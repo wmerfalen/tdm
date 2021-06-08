@@ -97,21 +97,21 @@ namespace mods::contracts {
 			std::string_view dump_step();
 			std::string pretty_dump_step();
 
-			void find_item(const uuid_t& item_uuid);
-			void give_item(const uuid_t& item_uuid,const uuid_t& mob_uuid);
-			void find_mob(const uuid_t& mob_uuid);
+			void find_item(obj_ptr_t& object);
+			void give_item(obj_ptr_t& object,player_ptr_t& mob);
+			void find_mob(player_ptr_t& mob);
 			void find_room(const room_rnum& room_id);
 			void find_door(const room_rnum& room_id,const int8_t& direction);
-			void destroy_item(const uuid_t& item_uuid);
+			void destroy_item(obj_ptr_t& object);
 			void destroy_door(const room_rnum& room_id,const int8_t& direction);
-			void retrieve_item(const uuid_t& item_uuid);
-			void quota_find_item(const uuid_t& item_uuid);
-			void quota_kill_mob(const uuid_t& mob_uuid);
+			void retrieve_item(obj_ptr_t& object);
+			void quota_find_item(obj_ptr_t& object);
+			void quota_kill_mob(player_ptr_t& mob);
 			void quota_destroy_door(const room_rnum& room_id,const int8_t& direction);
-			void kill(const uuid_t& mob_uuid);
+			void kill(player_ptr_t& mob);
 			void gain_entry(const room_rnum& room_id);
-			void talk_to(const uuid_t& mob_uuid);
-			void install_item(const uuid_t& item_uuid);
+			void talk_to(player_ptr_t& mob);
+			void install_item(const uuid_t& obj_uuid);
 			std::string_view title() const {
 				return m_contract_copy->title;
 			}

@@ -163,11 +163,8 @@ namespace mods {
 			player_map[player->uuid()] = player;
 		}
 		void register_authenticated_player(player_ptr_t player) {
-			std::cerr << "registering authenticated user...:'" << player->name().c_str() << "'\n";
+			log(CAT("registering authenticated user...:'",player->name(),"'").c_str());
 			player_name_map[player->name()] = player;
-			for(auto& pair : player_name_map) {
-				std::cerr << "[name:" << pair.first << "]\n";
-			}
 			mods::globals::db_id_to_uuid_map[player->db_id()] = player->uuid();
 		}
 		void unregister_authenticated_player(player_ptr_t player) {
@@ -435,6 +432,7 @@ namespace mods {
 				pq_con = std::make_unique<pqxx::connection>(connection_string.c_str());
 				connected_to_postgres = true;
 			} catch(const std::exception& e) {
+				log(CAT("SYSERR: [POSTGRES CONNECTION ERROR]:'",e.what(),"'. Shutting down in 10 seconds...").c_str());
 				std::cerr << red_str("[POSTGRES CONNECTION ERROR]:'") << red_str(e.what()) << "'\n";
 				std::cerr << red_str("Shutting down in 10 seconds...\n");
 				sleep(10);
@@ -442,7 +440,7 @@ namespace mods {
 				exit(1);
 			}
 			if(connected_to_postgres) {
-				std::cout << green_str("[postgres] connected :)") << "\n";
+				log("OKAY: [postgres] connected :)");
 			} else {
 				log("SYSERR: Couldn't connect to postgres");
 				mods::globals::shutdown();
@@ -804,20 +802,17 @@ namespace mods {
 			if(player->paging()) {
 				if(vec_args.size() == 0) {
 					player->pager_next_page();
-					std::cerr << red_str("paging, returning false vec_args.size() == 0\n");
 					return false;
 				}
 				if(vec_args.size() && vec_args[0].compare("q") == 0) {
 					player->pager_clear();
 					player->pager_end();
-					std::cerr << red_str("quitting paging, returning false\n");
 					return false;
 				}
 				auto good = mods::util::stoi(in_argument.data());
 				if(good.has_value()) {
 					player->page(good.value() - 1);
 				}
-				std::cerr << red_str("quitting paging, returning false\n");
 				return false;
 			}
 			if(vec_args.size()) {
@@ -1075,7 +1070,6 @@ namespace mods {
 				ch->was_in_room = room_id;
 				if(room_id >= room_list.size()) {
 					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
-					std::cerr << red_str("SYSERR: char_from_room failed. room_id >= room_list.size()") << "\n";
 					return;
 				}
 				bool found = 0;
@@ -1114,11 +1108,12 @@ namespace mods {
 				}
 				if(target_room >= room_list.size()) {
 					log("SYSERR: char_to_room failed for ch. Recontracted room is out of bounds: ",target_room);
-					std::cerr << red_str("SYSERR: char_to_room failed for ch. Recontracted room is out of bounds: ") << target_room << "\n";
 					return;
 				}
 				if(!mods::movement::char_move_to(player,target_room)) {
+#ifdef __MENTOC_SHOW_CHAR_MOVE_TO_FAILURE_MESSAGE__
 					std::cerr << red_str("cannot move to target room") << "\n";
+#endif
 					player->set_room(ch->was_in_room);
 					mods::globals::room_list[ch->was_in_room].push_back(player);
 					return;
@@ -1126,7 +1121,9 @@ namespace mods {
 				player->set_room(target_room);
 				mods::globals::room_list[target_room].push_back(player);
 				if(!IS_NPC(ch)) {
+#ifdef __MENTOC_SHOW_ROOM_EVENTS_DEBUG__
 					std::cerr << "[room_entry] watching events: " << player->name().c_str() << "\n";
+#endif
 					mods::mobs::room_watching::events::room_entry(target_room,player->uuid());
 				}
 				return;

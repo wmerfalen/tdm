@@ -23,6 +23,7 @@
 #include "demolitions.hpp"
 #include "contract-types.hpp"
 #include "player-contract-instance.hpp"
+#include "contract-events.hpp"
 
 /**
  * TODO: All these stc* functions need to be altered to accomodate
@@ -911,6 +912,8 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init() {
+		m_contract_size = 0;
+		m_contract = 0;
 		m_incendiary_resistance_percent = 0;
 		m_explosive_resistance_percent = 0;
 		m_shrapnel_resistance_percent = 0;
@@ -1474,6 +1477,9 @@ namespace mods {
 					if(mods::object_utils::is_claymore(obj)) {
 						mods::demolitions::set_done_installing(target,this->uuid());
 					}
+					if(m_char_data->contract) {
+						contract_install_item(target);
+					}
 					this->send("\r\nYou successfully deploy a %s\r\n", obj->name.c_str());
 					break;
 				}
@@ -1943,21 +1949,30 @@ namespace mods {
 	bool player::is_npc() const {
 		return IS_NPC(cd());
 	}
-	void player::contract_find_item(const uuid_t& obj_uuid) {
+	void player::contract_find_item(obj_ptr_t& object) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_find_item()) {
-				c->find_item(obj_uuid);
+				c->find_item(object);
 			}
 		}
 	}
-	void player::contract_find_mob(const uuid_t& mob_uuid) {
+	void player::contract_find_mob(player_ptr_t& mob) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_find_mob()) {
-				c->find_mob(mob_uuid);
+				c->find_mob(mob);
 			}
 		}
 	}
 	void player::contract_find_room(const room_rnum& room_id) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_find_room()) {
 				c->find_room(room_id);
@@ -1965,86 +1980,128 @@ namespace mods {
 		}
 	}
 	void player::contract_find_door(const room_rnum& room_id,const int8_t& direction) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_find_door()) {
 				c->find_door(room_id,direction);
 			}
 		}
 	}
-	void player::contract_destroy_item(const uuid_t& item_uuid) {
+	/** TODO: */
+	void player::contract_destroy_item(obj_ptr_t& object) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_destroy_item()) {
-				c->destroy_item(item_uuid);
+				c->destroy_item(object);
 			}
 		}
 	}
+	/** TODO: */
 	void player::contract_destroyed_door(const room_rnum& room_id,const int8_t& direction) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_destroy_door()) {
 				c->destroy_door(room_id,direction);
 			}
 		}
 	}
-	void player::contract_retrieve_item(const uuid_t& item_uuid) {
+	void player::contract_retrieve_item(obj_ptr_t& object) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_retrieve_item()) {
-				c->retrieve_item(item_uuid);
+				c->retrieve_item(object);
 			}
 		}
 	}
-	void player::contract_quota_item_find_increase(const uuid_t& item_uuid) {
+	void player::contract_quota_item_find_increase(obj_ptr_t& item) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->goal() & task_t::GOAL_QUOTA && c->goal() & task_t::GOAL_FIND && c->target() == target_t::TARGET_ITEM) {
-				c->quota_find_item(item_uuid);
+				c->quota_find_item(item);
 			}
 		}
 	}
-	void player::contract_quota_kill_mob_increase(const uuid_t& mob_uuid) {
+	/** TODO: */
+	void player::contract_quota_kill_mob_increase(player_ptr_t& mob) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_quota_kill_mob()) {
-				c->quota_kill_mob(mob_uuid);
+				c->quota_kill_mob(mob);
 			}
 		}
 	}
+	/** TODO: */
 	void player::contract_quota_destroyed_door(const room_rnum& room_id,const int8_t& direction) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_quota_destroy_door()) {
 				c->quota_destroy_door(room_id,direction);
 			}
 		}
 	}
-	void player::contract_kill_mob(const uuid_t& mob_uuid) {
+	/** TODO: */
+	void player::contract_kill_mob(player_ptr_t& mob) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_kill()) {
-				c->kill(mob_uuid);
+				c->kill(mob);
 			}
 		}
 	}
 	void player::contract_gain_entry(const room_rnum& room_id) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_gain_entry()) {
 				c->gain_entry(room_id);
 			}
 		}
 	}
-	void player::contract_talk_to(const uuid_t& mob_uuid) {
+	/** TODO: */
+	void player::contract_talk_to(player_ptr_t& mob) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_talk_to()) {
-				c->talk_to(mob_uuid);
+				c->talk_to(mob);
 			}
 		}
 	}
 	void player::contract_install_item(const uuid_t& item_uuid) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_install_item()) {
 				c->install_item(item_uuid);
 			}
 		}
 	}
-	void player::contract_give_item(const uuid_t& obj_uuid,const uuid_t& mob_uuid) {
+	void player::contract_give_item(obj_ptr_t& object,player_ptr_t& mob) {
+		if(!m_contract) {
+			return;
+		}
 		for(auto& c : contracts()) {
 			if(c->is_give_item()) {
-				c->give_item(obj_uuid,mob_uuid);
+				c->give_item(object,mob);
 			}
 		}
 	}
@@ -2052,8 +2109,32 @@ namespace mods {
 		sendln(msg);
 		//mods::players::messages::queue(db_id(),msg);
 	}
+	void player::update_contract_status() {
+		m_contract = m_char_data->contract = m_contract_size;
+	}
 	bool& player::moving_to_room() {
 		return m_moving_to_room;
+	}
+	player::contract_list_t& player::contracts() {
+		return m_contracts;
+	}
+	void player::start_contract(const contract_vnum_t& contract_vnum) {
+		m_contracts.emplace_front(std::make_shared<mods::contracts::player_contract_instance>(contract_vnum,db_id()));
+		++m_contract_size;
+		update_contract_status();
+	}
+	void player::stop_contract(const contract_vnum_t& contract_vnum) {
+		m_contracts.remove_if([&](const auto& pcon_instance) -> bool {
+			if(pcon_instance->vnum() == contract_vnum) {
+				pcon_instance->stop_contract();
+				if(m_contract_size) {
+					--m_contract_size;
+				}
+				return true;
+			}
+			return false;
+		});
+		update_contract_status();
 	}
 
 };

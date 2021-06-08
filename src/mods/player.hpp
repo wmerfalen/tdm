@@ -1,4 +1,5 @@
 #ifndef __MENTOC_MODS_PLAYER_HEADER__
+bool has_builder_data();
 #define  __MENTOC_MODS_PLAYER_HEADER__
 
 
@@ -63,8 +64,11 @@ namespace mods::contracts {
 	struct player_contract_instance;
 };
 
+
 namespace mods {
 	struct player {
+			using contract_vnum_t = uint32_t;
+			using contract_list_t = std::forward_list<std::shared_ptr<mods::contracts::player_contract_instance>>;
 			using damage = damage_event_t;
 			using obj_ptr_t = std::shared_ptr<obj_data>;
 			using affect_t = mods::affects::affect_t;
@@ -834,26 +838,30 @@ namespace mods {
 			const std::array<obj_ptr_t,NUM_WEARS>& equipment() const {
 				return m_equipment;
 			}
-			std::deque<std::shared_ptr<mods::contracts::player_contract_instance>>& contracts() {
-				return m_contracts;
+			void start_contract(const contract_vnum_t& contract_vnum);
+			void stop_contract(const contract_vnum_t& contract_vnum);
+			bool has_contract() const {
+				return m_contract_size;
 			}
-			void contract_give_item(const uuid_t& obj_uuid,const uuid_t& mob_uuid);
-			void contract_find_item(const uuid_t& obj_uuid);
-			void contract_find_mob(const uuid_t& mob_uuid);
+			void contract_give_item(obj_ptr_t& object,player_ptr_t& mob);
+			void contract_find_item(obj_ptr_t& object);
+			void contract_find_mob(player_ptr_t& mob);
 			void contract_find_room(const room_rnum& room_id);
 			void contract_find_door(const room_rnum& room_id,const int8_t& direction);
-			void contract_destroy_item(const uuid_t& item_uuid);
+			void contract_destroy_item(obj_ptr_t& object);
 			void contract_destroyed_door(const room_rnum& room_id,const int8_t& direction);
-			void contract_retrieve_item(const uuid_t& item_uuid);
-			void contract_quota_item_find_increase(const uuid_t& item_uuid);
-			void contract_quota_kill_mob_increase(const uuid_t& mob_uuid);
+			void contract_retrieve_item(obj_ptr_t& object);
+			void contract_quota_item_find_increase(obj_ptr_t& object);
+			void contract_quota_kill_mob_increase(player_ptr_t& mob);
 			void contract_quota_destroyed_door(const room_rnum& room_id,const int8_t& direction);
-			void contract_kill_mob(const uuid_t& mob_uuid);
+			void contract_kill_mob(player_ptr_t& mob);
 			void contract_gain_entry(const room_rnum& room_id);
-			void contract_talk_to(const uuid_t& mob_uuid);
-			void contract_install_item(const uuid_t& item_uuid);
+			void contract_talk_to(player_ptr_t& mob);
+			void contract_install_item(const uuid_t& object_uuid);
 			void queue_up(std::string_view);
 			bool& moving_to_room();
+			void update_contract_status();
+			contract_list_t& contracts();
 		protected:
 			std::map<std::string,std::string> m_ada_data;
 			bool m_ada;
@@ -947,7 +955,7 @@ namespace mods {
 			int16_t m_emp_resistance_percent;
 			int16_t m_shock_resistance_percent;
 			int16_t m_anti_matter_resistance_percent;
-			std::deque<std::shared_ptr<mods::contracts::player_contract_instance>> m_contracts;
+			std::forward_list<std::shared_ptr<mods::contracts::player_contract_instance>> m_contracts;
 			std::deque<std::shared_ptr<mods::rifle_attachments_t>> m_rifles;
 			int16_t m_incendiary_damage_percent;
 			int16_t m_explosive_damage_percent;
@@ -958,6 +966,8 @@ namespace mods {
 			int16_t m_emp_damage_percent;
 			int16_t m_shock_damage_percent;
 			int16_t m_anti_matter_damage_percent;
+			uint8_t m_contract_size;
+			bool m_contract;
 	};
 };
 

@@ -21,10 +21,10 @@ namespace mods::contracts {
 			if(std::get<0>(s)) {
 				auto c = create_object(std::get<1>(s),std::get<2>(s));
 				player->sendln(CAT(
-				                   "{grn}*************************************{/grn}\r\n",
+				                   "{grn}**********************************************{/grn}\r\n",
 				                   "{yel} You are rewarded with the following item:{/grn}\r\n",
 				                   "{grn}",c->name.c_str(),"{/grn}\r\n",
-				                   "{grn}*************************************{/grn}\r\n"
+				                   "{grn}**********************************************{/grn}\r\n"
 				               ));
 				player->carry(c);
 				return;
@@ -36,10 +36,10 @@ namespace mods::contracts {
 				auto& ref = std::get<2>(s);
 				auto ptr = mods::rifle_attachments::make(ref);
 				player->sendln(CAT(
-				                   "{grn}*************************************{/grn}\r\n",
+				                   "{grn}**********************************************{/grn}\r\n",
 				                   "{yel} You are rewarded with the following item:{/grn}\r\n",
 				                   "{grn}",ptr->base_object->name.c_str(),"{/grn}\r\n",
-				                   "{grn}*************************************{/grn}\r\n"
+				                   "{grn}**********************************************{/grn}\r\n"
 				               ));
 				player->carry(ptr->base_object);
 			}
@@ -54,17 +54,17 @@ namespace mods::contracts {
 		}
 		if(reward_xp > 0) {
 			player->sendln(CAT(
-			                   "{grn}*************************************{/grn}\r\n",
+			                   "{grn}***********************************************{/grn}\r\n",
 			                   "{yel} You are rewarded {grn}",reward_xp," XP{/grn}\r\n",
-			                   "{grn}*************************************{/grn}\r\n"
+			                   "{grn}***********************************************{/grn}\r\n"
 			               ));
 			player->exp() += reward_xp;
 		}
 		if(reward_money > 0) {
 			player->sendln(CAT(
-			                   "{grn}*************************************{/grn}\r\n",
+			                   "{grn}***********************************************{/grn}\r\n",
 			                   "{yel} You are rewarded {grn}",reward_money," MP{/grn}\r\n",
-			                   "{grn}*************************************{/grn}\r\n"
+			                   "{grn}***********************************************{/grn}\r\n"
 			               ));
 			player->gold() += reward_money;
 		}

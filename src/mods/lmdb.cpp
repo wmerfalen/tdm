@@ -967,7 +967,6 @@ pqxx::result db_get_by_meta_order_by(std::string table, std::string col,const st
 	}
 }
 /*
-/*
 pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::field & value){
 	return db_get_by_meta(table,col,value.c_str());
 }

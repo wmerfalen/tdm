@@ -25,6 +25,7 @@
 #include "mods/yaml.hpp"
 #include "mods/skills.hpp"
 #include "mods/drone.hpp"
+#include "mods/contract-events.hpp"
 
 #define __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__
 /* extern variables */
@@ -234,6 +235,9 @@ void perform_get_from_container(char_data *ch, struct obj_data *obj,
 			act("You get $p from $P.", FALSE, ch, obj, cont, TO_CHAR);
 			act("$n gets $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
 			get_check_money(ch, obj);
+			if(ch->contract) {
+				mods::contract_events::perform_get(ch,obj);
+			}
 		}
 	}
 }
@@ -300,6 +304,9 @@ int perform_get_from_room(char_data *ch, struct obj_data *obj) {
 		act("You get $p.", FALSE, ch, obj, 0, TO_CHAR);
 		act("$n gets $p.", TRUE, ch, obj, 0, TO_ROOM);
 		get_check_money(ch, obj);
+		if(ch->contract) {
+			mods::contract_events::perform_get(ch,obj);
+		}
 		return (1);
 	}
 
@@ -675,6 +682,12 @@ void perform_give(char_data *ch, char_data *vict,
 	act("You give $p to $N.", FALSE, ch, obj, vict, TO_CHAR);
 	act("$n gives you $p.", FALSE, ch, obj, vict, TO_VICT);
 	act("$n gives $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
+	if(ch->contract) {
+		mods::contract_events::perform_give(ch,vict,obj);
+	}
+	if(vict->contract) {
+		mods::contract_events::perform_get(vict,obj);
+	}
 }
 
 /* utility function for give */

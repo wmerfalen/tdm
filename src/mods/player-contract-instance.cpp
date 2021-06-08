@@ -232,21 +232,14 @@ namespace mods::contracts {
 	 *
 	 * @param item_uuid
 	 */
-	void player_contract_instance::find_item(const uuid_t& item_uuid) {
+	void player_contract_instance::find_item(obj_ptr_t& object) {
 		if(!m_current_step) {
 			std::cerr << red_str("find_item -> m_current_step is null!") << "\n";
 			return;
 		}
-		auto item = optr_by_uuid(item_uuid);
-		if(!item) {
-			std::cerr << red_str("find_item -> optr_by_uuid is null!") << "\n";
-			return;
-		}
 		if(m_current_step->goal & task_t::GOAL_FIND &&
 		        m_current_step->target == target_t::TARGET_ITEM) {
-			std::cerr << green_str("is goal find and is target item...") << "\n";
-			std::cerr << green_str("step yaml:'") << m_current_step->object_yaml.c_str() << "', item:'" << item->feed_file().data() << "'\n";
-			if(m_current_step->object_yaml.compare(item->feed_file().data()) == 0) {
+			if(m_current_step->object_yaml.compare(object->feed_file().data()) == 0) {
 				std::cerr << green_str("advancing!") << "\n";
 				this->advance();
 				return;
@@ -258,12 +251,8 @@ namespace mods::contracts {
 	 *
 	 * @param mob_uuid
 	 */
-	void player_contract_instance::find_mob(const uuid_t& mob_uuid) {
+	void player_contract_instance::find_mob(player_ptr_t& mob) {
 		if(!m_current_step) {
-			return;
-		}
-		auto mob = ptr_by_uuid(mob_uuid);
-		if(!mob) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_FIND &&
@@ -441,17 +430,13 @@ namespace mods::contracts {
 	 *
 	 * @param item_uuid
 	 */
-	void player_contract_instance::destroy_item(const uuid_t& item_uuid) {
+	void player_contract_instance::destroy_item(obj_ptr_t& object) {
 		if(!m_current_step) {
-			return;
-		}
-		auto item = optr_by_uuid(item_uuid);
-		if(!item) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_DESTROY &&
 		        m_current_step->target == target_t::TARGET_ITEM) {
-			if(m_current_step->object_yaml.compare(item->feed_file().data()) == 0) {
+			if(m_current_step->object_yaml.compare(object->feed_file().data()) == 0) {
 				this->advance();
 				return;
 			}
@@ -483,17 +468,13 @@ namespace mods::contracts {
 	 *
 	 * @param item_uuid
 	 */
-	void player_contract_instance::retrieve_item(const uuid_t& item_uuid) {
+	void player_contract_instance::retrieve_item(obj_ptr_t& object) {
 		if(!m_current_step) {
-			return;
-		}
-		auto item = optr_by_uuid(item_uuid);
-		if(!item) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_RETRIEVE &&
 		        m_current_step->target == target_t::TARGET_ITEM) {
-			if(m_current_step->object_yaml.compare(item->feed_file().data()) == 0) {
+			if(m_current_step->object_yaml.compare(object->feed_file().data()) == 0) {
 				this->advance();
 				return;
 			}
@@ -505,17 +486,13 @@ namespace mods::contracts {
 	 *
 	 * @param item_uuid
 	 */
-	void player_contract_instance::quota_find_item(const uuid_t& item_uuid) {
+	void player_contract_instance::quota_find_item(obj_ptr_t& object) {
 		if(!m_current_step) {
-			return;
-		}
-		auto item = optr_by_uuid(item_uuid);
-		if(!item) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_QUOTA &&
 		        m_current_step->target == target_t::TARGET_ITEM) {
-			if(m_current_step->object_yaml.compare(item->feed_file().data()) == 0) {
+			if(m_current_step->object_yaml.compare(object->feed_file().data()) == 0) {
 				++m_quota;/** TODO FIXME INITIALIZE THIS */
 				if(m_quota >= m_current_step->quota) {
 					this->advance();
@@ -530,12 +507,8 @@ namespace mods::contracts {
 	 *
 	 * @param mob_uuid
 	 */
-	void player_contract_instance::quota_kill_mob(const uuid_t& mob_uuid) {
+	void player_contract_instance::quota_kill_mob(player_ptr_t& mob) {
 		if(!m_current_step) {
-			return;
-		}
-		auto mob = ptr_by_uuid(mob_uuid);
-		if(!mob) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_QUOTA &&
@@ -578,12 +551,8 @@ namespace mods::contracts {
 	 *
 	 * @param mob_uuid
 	 */
-	void player_contract_instance::kill(const uuid_t& mob_uuid) {
+	void player_contract_instance::kill(player_ptr_t& mob) {
 		if(!m_current_step) {
-			return;
-		}
-		auto mob = ptr_by_uuid(mob_uuid);
-		if(!mob) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_KILL &&
@@ -620,12 +589,8 @@ namespace mods::contracts {
 	 *
 	 * @param mob_uuid
 	 */
-	void player_contract_instance::talk_to(const uuid_t& mob_uuid) {
+	void player_contract_instance::talk_to(player_ptr_t& mob) {
 		if(!m_current_step) {
-			return;
-		}
-		auto mob = ptr_by_uuid(mob_uuid);
-		if(!mob) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_TALK_TO &&
@@ -642,17 +607,17 @@ namespace mods::contracts {
 	 *
 	 * @param item_uuid
 	 */
-	void player_contract_instance::install_item(const uuid_t& item_uuid) {
+	void player_contract_instance::install_item(const uuid_t& obj_uuid) {
 		if(!m_current_step) {
-			return;
-		}
-		auto item = optr_by_uuid(item_uuid);
-		if(!item) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_INSTALL &&
 		        m_current_step->target == target_t::TARGET_ITEM) {
-			if(m_current_step->object_yaml.compare(item->feed_file().data()) == 0) {
+			auto object = optr_by_uuid(obj_uuid);
+			if(!object) {
+				return;
+			}
+			if(m_current_step->object_yaml.compare(object->feed_file().data()) == 0) {
 				++m_quota;/** TODO FIXME INITIALIZE THIS */
 				if(m_quota >= m_current_step->quota) {
 					this->advance();
@@ -667,17 +632,13 @@ namespace mods::contracts {
 	 *
 	 * @param item_uuid
 	 */
-	void player_contract_instance::give_item(const uuid_t& item_uuid,const uuid_t& mob_uuid) {
+	void player_contract_instance::give_item(obj_ptr_t& object,player_ptr_t& mob) {
 		if(!m_current_step) {
-			return;
-		}
-		auto item = optr_by_uuid(item_uuid);
-		if(!item) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_GIVE &&
 		        m_current_step->target == target_t::TARGET_MOB) {
-			if(m_current_step->object_yaml.compare(item->feed_file().data()) == 0) {
+			if(m_current_step->object_yaml.compare(object->feed_file().data()) == 0) {
 				++m_quota;
 				if(m_quota >= m_current_step->quota) {
 					this->advance();

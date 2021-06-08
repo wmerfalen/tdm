@@ -23,6 +23,7 @@
 #include "constants.h"
 #include "mods/classes/breacher.hpp"
 #include "mods/classes/ghost.hpp"
+#include "mods/contract-events.hpp"
 
 /* external variables  */
 extern int tunnel_size;
@@ -188,8 +189,10 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	if(ch->has_desc) {
 		look_at_room(ch, 0);
 	}
-	player->contract_find_room(to_room);
-	player->contract_gain_entry(to_room);
+	if(ch->contract) {
+		mods::contract_events::find_room(player,to_room);
+		mods::contract_events::gain_entry_to_room(player,to_room);
+	}
 
 	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_DEATH) && GET_LEVEL(ch) < LVL_IMMORT) {
 		log_death_trap(ch);

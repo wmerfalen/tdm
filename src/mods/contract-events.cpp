@@ -7,102 +7,39 @@
 #else
 #define dbg_print(a)
 #endif
-namespace mods::message_queue {
-	void player_found_item(player_ptr_t& player,uuid_t item_uuid) {
-		//auto item = optr_by_uuid(item_uuid);
-		//if(item->contract) {
-		player->contract_find_item(item_uuid);
-		//}
+namespace mods::contract_events {
+	void perform_get(char_data* ch,obj_data* object) {
+		auto receiver = ptr(ch);
+		auto o = optr(object);
+		receiver->contract_find_item(o);
 	}
-
-	void player_found_mob(player_ptr_t& player,uuid_t mob_uuid) {
-		//auto mob = ptr_by_uuid(mob_uuid);
-		//if(mob->cd()->contract) {
-		player->contract_find_mob(mob_uuid);
-		//}
+	void perform_give(char_data* ch, char_data* target,obj_data* object) {
+		auto giver = ptr(ch);
+		auto receiver = ptr(target);
+		auto o = optr(object);
+		giver->contract_give_item(o,receiver);
 	}
-
-	void player_found_room(player_ptr_t& player,room_rnum room_id) {
-		//if(world[room_id].contract) {
+	void perform_give(player_ptr_t& giver, player_ptr_t& receiver,obj_ptr_t& object) {
+		giver->contract_give_item(object,receiver);
+	}
+	void perform_get(player_ptr_t& receiver,obj_ptr_t& object) {
+		receiver->contract_retrieve_item(object);
+		receiver->contract_find_item(object);
+	}
+	void find_mob(player_ptr_t& player,player_ptr_t& mob) {
+		player->contract_find_mob(mob);
+	}
+	void find_room(player_ptr_t& player,const room_rnum& room_id) {
 		player->contract_find_room(room_id);
-		//}
 	}
 
-	void player_found_door(player_ptr_t& player,room_rnum room_id, int8_t direction) {
-		//if(world[room_id].dir_option[direction]->contract) {
-		player->contract_find_door(room_id,direction);
-		//}
+	void find_item(player_ptr_t& player,obj_ptr_t& object) {
+		player->contract_find_item(object);
 	}
-
-	void player_destroyed_item(player_ptr_t& player,uuid_t item_uuid) {
-		//auto item = optr_by_uuid(item_uuid);
-		//if(item->contract) {
-		player->contract_destroy_item(item_uuid);
-		//}
-	}
-
-	void player_destroyed_door(player_ptr_t& player,room_rnum room_id,int8_t direction) {
-		//if(world[room_id].dir_option[direction]->contract) {
-		player->contract_destroyed_door(room_id,direction);
-		//}
-	}
-
-	void player_retrieved_item(player_ptr_t& player,uuid_t item_uuid) {
-		//auto item = optr_by_uuid(item_uuid);
-		//if(item->contract) {
-		player->contract_retrieve_item(item_uuid);
-		//}
-	}
-
-	void player_quota_item_find_increase(player_ptr_t& player,uuid_t item_uuid) {
-		//auto item = optr_by_uuid(item_uuid);
-		//if(item->contract) {
-		player->contract_quota_item_find_increase(item_uuid);
-		//}
-	}
-
-	void player_quota_mob_kill_increase(player_ptr_t& player,uuid_t mob_uuid) {
-		//auto mob = ptr_by_uuid(mob_uuid);
-		//if(mob->cd()->contract) {
-		player->contract_quota_kill_mob_increase(mob_uuid);
-		//}
-	}
-
-	void player_quota_door_destroyed_increase(player_ptr_t& player,room_rnum room_id,int8_t direction) {
-		//if(world[room_id].dir_option[direction]->contract) {
-		player->contract_quota_destroyed_door(room_id,direction);
-		//}
-	}
-
-	void player_kill_mob(player_ptr_t& player,uuid_t mob_uuid) {
-		//auto mob = ptr_by_uuid(mob_uuid);
-		//if(mob->cd()->contract) {
-		player->contract_kill_mob(mob_uuid);
-		//}
-
-	}
-
-	void player_gain_entry(player_ptr_t& player,room_rnum room_id) {
-		//if(world[room_id].contract) {
+	void gain_entry_to_room(player_ptr_t& player,const room_rnum& room_id) {
 		player->contract_gain_entry(room_id);
-		//}
 	}
-
-	void player_talk_to(player_ptr_t& player,uuid_t mob_uuid) {
-		//auto mob = ptr_by_uuid(mob_uuid);
-		//if(mob->cd()->contract) {
-		player->contract_talk_to(mob_uuid);
-		//}
-
+	void find_door(player_ptr_t& player,const room_rnum& room_id,const direction_t& dir) {
+		player->contract_find_door(room_id,dir);
 	}
-
-	void player_install_item(player_ptr_t& player,uuid_t item_uuid) {
-		//auto item = optr_by_uuid(item_uuid);
-		//if(item->contract) {
-		player->contract_install_item(item_uuid);
-		//}
-	}
-
-
 };
-

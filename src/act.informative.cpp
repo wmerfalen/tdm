@@ -38,6 +38,7 @@
 #include "mods/calc-visibility.hpp"
 #include "mods/overhead_map.hpp"
 #include "mods/js.hpp"
+#include "mods/contract-events.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -240,6 +241,9 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 		log("SYSERR: NULL pointer in show_obj_to_char(): obj=%p ch=%p", obj, ch);
 		return;
 	}
+	if(ch->contract) {
+		mods::contract_events::find_item(player,object);
+	}
 
 	if(mods::object_utils::is_camera(obj) && obj->location_data() >= 16) {
 		player->send("A %s is installed on the %s wall.\r\n", obj->name.c_str(), mods::globals::dir_to_str(obj->location_data() - 16, true).c_str());
@@ -416,6 +420,10 @@ void look_at_char(char_data *i, char_data *ch) {
 	if(!ch->has_desc) {
 		return;
 	}
+	if(ch->contract) {
+		auto o = ptr(i);
+		mods::contract_events::find_mob(player,o);
+	}
 
 	if(i->player.description) {
 		player->send(i->player.description);
@@ -486,6 +494,10 @@ void list_one_char(char_data *i, char_data *ch) {
 
 	if(IS_NPC(i)) {
 		player->stc(i->player.short_descr);
+		if(ch->contract) {
+			auto o = ptr(i);
+			mods::contract_events::find_mob(player,o);
+		}
 	} else {
 		player->stc(i->player.name.str() + (GET_TITLE(i).length() ? " " + GET_TITLE(i).str() : ""));
 	}
@@ -808,6 +820,9 @@ void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 	if(room < 0 || room >= world.size()) {
 		return;
 	}
+	if(ch->contract) {
+		mods::contract_events::find_room(player,room);
+	}
 
 	player->sendln(CCCYN(ch, C_NRM));
 
@@ -857,6 +872,9 @@ void look_in_direction(char_data *ch, int dir) {
 			player->send(EXIT(ch, dir)->general_description);
 		} else {
 			player->sendln("You see nothing special.");
+		}
+		if(ch->contract && EXIT_FLAGGED(EXIT(ch, dir), EX_ISDOOR)) {
+			mods::contract_events::find_door(player,player->room(),dir);
 		}
 
 		if(EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) && EXIT(ch, dir)->keyword) {

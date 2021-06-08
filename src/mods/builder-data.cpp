@@ -41,9 +41,7 @@ bool room_recorder_t::should_record() const {
 	return record;
 }
 void room_recorder_t::char_to_room(const room_rnum& r) {
-	std::cerr << "char_to_room (room recorder)\n";
 	if(record) {
-		std::cerr << "recording room: " << r << "\n";
 		room_list.emplace_back(r);
 	}
 }

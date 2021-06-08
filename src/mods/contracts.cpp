@@ -57,19 +57,11 @@ namespace mods::contracts {
 	 *
 	 */
 	void start_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
-		player->contracts().emplace_back(std::make_shared<player_contract_instance>(contract_vnum,player->db_id()));
+		player->start_contract(contract_vnum);
 	}
 
 	std::tuple<bool,std::string> stop_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
-		auto& d = player->contracts();
-		std::remove_if(d.begin(),d.end(),[contract_vnum](std::shared_ptr<player_contract_instance>& ptr) -> bool {
-			bool is_contract = ptr->contract_vnum() == contract_vnum;
-			if(is_contract) {
-				ptr->stop_contract();
-			}
-			return is_contract;
-		});
-		player->contracts() = std::move(d);
+		player->stop_contract(contract_vnum);
 		return {0,"stub"};
 	}
 
@@ -78,7 +70,7 @@ namespace mods::contracts {
 	}
 
 	bool has_contract(player_ptr_t& player) {
-		return !!player->contracts().size();
+		return player->has_contract();
 	}
 
 	ACMD(do_contract) {

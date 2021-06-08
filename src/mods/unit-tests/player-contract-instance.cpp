@@ -58,11 +58,11 @@ TEST_CASE("contracts are tracked by player instance wrappers") {
 		auto player = new_player();
 		player->set_db_id(1);
 		mods::contracts::start_contract(player,1);
-		auto c = player->contracts()[0];
+		auto c = player->contracts().front();
 		REQUIRE(c->is_find_item() == true);
 		REQUIRE(c->step_counter() == 0);
 		auto rifle = create_object(ITEM_RIFLE,"g36c.yml");
-		player->contract_find_item(rifle->uuid);
+		player->contract_find_item(rifle);
 		REQUIRE(c->step_counter() == 1);
 	}
 }

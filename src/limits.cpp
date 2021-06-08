@@ -528,7 +528,9 @@ void point_update(void) {
 			continue;
 		}
 
+#ifdef __MENTOC_SHOW_IS_CORPSE_ON_ALL_OBJECTS__
 		std::cerr << "IS_CORPSE: " << j->uuid << ", :'" << j->name.c_str() << "'\n";
+#endif
 		/* If this is a corpse */
 		if(IS_CORPSE(j)) {
 			/* timer count down */
