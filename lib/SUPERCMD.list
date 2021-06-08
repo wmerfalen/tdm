@@ -114,6 +114,191 @@
 {yel}act.builder{/yel}:->{grn}pmw_obj_from_room{/grn}
 {yel}act.builder{/yel}:->{grn}toggle_obj_from_room{/grn}
 {yel}act.builder{/yel}:->{grn}js_help{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->armor_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->attachment_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->consumable_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->container_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->drone_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->explosive_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->gadget_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->histfile$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->js_help$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->melee_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->next_mob_number$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->next_obj_number$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->next_object_number$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->next_room_number$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->next_zone_number$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->pmw_obj_from_room$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->rifle_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->toggle_obj_from_room$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->trap_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->vehicle_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->yaml_example$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->yaml_import$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->yaml_log$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->yaml_log_clear$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.builder.cpp	/^->yaml_log_save$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->feed_player$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->flush_player$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->get_ticks_per_minute$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->giveme_camera$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->giveme_emp_grenades$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->giveme_flashbang_grenades$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->giveme_frag_grenades$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->giveme_incendiary_grenades$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->giveme_night_vision_camera$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->giveme_sensor_grenades$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->giveme_smoke_grenades$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->giveme_sniper_rifle$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->giveme_thermal_camera$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->givemenades$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->my_uuid$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->one_punch$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->point_update$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->room_dark$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->room_fire$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->room_list_uuid$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->send_report$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->set_ammo$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->set_npc_position$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->set_position$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->show_tics$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.debug.cpp	/^->zero_socket$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.informative.cpp	/^->givemegold$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.informative.cpp	/^->js$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.informative.cpp	/^->jstest$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.informative.cpp	/^->newjs$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.offensive.cpp	/^->affect_me$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->advance$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->at$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->date$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->dc$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->echo$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->force$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->gecho$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->goto$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->invis$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->last$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->load$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->poofset$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->purge$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->restore$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->return$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->send$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->set$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->show$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->shutdown$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->snoop$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->stat$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->switch$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->syslog$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->teleport$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->trans$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->vnum$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->vstat$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->wiz_quote$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->wizlock$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->wiznet$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->wizutil$/;"	f{/grn}
+{yel}tags:SUPERCMD	act.wizard.cpp	/^->zreset$/;"	f{/grn}
+{yel}tags:SUPERCMD	ban.cpp	/^->ban$/;"	f{/grn}
+{yel}tags:SUPERCMD	ban.cpp	/^->unban$/;"	f{/grn}
+{yel}tags:SUPERCMD	db.cpp	/^->reboot$/;"	f{/grn}
+{yel}tags:SUPERCMD	interpreter.cpp	/^->builder$/;"	f{/grn}
+{yel}tags:SUPERCMD	interpreter.cpp	/^->debug_sleep$/;"	f{/grn}
+{yel}tags:SUPERCMD	interpreter.cpp	/^->require_js$/;"	f{/grn}
+{yel}tags:SUPERCMD	interpreter.cpp	/^->room_list$/;"	f{/grn}
+{yel}tags:SUPERCMD	mobact.cpp	/^	->mobact$/;"	f	namespace:mods::mobact{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->ndelete$/;"	f	namespace:mods::builder{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->nfind$/;"	f	namespace:mods::builder{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->ngoto$/;"	f	namespace:mods::builder{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->nhelp$/;"	f	namespace:mods::builder{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->nset$/;"	f	namespace:mods::builder{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->mbuild$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->obuild$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->rbuild$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->rbuild_sandbox$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->sbuild$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->zbuild$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/builder/bookmarks.cpp	/^	->bookmark$/;"	f	namespace:mods::builder::bookmarks{/grn}
+{yel}tags:SUPERCMD	mods/builder/bookmarks.cpp	/^	->goto$/;"	f	namespace:mods::builder::bookmarks{/grn}
+{yel}tags:SUPERCMD	mods/builder/bookmarks.cpp	/^	->print_vnum$/;"	f	namespace:mods::builder::bookmarks{/grn}
+{yel}tags:SUPERCMD	mods/builder/conbuild.cpp	/^	->conbuild$/;"	f	namespace:mods::builder::conbuild{/grn}
+{yel}tags:SUPERCMD	mods/builder/hqbuild.cpp	/^	->hqbuild$/;"	f	namespace:mods::builder::hqbuild{/grn}
+{yel}tags:SUPERCMD	mods/builder/meqbuild.cpp	/^	->meqbuild$/;"	f	namespace:mods::builder::meqbuild{/grn}
+{yel}tags:SUPERCMD	mods/builder/seqbuild.cpp	/^	->seqbuild$/;"	f	namespace:mods::builder::seqbuild{/grn}
+{yel}tags:SUPERCMD	mods/chat.cpp	/^->chanmgr$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/classes/super-user-fiddler.cpp	/^	->mock_level$/;"	f	namespace:mods::classes{/grn}
+{yel}tags:SUPERCMD	mods/contract-step-callback.cpp	/^	->contract_step_callback$/;"	f	namespace:mods{/grn}
+{yel}tags:SUPERCMD	mods/date-time.cpp	/^	->serialize_date$/;"	f	namespace:mods::date_time{/grn}
+{yel}tags:SUPERCMD	mods/elevator.cpp	/^->instantiate_elevator_here$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/fluxkraft/arcon-bar.hpp	/^		->generate_bar$/;"	f	namespace:mods::fluxkraft::arcon_bar{/grn}
+{yel}tags:SUPERCMD	mods/fluxkraft/shape-dictionary.cpp	/^	->generate_zone$/;"	f	namespace:mods::fluxkraft{/grn}
+{yel}tags:SUPERCMD	mods/fluxkraft/shape-dictionary.cpp	/^	->procgen_random_amount$/;"	f	namespace:mods::fluxkraft{/grn}
+{yel}tags:SUPERCMD	mods/forge-engine/value-scaler.cpp	/^		->value_scaler$/;"	f	namespace:mods::forge_engine::value_scaler_static{/grn}
+{yel}tags:SUPERCMD	mods/immortal.cpp	/^->rnumlist$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/immortal.cpp	/^->rnumtele$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->armor_locker_quota$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->create_catchy_name$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->install_armor_locker$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->install_camera_feed$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->install_computer_choice$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->install_sign$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->install_weapon_locker$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->instantiate_catchy_name$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->list_wear_flags$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->uninstall_armor_locker$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->uninstall_camera_feed$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->uninstall_sign$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->uninstall_weapon_locker$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/integral-objects.cpp	/^->weapon_locker_quota$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/levels.cpp	/^	->award_exp_by_name$/;"	f	namespace:mods::levels{/grn}
+{yel}tags:SUPERCMD	mods/levels.cpp	/^	->csv_export_levels$/;"	f	namespace:mods::levels{/grn}
+{yel}tags:SUPERCMD	mods/loot.cpp	/^	->add_armor_index$/;"	f	namespace:mods::loot{/grn}
+{yel}tags:SUPERCMD	mods/loot.cpp	/^	->add_rifle_index$/;"	f	namespace:mods::loot{/grn}
+{yel}tags:SUPERCMD	mods/loot.cpp	/^	->reward$/;"	f	namespace:mods::loot{/grn}
+{yel}tags:SUPERCMD	mods/mini-games.cpp	/^->install_minigame$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/mini-games.cpp	/^->list_minigame$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/mini-games.cpp	/^->uninstall_minigame$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/mob-equipment.cpp	/^	->npc_report$/;"	f	namespace:mods::mob_equipment{/grn}
+{yel}tags:SUPERCMD	mods/player-registration.cpp	/^->disable_registration$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/player-registration.cpp	/^->enable_registration$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/player-registration.cpp	/^->registration_status$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/players/messages.cpp	/^	->queue_message$/;"	f	namespace:mods::players::messages{/grn}
+{yel}tags:SUPERCMD	mods/query-objects.cpp	/^->query_container$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/query-objects.cpp	/^->query_inventory$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/query-objects.cpp	/^->query_inventory_container$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/query-objects.cpp	/^->query_room$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/query-objects.cpp	/^->query_zone$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/rate-limiting.cpp	/^	->get_rate_limit_types$/;"	f	namespace:mods::rate_limiting{/grn}
+{yel}tags:SUPERCMD	mods/rate-limiting.cpp	/^	->list_rate_limits$/;"	f	namespace:mods::rate_limiting{/grn}
+{yel}tags:SUPERCMD	mods/rate-limiting.cpp	/^	->set_rate_limit$/;"	f	namespace:mods::rate_limiting{/grn}
+{yel}tags:SUPERCMD	mods/rifle-attachments.cpp	/^		->instantiate_rifle_attachment$/;"	f	namespace:mods::rifle_attachments{/grn}
+{yel}tags:SUPERCMD	mods/rifle-attachments.cpp	/^		->list_rifle_attachments$/;"	f	namespace:mods::rifle_attachments{/grn}
+{yel}tags:SUPERCMD	mods/rifle-attachments.cpp	/^		->load_my_rifle_attachments$/;"	f	namespace:mods::rifle_attachments{/grn}
+{yel}tags:SUPERCMD	mods/scripted-sequence-runner.cpp	/^	->run_sequence$/;"	f	namespace:mods::scripted_sequence_runner{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->add_super_user$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->banish$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->clear_who_line$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->force_out$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->get_super_user_list$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->go_invisible$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->go_visible$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->remove_super_user$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->set_banish_room$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->set_who_line$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/super-users.cpp	/^->shutdown_mud$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/target-practice.cpp	/^->install_dummy$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/target-practice.cpp	/^->instantiate_dummy$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/target-practice.cpp	/^->uninstall_dummy$/;"	f{/grn}
+{yel}tags:SUPERCMD	mods/weapons/damage-types.cpp	/^	->inc_damage$/;"	f	namespace:mods::weapons::damage_types{/grn}
+{yel}tags:SUPERCMD	mods/weapons/elemental.cpp	/^	->inc_damage$/;"	f	namespace:mods::weapons::elemental{/grn}
+{yel}tags:SUPERCMD	mods/zone.cpp	/^	->list_zone_table$/;"	f	namespace:mods::zone{/grn}
+{yel}tags:SUPERCMD	mods/zone.cpp	/^	->reset_zone$/;"	f	namespace:mods::zone{/grn}
+{yel}tags:SUPERCMD	mods/zone.cpp	/^	->uuids$/;"	f	namespace:mods::zone{/grn}
+{yel}tags:SUPERCMD	olc.cpp	/^->olc$/;"	f{/grn}
+{yel}tags:SUPERCMD	spell_parser.cpp	/^->cast$/;"	f{/grn}
 {yel}mobact{/yel}:->{grn}mobact{/grn}
 {yel}act.offensive{/yel}:->{grn}affect_me{/grn}
 {yel}act.debug{/yel}:->{grn}get_ticks_per_minute{/grn}

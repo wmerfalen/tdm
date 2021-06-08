@@ -88,6 +88,140 @@
 ./act.builder.cpp:->flush_holding
 ./act.builder.cpp:->hold_anything
 ./act.builder.cpp:->uuid
+./tags:ACMD	act.builder.cpp	/^->flush_holding$/;"	f
+./tags:ACMD	act.builder.cpp	/^->hold_anything$/;"	f
+./tags:ACMD	act.builder.cpp	/^->uuid$/;"	f
+./tags:ACMD	act.comm.cpp	/^->gen_comm$/;"	f
+./tags:ACMD	act.comm.cpp	/^->gsay$/;"	f
+./tags:ACMD	act.comm.cpp	/^->qcomm$/;"	f
+./tags:ACMD	act.comm.cpp	/^->reply$/;"	f
+./tags:ACMD	act.comm.cpp	/^->say$/;"	f
+./tags:ACMD	act.comm.cpp	/^->spec_comm$/;"	f
+./tags:ACMD	act.comm.cpp	/^->tell$/;"	f
+./tags:ACMD	act.comm.cpp	/^->write$/;"	f
+./tags:ACMD	act.demolitions.cpp	/^->breach$/;"	f
+./tags:ACMD	act.demolitions.cpp	/^->cancel$/;"	f
+./tags:ACMD	act.demolitions.cpp	/^->install$/;"	f
+./tags:ACMD	act.demolitions.cpp	/^->thermite$/;"	f
+./tags:ACMD	act.demolitions.cpp	/^->uninstall$/;"	f
+./tags:ACMD	act.informative.cpp	/^->color$/;"	f
+./tags:ACMD	act.informative.cpp	/^->commands$/;"	f
+./tags:ACMD	act.informative.cpp	/^->consider$/;"	f
+./tags:ACMD	act.informative.cpp	/^->diagnose$/;"	f
+./tags:ACMD	act.informative.cpp	/^->drone$/;"	f
+./tags:ACMD	act.informative.cpp	/^->equipment$/;"	f
+./tags:ACMD	act.informative.cpp	/^->examine$/;"	f
+./tags:ACMD	act.informative.cpp	/^->exits$/;"	f
+./tags:ACMD	act.informative.cpp	/^->gen_ps$/;"	f
+./tags:ACMD	act.informative.cpp	/^->gold$/;"	f
+./tags:ACMD	act.informative.cpp	/^->inventory$/;"	f
+./tags:ACMD	act.informative.cpp	/^->levels$/;"	f
+./tags:ACMD	act.informative.cpp	/^->look$/;"	f
+./tags:ACMD	act.informative.cpp	/^->preferences$/;"	f
+./tags:ACMD	act.informative.cpp	/^->recall$/;"	f
+./tags:ACMD	act.informative.cpp	/^->score$/;"	f
+./tags:ACMD	act.informative.cpp	/^->time$/;"	f
+./tags:ACMD	act.informative.cpp	/^->toggle$/;"	f
+./tags:ACMD	act.informative.cpp	/^->users$/;"	f
+./tags:ACMD	act.informative.cpp	/^->view$/;"	f
+./tags:ACMD	act.informative.cpp	/^->weather$/;"	f
+./tags:ACMD	act.informative.cpp	/^->where$/;"	f
+./tags:ACMD	act.informative.cpp	/^->who$/;"	f
+./tags:ACMD	act.item.cpp	/^->drink$/;"	f
+./tags:ACMD	act.item.cpp	/^->drop$/;"	f
+./tags:ACMD	act.item.cpp	/^->eat$/;"	f
+./tags:ACMD	act.item.cpp	/^->get$/;"	f
+./tags:ACMD	act.item.cpp	/^->give$/;"	f
+./tags:ACMD	act.item.cpp	/^->grab$/;"	f
+./tags:ACMD	act.item.cpp	/^->pour$/;"	f
+./tags:ACMD	act.item.cpp	/^->put$/;"	f
+./tags:ACMD	act.item.cpp	/^->remove$/;"	f
+./tags:ACMD	act.item.cpp	/^->wear$/;"	f
+./tags:ACMD	act.item.cpp	/^->wield$/;"	f
+./tags:ACMD	act.medic.cpp	/^->heal$/;"	f
+./tags:ACMD	act.medic.cpp	/^->revive$/;"	f
+./tags:ACMD	act.movement.cpp	/^->enter$/;"	f
+./tags:ACMD	act.movement.cpp	/^->follow$/;"	f
+./tags:ACMD	act.movement.cpp	/^->gen_door$/;"	f
+./tags:ACMD	act.movement.cpp	/^->leave$/;"	f
+./tags:ACMD	act.movement.cpp	/^->move$/;"	f
+./tags:ACMD	act.movement.cpp	/^->rest$/;"	f
+./tags:ACMD	act.movement.cpp	/^->sit$/;"	f
+./tags:ACMD	act.movement.cpp	/^->sleep$/;"	f
+./tags:ACMD	act.movement.cpp	/^->stand$/;"	f
+./tags:ACMD	act.movement.cpp	/^->wake$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->assist$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->command_sequence$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->engagement_mode$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->go_loud$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->regroup$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->scan \/* !mods *\/$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->silencers_off$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->silencers_on$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->snipe$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->snipe_object$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->spray$/;"	f
+./tags:ACMD	act.offensive.cpp	/^->throw$/;"	f
+./tags:ACMD	act.other.cpp	/^->display$/;"	f
+./tags:ACMD	act.other.cpp	/^->gen_tog$/;"	f
+./tags:ACMD	act.other.cpp	/^->gen_write$/;"	f
+./tags:ACMD	act.other.cpp	/^->group$/;"	f
+./tags:ACMD	act.other.cpp	/^->hide$/;"	f
+./tags:ACMD	act.other.cpp	/^->not_here$/;"	f
+./tags:ACMD	act.other.cpp	/^->practice$/;"	f
+./tags:ACMD	act.other.cpp	/^->quit$/;"	f
+./tags:ACMD	act.other.cpp	/^->report$/;"	f
+./tags:ACMD	act.other.cpp	/^->save$/;"	f
+./tags:ACMD	act.other.cpp	/^->sneak$/;"	f
+./tags:ACMD	act.other.cpp	/^->split$/;"	f
+./tags:ACMD	act.other.cpp	/^->steal$/;"	f
+./tags:ACMD	act.other.cpp	/^->title$/;"	f
+./tags:ACMD	act.other.cpp	/^->ungroup$/;"	f
+./tags:ACMD	act.other.cpp	/^->use$/;"	f
+./tags:ACMD	act.other.cpp	/^->visible$/;"	f
+./tags:ACMD	act.other.cpp	/^->wimpy$/;"	f
+./tags:ACMD	act.social.cpp	/^->action$/;"	f
+./tags:ACMD	act.social.cpp	/^->insult$/;"	f
+./tags:ACMD	graph.cpp	/^->track$/;"	f
+./tags:ACMD	house.cpp	/^->hcontrol$/;"	f
+./tags:ACMD	house.cpp	/^->house$/;"	f
+./tags:ACMD	interpreter.cpp	/^->alias$/;"	f
+./tags:ACMD	interpreter.cpp	/^->room_vnum$/;"	f
+./tags:ACMD	interpreter.cpp	/^->unimplemented$/;"	f
+./tags:ACMD	limits.cpp	/^->idle$/;"	f
+./tags:ACMD	modify.cpp	/^->skillset$/;"	f
+./tags:ACMD	mods/classes/breacher.cpp	/^->teep$/;"	f
+./tags:ACMD	mods/classes/engineer.cpp	/^	->drone_bomb$/;"	f	namespace:mods::class_abilities::engineer
+./tags:ACMD	mods/classes/ghost.cpp	/^	->dissipate$/;"	f	namespace:mods::class_abilities::ghost
+./tags:ACMD	mods/classes/pyrexia.cpp	/^->fire_nade$/;"	f
+./tags:ACMD	mods/classes/sniper.cpp	/^	->disengage$/;"	f	namespace:mods::class_abilities::sniper
+./tags:ACMD	mods/classes/sniper.cpp	/^	->engage$/;"	f	namespace:mods::class_abilities::sniper
+./tags:ACMD	mods/classes/sniper.cpp	/^	->mark_target$/;"	f	namespace:mods::class_abilities::sniper
+./tags:ACMD	mods/classes/sniper.cpp	/^	->tracking_shot$/;"	f	namespace:mods::class_abilities::sniper
+./tags:ACMD	mods/classes/sniper.cpp	/^	->xray_shot$/;"	f	namespace:mods::class_abilities::sniper
+./tags:ACMD	mods/contracts.cpp	/^	->contract$/;"	f	namespace:mods::contracts
+./tags:ACMD	mods/date-time.cpp	/^	->moon_phase$/;"	f	namespace:mods::date_time
+./tags:ACMD	mods/help.cpp	/^	->help$/;"	f	namespace:mods::help
+./tags:ACMD	mods/levels.cpp	/^	->exp$/;"	f	namespace:mods::levels
+./tags:ACMD	mods/levels.cpp	/^	->practices$/;"	f	namespace:mods::levels
+./tags:ACMD	mods/mini-games/line-up.cpp	/^->hack$/;"	f
+./tags:ACMD	mods/mini-games/line-up.cpp	/^->next_row$/;"	f
+./tags:ACMD	mods/mini-games/line-up.cpp	/^->reset_hack$/;"	f
+./tags:ACMD	mods/mini-games/line-up.cpp	/^->rotate_left$/;"	f
+./tags:ACMD	mods/mini-games/line-up.cpp	/^->rotate_right$/;"	f
+./tags:ACMD	mods/mini-games/wires.cpp	/^->plug_cable$/;"	f
+./tags:ACMD	mods/orm/player-base-ability.cpp	/^		->save_my_pba$/;"	f	namespace:mods::orm::pba
+./tags:ACMD	mods/prefs.cpp	/^->pref$/;"	f
+./tags:ACMD	mods/rifle-attachments.cpp	/^		->vcarrying$/;"	f	namespace:mods::rifle_attachments
+./tags:ACMD	mods/scripted-step.cpp	/^	->scripted_step$/;"	f	namespace:mods
+./tags:ACMD	mods/skills.cpp	/^->train$/;"	f
+./tags:ACMD	mods/values.cpp	/^			->get_value$/;"	f	namespace:mods::values
+./tags:ACMD	mods/values.cpp	/^			->list_values$/;"	f	namespace:mods::values
+./tags:ACMD	mods/values.cpp	/^			->revert_value_to_default$/;"	f	namespace:mods::values
+./tags:ACMD	mods/values.cpp	/^			->set_value$/;"	f	namespace:mods::values
+./tags:ACMD	mods/weapons/reload.cpp	/^	->reload$/;"	f	namespace:mods::weapons::reload
+./tags:ACMD	shop.cpp	/^->buy$/;"	f
+./tags:ACMD	shop.cpp	/^->list$/;"	f
 ./modify.cpp:->skillset
 ./act.offensive.cpp:->throw
 ./act.offensive.cpp:->snipe_object

@@ -990,7 +990,7 @@ DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
 DB_SAVE_CHAR	mods/players/db-load.hpp	/^		DB_SAVE_CHAR$/;"	e	enum:mods::players::db_load::save_from_t
-DD	mods/debug-pre-game.hpp	204;"	d
+DD	mods/debug-pre-game.hpp	233;"	d
 DD	mods/debug-pre-game.hpp	39;"	d
 DEAD	mods/scan.hpp	/^			DEAD = (1 << 3),$/;"	e	enum:mods::scan::find_type_t
 DEALER	structs.h	/^	DEALER = 17,$/;"	e	enum:player_class_t
@@ -2418,12 +2418,12 @@ MENTOC_HACK_USED	mods/chat.hpp	13;"	d
 MENTOC_HACK_USED	mods/chat.hpp	54;"	d
 MENTOC_INITIALIZE	mods/item-types.hpp	629;"	d
 MENTOC_INITIALIZE_IMPL	mods/item-types.hpp	625;"	d
-MENTOC_ITEM_PARSE	mods/util.cpp	981;"	d	file:
-MENTOC_ITEM_PARSE	mods/util.cpp	987;"	d	file:
-MENTOC_ITEM_PARSE	mods/util.cpp	994;"	d	file:
-MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	977;"	d	file:
-MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	986;"	d	file:
-MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	990;"	d	file:
+MENTOC_ITEM_PARSE	mods/util.cpp	1237;"	d	file:
+MENTOC_ITEM_PARSE	mods/util.cpp	1243;"	d	file:
+MENTOC_ITEM_PARSE	mods/util.cpp	1250;"	d	file:
+MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1233;"	d	file:
+MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1242;"	d	file:
+MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1246;"	d	file:
 MENTOC_ITEM_TYPES_BY_CAPS_SEQ	mods/item-types.hpp	38;"	d
 MENTOC_ITEM_TYPES_CAPS_SEQ	mods/item-types.hpp	25;"	d
 MENTOC_ITEM_TYPES_SEQ	mods/item-types.hpp	12;"	d
@@ -2441,14 +2441,14 @@ MENTOC_LAZY_INT	mods/builder.cpp	1831;"	d	file:
 MENTOC_LAZY_INT	mods/builder.cpp	1850;"	d	file:
 MENTOC_LAZY_ME	mods/builder.cpp	3428;"	d	file:
 MENTOC_LAZY_ME	mods/builder.cpp	3437;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	884;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	896;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	903;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	915;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	916;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	928;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	935;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	947;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1140;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1152;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1159;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1171;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1172;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1184;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1191;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1203;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	221;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	236;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	247;"	d	file:
@@ -5042,11 +5042,12 @@ __MENTOC_MODS_scripted_stepS_HEADER__	mods/scripted-step.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/search.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/util.hpp	2;"	d
 __MENTOC_PLR	db.cpp	2228;"	d	file:
-__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	138;"	d
-__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	156;"	d
+__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	167;"	d
+__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	185;"	d
 __MENTOC_RUN_PBA_CODE__	mods/debug-pre-game.hpp	23;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	145;"	d
+__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	174;"	d
+__MENTOC_RUN_WRAPPER_PREGAME__	mods/debug-pre-game.hpp	86;"	d
 __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/runners/movement.cpp	7;"	d	file:
 __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	8;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
@@ -5305,14 +5306,14 @@ arcon_bar	mods/init.hpp	/^INIT(mods::fluxkraft::arcon_bar);$/;"	v
 arg1	db.h	/^	int	arg1;		\/*                                      *\/$/;"	m	struct:reset_com
 arg2	db.h	/^	int	arg2;		\/* Arguments to the command             *\/$/;"	m	struct:reset_com
 arg3	db.h	/^	int	arg3;		\/*                                      *\/$/;"	m	struct:reset_com
-argat	mods/util.hpp	425;"	d
+argat	mods/util.hpp	430;"	d
 arglist	mods/util.hpp	/^	T arglist(std::string in_arglist_argument) {$/;"	f	namespace:mods::util
 arglist_parser	mods/util.hpp	/^	struct arglist_parser {$/;"	s	namespace:mods::util::args
 args	mods/util.cpp	/^namespace mods::util::args {$/;"	n	class:mods::util	file:
 args	mods/util.hpp	/^namespace mods::util::args {$/;"	n	class:mods::util
-args	mods/util.hpp	424;"	d
-argsat	mods/util.hpp	427;"	d
-argshave	mods/util.hpp	428;"	d
+args	mods/util.hpp	429;"	d
+argsat	mods/util.hpp	432;"	d
+argshave	mods/util.hpp	433;"	d
 argument_interpreter	interpreter.h	43;"	d
 arguments	mods/builder.cpp	/^	size_t arguments;$/;"	m	struct:command_t	file:
 armor	mods/armor/advanced-protection.cpp	/^namespace mods::armor {$/;"	n	class:mods	file:
@@ -6340,7 +6341,7 @@ dbg_print	mods/orm/contract-steps.hpp	10;"	d
 dbg_print	mods/orm/contract-steps.hpp	225;"	d
 dbg_print	mods/orm/contract-steps.hpp	8;"	d
 dbg_print	mods/player-contract-instance.cpp	11;"	d	file:
-dbg_print	mods/player-contract-instance.cpp	697;"	d	file:
+dbg_print	mods/player-contract-instance.cpp	700;"	d	file:
 dbg_print	mods/player-contract-instance.cpp	9;"	d	file:
 dbg_print	mods/runners/communication.cpp	6;"	d	file:
 dbg_print	mods/runners/communication.cpp	8;"	d	file:
@@ -6967,6 +6968,7 @@ do_wiznet	act.wizard.cpp	/^SUPERCMD(do_wiznet);$/;"	v
 do_wiznet	interpreter.cpp	/^ACMD(do_wiznet);$/;"	v
 do_wizutil	act.wizard.cpp	/^SUPERCMD(do_wizutil);$/;"	v
 do_wizutil	interpreter.cpp	/^ACMD(do_wizutil);$/;"	v
+do_wrapper	mods/debug-pre-game.hpp	/^	void do_wrapper() {$/;"	f	namespace:mods::debug::pre_game
 do_write	act.comm.cpp	/^ACMD(do_write);$/;"	v
 do_write	interpreter.cpp	/^ACMD(do_write);$/;"	v
 do_xray_shot	mods/classes/class-commands.hpp	/^ACMD(do_xray_shot);$/;"	v
@@ -8614,7 +8616,7 @@ int_at	mods/util.cpp	/^	int parsed_args::int_at(std::size_t index) {$/;"	f	class
 int_map	mods/util.cpp	/^	std::map<std::size_t,int> parsed_args::int_map(std::vector<std::size_t> indexes) {$/;"	f	class:mods::util::args::parsed_args
 int_type	mods/acl/config-parser.hpp	/^                typedef uint64_t int_type;$/;"	t	class:mods::acl::FileParser
 int_types	mods/values.cpp	/^static const std::vector<value_key_t> int_types = {$/;"	m	namespace:mods::values	file:
-intat	mods/util.hpp	426;"	d
+intat	mods/util.hpp	431;"	d
 integral_list	mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& integral_list() const {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 integral_object	mods/orm/integral-object.hpp	/^		integral_object() : id(0) {$/;"	f	struct:mods::orm::integral_object
 integral_object	mods/orm/integral-object.hpp	/^	struct integral_object : public mods::orm::orm_base<integral_object,std::string> {$/;"	s	namespace:mods::orm
@@ -9795,6 +9797,8 @@ magazine	mods/rifle-attachments.hpp	/^			obj_ptr_t magazine;$/;"	m	struct:mods::
 magazine_t	mods/weapon.hpp	/^	enum magazine_t {$/;"	g	namespace:mods::weapon
 magic_user	spec_assign.cpp	/^SPECIAL(magic_user);$/;"	v
 magic_user	spec_procs.cpp	/^SPECIAL(magic_user);$/;"	v
+mail_format	mods/util.cpp	/^	std::string mail_format(std::size_t width,std::string_view subject,std::string_view header,std::string_view body) {$/;"	f	namespace:mods::util
+mail_format	mods/util.cpp	/^	std::string mail_format(std::string_view subject,std::string_view header,std::string_view body) {$/;"	f	namespace:mods::util
 mail_index	mail.cpp	/^mail_index_type *mail_index = NULL;	\/* list of recs in the mail file  *\/$/;"	v
 mail_index_type	mail.h	/^typedef struct mail_index_type_d mail_index_type;$/;"	t	typeref:struct:mail_index_type_d
 mail_index_type_d	mail.h	/^struct mail_index_type_d {$/;"	s
@@ -10236,7 +10240,7 @@ mtp_debug	mods/target-practice-db.cpp	38;"	d	file:
 mtp_debug	mods/target-practice.cpp	11;"	d	file:
 mtp_debug	mods/target-practice.cpp	13;"	d	file:
 mtp_debug	mods/target-practice.cpp	62;"	d	file:
-mu_debug	mods/util.cpp	1275;"	d	file:
+mu_debug	mods/util.cpp	1531;"	d	file:
 mu_debug	mods/util.cpp	17;"	d	file:
 mu_debug	mods/util.cpp	19;"	d	file:
 mud_time_passed	utils.cpp	/^struct time_info_data *mud_time_passed(time_t t2, time_t t1) {$/;"	f
@@ -11261,7 +11265,7 @@ pyrexia_seal_off_room_with_wall_of_fire_level	mods/orm/pyrexia.hpp	/^		skill_fam
 pyrexia_solar_assistance_level	mods/orm/pyrexia.hpp	/^		skill_familiarity_t pyrexia_solar_assistance_level;$/;"	m	struct:mods::orm::pyrexia
 pyrexia_summon_napalm_strike_level	mods/orm/pyrexia.hpp	/^		skill_familiarity_t pyrexia_summon_napalm_strike_level;$/;"	m	struct:mods::orm::pyrexia
 q	random.cpp	46;"	d	file:
-qmob	mods/util.hpp	429;"	d
+qmob	mods/util.hpp	434;"	d
 quantity	mods/scripted-step.hpp	/^		uint16_t quantity;$/;"	m	struct:mods::scripted_step
 query_contents_by_yaml	mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {$/;"	f	namespace:mods::query_objects
 query_contents_by_yaml_multi	mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml_multi(obj_ptr_t& found_object,const std::vector<std::string>& files) {$/;"	f	namespace:mods::query_objects
@@ -13464,6 +13468,9 @@ world_conf	mods/world-configuration.hpp	/^namespace mods::world_conf {$/;"	n	cla
 world_size	db.cpp	/^std::size_t world_size() {$/;"	f
 worn_by	structs.h	/^		char_data *worn_by;	  \/* Worn by?			      *\/$/;"	m	struct:obj_data
 worn_on	structs.h	/^		sh_int worn_on;		  \/* Worn where?		      *\/$/;"	m	struct:obj_data
+wrap_in_box	mods/util.cpp	/^	std::string wrap_in_box(std::size_t width,std::string_view msg) {$/;"	f	namespace:mods::util
+wrap_in_header	mods/util.cpp	/^	std::string wrap_in_header(std::size_t width,std::string_view msg) {$/;"	f	namespace:mods::util
+wrap_in_header	mods/util.cpp	/^	std::string wrap_in_header(std::size_t width,std::string_view msg,std::string_view title) {$/;"	f	namespace:mods::util
 write	comm.cpp	1545;"	d	file:
 writeToStream	mods/catch2.hpp	/^        void writeToStream( std::ostream &os ) const {$/;"	f	struct:Catch::Parser
 write_aliases	alias.cpp	/^void write_aliases(char_data *ch) {$/;"	f

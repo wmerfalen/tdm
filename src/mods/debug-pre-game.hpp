@@ -83,7 +83,36 @@ namespace mods::debug::pre_game {
 		std::cout << "[" << std::get<0>(i) << ",";
 		std::cout << std::get<1>(i) << "]\n";
 	}
+#define __MENTOC_RUN_WRAPPER_PREGAME__
+#ifdef __MENTOC_RUN_WRAPPER_PREGAME__
+	void do_wrapper() {
+		std::string text = "Greetings fellow soldier, the items that you found are "
+		                   "part of an everlasting source of gun stuff that we found in the H.V.23 "
+		                   "tonage Floor park. As you can tell, this is a lot of bs that i've just"
+		                   "come up on my own. I hope you like it.. I sure did"
+		                   "\theh\r\n"
+		                   "\r\n"
+		                   "going away now..\r\n"
+		                   ;
+		std::cerr << mods::util::wrap_in_header(80,"The life and times of jerry the race car driver", "Life and times vol. 4");
+		std::cerr << mods::util::wrap_in_header(80,"There are sometimes when....\r\nWhere you wanna go where everybody...\r\nKnows your name...\r\nThe life and times of jerry the race car driver");
+		std::cerr << mods::util::wrap_in_header(80,"Therearesometimeswhen....Whereyouwannagowhereeverybody...Knowsyour-full-forward-facingname...nThelifeandtimesof jerrytheracecardriver");
+		std::cerr << mods::util::wrap_in_box(80,text);
+
+		std::cerr << mods::util::mail_format("RE: I totally know you killed my hard drive drip mucos infection more time fills each day what goes around comes back stronger",
+		                                     "Really? Are we really having this conversation? Why don't you take your accusations...",
+		                                     text
+		                                    );
+		sleep(60);
+		exit(1);
+
+	}
+#endif
+
 	bool run() {
+#ifdef __MENTOC_RUN_WRAPPER_PREGAME__
+		do_wrapper();
+#endif
 		deep_object_parser_test();
 #ifdef __MENTOC_RUN_RIFLE_INDEX_ORM_PREGAME__
 		{
