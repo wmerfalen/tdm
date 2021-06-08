@@ -22,11 +22,23 @@ namespace mods {
 		return list;
 	}
 	void load_all_contract_step_callbacks() {
+		dbg_print(green_str("load_all_contract_step_callbacks"));
 		auto status = mods::orm::load_all_contract_step_callbacks();
 		if(std::get<0>(status)) {
 			dbg_print(green_str("load_all_contract_step_callbacks:") << "'" << std::get<1>(status) << "'");
 		} else {
 			dbg_print(red_str("load_all_contract_step_callbacks:") << "'" << std::get<1>(status) << "'");
+		}
+	}
+	contract_step_callback::contract_step_callback(const contract_step_callback& other) {
+		dbg_print(green_str("[contract_step_callback]::copy constructor"));
+		contract_vnum = other.contract_vnum;
+		sequence_vnum = other.sequence_vnum;
+		task_vnum = other.task_vnum;
+		task_type = other.task_type;
+		task_target = other.task_target;
+		for(const auto& step : other.steps) {
+			steps.emplace_back(step);
 		}
 	}
 

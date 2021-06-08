@@ -21,6 +21,10 @@ namespace mods::contracts {
 			if(std::get<0>(s)) {
 				auto c = create_object(std::get<1>(s),std::get<2>(s));
 				player->sendln(CAT(
+				                   "\r\n\r\n"
+				                   "{grn}***********************************************{/grn}\r\n",
+				                   "{yel} C O N G R A T U L A T I O N S                 {/yel}\r\n"
+				                   "{grn}***********************************************{/grn}\r\n"
 				                   "{grn}**********************************************{/grn}\r\n",
 				                   "{yel} You are rewarded with the following item:{/grn}\r\n",
 				                   "{grn}",c->name.c_str(),"{/grn}\r\n",
@@ -36,6 +40,10 @@ namespace mods::contracts {
 				auto& ref = std::get<2>(s);
 				auto ptr = mods::rifle_attachments::make(ref);
 				player->sendln(CAT(
+				                   "\r\n\r\n"
+				                   "{grn}***********************************************{/grn}\r\n",
+				                   "{yel} C O N G R A T U L A T I O N S                 {/yel}\r\n"
+				                   "{grn}***********************************************{/grn}\r\n"
 				                   "{grn}**********************************************{/grn}\r\n",
 				                   "{yel} You are rewarded with the following item:{/grn}\r\n",
 				                   "{grn}",ptr->base_object->name.c_str(),"{/grn}\r\n",
@@ -44,6 +52,32 @@ namespace mods::contracts {
 				player->carry(ptr->base_object);
 			}
 		}
+	}
+	contract_step::contract_step(const contract_step& other) {
+		m_debug(green_str("[contract_step]:: copy constructor"));
+		m_debug("other.reward_xp:" << other.reward_xp << ", other.reward_money:" << other.reward_money << ", desc:" << other.description);
+		goal = other.goal;
+		target = other.target;
+		description = other.description;
+		mob_vnum = other.mob_vnum;
+		mob_uuid = other.mob_uuid;
+		object_yaml = other.object_yaml;
+		object_uuid = other.object_uuid;
+		room = other.room;
+		quota = other.quota;
+		is_optional = other.is_optional;
+		reward_xp = other.reward_xp;
+		reward_money = other.reward_money;
+		reward_1 = other.reward_1;
+		reward_2 = other.reward_2;
+		reward_3 = other.reward_3;
+		reward_4 = other.reward_4;
+		reward_5 = other.reward_5;
+		reward_6 = other.reward_6;
+		reward_7 = other.reward_7;
+		reward_8 = other.reward_8;
+		reward_9 = other.reward_9;
+		reward_10 = other.reward_10;
 	}
 	void contract_step::reward(const uint64_t& player_db_id) {
 		m_debug("rewarding player id: " << green_str(std::to_string(player_db_id)));
@@ -54,6 +88,10 @@ namespace mods::contracts {
 		}
 		if(reward_xp > 0) {
 			player->sendln(CAT(
+			                   "\r\n\r\n"
+			                   "{grn}***********************************************{/grn}\r\n",
+			                   "{yel} C O N G R A T U L A T I O N S                 {/yel}\r\n"
+			                   "{grn}***********************************************{/grn}\r\n"
 			                   "{grn}***********************************************{/grn}\r\n",
 			                   "{yel} You are rewarded {grn}",reward_xp," XP{/grn}\r\n",
 			                   "{grn}***********************************************{/grn}\r\n"
@@ -62,6 +100,10 @@ namespace mods::contracts {
 		}
 		if(reward_money > 0) {
 			player->sendln(CAT(
+			                   "\r\n\r\n"
+			                   "{grn}***********************************************{/grn}\r\n",
+			                   "{yel} C O N G R A T U L A T I O N S                 {/yel}\r\n"
+			                   "{grn}***********************************************{/grn}\r\n"
 			                   "{grn}***********************************************{/grn}\r\n",
 			                   "{yel} You are rewarded {grn}",reward_money," MP{/grn}\r\n",
 			                   "{grn}***********************************************{/grn}\r\n"

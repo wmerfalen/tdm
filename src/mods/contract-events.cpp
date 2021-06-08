@@ -2,11 +2,6 @@
 #include "contract-events.hpp"
 #include "contract-types.hpp"
 #include "player.hpp"
-#ifdef  __MENTOC_SHOW_MESSAGE_QUEUE_OUTPUT__
-#define dbg_print(a) std::cerr << "[mods::contract-events][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
-#else
-#define dbg_print(a)
-#endif
 namespace mods::contract_events {
 	void perform_get(char_data* ch,obj_data* object) {
 		auto receiver = ptr(ch);

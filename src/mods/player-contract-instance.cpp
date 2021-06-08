@@ -322,6 +322,28 @@ namespace mods::contracts {
 			pretty += "give_item";
 		}
 		pretty += CAT("{/grn}\r\n\t\t{yel}[description]:{/yel}{grn}",m_current_step->description,"{/grn}\r\n");
+		pretty += CAT(
+		              "\t\t{yel}[reward_xp]:{/yel}{grn}",m_current_step->reward_xp,"{/grn}\r\n",
+		              "\t\t{yel}[reward_money]:{/yel}{grn}",m_current_step->reward_money,"{/grn}\r\n",
+		              "\t\t{yel}[target]:{/yel}{grn}",m_current_step->target,"{/grn}\r\n",
+		              "\t\t{yel}[mob_vnum]:{/yel}{grn}",m_current_step->mob_vnum,"{/grn}\r\n",
+		              "\t\t{yel}[mob_uuid]:{/yel}{grn}",m_current_step->mob_uuid,"{/grn}\r\n",
+		              "\t\t{yel}[object_yaml]:{/yel}{grn}",m_current_step->object_yaml,"{/grn}\r\n",
+		              "\t\t{yel}[object_uuid]:{/yel}{grn}",m_current_step->object_uuid,"{/grn}\r\n",
+		              "\t\t{yel}[room]:{/yel}{grn}",m_current_step->room,"{/grn}\r\n",
+		              "\t\t{yel}[quota]:{/yel}{grn}",m_current_step->quota,"{/grn}\r\n",
+		              "\t\t{yel}[is_optional]:{/yel}{grn}",m_current_step->is_optional,"{/grn}\r\n",
+		              "\t\t{yel}[reward_1]:{/yel}{grn}",m_current_step->reward_1,"{/grn}\r\n",
+		              "\t\t{yel}[reward_2]:{/yel}{grn}",m_current_step->reward_2,"{/grn}\r\n",
+		              "\t\t{yel}[reward_3]:{/yel}{grn}",m_current_step->reward_3,"{/grn}\r\n",
+		              "\t\t{yel}[reward_4]:{/yel}{grn}",m_current_step->reward_4,"{/grn}\r\n",
+		              "\t\t{yel}[reward_5]:{/yel}{grn}",m_current_step->reward_5,"{/grn}\r\n",
+		              "\t\t{yel}[reward_6]:{/yel}{grn}",m_current_step->reward_6,"{/grn}\r\n",
+		              "\t\t{yel}[reward_7]:{/yel}{grn}",m_current_step->reward_7,"{/grn}\r\n",
+		              "\t\t{yel}[reward_8]:{/yel}{grn}",m_current_step->reward_8,"{/grn}\r\n",
+		              "\t\t{yel}[reward_9]:{/yel}{grn}",m_current_step->reward_9,"{/grn}\r\n",
+		              "\t\t{yel}[reward_10]:{/yel}{grn}",m_current_step->reward_10,"{/grn}\r\n"
+		          );
 		return pretty;
 	}
 	void player_contract_instance::refresh_dump() {
@@ -376,6 +398,28 @@ namespace mods::contracts {
 			m_step_dump += "give_item";
 		}
 		m_step_dump += CAT("\r\n[description]:{yel}",m_current_step->description,"{/yel}\r\n");
+		m_step_dump += CAT(
+		                   "\t\t{yel}[reward_xp]:{/yel}{grn}",m_current_step->reward_xp,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_money]:{/yel}{grn}",m_current_step->reward_money,"{/grn}\r\n",
+		                   "\t\t{yel}[target]:{/yel}{grn}",m_current_step->target,"{/grn}\r\n",
+		                   "\t\t{yel}[mob_vnum]:{/yel}{grn}",m_current_step->mob_vnum,"{/grn}\r\n",
+		                   "\t\t{yel}[mob_uuid]:{/yel}{grn}",m_current_step->mob_uuid,"{/grn}\r\n",
+		                   "\t\t{yel}[object_yaml]:{/yel}{grn}",m_current_step->object_yaml,"{/grn}\r\n",
+		                   "\t\t{yel}[object_uuid]:{/yel}{grn}",m_current_step->object_uuid,"{/grn}\r\n",
+		                   "\t\t{yel}[room]:{/yel}{grn}",m_current_step->room,"{/grn}\r\n",
+		                   "\t\t{yel}[quota]:{/yel}{grn}",m_current_step->quota,"{/grn}\r\n",
+		                   "\t\t{yel}[is_optional]:{/yel}{grn}",m_current_step->is_optional,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_1]:{/yel}{grn}",m_current_step->reward_1,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_2]:{/yel}{grn}",m_current_step->reward_2,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_3]:{/yel}{grn}",m_current_step->reward_3,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_4]:{/yel}{grn}",m_current_step->reward_4,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_5]:{/yel}{grn}",m_current_step->reward_5,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_6]:{/yel}{grn}",m_current_step->reward_6,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_7]:{/yel}{grn}",m_current_step->reward_7,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_8]:{/yel}{grn}",m_current_step->reward_8,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_9]:{/yel}{grn}",m_current_step->reward_9,"{/grn}\r\n",
+		                   "\t\t{yel}[reward_10]:{/yel}{grn}",m_current_step->reward_10,"{/grn}\r\n"
+		               );
 	}
 	/**
 	 * @brief
@@ -650,3 +694,4 @@ namespace mods::contracts {
 	}
 
 };
+#undef dbg_print

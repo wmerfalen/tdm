@@ -49,6 +49,8 @@ namespace mods::contracts {
 		std::string     reward_9;
 		std::string     reward_10;
 		void reward(const uint64_t& player_db_id);
+		contract_step(const contract_step& other);
+		contract_step() = default;
 	};
 	using task_t = contract_step::task_type_t;
 	using target_t = contract_step::task_target_t;

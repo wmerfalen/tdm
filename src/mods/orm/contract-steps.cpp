@@ -1,6 +1,11 @@
 #include "contract-steps.hpp"
 #include "util.hpp"
 #include "../player.hpp"
+#ifdef  __MENTOC_SHOW_CONTRACT_OUTPUT__
+#define m_debug(a) std::cerr << "[mods::orm::contract_steps][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#else
+#define m_debug(a)
+#endif
 
 namespace mods::orm {
 	std::tuple<int16_t,std::string> contract_steps::update_row() {
@@ -45,6 +50,8 @@ namespace mods::orm {
 	int16_t contract_steps::feed(const pqxx::result::reference& row) {
 		init();
 		id = row["id"].as<uint64_t>();
+		s_reward_xp = row["s_reward_xp"].is_null() ? 0 : row["s_reward_xp"].as<int>();
+		s_reward_money = row["s_reward_money"].is_null() ? 0 : row["s_reward_money"].as<int>();
 		s_contract_vnum = row["s_contract_vnum"].as<int>();
 		s_task_type = row["s_task_type"].as<int>();
 		s_task_target = row["s_task_target"].as<int>();
@@ -55,8 +62,6 @@ namespace mods::orm {
 		s_is_optional = std::string(row["s_is_optional"].c_str())[0] == 'f' ? false : true;
 		s_order = row["s_order"].as<int>();
 		s_object_yaml = row["s_object_yaml"].c_str();
-		s_reward_xp = NULLABLE_U32("s_reward_xp");
-		s_reward_money = NULLABLE_U32("s_reward_money");
 		s_reward_1 = row["s_reward_1"].c_str();
 		s_reward_2 = row["s_reward_2"].c_str();
 		s_reward_3 = row["s_reward_3"].c_str();
@@ -114,7 +119,7 @@ namespace mods::orm {
 			s_reward_10 = record.s_reward_10;
 			std::tuple<int16_t,std::string,uint64_t> insert_result = mods::orm::util::insert_returning<contract_steps_record_t,sql_compositor>(&record, "id");
 			if(!ORM_SUCCESS(insert_result)) {
-				std::cerr << red_str("Issue saving contract_steps:'") << std::get<1>(insert_result) << "'\n";
+				log(CAT("SYSERR: Issue saving contract_steps:'",std::get<1>(insert_result),"'").c_str());
 			}
 		}
 		return 0;
@@ -165,9 +170,11 @@ namespace mods::orm {
 		}
 
 		for(auto&& row : result) {
-			std::cerr << green_str("contract_steps filling contract:") << row["s_contract_vnum"].as<int>() << "\n";
+			m_debug(green_str("contract_steps filling contract:") << row["s_contract_vnum"].as<int>());
 			rows.emplace_back();
 			auto& step = rows.back();
+			step.s_reward_xp = row["s_reward_xp"].is_null() ? 0 : row["s_reward_xp"].as<int>();
+			step.s_reward_money = row["s_reward_money"].is_null() ? 0 : row["s_reward_money"].as<int>();
 			step.s_task_type = (mods::contracts::contract_step::task_type_t)row["s_task_type"].as<uint16_t>();
 			step.s_task_target = (mods::contracts::contract_step::task_target_t)row["s_task_target"].as<uint16_t>();
 			step.s_description = row["s_description"].c_str();
@@ -176,8 +183,6 @@ namespace mods::orm {
 			step.s_room_vnum = row["s_room_vnum"].as<room_vnum>();
 			step.s_quota = row["s_quota"].as<int>();
 			step.s_is_optional = row["s_is_optional"].as<bool>();
-			step.s_reward_xp = row["s_reward_xp"].as<uint32_t>(0);
-			step.s_reward_money = row["s_reward_money"].as<uint32_t>(0);
 			step.s_reward_1 = row["s_reward_1"].c_str();
 			step.s_reward_2 = row["s_reward_2"].c_str();
 			step.s_reward_3 = row["s_reward_3"].c_str();
@@ -190,7 +195,7 @@ namespace mods::orm {
 			step.s_reward_10 = row["s_reward_10"].c_str();
 			step.s_order = row["s_order"].as<int>();
 		}
-		return {result.size(),"loaded"};
+		return {rows.size(),"loaded"};
 	}
 	std::deque<std::shared_ptr<contract_steps>>& contract_steps_list() {
 		static std::deque<std::shared_ptr<contract_steps>> list;
@@ -204,9 +209,12 @@ namespace mods::orm {
 		}
 
 		for(auto&& row : result) {
-			std::cerr << green_str("contract_steps filling contract:") << row["s_contract_vnum"].as<int>() << "\n";
-			auto step = std::make_shared<mods::orm::contract_steps>();
+			m_debug(green_str("contract_steps filling contract:") << row["s_contract_vnum"].as<int>());
+			in_list_ptr->emplace_back();
+			auto& step = in_list_ptr->back();
 			step->id = row["id"].as<uint64_t>();
+			step->s_reward_xp = row["s_reward_xp"].is_null() ? 0 : row["s_reward_xp"].as<int>();
+			step->s_reward_money = row["s_reward_money"].is_null() ? 0 : row["s_reward_money"].as<int>();
 			step->s_order = row["s_order"].as<int>();
 			step->s_contract_vnum = row["s_contract_vnum"].as<int>();
 			step->s_task_type = (mods::contracts::contract_step::task_type_t)row["s_task_type"].as<uint16_t>();
@@ -217,8 +225,6 @@ namespace mods::orm {
 			step->s_room_vnum = row["s_room_vnum"].as<room_vnum>();
 			step->s_quota = row["s_quota"].as<int>();
 			step->s_is_optional = std::string(row["s_is_optional"].c_str())[0] == 'f' ? false : true;
-			step->s_reward_xp = row["s_reward_xp"].as<uint32_t>(0);
-			step->s_reward_money = row["s_reward_money"].as<uint32_t>(0);
 			step->s_reward_1 = row["s_reward_1"].c_str();
 			step->s_reward_2 = row["s_reward_2"].c_str();
 			step->s_reward_3 = row["s_reward_3"].c_str();
@@ -229,7 +235,6 @@ namespace mods::orm {
 			step->s_reward_8 = row["s_reward_8"].c_str();
 			step->s_reward_9 = row["s_reward_9"].c_str();
 			step->s_reward_10 = row["s_reward_10"].c_str();
-			in_list_ptr->emplace_back(std::move(step));
 		}
 		return {result.size(),"loaded"};
 

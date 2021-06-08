@@ -55,7 +55,7 @@ namespace mods::orm {
 		        "id"
 		    );
 		if(!ORM_SUCCESS(insert_result)) {
-			std::cerr << red_str("Issue saving contracts:'") << std::get<1>(insert_result) << "'\n";
+			log(CAT("SYSERR: Issue saving contracts:'",std::get<1>(insert_result),"'").c_str());
 		}
 		return 0;
 	}
@@ -104,6 +104,18 @@ namespace mods::orm {
 				r.room = row.s_room_vnum;
 				r.quota = row.s_quota;
 				r.is_optional = row.s_is_optional;
+				r.reward_xp = row.s_reward_xp;
+				r.reward_money = row.s_reward_money;
+				r.reward_1 = row.s_reward_1;
+				r.reward_2 = row.s_reward_2;
+				r.reward_3 = row.s_reward_3;
+				r.reward_4 = row.s_reward_4;
+				r.reward_5 = row.s_reward_5;
+				r.reward_6 = row.s_reward_6;
+				r.reward_7 = row.s_reward_7;
+				r.reward_8 = row.s_reward_8;
+				r.reward_9 = row.s_reward_9;
+				r.reward_10 = row.s_reward_10;
 			}
 			++count;
 		}

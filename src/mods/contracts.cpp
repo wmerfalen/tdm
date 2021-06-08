@@ -25,6 +25,7 @@ namespace mods::contracts {
 		return list;
 	}
 	void load_all_contracts() {
+		dbg_print(green_str("load_all_contracts"));
 		auto& master_list = contract_master_list();
 		auto status = mods::orm::load_all_non_orm_contracts(&master_list);
 		if(std::get<0>(status)) {
@@ -35,6 +36,16 @@ namespace mods::contracts {
 	}
 	void clear_all_contracts() {
 		contract_master_list().clear();
+	}
+	contract::contract(const contract& other) {
+		dbg_print(green_str("[contract]::copy constructor"));
+		vnum = other.vnum;
+		title.assign(other.title);
+		description.assign(other.description);
+		for(const auto& step : other.steps) {
+			dbg_print("other.steps.reward_xp: " << step.reward_xp);
+			steps.emplace_back(step);
+		}
 	}
 
 	/**
@@ -164,3 +175,4 @@ namespace mods::contracts {
 	}
 
 };
+#undef dbg_print

@@ -4,6 +4,11 @@
 #include "orm-base.hpp"
 #include "../contract-types.hpp"
 
+#ifdef  __MENTOC_SHOW_CONTRACT_OUTPUT__
+#define dbg_print(a) std::cerr << "[mods::contracts][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#else
+#define dbg_print(a)
+#endif
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
@@ -91,11 +96,11 @@ namespace mods::orm {
 		}
 		contract_steps(const contract_vnum_t& contract_vnum) {
 			auto s = load_by_contract_vnum(contract_vnum);
-			std::cerr << "contract_steps(contract_vnum) constructor status: " << std::get<0>(s) << "|'" << std::get<1>(s) << "'\n";
+			dbg_print("contract_steps(contract_vnum) constructor status: " << std::get<0>(s) << "|'" << std::get<1>(s) << "'");
 		}
 		void fill(mods::contracts::contract& c) {
 			for(auto& row : rows) {
-				std::cerr << green_str("contract_steps filling contract:") << c.vnum << "\n";
+				dbg_print(green_str("contract_steps filling contract:") << c.vnum);
 				c.steps.emplace_back();
 				auto& step = c.steps.back();
 				step.goal = (mods::contracts::contract_step::task_type_t)row.s_task_type;
@@ -118,7 +123,6 @@ namespace mods::orm {
 				step.reward_8 = row.s_reward_8;
 				step.reward_9 = row.s_reward_9;
 				step.reward_10 = row.s_reward_10;
-				c.steps.emplace_back(step);
 			}
 		}
 		~contract_steps() = default;
@@ -218,4 +222,5 @@ namespace mods::orm {
 	//std::tuple<int16_t,std::string> sync_player_with_class_skills(const uint64_t& player_id, std::string_view player_class);
 };
 
+#undef dbg_print
 #endif

@@ -34,6 +34,8 @@ namespace mods {
 			}
 			return d;
 		}
+		contract_step_callback() = default;
+		contract_step_callback(const contract_step_callback& other);
 		std::vector<scripted_step> steps;
 	};
 };
