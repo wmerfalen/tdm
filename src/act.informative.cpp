@@ -241,17 +241,20 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 		log("SYSERR: NULL pointer in show_obj_to_char(): obj=%p ch=%p", obj, ch);
 		return;
 	}
-	if(ch->contract) {
-		mods::contract_events::find_item(player,object);
-	}
 
 	if(mods::object_utils::is_camera(obj) && obj->location_data() >= 16) {
 		player->send("A %s is installed on the %s wall.\r\n", obj->name.c_str(), mods::globals::dir_to_str(obj->location_data() - 16, true).c_str());
+		if(ch->contract) {
+			mods::contract_events::find_item(player,object);
+		}
 		return;
 	}
 
 	if(mods::object_utils::is_claymore(obj) && obj->location_data() >= 16) {
 		player->send("A %s is installed at the foot of the %s entrance.\r\n", obj->name.c_str(), mods::globals::dir_to_str(obj->location_data() - 16, true).c_str());
+		if(ch->contract) {
+			mods::contract_events::find_item(player,object);
+		}
 		return;
 	}
 
@@ -323,6 +326,9 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 	}
 
 	show_obj_modifiers(obj, ch);
+	if(ch->contract) {
+		mods::contract_events::find_item(player,object);
+	}
 }
 
 
@@ -416,13 +422,11 @@ void look_at_char(char_data *i, char_data *ch) {
 	MENTOC_PREAMBLE();
 	int j, found = false;
 	struct obj_data *tmp_obj;
+	auto iptr = ptr(i);
+	std::cerr << "i('" << iptr->name().c_str() << "') ch:('" << player->name().c_str() << "')\n";
 
 	if(!ch->has_desc) {
 		return;
-	}
-	if(ch->contract) {
-		auto o = ptr(i);
-		mods::contract_events::find_mob(player,o);
 	}
 
 	if(i->player.description) {
@@ -435,7 +439,6 @@ void look_at_char(char_data *i, char_data *ch) {
 
 	found = FALSE;
 
-	auto iptr = ptr(i);
 	act("\r\n$n is using:\r\n", FALSE, i, 0, ch, TO_VICT);
 	for(j = 0; j < NUM_WEARS; j++) {
 		auto obj = iptr->equipment(j);
@@ -468,11 +471,15 @@ void look_at_char(char_data *i, char_data *ch) {
 			player->sendln("You can't see anything.");
 		}
 	}
+	if(ch->contract) {
+		mods::contract_events::find_mob(player,iptr);
+	}
 }
 
 
 void list_one_char(char_data *i, char_data *ch) {
 	MENTOC_PREAMBLE();
+
 	if(i == nullptr) {
 		return;
 	}
@@ -491,13 +498,10 @@ void list_one_char(char_data *i, char_data *ch) {
 		"!FIGHTING!",
 		" is standing here."
 	};
+	auto iptr = ptr(i);
 
 	if(IS_NPC(i)) {
 		player->stc(i->player.short_descr);
-		if(ch->contract) {
-			auto o = ptr(i);
-			mods::contract_events::find_mob(player,o);
-		}
 	} else {
 		player->stc(i->player.name.str() + (GET_TITLE(i).length() ? " " + GET_TITLE(i).str() : ""));
 	}
@@ -556,6 +560,9 @@ void list_one_char(char_data *i, char_data *ch) {
 		act(" ...$e glows with a bright light!", FALSE, i, 0, ch, TO_VICT);
 	}
 	player->send("\r\n");
+	if(ch->contract) {
+		mods::contract_events::find_mob(player,iptr);
+	}
 }
 
 
@@ -820,9 +827,7 @@ void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 	if(room < 0 || room >= world.size()) {
 		return;
 	}
-	if(ch->contract) {
-		mods::contract_events::find_room(player,room);
-	}
+	bool contract = ch->contract;
 
 	player->sendln(CCCYN(ch, C_NRM));
 
@@ -861,6 +866,9 @@ void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 	player->send(CCYEL(ch, C_NRM));
 	list_char_to_char(ch);
 	player->send(CCNRM(ch, C_NRM));
+	if(contract) {
+		mods::contract_events::find_room(player,room);
+	}
 }
 
 
@@ -873,9 +881,6 @@ void look_in_direction(char_data *ch, int dir) {
 		} else {
 			player->sendln("You see nothing special.");
 		}
-		if(ch->contract && EXIT_FLAGGED(EXIT(ch, dir), EX_ISDOOR)) {
-			mods::contract_events::find_door(player,player->room(),dir);
-		}
 
 		if(EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) && EXIT(ch, dir)->keyword) {
 			player->send("The %s is closed.\r\n", fname(EXIT(ch, dir)->keyword));
@@ -884,6 +889,9 @@ void look_in_direction(char_data *ch, int dir) {
 		}
 	} else {
 		player->sendln("Nothing special there...");
+	}
+	if(ch->contract && EXIT_FLAGGED(EXIT(ch, dir), EX_ISDOOR)) {
+		mods::contract_events::find_door(player,player->room(),dir);
 	}
 }
 

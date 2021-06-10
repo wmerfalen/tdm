@@ -83,25 +83,41 @@ namespace mods::debug::pre_game {
 		std::cout << "[" << std::get<0>(i) << ",";
 		std::cout << std::get<1>(i) << "]\n";
 	}
-#define __MENTOC_RUN_WRAPPER_PREGAME__
 #ifdef __MENTOC_RUN_WRAPPER_PREGAME__
 	void do_wrapper() {
-		std::string text = "Greetings fellow soldier, the items that you found are "
-		                   "part of an everlasting source of gun stuff that we found in the H.V.23 "
-		                   "tonage Floor park. As you can tell, this is a lot of bs that i've just"
-		                   "come up on my own. I hope you like it.. I sure did"
-		                   "\theh\r\n"
+		std::string text = "Greetings, soldier.\r\n"
 		                   "\r\n"
-		                   "going away now..\r\n"
+		                   "Doctor Land has recently been notified that our {blu}group of TRITON Labs\r\n"
+		                   "scientists have made astounding breakthroughs in ballistics; particularly in\r\n"
+		                   "the realm of high velocity experimental magazines. The type of ammo\r\n"
+		                   "generated is a combination of radioactive isotypes and aerodynamic shell\r\n"
+		                   "design. The resulting ammunition causes a great deal of damage to the target\r\n"
+		                   "while continuously doing radioactive damage even if the rounds did not \r\n"
+		                   "penetrate the flesh.\r\n"
+		                   "\r\n"
+		                   "This magazine is just one element of the recipe for what Doctor Land\r\n"
+		                   "affectionately calls the DXC DemonLance XIV.\r\n"
 		                   ;
-		std::cerr << mods::util::wrap_in_header(80,"The life and times of jerry the race car driver", "Life and times vol. 4");
-		std::cerr << mods::util::wrap_in_header(80,"There are sometimes when....\r\nWhere you wanna go where everybody...\r\nKnows your name...\r\nThe life and times of jerry the race car driver");
-		std::cerr << mods::util::wrap_in_header(80,"Therearesometimeswhen....Whereyouwannagowhereeverybody...Knowsyour-full-forward-facingname...nThelifeandtimesof jerrytheracecardriver");
-		std::cerr << mods::util::wrap_in_box(80,text);
+		std::cerr << mods::util::mail_format("{yel}High Velocity{/yel}\r \t Magazines Contract [1]",
+		                                     "Gather the necessary items",
+		                                     text,
+		                                     80
+		                                    );
+		std::cerr << mods::util::mail_format("a",
+		                                     "Gather the necessary items",
+		                                     text,
+		                                     80
+		                                    );
+		std::cerr << mods::util::mail_format("The runtime verification subsystem",
+		                                     "[LWN subscriber-only content]",
+		                                     "The realtime project has been the source of many of the innovations that have found their way into the core kernel in the last fifteen years or so. There is more to it than that, though; the wider realtime community is also doing interesting work in a number of areas that go beyond ensuring deterministic response.\r\n\r\n"
+		                                     "One example is Daniel Bristot de Oliveira's runtime verification patch set, which can monitor the kernel to ensure that it is behaving the way one thinks it should. Realtime development in the kernel community is a pragmatic effort to add determinism to a production system, but there is also an active academic community focused on realtime work.\r\nAcademic developers often struggle to collaborate effectively with projects like the kernel, where concerns about performance, regressions, and maintainability have been the downfall of many a bright idea. As a result, there is a lot of good academic work that takes a long time to make it into a production system, if it ever does.\r\n\r\n"
+		                                     "Imagine, for a moment, a project to create a realtime system that absolutely cannot be allowed to fail; examples might include a controller for a nuclear reactor, a jetliner's flight-control system, or the image processor in a television set showing that important football game. In such a setting, it is nice to know that the system will always respond to events within the budgeted time.\r\n\r\n"
+		                                     "Simply observing that it seems to do so tends to be considered inadequate for these systems. One way to get to a higher level of assurance is to create a formal model of the system, prove mathematically that the model produces the desired results, then run that model with every scenario that can be imagined. This approach can work, but it has its difficulties: ensuring that the model properly matches the real system is a challenge in its own right and, even if the model is perfect, it is almost certain to be far too slow for any sort of exhaustive testing.\r\nThe complexity of real-world systems makes this approach impractical, at best. Runtime verification. The runtime verification patches take a different approach.\r\n\r\n"
+		                                     "Developers can create a high-level model describing the states that the system can be in and the transitions that occur in response to events. The verification code will then watch the kernel to ensure that the system does, indeed, behave as expected. If a discrepancy is found in a running system, then there is either an error in the model or a bug in the system; either way, fixing it will improve confidence that the system is behaving correctly. The use of this mechanism is described in this documentation patch helpfully included with the code; the following example is shamelessly stolen from there.\r\n\r\n"
+		                                     "The first step is to express one's model of an aspect of the system's behavior; the example given is whether a CPU can be preempted or not a question that realtime researchers tend to be interested in. This model is described in the DOT language.\r\n\r\n",
 
-		std::cerr << mods::util::mail_format("RE: I totally know you killed my hard drive drip mucos infection more time fills each day what goes around comes back stronger",
-		                                     "Really? Are we really having this conversation? Why don't you take your accusations...",
-		                                     text
+		                                     80
 		                                    );
 		sleep(60);
 		exit(1);

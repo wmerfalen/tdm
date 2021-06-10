@@ -862,6 +862,11 @@ namespace mods {
 			bool& moving_to_room();
 			void update_contract_status();
 			contract_list_t& contracts();
+
+			/** TODO: power this by user preferences */
+			std::size_t screen_width() const {
+				return 80;
+			}
 		protected:
 			std::map<std::string,std::string> m_ada_data;
 			bool m_ada;

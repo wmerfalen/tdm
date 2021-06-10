@@ -15,44 +15,6 @@
 #define m_debug(a)
 #endif
 namespace mods::contracts {
-	void give_player_rewards(player_ptr_t& player,std::string_view line) {
-		{
-			auto s = util::extract_yaml_reward(line.data());
-			if(std::get<0>(s)) {
-				auto c = create_object(std::get<1>(s),std::get<2>(s));
-				player->sendln(CAT(
-				                   "\r\n\r\n"
-				                   "{grn}***********************************************{/grn}\r\n",
-				                   "{yel} C O N G R A T U L A T I O N S                 {/yel}\r\n"
-				                   "{grn}***********************************************{/grn}\r\n"
-				                   "{grn}**********************************************{/grn}\r\n",
-				                   "{yel} You are rewarded with the following item:{/grn}\r\n",
-				                   "{grn}",c->name.c_str(),"{/grn}\r\n",
-				                   "{grn}**********************************************{/grn}\r\n"
-				               ));
-				player->carry(c);
-				return;
-			}
-		}
-		{
-			auto s = util::extract_deep_reward(line.data());
-			if(std::get<0>(s)) {
-				auto& ref = std::get<2>(s);
-				auto ptr = mods::rifle_attachments::make(ref);
-				player->sendln(CAT(
-				                   "\r\n\r\n"
-				                   "{grn}***********************************************{/grn}\r\n",
-				                   "{yel} C O N G R A T U L A T I O N S                 {/yel}\r\n"
-				                   "{grn}***********************************************{/grn}\r\n"
-				                   "{grn}**********************************************{/grn}\r\n",
-				                   "{yel} You are rewarded with the following item:{/grn}\r\n",
-				                   "{grn}",ptr->base_object->name.c_str(),"{/grn}\r\n",
-				                   "{grn}**********************************************{/grn}\r\n"
-				               ));
-				player->carry(ptr->base_object);
-			}
-		}
-	}
 	contract_step::contract_step(const contract_step& other) {
 		m_debug(green_str("[contract_step]:: copy constructor"));
 		m_debug("other.reward_xp:" << other.reward_xp << ", other.reward_money:" << other.reward_money << ", desc:" << other.description);
@@ -78,56 +40,6 @@ namespace mods::contracts {
 		reward_8 = other.reward_8;
 		reward_9 = other.reward_9;
 		reward_10 = other.reward_10;
-	}
-	void contract_step::reward(const uint64_t& player_db_id) {
-		m_debug("rewarding player id: " << green_str(std::to_string(player_db_id)));
-		auto player = ptr_by_db_id(player_db_id);
-		if(!player) {
-			log("Unable to find player by db id for the purposes of rewarding player for contract");
-			return;
-		}
-		if(reward_xp > 0) {
-			player->sendln(CAT(
-			                   "\r\n\r\n"
-			                   "{grn}***********************************************{/grn}\r\n",
-			                   "{yel} C O N G R A T U L A T I O N S                 {/yel}\r\n"
-			                   "{grn}***********************************************{/grn}\r\n"
-			                   "{grn}***********************************************{/grn}\r\n",
-			                   "{yel} You are rewarded {grn}",reward_xp," XP{/grn}\r\n",
-			                   "{grn}***********************************************{/grn}\r\n"
-			               ));
-			player->exp() += reward_xp;
-		}
-		if(reward_money > 0) {
-			player->sendln(CAT(
-			                   "\r\n\r\n"
-			                   "{grn}***********************************************{/grn}\r\n",
-			                   "{yel} C O N G R A T U L A T I O N S                 {/yel}\r\n"
-			                   "{grn}***********************************************{/grn}\r\n"
-			                   "{grn}***********************************************{/grn}\r\n",
-			                   "{yel} You are rewarded {grn}",reward_money," MP{/grn}\r\n",
-			                   "{grn}***********************************************{/grn}\r\n"
-			               ));
-			player->gold() += reward_money;
-		}
-		for(auto& line : {
-		            reward_1,
-		            reward_2,
-		            reward_3,
-		            reward_4,
-		            reward_5,
-		            reward_6,
-		            reward_7,
-		            reward_8,
-		            reward_9,
-		            reward_10
-		        }) {
-			if(line.length()) {
-				give_player_rewards(player,line);
-			}
-		}
-
-		mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::CONTRACT_REWARD);
 	}
 	std::map<std::string,task_t> task_string_map() {
 		return {

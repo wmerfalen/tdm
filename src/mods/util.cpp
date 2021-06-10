@@ -19,16 +19,33 @@
 #define mu_debug(A) /**-*/
 #endif
 namespace mods::util {
-	std::string mail_format(std::string_view subject,std::string_view header,std::string_view body) {
-		return mail_format(80,subject,header,body);
-	}
-	std::string mail_format(std::size_t width,std::string_view subject,std::string_view header,std::string_view body) {
-		return wrap_in_header(width,header,subject) + wrap_in_box(width,body);
-	}
-	std::string wrap_in_header(std::size_t width,std::string_view msg,std::string_view title) {
+	static std::map<std::string_view,std::string_view> default_colors = {
+		{"blu","\033[34m"},
+		{"gld","\033[33m"},
+		{"grn","\033[32m"},
+		{"red","\033[31m"},
+		{"wht","\033[37m"},
+		{"yel","\033[93m"}
+	};
+	std::string wrap_in_header(std::size_t width,std::string_view msg,std::string_view in_title) {
 		int w = width - 4;
 		if(w <= 0) {
 			w = 76;
+		}
+		std::string title;
+		for(int i=0; i < in_title.length(); i++) {
+			if(in_title[i] == '{' && i+4 < in_title.length() && in_title[i+4] == '}') {
+				i += 4;
+				continue;
+			}
+			if(in_title[i] == '{' && i+5 < in_title.length() && in_title[i+5] == '}' && in_title[i+1] == '/') {
+				i += 5;
+				continue;
+			}
+			if(in_title[i] == '\r' || in_title[i] == '\t' || in_title[i] == '\n' || in_title[i] == '{' || in_title[i] == '}') {
+				continue;
+			}
+			title += in_title[i];
 		}
 		int sub_len = 0;
 		if(title.length() > w) {
@@ -50,37 +67,51 @@ namespace mods::util {
 			box += "─";
 		}
 		box += "╛{yel}";
+		std::string str;
+		std::string suffix;
 		if(title.length() > w) {
-			auto str = title.substr(0,w-18);
-			for(auto ch : str) {
-				if(ch == '\t' || ch == '\r' || ch == '\n') {
-					box += " ";
-					continue;
-				}
-				box += ch;
-			}
-			box += "...";
-			box += "{/yel}{grn}╘{grn}";
-			for(int i=w-18; i < w -9; i++) {
-				box += "─";
-			}
+			str = title.substr(0,w-18);
+			suffix = "...";
 		} else {
-			for(auto ch : title) {
-				if(ch == '\t' || ch == '\r' || ch == '\n') {
-					box += " ";
-					continue;
-				}
-				box += ch;
+			str = title;
+			suffix = "";
+		}
+		for(int i=0; i < str.length(); i++) {
+			if(str[i] == '{' && i + 4 < str.length() && str[i+4] == '}') {
+				i += 4;
+				continue;
 			}
-			box += "{/yel}{grn}╘{grn}";
-			for(int i=title.length(); i < w -6; i++) {
-				box += "─";
+			if(str[i] == '{' && i + 5 < str.length() && str[i+5] == '}' && str[i+1] == '/') {
+				i += 5;
+				continue;
 			}
+			if(str[i] == '{' || str[i] == '}' || str[i] == '\t' || str[i] == '\r' || str[i] == '\n') {
+				continue;
+			}
+			box += str[i];
+		}
+		if(suffix.length()) {
+			box += suffix;
+		}
+		box += "{/yel}{grn}╘{grn}";
+		for(int i=str.length(); i < w-6; i++) {
+			box += "─";
 		}
 		box += "{grn}┓{/grn}\r\n{grn}║ {blu}";
 		int line_chars = 0;
 		for(std::size_t i = 0; i < msg.length(); i++) {
 			++line_chars;
+
+			if(msg[i] == '{' && i+4 < msg.length() && msg[i+4] == '}') {
+				i += 4;
+				--line_chars;
+				continue;
+			}
+			if(msg[i] == '{' && i+5 < msg.length() && msg[i+5] == '}' && msg[i+1] == '/') {
+				i += 5;
+				--line_chars;
+				continue;
+			}
 			if(msg[i] == '\r' && i + 1 < msg.length() && msg[i+1] == '\n') {
 				for(int fill=line_chars; fill <= w; fill++) {
 					box += " ";
@@ -90,12 +121,18 @@ namespace mods::util {
 				line_chars = 0;
 				continue;
 			}
+			if(msg[i] == '\r' || msg[i] == '\t' || msg[i] == '\n' || msg[i] == '{' || msg[i] == '}') {
+				continue;
+			}
 			box += msg[i];
 			if(isspace(msg[i])) {
 				std::string next_word;
 				for(int k=1; k + i < msg.length(); k++) {
 					if(isspace(msg[k+i])) {
 						break;
+					}
+					if(msg[k+i] == '{' || msg[k+i] == '}') {
+						continue;
 					}
 					next_word += msg[k+i];
 				}
@@ -135,125 +172,86 @@ namespace mods::util {
 
 		return mods::globals::color_eval(box);
 	}
-	std::string wrap_in_header(std::size_t width,std::string_view msg) {
-		std::string box = "{grn}┏─";
-		int w = width - 4;
-		if(w <= 0) {
-			w = 76;
-		}
-		for(int i=0; i <= w; i++) {
-			box += "─";
-		}
-		box += "{grn}┓{/grn}\r\n{grn}║ {blu}";
-		int line_chars = 0;
-		for(std::size_t i = 0; i < msg.length(); i++) {
-			++line_chars;
-			if(msg[i] == '\r' && i + 1 < msg.length() && msg[i+1] == '\n') {
-				for(int fill=line_chars; fill <= w; fill++) {
-					box += " ";
-				}
-				box += " {/blu}{grn}║{/grn}\r\n{grn}║ {blu}";
-				i += 1;
-				line_chars = 0;
+	std::string strip_colors_and_escapes(std::string_view str) {
+		std::string sanitized;
+		for(int i=0; i < str.length(); i++) {
+			if(str[i] == '{' && i + 4 < str.length() && str[i+4] == '}') {
+				i += 4;
 				continue;
 			}
-			box += msg[i];
-			if(isspace(msg[i])) {
-				std::string next_word;
-				for(int k=1; k + i < msg.length(); k++) {
-					if(isspace(msg[k+i])) {
-						break;
-					}
-					next_word += msg[k+i];
-				}
-				if(next_word.length() > w) {
-					//it's just a super long word, so break it up without mercy
-					continue;
-				}
-				if(next_word.length() + line_chars > w) {
-					for(int k=line_chars; k < w; k++) {
-						box += " ";
-					}
-					box += " {/blu}{grn}║{/grn}\r\n{grn}║ {blu}";
-					box += next_word;
-					line_chars = next_word.length();
-					i += next_word.length();
-					next_word.clear();
-					continue;
-				}
+			if(str[i] == '{' && i + 5 < str.length() && str[i+5] == '}' && str[i+1] == '/') {
+				i += 5;
+				continue;
 			}
-			if(line_chars >= w) {
-				box += " {/blu}{grn}║{/grn}\r\n{grn}║ {blu}";
-				line_chars = 0;
+			if(str[i] == '\t') {
+				continue;
+			}
+			if(str[i] == '{' || str[i] == '}') {
+				continue;
+			}
+			if(str[i] == '\n') {
+				sanitized += "\r\n";
+				continue;
+			}
+			if(str[i] == '\r') {
+				sanitized += "\r\n";
+				if(i + 1 < str.length() && str[i+1] == '\n') {
+					++i;
+				}
+				continue;
+			}
+			if(ispunct(str[i]) || isspace(str[i]) || isalnum(str[i])) {
+				sanitized += str[i];
 			}
 		}
-		if(line_chars < w) {
-			for(int i=line_chars; i <= w; i++) {
-				box += " ";
-			}
-			box += "{/blu}{grn}║{/grn}";
-		}
-
-		box += "\r\n{grn}┢─";
-		for(int i=0; i < w; i++) {
-			box += "─";
-		}
-		box += "{grn}─┧{/grn}\r\n";
-		return mods::globals::color_eval(box);
+		return sanitized;
 	}
-	std::string wrap_in_box(std::size_t width,std::string_view msg) {
+	std::string wrap_in_box(std::size_t width,std::string_view in_msg) {
 		std::string box = "{grn}┃ {/grn}";
 		int w = width - 4;
 		if(w <= 0) {
 			w = 76;
 		}
 		int line_chars = 0;
+		auto msg = strip_colors_and_escapes(in_msg);
 		for(std::size_t i = 0; i < msg.length(); i++) {
+			if(line_chars < 0) {
+				line_chars = 0;
+			}
 			++line_chars;
-			if(msg[i] == '\t') {
-				box += "    ";
-				line_chars += 3;
+			if(line_chars == 1 && (msg[i] == ' ' || msg[i] == '\t' || msg[i] == '\n')) {
+				line_chars = 0;
 				continue;
 			}
-			if(msg[i] == '\n') {
-				continue;
-			}
-
-			if(msg[i] == '\r' && (i + 1) < msg.length() && msg[i+1] == '\n') {
-				for(int fill=line_chars; fill <= w; fill++) {
+			if(msg[i] == '\r') {
+				for(int k=line_chars; k <= w; k++) {
 					box += " ";
 				}
-				box += " {grn}┃{/grn}\r\n{grn}┃ {/grn}";
-				i += 1;
-				if(i + 1 >= msg.length()) {
-					for(int fill=0; fill < w; fill++) {
-						box += " ";
-					}
-					box += " {grn}┃{/grn}";
-					break;
+				box += " {grn}┃{/grn}\r\n{grn}┃{/grn} ";
+				if(i + 1 < msg.length() && msg[i+1] == '\n') {
+					++i;
 				}
 				line_chars = 0;
 				continue;
 			}
 			box += msg[i];
-
 			if(isspace(msg[i])) {
 				std::string next_word;
-				for(int k = 1; k <= w; k++) {
-					if(k + i >= msg.length()) {
+				for(int k=1; k + i < msg.length(); k++) {
+					if(msg[k+i] == ' ') {
 						break;
 					}
-					if(isspace(msg[i+k])) {
-						break;
-					} else {
-						next_word += msg[i+k];
-					}
+					next_word += msg[k+i];
+				}
+				if(next_word.length() > w) {
+					//it's just a super long word, so break it up without mercy
+					continue;
 				}
 				if(next_word.length() + line_chars > w) {
-					for(int fill=line_chars; fill < w; fill++) {
+					for(int k=line_chars; k < w; k++) {
 						box += " ";
 					}
-					box += " {grn}┃{/grn}\r\n{grn}┃ {/grn}";
+					box += " {grn}┃{/grn}\r\n{grn}┃{/grn} ";
 					box += next_word;
 					line_chars = next_word.length();
 					i += next_word.length();
@@ -262,18 +260,26 @@ namespace mods::util {
 				}
 			}
 			if(line_chars >= w) {
-				box += " {grn}┃{/grn}\r\n{grn}┃ {/grn}";
+				box += " {grn}┃{/grn}\r\n{grn}┃{/grn} ";
 				line_chars = 0;
 			}
 		}
-		box += "\r\n{grn}╚═";//	┖─";
+		if(line_chars < w) {
+			for(int i=line_chars; i < w; i++) {
+				box += " ";
+			}
+		}
+		box += " {grn}┃{/grn}";
+		box += "\r\n{grn}╚═";
 
 		for(int i=0; i < w; i++) {
-			box += "═";//	─";
+			box += "═";
 		}
-		//box += "{grn}─╝{/grn}\r\n";//	┚{/grn}\r\n";
-		box += "{grn}═╝{/grn}\r\n";//	┚{/grn}\r\n";
+		box += "{grn}═╝{/grn}\r\n";
 		return mods::globals::color_eval(box);
+	}
+	std::string mail_format(std::string_view subject,std::string_view header,std::string_view body,std::size_t width) {
+		return wrap_in_header(width,header,subject) + wrap_in_box(width,body);
 	}
 	player_ptr_t query_mob_in_room(room_vnum r_vnum,mob_vnum mob) {
 		auto r = real_room(r_vnum);
@@ -674,41 +680,41 @@ namespace mods::util {
 
 		return std::move(buffer);
 	}
-	//uint64_t aff2legacy(mods::flags::aff f){
-	//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
-	//		if(mods::flags::aff_flags[i].first == f){
-	//			return mods::flags::aff_flags[i].second;
-	//		}
-	//	}
-	//	return 0;
-	//}
-	//mods::flags::aff legacy2aff(uint64_t f){
-	//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
-	//		if(mods::flags::aff_flags[i].second == f){
-	//			return mods::flags::aff_flags[i].first;
-	//		}
-	//	}
-	//	return mods::flags::aff::__AFF_FIRST;
-	//}
-	///**
-	// * @return returns the legacy PLR_ flag given the modern plr flag
-	// */
-	//uint64_t plr2legacy(mods::flags::plr f){
-	//	for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
-	//		if(mods::flags::plr_flags[i].first == f){
-	//			return mods::flags::plr_flags[i].second;
-	//		}
-	//	}
-	//	return 0;
-	//}
-	//mods::flags::plr legacy2plr(uint64_t f){
-	//	for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
-	//		if(mods::flags::plr_flags[i].second == f){
-	//			return mods::flags::plr_flags[i].first;
-	//		}
-	//	}
-	//	return mods::flags::plr::__PLR_FIRST;
-	//}
+//uint64_t aff2legacy(mods::flags::aff f){
+//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
+//		if(mods::flags::aff_flags[i].first == f){
+//			return mods::flags::aff_flags[i].second;
+//		}
+//	}
+//	return 0;
+//}
+//mods::flags::aff legacy2aff(uint64_t f){
+//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
+//		if(mods::flags::aff_flags[i].second == f){
+//			return mods::flags::aff_flags[i].first;
+//		}
+//	}
+//	return mods::flags::aff::__AFF_FIRST;
+//}
+///**
+// * @return returns the legacy PLR_ flag given the modern plr flag
+// */
+//uint64_t plr2legacy(mods::flags::plr f){
+//	for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
+//		if(mods::flags::plr_flags[i].first == f){
+//			return mods::flags::plr_flags[i].second;
+//		}
+//	}
+//	return 0;
+//}
+//mods::flags::plr legacy2plr(uint64_t f){
+//	for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
+//		if(mods::flags::plr_flags[i].second == f){
+//			return mods::flags::plr_flags[i].first;
+//		}
+//	}
+//	return mods::flags::plr::__PLR_FIRST;
+//}
 	bool preg_match(std::string_view regex,std::string_view haystack) {
 		using namespace std::regex_constants;
 		return std::regex_search(haystack.data(), std::regex(regex.data()), match_not_null);
@@ -1044,7 +1050,7 @@ namespace mods::util {
 		return parse_objdir_capable(player,arg, CAP_ALL, capabilities);
 	}
 	*/
-	// --
+// --
 	player_class_t to_player_class(std::string_view str) {
 		if(is_lower_match(str,"SNIPER")) {
 			return player_class_t::SNIPER;
@@ -1102,7 +1108,7 @@ namespace mods::util {
 		}
 		return player_class_t::CLASS_UNDEFINED;
 	}
-	// --/
+// --/
 	std::vector<std::string> explode(char delim,std::string& haystack) {
 		std::vector<std::string> results;
 		std::string current = "";

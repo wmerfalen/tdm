@@ -4,6 +4,7 @@
 #include "player.hpp"
 #include "player-contract-instance.hpp"
 #include "scripted-sequence-events.hpp"
+#include "players/db-load.hpp"
 
 #ifdef  __MENTOC_SHOW_CONTRACT_OUTPUT__
 #define dbg_print(a) std::cerr << "[mods::contracts::player_contract_instance][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -150,42 +151,82 @@ namespace mods::contracts {
 			return m_update_status;
 		}
 		mods::scripted_sequence_events::player_finished_step(player,m_contract_vnum,m_current_step);
+		std::string reward_string;
+
 		if(m_current_step) {
-			m_current_step->reward(m_player_id);
-			std::string msg = CAT(
-			                      "{grn}************************************************************{/grn}\r\n",
-			                      "{grn}| Contract Step completed                                  |{/grn}\r\n",
-			                      "{yel}|----------------------------------------------------------|{/yel}\r\n"
-			                  );
-			player->sendln(msg);
+			if(m_current_step->reward_xp > 0) {
+				reward_string += CAT("You gain ",m_current_step->reward_xp," XP\r\n\r\n");
+				player->exp() += m_current_step->reward_xp;
+			}
+			if(m_current_step->reward_money > 0) {
+				reward_string = CAT("You gain ",m_current_step->reward_money," MP\r\n\r\n");
+				player->gold() += m_current_step->reward_money;
+			}
+			for(auto& line : {
+			            m_current_step->reward_1,
+			            m_current_step->reward_2,
+			            m_current_step->reward_3,
+			            m_current_step->reward_4,
+			            m_current_step->reward_5,
+			            m_current_step->reward_6,
+			            m_current_step->reward_7,
+			            m_current_step->reward_8,
+			            m_current_step->reward_9,
+			            m_current_step->reward_10
+			        }) {
+				if(line.length()) {
+					{
+						auto s = util::extract_yaml_reward(line.data());
+						if(std::get<0>(s)) {
+							auto c = create_object(std::get<1>(s),std::get<2>(s));
+							reward_string += CAT(
+							                     "\r\n\r\n",
+							                     "You are rewarded with the following item:\r\n",
+							                     c->name.c_str(),"\r\n"
+							                 );
+							player->carry(c);
+						}
+					}
+					{
+						auto s = util::extract_deep_reward(line.data());
+						if(std::get<0>(s)) {
+							auto& ref = std::get<2>(s);
+							auto ptr = mods::rifle_attachments::make(ref);
+							reward_string += CAT(
+							                     "You are rewarded with the following item:{/grn}\r\n",
+							                     ptr->base_object->name.c_str(),"\r\n"
+							                 );
+							player->carry(ptr->base_object);
+						}
+					}
+				}
+			}
+			mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::CONTRACT_REWARD);
 		}
 		m_quota = 0;
 		m_step += 1;
 		save_step_data();
 		m_auto_update_step();
 
+		player->sendln("\r\n\r\n");
 		if(!finished()) {
-			std::string msg = CAT(
-			                      "{grn}+********************************************************************************+{/grn}\r\n",
-			                      "{grn}| Your next objective:                                                           |{/grn}\r\n",
-			                      "{yel}+--------------------------------------------------------------------------------+{/yel}\r\n",
-			                      "\r\n",
-			                      "{grn}Objective:{/grn}\r\n",
-			                      mods::util::wrap_in_box(80,m_current_step->description),
-			                      "{yel}+--------------------------------------------------------------------------------+{/yel}\r\n",
-			                      "{yel}+                                                                                +{/yel}\r\n",
-			                      "{yel}+--------------------------------------------------------------------------------+{/yel}\r\n",
-			                      "\r\n"
-			                  );
-			player->sendln(msg);
+			player->sendln(
+			    mods::util::mail_format(
+			        "Congratulations, soldier!",
+			        "You completed part of your contract. Here are your next instructions:",
+			        CAT(m_current_step->description,"\r\n",reward_string),
+			        player->screen_width()
+			    )
+			);
 		} else {
-			std::string msg = CAT(
-			                      "{grn}********************************************************************{/grn}\r\n",
-			                      "{grn}| Congratulations. You've completed all steps to this contract!    |{/grn}\r\n",
-			                      "{yel}|------------------------------------------------------------------|{/yel}\r\n",
-			                      "\r\n"
-			                  );
-			player->sendln(msg);
+			player->sendln(
+			    mods::util::mail_format(
+			        "Congratulations, soldier!",
+			        "You completed your contract.",
+			        CAT("You just finished your contract successfully!\r\n",reward_string),
+			        player->screen_width()
+			    )
+			);
 		}
 		return m_update_status;
 	}
@@ -260,7 +301,7 @@ namespace mods::contracts {
 		}
 		if(m_current_step->goal & task_t::GOAL_FIND &&
 		        m_current_step->target == target_t::TARGET_MOB) {
-			if(m_current_step->mob_vnum == mob->vnum()) {
+			if(m_current_step->mob_vnum == mob->cd()->mob_specials.vnum) {
 				this->advance();
 				return;
 			}
@@ -560,7 +601,7 @@ namespace mods::contracts {
 		}
 		if(m_current_step->goal & task_t::GOAL_QUOTA &&
 		        m_current_step->target == target_t::TARGET_MOB) {
-			if(m_current_step->mob_vnum == mob->vnum()) {
+			if(m_current_step->mob_vnum == mob->cd()->mob_specials.vnum) {
 				++m_quota;/** TODO FIXME INITIALIZE THIS */
 				if(m_quota >= m_current_step->quota) {
 					this->advance();
@@ -604,7 +645,7 @@ namespace mods::contracts {
 		}
 		if(m_current_step->goal & task_t::GOAL_KILL &&
 		        m_current_step->target == target_t::TARGET_MOB) {
-			if(m_current_step->mob_vnum == mob->vnum()) {
+			if(m_current_step->mob_vnum == mob->cd()->mob_specials.vnum) {
 				this->advance();
 				return;
 			}
@@ -642,7 +683,7 @@ namespace mods::contracts {
 		}
 		if(m_current_step->goal & task_t::GOAL_TALK_TO &&
 		        m_current_step->target == target_t::TARGET_MOB) {
-			if(m_current_step->mob_vnum == mob->vnum()) {
+			if(m_current_step->mob_vnum == mob->cd()->mob_specials.vnum) {
 				this->advance();
 				return;
 			}

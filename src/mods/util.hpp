@@ -24,11 +24,10 @@ extern std::deque<std::shared_ptr<obj_data>> obj_list;
 namespace mods::util {
 	player_ptr_t query_mob_in_room(room_vnum r_vnum,mob_vnum mob);
 	direction_t random_direction();
-	std::string mail_format(std::string_view subject,std::string_view header,std::string_view body);
-	std::string mail_format(std::size_t width,std::string_view subject,std::string_view header,std::string_view body);
-	std::string wrap_in_header(std::size_t width,std::string_view msg,std::string_view title);
-	std::string wrap_in_header(std::size_t width,std::string_view msg);
-	std::string wrap_in_box(std::size_t width,std::string_view msg);
+	std::string mail_format(std::string_view subject,std::string_view header,std::string_view body,std::size_t width);
+	//std::string mail_format(std::size_t width,std::string_view subject,std::string_view header,std::string_view body);
+	//std::string wrap_in_header(std::size_t width,std::string_view msg,std::string_view title);
+	//std::string wrap_in_box(std::size_t width,std::string_view msg);
 	/** !!*****************!! */
 	/** !!UPDATE_ITEM_TYPES!! */
 	/** !!*****************!! */
