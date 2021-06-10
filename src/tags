@@ -990,8 +990,8 @@ DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
 DB_SAVE_CHAR	mods/players/db-load.hpp	/^		DB_SAVE_CHAR$/;"	e	enum:mods::players::db_load::save_from_t
-DD	mods/debug-pre-game.hpp	249;"	d
-DD	mods/debug-pre-game.hpp	39;"	d
+DD	mods/debug-pre-game.hpp	265;"	d
+DD	mods/debug-pre-game.hpp	38;"	d
 DEAD	mods/scan.hpp	/^			DEAD = (1 << 3),$/;"	e	enum:mods::scan::find_type_t
 DEALER	structs.h	/^	DEALER = 17,$/;"	e	enum:player_class_t
 DECENT	mods/yaml.hpp	/^		DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
@@ -2346,10 +2346,10 @@ MENTOC_CF	mods/yaml.hpp	102;"	d
 MENTOC_CF	mods/yaml.hpp	84;"	d
 MENTOC_CF	mods/yaml.hpp	89;"	d
 MENTOC_CF	mods/yaml.hpp	93;"	d
-MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	345;"	d
-MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	360;"	d
-MENTOC_CHECK_TYPE	mods/orm/orm-base.hpp	308;"	d
-MENTOC_COLUMN_LIST_IMPL	mods/orm/orm-base.hpp	322;"	d
+MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	353;"	d
+MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	368;"	d
+MENTOC_CHECK_TYPE	mods/orm/orm-base.hpp	316;"	d
+MENTOC_COLUMN_LIST_IMPL	mods/orm/orm-base.hpp	330;"	d
 MENTOC_CONSUMABLE_MEMBERS_TUPLE	mods/item-types.hpp	473;"	d
 MENTOC_CONSUMABLE_TYPES_SEQUENCE	mods/item-types.hpp	464;"	d
 MENTOC_CONTAINER_MEMBERS_TUPLE	mods/item-types.hpp	118;"	d
@@ -2480,25 +2480,25 @@ MENTOC_OBJ_DATA_STAT_GEN	structs.cpp	97;"	d	file:
 MENTOC_OBJ_INITIALIZE_CONSTRUCTOR	structs.cpp	47;"	d	file:
 MENTOC_OBS	mods/builder.cpp	42;"	d	file:
 MENTOC_OBS2	mods/builder.cpp	43;"	d	file:
-MENTOC_ORM_CLASS	mods/orm/orm-base.hpp	407;"	d
-MENTOC_ORM_COLUMN_LIST_FOR	mods/orm/orm-base.hpp	325;"	d
-MENTOC_ORM_EXPORT_CLASS	mods/orm/orm-base.hpp	285;"	d
-MENTOC_ORM_FEED_CLASS	mods/orm/orm-base.hpp	310;"	d
-MENTOC_ORM_FEED_IMPL	mods/orm/orm-base.hpp	333;"	d
-MENTOC_ORM_FEED_ROW_INTEGRAL_IMPL	mods/orm/orm-base.hpp	302;"	d
-MENTOC_ORM_FEED_ROW_STRING_IMPL	mods/orm/orm-base.hpp	299;"	d
-MENTOC_ORM_FEED_ROW_STRING_VECTOR_IMPL	mods/orm/orm-base.hpp	305;"	d
-MENTOC_ORM_GENERATE_MAP_IMPL	mods/orm/orm-base.hpp	280;"	d
-MENTOC_ORM_INIT	mods/orm/orm-base.hpp	294;"	d
-MENTOC_ORM_INIT_IMPL	mods/orm/orm-base.hpp	291;"	d
-MENTOC_ORM_MEMBER_VARS_FOR	mods/orm/orm-base.hpp	318;"	d
-MENTOC_ORM_MEMBER_VARS_IMPL	mods/orm/orm-base.hpp	315;"	d
-MENTOC_ORM_SET_FUNCTION	mods/orm/orm-base.hpp	362;"	d
-MENTOC_ORM_SET_IMPL	mods/orm/orm-base.hpp	354;"	d
-MENTOC_ORM_SLOT_LIST_FOR	mods/orm/orm-base.hpp	347;"	d
-MENTOC_ORM_SLOT_LIST_IMPL	mods/orm/orm-base.hpp	342;"	d
-MENTOC_ORM_SLOT_TYPES_FOR	mods/orm/orm-base.hpp	371;"	d
-MENTOC_ORM_SLOT_TYPE_STRING_IMPL	mods/orm/orm-base.hpp	368;"	d
+MENTOC_ORM_CLASS	mods/orm/orm-base.hpp	415;"	d
+MENTOC_ORM_COLUMN_LIST_FOR	mods/orm/orm-base.hpp	333;"	d
+MENTOC_ORM_EXPORT_CLASS	mods/orm/orm-base.hpp	293;"	d
+MENTOC_ORM_FEED_CLASS	mods/orm/orm-base.hpp	318;"	d
+MENTOC_ORM_FEED_IMPL	mods/orm/orm-base.hpp	341;"	d
+MENTOC_ORM_FEED_ROW_INTEGRAL_IMPL	mods/orm/orm-base.hpp	310;"	d
+MENTOC_ORM_FEED_ROW_STRING_IMPL	mods/orm/orm-base.hpp	307;"	d
+MENTOC_ORM_FEED_ROW_STRING_VECTOR_IMPL	mods/orm/orm-base.hpp	313;"	d
+MENTOC_ORM_GENERATE_MAP_IMPL	mods/orm/orm-base.hpp	288;"	d
+MENTOC_ORM_INIT	mods/orm/orm-base.hpp	302;"	d
+MENTOC_ORM_INIT_IMPL	mods/orm/orm-base.hpp	299;"	d
+MENTOC_ORM_MEMBER_VARS_FOR	mods/orm/orm-base.hpp	326;"	d
+MENTOC_ORM_MEMBER_VARS_IMPL	mods/orm/orm-base.hpp	323;"	d
+MENTOC_ORM_SET_FUNCTION	mods/orm/orm-base.hpp	370;"	d
+MENTOC_ORM_SET_IMPL	mods/orm/orm-base.hpp	362;"	d
+MENTOC_ORM_SLOT_LIST_FOR	mods/orm/orm-base.hpp	355;"	d
+MENTOC_ORM_SLOT_LIST_IMPL	mods/orm/orm-base.hpp	350;"	d
+MENTOC_ORM_SLOT_TYPES_FOR	mods/orm/orm-base.hpp	379;"	d
+MENTOC_ORM_SLOT_TYPE_STRING_IMPL	mods/orm/orm-base.hpp	376;"	d
 MENTOC_PAGINATED_LIST	mods/builder.hpp	196;"	d
 MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	1199;"	d	file:
 MENTOC_PREAMBLE	globals.hpp	20;"	d
@@ -5039,11 +5039,6 @@ __MENTOC_MODS_scripted_stepS_HEADER__	mods/scripted-step.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/search.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/util.hpp	2;"	d
 __MENTOC_PLR	db.cpp	2238;"	d	file:
-__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	183;"	d
-__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	201;"	d
-__MENTOC_RUN_PBA_CODE__	mods/debug-pre-game.hpp	23;"	d
-__MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	190;"	d
 __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/runners/movement.cpp	7;"	d	file:
 __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	8;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d

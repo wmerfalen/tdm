@@ -391,7 +391,9 @@ void	char_from_room(player_ptr_t player) {
 	char_from_room(player->cd());
 }
 void	char_to_room(player_ptr_t player, room_rnum room) {
+#ifdef __MENTOC_DEBUG_OUTPUT__
 	std::cerr << "char-to-room new\n";
+#endif
 	char_to_room(player->cd(),room);
 }
 
@@ -424,7 +426,9 @@ void char_from_room(char_data *ch) {
 
 /* place a character in a room */
 void char_to_room(char_data *ch, room_rnum room) {
+#ifdef __MENTOC_LEGACY_DEBUG__
 	std::cerr << "char_to_room legacy entrance\n";
+#endif
 	IN_ROOM(ch) = room;
 	if(ch == nullptr) {
 		log("SYSERR: char_to_room given a nullptr");
@@ -471,7 +475,9 @@ void char_to_room(char_data *ch, room_rnum room) {
 			}
 		}
 	}
+#ifdef __MENTOC_CTR_OUTPUT__
 	std::cerr << "end of ctr\n";
+#endif
 }
 
 void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player) {
@@ -1078,7 +1084,9 @@ void object_list_new_owner(struct obj_data *list, char_data *ch) {
 
 /* Extract an object from the world */
 void extract_obj(struct obj_data *obj) {
+#ifdef __MENTOC_DEBUG_OUTPUT__
 	std::cerr << "[extract_obj]";
+#endif
 	if(obj->worn_by) {
 		unequip_char(ptr(obj->worn_by), obj->worn_on);
 	}

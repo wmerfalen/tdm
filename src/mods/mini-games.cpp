@@ -14,6 +14,7 @@ namespace mods::mini_games {
 		db.load_all();
 	}
 	void load(mini_game_payload_t g) {
+#ifdef __MENTOC_SHOW_MINI_GAME_LOAD_DEBUG__
 		std::cerr << "[mods::mini_games::load]: " << g.primary_key << ", "
 		          << "type:" << g.type << ", "
 		          << "vnum:" << g.vnum << ", "
@@ -21,6 +22,7 @@ namespace mods::mini_games {
 		          << "action:'" << g.action << "', "
 		          << "room:" << g.game_room_vnum  << ", "
 		          << "order:" << g.order << "\n";
+#endif
 	}
 	bool device_exists(room_vnum vnum,int device_id) {
 		auto found = devices.find(vnum);

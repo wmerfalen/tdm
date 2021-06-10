@@ -4,7 +4,6 @@
 #include "flashbang.hpp"
 #include "orm/room.hpp"
 #include "db.hpp"
-#define __MENTOC_RUN_PREGAME_SKILL_CODE__
 #ifdef __MENTOC_RUN_PREGAME_SKILL_CODE__
 #include "skills.hpp"
 #include "rand.hpp"
@@ -20,7 +19,6 @@
 #include "rifle-attachments.hpp"
 #include "levels.hpp"
 #include "deep-object-parser.hpp"
-#define __MENTOC_RUN_PBA_CODE__
 #ifdef __MENTOC_RUN_PBA_CODE__
 #include "orm/player-base-ability.hpp"
 #endif
@@ -36,21 +34,32 @@
 extern bool login(std::string_view user_name,std::string_view password);
 extern int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values);
 namespace mods::debug::pre_game {
+#ifdef __MENTOC_SHOW_PREGAME_DD_OUTPUT__
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
+#else
+#define DD(a)
+#endif
+
 	namespace fb = ::mods::flashbang;
 	void mini_game_test() {
+#ifdef __MENTOC_DO_MINIGAME_PREGAME_CODE__
 		mods::mini_games::line_up game;
 		std::cerr << game.get_body().data() << "\n";
 		std::cerr << game.rotate_right(1).data() << "\n";
 		std::cerr << game.rotate_left(1).data() << "\n";
+#endif
 	}
 	void mini_game_orm_test() {
+#ifdef __MENTOC_DO_MINIGAME_PREGAME_CODE__
 		mods::orm::mini_game db;
 		db.load_by_room_vnum(128);
+#endif
 	}
 	void wire_mini_game_test() {
+#ifdef __MENTOC_DO_MINIGAME_PREGAME_CODE__
 		mods::mini_games::wires w;
 		std::cerr << w.get_body() << "\n";
+#endif
 	}
 	void deep_object_parser_test() {
 #ifdef __MENTOC_RUN_DEEP_OBJECT_PARSER_TEST__
@@ -58,6 +67,7 @@ namespace mods::debug::pre_game {
 #endif
 	}
 	void migrations_test() {
+#ifdef __MENTOC_DO_MIGRATIONS_PREGAME__
 		std::string identifier = "create-karma-table";
 		std::string purpose = "to create the karma table";
 
@@ -82,6 +92,7 @@ namespace mods::debug::pre_game {
 		i = mods::migrations::run_migration(identifier,purpose,"up");
 		std::cout << "[" << std::get<0>(i) << ",";
 		std::cout << std::get<1>(i) << "]\n";
+#endif
 	}
 #ifdef __MENTOC_RUN_WRAPPER_PREGAME__
 	void do_wrapper() {
@@ -129,7 +140,9 @@ namespace mods::debug::pre_game {
 #ifdef __MENTOC_RUN_WRAPPER_PREGAME__
 		do_wrapper();
 #endif
+#ifdef __MENTOC_DO_PARSER_PREGAME__
 		deep_object_parser_test();
+#endif
 #ifdef __MENTOC_RUN_RIFLE_INDEX_ORM_PREGAME__
 		{
 			mods::orm::rifle_index r;
@@ -171,6 +184,8 @@ namespace mods::debug::pre_game {
 		mods::levels::csv_export_report();
 		exit(0);
 #endif
+
+#ifdef __MENTOC_DO_MINIGAME_PREGAME_CODE__
 		wire_mini_game_test();
 
 		mini_game_test();
@@ -178,16 +193,18 @@ namespace mods::debug::pre_game {
 		mini_game_orm_test();
 
 		std::cerr << "RUN\n";
-		mods::rifle_attachments_t a("g36c.yml{sight:acog.yml,under_barrel:gmtgrenadelauncher.yml,grip:vertical-grip.yml,barrel:extended-barrel.yml,muzzle:brake.yml,magazine:extended-mag.yml,stock:default-stock.yml,strap:shoulder-strap.yml}");
+#endif
 
-#define __MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__
+#ifdef __MENTOC_DO_RIFLE_ATTACHMENTS_PREGAME__
+		mods::rifle_attachments_t a("g36c.yml{sight:acog.yml,under_barrel:gmtgrenadelauncher.yml,grip:vertical-grip.yml,barrel:extended-barrel.yml,muzzle:brake.yml,magazine:extended-mag.yml,stock:default-stock.yml,strap:shoulder-strap.yml}");
+#endif
+
 #ifdef __MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__
 		{
 			//mods::classes::medic m;
 			//m.report({"foobar message goes here. lot's of things to report about..","bar"});
 		}
 #endif
-#define __MENTOC_RUN_SNIPER_PREGAME_TESTS__
 #ifdef __MENTOC_RUN_SNIPER_PREGAME_TESTS__
 		//mods::orm::sniper sniper;
 		//auto p = std::make_shared<mods::player>();
@@ -198,7 +215,6 @@ namespace mods::debug::pre_game {
 		//sniper.load_by_player(69);
 #endif
 
-#define __MENTOC_RUN_MEDIC_PREGAME_TESTS__
 #ifdef __MENTOC_RUN_MEDIC_PREGAME_TESTS__
 		mods::orm::medic m;
 		auto mp = std::make_shared<mods::player>();

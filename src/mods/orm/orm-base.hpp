@@ -149,9 +149,11 @@ namespace mods::orm {
 			std::tuple<int16_t,std::string> read(TClass* c) {
 				auto status = mods::orm::util::load_by_pkid<TClass,sql_compositor>(c);
 				m_result = status;
+#ifdef __MENTOC_SHOW_ORM_DEBUG__
 				if(ORM_NO_RESULTS(status)) {
 					std::cout << "[load_by_pkid] no results.\n";
 				}
+#endif
 				if(ORM_FAILURE(status)) {
 					m_register_error(status);
 					mods::sql::error_log(CAT("[orm_base::read::load_by_pk_id] failed: '",std::get<1>(status),"'"));
@@ -162,9 +164,11 @@ namespace mods::orm {
 			std::tuple<int16_t,std::string> read_normalized(TClass* c,std::string column,std::string value) {
 				auto status = mods::orm::util::load_multi_by_column<TClass,sql_compositor>(c,column,value);
 				m_result = status;
+#ifdef __MENTOC_SHOW_ORM_DEBUG__
 				if(ORM_NO_RESULTS(status)) {
 					std::cout << "[read_normalized] no results.\n";
 				}
+#endif
 				if(ORM_FAILURE(status)) {
 					m_register_error(status);
 					mods::sql::error_log(CAT("[orm_base::read_normalized::load_mutli_by_column] failed: '",std::get<1>(status),"'"));
@@ -175,9 +179,11 @@ namespace mods::orm {
 			std::tuple<int16_t,std::string> read_all(TClass* c) {
 				auto status = mods::orm::util::load_all<TClass,sql_compositor>(c);
 				m_result = status;
+#ifdef __MENTOC_SHOW_ORM_DEBUG__
 				if(ORM_NO_RESULTS(status)) {
 					std::cout << "[mods::orm::orm_base::read] no results.\n";
 				}
+#endif
 				if(ORM_FAILURE(status)) {
 					m_register_error(status);
 					mods::sql::error_log(CAT("[orm_base::read_all::load_all] failed: '",std::get<1>(status),"'"));
@@ -188,9 +194,11 @@ namespace mods::orm {
 			std::tuple<int16_t,std::string> read(TClass* c,std::string_view column,std::string_view value) {
 				auto status = mods::orm::util::load_by_column<TClass,sql_compositor>(c,column,value);
 				m_result = status;
+#ifdef __MENTOC_SHOW_ORM_DEBUG__
 				if(ORM_NO_RESULTS(status)) {
 					std::cout << "[mods::orm::orm_base::read] no results.\n";
 				}
+#endif
 				if(ORM_FAILURE(status)) {
 					m_register_error(status);
 					mods::sql::error_log(CAT("[orm_base::read::load_by_column] failed: '",std::get<1>(status),"'"));
