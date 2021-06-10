@@ -2,8 +2,13 @@
 #define __MENTOC_MODS_RIFLE_ATTACHMENTS_HEADER__
 #include "deep-object-parser.hpp"
 
+#ifdef __MENTOC_PARSER_DEBUG__
 #define mdo_debug(A)\
 			std::cerr << "[mods::deep_object_parser:" << A << "\n";
+#else
+#define mdo_debug(A) /**-*/
+#endif
+
 namespace mods {
 	using str_map_t = std::map<std::string,std::string>;
 

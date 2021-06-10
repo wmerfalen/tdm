@@ -427,7 +427,9 @@ namespace mods::yaml {
 				break;
 			default:
 				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
+#ifdef __MENTOC_SHOW_DEFAULT_FILL_FLAGS_LOG__
 				log(CAT("[rifle_description_t][WARNING] fill_flags used the default flags for type: ",this->str_type,", and this file: '",this->feed_file,"'").c_str());
+#endif
 				break;
 		}
 		o->rifle_instance = std::make_unique<rifle_instance_data<attachment_data_t,obj_ptr_t,uuid_t>>();
@@ -488,7 +490,9 @@ namespace mods::yaml {
 			case mw_type::BRASS_KNUCKLES:
 				break;
 			default:
+#ifdef __MENTOC_SHOW_DEFAULT_FILL_FLAGS_LOG__
 				log(CAT("[melee_description_t][WARNING] fill_flags used the default flags for type: ",this->str_type,", and this file: '",this->feed_file,"'").c_str());
+#endif
 				break;
 		}
 		o->obj_flags.weapon_flags = this->type;
@@ -504,11 +508,15 @@ namespace mods::yaml {
 		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_ARMOR;
 		o->armor()->type = (mw_armor)this->type;
+#ifdef __MENTOC_FILL_FLAGS_OUTPUT__
 		std::cerr << "armor_description_t::fill_flags() o->armor()->type: '" << green_str(std::to_string(o->armor()->type)) << "'\n";
+#endif
 
 		switch((mw_armor)this->type) {
 			default:
-				log(CAT("[armor_description_t][WARNING] fill_flags used the default flags for type: ",this->str_type,", and this file: '",this->feed_file,"'").c_str());
+#ifdef __MENTOC_SHOW_DEFAULT_FILL_FLAGS_LOG__
+				log(CAT("[melee_description_t][WARNING] fill_flags used the default flags for type: ",this->str_type,", and this file: '",this->feed_file,"'").c_str());
+#endif
 				break;
 			case mw_armor::VEST:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_BODY | ITEM_WEAR_HOLD;
@@ -589,7 +597,9 @@ namespace mods::yaml {
 		switch((mw_drone)o->extended_type) {
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+#ifdef __MENTOC_SHOW_DEFAULT_FILL_FLAGS_LOG__
 				log("[drone_description_t][WARNING] fill_flags used the default flags");
+#endif
 				break;
 		}
 	}
@@ -601,7 +611,9 @@ namespace mods::yaml {
 		switch((mw_consumable)this->type) {
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+#ifdef __MENTOC_SHOW_DEFAULT_FILL_FLAGS_LOG__
 				log("[consumable_description_t][WARNING] fill_flags used the default flags");
+#endif
 				break;
 		}
 	}
@@ -613,7 +625,9 @@ namespace mods::yaml {
 		switch((mw_trap)this->type) {
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+#ifdef __MENTOC_SHOW_DEFAULT_FILL_FLAGS_LOG__
 				log("[trap_description_t][WARNING] fill_flags used the default flags");
+#endif
 				break;
 		}
 	}
@@ -625,7 +639,9 @@ namespace mods::yaml {
 		switch((mw_attachment)this->type) {
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+#ifdef __MENTOC_SHOW_DEFAULT_FILL_FLAGS_LOG__
 				log("[attachment_description_t][WARNING] fill_flags used the default flags");
+#endif
 				break;
 		}
 	}

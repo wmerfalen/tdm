@@ -2,7 +2,6 @@
 #include "scripted-sequence-runner.hpp"
 #include "interpreter.hpp"
 
-#define __MENTOC_DEBUG_EVENT_MATCHES__
 #ifdef __MENTOC_DEBUG_EVENT_MATCHES__
 #define dbg_print(A) *player << "{grn}event_matching_debug{/grn}: " << A << "\r\n";
 #else

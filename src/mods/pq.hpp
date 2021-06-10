@@ -514,60 +514,72 @@ struct orm_base {
 	template <typename TClass>
 	std::tuple<int16_t,std::string> read(TClass* c) {
 		auto status = load_by_pkid<TClass,sql_compositor>(c);
+#ifdef __MENTOC_SHOW_ORM_DEBUG__
 		if(ORM_NO_RESULTS(status)) {
 			std::cout << "[load_by_pkid] no results.\n";
 		}
 		if(ORM_FAILURE(status)) {
 			std::cerr << "[load_by_pkid] failed: '" << std::get<1>(status) << "'\n";
 		}
+#endif
 		return status;
 	}
 	template <typename TClass>
 	std::tuple<int16_t,std::string> read_normalized(TClass* c,std::string column,std::string value) {
 		auto status = load_multi_by_column<TClass,sql_compositor>(c,column,value);
+#ifdef __MENTOC_SHOW_ORM_DEBUG__
 		if(ORM_NO_RESULTS(status)) {
 			std::cout << "[read_normalized] no results.\n";
 		}
 		if(ORM_FAILURE(status)) {
 			std::cerr << "[read_normalized] failed: '" << std::get<1>(status) << "'\n";
 		}
+#endif
 		return status;
 	}
 	template <typename TClass>
 	std::tuple<int16_t,std::string> read_all(TClass* c) {
 		auto status = load_all<TClass,sql_compositor>(c);
+#ifdef __MENTOC_SHOW_ORM_DEBUG__
 		if(ORM_NO_RESULTS(status)) {
 			std::cout << "[mods::orm::orm_base::read] no results.\n";
 		}
 		if(ORM_FAILURE(status)) {
 			std::cerr << "[mods::orm::orm_base::read] failed: '" << std::get<1>(status) << "'\n";
 		}
+#endif
 		return status;
 	}
 	template <typename TClass>
 	std::tuple<int16_t,std::string> read(TClass* c,std::string_view column,std::string_view value) {
 		auto status = load_by_column<TClass,sql_compositor>(c,column,value);
+#ifdef __MENTOC_SHOW_ORM_DEBUG__
 		if(ORM_NO_RESULTS(status)) {
 			std::cout << "[mods::orm::orm_base::read] no results.\n";
 		}
 		if(ORM_FAILURE(status)) {
 			std::cerr << "[mods::orm::orm_base::read] failed: '" << std::get<1>(status) << "'\n";
 		}
+#endif
 		return status;
 	}
 	template <typename TClass>
 	static inline std::tuple<int16_t,std::string> update(TClass* c) {
 		auto status = update<TClass,sql_compositor>(c);
+#ifdef __MENTOC_SHOW_ORM_DEBUG__
 		if(ORM_FAILURE(status)) {
 			std::cerr << "[orm_base::update] failed: '" << std::get<1>(status) << "'\n";
 		}
+#endif
 		return status;
 	}
 	std::tuple<int16_t,std::string> remove() {
 		auto status = delete_from<orm_base,sql_compositor>(this);
+#ifdef __MENTOC_SHOW_ORM_DEBUG__
 		if(ORM_FAILURE(status)) {
 			std::cerr << "[orm_base::remove] failed: '" << std::get<1>(status) << "'\n";
 		}
+#endif
 		return status;
 	}
 

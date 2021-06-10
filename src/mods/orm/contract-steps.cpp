@@ -202,6 +202,7 @@ namespace mods::orm {
 		return list;
 
 	}
+	/*
 	std::tuple<int16_t,std::string> gather_contract_steps_by_contract_vnum(const contract_vnum_t& contract_vnum,std::deque<std::shared_ptr<mods::orm::contract_steps>>* in_list_ptr) {
 		auto result = db_get_by_meta(contract_steps().table, "s_contract_vnum",std::to_string(contract_vnum));
 		if(result.size() == 0) {
@@ -236,7 +237,9 @@ namespace mods::orm {
 			step->s_reward_9 = row["s_reward_9"].c_str();
 			step->s_reward_10 = row["s_reward_10"].c_str();
 		}
+		std::cerr << "[foobar]\n";
 		return {result.size(),"loaded"};
 
 	}
+	*/
 };

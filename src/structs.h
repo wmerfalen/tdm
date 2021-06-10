@@ -824,7 +824,9 @@ struct obj_data {
 			carried_by(nullptr),worn_by(nullptr),worn_on(0),
 			in_obj(nullptr),contains(nullptr),next_content(nullptr),
 			next(nullptr),ai_state(0),uuid(0),m_db_id(0) {
+#ifdef __MENTOC_OBJ_DATA_DEBUG__
 			std::cerr << "obj_data::obj_data(int type, str feed_file) (inline constructor in structs.h)\n";
+#endif
 			this->init();
 			this->feed_status = 1;
 			this->feed_status = this->feed(item_type,feed_file);
@@ -859,7 +861,9 @@ struct obj_data {
 					);
 					break;
 			}
+#ifdef __MENTOC_OBJ_DATA_DEBUG__
 			std::cerr << ("obj_data(type,feed_file)") << ", name:'" << name.c_str() << "'\n";
+#endif
 		}
 		~obj_data() = default;
 		obj_vnum item_number;	/* Where in data-type			*/

@@ -13,7 +13,6 @@
 #include "rifle-attachments.hpp"
 #include "query-objects.hpp"
 
-#define __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
 #define mo_debug(A) std::cerr << red_str("[mods::integral_objects][debug]:") << A <<"\n";
 #else

@@ -415,6 +415,10 @@ void diag_char_to_char(char_data *i, char_data *ch) {
 	}
 
 	player->send("%s %s\r\n", pers.c_str(), diagnosis[ar_index].text);
+	if(ch->contract) {
+		auto iptr = ptr(i);
+		mods::contract_events::find_mob(player,iptr);
+	}
 }
 
 
@@ -423,7 +427,6 @@ void look_at_char(char_data *i, char_data *ch) {
 	int j, found = false;
 	struct obj_data *tmp_obj;
 	auto iptr = ptr(i);
-	std::cerr << "i('" << iptr->name().c_str() << "') ch:('" << player->name().c_str() << "')\n";
 
 	if(!ch->has_desc) {
 		return;
@@ -470,9 +473,6 @@ void look_at_char(char_data *i, char_data *ch) {
 		if(!found) {
 			player->sendln("You can't see anything.");
 		}
-	}
-	if(ch->contract) {
-		mods::contract_events::find_mob(player,iptr);
 	}
 }
 

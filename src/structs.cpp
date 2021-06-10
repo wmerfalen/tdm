@@ -49,12 +49,16 @@ void obj_data::init() {
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 }
 obj_data::obj_data(std::string item_type,std::string_view feed_file) {
+#ifdef __MENTOC_OBJ_DATA_DEBUG_OUTPUT__
 	std::cerr << "obj_data::obj_data(string item_type, string feed_file)\n";
+#endif
 	int type = txt::yaml_string_to_int(item_type);
 	obj_data(type,feed_file);
 }
 int16_t obj_data::feed(int16_t in_type,std::string_view feed_file) {
+#ifdef __MENTOC_OBJ_DATA_DEBUG_OUTPUT__
 	std::cerr << "obj_data::feed(int item_type, string feed_file)\n";
+#endif
 	this->feed_status = 2;
 	this->m_feed_file = feed_file.data();
 	this->type = in_type;
@@ -76,12 +80,16 @@ int16_t obj_data::feed(int16_t in_type,std::string_view feed_file) {
 obj_data::obj_data(const obj_data& other) {
 	feed(other.type,other.m_feed_file);
 	action_description = other.action_description;
+#ifdef __MENTOC_OBJ_DATA_DEBUG_OUTPUT__
 	std::cerr << ("obj_data copy constructor") << ", name:'" << name.c_str() << "'\n";
+#endif
 }
 obj_data& obj_data::operator=(obj_data& other) {
 	feed(other.type,other.m_feed_file);
 	action_description = other.action_description;
+#ifdef __MENTOC_OBJ_DATA_DEBUG_OUTPUT__
 	std::cerr << ("obj_data operator equals") << ", name:'" << name.c_str() << "'\n";
+#endif
 	return *this;
 }
 
@@ -156,7 +164,9 @@ std::vector<mods::extra_desc_data>& room_data::ex_descriptions() {
 }
 #ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
 char_player_data::~char_player_data() {
+#ifdef __MENTOC_PLAYER_DATA_DESTRUCTOR_OUTPUT__
 	std::cerr << green_str("[char_player_data] DESTRUCTOR HIT\n");
+#endif
 }
 #endif
 char_player_data::char_player_data() {
@@ -450,7 +460,11 @@ room_data::~room_data() {
 /** !zone
  * !integral-objects !integral_objects
  */
+#ifdef __MENTOC_SHOW_MATCHES_QUERY_DEBUG_OUTPUT__
 #define mq_debug(A) std::cerr << "[matches_query]:'" << A << "'\n";
+#else
+#define mq_debug(A) /** - */
+#endif
 /** for the most part, this is crap. clean it up */
 bool obj_data::matches_query(std::string_view query) {
 	if(query.compare("armor-locker") == 0) {

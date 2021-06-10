@@ -11,7 +11,6 @@
 #include "../orm/skill-trees.hpp"
 #include "../orm/rifle-attachment.hpp"
 
-#define __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[mods::players::db_load][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #define m_crit(a) std::cerr << red_str("[CRITICAL]") << "mods::players::db_load][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -44,22 +43,30 @@ namespace mods::players::db_load {
 			found = false;
 			for(const auto& prow : ps.rows) {
 				if(prow.skill_id == row.id) {
+#ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 					std::cerr << green_str("Found skill id: ") << prow.skill_id << "\n";
+#endif
 					found = true;
 					break;
 				}
 			}
 			if(!found) {
+#ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 				std::cerr << red_str("Missing player skill id for player: ") << player_id << ", skill: '" << row.skill_name << "'\n";
+#endif
 				missing[row.id] = 0;
 			}
 		}
 		if(missing.size()) {
 			ps.rows.clear();
+#ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 			std::cerr << red_str("Player has missing skill tree members. Populating...") << "\n";
+#endif
 			ps.populate(player_id,missing);
 			ps.save();
+#ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 			std::cerr << green_str("Remedied.");
+#endif
 		}
 		mods::orm::player_skill_usage_upkeep(player_id,player_class);
 	}
@@ -133,7 +140,7 @@ namespace mods::players::db_load {
 			mods::pq::exec(up_txn,up_sql);
 			mods::pq::commit(up_txn);
 		} catch(std::exception& e) {
-			std::cerr << red_str("Failed saving player!:") << red_str(e.what()) << "\n";
+			log(CAT("SYSERR:Failed saving player!:", e.what()).c_str());
 		}
 		values.clear();
 
@@ -148,7 +155,9 @@ namespace mods::players::db_load {
 		mods::orm::player_base_ability pba;
 		auto status = pba.save_by_player(player_ptr);
 		if(0 != status) {
+#ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 			std::cerr << red_str("Warning: couldn't save player_ptr's base abilities...") << "status: " << status << " for player_ptr:'" << player_ptr->name().c_str() << "'\n";
+#endif
 		}
 		if(player_ptr->position() == CON_PLAYING) {
 			player_ptr->sendln("Your character has been saved.");
@@ -229,7 +238,7 @@ namespace mods::players::db_load {
 		} catch(std::exception& e) {
 			auto msg = CAT("Player:'",player->db_id(),"/name:'",player->name().c_str(),"'.. Unable to save player password!:'",e.what(),"'");
 			report(-1,msg);
-			std::cerr << red_str("Failed updating player password!:") << red_str(msg) << "\n";
+			log(CAT("SYSERR: ",msg).c_str());
 			return -1;
 		}
 	}

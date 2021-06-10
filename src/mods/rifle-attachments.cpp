@@ -38,7 +38,9 @@ namespace mods {
 			return list;
 		}
 		void erase(const uuid_t& uuid) {
+#ifdef __MENTOC_SHOW_RIFLE_DEBUG__
 			std::cerr << green_str("erasing uuid from rifle attachments:") << uuid << "\n";
+#endif
 			uuid_schema_list().erase(uuid);
 			global_list().erase(uuid);
 		}
@@ -242,7 +244,9 @@ namespace mods {
 	}
 	std::string short_desc(auto& in_a) {
 		if(!in_a->has_attachment()) {
+#ifdef __MENTOC_ATTACHMENT_DEBUG__
 			std::cerr << red_str("item doesnt have attachment!") << "\n";
+#endif
 			return "";
 		}
 		auto& a = in_a->attachment()->attributes;

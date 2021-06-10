@@ -31,7 +31,9 @@ namespace mods::orm {
 				              .values(obj.export_class())
 				              .returning(returning_field)
 				              .sql();
+#ifdef __MENTOC_ORM_BASE_DEBUG_OUTPUT__
 				std::cerr << "insert_returning: '" << up_sql << "'\n";
+#endif
 				auto record = mods::pq::exec(insert_transaction,up_sql);
 				mods::pq::commit(insert_transaction);
 				if(record.size()) {
@@ -94,7 +96,9 @@ namespace mods::orm {
 				              .set(values)
 				              .where(s.primary_key_name(),"=",s.primary_key_value())
 				              .sql();
+#ifdef __MENTOC_ORM_BASE_DEBUG_OUTPUT__
 				std::cerr << "update:'" << up_sql << "'\n";
+#endif
 				mods::pq::exec(up_txn,up_sql);
 				mods::pq::commit(up_txn);
 				return {0,"okay"};
@@ -116,7 +120,9 @@ namespace mods::orm {
 				                  .from(s[0].table_name())
 				                  .where(where.data(), sql_operator.data(), value.data())
 				                  .sql();
+#ifdef __MENTOC_ORM_BASE_DEBUG_OUTPUT__
 				std::cerr << "load_where:'" << player_sql << "'\n";
+#endif
 				auto player_record = mods::pq::exec(select_transaction,player_sql);
 				mods::pq::commit(select_transaction);
 				for(auto row : player_record) {
@@ -144,7 +150,9 @@ namespace mods::orm {
 				                  .where(where.data(), sql_operator.data(), value.data())
 				                  .order_by(order_by.data(),direction.data())
 				                  .sql();
+#ifdef __MENTOC_ORM_BASE_DEBUG_OUTPUT__
 				std::cerr << "load_where_order_by:'" << player_sql << "'\n";
+#endif
 				auto player_record = mods::pq::exec(select_transaction,player_sql);
 				mods::pq::commit(select_transaction);
 				for(auto row : player_record) {
@@ -166,7 +174,9 @@ namespace mods::orm {
 				                  .from(s.table_name())
 				                  .where(s.primary_key_name(),"=",pkid)
 				                  .sql();
+#ifdef __MENTOC_ORM_BASE_DEBUG_OUTPUT__
 				std::cerr << "load_by_pkid'" << player_sql << "'\n";
+#endif
 				auto player_record = mods::pq::exec(select_transaction,player_sql);
 				if(player_record.size()) {
 					s.feed(player_record[0]);

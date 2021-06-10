@@ -7,7 +7,6 @@
 #include "screen-searcher.hpp"
 #include "npc.hpp"
 
-#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
 #define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
 #define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
@@ -170,7 +169,7 @@ namespace mods::zone {
 						if(zone_command_upkeep(ZCMD)) {
 							auto obj = mods::globals::read_mobile_ptr(ZCMD.arg1,VIRTUAL);
 							if(!obj) {
-								std::cerr << red_str("Warning: zone update failed to read this mob:") << ZCMD.arg1 << "\n";
+								log(CAT("Warning: zone update failed to read this mob:",ZCMD.arg1).c_str());
 								last_cmd = 1;/* just power through it*/
 								break;
 							}

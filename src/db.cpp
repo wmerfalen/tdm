@@ -424,7 +424,9 @@ void free_extra_descriptions(struct extra_descr_data *edesc) {
 	//		free(edesc->description);
 	//		free(edesc);
 	//	}
+#ifdef __MENTOC_SHOW_DEPRECATED__
 	std::cerr << "[stub]: free_extra_descriptions - things will break if malloc()'d\n";
+#endif
 }
 
 
@@ -1001,8 +1003,8 @@ int parse_sql_objects() {
 
 		for(auto row : result) {
 			if(strlen(row["obj_file"].c_str()) == 0) {
-				std::cerr << "obj_file is zero!-> '" << row["id"].c_str() << "\n";
-				exit(6);
+				REPORT_DB_ISSUE(CAT("SYSERR: obj_file is zero!-> '",row["id"].c_str(),"'").c_str(),"");
+				continue;
 			}
 			if(row["obj_type"].as<int>() == 0 || !row["obj_file"].c_str()) {
 				REPORT_DB_ISSUE("parse_sql_objects encountered broken row ","");
@@ -1114,7 +1116,9 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 	log("[status] Loading sql zones");
 
 	for(const auto& row: db_get_all("zone")) {
+#ifdef __MENTOC_SHOW_ZONE_DB_CPP__
 		std::cerr << green_str("parsing zone:") << row["zone_name"].c_str() << "'\n";
+#endif
 		zone_data z;
 		//struct zone_data {
 		//  1    char *name;          /* name of this zone                  */
@@ -1187,7 +1191,9 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 		//siege=#
 
 		for(auto&& zone_data_row : db_get_by_meta("zone_data","zone_id",std::to_string(z.number))) {
+#ifdef __MENTOC_SHOW_ZONE_DB_CPP__
 			std::cerr << green_str("parsing zone_data from db") << "\n";
+#endif
 			reset_com res;
 			res.command = std::string(zone_data_row["zone_command"].c_str())[0];
 			res.if_flag =mods::util::stoi<int>(zone_data_row["zone_if_flag"]);
@@ -1955,7 +1961,9 @@ obj_ptr_t blank_object() {
 }
 /** check for rifle|pkid:N match */
 obj_ptr_t create_object(int type,std::string yaml_file) {
+#ifdef __MENTOC_SHOW_CREATE_OBJECT_OUTPUT__
 	std::cerr << "create_object:'" << yaml_file << "'\n";
+#endif
 	if(yaml_file.find_first_of('|') != std::string::npos) {
 		return mods::util::create_pkid_object(yaml_file);
 	}
@@ -2050,7 +2058,9 @@ obj_ptr_t read_object_ptr(obj_vnum nr, int type) { /* and obj_rnum */
 
 /* update zone ages, queue for reset if necessary, and dequeue when possible */
 void zone_update() {
+#ifdef __MENTOC_SHOW_DEPRECATED__
 	std::cerr << red_str("DEPRECATED: legacy zone_update(). Returning...") << "\n";
+#endif
 	return;
 }
 
@@ -2257,7 +2267,10 @@ bool parse_sql_player(player_ptr_t player_ptr) {
 							__MENTOC_PLR(AFF_HIDE);
 							__MENTOC_PLR(AFF_CHARM);
 						default:
+#ifdef __MENTOC_SHOW_UNKNOWN_AFF__
 							std::cerr << "unknown affected flag: " << shift << "\n";
+#endif
+							break;
 					}
 					player_ptr->affect(shift);
 				}
@@ -2288,7 +2301,9 @@ bool parse_sql_player(player_ptr_t player_ptr) {
 							__MENTOC_PLR(PLR_CRYO);
 							__MENTOC_PLR(PLR_NOTDEADYET);
 						default:
+#ifdef __MENTOC_SHOW_UNKNOWN_AFF__
 							std::cerr << "unknown affected_plr flag: " << shift << "\n";
+#endif
 							break;
 					}
 					player_ptr->affect(shift);

@@ -11,9 +11,6 @@
 #include "../contract-types.hpp"
 
 #include "slotted-builder.hpp"
-namespace mods::orm {
-	std::deque<std::shared_ptr<mods::orm::contracts>>& contract_list();
-};
 
 namespace mods::builder::conbuild {
 
@@ -24,6 +21,8 @@ namespace mods::builder::conbuild {
 	using conbuild_vnum_t = uint64_t;
 	using conbuild_orm_type = mods::orm::contracts;
 	struct conbuild_interface : public slotted_builder<conbuild_vnum_t,conbuild_orm_type> {
+		std::deque<std::shared_ptr<mods::orm::contract_steps>> step_list;
+
 		/** ======== */
 		/** required */
 		/** ======== */
@@ -71,7 +70,6 @@ namespace mods::builder::conbuild {
 			s->initialize_row(vnum);
 			return std::move(s);
 		}
-		std::deque<std::shared_ptr<mods::orm::contract_steps>> step_list;
 		std::optional<std::shared_ptr<mods::orm::contract_steps>> find_local_step_by_id(const uint64_t& step_id) {
 			for(const auto& s : step_list) {
 				if(s->id == step_id) {
@@ -136,7 +134,7 @@ namespace mods::builder::conbuild {
 			load_all();
 			remove_command_signatures({"list-extract","reload-all","remove","set"});
 			get_signatures()["new"] = "{grn}conbuild{/grn} {red}new <virtual-number>{/red}\r\n";
-			register_custom_non_profile_command("legend",[&,this](const std::vector<std::string>& args,std::string argument) -> std::tuple<bool,std::string> {
+			register_custom_non_profile_command("legend",[&](const std::vector<std::string>& args,std::string argument) -> std::tuple<bool,std::string> {
 				std::string legend = CAT("{yel}LEGEND:{/yel}\r\n",
 				                         "{yel}virtual-number{/yel}: {grn}The contract virtual number.{/grn}\r\n",
 				                         "{yel}Nth-step{/yel}: {grn}The zero-indexed position of the step.{/grn}\r\n",
@@ -246,8 +244,8 @@ namespace mods::builder::conbuild {
 			 * 	creates a new step for the given contract vnum
 			 *  -----------------------------------------
 			 */
-			register_custom_command("new-step","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-				this->step_list.emplace_back(create_step(profile->vnum()));
+			register_custom_command("new-step","<virtual_number>",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				step_list.emplace_back(create_step(profile->vnum()));
 				return {1,"Created"};
 			});
 			/**
@@ -259,7 +257,7 @@ namespace mods::builder::conbuild {
 			 * 	lists the columns on the steps orm object
 			 *  -----------------------------------------
 			 */
-			register_custom_command("columns","",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+			register_custom_command("columns","",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				for(const auto& str : mods::orm::contract_steps::column_list()) {
 					push_encoded_ok(str);
 				}
@@ -274,7 +272,7 @@ namespace mods::builder::conbuild {
 			 * 	grabs the specified field(s) on the steps for contract vnum
 			 *  -----------------------------------------
 			 */
-			register_custom_command("extract-step","<virtual_number> <field>...[field-N]",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+			register_custom_command("extract-step","<virtual_number> <field>...[field-N]",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				/** signature: [0] => extract-step [1] => vnum [2] => field ... [N] => [field-N] */
 				// grab step
 				if(args.size() < 3) {
@@ -310,7 +308,7 @@ namespace mods::builder::conbuild {
 			 * 	paginates the steps
 			 *  -----------------------------------------
 			 */
-			register_custom_command("paginate-steps","<virtual_number> <page> <page-size>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+			register_custom_command("paginate-steps","<virtual_number> <page> <page-size>",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				/** signature: [0] => paginate-steps [1] => vnum [2] => page [3] => page-size */
 				// grab step
 				if(args.size() < 4) {
@@ -354,10 +352,8 @@ namespace mods::builder::conbuild {
 			 * 	shows the steps for the given contract vnum
 			 *  -----------------------------------------
 			 */
-			register_custom_command("show-steps","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-				this->step_list.clear();
-				auto s = mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
-				for(const auto& s : this->step_list) {
+			register_custom_command("show-steps","<virtual_number>",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				for(const auto& s : step_list) {
 					if(s->s_contract_vnum == profile->vnum()) {
 						dump_step(s);
 					}
@@ -374,10 +370,8 @@ namespace mods::builder::conbuild {
 			 * 	saves the step by step id (step->id)
 			 *  -----------------------------------------
 			 */
-			register_integral_accumulator_command("save-step","<virtual_number> <Nth-step-id>...[Nth-step-id-N]",[&,this](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+			register_integral_accumulator_command("save-step","<virtual_number> <Nth-step-id>...[Nth-step-id-N]",[&](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				auto p = foreach_step_do(step_ids,"save");
-				this->step_list.clear();
-				mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
 				return {1,CAT("saved ",std::get<0>(p)," successfully. failed saving: ",std::get<1>(p), " items")};
 			});
 
@@ -390,10 +384,8 @@ namespace mods::builder::conbuild {
 			 * 	deletes the step by step id (step->id)
 			 *  -----------------------------------------
 			 */
-			register_integral_accumulator_command("delete-step","<virtual_number> <step-id>...[step-id-N]",[&,this](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+			register_integral_accumulator_command("delete-step","<virtual_number> <step-id>...[step-id-N]",[&](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				auto p = foreach_step_do(step_ids,"delete");
-				this->step_list.clear();
-				mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
 				return {1,CAT("deleted ",std::get<0>(p)," successfully. failed deleting: ",std::get<1>(p), " items")};
 			});
 
@@ -409,10 +401,9 @@ namespace mods::builder::conbuild {
 			 * 	postgres if saved prior to this command being invoked.
 			 *  -----------------------------------------
 			 */
-			register_custom_command("load-steps","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-				this->step_list.clear();
-				auto s = mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
-				return {1,CAT("loaded ",std::get<0>(s)," entries.")};
+			register_custom_command("load-steps","<virtual_number>",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				return {1,"stub"};
+				//return {1,CAT("loaded ",std::get<0>(s)," entries.")};
 			});
 
 			/**
@@ -425,7 +416,7 @@ namespace mods::builder::conbuild {
 			 * 	of columns call the columns sub-command
 			 * 	-----------------------------------------
 			 */
-			register_custom_command("set-step-data","<virtual_number> <Nth-step> <field> <value>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+			register_custom_command("set-step-data","<virtual_number> <Nth-step> <field> <value>",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				/** signature: [0] => set-step-data [1] => vnum [2] => Nth-step [3] => field [4] => value */
 				if(args.size() < 5) {
 					return {0,"Invalid number of arguments"};

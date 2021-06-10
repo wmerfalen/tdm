@@ -614,11 +614,17 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 						BOOST_PP_TUPLE_ELEM(4,2,MEMBER_TUPLE)      \
 						<< "\n";
 
+#ifdef __MENTOC_GENERATING_MAP_OUTPUT__
+#define mgen_debug(A) std::cerr << "generating map: '" << A << "\n";
+#else
+#define mgen_debug(A) /**-*/
+#endif
+
 #define MENTOC_GENERATE_MAP_IMPL(r,PREFIX,MEMBER_TUPLE) \
 {\
 	std::string item_name = PREFIX; item_name += "_";\
 	item_name += BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE));\
-	std::cerr << "generating map: '" << item_name << "\n";\
+	mgen_debug(item_name);\
 		this->exported[item_name.c_str()] = mods::yaml::to_string<BOOST_PP_TUPLE_ELEM(4,0,MEMBER_TUPLE)>(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE));\
 }
 

@@ -20,7 +20,9 @@ namespace mods::orm {
 			this->player_id = record.player_id;
 			std::tuple<int16_t,std::string,uint64_t> insert_result = mods::orm::util::insert_returning<player_skill_usage_record_t,sql_compositor>(&record, "id");
 			if(!ORM_SUCCESS(insert_result)) {
+#ifdef __MENTOC_PLAYER_SKILL_USAGE_DEBUG_OUTPUT__
 				std::cerr << red_str("Issue saving player_skill_usage:'") << std::get<1>(insert_result) << "'\n";
+#endif
 			}
 		}
 		return 0;
@@ -106,9 +108,13 @@ namespace mods::orm {
 		player_skill_usage psu;
 		auto psu_rows = psu.get_player_levels(player_id, c);
 		for(const auto& row : s.rows) {
+#ifdef __MENTOC_PLAYER_SKILL_USAGE_DEBUG_OUTPUT__
 			std::cerr << green_str("checking s.rows:") << row.id << "\n";
+#endif
 			if(!psu_rows[row.id]) {
+#ifdef __MENTOC_PLAYER_SKILL_USAGE_DEBUG_OUTPUT__
 				std::cerr << green_str("Fixing unfound row.id:") << row.id << "\n";
+#endif
 				psu_rows[row.id] = 1;
 			}
 		}

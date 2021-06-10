@@ -155,11 +155,11 @@ namespace mods::contracts {
 
 		if(m_current_step) {
 			if(m_current_step->reward_xp > 0) {
-				reward_string += CAT("You gain ",m_current_step->reward_xp," XP\r\n\r\n");
+				reward_string = CAT("You gain ",m_current_step->reward_xp," XP\r\n");
 				player->exp() += m_current_step->reward_xp;
 			}
 			if(m_current_step->reward_money > 0) {
-				reward_string = CAT("You gain ",m_current_step->reward_money," MP\r\n\r\n");
+				reward_string += CAT("You gain ",m_current_step->reward_money," MP\r\n");
 				player->gold() += m_current_step->reward_money;
 			}
 			for(auto& line : {
@@ -179,11 +179,9 @@ namespace mods::contracts {
 						auto s = util::extract_yaml_reward(line.data());
 						if(std::get<0>(s)) {
 							auto c = create_object(std::get<1>(s),std::get<2>(s));
-							reward_string += CAT(
-							                     "\r\n\r\n",
-							                     "You are rewarded with the following item:\r\n",
+							reward_string += CAT("You are rewarded with the following item:\r\n",
 							                     c->name.c_str(),"\r\n"
-							                 );
+							                    );
 							player->carry(c);
 						}
 					}
@@ -208,8 +206,8 @@ namespace mods::contracts {
 		save_step_data();
 		m_auto_update_step();
 
-		player->sendln("\r\n\r\n");
 		if(!finished()) {
+			std::string newline;
 			player->sendln(
 			    mods::util::mail_format(
 			        "Congratulations, soldier!",
@@ -221,8 +219,8 @@ namespace mods::contracts {
 		} else {
 			player->sendln(
 			    mods::util::mail_format(
+			        "Contract COMPLETE!",
 			        "Congratulations, soldier!",
-			        "You completed your contract.",
 			        CAT("You just finished your contract successfully!\r\n",reward_string),
 			        player->screen_width()
 			    )
@@ -278,13 +276,11 @@ namespace mods::contracts {
 	 */
 	void player_contract_instance::find_item(obj_ptr_t& object) {
 		if(!m_current_step) {
-			std::cerr << red_str("find_item -> m_current_step is null!") << "\n";
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_FIND &&
 		        m_current_step->target == target_t::TARGET_ITEM) {
 			if(m_current_step->object_yaml.compare(object->feed_file().data()) == 0) {
-				std::cerr << green_str("advancing!") << "\n";
 				this->advance();
 				return;
 			}

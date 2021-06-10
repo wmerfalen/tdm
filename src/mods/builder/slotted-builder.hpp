@@ -355,7 +355,9 @@ namespace mods::builder {
 			}
 
 			slotted_builder() {
+#ifdef __MENTOC_ENCODED_MESSAGE_DEBUG_OUTPUT__
 				std::cerr << green_str("slotted_builder") << "\n";
+#endif
 				m_automatically_clear = true;
 				m_builder_ptr = nullptr;
 				m_encoded_response.clear();
@@ -373,7 +375,9 @@ namespace mods::builder {
 				m_signatures["reload-all"] = "{grn}%s{/grn} {red}reload-all{/red}\r\n";
 			}
 			virtual ~slotted_builder() {
+#ifdef __MENTOC_ENCODED_MESSAGE_DEBUG_OUTPUT__
 				std::cerr << red_str("~slotted_builder") << "\n";
+#endif
 				m_orm_list = nullptr;
 				m_builder_ptr = nullptr;
 				m_encoded_response.clear();
@@ -393,10 +397,12 @@ namespace mods::builder {
 				return m_encoded_response;
 			}
 			void clear_response() {
+#ifdef __MENTOC_ENCODED_MESSAGE_DEBUG_OUTPUT__
 				std::cerr << green_str("clearing response") << "\n";
 				for(auto c : m_encoded_response) {
 					std::cerr << "response: '" << c << "'\n";
 				}
+#endif
 				m_encoded_response.clear();
 			}
 			void flush() {
@@ -563,7 +569,9 @@ namespace mods::builder {
 
 			/** helper function to handle communication of messages. supports encoding if user is executing js */
 			void push_encoded_message(std::string msg, std::string encoded,uint8_t msg_type) {
+#ifdef __MENTOC_ENCODED_MESSAGE_DEBUG_OUTPUT__
 				std::cerr << green_str("push encoded message:'") << msg << "', encoded:'" << encoded << "'\n";
+#endif
 				if(m_builder_ptr->is_executing_js()) {
 					if(msg_type == MSG_SUCCESS) {
 						m_encoded_response.emplace_back(CAT("{type:\"success\",msg_len:",encoded.length(),",msg:\"",encoded.data(),"\"}"));

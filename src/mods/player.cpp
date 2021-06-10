@@ -559,7 +559,11 @@ namespace mods {
 	}
 	/** TODO: do this */
 	void player::carry(obj_ptr_t obj) {
+#ifdef __MENTOC_CARRY_DEBUG__
 #define dbg(A) std::cerr << red_str("[CARRY]dbug:") << A << "\n";
+#else
+#define dbg(A) ;;
+#endif
 		dbg("carry entry");
 		if(obj == nullptr) {
 			dbg("obj is nullptr, returning early!");

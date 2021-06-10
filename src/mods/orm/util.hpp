@@ -48,7 +48,9 @@ namespace mods::orm::util {
 			              .values(mapped)
 			              .returning(returning_field)
 			              .sql();
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "insert_returning: '" << up_sql << "'\n";
+#endif
 			auto record = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
 			if(record.size()) {
@@ -72,7 +74,9 @@ namespace mods::orm::util {
 			              .from(obj->table_name())
 			              .where(obj->primary_key_name(),"=",obj->primary_key_value())
 			              .sql();
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "delete_from: '" << up_sql << "'\n";
+#endif
 			auto record = mods::pq::exec(del_txn,up_sql);
 			mods::pq::commit(del_txn);
 			return {FETCHED_OKAY,"okay"};
@@ -95,7 +99,9 @@ namespace mods::orm::util {
 			              .from(table_name.data())
 			              .where(where.data(), sql_operator.data(),value.data())
 			              .sql();
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "delete_where: '" << up_sql << "'\n";
+#endif
 			mods::pq::exec(del_txn,up_sql);
 			mods::pq::commit(del_txn);
 			return {FETCHED_OKAY,"okay"};
@@ -132,7 +138,9 @@ namespace mods::orm::util {
 				op_and = element.op_and;
 				op_or = element.op_or;
 			}
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "delete_where(builder): '" << builder.sql() << "'\n";
+#endif
 			mods::pq::exec(del_txn,builder.sql());
 			mods::pq::commit(del_txn);
 			return {FETCHED_OKAY,"okay"};
@@ -151,7 +159,9 @@ namespace mods::orm::util {
 			              .set(s->export_class())
 			              .where(s->primary_key_name(),"=",s->primary_key_value())
 			              .sql();
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "update: '" << up_sql << "'\n";
+#endif
 			mods::pq::exec(up_txn,up_sql);
 			mods::pq::commit(up_txn);
 			return {FETCHED_OKAY,"okay"};
@@ -168,7 +178,9 @@ namespace mods::orm::util {
 			auto player_sql = comp.select("*")
 			                  .from(s->table_name())
 			                  .sql();
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "load_all: '" << player_sql << "'\n";
+#endif
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 			mods::pq::commit(select_transaction);
 			if(player_record.size()) {
@@ -193,7 +205,9 @@ namespace mods::orm::util {
 			                  .from(s[0].table_name())
 			                  .where(where.data(), sql_operator.data(), value.data())
 			                  .sql();
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "load_where: '" << player_sql << "'\n";
+#endif
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 			mods::pq::commit(select_transaction);
 			for(auto row : player_record) {
@@ -237,7 +251,9 @@ namespace mods::orm::util {
 			}
 
 			auto player_sql = builder.sql();
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "load_where(builder): '" << player_sql << "'\n";
+#endif
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 			mods::pq::commit(select_transaction);
 			for(auto row : player_record) {
@@ -258,7 +274,9 @@ namespace mods::orm::util {
 			                  .from(s->table_name())
 			                  .where(column.data(),"=",value.data())
 			                  .sql();
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "load_by_column: '" << player_sql << "'\n";
+#endif
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 			if(player_record.size()) {
 				s->feed(player_record[0]);
@@ -349,7 +367,9 @@ namespace mods::orm::util {
 			                  .from(s->table_name())
 			                  .where(s->primary_key_name(),"=",s->primary_key_value())
 			                  .sql();
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "load_by_pkid: '" << player_sql << "'\n";
+#endif
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 			if(player_record.size()) {
 				s->feed(player_record[0]);

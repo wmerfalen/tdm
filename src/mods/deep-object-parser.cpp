@@ -119,7 +119,9 @@ namespace mods {
 			return {false,"",in_counter};
 		}
 		auto s = line.substr(in_counter);
+#ifdef __MENTOC_SHOW_PARSE_DEBUG__
 		std::cout << "line substr: '" << s << "'\n\n\n\n";
+#endif
 		std::string digit_string = "";
 		while(line.length() > in_counter) {
 			if(isdigit(line[in_counter])) {
@@ -127,7 +129,9 @@ namespace mods {
 				++in_counter;
 				continue;
 			}
+#ifdef __MENTOC_SHOW_PARSE_DEBUG__
 			std::cerr << "going...";
+#endif
 			break;
 		}
 		return {digit_string.length(),digit_string,saved};
@@ -147,9 +151,13 @@ namespace mods {
 			return {false,"",in_counter};
 		}
 		auto s = line.substr(in_counter);
+#ifdef __MENTOC_SHOW_PARSE_DEBUG__
 		std::cout << "line substr: '" << s << "'\n\n\n\n";
+#endif
 		for(auto& slot_option : acceptable_slot_names) {
+#ifdef __MENTOC_SHOW_PARSE_DEBUG__
 			std::cout << "line substr: '" << line.substr(in_counter) << "'\n";
+#endif
 			if(line.length() <= (in_counter + slot_option.length())) {
 				m_debug("out of bounds. not going to compare...");
 				continue;
@@ -277,7 +285,9 @@ namespace mods {
 				continue;
 			}
 			std::string slot = std::get<1>(tslot);
+#ifdef __MENTOC_SHOW_PARSE_DEBUG__
 			std::cout << "found slot name: '" << slot << "'\n";
+#endif
 			counter += slot.length();
 			auto in_counter = counter;
 			in_counter = counter;
