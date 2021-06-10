@@ -21,24 +21,42 @@ namespace mods::builder::conbuild {
 	using conbuild_vnum_t = uint64_t;
 	using conbuild_orm_type = mods::orm::contracts;
 	struct conbuild_interface : public slotted_builder<conbuild_vnum_t,conbuild_orm_type> {
-		std::deque<std::shared_ptr<mods::orm::contract_steps>> step_list;
+		using step_orm_ptr_t = std::shared_ptr<mods::orm::contract_steps>;
+		using step_list_t = std::deque<step_orm_ptr_t>;
+		using contract_list_t = std::deque<std::shared_ptr<mods::orm::contracts>>;
+
+		step_list_t step_list;
+		contract_list_t contract_list;
+
+		void remove_from_step_list_by_contract_vnum(const contract_vnum_t vnum) {
+			step_list
+			.erase(
+			std::remove_if(step_list.begin(), step_list.end(), [&](auto& step) -> bool {
+				return step->s_contract_vnum == vnum;
+			}),
+			step_list.end()
+			);
+		}
 
 		/** ======== */
 		/** required */
 		/** ======== */
 		bool delete_by_vnum(conbuild_vnum_t vnum) {
-			std::deque<std::shared_ptr<mods::orm::contracts>> list;
-			bool deleted = false;
-			for(auto& m : mods::orm::orm_contract_list()) {
-				if(m->vnum() == vnum) {
-					m->destroy();
-					deleted = true;
-					continue;
+			contract_list.erase(std::remove_if(contract_list.begin(),contract_list.end(),[&](const auto& contract) -> bool {
+				if(contract->vnum() == vnum) {
+					contract->destroy();
+					return true;
 				}
-				list.emplace_back(std::move(m));
-			}
-			mods::orm::orm_contract_list() = std::move(list);
-			return deleted;
+				return false;
+			}), contract_list.end());
+			step_list.erase(std::remove_if(step_list.begin(),step_list.end(),[&](const auto& step) -> bool {
+				if(step->s_contract_vnum == vnum) {
+					step->destroy();
+					return true;
+				}
+				return false;
+			}), step_list.end());
+			return true;
 		}
 
 		/** ======== */
@@ -46,7 +64,7 @@ namespace mods::builder::conbuild {
 		/** ======== */
 		/** will optionally return the orm entity that has the given vnum */
 		std::optional<std::shared_ptr<conbuild_orm_type>> by_vnum(conbuild_vnum_t vnum) {
-			for(const auto& m : mods::orm::orm_contract_list()) {
+			for(const auto& m : contract_list) {
 				if(m->c_vnum == vnum) {
 					return m;
 				}
@@ -54,29 +72,10 @@ namespace mods::builder::conbuild {
 			return std::nullopt;
 		}
 
-		/** contract_steps */
-		/** will optionally return the orm entity that has the given vnum */
-		std::optional<std::shared_ptr<mods::orm::contract_steps>> step_by_vnum(conbuild_vnum_t vnum) {
-			for(const auto& m : mods::orm::contract_steps_list()) {
-				if(m->s_contract_vnum == vnum) {
-					return m;
-				}
-			}
-			return std::nullopt;
-		}
-
-		std::shared_ptr<mods::orm::contract_steps> create_step(conbuild_vnum_t vnum) {
+		step_orm_ptr_t create_step(conbuild_vnum_t vnum) {
 			auto s = std::make_shared<mods::orm::contract_steps>();
 			s->initialize_row(vnum);
 			return std::move(s);
-		}
-		std::optional<std::shared_ptr<mods::orm::contract_steps>> find_local_step_by_id(const uint64_t& step_id) {
-			for(const auto& s : step_list) {
-				if(s->id == step_id) {
-					return s;
-				}
-			}
-			return std::nullopt;
 		}
 		std::pair<unsigned,unsigned> foreach_step_do(std::vector<int> list,std::string mode) {
 			/** signature: [0] => save-step [1] => vnum [2] => Nth-step-id ... [N] => [step-id-N] */
@@ -113,7 +112,7 @@ namespace mods::builder::conbuild {
 			}
 			return {ok,error};
 		}
-		void dump_step(std::shared_ptr<mods::orm::contract_steps> s) {
+		void dump_step(step_orm_ptr_t s) {
 			auto str = s->dump();
 			str += CAT("task_type_t: '", IMPLODE(mods::contracts::get_string_list_from_task_flags((mods::contracts::task_t)s->s_task_type),","),"'\r\n");
 			str += CAT("task_target_t: '", mods::contracts::get_string_from_target((mods::contracts::target_t)s->s_task_target),"'\r\n");
@@ -127,7 +126,7 @@ namespace mods::builder::conbuild {
 			/** set available slots */
 			set_slot_list(conbuild_orm_type::get_slot_list());
 			/** point the class to our base orm structure */
-			set_orm_list(&mods::orm::orm_contract_list());
+			set_orm_list(&contract_list);
 			/** set the base command */
 			set_base_command("conbuild");
 			clear();
@@ -218,6 +217,9 @@ namespace mods::builder::conbuild {
 			 *  -----------------------------------------
 			 */
 			register_accumulator_command("title","<virtual_number> <text>",[](std::string&& value, std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Profile doesn't exist"};
+				}
 				profile->c_title = value;
 				return profile->update();
 			});
@@ -231,6 +233,9 @@ namespace mods::builder::conbuild {
 			 *  -----------------------------------------
 			 */
 			register_accumulator_command("description","<virtual_number> <text>",[](std::string&& value, std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Profile doesn't exist"};
+				}
 				profile->c_description = value;
 				return profile->update();
 			});
@@ -245,6 +250,9 @@ namespace mods::builder::conbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("new-step","<virtual_number>",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Profile doesn't exist"};
+				}
 				step_list.emplace_back(create_step(profile->vnum()));
 				return {1,"Created"};
 			});
@@ -273,6 +281,9 @@ namespace mods::builder::conbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("extract-step","<virtual_number> <field>...[field-N]",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Profile doesn't exist"};
+				}
 				/** signature: [0] => extract-step [1] => vnum [2] => field ... [N] => [field-N] */
 				// grab step
 				if(args.size() < 3) {
@@ -309,6 +320,9 @@ namespace mods::builder::conbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("paginate-steps","<virtual_number> <page> <page-size>",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Profile doesn't exist"};
+				}
 				/** signature: [0] => paginate-steps [1] => vnum [2] => page [3] => page-size */
 				// grab step
 				if(args.size() < 4) {
@@ -353,6 +367,9 @@ namespace mods::builder::conbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("show-steps","<virtual_number>",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Profile doesn't exist"};
+				}
 				for(const auto& s : step_list) {
 					if(s->s_contract_vnum == profile->vnum()) {
 						dump_step(s);
@@ -371,6 +388,9 @@ namespace mods::builder::conbuild {
 			 *  -----------------------------------------
 			 */
 			register_integral_accumulator_command("save-step","<virtual_number> <Nth-step-id>...[Nth-step-id-N]",[&](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Profile doesn't exist"};
+				}
 				auto p = foreach_step_do(step_ids,"save");
 				return {1,CAT("saved ",std::get<0>(p)," successfully. failed saving: ",std::get<1>(p), " items")};
 			});
@@ -385,6 +405,9 @@ namespace mods::builder::conbuild {
 			 *  -----------------------------------------
 			 */
 			register_integral_accumulator_command("delete-step","<virtual_number> <step-id>...[step-id-N]",[&](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Profile doesn't exist"};
+				}
 				auto p = foreach_step_do(step_ids,"delete");
 				return {1,CAT("deleted ",std::get<0>(p)," successfully. failed deleting: ",std::get<1>(p), " items")};
 			});
@@ -402,6 +425,9 @@ namespace mods::builder::conbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("load-steps","<virtual_number>",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Profile doesn't exist"};
+				}
 				return {1,"stub"};
 				//return {1,CAT("loaded ",std::get<0>(s)," entries.")};
 			});
@@ -564,51 +590,25 @@ namespace mods::builder::conbuild {
 			if(id <= 0) {
 				return {0,"Couldn't initialize row"};
 			}
-			mods::orm::orm_contract_list().emplace_back(std::move(c));
+			contract_list.emplace_back(std::move(c));
 			return {1,"Created row."};
 		}
 		/** ======== */
 		/** required */
 		/** ======== */
 		void clear() {
-			mods::orm::orm_contract_list().clear();
-			mods::orm::contract_steps_list().clear();
+			contract_list.clear();
+			step_list.clear();
 		}
 		/** ======== */
 		/** required */
 		/** ======== */
 		void load_all() {
-			mods::orm::orm_contract_list() = std::move(mods::orm::load_all_by_table<mods::orm::contracts>());
-			mods::orm::contract_steps_list() = std::move(mods::orm::load_all_by_table<mods::orm::contract_steps>());
+			contract_list = std::move(mods::orm::load_all_by_table<mods::orm::contracts>());
+			step_list = std::move(mods::orm::load_all_by_table<mods::orm::contract_steps>());
 		}
 	};
 
-	namespace map {
-
-		bool delete_by_vnum(const uint64_t& vnum) {
-			std::deque<std::shared_ptr<mods::orm::contract_steps>> list;
-			bool deleted = false;
-			for(auto& m : mods::orm::contract_steps_list()) {
-				if(m->s_contract_vnum == vnum) {
-					m->destroy();
-					deleted = true;
-					continue;
-				}
-				list.emplace_back(std::move(m));
-			}
-			mods::orm::contract_steps_list() = std::move(list);
-			return deleted;
-		}
-		std::deque<std::shared_ptr<mods::orm::contract_steps>> by_profile_vnum(const uint64_t& vnum) {
-			std::deque<std::shared_ptr<mods::orm::contract_steps>> list;
-			for(const auto& m : mods::orm::contract_steps_list()) {
-				if(m->s_contract_vnum == vnum) {
-					list.emplace_back(m);
-				}
-			}
-			return list;
-		}
-	};
 	using args_t = std::vector<std::string>;
 
 	static conbuild_interface& conbuilder(player_ptr_t player) {
@@ -626,127 +626,6 @@ namespace mods::builder::conbuild {
 			return;
 		}
 
-		auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
-		/** map-list */
-		{
-			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-list");
-
-			if(args.has_value()) {
-				ENCODE_INIT();
-				/**
-				 * cmd_args will be: [0] => map-list
-				 */
-				std::string list = "";
-				for(const auto& m : mods::orm::contract_steps_list()) {
-					list += CAT("{contract_vnum:",m->s_contract_vnum,",todo:1}");
-				}
-				ENCODE_R(list);
-				r_success(player,list);
-				return;
-			}//end pave on
-		}
-		/** map-assign */
-		{
-			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-assign");
-
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				if(cmd_args.size() < 3) {
-					r_error(player,"Not enough arguments");
-					return;
-				}
-				/**
-				 * cmd_args will be: [0] => map-assign, [1] => <mob-vnum> [2] => <eq-vnum>
-				 */
-				auto mvn = mods::util::stoi(cmd_args[1]).value_or(-1);
-				auto eq_vnum = mods::util::stoi(cmd_args[2]).value_or(-1);
-				if(mvn <= 0) {
-					r_error(player,"mob vnum must be a positive number");
-					return;
-				}
-				if(eq_vnum <= 0) {
-					r_error(player,"eq vnum must be a positive number");
-					return;
-				}
-#if 0
-				for(auto& m : mods::orm::contract_steps_list()) {
-					/*
-					if(m->mmap_mob_vnum == mvn) {
-						auto backup = m->mmap_contracts_vnum;
-						m->mmap_contracts_vnum = eq_vnum;
-						if(m->save() < 0) {
-							r_error(player,"Unable to save existing.");
-							m->mmap_contracts_vnum = backup;
-							return;
-						}
-						*/
-					r_success(player,"Saved existing.");
-					ENCODE_R("ok");
-					return;
-					//}
-				}
-				/** we've reached here which means no existing map exists. create one */
-				auto ref = std::make_shared<mods::orm::contract_steps>();
-				ref->initialize_row(mvn,eq_vnum);
-				ref->mmap_mob_vnum = mvn;
-				ref->mmap_contracts_vnum = eq_vnum;
-				if(ref->save() < 0) {
-					r_error(player,"Unable to save.");
-					return;
-				}
-				mods::orm::contracts_map_list().emplace_back(std::move(ref));
-#endif
-				r_success(player,"Created new mapping and saved");
-				ENCODE_R("ok");
-				return;
-			}//end pave on
-		}
-		/** map-delete */
-		{
-			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-delete");
-
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				if(cmd_args.size() < 2) {
-					r_error(player,"Not enough arguments");
-					return;
-				}
-				/**
-				 * cmd_args will be: [0] => map-delete, [1] => <mob-vnum> ... [N] => <mob-vnum-N>
-				 */
-#if 0
-				std::string list = "";
-				std::deque<std::shared_ptr<mods::orm::contract_steps>> after;
-				for(unsigned i=1; i < cmd_args.size(); ++i) {
-					auto mvn = mods::util::stoi(cmd_args[i]).value_or(-1);
-					if(mvn < 0) {
-						r_error(player,"mob vnum must be a positive number");
-						continue;
-					}
-					for(auto& m : mods::orm::contracts_map_list()) {
-						if(m->mmap_mob_vnum == mvn) {
-							m->destroy();
-							m->destroyed = true;
-							list += CAT("{",mvn,"}");
-							continue;
-						}
-					}
-				}
-				for(auto& m : mods::orm::contracts_map_list()) {
-					if(m->destroyed) {
-						continue;
-					}
-					after.emplace_back(std::move(m));
-				}
-				mods::orm::contracts_map_list() = std::move(after);
-				r_success(player,CAT("Deleted: ",list));
-				ENCODE_R(list);
-#endif
-				return;
-			}//end pave on
-		}
 	}	//end conbuild
 	void init() {
 		mods::interpreter::add_command("conbuild", POS_RESTING, do_conbuild, LVL_BUILDER,0);

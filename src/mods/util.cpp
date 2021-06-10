@@ -284,7 +284,9 @@ namespace mods::util {
 	player_ptr_t query_mob_in_room(room_vnum r_vnum,mob_vnum mob) {
 		auto r = real_room(r_vnum);
 		if(r == NOWHERE) {
+#ifdef __MENTOC_MODS_UTIL_DEBUG__
 			std::cerr << red_str("r_vnum turned out to be NOWHERE:") << r_vnum << "\n";
+#endif
 			return nullptr;
 		}
 		auto it = std::find_if(room_list(r).cbegin(),room_list(r).cend(),[mob](const auto & player_ptr) -> bool {
@@ -1278,7 +1280,9 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
 	obj_ptr_t create_pkid_object(std::string_view in_schema) {
 		std::string object_type = extract_until(in_schema,'|');
 		if(std::string::npos == in_schema.find_first_of(':')) {
+#ifdef __MENTOC_MODS_UTIL_DEBUG__
 			std::cerr << red_str("WARNING: create_pkid_object couldnt find pkid colon: '") << in_schema << "'\n";
+#endif
 			return nullptr;
 		}
 		if(object_type.compare("rifle") == 0) {
@@ -1353,7 +1357,9 @@ namespace mods::util::args {
 	int parsed_args::fetch_parsed_integer(std::size_t index) {
 		return i_storage[index];
 		if(i_storage.size() > index) {
+#ifdef __MENTOC_MODS_UTIL_DEBUG__
 			std::cerr << "returning i_storage index :)\n";
+#endif
 			return i_storage[index];
 		}
 		return -1;
@@ -1378,18 +1384,24 @@ namespace mods::util::args {
 		return this;
 	}
 	parsed_args* parsed_args::save_integer(std::size_t index) {
+#ifdef __MENTOC_MODS_UTIL_DEBUG__
 		int n = 0;
 		for(auto f : vec_args) {
 			std::cerr << "f[" << n++ << "](asking for:" << index << "): '" << f << "'\n";
 		}
+#endif
 		while(i_storage.size() <= index) {
 			i_storage.emplace_back(-1);
 		}
 		i_storage[index] = -1;
 		if(vec_args.size() > index) {
+#ifdef __MENTOC_MODS_UTIL_DEBUG__
 			std::cerr << "setting index for: " << index << " vec_args[index]:'" << vec_args[index] << "'\n";
+#endif
 			i_storage[index] = mods::util::stoi(vec_args[index]).value_or(-1);
+#ifdef __MENTOC_MODS_UTIL_DEBUG__
 			std::cerr << "index for: " << index << " i_storage[index]'" << i_storage[index] << "'\n";
+#endif
 		}
 		return this;
 	}

@@ -231,7 +231,9 @@ namespace mods::orm {
 		created_at = mods::util::pg_timestamp_to_long(row["created_at"].c_str());
 		updated_at = mods::util::pg_timestamp_to_long(row["updated_at"].c_str());
 		loaded = 1;
+#ifdef __MENTOC_MEQ_ORM_DEBUG__
 		std::cerr << "fed row mob_equipment(" << id << ")\n";
+#endif
 		return 0;
 	}
 	void mob_equipment::init() {
