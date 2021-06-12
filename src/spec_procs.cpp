@@ -36,7 +36,6 @@ ACMD(do_action);
 void sort_spells(void);
 int compare_spells(const void *x, const void *y);
 const char *how_good(int percent);
-void list_skills(char_data *ch);
 SPECIAL(guild);
 SPECIAL(dump);
 SPECIAL(mayor);
@@ -406,7 +405,7 @@ SPECIAL(thief) {
 	}
 
 	//for(cons = world[IN_ROOM(ch)].people; cons; cons = cons->next_in_room)
-	for(auto & cons : mods::globals::get_room_list(player)){
+	for(auto& cons : mods::globals::get_room_list(player)) {
 		if(!IS_NPC(cons->cd()) && GET_LEVEL(cons->cd()) < LVL_IMMORT && !rand_number(0, 4)) {
 			npc_steal(ch, cons->cd());
 			return (TRUE);
@@ -425,7 +424,7 @@ SPECIAL(magic_user) {
 	}
 
 	/* pseudo-randomly choose someone in the room who is fighting me */
-	FOR_ROOM(plr){
+	FOR_ROOM(plr) {
 		if(FIGHTING(plr->cd()) == ch && !rand_number(0, 4)) {
 			vict = plr->cd();
 			break;

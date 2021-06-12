@@ -5,6 +5,7 @@
 #include "player-contract-instance.hpp"
 #include "scripted-sequence-events.hpp"
 #include "players/db-load.hpp"
+#include "levels.hpp"
 
 #ifdef  __MENTOC_SHOW_CONTRACT_OUTPUT__
 #define dbg_print(a) std::cerr << "[mods::contracts::player_contract_instance][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -156,7 +157,7 @@ namespace mods::contracts {
 		if(m_current_step) {
 			if(m_current_step->reward_xp > 0) {
 				reward_string = CAT("You gain ",m_current_step->reward_xp," XP\r\n");
-				player->exp() += m_current_step->reward_xp;
+				mods::levels::gain_exp(player,m_current_step->reward_xp);
 			}
 			if(m_current_step->reward_money > 0) {
 				reward_string += CAT("You gain ",m_current_step->reward_money," MP\r\n");
@@ -304,6 +305,55 @@ namespace mods::contracts {
 		}
 
 	}
+	std::string player_contract_instance::get_type_string() const {
+		std::string type = "\t\t{yel}[type]:{/yel}{grn}";
+		if(is_find_item()) {
+			type += "find_item";
+		}
+		if(is_find_mob()) {
+			type += "find_mob";
+		}
+		if(is_find_room()) {
+			type += "find_room";
+		}
+		if(is_find_door()) {
+			type += "find_door";
+		}
+		if(is_destroy_item()) {
+			type += "destroy_item";
+		}
+		if(is_destroy_door()) {
+			type += "destroy_door";
+		}
+		if(is_retrieve_item()) {
+			type += "retrieve_item";
+		}
+		if(is_quota_find_item()) {
+			type += "quota_find_item";
+		}
+		if(is_quota_kill_mob()) {
+			type += "quota_kill_mob";
+		}
+		if(is_quota_destroy_door()) {
+			type += "quota_destroy_door";
+		}
+		if(is_kill()) {
+			type += "kill";
+		}
+		if(is_gain_entry()) {
+			type += "gain_entry";
+		}
+		if(is_talk_to()) {
+			type += "talk_to";
+		}
+		if(is_install_item()) {
+			type += "install_item";
+		}
+		if(is_give_item()) {
+			type += "give_item";
+		}
+		return type;
+	}
 	/**
 	 * @brief
 	 *
@@ -315,53 +365,7 @@ namespace mods::contracts {
 			pretty = "\tnothing to report\r\n";
 			return pretty;
 		}
-		pretty += "\t\t{yel}[type]:{/yel}{grn}";
-		if(is_find_item()) {
-			pretty += "find item";
-		}
-		if(is_find_mob()) {
-			pretty += "find_mob";
-		}
-		if(is_find_room()) {
-			pretty += "find_room";
-		}
-		if(is_find_door()) {
-			pretty += "find_door";
-		}
-		if(is_destroy_item()) {
-			pretty += "destroy_item";
-		}
-		if(is_destroy_door()) {
-			pretty += "destroy_door";
-		}
-		if(is_retrieve_item()) {
-			pretty += "retrieve_item";
-		}
-		if(is_quota_find_item()) {
-			pretty += "quota_find_item";
-		}
-		if(is_quota_kill_mob()) {
-			pretty += "quota_kill_mob";
-		}
-		if(is_quota_destroy_door()) {
-			pretty += "quota_destroy_door";
-		}
-		if(is_kill()) {
-			pretty += "kill";
-		}
-		if(is_gain_entry()) {
-			pretty += "gain_entry";
-		}
-		if(is_talk_to()) {
-			pretty += "talk_to";
-		}
-		if(is_install_item()) {
-			pretty += "install_item";
-		}
-		if(is_give_item()) {
-			pretty += "give_item";
-		}
-		pretty += CAT("{/grn}\r\n\t\t{yel}[description]:{/yel}{grn}",m_current_step->description,"{/grn}\r\n");
+		pretty += CAT(get_type_string(),"{/grn}\r\n\t\t{yel}[description]:{/yel}{grn}",m_current_step->description,"{/grn}\r\n");
 		pretty += CAT(
 		              "\t\t{yel}[reward_xp]:{/yel}{grn}",m_current_step->reward_xp,"{/grn}\r\n",
 		              "\t\t{yel}[reward_money]:{/yel}{grn}",m_current_step->reward_money,"{/grn}\r\n",
@@ -391,53 +395,7 @@ namespace mods::contracts {
 			m_step_dump = "nothing to report\r\n";
 			return;
 		}
-		m_step_dump = "[type]:";
-		if(is_find_item()) {
-			m_step_dump += "find item";
-		}
-		if(is_find_mob()) {
-			m_step_dump += "find_mob";
-		}
-		if(is_find_room()) {
-			m_step_dump += "find_room";
-		}
-		if(is_find_door()) {
-			m_step_dump += "find_door";
-		}
-		if(is_destroy_item()) {
-			m_step_dump += "destroy_item";
-		}
-		if(is_destroy_door()) {
-			m_step_dump += "destroy_door";
-		}
-		if(is_retrieve_item()) {
-			m_step_dump += "retrieve_item";
-		}
-		if(is_quota_find_item()) {
-			m_step_dump += "quota_find_item";
-		}
-		if(is_quota_kill_mob()) {
-			m_step_dump += "quota_kill_mob";
-		}
-		if(is_quota_destroy_door()) {
-			m_step_dump += "quota_destroy_door";
-		}
-		if(is_kill()) {
-			m_step_dump += "kill";
-		}
-		if(is_gain_entry()) {
-			m_step_dump += "gain_entry";
-		}
-		if(is_talk_to()) {
-			m_step_dump += "talk_to";
-		}
-		if(is_install_item()) {
-			m_step_dump += "install_item";
-		}
-		if(is_give_item()) {
-			m_step_dump += "give_item";
-		}
-		m_step_dump += CAT("\r\n[description]:{yel}",m_current_step->description,"{/yel}\r\n");
+		m_step_dump += CAT(get_type_string(),"\r\n[description]:{yel}",m_current_step->description,"{/yel}\r\n");
 		m_step_dump += CAT(
 		                   "\t\t{yel}[reward_xp]:{/yel}{grn}",m_current_step->reward_xp,"{/grn}\r\n",
 		                   "\t\t{yel}[reward_money]:{/yel}{grn}",m_current_step->reward_money,"{/grn}\r\n",

@@ -610,7 +610,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "pour", POS_STANDING, do_pour, 0, SCMD_POUR },
 	{ "pout", POS_RESTING, do_action, 0, 0 },
 	{ "prompt", POS_DEAD, do_display, 0, 0 },
-	{ "practice", POS_RESTING, do_practice, 1, 0 },
 	{ "pray", POS_SITTING, do_action, 0, 0 },
 	{ "puke", POS_RESTING, do_action, 0, 0 },
 	{ "punch", POS_RESTING, do_action, 0, 0 },

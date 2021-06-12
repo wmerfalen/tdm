@@ -28,6 +28,9 @@ namespace mods::contracts {
 			std::tuple<bool,std::string> advance();
 			bool finished();
 			void init();
+
+			std::string get_type_string() const ;
+
 			const auto& vnum() const {
 				return m_contract_vnum;
 			}

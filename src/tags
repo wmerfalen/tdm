@@ -86,7 +86,6 @@ ACMD	act.other.cpp	/^ACMD(do_gen_write) {$/;"	f
 ACMD	act.other.cpp	/^ACMD(do_group) {$/;"	f
 ACMD	act.other.cpp	/^ACMD(do_hide) {$/;"	f
 ACMD	act.other.cpp	/^ACMD(do_not_here) {$/;"	f
-ACMD	act.other.cpp	/^ACMD(do_practice) {$/;"	f
 ACMD	act.other.cpp	/^ACMD(do_quit) {$/;"	f
 ACMD	act.other.cpp	/^ACMD(do_report) {$/;"	f
 ACMD	act.other.cpp	/^ACMD(do_save) {$/;"	f
@@ -122,7 +121,6 @@ ACMD	mods/contracts.cpp	/^	ACMD(do_contract) {$/;"	f	namespace:mods::contracts
 ACMD	mods/date-time.cpp	/^	ACMD(do_moon_phase) {$/;"	f	namespace:mods::date_time
 ACMD	mods/help.cpp	/^	ACMD(do_help) {$/;"	f	namespace:mods::help
 ACMD	mods/levels.cpp	/^	ACMD(do_exp) {$/;"	f	namespace:mods::levels
-ACMD	mods/levels.cpp	/^	ACMD(do_practices) {$/;"	f	namespace:mods::levels
 ACMD	mods/mini-games/line-up.cpp	/^ACMD(do_hack){$/;"	f
 ACMD	mods/mini-games/line-up.cpp	/^ACMD(do_next_row) {$/;"	f
 ACMD	mods/mini-games/line-up.cpp	/^ACMD(do_reset_hack) {$/;"	f
@@ -133,6 +131,7 @@ ACMD	mods/orm/player-base-ability.cpp	/^		ACMD(do_save_my_pba) {$/;"	f	namespace
 ACMD	mods/prefs.cpp	/^ACMD(do_pref) {$/;"	f
 ACMD	mods/rifle-attachments.cpp	/^		ACMD(do_vcarrying) {$/;"	f	namespace:mods::rifle_attachments
 ACMD	mods/scripted-step.cpp	/^	ACMD(do_scripted_step) {$/;"	f	namespace:mods
+ACMD	mods/skills.cpp	/^ACMD(do_practice_sessions) {$/;"	f
 ACMD	mods/skills.cpp	/^ACMD(do_train) {$/;"	f
 ACMD	mods/values.cpp	/^			ACMD(do_get_value) {$/;"	f	namespace:mods::values
 ACMD	mods/values.cpp	/^			ACMD(do_list_values) {$/;"	f	namespace:mods::values
@@ -2028,8 +2027,8 @@ LAST	structs.h	/^	LAST$/;"	e	enum:lense_type_t
 LAST_BLOCK	mail.h	54;"	d
 LAZY_CHECK	mods/builder/conbuild.cpp	464;"	d	file:
 LEAF	mods/behaviour_tree_node.hpp	/^			enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
-LEARNED	spec_procs.cpp	133;"	d	file:
-LEARNED_LEVEL	spec_procs.cpp	125;"	d	file:
+LEARNED	spec_procs.cpp	132;"	d	file:
+LEARNED_LEVEL	spec_procs.cpp	124;"	d	file:
 LEGACY_AFF	mods/flags.hpp	/^		LEGACY_AFF = 0,$/;"	e	enum:mods::flags::chunk_type_t
 LEGACY_AFF_BLIND	mods/flags.hpp	/^	constexpr static uint32_t LEGACY_AFF_BLIND = (1 << 0);$/;"	m	namespace:mods::flags
 LEGACY_AFF_CHARM	mods/flags.hpp	/^	constexpr static uint32_t LEGACY_AFF_CHARM = (1 << 21);$/;"	m	namespace:mods::flags
@@ -2274,7 +2273,7 @@ MASTER	mods/skills.hpp	/^	MASTER = 3$/;"	e	enum:uint8_t
 MAX	bsd-snprintf.cpp	97;"	d	file:
 MAX	utils.cpp	/^int MAX(int a, int b) {$/;"	f
 MAX	utils.h	75;"	d
-MAXGAIN	spec_procs.cpp	135;"	d	file:
+MAXGAIN	spec_procs.cpp	134;"	d	file:
 MAX_AFFECT	structs.h	706;"	d
 MAX_AOE_TRIGGERS	mods/yaml.hpp	/^	constexpr static std::size_t MAX_AOE_TRIGGERS = 6;$/;"	m	namespace:mods::yaml
 MAX_ATTRIBUTES	mods/fluxkraft/generator.cpp	/^	static constexpr uint8_t MAX_ATTRIBUTES = 35;$/;"	m	namespace:mods::fluxkraft	file:
@@ -2301,8 +2300,8 @@ MAX_OBJ_DESC	olc.h	19;"	d
 MAX_OBJ_NAME	olc.h	16;"	d
 MAX_OPER	shop.h	131;"	d
 MAX_OUTSIDE_BANK	shop.h	171;"	d
-MAX_PER_PRAC	spec_procs.cpp	126;"	d	file:
-MAX_PLAYER_LEVEL	mods/levels.cpp	/^	static constexpr uint8_t MAX_PLAYER_LEVEL = 30;$/;"	m	namespace:mods::levels	file:
+MAX_PER_PRAC	spec_procs.cpp	125;"	d	file:
+MAX_PLAYER_LEVEL	mods/levels.hpp	/^	static constexpr uint8_t MAX_PLAYER_LEVEL = 30;$/;"	m	namespace:mods::levels
 MAX_PROD	shop.h	83;"	d
 MAX_PROMPT_LENGTH	structs.h	688;"	d
 MAX_PWD_LENGTH	structs.h	700;"	d
@@ -2570,7 +2569,7 @@ MG_REPORT	mods/mobs/smart-mob.cpp	37;"	d	file:
 MIN	utils.cpp	/^int MIN(int a, int b) {$/;"	f
 MIN	utils.h	79;"	d
 MINDEX_FILE	db.h	67;"	d
-MINGAIN	spec_procs.cpp	134;"	d	file:
+MINGAIN	spec_procs.cpp	133;"	d	file:
 MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS	mods/values-list.cpp	/^MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS,""$/;"	v
 MINI_GUNNER_RANDOM_DISORIENT_STRINGS	mods/values-list.cpp	/^MINI_GUNNER_RANDOM_DISORIENT_STRINGS,""$/;"	v
 MINI_GUNNER_WEAR_ABOUT	mods/values-list.cpp	/^MINI_GUNNER_WEAR_ABOUT,""$/;"	v
@@ -2604,7 +2603,7 @@ MINI_GUNNER_WEAR_WRIST_L	mods/values-list.cpp	/^MINI_GUNNER_WEAR_WRIST_L,""$/;"	
 MINI_GUNNER_WEAR_WRIST_R	mods/values-list.cpp	/^MINI_GUNNER_WEAR_WRIST_R,""$/;"	v
 MIN_MAIL_LEVEL	mail.h	20;"	d
 MIN_OUTSIDE_BANK	shop.h	170;"	d
-MIN_PER_PRAC	spec_procs.cpp	127;"	d	file:
+MIN_PER_PRAC	spec_procs.cpp	126;"	d	file:
 MISC	act.wizard.cpp	2290;"	d	file:
 MK46	mods/orm/support.hpp	/^		const std::string MK46 = "MK46";$/;"	m	struct:mods::orm::support
 MK46	mods/weapon.hpp	/^			MK46 = 1,$/;"	e	enum:mods::weapon::support::primary_choice_t
@@ -2864,7 +2863,7 @@ NUM_CLASSES	structs.h	243;"	d
 NUM_OF_BOARDS	boards.h	11;"	d
 NUM_OF_DIRS	structs.h	658;"	d
 NUM_RESERVED_DESCS	comm.h	11;"	d
-NUM_TOKENS	interpreter.cpp	1156;"	d	file:
+NUM_TOKENS	interpreter.cpp	1155;"	d	file:
 NUM_WEARS	structs.h	430;"	d
 NUNCHAKU	mods/weapon.hpp	/^		NUNCHAKU,$/;"	e	enum:mods::weapon::melee_t
 NameAndDesc	mods/catch.hpp	/^		NameAndDesc(const char* _name = "", const char* _description= "")$/;"	f	struct:Catch::NameAndDesc
@@ -2996,7 +2995,7 @@ PAUSE_FILE	db.h	58;"	d
 PAUSE_FILE	db.h	62;"	d
 PC	act.wizard.cpp	2286;"	d	file:
 PERS	utils.h	484;"	d
-PET_PRICE	spec_procs.cpp	704;"	d	file:
+PET_PRICE	spec_procs.cpp	703;"	d	file:
 PICKAXE	mods/weapon.hpp	/^		PICKAXE,$/;"	e	enum:mods::weapon::melee_t
 PIKE	mods/weapon.hpp	/^		PIKE,$/;"	e	enum:mods::weapon::melee_t
 PISTOL	mods/weapon.hpp	/^	                 GRENADE = (1 << 4), ASSAULT_RIFLE = (1 << 5), PISTOL = (1 << 6),$/;"	e	enum:mods::weapon::mask_type
@@ -3063,7 +3062,7 @@ POS_SLEEPING	structs.h	265;"	d
 POS_STANDING	structs.h	269;"	d
 POS_STUNNED	structs.h	264;"	d
 PQXX_TR1_HEADERS	mods/string.hpp	8;"	d
-PRAC_TYPE	spec_procs.cpp	128;"	d	file:
+PRAC_TYPE	spec_procs.cpp	127;"	d	file:
 PREFS_FORMAT_STRING	mods/prefs.hpp	15;"	d
 PREFS_SEPARATOR	mods/prefs.hpp	14;"	d
 PREVENT_RUN	mods/weapon-types.hpp	/^		PREVENT_RUN,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -3093,7 +3092,7 @@ PRF_OVERHEAD_MAP	structs.h	338;"	d
 PRF_QUEST	structs.h	324;"	d
 PRF_ROOMFLAGS	structs.h	336;"	d
 PRF_SUMMONABLE	structs.h	325;"	d
-PRF_TOG_CHK	act.other.cpp	920;"	d	file:
+PRF_TOG_CHK	act.other.cpp	900;"	d	file:
 PRF_TOG_CHK	utils.h	251;"	d
 PROCESS_INPUT_CONTROL_C	comm.cpp	577;"	d	file:
 PROTECT	mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	e	enum:mods::ai_state::state
@@ -3167,7 +3166,7 @@ READ_LVL	boards.h	37;"	d
 READ_SIZE	utils.h	27;"	d
 REAL	db.h	/^               REAL=0,\\$/;"	e	enum:__anon1
 REBAR	mods/weapon.hpp	/^		REBAR,$/;"	e	enum:mods::weapon::melee_t
-RECON	interpreter.cpp	1563;"	d	file:
+RECON	interpreter.cpp	1562;"	d	file:
 RECREATE	utils.h	173;"	d
 RELOAD	mods/weapon-types.hpp	/^		RELOAD,$/;"	e	enum:mods::weapon::capabilities::cap_t
 REMOTE	mods/item.hpp	/^		REMOTE = (1 << 7),$/;"	e	enum:mods::item::capability_t
@@ -3832,7 +3831,7 @@ SPELL_TYPE_STAFF	spells.h	243;"	d
 SPELL_TYPE_WAND	spells.h	242;"	d
 SPELL_VENTRILOQUATE	spells.h	81;"	d
 SPELL_WORD_OF_RECALL	spells.h	82;"	d
-SPLSKL	spec_procs.cpp	136;"	d	file:
+SPLSKL	spec_procs.cpp	135;"	d	file:
 SPRAY_BULLETS	mods/weapon-types.hpp	/^		SPRAY_BULLETS,$/;"	e	enum:mods::weapon::capabilities::cap_t
 SSEQ_MEMBERS_TUPLE	mods/orm/scripted-step.hpp	127;"	d
 STAB	mods/weapon-types.hpp	/^		STAB,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -4249,8 +4248,8 @@ TO	mods/mini-games/wires.hpp	/^		static constexpr uint8_t TO = 2;$/;"	m	struct:m
 TODO	globals.hpp	284;"	d
 TOGGLE_BIT	utils.h	203;"	d
 TOGGLE_LOCK	act.movement.cpp	384;"	d	file:
-TOG_OFF	act.other.cpp	917;"	d	file:
-TOG_ON	act.other.cpp	918;"	d	file:
+TOG_OFF	act.other.cpp	897;"	d	file:
+TOG_ON	act.other.cpp	898;"	d	file:
 TOP_SPELL_DEFINE	spells.h	124;"	d
 TOROOM	graph.cpp	56;"	d	file:
 TOROOM	house.h	30;"	d
@@ -4480,7 +4479,7 @@ UNKNOWN_YAML_FILE	mods/util.hpp	/^	constexpr static const char* UNKNOWN_YAML_FIL
 UNLOCK_DOOR	act.movement.cpp	381;"	d	file:
 UNMARK	graph.cpp	54;"	d	file:
 UNRECOGNIZED	mods/util.hpp	/^		UNRECOGNIZED = 0,$/;"	e	enum:mods::util::yaml_type_t
-UNSWITCH	interpreter.cpp	1565;"	d	file:
+UNSWITCH	interpreter.cpp	1564;"	d	file:
 UNUSED16	mods/flags.hpp	/^		UNUSED16,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UP	structs.h	137;"	d
@@ -4488,7 +4487,7 @@ UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT$/;"	e	enum:mods::lmdb::transact_ty
 UPPER	utils.h	156;"	d
 USERS_FORMAT	act.informative.cpp	1469;"	d	file:
 USE_AUTOEQ	structs.h	119;"	d
-USURP	interpreter.cpp	1564;"	d	file:
+USURP	interpreter.cpp	1563;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
 Unknown	mods/catch2.hpp	/^        Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
 VALID_EDGE	graph.cpp	/^int VALID_EDGE(room_rnum x, int y) {$/;"	f
@@ -5608,7 +5607,7 @@ calc_visibility	mods/calc-visibility.hpp	/^namespace mods::calc_visibility {$/;"
 calculate	mods/forge-engine/value-scaler.cpp	/^	void value_scaler::calculate(player_ptr_t& player) {$/;"	f	class:mods::forge_engine::value_scaler
 calculate	mods/weapons/damage-calculator.cpp	/^		int16_t calculate($/;"	f	namespace:mods::weapons::damage_calculator::algorithm_A
 calculate	mods/weapons/damage-calculator.cpp	/^	int16_t calculate($/;"	f	namespace:mods::weapons::damage_calculator
-calculate_available_practice_sessions	mods/levels.cpp	/^	uint8_t calculate_available_practice_sessions(uint8_t level) {$/;"	f	namespace:mods::levels
+calculate_available_practice_sessions	mods/skills.cpp	/^uint8_t calculate_available_practice_sessions(uint8_t level) {$/;"	f
 calculate_based_on_triads	mods/levels.cpp	/^	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {$/;"	f	namespace:mods::levels
 calculate_bonus_damage	mods/weapons/damage-calculator.cpp	/^	int16_t calculate_bonus_damage($/;"	f	namespace:mods::weapons::damage_calculator
 calculate_bonus_hp_gain	mods/levels.cpp	/^	int calculate_bonus_hp_gain(int dice,int sides,int greater_than,int player_level) {$/;"	f	namespace:mods::levels
@@ -6330,9 +6329,9 @@ dbg_print	mods/contracts.cpp	178;"	d	file:
 dbg_print	mods/orm/contract-steps.hpp	10;"	d
 dbg_print	mods/orm/contract-steps.hpp	225;"	d
 dbg_print	mods/orm/contract-steps.hpp	8;"	d
-dbg_print	mods/player-contract-instance.cpp	10;"	d	file:
-dbg_print	mods/player-contract-instance.cpp	12;"	d	file:
-dbg_print	mods/player-contract-instance.cpp	737;"	d	file:
+dbg_print	mods/player-contract-instance.cpp	11;"	d	file:
+dbg_print	mods/player-contract-instance.cpp	13;"	d	file:
+dbg_print	mods/player-contract-instance.cpp	695;"	d	file:
 dbg_print	mods/runners/communication.cpp	6;"	d	file:
 dbg_print	mods/runners/communication.cpp	8;"	d	file:
 dbg_print	mods/runners/items.cpp	7;"	d	file:
@@ -6783,7 +6782,6 @@ do_poofset	act.wizard.cpp	/^SUPERCMD(do_poofset);$/;"	v
 do_poofset	interpreter.cpp	/^ACMD(do_poofset);$/;"	v
 do_pour	act.item.cpp	/^ACMD(do_pour);$/;"	v
 do_pour	interpreter.cpp	/^ACMD(do_pour);$/;"	v
-do_practice	act.other.cpp	/^ACMD(do_practice);$/;"	v
 do_practice	interpreter.cpp	/^ACMD(do_practice);$/;"	v
 do_pref	interpreter.cpp	/^ACMD(do_pref);$/;"	v
 do_pref	mods/prefs.hpp	/^ACMD(do_pref);$/;"	v
@@ -7946,7 +7944,7 @@ get_player_map	mods/skill-orm-adaptor.cpp	/^	int get_player_map(player_ptr_t& pl
 get_player_vector	mods/db.cpp	/^int get_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string>& values) {$/;"	f
 get_player_vis	handler.cpp	/^char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {$/;"	f
 get_pluck_filter	mods/lmdb.cpp	/^	const std::vector<std::string>& _db_handle::get_pluck_filter() const {$/;"	f	class:mods::lmdb::_db_handle
-get_practice_dump	mods/levels.cpp	/^	std::string get_practice_dump() {$/;"	f	namespace:mods::levels
+get_practice_dump	mods/skills.cpp	/^std::string get_practice_dump() {$/;"	f
 get_prefs	mods/player.hpp	/^			auto get_prefs() {$/;"	f	struct:mods::player
 get_private	mods/chat.hpp	/^			bool get_private() const {$/;"	f	struct:mods::chat::channel
 get_private_publishers	mods/chat.hpp	/^			const std::vector<std::string>& get_private_publishers() const {$/;"	f	struct:mods::chat::channel
@@ -7988,6 +7986,7 @@ get_time_login	mods/player.cpp	/^	time_t player::get_time_login() const {$/;"	f	
 get_time_played	mods/player.cpp	/^	int player::get_time_played() const {$/;"	f	class:mods::player
 get_triads_by_class	mods/levels.cpp	/^	std::array<uint8_t,5> get_triads_by_class(player_class_t c) {$/;"	f	namespace:mods::levels
 get_type	mods/weapon.cpp	/^	std::variant<mw_rifle,mw_explosive,mw_drone> get_type(obj_data_ptr_t& o) {$/;"	f	namespace:mods::weapon
+get_type_string	mods/player-contract-instance.cpp	/^	std::string player_contract_instance::get_type_string() const {$/;"	f	class:mods::contracts::player_contract_instance
 get_type_string	mods/player.cpp	/^	std::string player::get_type_string() {$/;"	f	class:mods::player
 get_user	mods/auto-login.cpp	/^	const std::string& get_user() { return mods::auto_login::user; }$/;"	f	namespace:mods::auto_login
 get_verb	mods/chat.cpp	/^	std::string_view channel::get_verb() const {$/;"	f	class:mods::chat::channel
@@ -9360,9 +9359,9 @@ m_debug	mods/radio.cpp	7;"	d	file:
 m_debug	mods/skill-orm-adaptor.cpp	22;"	d	file:
 m_debug	mods/skill-orm-adaptor.cpp	7;"	d	file:
 m_debug	mods/skill-orm-adaptor.cpp	9;"	d	file:
-m_debug	mods/skills.cpp	10;"	d	file:
-m_debug	mods/skills.cpp	12;"	d	file:
-m_debug	mods/skills.cpp	137;"	d	file:
+m_debug	mods/skills.cpp	11;"	d	file:
+m_debug	mods/skills.cpp	13;"	d	file:
+m_debug	mods/skills.cpp	156;"	d	file:
 m_debug	mods/stat-bonuses.cpp	12;"	d	file:
 m_debug	mods/stat-bonuses.cpp	14;"	d	file:
 m_debug	mods/string.cpp	4;"	d	file:
@@ -10036,7 +10035,7 @@ mo_debug	mods/integral-objects.cpp	19;"	d	file:
 mo_debug	mods/integral-objects.cpp	305;"	d	file:
 mo_debug	mods/levels.cpp	12;"	d	file:
 mo_debug	mods/levels.cpp	14;"	d	file:
-mo_debug	mods/levels.cpp	547;"	d	file:
+mo_debug	mods/levels.cpp	530;"	d	file:
 mo_debug	mods/rate-limiting.cpp	10;"	d	file:
 mo_debug	mods/rate-limiting.cpp	172;"	d	file:
 mo_debug	mods/rate-limiting.cpp	8;"	d	file:

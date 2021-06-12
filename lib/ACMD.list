@@ -12,7 +12,6 @@
 ./mods/classes/sniper.cpp:	->engage
 ./mods/classes/sniper.cpp:	->disengage
 ./mods/help.cpp:	->help
-./mods/levels.cpp:	->practices
 ./mods/levels.cpp:	->exp
 ./mods/date-time.cpp:	->moon_phase
 ./mods/scripted-step.cpp:	->scripted_step
@@ -24,6 +23,7 @@
 ./mods/mini-games/wires.cpp:->plug_cable
 ./mods/contracts.cpp:	->contract
 ./mods/weapons/reload.cpp:	->reload
+./mods/skills.cpp:->practice_sessions
 ./mods/skills.cpp:->train
 ./mods/values.cpp:			->set_value
 ./mods/values.cpp:			->get_value
@@ -73,7 +73,6 @@
 ./act.other.cpp:->sneak
 ./act.other.cpp:->hide
 ./act.other.cpp:->steal
-./act.other.cpp:->practice
 ./act.other.cpp:->visible
 ./act.other.cpp:->title
 ./act.other.cpp:->group

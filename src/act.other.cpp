@@ -39,7 +39,6 @@ extern int auto_save;
 extern int track_through_doors;
 
 /* extern procedures */
-void list_skills(char_data *ch);
 void appear(char_data *ch);
 void write_aliases(char_data *ch);
 void perform_immort_vis(char_data *ch);
@@ -55,7 +54,6 @@ ACMD(do_not_here);
 ACMD(do_sneak);
 ACMD(do_hide);
 ACMD(do_steal);
-ACMD(do_practice);
 ACMD(do_visible);
 ACMD(do_title);
 int perform_group(char_data *ch, char_data *vict);
@@ -336,24 +334,6 @@ ACMD(do_steal) {
 //	if(ohoh && IS_NPC(vict) && AWAKE(vict)) {
 //		hit(vict, ch, TYPE_UNDEFINED);
 //	}
-}
-
-
-
-ACMD(do_practice) {
-	char arg[MAX_INPUT_LENGTH];
-
-	if(IS_NPC(ch)) {
-		return;
-	}
-
-	one_argument(argument, arg);
-
-	if(*arg) {
-		send_to_char(ch, "You can only practice skills in your guild.");
-	} else {
-		list_skills(ch);
-	}
 }
 
 

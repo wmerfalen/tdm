@@ -12,10 +12,12 @@ enum triad : uint8_t {
 	ARMOR
 };
 namespace mods::levels {
+	static constexpr uint8_t MAX_PLAYER_LEVEL = 30;
 	static constexpr std::array<player_class_t,2> implemented_classes = {
 		GHOST,
 		PYREXIA
 	};
+	void list_skills(player_ptr_t& player);
 	int gain_exp(player_ptr_t& player,int gain);
 	void advance_level(player_ptr_t& player);
 	static inline bool class_is_implemented(player_class_t pc) {

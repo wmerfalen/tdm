@@ -5,6 +5,7 @@
 #include "skill-orm-adaptor.hpp"
 #include "orm/skill-trees.hpp"
 #include "orm/player-skill-points.hpp"
+#include "levels.hpp"
 
 #ifdef __MENTOC_MODS_SKILLS_SHOW_DEBUG_OUTPUT__
 #define m_debug(A) std::cerr << "[mods::skills][debug]:'" << A << "'\n";
@@ -94,6 +95,23 @@ void train_skill(player_ptr_t& player,std::string_view skill_name, int16_t amoun
 	player->sendln("You practice for awhile...\r\n");
 }
 
+uint8_t calculate_available_practice_sessions(uint8_t level) {
+	uint8_t sessions = 0;
+	for(uint8_t current_level = 1; current_level <= level; ++current_level) {
+		sessions += mods::levels::award_practice_sessions(current_level);
+	}
+	return sessions;
+}
+std::string get_practice_dump() {
+	std::string report = "[practice sessions per level]\r\n";
+	for(uint8_t i = 1; i <= mods::levels::MAX_PLAYER_LEVEL; ++i) {
+		report += CAT("Player level: ",i,": ", calculate_available_practice_sessions(i), "\r\n");
+	}
+	return report;
+}
+ACMD(do_practice_sessions) {
+	player->sendln(get_practice_dump());
+}
 ACMD(do_train) {
 	DO_HELP("train");
 	static constexpr const char* usage = "usage: train <skill> <amount>";
@@ -129,6 +147,7 @@ namespace mods::skills {
 		mods::interpreter::add_command("train", POS_RESTING, do_train, 0,0);
 		mods::interpreter::add_command("practice", POS_RESTING, do_train, 0,0);
 		mods::interpreter::add_command("prac", POS_RESTING, do_train, 0,0);
+		mods::interpreter::add_command("practice_sessions", POS_RESTING, do_practice_sessions, 0,0);
 		//mods::interpreter::add_command("allow_skill", POS_RESTING, do_allow_skill, LVL_BUILDER,0);
 	}
 };
