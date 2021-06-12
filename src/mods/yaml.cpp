@@ -167,6 +167,21 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	}
+	void consumable_description_t::generate_map() {
+		exported.clear();
+	}
+	void attachment_description_t::generate_map() {
+		exported.clear();
+	}
+	void trap_description_t::generate_map() {
+		exported.clear();
+	}
+	void vehicle_description_t::generate_map() {
+		exported.clear();
+	}
+	void drone_description_t::generate_map() {
+		exported.clear();
+	}
 	void container_description_t::generate_map() {
 		exported["container_detailed_description"] = this->detailed_description;
 	}
@@ -712,7 +727,44 @@ namespace mods::yaml {
 		return 0;
 	};
 	void melee_description_t::generate_map() {
-		MELEE_STUB(__LINE__);
+		this->exported["melee_chance_to_injure"] = std::to_string(chance_to_injure);
+		this->exported["melee_critical_chance"] = std::to_string(critical_chance);
+		this->exported["melee_damage_per_second"] = std::to_string(damage_per_second);
+		this->exported["melee_disorient_amount"] = std::to_string(disorient_amount);
+		this->exported["melee_str_type"] = str_type;
+		this->exported["melee_type"] = std::to_string(type);
+		this->exported["melee_name"] = name;
+		this->exported["melee_vnum"] = std::to_string(vnum);
+		this->exported["melee_file"] = feed_file;
+		this->exported["melee_incendiary_damage"] = std::to_string(incendiary_damage);
+		this->exported["melee_explosive_damage"] = std::to_string(explosive_damage);
+		this->exported["melee_shrapnel_damage"] = std::to_string(shrapnel_damage);
+		this->exported["melee_corrosive_damage"] = std::to_string(corrosive_damage);
+		this->exported["melee_cryogenic_damage"] = std::to_string(cryogenic_damage);
+		this->exported["melee_radioactive_damage"] = std::to_string(radioactive_damage);
+		this->exported["melee_emp_damage"] = std::to_string(emp_damage);
+		this->exported["melee_shock_damage"] = std::to_string(shock_damage);
+		this->exported["melee_anti_matter_damage"] = std::to_string(anti_matter_damage);
+		this->exported["melee_stat_strength"] = std::to_string(stat_strength);
+		this->exported["melee_stat_intelligence"] = std::to_string(stat_intelligence);
+		this->exported["melee_stat_wisdom"] = std::to_string(stat_wisdom);
+		this->exported["melee_stat_dexterity"] = std::to_string(stat_dexterity);
+		this->exported["melee_stat_constitution"] = std::to_string(stat_constitution);
+		this->exported["melee_stat_electronics"] = std::to_string(stat_electronics);
+		this->exported["melee_stat_armor"] = std::to_string(stat_armor);
+		this->exported["melee_stat_marksmanship"] = std::to_string(stat_marksmanship);
+		this->exported["melee_stat_sniping"] = std::to_string(stat_sniping);
+		this->exported["melee_stat_demolitions"] = std::to_string(stat_demolitions);
+		this->exported["melee_stat_chemistry"] = std::to_string(stat_chemistry);
+		this->exported["melee_stat_weapon_handling"] = std::to_string(stat_weapon_handling);
+		this->exported["melee_stat_strategy"] = std::to_string(stat_strategy);
+		this->exported["melee_stat_medical"] = std::to_string(stat_medical);
+		for(auto& rarity_pair : rarity_strings()) {
+			if(rarity == rarity_pair.second) {
+				this->exported["melee_rarity"] = rarity_pair.first;
+				break;
+			}
+		}
 	}
 	void rifle_description_t::generate_map() {
 		std::string rifm = "rifle_accuracy_map_",
@@ -898,9 +950,6 @@ namespace mods::yaml {
 	}
 
 	int16_t melee_description_t::feed(std::string_view in_file) {
-		MELEE_STUB(__LINE__);
-		return 0;
-#if 0
 		MENTOC_FILE_EXISTS_PREAMBLE(melee);
 		std::vector<std::string> fed_items;
 		try {
@@ -908,14 +957,13 @@ namespace mods::yaml {
 			auto yaml_file = YAML::LoadFile(file);
 			auto type_string = yaml_file["str_type"].as<std::string>();
 			MENTOC_FEED_BASE_MEMBERS
-			MENTOC_FEED_EXPLOSIVE
+			MENTOC_FEED_MELEE
 		} catch(YAML::Exception& e) {
 			mods::object_utils::report_yaml_exception(e,fed_items);
 			REPORT_DB_ISSUE("error",e.what());
 			return -2;
 		}
 		return 0;
-#endif
 	}
 	int16_t explosive_description_t::feed(std::string_view in_file) {
 		MENTOC_FILE_EXISTS_PREAMBLE(explosive);

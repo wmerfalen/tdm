@@ -1344,24 +1344,26 @@ struct char_ability_data {
  * should default to.
  */
 struct char_point_data {
-	sh_int mana;
-	sh_int max_mana;     /* Max mana for PC/NPC			   */
-	sh_int hit;
-	sh_int max_hit;      /* Max hit for PC/NPC                      */
-	sh_int move;
-	sh_int max_move;     /* Max move for PC/NPC                     */
+	using points_t = int32_t;
+	points_t mana;
+	points_t max_mana;     /* Max mana for PC/NPC			   */
+	points_t hit;
+	points_t max_hit;      /* Max hit for PC/NPC                      */
+	points_t move;
+	points_t max_move;     /* Max move for PC/NPC                     */
 
-	sh_int armor;        /* Internal -100..100, external -10..10 AC */
-	int	gold;           /* Money carried                           */
-	int	bank_gold;	/* Gold the char has in a bank account	   */
-	int	exp;            /* The experience of the player            */
+	points_t armor;        /* Internal -100..100, external -10..10 AC */
+	points_t gold;           /* Money carried                           */
+	points_t bank_gold;	/* Gold the char has in a bank account	   */
+	points_t exp;            /* The experience of the player            */
 
-	sbyte hitroll;       /* Any bonus or penalty to the hit roll    */
-	sbyte damroll;       /* Any bonus or penalty to the damage roll */
+	points_t hitroll;       /* Any bonus or penalty to the hit roll    */
+	points_t damroll;       /* Any bonus or penalty to the damage roll */
 	char_point_data() : mana(0),max_mana(0),hit(0),max_hit(0),
 		move(0),max_move(0),armor(0),gold(0),bank_gold(0),exp(0),
 		hitroll(0),damroll(0) {}
 	~char_point_data() = default;
+	char_point_data(const char_point_data& other);
 };
 
 

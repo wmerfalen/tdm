@@ -34,7 +34,8 @@ namespace mods::util {
 	/** !!*****************!! */
 	static std::vector<std::string> VALID_TYPES = {
 		"rifle","explosive","drone","attachment","gadget",
-		"armor","trap","consumable","container","vehicle"
+		"armor","trap","consumable","container","vehicle",
+		"melee"
 	};
 	bool match_any(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch);
 

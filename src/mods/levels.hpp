@@ -12,6 +12,12 @@ enum triad : uint8_t {
 	ARMOR
 };
 namespace mods::levels {
+	static constexpr float FIRST_TIER = 10.0;
+	static constexpr float SECOND_TIER = FIRST_TIER * 0.75;
+	static constexpr float THIRD_TIER = FIRST_TIER * 0.50;
+	static constexpr float PASSIVE_TIER = FIRST_TIER * 0.25;
+	static constexpr float SPLIT_TIER = FIRST_TIER * 0.10;
+	static constexpr float SPLIT_TIER_HALF = SPLIT_TIER / 2;
 	static constexpr uint8_t MAX_PLAYER_LEVEL = 30;
 	static constexpr std::array<player_class_t,2> implemented_classes = {
 		GHOST,
@@ -20,6 +26,7 @@ namespace mods::levels {
 	void list_skills(player_ptr_t& player);
 	int gain_exp(player_ptr_t& player,int gain);
 	void advance_level(player_ptr_t& player);
+	uint8_t player_tier(player_ptr_t& player);
 	static inline bool class_is_implemented(player_class_t pc) {
 		return std::find(implemented_classes.begin(),implemented_classes.end(),pc) != implemented_classes.end();
 	}

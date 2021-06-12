@@ -691,67 +691,79 @@ void dam_message(int dam, char_data *ch, char_data *victim,
 		"$n suppresses you with LMG fire!!"
 	};
 
+	const char* to_room = nullptr;
+	const char* to_char = nullptr;
+	const char* to_victim = nullptr;
 	if(player->attacking_with()) {
-		const char* to_room = nullptr;
-		const char* to_char = nullptr;
-		const char* to_victim = nullptr;
-		switch((mw_rifle)player->attacking_with_type()) {
-			default:
-				break;
-			case mw_rifle::SHOTGUN:
-				to_room = msg_SHOTGUN.to_room;
-				to_char = msg_SHOTGUN.to_char;
-				to_victim = msg_SHOTGUN.to_victim;
-				break;
+		if(player->attacking_with()->has_rifle()) {
+			switch(player->attacking_with_type()) {
+				default:
+					break;
+				case mw_rifle::SHOTGUN:
+					to_room = msg_SHOTGUN.to_room;
+					to_char = msg_SHOTGUN.to_char;
+					to_victim = msg_SHOTGUN.to_victim;
+					break;
 
-			case mw_rifle::ASSAULT_RIFLE:
-				to_room = msg_ASSAULT_RIFLE.to_room;
-				to_char = msg_ASSAULT_RIFLE.to_char;
-				to_victim = msg_ASSAULT_RIFLE.to_victim;
-				break;
+				case mw_rifle::ASSAULT_RIFLE:
+					to_room = msg_ASSAULT_RIFLE.to_room;
+					to_char = msg_ASSAULT_RIFLE.to_char;
+					to_victim = msg_ASSAULT_RIFLE.to_victim;
+					break;
 
-			case mw_rifle::SUB_MACHINE_GUN:
-				to_room = msg_SUB_MACHINE_GUN.to_room;
-				to_char = msg_SUB_MACHINE_GUN.to_char;
-				to_victim = msg_SUB_MACHINE_GUN.to_victim;
-				break;
+				case mw_rifle::SUB_MACHINE_GUN:
+					to_room = msg_SUB_MACHINE_GUN.to_room;
+					to_char = msg_SUB_MACHINE_GUN.to_char;
+					to_victim = msg_SUB_MACHINE_GUN.to_victim;
+					break;
 
-			case mw_rifle::SNIPER:
-				to_room = msg_SNIPER.to_room;
-				to_char = msg_SNIPER.to_char;
-				to_victim = msg_SNIPER.to_victim;
-				break;
+				case mw_rifle::SNIPER:
+					to_room = msg_SNIPER.to_room;
+					to_char = msg_SNIPER.to_char;
+					to_victim = msg_SNIPER.to_victim;
+					break;
 
-			case mw_rifle::HANDGUN:
-			case mw_rifle::PISTOL:
-				to_room = msg_PISTOL.to_room;
-				to_char = msg_PISTOL.to_char;
-				to_victim = msg_PISTOL.to_victim;
-				break;
+				case mw_rifle::HANDGUN:
+				case mw_rifle::PISTOL:
+					to_room = msg_PISTOL.to_room;
+					to_char = msg_PISTOL.to_char;
+					to_victim = msg_PISTOL.to_victim;
+					break;
 
-			case mw_rifle::MACHINE_PISTOL:
-				to_room = msg_MACHINE_PISTOL.to_room;
-				to_char = msg_MACHINE_PISTOL.to_char;
-				to_victim = msg_MACHINE_PISTOL.to_victim;
-				break;
+				case mw_rifle::MACHINE_PISTOL:
+					to_room = msg_MACHINE_PISTOL.to_room;
+					to_char = msg_MACHINE_PISTOL.to_char;
+					to_victim = msg_MACHINE_PISTOL.to_victim;
+					break;
 
-			case mw_rifle::LIGHT_MACHINE_GUN:
-				to_room = msg_LIGHT_MACHINE_GUN.to_room;
-				to_char = msg_LIGHT_MACHINE_GUN.to_char;
-				to_victim = msg_LIGHT_MACHINE_GUN.to_victim;
-				break;
+				case mw_rifle::LIGHT_MACHINE_GUN:
+					to_room = msg_LIGHT_MACHINE_GUN.to_room;
+					to_char = msg_LIGHT_MACHINE_GUN.to_char;
+					to_victim = msg_LIGHT_MACHINE_GUN.to_victim;
+					break;
+			}
 		}
-
-		if(to_room && to_char && to_victim) {
-			act(to_room, FALSE, ch, NULL, victim, TO_NOTVICT);
-			send_to_char(ch, CCYEL(ch, C_CMP));
-			act(to_char, FALSE, ch, NULL, victim, TO_CHAR);
-			send_to_char(ch, CCNRM(ch, C_CMP));
-			send_to_char(victim, CCRED(victim, C_CMP));
-			act(to_victim, FALSE, ch, NULL, victim, TO_VICT | TO_SLEEP);
-			send_to_char(victim, CCNRM(victim, C_CMP));
-			return;
+		if(player->attacking_with()->has_melee()) {
+			/** TODO */
+#if 0
+			switch(player->attacking_with_type()) {
+				default:
+					to_room = "heh";
+					break;
+			}
+#endif
 		}
+	}
+
+	if(to_room && to_char && to_victim) {
+		act(to_room, FALSE, ch, NULL, victim, TO_NOTVICT);
+		send_to_char(ch, CCYEL(ch, C_CMP));
+		act(to_char, FALSE, ch, NULL, victim, TO_CHAR);
+		send_to_char(ch, CCNRM(ch, C_CMP));
+		send_to_char(victim, CCRED(victim, C_CMP));
+		act(to_victim, FALSE, ch, NULL, victim, TO_VICT | TO_SLEEP);
+		send_to_char(victim, CCNRM(victim, C_CMP));
+		return;
 	}
 
 
@@ -935,9 +947,7 @@ void hit(char_data *ch, char_data *victim, int type) {
 		wielded_weapon = hands_ptr;
 	}
 	player->set_attacking_with(wielded_weapon);
-
 	ch->last_fight_timestamp = time(NULL);
-
 	/* Do some sanity checking, in case someone flees, etc. */
 	if(IN_ROOM(ch) != IN_ROOM(victim)) {
 		if(FIGHTING(ch) && FIGHTING(ch) == victim) {
@@ -946,6 +956,16 @@ void hit(char_data *ch, char_data *victim, int type) {
 
 		return;
 	}
+
+	if(wielded_weapon && wielded_weapon->has_melee()) {
+		auto vptr = ptr(victim);
+		auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(
+		                    player,
+		                    wielded_weapon,
+		                    vptr);
+		return;
+	}
+
 
 	/* Find the weapon type (for display purposes only) */
 	if(wielded_weapon && GET_OBJ_TYPE(wielded_weapon) == ITEM_WEAPON) {
@@ -961,7 +981,6 @@ void hit(char_data *ch, char_data *victim, int type) {
 	/* Calculate chance of hit. Lower THAC0 is better for attacker. */
 	calc_thaco = compute_thaco(ch, victim);
 
-
 	send_to_char(ch,(std::to_string(calc_thaco) + "\r\n").c_str());
 
 	/* Calculate the raw armor including magic armor.  Lower AC is better for defender. */
@@ -971,9 +990,7 @@ void hit(char_data *ch, char_data *victim, int type) {
 
 	diceroll = 0;
 	if(wielded_weapon) {
-		if(wielded_weapon->has_melee()) {
-			diceroll = mods::rand::roll(wielded_weapon->melee()->attributes->damage_dice_count,wielded_weapon->melee()->attributes->damage_dice_sides);
-		} else if(wielded_weapon->has_rifle()) {
+		if(wielded_weapon->has_rifle()) {
 			diceroll = mods::rand::roll(wielded_weapon->rifle()->attributes->damage_dice_count,wielded_weapon->rifle()->attributes->damage_dice_sides);
 		} else {
 			diceroll = mods::rand::roll(1, 20);

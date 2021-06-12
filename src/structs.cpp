@@ -100,8 +100,9 @@ std::string obj_data::generate_stat_page() {
 				return mods::util::map2str(\
 				BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->exported\
 				);\
-			} return "<no stat page>";
+			}
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_STAT_GEN, ~, MENTOC_ITEM_TYPES_SEQ)
+	return "<no stat page>";
 }
 
 void obj_flag_data::init() {
@@ -651,4 +652,19 @@ mob_special_data::~mob_special_data() {
 	this->behaviour_tree = 0;
 	this->behaviour_tree_flags = 0;
 	this->extended_mob_type = mods::mobs::extended_types_t::NONE;
+}
+char_point_data::char_point_data(const char_point_data& other) {
+	std::cerr << "[char_point_data]::copy constructor\n";
+	this->mana = other.mana;
+	this->max_mana = other.max_mana;
+	this->hit = other.hit;
+	this->max_hit = other.max_hit;
+	this->move = other.move;
+	this->max_move = other.max_move;
+	this->armor = other.armor;
+	this->gold = other.gold;
+	this->bank_gold = other.bank_gold;
+	this->exp = other.exp;
+	this->hitroll = other.hitroll;
+	this->damroll = other.damroll;
 }

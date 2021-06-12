@@ -17,6 +17,8 @@ namespace mods::interpreter {
 #ifndef ADD_BUILDER_COMMAND
 #define ADD_BUILDER_COMMAND(MENTOC_ADC_STRING,MENTOC_ADC_ACTUAL) \
 		mods::interpreter::add_command(MENTOC_ADC_STRING, POS_RESTING, MENTOC_ADC_ACTUAL, LVL_BUILDER,0)
+#define ADD_USER_COMMAND(MENTOC_ADC_STRING,MENTOC_ADC_ACTUAL) \
+		mods::interpreter::add_command(MENTOC_ADC_STRING, POS_RESTING, MENTOC_ADC_ACTUAL, 0,0)
 #endif
 
 #endif

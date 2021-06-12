@@ -70,6 +70,8 @@
 {yel}mods/query-objects{/yel}:->{grn}query_zone{/grn}
 {yel}mods/contract-step-callback{/yel}:->{grn}contract_step_callback{/grn}
 {yel}mods/scripted-sequence-runner{/yel}:->{grn}run_sequence{/grn}
+{yel}mods/rand{/yel}:->{grn}roll_dice{/grn}
+{yel}mods/rand{/yel}:->{grn}roll_dice_average{/grn}
 {yel}mods/chat{/yel}:->{grn}chanmgr{/grn}
 {yel}mods/immortal{/yel}:->{grn}rnumtele{/grn}
 {yel}mods/immortal{/yel}:->{grn}rnumlist{/grn}
@@ -149,7 +151,6 @@
 {yel}act.wizard{/yel}:->{grn}trans{/grn}
 {yel}act.wizard{/yel}:->{grn}teleport{/grn}
 {yel}act.wizard{/yel}:->{grn}vnum{/grn}
-{yel}act.wizard{/yel}:->{grn}stat{/grn}
 {yel}act.wizard{/yel}:->{grn}shutdown{/grn}
 {yel}act.wizard{/yel}:->{grn}snoop{/grn}
 {yel}act.wizard{/yel}:->{grn}switch{/grn}

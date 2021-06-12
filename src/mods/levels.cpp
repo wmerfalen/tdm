@@ -250,6 +250,18 @@ namespace mods::levels {
 		return m_triads;
 	}
 
+	uint8_t player_tier(player_ptr_t& player) {
+		if(player->level() <= 9) {
+			return 1;
+		}
+		if(player->level() >= 10 && player->level() <= 19) {
+			return 2;
+		}
+		if(player->level() >= 20) {
+			return 3;
+		}
+		return 1;
+	}
 	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {
 
 		std::array<float,STAT_INDEXES_SIZE> s = {0};
@@ -286,12 +298,6 @@ namespace mods::levels {
 		/** unclassified */
 		charisma = 0
 		           ;
-		float FIRST_TIER = LEVELS_FIRST_TIER();
-		float SECOND_TIER = FIRST_TIER * 0.75;
-		float THIRD_TIER = FIRST_TIER * 0.50;
-		float PASSIVE_TIER = FIRST_TIER * 0.25;
-		float SPLIT_TIER = FIRST_TIER * 0.10;
-		float SPLIT_TIER_HALF = SPLIT_TIER / 2;
 		switch(triads[MELEE]) {
 			case 1:
 			case 2:

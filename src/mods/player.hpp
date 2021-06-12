@@ -281,22 +281,22 @@ namespace mods {
 
 			/* informational functions */
 
-			sh_int& mana() {
+			auto& mana() {
 				return cd()->points.mana;
 			}
-			sh_int& max_mana() {
+			auto& max_mana() {
 				return cd()->points.max_mana;
 			}
-			sh_int& hp() {
+			auto& hp() {
 				return cd()->points.hit;
 			}
-			sh_int& max_hp() {
+			auto& max_hp() {
 				return cd()->points.max_hit;
 			}
-			sh_int& move() {
+			auto& move() {
 				return cd()->points.move;
 			}
-			sh_int& max_move() {
+			auto& max_move() {
 				return cd()->points.max_move;
 			}
 
@@ -363,10 +363,10 @@ namespace mods {
 			int& exp() {
 				return cd()->points.exp;
 			}
-			sbyte& hitroll() {
+			auto& hitroll() {
 				return cd()->points.hitroll;
 			}
-			sbyte& damroll() {
+			auto& damroll() {
 				return cd()->points.damroll;
 			}
 			uint8_t& level();
@@ -748,9 +748,7 @@ namespace mods {
 			obj_data_ptr_t attacking_with() {
 				return m_attacking_with;
 			}
-			int attacking_with_type() {
-				return m_attacking_with->rifle()->attributes->type;
-			}
+			int attacking_with_type();
 			void set_fight_timestamp();
 
 			/** reporting utilities */

@@ -12,6 +12,18 @@
 #include "../rifle-attachments.hpp"
 
 namespace mods::weapons::damage_calculator {
+	int calculate_strength_bonus(
+	    player_ptr_t& player,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim,
+	    int16_t dam
+	);
+	int calculate_constitution_resistance(
+	    player_ptr_t& player,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim,
+	    int16_t dam
+	);
 	int16_t calculate(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,

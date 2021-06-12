@@ -120,6 +120,7 @@
 ./act.movement.cpp:->sleep
 ./act.movement.cpp:->wake
 ./act.movement.cpp:->follow
+./act.wizard.cpp:->stat
 ./act.demolitions.cpp:->cancel
 ./act.demolitions.cpp:->install
 ./act.demolitions.cpp:->uninstall

@@ -299,5 +299,47 @@ namespace mods::weapons::damage_calculator {
 	) {
 		return algorithm_A::calculate(attacker,weapon,victim);
 	}
+	int calculate_strength_bonus(
+	    player_ptr_t& player,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim,
+	    int16_t dam
+	) {
+		float multiplier = BONUS_STRENGTH_MULTIPLIER();
+		switch(mods::levels::player_tier(player)) {
+			default:
+			case 1:
+				multiplier += 0.10;
+				break;
+			case 2:
+				multiplier += 0.12;
+				break;
+			case 3:
+				multiplier += 0.18;
+				break;
+		}
+		return player->strength() * multiplier;
+	}
+	int calculate_constitution_resistance(
+	    player_ptr_t& player,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim,
+	    int16_t dam
+	) {
+		float multiplier = CONSTITUTION_STRENGTH_DAMPENER_MULTIPLIER();
+		switch(mods::levels::player_tier(victim)) {
+			default:
+			case 1:
+				multiplier += 0.11;
+				break;
+			case 2:
+				multiplier += 0.15;
+				break;
+			case 3:
+				multiplier += 0.19;
+				break;
+		}
+		return player->constitution() * multiplier;
+	}
 };
 

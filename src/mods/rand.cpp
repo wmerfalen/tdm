@@ -2,6 +2,7 @@
 #include <random>
 #include <iostream>
 #include <chrono>
+#include "interpreter.hpp"
 
 extern void log(const char* format,...);
 
@@ -11,29 +12,50 @@ extern void log(const char* format,...);
 #define rand_debug(a) ;;
 #endif
 namespace mods::rand {
+	SUPERCMD(do_roll_dice) {
+		if(argshave()->size_gt(1)->nth_has_integer({0,1})->passed() == false) {
+			player->sendln("Usage: roll_dice <count> <sides>");
+			return;
+		}
+
+		player->sendln(CAT("rolling ",intat(0),"d",intat(1),": ",roll(intat(0),intat(1))));
+	}
+	SUPERCMD(do_roll_dice_average) {
+		if(argshave()->size_gt(2)->nth_has_integer({0,1,2})->passed() == false) {
+			player->sendln("Usage: roll_dice_average <count> <sides> <times>");
+			return;
+		}
+		auto times = intat(2);
+		int rolls = 0;
+		for(int i=0; i < times; i++) {
+			rolls += roll(intat(0),intat(1));
+		}
+
+		player->sendln(CAT("rolling ",intat(0),"d",intat(1)," x ",intat(2)," average is: ",rolls / times));
+	}
 	int roll(int number, int size) {
 		static std::random_device rd;
 		static std::mt19937 serious_generator(rd());
 		static std::map<int,std::uniform_int_distribution<int>> popular_distributions;
-		if(number < 0){
+		if(number < 0) {
 			rand_debug("SYSERR: roll() should not receive a negative number for count dice");
 			return -1;
 		}
 		auto search = popular_distributions.find(size);
-		if(search == popular_distributions.end()){
+		if(search == popular_distributions.end()) {
 			rand_debug("[static initialization of distribution] number/size:" << number << "/" << size);
 			popular_distributions[size] = std::uniform_int_distribution<int>(1,size);
 		}
 		int result = 0;
 		int rolls = number;
-		while(rolls-- > 0){
+		while(rolls-- > 0) {
 			result += popular_distributions[size](serious_generator);
 		}
 		rand_debug("(mods::rand::roll): num,size:" << number << "," << size << "| roll:" << result);
 		return result;
 	}
-	bool chance(uint8_t chance){
-		if(chance >= 100){
+	bool chance(uint8_t chance) {
+		if(chance >= 100) {
 			return true;
 		}
 		uint8_t percent = 100 - chance;
@@ -47,7 +69,7 @@ int rand_number(int from, int to) {
 	static std::mt19937 serious_generator(rd());
 	static std::map<std::tuple<int,int>,std::uniform_int_distribution<int>> distributions;
 	std::tuple<int,uint64_t> f(from,to);
-	if(distributions.find(f) == distributions.end()){
+	if(distributions.find(f) == distributions.end()) {
 		rand_debug("distribution inserting..");
 		distributions[f] = std::uniform_int_distribution<int>(from,to);
 	}
@@ -61,7 +83,7 @@ int rand_number(int from, int to) {
 	return distributions[f](serious_generator);
 }
 
-int dice(int num,int size){
+int dice(int num,int size) {
 	int roll = mods::rand::roll(num,size);
 	rand_debug("(dice) dice: num,size:" << num << "," << size << "| roll:" << roll);
 	return roll;
@@ -128,15 +150,15 @@ namespace mods::rand::xoroshiro {
 		uint64_t s3 = 0;
 		for(int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
 			for(int b = 0; b < 64; b++) {
-				if (JUMP[i] & UINT64_C(1) << b) {
+				if(JUMP[i] & UINT64_C(1) << b) {
 					s0 ^= s[0];
 					s1 ^= s[1];
 					s2 ^= s[2];
 					s3 ^= s[3];
 				}
-				next();	
+				next();
 			}
-			
+
 		s[0] = s0;
 		s[1] = s1;
 		s[2] = s2;
@@ -159,15 +181,15 @@ namespace mods::rand::xoroshiro {
 		uint64_t s3 = 0;
 		for(int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
 			for(int b = 0; b < 64; b++) {
-				if (LONG_JUMP[i] & UINT64_C(1) << b) {
+				if(LONG_JUMP[i] & UINT64_C(1) << b) {
 					s0 ^= s[0];
 					s1 ^= s[1];
 					s2 ^= s[2];
 					s3 ^= s[3];
 				}
-				next();	
+				next();
 			}
-			
+
 		s[0] = s0;
 		s[1] = s1;
 		s[2] = s2;
@@ -175,15 +197,17 @@ namespace mods::rand::xoroshiro {
 	}
 };//end namespace mods::rand::xoroshiro
 
-uint64_t rand_xoroshiro(){
+uint64_t rand_xoroshiro() {
 	return mods::rand::xoroshiro::next();
 }
 
 namespace mods::rand {
-	void init(){
+	void init() {
 		using namespace std::chrono;
-		for(uint8_t i = 0; i < 4; i++){
+		for(uint8_t i = 0; i < 4; i++) {
 			mods::rand::xoroshiro::s[i] = duration_cast< milliseconds >(system_clock::now().time_since_epoch()).count();
 		}
+		ADD_BUILDER_COMMAND("roll_dice",do_roll_dice);
+		ADD_BUILDER_COMMAND("roll_dice_average",do_roll_dice_average);
 	}
 };

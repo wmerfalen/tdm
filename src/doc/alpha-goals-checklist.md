@@ -7,9 +7,9 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 	- status: 
 		- not ready, needs testing and to honor object properties
 			- most of this is coded aready, it just needs to be verified
-			- [ ] verify i can attack with melee weapons
+			- [x] verify i can attack with melee weapons
 			- [ ] verify attacks honor elemental damage percents
-			- [ ] melee weapons can be picked up/dropped/junk'd
+			- [x] melee weapons can be picked up/dropped/junk'd
 			- [ ] melee weapons can only be equipped in primary position
 			- [ ] melee weapons take precedence over secondary weapons
 			- [ ] melee weapon elemental damage can be blocked/resisted by armor
@@ -20,7 +20,7 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 	- status:
 		- needs work. stats affect the user in predictable ways
 			- strength
-				- [ ] increases damage done with melee weapons
+				- [x] increases damage done with melee weapons
 				- [ ] unlocks automatic melee attacks
 					- [ ] kick
 					- [ ] elbow

@@ -1415,7 +1415,7 @@ namespace mods::util::args {
 	}
 
 	bool parsed_args::nth_has_integer(std::size_t index) {
-		if(vec_args.size() <= index) {
+		if(index >= vec_args.size()) {
 			return false;
 		}
 		auto o = mods::util::stoi(vec_args[index]);
@@ -1423,7 +1423,7 @@ namespace mods::util::args {
 	}
 	bool parsed_args::nth_has_integer(std::vector<std::size_t> indices) {
 		for(const auto& index : indices) {
-			if(vec_args.size() < index) {
+			if(vec_args.size() <= index) {
 				return false;
 			}
 			if(!mods::util::stoi(vec_args[index]).has_value()) {

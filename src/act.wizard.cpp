@@ -67,7 +67,7 @@ SUPERCMD(do_vnum);
 void do_stat_room(char_data *ch);
 void do_stat_object(char_data *ch, struct obj_data *j);
 void do_stat_character(char_data *ch, char_data *k);
-SUPERCMD(do_stat);
+ACMD(do_stat);
 void stop_snooping(char_data *ch);
 SUPERCMD(do_snoop);
 SUPERCMD(do_switch);
@@ -821,7 +821,7 @@ void do_stat_character(char_data *ch, char_data *k) {
 }
 
 
-SUPERCMD(do_stat) {
+ACMD(do_stat) {
 	DO_HELP("stat,stats");
 	static constexpr const char* usage = "usage: stat <object|weapon>";
 	auto vec_args = PARSE_ARGS();

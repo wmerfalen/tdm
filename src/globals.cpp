@@ -568,14 +568,7 @@ namespace mods {
 			}
 			mob->cd()->carrying = nullptr;
 			mob->cd()->mob_specials.vnum = nr;
-			int from = mob->hp(), to = mob->mana();
-			if(from > to) {
-				to = from + rand_number(1,50);
-			}
-			mob->max_hp() = rand_number(from, to);
-			mob->hp() = mob->max_hp();
-			mob->mana() = mob->max_mana();
-			mob->move() = mob->max_move();
+			mob->cd()->points = mob_proto[i].points;
 
 			mob->set_time_birth(time(0));
 			mob->set_time_played(0);

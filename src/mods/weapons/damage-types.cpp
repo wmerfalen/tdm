@@ -358,7 +358,12 @@ namespace mods::weapons::damage_types {
 		if(mods::super_users::player_is(victim)) {
 			return 0;
 		}
-		auto chance = weapon->rifle()->attributes->chance_to_injure;
+		float chance = 0;
+		if(weapon->has_rifle()) {
+			chance = weapon->rifle()->attributes->chance_to_injure;
+		} else if(weapon->has_melee()) {
+			chance = weapon->melee()->attributes->chance_to_injure;
+		}
 		if(mods::skills::player_can(player,"INCREASED_INJURE_CHANCE")) {
 			chance += CHANCE_TO_INJURE_SKILL_MODIFIER();
 		}
@@ -397,19 +402,65 @@ namespace mods::weapons::damage_types {
 	 * @return
 	 */
 	int get_legacy_attack_type(obj_ptr_t& weapon) {
-		switch((mw_rifle)weapon->rifle()->attributes->type) {
-			case mw_rifle::SNIPER:
-				return TYPE_SNIPE;
-			case mw_rifle::SHOTGUN:
-				return TYPE_SHOTGUN;
-			case mw_rifle::SUB_MACHINE_GUN:
-				return TYPE_SUB_MACHINE_GUN;
-			case mw_rifle::LIGHT_MACHINE_GUN:
-				return TYPE_LIGHT_MACHINE_GUN;
-			default:
-				log("SYSERR: invalid rifle type");
-				return TYPE_SNIPE;
+		if(weapon->has_rifle()) {
+			switch((mw_rifle)weapon->rifle()->attributes->type) {
+				case mw_rifle::SNIPER:
+					return TYPE_SNIPE;
+				case mw_rifle::SHOTGUN:
+					return TYPE_SHOTGUN;
+				case mw_rifle::SUB_MACHINE_GUN:
+					return TYPE_SUB_MACHINE_GUN;
+				case mw_rifle::LIGHT_MACHINE_GUN:
+					return TYPE_LIGHT_MACHINE_GUN;
+				default:
+					log("SYSERR: invalid rifle type");
+					return TYPE_SNIPE;
+			}
 		}
+		if(weapon->has_melee()) {
+			switch((mw_melee)weapon->melee()->attributes->type) {
+				case mw_melee::MACHETE:
+				case mw_melee::KNIFE:
+				case mw_melee::AXE:
+				case mw_melee::KATANA:
+				case mw_melee::LONGSWORD:
+				case mw_melee::SCYTHE:
+				case mw_melee::CHAINSAW:
+					return TYPE_SLASH;
+
+				case mw_melee::PICKAXE:
+				case mw_melee::NAGINATA:
+				case mw_melee::DAGGER:
+				case mw_melee::SHURIKEN:
+				case mw_melee::SPEAR:
+				case mw_melee::SICKLE:
+				case mw_melee::ICE_PICK:
+				case mw_melee::PIKE:
+				case mw_melee::HALBERD:
+				case mw_melee::LANCE:
+				case mw_melee::TRIDENT:
+					return TYPE_STAB;
+
+				case mw_melee::CROWBAR:
+				case mw_melee::CHAIN:
+				case mw_melee::WOODEN_BASEBALL_BAT:
+				case mw_melee::ALUMINUM_BASEBALL_BAT:
+				case mw_melee::HAMMER:
+				case mw_melee::SLEDGEHAMMER:
+				case mw_melee::BATON:
+				case mw_melee::HOCKEY_STICK:
+				case mw_melee::SHOVEL:
+				case mw_melee::MACE:
+				case mw_melee::NUNCHAKU:
+				case mw_melee::BRASS_KNUCKLES:
+				case mw_melee::QUARTERSTAFF:
+				case mw_melee::REBAR:
+					return TYPE_BLUDGEON;
+				default:
+					break;
+			}
+		}
+		return TYPE_HIT;
 	}
 	uint8_t calculate_spray_chance(player_ptr_t& player) {
 		uint8_t spray_chance = mods::values::SPRAY_CHANCE();
@@ -902,6 +953,12 @@ namespace mods::weapons::damage_types {
 	    obj_ptr_t weapon,
 	    player_ptr_t victim
 	) {
+#define __MENTOC_SHOW_MELEE_HIT_STATS__
+#ifdef __MENTOC_SHOW_MELEE_HIT_STATS__
+#define md(A) std::cerr << green_str("[melee_damage_with_feedback]->") << A << "\n"; (*player) << "\r\n [melee_damage_with_feedback debug]:" << A << "\r\n";
+#else
+#define md(A)
+#endif
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
 		feedback_t feedback;
@@ -909,23 +966,27 @@ namespace mods::weapons::damage_types {
 		feedback.damage = 0;
 		feedback.from_direction = NORTH;
 		if(mods::super_users::player_is(victim)) {
+			md("victim is super user. ignoring");
 			return feedback;
 		}
 
 		if(mods::rooms::is_peaceful(player->room())) {
 			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
 			player->damage_event(feedback);
+			md("room is peaceful. ignoring");
 			return feedback;
 		}
 		if(!victim) {
 			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
 			player->damage_event(feedback);
+			md("victim not present. ignoring");
 			return feedback;
 		}
 		/** FIXME: use weapon id */
-		if(!player->weapon_cooldown_expired(weapon)) {
+		if(false && !player->weapon_cooldown_expired(weapon)) {
 			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
 			player->damage_event(feedback);
+			md("weapon cooldown not expired");
 			return feedback;
 		}
 
@@ -933,22 +994,27 @@ namespace mods::weapons::damage_types {
 		auto dice_roll = mods::weapons::damage_calculator::calculate(player,weapon,victim);
 		dam += dice_roll;
 
-#ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
-		player->send(
-		    "dice roll[%d]\r\n"
-		    "damage: [%d]\r\n",
-		    dice_roll,
-		    dam
-		);
-#endif
+		int str_bonus = mods::weapons::damage_calculator::calculate_strength_bonus(player,weapon,victim,dam);
+		md("strength bonus: " << str_bonus);
+
+		int con_dampener = mods::weapons::damage_calculator::calculate_constitution_resistance(player,weapon,victim,dam);
+		md("constitution dampener amount: " << con_dampener);
+
+		dam = dam + str_bonus - con_dampener;
+
+		md("dice_roll: " << dice_roll);
+
 		dam = calculate_tracked_damage(player,dam);
+		md("tracked damage: " << dam);
+
 		auto bonus_dam = mods::weapons::damage_calculator::calculate_bonus_damage(player,weapon,dam);
 		if(bonus_dam > dam) {
-			std::cerr << "[mods::weapons::damage_types::rifle_attack_object_with_feedback] bonus damage: " << bonus_dam << "\n";
+			md("bonus damage:" << bonus_dam);
 			dam = bonus_dam;
 		}
 
 		if(victim->position() > POS_DEAD) {
+			md("deploying damage: " << dam);
 			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 			if(dam == 0) {
 				feedback.damage = dam;
@@ -981,6 +1047,7 @@ namespace mods::weapons::damage_types {
 					feedback.damage_event= de::YOU_INJURED_SOMEONE_EVENT;
 					player->damage_event(feedback);
 					mods::injure::injure_player(victim);
+					md("attack injures");
 				}
 				if(mods::weapons::damage_calculator::attack_disorients(player,weapon,victim)) {
 					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(player,weapon,victim));
@@ -989,8 +1056,10 @@ namespace mods::weapons::damage_types {
 
 					feedback.damage_event= de::YOU_DISORIENTED_SOMEONE_EVENT;
 					player->damage_event(feedback);
+					md("attack disorients");
 				}
 			}
+			md("remembering");
 			remember_event(victim,player);
 		} else {
 			feedback.damage_event= de::TARGET_DEAD_EVENT;
@@ -998,10 +1067,13 @@ namespace mods::weapons::damage_types {
 			player->damage_event(feedback);
 			stop_fighting(player->cd());
 			stop_fighting(victim->cd());
+			md("target dead. stop fighting");
 		}
 
 		player->set_fight_timestamp();
 		mods::weapons::elemental::process_elemental_damage(player,weapon,victim,feedback);
+		md("processed elemental damage");
+#undef md
 		return feedback;
 	}
 

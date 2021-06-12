@@ -1620,6 +1620,21 @@ namespace mods {
 		if(IS_NPC(this->cd())) {
 			this->cd()->mob_specials.report(this->room());
 		}
+		send_to_room(room(),CAT("hp() :",hp(),"\r\n").c_str());
+		send_to_room(room(),CAT("max_hp() :",max_hp(),"\r\n").c_str());
+		send_to_room(room(),CAT("mana() :",mana(),"\r\n").c_str());
+		send_to_room(room(),CAT("max_mana() :",max_mana(),"\r\n").c_str());
+		send_to_room(room(),CAT("move() :",this->move(),"\r\n").c_str());
+		send_to_room(room(),CAT("max_move() :",max_move(),"\r\n").c_str());
+		send_to_room(room(),CAT("armor() :",armor(),"\r\n").c_str());
+		send_to_room(room(),CAT("gold() :",gold(),"\r\n").c_str());
+		send_to_room(room(),CAT("bank_gold() :",bank_gold(),"\r\n").c_str());
+		send_to_room(room(),CAT("exp() :",exp(),"\r\n").c_str());
+		send_to_room(room(),CAT("hitroll() :",hitroll(),"\r\n").c_str());
+		send_to_room(room(),CAT("damroll() :",damroll(),"\r\n").c_str());
+		send_to_room(room(),CAT("level() :",level(),"\r\n").c_str());
+		send_to_room(room(),CAT("height() :",height(),"\r\n").c_str());
+
 		send_to_room(room(),CAT("m_incendiary_damage_percent :",m_incendiary_damage_percent,"\r\n").c_str());
 		send_to_room(room(),CAT("m_explosive_damage_percent :",m_explosive_damage_percent,"\r\n").c_str());
 		send_to_room(room(),CAT("m_shrapnel_damage_percent :",m_shrapnel_damage_percent,"\r\n").c_str());
@@ -2139,6 +2154,15 @@ namespace mods {
 			return false;
 		});
 		update_contract_status();
+	}
+	int player::attacking_with_type() {
+		if(m_attacking_with->has_rifle()) {
+			return m_attacking_with->rifle()->attributes->type;
+		}
+		if(m_attacking_with->has_melee()) {
+			return m_attacking_with->melee()->attributes->type;
+		}
+		return 0;
 	}
 
 };
