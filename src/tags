@@ -37,7 +37,6 @@ ACMD	act.informative.cpp	/^ACMD(do_levels) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_look) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_preferences) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_recall) {$/;"	f
-ACMD	act.informative.cpp	/^ACMD(do_score) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_time) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_toggle) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_users) {$/;"	f
@@ -131,8 +130,9 @@ ACMD	mods/orm/player-base-ability.cpp	/^		ACMD(do_save_my_pba) {$/;"	f	namespace
 ACMD	mods/prefs.cpp	/^ACMD(do_pref) {$/;"	f
 ACMD	mods/rifle-attachments.cpp	/^		ACMD(do_vcarrying) {$/;"	f	namespace:mods::rifle_attachments
 ACMD	mods/scripted-step.cpp	/^	ACMD(do_scripted_step) {$/;"	f	namespace:mods
-ACMD	mods/skills.cpp	/^ACMD(do_practice_sessions) {$/;"	f
-ACMD	mods/skills.cpp	/^ACMD(do_train) {$/;"	f
+ACMD	mods/skills.cpp	/^	ACMD(do_practice_sessions) {$/;"	f	namespace:mods::skills
+ACMD	mods/skills.cpp	/^	ACMD(do_score) {$/;"	f	namespace:mods::skills
+ACMD	mods/skills.cpp	/^	ACMD(do_train) {$/;"	f	namespace:mods::skills
 ACMD	mods/values.cpp	/^			ACMD(do_get_value) {$/;"	f	namespace:mods::values
 ACMD	mods/values.cpp	/^			ACMD(do_list_values) {$/;"	f	namespace:mods::values
 ACMD	mods/values.cpp	/^			ACMD(do_revert_value_to_default){$/;"	f	namespace:mods::values
@@ -2417,12 +2417,12 @@ MENTOC_HACK_USED	mods/chat.hpp	13;"	d
 MENTOC_HACK_USED	mods/chat.hpp	54;"	d
 MENTOC_INITIALIZE	mods/item-types.hpp	635;"	d
 MENTOC_INITIALIZE_IMPL	mods/item-types.hpp	631;"	d
-MENTOC_ITEM_PARSE	mods/util.cpp	1245;"	d	file:
-MENTOC_ITEM_PARSE	mods/util.cpp	1251;"	d	file:
-MENTOC_ITEM_PARSE	mods/util.cpp	1258;"	d	file:
-MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1241;"	d	file:
-MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1250;"	d	file:
-MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1254;"	d	file:
+MENTOC_ITEM_PARSE	mods/util.cpp	1253;"	d	file:
+MENTOC_ITEM_PARSE	mods/util.cpp	1259;"	d	file:
+MENTOC_ITEM_PARSE	mods/util.cpp	1266;"	d	file:
+MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1249;"	d	file:
+MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1258;"	d	file:
+MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1262;"	d	file:
 MENTOC_ITEM_TYPES_BY_CAPS_SEQ	mods/item-types.hpp	38;"	d
 MENTOC_ITEM_TYPES_CAPS_SEQ	mods/item-types.hpp	25;"	d
 MENTOC_ITEM_TYPES_SEQ	mods/item-types.hpp	12;"	d
@@ -2440,14 +2440,14 @@ MENTOC_LAZY_INT	mods/builder.cpp	1831;"	d	file:
 MENTOC_LAZY_INT	mods/builder.cpp	1850;"	d	file:
 MENTOC_LAZY_ME	mods/builder.cpp	3428;"	d	file:
 MENTOC_LAZY_ME	mods/builder.cpp	3437;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	1148;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	1160;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	1167;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	1179;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	1180;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	1192;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	1199;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	1211;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1156;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1168;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1175;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1187;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1188;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1200;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1207;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	1219;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	221;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	236;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	247;"	d	file:
@@ -2863,7 +2863,7 @@ NUM_CLASSES	structs.h	243;"	d
 NUM_OF_BOARDS	boards.h	11;"	d
 NUM_OF_DIRS	structs.h	658;"	d
 NUM_RESERVED_DESCS	comm.h	11;"	d
-NUM_TOKENS	interpreter.cpp	1155;"	d	file:
+NUM_TOKENS	interpreter.cpp	1153;"	d	file:
 NUM_WEARS	structs.h	430;"	d
 NUNCHAKU	mods/weapon.hpp	/^		NUNCHAKU,$/;"	e	enum:mods::weapon::melee_t
 NameAndDesc	mods/catch.hpp	/^		NameAndDesc(const char* _name = "", const char* _description= "")$/;"	f	struct:Catch::NameAndDesc
@@ -3166,7 +3166,7 @@ READ_LVL	boards.h	37;"	d
 READ_SIZE	utils.h	27;"	d
 REAL	db.h	/^               REAL=0,\\$/;"	e	enum:__anon1
 REBAR	mods/weapon.hpp	/^		REBAR,$/;"	e	enum:mods::weapon::melee_t
-RECON	interpreter.cpp	1562;"	d	file:
+RECON	interpreter.cpp	1560;"	d	file:
 RECREATE	utils.h	173;"	d
 RELOAD	mods/weapon-types.hpp	/^		RELOAD,$/;"	e	enum:mods::weapon::capabilities::cap_t
 REMOTE	mods/item.hpp	/^		REMOTE = (1 << 7),$/;"	e	enum:mods::item::capability_t
@@ -3494,9 +3494,9 @@ SHOULD_DO_ROAM	mods/mobs/lowly-security.hpp	/^		static constexpr uint16_t SHOULD
 SHOULD_DO_ROAM	mods/mobs/mp-shotgunner.hpp	/^		static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	m	struct:mods::mobs::mp_shotgunner
 SHOULD_RATE_LIMIT	globals.hpp	286;"	d
 SHOVEL	mods/weapon.hpp	/^		SHOVEL,$/;"	e	enum:mods::weapon::melee_t
-SHOW_OBJ_ACTION	act.informative.cpp	123;"	d	file:
-SHOW_OBJ_LONG	act.informative.cpp	121;"	d	file:
-SHOW_OBJ_SHORT	act.informative.cpp	122;"	d	file:
+SHOW_OBJ_ACTION	act.informative.cpp	122;"	d	file:
+SHOW_OBJ_LONG	act.informative.cpp	120;"	d	file:
+SHOW_OBJ_SHORT	act.informative.cpp	121;"	d	file:
 SHP_PREFIX	db.h	72;"	d
 SHRAPNEL	mods/aoe.hpp	/^		SHRAPNEL,	\/** metal fragments flown in random directions *\/$/;"	e	enum:mods::aoe::types_t
 SHURIKEN	mods/weapon.hpp	/^		SHURIKEN,$/;"	e	enum:mods::weapon::melee_t
@@ -4479,15 +4479,15 @@ UNKNOWN_YAML_FILE	mods/util.hpp	/^	constexpr static const char* UNKNOWN_YAML_FIL
 UNLOCK_DOOR	act.movement.cpp	381;"	d	file:
 UNMARK	graph.cpp	54;"	d	file:
 UNRECOGNIZED	mods/util.hpp	/^		UNRECOGNIZED = 0,$/;"	e	enum:mods::util::yaml_type_t
-UNSWITCH	interpreter.cpp	1564;"	d	file:
+UNSWITCH	interpreter.cpp	1562;"	d	file:
 UNUSED16	mods/flags.hpp	/^		UNUSED16,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UP	structs.h	137;"	d
 UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT$/;"	e	enum:mods::lmdb::transact_type_t
 UPPER	utils.h	156;"	d
-USERS_FORMAT	act.informative.cpp	1469;"	d	file:
+USERS_FORMAT	act.informative.cpp	1339;"	d	file:
 USE_AUTOEQ	structs.h	119;"	d
-USURP	interpreter.cpp	1563;"	d	file:
+USURP	interpreter.cpp	1561;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
 Unknown	mods/catch2.hpp	/^        Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
 VALID_EDGE	graph.cpp	/^int VALID_EDGE(room_rnum x, int y) {$/;"	f
@@ -4555,7 +4555,7 @@ WEAR_WRIST_R	structs.h	414;"	d
 WELC_MESSG	config.cpp	/^const char *WELC_MESSG =$/;"	v
 WEST	structs.h	136;"	d
 WHEN	mods/catch.hpp	12215;"	d
-WHO_FORMAT	act.informative.cpp	1432;"	d	file:
+WHO_FORMAT	act.informative.cpp	1302;"	d	file:
 WILL	telnet.h	46;"	d
 WILL_BANK_MONEY	shop.h	164;"	d
 WILL_START_FIGHT	shop.h	163;"	d
@@ -5295,14 +5295,14 @@ arcon_bar	mods/init.hpp	/^INIT(mods::fluxkraft::arcon_bar);$/;"	v
 arg1	db.h	/^	int	arg1;		\/*                                      *\/$/;"	m	struct:reset_com
 arg2	db.h	/^	int	arg2;		\/* Arguments to the command             *\/$/;"	m	struct:reset_com
 arg3	db.h	/^	int	arg3;		\/*                                      *\/$/;"	m	struct:reset_com
-argat	mods/util.hpp	429;"	d
+argat	mods/util.hpp	430;"	d
 arglist	mods/util.hpp	/^	T arglist(std::string in_arglist_argument) {$/;"	f	namespace:mods::util
 arglist_parser	mods/util.hpp	/^	struct arglist_parser {$/;"	s	namespace:mods::util::args
 args	mods/util.cpp	/^namespace mods::util::args {$/;"	n	class:mods::util	file:
 args	mods/util.hpp	/^namespace mods::util::args {$/;"	n	class:mods::util
-args	mods/util.hpp	428;"	d
-argsat	mods/util.hpp	431;"	d
-argshave	mods/util.hpp	432;"	d
+args	mods/util.hpp	429;"	d
+argsat	mods/util.hpp	432;"	d
+argshave	mods/util.hpp	433;"	d
 argument_interpreter	interpreter.h	43;"	d
 arguments	mods/builder.cpp	/^	size_t arguments;$/;"	m	struct:command_t	file:
 armor	mods/armor/advanced-protection.cpp	/^namespace mods::armor {$/;"	n	class:mods	file:
@@ -5607,7 +5607,7 @@ calc_visibility	mods/calc-visibility.hpp	/^namespace mods::calc_visibility {$/;"
 calculate	mods/forge-engine/value-scaler.cpp	/^	void value_scaler::calculate(player_ptr_t& player) {$/;"	f	class:mods::forge_engine::value_scaler
 calculate	mods/weapons/damage-calculator.cpp	/^		int16_t calculate($/;"	f	namespace:mods::weapons::damage_calculator::algorithm_A
 calculate	mods/weapons/damage-calculator.cpp	/^	int16_t calculate($/;"	f	namespace:mods::weapons::damage_calculator
-calculate_available_practice_sessions	mods/skills.cpp	/^uint8_t calculate_available_practice_sessions(uint8_t level) {$/;"	f
+calculate_available_practice_sessions	mods/skills.cpp	/^	uint8_t calculate_available_practice_sessions(uint8_t level) {$/;"	f	namespace:mods::skills
 calculate_based_on_triads	mods/levels.cpp	/^	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {$/;"	f	namespace:mods::levels
 calculate_bonus_damage	mods/weapons/damage-calculator.cpp	/^	int16_t calculate_bonus_damage($/;"	f	namespace:mods::weapons::damage_calculator
 calculate_bonus_hp_gain	mods/levels.cpp	/^	int calculate_bonus_hp_gain(int dice,int sides,int greater_than,int player_level) {$/;"	f	namespace:mods::levels
@@ -6349,8 +6349,8 @@ dbg_print	mods/scripted-step.cpp	6;"	d	file:
 dbg_red	mods/acl/config-parser.hpp	26;"	d
 dbi	mods/lmdb/db.hpp	/^			MDB_dbi dbi; 	\/* this is just an unsigned int *\/$/;"	m	struct:gdns::lmdb::gdns_dbi
 dbi	mods/lmdb/db.hpp	/^			std::unique_ptr<gdns_dbi> dbi;$/;"	m	struct:gdns::lmdb::db
-dd	act.informative.cpp	573;"	d	file:
-dd	act.informative.cpp	733;"	d	file:
+dd	act.informative.cpp	572;"	d	file:
+dd	act.informative.cpp	732;"	d	file:
 deactivate_account	mods/player.cpp	/^	void player::deactivate_account() {$/;"	f	class:mods::player
 deal_damage	mods/weapons/damage-types.cpp	/^		void deal_damage(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	f	namespace:mods::weapons::damage_types::legacy
 deal_hp_damage	mods/weapons/damage-types.cpp	/^	void deal_hp_damage(player_ptr_t& player, uint16_t damage) {$/;"	f	namespace:mods::weapons::damage_types
@@ -6564,7 +6564,6 @@ dispatch_slot	mods/builder/slotted-builder.hpp	/^			bool dispatch_slot(std::stri
 dispatch_status_t	mods/behaviour_tree_impl.hpp	/^	enum dispatch_status_t {$/;"	g	namespace:mods::behaviour_tree_impl
 display_signatures	mods/builder/slotted-builder.hpp	/^			void display_signatures() {$/;"	f	struct:mods::builder::slotted_builder
 display_slot_list	mods/builder/slotted-builder.hpp	/^			void display_slot_list() {$/;"	f	struct:mods::builder::slotted_builder
-display_user_skills	mods/skills.cpp	/^void display_user_skills(player_ptr_t& player) {$/;"	f
 dispose_breach	mods/doors.hpp	/^	static inline void dispose_breach(uuid_t obj_uuid) {$/;"	f	namespace:mods::doors
 dispose_object	globals.cpp	/^		void dispose_object(uuid_t obj_uuid) {$/;"	f	namespace:mods::globals
 dispose_player	globals.cpp	/^		void dispose_player(uuid_t pl_uuid) {$/;"	f	namespace:mods::globals
@@ -6843,8 +6842,6 @@ do_say	shop.cpp	/^ACMD(do_say);$/;"	v
 do_say	spec_procs.cpp	/^ACMD(do_say);$/;"	v
 do_sbuild	interpreter.cpp	/^ACMD(do_sbuild);$/;"	v
 do_scan	interpreter.cpp	/^ACMD(do_scan);$/;"	v
-do_score	act.informative.cpp	/^ACMD(do_score);$/;"	v
-do_score	interpreter.cpp	/^ACMD(do_score);$/;"	v
 do_send	act.wizard.cpp	/^SUPERCMD(do_send);$/;"	v
 do_send	interpreter.cpp	/^ACMD(do_send);$/;"	v
 do_send_report	interpreter.cpp	/^ACMD(do_send_report);$/;"	v
@@ -7188,6 +7185,7 @@ exit_num	house.h	/^	sh_int exit_num;		\/* direction of house's exit	*\/$/;"	m	st
 exits	mods/mobs/mob.cpp	/^	void player::exits() {$/;"	f	class:mods::player
 exp	mods/mobs/mob.hpp	/^			int& exp() {$/;"	f	class:mods::player
 exp	mods/player.hpp	/^			int& exp() {$/;"	f	struct:mods::player
+expand_safe_escape_codes	mods/util.cpp	/^	std::string expand_safe_escape_codes(std::string_view str,std::size_t screen_width) {$/;"	f	namespace:mods::util
 expect_integer	mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> expect_integer(const std::string& line, counter_t in_counter) {$/;"	f	namespace:mods
 expect_item_declaration	mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t,parsed_type_t> expect_item_declaration(const std::string& line, counter_t in_counter) {$/;"	f	namespace:mods
 expect_slot_name	mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> expect_slot_name(const std::vector<std::string>& acceptable_slot_names,const std::string& line, counter_t in_counter) {$/;"	f	namespace:mods
@@ -7687,7 +7685,7 @@ from_string	mods/orm/orm-base.hpp	/^	TObject from_string(std::string value) {$/;
 from_string	mods/orm/orm-base.hpp	/^	inline std::string from_string<std::string>(std::string value) {$/;"	f	namespace:mods::orm
 from_string	mods/orm/orm-base.hpp	/^	inline std::vector<std::string> from_string<std::vector<std::string>>(std::string value) {$/;"	f	namespace:mods::orm
 from_string_to_rifle	mods/weapon.hpp	/^	static inline weapon_rifle_t from_string_to_rifle(std::string_view rifle_type) {$/;"	f	namespace:mods::weapon
-from_string_to_skill_id	mods/skills.cpp	/^std::optional<uint32_t> from_string_to_skill_id($/;"	f
+from_string_to_skill_id	mods/skills.cpp	/^	std::optional<uint32_t> from_string_to_skill_id($/;"	f	namespace:mods::skills
 fromdirstr	mods/projectile.cpp	/^		std::string fromdirstr(int direction,bool prefix, bool suffix) {$/;"	f	namespace:mods::projectile
 frozen_start_room	config.cpp	/^room_vnum frozen_start_room = 0;$/;"	v
 fry_victim	castle.cpp	/^void fry_victim(char_data *ch) {$/;"	f
@@ -7944,7 +7942,7 @@ get_player_map	mods/skill-orm-adaptor.cpp	/^	int get_player_map(player_ptr_t& pl
 get_player_vector	mods/db.cpp	/^int get_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string>& values) {$/;"	f
 get_player_vis	handler.cpp	/^char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {$/;"	f
 get_pluck_filter	mods/lmdb.cpp	/^	const std::vector<std::string>& _db_handle::get_pluck_filter() const {$/;"	f	class:mods::lmdb::_db_handle
-get_practice_dump	mods/skills.cpp	/^std::string get_practice_dump() {$/;"	f
+get_practice_dump	mods/skills.cpp	/^	std::string get_practice_dump() {$/;"	f	namespace:mods::skills
 get_prefs	mods/player.hpp	/^			auto get_prefs() {$/;"	f	struct:mods::player
 get_private	mods/chat.hpp	/^			bool get_private() const {$/;"	f	struct:mods::chat::channel
 get_private_publishers	mods/chat.hpp	/^			const std::vector<std::string>& get_private_publishers() const {$/;"	f	struct:mods::chat::channel
@@ -7989,6 +7987,9 @@ get_type	mods/weapon.cpp	/^	std::variant<mw_rifle,mw_explosive,mw_drone> get_typ
 get_type_string	mods/player-contract-instance.cpp	/^	std::string player_contract_instance::get_type_string() const {$/;"	f	class:mods::contracts::player_contract_instance
 get_type_string	mods/player.cpp	/^	std::string player::get_type_string() {$/;"	f	class:mods::player
 get_user	mods/auto-login.cpp	/^	const std::string& get_user() { return mods::auto_login::user; }$/;"	f	namespace:mods::auto_login
+get_user_skills_page	mods/skills.cpp	/^	std::string get_user_skills_page(player_ptr_t& player) {$/;"	f	namespace:mods::skills
+get_user_stats_page	mods/skills.cpp	/^	std::string get_user_stats_page(player_ptr_t& player) {$/;"	f	namespace:mods::skills
+get_user_unlocks_page	mods/skills.cpp	/^	std::string get_user_unlocks_page(player_ptr_t& player) {$/;"	f	namespace:mods::skills
 get_verb	mods/chat.cpp	/^	std::string_view channel::get_verb() const {$/;"	f	class:mods::chat::channel
 get_victim	castle.cpp	/^char_data *get_victim( char_data *ch) {$/;"	f
 get_watching	mods/player.hpp	/^			direction_t get_watching() {$/;"	f	struct:mods::player
@@ -8602,7 +8603,7 @@ int_at	mods/util.cpp	/^	int parsed_args::int_at(std::size_t index) {$/;"	f	class
 int_map	mods/util.cpp	/^	std::map<std::size_t,int> parsed_args::int_map(std::vector<std::size_t> indexes) {$/;"	f	class:mods::util::args::parsed_args
 int_type	mods/acl/config-parser.hpp	/^                typedef uint64_t int_type;$/;"	t	class:mods::acl::FileParser
 int_types	mods/values.cpp	/^static const std::vector<value_key_t> int_types = {$/;"	m	namespace:mods::values	file:
-intat	mods/util.hpp	430;"	d
+intat	mods/util.hpp	431;"	d
 integral_list	mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& integral_list() const {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 integral_object	mods/orm/integral-object.hpp	/^		integral_object() : id(0) {$/;"	f	struct:mods::orm::integral_object
 integral_object	mods/orm/integral-object.hpp	/^	struct integral_object : public mods::orm::orm_base<integral_object,std::string> {$/;"	s	namespace:mods::orm
@@ -9361,7 +9362,7 @@ m_debug	mods/skill-orm-adaptor.cpp	7;"	d	file:
 m_debug	mods/skill-orm-adaptor.cpp	9;"	d	file:
 m_debug	mods/skills.cpp	11;"	d	file:
 m_debug	mods/skills.cpp	13;"	d	file:
-m_debug	mods/skills.cpp	156;"	d	file:
+m_debug	mods/skills.cpp	249;"	d	file:
 m_debug	mods/stat-bonuses.cpp	12;"	d	file:
 m_debug	mods/stat-bonuses.cpp	14;"	d	file:
 m_debug	mods/string.cpp	4;"	d	file:
@@ -10035,7 +10036,7 @@ mo_debug	mods/integral-objects.cpp	19;"	d	file:
 mo_debug	mods/integral-objects.cpp	305;"	d	file:
 mo_debug	mods/levels.cpp	12;"	d	file:
 mo_debug	mods/levels.cpp	14;"	d	file:
-mo_debug	mods/levels.cpp	530;"	d	file:
+mo_debug	mods/levels.cpp	529;"	d	file:
 mo_debug	mods/rate-limiting.cpp	10;"	d	file:
 mo_debug	mods/rate-limiting.cpp	172;"	d	file:
 mo_debug	mods/rate-limiting.cpp	8;"	d	file:
@@ -10228,7 +10229,7 @@ mtp_debug	mods/target-practice-db.cpp	38;"	d	file:
 mtp_debug	mods/target-practice.cpp	11;"	d	file:
 mtp_debug	mods/target-practice.cpp	13;"	d	file:
 mtp_debug	mods/target-practice.cpp	62;"	d	file:
-mu_debug	mods/util.cpp	1549;"	d	file:
+mu_debug	mods/util.cpp	1557;"	d	file:
 mu_debug	mods/util.cpp	17;"	d	file:
 mu_debug	mods/util.cpp	19;"	d	file:
 mud_time_passed	utils.cpp	/^struct time_info_data *mud_time_passed(time_t t2, time_t t1) {$/;"	f
@@ -10670,7 +10671,7 @@ owner_drone	mods/drone.cpp	/^		std::pair<player_ptr_t,player_ptr_t> owner_drone(
 owner_uuid	mods/camera.hpp	/^			uuid_t owner_uuid() const { return m_player; }$/;"	f	class:mods::camera
 p	mods/util.hpp	/^			parsed_args* p;$/;"	m	struct:mods::util::args::check_parsed_args
 pad_room	globals.cpp	/^		void pad_room(int room,char_data* ch,int door) {$/;"	f	namespace:mods::globals
-pad_string	mods/skills.cpp	/^std::string pad_string(std::string_view str,std::size_t to, std::string with) {$/;"	f
+pad_string	mods/skills.cpp	/^	std::string pad_string(std::string_view str,std::size_t to, std::string with) {$/;"	f	namespace:mods::skills
 page	mods/mobs/mob.cpp	/^	void player::page(int pg) {$/;"	f	class:mods::player
 page	mods/player.cpp	/^	void player::page(int pg) {$/;"	f	class:mods::player
 page_string	modify.cpp	/^void page_string(mods::descriptor_data d, char *str, int keep_internal) {$/;"	f
@@ -11252,7 +11253,7 @@ pyrexia_seal_off_room_with_wall_of_fire_level	mods/orm/pyrexia.hpp	/^		skill_fam
 pyrexia_solar_assistance_level	mods/orm/pyrexia.hpp	/^		skill_familiarity_t pyrexia_solar_assistance_level;$/;"	m	struct:mods::orm::pyrexia
 pyrexia_summon_napalm_strike_level	mods/orm/pyrexia.hpp	/^		skill_familiarity_t pyrexia_summon_napalm_strike_level;$/;"	m	struct:mods::orm::pyrexia
 q	random.cpp	46;"	d	file:
-qmob	mods/util.hpp	433;"	d
+qmob	mods/util.hpp	434;"	d
 quantity	mods/scripted-step.hpp	/^		uint16_t quantity;$/;"	m	struct:mods::scripted_step
 query_contents_by_yaml	mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {$/;"	f	namespace:mods::query_objects
 query_contents_by_yaml_multi	mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml_multi(obj_ptr_t& found_object,const std::vector<std::string>& files) {$/;"	f	namespace:mods::query_objects
@@ -12794,7 +12795,6 @@ stringify	mods/catch2.hpp	/^        inline std::string stringify( NSString* nsst
 stringify	mods/catch2.hpp	/^        std::string stringify(const T& e) {$/;"	f	namespace:Catch::Detail
 strings	mods/mobs/extended-types.cpp	/^	std::vector<std::string> strings() {$/;"	f	namespace:mods::mobs::extended_types
 strip_colors	globals.cpp	/^		std::string strip_colors(std::string_view buffer) {$/;"	f	namespace:mods::globals
-strip_colors_and_escapes	mods/util.cpp	/^	std::string strip_colors_and_escapes(std::string_view str) {$/;"	f	namespace:mods::util
 strip_identifier	mods/migrations.cpp	/^	std::tuple<int,std::string> strip_identifier(std::string identifier){$/;"	f	namespace:mods::migrations
 strlcpy	utils.cpp	/^size_t strlcpy(char *dest, const char *source, size_t totalsize) {$/;"	f
 strn_cmp	sysdep.h	333;"	d
@@ -13079,8 +13079,8 @@ track_through_doors	config.cpp	/^int track_through_doors = YES;$/;"	v
 tracking_shot	mods/classes/sniper.cpp	/^	std::tuple<bool,std::string> sniper::tracking_shot(std::string_view target, direction_t direction) {$/;"	f	class:mods::classes::sniper
 trade_letters	shop.cpp	/^const char *trade_letters[] = {$/;"	v
 trade_with	shop.cpp	/^int trade_with(struct obj_data *item, int shop_nr) {$/;"	f
-train_skill	mods/skills.cpp	/^void train_skill(player_ptr_t& player,std::string_view skill_name, int16_t amount) {$/;"	f
-train_user_skill	mods/skills.cpp	/^void train_user_skill(player_ptr_t& player,uint32_t skill_id,int16_t amount) {$/;"	f
+train_skill	mods/skills.cpp	/^	void train_skill(player_ptr_t& player,std::string_view skill_name, int16_t amount) {$/;"	f	namespace:mods::skills
+train_user_skill	mods/skills.cpp	/^	void train_user_skill(player_ptr_t& player,uint32_t skill_id,int16_t amount) {$/;"	f	namespace:mods::skills
 training_master	castle.cpp	/^SPECIAL(training_master);$/;"	v
 transact_id	mods/builder-data.hpp	/^	int transact_id;$/;"	m	struct:room_pavement_t
 transact_type_t	mods/lmdb.hpp	/^	enum transact_type_t {$/;"	g	namespace:mods::lmdb

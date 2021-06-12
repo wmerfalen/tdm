@@ -83,7 +83,6 @@ ACMD(do_drone);
 ACMD(do_look);
 ACMD(do_examine);
 ACMD(do_gold);
-ACMD(do_score);
 ACMD(do_inventory);
 ACMD(do_equipment);
 ACMD(do_time);
@@ -1197,135 +1196,6 @@ ACMD(do_gold) {
 }
 
 
-ACMD(do_score) {
-	struct time_info_data playing_time;
-
-	if(IS_NPC(ch)) {
-		return;
-	}
-
-	/** TODO: implement player::age() */
-	player->sendln(TOSTR("You are ") + TOSTR(GET_AGE(player->cd())) + " years old.");
-
-	if(age(ch)->month == 0 && age(ch)->day == 0) {
-		player->sendln("  It's your birthday today.");
-	} else {
-		player->sendln("");
-	}
-
-	player->send("You have %d(%d) hit, %d(%d) mana and %d(%d) movement points.\r\n",
-	             GET_HIT(ch), GET_MAX_HIT(ch), GET_MANA(ch), GET_MAX_MANA(ch),
-	             GET_MOVE(ch), GET_MAX_MOVE(ch));
-
-	player->send("Your armor class is %d/10, and your alignment is %d.\r\n",
-	             compute_armor_class(ch), GET_ALIGNMENT(ch));
-
-	player->send("You have scored %d exp, and have %d gold coins.\r\n",
-	             GET_EXP(ch), GET_GOLD(ch));
-
-	if(GET_LEVEL(ch) < LVL_IMMORT)
-		player->send("You need %d exp to reach your next level.\r\n",
-		             mods::levels::level_exp(GET_LEVEL(ch) + 1) - GET_EXP(ch));
-
-	playing_time = *real_time_passed((time(0) - ch->player.time.logon) +
-	                                 ch->player.time.played, 0);
-	player->send("You have been playing for %d day%s and %d hour%s.\r\n",
-	             playing_time.day, playing_time.day == 1 ? "" : "s",
-	             playing_time.hours, playing_time.hours == 1 ? "" : "s");
-
-	player->send("This ranks you as %s %s (level %d).\r\n",
-	             GET_NAME(ch).c_str(), GET_TITLE(ch).c_str(), GET_LEVEL(ch));
-
-	switch(GET_POS(ch)) {
-		case POS_DEAD:
-			player->sendln("You are DEAD!");
-			break;
-
-		case POS_MORTALLYW:
-			player->sendln("You are mortally wounded!  You should seek help!");
-			break;
-
-		case POS_INCAP:
-			player->sendln("You are incapacitated, slowly fading away...");
-			break;
-
-		case POS_STUNNED:
-			player->sendln("You are stunned!  You can't move!");
-			break;
-
-		case POS_SLEEPING:
-			player->sendln("You are sleeping.");
-			break;
-
-		case POS_RESTING:
-			player->sendln("You are resting.");
-			break;
-
-		case POS_SITTING:
-			player->sendln("You are sitting.");
-			break;
-
-		case POS_FIGHTING:
-			player->send("You are fighting %s.", FIGHTING(ch) ? std::string(PERS(FIGHTING(ch), ch)).c_str() : "thin air");
-			break;
-
-		case POS_STANDING:
-			player->sendln("You are standing.");
-			break;
-
-		default:
-			player->sendln("You are floating.");
-			break;
-	}
-
-	if(GET_COND(ch, DRUNK) > 10) {
-		player->sendln("You are intoxicated.");
-	}
-
-	if(GET_COND(ch, FULL) == 0) {
-		player->sendln("You are hungry.");
-	}
-
-	if(GET_COND(ch, THIRST) == 0) {
-		player->sendln("You are thirsty.");
-	}
-
-	if(AFF_FLAGGED(ch, AFF_BLIND)) {
-		player->sendln("You have been blinded!");
-	}
-
-	if(AFF_FLAGGED(ch, AFF_INVISIBLE)) {
-		player->sendln("You are invisible.");
-	}
-
-	if(AFF_FLAGGED(ch, AFF_DETECT_INVIS)) {
-		player->sendln("You are sensitive to the presence of invisible things.");
-	}
-
-	if(AFF_FLAGGED(ch, AFF_SANCTUARY)) {
-		player->sendln("You are protected by Sanctuary.");
-	}
-
-	if(AFF_FLAGGED(ch, AFF_POISON)) {
-		player->sendln("You are poisoned!");
-	}
-
-	if(AFF_FLAGGED(ch, AFF_CHARM)) {
-		player->sendln("You have been charmed!");
-	}
-
-	if(affected_by_spell(ch, SPELL_ARMOR)) {
-		player->sendln("You feel protected.");
-	}
-
-	if(AFF_FLAGGED(ch, AFF_INFRAVISION)) {
-		player->sendln("Your eyes are glowing red.");
-	}
-
-	if(PRF_FLAGGED(ch, PRF_SUMMONABLE)) {
-		player->sendln("You are summonable by other players.");
-	}
-}
 
 
 ACMD(do_inventory) {
@@ -2199,7 +2069,6 @@ namespace informative {
 		mods::interpreter::add_command("newjs",POS_RESTING,do_newjs,0,0);
 		mods::interpreter::add_command("preferences",POS_RESTING,do_preferences,0,0);
 		mods::interpreter::add_command("recall",POS_RESTING,do_recall,0,0);
-		mods::interpreter::add_command("score",POS_RESTING,do_score,0,0);
 		mods::interpreter::add_command("time",POS_RESTING,do_time,0,0);
 		mods::interpreter::add_command("toggle",POS_RESTING,do_toggle,0,0);
 		mods::interpreter::add_command("users",POS_RESTING,do_users,0,0);

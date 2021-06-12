@@ -42,11 +42,20 @@ namespace mods::movement {
 	}
 	bool force_move_to(player_ptr_t& player,const room_rnum& target_room) {
 		if(target_room < world.size()) {
+			std::string msg = "You leave the room";
+			auto old_room = player->room();
+			for(const auto& dir : world[old_room].directions()) {
+				if(world[old_room].dir_option[dir]->to_room == target_room) {
+					msg = CAT("You go ",dirstr(dir));
+					break;
+				}
+			}
 			mods::globals::rooms::char_from_room(player->cd());
 			player->moving_to_room() = true;
 			player->set_room(target_room);
 			mods::globals::room_list[target_room].push_back(player);
-			player->sendln("You've been moved to a new room");
+
+			player->sendln(msg);
 			return true;
 		}
 		return false;

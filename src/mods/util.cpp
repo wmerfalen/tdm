@@ -172,9 +172,17 @@ namespace mods::util {
 
 		return mods::globals::color_eval(box);
 	}
-	std::string strip_colors_and_escapes(std::string_view str) {
+	std::string expand_safe_escape_codes(std::string_view str,std::size_t screen_width) {
 		std::string sanitized;
 		for(int i=0; i < str.length(); i++) {
+			if(str[i] == '{' && i + 3 < str.length() && str[i+1] == 'h' && str[i+2] == 'r' && str[i+3] == '}') {
+				i += 3;
+				sanitized += "\r\n";
+				for(int k=0; k < screen_width; k++) {
+					sanitized += "-";
+				}
+				continue;
+			}
 			if(str[i] == '{' && i + 4 < str.length() && str[i+4] == '}') {
 				i += 4;
 				continue;
@@ -213,7 +221,7 @@ namespace mods::util {
 			w = 76;
 		}
 		int line_chars = 0;
-		auto msg = strip_colors_and_escapes(in_msg);
+		auto msg = expand_safe_escape_codes(in_msg,w);
 		for(std::size_t i = 0; i < msg.length(); i++) {
 			if(line_chars < 0) {
 				line_chars = 0;

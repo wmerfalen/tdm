@@ -436,7 +436,6 @@ namespace mods::levels {
 				mods::classes::ghost_advance_level(player);
 				break;
 			default:
-				std::cerr << red_str("[mods::levels::advance_level] unsupported class type: ") << player->get_class_string().str() << "\n";
 				break;
 		}
 	}

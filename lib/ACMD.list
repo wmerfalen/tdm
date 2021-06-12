@@ -23,8 +23,9 @@
 ./mods/mini-games/wires.cpp:->plug_cable
 ./mods/contracts.cpp:	->contract
 ./mods/weapons/reload.cpp:	->reload
-./mods/skills.cpp:->practice_sessions
-./mods/skills.cpp:->train
+./mods/skills.cpp:	->score
+./mods/skills.cpp:	->practice_sessions
+./mods/skills.cpp:	->train
 ./mods/values.cpp:			->set_value
 ./mods/values.cpp:			->get_value
 ./mods/values.cpp:			->revert_value_to_default
@@ -51,7 +52,6 @@
 ./act.informative.cpp:->look
 ./act.informative.cpp:->examine
 ./act.informative.cpp:->gold
-./act.informative.cpp:->score
 ./act.informative.cpp:->inventory
 ./act.informative.cpp:->equipment
 ./act.informative.cpp:->time

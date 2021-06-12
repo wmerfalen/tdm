@@ -258,7 +258,6 @@ ACMD(do_restore);
 ACMD(do_return);
 ACMD(do_save);
 ACMD(do_say);
-ACMD(do_score);
 ACMD(do_send);
 ACMD(do_set);
 ACMD(do_show);
@@ -643,7 +642,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "say", POS_RESTING, do_say, 0, 0 },
 	{ "'", POS_RESTING, do_say, 0, 0 },
 	{ "save", POS_SLEEPING, do_save, 0, 0 },
-	{ "score", POS_DEAD, do_score, 0, 0 },
 	{ "scream", POS_RESTING, do_action, 0, 0 },
 	{ "sell", POS_STANDING, do_not_here, 0, 0 },
 	{ "send", POS_SLEEPING, do_send, LVL_GOD, 0 },
