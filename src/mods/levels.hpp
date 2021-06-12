@@ -27,6 +27,7 @@ namespace mods::levels {
 	int gain_exp(player_ptr_t& player,int gain);
 	void advance_level(player_ptr_t& player);
 	uint8_t player_tier(player_ptr_t& player);
+	uint8_t player_tier(const uint8_t& level);
 	static inline bool class_is_implemented(player_class_t pc) {
 		return std::find(implemented_classes.begin(),implemented_classes.end(),pc) != implemented_classes.end();
 	}

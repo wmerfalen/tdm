@@ -250,6 +250,18 @@ namespace mods::levels {
 		return m_triads;
 	}
 
+	uint8_t player_tier(const uint8_t& level) {
+		if(level <= 9) {
+			return 1;
+		}
+		if(level >= 10 && level <= 19) {
+			return 2;
+		}
+		if(level >= 20) {
+			return 3;
+		}
+		return 1;
+	}
 	uint8_t player_tier(player_ptr_t& player) {
 		if(player->level() <= 9) {
 			return 1;

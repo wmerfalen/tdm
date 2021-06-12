@@ -933,9 +933,20 @@ void parse_sql_mobiles() {
 		MENTOC_ABIL_SET(con,mob_ability_constitution);
 		MENTOC_ABIL_SET(cha,mob_ability_charisma);
 
-		GET_LEVEL(&proto) = mods::util::stoi<int>(row["mob_level"]);
-		GET_HITROLL(&proto) = 20 -mods::util::stoi<int>(row["mob_hitroll"]);
-		GET_AC(&proto) = 10 *mods::util::stoi<int>(row["mob_armor"]);
+		MENTOC_ABIL_SET(electronics,mob_ability_electronics);
+		MENTOC_ABIL_SET(armor,mob_ability_armor);
+		MENTOC_ABIL_SET(marksmanship,mob_ability_marksmanship);
+		MENTOC_ABIL_SET(sniping,mob_ability_sniping);
+		MENTOC_ABIL_SET(demolitions,mob_ability_demolitions);
+		MENTOC_ABIL_SET(chemistry,mob_ability_chemistry);
+		MENTOC_ABIL_SET(weapon_handling,mob_ability_weapon_handling);
+		MENTOC_ABIL_SET(strategy,mob_ability_strategy);
+		MENTOC_ABIL_SET(medical,mob_ability_medical);
+
+		proto.player.level = mods::util::stoi<int>(row["mob_level"]);
+		proto.points.hitroll = 20 -mods::util::stoi<int>(row["mob_hitroll"]);
+		proto.points.armor = 10 *mods::util::stoi<int>(row["mob_armor"]);
+		proto.points.damroll = mods::util::stoi<int>(row["mob_damroll"]);
 
 		/* max hit = 0 is a flag that H, M, V is xdy+z */
 		GET_MAX_HIT(&proto) = mods::util::stoi<int>(row["mob_max_hitpoints"]);
@@ -947,7 +958,6 @@ void parse_sql_mobiles() {
 		proto.mob_specials.damnodice = mods::util::stoi<int>(row["mob_damnodice"]);
 		proto.mob_specials.damsizedice = mods::util::stoi<int>(row["mob_damsizedice"]);
 		proto.mob_specials.behaviour_tree = behaviour_tree::NONE;
-		GET_DAMROLL(&proto) = mods::util::stoi<int>(row["mob_damroll"]);
 		GET_GOLD(&proto) = mods::util::stoi<int>(row["mob_gold"]);
 		GET_EXP(&proto) = mods::util::stoi<int>(row["mob_exp"]);
 		GET_POS(&proto) = mods::util::stoi<int>(row["mob_load_position"]);

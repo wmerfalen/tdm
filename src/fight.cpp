@@ -959,10 +959,10 @@ void hit(char_data *ch, char_data *victim, int type) {
 
 	if(wielded_weapon && wielded_weapon->has_melee()) {
 		auto vptr = ptr(victim);
-		auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(
-		                    player,
-		                    wielded_weapon,
-		                    vptr);
+		mods::weapons::damage_types::melee_damage_with_feedback(
+		    player,
+		    wielded_weapon,
+		    vptr);
 		return;
 	}
 

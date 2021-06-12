@@ -23,41 +23,110 @@ namespace mods::weapons::elemental {
 		}
 		return damage;
 	}
-	void elemental_damage(player_ptr_t& player,std::string_view message,int damage) {
-		if(damage  <= 0) {
+	void send_elemental(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage,int type) {
+		if(attacker->position() == POS_DEAD || victim->position() == POS_DEAD) {
 			return;
 		}
-		player->send(message.data(),damage);
-		mods::weapons::damage_types::deal_hp_damage(player,damage);
+		feedback_t feedback;
+		feedback.hits = 1;
+		auto atk_event = de::YOU_INFLICTED_INCENDIARY_DAMAGE;
+		auto vic_event = de::HIT_BY_INCENDIARY_DAMAGE;
+		switch(type) {
+			case ELEM_SHOCK:
+				feedback.damage = reduce_elemental_resistance(requested_damage,victim->shock_resistance_percent());
+				atk_event =  de::YOU_INFLICTED_SHOCK_DAMAGE;
+				vic_event = de::HIT_BY_SHOCK_DAMAGE;
+				break;
+			case ELEM_INCENDIARY:
+				feedback.damage = reduce_elemental_resistance(requested_damage,victim->incendiary_resistance_percent());
+				atk_event =  de::YOU_INFLICTED_INCENDIARY_DAMAGE;
+				vic_event = de::HIT_BY_INCENDIARY_DAMAGE;
+				break;
+			case ELEM_EXPLOSIVE:
+				feedback.damage = reduce_elemental_resistance(requested_damage,victim->explosive_resistance_percent());
+				atk_event =  de::YOU_INFLICTED_EXPLOSIVE_DAMAGE;
+				vic_event = de::HIT_BY_EXPLOSIVE_DAMAGE;
+				break;
+
+			case ELEM_SHRAPNEL:
+				feedback.damage = reduce_elemental_resistance(requested_damage,victim->shrapnel_resistance_percent());
+				atk_event =  de::YOU_INFLICTED_SHRAPNEL_DAMAGE;
+				vic_event = de::HIT_BY_SHRAPNEL_DAMAGE;
+				break;
+
+			case ELEM_EMP:
+				feedback.damage = reduce_elemental_resistance(requested_damage,victim->emp_resistance_percent());
+				atk_event =  de::YOU_INFLICTED_EMP_DAMAGE;
+				vic_event = de::HIT_BY_EMP_DAMAGE;
+				break;
+			case ELEM_CORROSIVE:
+				feedback.damage = reduce_elemental_resistance(requested_damage,victim->corrosive_resistance_percent());
+				atk_event =  de::YOU_INFLICTED_CORROSIVE_DAMAGE;
+				vic_event = de::HIT_BY_CORROSIVE_DAMAGE;
+				break;
+
+			case ELEM_CRYOGENIC:
+				feedback.damage = reduce_elemental_resistance(requested_damage,victim->cryogenic_resistance_percent());
+				atk_event =  de::YOU_INFLICTED_CRYOGENIC_DAMAGE;
+				vic_event = de::HIT_BY_CRYOGENIC_DAMAGE;
+				break;
+
+			case ELEM_RADIOACTIVE:
+				feedback.damage = reduce_elemental_resistance(requested_damage,victim->radiation_resistance_percent());
+				atk_event =  de::YOU_INFLICTED_RADIOACTIVE_DAMAGE;
+				vic_event = de::HIT_BY_RADIOACTIVE_DAMAGE;
+				break;
+			case ELEM_ANTI_MATTER:
+				feedback.damage = reduce_elemental_resistance(requested_damage,victim->anti_matter_resistance_percent());
+				atk_event =  de::YOU_INFLICTED_ANTI_MATTER_DAMAGE;
+				vic_event = de::HIT_BY_ANTI_MATTER_DAMAGE;
+				break;
+			default:
+				return;
+				break;
+		}
+		if(feedback.damage > 0) {
+			victim->hp() -= feedback.damage;
+		}
+		feedback.damage_info.emplace_back(victim->uuid(),feedback.damage,victim->room());
+		feedback.damage_event = atk_event;
+		attacker->damage_event(feedback);
+
+		feedback.damage_info.clear();
+
+		feedback.attacker = attacker->uuid();
+		feedback.damage_event = vic_event;
+		victim->damage_event(feedback);
+	}
+	void incendiary_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
+		send_elemental(attacker,victim,requested_damage,ELEM_INCENDIARY);
 	}
 
-	void incendiary_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_FIRE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->incendiary_resistance_percent()));
+	void explosive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
+		send_elemental(attacker,victim,requested_damage,ELEM_EXPLOSIVE);
 	}
 
-	void explosive_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_EXPLOSIVE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->explosive_resistance_percent()));
+	void shrapnel_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
+		send_elemental(attacker,victim,requested_damage,ELEM_SHRAPNEL);
 	}
-	void shrapnel_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_SHRAPNEL_DAMAGE(), reduce_elemental_resistance(requested_damage,player->shrapnel_resistance_percent()));
+
+	void corrosive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
+		send_elemental(attacker,victim,requested_damage,ELEM_CORROSIVE);
 	}
-	void corrosive_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_CORROSIVE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->corrosive_resistance_percent()));
+	void cryogenic_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
+		send_elemental(attacker,victim,requested_damage,ELEM_CRYOGENIC);
 	}
-	void cryogenic_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_CRYOGENIC_DAMAGE(), reduce_elemental_resistance(requested_damage,player->cryogenic_resistance_percent()));
+	void radioactive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
+		send_elemental(attacker,victim,requested_damage,ELEM_RADIOACTIVE);
 	}
-	void radioactive_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_RADIOACTIVE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->radiation_resistance_percent()));
+	void emp_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
+		send_elemental(attacker,victim,requested_damage,ELEM_EMP);
 	}
-	void emp_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_EMP_DAMAGE(), reduce_elemental_resistance(requested_damage,player->emp_resistance_percent()));
+	void shock_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
+		send_elemental(attacker,victim,requested_damage,ELEM_SHOCK);
 	}
-	void shock_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_SHOCK_DAMAGE(), reduce_elemental_resistance(requested_damage,player->shock_resistance_percent()));
-	}
-	void anti_matter_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_ANTI_MATTER_DAMAGE(), reduce_elemental_resistance(requested_damage,player->anti_matter_resistance_percent()));
+	void anti_matter_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
+		send_elemental(attacker,victim,requested_damage,ELEM_ANTI_MATTER);
 	}
 
 	/**
@@ -105,65 +174,41 @@ namespace mods::weapons::elemental {
 			shock = (rifle_variant ? rifle_variant->shock_damage_percent : weapon->rifle()->attributes->shock_damage) * 0.01;
 			anti_matter = (rifle_variant ? rifle_variant->anti_matter_damage_percent : weapon->rifle()->attributes->anti_matter_damage) * 0.01;
 		}
-		for(const auto& elem : mods::forge_engine::fetch_valid_elemental_types()) {
-			switch((elemental_types_t)elem) {
-				case ELEM_INCENDIARY:
-					if(incendiary > 0.0) {
-						m_debug("weapon has incendiary damage. processing...");
-						incendiary_damage(victim, feedback.damage * incendiary);
-					}
-					break;
-				case ELEM_EXPLOSIVE:
-					if(explosive > 0.0) {
-						m_debug("weapon has explosive damage. processing...");
-						explosive_damage(victim, feedback.damage * explosive);
-					}
-					break;
-				case ELEM_SHRAPNEL:
-					if(shrapnel > 0.0) {
-						m_debug("weapon has shrapnel damage. processing...");
-						shrapnel_damage(victim, feedback.damage * shrapnel);
-					}
-					break;
-				case ELEM_CORROSIVE:
-					if(corrosive > 0.0) {
-						m_debug("weapon has corrosive damage. processing...");
-						corrosive_damage(victim, feedback.damage * corrosive);
-					}
-					break;
-				case ELEM_CRYOGENIC:
-					if(cryogenic > 0.0) {
-						m_debug("weapon has cryogenic damage. processing...");
-						cryogenic_damage(victim, feedback.damage * cryogenic);
-					}
-					break;
-				case ELEM_RADIOACTIVE:
-					if(radioactive > 0.0) {
-						m_debug("weapon has radioactive damage. processing...");
-						radioactive_damage(victim, feedback.damage * radioactive);
-					}
-					break;
-				case ELEM_EMP:
-					if(emp > 0.0) {
-						m_debug("weapon has emp damage. processing...");
-						emp_damage(victim, feedback.damage * emp);
-					}
-					break;
-				case ELEM_SHOCK:
-					if(shock > 0.0) {
-						m_debug("weapon has shock damage. processing...");
-						shock_damage(victim, feedback.damage * shock);
-					}
-					break;
-				case ELEM_ANTI_MATTER:
-					if(anti_matter > 0.0) {
-						m_debug("weapon has anti_matter damage. processing...");
-						anti_matter_damage(victim, feedback.damage * anti_matter);
-					}
-					break;
-				default:
-					break;
-			}
+		if(incendiary > 0.0) {
+			m_debug("weapon has incendiary damage. processing...");
+			incendiary_damage(attacker,victim, feedback.damage * incendiary);
+		}
+		if(explosive > 0.0) {
+			m_debug("weapon has explosive damage. processing...");
+			explosive_damage(attacker,victim, feedback.damage * explosive);
+		}
+		if(shrapnel > 0.0) {
+			m_debug("weapon has shrapnel damage. processing...");
+			shrapnel_damage(attacker,victim, feedback.damage * shrapnel);
+		}
+		if(corrosive > 0.0) {
+			m_debug("weapon has corrosive damage. processing...");
+			corrosive_damage(attacker,victim, feedback.damage * corrosive);
+		}
+		if(cryogenic > 0.0) {
+			m_debug("weapon has cryogenic damage. processing...");
+			cryogenic_damage(attacker,victim, feedback.damage * cryogenic);
+		}
+		if(radioactive > 0.0) {
+			m_debug("weapon has radioactive damage. processing...");
+			radioactive_damage(attacker,victim, feedback.damage * radioactive);
+		}
+		if(emp > 0.0) {
+			m_debug("weapon has emp damage. processing...");
+			emp_damage(attacker,victim, feedback.damage * emp);
+		}
+		if(shock > 0.0) {
+			m_debug("weapon has shock damage. processing...");
+			shock_damage(attacker,victim, feedback.damage * shock);
+		}
+		if(anti_matter > 0.0) {
+			m_debug("weapon has anti_matter damage. processing...");
+			anti_matter_damage(attacker,victim, feedback.damage * anti_matter);
 		}
 	}
 
@@ -197,7 +242,7 @@ namespace mods::weapons::elemental {
 		auto obj = create_object(ITEM_RIFLE,"g36c.yml");
 		player->incendiary_resistance_percent() = resistance;
 		player->send("Your resistance: %f\r\n",player->incendiary_resistance_percent());
-		incendiary_damage(player,damage);
+		incendiary_damage(player,player,damage);
 	}
 
 	void init() {

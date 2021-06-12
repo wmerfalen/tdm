@@ -569,6 +569,8 @@ namespace mods {
 			mob->cd()->carrying = nullptr;
 			mob->cd()->mob_specials.vnum = nr;
 			mob->cd()->points = mob_proto[i].points;
+			mob->cd()->real_abils = mob_proto[i].real_abils;
+			mob->cd()->player.level = mob_proto[i].player.level;
 
 			mob->set_time_birth(time(0));
 			mob->set_time_played(0);

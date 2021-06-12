@@ -1695,6 +1695,72 @@ namespace mods {
 				std::cerr << "[damage_event]: UNHANDLED case!->'" << e << "'\n";
 #endif
 				break;
+			case damage_event_t::YOU_INFLICTED_MELEE_ATTACK:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_MELEE_ATTACK(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_BLADED_MELEE_ATTACK:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_BLADED_MELEE_ATTACK(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_BLUNT_MELEE_ATTACK:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_BLUNT_MELEE_ATTACK(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_INCENDIARY_DAMAGE:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_INCENDIARY_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_RADIOACTIVE_DAMAGE:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_RADIOACTIVE_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_ANTI_MATTER_DAMAGE:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_ANTI_MATTER_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_CORROSIVE_DAMAGE:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_CORROSIVE_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_EMP_DAMAGE:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_EMP_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_EXPLOSIVE_DAMAGE:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_EXPLOSIVE_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_SHRAPNEL_DAMAGE:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_SHRAPNEL_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_CRYOGENIC_DAMAGE:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_CRYOGENIC_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::YOU_INFLICTED_SHOCK_DAMAGE:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_SHOCK_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+
+			case damage_event_t::HIT_BY_INCENDIARY_DAMAGE:
+				this->queue_up(CAT(MSG_HIT_BY_INCENDIARY_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::HIT_BY_RADIOACTIVE_DAMAGE:
+				this->queue_up(CAT(MSG_HIT_BY_RADIOACTIVE_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::HIT_BY_ANTI_MATTER_DAMAGE:
+				this->queue_up(CAT(MSG_HIT_BY_ANTI_MATTER_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::HIT_BY_CORROSIVE_DAMAGE:
+				this->queue_up(CAT(MSG_HIT_BY_CORROSIVE_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::HIT_BY_EMP_DAMAGE:
+				this->queue_up(CAT(MSG_HIT_BY_EMP_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::HIT_BY_EXPLOSIVE_DAMAGE:
+				this->queue_up(CAT(MSG_HIT_BY_EXPLOSIVE_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::HIT_BY_SHRAPNEL_DAMAGE:
+				this->queue_up(CAT(MSG_HIT_BY_SHRAPNEL_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::HIT_BY_CRYOGENIC_DAMAGE:
+				this->queue_up(CAT(MSG_HIT_BY_CRYOGENIC_DAMAGE(),"[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::HIT_BY_SHOCK_DAMAGE:
+				this->queue_up(CAT(MSG_HIT_BY_SHOCK_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
+				break;
+
+
 			case damage_event_t::YOU_GOT_HIT_BY_INCENDIARY_AMMO:
 				this->queue_up(CAT(mods::values::MSG_YOU_GOT_HIT_BY_INCENDIARY_AMMO(),"[from:",dirstr(feedback.from_direction),"]"));
 				break;
@@ -1760,6 +1826,7 @@ namespace mods {
 				break;
 			case damage_event_t::YOU_INJURED_SOMEONE_EVENT:
 				this->queue_up(MSG_YOU_INJURED_SOMEONE());
+				break;
 			case damage_event_t::YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT:
 				sendln(CAT(MSG_YOU_GOT_HIT_BY_REFLECTED_MUNTIONS(),"[",feedback.damage,"][from:",dirstr(feedback.from_direction)));
 				break;

@@ -412,8 +412,8 @@ BLOCK_SIZE	mail.h	29;"	d
 BOARD_MAGIC	boards.h	17;"	d
 BOARD_RNUM	boards.h	41;"	d
 BOARD_VNUM	boards.h	36;"	d
-BOOL_CASE	db.cpp	1646;"	d	file:
-BOOL_CASE	db.cpp	1710;"	d	file:
+BOOL_CASE	db.cpp	1656;"	d	file:
+BOOL_CASE	db.cpp	1720;"	d	file:
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ARMOR_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::armor
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ATTACHMENT_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::attachment
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONSUMABLE_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::consumable
@@ -482,8 +482,8 @@ CAP_ALL	mods/util.hpp	/^	static constexpr uint8_t CAP_ALL = 0;$/;"	m	namespace:m
 CAP_ANY	mods/util.hpp	/^	static constexpr uint8_t CAP_ANY = 0;$/;"	m	namespace:mods::util
 CAP_SINGLE	mods/util.hpp	/^	static constexpr uint8_t CAP_SINGLE = 0;$/;"	m	namespace:mods::util
 CARPET	structs.h	/^			CARPET,$/;"	m	struct:room_data	typeref:enum:room_data::
-CASE	db.cpp	1643;"	d	file:
-CASE	db.cpp	1709;"	d	file:
+CASE	db.cpp	1653;"	d	file:
+CASE	db.cpp	1719;"	d	file:
 CASE_MOON	mods/date-time.cpp	217;"	d	file:
 CAST_POTION	spells.h	18;"	d
 CAST_SCROLL	spells.h	21;"	d
@@ -761,10 +761,10 @@ CCRED	screen.h	30;"	d
 CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
-CGET	mods/values.hpp	1226;"	d
-CGET	mods/values.hpp	613;"	d
+CGET	mods/values.hpp	1250;"	d
+CGET	mods/values.hpp	625;"	d
 CGET_DEF	mods/values.cpp	20;"	d	file:
-CGET_DEF	mods/values.cpp	2472;"	d	file:
+CGET_DEF	mods/values.cpp	2520;"	d	file:
 CHAIN	mods/weapon.hpp	/^		CHAIN,$/;"	e	enum:mods::weapon::melee_t
 CHAINSAW	mods/weapon.hpp	/^		CHAINSAW,$/;"	e	enum:mods::weapon::melee_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
@@ -1028,8 +1028,8 @@ DISORIENT	mods/weapon-types.hpp	/^		DISORIENT,$/;"	e	enum:mods::weapon::capabili
 DISPLAY	mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY = "A small LED display on the panel says: ";$/;"	m	struct:mods::mini_games::wires
 DISPLAY_ACMD	mods/players/db-load.hpp	/^		DISPLAY_ACMD,$/;"	e	enum:mods::players::db_load::save_from_t
 DM	telnet.h	55;"	d
-DMG_DEBUG	mods/weapons/damage-types.cpp	1297;"	d	file:
-DMG_DUMP	mods/weapons/damage-types.cpp	523;"	d	file:
+DMG_DEBUG	mods/weapons/damage-types.cpp	1315;"	d	file:
+DMG_DUMP	mods/weapons/damage-types.cpp	536;"	d	file:
 DO	telnet.h	44;"	d
 DONT	telnet.h	43;"	d
 DONTSET	mods/flags.hpp	/^		DONTSET,$/;"	e	enum:mods::flags::plr
@@ -1589,21 +1589,21 @@ HISTFILE_FILE	mods/player.cpp	/^	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_
 HISTFILE_LMDB	mods/player.cpp	/^	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3$/;"	e	enum:histfile_type_t	file:
 HISTFILE_STRATEGY	mods/player.cpp	/^static constexpr histfile_type_t HISTFILE_STRATEGY = histfile_type_t::HISTFILE_FILE;$/;"	v	file:
 HISTORY_SIZE	structs.h	694;"	d
-HIT_BY_ANTI_MATTER_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_ANTI_MATTER_MELEE_ATTACK,$/;"	e	enum:uint16_t
+HIT_BY_ANTI_MATTER_DAMAGE	mods/damage-event.hpp	/^	HIT_BY_ANTI_MATTER_DAMAGE,$/;"	e	enum:uint16_t
 HIT_BY_BLADED_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_BLADED_MELEE_ATTACK,$/;"	e	enum:uint16_t
 HIT_BY_BLUNT_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_BLUNT_MELEE_ATTACK,$/;"	e	enum:uint16_t
-HIT_BY_CORROSIVE_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_CORROSIVE_MELEE_ATTACK,$/;"	e	enum:uint16_t
+HIT_BY_CORROSIVE_DAMAGE	mods/damage-event.hpp	/^	HIT_BY_CORROSIVE_DAMAGE,$/;"	e	enum:uint16_t
 HIT_BY_CRITICAL_RIFLE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_CRITICAL_RIFLE_ATTACK,$/;"	e	enum:uint16_t
 HIT_BY_CRITICAL_SPRAY_ATTACK	mods/damage-event.hpp	/^	HIT_BY_CRITICAL_SPRAY_ATTACK,$/;"	e	enum:uint16_t
-HIT_BY_CRYOGENIC_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_CRYOGENIC_MELEE_ATTACK,$/;"	e	enum:uint16_t
-HIT_BY_EMP_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_EMP_MELEE_ATTACK,$/;"	e	enum:uint16_t
-HIT_BY_EXPLOSIVE_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_EXPLOSIVE_MELEE_ATTACK,$/;"	e	enum:uint16_t
-HIT_BY_INCENDIARY_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_INCENDIARY_MELEE_ATTACK,$/;"	e	enum:uint16_t
+HIT_BY_CRYOGENIC_DAMAGE	mods/damage-event.hpp	/^	HIT_BY_CRYOGENIC_DAMAGE,$/;"	e	enum:uint16_t
+HIT_BY_EMP_DAMAGE	mods/damage-event.hpp	/^	HIT_BY_EMP_DAMAGE,$/;"	e	enum:uint16_t
+HIT_BY_EXPLOSIVE_DAMAGE	mods/damage-event.hpp	/^	HIT_BY_EXPLOSIVE_DAMAGE,$/;"	e	enum:uint16_t
+HIT_BY_INCENDIARY_DAMAGE	mods/damage-event.hpp	/^	HIT_BY_INCENDIARY_DAMAGE,$/;"	e	enum:uint16_t
 HIT_BY_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_MELEE_ATTACK,$/;"	e	enum:uint16_t
-HIT_BY_RADIOACTIVE_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_RADIOACTIVE_MELEE_ATTACK,$/;"	e	enum:uint16_t
+HIT_BY_RADIOACTIVE_DAMAGE	mods/damage-event.hpp	/^	HIT_BY_RADIOACTIVE_DAMAGE,$/;"	e	enum:uint16_t
 HIT_BY_RIFLE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_RIFLE_ATTACK,$/;"	e	enum:uint16_t
-HIT_BY_SHOCK_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_SHOCK_MELEE_ATTACK,$/;"	e	enum:uint16_t
-HIT_BY_SHRAPNEL_MELEE_ATTACK	mods/damage-event.hpp	/^	HIT_BY_SHRAPNEL_MELEE_ATTACK,$/;"	e	enum:uint16_t
+HIT_BY_SHOCK_DAMAGE	mods/damage-event.hpp	/^	HIT_BY_SHOCK_DAMAGE,$/;"	e	enum:uint16_t
+HIT_BY_SHRAPNEL_DAMAGE	mods/damage-event.hpp	/^	HIT_BY_SHRAPNEL_DAMAGE,$/;"	e	enum:uint16_t
 HIT_BY_SPRAY_ATTACK	mods/damage-event.hpp	/^	HIT_BY_SPRAY_ATTACK,$/;"	e	enum:uint16_t
 HK21	mods/orm/support.hpp	/^		const std::string HK21 = "HK21";$/;"	m	struct:mods::orm::support
 HK21	mods/weapon.hpp	/^			HK21 = 2$/;"	e	enum:mods::weapon::support::primary_choice_t
@@ -2343,7 +2343,7 @@ MENTOC_ARMOR_TYPES_SEQUENCE	mods/item-types.hpp	406;"	d
 MENTOC_ATTACHMENT_MEMBERS_TUPLE	mods/item-types.hpp	378;"	d
 MENTOC_ATTACHMENT_TYPES_SEQUENCE	mods/item-types.hpp	369;"	d
 MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	55;"	d
-MENTOC_BITVECTOR	mods/builder.cpp	4008;"	d	file:
+MENTOC_BITVECTOR	mods/builder.cpp	4038;"	d	file:
 MENTOC_CF	mods/yaml.hpp	102;"	d
 MENTOC_CF	mods/yaml.hpp	84;"	d
 MENTOC_CF	mods/yaml.hpp	89;"	d
@@ -2439,10 +2439,10 @@ MENTOC_LAZY	mods/rooms.hpp	100;"	d
 MENTOC_LAZY	mods/rooms.hpp	118;"	d
 MENTOC_LAZY_COMP	mods/doors.hpp	280;"	d
 MENTOC_LAZY_COMP	mods/doors.hpp	291;"	d
-MENTOC_LAZY_INT	mods/builder.cpp	1831;"	d	file:
-MENTOC_LAZY_INT	mods/builder.cpp	1850;"	d	file:
-MENTOC_LAZY_ME	mods/builder.cpp	3428;"	d	file:
-MENTOC_LAZY_ME	mods/builder.cpp	3437;"	d	file:
+MENTOC_LAZY_INT	mods/builder.cpp	1842;"	d	file:
+MENTOC_LAZY_INT	mods/builder.cpp	1861;"	d	file:
+MENTOC_LAZY_ME	mods/builder.cpp	3458;"	d	file:
+MENTOC_LAZY_ME	mods/builder.cpp	3467;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	1156;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	1168;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	1175;"	d	file:
@@ -2455,12 +2455,12 @@ MENTOC_LAZY_POS	act.debug.cpp	221;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	236;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	247;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	269;"	d	file:
-MENTOC_LAZY_SHOP	mods/builder.cpp	1921;"	d	file:
-MENTOC_LAZY_SHOP	mods/builder.cpp	1946;"	d	file:
+MENTOC_LAZY_SHOP	mods/builder.cpp	1932;"	d	file:
+MENTOC_LAZY_SHOP	mods/builder.cpp	1957;"	d	file:
 MENTOC_LAZY_SHOP	mods/builder.cpp	67;"	d	file:
 MENTOC_LAZY_SHOP	mods/builder.cpp	92;"	d	file:
-MENTOC_LAZY_STR	mods/builder.cpp	1815;"	d	file:
-MENTOC_LAZY_STR	mods/builder.cpp	1830;"	d	file:
+MENTOC_LAZY_STR	mods/builder.cpp	1826;"	d	file:
+MENTOC_LAZY_STR	mods/builder.cpp	1841;"	d	file:
 MENTOC_LIST_EXTRACT	mods/builder.hpp	165;"	d
 MENTOC_MELEE_MEMBERS_TUPLE	mods/item-types.hpp	233;"	d
 MENTOC_MELEE_TYPES_SEQUENCE	mods/item-types.hpp	200;"	d
@@ -2510,10 +2510,10 @@ MENTOC_S	mods/orm/room.cpp	117;"	d	file:
 MENTOC_S	mods/orm/room.cpp	135;"	d	file:
 MENTOC_S	mods/orm/room.cpp	148;"	d	file:
 MENTOC_S	mods/orm/room.cpp	169;"	d	file:
-MENTOC_SHOW_FLAG	mods/builder.cpp	4044;"	d	file:
-MENTOC_SHOW_OBJ	mods/builder.cpp	2783;"	d	file:
-MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2775;"	d	file:
-MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2767;"	d	file:
+MENTOC_SHOW_FLAG	mods/builder.cpp	4074;"	d	file:
+MENTOC_SHOW_OBJ	mods/builder.cpp	2804;"	d	file:
+MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2796;"	d	file:
+MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2788;"	d	file:
 MENTOC_T	mods/aoe.hpp	32;"	d
 MENTOC_T	mods/aoe.hpp	55;"	d
 MENTOC_T	mods/lmdb.hpp	68;"	d
@@ -2542,7 +2542,7 @@ MENTOC_TO_STR	mods/weapon.hpp	400;"	d
 MENTOC_TO_STR	mods/weapon.hpp	407;"	d
 MENTOC_TRAP_MEMBERS_TUPLE	mods/item-types.hpp	515;"	d
 MENTOC_TRAP_TYPES_SEQUENCE	mods/item-types.hpp	512;"	d
-MENTOC_TYPE	mods/builder.cpp	3982;"	d	file:
+MENTOC_TYPE	mods/builder.cpp	4012;"	d	file:
 MENTOC_TYPE_LIST_IMPL	mods/item-types.hpp	874;"	d
 MENTOC_UPTR	structs.h	1037;"	d
 MENTOC_UPTR	structs.h	1039;"	d
@@ -2552,7 +2552,7 @@ MENTOC_VEHICLE_MEMBERS_TUPLE	mods/item-types.hpp	133;"	d
 MENTOC_VEHICLE_TYPES_SEQUENCE	mods/item-types.hpp	122;"	d
 MENTOC_WEAPON	mods/builder.cpp	291;"	d	file:
 MENTOC_WEAPON	mods/builder.cpp	308;"	d	file:
-MENTOC_WEAR	mods/builder.cpp	3965;"	d	file:
+MENTOC_WEAR	mods/builder.cpp	3995;"	d	file:
 MENTOC_WEAR_PLACES_SEQ	mods/item-types.hpp	51;"	d
 MENTOC_YAML_DESC	mods/item-types.hpp	560;"	d
 MENTOC_YAML_DESC_IMPL	mods/item-types.hpp	559;"	d
@@ -2560,7 +2560,7 @@ MENU	config.cpp	/^const char *MENU =$/;"	v
 MESS_FILE	db.h	91;"	d
 METAL_HATCH	structs.h	/^			METAL_HATCH,$/;"	m	struct:room_data	typeref:enum:room_data::
 METAL_WALL	structs.h	/^			METAL_WALL,$/;"	m	struct:room_data	typeref:enum:room_data::
-MFEEDBACK	mods/weapons/damage-types.cpp	542;"	d	file:
+MFEEDBACK	mods/weapons/damage-types.cpp	555;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	87;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	96;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	86;"	d	file:
@@ -2703,20 +2703,20 @@ MSG_FIRE_DAMAGE	mods/values-list.cpp	/^MSG_FIRE_DAMAGE,"[%d] You suffer burns fr
 MSG_HEADING	boards.h	44;"	d
 MSG_HEADSHOT	mods/values-list.cpp	/^MSG_HEADSHOT,"{red}***HEADSHOT***{\/red} -- "$/;"	v
 MSG_HIT	mods/values-list.cpp	/^MSG_HIT,"{yel}--[HIT]--{\/yel}"$/;"	v
-MSG_HIT_BY_ANTI_MATTER_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_ANTI_MATTER_MELEE_ATTACK,"{red}*** YOU TAKE {blu}ANTI-MATTER{\/blu}{red} MELEE DAMAGE ***{\/red} -- "$/;"	v
+MSG_HIT_BY_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_HIT_BY_ANTI_MATTER_DAMAGE,"{red}*** YOU TAKE {blu}ANTI-MATTER{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
 MSG_HIT_BY_BLADED_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_BLADED_MELEE_ATTACK,"{red}*** YOU ARE HIT BY A BLADED WEAPON ***{\/red} -- "$/;"	v
 MSG_HIT_BY_BLUNT_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_BLUNT_MELEE_ATTACK,"{red}*** YOU ARE HIT BY A BLUNT FORCE WEAPON ***{\/red} -- "$/;"	v
-MSG_HIT_BY_CORROSIVE_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_CORROSIVE_MELEE_ATTACK,"{red}*** YOU TAKE {grn}CORROSIVE{\/grn}{red} MELEE DAMAGE ***{\/red} -- "$/;"	v
-MSG_HIT_BY_CRYOGENIC_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_CRYOGENIC_MELEE_ATTACK,"{red}*** YOU TAKE {blu}CRYOGENIC{\/blu}{red} MELEE DAMAGE ***{\/red} -- "$/;"	v
-MSG_HIT_BY_EMP_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_EMP_MELEE_ATTACK,"{red}*** YOU TAKE {blu}EMP{\/blu}{red} MELEE DAMAGE ***{\/red} -- "$/;"	v
-MSG_HIT_BY_EXPLOSIVE_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_EXPLOSIVE_MELEE_ATTACK,"{red}*** YOU TAKE {yel}EXPLOSIVE{\/yel}{red} MELEE DAMAGE ***{\/red} -- "$/;"	v
+MSG_HIT_BY_CORROSIVE_DAMAGE	mods/values-list.cpp	/^MSG_HIT_BY_CORROSIVE_DAMAGE,"{red}*** YOU TAKE {grn}CORROSIVE{\/grn}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_HIT_BY_CRYOGENIC_DAMAGE	mods/values-list.cpp	/^MSG_HIT_BY_CRYOGENIC_DAMAGE,"{red}*** YOU TAKE {blu}CRYOGENIC{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_HIT_BY_EMP_DAMAGE	mods/values-list.cpp	/^MSG_HIT_BY_EMP_DAMAGE,"{red}*** YOU TAKE {blu}EMP{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_HIT_BY_EXPLOSIVE_DAMAGE	mods/values-list.cpp	/^MSG_HIT_BY_EXPLOSIVE_DAMAGE,"{red}*** YOU TAKE {yel}EXPLOSIVE{\/yel}{red} DAMAGE ***{\/red} -- "$/;"	v
 MSG_HIT_BY_HEADSHOT	mods/values-list.cpp	/^MSG_HIT_BY_HEADSHOT,"{red}*** YOU'VE BEEN HEADSHOTTED ***{\/red} -- "$/;"	v
-MSG_HIT_BY_INCENDIARY_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_INCENDIARY_MELEE_ATTACK,"{red}*** YOU TAKE {yel}INCENDIARY{\/yel}{red} MELEE DAMAGE ***{\/red} -- "$/;"	v
+MSG_HIT_BY_INCENDIARY_DAMAGE	mods/values-list.cpp	/^MSG_HIT_BY_INCENDIARY_DAMAGE,"{red}*** YOU TAKE {yel}INCENDIARY{\/yel}{red} DAMAGE ***{\/red} -- "$/;"	v
 MSG_HIT_BY_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_MELEE_ATTACK,"{red}*** YOU ARE HIT BY A MELEE WEAPON ***{\/red} -- "$/;"	v
-MSG_HIT_BY_RADIOACTIVE_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_RADIOACTIVE_MELEE_ATTACK,"{red}*** YOU TAKE {grn}RADIOACTIVE{\/blu}{red} MELEE DAMAGE ***{\/red} -- "$/;"	v
+MSG_HIT_BY_RADIOACTIVE_DAMAGE	mods/values-list.cpp	/^MSG_HIT_BY_RADIOACTIVE_DAMAGE,"{red}*** YOU TAKE {grn}RADIOACTIVE{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
 MSG_HIT_BY_RIFLE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOU ARE HIT ***{\/red} -- "$/;"	v
-MSG_HIT_BY_SHOCK_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_SHOCK_MELEE_ATTACK,"{red}*** YOU TAKE {blu}SHOCK{\/blu}{red} MELEE DAMAGE ***{\/red} -- "$/;"	v
-MSG_HIT_BY_SHRAPNEL_MELEE_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_SHRAPNEL_MELEE_ATTACK,"{red}*** YOU TAKE {blu}SHRAPNEL{\/blu}{red} MELEE DAMAGE ***{\/red} -- "$/;"	v
+MSG_HIT_BY_SHOCK_DAMAGE	mods/values-list.cpp	/^MSG_HIT_BY_SHOCK_DAMAGE,"{red}*** YOU TAKE {blu}SHOCK{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_HIT_BY_SHRAPNEL_DAMAGE	mods/values-list.cpp	/^MSG_HIT_BY_SHRAPNEL_DAMAGE,"{red}*** YOU TAKE {blu}SHRAPNEL{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
 MSG_HIT_BY_SPRAY_ATTACK	mods/values-list.cpp	/^MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOU ARE HIT BY A SPRAY OF BULLETS ***{\/red} -- "$/;"	v
 MSG_LEVEL	boards.h	46;"	d
 MSG_MISSED_TARGET	mods/values-list.cpp	/^MSG_MISSED_TARGET,"You missed your target!"$/;"	v
@@ -2744,7 +2744,19 @@ MSG_YOU_ARE_DISORIENTED	mods/values-list.cpp	/^MSG_YOU_ARE_DISORIENTED,"You beco
 MSG_YOU_ARE_INJURED	mods/values-list.cpp	/^MSG_YOU_ARE_INJURED,"{red}***YOU ARE INJURED***{\/red} --"$/;"	v
 MSG_YOU_DISORIENT_SOMEONE	mods/values-list.cpp	/^MSG_YOU_DISORIENT_SOMEONE,"You disorient your target!"$/;"	v
 MSG_YOU_GOT_HIT_BY_INCENDIARY_AMMO	mods/values-list.cpp	/^MSG_YOU_GOT_HIT_BY_INCENDIARY_AMMO,"{yel} Your equipment burns from incendiary damage! {\/yel}"$/;"	v
+MSG_YOU_INFLICTED_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_YOU_INFLICTED_ANTI_MATTER_DAMAGE,"{red}*** YOU INFLICTED {blu}ANTI-MATTER{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_YOU_INFLICTED_BLADED_MELEE_ATTACK	mods/values-list.cpp	/^MSG_YOU_INFLICTED_BLADED_MELEE_ATTACK,"{red}*** YOU INFLICTED BLADED WEAPON DAMAGE ***{\/red} -- "$/;"	v
+MSG_YOU_INFLICTED_BLUNT_MELEE_ATTACK	mods/values-list.cpp	/^MSG_YOU_INFLICTED_BLUNT_MELEE_ATTACK,"{red}*** YOU INFLICTED BLUNT FORCE WEAPON DAMAGE ***{\/red} -- "$/;"	v
+MSG_YOU_INFLICTED_CORROSIVE_DAMAGE	mods/values-list.cpp	/^MSG_YOU_INFLICTED_CORROSIVE_DAMAGE,"{red}*** YOU INFLICTED {grn}CORROSIVE{\/grn}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_YOU_INFLICTED_CRYOGENIC_DAMAGE	mods/values-list.cpp	/^MSG_YOU_INFLICTED_CRYOGENIC_DAMAGE,"{red}*** YOU INFLICTED {blu}CRYOGENIC{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_YOU_INFLICTED_EMP_DAMAGE	mods/values-list.cpp	/^MSG_YOU_INFLICTED_EMP_DAMAGE,"{red}*** YOU INFLICTED {blu}EMP{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_YOU_INFLICTED_EXPLOSIVE_DAMAGE	mods/values-list.cpp	/^MSG_YOU_INFLICTED_EXPLOSIVE_DAMAGE,"{red}*** YOU INFLICTED {yel}EXPLOSIVE{\/yel}{red} DAMAGE ***{\/red} -- "$/;"	v
 MSG_YOU_INFLICTED_INCENDIARY_AMMO	mods/values-list.cpp	/^MSG_YOU_INFLICTED_INCENDIARY_AMMO,"{grn} You inflict incendiary damage on your target! {\/grn}"$/;"	v
+MSG_YOU_INFLICTED_INCENDIARY_DAMAGE	mods/values-list.cpp	/^MSG_YOU_INFLICTED_INCENDIARY_DAMAGE,"{red}*** YOU INFLICTED {yel}INCENDIARY{\/yel}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_YOU_INFLICTED_MELEE_ATTACK	mods/values-list.cpp	/^MSG_YOU_INFLICTED_MELEE_ATTACK,"{red}*** YOU INFLICTED MELEE DAMAGE ***{\/red} -- "$/;"	v
+MSG_YOU_INFLICTED_RADIOACTIVE_DAMAGE	mods/values-list.cpp	/^MSG_YOU_INFLICTED_RADIOACTIVE_DAMAGE,"{red}*** YOU INFLICTED {grn}RADIOACTIVE{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_YOU_INFLICTED_SHOCK_DAMAGE	mods/values-list.cpp	/^MSG_YOU_INFLICTED_SHOCK_DAMAGE,"{red}*** YOU INFLICTED {blu}SHOCK{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
+MSG_YOU_INFLICTED_SHRAPNEL_DAMAGE	mods/values-list.cpp	/^MSG_YOU_INFLICTED_SHRAPNEL_DAMAGE,"{red}*** YOU INFLICTED {blu}SHRAPNEL{\/blu}{red} DAMAGE ***{\/red} -- "$/;"	v
 MSG_YOU_INJURED_SOMEONE	mods/values-list.cpp	/^MSG_YOU_INJURED_SOMEONE,"{red}*** YOU INJURED YOUR TARGET ***{\/red}!"$/;"	v
 MUZZLE_BRAKE	mods/weapon.hpp	/^		COMPENSATOR, MUZZLE_BRAKE,EXTENDED,$/;"	e	enum:mods::weapon::barrel_t
 M_LAZY	mods/forge-engine/util.cpp	132;"	d	file:
@@ -3156,8 +3168,8 @@ QYEL	screen.h	43;"	d
 RADIATION	mods/aoe.hpp	/^		RADIATION, \/** Radioactive fallout *\/$/;"	e	enum:mods::aoe::types_t
 RADIOACTIVE	structs.h	/^			RADIOACTIVE, \/** actively emitting radioactivity *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 RANGE	act.wizard.cpp	2298;"	d	file:
-RANGE	db.cpp	1649;"	d	file:
-RANGE	db.cpp	1711;"	d	file:
+RANGE	db.cpp	1659;"	d	file:
+RANGE	db.cpp	1721;"	d	file:
 RANGED_ATTACK	mods/weapon-types.hpp	/^		RANGED_ATTACK,$/;"	e	enum:mods::weapon::capabilities::cap_t
 RARE	mods/randomized-items.hpp	/^	RARE,$/;"	e	enum:mods::rarity_enum_t
 RARE	mods/rarity.hpp	/^		constexpr static float RARE = 0.05034415;$/;"	m	namespace:mods::rarity
@@ -4702,8 +4714,20 @@ YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK	mods/damage-event.hpp	/^	YOU_GOT_HEADSHOT_BY_SP
 YOU_GOT_HIT_BY_AR_SHRAPNEL	mods/damage-event.hpp	/^	YOU_GOT_HIT_BY_AR_SHRAPNEL,$/;"	e	enum:uint16_t
 YOU_GOT_HIT_BY_INCENDIARY_AMMO	mods/damage-event.hpp	/^	YOU_GOT_HIT_BY_INCENDIARY_AMMO,$/;"	e	enum:uint16_t
 YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT	mods/damage-event.hpp	/^	YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT,$/;"	e	enum:uint16_t
+YOU_INFLICTED_ANTI_MATTER_DAMAGE	mods/damage-event.hpp	/^	YOU_INFLICTED_ANTI_MATTER_DAMAGE,$/;"	e	enum:uint16_t
 YOU_INFLICTED_AR_SHRAPNEL	mods/damage-event.hpp	/^	YOU_INFLICTED_AR_SHRAPNEL,$/;"	e	enum:uint16_t
+YOU_INFLICTED_BLADED_MELEE_ATTACK	mods/damage-event.hpp	/^	YOU_INFLICTED_BLADED_MELEE_ATTACK,$/;"	e	enum:uint16_t
+YOU_INFLICTED_BLUNT_MELEE_ATTACK	mods/damage-event.hpp	/^	YOU_INFLICTED_BLUNT_MELEE_ATTACK,$/;"	e	enum:uint16_t
+YOU_INFLICTED_CORROSIVE_DAMAGE	mods/damage-event.hpp	/^	YOU_INFLICTED_CORROSIVE_DAMAGE,$/;"	e	enum:uint16_t
+YOU_INFLICTED_CRYOGENIC_DAMAGE	mods/damage-event.hpp	/^	YOU_INFLICTED_CRYOGENIC_DAMAGE,$/;"	e	enum:uint16_t
+YOU_INFLICTED_EMP_DAMAGE	mods/damage-event.hpp	/^	YOU_INFLICTED_EMP_DAMAGE,$/;"	e	enum:uint16_t
+YOU_INFLICTED_EXPLOSIVE_DAMAGE	mods/damage-event.hpp	/^	YOU_INFLICTED_EXPLOSIVE_DAMAGE,$/;"	e	enum:uint16_t
 YOU_INFLICTED_INCENDIARY_AMMO	mods/damage-event.hpp	/^	YOU_INFLICTED_INCENDIARY_AMMO,$/;"	e	enum:uint16_t
+YOU_INFLICTED_INCENDIARY_DAMAGE	mods/damage-event.hpp	/^	YOU_INFLICTED_INCENDIARY_DAMAGE,$/;"	e	enum:uint16_t
+YOU_INFLICTED_MELEE_ATTACK	mods/damage-event.hpp	/^	YOU_INFLICTED_MELEE_ATTACK,$/;"	e	enum:uint16_t
+YOU_INFLICTED_RADIOACTIVE_DAMAGE	mods/damage-event.hpp	/^	YOU_INFLICTED_RADIOACTIVE_DAMAGE,$/;"	e	enum:uint16_t
+YOU_INFLICTED_SHOCK_DAMAGE	mods/damage-event.hpp	/^	YOU_INFLICTED_SHOCK_DAMAGE,$/;"	e	enum:uint16_t
+YOU_INFLICTED_SHRAPNEL_DAMAGE	mods/damage-event.hpp	/^	YOU_INFLICTED_SHRAPNEL_DAMAGE,$/;"	e	enum:uint16_t
 YOU_INJURED_SOMEONE_EVENT	mods/damage-event.hpp	/^	YOU_INJURED_SOMEONE_EVENT,$/;"	e	enum:uint16_t
 YOU_MISSED_YOUR_TARGET_EVENT	mods/damage-event.hpp	/^	YOU_MISSED_YOUR_TARGET_EVENT,$/;"	e	enum:uint16_t
 YOU_REFLECTED_MUNITIONS_EVENT	mods/damage-event.hpp	/^	YOU_REFLECTED_MUNITIONS_EVENT,$/;"	e	enum:uint16_t
@@ -4711,8 +4735,8 @@ YamlFeedExceptionInfo	mods/object-utils.hpp	/^		YamlFeedExceptionInfo($/;"	f	str
 YamlFeedExceptionInfo	mods/object-utils.hpp	/^	struct YamlFeedExceptionInfo {$/;"	s	namespace:mods::object_utils
 Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Yes	mods/catch2.hpp	/^        Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
-Z	db.cpp	1764;"	d	file:
-Z	db.cpp	1772;"	d	file:
+Z	db.cpp	1774;"	d	file:
+Z	db.cpp	1782;"	d	file:
 ZONE_ERROR	mods/zone.cpp	127;"	d	file:
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -5046,14 +5070,14 @@ __MENTOC_MODS_scripted_sequences_events_HEADER__	mods/scripted-sequence-events.h
 __MENTOC_MODS_scripted_stepS_HEADER__	mods/scripted-step.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/search.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/util.hpp	2;"	d
-__MENTOC_PLR	db.cpp	2238;"	d	file:
+__MENTOC_PLR	db.cpp	2248;"	d	file:
 __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/runners/movement.cpp	7;"	d	file:
 __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	8;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	14;"	d	file:
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1207;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1209;"	d	file:
 __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__	mods/player.cpp	36;"	d	file:
-__MENTOC_SHOW_MELEE_HIT_STATS__	mods/weapons/damage-types.cpp	956;"	d	file:
+__MENTOC_SHOW_MELEE_HIT_STATS__	mods/weapons/damage-types.cpp	969;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ELITE_PROTECTION_DEBUG_OUTPUT__	mods/armor/elite-protection.cpp	4;"	d	file:
@@ -5273,7 +5297,7 @@ ammunition_amount	mods/rifle-attachments.hpp	/^			int16_t ammunition_amount;				
 ammunition_amount	mods/weapons/damage-calculator.cpp	/^	int16_t ammunition_amount($/;"	f	namespace:mods::weapons::damage_calculator
 amount	mods/deferred.hpp	/^		int64_t amount;$/;"	m	struct:mods::chunk_affect_t
 another_hour	weather.cpp	/^void another_hour(int mode) {$/;"	f
-anti_matter_damage	mods/weapons/elemental.cpp	/^	void anti_matter_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
+anti_matter_damage	mods/weapons/elemental.cpp	/^	void anti_matter_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 anti_matter_damage_percent	mods/rifle-attachments.hpp	/^			int16_t anti_matter_damage_percent;$/;"	m	struct:mods::rifle_attachments_t
 anti_matter_resistance_percent	mods/player.cpp	/^	int16_t& player::anti_matter_resistance_percent() {$/;"	f	class:mods::player
 any_one_arg	interpreter.cpp	/^char *any_one_arg(char *argument, char *first_arg) {$/;"	f
@@ -6113,7 +6137,7 @@ cooldown_between_shots	mods/weapon.hpp	/^			float cooldown_between_shots;$/;"	m	
 coordinates	mods/builder/coordinates.hpp	/^namespace mods::builder::coordinates {$/;"	n	class:mods::builder
 core_dump	utils.h	56;"	d
 core_dump_real	utils.cpp	/^void core_dump_real(const char *who, int line) {$/;"	f
-corrosive_damage	mods/weapons/elemental.cpp	/^	void corrosive_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
+corrosive_damage	mods/weapons/elemental.cpp	/^	void corrosive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 corrosive_damage_percent	mods/rifle-attachments.hpp	/^			int16_t corrosive_damage_percent;$/;"	m	struct:mods::rifle_attachments_t
 corrosive_resistance_percent	mods/player.cpp	/^	int16_t& player::corrosive_resistance_percent() {$/;"	f	class:mods::player
 cost	structs.h	/^	int	cost;		\/* Value when sold (gp.)            *\/$/;"	m	struct:obj_flag_data
@@ -6214,7 +6238,7 @@ critical_chance	mods/weapon.hpp	/^			float critical_chance;$/;"	m	struct:mods::w
 critical_range	mods/weapon.hpp	/^			int critical_range;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 cron	mods/cron.hpp	/^			cron(uint64_t tick_resolution) : m_tres(tick_resolution) {$/;"	f	class:mods::cron
 cron	mods/cron.hpp	/^	class cron {$/;"	c	namespace:mods
-cryogenic_damage	mods/weapons/elemental.cpp	/^	void cryogenic_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
+cryogenic_damage	mods/weapons/elemental.cpp	/^	void cryogenic_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 cryogenic_damage_percent	mods/rifle-attachments.hpp	/^			int16_t cryogenic_damage_percent;$/;"	m	struct:mods::rifle_attachments_t
 cryogenic_grenade_count	mods/classes/ghost.cpp	/^	uint8_t ghost::cryogenic_grenade_count() const {$/;"	f	class:mods::classes::ghost
 cryogenic_resistance_percent	mods/player.cpp	/^	int16_t& player::cryogenic_resistance_percent() {$/;"	f	class:mods::player
@@ -7067,7 +7091,6 @@ electric	mods/projectile.cpp	/^			int electric;$/;"	m	struct:mods::projectile::e
 electronics	mods/player.hpp	/^			uint16_t& electronics() {$/;"	f	struct:mods::player
 elemental	mods/weapons/elemental.cpp	/^namespace mods::weapons::elemental {$/;"	n	class:mods::weapons	file:
 elemental	mods/weapons/elemental.hpp	/^namespace mods::weapons::elemental {$/;"	n	class:mods::weapons
-elemental_damage	mods/weapons/elemental.cpp	/^	void elemental_damage(player_ptr_t& player,std::string_view message,int damage) {$/;"	f	namespace:mods::weapons::elemental
 elemental_damages	mods/forge-engine/generator.hpp	/^		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_damages;$/;"	m	struct:mods::forge_engine::generated_explosive_t
 elemental_resistances	mods/forge-engine/generator.hpp	/^		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_resistances;$/;"	m	struct:mods::forge_engine::generated_explosive_t
 elemental_types_t	mods/forge-engine/elemental-enum.hpp	/^	enum elemental_types_t {$/;"	g	namespace:mods::forge_engine
@@ -7080,7 +7103,7 @@ elite_protection	mods/armor/elite-protection.cpp	/^	elite_protection::elite_prot
 elite_protection	mods/armor/elite-protection.hpp	/^	struct elite_protection {$/;"	s	namespace:mods::armor
 emergency_unban	comm.cpp	/^byte emergency_unban;		\/* signal: SIGUSR2 *\/$/;"	v
 emp_damage	mods/projectile.cpp	/^		void emp_damage(room_rnum& room_id,obj_ptr_t object) {$/;"	f	namespace:mods::projectile
-emp_damage	mods/weapons/elemental.cpp	/^	void emp_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
+emp_damage	mods/weapons/elemental.cpp	/^	void emp_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 emp_damage_percent	mods/rifle-attachments.hpp	/^			int16_t emp_damage_percent;$/;"	m	struct:mods::rifle_attachments_t
 emp_resistance_percent	mods/player.cpp	/^	int16_t& player::emp_resistance_percent() {$/;"	f	class:mods::player
 empty	mods/forge-engine/generated-armor.cpp	/^	static std::vector<std::string> empty = {};$/;"	m	namespace:mods::forge_engine	file:
@@ -7216,7 +7239,7 @@ explosive	mods/projectile.cpp	/^	namespace explosive {$/;"	n	namespace:mods::inj
 explosive	mods/weapon.cpp	/^	mw_explosive explosive(obj_data_ptr_t& object) {$/;"	f	namespace:mods::weapon
 explosive_attributes_t	mods/forge-engine/generator.hpp	/^	enum explosive_attributes_t {$/;"	g	namespace:mods::forge_engine
 explosive_damage	mods/projectile.cpp	/^		int explosive_damage(player_ptr_t victim, obj_ptr_t item) {$/;"	f	namespace:mods::projectile
-explosive_damage	mods/weapons/elemental.cpp	/^	void explosive_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
+explosive_damage	mods/weapons/elemental.cpp	/^	void explosive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 explosive_damage_percent	mods/rifle-attachments.hpp	/^			int16_t explosive_damage_percent;$/;"	m	struct:mods::rifle_attachments_t
 explosive_damage_t	mods/projectile.cpp	/^			explosive_damage_t() :$/;"	f	struct:mods::projectile::explosive_damage_t
 explosive_damage_t	mods/projectile.cpp	/^		struct explosive_damage_t {$/;"	s	namespace:mods::projectile	file:
@@ -8410,7 +8433,7 @@ in_room	mods/js.cpp	/^		static duk_ret_t in_room(duk_context *ctx) {$/;"	f	names
 in_room	shop.h	/^	room_vnum *in_room;		\/* Where is the shop?			*\/$/;"	m	struct:shop_data
 in_room	structs.h	/^		room_rnum in_room;		\/* In what room -1 when conta\/carr	*\/$/;"	m	struct:obj_data
 incendiary_damage	mods/rifle-attachments.hpp	/^			int16_t incendiary_damage;				\/** honored [ ? (see elemental.cpp) ] *\/$/;"	m	struct:mods::rifle_attachments_t
-incendiary_damage	mods/weapons/elemental.cpp	/^	void incendiary_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
+incendiary_damage	mods/weapons/elemental.cpp	/^	void incendiary_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 incendiary_damage_percent	mods/rifle-attachments.hpp	/^			int16_t incendiary_damage_percent;$/;"	m	struct:mods::rifle_attachments_t
 incendiary_resistance_percent	mods/player.cpp	/^	int16_t& player::incendiary_resistance_percent() {$/;"	f	class:mods::player
 incidents	mods/response-team/radio.hpp	/^	static std::map<room_vnum,int32_t> incidents;$/;"	m	namespace:mods::response_team::radio
@@ -9386,7 +9409,7 @@ m_debug	mods/stat-bonuses.cpp	14;"	d	file:
 m_debug	mods/string.cpp	4;"	d	file:
 m_debug	mods/values.cpp	13;"	d	file:
 m_debug	mods/values.cpp	15;"	d	file:
-m_debug	mods/weapons/elemental.cpp	208;"	d	file:
+m_debug	mods/weapons/elemental.cpp	253;"	d	file:
 m_debug	mods/weapons/elemental.cpp	6;"	d	file:
 m_debug	mods/weapons/elemental.cpp	8;"	d	file:
 m_debug_line_info	mods/deep-object-parser.cpp	12;"	d	file:
@@ -9906,8 +9929,8 @@ mc_debug	mods/query-objects.cpp	257;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	11;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	134;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	14;"	d	file:
-md	mods/weapons/damage-types.cpp	1076;"	d	file:
-md	mods/weapons/damage-types.cpp	958;"	d	file:
+md	mods/weapons/damage-types.cpp	1094;"	d	file:
+md	mods/weapons/damage-types.cpp	971;"	d	file:
 mdo_debug	mods/deep-object-parser.hpp	11;"	d
 mdo_debug	mods/deep-object-parser.hpp	22;"	d
 mdo_debug	mods/rifle-attachments.hpp	116;"	d
@@ -9991,7 +10014,7 @@ metro	mods/fluxkraft/arcon-metropolitan.hpp	/^	struct metro {$/;"	s	namespace:mo
 mex_debug	mods/examine.cpp	5;"	d	file:
 mex_debug	mods/examine.cpp	7;"	d	file:
 mg_map	mods/mobs/mini-gunner.cpp	/^	mg_map_t& mg_map() {$/;"	f	namespace:mods::mobs
-mgdp_debug	globals.cpp	1209;"	d	file:
+mgdp_debug	globals.cpp	1211;"	d	file:
 mgen_debug	mods/item-types.hpp	618;"	d
 mgen_debug	mods/item-types.hpp	620;"	d
 mi_debug	mods/interpreter.cpp	49;"	d	file:
@@ -10056,7 +10079,7 @@ mo_debug	mods/integral-objects.cpp	19;"	d	file:
 mo_debug	mods/integral-objects.cpp	305;"	d	file:
 mo_debug	mods/levels.cpp	12;"	d	file:
 mo_debug	mods/levels.cpp	14;"	d	file:
-mo_debug	mods/levels.cpp	535;"	d	file:
+mo_debug	mods/levels.cpp	547;"	d	file:
 mo_debug	mods/rate-limiting.cpp	10;"	d	file:
 mo_debug	mods/rate-limiting.cpp	172;"	d	file:
 mo_debug	mods/rate-limiting.cpp	8;"	d	file:
@@ -10957,6 +10980,7 @@ player_skill_usage_record_t	mods/orm/player-skill-usage.hpp	/^	struct player_ski
 player_skill_usage_table_name	mods/orm/player-skill-usage.hpp	/^	static constexpr std::string_view player_skill_usage_table_name = "player_skill_usage";$/;"	m	namespace:mods::orm
 player_skill_usage_upkeep	mods/orm/player-skill-usage.cpp	/^	void player_skill_usage_upkeep(const uint64_t& player_id, std::string_view in_class) {$/;"	f	namespace:mods::orm
 player_table	db.cpp	/^std::deque<player_index_element> player_table;	\/* index to plr file	 *\/$/;"	v
+player_tier	mods/levels.cpp	/^	uint8_t player_tier(const uint8_t& level) {$/;"	f	namespace:mods::levels
 player_tier	mods/levels.cpp	/^	uint8_t player_tier(player_ptr_t& player) {$/;"	f	namespace:mods::levels
 player_type_enum_t	mods/mobs/mob.hpp	/^			enum player_type_enum_t { $/;"	g	class:mods::player
 player_type_enum_t	mods/player.hpp	/^			enum player_type_enum_t {$/;"	g	struct:mods::player
@@ -11334,7 +11358,7 @@ radio	mods/radio.cpp	/^namespace mods::radio {$/;"	n	class:mods	file:
 radio	mods/radio.hpp	/^namespace mods::radio {$/;"	n	class:mods
 radio	mods/response-team/radio.cpp	/^namespace mods::response_team::radio {$/;"	n	class:mods::response_team	file:
 radio	mods/response-team/radio.hpp	/^namespace mods::response_team::radio {$/;"	n	class:mods::response_team
-radioactive_damage	mods/weapons/elemental.cpp	/^	void radioactive_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
+radioactive_damage	mods/weapons/elemental.cpp	/^	void radioactive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 ram_db	globals.cpp	/^		std::unordered_map<std::string,std::string> ram_db;$/;"	m	namespace:mods::globals	file:
 rand	mods/init.hpp	/^INIT(mods::rand);$/;"	v
 rand	mods/rand.cpp	/^namespace mods::rand {$/;"	n	class:mods	file:
@@ -12140,6 +12164,7 @@ send_class_header	mods/help.cpp	/^	void send_class_header(player_ptr_t& player,s
 send_combat_messages	mods/weapons/damage-types.cpp	/^		void send_combat_messages(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	f	namespace:mods::weapons::damage_types::legacy
 send_contagion_help_menu	mods/help.cpp	/^	void send_contagion_help_menu(player_ptr_t& player) {$/;"	f	namespace:mods::help
 send_dealer_help_menu	mods/help.cpp	/^	void send_dealer_help_menu(player_ptr_t& player) {$/;"	f	namespace:mods::help
+send_elemental	mods/weapons/elemental.cpp	/^	void send_elemental(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage,int type) {$/;"	f	namespace:mods::weapons::elemental
 send_forge_help_menu	mods/help.cpp	/^	void send_forge_help_menu(player_ptr_t& player) {$/;"	f	namespace:mods::help
 send_ghost_help_menu	mods/help.cpp	/^	void send_ghost_help_menu(player_ptr_t& player) {$/;"	f	namespace:mods::help
 send_help	mods/help.cpp	/^	bool send_help(std::string_view from, std::shared_ptr<mods::player>& player) {$/;"	f	namespace:mods::help
@@ -12388,7 +12413,7 @@ shield_proficiency_levels_t	mods/classes/sentinel.hpp	/^		enum shield_proficienc
 shm	mods/lmdb/shm-config.hpp	/^namespace shm {$/;"	n
 shm	mods/lmdb/shm.hpp	/^class  shm {$/;"	c	namespace:gdns
 shm	mods/lmdb/shm.hpp	/^shm::shm(){$/;"	f	class:gdns::shm
-shock_damage	mods/weapons/elemental.cpp	/^	void shock_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
+shock_damage	mods/weapons/elemental.cpp	/^	void shock_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 shock_damage_percent	mods/rifle-attachments.hpp	/^			int16_t shock_damage_percent;$/;"	m	struct:mods::rifle_attachments_t
 shock_resistance_percent	mods/player.cpp	/^	int16_t& player::shock_resistance_percent() {$/;"	f	class:mods::player
 shop	mods/orm/shop.hpp	/^		shop() : base(), loaded(false) {}$/;"	f	struct:mods::orm::shop
@@ -12483,7 +12508,7 @@ show_tics	mods/debug.cpp	/^	bool state::show_tics() { return m_show_tics; }$/;"	
 show_tics	mods/debug.cpp	/^	void state::show_tics(bool b){ m_show_tics = b; }$/;"	f	class:mods::debug::state
 show_triads	mods/chargen.cpp	/^	void show_triads(player_ptr_t& player, player_class_t p_class){$/;"	f	namespace:mods::chargen
 shptr	mods/loops.hpp	/^	namespace shptr {$/;"	n	namespace:mods::loops
-shrapnel_damage	mods/weapons/elemental.cpp	/^	void shrapnel_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
+shrapnel_damage	mods/weapons/elemental.cpp	/^	void shrapnel_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 shrapnel_damage_percent	mods/rifle-attachments.hpp	/^			int16_t shrapnel_damage_percent;$/;"	m	struct:mods::rifle_attachments_t
 shrapnel_resistance_percent	mods/player.cpp	/^	int16_t& player::shrapnel_resistance_percent() {$/;"	f	class:mods::player
 shuffle	mods/util.hpp	/^	static inline void shuffle(T& vec) {$/;"	f	namespace:mods::util

@@ -370,6 +370,19 @@ namespace mods::weapons::damage_types {
 		if(mods::skills::player_can(victim,"INJURE_RESISTANCE")) {
 			chance -= INJURE_RESISTANCE_SKILL_MODIFIER();
 		}
+		switch(mods::levels::player_tier(victim)) {
+			case 1:
+				chance -= 0.01 * victim->constitution();
+				break;
+			case 2:
+				chance -= 0.02 * victim->constitution();
+				break;
+			case 3:
+				chance -= 0.11 * victim->constitution();
+				break;
+			default:
+				break;
+		}
 		return mods::injure::do_injure_roll(chance);
 	}
 
@@ -1031,14 +1044,19 @@ namespace mods::weapons::damage_types {
 				feedback.damage = dam;
 				feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
 				victim->set_attacker(player->uuid());
+				auto attacker_feedback = feedback;
 				if(mods::object_utils::is_bladed_weapon(weapon)) {
 					feedback.damage_event = de::HIT_BY_BLADED_MELEE_ATTACK;
+					attacker_feedback.damage_event = de::YOU_INFLICTED_BLADED_MELEE_ATTACK;
 				} else if(mods::object_utils::is_blunt_weapon(weapon)) {
 					feedback.damage_event = de::HIT_BY_BLUNT_MELEE_ATTACK;
+					attacker_feedback.damage_event = de::YOU_INFLICTED_BLUNT_MELEE_ATTACK;
 				} else {
 					feedback.damage_event = de::HIT_BY_MELEE_ATTACK;
+					attacker_feedback.damage_event = de::YOU_INFLICTED_MELEE_ATTACK;
 				}
 				victim->damage_event(feedback);
+				player->damage_event(attacker_feedback);
 				if(attack_injures(player,victim,weapon,feedback)) {
 					feedback.injured.emplace_back(victim->uuid());
 					feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
@@ -1285,7 +1303,7 @@ namespace mods::weapons::damage_types {
 		}
 		player->incendiary_resistance_percent() = resistance;
 		player->send("Your resistance: %f\r\n",player->incendiary_resistance_percent());
-		mods::weapons::elemental::incendiary_damage(player,damage);
+		mods::weapons::elemental::incendiary_damage(player,player,damage);
 	}
 
 	void init() {

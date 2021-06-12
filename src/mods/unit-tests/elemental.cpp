@@ -48,7 +48,7 @@ TEST_CASE("player resistance member functions should reduce damage", "[reduce_el
 		mods::globals::register_player(player);
 		player->hp() = starting_hp;
 		player->incendiary_resistance_percent() = resistance;
-		mods::weapons::elemental::incendiary_damage(player,requested_damage);
+		mods::weapons::elemental::incendiary_damage(player,player,requested_damage);
 		REQUIRE(player->hp() == (starting_hp - (requested_damage - ((resistance * 0.01) * requested_damage))));
 	}
 	SECTION("zero resistance percents have no effect") {
@@ -59,7 +59,7 @@ TEST_CASE("player resistance member functions should reduce damage", "[reduce_el
 		mods::globals::register_player(player);
 		player->hp() = starting_hp;
 		player->incendiary_resistance_percent() = resistance;
-		mods::weapons::elemental::incendiary_damage(player,requested_damage);
+		mods::weapons::elemental::incendiary_damage(player,player,requested_damage);
 		REQUIRE(player->hp() == (starting_hp - (requested_damage - ((resistance * 0.01) * requested_damage))));
 	}
 

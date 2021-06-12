@@ -5,8 +5,8 @@ chance_to_injure: 28 #float, out of 100
 critical_chance: 13 #int16_t, out of 100
 damage_per_second: 64 #float, out of 100
 disorient_amount: 0 #float, out of 100
-damage_dice_count: 8 #int16_t, number of dice
-damage_dice_sides: 16 #int16_t, dice sides
+damage_dice_count: 25 #int16_t, number of dice
+damage_dice_sides: 28 #int16_t, dice sides
 incendiary_damage: 0 #int16_t, damage
 explosive_damage: 0 #int16_t, damage
 shrapnel_damage: 0 #int16_t, damage

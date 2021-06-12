@@ -21,17 +21,11 @@ namespace mods::rand {
 		player->sendln(CAT("rolling ",intat(0),"d",intat(1),": ",roll(intat(0),intat(1))));
 	}
 	SUPERCMD(do_roll_dice_average) {
-		if(argshave()->size_gt(2)->nth_has_integer({0,1,2})->passed() == false) {
-			player->sendln("Usage: roll_dice_average <count> <sides> <times>");
+		if(argshave()->size_gt(1)->nth_has_integer({0,1})->passed() == false) {
+			player->sendln("Usage: roll_dice_average <count> <sides>");
 			return;
 		}
-		auto times = intat(2);
-		int rolls = 0;
-		for(int i=0; i < times; i++) {
-			rolls += roll(intat(0),intat(1));
-		}
-
-		player->sendln(CAT("rolling ",intat(0),"d",intat(1)," x ",intat(2)," average is: ",rolls / times));
+		player->sendln(CAT(intat(0),"d",intat(1),": HIGH(",intat(0) * intat(1),") LOW(",intat(0),") AVERAGE(",((intat(1) + 1)/2) * intat(0),")"));
 	}
 	int roll(int number, int size) {
 		static std::random_device rd;
@@ -209,5 +203,6 @@ namespace mods::rand {
 		}
 		ADD_BUILDER_COMMAND("roll_dice",do_roll_dice);
 		ADD_BUILDER_COMMAND("roll_dice_average",do_roll_dice_average);
+		ADD_BUILDER_COMMAND("rda",do_roll_dice_average);
 	}
 };

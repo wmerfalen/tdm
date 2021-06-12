@@ -1218,6 +1218,17 @@ namespace mods::builder {
 			p_map["mob_ability_dexterity"] = mods::util::itoa(obj->real_abils.dex);
 			p_map["mob_ability_constitution"] = mods::util::itoa(obj->real_abils.con);
 			p_map["mob_ability_charisma"] = mods::util::itoa(obj->real_abils.cha);
+
+			p_map["mob_ability_electronics"] = mods::util::itoa(obj->real_abils.electronics);
+			p_map["mob_ability_armor"] = mods::util::itoa(obj->real_abils.armor);
+			p_map["mob_ability_marksmanship"] = mods::util::itoa(obj->real_abils.marksmanship);
+			p_map["mob_ability_sniping"] = mods::util::itoa(obj->real_abils.sniping);
+			p_map["mob_ability_demolitions"] = mods::util::itoa(obj->real_abils.demolitions);
+			p_map["mob_ability_chemistry"] = mods::util::itoa(obj->real_abils.chemistry);
+			p_map["mob_ability_weapon_handling"] = mods::util::itoa(obj->real_abils.weapon_handling);
+			p_map["mob_ability_strategy"] = mods::util::itoa(obj->real_abils.strategy);
+			p_map["mob_ability_medical"] = mods::util::itoa(obj->real_abils.medical);
+
 			p_map["mob_mana"] = mods::util::itoa(obj->points.mana);
 			p_map["mob_max_mana"] = mods::util::itoa(obj->points.max_mana);
 			p_map["mob_hitpoints"] = mods::util::itoa(obj->points.hit);
@@ -2276,6 +2287,16 @@ SUPERCMD(do_mbuild) {
 		        "  {gld}|:: wisdom{/gld}\r\n" <<
 		        "  {gld}|:: dexterity{/gld}\r\n" <<
 		        "  {gld}|:: constitution{/gld}\r\n" <<
+
+		        "  {gld}|:: electronics{/gld}\r\n" <<
+		        "  {gld}|:: chemistry{/gld}\r\n" <<
+		        "  {gld}|:: strategy{/gld}\r\n" <<
+		        "  {gld}|:: marksmanship{/gld}\r\n" <<
+		        "  {gld}|:: sniping{/gld}\r\n" <<
+		        "  {gld}|:: weapon_handling{/gld}\r\n" <<
+		        "  {gld}|:: demolitions{/gld}\r\n" <<
+		        "  {gld}|:: armor{/gld}\r\n" <<
+		        "  {gld}|:: medical{/gld}\r\n" <<
 		        "  {gld}|:: charisma{/gld}\r\n" <<
 		        "  {gld}|:: damnodice{/gld}\r\n" <<
 		        "  {gld}|:: damsizedice{/gld}\r\n" <<
@@ -2874,6 +2895,15 @@ SUPERCMD(do_mbuild) {
 			MENTOC_OBI2(player.level,level);
 			MENTOC_OBI2(player.weight,weight);
 			MENTOC_OBI2(player.height,height);
+			MENTOC_OBI2(real_abils.electronics,electronics);
+			MENTOC_OBI2(real_abils.armor,armor);
+			MENTOC_OBI2(real_abils.marksmanship,marksmanship);
+			MENTOC_OBI2(real_abils.sniping,sniping);
+			MENTOC_OBI2(real_abils.demolitions,demolitions);
+			MENTOC_OBI2(real_abils.chemistry,chemistry);
+			MENTOC_OBI2(real_abils.weapon_handling,weapon_handling);
+			MENTOC_OBI2(real_abils.strategy,strategy);
+			MENTOC_OBI2(real_abils.medical,medical);
 			MENTOC_OBI2(real_abils.str,strength);
 			MENTOC_OBI2(real_abils.str_add,strength_add);
 			MENTOC_OBI2(real_abils.intel,intelligence);

@@ -12,9 +12,9 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 			- [x] melee weapons can be picked up/dropped/junk'd
 			- [ ] melee weapons can only be equipped in primary position
 			- [ ] melee weapons take precedence over secondary weapons
-			- [ ] melee weapon elemental damage can be blocked/resisted by armor
-				- [ ] melee elemental damage respects resistances of target's armor
-			- [ ] melee weapon attacks don't need to be spammed like snipe command does
+			- [x] melee weapon elemental damage can be blocked/resisted by armor
+				- [x] melee elemental damage respects resistances of target's armor
+			- [x] melee weapon attacks don't need to be spammed like snipe command does
 
 # component: practice and leveling up
 	- status:
@@ -27,13 +27,12 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 				- [ ] increases likelihood of double attacks of same-room weapon and automatic melee attacks
 				- [ ] increases chance of penetration damage with melee weapons
 				- [ ] decreases mobility penalty that come from carry/wield weights
-			- constitution
+			- constitution (toughness)
 				- [ ] affects movement points
 				- [ ] affects resistance to elemental damage
-				- [ ] adds N.X (float) percent to resistances
-				- [ ] adds resistance to getting injured
-				- [ ] adds resistance to bleeding
-			- dexterity
+				- [x] adds N.X (float) percent to resistances
+				- [x] adds resistance to getting injured
+			- dexterity (felxibility/fastness)
 				- [ ] affects possibility of doubling up melee weapon attacks
 				- [ ] affects successful chance of fleeing melee combat
 				- [ ] affects possibility of dodging the following:
@@ -48,7 +47,6 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 				- [ ] decreases installation ticks
 				- [ ] increases drone scan distance
 				- [ ] increases likelihood of drone going unnoticed
-				- 
 			- electronics
 				- [ ] decreases install time of:
 					- [ ] cameras

@@ -19,7 +19,7 @@ TEST_CASE("armor with elemental resistance reduces damage", "[reduce_elemental_r
 		player->equip(vest,ITEM_WEAR_BODY);
 		REQUIRE(player->incendiary_resistance_percent() == 50);
 		player->hp() = starting_hp;
-		mods::weapons::elemental::incendiary_damage(player,requested_damage);
+		mods::weapons::elemental::incendiary_damage(player,player,requested_damage);
 		REQUIRE(player->hp() == 50);
 
 	}
@@ -33,12 +33,12 @@ TEST_CASE("armor with elemental resistance reduces damage", "[reduce_elemental_r
 		player->equip(vest,ITEM_WEAR_BODY);
 		REQUIRE(player->incendiary_resistance_percent() == 50);
 		player->hp() = starting_hp;
-		mods::weapons::elemental::incendiary_damage(player,requested_damage);
+		mods::weapons::elemental::incendiary_damage(player,player,requested_damage);
 		REQUIRE(player->hp() == 50);
 
 		player->unequip(ITEM_WEAR_BODY);
 		player->hp() = starting_hp;
-		mods::weapons::elemental::incendiary_damage(player,requested_damage);
+		mods::weapons::elemental::incendiary_damage(player,player,requested_damage);
 		REQUIRE(player->hp() == 0);
 	}//end section
 }// end test case
