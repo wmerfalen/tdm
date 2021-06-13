@@ -1,55 +1,9 @@
-#include "damage-types.hpp"
-#include "../../spells.h"
-#include "../object-utils.hpp"
-#include "../injure.hpp"
-#include "../rooms.hpp"
-#include "../skills.hpp"
-#include "../projectile.hpp"
-#include "../levels.hpp"
-#include "../interpreter-include.hpp"
-#include "elemental.hpp"
-#include "damage-calculator.hpp"
-#include <variant>
-
-#define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
-#ifndef TO_ROOM
-#define TO_ROOM		1
+#ifdef __MENTOC_SHOW_COOLDOWN_DEBUG__
+#define cdebug(a) std::cerr << "[mods::weapons::damage_types::set_player_weapon_cooldown][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#else
+#define cdebug(a)
 #endif
-extern int ok_damage_shopkeeper(char_data *ch, char_data *victim);
-extern void die(char_data* killer,char_data *victim);
-extern void die(char_data *victim);
-extern void set_fighting(char_data *ch, char_data *vict);
-extern void appear(char_data *ch);
-extern int pk_allowed;
-extern void check_killer(char_data *ch, char_data *vict);
-extern int skill_message(int dam, char_data *ch, char_data *vict, int attacktype);
-extern void dam_message(int dam, char_data *ch, char_data *victim, int w_type);
-extern ACMD(do_flee);
-extern void group_gain(char_data *ch, char_data *victim);
-extern void solo_gain(char_data *ch, char_data *victim);
-extern void forget(char_data *ch,char_data *victim);
-#ifndef IS_WEAPON
-#define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
-#endif
-extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
-
-#include "../affects.hpp"
-
 namespace mods::weapons::damage_types {
-	using de = damage_event_t;
-	using vpd = mods::scan::vec_player_data;
-#define MFEEDBACK(HITS,DAMAGE,EVENT)\
-		{\
-				feedback_t f;\
-				f.hits = HITS;\
-				f.damage = DAMAGE;\
-				f.from_direction = OPPOSITE_DIR(direction);\
-				f.attacker = player->uuid();\
-				f.damage_event = EVENT;\
-			victim->damage_event(f);\
-		}
-
-	//void reflect_munitions(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction);
 	bool can_be_injured(player_ptr_t& victim);
 	bool attack_injures(player_ptr_t& player,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t feedback) {
 		if(mods::super_users::player_is(victim)) {
@@ -145,12 +99,6 @@ namespace mods::weapons::damage_types {
 		}
 		return {true,feedback};
 	}
-#define __MENTOC_SHOW_COOLDOWN_DEBUG__
-#ifdef __MENTOC_SHOW_COOLDOWN_DEBUG__
-#define cdebug(a) std::cerr << "[mods::weapons::damage_types::set_player_weapon_cooldown][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
-#else
-#define cdebug(a)
-#endif
 
 	int calculate_weapon_cooldown(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& attackers_weapon, feedback_t& feedback) {
 		static const float modifiers[] = {0,
@@ -209,7 +157,7 @@ namespace mods::weapons::damage_types {
 		}
 		return spray_chance;
 	}
-
+#undef MFEEDBACK
 };
 #ifdef DMG_DEBUG
 #undef DMG_DEBUG

@@ -1028,10 +1028,9 @@ DISORIENT	mods/weapon-types.hpp	/^		DISORIENT,$/;"	e	enum:mods::weapon::capabili
 DISPLAY	mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY = "A small LED display on the panel says: ";$/;"	m	struct:mods::mini_games::wires
 DISPLAY_ACMD	mods/players/db-load.hpp	/^		DISPLAY_ACMD,$/;"	e	enum:mods::players::db_load::save_from_t
 DM	telnet.h	55;"	d
-DMG_DEBUG	mods/weapons/damage-decisions.hpp	215;"	d
-DMG_DEBUG	mods/weapons/damage-event-broadcaster.hpp	179;"	d
-DMG_DEBUG	mods/weapons/damage-types.cpp	1086;"	d	file:
-DMG_DUMP	mods/weapons/damage-types.cpp	449;"	d	file:
+DMG_DEBUG	mods/weapons/damage-decisions.hpp	163;"	d
+DMG_DEBUG	mods/weapons/damage-types.cpp	1089;"	d	file:
+DMG_DUMP	mods/weapons/damage-types.cpp	452;"	d	file:
 DO	telnet.h	44;"	d
 DONT	telnet.h	43;"	d
 DONTSET	mods/flags.hpp	/^		DONTSET,$/;"	e	enum:mods::flags::plr
@@ -1883,9 +1882,7 @@ IS_SUPPORT	utils.h	511;"	d
 IS_THIEF	utils.h	506;"	d
 IS_WARRIOR	utils.h	510;"	d
 IS_WEAPON	fight.cpp	129;"	d	file:
-IS_WEAPON	mods/weapons/damage-decisions.hpp	32;"	d
-IS_WEAPON	mods/weapons/damage-event-broadcaster.hpp	34;"	d
-IS_WEAPON	mods/weapons/damage-types.cpp	34;"	d	file:
+IS_WEAPON	mods/weapons/damage-types.cpp	37;"	d	file:
 IS_WEAPON_LOADED	mods/weapon.hpp	15;"	d
 IShared	mods/catch.hpp	/^	struct IShared : NonCopyable {$/;"	s	namespace:Catch
 IStream	mods/catch2.hpp	/^    struct IStream {$/;"	s	namespace:Catch
@@ -2565,9 +2562,10 @@ MENU	config.cpp	/^const char *MENU =$/;"	v
 MESS_FILE	db.h	91;"	d
 METAL_HATCH	structs.h	/^			METAL_HATCH,$/;"	m	struct:room_data	typeref:enum:room_data::
 METAL_WALL	structs.h	/^			METAL_WALL,$/;"	m	struct:room_data	typeref:enum:room_data::
-MFEEDBACK	mods/weapons/damage-decisions.hpp	41;"	d
-MFEEDBACK	mods/weapons/damage-event-broadcaster.hpp	44;"	d
-MFEEDBACK	mods/weapons/damage-types.cpp	43;"	d	file:
+MFEEDBACK	mods/weapons/damage-decisions.hpp	160;"	d
+MFEEDBACK	mods/weapons/damage-event-broadcaster.hpp	137;"	d
+MFEEDBACK	mods/weapons/damage-event-broadcaster.hpp	5;"	d
+MFEEDBACK	mods/weapons/damage-types.cpp	46;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	87;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	96;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	86;"	d	file:
@@ -4293,9 +4291,7 @@ TO_OBJ_PTR	utils.h	553;"	d
 TO_ROOM	comm.h	64;"	d
 TO_ROOM	mods/item.cpp	/^	static constexpr uint8_t TO_ROOM = 1;$/;"	m	namespace:mods::item	file:
 TO_ROOM	mods/weapons/damage-calculator.cpp	22;"	d	file:
-TO_ROOM	mods/weapons/damage-decisions.hpp	16;"	d
-TO_ROOM	mods/weapons/damage-event-broadcaster.hpp	16;"	d
-TO_ROOM	mods/weapons/damage-types.cpp	18;"	d	file:
+TO_ROOM	mods/weapons/damage-types.cpp	21;"	d	file:
 TO_ROOM	mods/weapons/reload.cpp	7;"	d	file:
 TO_SLEEP	comm.h	68;"	d
 TO_SLEEP	mods/chat.hpp	12;"	d
@@ -5086,11 +5082,11 @@ __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	8;"	
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	18;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mp-shotgunner-behaviour-tree.hpp	7;"	d
-__MENTOC_SHOW_COOLDOWN_DEBUG__	mods/weapons/damage-decisions.hpp	148;"	d
+__MENTOC_SHOW_COOLDOWN_DEBUG__	mods/weapons/damage-types.cpp	13;"	d	file:
 __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	14;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1209;"	d	file:
 __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__	mods/player.cpp	36;"	d	file:
-__MENTOC_SHOW_MELEE_HIT_STATS__	mods/weapons/damage-types.cpp	824;"	d	file:
+__MENTOC_SHOW_MELEE_HIT_STATS__	mods/weapons/damage-types.cpp	827;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ELITE_PROTECTION_DEBUG_OUTPUT__	mods/armor/elite-protection.cpp	4;"	d	file:
@@ -5740,9 +5736,9 @@ cd	mods/mobs/mini-gunner.cpp	/^	char_data* mini_gunner::cd() {$/;"	f	class:mods:
 cd	mods/mobs/mob.hpp	/^			char_data* cd() const {$/;"	f	class:mods::player
 cd	mods/mobs/smart-mob.cpp	/^	char_data* smart_mob::cd() {$/;"	f	class:mods::mobs::smart_mob
 cd	mods/player.hpp	/^			char_data* cd() const {$/;"	f	struct:mods::player
-cdebug	mods/weapons/damage-decisions.hpp	150;"	d
-cdebug	mods/weapons/damage-decisions.hpp	152;"	d
-cdebug	mods/weapons/damage-decisions.hpp	187;"	d
+cdebug	mods/weapons/damage-decisions.hpp	135;"	d
+cdebug	mods/weapons/damage-decisions.hpp	2;"	d
+cdebug	mods/weapons/damage-decisions.hpp	4;"	d
 ch	mods/scan.hpp	/^			char_data* ch;$/;"	m	struct:mods::scan::__anon4
 ch_time	mods/player.hpp	/^			time_data& ch_time() {$/;"	f	struct:mods::player
 chan	mods/chat.cpp	/^	static std::vector<mods::chat::channel> chan;$/;"	m	namespace:mods::chat	file:
@@ -7067,9 +7063,7 @@ drone_uuid	mods/player.hpp	/^			uuid_t& drone_uuid() {$/;"	f	struct:mods::player
 dts_are_dumps	config.cpp	/^int dts_are_dumps = YES;$/;"	v
 dty_debug	mods/weapons/damage-calculator.cpp	16;"	d	file:
 dty_debug	mods/weapons/damage-calculator.cpp	18;"	d	file:
-dty_debug	mods/weapons/damage-decisions.hpp	14;"	d
-dty_debug	mods/weapons/damage-event-broadcaster.hpp	14;"	d
-dty_debug	mods/weapons/damage-types.cpp	16;"	d	file:
+dty_debug	mods/weapons/damage-types.cpp	19;"	d	file:
 dty_debug	mods/weapons/reload.cpp	5;"	d	file:
 duktape_context	mods/js.cpp	/^		static duk_context* duktape_context;$/;"	m	namespace:mods::js	file:
 dummy_list	mods/zone.cpp	/^	std::vector<room_vnum> dummy_list;$/;"	m	namespace:mods::zone	file:
@@ -9962,8 +9956,8 @@ mc_debug	mods/query-objects.cpp	257;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	11;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	134;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	14;"	d	file:
-md	mods/weapons/damage-types.cpp	826;"	d	file:
-md	mods/weapons/damage-types.cpp	892;"	d	file:
+md	mods/weapons/damage-types.cpp	829;"	d	file:
+md	mods/weapons/damage-types.cpp	895;"	d	file:
 mdo_debug	mods/deep-object-parser.hpp	11;"	d
 mdo_debug	mods/deep-object-parser.hpp	22;"	d
 mdo_debug	mods/rifle-attachments.hpp	116;"	d

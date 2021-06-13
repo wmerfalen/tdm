@@ -1,42 +1,3 @@
-#include "damage-types.hpp"
-#include "../../spells.h"
-#include "../object-utils.hpp"
-#include "../injure.hpp"
-#include "../rooms.hpp"
-#include "../skills.hpp"
-#include "../projectile.hpp"
-#include "../levels.hpp"
-#include "../interpreter-include.hpp"
-#include "elemental.hpp"
-#include "damage-calculator.hpp"
-#include <variant>
-
-#define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
-#ifndef TO_ROOM
-#define TO_ROOM		1
-#endif
-
-extern int ok_damage_shopkeeper(char_data *ch, char_data *victim);
-extern void die(char_data* killer,char_data *victim);
-extern void die(char_data *victim);
-extern void set_fighting(char_data *ch, char_data *vict);
-extern void appear(char_data *ch);
-extern int pk_allowed;
-extern void check_killer(char_data *ch, char_data *vict);
-extern int skill_message(int dam, char_data *ch, char_data *vict, int attacktype);
-extern void dam_message(int dam, char_data *ch, char_data *victim, int w_type);
-extern ACMD(do_flee);
-extern void group_gain(char_data *ch, char_data *victim);
-extern void solo_gain(char_data *ch, char_data *victim);
-extern void forget(char_data *ch,char_data *victim);
-
-#ifndef IS_WEAPON
-#define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
-#endif
-extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
-
-#include "../affects.hpp"
-
 namespace mods::weapons::damage_types {
 	extern bool attack_injures(player_ptr_t& player,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t feedback);
 	using de = damage_event_t;
@@ -173,8 +134,5 @@ namespace mods::weapons::damage_types {
 			ar_shrapnel(feedback.from_direction, attacker,victim);
 		}
 	}
-
+#undef MFEEDBACK
 };
-#ifdef DMG_DEBUG
-#undef DMG_DEBUG
-#endif

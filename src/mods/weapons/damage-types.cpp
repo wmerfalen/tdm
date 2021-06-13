@@ -9,6 +9,9 @@
 #include "../interpreter-include.hpp"
 #include "elemental.hpp"
 #include "damage-calculator.hpp"
+
+#define __MENTOC_SHOW_COOLDOWN_DEBUG__
+
 #include <variant>
 #include "damage-event-broadcaster.hpp"
 #include "damage-decisions.hpp"
