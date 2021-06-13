@@ -31,6 +31,7 @@ namespace mods {
 #include "affects.hpp"
 #include "camera.hpp"
 #include "rifle-attachments.hpp"
+#include <ctime>
 
 namespace mods::armor {
 	struct basic_protection;
@@ -444,13 +445,9 @@ namespace mods {
 			}
 
 			/* weapon cooldown functions */
-
-			void weapon_cooldown_start(uint16_t duration,weapon_set set);
-			bool weapon_cooldown_expired(weapon_set);
-
-			/** the preferred API */
-			void weapon_cooldown_start(uint16_t duration,obj_ptr_t& weapon);
-			bool weapon_cooldown_expired(obj_ptr_t& weapon);
+			void weapon_cooldown_clear();
+			void weapon_cooldown_start(const int& ticks);
+			const bool& can_attack_again() const;
 
 			/* communication functions */
 			void stc_room(const room_rnum&);
@@ -903,7 +900,7 @@ namespace mods {
 			std::string m_ucname;
 			player_class_t m_class;
 			class_capability_t m_class_capability;
-			std::array<uint16_t,WEAPON_SET_NUM> m_weapon_cooldown;
+			bool         m_weapon_cooldown_expired;
 			weapon_set   m_weapon_set;
 			bool         m_do_paging;
 			bool         m_capture_output;
@@ -971,6 +968,9 @@ namespace mods {
 			int16_t m_anti_matter_damage_percent;
 			uint8_t m_contract_size;
 			bool m_contract;
+			bool m_can_attack;
+			mods::util::stopwatch_t m_timer;
+			int m_cooldown_ticks;
 	};
 };
 

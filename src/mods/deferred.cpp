@@ -21,6 +21,9 @@ namespace mods {
 	void deferred::cancel_event(event_queue_iterator it) {
 		m_ticks_event_type.erase(it);
 	}
+	void deferred::push_weapon_cooldown(const uint16_t& ticks, const uuid_t& player_uuid) {
+		push_ticks_event(ticks,player_uuid,EVENT_WEAPON_COOLDOWN_FINISHED);
+	}
 	uint32_t deferred::get_ticks_per_minute() {
 		return m_ticks_per_minute_sample;
 	}
@@ -97,7 +100,9 @@ namespace mods {
 	void deferred::push_step(uint16_t ticks, std::size_t hash,const uuid_t& player_uuid) {
 		m_q.insert(
 		std::make_pair(ticks + m_tick,[=]() {
+#ifdef __MENTOC_SHOW_SCRIPTED_STEP_RUNNER_DEBUG__
 			std::cerr << green_str("running scripted step runner...") << "\n";
+#endif
 			mods::scripted_sequence_runner::step_runner(hash,player_uuid);
 		})
 		);

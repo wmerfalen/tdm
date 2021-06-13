@@ -40,6 +40,7 @@ namespace mods {
 			constexpr static uint32_t EVENT_PLAYER_REVIVE_SUCCESSFUL = 4;
 			constexpr static uint32_t EVENT_PLAYER_FINISHES_FEIGN_DEATH = 5;
 			constexpr static uint32_t EVENT_PLAYER_GOES_VISIBLE = 6;
+			constexpr static uint32_t EVENT_WEAPON_COOLDOWN_FINISHED = 7;
 			constexpr static uint64_t TICK_RESOLUTION = 3;
 			using seconds = uint16_t;
 			using lambda_queue_t = std::multimap<uint64_t,std::function<void()>>;
@@ -71,6 +72,7 @@ namespace mods {
 			    uint64_t next_event_tick,
 			    uint64_t add
 			);
+			void push_weapon_cooldown(const uint16_t& ticks, const uuid_t& player_uuid);
 			void push_step(uint16_t ticks,std::size_t hash,const uuid_t& player_uuid);
 			void iteration();
 			void detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture);

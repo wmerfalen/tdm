@@ -24,8 +24,22 @@
 #include "mods/object-utils.hpp"
 #include "mods/rooms.hpp"
 #include "mods/orm/inventory.hpp"
+#include "mods/interpreter.hpp"
+
 extern void point_update(void);
 extern void check_idling(player_ptr_t player);
+SUPERCMD(do_wait_ticks) {
+	if(argshave()->size_gt(1)->nth_has_integer(0)->passed() == false) {
+		player->sendln("usage: wait_ticks <ticks> <message>");
+		return;
+	}
+	const auto uuid = player->uuid();
+	const auto msg = argat(1);
+	mods::globals::defer_queue->push(intat(0),[=]() {
+		auto p = ptr_by_uuid(uuid);
+		p->sendln(msg);
+	});
+}
 SUPERCMD(do_get_ticks_per_minute) {
 	player->send("[%d] ticks per minute\r\n",mods::globals::defer_queue->get_ticks_per_minute());
 	player->send("[%d] affects processer ticks per minute\r\n",mods::affects::get_ticks_per_minute());
@@ -288,3 +302,9 @@ SUPERCMD(do_show_tics) {
 	player->send("Toggling %s\r\n", state ? "{red}off{/red}" : "{grn}on{/grn}");
 	mods::debug::debug_state->show_tics(!state);
 }
+
+namespace src::act::debug {
+	void init() {
+		ADD_BUILDER_COMMAND("wait_ticks",do_wait_ticks);
+	}
+};

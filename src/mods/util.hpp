@@ -6,6 +6,7 @@
 #include <random>
 //#include <ctime>
 #include "../interpreter.h"
+#include <chrono>
 
 #ifndef __MENTOC_STRING_LIT__
 #define __MENTOC_STRING_LIT__
@@ -22,6 +23,22 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+	class stopwatch_t {
+		public:
+			stopwatch_t() : beg_(clock_::now()) {}
+			void reset() {
+				beg_ = clock_::now();
+			}
+			double elapsed() const {
+				return std::chrono::duration_cast<second_>
+				       (clock_::now() - beg_).count();
+			}
+
+		private:
+			typedef std::chrono::high_resolution_clock clock_;
+			typedef std::chrono::duration<double, std::ratio<1> > second_;
+			std::chrono::time_point<clock_> beg_;
+	};
 	player_ptr_t query_mob_in_room(room_vnum r_vnum,mob_vnum mob);
 	direction_t random_direction();
 	std::string wrap_in_box(std::size_t width,std::string_view in_msg);
@@ -426,6 +443,7 @@ namespace mods::util::args {
 		}
 	};
 	static std::map<uuid_t,arglist_parser> player_parsers;
+
 };
 #define args() mods::util::args::player_parsers[player->uuid()].use(argument)
 #define argat(A) mods::util::args::player_parsers[player->uuid()].use(argument)->at(A)

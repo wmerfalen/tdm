@@ -49,6 +49,7 @@ INIT(mods::builder::seqbuild);
 INIT(mods::contract_step_callback_init);
 INIT(mods::scripted_sequence_events);
 INIT(mods::scripted_sequence_runner);
+INIT(src::act::debug);
 #undef INIT
 
 
@@ -99,6 +100,7 @@ namespace mods::init {
 		mods::contract_step_callback_init::init();
 		mods::scripted_sequence_events::init();
 		mods::scripted_sequence_runner::init();
+		src::act::debug::init();
 	}
 };
 #endif

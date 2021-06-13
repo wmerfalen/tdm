@@ -223,6 +223,7 @@ namespace mods {
 		m_equipment = ptr->m_equipment;
 		m_sync_equipment();
 		m_class = ptr->m_class;
+		m_can_attack = ptr->m_can_attack;
 	}
 	void player::capture_output(bool capture_status) {
 		m_capture_output = capture_status;
@@ -533,17 +534,17 @@ namespace mods {
 	bool player::has_inventory_capability(int type) {
 		return true; //FIXME:
 	}
-	void player::weapon_cooldown_start(uint16_t duration,weapon_set set) {
-		m_weapon_cooldown[set] = duration + mods::globals::current_tick;
+	void player::weapon_cooldown_start(const int& ticks) {
+		mods::globals::defer_queue->push_weapon_cooldown(ticks,uuid());
+		m_can_attack = 0;
+		m_timer.reset();
+		m_cooldown_ticks = ticks;
 	}
-	void player::weapon_cooldown_start(uint16_t duration,obj_ptr_t& weapon) {
-		m_weapon_cooldown[weapon->uuid] = duration + mods::globals::current_tick;
+	void player::weapon_cooldown_clear() {
+		m_can_attack = 1;
 	}
-	bool player::weapon_cooldown_expired(weapon_set set) {
-		return mods::globals::current_tick >= m_weapon_cooldown[set];
-	}
-	bool player::weapon_cooldown_expired(obj_ptr_t& weapon) {
-		return mods::globals::current_tick >= m_weapon_cooldown[weapon->uuid];
+	const bool& player::can_attack_again() const {
+		return m_can_attack;
 	}
 	bool player::carrying_ammo_of_type(const weapon_type_t& type) {
 		if(m_char_data->carrying == 0) {
@@ -916,6 +917,7 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init() {
+		m_can_attack = 1;
 		m_contract_size = 0;
 		m_contract = 0;
 		m_incendiary_resistance_percent = 0;
@@ -964,7 +966,6 @@ namespace mods {
 		if(m_char_data) {
 			m_char_data = nullptr;
 		}
-		std::fill(m_weapon_cooldown.begin(),m_weapon_cooldown.end(),0);
 		m_weapon_set = {};
 		m_do_paging = m_capture_output = false;
 		m_captured_output.clear();
@@ -1330,7 +1331,6 @@ namespace mods {
 		if(m_char_data) {
 			m_char_data = nullptr;
 		}
-		std::fill(m_weapon_cooldown.begin(),m_weapon_cooldown.end(),0);
 		m_weapon_set = {};
 		m_do_paging = m_capture_output = false;
 		m_captured_output.clear();
@@ -1512,6 +1512,11 @@ namespace mods {
 					send_to_room_except(this->room(), {this->uuid(),revive_target->uuid()},
 					                    "%s is revived by %s!",this->name().c_str(),revive_target->name().c_str()
 					                   );
+					break;
+				}
+			case mods::deferred::EVENT_WEAPON_COOLDOWN_FINISHED: {
+					m_can_attack = 1;
+					sendln(CAT("{grn}Cooldown finished. ",m_cooldown_ticks," took ", m_timer.elapsed()));
 					break;
 				}
 			default:

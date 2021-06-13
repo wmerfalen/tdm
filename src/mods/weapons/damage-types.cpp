@@ -9,6 +9,9 @@
 #include "../interpreter-include.hpp"
 #include "elemental.hpp"
 #include "damage-calculator.hpp"
+#include <variant>
+#include "damage-event-broadcaster.hpp"
+#include "damage-decisions.hpp"
 
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #ifndef TO_ROOM
@@ -37,12 +40,22 @@ extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_d
 namespace mods::weapons::damage_types {
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
-	int calculate_tracked_damage(player_ptr_t& player,int original_damage) {
-		if(player->has_affect(AFF_TRACKED)) {
-			return mods::affects::apply_tracked_bonus_damage(original_damage);
+#define MFEEDBACK(HITS,DAMAGE,EVENT)\
+		{\
+				feedback_t f;\
+				f.hits = HITS;\
+				f.damage = DAMAGE;\
+				f.from_direction = OPPOSITE_DIR(direction);\
+				f.attacker = player->uuid();\
+				f.damage_event = EVENT;\
+			victim->damage_event(f);\
 		}
-		return original_damage;
-	}
+
+	void reflect_munitions(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction);
+	bool can_be_injured(player_ptr_t& victim);
+	void handle_assault_rifle_shrapnel_skill(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t& feedback);
+
+
 	void rifle_attack_object(
 	    player_ptr_t& player,
 	    obj_ptr_t weapon,
@@ -59,28 +72,6 @@ namespace mods::weapons::damage_types {
 	);
 
 
-	void remember_event(player_ptr_t& victim,player_ptr_t& attacker) {
-		if(IS_NPC(victim->cd())) {
-			remember(victim->cd(),attacker->cd());
-		}
-	}
-	bool can_be_injured(player_ptr_t& victim) {
-		return victim->hp() <= (victim->max_hp() * INJURED_MAX_HP_MULTIPLIER());
-	}
-	void reflect_munitions(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction) {
-		feedback_t f;
-		f.hits = 1;
-		f.damage = dam;
-		f.from_direction = from_direction;
-		f.attacker = attacker->uuid();
-
-		f.damage_event = de::YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT;
-		victim->damage_event(f);
-
-		f.attacker = victim->uuid();
-		f.damage_event = de::YOU_REFLECTED_MUNITIONS_EVENT;
-		attacker->damage_event(f);
-	}
 
 	namespace legacy {
 		int step_one(char_data *ch, char_data *victim, int dam, int attacktype) {
@@ -354,57 +345,6 @@ namespace mods::weapons::damage_types {
 		legacy::send_combat_messages(nullptr,victim,damage,0);
 	}
 
-	bool attack_injures(player_ptr_t& player,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t feedback) {
-		if(mods::super_users::player_is(victim)) {
-			return 0;
-		}
-		float chance = 0;
-		if(weapon->has_rifle()) {
-			chance = weapon->rifle()->attributes->chance_to_injure;
-		} else if(weapon->has_melee()) {
-			chance = weapon->melee()->attributes->chance_to_injure;
-		}
-		if(mods::skills::player_can(player,"INCREASED_INJURE_CHANCE")) {
-			chance += CHANCE_TO_INJURE_SKILL_MODIFIER();
-		}
-		if(mods::skills::player_can(victim,"INJURE_RESISTANCE")) {
-			chance -= INJURE_RESISTANCE_SKILL_MODIFIER();
-		}
-		switch(mods::levels::player_tier(victim)) {
-			case 1:
-				chance -= 0.01 * victim->constitution();
-				break;
-			case 2:
-				chance -= 0.02 * victim->constitution();
-				break;
-			case 3:
-				chance -= 0.11 * victim->constitution();
-				break;
-			default:
-				break;
-		}
-		return mods::injure::do_injure_roll(chance);
-	}
-
-	void handle_assault_rifle_shrapnel_skill(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t& feedback) {
-		if(mods::super_users::player_is(victim)) {
-			return;
-		}
-		if(mods::skills::player_can(attacker,"ASSAULT_RIFLE_SHRAPNEL") &&
-		        dice(1,100) <= ASSAULT_RIFLE_SHRAPNEL_SKILL_CHANCE()) {
-			feedback_t shrapnel;
-			shrapnel.hits = 1;
-			shrapnel.from_direction = feedback.from_direction;
-			shrapnel.attacker = attacker->uuid();
-			int dice_count = ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_COUNT();
-			int dice_sides = ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_SIDES();
-			shrapnel.damage = mods::projectile::deploy_shrapnel_at(victim,dice_count,dice_sides,feedback.from_direction);
-			shrapnel.damage_event = de::YOU_INFLICTED_AR_SHRAPNEL;
-			attacker->damage_event(shrapnel);
-			shrapnel.damage_event = de::YOU_GOT_HIT_BY_AR_SHRAPNEL;
-			victim->damage_event(shrapnel);
-		}
-	}
 
 	/**
 	 * @brief This is needed because we feed the damage and the attacktype to damage()
@@ -475,13 +415,6 @@ namespace mods::weapons::damage_types {
 		}
 		return TYPE_HIT;
 	}
-	uint8_t calculate_spray_chance(player_ptr_t& player) {
-		uint8_t spray_chance = mods::values::SPRAY_CHANCE();
-		if(mods::skills::player_can(player,"SPRAY_CHANCE")) {
-			spray_chance += mods::values::SPRAY_CHANCE_SKILL_MODIFIER();
-		}
-		return spray_chance;
-	}
 
 	/**
 	 * @brief sprays using the primary weapon
@@ -492,37 +425,17 @@ namespace mods::weapons::damage_types {
 	void spray_direction(player_ptr_t& player,int direction) {
 		spray_direction_with_feedback(player,direction);
 	}
+
 	feedback_t spray_direction_with_feedback(player_ptr_t& player,int direction) {
 		using de = damage_event_t;
 		feedback_t feedback;
-		feedback.hits = 0;
-		feedback.damage = 0;
-		feedback.from_direction = OPPOSITE_DIR(direction);
-		feedback.attacker = player->uuid();
-
-		if(mods::rooms::is_peaceful(player->room())) {
-			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
-			player->damage_event(feedback);
-			return feedback;
-		}
-
 		auto weapon = player->primary();
-		if(!weapon || !weapon->has_rifle()) {
-			feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
-			player->damage_event(feedback);
-			return feedback;
+
+		auto s = can_continue(player,weapon,-1,OPPOSITE_DIR(direction),ITEM_RIFLE);
+		if(std::get<0>(s) == false) {
+			return std::get<1>(s);
 		}
-		if(!player->weapon_cooldown_expired(weapon)) {
-			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
-		/* Check ammo */
-		if(mods::object_utils::get_ammo(weapon) == 0) {
-			feedback.damage_event = de::OUT_OF_AMMO_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
+		feedback = std::get<1>(s);
 
 		/** FIXME : grab weapon's accuracy and apply accurace modifications */
 
@@ -552,17 +465,6 @@ namespace mods::weapons::damage_types {
 #endif
 
 
-#define MFEEDBACK(HITS,DAMAGE,EVENT)\
-		{\
-				feedback_t f;\
-				f.hits = HITS;\
-				f.damage = DAMAGE;\
-				f.from_direction = OPPOSITE_DIR(direction);\
-				f.attacker = player->uuid();\
-				f.damage_event = EVENT;\
-			victim->damage_event(f);\
-		}
-
 
 
 		vpd scan;
@@ -585,21 +487,17 @@ namespace mods::weapons::damage_types {
 				player->send(MSG_HIT().c_str());
 				int spray_damage = 0;
 				spray_damage = dice(damage_dice,damage_sides);
-#ifdef __MENTOC_USE_BASE_STAT_SPRAY_DAMAGE__
-				spray_damage += weapon->rifle()->attributes->base_stat_list->at(scanned_target.distance).damage;
-#endif
+				//spray_damage += weapon->rifle()->attributes->base_stat_list->at(scanned_target.distance).damage;
 				dam += spray_damage;
 
 				MFEEDBACK(1,dam,de::HIT_BY_SPRAY_ATTACK);
 			}
-#ifdef __MENTOC_SPRAYS_CAN_HEADSHOT__
 			/** calculate headshot */
 			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_HEADSHOT_CHANCE()) {
 				player->send(MSG_HEADSHOT().c_str());
 				dam = victim->hp();
-				MFEEDBACK(1,dam,de::HEADSHOT_BY_SPRAY_ATTACK);
+				MFEEDBACK(1,dam,de::YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK);
 			}
-#endif
 			if(scanned_target.distance == crit_range) {
 				if(dice(1,(100 * scanned_target.distance)) <= crit_chance) {
 					player->send(MSG_CRITICAL().c_str());
@@ -619,32 +517,12 @@ namespace mods::weapons::damage_types {
 			if(victim->position() > POS_DEAD) {
 				damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 				if(dam == 0) {
-					feedback.attacker = player->uuid();
-					feedback.damage_event = de::ATTACKER_NARROWLY_MISSED_YOU_EVENT;
-					victim->damage_event(feedback);
-
-					feedback.attacker = player->uuid();
-					feedback.damage_event = de::YOU_MISSED_YOUR_TARGET_EVENT;
-					player->damage_event(feedback);
+					missed(player,victim);
 				} else if(dam > 0) {
-					if(mods::skills::player_can(victim,"MUNITIONS_REFLECTOR") && dice(1,100) <= 4) {
-						reflect_munitions(player,victim,dam,OPPOSITE_DIR(direction));
-					}
-					feedback.hits++;
-					feedback.damage += dam;
-					feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
-					victim->set_attacker(player->uuid());
-					MFEEDBACK(feedback.hits,dam,de::HIT_BY_SPRAY_ATTACK);
-					if(attack_injures(player,victim,weapon,feedback) && can_be_injured(victim)) {
-						mods::injure::injure_player(victim);
-						feedback.injured.emplace_back(victim->uuid());
-						MFEEDBACK(feedback.hits,dam,de::YOU_ARE_INJURED_EVENT);
-					}
-					if(weapon->rifle()->attributes->type == mw_rifle::ASSAULT_RIFLE) {
-						handle_assault_rifle_shrapnel_skill(player,victim,weapon,feedback);
-					}
+					send_rifle_damage(1,dam,direction,player,victim,weapon, feedback);
 				}
 				remember_event(victim,player);
+				set_player_weapon_cooldown(player,victim,weapon, feedback);
 			} else {
 				stop_fighting(player->cd());
 				stop_fighting(victim->cd());
@@ -656,11 +534,15 @@ namespace mods::weapons::damage_types {
 	}//end spray_direction function
 
 	void rifle_attack_object_by_name(player_ptr_t& player,std::string_view target_object,int direction) {
+		feedback_t feedback;
 		auto weapon = player->primary();
-		if(!weapon || !weapon->has_rifle()) {
-			player->sendln("You aren't wielding any weapon.");
+
+		auto s = can_continue(player,weapon,-1,OPPOSITE_DIR(direction),ITEM_RIFLE);
+		if(std::get<0>(s) == false) {
 			return;
 		}
+		feedback = std::get<1>(s);
+
 		vpd scan;
 		auto max_range = mods::weapons::damage_calculator::max_range(player,weapon);
 		mods::scan::los_scan_direction(player->cd(),max_range,&scan,direction,mods::scan::find_type_t::OBJECTS);
@@ -688,11 +570,14 @@ namespace mods::weapons::damage_types {
 	 * @param direction
 	 */
 	void rifle_attack_by_name(player_ptr_t& player,std::string_view victim_name,int direction) {
+		feedback_t feedback;
 		auto weapon = player->primary();
-		if(!weapon || !weapon->has_rifle()) {
-			player->sendln("You aren't wielding any weapon.");
+
+		auto s = can_continue(player,weapon,-1,OPPOSITE_DIR(direction),ITEM_RIFLE);
+		if(std::get<0>(s) == false) {
 			return;
 		}
+		feedback = std::get<1>(s);
 		vpd scan;
 		auto max_range = mods::weapons::damage_calculator::max_range(player,weapon);
 		mods::scan::los_scan_direction(player->cd(),max_range,&scan,direction,mods::scan::find_type_t::ALIVE);
@@ -849,40 +734,15 @@ namespace mods::weapons::damage_types {
 	) {
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
+
 		feedback_t feedback;
-		feedback.hits = 0;
-		feedback.damage = 0;
-		feedback.from_direction = OPPOSITE_DIR(direction);
 
-		if(mods::rooms::is_peaceful(player->room())) {
-			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
-			player->damage_event(feedback);
-			return feedback;
+		auto s = can_continue(player,weapon,victim,OPPOSITE_DIR(direction),ITEM_RIFLE);
+		if(std::get<0>(s) == false) {
+			return std::get<1>(s);
 		}
-		/** TODO: if primary is out of ammo, and player_pref.auto_switch is on, use secondary */
+		feedback = std::get<1>(s);
 
-		if(!weapon || !weapon->has_rifle()) {
-			feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
-		if(!player->weapon_cooldown_expired(weapon)) {
-			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
-		/* Check ammo */
-		if(mods::weapon::has_clip(player->rifle()) && player->ammo() <= 0) {
-			feedback.damage_event = de::OUT_OF_AMMO_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
-
-		if(!victim) {
-			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
 		/** FIXME : grab weapon's accuracy and apply accurace modifications */
 
 		int dam = weapon->rifle()->attributes->base_stat_list->at(distance).damage;
@@ -891,11 +751,6 @@ namespace mods::weapons::damage_types {
 		int crit_range = weapon->rifle()->attributes->critical_range;
 		int crit_chance = weapon->rifle()->attributes->critical_chance;
 		int critical_bonus = 0;
-		if(mods::rooms::is_peaceful(victim->in_room)) {
-			feedback.damage_event = de::TARGET_IN_PEACEFUL_ROOM_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
 
 		/** TODO: honor accuracy bonus */
 		/** TODO: honor max_range calculations */
@@ -975,31 +830,21 @@ namespace mods::weapons::damage_types {
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
 		feedback_t feedback;
-		feedback.hits = 0;
+
+		auto s = can_continue(player,weapon,victim,NORTH,ITEM_MELEE);
+		if(std::get<0>(s) == false) {
+			return std::get<1>(s);
+		}
+		feedback = std::get<1>(s);
+
+		feedback.hits = 1;
 		feedback.damage = 0;
 		feedback.from_direction = NORTH;
-		if(mods::super_users::player_is(victim)) {
-			md("victim is super user. ignoring");
-			return feedback;
-		}
 
-		if(mods::rooms::is_peaceful(player->room())) {
-			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
-			player->damage_event(feedback);
-			md("room is peaceful. ignoring");
-			return feedback;
-		}
 		if(!victim) {
 			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
 			player->damage_event(feedback);
 			md("victim not present. ignoring");
-			return feedback;
-		}
-		/** FIXME: use weapon id */
-		if(false && !player->weapon_cooldown_expired(weapon)) {
-			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
-			player->damage_event(feedback);
-			md("weapon cooldown not expired");
 			return feedback;
 		}
 
@@ -1030,68 +875,22 @@ namespace mods::weapons::damage_types {
 			md("deploying damage: " << dam);
 			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 			if(dam == 0) {
-				feedback.damage = dam;
-				feedback.hits = 0;
-
-				feedback.damage_event = de::YOU_MISSED_YOUR_TARGET_EVENT;
-				player->damage_event(feedback);
-
-				feedback.damage_event =de::ATTACKER_NARROWLY_MISSED_YOU_EVENT;
-				victim->damage_event(feedback);
-
+				missed(player,victim);
 			} else if(dam > 0) {
-				feedback.hits = 1;
-				feedback.damage = dam;
-				feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
-				victim->set_attacker(player->uuid());
-				auto attacker_feedback = feedback;
-				if(mods::object_utils::is_bladed_weapon(weapon)) {
-					feedback.damage_event = de::HIT_BY_BLADED_MELEE_ATTACK;
-					attacker_feedback.damage_event = de::YOU_INFLICTED_BLADED_MELEE_ATTACK;
-				} else if(mods::object_utils::is_blunt_weapon(weapon)) {
-					feedback.damage_event = de::HIT_BY_BLUNT_MELEE_ATTACK;
-					attacker_feedback.damage_event = de::YOU_INFLICTED_BLUNT_MELEE_ATTACK;
-				} else {
-					feedback.damage_event = de::HIT_BY_MELEE_ATTACK;
-					attacker_feedback.damage_event = de::YOU_INFLICTED_MELEE_ATTACK;
-				}
-				victim->damage_event(feedback);
-				player->damage_event(attacker_feedback);
-				if(attack_injures(player,victim,weapon,feedback)) {
-					feedback.injured.emplace_back(victim->uuid());
-					feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
-					victim->damage_event(feedback);
-
-					feedback.damage_event= de::YOU_INJURED_SOMEONE_EVENT;
-					player->damage_event(feedback);
-					mods::injure::injure_player(victim);
-					md("attack injures");
-				}
-				if(mods::weapons::damage_calculator::attack_disorients(player,weapon,victim)) {
-					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(player,weapon,victim));
-					feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;
-					victim->damage_event(feedback);
-
-					feedback.damage_event= de::YOU_DISORIENTED_SOMEONE_EVENT;
-					player->damage_event(feedback);
-					md("attack disorients");
-				}
+				auto f = send_melee_damage(feedback.hits, dam, player, victim, weapon);
+				feedback = std::get<0>(f);
 			}
 			md("remembering");
 			remember_event(victim,player);
 		} else {
-			feedback.damage_event= de::TARGET_DEAD_EVENT;
-			feedback.attacker = victim->uuid();
-			player->damage_event(feedback);
-			stop_fighting(player->cd());
-			stop_fighting(victim->cd());
-			md("target dead. stop fighting");
+			feedback = send_target_dead(player,victim,feedback);
 		}
 
 		player->set_fight_timestamp();
 		mods::weapons::elemental::process_elemental_damage(player,weapon,victim,feedback);
 		md("processed elemental damage");
 #undef md
+		set_player_weapon_cooldown(player,victim,weapon, feedback);
 		return feedback;
 	}
 
@@ -1104,46 +903,17 @@ namespace mods::weapons::damage_types {
 	) {
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
+
+
 		feedback_t feedback;
-		feedback.hits = 0;
-		feedback.damage = 0;
-		feedback.from_direction = OPPOSITE_DIR(direction);
-		if(mods::super_users::player_is(victim)) {
-			return feedback;
+		auto s = can_continue(player,weapon,victim,OPPOSITE_DIR(direction),ITEM_RIFLE);
+		if(std::get<0>(s) == false) {
+			return std::get<1>(s);
 		}
+		feedback = std::get<1>(s);
 
-		if(mods::rooms::is_peaceful(player->room())) {
-			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
-			player->damage_event(feedback);
-			return feedback;
-		}
-		/** TODO: if primary is out of ammo, and player_pref.auto_switch is on, use secondary */
 
-		if(!weapon || !weapon->has_rifle()) {
-			feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
-		/** FIXME: use weapon id */
-		if(!player->weapon_cooldown_expired(weapon)) {
-			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
-		/* Check ammo */
-		if(mods::weapon::has_clip(player->rifle()) && player->ammo() <= 0) {
-			feedback.damage_event = de::OUT_OF_AMMO_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
-
-		if(!victim) {
-			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
-			player->damage_event(feedback);
-			return feedback;
-		}
 		/** FIXME : grab weapon's accuracy and apply accurace modifications */
-
 		int dam = 0;
 		if(distance < weapon->rifle()->attributes->base_stat_list->size()) {
 			dam = weapon->rifle()->attributes->base_stat_list->at(distance).damage;
@@ -1281,6 +1051,7 @@ namespace mods::weapons::damage_types {
 
 		decrease_single_shot_ammo(player,weapon);
 		player->set_fight_timestamp();
+		set_player_weapon_cooldown(player,victim,weapon, feedback);
 		return feedback;
 	}
 

@@ -118,6 +118,7 @@
 {yel}act.builder{/yel}:->{grn}js_help{/grn}
 {yel}mobact{/yel}:->{grn}mobact{/grn}
 {yel}act.offensive{/yel}:->{grn}affect_me{/grn}
+{yel}act.debug{/yel}:->{grn}wait_ticks{/grn}
 {yel}act.debug{/yel}:->{grn}get_ticks_per_minute{/grn}
 {yel}act.debug{/yel}:->{grn}flush_player{/grn}
 {yel}act.debug{/yel}:->{grn}feed_player{/grn}
