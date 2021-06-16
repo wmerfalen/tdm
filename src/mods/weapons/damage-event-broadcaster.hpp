@@ -2,16 +2,6 @@ namespace mods::weapons::damage_types {
 	extern bool attack_injures(player_ptr_t& player,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t feedback);
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
-#define MFEEDBACK(HITS,DAMAGE,EVENT)\
-		{\
-				feedback_t f;\
-				f.hits = HITS;\
-				f.damage = DAMAGE;\
-				f.from_direction = OPPOSITE_DIR(direction);\
-				f.attacker = player->uuid();\
-				f.damage_event = EVENT;\
-			victim->damage_event(f);\
-		}
 
 	void reflect_munitions(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction);
 	bool can_be_injured(player_ptr_t& victim);
@@ -35,11 +25,28 @@ namespace mods::weapons::damage_types {
 		feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
 		victim->set_attacker(attacker->uuid());
 		const auto& player = attacker;
-		MFEEDBACK(feedback.hits,dam,de::HIT_BY_SPRAY_ATTACK);
+		feedback.from_direction = OPPOSITE_DIR(direction);
+		feedback.damage_event = de::HIT_BY_SPRAY_ATTACK;
+		victim->damage_event(feedback);
+
+		{
+			auto attacker_feedback = feedback;
+			attacker_feedback.damage_event = de::YOU_INFLICTED_SPRAY_DAMAGE;
+			player->damage_event(attacker_feedback);
+		}
+
 		if(attack_injures(attacker,victim,weapon,feedback) && can_be_injured(victim)) {
 			mods::injure::injure_player(victim);
+			feedback.attacker = attacker->uuid();
 			feedback.injured.emplace_back(victim->uuid());
-			MFEEDBACK(feedback.hits,dam,de::YOU_ARE_INJURED_EVENT);
+			feedback.damage_event = de::YOU_ARE_INJURED_EVENT;
+			{
+				auto attacker_feedback = feedback;
+				attacker_feedback.attacker = 0;
+				attacker_feedback.damage_event = de::YOU_INJURED_SOMEONE_EVENT;
+				attacker_feedback.injured.emplace_back(victim->uuid());
+				player->damage_event(attacker_feedback);
+			}
 		}
 		if(weapon->rifle()->attributes->type == mw_rifle::ASSAULT_RIFLE) {
 			handle_assault_rifle_shrapnel_skill(attacker,victim,weapon,feedback);
@@ -56,12 +63,9 @@ namespace mods::weapons::damage_types {
 		if(mods::object_utils::is_bladed_weapon(weapon)) {
 			feedback.damage_event = de::HIT_BY_BLADED_MELEE_ATTACK;
 			attacker_feedback.damage_event = de::YOU_INFLICTED_BLADED_MELEE_ATTACK;
-		} else if(mods::object_utils::is_blunt_weapon(weapon)) {
+		} else {
 			feedback.damage_event = de::HIT_BY_BLUNT_MELEE_ATTACK;
 			attacker_feedback.damage_event = de::YOU_INFLICTED_BLUNT_MELEE_ATTACK;
-		} else {
-			feedback.damage_event = de::HIT_BY_MELEE_ATTACK;
-			attacker_feedback.damage_event = de::YOU_INFLICTED_MELEE_ATTACK;
 		}
 		victim->damage_event(feedback);
 		attacker->damage_event(attacker_feedback);

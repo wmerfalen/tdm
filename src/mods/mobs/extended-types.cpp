@@ -16,7 +16,7 @@ namespace mods::mobs {
 		switch(ch->mob_specials.extended_mob_type) {
 			default:
 			case extended_types_t::NONE:
-				std::cerr << "[extended mob type]: no extended mob type for mob: ('" << ch->player.name.c_str() << "')\n";
+				std::cerr << "[extended mob type]: no extended mob type for mob: ('" << p->name().c_str() << "')\n";
 				break;
 			/**! @NEW_BEHAVIOUR_TREE@ !**/
 			case extended_types_t::MP_SHOTGUNNER:

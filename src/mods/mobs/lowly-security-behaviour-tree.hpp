@@ -13,6 +13,8 @@
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 
 namespace mods::mobs::lowly_security_behaviour_tree {
+#define TSUCCESS TStatus::SUCCESS
+#define TFAILURE TStatus::FAILURE
 	/**
 	 * Lowly Security Guard behaviour
 	 * ------------------------------
@@ -39,8 +41,6 @@ namespace mods::mobs::lowly_security_behaviour_tree {
 					[2] move in random direction
 
 	 */
-#define TSUCCESS TStatus::SUCCESS
-#define TFAILURE TStatus::FAILURE
 	using namespace helpers;
 	using vec_player_data = mods::scan::vec_player_data;
 

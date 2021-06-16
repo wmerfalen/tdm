@@ -25,6 +25,7 @@ namespace mods::players::db_load {
 	static bool reporter_function_set = false;
 	void game_entry(player_ptr_t& player) {
 		mods::orm::load_player_rifle_attachments(player);
+		mods::orm::inventory::feed_player(player);
 	}
 
 	void sync_player_with_class_skills(const uint64_t& player_id,const std::string& player_class) {

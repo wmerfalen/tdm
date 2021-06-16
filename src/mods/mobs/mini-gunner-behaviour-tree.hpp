@@ -17,7 +17,7 @@
 
 #define __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << "[mods::mobs::mini_gunner_behaviour_tree][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#define m_debug(a) std::cerr << green_str("[mgbtree]") << "[" << __LINE__ << "]->" << a << "\n";
 #else
 #define m_debug(a)
 #endif

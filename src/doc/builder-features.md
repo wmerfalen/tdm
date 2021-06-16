@@ -468,18 +468,22 @@
 		object parser to recognize items in the database. This is so that a player can have loadouts
 		and customized weapons that survive mud shutdown/reboot.
 	- postgres table: `rifle_instance`
-		- has all columns that are in the rifle tuple members (see `mods/item-types.hpp`)
-		- contains the rolled values from the forge engine
+		- [x] has all columns that are in the rifle tuple members (see `mods/item-types.hpp`)
+		- [x] contains the rolled values from the forge engine
+			- [x] as of 2021-06-16: forge engine rifles are persisted across logouts/reboots/shutdowns
 	- postgres table: `armor_instance`
-		- has all columns that are in the armor tuple members (see `mods/item-types.hpp`)
-		- contains the rolled values from the forge engine
+		- [ ] has all columns that are in the armor tuple members (see `mods/item-types.hpp`)
+		- [ ] contains the rolled values from the forge engine
+			- [ ] persist across logouts/shutdowns/reboots
 
 # object instances [ PHASE 2 ]
 	- Overview:
 		Once phase 1 is finished, the deep object parser needs to be adapted to parse database ID's so
 		that a customized rifle or piece of armor can survive shutdown/reboot. Store this in postgres.
-	- modify deep object parser to recognize database ID's
-		- load those object instances
+			- [x] rifles persist
+			- [ ] armors persist
+	- [ ] modify deep object parser to recognize database ID's
+		- [ ] load those object instances
 	
 
 # compound sql statements

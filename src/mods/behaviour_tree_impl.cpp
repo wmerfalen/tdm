@@ -15,7 +15,6 @@
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
 extern void hit(char_data *ch, char_data *victim, int type);
-#define __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__
 #define bti_debug(a) std::cerr << "[mods::behaviour_tree_imp::dispatch][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else
@@ -110,6 +109,7 @@ namespace mods::behaviour_tree_impl {
 		node mini_gunner_disoriented(node_type::SELECTOR);
 		/**! @NEW_BEHAVIOUR_TREE@ !**/
 		node mp_shotgunner(node_type::SELECTOR);
+		node mp_shotgunner_engage(node_type::SEQUENCE);
 		node mp_shotgunner_backup(node_type::SELECTOR);
 		node lowly_security(node_type::SELECTOR);
 		node lowly_security_roam(node_type::SELECTOR);
@@ -121,8 +121,9 @@ namespace mods::behaviour_tree_impl {
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_disoriented<node,argument_type,status>(mini_gunner_disoriented);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security<node,argument_type,status>(lowly_security);
 		/**! @NEW_BEHAVIOUR_TREE@ !**/
-		mods::mobs::mp_shotgunner_behaviour_tree::make_mp_shotgunner<node,argument_type,status>(mp_shotgunner);
-		mods::mobs::mp_shotgunner_behaviour_tree::make_mp_shotgunner_backup<node,argument_type,status>(mp_shotgunner_backup);
+		mods::mobs::mp_shotgunner_behaviour_tree::make_mp_shotgunner(mp_shotgunner);
+		mods::mobs::mp_shotgunner_behaviour_tree::make_mp_shotgunner_backup(mp_shotgunner_backup);
+		mods::mobs::mp_shotgunner_behaviour_tree::make_mp_shotgunner_engage(mp_shotgunner_engage);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_roam<node,argument_type,status>(lowly_security_roam);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_engage<node,argument_type,status>(lowly_security_engage);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_pursuit<node,argument_type,status>(lowly_security_pursuit);
@@ -270,6 +271,7 @@ namespace mods::behaviour_tree_impl {
 		add_tree("lowly_security_pursuit",lowly_security_pursuit);
 		/**! @NEW_BEHAVIOUR_TREE@ !**/
 		add_tree("mp_shotgunner",mp_shotgunner);
+		add_tree("mp_shotgunner_engage",mp_shotgunner_engage);
 		/**
 		 * Suspicious roaming tree.
 		 */

@@ -9,8 +9,8 @@
 #include "../interpreter-include.hpp"
 #include "elemental.hpp"
 #include "damage-calculator.hpp"
+#include "../mobs/damage-event.hpp"
 
-#define __MENTOC_SHOW_COOLDOWN_DEBUG__
 
 #include <variant>
 #include "damage-event-broadcaster.hpp"
@@ -824,7 +824,6 @@ namespace mods::weapons::damage_types {
 	    obj_ptr_t weapon,
 	    player_ptr_t victim
 	) {
-#define __MENTOC_SHOW_MELEE_HIT_STATS__
 #ifdef __MENTOC_SHOW_MELEE_HIT_STATS__
 #define md(A) std::cerr << green_str("[melee_damage_with_feedback]->") << A << "\n"; (*player) << "\r\n [melee_damage_with_feedback debug]:" << A << "\r\n";
 #else
@@ -882,6 +881,9 @@ namespace mods::weapons::damage_types {
 			} else if(dam > 0) {
 				auto f = send_melee_damage(feedback.hits, dam, player, victim, weapon);
 				feedback = std::get<0>(f);
+				if(victim->is_npc()) {
+					mods::mobs::damage_event::meleed(victim,feedback);
+				}
 			}
 			md("remembering");
 			remember_event(victim,player);
@@ -915,6 +917,13 @@ namespace mods::weapons::damage_types {
 		}
 		feedback = std::get<1>(s);
 
+		auto max_range = mods::weapons::damage_calculator::max_range(player,weapon);
+		if(distance > max_range) {
+			feedback.damage_event = de::TARGET_IS_OUT_OF_RANGE;
+			player->damage_event(feedback);
+			return feedback;
+		}
+
 
 		/** FIXME : grab weapon's accuracy and apply accurace modifications */
 		int dam = 0;
@@ -943,6 +952,8 @@ namespace mods::weapons::damage_types {
 			feedback.attacker = player->uuid();
 			feedback.damage_event = de::YOU_DEALT_HEADSHOT_WITH_RIFLE_ATTACK;
 			player->damage_event(feedback);
+
+			feedback.from_direction = OPPOSITE_DIR(direction);
 			feedback.damage_event =de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK;
 			victim->damage_event(feedback);
 
@@ -961,6 +972,7 @@ namespace mods::weapons::damage_types {
 				feedback.damage_event = de::YOU_DEALT_CRITICAL_RIFLE_ATTACK;
 				player->damage_event(feedback);
 
+				feedback.from_direction = OPPOSITE_DIR(direction);
 				feedback.damage_event =de::HIT_BY_CRITICAL_RIFLE_ATTACK;
 				victim->damage_event(feedback);
 			}
@@ -1004,6 +1016,7 @@ namespace mods::weapons::damage_types {
 				feedback.damage_event = de::YOU_MISSED_YOUR_TARGET_EVENT;
 				player->damage_event(feedback);
 
+				feedback.from_direction = OPPOSITE_DIR(direction);
 				feedback.damage_event =de::ATTACKER_NARROWLY_MISSED_YOU_EVENT;
 				victim->damage_event(feedback);
 
@@ -1011,24 +1024,21 @@ namespace mods::weapons::damage_types {
 				feedback.hits = 1;
 				feedback.damage = dam;
 				feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
+				feedback.from_direction = OPPOSITE_DIR(direction);
 				victim->set_attacker(player->uuid());
 				feedback.damage_event = de::HIT_BY_RIFLE_ATTACK;
 				victim->damage_event(feedback);
-				if(IS_NPC(victim->cd())) {
-					if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)) {
-						dty_debug("Mob is a sentinel. Setting sentinel_snipe_tracking on mob's behaviour tree");
-						victim->cd()->mob_specials.set_behaviour_tree("sentinel_snipe_tracking");
-						victim->cd()->mob_specials.snipe_tracking = player->uuid();
-					} else {
-						dty_debug("Mob is normal mob. Setting snipe_tracking on mob's behaviour tree");
-						victim->cd()->mob_specials.set_behaviour_tree("snipe_tracking");
-						victim->cd()->mob_specials.snipe_tracking = player->uuid();
-					}
+				if(victim->is_npc()) {
+					mods::mobs::damage_event::sniped(victim,feedback);
 				}
 				if(attack_injures(player,victim,weapon,feedback)) {
 					feedback.injured.emplace_back(victim->uuid());
 					feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
+					feedback.from_direction = OPPOSITE_DIR(direction);
 					victim->damage_event(feedback);
+					if(victim->is_npc()) {
+						mods::mobs::damage_event::injured(victim,feedback);
+					}
 
 					feedback.damage_event= de::YOU_INJURED_SOMEONE_EVENT;
 					player->damage_event(feedback);
@@ -1037,7 +1047,12 @@ namespace mods::weapons::damage_types {
 				if(mods::weapons::damage_calculator::attack_disorients(player,weapon,victim)) {
 					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(player,weapon,victim));
 					feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;
+					/** TODO: maybe make this random to disorient the player ? >:) EVIL GENIUS */
+					feedback.from_direction = OPPOSITE_DIR(direction);
 					victim->damage_event(feedback);
+					if(victim->is_npc()) {
+						mods::mobs::damage_event::disoriented(victim,feedback);
+					}
 
 					feedback.damage_event= de::YOU_DISORIENTED_SOMEONE_EVENT;
 					player->damage_event(feedback);

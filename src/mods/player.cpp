@@ -315,8 +315,10 @@ namespace mods {
 			in_object->worn_on = pos;
 			m_equipment[pos] = in_object;
 #ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
+			sendln("add_player_wear");
 			mods::orm::inventory::lmdb::add_player_wear(this->db_id(),in_object->db_id(),in_object->type,pos);
 #else
+			sendln("flush_player_by_uuid");
 			mods::orm::inventory::flush_player_by_uuid(uuid());
 #endif
 #ifdef __MENTOC_PLAYER_DEBUG__
@@ -1683,12 +1685,14 @@ namespace mods {
 	uint16_t player::skill(int t) {
 		return m_skills[t];
 	}
-	void player::register_damage_event_callback(damage_event_t e,damage_event_callback_t cb) {
-		m_damage_event_callbacks[e] = cb;
+	void player::register_damage_event_callback(const std::vector<damage_event_t>& events,damage_event_callback_t cb) {
+		m_damage_event_callbacks.emplace_back(std::make_pair<>(events,cb));
 	}
 	void player::dispatch_event(feedback_t feedback) {
-		if(m_damage_event_callbacks.find(feedback.damage_event) != m_damage_event_callbacks.end()) {
-			m_damage_event_callbacks[feedback.damage_event](feedback,this->uuid());
+		for(const auto& cb : m_damage_event_callbacks) {
+			if(std::find(cb.first.cbegin(),cb.first.cend(),feedback.damage_event) != cb.first.cend()) {
+				cb.second(feedback,uuid());
+			}
 		}
 	}
 

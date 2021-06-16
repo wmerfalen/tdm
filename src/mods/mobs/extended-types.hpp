@@ -22,7 +22,9 @@ namespace mods::mobs {
 		PRACTICE_DUMMY,
 		LOWLY_SECURITY,
 		/**! @NEW_BEHAVIOUR_TREE@ !**/
-		MP_SHOTGUNNER
+		MP_SHOTGUNNER,
+		MP_ENFORCER,
+		ROGUE_MP_SHOTGUNNER,
 	};
 	//vim sorcery: s/\t\t\([A-Z_]\+\),/\t\t{\1,"\1"},/g
 	static std::map<extended_types_t,std::string> ext_map = {
@@ -39,6 +41,8 @@ namespace mods::mobs {
 		{LOWLY_SECURITY,"LOWLY_SECURITY"},
 		/**! @NEW_BEHAVIOUR_TREE@ !**/
 		{MP_SHOTGUNNER,"MP_SHOTGUNNER"},
+		{MP_ENFORCER,"MP_ENFORCER"},
+		{ROGUE_MP_SHOTGUNNER,"ROGUE_MP_SHOTGUNNER"},
 	};
 	void decorate(uuid_t mob_id);
 
@@ -71,6 +75,8 @@ namespace mods::mobs {
 		{LOWLY_SECURITY,desc::lowly_security},
 		/**! @NEW_BEHAVIOUR_TREE@ !**/
 		{MP_SHOTGUNNER,desc::mp_shotgunner},
+		{MP_ENFORCER,"MP_ENFORCER"},
+		{ROGUE_MP_SHOTGUNNER,"ROGUE_MP_SHOTGUNNER"},
 	};
 	namespace extended_types {
 		std::vector<std::string> strings();

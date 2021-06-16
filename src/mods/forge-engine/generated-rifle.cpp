@@ -110,6 +110,7 @@ namespace mods::forge_engine {
 		m_stat_boosts = mods::forge_engine::item_generator.generate_rifle_stat_boosts(m_player);
 		m_instance = create_object(ITEM_RIFLE,random_yaml(yaml_list(m_type)));
 		this->fill(m_instance);
+		m_instance->forged = true;
 		return m_instance;
 	}
 

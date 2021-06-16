@@ -3262,3 +3262,22 @@ CREATE TABLE public.room_signs (
 			ON DELETE CASCADE
 			ON UPDATE CASCADE
 );
+DROP TABLE public.player_object;
+CREATE TABLE public.player_object (
+    id SERIAL UNIQUE,
+    po_player_id integer NOT NULL,
+    po_type varchar NOT NULL,
+    po_type_vnum integer,
+    po_type_id integer,
+		po_yaml TEXT,
+    po_load_type varchar NOT NULL,
+    po_wear_position integer,
+    po_in_inventory integer,
+	PRIMARY KEY(id),
+		CONSTRAINT fk_player_id
+			FOREIGN KEY (po_player_id)
+			REFERENCES public.player(id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+);
+

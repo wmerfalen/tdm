@@ -1,6 +1,7 @@
 #include "elemental.hpp"
 #include "../object-utils.hpp"
 #include "../interpreter-include.hpp"
+#include "../mobs/damage-event.hpp"
 #define __MENTOC_MODS_SHOW_ELEMENTAL_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_SHOW_ELEMENTAL_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -23,7 +24,7 @@ namespace mods::weapons::elemental {
 		}
 		return damage;
 	}
-	void send_elemental(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage,int type) {
+	void process_elemental_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage,int type) {
 		if(attacker->position() == POS_DEAD || victim->position() == POS_DEAD) {
 			return;
 		}
@@ -87,46 +88,49 @@ namespace mods::weapons::elemental {
 		}
 		if(feedback.damage > 0) {
 			victim->hp() -= feedback.damage;
+			if(victim->is_npc()) {
+				mods::mobs::damage_event::received_elemental_damage(victim,feedback);
+			}
+			feedback.damage_info.emplace_back(victim->uuid(),feedback.damage,victim->room());
+			feedback.damage_event = atk_event;
+			attacker->damage_event(feedback);
+
+			feedback.damage_info.clear();
+
+			feedback.attacker = attacker->uuid();
+			feedback.damage_event = vic_event;
+			victim->damage_event(feedback);
 		}
-		feedback.damage_info.emplace_back(victim->uuid(),feedback.damage,victim->room());
-		feedback.damage_event = atk_event;
-		attacker->damage_event(feedback);
-
-		feedback.damage_info.clear();
-
-		feedback.attacker = attacker->uuid();
-		feedback.damage_event = vic_event;
-		victim->damage_event(feedback);
 	}
 	void incendiary_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		send_elemental(attacker,victim,requested_damage,ELEM_INCENDIARY);
+		process_elemental_damage(attacker,victim,requested_damage,ELEM_INCENDIARY);
 	}
 
 	void explosive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		send_elemental(attacker,victim,requested_damage,ELEM_EXPLOSIVE);
+		process_elemental_damage(attacker,victim,requested_damage,ELEM_EXPLOSIVE);
 	}
 
 	void shrapnel_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		send_elemental(attacker,victim,requested_damage,ELEM_SHRAPNEL);
+		process_elemental_damage(attacker,victim,requested_damage,ELEM_SHRAPNEL);
 	}
 
 	void corrosive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		send_elemental(attacker,victim,requested_damage,ELEM_CORROSIVE);
+		process_elemental_damage(attacker,victim,requested_damage,ELEM_CORROSIVE);
 	}
 	void cryogenic_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		send_elemental(attacker,victim,requested_damage,ELEM_CRYOGENIC);
+		process_elemental_damage(attacker,victim,requested_damage,ELEM_CRYOGENIC);
 	}
 	void radioactive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		send_elemental(attacker,victim,requested_damage,ELEM_RADIOACTIVE);
+		process_elemental_damage(attacker,victim,requested_damage,ELEM_RADIOACTIVE);
 	}
 	void emp_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		send_elemental(attacker,victim,requested_damage,ELEM_EMP);
+		process_elemental_damage(attacker,victim,requested_damage,ELEM_EMP);
 	}
 	void shock_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		send_elemental(attacker,victim,requested_damage,ELEM_SHOCK);
+		process_elemental_damage(attacker,victim,requested_damage,ELEM_SHOCK);
 	}
 	void anti_matter_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		send_elemental(attacker,victim,requested_damage,ELEM_ANTI_MATTER);
+		process_elemental_damage(attacker,victim,requested_damage,ELEM_ANTI_MATTER);
 	}
 
 	/**

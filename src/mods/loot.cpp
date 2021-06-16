@@ -47,9 +47,7 @@ namespace mods::loot {
 				}
 
 				player->level() = level;
-				generated_rifle_t rifle(player);
-				player->carry(rifle.roll());
-				rifle.send_stats_to_player(player);
+				player->carry(reward_player(player));
 			}
 		}
 		/** generate rifle */
@@ -66,6 +64,7 @@ namespace mods::loot {
 				generated_armor_t armor(player);
 				player->carry(armor.roll());
 				armor.send_stats_to_player(player);
+				player->sendln("Warning: this is not being saved in armor_instance");
 			}
 		}
 		player->level() = saved_level;

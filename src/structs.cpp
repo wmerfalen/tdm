@@ -17,6 +17,7 @@ static inline std::string default_yaml_file(const std::string& type) {
 
 void obj_data::init() {
 	d("[debug]obj_data::init()\n");
+	forged = false;
 	visibility = STARTING_VISIBILITY;
 	feed_status = 0;
 	m_location_data = 0;
@@ -78,6 +79,7 @@ int16_t obj_data::feed(int16_t in_type,std::string_view feed_file) {
 	return this->feed_status;
 }
 obj_data::obj_data(const obj_data& other) {
+	forged = other.forged;
 	feed(other.type,other.m_feed_file);
 	action_description = other.action_description;
 #ifdef __MENTOC_OBJ_DATA_DEBUG_OUTPUT__
@@ -85,6 +87,7 @@ obj_data::obj_data(const obj_data& other) {
 #endif
 }
 obj_data& obj_data::operator=(obj_data& other) {
+	forged = other.forged;
 	feed(other.type,other.m_feed_file);
 	action_description = other.action_description;
 #ifdef __MENTOC_OBJ_DATA_DEBUG_OUTPUT__

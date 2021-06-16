@@ -23,13 +23,13 @@ namespace mods::weapons::damage_types {
 		}
 		switch(mods::levels::player_tier(victim)) {
 			case 1:
-				chance -= 0.01 * victim->constitution();
+				chance -= TIER_ONE_CONSTITUTION_INJURY_DAMPENER() * victim->constitution();
 				break;
 			case 2:
-				chance -= 0.02 * victim->constitution();
+				chance -= TIER_TWO_CONSTITUTION_INJURY_DAMPENER() * victim->constitution();
 				break;
 			case 3:
-				chance -= 0.11 * victim->constitution();
+				chance -= TIER_THREE_CONSTITUTION_INJURY_DAMPENER() * victim->constitution();
 				break;
 			default:
 				break;

@@ -43,11 +43,12 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_SHOW_GAIN_EXP_DEBUG_OUTPUT__=1
 
 	#-D__MENTOC_SHOW_MELEE_HIT_STATS__=1
+	#-D__MENTOC_SHOW_COOLDOWN_DEBUG__=1
+	#-D__MENTOC_SHOW_MELEE_HIT_STATS__=1
 	#-D__MENTOC_PLAYER_SKILL_USAGE_DEBUG_OUTPUT__=1
 	#-D__MENTOC_ORM_BASE_DEBUG_OUTPUT__
 	#-D__MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__=1
 	#-D__MENTOC_ORM_UTIL_DEBUG_OUTPUT__=1
-	#-D__MENTOC_ENCODED_MESSAGE_DEBUG_OUTPUT__=1
 	#-D__MENTOC_ENCODED_MESSAGE_DEBUG_OUTPUT__=1
 	#-D__MENTOC_MODS_ZONE_DEBUG__=1
 	#-D__MENTOC_OBJ_DATA_DEBUG__=1
@@ -152,7 +153,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/scripted-step mods/contract-step-callback \
 					 mods/scripted-sequence-events mods/scripted-sequence-runner \
 					 mods/doors mods/runners/movement mods/runners/items \
-					 mods/runners/communication
+					 mods/runners/communication mods/mobs/damage-event
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

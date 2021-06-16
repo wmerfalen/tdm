@@ -806,6 +806,7 @@ struct obj_affected_type {
 /* ================== Memory Structure for Objects ================== */
 struct obj_data {
 		bool contract;
+		bool forged;
 		bool matches_query(std::string_view);
 		using visibility_t = uint8_t;
 		static constexpr visibility_t STARTING_VISIBILITY = 255;

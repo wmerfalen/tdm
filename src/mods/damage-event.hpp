@@ -42,10 +42,13 @@ enum damage_event_t : uint16_t {
 	YOU_INFLICTED_CRYOGENIC_DAMAGE,
 	YOU_INFLICTED_SHOCK_DAMAGE,
 
+	YOU_INFLICTED_SPRAY_DAMAGE,
+	YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK,
+
+	TARGET_IS_OUT_OF_RANGE,
 
 	HIT_BY_SPRAY_ATTACK,
 	YOU_DEALT_HEADSHOT_WITH_RIFLE_ATTACK,
-	YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK,
 	YOU_DEALT_CRITICAL_RIFLE_ATTACK,
 	YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK,
 	YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK,
@@ -79,6 +82,6 @@ struct feedback_t {
 	uint8_t from_direction;
 	uuid_t attacker;
 };
-using damage_event_callback_t = std::function<void(feedback_t,uuid_t)>;
+using damage_event_callback_t = std::function<void(const feedback_t&,const uuid_t&)>;
 
 #endif

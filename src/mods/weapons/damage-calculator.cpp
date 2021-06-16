@@ -29,37 +29,37 @@ namespace mods::weapons::damage_calculator {
 	namespace algorithm_A {
 		float get_base_damage(player_ptr_t& attacker) {
 			static float base_damage[] = {
-				10.0,	/* level 0 */
-				10.0,	/* level 1 */
-				15.0, /* level 2 */
-				18.0, /* level 3 */
-				20.0, /* level 4 */
-				24.0, /* level 5 */
-				26.0, /* level 6 */
-				28.0, /* level 7 */
-				30.0, /* level 9 */
-				32.0, /* level 9 */
-				34.0, /* level 10 */
-				36.0, /* level 11 */
-				38.0, /* level 12 */
-				40.0, /* level 13 */
-				42.0, /* level 14 */
-				45.0, /* level 15 */
-				50.0, /* level 16 */
-				54.0, /* level 17 */
-				60.0, /* level 18 */
-				68.0, /* level 19 */
-				80.0, /* level 20 */
-				100.0, /* level 21 */
-				115.0, /* level 22 */
-				130.0, /* level 23 */
-				150.0, /* level 24 */
-				170.0, /* level 25 */
-				190.0, /* level 26 */
-				200.0, /* level 27 */
-				250.0, /* level 28 */
-				280.0, /* level 29 */
-				300.0, /* level 30 */
+				LEVEL_0_BASE_DAMAGE(),
+				LEVEL_1_BASE_DAMAGE(),
+				LEVEL_2_BASE_DAMAGE(),
+				LEVEL_3_BASE_DAMAGE(),
+				LEVEL_4_BASE_DAMAGE(),
+				LEVEL_5_BASE_DAMAGE(),
+				LEVEL_6_BASE_DAMAGE(),
+				LEVEL_7_BASE_DAMAGE(),
+				LEVEL_8_BASE_DAMAGE(),
+				LEVEL_9_BASE_DAMAGE(),
+				LEVEL_10_BASE_DAMAGE(),
+				LEVEL_11_BASE_DAMAGE(),
+				LEVEL_12_BASE_DAMAGE(),
+				LEVEL_13_BASE_DAMAGE(),
+				LEVEL_14_BASE_DAMAGE(),
+				LEVEL_15_BASE_DAMAGE(),
+				LEVEL_16_BASE_DAMAGE(),
+				LEVEL_17_BASE_DAMAGE(),
+				LEVEL_18_BASE_DAMAGE(),
+				LEVEL_19_BASE_DAMAGE(),
+				LEVEL_20_BASE_DAMAGE(),
+				LEVEL_21_BASE_DAMAGE(),
+				LEVEL_22_BASE_DAMAGE(),
+				LEVEL_23_BASE_DAMAGE(),
+				LEVEL_24_BASE_DAMAGE(),
+				LEVEL_25_BASE_DAMAGE(),
+				LEVEL_26_BASE_DAMAGE(),
+				LEVEL_27_BASE_DAMAGE(),
+				LEVEL_28_BASE_DAMAGE(),
+				LEVEL_29_BASE_DAMAGE(),
+				LEVEL_30_BASE_DAMAGE()
 			};
 			std::size_t level = attacker->level();
 			if(level >= 30) {
@@ -73,33 +73,33 @@ namespace mods::weapons::damage_calculator {
 		) {
 			std::size_t level_difference = attacker->level() - victim->level();
 			if(level_difference >= 6) {
-				return 2;
+				return LEVEL_DIFF_GREATER_THAN_SIX();
 			}
 			switch(level_difference) {
 				case 5:
-					return 1.6;
+					return LEVEL_DIFF_5();
 				case 4:
-					return 1.4;
+					return LEVEL_DIFF_4();
 				case 3:
-					return 1.3;
+					return LEVEL_DIFF_3();
 				case 2:
-					return 1.2;
+					return LEVEL_DIFF_2();
 				case 1:
-					return 1.1;
+					return LEVEL_DIFF_1();
 				case 0:
-					return 1.0;
+					return LEVEL_DIFF_0();
 				case -1:
-					return 0.8;
+					return LEVEL_DIFF_NEG_1();
 				case -2:
-					return 0.6;
+					return LEVEL_DIFF_NEG_2();
 				case -3:
-					return 0.4;
+					return LEVEL_DIFF_NEG_3();
 				case -4:
-					return 0.2;
+					return LEVEL_DIFF_NEG_4();
 				case -5:
-					return 0.1;
+					return LEVEL_DIFF_NEG_5();
 				default:
-					return 0.05;
+					return LEVEL_DIFF_DEFAULT();
 			}
 		}
 		int16_t roll_weapon(
@@ -120,9 +120,9 @@ namespace mods::weapons::damage_calculator {
 				auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 				if(rifle_attachment) {
 					dice_count = rifle_attachment->base_object->rifle()->attributes->damage_dice_count *
-					             (rifle_attachment->get_level() * 0.3);
+					             (rifle_attachment->get_level() * RIFLE_ATTACHMENT_LEVEL_MULTIPLIER());
 					sides = rifle_attachment->base_object->rifle()->attributes->damage_dice_sides *
-					        (rifle_attachment->get_level() * 0.3);
+					        (rifle_attachment->get_level() * RIFLE_ATTACHMENT_LEVEL_MULTIPLIER());
 				} else {
 					dice_count = weapon->rifle()->attributes->damage_dice_count;
 					sides = weapon->rifle()->attributes->damage_dice_sides;
@@ -205,14 +205,12 @@ namespace mods::weapons::damage_calculator {
 		if(!rifle_attachment) {
 			return wants_to_deduct;
 		}
-		if(auto free_ammo = mods::rand::chance(rifle_attachment->free_ammo_chance)) {
-			dty_debug("Player rolled free ammo " << (free_ammo ?  green_str("SUCCESS") : red_str("FAIL")) <<
-			          "Chances were: " << rifle_attachment->free_ammo_chance << "%");
+		if(mods::rand::chance(rifle_attachment->free_ammo_chance)) {
+			dty_debug("Player rolled free ammo " << green_str("SUCCESS") << "Chances were: " << rifle_attachment->free_ammo_chance << "%");
 			ammo_reduction = 0;
 		}
-		if(auto regenerated_ammo = mods::rand::chance(rifle_attachment->regenerate_ammo_chance)) {
-			dty_debug("Player rolled regenerated ammo " << (regenerated_ammo ?  green_str("SUCCESS") : red_str("FAIL")) <<
-			          "Chances were: " << rifle_attachment->regenerate_ammo_chance << "%");
+		if(mods::rand::chance(rifle_attachment->regenerate_ammo_chance)) {
+			dty_debug("Player rolled regenerated ammo " << green_str("SUCCESS") << "Chances were: " << rifle_attachment->regenerate_ammo_chance << "%");
 			int16_t regen = rand_number(
 			                    mods::values::REGENERATED_AMMO_LOW(),
 			                    mods::values::REGENERATED_AMMO_HIGH()
@@ -309,13 +307,13 @@ namespace mods::weapons::damage_calculator {
 		switch(mods::levels::player_tier(player)) {
 			default:
 			case 1:
-				multiplier += 0.10;
+				multiplier += TIER_ONE_STRENGTH_BONUS_MULTIPLIER();
 				break;
 			case 2:
-				multiplier += 0.12;
+				multiplier += TIER_TWO_STRENGTH_BONUS_MULTIPLIER();
 				break;
 			case 3:
-				multiplier += 0.18;
+				multiplier += TIER_THREE_STRENGTH_BONUS_MULTIPLIER();
 				break;
 		}
 		return player->strength() * multiplier;
@@ -330,13 +328,13 @@ namespace mods::weapons::damage_calculator {
 		switch(mods::levels::player_tier(victim)) {
 			default:
 			case 1:
-				multiplier += 0.11;
+				multiplier += TIER_ONE_CONSTITUTION_RESISTANCE_MULTIPLIER();
 				break;
 			case 2:
-				multiplier += 0.15;
+				multiplier += TIER_TWO_CONSTITUTION_RESISTANCE_MULTIPLIER();
 				break;
 			case 3:
-				multiplier += 0.19;
+				multiplier += TIER_THREE_CONSTITUTION_RESISTANCE_MULTIPLIER();
 				break;
 		}
 		return player->constitution() * multiplier;

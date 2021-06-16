@@ -762,7 +762,7 @@ namespace mods {
 			uuid_t get_attacker() {
 				return this->m_attacker_uuid;
 			}
-			void register_damage_event_callback(damage_event_t a,damage_event_callback_t cb);
+			void register_damage_event_callback(const std::vector<damage_event_t>& events,damage_event_callback_t cb);
 			void dispatch_event(feedback_t);
 			void set_watching(direction_t dir) {
 				this->m_watching = dir;
@@ -937,7 +937,7 @@ namespace mods {
 			uint32_t m_blocked_until;
 			obj_ptr_t m_attacking_with;
 			std::map<int,uint16_t> m_skills;
-			std::map<damage_event_t,damage_event_callback_t> m_damage_event_callbacks;
+			std::vector<std::pair<std::vector<damage_event_t>,damage_event_callback_t>> m_damage_event_callbacks;
 			direction_t m_watching;
 			std::shared_ptr<mods::armor::basic_protection> m_basic_protection;
 			std::shared_ptr<mods::armor::advanced_protection> m_advanced_protection;

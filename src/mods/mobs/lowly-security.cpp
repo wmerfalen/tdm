@@ -107,11 +107,11 @@ namespace mods::mobs {
 	 */
 	void lowly_security::setup_damage_callbacks() {
 		using de = damage_event_t;
-		this->player_ptr->register_damage_event_callback(de::TARGET_DEAD_EVENT,[&](feedback_t feedback,uuid_t player) {
+		this->player_ptr->register_damage_event_callback({de::TARGET_DEAD_EVENT},[&](const feedback_t& feedback,const uuid_t& player) {
 			this->set_behaviour_tree("lowly_security");
 		});
 
-		this->player_ptr->register_damage_event_callback(de::YOURE_IN_PEACEFUL_ROOM,[&](feedback_t feedback,uuid_t player) {
+		this->player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
 			auto& room = world[this->player_ptr->room()];
 			int decision = lowly_sec::weighted_direction_decider(this->player_ptr);
 			if(decision == -1) {

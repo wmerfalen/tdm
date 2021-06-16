@@ -27,6 +27,7 @@
 #include "mods/weapons/damage-types.hpp"
 #include "mods/levels.hpp"
 #include "mods/rand.hpp"
+#include "mods/loot.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
 #define MOD_SNIPE_DISTANCE_THACO 5
@@ -429,7 +430,6 @@ void death_cry(char_data *ch) {
 
 
 void die(char_data* killer,char_data *victim) {
-	std::cerr << "[die(killer,victim)] -> killing: " << victim->player.name.c_str() << "\n";
 	/* check if mob death trigger is active */
 
 	if(victim->drone) {
@@ -444,6 +444,10 @@ void die(char_data* killer,char_data *victim) {
 		stop_fighting(killer);
 	}
 
+	auto p = ptr(killer);
+	auto v = ptr(victim);
+	auto obj = mods::loot::reward_player(p);
+	obj_to_char(obj,v);
 	die(victim);
 }
 
