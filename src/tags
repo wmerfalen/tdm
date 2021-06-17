@@ -2681,12 +2681,12 @@ MOTORCYCLE	mods/weapon.hpp	/^		MOTORCYCLE,$/;"	e	enum:mods::weapon::vehicle_t
 MP5	mods/orm/breacher.hpp	/^		const std::string MP5 = "MP5";$/;"	m	struct:mods::orm::breacher
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_choice_t
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1585;"	d	file:
-MR	mods/player.cpp	1654;"	d	file:
+MR	mods/player.cpp	1573;"	d	file:
+MR	mods/player.cpp	1642;"	d	file:
 MR	structs.cpp	622;"	d	file:
 MR	structs.cpp	633;"	d	file:
-MRC	mods/player.cpp	1586;"	d	file:
-MRC	mods/player.cpp	1655;"	d	file:
+MRC	mods/player.cpp	1574;"	d	file:
+MRC	mods/player.cpp	1643;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
@@ -5284,7 +5284,7 @@ ammo_locker_list	mods/zone.cpp	/^	std::vector<room_vnum> ammo_locker_list;$/;"	m
 ammo_max	mods/weapon.hpp	/^			int ammo_max;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 ammo_max	structs.h	/^	uint16_t ammo_max;$/;"	m	struct:obj_flag_data
 ammo_type	mods/weapon.hpp	/^			std::string ammo_type;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
-ammo_type_adjustment	mods/player.cpp	/^	int player::ammo_type_adjustment(int increment,const weapon_type_t& type) {$/;"	f	class:mods::player
+ammo_type_adjustment	mods/player.cpp	/^	int player::ammo_type_adjustment(int increment,const mw_rifle& type) {$/;"	f	class:mods::player
 ammunition_amount	mods/rifle-attachments.hpp	/^			int16_t ammunition_amount;				\/** honored [ 2021-04-13 ] *\/$/;"	m	struct:mods::rifle_attachments_t
 ammunition_amount	mods/weapons/damage-calculator.cpp	/^	int16_t ammunition_amount($/;"	f	namespace:mods::weapons::damage_calculator
 amount	mods/deferred.hpp	/^		int64_t amount;$/;"	m	struct:mods::chunk_affect_t
@@ -5707,7 +5707,7 @@ carry	mods/player.cpp	/^	void player::carry(obj_ptr_t obj) {$/;"	f	class:mods::p
 carry_items	mods/player.hpp	/^			byte& carry_items() {$/;"	f	struct:mods::player
 carry_weight	mods/player.hpp	/^			int&	carry_weight() {$/;"	f	struct:mods::player
 carrying	mods/player.cpp	/^	obj_data* player::carrying() {$/;"	f	class:mods::player
-carrying_ammo_of_type	mods/player.cpp	/^	bool player::carrying_ammo_of_type(const weapon_type_t& type) {$/;"	f	class:mods::player
+carrying_ammo_of_type	mods/player.cpp	/^	bool player::carrying_ammo_of_type(const mw_rifle& type) {$/;"	f	class:mods::player
 cast_spell	spell_parser.cpp	/^int cast_spell(char_data *ch, char_data *tch,$/;"	f
 castle_cleaner	castle.cpp	/^int castle_cleaner(char_data *ch, int cmd, int gripe) {$/;"	f
 castle_mob_spec	castle.cpp	/^void castle_mob_spec(mob_vnum mobnum, SPECIAL(*specproc)) {$/;"	f
@@ -6347,10 +6347,10 @@ db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	f	names
 db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob_vnum,str_map_t values) {$/;"	f	namespace:mods::mobs::mg::orm
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	f
 dbg	mods/acl/config-parser.hpp	20;"	d
-dbg	mods/player.cpp	561;"	d	file:
-dbg	mods/player.cpp	589;"	d	file:
-dbg	mods/player.cpp	592;"	d	file:
-dbg	mods/player.cpp	639;"	d	file:
+dbg	mods/player.cpp	560;"	d	file:
+dbg	mods/player.cpp	588;"	d	file:
+dbg	mods/player.cpp	591;"	d	file:
+dbg	mods/player.cpp	638;"	d	file:
 dbg_blu	mods/acl/config-parser.hpp	25;"	d
 dbg_grn	mods/acl/config-parser.hpp	24;"	d
 dbg_print	mods/contract-step-callback.cpp	10;"	d	file:
@@ -7843,7 +7843,7 @@ get_all	mods/lmdb.cpp	/^	result_container_t transaction_t::get_all(T consumer) {
 get_all_meta_values	mods/meta_utils.cpp	/^	std::vector<std::string> get_all_meta_values($/;"	f	namespace:mods::meta_utils
 get_ammo	mods/object-utils.hpp	/^	uint16_t get_ammo(T& weapon) {$/;"	f	namespace:mods::object_utils
 get_ammo	mods/object-utils.hpp	/^	uint16_t get_ammo(obj_ptr_t& weapon) {$/;"	f	namespace:mods::object_utils
-get_ammo	mods/player.cpp	/^	obj_data* player::get_ammo(const weapon_type_t& type) {$/;"	f	class:mods::player
+get_ammo	mods/player.cpp	/^	obj_ptr_t player::get_ammo(const mw_rifle& type) {$/;"	f	class:mods::player
 get_ammo_for	mods/player.cpp	/^	obj_ptr_t player::get_ammo_for(obj_ptr_t& weapon) {$/;"	f	class:mods::player
 get_attacker	mods/player.hpp	/^			uuid_t get_attacker() {$/;"	f	struct:mods::player
 get_auto_clear_response_flag	mods/builder/slotted-builder.hpp	/^			bool get_auto_clear_response_flag() {$/;"	f	struct:mods::builder::slotted_builder
@@ -7911,7 +7911,7 @@ get_explosive_type	mods/object-utils.hpp	/^	static inline mw_explosive get_explo
 get_file	mods/js.hpp	/^				inline std::string_view get_file() {$/;"	f	struct:mods::js::include
 get_filename	utils.cpp	/^int get_filename(char *filename, size_t fbufsize, int mode, const char *orig_name) {$/;"	f
 get_fire_status	mods/rooms.hpp	/^	static inline fire_status_t get_fire_status(TRoom room) {$/;"	f	namespace:mods::rooms
-get_first_ammo_of_type	mods/player.cpp	/^	obj_data* player::get_first_ammo_of_type(const weapon_type_t& type) const {$/;"	f	class:mods::player
+get_first_ammo_of_type	mods/player.cpp	/^	obj_ptr_t player::get_first_ammo_of_type(const mw_rifle& type) {$/;"	f	class:mods::player
 get_from_container	act.item.cpp	/^void get_from_container(char_data *ch, struct obj_data *cont,$/;"	f
 get_from_q	comm.cpp	/^int get_from_q(mods::descriptor_data& d, char *dest, int *aliased) {$/;"	f
 get_from_room	act.item.cpp	/^void get_from_room(char_data *ch, char *arg, int howmany) {$/;"	f

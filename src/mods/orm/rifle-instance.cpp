@@ -39,9 +39,9 @@ namespace mods::orm {
 		if(this->rifle_str_type.length() == 0) {
 			this->rifle_str_type = "ASSAULT_RIFLE";
 		}
-		this->rifle_type = obj->rifle()->attributes->type;
+		this->rifle_type = std::to_string(obj->rifle()->attributes->type);
 		if(this->rifle_type.length() == 0) {
-			this->rifle_type = "ASSAULT_RIFLE";
+			this->rifle_type = "0";
 		}
 		this->rifle_manufacturer = obj->rifle()->attributes->manufacturer;
 		if(this->rifle_manufacturer.length() == 0) {
@@ -111,7 +111,7 @@ namespace mods::orm {
 		obj->rifle()->attributes->damage_map[3] = this->rifle_damage_map_3;
 		obj->rifle()->attributes->rarity = mods::yaml::parse_rarity(this->rifle_rarity);
 		obj->rifle()->attributes->str_type = this->rifle_str_type;
-		obj->rifle()->attributes->type = mods::weapon::from_string_to_rifle(this->rifle_type);
+		obj->rifle()->attributes->type = mods::weapon::from_string_to_rifle(this->rifle_str_type);
 		obj->rifle()->attributes->manufacturer = this->rifle_manufacturer;
 		obj->rifle()->attributes->name = this->rifle_name;
 		obj->rifle()->attributes->ammo_type = this->rifle_ammo_type;
@@ -194,9 +194,9 @@ namespace mods::orm {
 		if(values["rifle_str_type"].length() == 0) {
 			values["rifle_str_type"] = "ASSAULT_RIFLE";
 		}
-		values["rifle_type"] = (this->rifle_type);
+		values["rifle_type"] = this->rifle_type;
 		if(values["rifle_type"].length() == 0) {
-			values["rifle_type"] = "ASSAULT_RIFLE";
+			values["rifle_type"] = "0";
 		}
 		values["rifle_manufacturer"] = (this->rifle_manufacturer);
 		if(values["rifle_manufacturer"].length() == 0) {
@@ -308,7 +308,7 @@ namespace mods::orm {
 			this->rifle_str_type = row["rifle_str_type"].c_str();
 		}
 		if(!row["rifle_type"].is_null()) {
-			this->rifle_type = row["rifle_type"].c_str();
+			this->rifle_type = row["rifle_type"].as<int>();
 		}
 		if(!row["rifle_manufacturer"].is_null()) {
 			this->rifle_manufacturer = row["rifle_manufacturer"].c_str();

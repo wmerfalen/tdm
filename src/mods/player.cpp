@@ -536,21 +536,20 @@ namespace mods {
 	const bool& player::can_attack_again() const {
 		return m_can_attack;
 	}
-	bool player::carrying_ammo_of_type(const weapon_type_t& type) {
-		for(const auto& item : m_char_data->m_carrying) {
-			if(item->has_consumable() && item->consumable()->attributes->consumed_by.compare("RIFLE") == 0 &&
-			        mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type) == type) {
-				return true;
-			}
-		}
-
-		return false;
+	bool player::carrying_ammo_of_type(const mw_rifle& type) {
+		return get_ammo(type) != nullptr;
 	}
-	obj_data* player::get_ammo(const weapon_type_t& type) {
+	obj_ptr_t player::get_ammo(const mw_rifle& type) {
 		for(const auto& item : m_char_data->m_carrying) {
+			if(item->has_consumable()) {
+				sendln(item->consumable()->attributes->ammo_type);
+				sendln(CAT("type:",type,"==?", mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type)));
+				sendln(CAT("type:",type,"==?", item->consumable()->attributes->ammo_type));
+				sendln(CAT("type:",mods::weapon::to_string(type)));
+			}
 			if(item->has_consumable() && item->consumable()->attributes->consumed_by.compare("RIFLE") == 0 &&
 			        mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type) == type) {
-				return item.get();
+				return item;
 			}
 		}
 		return nullptr;
@@ -768,25 +767,20 @@ namespace mods {
 	void player::pager_clear() {
 		m_pages.clear();
 	}
-	obj_data* player::get_first_ammo_of_type(const weapon_type_t& type) const {
-		for(auto& item : m_char_data->m_carrying) {
-			if(item->has_consumable() && item->consumable()->attributes->consumed_by.compare("RIFLE") == 0 &&
-			        mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type) == type) {
-				return item.get();
-			}
-		}
-		return nullptr;
+	obj_ptr_t player::get_first_ammo_of_type(const mw_rifle& type) {
+		return get_ammo(type);
 	}
 	/* returns:
 	 * 	the `ammo` trait of the obj_data struct after the increment has been applied.
 	 * if 0 (zero) is returned, then nothing was subtraced/added from the user's
 	 * ammo supply. This means the user doesn't have that ammo type
 	 */
-	int player::ammo_type_adjustment(int increment,const weapon_type_t& type) {
+	int player::ammo_type_adjustment(int increment,const mw_rifle& type) {
 		if(!m_char_data->carrying) {
 			return 0;
 		}
 
+		/** FIXME */
 		for(auto item = m_char_data->carrying; item->next; item = item->next) {
 			if(item->obj_flags.is_ammo &&
 			        item->obj_flags.type == type && m_char_data == item->carried_by) {
@@ -1544,16 +1538,10 @@ namespace mods {
 		return false;
 	}
 	obj_ptr_t player::get_ammo_for(obj_ptr_t& weapon) {
-		auto type = weapon->rifle()->attributes->str_type;
-		/** TODO: use a query based interface to get any ammunition from packs, backpack, inventory, etc */
-		for(const auto& item : m_char_data->m_carrying) {
-			if(item->has_consumable() &&
-			        item->consumable()->attributes->consumed_by.compare("RIFLE") == 0 &&
-			        item->consumable()->attributes->ammo_type.compare(type.c_str()) == 0) {
-				return item;
-			}
+		if(!weapon->has_rifle()) {
+			return nullptr;
 		}
-		return nullptr;
+		return get_ammo((mw_rifle)weapon->rifle()->type);
 	}
 	void player::consume_from_carrying(obj_ptr_t& item) {
 		auto it = std::find(m_char_data->m_carrying.begin(),m_char_data->m_carrying.end(),item);

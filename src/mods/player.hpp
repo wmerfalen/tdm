@@ -168,8 +168,6 @@ namespace mods {
 			bool room_pave_mode();
 			bool zone_pave_mode();
 
-			obj_ptr_t get_ammo_for(obj_ptr_t&);
-			void consume_from_carrying(obj_ptr_t& item);
 
 			/* class info */
 			player_class_t get_class();
@@ -177,19 +175,23 @@ namespace mods {
 			mods::string get_class_string() const;
 			bool can(std::string_view);
 
-			/* ammo gettters */
-			obj_data* get_first_ammo_of_type(const weapon_type_t&) const;
 
 			/* combat functions */
 			bool can_snipe(player_ptr_t target);
 			bool is_weapon_loaded();
-			bool carrying_ammo_of_type(const weapon_type_t&);
 			obj_data* carrying();
 			std::vector<obj_data*> vcarrying();
 			void uncarry(obj_ptr_t obj);
 			void carry(obj_ptr_t);
+
+			uint16_t ammo();
+			uint16_t set_ammo(uint16_t value);
+			obj_ptr_t get_ammo(const mw_rifle&);
+			obj_ptr_t get_ammo_for(obj_ptr_t&);
+			obj_ptr_t get_first_ammo_of_type(const mw_rifle&);
+			bool carrying_ammo_of_type(const mw_rifle&);
 			void ammo_adjustment(int);
-			int  ammo_type_adjustment(int,const weapon_type_t&);
+			int ammo_type_adjustment(int,const mw_rifle&);
 
 			/* setters */
 			void set_cd(char_data* ch);
@@ -424,10 +426,10 @@ namespace mods {
 				return m_char_data;
 			}
 			rifle_data_t* rifle();
-			uint16_t ammo();
-			uint16_t set_ammo(uint16_t value);
 
-			obj_data*      get_ammo(const weapon_type_t&);
+
+			void consume_from_carrying(obj_ptr_t& item);
+
 			mods::string weapon_name();
 
 			/* conversion operator to char_data* */
@@ -865,7 +867,6 @@ namespace mods {
 			uint8_t m_overhead_map_height;
 			char_data*   m_char_data;
 			std::shared_ptr<char_data> m_shared_ptr;
-			//std::deque<std::shared_ptr<obj_data>> m_carrying;
 			std::vector<affected_type> m_affected_by;
 			bool m_moving_to_room;
 

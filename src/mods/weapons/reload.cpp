@@ -9,7 +9,7 @@
 namespace mods::weapons::reload {
 	void reload_weapon(player_ptr_t& player,obj_ptr_t weapon) {
 		uint16_t ticks = 6;
-		switch((mw_rifle)weapon->rifle()->attributes->type) {
+		switch((mw_rifle)weapon->rifle()->type) {
 			case mw_rifle::LIGHT_MACHINE_GUN:
 				ticks = mods::values::RELOAD_TICKS_LIGHT_MACHINE_GUN();
 				break;
@@ -20,6 +20,7 @@ namespace mods::weapons::reload {
 
 			case mw_rifle::SHOTGUN:
 				ticks = mods::values::RELOAD_TICKS_SHOTGUN();
+				player->sendln("yuhhhhhhh");
 				break;
 
 			case mw_rifle::SNIPER:
