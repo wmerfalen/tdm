@@ -169,6 +169,40 @@ namespace mods::yaml {
 	}
 	void consumable_description_t::generate_map() {
 		exported.clear();
+		exported["consumable_csv_capabilities"] = (this->csv_capabilities);
+		exported["consumable_csv_attach_to"] = (this->csv_attach_to);
+		exported["consumable_weight_in_lbs"] = std::to_string(this->weight_in_lbs);
+		exported["consumable_consumed_by"] = (this->consumed_by);
+		exported["consumable_adds_hp"] = std::to_string(this->adds_hp);
+		exported["consumable_adds_movement"] = std::to_string(this->adds_movement);
+		exported["consumable_adds_room_range"] = std::to_string(this->adds_room_range);
+		exported["consumable_adds_strength"] = std::to_string(this->adds_strength);
+		exported["consumable_adds_intelligence"] = std::to_string(this->adds_intelligence);
+		exported["consumable_adds_charisma"] = std::to_string(this->adds_charisma);
+		exported["consumable_adds_dexterity"] = std::to_string(this->adds_dexterity);
+		exported["consumable_adds_constitution"] = std::to_string(this->adds_constitution);
+		exported["consumable_adds_wisdom"] = std::to_string(this->adds_wisdom);
+		exported["consumable_adds_weight"] = std::to_string(this->adds_weight);
+		exported["consumable_adds_experience"] = std::to_string(this->adds_experience);
+		exported["consumable_adds_armor_class"] = std::to_string(this->adds_armor_class);
+		exported["consumable_adds_hitroll"] = std::to_string(this->adds_hitroll);
+		exported["consumable_adds_damage_roll"] = std::to_string(this->adds_damage_roll);
+		exported["consumable_ticks_until_zero"] = std::to_string(this->ticks_until_zero);
+		exported["consumable_ammo_type"] = (this->ammo_type);
+		exported["consumable_capacity"] = std::to_string(this->capacity);
+		exported["consumable_adds_fire_damage"] = std::to_string(this->adds_fire_damage);
+		exported["consumable_adds_critical_chance"] = std::to_string(this->adds_critical_chance);
+		exported["consumable_adds_ammo_max"] = std::to_string(this->adds_ammo_max);
+		exported["consumable_adds_chance_to_injure"] = std::to_string(this->adds_chance_to_injure);
+		exported["consumable_adds_clip_size"] = std::to_string(this->adds_clip_size);
+		exported["consumable_adds_cooldown_between_shots"] = std::to_string(this->adds_cooldown_between_shots);
+		exported["consumable_adds_critical_range"] = std::to_string(this->adds_critical_range);
+		exported["consumable_adds_disorient_amount"] = std::to_string(this->adds_disorient_amount);
+		exported["consumable_adds_headshot_bonus"] = std::to_string(this->adds_headshot_bonus);
+		exported["consumable_adds_max_range"] = std::to_string(this->adds_max_range);
+		exported["consumable_adds_reload_time"] = std::to_string(this->adds_reload_time);
+		exported["consumable_adds_muzzle_velocity"] = std::to_string(this->adds_muzzle_velocity);
+		exported["consumable_adds_damage_dice_count"] = std::to_string(this->adds_damage_dice_count);
 	}
 	void attachment_description_t::generate_map() {
 		exported.clear();
@@ -1041,6 +1075,7 @@ namespace mods::yaml {
 			return -2;
 		}
 		MENTOC_EXAMPLE_CONSUMABLE
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 		base_items(&out_file, "N7RCX Human Growth Hormone ","PED");
 		out_file.flush();
 		out_file.close();
@@ -1057,7 +1092,7 @@ namespace mods::yaml {
 			return -2;
 		}
 		MENTOC_EXAMPLE_TRAP
-		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_TRAP_MEMBERS_TUPLE)
 		base_items(&out_file, "Bear Trap ","BEAR_TRAP");
 		out_file.flush();
 		out_file.close();

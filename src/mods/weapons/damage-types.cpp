@@ -16,7 +16,13 @@
 #include "damage-event-broadcaster.hpp"
 #include "damage-decisions.hpp"
 
+#ifdef __MENTOC_DAMAGE_TYPES_DEBUG_OUTPUT__
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#else
+#define dty_debug(a)
+#endif
+
+
 #ifndef TO_ROOM
 #define TO_ROOM		1
 #endif
@@ -781,7 +787,9 @@ namespace mods::weapons::damage_types {
 		dam = calculate_tracked_damage(player,dam);
 		auto bonus_dam = mods::weapons::damage_calculator::calculate_bonus_damage(player,weapon,dam);
 		if(bonus_dam > dam) {
+#ifdef __MENTOC_SHOW_MELEE_HIT_STATS__
 			std::cerr << "[mods::weapons::damage_types::rifle_attack_object_with_feedback] bonus damage: " << bonus_dam << "\n";
+#endif
 			dam = bonus_dam;
 		}
 
@@ -1003,7 +1011,9 @@ namespace mods::weapons::damage_types {
 		dam = calculate_tracked_damage(player,dam);
 		auto bonus_dam = mods::weapons::damage_calculator::calculate_bonus_damage(player,weapon,dam);
 		if(bonus_dam > dam) {
+#ifdef __MENTOC_SHOW_BONUS_DAM_OUTPUT__
 			std::cerr << "[mods::weapons::damage_types::rifle_attack_object_with_feedback] bonus damage: " << bonus_dam << "\n";
+#endif
 			dam = bonus_dam;
 		}
 

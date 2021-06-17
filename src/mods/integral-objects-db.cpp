@@ -19,6 +19,11 @@
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::integral_objects_db {
+	void save_ammo_locker(player_ptr_t& player, std::vector<std::string>& args) {
+		mo_debug("saving ammo locker");
+		save_item_to_db(player, "ammo-locker", args);
+		//mods::orm::weapon_locker::place_locker(world[player->room()].number, args);
+	}
 	void save_weapon_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving weapon locker");
 		save_item_to_db(player, "weapon-locker", args);
@@ -63,6 +68,11 @@ namespace mods::integral_objects_db {
 	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
 		auto status = delete_section_vector("weapon-locker",std::to_string(world[player->room()].number));
+		player->send("delete status: %d\r\n",status);
+	}
+	void remove_ammo_locker(player_ptr_t& player, std::vector<std::string>& args) {
+		using namespace mods::db;
+		auto status = delete_section_vector("ammo-locker",std::to_string(world[player->room()].number));
 		player->send("delete status: %d\r\n",status);
 	}
 	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args) {

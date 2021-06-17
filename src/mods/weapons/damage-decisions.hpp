@@ -80,12 +80,6 @@ namespace mods::weapons::damage_types {
 					player->damage_event(feedback);
 					return {false,feedback};
 				}
-				/* FIXME this is duplicate but different code  */
-				if(weapon->has_rifle() && mods::weapon::has_clip(player->rifle()) && player->ammo() <= 0) {
-					feedback.damage_event = de::OUT_OF_AMMO_EVENT;
-					player->damage_event(feedback);
-					return {false,feedback};
-				}
 				break;
 			case ITEM_MELEE:
 				if(weapon && weapon->has_melee() == false) {

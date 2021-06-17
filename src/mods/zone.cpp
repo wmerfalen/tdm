@@ -19,6 +19,7 @@ namespace mods::zone {
 	static std::deque<replenish_command> replenish;
 	static std::vector<int> zone_id_blacklist;
 	static bool disable_all_zone_resets = false;
+	std::vector<room_vnum> ammo_locker_list;
 	std::vector<room_vnum> weapon_locker_list;
 	std::vector<room_vnum> armor_locker_list;
 	std::vector<room_vnum> camera_feed_list;
@@ -26,6 +27,12 @@ namespace mods::zone {
 	std::vector<room_vnum> sign_list;
 
 
+	void build_ammo_locker(room_vnum room) {
+		z_debug("building ammo locker");
+		auto obj = create_object(ITEM_CONTAINER, "ammo-locker.yml");
+		obj_to_room(obj.get(),real_room(room));
+		ammo_locker_list.emplace_back(room);
+	}
 	void build_weapon_locker(room_vnum room) {
 		z_debug("building weapon locker");
 		auto obj = create_object(ITEM_CONTAINER, "weapon-locker.yml");
@@ -242,6 +249,10 @@ namespace mods::zone {
 
 		for(auto command : replenish) {
 			rr_debug("running command:" << command.type);
+			if(command.type.compare("ammo-locker") == 0) {
+				rr_debug("ammo locker command type found. running feed");
+				mods::integral_objects::feed_ammo_locker(command.room);
+			}
 			if(command.type.compare("weapon-locker") == 0) {
 				rr_debug("weapon locker command type found. running feed");
 				mods::integral_objects::feed_weapon_locker(command.room);
@@ -280,6 +291,11 @@ namespace mods::zone {
 	}
 
 	void new_room(room_data* room_ptr) {
+		if(mods::db::vector_exists("ammo-locker",std::to_string(room_ptr->number))) {
+			z_debug("Found ammo locker in room_ptr->number: " << room_ptr->number);
+			build_ammo_locker(room_ptr->number);
+			register_replenish(room_ptr->number,"ammo-locker");
+		}
 		if(mods::db::vector_exists("weapon-locker",std::to_string(room_ptr->number))) {
 			z_debug("Found weapon locker in room_ptr->number: " << room_ptr->number);
 			build_weapon_locker(room_ptr->number);

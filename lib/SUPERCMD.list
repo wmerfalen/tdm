@@ -5,6 +5,8 @@
 {yel}mods/integral-objects{/yel}:->{grn}install_weapon_locker{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}uninstall_armor_locker{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}uninstall_weapon_locker{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}install_ammo_locker{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}uninstall_ammo_locker{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}list_wear_flags{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}armor_locker_quota{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}weapon_locker_quota{/grn}

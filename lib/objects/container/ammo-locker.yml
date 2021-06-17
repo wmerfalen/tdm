@@ -1,0 +1,25 @@
+# type: ARMOR_LOCKER
+# type: WEAPON_LOCKER
+# type: LOCKER
+# type: EXPLOSIVE_BARREL
+# type: BILE_BARREL
+# type: WATER_BARREL
+# type: GASOLINE_BARREL
+# type: GAS_STATION_PUMP
+detailed_description: 'Ammo locker.' #string, description
+str_type: 'WEAPON_LOCKER' # enum, object type
+manufacturer: 'ACME Industries' # string, anything 
+name: 'Ammo Locker' # string, anything name of object 
+vnum: 132
+description: 'Ammo Locker'
+short_description: 'Ammo Locker'
+action_description: 'Ammo Locker'
+feed_file: 'container/ammo-locker.yml'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

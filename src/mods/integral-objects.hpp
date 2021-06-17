@@ -9,6 +9,7 @@ namespace mods::integral_objects {
 
 	};
 	void init();
+	void feed_ammo_locker(room_vnum);
 	void feed_weapon_locker(room_vnum);
 	void feed_armor_locker(room_vnum);
 	void feed_camera_feed(room_vnum);

@@ -33,7 +33,6 @@
  * output.
  */
 
-#define __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__
 namespace mods::stat_bonuses {
 	extern void player_equip(uuid_t player_uuid,uuid_t object_uuid);
 	extern void player_unequip(uuid_t player_uuid,uuid_t object_uuid);
@@ -305,7 +304,6 @@ namespace mods {
 			m_advanced_protection = std::make_shared<mods::armor::advanced_protection>(uuid());
 			m_elite_protection = std::make_shared<mods::armor::elite_protection>(uuid());
 		}
-		std::cerr << green_str("mods::player::equip(obj_ptr_t,pos):") << in_object->name.c_str() << "', pos:" << pos << "\n";
 		if(pos < NUM_WEARS) {
 			if(pos == WEAR_WIELD || pos == WEAR_PRIMARY || pos == WEAR_SECONDARY) {
 				this->m_weapon_flags = in_object->obj_flags.weapon_flags;
@@ -314,13 +312,7 @@ namespace mods {
 			in_object->worn_by = this->cd();
 			in_object->worn_on = pos;
 			m_equipment[pos] = in_object;
-#ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
-			sendln("add_player_wear");
-			mods::orm::inventory::lmdb::add_player_wear(this->db_id(),in_object->db_id(),in_object->type,pos);
-#else
-			sendln("flush_player_by_uuid");
 			mods::orm::inventory::flush_player_by_uuid(uuid());
-#endif
 #ifdef __MENTOC_PLAYER_DEBUG__
 			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
 #endif
@@ -355,11 +347,7 @@ namespace mods {
 			m_equipment[pos]->worn_on = -1;
 			m_equipment[pos] = nullptr;
 
-#ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
-			mods::orm::inventory::lmdb::remove_player_wear(this->db_id(),pos);
-#else
 			mods::orm::inventory::flush_player_by_uuid(uuid());
-#endif
 			this->m_sync_equipment();
 		}
 	}
@@ -549,16 +537,23 @@ namespace mods {
 		return m_can_attack;
 	}
 	bool player::carrying_ammo_of_type(const weapon_type_t& type) {
-		if(m_char_data->carrying == 0) {
-			return false;
-		}
-		for(auto item = m_char_data->carrying; item->next; item = item->next) {
-			if(item->obj_flags.is_ammo && type == item->obj_flags.type) {
+		for(const auto& item : m_char_data->m_carrying) {
+			if(item->has_consumable() && item->consumable()->attributes->consumed_by.compare("RIFLE") == 0 &&
+			        mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type) == type) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+	obj_data* player::get_ammo(const weapon_type_t& type) {
+		for(const auto& item : m_char_data->m_carrying) {
+			if(item->has_consumable() && item->consumable()->attributes->consumed_by.compare("RIFLE") == 0 &&
+			        mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type) == type) {
+				return item.get();
+			}
+		}
+		return nullptr;
 	}
 	/** TODO: do this */
 	void player::carry(obj_ptr_t obj) {
@@ -671,6 +666,21 @@ namespace mods {
 
 		return true;
 	}
+	uint16_t player::set_ammo(uint16_t value) {
+		auto eq = m_equipment[WEAR_WIELD];
+		if(eq && eq->has_rifle()) {
+			return eq->rifle_instance->ammo = value;
+		}
+		return 0;
+	}
+
+	uint16_t player::ammo() {
+		auto eq = m_equipment[WEAR_WIELD];
+		if(eq && eq->has_rifle()) {
+			return eq->rifle_instance->ammo;
+		}
+		return 0;
+	}
 	bool player::has_ammo() {
 		return true; //FIXME
 	}
@@ -759,13 +769,12 @@ namespace mods {
 		m_pages.clear();
 	}
 	obj_data* player::get_first_ammo_of_type(const weapon_type_t& type) const {
-		for(auto item = m_char_data->carrying; item->next; item = item->next) {
-			if(item->obj_flags.is_ammo &&
-			        item->obj_flags.type == type && m_char_data == item->carried_by) {
-				return item;
+		for(auto& item : m_char_data->m_carrying) {
+			if(item->has_consumable() && item->consumable()->attributes->consumed_by.compare("RIFLE") == 0 &&
+			        mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type) == type) {
+				return item.get();
 			}
 		}
-
 		return nullptr;
 	}
 	/* returns:
@@ -834,11 +843,6 @@ namespace mods {
 			return;
 		}
 		raw_send(world[rnum].name);
-		//if(world[rnum].name) {
-		//	/** note: using 1 for the plain parameter since colr eval is done on room load from postgres */
-		//	std::cerr << __FILE__ << "|" << __LINE__ << "-> name:'" << world[rnum].name.c_str() << "'\n";
-		//	//write_to_char( world[rnum].name.view(),1,1);
-		//}
 		if(builder_mode()) {
 			write_to_char((std::string("[room_id:") + std::to_string(rnum) + "|number:" +
 			               std::to_string(world[rnum].number) + "|zone:" +
@@ -900,18 +904,6 @@ namespace mods {
 	}
 	rifle_data_t* player::rifle() {
 		return GET_EQ(m_char_data, WEAR_WIELD)->rifle();
-	}
-	obj_data* player::get_ammo(const weapon_type_t& type) {
-		for(auto item = m_char_data->carrying; item->next; item = item->next) {
-			if(item->obj_flags.is_ammo &&
-			        m_char_data == item->carried_by &&
-			        type == item->obj_flags.type
-			  ) {
-				return item;
-			}
-		}
-
-		return nullptr;
 	}
 	void player::set_char_on_descriptor(std::deque<descriptor_data>::iterator it) {
 		it->character = this->cd();
@@ -1175,30 +1167,23 @@ namespace mods {
 	void player::set_bad_password_count(int i) {
 		if(m_desc) {
 			m_desc->bad_pws = i;
-		} else {
-			std::cerr << "warning: set_bad_password_count called but m_desc is null\n";
 		}
 	}
 	void player::increment_bad_password_count() {
 		if(m_desc) {
 			++m_desc->bad_pws;
-		} else {
-			std::cerr << "warning: increment_bad_password_count called but m_desc is null\n";
 		}
 	}
 	int player::get_bad_password_count() {
 		if(m_desc) {
 			return m_desc->bad_pws;
 		} else {
-			std::cerr << "warning: get_bad_password_count called but m_desc is null\n";
 			return 0;
 		}
 	}
 	void player::set_state(int state) {
 		if(m_desc) {
 			m_desc->connected = state;
-		} else {
-			std::cerr << "warning: set_state called but m_desc is null\n";
 		}
 	}
 
@@ -1206,7 +1191,6 @@ namespace mods {
 		if(m_desc) {
 			return m_desc->connected;
 		} else {
-			std::cerr << "warning: state called but m_desc is null\n";
 			if(cd()->desc) {
 				return cd()->desc->connected;
 			}
@@ -1216,15 +1200,11 @@ namespace mods {
 	void player::set_host(std::string host) {
 		if(m_desc) {
 			m_desc->host = host;
-		} else {
-			std::cerr << "warning: player::set_host called but m_desc is null\n";
 		}
 	}
 	std::string player::host() const {
 		if(m_desc) {
 			return m_desc->host.c_str();
-		} else {
-			std::cerr << "warning: player::host called but m_desc is null\n";
 		}
 		return "unknown";
 	}
@@ -1285,9 +1265,6 @@ namespace mods {
 		lib_dir += "-" + std::to_string(std::time(nullptr));
 		lib_dir += ".log";
 		m_histfile_fp = (FILE*)fopen(lib_dir.c_str(),"a+");
-		if(!m_histfile_fp) {
-			std::cerr << "can't open log file '" << lib_dir.c_str() << "'\n";
-		}
 	}
 	void player::write_histfile(std::string_view line) {
 		if(!m_histfile_fp) {
@@ -1475,7 +1452,6 @@ namespace mods {
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION: {
 					auto obj = optr_by_uuid(target);
 					if(!obj) {
-						std::cerr << "[WARNING] got nullptr from EVENT_PLAYER_UNBLOCK_INSTALLATION\n";
 						break;
 					}
 					obj_to_room(obj, obj->in_room);
@@ -1492,7 +1468,6 @@ namespace mods {
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_BREACH: {
 					auto obj = optr_by_uuid(target);
 					if(!obj) {
-						std::cerr << "[WARNING] got nullptr from EVENT_PLAYER_UNBLOCK_INSTALLATION\n";
 						break;
 					}
 					mods::object_utils::set_done_breaching(obj);
@@ -1501,7 +1476,6 @@ namespace mods {
 			case mods::deferred::EVENT_PLAYER_REVIVE_SUCCESSFUL: {
 					auto revive_target = ptr_by_uuid(target);
 					if(!revive_target) {
-						std::cerr << "[WARNING] got nullptr from EVENT_PLAYER_REVIVE_SUCCESSFUL\n";
 						break;
 					}
 					revive_target->hp() = mods::values::REVIVE_HP();
@@ -1522,7 +1496,6 @@ namespace mods {
 					break;
 				}
 			default:
-				std::cerr << "[WARNING] unhandled unblock event: " << unblock << "\n";
 				break;
 		}
 		m_block_data.erase(unblock);
@@ -1571,10 +1544,13 @@ namespace mods {
 		return false;
 	}
 	obj_ptr_t player::get_ammo_for(obj_ptr_t& weapon) {
+		auto type = weapon->rifle()->attributes->str_type;
 		/** TODO: use a query based interface to get any ammunition from packs, backpack, inventory, etc */
-		for(auto obj : m_char_data->m_carrying) {
-			if(obj->obj_flags.is_ammo && obj->obj_flags.type == weapon->rifle()->attributes->type) {
-				return obj;
+		for(const auto& item : m_char_data->m_carrying) {
+			if(item->has_consumable() &&
+			        item->consumable()->attributes->consumed_by.compare("RIFLE") == 0 &&
+			        item->consumable()->attributes->ammo_type.compare(type.c_str()) == 0) {
+				return item;
 			}
 		}
 		return nullptr;

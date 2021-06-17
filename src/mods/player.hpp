@@ -424,17 +424,8 @@ namespace mods {
 				return m_char_data;
 			}
 			rifle_data_t* rifle();
-			uint16_t ammo() {
-				auto eq = m_equipment[WEAR_WIELD];
-				return eq ? eq->obj_flags.ammo : 0 ;
-			}
-			uint16_t set_ammo(uint16_t value) {
-				auto eq = m_equipment[WEAR_WIELD];
-				if(eq) {
-					return eq->obj_flags.ammo += value;
-				}
-				return 0;
-			}
+			uint16_t ammo();
+			uint16_t set_ammo(uint16_t value);
 
 			obj_data*      get_ammo(const weapon_type_t&);
 			mods::string weapon_name();

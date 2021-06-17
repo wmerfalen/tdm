@@ -1,0 +1,59 @@
+# type: AMMUNITION
+# type: FOOD
+# type: PILLS
+# type: HERBS
+# type: HALLUCINOGENS
+# type: PEDS
+# type: GASOLINE
+# type: TRANQUILIZER_DARTS
+csv_capabilities: 'AMMUNITION' #csv, strings free-form TBA
+csv_attach_to: '' #csv, strings attach to various kinds of items TBA
+weight_in_lbs: 15 #int, weight in lbs
+consumed_by: 'RIFLE' #string, ENUM HUMAN,VEHICLE,ATTACHMENT,DRONE,GADGET,RIFLE,TRAP
+adds_hp: 0 #int,  amount of hp it adds when consumed (can be negative)
+adds_movement: -1 #int, amount of movement it adds when consumed (can be negative)
+adds_room_range: 3 #int, amount of rooms it adds when consumed (can be negative)
+adds_strength: 4 #int, amount of STR it adds when consumed (can be negative)
+adds_intelligence: 0 #int, amount of INT it adds when consumed (can be negative)
+adds_charisma: 0 #int, amount of CHA it adds when consumed (can be negative)
+adds_dexterity: -1 #int, amount of DEX it adds when consumed (can be negative)
+adds_constitution: 2 #int, amount of CON it adds when consumed (can be negative)
+adds_wisdom: 0 #int, amount of WIS it adds when consumed (can be negative)
+adds_weight: 8 #int, amount of weight it adds when consumed (can be negative)
+adds_experience: 0 #int, amount of EXP it adds when consumed (can be negative)
+adds_armor_class: 0 #int, amount of AC it adds when consumed (can be negative)
+adds_hitroll: 5 #int, amount of HITROLL it adds when consumed (can be negative)
+adds_damage_roll: 5 #int, amount of DAMROLL it adds when consumed (can be negative)
+ticks_until_zero: 0 #int, amount of game ticks until consumable wears off (can be negative)
+ammo_type: 'MACHINE_PISTOL' #string, ENUM any type of ITEM_RIFLE if this is ammunition
+capacity: 111 #int, usually used for ammunition. how much of this consumable is present (i.    e.: bullets)
+adds_fire_damage: 0 #int, amount of fire damage it adds to the consumer
+adds_critical_chance: 1 #int, amount of points to add to critical chance of consumer
+adds_ammo_max: 111 #int, adds to ammo maximum of consumer
+adds_chance_to_injure: 25 #float, out of 100
+adds_clip_size: 15 #int, bullets
+adds_cooldown_between_shots: 0 #int, ticks (can be negative)
+adds_critical_range: 1 #int, rooms (can be negative)
+adds_disorient_amount: 25 #float, out of 100
+adds_headshot_bonus: 8 #float, static addition to hitroll
+adds_max_range: 0 #int, rooms
+adds_reload_time: 2 #int, ticks
+adds_muzzle_velocity: 11 #int, TBA
+adds_damage_dice_count: 10 #int, number of dice
+adds_damage_dice_sides: 6 #int, dice sides
+str_type: 'AMMUNITION' # enum, object type
+manufacturer: 'SG-3 Corp.' # string, anything
+name: 'Machine pistol ammunition' # string, anything name of object
+vnum: 131
+description: 'Machine pistol ammunition'
+short_description: 'Machine pistol ammunition'
+action_description: 'Machine pistol ammunition'
+feed_file: 'sg3-mp-ammunition.yml'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

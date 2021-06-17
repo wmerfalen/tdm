@@ -46,21 +46,19 @@ namespace mods::weapons::reload {
 			player->send("You don't seem to have any ammunition for that weapon anywhere in your inventory!");
 			return;
 		}
-		auto ammo_amount = mods::weapons::damage_calculator::ammunition_amount(player,weapon);
-		/** TODO: buff to clip size using attachments */
-		if(ammo_amount < weapon->rifle()->attributes->clip_size) {
-			weapon->rifle_instance->ammo = ammo_amount;
-			player->send("You partially reload your %s with %d ammo.", weapon->name.c_str(), ammo_amount);
+
+		auto clip_size = weapon->rifle()->attributes->clip_size;
+		auto& capacity = obj->consumable()->attributes->capacity;
+		if(capacity < clip_size) {
+			clip_size = capacity;
+		}
+
+		weapon->rifle_instance->ammo = clip_size;
+		player->send("You reload your %s with %d ammo.", weapon->name.c_str(), clip_size);
+		capacity -= clip_size;
+		if(obj->consumable()->attributes->capacity <= 0) {
 			player->consume_from_carrying(obj);
-			return;
 		}
-		if(!player->carrying_ammo_of_type(weapon->rifle()->attributes->type)) {
-			player->sendln("You don't have any ammo for that weapon!");
-			return;
-		}
-		weapon->rifle_instance->ammo = weapon->rifle()->attributes->clip_size;
-		player->send("You reload your %s with %d ammo.", weapon->name.c_str(), ammo_amount);
-		player->consume_from_carrying(obj);
 
 	}
 	/* TODO: Implement weapon tags in the obj_data data structure */

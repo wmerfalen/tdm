@@ -28,6 +28,27 @@ namespace mods::integral_objects {
 	std::size_t armor_locker_quota(const obj_ptr_t& object) {
 		return 10;
 	}
+	void feed_ammo_locker(room_vnum room) {
+		mo_debug("feeding ammo locker to room vnum:" << room << "| real room:" << real_room(room));
+		std::vector<std::string> values;
+		mods::db::get_section_vector("ammo-locker", std::to_string(room), values);
+		auto locker = mods::integral_objects_db::first_or_create(room,"ammo-locker", ITEM_CONTAINER, "ammo-locker.yml");
+		for(auto yaml : values) {
+			if(!mods::object_utils::assert_sane_object(yaml)) {
+				mo_debug("[feed_ammo_locker]: not feeding invalid yaml type: '" << yaml << "'");
+				continue;
+			}
+			mo_debug("[feed_ammo_locker]: checking if quota hit for yaml file(not deconstructed): '" << yaml);
+			auto yaml_file = mods::object_utils::get_yaml_file(yaml);
+			mo_debug("[feed_ammo_locker]: extracted yaml: '" << yaml_file << "'");
+			auto uuid_list = mods::query_objects::query_contents_by_yaml(locker,yaml_file);
+			if(uuid_list.size() < AMMO_LOCKER_QUOTA()) {
+				mo_debug("[feed_ammo_locker]: quota not hit for object:'" << yaml << "', feeding to locker");
+				auto obj = create_object(mods::object_utils::get_yaml_type(yaml),yaml_file);
+				obj_to_obj(obj,locker);
+			}
+		}
+	}
 	void feed_weapon_locker(room_vnum room) {
 		mo_debug("feeding weapon locker to room vnum:" << room << "| real room:" << real_room(room));
 		std::vector<std::string> values;
@@ -189,6 +210,24 @@ SUPERCMD(do_uninstall_weapon_locker) {
 	mods::integral_objects_db::remove_weapon_locker(player,vec_args);
 	ADMIN_DONE();
 }
+SUPERCMD(do_install_ammo_locker) {
+	ADMIN_REJECT();
+	DO_HELP_WITH_ZERO("install_ammo_locker");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	mods::integral_objects_db::save_ammo_locker(player,vec_args);
+	mods::zone::register_replenish(world[player->room()].number,"ammo-locker");
+	mods::zone::remove_replenish(world[player->room()].number,"ammo-locker");
+	ADMIN_DONE();
+}
+SUPERCMD(do_uninstall_ammo_locker) {
+	ADMIN_REJECT();
+	DO_HELP_WITH_ZERO("uninstall_ammo_locker");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	mods::integral_objects_db::remove_ammo_locker(player,vec_args);
+	ADMIN_DONE();
+}
 
 SUPERCMD(do_list_wear_flags) {
 	static const std::vector<std::string> flags = {
@@ -285,6 +324,9 @@ namespace mods::integral_objects {
 
 		mods::interpreter::add_command("install_weapon_locker", POS_RESTING, do_install_weapon_locker, LVL_BUILDER,0);
 		mods::interpreter::add_command("uninstall_weapon_locker", POS_RESTING, do_uninstall_weapon_locker, LVL_BUILDER,0);
+
+		mods::interpreter::add_command("install_ammo_locker", POS_RESTING, do_install_ammo_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("uninstall_ammo_locker", POS_RESTING, do_uninstall_ammo_locker, LVL_BUILDER,0);
 
 		mods::interpreter::add_command("install_camera_feed", POS_RESTING, do_install_camera_feed, LVL_BUILDER,0);
 		mods::interpreter::add_command("uninstall_camera_feed", POS_RESTING, do_uninstall_camera_feed, LVL_BUILDER,0);
