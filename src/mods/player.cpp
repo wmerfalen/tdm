@@ -541,12 +541,6 @@ namespace mods {
 	}
 	obj_ptr_t player::get_ammo(const mw_rifle& type) {
 		for(const auto& item : m_char_data->m_carrying) {
-			if(item->has_consumable()) {
-				sendln(item->consumable()->attributes->ammo_type);
-				sendln(CAT("type:",type,"==?", mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type)));
-				sendln(CAT("type:",type,"==?", item->consumable()->attributes->ammo_type));
-				sendln(CAT("type:",mods::weapon::to_string(type)));
-			}
 			if(item->has_consumable() && item->consumable()->attributes->consumed_by.compare("RIFLE") == 0 &&
 			        mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type) == type) {
 				return item;
@@ -780,15 +774,17 @@ namespace mods {
 			return 0;
 		}
 
-		/** FIXME */
-		for(auto item = m_char_data->carrying; item->next; item = item->next) {
-			if(item->obj_flags.is_ammo &&
-			        item->obj_flags.type == type && m_char_data == item->carried_by) {
-				item->obj_flags.ammo += increment;
-				return item->obj_flags.ammo;
-			}
+		auto ammo = get_ammo(type);
+		if(!ammo) {
+			return 0;
 		}
-		return 0;
+		int cap = ammo->consumable()->attributes->capacity;
+		if(cap += increment < 0) {
+			ammo->consumable()->attributes->capacity = 0;
+			return 0;
+		}
+		ammo->consumable()->attributes->capacity += increment;
+		return ammo->consumable()->attributes->capacity;
 	}
 	void player::send(const std::vector<std::string>& list) {
 		for(auto& item : list) {

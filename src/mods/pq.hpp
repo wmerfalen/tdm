@@ -19,6 +19,7 @@ typedef int socket_t;
 #include "../mods/util.hpp"
 #include "../globals.hpp"
 #include <optional>
+#include "sql.hpp"
 
 using namespace mods::colors;
 namespace mods::pq {
@@ -36,6 +37,8 @@ namespace mods::globals {
 inline mods::pq::transaction txn() {
 	return mods::pq::transaction(*mods::globals::pq_con);
 }
+
+using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
 static inline void REPORT_DB_ISSUE(std::string issue,std::string exception_message) {
 	std::cerr << red_str("[DATABASE ISSUE]->") << issue << ", " << red_str("EXCEPTION: '") << red_str(exception_message) << "'\n";
@@ -142,6 +145,71 @@ std::pair<bool,std::string> insert_or_update_existing(
 
 	return {true,"success"};
 }
+std::tuple<bool,std::string> upsert(
+    const std::string& table_name,
+    const std::string& primary_key,
+    const std::map<std::string,std::string>& criteria,
+    const std::map<std::string,std::string>& values
+);
+
+
+template <typename sql_compositor,typename PKValueType>
+std::tuple<bool,std::string,std::string> upsert_returning(
+    const std::string& table_name,
+    std::string_view primary_key,
+    std::forward_list<std::tuple<std::string_view,std::string_view,std::string_view>> criteria,
+    std::map<std::string,std::string>& values,
+    const std::string& returning_column
+) {
+	try {
+		auto check_txn = txn();
+		auto builder = sql_compositor(table_name,&check_txn)
+		               .select(primary_key)
+		               .from(table_name);
+		auto front = criteria.front();
+		builder.where(std::get<0>(front),std::get<1>(front),std::get<2>(front));
+		criteria.pop_front();
+		for(const auto& pair : criteria) {
+			builder.op_and(std::get<0>(pair),std::get<1>(pair),std::get<2>(pair));
+		}
+		auto check_sql = builder.sql();
+		auto check_result = mods::pq::exec(check_txn,check_sql);
+		mods::pq::commit(check_txn);
+
+		if(check_result.size()) {
+			/* update the record */
+			auto t = txn();
+			auto sql = sql_compositor(table_name,&t)
+			           .update(table_name)
+			           .set(values)
+			           .where(primary_key,"=",check_result[0][primary_key.data()].c_str())
+			           .sql();
+			mods::pq::exec(t,sql);
+			mods::pq::commit(t);
+		} else {
+			/* insert the record */
+			auto t = txn();
+			auto sql = sql_compositor(table_name,&t)
+			           .insert()
+			           .into(table_name)
+			           .values(values)
+			           .returning(returning_column)
+			           .sql();
+			auto record = mods::pq::exec(t,sql);
+			mods::pq::commit(t);
+			if(record.size()) {
+				return {true,"success",record[0][returning_column.data()].c_str()};
+			}
+			return {true,"success",""};
+		}
+	} catch(const std::exception& e) {
+		return {false,e.what(),""};
+	}
+
+	return {true,"success",""};
+}
+
+
 
 template <typename sql_compositor,typename PKValueType>
 std::tuple<bool,std::string,std::string> insert_or_update_existing_returning(

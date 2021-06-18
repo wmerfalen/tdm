@@ -34,6 +34,9 @@ namespace mods::orm::inventory {
 	}
 	namespace sql {
 		int16_t feed_player(player_ptr_t& player) {
+			for(int i =0; i < NUM_WEARS; i++) {
+				player->unequip(i);
+			}
 			{
 				try {
 					// ----------------------------+-----------+----------+----------------------------------------------
@@ -58,17 +61,20 @@ namespace mods::orm::inventory {
 					obj_ptr_t obj = nullptr;
 					mods::pq::commit(select_transaction);
 					for(auto&& row : player_record) {
+						if(std::string(row["po_load_type"].c_str()).compare("placeholder") == 0) {
+							continue;
+						}
 						obj = nullptr;
 						obj = dynamic_fetch(row);
 						if(!obj) {
 							log("Failed to load user object: player[%s] po_id[%d]", player->name().c_str(),row["po_id"].as<int>());
 							continue;
 						}
-						if(row["po_in_inventory"].as<int>()) {
+						if(row["po_in_inventory"].as<int>() == 1) {
 							player->carry(std::move(obj));
 							continue;
 						}
-						if(row["po_wear_position"].as<int>()) {
+						if(row["po_wear_position"].is_null() == false) {
 							player->equip(std::move(obj),row["po_wear_position"].as<int>());
 							continue;
 						}
@@ -124,6 +130,7 @@ namespace mods::orm::inventory {
 					              .del()
 					              .from("player_object")
 					              .where("po_player_id","=",std::to_string(player->db_id()))
+					              .op_and("po_in_inventory","=","1")
 					              .sql();
 					mods::pq::exec(del_txn,up_sql);
 					mods::pq::commit(del_txn);
@@ -135,27 +142,23 @@ namespace mods::orm::inventory {
 
 			std::map<std::string,std::string> mapped_values;
 			for(int i=0; i < NUM_WEARS; ++i) {
-				d("Grabbing equipment");
+				mapped_values.clear();
 				auto eq = player->equipment(i);
 				if(!eq) {
-					continue;
+					mapped_values = {
+						{"po_load_type","placeholder"},
+						{"po_type","ITEM_RIFLE"},
+						{"po_wear_position",std::to_string(i)},
+						{"po_player_id",std::to_string(player->db_id())},
+						{"po_in_inventory","0"},
+					};
+				} else {
+					mapped_values = export_object(eq,player,i,false);
 				}
-				auto mapped_values = export_object(eq,player,i,false);
-				try {
-					d("Saving position: " << i << " [id:" << eq->db_id() << "][type:'" << eq->str_type << "']");
-					auto insert_transaction = txn();
-					sql_compositor comp("player_object",&insert_transaction);
-					auto up_sql = comp
-					              .insert()
-					              .into("player_object")
-					              .values(mapped_values)
-					              .sql();
-					mods::pq::exec(insert_transaction,up_sql);
-					mods::pq::commit(insert_transaction);
-				} catch(std::exception& e) {
-					REPORT_DB_ISSUE(": error inserting player_object row: '",e.what());
-				}
-				d("Done [position:" << i << "]");
+				upsert("player_object", "id", {
+					{"po_player_id",std::to_string(player->db_id())},
+					{"po_wear_position",std::to_string(i)},
+				}, mapped_values);
 			}
 			for(auto& eq : player->vcarrying()) {
 				auto mapped_values = export_object(optr(eq),player,0,true);

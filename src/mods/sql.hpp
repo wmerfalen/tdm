@@ -20,6 +20,7 @@ typedef std::string_view str_object;
 typedef std::string str_object;
 #endif
 
+
 namespace mods::sql {
 	template <typename T>
 	struct compositor {
@@ -132,8 +133,7 @@ namespace mods::sql {
 			}
 
 			compositor<T>& insert() {
-				std::string sql = "INSERT INTO ";
-				m_query[0] = sql;
+				m_query[0] = "INSERT INTO ";
 				return *this;
 			}
 			compositor<T>& into(str_object table) {
@@ -348,7 +348,7 @@ namespace mods::sql {
 				return *this;
 			}
 
-			str_object sql() {
+			std::string sql() {
 				m_sql = "";
 				m_query[3] = "";
 

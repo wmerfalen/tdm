@@ -2681,12 +2681,12 @@ MOTORCYCLE	mods/weapon.hpp	/^		MOTORCYCLE,$/;"	e	enum:mods::weapon::vehicle_t
 MP5	mods/orm/breacher.hpp	/^		const std::string MP5 = "MP5";$/;"	m	struct:mods::orm::breacher
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_choice_t
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1573;"	d	file:
-MR	mods/player.cpp	1642;"	d	file:
+MR	mods/player.cpp	1569;"	d	file:
+MR	mods/player.cpp	1638;"	d	file:
 MR	structs.cpp	622;"	d	file:
 MR	structs.cpp	633;"	d	file:
-MRC	mods/player.cpp	1574;"	d	file:
-MRC	mods/player.cpp	1643;"	d	file:
+MRC	mods/player.cpp	1570;"	d	file:
+MRC	mods/player.cpp	1639;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
@@ -2940,14 +2940,14 @@ OPER_OR	shop.h	128;"	d
 OPPOSITE_DIR	globals.hpp	24;"	d
 OPT_USEC	structs.h	669;"	d
 ORM_FAILURE	mods/orm/orm-base.hpp	16;"	d
-ORM_FAILURE	mods/pq.hpp	47;"	d
-ORM_FAILURE	mods/pq.hpp	623;"	d
+ORM_FAILURE	mods/pq.hpp	50;"	d
+ORM_FAILURE	mods/pq.hpp	691;"	d
 ORM_NO_RESULTS	mods/orm/orm-base.hpp	15;"	d
-ORM_NO_RESULTS	mods/pq.hpp	46;"	d
-ORM_NO_RESULTS	mods/pq.hpp	622;"	d
+ORM_NO_RESULTS	mods/pq.hpp	49;"	d
+ORM_NO_RESULTS	mods/pq.hpp	690;"	d
 ORM_SUCCESS	mods/orm/orm-base.hpp	14;"	d
-ORM_SUCCESS	mods/pq.hpp	45;"	d
-ORM_SUCCESS	mods/pq.hpp	621;"	d
+ORM_SUCCESS	mods/pq.hpp	48;"	d
+ORM_SUCCESS	mods/pq.hpp	689;"	d
 OTHER_PLAYER_INDEX_START	mods/player-scaffolding.hpp	/^		constexpr static std::size_t OTHER_PLAYER_INDEX_START = 2;$/;"	m	struct:mods::player_scaffolding
 OUT	structs.h	/^			OUT = 5$/;"	e	enum:uint8_t
 OUTSIDE	structs.h	/^			OUTSIDE,		\/** Outside where anyone can see you *\/$/;"	m	struct:room_data	typeref:enum:room_data::
@@ -6347,10 +6347,10 @@ db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	f	names
 db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob_vnum,str_map_t values) {$/;"	f	namespace:mods::mobs::mg::orm
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	f
 dbg	mods/acl/config-parser.hpp	20;"	d
-dbg	mods/player.cpp	560;"	d	file:
-dbg	mods/player.cpp	588;"	d	file:
-dbg	mods/player.cpp	591;"	d	file:
-dbg	mods/player.cpp	638;"	d	file:
+dbg	mods/player.cpp	554;"	d	file:
+dbg	mods/player.cpp	582;"	d	file:
+dbg	mods/player.cpp	585;"	d	file:
+dbg	mods/player.cpp	632;"	d	file:
 dbg_blu	mods/acl/config-parser.hpp	25;"	d
 dbg_grn	mods/acl/config-parser.hpp	24;"	d
 dbg_print	mods/contract-step-callback.cpp	10;"	d	file:
@@ -12653,7 +12653,7 @@ spskill_name	mods/orm/chargen.hpp	/^		std::string spskill_name;\/\/VARCHAR(64) N
 sql	mods/orm/inventory.cpp	/^	namespace sql {$/;"	n	namespace:mods::orm::inventory	file:
 sql	mods/orm/inventory.hpp	/^	namespace sql {$/;"	n	namespace:mods::orm::inventory
 sql	mods/sql.cpp	/^namespace mods::sql {$/;"	n	class:mods	file:
-sql	mods/sql.hpp	/^			str_object sql() {$/;"	f	struct:mods::sql::compositor
+sql	mods/sql.hpp	/^			std::string sql() {$/;"	f	struct:mods::sql::compositor
 sql	mods/sql.hpp	/^namespace mods::sql {$/;"	n	class:mods
 sql_compositor	mods/builder_util.hpp	/^typedef mods::sql::compositor<mods::pq::transaction> sql_compositor;$/;"	t
 stack_data	shop.h	/^struct stack_data {$/;"	s
@@ -13228,6 +13228,8 @@ updated_at	mods/orm/support.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::sup
 updated_at	mods/orm/syndrome.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::syndrome
 updated_at	mods/pq.hpp	/^	long updated_at;$/;"	m	struct:orm_base
 upkeep	mods/super-users.cpp	/^	void upkeep(player_ptr_t& player) {$/;"	f	namespace:mods::super_users
+upsert	mods/pq.cpp	/^std::tuple<bool,std::string> upsert($/;"	f
+upsert_returning	mods/pq.hpp	/^std::tuple<bool,std::string,std::string> upsert_returning($/;"	f
 usage	mods/lmdb/shm-viewer.cpp	/^void usage(const char* prog){$/;"	f
 usage_count	mods/orm/player-skill-usage.hpp	/^		uint16_t usage_count;$/;"	m	struct:mods::orm::player_skill_usage
 usage_count	mods/orm/player-skill-usage.hpp	/^		uint16_t usage_count;$/;"	m	struct:mods::orm::player_skill_usage_record_t
