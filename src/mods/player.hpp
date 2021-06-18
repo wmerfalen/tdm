@@ -629,7 +629,7 @@ namespace mods {
 			}
 			void equip(obj_ptr_t obj,int pos);
 			void equip(uuid_t,int pos);
-			void unequip(int pos);
+			void unequip(const std::size_t& pos);
 			void unequip_into_inventory(int pos);
 			obj_ptr_t equipment(int pos);
 			std::vector<affected_type>& get_affected_by() {

@@ -122,7 +122,6 @@
 {yel}act.offensive{/yel}:->{grn}affect_me{/grn}
 {yel}act.debug{/yel}:->{grn}wait_ticks{/grn}
 {yel}act.debug{/yel}:->{grn}get_ticks_per_minute{/grn}
-{yel}act.debug{/yel}:->{grn}flush_player{/grn}
 {yel}act.debug{/yel}:->{grn}feed_player{/grn}
 {yel}act.debug{/yel}:->{grn}givemenades{/grn}
 {yel}act.debug{/yel}:->{grn}room_dark{/grn}

@@ -167,7 +167,6 @@ ACMD(do_yaml_log_save);
 ACMD(do_yaml_log_clear);
 ACMD(do_yaml_example);
 ACMD(do_flush_holding);
-ACMD(do_flush_player);
 ACMD(do_feed_player);
 ACMD(do_hold_anything);
 ACMD(do_histfile);
@@ -756,7 +755,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "get_super_user_list", POS_RESTING, do_get_super_user_list, LVL_BUILDER, 0 },
 	{ "show_tics", POS_RESTING, do_show_tics, LVL_BUILDER, 0 },
 	{ "flush_holding", POS_RESTING, do_flush_holding, LVL_GOD, 0 },
-	{ "flush_player", POS_RESTING, do_flush_player, LVL_GOD, 0 },
 	{ "feed_player", POS_RESTING, do_feed_player, LVL_GOD, 0 },
 	{ "hold_anything", POS_RESTING, do_hold_anything, LVL_GOD, 0 },
 	{ "yaml_import", POS_RESTING, do_yaml_import, LVL_GOD, 0 },

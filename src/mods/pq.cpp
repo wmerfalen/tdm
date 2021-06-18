@@ -72,3 +72,65 @@ std::tuple<bool,std::string> upsert(
 }
 
 
+std::tuple<bool,std::string,std::string> upsert_returning(
+    const std::string& table_name,
+    std::string_view primary_key,
+    const std::map<std::string,std::string>& criteria,
+    const std::map<std::string,std::string>& values,
+    const std::string& returning_column
+) {
+	try {
+		auto check_txn = txn();
+		auto builder = sql_compositor(table_name,&check_txn)
+		               .select(primary_key)
+		               .from(table_name);
+		bool first = true;
+		for(const auto& pair : criteria) {
+			if(first) {
+				builder.where(pair.first,pair.second);
+				first = false;
+				continue;
+			}
+			builder.op_and(pair.first,pair.second);
+		}
+		auto check_sql = builder.sql();
+		auto check_result = mods::pq::exec(check_txn,check_sql);
+		mods::pq::commit(check_txn);
+
+		if(check_result.size()) {
+			/* update the record */
+			auto t = txn();
+			auto sql = sql_compositor(table_name,&t)
+			           .update(table_name)
+			           .set(values)
+			           .where(primary_key,check_result[0][primary_key.data()].c_str())
+			           .sql();
+			mods::pq::exec(t,sql);
+			mods::pq::commit(t);
+			std::cerr << "updated: '" << sql << "'\n";
+			return {true,"success",primary_key.data()};
+		} else {
+			/* insert the record */
+			auto t = txn();
+			auto sql = sql_compositor(table_name,&t)
+			           .insert()
+			           .into(table_name)
+			           .values(values)
+			           .returning(returning_column)
+			           .sql();
+			auto record = mods::pq::exec(t,sql);
+			mods::pq::commit(t);
+			std::cerr << "inserted: '" << sql << "'\n";
+			if(record.size()) {
+				return {true,"success",record[0][returning_column.data()].c_str()};
+			}
+			return {true,"success",""};
+		}
+	} catch(const std::exception& e) {
+		return {false,e.what(),""};
+	}
+
+	return {true,"success",""};
+}
+
+

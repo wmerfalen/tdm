@@ -24,6 +24,14 @@
 #include "contract-types.hpp"
 #include "player-contract-instance.hpp"
 #include "contract-events.hpp"
+#include "orm/inventory.hpp"
+
+#ifdef __MENTOC_CARRY_DEBUG__
+#define dbg(A) std::cerr << red_str("[CARRY]dbug:") << A << "\n";
+#else
+#define dbg(A) ;;
+#endif
+
 
 /**
  * TODO: All these stc* functions need to be altered to accomodate
@@ -312,7 +320,8 @@ namespace mods {
 			in_object->worn_by = this->cd();
 			in_object->worn_on = pos;
 			m_equipment[pos] = in_object;
-			mods::orm::inventory::flush_player_by_uuid(uuid());
+			mods::orm::inventory::equip(db_id(),pos,in_object);
+
 #ifdef __MENTOC_PLAYER_DEBUG__
 			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
 #endif
@@ -331,9 +340,10 @@ namespace mods {
 		}
 		this->equip(obj,pos);
 	}
-	void player::unequip(int pos) {
+	void player::unequip(const std::size_t& pos) {
 		if(pos < NUM_WEARS && m_equipment[pos]) {
 			mods::stat_bonuses::player_unequip(uuid(),m_equipment[pos]->uuid);
+			mods::orm::inventory::unequip(db_id(),m_equipment[pos],pos);
 			auto item = m_equipment[pos];
 			if(pos == WEAR_WIELD) {
 				/** FIXME: this needs to negate the bit */
@@ -347,7 +357,6 @@ namespace mods {
 			m_equipment[pos]->worn_on = -1;
 			m_equipment[pos] = nullptr;
 
-			mods::orm::inventory::flush_player_by_uuid(uuid());
 			this->m_sync_equipment();
 		}
 	}
@@ -550,11 +559,6 @@ namespace mods {
 	}
 	/** TODO: do this */
 	void player::carry(obj_ptr_t obj) {
-#ifdef __MENTOC_CARRY_DEBUG__
-#define dbg(A) std::cerr << red_str("[CARRY]dbug:") << A << "\n";
-#else
-#define dbg(A) ;;
-#endif
 		dbg("carry entry");
 		if(obj == nullptr) {
 			dbg("obj is nullptr, returning early!");
@@ -572,17 +576,10 @@ namespace mods {
 		m_char_data->carrying = obj.get();
 		dbg("checking rifle has attachment");
 		dbg("short circuited");
-#ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
-		dbg("adding...via lmdb");
-		mods::orm::inventory::lmdb::add_player_inventory(this->db_id(), obj->db_id(), obj->type);
-#else
-		mods::orm::inventory::flush_player_by_uuid(uuid());
+		mods::orm::inventory::carry(db_id(),obj);
 		dbg("flushing by uuid");
-#endif
-#undef dbg
 	}
 	void player::uncarry(obj_ptr_t obj) {
-#define dbg(A) std::cerr << red_str("dbug:") << A << "\n";
 
 		dbg("entrance");
 		dbg("trimming rifle attachments");
@@ -622,14 +619,7 @@ namespace mods {
 			}
 		}
 		dbg("carrying erased");
-#ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
-		dbg("remove player inv");
-		mods::orm::inventory::lmdb::remove_player_inventory(this->db_id(), obj->db_id());
-#else
-		dbg("flush player by uuid");
-		mods::orm::inventory::flush_player_by_uuid(uuid());
-#endif
-#undef dbg
+		mods::orm::inventory::uncarry(db_id(),obj);
 	}
 	std::vector<obj_data*> player::vcarrying() {
 		std::vector<obj_data*> list;

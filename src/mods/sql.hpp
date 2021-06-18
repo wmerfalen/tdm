@@ -119,7 +119,11 @@ namespace mods::sql {
 				for(auto& pair : values) {
 					set += pair.first;
 					set += "=";
-					set += m_txn_ptr->quote(pair.second);
+					if(pair.second.length() == 0) {
+						set += "NULL";
+					} else {
+						set += m_txn_ptr->quote(pair.second);
+					}
 
 					if(ctr + 1 != v_size) {
 						set += ", ";
@@ -201,7 +205,11 @@ namespace mods::sql {
 				ctr = 0;
 
 				for(auto& pair : values) {
-					value_sql += m_txn_ptr->quote(pair.second);
+					if(pair.second.length() == 0) {
+						value_sql += "NULL";
+					} else {
+						value_sql += m_txn_ptr->quote(pair.second);
+					}
 
 					if(ctr + 1 != v_size) {
 						value_sql += ", ";
@@ -260,6 +268,96 @@ namespace mods::sql {
 				m_query[4] = sql;
 				return *this;
 			}
+			compositor<T>& where(str_object lhs,
+			                     str_object rhs) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::string(rhs.data()));
+				m_query[4] = sql;
+				return *this;
+			}
+			compositor<T>& where(str_object lhs,
+			                     const int64_t& rhs) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] = sql;
+				return *this;
+			}
+
+			compositor<T>& where(str_object lhs,
+			                     const uint64_t& rhs) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] = sql;
+				return *this;
+			}
+
+			compositor<T>& where(str_object lhs,
+			                     const uint32_t& rhs) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] = sql;
+				return *this;
+			}
+
+			compositor<T>& where(str_object lhs,
+			                     const int32_t& rhs) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] = sql;
+				return *this;
+			}
+
+			compositor<T>& where(str_object lhs,
+			                     const uint16_t& rhs) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] = sql;
+				return *this;
+			}
+
+			compositor<T>& where(str_object lhs,
+			                     const int16_t& rhs) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] = sql;
+				return *this;
+			}
+
+			compositor<T>& where(str_object lhs,
+			                     const uint8_t& rhs) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] = sql;
+				return *this;
+			}
+
+
+			compositor<T>& where(str_object lhs,
+			                     const int8_t& rhs) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] = sql;
+				return *this;
+			}
+
 			compositor<T>& where_crypt(str_object lhs,
 			                           str_object rhs) {
 				std::string sql = " WHERE ";
@@ -304,6 +402,81 @@ namespace mods::sql {
 				return *this;
 			}
 
+			compositor<T>& op_or(str_object lhs,
+			                     str_object rhs) {
+				std::string sql = " OR ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::string(rhs.data()));
+				m_query[4] += sql;
+				return *this;
+			}
+
+			compositor<T>& op_and(str_object lhs,
+			                      const std::string_view& rhs) {
+				std::string sql = " AND ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(rhs.data());
+				m_query[4] += sql;
+				return *this;
+			}
+			compositor<T>& op_and(str_object lhs,
+			                      const int16_t& rhs) {
+				std::string sql = " AND ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] += sql;
+				return *this;
+			}
+
+			compositor<T>& op_and(str_object lhs,
+			                      const uint16_t& rhs) {
+				std::string sql = " AND ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] += sql;
+				return *this;
+			}
+			compositor<T>& op_and(str_object lhs,
+			                      const uint32_t& rhs) {
+				std::string sql = " AND ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] += sql;
+				return *this;
+			}
+			compositor<T>& op_and(str_object lhs,
+			                      const int32_t& rhs) {
+				std::string sql = " AND ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] += sql;
+				return *this;
+			}
+			compositor<T>& op_and(str_object lhs,
+			                      const uint64_t& rhs) {
+				std::string sql = " AND ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] += sql;
+				return *this;
+			}
+			compositor<T>& op_and(str_object lhs,
+			                      const int64_t& rhs) {
+				std::string sql = " AND ";
+				sql += lhs.data();
+				sql += " = ";
+				sql += m_txn_ptr->quote(std::to_string(rhs));
+				m_query[4] += sql;
+				return *this;
+			}
+
 			compositor<T>& op_and(str_object lhs,
 			                      str_object op,
 			                      str_object rhs) {
@@ -334,8 +507,14 @@ namespace mods::sql {
 				m_order_by = " order by " + sanitized_column + " " + direction + " ";
 				return *this;
 			}
+
+			compositor<T>& limit(const std::size_t count) {
+				m_limit = " LIMIT " + m_txn_ptr->quote(std::to_string(count));
+				return *this;
+			}
 			compositor<T>& clear() {
 				m_current_join = m_table = m_sql = "";
+				m_order_by = m_returning = m_limit = "";
 				std::fill(m_query.begin(), m_query.end(), "");
 				m_joins.clear();
 				return *this;
@@ -365,7 +544,11 @@ namespace mods::sql {
 				if(m_order_by.length()) {
 					m_sql += m_order_by;
 				}
+				if(m_limit.length()) {
+					m_sql += m_limit;
+				}
 
+#define __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
 				std::cerr << m_sql << "\n";
 #endif
@@ -379,6 +562,7 @@ namespace mods::sql {
 			std::string m_order_by;
 			std::string m_table;
 			std::string m_returning;
+			std::string m_limit;
 			T* m_txn_ptr;
 	};
 

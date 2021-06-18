@@ -145,7 +145,6 @@ namespace mods::players::db_load {
 		}
 		values.clear();
 
-		mods::orm::inventory::flush_player(player_ptr);
 		switch(player_ptr->get_class()) {
 			default:
 				break;

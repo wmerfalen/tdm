@@ -88,7 +88,6 @@ namespace mods::classes {
 		return result;
 	}
 	int16_t engineer::save() {
-		mods::orm::inventory::flush_player(m_player);
 		return m_orm.save();
 	}
 	std::shared_ptr<engineer> create_engineer(player_ptr_t& in_player) {

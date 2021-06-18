@@ -45,10 +45,6 @@ SUPERCMD(do_get_ticks_per_minute) {
 	player->send("[%d] affects processer ticks per minute\r\n",mods::affects::get_ticks_per_minute());
 }
 
-SUPERCMD(do_flush_player) {
-	auto status = mods::orm::inventory::flush_player(player);
-	player->send("[%d] status\r\n",status);
-}
 SUPERCMD(do_feed_player) {
 	auto status = mods::orm::inventory::feed_player(player);
 	player->send("[%d] status\r\n",status);
