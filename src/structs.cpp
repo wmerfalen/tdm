@@ -44,7 +44,6 @@ void obj_data::init() {
 	this->uuid = mods::globals::obj_uuid();
 	from_direction = 0;
 	m_db_id = 0;
-	player_object_db_id = 0;
 
 #define MENTOC_OBJ_INITIALIZE_CONSTRUCTOR(r,data,CLASS_TYPE) \
 			this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
@@ -80,7 +79,6 @@ int16_t obj_data::feed(int16_t in_type,std::string_view feed_file) {
 	return this->feed_status;
 }
 obj_data::obj_data(const obj_data& other) {
-	player_object_db_id = other.player_object_db_id;
 	forged = other.forged;
 	feed(other.type,other.m_feed_file);
 	action_description = other.action_description;
@@ -89,7 +87,6 @@ obj_data::obj_data(const obj_data& other) {
 #endif
 }
 obj_data& obj_data::operator=(obj_data& other) {
-	player_object_db_id = other.player_object_db_id;
 	forged = other.forged;
 	feed(other.type,other.m_feed_file);
 	action_description = other.action_description;

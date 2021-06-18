@@ -2477,11 +2477,11 @@ MENTOC_NPC_CHECK	mods/player.cpp	90;"	d	file:
 MENTOC_NPC_CHECK_0	mods/player.cpp	91;"	d	file:
 MENTOC_OBI	mods/builder.cpp	40;"	d	file:
 MENTOC_OBI2	mods/builder.cpp	41;"	d	file:
-MENTOC_OBJ_DATA_FEED_DUAL	structs.cpp	74;"	d	file:
+MENTOC_OBJ_DATA_FEED_DUAL	structs.cpp	73;"	d	file:
 MENTOC_OBJ_DATA_FEED_SWITCH	mods/item-types.hpp	588;"	d
 MENTOC_OBJ_DATA_FEED_SWITCH_IMPL	mods/item-types.hpp	582;"	d
-MENTOC_OBJ_DATA_STAT_GEN	structs.cpp	103;"	d	file:
-MENTOC_OBJ_INITIALIZE_CONSTRUCTOR	structs.cpp	49;"	d	file:
+MENTOC_OBJ_DATA_STAT_GEN	structs.cpp	100;"	d	file:
+MENTOC_OBJ_INITIALIZE_CONSTRUCTOR	structs.cpp	48;"	d	file:
 MENTOC_OBS	mods/builder.cpp	42;"	d	file:
 MENTOC_OBS2	mods/builder.cpp	43;"	d	file:
 MENTOC_ORM_CLASS	mods/orm/orm-base.hpp	415;"	d
@@ -2546,8 +2546,8 @@ MENTOC_TRAP_MEMBERS_TUPLE	mods/item-types.hpp	515;"	d
 MENTOC_TRAP_TYPES_SEQUENCE	mods/item-types.hpp	512;"	d
 MENTOC_TYPE	mods/builder.cpp	4012;"	d	file:
 MENTOC_TYPE_LIST_IMPL	mods/item-types.hpp	874;"	d
-MENTOC_UPTR	structs.h	1039;"	d
-MENTOC_UPTR	structs.h	1041;"	d
+MENTOC_UPTR	structs.h	1038;"	d
+MENTOC_UPTR	structs.h	1040;"	d
 MENTOC_USING_CT	mods/item-types.hpp	546;"	d
 MENTOC_USING_CT_IMPL	mods/item-types.hpp	543;"	d
 MENTOC_VEHICLE_MEMBERS_TUPLE	mods/item-types.hpp	133;"	d
@@ -2687,8 +2687,8 @@ MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_cho
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
 MR	mods/player.cpp	1559;"	d	file:
 MR	mods/player.cpp	1628;"	d	file:
-MR	structs.cpp	625;"	d	file:
-MR	structs.cpp	636;"	d	file:
+MR	structs.cpp	622;"	d	file:
+MR	structs.cpp	633;"	d	file:
 MRC	mods/player.cpp	1560;"	d	file:
 MRC	mods/player.cpp	1629;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
@@ -5087,7 +5087,6 @@ __MENTOC_SHOW_MODS_PLAYERS_MESSAGES_DEBUG_OUTPUT__	mods/players/messages.cpp	6;"
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_SHOW_ORM_INVENTORY_FLUSH_OUTPUT__	mods/orm/inventory.cpp	17;"	d	file:
 __MENTOC_SHOW_SQL_DEBUG_OUTPUT__	mods/orm/inventory.cpp	1;"	d	file:
-__MENTOC_SHOW_SQL_DEBUG_OUTPUT__	mods/sql.hpp	551;"	d
 __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__	act.item.cpp	30;"	d	file:
 __MENTOC_STRING_LIT__	mods/util.hpp	12;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
@@ -10233,9 +10232,9 @@ mpub_intelligence	mods/ai_state.hpp	/^			int32_t mpub_intelligence;$/;"	m	class:
 mpub_lenient	mods/ai_state.hpp	/^			int32_t mpub_lenient;$/;"	m	class:mods::ai_state
 mpub_stunned	mods/ai_state.hpp	/^			uint32_t mpub_stunned;$/;"	m	class:mods::ai_state
 mpub_suspicious	mods/ai_state.hpp	/^			int32_t mpub_suspicious;$/;"	m	class:mods::ai_state
-mq_debug	structs.cpp	471;"	d	file:
-mq_debug	structs.cpp	473;"	d	file:
-mq_debug	structs.cpp	498;"	d	file:
+mq_debug	structs.cpp	468;"	d	file:
+mq_debug	structs.cpp	470;"	d	file:
+mq_debug	structs.cpp	495;"	d	file:
 mra_debug	mods/rooms.hpp	10;"	d
 mra_debug	mods/rooms.hpp	12;"	d
 msg	mods/object-utils.hpp	/^		std::string msg;$/;"	m	struct:mods::object_utils::YamlFeedExceptionInfo
@@ -10914,7 +10913,6 @@ player_name	mods/js.cpp	/^				std::string player_name;$/;"	m	struct:mods::js::ut
 player_name_is	mods/super-users.cpp	/^	bool player_name_is(std::string_view name) {$/;"	f	namespace:mods::super_users
 player_name_map	globals.cpp	/^		std::map<std::string,player_ptr_t> player_name_map;$/;"	m	namespace:mods::globals	file:
 player_nobody	globals.cpp	/^		player_ptr_t player_nobody;$/;"	m	namespace:mods::globals	file:
-player_object_db_id	structs.h	/^		uint32_t player_object_db_id;$/;"	m	struct:obj_data
 player_parsers	mods/util.hpp	/^	static std::map<uuid_t,arglist_parser> player_parsers;$/;"	m	namespace:mods::util::args
 player_ptr	mods/mobs/mini-gunner.hpp	/^			player_ptr_t player_ptr;$/;"	m	struct:mods::mobs::mini_gunner
 player_ptr	mods/mobs/smart-mob.hpp	/^			player_ptr_t player_ptr;$/;"	m	struct:mods::mobs::smart_mob

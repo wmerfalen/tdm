@@ -548,7 +548,6 @@ namespace mods::sql {
 					m_sql += m_limit;
 				}
 
-#define __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
 				std::cerr << m_sql << "\n";
 #endif

@@ -53,12 +53,10 @@ namespace mods::orm::inventory {
 			case I_FORGED: {
 					auto obj = create_object(ITEM_RIFLE,CAT("rifle|pkid:",row["po_type_id"].as<int>()));
 					obj->forged = true;
-					obj->player_object_db_id = row["id"].as<uint64_t>();
 					return std::move(obj);
 				}
 			case I_YAML: {
 					auto obj = create_object(row["po_type"].as<int>(),row["po_yaml"].c_str());
-					obj->player_object_db_id = row["id"].as<uint64_t>();
 					return std::move(obj);
 				}
 			default:
@@ -100,7 +98,6 @@ namespace mods::orm::inventory {
 			              .sql();
 			auto record = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
-			object->player_object_db_id = record[0]["id"].as<uint64_t>();
 			return {true,""};
 		} catch(std::exception& e) {
 			REPORT_DB_ISSUE(": error inserting player_object row: '",e.what());
@@ -119,7 +116,6 @@ namespace mods::orm::inventory {
 			              .sql();
 			auto record = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
-			object->player_object_db_id = record[0]["id"].as<uint64_t>();
 			return {true,""};
 		} catch(std::exception& e) {
 			REPORT_DB_ISSUE(": error inserting player_object row: '",e.what());
@@ -170,18 +166,6 @@ namespace mods::orm::inventory {
 
 	int16_t feed_player(player_ptr_t& player) {
 		try {
-			// ----------------------------+-----------+----------+----------------------------------------------
-			//  po_id        | integer                     |           | not null | nextval('player_object_po_id_seq'::regclass)
-			//  po_player_id | integer                     |           | not null |
-			//  po_type      | player_object_type_t        |           | not null | 'object'::player_object_type_t
-			//po_wear_position INTEGER NOT NULL,
-			//po_in_inventory INTEGER NOT NULL DEFAULT 0,
-			//po_type_vnum
-			//po_type_id
-			//po_type_load 'id' or 'vnum'
-			//  created_at   | timestamp without time zone |           | not null | CURRENT_TIMESTAMP
-			//  updated_at   | timestamp without time zone |           | not null | CURRENT_TIMESTAMP
-
 			auto select_transaction = txn();
 			sql_compositor comp("player_object",&select_transaction);
 			auto player_sql = comp.select("*")

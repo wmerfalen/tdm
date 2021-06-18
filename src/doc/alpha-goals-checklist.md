@@ -21,9 +21,6 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 		- needs work. stats affect the user in predictable ways
 			- strength
 				- [x] increases damage done with melee weapons
-				- [ ] unlocks automatic melee attacks
-					- [ ] kick
-					- [ ] elbow
 				- [ ] increases likelihood of double attacks of same-room weapon and automatic melee attacks
 				- [ ] increases chance of penetration damage with melee weapons
 				- [ ] decreases mobility penalty that come from carry/wield weights

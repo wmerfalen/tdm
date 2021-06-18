@@ -1034,7 +1034,6 @@ struct obj_data {
 			return m_feed_file;
 		}
 		std::unique_ptr<rifle_instance_data<attachment_data_t,std::shared_ptr<obj_data>,uuid_t>> rifle_instance;
-		uint32_t player_object_db_id;
 	protected:
 #define MENTOC_UPTR(r,data,CLASS_TYPE) std::shared_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
 		BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
