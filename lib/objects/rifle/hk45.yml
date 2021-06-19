@@ -34,7 +34,7 @@ reload_time: 5 #int, measured in ticks
 str_type: 'PISTOL'
 type: 'PISTOL' #string, type of weapon
 manufacturer: 'HDK'
-name: 'A HDK .45 ACP' #string
+name: 'HDK .45 ACP' #string
 #rarity types
 # COMMON
 # UNCOMMON

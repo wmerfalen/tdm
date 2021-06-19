@@ -6,6 +6,8 @@
 #include "orm/skill-trees.hpp"
 #include "orm/player-skill-points.hpp"
 #include "levels.hpp"
+#include "classes/sniper.hpp"
+#include "classes/ghost.hpp"
 
 #ifdef __MENTOC_MODS_SKILLS_SHOW_DEBUG_OUTPUT__
 #define m_debug(A) std::cerr << "[mods::skills][debug]:'" << A << "'\n";
@@ -30,9 +32,13 @@ namespace mods::skills {
 	}
 
 	std::string get_user_skills_page(player_ptr_t& player) {
-		return CAT("{hr}\r\n",
-		           "Skills:\r\n"
-		          );
+		if(player->sniper()) {
+			return player->sniper()->skills_page();
+		}
+		if(player->ghost()) {
+			return player->ghost()->skills_page();
+		}
+		return "[stub]";
 	}
 
 	std::string get_user_stats_page(player_ptr_t& player) {

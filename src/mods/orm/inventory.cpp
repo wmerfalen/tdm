@@ -14,12 +14,6 @@ extern obj_ptr_t blank_object();
 extern void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player);
 extern obj_ptr_t create_object_from_index(std::size_t proto_index);
 namespace mods::orm::inventory {
-#define __MENTOC_SHOW_ORM_INVENTORY_FLUSH_OUTPUT__
-#ifdef __MENTOC_SHOW_ORM_INVENTORY_FLUSH_OUTPUT__
-#define DBG(a) std::cerr << "[mods::orm::inventory::flush_player][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "]->'" << a << "'\n";
-#else
-#define DBG(a) ;;
-#endif
 
 	static constexpr const char* PLACEHOLDER = "0";
 	static constexpr const char* FORGED = "1";
@@ -186,11 +180,11 @@ namespace mods::orm::inventory {
 					continue;
 				}
 				if(row["po_in_inventory"].as<int>() == 1) {
-					player->carry(std::move(obj));
+					player->carry(std::move(obj),false);
 					continue;
 				}
 				if(row["po_wear_position"].is_null() == false) {
-					player->equip(std::move(obj),row["po_wear_position"].as<int>());
+					player->equip(std::move(obj),row["po_wear_position"].as<int>(),false);
 					continue;
 				}
 			}

@@ -31,7 +31,7 @@ manufacturer: 'Standard Issue'
 feed_file: 'm16a4.yml'
 type: 'ASSAULT_RIFLE' #string, type of weapon
 str_type: 'ASSAULT_RIFLE' #string, type of weapon
-name: 'A M16A4 Assault Rifle' #string
+name: 'M16A4 Assault Rifle' #string
 #rarity types
 # COMMON
 # UNCOMMON

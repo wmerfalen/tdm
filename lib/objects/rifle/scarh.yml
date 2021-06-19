@@ -31,7 +31,7 @@ manufacturer: 'SK-10'
 feed_file: 'scarh.yml'
 type: 'ASSAULT_RIFLE' #string, type of weapon
 str_type: 'ASSAULT_RIFLE' #string, type of weapon
-name: 'A SCAR-H Assault Rifle' #string
+name: 'SCAR-H Assault Rifle' #string
 #rarity types
 # COMMON
 # UNCOMMON

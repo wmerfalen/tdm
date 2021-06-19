@@ -7,6 +7,7 @@
 #include "screen-searcher.hpp"
 #include "npc.hpp"
 
+#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
 #define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
 #define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
@@ -132,7 +133,7 @@ namespace mods::zone {
 	}
 
 #define ZONE_ERROR(message) \
-{ log_zone_error(zone, cmd_no, message); last_cmd = 0; }
+{ log_zone_error(zone, cmd_no, message); }
 
 	/* execute the reset command table of a given zone */
 	void reset_zone(zone_rnum zone) {
@@ -143,17 +144,11 @@ namespace mods::zone {
 			log("[reset_zone]->[is_blacklisted] Skipping Zone ID due to blacklist rule: %d",zone);
 			return;
 		}
-		int cmd_no = 0, last_cmd = 0;
+		int cmd_no = 0;
 
 		z_debug("looping..");
 		for(auto& ZCMD : zone_table[zone].cmd) {
 			z_debug("found command. processing");
-
-			if(ZCMD.if_flag && !last_cmd) {
-				z_debug("last_cmd preventing processing. skipping");
-				continue;
-			}
-
 			/*  This is the list of actual zone commands.  If any new
 			 *  zone commands are added to the game, be certain to update
 			 *  the list of commands in load_zone() so that the counting
@@ -162,7 +157,6 @@ namespace mods::zone {
 			z_debug("command type: '" << std::string(&ZCMD.command) << "'");
 			switch(ZCMD.command) {
 				case '*':			/* ignore command */
-					last_cmd = 0;
 					break;
 
 				case 'M': {		/* read a mobile */
@@ -171,13 +165,11 @@ namespace mods::zone {
 						 * arg2 = room_vnum
 						 * arg3 = max
 						 */
-						last_cmd = 0;
 						z_debug(green_str("read mobile: ") << ZCMD.arg1 << ", arg2:" << ZCMD.arg2 << ", arg3:" << ZCMD.arg3);
 						if(zone_command_upkeep(ZCMD)) {
 							auto obj = mods::globals::read_mobile_ptr(ZCMD.arg1,VIRTUAL);
 							if(!obj) {
 								log(CAT("Warning: zone update failed to read this mob:",ZCMD.arg1).c_str());
-								last_cmd = 1;/* just power through it*/
 								break;
 							}
 							z_debug("cool, we found a mob. throwing him in a room now...");
@@ -185,8 +177,6 @@ namespace mods::zone {
 							char_to_room(obj->cd(),real_room(ZCMD.arg2));
 							ZCMD.object_data.emplace_back(obj->uuid());
 							ZCMD.count = ZCMD.object_data.size();
-							last_cmd = 1;
-							break;
 						}
 					}
 					break;
@@ -277,12 +267,12 @@ namespace mods::zone {
 			if(minute_passed) {
 				z_debug(green_str("a minute passed. updating zones..."));
 				/* one minute has passed */
-				if(zone_table[i].age < zone_table[i].lifespan && zone_table[i].reset_mode) {
+				if(zone_table[i].age < zone_table[i].lifespan) { // && zone_table[i].reset_mode) {
 					z_debug(green_str("one minute has passed. incrementing age: '") << zone_table[i].age << "'");
 					zone_table[i].age += 1;
 				}
 
-				if(zone_table[i].age >= zone_table[i].lifespan && zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
+				if(zone_table[i].age >= zone_table[i].lifespan && zone_table[i].age < ZO_DEAD) { // && zone_table[i].reset_mode) {
 					mods::zone::reset_zone(i);
 					zone_table[i].age = 0;
 				}

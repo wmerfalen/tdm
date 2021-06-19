@@ -31,7 +31,7 @@ manufacturer: 'SK-10'
 feed_file: 'augpara.yml'
 type: 'ASSAULT_RIFLE' #string, type of weapon
 str_type: 'ASSAULT_RIFLE' #string, type of weapon
-name: 'An AUG-PARA Assault Rifle' #string
+name: 'AUG-PARA Assault Rifle' #string
 #rarity types
 # COMMON
 # UNCOMMON

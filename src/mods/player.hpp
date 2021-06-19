@@ -183,6 +183,7 @@ namespace mods {
 			std::vector<obj_data*> vcarrying();
 			void uncarry(obj_ptr_t obj);
 			void carry(obj_ptr_t);
+			void carry(obj_ptr_t,bool flush);
 
 			uint16_t ammo();
 			uint16_t set_ammo(uint16_t value);
@@ -628,6 +629,7 @@ namespace mods {
 				m_overhead_map_height = h;
 			}
 			void equip(obj_ptr_t obj,int pos);
+			void equip(obj_ptr_t obj,int pos,bool flush);
 			void equip(uuid_t,int pos);
 			void unequip(const std::size_t& pos);
 			void unequip_into_inventory(int pos);

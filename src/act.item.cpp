@@ -491,6 +491,10 @@ void perform_drop_gold(char_data *ch, int amount,
 
 int perform_drop(char_data *ch, struct obj_data *obj,
                  byte mode, const char *sname, room_rnum RDR) {
+	MENTOC_PREAMBLE();
+	auto o = optr(obj);
+	player->uncarry(o);
+
 	char buf[MAX_STRING_LENGTH];
 	int value;
 
@@ -505,8 +509,6 @@ int perform_drop(char_data *ch, struct obj_data *obj,
 
 	snprintf(buf, sizeof(buf), "$n %ss $p.%s", sname, VANISH(mode));
 	act(buf, TRUE, ch, obj, 0, TO_ROOM);
-
-	obj_from_char(obj);
 
 	if((mode == SCMD_DONATE) && OBJ_FLAGGED(obj, ITEM_NODONATE)) {
 		mode = SCMD_JUNK;

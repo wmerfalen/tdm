@@ -23,13 +23,11 @@ namespace mods::demolitions {
 	}
 	std::vector<uuid_t> claymores_in(const room_rnum& room) {
 		if(room >= world_size()) {
-			std::cerr << red_str("claymores_in room is too big") << "\n";
 			return {};
 		}
 		std::vector<uuid_t> v;
 		for(auto i = world[room].contents; i; i = i->next_content) {
 			if(i->has_explosive() && i->explosive()->attributes->type == mw_explosive::CLAYMORE_MINE) {
-				std::cerr << green_str("found claymore") << ": '" << i->uuid << "'\n";
 				v.emplace_back(i->uuid);
 			}
 		}

@@ -31,7 +31,7 @@ manufacturer: 'VI-AUG-IX'
 feed_file: 'aug-a3.yml'
 type: 'ASSAULT_RIFLE' #string, type of weapon
 str_type: 'ASSAULT_RIFLE' #string, type of weapon
-name: 'A AUG A3'  #string
+name: 'AUG A3'  #string
 #rarity types
 # COMMON
 # UNCOMMON

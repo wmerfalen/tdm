@@ -36,7 +36,7 @@ reload_time: 3 #int, measured in ticks
 # type: HANDGUN
 # type: MACHINE_PISTOL
 # type: LIGHT_MACHINE_GUN
-type: 0  # enum, object type
+type: 'SHOTGUN'  # enum, object type
 manufacturer: 'BF Corp' # string, anything 
 name: 'BF-39 Shotgun' # string, anything name of object 
 description: 'A BF-39 shotgun is lying here.'

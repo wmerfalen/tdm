@@ -19,6 +19,11 @@
 #include "rifle-attachments.hpp"
 #include "levels.hpp"
 #include "deep-object-parser.hpp"
+//#define __MENTOC_RUN_ARMOR_CALCULATOR__
+#include "weapons/armor-calculator.hpp"
+
+//#define __MENTOC_RUN_WRAPPER_PREGAME__
+
 #ifdef __MENTOC_RUN_PBA_CODE__
 #include "orm/player-base-ability.hpp"
 #endif
@@ -121,13 +126,7 @@ namespace mods::debug::pre_game {
 		                                    );
 		std::cerr << mods::util::mail_format("The runtime verification subsystem",
 		                                     "[LWN subscriber-only content]",
-		                                     "The realtime project has been the source of many of the innovations that have found their way into the core kernel in the last fifteen years or so. There is more to it than that, though; the wider realtime community is also doing interesting work in a number of areas that go beyond ensuring deterministic response.\r\n\r\n"
-		                                     "One example is Daniel Bristot de Oliveira's runtime verification patch set, which can monitor the kernel to ensure that it is behaving the way one thinks it should. Realtime development in the kernel community is a pragmatic effort to add determinism to a production system, but there is also an active academic community focused on realtime work.\r\nAcademic developers often struggle to collaborate effectively with projects like the kernel, where concerns about performance, regressions, and maintainability have been the downfall of many a bright idea. As a result, there is a lot of good academic work that takes a long time to make it into a production system, if it ever does.\r\n\r\n"
-		                                     "Imagine, for a moment, a project to create a realtime system that absolutely cannot be allowed to fail; examples might include a controller for a nuclear reactor, a jetliner's flight-control system, or the image processor in a television set showing that important football game. In such a setting, it is nice to know that the system will always respond to events within the budgeted time.\r\n\r\n"
-		                                     "Simply observing that it seems to do so tends to be considered inadequate for these systems. One way to get to a higher level of assurance is to create a formal model of the system, prove mathematically that the model produces the desired results, then run that model with every scenario that can be imagined. This approach can work, but it has its difficulties: ensuring that the model properly matches the real system is a challenge in its own right and, even if the model is perfect, it is almost certain to be far too slow for any sort of exhaustive testing.\r\nThe complexity of real-world systems makes this approach impractical, at best. Runtime verification. The runtime verification patches take a different approach.\r\n\r\n"
-		                                     "Developers can create a high-level model describing the states that the system can be in and the transitions that occur in response to events. The verification code will then watch the kernel to ensure that the system does, indeed, behave as expected. If a discrepancy is found in a running system, then there is either an error in the model or a bug in the system; either way, fixing it will improve confidence that the system is behaving correctly. The use of this mechanism is described in this documentation patch helpfully included with the code; the following example is shamelessly stolen from there.\r\n\r\n"
-		                                     "The first step is to express one's model of an aspect of the system's behavior; the example given is whether a CPU can be preempted or not a question that realtime researchers tend to be interested in. This model is described in the DOT language.\r\n\r\n",
-
+		                                     "The realtime{->}[ not-learned ]\r\nproject has been the source of many of the innovations that have found their way into the core kernel in the last fifteen years or so. There is more to it than that, though; the wider realtime community is also doing interesting work in a number of areas that go beyond ensuring deterministic response.\r\n\r\n",
 		                                     80
 		                                    );
 		sleep(60);
@@ -136,7 +135,33 @@ namespace mods::debug::pre_game {
 	}
 #endif
 
+	player_ptr_t new_player() {
+		return mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
+	}
+	void do_armor_calculator() {
+		player_ptr_t attacker = new_player();
+		player_ptr_t victim = new_player();
+		obj_ptr_t weapon = create_object(ITEM_RIFLE,"g36c.yml");
+		attacker->level() = 10;
+		attacker->armor() = 80;
+		victim->level() = 5;
+		int16_t dam = 450;
+		float res =  mods::weapons::armor_calculator::roll_critical_damage_reduction(
+		                 attacker,
+		                 weapon,
+		                 victim,
+		                 dam
+		             );
+		std::cerr << "damage: " << dam << "\n"
+		          << "dampener: " << res << "\n";
+		sleep(60);
+
+	}
+
 	bool run() {
+#ifdef __MENTOC_RUN_ARMOR_CALCULATOR__
+		do_armor_calculator();
+#endif
 #ifdef __MENTOC_RUN_WRAPPER_PREGAME__
 		do_wrapper();
 #endif

@@ -3316,3 +3316,16 @@ CREATE TABLE public.player_object (
 			ON UPDATE CASCADE
 );
 
+CREATE TABLE public.skill_usage (
+    id SERIAL UNIQUE,
+    player_id integer NOT NULL,
+    skill_name VARCHAR(32) NOT NULL,
+		skill_level float NOT NULL DEFAULT 0.0,
+	PRIMARY KEY(id),
+		CONSTRAINT fk_player_id
+			FOREIGN KEY (player_id)
+			REFERENCES public.player(id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+);
+

@@ -44,8 +44,7 @@ name: 'Silenced PPK' #string
 # DEFAULT
 rarity: 'RARE'
 vnum: 42 #virtual number
-object_type: rifle
-feed_file: 'glock.yml'
+feed_file: 'ppk.yml'
 description: 'A Silenced PPK is lying here.'
 short_description: 'a Silenced PPK'
 action_description: 'Silenced PPK'

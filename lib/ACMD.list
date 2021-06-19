@@ -6,6 +6,7 @@
 ./mods/classes/ghost.cpp:	->dissipate
 ./mods/classes/engineer.cpp:	->drone_bomb
 ./mods/classes/breacher.cpp:->teep
+./mods/classes/sniper.cpp:	->build_claymore
 ./mods/classes/sniper.cpp:	->xray_shot
 ./mods/classes/sniper.cpp:	->mark_target
 ./mods/classes/sniper.cpp:	->tracking_shot

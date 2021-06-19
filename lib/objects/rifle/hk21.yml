@@ -38,7 +38,7 @@ reload_time: 33 #int, measured in ticks
 # type: LIGHT_MACHINE_GUN
 type: 'LIGHT_MACHINE_GUN'  # enum, object type
 manufacturer: 'TN-33Y' # string, anything 
-name: 'A HK-21 Light Machine Gun'
+name: 'HK-21 Light Machine Gun'
 vnum: 33 # integer, unique identifier
 str_type: 'LIGHT_MACHINE_GUN'
 #rarity types

@@ -174,10 +174,42 @@ namespace mods::util {
 	}
 	std::string expand_safe_escape_codes(std::string_view str,std::size_t screen_width) {
 		std::string sanitized;
+		bool hr_fetched = false;
+		int line_width = 0;
 		for(int i=0; i < str.length(); i++) {
+			if(hr_fetched) {
+				std::cerr << "next chars: '" << str[i] << str[i+1] << str[i+2] << "'\n";
+				hr_fetched = false;
+			}
+			/**
+			 * match if the user wants right justified
+			 * {->} is what we use for right justified
+			 */
+			if(str[i] == '{' && i + 3 < str.length() && str[i+1] == '-' && str[i+2] == '>' && str[i+3] == '}') {
+				std::string capture = "";
+				std::cerr << "k+4:'" << str[i+4] << "'\n";
+				for(int k=i+4; k < str.length() && str[k] != '\r'; k++) {
+					capture += str[k];
+				}
+				std::cerr << "captured:'" << capture << "'\n";
+				i += capture.length() + 5;
+				int spaces = screen_width - capture.length() - line_width - 3;
+				for(int k=0; k < spaces; k++) {
+					sanitized += " ";
+				}
+				sanitized += capture + " ";
+				line_width = 0;
+				hr_fetched = true;
+				continue;
+			}
+			/**
+			 * match if the user wants a horizontal line
+			 * {hr} is what we use for horizontal lines
+			 */
 			if(str[i] == '{' && i + 3 < str.length() && str[i+1] == 'h' && str[i+2] == 'r' && str[i+3] == '}') {
 				i += 3;
 				sanitized += "\r\n";
+				line_width = 0;
 				for(int k=0; k < screen_width; k++) {
 					sanitized += "-";
 				}
@@ -199,10 +231,12 @@ namespace mods::util {
 			}
 			if(str[i] == '\n') {
 				sanitized += "\r\n";
+				line_width = 0;
 				continue;
 			}
 			if(str[i] == '\r') {
 				sanitized += "\r\n";
+				line_width = 0;
 				if(i + 1 < str.length() && str[i+1] == '\n') {
 					++i;
 				}
@@ -210,6 +244,7 @@ namespace mods::util {
 			}
 			if(ispunct(str[i]) || isspace(str[i]) || isalnum(str[i])) {
 				sanitized += str[i];
+				++line_width;
 			}
 		}
 		return sanitized;

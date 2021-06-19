@@ -31,7 +31,7 @@ manufacturer: 'S1 Industries'
 feed_file: '552-commando.yml'
 type: 'ASSAULT_RIFLE' #string, type of weapon
 str_type: 'ASSAULT_RIFLE' #string, type of weapon
-name: 'A 552 Commando'  #string
+name: '552 Commando'  #string
 #rarity types
 # COMMON
 # UNCOMMON

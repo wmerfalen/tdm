@@ -26,10 +26,16 @@
 #include "contract-events.hpp"
 #include "orm/inventory.hpp"
 
-#ifdef __MENTOC_CARRY_DEBUG__
-#define dbg(A) std::cerr << red_str("[CARRY]dbug:") << A << "\n";
+#ifdef __MENTOC_PLAYER_CLASS_DEBUG__
+#define dbg(A) std::cerr << red_str("[mods::player]debug:") << A << "\n";
+#define eqd(A) std::cerr << green_str("[equipment]debug:") << A << "\n";
+#define dsd(A) std::cerr << green_str("[destructor]debug:") << A << "\n";
+#define NPC_SEND_DEBUG(a){ std::cerr << "[player-output--NPC_SEND_DEBUG--][NPC:" << this->name().c_str() << "][uuid:" << this->uuid() << "]->'" << a <<"'\n"; }
 #else
-#define dbg(A) ;;
+#define dbg(A)
+#define eqd(A)
+#define dsd(A)
+#define NPC_SEND_DEBUG(a)
 #endif
 
 
@@ -82,11 +88,6 @@ namespace mods {
 	using task_t = mods::contracts::contract_step::task_type_t;
 	using target_t = mods::contracts::contract_step::task_target_t;
 
-#ifdef __MENTOC_NPC_SEND_DEBUG_OUTPUT__
-#define NPC_SEND_DEBUG(a){ std::cerr << "[player-output--NPC_SEND_DEBUG--][NPC:" << this->name().c_str() << "][uuid:" << this->uuid() << "]->'" << a <<"'\n"; }
-#else
-#define NPC_SEND_DEBUG(a)
-#endif
 #define MENTOC_NPC_CHECK(str) if(IS_NPC(cd())){ NPC_SEND_DEBUG(str); return; }
 #define MENTOC_NPC_CHECK_0(str) if(IS_NPC(cd())){ NPC_SEND_DEBUG(str); return 0; }
 	using mask_t = mods::weapon::mask_type;
@@ -94,9 +95,7 @@ namespace mods {
 
 
 	void player::set_shared_ptr(player_ptr_t& self_ptr) {
-#ifdef __MENTOC_SHOW_SET_SHARED_PTR_DEPRECATED__
-		std::cerr << "[deprecated] set_shared_ptr\n";
-#endif
+		deprecated("set_shared_ptr");
 		return;
 		/*
 			 m_self_ptr = self_ptr;
@@ -307,6 +306,9 @@ namespace mods {
 		return m_equipment[pos];
 	}
 	void player::equip(obj_ptr_t in_object,int pos) {
+		equip(in_object,pos,true);
+	}
+	void player::equip(obj_ptr_t in_object,int pos,bool flush) {
 		if(!m_basic_protection) {
 			m_basic_protection = std::make_shared<mods::armor::basic_protection>(uuid());
 			m_advanced_protection = std::make_shared<mods::armor::advanced_protection>(uuid());
@@ -320,38 +322,27 @@ namespace mods {
 			in_object->worn_by = this->cd();
 			in_object->worn_on = pos;
 			m_equipment[pos] = in_object;
-			mods::orm::inventory::equip(db_id(),pos,in_object);
+			if(flush) {
+				mods::orm::inventory::equip(db_id(),pos,in_object);
+			}
 
-#ifdef __MENTOC_PLAYER_DEBUG__
-			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
-#endif
 			perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
 			mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
 		}
 	}
 	void player::equip(uuid_t obj_uuid,int pos) {
-#ifdef __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__
-		std::cerr << "player::equip(uuid): " << obj_uuid << "\n";
-#endif
+		eqd("player::equip(uuid): " << obj_uuid);
 		auto obj = optr_by_uuid(obj_uuid);
-		if(!obj) {
-			exit(3);
-		}
-		this->equip(obj,pos);
+		this->equip(obj,pos,true);
 	}
 	void player::unequip(const std::size_t& pos) {
 		if(pos < NUM_WEARS && m_equipment[pos]) {
 			mods::stat_bonuses::player_unequip(uuid(),m_equipment[pos]->uuid);
 			mods::orm::inventory::unequip(db_id(),m_equipment[pos],pos);
 			auto item = m_equipment[pos];
-			if(pos == WEAR_WIELD) {
-				/** FIXME: this needs to negate the bit */
-				m_weapon_flags = 0;//m_equipment[pos]->obj_flags.weapon_flags;
-			}
-#ifdef __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__
-			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
-#endif
+
+			eqd("perform equip calculations");
 			perform_equip_calculations(pos,false);
 			m_equipment[pos]->worn_by = nullptr;
 			m_equipment[pos]->worn_on = -1;
@@ -558,7 +549,7 @@ namespace mods {
 		return nullptr;
 	}
 	/** TODO: do this */
-	void player::carry(obj_ptr_t obj) {
+	void player::carry(obj_ptr_t obj,bool flush) {
 		dbg("carry entry");
 		if(obj == nullptr) {
 			dbg("obj is nullptr, returning early!");
@@ -576,8 +567,13 @@ namespace mods {
 		m_char_data->carrying = obj.get();
 		dbg("checking rifle has attachment");
 		dbg("short circuited");
-		mods::orm::inventory::carry(db_id(),obj);
-		dbg("flushing by uuid");
+		if(flush) {
+			dbg("flushing by db_id");
+			mods::orm::inventory::carry(db_id(),obj);
+		}
+	}
+	void player::carry(obj_ptr_t obj) {
+		carry(obj,true);
 	}
 	void player::uncarry(obj_ptr_t obj) {
 
@@ -1268,9 +1264,8 @@ namespace mods {
 	}
 
 	player::~player() {
-#ifdef __MENTOC_SHOW_MODS_PLAYER__DESTRUCTOR_CALLS__
-		std::cerr << "[~player]\n";
-#endif
+		dsd("[~player]");
+
 		if(m_histfile_on) {
 			stop_histfile();
 		}
@@ -1650,9 +1645,6 @@ namespace mods {
 		this->dispatch_event(feedback);
 		switch(feedback.damage_event) {
 			default:
-#ifdef __MENTOC_SHOW_UNHANDLED_DAMAGE_EVENTS__
-				std::cerr << "[damage_event]: UNHANDLED case!->'" << e << "'\n";
-#endif
 				break;
 			case damage_event_t::YOU_INFLICTED_MELEE_ATTACK:
 				this->queue_up(CAT(MSG_YOU_INFLICTED_MELEE_ATTACK(), "[",std::to_string(feedback.damage),"]"));
@@ -1813,9 +1805,7 @@ namespace mods {
 		return m_class;
 	}
 	void player::set_class(player_class_t c) {
-#ifdef __MENTOC_PLAYER_DEBUG__
-		std::cerr << "[mods::player] set class to: " << c << "\n";
-#endif
+		dbg("[mods::player] set class to: " << c);
 		m_class = c;
 		m_class_string = mods::util::player_class_to_string(c);
 		m_triads = mods::levels::get_triads_by_class(m_class);
@@ -2193,4 +2183,8 @@ namespace mods {
 
 };
 
+#undef dbg
+#undef eqd
+#undef dsd
+#undef NPC_SEND_DEBUG
 #endif
