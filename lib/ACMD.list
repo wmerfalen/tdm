@@ -6,6 +6,7 @@
 ./mods/classes/ghost.cpp:	->dissipate
 ./mods/classes/engineer.cpp:	->drone_bomb
 ./mods/classes/breacher.cpp:->teep
+./mods/classes/sniper.cpp:	->light_bandage
 ./mods/classes/sniper.cpp:	->build_claymore
 ./mods/classes/sniper.cpp:	->xray_shot
 ./mods/classes/sniper.cpp:	->mark_target
@@ -26,7 +27,8 @@
 ./mods/weapons/reload.cpp:	->reload
 ./mods/skills.cpp:	->score
 ./mods/skills.cpp:	->practice_sessions
-./mods/skills.cpp:	->train
+./mods/skills.cpp:	->skills
+./mods/skills.cpp:	->practice
 ./mods/values.cpp:			->set_value
 ./mods/values.cpp:			->get_value
 ./mods/values.cpp:			->revert_value_to_default

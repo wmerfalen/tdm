@@ -24,8 +24,6 @@ namespace mods::classes {
 			~forge() = default;
 			void init();
 
-			player_ptr_t 	player();
-
 			void set_player(player_ptr_t);
 
 			/** will return how many turns the attacker will be distracted until it re-engages the player */

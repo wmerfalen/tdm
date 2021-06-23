@@ -46,9 +46,6 @@ namespace mods::classes {
 		this->init();
 		load_by_player(p);
 	}
-	player_ptr_t 	ghost::player() {
-		return m_player;
-	}
 	bool ghost::is_dissipated() const {
 		return m_dissipated;
 	}

@@ -7,6 +7,22 @@
 
 namespace mods::help::pages {
 #define HELP_STR static constexpr const char*
+	HELP_STR h_practice=
+	    "usage: practice <help>\r\n"
+	    "usage: practice <skill-shorthand>\r\n"
+	    "see also:\r\n"
+	    " skills train\r\n"
+	    ;
+	HELP_STR h_sniper=
+	    "Sniper class abilities\r\n"
+	    "----------------------\r\n"
+	    "{grn}build_claymore{/grn}: creates a claymore in your inventory (if you have a charge left).\r\n"
+	    "{grn}xray_shot{/grn}: hit a target through walls or doors.\r\n"
+	    "{grn}mark_target{/grn}: mark your target\r\n"
+	    "{grn}tracking_shot{/grn}: tracking your target.\r\n"
+	    "{grn}engage{/grn}: used with xray_shot to engage with a target\r\n"
+	    "{grn}disengage{/grn}: used with xray_shot to focus your fire elsewhere\r\n";
+
 	HELP_STR h_contract = "usage: contract <list>\r\n"
 	                      "usage: contract <join> <N>\r\n"
 	                      "usage: contract <leave> <N>\r\n"
@@ -456,6 +472,7 @@ namespace mods::help {
 	}
 	static std::map<std::string,std::pair<player_level,std::string>> registered_help_commands;
 	static std::map<std::string,std::string> registered_admin_help_commands;
+
 	bool matches_many(const std::string& items,std::string_view from) {
 		std::vector<std::string> tokens;
 		std::string token;
@@ -467,14 +484,18 @@ namespace mods::help {
 		}
 		return false;
 	}
-	bool send_help(std::string_view from, std::shared_ptr<mods::player>& player) {
-		auto it = registered_help_commands.find(from.data());
+
+
+	bool send_help(std::string_view topic, std::shared_ptr<mods::player>& player) {
+		auto it = registered_help_commands.find(topic.data());
 		if(registered_help_commands.end() != it && ((int)player->level()) >= ((int)it->second.first)) {
 			player->send("your player level: %d, second.first: %d\r\n",player->level(),it->second.first);
 			player->sendln(CAT("{blu}",it->second.second,"{/blu}"));
 			return false;
 		}
-#define M_MATCH(A,SUBJECT) if(matches_many(A,from)){ player->sendln(CAT("{blu}",pages::SUBJECT,"{/blu}")); return false; }
+#define M_MATCH(A,SUBJECT) if(matches_many(A,topic)){ player->sendln(CAT("{blu}",pages::SUBJECT,"{/blu}")); return false; }
+		M_MATCH("practice",h_practice);
+		M_MATCH("sniper",h_sniper);
 		M_MATCH("throw,grenade",h_grenade);
 		M_MATCH("camera,claymore,install,uninstall",h_install);
 		M_MATCH("cancel",h_cancel);
@@ -510,9 +531,14 @@ namespace mods::help {
 #undef M_MATCH
 		return true;
 	}
+
+
+
 	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level level) {
 		registered_help_commands[command] = {level,contents};
 	}
+
+
 	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help) {
 		bool show = false;
 		auto vec_args = PARSE_ARGS();
@@ -524,6 +550,8 @@ namespace mods::help {
 		}
 		return send_help(from,player);
 	}
+
+
 	void send_class_header(player_ptr_t& player,std::string_view class_name) {
 		uint8_t len = class_name.length();
 		uint8_t bar_count = len + 2 + strlen(" class menu =");
@@ -537,6 +565,8 @@ namespace mods::help {
 		}
 		player->sendln(header);
 	}
+
+
 	void send_class_footer(player_ptr_t& player,std::string_view class_name) {
 		uint8_t len = class_name.length();
 		uint8_t bar_count = len + 2 + strlen(" class menu =");
@@ -681,6 +711,8 @@ namespace mods::help {
 		send_class_footer(player,"MACHINIST");
 
 	}
+
+
 	ACMD(do_help) {
 		if(IS_NPC(ch)) {
 			return;
@@ -734,24 +766,23 @@ namespace mods::help {
 					break;
 			}
 		}
+
 		if(player->implementor_mode() || player->builder_mode()) {
 			mods::help::fetch_builder_help(screen);
 		}
-		if(vec_args.size()) {
-			player->sendln("Searching...");
-			mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
-			player->sendln("Done listing.");
-			return;
-		}
-		player->pager_start();
-		for(auto& line : screen) {
-			player->sendln(line);
-		}
-		player->sendln("Done listing.");
-		player->pager_end();
-		player->page(0);
 
+		if(argshave()->size_gt(0)->passed()) {
+			if(send_help(argat(0), player)) {
+				player->pager_start();
+				player->sendln("No specific help screen found for that. Searching every command...");
+				mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
+				player->pager_end();
+				player->page(0);
+				return;
+			}
+		}
 	}
+
 	void init() {
 		mods::interpreter::add_command("builder_help", POS_RESTING, do_help, LVL_BUILDER,0);
 		mods::interpreter::add_command("help", POS_RESTING, do_help, 0,0);

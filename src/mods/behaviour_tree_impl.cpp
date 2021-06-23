@@ -11,6 +11,7 @@
 #include "mobs/mini-gunner-behaviour-tree.hpp"
 #include "mobs/lowly-security-behaviour-tree.hpp"
 #include "mobs/mp-shotgunner-behaviour-tree.hpp"
+#include "mobs/car-thief-behaviour-tree.hpp"
 
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
@@ -115,6 +116,9 @@ namespace mods::behaviour_tree_impl {
 		node lowly_security_roam(node_type::SELECTOR);
 		node lowly_security_engage(node_type::SELECTOR);
 		node lowly_security_pursuit(node_type::SELECTOR);
+		node car_thief_roam(node_type::SELECTOR);
+		node car_thief_hostile(node_type::SELECTOR);
+		node car_thief_wimpy(node_type::SELECTOR);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_roam<node,argument_type,status>(mini_gunner_roam);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_engage<node,argument_type,status>(mini_gunner_engage);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_aggressive_roam<node,argument_type,status>(mini_gunner_aggressive_roam);
@@ -127,6 +131,10 @@ namespace mods::behaviour_tree_impl {
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_roam<node,argument_type,status>(lowly_security_roam);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_engage<node,argument_type,status>(lowly_security_engage);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_pursuit<node,argument_type,status>(lowly_security_pursuit);
+
+		mods::mobs::car_thief_behaviour_tree::make_car_thief_roam(car_thief_roam);
+		mods::mobs::car_thief_behaviour_tree::make_car_thief_hostile(car_thief_hostile);
+		mods::mobs::car_thief_behaviour_tree::make_car_thief_wimpy(car_thief_wimpy);
 
 		auto node_mob_has_snipe_capability = node::create_leaf(
 		[](argument_type mob) -> status {

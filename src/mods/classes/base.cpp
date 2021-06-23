@@ -200,10 +200,16 @@ namespace mods::classes {
 		          );
 	}
 
+	skill_t* base::skill_ptr(uint8_t skill) {
+		for(const auto& s : get_abilities()) {
+			if(s.ability_value == skill) {
+				return s.skill_ptr;
+			}
+		}
+		return nullptr;
+	}
 	skill_t* base::skill_ptr(std::string_view skill) {
 		for(const auto& s : get_abilities()) {
-			std::cerr << s.dump() << "\n" <<
-			          "skill.data:'" << skill.data() << "'\n";
 			if(s.shortened.compare(skill.data()) == 0) {
 				return s.skill_ptr;
 			}
@@ -220,7 +226,7 @@ namespace mods::classes {
 		return s->practice(player_ptr);
 	}
 
-	std::tuple<bool,std::string> base::roll_skill_success(std::string_view skill) {
+	std::tuple<bool,std::string> base::roll_skill_success(uint8_t skill) {
 		auto ptr = skill_ptr(skill);
 		if(!ptr) {
 			return {false,"Which skill?"};

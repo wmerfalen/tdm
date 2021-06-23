@@ -1,0 +1,36 @@
+# type: SUV
+# type: MOTORCYCLE
+# type: TWO_DOOR
+# type: FOUR_DOOR
+# type: TRUCK
+# type: SEMI
+# type: VAN
+# type: SWAT_VAN
+# type: TANK
+# type: JEEP
+hp: 250 #int32_t, hitpoints
+armor_hp: 0 #int32_t, armor hitpoints
+vehicle_type: 'SUV; #string, SUV, MOTORCYCLE,TWO_DOOR,FOUR_DOOR,TRUCK,SEMI,VAN,SWAT_VAN,TANK,JEEP
+horsepower: 1000 #int32_t, horsepower
+zero_to_sixty: 10 #int16_t, amount in seconds to go from zero to 60mph
+tire_hp: 150 #int32_t, tire hp
+tire_types: 'AIR' #string, tire types AIR,AIRLESS,TRACKS (tank)
+front_windshield_glass_type: 'STOCK_GLASS' #string, glass types, BULLET_PROOF,STOCK_GLASS,BULLET_PROOF_TINTED,STOCK_TINTED
+rear_windshield_glass_type: 'STOCK_GLASS' #string, glass types, BULLET_PROOF,STOCK_GLASS,BULLET_PROOF_TINTED,STOCK_TINTED
+passenger_count: 2 #int16_t, passenger count
+str_type: '12' # enum, object type
+manufacturer: 'ACME Industries' # string, anything 
+name: 'Response team SUV' # string, anything name of object 
+vnum: 1000 # integer, unique identifier
+description: 'Description'
+short_description: 'short description'
+action_description: 'action description'
+feed_file: '12.yml'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

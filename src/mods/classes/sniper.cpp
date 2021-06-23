@@ -5,16 +5,20 @@
 #include "../help.hpp"
 #include "../examine.hpp"
 
+namespace mods::rand {
+	extern int roll(int num,int size);
+};
+
 namespace mods::classes {
+	struct shorthand {
+		static constexpr std::string_view LIGHT_BANDAGE = "lb";
+	};
 	sniper::sniper() {
 		this->init();
 	}
 	sniper::sniper(player_ptr_t p) {
 		this->init();
 		load_by_player(p);
-	}
-	player_ptr_t 	sniper::player() {
-		return m_player;
 	}
 	void sniper::init() {
 		m_target = 0;
@@ -24,10 +28,11 @@ namespace mods::classes {
 		m_claymore_charges = 0;
 		m_tracking_shot_charges = 0;
 		m_preferences["mute-replenish"] = true;
+		m_gauze_count = 0;
 		using s = ability_data_t::skillset_t;
 		m_abilities = {
 			{TRACKING_SHOT,"ts","Tracking Shot",s::SNIPING,&m_tracking_shot},
-			{LIGHT_BANDAGE,"lb","Light Bandage",s::MEDICAL,&m_light_bandage},
+			{LIGHT_BANDAGE,shorthand::LIGHT_BANDAGE.data(),"Light Bandage",s::MEDICAL,&m_light_bandage},
 			{SUTURE,"suture","Suture",s::MEDICAL,&m_suture},
 			{ADRENALINE_SHOT,"as","Adrenaline Shot",s::MEDICAL,&m_adrenaline_shot},
 			{EMP_NADE,"emp","EMP Grenade",s::DEMOLITIONS,&m_emp_nade},
@@ -80,6 +85,10 @@ namespace mods::classes {
 			if(m_tracking_shot_charges < SNIPER_TRACKING_SHOT_MAX_COUNT() * tier) {
 				replenish_notify("{grn}A sniper class Tracking Shot charge has been regenerated.{/grn}");
 				++m_tracking_shot_charges;
+			}
+			if(m_gauze_count < SNIPER_GAUZE_MAX_COUNT() * tier) {
+				replenish_notify("{grn}A gauze has been regenerated.{/grn}");
+				++m_gauze_count;
 			}
 		}
 	}
@@ -203,9 +212,29 @@ namespace mods::classes {
 	std::shared_ptr<sniper> create_sniper(player_ptr_t& in_player) {
 		return std::move(std::make_shared<sniper>(in_player));
 	}
+	std::tuple<bool,std::string> sniper::light_bandage() {
+		if(m_gauze_count) {
+			auto s = roll_skill_success(LIGHT_BANDAGE);
+			--m_gauze_count;
+			if(std::get<0>(s)) {
+				auto player_tier = tier(m_player);
+				m_player->hp() += player_tier * SNIPER_GAUZE_MULTIPLIER() * (m_player->level() * 0.3178) * (rand_number(1,185) * 0.112);
+				m_light_bandage.use_skill(m_player);
+				return {1,"You bandage yourself"};
+			}
+			return {0,std::get<1>(s)};
+		}
+		return {0,"You don't have any gauze!"};
+	}
 };
 
 namespace mods::class_abilities::sniper {
+	ACMD(do_light_bandage) {
+		PLAYER_CAN("sniper.light_bandage");
+		DO_HELP("light_bandage");
+		auto status = player->sniper()->light_bandage();
+		player->sendln(std::get<1>(status));
+	};
 	ACMD(do_build_claymore) {
 		PLAYER_CAN("sniper.build_claymore");
 		DO_HELP("build_claymore");
@@ -266,5 +295,6 @@ namespace mods::class_abilities::sniper {
 		mods::interpreter::add_command("disengage", POS_RESTING, do_disengage, 0,0);
 		mods::interpreter::add_command("xray_shot", POS_RESTING, do_xray_shot, 0,0);
 		mods::interpreter::add_command("build_claymore", POS_RESTING, do_build_claymore, 0,0);
+		mods::interpreter::add_command("light_bandage", POS_RESTING, do_light_bandage, 0,0);
 	}
 };

@@ -25,8 +25,6 @@ namespace mods::classes {
 			~syndrome() = default;
 			void replenish();
 
-			player_ptr_t 	player();
-
 			void set_player(player_ptr_t);
 
 			/** database routines */

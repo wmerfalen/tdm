@@ -37,7 +37,6 @@ namespace mods::classes {
 			~marine() = default;
 
 			int16_t load_by_player(player_ptr_t&);
-			player_ptr_t 	player();
 			int16_t				new_player(player_ptr_t&, primary_choice_t primary);
 			int16_t save();
 			void replenish();

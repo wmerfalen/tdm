@@ -88,8 +88,9 @@ namespace mods::classes {
 		virtual ability_list_t& get_abilities() = 0;
 
 		skill_t* skill_ptr(std::string_view skill);
+		skill_t* skill_ptr(uint8_t skill);
 		std::tuple<bool,std::string> practice(std::string_view skill);
-		std::tuple<bool,std::string> roll_skill_success(std::string_view skill);
+		std::tuple<bool,std::string> roll_skill_success(uint8_t skill);
 		void initialize_skills_for_player(player_ptr_t& player);
 		std::string skills_page();
 		std::string shorthand_page();

@@ -160,6 +160,8 @@ namespace mods::skills {
 		}
 		return sessions;
 	}
+
+
 	std::string get_practice_dump() {
 		std::string report = "[practice sessions per level]\r\n";
 		for(uint8_t i = 1; i <= mods::levels::MAX_PLAYER_LEVEL; ++i) {
@@ -182,31 +184,30 @@ namespace mods::skills {
 	}
 
 
-	std::string request_page_for(player_ptr_t& player,std::string_view page) {
-		return std::get<1>(player->class_action("request_page",page));
-	}
-
 	ACMD(do_practice_sessions) {
 		player->sendln(get_practice_dump());
 	}
 
+	ACMD(do_skills) {
+		DO_HELP("skills");
+		player->sendln(std::get<1>(player->class_action("request_page","skills")));
+	}
 
-
-	ACMD(do_train) {
-		DO_HELP("train");
+	ACMD(do_practice) {
+		DO_HELP("practice");
 		if(argshave()->size_gt(0)->first_is("help")->passed()) {
-			player->sendln(request_page_for(player,"shorthand"));
+			player->sendln(std::get<1>(player->class_action("request_page","shorthand")));
 			return;
-		}
-		if(argshave()->size_gt(0)->passed() == false) {
-			player->sendln(request_page_for(player,"skills"));
 		}
 
 		if(argshave()->size_gt(0)->passed()) {
 			player->sendln(practice_skill(player,argat(0)));
 		}
+
+		player->sendln(CAT("You have ",player->practice_sessions()," practice sessions."));
 		return;
 	}
+
 
 	bool npc_can(player_ptr_t& player,int e_name) {
 		return true;/** TODO */
@@ -217,11 +218,9 @@ namespace mods::skills {
 	}
 	/** called by game initialization sequence */
 	void init() {
-		mods::interpreter::add_command("skills", POS_RESTING, do_train, 0,0);
-		mods::interpreter::add_command("skill", POS_RESTING, do_train, 0,0);
-		mods::interpreter::add_command("train", POS_RESTING, do_train, 0,0);
-		mods::interpreter::add_command("practice", POS_RESTING, do_train, 0,0);
-		mods::interpreter::add_command("prac", POS_RESTING, do_train, 0,0);
+		mods::interpreter::add_command("skills", POS_RESTING, do_skills, 0,0);
+		mods::interpreter::add_command("skill", POS_RESTING, do_skills, 0,0);
+		mods::interpreter::add_command("practice", POS_RESTING, do_practice, 0,0);
 		mods::interpreter::add_command("practice_sessions", POS_RESTING, do_practice_sessions, 0,0);
 		mods::interpreter::add_command("score", POS_RESTING, do_score, 0,0);
 		//mods::interpreter::add_command("allow_skill", POS_RESTING, do_allow_skill, LVL_BUILDER,0);

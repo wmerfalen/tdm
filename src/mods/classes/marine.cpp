@@ -34,10 +34,6 @@ namespace mods::classes {
 		this->init();
 		load_by_player(p);
 	}
-	player_ptr_t 	marine::player() {
-		return m_player;
-	}
-
 	int16_t marine::new_player(player_ptr_t& player, primary_choice_t primary_choice) {
 		if(primary_choice == primary_choice_t::NONE) {
 			report("marine::new_player. got primary_choice of zero. defaulting to M16A4");

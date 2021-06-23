@@ -3,6 +3,7 @@
 #include "mini-gunner.hpp"
 #include "lowly-security.hpp"
 #include "mp-shotgunner.hpp"
+#include "car-thief.hpp"
 #include "../behaviour_tree_impl.hpp"
 
 namespace mods::mobs {
@@ -13,6 +14,7 @@ namespace mods::mobs {
 			return;
 		}
 		auto ch = p->cd();
+		std::cerr << "extended_mob_type for mob_id:'" << ch->mob_specials.extended_mob_type << "', mob_id:'" << mob_id << "'\n";
 		switch(ch->mob_specials.extended_mob_type) {
 			default:
 			case extended_types_t::NONE:
@@ -34,6 +36,10 @@ namespace mods::mobs {
 			case extended_types_t::MINI_GUNNER_SENTINEL:
 				std::cerr << "[ found mini gunner sentinel ]\n";
 				mini_gunner::create(mob_id, "sentinel");
+				break;
+			case extended_types_t::CAR_THIEF:
+				std::cerr << "[ found car thief ]\n";
+				car_thief::create(mob_id, "normal");
 				break;
 		}
 		/** simply add the mob to the list of mobs with behaviour trees */

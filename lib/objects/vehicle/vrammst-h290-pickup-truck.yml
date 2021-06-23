@@ -1,0 +1,36 @@
+# type: SUV
+# type: MOTORCYCLE
+# type: TWO_DOOR
+# type: FOUR_DOOR
+# type: TRUCK
+# type: SEMI
+# type: VAN
+# type: SWAT_VAN
+# type: TANK
+# type: JEEP
+hp: 250 #int32_t, hitpoints
+armor_hp: 0 #int32_t, armor hitpoints
+vehicle_type: 'TRUCK' #string, SUV, MOTORCYCLE,TWO_DOOR,FOUR_DOOR,TRUCK,SEMI,VAN,SWAT_VAN,TANK,JEEP
+horsepower: 1000 #int32_t, horsepower
+zero_to_sixty: 10 #int16_t, amount in seconds to go from zero to 60mph
+tire_hp: 150 #int32_t, tire hp
+tire_types: 'AIR' #string, tire types AIR,AIRLESS,TRACKS (tank)
+front_windshield_glass_type: 'STOCK_GLASS' #string, glass types, BULLET_PROOF,STOCK_GLASS,BULLET_PROOF_TINTED,STOCK_TINTED
+rear_windshield_glass_type: 'STOCK_GLASS' #string, glass types, BULLET_PROOF,STOCK_GLASS,BULLET_PROOF_TINTED,STOCK_TINTED
+passenger_count: 2 #int16_t, passenger count
+str_type: 'TRUCK' # enum, object type
+manufacturer: 'Vrammst' # string, anything 
+name: 'Vrammst H290 Pickup Truck' # string, anything name of object 
+vnum: 142
+description: 'Vrammst H290 Pickup Truck'
+short_description: 'Vrammst H290 Pickup Truck'
+action_description: 'Vrammst H290 Pickup Truck'
+feed_file: 'vrammst-h290-pickup-truck.yml'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

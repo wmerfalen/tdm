@@ -46,8 +46,6 @@ namespace mods::classes {
 			~ghost() = default;
 			void init();
 
-			player_ptr_t 	player();
-
 			void set_player(player_ptr_t);
 			void go_stealth();
 			void apply_stealth_to(obj_ptr_t& object);

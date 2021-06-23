@@ -34,6 +34,9 @@ who don't mind kiting around a mob and avoiding melee.
 You'll need g++-7 to be in your include path. Simply go to the src directory
 and execute 'make'. Currently, compiling on Windows systems is not supported.
 
+# Installing using the bootstrap script
+To install, run `src/bootstrap.sh`
+
 #Latest improvements
 beta features:
 - Deploying a test suite within src/scripts/test-suites/A-\*. Where '\*' is either a or b

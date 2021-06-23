@@ -154,7 +154,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/scripted-sequence-events mods/scripted-sequence-runner \
 					 mods/doors mods/runners/movement mods/runners/items \
 					 mods/runners/communication mods/mobs/damage-event \
-					 mods/weapons/armor-calculator
+					 mods/weapons/armor-calculator \
+					 mods/mobs/car-thief mods/mobs/car-thief-behaviour-tree
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

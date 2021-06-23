@@ -39,7 +39,6 @@ namespace mods::classes {
 			~sniper() = default;
 
 			int16_t load_by_player(player_ptr_t&);
-			player_ptr_t player();
 			int16_t new_player(player_ptr_t&);
 			int16_t save();
 			void init();
@@ -61,6 +60,7 @@ namespace mods::classes {
 
 
 			std::tuple<bool,std::string> tracking_shot(std::string_view target, direction_t direction);
+			std::tuple<bool,std::string> light_bandage();
 
 			/*
 			- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)
@@ -78,6 +78,7 @@ namespace mods::classes {
 			bool m_engaged;
 			uint16_t m_xray_shot_charges;
 			uint8_t m_claymore_charges;
+			uint8_t m_gauze_count;
 
 			player_ptr_t m_player;
 			sniper_orm_t m_orm;
