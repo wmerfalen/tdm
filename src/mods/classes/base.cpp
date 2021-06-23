@@ -192,20 +192,12 @@ namespace mods::classes {
 		return {true,"success"};
 	}
 
-	player_ptr_t base::get_player_ptr() {
-		return nullptr;
-	}
-
 	std::string base::ability_data_t::dump() const {
 		return CAT("ability_value:",ability_value,"\r\n",
 		           "shortened:'",shortened,"'\r\n",
 		           "pretty:'",pretty,"'\r\n",
 		           "category:",category,"\r\n"
 		          );
-	}
-	std::vector<base::ability_data_t>& base::get_abilities() {
-		static std::vector<base::ability_data_t> ignored;
-		return ignored;
 	}
 
 	skill_t* base::skill_ptr(std::string_view skill) {

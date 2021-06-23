@@ -53,10 +53,8 @@ namespace mods::classes {
 			std::tuple<bool,std::string> m_load_status;
 	};
 	struct base {
-		virtual types kind() {
-			return types::UNDEFINED;
-		}
-		virtual player_ptr_t get_player_ptr();
+		virtual types kind() = 0;
+		virtual player_ptr_t get_player_ptr() = 0;
 		struct ability_data_t {
 			enum skillset_t : uint8_t {
 				NONE = 0,
@@ -86,7 +84,8 @@ namespace mods::classes {
 		};
 
 
-		virtual std::vector<ability_data_t>& get_abilities();
+		using ability_list_t = std::vector<ability_data_t>;
+		virtual ability_list_t& get_abilities() = 0;
 
 		skill_t* skill_ptr(std::string_view skill);
 		std::tuple<bool,std::string> practice(std::string_view skill);

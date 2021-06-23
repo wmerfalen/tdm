@@ -186,7 +186,7 @@ namespace mods::util {
 					capture += str[k];
 				}
 				i += capture.length() + 5;
-				int spaces = screen_width - capture.length() - line_width - 3;
+				int spaces = screen_width - capture.length() - line_width;
 				for(int k=0; k < spaces; k++) {
 					sanitized += " ";
 				}

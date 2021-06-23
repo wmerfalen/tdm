@@ -3,11 +3,35 @@
 
 namespace mods::classes {
 	marine::marine() {
+		this->init();
 	}
+	void marine::init() {
+		using s = base::ability_data_t::skillset_t;
+		m_abilities = {
+			{TRACKING_SHOT,"ts","Tracking Shot",s::SNIPING,&m_tracking_shot},
+			{LIGHT_BANDAGE,"lb","Light Bandage",s::MEDICAL,&m_light_bandage},
+			{SUTURE,"suture","Suture",s::MEDICAL,&m_suture},
+			{ADRENALINE_SHOT,"as","Adrenaline Shot",s::MEDICAL,&m_adrenaline_shot},
+			{EMP_NADE,"emp","EMP Grenade",s::DEMOLITIONS,&m_emp_nade},
+			{CHAFF_NADE,"chaff","Chaff Grenade",s::DEMOLITIONS,&m_chaff_nade},
+			{SENSOR_NADE,"sensor","Sensor Grenade",s::INTELLIGENCE,&m_sensor_nade},
+			{UB_SHOTGUN,"ubs","Underbarrel Shotgun",s::DEMOLITIONS,&m_ub_shotgun},
+			{UB_FRAG,"ubf","Underbarrel Nade Launcher",s::DEMOLITIONS,&m_ub_frag},
+			{GUIDED_MISSILE,"gm","Guided Missile",s::DEMOLITIONS,&m_guided_missile},
+			{TARGET_LIMB,"limb","Target Limb",s::SNIPING,&m_target_limb},
+			{PLANT_CLAYMORE,"claymore","Plant Claymore",s::DEMOLITIONS,&m_plant_claymore},
+			{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",s::DEMOLITIONS,&m_plant_shrapnel_claymore},
+			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",s::DEMOLITIONS,&m_plant_corrosive_claymore},
+			{XRAY_SHOT,"xray","X-Ray Shot",s::SNIPING,&m_xray_shot},
+			{REQUEST_RECON,"recon","Request Recon",s::INTELLIGENCE,&m_request_recon},
+		};
+	}
+
 	void marine::replenish() {
 
 	}
 	marine::marine(player_ptr_t p) {
+		this->init();
 		load_by_player(p);
 	}
 	player_ptr_t 	marine::player() {
@@ -33,13 +57,7 @@ namespace mods::classes {
 			report(CAT("unable to load marine class by player id: ",(player->db_id()),".. return status: ",(result),"player:",player->name().c_str()));
 			return -100 - result;
 		}
-		obj_ptr_t primary = nullptr;
-		/** TODO: create catchy name using the deep object parser */
-		primary = create_object(ITEM_RIFLE,"m4.yml");
-		player->equip(primary,WEAR_PRIMARY);
-		player->equip(create_object(ITEM_RIFLE,"magnum-revolver.yml"),WEAR_SECONDARY);
-		auto fatal = create_object(ITEM_EXPLOSIVE,"frag-grenade.yml");
-		player->carry(fatal);
+		initialize_skills_for_player(player);
 		return result;
 	}
 	int16_t marine::save() {

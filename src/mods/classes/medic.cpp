@@ -16,6 +16,24 @@ namespace mods::classes {
 	}
 	void medic::init() {
 		m_stim_pistol_ammo = medic::DEFAULT_STARTING_STIM_PISTOL_AMMO;
+		using s = base::ability_data_t::skillset_t;
+		m_abilities = {
+			{STIM_SHOT,"stim","Stim Shot",s::MEDICAL,&m_stim_shot},
+			{PARASITIC_AMMO,"ps","Parasitic Ammo",s::MEDICAL,&m_parasitic_ammo},
+			{ADRENALINE_SHOT,"adrenal","Adrenaline Shot",s::MEDICAL,&m_adrenaline_shot},
+			{DRONE_HEALER,"drone","Drone Healer",s::ELECTRONICS,&m_drone_healer},
+			{HEARTBEAT_SENSOR,"hbs","Heartbeat Sensor",s::ELECTRONICS,&m_heartbeat_sensor},
+			{EMERGENCY_EVAC,"evac","Emergency Evac",s::STRATEGY,&m_emergency_evac},
+			{DEUTERIUM_SHOTGUN_UNDERBARREL,"dts","Deuterium Underbarrel",s::DEMOLITIONS,&m_deuterium_shotgun_ub},
+			{CORROSIVE_AGENT,"agent","Corrosive Agent",s::DEMOLITIONS,&m_corrosive_agent},
+			{SEAL_ROOM,"seal","Seal Room",s::DEMOLITIONS,&m_seal_room},
+			{SHOTGUN_SNIPER,"ss","Shotgun Sniper",s::SNIPING,&m_shotgun_sniper},
+			{HAZARDOUS_WASTE_SHOT,"hazard","Hazardous Waste Shot",s::SNIPING,&m_hazardous_waste_shot},
+			{SEDATIVE_HYPNOTIC,"sed","Sedative Hypnotic",s::SNIPING,&m_sedative_hypnotic},
+			{ARMOR_BONUS,"armor","Armor Bonus",s::ARMOR,&m_armor_bonus},
+			{NO_FACTOR_ARMOR,"nof","No Factor Armor",s::ARMOR,&m_no_factor_armor},
+			{SURGICAL_PRECISION,"surg","Surgical Precision",s::WEAPON_HANDLING,&m_surgical_precision},
+		};
 	}
 	void medic::heal_player(player_ptr_t& target) {
 		if(m_stim_pistol_ammo == 0) {
@@ -76,6 +94,7 @@ namespace mods::classes {
 		}
 		player->set_db_id(db_id);
 		load_by_player(player);
+		initialize_skills_for_player(player);
 		return 0;
 	}
 	int16_t medic::load_by_player(player_ptr_t& player) {
@@ -85,18 +104,14 @@ namespace mods::classes {
 			report({"unable to load medic class by player id: ",std::to_string(player->db_id()),".. return status: ",std::to_string(result),"player:",player->name().c_str()});
 			return -100 - result;
 		}
-		obj_ptr_t primary = nullptr;
-		/** TODO: create catchy name using the deep object parser */
-		primary = create_object(ITEM_RIFLE,"saiga12.yml");
-		player->equip(primary,WEAR_PRIMARY);
-		player->equip(create_object(ITEM_RIFLE,"mp9.yml"),WEAR_SECONDARY);
-		auto fatal = create_object(ITEM_EXPLOSIVE,"smoke-grenade.yml");
-		player->carry(fatal);
+		initialize_skills_for_player(player);
 		return result;
 	}
 	medic::medic() {
+		this->init();
 	}
 	medic::medic(player_ptr_t p) {
+		this->init();
 		load_by_player(p);
 	}
 	player_ptr_t 	medic::player() {

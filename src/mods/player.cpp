@@ -21,6 +21,8 @@
 #include "classes/super-user-fiddler.hpp"
 #include "classes/sniper.hpp"
 #include "classes/ghost.hpp"
+#include "classes/medic.hpp"
+#include "classes/marine.hpp"
 #include "demolitions.hpp"
 #include "contract-types.hpp"
 #include "player-contract-instance.hpp"
@@ -2187,6 +2189,12 @@ namespace mods {
 			if(m_ghost) {
 				return m_ghost->practice(param);
 			}
+			if(m_medic) {
+				return m_medic->practice(param);
+			}
+			if(m_marine) {
+				return m_marine->practice(param);
+			}
 		}
 		if(func.compare("request_page") == 0) {
 			if(m_sniper) {
@@ -2194,6 +2202,12 @@ namespace mods {
 			}
 			if(m_ghost) {
 				return {1,m_ghost->request_page_for(param)};
+			}
+			if(m_medic) {
+				return {1,m_medic->request_page_for(param)};
+			}
+			if(m_marine) {
+				return {1,m_marine->request_page_for(param)};
 			}
 		}
 		return {0,"Unimplemented"};

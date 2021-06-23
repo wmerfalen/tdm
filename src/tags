@@ -156,6 +156,9 @@ ADD_USER_COMMAND	mods/interpreter.hpp	20;"	d
 ADMIN_DONE	globals.hpp	282;"	d
 ADMIN_FAIL	globals.hpp	283;"	d
 ADMIN_REJECT	globals.hpp	284;"	d
+ADRENALINE_SHOT	mods/classes/engineer.hpp	/^				ADRENALINE_SHOT,$/;"	e	enum:mods::classes::engineer::ability_t
+ADRENALINE_SHOT	mods/classes/marine.hpp	/^				ADRENALINE_SHOT,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
+ADRENALINE_SHOT	mods/classes/medic.hpp	/^				ADRENALINE_SHOT,$/;"	e	enum:mods::classes::medic::ability_t
 ADRENALINE_SHOT	mods/classes/sniper.hpp	/^				ADRENALINE_SHOT,$/;"	e	enum:mods::classes::sniper::ability_t
 ADVANCED	mods/yaml.hpp	/^		ADVANCED = 2,$/;"	e	enum:mods::yaml::armor_classification_type_t
 ADVANCE_LEVEL_BONUS_HP_DICE	mods/values-list.cpp	/^ADVANCE_LEVEL_BONUS_HP_DICE,6$/;"	v
@@ -289,6 +292,7 @@ ARMOR_ATTR_SPEED_PROFILE	mods/forge-engine/generator.hpp	/^		ARMOR_ATTR_SPEED_PR
 ARMOR_ATTR_THAC0	mods/forge-engine/generator.hpp	/^		ARMOR_ATTR_THAC0 = 1,$/;"	e	enum:mods::forge_engine::armor_attributes_t
 ARMOR_ATTR_WEIGHT	mods/forge-engine/generator.hpp	/^		ARMOR_ATTR_WEIGHT,$/;"	e	enum:mods::forge_engine::armor_attributes_t
 ARMOR_ATTR_WORTH	mods/forge-engine/generator.hpp	/^		ARMOR_ATTR_WORTH,$/;"	e	enum:mods::forge_engine::armor_attributes_t
+ARMOR_BONUS	mods/classes/medic.hpp	/^				ARMOR_BONUS,$/;"	e	enum:mods::classes::medic::ability_t
 ARMOR_ITEM_WEAR_ABOUT	mods/forge-engine/generator.hpp	/^		ARMOR_ITEM_WEAR_ABOUT		,$/;"	e	enum:mods::forge_engine::armor_types_t
 ARMOR_ITEM_WEAR_ARMS	mods/forge-engine/generator.hpp	/^		ARMOR_ITEM_WEAR_ARMS		,$/;"	e	enum:mods::forge_engine::armor_types_t
 ARMOR_ITEM_WEAR_BACKPACK	mods/forge-engine/generator.hpp	/^		ARMOR_ITEM_WEAR_BACKPACK,$/;"	e	enum:mods::forge_engine::armor_types_t
@@ -771,6 +775,8 @@ CGET	mods/values.hpp	1396;"	d
 CGET	mods/values.hpp	698;"	d
 CGET_DEF	mods/values.cpp	20;"	d	file:
 CGET_DEF	mods/values.cpp	2812;"	d	file:
+CHAFF_NADE	mods/classes/engineer.hpp	/^				CHAFF_NADE,$/;"	e	enum:mods::classes::engineer::ability_t
+CHAFF_NADE	mods/classes/marine.hpp	/^				CHAFF_NADE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 CHAFF_NADE	mods/classes/sniper.hpp	/^				CHAFF_NADE,$/;"	e	enum:mods::classes::sniper::ability_t
 CHAIN	mods/weapon.hpp	/^		CHAIN,$/;"	e	enum:mods::weapon::melee_t
 CHAINSAW	mods/weapon.hpp	/^		CHAINSAW,$/;"	e	enum:mods::weapon::melee_t
@@ -913,6 +919,9 @@ CON_RMOTD	structs.h	381;"	d
 CON_SUB_CLASS	structs.h	391;"	d
 COOLDOWN_IN_EFFECT_EVENT	mods/damage-event.hpp	/^	COOLDOWN_IN_EFFECT_EVENT,$/;"	e	enum:uint16_t
 CORROSIVE	mods/aoe.hpp	/^		CORROSIVE,	\/** Corrodes devices, melting them into a useless state. Causes irreversible burns to exposed skin *\/$/;"	e	enum:mods::aoe::types_t
+CORROSIVE_AGENT	mods/classes/medic.hpp	/^				CORROSIVE_AGENT,$/;"	e	enum:mods::classes::medic::ability_t
+CORROSIVE_CLAYMORE	mods/classes/engineer.hpp	/^				CORROSIVE_CLAYMORE,$/;"	e	enum:mods::classes::engineer::ability_t
+CORROSIVE_CLAYMORE	mods/classes/marine.hpp	/^				CORROSIVE_CLAYMORE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 CORROSIVE_CLAYMORE	mods/classes/sniper.hpp	/^				CORROSIVE_CLAYMORE,$/;"	e	enum:mods::classes::sniper::ability_t
 COULDNT_FIND_TARGET_EVENT	mods/damage-event.hpp	/^	COULDNT_FIND_TARGET_EVENT,$/;"	e	enum:uint16_t
 COULDNT_FIND_USER_ID	mods/meta_utils.cpp	/^		COULDNT_FIND_USER_ID = -1$/;"	e	enum:mods::meta_utils::return_codes	file:
@@ -1026,6 +1035,7 @@ DETECT_ALIGN	mods/flags.hpp	/^		DETECT_ALIGN, 	\/\/ useless$/;"	e	enum:mods::fla
 DETECT_INVIS	mods/flags.hpp	/^		DETECT_INVIS,$/;"	e	enum:mods::flags::aff
 DETECT_MAGIC	mods/flags.hpp	/^		DETECT_MAGIC,		\/\/ useless$/;"	e	enum:mods::flags::aff
 DETONATE	mods/item.hpp	/^		DETONATE = (1 << 4),$/;"	e	enum:mods::item::capability_t
+DEUTERIUM_SHOTGUN_UNDERBARREL	mods/classes/medic.hpp	/^				DEUTERIUM_SHOTGUN_UNDERBARREL,$/;"	e	enum:mods::classes::medic::ability_t
 DEXTERITY	mods/classes/base.hpp	/^				DEXTERITY,$/;"	m	struct:mods::classes::base::ability_data_t	typeref:enum:mods::classes::base::ability_data_t::
 DFLT_DIR	config.cpp	/^const char *DFLT_DIR = "lib";$/;"	v
 DFLT_IP	config.cpp	/^const char *DFLT_IP = NULL; \/* bind to all interfaces *\/$/;"	v
@@ -1084,6 +1094,7 @@ DP_S_MAX	bsd-snprintf.cpp	134;"	d	file:
 DP_S_MIN	bsd-snprintf.cpp	132;"	d	file:
 DP_S_MOD	bsd-snprintf.cpp	135;"	d	file:
 DRONE	mods/player.hpp	/^				PLAYER, MOB, DRONE,$/;"	e	enum:mods::player::player_type_enum_t
+DRONE_HEALER	mods/classes/medic.hpp	/^				DRONE_HEALER,$/;"	e	enum:mods::classes::medic::ability_t
 DRONE_MUTED_DESCRIPTOR	mods/player.hpp	/^				DRONE_MUTED_DESCRIPTOR$/;"	e	enum:mods::player::player_type_enum_t
 DRONE_NONE	mods/item-types.hpp	/^		DRONE_NONE = 0,$/;"	e	enum:mods::weapon::type::drone
 DRONE_WEAPON_SET_NUM	mods/drone.hpp	14;"	d
@@ -1130,10 +1141,13 @@ ELITE	mods/classes/base.hpp	/^			static constexpr float ELITE = 50000.0;$/;"	m	s
 ELITE	mods/randomized-items.hpp	/^	ELITE,$/;"	e	enum:mods::rarity_enum_t
 ELITE	mods/yaml.hpp	/^		ELITE = 3,$/;"	e	enum:mods::yaml::armor_classification_type_t
 ELITE_DROP_RATE	mods/randomized-items.hpp	/^		constexpr static float ELITE_DROP_RATE = 0.033;$/;"	m	class:mods::randomized_items
+EMERGENCY_EVAC	mods/classes/medic.hpp	/^				EMERGENCY_EVAC,$/;"	e	enum:mods::classes::medic::ability_t
 EMIT_SUBSTANCE	mods/weapon-types.hpp	/^		EMIT_SUBSTANCE,$/;"	e	enum:mods::weapon::capabilities::cap_t
 EMP	mods/aoe.hpp	/^		EMP,	\/** Electro magnetic pulse. Destroys\/hampers electronics *\/$/;"	e	enum:mods::aoe::types_t
 EMP	structs.h	/^			EMP, \/** chaff or emp has been detonated *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 EMP_GRENADE_TICKS	mods/values-list.cpp	/^EMP_GRENADE_TICKS,6$/;"	v
+EMP_NADE	mods/classes/engineer.hpp	/^				EMP_NADE,$/;"	e	enum:mods::classes::engineer::ability_t
+EMP_NADE	mods/classes/marine.hpp	/^				EMP_NADE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 EMP_NADE	mods/classes/sniper.hpp	/^				EMP_NADE,$/;"	e	enum:mods::classes::sniper::ability_t
 ENCODE_INIT	mods/builder.hpp	139;"	d
 ENCODE_MAP	mods/builder.hpp	141;"	d
@@ -1533,6 +1547,8 @@ GRENADE_EXPLOSION	mods/ai_state.hpp	/^				GRENADE_FLIES_BY,GRENADE_EXPLOSION,$/;
 GRENADE_FLIES_BY	mods/ai_state.hpp	/^				GRENADE_FLIES_BY,GRENADE_EXPLOSION,$/;"	e	enum:mods::ai_state::event_type_t
 GRIP	mods/weapon.hpp	/^		GRIP,$/;"	e	enum:mods::weapon::attachment_t
 GROUP	mods/flags.hpp	/^		GROUP,$/;"	e	enum:mods::flags::aff
+GUIDED_MISSILE	mods/classes/engineer.hpp	/^				GUIDED_MISSILE,$/;"	e	enum:mods::classes::engineer::ability_t
+GUIDED_MISSILE	mods/classes/marine.hpp	/^				GUIDED_MISSILE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 GUIDED_MISSILE	mods/classes/sniper.hpp	/^				GUIDED_MISSILE,$/;"	e	enum:mods::classes::sniper::ability_t
 HALBERD	mods/weapon.hpp	/^		HALBERD,$/;"	e	enum:mods::weapon::melee_t
 HAMMER	mods/weapon.hpp	/^		HAMMER,$/;"	e	enum:mods::weapon::melee_t
@@ -1583,12 +1599,14 @@ HAVE_VPRINTF	conf.h	14;"	d
 HAVE_VSNPRINTF	bsd-snprintf.cpp	102;"	d	file:
 HAVE_VSNPRINTF	conf.h	89;"	d
 HAZARDOUS_SMOKE	structs.h	/^			HAZARDOUS_SMOKE, \/** think: gas attacks *\/$/;"	m	struct:room_data	typeref:enum:room_data::
+HAZARDOUS_WASTE_SHOT	mods/classes/medic.hpp	/^				HAZARDOUS_WASTE_SHOT,$/;"	e	enum:mods::classes::medic::ability_t
 HCONTROL_FILE	db.h	98;"	d
 HCONTROL_FORMAT	house.cpp	/^const char *HCONTROL_FORMAT =$/;"	v
 HEADER	mods/mini-games/wires.hpp	/^		static constexpr std::string_view HEADER = "[ TN 3 v1.0.12 - Baphomet O.S. ]\\r\\n"$/;"	m	struct:mods::mini_games::wires
 HEADER_BLOCK	mail.h	53;"	d
 HEADER_BLOCK_DATASIZE	mail.h	71;"	d
 HEADSHOT_DIVISOR	mods/values-list.cpp	/^HEADSHOT_DIVISOR,3$/;"	v
+HEARTBEAT_SENSOR	mods/classes/medic.hpp	/^				HEARTBEAT_SENSOR,$/;"	e	enum:mods::classes::medic::ability_t
 HELMET	mods/object.hpp	/^				HELMET,$/;"	e	enum:mods::object::object_type_enum_t
 HELP_PAGE_FILE	db.h	80;"	d
 HELP_STR	mods/help.cpp	334;"	d	file:
@@ -2124,6 +2142,8 @@ LIB_TEXT_HELP	db.h	24;"	d
 LIB_TEXT_HELP	db.h	35;"	d
 LIB_WORLD	db.h	22;"	d
 LIB_WORLD	db.h	33;"	d
+LIGHT_BANDAGE	mods/classes/engineer.hpp	/^				LIGHT_BANDAGE,$/;"	e	enum:mods::classes::engineer::ability_t
+LIGHT_BANDAGE	mods/classes/marine.hpp	/^				LIGHT_BANDAGE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 LIGHT_BANDAGE	mods/classes/sniper.hpp	/^				LIGHT_BANDAGE,$/;"	e	enum:mods::classes::sniper::ability_t
 LIGHT_MACHINE_GUN	mods/object.hpp	/^				LIGHT_MACHINE_GUN,$/;"	e	enum:mods::object::object_type_enum_t
 LIGHT_OK	utils.h	440;"	d
@@ -2497,8 +2517,8 @@ MENTOC_MEMBER_VARS_IMPL	mods/item-types.hpp	647;"	d
 MENTOC_MOB_WEARS	mods/item-types.hpp	552;"	d
 MENTOC_MS_COMP	mods/doors.hpp	262;"	d
 MENTOC_MS_COMP	mods/doors.hpp	277;"	d
-MENTOC_NPC_CHECK	mods/player.cpp	81;"	d	file:
-MENTOC_NPC_CHECK_0	mods/player.cpp	82;"	d	file:
+MENTOC_NPC_CHECK	mods/player.cpp	83;"	d	file:
+MENTOC_NPC_CHECK_0	mods/player.cpp	84;"	d	file:
 MENTOC_OBI	mods/builder.cpp	40;"	d	file:
 MENTOC_OBI2	mods/builder.cpp	41;"	d	file:
 MENTOC_OBJ_DATA_FEED_DUAL	structs.cpp	73;"	d	file:
@@ -2709,12 +2729,12 @@ MOTORCYCLE	mods/weapon.hpp	/^		MOTORCYCLE,$/;"	e	enum:mods::weapon::vehicle_t
 MP5	mods/orm/breacher.hpp	/^		const std::string MP5 = "MP5";$/;"	m	struct:mods::orm::breacher
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_choice_t
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1549;"	d	file:
-MR	mods/player.cpp	1618;"	d	file:
+MR	mods/player.cpp	1551;"	d	file:
+MR	mods/player.cpp	1620;"	d	file:
 MR	structs.cpp	622;"	d	file:
 MR	structs.cpp	633;"	d	file:
-MRC	mods/player.cpp	1550;"	d	file:
-MRC	mods/player.cpp	1619;"	d	file:
+MRC	mods/player.cpp	1552;"	d	file:
+MRC	mods/player.cpp	1621;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
@@ -2847,7 +2867,9 @@ NOMINMAX	mods/catch2.hpp	8004;"	d
 NONE	mods/affects.hpp	/^		NONE = -1,$/;"	e	enum:mods::affects::affect_t
 NONE	mods/behaviour_tree.hpp	/^		static constexpr int NONE = 0;$/;"	m	struct:mods::behaviour_tree
 NONE	mods/behaviour_tree_impl.hpp	/^		NONE = 0,$/;"	e	enum:mods::behaviour_tree_impl::type
+NONE	mods/classes/engineer.hpp	/^				NONE = 0,$/;"	e	enum:mods::classes::engineer::ability_t
 NONE	mods/classes/ghost.hpp	/^				NONE = 0,$/;"	e	enum:mods::classes::ghost::ability_t
+NONE	mods/classes/medic.hpp	/^				NONE = 0,$/;"	e	enum:mods::classes::medic::ability_t
 NONE	mods/classes/sniper.hpp	/^				NONE = 0,$/;"	e	enum:mods::classes::sniper::ability_t
 NONE	mods/events.hpp	/^		NONE = 0,$/;"	e	enum:mods::events::event_enum
 NONE	mods/players/db-load.hpp	/^		NONE,$/;"	e	enum:mods::players::db_load::save_from_t
@@ -2891,15 +2913,16 @@ NOT_OURS	mods/builder.cpp	/^	NOT_OURS,$/;"	e	enum:parse_response_t	file:
 NOWHERE	mods/index-type.hpp	12;"	d
 NOWIZLIST	mods/flags.hpp	/^		NOWIZLIST,$/;"	e	enum:mods::flags::plr
 NO_ATTACK_TYPE	mods/ai_state.cpp	20;"	d	file:
+NO_FACTOR_ARMOR	mods/classes/medic.hpp	/^				NO_FACTOR_ARMOR,$/;"	e	enum:mods::classes::medic::ability_t
 NO_LOGIC	mods/behaviour_tree_status.hpp	/^		NO_LOGIC,$/;"	e	enum:mods::behaviour_tree_status
 NO_PRIMARY_WIELDED_EVENT	mods/damage-event.hpp	/^	NO_PRIMARY_WIELDED_EVENT,$/;"	e	enum:uint16_t
 NO_RESULTS	mods/orm/util.hpp	/^	static constexpr int8_t NO_RESULTS = 1;$/;"	m	namespace:mods::orm::util
 NO_RESULTS	mods/pq.hpp	/^static constexpr int8_t NO_RESULTS = 1;$/;"	v
 NPC	act.wizard.cpp	2287;"	d	file:
 NPC	mods/scan.hpp	/^			NPC = (1 << 1),$/;"	e	enum:mods::scan::find_type_t
-NPC_SEND_DEBUG	mods/player.cpp	2208;"	d	file:
-NPC_SEND_DEBUG	mods/player.cpp	34;"	d	file:
-NPC_SEND_DEBUG	mods/player.cpp	39;"	d	file:
+NPC_SEND_DEBUG	mods/player.cpp	2222;"	d	file:
+NPC_SEND_DEBUG	mods/player.cpp	36;"	d	file:
+NPC_SEND_DEBUG	mods/player.cpp	41;"	d	file:
 NRM	utils.h	119;"	d
 NSLC	telnet.h	200;"	d
 NTELOPTS	telnet.h	125;"	d
@@ -3031,6 +3054,7 @@ P90	mods/weapon.hpp	/^			P90 = 2$/;"	e	enum:mods::weapon::engineer::primary_choi
 PAGE_LENGTH	comm.h	80;"	d
 PAGE_SIZE	mods/player.hpp	/^			static constexpr int PAGE_SIZE = 40;$/;"	m	struct:mods::player
 PAGE_WIDTH	comm.h	81;"	d
+PARASITIC_AMMO	mods/classes/medic.hpp	/^				PARASITIC_AMMO,$/;"	e	enum:mods::classes::medic::ability_t
 PARSE_ARGS	globals.hpp	241;"	d
 PARSE_FAIL	mods/acl/config-parser.cpp	/^        const int FileParser::PARSE_FAIL = -1;$/;"	m	class:mods::acl::FileParser	file:
 PARSE_FAIL	mods/acl/config-parser.hpp	/^                static const int PARSE_FAIL;$/;"	m	class:mods::acl::FileParser
@@ -3050,7 +3074,9 @@ PIKE	mods/weapon.hpp	/^		PIKE,$/;"	e	enum:mods::weapon::melee_t
 PISTOL	mods/weapon.hpp	/^	                 GRENADE = (1 << 4), ASSAULT_RIFLE = (1 << 5), PISTOL = (1 << 6),$/;"	e	enum:mods::weapon::mask_type
 PLACEHOLDER	mods/orm/inventory.cpp	/^	static constexpr const char* PLACEHOLDER = "0";$/;"	m	namespace:mods::orm::inventory	file:
 PLACE_HOLDER_VALUE	mods/schema.hpp	/^	constexpr static const char* PLACE_HOLDER_VALUE = "\\x01";$/;"	m	namespace:mods::schema
+PLANT_CLAYMORE	mods/classes/engineer.hpp	/^				PLANT_CLAYMORE,$/;"	e	enum:mods::classes::engineer::ability_t
 PLANT_CLAYMORE	mods/classes/ghost.hpp	/^				PLANT_CLAYMORE,$/;"	e	enum:mods::classes::ghost::ability_t
+PLANT_CLAYMORE	mods/classes/marine.hpp	/^				PLANT_CLAYMORE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 PLANT_CLAYMORE	mods/classes/sniper.hpp	/^				PLANT_CLAYMORE,$/;"	e	enum:mods::classes::sniper::ability_t
 PLAYER	mods/player.hpp	/^				PLAYER, MOB, DRONE,$/;"	e	enum:mods::player::player_type_enum_t
 PLAYERS	mods/scan.hpp	/^			PLAYERS = (1 << 4),$/;"	e	enum:mods::scan::find_type_t
@@ -3239,6 +3265,7 @@ REPORT_DB_ISSUE	mods/db-report.hpp	11;"	d
 REPORT_DB_ISSUE	mods/migrations.cpp	/^	void REPORT_DB_ISSUE(std::string issue,std::string exception_message){$/;"	f	namespace:mods::migrations
 REPORT_DB_ISSUE	mods/pq.hpp	/^static inline void REPORT_DB_ISSUE(std::string issue,std::string exception_message) {$/;"	f
 REPORT_VIOLENCE	mods/response-team/radio.hpp	/^		REPORT_VIOLENCE,$/;"	e	enum:mods::response_team::radio::severity_t
+REQUEST_RECON	mods/classes/engineer.hpp	/^				REQUEST_RECON$/;"	e	enum:mods::classes::engineer::ability_t
 REQUEST_RECON	mods/classes/sniper.hpp	/^				REQUEST_RECON$/;"	e	enum:mods::classes::sniper::ability_t
 RESERVED	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 RETSIGTYPE	conf.h	20;"	d
@@ -3429,6 +3456,7 @@ SCOPE	mods/weapon.hpp	/^		SCOPE,$/;"	e	enum:mods::weapon::attachment_t
 SCSTEP_MEMBERS_TUPLE	mods/orm/scripted-step.hpp	30;"	d
 SCYTHE	mods/weapon.hpp	/^		SCYTHE,$/;"	e	enum:mods::weapon::melee_t
 SE	telnet.h	57;"	d
+SEAL_ROOM	mods/classes/medic.hpp	/^				SEAL_ROOM,	\/\/ meh$/;"	e	enum:mods::classes::medic::ability_t
 SECOND_TIER	mods/levels.hpp	/^	static constexpr float SECOND_TIER = FIRST_TIER * 0.75;$/;"	m	namespace:mods::levels
 SECS_PER_MUD_DAY	utils.h	138;"	d
 SECS_PER_MUD_HOUR	utils.h	137;"	d
@@ -3450,6 +3478,7 @@ SECT_MOUNTAIN	structs.h	180;"	d
 SECT_UNDERWATER	structs.h	184;"	d
 SECT_WATER_NOSWIM	structs.h	182;"	d
 SECT_WATER_SWIM	structs.h	181;"	d
+SEDATIVE_HYPNOTIC	mods/classes/medic.hpp	/^				SEDATIVE_HYPNOTIC,$/;"	e	enum:mods::classes::medic::ability_t
 SEEK_CUR	utils.h	536;"	d
 SEEK_END	utils.h	537;"	d
 SEEK_SET	utils.h	535;"	d
@@ -3462,6 +3491,8 @@ SENSE_LIFE	mods/flags.hpp	/^		SENSE_LIFE,$/;"	e	enum:mods::flags::aff
 SENSE_MOTION	mods/weapon-types.hpp	/^		SENSE_MOTION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 SENSOR	mods/aoe.hpp	/^		SENSOR, \/** senses objects or enemies within blast_radius *\/$/;"	e	enum:mods::aoe::types_t
 SENSOR_GRENADE_TICKS	mods/values-list.cpp	/^SENSOR_GRENADE_TICKS,6$/;"	v
+SENSOR_NADE	mods/classes/engineer.hpp	/^				SENSOR_NADE,$/;"	e	enum:mods::classes::engineer::ability_t
+SENSOR_NADE	mods/classes/marine.hpp	/^				SENSOR_NADE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 SENSOR_NADE	mods/classes/sniper.hpp	/^				SENSOR_NADE,$/;"	e	enum:mods::classes::sniper::ability_t
 SENTINEL	mods/classes/types.hpp	/^		SENTINEL,$/;"	e	enum:mods::classes::types
 SENTINEL	mods/object.hpp	/^				SENTINEL,$/;"	e	enum:mods::object::object_type_enum_t
@@ -3541,6 +3572,7 @@ SHOP_USES_BANK	shop.h	167;"	d
 SHORT_RANGE	mods/object.hpp	/^				SHORT_RANGE,$/;"	e	enum:mods::object::object_type_enum_t
 SHOTGUN	mods/object.hpp	/^				SHOTGUN,$/;"	e	enum:mods::object::object_type_enum_t
 SHOTGUN	mods/weapon.hpp	/^	enum mask_type { SMG = 1, SNIPE = (1 << 2), SHOTGUN = (1 << 3),$/;"	e	enum:mods::weapon::mask_type
+SHOTGUN_SNIPER	mods/classes/medic.hpp	/^				SHOTGUN_SNIPER,$/;"	e	enum:mods::classes::medic::ability_t
 SHOULDER	mods/object.hpp	/^				SHOULDER,$/;"	e	enum:mods::object::object_type_enum_t
 SHOULD_DO_RANDOM_TRIVIAL	mods/mobs/lowly-security.hpp	/^		static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	m	struct:mods::mobs::lowly_security
 SHOULD_DO_RANDOM_TRIVIAL	mods/mobs/mp-shotgunner.hpp	/^			static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	m	struct:mods::mobs::mp_shotgunner
@@ -3553,6 +3585,8 @@ SHOW_OBJ_LONG	act.informative.cpp	120;"	d	file:
 SHOW_OBJ_SHORT	act.informative.cpp	121;"	d	file:
 SHP_PREFIX	db.h	72;"	d
 SHRAPNEL	mods/aoe.hpp	/^		SHRAPNEL,	\/** metal fragments flown in random directions *\/$/;"	e	enum:mods::aoe::types_t
+SHRAPNEL_CLAYMORE	mods/classes/engineer.hpp	/^				SHRAPNEL_CLAYMORE,$/;"	e	enum:mods::classes::engineer::ability_t
+SHRAPNEL_CLAYMORE	mods/classes/marine.hpp	/^				SHRAPNEL_CLAYMORE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 SHRAPNEL_CLAYMORE	mods/classes/sniper.hpp	/^				SHRAPNEL_CLAYMORE,$/;"	e	enum:mods::classes::sniper::ability_t
 SHURIKEN	mods/weapon.hpp	/^		SHURIKEN,$/;"	e	enum:mods::weapon::melee_t
 SICKLE	mods/weapon.hpp	/^		SICKLE,$/;"	e	enum:mods::weapon::melee_t
@@ -3909,6 +3943,7 @@ STDC_HEADERS	conf.h	26;"	d
 STDERR_FILENO	sysdep.h	416;"	d
 STDOUT_FILENO	sysdep.h	421;"	d
 STEALTH	mods/classes/ghost.hpp	/^				STEALTH,$/;"	e	enum:mods::classes::ghost::ability_t
+STIM_SHOT	mods/classes/medic.hpp	/^				STIM_SHOT,$/;"	e	enum:mods::classes::medic::ability_t
 STITCH_CLARA_CLOSE_NAMESPACE	mods/catch.hpp	4241;"	d
 STITCH_CLARA_CLOSE_NAMESPACE	mods/catch.hpp	5424;"	d
 STITCH_CLARA_OPEN_NAMESPACE	mods/catch.hpp	4230;"	d
@@ -4149,9 +4184,12 @@ SUPPORT_NONE	mods/weapon.hpp	/^			SUPPORT_NONE = 0,$/;"	e	enum:mods::weapon::sup
 SUPPORT_PRIMARY_HK21	mods/weapon.hpp	/^			SUPPORT_PRIMARY_HK21 = 2,$/;"	e	enum:mods::weapon::support::primary_choice_t
 SUPPORT_PRIMARY_MK46	mods/weapon.hpp	/^			SUPPORT_PRIMARY_MK46 = 1,$/;"	e	enum:mods::weapon::support::primary_choice_t
 SUPPRESSOR	mods/weapon.hpp	/^		FLASH_HIDER, SUPPRESSOR$/;"	e	enum:mods::weapon::barrel_t
+SURGICAL_PRECISION	mods/classes/medic.hpp	/^				SURGICAL_PRECISION,$/;"	e	enum:mods::classes::medic::ability_t
 SUSP	telnet.h	60;"	d
 SUSPICIOUS	mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	e	enum:mods::ai_state::state
 SUSPICIOUS2	mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	e	enum:mods::ai_state::state
+SUTURE	mods/classes/engineer.hpp	/^				SUTURE,$/;"	e	enum:mods::classes::engineer::ability_t
+SUTURE	mods/classes/marine.hpp	/^				SUTURE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 SUTURE	mods/classes/sniper.hpp	/^				SUTURE,$/;"	e	enum:mods::classes::sniper::ability_t
 SUV	mods/weapon.hpp	/^		SUV,$/;"	e	enum:mods::weapon::vehicle_t
 SWAT_VAN	mods/weapon.hpp	/^		SWAT_VAN,$/;"	e	enum:mods::weapon::vehicle_t
@@ -4215,6 +4253,8 @@ TARGET_DEAD_EVENT	mods/damage-event.hpp	/^	TARGET_DEAD_EVENT,$/;"	e	enum:uint16_
 TARGET_IN_PEACEFUL_ROOM_EVENT	mods/damage-event.hpp	/^	TARGET_IN_PEACEFUL_ROOM_EVENT,$/;"	e	enum:uint16_t
 TARGET_IS_OUT_OF_RANGE	mods/damage-event.hpp	/^	TARGET_IS_OUT_OF_RANGE,$/;"	e	enum:uint16_t
 TARGET_ITEM	mods/contract-steps.hpp	/^			TARGET_ITEM,$/;"	m	struct:mods::contracts::contract_step	typeref:enum:mods::contracts::contract_step::
+TARGET_LIMB	mods/classes/engineer.hpp	/^				TARGET_LIMB,$/;"	e	enum:mods::classes::engineer::ability_t
+TARGET_LIMB	mods/classes/marine.hpp	/^				TARGET_LIMB,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 TARGET_LIMB	mods/classes/sniper.hpp	/^				TARGET_LIMB,$/;"	e	enum:mods::classes::sniper::ability_t
 TARGET_PLAYER_INDEX	mods/player-scaffolding.hpp	/^		constexpr static std::size_t TARGET_PLAYER_INDEX = 1;$/;"	m	struct:mods::player_scaffolding
 TARGET_ROOM	mods/contract-steps.hpp	/^			TARGET_ROOM,$/;"	m	struct:mods::contracts::contract_step	typeref:enum:mods::contracts::contract_step::
@@ -4344,6 +4384,8 @@ TO_VICT	mods/item.cpp	/^	static constexpr uint8_t TO_VICT = 2;$/;"	m	namespace:m
 TRACER_AMMUNITION	mods/weapon.hpp	/^		TRACER_AMMUNITION,$/;"	e	enum:mods::weapon::magazine_t
 TRACKED	mods/affects.hpp	/^		TRACKED = 5,$/;"	e	enum:mods::affects::affect_t
 TRACKED_DAMAGE_BONUS_MULTIPLIER	mods/affects.hpp	/^	static constexpr float TRACKED_DAMAGE_BONUS_MULTIPLIER = 0.15;$/;"	m	namespace:mods::affects
+TRACKING_SHOT	mods/classes/engineer.hpp	/^				TRACKING_SHOT,$/;"	e	enum:mods::classes::engineer::ability_t
+TRACKING_SHOT	mods/classes/marine.hpp	/^				TRACKING_SHOT,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 TRACKING_SHOT	mods/classes/sniper.hpp	/^				TRACKING_SHOT,$/;"	e	enum:mods::classes::sniper::ability_t
 TRADE_NOCLERIC	shop.h	111;"	d
 TRADE_NOEVIL	shop.h	108;"	d
@@ -4532,7 +4574,11 @@ ThrewException	mods/catch.hpp	/^			ThrewException = Exception | 1,$/;"	e	enum:Ca
 ThrewException	mods/catch2.hpp	/^        ThrewException = Exception | 1,$/;"	e	enum:Catch::ResultWas::OfType
 TrueType	mods/catch.hpp	/^		struct TrueType {$/;"	s	namespace:Catch::Detail
 TupleDetail	mods/catch.hpp	/^	namespace TupleDetail {$/;"	n	namespace:Catch
+UB_FRAG	mods/classes/engineer.hpp	/^				UB_FRAG,$/;"	e	enum:mods::classes::engineer::ability_t
+UB_FRAG	mods/classes/marine.hpp	/^				UB_FRAG,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 UB_FRAG	mods/classes/sniper.hpp	/^				UB_FRAG,$/;"	e	enum:mods::classes::sniper::ability_t
+UB_SHOTGUN	mods/classes/engineer.hpp	/^				UB_SHOTGUN,$/;"	e	enum:mods::classes::engineer::ability_t
+UB_SHOTGUN	mods/classes/marine.hpp	/^				UB_SHOTGUN,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 UB_SHOTGUN	mods/classes/sniper.hpp	/^				UB_SHOTGUN,$/;"	e	enum:mods::classes::sniper::ability_t
 UMP45	mods/weapon.hpp	/^			UMP45 = 2$/;"	e	enum:mods::weapon::psyop::primary_choice_t
 UNCOMMON	mods/randomized-items.hpp	/^	UNCOMMON,$/;"	e	enum:mods::rarity_enum_t
@@ -4747,7 +4793,9 @@ WSL_SNIPER_4_DAMAGE	mods/values-list.cpp	/^WSL_SNIPER_4_DAMAGE,75$/;"	v
 Warning	mods/catch.hpp	/^			Warning = 2,$/;"	e	enum:Catch::ResultWas::OfType
 Warning	mods/catch2.hpp	/^        Warning = 2,$/;"	e	enum:Catch::ResultWas::OfType
 XNAME_FILE	db.h	93;"	d
+XRAY_SHOT	mods/classes/engineer.hpp	/^				XRAY_SHOT,$/;"	e	enum:mods::classes::engineer::ability_t
 XRAY_SHOT	mods/classes/ghost.hpp	/^				XRAY_SHOT,$/;"	e	enum:mods::classes::ghost::ability_t
+XRAY_SHOT	mods/classes/marine.hpp	/^				XRAY_SHOT,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 XRAY_SHOT	mods/classes/sniper.hpp	/^				XRAY_SHOT,$/;"	e	enum:mods::classes::sniper::ability_t
 YAML	mods/orm/inventory.cpp	/^	static constexpr const char* YAML = "2";$/;"	m	namespace:mods::orm::inventory	file:
 YAML_FILE_WITH_PREFIX	mods/util.hpp	/^		YAML_FILE_WITH_PREFIX = 2,$/;"	e	enum:mods::util::yaml_type_t
@@ -5191,7 +5239,9 @@ _write_one_node	ban.cpp	/^void _write_one_node(FILE *fp, struct ban_list_element
 a	random.cpp	48;"	d	file:
 ability_data_t	mods/classes/base.hpp	/^			ability_data_t(uint8_t av,std::string sh,std::string p,skillset_t c,skill_t* ptr) :$/;"	f	struct:mods::classes::base
 ability_data_t	mods/classes/base.hpp	/^		struct ability_data_t {$/;"	s	struct:mods::classes::base
+ability_t	mods/classes/engineer.hpp	/^			enum ability_t {$/;"	g	struct:mods::classes::engineer
 ability_t	mods/classes/ghost.hpp	/^			enum ability_t {$/;"	g	struct:mods::classes::ghost
+ability_t	mods/classes/medic.hpp	/^			enum ability_t {$/;"	g	struct:mods::classes::medic
 ability_t	mods/classes/sniper.hpp	/^			enum ability_t {$/;"	g	struct:mods::classes::sniper
 ability_value	mods/classes/base.hpp	/^			uint8_t ability_value;$/;"	m	struct:mods::classes::base
 abort_txn	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::abort_txn() {$/;"	f	class:mods::lmdb::_db_handle
@@ -6268,7 +6318,7 @@ create_support	mods/classes/support.cpp	/^	std::shared_ptr<support> create_suppo
 create_syndrome	mods/classes/syndrome.cpp	/^		std::shared_ptr<syndrome> create_syndrome(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
 create_wall_of_fire	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::create_wall_of_fire(uint8_t direction){$/;"	f	class:mods::classes::pyrexia
 create_wall_of_fire	mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::create_wall_of_fire(uint8_t direction){$/;"	f	class:mods::orm::pyrexia
-created_at	mods/classes/forge.hpp	/^		long created_at;$/;"	m	struct:mods::classes::forge
+created_at	mods/classes/forge.hpp	/^			long created_at;$/;"	m	struct:mods::classes::forge
 created_at	mods/classes/ghost.hpp	/^			long created_at;$/;"	m	struct:mods::classes::ghost
 created_at	mods/intent.hpp	/^		uint64_t						created_at;$/;"	m	struct:mods::intent::intent_t
 created_at	mods/orm/breacher.hpp	/^		long created_at;$/;"	m	struct:mods::orm::breacher
@@ -6418,9 +6468,9 @@ db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	f	names
 db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob_vnum,str_map_t values) {$/;"	f	namespace:mods::mobs::mg::orm
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	f
 dbg	mods/acl/config-parser.hpp	20;"	d
-dbg	mods/player.cpp	2205;"	d	file:
-dbg	mods/player.cpp	31;"	d	file:
-dbg	mods/player.cpp	36;"	d	file:
+dbg	mods/player.cpp	2219;"	d	file:
+dbg	mods/player.cpp	33;"	d	file:
+dbg	mods/player.cpp	38;"	d	file:
 dbg_blu	mods/acl/config-parser.hpp	25;"	d
 dbg_grn	mods/acl/config-parser.hpp	24;"	d
 dbg_print	mods/contract-step-callback.cpp	10;"	d	file:
@@ -7111,9 +7161,9 @@ drone_impl	mods/drone.hpp	/^	struct drone_impl {$/;"	s	namespace:mods
 drone_scan_room	mods/scan.cpp	/^	std::vector<uuid_t> drone_scan_room(room_rnum room) {$/;"	f	namespace:mods::scan
 drone_simulate	mods/player.hpp	/^			bool& drone_simulate() {$/;"	f	struct:mods::player
 drone_uuid	mods/player.hpp	/^			uuid_t& drone_uuid() {$/;"	f	struct:mods::player
-dsd	mods/player.cpp	2207;"	d	file:
-dsd	mods/player.cpp	33;"	d	file:
-dsd	mods/player.cpp	38;"	d	file:
+dsd	mods/player.cpp	2221;"	d	file:
+dsd	mods/player.cpp	35;"	d	file:
+dsd	mods/player.cpp	40;"	d	file:
 dts_are_dumps	config.cpp	/^int dts_are_dumps = YES;$/;"	v
 dty_debug	mods/weapons/armor-calculator.cpp	16;"	d	file:
 dty_debug	mods/weapons/armor-calculator.cpp	18;"	d	file:
@@ -7236,9 +7286,9 @@ env	mods/lmdb/db.hpp	/^			std::unique_ptr<gdns_env> env;$/;"	m	struct:gdns::lmdb
 epoch_string	mods/date-time.cpp	/^	std::string epoch_string() {$/;"	f	namespace:mods::date_time::irl
 epoll_ev	comm.cpp	/^epoll_event epoll_ev;$/;"	v
 epoll_fd	comm.cpp	/^int epoll_fd = -1;$/;"	v
-eqd	mods/player.cpp	2206;"	d	file:
-eqd	mods/player.cpp	32;"	d	file:
-eqd	mods/player.cpp	37;"	d	file:
+eqd	mods/player.cpp	2220;"	d	file:
+eqd	mods/player.cpp	34;"	d	file:
+eqd	mods/player.cpp	39;"	d	file:
 equip	mods/armor/advanced-protection.cpp	/^	void advanced_protection::equip(int where,uuid_t obj) {$/;"	f	class:mods::armor::advanced_protection
 equip	mods/armor/basic-protection.cpp	/^	void basic_protection::equip(int where,uuid_t obj) {$/;"	f	class:mods::armor::basic_protection
 equip	mods/armor/elite-protection.cpp	/^	void elite_protection::equip(int where,uuid_t obj) {$/;"	f	class:mods::armor::elite_protection
@@ -7914,7 +7964,6 @@ get	mods/players/search.hpp	/^					ResultType get(const ResultType& _search) {$/
 get	mods/prefs.cpp	/^	std::string prefs::get(const std::string& key,char_data* ch) {$/;"	f	class:mods::prefs
 getFile	mods/acl/config-parser.hpp	/^                const char* getFile() const { return m_file_name.c_str(); }$/;"	f	class:mods::acl::FileParser
 getName	mods/catch.hpp	/^			static const char* getName() {$/;"	f	struct:Catch::Internal::OperatorTraits
-get_abilities	mods/classes/base.cpp	/^	std::vector<base::ability_data_t>& base::get_abilities() {$/;"	f	class:mods::classes::base
 get_abilities	mods/classes/ghost.hpp	/^			std::vector<ability_data_t>& get_abilities() {$/;"	f	struct:mods::classes::ghost
 get_ada_data	mods/player.cpp	/^	std::map<std::string,std::string>& player::get_ada_data() {$/;"	f	class:mods::player
 get_affect_dissolver	mods/player.cpp	/^	player::affect_dissolver_t& player::get_affect_dissolver() {$/;"	f	class:mods::player
@@ -8065,8 +8114,6 @@ get_player_levels	mods/orm/player-skill-points.cpp	/^	std::map<uint32_t,uint16_t
 get_player_levels	mods/orm/player-skill-usage.cpp	/^	std::map<uint64_t,uint16_t> player_skill_usage::get_player_levels(const uint64_t& player_id, std::string_view player_class) {$/;"	f	class:mods::orm::player_skill_usage
 get_player_map	mods/db.cpp	/^int get_player_map(std::string_view player_name,std::string prefix, std::map<std::string,std::string>& values) {$/;"	f
 get_player_map	mods/skill-orm-adaptor.cpp	/^	int get_player_map(player_ptr_t& player, std::vector<std::string,std::string>& skills) {$/;"	f	namespace:mods::skill_orm_adaptor
-get_player_ptr	mods/classes/base.cpp	/^	player_ptr_t base::get_player_ptr() {$/;"	f	class:mods::classes::base
-get_player_ptr	mods/classes/sniper.hpp	/^			player_ptr_t get_player_ptr() {$/;"	f	struct:mods::classes::sniper
 get_player_vector	mods/db.cpp	/^int get_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string>& values) {$/;"	f
 get_player_vis	handler.cpp	/^char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {$/;"	f
 get_pluck_filter	mods/lmdb.cpp	/^	const std::vector<std::string>& _db_handle::get_pluck_filter() const {$/;"	f	class:mods::lmdb::_db_handle
@@ -8552,6 +8599,7 @@ init	mods/classes/forge.cpp	/^	void forge::init(){$/;"	f	class:mods::classes::fo
 init	mods/classes/forge.cpp	/^	void init(){$/;"	f	namespace:mods::class_abilities::forge
 init	mods/classes/ghost.cpp	/^	void ghost::init() {$/;"	f	class:mods::classes::ghost
 init	mods/classes/ghost.cpp	/^	void init() {$/;"	f	namespace:mods::class_abilities::ghost
+init	mods/classes/marine.cpp	/^	void marine::init() {$/;"	f	class:mods::classes::marine
 init	mods/classes/medic.cpp	/^	void medic::init() {$/;"	f	class:mods::classes::medic
 init	mods/classes/sniper.cpp	/^	void init() {$/;"	f	namespace:mods::class_abilities::sniper
 init	mods/classes/sniper.cpp	/^	void sniper::init() {$/;"	f	class:mods::classes::sniper
@@ -8909,20 +8957,19 @@ keyword	structs.h	/^	mods::string keyword;		\/* for open\/close			*\/$/;"	m	stru
 keyword	structs.h	/^	mods::string keyword;                 \/* Keyword in look\/examine          *\/$/;"	m	struct:extra_descr_data
 keywords	shop.h	/^	char *keywords;$/;"	m	struct:shop_buy_data
 kill	mods/player-contract-instance.cpp	/^	void player_contract_instance::kill(player_ptr_t& mob) {$/;"	f	class:mods::contracts::player_contract_instance
-kind	mods/classes/base.hpp	/^		virtual types kind() {$/;"	f	struct:mods::classes::base
-kind	mods/classes/breacher.hpp	/^		types kind() {$/;"	f	struct:mods::classes::breacher
-kind	mods/classes/contagion.hpp	/^		types kind() {$/;"	f	struct:mods::classes::contagion
-kind	mods/classes/engineer.hpp	/^		types kind() {$/;"	f	struct:mods::classes::engineer
-kind	mods/classes/forge.hpp	/^		types kind() {$/;"	f	struct:mods::classes::forge
+kind	mods/classes/breacher.hpp	/^			types kind() {$/;"	f	struct:mods::classes::breacher
+kind	mods/classes/contagion.hpp	/^			types kind() {$/;"	f	struct:mods::classes::contagion
+kind	mods/classes/engineer.hpp	/^			types kind() {$/;"	f	struct:mods::classes::engineer
+kind	mods/classes/forge.hpp	/^			types kind() {$/;"	f	struct:mods::classes::forge
 kind	mods/classes/ghost.hpp	/^			types kind() {$/;"	f	struct:mods::classes::ghost
-kind	mods/classes/marine.hpp	/^		types kind() {$/;"	f	struct:mods::classes::marine
+kind	mods/classes/marine.hpp	/^			types kind() {$/;"	f	struct:mods::classes::marine
 kind	mods/classes/medic.hpp	/^			types kind() {$/;"	f	struct:mods::classes::medic
 kind	mods/classes/psyop.hpp	/^		types kind() {$/;"	f	struct:mods::classes::psyop
 kind	mods/classes/pyrexia.hpp	/^			types kind() {$/;"	f	struct:mods::classes::pyrexia
 kind	mods/classes/sentinel.hpp	/^		types kind() {$/;"	f	struct:mods::classes::sentinel
 kind	mods/classes/sniper.hpp	/^			types kind() {$/;"	f	struct:mods::classes::sniper
-kind	mods/classes/support.hpp	/^		types kind() {$/;"	f	struct:mods::classes::support
-kind	mods/classes/syndrome.hpp	/^		types kind() {$/;"	f	struct:mods::classes::syndrome
+kind	mods/classes/support.hpp	/^			types kind() {$/;"	f	struct:mods::classes::support
+kind	mods/classes/syndrome.hpp	/^			types kind() {$/;"	f	struct:mods::classes::syndrome
 king_welmar	castle.cpp	/^SPECIAL(king_welmar);$/;"	v
 knockback_room	mods/doors.hpp	/^	static inline void knockback_room(const room_rnum room,int door) {$/;"	f	namespace:mods::doors
 l96aw	mods/weapons/sniper-rifle-l96aw.cpp	/^	l96aw::l96aw(){$/;"	f	class:mods::weapons::sniper_rifle::l96aw
@@ -9230,14 +9277,24 @@ m	mods/mobs/mp-shotgunner.cpp	113;"	d	file:
 m	mods/mobs/mp-shotgunner.cpp	305;"	d	file:
 m	random.cpp	45;"	d	file:
 m20	mods/acl/config-parser.cpp	/^        inline void FileParser::m20(){ if(!print_debug){ return; } $/;"	f	class:mods::acl::FileParser
+m_abilities	mods/classes/breacher.hpp	/^			ability_list_t m_abilities;$/;"	m	struct:mods::classes::breacher
+m_abilities	mods/classes/contagion.hpp	/^			ability_list_t m_abilities;$/;"	m	struct:mods::classes::contagion
+m_abilities	mods/classes/engineer.hpp	/^			ability_list_t m_abilities;$/;"	m	struct:mods::classes::engineer
+m_abilities	mods/classes/forge.hpp	/^			ability_list_t m_abilities;$/;"	m	struct:mods::classes::forge
 m_abilities	mods/classes/ghost.hpp	/^			std::vector<ability_data_t> m_abilities;$/;"	m	struct:mods::classes::ghost
-m_abilities	mods/classes/sniper.hpp	/^			std::vector<ability_data_t> m_abilities;$/;"	m	struct:mods::classes::sniper
+m_abilities	mods/classes/marine.hpp	/^			ability_list_t m_abilities;$/;"	m	namespace:mods::classes
+m_abilities	mods/classes/medic.hpp	/^			ability_list_t m_abilities;$/;"	m	struct:mods::classes::medic
+m_abilities	mods/classes/sniper.hpp	/^			ability_list_t m_abilities;$/;"	m	struct:mods::classes::sniper
+m_abilities	mods/classes/support.hpp	/^			ability_list_t m_abilities;$/;"	m	struct:mods::classes::support
+m_abilities	mods/classes/syndrome.hpp	/^			ability_list_t m_abilities;$/;"	m	struct:mods::classes::syndrome
 m_accept_regex	mods/acl/config-parser.cpp	/^        int FileParser::m_accept_regex(const std::string & regex_string){$/;"	f	class:mods::acl::FileParser
 m_accept_regex	mods/acl/config-parser.cpp	/^        int FileParser::m_accept_regex(const std::string & regex_string,std::vector<std::string> & holder){$/;"	f	class:mods::acl::FileParser
 m_access_rules	mods/acl/config-parser.cpp	/^        int FileParser::m_access_rules(void){$/;"	f	class:mods::acl::FileParser
 m_access_type	mods/acl/config-parser.cpp	/^        std::tuple<int,bool> FileParser::m_access_type(void){$/;"	f	class:mods::acl::FileParser
 m_ada	mods/player.hpp	/^			bool m_ada;$/;"	m	struct:mods::player
 m_ada_data	mods/player.hpp	/^			std::map<std::string,std::string> m_ada_data;$/;"	m	struct:mods::player
+m_adrenaline_shot	mods/classes/marine.hpp	/^			skill_t m_adrenaline_shot;$/;"	m	namespace:mods::classes
+m_adrenaline_shot	mods/classes/medic.hpp	/^			skill_t m_adrenaline_shot;$/;"	m	struct:mods::classes::medic
 m_adrenaline_shot	mods/classes/sniper.hpp	/^			skill_t m_adrenaline_shot;$/;"	m	struct:mods::classes::sniper
 m_advance	mods/acl/config-parser.cpp	/^        inline void FileParser::m_advance(size_t i){ dbg("m_advance"); if(m_out_of_bounds()){ return; } m_increment_file_offset(i); }$/;"	f	class:mods::acl::FileParser
 m_advanced_protection	mods/player.hpp	/^			std::shared_ptr<mods::armor::advanced_protection> m_advanced_protection;$/;"	m	struct:mods::player
@@ -9248,6 +9305,7 @@ m_allocate	mods/string.cpp	/^	void string::m_allocate(){$/;"	f	class:mods::strin
 m_anti_matter_damage_percent	mods/player.hpp	/^			int16_t m_anti_matter_damage_percent;$/;"	m	struct:mods::player
 m_anti_matter_resistance_percent	mods/player.hpp	/^			int16_t m_anti_matter_resistance_percent;$/;"	m	struct:mods::player
 m_args	mods/catch2.hpp	/^        std::vector<Arg> m_args;$/;"	m	struct:Catch::Parser
+m_armor_bonus	mods/classes/medic.hpp	/^			skill_t m_armor_bonus;$/;"	m	struct:mods::classes::medic
 m_armor_ptrs	mods/armor/advanced-protection.hpp	/^			std::map<int,obj_ptr_t> m_armor_ptrs;$/;"	m	struct:mods::armor::advanced_protection
 m_armor_ptrs	mods/armor/basic-protection.hpp	/^			std::map<int,obj_ptr_t> m_armor_ptrs;$/;"	m	struct:mods::armor::basic_protection
 m_armor_ptrs	mods/armor/elite-protection.hpp	/^			std::map<int,obj_ptr_t> m_armor_ptrs;$/;"	m	struct:mods::armor::elite_protection
@@ -9300,6 +9358,7 @@ m_capabilities	structs.h	/^		capability_list_t m_capabilities;$/;"	m	struct:obj_
 m_capture	mods/mob-roam.hpp	/^			bool m_capture;$/;"	m	struct:mods::mob_roam::roam_recorder
 m_capture_output	mods/player.hpp	/^			bool         m_capture_output;$/;"	m	struct:mods::player
 m_captured_output	mods/player.hpp	/^			std::string  m_captured_output;$/;"	m	struct:mods::player
+m_chaff_nade	mods/classes/marine.hpp	/^			skill_t m_chaff_nade;$/;"	m	namespace:mods::classes
 m_chaff_nade	mods/classes/sniper.hpp	/^			skill_t m_chaff_nade;$/;"	m	struct:mods::classes::sniper
 m_char_data	mods/ai_state.hpp	/^			char_data* m_char_data;$/;"	m	class:mods::ai_state
 m_char_data	mods/drone.hpp	/^			char_data* m_char_data;$/;"	m	struct:mods::drone_impl
@@ -9332,6 +9391,7 @@ m_contract_vnum	mods/player-contract-instance.hpp	/^			contract_vnum_t m_contrac
 m_contracts	mods/player.hpp	/^			std::forward_list<std::shared_ptr<mods::contracts::player_contract_instance>> m_contracts;$/;"	m	struct:mods::player
 m_convert_to_fire_nade_level	mods/classes/pyrexia.hpp	/^			skill_familiarity_t m_convert_to_fire_nade_level;$/;"	m	struct:mods::classes::pyrexia
 m_cooldown_ticks	mods/player.hpp	/^			int m_cooldown_ticks;$/;"	m	struct:mods::player
+m_corrosive_agent	mods/classes/medic.hpp	/^			skill_t m_corrosive_agent;$/;"	m	struct:mods::classes::medic
 m_corrosive_damage_percent	mods/player.hpp	/^			int16_t m_corrosive_damage_percent;$/;"	m	struct:mods::player
 m_corrosive_resistance_percent	mods/player.hpp	/^			int16_t m_corrosive_resistance_percent;$/;"	m	struct:mods::player
 m_count	mods/catch.hpp	/^		std::size_t m_count;$/;"	m	struct:Catch::pluralise
@@ -9506,6 +9566,7 @@ m_destroy_queue	mods/affects.hpp	/^			std::vector<TAffects> m_destroy_queue;$/;"
 m_destroyed_pieces	mods/armor/advanced-protection.hpp	/^			vec_t<uuid_t> m_destroyed_pieces;$/;"	m	struct:mods::armor::advanced_protection
 m_destroyed_pieces	mods/armor/basic-protection.hpp	/^			vec_t<uuid_t> m_destroyed_pieces;$/;"	m	struct:mods::armor::basic_protection
 m_destroyed_pieces	mods/armor/elite-protection.hpp	/^			vec_t<uuid_t> m_destroyed_pieces;$/;"	m	struct:mods::armor::elite_protection
+m_deuterium_shotgun_ub	mods/classes/medic.hpp	/^			skill_t m_deuterium_shotgun_ub;$/;"	m	struct:mods::classes::medic
 m_device_id	mods/mini-games/line-up.hpp	/^		int m_device_id;$/;"	m	namespace:mods::mini_games
 m_device_id	mods/mini-games/wires.hpp	/^		uint32_t m_device_id;$/;"	m	struct:mods::mini_games::wires
 m_dir	mods/js.hpp	/^				std::string m_dir;$/;"	m	struct:mods::js::include
@@ -9520,12 +9581,15 @@ m_dont_advance_file_offset	mods/acl/config-parser.hpp	/^                bool m_d
 m_drench_object_in_gasoline_level	mods/classes/pyrexia.hpp	/^			skill_familiarity_t m_drench_object_in_gasoline_level;$/;"	m	struct:mods::classes::pyrexia
 m_drench_room_in_gasoline_level	mods/classes/pyrexia.hpp	/^			skill_familiarity_t m_drench_room_in_gasoline_level;$/;"	m	struct:mods::classes::pyrexia
 m_drone_bomb_charges	mods/classes/engineer.hpp	/^			uint8_t m_drone_bomb_charges;$/;"	m	struct:mods::classes::engineer
+m_drone_healer	mods/classes/medic.hpp	/^			skill_t m_drone_healer;$/;"	m	struct:mods::classes::medic
 m_drone_scan	mods/classes/ghost.hpp	/^			skill_t m_drone_scan;$/;"	m	struct:mods::classes::ghost
 m_elemental_damages	mods/forge-engine/generated-armor.hpp	/^			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> m_elemental_damages;$/;"	m	struct:mods::forge_engine::generated_armor_t
 m_elemental_damages	mods/forge-engine/generated-rifle.hpp	/^			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> m_elemental_damages;$/;"	m	struct:mods::forge_engine::generated_rifle_t
 m_elemental_resistances	mods/forge-engine/generated-armor.hpp	/^			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> m_elemental_resistances;$/;"	m	struct:mods::forge_engine::generated_armor_t
 m_elite_protection	mods/player.hpp	/^			std::shared_ptr<mods::armor::elite_protection> m_elite_protection;$/;"	m	struct:mods::player
+m_emergency_evac	mods/classes/medic.hpp	/^			skill_t m_emergency_evac;$/;"	m	struct:mods::classes::medic
 m_emp_damage_percent	mods/player.hpp	/^			int16_t m_emp_damage_percent;$/;"	m	struct:mods::player
+m_emp_nade	mods/classes/marine.hpp	/^			skill_t m_emp_nade;$/;"	m	namespace:mods::classes
 m_emp_nade	mods/classes/sniper.hpp	/^			skill_t m_emp_nade;$/;"	m	struct:mods::classes::sniper
 m_emp_resistance_percent	mods/player.hpp	/^			int16_t m_emp_resistance_percent;$/;"	m	struct:mods::player
 m_encoded_response	mods/builder/slotted-builder.hpp	/^			std::vector<std::string> m_encoded_response;$/;"	m	struct:mods::builder::slotted_builder
@@ -9586,11 +9650,14 @@ m_good	mods/lmdb.hpp	/^			bool m_good;$/;"	m	struct:mods::lmdb::_db_handle
 m_good	mods/lmdb/db.hpp	/^				bool m_good;$/;"	m	struct:gdns::lmdb::client
 m_good	mods/lmdb/db.hpp	/^				bool m_good;$/;"	m	struct:gdns::lmdb::db
 m_good	mods/lmdb/db.hpp	/^				bool m_good;$/;"	m	struct:gdns::lmdb::server
+m_guided_missile	mods/classes/marine.hpp	/^			skill_t m_guided_missile;$/;"	m	namespace:mods::classes
 m_guided_missile	mods/classes/sniper.hpp	/^			skill_t m_guided_missile;$/;"	m	struct:mods::classes::sniper
 m_hacking_row	mods/player.hpp	/^			uint8_t m_hacking_row;$/;"	m	struct:mods::player
 m_has_affects	mods/affects.hpp	/^			bool m_has_affects;$/;"	m	struct:mods::affects::dissolver
 m_has_block_event	mods/player.hpp	/^			bool m_has_block_event;$/;"	m	struct:mods::player
+m_hazardous_waste_shot	mods/classes/medic.hpp	/^			skill_t m_hazardous_waste_shot;$/;"	m	struct:mods::classes::medic
 m_heal_level	mods/classes/sentinel.hpp	/^			cure_levels_t		m_heal_level;$/;"	m	struct:mods::classes::sentinel
+m_heartbeat_sensor	mods/classes/medic.hpp	/^			skill_t m_heartbeat_sensor;$/;"	m	struct:mods::classes::medic
 m_hint	mods/catch2.hpp	/^        std::string m_hint;$/;"	m	class:Catch::ParserRefImpl
 m_histfile_fp	mods/player.hpp	/^			FILE* m_histfile_fp;$/;"	m	struct:mods::player
 m_histfile_index	mods/player.hpp	/^			uint32_t m_histfile_index;$/;"	m	struct:mods::player
@@ -9621,6 +9688,7 @@ m_last_attacker	mods/mobs/mp-shotgunner.hpp	/^			player_ptr_t m_last_attacker;$/
 m_last_error	mods/orm/orm-base.hpp	/^			std::string m_last_error;$/;"	m	struct:mods::orm::orm_base
 m_lense_type	mods/player.hpp	/^			lense_type_t m_lense_type;$/;"	m	struct:mods::player
 m_levels	mods/jx.hpp	/^			std::map<uint32_t,uint32_t> m_levels;$/;"	m	struct:mods::jx::compositor
+m_light_bandage	mods/classes/marine.hpp	/^			skill_t m_light_bandage;$/;"	m	namespace:mods::classes
 m_light_bandage	mods/classes/sniper.hpp	/^			skill_t m_light_bandage;$/;"	m	struct:mods::classes::sniper
 m_limit	mods/sql.hpp	/^			std::string m_limit;$/;"	m	struct:mods::sql::compositor
 m_lineInfo	mods/catch.hpp	/^			SourceLineInfo m_lineInfo;$/;"	m	class:Catch::NotImplementedException
@@ -9657,6 +9725,7 @@ m_name	mods/lmdb.hpp	/^			std::string m_name;$/;"	m	struct:mods::lmdb::_db_handl
 m_name	mods/player.hpp	/^			std::string	m_name;$/;"	m	struct:mods::player
 m_next_char	mods/acl/config-parser.cpp	/^        char FileParser::m_next_char(){$/;"	f	class:mods::acl::FileParser
 m_nextline	mods/acl/config-parser.cpp	/^        void FileParser::m_nextline(void){$/;"	f	class:mods::acl::FileParser
+m_no_factor_armor	mods/classes/medic.hpp	/^			skill_t m_no_factor_armor;$/;"	m	struct:mods::classes::medic
 m_node	mods/behaviour_tree.hpp	/^		node m_node;$/;"	m	struct:mods::behaviour_tree
 m_node_type	mods/behaviour_tree_node.hpp	/^			node_type_t m_node_type;$/;"	m	struct:mods::behaviour_tree_node
 m_obj	mods/weapons/sniper-rifle-l96aw.hpp	/^			obj_data_ptr_t m_obj;$/;"	m	struct:mods::weapons::sniper_rifle::l96aw
@@ -9674,7 +9743,7 @@ m_orm	mods/classes/contagion.hpp	/^			contagion_orm_t m_orm;$/;"	m	struct:mods::
 m_orm	mods/classes/engineer.hpp	/^			engineer_orm_t m_orm;$/;"	m	struct:mods::classes::engineer
 m_orm	mods/classes/forge.hpp	/^			forge_orm_t	m_orm;$/;"	m	struct:mods::classes::forge
 m_orm	mods/classes/ghost.hpp	/^			ghost_orm_t	m_orm;$/;"	m	struct:mods::classes::ghost
-m_orm	mods/classes/marine.hpp	/^			marine_orm_t m_orm;$/;"	m	struct:mods::classes::marine
+m_orm	mods/classes/marine.hpp	/^			marine_orm_t m_orm;$/;"	m	namespace:mods::classes
 m_orm	mods/classes/medic.hpp	/^			medic_orm_t m_orm;$/;"	m	struct:mods::classes::medic
 m_orm	mods/classes/psyop.hpp	/^			psyop_orm_t m_orm;$/;"	m	struct:mods::classes::psyop
 m_orm	mods/classes/pyrexia.hpp	/^			pyrexia_orm_t	m_orm;$/;"	m	struct:mods::classes::pyrexia
@@ -9693,6 +9762,7 @@ m_owner_uuid	mods/rifle-attachments.hpp	/^			uuid_t m_owner_uuid;$/;"	m	struct:m
 m_p	mods/catch.hpp	/^			T* m_p;$/;"	m	class:Catch::Ptr
 m_page	mods/player.hpp	/^			unsigned int m_page;$/;"	m	struct:mods::player
 m_pages	mods/player.hpp	/^			std::vector<std::string> m_pages;$/;"	m	struct:mods::player
+m_parasitic_ammo	mods/classes/medic.hpp	/^			skill_t m_parasitic_ammo;$/;"	m	struct:mods::classes::medic
 m_parse_error	mods/deep-object-parser.cpp	14;"	d	file:
 m_parse_error	mods/deep-object-parser.cpp	8;"	d	file:
 m_parse_list	mods/acl/config-parser.cpp	/^        std::vector<std::string> FileParser::m_parse_list(){$/;"	f	class:mods::acl::FileParser
@@ -9705,8 +9775,11 @@ m_parts	mods/jx.hpp	/^			std::vector<std::string> m_parts;$/;"	m	struct:mods::jx
 m_password	mods/player.hpp	/^			std::string m_password;$/;"	m	struct:mods::player
 m_penetrating_shot	mods/classes/ghost.hpp	/^			skill_t m_penetrating_shot;$/;"	m	struct:mods::classes::ghost
 m_plant_claymore	mods/classes/ghost.hpp	/^			skill_t m_plant_claymore;$/;"	m	struct:mods::classes::ghost
+m_plant_claymore	mods/classes/marine.hpp	/^			skill_t m_plant_claymore;$/;"	m	namespace:mods::classes
 m_plant_claymore	mods/classes/sniper.hpp	/^			skill_t m_plant_claymore;$/;"	m	struct:mods::classes::sniper
+m_plant_corrosive_claymore	mods/classes/marine.hpp	/^			skill_t m_plant_corrosive_claymore;$/;"	m	namespace:mods::classes
 m_plant_corrosive_claymore	mods/classes/sniper.hpp	/^			skill_t m_plant_corrosive_claymore;$/;"	m	struct:mods::classes::sniper
+m_plant_shrapnel_claymore	mods/classes/marine.hpp	/^			skill_t m_plant_shrapnel_claymore;$/;"	m	namespace:mods::classes
 m_plant_shrapnel_claymore	mods/classes/sniper.hpp	/^			skill_t m_plant_shrapnel_claymore;$/;"	m	struct:mods::classes::sniper
 m_player	mods/builder.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods::builder::sandbox_data_t
 m_player	mods/camera.hpp	/^			uuid_t m_player;$/;"	m	class:mods::camera
@@ -9715,7 +9788,7 @@ m_player	mods/classes/contagion.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mod
 m_player	mods/classes/engineer.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods::classes::engineer
 m_player	mods/classes/forge.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods::classes::forge
 m_player	mods/classes/ghost.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods::classes::ghost
-m_player	mods/classes/marine.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods::classes::marine
+m_player	mods/classes/marine.hpp	/^			player_ptr_t m_player;$/;"	m	namespace:mods::classes
 m_player	mods/classes/medic.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods::classes::medic
 m_player	mods/classes/psyop.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods::classes::psyop
 m_player	mods/classes/pyrexia.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods::classes::pyrexia
@@ -9755,6 +9828,7 @@ m_reinforce_weapon_level	mods/classes/forge.hpp	/^			skill_familiarity_t m_reinf
 m_repair_armor_level	mods/classes/forge.hpp	/^			skill_familiarity_t m_repair_armor_level;$/;"	m	struct:mods::classes::forge
 m_repair_weapon_level	mods/classes/forge.hpp	/^			skill_familiarity_t m_repair_weapon_level;$/;"	m	struct:mods::classes::forge
 m_report_line	mods/acl/config-parser.cpp	/^        void FileParser::m_report_line(const char* s){ printf(s,m_line_number + 1); }$/;"	f	class:mods::acl::FileParser
+m_request_recon	mods/classes/marine.hpp	/^			skill_t m_request_recon;$/;"	m	namespace:mods::classes
 m_request_recon	mods/classes/sniper.hpp	/^			skill_t m_request_recon;$/;"	m	struct:mods::classes::sniper
 m_requirements	mods/forge-engine/generated-armor.hpp	/^			requirements_t m_requirements;$/;"	m	struct:mods::forge_engine::generated_armor_t
 m_requirements	mods/forge-engine/generated-rifle.hpp	/^			requirements_t m_requirements;$/;"	m	struct:mods::forge_engine::generated_rifle_t
@@ -9776,7 +9850,10 @@ m_scanned	mods/classes/sniper.hpp	/^			std::vector<uuid_t> m_scanned;$/;"	m	stru
 m_scanned	mods/drone.hpp	/^			std::vector<uuid_t> m_scanned;$/;"	m	struct:mods::drone_impl
 m_scripted_response	mods/player.hpp	/^			std::string m_scripted_response;$/;"	m	struct:mods::player
 m_seal_off_room_with_wall_of_fire_level	mods/classes/pyrexia.hpp	/^			skill_familiarity_t m_seal_off_room_with_wall_of_fire_level;$/;"	m	struct:mods::classes::pyrexia
+m_seal_room	mods/classes/medic.hpp	/^			skill_t m_seal_room;$/;"	m	struct:mods::classes::medic
+m_sedative_hypnotic	mods/classes/medic.hpp	/^			skill_t m_sedative_hypnotic;$/;"	m	struct:mods::classes::medic
 m_sensor_grenade_charges	mods/classes/engineer.hpp	/^			uint8_t m_sensor_grenade_charges;$/;"	m	struct:mods::classes::engineer
+m_sensor_nade	mods/classes/marine.hpp	/^			skill_t m_sensor_nade;$/;"	m	namespace:mods::classes
 m_sensor_nade	mods/classes/sniper.hpp	/^			skill_t m_sensor_nade;$/;"	m	struct:mods::classes::sniper
 m_set_tentative_file_offset	mods/acl/config-parser.cpp	/^        inline void FileParser::m_set_tentative_file_offset(size_t i){ m_tentative_file_offset = i; }$/;"	f	class:mods::acl::FileParser
 m_set_time	mods/player.cpp	/^	void player::m_set_time() {$/;"	f	class:mods::player
@@ -9785,6 +9862,7 @@ m_shared_ptr	mods/object.hpp	/^			std::shared_ptr<obj_data> m_shared_ptr;$/;"	m	
 m_shared_ptr	mods/player.hpp	/^			std::shared_ptr<char_data> m_shared_ptr;$/;"	m	struct:mods::player
 m_shock_damage_percent	mods/player.hpp	/^			int16_t m_shock_damage_percent;$/;"	m	struct:mods::player
 m_shock_resistance_percent	mods/player.hpp	/^			int16_t m_shock_resistance_percent;$/;"	m	struct:mods::player
+m_shotgun_sniper	mods/classes/medic.hpp	/^			skill_t m_shotgun_sniper;$/;"	m	struct:mods::classes::medic
 m_shouldDebugBreak	mods/catch.hpp	/^			bool m_shouldDebugBreak;$/;"	m	class:Catch::ResultBuilder
 m_shouldThrow	mods/catch.hpp	/^			bool m_shouldThrow;$/;"	m	class:Catch::ResultBuilder
 m_should_do	mods/mobs/smart-mob.hpp	/^			std::map<uint16_t,uint16_t> m_should_do;$/;"	m	struct:mods::mobs::smart_mob
@@ -9814,6 +9892,7 @@ m_step	mods/player-contract-instance.hpp	/^			std::size_t m_step;$/;"	m	struct:m
 m_step_dump	mods/player-contract-instance.hpp	/^			std::string m_step_dump;$/;"	m	struct:mods::contracts::player_contract_instance
 m_still_have_content	mods/acl/config-parser.cpp	/^        inline bool FileParser::m_still_have_content(){$/;"	f	class:mods::acl::FileParser
 m_stim_pistol_ammo	mods/classes/medic.hpp	/^			uint8_t m_stim_pistol_ammo;$/;"	m	struct:mods::classes::medic
+m_stim_shot	mods/classes/medic.hpp	/^			skill_t m_stim_shot;$/;"	m	struct:mods::classes::medic
 m_store_extends	mods/acl/config-parser.cpp	/^        int FileParser::m_store_extends(std::string & klass_name){$/;"	f	class:mods::acl::FileParser
 m_store_items	mods/acl/config-parser.cpp	/^        int FileParser::m_store_items(const std::string & klass_name){$/;"	f	class:mods::acl::FileParser
 m_str	mods/string.hpp	/^			std::string m_str;$/;"	m	struct:mods::string
@@ -9825,6 +9904,8 @@ m_success	mods/deep-object-parser.cpp	13;"	d	file:
 m_success	mods/deep-object-parser.cpp	7;"	d	file:
 m_summon_extraction	mods/classes/ghost.hpp	/^			skill_t m_summon_extraction;$/;"	m	struct:mods::classes::ghost
 m_support	mods/player.hpp	/^			std::shared_ptr<mods::classes::support> m_support;$/;"	m	struct:mods::player
+m_surgical_precision	mods/classes/medic.hpp	/^			skill_t m_surgical_precision;$/;"	m	struct:mods::classes::medic
+m_suture	mods/classes/marine.hpp	/^			skill_t m_suture;$/;"	m	namespace:mods::classes
 m_suture	mods/classes/sniper.hpp	/^			skill_t m_suture;$/;"	m	struct:mods::classes::sniper
 m_sync_equipment	mods/player.cpp	/^	void player::m_sync_equipment() {$/;"	f	class:mods::player
 m_syndrome	mods/player.hpp	/^			std::shared_ptr<mods::classes::syndrome> m_syndrome;$/;"	m	struct:mods::player
@@ -9832,6 +9913,7 @@ m_table	mods/lmdb.hpp	/^			table_type_t m_table;$/;"	m	struct:mods::lmdb::transa
 m_table	mods/sql.hpp	/^			std::string m_table;$/;"	m	struct:mods::sql::compositor
 m_target	mods/classes/sniper.hpp	/^			uuid_t m_target;$/;"	m	struct:mods::classes::sniper
 m_target	mods/player-contract-instance.hpp	/^			target_t m_target;$/;"	m	struct:mods::contracts::player_contract_instance
+m_target_limb	mods/classes/marine.hpp	/^			skill_t m_target_limb;$/;"	m	namespace:mods::classes
 m_target_limb	mods/classes/sniper.hpp	/^			skill_t m_target_limb;$/;"	m	struct:mods::classes::sniper
 m_teep_level	mods/classes/breacher.hpp	/^			int \/** todo replace iwth skill_familiarity_t *\/ m_teep_level;$/;"	m	struct:mods::classes::breacher
 m_temperature	mods/rifle-instance-data.hpp	/^			int16_t m_temperature;$/;"	m	struct:heat
@@ -9851,6 +9933,7 @@ m_time	mods/player.hpp	/^			time_type_t	m_time;$/;"	m	struct:mods::player
 m_time_tracker	mods/deferred.hpp	/^			time_t m_time_tracker;$/;"	m	class:mods::deferred
 m_timer	mods/player.hpp	/^			mods::util::stopwatch_t m_timer;$/;"	m	struct:mods::player
 m_toggle_file_offset_advance	mods/acl/config-parser.cpp	/^        inline void FileParser::m_toggle_file_offset_advance(bool b){$/;"	f	class:mods::acl::FileParser
+m_tracking_shot	mods/classes/marine.hpp	/^			skill_t m_tracking_shot;$/;"	m	namespace:mods::classes
 m_tracking_shot	mods/classes/sniper.hpp	/^			skill_t m_tracking_shot;$/;"	m	struct:mods::classes::sniper
 m_tracking_shot_charges	mods/classes/sniper.hpp	/^			uint8_t m_tracking_shot_charges;$/;"	m	struct:mods::classes::sniper
 m_trade_attribute_level	mods/classes/forge.hpp	/^			skill_familiarity_t m_trade_attribute_level;$/;"	m	struct:mods::classes::forge
@@ -9869,7 +9952,9 @@ m_type	mods/forge-engine/generated-rifle.hpp	/^			rifle_types_t m_type;$/;"	m	st
 m_type	mods/lmdb.hpp	/^			transact_type_t m_type;$/;"	m	struct:mods::lmdb::transaction_t
 m_type	mods/object.hpp	/^			std::vector<object_type_enum_t> m_type;$/;"	m	struct:mods::object
 m_type	mods/player.hpp	/^			player_type_enum_t m_type;$/;"	m	struct:mods::player
+m_ub_frag	mods/classes/marine.hpp	/^			skill_t m_ub_frag;$/;"	m	namespace:mods::classes
 m_ub_frag	mods/classes/sniper.hpp	/^			skill_t m_ub_frag;$/;"	m	struct:mods::classes::sniper
+m_ub_shotgun	mods/classes/marine.hpp	/^			skill_t m_ub_shotgun;$/;"	m	namespace:mods::classes
 m_ub_shotgun	mods/classes/sniper.hpp	/^			skill_t m_ub_shotgun;$/;"	m	struct:mods::classes::sniper
 m_ucname	mods/player.hpp	/^			std::string m_ucname;$/;"	m	struct:mods::player
 m_underlyingMatcher	mods/catch.hpp	/^				MatcherBase<ArgT> const& m_underlyingMatcher;$/;"	m	struct:Catch::Matchers::Impl::MatchNotOf
@@ -9888,6 +9973,7 @@ m_weapon_type	mods/player.hpp	/^			weapon_type_t m_weapon_type;$/;"	m	struct:mod
 m_weapon_uuid	mods/rifle-instance-data.hpp	/^			TUUID m_weapon_uuid;$/;"	m	struct:heat
 m_what	mods/catch.hpp	/^			std::string m_what;$/;"	m	class:Catch::NotImplementedException
 m_xray_shot	mods/classes/ghost.hpp	/^			skill_t m_xray_shot;$/;"	m	struct:mods::classes::ghost
+m_xray_shot	mods/classes/marine.hpp	/^			skill_t m_xray_shot;$/;"	m	namespace:mods::classes
 m_xray_shot	mods/classes/sniper.hpp	/^			skill_t m_xray_shot;$/;"	m	struct:mods::classes::sniper
 m_xray_shot_charges	mods/classes/sniper.hpp	/^			uint16_t m_xray_shot_charges;$/;"	m	struct:mods::classes::sniper
 machine_pistols	mods/forge-engine/generated-rifle.cpp	/^	static std::vector<std::string> machine_pistols;$/;"	m	namespace:mods::forge_engine	file:

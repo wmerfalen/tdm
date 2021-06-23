@@ -8,38 +8,47 @@
 using forge_orm_t = mods::orm::forge;
 namespace mods::classes {
 	struct forge : base {
-		friend class mods::classes::super_user_fiddler;
-		using primary_choice_t = mods::weapon::ghost::primary_choice_t;
+			friend class mods::classes::super_user_fiddler;
+			using primary_choice_t = mods::weapon::ghost::primary_choice_t;
 
-		long created_at;
+			long created_at;
 
-		static int16_t destroy(player_ptr_t& player);
-		types kind() {
-			return types::FORGE;
-		}
+			static int16_t destroy(player_ptr_t& player);
+			types kind() {
+				return types::FORGE;
+			}
 
-		/* constructors and destructors */
-		forge();
-		forge(player_ptr_t);
-		~forge() = default;
-		void init();
+			/* constructors and destructors */
+			forge();
+			forge(player_ptr_t);
+			~forge() = default;
+			void init();
 
-		player_ptr_t 	player();
+			player_ptr_t 	player();
 
-		void set_player(player_ptr_t);
+			void set_player(player_ptr_t);
 
-		/** will return how many turns the attacker will be distracted until it re-engages the player */
-		std::pair<int16_t,std::string> distract();
+			/** will return how many turns the attacker will be distracted until it re-engages the player */
+			std::pair<int16_t,std::string> distract();
 
-		/** database routines */
-		int16_t load_by_player(player_ptr_t&);
-		int16_t new_player(player_ptr_t&);
-		int64_t db_id() const;
-		int16_t save();
+			/** database routines */
+			int16_t load_by_player(player_ptr_t&);
+			int16_t new_player(player_ptr_t&);
+			int64_t db_id() const;
+			int16_t save();
 
-		void replenish();
-		std::string get_proficiency_by_name(std::string_view prof) const;
-		std::string skill_screen() const ;
+			void replenish();
+			std::string get_proficiency_by_name(std::string_view prof) const;
+			std::string skill_screen() const ;
+
+
+
+			player_ptr_t get_player_ptr() override {
+				return m_player;
+			}
+			ability_list_t& get_abilities() override {
+				return m_abilities;
+			}
 
 		private:
 			std::vector<uuid_t> m_scanned;
@@ -62,9 +71,10 @@ namespace mods::classes {
 			skill_familiarity_t m_reinforce_weapon_level;
 
 			std::deque<obj_ptr_t> m_claymores;
+			ability_list_t m_abilities;
 	};
 	void forge_advance_level(player_ptr_t& player);
-	std::shared_ptr<mods::classes::forge> create_forge(player_ptr_t &player);
+	std::shared_ptr<mods::classes::forge> create_forge(player_ptr_t& player);
 };
 
 #endif

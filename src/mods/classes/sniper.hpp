@@ -32,9 +32,6 @@ namespace mods::classes {
 				XRAY_SHOT,
 				REQUEST_RECON
 			};
-			std::vector<ability_data_t>& get_abilities() override {
-				return m_abilities;
-			}
 
 			/* constructors and destructors */
 			sniper();
@@ -49,8 +46,11 @@ namespace mods::classes {
 			void replenish();
 			std::tuple<bool,std::string,obj_ptr_t> build_claymore();
 
-			player_ptr_t get_player_ptr() {
+			player_ptr_t get_player_ptr() override {
 				return m_player;
+			}
+			ability_list_t& get_abilities() override {
+				return m_abilities;
 			}
 
 
@@ -101,7 +101,7 @@ namespace mods::classes {
 			skill_t m_plant_corrosive_claymore;
 			skill_t m_xray_shot;
 			skill_t m_request_recon;
-			std::vector<ability_data_t> m_abilities;
+			ability_list_t m_abilities;
 	};
 	std::shared_ptr<mods::classes::sniper> create_sniper(player_ptr_t& player);
 };
