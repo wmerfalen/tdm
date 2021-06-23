@@ -13,6 +13,28 @@ namespace mods::classes {
 			}
 			using primary_choice_t = mods::weapon::sniper::primary_choice_t;
 			using secondary_choice_t = mods::weapon::sniper::secondary_choice_t;
+			enum ability_t {
+				NONE = 0,
+				TRACKING_SHOT,
+				LIGHT_BANDAGE,
+				SUTURE,
+				ADRENALINE_SHOT,
+				EMP_NADE,
+				CHAFF_NADE,
+				SENSOR_NADE,
+				UB_SHOTGUN,
+				UB_FRAG,
+				GUIDED_MISSILE,
+				TARGET_LIMB,
+				PLANT_CLAYMORE,
+				SHRAPNEL_CLAYMORE,
+				CORROSIVE_CLAYMORE,
+				XRAY_SHOT,
+				REQUEST_RECON
+			};
+			std::vector<ability_data_t>& get_abilities() override {
+				return m_abilities;
+			}
 
 			/* constructors and destructors */
 			sniper();
@@ -27,43 +49,10 @@ namespace mods::classes {
 			void replenish();
 			std::tuple<bool,std::string,obj_ptr_t> build_claymore();
 
-			std::string skills_page() override;
-			std::tuple<bool,std::string> roll_skill_success(std::string_view skill) override;
-			std::tuple<bool,std::string> practice(std::string_view skill) override;
+			player_ptr_t get_player_ptr() {
+				return m_player;
+			}
 
-			std::string tracking_shot_proficiency();
-			std::string light_bandage_proficiency();
-			std::string suture_proficiency();
-			std::string adrenaline_shot_proficiency();
-			std::string emp_nade_proficiency();
-			std::string chaff_nade_proficiency();
-			std::string sensor_nade_proficiency();
-			std::string ub_shotgun_proficiency();
-			std::string ub_frag_proficiency();
-			std::string guided_missile_proficiency();
-			std::string target_limb_proficiency();
-			std::string plant_claymore_proficiency();
-			std::string plant_shrapnel_claymore_proficiency();
-			std::string plant_corrosive_claymore_proficiency();
-			std::string xray_shot_proficiency();
-			std::string request_recon_proficiency();
-
-			float tracking_shot_level();
-			float light_bandage_level();
-			float suture_level();
-			float adrenaline_shot_level();
-			float emp_nade_level();
-			float chaff_nade_level();
-			float sensor_nade_level();
-			float ub_shotgun_level();
-			float ub_frag_level();
-			float guided_missile_level();
-			float target_limb_level();
-			float plant_claymore_level();
-			float plant_shrapnel_claymore_level();
-			float plant_corrosive_claymore_level();
-			float xray_shot_level();
-			float request_recon_level();
 
 			void target_died(uuid_t);
 			std::tuple<bool,std::string> mark_target(std::string_view target);
@@ -112,6 +101,7 @@ namespace mods::classes {
 			skill_t m_plant_corrosive_claymore;
 			skill_t m_xray_shot;
 			skill_t m_request_recon;
+			std::vector<ability_data_t> m_abilities;
 	};
 	std::shared_ptr<mods::classes::sniper> create_sniper(player_ptr_t& player);
 };

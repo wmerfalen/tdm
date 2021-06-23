@@ -340,6 +340,7 @@ LEVEL_DIFF_FOOBAR_TEST,10.0
 ARMOR_CRIT_DAMAGE_MULTIPLIER,0.011134
 
 [std::string]
+MSG_NO_PRACTICE_SESSIONS,"You don't have any practice sessions."
 CAN_BE_SEARCHED,"This command can be searched by typing the command followed by a space and a word that you would like to search for."
 SANITY_CHECK,"sanity-check"
 MINI_GUNNER_WEAR_LIGHT,""
@@ -533,6 +534,8 @@ ADVANCE_LEVEL_MESSAGE,"{grn}CONGRATS! You rise a level!{/grn}"
 ADVANCE_MULTIPLE_LEVELS_MESSAGE,"{grn}CONGRATS! You rise %d levels!{/grn}"
 
 [uint8_t]
+ARMOR_LOCKER_QUOTA,10
+WEAPON_LOCKER_QUOTA,10
 RADIO_INITIAL_RESPONSE_TICKS,10
 SNIPER_TRACKING_SHOT_MAX_COUNT,1
 LUCKY_DISORIENTED_VISION_CHANCE,2

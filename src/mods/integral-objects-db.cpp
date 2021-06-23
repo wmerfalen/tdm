@@ -102,7 +102,7 @@ namespace mods::integral_objects_db {
 		for(auto packed_yaml_info : values) {
 			return mods::util::stoi_optional<int>(packed_yaml_info).value_or(10);
 		}
-		return 10;
+		return ARMOR_LOCKER_QUOTA();
 	}
 	int weapon_quota(room_vnum room) {
 		mo_debug("getting weapon locker quota:" << room << "| real room:" << real_room(room));
@@ -111,7 +111,7 @@ namespace mods::integral_objects_db {
 		for(auto packed_yaml_info : values) {
 			return mods::util::stoi_optional<int>(packed_yaml_info).value_or(10);
 		}
-		return 10;
+		return WEAPON_LOCKER_QUOTA();
 	}
 
 };

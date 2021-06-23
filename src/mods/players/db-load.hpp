@@ -17,7 +17,8 @@ namespace mods::players::db_load {
 		GAIN_EXP,
 		CONTRACT_REWARD,
 		DISPLAY_ACMD,
-		DB_SAVE_CHAR
+		DB_SAVE_CHAR,
+		PRACTICE_SKILL
 	};
 	void save_from(player_ptr_t& player,save_from_t);
 	void extract_character(player_ptr_t& player);

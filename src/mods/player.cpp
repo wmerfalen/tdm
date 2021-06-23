@@ -20,6 +20,7 @@
 #include "armor/basic-protection.hpp"
 #include "classes/super-user-fiddler.hpp"
 #include "classes/sniper.hpp"
+#include "classes/ghost.hpp"
 #include "demolitions.hpp"
 #include "contract-types.hpp"
 #include "player-contract-instance.hpp"
@@ -72,17 +73,6 @@ enum histfile_type_t {
 	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3
 };
 static constexpr histfile_type_t HISTFILE_STRATEGY = histfile_type_t::HISTFILE_FILE;
-
-namespace mods::orm::inventory::lmdb {
-	extern void add_player_wear(uint64_t player_db_id, uint64_t object_db_id, uint8_t obj_type, uint8_t position);
-	extern void remove_player_wear(uint64_t player_db_id, uint8_t position);
-	extern void add_player_inventory(uint64_t player_db_id, uint64_t object_db_id, uint16_t obj_type);
-	extern void remove_player_inventory(uint64_t player_db_id, uint64_t object_db_id);
-};
-namespace mods::orm::inventory {
-	extern int16_t flush_player_by_uuid(uuid_t);
-	extern int16_t feed_player_by_uuid(uuid_t);
-};
 
 namespace mods {
 	using task_t = mods::contracts::contract_step::task_type_t;
@@ -322,7 +312,7 @@ namespace mods {
 			in_object->worn_by = this->cd();
 			in_object->worn_on = pos;
 			m_equipment[pos] = in_object;
-			if(flush) {
+			if(flush && !is_npc()) {
 				mods::orm::inventory::equip(db_id(),pos,in_object);
 			}
 
@@ -339,7 +329,9 @@ namespace mods {
 	void player::unequip(const std::size_t& pos) {
 		if(pos < NUM_WEARS && m_equipment[pos]) {
 			mods::stat_bonuses::player_unequip(uuid(),m_equipment[pos]->uuid);
-			mods::orm::inventory::unequip(db_id(),m_equipment[pos],pos);
+			if(!is_npc()) {
+				mods::orm::inventory::unequip(db_id(),m_equipment[pos],pos);
+			}
 			auto item = m_equipment[pos];
 
 			eqd("perform equip calculations");
@@ -567,7 +559,7 @@ namespace mods {
 		m_char_data->carrying = obj.get();
 		dbg("checking rifle has attachment");
 		dbg("short circuited");
-		if(flush) {
+		if(flush && !is_npc()) {
 			dbg("flushing by db_id");
 			mods::orm::inventory::carry(db_id(),obj);
 		}
@@ -615,7 +607,9 @@ namespace mods {
 			}
 		}
 		dbg("carrying erased");
-		mods::orm::inventory::uncarry(db_id(),obj);
+		if(!is_npc()) {
+			mods::orm::inventory::uncarry(db_id(),obj);
+		}
 	}
 	std::vector<obj_data*> player::vcarrying() {
 		std::vector<obj_data*> list;
@@ -887,6 +881,7 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init() {
+		m_practice_sessions = 0;
 		m_can_attack = 1;
 		m_contract_size = 0;
 		m_contract = 0;
@@ -2179,6 +2174,30 @@ namespace mods {
 			return m_attacking_with->melee()->attributes->type;
 		}
 		return 0;
+	}
+	uint16_t& player::practice_sessions() {
+		return m_practice_sessions;
+	}
+	std::tuple<bool,std::string> player::class_action(std::string_view func,std::string_view param) {
+
+		if(func.compare("practice") == 0) {
+			if(m_sniper) {
+				return m_sniper->practice(param);
+			}
+			if(m_ghost) {
+				return m_ghost->practice(param);
+			}
+		}
+		if(func.compare("request_page") == 0) {
+			if(m_sniper) {
+				return {1,m_sniper->request_page_for(param)};
+			}
+			if(m_ghost) {
+				return {1,m_ghost->request_page_for(param)};
+			}
+		}
+		return {0,"Unimplemented"};
+
 	}
 
 };

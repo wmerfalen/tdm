@@ -24,290 +24,29 @@ namespace mods::classes {
 		m_claymore_charges = 0;
 		m_tracking_shot_charges = 0;
 		m_preferences["mute-replenish"] = true;
-	}
-	std::tuple<bool,std::string> sniper::roll_skill_success(std::string_view skill) {
-		skill_t* ptr = nullptr;
-		if(skill.compare("tracking_shot") == 0) {
-			ptr = &m_tracking_shot;
-		}
-		if(skill.compare("light_bandage") == 0) {
-			ptr = &m_light_bandage;
-		}
-		if(skill.compare("suture") == 0) {
-			ptr = &m_suture;
-		}
-		if(skill.compare("adrenaline_shot") == 0) {
-			ptr = &m_adrenaline_shot;
-		}
-		if(skill.compare("emp_nade") == 0) {
-			ptr = &m_emp_nade;
-		}
-		if(skill.compare("chaff_nade") == 0) {
-			ptr = &m_chaff_nade;
-		}
-		if(skill.compare("sensor_nade") == 0) {
-			ptr = &m_sensor_nade;
-		}
-		if(skill.compare("ub_shotgun") == 0) {
-			ptr = &m_ub_shotgun;
-		}
-		if(skill.compare("ub_frag") == 0) {
-			ptr = &m_ub_frag;
-		}
-		if(skill.compare("guided_missile") == 0) {
-			ptr = &m_guided_missile;
-		}
-		if(skill.compare("target_limb") == 0) {
-			ptr = &m_target_limb;
-		}
-		if(skill.compare("target_limb") == 0) {
-			ptr = &m_target_limb;
-		}
-		if(skill.compare("plant_claymore") == 0) {
-			ptr = &m_plant_claymore;
-		}
-		if(skill.compare("plant_shrapnel_claymore") == 0) {
-			ptr = &m_plant_shrapnel_claymore;
-		}
-		if(skill.compare("plant_corrosive_claymore") == 0) {
-			ptr = &m_plant_corrosive_claymore;
-		}
-		if(skill.compare("xray_shot") == 0) {
-			ptr = &m_xray_shot;
-		}
-		if(skill.compare("request_recon") == 0) {
-			ptr = &m_request_recon;
-		}
-		if(!ptr) {
-			return {false,"Which skill?"};
-		}
-		if(ptr->not_learned()) {
-			return {false,"You have no idea how to do that!"};
-		}
-		if(ptr->terrible()) {
-			return {mods::rand::chance(TERRIBLE_SKILL_CHANCE_OF_SUCCESS()),"You try your best"};
-		}
-		if(ptr->awful()) {
-			return {mods::rand::chance(AWFUL_SKILL_CHANCE_OF_SUCCESS()),"You try your best"};
-		}
-		if(ptr->okay()) {
-			return {mods::rand::chance(OKAY_SKILL_CHANCE_OF_SUCCESS()),"You try your best"};
-		}
-		if(ptr->learned()) {
-			return {mods::rand::chance(LEARNED_SKILL_CHANCE_OF_SUCCESS()),"You try your best"};
-		}
-		if(ptr->mastered()) {
-			return {mods::rand::chance(MASTERED_SKILL_CHANCE_OF_SUCCESS()),"You masterfully get to work"};
-		}
-		if(ptr->elite()) {
-			return {mods::rand::chance(ELITE_SKILL_CHANCE_OF_SUCCESS()),"You work with precision"};
-		}
-		return {false,"You have no idea how to do that. Maybe you should practice!"};
-	}
-	std::tuple<bool,std::string> sniper::practice(std::string_view skill) {
-		if(skill.compare("tracking_shot") == 0) {
-			m_tracking_shot.practice(m_player);
-		}
-		if(skill.compare("light_bandage") == 0) {
-			m_light_bandage.practice(m_player);
-		}
-		if(skill.compare("suture") == 0) {
-			m_suture.practice(m_player);
-		}
-		if(skill.compare("adrenaline_shot") == 0) {
-			m_adrenaline_shot.practice(m_player);
-		}
-		if(skill.compare("emp_nade") == 0) {
-			m_emp_nade.practice(m_player);
-		}
-		if(skill.compare("chaff_nade") == 0) {
-			m_chaff_nade.practice(m_player);
-		}
-		if(skill.compare("sensor_nade") == 0) {
-			m_sensor_nade.practice(m_player);
-		}
-		if(skill.compare("ub_shotgun") == 0) {
-			m_ub_shotgun.practice(m_player);
-		}
-		if(skill.compare("ub_frag") == 0) {
-			m_ub_frag.practice(m_player);
-		}
-		if(skill.compare("guided_missile") == 0) {
-			m_guided_missile.practice(m_player);
-		}
-		if(skill.compare("target_limb") == 0) {
-			m_target_limb.practice(m_player);
-		}
-		if(skill.compare("target_limb") == 0) {
-			m_target_limb.practice(m_player);
-		}
-		if(skill.compare("plant_claymore") == 0) {
-			m_plant_claymore.practice(m_player);
-		}
-		if(skill.compare("plant_shrapnel_claymore") == 0) {
-			m_plant_shrapnel_claymore.practice(m_player);
-		}
-		if(skill.compare("plant_corrosive_claymore") == 0) {
-			m_plant_corrosive_claymore.practice(m_player);
-		}
-		if(skill.compare("xray_shot") == 0) {
-			m_xray_shot.practice(m_player);
-		}
-		if(skill.compare("request_recon") == 0) {
-			m_request_recon.practice(m_player);
-		}
-		return {1,"[stub](sniper)"};
-	}
-	std::string sniper::tracking_shot_proficiency() {
-		return m_tracking_shot.get_proficiency();
-	}
-	std::string sniper::light_bandage_proficiency() {
-		return m_light_bandage.get_proficiency();
-	}
-	std::string sniper::suture_proficiency() {
-		return m_suture.get_proficiency();
-	}
-	std::string sniper::adrenaline_shot_proficiency() {
-		return m_adrenaline_shot.get_proficiency();
-	}
-	std::string sniper::emp_nade_proficiency() {
-		return m_emp_nade.get_proficiency();
-	}
-	std::string sniper::chaff_nade_proficiency() {
-		return m_chaff_nade.get_proficiency();
-	}
-	std::string sniper::sensor_nade_proficiency() {
-		return m_sensor_nade.get_proficiency();
-	}
-	std::string sniper::ub_shotgun_proficiency() {
-		return m_ub_shotgun.get_proficiency();
-	}
-	std::string sniper::ub_frag_proficiency() {
-		return m_ub_frag.get_proficiency();
-	}
-	std::string sniper::guided_missile_proficiency() {
-		return m_guided_missile.get_proficiency();
-	}
-	std::string sniper::target_limb_proficiency() {
-		return m_target_limb.get_proficiency();
-	}
-	std::string sniper::plant_claymore_proficiency() {
-		return m_plant_claymore.get_proficiency();
-	}
-	std::string sniper::plant_shrapnel_claymore_proficiency() {
-		return m_plant_shrapnel_claymore.get_proficiency();
-	}
-	std::string sniper::plant_corrosive_claymore_proficiency() {
-		return m_plant_corrosive_claymore.get_proficiency();
-	}
-	std::string sniper::xray_shot_proficiency() {
-		return m_xray_shot.get_proficiency();
-	}
-	std::string sniper::request_recon_proficiency() {
-		return m_request_recon.get_proficiency();
+		using s = ability_data_t::skillset_t;
+		m_abilities = {
+			{TRACKING_SHOT,"ts","Tracking Shot",s::SNIPING,&m_tracking_shot},
+			{LIGHT_BANDAGE,"lb","Light Bandage",s::MEDICAL,&m_light_bandage},
+			{SUTURE,"suture","Suture",s::MEDICAL,&m_suture},
+			{ADRENALINE_SHOT,"as","Adrenaline Shot",s::MEDICAL,&m_adrenaline_shot},
+			{EMP_NADE,"emp","EMP Grenade",s::DEMOLITIONS,&m_emp_nade},
+			{CHAFF_NADE,"chaff","Chaff Grenade",s::DEMOLITIONS,&m_chaff_nade},
+			{SENSOR_NADE,"sensor","Sensor Grenade",s::INTELLIGENCE,&m_sensor_nade},
+			{UB_SHOTGUN,"ubs","Underbarrel Shotgun",s::DEMOLITIONS,&m_ub_shotgun},
+			{UB_FRAG,"ubf","Underbarrel Nade Launcher",s::DEMOLITIONS,&m_ub_frag},
+			{GUIDED_MISSILE,"gm","Guided Missile",s::DEMOLITIONS,&m_guided_missile},
+			{TARGET_LIMB,"limb","Target Limb",s::SNIPING,&m_target_limb},
+			{PLANT_CLAYMORE,"claymore","Plant Claymore",s::DEMOLITIONS,&m_plant_claymore},
+			{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",s::DEMOLITIONS,&m_plant_shrapnel_claymore},
+			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",s::DEMOLITIONS,&m_plant_corrosive_claymore},
+			{XRAY_SHOT,"xray","X-Ray Shot",s::SNIPING,&m_xray_shot},
+			{REQUEST_RECON,"recon","Request Recon",s::INTELLIGENCE,&m_request_recon},
+		};
 	}
 
-
-
-
-	float sniper::tracking_shot_level() {
-		return m_tracking_shot.get_current_level();
-	}
-	float sniper::light_bandage_level() {
-		return m_light_bandage.get_current_level();
-	}
-	float sniper::suture_level() {
-		return m_suture.get_current_level();
-	}
-	float sniper::adrenaline_shot_level() {
-		return m_adrenaline_shot.get_current_level();
-	}
-	float sniper::emp_nade_level() {
-		return m_emp_nade.get_current_level();
-	}
-	float sniper::chaff_nade_level() {
-		return m_chaff_nade.get_current_level();
-	}
-	float sniper::sensor_nade_level() {
-		return m_sensor_nade.get_current_level();
-	}
-	float sniper::ub_shotgun_level() {
-		return m_ub_shotgun.get_current_level();
-	}
-	float sniper::ub_frag_level() {
-		return m_ub_frag.get_current_level();
-	}
-	float sniper::guided_missile_level() {
-		return m_guided_missile.get_current_level();
-	}
-	float sniper::target_limb_level() {
-		return m_target_limb.get_current_level();
-	}
-	float sniper::plant_claymore_level() {
-		return m_plant_claymore.get_current_level();
-	}
-	float sniper::plant_shrapnel_claymore_level() {
-		return m_plant_shrapnel_claymore.get_current_level();
-	}
-	float sniper::plant_corrosive_claymore_level() {
-		return m_plant_corrosive_claymore.get_current_level();
-	}
-	float sniper::xray_shot_level() {
-		return m_xray_shot.get_current_level();
-	}
-	float sniper::request_recon_level() {
-		return m_request_recon.get_current_level();
-	}
-	std::string sniper::skills_page() {
-		std::string page = CAT("Sniping:{hr}",
-		                       "Underbarrel Shotgun{->}[ ",ub_shotgun_proficiency()," ]\r\n",
-		                       "Underbarrel Frag Launcher{->}[ ",ub_frag_proficiency()," ]\r\n",
-		                       "Target Limb{->}[ ",target_limb_proficiency()," ]\r\n",
-
-		                       "{hr}\r\n",
-		                       "Demolitions:{hr}",
-		                       "Plant Claymore{->}[ ",plant_claymore_proficiency()," ]\r\n",
-		                       "Shrapnel Claymore{->}[ ",plant_shrapnel_claymore_proficiency()," ]\r\n",
-		                       "Corrosive Claymore{->}[ ",plant_corrosive_claymore_proficiency()," ]\r\n",
-		                       "Guided Missile{->}[ ",guided_missile_proficiency()," ]\r\n",
-
-		                       "{hr}\r\n",
-		                       "Technology:{hr}",
-		                       "Tracking Shot:{->}[ ",tracking_shot_proficiency(), " ]\r\n",
-		                       "Sensor Grenade:{->}[ ",sensor_nade_proficiency(), " ]\r\n",
-		                       "X-Ray Shot{->}[ ",xray_shot_proficiency(), " ]\r\n",
-		                       "Request Recon{->}[ ",request_recon_proficiency()," ]\r\n",
-		                       "Chaff Grenade{->}[ ",chaff_nade_proficiency()," ]\r\n",
-		                       "EMP Grenade{->}[ ",emp_nade_proficiency()," ]\r\n",
-
-		                       "{hr}\r\n",
-		                       "Medical:{hr}",
-		                       "Light Bandage:{->}[ ",light_bandage_proficiency(), " ]\r\n",
-		                       "Suture:{->}[ ",suture_proficiency(), " ]\r\n",
-		                       "Adrenaline Shot:{->}[ ",adrenaline_shot_proficiency(), " ]\r\n",
-		                       "{hr}\r\n",
-		                       "How to practice each skill:\r\n"
-		                       "example: practice tracking_shot\r\n"
-		                       "example: practice light_bandage\r\n"
-		                       "example: practice suture\r\n"
-		                       "example: practice adrenaline_shot\r\n"
-		                       "example: practice emp_nade\r\n"
-		                       "example: practice chaff_nade\r\n"
-		                       "example: practice sensor_nade\r\n"
-		                       "example: practice ub_shotgun\r\n"
-		                       "example: practice ub_frag\r\n"
-		                       "example: practice guided_missile\r\n"
-		                       "example: practice target_limb\r\n"
-		                       "example: practice target_limb\r\n"
-		                       "example: practice plant_claymore\r\n"
-		                       "example: practice plant_shrapnel_claymore\r\n"
-		                       "example: practice plant_corrosive_claymore\r\n"
-		                       "example: practice xray_shot\r\n"
-		                       "example: practice request_recon\r\n"
-		                      );
-		return mods::util::mail_format("Your skills","Proficiencies",page,m_player->screen_width());
-	}
 	void sniper::use_claymore(uuid_t object_uuid) {
+
 	}
 	void sniper::replenish_notify(std::string_view msg) {
 		if(m_preferences["mute-replenish"]) {
@@ -361,33 +100,10 @@ namespace mods::classes {
 			report(CAT("unable to load sniper class by player id: ", player->db_id(), ".. return status: ", result));
 			return -100 - result;
 		}
-		obj_ptr_t primary = nullptr;
-		/** TODO: create catchy name using the deep object parser */
-		//primary = create_object(ITEM_RIFLE,"psg1.yml");
-		//player->equip(primary,WEAR_PRIMARY);
-		//player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
-
-		m_tracking_shot.load_skill_by_player("tracking_shot",m_player);
-		m_light_bandage.load_skill_by_player("light_bandage",m_player);
-		m_suture.load_skill_by_player("suture",m_player);
-		m_adrenaline_shot.load_skill_by_player("adrenaline_shot",m_player);
-		m_emp_nade.load_skill_by_player("emp_nade",m_player);
-		m_chaff_nade.load_skill_by_player("chaff_nade",m_player);
-		m_sensor_nade.load_skill_by_player("sensor_nade",m_player);
-		m_ub_shotgun.load_skill_by_player("ub_shotgun",m_player);
-		m_ub_frag.load_skill_by_player("ub_frag",m_player);
-		m_guided_missile.load_skill_by_player("guided_missile",m_player);
-		m_target_limb.load_skill_by_player("target_limb",m_player);
-		m_plant_claymore.load_skill_by_player("plant_claymore",m_player);
-		m_plant_shrapnel_claymore.load_skill_by_player("plant_shrapnel_claymore",m_player);
-		m_plant_corrosive_claymore.load_skill_by_player("plant_corrosive_claymore",m_player);
-		m_xray_shot.load_skill_by_player("xray_shot",m_player);
-		m_request_recon.load_skill_by_player("request_recon",m_player);
+		initialize_skills_for_player(m_player);
 		return result;
 	}
 	int16_t sniper::save() {
-		m_player->sendln("Saving from sniper class");
-		//mods::orm::inventory::flush_player(m_player);
 		return m_orm.save();
 	}
 	/*
@@ -398,7 +114,7 @@ namespace mods::classes {
 		*/
 	std::tuple<bool,std::string> sniper::xray_shot() {
 		auto weapon = m_player->primary();
-		if(!weapon || weapon->rifle()->attributes->type != mw_rifle::SNIPER) {
+		if(!weapon || weapon->has_rifle() == false || weapon->rifle()->attributes->type != mw_rifle::SNIPER) {
 			return {0,"You must be wielding a sniper rifle!"};
 		}
 		if(!m_engaged) {
@@ -457,16 +173,6 @@ namespace mods::classes {
 		if(m_tracking_shot_charges) {
 			int depth = 6;
 			mods::scan::vec_player_data data;
-			/*
-			 * vec_player_data {
-				*	char_data* ch;
-				*	obj_data* obj;
-				*	uint16_t distance;
-				*	uuid_t uuid;
-				*	uint8_t direction;
-				*	uint32_t room_rnum;
-				* }
-			*/
 			mods::scan::los_scan_direction(m_player->cd(),depth,&data,direction);
 			for(const auto& result : data) {
 				if(mods::util::fuzzy_match(target.data(),result.ch->player.name.c_str())) {

@@ -857,6 +857,8 @@ namespace mods {
 			std::size_t screen_width() const {
 				return 80;
 			}
+			uint16_t& practice_sessions();
+			std::tuple<bool,std::string> class_action(std::string_view func,std::string_view param);
 		protected:
 			std::map<std::string,std::string> m_ada_data;
 			bool m_ada;
@@ -919,7 +921,6 @@ namespace mods {
 			std::shared_ptr<mods::classes::pyrexia> m_pyrexia;
 			std::shared_ptr<mods::classes::forge> m_forge;
 			std::shared_ptr<mods::classes::syndrome> m_syndrome;
-			//std::shared_ptr<mods::classes::striker> m_striker;
 			FILE* m_histfile_fp;
 			bool m_histfile_on;
 			uint32_t m_histfile_index;
@@ -965,6 +966,7 @@ namespace mods {
 			bool m_can_attack;
 			mods::util::stopwatch_t m_timer;
 			int m_cooldown_ticks;
+			uint16_t m_practice_sessions;
 	};
 };
 

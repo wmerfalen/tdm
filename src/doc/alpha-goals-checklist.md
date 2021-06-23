@@ -16,6 +16,11 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 				- [x] melee elemental damage respects resistances of target's armor
 			- [x] melee weapon attacks don't need to be spammed like snipe command does
 
+# component: sniper class
+	- status:
+		- unfinished, may need testing as well
+		- [ ]
+
 # component: practice and leveling up
 	- status:
 		- needs work. stats affect the user in predictable ways

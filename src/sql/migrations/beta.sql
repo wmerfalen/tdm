@@ -3263,40 +3263,6 @@ CREATE TABLE public.room_signs (
 			ON UPDATE CASCADE
 );
 
-/**
-=========================================
-= table: player_object_instance
-=========================================
-
- id = 1
- po_type = 'rifle_instance'
- po_type_id = rifle_instance.id
- ----
- id = 2
- po_type = 'yaml'
- po_type_id = yaml_index.id
- ----
-
-=========================================
-= table: player_object
-=========================================
- id = 1
- po_player_id = player.id
- po_poi_id = 1
- po_wear_position = 16
- po_in_inventory = 0
- po_quantity = 1
- ----
- id = 2
- po_player_id = player.id
- po_poi_id = 2
- po_wear_position = 0
- po_in_inventory = 1 
- po_quantity = 5
-
- ========================================
-
- */
 DROP TABLE public.player_object;
 CREATE TABLE public.player_object (
     id SERIAL UNIQUE,
@@ -3329,3 +3295,4 @@ CREATE TABLE public.skill_usage (
 			ON UPDATE CASCADE
 );
 
+ALTER TABLE public.player ADD COLUMN player_practice_sessions INTEGER NOT NULL DEFAULT 1;

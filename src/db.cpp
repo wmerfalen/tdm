@@ -2326,6 +2326,7 @@ bool parse_sql_player(player_ptr_t player_ptr) {
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
 		player_ptr->set_time_logon(time(0));
 		player_ptr->set_prefs(mods::util::stoi<long>(row["player_preferences"]));
+		player_ptr->practice_sessions() = row["player_practice_sessions"].as<uint16_t>();
 		str_map_t values;
 		get_player_map(player_ptr->name(),"mute-channels", values);
 		auto default_prefs = EXPLODE(EXTENDED_PREFERENCES_DEFAULTS(),'|');

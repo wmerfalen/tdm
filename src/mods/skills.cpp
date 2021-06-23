@@ -6,8 +6,7 @@
 #include "orm/skill-trees.hpp"
 #include "orm/player-skill-points.hpp"
 #include "levels.hpp"
-#include "classes/sniper.hpp"
-#include "classes/ghost.hpp"
+#include "players/db-load.hpp"
 
 #ifdef __MENTOC_MODS_SKILLS_SHOW_DEBUG_OUTPUT__
 #define m_debug(A) std::cerr << "[mods::skills][debug]:'" << A << "'\n";
@@ -31,16 +30,6 @@ namespace mods::skills {
 		return padded;
 	}
 
-	std::string get_user_skills_page(player_ptr_t& player) {
-		if(player->sniper()) {
-			return player->sniper()->skills_page();
-		}
-		if(player->ghost()) {
-			return player->ghost()->skills_page();
-		}
-		return "[stub]";
-	}
-
 	std::string get_user_stats_page(player_ptr_t& player) {
 		return CAT("{hr}\r\n",
 		           "Stats:\r\n",
@@ -56,11 +45,6 @@ namespace mods::skills {
 		           "Sniping:          ",player->sniping(),"\r\n",
 		           "Strength:         ",player->strength(),"\r\n",
 		           "Weapon Handling:  ",player->weapon_handling(),"\r\n"
-		          );
-	}
-	std::string get_user_unlocks_page(player_ptr_t& player) {
-		return CAT("{hr}\r\n",
-		           "Unlocks:\r\n"
 		          );
 	}
 
@@ -143,27 +127,12 @@ namespace mods::skills {
 			screen += CAT("You are invisible.\r\n");
 		}
 
-		screen += get_user_skills_page(player);
+		screen += std::get<1>(player->class_action("request_page","skills"));
 		screen += get_user_stats_page(player);
-		screen += get_user_unlocks_page(player);
 		player->sendln(mods::util::mail_format("Your stats",header,screen,player->screen_width()));
 	}
 
-	void train_user_skill(player_ptr_t& player,uint32_t skill_id,int16_t amount) {
-		mods::orm::skill_trees tree;
-		std::string pc = "";
-		for(auto ch : player->get_class_string().str()) {
-			pc += std::tolower(ch);
-		}
-		tree.load_by_class(pc);
-
-		mods::orm::player_skill_points ps;
-		auto results = ps.get_player_levels(player->db_id(),pc);
-		results[skill_id] += amount;
-		ps.delete_by_player(player->db_id());
-		ps.rows.clear();
-		ps.populate(player->db_id(),results);
-		ps.save();
+	void train_user_skill(player_ptr_t& player,std::string_view skill) {
 	}
 
 	std::optional<uint32_t> from_string_to_skill_id(
@@ -184,16 +153,6 @@ namespace mods::skills {
 	}
 
 
-	void train_skill(player_ptr_t& player,std::string_view skill_name, int16_t amount) {
-		auto id = from_string_to_skill_id(player->get_class_string().str(),skill_name);
-		if(!id.has_value()) {
-			player->send("That skill doesn't seem to exist: '%s'\r\n",skill_name.data());
-			return;
-		}
-		train_user_skill(player,id.value(),amount);
-		player->sendln("You practice for awhile...\r\n");
-	}
-
 	uint8_t calculate_available_practice_sessions(uint8_t level) {
 		uint8_t sessions = 0;
 		for(uint8_t current_level = 1; current_level <= level; ++current_level) {
@@ -208,25 +167,43 @@ namespace mods::skills {
 		}
 		return report;
 	}
+
+	std::string practice_skill(player_ptr_t& player,std::string_view skill) {
+		if(player->practice_sessions() == 0) {
+			return MSG_NO_PRACTICE_SESSIONS();
+		}
+		std::tuple<bool,std::string> s = {false,"Class unimplemented"};
+		s = player->class_action("practice",skill);
+		if(std::get<0>(s)) {
+			--player->practice_sessions();
+			mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::PRACTICE_SKILL);
+		}
+		return std::get<1>(s);
+	}
+
+
+	std::string request_page_for(player_ptr_t& player,std::string_view page) {
+		return std::get<1>(player->class_action("request_page",page));
+	}
+
 	ACMD(do_practice_sessions) {
 		player->sendln(get_practice_dump());
 	}
+
+
+
 	ACMD(do_train) {
 		DO_HELP("train");
-		static constexpr const char* usage = "usage: train <skill> <amount>";
-		auto vec_args = PARSE_ARGS();
-		if(vec_args.size() == 0) {
-			player->sendln(get_user_skills_page(player));
+		if(argshave()->size_gt(0)->first_is("help")->passed()) {
+			player->sendln(request_page_for(player,"shorthand"));
 			return;
 		}
+		if(argshave()->size_gt(0)->passed() == false) {
+			player->sendln(request_page_for(player,"skills"));
+		}
 
-		if(vec_args.size() >= 2) {
-			auto i = mods::util::stoi_optional<int16_t>(vec_args[1]);
-			if(!i.has_value()) {
-				player->errorln(CAT("Invalid amount.\r\n",usage,"\r\n").c_str());
-				return;
-			}
-			train_skill(player,vec_args[0],i.value());
+		if(argshave()->size_gt(0)->passed()) {
+			player->sendln(practice_skill(player,argat(0)));
 		}
 		return;
 	}

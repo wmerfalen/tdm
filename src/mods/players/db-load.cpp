@@ -44,30 +44,22 @@ namespace mods::players::db_load {
 			found = false;
 			for(const auto& prow : ps.rows) {
 				if(prow.skill_id == row.id) {
-#ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
-					std::cerr << green_str("Found skill id: ") << prow.skill_id << "\n";
-#endif
+					m_debug(green_str("Found skill id: ") << prow.skill_id);
 					found = true;
 					break;
 				}
 			}
 			if(!found) {
-#ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
-				std::cerr << red_str("Missing player skill id for player: ") << player_id << ", skill: '" << row.skill_name << "'\n";
-#endif
+				m_crit(red_str("Missing player skill id for player: ") << player_id << ", skill: '" << row.skill_name << "'");
 				missing[row.id] = 0;
 			}
 		}
 		if(missing.size()) {
 			ps.rows.clear();
-#ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
-			std::cerr << red_str("Player has missing skill tree members. Populating...") << "\n";
-#endif
+			m_crit(red_str("Player has missing skill tree members. Populating..."));
 			ps.populate(player_id,missing);
 			ps.save();
-#ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
-			std::cerr << green_str("Remedied.");
-#endif
+			m_debug(green_str("Remedied."));
 		}
 		mods::orm::player_skill_usage_upkeep(player_id,player_class);
 	}
@@ -130,6 +122,7 @@ namespace mods::players::db_load {
 		values["player_hitroll"] = std::to_string(player_ptr->cd()->points.hitroll);
 		values["player_armor"] = std::to_string(player_ptr->cd()->points.armor);
 		values["player_preferences"] = std::to_string(player_ptr->get_prefs());
+		values["player_practice_sessions"] = std::to_string(player_ptr->practice_sessions());
 		try {
 			auto up_txn = txn();
 			mods::sql::compositor comp("player",&up_txn);
@@ -155,9 +148,7 @@ namespace mods::players::db_load {
 		mods::orm::player_base_ability pba;
 		auto status = pba.save_by_player(player_ptr);
 		if(0 != status) {
-#ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
-			std::cerr << red_str("Warning: couldn't save player_ptr's base abilities...") << "status: " << status << " for player_ptr:'" << player_ptr->name().c_str() << "'\n";
-#endif
+			m_crit(red_str("Warning: couldn't save player_ptr's base abilities...") << "status: " << status << " for player_ptr:'" << player_ptr->name().c_str() << "'");
 		}
 		if(player_ptr->position() == CON_PLAYING) {
 			player_ptr->sendln("Your character has been saved.");

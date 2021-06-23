@@ -12,6 +12,27 @@ namespace mods::classes {
 			friend class mods::classes::super_user_fiddler;
 			using primary_choice_t = mods::weapon::ghost::primary_choice_t;
 
+			enum ability_t {
+				NONE = 0,
+				AERIAL_DRONE_SCAN,
+				STEALTH,
+				SUMMON_EXTRACTION,
+				XRAY_SHOT,
+				FEIGN_DEATH,
+				PLANT_CLAYMORE,
+				PENETRATING_SHOT,
+				INTIMIDATION,
+				CRYOGENIC_GRENADE,
+				FLASH_UNDERBARREL,
+			};
+			std::vector<ability_data_t>& get_abilities() {
+				return m_abilities;
+			}
+
+			player_ptr_t get_player_ptr() override {
+				return m_player;
+			}
+
 			long created_at;
 
 			static int16_t destroy(player_ptr_t& player);
@@ -35,9 +56,6 @@ namespace mods::classes {
 			void feign_death_done();
 			std::pair<int16_t,std::string> summon_extraction(room_rnum);
 
-			std::string skills_page() {
-				return "[stub]";
-			}
 			void intimidate(uuid_t);
 			std::pair<bool,std::string>  pass_through_door_attempt(int direction);
 
@@ -57,13 +75,12 @@ namespace mods::classes {
 			int16_t save();
 
 			void replenish();
-			std::string get_proficiency_by_name(std::string_view prof) const;
-			std::string skill_screen() const ;
 
 			std::tuple<uint32_t,std::string> fire_penetrating_shot_at(uuid_t npc_uuid);
 			std::tuple<bool,std::string> intimidate_target(uuid_t npc_uuid);
 			uint8_t cryogenic_grenade_count() const;
 			std::tuple<bool,std::string> toss_cryogenic_grenade_towards(uint8_t direction, uint8_t rooms);
+
 			/** applies it to the entire room. every will get flashed */
 			std::tuple<bool,std::string> use_flash_underbarrel();
 
@@ -74,6 +91,7 @@ namespace mods::classes {
 			std::tuple<bool,std::string> dissipate();
 			void dissipate_wears_off();
 			bool is_dissipated() const;
+
 		private:
 			uint8_t m_dissipate_charges;
 			std::vector<uuid_t> m_scanned;
@@ -83,17 +101,18 @@ namespace mods::classes {
 			ghost_orm_t	m_orm;
 			player_ptr_t m_player;
 
-			skill_familiarity_t m_drone_scan_level;
-			skill_familiarity_t m_stealth_level;
-			skill_familiarity_t m_summon_extraction_level;
-			skill_familiarity_t m_xray_shot_level;
-			skill_familiarity_t m_feign_death_level;
-			skill_familiarity_t m_plant_claymore_level;
-			skill_familiarity_t m_penetrating_shot_level;
-			skill_familiarity_t m_intimidation_level;
-			skill_familiarity_t m_cryogenic_grenade_level;
-			skill_familiarity_t m_flash_underbarrel_level;
+			skill_t m_cryogenic_grenade;
+			skill_t m_drone_scan;
+			skill_t m_feign_death;
+			skill_t m_flash_underbarrel;
+			skill_t m_intimidation;
+			skill_t m_penetrating_shot;
+			skill_t m_plant_claymore;
+			skill_t m_stealth;
+			skill_t m_summon_extraction;
+			skill_t m_xray_shot;
 			bool m_dissipated;
+			std::vector<ability_data_t> m_abilities;
 	};
 	void ghost_advance_level(player_ptr_t& player);
 	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t& player);

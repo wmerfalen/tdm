@@ -9,9 +9,9 @@
 #include "players/db-load.hpp"
 
 #ifdef __MENTOC_MODS_LEVELS_DEBUG__
-#define mo_debug(A) std::cerr << "[mods::levels][debug]:" << A <<"\n";
+#define m_debug(A) std::cerr << "[mods::levels][debug]:" << A <<"\n";
 #else
-#define mo_debug(A)
+#define m_debug(A)
 #endif
 
 extern std::string sanitize_key(std::string key);
@@ -170,51 +170,16 @@ namespace mods::levels {
 				//set_title(ch, NULL);
 			}
 		}//end while
-#ifdef __MENTOC_SHOW_GAIN_EXP_DEBUG_OUTPUT__
-		std::cerr << green_str("gain_exp has your level as: ") << std::to_string(player->level()) << "\n";
-#endif
+		m_debug(green_str("gain_exp has your level as: ") << player->level());
 		mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::GAIN_EXP);
 		return num_levels;
 	}
-#ifdef __MENTOC_USE_RANDOM_STAT_GAIN__
-	int calculate_bonus_hp_gain(int dice,int sides,int greater_than,int player_level) {
-		int amount = mods::rand::roll(1,6);
-		if(greater_than < mods::rand::roll(dice,sides)) {
-			amount = ADVANCE_LEVEL_HP_FLOAT_MULTIPLIER() * player_level;
-		}
-		return amount;
-	}
-	int calculate_bonus_move_gain(int dice,int sides,int greater_than,int player_level) {
-		int amount = mods::rand::roll(1,6);
-		if(greater_than < mods::rand::roll(dice,sides)) {
-			amount += ADVANCE_LEVEL_HP_FLOAT_MULTIPLIER() * player_level;
-		}
-		return amount;
-	}
-#endif
 
 	/**
 	 * extra rewards for advancing
 	 */
 	void reward_player_for_advancing_levels(player_ptr_t& player) {
 		player->sendln(ADVANCE_LEVEL_CONGRATS());
-
-#ifdef __MENTOC_USE_RANDOM_STAT_GAIN__
-		auto bonus_hp = calculate_bonus_hp_gain(
-		                    ADVANCE_LEVEL_BONUS_HP_DICE(),
-		                    ADVANCE_LEVEL_BONUS_HP_SIDES(),
-		                    ADVANCE_LEVEL_BONUS_HP_THRESHOLD(),
-		                    player->level()
-		                );
-		/** Random chance of additional move gain */
-		auto bonus_move = calculate_bonus_move_gain(
-		                      ADVANCE_LEVEL_BONUS_HP_DICE(),
-		                      ADVANCE_LEVEL_BONUS_HP_SIDES(),
-		                      ADVANCE_LEVEL_BONUS_HP_THRESHOLD(),
-		                      player->level()
-		                  );
-#endif
-
 	}
 
 
@@ -437,6 +402,7 @@ namespace mods::levels {
 		player->real_armor() = s[STAT_ARMOR];
 		player->medical() = s[STAT_MEDICAL];
 		player->charisma() = s[STAT_CHARISMA];
+		player->practice_sessions() += 5;
 	}
 
 
@@ -544,4 +510,4 @@ namespace mods::levels {
 		mods::interpreter::add_command("exp", POS_RESTING, do_exp, 0,0);
 	}
 };
-#undef mo_debug
+#undef m_debug
