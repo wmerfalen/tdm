@@ -492,9 +492,9 @@ namespace mods::yaml {
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
 		//bool recognized = 0;
-		(*tf) = ITEM_MELEE;
+		(*tf) = ITEM_VEHICLE;
 		o->vehicle()->type = (mw_vehicle)this->type;
-		(*w) |= ITEM_VEHICLE;
+		(*w) = 0;
 		o->obj_flags.weapon_flags = 0;
 	}
 

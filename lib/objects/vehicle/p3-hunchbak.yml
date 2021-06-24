@@ -10,7 +10,7 @@
 # type: JEEP
 hp: 250 #int32_t, hitpoints
 armor_hp: 0 #int32_t, armor hitpoints
-vehicle_type: 'SUV; #string, SUV, MOTORCYCLE,TWO_DOOR,FOUR_DOOR,TRUCK,SEMI,VAN,SWAT_VAN,TANK,JEEP
+vehicle_type: 'SUV' #string, SUV, MOTORCYCLE,TWO_DOOR,FOUR_DOOR,TRUCK,SEMI,VAN,SWAT_VAN,TANK,JEEP
 horsepower: 1000 #int32_t, horsepower
 zero_to_sixty: 10 #int16_t, amount in seconds to go from zero to 60mph
 tire_hp: 150 #int32_t, tire hp

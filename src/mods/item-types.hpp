@@ -134,7 +134,7 @@
 #define MENTOC_VEHICLE_MEMBERS_TUPLE ( \
 (int32_t,hp,"#int32_t, hitpoints",250), \
 (int32_t,armor_hp,"#int32_t, armor hitpoints",0), \
-(std::string,vehicle_type,"#string, SUV, MOTORCYCLE,TWO_DOOR,FOUR_DOOR,TRUCK,SEMI,VAN,SWAT_VAN,TANK,JEEP","'SUV;"), \
+(std::string,vehicle_type,"#string, SUV, MOTORCYCLE,TWO_DOOR,FOUR_DOOR,TRUCK,SEMI,VAN,SWAT_VAN,TANK,JEEP","'SUV'"), \
 (int32_t,horsepower,"#int32_t, horsepower", 1000), \
 (int16_t,zero_to_sixty,"#int16_t, amount in seconds to go from zero to 60mph",10), \
 (int32_t,tire_hp,"#int32_t, tire hp",150), \
@@ -785,11 +785,11 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 /** VEHICLE                                                               */
 /**************************************************************************/
 #define MENTOC_FEED_VEHICLE \
-	BOOST_PP_SEQ_FOR_EACH(MENTOC_FEED_TYPE_IMPL,mw_melee,MENTOC_VEHICLE_TYPES_SEQUENCE) \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_FEED_TYPE_IMPL,mw_vehicle,MENTOC_VEHICLE_TYPES_SEQUENCE) \
 	MENTOC_FEED_PARSE_ALL_IMPL(MENTOC_VEHICLE_MEMBERS_TUPLE)
 
 #define MENTOC_EXAMPLE_VEHICLE \
-	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_melee,MENTOC_VEHICLE_TYPES_SEQUENCE)
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_vehicle,MENTOC_VEHICLE_TYPES_SEQUENCE)
 
 
 /*********************************************************/
