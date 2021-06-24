@@ -16,7 +16,7 @@
 
 
 namespace mods::calc_visibility {
-	bool is_visible(player_ptr_t& observer,player_ptr_t& target) {
+	std::tuple<bool,std::string> is_visible_with_reason(player_ptr_t& observer,player_ptr_t& target) {
 		const bool is_dissipated = target->ghost() && target->ghost()->is_dissipated();
 		const bool invisible = target->visibility() == 0;
 		const bool observer_has_thermals = observer->has_thermal_vision();
@@ -57,51 +57,68 @@ namespace mods::calc_visibility {
 
 		if(observer->has_affect(AFF_BLIND)) {
 			mcv_debug("observer is blind");
-			return false;
+			return {false,"observer is blind"};
 		}
 		if(observer->engineer() && target_is_scanned) {
 			mcv_debug("Observer is an engineer and target was scanned - returning true");
-			return true;
+			return {true, "Observer is an engineer and target was scanned - returning true"};
 		}
 		if(target_is_tracked) {
-			return true;
+			return {true,"Target is tracked"};
 		}
 		if(is_dissipated || invisible) {
 			mcv_debug("target dissipated/invisible");
-			return false;
+			return {false,"target dissipated/invisible"};
 		}
 		if(observer_is_affected_by_emp && (observer_has_thermals || observer_has_night_vision) &&
 		        (room_is_dark || smoked_room || room_on_fire)) {
 			mcv_debug("observer affected by emp + special vision + dark/smoked/fire");
-			return false;
+			return {false,"observer affected by emp + special vision + dark/smoked/fire"};
 		}
 		if((observer_has_thermals || observer_has_night_vision) && room_on_fire) {
 			mcv_debug("Observer has special vision and room is on fire");
-			return false;
+			return {false,"Observer has special vision and room is on fire"};
 		}
 		if(observer_has_thermals && (room_is_dark || smoked_room) && !same_room) {
 			mcv_debug("Observer has special vision + dark/smoked + not in same room");
-			return false;
+			return {false,"Observer has special vision + dark/smoked + not in same room"};
 		}
 		if(observer_has_night_vision && (room_is_dark || smoked_room) && !same_room) {
 			mcv_debug("Observer has night vision + dark/smoked + not in same room");
-			return false;
+			return {false,"Observer has night vision + dark/smoked + not in same room"};
 		}
 		if(target_is_sneaking && (observer_has_thermals || observer_has_night_vision) && !same_room) {
 			mcv_debug("target is sneaking + observer has special vision + not in same room");
-			return false;
+			return {false,"target is sneaking + observer has special vision + not in same room"};
 		}
 		if(target_is_sneaking && !observer_has_thermals && !observer_has_night_vision) {
 			mcv_debug("target is sneaking + observer has normal vision");
-			return false;
+			return {false,"target is sneaking + observer has normal vision"};
 		}
 		if(observer_disoriented && mods::rand::chance(LUCKY_DISORIENTED_VISION_CHANCE()) &&
 		        (target_is_sneaking || target->visibility() <= 250)) {
 			mcv_debug("observer got very lucky");
-			return false;
+			return {false, "observer got very lucky"};
 		}
 		mcv_debug("Target is visible");
-		return true;
+		return {true,"target is visible"};
+	}
+
+
+
+	bool roll_victim_spots_attacker(player_ptr_t& victim,player_ptr_t& attacker,const feedback_t& feedback) {
+		auto s = is_visible_with_reason(victim,attacker);
+		if(std::get<0>(s)) {
+			/** 1) allow attacker to use passive abilities to avoid being spotted TODO */
+			return true;
+		} else {
+			/** initial scan says we can't see our target... */
+			/** 1) allow victim to use passive abilities to see attacker */
+			return false;
+		}
+	}
+	bool is_visible(player_ptr_t& observer,player_ptr_t& target) {
+		return std::get<0>(is_visible_with_reason(observer,target));
 	}
 	bool is_visible(uuid_t observer_uuid,uuid_t target_uuid) {
 		auto target = ptr_by_uuid(target_uuid);

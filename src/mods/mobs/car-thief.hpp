@@ -50,7 +50,7 @@ namespace mods::mobs {
 			void enemy_spotted(room_rnum room,uuid_t player);
 			void set_variation(std::string);
 			void attacked(const feedback_t& feedback);
-			void shotgun_attack_within_range();
+			void melee_attack_within_range();
 			std::pair<bool,std::string> move_to(const direction_t& dir);
 			void move_closer_to_target();
 

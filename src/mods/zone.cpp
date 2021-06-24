@@ -26,7 +26,6 @@ namespace mods::zone {
 	std::vector<room_vnum> dummy_list;
 	std::vector<room_vnum> sign_list;
 
-
 	void build_ammo_locker(room_vnum room) {
 		z_debug("building ammo locker");
 		auto obj = create_object(ITEM_CONTAINER, "ammo-locker.yml");

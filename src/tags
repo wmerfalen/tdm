@@ -772,10 +772,10 @@ CCRED	screen.h	30;"	d
 CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
-CGET	mods/values.hpp	1400;"	d
-CGET	mods/values.hpp	700;"	d
+CGET	mods/values.hpp	1402;"	d
+CGET	mods/values.hpp	701;"	d
 CGET_DEF	mods/values.cpp	20;"	d	file:
-CGET_DEF	mods/values.cpp	2820;"	d	file:
+CGET_DEF	mods/values.cpp	2824;"	d	file:
 CHAFF_NADE	mods/classes/engineer.hpp	/^				CHAFF_NADE,$/;"	e	enum:mods::classes::engineer::ability_t
 CHAFF_NADE	mods/classes/marine.hpp	/^				CHAFF_NADE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 CHAFF_NADE	mods/classes/sniper.hpp	/^				CHAFF_NADE,$/;"	e	enum:mods::classes::sniper::ability_t
@@ -1049,9 +1049,9 @@ DISORIENT	mods/weapon-types.hpp	/^		DISORIENT,$/;"	e	enum:mods::weapon::capabili
 DISPLAY	mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY = "A small LED display on the panel says: ";$/;"	m	struct:mods::mini_games::wires
 DISPLAY_ACMD	mods/players/db-load.hpp	/^		DISPLAY_ACMD,$/;"	e	enum:mods::players::db_load::save_from_t
 DM	telnet.h	55;"	d
-DMG_DEBUG	mods/weapons/damage-decisions.hpp	157;"	d
-DMG_DEBUG	mods/weapons/damage-types.cpp	1114;"	d	file:
-DMG_DUMP	mods/weapons/damage-types.cpp	458;"	d	file:
+DMG_DEBUG	mods/weapons/damage-decisions.hpp	163;"	d
+DMG_DEBUG	mods/weapons/damage-types.cpp	1119;"	d	file:
+DMG_DUMP	mods/weapons/damage-types.cpp	459;"	d	file:
 DO	telnet.h	44;"	d
 DONT	telnet.h	43;"	d
 DONTSET	mods/flags.hpp	/^		DONTSET,$/;"	e	enum:mods::flags::plr
@@ -1918,7 +1918,7 @@ IS_SUPPORT	utils.h	511;"	d
 IS_THIEF	utils.h	506;"	d
 IS_WARRIOR	utils.h	510;"	d
 IS_WEAPON	fight.cpp	130;"	d	file:
-IS_WEAPON	mods/weapons/damage-types.cpp	43;"	d	file:
+IS_WEAPON	mods/weapons/damage-types.cpp	44;"	d	file:
 IS_WEAPON_LOADED	mods/weapon.hpp	15;"	d
 IShared	mods/catch.hpp	/^	struct IShared : NonCopyable {$/;"	s	namespace:Catch
 IStream	mods/catch2.hpp	/^    struct IStream {$/;"	s	namespace:Catch
@@ -2608,11 +2608,9 @@ MENU	config.cpp	/^const char *MENU =$/;"	v
 MESS_FILE	db.h	91;"	d
 METAL_HATCH	structs.h	/^			METAL_HATCH,$/;"	m	struct:room_data	typeref:enum:room_data::
 METAL_WALL	structs.h	/^			METAL_WALL,$/;"	m	struct:room_data	typeref:enum:room_data::
-MFEEDBACK	mods/weapons/damage-decisions.hpp	154;"	d
+MFEEDBACK	mods/weapons/damage-decisions.hpp	160;"	d
 MFEEDBACK	mods/weapons/damage-event-broadcaster.hpp	141;"	d
-MFEEDBACK	mods/weapons/damage-types.cpp	52;"	d	file:
-MG_REPORT	mods/mobs/car-thief.cpp	100;"	d	file:
-MG_REPORT	mods/mobs/car-thief.cpp	91;"	d	file:
+MFEEDBACK	mods/weapons/damage-types.cpp	53;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	87;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	96;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	86;"	d	file:
@@ -2733,12 +2731,12 @@ MOTORCYCLE	mods/weapon.hpp	/^		MOTORCYCLE,$/;"	e	enum:mods::weapon::vehicle_t
 MP5	mods/orm/breacher.hpp	/^		const std::string MP5 = "MP5";$/;"	m	struct:mods::orm::breacher
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_choice_t
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1551;"	d	file:
-MR	mods/player.cpp	1620;"	d	file:
+MR	mods/player.cpp	1552;"	d	file:
+MR	mods/player.cpp	1621;"	d	file:
 MR	structs.cpp	622;"	d	file:
 MR	structs.cpp	633;"	d	file:
-MRC	mods/player.cpp	1552;"	d	file:
-MRC	mods/player.cpp	1621;"	d	file:
+MRC	mods/player.cpp	1553;"	d	file:
+MRC	mods/player.cpp	1622;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
@@ -2924,7 +2922,7 @@ NO_RESULTS	mods/orm/util.hpp	/^	static constexpr int8_t NO_RESULTS = 1;$/;"	m	na
 NO_RESULTS	mods/pq.hpp	/^static constexpr int8_t NO_RESULTS = 1;$/;"	v
 NPC	act.wizard.cpp	2287;"	d	file:
 NPC	mods/scan.hpp	/^			NPC = (1 << 1),$/;"	e	enum:mods::scan::find_type_t
-NPC_SEND_DEBUG	mods/player.cpp	2222;"	d	file:
+NPC_SEND_DEBUG	mods/player.cpp	2223;"	d	file:
 NPC_SEND_DEBUG	mods/player.cpp	36;"	d	file:
 NPC_SEND_DEBUG	mods/player.cpp	41;"	d	file:
 NRM	utils.h	119;"	d
@@ -4378,7 +4376,7 @@ TO_ROOM	comm.h	64;"	d
 TO_ROOM	mods/item.cpp	/^	static constexpr uint8_t TO_ROOM = 1;$/;"	m	namespace:mods::item	file:
 TO_ROOM	mods/weapons/armor-calculator.cpp	22;"	d	file:
 TO_ROOM	mods/weapons/damage-calculator.cpp	22;"	d	file:
-TO_ROOM	mods/weapons/damage-types.cpp	27;"	d	file:
+TO_ROOM	mods/weapons/damage-types.cpp	28;"	d	file:
 TO_ROOM	mods/weapons/reload.cpp	7;"	d	file:
 TO_SLEEP	comm.h	68;"	d
 TO_SLEEP	mods/chat.hpp	12;"	d
@@ -4844,7 +4842,7 @@ Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Yes	mods/catch2.hpp	/^        Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Z	db.cpp	1774;"	d	file:
 Z	db.cpp	1782;"	d	file:
-ZONE_ERROR	mods/zone.cpp	134;"	d	file:
+ZONE_ERROR	mods/zone.cpp	133;"	d	file:
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
 Z_KINGS_C	castle.cpp	31;"	d	file:
@@ -5048,7 +5046,6 @@ __MENTOC_MODS_MOBS_ROOM_WATCHING_HEADER__	mods/mobs/room-watching.hpp	2;"	d
 __MENTOC_MODS_MOBS_SMART_MOB_HEADER__	mods/mobs/smart-mob.hpp	2;"	d
 __MENTOC_MODS_MOBS_car_thief_BEHAVIOUR_TREE_HEADER__	mods/mobs/car-thief-behaviour-tree.hpp	2;"	d
 __MENTOC_MODS_MOBS_car_thief_HEADER__	mods/mobs/car-thief.hpp	2;"	d
-__MENTOC_MODS_MOBS_car_thief_SHOW_DEBUG_OUTPUT__	mods/mobs/car-thief.cpp	9;"	d	file:
 __MENTOC_MODS_MOBS_mp_shotgunner_HEADER__	mods/mobs/mp-shotgunner.hpp	2;"	d
 __MENTOC_MODS_MOB_EQUIPMENT_HEADER__	mods/mob-equipment.hpp	2;"	d
 __MENTOC_MODS_MOB_ROAM_HEADER__	mods/mob-roam.hpp	2;"	d
@@ -5817,7 +5814,6 @@ can_roam_to	mods/mob-roam.cpp	/^	bool can_roam_to(char_data* npc, room_rnum room
 can_see_player	mods/sensor-grenade.cpp	/^	bool can_see_player(uuid_t nade,player_ptr_t& target) {$/;"	f	namespace:mods::sensor_grenade
 can_see_through_fire	mods/rooms.hpp	/^	static inline bool can_see_through_fire(room_rnum room) {$/;"	f	namespace:mods::rooms
 can_snipe	mods/player.cpp	/^	bool player::can_snipe(player_ptr_t target) {$/;"	f	class:mods::player
-can_still_see_target	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode can_still_see_target() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 can_still_see_target	mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto can_still_see_target() {$/;"	f	namespace:mods::mobs::lowly_security_behaviour_tree
 can_still_see_target	mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto can_still_see_target() {$/;"	f	namespace:mods::mobs::mini_gunner_behaviour_tree
 can_still_see_target	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode can_still_see_target() {$/;"	f	namespace:mods::mobs::mp_shotgunner_behaviour_tree
@@ -5858,7 +5854,7 @@ cd	mods/drone.hpp	/^			char_data* cd() const {$/;"	f	struct:mods::drone_impl
 cd	mods/mobs/mini-gunner.cpp	/^	char_data* mini_gunner::cd() {$/;"	f	class:mods::mobs::mini_gunner
 cd	mods/mobs/smart-mob.cpp	/^	char_data* smart_mob::cd() {$/;"	f	class:mods::mobs::smart_mob
 cd	mods/player.hpp	/^			char_data* cd() const {$/;"	f	struct:mods::player
-cdebug	mods/weapons/damage-decisions.hpp	129;"	d
+cdebug	mods/weapons/damage-decisions.hpp	135;"	d
 cdebug	mods/weapons/damage-decisions.hpp	2;"	d
 cdebug	mods/weapons/damage-decisions.hpp	4;"	d
 ch	mods/scan.hpp	/^			char_data* ch;$/;"	m	struct:mods::scan::__anon4
@@ -6489,7 +6485,7 @@ db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	f	names
 db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob_vnum,str_map_t values) {$/;"	f	namespace:mods::mobs::mg::orm
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	f
 dbg	mods/acl/config-parser.hpp	20;"	d
-dbg	mods/player.cpp	2219;"	d	file:
+dbg	mods/player.cpp	2220;"	d	file:
 dbg	mods/player.cpp	33;"	d	file:
 dbg	mods/player.cpp	38;"	d	file:
 dbg_blu	mods/acl/config-parser.hpp	25;"	d
@@ -7183,7 +7179,7 @@ drone_impl	mods/drone.hpp	/^	struct drone_impl {$/;"	s	namespace:mods
 drone_scan_room	mods/scan.cpp	/^	std::vector<uuid_t> drone_scan_room(room_rnum room) {$/;"	f	namespace:mods::scan
 drone_simulate	mods/player.hpp	/^			bool& drone_simulate() {$/;"	f	struct:mods::player
 drone_uuid	mods/player.hpp	/^			uuid_t& drone_uuid() {$/;"	f	struct:mods::player
-dsd	mods/player.cpp	2221;"	d	file:
+dsd	mods/player.cpp	2222;"	d	file:
 dsd	mods/player.cpp	35;"	d	file:
 dsd	mods/player.cpp	40;"	d	file:
 dts_are_dumps	config.cpp	/^int dts_are_dumps = YES;$/;"	v
@@ -7191,8 +7187,8 @@ dty_debug	mods/weapons/armor-calculator.cpp	16;"	d	file:
 dty_debug	mods/weapons/armor-calculator.cpp	18;"	d	file:
 dty_debug	mods/weapons/damage-calculator.cpp	16;"	d	file:
 dty_debug	mods/weapons/damage-calculator.cpp	18;"	d	file:
-dty_debug	mods/weapons/damage-types.cpp	20;"	d	file:
-dty_debug	mods/weapons/damage-types.cpp	22;"	d	file:
+dty_debug	mods/weapons/damage-types.cpp	21;"	d	file:
+dty_debug	mods/weapons/damage-types.cpp	23;"	d	file:
 dty_debug	mods/weapons/reload.cpp	5;"	d	file:
 duktape_context	mods/js.cpp	/^		static duk_context* duktape_context;$/;"	m	namespace:mods::js	file:
 dummy_list	mods/zone.cpp	/^	std::vector<room_vnum> dummy_list;$/;"	m	namespace:mods::zone	file:
@@ -7310,7 +7306,7 @@ env	mods/lmdb/db.hpp	/^			std::unique_ptr<gdns_env> env;$/;"	m	struct:gdns::lmdb
 epoch_string	mods/date-time.cpp	/^	std::string epoch_string() {$/;"	f	namespace:mods::date_time::irl
 epoll_ev	comm.cpp	/^epoll_event epoll_ev;$/;"	v
 epoll_fd	comm.cpp	/^int epoll_fd = -1;$/;"	v
-eqd	mods/player.cpp	2220;"	d	file:
+eqd	mods/player.cpp	2221;"	d	file:
 eqd	mods/player.cpp	34;"	d	file:
 eqd	mods/player.cpp	39;"	d	file:
 equip	mods/armor/advanced-protection.cpp	/^	void advanced_protection::equip(int where,uuid_t obj) {$/;"	f	class:mods::armor::advanced_protection
@@ -7731,6 +7727,7 @@ find_targets	mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto find_targets() {$/
 find_targets	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode find_targets() {$/;"	f	namespace:mods::mobs::mp_shotgunner_behaviour_tree
 find_targets_with_compromised_line_of_sight	mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto find_targets_with_compromised_line_of_sight() {$/;"	f	namespace:mods::mobs::mini_gunner_behaviour_tree
 find_type_t	mods/scan.hpp	/^		enum find_type_t {$/;"	g	namespace:mods::scan
+find_vehicle_near_me	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode find_vehicle_near_me() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 finished	mods/player-contract-instance.cpp	/^	bool player_contract_instance::finished() {$/;"	f	class:mods::contracts::player_contract_instance
 fire	mods/projectile.cpp	/^			int fire;$/;"	m	struct:mods::projectile::explosive_damage_t	file:
 fire_damage	mods/projectile.cpp	/^		int fire_damage(player_ptr_t victim,obj_ptr_t projectile) {$/;"	f	namespace:mods::projectile
@@ -8079,6 +8076,7 @@ get_hash_obj_vis	shop.cpp	/^struct obj_data *get_hash_obj_vis(char_data *ch, cha
 get_heading	mods/mobs/mini-gunner.hpp	/^			int get_heading() const {$/;"	f	struct:mods::mobs::mini_gunner
 get_heading	mods/mobs/smart-mob.hpp	/^			int get_heading() const {$/;"	f	struct:mods::mobs::smart_mob
 get_hostile_targets	mods/mobs/smart-mob.cpp	/^	const vec_t<uuid_t> smart_mob::get_hostile_targets() const {$/;"	f	class:mods::mobs::smart_mob
+get_hostile_toward_witnesses	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode get_hostile_toward_witnesses() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 get_hour	mods/date-time.cpp	/^	std::string get_hour() {$/;"	f	namespace:mods::date_time
 get_hunting	mods/mobs/mini-gunner.cpp	/^	uuidvec_t& mini_gunner::get_hunting() {$/;"	f	class:mods::mobs::mini_gunner
 get_hunting	mods/mobs/smart-mob.cpp	/^	uuidvec_t& smart_mob::get_hunting() {$/;"	f	class:mods::mobs::smart_mob
@@ -8946,6 +8944,7 @@ is_using_pluck_filter	mods/lmdb.cpp	/^	bool _db_handle::is_using_pluck_filter() 
 is_valid_name	login.cpp	/^	bool is_valid_name(std::string_view name){$/;"	f	namespace:login
 is_visible	mods/calc-visibility.cpp	/^	bool is_visible(player_ptr_t& observer,player_ptr_t& target) {$/;"	f	namespace:mods::calc_visibility
 is_visible	mods/calc-visibility.cpp	/^	bool is_visible(uuid_t observer_uuid,uuid_t target_uuid) {$/;"	f	namespace:mods::calc_visibility
+is_visible_with_reason	mods/calc-visibility.cpp	/^	std::tuple<bool,std::string> is_visible_with_reason(player_ptr_t& observer,player_ptr_t& target) {$/;"	f	namespace:mods::calc_visibility
 is_weapon_loaded	mods/player.cpp	/^	bool player::is_weapon_loaded() {$/;"	f	class:mods::player
 is_wield_position	mods/object-utils.cpp	/^	bool is_wield_position(int where) {$/;"	f	namespace:mods::object_utils
 is_yaml_type	mods/util.cpp	/^	bool is_yaml_type(std::string_view type) {$/;"	f	namespace:mods::util
@@ -9272,6 +9271,7 @@ look_at_target	act.informative.cpp	/^void look_at_target(char_data *ch, char *ar
 look_in_direction	act.informative.cpp	/^void look_in_direction(char_data *ch, int dir) {$/;"	f
 look_in_obj	act.informative.cpp	/^void look_in_obj(char_data *ch, char *arg) {$/;"	f
 look_into_camera_feed	act.informative.cpp	/^void look_into_camera_feed(player_ptr_t& player, obj_data* obj, int mode) {$/;"	f
+look_suspicious	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode look_suspicious() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 loops	mods/loops.cpp	/^namespace mods::loops {$/;"	n	class:mods	file:
 loops	mods/loops.hpp	/^namespace mods::loops {$/;"	n	class:mods
 loot	mods/init.hpp	/^INIT(mods::loot);$/;"	v
@@ -9305,8 +9305,8 @@ lsg_debug	mods/mobs/lowly-security.cpp	179;"	d	file:
 lsg_debug	mods/mobs/lowly-security.cpp	9;"	d	file:
 ltrim	mods/lmdb/db.hpp	/^		static inline void ltrim(std::string &s) {$/;"	f	struct:gdns::util
 ltrim_copy	mods/lmdb/db.hpp	/^		static inline std::string ltrim_copy(std::string s) {$/;"	f	struct:gdns::util
-m	mods/mobs/car-thief.cpp	113;"	d	file:
-m	mods/mobs/car-thief.cpp	305;"	d	file:
+m	mods/mobs/car-thief.cpp	227;"	d	file:
+m	mods/mobs/car-thief.cpp	96;"	d	file:
 m	mods/mobs/mp-shotgunner.cpp	113;"	d	file:
 m	mods/mobs/mp-shotgunner.cpp	305;"	d	file:
 m	random.cpp	45;"	d	file:
@@ -9407,7 +9407,7 @@ m_class_capability	mods/player.hpp	/^			class_capability_t m_class_capability;$/
 m_class_string	mods/player.hpp	/^			mods::string m_class_string;$/;"	m	struct:mods::player
 m_claymore_charges	mods/classes/sniper.hpp	/^			uint8_t m_claymore_charges;$/;"	m	struct:mods::classes::sniper
 m_claymore_count	mods/classes/forge.hpp	/^			uint8_t m_claymore_count;$/;"	m	struct:mods::classes::forge
-m_claymore_instances	mods/classes/ghost.hpp	/^			std::vector<uuid_t> m_claymore_instances;$/;"	m	struct:mods::classes::ghost
+m_claymore_count	mods/classes/ghost.hpp	/^			uint8_t m_claymore_count;$/;"	m	struct:mods::classes::ghost
 m_claymores	mods/classes/forge.hpp	/^			std::deque<obj_ptr_t> m_claymores;$/;"	m	struct:mods::classes::forge
 m_clear_status	mods/lmdb.hpp	/^			void m_clear_status() {$/;"	f	struct:mods::lmdb::_db_handle
 m_closed	mods/lmdb.hpp	/^			bool m_closed;$/;"	m	struct:mods::lmdb::_db_handle
@@ -9559,7 +9559,13 @@ m_debug	mods/migrations.cpp	5;"	d	file:
 m_debug	mods/migrations.cpp	70;"	d	file:
 m_debug	mods/mobs/car-thief-behaviour-tree.cpp	14;"	d	file:
 m_debug	mods/mobs/car-thief-behaviour-tree.cpp	16;"	d	file:
-m_debug	mods/mobs/car-thief-behaviour-tree.cpp	526;"	d	file:
+m_debug	mods/mobs/car-thief-behaviour-tree.cpp	438;"	d	file:
+m_debug	mods/mobs/car-thief.cpp	11;"	d	file:
+m_debug	mods/mobs/car-thief.cpp	13;"	d	file:
+m_debug	mods/mobs/car-thief.cpp	342;"	d	file:
+m_debug	mods/mobs/extended-types.cpp	10;"	d	file:
+m_debug	mods/mobs/extended-types.cpp	12;"	d	file:
+m_debug	mods/mobs/extended-types.cpp	88;"	d	file:
 m_debug	mods/mobs/lowly-security-behaviour-tree.hpp	10;"	d
 m_debug	mods/mobs/lowly-security-behaviour-tree.hpp	386;"	d
 m_debug	mods/mobs/lowly-security-behaviour-tree.hpp	8;"	d
@@ -10064,7 +10070,6 @@ make	mods/weapons/smg-mp5.cpp	/^	obj_data_ptr_t mp5::make(){$/;"	f	class:mods::w
 make	mods/weapons/sniper-rifle-l96aw.cpp	/^	obj_data_ptr_t l96aw::make(){$/;"	f	class:mods::weapons::sniper_rifle::l96aw
 make	mods/weapons/sniper-rifle-psg1.cpp	/^	obj_data_ptr_t psg1::make(){$/;"	f	class:mods::weapons::sniper_rifle::psg1
 makeSafe	mods/catch.hpp	/^			static type makeSafe(bool value) {$/;"	f	class:Catch::SafeBool
-make_car_thief_backup	mods/mobs/car-thief-behaviour-tree.cpp	/^	void make_car_thief_backup(TNode& tree) {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 make_car_thief_engage	mods/mobs/car-thief-behaviour-tree.cpp	/^	void make_car_thief_engage(TNode& tree) {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 make_car_thief_hostile	mods/mobs/car-thief-behaviour-tree.cpp	/^	void make_car_thief_hostile(TNode& tree) {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 make_car_thief_roam	mods/mobs/car-thief-behaviour-tree.cpp	/^	void make_car_thief_roam(TNode& tree) {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
@@ -10151,10 +10156,10 @@ mc_debug	mods/query-objects.cpp	11;"	d	file:
 mc_debug	mods/query-objects.cpp	13;"	d	file:
 mc_debug	mods/query-objects.cpp	257;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	11;"	d	file:
-mcv_debug	mods/calc-visibility.cpp	134;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	14;"	d	file:
-md	mods/weapons/damage-types.cpp	836;"	d	file:
-md	mods/weapons/damage-types.cpp	905;"	d	file:
+mcv_debug	mods/calc-visibility.cpp	151;"	d	file:
+md	mods/weapons/damage-types.cpp	841;"	d	file:
+md	mods/weapons/damage-types.cpp	910;"	d	file:
 mdo_debug	mods/deep-object-parser.hpp	11;"	d
 mdo_debug	mods/deep-object-parser.hpp	22;"	d
 mdo_debug	mods/rifle-attachments.hpp	116;"	d
@@ -10176,6 +10181,8 @@ medic_player_id	mods/orm/medic.hpp	/^		uint64_t medic_player_id;$/;"	m	struct:mo
 medic_ptrs	mods/replenish.cpp	/^	static std::map<uuid_t,medic_ptr_t> medic_ptrs;$/;"	m	namespace:mods::replenish	file:
 medical	mods/player.hpp	/^			uint16_t& medical() {$/;"	f	struct:mods::player
 melee	mods/item-types.hpp	/^	enum melee {$/;"	g	namespace:mods::weapon::type
+melee_attack	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode melee_attack() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
+melee_attack_within_range	mods/mobs/car-thief.cpp	/^	void car_thief::melee_attack_within_range() {$/;"	f	class:mods::mobs::car_thief
 melee_damage_with_feedback	mods/weapons/damage-types.cpp	/^	feedback_t melee_damage_with_feedback($/;"	f	namespace:mods::weapons::damage_types
 melee_description_t	mods/yaml.hpp	/^		melee_description_t()  {$/;"	f	struct:mods::yaml::melee_description_t
 melee_description_t	mods/yaml.hpp	/^	struct melee_description_t : public yaml_description_t {$/;"	s	namespace:mods::yaml
@@ -10476,9 +10483,6 @@ mp_shotgunner_behaviour_tree	mods/mobs/mp-shotgunner-behaviour-tree.hpp	/^namesp
 mp_shotgunner_btree	mods/mobs/mp-shotgunner.cpp	/^	namespace mp_shotgunner_btree {$/;"	n	namespace:mods::mobs	file:
 mp_shotgunner_ptr	mods/mobs/mp-shotgunner.hpp	/^static inline std::shared_ptr<mods::mobs::mp_shotgunner> mp_shotgunner_ptr(const uuid_t& u) {$/;"	f
 mpl_	mods/catch2.hpp	/^namespace mpl_{$/;"	n
-mps_debug	mods/mobs/car-thief.cpp	11;"	d	file:
-mps_debug	mods/mobs/car-thief.cpp	13;"	d	file:
-mps_debug	mods/mobs/car-thief.cpp	420;"	d	file:
 mps_debug	mods/mobs/mp-shotgunner.cpp	11;"	d	file:
 mps_debug	mods/mobs/mp-shotgunner.cpp	13;"	d	file:
 mps_debug	mods/mobs/mp-shotgunner.cpp	420;"	d	file:
@@ -11597,7 +11601,6 @@ random_key_string	mods/values.cpp	/^		std::string random_key_string(std::string 
 random_odd_number	mods/mini-games.cpp	/^	int random_odd_number(int from,int to) {$/;"	f	namespace:mods::mini_games
 random_rifle_attribute	mods/forge-engine/generator.cpp	/^	rifle_attributes_t generator::random_rifle_attribute() {$/;"	f	class:mods::forge_engine::generator
 random_rifle_type	mods/forge-engine/generator.cpp	/^	rifle_types_t generator::random_rifle_type() {$/;"	f	class:mods::forge_engine::generator
-random_trivial_action	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode random_trivial_action() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 random_trivial_action	mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto random_trivial_action() {$/;"	f	namespace:mods::mobs::lowly_security_behaviour_tree
 random_trivial_action	mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto random_trivial_action() {$/;"	f	namespace:mods::mobs::mini_gunner_behaviour_tree
 random_trivial_action	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode random_trivial_action() {$/;"	f	namespace:mods::mobs::mp_shotgunner_behaviour_tree
@@ -12019,6 +12022,7 @@ roll_heat_accumulation_hp_gain	mods/classes/pyrexia.cpp	/^		uint16_t pyrexia::ro
 roll_incendiary_shot	mods/classes/pyrexia.cpp	/^		uint16_t pyrexia::roll_incendiary_shot(obj_ptr_t& attacking_weapon,uuid_t target){$/;"	f	class:mods::classes::pyrexia
 roll_real_abils	class.cpp	/^void roll_real_abils(char_data *ch) {$/;"	f
 roll_skill_success	mods/classes/base.cpp	/^	std::tuple<bool,std::string> base::roll_skill_success(uint8_t skill) {$/;"	f	class:mods::classes::base
+roll_victim_spots_attacker	mods/calc-visibility.cpp	/^	bool roll_victim_spots_attacker(player_ptr_t& victim,player_ptr_t& attacker,const feedback_t& feedback) {$/;"	f	namespace:mods::calc_visibility
 roll_weapon	mods/weapons/damage-calculator.cpp	/^		int16_t roll_weapon($/;"	f	namespace:mods::weapons::damage_calculator::algorithm_A
 room	graph.cpp	/^	room_rnum room;$/;"	m	struct:bfs_queue_struct	file:
 room	mods/camera.cpp	/^	int camera::room() {$/;"	f	class:mods::camera
@@ -12130,7 +12134,7 @@ rr_debug	mods/intimidate.cpp	8;"	d	file:
 rr_debug	mods/intimidate.cpp	95;"	d	file:
 rr_debug	mods/zone.cpp	12;"	d	file:
 rr_debug	mods/zone.cpp	15;"	d	file:
-rr_debug	mods/zone.cpp	372;"	d	file:
+rr_debug	mods/zone.cpp	371;"	d	file:
 rst_text	mods/acl/color.hpp	6;"	d
 rtrim	mods/lmdb/db.hpp	/^		static inline void rtrim(std::string &s) {$/;"	f	struct:gdns::util
 rtrim_copy	mods/lmdb/db.hpp	/^		static inline std::string rtrim_copy(std::string s) {$/;"	f	struct:gdns::util
@@ -12306,9 +12310,9 @@ scan	mods/scan.cpp	/^namespace mods::scan {$/;"	n	class:mods	file:
 scan	mods/scan.hpp	/^	namespace scan {$/;"	n	namespace:mods
 scan_file	mail.cpp	/^int scan_file(void) {$/;"	f
 scan_file	mods/hell.hpp	/^	constexpr inline bool scan_file = false;$/;"	m	namespace:mods::hell
+scan_for_witness	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode scan_for_witness() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 scan_from_room	mods/sensor-grenade.cpp	/^	std::vector<int> scan_from_room(int blast_radius,const room_rnum& room_number) {$/;"	f	namespace:mods::sensor_grenade
 scan_results	mods/players/search.hpp	/^			typedef std::array<std::vector<std::string>,6> scan_results;$/;"	t	namespace:mods::player::util
-scan_to_find_hostile_activity	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode scan_to_find_hostile_activity() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 scan_to_find_hostile_activity	mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto scan_to_find_hostile_activity() {$/;"	f	namespace:mods::mobs::lowly_security_behaviour_tree
 scan_to_find_hostile_activity	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode scan_to_find_hostile_activity() {$/;"	f	namespace:mods::mobs::mp_shotgunner_behaviour_tree
 scan_to_find_targets	mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto scan_to_find_targets() {$/;"	f	namespace:mods::mobs::mini_gunner_behaviour_tree
@@ -12468,11 +12472,10 @@ set_base_command	mods/builder/slotted-builder.hpp	/^			void set_base_command(std
 set_behaviour_tree	mods/mobs/mini-gunner.cpp	/^	void mini_gunner::set_behaviour_tree(std::string_view name) {$/;"	f	class:mods::mobs::mini_gunner
 set_behaviour_tree	mods/mobs/smart-mob.cpp	/^	void smart_mob::set_behaviour_tree(std::string_view name) {$/;"	f	class:mods::mobs::smart_mob
 set_behaviour_tree	structs.cpp	/^void mob_special_data::set_behaviour_tree(std::string_view name) {$/;"	f	class:mob_special_data
-set_behaviour_tree_to_engage	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode set_behaviour_tree_to_engage() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 set_behaviour_tree_to_engage	mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto set_behaviour_tree_to_engage() {$/;"	f	namespace:mods::mobs::lowly_security_behaviour_tree
 set_behaviour_tree_to_engage	mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto set_behaviour_tree_to_engage() {$/;"	f	namespace:mods::mobs::mini_gunner_behaviour_tree
 set_behaviour_tree_to_engage	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode set_behaviour_tree_to_engage() {$/;"	f	namespace:mods::mobs::mp_shotgunner_behaviour_tree
-set_behaviour_tree_to_pursuit	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode set_behaviour_tree_to_pursuit() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
+set_behaviour_tree_to_hostile	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode set_behaviour_tree_to_hostile() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 set_behaviour_tree_to_pursuit	mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto set_behaviour_tree_to_pursuit() {$/;"	f	namespace:mods::mobs::lowly_security_behaviour_tree
 set_behaviour_tree_to_pursuit	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode set_behaviour_tree_to_pursuit() {$/;"	f	namespace:mods::mobs::mp_shotgunner_behaviour_tree
 set_breacher	mods/player.cpp	/^	void player::set_breacher(std::shared_ptr<mods::classes::breacher> g) {$/;"	f	class:mods::player
@@ -12705,9 +12708,7 @@ shorthand	mods/classes/sniper.cpp	/^	struct shorthand {$/;"	s	namespace:mods::cl
 shorthand_page	mods/classes/base.cpp	/^	std::string base::shorthand_page() {$/;"	f	class:mods::classes::base
 shotgun	mods/weapons/shotgun-sasg12.cpp	/^namespace mods::weapons::shotgun {$/;"	n	class:mods::weapons	file:
 shotgun	mods/weapons/shotgun-sasg12.hpp	/^namespace mods::weapons::shotgun {$/;"	n	class:mods::weapons
-shotgun_attack	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode shotgun_attack() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 shotgun_attack	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode shotgun_attack() {$/;"	f	namespace:mods::mobs::mp_shotgunner_behaviour_tree
-shotgun_attack_within_range	mods/mobs/car-thief.cpp	/^	void car_thief::shotgun_attack_within_range() {$/;"	f	class:mods::mobs::car_thief
 shotgun_attack_within_range	mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::shotgun_attack_within_range() {$/;"	f	class:mods::mobs::mp_shotgunner
 shotguns	mods/forge-engine/generated-rifle.cpp	/^	static std::vector<std::string> shotguns;$/;"	m	namespace:mods::forge_engine	file:
 shouldContinueOnFailure	mods/catch.hpp	/^	inline bool shouldContinueOnFailure(int flags)    {$/;"	f	namespace:Catch
@@ -12927,7 +12928,6 @@ spray	mods/mobs/car-thief.cpp	/^	feedback_t& car_thief::spray(uint8_t dir) {$/;"
 spray	mods/mobs/lowly-security.cpp	/^	feedback_t& lowly_security::spray(uint8_t dir) {$/;"	f	class:mods::mobs::lowly_security
 spray	mods/mobs/mini-gunner.cpp	/^	feedback_t& mini_gunner::spray(int dir) {$/;"	f	class:mods::mobs::mini_gunner
 spray	mods/mobs/mp-shotgunner.cpp	/^	feedback_t& mp_shotgunner::spray(uint8_t dir) {$/;"	f	class:mods::mobs::mp_shotgunner
-spray_direction	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode spray_direction() {$/;"	f	namespace:mods::mobs::car_thief_behaviour_tree
 spray_direction	mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto spray_direction() {$/;"	f	namespace:mods::mobs::lowly_security_behaviour_tree
 spray_direction	mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto spray_direction() {$/;"	f	namespace:mods::mobs::mini_gunner_behaviour_tree
 spray_direction	mods/mobs/mini-gunner.hpp	/^			int spray_direction;$/;"	m	struct:mods::mobs::mini_gunner
@@ -13703,7 +13703,7 @@ weight	mods/player.hpp	/^			ubyte& weight() {$/;"	f	struct:mods::player
 weight	structs.h	/^	int	weight;		\/* Weigt what else                  *\/$/;"	m	struct:obj_flag_data
 weight	structs.h	/^	int	weight;$/;"	m	struct:obj_file_elem
 weight_change_object	act.item.cpp	/^void weight_change_object(struct obj_data *obj, int weight) {$/;"	f
-weighted_direction_decider	mods/mobs/car-thief.cpp	/^		uint8_t weighted_direction_decider(player_ptr_t& mob) {$/;"	f	namespace:mods::mobs::car_thief_btree
+weighted_direction_decider	mods/mobs/car-thief.cpp	/^		uint8_t weighted_direction_decider(player_ptr_t& mob,player_ptr_t victim) {$/;"	f	namespace:mods::mobs::car_thief_btree
 weighted_direction_decider	mods/mobs/lowly-security.cpp	/^		uint8_t weighted_direction_decider(player_ptr_t& mob) {$/;"	f	namespace:mods::mobs::lowly_sec
 weighted_direction_decider	mods/mobs/mini-gunner.cpp	/^	int weighted_direction_decider(player_ptr_t& mob) {$/;"	f	namespace:mods::mobs
 weighted_direction_decider	mods/mobs/mp-shotgunner.cpp	/^		uint8_t weighted_direction_decider(player_ptr_t& mob) {$/;"	f	namespace:mods::mobs::mp_shotgunner_btree
@@ -13804,7 +13804,7 @@ z_debug	mods/intimidate.cpp	7;"	d	file:
 z_debug	mods/intimidate.cpp	96;"	d	file:
 z_debug	mods/zone.cpp	11;"	d	file:
 z_debug	mods/zone.cpp	14;"	d	file:
-z_debug	mods/zone.cpp	373;"	d	file:
+z_debug	mods/zone.cpp	372;"	d	file:
 zone	db.cpp	/^namespace mods::zone {$/;"	n	class:mods	file:
 zone	mods/init.hpp	/^INIT(mods::zone);$/;"	v
 zone	mods/intimidate.cpp	/^namespace mods::zone {$/;"	n	class:mods	file:

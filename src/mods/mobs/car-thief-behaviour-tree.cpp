@@ -28,9 +28,9 @@ namespace mods::mobs::car_thief_behaviour_tree {
 	using vec_player_data = mods::scan::vec_player_data;
 	using TChildNode = mods::behaviour_tree_node<TArgumentType>::child_node_t;
 
-	TChildNode shotgun_attack() {
+	TChildNode melee_attack() {
 		return TNode::create_leaf([](mods::npc& mob) -> TStatus {
-			car_thief_ptr(mob.uuid())->shotgun_attack_within_range();
+			car_thief_ptr(mob.uuid())->melee_attack_within_range();
 			return TStatus::SUCCESS;
 		});
 	}
@@ -73,82 +73,6 @@ namespace mods::mobs::car_thief_behaviour_tree {
 			return TStatus::SUCCESS;
 		});
 	}
-	TChildNode random_trivial_action() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto lsec = car_thief_ptr(mob.uuid());
-			if(!lsec->should_do(car_thief::SHOULD_DO_RANDOM_TRIVIAL)) {
-				return TStatus::SUCCESS;
-			}
-			static constexpr uint8_t RANDOM_THINGS = 4;
-			auto roll = rand_number(1,RANDOM_THINGS);
-			switch(roll) {
-				default:
-					act("$n shifts $s weight and slowly goes back to standing still.",FALSE,mob.cd(),0,0,TO_ROOM);
-					break;
-				case 0:
-					act("$n tilts $s sunglasses to see you with $s eyes.",FALSE,mob.cd(),0,0,TO_ROOM);
-					break;
-				case 1:
-					act("$n scans the room slowly.",0,mob.cd(),0,0,TO_ROOM);
-					break;
-			}
-			return TStatus::SUCCESS;
-		});
-	}
-	/**
-	 * @brief set behaviour tree
-	 *
-	 * @tparam TNode
-	 * @tparam TArgumentType
-	 * @tparam TStatus
-	 *
-	 * @return
-	 */
-	TChildNode set_behaviour_tree_to_engage() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = car_thief_ptr(mob.uuid());
-			mg->set_behaviour_tree("car_thief_engage");
-			return TStatus::SUCCESS;
-		});
-	}
-	TChildNode set_behaviour_tree_to_pursuit() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = car_thief_ptr(mob.uuid());
-			mg->set_behaviour_tree("car_thief_pursuit");
-			return TStatus::SUCCESS;
-		});
-	}
-	/**
-	 * @brief spray dir
-	 *
-	 * @tparam TNode
-	 * @tparam TArgumentType
-	 * @tparam TStatus
-	 *
-	 * @return
-	 */
-	TChildNode spray_direction() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = car_thief_ptr(mob.uuid());
-			mg->spray(mg->get_heading());
-			return TStatus::SUCCESS;
-		});
-	}
-	/**
-	 * @brief returns success if mg can still see a target
-	 *
-	 * @tparam TNode
-	 * @tparam TArgumentType
-	 * @tparam TStatus
-	 *
-	 * @return
-	 */
-	TChildNode can_still_see_target() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = car_thief_ptr(mob.uuid());
-			return TStatus::SUCCESS;
-		});
-	}
 
 	/**
 	 * @brief find targets, set heading and watching
@@ -161,8 +85,8 @@ namespace mods::mobs::car_thief_behaviour_tree {
 	 */
 	TChildNode find_targets() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = car_thief_ptr(mob.uuid());
-			int depth = LOWLY_SECURITY_SCAN_DEPTH();
+			auto ct = car_thief_ptr(mob.uuid());
+			int depth = CAR_THIEF_SCAN_DEPTH();
 			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
 			std::map<int,int> scores;
 			std::map<uint8_t,uuidvec_t> dir_players;
@@ -189,15 +113,22 @@ namespace mods::mobs::car_thief_behaviour_tree {
 				}
 			}
 			if(should_fire == -1) {
-				mg->set_heading(go_random_direction(mob));
+				ct->set_heading(go_random_direction(mob));
 				/** this HAS to be after the previous line because
 				 * in the previous line we are going in a random direction
 				 */
-				mg->watch_directions(world[mg->room()].directions());
+				ct->watch_directions(world[ct->room()].directions());
 				return TStatus::FAILURE;
 			}
-			mg->watch_directions(world[mg->room()].directions());
-			mg->set_heading(should_fire);
+			ct->watch_directions(world[ct->room()].directions());
+			ct->set_heading(should_fire);
+			return TStatus::SUCCESS;
+		});
+	}
+	TChildNode set_behaviour_tree_to_hostile() {
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			auto ct = car_thief_ptr(mob.uuid());
+			ct->set_behaviour_tree("car_thief_hostile");
 			return TStatus::SUCCESS;
 		});
 	}
@@ -330,7 +261,6 @@ namespace mods::mobs::car_thief_behaviour_tree {
 			return TStatus::SUCCESS;
 		});
 	}
-	mods::behaviour_tree_node<mods::npc&>::child_node_t shotgun_attack();
 
 
 	void make_car_thief_engage(TNode& tree) {
@@ -352,79 +282,78 @@ namespace mods::mobs::car_thief_behaviour_tree {
 		tree.append_child(
 		TNode::create_sequence({
 			debug_echo_tree_name("car_thief_engage"),
-			shotgun_attack()
+			melee_attack()
 		})
 		);
 	}
 
-	void make_car_thief_backup(TNode& tree) {
-		/**
-		 * [ backup ]
-		 * [A-1] scan for reported person
-		 * 	[found person]
-		 * 		[1] set heading toward direction
-		 * 		[2] if not in same room, head to that room
-		 * 			[-] repeat until inside same room
-		 * 		[3] fire shotgun at target
-		 * 	[not found]
-		 * 		[1] head towards reported room
-		 * 		[2] loop A-1
-		 *
-		 */
-		tree.append_child(
-		TNode::create_sequence({
-			debug_echo_tree_name("car_thief_backup"),
-			spray_direction(),
-			find_targets(),
-			TNode::create_sequence({
-				can_still_see_target(),
-				shout_random(),
-			})
-		})
-		);
+	TChildNode scan_for_witness() {
+		return TNode::create_selector({
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				const auto& g = car_thief_ptr(mob.uuid());
+				m_debug("scanning for witnesses...");
+				return TStatus::SUCCESS;
+				//return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
+			}),
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				using namespace mods::doors;
+				const auto& g = car_thief_ptr(mob.uuid());
+				return TStatus::SUCCESS;
+			}),
+		});
 	}
+
+	TChildNode find_vehicle_near_me() {
+		return TNode::create_selector({
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				const auto& g = car_thief_ptr(mob.uuid());
+				m_debug("finding vehicle near me");
+				return TStatus::SUCCESS;
+				//return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
+			}),
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				using namespace mods::doors;
+				const auto& g = car_thief_ptr(mob.uuid());
+				return TStatus::SUCCESS;
+			}),
+		});
+	}
+
+	TChildNode look_suspicious() {
+		return TNode::create_selector({
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				const auto& g = car_thief_ptr(mob.uuid());
+				m_debug("look suspicious");
+				return TStatus::SUCCESS;
+				//return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
+			}),
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				using namespace mods::doors;
+				const auto& g = car_thief_ptr(mob.uuid());
+				return TStatus::SUCCESS;
+			}),
+		});
+	}
+
+	TChildNode get_hostile_toward_witnesses() {
+		return TNode::create_selector({
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				const auto& g = car_thief_ptr(mob.uuid());
+				m_debug("get hostile toward witnesses");
+				return TStatus::SUCCESS;
+				//return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
+			}),
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				using namespace mods::doors;
+				const auto& g = car_thief_ptr(mob.uuid());
+				return TStatus::SUCCESS;
+			}),
+		});
+	}
+
 	TChildNode perform_random_non_hostile_action() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto g = car_thief_ptr(mob.uuid());
-			return TStatus::SUCCESS;
-		});
-	}
-	TChildNode scan_to_find_hostile_activity() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto g = car_thief_ptr(mob.uuid());
-			int depth = LOWLY_SECURITY_SCAN_DEPTH();
-			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
-			std::map<int,int> scores;
-			std::map<uint8_t,uuidvec_t> fighting_players;
-			for(auto v : vpd) {
-				auto ptr = ptr_by_uuid(v.uuid);
-				if(!ptr) {
-					continue;
-				}
-				if(!mods::calc_visibility::is_visible(mob.uuid(),v.uuid)) {
-					continue;
-				}
-				if(mods::rooms::is_peaceful(v.room_rnum)) {
-					continue;
-				}
-				if(ptr->fighting() && ptr->fighting()->is_npc()) {
-					++scores[v.direction];
-					fighting_players[v.direction].emplace_back(v.uuid);
-				}
-			}
-			int should_move = -1;
-			int max = 0;
-			for(auto pair : scores) {
-				if(pair.second > max) {
-					max = pair.second;
-					should_move = pair.first;
-				}
-			}
-			g->set_heading(should_move);
-			if(should_move == -1) {
-				return TStatus::FAILURE;
-			}
-			g->save_hostile_targets(fighting_players[should_move]);
 			return TStatus::SUCCESS;
 		});
 	}
@@ -454,17 +383,6 @@ namespace mods::mobs::car_thief_behaviour_tree {
 				}
 				m_debug("mps attempting perform_move 2");
 				return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
-			}),
-			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-				using namespace mods::doors;
-				m_debug("mps last ditch attempt. breaching door");
-				const auto& g = car_thief_ptr(mob.uuid());
-				/** Attempt to breach door */
-				auto obj = create_object(ITEM_EXPLOSIVE,"breach-charge.yml");
-				const auto obj_uuid = obj->uuid;
-				g->player()->equip(std::move(obj),WEAR_HOLD);
-				perform_breach(obj_uuid,mob.uuid(),g->get_heading());
-				return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
 			})
 		});
 
@@ -490,9 +408,10 @@ namespace mods::mobs::car_thief_behaviour_tree {
 		tree.append_child(
 		TNode::create_sequence({
 			debug_echo_tree_name("car_thief_roam"),
-			random_trivial_action(),
-			scan_to_find_hostile_activity(),
-			set_behaviour_tree_to_pursuit()
+			find_vehicle_near_me(),
+			look_suspicious(),
+			scan_for_witness(),
+			get_hostile_toward_witnesses()
 		})
 		);
 
@@ -501,10 +420,6 @@ namespace mods::mobs::car_thief_behaviour_tree {
 		tree.append_child(
 		TNode::create_sequence({
 			debug_echo_tree_name("car_thief_hostile"),
-			move_toward_heading(),
-			report_hostile_activity(),
-			engage_hostile(),
-			set_behaviour_tree_to_engage()
 		})
 		);
 
@@ -514,9 +429,6 @@ namespace mods::mobs::car_thief_behaviour_tree {
 		tree.append_child(
 		TNode::create_sequence({
 			debug_echo_tree_name("car_thief_wimpy"),
-			random_trivial_action(),
-			scan_to_find_hostile_activity(),
-			set_behaviour_tree_to_pursuit()
 		})
 		);
 

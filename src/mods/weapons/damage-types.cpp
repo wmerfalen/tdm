@@ -10,6 +10,7 @@
 #include "elemental.hpp"
 #include "damage-calculator.hpp"
 #include "../mobs/damage-event.hpp"
+#include "../calc-visibility.hpp"
 
 
 #include <variant>
@@ -605,6 +606,11 @@ namespace mods::weapons::damage_types {
 					player->sendln("That target is out of range!");
 					return;
 				}
+				if(!mods::calc_visibility::is_visible(player,victim)) {
+					feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
+					player->damage_event(feedback);
+					return;
+				}
 				rifle_attack(player,weapon,victim,scanned_target.distance,direction);
 				return;
 			}
@@ -741,7 +747,6 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	) {
-		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
 
 		feedback_t feedback;
@@ -851,7 +856,7 @@ namespace mods::weapons::damage_types {
 		feedback.damage = 0;
 		feedback.from_direction = NORTH;
 
-		if(!victim) {
+		if(!victim || !mods::calc_visibility::is_visible(player,victim)) {
 			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
 			player->damage_event(feedback);
 			md("victim not present. ignoring");

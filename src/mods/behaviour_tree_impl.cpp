@@ -280,6 +280,9 @@ namespace mods::behaviour_tree_impl {
 		/**! @NEW_BEHAVIOUR_TREE@ !**/
 		add_tree("mp_shotgunner",mp_shotgunner);
 		add_tree("mp_shotgunner_engage",mp_shotgunner_engage);
+		add_tree("car_thief_roam",car_thief_roam);
+		add_tree("car_thief_hostile",car_thief_hostile);
+		add_tree("car_thief_wimpy",car_thief_wimpy);
 		/**
 		 * Suspicious roaming tree.
 		 */

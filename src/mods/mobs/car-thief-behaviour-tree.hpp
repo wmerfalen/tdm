@@ -36,7 +36,7 @@ namespace mods::mobs::car_thief_behaviour_tree {
 	using TChildNode = mods::behaviour_tree_node<TArgumentType>::child_node_t;
 
 	TChildNode debug_echo_tree_name(str_t name);
-	TChildNode shotgun_attack();
+	TChildNode melee_attack();
 	TChildNode debug_echo_tree_name(str_t name);
 	TChildNode shout_random();
 	TChildNode random_trivial_action();

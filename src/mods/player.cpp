@@ -1426,6 +1426,7 @@ namespace mods {
 					if(!obj) {
 						break;
 					}
+					uncarry(obj);
 					obj_to_room(obj, obj->in_room);
 					mods::object_utils::set_done_installing(obj);
 					if(mods::object_utils::is_claymore(obj)) {

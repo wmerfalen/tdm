@@ -21,7 +21,6 @@ namespace mods::classes {
 		player->send("[stub] file:%s line:%d\r\n",__FILE__,__LINE__);
 	}
 	void ghost::init() {
-		m_claymore_instances.clear();
 		m_scanned.clear();
 		m_player = nullptr;
 		m_dissipate_charges = 10;
@@ -180,20 +179,14 @@ namespace mods::classes {
 		m_dissipated = false;
 	}
 	void ghost::use_claymore(uuid_t object_uuid) {
-		auto it = std::find(m_claymore_instances.begin(),m_claymore_instances.end(),object_uuid);
-		if(it != m_claymore_instances.end()) {
-			m_claymore_instances.erase(it);
-		}
 	}
 	void ghost::replenish() {
 		static uint16_t call_count = 0;
 		++call_count;
 		auto tier = tier(m_player);
 		if((call_count % GHOST_REPLENISH_PULSE()) == 0) {
-			if(m_claymore_instances.size() < GHOST_CLAYMORE_MAX_COUNT() * tier) {
-				auto fatal = create_object(ITEM_EXPLOSIVE,"claymore-mine.yml");
-				m_claymore_instances.emplace_back(fatal->uuid);
-				m_player->carry(fatal);
+			if(m_claymore_count < GHOST_CLAYMORE_MAX_COUNT() * tier) {
+				++m_claymore_count;
 				m_player->sendln("{grn}A ghost class claymore mine has been regenerated.{/grn}");
 			}
 			if(m_dissipate_charges < GHOST_DISSIPATE_CHARGE_MAX_COUNT() * tier) {
@@ -206,7 +199,7 @@ namespace mods::classes {
 		}
 	}
 	uint8_t ghost::claymore_count() const {
-		return m_claymore_instances.size();
+		return m_claymore_count;
 	}
 	std::vector<uuid_t> ghost::get_targets_scanned_by_drone() {
 		std::vector<uuid_t> scanned;

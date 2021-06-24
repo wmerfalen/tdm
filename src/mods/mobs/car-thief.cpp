@@ -5,12 +5,12 @@
 #include "helpers.hpp"
 #include "extended-types.hpp"
 #include "../scan.hpp"
+#include "../calc-visibility.hpp"
 
-#define __MENTOC_MODS_MOBS_car_thief_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_car_thief_SHOW_DEBUG_OUTPUT__
-#define mps_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n";
+#define m_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n";
 #else
-#define mps_debug(a) ;;
+#define m_debug(a) ;;
 #endif
 namespace mods::mobs {
 	/**! @NEW_BEHAVIOUR_TREE@ !**/
@@ -23,11 +23,12 @@ namespace mods::mobs {
 		 * @brief find the room with the most enemies, and go towards that direction
 		 *
 		 * @param mob
+		 * @param victim
 		 *
 		 * @return
 		 */
-		uint8_t weighted_direction_decider(player_ptr_t& mob) {
-			int depth = LOWLY_SECURITY_SCAN_DEPTH();
+		uint8_t weighted_direction_decider(player_ptr_t& mob,player_ptr_t victim) {
+			int depth = CAR_THIEF_SCAN_DEPTH();
 			mods::scan::vec_player_data vpd;
 			mods::scan::los_scan_for_players(mob->cd(),depth,&vpd);
 			std::map<uint8_t,int> scores;
@@ -37,6 +38,9 @@ namespace mods::mobs {
 				}
 				if(mods::rooms::is_peaceful(v.room_rnum)) {
 					continue;
+				}
+				if(victim && victim->uuid() == v.uuid) {
+					scores[v.direction] += 2;
 				}
 				++scores[v.direction];
 			}
@@ -51,13 +55,13 @@ namespace mods::mobs {
 			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
 			if(should_fire == -1) {
 				/** FIXME */
-				mps_debug("[stub] should_fire is -1, choose random direction");
+				m_debug("[stub] should_fire is -1, choose random direction");
 			}
 			return should_fire;
 		}
 	};// end namespace car_thief_btree
 	void car_thief::create(uuid_t mob_uuid, std::string variation) {
-		mps_debug("car_thief create on uuid:" << mob_uuid);
+		m_debug("car_thief create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
 			log("SYSERR: did not find player to populate car_thief with: %d",mob_uuid);
@@ -73,35 +77,14 @@ namespace mods::mobs {
 	 * @param player
 	 */
 	void car_thief::enemy_spotted(room_rnum room,uuid_t player) {
-		mps_debug("##################################################################################" <<
-		          "[car_thief] enemy spotted:" << room << "\n" <<
-		          "##################################################################################");
+		m_debug("##################################################################################" <<
+		        "[car_thief] enemy spotted:" << room << "\n" <<
+		        "##################################################################################");
 		this->spray(player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}
 	void car_thief::set_variation(std::string v) {
-		mps_debug("setting variation: '" << v << "'");
-		this->variation = v;
-		if(v.compare("sentinel") == 0) {
-			auto row = db_get_by_meta("car_thief_sentinel","mgs_mob_vnum",std::to_string(this->cd()->nr));
-			if(row.size() == 0) {
-				mps_debug("[car_thief][set_variation]-> cannot load data from postgres...");
-				return;
-			}
-#define MG_REPORT(A)\
-	mps_debug("[[[[ MINI GUNNER SENTINEL DUMP ]]]]" << \
-	#A << ": '" << row[0][#A].c_str() << "'" << \
-	"[[[[ -- MINI GUNNER SENTINEL DUMP -- ]]]]");
-
-			mps_debug("[status][car_thief][setting variation data]->");
-			MG_REPORT(mgs_face_direction);
-			MG_REPORT(mgs_room_vnum);
-			MG_REPORT(mgs_mob_vnum);
-#undef MG_REPORT
-
-			this->set_heading(mods::globals::dir_int(row[0]["mgs_face_direction"].c_str()[0]));
-			char_to_room(this->cd(),real_room(row[0]["mgs_room_vnum"].as<int>()));
-		}
+		//
 	}
 	str_map_t car_thief::report() {
 		return {{"foo","todo"}};
@@ -119,90 +102,32 @@ namespace mods::mobs {
 		};
 		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const uuid_t& player) {
 			m("pacify events");
-			set_behaviour_tree("car_thief");
+			set_behaviour_tree("car_thief_roam");
 		});
 
-		static const std::vector<de> move_closer = {
-			de::TARGET_IS_OUT_OF_RANGE,
-		};
-
-		player_ptr->register_damage_event_callback(move_closer,[&](const feedback_t& feedback,const uuid_t& player) {
-			m("move closer");
-			this->move_closer_to_target();
-		});
-
-		static const std::vector<de> scan_for_attacker = {
+		static const std::vector<de> enrage_if = {
 			de::ATTACKER_NARROWLY_MISSED_YOU_EVENT,
 			de::HIT_BY_RIFLE_ATTACK,
 			de::HIT_BY_SPRAY_ATTACK,
 			de::YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK,
 			de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK,
-			de::COULDNT_FIND_TARGET_EVENT,
 		};
-		player_ptr->register_damage_event_callback(scan_for_attacker,[&](const feedback_t& feedback,const uuid_t& player) {
-			m("scan for attacker");
-			set_behaviour_tree("car_thief");
-		});
-
-		static const std::vector<de> breakaway_if = {
-			de::HIT_BY_MELEE_ATTACK,
-			de::HIT_BY_BLADED_MELEE_ATTACK,
-			de::HIT_BY_BLUNT_MELEE_ATTACK,
-		};
-		/** motivation of mp shotgunner is to get at optimal range to use shotgun primary weapon.
-		 * Do note, that the shotgun can be used in same room situations and is probably preferred in
-		 * some cases.
-		 */
-		player_ptr->register_damage_event_callback(breakaway_if,[&](const feedback_t& feedback,const uuid_t& player) {
-			auto& room = world[player_ptr->room()];
-			auto victim = ptr_by_uuid(feedback.attacker);
+		player_ptr->register_damage_event_callback(enrage_if,[&](const feedback_t& feedback,const uuid_t& player) {
+			auto attacker = ptr_by_uuid(feedback.attacker);
 			auto weapon = player_ptr->primary();
-			auto secondary = player_ptr->secondary();
 
-			int decision = car_thief_btree::weighted_direction_decider(player_ptr);
-			if(decision == -1) {
-				for(auto dir : room.directions()) {
-					if(mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false) {
-						decision = dir;
-						break;
-					}
-				}
-			}
-			bool can_go = false;
-			switch(player_ptr->position()) {
-				case POS_DEAD:
-				case POS_MORTALLYW:
-				case POS_INCAP:
-				case POS_SLEEPING:
-					break;
-				case POS_STUNNED:
-				case POS_RESTING:
-				case POS_SITTING:
-					break;
-				case POS_FIGHTING:
-				case POS_STANDING:
-					if(player_ptr->fighting() && player_ptr->fighting()->room() == player_ptr->room()) {
-						can_go = mods::rand::chance(10);
-					}
-					break;
-				default:
-					break;
-			}
-			if(can_go) {
-				cd()->mob_specials.previous_room = player_ptr->room();
-				char_from_room(cd());
-				char_to_room(cd(),room.dir_option[decision]->to_room);
-				set_heading(decision);
-				mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,player_ptr->primary(),victim,0,OPPOSITE_DIR(decision));
-			} else {
-				if(mods::object_utils::can_attack_same_room(weapon)) {
-					mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,weapon,victim,0,NORTH);
-				} else if(secondary && mods::object_utils::can_attack_same_room(secondary)) {
-					mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,secondary,victim,0,NORTH);
+			if(player_ptr->room() != attacker->room()) {
+				if(mods::calc_visibility::roll_victim_spots_attacker(player_ptr,attacker,feedback)) {
+					m_debug("car thief (as victim) spots attacker!");
+					auto decision = feedback.from_direction;
+					move_to(decision);
+					set_heading(decision);
 				} else {
-					/** Attempt to fight back with melee attacker */
-					mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,victim);
+					m_debug("car thief (as victim) ***DOES NOT*** spot attacker!");
 				}
+			}
+			if(player_ptr->room() == attacker->room()) {
+				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,attacker);
 			}
 		});
 
@@ -263,31 +188,30 @@ namespace mods::mobs {
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
 			switch(feedback.damage_event) {
 				case de::OUT_OF_AMMO_EVENT:
-					mps_debug("DAMN! OUT OF AMMO!");
+					m_debug("DAMN! OUT OF AMMO!");
 					player_ptr->primary()->rifle_instance->ammo = 255;
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
-					mps_debug("No primary wieldded... wtf?");
+					m_debug("No primary wieldded... wtf?");
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
-					mps_debug("cooldown in effect for primary");
+					m_debug("cooldown in effect for primary");
 					break;
 				case de::COULDNT_FIND_TARGET_EVENT:
-					mps_debug("Can't find target");
+					m_debug("Can't find target");
 					break;
 				default:
-					mps_debug("Weird status. unknown");
+					m_debug("Weird status. unknown");
 					break;
 			}
 		});
 
 		player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
 			if(player_ptr->room() >= world.size()) {
-				std::cerr << red_str("WARNING> mp shotgunner got invalid room id!: ") << player_ptr->room() << ". Staying put!\n";
 				return;
 			}
 			auto& room = world[player_ptr->room()];
-			int decision = car_thief_btree::weighted_direction_decider(player_ptr);
+			int decision = car_thief_btree::weighted_direction_decider(player_ptr,nullptr);
 			if(decision == -1) {
 				for(auto dir : room.directions()) {
 					if(room.dir_option[dir] && mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false) {
@@ -296,10 +220,8 @@ namespace mods::mobs {
 					}
 				}
 			}
-			assert(decision != -1);
 			this->cd()->mob_specials.previous_room = player_ptr->room();
-			char_from_room(this->cd());
-			char_to_room(this->cd(),world[this->room()].dir_option[decision]->to_room);
+			move_to(decision);
 			this->set_heading(decision);
 		});
 #undef m
@@ -344,7 +266,7 @@ namespace mods::mobs {
 	 * @return
 	 */
 	feedback_t& car_thief::spray(uint8_t dir) {
-		mps_debug("SPRAYING: " << dirstr(dir));
+		m_debug("SPRAYING: " << dirstr(dir));
 		this->spray_direction = dir;
 		this->last_attack = mods::weapons::damage_types::spray_direction_with_feedback(player_ptr,dir);
 		this->weapon_heat += 20; /** TODO: */
@@ -364,21 +286,19 @@ namespace mods::mobs {
 		auto room_id = player_ptr->room();
 		auto opt = world[room_id].dir_option[dir];
 		if(opt && opt->to_room <= world.size()) {
-			char_from_room(player_ptr->cd());
-			char_to_room(player_ptr->cd(),opt->to_room);
+			perform_move(player_ptr->cd(),dir,0);
 			return {true,"moved"};
 		}
 		return {false,"stayed"};
 	}
-	void car_thief::shotgun_attack_within_range() {
-		mps_debug("shotgun_attack_within_range");
+	void car_thief::melee_attack_within_range() {
+		m_debug("melee_attack_within_range");
 		if(!m_weapon) {
 			m_weapon = player_ptr->primary();
 		}
-		m_weapon->rifle_instance->ammo = 255;
 		if(m_last_attacker) {
 			if(m_last_attacker->position() == POS_DEAD) {
-				mps_debug("Our target is dead!");
+				m_debug("Our target is dead!");
 				m_attackers.remove(m_last_attacker);
 				m_last_attacker = get_next_attacking_priority();
 			}
@@ -391,15 +311,17 @@ namespace mods::mobs {
 				}
 				continue;
 			}
-			mps_debug("distance:" << results.distance << ", direction: " << results.direction);
+			m_debug("distance:" << results.distance << ", direction: " << results.direction);
 			if(results.distance > m_weapon->rifle()->attributes->max_range) {
 				move_to(results.direction);
 			}
 			m_attackers_last_direction = results.direction;
 
-			auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,player_ptr->primary(),attacker,results.distance,results.direction);
-			if(feedback.hits == 0 || feedback.damage == 0) {
-				continue;
+			if(attacker->room() == player_ptr->room()) {
+				auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,player_ptr->primary(),attacker);
+				if(feedback.hits == 0 || feedback.damage == 0) {
+					continue;
+				}
 			}
 		}
 	}
@@ -417,4 +339,4 @@ namespace mods::mobs {
 		}
 	}
 };
-#undef mps_debug
+#undef m_debug

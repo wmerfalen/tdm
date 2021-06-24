@@ -63,6 +63,7 @@ namespace mods::classes {
 		if(m_claymore_charges == 0) {
 			return {false,"You don't have any claymore charges!",nullptr};
 		}
+		--m_claymore_charges;
 		return {true,"A claymore charge is built",create_object(ITEM_EXPLOSIVE,"claymore-mine.yml")};
 	}
 

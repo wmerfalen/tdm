@@ -57,6 +57,12 @@ namespace mods::weapons::damage_types {
 			return {false,feedback};
 		}
 
+		if(mods::rooms::is_peaceful(player->room())) {
+			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
+			player->damage_event(feedback);
+			return {false,feedback};
+		}
+
 		if(!weapon) {
 			feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
 			player->damage_event(feedback);

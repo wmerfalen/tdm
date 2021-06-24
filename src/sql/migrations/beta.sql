@@ -3296,3 +3296,5 @@ CREATE TABLE public.skill_usage (
 );
 
 ALTER TABLE public.player ADD COLUMN player_practice_sessions INTEGER NOT NULL DEFAULT 1;
+/** sets mini gunner extended types to car thief extended types */
+update public.mobile set mob_special_extended_type=14 where mob_special_extended_type=1;

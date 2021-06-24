@@ -6,39 +6,45 @@
 #include "car-thief.hpp"
 #include "../behaviour_tree_impl.hpp"
 
+#ifdef  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
+#define m_debug(a) mentoc_prefix_debug("m|mobs") << a << "\n";
+#else
+#define m_debug(a) ;;
+#endif
+
 namespace mods::mobs {
 	void decorate(uuid_t mob_id) {
 		auto p = ptr_by_uuid(mob_id);
 		if(!p) {
-			std::cerr << "[mods::mobs::decorate] NOT-FOUND cant find by uuid:" << mob_id << "\n";
+			m_debug("[mods::mobs::decorate] NOT-FOUND cant find by uuid:" << mob_id);
 			return;
 		}
 		auto ch = p->cd();
-		std::cerr << "extended_mob_type for mob_id:'" << ch->mob_specials.extended_mob_type << "', mob_id:'" << mob_id << "'\n";
+		m_debug("extended_mob_type for mob_id:'" << ch->mob_specials.extended_mob_type << "', mob_id:'" << mob_id << "'");
 		switch(ch->mob_specials.extended_mob_type) {
 			default:
 			case extended_types_t::NONE:
-				std::cerr << "[extended mob type]: no extended mob type for mob: ('" << p->name().c_str() << "')\n";
+				m_debug("[extended mob type][" << __FILE__ << "]: no extended mob type for mob: ('" << p->name().c_str() << "')");
 				break;
 			/**! @NEW_BEHAVIOUR_TREE@ !**/
 			case extended_types_t::MP_SHOTGUNNER:
-				std::cerr << "[ found mp shotgunner ]\n";
+				m_debug("[ found mp shotgunner ]");
 				mp_shotgunner::create(mob_id, "normal");
 				break;
 			case extended_types_t::LOWLY_SECURITY:
-				std::cerr << "[ found lowly security guard ]\n";
+				m_debug("[ found lowly security guard ]");
 				lowly_security::create(mob_id, "normal");
 				break;
 			case extended_types_t::MINI_GUNNER:
-				std::cerr << "[ found mini gunner ]\n";
+				m_debug("[ found mini gunner ]");
 				mini_gunner::create(mob_id, "normal");
 				break;
 			case extended_types_t::MINI_GUNNER_SENTINEL:
-				std::cerr << "[ found mini gunner sentinel ]\n";
+				m_debug("[ found mini gunner sentinel ]");
 				mini_gunner::create(mob_id, "sentinel");
 				break;
 			case extended_types_t::CAR_THIEF:
-				std::cerr << "[ found car thief ]\n";
+				m_debug("[ found car thief ]");
 				car_thief::create(mob_id, "normal");
 				break;
 		}
@@ -79,3 +85,4 @@ namespace mods::mobs::extended_types {
 		return ext_map[t];
 	}
 };
+#undef m_debug

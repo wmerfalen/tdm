@@ -93,7 +93,7 @@ namespace mods::classes {
 		private:
 			uint8_t m_dissipate_charges;
 			std::vector<uuid_t> m_scanned;
-			std::vector<uuid_t> m_claymore_instances;
+			uint8_t m_claymore_count;
 			uint8_t m_cryogenic_grenade_count;
 			uint8_t m_flash_underbarrel_charges;
 			ghost_orm_t	m_orm;

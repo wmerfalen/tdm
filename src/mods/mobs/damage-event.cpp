@@ -3,6 +3,7 @@
 #include "mini-gunner.hpp"
 #include "lowly-security.hpp"
 #include "mp-shotgunner.hpp"
+#include "car-thief.hpp"
 #include "../behaviour_tree_impl.hpp"
 #include "extended-types.hpp"
 
@@ -13,7 +14,7 @@ namespace mods::mobs::damage_event {
 		switch(ch->mob_specials.extended_mob_type) {
 			default:
 			case extended_types_t::NONE:
-				std::cerr << "[extended mob type]: no extended mob type for mob: ('" << mob->name().c_str() << "')\n";
+				std::cerr << "[extended mob type][" << __FILE__ << ":" << __LINE__ << "]: no extended mob type for mob: ('" << mob->name().c_str() << "')\n";
 				break;
 			case extended_types_t::MP_SHOTGUNNER:
 				std::cerr << "[ found mp shotgunner ]\n";
@@ -35,6 +36,14 @@ namespace mods::mobs::damage_event {
 				std::cerr << "[ found mini gunner sentinel ]\n";
 				//mini_gunner::create(mob_id, "sentinel");
 				break;
+			case extended_types_t::CAR_THIEF:
+				std::cerr << "[ found car thief ]\n";
+				{
+					auto ct = car_thief_ptr(mob->uuid());
+					ct->set_behaviour_tree("car_thief_hostile");
+					ct->attacked(feedback);
+				}
+				break;
 		}
 		//mods::behaviour_tree_impl::register_mob(ch->uuid);
 	}
@@ -52,9 +61,13 @@ namespace mods::mobs::damage_event {
 		switch(ch->mob_specials.extended_mob_type) {
 			default:
 			case extended_types_t::NONE:
-				std::cerr << "[extended mob type]: no extended mob type for mob: ('" << ch->player.name.c_str() << "')\n";
+				std::cerr << "[extended mob type][" << __FILE__ << ":" << __LINE__ << "]: no extended mob type for mob: ('" << ch->player.name.c_str() << "')\n";
 				break;
 			/**! @NEW_BEHAVIOUR_TREE@ !**/
+			case extended_types_t::CAR_THIEF:
+				std::cerr << "[ found car thief ]\n";
+				//mp_shotgunner::create(mob_id, "normal");
+				break;
 			case extended_types_t::MP_SHOTGUNNER:
 				std::cerr << "[ found mp shotgunner ]\n";
 				//mp_shotgunner::create(mob_id, "normal");
