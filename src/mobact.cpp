@@ -102,10 +102,11 @@ void mobile_activity(void) {
 
 		/* Mob Movement */
 		if(!MOB_FLAGGED(ch, MOB_SENTINEL) && (GET_POS(ch) == POS_STANDING) &&
-		        ((door = rand_number(0, 18)) < NUM_OF_DIRS) && CAN_GO(ch, door) &&
-		        !ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_NOMOB | ROOM_DEATH) &&
-		        (!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
-		         (world[EXIT(ch, door)->to_room].zone == world[IN_ROOM(ch)].zone))) {
+		        ((door = rand_number(0, 18)) < NUM_OF_DIRS) && CAN_GO(ch, door)) {
+			//!ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_NOMOB | ROOM_DEATH) &&
+			//(!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
+			// (world[EXIT(ch, door)->to_room].zone == world[IN_ROOM(ch)].zone))) {
+			std::cerr << "checking if can_roam_to...\n";
 			if(mods::mob_roam::can_roam_to(ch,EXIT(ch,door)->to_room)) {
 				std::cerr << green_str("Can roam to area") << "\n";
 				perform_move(ch, door, 1);

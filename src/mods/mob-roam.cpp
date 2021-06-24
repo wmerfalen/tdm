@@ -8,11 +8,10 @@ namespace mods::mob_roam {
 	static std::vector<std::shared_ptr<mods::mob_roam::roam_recorder>> roam_recorder_data;
 	bool can_roam_to(char_data* npc, room_rnum room_id) {
 		if(room_id >= world.size()) {
-			std::cerr << red_str("can_roam_to received invalid room_id...") << "\n";
 			return false;
 		}
 		const auto& vnum = world[room_id].number;
-		const auto& it = roaming_data.find(npc->nr);
+		const auto& it = roaming_data.find(npc->mob_specials.vnum);
 		if(it == roaming_data.end()) {
 			return false;
 		}

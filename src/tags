@@ -5182,7 +5182,6 @@ __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/runners/movement.cpp	7;"	d	file:
 __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	8;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mp-shotgunner-behaviour-tree.cpp	12;"	d	file:
-__MENTOC_SHOW_BEHAVIOUR_TREE_car_thief_BTREE_DEBUG_OUTPUT__	mods/mobs/car-thief-behaviour-tree.cpp	12;"	d	file:
 __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	14;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1210;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	4;"	d	file:
@@ -9557,9 +9556,9 @@ m_debug	mods/loot.cpp	6;"	d	file:
 m_debug	mods/loot.cpp	8;"	d	file:
 m_debug	mods/migrations.cpp	5;"	d	file:
 m_debug	mods/migrations.cpp	70;"	d	file:
-m_debug	mods/mobs/car-thief-behaviour-tree.cpp	14;"	d	file:
-m_debug	mods/mobs/car-thief-behaviour-tree.cpp	16;"	d	file:
-m_debug	mods/mobs/car-thief-behaviour-tree.cpp	438;"	d	file:
+m_debug	mods/mobs/car-thief-behaviour-tree.cpp	13;"	d	file:
+m_debug	mods/mobs/car-thief-behaviour-tree.cpp	15;"	d	file:
+m_debug	mods/mobs/car-thief-behaviour-tree.cpp	437;"	d	file:
 m_debug	mods/mobs/car-thief.cpp	11;"	d	file:
 m_debug	mods/mobs/car-thief.cpp	13;"	d	file:
 m_debug	mods/mobs/car-thief.cpp	342;"	d	file:
