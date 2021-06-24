@@ -2,6 +2,7 @@
 #include "demolitions.hpp"
 #include "projectile.hpp"
 #include "object-utils.hpp"
+#include "rooms.hpp"
 
 namespace mods::movement {
 	bool char_move_to(player_ptr_t& player,const room_rnum& room) {

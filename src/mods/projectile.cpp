@@ -95,6 +95,8 @@ namespace mods {
 		}
 		void emp_damage(room_rnum& room_id,obj_ptr_t object) {
 			if(mods::rooms::is_peaceful(room_id)) {
+				obj_from_room(object);
+				mods::globals::dispose_object(object->uuid);
 				return;
 			}
 			/** TODO: fill this function */
@@ -258,6 +260,8 @@ namespace mods {
 		    obj_ptr_t device,
 		    uuid_t player_uuid) {
 			if(mods::rooms::is_peaceful(room_id)) {
+				obj_from_room(device);
+				mods::globals::dispose_object(device->uuid);
 				return;
 			}
 			pbr_debug("perform blast radius entry");
@@ -347,6 +351,8 @@ namespace mods {
 			}
 			if(mods::rooms::is_peaceful(victim->room())) {
 				std::cerr << red_str("Not dispatching explosive_damage to peaceful room: ") << victim->room() << "\n";
+				obj_from_room(item);
+				mods::globals::dispose_object(item->uuid);
 				return 0;
 			}
 			auto& attr = item->explosive()->attributes;
@@ -412,6 +418,9 @@ namespace mods {
 				return;
 			}
 			if(mods::rooms::is_peaceful(room_id)) {
+				auto device = optr_by_uuid(object_uuid);
+				obj_from_room(device);
+				mods::globals::dispose_object(object_uuid);
 				return;
 			}
 			explode_debug("explode, calling optr");
@@ -705,6 +714,7 @@ namespace mods {
 				room_rnum room_id = resolve_room(player->room(),direction,depth);
 				if(mods::rooms::is_peaceful(room_id)) {
 					player->sendln("Target room is in the D.M.Z.. Your item has been destroyed.");
+					obj_from_room(object);
 					mods::globals::dispose_object(object->uuid);
 					return;
 				}
