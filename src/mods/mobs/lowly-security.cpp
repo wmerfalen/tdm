@@ -79,7 +79,7 @@ namespace mods::mobs {
 	void lowly_security::set_variation(std::string v) {
 		this->variation = v;
 		if(v.compare("sentinel") == 0) {
-			auto row = db_get_by_meta("lowly_security_sentinel","mgs_mob_vnum",std::to_string(this->cd()->nr));
+			auto row = db_get_by_meta("lowly_security_sentinel","mgs_mob_vnum",std::to_string(this->cd()->mob_specials.vnum));
 			if(row.size() == 0) {
 				lsg_debug("[lowly_security][set_variation]-> cannot load data from postgres...");
 				return;

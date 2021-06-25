@@ -41,6 +41,12 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 #define MOB_AGGR_TO_ALIGN (MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL | MOB_AGGR_GOOD)
 
+#ifdef __MENTOC_MOBACT_ROAM_DEBUG__
+#define m_can_roam(A) std::cerr << "[mobile_activity][can_rom]:" << A << "\n";
+#else
+#define m_can_roam(A)
+#endif
+
 #ifdef __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
 #define bht_debug(a) /**/
 #else
@@ -106,9 +112,8 @@ void mobile_activity(void) {
 			//!ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_NOMOB | ROOM_DEATH) &&
 			//(!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
 			// (world[EXIT(ch, door)->to_room].zone == world[IN_ROOM(ch)].zone))) {
-			std::cerr << "checking if can_roam_to...\n";
 			if(mods::mob_roam::can_roam_to(ch,EXIT(ch,door)->to_room)) {
-				std::cerr << green_str("Can roam to area") << "\n";
+				m_can_roam(green_str("Can roam to area"));
 				perform_move(ch, door, 1);
 			}
 		}
@@ -302,3 +307,4 @@ namespace mods::mobact {
 		mods::interpreter::add_command("mobact", POS_RESTING, do_mobact, LVL_BUILDER,0);
 	}
 };
+#undef m_can_roam

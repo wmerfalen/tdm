@@ -78,7 +78,7 @@ namespace mods::mobs {
 	void mini_gunner::set_variation(std::string v) {
 		this->variation = v;
 		if(v.compare("sentinel") == 0) {
-			auto row = db_get_by_meta("mini_gunner_sentinel","mgs_mob_vnum",std::to_string(this->cd()->nr));
+			auto row = db_get_by_meta("mini_gunner_sentinel","mgs_mob_vnum",std::to_string(this->cd()->mob_specials.vnum));
 			if(row.size() == 0) {
 				mini_debug("[mini_gunner][set_variation]-> cannot load data from postgres...");
 				return;

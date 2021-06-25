@@ -2733,8 +2733,8 @@ MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_cho
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
 MR	mods/player.cpp	1552;"	d	file:
 MR	mods/player.cpp	1621;"	d	file:
-MR	structs.cpp	622;"	d	file:
-MR	structs.cpp	633;"	d	file:
+MR	structs.cpp	623;"	d	file:
+MR	structs.cpp	634;"	d	file:
 MRC	mods/player.cpp	1553;"	d	file:
 MRC	mods/player.cpp	1622;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
@@ -5627,8 +5627,8 @@ bfs_dequeue	graph.cpp	/^void bfs_dequeue(void) {$/;"	f
 bfs_enqueue	graph.cpp	/^void bfs_enqueue(room_rnum room, int dir) {$/;"	f
 bfs_queue_struct	graph.cpp	/^struct bfs_queue_struct {$/;"	s	file:
 bg	mods/acl/color.hpp	/^        namespace bg {$/;"	n	namespace:mods::Color
-bht_debug	mobact.cpp	45;"	d	file:
-bht_debug	mobact.cpp	47;"	d	file:
+bht_debug	mobact.cpp	51;"	d	file:
+bht_debug	mobact.cpp	53;"	d	file:
 bit	mods/deferred.hpp	/^		uint64_t bit;$/;"	m	struct:mods::chunk_affect_t
 bitvector	shop.h	/^	bitvector_t	 bitvector;	\/* Can attack? Use bank? Cast here?	*\/$/;"	m	struct:shop_data
 bitvector	structs.h	/^	long \/*bitvector_t*\/	bitvector;	\/* To set chars bits                *\/$/;"	m	struct:obj_flag_data
@@ -9389,6 +9389,9 @@ m_callbacks	mods/affects.hpp	/^			std::map<TAffects,std::function<void(TEntityId
 m_camera	mods/player.hpp	/^			std::shared_ptr<mods::camera> m_camera;$/;"	m	struct:mods::player
 m_camera_viewing	mods/player.hpp	/^			bool m_camera_viewing;$/;"	m	struct:mods::player
 m_can_attack	mods/player.hpp	/^			bool m_can_attack;$/;"	m	struct:mods::player
+m_can_roam	mobact.cpp	310;"	d	file:
+m_can_roam	mobact.cpp	45;"	d	file:
+m_can_roam	mobact.cpp	47;"	d	file:
 m_capabilities	structs.h	/^		capability_list_t m_capabilities;$/;"	m	struct:obj_data
 m_capture	mods/mob-roam.hpp	/^			bool m_capture;$/;"	m	struct:mods::mob_roam::roam_recorder
 m_capture_output	mods/player.hpp	/^			bool         m_capture_output;$/;"	m	struct:mods::player
@@ -10444,7 +10447,7 @@ mods	mods/util-map.hpp	/^namespace mods {$/;"	n
 mods	mods/yaml.hpp	/^namespace mods {$/;"	n
 mods	structs.cpp	/^namespace mods {$/;"	n	file:
 mods	structs.h	/^namespace mods {$/;"	n
-mods	utils.h	/^namespace mods{$/;"	n
+mods	utils.h	/^namespace mods {$/;"	n
 money_desc	handler.cpp	/^const char *money_desc(int amount) {$/;"	f
 month	mods/date-time.cpp	/^	static uint8_t month;$/;"	m	namespace:mods::date_time	file:
 month_name	constants.cpp	/^const char *month_name[] = {$/;"	v
@@ -10492,9 +10495,9 @@ mpub_intelligence	mods/ai_state.hpp	/^			int32_t mpub_intelligence;$/;"	m	class:
 mpub_lenient	mods/ai_state.hpp	/^			int32_t mpub_lenient;$/;"	m	class:mods::ai_state
 mpub_stunned	mods/ai_state.hpp	/^			uint32_t mpub_stunned;$/;"	m	class:mods::ai_state
 mpub_suspicious	mods/ai_state.hpp	/^			int32_t mpub_suspicious;$/;"	m	class:mods::ai_state
-mq_debug	structs.cpp	468;"	d	file:
-mq_debug	structs.cpp	470;"	d	file:
-mq_debug	structs.cpp	495;"	d	file:
+mq_debug	structs.cpp	469;"	d	file:
+mq_debug	structs.cpp	471;"	d	file:
+mq_debug	structs.cpp	496;"	d	file:
 mra_debug	mods/rooms.hpp	10;"	d
 mra_debug	mods/rooms.hpp	12;"	d
 msg	mods/object-utils.hpp	/^		std::string msg;$/;"	m	struct:mods::object_utils::YamlFeedExceptionInfo

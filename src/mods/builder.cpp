@@ -1192,7 +1192,7 @@ namespace mods::builder {
 			auto result_01 = mods::pq::exec(txn_01,sql_compositor("mobile",&txn_01)
 			                                .select("mob_id")
 			                                .from("mobile")
-			                                .where("mob_virtual_number","=",mods::util::itoa(obj->nr))
+			                                .where("mob_virtual_number","=",mods::util::itoa(obj->mob_specials.vnum))
 			                                .sql()
 			                               );
 			mods::pq::commit(txn_01);
@@ -1206,7 +1206,7 @@ namespace mods::builder {
 			MENTOC_PLAYER_NULL_CHECK(player.description);
 
 			sql_compositor::value_map p_map;
-			p_map["mob_virtual_number"] = mods::util::itoa(obj->nr);
+			p_map["mob_virtual_number"] = mods::util::itoa(obj->mob_specials.vnum);
 			p_map["mob_name"] = obj->player.name.c_str();
 			p_map["mob_short_description"] = obj->player.short_descr.c_str();
 			p_map["mob_long_description"] = obj->player.long_descr.c_str();
@@ -1262,7 +1262,7 @@ namespace mods::builder {
 				sql = sql_compositor("mobile",&txn_02)
 				      .update("mobile")
 				      .set(p_map)
-				      .where("mob_virtual_number","=",mods::util::itoa(obj->nr))
+				      .where("mob_virtual_number","=",mods::util::itoa(obj->mob_specials.vnum))
 				      .sql();
 			} else {
 				//Insert
@@ -2543,7 +2543,7 @@ SUPERCMD(do_mbuild) {
 			auto i_value = mods::util::stoi(arg_vec[1]);
 			unsigned ctr = 0;
 			for(const auto& mob : mob_proto) {
-				if(mob.nr == i_value.value()) {
+				if(mob.mob_specials.vnum == i_value.value()) {
 					ENCODE_STR(ctr);
 					r_success(player,CAT("Index: ",ctr));
 					return;
@@ -2577,7 +2577,7 @@ SUPERCMD(do_mbuild) {
 				mob_vnum v = next_mob_number();
 				mob_proto.emplace_back();
 				mob_proto.back() = mob_proto[i];
-				mob_proto.back().nr = v;
+				mob_proto.back().mob_specials.vnum = v;
 				r_success(player,"Object cloned");
 			}
 			return;
@@ -2804,7 +2804,7 @@ SUPERCMD(do_mbuild) {
 #define MENTOC_SHOW_OBJ(display_name,struct_member) \
 		*player << "{red}" << #display_name << "{/red}: " << obj->struct_member << "\r\n";
 		MENTOC_SHOW_OBJ(name,player.name.c_str());
-		MENTOC_SHOW_OBJ(virtual_number,nr);
+		MENTOC_SHOW_OBJ(virtual_number,mob_specials.vnum);
 		MENTOC_SHOW_OBJ(short_description,player.short_descr.c_str());
 		MENTOC_SHOW_OBJ(long_description,player.long_descr.c_str());
 		MENTOC_SHOW_OBJ(description,player.description.c_str());
@@ -2923,7 +2923,7 @@ SUPERCMD(do_mbuild) {
 					return;
 				}
 				auto opt_vr_number = mods::util::stoi(arg_vec[3]);
-				obj->nr = opt_vr_number.value();
+				obj->mob_specials.vnum = opt_vr_number.value();
 				r_success(player,"Saved");
 				return;
 			}

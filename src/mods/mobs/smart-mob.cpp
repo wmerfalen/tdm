@@ -20,7 +20,7 @@ namespace mods::mobs {
 	void smart_mob::set_variation(std::string v) {
 		this->variation = v;
 		if(v.compare("sentinel") == 0) {
-			auto row = db_get_by_meta("smart_mob_sentinel","mgs_mob_vnum",std::to_string(this->cd()->nr));
+			auto row = db_get_by_meta("smart_mob_sentinel","mgs_mob_vnum",std::to_string(this->cd()->mob_specials.vnum));
 			if(row.size() == 0) {
 				sm_debug("[smart_mob][set_variation]-> cannot load data from postgres...");
 				return;
@@ -69,7 +69,7 @@ namespace mods::mobs {
 		return items;
 	}
 	void smart_mob::populate_from_meqbuild_profile() {
-		this->wear_list = std::move(mods::mob_equipment::fetch_list_by_mob_vnum(this->cd()->nr));
+		this->wear_list = std::move(mods::mob_equipment::fetch_list_by_mob_vnum(this->cd()->mob_specials.vnum));
 	}
 	void smart_mob::bootstrap_equipment() {
 		this->populate_from_meqbuild_profile();

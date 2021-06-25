@@ -209,6 +209,7 @@ void char_data::import(const char_data* o) {
 	uuid = o->uuid;
 	last_fight_timestamp = o->last_fight_timestamp;
 	nr = o->nr;
+	mob_specials.vnum = o->mob_specials.vnum;
 	in_room = o->in_room;
 	was_in_room = o->was_in_room;
 	wait = o->wait;

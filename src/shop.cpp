@@ -1087,7 +1087,7 @@ SPECIAL(shop_keeper) {
 	int shop_nr;
 
 	for(shop_nr = 0; shop_nr <= top_shop; shop_nr++)
-		if(SHOP_KEEPER(shop_nr) == keeper->nr) {
+		if(SHOP_KEEPER(shop_nr) == keeper->mob_specials.vnum) {
 			break;
 		}
 

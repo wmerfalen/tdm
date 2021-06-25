@@ -83,7 +83,7 @@ namespace mods::mobs {
 		mps_debug("setting variation: '" << v << "'");
 		this->variation = v;
 		if(v.compare("sentinel") == 0) {
-			auto row = db_get_by_meta("mp_shotgunner_sentinel","mgs_mob_vnum",std::to_string(this->cd()->nr));
+			auto row = db_get_by_meta("mp_shotgunner_sentinel","mgs_mob_vnum",std::to_string(this->cd()->mob_specials.vnum));
 			if(row.size() == 0) {
 				mps_debug("[mp_shotgunner][set_variation]-> cannot load data from postgres...");
 				return;

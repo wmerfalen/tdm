@@ -14,7 +14,7 @@
 #include "structs.h"
 #include "mods/macro_impl.hpp"
 /* external declarations and prototypes **********************************/
-namespace mods{
+namespace mods {
 	struct descriptor_data;
 	struct player;
 };
@@ -27,7 +27,7 @@ bool boot_type_hell();
 #define READ_SIZE	256
 #ifndef __STATE_GUARD__
 #define __STATE_GUARD__
-int& STATE(mods::descriptor_data &d);
+int& STATE(mods::descriptor_data& d);
 int& STATE(mods::descriptor_data *d);
 int& STATE(std::deque<mods::descriptor_data>::iterator d);
 int& STATE(std::shared_ptr<mods::descriptor_data> d);
@@ -346,8 +346,8 @@ room_rnum& GET_WAS_IN(char_data* player);
 
 #define GET_EQ(ch, i)		((ch)->equipment[i])
 
-#define GET_MOB_SPEC(ch)	(IS_MOB(ch) ? mob_index[(ch)->nr].func : NULL)
-#define GET_MOB_RNUM(mob)	((mob)->nr)
+#define GET_MOB_SPEC(ch)	(IS_MOB(ch) ? mob_index[(ch)->mob_specials.vnum].func : NULL)
+#define GET_MOB_RNUM(mob)	((mob)->mob_specials.vnum)
 #define GET_MOB_VNUM(mob)	(IS_MOB(mob) ? \
 				 mob_index[GET_MOB_RNUM(mob)].vnum : NOBODY)
 
