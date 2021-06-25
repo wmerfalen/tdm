@@ -1210,6 +1210,7 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 			res.arg1 =mods::util::stoi<int>(zone_data_row["zone_arg1"]);
 			res.arg2 =mods::util::stoi<int>(zone_data_row["zone_arg2"]);
 			res.arg3 =mods::util::stoi<int>(zone_data_row["zone_arg3"]);
+			res.yaml = zone_data_row["zone_yaml"].is_null() ? "" : zone_data_row["zone_yaml"].c_str();
 			res.line = 0; //TODO: mods::util::stoi<int>(zone_data_row["line"]);
 			res.count = 0;
 			z.cmd.push_back(res);

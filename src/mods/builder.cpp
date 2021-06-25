@@ -1145,6 +1145,33 @@ namespace mods::builder {
 		std::cerr << red_str("zone_place[arg2.data()]:'") << arg2.data() << "'\n";
 		std::cerr << red_str("zone_place[arg3.data()]:'") << arg3.data() << "'\n";
 		std::cerr << red_str("zone_table[") << zone_id << "].number:'" << std::to_string(zone_table[zone_id].number) << "'\n";
+		std::string yaml_file;
+		if(zone_command.compare("Y") == 0) {
+			yaml_file = arg1.data();
+			try {
+				auto t = txn();
+				sql_compositor comp("zone_data",&t);
+				auto sql = comp
+				           .insert()
+				           .into("zone_data")
+				.values({
+					{"zone_id",std::to_string(zone_table[zone_id].number)},
+					{"zone_command",zone_command.data()},
+					{"zone_if_flag",if_flag.data()},
+					{"zone_arg1","0"},
+					{"zone_arg2",arg2.data()},
+					{"zone_arg3",arg3.data()},
+					{"zone_yaml",yaml_file},
+				})
+				.sql();
+				mods::pq::exec(t,sql);
+				mods::pq::commit(t);
+			} catch(std::exception& e) {
+				REPORT_DB_ISSUE("error",e.what());
+				return {false,std::string("Exception occurred: ") + e.what()};
+			}
+			return {true,"Saved zone successfully."};
+		}
 		try {
 			auto t = txn();
 			sql_compositor comp("zone_data",&t);
@@ -4406,6 +4433,8 @@ SUPERCMD(do_zbuild) {
 		        "  |--> gives object obj_vnum to mob mob_vnum\r\n" <<
 		        " {grn}zbuild{/grn} {red}obj2obj <zone_id> <obj_vnum> <obj_vnum2> <max> <if_flag>{/red}\r\n" <<
 		        "  |--> places object obj_vnum into object obj_vnum2\r\n" <<
+		        " {grn}zbuild{/grn} {red}yaml <zone_id> <yaml> <room_vnum> <max> <if_flag>{/red}\r\n" <<
+		        "  |--> places the yaml file identified by yaml in the room room_vnum\r\n" <<
 		        "\r\n" <<
 		        " /-------------------------------------------------------------\\\r\n" <<
 		        " | P A V E M E N T S  S Y S T E M                   version 0.1|\r\n" <<
@@ -4499,9 +4528,9 @@ SUPERCMD(do_zbuild) {
 				default:
 					*player << "{red}unimplimented command{/red}: [" << ZCMD.command << "] " << ZCMD.arg1 << " " << ZCMD.arg2 << " " << ZCMD.arg3 << "\r\n";
 					break;
-					//case 'O':
-					//	*player << "{red}object{/red}: " << ZCMD.arg1 << "{red} to room: {/red}" << ZCMD.arg2 <<  " {yel}max:{/yel}" << ZCMD.arg3 << "\r\n";"\r\n";
-					//	break;
+				case 'Y':
+					*player << "{red}place yaml{/red}: " << ZCMD.yaml << "{red} to room: {/red}" << ZCMD.arg2 <<  " {yel}max:{/yel}" << ZCMD.arg3 << "\r\n";
+					break;
 
 					//case 'G':
 					//	*player << "{red}give object{/red}: " << ZCMD.arg1 << "{red} to mobile{/red}: " << current_mobile << "\r\n";
@@ -4679,6 +4708,64 @@ SUPERCMD(do_zbuild) {
 		}
 		return;
 	}
+	if(vargs.size() && vargs[0].compare("yaml") == 0) {
+		int zone = 0;
+		if(vargs[1].compare("this") == 0) {
+			zone = world[player->room()].zone;
+			player->sendln(CAT("Using current zone id:", zone));
+		} else {
+			auto zone_id = mods::util::stoi(vargs[1]);
+
+			if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
+				r_error(player," Invalid zone id");
+				return;
+			}
+			zone = zone_id.value();
+		}
+		if(vargs.size() < 6) {
+			r_error(player,"Not enough arguments");
+			return;
+		}
+
+		for(int i=0; i < vargs.size(); i++) {
+			player->sendln(CAT("i:",i,":'",vargs[i],"'"));
+		}
+		/**
+		 * [0] 'mob',
+		 * [1] zone_id
+		 * [2] mob_vnum
+		 * [3] room_vnum
+		 * [4] max
+		 * [5] if_flag
+		 */
+		auto zone_command = "Y";
+		auto arg1 = vargs[2]; /** obj_vnum */
+		auto arg2 = /** room_vnum */ vargs[3].compare("this") == 0 ? std::to_string(world[player->room()].number) : vargs[3];
+		auto arg3 = vargs[4]; /** max */
+		auto if_flag = vargs[5];
+		//zone_place(int zone_id,std::string_view zone_command,if_flag,arg1,arg2,arg3)
+		/**
+		 * ---------------------------------
+		 *  !!! THIS DIFFERS FROM LEGACY !!!
+		 * ---------------------------------
+		 * The order here matters. Check mods/zone.cpp for how this differs from legacy code
+		 * when reading a mobile ("M" command)
+		 * arg1 = mob_vnum
+		 * arg2 = room_vnum
+		 * arg3 = max
+		 * ---------------------------------
+		 *  !!! THIS DIFFERS FROM LEGACY !!!
+		 * ---------------------------------
+		 */
+		auto result = mods::builder::zone_place(zone,zone_command,if_flag,arg1,arg2,arg3);
+		if(!result.first) {
+			r_error(player,result.second);
+		} else {
+			r_success(player,"Placed mob in zone successfully");
+		}
+		return;
+	}
+
 
 	if(std::string(&command[0]).compare("place") == 0) {
 		std::string arg = argument;

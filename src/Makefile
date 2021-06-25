@@ -156,7 +156,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/doors mods/runners/movement mods/runners/items \
 					 mods/runners/communication mods/mobs/damage-event \
 					 mods/weapons/armor-calculator \
-					 mods/mobs/car-thief mods/mobs/car-thief-behaviour-tree
+					 mods/mobs/car-thief mods/mobs/car-thief-behaviour-tree \
+					 mods/players/banish
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

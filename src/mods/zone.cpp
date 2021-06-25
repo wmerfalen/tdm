@@ -124,6 +124,11 @@ namespace mods::zone {
 					return command.count < command.arg3;
 				}
 				break;
+			case 'Y': {
+					command.count = command.object_data.size();
+					return command.count < command.arg3;
+				}
+				break;
 			default:
 				break;
 		};
@@ -174,6 +179,28 @@ namespace mods::zone {
 							char_from_room(obj->cd());
 							char_to_room(obj->cd(),real_room(ZCMD.arg2));
 							ZCMD.object_data.emplace_back(obj->uuid());
+							ZCMD.count = ZCMD.object_data.size();
+						}
+					}
+					break;
+				case 'Y': {		/* read a yaml file  */
+						/**
+						 * arg1 = 0
+						 * arg2 = room_vnum
+						 * arg3 = max
+						 * yaml = file to load
+						 */
+						z_debug(green_str("read yaml: ") << ZCMD.yaml << ", arg2:" << ZCMD.arg2 << ", arg3:" << ZCMD.arg3);
+						if(zone_command_upkeep(ZCMD)) {
+							auto s = mods::util::extract_yaml_reward(ZCMD.yaml);
+							auto obj = create_object(std::get<1>(s),std::get<2>(s));
+							if(!obj) {
+								log(CAT("Warning: zone update failed to read this yaml:",ZCMD.yaml).c_str());
+								break;
+							}
+							z_debug("cool, we found a yaml file. throwing him in a room now...");
+							obj_to_room(obj.get(),real_room(ZCMD.arg2));
+							ZCMD.object_data.emplace_back(obj->uuid);
 							ZCMD.count = ZCMD.object_data.size();
 						}
 					}

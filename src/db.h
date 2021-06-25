@@ -156,7 +156,7 @@ typedef enum { \
 struct reset_com {
 	reset_com() : command('X'),
 		if_flag(0), arg1(0), arg2(0),
-		arg3(0),line(0), count(0) {
+		arg3(0),line(0), count(0), yaml("") {
 
 	}
 	~reset_com() = default;
@@ -168,6 +168,7 @@ struct reset_com {
 	int	arg3;		/*                                      */
 	int line;		/* line number this command appears on  */
 	int32_t count;
+	std::string yaml;
 	std::vector<uuid_t> object_data;
 
 	/*
@@ -187,6 +188,7 @@ struct reset_com {
 		std::cerr << "reset_com[arg2]:'"<< arg2 << "'\n";
 		std::cerr << "reset_com[arg3]:'"<< arg3 << "'\n";
 		std::cerr << "reset_com[count]:'"<< count << "'\n";
+		std::cerr << "reset_com[yaml]:'"<< yaml << "'\n";
 	}
 };
 
@@ -200,8 +202,10 @@ struct zone_data {
 			reset_mode(0),
 			number(0),m_id(0) {
 			name.clear();
+			yaml.clear();
 		}
 		~zone_data() = default;
+		std::string yaml;
 		std::string name;   /* name of this zone                  */
 		int	lifespan;           /* how long between resets (minutes)  */
 		int	age;                /* current age of this zone (minutes) */
@@ -225,6 +229,18 @@ struct zone_data {
 			std::cerr << "zone_data[bot]:'"<< bot << "'\n";
 			std::cerr << "zone_data[top]:'"<< top << "'\n";
 			std::cerr << "zone_data[reset_mode]:'"<< reset_mode << "'\n";
+		}
+		zone_data(const zone_data& other) {
+			yaml.assign(other.yaml);
+			name.assign(other.name);
+			lifespan = other.lifespan;
+			age = other.age;
+			bot = other.bot;
+			top = other.top;
+			reset_mode = other.reset_mode;
+			number = other.number;
+			cmd = other.cmd;
+			set_id(other.get_id());
 		}
 	private:
 		int64_t m_id;

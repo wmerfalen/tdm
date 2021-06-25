@@ -19,6 +19,7 @@ namespace mods::loops {
 	void foreach_mob(mob_function_t);
 	void foreach_mob(mods_npc_function_t);
 	void foreach_player(player_function_t);
+	using object_in_room_function_t = std::function<bool(obj_ptr_t&)>;
 	namespace shptr {
 		template <typename PointerType>
 		using function_with_return_t = std::function<bool(player_ptr_t,PointerType*)>;
@@ -27,74 +28,100 @@ namespace mods::loops {
 		using npc_function_t = std::function<bool(std::shared_ptr<mods::npc>)>;
 
 		template <typename PointerType>
-		static inline PointerType* foreach_player(function_with_return_t<PointerType> func,PointerType* param){
-			for(auto & player_ptr : mods::globals::player_list){
-				if(!player_ptr->authenticated()){
+		static inline PointerType* foreach_player(function_with_return_t<PointerType> func,PointerType* param) {
+			for(auto& player_ptr : mods::globals::player_list) {
+				if(!player_ptr->authenticated()) {
 					continue;
 				}
-				if(!func(player_ptr,param)){ return param; }
+				if(!func(player_ptr,param)) {
+					return param;
+				}
 			}
 			return param;
 		}
-		static inline void foreach_player(function_t func){
-			for(auto & player_ptr : mods::globals::player_list){
-				if(!player_ptr->authenticated()){
+		static inline void foreach_player(function_t func) {
+			for(auto& player_ptr : mods::globals::player_list) {
+				if(!player_ptr->authenticated()) {
 					continue;
 				}
-				if(!func(player_ptr)){ return; }
+				if(!func(player_ptr)) {
+					return;
+				}
 			}
 		}
 		template <typename PointerType>
-		static inline PointerType* foreach_mob(function_with_return_t<PointerType> func,PointerType* param){
-			for(auto & mob_ptr : mob_list){
-				if(!func(mob_ptr,param)){ return param; }
+		static inline PointerType* foreach_mob(function_with_return_t<PointerType> func,PointerType* param) {
+			for(auto& mob_ptr : mob_list) {
+				if(!func(mob_ptr,param)) {
+					return param;
+				}
 			}
 			return param;
 		}
-		static inline void foreach_mob(npc_function_t func){
-			for(auto & mob_ptr : mob_list){
-				if(!func(mob_ptr)){ return; }
+		static inline void foreach_mob(npc_function_t func) {
+			for(auto& mob_ptr : mob_list) {
+				if(!func(mob_ptr)) {
+					return;
+				}
 			}
 		}
-		static inline void foreach_mob_as_player(function_t func){
-			for(auto & mob_ptr : mob_list){
-				if(!func(mob_ptr)){ return; }
+		static inline void foreach_mob_as_player(function_t func) {
+			for(auto& mob_ptr : mob_list) {
+				if(!func(mob_ptr)) {
+					return;
+				}
 			}
 		}
 		template <typename PointerType>
-		static inline PointerType* foreach_all(function_with_return_t<PointerType> func,PointerType* param){
+		static inline PointerType* foreach_all(function_with_return_t<PointerType> func,PointerType* param) {
 			foreach_mob<PointerType>(func,param);
 			foreach_player<PointerType>(func,param);
 			return param;
 		}
-		static inline void foreach_all(function_t func){
+		static inline void foreach_all(function_t func) {
 			foreach_mob_as_player(func);
 			foreach_player(func);
 		}
 	};
 	template <typename PointerType>
-	static inline PointerType* foreach_player(mods_player_function_t<PointerType> func,PointerType* param){
-		for(auto player_ptr : mods::globals::player_list){
-			if(!player_ptr->authenticated()){
+	static inline PointerType* foreach_player(mods_player_function_t<PointerType> func,PointerType* param) {
+		for(auto player_ptr : mods::globals::player_list) {
+			if(!player_ptr->authenticated()) {
 				continue;
 			}
-			if(!func(player_ptr,param)){ return param; }
+			if(!func(player_ptr,param)) {
+				return param;
+			}
 		}
 		return nullptr;
 	}
-	static inline void foreach_all(all_function_t func){
-		for(auto & mob_ptr : mob_list){
-			if(!func(mob_ptr)){ return; }
+	static inline void foreach_all(all_function_t func) {
+		for(auto& mob_ptr : mob_list) {
+			if(!func(mob_ptr)) {
+				return;
+			}
 		}
-		for(auto & player_ptr : mods::globals::player_list){
-			if(!player_ptr->authenticated()){ 
+		for(auto& player_ptr : mods::globals::player_list) {
+			if(!player_ptr->authenticated()) {
 				continue;
 			}
-			if(!func(player_ptr)){ return; }
+			if(!func(player_ptr)) {
+				return;
+			}
 		}
 	}
 	void foreach_all_chars(all_function_t);
 	void foreach_in_room(std::size_t,player_function_t);
+	static inline void foreach_object_in_room(const room_rnum& room_id, object_in_room_function_t func) {
+		obj_data* next_obj = nullptr;
+		for(auto obj = world[room_id].contents; obj; obj = next_obj) {
+			next_obj = obj->next_content;
+			auto o = optr(obj);
+			if(!func(o)) {
+				break;
+			}
+		}
+	}
 };
 
 #include "util.hpp"

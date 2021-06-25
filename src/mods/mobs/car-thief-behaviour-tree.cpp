@@ -8,7 +8,10 @@
 #include "../rooms.hpp"
 #include "helpers.hpp"
 #include "../radio.hpp"
+#include "../mob-roam.hpp"
+#include "../query-objects.hpp"
 
+//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_car_thief_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_car_thief_BTREE_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[m.m.ct.btree:" << __LINE__ << "]->" << a << "\n";
 #else
@@ -303,16 +306,54 @@ namespace mods::mobs::car_thief_behaviour_tree {
 	}
 
 	TChildNode find_vehicle_near_me() {
-		return TNode::create_selector({
+		return TNode::create_sequence({
 			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				if(mods::query_objects::room_has_vehicle(mob.room())) {
+					return TStatus::SUCCESS;
+				}
+
+				auto ch = mob.cd();
 				const auto& g = car_thief_ptr(mob.uuid());
 				m_debug("finding vehicle near me");
-				return TStatus::SUCCESS;
-				//return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
+				mods::scan::vec_player_data los_room_list;
+				if(mob.room() >= world.size()) {
+					m_debug("mob room invalid");
+					return TStatus::FAILURE;
+				}
+				for(const auto& dir : world[mob.room()].directions()) {
+					m_debug("direction: " << dirstr(dir));
+					los_scan_direction(ch,5,&los_room_list,dir, mods::scan::find_type_t::OBJECTS);
+					m_debug("scanned direction. found " << los_room_list.size() << " entries...");
+					for(const auto& scanned : los_room_list) {
+						m_debug("checking if has vehicle: " << scanned.uuid);
+						auto obj = optr_by_uuid(scanned.uuid);
+						if(obj->has_vehicle()) { // TODO: std::get<0>(mods::calc_visibility::can_see_object(g->player(),obj)) && obj->has_vehicle()) {
+							g->found_vehicle(scanned);
+						}
+					}
+				}
+				auto dir = g->determine_heading_from_found_vehicles();
+				g->clear_scanned_cars();
+				if(dir == -1) {
+					m_debug("Couldnt decide on direction. moving randomly");
+					/** go in mob roam direction */
+					auto m = mods::rand::shuffle_container(world[mob.room()].directions());
+					for(const auto& dir : m) {
+						if(mods::mob_roam::can_roam_to(ch,EXIT(ch,dir)->to_room)) {
+							g->set_heading(dir);
+							g->move_to(dir);
+							return TStatus::FAILURE;
+						}
+					}
+				}
+				g->move_to(dir);
+				g->set_heading(dir);
+				return TStatus::FAILURE;
 			}),
 			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 				using namespace mods::doors;
 				const auto& g = car_thief_ptr(mob.uuid());
+				//g->shout("WHAT THE FUUUUUUUUUUUUUUCK");
 				return TStatus::SUCCESS;
 			}),
 		});
@@ -350,12 +391,6 @@ namespace mods::mobs::car_thief_behaviour_tree {
 		});
 	}
 
-	TChildNode perform_random_non_hostile_action() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto g = car_thief_ptr(mob.uuid());
-			return TStatus::SUCCESS;
-		});
-	}
 	TChildNode move_toward_heading() {
 		return TNode::create_selector({
 			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
@@ -386,14 +421,6 @@ namespace mods::mobs::car_thief_behaviour_tree {
 		});
 
 	}
-	TChildNode report_hostile_activity() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			const auto& g = car_thief_ptr(mob.uuid());
-			m_debug("mps reporting hostile activity");
-			mods::response_team::radio::report_violence(mob.uuid(),"Disciple 1, 810 charlie at {exact_location}");
-			return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
-		});
-	}
 	TChildNode engage_hostile() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			const auto& g = car_thief_ptr(mob.uuid());
@@ -407,10 +434,11 @@ namespace mods::mobs::car_thief_behaviour_tree {
 		tree.append_child(
 		TNode::create_sequence({
 			debug_echo_tree_name("car_thief_roam"),
-			find_vehicle_near_me(),
-			look_suspicious(),
-			scan_for_witness(),
-			get_hostile_toward_witnesses()
+			find_vehicle_near_me()
+			//move_toward_heading(),
+			//look_suspicious(),
+			//scan_for_witness(),
+			//get_hostile_toward_witnesses()
 		})
 		);
 

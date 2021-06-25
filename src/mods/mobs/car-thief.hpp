@@ -7,6 +7,7 @@
 #include "smart-mob.hpp"
 #include <stack>
 #include <forward_list>
+#include "../scan.hpp"
 
 namespace mods::mobs {
 	using tick_t = uint64_t;
@@ -53,6 +54,9 @@ namespace mods::mobs {
 			void melee_attack_within_range();
 			std::pair<bool,std::string> move_to(const direction_t& dir);
 			void move_closer_to_target();
+			void found_vehicle(const mods::scan::vec_player_data_element& data);
+			int8_t determine_heading_from_found_vehicles();
+			void clear_scanned_cars();
 
 		private:
 			player_ptr_t get_next_attacking_priority();
@@ -60,6 +64,7 @@ namespace mods::mobs {
 			std::forward_list<player_ptr_t> m_attackers;
 			obj_ptr_t m_weapon;
 			std::optional<direction_t> m_attackers_last_direction;
+			std::vector<mods::scan::vec_player_data_element> m_scanned_cars;
 	};
 	using car_thief_map_t = std::map<uuid_t,std::shared_ptr<car_thief>>;
 	car_thief_map_t& car_thief_map();

@@ -205,6 +205,9 @@ ACMD(do_scan) { /* !mods */
 	mods::scan::los_scan(ch,mods::weapon::MAX_RANGE,&scan);
 	for(auto e : scan) {
 		auto found_player = ptr(e.ch);
+		if(!found_player) {
+			continue;
+		}
 		if(!mods::calc_visibility::is_visible(player,found_player)) {
 			continue;
 		}

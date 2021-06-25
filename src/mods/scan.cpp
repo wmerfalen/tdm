@@ -1,6 +1,7 @@
 #include "scan.hpp"
 #include <tuple>
 #include "player.hpp"
+#include "loops.hpp"
 #ifdef __MENTOC_SHOW_LOS_SCAN_DEBUG__
 #define LOS_SCAN_DIRECTION_DEBUG(a) { std::cerr << "[los_scan_debug]: " << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
 #else
@@ -114,17 +115,19 @@ namespace mods::scan {
 				room_id = room_dir->to_room;
 
 				if(type & find_type_t::OBJECTS) {
-					for(auto object : world[room_id].contents_container()) {
+					mods::loops::foreach_object_in_room(room_id,[&](obj_ptr_t& object) -> bool {
 						vec_room_list->push_back({});
 						auto& pushed_item = vec_room_list->back();
 						pushed_item.ch = nullptr;
-						pushed_item.obj = object.get();
+						pushed_item.obj =object.get();
 						pushed_item.uuid = object->uuid;
 						pushed_item.distance = ++ctr;
 						pushed_item.direction = i_d;
 						pushed_item.room_rnum = room_id;
 						LOS_SCAN_DIRECTION_DEBUG("moved item to list");
-					}
+						return true;
+					});
+
 				}
 				for(auto character : mods::globals::get_room_list(room_id)) {
 					if(

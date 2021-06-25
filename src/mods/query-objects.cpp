@@ -6,6 +6,7 @@
 #include "db.hpp"
 #include "util.hpp"
 #include "zone.hpp"
+#include "loops.hpp"
 
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
 #define mc_debug(A) std::cerr << "[mods::query_objects][debug]:" << A <<"\n";
@@ -148,7 +149,17 @@ namespace mods::query_objects {
 		return objects;
 	}
 
-
+	bool room_has_vehicle(const room_rnum& room_id) {
+		bool has_vehicle = false;
+		mods::loops::foreach_object_in_room(room_id, [&](auto& obj) -> bool {
+			if(obj->has_vehicle()) {
+				has_vehicle = true;
+				return false;
+			}
+			return true;
+		});
+		return has_vehicle;
+	}
 };
 
 SUPERCMD(do_query_container) {

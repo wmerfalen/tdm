@@ -17,14 +17,14 @@ typedef int socket_t;
 
 namespace mods {
 	namespace scan {
-		typedef struct {
+		struct vec_player_data_element {
 			char_data* ch;
 			obj_data* obj;
 			uint16_t distance;
 			uuid_t uuid;
 			uint8_t direction;
 			uint32_t room_rnum;
-		} vec_player_data_element;
+		};
 		using chptr = player_ptr_t;
 		using vec_player_data = std::vector<vec_player_data_element>;
 		using los_scan_foreach_callback = std::function<bool (room_rnum,int,vec_player_data)>;

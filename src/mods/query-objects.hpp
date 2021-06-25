@@ -19,6 +19,7 @@ namespace mods::query_objects {
 	std::vector<uuid_t> query_inventory(player_ptr_t& player, std::vector<std::string>& vec_args);
 	std::vector<uuid_t> query_zone(player_ptr_t& player, std::vector<std::string>& vec_args);
 	std::vector<uuid_t> query_equipment_by_yaml(player_ptr_t& player, std::string_view yaml_file);
+	bool room_has_vehicle(const room_rnum& room_id);
 	void init();
 };
 #endif

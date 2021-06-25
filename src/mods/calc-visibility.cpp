@@ -16,7 +16,90 @@
 
 
 namespace mods::calc_visibility {
+	std::tuple<bool,std::string> can_see_object(player_ptr_t& observer,obj_ptr_t& target) {
+		const bool invisible = false; /**TODO: target->visibility() == 0;*/
+		const bool observer_has_thermals = observer->has_thermal_vision();
+		const bool observer_has_night_vision = observer->has_night_vision();
+		const bool same_room = observer->viewing_room() == target->in_room;
+		const bool smoked_room = mods::rooms::is_smoked(target->in_room);
+		const bool observer_disoriented = observer->has_affect(AFF_DISORIENT);
+		const bool room_on_fire = mods::rooms::is_on_fire(target->in_room);
+		const bool room_is_dark = mods::rooms::is_dark(target->in_room);
+		const bool observer_is_affected_by_emp = mods::rooms::has_emp(observer->viewing_room()) || mods::rooms::has_emp(observer->room());
+		auto camera = observer->get_camera();
+		//auto room = observer->viewing_room();
+		//auto fire_status = mods::rooms::get_fire_status(room);
+		//bool camera_is_thermal = camera != nullptr ? mods::object_utils::is_thermal_camera(camera->object_uuid()) : false;
+		//bool camera_is_night_vision = camera != nullptr ? mods::object_utils::is_night_vision_camera(camera->object_uuid()) : false;
+		//bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
+
+		std::string info = CAT("Observer(",observer->name(),"|",observer->uuid(),")::Target(",target->name.c_str(),"|",target->uuid,")");
+#define __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
+#ifdef __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
+		std::string dump = CAT("invisible: ",invisible,"\n",
+		                       "observer_has_thermals: ",observer_has_thermals,"\n",
+		                       "observer_has_night_vision: ",observer_has_night_vision,"\n",
+		                       "same_room: ",same_room,"\n",
+		                       "smoked_room: ",smoked_room,"\n",
+		                       "observer_disoriented: ",observer_disoriented,"\n",
+		                       "room_on_fire: ",room_on_fire,"\n",
+		                       "room_is_dark: ",room_is_dark,"\n",
+		                       "observer_is_affected_by_emp: ",observer_is_affected_by_emp,"\n"
+		                      );
+#endif
+
+		if(observer->has_affect(AFF_BLIND)) {
+			mcv_debug("observer is blind");
+			return {false,"observer is blind"};
+		}
+		/** TODO scan objects
+		if(observer->engineer() && target_is_scanned) {
+			mcv_debug("Observer is an engineer and target was scanned - returning true");
+			return {true, "Observer is an engineer and target was scanned - returning true"};
+		}
+		*/
+		/** TODO: track objects
+		if(target_is_tracked) {
+			return {true,"Target is tracked"};
+		}
+		*/
+		if(invisible) {
+			mcv_debug("target dissipated/invisible");
+			return {false,"target dissipated/invisible"};
+		}
+		if(observer_is_affected_by_emp && (observer_has_thermals || observer_has_night_vision) &&
+		        (room_is_dark || smoked_room || room_on_fire)) {
+			mcv_debug("observer affected by emp + special vision + dark/smoked/fire");
+			return {false,"observer affected by emp + special vision + dark/smoked/fire"};
+		}
+		if((observer_has_thermals || observer_has_night_vision) && room_on_fire) {
+			mcv_debug("Observer has special vision and room is on fire");
+			return {false,"Observer has special vision and room is on fire"};
+		}
+		if(observer_has_thermals && (room_is_dark || smoked_room) && !same_room) {
+			mcv_debug("Observer has special vision + dark/smoked + not in same room");
+			return {false,"Observer has special vision + dark/smoked + not in same room"};
+		}
+		if(observer_has_night_vision && (room_is_dark || smoked_room) && !same_room) {
+			mcv_debug("Observer has night vision + dark/smoked + not in same room");
+			return {false,"Observer has night vision + dark/smoked + not in same room"};
+		}
+		/** TODO: visibility for objects
+		if(observer_disoriented && mods::rand::chance(LUCKY_DISORIENTED_VISION_CHANCE()) &&
+		        (target->visibility() <= 250)) {
+			mcv_debug("observer got very lucky");
+			return {false, "observer got very lucky"};
+		}
+		*/
+		mcv_debug("Target is visible");
+		return {true,"target is visible"};
+	}
+
+
 	std::tuple<bool,std::string> is_visible_with_reason(player_ptr_t& observer,player_ptr_t& target) {
+		if(!target) {
+			return {1,"object dead"};
+		}
 		const bool is_dissipated = target->ghost() && target->ghost()->is_dissipated();
 		const bool invisible = target->visibility() == 0;
 		const bool observer_has_thermals = observer->has_thermal_vision();

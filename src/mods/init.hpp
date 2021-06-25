@@ -3,6 +3,7 @@
 
 #define INIT(A) \
 	namespace A { extern void init(); };
+INIT(mods::players::banish);
 INIT(mods::rand);
 INIT(builder);
 INIT(mods::date_time);
@@ -101,6 +102,7 @@ namespace mods::init {
 		mods::scripted_sequence_events::init();
 		mods::scripted_sequence_runner::init();
 		src::act::debug::init();
+		mods::players::banish::init();
 	}
 };
 #endif

@@ -25,6 +25,9 @@
 {yel}mods/zone{/yel}:->{grn}uuids{/grn}
 {yel}mods/zone{/yel}:->{grn}reset_zone{/grn}
 {yel}mods/players/messages{/yel}:->{grn}queue_message{/grn}
+{yel}mods/players/banish{/yel}:->{grn}force_out{/grn}
+{yel}mods/players/banish{/yel}:->{grn}set_banish_room{/grn}
+{yel}mods/players/banish{/yel}:->{grn}banish{/grn}
 {yel}mods/fluxkraft/arcon-bar.hpp:		->generate_bar{/grn}
 {yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}procgen_random_amount{/grn}
 {yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}generate_zone{/grn}
@@ -43,9 +46,6 @@
 {yel}mods/super-users{/yel}:->{grn}set_who_line{/grn}
 {yel}mods/super-users{/yel}:->{grn}clear_who_line{/grn}
 {yel}mods/super-users{/yel}:->{grn}shutdown_mud{/grn}
-{yel}mods/super-users{/yel}:->{grn}force_out{/grn}
-{yel}mods/super-users{/yel}:->{grn}set_banish_room{/grn}
-{yel}mods/super-users{/yel}:->{grn}banish{/grn}
 {yel}mods/loot{/yel}:->{grn}reward{/grn}
 {yel}mods/loot{/yel}:->{grn}add_rifle_index{/grn}
 {yel}mods/loot{/yel}:->{grn}add_armor_index{/grn}

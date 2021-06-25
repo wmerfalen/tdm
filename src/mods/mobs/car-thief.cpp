@@ -338,5 +338,31 @@ namespace mods::mobs {
 			}
 		}
 	}
+	/*
+	void car_thief::move_closer_to_vehicle() {
+
+	}
+	*/
+	int8_t car_thief::determine_heading_from_found_vehicles() {
+		std::map<direction_t,std::size_t> weights;
+		for(const auto& spot : m_scanned_cars) {
+			++weights[spot.direction];
+		}
+		int direction = -1, count = 0;
+		for(const auto& pair : weights) {
+			if(pair.second > count) {
+				direction = pair.first;
+				count = pair.second;
+			}
+		}
+		return direction;
+	}
+	void car_thief::found_vehicle(const mods::scan::vec_player_data_element& data) {
+		m_scanned_cars.emplace_back(data);
+		std::cerr << "I found a vehicle here: " << data.direction << "\n";
+	}
+	void car_thief::clear_scanned_cars() {
+		m_scanned_cars.clear();
+	}
 };
 #undef m_debug
