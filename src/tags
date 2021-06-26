@@ -9578,7 +9578,7 @@ m_debug	mods/mobs/car-thief-behaviour-tree.cpp	18;"	d	file:
 m_debug	mods/mobs/car-thief-behaviour-tree.cpp	465;"	d	file:
 m_debug	mods/mobs/car-thief.cpp	11;"	d	file:
 m_debug	mods/mobs/car-thief.cpp	13;"	d	file:
-m_debug	mods/mobs/car-thief.cpp	368;"	d	file:
+m_debug	mods/mobs/car-thief.cpp	367;"	d	file:
 m_debug	mods/mobs/extended-types.cpp	10;"	d	file:
 m_debug	mods/mobs/extended-types.cpp	12;"	d	file:
 m_debug	mods/mobs/extended-types.cpp	88;"	d	file:

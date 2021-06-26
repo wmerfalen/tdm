@@ -25,4 +25,5 @@ GCOUNT=$(pgrep rlwrap | wc -l)
 if [[ $GCOUNT -gt 0 ]]; then
 	killall rlwrap
 fi
+killall circle
 exit 0
