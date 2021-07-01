@@ -338,7 +338,7 @@ namespace mods::mobs {
 
 	void car_thief::move_closer_to_target() {
 		uint8_t loops = 1;
-		if(mods::rand::chance(10)) {
+		if(mods::rand::chance(CAR_THIEF_EXTRA_LOOP_CHANCE())) {
 			++loops;
 		}
 		for(int i =0; i < loops; ++i) {
