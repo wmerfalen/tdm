@@ -6,6 +6,10 @@
 namespace mods::weapons::damage_types {
 	bool can_be_injured(player_ptr_t& victim);
 	bool attack_injures(player_ptr_t& player,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t feedback) {
+		if(DISABLE_INJURE_ROLL()) {
+			std::cerr << red_str("DISABLE_INJURE_ROLL is set. Not rolling injury.") << "\n";
+			return 0;
+		}
 		if(mods::super_users::player_is(victim)) {
 			return 0;
 		}

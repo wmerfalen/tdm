@@ -12,6 +12,17 @@ namespace mods::mobs {
 	smart_mob::smart_mob() {
 		this->init();
 	}
+	void smart_mob::set_watching_room(bool status) {
+		player_ptr->cd()->mob_specials.watching_room = status;
+		if(status) {
+			mods::mobs::room_watching::watch_room(player_ptr);
+			return;
+		}
+		mods::mobs::room_watching::unwatch_room(player_ptr);
+	}
+	bool smart_mob::watching_room() {
+		return player_ptr->cd()->mob_specials.watching_room;
+	}
 	/**
 	 * @brief set variation of mg.
 	 *
@@ -67,6 +78,16 @@ namespace mods::mobs {
 			items++;
 		}
 		return items;
+	}
+	std::pair<bool,std::string> smart_mob::move_to(const direction_t& dir) {
+		auto room_id = player_ptr->room();
+		auto opt = world[room_id].dir_option[dir];
+		if(opt && opt->to_room <= world.size()) {
+			mods::mobs::room_watching::unwatch_room(player_ptr);
+			perform_move(player_ptr->cd(),dir,0);
+			return {true,"moved"};
+		}
+		return {false,"stayed"};
 	}
 	void smart_mob::populate_from_meqbuild_profile() {
 		this->wear_list = std::move(mods::mob_equipment::fetch_list_by_mob_vnum(this->cd()->mob_specials.vnum));

@@ -944,8 +944,8 @@ void parse_sql_mobiles() {
 		MENTOC_ABIL_SET(medical,mob_ability_medical);
 
 		proto.player.level = mods::util::stoi<int>(row["mob_level"]);
-		proto.points.hitroll = 20 -mods::util::stoi<int>(row["mob_hitroll"]);
-		proto.points.armor = 10 *mods::util::stoi<int>(row["mob_armor"]);
+		proto.points.hitroll = mods::util::stoi<int>(row["mob_hitroll"]);
+		proto.points.armor = mods::util::stoi<int>(row["mob_armor"]);
 		proto.points.damroll = mods::util::stoi<int>(row["mob_damroll"]);
 
 		/* max hit = 0 is a flag that H, M, V is xdy+z */

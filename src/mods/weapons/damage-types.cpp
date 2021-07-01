@@ -837,6 +837,7 @@ namespace mods::weapons::damage_types {
 	    obj_ptr_t weapon,
 	    player_ptr_t victim
 	) {
+#define __MENTOC_SHOW_MELEE_HIT_STATS__
 #ifdef __MENTOC_SHOW_MELEE_HIT_STATS__
 #define md(A) std::cerr << green_str("[melee_damage_with_feedback]->") << A << "\n"; (*player) << "\r\n [melee_damage_with_feedback debug]:" << A << "\r\n";
 #else
@@ -864,7 +865,9 @@ namespace mods::weapons::damage_types {
 		}
 
 		int dam = 0;
+		md("doing damage calculate");
 		auto dice_roll = mods::weapons::damage_calculator::calculate(player,weapon,victim);
+		md("dice_roll: " << dice_roll << ", adding onto damage of:" << dam);
 		dam += dice_roll;
 
 		int str_bonus = mods::weapons::damage_calculator::calculate_strength_bonus(player,weapon,victim,dam);
@@ -890,8 +893,10 @@ namespace mods::weapons::damage_types {
 			md("deploying damage: " << dam);
 			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 			if(dam == 0) {
+				md("missed victim");
 				missed(player,victim);
 			} else if(dam > 0) {
+				md("sending melee damage: " << feedback.dump());
 				auto f = send_melee_damage(feedback.hits, dam, player, victim, weapon);
 				feedback = std::get<0>(f);
 				if(victim->is_npc()) {
@@ -904,7 +909,9 @@ namespace mods::weapons::damage_types {
 			feedback = send_target_dead(player,victim,feedback);
 		}
 
+		md("setting fight timestamp");
 		player->set_fight_timestamp();
+		md("processing elemental damage");
 		mods::weapons::elemental::process_elemental_damage(player,weapon,victim,feedback);
 		md("processed elemental damage");
 #undef md
@@ -1046,6 +1053,7 @@ namespace mods::weapons::damage_types {
 				if(victim->is_npc()) {
 					mods::mobs::damage_event::sniped(victim,feedback);
 				}
+#ifndef __MENTOC_DISABLE_INJURE_DYNAMICS__
 				if(attack_injures(player,victim,weapon,feedback)) {
 					feedback.injured.emplace_back(victim->uuid());
 					feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
@@ -1059,6 +1067,7 @@ namespace mods::weapons::damage_types {
 					player->damage_event(feedback);
 					mods::injure::injure_player(victim);
 				}
+#endif
 				if(mods::weapons::damage_calculator::attack_disorients(player,weapon,victim)) {
 					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(player,weapon,victim));
 					feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;

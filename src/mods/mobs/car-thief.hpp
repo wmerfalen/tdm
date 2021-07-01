@@ -12,6 +12,7 @@
 namespace mods::mobs {
 	using tick_t = uint64_t;
 	struct car_thief : public smart_mob {
+			using uuidlist_t = std::forward_list<uuid_t>;
 			static constexpr uint16_t SHOULD_DO_ROAM = 0;
 			static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;
 			/**====================================================*/
@@ -25,6 +26,7 @@ namespace mods::mobs {
 			/** can be called anytime after construct if needed */
 			/**====================================================*/
 			void init();
+			void set_variation(std::string);
 
 			/**====================================================*/
 			/** preferred construct method */
@@ -49,14 +51,33 @@ namespace mods::mobs {
 			/**=================*/
 			void setup_damage_callbacks();
 			void enemy_spotted(room_rnum room,uuid_t player);
-			void set_variation(std::string);
-			void attacked(const feedback_t& feedback);
-			void melee_attack_within_range();
-			std::pair<bool,std::string> move_to(const direction_t& dir);
-			void move_closer_to_target();
+			void found_witness(const mods::scan::vec_player_data_element& data);
 			void found_vehicle(const mods::scan::vec_player_data_element& data);
+			void attacked(const feedback_t& feedback);
+			void door_entry_event(player_ptr_t& player);
+
+			/**===================*/
+			/** calculate heading */
+			/**===================*/
 			int8_t determine_heading_from_found_vehicles();
 			void clear_scanned_cars();
+
+			/**================*/
+			/** combat helpers */
+			/**================*/
+			void melee_attack_within_range();
+			void move_closer_to_target();
+
+			/** state management */
+			void remember_car(const mods::scan::vec_player_data_element& data);
+			const uuidlist_t& get_remembered_cars() const;
+			bool has_found_car();
+			void set_found_car(bool status);
+
+
+			/** rival npc helpers */
+			bool is_rival(player_ptr_t& player);
+
 
 		private:
 			player_ptr_t get_next_attacking_priority();
@@ -65,6 +86,9 @@ namespace mods::mobs {
 			obj_ptr_t m_weapon;
 			std::optional<direction_t> m_attackers_last_direction;
 			std::vector<mods::scan::vec_player_data_element> m_scanned_cars;
+			uuidlist_t m_remembered_cars;
+			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;
+			bool m_found_car;
 	};
 	using car_thief_map_t = std::map<uuid_t,std::shared_ptr<car_thief>>;
 	car_thief_map_t& car_thief_map();

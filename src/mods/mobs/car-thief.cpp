@@ -226,11 +226,30 @@ namespace mods::mobs {
 		});
 #undef m
 	}
+	bool car_thief::is_rival(player_ptr_t& player) {
+		return false;
+	}
+	void car_thief::door_entry_event(player_ptr_t& player) {
+		if(player->is_npc()) {
+			if(is_rival(player)) {
+				set_behaviour_tree("turn_hostile");
+				//TODO: attack_with_melee(player);
+				//player->sendln(CAT("I am:",uuid," and I'm Watching you"));
+			}
+		}
+	}
 	void car_thief::init() {
 		smart_mob::init();
 		m_should_do_max[SHOULD_DO_ROAM] = LOWLY_SECURITY_ROAM_TICK();
 		m_should_do_max[SHOULD_DO_RANDOM_TRIVIAL] = LOWLY_SECURITY_RANDOM_TRIVIAL_TICK();
-	}
+		m_found_car = 0;
+		m_last_attacker = nullptr;
+		m_attackers.clear();
+		m_weapon = nullptr;
+		m_attackers_last_direction = std::nullopt;
+		m_scanned_cars.clear();
+		m_remembered_cars.clear();
+	};
 
 	/**
 	 * @brief preferred constructor method
@@ -281,15 +300,6 @@ namespace mods::mobs {
 	}
 	player_ptr_t car_thief::get_next_attacking_priority() {
 		return m_attackers.front();
-	}
-	std::pair<bool,std::string> car_thief::move_to(const direction_t& dir) {
-		auto room_id = player_ptr->room();
-		auto opt = world[room_id].dir_option[dir];
-		if(opt && opt->to_room <= world.size()) {
-			perform_move(player_ptr->cd(),dir,0);
-			return {true,"moved"};
-		}
-		return {false,"stayed"};
 	}
 	void car_thief::melee_attack_within_range() {
 		m_debug("melee_attack_within_range");
@@ -357,11 +367,26 @@ namespace mods::mobs {
 		}
 		return direction;
 	}
+	bool car_thief::has_found_car() {
+		return m_found_car;
+	}
+	void car_thief::set_found_car(bool status) {
+		m_found_car = status;
+	}
+	void car_thief::found_witness(const mods::scan::vec_player_data_element& data) {
+		m_hostiles.emplace_front(data);
+	}
 	void car_thief::found_vehicle(const mods::scan::vec_player_data_element& data) {
 		m_scanned_cars.emplace_back(data);
 	}
 	void car_thief::clear_scanned_cars() {
 		m_scanned_cars.clear();
+	}
+	void car_thief::remember_car(const mods::scan::vec_player_data_element& data) {
+		m_remembered_cars.push_front(data.uuid);
+	}
+	const car_thief::uuidlist_t& car_thief::get_remembered_cars() const {
+		return m_remembered_cars;
 	}
 };
 #undef m_debug

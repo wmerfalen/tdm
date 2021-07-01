@@ -852,6 +852,8 @@ namespace mods::yaml {
 		this->exported["rifle_stat_weapon_handling"] = std::to_string(stat_weapon_handling);
 		this->exported["rifle_stat_strategy"] = std::to_string(stat_strategy);
 		this->exported["rifle_stat_medical"] = std::to_string(stat_medical);
+		this->exported["rifle_damage_dice_count"] = std::to_string(damage_dice_count);
+		this->exported["rifle_damage_dice_sides"] = std::to_string(damage_dice_sides);
 		for(auto& rarity_pair : rarity_strings()) {
 			if(rarity == rarity_pair.second) {
 				this->exported["rifle_rarity"] = rarity_pair.first;

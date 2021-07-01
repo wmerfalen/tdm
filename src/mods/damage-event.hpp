@@ -81,6 +81,15 @@ struct feedback_t {
 	std::vector<std::tuple<uuid_t,int,uint32_t>> damage_info;
 	uint8_t from_direction;
 	uuid_t attacker;
+	std::string dump() {
+		using namespace std;
+		return string("damage_event:") + to_string(damage_event) + string("\r\n") +
+		       string("damage:") + to_string(damage) + string("\r\n") +
+		       string("hits:") + to_string(hits) + string("\r\n") +
+		       string("from_direction:") + to_string(from_direction) + string("\r\n") +
+		       string("attacker:") + to_string(attacker) + string("\r\n");
+		/** TODO: dump injured and damage_info */
+	}
 };
 using damage_event_callback_t = std::function<void(const feedback_t&,const uuid_t&)>;
 

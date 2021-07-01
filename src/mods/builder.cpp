@@ -1262,7 +1262,7 @@ namespace mods::builder {
 			p_map["mob_max_hitpoints"] = mods::util::itoa(obj->points.max_hit);
 			p_map["mob_move"] = mods::util::itoa(obj->points.move);
 			p_map["mob_max_move"] = mods::util::itoa(obj->points.max_move);
-			p_map["mob_armor"] = mods::util::itoa(obj->points.armor);
+			p_map["mob_armor"] = "0";// FIXME mods::util::itoa(obj->real_abils.armor);
 			p_map["mob_gold"] = mods::util::itoa(obj->points.gold);
 			p_map["mob_exp"] = mods::util::itoa(obj->points.exp);
 			p_map["mob_hitroll"] = mods::util::itoa(obj->points.hitroll);
@@ -1275,10 +1275,10 @@ namespace mods::builder {
 			p_map["mob_attack_type"] = mods::util::itoa(obj->mob_specials.attack_type);
 			p_map["mob_weight"] = mods::util::itoa(obj->player.weight);
 			p_map["mob_height"] = mods::util::itoa(obj->player.height);
-			p_map["mob_level"] = "0";	//TODO: find this
-			p_map["mob_sex"] = "0"; //TODO: find this
-			p_map["mob_damsizedice"] = "0"; //TODO: find this
-			p_map["mob_damroll"] = "0"; //TODO: find this
+			p_map["mob_level"] = std::to_string(obj->player.level);
+			p_map["mob_sex"] = obj->player.sex == SEX_MALE ? "M" : "F";
+			p_map["mob_damsizedice"] = std::to_string(obj->mob_specials.damsizedice);
+			p_map["mob_damroll"] = std::to_string(obj->points.damroll);
 			p_map["mob_class"] = "0"; //TODO: find this
 			p_map["mob_special_extended_type"] = std::to_string(obj->mob_specials.extended_mob_type);
 			auto txn_02 = txn();
@@ -2855,7 +2855,7 @@ SUPERCMD(do_mbuild) {
 		MENTOC_SHOW_OBJ(max_hit,points.max_hit);
 		MENTOC_SHOW_OBJ(move,points.move);
 		MENTOC_SHOW_OBJ(max_move,points.max_move);
-		MENTOC_SHOW_OBJ(armor,points.armor);
+		MENTOC_SHOW_OBJ(armor,real_abils.armor);
 		MENTOC_SHOW_OBJ(gold,points.gold);
 		MENTOC_SHOW_OBJ(exp,points.exp);
 		MENTOC_SHOW_OBJ(hitroll,points.hitroll);
@@ -2914,7 +2914,6 @@ SUPERCMD(do_mbuild) {
 			MENTOC_OBI2(points.max_hit,max_hit);
 			MENTOC_OBI2(points.move,move);
 			MENTOC_OBI2(points.max_move,max_move);
-			MENTOC_OBI2(points.armor,armor);
 			MENTOC_OBI2(points.gold,gold);
 			MENTOC_OBI2(points.exp,exp);
 			MENTOC_OBI2(points.hitroll,hitroll);

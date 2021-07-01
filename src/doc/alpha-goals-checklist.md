@@ -3,6 +3,11 @@
 The mud is in a very close state to having an alpha testing environment. Documented here are
 a checklist of items neeeded before a successfull alpha could be deployed.
 
+# component: regen hp when sleeping/resting
+	- status:
+		- not done
+			- [ ] when user is sleeping/resting regenerate hp at a slow pace
+
 # component: melee combat
 	- status: 
 		- not ready, needs testing and to honor object properties

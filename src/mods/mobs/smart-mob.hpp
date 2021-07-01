@@ -84,6 +84,8 @@ namespace mods::mobs {
 			virtual void setup_damage_callbacks();
 			virtual void enemy_spotted(room_rnum room,uuid_t player);
 
+			void set_watching_room(bool status);
+			bool watching_room();
 			/**====================================================*/
 			/** weapon helpers */
 			/**====================================================*/
@@ -98,6 +100,7 @@ namespace mods::mobs {
 				}
 				return false;
 			}
+			virtual std::pair<bool,std::string> move_to(const direction_t& dir);
 
 		protected:
 			std::map<uint16_t,uint16_t> m_should_do;

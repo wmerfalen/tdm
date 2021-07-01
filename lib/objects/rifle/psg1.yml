@@ -6,8 +6,6 @@
 # type: PISTOL
 # type: MACHINE_PISTOL
 # type: LIGHT_MACHINE_GUN
-damage_dice_count: 2 #int16_t, number of dice
-damage_dice_sides: 6 #int16_t, dice sides
 incendiary_damage: 0 #int16_t, damage
 explosive_damage: 0 #int16_t, damage
 shrapnel_damage: 0 #int16_t, damage
@@ -90,7 +88,7 @@ str_type: 'SNIPER'
 rarity: 'COMMON'
 feed_file: 'psg1.yml'
 damage_dice_count: 2
-damage_dice_sides: 50
+damage_dice_sides: 80
 description: 'PSG-1 Sniper Rifle'
 short_description: 'PSG-1 Sniper Rifle'
 action_description: 'PSG-1 Sniper Rifle'

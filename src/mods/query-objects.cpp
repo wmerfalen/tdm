@@ -42,6 +42,17 @@ namespace mods::query_objects {
 	static constexpr int FIND_OBJ_WORLD    = (1 << 4);
 	static constexpr int FIND_OBJ_EQUIP    = (1 << 5);
 
+	bool room_has_object_uuid(const room_rnum& room_id, const uuid_t& obj_uuid) {
+		bool has_vehicle = false;
+		mods::loops::foreach_object_in_room(room_id, [&](auto& obj) -> bool {
+			if(obj->uuid == obj_uuid) {
+				has_vehicle = true;
+				return false;
+			}
+			return true;
+		});
+		return has_vehicle;
+	}
 	obj_ptr_t query_room_for_object(const room_rnum& room, std::string_view name) {
 		for(auto obj = world[room].contents; obj ; obj = obj->next_content) {
 			if(isname(name.data(), obj->name)) {

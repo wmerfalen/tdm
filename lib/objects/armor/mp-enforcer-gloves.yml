@@ -22,7 +22,7 @@ balistic_resistance_percent: 25 #percent
 speed_profile: 1 #int, ENUM 0=UNHINDERED,1=FAST,2=HINDERED,3=SLOW,4=SLUGGISH
 offensive_damage_amount: 15 #int, static amount of offensive damage
 durability_profile: 'DURABLE' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE
-repair_cost_profile: j #int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE
+repair_cost_profile: 1 #int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE
 hp: 240 #int, hit points
 classification: 'BASIC' #string, 'BASIC', 'ADVANCED', 'ELITE'
 worth: 50 #int, how much the item is worth.

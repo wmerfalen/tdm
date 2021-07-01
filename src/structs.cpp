@@ -602,6 +602,7 @@ void mob_special_data::init() {
 	this->previous_room = 0;
 }
 void mob_special_data::import(const mob_special_data& other) {
+	this->watching_room = other.watching_room;
 	this->memory = other.memory;
 	this->attack_type = other.attack_type;
 	this->default_pos = other.default_pos;

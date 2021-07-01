@@ -21,7 +21,9 @@ extern void hit(char_data *ch, char_data *victim, int type);
 #else
 #define bti_debug(a)
 #endif
-
+namespace mods::mobs::car_thief_behaviour_tree {
+	extern std::map<std::string,mods::behaviour_tree_impl::node&> get_trees();
+};
 namespace mods::behaviour_tree_impl {
 	using vec_player_data = mods::scan::vec_player_data;
 	container_t trees;
@@ -116,9 +118,6 @@ namespace mods::behaviour_tree_impl {
 		node lowly_security_roam(node_type::SELECTOR);
 		node lowly_security_engage(node_type::SELECTOR);
 		node lowly_security_pursuit(node_type::SELECTOR);
-		node car_thief_roam(node_type::SELECTOR);
-		node car_thief_hostile(node_type::SELECTOR);
-		node car_thief_wimpy(node_type::SELECTOR);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_roam<node,argument_type,status>(mini_gunner_roam);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_engage<node,argument_type,status>(mini_gunner_engage);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_aggressive_roam<node,argument_type,status>(mini_gunner_aggressive_roam);
@@ -131,10 +130,6 @@ namespace mods::behaviour_tree_impl {
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_roam<node,argument_type,status>(lowly_security_roam);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_engage<node,argument_type,status>(lowly_security_engage);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_pursuit<node,argument_type,status>(lowly_security_pursuit);
-
-		mods::mobs::car_thief_behaviour_tree::make_car_thief_roam(car_thief_roam);
-		mods::mobs::car_thief_behaviour_tree::make_car_thief_hostile(car_thief_hostile);
-		mods::mobs::car_thief_behaviour_tree::make_car_thief_wimpy(car_thief_wimpy);
 
 		auto node_mob_has_snipe_capability = node::create_leaf(
 		[](argument_type mob) -> status {
@@ -280,9 +275,6 @@ namespace mods::behaviour_tree_impl {
 		/**! @NEW_BEHAVIOUR_TREE@ !**/
 		add_tree("mp_shotgunner",mp_shotgunner);
 		add_tree("mp_shotgunner_engage",mp_shotgunner_engage);
-		add_tree("car_thief_roam",car_thief_roam);
-		add_tree("car_thief_hostile",car_thief_hostile);
-		add_tree("car_thief_wimpy",car_thief_wimpy);
 		/**
 		 * Suspicious roaming tree.
 		 */
@@ -293,6 +285,11 @@ namespace mods::behaviour_tree_impl {
 			})
 		}));
 		add_tree("suspicious_roaming",suspicious_roaming);
+
+		for(auto& pair : mods::mobs::car_thief_behaviour_tree::get_trees()) {
+			std::cerr << "adding tree: " << pair.first << "\n";
+			add_tree(pair.first,pair.second);
+		}
 	}
 	std::vector<uuid_t>& mob_list() {
 		static std::vector<uuid_t> list;

@@ -99,8 +99,8 @@ namespace mods::util {
 
 	template <typename T>
 	static inline void shuffle(T& vec) {
-		std::random_device rd;
-		std::mt19937 g(rd());
+		static std::random_device rd;
+		static std::mt19937 g(rd());
 		std::shuffle(vec.begin(),vec.end(),g);
 	}
 

@@ -59,7 +59,7 @@ namespace mods::unit_tests {
 	extern int run();
 };
 namespace mods::mobs::room_watching::events {
-	extern void room_entry(room_rnum,uuid_t);
+	extern void room_entry(player_ptr_t&);
 };
 namespace config {
 	extern void init(int,char**);
@@ -1120,7 +1120,7 @@ namespace mods {
 #ifdef __MENTOC_SHOW_ROOM_EVENTS_DEBUG__
 					std::cerr << "[room_entry] watching events: " << player->name().c_str() << "\n";
 #endif
-					mods::mobs::room_watching::events::room_entry(target_room,player->uuid());
+					mods::mobs::room_watching::events::room_entry(player);
 				}
 				return;
 			}

@@ -1102,6 +1102,7 @@ struct room_direction_data {
 /* ================== Memory Structure for room ======================= */
 struct room_data {
 		bool contract;
+		std::set<player_ptr_t> watchers;
 		enum texture_type_t : uint8_t {
 			AIR,
 			CARPET,
@@ -1477,6 +1478,7 @@ struct mob_special_data {
 	int heading;
 	int previous_room;
 	mob_vnum vnum;
+	bool watching_room;
 	void set_behaviour_tree(std::string_view name);
 	void clear_behaviour_tree();
 	mob_special_data() : memory({}),
@@ -1484,7 +1486,7 @@ struct mob_special_data {
 	                 damnodice(0),damsizedice(0),snipe_tracking(0),
 	                 behaviour_tree(0),behaviour_tree_flags(0),
 	                 extended_mob_type(extended_mob_type_t::NONE),
-	heading(NORTH), previous_room(0), vnum(0) {
+	heading(NORTH), previous_room(0), vnum(0), watching_room(0) {
 #ifdef __MENTOC_SHOW_STRUCTS_H_DEBUG_OUTPUT__
 		std::cerr << "[mob_special_data] default constructor\n";
 #endif
