@@ -20,6 +20,9 @@ typedef std::string_view str_object;
 typedef std::string str_object;
 #endif
 
+namespace mods::values {
+	extern bool ECHO_ALL_SQL_COMMANDS();
+};
 
 namespace mods::sql {
 	template <typename T>
@@ -527,32 +530,7 @@ namespace mods::sql {
 				return *this;
 			}
 
-			std::string sql() {
-				m_sql = "";
-				m_query[3] = "";
-
-				for(auto& join : m_joins) {
-					m_query[3] += join + " ";
-				}
-
-				for(unsigned i = 0; i < query_parts; i++) {
-					m_sql += m_query[i];
-				}
-				if(m_returning.length()) {
-					m_sql += m_returning;
-				}
-				if(m_order_by.length()) {
-					m_sql += m_order_by;
-				}
-				if(m_limit.length()) {
-					m_sql += m_limit;
-				}
-
-#ifdef __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
-				std::cerr << m_sql << "\n";
-#endif
-				return m_sql;
-			}
+			std::string sql();
 		private:
 			std::string m_sql;
 			std::array<std::string, query_parts> m_query;

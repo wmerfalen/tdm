@@ -4,7 +4,6 @@
 #include "interpreter.hpp"
 #include "screen-searcher.hpp"
 
-#define __MENTOC_MODS_MOBS_HELPERS_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_HELPERS_SHOW_DEBUG_OUTPUT__
 #define me_debug(a) mentoc_prefix_debug("mods::mob_equipment") << a << "\n";
 #else

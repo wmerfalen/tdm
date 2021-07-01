@@ -25,6 +25,9 @@ namespace mods::levels {
 	};
 	void list_skills(player_ptr_t& player);
 	int gain_exp(player_ptr_t& player,int gain);
+	int gain_exp_from_killing(player_ptr_t& attacker,player_ptr_t& victim);
+	int reduce_exp_from_dying(player_ptr_t& player);
+	int gain_mp_from_killing(player_ptr_t& attacker,player_ptr_t& victim);
 	void advance_level(player_ptr_t& player);
 	uint8_t player_tier(player_ptr_t& player);
 	uint8_t player_tier(const uint8_t& level);

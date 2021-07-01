@@ -42,8 +42,10 @@ extern void check_killer(char_data *ch, char_data *vict);
 extern int skill_message(int dam, char_data *ch, char_data *vict, int attacktype);
 extern void dam_message(int dam, char_data *ch, char_data *victim, int w_type);
 extern ACMD(do_flee);
+#if __MENTOC_USE_GROUP_GAIN__
 extern void group_gain(char_data *ch, char_data *victim);
-extern void solo_gain(char_data *ch, char_data *victim);
+#endif
+extern void solo_gain(player_ptr_t&,player_ptr_t&);
 extern void forget(char_data *ch,char_data *victim);
 #ifndef IS_WEAPON
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
@@ -291,8 +293,9 @@ namespace mods::weapons::damage_types {
 			}
 		}
 		int perform_damage_cleanup(char_data *ch, char_data *victim, int dam, int attacktype) {
-			auto vplayer = ptr(victim);
-			if(mods::super_users::player_is(vplayer)) {
+			auto victim_ptr = ptr(victim);
+			auto attacker = ptr(ch);
+			if(mods::super_users::player_is(victim_ptr)) {
 				return 0;
 			}
 			/* stop someone from fighting if they're stunned or worse */
@@ -303,11 +306,15 @@ namespace mods::weapons::damage_types {
 			/* Uh oh.  Victim died. */
 			if(GET_POS(victim) == POS_DEAD) {
 				if(ch && ch != victim && (IS_NPC(victim) || victim->has_desc)) {
+#if __MENTOC_USE_GROUP_GAIN__
 					if(AFF_FLAGGED(ch, AFF_GROUP)) {
 						group_gain(ch, victim);
 					} else {
-						solo_gain(ch, victim);
+						solo_gain(attacker,victim_ptr);
 					}
+#else
+					solo_gain(attacker,victim_ptr);
+#endif
 				}
 
 				if(!IS_NPC(victim)) {
@@ -348,7 +355,7 @@ namespace mods::weapons::damage_types {
 			md("deal_damage'd");
 			auto p = ptr(attacker);
 			md("gaining xp");
-			mods::levels::gain_exp(p, std::min(GET_LEVEL(victim),(uint8_t)1) * dam);
+			mods::levels::gain_exp_from_killing(p, vplayer);
 			md("updating pos of victim");
 			update_position(victim);
 			send_combat_messages(attacker,victim,dam,attacktype);

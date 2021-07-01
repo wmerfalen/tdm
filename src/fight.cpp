@@ -448,13 +448,14 @@ void die(char_data* killer,char_data *victim) {
 	auto v = ptr(victim);
 	auto obj = mods::loot::reward_player(p);
 	obj_to_char(obj,v);
+	mods::levels::gain_exp_from_killing(p,v);
 	die(victim);
 }
 
 
 void die(char_data *ch) {
 	auto p = ptr(ch);
-	mods::levels::gain_exp(p, -(GET_EXP(ch) / 2));
+	mods::levels::reduce_exp_from_dying(p);
 
 	if(!IS_NPC(ch)) {
 		REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
@@ -531,29 +532,13 @@ void group_gain(char_data *ch, char_data *victim) {
 }
 
 
-void solo_gain(char_data *ch, char_data *victim) {
-	int exp;
-
-	exp = MIN(max_exp_gain, GET_EXP(victim) / 3);
-
-	/* Calculate level-difference bonus */
-	if(IS_NPC(ch)) {
-		exp += MAX(0, (exp * MIN(4, (GET_LEVEL(victim) - GET_LEVEL(ch)))) / 8);
-	} else {
-		exp += MAX(0, (exp * MIN(8, (GET_LEVEL(victim) - GET_LEVEL(ch)))) / 8);
+void solo_gain(player_ptr_t& attacker,player_ptr_t& victim) {
+	attacker->sendln(CAT("You gain ",mods::levels::gain_exp_from_killing(attacker, victim)," experience points."));
+	auto mp = mods::levels::gain_mp_from_killing(attacker, victim);
+	if(mp) {
+		attacker->sendln(CAT("You gain ",mp," mission points."));
 	}
-
-	exp = MAX(exp, 1);
-
-	if(exp > 1) {
-		send_to_char(ch, "You receive %d experience points.", exp);
-	} else {
-		send_to_char(ch, "You receive one lousy experience point.");
-	}
-
-	auto p = ptr(ch);
-	mods::levels::gain_exp(p, exp);
-	change_alignment(ch, victim);
+	change_alignment(attacker->cd(), victim->cd());
 }
 
 

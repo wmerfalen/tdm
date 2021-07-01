@@ -174,6 +174,102 @@ namespace mods::levels {
 		mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::GAIN_EXP);
 		return num_levels;
 	}
+	void gain_mp(player_ptr_t& player,int gain) {
+		player->mp() += gain;
+	}
+	int gain_mp_from_killing(player_ptr_t& attacker,player_ptr_t& victim) {
+		if(attacker->is_npc()) {
+			return 0;
+		}
+		int32_t level_difference = attacker->level() - victim->level();
+		int gain = 0;
+		switch(level_difference) {
+			case 1:
+				gain = victim->level() + victim->level() * GAIN_MP_LEVEL_DIFFERENCE_POSITIVE_ONE();
+				break;
+			case 0:
+				gain = victim->level() + victim->level() * GAIN_MP_LEVEL_DIFFERENCE_ZERO();
+				break;
+			case -1:
+				gain = victim->level() + victim->level() * GAIN_MP_LEVEL_DIFFERENCE_NEGATIVE_ONE();
+				break;
+			case -2:
+				gain = victim->level() + victim->level() * GAIN_MP_LEVEL_DIFFERENCE_NEGATIVE_TWO();
+				break;
+			default:
+				break;
+		}
+		if(level_difference < -2 && level_difference >= -4) {
+			gain = victim->level() + victim->level() * GAIN_MP_LEVEL_DIFFERENCE_BETWEEN_NEG_TWO_NEG_FOUR();
+		}
+		if(level_difference < -5 && level_difference >= -10) {
+			gain = victim->level() + victim->level() * GAIN_MP_LEVEL_DIFFERENCE_BETWEEN_NEG_FIVE_NEG_TEN();
+		}
+		if(level_difference < -10) {
+			gain = victim->level() + victim->level() * GAIN_MP_LEVEL_DIFFERENCE_LESS_THAN_NEG_TEN();
+		}
+		if(level_difference > 1) {
+			gain = victim->level() + victim->level() * GAIN_MP_LEVEL_GREATER_THAN_ONE();
+		}
+		if(gain != 0) {
+			gain_mp(attacker,gain);
+		}
+		return gain;
+	}
+
+	int gain_exp_from_killing(player_ptr_t& attacker,player_ptr_t& victim) {
+		int32_t level_difference = attacker->level() - victim->level();
+		int gain = 0;
+		switch(level_difference) {
+			case 1:
+				gain = victim->level() + victim->level() * GAIN_EXP_LEVEL_DIFFERENCE_POSITIVE_ONE();
+				break;
+			case 0:
+				gain = victim->level() + victim->level() * GAIN_EXP_LEVEL_DIFFERENCE_ZERO();
+				break;
+			case -1:
+				gain = victim->level() + victim->level() * GAIN_EXP_LEVEL_DIFFERENCE_NEGATIVE_ONE();
+				break;
+			case -2:
+				gain = victim->level() + victim->level() * GAIN_EXP_LEVEL_DIFFERENCE_NEGATIVE_TWO();
+				break;
+			default:
+				break;
+		}
+		if(level_difference < -2 && level_difference >= -4) {
+			gain = victim->level() + victim->level() * GAIN_EXP_LEVEL_DIFFERENCE_BETWEEN_NEG_TWO_NEG_FOUR();
+		}
+		if(level_difference < -5 && level_difference >= -10) {
+			gain = victim->level() + victim->level() * GAIN_EXP_LEVEL_DIFFERENCE_BETWEEN_NEG_FIVE_NEG_TEN();
+		}
+		if(level_difference < -10) {
+			gain = victim->level() + victim->level() * GAIN_EXP_LEVEL_DIFFERENCE_LESS_THAN_NEG_TEN();
+		}
+		if(level_difference > 1) {
+			gain = victim->level() + victim->level() * GAIN_EXP_LEVEL_GREATER_THAN_ONE();
+		}
+		if(gain != 0) {
+			gain_exp(attacker,gain);
+		}
+		return gain;
+	}
+
+	int reduce_exp_from_dying(player_ptr_t& player) {
+		if(player->is_npc()) {
+			return 0;
+		}
+		if(player->level() >= 1 && player->level() <= NEWBIES_KEEP_EXP_LEVEL()) {
+			return 0;
+		}
+		switch(player_tier(player->level())) {
+			case 2:
+				return gain_exp(player,player->level() * TIER_TWO_DEATH_EXP_LOSS());
+			case 3:
+				return gain_exp(player,player->level() * TIER_THREE_DEATH_EXP_LOSS());
+			default:
+				return gain_exp(player,player->level() * TIER_ELITE_DEATH_EXP_LOSS());
+		}
+	}
 
 	/**
 	 * extra rewards for advancing
@@ -216,28 +312,10 @@ namespace mods::levels {
 	}
 
 	uint8_t player_tier(const uint8_t& level) {
-		if(level <= 9) {
-			return 1;
-		}
-		if(level >= 10 && level <= 19) {
-			return 2;
-		}
-		if(level >= 20) {
-			return 3;
-		}
-		return 1;
+		return (level / 10) + 1;
 	}
 	uint8_t player_tier(player_ptr_t& player) {
-		if(player->level() <= 9) {
-			return 1;
-		}
-		if(player->level() >= 10 && player->level() <= 19) {
-			return 2;
-		}
-		if(player->level() >= 20) {
-			return 3;
-		}
-		return 1;
+		return player->level() / 10 + 1;
 	}
 	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {
 

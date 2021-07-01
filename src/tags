@@ -225,6 +225,7 @@ ALTEX_SCAN	mods/yaml.hpp	/^	ALTEX_SCAN = (1),$/;"	e	enum:alternate_explosion_t
 ALTEX_SMOKE	mods/yaml.hpp	/^	ALTEX_SMOKE = (1 << 1),$/;"	e	enum:alternate_explosion_t
 ALUMINUM_BASEBALL_BAT	mods/weapon.hpp	/^		ALUMINUM_BASEBALL_BAT,$/;"	e	enum:mods::weapon::melee_t
 AMMO	mods/weapon.hpp	13;"	d
+AM_I_EVIL	mods/values-list.cpp	/^AM_I_EVIL,true$/;"	v
 AN	utils.h	161;"	d
 ANA	utils.h	434;"	d
 ANACONDA_ASSAULT	mods/object.hpp	/^				ANACONDA_ASSAULT,$/;"	e	enum:mods::object::object_type_enum_t
@@ -772,10 +773,10 @@ CCRED	screen.h	30;"	d
 CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
-CGET	mods/values.hpp	1406;"	d
-CGET	mods/values.hpp	703;"	d
+CGET	mods/values.hpp	1450;"	d
+CGET	mods/values.hpp	725;"	d
 CGET_DEF	mods/values.cpp	20;"	d	file:
-CGET_DEF	mods/values.cpp	2832;"	d	file:
+CGET_DEF	mods/values.cpp	2920;"	d	file:
 CHAFF_NADE	mods/classes/engineer.hpp	/^				CHAFF_NADE,$/;"	e	enum:mods::classes::engineer::ability_t
 CHAFF_NADE	mods/classes/marine.hpp	/^				CHAFF_NADE,$/;"	m	struct:mods::classes::marine	typeref:enum:mods::classes::marine::
 CHAFF_NADE	mods/classes/sniper.hpp	/^				CHAFF_NADE,$/;"	e	enum:mods::classes::sniper::ability_t
@@ -1051,8 +1052,8 @@ DISPLAY	mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY 
 DISPLAY_ACMD	mods/players/db-load.hpp	/^		DISPLAY_ACMD,$/;"	e	enum:mods::players::db_load::save_from_t
 DM	telnet.h	55;"	d
 DMG_DEBUG	mods/weapons/damage-decisions.hpp	182;"	d
-DMG_DEBUG	mods/weapons/damage-types.cpp	1155;"	d	file:
-DMG_DUMP	mods/weapons/damage-types.cpp	474;"	d	file:
+DMG_DEBUG	mods/weapons/damage-types.cpp	1162;"	d	file:
+DMG_DUMP	mods/weapons/damage-types.cpp	481;"	d	file:
 DO	telnet.h	44;"	d
 DONT	telnet.h	43;"	d
 DONTSET	mods/flags.hpp	/^		DONTSET,$/;"	e	enum:mods::flags::plr
@@ -1116,6 +1117,7 @@ DidntThrowException	mods/catch.hpp	/^			DidntThrowException = Exception | 2,$/;"
 DidntThrowException	mods/catch2.hpp	/^        DidntThrowException = Exception | 2,$/;"	e	enum:Catch::ResultWas::OfType
 EAST	structs.h	134;"	d
 EC	telnet.h	50;"	d
+ECHO_ALL_SQL_COMMANDS	mods/values-list.cpp	/^ECHO_ALL_SQL_COMMANDS,true$/;"	v
 EIM_BREACHABLE	mods/doors.hpp	/^		EIM_BREACHABLE = EX_BREACHABLE,$/;"	e	enum:mods::doors::exit_info_masks_t
 EIM_BREACHED	mods/doors.hpp	/^		EIM_BREACHED = EX_BREACHED,$/;"	e	enum:mods::doors::exit_info_masks_t
 EIM_CLOSED	mods/doors.hpp	/^		EIM_CLOSED = EX_CLOSED,$/;"	e	enum:mods::doors::exit_info_masks_t
@@ -1919,7 +1921,7 @@ IS_SUPPORT	utils.h	511;"	d
 IS_THIEF	utils.h	506;"	d
 IS_WARRIOR	utils.h	510;"	d
 IS_WEAPON	fight.cpp	130;"	d	file:
-IS_WEAPON	mods/weapons/damage-types.cpp	49;"	d	file:
+IS_WEAPON	mods/weapons/damage-types.cpp	51;"	d	file:
 IS_WEAPON_LOADED	mods/weapon.hpp	15;"	d
 IShared	mods/catch.hpp	/^	struct IShared : NonCopyable {$/;"	s	namespace:Catch
 IStream	mods/catch2.hpp	/^    struct IStream {$/;"	s	namespace:Catch
@@ -2611,13 +2613,13 @@ METAL_HATCH	structs.h	/^			METAL_HATCH,$/;"	m	struct:room_data	typeref:enum:room
 METAL_WALL	structs.h	/^			METAL_WALL,$/;"	m	struct:room_data	typeref:enum:room_data::
 MFEEDBACK	mods/weapons/damage-decisions.hpp	179;"	d
 MFEEDBACK	mods/weapons/damage-event-broadcaster.hpp	147;"	d
-MFEEDBACK	mods/weapons/damage-types.cpp	58;"	d	file:
+MFEEDBACK	mods/weapons/damage-types.cpp	60;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	87;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	96;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	86;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	95;"	d	file:
-MG_REPORT	mods/mobs/mp-shotgunner.cpp	100;"	d	file:
-MG_REPORT	mods/mobs/mp-shotgunner.cpp	91;"	d	file:
+MG_REPORT	mods/mobs/mp-shotgunner.cpp	90;"	d	file:
+MG_REPORT	mods/mobs/mp-shotgunner.cpp	99;"	d	file:
 MG_REPORT	mods/mobs/smart-mob.cpp	39;"	d	file:
 MG_REPORT	mods/mobs/smart-mob.cpp	48;"	d	file:
 MIN	utils.cpp	/^int MIN(int a, int b) {$/;"	f
@@ -3806,7 +3808,6 @@ SNIPE	mods/weapon-types.hpp	/^		SNIPE,$/;"	e	enum:mods::weapon::capabilities::ca
 SNIPE	mods/weapon.hpp	/^	enum mask_type { SMG = 1, SNIPE = (1 << 2), SHOTGUN = (1 << 3),$/;"	e	enum:mods::weapon::mask_type
 SNIPER	mods/classes/types.hpp	/^		SNIPER,$/;"	e	enum:mods::classes::types
 SNIPER	structs.h	/^	SNIPER = 1,$/;"	e	enum:player_class_t
-SNIPER_GAUZE_MULTIPLIER	mods/values-list.cpp	/^SNIPER_GAUZE_MULTIPLIER,12.3418$/;"	v
 SNIPER_NONE	mods/weapon.hpp	/^			SNIPER_NONE = 0,$/;"	e	enum:mods::weapon::sniper::primary_choice_t
 SNIPER_PRIMARY_L96AW	mods/weapon.hpp	/^			SNIPER_PRIMARY_L96AW = 2,$/;"	e	enum:mods::weapon::sniper::primary_choice_t
 SNIPER_PRIMARY_PSG1	mods/weapon.hpp	/^			SNIPER_PRIMARY_PSG1 = 1,$/;"	e	enum:mods::weapon::sniper::primary_choice_t
@@ -4351,6 +4352,7 @@ THIRST	structs.h	601;"	d
 THROW	mods/item.hpp	/^		THROW = (1 << 2),$/;"	e	enum:mods::item::capability_t
 THROW	mods/weapon-types.hpp	/^		THROW,$/;"	e	enum:mods::weapon::capabilities::cap_t
 TICK_RESOLUTION	mods/deferred.hpp	/^			constexpr static uint64_t TICK_RESOLUTION = 3;$/;"	m	class:mods::deferred
+TIER_TWO_DEATH_EXP_LOSS	mods/values-list.cpp	/^TIER_TWO_DEATH_EXP_LOSS,10.13$/;"	v
 TIME_FILE	db.h	99;"	d
 TIME_LOG_FILE_NAME	mods/date-time.cpp	/^	constexpr const char* TIME_LOG_FILE_NAME = "\/tmp\/cm++-time.log";$/;"	m	namespace:mods::date_time	file:
 TIME_WITH_SYS_TIME	conf.h	29;"	d
@@ -5033,7 +5035,6 @@ __MENTOC_MODS_MINI_GAMES_WIRES_HEADER__	mods/mini-games/wires.hpp	2;"	d
 __MENTOC_MODS_MOBS_DAMAGE_EVENT_HEADER__	mods/mobs/damage-event.hpp	2;"	d
 __MENTOC_MODS_MOBS_EXTENDED_TYPES_HEADER__	mods/mobs/extended-types.hpp	2;"	d
 __MENTOC_MODS_MOBS_HELPERS_HEADER__	mods/mobs/helpers.hpp	2;"	d
-__MENTOC_MODS_MOBS_HELPERS_SHOW_DEBUG_OUTPUT__	mods/mob-equipment.cpp	7;"	d	file:
 __MENTOC_MODS_MOBS_LOWLY_SECURITY_BEHAVIOUR_TREE_HEADER__	mods/mobs/lowly-security-behaviour-tree.hpp	2;"	d
 __MENTOC_MODS_MOBS_LOWLY_SECURITY_HEADER__	mods/mobs/lowly-security.hpp	2;"	d
 __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__	mods/mobs/lowly-security.cpp	7;"	d	file:
@@ -5042,7 +5043,6 @@ __MENTOC_MODS_MOBS_MINI_GUNNER_BEHAVIOUR_TREE_SHOW_DEBUG_OUTPUT__	mods/mobs/mini
 __MENTOC_MODS_MOBS_MINI_GUNNER_HEADER__	mods/mobs/mini-gunner.hpp	2;"	d
 __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG_OUTPUT__	mods/mobs/mini-gunner.cpp	10;"	d	file:
 __MENTOC_MODS_MOBS_MP_SHOTGUNNER_BEHAVIOUR_TREE_HEADER__	mods/mobs/mp-shotgunner-behaviour-tree.hpp	2;"	d
-__MENTOC_MODS_MOBS_MP_SHOTGUNNER_SHOW_DEBUG_OUTPUT__	mods/mobs/mp-shotgunner.cpp	9;"	d	file:
 __MENTOC_MODS_MOBS_ROOM_WATCHING_HEADER__	mods/mobs/room-watching.hpp	2;"	d
 __MENTOC_MODS_MOBS_SMART_MOB_HEADER__	mods/mobs/smart-mob.hpp	2;"	d
 __MENTOC_MODS_MOBS_car_thief_BEHAVIOUR_TREE_HEADER__	mods/mobs/car-thief-behaviour-tree.hpp	2;"	d
@@ -7911,7 +7911,10 @@ gain_entry	mods/player-contract-instance.cpp	/^	void player_contract_instance::g
 gain_entry_to_room	mods/contract-events.cpp	/^	void gain_entry_to_room(player_ptr_t& player,const room_rnum& room_id) {$/;"	f	namespace:mods::contract_events
 gain_exp	limits.cpp	/^	void gain_exp(char_data *ch, int gain) {$/;"	f	namespace:legacy
 gain_exp	mods/levels.cpp	/^	int gain_exp(player_ptr_t& player,int gain) {$/;"	f	namespace:mods::levels
+gain_exp_from_killing	mods/levels.cpp	/^	int gain_exp_from_killing(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	f	namespace:mods::levels
 gain_exp_regardless	limits.cpp	/^	void gain_exp_regardless(char_data *ch, int gain) {$/;"	f	namespace:legacy
+gain_mp	mods/levels.cpp	/^	void gain_mp(player_ptr_t& player,int gain) {$/;"	f	namespace:mods::levels
+gain_mp_from_killing	mods/levels.cpp	/^	int gain_mp_from_killing(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	f	namespace:mods::levels
 game	mods/mini-games.cpp	/^	line_up& game(room_vnum vnum,int id) {$/;"	f	namespace:mods::mini_games
 game_action	mods/orm/mini-game.hpp	/^		std::string game_action;$/;"	m	struct:mods::orm::mini_game
 game_entry	mods/players/db-load.cpp	/^	void game_entry(player_ptr_t& player) {$/;"	f	namespace:mods::players::db_load
@@ -9325,8 +9328,8 @@ ltrim	mods/lmdb/db.hpp	/^		static inline void ltrim(std::string &s) {$/;"	f	stru
 ltrim_copy	mods/lmdb/db.hpp	/^		static inline std::string ltrim_copy(std::string s) {$/;"	f	struct:gdns::util
 m	mods/mobs/car-thief.cpp	227;"	d	file:
 m	mods/mobs/car-thief.cpp	96;"	d	file:
-m	mods/mobs/mp-shotgunner.cpp	113;"	d	file:
-m	mods/mobs/mp-shotgunner.cpp	305;"	d	file:
+m	mods/mobs/mp-shotgunner.cpp	112;"	d	file:
+m	mods/mobs/mp-shotgunner.cpp	304;"	d	file:
 m	random.cpp	45;"	d	file:
 m20	mods/acl/config-parser.cpp	/^        inline void FileParser::m20(){ if(!print_debug){ return; } $/;"	f	class:mods::acl::FileParser
 m_abilities	mods/classes/breacher.hpp	/^			ability_list_t m_abilities;$/;"	m	struct:mods::classes::breacher
@@ -9575,7 +9578,7 @@ m_debug	mods/forge-engine/value-scaler.hpp	47;"	d
 m_debug	mods/forge-engine/value-scaler.hpp	9;"	d
 m_debug	mods/levels.cpp	12;"	d	file:
 m_debug	mods/levels.cpp	14;"	d	file:
-m_debug	mods/levels.cpp	513;"	d	file:
+m_debug	mods/levels.cpp	591;"	d	file:
 m_debug	mods/loot.cpp	6;"	d	file:
 m_debug	mods/loot.cpp	8;"	d	file:
 m_debug	mods/migrations.cpp	5;"	d	file:
@@ -10190,7 +10193,7 @@ mcv_debug	mods/calc-visibility.cpp	234;"	d	file:
 md	mods/weapons/damage-decisions.hpp	119;"	d
 md	mods/weapons/damage-decisions.hpp	45;"	d
 md	mods/weapons/damage-decisions.hpp	47;"	d
-md	mods/weapons/damage-types.cpp	1156;"	d	file:
+md	mods/weapons/damage-types.cpp	1163;"	d	file:
 md	mods/weapons/damage-types.cpp	27;"	d	file:
 md	mods/weapons/damage-types.cpp	29;"	d	file:
 mdo_debug	mods/deep-object-parser.hpp	11;"	d
@@ -10198,9 +10201,9 @@ mdo_debug	mods/deep-object-parser.hpp	22;"	d
 mdo_debug	mods/rifle-attachments.hpp	116;"	d
 mdo_debug	mods/rifle-attachments.hpp	6;"	d
 mdo_debug	mods/rifle-attachments.hpp	9;"	d
-me_debug	mods/mob-equipment.cpp	11;"	d	file:
-me_debug	mods/mob-equipment.cpp	66;"	d	file:
-me_debug	mods/mob-equipment.cpp	9;"	d	file:
+me_debug	mods/mob-equipment.cpp	10;"	d	file:
+me_debug	mods/mob-equipment.cpp	65;"	d	file:
+me_debug	mods/mob-equipment.cpp	8;"	d	file:
 medic	mods/classes/medic.cpp	/^	medic::medic() {$/;"	f	class:mods::classes::medic
 medic	mods/classes/medic.cpp	/^	medic::medic(player_ptr_t p) {$/;"	f	class:mods::classes::medic
 medic	mods/classes/medic.hpp	/^	struct medic : public base {$/;"	s	namespace:mods::classes
@@ -10514,9 +10517,9 @@ mp_shotgunner_behaviour_tree	mods/mobs/mp-shotgunner-behaviour-tree.hpp	/^namesp
 mp_shotgunner_btree	mods/mobs/mp-shotgunner.cpp	/^	namespace mp_shotgunner_btree {$/;"	n	namespace:mods::mobs	file:
 mp_shotgunner_ptr	mods/mobs/mp-shotgunner.hpp	/^static inline std::shared_ptr<mods::mobs::mp_shotgunner> mp_shotgunner_ptr(const uuid_t& u) {$/;"	f
 mpl_	mods/catch2.hpp	/^namespace mpl_{$/;"	n
-mps_debug	mods/mobs/mp-shotgunner.cpp	11;"	d	file:
-mps_debug	mods/mobs/mp-shotgunner.cpp	13;"	d	file:
-mps_debug	mods/mobs/mp-shotgunner.cpp	420;"	d	file:
+mps_debug	mods/mobs/mp-shotgunner.cpp	10;"	d	file:
+mps_debug	mods/mobs/mp-shotgunner.cpp	12;"	d	file:
+mps_debug	mods/mobs/mp-shotgunner.cpp	419;"	d	file:
 mpshotgunner_map	mods/mobs/mp-shotgunner.cpp	/^	mpshotgunner_map_t& mpshotgunner_map() {$/;"	f	namespace:mods::mobs
 mpub_aggro	mods/ai_state.hpp	/^			int32_t mpub_aggro;$/;"	m	class:mods::ai_state
 mpub_dead	mods/ai_state.hpp	/^			uint32_t mpub_dead;$/;"	m	class:mods::ai_state
@@ -11714,6 +11717,7 @@ red_text	mods/acl/color.hpp	4;"	d
 reduce_ammo	mods/weapons/damage-calculator.cpp	/^	int16_t reduce_ammo($/;"	f	namespace:mods::weapons::damage_calculator
 reduce_durability_points	mods/weapons/damage-calculator.cpp	/^	int16_t reduce_durability_points($/;"	f	namespace:mods::weapons::damage_calculator
 reduce_elemental_resistance	mods/weapons/elemental.cpp	/^	int reduce_elemental_resistance(int requested_damage, int16_t resistance) {$/;"	f	namespace:mods::weapons::elemental
+reduce_exp_from_dying	mods/levels.cpp	/^	int reduce_exp_from_dying(player_ptr_t& player) {$/;"	f	namespace:mods::levels
 reduce_explosive_damage_using_armor	mods/armor/basic-protection.cpp	/^	int basic_protection::reduce_explosive_damage_using_armor(obj_ptr_t& explosive,int damage,int where) {$/;"	f	class:mods::armor::basic_protection
 reflect_munitions	mods/weapons/damage-event-broadcaster.hpp	/^	void reflect_munitions(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction) {$/;"	f	namespace:mods::weapons::damage_types
 refresh_armor_index	mods/forge-engine/generated-armor.cpp	/^	static bool refresh_armor_index = true;$/;"	m	namespace:mods::forge_engine	file:
@@ -12914,7 +12918,7 @@ socket_t	mods/scan.hpp	/^typedef int socket_t;$/;"	t
 socket_t	sysdep.h	/^typedef SOCKET		socket_t;$/;"	t
 socklen_t	mods/lmdb/gethostbyname.cpp	/^typedef uint32_t socklen_t;$/;"	t	file:
 solar_assistance	mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::solar_assistance(room_rnum room_id){$/;"	f	class:mods::orm::pyrexia
-solo_gain	fight.cpp	/^void solo_gain(char_data *ch, char_data *victim) {$/;"	f
+solo_gain	fight.cpp	/^void solo_gain(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	f
 solution	mods/intent.hpp	/^		std::vector<std::string> solution;$/;"	m	struct:mods::intent::intent_t
 solution	mods/mini-games/wires.hpp	/^		std::tuple<uint8_t,uint8_t> solution;$/;"	m	struct:mods::mini_games::wires
 solutions	mods/mini-games/line-up.hpp	/^		std::vector<uint8_t> solutions;$/;"	m	namespace:mods::mini_games
@@ -12974,8 +12978,8 @@ sprintbit	utils.cpp	/^size_t sprintbit(bitvector_t bitvector, const char *names[
 sprinttype	utils.cpp	/^size_t sprinttype(int type, const char *names[], char *result, size_t reslen) {$/;"	f
 spskill_description	mods/orm/chargen.hpp	/^		std::string spskill_description;\/\/TEXT$/;"	m	struct:mods::orm::specialty_skills
 spskill_name	mods/orm/chargen.hpp	/^		std::string spskill_name;\/\/VARCHAR(64) NOT NULL,$/;"	m	struct:mods::orm::specialty_skills
+sql	mods/sql.cpp	/^	std::string compositor<mods::pq::transaction>::sql() {$/;"	f	class:mods::sql::compositor
 sql	mods/sql.cpp	/^namespace mods::sql {$/;"	n	class:mods	file:
-sql	mods/sql.hpp	/^			std::string sql() {$/;"	f	struct:mods::sql::compositor
 sql	mods/sql.hpp	/^namespace mods::sql {$/;"	n	class:mods
 sql_compositor	mods/builder_util.hpp	/^typedef mods::sql::compositor<mods::pq::transaction> sql_compositor;$/;"	t
 stack_data	shop.h	/^struct stack_data {$/;"	s
@@ -13620,6 +13624,7 @@ value_scaler_static	mods/init.hpp	/^INIT(mods::forge_engine::value_scaler_static
 values	mods/builder.cpp	/^	str_map_t values;$/;"	m	struct:command_t	file:
 values	mods/init.hpp	/^INIT(mods::values);$/;"	v
 values	mods/sql.hpp	/^			compositor<T>& values(const value_map& values) {$/;"	f	struct:mods::sql::compositor
+values	mods/sql.hpp	/^namespace mods::values {$/;"	n	class:mods
 values	mods/values.cpp	/^namespace mods::values {$/;"	n	class:mods	file:
 values	mods/values.hpp	/^namespace mods::values {$/;"	n	class:mods
 values_with_password	mods/sql.hpp	/^			compositor<T>& values_with_password(const value_map& values, std::string_view password_field) {$/;"	f	struct:mods::sql::compositor

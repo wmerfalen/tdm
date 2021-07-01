@@ -15,6 +15,37 @@
 				player->send(vec_args);
 				mods::values::save_to_lmdb(vec_args[0],vec_args[1]);
 				mods::values::load_from_lmdb(vec_args[0]);
+				value_key_t key = to_vk_from_string(vec_args[0]);
+				if(is_bool(key)){
+					auto it = std::find(bool_types.begin(),bool_types.end(),key);
+					player->sendln(CAT("setting ",key,":"));
+					CONSTSET<bool>(*it,vec_args[1][0] == '1' ? true : false);
+				}
+				if(is_int(key)){
+					auto it = std::find(int_types.begin(),int_types.end(),key);
+					player->sendln(CAT("setting ",key,":"));
+					CONSTSET<int>(*it,mods::util::stoi<int>(vec_args[1]));
+				}
+				if(is_uint8(key)){
+					auto it = std::find(uint8_types.begin(),uint8_types.end(),key);
+					player->sendln(CAT("setting ",key,":"));
+					CONSTSET<uint8_t>(*it,mods::util::stoi<uint8_t>(vec_args[1]));
+				}
+				if(is_uint16(key)){
+					auto it = std::find(uint16_types.begin(),uint16_types.end(),key);
+					player->sendln(CAT("setting ",key,":"));
+					CONSTSET<uint16_t>(*it,mods::util::stoi<uint16_t>(vec_args[1]));
+				}
+				if(is_float(key)){
+					auto it = std::find(float_types.begin(),float_types.end(),key);
+					player->sendln(CAT("setting ",key,":"));
+					CONSTSET<float>(*it,mods::util::stoi<float>(vec_args[1]));
+				}
+				if(is_string(key)){
+					auto it = std::find(string_types.begin(),string_types.end(),key);
+					player->sendln(CAT("setting ",key,":"));
+					CONSTSET<std::string>(*it,vec_args[1]);
+				}
 				ADMIN_DONE();
 			}
 			/**************/
@@ -32,6 +63,10 @@
 
 				for(auto vk_key : vec_args){
 					value_key_t key = to_vk_from_string(vk_key);
+					if(is_bool(key)){
+						auto it = std::find(bool_types.begin(),bool_types.end(),key);
+						player->sendln(CAT(key,":'",CONSTGET<bool>(*it,0),"'"));
+					}
 					if(is_int(key)){
 						auto it = std::find(int_types.begin(),int_types.end(),key);
 						player->sendln(CAT(key,":'",CONSTGET<int>(*it,0),"'"));
@@ -82,7 +117,7 @@
 				DO_HELP("list_values");
 				auto vec_args = PARSE_ARGS();
 				std::vector<std::string> screen;
-				for(auto section : {uint8_types,uint16_types,int_types,string_types}){
+				for(auto section : {bool_types,uint8_types,uint16_types,int_types,string_types}){
 					for(auto item : section){
 						screen.emplace_back(to_string(item));
 					}

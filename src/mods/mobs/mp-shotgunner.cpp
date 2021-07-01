@@ -6,7 +6,6 @@
 #include "extended-types.hpp"
 #include "../scan.hpp"
 
-#define __MENTOC_MODS_MOBS_MP_SHOTGUNNER_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_MP_SHOTGUNNER_SHOW_DEBUG_OUTPUT__
 #define mps_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n";
 #else

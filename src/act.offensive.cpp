@@ -521,8 +521,7 @@ ACMD(do_order) {
 
 
 ACMD(do_flee) {
-	int i, attempt, loss;
-	char_data *was_fighting;
+	int i, attempt;
 
 	if(GET_POS(ch) < POS_FIGHTING) {
 		send_to_char(ch, "You are in pretty bad shape, unable to flee!");
@@ -535,16 +534,9 @@ ACMD(do_flee) {
 		if(CAN_GO(ch, attempt) &&
 		        !ROOM_FLAGGED(EXIT(ch, attempt)->to_room, ROOM_DEATH)) {
 			act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
-			was_fighting = FIGHTING(ch);
 
 			if(do_simple_move(ch, attempt, TRUE)) {
 				send_to_char(ch, "You flee head over heels.");
-
-				if(was_fighting && !IS_NPC(ch)) {
-					loss = GET_MAX_HIT(was_fighting) - GET_HIT(was_fighting);
-					loss *= GET_LEVEL(was_fighting);
-					mods::levels::gain_exp(player, -loss);
-				}
 			} else {
 				act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
 			}

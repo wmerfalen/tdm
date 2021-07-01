@@ -3299,3 +3299,6 @@ ALTER TABLE public.player ADD COLUMN player_practice_sessions INTEGER NOT NULL D
 /** sets mini gunner extended types to car thief extended types */
 update public.mobile set mob_special_extended_type=14 where mob_special_extended_type=1;
 ALTER TABLE zone_data ADD COLUMN zone_yaml TEXT;
+ALTER TABLE rifle_instance ALTER COLUMN rifle_type TYPE VARCHAR(32);
+ALTER TABLE rifle_instance ALTER COLUMN rifle_ammo_type TYPE VARCHAR(32);
+ALTER TABLE rifle_instance ALTER COLUMN rifle_str_type TYPE VARCHAR(32);
