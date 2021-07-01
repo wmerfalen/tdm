@@ -276,6 +276,13 @@ namespace mods::mobs {
 	void smart_mob::setup_damage_callbacks() {
 
 	}
+	std::pair<bool,std::string> smart_mob::move_to_on_tick(const direction_t& dir,const uint16_t tick_mod) {
+		if(mods::globals::current_tick % tick_mod == 0) {
+			move_to(dir);
+			return {1,"moved"};
+		}
+		return {0,"cooldown"};
+	}
 };
 #if 0
 #endif

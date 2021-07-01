@@ -23,6 +23,11 @@
 #define dty_debug(a)
 #endif
 
+#ifdef __MENTOC_SHOW_DAMAGE_TYPES_DEBUG__
+#define md(A) std::cerr << green_str("damage_types_debug:") << A << "\n";
+#else
+#define md(A)
+#endif
 
 #ifndef TO_ROOM
 #define TO_ROOM		1
@@ -87,12 +92,15 @@ namespace mods::weapons::damage_types {
 		int step_one(char_data *ch, char_data *victim, int dam, int attacktype) {
 			auto vplayer = ptr(victim);
 			if(mods::super_users::player_is(vplayer)) {
+				md("player is super user (from step_one)");
 				return 0;
 			}
 			/*TODO: Modify this code to allow sniping */
 			if(GET_POS(victim) <= POS_DEAD) {
+				md("victim is <= dead");
 				/* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
 				if(PLR_FLAGGED(victim, PLR_NOTDEADYET) || MOB_FLAGGED(victim, MOB_NOTDEADYET)) {
+					md("plr_flagged not dead yet");
 					return (-1);
 				}
 
@@ -110,23 +118,31 @@ namespace mods::weapons::damage_types {
 			}
 
 			/* shopkeeper protection */
+#if 0
+			/** THIS IS BROKEN WITH CAR THIEF AND POSSIBLY OTHER NPCS */
 			if(ch && !ok_damage_shopkeeper(ch, victim)) {
+				md("cannot damage shopkeeper");
 				return (0);
 			}
+#endif
+			md("step_one okay");
 			return 1;
 		}
 		int step_two(char_data *ch, char_data *victim, int dam, int attacktype) {
 			auto vplayer = ptr(victim);
 			if(mods::super_users::player_is(vplayer)) {
+				md("player is super user (step 2)");
 				return 0;
 			}
 			/* You can't damage an immortal! */
 			if(!IS_NPC(victim) && (GET_LEVEL(victim) >= LVL_IMMORT)) {
+				md("victim isnt npc and victim >= IMMORT");
 				dam = 0;
 			}
 			if(victim != ch) {
 				/* Start the attacker fighting the victim */
 				if(GET_POS(ch) > POS_STUNNED && (FIGHTING(ch) == NULL)) {
+					md("set fighting");
 					set_fighting(ch, victim);
 				}
 
@@ -145,8 +161,10 @@ namespace mods::weapons::damage_types {
 
 				/* If the attacker is invisible, he becomes visible */
 				if(AFF_FLAGGED(ch, AFF_INVISIBLE | AFF_HIDE)) {
+					md("appear");
 					appear(ch);
 				}
+				md("step_two okay");
 				return 1;
 			}
 			return -1;
@@ -313,18 +331,25 @@ namespace mods::weapons::damage_types {
 		int damage(char_data *attacker, char_data *victim, int dam, int attacktype) {
 			auto vplayer = ptr(victim);
 			if(mods::super_users::player_is(vplayer)) {
+				md("player is super user");
 				return -1;
 			}
 			if(step_one(attacker,victim,dam,attacktype) <= 0) {
+				md("step one failed");
 				return -1;
 			}
 			if(step_two(attacker,victim,dam,attacktype) <= 0) {
+				md("step two failed");
 				return -1;
 			}
 			dam = get_damage(attacker,victim,dam,attacktype);
+			md("get_damage:" << dam);
 			deal_damage(attacker,victim,dam,attacktype);
+			md("deal_damage'd");
 			auto p = ptr(attacker);
+			md("gaining xp");
 			mods::levels::gain_exp(p, std::min(GET_LEVEL(victim),(uint8_t)1) * dam);
+			md("updating pos of victim");
 			update_position(victim);
 			send_combat_messages(attacker,victim,dam,attacktype);
 			help_linkless(attacker,victim,dam,attacktype);
@@ -837,12 +862,6 @@ namespace mods::weapons::damage_types {
 	    obj_ptr_t weapon,
 	    player_ptr_t victim
 	) {
-#define __MENTOC_SHOW_MELEE_HIT_STATS__
-#ifdef __MENTOC_SHOW_MELEE_HIT_STATS__
-#define md(A) std::cerr << green_str("[melee_damage_with_feedback]->") << A << "\n"; (*player) << "\r\n [melee_damage_with_feedback debug]:" << A << "\r\n";
-#else
-#define md(A)
-#endif
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
 		feedback_t feedback;
@@ -914,7 +933,6 @@ namespace mods::weapons::damage_types {
 		md("processing elemental damage");
 		mods::weapons::elemental::process_elemental_damage(player,weapon,victim,feedback);
 		md("processed elemental damage");
-#undef md
 		set_player_weapon_cooldown(player,victim,weapon, feedback);
 		return feedback;
 	}
@@ -933,14 +951,17 @@ namespace mods::weapons::damage_types {
 		feedback_t feedback;
 		auto s = can_continue(player,weapon,victim,OPPOSITE_DIR(direction),ITEM_RIFLE);
 		if(std::get<0>(s) == false) {
+			md("can't continue");
 			return std::get<1>(s);
 		}
 		feedback = std::get<1>(s);
+		md("can continue. feedback:" << feedback.dump());
 
 		auto max_range = mods::weapons::damage_calculator::max_range(player,weapon);
 		if(distance > max_range) {
 			feedback.damage_event = de::TARGET_IS_OUT_OF_RANGE;
 			player->damage_event(feedback);
+			md("out of max range");
 			return feedback;
 		}
 
@@ -949,6 +970,7 @@ namespace mods::weapons::damage_types {
 		int dam = 0;
 		if(distance < weapon->rifle()->attributes->base_stat_list->size()) {
 			dam = weapon->rifle()->attributes->base_stat_list->at(distance).damage;
+			md("using base stat list: " << dam);
 		}
 		int damage_dice = weapon->rifle()->attributes->damage_dice_count;
 		int damage_sides = weapon->rifle()->attributes->damage_dice_sides;
@@ -958,6 +980,7 @@ namespace mods::weapons::damage_types {
 		if(mods::rooms::is_peaceful(victim->room())) {
 			feedback.damage_event = de::TARGET_IN_PEACEFUL_ROOM_EVENT;
 			player->damage_event(feedback);
+			md("is peaceful");
 			return feedback;
 		}
 
@@ -978,8 +1001,11 @@ namespace mods::weapons::damage_types {
 			victim->damage_event(feedback);
 
 			player->send(MSG_HEADSHOT().c_str());
+			md("headshot");
 		}
+		md("checking crit range");
 		if(distance == crit_range) {
+			md("is crit range");
 			if(dice(1,100) <= crit_chance) {
 				player->send(MSG_CRITICAL().c_str());
 				critical_bonus = dice(
@@ -1020,18 +1046,21 @@ namespace mods::weapons::damage_types {
 		    crit_chance
 		);
 #endif
+		md("dice_roll: " << dice_roll << ", dam:" << dam << "critical_bonus: " << critical_bonus <<
+		   ", " << damage_dice << "d" << damage_sides);
 		dam = calculate_tracked_damage(player,dam);
+		md("tracked damage: " << dam);
 		auto bonus_dam = mods::weapons::damage_calculator::calculate_bonus_damage(player,weapon,dam);
+		md("bonus damage: " << bonus_dam);
 		if(bonus_dam > dam) {
-#ifdef __MENTOC_SHOW_BONUS_DAM_OUTPUT__
-			std::cerr << "[mods::weapons::damage_types::rifle_attack_object_with_feedback] bonus damage: " << bonus_dam << "\n";
-#endif
 			dam = bonus_dam;
 		}
 
 		if(victim->position() > POS_DEAD) {
+			md("victim position > DEAD");
 			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 			if(dam == 0) {
+				md("damage is zero");
 				feedback.damage = dam;
 				feedback.hits = 0;
 
@@ -1043,6 +1072,7 @@ namespace mods::weapons::damage_types {
 				victim->damage_event(feedback);
 
 			} else if(dam > 0) {
+				md("damage greater than zero");
 				feedback.hits = 1;
 				feedback.damage = dam;
 				feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
@@ -1053,7 +1083,8 @@ namespace mods::weapons::damage_types {
 				if(victim->is_npc()) {
 					mods::mobs::damage_event::sniped(victim,feedback);
 				}
-#ifndef __MENTOC_DISABLE_INJURE_DYNAMICS__
+#ifdef __MENTOC_DISABLE_INJURE_DYNAMICS__
+#else
 				if(attack_injures(player,victim,weapon,feedback)) {
 					feedback.injured.emplace_back(victim->uuid());
 					feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
@@ -1068,7 +1099,9 @@ namespace mods::weapons::damage_types {
 					mods::injure::injure_player(victim);
 				}
 #endif
+				md("checking disorient");
 				if(mods::weapons::damage_calculator::attack_disorients(player,weapon,victim)) {
+					md("disorients");
 					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(player,weapon,victim));
 					feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;
 					/** TODO: maybe make this random to disorient the player ? >:) EVIL GENIUS */
@@ -1082,8 +1115,10 @@ namespace mods::weapons::damage_types {
 					player->damage_event(feedback);
 				}
 			}
+			md("remembering");
 			remember_event(victim,player);
 		} else {
+			md("target dead!");
 			feedback.damage_event= de::TARGET_DEAD_EVENT;
 			feedback.attacker = victim->uuid();
 			player->damage_event(feedback);
@@ -1091,9 +1126,11 @@ namespace mods::weapons::damage_types {
 			stop_fighting(victim->cd());
 		}
 
+		md("decreasing ammo");
 		decrease_single_shot_ammo(player,weapon);
 		player->set_fight_timestamp();
 		set_player_weapon_cooldown(player,victim,weapon, feedback);
+		md("cooldown set");
 		return feedback;
 	}
 
@@ -1126,4 +1163,5 @@ namespace mods::weapons::damage_types {
 };
 #ifdef DMG_DEBUG
 #undef DMG_DEBUG
+#undef md
 #endif

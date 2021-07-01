@@ -23,3 +23,4 @@ lib/lock.mdb
 core
 database-errors.log
 
+lib/plralias

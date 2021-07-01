@@ -101,6 +101,7 @@ namespace mods::mobs {
 				return false;
 			}
 			virtual std::pair<bool,std::string> move_to(const direction_t& dir);
+			virtual std::pair<bool,std::string> move_to_on_tick(const direction_t& dir,const uint16_t tick_mod);
 
 		protected:
 			std::map<uint16_t,uint16_t> m_should_do;

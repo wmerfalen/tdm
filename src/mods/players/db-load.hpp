@@ -20,6 +20,7 @@ namespace mods::players::db_load {
 		DB_SAVE_CHAR,
 		PRACTICE_SKILL
 	};
+	void load_aliases(player_ptr_t& player);
 	void save_from(player_ptr_t& player,save_from_t);
 	void extract_character(player_ptr_t& player);
 	void load_base_abilities(player_ptr_t& player);

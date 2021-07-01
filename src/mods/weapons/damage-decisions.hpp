@@ -41,6 +41,11 @@ namespace mods::weapons::damage_types {
 		return mods::injure::do_injure_roll(chance);
 	}
 
+#ifdef __MENTOC_CAN_CONTINUE_DEBUG__
+#define md(A) std::cerr << green_str("can_continue_debug:") << A << "\n";
+#else
+#define md(A)
+#endif
 	std::tuple<bool,feedback_t> can_continue(player_ptr_t& player,obj_ptr_t weapon,std::variant<player_ptr_t,obj_ptr_t,int8_t> victim,direction_t direction, const uint8_t& item_type) {
 		feedback_t feedback;
 		feedback.hits = 0;
@@ -50,26 +55,31 @@ namespace mods::weapons::damage_types {
 
 		if((std::holds_alternative<player_ptr_t>(victim) && !std::get<player_ptr_t>(victim)) ||
 		        (std::holds_alternative<obj_ptr_t>(victim) && !std::get<obj_ptr_t>(victim))) {
+			md("couldn't find target!");
 			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
 			player->damage_event(feedback);
+			md(feedback.dump());
 			return {false,feedback};
 		}
 
 		if(mods::rooms::is_peaceful(player->room())) {
 			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
 			player->damage_event(feedback);
+			md("is_peaceful room");
 			return {false,feedback};
 		}
 
 		if(mods::rooms::is_peaceful(player->room())) {
 			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
 			player->damage_event(feedback);
+			md("is_peaceful(2)");
 			return {false,feedback};
 		}
 
 		if(!weapon) {
 			feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
 			player->damage_event(feedback);
+			md("no primary!");
 			return {false,feedback};
 		}
 		switch(item_type) {
@@ -77,17 +87,20 @@ namespace mods::weapons::damage_types {
 				if(!weapon->has_rifle()) {
 					feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
 					player->damage_event(feedback);
+					md("no primary rifle(2)");
 					return {false,feedback};
 				}
 				if(!player->can_attack_again()) {
 					feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
 					player->damage_event(feedback);
+					md("can't attack again");
 					return {false,feedback};
 				}
 				/* Check ammo */
 				if(mods::object_utils::get_ammo(weapon) == 0) {
 					feedback.damage_event = de::OUT_OF_AMMO_EVENT;
 					player->damage_event(feedback);
+					md("out of ammo");
 					return {false,feedback};
 				}
 				break;
@@ -95,6 +108,7 @@ namespace mods::weapons::damage_types {
 				if(weapon && weapon->has_melee() == false) {
 					feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
 					player->damage_event(feedback);
+					md("no primary melee");
 					return {false,feedback};
 				}
 				break;
@@ -102,6 +116,7 @@ namespace mods::weapons::damage_types {
 				break;
 		}
 		return {true,feedback};
+#undef md
 	}
 
 	int calculate_weapon_cooldown(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& attackers_weapon, feedback_t& feedback) {

@@ -1050,9 +1050,9 @@ DISORIENT	mods/weapon-types.hpp	/^		DISORIENT,$/;"	e	enum:mods::weapon::capabili
 DISPLAY	mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY = "A small LED display on the panel says: ";$/;"	m	struct:mods::mini_games::wires
 DISPLAY_ACMD	mods/players/db-load.hpp	/^		DISPLAY_ACMD,$/;"	e	enum:mods::players::db_load::save_from_t
 DM	telnet.h	55;"	d
-DMG_DEBUG	mods/weapons/damage-decisions.hpp	167;"	d
-DMG_DEBUG	mods/weapons/damage-types.cpp	1128;"	d	file:
-DMG_DUMP	mods/weapons/damage-types.cpp	459;"	d	file:
+DMG_DEBUG	mods/weapons/damage-decisions.hpp	182;"	d
+DMG_DEBUG	mods/weapons/damage-types.cpp	1165;"	d	file:
+DMG_DUMP	mods/weapons/damage-types.cpp	484;"	d	file:
 DO	telnet.h	44;"	d
 DONT	telnet.h	43;"	d
 DONTSET	mods/flags.hpp	/^		DONTSET,$/;"	e	enum:mods::flags::plr
@@ -1919,7 +1919,7 @@ IS_SUPPORT	utils.h	511;"	d
 IS_THIEF	utils.h	506;"	d
 IS_WARRIOR	utils.h	510;"	d
 IS_WEAPON	fight.cpp	130;"	d	file:
-IS_WEAPON	mods/weapons/damage-types.cpp	44;"	d	file:
+IS_WEAPON	mods/weapons/damage-types.cpp	49;"	d	file:
 IS_WEAPON_LOADED	mods/weapon.hpp	15;"	d
 IShared	mods/catch.hpp	/^	struct IShared : NonCopyable {$/;"	s	namespace:Catch
 IStream	mods/catch2.hpp	/^    struct IStream {$/;"	s	namespace:Catch
@@ -2609,9 +2609,9 @@ MENU	config.cpp	/^const char *MENU =$/;"	v
 MESS_FILE	db.h	91;"	d
 METAL_HATCH	structs.h	/^			METAL_HATCH,$/;"	m	struct:room_data	typeref:enum:room_data::
 METAL_WALL	structs.h	/^			METAL_WALL,$/;"	m	struct:room_data	typeref:enum:room_data::
-MFEEDBACK	mods/weapons/damage-decisions.hpp	164;"	d
-MFEEDBACK	mods/weapons/damage-event-broadcaster.hpp	141;"	d
-MFEEDBACK	mods/weapons/damage-types.cpp	53;"	d	file:
+MFEEDBACK	mods/weapons/damage-decisions.hpp	179;"	d
+MFEEDBACK	mods/weapons/damage-event-broadcaster.hpp	147;"	d
+MFEEDBACK	mods/weapons/damage-types.cpp	58;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	87;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	96;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	86;"	d	file:
@@ -4377,7 +4377,7 @@ TO_ROOM	comm.h	64;"	d
 TO_ROOM	mods/item.cpp	/^	static constexpr uint8_t TO_ROOM = 1;$/;"	m	namespace:mods::item	file:
 TO_ROOM	mods/weapons/armor-calculator.cpp	22;"	d	file:
 TO_ROOM	mods/weapons/damage-calculator.cpp	22;"	d	file:
-TO_ROOM	mods/weapons/damage-types.cpp	28;"	d	file:
+TO_ROOM	mods/weapons/damage-types.cpp	33;"	d	file:
 TO_ROOM	mods/weapons/reload.cpp	7;"	d	file:
 TO_SLEEP	comm.h	68;"	d
 TO_SLEEP	mods/chat.hpp	12;"	d
@@ -5186,7 +5186,6 @@ __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gun
 __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mp-shotgunner-behaviour-tree.cpp	12;"	d	file:
 __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	14;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1210;"	d	file:
-__MENTOC_SHOW_MELEE_HIT_STATS__	mods/weapons/damage-types.cpp	840;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ELITE_PROTECTION_DEBUG_OUTPUT__	mods/armor/elite-protection.cpp	4;"	d	file:
@@ -5863,7 +5862,7 @@ cd	mods/drone.hpp	/^			char_data* cd() const {$/;"	f	struct:mods::drone_impl
 cd	mods/mobs/mini-gunner.cpp	/^	char_data* mini_gunner::cd() {$/;"	f	class:mods::mobs::mini_gunner
 cd	mods/mobs/smart-mob.cpp	/^	char_data* smart_mob::cd() {$/;"	f	class:mods::mobs::smart_mob
 cd	mods/player.hpp	/^			char_data* cd() const {$/;"	f	struct:mods::player
-cdebug	mods/weapons/damage-decisions.hpp	139;"	d
+cdebug	mods/weapons/damage-decisions.hpp	154;"	d
 cdebug	mods/weapons/damage-decisions.hpp	2;"	d
 cdebug	mods/weapons/damage-decisions.hpp	4;"	d
 ch	mods/scan.hpp	/^			char_data* ch;$/;"	m	struct:mods::scan::vec_player_data_element
@@ -9110,6 +9109,7 @@ lmdb_write_values	mods/db.cpp	/^	tuple_status_t lmdb_write_values($/;"	f	namespa
 load	mods/classes/base.cpp	/^	std::tuple<bool,std::string> skill_t::load(player_ptr_t& player,std::string_view skill_name) {$/;"	f	class:mods::classes::skill_t
 load	mods/karma.cpp	/^	void load(player_ptr_t& player){$/;"	f	namespace:mods
 load	mods/mini-games.cpp	/^	void load(mini_game_payload_t g) {$/;"	f	namespace:mods::mini_games
+load_aliases	mods/players/db-load.cpp	/^	void load_aliases(player_ptr_t& player) {$/;"	f	namespace:mods::players::db_load
 load_all	mods/builder/conbuild.cpp	/^		void load_all() {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
 load_all	mods/builder/hqbuild.cpp	/^	void load_all() {$/;"	f	namespace:mods::builder::hqbuild
 load_all	mods/builder/meqbuild.cpp	/^		void load_all() {$/;"	f	struct:mods::builder::meqbuild::meqbuild_interface
@@ -10186,8 +10186,12 @@ mc_debug	mods/query-objects.cpp	279;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	11;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	14;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	234;"	d	file:
-md	mods/weapons/damage-types.cpp	842;"	d	file:
-md	mods/weapons/damage-types.cpp	917;"	d	file:
+md	mods/weapons/damage-decisions.hpp	119;"	d
+md	mods/weapons/damage-decisions.hpp	45;"	d
+md	mods/weapons/damage-decisions.hpp	47;"	d
+md	mods/weapons/damage-types.cpp	1166;"	d	file:
+md	mods/weapons/damage-types.cpp	27;"	d	file:
+md	mods/weapons/damage-types.cpp	29;"	d	file:
 mdo_debug	mods/deep-object-parser.hpp	11;"	d
 mdo_debug	mods/deep-object-parser.hpp	22;"	d
 mdo_debug	mods/rifle-attachments.hpp	116;"	d
@@ -10487,6 +10491,7 @@ move_closer_to_target	mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::move_cl
 move_gain	limits.cpp	/^int move_gain(char_data *ch) {$/;"	f
 move_to	mods/mobs/mp-shotgunner.cpp	/^	std::pair<bool,std::string> mp_shotgunner::move_to(const direction_t& dir) {$/;"	f	class:mods::mobs::mp_shotgunner
 move_to	mods/mobs/smart-mob.cpp	/^	std::pair<bool,std::string> smart_mob::move_to(const direction_t& dir) {$/;"	f	class:mods::mobs::smart_mob
+move_to_on_tick	mods/mobs/smart-mob.cpp	/^	std::pair<bool,std::string> smart_mob::move_to_on_tick(const direction_t& dir,const uint16_t tick_mod) {$/;"	f	class:mods::mobs::smart_mob
 move_toward_heading	mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto move_toward_heading() {$/;"	f	namespace:mods::mobs::lowly_security_behaviour_tree
 move_toward_heading	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode move_toward_heading() {$/;"	f	namespace:mods::mobs::mp_shotgunner_behaviour_tree
 move_toward_target	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode move_toward_target() {$/;"	f	namespace:mods::mobs::mp_shotgunner_behaviour_tree

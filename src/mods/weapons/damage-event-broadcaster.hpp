@@ -35,6 +35,8 @@ namespace mods::weapons::damage_types {
 			player->damage_event(attacker_feedback);
 		}
 
+#ifdef __MENTOC_DISABLE_INJURE_DYNAMICS__
+#else
 		if(attack_injures(attacker,victim,weapon,feedback) && can_be_injured(victim)) {
 			mods::injure::injure_player(victim);
 			feedback.attacker = attacker->uuid();
@@ -48,6 +50,7 @@ namespace mods::weapons::damage_types {
 				player->damage_event(attacker_feedback);
 			}
 		}
+#endif
 		if(weapon->rifle()->attributes->type == mw_rifle::ASSAULT_RIFLE) {
 			handle_assault_rifle_shrapnel_skill(attacker,victim,weapon,feedback);
 		}
@@ -69,6 +72,8 @@ namespace mods::weapons::damage_types {
 		}
 		victim->damage_event(feedback);
 		attacker->damage_event(attacker_feedback);
+#ifdef __MENTOC_DISABLE_INJURE_DYNAMICS__
+#else
 		if(attack_injures(attacker,victim,weapon,feedback)) {
 			feedback.injured.emplace_back(victim->uuid());
 			feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
@@ -78,6 +83,7 @@ namespace mods::weapons::damage_types {
 			attacker->damage_event(feedback);
 			mods::injure::injure_player(victim);
 		}
+#endif
 		if(mods::weapons::damage_calculator::attack_disorients(attacker,weapon,victim)) {
 			mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(attacker,weapon,victim));
 			feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;

@@ -2348,6 +2348,7 @@ bool parse_sql_player(player_ptr_t player_ptr) {
 		mods::players::db_load::set_class(player_ptr, static_cast<player_class_t>(row["player_class"].as<int>()));
 		mods::players::db_load::load_base_abilities(player_ptr);
 		mods::players::db_load::sync_player_with_class_skills(player_ptr->db_id(), player_ptr->get_class_string().c_str());
+		mods::players::db_load::load_aliases(player_ptr);
 		return true;
 	}
 	return false;

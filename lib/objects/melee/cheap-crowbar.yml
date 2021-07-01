@@ -1,11 +1,12 @@
-# type: SHOTGUN
-# type: ASSAULT_RIFLE
-# type: SUB_MACHINE_GUN
-# type: SNIPER
-# type: HANDGUN
-# type: PISTOL
-# type: MACHINE_PISTOL
-# type: LIGHT_MACHINE_GUN
+# type: MACHETE
+# type: KNIFE
+# type: BRASS_KNUCKLES
+chance_to_injure: 1 #float, out of 100
+critical_chance: 3 #int16_t, out of 100
+damage_per_second: 24 #float, out of 100
+disorient_amount: 0 #float, out of 100
+damage_dice_count: 4 #int16_t, number of dice
+damage_dice_sides: 6 #int16_t, dice sides
 incendiary_damage: 0 #int16_t, damage
 explosive_damage: 0 #int16_t, damage
 shrapnel_damage: 0 #int16_t, damage
@@ -15,7 +16,7 @@ radioactive_damage: 0 #int16_t, damage
 emp_damage: 0 #int16_t, damage
 shock_damage: 0 #int16_t, damage
 anti_matter_damage: 0 #int16_t, damage
-stat_strength: 0 #int16_t, positive or negative amount to affect strength stat
+stat_strength: 1 #int16_t, positive or negative amount to affect strength stat
 stat_intelligence: 0 #int16_t, positive or negative amount to affect intelligence stat
 stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
 stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
@@ -29,55 +30,14 @@ stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
 stat_weapon_handling: 0 #int16_t, positive or negative amount to affect weapon_handling stat
 stat_strategy: 0 #int16_t, positive or negative amount to affect strategy stat
 stat_medical: 0 #int16_t, positive or negative amount to affect medical stat
-#rarity types
-# COMMON
-# UNCOMMON
-# RARE
-# LEGENDARY
-# GOD_TIER
-# DEFAULT
-accuracy_map: [
-0.00,
-20.00,
-90.00,
-90.00
-]
-rounds_per_minute: 10
-muzzle_velocity: 1818 # Feet per second
-effective_firing_range: 500 # feet
-ammo_max: 70 #integer
-ammo_type: 'SNIPER' #string, constant enum
-chance_to_injure: 0.813 #float, out of 100 
-clip_size: 7 #integer
-cooldown_between_shots: 6 #int, in ticks
-critical_chance: 19 #int, out of 100
-critical_range: 3 #integer, measured in rooms
-damage_map: [
-10.00,
-20.00,
-90.00,
-90.00
-]
-damage_per_second: 450.0 #float
-disorient_amount: 0.0 #float
-headshot_bonus: 13.0 #float
-max_range: 4 #integer,measured in rooms
-range_multiplier: 4.3 #float, multiplied by 
-reload_time: 9 #int, measured in ticks
-# types
-#######
-# type: SNIPER
-# type: ASSAULT_RIFLE
-# type: SHOTGUN
-# type: SUB_MACHINE_GUN
-# type: HANDGUN
-# type: MACHINE_PISTOL
-# type: LIGHT_MACHINE_GUN
-type: 'SNIPER'  # enum, object type
-manufacturer: 'PF-TDN' # string, anything 
-name: 'PSG1' # string, anything name of object 
-vnum: 8 # integer, unique identifier
-str_type: 'SNIPER'
+str_type: 'CROWBAR' # enum, object type
+manufacturer: 'CH10 LLC' # string, anything 
+name: 'A cheap crowbar' # string, anything name of object 
+vnum: 144
+description: 'A cheap crowbar' # string, anything name of object 
+short_description: 'A cheap crowbar' # string, anything name of object 
+action_description: 'A cheap crowbar' # string, anything name of object 
+feed_file: 'cheap-crowbar.yml'
 #rarity types
 # COMMON
 # UNCOMMON
@@ -86,9 +46,3 @@ str_type: 'SNIPER'
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
-feed_file: 'psg1.yml'
-damage_dice_count: 2
-damage_dice_sides: 34
-description: 'PSG-1 Sniper Rifle'
-short_description: 'PSG-1 Sniper Rifle'
-action_description: 'PSG-1 Sniper Rifle'
