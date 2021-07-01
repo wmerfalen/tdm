@@ -1699,28 +1699,28 @@ obj_ptr_t create_money(int amount) {
 	auto obj = blank_object();
 
 	if(amount == 1) {
-		obj->name.assign("coin gold");
-		obj->short_description.assign("a gold coin");
-		obj->description.assign("One miserable gold coin is lying here.");
-		obj->ex_description.emplace_back("coin gold","It's just one miserable little gold coin.");
+		obj->name.assign("federal reserve note");
+		obj->short_description.assign("a federal reserve note");
+		obj->description.assign("One miserable federal reserve note is lying here.");
+		obj->ex_description.emplace_back("federal reserve note","It's just one miserable little federal reserve note.");
 	} else {
-		obj->name.assign("coins gold");
+		obj->name.assign("stash of federal reserve notes");
 		obj->short_description.assign(money_desc(amount));
 		snprintf(buf, sizeof(buf), "%s is lying here.", money_desc(amount));
 		obj->description.assign(CAP(buf));
 		if(amount < 10) {
-			snprintf(buf, sizeof(buf), "There are %d coins.", amount);
+			snprintf(buf, sizeof(buf), "There are %d federal reserve notes.", amount);
 		} else if(amount < 100) {
-			snprintf(buf, sizeof(buf), "There are about %d coins.", 10 * (amount / 10));
+			snprintf(buf, sizeof(buf), "There are about %d federal reserve notes.", 10 * (amount / 10));
 		} else if(amount < 1000) {
-			snprintf(buf, sizeof(buf), "It looks to be about %d coins.", 100 * (amount / 100));
+			snprintf(buf, sizeof(buf), "It looks to be about %d federal reserve notes.", 100 * (amount / 100));
 		} else if(amount < 100000)
-			snprintf(buf, sizeof(buf), "You guess there are, maybe, %d coins.",
+			snprintf(buf, sizeof(buf), "You guess there are, maybe, %d federal reserve notes.",
 			         1000 * ((amount / 1000) + rand_number(0, (amount / 1000))));
 		else {
-			strcpy(buf, "There are a LOT of coins.");    /* strcpy: OK (is < 200) */
+			strcpy(buf, "There are a LOT of federal reserve notes.");    /* strcpy: OK (is < 200) */
 		}
-		obj->ex_description.emplace_back("coin gold",buf);
+		obj->ex_description.emplace_back("federal reserve notes",buf);
 	}
 
 

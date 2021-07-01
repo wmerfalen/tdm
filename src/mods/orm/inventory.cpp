@@ -50,6 +50,9 @@ namespace mods::orm::inventory {
 					return std::move(obj);
 				}
 			case I_YAML: {
+					if(row["po_yaml"].is_null()) {
+						return nullptr;
+					}
 					auto obj = create_object(row["po_type"].as<int>(),row["po_yaml"].c_str());
 					return std::move(obj);
 				}
@@ -170,8 +173,15 @@ namespace mods::orm::inventory {
 			obj_ptr_t obj = nullptr;
 			mods::pq::commit(select_transaction);
 			for(auto&& row : player_record) {
-				if(std::string(row["po_load_type"].c_str()).compare("placeholder") == 0) {
-					continue;
+				switch(row["po_load_type"].as<int>()) {
+					default:
+						log("Warning: weird po_load_type encountered (%d). Ignoring...",row["po_load_type"].as<int>());
+						continue;
+					case I_PLACEHOLDER:
+						continue;
+					case I_FORGED:
+					case I_YAML:
+						break;
 				}
 				obj = nullptr;
 				obj = dynamic_fetch(row);

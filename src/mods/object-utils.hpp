@@ -98,6 +98,11 @@ namespace mods::object_utils {
 		std::variant<YamlFeedExceptionInfo,std::string> item;
 		item.emplace<0>(e.mark,e.msg,items_fed);
 		yaml_feed_exceptions.emplace_back(item);
+		std::string compiled;
+		for(const auto& item : items_fed) {
+			compiled += CAT("fed: ",item,"[ok]...");
+		}
+		REPORT_DB_ISSUE(CAT("yaml_exception occurred with fed items so far:",compiled),e.what());
 	}
 	template <typename TPlayerPointer>
 	static inline void send_yaml_exceptions_to(TPlayerPointer& player) {

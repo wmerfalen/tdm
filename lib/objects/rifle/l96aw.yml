@@ -52,3 +52,6 @@ rarity: 'COMMON'
 feed_file: 'l96aw.yml'
 damage_dice_count: 3
 damage_dice_sides: 54
+description: 'L96 Arctic Warfare Sniper Rifle'
+short_description: 'L96 Arctic Warfare Sniper Rifle'
+action_description: 'L96 Arctic Warfare Sniper Rifle'

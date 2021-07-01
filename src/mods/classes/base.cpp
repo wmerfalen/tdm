@@ -341,7 +341,7 @@ namespace mods::classes {
 		            "The strings in parenthesis are what you would pass to the practice or train command. ",
 		            "{hr}\r\nFor example, to train ",get_abilities().begin()->pretty," you would type: practice ",get_abilities().begin()->shortened,"\r\n"
 		           );
-		return mods::util::mail_format("Your skills","Proficiencies",page,get_player_ptr()->screen_width());
+		return page;
 	}
 
 	void base::report(std::vector<std::string> msgs) {

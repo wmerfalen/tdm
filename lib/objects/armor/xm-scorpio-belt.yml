@@ -51,8 +51,8 @@ stat_strategy: 10 #int16_t, positive or negative amount to affect strategy stat
 stat_medical: 1 #int16_t, positive or negative amount to affect medical stat
 str_type: 'WAIST' # enum, object type
 type: 'WAIST' # enum, object type
-manufacturer: 'SR-Lead Corp' # string, anything 
-name: 'Tactical full-face gas mask' # string, anything name of object 
+manufacturer: 'DS201-X' # string, anything 
+name: 'XM-50 Scorpio Tac Belt' # string, anything name of object 
 vnum: 85
 description: 'XM50 Scorpio Tac Belt'
 short_description: 'XM50 Scorpio Tac Belt'

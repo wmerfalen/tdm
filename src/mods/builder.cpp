@@ -30,6 +30,7 @@
 #include "super-users.hpp"
 #include "interpreter.hpp"
 #include "zone.hpp"
+#include "sex.hpp"
 
 namespace mods {
 	struct player;
@@ -1276,7 +1277,7 @@ namespace mods::builder {
 			p_map["mob_weight"] = mods::util::itoa(obj->player.weight);
 			p_map["mob_height"] = mods::util::itoa(obj->player.height);
 			p_map["mob_level"] = std::to_string(obj->player.level);
-			p_map["mob_sex"] = obj->player.sex == SEX_MALE ? "M" : "F";
+			p_map["mob_sex"] = mods::sex::to_db_string(obj->player.sex);
 			p_map["mob_damsizedice"] = std::to_string(obj->mob_specials.damsizedice);
 			p_map["mob_damroll"] = std::to_string(obj->points.damroll);
 			p_map["mob_class"] = "0"; //TODO: find this

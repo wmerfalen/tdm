@@ -68,7 +68,7 @@ namespace mods::yaml {
 		debug_echo("action_desc");\
 		action_description = yaml_file["action_description"].as<std::string>();\
 		fed_items.push_back("action_description");\
-	}catch(YAML::Exception &e){this->feed_status = -3; mods::object_utils::report_yaml_exception(e,fed_items); REPORT_DB_ISSUE("yaml error",e.what()); }
+	}catch(YAML::Exception &e){this->feed_status = -3; mods::object_utils::report_yaml_exception(e,fed_items); REPORT_DB_ISSUE(CAT("yaml error when feeding ",feed_file.data()),e.what()); }
 
 	std::string true_path(std::string_view type,std::string_view in_file) {
 		std::string cwd = current_working_dir();
@@ -1153,7 +1153,7 @@ namespace mods::yaml {
 			return 0;
 		} catch(YAML::Exception& e) {
 			mods::object_utils::report_yaml_exception(e,fed_items);
-			REPORT_DB_ISSUE("error",e.what());
+			REPORT_DB_ISSUE(CAT("rifle_description_t::feed('",in_file.data(),"') failed."),e.what());
 			this->feed_status = -2;
 			return -2;
 		}

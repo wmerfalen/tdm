@@ -1465,7 +1465,9 @@ namespace mods {
 				}
 			case mods::deferred::EVENT_WEAPON_COOLDOWN_FINISHED: {
 					m_can_attack = 1;
+#ifdef __MENTOC_TELL_PLAYER_WHEN_COOLDOWN_FINISHES__
 					sendln(CAT("{grn}Cooldown finished. ",m_cooldown_ticks," took ", m_timer.elapsed()));
+#endif
 					break;
 				}
 			default:

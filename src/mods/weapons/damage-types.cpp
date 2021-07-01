@@ -96,7 +96,7 @@ namespace mods::weapons::damage_types {
 				return 0;
 			}
 			/*TODO: Modify this code to allow sniping */
-			if(GET_POS(victim) <= POS_DEAD) {
+			if(GET_POS(victim) == POS_DEAD) {
 				md("victim is <= dead");
 				/* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
 				if(PLR_FLAGGED(victim, PLR_NOTDEADYET) || MOB_FLAGGED(victim, MOB_NOTDEADYET)) {
@@ -357,27 +357,17 @@ namespace mods::weapons::damage_types {
 		}
 	};//end namespace legacy
 
-	void deal_hp_damage(player_ptr_t& player, uint16_t damage) {
-		if(mods::super_users::player_is(player)) {
+	void deal_hp_damage(player_ptr_t& victim, uint16_t damage) {
+		if(mods::super_users::player_is(victim)) {
 			return;
 		}
-		if(player->position() == POS_DEAD) {
-			return;
-		}
-		auto& hp = player->hp();
-		int hp_after = hp;
-		hp_after -= damage;
-		if(hp_after < 0) {
-			hp_after = 0;
-		}
-		auto victim = player->cd();
-		if(legacy::step_one(nullptr,victim,damage,0) <= 0) {
+		if(legacy::step_one(nullptr,victim->cd(),damage,0) <= 0) {
 			return;
 		}
 
-		legacy::deal_damage(nullptr,victim,damage,0);
-		legacy::update_position(victim);
-		legacy::send_combat_messages(nullptr,victim,damage,0);
+		legacy::deal_damage(nullptr,victim->cd(),damage,0);
+		legacy::update_position(victim->cd());
+		legacy::send_combat_messages(nullptr,victim->cd(),damage,0);
 	}
 
 

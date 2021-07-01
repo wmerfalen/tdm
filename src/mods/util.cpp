@@ -97,7 +97,7 @@ namespace mods::util {
 		for(int i=str.length(); i < w-6; i++) {
 			box += "─";
 		}
-		box += "{grn}┓{/grn}\r\n{grn}║ {blu}";
+		box += "{grn}┓{/grn}\r\n{grn}║ {grn}";
 		int line_chars = 0;
 		for(std::size_t i = 0; i < msg.length(); i++) {
 			++line_chars;
@@ -116,7 +116,7 @@ namespace mods::util {
 				for(int fill=line_chars; fill <= w; fill++) {
 					box += " ";
 				}
-				box += " {/blu}{grn}║{/grn}\r\n{grn}║ {blu}";
+				box += " {/grn}{grn}║{/grn}\r\n{grn}║ {grn}";
 				i += 1;
 				line_chars = 0;
 				continue;
