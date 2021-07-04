@@ -197,6 +197,7 @@ namespace mods {
 		this->clear_all_affected_plr();
 	}
 #endif
+#if 0
 	player::player(mods::player* ptr) {
 		this->init();
 		m_incendiary_resistance_percent = ptr->m_incendiary_resistance_percent;
@@ -239,6 +240,7 @@ namespace mods {
 		m_class = ptr->m_class;
 		m_can_attack = ptr->m_can_attack;
 	}
+#endif
 	void player::capture_output(bool capture_status) {
 		m_capture_output = capture_status;
 	}
@@ -336,7 +338,7 @@ namespace mods {
 
 			perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
-			mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
+			//mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
 		}
 	}
 	void player::equip(uuid_t obj_uuid,int pos) {
@@ -346,7 +348,7 @@ namespace mods {
 	}
 	void player::unequip(const std::size_t& pos) {
 		if(pos < NUM_WEARS && m_equipment[pos]) {
-			mods::stat_bonuses::player_unequip(uuid(),m_equipment[pos]->uuid);
+			//mods::stat_bonuses::player_unequip(uuid(),m_equipment[pos]->uuid);
 			if(!is_npc()) {
 				mods::orm::inventory::unequip(db_id(),m_equipment[pos],pos);
 			}
@@ -369,6 +371,7 @@ namespace mods {
 		}
 	}
 	void player::perform_equip_calculations(int pos,bool equip) {
+		std::cerr << "perform_equip_calculations (" << pos << ") equip:" << (int)equip << "\n";
 		/**
 		 * TODO: honor basic armor protection
 		 * TODO: honor advanced armor protection
@@ -1828,7 +1831,7 @@ namespace mods {
 		GET_CLASS(m_char_data) = m_class;
 	}
 	int player::screen_width() {
-		return mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
+		return 80;//mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
 	}
 	std::tuple<uint32_t,uint8_t> player::currently_hacking() {
 		return {m_currently_hacking,m_hacking_row};

@@ -10,6 +10,11 @@
 #include "../contracts.hpp"
 
 extern player_ptr_t new_player();
+namespace mods::globals {
+	extern std::map<uint64_t,uuid_t> db_id_to_uuid_map;
+	extern void register_authenticated_player(player_ptr_t player);
+	extern void register_player(player_ptr_t player);
+};
 
 TEST_CASE("contracts are tracked by player instance wrappers") {
 	SECTION("a contract is tracked by finding items") {
@@ -57,6 +62,10 @@ TEST_CASE("contracts are tracked by player instance wrappers") {
 
 		auto player = new_player();
 		player->set_db_id(1);
+		player->cd()->player.name.assign("unittest");
+		player->name() = "unittest";
+		mods::globals::register_player(player);
+		mods::globals::register_authenticated_player(player);
 		mods::contracts::start_contract(player,1);
 		auto c = player->contracts().front();
 		REQUIRE(c->is_find_item() == true);
