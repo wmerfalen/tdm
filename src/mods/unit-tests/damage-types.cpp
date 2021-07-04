@@ -35,6 +35,7 @@ TEST_CASE("user takes 15\% damage when tracked") {
 		REQUIRE(expected_damage == mods::weapons::damage_types::calculate_tracked_damage(victim,original_damage));
 	}
 }
+
 TEST_CASE("user cannot attack within peaceful rooms") {
 	SECTION("melee weapons") {
 		world.emplace_back();
@@ -133,5 +134,146 @@ TEST_CASE("user cannot attack within peaceful rooms") {
 		REQUIRE(mods::projectile::explode(0,object_uuid,attacker->uuid()) == -2);
 	}
 }
+
+TEST_CASE("user must be wielding rifle/melee in order to attack") {
+	SECTION("any type of weapon") {
+		world.emplace_back();
+		mods::globals::register_room(0);
+		world[0].room_flags = 0;
+
+		auto attacker = new_player();
+		mods::globals::register_player(attacker);
+		attacker->room() = 0;
+
+		auto victim = new_player();
+		mods::globals::register_player(victim);
+		victim->room() = 0;
+
+		auto weapon = nullptr;
+
+		for(const auto& type : {
+		            ITEM_MELEE,ITEM_RIFLE
+		        }) {
+			std::tuple<bool,feedback_t> result = mods::weapons::damage_types::can_continue(attacker,
+			                                                                               weapon,
+			                                                                               victim,
+			                                                                               NORTH,
+			                                                                               type
+			                                                                              );
+			REQUIRE(std::get<0>(result) == false);
+			REQUIRE(std::get<1>(result).damage_event == de::NO_PRIMARY_WIELDED_EVENT);
+		}
+	}
+
+
+	SECTION("must have rifle if attacking with rifle") {
+		world.emplace_back();
+		mods::globals::register_room(0);
+		world[0].room_flags = 0;
+
+		auto attacker = new_player();
+		mods::globals::register_player(attacker);
+		attacker->room() = 0;
+
+		auto victim = new_player();
+		mods::globals::register_player(victim);
+		victim->room() = 0;
+
+		auto weapon = create_object(ITEM_ARMOR,"basic-boots.yml");
+		std::tuple<bool,feedback_t> result = mods::weapons::damage_types::can_continue(attacker,
+		                                                                               weapon,
+		                                                                               victim,
+		                                                                               NORTH,
+		                                                                               ITEM_RIFLE
+		                                                                              );
+		REQUIRE(std::get<0>(result) == false);
+		REQUIRE(std::get<1>(result).damage_event == de::NO_PRIMARY_WIELDED_EVENT);
+	}
+
+	SECTION("cooldown cannot be in effect") {
+		world.emplace_back();
+		mods::globals::register_room(0);
+		world[0].room_flags = 0;
+
+		auto attacker = new_player();
+		mods::globals::register_player(attacker);
+		attacker->room() = 0;
+
+		auto victim = new_player();
+		mods::globals::register_player(victim);
+		victim->room() = 0;
+
+		auto weapon = create_object(ITEM_RIFLE,"g36c.yml");
+		attacker->weapon_cooldown_start(500);
+		std::tuple<bool,feedback_t> result = mods::weapons::damage_types::can_continue(attacker,
+		                                                                               weapon,
+		                                                                               victim,
+		                                                                               NORTH,
+		                                                                               ITEM_RIFLE
+		                                                                              );
+		REQUIRE(std::get<0>(result) == false);
+		REQUIRE(std::get<1>(result).damage_event == de::COOLDOWN_IN_EFFECT_EVENT);
+	}
+
+	SECTION("must have ammo in rifle") {
+		world.emplace_back();
+		mods::globals::register_room(0);
+		world[0].room_flags = 0;
+
+		auto attacker = new_player();
+		mods::globals::register_player(attacker);
+		attacker->room() = 0;
+
+		auto victim = new_player();
+		mods::globals::register_player(victim);
+		victim->room() = 0;
+
+		auto weapon = create_object(ITEM_RIFLE,"g36c.yml");
+		weapon->rifle_instance = std::make_unique<rifle_instance_data<attachment_data_t,std::shared_ptr<obj_data>,uuid_t>>();
+		weapon->rifle_instance->ammo = 0;
+		std::tuple<bool,feedback_t> result = mods::weapons::damage_types::can_continue(attacker,
+		                                                                               weapon,
+		                                                                               victim,
+		                                                                               NORTH,
+		                                                                               ITEM_RIFLE
+		                                                                              );
+		REQUIRE(std::get<0>(result) == false);
+		REQUIRE(std::get<1>(result).damage_event ==  de::OUT_OF_AMMO_EVENT);
+	}
+
+	SECTION("must have melee if attacking with melee") {
+		world.emplace_back();
+		mods::globals::register_room(0);
+		world[0].room_flags = 0;
+
+		auto attacker = new_player();
+		mods::globals::register_player(attacker);
+		attacker->room() = 0;
+
+		auto victim = new_player();
+		mods::globals::register_player(victim);
+		victim->room() = 0;
+
+		auto weapon = create_object(ITEM_ARMOR,"basic-boots.yml");
+		std::tuple<bool,feedback_t> result = mods::weapons::damage_types::can_continue(attacker,
+		                                                                               weapon,
+		                                                                               victim,
+		                                                                               NORTH,
+		                                                                               ITEM_MELEE
+		                                                                              );
+		REQUIRE(std::get<0>(result) == false);
+		REQUIRE(std::get<1>(result).damage_event == de::NO_PRIMARY_WIELDED_EVENT);
+
+		weapon = create_object(ITEM_MELEE,"crowbar.yml");
+		result = mods::weapons::damage_types::can_continue(attacker,
+		                                                   weapon,
+		                                                   victim,
+		                                                   NORTH,
+		                                                   ITEM_MELEE
+		                                                  );
+		REQUIRE(std::get<0>(result) == true);
+	}
+}
+
 #endif
 #endif
