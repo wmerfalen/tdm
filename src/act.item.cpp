@@ -444,48 +444,6 @@ ACMD(do_get) {
 }
 
 
-void perform_drop_gold(char_data *ch, int amount,
-                       byte mode, room_rnum RDR) {
-	struct obj_data *obj;
-
-	if(amount <= 0) {
-		send_to_char(ch, "Heh heh heh.. we are jolly funny today, eh?");
-	} else if(GET_GOLD(ch) < amount) {
-		send_to_char(ch, "You don't have that many coins!");
-	} else {
-		if(mode != SCMD_JUNK) {
-			WAIT_STATE(ch, PULSE_VIOLENCE);	/* to prevent coin-bombing */
-			obj = create_money(amount).get();	/** FIXME legacy */
-
-			if(mode == SCMD_DONATE) {
-				send_to_char(ch, "You throw some gold into the air where it disappears in a puff of smoke!");
-				act("$n throws some gold into the air where it disappears in a puff of smoke!",
-				    FALSE, ch, 0, 0, TO_ROOM);
-				obj_to_room(obj, RDR);
-				act("$p suddenly appears in a puff of orange smoke!", 0, 0, obj, 0, TO_ROOM);
-			} else {
-				char buf[MAX_STRING_LENGTH];
-
-				snprintf(buf, sizeof(buf), "$n drops %s.", money_desc(amount));
-				act(buf, TRUE, ch, 0, 0, TO_ROOM);
-
-				send_to_char(ch, "You drop some gold.");
-				obj_to_room(obj, IN_ROOM(ch));
-			}
-		} else {
-			char buf[MAX_STRING_LENGTH];
-
-			snprintf(buf, sizeof(buf), "$n drops %s which disappears in a puff of smoke!", money_desc(amount));
-			act(buf, FALSE, ch, 0, 0, TO_ROOM);
-
-			send_to_char(ch, "You drop some gold which disappears in a puff of smoke!");
-		}
-
-		GET_GOLD(ch) -= amount;
-	}
-}
-
-
 #define VANISH(mode) ((mode == SCMD_DONATE || mode == SCMD_JUNK) ? \
 		      "  It vanishes in a puff of smoke!" : "")
 
@@ -592,9 +550,7 @@ ACMD(do_drop) {
 		multi = atoi(arg);
 		one_argument(argument, arg);
 
-		if(!str_cmp("coins", arg) || !str_cmp("coin", arg)) {
-			perform_drop_gold(ch, multi, mode, RDR);
-		} else if(multi <= 0) {
+		if(multi <= 0) {
 			send_to_char(ch, "Yeah, that makes sense.");
 		} else if(!*arg) {
 			send_to_char(ch, "What do you want to %s %d of?", sname, multi);
@@ -712,36 +668,6 @@ char_data *give_find_vict(char_data *ch, char *arg) {
 }
 
 
-void perform_give_gold(char_data *ch, char_data *vict,
-                       int amount) {
-	char buf[MAX_STRING_LENGTH];
-
-	if(amount <= 0) {
-		send_to_char(ch, "Heh heh heh ... we are jolly funny today, eh?");
-		return;
-	}
-
-	if((GET_GOLD(ch) < amount) && (IS_NPC(ch) || (GET_LEVEL(ch) < LVL_GOD))) {
-		send_to_char(ch, "You don't have that many coins!");
-		return;
-	}
-
-	send_to_char(ch, "%s", OK);
-
-	snprintf(buf, sizeof(buf), "$n gives you %d gold coin%s.", amount, amount == 1 ? "" : "s");
-	act(buf, FALSE, ch, 0, vict, TO_VICT);
-
-	snprintf(buf, sizeof(buf), "$n gives %s to $N.", money_desc(amount));
-	act(buf, TRUE, ch, 0, vict, TO_NOTVICT);
-
-	if(IS_NPC(ch) || (GET_LEVEL(ch) < LVL_GOD)) {
-		GET_GOLD(ch) -= amount;
-	}
-
-	GET_GOLD(vict) += amount;
-}
-
-
 ACMD(do_give) {
 	char arg[MAX_STRING_LENGTH];
 	int amount, dotmode;
@@ -756,15 +682,7 @@ ACMD(do_give) {
 		amount = atoi(arg);
 		argument = one_argument(argument, arg);
 
-		if(!str_cmp("coins", arg) || !str_cmp("coin", arg)) {
-			one_argument(argument, arg);
-
-			if((vict = give_find_vict(ch, arg)) != NULL) {
-				perform_give_gold(ch, vict, amount);
-			}
-
-			return;
-		} else if(!*arg) {	/* Give multiple code. */
+		if(!*arg) {	/* Give multiple code. */
 			send_to_char(ch, "What do you want to give %d of?", amount);
 		} else if(!(vict = give_find_vict(ch, argument))) {
 			return;

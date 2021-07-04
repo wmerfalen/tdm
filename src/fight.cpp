@@ -388,10 +388,10 @@ void make_corpse(char_data *ch) {
 	}
 
 	/* transfer gold */
-	if(player->gold() > 0) {
-		obj_to_obj(create_money(player->gold()), corpse);
-		player->gold() = 0;
-	}
+	//if(player->gold() > 0) {
+	//	obj_to_obj(create_money(player->gold()), corpse);
+	//	player->gold() = 0;
+	//}
 
 	player->carry(nullptr);
 	player->carry_items() = 0;

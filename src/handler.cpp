@@ -1687,53 +1687,6 @@ const char *money_desc(int amount) {
 }
 
 
-obj_ptr_t create_money(int amount) {
-	char buf[200];
-
-	if(amount <= 0) {
-		log("SYSERR: Try to create negative or 0 money. (%d)", amount);
-		return (NULL);
-	}
-
-	/** TODO: feed as consumable type of money */
-	auto obj = blank_object();
-
-	if(amount == 1) {
-		obj->name.assign("federal reserve note");
-		obj->short_description.assign("a federal reserve note");
-		obj->description.assign("One miserable federal reserve note is lying here.");
-		obj->ex_description.emplace_back("federal reserve note","It's just one miserable little federal reserve note.");
-	} else {
-		obj->name.assign("stash of federal reserve notes");
-		obj->short_description.assign(money_desc(amount));
-		snprintf(buf, sizeof(buf), "%s is lying here.", money_desc(amount));
-		obj->description.assign(CAP(buf));
-		if(amount < 10) {
-			snprintf(buf, sizeof(buf), "There are %d federal reserve notes.", amount);
-		} else if(amount < 100) {
-			snprintf(buf, sizeof(buf), "There are about %d federal reserve notes.", 10 * (amount / 10));
-		} else if(amount < 1000) {
-			snprintf(buf, sizeof(buf), "It looks to be about %d federal reserve notes.", 100 * (amount / 100));
-		} else if(amount < 100000)
-			snprintf(buf, sizeof(buf), "You guess there are, maybe, %d federal reserve notes.",
-			         1000 * ((amount / 1000) + rand_number(0, (amount / 1000))));
-		else {
-			strcpy(buf, "There are a LOT of federal reserve notes.");    /* strcpy: OK (is < 200) */
-		}
-		obj->ex_description.emplace_back("federal reserve notes",buf);
-	}
-
-
-	GET_OBJ_TYPE(obj) = ITEM_MONEY;
-	GET_OBJ_WEAR(obj) = ITEM_WEAR_TAKE;
-	GET_OBJ_VAL(obj, 0) = amount;
-	GET_OBJ_COST(obj) = amount;
-	obj->item_number = NOTHING;
-
-	return (obj);
-}
-
-
 /* Generic Find, designed to find any object/character
  *
  * Calling:
