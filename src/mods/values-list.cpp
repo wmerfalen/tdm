@@ -1,7 +1,7 @@
 [bool]
 ALLOW_MOCK_LEVELS,false
 DISABLE_INJURE_ROLL,false
-ECHO_ALL_SQL_COMMANDS,true
+ECHO_ALL_SQL_COMMANDS,false
 AM_I_EVIL,true
 
 [int]

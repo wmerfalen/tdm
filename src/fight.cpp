@@ -340,7 +340,6 @@ void stop_fighting(char_data *ch) {
 
 void make_corpse(char_data *ch) {
 	MENTOC_PREAMBLE();
-	std::cerr << "[make_corpse(victim)] -> raw_kill for: " << player->name().c_str() << "\n";
 	char buf2[MAX_NAME_LENGTH + 64];
 	obj_data *o;
 	int i;
