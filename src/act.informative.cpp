@@ -359,12 +359,28 @@ void list_obj_to_char(struct obj_data *list, char_data *ch, int mode, int show) 
 	MENTOC_PREAMBLE();
 	bool found = FALSE;
 
+	std::unordered_map<std::string,int> lines;
+	std::set<std::string> sent;
 	for(auto i = list; i; i = i->next_content) {
 		if(!i) {
 			break;
 		}
 		if(CAN_SEE_OBJ(ch, i)) {
-			show_obj_to_char(i, ch, mode);
+			lines[i->name.c_str()]++;
+		}
+	}
+
+	for(auto i = list; i; i = i->next_content) {
+		if(!i) {
+			break;
+		}
+		if(CAN_SEE_OBJ(ch, i)) {
+			if(sent.find(i->name.c_str()) != sent.end()) {
+				continue;
+			}
+			auto obj = optr(i);
+			show_obj_to_char(obj, player, mode, lines[i->name.c_str()]);
+			sent.insert(i->name.c_str());
 			found = TRUE;
 		}
 	}
