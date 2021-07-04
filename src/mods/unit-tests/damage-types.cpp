@@ -18,6 +18,7 @@ using de = damage_event_t;
 
 namespace mods::weapons::damage_types {
 	extern std::tuple<bool,feedback_t> can_continue(player_ptr_t& player,obj_ptr_t weapon,std::variant<player_ptr_t,obj_ptr_t,int8_t> victim,direction_t direction, const uint8_t& item_type);
+	extern int calculate_weapon_cooldown(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& attackers_weapon, feedback_t& feedback);
 };
 extern player_ptr_t new_player();
 TEST_CASE("user takes 15\% damage when tracked") {
@@ -272,6 +273,57 @@ TEST_CASE("user must be wielding rifle/melee in order to attack") {
 		                                                   ITEM_MELEE
 		                                                  );
 		REQUIRE(std::get<0>(result) == true);
+	}
+}
+
+TEST_CASE("weapon cooldown calculations") {
+	SECTION("cooldowns are affected by WEAPON_COOLDOWN_MODIFIER_TIER_[ONE|TWO|THREE]() values system") {
+		feedback_t feedback;
+		world.emplace_back();
+		mods::globals::register_room(0);
+		world[0].room_flags = 0;
+
+		auto attacker = new_player();
+		mods::globals::register_player(attacker);
+		attacker->room() = 0;
+
+		auto victim = new_player();
+		mods::globals::register_player(victim);
+		victim->room() = 0;
+
+		auto weapon = create_object(ITEM_RIFLE,"g36c.yml");
+
+
+		/**
+		 * formula for cooldown modifiers
+		 * TIER ZERO: cooldown -= attacker->weapon_handling() * 0.0
+		 * TIER ONE: cooldown -= attacker->weapon_handling() * 0.032 # this is WEAPON_COOLDOWN_MODIFIER_TIER_ONE
+		 * TIER TWO: cooldown -= attacker->weapon_handling() * 0.05813 # this is WEAPON_COOLDOWN_MODIFIER_TIER_TWO
+		 * TIER THREE: cooldown -= attacker->weapon_handling() * 0.12893 # this is WEAPON_COOLDOWN_MODIFIER_TIER_THREE
+		 *
+		 * Values prone to change, but the formula should stay the same
+		 */
+		attacker->level() = 5;	//tier 1
+		attacker->weapon_handling() = 10;
+		int base_cooldown = 100;
+
+		weapon->rifle()->attributes->cooldown_between_shots = base_cooldown;
+		int cooldown = mods::weapons::damage_types::calculate_weapon_cooldown(attacker,victim,weapon, feedback);
+		REQUIRE(cooldown == (int)(base_cooldown - attacker->weapon_handling() * WEAPON_COOLDOWN_MODIFIER_TIER_ONE()));
+
+		attacker->level() = 15;	//tier 2
+		attacker->weapon_handling() = 10;
+		base_cooldown = 100;
+		weapon->rifle()->attributes->cooldown_between_shots = base_cooldown;
+		cooldown = mods::weapons::damage_types::calculate_weapon_cooldown(attacker,victim,weapon, feedback);
+		REQUIRE(cooldown == (int)(base_cooldown - attacker->weapon_handling() * WEAPON_COOLDOWN_MODIFIER_TIER_TWO()));
+
+		attacker->level() = 25;	//tier 3
+		attacker->weapon_handling() = 10;
+		base_cooldown = 100;
+		weapon->rifle()->attributes->cooldown_between_shots = base_cooldown;
+		cooldown = mods::weapons::damage_types::calculate_weapon_cooldown(attacker,victim,weapon, feedback);
+		REQUIRE(cooldown == (int)(base_cooldown - attacker->weapon_handling() * WEAPON_COOLDOWN_MODIFIER_TIER_THREE()));
 	}
 }
 
