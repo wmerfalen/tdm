@@ -32,7 +32,6 @@ namespace mods::sql {
 #ifdef __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
 		std::cerr << m_sql << "\n";
 #endif
-		std::cerr << "EASC: " << (bool)ECHO_ALL_SQL_COMMANDS() << "\n";
 		if((bool)ECHO_ALL_SQL_COMMANDS()) {
 			std::cerr << "[ECHO_ALL_SQL_COMMANDS()]: '" << m_sql << "'\n";
 		}

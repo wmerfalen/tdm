@@ -119,7 +119,7 @@ namespace mods::globals {
 extern struct time_info_data time_info;		/* In db.c */
 extern char *help;
 player_ptr_t new_player() {
-	return mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
+	return mods::globals::player_list.emplace_back(std::make_shared<mods::player>(mods::player::player_type_enum_t::PLAYER));
 }
 
 using descriptor_list_t = std::deque<mods::descriptor_data>;

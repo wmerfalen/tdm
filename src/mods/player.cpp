@@ -105,57 +105,10 @@ namespace mods {
 		set_bui_mode(false);
 		set_imp_mode(false);
 		m_set_time();
-		switch(type) {
-			case DRONE:
-				player();
-				break;
-			default:
-				player();
-				break;
-		}
-		set_type(type);
-		m_quitting = 0;
-		visibility() = 1;
-	}
-	void player::set_type(player_type_enum_t type) {
-		/**
-		 * FIXME: take appropriate action on a per type basis.
-		 * TODO: If it's a drone, then the appropriate drone flags need to be set
-		 * TODO: if it's a mob, then it needs to have IS_NPC return true.. so, set that flag
-		 * TODO: if it's a player, set the IS_NPC flag to false. Also, figure out how to handle descriptor_data
-		 */
-		m_type = type;
-		switch(type) {
-			case player_type_enum_t::PLAYER:
-			case player_type_enum_t::DRONE:
-				if(m_desc) {
-					m_desc->set_queue_behaviour(mods::descriptor_data::queue_behaviour_enum_t::NORMAL);
-				}
-				break;
-			case player_type_enum_t::MOB:
-				SET_BIT(cd()->char_specials.saved.act, MOB_ISNPC);
-			case player_type_enum_t::PLAYER_MUTED_DESCRIPTOR:
-			case player_type_enum_t::MOB_MUTED_DESCRIPTOR:
-			case player_type_enum_t::DRONE_MUTED_DESCRIPTOR:
-				if(m_desc) {
-					m_desc->set_queue_behaviour(mods::descriptor_data::queue_behaviour_enum_t::IGNORE_ALL);
-				}
-				break;
-		}
-	}
-	player::player() {
-		this->init();
-		set_god_mode(false);
-		set_bui_mode(false);
-		set_imp_mode(false);
-		m_set_time();
-		descriptor_list.emplace_back();
-		auto descriptor = descriptor_list.end()-1;
 		m_shared_ptr = std::make_shared<char_data>();
 		m_char_data = m_shared_ptr.get();
-		descriptor->character  = this->cd();
-		set_desc(descriptor);
-		set_char_on_descriptor(descriptor);
+
+
 		/** I don't like this class call FIXME */
 		m_player_specials = std::make_shared<player_special_data>();
 		m_char_data->player_specials = m_player_specials;
@@ -171,9 +124,71 @@ namespace mods {
 		m_current_page_fragment = "";
 		m_capture_output = false;
 		m_executing_js = false;
-		set_type(player_type_enum_t::PLAYER);
-		this->set_overhead_map_width(16);
-		this->set_overhead_map_height(10);
+		m_quitting = 0;
+		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
+		m_sync_equipment();
+		visibility() = 1;
+		this->clear_all_affected();
+		this->clear_all_affected_plr();
+		set_type(type);
+	}
+	void player::set_type(player_type_enum_t type) {
+		/**
+		 * FIXME: take appropriate action on a per type basis.
+		 * TODO: If it's a drone, then the appropriate drone flags need to be set
+		 * TODO: if it's a mob, then it needs to have IS_NPC return true.. so, set that flag
+		 * TODO: if it's a player, set the IS_NPC flag to false. Also, figure out how to handle descriptor_data
+		 */
+		m_type = type;
+		switch(type) {
+			case player_type_enum_t::PLAYER: {
+					m_desc = std::make_shared<mods::descriptor_data>();
+					descriptor_list.emplace_back(*m_desc);
+					this->cd()->desc = m_desc;
+					this->cd()->has_desc = true;
+					m_desc->character = this->cd();
+					this->set_overhead_map_width(16);
+					this->set_overhead_map_height(10);
+				}
+			/** purposeful fall-through behaviour */
+			case player_type_enum_t::DRONE:
+				m_desc->set_queue_behaviour(mods::descriptor_data::queue_behaviour_enum_t::NORMAL);
+				break;
+			case player_type_enum_t::MOB:
+				SET_BIT(cd()->char_specials.saved.act, MOB_ISNPC);
+			case player_type_enum_t::PLAYER_MUTED_DESCRIPTOR:
+			case player_type_enum_t::MOB_MUTED_DESCRIPTOR:
+			case player_type_enum_t::DRONE_MUTED_DESCRIPTOR:
+				//m_desc->set_queue_behaviour(mods::descriptor_data::queue_behaviour_enum_t::IGNORE_ALL);
+				break;
+		}
+	}
+#if 0
+	player::player() {
+		this->init();
+		set_god_mode(false);
+		set_bui_mode(false);
+		set_imp_mode(false);
+		m_set_time();
+		m_shared_ptr = std::make_shared<char_data>();
+		m_char_data = m_shared_ptr.get();
+
+
+		/** I don't like this class call FIXME */
+		m_player_specials = std::make_shared<player_special_data>();
+		m_char_data->player_specials = m_player_specials;
+		/** Need a better uuid generator than this */
+		/** FIXME: this is not how uuid's should be generated */
+		m_char_data->uuid = mods::globals::player_uuid();
+		m_char_data->next = character_list;
+		character_list = m_char_data;
+		/** FIXME: need to set the m_char_data->desc */
+		m_page = 0;
+		m_current_page = 0;
+		m_do_paging = false;
+		m_current_page_fragment = "";
+		m_capture_output = false;
+		m_executing_js = false;
 		m_quitting = 0;
 		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
 		m_sync_equipment();
@@ -181,6 +196,7 @@ namespace mods {
 		this->clear_all_affected();
 		this->clear_all_affected_plr();
 	}
+#endif
 	player::player(mods::player* ptr) {
 		this->init();
 		m_incendiary_resistance_percent = ptr->m_incendiary_resistance_percent;
@@ -969,11 +985,11 @@ namespace mods {
 	}
 	void player::set_desc(std::deque<descriptor_data>::iterator it) {
 		m_desc = std::make_shared<mods::descriptor_data>(*it);
-		set_type(m_type);	//This will indirectly call the set_queue_behaviour function on our new descriptor_data object
+		//set_type(m_type);	//This will indirectly call the set_queue_behaviour function on our new descriptor_data object
 	}
 	void player::set_desc(std::shared_ptr<descriptor_data> it) {
 		m_desc = it;
-		set_type(m_type);	//This will indirectly call the set_queue_behaviour function on our new descriptor_data object
+		//set_type(m_type);	//This will indirectly call the set_queue_behaviour function on our new descriptor_data object
 	}
 	descriptor_data& player::desc() {
 		if(m_desc) {

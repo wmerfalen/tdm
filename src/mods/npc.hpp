@@ -9,7 +9,10 @@ namespace mods {
 	struct npc : public player {
 		/* constructors and destructors */
 		npc() = delete;
-		npc(const mob_rnum&);
+		npc(const mob_rnum& i) : player(mods::player::player_type_enum_t::MOB) {
+			name().assign(mob_proto[i].player.name.c_str());
+			short_descr().assign(mob_proto[i].player.short_descr.c_str());
+		}
 
 		mob_special_data& mob_specials();
 		bool has_tree() ;

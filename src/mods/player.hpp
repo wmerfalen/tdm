@@ -107,7 +107,7 @@ namespace mods {
 			};
 
 			/* constructors and destructors */
-			player();
+			player() = delete;
 			player(char_data*);
 			player(mods::player*);
 			player(player_type_enum_t);

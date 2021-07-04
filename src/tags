@@ -2734,12 +2734,12 @@ MOTORCYCLE	mods/weapon.hpp	/^		MOTORCYCLE,$/;"	e	enum:mods::weapon::vehicle_t
 MP5	mods/orm/breacher.hpp	/^		const std::string MP5 = "MP5";$/;"	m	struct:mods::orm::breacher
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_choice_t
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1554;"	d	file:
-MR	mods/player.cpp	1623;"	d	file:
+MR	mods/player.cpp	1570;"	d	file:
+MR	mods/player.cpp	1639;"	d	file:
 MR	structs.cpp	624;"	d	file:
 MR	structs.cpp	635;"	d	file:
-MRC	mods/player.cpp	1555;"	d	file:
-MRC	mods/player.cpp	1624;"	d	file:
+MRC	mods/player.cpp	1571;"	d	file:
+MRC	mods/player.cpp	1640;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
@@ -2925,7 +2925,7 @@ NO_RESULTS	mods/orm/util.hpp	/^	static constexpr int8_t NO_RESULTS = 1;$/;"	m	na
 NO_RESULTS	mods/pq.hpp	/^static constexpr int8_t NO_RESULTS = 1;$/;"	v
 NPC	act.wizard.cpp	2287;"	d	file:
 NPC	mods/scan.hpp	/^			NPC = (1 << 1),$/;"	e	enum:mods::scan::find_type_t
-NPC_SEND_DEBUG	mods/player.cpp	2225;"	d	file:
+NPC_SEND_DEBUG	mods/player.cpp	2241;"	d	file:
 NPC_SEND_DEBUG	mods/player.cpp	36;"	d	file:
 NPC_SEND_DEBUG	mods/player.cpp	41;"	d	file:
 NRM	utils.h	119;"	d
@@ -6495,7 +6495,7 @@ db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	f	names
 db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob_vnum,str_map_t values) {$/;"	f	namespace:mods::mobs::mg::orm
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	f
 dbg	mods/acl/config-parser.hpp	20;"	d
-dbg	mods/player.cpp	2222;"	d	file:
+dbg	mods/player.cpp	2238;"	d	file:
 dbg	mods/player.cpp	33;"	d	file:
 dbg	mods/player.cpp	38;"	d	file:
 dbg_blu	mods/acl/config-parser.hpp	25;"	d
@@ -7190,7 +7190,7 @@ drone_impl	mods/drone.hpp	/^	struct drone_impl {$/;"	s	namespace:mods
 drone_scan_room	mods/scan.cpp	/^	std::vector<uuid_t> drone_scan_room(room_rnum room) {$/;"	f	namespace:mods::scan
 drone_simulate	mods/player.hpp	/^			bool& drone_simulate() {$/;"	f	struct:mods::player
 drone_uuid	mods/player.hpp	/^			uuid_t& drone_uuid() {$/;"	f	struct:mods::player
-dsd	mods/player.cpp	2224;"	d	file:
+dsd	mods/player.cpp	2240;"	d	file:
 dsd	mods/player.cpp	35;"	d	file:
 dsd	mods/player.cpp	40;"	d	file:
 dts_are_dumps	config.cpp	/^int dts_are_dumps = YES;$/;"	v
@@ -7317,7 +7317,7 @@ env	mods/lmdb/db.hpp	/^			std::unique_ptr<gdns_env> env;$/;"	m	struct:gdns::lmdb
 epoch_string	mods/date-time.cpp	/^	std::string epoch_string() {$/;"	f	namespace:mods::date_time::irl
 epoll_ev	comm.cpp	/^epoll_event epoll_ev;$/;"	v
 epoll_fd	comm.cpp	/^int epoll_fd = -1;$/;"	v
-eqd	mods/player.cpp	2223;"	d	file:
+eqd	mods/player.cpp	2239;"	d	file:
 eqd	mods/player.cpp	34;"	d	file:
 eqd	mods/player.cpp	39;"	d	file:
 equip	mods/armor/advanced-protection.cpp	/^	void advanced_protection::equip(int where,uuid_t obj) {$/;"	f	class:mods::armor::advanced_protection
@@ -10681,7 +10681,7 @@ not_found	act.social.cpp	/^	char *not_found;$/;"	m	struct:social_messg	file:
 not_learned	mods/classes/base.cpp	/^	bool skill_t::not_learned() const {$/;"	f	class:mods::classes::skill_t
 now	mods/date-time.cpp	/^	std::string now() {$/;"	f	namespace:mods::date_time::irl
 nowhere	mods/builder.cpp	60;"	d	file:
-npc	mods/npc.cpp	/^	npc::npc(const mob_rnum& i) {$/;"	f	class:mods::npc
+npc	mods/npc.hpp	/^		npc(const mob_rnum& i) : player(mods::player::player_type_enum_t::MOB) {$/;"	f	struct:mods::npc
 npc	mods/npc.hpp	/^	struct npc : public player {$/;"	s	namespace:mods
 npc_by_uuid	globals.cpp	/^std::shared_ptr<mods::npc> npc_by_uuid(const uuid_t& u) {$/;"	f
 npc_can	mods/skills.cpp	/^	bool npc_can(player_ptr_t& player,int e_name) {$/;"	f	namespace:mods::skills
@@ -11157,7 +11157,6 @@ player	mods/js-player-scaffolding.hpp	/^namespace mods::js::player {$/;"	n	class
 player	mods/js.cpp	/^				player_ptr_t player;$/;"	m	struct:mods::js::utils::find_player_payload_t	file:
 player	mods/mobs/mini-gunner.hpp	/^			player_ptr_t& player() {$/;"	f	struct:mods::mobs::mini_gunner
 player	mods/mobs/smart-mob.hpp	/^			player_ptr_t& player() {$/;"	f	struct:mods::mobs::smart_mob
-player	mods/player.cpp	/^	player::player() {$/;"	f	class:mods::player
 player	mods/player.cpp	/^	player::player(char_data* ch) {$/;"	f	class:mods::player
 player	mods/player.cpp	/^	player::player(mods::player* ptr) {$/;"	f	class:mods::player
 player	mods/player.cpp	/^	player::player(player_type_enum_t type) {$/;"	f	class:mods::player

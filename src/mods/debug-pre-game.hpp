@@ -136,7 +136,7 @@ namespace mods::debug::pre_game {
 #endif
 
 	player_ptr_t new_player() {
-		return mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
+		return mods::globals::player_list.emplace_back(std::make_shared<mods::player>(mods::player::player_type_enum_t::PLAYER));
 	}
 	void do_armor_calculator() {
 		player_ptr_t attacker = new_player();
