@@ -37,6 +37,9 @@ extern int max_filesize;
 extern int nameserver_is_slow;
 extern int auto_save;
 extern int track_through_doors;
+namespace mods::weapons::damage_types::legacy {
+	extern void die(char_data*);
+};
 
 /* extern procedures */
 void appear(char_data *ch);
@@ -44,7 +47,6 @@ void write_aliases(char_data *ch);
 void perform_immort_vis(char_data *ch);
 SPECIAL(shop_keeper);
 ACMD(do_gen_comm);
-void die(char_data *ch);
 void Crash_rentsave(char_data *ch, int cost);
 
 /* local functions */
@@ -83,7 +85,7 @@ ACMD(do_quit) {
 		send_to_char(ch, "No way!  You're fighting for your life!");
 	} else if(GET_POS(ch) < POS_STUNNED) {
 		send_to_char(ch, "You die before your time...");
-		die(ch);
+		mods::weapons::damage_types::legacy::die(ch);
 	} else {
 		act("$n has left the game.", TRUE, ch, 0, 0, TO_ROOM);
 		mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s has quit the game.", GET_NAME(ch).c_str());

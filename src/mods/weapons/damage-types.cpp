@@ -11,6 +11,7 @@
 #include "damage-calculator.hpp"
 #include "../mobs/damage-event.hpp"
 #include "../calc-visibility.hpp"
+#include "../loot.hpp"
 
 
 #include <variant>
@@ -32,20 +33,24 @@
 #ifndef TO_ROOM
 #define TO_ROOM		1
 #endif
+
+extern void extract_char_final(char_data *ch);
+extern void make_corpse(char_data *ch);
+extern void death_cry(char_data *ch);
+extern void change_alignment(char_data *ch, char_data *victim);
+extern void obj_to_char(obj_ptr_t  object, player_ptr_t player);
 extern int ok_damage_shopkeeper(char_data *ch, char_data *victim);
-extern void die(char_data* killer,char_data *victim);
-extern void die(char_data *victim);
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void appear(char_data *ch);
 extern int pk_allowed;
 extern void check_killer(char_data *ch, char_data *vict);
 extern int skill_message(int dam, char_data *ch, char_data *vict, int attacktype);
 extern void dam_message(int dam, char_data *ch, char_data *victim, int w_type);
+extern void send_to_room(room_rnum room, const char *messg, ...);
 extern ACMD(do_flee);
 #if __MENTOC_USE_GROUP_GAIN__
 extern void group_gain(char_data *ch, char_data *victim);
 #endif
-extern void solo_gain(player_ptr_t&,player_ptr_t&);
 extern void forget(char_data *ch,char_data *victim);
 #ifndef IS_WEAPON
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
@@ -72,7 +77,6 @@ namespace mods::weapons::damage_types {
 	bool can_be_injured(player_ptr_t& victim);
 	void handle_assault_rifle_shrapnel_skill(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t& feedback);
 
-
 	void rifle_attack_object(
 	    player_ptr_t& player,
 	    obj_ptr_t weapon,
@@ -91,27 +95,65 @@ namespace mods::weapons::damage_types {
 
 
 	namespace legacy {
+		void solo_gain(player_ptr_t& attacker,player_ptr_t& victim);
+		void die(char_data* victim);
+		void die(char_data* killer,char_data *victim) {
+			/* check if mob death trigger is active */
+
+			if(victim->drone) {
+				auto room = IN_ROOM(victim);
+				char_from_room(victim);
+				mods::drone::stop(mods::globals::player_list[victim->drone_owner]->uuid());
+				send_to_room(room,"A drone is destroyed.");
+				char_to_room(victim,NOWHERE);
+				return;
+			}
+			if(FIGHTING(killer) == victim) {
+				stop_fighting(killer);
+			}
+
+			auto p = ptr(killer);
+			auto v = ptr(victim);
+
+
+			if(killer && !IS_NPC(killer)) {
+				auto obj = mods::loot::reward_player(p);
+				obj_to_char(obj,v);
+			}
+			die(victim);
+			if(killer && !IS_NPC(killer)) {
+				solo_gain(p,v);
+			}
+		}
+		void solo_gain(player_ptr_t& attacker,player_ptr_t& victim) {
+			attacker->sendln(CAT("You gain ",mods::levels::gain_exp_from_killing(attacker, victim)," experience points."));
+			auto mp = mods::levels::gain_mp_from_killing(attacker, victim);
+			if(mp) {
+				attacker->sendln(CAT("You gain ",mp," mission points."));
+			}
+			change_alignment(attacker->cd(), victim->cd());
+		}
+
+		void die(char_data *ch) {
+			auto p = ptr(ch);
+			mods::levels::reduce_exp_from_dying(p);
+
+			if(!IS_NPC(ch)) {
+				REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
+			}
+
+			death_cry(ch);
+
+			make_corpse(ch);
+			extract_char_final(ch);
+		}
+
+
 		int step_one(char_data *ch, char_data *victim, int dam, int attacktype) {
 			auto vplayer = ptr(victim);
 			if(mods::super_users::player_is(vplayer)) {
 				md("player is super user (from step_one)");
 				return 0;
-			}
-			/*TODO: Modify this code to allow sniping */
-			if(GET_POS(victim) == POS_DEAD) {
-				md("victim is <= dead");
-				/* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
-				if(PLR_FLAGGED(victim, PLR_NOTDEADYET) || MOB_FLAGGED(victim, MOB_NOTDEADYET)) {
-					md("plr_flagged not dead yet");
-					return (-1);
-				}
-
-				if(ch) {
-					die(ch,victim);
-				} else {
-					die(victim);
-				}
-				return (-1);			/* -je, 7/7/92 */
 			}
 			/* peaceful rooms */
 			if(ch && ch != victim && ROOM_FLAGGED(IN_ROOM(ch), ROOM_PEACEFUL)) {
@@ -303,36 +345,6 @@ namespace mods::weapons::damage_types {
 				stop_fighting(victim);
 			}
 
-			/* Uh oh.  Victim died. */
-			if(GET_POS(victim) == POS_DEAD) {
-				if(ch && ch != victim && (IS_NPC(victim) || victim->has_desc)) {
-#if __MENTOC_USE_GROUP_GAIN__
-					if(AFF_FLAGGED(ch, AFF_GROUP)) {
-						group_gain(ch, victim);
-					} else {
-						solo_gain(attacker,victim_ptr);
-					}
-#else
-					solo_gain(attacker,victim_ptr);
-#endif
-				}
-
-				if(!IS_NPC(victim)) {
-					if(ch) {
-						mudlog(BRF, LVL_IMMORT, TRUE, "%s killed by %s at %s", GET_NAME(victim).c_str(), GET_NAME(ch).c_str(), world[IN_ROOM(victim)].name.c_str());
-					} else {
-						mudlog(BRF, LVL_IMMORT, TRUE, "%s killed at %s", GET_NAME(victim).c_str(), world[IN_ROOM(victim)].name.c_str());
-					}
-
-				}
-
-				if(ch) {
-					die(ch,victim);
-				} else {
-					die(victim);
-				}
-				return (-1);
-			}
 			return dam;
 		}
 		int damage(char_data *attacker, char_data *victim, int dam, int attacktype) {
@@ -343,26 +355,35 @@ namespace mods::weapons::damage_types {
 			}
 			if(step_one(attacker,victim,dam,attacktype) <= 0) {
 				md("step one failed");
-				return -1;
+				return -2;
 			}
 			if(step_two(attacker,victim,dam,attacktype) <= 0) {
 				md("step two failed");
-				return -1;
+				return -3;
 			}
 			dam = get_damage(attacker,victim,dam,attacktype);
 			md("get_damage:" << dam);
 			deal_damage(attacker,victim,dam,attacktype);
 			md("deal_damage'd");
 			auto p = ptr(attacker);
-			md("gaining xp");
-			mods::levels::gain_exp_from_killing(p, vplayer);
 			md("updating pos of victim");
 			update_position(victim);
 			send_combat_messages(attacker,victim,dam,attacktype);
 			help_linkless(attacker,victim,dam,attacktype);
 			return perform_damage_cleanup(attacker,victim,dam,attacktype);
 		}
+		void player_died(player_ptr_t& attacker,player_ptr_t& victim) {
+			md("target dead!");
+			feedback_t feedback;
+			feedback.damage_event= de::TARGET_DEAD_EVENT;
+			feedback.attacker = victim->uuid();
+			attacker->damage_event(feedback);
+			stop_fighting(attacker->cd());
+			stop_fighting(victim->cd());
+			mods::weapons::damage_types::legacy::die(attacker->cd(),victim->cd());
+		}
 	};//end namespace legacy
+
 
 	void deal_hp_damage(player_ptr_t& victim, uint16_t damage) {
 		if(mods::super_users::player_is(victim)) {
@@ -555,9 +576,9 @@ namespace mods::weapons::damage_types {
 				}
 				remember_event(victim,player);
 				set_player_weapon_cooldown(player,victim,weapon, feedback);
-			} else {
-				stop_fighting(player->cd());
-				stop_fighting(victim->cd());
+			}
+			if(victim->position() == POS_DEAD) {
+				legacy::player_died(player,victim);
 			}
 		}//end for loop
 
@@ -921,8 +942,9 @@ namespace mods::weapons::damage_types {
 			}
 			md("remembering");
 			remember_event(victim,player);
-		} else {
-			feedback = send_target_dead(player,victim,feedback);
+		}
+		if(victim->position() == POS_DEAD) {
+			legacy::player_died(player,victim);
 		}
 
 		md("setting fight timestamp");
@@ -932,7 +954,7 @@ namespace mods::weapons::damage_types {
 		md("processed elemental damage");
 		set_player_weapon_cooldown(player,victim,weapon, feedback);
 		return feedback;
-	}
+	}// end melee_damage_with_feedback
 
 	feedback_t rifle_attack_with_feedback(
 	    player_ptr_t& player,
@@ -1114,13 +1136,9 @@ namespace mods::weapons::damage_types {
 			}
 			md("remembering");
 			remember_event(victim,player);
-		} else {
-			md("target dead!");
-			feedback.damage_event= de::TARGET_DEAD_EVENT;
-			feedback.attacker = victim->uuid();
-			player->damage_event(feedback);
-			stop_fighting(player->cd());
-			stop_fighting(victim->cd());
+		}
+		if(victim->position() == POS_DEAD) {
+			legacy::player_died(player,victim);
 		}
 
 		md("decreasing ammo");
@@ -1129,7 +1147,7 @@ namespace mods::weapons::damage_types {
 		set_player_weapon_cooldown(player,victim,weapon, feedback);
 		md("cooldown set");
 		return feedback;
-	}
+	}//end rifle_attack_with_feedback
 
 	SUPERCMD(do_inc_damage) {
 		auto vec_args = PARSE_ARGS();

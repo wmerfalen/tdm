@@ -1333,44 +1333,45 @@ void extract_char(char_data *ch) {
  *
  * NOTE: This doesn't handle recursive extractions.
  */
-//void extract_pending_chars() {
-//	char_data *vict, *next_vict, *prev_vict;
-//
-//	if(extractions_pending < 0) {
-//		log("SYSERR: Negative (%d) extractions pending.", extractions_pending);
-//	}
-//
-//	for(vict = character_list, prev_vict = NULL; vict && extractions_pending; vict = next_vict) {
-//		next_vict = vict->next;
-//
-//		if(MOB_FLAGGED(vict, MOB_NOTDEADYET)) {
-//			REMOVE_BIT(MOB_FLAGS(vict), MOB_NOTDEADYET);
-//		} else if(PLR_FLAGGED(vict, PLR_NOTDEADYET)) {
-//			REMOVE_BIT(PLR_FLAGS(vict), PLR_NOTDEADYET);
-//		} else {
-//			/* Last non-free'd character to continue chain from. */
-//			prev_vict = vict;
-//			continue;
-//		}
-//
-//		extract_char_final(vict);
-//		extractions_pending--;
-//
-//		if(prev_vict) {
-//			prev_vict->next = next_vict;
-//		} else {
-//			character_list = next_vict;
-//		}
-//	}
-//
-//	if(extractions_pending > 0) {
-//		log("SYSERR: Couldn't find %d extractions as counted.", extractions_pending);
-//	}
-//
-//	extractions_pending = 0;
-//}
-//
+void extract_pending_chars() {
+	char_data *vict, *next_vict, *prev_vict;
 
+	if(extractions_pending < 0) {
+		log("SYSERR: Negative (%d) extractions pending.", extractions_pending);
+	}
+
+	for(vict = character_list, prev_vict = NULL; vict && extractions_pending; vict = next_vict) {
+		next_vict = vict->next;
+
+		if(MOB_FLAGGED(vict, MOB_NOTDEADYET)) {
+			REMOVE_BIT(MOB_FLAGS(vict), MOB_NOTDEADYET);
+		} else if(PLR_FLAGGED(vict, PLR_NOTDEADYET)) {
+			REMOVE_BIT(PLR_FLAGS(vict), PLR_NOTDEADYET);
+		} else {
+			/* Last non-free'd character to continue chain from. */
+			prev_vict = vict;
+			continue;
+		}
+
+		extract_char_final(vict);
+		extractions_pending--;
+
+		if(prev_vict) {
+			prev_vict->next = next_vict;
+		} else {
+			character_list = next_vict;
+		}
+	}
+
+	if(extractions_pending > 0) {
+		log("SYSERR: Couldn't find %d extractions as counted.", extractions_pending);
+	}
+
+	extractions_pending = 0;
+}
+
+
+#if 0
 void extract_pending_chars() {
 	/*
 	if(extractions_pending < 0) {
@@ -1398,6 +1399,7 @@ void extract_pending_chars() {
 	});
 	*/
 }
+#endif
 
 
 /* ***********************************************************************

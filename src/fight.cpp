@@ -67,10 +67,6 @@ void check_killer(char_data *ch, char_data *vict);
 void make_corpse(char_data *ch);
 void change_alignment(char_data *ch, char_data *victim);
 void death_cry(char_data *ch);
-void die(char_data *killer,char_data *victim); /* !mods */
-void die(char_data *ch);
-void group_gain(char_data *ch, char_data *victim);
-void solo_gain(char_data *ch, char_data *victim);
 char *replace_string(const char *str, const char *weapon_singular, const char *weapon_plural);
 void perform_violence(void);
 int compute_armor_class(char_data *ch);
@@ -428,46 +424,6 @@ void death_cry(char_data *ch) {
 
 
 
-void die(char_data* killer,char_data *victim) {
-	/* check if mob death trigger is active */
-
-	if(victim->drone) {
-		auto room = IN_ROOM(victim);
-		char_from_room(victim);
-		mods::drone::stop(mods::globals::player_list[victim->drone_owner]->uuid());
-		send_to_room(room,"A drone is destroyed.");
-		char_to_room(victim,NOWHERE);
-		return;
-	}
-	if(FIGHTING(killer) == victim) {
-		stop_fighting(killer);
-	}
-
-	auto p = ptr(killer);
-	auto v = ptr(victim);
-	auto obj = mods::loot::reward_player(p);
-	obj_to_char(obj,v);
-	mods::levels::gain_exp_from_killing(p,v);
-	die(victim);
-}
-
-
-void die(char_data *ch) {
-	auto p = ptr(ch);
-	mods::levels::reduce_exp_from_dying(p);
-
-	if(!IS_NPC(ch)) {
-		REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
-	}
-
-	death_cry(ch);
-
-	make_corpse(ch);
-	extract_char_final(ch);
-}
-
-
-
 void perform_group_gain(char_data *ch, int base,
                         char_data *victim) {
 	int share;
@@ -530,15 +486,6 @@ void group_gain(char_data *ch, char_data *victim) {
 		}
 }
 
-
-void solo_gain(player_ptr_t& attacker,player_ptr_t& victim) {
-	attacker->sendln(CAT("You gain ",mods::levels::gain_exp_from_killing(attacker, victim)," experience points."));
-	auto mp = mods::levels::gain_mp_from_killing(attacker, victim);
-	if(mp) {
-		attacker->sendln(CAT("You gain ",mp," mission points."));
-	}
-	change_alignment(attacker->cd(), victim->cd());
-}
 
 
 char *replace_string(const char *str, const char *weapon_singular, const char *weapon_plural) {

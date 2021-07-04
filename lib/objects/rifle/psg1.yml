@@ -49,7 +49,7 @@ ammo_max: 70 #integer
 ammo_type: 'SNIPER' #string, constant enum
 chance_to_injure: 0.813 #float, out of 100 
 clip_size: 7 #integer
-cooldown_between_shots: 6 #int, in ticks
+cooldown_between_shots: 16 #int, in ticks
 critical_chance: 19 #int, out of 100
 critical_range: 3 #integer, measured in rooms
 damage_map: [
@@ -88,7 +88,7 @@ str_type: 'SNIPER'
 rarity: 'COMMON'
 feed_file: 'psg1.yml'
 damage_dice_count: 2
-damage_dice_sides: 34
+damage_dice_sides: 49
 description: 'PSG-1 Sniper Rifle'
 short_description: 'PSG-1 Sniper Rifle'
 action_description: 'PSG-1 Sniper Rifle'

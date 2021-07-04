@@ -37,7 +37,9 @@
 /* extern variables */
 extern int pk_allowed;
 extern void three_arguments(char*,char*,char*,char*);
-extern void die(char_data*,char_data*);
+namespace mods::weapons::damage_types::legacy {
+	extern void die(char_data*,char_data*);
+};
 extern mods::globals::room_list_t mods::globals::room_list;
 /* extern functions */
 void check_killer(char_data *ch, char_data *vict);
@@ -395,7 +397,7 @@ ACMD(do_kill) {
 			act("You chop $M to pieces!  Ah!  The blood!", FALSE, ch, 0, vict, TO_CHAR);
 			act("$N chops you to pieces!", FALSE, vict, 0, ch, TO_CHAR);
 			act("$n brutally slays $N!", FALSE, ch, 0, vict, TO_NOTVICT);
-			die(ch,vict);
+			mods::weapons::damage_types::legacy::die(ch,vict);
 		}
 	}
 }
