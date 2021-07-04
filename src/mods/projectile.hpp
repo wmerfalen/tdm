@@ -55,7 +55,7 @@ namespace mods {
 		std::string fromdirstr(int direction,bool prefix, bool suffix);
 		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_ptr_t held_object,std::size_t blast_radius);
 		int to_direction(const std::string&);
-		void explode(room_rnum room,uuid_t object_uuid,uuid_t player_uuid);
+		int8_t explode(room_rnum room,uuid_t object_uuid,uuid_t player_uuid);
 		void disable_electronics(room_rnum room);
 		void smoke_room(room_rnum room);
 		void blind_target(player_ptr_t victim);
@@ -65,8 +65,8 @@ namespace mods {
 		void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device);
 		int deploy_shrapnel_at(player_ptr_t& victim, int dice_count,int dice_sides,int from_direction);
 
-		void throw_object(player_ptr_t& player, int direction, std::size_t depth, 
-				obj_ptr_t& object, std::string_view verb);
+		void throw_object(player_ptr_t& player, int direction, std::size_t depth,
+		                  obj_ptr_t& object, std::string_view verb);
 	};
 };
 #endif

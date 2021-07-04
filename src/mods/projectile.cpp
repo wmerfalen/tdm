@@ -412,29 +412,29 @@ namespace mods {
 			disorient_person(player);
 			player->sendln("You become extremely disoriented!");
 		}
-		void explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid) {
+		int8_t explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid) {
 			if(room_id >= world.size()) {
 				log("[error]: mods::projectile::explode received room_id greater than world.size()");
-				return;
+				return -1;
 			}
 			if(mods::rooms::is_peaceful(room_id)) {
 				auto device = optr_by_uuid(object_uuid);
 				obj_from_room(device);
 				mods::globals::dispose_object(object_uuid);
-				return;
+				return -2;
 			}
 			explode_debug("explode, calling optr");
 			auto opt_object = optr_opt(object_uuid);
 			if(!opt_object.has_value()) {
 				log("[error]: mods::projectile::explode received invalid object to blow up");
-				return;
+				return -3;
 			}
 			explode_debug("opt_object has a value");
 			auto object = std::move(opt_object.value());
 			if(object->has_explosive() == false || object->explosive()->attributes == nullptr ||
 			        object->explosive()->type == mw_explosive::EXPLOSIVE_NONE) {
 				log("[error]: mods::projectile::explode. explosive integrity check failed");
-				return;
+				return -4;
 			}
 			auto type = object->explosive()->type;
 			std::size_t blast_radius = object->explosive()->attributes->blast_radius;	/** TODO: grab from explosive()->blast_radius */
@@ -445,7 +445,7 @@ namespace mods {
 			switch(type) {
 				default:
 					log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);
-					return;
+					return -5;
 				case mw_explosive::REMOTE_EXPLOSIVE:
 					does_damage = true;
 					send_to_room(room_id,"A %s explodes!\r\n",object->name.c_str());
@@ -488,7 +488,7 @@ namespace mods {
 			if(type == mw_explosive::SENSOR_GRENADE) {
 				mods::sensor_grenade::handle_explosion(object_uuid,player_uuid,room_id,object->from_direction);
 				mods::globals::dispose_object(object_uuid);
-				return;
+				return 1;
 			}
 
 			for(auto& person : mods::globals::get_room_list(room_id)) {
@@ -498,7 +498,7 @@ namespace mods {
 				switch(type) {
 					default:
 						log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);
-						return;
+						return -5;
 					case mw_explosive::REMOTE_EXPLOSIVE:
 						mods::projectile::explosive_damage(person,object);
 						break;
@@ -541,6 +541,7 @@ namespace mods {
 			explode_debug("calling perform blast radius");
 			mods::projectile::perform_blast_radius(room_id,blast_radius,object,player_uuid);
 			mods::globals::dispose_object(object_uuid);
+			return 2;
 		}
 		/**
 		 * TODO: place the grenade on the floor so that some crazy bastards can potentially throw it back,
