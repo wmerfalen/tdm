@@ -165,23 +165,6 @@ namespace mods::skills {
 	}
 
 
-	uint8_t calculate_available_practice_sessions(uint8_t level) {
-		uint8_t sessions = 0;
-		for(uint8_t current_level = 1; current_level <= level; ++current_level) {
-			sessions += mods::levels::award_practice_sessions(current_level);
-		}
-		return sessions;
-	}
-
-
-	std::string get_practice_dump() {
-		std::string report = "[practice sessions per level]\r\n";
-		for(uint8_t i = 1; i <= mods::levels::MAX_PLAYER_LEVEL; ++i) {
-			report += CAT("Player level: ",i,": ", calculate_available_practice_sessions(i), "\r\n");
-		}
-		return report;
-	}
-
 	std::string practice_skill(player_ptr_t& player,std::string_view skill) {
 		if(player->practice_sessions() == 0) {
 			return MSG_NO_PRACTICE_SESSIONS();
@@ -196,9 +179,6 @@ namespace mods::skills {
 	}
 
 
-	ACMD(do_practice_sessions) {
-		player->sendln(get_practice_dump());
-	}
 	ACMD(do_buy_practice) {
 		DO_HELP("buy_practice");
 		if(player->mp() == 0) {
@@ -218,7 +198,7 @@ namespace mods::skills {
 
 	ACMD(do_skills) {
 		DO_HELP("skills");
-		player->sendln(std::get<1>(player->class_action("request_page","skills")));
+		player->sendln(mods::util::mail_format("Your skills","",std::get<1>(player->class_action("request_page","skills")),player->screen_width()));
 	}
 
 	ACMD(do_practice) {
@@ -247,9 +227,7 @@ namespace mods::skills {
 	/** called by game initialization sequence */
 	void init() {
 		mods::interpreter::add_command("skills", POS_RESTING, do_skills, 0,0);
-		mods::interpreter::add_command("skill", POS_RESTING, do_skills, 0,0);
 		mods::interpreter::add_command("practice", POS_RESTING, do_practice, 0,0);
-		mods::interpreter::add_command("practice_sessions", POS_RESTING, do_practice_sessions, 0,0);
 		mods::interpreter::add_command("score", POS_RESTING, do_score, 0,0);
 		mods::interpreter::add_command("buy_practice", POS_RESTING, do_buy_practice, 0,0);
 		//mods::interpreter::add_command("allow_skill", POS_RESTING, do_allow_skill, LVL_BUILDER,0);

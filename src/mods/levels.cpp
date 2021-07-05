@@ -299,15 +299,169 @@ namespace mods::levels {
 		          << "charisma:		" << stats[STAT_CHARISMA] << "\n";
 	}
 
+	/*
+	 * Example Triad.
+	 * Triad rules:
+	 * ------------
+	 *  - Each field (i.e. Melee) must have atleast one point
+	 *  - six points are allocated betwen M/W/I
+	 *  - no two fields can have 3 points each at the same time
+	 *  - speed and armor are 4 points allocated between each field
+	 *  	- both fields must have atleast one point
+	 *
+	 *				- Military Triad
+	 *						- [Melee]   [x] [ ] [ ]
+	 *						- [Weapons] [x] [x] [x]
+	 *						- [Intel]   [x] [x] [ ]
+	 *					- Speed/Armor tradeoff MAX 4 points
+	 *						- [Speed]   [x] [ ] [ ]
+	 *						- [Armor]   [x] [x] [x]
+	*/
 	std::array<uint8_t,5> get_triads_by_class(player_class_t c) {
 		std::array<uint8_t,5> m_triads;
-		m_triads = {
-			2, /** MELEE */
-			2, /** WEAPONS */
-			2, /** INTEL */
-			2, /** SPEED */
-			2  /** ARMOR */
-		};
+		switch(c) {
+			case SNIPER:
+				return {
+					1, // MELEE
+					3, // WEAPONS
+					2, // INTEL
+					3, // SPEED
+					1, // ARMOR
+				};
+			case GHOST:
+				/**
+				 * --[
+				 *  -- uses stealth and intel to deal extra damage
+				 *  -- can dissipate
+				 *  	-- when dissipated, enemies cannot see or detect you
+				 *  -- time to install claymore mines are reduced by 50%
+				 *  -- ranged combat has a 75% chance of the target not knowing
+				 *  	which direction the shot came from
+				 *  -- SMG's are silenced
+				 *  	-- first attack with SMG's cause the target to not know who
+				 *  		the attack is
+				 *  -- SMG's have "initiative"
+				 *  	-- when an enemy would attack you, you attack first
+				 *  	-- when they attack, you immediately attack again
+				 *  -- have access to smoke and flashbang grenades (replenishes)
+				 *  -- [
+				 */
+				return {
+					1, // MELEE
+					2, // WEAPONS
+					3, // INTEL
+					3, // SPEED
+					1, // ARMOR
+				};
+			case MARINE:
+				/**
+				 * --[
+				 *  -- most well-balanced character
+				 *  -- all wielded assault rifles get:
+				 *  	-- +10% critical chance
+				 *  	-- +15% free ammunition
+				 *  	-- underbarrel frag launcher (ammo replenishes)
+				 *  -- received shrapnel and incendiary damage is reduced by 25%
+				 * 	-- "second wind" (passive)
+				 * 		-- if a hit would cause death, you have a 23% chance of
+				 * 			surviving with 20hp for 20 ticks. During this time
+				 * 			you can move around but cannot attack. When over,
+				 * 			your primary weapon does 10% more damage and gains
+				 * 			10% explosive damage.
+				 * 	-- received disorient affects are reduced in duration by 50%
+				 * --[
+				 */
+				return {
+					2, // MELEE
+					2, // WEAPONS
+					2, // INTEL
+					2, // SPEED
+					2  // ARMOR
+				};
+			case BREACHER:
+				/**
+				 * -- [
+				 *  -- expert with demolitions
+				 *  -- breach charges replenish automatically
+				 *  -- can retrofit shotguns with explosive breach underbarrel
+				 *  -- all wielded weapons get +10% explosive damage
+				 *  -- can remotely seal a room for the purpose of amplifying detonations
+				 *  -- can walk in a direction and automatically breach through
+				 *  	-- can sometimes make new rooms
+				 *  -- [
+				 */
+				return {
+					3, // MELEE
+					2, // WEAPONS
+					1, // INTEL
+					1, // SPEED
+					3 // ARMOR
+				};
+			case MEDIC:
+				/**
+				 * -- [
+				 *  -- built like a tank, but not very fast
+				 *  -- can heal self and teammates
+				 *  -- has parasitic ammunition
+				 *  -- can craft PED's
+				 *  -- can deal extra damage with SMG's and Shotguns
+				 *  -- can dual wield shotguns
+				 *  -- has access to ballistic shield
+				 *  -- [
+				 */
+				return {
+					1, // MELEE
+					2, // WEAPONS
+					3, // INTEL
+					1, // SPEED
+					3, // ARMOR
+				};
+			case ENGINEER:
+				/**
+				 * -- [
+				 *  -- decent at weaponry
+				 *  -- famliarity with gadgets/demolitions/attachments
+				 *  -- can setup entry denial devices to keep targets at ideal sniping distance
+				 *  -- can construct in-field turret
+				 *  	-- shrapnel upgrade
+				 *  	-- corrossive upgrade
+				 *  	-- radioactive upgrade
+				 *  -- can attach items to rifles
+				 *  -- can repair melee items
+				 *  -- sensor grenades have a wider area of affect
+				 *  -- emp grenades do not affect engineer
+				 *  -- can request UAV scan
+				 *  	-- scanned enemies become TRACKED and take more damage
+				 *
+				 *  -- [
+				 */
+				return {
+					1, // MELEE
+					2, // WEAPONS
+					3, // INTEL
+					2, // SPEED
+					2, // ARMOR
+				};
+			case SUPPORT:
+				/**
+				 * -- [
+				 * - Quick moving, expert at weaponry and can carry tons of weight.
+				 * - not much armor due to quickness to bring ammo/weapons/items to teammates
+				 * - can call in loadout drops
+				 * - can pilot drone that drops items near squads that need it
+				 * -- [
+				 */
+				return {
+					2, // MELEE
+					3, // WEAPONS
+					1, // INTEL
+					3, // SPEED
+					1, // ARMOR
+				};
+			default:
+				return {0,0,0,0,0};
+		}
+
 		return m_triads;
 	}
 
@@ -480,7 +634,7 @@ namespace mods::levels {
 		player->real_armor() = s[STAT_ARMOR];
 		player->medical() = s[STAT_MEDICAL];
 		player->charisma() = s[STAT_CHARISMA];
-		player->practice_sessions() += 5;
+		player->practice_sessions() += PRACTICE_SESSIONS_PER_LEVEL_UP();
 	}
 
 
@@ -500,9 +654,6 @@ namespace mods::levels {
 			default:
 				break;
 		}
-	}
-	uint8_t award_practice_sessions(uint8_t level) {
-		return 1;
 	}
 	int csv_export_report() {
 		FILE* fp = fopen("levels.csv", "w+");
