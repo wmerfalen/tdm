@@ -353,6 +353,14 @@ namespace mods::classes {
 	void unblock_event(uint32_t unblock_event,uuid_t player_uuid) {
 		auto player = ptr_by_uuid(player_uuid);
 		switch(unblock_event) {
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_HEALING:
+				if(player->sniper()) {
+					player->sniper()->unblock_healing();
+				}
+				if(player->medic()) {
+					/** TODO: player->medic()->unblock_healing(); */
+				}
+				break;
 			case mods::deferred::EVENT_PLAYER_FINISHES_FEIGN_DEATH:
 				player->ghost()->feign_death_done();
 				break;

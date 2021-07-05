@@ -1134,8 +1134,8 @@ namespace mods {
 				player_ptr->max_move() = static_cast<sh_int>(value);
 			} else if(key.compare("armor") == 0) {
 				player_ptr->armor() = static_cast<sh_int>(value);
-			} else if(key.compare("gold") == 0) {
-				player_ptr->gold() = static_cast<int>(value);
+			} else if(key.compare("gold") == 0 || key.compare("mp") == 0) {
+				player_ptr->mp() = static_cast<int>(value);
 			} else if(key.compare("bank_gold") == 0) {
 				player_ptr->bank_gold() = static_cast<int>(value);
 			} else if(key.compare("exp") == 0) {

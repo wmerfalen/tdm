@@ -61,7 +61,7 @@ TEST_CASE("contracts are tracked by player instance wrappers") {
 		mods::contracts::load_all_contracts();
 
 		auto player = new_player();
-		player->set_db_id(1);
+		player->set_db_id(2);
 		player->cd()->player.name.assign("unittest");
 		player->name() = "unittest";
 		mods::globals::register_player(player);

@@ -27,6 +27,7 @@
 ./mods/weapons/reload.cpp:	->reload
 ./mods/skills.cpp:	->score
 ./mods/skills.cpp:	->practice_sessions
+./mods/skills.cpp:	->buy_practice
 ./mods/skills.cpp:	->skills
 ./mods/skills.cpp:	->practice
 ./mods/values.cpp:			->set_value

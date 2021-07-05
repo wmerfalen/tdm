@@ -163,84 +163,6 @@ namespace mods {
 				break;
 		}
 	}
-#if 0
-	player::player() {
-		this->init();
-		set_god_mode(false);
-		set_bui_mode(false);
-		set_imp_mode(false);
-		m_set_time();
-		m_shared_ptr = std::make_shared<char_data>();
-		m_char_data = m_shared_ptr.get();
-
-
-		/** I don't like this class call FIXME */
-		m_player_specials = std::make_shared<player_special_data>();
-		m_char_data->player_specials = m_player_specials;
-		/** Need a better uuid generator than this */
-		/** FIXME: this is not how uuid's should be generated */
-		m_char_data->uuid = mods::globals::player_uuid();
-		m_char_data->next = character_list;
-		character_list = m_char_data;
-		/** FIXME: need to set the m_char_data->desc */
-		m_page = 0;
-		m_current_page = 0;
-		m_do_paging = false;
-		m_current_page_fragment = "";
-		m_capture_output = false;
-		m_executing_js = false;
-		m_quitting = 0;
-		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
-		m_sync_equipment();
-		visibility() = 1;
-		this->clear_all_affected();
-		this->clear_all_affected_plr();
-	}
-#endif
-#if 0
-	player::player(mods::player* ptr) {
-		this->init();
-		m_incendiary_resistance_percent = ptr->m_incendiary_resistance_percent;
-		m_explosive_resistance_percent = ptr->m_explosive_resistance_percent;
-		m_shrapnel_resistance_percent = ptr->m_shrapnel_resistance_percent;
-		m_corrosive_resistance_percent = ptr->m_corrosive_resistance_percent;
-		m_cryogenic_resistance_percent = ptr->m_cryogenic_resistance_percent;
-		m_radiation_resistance_percent = ptr->m_radiation_resistance_percent;
-		m_emp_resistance_percent = ptr->m_emp_resistance_percent;
-		m_shock_resistance_percent = ptr->m_shock_resistance_percent;
-		m_anti_matter_resistance_percent = ptr->m_anti_matter_resistance_percent;
-		m_incendiary_damage_percent = ptr->m_incendiary_damage_percent;
-		m_explosive_damage_percent = ptr->m_explosive_damage_percent;
-		m_shrapnel_damage_percent = ptr->m_shrapnel_damage_percent;
-		m_corrosive_damage_percent = ptr->m_corrosive_damage_percent;
-		m_cryogenic_damage_percent = ptr->m_cryogenic_damage_percent;
-		m_radiation_damage_percent = ptr->m_radiation_damage_percent;
-		m_emp_damage_percent = ptr->m_emp_damage_percent;
-		m_shock_damage_percent = ptr->m_shock_damage_percent;
-		m_anti_matter_damage_percent = ptr->m_anti_matter_damage_percent;
-		m_char_data = ptr->m_char_data;
-		/**TODO: should we set the queue_behaviour flags on the descriptor data items on *this? */
-		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
-		m_misc_pref = ptr->m_misc_pref;
-		m_shared_ptr = ptr->m_shared_ptr;
-		m_page = 0;
-		m_current_page = 0;
-		m_do_paging = false;
-		m_current_page_fragment = "";
-		m_capture_output = false;
-		m_executing_js = false;
-		m_time = ptr->time();
-		set_god_mode(ptr->god_mode());
-		set_bui_mode(ptr->builder_mode());
-		set_imp_mode(ptr->implementor_mode());
-		/** TODO: investigate this function. I have a feeling that m_desc needs to be updated here */
-		m_quitting = 0;
-		m_equipment = ptr->m_equipment;
-		m_sync_equipment();
-		m_class = ptr->m_class;
-		m_can_attack = ptr->m_can_attack;
-	}
-#endif
 	void player::capture_output(bool capture_status) {
 		m_capture_output = capture_status;
 	}
@@ -371,7 +293,6 @@ namespace mods {
 		}
 	}
 	void player::perform_equip_calculations(int pos,bool equip) {
-		std::cerr << "perform_equip_calculations (" << pos << ") equip:" << (int)equip << "\n";
 		/**
 		 * TODO: honor basic armor protection
 		 * TODO: honor advanced armor protection
@@ -1432,10 +1353,8 @@ namespace mods {
 		uuid_t target = 0;
 		target = m_block_data[unblock];
 		switch(unblock) {
-			case mods::deferred::EVENT_PLAYER_GOES_VISIBLE: {
-					mods::classes::unblock_event(unblock,uuid());
-					break;
-				}
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_HEALING:
+			case mods::deferred::EVENT_PLAYER_GOES_VISIBLE:
 			case mods::deferred::EVENT_PLAYER_FINISHES_FEIGN_DEATH: {
 					mods::classes::unblock_event(unblock,uuid());
 					break;

@@ -4,6 +4,8 @@
 #include "../interpreter.hpp"
 #include "../help.hpp"
 #include "../examine.hpp"
+#include "../medic.hpp"
+#include "../levels.hpp"
 
 namespace mods::rand {
 	extern int roll(int num,int size);
@@ -29,6 +31,7 @@ namespace mods::classes {
 		m_tracking_shot_charges = 0;
 		m_preferences["mute-replenish"] = true;
 		m_gauze_count = 0;
+		m_medkit_count = 0;
 		using s = ability_data_t::skillset_t;
 		m_abilities = {
 			{TRACKING_SHOT,"ts","Tracking Shot",s::SNIPING,&m_tracking_shot},
@@ -50,8 +53,34 @@ namespace mods::classes {
 		};
 	}
 
+	void sniper::unblock_healing() {
+		m_player->sendln("Unblock healing");
+		if(m_heal_mode == HEAL_MODE_SUTURE) {
+			m_suture.use_skill(m_player);
+		}
+	}
 	void sniper::use_claymore(uuid_t object_uuid) {
 
+	}
+	std::tuple<bool,std::string> sniper::suture() {
+		static const std::array<uint8_t,3> suture_tier_duration = {
+			SUTURE_TIER_ONE_TICKS(),
+			SUTURE_TIER_TWO_TICKS(),
+			SUTURE_TIER_THREE_TICKS()
+		};
+		std::size_t tier = mods::levels::player_tier(m_player) - 1;
+		std::size_t index = std::clamp(tier,(std::size_t)0,(std::size_t)2);
+		m_heal_mode = HEAL_MODE_SUTURE;
+		auto s = roll_skill_success(SUTURE);
+		if(std::get<0>(s)) {
+			s = mods::medic::set_is_suturing(m_player,suture_tier_duration[index]);
+			if(!std::get<0>(s)) {
+				return s;
+			}
+			--m_medkit_count;
+			return s;
+		}
+		return s;
 	}
 	void sniper::replenish_notify(std::string_view msg) {
 		if(m_preferences["mute-replenish"]) {
@@ -218,6 +247,7 @@ namespace mods::classes {
 			auto s = roll_skill_success(LIGHT_BANDAGE);
 			--m_gauze_count;
 			if(std::get<0>(s)) {
+				m_heal_mode = HEAL_MODE_SUTURE;
 				auto player_tier = tier(m_player);
 				m_player->hp() += player_tier * SNIPER_GAUZE_MULTIPLIER() * (m_player->level() * 0.3178) * (rand_number(1,185) * 0.112);
 				m_light_bandage.use_skill(m_player);

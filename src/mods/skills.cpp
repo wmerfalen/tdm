@@ -30,6 +30,12 @@ namespace mods::skills {
 		return padded;
 	}
 
+	int calculate_practice_sessions_from_mission_points(player_ptr_t& player) {
+		if(player->mp() == 0) {
+			return 0;
+		}
+		return player->mp() / PRICE_PER_PRACTICE_SESSION();
+	}
 	std::string get_user_stats_page(player_ptr_t& player) {
 		return CAT("{hr}\r\n",
 		           "Stats:\r\n",
@@ -56,7 +62,13 @@ namespace mods::skills {
 		}
 
 		std::string screen = "";
-		std::string header = CAT("You have scored ",player->exp()," exp, and have ",player->gold()," mission points.\r\n");
+		std::string header = CAT(
+		                         "You have scored ",player->exp()," exp, and have ",player->mp()," mission points.\r\n",
+		                         "You have ",player->practice_sessions()," practice sessions.\r\n",
+		                         "You can buy ",calculate_practice_sessions_from_mission_points(player)," practice sessions with your current mission points.\r\n",
+		                         "To buy more practice sessions use: 'buy_practice'\r\n",
+		                         "Current practice session cost: ",PRICE_PER_PRACTICE_SESSION()," mission points.\r\n"
+		                     );
 
 		if(GET_LEVEL(ch) < LVL_IMMORT) {
 			header += CAT("You need ", mods::levels::level_exp(player->level() + 1) - player->exp()," exp to reach your next level.\r\n");
@@ -187,6 +199,22 @@ namespace mods::skills {
 	ACMD(do_practice_sessions) {
 		player->sendln(get_practice_dump());
 	}
+	ACMD(do_buy_practice) {
+		DO_HELP("buy_practice");
+		if(player->mp() == 0) {
+			player->sendln("You can't buy any practice sessions! You're broke!");
+			return;
+		}
+		int available = player->mp() / PRICE_PER_PRACTICE_SESSION();
+		if(available > 0) {
+			player->practice_sessions() += 1;
+			player->mp() -= PRICE_PER_PRACTICE_SESSION();
+			player->sendln("{grn}You buy 1 practice session.{/grn}");
+			mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::PRACTICE_SKILL);
+			return;
+		}
+		player->sendln(CAT("Practice sessions cost ",PRICE_PER_PRACTICE_SESSION(),", but you only have ",player->mp()," mission points."));
+	}
 
 	ACMD(do_skills) {
 		DO_HELP("skills");
@@ -223,6 +251,7 @@ namespace mods::skills {
 		mods::interpreter::add_command("practice", POS_RESTING, do_practice, 0,0);
 		mods::interpreter::add_command("practice_sessions", POS_RESTING, do_practice_sessions, 0,0);
 		mods::interpreter::add_command("score", POS_RESTING, do_score, 0,0);
+		mods::interpreter::add_command("buy_practice", POS_RESTING, do_buy_practice, 0,0);
 		//mods::interpreter::add_command("allow_skill", POS_RESTING, do_allow_skill, LVL_BUILDER,0);
 	}
 };

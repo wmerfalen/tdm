@@ -54,6 +54,7 @@ namespace mods::classes {
 
 
 			void target_died(uuid_t);
+			void unblock_healing();
 			std::tuple<bool,std::string> mark_target(std::string_view target);
 			std::tuple<bool,std::string> engage();
 			std::tuple<bool,std::string> disengage();
@@ -61,6 +62,7 @@ namespace mods::classes {
 
 			std::tuple<bool,std::string> tracking_shot(std::string_view target, direction_t direction);
 			std::tuple<bool,std::string> light_bandage();
+			std::tuple<bool,std::string> suture();
 
 			/*
 			- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)
@@ -79,6 +81,13 @@ namespace mods::classes {
 			uint16_t m_xray_shot_charges;
 			uint8_t m_claymore_charges;
 			uint8_t m_gauze_count;
+			uint8_t m_medkit_count;
+			enum heal_mode_t {
+				HEAL_MODE_SUTURE,
+				HEAL_MODE_LIGHT_BANDAGE
+			};
+
+			heal_mode_t m_heal_mode;
 
 			player_ptr_t m_player;
 			sniper_orm_t m_orm;
