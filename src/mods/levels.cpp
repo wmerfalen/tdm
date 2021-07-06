@@ -321,6 +321,33 @@ namespace mods::levels {
 		std::array<uint8_t,5> m_triads;
 		switch(c) {
 			case SNIPER:
+				/**
+				 * --[
+				 *  -- expert at sniper rifles and ranged combat
+				 *  -- can attach underbarrels to sniper rifles
+				 *  	-- shotgun underbarrel
+				 *  	-- frag launcher
+				 *  -- has access to emp/chaff grenades (replenishes)
+				 *  -- can inject arenaline shot
+				 *  	-- <insert the buffs here>
+				 *  	-- ...
+				 *  -- has xray shot
+				 *  	-- targets don't need to be in line of sight
+				 *  -- has access to corrosive/shrapnel/explosive claymores (replenishes)
+				 *  -- can mark and track an enemy
+				 *  	-- tracked enemies take more damage
+				 *  -- can target limb
+				 *  	-- attacking right arm activates nerfs on target related to primary
+				 *  	-- attacking left arm activates nerfs on target related to primary and secondary
+				 *  -- can snipe objects (such as doors, cars, etc)
+				 *  	-- cars will explode and light the room on fire
+				 *  -- can fire "neutron" shell
+				 *  	-- targets hit by shell cause radioactive and explosive damage to all room inhabitants
+				 *  -- fleeing from melee is 25% more effective
+				 *  -- immobilizing shot (passive)
+				 *  	-- 15% chance of causing target to stay in room and not close distance for 50 ticks
+				 *  --[
+				 */
 				return {
 					1, // MELEE
 					3, // WEAPONS
@@ -344,6 +371,11 @@ namespace mods::levels {
 				 *  	-- when an enemy would attack you, you attack first
 				 *  	-- when they attack, you immediately attack again
 				 *  -- have access to smoke and flashbang grenades (replenishes)
+				 *  -- "misdirection"
+				 *  	-- spawn a holographic decoy that your enemies will attack instead of you
+				 *	-- "Suffering Shot"
+				 *  	-- fire special ammunition which sticks to the target and deals damage continuously
+				 *  		for 50 ticks
 				 *  -- [
 				 */
 				return {
@@ -369,6 +401,11 @@ namespace mods::levels {
 				 * 			your primary weapon does 10% more damage and gains
 				 * 			10% explosive damage.
 				 * 	-- received disorient affects are reduced in duration by 50%
+				 * 	-- Shotguns deal same room damage at 2-3 rooms away
+				 * 	-- "disarm"
+				 * 		-- melee anatagonists get their primary dropped on the ground
+				 * 		-- tier 3: melee antagonists get their primary weapon removed and destroyed
+				 * 	-- assault rifles have a 10% chance of dealing incendiary damage
 				 * --[
 				 */
 				return {
@@ -388,6 +425,25 @@ namespace mods::levels {
 				 *  -- can remotely seal a room for the purpose of amplifying detonations
 				 *  -- can walk in a direction and automatically breach through
 				 *  	-- can sometimes make new rooms
+				 *  -- breaching doors causes room inhabitants to take damage from explosion
+				 *  -- "breach and clear"
+				 *  	-- breach a door and immediatel throw a flash bang into the room
+				 *  	-- inhabitants get disoriented and take more damage
+				 *  -- "knockdown"
+				 *  	-- fire a shot that knocks the enemy to the ground
+				 *  	-- knocked down enemies take more damage and are vulnerable to "detain"
+				 *  -- "detain"
+				 *  	-- disarm and zip-tie an enemy
+				 *  -- "entry denial"
+				 *  	-- prevent any enemy from entering your room by guarding a specific entrance
+				 *  	-- friendlies can snipe around you
+				 *  	-- you can use your secondary to deal damage to NPCs trying to enter
+				 *  -- Shotguns deal 10% extra damage
+				 *  -- SMG's deal 10% extra damage
+				 *  -- SMG's have corrossive damage
+				 *  	-- corrossive damage from SMG's cause enemy armor to be less effective
+				 *  -- SMG's in same-room engagements have a chance of dealing shotgun damage
+				 *  -- received shrapnel and explosive damage reduced by 25%
 				 *  -- [
 				 */
 				return {

@@ -1,0 +1,68 @@
+# type: VEST
+vnum: 146
+# type: LEGS
+# type: GAUNTLETS
+# type: SHOULDER_PADS
+# type: HELMET
+# type: HAT
+# type: EYEWEAR
+# type: GOGGLES
+# type: BACKPACK
+# type: WAIST_PACK
+# type: VEST_PACK
+# type: ELBOW_GUARDS
+# type: GLOVES
+# type: SHIELD
+# type: MASK
+csv_capabilities: 'TBA' #csv, strings free-form TBA
+csv_attach_to: 'TBA' #csv, strings attach to various kinds of items TBA
+thac0: 15 #int
+weight_in_lbs: 2 #float, weight in lbs
+fire_resistance_percent: 1 #percent
+balistic_resistance_percent: 1 #percent
+speed_profile: 3 #int, ENUM 0=UNHINDERED,1=FAST,2=HINDERED,3=SLOW,4=SLUGGISH
+offensive_damage_amount: 1 #int, static amount of offensive damage
+durability_profile: 'HARDENED' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE
+repair_cost_profile: 2 #int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE
+hp: 30 #int, hit points
+classification: 'BASIC' #string, 'BASIC', 'ADVANCED', 'ELITE'
+worth: 85 #int, how much the item is worth.
+incendiary_resistance_percent: 1 #int, static amount of incendiary resistance_percent, no limit
+explosive_resistance_percent: 1 #int, static amount of explosive resistance_percent, no limit
+shrapnel_resistance_percent: 1 #int, static amount of shrapnel resistance_percent, no limit
+corrosive_resistance_percent: 1 #int, static amount of corrosive resistance_percent, no limit
+cryogenic_resistance_percent: 0 #int, static amount of cryogenic resistance_percent, no limit
+radiation_resistance_percent: 0 #int, static amount of radiation resistance_percent, no limit
+emp_resistance_percent: 0 #int, static amount of emp resistance_percent, no limit
+shock_resistance_percent: 8 #int, static amount of shock resistance_percent, no limit
+anti_matter_resistance_percent: 0 #int, static amount of anti_matter resistance_percent, no limit
+stat_strength: 1 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 0 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 2 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 2 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 1 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 0 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 1 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 0 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 1 #int16_t, positive or negative amount to affect strategy stat
+stat_medical: 0 #int16_t, positive or negative amount to affect medical stat
+str_type: 'FEET' # enum, object type
+type: 'FEET' # enum, object type
+manufacturer: 'Presidential Construction Apparel' # string, anything 
+name: 'atom fade construction shoes' # string, anything name of object 
+description: 'atom fade construction shoes'
+short_description: 'atom fade construction shoes'
+action_description: 'atom fade construction shoes'
+feed_file: 'atom-fade-shoes.yml'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

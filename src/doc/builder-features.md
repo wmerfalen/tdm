@@ -1,5 +1,22 @@
 # Inventory of features
 
+# 2021-07-04
+	- I made a list of skills and perks in `mods/levels.cpp`
+	- I suggest you look there for next steps and which dynamics to implement
+	- [ ] perform a review and add/remove skills
+		- [ ] review list of skills in `get_triads_by_class(player_class_t c)`
+		- [ ] add more skills to each class
+		- [ ] add WEAPON perks to each class 
+			-- Give concrete incentives for a player to choose a specific class
+			-- Give nerfs/buffs based on weapon types
+			-- for example: GHOST class has SMG perks
+
+
+
+
+
+
+
 # 2021-05 new features
 	- `build_contract(data)` javascript function now available. see conbuild.md for example usage
 

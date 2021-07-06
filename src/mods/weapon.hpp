@@ -177,24 +177,6 @@ namespace mods::weapon {
 	};
 	using explosive_description_t = mods::yaml::explosive_description_t;
 
-	//		~explosive_description_t() = default;
-	//		explosive_description_t() :
-	//			chance_to_injure(0.0),	 /** Percent */
-	//			critical_chance(0.0), /** Percent */
-	//			critical_range(0), /** Rooms */
-	//			blast_radius(1),	/** 1 will only affect room it detonates in */
-	//			damage_per_second(0.0), /** static amount of damage done per second after detonation */
-	//			disorient_amount(0.0) /** percent */
-	//		{}
-	//		float chance_to_injure;
-	//		float critical_chance;
-	//		int critical_range;
-	//		int blast_radius;	/** In rooms */
-	//		float damage_per_second;
-	//		float disorient_amount;
-	//		std::string manufacturer;
-	//		type::explosive type;
-	//	};
 };
 using weapon_rifle_t = mods::weapon::type::rifle;
 using weapon_explosive_t = mods::weapon::type::explosive;
@@ -298,6 +280,7 @@ namespace mods::weapon {
 				MENTOC_TO_STR(ELBOW_GUARDS);
 				MENTOC_TO_STR(GLOVES);
 				MENTOC_TO_STR(SHIELD);
+				MENTOC_TO_STR(NECK);
 			default:
 				return "<unknown>";
 #undef MENTOC_TO_STR

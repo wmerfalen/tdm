@@ -211,6 +211,25 @@ namespace mods::builder {
 			return -5;
 		}
 	}
+	std::tuple<bool,std::string> delete_by_mob_vnum(std::string_view mob_vnum) {
+		rb_debug("delete all zone data -- start transaction");
+		try {
+			auto del_txn = txn();
+			sql_compositor comp("zone_data",&del_txn);
+			auto room_sql = comp.del()
+			                .from("zone_data")
+			                .where("zone_command","M")
+			                .op_and("zone_arg1","=",mob_vnum)
+			                .sql();
+			auto row = mods::pq::exec(del_txn,room_sql.data());
+			mods::pq::commit(del_txn);
+			return {1,"deleted"};
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("login exception",e.what());
+			return {false,CAT("failed: '",e.what(),"'")};
+		}
+	}
+
 
 	void encode_scripted_response(player_ptr_t& player, std::string_view encoded) {
 		if(!player->is_executing_js()) {
@@ -2332,8 +2351,6 @@ SUPERCMD(do_mbuild) {
 		        "  {gld}|:: default_position {red}see mbuild help default_position{/red}{/gld}\r\n" <<
 		        "  {gld}|:: action {red}see mbuild help action{/red}{/gld}\r\n" <<
 
-		        " {grn}NEW FEATURE [as of: 2020-07-10]{/grn}\r\n" <<
-		        " {red}FEATURE: extended-type{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}extended-type <mob_id> <type>{/red}\r\n" <<
 		        "  |--> will set the mob's extended type to <type>. The list of\r\n" <<
 		        "  available mob types follow.\r\n" <<
@@ -2348,8 +2365,17 @@ SUPERCMD(do_mbuild) {
 		        "  |::{red} for a description, type mbuild describe <type>\r\n" <<
 		        "  {grn}|____[example]{/grn}\r\n" <<
 		        "  |:: {wht}mbuild{/wht} {gld}describe INNOCENT{/gld}\r\n" <<
-		        "[documentation written on 2020-07-10]\r\n" <<
-		        " {grn}mbuild{/grn} {red}save <mob_id>{/red}\r\n" <<
+
+
+
+		        " {grn}mbuild{/grn} {red}targets <mob_id> <target>...[target-N]{/red}\r\n" <<
+		        "  |--> will set the mob's target to the list specified.\r\n" <<
+		        "  This is useful for mobs like GENERIC_THIEF which have an item that they \r\n" <<
+		        "  are prone to gravitate toward. This field is free-form and prone to interpretation\r\n" <<
+		        "  by the mud itself.\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}mbuild{/wht} {gld}targets 5 CARS ROOM_DARK HOUSEHOLDS DRUGS{/gld}\r\n" <<
+		        " {grn}mbuild{/grn} {red} save <mob_id> {/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}instantiate <mob_vnum>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}place <mob_vnum> <room_vnum> <tag>...<tag-N>{/red}\r\n" <<
@@ -2422,6 +2448,15 @@ SUPERCMD(do_mbuild) {
 				return;
 			}
 			mob_proto[mob_id].mob_specials.extended_mob_type = opt;
+			r_success(player,"Set mob type.");
+			return;
+		}
+	}
+	{
+		if(argshave()->first_is("targets")->passed()) {
+			exit(30);
+
+			r_error(player, "Mob-id is out of bounds.");
 			r_success(player,"Set mob type.");
 			return;
 		}
@@ -4493,7 +4528,9 @@ SUPERCMD(do_zbuild) {
 		        "  |--> lists all place commands for zone by vnum. multiple vnums can be passed.\r\n" <<
 		        " {grn}zbuild{/grn} {red}place-remove <zone_id> <place_id>{/red}\r\n" <<
 		        "  |--> removes the place command 'place_id' in zone 'zone_id'\r\n" <<
-		        "\r\n"
+		        "\r\n" <<
+		        " {grn}zbuild{/grn} {red}delete-by-mob-vnum <mob_vnum>{/red}\r\n" <<
+		        "  |--> removes all data within the zone_data table.\r\n" <<
 		        "\r\n"
 		        "{red}---[ DANGEROUS COMMANDS ]---{/red}\r\n" <<
 		        " {grn}zbuild{/grn} {red} remove-all-zone-data-from-db{/red}\r\n" <<
@@ -4560,6 +4597,19 @@ SUPERCMD(do_zbuild) {
 		auto s = mods::builder::delete_all_zone_data();
 		player->sendln(CAT("Delete zone data status: ",s,". Zero means success. Negative means error"));
 		player->sendln("DONE");
+		return;
+	}
+	if(argshave()->first_is("delete-by-mob-vnum")->passed()) {
+		if(argshave()->size_gt(1)->passed() == false) {
+			r_error(player,"Specify a mob vnum");
+			return;
+		}
+		auto s = mods::builder::delete_by_mob_vnum(argat(1));
+		if(!std::get<0>(s)) {
+			r_error(player,std::get<1>(s));
+			return;
+		}
+		r_success(player,std::get<1>(s));
 		return;
 	}
 

@@ -567,6 +567,10 @@ namespace mods::yaml {
 				log(CAT("[melee_description_t][WARNING] fill_flags used the default flags for type: ",this->str_type,", and this file: '",this->feed_file,"'").c_str());
 #endif
 				break;
+			case mw_armor::NECK:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_NECK;
+				break;
+
 			case mw_armor::VEST:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_BODY | ITEM_WEAR_HOLD;
 				break;
