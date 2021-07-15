@@ -2,7 +2,7 @@
 #include "../behaviour_tree_status.hpp"
 #include "../npc.hpp"
 #include "../behaviour_tree_impl.hpp"
-#include "generic-thief.hpp"
+#include "chaotic-meth-addict.hpp"
 #include "../weapons/damage-types.hpp"
 #include "../../comm.h"
 #include "../calc-visibility.hpp"
@@ -12,9 +12,9 @@
 #include "../mob-roam.hpp"
 #include "../query-objects.hpp"
 
-//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__
-#ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << "[m.m.generic-thief.btree:" << __LINE__ << "]->" << a << "\n";
+#define  __MENTOC_SHOW_BEHAVIOUR_TREE_chaotic_meth_addict_BTREE_DEBUG_OUTPUT__
+#ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_chaotic_meth_addict_BTREE_DEBUG_OUTPUT__
+#define m_debug(a) std::cerr << "[m.m.cma.btree:" << __LINE__ << "]->" << a << "\n";
 #else
 #define m_debug(a)
 #endif
@@ -25,10 +25,10 @@ namespace mods::behaviour_tree_impl {
 	extern void add_tree(std::string sv_tree_name,node& n);
 };
 
-namespace mods::mobs::generic_thief_behaviour_tree {
+namespace mods::mobs::chaotic_meth_addict_behaviour_tree {
 	using namespace helpers;
 	using vec_player_data = mods::scan::vec_player_data;
-	using TArgumentType = std::shared_ptr<mods::mobs::generic_thief>;
+	using TArgumentType = std::shared_ptr<mods::mobs::chaotic_meth_addict>;
 	using TNode = mods::behaviour_tree_node<TArgumentType>;
 	using TStatus = mods::behaviour_tree_status;
 	using vec_player_data = mods::scan::vec_player_data;
@@ -128,7 +128,7 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 		});
 	}
 
-	void make_generic_thief_engage(TNode& tree) {
+	void make_chaotic_meth_addict_engage(TNode& tree) {
 		/**
 		 * SEQUENCE TREE
 		 * --------------
@@ -161,52 +161,31 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 		});
 	}
 
-	/**
-	 * [1] Have we already found an item of interest?
-	 * 	[found item of interest]
-	 * 		[1] return SUCCESS
-	 * 		[2] go toward heading
-	 * 			return failure until in same room as item of interest
-	 * [2] in same room as item of interest
-	 */
-	TChildNode find_target_near_me() {
-		m_debug("initializing find_target_near_me");
-		return TNode::create_sequence({
+	TChildNode find_someone_to_attack() {
+		return TNode::create_selector({
 			TNode::create_leaf([](TArgumentType g) -> TStatus {
-				m_debug("inside first leaf of find_targets_near_me");
-				int SCAN_DEPTH = 8;
-				m_debug("has found car check");
+				if(g->attack_anyone_in_same_room()) {
+					return TStatus::SUCCESS;
+				}
 				if(g->has_found_item()) {
 					m_debug("start moving that way");
 					return TStatus::SUCCESS; // start moving that way
 				}
-				auto ch = g->cd();
-				m_debug("finding vehicle near me");
-				mods::scan::vec_player_data los_room_list;
-				auto dirs =  world[g->room()].directions();
-				mods::util::shuffle(dirs);
-				for(const auto& dir : dirs) {
+				m_debug("finding npcs/players near me to attack");
+				for(const auto& dir : g->shuffle_directions()) {
 					m_debug("direction: " << dirstr(dir));
-					los_scan_direction(ch,SCAN_DEPTH,&los_room_list,dir, mods::scan::find_type_t::OBJECTS);
+					auto los_room_list = g->scan_attackable(dir);
 					m_debug("scanned direction. found " << los_room_list.size() << " entries...");
 					for(const auto& scanned : los_room_list) {
-						m_debug("checking if has vehicle: " << scanned.uuid);
-						auto obj = optr_by_uuid(scanned.uuid);
-						if(obj->has_vehicle()) { // TODO: std::get<0>(mods::calc_visibility::can_see_object(g->player(),obj)) && obj->has_vehicle()) {
-							g->found_item(scanned);
-							g->remember_item(scanned);
-							g->set_heading(dir);
-							break;
-						}
+						g->found_item(scanned);
+						g->remember_item(scanned);
+						g->set_heading(dir);
+						g->move_to(g->get_heading());
+						return TStatus::SUCCESS;
 					}
 				}
-				g->move_to(g->get_heading());
-				return TStatus::SUCCESS;
+				return TStatus::FAILURE;
 			}),
-			/**
-			 * check to see if we're in the same room as a car we spotted.
-			 * if not, move towards heading
-			 */
 			TNode::create_leaf([](TArgumentType c) -> TStatus {
 				using namespace mods::doors;
 				for(const auto& car_uuid : c->get_remembered_items()) {
@@ -221,46 +200,63 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 				c->move_to(c->get_heading());
 				return TStatus::FAILURE;
 			}),
+#if __MENTOC_CHAOTIC_METH_ADDICT_CAN_SPAWN_NEAR_SOMEONE__
+			TNode::create_leaf([](TArgumentType g) -> TStatus {
+				if(mods::rand::chance(CHAOTIC_METH_ADDICT_SPAWN_NEAR_RANDOM_PLAYER_CHANCE())) {
+					auto who = g->spawn_near_someone();
+					if(!who) {
+						return TStatus::FAILURE;
+					}
+					g->attack(who);
+					return TStatus::SUCCESS;
+				}
+				return TStatus::FAILURE;
+			}),
+#endif
 		});//end create_sequence
 	}//end find_target_near_me
 
+	TChildNode random_action() {
+		//return TNode::create_sequence({
+		return TNode::create_leaf([](TArgumentType g) -> TStatus {
+			m_debug("performing random chaotic action");
+			auto list = mods::globals::get_room_list(g->room());
+			if(list.size() > 1 && rand_number(0,10) > rand_number(0,10)) {
+				g->perform_random_act();
+			}
+			if(g->player()->fighting()) {
+				if(mods::rand::chance(CHAOTIC_DOUBLE_ATTACK_CHANCE())) {
+					g->extra_attack();
+					return TStatus::SUCCESS;
+				}
+			}
+			return TStatus::SUCCESS;
+		});
+		//});//end create_sequence
+	}//end find_target_near_me
+
 	std::deque<TNode>& trees() {
-		static TNode generic_thief_roam(TNode::SELECTOR);
-		static TNode generic_thief_hostile(TNode::SELECTOR);
-		static TNode generic_thief_witness_hunting(TNode::SELECTOR);
-		static TNode generic_thief_wimpy(TNode::SELECTOR);
-		static TNode generic_thief_attempt_thievery(TNode::SELECTOR);
+		static TNode chaotic_meth_addict_roam(TNode::SELECTOR);
+		static TNode chaotic_meth_addict_hostile(TNode::SELECTOR);
 		static bool bootstrapped = false;
 		static std::deque<TNode> s;
 		if(!bootstrapped) {
 			m_debug("bootstrapping");
-			generic_thief_roam.append_child(
+			chaotic_meth_addict_roam.append_child(
 			TNode::create_selector({
-				find_target_near_me(),
-				//watch_room(),
+				find_someone_to_attack(),
+				random_action(),
+				//move_toward_existing_target(),
+				//perform_hostile_action(),
 			})
 			);
-			generic_thief_hostile.append_child(
+			chaotic_meth_addict_hostile.append_child(
 			TNode::create_sequence({
-			})
-			);
-			generic_thief_wimpy.append_child(
-			TNode::create_sequence({
-			})
-			);
-			generic_thief_attempt_thievery.append_child(
-			TNode::create_sequence({
-				find_target_near_me(),
-				watch_room(),
-				//get_hostile_toward_witnesses()
 			})
 			);
 			s = {
-				generic_thief_roam,
-				generic_thief_hostile,
-				generic_thief_witness_hunting,
-				generic_thief_wimpy,
-				generic_thief_attempt_thievery,
+				chaotic_meth_addict_roam,
+				chaotic_meth_addict_hostile,
 			};
 			bootstrapped = true;
 		}
@@ -269,11 +265,11 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 
 	void run_trees() {
 		m_debug("run trees");
-		for(auto& thief : generic_thief_list()) {
-			m_debug("checking thief ptr");
-			if(thief->has_tree()) {
-				m_debug("has tree. dispatching..." << thief->get_tree());
-				trees()[thief->get_tree()].run(thief);
+		for(auto& meth : chaotic_meth_addict_list()) {
+			m_debug("checking meth ptr");
+			if(meth->has_tree() && meth->alive() && meth->capable()) {
+				m_debug("has tree. dispatching..." << meth->get_tree());
+				trees()[meth->get_tree()].run(meth);
 			}
 		}
 	}

@@ -364,6 +364,7 @@ LEVEL_DIFF_FOOBAR_TEST,10.0
 ARMOR_CRIT_DAMAGE_MULTIPLIER,0.011134
 
 [std::string]
+CHAOTIC_METH_ADDICT_PSV_RANDOM_ACT,"$n looks at you with utter contempt!|$n's nose starts bleeding profusely...|$n manically scratches at invisible insects crawling all over.|$n is looking for something to hurt!"
 MSG_NO_PRACTICE_SESSIONS,"You don't have any practice sessions."
 CAN_BE_SEARCHED,"This command can be searched by typing the command followed by a space and a word that you would like to search for."
 SANITY_CHECK,"sanity-check"
@@ -558,6 +559,9 @@ ADVANCE_LEVEL_MESSAGE,"{grn}CONGRATS! You rise a level!{/grn}"
 ADVANCE_MULTIPLE_LEVELS_MESSAGE,"{grn}CONGRATS! You rise %d levels!{/grn}"
 
 [uint8_t]
+CHAOTIC_METH_ADDICT_SPAWN_NEAR_RANDOM_PLAYER_CHANCE,10
+CHAOTIC_METH_ADDICT_SCAN_DEPTH,18
+CHAOTIC_DOUBLE_ATTACK_CHANCE,25
 PRACTICE_SESSIONS_PER_LEVEL_UP,2
 SUTURE_TIER_ONE_TICKS,30
 SUTURE_TIER_TWO_TICKS,20

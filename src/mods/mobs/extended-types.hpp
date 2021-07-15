@@ -26,6 +26,7 @@ namespace mods::mobs {
 		ROGUE_MP_SHOTGUNNER,
 		CAR_THIEF,
 		GENERIC_THIEF,
+		CHAOTIC_METH_ADDICT,
 	};
 	//vim sorcery: s/\t\t\([A-Z_]\+\),/\t\t{\1,"\1"},/g
 	static std::map<extended_types_t,std::string> ext_map = {
@@ -46,6 +47,7 @@ namespace mods::mobs {
 		{ROGUE_MP_SHOTGUNNER,"ROGUE_MP_SHOTGUNNER"},
 		{CAR_THIEF,"CAR_THIEF"},
 		{GENERIC_THIEF,"GENERIC_THIEF"},
+		{CHAOTIC_METH_ADDICT,"CHAOTIC_METH_ADDICT"},
 	};
 	void decorate(uuid_t mob_id);
 
@@ -82,6 +84,7 @@ namespace mods::mobs {
 		{ROGUE_MP_SHOTGUNNER,"ROGUE_MP_SHOTGUNNER"},
 		{CAR_THIEF,"CAR_THIEF"},
 		{GENERIC_THIEF,"GENERIC_THIEF"},
+		{CHAOTIC_METH_ADDICT,"CHAOTIC_METH_ADDICT"},
 	};
 	namespace extended_types {
 		using mob_rnum = uint32_t;

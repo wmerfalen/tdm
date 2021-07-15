@@ -12,6 +12,9 @@ namespace mods::mobs {
 	smart_mob::smart_mob() {
 		this->init();
 	}
+	void smart_mob::act_to_room(std::string_view str) {
+		act(str.data(), TRUE, player_ptr->cd(), 0, 0, TO_ROOM);
+	}
 	void smart_mob::set_watching_room(bool status) {
 		player_ptr->cd()->mob_specials.watching_room = status;
 		if(status) {
@@ -144,7 +147,7 @@ namespace mods::mobs {
 	 *
 	 * @param dir
 	 */
-	void smart_mob::set_heading(uint8_t dir) {
+	void smart_mob::set_heading(const int8_t& dir) {
 		this->heading = this->cd()->mob_specials.heading = dir;
 	}
 	/**
@@ -292,6 +295,42 @@ namespace mods::mobs {
 			return {1,"moved"};
 		}
 		return {0,"cooldown"};
+	}
+	std::vector<direction_t> smart_mob::shuffle_directions() {
+		auto dirs =  world[room()].directions();
+		mods::util::shuffle(dirs);
+		return dirs;
+	}
+	bool smart_mob::alive() {
+		return player_ptr->position() > POS_DEAD;
+	}
+	bool smart_mob::capable() {
+		switch(player_ptr->position()) {
+			default:
+			case POS_DEAD:
+			case POS_MORTALLYW:
+			case POS_INCAP:
+			case POS_STUNNED:
+				return false;
+			case POS_SLEEPING:
+			case POS_RESTING:
+			case POS_SITTING:
+			case POS_FIGHTING:
+			case POS_STANDING:
+				return true;
+		}
+	}
+	bool smart_mob::can_move() {
+		return player_ptr->position() > POS_STUNNED;
+	}
+	mods::scan::vec_player_data smart_mob::scan_attackable(const direction_t& dir) {
+		static mods::scan::vec_player_data results;
+		results.clear();
+		mods::scan::los_scan_direction(cd(),scan_depth(),&results,dir, mods::scan::find_type_t::NPC_AND_PLAYER);
+		return results;
+	}
+	uint8_t smart_mob::scan_depth() const {
+		return 8;
 	}
 };
 #if 0

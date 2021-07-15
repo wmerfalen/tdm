@@ -5,8 +5,10 @@
 #include "mp-shotgunner.hpp"
 #include "car-thief.hpp"
 #include "generic-thief.hpp"
+#include "chaotic-meth-addict.hpp"
 #include "../behaviour_tree_impl.hpp"
 
+#define  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|mobs") << a << "\n";
 #else
@@ -52,6 +54,11 @@ namespace mods::mobs {
 			case extended_types_t::GENERIC_THIEF:
 				m_debug("[ found generic thief ]");
 				generic_thief::create(mob_id, mods::mobs::extended_types::get_mobs_targets(ch->nr));
+				register_mob_with_btree = false;
+				break;
+			case extended_types_t::CHAOTIC_METH_ADDICT:
+				m_debug("[ found chaotic meth addict ]");
+				chaotic_meth_addict::create(mob_id, mods::mobs::extended_types::get_mobs_targets(ch->nr));
 				register_mob_with_btree = false;
 				break;
 		}

@@ -4,6 +4,7 @@
 #include "../../globals.hpp"
 #include "../damage-event.hpp"
 #include "../npc.hpp"
+#include "../scan.hpp"
 
 namespace mods::mobs {
 	using tick_t = uint64_t;
@@ -37,8 +38,8 @@ namespace mods::mobs {
 			/**====================================================*/
 			/** motion control */
 			/**====================================================*/
-			void set_heading(uint8_t dir);
-			int get_heading() const {
+			void set_heading(const int8_t& dir);
+			int8_t get_heading() const {
 				return heading;
 			}
 			void shout(std::string_view);
@@ -111,6 +112,13 @@ namespace mods::mobs {
 			void set_extended_type(void* type) {
 				m_extended_type = type;
 			}
+			void act_to_room(std::string_view msg);
+			virtual uint8_t scan_depth() const;
+			mods::scan::vec_player_data scan_attackable(const direction_t& dir);
+			std::vector<direction_t> shuffle_directions();
+			bool alive();
+			bool can_move();
+			bool capable();
 
 		protected:
 			std::map<uint16_t,uint16_t> m_should_do;
@@ -122,7 +130,7 @@ namespace mods::mobs {
 			uuidvec_t hunting;
 			std::string variation;
 			int weapon_heat;
-			uint8_t heading;
+			int8_t heading;
 			uint8_t spray_direction;
 			player_ptr_t player_ptr;
 			bool loaded;

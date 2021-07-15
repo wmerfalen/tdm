@@ -870,9 +870,13 @@ void game_loop(socket_t mother_desc) {
 namespace mods::mobs::generic_thief_behaviour_tree {
 	extern void run_trees();
 };
+namespace mods::mobs::chaotic_meth_addict_behaviour_tree {
+	extern void run_trees();
+};
 void run_behaviour_trees() {
 	rb_bht_debug("run_behaviour_trees [ENTRY]");
 	mods::mobs::generic_thief_behaviour_tree::run_trees();
+	mods::mobs::chaotic_meth_addict_behaviour_tree::run_trees();
 	for(const auto& npc_uuid : mods::behaviour_tree_impl::mob_list()) {
 		auto npc = npc_by_uuid(npc_uuid);
 		if(!npc) {

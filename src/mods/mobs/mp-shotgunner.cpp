@@ -187,7 +187,7 @@ namespace mods::mobs {
 				default:
 					break;
 			}
-			if(can_go) {
+			if(can_go && decision < sizeof(room.dir_option)) {
 				cd()->mob_specials.previous_room = player_ptr->room();
 				char_from_room(cd());
 				char_to_room(cd(),room.dir_option[decision]->to_room);

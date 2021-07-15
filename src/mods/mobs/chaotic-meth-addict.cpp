@@ -1,27 +1,21 @@
-#include "generic-thief.hpp"
+#include "chaotic-meth-addict.hpp"
 #include "../weapons/damage-types.hpp"
 #include "../scan.hpp"
 #include "../rooms.hpp"
 #include "helpers.hpp"
 #include "extended-types.hpp"
 #include "../scan.hpp"
+#include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
-#ifdef  __MENTOC_MODS_MOBS_generic_thief_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n";
+#define  __MENTOC_MODS_MOBS_chaotic_meth_addict_SHOW_DEBUG_OUTPUT__
+#ifdef  __MENTOC_MODS_MOBS_chaotic_meth_addict_SHOW_DEBUG_OUTPUT__
+#define m_debug(a) mentoc_prefix_debug("m|m|cma") << a << "\n";
 #else
 #define m_debug(a) ;;
 #endif
 namespace mods::mobs {
-	/**! @NEW_BEHAVIOUR_TREE@ !**/
-#if 0
-	generic_thief_map_t& generic_thief_map() {
-		static generic_thief_map_t m;
-		return m;
-	}
-#endif
-
-	namespace generic_thief_btree {
+	namespace chaotic_meth_addict_btree {
 		/**
 		 * @brief find the room with the most enemies, and go towards that direction
 		 *
@@ -62,30 +56,20 @@ namespace mods::mobs {
 			}
 			return should_fire;
 		}
-	};// end namespace generic_thief_btree
-	std::forward_list<generic_thief::target_t>& generic_thief::parse_targets(std::string_view targets) {
-		for(const auto& item : EXPLODE(targets.data(),' ')) {
-			auto target = str_to_target(item);
-			if(target == target_t::NONE) {
-				continue;
-			}
-			m_targets.emplace_front(target);
-		}
-		return m_targets;
-	}
-	std::forward_list<generic_thief::target_t>& generic_thief::get_targets()  {
-		return m_targets;
-	}
-	void generic_thief::create(const uuid_t& mob_uuid, std::string_view targets) {
-		m_debug("generic_thief create on uuid:" << mob_uuid);
+	};// end namespace chaotic_meth_addict_btree
+	void chaotic_meth_addict::create(const uuid_t& mob_uuid, std::string_view targets) {
+		m_debug("chaotic_meth_addict create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
-			log("SYSERR: did not find player to populate generic_thief with: %d",mob_uuid);
+			log("SYSERR: did not find player to populate chaotic_meth_addict with: %d",mob_uuid);
 			return;
 		}
-		auto g = std::make_shared<generic_thief>(mob_uuid,targets.data());
+		auto g = std::make_shared<chaotic_meth_addict>(mob_uuid,targets.data());
 		g->btree_roam();
-		mods::mobs::generic_thief_list().push_front(g);
+		mods::mobs::chaotic_meth_addict_list().push_front(g);
+	}
+	void chaotic_meth_addict::perform_random_act() {
+		act_to_room(m_random_acts[rand_number(0,m_random_acts.size()-1)]);
 	}
 
 	/**
@@ -94,58 +78,46 @@ namespace mods::mobs {
 	 * @param room
 	 * @param player
 	 */
-	void generic_thief::enemy_spotted(room_rnum room,uuid_t player) {
+	void chaotic_meth_addict::enemy_spotted(room_rnum room,uuid_t player) {
 		m_debug("##################################################################################" <<
-		        "[generic_thief] enemy spotted:" << room << "\n" <<
+		        "[chaotic_meth_addict] enemy spotted:" << room << "\n" <<
 		        "##################################################################################");
-		this->spray(player_ptr->get_watching());
+		//this->spray(player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}
-	void generic_thief::set_variation(const std::string& v) {
+	void chaotic_meth_addict::set_variation(const std::string& v) {
 		for(const auto& type : EXPLODE(v,' ')) {
-			std::cerr << green_str("generic_thief::variation:") << type << "\n";
+			std::cerr << green_str("chaotic_meth_addict::variation:") << type << "\n";
 		}
 	}
-	str_map_t generic_thief::report() {
+	str_map_t chaotic_meth_addict::report() {
 		return {{"foo","todo"}};
 	}
-	void generic_thief::set_behavior_tree_directly(const generic_thief::btree_t& t) {
+	void chaotic_meth_addict::set_behavior_tree_directly(const chaotic_meth_addict::btree_t& t) {
 		m_debug("setting tree id directly to: " << t);
 		cd()->mob_specials.behaviour_tree = (uint16_t)t;
 	}
-	bool generic_thief::has_tree() {
-		return cd()->mob_specials.behaviour_tree != generic_thief::btree_t::GT_NONE;
+	bool chaotic_meth_addict::has_tree() {
+		return cd()->mob_specials.behaviour_tree != chaotic_meth_addict::btree_t::CMA_NONE;
 	}
-	generic_thief::btree_t generic_thief::get_tree() {
+	chaotic_meth_addict::btree_t chaotic_meth_addict::get_tree() {
 		return (btree_t)cd()->mob_specials.behaviour_tree;
 	}
-	void generic_thief::btree_none() {
-		set_behaviour_tree_directly(generic_thief::btree_t::GT_NONE);
+	void chaotic_meth_addict::btree_none() {
+		set_behaviour_tree_directly(chaotic_meth_addict::btree_t::CMA_NONE);
 	}
-	void generic_thief::btree_roam() {
-		set_behavior_tree_directly(generic_thief::btree_t::GT_ROAM);
+	void chaotic_meth_addict::btree_roam() {
+		set_behavior_tree_directly(chaotic_meth_addict::btree_t::CMA_ROAM);
 
 	}
-	void generic_thief::btree_hostile() {
-		set_behavior_tree_directly(generic_thief::btree_t::GT_HOSTILE);
+	void chaotic_meth_addict::btree_hostile() {
+		set_behavior_tree_directly(chaotic_meth_addict::btree_t::CMA_HOSTILE);
 
 	}
-	void generic_thief::btree_witness_hunting() {
-		set_behavior_tree_directly(generic_thief::btree_t::GT_WITNESS_HUNTING);
-
-	}
-	void generic_thief::btree_wimpy() {
-		set_behavior_tree_directly(generic_thief::btree_t::GT_WIMPY);
-
-	}
-	void generic_thief::btree_attempt_thievery() {
-		set_behavior_tree_directly(generic_thief::btree_t::GT_ATTEMPT_THIEVERY);
-	}
-
 	/**
 	 * @brief damage_events registered here
 	 */
-	void generic_thief::setup_damage_callbacks() {
+	void chaotic_meth_addict::setup_damage_callbacks() {
 		using de = damage_event_t;
 		static const std::vector<de> pacify_events = {
 			de::TARGET_DEAD_EVENT,
@@ -241,10 +213,10 @@ namespace mods::mobs {
 			switch(feedback.damage_event) {
 				case de::OUT_OF_AMMO_EVENT:
 					m_debug("DAMN! OUT OF AMMO!");
-					player_ptr->primary()->rifle_instance->ammo = 255;
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
 					m_debug("No primary wieldded... wtf?");
+					m_weapon = player_ptr->primary();
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
 					m_debug("cooldown in effect for primary");
@@ -263,7 +235,7 @@ namespace mods::mobs {
 				return;
 			}
 			auto& room = world[player_ptr->room()];
-			int decision = generic_thief_btree::weighted_direction_decider(player_ptr,nullptr);
+			int decision = chaotic_meth_addict_btree::weighted_direction_decider(player_ptr,nullptr);
 			if(decision == -1) {
 				for(auto dir : room.directions()) {
 					if(room.dir_option[dir] && mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false) {
@@ -277,10 +249,10 @@ namespace mods::mobs {
 			this->set_heading(decision);
 		});
 	}
-	bool generic_thief::is_rival(player_ptr_t& player) {
+	bool chaotic_meth_addict::is_rival(player_ptr_t& player) {
 		return false;
 	}
-	void generic_thief::door_entry_event(player_ptr_t& player) {
+	void chaotic_meth_addict::door_entry_event(player_ptr_t& player) {
 		if(player->is_npc()) {
 			if(is_rival(player)) {
 				btree_roam();
@@ -289,7 +261,7 @@ namespace mods::mobs {
 			}
 		}
 	}
-	void generic_thief::init() {
+	void chaotic_meth_addict::init() {
 		smart_mob::init();
 		m_should_do_max[SHOULD_DO_ROAM] = LOWLY_SECURITY_ROAM_TICK();
 		m_should_do_max[SHOULD_DO_RANDOM_TRIVIAL] = LOWLY_SECURITY_RANDOM_TRIVIAL_TICK();
@@ -300,6 +272,9 @@ namespace mods::mobs {
 		m_attackers_last_direction = std::nullopt;
 		m_scanned_items.clear();
 		m_remembered_items.clear();
+		for(const auto& msg : EXPLODE(CHAOTIC_METH_ADDICT_PSV_RANDOM_ACT(),'|')) {
+			m_random_acts.emplace_back(msg);
+		}
 	};
 
 	/**
@@ -308,54 +283,46 @@ namespace mods::mobs {
 	 * @param mob_uuid
 	 * @param variation
 	 */
-	generic_thief::generic_thief(const uuid_t& mob_uuid, std::string_view variation) {
+	chaotic_meth_addict::chaotic_meth_addict(const uuid_t& mob_uuid, std::string_view variation) {
 		this->init();
 		this->uuid = mob_uuid;
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
-			log("SYSERR: did not find player to populate generic_thief with: %d",mob_uuid);
+			log("SYSERR: did not find player to populate chaotic_meth_addict with: %d",mob_uuid);
 			this->loaded = false;
 			this->error = true;
 			return;
 		}
 		player_ptr = p;
 		auto ch = p->cd();
-		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::GENERIC_THIEF;
+		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::CHAOTIC_METH_ADDICT;
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
 		this->set_variation(variation.data());
 		bootstrap_equipment();
+		m_weapon = player()->primary();
 	}
-	/**
-	 * @brief spray direction
-	 *
-	 * @param dir
-	 *
-	 * @return
-	 */
-	feedback_t& generic_thief::spray(uint8_t dir) {
-		m_debug("SPRAYING: " << dirstr(dir));
-		this->spray_direction = dir;
-		this->last_attack = mods::weapons::damage_types::spray_direction_with_feedback(player_ptr,dir);
-		this->weapon_heat += 20; /** TODO: */
-		return this->last_attack;
-	}
-	void generic_thief::attacked(const feedback_t& feedback) {
+	void chaotic_meth_addict::attacked(const feedback_t& feedback) {
 		auto p = ptr_by_uuid(feedback.attacker);
 		if(p) {
 			m_last_attacker = p;
 			m_attackers.emplace_front(p);
 		}
 	}
-	player_ptr_t generic_thief::get_next_attacking_priority() {
+	player_ptr_t chaotic_meth_addict::get_next_attacking_priority() {
 		return m_attackers.front();
 	}
-	void generic_thief::melee_attack_within_range() {
-		m_debug("melee_attack_within_range");
-		if(!m_weapon) {
-			m_weapon = player_ptr->primary();
+	void chaotic_meth_addict::extra_attack() {
+		m_debug("extra attack roll success");
+		auto attacker = player()->fighting();
+		if(m_weapon && attacker->room() == this->room()) {
+			m_debug("i have a weapon and i'm using it against who i'm fighting");
+			mods::weapons::damage_types::melee_damage_with_feedback(player(),m_weapon,attacker);
 		}
+	}
+	void chaotic_meth_addict::melee_attack_within_range() {
+		m_debug("melee_attack_within_range");
 		if(m_last_attacker) {
 			if(m_last_attacker->position() == POS_DEAD) {
 				m_debug("Our target is dead!");
@@ -372,13 +339,10 @@ namespace mods::mobs {
 				continue;
 			}
 			m_debug("distance:" << results.distance << ", direction: " << results.direction);
-			if(results.distance > m_weapon->rifle()->attributes->max_range) {
-				move_to(results.direction);
-			}
 			m_attackers_last_direction = results.direction;
 
 			if(attacker->room() == player_ptr->room()) {
-				auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,player_ptr->primary(),attacker);
+				auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,attacker);
 				if(feedback.hits == 0 || feedback.damage == 0) {
 					continue;
 				}
@@ -386,24 +350,23 @@ namespace mods::mobs {
 		}
 	}
 
-	void generic_thief::move_closer_to_target() {
+	void chaotic_meth_addict::attack(player_ptr_t& player) {
+		m_last_attacker = player;
+		melee_attack_within_range();
+	}
+	void chaotic_meth_addict::move_closer_to_target() {
 		uint8_t loops = 1;
 		if(mods::rand::chance(CAR_THIEF_EXTRA_LOOP_CHANCE())) {
 			++loops;
 		}
 		for(int i =0; i < loops; ++i) {
 			auto results = mods::scan::los_find(player_ptr,m_last_attacker);
-			if(results.found && results.distance >= m_weapon->rifle()->attributes->max_range) {
+			if(results.found && results.distance > 0) {
 				move_to(m_attackers_last_direction.value());
 			}
 		}
 	}
-	/*
-	void generic_thief::move_closer_to_vehicle() {
-
-	}
-	*/
-	int8_t generic_thief::determine_heading_from_found_vehicles() {
+	int8_t chaotic_meth_addict::determine_heading_from_found_victims() {
 		std::map<direction_t,std::size_t> weights;
 		for(const auto& spot : m_scanned_items) {
 			++weights[spot.direction];
@@ -417,35 +380,59 @@ namespace mods::mobs {
 		}
 		return direction;
 	}
-	bool generic_thief::has_found_item() {
+	bool chaotic_meth_addict::has_found_item() {
 		return m_found_item;
 	}
-	void generic_thief::set_found_item(bool status) {
+	void chaotic_meth_addict::set_found_item(bool status) {
 		m_found_item = status;
 	}
-	void generic_thief::found_witness(const mods::scan::vec_player_data_element& data) {
+	void chaotic_meth_addict::found_witness(const mods::scan::vec_player_data_element& data) {
 		m_hostiles.emplace_front(data);
 	}
-#if 0
-	void generic_thief::found_item(const mods::scan::vec_player_data_element& data) {
-		m_scanned_items.emplace_back(data);
-	}
-#endif
-	void generic_thief::clear_scanned_items() {
+	void chaotic_meth_addict::clear_scanned_items() {
 		m_scanned_items.clear();
 	}
-	void generic_thief::remember_item(const mods::scan::vec_player_data_element& data) {
+	void chaotic_meth_addict::remember_item(const mods::scan::vec_player_data_element& data) {
 		m_remembered_items.push_front(data.uuid);
 	}
-	const generic_thief::uuidlist_t& generic_thief::get_remembered_items() const {
+	const chaotic_meth_addict::uuidlist_t& chaotic_meth_addict::get_remembered_items() const {
 		return m_remembered_items;
 	}
-	void generic_thief::found_item(mods::scan::vec_player_data_element const& item) {
+	void chaotic_meth_addict::found_item(mods::scan::vec_player_data_element const& item) {
 		m_scanned_items.emplace_back(item);
 	}
-	std::forward_list<std::shared_ptr<generic_thief>>& generic_thief_list() {
-		static std::forward_list<std::shared_ptr<generic_thief>> s;
+	std::forward_list<std::shared_ptr<chaotic_meth_addict>>& chaotic_meth_addict_list() {
+		static std::forward_list<std::shared_ptr<chaotic_meth_addict>> s;
 		return s;
+	}
+	uint8_t chaotic_meth_addict::scan_depth() const {
+		return CHAOTIC_METH_ADDICT_SCAN_DEPTH();
+	}
+	player_ptr_t chaotic_meth_addict::spawn_near_someone() {
+		player_ptr_t who = nullptr;
+		mods::loops::foreach_player([&](auto player) -> bool {
+			if(rand_number(1,10) > rand_number(1,10)) {
+				who = player;
+				player->sendln("Beware! A meth addict approaches!");
+				char_from_room(cd());
+				char_to_room(cd(),player->room());
+				return false;
+			}
+			return true;
+		});
+		return who;
+	}
+	bool chaotic_meth_addict::attack_anyone_in_same_room() {
+		for(auto& victim : mods::globals::get_room_list(room())) {
+			if(victim->is(cd())) {
+				continue;
+			}
+			auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,victim);
+			if(feedback.hits || feedback.damage) {
+				return true;
+			}
+		}
+		return false;
 	}
 };
 #undef m_debug

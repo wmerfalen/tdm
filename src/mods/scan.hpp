@@ -44,6 +44,7 @@ namespace mods {
 			DEAD = (1 << 3),
 			PLAYERS = (1 << 4),
 			OBJECTS = (1 << 5),
+			NPC_AND_PLAYER = NPC | PLAYERS | ALIVE,
 			ANY = NPC | ALIVE | DEAD | PLAYERS | OBJECTS,
 		};
 
