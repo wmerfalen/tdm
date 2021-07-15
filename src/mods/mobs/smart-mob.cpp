@@ -131,6 +131,7 @@ namespace mods::mobs {
 	 * @brief initialize
 	 */
 	void smart_mob::init() {
+		m_extended_type = nullptr;
 		this->uuid = 0;
 		this->loaded = false;
 		this->weapon_heat =0;
@@ -163,6 +164,15 @@ namespace mods::mobs {
 	void smart_mob::set_behaviour_tree(std::string_view name) {
 		sm_debug("Setting behaviour tree to: '" << name << "'");
 		this->cd()->mob_specials.set_behaviour_tree(name);
+	}
+	void smart_mob::set_behaviour_tree_directly(const uint16_t& tree) {
+		this->cd()->mob_specials.behaviour_tree = tree;
+	}
+	bool smart_mob::has_tree() {
+		return this->cd()->mob_specials.behaviour_tree;
+	}
+	uint16_t smart_mob::get_tree() {
+		return this->cd()->mob_specials.behaviour_tree;
 	}
 	/**
 	 * @brief callback when someone spotted

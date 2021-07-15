@@ -6,7 +6,7 @@
 
 namespace mods::mobs::generic_thief_behaviour_tree {
 	/**
-	 * MP Shotgunner behaviour tree
+	 * Generic behaviour tree
 	 * ----------------------------
 	    [1] When attacked
 				[1] radio nearby units for help at coordinates
@@ -29,8 +29,7 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 	 */
 	using namespace helpers;
 	using vec_player_data = mods::scan::vec_player_data;
-	using TArgumentType = mods::npc&;
-	using TNode = mods::behaviour_tree_node<TArgumentType>;
+	using TArgumentType = std::shared_ptr<mods::mobs::generic_thief>;
 	using TStatus = mods::behaviour_tree_status;
 	using vec_player_data = mods::scan::vec_player_data;
 	using TChildNode = mods::behaviour_tree_node<TArgumentType>::child_node_t;
@@ -58,6 +57,7 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 	void make_generic_thief_hostile(TNode&);
 	void make_generic_thief_wimpy(TNode&);
 
+	void run_trees();
 };//end namespace
 
 #endif

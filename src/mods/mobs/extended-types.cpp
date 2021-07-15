@@ -4,6 +4,7 @@
 #include "lowly-security.hpp"
 #include "mp-shotgunner.hpp"
 #include "car-thief.hpp"
+#include "generic-thief.hpp"
 #include "../behaviour_tree_impl.hpp"
 
 #ifdef  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
@@ -21,6 +22,7 @@ namespace mods::mobs {
 		}
 		auto ch = p->cd();
 		m_debug("extended_mob_type for mob_id:'" << ch->mob_specials.extended_mob_type << "', mob_id:'" << mob_id << "'");
+		bool register_mob_with_btree = true;
 		switch(ch->mob_specials.extended_mob_type) {
 			default:
 			case extended_types_t::NONE:
@@ -47,13 +49,27 @@ namespace mods::mobs {
 				m_debug("[ found car thief ]");
 				car_thief::create(mob_id, "normal");
 				break;
+			case extended_types_t::GENERIC_THIEF:
+				m_debug("[ found generic thief ]");
+				generic_thief::create(mob_id, mods::mobs::extended_types::get_mobs_targets(ch->nr));
+				register_mob_with_btree = false;
+				break;
 		}
-		/** simply add the mob to the list of mobs with behaviour trees */
-		mods::behaviour_tree_impl::register_mob(ch->uuid);
+		if(register_mob_with_btree) {
+			/** simply add the mob to the list of mobs with behaviour trees */
+			mods::behaviour_tree_impl::register_mob(ch->uuid);
+		}
 	}
 };
 
 namespace mods::mobs::extended_types {
+	static std::map<mob_rnum,std::string> mob_target_map;
+	void register_targets(const mob_rnum& vnum, std::string_view items) {
+		mob_target_map[vnum] = items.data();
+	}
+	std::string_view get_mobs_targets(const mob_rnum& vnum) {
+		return mob_target_map[vnum];
+	}
 	std::vector<std::string> strings() {
 		std::vector<std::string> m;
 		for(auto pair : ext_map) {

@@ -24,6 +24,9 @@ extern void hit(char_data *ch, char_data *victim, int type);
 namespace mods::mobs::car_thief_behaviour_tree {
 	extern std::map<std::string,mods::behaviour_tree_impl::node&> get_trees();
 };
+namespace mods::mobs::generic_thief_behaviour_tree {
+	extern std::map<std::string,mods::behaviour_tree_impl::node&> get_trees();
+};
 namespace mods::behaviour_tree_impl {
 	using vec_player_data = mods::scan::vec_player_data;
 	container_t trees;
@@ -41,6 +44,9 @@ namespace mods::behaviour_tree_impl {
 		return dispatch_ptr(*it);
 	}
 	int8_t dispatch_ptr(argument_type& ch) {
+		if(ch.mob_specials().extended_mob_type == mob_special_data::extended_mob_type_t::GENERIC_THIEF) {
+			return dispatch_status_t::AS_YOU_WERE;
+		}
 		bti_debug("dispatching behaviour tree on: " << ch.name().c_str());
 		if(ch.mob_specials().behaviour_tree == 0) {
 			bti_debug("As you were... ");
@@ -51,18 +57,15 @@ namespace mods::behaviour_tree_impl {
 			log("SYSERR: behaviour tree out of range: %d. not running",ch.mob_specials().behaviour_tree);
 			return dispatch_status_t::AS_YOU_WERE;
 		}
-		if(ch.mob_specials().behaviour_tree) {
-			bti_debug("mob has this behaviour_tree:" << ch.mob_specials().behaviour_tree);
-			assert(ch.mob_specials().behaviour_tree < trees.size());
-			auto btree_status = trees[ch.mob_specials().behaviour_tree].run(ch);
-			switch(btree_status.status) {
-				case mods::behaviour_tree_status::SUCCESS:
-					bti_debug("Return success...");
-					return mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY;
-				default:
-					bti_debug("defaulted value from dispatch: " << btree_status.status << " (processing as 'as you were')");
-					return mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE;
-			}
+		bti_debug("mob has this behaviour_tree:" << ch.mob_specials().behaviour_tree);
+		assert(ch.mob_specials().behaviour_tree < trees.size());
+		auto btree_status = trees[ch.mob_specials().behaviour_tree].run(ch);
+		switch(btree_status.status) {
+			case mods::behaviour_tree_status::SUCCESS:
+				bti_debug("Return success...");
+				return mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY;
+			default:
+				break;
 		}
 		return mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE;
 	}
@@ -286,9 +289,14 @@ namespace mods::behaviour_tree_impl {
 		}));
 		add_tree("suspicious_roaming",suspicious_roaming);
 
-		for(auto& pair : mods::mobs::car_thief_behaviour_tree::get_trees()) {
-			std::cerr << "adding tree: " << pair.first << "\n";
-			add_tree(pair.first,pair.second);
+		for(const auto& collection : {
+		            mods::mobs::car_thief_behaviour_tree::get_trees(),
+		            //mods::mobs::generic_thief_behaviour_tree::get_trees(),
+		        }) {
+			for(const auto& pair : collection) {
+				std::cerr << "adding tree: " << pair.first << "\n";
+				add_tree(pair.first,pair.second);
+			}
 		}
 	}
 	std::vector<uuid_t>& mob_list() {

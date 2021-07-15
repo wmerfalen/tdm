@@ -211,6 +211,26 @@ namespace mods::builder {
 			return -5;
 		}
 	}
+	std::tuple<bool,std::string> save_mob_target(int mob_id,std::string targets) {
+		rb_debug("saving mob targets");
+		try {
+			auto up_txn = txn();
+			sql_compositor comp("mobile",&up_txn);
+			auto room_sql = comp.update("mobile")
+			.set({
+				{"mob_targets",targets}
+			})
+			.where("mob_virtual_number",std::to_string(mob_proto[mob_id].nr))
+			.sql();
+			auto row = mods::pq::exec(up_txn,room_sql.data());
+			mods::pq::commit(up_txn);
+			return {1,"set targets successfully"};
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("save_mob_target exception: ",e.what());
+			return {false,CAT("failed: '",e.what(),"'")};
+		}
+	}
+
 	std::tuple<bool,std::string> delete_by_mob_vnum(std::string_view mob_vnum) {
 		rb_debug("delete all zone data -- start transaction");
 		try {
@@ -2454,10 +2474,26 @@ SUPERCMD(do_mbuild) {
 	}
 	{
 		if(argshave()->first_is("targets")->passed()) {
-			exit(30);
+			if(argshave()->size_gt(2)->passed() == false) {
+				r_error(player,"Not enough arguments. Expected atleast 3");
+				return;
+			}
+			if(argshave()->int_at(1)->passed() == false) {
+				r_error(player,"Please specify a correct mob id");
+				return;
+			}
+			auto mob_id = intat(1);
+			if(mob_id >= mob_proto.size()) {
+				r_error(player,"Mob id out of bounds");
+				return;
+			}
 
-			r_error(player, "Mob-id is out of bounds.");
-			r_success(player,"Set mob type.");
+			auto s = mods::builder::save_mob_target(mob_id,args()->gather_strings_starting_at(2));
+			if(!std::get<0>(s)) {
+				r_error(player, std::get<1>(s));
+				return;
+			}
+			r_success(player,std::get<1>(s));
 			return;
 		}
 	}

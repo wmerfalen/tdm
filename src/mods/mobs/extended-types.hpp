@@ -25,6 +25,7 @@ namespace mods::mobs {
 		MP_ENFORCER,
 		ROGUE_MP_SHOTGUNNER,
 		CAR_THIEF,
+		GENERIC_THIEF,
 	};
 	//vim sorcery: s/\t\t\([A-Z_]\+\),/\t\t{\1,"\1"},/g
 	static std::map<extended_types_t,std::string> ext_map = {
@@ -44,6 +45,7 @@ namespace mods::mobs {
 		{MP_ENFORCER,"MP_ENFORCER"},
 		{ROGUE_MP_SHOTGUNNER,"ROGUE_MP_SHOTGUNNER"},
 		{CAR_THIEF,"CAR_THIEF"},
+		{GENERIC_THIEF,"GENERIC_THIEF"},
 	};
 	void decorate(uuid_t mob_id);
 
@@ -79,13 +81,17 @@ namespace mods::mobs {
 		{MP_ENFORCER,"MP_ENFORCER"},
 		{ROGUE_MP_SHOTGUNNER,"ROGUE_MP_SHOTGUNNER"},
 		{CAR_THIEF,"CAR_THIEF"},
+		{GENERIC_THIEF,"GENERIC_THIEF"},
 	};
 	namespace extended_types {
+		using mob_rnum = uint32_t;
 		std::vector<std::string> strings();
 		std::optional<extended_types_t> from_string(std::string);
 		std::string to_string(extended_types_t t);
 		std::string description(std::string str);
 		std::string description(extended_types_t type);
+		void register_targets(const mob_rnum& vnum, std::string_view items);
+		std::string_view get_mobs_targets(const mob_rnum& vnum);
 	};
 	void default_wear_strategy(int where, std::string_view path);
 	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path);

@@ -989,6 +989,9 @@ void parse_sql_mobiles() {
 		proto.mob_specials.extended_mob_type = static_cast<mods::mobs::extended_types_t>(row["mob_special_extended_type"].as<uint16_t>());
 		mob_proto.push_back(proto);
 		mob_proto.back().nr = proto.nr;
+		if(row["mob_targets"].is_null() == false) {
+			mods::mobs::extended_types::register_targets(proto.nr, row["mob_targets"].c_str());
+		}
 		log("mob_proto.size(): %d",mob_proto.size());
 		log("mob_proto.back().nr: %d", mob_proto.back().nr);
 

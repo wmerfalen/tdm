@@ -14,10 +14,13 @@
 #endif
 namespace mods::mobs {
 	/**! @NEW_BEHAVIOUR_TREE@ !**/
+#if 0
 	generic_thief_map_t& generic_thief_map() {
 		static generic_thief_map_t m;
 		return m;
 	}
+#endif
+
 	namespace generic_thief_btree {
 		/**
 		 * @brief find the room with the most enemies, and go towards that direction
@@ -60,14 +63,29 @@ namespace mods::mobs {
 			return should_fire;
 		}
 	};// end namespace generic_thief_btree
-	void generic_thief::create(uuid_t mob_uuid, std::string variation) {
+	std::forward_list<generic_thief::target_t>& generic_thief::parse_targets(std::string_view targets) {
+		for(const auto& item : EXPLODE(targets.data(),' ')) {
+			auto target = str_to_target(item);
+			if(target == target_t::NONE) {
+				continue;
+			}
+			m_targets.emplace_front(target);
+		}
+		return m_targets;
+	}
+	std::forward_list<generic_thief::target_t>& generic_thief::get_targets()  {
+		return m_targets;
+	}
+	void generic_thief::create(const uuid_t& mob_uuid, std::string_view targets) {
 		m_debug("generic_thief create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
 			log("SYSERR: did not find player to populate generic_thief with: %d",mob_uuid);
 			return;
 		}
-		mods::mobs::generic_thief_map().insert({mob_uuid,std::make_shared<generic_thief>(mob_uuid,variation)});
+		auto g = std::make_shared<generic_thief>(mob_uuid,targets.data());
+		g->set_behavior_tree_directly(generic_thief::btree_t::GT_ROAM);
+		mods::mobs::generic_thief_list().push_front(g);
 	}
 
 	/**
@@ -83,17 +101,51 @@ namespace mods::mobs {
 		this->spray(player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}
-	void generic_thief::set_variation(std::string v) {
-		//
+	void generic_thief::set_variation(const std::string& v) {
+		for(const auto& type : EXPLODE(v,' ')) {
+			std::cerr << green_str("generic_thief::variation:") << type << "\n";
+		}
 	}
 	str_map_t generic_thief::report() {
 		return {{"foo","todo"}};
 	}
+	void generic_thief::set_behavior_tree_directly(const generic_thief::btree_t& t) {
+		m_debug("setting tree id directly to: " << t);
+		cd()->mob_specials.behaviour_tree = (uint16_t)t;
+	}
+	bool generic_thief::has_tree() {
+		return cd()->mob_specials.behaviour_tree != generic_thief::btree_t::GT_NONE;
+	}
+	generic_thief::btree_t generic_thief::get_tree() {
+		return (btree_t)cd()->mob_specials.behaviour_tree;
+	}
+	void generic_thief::btree_none() {
+		set_behaviour_tree_directly(generic_thief::btree_t::GT_NONE);
+	}
+	void generic_thief::btree_roam() {
+		set_behavior_tree_directly(generic_thief::btree_t::GT_ROAM);
+
+	}
+	void generic_thief::btree_hostile() {
+		set_behavior_tree_directly(generic_thief::btree_t::GT_HOSTILE);
+
+	}
+	void generic_thief::btree_witness_hunting() {
+		set_behavior_tree_directly(generic_thief::btree_t::GT_WITNESS_HUNTING);
+
+	}
+	void generic_thief::btree_wimpy() {
+		set_behavior_tree_directly(generic_thief::btree_t::GT_WIMPY);
+
+	}
+	void generic_thief::btree_attempt_thievery() {
+		set_behavior_tree_directly(generic_thief::btree_t::GT_ATTEMPT_THIEVERY);
+	}
+
 	/**
 	 * @brief damage_events registered here
 	 */
 	void generic_thief::setup_damage_callbacks() {
-#define m(A) std::cerr << green_str("[generic_thief::setup_damage_callbacks]") << A << "\n";
 		using de = damage_event_t;
 		static const std::vector<de> pacify_events = {
 			de::TARGET_DEAD_EVENT,
@@ -101,8 +153,8 @@ namespace mods::mobs {
 			de::YOURE_IN_PEACEFUL_ROOM,
 		};
 		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const uuid_t& player) {
-			m("pacify events");
-			set_behaviour_tree("generic_thief_roam");
+			m_debug("pacify events");
+			btree_roam();
 		});
 
 		static const std::vector<de> enrage_if = {
@@ -224,7 +276,6 @@ namespace mods::mobs {
 			move_to(decision);
 			this->set_heading(decision);
 		});
-#undef m
 	}
 	bool generic_thief::is_rival(player_ptr_t& player) {
 		return false;
@@ -232,7 +283,7 @@ namespace mods::mobs {
 	void generic_thief::door_entry_event(player_ptr_t& player) {
 		if(player->is_npc()) {
 			if(is_rival(player)) {
-				set_behaviour_tree("turn_hostile");
+				btree_roam();
 				//TODO: attack_with_melee(player);
 				//player->sendln(CAT("I am:",uuid," and I'm Watching you"));
 			}
@@ -257,7 +308,7 @@ namespace mods::mobs {
 	 * @param mob_uuid
 	 * @param variation
 	 */
-	generic_thief::generic_thief(uuid_t mob_uuid, std::string variation) {
+	generic_thief::generic_thief(const uuid_t& mob_uuid, std::string_view variation) {
 		this->init();
 		this->uuid = mob_uuid;
 		auto p = ptr_by_uuid(mob_uuid);
@@ -269,12 +320,11 @@ namespace mods::mobs {
 		}
 		player_ptr = p;
 		auto ch = p->cd();
-		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::CAR_THIEF;
-		this->set_behaviour_tree("generic_thief_roam");
+		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::GENERIC_THIEF;
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
-		this->set_variation(variation);
+		this->set_variation(variation.data());
 		bootstrap_equipment();
 	}
 	/**
@@ -392,6 +442,10 @@ namespace mods::mobs {
 	}
 	void generic_thief::found_item(mods::scan::vec_player_data_element const& item) {
 		m_scanned_items.emplace_back(item);
+	}
+	std::forward_list<std::shared_ptr<generic_thief>>& generic_thief_list() {
+		static std::forward_list<std::shared_ptr<generic_thief>> s;
+		return s;
 	}
 };
 #undef m_debug

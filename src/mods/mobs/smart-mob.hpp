@@ -43,6 +43,9 @@ namespace mods::mobs {
 			}
 			void shout(std::string_view);
 			void set_behaviour_tree(std::string_view name);
+			void set_behaviour_tree_directly(const uint16_t& tree);
+			bool has_tree();
+			uint16_t get_tree();
 			void populate_from_meqbuild_profile();
 			void bootstrap_equipment();
 
@@ -102,6 +105,12 @@ namespace mods::mobs {
 			}
 			virtual std::pair<bool,std::string> move_to(const direction_t& dir);
 			virtual std::pair<bool,std::string> move_to_on_tick(const direction_t& dir,const uint16_t tick_mod);
+			void* extended_type() {
+				return m_extended_type;
+			}
+			void set_extended_type(void* type) {
+				m_extended_type = type;
+			}
 
 		protected:
 			std::map<uint16_t,uint16_t> m_should_do;
@@ -120,6 +129,7 @@ namespace mods::mobs {
 			bool error;
 			feedback_t last_attack;
 			vec_t<uuid_t> targeting;
+			void* m_extended_type;
 	};
 };
 #endif

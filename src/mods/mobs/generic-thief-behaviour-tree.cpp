@@ -28,7 +28,7 @@ namespace mods::behaviour_tree_impl {
 namespace mods::mobs::generic_thief_behaviour_tree {
 	using namespace helpers;
 	using vec_player_data = mods::scan::vec_player_data;
-	using TArgumentType = mods::npc&;
+	using TArgumentType = std::shared_ptr<mods::mobs::generic_thief>;
 	using TNode = mods::behaviour_tree_node<TArgumentType>;
 	using TStatus = mods::behaviour_tree_status;
 	using vec_player_data = mods::scan::vec_player_data;
@@ -45,11 +45,10 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 	 * @return
 	 */
 	TChildNode find_targets() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+		return TNode::create_leaf([](TArgumentType ct) -> TStatus {
 			static constexpr int SCAN_DEPTH = 8;
-			auto ct = generic_thief_ptr(mob.uuid());
 			int depth = SCAN_DEPTH;
-			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
+			vec_player_data vpd; mods::scan::los_scan_for_players(ct->cd(),depth,&vpd);
 			std::map<int,int> scores;
 			std::map<uint8_t,uuidvec_t> dir_players;
 			for(auto v : vpd) {
@@ -57,7 +56,7 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 				if(!ptr) {
 					continue;
 				}
-				if(!mods::calc_visibility::is_visible(mob.uuid(),v.uuid)) {
+				if(!mods::calc_visibility::is_visible(ct->uuid,v.uuid)) {
 					continue;
 				}
 				if(mods::rooms::is_peaceful(v.room_rnum)) {
@@ -75,7 +74,7 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 				}
 			}
 			if(should_fire == -1) {
-				ct->set_heading(go_random_direction(mob));
+				//FIXME ct->set_heading(go_random_direction(ct->player()));
 				/** this HAS to be after the previous line because
 				 * in the previous line we are going in a random direction
 				 */
@@ -88,10 +87,9 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 		});
 	}
 	TChildNode find_attackers() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = generic_thief_ptr(mob.uuid());
+		return TNode::create_leaf([](TArgumentType mg) -> TStatus {
 			int depth = LOWLY_SECURITY_SCAN_DEPTH();
-			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
+			vec_player_data vpd; mods::scan::los_scan_for_players(mg->cd(),depth,&vpd);
 			std::map<int,int> scores;
 			std::map<uint8_t,uuidvec_t> dir_players;
 			for(auto v : vpd) {
@@ -99,7 +97,7 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 				if(!ptr) {
 					continue;
 				}
-				if(!mods::calc_visibility::is_visible(mob.uuid(),v.uuid)) {
+				if(!mods::calc_visibility::is_visible(mg->uuid,v.uuid)) {
 					continue;
 				}
 				if(mods::rooms::is_peaceful(v.room_rnum)) {
@@ -117,7 +115,7 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 				}
 			}
 			if(should_fire == -1) {
-				mg->set_heading(go_random_direction(mob));
+				//FIXME mg->set_heading(go_random_direction(mg->player()));
 				/** this HAS to be after the previous line because
 				 * in the previous line we are going in a random direction
 				 */
@@ -154,8 +152,7 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 
 	TChildNode watch_room() {
 		return TNode::create_selector({
-			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-				const auto& g = generic_thief_ptr(mob.uuid());
+			TNode::create_leaf([](TArgumentType g) -> TStatus {
 				m_debug("watching room for witnesses...");
 				g->set_watching_room(true);
 				return TStatus::SUCCESS;
@@ -172,20 +169,21 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 	 * 			return failure until in same room as item of interest
 	 * [2] in same room as item of interest
 	 */
-	TChildNode find_vehicle_near_me() {
+	TChildNode find_target_near_me() {
+		m_debug("initializing find_target_near_me");
 		return TNode::create_sequence({
-			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			TNode::create_leaf([](TArgumentType g) -> TStatus {
+				m_debug("inside first leaf of find_targets_near_me");
 				int SCAN_DEPTH = 8;
-				const auto& g = generic_thief_ptr(mob.uuid());
 				m_debug("has found car check");
 				if(g->has_found_item()) {
 					m_debug("start moving that way");
 					return TStatus::SUCCESS; // start moving that way
 				}
-				auto ch = mob.cd();
+				auto ch = g->cd();
 				m_debug("finding vehicle near me");
 				mods::scan::vec_player_data los_room_list;
-				auto dirs =  world[mob.room()].directions();
+				auto dirs =  world[g->room()].directions();
 				mods::util::shuffle(dirs);
 				for(const auto& dir : dirs) {
 					m_debug("direction: " << dirstr(dir));
@@ -209,11 +207,10 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 			 * check to see if we're in the same room as a car we spotted.
 			 * if not, move towards heading
 			 */
-			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			TNode::create_leaf([](TArgumentType c) -> TStatus {
 				using namespace mods::doors;
-				auto c = generic_thief_ptr(mob.uuid());
 				for(const auto& car_uuid : c->get_remembered_items()) {
-					if(mods::query_objects::room_has_object_uuid(mob.room(),car_uuid)) {
+					if(mods::query_objects::room_has_object_uuid(c->room(),car_uuid)) {
 						m_debug("found car");
 						c->set_found_item(true);
 						return TStatus::SUCCESS;
@@ -225,53 +222,60 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 				return TStatus::FAILURE;
 			}),
 		});//end create_sequence
-	}//end find_vehicle_near_me
+	}//end find_target_near_me
 
-	void make_generic_thief_roam(TNode& tree) {
-		tree.append_child(
-		TNode::create_sequence({
-			/**
-			 * find vehicle will successfully execute all of it's
-			 * nodes when it has scanned for, found, walked toward,
-			 * and successfully made it to the same room as a car.
-			 */
-			find_vehicle_near_me(),
-			watch_room(),
-			//get_hostile_toward_witnesses()
-		})
-		);
-
+	std::deque<TNode>& trees() {
+		static TNode generic_thief_roam(TNode::SELECTOR);
+		static TNode generic_thief_hostile(TNode::SELECTOR);
+		static TNode generic_thief_witness_hunting(TNode::SELECTOR);
+		static TNode generic_thief_wimpy(TNode::SELECTOR);
+		static TNode generic_thief_attempt_thievery(TNode::SELECTOR);
+		static bool bootstrapped = false;
+		static std::deque<TNode> s;
+		if(!bootstrapped) {
+			m_debug("bootstrapping");
+			generic_thief_roam.append_child(
+			TNode::create_selector({
+				find_target_near_me(),
+				//watch_room(),
+			})
+			);
+			generic_thief_hostile.append_child(
+			TNode::create_sequence({
+			})
+			);
+			generic_thief_wimpy.append_child(
+			TNode::create_sequence({
+			})
+			);
+			generic_thief_attempt_thievery.append_child(
+			TNode::create_sequence({
+				find_target_near_me(),
+				watch_room(),
+				//get_hostile_toward_witnesses()
+			})
+			);
+			s = {
+				generic_thief_roam,
+				generic_thief_hostile,
+				generic_thief_witness_hunting,
+				generic_thief_wimpy,
+				generic_thief_attempt_thievery,
+			};
+			bootstrapped = true;
+		}
+		return s;
 	}
-	void make_generic_thief_hostile(TNode& tree) {
-		tree.append_child(
-		TNode::create_sequence({
-		})
-		);
 
-	}
-
-	void make_generic_thief_wimpy(TNode& tree) {
-		tree.append_child(
-		TNode::create_sequence({
-		})
-		);
-
-	}
-	using namespace mods::behaviour_tree_impl;
-	using node_type = node::node_type_t;
-	std::map<std::string,node&> get_trees() {
-		static node generic_thief_roam(node_type::SELECTOR);
-		static node generic_thief_hostile(node_type::SELECTOR);
-		static node generic_thief_witness_hunting(node_type::SELECTOR);
-		static node generic_thief_wimpy(node_type::SELECTOR);
-		make_generic_thief_roam(generic_thief_roam);
-		make_generic_thief_hostile(generic_thief_hostile);
-		make_generic_thief_wimpy(generic_thief_wimpy);
-		return {
-			{"generic_thief_roam",generic_thief_roam},
-			{"generic_thief_hostile",generic_thief_hostile},
-			{"generic_thief_wimpy",generic_thief_wimpy},
-		};
+	void run_trees() {
+		m_debug("run trees");
+		for(auto& thief : generic_thief_list()) {
+			m_debug("checking thief ptr");
+			if(thief->has_tree()) {
+				m_debug("has tree. dispatching..." << thief->get_tree());
+				trees()[thief->get_tree()].run(thief);
+			}
+		}
 	}
 
 };
