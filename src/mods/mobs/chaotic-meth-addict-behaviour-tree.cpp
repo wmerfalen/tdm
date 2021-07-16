@@ -12,7 +12,7 @@
 #include "../mob-roam.hpp"
 #include "../query-objects.hpp"
 
-#define  __MENTOC_SHOW_BEHAVIOUR_TREE_chaotic_meth_addict_BTREE_DEBUG_OUTPUT__
+//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_chaotic_meth_addict_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_chaotic_meth_addict_BTREE_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[m.m.cma.btree:" << __LINE__ << "]->" << a << "\n";
 #else
@@ -172,6 +172,7 @@ namespace mods::mobs::chaotic_meth_addict_behaviour_tree {
 					return TStatus::SUCCESS; // start moving that way
 				}
 				m_debug("finding npcs/players near me to attack");
+				g->clear_state();
 				for(const auto& dir : g->shuffle_directions()) {
 					m_debug("direction: " << dirstr(dir));
 					auto los_room_list = g->scan_attackable(dir);

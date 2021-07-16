@@ -85,6 +85,7 @@ namespace mods::mobs {
 			void extra_attack();
 
 			/** state management */
+			void clear_state();
 			void remember_item(const mods::scan::vec_player_data_element& data);
 			const uuidlist_t& get_remembered_items() const;
 			bool has_found_item();

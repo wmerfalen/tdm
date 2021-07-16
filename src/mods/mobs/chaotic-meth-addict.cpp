@@ -14,6 +14,7 @@
 #else
 #define m_debug(a) ;;
 #endif
+#define cmem(a) mentoc_prefix_debug("[chaotic_meth_addict][memory_footprint]") << a << "\n";
 namespace mods::mobs {
 	namespace chaotic_meth_addict_btree {
 		/**
@@ -275,6 +276,7 @@ namespace mods::mobs {
 		for(const auto& msg : EXPLODE(CHAOTIC_METH_ADDICT_PSV_RANDOM_ACT(),'|')) {
 			m_random_acts.emplace_back(msg);
 		}
+		cmem("m_random_acts:" << m_random_acts.size());
 	};
 
 	/**
@@ -308,6 +310,7 @@ namespace mods::mobs {
 		if(p) {
 			m_last_attacker = p;
 			m_attackers.emplace_front(p);
+			cmem("{m_attackers.size}:" << std::distance(m_attackers.cbegin(),m_attackers.cend()));
 		}
 	}
 	player_ptr_t chaotic_meth_addict::get_next_attacking_priority() {
@@ -388,18 +391,21 @@ namespace mods::mobs {
 	}
 	void chaotic_meth_addict::found_witness(const mods::scan::vec_player_data_element& data) {
 		m_hostiles.emplace_front(data);
+		cmem("m_hostiles:" << std::distance(m_hostiles.cbegin(),m_hostiles.cend()));
 	}
 	void chaotic_meth_addict::clear_scanned_items() {
 		m_scanned_items.clear();
 	}
 	void chaotic_meth_addict::remember_item(const mods::scan::vec_player_data_element& data) {
 		m_remembered_items.push_front(data.uuid);
+		cmem("m_remembered_items:" << std::distance(m_remembered_items.cbegin(),m_remembered_items.cend()));
 	}
 	const chaotic_meth_addict::uuidlist_t& chaotic_meth_addict::get_remembered_items() const {
 		return m_remembered_items;
 	}
 	void chaotic_meth_addict::found_item(mods::scan::vec_player_data_element const& item) {
 		m_scanned_items.emplace_back(item);
+		cmem("m_scanned_items:" << m_scanned_items.size());
 	}
 	std::forward_list<std::shared_ptr<chaotic_meth_addict>>& chaotic_meth_addict_list() {
 		static std::forward_list<std::shared_ptr<chaotic_meth_addict>> s;
@@ -434,5 +440,12 @@ namespace mods::mobs {
 		}
 		return false;
 	}
+	void chaotic_meth_addict::clear_state() {
+		m_scanned_items.clear();
+		m_hostiles.clear();
+		m_attackers.clear();
+		m_remembered_items.clear();
+	}
 };
 #undef m_debug
+#undef cmem

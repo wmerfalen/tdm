@@ -324,6 +324,7 @@ namespace mods::levels {
 				/**
 				 * --[
 				 *  -- expert at sniper rifles and ranged combat
+				 *  	-- Extra 10.5% damage per tier (each tier is ten levels)
 				 *  -- can attach underbarrels to sniper rifles
 				 *  	-- shotgun underbarrel
 				 *  	-- frag launcher
