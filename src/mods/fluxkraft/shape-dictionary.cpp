@@ -11,6 +11,7 @@
 namespace mods::globals {
 	extern void glue_room_at_coordinates(int,int,int,room_vnum);
 };
+extern player_ptr_t new_player();
 
 namespace mods::fluxkraft {
 	using room_counter_t = uint8_t;
@@ -249,7 +250,7 @@ namespace mods::fluxkraft {
 			 * _____________
 			 * |A|_..N.._|A| END
 			 */
-			shape_description("horitontal_pipe",{"procgen_attach w","procgen_random_amount e","procgen_attach e"}),
+			shape_description("horizontal_pipe",{"procgen_attach w","procgen_random_amount e","procgen_attach e"}),
 			/**
 			 * |A| END
 			 * ...
@@ -340,8 +341,54 @@ namespace mods::fluxkraft {
 		ADMIN_DONE();
 	}
 
+
+	void generate_horizonal_line_at(player_ptr_t player,int x, int y, int z, std::size_t length) {
+		mods::builder::pave_continue(player);
+		world[player->room()].x = 0;
+		world[player->room()].y = 0;
+		world[player->room()].z = 0;
+		world[player->room()].starting_point = true;
+		shape_description("horizontal_pipe", {"procgen_attach w",CAT("repeat e ",length),"procgen_attach e"}).walk(player);
+		for(const auto& r : world) {
+			mods::globals::glue_room_at_coordinates(r.x,r.y,r.z,r.number);
+		}
+		mods::builder::pave_off(player);
+	}
+	SUPERCMD(do_repeat) {
+		static constexpr const char* usage = "usage: repeat <command> <times>\r\n";
+		if(argshave()->size_gt(1)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		auto command = argat(0);
+		int times = mods::util::stoi(argat(1)).value_or(-1);
+		player->sendln(CAT("command:'",command,"', times:'",times,"'"));
+		for(int i=0; i < times; i++) {
+			command_interpreter(player,command);
+		}
+	}
+	SUPERCMD(do_generate_horizontal_line) {
+		static constexpr const char* usage = "usage: generate_horizontal_line <x> <y> <z> <length>\r\n";
+		if(argshave()->size_gt(3)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		auto x = mods::util::stoi(argat(0)).value_or(-1);
+		auto y = mods::util::stoi(argat(1)).value_or(-1);
+		auto z = mods::util::stoi(argat(2)).value_or(-1);
+		auto length = mods::util::stoi(argat(3)).value_or(-1);
+		if(length <= 0) {
+			player->sendln("Length must be a non-zero integer.");
+			return;
+		}
+		generate_horizonal_line_at(player,x,y,z,length);
+		player->sendln("Done");
+	}
+
 	void init() {
 		mods::interpreter::add_command("generate_zone", POS_RESTING, do_generate_zone, LVL_BUILDER,0);
+		mods::interpreter::add_command("repeat", POS_RESTING, do_repeat, LVL_BUILDER,0);
+		mods::interpreter::add_command("generate_horizontal_line", POS_RESTING, do_generate_horizontal_line, LVL_BUILDER,0);
 	}
 };//end namespace mods::fluxkraft
 #undef m_debug

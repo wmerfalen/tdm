@@ -23,9 +23,9 @@ namespace mods::classes {
 			std::tuple<bool,std::string> practice(player_ptr_t& player);
 			std::map<std::string,std::string>& export_class();
 			static constexpr float NOT_LEARNED = 0.0;
-			static constexpr float AWFUL = 50.0;
+			static constexpr float AWFUL = 15.0;
 			static constexpr float OKAY = 250.0;
-			static constexpr float LEARNED = 1000.0;
+			static constexpr float LEARNED = 280.0;
 			static constexpr float MASTER = 10000.0;
 			static constexpr float ELITE = 50000.0;
 

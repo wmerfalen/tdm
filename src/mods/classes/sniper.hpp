@@ -3,6 +3,8 @@
 #include "../orm/sniper.hpp"
 #include "base.hpp"
 #include "../drone.hpp"
+#include "../weapons/attachment-shotgun-underbarrel.hpp"
+#include "../weapons/attachment-frag-underbarrel.hpp"
 
 using sniper_orm_t = mods::orm::sniper;
 
@@ -13,6 +15,9 @@ namespace mods::classes {
 			}
 			using primary_choice_t = mods::weapon::sniper::primary_choice_t;
 			using secondary_choice_t = mods::weapon::sniper::secondary_choice_t;
+			using shotgun_ub_t = mods::weapons::attachment_shotgun_underbarrel;
+			using frag_ub_t = mods::weapons::attachment_frag_underbarrel;
+
 			enum ability_t {
 				NONE = 0,
 				TRACKING_SHOT,
@@ -44,6 +49,13 @@ namespace mods::classes {
 			void init();
 			void replenish();
 			std::tuple<bool,std::string,obj_ptr_t> build_claymore();
+			std::tuple<bool,std::string> attach_shotgun_underbarrel();
+			std::tuple<bool,std::string> detach_shotgun_underbarrel();
+			std::tuple<bool,std::string> attach_frag_underbarrel();
+			std::tuple<bool,std::string> detach_frag_underbarrel();
+			std::tuple<bool,std::string> fire_frag(const direction_t& direction,const uint8_t& distance);
+
+			obj_ptr_t underbarrel();
 
 			player_ptr_t get_player_ptr() override {
 				return m_player;
@@ -58,6 +70,7 @@ namespace mods::classes {
 			std::tuple<bool,std::string> mark_target(std::string_view target);
 			std::tuple<bool,std::string> engage();
 			std::tuple<bool,std::string> disengage();
+			void consume_shotgun_underbarrel_ammo();
 
 
 			std::tuple<bool,std::string> tracking_shot(std::string_view target, direction_t direction);
@@ -112,6 +125,8 @@ namespace mods::classes {
 			skill_t m_xray_shot;
 			skill_t m_request_recon;
 			ability_list_t m_abilities;
+			shotgun_ub_t m_shotgun_ub;
+			frag_ub_t m_frag_ub;
 	};
 	std::shared_ptr<mods::classes::sniper> create_sniper(player_ptr_t& player);
 };

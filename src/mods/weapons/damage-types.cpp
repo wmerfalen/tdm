@@ -17,6 +17,7 @@
 #include <variant>
 #include "damage-event-broadcaster.hpp"
 #include "damage-decisions.hpp"
+#include "../classes/sniper.hpp"
 
 #ifdef __MENTOC_DAMAGE_TYPES_DEBUG_OUTPUT__
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -96,7 +97,20 @@ namespace mods::weapons::damage_types {
 
 	namespace legacy {
 		void solo_gain(player_ptr_t& attacker,player_ptr_t& victim);
-		void die(char_data* victim);
+		void die(char_data *ch) {
+			auto p = ptr(ch);
+			mods::levels::reduce_exp_from_dying(p);
+
+			if(!IS_NPC(ch)) {
+				REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
+			}
+
+			death_cry(ch);
+
+			make_corpse(ch);
+			extract_char_final(ch);
+		}
+
 		void die(char_data* killer,char_data *victim) {
 			/* check if mob death trigger is active */
 
@@ -106,7 +120,6 @@ namespace mods::weapons::damage_types {
 				mods::drone::stop(mods::globals::player_list[victim->drone_owner]->uuid());
 				send_to_room(room,"A drone is destroyed.");
 				char_to_room(victim,NOWHERE);
-				return;
 			}
 			if(FIGHTING(killer) == victim) {
 				stop_fighting(killer);
@@ -134,27 +147,15 @@ namespace mods::weapons::damage_types {
 			change_alignment(attacker->cd(), victim->cd());
 		}
 
-		void die(char_data *ch) {
-			auto p = ptr(ch);
-			mods::levels::reduce_exp_from_dying(p);
-
-			if(!IS_NPC(ch)) {
-				REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
-			}
-
-			death_cry(ch);
-
-			make_corpse(ch);
-			extract_char_final(ch);
-		}
-
 
 		int step_one(char_data *ch, char_data *victim, int dam, int attacktype) {
 			auto vplayer = ptr(victim);
+#ifdef __MENTOC_SUPER_USERS_ARE_INVINCIBLE__
 			if(mods::super_users::player_is(vplayer)) {
 				md("player is super user (from step_one)");
 				return 0;
 			}
+#endif
 			/* peaceful rooms */
 			if(ch && ch != victim && ROOM_FLAGGED(IN_ROOM(ch), ROOM_PEACEFUL)) {
 				send_to_char(ch, "This room just has such a peaceful, easy feeling...\r\n");
@@ -174,10 +175,12 @@ namespace mods::weapons::damage_types {
 		}
 		int step_two(char_data *ch, char_data *victim, int dam, int attacktype) {
 			auto vplayer = ptr(victim);
+#ifdef __MENTOC_SUPER_USERS_ARE_INVINCIBLE__
 			if(mods::super_users::player_is(vplayer)) {
 				md("player is super user (step 2)");
 				return 0;
 			}
+#endif
 			/* You can't damage an immortal! */
 			if(!IS_NPC(victim) && (GET_LEVEL(victim) >= LVL_IMMORT)) {
 				md("victim isnt npc and victim >= IMMORT");
@@ -215,9 +218,11 @@ namespace mods::weapons::damage_types {
 		}
 		int get_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 			auto vplayer = ptr(victim);
+#ifdef __MENTOC_SUPER_USERS_ARE_INVINCIBLE__
 			if(mods::super_users::player_is(vplayer)) {
 				return 0;
 			}
+#endif
 			/* Cut damage in half if victim has sanct, to a minimum 1 */
 			if(AFF_FLAGGED(victim, AFF_SANCTUARY) && dam >= 2) {
 				dam /= 2;
@@ -235,9 +240,11 @@ namespace mods::weapons::damage_types {
 		}
 		void deal_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 			auto vplayer = ptr(victim);
+#ifdef __MENTOC_SUPER_USERS_ARE_INVINCIBLE__
 			if(mods::super_users::player_is(vplayer)) {
 				return;
 			}
+#endif
 			ptr(victim)->hp() -= dam;
 		}
 
@@ -247,9 +254,11 @@ namespace mods::weapons::damage_types {
 
 		void send_combat_messages(char_data *ch, char_data *victim, int dam, int attacktype) {
 			auto vplayer = ptr(victim);
+#ifdef __MENTOC_SUPER_USERS_ARE_INVINCIBLE__
 			if(mods::super_users::player_is(vplayer)) {
 				return;
 			}
+#endif
 			MENTOC_PREAMBLE();
 			/*
 			 * skill_message sends a message from the messages file in lib/misc.
@@ -337,9 +346,11 @@ namespace mods::weapons::damage_types {
 		int perform_damage_cleanup(char_data *ch, char_data *victim, int dam, int attacktype) {
 			auto victim_ptr = ptr(victim);
 			auto attacker = ptr(ch);
+#ifdef __MENTOC_SUPER_USERS_ARE_INVINCIBLE__
 			if(mods::super_users::player_is(victim_ptr)) {
 				return 0;
 			}
+#endif
 			/* stop someone from fighting if they're stunned or worse */
 			if(ch && GET_POS(victim) <= POS_STUNNED && FIGHTING(victim) != NULL) {
 				stop_fighting(victim);
@@ -349,10 +360,12 @@ namespace mods::weapons::damage_types {
 		}
 		int damage(char_data *attacker, char_data *victim, int dam, int attacktype) {
 			auto vplayer = ptr(victim);
+#ifdef __MENTOC_SUPER_USERS_ARE_INVINCIBLE__
 			if(mods::super_users::player_is(vplayer)) {
 				md("player is super user");
 				return -1;
 			}
+#endif
 			if(step_one(attacker,victim,dam,attacktype) <= 0) {
 				md("step one failed");
 				return -2;
@@ -384,11 +397,89 @@ namespace mods::weapons::damage_types {
 		}
 	};//end namespace legacy
 
+	feedback_t perform_damage(
+	    player_ptr_t& player,
+	    player_ptr_t& victim,
+	    obj_ptr_t weapon,
+	    int dam,
+	    direction_t direction
+	) {
+		feedback_t feedback;
+		if(victim->position() > POS_DEAD) {
+			md("victim position > DEAD");
+			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
+			if(dam == 0) {
+				md("damage is zero");
+				feedback.damage = dam;
+				feedback.hits = 0;
+
+				feedback.damage_event = de::YOU_MISSED_YOUR_TARGET_EVENT;
+				player->damage_event(feedback);
+
+				feedback.from_direction = OPPOSITE_DIR(direction);
+				feedback.damage_event =de::ATTACKER_NARROWLY_MISSED_YOU_EVENT;
+				victim->damage_event(feedback);
+
+			} else if(dam > 0) {
+				md("damage greater than zero");
+				feedback.hits = 1;
+				feedback.damage = dam;
+				feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
+				feedback.from_direction = OPPOSITE_DIR(direction);
+				victim->set_attacker(player->uuid());
+				feedback.damage_event = de::HIT_BY_RIFLE_ATTACK;
+				victim->damage_event(feedback);
+				if(victim->is_npc()) {
+					mods::mobs::damage_event::sniped(victim,feedback);
+				}
+#ifdef __MENTOC_DISABLE_INJURE_DYNAMICS__
+#else
+				if(attack_injures(player,victim,weapon,feedback)) {
+					feedback.injured.emplace_back(victim->uuid());
+					feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
+					feedback.from_direction = OPPOSITE_DIR(direction);
+					victim->damage_event(feedback);
+					if(victim->is_npc()) {
+						mods::mobs::damage_event::injured(victim,feedback);
+					}
+
+					feedback.damage_event= de::YOU_INJURED_SOMEONE_EVENT;
+					player->damage_event(feedback);
+					mods::injure::injure_player(victim);
+				}
+#endif
+				md("checking disorient");
+				if(mods::weapons::damage_calculator::attack_disorients(player,weapon,victim)) {
+					md("disorients");
+					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(player,weapon,victim));
+					feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;
+					/** TODO: maybe make this random to disorient the player ? >:) EVIL GENIUS */
+					feedback.from_direction = OPPOSITE_DIR(direction);
+					victim->damage_event(feedback);
+					if(victim->is_npc()) {
+						mods::mobs::damage_event::disoriented(victim,feedback);
+					}
+
+					feedback.damage_event= de::YOU_DISORIENTED_SOMEONE_EVENT;
+					player->damage_event(feedback);
+				}
+			}
+			md("remembering");
+			remember_event(victim,player);
+		}
+		if(victim->position() == POS_DEAD) {
+			legacy::player_died(player,victim);
+		}
+		return feedback;
+	}
+
 
 	void deal_hp_damage(player_ptr_t& victim, uint16_t damage) {
+#ifdef __MENTOC_SUPER_USERS_ARE_INVINCIBLE__
 		if(mods::super_users::player_is(victim)) {
 			return;
 		}
+#endif
 		if(legacy::step_one(nullptr,victim->cd(),damage,0) <= 0) {
 			return;
 		}
@@ -641,9 +732,11 @@ namespace mods::weapons::damage_types {
 			if(!victim) {
 				continue;
 			}
+#ifdef __MENTOC_SUPER_USERS_ARE_INVINCIBLE__
 			if(mods::super_users::player_is(victim)) {
 				continue;
 			}
+#endif
 			if(mods::util::fuzzy_match(victim_name.data(),victim->name())) {
 				if(scanned_target.distance > max_range) {
 					player->sendln("That target is out of range!");
@@ -766,9 +859,11 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	) {
+#ifdef __MENTOC_SUPER_USERS_ARE_INVINCIBLE__
 		if(mods::super_users::player_is(victim)) {
 			return;
 		}
+#endif
 		auto feedback = rifle_attack_with_feedback(player,weapon,victim,distance,direction);
 		mods::weapons::elemental::process_elemental_damage(player,weapon,victim,feedback);
 	}
@@ -835,9 +930,7 @@ namespace mods::weapons::damage_types {
 		dam = calculate_tracked_damage(player,dam);
 		auto bonus_dam = mods::weapons::damage_calculator::calculate_bonus_damage(player,weapon,dam);
 		if(bonus_dam > dam) {
-#ifdef __MENTOC_SHOW_MELEE_HIT_STATS__
-			std::cerr << "[mods::weapons::damage_types::rifle_attack_object_with_feedback] bonus damage: " << bonus_dam << "\n";
-#endif
+			dty_debug("bonus damage: " << bonus_dam);
 			dam = bonus_dam;
 		}
 
@@ -956,6 +1049,57 @@ namespace mods::weapons::damage_types {
 		return feedback;
 	}// end melee_damage_with_feedback
 
+	feedback_t underbarrel_shotgun_attack_with_feedback(
+	    player_ptr_t& player,
+	    player_ptr_t victim) {
+
+		feedback_t feedback;
+
+		auto ub = player->sniper()->underbarrel();
+		int dam = tier(player) * 65.314712 * (rand_number(1,7));
+		//auto headshot_roll = dice(1,100) + (mods::skills::player_can(player,"HEADSHOT_CHANCE") ? mods::values::HEADSHOT_SKILL_MODIFIER() : 0);
+		//if(headshot_roll >= 95) {
+		//	/** TODO: evaluate dam if wearing super strong headgear */
+		//	int headshot_damage = victim->hp() / HEADSHOT_DIVISOR();
+		//	dam = headshot_damage;
+		//	feedback.hits = 1;
+		//	feedback.dam = dam;
+		//	feedback.attacker = nullptr;
+		//	feedback.damage_event = de::YOU_DEALT_HEADSHOT_WITH_RIFLE_ATTACK;
+		//	player->damage_event(feedback);
+
+		//	feedback.attacker = player->uuid();
+		//	feedback.from_direction = 0;
+		//	feedback.damage_event =de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK;
+		//	victim->damage_event(feedback);
+
+		//	player->send(MSG_HEADSHOT().c_str());
+		//	md("headshot");
+		//}
+
+		damage(player->cd(),victim->cd(),dam,TYPE_SHOTGUN);
+		feedback.hits = 1;
+		feedback.damage = dam;
+		feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
+		feedback.from_direction = 0;
+		feedback.attacker = player->uuid();
+		victim->set_attacker(player->uuid());
+		feedback.damage_event = de::HIT_BY_SHOTGUN_BLAST;
+		victim->damage_event(feedback);
+
+		feedback.damage_info.clear();
+		feedback.attacker = 0;
+		feedback.damage_event = de::YOU_INFLICTED_SHOTGUN_BLAST;
+		player->damage_event(feedback);
+		player->set_attacker(victim->uuid());
+		remember_event(victim,player);
+		if(victim->position() == POS_DEAD) {
+			legacy::player_died(player,victim);
+		}
+		player->sniper()->consume_shotgun_underbarrel_ammo();
+		return feedback;
+	}
+
 	feedback_t rifle_attack_with_feedback(
 	    player_ptr_t& player,
 	    obj_ptr_t weapon,
@@ -965,6 +1109,13 @@ namespace mods::weapons::damage_types {
 	) {
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
+
+		if(distance == 0 && player->sniper()) {
+			auto ub = player->sniper()->underbarrel();
+			if(ub) {
+				return underbarrel_shotgun_attack_with_feedback(player,victim);
+			}
+		}
 
 
 		feedback_t feedback;
@@ -983,8 +1134,6 @@ namespace mods::weapons::damage_types {
 			md("out of max range");
 			return feedback;
 		}
-
-
 		/** FIXME : grab weapon's accuracy and apply accurace modifications */
 		int dam = 0;
 		if(distance < weapon->rifle()->attributes->base_stat_list->size()) {
@@ -1047,6 +1196,11 @@ namespace mods::weapons::damage_types {
 		auto dice_roll = mods::weapons::damage_calculator::calculate(player,weapon,victim);
 		dam += dice_roll;
 
+		if(weapon->rifle()->attributes->type == mw_rifle::SNIPER && player->sniper()) {
+			int sniper_class_damage = mods::weapons::damage_calculator::calculate_sniper_extra_damage(player,weapon,victim,dam);
+			classes::sniper::send_innate_bonus(sniper_class_damage,direction,player,victim,weapon);
+			dam += sniper_class_damage;
+		}
 #ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
 		player->send(
 		    "dice roll[%d]\r\n"
@@ -1075,71 +1229,7 @@ namespace mods::weapons::damage_types {
 			dam = bonus_dam;
 		}
 
-		if(victim->position() > POS_DEAD) {
-			md("victim position > DEAD");
-			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
-			if(dam == 0) {
-				md("damage is zero");
-				feedback.damage = dam;
-				feedback.hits = 0;
-
-				feedback.damage_event = de::YOU_MISSED_YOUR_TARGET_EVENT;
-				player->damage_event(feedback);
-
-				feedback.from_direction = OPPOSITE_DIR(direction);
-				feedback.damage_event =de::ATTACKER_NARROWLY_MISSED_YOU_EVENT;
-				victim->damage_event(feedback);
-
-			} else if(dam > 0) {
-				md("damage greater than zero");
-				feedback.hits = 1;
-				feedback.damage = dam;
-				feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
-				feedback.from_direction = OPPOSITE_DIR(direction);
-				victim->set_attacker(player->uuid());
-				feedback.damage_event = de::HIT_BY_RIFLE_ATTACK;
-				victim->damage_event(feedback);
-				if(victim->is_npc()) {
-					mods::mobs::damage_event::sniped(victim,feedback);
-				}
-#ifdef __MENTOC_DISABLE_INJURE_DYNAMICS__
-#else
-				if(attack_injures(player,victim,weapon,feedback)) {
-					feedback.injured.emplace_back(victim->uuid());
-					feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
-					feedback.from_direction = OPPOSITE_DIR(direction);
-					victim->damage_event(feedback);
-					if(victim->is_npc()) {
-						mods::mobs::damage_event::injured(victim,feedback);
-					}
-
-					feedback.damage_event= de::YOU_INJURED_SOMEONE_EVENT;
-					player->damage_event(feedback);
-					mods::injure::injure_player(victim);
-				}
-#endif
-				md("checking disorient");
-				if(mods::weapons::damage_calculator::attack_disorients(player,weapon,victim)) {
-					md("disorients");
-					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(player,weapon,victim));
-					feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;
-					/** TODO: maybe make this random to disorient the player ? >:) EVIL GENIUS */
-					feedback.from_direction = OPPOSITE_DIR(direction);
-					victim->damage_event(feedback);
-					if(victim->is_npc()) {
-						mods::mobs::damage_event::disoriented(victim,feedback);
-					}
-
-					feedback.damage_event= de::YOU_DISORIENTED_SOMEONE_EVENT;
-					player->damage_event(feedback);
-				}
-			}
-			md("remembering");
-			remember_event(victim,player);
-		}
-		if(victim->position() == POS_DEAD) {
-			legacy::player_died(player,victim);
-		}
+		feedback = perform_damage(player,victim,weapon,dam,direction);
 
 		md("decreasing ammo");
 		decrease_single_shot_ammo(player,weapon);

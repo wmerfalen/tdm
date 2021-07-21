@@ -449,6 +449,9 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
+	bool rifle_description_t::is_sniper() const {
+		return (mw_rifle)this->type == mw_rifle::SNIPER;
+	}
 	void rifle_description_t::fill_flags(obj_data* o) {
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);

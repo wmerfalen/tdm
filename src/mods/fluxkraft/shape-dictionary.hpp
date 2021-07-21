@@ -27,6 +27,7 @@ namespace mods::fluxkraft {
 		private:
 			void init();
 	};
+	void generate_horizonal_line_at(player_ptr_t player,int x, int y, int z, std::size_t length);
 };
 
 #undef m_debug

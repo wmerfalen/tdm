@@ -1084,7 +1084,7 @@ void object_list_new_owner(struct obj_data *list, char_data *ch) {
 
 /* Extract an object from the world */
 void extract_obj(struct obj_data *obj) {
-#ifdef __MENTOC_DEBUG_OUTPUT__
+#ifdef __MENTOC_DEBUG_EXTRACT_OBJ_OUTPUT__
 	std::cerr << "[extract_obj]";
 #endif
 	if(obj->worn_by) {
@@ -1104,19 +1104,6 @@ void extract_obj(struct obj_data *obj) {
 		extract_obj(obj->contains);
 	}
 
-	/** FIXME: PURGE BROKEN */
-	//if(GET_OBJ_RNUM(obj) != NOTHING) {
-	//	(obj_index[GET_OBJ_RNUM(obj)].number)--;
-	//}
-
-	for(auto iterator = obj_list.begin();
-	        iterator != obj_list.end();
-	        ++iterator) {
-		if(iterator->get() == obj) {
-			obj_list.erase(iterator);
-			break;
-		}
-	}
 	mods::globals::dispose_object(obj->uuid);
 }
 

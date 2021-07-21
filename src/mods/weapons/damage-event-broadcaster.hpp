@@ -15,6 +15,50 @@ namespace mods::weapons::damage_types {
 		stop_fighting(victim->cd());
 		return feedback;
 	}
+	void injure_roll(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t& feedback) {
+#ifdef __MENTOC_DISABLE_INJURE_DYNAMICS__
+#else
+		if(attack_injures(attacker,victim,weapon,feedback) && can_be_injured(victim)) {
+			mods::injure::injure_player(victim);
+			feedback.attacker = attacker->uuid();
+			feedback.injured.emplace_back(victim->uuid());
+			feedback.damage_event = de::YOU_ARE_INJURED_EVENT;
+			{
+				auto attacker_feedback = feedback;
+				attacker_feedback.attacker = 0;
+				attacker_feedback.damage_event = de::YOU_INJURED_SOMEONE_EVENT;
+				attacker_feedback.injured.emplace_back(victim->uuid());
+				attacker->damage_event(attacker_feedback);
+			}
+		}
+#endif
+	}
+	namespace classes::sniper {
+		void send_innate_bonus(const int& dam,const direction_t& direction,player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon) {
+#ifdef __MENTOC_USE_MUNITIONS_REFLECTOR_FOR_INNATE_SNIPER_BONUS__
+			if(mods::skills::player_can(victim,"MUNITIONS_REFLECTOR") && dice(1,100) <= 4) {
+				reflect_munitions(attacker,victim,dam,OPPOSITE_DIR(direction));
+			}
+#endif
+			feedback_t feedback;
+			feedback.hits = 1;
+			feedback.damage = dam;
+			feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
+			victim->set_attacker(attacker->uuid());
+			feedback.from_direction = OPPOSITE_DIR(direction);
+			feedback.damage_event = de::HIT_BY_BONUS_INNATE_SNIPER_RIFLE_ATTACK;
+			victim->damage_event(feedback);
+
+			{
+				auto attacker_feedback = feedback;
+				attacker_feedback.damage_event = de::YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK;
+				attacker->damage_event(attacker_feedback);
+			}
+			injure_roll(attacker,victim,weapon,feedback);
+
+		}
+	};//end namespace classes::sniper
+
 
 	void send_rifle_damage(int hits,const int& dam,const direction_t& direction,player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon, feedback_t& feedback) {
 		if(mods::skills::player_can(victim,"MUNITIONS_REFLECTOR") && dice(1,100) <= 4) {
@@ -34,23 +78,8 @@ namespace mods::weapons::damage_types {
 			attacker_feedback.damage_event = de::YOU_INFLICTED_SPRAY_DAMAGE;
 			player->damage_event(attacker_feedback);
 		}
+		injure_roll(attacker,victim,weapon,feedback);
 
-#ifdef __MENTOC_DISABLE_INJURE_DYNAMICS__
-#else
-		if(attack_injures(attacker,victim,weapon,feedback) && can_be_injured(victim)) {
-			mods::injure::injure_player(victim);
-			feedback.attacker = attacker->uuid();
-			feedback.injured.emplace_back(victim->uuid());
-			feedback.damage_event = de::YOU_ARE_INJURED_EVENT;
-			{
-				auto attacker_feedback = feedback;
-				attacker_feedback.attacker = 0;
-				attacker_feedback.damage_event = de::YOU_INJURED_SOMEONE_EVENT;
-				attacker_feedback.injured.emplace_back(victim->uuid());
-				player->damage_event(attacker_feedback);
-			}
-		}
-#endif
 		if(weapon->rifle()->attributes->type == mw_rifle::ASSAULT_RIFLE) {
 			handle_assault_rifle_shrapnel_skill(attacker,victim,weapon,feedback);
 		}
@@ -72,18 +101,7 @@ namespace mods::weapons::damage_types {
 		}
 		victim->damage_event(feedback);
 		attacker->damage_event(attacker_feedback);
-#ifdef __MENTOC_DISABLE_INJURE_DYNAMICS__
-#else
-		if(attack_injures(attacker,victim,weapon,feedback)) {
-			feedback.injured.emplace_back(victim->uuid());
-			feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
-			victim->damage_event(feedback);
-
-			feedback.damage_event= de::YOU_INJURED_SOMEONE_EVENT;
-			attacker->damage_event(feedback);
-			mods::injure::injure_player(victim);
-		}
-#endif
+		injure_roll(attacker,victim,weapon,feedback);
 		if(mods::weapons::damage_calculator::attack_disorients(attacker,weapon,victim)) {
 			mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(attacker,weapon,victim));
 			feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;

@@ -201,6 +201,7 @@ namespace mods::yaml {
 		mods::weapon::weapon_stat_list_t* base_stat_list;
 		int16_t feed_status;
 		bool is_rifle_attachment;
+		bool is_sniper() const;
 	};
 
 	struct explosive_description_t : public yaml_description_t {

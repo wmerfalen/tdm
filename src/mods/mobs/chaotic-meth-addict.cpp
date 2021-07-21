@@ -8,13 +8,13 @@
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
-#define  __MENTOC_MODS_MOBS_chaotic_meth_addict_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_chaotic_meth_addict_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|m|cma") << a << "\n";
-#else
-#define m_debug(a) ;;
-#endif
 #define cmem(a) mentoc_prefix_debug("[chaotic_meth_addict][memory_footprint]") << a << "\n";
+#else
+#define m_debug(a)
+#define cmem(a)
+#endif
 namespace mods::mobs {
 	namespace chaotic_meth_addict_btree {
 		/**

@@ -550,7 +550,7 @@ void list_one_char(char_data *i, char_data *ch) {
 					player->send("YOU!");
 				} else {
 					if(IN_ROOM(i) == IN_ROOM(FIGHTING(i))) {
-						player->send("%s!",PERS(FIGHTING(i), ch));
+						player->send(CAT(iptr->fighting()->name().c_str(),"!").c_str());
 					} else {
 						player->send("someone who has already left!");
 					}

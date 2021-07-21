@@ -11,7 +11,6 @@
 #include "../rand.hpp"
 #include <math.h>
 
-#define __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_calculator][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else
@@ -338,6 +337,11 @@ namespace mods::weapons::damage_calculator {
 				break;
 		}
 		return player->constitution() * multiplier;
+	}
+	int calculate_sniper_extra_damage(player_ptr_t& attacker,obj_ptr_t& weapon,player_ptr_t& victim,int dam) {
+		float multiplier = SNIPER_CLASS_EXPERT_BONUS_DAMAGE_PER_TIER() * 0.01;
+		auto attacker_tier = tier(attacker);
+		return (multiplier * attacker_tier) * dam;
 	}
 };
 

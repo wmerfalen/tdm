@@ -7,6 +7,12 @@
 #include "../behaviour_tree_impl.hpp"
 #include "extended-types.hpp"
 
+#ifdef __MENTOC_DAMAGE_EVENTS_DEBUG_OUTPUT__
+#define dty_debug(a) std::cerr << "[mods::weapons::damage_event][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#else
+#define dty_debug(a)
+#endif
+
 namespace mods::mobs::damage_event {
 	using extended_types_t = mods::mobs::extended_types_t;
 	void sniped(player_ptr_t& mob,const feedback_t& feedback) {
@@ -14,10 +20,10 @@ namespace mods::mobs::damage_event {
 		switch(ch->mob_specials.extended_mob_type) {
 			default:
 			case extended_types_t::NONE:
-				std::cerr << "[extended mob type][" << __FILE__ << ":" << __LINE__ << "]: no extended mob type for mob: ('" << mob->name().c_str() << "')\n";
+				dty_debug("no extended mob type for mob: ('" << mob->name().c_str() << "')");
 				break;
 			case extended_types_t::MP_SHOTGUNNER:
-				std::cerr << "[ found mp shotgunner ]\n";
+				dty_debug("[ found mp shotgunner ]");
 				{
 					auto mp = mp_shotgunner_ptr(mob->uuid());
 					mp->set_behaviour_tree("mp_shotgunner_engage");
@@ -25,19 +31,19 @@ namespace mods::mobs::damage_event {
 				}
 				break;
 			case extended_types_t::LOWLY_SECURITY:
-				std::cerr << "[ found lowly security guard ]\n";
+				dty_debug("[ found lowly security guard ]");
 				//lowly_security::create(mob_id, "normal");
 				break;
 			case extended_types_t::MINI_GUNNER:
-				std::cerr << "[ found mini gunner ]\n";
+				dty_debug("[ found mini gunner ]");
 				//mini_gunner::create(mob_id, "normal");
 				break;
 			case extended_types_t::MINI_GUNNER_SENTINEL:
-				std::cerr << "[ found mini gunner sentinel ]\n";
+				dty_debug("[ found mini gunner sentinel ]");
 				//mini_gunner::create(mob_id, "sentinel");
 				break;
 			case extended_types_t::CAR_THIEF:
-				std::cerr << "[ found car thief ]\n";
+				dty_debug("[ found car thief ]");
 				{
 					auto ct = car_thief_ptr(mob->uuid());
 					ct->set_behaviour_tree("car_thief_hostile");
@@ -61,27 +67,27 @@ namespace mods::mobs::damage_event {
 		switch(ch->mob_specials.extended_mob_type) {
 			default:
 			case extended_types_t::NONE:
-				std::cerr << "[extended mob type][" << __FILE__ << ":" << __LINE__ << "]: no extended mob type for mob: ('" << ch->player.name.c_str() << "')\n";
+				dty_debug("no extended mob type for mob: ('" << ch->player.name.c_str() << "')");
 				break;
 			/**! @NEW_BEHAVIOUR_TREE@ !**/
 			case extended_types_t::CAR_THIEF:
-				std::cerr << "[ found car thief ]\n";
+				dty_debug("[ found car thief ]");
 				//mp_shotgunner::create(mob_id, "normal");
 				break;
 			case extended_types_t::MP_SHOTGUNNER:
-				std::cerr << "[ found mp shotgunner ]\n";
+				dty_debug("[ found mp shotgunner ]");
 				//mp_shotgunner::create(mob_id, "normal");
 				break;
 			case extended_types_t::LOWLY_SECURITY:
-				std::cerr << "[ found lowly security guard ]\n";
+				dty_debug("[ found lowly security guard ]");
 				//lowly_security::create(mob_id, "normal");
 				break;
 			case extended_types_t::MINI_GUNNER:
-				std::cerr << "[ found mini gunner ]\n";
+				dty_debug("[ found mini gunner ]");
 				//mini_gunner::create(mob_id, "normal");
 				break;
 			case extended_types_t::MINI_GUNNER_SENTINEL:
-				std::cerr << "[ found mini gunner sentinel ]\n";
+				dty_debug("[ found mini gunner sentinel ]");
 				//mini_gunner::create(mob_id, "sentinel");
 				break;
 		}

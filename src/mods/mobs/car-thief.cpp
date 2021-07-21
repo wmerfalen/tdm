@@ -109,6 +109,7 @@ namespace mods::mobs {
 			de::ATTACKER_NARROWLY_MISSED_YOU_EVENT,
 			de::HIT_BY_RIFLE_ATTACK,
 			de::HIT_BY_SPRAY_ATTACK,
+			de::HIT_BY_SHOTGUN_BLAST,
 			de::YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK,
 			de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK,
 		};
@@ -167,6 +168,7 @@ namespace mods::mobs {
 			de::YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT,
 			de::YOU_GOT_HIT_BY_AR_SHRAPNEL,
 			de::YOU_GOT_HIT_BY_INCENDIARY_AMMO,
+			de::HIT_BY_SHOTGUN_BLAST,
 			de::YOU_ARE_DISORIENTED_EVENT,
 			de::HIT_BY_INCENDIARY_DAMAGE,
 			de::HIT_BY_RADIOACTIVE_DAMAGE,
@@ -193,6 +195,7 @@ namespace mods::mobs {
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
 					m_debug("No primary wieldded... wtf?");
+					m_weapon = player_ptr->primary();
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
 					m_debug("cooldown in effect for primary");

@@ -774,6 +774,15 @@ namespace mods {
 			victim->hp() -= damage;
 			return damage;
 		}
+		std::tuple<bool,std::string> launch_fragmentation_underbarrel(
+		    player_ptr_t& attacker,
+		    obj_ptr_t& launcher,
+		    const direction_t& direction,
+		    const uint8_t& distance
+		) {
+
+			return {1,"You launch a fragmentation grenade!"};
+		}
 	};
 };
 #undef m_error

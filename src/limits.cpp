@@ -465,9 +465,70 @@ ACMD(do_idle) {
 	check_idling(player);
 }
 
+bool IS_CORPSE(obj_data* obj) {
+	bool obj_okay = obj;
+	bool obj_is_container = obj && obj->obj_flags.type_flag == ITEM_CONTAINER;
+	bool obj_value_is_1 = obj && obj->obj_flags.value[3] == 1;
+#ifdef __MENTOC_SHOW_IS_CORPSE_DEBUG_OUTPUT__
+	if(obj_is_container && obj_value_is_1) {
+		std::cerr << "[IS_CORPSE]: obj_okay [" << obj_okay << "] " <<
+		          "obj_is_container [" << obj_is_container << "] " <<
+		          "obj_value_is_1 [" << obj_value_is_1 << "]\n";
+	}
+#endif
+	return obj_okay && obj_is_container && obj_value_is_1;
+}
+
+void clean_objects() {
+	struct obj_data *jj = nullptr, *next_thing2 = nullptr;
+	/* objects */
+	for(auto it = obj_list.begin(); it != obj_list.end(); ++it) {
+		auto j = it->get();
+
+#ifdef __MENTOC_SHOW_IS_CORPSE_ON_ALL_OBJECTS__
+		std::cerr << "IS_CORPSE: " << j->uuid << ", :'" << j->name.c_str() << "'\n";
+#endif
+		/* If this is a corpse */
+		if(IS_CORPSE(j)) {
+			/* timer count down */
+			if(GET_OBJ_TIMER(j) > 0) {
+				GET_OBJ_TIMER(j)--;
+			}
+
+			if(!GET_OBJ_TIMER(j)) {
+
+				if(j->carried_by) {
+					act("$p decays in your hands.", FALSE, j->carried_by, j, 0, TO_CHAR);
+				} else if((IN_ROOM(j) != NOWHERE) && (world[IN_ROOM(j)].people)) {
+					act("A quivering horde of maggots consumes $p.",
+					    TRUE, world[IN_ROOM(j)].people, j, 0, TO_ROOM);
+					act("A quivering horde of maggots consumes $p.",
+					    TRUE, world[IN_ROOM(j)].people, j, 0, TO_CHAR);
+				}
+
+				for(jj = j->contains; jj; jj = next_thing2) {
+					next_thing2 = jj->next_content;	/* Next in inventory */
+					obj_from_obj(jj);
+
+					if(j->in_obj) {
+						obj_to_obj(optr(jj), optr(j->in_obj));
+					} else if(j->carried_by) {
+						obj_to_room(jj, IN_ROOM(j->carried_by));
+					} else if(IN_ROOM(j) != NOWHERE) {
+						obj_to_room(jj, IN_ROOM(j));
+					} else {
+						core_dump();
+					}
+				}
+
+				extract_obj(j);
+				return clean_objects();
+			}
+		}
+	}//end for object_list
+}
 /* Update PCs, NPCs, and objects */
 void point_update(void) {
-	struct obj_data *jj, *next_thing2;
 
 	/* characters */
 	mods::loops::foreach_all([&](player_ptr_t player) -> bool {
@@ -518,54 +579,5 @@ void point_update(void) {
 		}
 		return true;
 	});
-
-	/* objects */
-	for(auto it = obj_list.begin(); it != obj_list.end(); ++it) {
-		auto j = it->get();
-		if(!j) {
-			log("SYSERR: obj_list has null object.. attempting to remove...");
-			obj_list.erase(it);
-			continue;
-		}
-
-#ifdef __MENTOC_SHOW_IS_CORPSE_ON_ALL_OBJECTS__
-		std::cerr << "IS_CORPSE: " << j->uuid << ", :'" << j->name.c_str() << "'\n";
-#endif
-		/* If this is a corpse */
-		if(IS_CORPSE(j)) {
-			/* timer count down */
-			if(GET_OBJ_TIMER(j) > 0) {
-				GET_OBJ_TIMER(j)--;
-			}
-
-			if(!GET_OBJ_TIMER(j)) {
-
-				if(j->carried_by) {
-					act("$p decays in your hands.", FALSE, j->carried_by, j, 0, TO_CHAR);
-				} else if((IN_ROOM(j) != NOWHERE) && (world[IN_ROOM(j)].people)) {
-					act("A quivering horde of maggots consumes $p.",
-					    TRUE, world[IN_ROOM(j)].people, j, 0, TO_ROOM);
-					act("A quivering horde of maggots consumes $p.",
-					    TRUE, world[IN_ROOM(j)].people, j, 0, TO_CHAR);
-				}
-
-				for(jj = j->contains; jj; jj = next_thing2) {
-					next_thing2 = jj->next_content;	/* Next in inventory */
-					obj_from_obj(jj);
-
-					if(j->in_obj) {
-						obj_to_obj(optr(jj), optr(j->in_obj));
-					} else if(j->carried_by) {
-						obj_to_room(jj, IN_ROOM(j->carried_by));
-					} else if(IN_ROOM(j) != NOWHERE) {
-						obj_to_room(jj, IN_ROOM(j));
-					} else {
-						core_dump();
-					}
-				}
-
-				extract_obj(j);
-			}
-		}
-	}//end for object_list
+	clean_objects();
 }

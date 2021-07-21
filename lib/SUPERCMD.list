@@ -31,6 +31,8 @@
 {yel}mods/fluxkraft/arcon-bar.hpp:		->generate_bar{/grn}
 {yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}procgen_random_amount{/grn}
 {yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}generate_zone{/grn}
+{yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}repeat{/grn}
+{yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}generate_horizontal_line{/grn}
 {yel}mods/rifle-attachments{/yel}:->{grn}instantiate_rifle_attachment{/grn}
 {yel}mods/rifle-attachments{/yel}:->{grn}load_my_rifle_attachments{/grn}
 {yel}mods/rifle-attachments{/yel}:->{grn}list_rifle_attachments{/grn}

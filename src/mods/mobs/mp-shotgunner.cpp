@@ -109,7 +109,11 @@ namespace mods::mobs {
 	 * @brief damage_events registered here
 	 */
 	void mp_shotgunner::setup_damage_callbacks() {
+#ifdef __MENTOC_SHOW_MP_SHOTGUNNER_DAMAGE_CALLBACKS__
 #define m(A) std::cerr << green_str("[mp_shotgunner::setup_damage_callbacks]") << A << "\n";
+#else
+#define m(A)
+#endif
 		using de = damage_event_t;
 		static const std::vector<de> pacify_events = {
 			de::TARGET_DEAD_EVENT,

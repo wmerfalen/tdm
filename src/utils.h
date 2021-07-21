@@ -412,8 +412,10 @@ room_rnum& GET_WAS_IN(char_data* player);
 #define GET_OBJ_SPEC(obj)	(VALID_OBJ_RNUM(obj) ? \
 				obj_index[GET_OBJ_RNUM(obj)].func : NULL)
 
+#if 0
 #define IS_CORPSE(obj)		(GET_OBJ_TYPE(obj) == ITEM_CONTAINER && \
 					GET_OBJ_VAL((obj), 3) == 1)
+#endif
 
 #define CAN_WEAR(obj, part)	OBJWEAR_FLAGGED((obj), (part))
 
@@ -556,3 +558,4 @@ std::string TOSTR(std::string a);
 std::string TOSTR(int);
 #define FOR_ROOM(plr) for(auto & plr : mods::globals::get_room_list(player))
 #define FOREACH_MOB(name) for(auto & name : mob_list)
+extern bool IS_CORPSE(obj_data*);

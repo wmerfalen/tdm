@@ -1584,6 +1584,9 @@ namespace mods {
 		switch(feedback.damage_event) {
 			default:
 				break;
+			case damage_event_t::YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK:
+				this->queue_up(CAT(MSG_YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"]"));
+				break;
 			case damage_event_t::YOU_INFLICTED_MELEE_ATTACK:
 				this->queue_up(CAT(MSG_YOU_INFLICTED_MELEE_ATTACK(), "[",std::to_string(feedback.damage),"]"));
 				break;
@@ -1686,6 +1689,12 @@ namespace mods {
 			case damage_event_t::HIT_BY_BLUNT_MELEE_ATTACK:
 				this->queue_up(CAT(MSG_HIT_BY_BLUNT_MELEE_ATTACK(),"[",std::to_string(feedback.damage),"]"));
 				break;
+			case damage_event_t::HIT_BY_BONUS_INNATE_SNIPER_RIFLE_ATTACK:
+				this->queue_up(CAT(MSG_HIT_BY_BONUS_INNATE_SNIPER_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
+				break;
+			case damage_event_t::HIT_BY_SHOTGUN_BLAST:
+				this->queue_up(CAT(MSG_HIT_BY_SHOTGUN_BLAST(),"[",std::to_string(feedback.damage),"]"));
+				break;
 			case damage_event_t::HIT_BY_RIFLE_ATTACK:
 				this->queue_up(CAT(MSG_HIT_BY_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
 				break;
@@ -1721,6 +1730,9 @@ namespace mods {
 				break;
 			case damage_event_t::YOU_REFLECTED_MUNITIONS_EVENT:
 				sendln(CAT(MSG_YOU_REFLECTED_MUNITIONS(),"[",feedback.damage,"][from:",dirstr(feedback.from_direction)));
+				break;
+			case damage_event_t::YOU_INFLICTED_SHOTGUN_BLAST:
+				sendln(CAT(MSG_YOU_INFLICTED_SHOTGUN_BLAST(),"[",feedback.damage,"]"));
 				break;
 			case damage_event_t::YOU_INFLICTED_AR_SHRAPNEL:
 				sendln(CAT(MSG_YOU_INFLICTED_AR_SHRAPNEL(),"[",feedback.damage,"]"));

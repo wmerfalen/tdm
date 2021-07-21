@@ -41,8 +41,11 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_SHOW_BEHAVIOUR_TREE_LOWLY_SECURITY_BTREE_DEBUG_OUTPUT__=1 \
 	-D__MENTOC_SHOW_CONTRACT_OUTPUT__=1 \
 	-D__MENTOC_SHOW_GAIN_EXP_DEBUG_OUTPUT__=1 \
-	-D__MENTOC_DISABLE_INJURE_DYNAMICS__=1
+	-D__MENTOC_DISABLE_INJURE_DYNAMICS__=1 \
+	-D__MENTOC_SHOW_IS_CORPSE_DEBUG_OUTPUT__=1 \
+	-D__MENTOC_DEBUG_EXTRACT_OBJ_OUTPUT__=1
 
+ 	#-D__MENTOC_MODS_MOBS_chaotic_meth_addict_SHOW_DEBUG_OUTPUT__=1
 	#-D__MENTOC_CAN_CONTINUE_DEBUG__=1
 	#-D__MENTOC_SHOW_DAMAGE_TYPES_DEBUG__=1
 	#-D__MENTOC_MODS_MOBS_car_thief_SHOW_DEBUG_OUTPUT__=1
@@ -162,7 +165,9 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/car-thief mods/mobs/car-thief-behaviour-tree \
 					 mods/players/banish mods/medic \
 					 mods/mobs/generic-thief mods/mobs/generic-thief-behaviour-tree \
-					 mods/mobs/chaotic-meth-addict mods/mobs/chaotic-meth-addict-behaviour-tree
+					 mods/mobs/chaotic-meth-addict mods/mobs/chaotic-meth-addict-behaviour-tree \
+					 mods/weapons/attachment-shotgun-underbarrel \
+					 mods/memory mods/weapons/attachment-frag-underbarrel mods/unit-tests/frag-underbarrel
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

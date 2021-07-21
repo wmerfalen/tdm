@@ -2,7 +2,6 @@
 #include "../object-utils.hpp"
 #include "../interpreter-include.hpp"
 #include "../mobs/damage-event.hpp"
-#define __MENTOC_MODS_SHOW_ELEMENTAL_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_SHOW_ELEMENTAL_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else

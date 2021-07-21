@@ -28,6 +28,7 @@
 #include "mods/levels.hpp"
 #include "mods/rand.hpp"
 #include "mods/loot.hpp"
+#include "mods/classes/sniper.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
 #define MOD_SNIPE_DISTANCE_THACO 5
@@ -854,7 +855,6 @@ int compute_thaco(char_data *ch, char_data *victim) {
 using vpd = mods::scan::vec_player_data;
 
 void hit(char_data *ch, char_data *victim, int type) {
-	assert(IN_ROOM(ch) == IN_ROOM(victim));
 	MENTOC_PREAMBLE();
 	auto victim_ptr_opt = ptr_opt(victim);
 	if(!victim_ptr_opt.has_value()) {
@@ -870,8 +870,20 @@ void hit(char_data *ch, char_data *victim, int type) {
 	bool same_room = IN_ROOM(ch) == IN_ROOM(victim);
 	bool primary_can_attack_same_room = primary && mods::object_utils::can_attack_same_room(primary);
 	bool secondary_can_attack_same_room = secondary && mods::object_utils::can_attack_same_room(secondary);
+	obj_ptr_t ub = (
+	                   player->sniper() && player->sniper()->underbarrel() &&
+	                   std::string(player->sniper()->underbarrel()->attachment()->attributes->underbarrel_launcher_type).compare("SHOTGUN") == 0
+	               ) ? player->sniper()->underbarrel() : nullptr;
 	if(same_room) {
-		if(primary_can_attack_same_room) {
+		if(ub) {
+			mods::weapons::damage_types::rifle_attack_with_feedback(
+			    player,
+			    player->primary(),
+			    victim_ptr,
+			    0,
+			    NORTH);
+			return;
+		} else if(primary_can_attack_same_room) {
 			wielded_weapon = primary;
 		} else if(secondary_can_attack_same_room) {
 			wielded_weapon = secondary;

@@ -42,9 +42,17 @@ namespace mods::weapons::damage_types {
 	void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon);
 	void deal_hp_damage(player_ptr_t& player, uint16_t damage);
 	int calculate_tracked_damage(player_ptr_t& player,int original_damage);
+	feedback_t perform_damage(
+	    player_ptr_t& player,
+	    player_ptr_t& victim,
+	    obj_ptr_t weapon,
+	    int dam,
+	    direction_t direction
+	);
 	namespace legacy {
 		int damage(char_data *ch, char_data *victim, int dam, int attacktype);
 	};
+	int get_legacy_attack_type(obj_ptr_t& weapon);
 };
 #endif
 

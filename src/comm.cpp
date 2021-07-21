@@ -27,6 +27,7 @@
 #include "mods/auto-login.hpp"
 #include "mods/zone.hpp"
 #include "mods/replenish.hpp"
+#include "mods/memory.hpp"
 #include "mods/orm/inventory.hpp"
 #include "mods/players/db-load.hpp"
 #include "mods/players/messages.hpp"
@@ -932,6 +933,9 @@ void heartbeat(int pulse) {
 
 	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION())) {
 		mods::rooms::process_fire_damage();
+	}
+	if(!(pulse % PULSE_PRINT_MEMORY_FOOTPRINTS)) {
+		mods::memory::print_footprints();
 	}
 
 	if(!(pulse % PULSE_ZONE)) {

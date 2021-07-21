@@ -324,17 +324,27 @@ namespace mods::levels {
 				/**
 				 * --[
 				 *  -- expert at sniper rifles and ranged combat
-				 *  	-- Extra 10.5% damage per tier (each tier is ten levels)
+				[DONE]  	-- Extra 10.5% damage per tier (each tier is ten levels)
 				 *  -- can attach underbarrels to sniper rifles
 				 *  	-- shotgun underbarrel
 				 *  	-- frag launcher
 				 *  -- has access to emp/chaff grenades (replenishes)
+				 *  	-- EMP causes damage to a 10x10x1 radius
+				 *  		-- devices under the emp umbrella:
+				 *  			-- Thermal vision does not work
+				 *  			-- Night vision does not work
+				 *  		-- TODO: flesh out this ability
 				 *  -- can inject arenaline shot
-				 *  	-- <insert the buffs here>
-				 *  	-- ...
+				 *  	-- 100 movement points are added to your current movement points
+				 *  	-- 25% chance of hitting first when forced into melee encounter
 				 *  -- has xray shot
 				 *  	-- targets don't need to be in line of sight
+				 *  		-- tier 1: does damage
+				 *  		-- tier 2: target becomes TRACKED and SCANNED
+				 *  		-- tier 3: shot explodes causing damage to anyone in room
 				 *  -- has access to corrosive/shrapnel/explosive claymores (replenishes)
+				 *  	-- corrossive damage is dealt in addition to explosive damage
+				 *  	-- shrapnel damage is dealt in addition to explosive damage
 				 *  -- can mark and track an enemy
 				 *  	-- tracked enemies take more damage
 				 *  -- can target limb
@@ -345,8 +355,8 @@ namespace mods::levels {
 				 *  -- can fire "neutron" shell
 				 *  	-- targets hit by shell cause radioactive and explosive damage to all room inhabitants
 				 *  -- fleeing from melee is 25% more effective
-				 *  -- immobilizing shot (passive)
-				 *  	-- 15% chance of causing target to stay in room and not close distance for 50 ticks
+				 *  -- Tactial Foam
+				 *  	-- Causes target to not be able to move for 20 ticks per tier
 				 *  --[
 				 */
 				return {

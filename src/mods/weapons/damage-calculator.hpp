@@ -69,6 +69,12 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim
 	);
+	int calculate_sniper_extra_damage(
+	    player_ptr_t& attacker,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim,
+	    int dam
+	);
 };
 #endif
 

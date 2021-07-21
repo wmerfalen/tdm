@@ -13,6 +13,11 @@
 ./mods/classes/sniper.cpp:	->tracking_shot
 ./mods/classes/sniper.cpp:	->engage
 ./mods/classes/sniper.cpp:	->disengage
+./mods/classes/sniper.cpp:	->attach_shotgun_underbarrel
+./mods/classes/sniper.cpp:	->detach_shotgun_underbarrel
+./mods/classes/sniper.cpp:	->attach_frag_underbarrel
+./mods/classes/sniper.cpp:	->detach_frag_underbarrel
+./mods/classes/sniper.cpp:	->fire_frag
 ./mods/help.cpp:	->help
 ./mods/levels.cpp:	->exp
 ./mods/date-time.cpp:	->moon_phase

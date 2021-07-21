@@ -269,6 +269,7 @@ SKILL_PYREXIA_SEAL_OFF_ROOM,50
 SKILL_SNIPER_TRACKING_SHOT_TICKS,280
 
 [float]
+SNIPER_CLASS_EXPERT_BONUS_DAMAGE_PER_TIER,10.5
 TIER_TWO_DEATH_EXP_LOSS,10.13
 TIER_THREE_DEATH_EXP_LOSS,20.13
 TIER_ELITE_DEATH_EXP_LOSS,40.14
@@ -364,6 +365,8 @@ LEVEL_DIFF_FOOBAR_TEST,10.0
 ARMOR_CRIT_DAMAGE_MULTIPLIER,0.011134
 
 [std::string]
+MSG_YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK,"{grn}*** Your expertly deal bonus damage ***{/grn}"
+MSG_HIT_BY_BONUS_INNATE_SNIPER_RIFLE_ATTACK,"{red}*** You've been hit by a precision sniper rifle ***{/red}"
 CHAOTIC_METH_ADDICT_PSV_RANDOM_ACT,"$n looks at you with utter contempt!|$n's nose starts bleeding profusely...|$n manically scratches at invisible insects crawling all over.|$n is looking for something to hurt!"
 MSG_NO_PRACTICE_SESSIONS,"You don't have any practice sessions."
 CAN_BE_SEARCHED,"This command can be searched by typing the command followed by a space and a word that you would like to search for."
@@ -494,6 +497,7 @@ MSG_YOU_INFLICTED_CORROSIVE_DAMAGE,"{red}*** YOU INFLICTED {grn}CORROSIVE{/grn}{
 MSG_YOU_INFLICTED_EMP_DAMAGE,"{red}*** YOU INFLICTED {blu}EMP{/blu}{red} DAMAGE ***{/red} -- "
 MSG_YOU_INFLICTED_EXPLOSIVE_DAMAGE,"{red}*** YOU INFLICTED {yel}EXPLOSIVE{/yel}{red} DAMAGE ***{/red} -- "
 MSG_YOU_INFLICTED_SHRAPNEL_DAMAGE,"{red}*** YOU INFLICTED {blu}SHRAPNEL{/blu}{red} DAMAGE ***{/red} -- "
+MSG_YOU_INFLICTED_SHOTGUN_BLAST,"{red}*** YOU INFLICTED SHOTGUN DAMAGE ***{/red} -- "
 MSG_YOU_INFLICTED_CRYOGENIC_DAMAGE,"{red}*** YOU INFLICTED {blu}CRYOGENIC{/blu}{red} DAMAGE ***{/red} -- "
 MSG_YOU_INFLICTED_SHOCK_DAMAGE,"{red}*** YOU INFLICTED {blu}SHOCK{/blu}{red} DAMAGE ***{/red} -- "
 MSG_HIT_BY_INCENDIARY_DAMAGE,"{red}*** YOU TAKE {yel}INCENDIARY{/yel}{red} DAMAGE ***{/red} -- "
@@ -503,6 +507,7 @@ MSG_HIT_BY_CORROSIVE_DAMAGE,"{red}*** YOU TAKE {grn}CORROSIVE{/grn}{red} DAMAGE 
 MSG_HIT_BY_EMP_DAMAGE,"{red}*** YOU TAKE {blu}EMP{/blu}{red} DAMAGE ***{/red} -- "
 MSG_HIT_BY_EXPLOSIVE_DAMAGE,"{red}*** YOU TAKE {yel}EXPLOSIVE{/yel}{red} DAMAGE ***{/red} -- "
 MSG_HIT_BY_SHRAPNEL_DAMAGE,"{red}*** YOU TAKE {blu}SHRAPNEL{/blu}{red} DAMAGE ***{/red} -- "
+MSG_HIT_BY_SHOTGUN_BLAST,"{red}*** YOU ARE HIT BY A SHOTGUN BLAST ***{/red} -- "
 MSG_HIT_BY_CRYOGENIC_DAMAGE,"{red}*** YOU TAKE {blu}CRYOGENIC{/blu}{red} DAMAGE ***{/red} -- "
 MSG_HIT_BY_SHOCK_DAMAGE,"{red}*** YOU TAKE {blu}SHOCK{/blu}{red} DAMAGE ***{/red} -- "
 MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOU ARE HIT BY A SPRAY OF BULLETS ***{/red} -- "
@@ -516,7 +521,7 @@ MSG_YOU_INJURED_SOMEONE,"{red}*** YOU INJURED YOUR TARGET ***{/red}!"
 DEFAULT_PUBLIC_CHANNELS,"chat,gossip,gratz,newbie"
 EXTENDED_PREFERENCES,IMPLODE({"nochat","nogossip","nonewbie","nogratz"},"|")
 EXTENDED_PREFERENCES_DEFAULTS,IMPLODE({"0","0","0","0"},"|")
-SUPER_USERS_LIST,IMPLODE({"far"},"|")
+SUPER_USERS_LIST,IMPLODE({"far","xisop","grifter"},"|")
 PRIMARY_CHOICE_SCREEN_PSG1_DESCRIPTION,"A bolt-action semi-automatic sniper rifle.\r\n"
 PRIMARY_CHOICE_SCREEN_L96AW_DESCRIPTION,"A reliable semi-automatic sniper rifle that works well in very cold conditions.\r\n"
 PRIMARY_CHOICE_SCREEN_M16A4_DESCRIPTION,"Standard issue marine corps automatic rifle.\r\n"
@@ -575,10 +580,10 @@ WEAPON_LOCKER_QUOTA,10
 RADIO_INITIAL_RESPONSE_TICKS,10
 SNIPER_TRACKING_SHOT_MAX_COUNT,1
 LUCKY_DISORIENTED_VISION_CHANCE,2
-TERRIBLE_SKILL_CHANCE_OF_SUCCESS,5
-AWFUL_SKILL_CHANCE_OF_SUCCESS,10
-OKAY_SKILL_CHANCE_OF_SUCCESS,30
-LEARNED_SKILL_CHANCE_OF_SUCCESS,80
+TERRIBLE_SKILL_CHANCE_OF_SUCCESS,40
+AWFUL_SKILL_CHANCE_OF_SUCCESS,68
+OKAY_SKILL_CHANCE_OF_SUCCESS,89
+LEARNED_SKILL_CHANCE_OF_SUCCESS,100
 MASTERED_SKILL_CHANCE_OF_SUCCESS,150
 ELITE_SKILL_CHANCE_OF_SUCCESS,200
 PERCENT_CHANCE_DISSIPATED_DETECTED_BY_THERMALS,5

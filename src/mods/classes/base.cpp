@@ -235,13 +235,13 @@ namespace mods::classes {
 			return {false,"You have no idea how to do that!"};
 		}
 		if(ptr->terrible()) {
-			return {mods::rand::chance(TERRIBLE_SKILL_CHANCE_OF_SUCCESS()),"You try your best"};
+			return {mods::rand::chance(TERRIBLE_SKILL_CHANCE_OF_SUCCESS()),"You attempt to, but fail miserably..."};
 		}
 		if(ptr->awful()) {
-			return {mods::rand::chance(AWFUL_SKILL_CHANCE_OF_SUCCESS()),"You try your best"};
+			return {mods::rand::chance(AWFUL_SKILL_CHANCE_OF_SUCCESS()),"You try, but fail..."};
 		}
 		if(ptr->okay()) {
-			return {mods::rand::chance(OKAY_SKILL_CHANCE_OF_SUCCESS()),"You try your best"};
+			return {mods::rand::chance(OKAY_SKILL_CHANCE_OF_SUCCESS()),"You almost did it..."};
 		}
 		if(ptr->learned()) {
 			return {mods::rand::chance(LEARNED_SKILL_CHANCE_OF_SUCCESS()),"You try your best"};

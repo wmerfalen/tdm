@@ -21,6 +21,8 @@ namespace mods::classes {
 	sniper::sniper(player_ptr_t p) {
 		this->init();
 		load_by_player(p);
+		m_shotgun_ub.init();
+		m_frag_ub.init();
 	}
 	void sniper::init() {
 		m_target = 0;
@@ -52,7 +54,30 @@ namespace mods::classes {
 			{REQUEST_RECON,"recon","Request Recon",s::INTELLIGENCE,&m_request_recon},
 		};
 	}
+	obj_ptr_t sniper::underbarrel() {
+		if(m_shotgun_ub.is_attached()) {
+			return m_shotgun_ub.obj();
+		}
+		if(m_frag_ub.is_attached()) {
+			return m_frag_ub.obj();
+		}
+		return nullptr;
+	}
 
+	std::tuple<bool,std::string> sniper::detach_shotgun_underbarrel() {
+		return m_shotgun_ub.detach();
+	}
+
+	std::tuple<bool,std::string> sniper::attach_shotgun_underbarrel() {
+		if(m_shotgun_ub.is_attached() && m_shotgun_ub.ammo()) {
+			return {1,"Already attached. To detach, use 'detach_shotgun_underbarrel'."};
+		}
+		auto s = roll_skill_success(UB_SHOTGUN);
+		if(std::get<0>(s)) {
+			return m_shotgun_ub.attach_to(m_player->primary(),tier(m_player));
+		}
+		return s;
+	}
 	void sniper::unblock_healing() {
 		m_player->sendln("Unblock healing");
 		if(m_heal_mode == HEAL_MODE_SUTURE) {
@@ -81,6 +106,9 @@ namespace mods::classes {
 			return s;
 		}
 		return s;
+	}
+	void sniper::consume_shotgun_underbarrel_ammo() {
+		m_shotgun_ub.consume_ammo();
 	}
 	void sniper::replenish_notify(std::string_view msg) {
 		if(m_preferences["mute-replenish"]) {
@@ -257,6 +285,22 @@ namespace mods::classes {
 		}
 		return {0,"You don't have any gauze!"};
 	}
+	std::tuple<bool,std::string> sniper::attach_frag_underbarrel() {
+		if(m_frag_ub.is_attached() && m_frag_ub.ammo()) {
+			return {1,"Already attached. To detach, use 'detach_frag_underbarrel'."};
+		}
+		auto s = roll_skill_success(UB_FRAG);
+		if(std::get<0>(s)) {
+			return m_frag_ub.attach_to(m_player->primary(),tier(m_player));
+		}
+		return s;
+	}
+	std::tuple<bool,std::string> sniper::detach_frag_underbarrel() {
+		return m_frag_ub.detach();
+	}
+	std::tuple<bool,std::string> sniper::fire_frag(const direction_t& direction,const uint8_t& distance) {
+		return m_frag_ub.fire(m_player,direction,distance);
+	}
 };
 
 namespace mods::class_abilities::sniper {
@@ -318,6 +362,71 @@ namespace mods::class_abilities::sniper {
 		auto status = player->sniper()->disengage();
 		player->sendln(std::get<1>(status));
 	};
+	ACMD(do_attach_shotgun_underbarrel) {
+		PLAYER_CAN("sniper.attach_shotgun_underbarrel");
+		DO_HELP("attach_shotgun_underbarrel");
+		if(player->sniper()) {
+			auto status = player->sniper()->attach_shotgun_underbarrel();
+			player->sendln(std::get<1>(status));
+			return;
+		}
+		player->sendln("Your class does not support this.");
+	};
+	ACMD(do_detach_shotgun_underbarrel) {
+		PLAYER_CAN("sniper.detach_shotgun_underbarrel");
+		DO_HELP("detach_shotgun_underbarrel");
+		if(player->sniper()) {
+			auto status = player->sniper()->detach_shotgun_underbarrel();
+			player->sendln(std::get<1>(status));
+			return;
+		}
+		player->sendln("Your class does not support this.");
+	};
+	ACMD(do_attach_frag_underbarrel) {
+		PLAYER_CAN("sniper.attach_frag_underbarrel");
+		DO_HELP("attach_frag_underbarrel");
+		if(player->sniper()) {
+			auto status = player->sniper()->attach_frag_underbarrel();
+			player->sendln(std::get<1>(status));
+			return;
+		}
+		player->sendln("Your class does not support this.");
+	};
+	ACMD(do_detach_frag_underbarrel) {
+		PLAYER_CAN("sniper.detach_frag_underbarrel");
+		DO_HELP("detach_frag_underbarrel");
+		if(player->sniper()) {
+			auto status = player->sniper()->detach_frag_underbarrel();
+			player->sendln(std::get<1>(status));
+			return;
+		}
+		player->sendln("Your class does not support this.");
+	};
+	ACMD(do_fire_frag) {
+		PLAYER_CAN("sniper.fire_frag");
+		DO_HELP("fire_frag");
+		static constexpr const char* usage = "fire_frag <direction> <distance>\r\n";
+		if(argshave()->size_gt(2)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		auto dir = mods::util::to_direction(argat(1));
+		if(dir < 0) {
+			player->sendln("Invalid direction.");
+			return;
+		}
+		auto distance = mods::util::stoi_optional<uint8_t>(argat(2));
+		if(distance.has_value() == false) {
+			player->sendln("Invalid distance.");
+			return;
+		}
+		if(player->sniper()) {
+			player->sendln(std::get<1>(player->sniper()->fire_frag(dir,distance.value())));
+			return;
+		}
+		player->sendln("Your class does not support this.");
+	};
+
 	void init() {
 		mods::interpreter::add_command("mark", POS_RESTING, do_mark_target, 0,0);
 		mods::interpreter::add_command("mark_target", POS_RESTING, do_mark_target, 0,0);
@@ -327,5 +436,8 @@ namespace mods::class_abilities::sniper {
 		mods::interpreter::add_command("xray_shot", POS_RESTING, do_xray_shot, 0,0);
 		mods::interpreter::add_command("build_claymore", POS_RESTING, do_build_claymore, 0,0);
 		mods::interpreter::add_command("light_bandage", POS_RESTING, do_light_bandage, 0,0);
+		mods::interpreter::add_command("attach_shotgun_underbarrel", POS_RESTING, do_attach_shotgun_underbarrel, 0,0);
+		mods::interpreter::add_command("attach_frag_underbarrel", POS_RESTING, do_attach_frag_underbarrel, 0,0);
+		mods::interpreter::add_command("fire_frag", POS_RESTING, do_fire_frag, 0,0);
 	}
 };

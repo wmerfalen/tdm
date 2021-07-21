@@ -1,5 +1,204 @@
 # Inventory of features
 
+# 2021-07-16
+	- [ ] Implement these game dynamics for each class
+		- [ ] SNIPER
+				 -- [x] expert at sniper rifles and ranged combat
+				 	-- [x] Extra 10.5% damage per tier (each tier is ten levels)
+				 -- [x] can attach underbarrels to sniper rifles
+				 	-- [x] shotgun underbarrel
+						-- [x] skill that gets an extra shot per half tier
+				 	-- frag launcher
+						-- skill that gets an extra shot per tier
+				 -- has access to emp/chaff grenades (replenishes)
+				 - 	
+				 -- can inject arenaline shot
+				 	-- <insert the buffs here>
+				 	-- ...
+				 -- has xray shot
+				 	-- targets don't need to be in line of sight
+				 -- has access to corrosive/shrapnel/explosive claymores (replenishes)
+				 -- can mark and track an enemy
+				 	-- tracked enemies take more damage
+				 -- can target limb
+				 	-- attacking right arm activates nerfs on target related to primary
+				 	-- attacking left arm activates nerfs on target related to primary and secondary
+				 -- can snipe objects (such as doors, cars, etc)
+				 	-- cars will explode and light the room on fire
+				 -- can fire "neutron" shell
+				 	-- targets hit by shell cause radioactive and explosive damage to all room inhabitants
+				 -- fleeing from melee is 25% more effective
+				 -- immobilizing shot (passive)
+				 	-- 15% chance of causing target to stay in room and not close distance for 50 ticks
+				return {
+					1, // MELEE
+					3, // WEAPONS
+					2, // INTEL
+					3, // SPEED
+					1, // ARMOR
+				};
+			case GHOST:
+				/**
+				 * --[
+				 *  -- uses stealth and intel to deal extra damage
+				 *  -- can dissipate
+				 *  	-- when dissipated, enemies cannot see or detect you
+				 *  -- time to install claymore mines are reduced by 50%
+				 *  -- ranged combat has a 75% chance of the target not knowing
+				 *  	which direction the shot came from
+				 *  -- SMG's are silenced
+				 *  	-- first attack with SMG's cause the target to not know who
+				 *  		the attack is
+				 *  -- SMG's have "initiative"
+				 *  	-- when an enemy would attack you, you attack first
+				 *  	-- when they attack, you immediately attack again
+				 *  -- have access to smoke and flashbang grenades (replenishes)
+				 *  -- "misdirection"
+				 *  	-- spawn a holographic decoy that your enemies will attack instead of you
+				 *	-- "Suffering Shot"
+				 *  	-- fire special ammunition which sticks to the target and deals damage continuously
+				 *  		for 50 ticks
+				 *  -- [
+				 */
+				return {
+					1, // MELEE
+					2, // WEAPONS
+					3, // INTEL
+					3, // SPEED
+					1, // ARMOR
+				};
+			case MARINE:
+				/**
+				 * --[
+				 *  -- most well-balanced character
+				 *  -- all wielded assault rifles get:
+				 *  	-- +10% critical chance
+				 *  	-- +15% free ammunition
+				 *  	-- underbarrel frag launcher (ammo replenishes)
+				 *  -- received shrapnel and incendiary damage is reduced by 25%
+				 * 	-- "second wind" (passive)
+				 * 		-- if a hit would cause death, you have a 23% chance of
+				 * 			surviving with 20hp for 20 ticks. During this time
+				 * 			you can move around but cannot attack. When over,
+				 * 			your primary weapon does 10% more damage and gains
+				 * 			10% explosive damage.
+				 * 	-- received disorient affects are reduced in duration by 50%
+				 * 	-- Shotguns deal same room damage at 2-3 rooms away
+				 * 	-- "disarm"
+				 * 		-- melee anatagonists get their primary dropped on the ground
+				 * 		-- tier 3: melee antagonists get their primary weapon removed and destroyed
+				 * 	-- assault rifles have a 10% chance of dealing incendiary damage
+				 * --[
+				 */
+				return {
+					2, // MELEE
+					2, // WEAPONS
+					2, // INTEL
+					2, // SPEED
+					2  // ARMOR
+				};
+			case BREACHER:
+				/**
+				 * -- [
+				 *  -- expert with demolitions
+				 *  -- breach charges replenish automatically
+				 *  -- can retrofit shotguns with explosive breach underbarrel
+				 *  -- all wielded weapons get +10% explosive damage
+				 *  -- can remotely seal a room for the purpose of amplifying detonations
+				 *  -- can walk in a direction and automatically breach through
+				 *  	-- can sometimes make new rooms
+				 *  -- breaching doors causes room inhabitants to take damage from explosion
+				 *  -- "breach and clear"
+				 *  	-- breach a door and immediatel throw a flash bang into the room
+				 *  	-- inhabitants get disoriented and take more damage
+				 *  -- "knockdown"
+				 *  	-- fire a shot that knocks the enemy to the ground
+				 *  	-- knocked down enemies take more damage and are vulnerable to "detain"
+				 *  -- "detain"
+				 *  	-- disarm and zip-tie an enemy
+				 *  -- "entry denial"
+				 *  	-- prevent any enemy from entering your room by guarding a specific entrance
+				 *  	-- friendlies can snipe around you
+				 *  	-- you can use your secondary to deal damage to NPCs trying to enter
+				 *  -- Shotguns deal 10% extra damage
+				 *  -- SMG's deal 10% extra damage
+				 *  -- SMG's have corrossive damage
+				 *  	-- corrossive damage from SMG's cause enemy armor to be less effective
+				 *  -- SMG's in same-room engagements have a chance of dealing shotgun damage
+				 *  -- received shrapnel and explosive damage reduced by 25%
+				 *  -- [
+				 */
+				return {
+					3, // MELEE
+					2, // WEAPONS
+					1, // INTEL
+					1, // SPEED
+					3 // ARMOR
+				};
+			case MEDIC:
+				/**
+				 * -- [
+				 *  -- built like a tank, but not very fast
+				 *  -- can heal self and teammates
+				 *  -- has parasitic ammunition
+				 *  -- can craft PED's
+				 *  -- can deal extra damage with SMG's and Shotguns
+				 *  -- can dual wield shotguns
+				 *  -- has access to ballistic shield
+				 *  -- [
+				 */
+				return {
+					1, // MELEE
+					2, // WEAPONS
+					3, // INTEL
+					1, // SPEED
+					3, // ARMOR
+				};
+			case ENGINEER:
+				/**
+				 * -- [
+				 *  -- decent at weaponry
+				 *  -- famliarity with gadgets/demolitions/attachments
+				 *  -- can setup entry denial devices to keep targets at ideal sniping distance
+				 *  -- can construct in-field turret
+				 *  	-- shrapnel upgrade
+				 *  	-- corrossive upgrade
+				 *  	-- radioactive upgrade
+				 *  -- can attach items to rifles
+				 *  -- can repair melee items
+				 *  -- sensor grenades have a wider area of affect
+				 *  -- emp grenades do not affect engineer
+				 *  -- can request UAV scan
+				 *  	-- scanned enemies become TRACKED and take more damage
+				 *
+				 *  -- [
+				 */
+				return {
+					1, // MELEE
+					2, // WEAPONS
+					3, // INTEL
+					2, // SPEED
+					2, // ARMOR
+				};
+			case SUPPORT:
+				/**
+				 * -- [
+				 * - Quick moving, expert at weaponry and can carry tons of weight.
+				 * - not much armor due to quickness to bring ammo/weapons/items to teammates
+				 * - can call in loadout drops
+				 * - can pilot drone that drops items near squads that need it
+				 * -- [
+				 */
+				return {
+					2, // MELEE
+					3, // WEAPONS
+					1, // INTEL
+					3, // SPEED
+					1, // ARMOR
+				};
+			default:
+
+
 # 2021-07-04
 	- I made a list of skills and perks in `mods/levels.cpp`
 	- I suggest you look there for next steps and which dynamics to implement
