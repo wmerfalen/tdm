@@ -10,8 +10,13 @@
 #include "flashbang.hpp"
 #include "rooms.hpp"
 #include "injure.hpp"
+#include "doors.hpp"
 #include "super-users.hpp"
 
+#include "interpreter.hpp"
+#include "classes/sniper.hpp"
+
+#define __MENTOC_SHOW_MODS_EXPLODE_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_EXPLODE_DEBUG_OUTPUT__
 #define explode_debug(MSG) mentoc_prefix_debug("[mods::projectile::explode]")  << MSG << "\n";
 #else
@@ -95,8 +100,6 @@ namespace mods {
 		}
 		void emp_damage(room_rnum& room_id,obj_ptr_t object) {
 			if(mods::rooms::is_peaceful(room_id)) {
-				obj_from_room(object);
-				mods::globals::dispose_object(object->uuid);
 				return;
 			}
 			/** TODO: fill this function */
@@ -260,8 +263,6 @@ namespace mods {
 		    obj_ptr_t device,
 		    uuid_t player_uuid) {
 			if(mods::rooms::is_peaceful(room_id)) {
-				obj_from_room(device);
-				mods::globals::dispose_object(device->uuid);
 				return;
 			}
 			pbr_debug("perform blast radius entry");
@@ -272,6 +273,9 @@ namespace mods {
 				pbr_debug("direction: (" << dirstr(dir) << ") roomid(" << room_id << ")");
 				for(std::size_t blast_count = 0; blast_count < blast_radius; blast_count++) {
 					auto dir_option = world[current_room].dir_option[dir];
+					if(!dir_option) {
+						break;
+					}
 					current_room = dir_option->to_room;
 					float damage_multiplier = 0;
 					auto opposite = OPPOSITE_DIR(dir);
@@ -343,7 +347,7 @@ namespace mods {
 					}
 				}
 			}
-			obj_from_room(device);
+			//obj_from_room(device);
 		}
 		int explosive_damage(player_ptr_t victim, obj_ptr_t item) {
 			if(mods::super_users::player_is(victim)) {
@@ -351,8 +355,6 @@ namespace mods {
 			}
 			if(mods::rooms::is_peaceful(victim->room())) {
 				std::cerr << red_str("Not dispatching explosive_damage to peaceful room: ") << victim->room() << "\n";
-				obj_from_room(item);
-				mods::globals::dispose_object(item->uuid);
 				return 0;
 			}
 			auto& attr = item->explosive()->attributes;
@@ -412,15 +414,13 @@ namespace mods {
 			disorient_person(player);
 			player->sendln("You become extremely disoriented!");
 		}
-		int8_t explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid) {
+		int8_t explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid, bool dispose) {
 			if(room_id >= world.size()) {
 				log("[error]: mods::projectile::explode received room_id greater than world.size()");
 				return -1;
 			}
 			if(mods::rooms::is_peaceful(room_id)) {
 				auto device = optr_by_uuid(object_uuid);
-				obj_from_room(device);
-				mods::globals::dispose_object(object_uuid);
 				return -2;
 			}
 			explode_debug("explode, calling optr");
@@ -487,7 +487,6 @@ namespace mods {
 
 			if(type == mw_explosive::SENSOR_GRENADE) {
 				mods::sensor_grenade::handle_explosion(object_uuid,player_uuid,room_id,object->from_direction);
-				mods::globals::dispose_object(object_uuid);
 				return 1;
 			}
 
@@ -540,8 +539,13 @@ namespace mods {
 			}
 			explode_debug("calling perform blast radius");
 			mods::projectile::perform_blast_radius(room_id,blast_radius,object,player_uuid);
-			mods::globals::dispose_object(object_uuid);
+			if(dispose) {
+				mods::globals::dispose_object(object_uuid);
+			}
 			return 2;
+		}
+		int8_t explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid) {
+			return explode(room_id,object_uuid,player_uuid, true);
 		}
 		/**
 		 * TODO: place the grenade on the floor so that some crazy bastards can potentially throw it back,
@@ -695,7 +699,7 @@ namespace mods {
 			eif_debug("explode_in_future uuid: " << object_uuid);
 			mods::globals::defer_queue->push(ticks, [room_id,object_uuid,player_uuid]() {
 				eif_debug("[defer_queue] callback:: explode_in_future uuid: " << object_uuid << " room_id:" << room_id);
-				explode(room_id,object_uuid,player_uuid);
+				explode(room_id,object_uuid,player_uuid,true);
 			});
 		}
 
@@ -715,8 +719,6 @@ namespace mods {
 				room_rnum room_id = resolve_room(player->room(),direction,depth);
 				if(mods::rooms::is_peaceful(room_id)) {
 					player->sendln("Target room is in the D.M.Z.. Your item has been destroyed.");
-					obj_from_room(object);
-					mods::globals::dispose_object(object->uuid);
 					return;
 				}
 			}
@@ -774,15 +776,137 @@ namespace mods {
 			victim->hp() -= damage;
 			return damage;
 		}
-		std::tuple<bool,std::string> launch_fragmentation_underbarrel(
+		std::tuple<bool,std::string> explode_frag_here(player_ptr_t& attacker, obj_ptr_t& frag, const room_rnum room_id) {
+			explode(room_id,frag->uuid,attacker->uuid());
+			return {1,"A fragmentation grenade explodes!"};
+		}
+		std::tuple<bool,std::string> frag_underbarrel_explodes_here(
+		    player_ptr_t& attacker,
+		    obj_ptr_t& frag,
+		    const direction_t& direction,
+		    const room_rnum& room_id,
+		    const uint8_t& travel_distance
+		) {
+			/** TODO honor travel_distance and explode at the maximum distance */
+			static constexpr const char* neither = "";
+			if(world[room_id].dir_option[direction] == nullptr) {
+				return explode_frag_here(attacker,frag,room_id);
+			}
+			auto& player_in_room = mods::globals::get_room_list(room_id);
+			if(player_in_room.size() > FRAG_GRENADE_PREMATURE_ROOM_SIZE()) {
+				explode(room_id,frag->uuid,attacker->uuid());
+				return {true,"Your fragmentation grenade hits a group of people!"};
+			}
+			/** TODO: if anyone is holding a shield inside this room, blow it up here */
+			return {false,neither};
+		}
+
+		/**
+		 * The idea here is to accept different types of
+		 * underbarrel attachments.
+		 * 	- fragmentation grenades
+		 * 	- sensor grenades (todo)
+		 * 	- flash bang (todo)
+		 * 	- incendiary (todo)
+		 * 	- emp (todo)
+		 * 	- corossive (todo)
+		 *  -
+		 */
+		std::tuple<bool,std::string> launch_underbarrel_grenade(
 		    player_ptr_t& attacker,
 		    obj_ptr_t& launcher,
 		    const direction_t& direction,
-		    const uint8_t& distance
+		    const std::size_t& distance
 		) {
+			if(launcher->has_attachment() == false) {
+				return {0,"{red}You must have a valid attachment connected!{/red}"};
+			}
 
-			return {1,"You launch a fragmentation grenade!"};
+			std::string type = launcher->attachment()->attributes->underbarrel_launcher_type;
+			if(type.compare("SHOTGUN") == 0 || type.compare("TASER") == 0 || type.compare("CORROSIVE_SPRAY") == 0 ||
+			        type.compare("FLAME_THROWER") == 0 || type.compare("NONE") == 0) {
+				return {0,"{red}You are using the wrong type of underbarrel attachment!{/red}"};
+			}
+			obj_ptr_t frag = nullptr;
+			if(type.compare("FRAG_LAUNCHER") == 0) {
+				frag = create_object(ITEM_EXPLOSIVE,"frag-grenade.yml");
+			} else if(type.compare("SENSOR_LAUNCHER") == 0) {
+				frag = create_object(ITEM_EXPLOSIVE,"sensor-grenade.yml");
+			} else if(type.compare("SMOKE_LAUNCHER") == 0) {
+				frag = create_object(ITEM_EXPLOSIVE,"smoke-grenade.yml");
+			} else if(type.compare("EMP_LAUNCHER") == 0) {
+				frag = create_object(ITEM_EXPLOSIVE,"emp-grenade.yml");
+			} else if(type.compare("INCENDIARY_LAUNCHER") == 0) {
+				frag = create_object(ITEM_EXPLOSIVE,"incendiary-grenade.yml");
+			} else if(type.compare("BREACH_LAUNCHER") == 0) {
+				frag = create_object(ITEM_EXPLOSIVE,"breach-charge.yml");
+			} else if(type.compare("THERMITE_BREACH_LAUNCHER") == 0) {
+				frag = create_object(ITEM_EXPLOSIVE,"thermite-charge.yml");
+			}
+
+			if(!frag) {
+				return {0,"{red}You are using the wrong type of underbarrel attachment!{/red}"};
+			}
+			auto room_id = attacker->room();
+			if(!world[room_id].dir_option[direction]) {
+				explode_debug("frag travel to hit a wall!");
+				return explode_frag_here(attacker, frag, room_id);
+			} else {
+				int travel_distance = 0;
+				do {
+					explode_debug("looping");
+					auto s = frag_underbarrel_explodes_here(attacker, frag, direction, room_id,travel_distance);
+					if(std::get<0>(s)) {
+						explode_debug("stopped short");
+						return s;
+					}
+					if(!world[room_id].dir_option[direction]) {
+						explode_debug("stopped short due to invalid dir_option");
+						return explode_frag_here(attacker, frag, room_id);
+					}
+					explode_debug("traversing...");
+					room_id = world[room_id].dir_option[direction]->to_room;
+					if(room_id >= world.size()) {
+						return explode_frag_here(attacker, frag, room_id);
+					}
+				} while(++travel_distance < distance);
+			}
+			explode_debug("Returning: " << room_id << " explode here");
+			return explode_frag_here(attacker, frag, room_id);
 		}
+
+		ACMD(do_fragtest_east) {
+			ADMIN_REJECT();
+			DO_HELP("fragtest_east");
+			static constexpr const char* usage = "usage: fragtest_east <direction> <distance>";
+			if(argshave()->int_at(1)->direction_at(0)->passed() == false) {
+				player->sendln(usage);
+				return;
+			}
+			auto dir = dirat(0);
+			auto distance = intat(1);
+			if(dir.has_value() == false) {
+				player->sendln("{red}Invalid direction{/red}");
+				return;
+			}
+			auto launcher = player->sniper()->underbarrel();
+			if(!launcher) {
+				player->sendln("{red}You don't have a launcher attached!{/red}");
+				return;
+			}
+			launch_underbarrel_grenade(
+			    player,
+			    launcher,
+			    dir.value(),
+			    distance
+			);
+
+			ADMIN_DONE();
+		}
+		void init() {
+			mods::interpreter::add_command("fe", POS_RESTING, do_fragtest_east, LVL_BUILDER,0);
+		}
+
 	};
 };
 #undef m_error

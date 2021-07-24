@@ -400,7 +400,7 @@
 (int16_t,regenerate_ammo_chance,"#int16_t,the higher the value, the more likely the weapon will use generate ammunition",0), \
 (int16_t,bleed_chance,"#int16_t,the higher the value, the more likely the weapon will cause the target to bleed",0), \
 (int16_t,aimed_limb_accuracy_percent,"#int16_t,the higher the value, the more likely aimed limb shots will land successfully",0), \
-(std::string,underbarrel_launcher_type,"#string, adds an underbarrel launcher of the specified type NONE,FRAG_LAUNCHER,SENSOR_LAUNCHER,SMOKE_LAUNCHER,INCENDIARY_LAUNCHER,SHOTGUN,TASER,CORROSIVE_SPRAY,FLAME_THROWER","'NONE'"), \
+(std::string,underbarrel_launcher_type,"#string, adds an underbarrel launcher of the specified type NONE,EMP_LAUNCHER,BREACH_LAUNCHER,THERMITE_BREACH_LAUNCHER,FRAG_LAUNCHER,SENSOR_LAUNCHER,SMOKE_LAUNCHER,INCENDIARY_LAUNCHER,SHOTGUN,TASER,CORROSIVE_SPRAY,FLAME_THROWER","'NONE'"), \
 (int16_t,damage_percent_bonus,"#int16_t, percent value multiplied by base weapon damage and added to every attack",0.0) \
 )
 

@@ -1505,6 +1505,16 @@ namespace mods::util::args {
 		save_integer(index);
 		return fetch_integer(index);
 	}
+	std::optional<direction_t> parsed_args::direction_at(std::size_t index) {
+		if(index < vec_args.size()) {
+			auto dir = to_direction(vec_args[index]);
+			if(dir < 0) {
+				return std::nullopt;
+			}
+			return dir;
+		}
+		return std::nullopt;
+	}
 	std::map<std::size_t,int> parsed_args::int_map(std::vector<std::size_t> indexes) {
 		std::map<std::size_t,int> m;
 		for(const auto& index : indexes) {
@@ -1560,6 +1570,19 @@ namespace mods::util::args {
 			}
 		}
 		return true;
+	}
+	check_parsed_args* check_parsed_args::direction_at(std::size_t index) {
+		if(index < p->vec_args.size()) {
+			auto dir = to_direction(p->vec_args[index]);
+			if(dir < 0) {
+				result("direction_at",index,false);
+				return this;
+			}
+			result("direction_at",index,true);
+		} else {
+			result("direction_at",index,false);
+		}
+		return this;
 	}
 	check_parsed_args* check_parsed_args::int_at(std::size_t index) {
 		result("int_at",index,p->nth_has_integer(index));

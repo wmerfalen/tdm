@@ -122,6 +122,29 @@ namespace mods::doors  {
 		world[world[room].dir_option[direction]->to_room].dir_option[OPPOSITE_DIR(direction)]->exit_info = EX_ISDOOR | EX_BREACHED;
 	}
 
+	static inline void door_explosion_event(const room_rnum& room,obj_ptr_t& explosive,const int8_t& direction, bool dispose, bool pave) {
+		switch(mods::object_utils::get_explosive_type(explosive->uuid)) {
+			case mw_explosive::THERMITE_CHARGE:
+				mods::doors::thermite_breached(room,direction);
+				break;
+			case mw_explosive::BREACH_CHARGE:
+				mods::doors::breached(room,direction);
+				break;
+			case mw_explosive::FRAG_GRENADE:
+				mods::doors::breached(room,direction);
+				break;
+			default:
+				std::cerr << "[WARNING] unhandled type! " << __FILE__ << ":" << __LINE__ << "\n";
+				break;
+		}
+		if(dispose) {
+			mods::doors::dispose_breach(explosive->uuid);
+		}
+		if(pave) {
+			mods::doors::pave_open_direction(room,direction);
+		}
+		mods::doors::knockback_room(room,direction);
+	}
 	static inline void door_explosion_event(uuid_t player_uuid,uuid_t obj_uuid,int8_t direction) {
 		auto player = ptr_by_uuid(player_uuid);
 		auto room = player->room();
@@ -130,6 +153,9 @@ namespace mods::doors  {
 				mods::doors::thermite_breached(room,direction);
 				break;
 			case mw_explosive::BREACH_CHARGE:
+				mods::doors::breached(room,direction);
+				break;
+			case mw_explosive::FRAG_GRENADE:
 				mods::doors::breached(room,direction);
 				break;
 			default:

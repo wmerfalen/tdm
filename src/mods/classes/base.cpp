@@ -244,7 +244,7 @@ namespace mods::classes {
 			return {mods::rand::chance(OKAY_SKILL_CHANCE_OF_SUCCESS()),"You almost did it..."};
 		}
 		if(ptr->learned()) {
-			return {mods::rand::chance(LEARNED_SKILL_CHANCE_OF_SUCCESS()),"You try your best"};
+			return {mods::rand::chance(LEARNED_SKILL_CHANCE_OF_SUCCESS()),"You try your best, but fail miserably..."};
 		}
 		if(ptr->mastered()) {
 			return {mods::rand::chance(MASTERED_SKILL_CHANCE_OF_SUCCESS()),"You masterfully get to work"};

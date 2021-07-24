@@ -113,6 +113,10 @@ namespace mods::loops {
 	void foreach_all_chars(all_function_t);
 	void foreach_in_room(std::size_t,player_function_t);
 	static inline void foreach_object_in_room(const room_rnum& room_id, object_in_room_function_t func) {
+		if(world.size() <= room_id) {
+			std::cerr << "foreach_object_in_room: " << red_str("INVALID ROOM ID:") << room_id << "\n";
+			return;
+		}
 		obj_data* next_obj = nullptr;
 		for(auto obj = world[room_id].contents; obj; obj = next_obj) {
 			next_obj = obj->next_content;

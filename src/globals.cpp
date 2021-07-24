@@ -48,6 +48,7 @@ extern int port_main(int,char**);
 extern int next_room_number();
 extern int next_room_vnum();
 extern void look_at_room(char_data* ch,int ignore_brief);
+extern void obj_from_room(obj_ptr_t in_object);
 namespace mods::chat {
 	extern void setup_public_channels();
 	extern bool handle_chat(player_ptr_t& player,std::string_view argument);
@@ -1197,6 +1198,7 @@ namespace mods {
 		}
 		void dispose_object(uuid_t obj_uuid) {
 			auto obj = optr_by_uuid(obj_uuid);
+			obj_from_room(obj);
 			obj_odmap.erase(obj.get());
 			obj_map.erase(obj_uuid);
 			auto it = std::find(obj_list.begin(),obj_list.end(),obj);

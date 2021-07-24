@@ -51,6 +51,7 @@ INIT(mods::contract_step_callback_init);
 INIT(mods::scripted_sequence_events);
 INIT(mods::scripted_sequence_runner);
 INIT(src::act::debug);
+INIT(mods::projectile);
 #undef INIT
 
 
@@ -103,6 +104,7 @@ namespace mods::init {
 		mods::scripted_sequence_runner::init();
 		src::act::debug::init();
 		mods::players::banish::init();
+		mods::projectile::init();
 	}
 };
 #endif

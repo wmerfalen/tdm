@@ -15,7 +15,7 @@ namespace mods::weapons {
 			return {0,"Not attached!"};
 		}
 		if(ammo()) {
-			auto s =  mods::projectile::launch_fragmentation_underbarrel(
+			auto s =  mods::projectile::launch_underbarrel_grenade(
 			              attacker,
 			              m_obj,
 			              direction,

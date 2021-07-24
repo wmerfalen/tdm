@@ -29,6 +29,8 @@ namespace mods::memory {
 		          "obj_proto: " << obj_proto.size() << "\n" <<
 		          "zone_table: " << zone_table.size() << "\n" <<
 		          "------------------------------------------------------------------\n";
+
+#ifdef __MENTOC_SHOW_OBJ_LIST_MEMORY_OUTPUT__
 		std::cerr << "[obj_list]:\n" <<
 		          "------------------------------------------------------------------\n";
 		std::map<std::string,std::size_t> counts;
@@ -38,6 +40,9 @@ namespace mods::memory {
 		for(const auto& pair : counts) {
 			std::cerr << green_str("[") << pair.second << green_str("]:") << " " << yellow_str(pair.first) << "\n";
 		}
+		std::cerr << "\n" <<
+		          "------------------------------------------------------------------\n";
+#endif
 	}
 };
 

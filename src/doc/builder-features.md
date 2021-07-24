@@ -8,28 +8,31 @@
 				 -- [x] can attach underbarrels to sniper rifles
 				 	-- [x] shotgun underbarrel
 						-- [x] skill that gets an extra shot per half tier
-				 	-- frag launcher
-						-- skill that gets an extra shot per tier
-				 -- has access to emp/chaff grenades (replenishes)
+				 	-- [x] frag launcher
+						-- [x] skill that gets an extra shot per half tier
+				 -- [delay until emp/chaff dynamics defined] has access to emp/chaff grenades (replenishes)
 				 - 	
-				 -- can inject arenaline shot
-				 	-- <insert the buffs here>
-				 	-- ...
-				 -- has xray shot
-				 	-- targets don't need to be in line of sight
-				 -- has access to corrosive/shrapnel/explosive claymores (replenishes)
-				 -- can mark and track an enemy
-				 	-- tracked enemies take more damage
-				 -- can target limb
-				 	-- attacking right arm activates nerfs on target related to primary
-				 	-- attacking left arm activates nerfs on target related to primary and secondary
-				 -- can snipe objects (such as doors, cars, etc)
-				 	-- cars will explode and light the room on fire
-				 -- can fire "neutron" shell
-				 	-- targets hit by shell cause radioactive and explosive damage to all room inhabitants
-				 -- fleeing from melee is 25% more effective
-				 -- immobilizing shot (passive)
-				 	-- 15% chance of causing target to stay in room and not close distance for 50 ticks
+				 -- [ ] can inject arenaline shot
+				 	-- [ ] 20 free movement points per tier
+				 	-- [ ] damage taken is reduced by 15% per tier
+				 -- [x] has xray shot
+				 	-- [x] targets don't need to be in line of sight
+				 -- can plant claymores of type:
+				 	-- [ ] corrosive 
+					-- [ ] shrapnel
+					-- [ ] explosive
+				 -- [ ] can mark and track an enemy
+				 	-- [ ] tracked enemies take more damage
+				 -- [ ] can target limb
+				 	-- [ ] attacking right arm activates nerfs on target related to primary
+				 	-- [ ] attacking left arm activates nerfs on target related to primary and secondary
+				 -- [ ] can snipe objects (such as doors, cars, etc)
+				 	-- [ ] cars will explode and light the room on fire
+				 -- [ ] can fire "neutron" shell
+				 	-- [ ] targets hit by shell cause radioactive and explosive damage to all room inhabitants
+				 -- [ ] fleeing from melee is 25% more effective
+				 -- [ ] immobilizing shot (passive)
+				 	-- [ ] 15% chance of causing target to stay in room and not close distance for 50 ticks
 				return {
 					1, // MELEE
 					3, // WEAPONS

@@ -64,11 +64,11 @@ namespace mods {
 		void disorient_clears_up(player_ptr_t victim);
 		void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device);
 		int deploy_shrapnel_at(player_ptr_t& victim, int dice_count,int dice_sides,int from_direction);
-		std::tuple<bool,std::string> launch_fragmentation_underbarrel(
+		std::tuple<bool,std::string> launch_underbarrel_grenade(
 		    player_ptr_t& attacker,
 		    obj_ptr_t& launcher,
 		    const direction_t& direction,
-		    const uint8_t& distance
+		    const std::size_t& distance
 		);
 
 		void throw_object(player_ptr_t& player, int direction, std::size_t depth,

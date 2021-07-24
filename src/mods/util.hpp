@@ -392,6 +392,7 @@ namespace mods::util::args {
 
 		std::string at(std::size_t index);
 		int int_at(std::size_t index);
+		std::optional<direction_t> direction_at(std::size_t index);
 		std::vector<std::string> multi(std::vector<std::size_t> indexes);
 		std::map<std::size_t,int> int_map(std::vector<std::size_t> indexes);
 	};
@@ -413,6 +414,7 @@ namespace mods::util::args {
 			check_parsed_args* nth_has_integer(std::size_t index);
 			check_parsed_args* nth_has_integer(std::vector<std::size_t> index);
 			check_parsed_args* int_at(std::size_t index);
+			check_parsed_args* direction_at(std::size_t index);
 			check_parsed_args* int_at(std::vector<std::size_t> index);
 			check_parsed_args* size_gt(std::size_t size);
 			check_parsed_args* size_eq(std::size_t size);
@@ -448,6 +450,7 @@ namespace mods::util::args {
 #define args() mods::util::args::player_parsers[player->uuid()].use(argument)
 #define argat(A) mods::util::args::player_parsers[player->uuid()].use(argument)->at(A)
 #define intat(A) mods::util::args::player_parsers[player->uuid()].use(argument)->int_at(A)
+#define dirat(A) mods::util::args::player_parsers[player->uuid()].use(argument)->direction_at(A)
 #define argsat(A) mods::util::args::player_parsers[player->uuid()].use(argument)->multi(A)
 #define argshave() mods::util::args::player_parsers[player->uuid()].have(argument)
 #define qmob(ROOM,MOB) mods::util::query_mob_in_room(ROOM,MOB);

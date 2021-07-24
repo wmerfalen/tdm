@@ -22,6 +22,7 @@
 ./mods/levels.cpp:	->exp
 ./mods/date-time.cpp:	->moon_phase
 ./mods/scripted-step.cpp:	->scripted_step
+./mods/projectile.cpp:		->fragtest_east
 ./mods/mini-games/line-up.cpp:->hack
 ./mods/mini-games/line-up.cpp:->rotate_right
 ./mods/mini-games/line-up.cpp:->rotate_left
