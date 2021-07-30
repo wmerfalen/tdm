@@ -32,6 +32,7 @@
 #include "mods/players/db-load.hpp"
 #include "mods/players/messages.hpp"
 #include "mods/scripted-sequence-runner.hpp"
+#include "mods/js.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -144,6 +145,13 @@ const char *text_overflow = "**OVERFLOW**\r\n";
 int epoll_fd = -1;
 epoll_event epoll_ev;
 
+void on_shutdown() {
+	if(mods::globals::db) {
+		mods::globals::db->abort_txn();
+		mods::globals::db->close();
+		mods::globals::db.release();
+	}
+}
 void logstrerror(std::string_view prefix,int _errno) {
 	log(mods::string(prefix.data()) + strerror(_errno));
 }
@@ -246,9 +254,16 @@ void deregister_player(player_ptr_t player_obj) {
 namespace mods::bugs {
 	extern void close();
 };
+
 void atexit_handler() {
 	mods::bugs::close();
 	mods::db_report::close();
+}
+
+void exit_with(int code) {
+	mods::bugs::close();
+	mods::db_report::close();
+	circle_shutdown = 1;
 }
 /***********************************************************************
  *  main game loop and related stuff                                    *
@@ -280,7 +295,7 @@ int main(int argc, char **argv) {
 
 	if(chdir(dir) < 0) {
 		perror("SYSERR: Fatal error changing to data directory");
-		exit(1);
+		exit_with(1);
 	}
 
 	log("Using %s as data directory.", dir);
@@ -362,7 +377,7 @@ void init_game(ush_int port) {
 
 	if(circle_reboot) {
 		log("Rebooting.");
-		exit(52);			/* what's so great about HHGTTG, anyhow? */
+		exit_with(52);			/* what's so great about HHGTTG, anyhow? */
 	}
 
 	log("Normal termination of game.");
@@ -392,7 +407,7 @@ socket_t init_socket(ush_int port) {
 
 	if((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
 		perror("SYSERR: Error creating socket");
-		exit(1);
+		exit_with(1);
 	}
 
 #if defined(SO_REUSEADDR)
@@ -400,7 +415,7 @@ socket_t init_socket(ush_int port) {
 
 	if(setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt)) < 0) {
 		perror("SYSERR: setsockopt REUSEADDR");
-		exit(1);
+		exit_with(1);
 	}
 
 #endif
@@ -435,7 +450,7 @@ socket_t init_socket(ush_int port) {
 	if(bind(s, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
 		perror("SYSERR: bind");
 		CLOSE_SOCKET(s);
-		exit(1);
+		exit_with(1);
 	}
 
 	nonblock(s);
@@ -465,7 +480,7 @@ int get_max_players(void) {
 
 		if(getrlimit(RLIMIT_NOFILE, &limit) < 0) {
 			perror("SYSERR: calling getrlimit");
-			exit(1);
+			exit_with(1);
 		}
 
 		/* set the current to the maximum */
@@ -473,7 +488,7 @@ int get_max_players(void) {
 
 		if(setrlimit(RLIMIT_NOFILE, &limit) < 0) {
 			perror("SYSERR: calling setrlimit");
-			exit(1);
+			exit_with(1);
 		}
 
 #ifdef RLIM_INFINITY
@@ -510,7 +525,7 @@ int get_max_players(void) {
 			max_descs = max_playing + NUM_RESERVED_DESCS;
 		} else {
 			perror("SYSERR: Error calling sysconf");
-			exit(1);
+			exit_with(1);
 		}
 	}
 
@@ -526,7 +541,7 @@ int get_max_players(void) {
 	if(max_descs <= 0) {
 		log("SYSERR: Non-positive max player limit!  (Set at %d using %s).",
 		    max_descs, method);
-		exit(1);
+		exit_with(1);
 	}
 
 	log("   Setting player limit to %d using %s.", max_descs, method);
@@ -541,7 +556,7 @@ void perform_auto_login(player_ptr_t& player) {
 	auto pw = mods::auto_login::get_password();
 	if(login(mods::auto_login::get_user(),pw) == false) {
 		log("SYSERR: user/password combination for auto_login failed");
-		exit(1);
+		exit_with(1);
 	} else {
 		parse_sql_player(player);
 	}
@@ -552,7 +567,7 @@ void perform_auto_login(player_ptr_t& player) {
 			start_room = mods::world_conf::real_mortal_start();
 		}
 		if(world.size() == 0) {
-			exit(0);
+			exit_with(0);
 		}
 		player->set_room(start_room);
 		char_to_room(player->cd(),start_room);
@@ -861,7 +876,8 @@ void game_loop(socket_t mother_desc) {
 		}
 		++tics;
 	}
-
+	mods::js::on_shutdown();
+	on_shutdown();
 }
 #ifdef __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
 #define rb_bht_debug(a) /**/
@@ -2101,7 +2117,7 @@ void nonblock(socket_t s) {
 
 	if(ioctl(s, FIONBIO, &val) < 0) {
 		perror("SYSERR: Fatal error executing nonblock (comm.c)");
-		exit(1);
+		exit_with(1);
 	}
 }
 
@@ -2119,7 +2135,7 @@ void nonblock(socket_t s) {
 
 	if(fcntl(s, F_SETFL, flags) < 0) {
 		perror("SYSERR: Fatal error executing nonblock (comm.c)");
-		exit(1);
+		exit_with(1);
 	}
 }
 
@@ -2164,7 +2180,7 @@ RETSIGTYPE checkpointing(int sig) {
 /* Dying anyway... */
 RETSIGTYPE hupsig(int sig) {
 	log("SYSERR: Received SIGHUP, SIGINT, or SIGTERM.  Shutting down...");
-	exit(1);			/* perhaps something more elegant should
+	exit_with(1);			/* perhaps something more elegant should
 								 * substituted */
 }
 
@@ -2693,7 +2709,7 @@ void setup_log(const char *filename, int fd) {
 
 	/* Erp, that didn't work either, just die. */
 	log("SYSERR: Couldn't open anything to log to, giving up.");
-	exit(1);
+	exit_with(1);
 }
 
 int open_logfile(const char *filename, FILE *stderr_fp) {

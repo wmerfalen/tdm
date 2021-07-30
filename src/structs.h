@@ -1044,6 +1044,7 @@ struct obj_data {
 		uuid_t m_owner;
 		location_data_t m_location_data;
 		std::string m_feed_file;
+		void free_next_content();
 };
 /* ======================================================================= */
 

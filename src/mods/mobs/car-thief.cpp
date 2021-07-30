@@ -114,6 +114,7 @@ namespace mods::mobs {
 	 * @brief damage_events registered here
 	 */
 	void car_thief::setup_damage_callbacks() {
+#if 0
 #define m(A) std::cerr << green_str("[car_thief::setup_damage_callbacks]") << A << "\n";
 		using de = damage_event_t;
 		static const std::vector<de> pacify_events = {
@@ -265,6 +266,7 @@ namespace mods::mobs {
 			this->set_heading(decision);
 		});
 #undef m
+#endif
 	}
 	bool car_thief::is_rival(player_ptr_t& player) {
 		return false;

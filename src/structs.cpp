@@ -28,18 +28,23 @@ obj_data::~obj_data() {
 	worn_on = -1;
 	in_obj = nullptr;
 	contains = nullptr;
+	next = nullptr;
+	ai_state = 0;
+}
+void obj_data::free_next_content() {
 	if(next_content) {
 		auto head = next_content;
 		auto tmp = head;
-		while(head != NULL) {
+		while(head) {
 			tmp = head;
-			head = head->next;
+			if(!tmp) {
+				break;
+			}
+			head = head->next_content;
 			free(tmp);
 		}
 		next_content = nullptr;
 	}
-	next = nullptr;
-	ai_state = 0;
 }
 void obj_data::init() {
 	d("[debug]obj_data::init()\n");
@@ -62,18 +67,9 @@ void obj_data::init() {
 	worn_on = -1;
 	in_obj = nullptr;
 	contains = nullptr;
-	if(next_content) {
-		auto head = next_content;
-		auto tmp = head;
-		while(head != NULL) {
-			tmp = head;
-			head = head->next;
-			free(tmp);
-		}
-		next_content = nullptr;
-	}
 	next = nullptr;
 	ai_state = 0;
+	next_content = nullptr;
 	obj_flags.init();
 	type = 0;
 	this->uuid = mods::globals::obj_uuid();
@@ -321,6 +317,7 @@ char_data::~char_data() {
 	}
 }
 void char_data::init() {
+	contract = false;
 	visibility = STARTING_VISIBILITY;
 	has_desc = false;
 	desc.reset();
@@ -492,6 +489,8 @@ room_data::room_data(const room_data& r) {
 room_data::~room_data() {
 	for(unsigned i = 0; i < NUM_OF_DIRS; i++) {
 		if(dir_option[i] != nullptr) {
+			dir_option[i]->general_description.clear();
+			dir_option[i]->keyword.clear();
 			free(dir_option[i]);
 		}
 	}
@@ -544,6 +543,8 @@ void room_data::set_dir_option(byte i,
 		this->dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
 	} else {
 		/** free is handled properly in room_data destructor */
+		this->dir_option[i]->general_description.clear();
+		this->dir_option[i]->keyword.clear();
 		free(this->dir_option[i]);
 		this->dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
 	}

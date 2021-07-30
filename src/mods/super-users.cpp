@@ -5,6 +5,8 @@
 #include "interpreter.hpp"
 #include "movement.hpp"
 
+extern void exit_with(int);
+
 namespace mods::super_users {
 	static std::set<std::string> super_users;
 	static std::set<std::string> invisible_super_users;
@@ -155,7 +157,7 @@ SUPERCMD(do_clear_who_line) {
 }
 SUPERCMD(do_shutdown_mud) {
 	ADMIN_REJECT();
-	exit(0);
+	exit_with(0);
 }
 namespace mods::super_users {
 	void init() {

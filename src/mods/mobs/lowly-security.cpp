@@ -110,6 +110,7 @@ namespace mods::mobs {
 	 * @brief damage_events registered here
 	 */
 	void lowly_security::setup_damage_callbacks() {
+#if 0
 		using de = damage_event_t;
 		this->player_ptr->register_damage_event_callback({de::TARGET_DEAD_EVENT},[&](const feedback_t& feedback,const uuid_t& player) {
 			this->set_behaviour_tree("lowly_security");
@@ -132,6 +133,7 @@ namespace mods::mobs {
 			char_to_room(this->cd(),world[this->room()].dir_option[decision]->to_room);
 			this->set_heading(decision);
 		});
+#endif
 	}
 	void lowly_security::init() {
 		smart_mob::init();

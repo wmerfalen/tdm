@@ -49,10 +49,8 @@ namespace mods {
 		//std::cerr << "mods::string::string(const char*) constructor\n";
 	}
 	string::~string() {
-		if(m_mallocd) {
-			free(m_cptr);
-		}
-		m_mallocd = false;
+		m_deallocate();
+		m_str.clear();
 	};
 	unsigned int string::length() const {
 		if(!m_mallocd) {
@@ -63,7 +61,8 @@ namespace mods {
 	void string::clear() {
 		m_debug("str clear");
 		///std::cerr <<"m_str: " << m_str.c_str() << "\n";
-		assign("");
+		m_deallocate();
+		m_str.clear();
 		/*
 		m_str = "";
 		if(m_mallocd){

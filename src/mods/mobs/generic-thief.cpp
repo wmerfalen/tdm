@@ -170,6 +170,7 @@ namespace mods::mobs {
 	 * @brief damage_events registered here
 	 */
 	void generic_thief::setup_damage_callbacks() {
+#if 0
 		using de = damage_event_t;
 		static const std::vector<de> pacify_events = {
 			de::TARGET_DEAD_EVENT,
@@ -177,6 +178,11 @@ namespace mods::mobs {
 			de::YOURE_IN_PEACEFUL_ROOM,
 		};
 		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!this) {
+				std::cerr << type().data() << red_str(" THIS IS NULL!!!!") << "\n";
+				sleep(10);
+				return;
+			}
 			if(!ptr_by_uuid(player)) {
 				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
 				return;
@@ -193,11 +199,19 @@ namespace mods::mobs {
 			de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK,
 		};
 		player_ptr->register_damage_event_callback(enrage_if,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!this) {
+				std::cerr << type().data() << red_str(" THIS IS NULL!!!!") << "\n";
+				sleep(10);
+				return;
+			}
 			if(!ptr_by_uuid(player)) {
 				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
 				return;
 			}
 			auto attacker = ptr_by_uuid(feedback.attacker);
+			if(!attacker) {
+				return;
+			}
 			auto weapon = player_ptr->primary();
 
 			if(player_ptr->room() != attacker->room()) {
@@ -270,6 +284,11 @@ namespace mods::mobs {
 			de::COULDNT_FIND_TARGET_EVENT,
 		};
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!this) {
+				std::cerr << type().data() << red_str(" THIS IS NULL!!!!") << "\n";
+				sleep(10);
+				return;
+			}
 			if(!ptr_by_uuid(player)) {
 				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
 				return;
@@ -295,6 +314,11 @@ namespace mods::mobs {
 		});
 
 		player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!this) {
+				std::cerr << type().data() << red_str(" THIS IS NULL!!!!") << "\n";
+				sleep(10);
+				return;
+			}
 			if(!ptr_by_uuid(player)) {
 				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
 				return;
@@ -316,6 +340,7 @@ namespace mods::mobs {
 			move_to(decision);
 			this->set_heading(decision);
 		});
+#endif
 	}
 	bool generic_thief::is_rival(player_ptr_t& player) {
 		return false;

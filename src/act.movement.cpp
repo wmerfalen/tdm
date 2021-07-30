@@ -189,7 +189,7 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	if(ch->has_desc) {
 		look_at_room(ch, 0);
 	}
-	if(ch->contract) {
+	if(!IS_NPC(ch) && ch->contract) {
 		mods::contract_events::find_room(player,to_room);
 		mods::contract_events::gain_entry_to_room(player,to_room);
 	}

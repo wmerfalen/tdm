@@ -1868,7 +1868,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 							p->stc(START_MESSG);
 						}
 
-						look_at_room(p->cd(), 0);
 
 						if(has_mail(GET_IDNUM(p->cd()))) {
 							p->stc("You have mail waiting.\r\n");
@@ -1882,6 +1881,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 						mods::js::run_profile_scripts(p->name());
 #endif
 						mods::players::db_load::game_entry(p);
+						look_at_room(p->cd(), 0);
 						break;
 
 					case '2':

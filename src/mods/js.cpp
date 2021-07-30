@@ -18,9 +18,18 @@ extern void affect_from_char(char_data *ch, int type);
 extern void mobile_activity();
 namespace mods {
 	namespace js {
-		static duk_context* duktape_context;
+		static duk_context* duktape_context = nullptr;
 		void create_new_context() {
+			if(duktape_context) {
+				duk_destroy_heap(duktape_context);
+				duktape_context = nullptr;
+			}
 			duktape_context = new_context();
+		}
+		void on_shutdown() {
+			if(duktape_context) {
+				duk_destroy_heap(duktape_context);
+			}
 		}
 		std::string current_working_dir() {
 			return MENTOC_CURRENT_WORKING_DIR;
