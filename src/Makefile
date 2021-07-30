@@ -167,11 +167,12 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/generic-thief mods/mobs/generic-thief-behaviour-tree \
 					 mods/mobs/chaotic-meth-addict mods/mobs/chaotic-meth-addict-behaviour-tree \
 					 mods/weapons/attachment-shotgun-underbarrel \
-					 mods/memory mods/weapons/attachment-frag-underbarrel mods/unit-tests/frag-underbarrel
+					 mods/memory mods/weapons/attachment-frag-underbarrel mods/unit-tests/frag-underbarrel \
+					 mods/boosters/adrenaline-shot mods/unit-tests/class-sniper
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team $(builddir)/mods/boosters
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
 
 clean:
@@ -215,6 +216,8 @@ $(builddir)/mods/orm:
 	mkdir -p $(builddir)/mods/orm
 $(builddir)/mods/weapons:
 	mkdir -p $(builddir)/mods/weapons
+$(builddir)/mods/boosters:
+	mkdir -p $(builddir)/mods/boosters
 $(builddir)/mods/mobs:
 	mkdir -p $(builddir)/mods/mobs
 $(builddir)/mods/builder:

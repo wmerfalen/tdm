@@ -867,7 +867,7 @@ struct obj_data {
 			std::cerr << ("obj_data(type,feed_file)") << ", name:'" << name.c_str() << "'\n";
 #endif
 		}
-		~obj_data() = default;
+		~obj_data();
 		obj_vnum item_number;	/* Where in data-type			*/
 		room_rnum in_room;		/* In what room -1 when conta/carr	*/
 

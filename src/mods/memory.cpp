@@ -1,18 +1,71 @@
 #include "memory.hpp"
 //#include "../db.hpp"
 #include "../shop.h"
+#include "mobs/car-thief.hpp"
+#include "mobs/mp-shotgunner.hpp"
+#include "mobs/mini-gunner.hpp"
+#include "mobs/chaotic-meth-addict.hpp"
+#include "mobs/generic-thief.hpp"
 
 using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
 using shop_ptr_t = std::shared_ptr<shop_data_t>;
+namespace mods::behaviour_tree_impl {
+	extern std::vector<uuid_t>& mob_list();
+};
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 extern std::deque<std::shared_ptr<mods::npc>> mob_list;
 extern std::deque<std::shared_ptr<shop_data_t>> shop_list;
 extern std::deque<obj_data> obj_proto;	/* prototypes for objs		 */
 extern std::deque<zone_data> zone_table;	/* zone table			 */
 namespace mods::memory {
+	std::map<std::string,str_map_t> usage_report;
+	template <typename T>
+	void save_footprint(T& ptr) {
+		usage_report[CAT(ptr->type().data(),":",ptr->uuid)] = ptr->usages();
+	}
+	std::string get_saved_footprints() {
+		std::string s;
+		std::map<std::string,std::size_t> counts;
+		for(const auto& pair : usage_report) {
+			if(pair.second.size()) {
+				for(const auto& ipair : pair.second) {
+					auto type = CAT(EXPLODE(pair.first,':')[0],"|",ipair.first);
+					int i = mods::util::stoi(ipair.second).value_or(0);
+					counts[type] += i;
+				}
+			}
+		}
+		for(const auto& pair : counts) {
+			s += CAT(pair.first,": ",pair.second,"\n");
+		}
+		return s;
+	}
 	void print_footprints() {
+		for(const auto& g : mods::mobs::generic_thief_list()) {
+			save_footprint(g);
+		}
+		for(const auto& g : mods::mobs::chaotic_meth_addict_list()) {
+			save_footprint(g);
+		}
+		for(const auto& pair : mods::mobs::car_thief_map()) {
+			auto& g = pair.second;
+			save_footprint(g);
+		}
+		for(const auto& pair : mods::mobs::mpshotgunner_map()) {
+			auto& g = pair.second;
+			save_footprint(g);
+		}
+		for(const auto& pair : mods::mobs::mg_map()) {
+			auto& g = pair.second;
+			save_footprint(g);
+		}
+		std::size_t watchers = 0;
+		for(const auto& room : world) {
+			watchers += room.watchers.size();
+		}
 		std::cerr << "[memory footprint]\n" <<
 		          "------------------------------------------------------------------\n" <<
+		          "world.watchers:" << watchers << "\n" <<
 		          "obj_list: " << obj_list.size() << "\n" <<
 		          "obj_map: " << mods::globals::obj_map.size() << "\n" <<
 		          "socket_map: " << mods::globals::socket_map.size() << "\n" <<
@@ -28,6 +81,8 @@ namespace mods::memory {
 		          "player_map: " << mods::globals::player_map.size() << "\n" <<
 		          "obj_proto: " << obj_proto.size() << "\n" <<
 		          "zone_table: " << zone_table.size() << "\n" <<
+		          "mods::behaviour_tree_impl: " << mods::behaviour_tree_impl::mob_list().size() << "\n" <<
+		          get_saved_footprints() <<
 		          "------------------------------------------------------------------\n";
 
 #ifdef __MENTOC_SHOW_OBJ_LIST_MEMORY_OUTPUT__

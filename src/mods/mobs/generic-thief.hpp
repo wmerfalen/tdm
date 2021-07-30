@@ -92,6 +92,7 @@ namespace mods::mobs {
 			/** debugging info */
 			/**================*/
 			str_map_t report();
+			str_map_t usages();
 
 			/**=====================================*/
 			/** hunting helpers & state maintenance */
@@ -147,6 +148,9 @@ namespace mods::mobs {
 			/** rival npc helpers */
 			bool is_rival(player_ptr_t& player);
 
+			std::string_view type() {
+				return "generic_thief";
+			}
 
 		private:
 			std::forward_list<target_t> m_targets;

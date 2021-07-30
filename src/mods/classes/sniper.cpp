@@ -24,7 +24,21 @@ namespace mods::classes {
 		m_shotgun_ub.init();
 		m_frag_ub.init();
 	}
+	std::tuple<bool,std::string> sniper::inject_adrenaline_shot() {
+		if(m_ad_shot.active()) {
+			return {0,"You already have an adrenaline shot active!"};
+		}
+		auto s = roll_skill_success(ADRENALINE_SHOT);
+		if(std::get<0>(s)) {
+			return m_ad_shot.inject(m_player);
+		}
+		return s;
+	}
+	void sniper::unblock_adrenaline_shot() {
+		m_ad_shot.shot_wears_off(m_player);
+	}
 	void sniper::init() {
+		m_adrenaline_shot_charges = 0;
 		m_target = 0;
 		m_engaged = 0;
 		m_xray_shot_charges = 0;
@@ -147,6 +161,10 @@ namespace mods::classes {
 			if(m_gauze_count < SNIPER_GAUZE_MAX_COUNT() * tier) {
 				replenish_notify("{grn}A gauze has been regenerated.{/grn}");
 				++m_gauze_count;
+			}
+			if(m_adrenaline_shot_charges < SNIPER_ADRENALINE_SHOT_MAX_COUNT() * tier) {
+				replenish_notify("{grn}An adrenaline shot has been regenerated.{/grn}");
+				++m_adrenaline_shot_charges;
 			}
 		}
 	}
@@ -402,10 +420,10 @@ namespace mods::class_abilities::sniper {
 		}
 		player->sendln("Your class does not support this.");
 	};
-	ACMD(do_fire_frag) {
-		PLAYER_CAN("sniper.fire_frag");
-		DO_HELP("fire_frag");
-		static constexpr const char* usage = "fire_frag <direction> <distance>\r\n";
+	ACMD(do_fire) {
+		PLAYER_CAN("sniper.fire");
+		DO_HELP("fire");
+		static constexpr const char* usage = "fire <direction> <distance>\r\n";
 		if(argshave()->size_gt(2)->passed() == false) {
 			player->sendln(usage);
 			return;
@@ -436,8 +454,10 @@ namespace mods::class_abilities::sniper {
 		mods::interpreter::add_command("xray_shot", POS_RESTING, do_xray_shot, 0,0);
 		mods::interpreter::add_command("build_claymore", POS_RESTING, do_build_claymore, 0,0);
 		mods::interpreter::add_command("light_bandage", POS_RESTING, do_light_bandage, 0,0);
-		mods::interpreter::add_command("attach_shotgun_underbarrel", POS_RESTING, do_attach_shotgun_underbarrel, 0,0);
-		mods::interpreter::add_command("attach_frag_underbarrel", POS_RESTING, do_attach_frag_underbarrel, 0,0);
-		mods::interpreter::add_command("fire_frag", POS_RESTING, do_fire_frag, 0,0);
+		mods::interpreter::add_command("attach_shotgun", POS_RESTING, do_attach_shotgun_underbarrel, 0,0);
+		mods::interpreter::add_command("detach_shotgun", POS_RESTING, do_detach_shotgun_underbarrel, 0,0);
+		mods::interpreter::add_command("attach_frag", POS_RESTING, do_attach_frag_underbarrel, 0,0);
+		mods::interpreter::add_command("detach_frag", POS_RESTING, do_detach_frag_underbarrel, 0,0);
+		mods::interpreter::add_command("fire", POS_RESTING, do_fire, 0,0);
 	}
 };

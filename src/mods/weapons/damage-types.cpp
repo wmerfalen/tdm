@@ -408,6 +408,7 @@ namespace mods::weapons::damage_types {
 		if(victim->position() > POS_DEAD) {
 			md("victim position > DEAD");
 			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
+			feedback.attacker = player->uuid();
 			if(dam == 0) {
 				md("damage is zero");
 				feedback.damage = dam;
@@ -438,6 +439,7 @@ namespace mods::weapons::damage_types {
 					feedback.injured.emplace_back(victim->uuid());
 					feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
 					feedback.from_direction = OPPOSITE_DIR(direction);
+					feedback.attacker = player->uuid();
 					victim->damage_event(feedback);
 					if(victim->is_npc()) {
 						mods::mobs::damage_event::injured(victim,feedback);

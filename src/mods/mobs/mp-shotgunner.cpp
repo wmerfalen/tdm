@@ -103,7 +103,18 @@ namespace mods::mobs {
 		}
 	}
 	str_map_t mp_shotgunner::report() {
-		return {{"foo","todo"}};
+		return usages();
+	}
+	str_map_t mp_shotgunner::usages() {
+		str_map_t m;
+		m = base_usages();
+		std::size_t attackers = std::distance(m_attackers.cbegin(),m_attackers.cend());
+
+		if(attackers) {
+			m["attackers"] = std::to_string(attackers);
+		}
+		return m;
+
 	}
 	/**
 	 * @brief damage_events registered here
@@ -121,6 +132,10 @@ namespace mods::mobs {
 			de::YOURE_IN_PEACEFUL_ROOM,
 		};
 		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			m("pacify events");
 			set_behaviour_tree("mp_shotgunner");
 		});
@@ -130,6 +145,10 @@ namespace mods::mobs {
 		};
 
 		player_ptr->register_damage_event_callback(move_closer,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			m("move closer");
 			this->move_closer_to_target();
 		});
@@ -143,6 +162,10 @@ namespace mods::mobs {
 			de::COULDNT_FIND_TARGET_EVENT,
 		};
 		player_ptr->register_damage_event_callback(scan_for_attacker,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			m("scan for attacker");
 			set_behaviour_tree("mp_shotgunner");
 		});
@@ -157,6 +180,10 @@ namespace mods::mobs {
 		 * some cases.
 		 */
 		player_ptr->register_damage_event_callback(breakaway_if,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			auto& room = world[player_ptr->room()];
 			auto victim = ptr_by_uuid(feedback.attacker);
 			auto weapon = player_ptr->primary();
@@ -264,6 +291,10 @@ namespace mods::mobs {
 			de::COULDNT_FIND_TARGET_EVENT,
 		};
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			switch(feedback.damage_event) {
 				case de::OUT_OF_AMMO_EVENT:
 					mps_debug("DAMN! OUT OF AMMO!");
@@ -285,6 +316,10 @@ namespace mods::mobs {
 		});
 
 		player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			if(player_ptr->room() >= world.size()) {
 				std::cerr << red_str("WARNING> mp shotgunner got invalid room id!: ") << player_ptr->room() << ". Staying put!\n";
 				return;

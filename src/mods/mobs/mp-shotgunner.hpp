@@ -41,6 +41,7 @@ namespace mods::mobs {
 			/** debugging info */
 			/**================*/
 			str_map_t report();
+			str_map_t usages();
 
 			/**=====================================*/
 			/** hunting helpers & state maintenance */
@@ -58,6 +59,9 @@ namespace mods::mobs {
 			void shotgun_attack_within_range();
 			std::pair<bool,std::string> move_to(const direction_t& dir);
 			void move_closer_to_target();
+			std::string_view type() {
+				return "mp_shotgunner";
+			}
 
 		private:
 			player_ptr_t get_next_attacking_priority();

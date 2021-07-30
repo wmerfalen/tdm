@@ -12,6 +12,8 @@
 #include "../rifle-attachments.hpp"
 
 namespace mods::weapons::damage_calculator {
+	void clear_static_roll_weapon_amount();
+	void set_static_roll_weapon_amount(int16_t amount);
 	int calculate_strength_bonus(
 	    player_ptr_t& player,
 	    obj_ptr_t& weapon,

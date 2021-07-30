@@ -34,6 +34,11 @@ namespace mods::mobs {
 		/** debugging info */
 		/**================*/
 		str_map_t report();
+		str_map_t usages();
+
+		std::string_view type() {
+			return "lowly_security";
+		}
 
 		/**=====================================*/
 		/** hunting helpers & state maintenance */

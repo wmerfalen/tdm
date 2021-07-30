@@ -40,6 +40,7 @@
 {yel}mods/mini-games{/yel}:->{grn}uninstall_minigame{/grn}
 {yel}mods/mini-games{/yel}:->{grn}list_minigame{/grn}
 {yel}mods/classes/super-user-fiddler{/yel}:->{grn}mock_level{/grn}
+{yel}mods/boosters/adrenaline-shot{/yel}:->{grn}adshot_test{/grn}
 {yel}mods/super-users{/yel}:->{grn}add_super_user{/grn}
 {yel}mods/super-users{/yel}:->{grn}get_super_user_list{/grn}
 {yel}mods/super-users{/yel}:->{grn}remove_super_user{/grn}

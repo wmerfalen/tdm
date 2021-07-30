@@ -44,7 +44,6 @@ void assign_kings_castle(void);
 /* local functions */
 void assign_mobiles();
 void assign_objects();
-void assign_rooms();
 void ASSIGNROOM(room_vnum room, SPECIAL(fname));
 void ASSIGNMOB(mob_vnum mob, SPECIAL(fname));
 void ASSIGNOBJ(obj_vnum obj, SPECIAL(fname));
@@ -98,17 +97,3 @@ void assign_objects() {
 
 
 
-/* assign special procedures to rooms */
-void assign_rooms(void) {
-	if(top_of_world == 0){
-		log("INFO: assign_rooms called, but top_of_world is zero");
-		return;
-	}
-	room_rnum i;
-
-	if(dts_are_dumps)
-		for(i = 0; i <= top_of_world; i++)
-			if(ROOM_FLAGGED(i, ROOM_DEATH)) {
-				world[i].func = dump;
-			}
-}

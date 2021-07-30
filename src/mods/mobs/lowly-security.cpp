@@ -102,6 +102,10 @@ namespace mods::mobs {
 	str_map_t lowly_security::report() {
 		return {{"foo","todo"}};
 	}
+	str_map_t lowly_security::usages() {
+		str_map_t m = base_usages();
+		return m;
+	}
 	/**
 	 * @brief damage_events registered here
 	 */

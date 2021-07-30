@@ -1269,7 +1269,9 @@ void extract_char_final(char_data *ch) {
 
 	if(IS_NPC(ch)) {
 		if(GET_MOB_RNUM(ch) != NOTHING) {	/* prototyped */
-			mob_index[GET_MOB_RNUM(ch)].number--;
+			if(GET_MOB_RNUM(ch) < mob_index.size()) {
+				mob_index[GET_MOB_RNUM(ch)].number--;
+			}
 		}
 
 		clearMemory(ch);

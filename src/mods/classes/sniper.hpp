@@ -5,6 +5,7 @@
 #include "../drone.hpp"
 #include "../weapons/attachment-shotgun-underbarrel.hpp"
 #include "../weapons/attachment-frag-underbarrel.hpp"
+#include "../boosters/adrenaline-shot.hpp"
 
 using sniper_orm_t = mods::orm::sniper;
 
@@ -17,6 +18,7 @@ namespace mods::classes {
 			using secondary_choice_t = mods::weapon::sniper::secondary_choice_t;
 			using shotgun_ub_t = mods::weapons::attachment_shotgun_underbarrel;
 			using frag_ub_t = mods::weapons::attachment_frag_underbarrel;
+			using adrenaline_shot_t = mods::boosters::adrenaline_shot;
 
 			enum ability_t {
 				NONE = 0,
@@ -76,6 +78,7 @@ namespace mods::classes {
 			std::tuple<bool,std::string> tracking_shot(std::string_view target, direction_t direction);
 			std::tuple<bool,std::string> light_bandage();
 			std::tuple<bool,std::string> suture();
+			std::tuple<bool,std::string> inject_adrenaline_shot();
 
 			/*
 			- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)
@@ -86,6 +89,7 @@ namespace mods::classes {
 			std::tuple<bool,std::string> xray_shot();
 			uint8_t claymore_count() const;
 			void use_claymore(uuid_t);
+			void unblock_adrenaline_shot();
 
 		private:
 			void replenish_notify(std::string_view);
@@ -95,6 +99,7 @@ namespace mods::classes {
 			uint8_t m_claymore_charges;
 			uint8_t m_gauze_count;
 			uint8_t m_medkit_count;
+			uint8_t m_adrenaline_shot_charges;
 			enum heal_mode_t {
 				HEAL_MODE_SUTURE,
 				HEAL_MODE_LIGHT_BANDAGE
@@ -127,6 +132,8 @@ namespace mods::classes {
 			ability_list_t m_abilities;
 			shotgun_ub_t m_shotgun_ub;
 			frag_ub_t m_frag_ub;
+			adrenaline_shot_t m_ad_shot;
+
 	};
 	std::shared_ptr<mods::classes::sniper> create_sniper(player_ptr_t& player);
 };

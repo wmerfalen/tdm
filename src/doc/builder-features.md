@@ -11,10 +11,12 @@
 				 	-- [x] frag launcher
 						-- [x] skill that gets an extra shot per half tier
 				 -- [delay until emp/chaff dynamics defined] has access to emp/chaff grenades (replenishes)
-				 - 	
 				 -- [ ] can inject arenaline shot
 				 	-- [ ] 20 free movement points per tier
 				 	-- [ ] damage taken is reduced by 15% per tier
+						-- [ ] tier 1 -> 50 ticks
+						-- [ ] tier 2 -> 100 ticks
+						-- [ ] tier 3 -> 170 ticks
 				 -- [x] has xray shot
 				 	-- [x] targets don't need to be in line of sight
 				 -- can plant claymores of type:

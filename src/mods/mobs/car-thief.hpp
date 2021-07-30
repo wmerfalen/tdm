@@ -39,6 +39,7 @@ namespace mods::mobs {
 			/** debugging info */
 			/**================*/
 			str_map_t report();
+			str_map_t usages();
 
 			/**=====================================*/
 			/** hunting helpers & state maintenance */
@@ -79,6 +80,9 @@ namespace mods::mobs {
 			bool is_rival(player_ptr_t& player);
 
 
+			std::string_view type() {
+				return "car_thief";
+			}
 		private:
 			player_ptr_t get_next_attacking_priority();
 			player_ptr_t m_last_attacker;

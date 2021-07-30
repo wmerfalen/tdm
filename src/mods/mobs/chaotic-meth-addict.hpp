@@ -47,6 +47,10 @@ namespace mods::mobs {
 			/** debugging info */
 			/**================*/
 			str_map_t report();
+			str_map_t usages();
+			std::string_view type() {
+				return "chaotic_meth_addict";
+			}
 
 			/**=====================================*/
 			/** hunting helpers & state maintenance */

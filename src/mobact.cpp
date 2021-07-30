@@ -55,7 +55,16 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 void mobile_activity(void) {
 	//auto player = mods::globals::current_player;
+	std::size_t mob_list_size = mob_list.size();
 	for(auto& npc : mob_list) {
+		if(mob_list_size != mob_list.size()) {
+			return mobile_activity();
+		}
+		auto uuid = npc->uuid();
+		if(!ptr_by_uuid(uuid)) {
+			log("SYSERR: possible memory leak in mob_list via mobile_activity");
+			continue;
+		}
 		auto ch = npc->cd();
 		player_ptr_t player = npc;
 		char_data *vict;

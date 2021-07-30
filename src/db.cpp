@@ -160,7 +160,6 @@ void load_zones(FILE *fl, char *zonename);
 void load_help(FILE *fl);
 void assign_mobiles(void);
 void assign_objects(void);
-void assign_rooms(void);
 void assign_the_shopkeepers(void);
 void build_player_index(void);
 int is_empty(zone_rnum zone_nr);
@@ -287,10 +286,6 @@ void boot_hell(void) {
 		log("   Objects.");
 		if(mods::hell::assign_objects) {
 			assign_objects();
-		}
-		log("   Rooms.");
-		if(mods::hell::assign_rooms) {
-			assign_rooms();
 		}
 	}
 
@@ -541,8 +536,6 @@ void boot_db(void) {
 		assign_the_shopkeepers();
 		log("   Objects.");
 		assign_objects();
-		log("   Rooms.");
-		assign_rooms();
 	}
 
 	log("Assigning spell and skill levels.");
@@ -1036,7 +1029,7 @@ int parse_sql_objects() {
 			}
 			obj_proto.push_back(obj_data(row["obj_type"].as<int16_t>(),obj_file));
 			auto& proto = obj_proto.back();
-			index_ref->vnum = proto.item_number;
+			index_ref->vnum = proto.item_number = row["obj_item_number"].as<obj_vnum>();
 			//!proposed lmdb code:
 			auto aff_rows = db_get_by_meta("affected_type","aff_fk_id",row["obj_item_number"]);
 			for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
@@ -1114,8 +1107,8 @@ int parse_sql_objects() {
 			proto.worn_by = nullptr;
 			proto.carried_by = nullptr;
 			mods::globals::obj_stat_pages[
-			proto.item_number
-			] = std::move(proto.generate_stat_page());
+			index_ref->vnum
+			] = proto.generate_stat_page();
 		}
 	} else {
 		log("[notice] no objects from sql");
@@ -1986,14 +1979,20 @@ obj_ptr_t create_object(int type,std::string yaml_file) {
 		auto error = CAT("SYSERR: create_object:: warning: unknown yaml file type+yaml_file:'",yaml_file,"', with type:'", type,"'");
 		log(error.c_str());
 		mods::object_utils::report_yaml_message(error);
-		return blank_object();
+		auto obj = blank_object();
+		obj_list.push_back(std::move(obj));
+		mods::globals::register_object(obj_list.back());
+		return obj_list.back();
 	}
 	bool exists = mods::util::yaml_file_exists(path);
 	if(!exists) {
 		auto error = CAT("SYSERR: create_object:: warning: yaml file DOESNT EXIST:'",yaml_file,"', with type:'", type,"'");
 		mods::object_utils::report_yaml_message(error);
 		log(error.c_str());
-		return blank_object();
+		auto obj = blank_object();
+		obj_list.push_back(std::move(obj));
+		mods::globals::register_object(obj_list.back());
+		return obj_list.back();
 	}
 	obj_list.push_back(std::make_shared<obj_data>(type,yaml_file));
 	mods::globals::register_object(obj_list.back());

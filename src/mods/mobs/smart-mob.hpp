@@ -5,6 +5,9 @@
 #include "../damage-event.hpp"
 #include "../npc.hpp"
 #include "../scan.hpp"
+namespace mods::memory {
+	extern void save_footprint(std::string_view type,uuid_t& uuid,str_map_t m);
+};
 
 namespace mods::mobs {
 	using tick_t = uint64_t;
@@ -54,6 +57,9 @@ namespace mods::mobs {
 			/** debugging info */
 			/**================*/
 			virtual str_map_t report() = 0;
+			virtual str_map_t usages() {
+				return {};
+			}
 
 			/**=====================================*/
 			/** hunting helpers & state maintenance */
@@ -119,6 +125,10 @@ namespace mods::mobs {
 			bool alive();
 			bool can_move();
 			bool capable();
+			virtual std::string_view type() {
+				return "smart-mob";
+			}
+			str_map_t base_usages();
 
 		protected:
 			std::map<uint16_t,uint16_t> m_should_do;

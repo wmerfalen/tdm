@@ -1277,10 +1277,21 @@ player_ptr_t ptr(const char_data* in_ch) {
 	if(!in_ch) {
 		return nullptr;
 	}
-	return mods::globals::player_chmap[const_cast<char_data*>(in_ch)];
+	auto it = mods::globals::player_chmap.find(const_cast<char_data*>(in_ch));
+	if(it == mods::globals::player_chmap.cend()) {
+		return nullptr;
+	}
+	return it->second;
 }
 obj_ptr_t optr(obj_data* in_obj) {
-	return mods::globals::obj_odmap[in_obj];
+	if(!in_obj) {
+		return nullptr;
+	}
+	auto it = mods::globals::obj_odmap.find(in_obj);
+	if(it == mods::globals::obj_odmap.cend()) {
+		return nullptr;
+	}
+	return it->second;
 }
 
 std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid) {
@@ -1306,7 +1317,11 @@ std::optional<player_ptr_t> ptr_opt(uuid_t plr_uuid) {
 	return std::nullopt;
 }
 player_ptr_t ptr_by_uuid(uuid_t id) {
-	return mods::globals::player_map[id];
+	auto it = mods::globals::player_map.find(id);
+	if(it != mods::globals::player_map.end()) {
+		return it->second;
+	}
+	return nullptr;
 }
 obj_ptr_t optr_by_uuid(uuid_t id) {
 	return mods::globals::obj_map[id];

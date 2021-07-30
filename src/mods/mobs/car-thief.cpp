@@ -87,7 +87,28 @@ namespace mods::mobs {
 		//
 	}
 	str_map_t car_thief::report() {
-		return {{"foo","todo"}};
+		return usages();
+	}
+	str_map_t car_thief::usages() {
+		str_map_t m;
+		m = base_usages();
+		std::size_t rem_size = 0, attackers = 0, hostiles = 0;
+		rem_size = std::distance(m_remembered_cars.cbegin(),m_remembered_cars.cend());
+		attackers = std::distance(m_attackers.cbegin(),m_attackers.cend());
+		hostiles = std::distance(m_hostiles.cbegin(),m_hostiles.cend());
+		if(rem_size) {
+			m["remembered_cars"] = std::to_string(rem_size);
+		}
+		if(attackers) {
+			m["attackers"] = std::to_string(attackers);
+		}
+		if(hostiles) {
+			m["hostiles"] = std::to_string(hostiles);
+		}
+		if(m_scanned_cars.size()) {
+			m["scanned_cars"] = std::to_string(m_scanned_cars.size());
+		}
+		return m;
 	}
 	/**
 	 * @brief damage_events registered here
@@ -101,6 +122,10 @@ namespace mods::mobs {
 			de::YOURE_IN_PEACEFUL_ROOM,
 		};
 		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			m("pacify events");
 			set_behaviour_tree("car_thief_roam");
 		});
@@ -114,6 +139,10 @@ namespace mods::mobs {
 			de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK,
 		};
 		player_ptr->register_damage_event_callback(enrage_if,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			auto attacker = ptr_by_uuid(feedback.attacker);
 			auto weapon = player_ptr->primary();
 
@@ -188,6 +217,10 @@ namespace mods::mobs {
 			de::COULDNT_FIND_TARGET_EVENT,
 		};
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			switch(feedback.damage_event) {
 				case de::OUT_OF_AMMO_EVENT:
 					m_debug("DAMN! OUT OF AMMO!");
@@ -210,6 +243,10 @@ namespace mods::mobs {
 		});
 
 		player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			if(player_ptr->room() >= world.size()) {
 				return;
 			}

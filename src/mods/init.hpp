@@ -52,6 +52,7 @@ INIT(mods::scripted_sequence_events);
 INIT(mods::scripted_sequence_runner);
 INIT(src::act::debug);
 INIT(mods::projectile);
+INIT(mods::boosters::adrenaline_shot_init);
 #undef INIT
 
 
@@ -105,6 +106,7 @@ namespace mods::init {
 		src::act::debug::init();
 		mods::players::banish::init();
 		mods::projectile::init();
+		mods::boosters::adrenaline_shot_init::init();
 	}
 };
 #endif

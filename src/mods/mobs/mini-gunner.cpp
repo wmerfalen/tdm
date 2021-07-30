@@ -99,7 +99,22 @@ namespace mods::mobs {
 		}
 	}
 	str_map_t mini_gunner::report() {
-		return {{"foo","bar"}};
+		return usages();
+	}
+
+	str_map_t mini_gunner::usages() {
+		str_map_t m;
+		m = base_usages();
+		if(last_seen.size()) {
+			m["last_seen"] = std::to_string(last_seen.size());
+		}
+		if(hunting.size()) {
+			m["hunting"] = std::to_string(hunting.size());
+		}
+		if(targeting.size()) {
+			m["targeting"] = std::to_string(targeting.size());
+		}
+		return m;
 	}
 	/**
 	 * @brief erase the mg instance from our list of mgs
@@ -138,6 +153,10 @@ namespace mods::mobs {
 		});
 
 		this->player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
+			if(!ptr_by_uuid(player)) {
+				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				return;
+			}
 			auto& room = world[this->player_ptr->room()];
 			int decision = weighted_direction_decider(this->player_ptr);
 			if(decision == -1) {

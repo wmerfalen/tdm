@@ -17,7 +17,7 @@
 ./mods/classes/sniper.cpp:	->detach_shotgun_underbarrel
 ./mods/classes/sniper.cpp:	->attach_frag_underbarrel
 ./mods/classes/sniper.cpp:	->detach_frag_underbarrel
-./mods/classes/sniper.cpp:	->fire_frag
+./mods/classes/sniper.cpp:	->fire
 ./mods/help.cpp:	->help
 ./mods/levels.cpp:	->exp
 ./mods/date-time.cpp:	->moon_phase

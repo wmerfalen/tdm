@@ -24,6 +24,15 @@
 namespace mods::weapons::damage_calculator {
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
+	static bool use_static_roll_weapon_amount = false;
+	static int16_t static_roll_weapon_amount = 0;
+	void set_static_roll_weapon_amount(int16_t amount) {
+		use_static_roll_weapon_amount = true;
+		static_roll_weapon_amount = amount;
+	}
+	void clear_static_roll_weapon_amount() {
+		use_static_roll_weapon_amount = false;
+	}
 
 	namespace algorithm_A {
 		float get_base_damage(player_ptr_t& attacker) {
@@ -104,6 +113,9 @@ namespace mods::weapons::damage_calculator {
 		int16_t roll_weapon(
 		    obj_ptr_t& weapon
 		) {
+			if(mods::weapons::damage_calculator::use_static_roll_weapon_amount) {
+				return mods::weapons::damage_calculator::static_roll_weapon_amount;
+			}
 			int16_t dice_count = 0, sides = 0;
 			if(weapon->has_rifle() == false) {
 				if(weapon->has_melee()) {
@@ -142,7 +154,13 @@ namespace mods::weapons::damage_calculator {
 			auto base_damage = get_base_damage(attacker);
 			auto level_scaler = get_level_damage(attacker,victim);
 			auto weapon_damage = get_weapon_damage(attacker,weapon);
-			return base_damage + (level_scaler * weapon_damage);
+			float damage_nerf = victim->get_damage_nerf();
+			auto total_damage = base_damage + (level_scaler * weapon_damage);
+			if(total_damage > 0 && damage_nerf > 0) {
+				total_damage -= (total_damage * 0.01 * damage_nerf);
+				return total_damage;
+			}
+			return total_damage;
 		}
 	};
 

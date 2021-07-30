@@ -332,6 +332,28 @@ namespace mods::mobs {
 	uint8_t smart_mob::scan_depth() const {
 		return 8;
 	}
+	str_map_t smart_mob::base_usages() {
+		str_map_t m;
+		if(m_should_do.size()) {
+			m["should_do"] = std::to_string(m_should_do.size());
+		}
+		if(m_should_do_max.size()) {
+			m["should_do_max"] = std::to_string(m_should_do_max.size());
+		}
+		if(hostile_targets.size()) {
+			m["hostile_targets"] = std::to_string(hostile_targets.size());
+		}
+		if(last_seen.size()) {
+			m["last_seen"] = std::to_string(last_seen.size());
+		}
+		if(hunting.size()) {
+			m["hunting"] = std::to_string(hunting.size());
+		}
+		if(targeting.size()) {
+			m["targeting"] = std::to_string(targeting.size());
+		}
+		return m;
+	}
 };
 #if 0
 #endif

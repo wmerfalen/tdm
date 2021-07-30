@@ -15,6 +15,32 @@ static inline std::string default_yaml_file(const std::string& type) {
 #include "mods/util.hpp"
 #include "mods/rooms.hpp"
 
+obj_data::~obj_data() {
+	name.clear();
+	str_type.clear();
+	str_sub_type.clear();
+	description.clear();
+	short_description.clear();
+	action_description.clear();
+	ex_description.clear();
+	carried_by = nullptr;
+	worn_by = nullptr;
+	worn_on = -1;
+	in_obj = nullptr;
+	contains = nullptr;
+	if(next_content) {
+		auto head = next_content;
+		auto tmp = head;
+		while(head != NULL) {
+			tmp = head;
+			head = head->next;
+			free(tmp);
+		}
+		next_content = nullptr;
+	}
+	next = nullptr;
+	ai_state = 0;
+}
 void obj_data::init() {
 	d("[debug]obj_data::init()\n");
 	forged = false;
@@ -36,7 +62,16 @@ void obj_data::init() {
 	worn_on = -1;
 	in_obj = nullptr;
 	contains = nullptr;
-	CREATE(next_content,struct obj_data,1);
+	if(next_content) {
+		auto head = next_content;
+		auto tmp = head;
+		while(head != NULL) {
+			tmp = head;
+			head = head->next;
+			free(tmp);
+		}
+		next_content = nullptr;
+	}
 	next = nullptr;
 	ai_state = 0;
 	obj_flags.init();

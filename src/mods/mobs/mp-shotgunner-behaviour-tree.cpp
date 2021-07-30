@@ -59,6 +59,7 @@ namespace mods::mobs::mp_shotgunner_behaviour_tree {
 
 	TChildNode debug_echo_tree_name(str_t name) {
 		return TNode::create_leaf([&](mods::npc& mob) -> TStatus {
+			auto g = mp_shotgunner_ptr(mob.uuid());
 #ifdef __MENTOC_SHOW_TREE_NAME__
 			std::cerr << "[debug_echo_tree_name][mob_uuid:" << mob.uuid() << "]" <<
 			          green_str(CAT("[tree:'",name,"']\n"));

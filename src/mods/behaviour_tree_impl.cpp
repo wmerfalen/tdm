@@ -62,14 +62,15 @@ namespace mods::behaviour_tree_impl {
 			return dispatch_status_t::AS_YOU_WERE;
 		}
 		bti_debug("mob has this behaviour_tree:" << ch.mob_specials().behaviour_tree);
-		assert(ch.mob_specials().behaviour_tree < trees.size());
-		auto btree_status = trees[ch.mob_specials().behaviour_tree].run(ch);
-		switch(btree_status.status) {
-			case mods::behaviour_tree_status::SUCCESS:
-				bti_debug("Return success...");
-				return mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY;
-			default:
-				break;
+		if(ch.mob_specials().behaviour_tree < trees.size()) {
+			auto btree_status = trees[ch.mob_specials().behaviour_tree].run(ch);
+			switch(btree_status.status) {
+				case mods::behaviour_tree_status::SUCCESS:
+					bti_debug("Return success...");
+					return mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY;
+				default:
+					break;
+			}
 		}
 		return mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE;
 	}

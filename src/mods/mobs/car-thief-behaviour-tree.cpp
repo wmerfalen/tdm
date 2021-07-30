@@ -47,6 +47,7 @@ namespace mods::mobs::car_thief_behaviour_tree {
 	TChildNode find_targets() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto ct = car_thief_ptr(mob.uuid());
+			//report(ct);
 			int depth = CAR_THIEF_SCAN_DEPTH();
 			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
 			std::map<int,int> scores;
@@ -89,6 +90,7 @@ namespace mods::mobs::car_thief_behaviour_tree {
 	TChildNode find_attackers() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = car_thief_ptr(mob.uuid());
+			//report(mg);
 			int depth = LOWLY_SECURITY_SCAN_DEPTH();
 			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
 			std::map<int,int> scores;
@@ -257,6 +259,7 @@ namespace mods::mobs::car_thief_behaviour_tree {
 	}
 	using namespace mods::behaviour_tree_impl;
 	using node_type = node::node_type_t;
+
 	std::map<std::string,node&> get_trees() {
 		static node car_thief_roam(node_type::SELECTOR);
 		static node car_thief_hostile(node_type::SELECTOR);

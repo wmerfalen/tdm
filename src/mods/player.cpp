@@ -126,7 +126,7 @@ namespace mods {
 		m_executing_js = false;
 		m_quitting = 0;
 		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
-		m_sync_equipment();
+		//m_sync_equipment();
 		visibility() = 1;
 		this->clear_all_affected();
 		this->clear_all_affected_plr();
@@ -822,7 +822,14 @@ namespace mods {
 		it->character->desc = m_desc;
 		it->character->has_desc = true;
 	}
+	void player::add_damage_nerf(const float& amount) {
+		m_damage_nerf_percent += amount;
+	}
+	const float& player::get_damage_nerf() const {
+		return m_damage_nerf_percent;
+	}
 	void player::init() {
+		m_damage_nerf_percent = 0.0;
 		m_practice_sessions = 0;
 		m_can_attack = 1;
 		m_contract_size = 0;
@@ -870,9 +877,7 @@ namespace mods {
 		m_class = CLASS_UNDEFINED;
 		m_class_capability = {};
 		m_executing_js = false;
-		if(m_char_data) {
-			m_char_data = nullptr;
-		}
+		m_char_data = nullptr;
 		m_weapon_set = {};
 		m_do_paging = m_capture_output = false;
 		m_captured_output.clear();
@@ -889,7 +894,7 @@ namespace mods {
 			m_equipment[i] = nullptr;
 		}
 		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
-		this->m_sync_equipment();
+		//this->m_sync_equipment();
 		m_class = CLASS_UNDEFINED;
 		m_incendiary_resistance_percent = 0;
 		m_explosive_resistance_percent = 0;
@@ -1353,6 +1358,9 @@ namespace mods {
 		uuid_t target = 0;
 		target = m_block_data[unblock];
 		switch(unblock) {
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_SMALL:
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_MEDIUM:
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_LARGE:
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_HEALING:
 			case mods::deferred::EVENT_PLAYER_GOES_VISIBLE:
 			case mods::deferred::EVENT_PLAYER_FINISHES_FEIGN_DEATH: {

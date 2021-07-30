@@ -859,6 +859,11 @@ namespace mods {
 			}
 			uint16_t& practice_sessions();
 			std::tuple<bool,std::string> class_action(std::string_view func,std::string_view param);
+			void add_damage_nerf(const float& amount);
+			const float& get_damage_nerf() const;
+			void set_damage_nerf(const float& amount) {
+				m_damage_nerf_percent = amount;
+			}
 		protected:
 			std::map<std::string,std::string> m_ada_data;
 			bool m_ada;
@@ -961,6 +966,7 @@ namespace mods {
 			int16_t m_emp_damage_percent;
 			int16_t m_shock_damage_percent;
 			int16_t m_anti_matter_damage_percent;
+			float m_damage_nerf_percent;
 			uint8_t m_contract_size;
 			bool m_contract;
 			bool m_can_attack;

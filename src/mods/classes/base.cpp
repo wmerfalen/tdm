@@ -352,7 +352,18 @@ namespace mods::classes {
 	}
 	void unblock_event(uint32_t unblock_event,uuid_t player_uuid) {
 		auto player = ptr_by_uuid(player_uuid);
+		if(!player) {
+			return;
+		}
 		switch(unblock_event) {
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_SMALL:
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_MEDIUM:
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_LARGE: {
+					if(player->sniper()) {
+						player->sniper()->unblock_adrenaline_shot();
+					}
+					break;
+				}
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_HEALING:
 				if(player->sniper()) {
 					player->sniper()->unblock_healing();

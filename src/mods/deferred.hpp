@@ -42,6 +42,9 @@ namespace mods {
 			constexpr static uint32_t EVENT_PLAYER_GOES_VISIBLE = 6;
 			constexpr static uint32_t EVENT_WEAPON_COOLDOWN_FINISHED = 7;
 			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_HEALING = 8;
+			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_SMALL = 9;
+			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_MEDIUM = 10;
+			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_LARGE = 11;
 			constexpr static uint64_t TICK_RESOLUTION = 3;
 			using seconds = uint16_t;
 			using lambda_queue_t = std::multimap<uint64_t,std::function<void()>>;
