@@ -20,8 +20,8 @@ yamllib = $(CURDIR)/yaml-cpp/build
 yamlcpp_object = yaml-cpp
 boostdir = $(CURDIR)/boost
 thirdparty = $(duktape) $(lmdb)
-#gdbflags = -ggdb -g
-post_build_args = strip-all
+gdbflags = -ggdb -g
+#post_build_args = strip-all
 optimization = -O2
 warnings_list = -Wall -Wunused-result \
 	-Wno-format-zero-length -Wno-format-security \

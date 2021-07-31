@@ -61,7 +61,6 @@ namespace mods::overhead_map {
 	) {
 
 		if(crawled->find(std::make_pair<>(room,direction)) != crawled->end()) {
-			std::cerr << "already crawled: " << room << "\n";
 			return;
 		}
 		crawled->insert(std::make_pair<>(room,direction));
