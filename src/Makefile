@@ -20,7 +20,9 @@ yamllib = $(CURDIR)/yaml-cpp/build
 yamlcpp_object = yaml-cpp
 boostdir = $(CURDIR)/boost
 thirdparty = $(duktape) $(lmdb)
-FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
+#gdbflags = -ggdb -g
+post_build_args = strip-all
+FLAGS = $(gdbflags) -O2 -Wall -Wno-unused-result \
 	-Wuninitialized \
 	-Wno-char-subscripts -Wcomment \
 	-Wno-format-zero-length -Wno-format-security\
@@ -173,7 +175,7 @@ buildobj = act.informative act.item act.medic \
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
 all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team $(builddir)/mods/boosters
-	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
+	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT) $(post_build_args)
 
 clean:
 	make -f $(lmdbdir)/Makefile clean ; \

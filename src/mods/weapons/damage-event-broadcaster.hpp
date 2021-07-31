@@ -89,6 +89,7 @@ namespace mods::weapons::damage_types {
 		feedback_t feedback;
 		feedback.hits = hits;
 		feedback.damage = dam;
+		feedback.attacker = attacker->uuid();
 		feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
 		victim->set_attacker(attacker->uuid());
 		auto attacker_feedback = feedback;

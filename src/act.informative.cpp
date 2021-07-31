@@ -243,7 +243,7 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 
 	if(mods::object_utils::is_camera(obj) && obj->location_data() >= 16) {
 		player->send("A %s is installed on the %s wall.\r\n", obj->name.c_str(), mods::globals::dir_to_str(obj->location_data() - 16, true).c_str());
-		if(!IS_NPC(ch) && ch->contract) {
+		if(ch->contract) {
 			mods::contract_events::find_item(player,object);
 		}
 		return;
@@ -251,7 +251,7 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 
 	if(mods::object_utils::is_claymore(obj) && obj->location_data() >= 16) {
 		player->send("A %s is installed at the foot of the %s entrance.\r\n", obj->name.c_str(), mods::globals::dir_to_str(obj->location_data() - 16, true).c_str());
-		if(!IS_NPC(ch) && ch->contract) {
+		if(ch->contract) {
 			mods::contract_events::find_item(player,object);
 		}
 		return;
@@ -325,7 +325,7 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 	}
 
 	show_obj_modifiers(obj, ch);
-	if(!IS_NPC(ch) && ch->contract) {
+	if(ch->contract) {
 		mods::contract_events::find_item(player,object);
 	}
 }
@@ -430,7 +430,7 @@ void diag_char_to_char(char_data *i, char_data *ch) {
 	}
 
 	player->send("%s %s\r\n", pers.c_str(), diagnosis[ar_index].text);
-	if(!IS_NPC(ch) && ch->contract) {
+	if(ch->contract) {
 		auto iptr = ptr(i);
 		mods::contract_events::find_mob(player,iptr);
 	}
@@ -575,7 +575,7 @@ void list_one_char(char_data *i, char_data *ch) {
 		act(" ...$e glows with a bright light!", FALSE, i, 0, ch, TO_VICT);
 	}
 	player->send("\r\n");
-	if(!IS_NPC(ch) && ch->contract) {
+	if(ch->contract) {
 		mods::contract_events::find_mob(player,iptr);
 	}
 }

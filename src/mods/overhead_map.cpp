@@ -61,6 +61,7 @@ namespace mods::overhead_map {
 	) {
 
 		if(crawled->find(std::make_pair<>(room,direction)) != crawled->end()) {
+			std::cerr << "already crawled: " << room << "\n";
 			return;
 		}
 		crawled->insert(std::make_pair<>(room,direction));
@@ -131,6 +132,7 @@ namespace mods::overhead_map {
 					return;
 			}
 			if(world[room].dir_option[direction] && world[room].dir_option[direction]->to_room != NOWHERE) {
+
 				room = world[room].dir_option[direction]->to_room;
 				switch(direction) {
 					case NORTH:

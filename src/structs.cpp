@@ -30,6 +30,18 @@ obj_data::~obj_data() {
 	contains = nullptr;
 	next = nullptr;
 	ai_state = 0;
+#define MENTOC_RELEASER(r,data,CLASS_TYPE) \
+	if(BOOST_PP_CAT(m_,CLASS_TYPE)){\
+		BOOST_PP_CAT(m_, CLASS_TYPE)->attributes = nullptr;\
+		BOOST_PP_CAT(m_, CLASS_TYPE) = nullptr;\
+	}
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_RELEASER, ~, MENTOC_ITEM_TYPES_SEQ)
+#undef MENTOC_RELEASER
+
+	if(rifle_instance) {
+		rifle_instance = nullptr;
+	}
+	feed_file() = "";
 }
 void obj_data::free_next_content() {
 	if(next_content) {
@@ -72,7 +84,7 @@ void obj_data::init() {
 	next_content = nullptr;
 	obj_flags.init();
 	type = 0;
-	this->uuid = mods::globals::obj_uuid();
+	//this->uuid = mods::globals::obj_uuid();
 	from_direction = 0;
 	m_db_id = 0;
 
@@ -492,8 +504,26 @@ room_data::~room_data() {
 			dir_option[i]->general_description.clear();
 			dir_option[i]->keyword.clear();
 			free(dir_option[i]);
+			dir_option[i] = nullptr;
 		}
 	}
+}
+room_direction_data::room_direction_data(const room_direction_data& other) {
+	this->general_description.assign(other.general_description.c_str());
+	this->keyword.assign(other.keyword.c_str());
+	this->exit_info = other.exit_info;
+	this->key = other.key;		/* Key's number (-1 for no key)		*/
+	this->to_room = other.to_room;
+	this->contract = other.contract;
+}
+room_direction_data& room_direction_data::operator=(room_direction_data& other) {
+	this->general_description.assign(other.general_description.c_str());
+	this->keyword.assign(other.keyword.c_str());
+	this->exit_info = other.exit_info;
+	this->key = other.key;		/* Key's number (-1 for no key)		*/
+	this->to_room = other.to_room;
+	this->contract = other.contract;
+	return *this;
 }
 
 /** !zone

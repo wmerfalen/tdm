@@ -120,7 +120,6 @@ namespace mods::mobs {
 	 * @brief damage_events registered here
 	 */
 	void mp_shotgunner::setup_damage_callbacks() {
-#if 0
 #ifdef __MENTOC_SHOW_MP_SHOTGUNNER_DAMAGE_CALLBACKS__
 #define m(A) std::cerr << green_str("[mp_shotgunner::setup_damage_callbacks]") << A << "\n";
 #else
@@ -345,7 +344,6 @@ namespace mods::mobs {
 			this->set_heading(decision);
 		});
 #undef m
-#endif
 	}
 	void mp_shotgunner::init() {
 		smart_mob::init();

@@ -170,7 +170,6 @@ namespace mods::mobs {
 	 * @brief damage_events registered here
 	 */
 	void generic_thief::setup_damage_callbacks() {
-#if 0
 		using de = damage_event_t;
 		static const std::vector<de> pacify_events = {
 			de::TARGET_DEAD_EVENT,
@@ -340,7 +339,6 @@ namespace mods::mobs {
 			move_to(decision);
 			this->set_heading(decision);
 		});
-#endif
 	}
 	bool generic_thief::is_rival(player_ptr_t& player) {
 		return false;

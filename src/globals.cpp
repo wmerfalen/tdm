@@ -1184,29 +1184,45 @@ namespace mods {
 		void destruct_object(uuid_t uuid) {
 			auto obj = optr_by_uuid(uuid);
 			if(!obj) {
+				std::cerr << red_str("CANNOT DESTRUCT_OBJECT") << "\n";
 				return;
 			}
-			auto omap = obj_map.find(obj->uuid);
-			if(omap != obj_map.end()) {
-				obj_map.erase(omap);
+			for(const auto& pair : obj_map) {
+				if(pair.second.get() == obj.get()) {
+					obj_map.erase(pair.first);
+				}
 			}
-			auto odmap = obj_odmap.find(obj.get());
-			if(odmap != obj_odmap.end()) {
-				obj_odmap.erase(odmap);
+			for(const auto& pair : obj_odmap) {
+				if(pair.second.get() == obj.get()) {
+					obj_odmap.erase(pair.first);
+				}
 			}
-			d("use count for destructed object: " << obj.use_count());
+			for(const auto& pair : db_id_to_uuid_map) {
+				if(pair.second == obj->uuid) {
+					db_id_to_uuid_map.erase(pair.first);
+				}
+			}
 		}
+		void recursive_obj_list_erase(obj_data* obj) {
+			for(auto it = obj_list.begin();
+			        it != obj_list.end(); ++it) {
+				if(it->get() == obj) {
+					obj_list.erase(it);
+					return recursive_obj_list_erase(obj);
+				}
+			}
+		}
+
 		void dispose_object(uuid_t obj_uuid) {
 			auto obj = optr_by_uuid(obj_uuid);
 			obj_from_room(obj);
-			obj_odmap.erase(obj.get());
-			obj_map.erase(obj_uuid);
-			auto it = std::find(obj_list.begin(),obj_list.end(),obj);
-			if(it != obj_list.end()) {
-				obj_list.erase(it);
-			}
+			destruct_object(obj_uuid);
+			recursive_obj_list_erase(obj.get());
 			mods::rifle_attachments::erase(obj_uuid);
-
+			std::cerr << green_str("USE_COUNT:") << obj.use_count() << "\n";
+			if(obj.use_count()) {
+				obj.reset();
+			}
 		}
 		void dispose_player(uuid_t pl_uuid) {
 #define __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__

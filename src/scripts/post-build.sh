@@ -1,4 +1,15 @@
 #!/bin/bash
+BINARY=/home/xkold/cmpp/bin/circle
+if [[ $1 -eq "strip-all" ]]; then
+	B=$(du -sh $BINARY | awk '{print $1}')
+	strip --strip-all $BINARY 2>&1 > /dev/null
+	A=$(du -sh $BINARY | awk '{print $1}')
+	echo 
+	echo -n "Before: $B"
+	echo
+	echo -n "After $A"
+	echo
+fi
 if [[ -f $PWD/../dont-kill-gc ]]; then
 	echo 'not killing gc due to ../dont-kill-gc file existence'
 	exit 0

@@ -832,6 +832,7 @@ struct obj_data {
 			this->init();
 			this->feed_status = 1;
 			this->feed_status = this->feed(item_type,feed_file);
+#if 0
 			switch(feed_status) {
 				case -1:
 					mods::object_utils::report_yaml_message(std::string("File doesn't exist. ") + std::to_string(item_type) + std::string("[file:'") + feed_file.data() + "']");
@@ -863,6 +864,7 @@ struct obj_data {
 					);
 					break;
 			}
+#endif
 #ifdef __MENTOC_OBJ_DATA_DEBUG__
 			std::cerr << ("obj_data(type,feed_file)") << ", name:'" << name.c_str() << "'\n";
 #endif
@@ -1098,6 +1100,8 @@ struct room_direction_data {
 	obj_vnum key;		/* Key's number (-1 for no key)		*/
 	room_rnum to_room;		/* Where direction leads (NOWHERE)	*/
 	bool contract;
+	room_direction_data& operator=(room_direction_data& other);
+	room_direction_data(const room_direction_data& other); // copy constructor
 };
 
 
