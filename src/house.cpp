@@ -674,6 +674,6 @@ void House_list_guests(char_data *ch, int i, int quiet) {
 		send_to_char(ch, "all dead");
 	}
 
-	send_to_char(ch, "");
+	send_to_char(ch, "\r\n");
 }
 

@@ -16,7 +16,7 @@
 #define KMAG  "\x1B[35m"
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
-#define KNUL  ""
+#define KNUL  KNRM
 
 /* conditional color.  pass it a pointer to a char_data and a color level. */
 #define C_OFF	0

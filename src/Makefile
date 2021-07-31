@@ -22,10 +22,15 @@ boostdir = $(CURDIR)/boost
 thirdparty = $(duktape) $(lmdb)
 #gdbflags = -ggdb -g
 post_build_args = strip-all
-FLAGS = $(gdbflags) -O2 -Wall -Wno-unused-result \
+optimization = -O2
+warnings_list = -Wall -Wunused-result \
+	-Wno-format-zero-length -Wno-format-security \
 	-Wuninitialized \
 	-Wno-char-subscripts -Wcomment \
-	-Wno-format-zero-length -Wno-format-security\
+	-Wno-sign-compare 
+
+FLAGS = $(gdbflags) $(optimization) \
+				$(warnings_list) \
 	-std=c++2a -fconcepts -fpermissive -MMD \
 	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-Imods/catch2/Catch2/src -Lmods/catch2/Catch2/build/src \
@@ -33,7 +38,7 @@ FLAGS = $(gdbflags) -O2 -Wall -Wno-unused-result \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	-D__MENTOC_USE_LMDB=1 \
-	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
+	-I$(yamlcpp) -L$(yamllib) \
 	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\" \
 	-D__MENTOC_SHOW_SNIPE_HIT_STATS__=1 \
 	-DMENTOC_LIB_DIR=\"$(CURDIR)/../lib/\" \
@@ -46,6 +51,9 @@ FLAGS = $(gdbflags) -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_DISABLE_INJURE_DYNAMICS__=1 \
 	-D__MENTOC_SHOW_IS_CORPSE_DEBUG_OUTPUT__=1 \
 	-D__MENTOC_DEBUG_EXTRACT_OBJ_OUTPUT__=1
+
+	#-Wno-format-zero-length -Wno-format-security\
+	#-Wuninitialized \
 
  	#-D__MENTOC_MODS_MOBS_chaotic_meth_addict_SHOW_DEBUG_OUTPUT__=1
 	#-D__MENTOC_CAN_CONTINUE_DEBUG__=1
