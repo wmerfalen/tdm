@@ -4,7 +4,6 @@
 #include "screen-searcher.hpp"
 #include "util.hpp"
 #include "object-utils.hpp"
-#include "classes/sniper.hpp"
 #include "classes/ghost.hpp"
 
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
@@ -36,9 +35,6 @@ namespace mods::demolitions {
 
 	void set_done_installing(uuid_t object_uuid,uuid_t player_uuid) {
 		auto player = ptr_by_uuid(player_uuid);
-		if(player->sniper()) {
-			player->sniper()->use_claymore(object_uuid);
-		}
 		if(player->ghost()) {
 			player->ghost()->use_claymore(object_uuid);
 		}

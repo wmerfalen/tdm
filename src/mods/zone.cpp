@@ -104,9 +104,11 @@ namespace mods::zone {
 		disable_all_zone_resets = b;
 	}
 	void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {
+#ifdef __MENTOC_SHOW_ZONE_ERRORS__
 		mudlog(NRM, LVL_GOD, TRUE, "SYSERR: zone file: %s", message);
 		mudlog(NRM, LVL_GOD, TRUE, "SYSERR: ...offending cmd: '%c' cmd in zone #%d, line %d",
 		       '0', zone_table[zone].number, 0);
+#endif
 	}
 
 	bool zone_command_upkeep(reset_com& command) {

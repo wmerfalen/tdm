@@ -1193,7 +1193,6 @@ void	write_to_q(std::string_view txt, mods::descriptor_data& d, int aliased) {
 
 int get_from_q(mods::descriptor_data& d, char *dest, int *aliased) {
 	if(d.input.size() == 0) {
-		std::cerr << red_str("get_from_q d.input is zero length") << "\n";
 		return 0;
 	}
 	strncpy(dest, d.input.begin()->text.c_str(), MAX_INPUT_LENGTH -1);

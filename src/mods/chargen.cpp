@@ -22,72 +22,42 @@ namespace mods::chargen {
 	void init() {
 		classes.clear();
 		classes.emplace_back(
-		    "SNIPER:\r\n"
-		    "	- Loadout:\r\n"
-		    "		- Primary: PSG-1 Sniper Rifle\r\n"
-		    "		- Secondary: CZP10 Pistol\r\n"
-		    "		- Lethal: Claymore Mine\r\n"
-		    "		- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)\r\n"
-		    "			- Can snipe an enemy within a building\r\n"
-		    "			- Can snipe an enemy through walls or doors\r\n"
-		    "			- If enemy not behind cover, it causes 150% damage to target\r\n"
-		    "\r\n");
-		classes.emplace_back(
 		    "MARINE:\r\n"
-		    "	- Loadout:\r\n"
-		    "		- Primary: M4 Assault Rifle\r\n"
-		    "		- Secondary: Magnum Revolver (exact type TBD)\r\n"
-		    "		- Lethal: Fragmentation Grenade\r\n"
-		    "		- Ability: Activate Underbarrel grenade launcher (x3 grenade rounds)\r\n"
-		    "			- Causes massive explosive damage to a room very far away\r\n"
-		    "			\r\n");
+		    " /----------------------------\r\n"
+		    "| STATS                       |\r\n"
+		    "|-----------------------------|\r\n"
+		    "| MELEE          | 2          |\r\n"
+		    "| WEAPONS        | 2          |\r\n"
+		    "| INTEL          | 2          |\r\n"
+		    "| SPEED          | 2          |\r\n"
+		    "| ARMOR          | 2          |\r\n"
+		    " \\-----------------------------+\r\n"
+		);
 		classes.emplace_back(
 		    "BREACHER:\r\n"
-		    "	- Loadout:\r\n"
-		    "		- Primary: MP-5 Sub Machine Gun\r\n"
-		    "		- Secondary: SASG-12 Shotgun\r\n"
-		    "		- Lethal: Flashbang\r\n"
-		    "		- Ability: Explosive shot\r\n"
-		    "			- Shot can breach doors/walls/surfaces, creating new tiles on the map\r\n"
-		    "			- Same effect as a breach charge but without having to use one\r\n"
-		    "			\r\n");
-		classes.emplace_back(
-		    "ENGINEER:\r\n"
-		    "	- Loadout:\r\n"
-		    "		- Primary: UMP-45\r\n"
-		    "		- Secondary: Glock\r\n"
-		    "		- Lethal: Sensor Grenade\r\n"
-		    "		- Ability: Spawn and control Explosive Autonomous Drone\r\n"
-		    "			\r\n");
-		classes.emplace_back(
-		    "MEDIC:\r\n"
-		    "	- Loadout:\r\n"
-		    "		- Primary: SAIGA-12 Automatic Shotgun\r\n"
-		    "		- Secondary: MP9 Machine Pistol\r\n"
-		    "		- Lethal: Smoke Grenade\r\n"
-		    "		- Ability: Heal self/team\r\n"
-		    "			- Gain 33% of your HP per ability level\r\n"
-		    "			\r\n");
+		    " /----------------------------\r\n"
+		    "| STATS                       |\r\n"
+		    "|-----------------------------|\r\n"
+		    "| MELEE          | 3          |\r\n"
+		    "| WEAPONS        | 2          |\r\n"
+		    "| INTEL          | 1          |\r\n"
+		    "| SPEED          | 1          |\r\n"
+		    "| ARMOR          | 3          |\r\n"
+		    " \\-----------------------------+\r\n"
+		);
 		classes.emplace_back(
 		    "GHOST:\r\n"
-		    "	- Loadout:\r\n"
-		    "		- Primary: Silenced G36C Assault Rifle\r\n"
-		    "		- Secondary: Silenced PPK Pistol\r\n"
-		    "		- Lethal: Smoke Grenade\r\n"
-		    "		- Ability: Paralyzing shot\r\n"
-		    "			- Target is immobilized for several seconds\r\n"
-		    "			- Target takes 150% damage\r\n"
-		    "			\r\n");
-		classes.emplace_back(
-		    "SUPPORT:\r\n"
-		    "	- Loadout:\r\n"
-		    "		- Primary: HK21 Light Machine Gun\r\n"
-		    "		- Secondary: <PISTOL TBD>\r\n"
-		    "		- Lethal: Incendiary Grenade\r\n"
-		    "		- Ability: Call in drone strike\r\n"
-		    "			- Drones drop hellfire missiles on target room\r\n"
-		    "			\r\n");
-	}
+		    " /----------------------------\r\n"
+		    "| STATS                       |\r\n"
+		    "|-----------------------------|\r\n"
+		    "| MELEE          | 1          |\r\n"
+		    "| WEAPONS        | 2          |\r\n"
+		    "| INTEL          | 3          |\r\n"
+		    "| SPEED          | 3          |\r\n"
+		    "| ARMOR          | 1          |\r\n"
+		    " \\-----------------------------+\r\n"
+		);
+	};
 	std::string chargen_triads_for(player_class_t pclass) {
 		std::array<uint8_t,5> triads = mods::levels::get_triads_by_class(pclass);
 		std::array<char,1024> buffer = {0};
@@ -98,23 +68,11 @@ namespace mods::chargen {
 		auto data = player->get_ada_data();
 		auto i = mods::util::stoi(data["current-class"]).value_or(0);
 		auto str_class = mods::util::extract_until(classes[i],':');
-		if(str_class.compare("SUPPORT") == 0) {
-			player->sendln(chargen_triads_for(SUPPORT));
-		}
-		if(str_class.compare("ENGINEER") == 0) {
-			player->sendln(chargen_triads_for(ENGINEER));
-		}
 		if(str_class.compare("BREACHER") == 0) {
 			player->sendln(chargen_triads_for(BREACHER));
 		}
-		if(str_class.compare("MEDIC") == 0) {
-			player->sendln(chargen_triads_for(MEDIC));
-		}
 		if(str_class.compare("MARINE") == 0) {
 			player->sendln(chargen_triads_for(MARINE));
-		}
-		if(str_class.compare("SNIPER") == 0) {
-			player->sendln(chargen_triads_for(SNIPER));
 		}
 		if(str_class.compare("GHOST") == 0) {
 			player->sendln(chargen_triads_for(GHOST));
@@ -231,26 +189,14 @@ namespace mods::chargen {
 	}
 	void show_triads(player_ptr_t& player, player_class_t p_class) {
 		switch(p_class) {
-			case player_class_t::SNIPER:
-				player->sendln(chargen_triads_for(SNIPER));
-				break;
 			case player_class_t::MARINE:
 				player->sendln(chargen_triads_for(MARINE));
 				break;
 			case player_class_t::BREACHER:
 				player->sendln(chargen_triads_for(BREACHER));
 				break;
-			case player_class_t::ENGINEER:
-				player->sendln(chargen_triads_for(ENGINEER));
-				break;
-			case player_class_t::MEDIC:
-				player->sendln(chargen_triads_for(MEDIC));
-				break;
 			case player_class_t::GHOST:
 				player->sendln(chargen_triads_for(GHOST));
-				break;
-			case player_class_t::SUPPORT:
-				player->sendln(chargen_triads_for(SUPPORT));
 				break;
 			default:
 				player->sendln("No stats page for the class you picked. Something has gone wrong...");
@@ -260,26 +206,14 @@ namespace mods::chargen {
 	}
 	std::string get_class_description(player_class_t p_class) {
 		switch(p_class) {
-			case player_class_t::SNIPER:
-				return classes[0];
-				break;
 			case player_class_t::MARINE:
 				return classes[1];
 				break;
 			case player_class_t::BREACHER:
 				return classes[2];
 				break;
-			case player_class_t::ENGINEER:
-				return classes[3];
-				break;
-			case player_class_t::MEDIC:
-				return classes[4];
-				break;
 			case player_class_t::GHOST:
 				return classes[5];
-				break;
-			case player_class_t::SUPPORT:
-				return classes[6];
 				break;
 			default:
 				return "Unknown class selected.";
@@ -322,11 +256,6 @@ namespace mods::chargen {
 		mods::orm::player_base_ability pba;
 		pba.initialize_row(player);
 		switch(class_type) {
-			case SNIPER: {
-					mods::orm::sniper sniper_orm;
-					sniper_orm.initialize_row(player);
-				}
-				break;
 			case MARINE: {
 					mods::orm::marine marine_orm;
 					marine_orm.initialize_row(player);
@@ -337,24 +266,9 @@ namespace mods::chargen {
 					breacher_orm.initialize_row(player);
 				}
 				break;
-			case ENGINEER: {
-					mods::orm::engineer engineer_orm;
-					engineer_orm.initialize_row(player);
-				}
-				break;
-			case MEDIC: {
-					mods::orm::medic medic_orm;
-					medic_orm.initialize_row(player);
-				}
-				break;
 			case GHOST: {
 					mods::orm::ghost ghost_orm;
 					ghost_orm.initialize_row(player);
-				}
-				break;
-			case SUPPORT: {
-					mods::orm::support support_orm;
-					support_orm.initialize_row(player);
 				}
 				break;
 			default:

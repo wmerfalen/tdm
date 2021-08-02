@@ -63,3 +63,9 @@ namespace mods::classes {
 		return std::move(std::make_shared<marine>(in_player));
 	}
 };
+
+namespace mods::class_abilities::marine {
+	void init() {
+
+	}
+};

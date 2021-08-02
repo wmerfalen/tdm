@@ -1,3 +1,4 @@
+#if 0
 #include "sniper.hpp"
 #include "../player.hpp"
 
@@ -61,3 +62,4 @@ namespace mods::orm {
 
 };
 
+#endif

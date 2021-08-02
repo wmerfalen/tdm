@@ -1,3 +1,4 @@
+#if 0
 #ifndef __MENTOC_MODS_ORM_SNIPER_HEADER__
 #define __MENTOC_MODS_ORM_SNIPER_HEADER__
 
@@ -62,4 +63,5 @@ namespace mods::orm {
 
 	};
 };
+#endif
 #endif

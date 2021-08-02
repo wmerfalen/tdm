@@ -17,7 +17,9 @@
 #include <variant>
 #include "damage-event-broadcaster.hpp"
 #include "damage-decisions.hpp"
-#include "../classes/sniper.hpp"
+#include "../classes/ghost.hpp"
+#include "../classes/breacher.hpp"
+#include "../classes/marine.hpp"
 
 #ifdef __MENTOC_DAMAGE_TYPES_DEBUG_OUTPUT__
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -1057,7 +1059,7 @@ namespace mods::weapons::damage_types {
 
 		feedback_t feedback;
 
-		auto ub = player->sniper()->underbarrel();
+		auto ub = player->ghost()->underbarrel();
 		int dam = tier(player) * 65.314712 * (rand_number(1,7));
 		//auto headshot_roll = dice(1,100) + (mods::skills::player_can(player,"HEADSHOT_CHANCE") ? mods::values::HEADSHOT_SKILL_MODIFIER() : 0);
 		//if(headshot_roll >= 95) {
@@ -1098,7 +1100,7 @@ namespace mods::weapons::damage_types {
 		if(victim->position() == POS_DEAD) {
 			legacy::player_died(player,victim);
 		}
-		player->sniper()->consume_shotgun_underbarrel_ammo();
+		player->ghost()->consume_shotgun_underbarrel_ammo();
 		return feedback;
 	}
 
@@ -1112,8 +1114,8 @@ namespace mods::weapons::damage_types {
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
 
-		if(distance == 0 && player->sniper()) {
-			auto ub = player->sniper()->underbarrel();
+		if(distance == 0 && player->ghost()) {
+			auto ub = player->ghost()->underbarrel();
 			if(ub) {
 				return underbarrel_shotgun_attack_with_feedback(player,victim);
 			}
@@ -1198,7 +1200,7 @@ namespace mods::weapons::damage_types {
 		auto dice_roll = mods::weapons::damage_calculator::calculate(player,weapon,victim);
 		dam += dice_roll;
 
-		if(weapon->rifle()->attributes->type == mw_rifle::SNIPER && player->sniper()) {
+		if(weapon->rifle()->attributes->type == mw_rifle::SNIPER && player->ghost()) {
 			int sniper_class_damage = mods::weapons::damage_calculator::calculate_sniper_extra_damage(player,weapon,victim,dam);
 			classes::sniper::send_innate_bonus(sniper_class_damage,direction,player,victim,weapon);
 			dam += sniper_class_damage;

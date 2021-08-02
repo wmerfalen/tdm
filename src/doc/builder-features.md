@@ -1,8 +1,22 @@
 # Inventory of features
 
+# Trim down classes 
+	- [ ] Marine
+		- Melee and rifles
+		- well-balanced
+
+	- [ ] Ghost
+		- sniper rifles and stealth
+		- fast, but low armor
+
+	- [ ] Breacher
+		- Heavy Melee favorite
+		- Tank character
+		- Slow
+
 # 2021-07-16
 	- [ ] Implement these game dynamics for each class
-		- [ ] SNIPER
+		- [ ] GHOST
 				 -- [x] expert at sniper rifles and ranged combat
 				 	-- [x] Extra 10.5% damage per tier (each tier is ten levels)
 				 -- [x] can attach underbarrels to sniper rifles
@@ -11,7 +25,7 @@
 				 	-- [x] frag launcher
 						-- [x] skill that gets an extra shot per half tier
 				 -- [delay until emp/chaff dynamics defined] has access to emp/chaff grenades (replenishes)
-				 -- [ ] can inject arenaline shot
+				 -- [x] can inject arenaline shot
 				 	-- [ ] 20 free movement points per tier
 				 	-- [ ] damage taken is reduced by 15% per tier
 						-- [ ] tier 1 -> 50 ticks
@@ -35,14 +49,6 @@
 				 -- [ ] fleeing from melee is 25% more effective
 				 -- [ ] immobilizing shot (passive)
 				 	-- [ ] 15% chance of causing target to stay in room and not close distance for 50 ticks
-				return {
-					1, // MELEE
-					3, // WEAPONS
-					2, // INTEL
-					3, // SPEED
-					1, // ARMOR
-				};
-			case GHOST:
 				/**
 				 * --[
 				 *  -- uses stealth and intel to deal extra damage
@@ -140,68 +146,6 @@
 					1, // SPEED
 					3 // ARMOR
 				};
-			case MEDIC:
-				/**
-				 * -- [
-				 *  -- built like a tank, but not very fast
-				 *  -- can heal self and teammates
-				 *  -- has parasitic ammunition
-				 *  -- can craft PED's
-				 *  -- can deal extra damage with SMG's and Shotguns
-				 *  -- can dual wield shotguns
-				 *  -- has access to ballistic shield
-				 *  -- [
-				 */
-				return {
-					1, // MELEE
-					2, // WEAPONS
-					3, // INTEL
-					1, // SPEED
-					3, // ARMOR
-				};
-			case ENGINEER:
-				/**
-				 * -- [
-				 *  -- decent at weaponry
-				 *  -- famliarity with gadgets/demolitions/attachments
-				 *  -- can setup entry denial devices to keep targets at ideal sniping distance
-				 *  -- can construct in-field turret
-				 *  	-- shrapnel upgrade
-				 *  	-- corrossive upgrade
-				 *  	-- radioactive upgrade
-				 *  -- can attach items to rifles
-				 *  -- can repair melee items
-				 *  -- sensor grenades have a wider area of affect
-				 *  -- emp grenades do not affect engineer
-				 *  -- can request UAV scan
-				 *  	-- scanned enemies become TRACKED and take more damage
-				 *
-				 *  -- [
-				 */
-				return {
-					1, // MELEE
-					2, // WEAPONS
-					3, // INTEL
-					2, // SPEED
-					2, // ARMOR
-				};
-			case SUPPORT:
-				/**
-				 * -- [
-				 * - Quick moving, expert at weaponry and can carry tons of weight.
-				 * - not much armor due to quickness to bring ammo/weapons/items to teammates
-				 * - can call in loadout drops
-				 * - can pilot drone that drops items near squads that need it
-				 * -- [
-				 */
-				return {
-					2, // MELEE
-					3, // WEAPONS
-					1, // INTEL
-					3, // SPEED
-					1, // ARMOR
-				};
-			default:
 
 
 # 2021-07-04

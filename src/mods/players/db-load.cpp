@@ -174,10 +174,6 @@ namespace mods::players::db_load {
 		m_debug(green_str("set_class called for player uuid:") << player->uuid());
 		player->set_class(p_class);
 		switch(p_class) {
-			case SNIPER:
-				player->set_sniper(mods::classes::create_sniper(player));
-				mods::replenish::register_sniper(player->uuid());
-				break;
 			case MARINE:
 				player->set_marine(mods::classes::create_marine(player));
 				mods::replenish::register_marine(player->uuid());
@@ -186,21 +182,9 @@ namespace mods::players::db_load {
 				player->set_breacher(mods::classes::create_breacher(player));
 				mods::replenish::register_breacher(player->uuid());
 				break;
-			case ENGINEER:
-				player->set_engineer(mods::classes::create_engineer(player));
-				mods::replenish::register_engineer(player->uuid());
-				break;
 			case GHOST:
 				player->set_ghost(mods::classes::create_ghost(player));
 				mods::replenish::register_ghost(player->uuid());
-				break;
-			case MEDIC:
-				player->set_medic(mods::classes::create_medic(player));
-				mods::replenish::register_medic(player->uuid());
-				break;
-			case SUPPORT:
-				player->set_support(mods::classes::create_support(player));
-				mods::replenish::register_support(player->uuid());
 				break;
 			default:
 				report(p_class,"Unable to create class. unknown class");

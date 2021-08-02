@@ -142,10 +142,10 @@ namespace mods::calc_visibility {
 			mcv_debug("observer is blind");
 			return {false,"observer is blind"};
 		}
-		if(observer->engineer() && target_is_scanned) {
-			mcv_debug("Observer is an engineer and target was scanned - returning true");
-			return {true, "Observer is an engineer and target was scanned - returning true"};
-		}
+		//if(observer->engineer() && target_is_scanned) {
+		//	mcv_debug("Observer is an engineer and target was scanned - returning true");
+		//	return {true, "Observer is an engineer and target was scanned - returning true"};
+		//}
 		if(target_is_tracked) {
 			return {true,"Target is tracked"};
 		}

@@ -3,7 +3,7 @@
 #include "../../db.h"
 #include "../../globals.hpp"
 #include "../interpreter.hpp"
-#include "../classes/sniper.hpp"
+#include "../classes/ghost.hpp"
 
 #ifdef __MENTOC_SHOW_ADRENALINE_SHOT_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << green_str("[adrenaline-shot]:") << a << "\n";
@@ -68,11 +68,11 @@ namespace mods::boosters {
 		SUPERCMD(do_adshot_test) {
 			ADMIN_REJECT();
 			DO_HELP("adshot_test");
-			if(!player->sniper()) {
+			if(!player->ghost()) {
 				player->sendln("You cannot inject an adrenaline shot!");
 				return;
 			}
-			player->sendln(std::get<1>(player->sniper()->inject_adrenaline_shot()));
+			player->sendln(std::get<1>(player->ghost()->inject_adrenaline_shot()));
 			ADMIN_DONE();
 		}
 		void init() {

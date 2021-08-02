@@ -6,7 +6,6 @@ bool has_builder_data();
 namespace mods {
 	struct player;
 	namespace classes {
-		struct sniper;
 		struct marine;
 		struct breacher;
 		struct engineer;
@@ -655,8 +654,6 @@ namespace mods {
 			std::vector<affected_type>& del_affected_by(const affected_type& af) {
 				return del_affected_by(af.index);
 			}
-			std::shared_ptr<mods::classes::sniper>& sniper();
-			void set_sniper(std::shared_ptr<mods::classes::sniper> g);
 
 			std::shared_ptr<mods::classes::breacher>& breacher();
 			void set_breacher(std::shared_ptr<mods::classes::breacher> g);
@@ -915,17 +912,10 @@ namespace mods {
 			player_type_enum_t m_type;
 			weapon_type_t m_weapon_type;
 			weapon_type_t m_weapon_flags;
-			std::shared_ptr<mods::classes::sniper> m_sniper;
 			std::shared_ptr<mods::classes::marine> m_marine;
 			std::shared_ptr<mods::classes::breacher> m_breacher;
-			std::shared_ptr<mods::classes::engineer> m_engineer;
 			std::shared_ptr<mods::classes::ghost> m_ghost;
-			std::shared_ptr<mods::classes::medic> m_medic;
-			std::shared_ptr<mods::classes::support> m_support;
 
-			std::shared_ptr<mods::classes::pyrexia> m_pyrexia;
-			std::shared_ptr<mods::classes::forge> m_forge;
-			std::shared_ptr<mods::classes::syndrome> m_syndrome;
 			FILE* m_histfile_fp;
 			bool m_histfile_on;
 			uint32_t m_histfile_index;

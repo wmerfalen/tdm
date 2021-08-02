@@ -1654,8 +1654,10 @@ void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::f
 #endif
 		this->room_info.rooms.emplace_back(s_row["shop_room_vnum"].as<room_vnum>());
 	}
+#ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 	int16_t count_placed = this->room_info.place_keepers_in_rooms(this->keeper);
 	log("%d keepers loaded in shop_vnum: %d",count_placed,this->vnum);
+#endif
 	for(auto&&   s_row : db_get_by_meta("shop_objects","shop_vnum",std::to_string(this->vnum).c_str())) {
 #ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 		std::cerr << __FILE__ << "|" << __LINE__ << ": found shop_objects record: " << s_row["shop_object_vnum"].c_str() << "\n";

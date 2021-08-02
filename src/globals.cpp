@@ -1184,22 +1184,24 @@ namespace mods {
 		void destruct_object(uuid_t uuid) {
 			auto obj = optr_by_uuid(uuid);
 			if(!obj) {
-				std::cerr << red_str("CANNOT DESTRUCT_OBJECT") << "\n";
 				return;
 			}
 			for(const auto& pair : obj_map) {
 				if(pair.second.get() == obj.get()) {
 					obj_map.erase(pair.first);
+					return destruct_object(uuid);
 				}
 			}
 			for(const auto& pair : obj_odmap) {
 				if(pair.second.get() == obj.get()) {
 					obj_odmap.erase(pair.first);
+					return destruct_object(uuid);
 				}
 			}
 			for(const auto& pair : db_id_to_uuid_map) {
 				if(pair.second == obj->uuid) {
 					db_id_to_uuid_map.erase(pair.first);
+					return destruct_object(uuid);
 				}
 			}
 		}
@@ -1215,6 +1217,9 @@ namespace mods {
 
 		void dispose_object(uuid_t obj_uuid) {
 			auto obj = optr_by_uuid(obj_uuid);
+			if(!obj) {
+				return;
+			}
 			obj_from_room(obj);
 			destruct_object(obj_uuid);
 			recursive_obj_list_erase(obj.get());

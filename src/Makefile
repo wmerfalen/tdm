@@ -49,11 +49,11 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_SHOW_CONTRACT_OUTPUT__=1 \
 	-D__MENTOC_SHOW_GAIN_EXP_DEBUG_OUTPUT__=1 \
 	-D__MENTOC_DISABLE_INJURE_DYNAMICS__=1 \
-	-D__MENTOC_SHOW_IS_CORPSE_DEBUG_OUTPUT__=1 \
 	-D__MENTOC_DEBUG_EXTRACT_OBJ_OUTPUT__=1
 
 	#-Wno-format-zero-length -Wno-format-security\
 	#-Wuninitialized \
+	#-D__MENTOC_SHOW_IS_CORPSE_DEBUG_OUTPUT__=1 
 
  	#-D__MENTOC_MODS_MOBS_chaotic_meth_addict_SHOW_DEBUG_OUTPUT__=1
 	#-D__MENTOC_CAN_CONTINUE_DEBUG__=1
@@ -106,7 +106,6 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/room \
 					 mods/weapons/pistol-czp10 \
 					 mods/weapons/smg-mp5 mods/weapons/shotgun-sasg12 \
-					 mods/orm/sniper mods/classes/sniper \
 					 mods/orm/marine mods/classes/marine \
 					 mods/orm/breacher mods/classes/breacher \
 					 mods/orm/engineer mods/classes/engineer \

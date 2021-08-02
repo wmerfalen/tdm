@@ -822,22 +822,6 @@ void discrete_load(FILE *fl, int mode, char *filename) {
 				log("SYSERR: Format error after %s #%d", modes[mode], last);
 				exit(1);
 			}
-
-			if(nr >= 99999) {
-				return;
-			} else
-				switch(mode) {
-					case DB_BOOT_WLD:
-						parse_room(fl, nr);
-						break;
-
-					case DB_BOOT_MOB:
-						break;
-
-					case DB_BOOT_OBJ:
-						//strlcpy(line, parse_object(fl, nr), sizeof(line));
-						break;
-				}
 		} else {
 			log("SYSERR: Format error in %s file %s near %s #%d", modes[mode],
 			    filename, modes[mode], nr);
@@ -976,7 +960,9 @@ void parse_sql_mobiles() {
 		}
 
 		proto.nr = mods::util::stoi<decltype(proto.nr)>(row["mob_virtual_number"]);
+#ifdef __MENTOC_SHOW_PARSE_MOB_OUTPUT__
 		log("proto.nr: %d", proto.nr);
+#endif
 		proto.uuid = mods::globals::mob_uuid();
 		proto.mob_specials.init();
 		proto.mob_specials.extended_mob_type = static_cast<mods::mobs::extended_types_t>(row["mob_special_extended_type"].as<uint16_t>());
@@ -985,8 +971,10 @@ void parse_sql_mobiles() {
 		if(row["mob_targets"].is_null() == false) {
 			mods::mobs::extended_types::register_targets(proto.nr, row["mob_targets"].c_str());
 		}
+#ifdef __MENTOC_SHOW_PARSE_MOB_OUTPUT__
 		log("mob_proto.size(): %d",mob_proto.size());
 		log("mob_proto.back().nr: %d", mob_proto.back().nr);
+#endif
 
 		top_of_mobt = mob_proto.size();
 		index_data m_index;
@@ -1315,9 +1303,13 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				room_data room;
 				room.name.assign(room_records_row["name"]);
 				room.description.assign(room_records_row["description"]);
+#ifdef __MENTOC_SHOW_PARSE_SQL_ROOMS_DEBUG__
 				log("DEBUG: room: %d name: (%s), description: (%s)",mods::util::stoi<int>(room_records_row["id"].c_str()),room.name.c_str(),room.description.c_str());
+#endif
 				room.number = room_records_row["room_number"].as<int>();
+#ifdef __MENTOC_SHOW_PARSE_SQL_ROOMS_DEBUG__
 				log("parse_sql_rooms: room.number (%d)",room.number);
+#endif
 				room.zone = real_zone(room_records_row["zone"].as<int>());
 				room.sector_type = room_records_row["sector_type"].as<int>();
 				room.light = (room_records_row["light"]).as<int>();
@@ -1379,7 +1371,9 @@ int16_t install_shop(shop_ptr_t& shop) {
 			log("install_shop skipping room vnum: (%d)", s_room_vnum);
 			continue;
 		}
+#ifdef __MENTOC_SHOW_INSTALL_SHOP_DEBUG__
 		log("Installing shop title: %s: %s", shop->title.c_str(), shop->description.c_str());
+#endif
 		world[room].name.assign(shop->title.c_str());
 		world[room].description.assign(shop->description.c_str());
 		mods::globals::room_shopmap[s_room_vnum] = shop;
@@ -1407,11 +1401,6 @@ int parse_sql_shops() {
 
 	return 0;
 }
-
-void parse_room(FILE *fl, int virtual_nr) {
-	log("[DEPRECATED] parse_room");
-}
-
 
 /* make sure the start rooms exist & resolve their vnums to rnums */
 void check_start_rooms(void) {
@@ -2593,7 +2582,9 @@ room_rnum real_room(room_vnum vnum) {
 mob_rnum real_mobile(mob_vnum vnum) {
 	static std::map<mob_vnum,mob_rnum> real_mobile_static_map;
 	if(real_mobile_static_map.find(vnum) == real_mobile_static_map.end()) {
+#ifdef __MENTOC_SHOW_PARSE_MOB_OUTPUT__
 		log("real_mobile first lookup for vnum: %d", vnum);
+#endif
 		for(unsigned i=0; i < mob_proto.size(); i++) {
 			if(mob_proto[i].nr == vnum) {
 				real_mobile_static_map[vnum] = i;

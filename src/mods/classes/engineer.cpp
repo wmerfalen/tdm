@@ -109,12 +109,12 @@ namespace mods::class_abilities::engineer {
 			player->errorln("Couldn't parse your direction/count.");
 			return;
 		}
-		auto status = player->engineer()->drone_bomb(std::get<1>(parsed),std::get<2>(parsed));
-		if(!std::get<0>(status)) {
-			player->errorln(std::get<1>(status));
-			return;
-		}
-		player->sendln(std::get<1>(status));
+		//auto status = player->engineer()->drone_bomb(std::get<1>(parsed),std::get<2>(parsed));
+		//if(!std::get<0>(status)) {
+		//	player->errorln(std::get<1>(status));
+		//	return;
+		//}
+		//player->sendln(std::get<1>(status));
 	}
 	void init() {
 		mods::interpreter::add_command("drone_bomb", POS_RESTING, do_drone_bomb, 0,0);

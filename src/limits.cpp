@@ -469,13 +469,6 @@ bool IS_CORPSE(obj_data* obj) {
 	bool obj_okay = obj;
 	bool obj_is_container = obj && obj->obj_flags.type_flag == ITEM_CONTAINER;
 	bool obj_value_is_1 = obj && obj->obj_flags.value[3] == 1;
-#ifdef __MENTOC_SHOW_IS_CORPSE_DEBUG_OUTPUT__
-	if(obj_is_container && obj_value_is_1) {
-		std::cerr << "[IS_CORPSE]: obj_okay [" << obj_okay << "] " <<
-		          "obj_is_container [" << obj_is_container << "] " <<
-		          "obj_value_is_1 [" << obj_value_is_1 << "]\n";
-	}
-#endif
 	return obj_okay && obj_is_container && obj_value_is_1;
 }
 

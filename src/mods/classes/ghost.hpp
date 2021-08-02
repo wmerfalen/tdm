@@ -5,12 +5,19 @@
 #include "base.hpp"
 #include "super-user-fiddler.hpp"
 #include "../skills.hpp"
+#include "../weapons/attachment-shotgun-underbarrel.hpp"
+#include "../weapons/attachment-frag-underbarrel.hpp"
+#include "../boosters/adrenaline-shot.hpp"
 
 using ghost_orm_t = mods::orm::ghost;
 namespace mods::classes {
 	struct ghost : base {
 			friend class mods::classes::super_user_fiddler;
 			using primary_choice_t = mods::weapon::ghost::primary_choice_t;
+
+			using shotgun_ub_t = mods::weapons::attachment_shotgun_underbarrel;
+			using frag_ub_t = mods::weapons::attachment_frag_underbarrel;
+			using adrenaline_shot_t = mods::boosters::adrenaline_shot;
 
 			enum ability_t {
 				NONE = 0,
@@ -24,6 +31,20 @@ namespace mods::classes {
 				INTIMIDATION,
 				CRYOGENIC_GRENADE,
 				FLASH_UNDERBARREL,
+				TRACKING_SHOT,
+				LIGHT_BANDAGE,
+				SUTURE,
+				ADRENALINE_SHOT,
+				EMP_NADE,
+				CHAFF_NADE,
+				SENSOR_NADE,
+				UB_SHOTGUN,
+				UB_FRAG,
+				GUIDED_MISSILE,
+				TARGET_LIMB,
+				SHRAPNEL_CLAYMORE,
+				CORROSIVE_CLAYMORE,
+				REQUEST_RECON
 			};
 			std::vector<ability_data_t>& get_abilities() {
 				return m_abilities;
@@ -61,7 +82,7 @@ namespace mods::classes {
 			std::pair<int16_t,std::string> distract();
 
 			/** requires drone assisted sniping mode */
-			std::pair<int16_t,std::string> xray_shot();
+			std::tuple<bool,std::string> xray_shot();
 			std::vector<uuid_t> get_targets_scanned_by_drone();
 			std::vector<uuid_t> get_scanned() const;
 			void set_scanned(std::vector<uuid_t>);
@@ -90,14 +111,84 @@ namespace mods::classes {
 			void dissipate_wears_off();
 			bool is_dissipated() const;
 
+			/** SNIPER IMPORT */
+			std::tuple<bool,std::string,obj_ptr_t> build_claymore();
+			std::tuple<bool,std::string> attach_shotgun_underbarrel();
+			std::tuple<bool,std::string> detach_shotgun_underbarrel();
+			std::tuple<bool,std::string> attach_frag_underbarrel();
+			std::tuple<bool,std::string> detach_frag_underbarrel();
+			std::tuple<bool,std::string> fire_frag(const direction_t& direction,const uint8_t& distance);
+
+			obj_ptr_t underbarrel();
+
+			void target_died(uuid_t);
+			void unblock_healing();
+			std::tuple<bool,std::string> mark_target(std::string_view target);
+			std::tuple<bool,std::string> engage();
+			std::tuple<bool,std::string> disengage();
+			void consume_shotgun_underbarrel_ammo();
+
+
+			std::tuple<bool,std::string> tracking_shot(std::string_view target, direction_t direction);
+			std::tuple<bool,std::string> light_bandage();
+			std::tuple<bool,std::string> suture();
+			std::tuple<bool,std::string> inject_adrenaline_shot();
+
+			/*
+			- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)
+				- Can snipe an enemy within a building
+				- Can snipe an enemy through walls or doors
+				- If enemy not behind cover, it causes 150% damage to target
+				*/
+			void unblock_adrenaline_shot();
+
 		private:
-			uint8_t m_dissipate_charges;
+			void replenish_notify(std::string_view);
+			uuid_t m_target;
+			bool m_engaged;
+			uint16_t m_xray_shot_charges;
+			uint8_t m_gauze_count;
+			uint8_t m_medkit_count;
+			uint8_t m_adrenaline_shot_charges;
+			enum heal_mode_t {
+				HEAL_MODE_SUTURE,
+				HEAL_MODE_LIGHT_BANDAGE
+			};
+
+			heal_mode_t m_heal_mode;
+
+			player_ptr_t m_player;
 			std::vector<uuid_t> m_scanned;
+			uint8_t m_tracking_shot_charges;
+			std::map<std::string,bool> m_preferences;
+
+			skill_t m_tracking_shot;
+			skill_t m_light_bandage;
+			skill_t m_suture;
+			skill_t m_adrenaline_shot;
+			skill_t m_emp_nade;
+			skill_t m_chaff_nade;
+			skill_t m_sensor_nade;
+			skill_t m_ub_shotgun;
+			skill_t m_ub_frag;
+			skill_t m_guided_missile;
+			skill_t m_target_limb;
+			skill_t m_plant_claymore;
+			skill_t m_plant_shrapnel_claymore;
+			skill_t m_plant_corrosive_claymore;
+			skill_t m_xray_shot;
+			skill_t m_request_recon;
+			ability_list_t m_abilities;
+			shotgun_ub_t m_shotgun_ub;
+			frag_ub_t m_frag_ub;
+			adrenaline_shot_t m_ad_shot;
+			/** END SNIPER IMPORT */
+
+			uint8_t m_dissipate_charges;
 			uint8_t m_claymore_count;
 			uint8_t m_cryogenic_grenade_count;
 			uint8_t m_flash_underbarrel_charges;
 			ghost_orm_t	m_orm;
-			player_ptr_t m_player;
 
 			skill_t m_cryogenic_grenade;
 			skill_t m_drone_scan;
@@ -105,12 +196,9 @@ namespace mods::classes {
 			skill_t m_flash_underbarrel;
 			skill_t m_intimidation;
 			skill_t m_penetrating_shot;
-			skill_t m_plant_claymore;
 			skill_t m_stealth;
 			skill_t m_summon_extraction;
-			skill_t m_xray_shot;
 			bool m_dissipated;
-			std::vector<ability_data_t> m_abilities;
 	};
 	void ghost_advance_level(player_ptr_t& player);
 	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t& player);

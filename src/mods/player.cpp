@@ -19,9 +19,8 @@
 #include "damage-event.hpp"
 #include "armor/basic-protection.hpp"
 #include "classes/super-user-fiddler.hpp"
-#include "classes/sniper.hpp"
 #include "classes/ghost.hpp"
-#include "classes/medic.hpp"
+#include "classes/breacher.hpp"
 #include "classes/marine.hpp"
 #include "demolitions.hpp"
 #include "contract-types.hpp"
@@ -1681,8 +1680,8 @@ namespace mods {
 				break;
 			case damage_event_t::TARGET_DEAD_EVENT:
 				this->queue_up(MSG_YOUR_TARGET_IS_DEAD());
-				if(sniper()) {
-					sniper()->target_died(feedback.attacker);
+				if(ghost()) {
+					ghost()->target_died(feedback.attacker);
 				}
 				break;
 			case damage_event_t::YOU_MISSED_YOUR_TARGET_EVENT:
@@ -1808,24 +1807,6 @@ namespace mods {
 	void player::set_ghost(std::shared_ptr<mods::classes::ghost> g) {
 		m_ghost = g;
 	}
-	std::shared_ptr<mods::classes::pyrexia>& player::pyrexia() {
-		return m_pyrexia;
-	}
-	void player::set_pyrexia(std::shared_ptr<mods::classes::pyrexia> g) {
-		m_pyrexia = g;
-	}
-	std::shared_ptr<mods::classes::forge>& player::forge() {
-		return m_forge;
-	}
-	void player::set_forge(std::shared_ptr<mods::classes::forge> f) {
-		m_forge = f;
-	}
-	std::shared_ptr<mods::classes::syndrome>& player::syndrome() {
-		return m_syndrome;
-	}
-	void player::set_syndrome(std::shared_ptr<mods::classes::syndrome> s) {
-		m_syndrome = s;
-	}
 	char_data::visibility_t& player::visibility() {
 		return m_char_data->visibility;
 	}
@@ -1860,12 +1841,6 @@ namespace mods {
 	void player::admin_fail(std::string_view msg) {
 		this->sendln(CAT("{red}[Admin Failure]:",msg.data(),"{/red}"));
 	}
-	std::shared_ptr<mods::classes::sniper>& player::sniper() {
-		return m_sniper;
-	}
-	void player::set_sniper(std::shared_ptr<mods::classes::sniper> g) {
-		m_sniper = g;
-	}
 
 	std::shared_ptr<mods::classes::marine>& player::marine() {
 		return m_marine;
@@ -1881,26 +1856,6 @@ namespace mods {
 		m_breacher = g;
 	}
 
-	std::shared_ptr<mods::classes::engineer>& player::engineer() {
-		return m_engineer;
-	}
-	void player::set_engineer(std::shared_ptr<mods::classes::engineer> g) {
-		m_engineer = g;
-	}
-
-	std::shared_ptr<mods::classes::medic>& player::medic() {
-		return m_medic;
-	}
-	void player::set_medic(std::shared_ptr<mods::classes::medic> g) {
-		m_medic = g;
-	}
-
-	std::shared_ptr<mods::classes::support>& player::support() {
-		return m_support;
-	}
-	void player::set_support(std::shared_ptr<mods::classes::support> g) {
-		m_support = g;
-	}
 	uint8_t& player::level() {
 		uint8_t level = mods::classes::mock_player_level(this->uuid(),m_char_data->player.level);
 		m_char_data->player.level = level;
@@ -2144,28 +2099,22 @@ namespace mods {
 	std::tuple<bool,std::string> player::class_action(std::string_view func,std::string_view param) {
 
 		if(func.compare("practice") == 0) {
-			if(m_sniper) {
-				return m_sniper->practice(param);
-			}
 			if(m_ghost) {
 				return m_ghost->practice(param);
-			}
-			if(m_medic) {
-				return m_medic->practice(param);
 			}
 			if(m_marine) {
 				return m_marine->practice(param);
 			}
+			if(m_breacher) {
+				return m_breacher->practice(param);
+			}
 		}
 		if(func.compare("request_page") == 0) {
-			if(m_sniper) {
-				return {1,m_sniper->request_page_for(param)};
-			}
 			if(m_ghost) {
 				return {1,m_ghost->request_page_for(param)};
 			}
-			if(m_medic) {
-				return {1,m_medic->request_page_for(param)};
+			if(m_breacher) {
+				return {1,m_breacher->request_page_for(param)};
 			}
 			if(m_marine) {
 				return {1,m_marine->request_page_for(param)};

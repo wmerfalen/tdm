@@ -16,7 +16,6 @@
 using de = damage_event_t;
 #include "../damage-event.hpp"
 #include "../catch2/Catch2/src/catch2/catch_all.hpp"
-#include "../classes/sniper.hpp"
 
 extern player_ptr_t new_player();
 TEST_CASE("a sniper class can deploy several skills") {

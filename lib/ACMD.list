@@ -3,21 +3,21 @@
 ./mods/rifle-attachments.cpp:		->vcarrying
 ./mods/prefs.cpp:->pref
 ./mods/classes/pyrexia.cpp:->fire_nade
+./mods/classes/ghost.cpp:	->light_bandage
+./mods/classes/ghost.cpp:	->build_claymore
+./mods/classes/ghost.cpp:	->xray_shot
+./mods/classes/ghost.cpp:	->mark_target
+./mods/classes/ghost.cpp:	->tracking_shot
+./mods/classes/ghost.cpp:	->engage
+./mods/classes/ghost.cpp:	->disengage
+./mods/classes/ghost.cpp:	->attach_shotgun_underbarrel
+./mods/classes/ghost.cpp:	->detach_shotgun_underbarrel
+./mods/classes/ghost.cpp:	->attach_frag_underbarrel
+./mods/classes/ghost.cpp:	->detach_frag_underbarrel
+./mods/classes/ghost.cpp:	->fire
 ./mods/classes/ghost.cpp:	->dissipate
 ./mods/classes/engineer.cpp:	->drone_bomb
 ./mods/classes/breacher.cpp:->teep
-./mods/classes/sniper.cpp:	->light_bandage
-./mods/classes/sniper.cpp:	->build_claymore
-./mods/classes/sniper.cpp:	->xray_shot
-./mods/classes/sniper.cpp:	->mark_target
-./mods/classes/sniper.cpp:	->tracking_shot
-./mods/classes/sniper.cpp:	->engage
-./mods/classes/sniper.cpp:	->disengage
-./mods/classes/sniper.cpp:	->attach_shotgun_underbarrel
-./mods/classes/sniper.cpp:	->detach_shotgun_underbarrel
-./mods/classes/sniper.cpp:	->attach_frag_underbarrel
-./mods/classes/sniper.cpp:	->detach_frag_underbarrel
-./mods/classes/sniper.cpp:	->fire
 ./mods/help.cpp:	->help
 ./mods/levels.cpp:	->exp
 ./mods/date-time.cpp:	->moon_phase

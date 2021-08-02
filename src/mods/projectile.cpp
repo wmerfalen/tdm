@@ -14,7 +14,7 @@
 #include "super-users.hpp"
 
 #include "interpreter.hpp"
-#include "classes/sniper.hpp"
+#include "classes/ghost.hpp"
 
 #define __MENTOC_SHOW_MODS_EXPLODE_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_EXPLODE_DEBUG_OUTPUT__
@@ -889,7 +889,7 @@ namespace mods {
 				player->sendln("{red}Invalid direction{/red}");
 				return;
 			}
-			auto launcher = player->sniper()->underbarrel();
+			auto launcher = player->ghost()->underbarrel();
 			if(!launcher) {
 				player->sendln("{red}You don't have a launcher attached!{/red}");
 				return;

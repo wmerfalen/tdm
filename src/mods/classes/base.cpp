@@ -3,7 +3,6 @@
 #include "../weapon.hpp"
 #include "../affects.hpp"
 #include "ghost.hpp"
-#include "sniper.hpp"
 
 namespace mods::classes {
 	float skill_t::get_increment() {
@@ -359,17 +358,14 @@ namespace mods::classes {
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_SMALL:
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_MEDIUM:
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_LARGE: {
-					if(player->sniper()) {
-						player->sniper()->unblock_adrenaline_shot();
+					if(player->ghost()) {
+						player->ghost()->unblock_adrenaline_shot();
 					}
 					break;
 				}
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_HEALING:
-				if(player->sniper()) {
-					player->sniper()->unblock_healing();
-				}
-				if(player->medic()) {
-					/** TODO: player->medic()->unblock_healing(); */
+				if(player->ghost()) {
+					player->ghost()->unblock_healing();
 				}
 				break;
 			case mods::deferred::EVENT_PLAYER_FINISHES_FEIGN_DEATH:
