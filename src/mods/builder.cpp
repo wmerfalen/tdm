@@ -894,7 +894,7 @@ namespace mods::builder {
 		rb_debug("delete transaction");
 		try {
 			auto del_txn = txn();
-			mods::pq::exec(del_txn,std::string("DELETE FROM room_direction_data where room_number=") + std::to_string(world[in_room].number));
+			mods::pq::exec(del_txn,std::string("DELETE FROM room_extra_descriptions where red_room_vnum=") + std::to_string(world[in_room].number));
 			mods::pq::commit(del_txn);
 		} catch(std::exception& e) {
 			REPORT_DB_ISSUE("deleting room_direction_data ",e.what());
@@ -906,23 +906,42 @@ namespace mods::builder {
 			return -5;
 		}
 
+
+		for(auto& ex : world[in_room].ex_descriptions()) {
+			rb_debug("Inserting room extra descriptions data");
+			strmap_t values = {
+				{"red_room_vnum",std::to_string(world[in_room].number)},
+				{"red_keyword",ex.keyword.c_str()},
+				{"red_description",ex.description.c_str()},
+			};
+			rb_map_debug(values);
+			try {
+				auto txn2 = txn();
+				sql_compositor comp("room_extra_descriptions",&txn2);
+				auto sql = comp
+				           .insert()
+				           .into("room_extra_descriptions")
+				           .values(values)
+				           .sql();
+				mods::pq::exec(txn2,sql);
+				mods::pq::commit(txn2);
+			} catch(std::exception& e) {
+				REPORT_DB_ISSUE("room dir data in db",e.what());
+				error_string = "error deleting room_direction_data in db: '";
+				error_string += e.what();
+				rb_debug("EXCEPTION (DELETE)");
+				rb_debug(e.what());
+				rb_debug(error_string);
+				return -5;
+			}
+		}
+
+
 		rb_debug("Deleted room_direction-data... now, insert some");
 		for(auto direction = 0; direction < NUM_OF_DIRS; direction++) {
 			if(world[in_room].dir_option[direction] &&
 			        world[in_room].dir_option[direction]->general_description) {
 
-				//rb_debug("Saving general description");
-				//auto check_txn = txn();
-				//sql_compositor comp("room_direction_data",&check_txn);
-				//std::string check_sql = comp.
-				//	select("room_number")
-				//	.from("room_direction_data")
-				//	.where("room_number","=",std::to_string(world[in_room].number))
-				//	.op_and("exit_direction","=",std::to_string(direction))
-				//	.sql().data();
-				//check_sql += " AND exit_direction=";
-				//check_sql += check_txn.quote(direction);
-				//auto check_result = mods::pq::exec(check_txn,check_sql);
 				auto vnum = world[world[in_room].dir_option[direction]->to_room].number;
 				rb_debug("real room num:" + std::to_string(vnum));
 				std::map<std::string,std::string> values = {
@@ -935,19 +954,6 @@ namespace mods::builder {
 					{"exit_direction",std::to_string(direction)}
 				};
 
-				//if(check_result.size()) {
-				//	/* update the row instead of inserting it */
-				//	auto up_txn = txn();
-				//	sql_compositor comp("room_direction_data",&up_txn);
-				//	auto up_sql = comp
-				//		.update("room_direction_data")
-				//		.set(values)
-				//		.where("exit_direction","=",std::to_string(direction))
-				//		.op_and("room_number","=",std::to_string(world[in_room].number))
-				//		.sql();
-				//	mods::pq::exec(up_txn,up_sql);
-				//	mods::pq::commit(up_txn);
-				//} else {
 				{
 					rb_debug("Inserting room dir data");
 					rb_map_debug(values);
@@ -972,50 +978,6 @@ namespace mods::builder {
 					}
 				}
 				//}
-			}
-		}
-
-		if(world[in_room].ex_descriptions().size()) {
-			rb_debug("ex desc delete..");
-			try {
-				auto room_ex_desc_d_del_txn = txn();
-				mods::pq::exec(room_ex_desc_d_del_txn,std::string("DELETE FROM room_extra_desc_data where room_number=")
-				               + std::to_string(world[in_room].number));
-				mods::pq::commit(room_ex_desc_d_del_txn);
-				rb_debug("deleted..");
-			} catch(std::exception& e) {
-				REPORT_DB_ISSUE("deleting room extra desc data in db",e.what());
-				error_string = "error deleting room_direction_data in db: '";
-				error_string += e.what();
-				rb_debug("EXCEPTION (DELETE)");
-				rb_debug(e.what());
-				rb_debug(error_string);
-				return -6;
-			}
-			for(const auto& ex_desc : world[in_room].ex_descriptions()) {
-				values.clear();
-				values["ex_keyword"] = ex_desc.keyword.c_str();
-				values["ex_description"] = ex_desc.description.c_str();
-				values["room_number"] = std::to_string(world[in_room].number);
-				{
-					rb_debug("inserting room ex desc data...");
-					try {
-						auto room_ex_desc_data_txn = txn();
-						sql_compositor comp("room_extra_desc_data",&room_ex_desc_data_txn);
-						auto sql = comp
-						           .insert()
-						           .into("room_extra_desc_data")
-						           .values(values).sql();
-						mods::pq::exec(room_ex_desc_data_txn,sql);
-						mods::pq::commit(room_ex_desc_data_txn);
-					} catch(std::exception& e) {
-						REPORT_DB_ISSUE("[room_extra_desc_data]-> error",e.what());
-						error_string = "[room_extra_desc_data]->error: '";
-						error_string += e.what();
-						rb_debug(error_string);
-						return -7;
-					}
-				}
 			}
 		}
 
@@ -5544,20 +5506,15 @@ SUPERCMD(do_rbuild) {
 			r_status(player,"Done listing...");
 			return;
 		}
+
+
+
 		/**
 		 *  command line: rbuild ed <index> <keyword> <value>
 		 * --------------------------------------------------
 		 *  the n is for which page to list. 25 to a page
 		 */
-		if(argshave()->first_is("ed")->passed()) {
-			if(argshave()->size_gt(3)->failed()) {
-				r_error(player,"Not enough arguments");
-				return;
-			}
-			if(argshave()->nth_is_any(2, {"keyword","description"})->failed()) {
-				r_error(player,"Sub-command must be either 'keyword' or 'description'");
-				return;
-			}
+		if(argshave()->first_is("ed")->size_gt(3)->passed() && argshave()->nth_is_any(2, {"keyword","description"})->passed()) {
 			if(argshave()->int_at(1)->failed()) {
 				r_error(player,"You must specify a valid integer for the index");
 				return;
@@ -5572,40 +5529,34 @@ SUPERCMD(do_rbuild) {
 			}
 			return;
 		}
-		if(vec_args.size() >= 3 && vec_args[1].compare("delete") == 0) {
-			/** accepts: rbuild ed delete n */
-			// rbuild ed <delete> <n>\n" <<  /** todo: needs impl */
-			/**
-			 *  command line: rbuild ed delte n
-			 * --------------------------------------------------
-			 *  where n is the index you want to delete. accepts csv (todo)
-			 */
-			int32_t target = mods::util::stoi<int>(vec_args[2]);
-			int32_t i = target;
-			if(i < 0) {
-				r_error(player,std::string("value must be greater than zero"));
+
+
+
+
+		/**
+		 * rbuild ed <delete> <id>....[id-N]
+		 */
+		if(argshave()->first_is("ed")->size_gt(2)->passed() && argshave()->nth_is_any(1, {"delete"})->passed()) {
+			auto remove_indexes = args()->gather_integers_starting_at(2);
+			if(world[in_room(ch)].ex_descriptions().size() == 0) {
+				r_error(player,std::string(
+				            "nothing to delete"));
 				return;
-			} else {
-				auto temp = world[in_room(ch)].ex_descriptions();
-				auto size_temp = temp.size();
-				if(temp.size()) {
-					r_error(player,std::string(
-					            "nothing to delete"));
-					return;
-				}
-				world[in_room(ch)].ex_descriptions().clear();
-				int32_t ctr = 0;
-				for(auto&& m : temp) {
-					if(ctr == target) {
-						continue;
-					} else {
-						world[in_room(ch)].ex_descriptions().emplace_back(std::move(m));
-					}
-				}
-				std::string before = std::string("before: [") + std::to_string(size_temp) + "] items.";
-				std::string items = std::string("now: [") + std::to_string(world[in_room(ch)].ex_descriptions().size()) + "] items.";
-				r_success(player,before + items);
 			}
+			std::size_t before_size = world[in_room(ch)].ex_descriptions().size();
+			auto keep = world[in_room(ch)].ex_descriptions();
+			keep.clear();
+			for(std::size_t i=0; i < world[in_room(ch)].ex_descriptions().size(); i++) {
+				if(std::find(remove_indexes.cbegin(),remove_indexes.cend(),i) != remove_indexes.cend()) {
+					continue;
+				}
+				keep.emplace_back(world[in_room(ch)].ex_descriptions()[i]);
+			}
+			world[in_room(ch)].ex_descriptions() = std::move(keep);
+			std::size_t after_size = world[in_room(ch)].ex_descriptions().size();
+
+			r_success(player,CAT("size before: ",before_size,", size after: ",after_size));
+			return;
 		}
 
 

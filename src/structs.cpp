@@ -206,7 +206,6 @@ void obj_flag_data::feed(pqxx::row row) {
 	timer = mods::util::stoi<int>(row["timer"]);
 }
 std::vector<mods::extra_desc_data>& room_data::ex_descriptions() {
-	log("DEPRECATED: implement room_data::ex_descriptions or stop calling it");
 	return m_ex_descriptions;
 }
 #ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__

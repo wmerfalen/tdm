@@ -12,6 +12,7 @@
 #include <filesystem>
 #include "deep-object-parser.hpp"
 #include <algorithm>
+#include <regex>
 
 #ifdef __MENTOC_MODS_UTIL_DEBUG__
 #define mu_debug(A) std::cerr << "[mods::util][debug]:'" << A << "'\n";
@@ -1411,6 +1412,39 @@ namespace mods::util::args {
 	}
 	bool parsed_args::nth_is_any(std::size_t index,std::vector<std::string> list_string) {
 		return mods::util::nth_is_any(index,vec_args,list_string);
+	}
+	bool parsed_args::nth_is(std::size_t index,std::string_view str) {
+		std::vector<std::string> m = {str.data()};
+		return mods::util::nth_is_any(index,vec_args,m);
+	}
+	bool parsed_args::nth_matches(std::size_t index,std::string_view regex) {
+		std::size_t i=0;
+		for(auto f : vec_args) {
+			if(i == index) {
+				std::smatch match;
+				if(std::regex_search(vec_args[i],match, std::regex(regex.data()))) {
+					return true;
+				}
+				break;
+			}
+		}
+		return false;
+	}
+	bool parsed_args::nth_matches_any(std::size_t index,std::vector<std::string_view> regexes) {
+		std::size_t i=0;
+		for(auto f : vec_args) {
+			if(i == index) {
+				for(const auto& regex : regexes) {
+					std::smatch match;
+					if(std::regex_search(vec_args[i],match, std::regex(regex.data()))) {
+						return true;
+					}
+				}
+				break;
+			}
+		}
+		return false;
+
 	}
 	parsed_args* parsed_args::save_integer(const std::vector<std::size_t>& index) {
 		for(const auto& i : index) {

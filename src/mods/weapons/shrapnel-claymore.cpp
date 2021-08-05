@@ -1,4 +1,5 @@
 #include "damage-calculator.hpp"
+#include "elemental.hpp"
 #include "damage-types.hpp"
 #include "shrapnel-claymore.hpp"
 /** db.h for read_object() */
@@ -72,15 +73,18 @@ namespace mods::weapons {
 			damage += e.armor_pen;
 			victim->sendln("The explosion shreds through your armor!");
 		}
+		auto u = item->uuid;
 
 		mods::weapons::damage_types::deal_hp_damage(victim,damage);
+		mods::weapons::elemental::perform_elemental_damage(nullptr,victim,damage,ELEM_SHRAPNEL);
+		shrapnel_claymore_exploded(u);
 		return damage;
 	}
 
 	obj_ptr_t shrapnel_claymore::create() {
-		shrapnel_claymore_list().emplace_front();
-		auto& ref = shrapnel_claymore_list().front();
-		return ref->obj();
+		auto s = std::make_shared<shrapnel_claymore>();
+		shrapnel_claymore_list().emplace_front(s);
+		return s->obj();
 	}
 
 
@@ -108,7 +112,13 @@ namespace mods::weapons {
 		m_uuid = 0;
 		m_installer = 0;
 		m_obj = create_object(ITEM_EXPLOSIVE,"shrapnel-claymore-mine.yml");
+		m_uuid = m_obj->uuid;
 	}
 
+	void shrapnel_claymore_perform_blast_radius(room_rnum room_id,obj_ptr_t device) {
+		for(auto& victim : mods::globals::room_list[room_id]) {
+			shrapnel_claymore_explode(victim, device);
+		}
+	}
 };
 #undef m_debug

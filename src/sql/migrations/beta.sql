@@ -3250,19 +3250,6 @@ CREATE TABLE public.armor_locker (
 	PRIMARY KEY(id)
 );
 
-CREATE TABLE public.room_signs (
-	id SERIAL UNIQUE,
-	r_room_vnum INTEGER NOT NULL,
-	r_name TEXT NOT NULL,
-	r_text TEXT NOT NULL,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_room_vnum
-			FOREIGN KEY (r_room_vnum)
-			REFERENCES public.room(room_number)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-
 DROP TABLE public.player_object;
 CREATE TABLE public.player_object (
     id SERIAL UNIQUE,
@@ -3304,3 +3291,16 @@ ALTER TABLE rifle_instance ALTER COLUMN rifle_ammo_type TYPE VARCHAR(32);
 ALTER TABLE rifle_instance ALTER COLUMN rifle_str_type TYPE VARCHAR(32);
 ALTER TABLE mobile ADD COLUMN mob_targets TEXT;
 update player set player_class=9 where player_name='far';
+
+CREATE TABLE public.room_extra_descriptions (
+    id SERIAL,
+    red_room_vnum integer NOT NULL,
+    red_keyword text NOT NULL,
+    red_description text NOT NULL,
+		PRIMARY KEY(id),
+			CONSTRAINT fk_room_vnum
+				FOREIGN KEY(red_room_vnum)
+					REFERENCES public.room(room_number)
+					ON DELETE CASCADE
+					ON UPDATE CASCADE
+);

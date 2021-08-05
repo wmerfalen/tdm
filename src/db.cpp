@@ -1356,6 +1356,15 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 			room_rnum to_room = real_room(row2["to_room"].as<int>());
 			world[real_room_number].set_dir_option(direction,gen_desc,keyword,row2["exit_info"].as<int>(),row2["exit_key"].as<int>(),to_room);
 		}
+		for(auto&& row: db_get_all("room_extra_descriptions")) {
+			try {
+				room_rnum room_id = real_room(row["red_room_vnum"].as<int>());
+				world[room_id].ex_descriptions().emplace_back(row["red_keyword"].c_str(),row["red_description"].c_str());
+			} catch(std::exception& red_except) {
+				REPORT_DB_ISSUE("error fetching room_extra_descriptions row",red_except.what());
+				continue;
+			}
+		}
 	} catch(std::exception& e) {
 		REPORT_DB_ISSUE("error selecting room from dd",e.what());
 		return {-1,std::string("An exception occured: ") + e.what()};

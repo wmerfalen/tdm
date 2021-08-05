@@ -63,6 +63,8 @@ namespace mods::injure {
 };
 namespace mods::weapons {
 	int corrosive_claymore_explode(player_ptr_t&,obj_ptr_t&);
+	void corrosive_claymore_perform_blast_radius(room_rnum,obj_ptr_t);
+	void shrapnel_claymore_perform_blast_radius(room_rnum,obj_ptr_t);
 	int shrapnel_claymore_explode(player_ptr_t&,obj_ptr_t&);
 };
 namespace mods {
@@ -203,6 +205,14 @@ namespace mods {
 		    obj_ptr_t device,
 		    uuid_t player_uuid) {
 			if(mods::rooms::is_peaceful(room_id)) {
+				return;
+			}
+			if(mods::object_utils::is_corrosive_claymore(device)) {
+				mods::weapons::corrosive_claymore_perform_blast_radius(room_id,device);
+				return;
+			}
+			if(mods::object_utils::is_shrapnel_claymore(device)) {
+				mods::weapons::shrapnel_claymore_perform_blast_radius(room_id,device);
 				return;
 			}
 			pbr_debug("perform blast radius entry");
@@ -393,6 +403,12 @@ namespace mods {
 			explode_debug("grabbed blast radius... (" << blast_radius << ")");
 			bool does_damage = false;
 			auto victim = ptr_by_uuid(player_uuid);
+			if(mods::object_utils::is_corrosive_claymore(object)) {
+				return mods::weapons::corrosive_claymore_explode(victim,object);
+			}
+			if(mods::object_utils::is_shrapnel_claymore(object)) {
+				return mods::weapons::shrapnel_claymore_explode(victim,object);
+			}
 
 			switch(type) {
 				default:
@@ -410,13 +426,7 @@ namespace mods {
 				case mw_explosive::CLAYMORE_MINE:
 					does_damage = true;
 					send_to_room(room_id,"An explosion catches you off guard as a {red}%s{/red} {yel}DETONATES!!!{/yel}\r\n",object->name.c_str());
-					if(mods::object_utils::is_corrosive_claymore(object)) {
-						mods::weapons::corrosive_claymore_explode(victim,object);
-					} else if(mods::object_utils::is_shrapnel_claymore(object)) {
-						mods::weapons::shrapnel_claymore_explode(victim,object);
-					} else {
-						explosive_damage(victim, object);
-					}
+					explosive_damage(victim, object);
 					break;
 				case mw_explosive::FRAG_GRENADE:
 					does_damage = true;

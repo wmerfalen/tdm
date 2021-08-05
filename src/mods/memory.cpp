@@ -12,6 +12,9 @@ using shop_ptr_t = std::shared_ptr<shop_data_t>;
 namespace mods::behaviour_tree_impl {
 	extern std::vector<uuid_t>& mob_list();
 };
+namespace mods::weapons::corrosive_claymore_memory {
+	extern std::string get();
+};
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 extern std::deque<std::shared_ptr<mods::npc>> mob_list;
 extern std::deque<std::shared_ptr<shop_data_t>> shop_list;
@@ -59,6 +62,7 @@ namespace mods::memory {
 			auto& g = pair.second;
 			save_footprint(g);
 		}
+		auto cor = mods::weapons::corrosive_claymore_memory::get();
 		std::size_t watchers = 0;
 		for(const auto& room : world) {
 			watchers += room.watchers.size();
@@ -83,6 +87,7 @@ namespace mods::memory {
 		          "zone_table: " << zone_table.size() << "\n" <<
 		          "mods::behaviour_tree_impl: " << mods::behaviour_tree_impl::mob_list().size() << "\n" <<
 		          get_saved_footprints() <<
+		          "corrosive_claymore: " << cor << "\n" <<
 		          "------------------------------------------------------------------\n";
 
 #ifdef __MENTOC_SHOW_OBJ_LIST_MEMORY_OUTPUT__

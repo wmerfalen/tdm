@@ -399,6 +399,7 @@ namespace mods::classes {
 		return {true,"A claymore charge is built",create_object(ITEM_EXPLOSIVE,"claymore-mine.yml")};
 	}
 	std::tuple<bool,std::string,obj_ptr_t> ghost::build_corrosive_claymore() {
+		m_corrosive_claymore_count = 10;
 		if(m_corrosive_claymore_count == 0) {
 			return {false,"You don't have any claymore charges!",nullptr};
 		}
@@ -407,6 +408,7 @@ namespace mods::classes {
 	}
 
 	std::tuple<bool,std::string,obj_ptr_t> ghost::build_shrapnel_claymore() {
+		m_corrosive_claymore_count = 10;
 		if(m_shrapnel_claymore_count == 0) {
 			return {false,"You don't have any claymore charges!",nullptr};
 		}

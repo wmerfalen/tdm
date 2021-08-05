@@ -1006,7 +1006,6 @@ char* find_exdesc(std::string_view word,std::vector<extra_descr_data>& in_list) 
 }
 
 char * find_exdesc(char *word,room_data& r) {
-	log("find_exdesc, word: %s (room_data)",word);
 	if(r.ex_descriptions().size() == 0) {
 		return nullptr;
 	}

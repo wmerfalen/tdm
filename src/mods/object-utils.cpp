@@ -3,10 +3,10 @@
 
 namespace mods::object_utils {
 	bool is_corrosive_claymore(const obj_ptr_t& item) {
-		return item->explosive()->attributes->alternate_explosion_type.compare("CORROSIVE");
+		return item->explosive()->attributes->alternate_explosion_type.compare("CORROSIVE") == 0;
 	}
 	bool is_shrapnel_claymore(const obj_ptr_t& item) {
-		return item->explosive()->attributes->alternate_explosion_type.compare("SHRAPNEL");
+		return item->explosive()->attributes->alternate_explosion_type.compare("SHRAPNEL") == 0;
 	}
 	std::vector<std::string> object_types() {
 		/** !!*****************!! */

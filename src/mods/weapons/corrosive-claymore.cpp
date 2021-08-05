@@ -73,16 +73,24 @@ namespace mods::weapons {
 			damage += e.armor_pen;
 			victim->sendln("The explosion shreds through your armor!");
 		}
+		auto u = item->uuid;
 
 		mods::weapons::damage_types::deal_hp_damage(victim,damage);
 		mods::weapons::elemental::perform_elemental_damage(nullptr,victim,damage,ELEM_CORROSIVE);
+		corrosive_claymore_exploded(u);
 		return damage;
 	}
 
+	void corrosive_claymore_perform_blast_radius(room_rnum room_id,obj_ptr_t device) {
+		for(auto& victim : mods::globals::room_list[room_id]) {
+			corrosive_claymore_explode(victim, device);
+		}
+	}
+
 	obj_ptr_t corrosive_claymore::create() {
-		corrosive_claymore_list().emplace_front();
-		auto& ref = corrosive_claymore_list().front();
-		return ref->obj();
+		auto s = std::make_shared<corrosive_claymore>();
+		corrosive_claymore_list().emplace_front(s);
+		return s->obj();
 	}
 
 
@@ -91,7 +99,7 @@ namespace mods::weapons {
 		return {true,"You begin installing a {grn}corrosive{/grn} claymore mine..."};
 	}
 
-	obj_ptr_t& corrosive_claymore::obj() {
+	obj_ptr_t corrosive_claymore::obj() {
 		return m_obj;
 	}
 
@@ -110,7 +118,14 @@ namespace mods::weapons {
 		m_uuid = 0;
 		m_installer = 0;
 		m_obj = create_object(ITEM_EXPLOSIVE,"corrosive-claymore-mine.yml");
+		m_uuid = m_obj->uuid;
 	}
 
+	namespace corrosive_claymore_memory {
+		std::string get() {
+			std::string s = CAT("corrosive_claymores: ",std::distance(corrosive_claymore_list().cbegin(),corrosive_claymore_list().cend()));
+			return s;
+		}
+	};
 };
 #undef m_debug

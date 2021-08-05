@@ -380,6 +380,10 @@ namespace mods::util::args {
 		void assign(const std::string& argument);
 		bool first_is(std::string_view list_string);
 		bool first_is_any(std::vector<std::string> list_string);
+		bool nth_is(std::size_t index,std::string_view str);
+		bool nth_matches(std::size_t index,std::string_view regex);
+		bool nth_matches_any(std::size_t index,std::vector<std::string_view> regexes);
+		bool nth_matches_either(std::size_t index,std::vector<std::string_view> regexes);
 		bool nth_is_any(std::size_t index,std::vector<std::string> list_string);
 		bool if_nth_has_either(std::size_t index,std::vector<std::string> list_string);
 		bool nth_has_integer(std::size_t index);
