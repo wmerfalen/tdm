@@ -5211,6 +5211,12 @@ SUPERCMD(do_rbuild) {
 		                      "  |:: {wht}rbuild{/wht} {gld}bind north 127{/gld}\r\n"<<
 		                      "  |:: (the room to the north will lead to the room with a vnum of 127)\r\n" <<
 
+		                      " {grn}rbuild{/grn} {red}<bind-mark> <direction> <bookmark-name>{/red}\r\n" <<
+		                      "  |--> bind a BOOKMARKED room to a direction\r\n" <<
+		                      "  {grn}|____[example]{/grn}\r\n"<<
+		                      "  |:: {wht}rbuild{/wht} {gld}bind-mark north cofobcenter{/gld}\r\n"<<
+		                      "  |:: (the room to the north will lead to the room bookmarked with 'cofobcenter')\r\n" <<
+
 		                      " {grn}rbuild{/grn} {red}<title> <string>{/red}\r\n" <<
 		                      "  |--> set the current room title to string\r\n" <<
 		                      "  {grn}|____[example]{/grn}\r\n" <<
@@ -5615,6 +5621,45 @@ SUPERCMD(do_rbuild) {
 			return;
 		}
 		if(mods::builder::create_direction(player->room(),mods::globals::dir_int(direction[0]),r)) {
+			r_success(player,"direction created");
+		} else {
+			r_error(player,"error");
+		}
+
+		return;
+	}
+
+	/**
+	 * args[0] bind-mark
+	 * args[1] direction
+	 * args[2] bookmark
+	 */
+	if(argshave()->first_is("bind-mark")->passed()) {
+		if(argshave()->size_gt(2)->passed() == false) {
+			r_error(player,"Not enough arguments. Expected atleast 3");
+			return;
+		}
+		if(argshave()->direction_at(1)->passed() == false) {
+			r_error(player,"Please specify valid direction");
+			return;
+		}
+		std::string bookmark = argat(2);
+		if(dirat(1).has_value() == false) {
+			r_error(player,"Invalid or unrecognized direction given");
+			return;
+		}
+		direction_t direction = dirat(1).value();
+
+		if(player->builder_data->bookmarks.find(bookmark) == player->builder_data->bookmarks.end()) {
+			r_error(player,"No bookmark by that name");
+			return;
+		}
+		auto room_id = player->builder_data->bookmarks[bookmark];
+		if(room_id < 0 || room_id >= world.size()) {
+			r_error(player,"Room id doesn't exist!");
+			return;
+		}
+		if(mods::builder::create_direction(player->room(),direction,room_id)) {
 			r_success(player,"direction created");
 		} else {
 			r_error(player,"error");
