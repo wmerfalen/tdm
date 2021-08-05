@@ -210,7 +210,7 @@ void flush_queues(mods::descriptor_data& d);
 void nonblock(socket_t s);
 int perform_subst(mods::descriptor_data& t, char *orig, char *subst);
 void record_usage(void);
-char *make_prompt(mods::descriptor_data& point);
+void send_prompt(player_ptr_t& player);
 void check_idle_passwords(void);
 void heartbeat(int pulse);
 struct in_addr *get_bind_addr(void);
@@ -816,7 +816,7 @@ void game_loop(socket_t mother_desc) {
 		/* Print prompts for other descriptors who had no other output */
 		for(auto& p : mods::globals::player_list) {
 			if(!p->desc().has_output && !p->desc().has_prompt && p->state() == CON_PLAYING) {
-				p->send("\r\n%s", make_prompt(p->desc()));
+				send_prompt(p);
 				p->desc().has_prompt = true;
 				continue;
 			}
@@ -1122,65 +1122,80 @@ void echo_on(mods::descriptor_data& d) {
 	write_to_output(d, "%s", on_string);
 }
 
-char *make_prompt(mods::descriptor_data& d) {
-	static char prompt[MAX_PROMPT_LENGTH];
-
-	/* Note, prompt is truncated at MAX_PROMPT_LENGTH chars (structs.h) */
-
-	if(d.str) {
-		strcpy(prompt, "] ");    /* strcpy: OK (for 'MAX_PROMPT_LENGTH >= 3') */
-	} else if(d.showstr_count) {
-		snprintf(prompt, sizeof(prompt),
-		         "\r\n[ Return to continue, (q)uit, (r)efresh, (b)ack, or page number (%d/%d]",
-		         d.showstr_page, d.showstr_count);
-	} else if(!IS_NPC(d.character)) {
-		int count;
-		size_t len = 0;
-
-		*prompt = '\0';
-
-		if(GET_INVIS_LEV(d.character) && len < sizeof(prompt)) {
-			count = snprintf(prompt + len, sizeof(prompt) - len, "i%d", GET_INVIS_LEV(d.character));
-
-			if(count >= 0) {
-				len += count;
-			}
-		}
-
-		if(PRF_FLAGGED(d.character, PRF_DISPHP) && len < sizeof(prompt)) {
-			count = snprintf(prompt + len, sizeof(prompt) - len, "%dH ", GET_HIT(d.character));
-
-			if(count >= 0) {
-				len += count;
-			}
-		}
-
-		if(PRF_FLAGGED(d.character, PRF_DISPMANA) && len < sizeof(prompt)) {
-			count = snprintf(prompt + len, sizeof(prompt) - len, "%dM ", GET_MANA(d.character));
-
-			if(count >= 0) {
-				len += count;
-			}
-		}
-
-		if(PRF_FLAGGED(d.character, PRF_DISPMOVE) && len < sizeof(prompt)) {
-			count = snprintf(prompt + len, sizeof(prompt) - len, "%dV ", GET_MOVE(d.character));
-
-			if(count >= 0) {
-				len += count;
-			}
-		}
-
-		if(len < sizeof(prompt)) {
-			strncat(prompt, "> ", sizeof(prompt) - len - 1);    /* strncat: OK */
-		}
-	} else if(IS_NPC(d.character)) {
-		snprintf(prompt, sizeof(prompt), "%s> ", GET_NAME(d.character).c_str());
-	} else {
-		*prompt = '\0';
+void send_prompt(player_ptr_t& player) {
+	if(player->is_npc()) {
+		return;
 	}
-
-	return (prompt);
+	if(player->paging()) {
+		return;
+	}
+	std::string hp = CAT(player->hp(),"H "),
+	            mana = CAT(player->mana(),"M "),
+	            move = CAT(player->move(),"V "),
+	            fighting = "",
+	            arrow = "{grn}> {/grn}",
+	            start = "",
+	            ammo = "",
+	            affects = "";
+	if(player->hp() < (player->max_hp() * 0.01)) {
+		hp = CAT("{red}",player->hp(),"{/red}H ");
+	}
+	if(player->mana() < (player->max_mana() * 0.01)) {
+		mana = CAT("{red}",player->mana(),"{/red}M ");
+	}
+	if(player->move() < (player->max_move() * 0.01)) {
+		move = CAT("{red}",player->move(),"{/red}V ");
+	}
+	if(player->ghost() && player->ghost()->is_dissipated()) {
+		start = "{yel}(:INVIS:){/yel}";
+	}
+	if(player->fighting()) {
+		fighting = CAT("{red}[",player->fighting()->name(),"]{/red}");
+	}
+	auto& a = player->get_affect_dissolver();
+	if(a.has_affect(mods::affects::affect_t::BLIND)) {
+		affects += "BLIND";
+	}
+	if(a.has_affect(mods::affects::affect_t::DISORIENT)) {
+		if(affects.length()) {
+			affects += "|";
+		}
+		affects += "DISORIENT";
+	}
+	if(a.has_affect(mods::affects::affect_t::POISON)) {
+		if(affects.length()) {
+			affects += "|";
+		}
+		affects += "POISON:";
+	}
+	if(a.has_affect(mods::affects::affect_t::INTIMIDATED)) {
+		if(affects.length()) {
+			affects += "|";
+		}
+		affects += "INTIMIDATED:";
+	}
+	if(a.has_affect(mods::affects::affect_t::SCANNED)) {
+		if(affects.length()) {
+			affects += "|";
+		}
+		affects += "SCANNED:";
+	}
+	if(a.has_affect(mods::affects::affect_t::TRACKED)) {
+		if(affects.length()) {
+			affects += "|";
+		}
+		affects += "TRACKED:";
+	}
+	if(player->primary() && player->primary()->has_rifle()) {
+		auto left = player->primary()->rifle_instance->ammo;
+		auto clip = player->primary()->rifle()->attributes->clip_size;
+		if(left == 0) {
+			ammo = CAT("{yel}[{red}RELOAD{/red}{yel}]{/yel}");
+		} else {
+			ammo = CAT("{yel}[",left,"/",clip,"]{/yel}");
+		}
+	}
+	player->send(CAT("\r\n",start,affects,hp,mana,move,fighting,ammo,arrow).c_str());
 }
 
 

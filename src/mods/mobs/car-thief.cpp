@@ -414,15 +414,18 @@ namespace mods::mobs {
 		m_found_car = status;
 	}
 	void car_thief::found_witness(const mods::scan::vec_player_data_element& data) {
+		clear_list_if_count(&m_hostiles,10);
 		m_hostiles.emplace_front(data);
 	}
 	void car_thief::found_vehicle(const mods::scan::vec_player_data_element& data) {
+		clear_list_if_count(&m_scanned_cars,10);
 		m_scanned_cars.emplace_back(data);
 	}
 	void car_thief::clear_scanned_cars() {
 		m_scanned_cars.clear();
 	}
 	void car_thief::remember_car(const mods::scan::vec_player_data_element& data) {
+		clear_list_if_count(&m_remembered_cars,10);
 		m_remembered_cars.push_front(data.uuid);
 	}
 	const car_thief::uuidlist_t& car_thief::get_remembered_cars() const {

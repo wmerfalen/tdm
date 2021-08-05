@@ -289,7 +289,7 @@
 
 
 #define MENTOC_EXPLOSIVE_MEMBERS_TUPLE ( \
-(std::string,alternate_explosion_type,"#int, ENUM  NONE,SCAN","'NONE'"), \
+(std::string,alternate_explosion_type,"#int, ENUM  NONE,SCAN,CORROSIVE,SHRAPNEL","'NONE'"), \
 (float,chance_to_injure,"#float, percent",3.0), \
 (float,critical_chance,"#float, percent",14.3), \
 (int,critical_range,"#int, rooms",2), \

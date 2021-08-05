@@ -361,5 +361,49 @@ namespace mods::weapons::damage_calculator {
 		auto attacker_tier = tier(attacker);
 		return (multiplier * attacker_tier) * dam;
 	}
+	explosive_damage_t calculate_explosive_damage(player_ptr_t victim, obj_ptr_t item) {
+		explosive_damage_t e;
+		if(mods::super_users::player_is(victim)) {
+			return e;
+		}
+
+		auto& attr = item->explosive()->attributes;
+		if(attr->alternate_explosion_type.compare("SCAN") == 0) {
+			return e;
+		}
+		uint8_t chance = attr->chance_to_injure;
+		uint8_t critical_chance = attr->critical_chance;
+		if(mods::skills::player_can(victim,"INJURE_RESISTANCE")) {
+			chance -= INJURE_RESISTANCE_SKILL_MODIFIER();
+		}
+		e.injured = mods::injure::do_injure_roll(chance);
+
+		/** TODO handle critical range attribute */
+		/** TODO handle blast radius attribute */
+		/** TODO handle loudness type */
+		e.damage = dice(attr->damage_dice_count,attr->damage_dice_sides);
+
+		if(dice(1,100) <= critical_chance) {
+			e.critical = e.damage * EXPLOSIVE_CRITICAL_MULTIPLIER();
+		}
+
+		if(attr->chemical_damage_dice_count) {
+			e.chemical = dice(attr->chemical_damage_dice_count,attr->chemical_damage_dice_sides);
+		}
+		if(attr->incendiary_damage_dice_count) {
+			e.fire = dice(attr->incendiary_damage_dice_count,attr->incendiary_damage_dice_sides);
+		}
+		if(attr->radiation_damage_dice_count) {
+			e.radiation = dice(attr->radiation_damage_dice_count,attr->radiation_damage_dice_sides);
+		}
+		if(attr->electric_damage_dice_count) {
+			e.electric = dice(attr->electric_damage_dice_count,attr->electric_damage_dice_sides);
+		}
+		if(attr->armor_penetration_damage_dice_count) {
+			e.armor_pen = dice(attr->armor_penetration_damage_dice_count,attr->armor_penetration_damage_dice_sides);
+		}
+
+		return e;
+	}
 };
 

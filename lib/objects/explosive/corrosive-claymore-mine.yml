@@ -1,0 +1,57 @@
+# type: FRAG_GRENADE
+# type: INCENDIARY_GRENADE
+# type: REMOTE_EXPLOSIVE
+# type: REMOTE_CHEMICAL
+# type: EMP_GRENADE
+# type: SMOKE_GRENADE
+# type: C4
+# type: BREACH_CHARGE
+# type: FLASHBANG_GRENADE
+# type: SENSOR_GRENADE
+str_type: 'CLAYMORE_MINE'
+type: 'CLAYMORE_MINE'
+manufacturer: 'NF-A0 Explosives' # string, anything 
+name: 'NF-C1 Corrosive Claymore Mine' # string, anything name of object 
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+description: 'A NF-C1 corrosive claymore mine is lying here.'
+short_description: 'a NF-C1 corrosive claymore mine'
+action_description: 'a NF-C1 corrosive claymore mine'
+alternate_explosion_type: 'CORROSIVE' #std::string, ENUM NONE,SCAN
+loudness_type: 'SUSPICIOUS' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
+chance_to_injure: 10.0 #float, percent
+critical_chance: 43.0 #float, percent
+critical_range: 1 #int, rooms
+blast_radius: 2 #int, rooms
+damage_per_second: 289.0 #float, static base damage done
+disorient_amount: 8.5 #float, percent
+range_modifier: 1 #int, rooms
+incendiary_damage_dice_count: 0
+incendiary_damage_dice_sides: 0
+radiation_damage_dice_count: 0
+radiation_damage_dice_sides: 0
+chemical_damage_dice_count: 9
+chemical_damage_dice_sides: 10
+electric_damage_dice_count: 2
+electric_damage_dice_sides: 4
+armor_penetration_damage_dice_count: 2
+armor_penetration_damage_dice_sides: 9
+damage_dice_count: 5 
+damage_dice_sides: 13
+incendiary_damage_percent: 0
+explosive_damage_percent: 0
+shrapnel_damage_percent: 0
+corrosive_damage_percent: 150 
+cryogenic_damage_percent: 0
+radiation_damage_percent: 2
+emp_damage_percent: 0
+shock_damage_percen: 0
+anti_matter_damage_percent: 0
+feed_file: 'corrosive-claymore-mine.yml'
+vnum: 155

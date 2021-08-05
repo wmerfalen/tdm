@@ -36,7 +36,7 @@
 				 -- can plant claymores of type:
 				 	-- [ ] corrosive 
 					-- [ ] shrapnel
-					-- [ ] explosive
+					-- [x] explosive
 				 -- [ ] can mark and track an enemy
 				 	-- [ ] tracked enemies take more damage
 				 -- [ ] can target limb

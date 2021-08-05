@@ -18,8 +18,8 @@ RETSIGTYPE checkpointing(int sig);
 RETSIGTYPE hupsig(int sig);
 ssize_t perform_socket_read(socket_t desc, char *read_point,size_t space_left);
 ssize_t perform_socket_write(socket_t desc, const char *txt,size_t length);
-void echo_off(mods::descriptor_data &d);
-void echo_on(mods::descriptor_data &d);
+void echo_off(mods::descriptor_data& d);
+void echo_on(mods::descriptor_data& d);
 void circle_sleep(struct timeval *timeout);
 //int get_from_q(struct txt_q *queue, char *dest, int *aliased);
 int get_from_q(mods::descriptor_data& d, char *dest, int *aliased);
@@ -29,15 +29,14 @@ void game_loop(socket_t mother_desc);
 socket_t init_socket(ush_int port);
 int new_descriptor(socket_t s);
 int get_max_players(void);
-int process_output(mods::descriptor_data &in_t);
-int process_input(mods::descriptor_data &t);
+int process_output(mods::descriptor_data& in_t);
+int process_input(mods::descriptor_data& t);
 void timediff(struct timeval *diff, struct timeval *a, struct timeval *b);
 void timeadd(struct timeval *sum, struct timeval *a, struct timeval *b);
-void flush_queues(mods::descriptor_data &d);
+void flush_queues(mods::descriptor_data& d);
 void nonblock(socket_t s);
-int perform_subst(mods::descriptor_data &t, char *orig, char *subst);
+int perform_subst(mods::descriptor_data& t, char *orig, char *subst);
 void record_usage(void);
-char *make_prompt(mods::descriptor_data &point);
 void check_idle_passwords(void);
 void heartbeat(int pulse);
 struct in_addr *get_bind_addr(void);
@@ -58,7 +57,7 @@ void	close_socket(mods::descriptor_data& d);
 void	perform_act(const char *orig, char_data *ch,
                     struct obj_data *obj, const void *vict_obj, char_data *to);
 
-void	act(const std::string & str, int hide_invisible, char_data *ch,
+void	act(const std::string& str, int hide_invisible, char_data *ch,
             obj_data *obj, void *vict_obj, int type);
 
 #define TO_ROOM		1
@@ -70,10 +69,10 @@ void	act(const std::string & str, int hide_invisible, char_data *ch,
 /* I/O functions */
 void	write_to_q(std::string_view txt, mods::descriptor_data&, int aliased);
 int	write_to_descriptor(socket_t desc, const char *txt);
-size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
-size_t	vwrite_to_output(mods::descriptor_data &d, const char *format, va_list args);
-size_t write_to_output(const mods::descriptor_data &t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
-size_t	vwrite_to_output(const mods::descriptor_data &d, const char *format, va_list args);
+size_t write_to_output(mods::descriptor_data& t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
+size_t	vwrite_to_output(mods::descriptor_data& d, const char *format, va_list args);
+size_t write_to_output(const mods::descriptor_data& t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
+size_t	vwrite_to_output(const mods::descriptor_data& d, const char *format, va_list args);
 void	string_add(mods::descriptor_data d, char *str);
 void	string_write(mods::descriptor_data d, char **txt, size_t len, long mailto, void *data);
 

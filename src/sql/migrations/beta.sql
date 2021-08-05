@@ -3303,3 +3303,4 @@ ALTER TABLE rifle_instance ALTER COLUMN rifle_type TYPE VARCHAR(32);
 ALTER TABLE rifle_instance ALTER COLUMN rifle_ammo_type TYPE VARCHAR(32);
 ALTER TABLE rifle_instance ALTER COLUMN rifle_str_type TYPE VARCHAR(32);
 ALTER TABLE mobile ADD COLUMN mob_targets TEXT;
+update player set player_class=9 where player_name='far';

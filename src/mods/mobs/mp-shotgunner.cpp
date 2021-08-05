@@ -392,6 +392,7 @@ namespace mods::mobs {
 		return this->last_attack;
 	}
 	void mp_shotgunner::attacked(const feedback_t& feedback) {
+		clear_list_if_count(&m_attackers,10);
 		auto p = ptr_by_uuid(feedback.attacker);
 		if(p) {
 			m_last_attacker = p;

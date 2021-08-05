@@ -16,6 +16,9 @@ typedef int socket_t;
 namespace mods::globals {
 	extern std::unique_ptr<mods::deferred> defer_queue;
 };
+namespace mods::weapons {
+	extern void corrosive_claymore_exploded(const uuid_t& obj_uuid);
+};
 namespace mods {
 	namespace projectile {
 		using obj_ptr_t = std::shared_ptr<obj_data>;

@@ -177,7 +177,9 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/chaotic-meth-addict mods/mobs/chaotic-meth-addict-behaviour-tree \
 					 mods/weapons/attachment-shotgun-underbarrel \
 					 mods/memory mods/weapons/attachment-frag-underbarrel mods/unit-tests/frag-underbarrel \
-					 mods/boosters/adrenaline-shot mods/unit-tests/class-sniper
+					 mods/boosters/adrenaline-shot mods/unit-tests/class-sniper \
+					 mods/corrosive mods/weapons/corrosive-claymore \
+					 mods/shrapnel mods/weapons/shrapnel-claymore
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

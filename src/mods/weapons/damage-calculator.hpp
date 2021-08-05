@@ -77,6 +77,28 @@ namespace mods::weapons::damage_calculator {
 	    player_ptr_t& victim,
 	    int dam
 	);
+	struct explosive_damage_t {
+		int chemical;
+		int fire;
+		int radiation;
+		int electric;
+		int armor_pen;
+		int total;
+		int damage;
+		int critical;
+		bool injured;
+		explosive_damage_t() :
+			chemical(0),
+			fire(0),
+			radiation(0),
+			electric(0),
+			armor_pen(0),
+			total(0),
+			damage(0),
+			critical(0),
+			injured(false) {}
+	};
+	explosive_damage_t calculate_explosive_damage(player_ptr_t victim, obj_ptr_t item);
 };
 #endif
 

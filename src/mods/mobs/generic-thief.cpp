@@ -487,6 +487,7 @@ namespace mods::mobs {
 		m_found_item = status;
 	}
 	void generic_thief::found_witness(const mods::scan::vec_player_data_element& data) {
+		clear_list_if_count(&m_hostiles,10);
 		m_hostiles.emplace_front(data);
 	}
 #if 0
@@ -498,12 +499,14 @@ namespace mods::mobs {
 		m_scanned_items.clear();
 	}
 	void generic_thief::remember_item(const mods::scan::vec_player_data_element& data) {
+		clear_list_if_count(&m_remembered_items,10);
 		m_remembered_items.push_front(data.uuid);
 	}
 	const generic_thief::uuidlist_t& generic_thief::get_remembered_items() const {
 		return m_remembered_items;
 	}
 	void generic_thief::found_item(mods::scan::vec_player_data_element const& item) {
+		clear_list_if_count(&m_scanned_items,10);
 		m_scanned_items.emplace_back(item);
 	}
 	std::forward_list<std::shared_ptr<generic_thief>>& generic_thief_list() {

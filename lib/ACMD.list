@@ -4,6 +4,8 @@
 ./mods/prefs.cpp:->pref
 ./mods/classes/pyrexia.cpp:->fire_nade
 ./mods/classes/ghost.cpp:	->light_bandage
+./mods/classes/ghost.cpp:	->build_corrosive_claymore
+./mods/classes/ghost.cpp:	->build_shrapnel_claymore
 ./mods/classes/ghost.cpp:	->build_claymore
 ./mods/classes/ghost.cpp:	->xray_shot
 ./mods/classes/ghost.cpp:	->mark_target

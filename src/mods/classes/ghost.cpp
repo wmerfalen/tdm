@@ -8,6 +8,8 @@
 #include "../demolitions.hpp"
 #include "../date-time.hpp"
 #include "../weapons/damage-types.hpp"
+#include "../weapons/corrosive-claymore.hpp"
+#include "../weapons/shrapnel-claymore.hpp"
 #include "../skills.hpp"
 #include "../date-time.hpp"
 #include "../help.hpp"
@@ -223,30 +225,26 @@ namespace mods::classes {
 		if((call_count % GHOST_REPLENISH_PULSE()) == 0) {
 			if(m_claymore_count < SNIPER_CLAYMORE_MAX_COUNT() * tier) {
 				++m_claymore_count;
-				replenish_notify("{grn}A ghost class claymore mine has been regenerated.{/grn}");
+			}
+			if(m_corrosive_claymore_count < SNIPER_CLAYMORE_MAX_COUNT() * tier) {
+				++m_corrosive_claymore_count;
+			}
+			if(m_shrapnel_claymore_count < SNIPER_CLAYMORE_MAX_COUNT() * tier) {
+				++m_shrapnel_claymore_count;
 			}
 			if(m_xray_shot_charges < SNIPER_XRAY_SHOT_MAX_COUNT() * tier) {
-				replenish_notify("{grn}A ghost class X-Ray shot charge has been regenerated.{/grn}");
 				++m_xray_shot_charges;
 			}
 			if(m_tracking_shot_charges < SNIPER_TRACKING_SHOT_MAX_COUNT() * tier) {
-				replenish_notify("{grn}A ghost class Tracking Shot charge has been regenerated.{/grn}");
 				++m_tracking_shot_charges;
 			}
 			if(m_gauze_count < SNIPER_GAUZE_MAX_COUNT() * tier) {
-				replenish_notify("{grn}A gauze has been regenerated.{/grn}");
 				++m_gauze_count;
 			}
 			if(m_adrenaline_shot_charges < SNIPER_ADRENALINE_SHOT_MAX_COUNT() * tier) {
-				replenish_notify("{grn}An adrenaline shot has been regenerated.{/grn}");
 				++m_adrenaline_shot_charges;
 			}
-			if(m_claymore_count < GHOST_CLAYMORE_MAX_COUNT() * tier) {
-				++m_claymore_count;
-				m_player->sendln("{grn}A ghost class claymore mine has been regenerated.{/grn}");
-			}
 			if(m_dissipate_charges < GHOST_DISSIPATE_CHARGE_MAX_COUNT() * tier) {
-				m_player->sendln("{grn}A ghost dissipate charge has been regenerated.{/grn}");
 				++m_dissipate_charges;
 			}
 #ifdef __MENTOC_SEND_GHOST_PLAYER_REPLENISH_DEBUG_MESSAGE__
@@ -400,6 +398,22 @@ namespace mods::classes {
 		--m_claymore_count;
 		return {true,"A claymore charge is built",create_object(ITEM_EXPLOSIVE,"claymore-mine.yml")};
 	}
+	std::tuple<bool,std::string,obj_ptr_t> ghost::build_corrosive_claymore() {
+		if(m_corrosive_claymore_count == 0) {
+			return {false,"You don't have any claymore charges!",nullptr};
+		}
+		--m_corrosive_claymore_count;
+		return {true,"A {grn}corrosive{/grn} claymore charge is built",mods::weapons::corrosive_claymore::create()};
+	}
+
+	std::tuple<bool,std::string,obj_ptr_t> ghost::build_shrapnel_claymore() {
+		if(m_shrapnel_claymore_count == 0) {
+			return {false,"You don't have any claymore charges!",nullptr};
+		}
+		--m_shrapnel_claymore_count;
+		return {true,"A {yel}shrapnel{/yel} claymore charge is built",create_object(ITEM_EXPLOSIVE,"shrapnel-claymore-mine.yml")};
+	}
+
 
 	/*
 	- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)
@@ -533,6 +547,24 @@ namespace mods::class_abilities::ghost {
 		PLAYER_CAN("ghost.light_bandage");
 		DO_HELP("light_bandage");
 		auto status = player->ghost()->light_bandage();
+		player->sendln(std::get<1>(status));
+	};
+	ACMD(do_build_corrosive_claymore) {
+		PLAYER_CAN("ghost.build_corrosive_claymore");
+		DO_HELP("build_claymore");
+		auto status = player->ghost()->build_corrosive_claymore();
+		if(std::get<0>(status)) {
+			player->carry(std::get<2>(status));
+		}
+		player->sendln(std::get<1>(status));
+	};
+	ACMD(do_build_shrapnel_claymore) {
+		PLAYER_CAN("ghost.build_shrapnel_claymore");
+		DO_HELP("build_claymore");
+		auto status = player->ghost()->build_shrapnel_claymore();
+		if(std::get<0>(status)) {
+			player->carry(std::get<2>(status));
+		}
 		player->sendln(std::get<1>(status));
 	};
 	ACMD(do_build_claymore) {
@@ -678,5 +710,8 @@ namespace mods::class_abilities::ghost {
 		mods::interpreter::add_command("attach_frag", POS_RESTING, do_attach_frag_underbarrel, 0,0);
 		mods::interpreter::add_command("detach_frag", POS_RESTING, do_detach_frag_underbarrel, 0,0);
 		mods::interpreter::add_command("fire", POS_RESTING, do_fire, 0,0);
+		mods::interpreter::add_command("build_claymore", POS_RESTING, do_build_claymore, 0,0);
+		mods::interpreter::add_command("build_corrosive_claymore", POS_RESTING, do_build_corrosive_claymore, 0,0);
+		mods::interpreter::add_command("build_shrapnel_claymore", POS_RESTING, do_build_shrapnel_claymore, 0,0);
 	}
 };

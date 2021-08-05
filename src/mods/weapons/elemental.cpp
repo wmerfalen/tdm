@@ -23,10 +23,7 @@ namespace mods::weapons::elemental {
 		}
 		return damage;
 	}
-	void process_elemental_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage,int type) {
-		if(attacker->position() == POS_DEAD || victim->position() == POS_DEAD) {
-			return;
-		}
+	void perform_elemental_damage(player_ptr_t attacker,player_ptr_t& victim,int requested_damage,int type) {
 		feedback_t feedback;
 		feedback.hits = 1;
 		auto atk_event = de::YOU_INFLICTED_INCENDIARY_DAMAGE;
@@ -91,15 +88,25 @@ namespace mods::weapons::elemental {
 				mods::mobs::damage_event::received_elemental_damage(victim,feedback);
 			}
 			feedback.damage_info.emplace_back(victim->uuid(),feedback.damage,victim->room());
-			feedback.damage_event = atk_event;
-			attacker->damage_event(feedback);
+			if(attacker) {
+				feedback.damage_event = atk_event;
+				attacker->damage_event(feedback);
+			}
 
 			feedback.damage_info.clear();
 
-			feedback.attacker = attacker->uuid();
+			if(attacker) {
+				feedback.attacker = attacker->uuid();
+			}
 			feedback.damage_event = vic_event;
 			victim->damage_event(feedback);
 		}
+	}
+	void process_elemental_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage,int type) {
+		if(attacker->position() == POS_DEAD || victim->position() == POS_DEAD) {
+			return;
+		}
+		perform_elemental_damage(attacker,victim,requested_damage,type);
 	}
 	void incendiary_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
 		process_elemental_damage(attacker,victim,requested_damage,ELEM_INCENDIARY);

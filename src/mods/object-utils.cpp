@@ -2,6 +2,12 @@
 #include "weapon-types.hpp"
 
 namespace mods::object_utils {
+	bool is_corrosive_claymore(const obj_ptr_t& item) {
+		return item->explosive()->attributes->alternate_explosion_type.compare("CORROSIVE");
+	}
+	bool is_shrapnel_claymore(const obj_ptr_t& item) {
+		return item->explosive()->attributes->alternate_explosion_type.compare("SHRAPNEL");
+	}
 	std::vector<std::string> object_types() {
 		/** !!*****************!! */
 		/** !!UPDATE_ITEM_TYPES!! */

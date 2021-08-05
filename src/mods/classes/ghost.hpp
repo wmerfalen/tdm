@@ -113,6 +113,8 @@ namespace mods::classes {
 
 			/** SNIPER IMPORT */
 			std::tuple<bool,std::string,obj_ptr_t> build_claymore();
+			std::tuple<bool,std::string,obj_ptr_t> build_corrosive_claymore();
+			std::tuple<bool,std::string,obj_ptr_t> build_shrapnel_claymore();
 			std::tuple<bool,std::string> attach_shotgun_underbarrel();
 			std::tuple<bool,std::string> detach_shotgun_underbarrel();
 			std::tuple<bool,std::string> attach_frag_underbarrel();
@@ -185,7 +187,11 @@ namespace mods::classes {
 			/** END SNIPER IMPORT */
 
 			uint8_t m_dissipate_charges;
+
 			uint8_t m_claymore_count;
+			uint8_t m_corrosive_claymore_count;
+			uint8_t m_shrapnel_claymore_count;
+
 			uint8_t m_cryogenic_grenade_count;
 			uint8_t m_flash_underbarrel_charges;
 			ghost_orm_t	m_orm;

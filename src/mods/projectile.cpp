@@ -1,3 +1,4 @@
+#include "weapons/damage-calculator.hpp"
 #include "projectile.hpp"
 #include "affects.hpp"
 #include "../handler.h"
@@ -59,6 +60,10 @@ namespace mods::injure {
 	namespace explosive {
 		extern void handle_crit_injure(obj_ptr_t&,player_ptr_t&);
 	};
+};
+namespace mods::weapons {
+	int corrosive_claymore_explode(player_ptr_t&,obj_ptr_t&);
+	int shrapnel_claymore_explode(player_ptr_t&,obj_ptr_t&);
 };
 namespace mods {
 	namespace projectile {
@@ -191,71 +196,6 @@ namespace mods {
 			victim->affect(AFF_DISORIENT);
 			victim->sendln("You become disoriented.");
 		}
-		struct explosive_damage_t {
-			int chemical;
-			int fire;
-			int radiation;
-			int electric;
-			int armor_pen;
-			int total;
-			int damage;
-			int critical;
-			bool injured;
-			explosive_damage_t() :
-				chemical(0),
-				fire(0),
-				radiation(0),
-				electric(0),
-				armor_pen(0),
-				total(0),
-				damage(0),
-				critical(0),
-				injured(false) {}
-		};
-		explosive_damage_t calculate_explosive_damage(player_ptr_t victim, obj_ptr_t item) {
-			explosive_damage_t e;
-			if(mods::super_users::player_is(victim)) {
-				return e;
-			}
-
-			auto& attr = item->explosive()->attributes;
-			if(attr->alternate_explosion_type.compare("SCAN") == 0) {
-				return e;
-			}
-			uint8_t chance = attr->chance_to_injure;
-			uint8_t critical_chance = attr->critical_chance;
-			if(mods::skills::player_can(victim,"INJURE_RESISTANCE")) {
-				chance -= INJURE_RESISTANCE_SKILL_MODIFIER();
-			}
-			e.injured = mods::injure::do_injure_roll(chance);
-
-			/** TODO handle critical range attribute */
-			/** TODO handle blast radius attribute */
-			/** TODO handle loudness type */
-			e.damage = dice(attr->damage_dice_count,attr->damage_dice_sides);
-
-			if(dice(1,100) <= critical_chance) {
-				e.critical = e.damage * EXPLOSIVE_CRITICAL_MULTIPLIER();
-			}
-
-			if(attr->chemical_damage_dice_count) {
-				e.chemical = dice(attr->chemical_damage_dice_count,attr->chemical_damage_dice_sides);
-			}
-			if(attr->incendiary_damage_dice_count) {
-				e.fire = dice(attr->incendiary_damage_dice_count,attr->incendiary_damage_dice_sides);
-			}
-			if(attr->radiation_damage_dice_count) {
-				e.radiation = dice(attr->radiation_damage_dice_count,attr->radiation_damage_dice_sides);
-			}
-			if(attr->electric_damage_dice_count) {
-				e.electric = dice(attr->electric_damage_dice_count,attr->electric_damage_dice_sides);
-			}
-			if(attr->armor_penetration_damage_dice_count) {
-				e.armor_pen = dice(attr->armor_penetration_damage_dice_count,attr->armor_penetration_damage_dice_sides);
-			}
-
-			return e;
-		}
 
 		void perform_blast_radius(
 		    room_rnum room_id,
@@ -318,10 +258,22 @@ namespace mods {
 							case mw_explosive::CLAYMORE_MINE:
 							case mw_explosive::REMOTE_EXPLOSIVE:
 							case mw_explosive::FRAG_GRENADE:
-								person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-								damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
-								person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
-								explosive_damage(person, device);
+								if(mods::object_utils::is_corrosive_claymore(device)) {
+									person->sendln("{grn}Corrosive shrapnel{/grn} tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+									damage_multiplier = (1.0 * blast_count) / CORROSIVE_DAMAGE_DIVISOR();
+									person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
+									mods::weapons::corrosive_claymore_explode(person,device);
+								} else if(mods::object_utils::is_shrapnel_claymore(device)) {
+									person->sendln("{yel}Enhanced shrapnel{/yel} tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+									damage_multiplier = (1.0 * blast_count) / SHRAPNEL_DAMAGE_DIVISOR();
+									person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
+									mods::weapons::shrapnel_claymore_explode(person,device);
+								} else {
+									person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+									damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
+									person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
+									explosive_damage(person, device);
+								}
 								break;
 							case mw_explosive::INCENDIARY_GRENADE:
 								person->sendln("A heated explosion sets the room on fire" + mods::projectile::fromdirstr(opposite,1,0) + "!");
@@ -361,7 +313,7 @@ namespace mods {
 			if(attr->alternate_explosion_type.compare("SCAN") == 0) {
 				return 0;
 			}
-			auto e = calculate_explosive_damage(victim,item);
+			auto e = mods::weapons::damage_calculator::calculate_explosive_damage(victim,item);
 			if(e.injured) {
 				mods::injure::injure_player(victim);
 				msg::youre_injured(victim);
@@ -458,7 +410,13 @@ namespace mods {
 				case mw_explosive::CLAYMORE_MINE:
 					does_damage = true;
 					send_to_room(room_id,"An explosion catches you off guard as a {red}%s{/red} {yel}DETONATES!!!{/yel}\r\n",object->name.c_str());
-					explosive_damage(victim,object);
+					if(mods::object_utils::is_corrosive_claymore(object)) {
+						mods::weapons::corrosive_claymore_explode(victim,object);
+					} else if(mods::object_utils::is_shrapnel_claymore(object)) {
+						mods::weapons::shrapnel_claymore_explode(victim,object);
+					} else {
+						explosive_damage(victim, object);
+					}
 					break;
 				case mw_explosive::FRAG_GRENADE:
 					does_damage = true;

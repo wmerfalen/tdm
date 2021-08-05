@@ -69,7 +69,6 @@ namespace mods::overhead_map {
 		        world.size() > room
 		     ) {
 			if(map_coordinates[in_y][in_x].compare("[x]") != 0) {
-#if 0
 				auto textures = world[room].textures();
 #define MENTOC_TFIND(A) textures.find(room_data::texture_type_t::A) != textures.end()
 				if(MENTOC_TFIND(WATER) || MENTOC_TFIND(UNDERWATER)) {
@@ -90,7 +89,6 @@ namespace mods::overhead_map {
 				        mods::globals::room_list[room].size() > 0) {
 					map_coordinates[in_y][in_x] = "[n]";
 				}
-#endif
 				map_coordinates[in_y][in_x] = "[ ]";
 			}
 

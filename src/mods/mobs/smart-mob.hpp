@@ -129,6 +129,12 @@ namespace mods::mobs {
 				return "smart-mob";
 			}
 			str_map_t base_usages();
+			template <typename T>
+			static inline void clear_list_if_count(T* list,std::size_t size) {
+				if(std::distance(list->cbegin(),list->cend()) > size) {
+					list->clear();
+				}
+			}
 
 		protected:
 			std::map<uint16_t,uint16_t> m_should_do;

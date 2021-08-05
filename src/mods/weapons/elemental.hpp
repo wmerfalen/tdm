@@ -19,6 +19,7 @@ namespace mods::weapons::elemental {
 	void emp_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage);
 	void shock_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage);
 	void anti_matter_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage);
+	void perform_elemental_damage(player_ptr_t attacker,player_ptr_t& victim,int requested_damage,int type);
 };
 #endif
 
