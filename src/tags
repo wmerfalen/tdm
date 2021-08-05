@@ -5271,15 +5271,15 @@ corrode_clears_up	mods/corrosive.cpp	/^	void corrode_clears_up(room_rnum room) {
 corrode_damage	mods/corrosive.cpp	/^	int corrode_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {$/;"	kind:function	line:24	namespace:mods::corrosive	signature:(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item)
 corrosive	mods/corrosive.cpp	/^namespace mods::corrosive {$/;"	kind:namespace	line:18	class:mods	file:
 corrosive	mods/corrosive.hpp	/^namespace mods::corrosive {$/;"	kind:namespace	line:5	class:mods	file:
-corrosive_claymore	mods/weapons/corrosive-claymore.cpp	/^	corrosive_claymore::corrosive_claymore() {$/;"	kind:function	line:113	class:mods::weapons::corrosive_claymore	signature:()
+corrosive_claymore	mods/weapons/corrosive-claymore.cpp	/^	corrosive_claymore::corrosive_claymore() {$/;"	kind:function	line:116	class:mods::weapons::corrosive_claymore	signature:()
 corrosive_claymore	mods/weapons/corrosive-claymore.hpp	/^	struct corrosive_claymore {$/;"	kind:struct	line:10	namespace:mods::weapons	file:
-corrosive_claymore_explode	mods/weapons/corrosive-claymore.cpp	/^	int corrosive_claymore_explode(player_ptr_t& victim,obj_ptr_t& item) {$/;"	kind:function	line:40	namespace:mods::weapons	signature:(player_ptr_t& victim,obj_ptr_t& item)
-corrosive_claymore_exploded	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore_exploded(const uuid_t& obj_uuid) {$/;"	kind:function	line:23	namespace:mods::weapons	signature:(const uuid_t& obj_uuid)
-corrosive_claymore_installed	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore_installed(const uuid_t& obj_uuid) {$/;"	kind:function	line:32	namespace:mods::weapons	signature:(const uuid_t& obj_uuid)
-corrosive_claymore_list	mods/weapons/corrosive-claymore.cpp	/^	std::forward_list<std::shared_ptr<corrosive_claymore>>& corrosive_claymore_list() {$/;"	kind:function	line:19	namespace:mods::weapons	signature:()
+corrosive_claymore_explode	mods/weapons/corrosive-claymore.cpp	/^	int corrosive_claymore_explode(player_ptr_t& victim,obj_ptr_t& item) {$/;"	kind:function	line:42	namespace:mods::weapons	signature:(player_ptr_t& victim,obj_ptr_t& item)
+corrosive_claymore_exploded	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore_exploded(const uuid_t& obj_uuid) {$/;"	kind:function	line:24	namespace:mods::weapons	signature:(const uuid_t& obj_uuid)
+corrosive_claymore_installed	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore_installed(const uuid_t& obj_uuid) {$/;"	kind:function	line:34	namespace:mods::weapons	signature:(const uuid_t& obj_uuid)
+corrosive_claymore_list	mods/weapons/corrosive-claymore.cpp	/^	std::forward_list<std::shared_ptr<corrosive_claymore>>& corrosive_claymore_list() {$/;"	kind:function	line:20	namespace:mods::weapons	signature:()
 corrosive_claymore_memory	mods/memory.cpp	/^namespace mods::weapons::corrosive_claymore_memory {$/;"	kind:namespace	line:15	class:mods::weapons	file:
-corrosive_claymore_memory	mods/weapons/corrosive-claymore.cpp	/^	namespace corrosive_claymore_memory {$/;"	kind:namespace	line:124	namespace:mods::weapons	file:
-corrosive_claymore_perform_blast_radius	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore_perform_blast_radius(room_rnum room_id,obj_ptr_t device) {$/;"	kind:function	line:84	namespace:mods::weapons	signature:(room_rnum room_id,obj_ptr_t device)
+corrosive_claymore_memory	mods/weapons/corrosive-claymore.cpp	/^	namespace corrosive_claymore_memory {$/;"	kind:namespace	line:127	namespace:mods::weapons	file:
+corrosive_claymore_perform_blast_radius	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore_perform_blast_radius(room_rnum room_id,obj_ptr_t device) {$/;"	kind:function	line:87	namespace:mods::weapons	signature:(room_rnum room_id,obj_ptr_t device)
 corrosive_damage	mods/weapons/elemental.cpp	/^	void corrosive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	kind:function	line:123	namespace:mods::weapons::elemental	signature:(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage)
 corrosive_damage_percent	mods/rifle-attachments.hpp	/^			int16_t corrosive_damage_percent;$/;"	kind:member	line:62	struct:mods::rifle_attachments_t	file:	access:public
 corrosive_resistance_percent	mods/player.cpp	/^	int16_t& player::corrosive_resistance_percent() {$/;"	kind:function	line:1873	class:mods::player	signature:()
@@ -5314,7 +5314,7 @@ create	mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::create(uuid_t mob_uuid
 create	mods/orm/orm-base.hpp	/^			std::tuple<int16_t,std::string,uint64_t> create(TClass* c) {$/;"	kind:function	line:139	struct:mods::orm::orm_base	access:public	signature:(TClass* c)
 create	mods/pq.hpp	/^	static inline std::tuple<int16_t,std::string,uint64_t> create(TClass* c) {$/;"	kind:function	line:527	struct:orm_base	access:public	signature:(TClass* c)
 create	mods/sql.hpp	/^			compositor<T>& create() {$/;"	kind:function	line:54	struct:mods::sql::compositor	access:public	signature:()
-create	mods/weapons/corrosive-claymore.cpp	/^	obj_ptr_t corrosive_claymore::create() {$/;"	kind:function	line:90	class:mods::weapons::corrosive_claymore	signature:()
+create	mods/weapons/corrosive-claymore.cpp	/^	obj_ptr_t corrosive_claymore::create() {$/;"	kind:function	line:93	class:mods::weapons::corrosive_claymore	signature:()
 create	mods/weapons/shrapnel-claymore.cpp	/^	obj_ptr_t shrapnel_claymore::create() {$/;"	kind:function	line:84	class:mods::weapons::shrapnel_claymore	signature:()
 create_breacher	mods/classes/breacher.cpp	/^	std::shared_ptr<breacher> create_breacher(player_ptr_t& in_player) {$/;"	kind:function	line:93	namespace:mods::classes	signature:(player_ptr_t& in_player)
 create_builder	mods/unit-tests/mob-roam.cpp	/^player_ptr_t create_builder() {$/;"	kind:function	line:10	signature:()
@@ -6427,7 +6427,7 @@ explode_debug	mods/projectile.cpp	22;"	kind:macro	line:22	file:
 explode_debug	mods/projectile.cpp	24;"	kind:macro	line:24	file:
 explode_frag_here	mods/projectile.cpp	/^		std::tuple<bool,std::string> explode_frag_here(player_ptr_t& attacker, obj_ptr_t& frag, const room_rnum room_id) {$/;"	kind:function	line:747	namespace:mods::projectile	signature:(player_ptr_t& attacker, obj_ptr_t& frag, const room_rnum room_id)
 explode_in_future	mods/projectile.cpp	/^		void explode_in_future(int room_id, int ticks, uuid_t object_uuid,uuid_t player_uuid) {$/;"	kind:function	line:666	namespace:mods::projectile	signature:(int room_id, int ticks, uuid_t object_uuid,uuid_t player_uuid)
-exploded	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore::exploded() {$/;"	kind:function	line:106	class:mods::weapons::corrosive_claymore	signature:()
+exploded	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore::exploded() {$/;"	kind:function	line:109	class:mods::weapons::corrosive_claymore	signature:()
 exploded	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore::exploded() {$/;"	kind:function	line:100	class:mods::weapons::shrapnel_claymore	signature:()
 explosive	mods/injure.cpp	/^	namespace explosive {$/;"	kind:namespace	line:60	namespace:mods::injure	file:
 explosive	mods/injure.hpp	/^	namespace explosive {$/;"	kind:namespace	line:8	namespace:mods::injure	file:
@@ -6767,7 +6767,7 @@ find_targets	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode find_targe
 find_targets_with_compromised_line_of_sight	mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto find_targets_with_compromised_line_of_sight() {$/;"	kind:function	line:146	namespace:mods::mobs::mini_gunner_behaviour_tree	signature:()
 find_vehicle_near_me	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode find_vehicle_near_me() {$/;"	kind:function	line:176	namespace:mods::mobs::car_thief_behaviour_tree	signature:()
 finished	mods/player-contract-instance.cpp	/^	bool player_contract_instance::finished() {$/;"	kind:function	line:140	class:mods::contracts::player_contract_instance	signature:()
-finished_installing	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore::finished_installing() {$/;"	kind:function	line:109	class:mods::weapons::corrosive_claymore	signature:()
+finished_installing	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore::finished_installing() {$/;"	kind:function	line:112	class:mods::weapons::corrosive_claymore	signature:()
 finished_installing	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore::finished_installing() {$/;"	kind:function	line:103	class:mods::weapons::shrapnel_claymore	signature:()
 fire	mods/weapons/attachment-frag-underbarrel.cpp	/^	std::tuple<bool,std::string> attachment_frag_underbarrel::fire(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance) {$/;"	kind:function	line:13	class:mods::weapons::attachment_frag_underbarrel	signature:(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance)
 fire	mods/weapons/damage-calculator.hpp	/^		int fire;$/;"	kind:member	line:82	struct:mods::weapons::damage_calculator::explosive_damage_t	file:	access:public
@@ -7046,7 +7046,7 @@ get	mods/lmdb/db.hpp	/^			int get(const std::string& key,std::string & in_value)
 get	mods/lmdb/db.hpp	/^		std::string get(const StringType& host){$/;"	kind:function	line:267	struct:gdns::lmdb::resolver	access:public	signature:(const StringType& host)
 get	mods/players/search.hpp	/^					ResultType get(const ResultType& _search) {$/;"	kind:function	line:18	class:mods::player::util::search	access:public	signature:(const ResultType& _search)
 get	mods/prefs.cpp	/^	std::string prefs::get(const std::string& key,char_data* ch) {$/;"	kind:function	line:16	class:mods::prefs	signature:(const std::string& key,char_data* ch)
-get	mods/weapons/corrosive-claymore.cpp	/^		std::string get() {$/;"	kind:function	line:125	namespace:mods::weapons::corrosive_claymore_memory	signature:()
+get	mods/weapons/corrosive-claymore.cpp	/^		std::string get() {$/;"	kind:function	line:128	namespace:mods::weapons::corrosive_claymore_memory	signature:()
 get_abilities	mods/classes/ghost.hpp	/^			std::vector<ability_data_t>& get_abilities() {$/;"	kind:function	line:49	struct:mods::classes::ghost	access:public	signature:()
 get_ada_data	mods/player.cpp	/^	std::map<std::string,std::string>& player::get_ada_data() {$/;"	kind:function	line:1801	class:mods::player	signature:()
 get_affect_dissolver	mods/player.cpp	/^	player::affect_dissolver_t& player::get_affect_dissolver() {$/;"	kind:function	line:1313	class:mods::player	signature:()
@@ -7898,7 +7898,7 @@ insert_returing	mods/orm/base.hpp	/^		static inline std::tuple<int16_t,std::stri
 insert_returing	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> insert_returing(TObject& obj, std::string_view returning_field) {$/;"	kind:function	line:417	file:	signature:(TObject& obj, std::string_view returning_field)
 insert_returning	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string,uint64_t> insert_returning(TObject* obj, std::string_view returning_field) {$/;"	kind:function	line:39	namespace:mods::orm::util	signature:(TObject* obj, std::string_view returning_field)
 insert_returning	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string,uint64_t> insert_returning(TObject& obj, std::string_view returning_field) {$/;"	kind:function	line:229	file:	signature:(TObject& obj, std::string_view returning_field)
-install	mods/weapons/corrosive-claymore.cpp	/^	std::tuple<bool,std::string> corrosive_claymore::install(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction) {$/;"	kind:function	line:97	class:mods::weapons::corrosive_claymore	signature:(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction)
+install	mods/weapons/corrosive-claymore.cpp	/^	std::tuple<bool,std::string> corrosive_claymore::install(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction) {$/;"	kind:function	line:100	class:mods::weapons::corrosive_claymore	signature:(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction)
 install	mods/weapons/shrapnel-claymore.cpp	/^	std::tuple<bool,std::string> shrapnel_claymore::install(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction) {$/;"	kind:function	line:91	class:mods::weapons::shrapnel_claymore	signature:(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction)
 install_item	mods/player-contract-instance.cpp	/^	void player_contract_instance::install_item(const uuid_t& obj_uuid) {$/;"	kind:function	line:652	class:mods::contracts::player_contract_instance	signature:(const uuid_t& obj_uuid)
 install_shop	db.cpp	/^int16_t install_shop(shop_ptr_t& shop) {$/;"	kind:function	line:1376	signature:(shop_ptr_t& shop)
@@ -8736,7 +8736,7 @@ m_debug	mods/weapons/attachment-frag-underbarrel.cpp	94;"	kind:macro	line:94	fil
 m_debug	mods/weapons/attachment-shotgun-underbarrel.cpp	74;"	kind:macro	line:74	file:
 m_debug	mods/weapons/attachment-shotgun-underbarrel.cpp	7;"	kind:macro	line:7	file:
 m_debug	mods/weapons/attachment-shotgun-underbarrel.cpp	9;"	kind:macro	line:9	file:
-m_debug	mods/weapons/corrosive-claymore.cpp	131;"	kind:macro	line:131	file:
+m_debug	mods/weapons/corrosive-claymore.cpp	134;"	kind:macro	line:134	file:
 m_debug	mods/weapons/corrosive-claymore.cpp	14;"	kind:macro	line:14	file:
 m_debug	mods/weapons/corrosive-claymore.cpp	16;"	kind:macro	line:16	file:
 m_debug	mods/weapons/elemental.cpp	263;"	kind:macro	line:263	file:
@@ -9809,7 +9809,7 @@ obj	mods/scripted-step.hpp	/^		obj_vnum obj;$/;"	kind:member	line:19	struct:mods
 obj	mods/util.hpp	/^		obj_ptr_t obj;$/;"	kind:member	line:122	struct:mods::util::objdir_struct	file:	access:public
 obj	mods/weapons/attachment-frag-underbarrel.cpp	/^	obj_ptr_t attachment_frag_underbarrel::obj() {$/;"	kind:function	line:86	class:mods::weapons::attachment_frag_underbarrel	signature:()
 obj	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	obj_ptr_t attachment_shotgun_underbarrel::obj() {$/;"	kind:function	line:66	class:mods::weapons::attachment_shotgun_underbarrel	signature:()
-obj	mods/weapons/corrosive-claymore.cpp	/^	obj_ptr_t corrosive_claymore::obj() {$/;"	kind:function	line:102	class:mods::weapons::corrosive_claymore	signature:()
+obj	mods/weapons/corrosive-claymore.cpp	/^	obj_ptr_t corrosive_claymore::obj() {$/;"	kind:function	line:105	class:mods::weapons::corrosive_claymore	signature:()
 obj	mods/weapons/pistol-czp10.hpp	/^			obj_data_ptr_t obj;$/;"	kind:member	line:18	struct:mods::weapons::pistol::czp10	file:	access:public
 obj	mods/weapons/shotgun-sasg12.hpp	/^			obj_data_ptr_t obj;$/;"	kind:member	line:18	struct:mods::weapons::shotgun::sasg12	file:	access:public
 obj	mods/weapons/shrapnel-claymore.cpp	/^	obj_ptr_t& shrapnel_claymore::obj() {$/;"	kind:function	line:96	class:mods::weapons::shrapnel_claymore	signature:()
@@ -12836,7 +12836,7 @@ weapons	mods/weapons/attachment-frag-underbarrel.cpp	/^namespace mods::weapons {
 weapons	mods/weapons/attachment-frag-underbarrel.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:7	class:mods	file:
 weapons	mods/weapons/attachment-shotgun-underbarrel.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:11	class:mods	file:
 weapons	mods/weapons/attachment-shotgun-underbarrel.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:7	class:mods	file:
-weapons	mods/weapons/corrosive-claymore.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:18	class:mods	file:
+weapons	mods/weapons/corrosive-claymore.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:19	class:mods	file:
 weapons	mods/weapons/corrosive-claymore.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:8	class:mods	file:
 weapons	mods/weapons/heat.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:3	class:mods	file:
 weapons	mods/weapons/shrapnel-claymore.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:18	class:mods	file:

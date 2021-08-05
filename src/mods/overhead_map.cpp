@@ -71,10 +71,8 @@ namespace mods::overhead_map {
 			if(map_coordinates[in_y][in_x].compare("[x]") != 0) {
 				auto textures = world[room].textures();
 #define MENTOC_TFIND(A) textures.find(room_data::texture_type_t::A) != textures.end()
-				if(MENTOC_TFIND(WATER) || MENTOC_TFIND(UNDERWATER)) {
+				if(MENTOC_TFIND(WATER) || MENTOC_TFIND(UNDERWATER) || MENTOC_TFIND(SHALLOW_WATER) || MENTOC_TFIND(DAMP)) {
 					map_coordinates[in_y][in_x] = "{blu}~~~{/blu}";
-				} else if(MENTOC_TFIND(SHALLOW_WATER)) {
-					map_coordinates[in_y][in_x] = "{blu}|~|{/blu}";
 				} else if(MENTOC_TFIND(DESERT)) {
 					map_coordinates[in_y][in_x] = "{gld}:::{/gld}";
 				} else if(MENTOC_TFIND(ON_FIRE)) {

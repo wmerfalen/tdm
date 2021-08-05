@@ -15,6 +15,7 @@
 #else
 #define m_debug(a)
 #endif
+void obj_from_room(obj_ptr_t in_object);
 namespace mods::weapons {
 	std::forward_list<std::shared_ptr<corrosive_claymore>>& corrosive_claymore_list() {
 		static std::forward_list<std::shared_ptr<corrosive_claymore>> c;
@@ -25,6 +26,7 @@ namespace mods::weapons {
 			if(claymore->uuid() == obj_uuid) {
 				claymore->exploded();
 				corrosive_claymore_list().remove(claymore);
+				mods::globals::dispose_object(obj_uuid);
 				return;
 			}
 		}
@@ -77,6 +79,7 @@ namespace mods::weapons {
 
 		mods::weapons::damage_types::deal_hp_damage(victim,damage);
 		mods::weapons::elemental::perform_elemental_damage(nullptr,victim,damage,ELEM_CORROSIVE);
+		obj_from_room(item);
 		corrosive_claymore_exploded(u);
 		return damage;
 	}

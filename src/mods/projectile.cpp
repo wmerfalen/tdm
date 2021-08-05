@@ -268,22 +268,22 @@ namespace mods {
 							case mw_explosive::CLAYMORE_MINE:
 							case mw_explosive::REMOTE_EXPLOSIVE:
 							case mw_explosive::FRAG_GRENADE:
-								if(mods::object_utils::is_corrosive_claymore(device)) {
-									person->sendln("{grn}Corrosive shrapnel{/grn} tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-									damage_multiplier = (1.0 * blast_count) / CORROSIVE_DAMAGE_DIVISOR();
-									person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
-									mods::weapons::corrosive_claymore_explode(person,device);
-								} else if(mods::object_utils::is_shrapnel_claymore(device)) {
-									person->sendln("{yel}Enhanced shrapnel{/yel} tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-									damage_multiplier = (1.0 * blast_count) / SHRAPNEL_DAMAGE_DIVISOR();
-									person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
-									mods::weapons::shrapnel_claymore_explode(person,device);
-								} else {
-									person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-									damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
-									person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
-									explosive_damage(person, device);
-								}
+								//if(mods::object_utils::is_corrosive_claymore(device)) {
+								//	person->sendln("{grn}Corrosive shrapnel{/grn} tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+								//	damage_multiplier = (1.0 * blast_count) / CORROSIVE_DAMAGE_DIVISOR();
+								//	person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
+								//	mods::weapons::corrosive_claymore_explode(person,device);
+								//} else if(mods::object_utils::is_shrapnel_claymore(device)) {
+								//	person->sendln("{yel}Enhanced shrapnel{/yel} tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+								//	damage_multiplier = (1.0 * blast_count) / SHRAPNEL_DAMAGE_DIVISOR();
+								//	person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
+								//	mods::weapons::shrapnel_claymore_explode(person,device);
+								//} else {
+								person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+								damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
+								person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
+								explosive_damage(person, device);
+								//}
 								break;
 							case mw_explosive::INCENDIARY_GRENADE:
 								person->sendln("A heated explosion sets the room on fire" + mods::projectile::fromdirstr(opposite,1,0) + "!");
