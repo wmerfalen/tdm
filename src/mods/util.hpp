@@ -420,6 +420,7 @@ namespace mods::util::args {
 			check_parsed_args* size_eq(std::size_t size);
 			std::string errors();
 			bool passed();
+			bool failed();
 		private:
 			void result(std::string f,std::string value,bool passed);
 			void result(std::string f,std::size_t value,bool passed);

@@ -5242,6 +5242,8 @@ SUPERCMD(do_rbuild) {
 		                      "  |:: keyword             -> The keyword of the room direction\r\n" <<
 		                      "  |:: key                 -> Integer key that is accepted for this exit\r\n" <<
 		                      "  |:: to_room             -> The room number that this exit leads to\r\n" <<
+		                      "  |:: to_vnum             -> The room vnum that this exit leads to\r\n"   <<
+		                      "  |:: to_mark             -> The room with the bookmark specified\r\n"    <<
 		                      "  {grn}|____[examples]{/grn}\r\n" <<
 		                      "  |:: {wht}rbuild{/wht} {gld}dopt north gen To the north you see the Taco Bell bathroom.{/gld}\r\n" <<
 		                      "  |:: (When you do 'look north' you will see the above description)\r\n" <<
@@ -5542,6 +5544,34 @@ SUPERCMD(do_rbuild) {
 			r_status(player,"Done listing...");
 			return;
 		}
+		/**
+		 *  command line: rbuild ed <index> <keyword> <value>
+		 * --------------------------------------------------
+		 *  the n is for which page to list. 25 to a page
+		 */
+		if(argshave()->first_is("ed")->passed()) {
+			if(argshave()->size_gt(3)->failed()) {
+				r_error(player,"Not enough arguments");
+				return;
+			}
+			if(argshave()->nth_is_any(2, {"keyword","description"})->failed()) {
+				r_error(player,"Sub-command must be either 'keyword' or 'description'");
+				return;
+			}
+			if(argshave()->int_at(1)->failed()) {
+				r_error(player,"You must specify a valid integer for the index");
+				return;
+			}
+			auto value = args()->gather_strings_starting_at(3);
+			if(argat(2).compare("keyword") == 0) {
+				world[player->room()].ex_descriptions()[intat(1)].keyword.assign(value);
+				r_success(player,"Set keyword");
+			} else {
+				world[player->room()].ex_descriptions()[intat(1)].description.assign(value);
+				r_success(player,"Set description");
+			}
+			return;
+		}
 		if(vec_args.size() >= 3 && vec_args[1].compare("delete") == 0) {
 			/** accepts: rbuild ed delete n */
 			// rbuild ed <delete> <n>\n" <<  /** todo: needs impl */
@@ -5747,6 +5777,51 @@ SUPERCMD(do_rbuild) {
 
 			return;
 		}
+
+		if(str_item.compare("to_vnum") == 0) {
+			auto to_room = mods::util::stoi(description);
+
+			if(to_room.value_or(-1) == -1) {
+				r_error(player,"Invalid room number");
+				return;
+			}
+
+			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
+			                                     std::nullopt,std::nullopt,std::nullopt,real_room(to_room.value())).value_or("success");
+
+			if(ret.compare("success") == 0) {
+				r_success(player,"to_room changed");
+			} else {
+				r_error(player,ret);
+			}
+
+			return;
+		}
+		if(str_item.compare("to_mark") == 0) {
+			auto bookmark = description;
+
+			if(player->builder_data->bookmarks.find(bookmark) == player->builder_data->bookmarks.end()) {
+				r_error(player,"No bookmark by that name");
+				return;
+			}
+			auto room_id = player->builder_data->bookmarks[bookmark];
+			if(room_id < 0 || room_id >= world.size()) {
+				r_error(player,"Room id doesn't exist!");
+				return;
+			}
+
+			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
+			                                     std::nullopt,std::nullopt,std::nullopt,room_id).value_or("success");
+
+			if(ret.compare("success") == 0) {
+				r_success(player,"to_room changed");
+			} else {
+				r_error(player,ret);
+			}
+
+			return;
+		}
+
 
 		if(str_item.compare("to_room") == 0) {
 			auto to_room = mods::util::stoi(description);

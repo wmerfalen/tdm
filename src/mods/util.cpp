@@ -1571,6 +1571,9 @@ namespace mods::util::args {
 		}
 		return true;
 	}
+	bool check_parsed_args::failed() {
+		return !this->passed();
+	}
 	check_parsed_args* check_parsed_args::direction_at(std::size_t index) {
 		if(index < p->vec_args.size()) {
 			auto dir = to_direction(p->vec_args[index]);
