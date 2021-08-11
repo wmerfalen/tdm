@@ -19,7 +19,7 @@ namespace mods::weapons {
 			}
 			void finished_installing();
 			void exploded();
-			obj_ptr_t& obj();
+			obj_ptr_t obj();
 		protected:
 			obj_ptr_t m_obj;
 			std::pair<room_rnum,direction_t> m_claymore_room;

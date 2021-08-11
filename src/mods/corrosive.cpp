@@ -22,6 +22,14 @@ namespace mods::corrosive {
 	using texture_type_t = room_data::texture_type_t;
 
 	int corrode_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {
+		/**
+		 * corrosive damage against a player has the following effects:
+		 * 	- melee attackers take 2 turns to move instead of 1
+		 * 	- chance of melee attackers to drop their weapon
+		 * 	- ranged attacks do N percent less damage
+		 *  - continuous damage over N seconds
+		 *  - blindness over N seconds
+		 */
 		return 0;
 	}
 	void disable_electronics(room_rnum room) {

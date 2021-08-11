@@ -13,7 +13,10 @@ namespace mods::behaviour_tree_impl {
 	extern std::vector<uuid_t>& mob_list();
 };
 namespace mods::weapons::corrosive_claymore_memory {
-	extern std::string get();
+	std::string get();
+};
+namespace mods::weapons::shrapnel_claymore_memory {
+	std::string get();
 };
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 extern std::deque<std::shared_ptr<mods::npc>> mob_list;
@@ -25,6 +28,14 @@ namespace mods::memory {
 	template <typename T>
 	void save_footprint(T& ptr) {
 		usage_report[CAT(ptr->type().data(),":",ptr->uuid)] = ptr->usages();
+	}
+	template <typename T>
+	void save_counts(std::map<uuid_t,T>& map,std::string_view type) {
+		usage_report[std::string(type.data()) + ".size()"] = {{"size",std::to_string(map.size())}};
+	}
+	template <typename T>
+	void save_counts(std::forward_list<T>& l,std::string_view type) {
+		usage_report[std::string(type.data()) + ".size()"] = {{"size",std::to_string(std::distance(l.cbegin(),l.cend()))}};
 	}
 	std::string get_saved_footprints() {
 		std::string s;
@@ -47,22 +58,30 @@ namespace mods::memory {
 		for(const auto& g : mods::mobs::generic_thief_list()) {
 			save_footprint(g);
 		}
+		save_counts(mods::mobs::generic_thief_list(),"generic_thief");
 		for(const auto& g : mods::mobs::chaotic_meth_addict_list()) {
 			save_footprint(g);
 		}
+		save_counts(mods::mobs::chaotic_meth_addict_list(),"chaotic_meth_addict");
 		for(const auto& pair : mods::mobs::car_thief_map()) {
 			auto& g = pair.second;
 			save_footprint(g);
+		}
+		save_counts(mods::mobs::car_thief_map(),"car_thief");
+		for(const auto& pair : mods::mobs::car_thief_map()) {
+			std::cerr << "car_thief hp: " << pair.second->player()->hp() << "\n";
 		}
 		for(const auto& pair : mods::mobs::mpshotgunner_map()) {
 			auto& g = pair.second;
 			save_footprint(g);
 		}
+		save_counts(mods::mobs::mpshotgunner_map(),"mpshotgunner");
 		for(const auto& pair : mods::mobs::mg_map()) {
 			auto& g = pair.second;
 			save_footprint(g);
 		}
 		auto cor = mods::weapons::corrosive_claymore_memory::get();
+		auto shrapnel = mods::weapons::shrapnel_claymore_memory::get();
 		std::size_t watchers = 0;
 		for(const auto& room : world) {
 			watchers += room.watchers.size();
@@ -88,6 +107,7 @@ namespace mods::memory {
 		          "mods::behaviour_tree_impl: " << mods::behaviour_tree_impl::mob_list().size() << "\n" <<
 		          get_saved_footprints() <<
 		          "corrosive_claymore: " << cor << "\n" <<
+		          "shrapnel_claymore: " << shrapnel << "\n" <<
 		          "------------------------------------------------------------------\n";
 
 #ifdef __MENTOC_SHOW_OBJ_LIST_MEMORY_OUTPUT__

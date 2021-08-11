@@ -22,6 +22,15 @@ namespace mods::shrapnel {
 	using texture_type_t = room_data::texture_type_t;
 
 	int shrapnel_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {
+		/**
+		 * Shrapnel has the one or more of the following effects on it's target:
+		 * - can cause bleeding
+		 *   - bleeding drains HP over a period of time
+		 * - cause target to take N % more movement points to move
+		 * - armor is less effective in absorbing subsequent attacks
+		 * - chance to cause target to flee room
+		 *
+		 * */
 		return 0;
 	}
 	void damage_electronics(room_rnum room) {

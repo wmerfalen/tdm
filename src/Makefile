@@ -179,7 +179,9 @@ buildobj = act.informative act.item act.medic \
 					 mods/memory mods/weapons/attachment-frag-underbarrel mods/unit-tests/frag-underbarrel \
 					 mods/boosters/adrenaline-shot mods/unit-tests/class-sniper \
 					 mods/corrosive mods/weapons/corrosive-claymore \
-					 mods/shrapnel mods/weapons/shrapnel-claymore
+					 mods/shrapnel mods/weapons/shrapnel-claymore \
+					 mods/incendiary mods/radioactive mods/anti-matter mods/shock \
+					 mods/cryogenic
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

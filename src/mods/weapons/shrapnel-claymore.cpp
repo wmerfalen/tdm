@@ -15,6 +15,7 @@
 #else
 #define m_debug(a)
 #endif
+void obj_from_room(obj_ptr_t in_object);
 namespace mods::weapons {
 	std::forward_list<std::shared_ptr<shrapnel_claymore>>& shrapnel_claymore_list() {
 		static std::forward_list<std::shared_ptr<shrapnel_claymore>> c;
@@ -25,6 +26,7 @@ namespace mods::weapons {
 			if(claymore->uuid() == obj_uuid) {
 				claymore->exploded();
 				shrapnel_claymore_list().remove(claymore);
+				mods::globals::dispose_object(obj_uuid);
 				return;
 			}
 		}
@@ -76,9 +78,16 @@ namespace mods::weapons {
 		auto u = item->uuid;
 
 		mods::weapons::damage_types::deal_hp_damage(victim,damage);
-		mods::weapons::elemental::perform_elemental_damage(nullptr,victim,damage,ELEM_SHRAPNEL);
+		mods::weapons::elemental::perform_elemental_damage(nullptr,victim,damage,ELEM_CORROSIVE);
+		obj_from_room(item);
 		shrapnel_claymore_exploded(u);
 		return damage;
+	}
+
+	void shrapnel_claymore_perform_blast_radius(room_rnum room_id,obj_ptr_t device) {
+		for(auto& victim : mods::globals::room_list[room_id]) {
+			shrapnel_claymore_explode(victim, device);
+		}
 	}
 
 	obj_ptr_t shrapnel_claymore::create() {
@@ -90,10 +99,10 @@ namespace mods::weapons {
 
 	std::tuple<bool,std::string> shrapnel_claymore::install(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction) {
 		mods::demolitions::plant_claymore(attacker,direction,m_obj);
-		return {true,"You begin installing an {yel}enhanced shrapnel{/yel} claymore mine..."};
+		return {true,"You begin installing a {grn}shrapnel{/grn} claymore mine..."};
 	}
 
-	obj_ptr_t& shrapnel_claymore::obj() {
+	obj_ptr_t shrapnel_claymore::obj() {
 		return m_obj;
 	}
 
@@ -115,10 +124,11 @@ namespace mods::weapons {
 		m_uuid = m_obj->uuid;
 	}
 
-	void shrapnel_claymore_perform_blast_radius(room_rnum room_id,obj_ptr_t device) {
-		for(auto& victim : mods::globals::room_list[room_id]) {
-			shrapnel_claymore_explode(victim, device);
+	namespace shrapnel_claymore_memory {
+		std::string get() {
+			std::string s = CAT("shrapnel_claymores: ",std::distance(shrapnel_claymore_list().cbegin(),shrapnel_claymore_list().cend()));
+			return s;
 		}
-	}
+	};
 };
 #undef m_debug

@@ -4130,16 +4130,22 @@ __MENTOC_MODS_YAML_HEADER__	mods/yaml.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_ZONE_HEADER__	mods/intimidate.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_ZONE_HEADER__	mods/zone.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_ai_state_HEADER__	mods/ai_state.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_anti_matter_HEADER__	mods/anti-matter.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_contract_events_HEADER__	mods/contract-events.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_corrosive_HEADER__	mods/corrosive.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_cron_HEADER__	mods/cron.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_cryogenic_HEADER__	mods/cryogenic.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_incendiary_HEADER__	mods/explosive.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_incendiary_HEADER__	mods/incendiary.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_radioactive_HEADER__	mods/radioactive.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_scripted_sequence_runner_HEADER__	mods/scripted-sequence-runner.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_scripted_sequencesS_HEADER__	mods/scripted-sequences.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_scripted_sequences_events_HEADER__	mods/scripted-sequence-events.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_scripted_stepS_HEADER__	mods/scripted-step.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_shock_HEADER__	mods/shock.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_shrapnel_HEADER__	mods/shrapnel.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/search.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/util.hpp	2;"	kind:macro	line:2	file:
@@ -4381,6 +4387,7 @@ ammunition_amount	mods/rifle-attachments.hpp	/^			int16_t ammunition_amount;				
 ammunition_amount	mods/weapons/damage-calculator.cpp	/^	int16_t ammunition_amount($/;"	kind:function	line:193	namespace:mods::weapons::damage_calculator	signature:( player_ptr_t& attacker, obj_ptr_t& weapon )
 amount	mods/deferred.hpp	/^		int64_t amount;$/;"	kind:member	line:28	struct:mods::chunk_affect_t	file:	access:public
 another_hour	weather.cpp	/^void another_hour(int mode) {$/;"	kind:function	line:39	signature:(int mode)
+anti_matter	mods/anti-matter.hpp	/^namespace mods::anti_matter {$/;"	kind:namespace	line:5	class:mods	file:
 anti_matter_damage	mods/weapons/elemental.cpp	/^	void anti_matter_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	kind:function	line:138	namespace:mods::weapons::elemental	signature:(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage)
 anti_matter_damage_percent	mods/rifle-attachments.hpp	/^			int16_t anti_matter_damage_percent;$/;"	kind:member	line:67	struct:mods::rifle_attachments_t	file:	access:public
 anti_matter_resistance_percent	mods/player.cpp	/^	int16_t& player::anti_matter_resistance_percent() {$/;"	kind:function	line:1888	class:mods::player	signature:()
@@ -4747,6 +4754,14 @@ builder_mode	mods/player.cpp	/^	bool player::builder_mode() const {$/;"	kind:fun
 builder_util	mods/builder_util.hpp	/^namespace mods::builder_util {$/;"	kind:namespace	line:18	class:mods	file:
 builders	mods/acl_list.cpp	/^		static player_acl_list_t builders;$/;"	kind:member	line:9	namespace:mods::acl_list::list_container	file:
 built_on	house.h	/^	time_t built_on;		\/* date this house was built	*\/$/;"	kind:member	line:11	struct:house_control_rec	file:	access:public
+burn_damage	mods/explosive.cpp	/^	int burn_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {$/;"	kind:function	line:24	namespace:mods::incendiary	signature:(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item)
+burn_damage	mods/incendiary.cpp	/^	int burn_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {$/;"	kind:function	line:24	namespace:mods::incendiary	signature:(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item)
+burn_electronics	mods/explosive.cpp	/^	void burn_electronics(room_rnum room) {$/;"	kind:function	line:39	namespace:mods::incendiary	signature:(room_rnum room)
+burn_electronics	mods/incendiary.cpp	/^	void burn_electronics(room_rnum room) {$/;"	kind:function	line:39	namespace:mods::incendiary	signature:(room_rnum room)
+burning_clears_up	mods/explosive.cpp	/^	void burning_clears_up(player_ptr_t victim) {$/;"	kind:function	line:48	namespace:mods::incendiary	signature:(player_ptr_t victim)
+burning_clears_up	mods/explosive.cpp	/^	void burning_clears_up(room_rnum room) {$/;"	kind:function	line:51	namespace:mods::incendiary	signature:(room_rnum room)
+burning_clears_up	mods/incendiary.cpp	/^	void burning_clears_up(player_ptr_t victim) {$/;"	kind:function	line:48	namespace:mods::incendiary	signature:(player_ptr_t victim)
+burning_clears_up	mods/incendiary.cpp	/^	void burning_clears_up(room_rnum room) {$/;"	kind:function	line:51	namespace:mods::incendiary	signature:(room_rnum room)
 buy_item	mods/shop.hpp	/^	void buy_item(player_ptr_t& player, TShopMap& shop_map, std::string_view argument) {$/;"	kind:function	line:13	namespace:mods::shop	signature:(player_ptr_t& player, TShopMap& shop_map, std::string_view argument)
 buy_price	shop.cpp	/^int buy_price(struct obj_data *obj, int shop_nr, char_data *keeper, char_data *buyer) {$/;"	kind:function	line:555	signature:(struct obj_data *obj, int shop_nr, char_data *keeper, char_data *buyer)
 by_mob_vnum	mods/builder/meqbuild.cpp	/^		std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> by_mob_vnum(const uint64_t& vnum) {$/;"	kind:function	line:135	namespace:mods::builder::meqbuild::map	signature:(const uint64_t& vnum)
@@ -5266,8 +5281,8 @@ cooldown_between_shots	mods/weapon.hpp	/^			float cooldown_between_shots;$/;"	ki
 coordinates	mods/builder/coordinates.hpp	/^namespace mods::builder::coordinates {$/;"	kind:namespace	line:5	class:mods::builder	file:
 core_dump	utils.h	56;"	kind:macro	line:56	file:
 core_dump_real	utils.cpp	/^void core_dump_real(const char *who, int line) {$/;"	kind:function	line:738	signature:(const char *who, int line)
-corrode_clears_up	mods/corrosive.cpp	/^	void corrode_clears_up(player_ptr_t victim) {$/;"	kind:function	line:36	namespace:mods::corrosive	signature:(player_ptr_t victim)
-corrode_clears_up	mods/corrosive.cpp	/^	void corrode_clears_up(room_rnum room) {$/;"	kind:function	line:39	namespace:mods::corrosive	signature:(room_rnum room)
+corrode_clears_up	mods/corrosive.cpp	/^	void corrode_clears_up(player_ptr_t victim) {$/;"	kind:function	line:44	namespace:mods::corrosive	signature:(player_ptr_t victim)
+corrode_clears_up	mods/corrosive.cpp	/^	void corrode_clears_up(room_rnum room) {$/;"	kind:function	line:47	namespace:mods::corrosive	signature:(room_rnum room)
 corrode_damage	mods/corrosive.cpp	/^	int corrode_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {$/;"	kind:function	line:24	namespace:mods::corrosive	signature:(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item)
 corrosive	mods/corrosive.cpp	/^namespace mods::corrosive {$/;"	kind:namespace	line:18	class:mods	file:
 corrosive	mods/corrosive.hpp	/^namespace mods::corrosive {$/;"	kind:namespace	line:5	class:mods	file:
@@ -5315,7 +5330,7 @@ create	mods/orm/orm-base.hpp	/^			std::tuple<int16_t,std::string,uint64_t> creat
 create	mods/pq.hpp	/^	static inline std::tuple<int16_t,std::string,uint64_t> create(TClass* c) {$/;"	kind:function	line:527	struct:orm_base	access:public	signature:(TClass* c)
 create	mods/sql.hpp	/^			compositor<T>& create() {$/;"	kind:function	line:54	struct:mods::sql::compositor	access:public	signature:()
 create	mods/weapons/corrosive-claymore.cpp	/^	obj_ptr_t corrosive_claymore::create() {$/;"	kind:function	line:93	class:mods::weapons::corrosive_claymore	signature:()
-create	mods/weapons/shrapnel-claymore.cpp	/^	obj_ptr_t shrapnel_claymore::create() {$/;"	kind:function	line:84	class:mods::weapons::shrapnel_claymore	signature:()
+create	mods/weapons/shrapnel-claymore.cpp	/^	obj_ptr_t shrapnel_claymore::create() {$/;"	kind:function	line:93	class:mods::weapons::shrapnel_claymore	signature:()
 create_breacher	mods/classes/breacher.cpp	/^	std::shared_ptr<breacher> create_breacher(player_ptr_t& in_player) {$/;"	kind:function	line:93	namespace:mods::classes	signature:(player_ptr_t& in_player)
 create_builder	mods/unit-tests/mob-roam.cpp	/^player_ptr_t create_builder() {$/;"	kind:function	line:10	signature:()
 create_char_from_registration	mods/chargen.cpp	/^	int create_char_from_registration(player_ptr_t& p,std::string argument) {$/;"	kind:function	line:83	namespace:mods::chargen	signature:(player_ptr_t& p,std::string argument)
@@ -5384,6 +5399,12 @@ critical_chance	mods/weapon.hpp	/^			float critical_chance;$/;"	kind:member	line
 critical_range	mods/weapon.hpp	/^			int critical_range;$/;"	kind:member	line:164	struct:mods::weapon::yaml::rifle_description_t	file:	access:public
 cron	mods/cron.hpp	/^			cron(uint64_t tick_resolution) : m_tres(tick_resolution) {$/;"	kind:function	line:18	class:mods::cron	access:public	signature:(uint64_t tick_resolution)
 cron	mods/cron.hpp	/^	class cron {$/;"	kind:class	line:15	namespace:mods	file:
+cryo_clears_up	mods/cryogenic.cpp	/^	void cryo_clears_up(player_ptr_t victim) {$/;"	kind:function	line:48	namespace:mods::cryogenic	signature:(player_ptr_t victim)
+cryo_clears_up	mods/cryogenic.cpp	/^	void cryo_clears_up(room_rnum room) {$/;"	kind:function	line:51	namespace:mods::cryogenic	signature:(room_rnum room)
+cryo_damage	mods/cryogenic.cpp	/^	int cryo_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {$/;"	kind:function	line:24	namespace:mods::cryogenic	signature:(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item)
+cryo_electronics	mods/cryogenic.cpp	/^	void cryo_electronics(room_rnum room) {$/;"	kind:function	line:39	namespace:mods::cryogenic	signature:(room_rnum room)
+cryogenic	mods/cryogenic.cpp	/^namespace mods::cryogenic {$/;"	kind:namespace	line:18	class:mods	file:
+cryogenic	mods/cryogenic.hpp	/^namespace mods::cryogenic {$/;"	kind:namespace	line:5	class:mods	file:
 cryogenic_damage	mods/weapons/elemental.cpp	/^	void cryogenic_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	kind:function	line:126	namespace:mods::weapons::elemental	signature:(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage)
 cryogenic_damage_percent	mods/rifle-attachments.hpp	/^			int16_t cryogenic_damage_percent;$/;"	kind:member	line:63	struct:mods::rifle_attachments_t	file:	access:public
 cryogenic_grenade_count	mods/classes/ghost.cpp	/^	uint8_t ghost::cryogenic_grenade_count() const {$/;"	kind:function	line:282	class:mods::classes::ghost	signature:() const
@@ -5425,7 +5446,7 @@ damage	mods/yaml.hpp	/^		int damage;$/;"	kind:member	line:225	struct:mods::yaml:
 damage	mods/yaml.hpp	/^		int damage;$/;"	kind:member	line:251	struct:mods::yaml::drone_description_t	file:	access:public
 damage_calculator	mods/weapons/damage-calculator.cpp	/^namespace mods::weapons::damage_calculator {$/;"	kind:namespace	line:24	class:mods::weapons	file:
 damage_calculator	mods/weapons/damage-calculator.hpp	/^namespace mods::weapons::damage_calculator {$/;"	kind:namespace	line:14	class:mods::weapons	file:
-damage_electronics	mods/shrapnel.cpp	/^	void damage_electronics(room_rnum room) {$/;"	kind:function	line:27	namespace:mods::shrapnel	signature:(room_rnum room)
+damage_electronics	mods/shrapnel.cpp	/^	void damage_electronics(room_rnum room) {$/;"	kind:function	line:36	namespace:mods::shrapnel	signature:(room_rnum room)
 damage_event	mods/damage-event.hpp	/^	damage_event_t damage_event;$/;"	kind:member	line:81	struct:feedback_t	file:	access:public
 damage_event	mods/mobs/damage-event.cpp	/^namespace mods::mobs::damage_event {$/;"	kind:namespace	line:16	class:mods::mobs	file:
 damage_event	mods/mobs/damage-event.hpp	/^namespace mods::mobs::damage_event {$/;"	kind:namespace	line:10	class:mods::mobs	file:
@@ -5743,7 +5764,7 @@ dirs	constants.hpp	/^const char *dirs[] =$/;"	kind:variable	line:29
 dirstr	globals.cpp	/^std::string dirstr(int dir) {$/;"	kind:function	line:1359	signature:(int dir)
 dirstr	mods/doors.hpp	/^	static inline std::string dirstr(const int& direction) {$/;"	kind:function	line:48	namespace:mods::doors	signature:(const int& direction)
 disable_all_zone_resets	mods/zone.cpp	/^	static bool disable_all_zone_resets = false;$/;"	kind:member	line:21	namespace:mods::zone	file:
-disable_electronics	mods/corrosive.cpp	/^	void disable_electronics(room_rnum room) {$/;"	kind:function	line:27	namespace:mods::corrosive	signature:(room_rnum room)
+disable_electronics	mods/corrosive.cpp	/^	void disable_electronics(room_rnum room) {$/;"	kind:function	line:35	namespace:mods::corrosive	signature:(room_rnum room)
 disable_electronics	mods/projectile.cpp	/^		void disable_electronics(room_rnum room) {$/;"	kind:function	line:167	namespace:mods::projectile	signature:(room_rnum room)
 disable_zone_resets	mods/builder.cpp	/^void disable_zone_resets() {$/;"	kind:function	line:160	signature:()
 disable_zone_resets	mods/zone.cpp	/^	void disable_zone_resets(bool b) {$/;"	kind:function	line:103	namespace:mods::zone	signature:(bool b)
@@ -6276,10 +6297,22 @@ e_put	mods/db.hpp	/^	constexpr static int_status_t e_put = -1;$/;"	kind:member	l
 echo_off	comm.cpp	/^void echo_off(mods::descriptor_data& d) {$/;"	kind:function	line:1100	signature:(mods::descriptor_data& d)
 echo_on	comm.cpp	/^void echo_on(mods::descriptor_data& d) {$/;"	kind:function	line:1114	signature:(mods::descriptor_data& d)
 effective_firing_range	mods/weapon.hpp	/^			int effective_firing_range; \/\/ feet$/;"	kind:member	line:175	struct:mods::weapon::yaml::rifle_description_t	file:	access:public
+eif_debug	mods/anti-matter.cpp	12;"	kind:macro	line:12	file:
+eif_debug	mods/anti-matter.cpp	14;"	kind:macro	line:14	file:
 eif_debug	mods/corrosive.cpp	12;"	kind:macro	line:12	file:
 eif_debug	mods/corrosive.cpp	14;"	kind:macro	line:14	file:
+eif_debug	mods/cryogenic.cpp	12;"	kind:macro	line:12	file:
+eif_debug	mods/cryogenic.cpp	14;"	kind:macro	line:14	file:
+eif_debug	mods/explosive.cpp	12;"	kind:macro	line:12	file:
+eif_debug	mods/explosive.cpp	14;"	kind:macro	line:14	file:
+eif_debug	mods/incendiary.cpp	12;"	kind:macro	line:12	file:
+eif_debug	mods/incendiary.cpp	14;"	kind:macro	line:14	file:
 eif_debug	mods/projectile.cpp	36;"	kind:macro	line:36	file:
 eif_debug	mods/projectile.cpp	38;"	kind:macro	line:38	file:
+eif_debug	mods/radioactive.cpp	12;"	kind:macro	line:12	file:
+eif_debug	mods/radioactive.cpp	14;"	kind:macro	line:14	file:
+eif_debug	mods/shock.cpp	12;"	kind:macro	line:12	file:
+eif_debug	mods/shock.cpp	14;"	kind:macro	line:14	file:
 eif_debug	mods/shrapnel.cpp	12;"	kind:macro	line:12	file:
 eif_debug	mods/shrapnel.cpp	14;"	kind:macro	line:14	file:
 elapsed	mods/util.hpp	/^			double elapsed() const {$/;"	kind:function	line:32	class:mods::util::stopwatch_t	access:public	signature:() const
@@ -6428,7 +6461,7 @@ explode_debug	mods/projectile.cpp	24;"	kind:macro	line:24	file:
 explode_frag_here	mods/projectile.cpp	/^		std::tuple<bool,std::string> explode_frag_here(player_ptr_t& attacker, obj_ptr_t& frag, const room_rnum room_id) {$/;"	kind:function	line:747	namespace:mods::projectile	signature:(player_ptr_t& attacker, obj_ptr_t& frag, const room_rnum room_id)
 explode_in_future	mods/projectile.cpp	/^		void explode_in_future(int room_id, int ticks, uuid_t object_uuid,uuid_t player_uuid) {$/;"	kind:function	line:666	namespace:mods::projectile	signature:(int room_id, int ticks, uuid_t object_uuid,uuid_t player_uuid)
 exploded	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore::exploded() {$/;"	kind:function	line:109	class:mods::weapons::corrosive_claymore	signature:()
-exploded	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore::exploded() {$/;"	kind:function	line:100	class:mods::weapons::shrapnel_claymore	signature:()
+exploded	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore::exploded() {$/;"	kind:function	line:109	class:mods::weapons::shrapnel_claymore	signature:()
 explosive	mods/injure.cpp	/^	namespace explosive {$/;"	kind:namespace	line:60	namespace:mods::injure	file:
 explosive	mods/injure.hpp	/^	namespace explosive {$/;"	kind:namespace	line:8	namespace:mods::injure	file:
 explosive	mods/projectile.cpp	/^	namespace explosive {$/;"	kind:namespace	line:60	namespace:mods::injure	file:
@@ -6768,7 +6801,7 @@ find_targets_with_compromised_line_of_sight	mods/mobs/mini-gunner-behaviour-tree
 find_vehicle_near_me	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode find_vehicle_near_me() {$/;"	kind:function	line:176	namespace:mods::mobs::car_thief_behaviour_tree	signature:()
 finished	mods/player-contract-instance.cpp	/^	bool player_contract_instance::finished() {$/;"	kind:function	line:140	class:mods::contracts::player_contract_instance	signature:()
 finished_installing	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore::finished_installing() {$/;"	kind:function	line:112	class:mods::weapons::corrosive_claymore	signature:()
-finished_installing	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore::finished_installing() {$/;"	kind:function	line:103	class:mods::weapons::shrapnel_claymore	signature:()
+finished_installing	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore::finished_installing() {$/;"	kind:function	line:112	class:mods::weapons::shrapnel_claymore	signature:()
 fire	mods/weapons/attachment-frag-underbarrel.cpp	/^	std::tuple<bool,std::string> attachment_frag_underbarrel::fire(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance) {$/;"	kind:function	line:13	class:mods::weapons::attachment_frag_underbarrel	signature:(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance)
 fire	mods/weapons/damage-calculator.hpp	/^		int fire;$/;"	kind:member	line:82	struct:mods::weapons::damage_calculator::explosive_damage_t	file:	access:public
 fire_damage	mods/projectile.cpp	/^		int fire_damage(player_ptr_t victim,obj_ptr_t projectile) {$/;"	kind:function	line:160	namespace:mods::projectile	signature:(player_ptr_t victim,obj_ptr_t projectile)
@@ -7047,6 +7080,7 @@ get	mods/lmdb/db.hpp	/^		std::string get(const StringType& host){$/;"	kind:funct
 get	mods/players/search.hpp	/^					ResultType get(const ResultType& _search) {$/;"	kind:function	line:18	class:mods::player::util::search	access:public	signature:(const ResultType& _search)
 get	mods/prefs.cpp	/^	std::string prefs::get(const std::string& key,char_data* ch) {$/;"	kind:function	line:16	class:mods::prefs	signature:(const std::string& key,char_data* ch)
 get	mods/weapons/corrosive-claymore.cpp	/^		std::string get() {$/;"	kind:function	line:128	namespace:mods::weapons::corrosive_claymore_memory	signature:()
+get	mods/weapons/shrapnel-claymore.cpp	/^		std::string get() {$/;"	kind:function	line:128	namespace:mods::weapons::shrapnel_claymore_memory	signature:()
 get_abilities	mods/classes/ghost.hpp	/^			std::vector<ability_data_t>& get_abilities() {$/;"	kind:function	line:49	struct:mods::classes::ghost	access:public	signature:()
 get_ada_data	mods/player.cpp	/^	std::map<std::string,std::string>& player::get_ada_data() {$/;"	kind:function	line:1801	class:mods::player	signature:()
 get_affect_dissolver	mods/player.cpp	/^	player::affect_dissolver_t& player::get_affect_dissolver() {$/;"	kind:function	line:1313	class:mods::player	signature:()
@@ -7228,7 +7262,7 @@ get_room_flags_from_room	mods/rooms.hpp	/^	static inline std::vector<std::string
 get_room_list	globals.cpp	/^		player_list_t& get_room_list(player_ptr_t& player) {$/;"	kind:function	line:1142	namespace:mods::globals	signature:(player_ptr_t& player)
 get_room_list	globals.cpp	/^		player_list_t& get_room_list(room_rnum room) {$/;"	kind:function	line:1136	namespace:mods::globals	signature:(room_rnum room)
 get_rounds	mods/weapon.hpp	/^	static inline auto get_rounds(TObject& obj) {$/;"	kind:function	line:689	namespace:mods::weapon	signature:(TObject& obj)
-get_saved_footprints	mods/memory.cpp	/^	std::string get_saved_footprints() {$/;"	kind:function	line:29	namespace:mods::memory	signature:()
+get_saved_footprints	mods/memory.cpp	/^	std::string get_saved_footprints() {$/;"	kind:function	line:40	namespace:mods::memory	signature:()
 get_scanned	mods/classes/ghost.cpp	/^	std::vector<uuid_t> ghost::get_scanned() const {$/;"	kind:function	line:266	class:mods::classes::ghost	signature:() const
 get_section_map	mods/db.cpp	/^	int get_section_map(std::string_view section_name,std::string prefix, std::map<std::string,std::string>& values) {$/;"	kind:function	line:39	namespace:mods::db	signature:(std::string_view section_name,std::string prefix, std::map<std::string,std::string>& values)
 get_section_vector	mods/db.cpp	/^	int get_section_vector(std::string_view section_name,std::string prefix, std::vector<std::string>& values) {$/;"	kind:function	line:86	namespace:mods::db	signature:(std::string_view section_name,std::string prefix, std::vector<std::string>& values)
@@ -7686,6 +7720,11 @@ in_room	mods/js.cpp	/^		static duk_ret_t in_room(duk_context *ctx) {$/;"	kind:fu
 in_room	shop.h	/^	room_vnum *in_room;		\/* Where is the shop?			*\/$/;"	kind:member	line:50	struct:shop_data	file:	access:public
 in_room	structs.h	/^	room_rnum in_room;                    \/* Location (real room number)	  *\/$/;"	kind:member	line:1715	struct:char_data	file:	access:public
 inbuf	structs.h	/^			buffer_type_t inbuf;  \/* buffer for raw input		*\/$/;"	kind:member	line:1677	struct:mods::descriptor_data	file:	access:public
+incendiary	mods/anti-matter.cpp	/^namespace mods::incendiary {$/;"	kind:namespace	line:18	class:mods	file:
+incendiary	mods/explosive.cpp	/^namespace mods::incendiary {$/;"	kind:namespace	line:18	class:mods	file:
+incendiary	mods/explosive.hpp	/^namespace mods::incendiary {$/;"	kind:namespace	line:5	class:mods	file:
+incendiary	mods/incendiary.cpp	/^namespace mods::incendiary {$/;"	kind:namespace	line:18	class:mods	file:
+incendiary	mods/incendiary.hpp	/^namespace mods::incendiary {$/;"	kind:namespace	line:5	class:mods	file:
 incendiary_damage	mods/rifle-attachments.hpp	/^			int16_t incendiary_damage;				\/** honored [ ? (see elemental.cpp) ] *\/$/;"	kind:member	line:75	struct:mods::rifle_attachments_t	file:	access:public
 incendiary_damage	mods/weapons/elemental.cpp	/^	void incendiary_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	kind:function	line:111	namespace:mods::weapons::elemental	signature:(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage)
 incendiary_damage_percent	mods/rifle-attachments.hpp	/^			int16_t incendiary_damage_percent;$/;"	kind:member	line:59	struct:mods::rifle_attachments_t	file:	access:public
@@ -7899,7 +7938,7 @@ insert_returing	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> inse
 insert_returning	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string,uint64_t> insert_returning(TObject* obj, std::string_view returning_field) {$/;"	kind:function	line:39	namespace:mods::orm::util	signature:(TObject* obj, std::string_view returning_field)
 insert_returning	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string,uint64_t> insert_returning(TObject& obj, std::string_view returning_field) {$/;"	kind:function	line:229	file:	signature:(TObject& obj, std::string_view returning_field)
 install	mods/weapons/corrosive-claymore.cpp	/^	std::tuple<bool,std::string> corrosive_claymore::install(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction) {$/;"	kind:function	line:100	class:mods::weapons::corrosive_claymore	signature:(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction)
-install	mods/weapons/shrapnel-claymore.cpp	/^	std::tuple<bool,std::string> shrapnel_claymore::install(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction) {$/;"	kind:function	line:91	class:mods::weapons::shrapnel_claymore	signature:(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction)
+install	mods/weapons/shrapnel-claymore.cpp	/^	std::tuple<bool,std::string> shrapnel_claymore::install(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction) {$/;"	kind:function	line:100	class:mods::weapons::shrapnel_claymore	signature:(player_ptr_t& attacker,const room_rnum& room,const direction_t& direction)
 install_item	mods/player-contract-instance.cpp	/^	void player_contract_instance::install_item(const uuid_t& obj_uuid) {$/;"	kind:function	line:652	class:mods::contracts::player_contract_instance	signature:(const uuid_t& obj_uuid)
 install_shop	db.cpp	/^int16_t install_shop(shop_ptr_t& shop) {$/;"	kind:function	line:1376	signature:(shop_ptr_t& shop)
 instantiate_catchy_name	mods/integral-objects.cpp	/^	TAttachments instantiate_catchy_name(std::string_view identifier) {$/;"	kind:function	line:138	namespace:mods::integral_objects	signature:(std::string_view identifier)
@@ -8742,7 +8781,7 @@ m_debug	mods/weapons/corrosive-claymore.cpp	16;"	kind:macro	line:16	file:
 m_debug	mods/weapons/elemental.cpp	263;"	kind:macro	line:263	file:
 m_debug	mods/weapons/elemental.cpp	6;"	kind:macro	line:6	file:
 m_debug	mods/weapons/elemental.cpp	8;"	kind:macro	line:8	file:
-m_debug	mods/weapons/shrapnel-claymore.cpp	124;"	kind:macro	line:124	file:
+m_debug	mods/weapons/shrapnel-claymore.cpp	134;"	kind:macro	line:134	file:
 m_debug	mods/weapons/shrapnel-claymore.cpp	14;"	kind:macro	line:14	file:
 m_debug	mods/weapons/shrapnel-claymore.cpp	16;"	kind:macro	line:16	file:
 m_debug_line_info	mods/deep-object-parser.cpp	12;"	kind:macro	line:12	file:
@@ -8784,12 +8823,24 @@ m_engaged	mods/classes/ghost.hpp	/^			bool m_engaged;$/;"	kind:member	line:150	s
 m_env	mods/lmdb.hpp	/^			MDB_env*	m_env;$/;"	kind:member	line:219	struct:mods::lmdb::_db_handle	file:	access:private
 m_env	mods/lmdb.hpp	/^			MDB_env* m_env;$/;"	kind:member	line:116	struct:mods::lmdb::transaction_t	file:	access:private
 m_equipment	mods/player.hpp	/^			std::array<obj_ptr_t,NUM_WEARS> m_equipment;$/;"	kind:member	line:923	struct:mods::player	file:	access:private
+m_error	mods/anti-matter.cpp	19;"	kind:macro	line:19	file:
+m_error	mods/anti-matter.cpp	52;"	kind:macro	line:52	file:
 m_error	mods/corrosive.cpp	19;"	kind:macro	line:19	file:
-m_error	mods/corrosive.cpp	45;"	kind:macro	line:45	file:
+m_error	mods/corrosive.cpp	53;"	kind:macro	line:53	file:
+m_error	mods/cryogenic.cpp	19;"	kind:macro	line:19	file:
+m_error	mods/cryogenic.cpp	57;"	kind:macro	line:57	file:
+m_error	mods/explosive.cpp	19;"	kind:macro	line:19	file:
+m_error	mods/explosive.cpp	57;"	kind:macro	line:57	file:
+m_error	mods/incendiary.cpp	19;"	kind:macro	line:19	file:
+m_error	mods/incendiary.cpp	57;"	kind:macro	line:57	file:
 m_error	mods/projectile.cpp	41;"	kind:macro	line:41	file:
 m_error	mods/projectile.cpp	880;"	kind:macro	line:880	file:
+m_error	mods/radioactive.cpp	19;"	kind:macro	line:19	file:
+m_error	mods/radioactive.cpp	53;"	kind:macro	line:53	file:
+m_error	mods/shock.cpp	19;"	kind:macro	line:19	file:
+m_error	mods/shock.cpp	57;"	kind:macro	line:57	file:
 m_error	mods/shrapnel.cpp	19;"	kind:macro	line:19	file:
-m_error	mods/shrapnel.cpp	36;"	kind:macro	line:36	file:
+m_error	mods/shrapnel.cpp	45;"	kind:macro	line:45	file:
 m_error_log	mods/orm/orm-base.hpp	/^			std::vector<std::string> m_error_log;$/;"	kind:member	line:285	struct:mods::orm::orm_base	file:	access:private
 m_errors	mods/player-scaffolding.hpp	/^			std::vector<std::string> m_errors;$/;"	kind:member	line:72	struct:mods::player_scaffolding	file:	access:protected
 m_ex_descriptions	structs.h	/^		std::vector<mods::extra_desc_data> m_ex_descriptions;$/;"	kind:member	line:1244	struct:obj_data	file:	access:protected
@@ -9301,7 +9352,7 @@ melee_description_t	mods/yaml.hpp	/^	struct melee_description_t : public yaml_de
 meleed	mods/mobs/damage-event.cpp	/^	void meleed(player_ptr_t& mob,const feedback_t& feedback) {$/;"	kind:function	line:65	namespace:mods::mobs::damage_event	signature:(player_ptr_t& mob,const feedback_t& feedback)
 member_of_royal_guard	castle.cpp	/^int member_of_royal_guard(char_data *chChar) {$/;"	kind:function	line:198	signature:(char_data *chChar)
 member_of_staff	castle.cpp	/^int member_of_staff(char_data *chChar) {$/;"	kind:function	line:163	signature:(char_data *chChar)
-memory	mods/memory.cpp	/^namespace mods::memory {$/;"	kind:namespace	line:23	class:mods	file:
+memory	mods/memory.cpp	/^namespace mods::memory {$/;"	kind:namespace	line:26	class:mods	file:
 memory	mods/memory.hpp	/^namespace mods::memory {$/;"	kind:namespace	line:5	class:mods	file:
 memory	mods/mobs/smart-mob.hpp	/^namespace mods::memory {$/;"	kind:namespace	line:8	class:mods	file:
 memory_id	mods/lmdb/shm-config.hpp	/^    const char* memory_id = "\/etc\/ghost.conf"; $/;"	kind:member	line:5	namespace:shm	file:
@@ -9812,7 +9863,7 @@ obj	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	obj_ptr_t attachment_shot
 obj	mods/weapons/corrosive-claymore.cpp	/^	obj_ptr_t corrosive_claymore::obj() {$/;"	kind:function	line:105	class:mods::weapons::corrosive_claymore	signature:()
 obj	mods/weapons/pistol-czp10.hpp	/^			obj_data_ptr_t obj;$/;"	kind:member	line:18	struct:mods::weapons::pistol::czp10	file:	access:public
 obj	mods/weapons/shotgun-sasg12.hpp	/^			obj_data_ptr_t obj;$/;"	kind:member	line:18	struct:mods::weapons::shotgun::sasg12	file:	access:public
-obj	mods/weapons/shrapnel-claymore.cpp	/^	obj_ptr_t& shrapnel_claymore::obj() {$/;"	kind:function	line:96	class:mods::weapons::shrapnel_claymore	signature:()
+obj	mods/weapons/shrapnel-claymore.cpp	/^	obj_ptr_t shrapnel_claymore::obj() {$/;"	kind:function	line:105	class:mods::weapons::shrapnel_claymore	signature:()
 obj	mods/weapons/smg-mp5.hpp	/^			obj_data_ptr_t obj;$/;"	kind:member	line:18	struct:mods::weapons::smg::mp5	file:	access:public
 obj	mods/weapons/sniper-rifle-l96aw.cpp	/^	obj_data_ptr_t l96aw::obj(){$/;"	kind:function	line:14	class:mods::weapons::sniper_rifle::l96aw	signature:()
 obj	mods/weapons/sniper-rifle-psg1.cpp	/^	obj_data_ptr_t psg1::obj(){$/;"	kind:function	line:14	class:mods::weapons::sniper_rifle::psg1	signature:()
@@ -10511,7 +10562,7 @@ primary_type	mods/orm/support.hpp	/^		primary_choice_t primary_type(){$/;"	kind:
 primary_type	mods/orm/syndrome.hpp	/^		primary_choice_t primary_type(){$/;"	kind:function	line:24	struct:mods::orm::syndrome	access:public	signature:()
 primary_type	mods/pq.hpp	/^	virtual TPrimaryType primary_type() {$/;"	kind:function	line:623	struct:orm_base	access:public	signature:()
 print_command	mods/builder.cpp	/^	void print_command(player_ptr_t& player) {$/;"	kind:function	line:2155	struct:command_t	access:public	signature:(player_ptr_t& player)
-print_footprints	mods/memory.cpp	/^	void print_footprints() {$/;"	kind:function	line:46	namespace:mods::memory	signature:()
+print_footprints	mods/memory.cpp	/^	void print_footprints() {$/;"	kind:function	line:57	namespace:mods::memory	signature:()
 print_group	act.other.cpp	/^void print_group(char_data *ch) {$/;"	kind:function	line:397	signature:(char_data *ch)
 print_object_location	act.informative.cpp	/^void print_object_location(int num, struct obj_data *obj, char_data *ch,$/;"	kind:function	line:1639	signature:(int num, struct obj_data *obj, char_data *ch, int recur)
 print_zone_to_buf	act.wizard.cpp	/^size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone) {$/;"	kind:function	line:2017	signature:(char *bufptr, size_t left, zone_rnum zone)
@@ -10537,9 +10588,19 @@ projectile	mods/projectile.cpp	/^	namespace projectile {$/;"	kind:namespace	line
 projectile	mods/projectile.hpp	/^	namespace projectile {$/;"	kind:namespace	line:23	namespace:mods	file:
 projectile	mods/sensor-grenade.cpp	/^namespace mods::projectile {$/;"	kind:namespace	line:10	class:mods	file:
 projectile_lands	mods/projectile.cpp	/^		void projectile_lands(room_rnum room_id,obj_ptr_t object,int from_direction) {$/;"	kind:function	line:599	namespace:mods::projectile	signature:(room_rnum room_id,obj_ptr_t object,int from_direction)
-propagate_chemical_blast	mods/corrosive.cpp	/^	void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device) {$/;"	kind:function	line:42	namespace:mods::corrosive	signature:(room_rnum& room_id,obj_ptr_t device)
+propagate_burning_blast	mods/explosive.cpp	/^	void propagate_burning_blast(room_rnum& room_id,obj_ptr_t device) {$/;"	kind:function	line:54	namespace:mods::incendiary	signature:(room_rnum& room_id,obj_ptr_t device)
+propagate_burning_blast	mods/incendiary.cpp	/^	void propagate_burning_blast(room_rnum& room_id,obj_ptr_t device) {$/;"	kind:function	line:54	namespace:mods::incendiary	signature:(room_rnum& room_id,obj_ptr_t device)
+propagate_chemical_blast	mods/corrosive.cpp	/^	void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device) {$/;"	kind:function	line:50	namespace:mods::corrosive	signature:(room_rnum& room_id,obj_ptr_t device)
 propagate_chemical_blast	mods/projectile.cpp	/^		void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device) {$/;"	kind:function	line:97	namespace:mods::projectile	signature:(room_rnum& room_id,obj_ptr_t device)
 propagate_chemical_blast	mods/projectile.cpp	/^		void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device,std::size_t depth) {$/;"	kind:function	line:101	namespace:mods::projectile	signature:(room_rnum& room_id,obj_ptr_t device,std::size_t depth)
+propagate_cryo_blast	mods/cryogenic.cpp	/^	void propagate_cryo_blast(room_rnum& room_id,obj_ptr_t device) {$/;"	kind:function	line:54	namespace:mods::cryogenic	signature:(room_rnum& room_id,obj_ptr_t device)
+propagate_proton_blast	mods/anti-matter.cpp	/^	void propagate_proton_blast(room_rnum& room_id,obj_ptr_t device) {$/;"	kind:function	line:49	namespace:mods::incendiary	signature:(room_rnum& room_id,obj_ptr_t device)
+propagate_radiation_blast	mods/radioactive.cpp	/^	void propagate_radiation_blast(room_rnum& room_id,obj_ptr_t device) {$/;"	kind:function	line:50	namespace:mods::radioactive	signature:(room_rnum& room_id,obj_ptr_t device)
+propagate_shocking_blast	mods/shock.cpp	/^	void propagate_shocking_blast(room_rnum& room_id,obj_ptr_t device) {$/;"	kind:function	line:54	namespace:mods::shock	signature:(room_rnum& room_id,obj_ptr_t device)
+proton_clears_up	mods/anti-matter.cpp	/^	void proton_clears_up(player_ptr_t victim) {$/;"	kind:function	line:43	namespace:mods::incendiary	signature:(player_ptr_t victim)
+proton_clears_up	mods/anti-matter.cpp	/^	void proton_clears_up(room_rnum room) {$/;"	kind:function	line:46	namespace:mods::incendiary	signature:(room_rnum room)
+proton_damage	mods/anti-matter.cpp	/^	int proton_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {$/;"	kind:function	line:24	namespace:mods::incendiary	signature:(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item)
+proton_electronics	mods/anti-matter.cpp	/^	void proton_electronics(room_rnum room) {$/;"	kind:function	line:34	namespace:mods::incendiary	signature:(room_rnum room)
 prperk_base_attribute_amount_add	mods/orm/chargen.hpp	/^		std::string prperk_base_attribute_amount_add; \/\/ INTEGER NOT NULL DEFAULT 0$/;"	kind:member	line:52	struct:mods::orm::player_race_perks	file:	access:public
 prperk_base_attribute_mutate	mods/orm/chargen.hpp	/^		std::string prperk_base_attribute_mutate; \/\/base_attribute NOT NULL,$/;"	kind:member	line:51	struct:mods::orm::player_race_perks	file:	access:public
 prperk_description	mods/orm/chargen.hpp	/^		std::string prperk_description;\/\/TEXT,$/;"	kind:member	line:50	struct:mods::orm::player_race_perks	file:	access:public
@@ -10686,7 +10747,11 @@ r_immort_start_room	db.cpp	/^room_rnum r_immort_start_room;	\/* rnum of immort s
 r_mortal_start_room	db.cpp	/^room_rnum r_mortal_start_room;	\/* rnum of mortal start room	 *\/$/;"	kind:variable	line:123
 r_status	mods/builder.cpp	/^void r_status(const player_ptr_t& player,std::string_view msg) {$/;"	kind:function	line:179	signature:(const player_ptr_t& player,std::string_view msg)
 r_success	mods/builder.cpp	/^void r_success(const player_ptr_t& player,std::string_view msg) {$/;"	kind:function	line:176	signature:(const player_ptr_t& player,std::string_view msg)
+radiate_electronics	mods/radioactive.cpp	/^	void radiate_electronics(room_rnum room) {$/;"	kind:function	line:35	namespace:mods::radioactive	signature:(room_rnum room)
 radiation	mods/weapons/damage-calculator.hpp	/^		int radiation;$/;"	kind:member	line:83	struct:mods::weapons::damage_calculator::explosive_damage_t	file:	access:public
+radiation_clears_up	mods/radioactive.cpp	/^	void radiation_clears_up(player_ptr_t victim) {$/;"	kind:function	line:44	namespace:mods::radioactive	signature:(player_ptr_t victim)
+radiation_clears_up	mods/radioactive.cpp	/^	void radiation_clears_up(room_rnum room) {$/;"	kind:function	line:47	namespace:mods::radioactive	signature:(room_rnum room)
+radiation_damage	mods/radioactive.cpp	/^	int radiation_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {$/;"	kind:function	line:24	namespace:mods::radioactive	signature:(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item)
 radiation_damage	mods/rifle-attachments.hpp	/^			int16_t radiation_damage;					\/** honored [ ? (see elemental.cpp) ] *\/$/;"	kind:member	line:76	struct:mods::rifle_attachments_t	file:	access:public
 radiation_damage_percent	mods/rifle-attachments.hpp	/^			int16_t radiation_damage_percent;$/;"	kind:member	line:64	struct:mods::rifle_attachments_t	file:	access:public
 radiation_resistance_percent	mods/player.cpp	/^	int16_t& player::radiation_resistance_percent() {$/;"	kind:function	line:1879	class:mods::player	signature:()
@@ -10694,6 +10759,8 @@ radio	mods/radio.cpp	/^namespace mods::radio {$/;"	kind:namespace	line:10	class:
 radio	mods/radio.hpp	/^namespace mods::radio {$/;"	kind:namespace	line:5	class:mods	file:
 radio	mods/response-team/radio.cpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:10	class:mods::response_team	file:
 radio	mods/response-team/radio.hpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:7	class:mods::response_team	file:
+radioactive	mods/radioactive.cpp	/^namespace mods::radioactive {$/;"	kind:namespace	line:18	class:mods	file:
+radioactive	mods/radioactive.hpp	/^namespace mods::radioactive {$/;"	kind:namespace	line:5	class:mods	file:
 radioactive_damage	mods/weapons/elemental.cpp	/^	void radioactive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	kind:function	line:129	namespace:mods::weapons::elemental	signature:(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage)
 ram_db	globals.cpp	/^		std::unordered_map<std::string,std::string> ram_db;$/;"	kind:member	line:79	namespace:mods::globals	file:
 rand	mods/classes/ghost.cpp	/^namespace mods::rand {$/;"	kind:namespace	line:20	class:mods	file:
@@ -11118,16 +11185,28 @@ roll	mods/rand.cpp	/^	int roll(int number, int size) {$/;"	kind:function	line:30
 roll_between	mods/fluxkraft/generator.hpp	/^			TUintWidth roll_between(TUintWidth LO, TUintWidth HI) {$/;"	kind:function	line:33	struct:mods::fluxkraft::generator	access:public	signature:(TUintWidth LO, TUintWidth HI)
 roll_between	mods/forge-engine/generator.hpp	/^			TUintWidth roll_between(TUintWidth LO, TUintWidth HI) {$/;"	kind:function	line:525	struct:mods::forge_engine::generator	access:public	signature:(TUintWidth LO, TUintWidth HI)
 roll_between	mods/forge-engine/util.hpp	/^	TUintWidth roll_between(TUintWidth LO, TUintWidth HI) {$/;"	kind:function	line:15	namespace:mods::forge_engine	signature:(TUintWidth LO, TUintWidth HI)
+roll_burn_equipment_in_room	mods/explosive.cpp	/^	void roll_burn_equipment_in_room(room_rnum room) {$/;"	kind:function	line:42	namespace:mods::incendiary	signature:(room_rnum room)
+roll_burn_equipment_in_room	mods/incendiary.cpp	/^	void roll_burn_equipment_in_room(room_rnum room) {$/;"	kind:function	line:42	namespace:mods::incendiary	signature:(room_rnum room)
+roll_burn_equipment_on_player	mods/explosive.cpp	/^	void roll_burn_equipment_on_player(player_ptr_t victim) {$/;"	kind:function	line:45	namespace:mods::incendiary	signature:(player_ptr_t victim)
+roll_burn_equipment_on_player	mods/incendiary.cpp	/^	void roll_burn_equipment_on_player(player_ptr_t victim) {$/;"	kind:function	line:45	namespace:mods::incendiary	signature:(player_ptr_t victim)
 roll_critical_damage_reduction	mods/weapons/armor-calculator.cpp	/^	float roll_critical_damage_reduction($/;"	kind:function	line:56	namespace:mods::weapons::armor_calculator	signature:( player_ptr_t& attacker, obj_ptr_t& weapon, player_ptr_t& victim, int16_t dam )
-roll_damage_equipment_in_room	mods/shrapnel.cpp	/^	void roll_damage_equipment_in_room(room_rnum room) {$/;"	kind:function	line:30	namespace:mods::shrapnel	signature:(room_rnum room)
-roll_damage_equipment_on_player	mods/shrapnel.cpp	/^	void roll_damage_equipment_on_player(player_ptr_t victim) {$/;"	kind:function	line:33	namespace:mods::shrapnel	signature:(player_ptr_t victim)
+roll_cryo_equipment_in_room	mods/cryogenic.cpp	/^	void roll_cryo_equipment_in_room(room_rnum room) {$/;"	kind:function	line:42	namespace:mods::cryogenic	signature:(room_rnum room)
+roll_cryo_equipment_on_player	mods/cryogenic.cpp	/^	void roll_cryo_equipment_on_player(player_ptr_t victim) {$/;"	kind:function	line:45	namespace:mods::cryogenic	signature:(player_ptr_t victim)
+roll_damage_equipment_in_room	mods/shrapnel.cpp	/^	void roll_damage_equipment_in_room(room_rnum room) {$/;"	kind:function	line:39	namespace:mods::shrapnel	signature:(room_rnum room)
+roll_damage_equipment_on_player	mods/shrapnel.cpp	/^	void roll_damage_equipment_on_player(player_ptr_t victim) {$/;"	kind:function	line:42	namespace:mods::shrapnel	signature:(player_ptr_t victim)
 roll_float	mods/fluxkraft/generator.hpp	/^			float roll_float(float LO, float HI) {$/;"	kind:function	line:28	struct:mods::fluxkraft::generator	access:public	signature:(float LO, float HI)
 roll_float	mods/forge-engine/generator.hpp	/^			float roll_float(float LO, float HI) {$/;"	kind:function	line:520	struct:mods::forge_engine::generator	access:public	signature:(float LO, float HI)
 roll_heat_accumulation_hp_gain	mods/classes/pyrexia.cpp	/^		uint16_t pyrexia::roll_heat_accumulation_hp_gain(obj_ptr_t& attacking_weapon){$/;"	kind:function	line:211	class:mods::classes::pyrexia	signature:(obj_ptr_t& attacking_weapon)
 roll_incendiary_shot	mods/classes/pyrexia.cpp	/^		uint16_t pyrexia::roll_incendiary_shot(obj_ptr_t& attacking_weapon,uuid_t target){$/;"	kind:function	line:199	class:mods::classes::pyrexia	signature:(obj_ptr_t& attacking_weapon,uuid_t target)
-roll_melt_equipment_in_room	mods/corrosive.cpp	/^	void roll_melt_equipment_in_room(room_rnum room) {$/;"	kind:function	line:30	namespace:mods::corrosive	signature:(room_rnum room)
-roll_melt_equipment_on_player	mods/corrosive.cpp	/^	void roll_melt_equipment_on_player(player_ptr_t victim) {$/;"	kind:function	line:33	namespace:mods::corrosive	signature:(player_ptr_t victim)
+roll_melt_equipment_in_room	mods/corrosive.cpp	/^	void roll_melt_equipment_in_room(room_rnum room) {$/;"	kind:function	line:38	namespace:mods::corrosive	signature:(room_rnum room)
+roll_melt_equipment_on_player	mods/corrosive.cpp	/^	void roll_melt_equipment_on_player(player_ptr_t victim) {$/;"	kind:function	line:41	namespace:mods::corrosive	signature:(player_ptr_t victim)
+roll_proton_equipment_in_room	mods/anti-matter.cpp	/^	void roll_proton_equipment_in_room(room_rnum room) {$/;"	kind:function	line:37	namespace:mods::incendiary	signature:(room_rnum room)
+roll_proton_equipment_on_player	mods/anti-matter.cpp	/^	void roll_proton_equipment_on_player(player_ptr_t victim) {$/;"	kind:function	line:40	namespace:mods::incendiary	signature:(player_ptr_t victim)
+roll_radiate_equipment_in_room	mods/radioactive.cpp	/^	void roll_radiate_equipment_in_room(room_rnum room) {$/;"	kind:function	line:38	namespace:mods::radioactive	signature:(room_rnum room)
+roll_radiate_equipment_on_player	mods/radioactive.cpp	/^	void roll_radiate_equipment_on_player(player_ptr_t victim) {$/;"	kind:function	line:41	namespace:mods::radioactive	signature:(player_ptr_t victim)
 roll_real_abils	class.cpp	/^void roll_real_abils(char_data *ch) {$/;"	kind:function	line:903	signature:(char_data *ch)
+roll_shock_equipment_in_room	mods/shock.cpp	/^	void roll_shock_equipment_in_room(room_rnum room) {$/;"	kind:function	line:42	namespace:mods::shock	signature:(room_rnum room)
+roll_shock_equipment_on_player	mods/shock.cpp	/^	void roll_shock_equipment_on_player(player_ptr_t victim) {$/;"	kind:function	line:45	namespace:mods::shock	signature:(player_ptr_t victim)
 roll_skill_success	mods/classes/base.cpp	/^	std::tuple<bool,std::string> base::roll_skill_success(uint8_t skill) {$/;"	kind:function	line:228	class:mods::classes::base	signature:(uint8_t skill)
 roll_victim_spots_attacker	mods/calc-visibility.cpp	/^	bool roll_victim_spots_attacker(player_ptr_t& victim,player_ptr_t& attacker,const feedback_t& feedback) {$/;"	kind:function	line:192	namespace:mods::calc_visibility	signature:(player_ptr_t& victim,player_ptr_t& attacker,const feedback_t& feedback)
 roll_weapon	mods/weapons/damage-calculator.cpp	/^		int16_t roll_weapon($/;"	kind:function	line:113	namespace:mods::weapons::damage_calculator::algorithm_A	signature:( obj_ptr_t& weapon )
@@ -11379,9 +11458,11 @@ save_by_player	mods/orm/player-base-ability.cpp	/^	int16_t player_base_ability::
 save_camera_feed	mods/integral-objects-db.cpp	/^	void save_camera_feed(player_ptr_t& player, std::vector<std::string>& args) {$/;"	kind:function	line:60	namespace:mods::integral_objects_db	signature:(player_ptr_t& player, std::vector<std::string>& args)
 save_catchy_name	mods/integral-objects-db.cpp	/^	void save_catchy_name(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description) {$/;"	kind:function	line:45	namespace:mods::integral_objects_db	signature:(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description)
 save_char	mods/db.cpp	/^	tuple_status_t save_char(player_ptr_t player_ptr) {$/;"	kind:function	line:559	namespace:mods::db	signature:(player_ptr_t player_ptr)
+save_counts	mods/memory.cpp	/^	void save_counts(std::forward_list<T>& l,std::string_view type) {$/;"	kind:function	line:37	namespace:mods::memory	signature:(std::forward_list<T>& l,std::string_view type)
+save_counts	mods/memory.cpp	/^	void save_counts(std::map<uuid_t,T>& map,std::string_view type) {$/;"	kind:function	line:33	namespace:mods::memory	signature:(std::map<uuid_t,T>& map,std::string_view type)
 save_dummy	mods/target-practice-db.cpp	/^	void save_dummy(player_ptr_t& player, std::vector<std::string>& args) {$/;"	kind:function	line:24	namespace:mods::target_practice_db	signature:(player_ptr_t& player, std::vector<std::string>& args)
 save_error_logs	mods/orm/orm-base.hpp	/^			bool save_error_logs;$/;"	kind:member	line:71	struct:mods::orm::orm_base	file:	access:public
-save_footprint	mods/memory.cpp	/^	void save_footprint(T& ptr) {$/;"	kind:function	line:26	namespace:mods::memory	signature:(T& ptr)
+save_footprint	mods/memory.cpp	/^	void save_footprint(T& ptr) {$/;"	kind:function	line:29	namespace:mods::memory	signature:(T& ptr)
 save_from	mods/players/db-load.cpp	/^	void save_from(player_ptr_t& player_ptr,save_from_t from) {$/;"	kind:function	line:72	namespace:mods::players::db_load	signature:(player_ptr_t& player_ptr,save_from_t from)
 save_function	mods/builder.cpp	/^	save_function_t save_function;$/;"	kind:member	line:2080	struct:command_t	file:	access:public
 save_hostile_targets	mods/mobs/smart-mob.cpp	/^	void smart_mob::save_hostile_targets(vec_t<uuid_t>& t) {$/;"	kind:function	line:264	class:mods::mobs::smart_mob	signature:(vec_t<uuid_t>& t)
@@ -11765,10 +11846,16 @@ shape_list	mods/fluxkraft/shape-dictionary.cpp	/^	std::vector<shape_description>
 shm	mods/lmdb/shm-config.hpp	/^namespace shm {$/;"	kind:namespace	line:4	file:
 shm	mods/lmdb/shm.hpp	/^class  shm {$/;"	kind:class	line:24	namespace:gdns	file:
 shm	mods/lmdb/shm.hpp	/^shm::shm(){$/;"	kind:function	line:65	class:gdns::shm	signature:()
+shock	mods/shock.cpp	/^namespace mods::shock {$/;"	kind:namespace	line:18	class:mods	file:
+shock	mods/shock.hpp	/^namespace mods::shock {$/;"	kind:namespace	line:5	class:mods	file:
 shock	structs.h	/^	sh_int shock;$/;"	kind:member	line:1871	struct:con_app_type	file:	access:public
+shock_damage	mods/shock.cpp	/^	int shock_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {$/;"	kind:function	line:24	namespace:mods::shock	signature:(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item)
 shock_damage	mods/weapons/elemental.cpp	/^	void shock_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	kind:function	line:135	namespace:mods::weapons::elemental	signature:(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage)
 shock_damage_percent	mods/rifle-attachments.hpp	/^			int16_t shock_damage_percent;$/;"	kind:member	line:66	struct:mods::rifle_attachments_t	file:	access:public
+shock_electronics	mods/shock.cpp	/^	void shock_electronics(room_rnum room) {$/;"	kind:function	line:39	namespace:mods::shock	signature:(room_rnum room)
 shock_resistance_percent	mods/player.cpp	/^	int16_t& player::shock_resistance_percent() {$/;"	kind:function	line:1885	class:mods::player	signature:()
+shocking_clears_up	mods/shock.cpp	/^	void shocking_clears_up(player_ptr_t victim) {$/;"	kind:function	line:48	namespace:mods::shock	signature:(player_ptr_t victim)
+shocking_clears_up	mods/shock.cpp	/^	void shocking_clears_up(room_rnum room) {$/;"	kind:function	line:51	namespace:mods::shock	signature:(room_rnum room)
 shop	mods/orm/shop.hpp	/^		shop() : base(), loaded(false) {}$/;"	kind:function	line:76	struct:mods::orm::shop	access:public	signature:()
 shop	mods/orm/shop.hpp	/^	struct shop : public base {$/;"	kind:struct	line:42	namespace:mods::orm	file:	inherits:base
 shop	mods/shop.cpp	/^namespace mods::shop {$/;"	kind:namespace	line:3	class:mods	file:
@@ -11871,13 +11958,15 @@ showstr_vector	structs.h	/^			char **showstr_vector;	\/* for paging through text
 shptr	mods/loops.hpp	/^	namespace shptr {$/;"	kind:namespace	line:23	namespace:mods::loops	file:
 shrapnel	mods/shrapnel.cpp	/^namespace mods::shrapnel {$/;"	kind:namespace	line:18	class:mods	file:
 shrapnel	mods/shrapnel.hpp	/^namespace mods::shrapnel {$/;"	kind:namespace	line:5	class:mods	file:
-shrapnel_claymore	mods/weapons/shrapnel-claymore.cpp	/^	shrapnel_claymore::shrapnel_claymore() {$/;"	kind:function	line:107	class:mods::weapons::shrapnel_claymore	signature:()
+shrapnel_claymore	mods/weapons/shrapnel-claymore.cpp	/^	shrapnel_claymore::shrapnel_claymore() {$/;"	kind:function	line:116	class:mods::weapons::shrapnel_claymore	signature:()
 shrapnel_claymore	mods/weapons/shrapnel-claymore.hpp	/^	struct shrapnel_claymore {$/;"	kind:struct	line:10	namespace:mods::weapons	file:
-shrapnel_claymore_explode	mods/weapons/shrapnel-claymore.cpp	/^	int shrapnel_claymore_explode(player_ptr_t& victim,obj_ptr_t& item) {$/;"	kind:function	line:40	namespace:mods::weapons	signature:(player_ptr_t& victim,obj_ptr_t& item)
-shrapnel_claymore_exploded	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore_exploded(const uuid_t& obj_uuid) {$/;"	kind:function	line:23	namespace:mods::weapons	signature:(const uuid_t& obj_uuid)
-shrapnel_claymore_installed	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore_installed(const uuid_t& obj_uuid) {$/;"	kind:function	line:32	namespace:mods::weapons	signature:(const uuid_t& obj_uuid)
-shrapnel_claymore_list	mods/weapons/shrapnel-claymore.cpp	/^	std::forward_list<std::shared_ptr<shrapnel_claymore>>& shrapnel_claymore_list() {$/;"	kind:function	line:19	namespace:mods::weapons	signature:()
-shrapnel_claymore_perform_blast_radius	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore_perform_blast_radius(room_rnum room_id,obj_ptr_t device) {$/;"	kind:function	line:118	namespace:mods::weapons	signature:(room_rnum room_id,obj_ptr_t device)
+shrapnel_claymore_explode	mods/weapons/shrapnel-claymore.cpp	/^	int shrapnel_claymore_explode(player_ptr_t& victim,obj_ptr_t& item) {$/;"	kind:function	line:42	namespace:mods::weapons	signature:(player_ptr_t& victim,obj_ptr_t& item)
+shrapnel_claymore_exploded	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore_exploded(const uuid_t& obj_uuid) {$/;"	kind:function	line:24	namespace:mods::weapons	signature:(const uuid_t& obj_uuid)
+shrapnel_claymore_installed	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore_installed(const uuid_t& obj_uuid) {$/;"	kind:function	line:34	namespace:mods::weapons	signature:(const uuid_t& obj_uuid)
+shrapnel_claymore_list	mods/weapons/shrapnel-claymore.cpp	/^	std::forward_list<std::shared_ptr<shrapnel_claymore>>& shrapnel_claymore_list() {$/;"	kind:function	line:20	namespace:mods::weapons	signature:()
+shrapnel_claymore_memory	mods/memory.cpp	/^namespace mods::weapons::shrapnel_claymore_memory {$/;"	kind:namespace	line:18	class:mods::weapons	file:
+shrapnel_claymore_memory	mods/weapons/shrapnel-claymore.cpp	/^	namespace shrapnel_claymore_memory {$/;"	kind:namespace	line:127	namespace:mods::weapons	file:
+shrapnel_claymore_perform_blast_radius	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore_perform_blast_radius(room_rnum room_id,obj_ptr_t device) {$/;"	kind:function	line:87	namespace:mods::weapons	signature:(room_rnum room_id,obj_ptr_t device)
 shrapnel_damage	mods/shrapnel.cpp	/^	int shrapnel_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {$/;"	kind:function	line:24	namespace:mods::shrapnel	signature:(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item)
 shrapnel_damage	mods/weapons/elemental.cpp	/^	void shrapnel_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	kind:function	line:119	namespace:mods::weapons::elemental	signature:(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage)
 shrapnel_damage_percent	mods/rifle-attachments.hpp	/^			int16_t shrapnel_damage_percent;$/;"	kind:member	line:61	struct:mods::rifle_attachments_t	file:	access:public
@@ -12660,7 +12749,7 @@ upsert_returning	mods/pq.cpp	/^std::tuple<bool,std::string,std::string> upsert_r
 usage	mods/lmdb/shm-viewer.cpp	/^void usage(const char* prog){$/;"	kind:function	line:10	signature:(const char* prog)
 usage_count	mods/orm/player-skill-usage.hpp	/^		uint16_t usage_count;$/;"	kind:member	line:13	struct:mods::orm::player_skill_usage_record_t	file:	access:public
 usage_count	mods/orm/player-skill-usage.hpp	/^		uint16_t usage_count;$/;"	kind:member	line:71	struct:mods::orm::player_skill_usage	file:	access:public
-usage_report	mods/memory.cpp	/^	std::map<std::string,str_map_t> usage_report;$/;"	kind:member	line:24	namespace:mods::memory	file:
+usage_report	mods/memory.cpp	/^	std::map<std::string,str_map_t> usage_report;$/;"	kind:member	line:27	namespace:mods::memory	file:
 usages	mods/mobs/car-thief.cpp	/^	str_map_t car_thief::usages() {$/;"	kind:function	line:92	class:mods::mobs::car_thief	signature:()
 usages	mods/mobs/chaotic-meth-addict.cpp	/^	str_map_t chaotic_meth_addict::usages() {$/;"	kind:function	line:97	class:mods::mobs::chaotic_meth_addict	signature:()
 usages	mods/mobs/generic-thief.cpp	/^	str_map_t generic_thief::usages() {$/;"	kind:function	line:112	class:mods::mobs::generic_thief	signature:()
@@ -12839,7 +12928,7 @@ weapons	mods/weapons/attachment-shotgun-underbarrel.hpp	/^namespace mods::weapon
 weapons	mods/weapons/corrosive-claymore.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:19	class:mods	file:
 weapons	mods/weapons/corrosive-claymore.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:8	class:mods	file:
 weapons	mods/weapons/heat.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:3	class:mods	file:
-weapons	mods/weapons/shrapnel-claymore.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:18	class:mods	file:
+weapons	mods/weapons/shrapnel-claymore.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:19	class:mods	file:
 weapons	mods/weapons/shrapnel-claymore.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:8	class:mods	file:
 weapons	mods/weapons/smg.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:6	class:mods	file:
 weapons	mods/weapons/smg.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:7	class:mods	file:
