@@ -11,6 +11,9 @@ namespace mods::affects {
 	static time_t time_tracker_per_minute = time(nullptr);
 	static uint32_t ticks_per_minute = 0;
 	static uint32_t ticks_per_minute_sample = 0;
+	void player_died(player_ptr_t p) {
+		needs_dissolve.erase(p);
+	}
 
 	int apply_tracked_bonus_damage(int damage) {
 		return damage + (TRACKED_DAMAGE_BONUS_MULTIPLIER * damage);

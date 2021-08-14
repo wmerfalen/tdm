@@ -170,7 +170,7 @@ namespace mods {
 		void affect_room_light(int room,int offset);
 		namespace rooms {
 			void char_from_room(char_data*);
-			void char_to_room(const room_rnum&,char_data*);
+			bool char_to_room(const room_rnum&,char_data*);
 		};
 		void pad_room(int room,char_data* ch,int door);
 		player_list_t& get_room_list(room_rnum);

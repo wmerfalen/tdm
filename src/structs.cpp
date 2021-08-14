@@ -58,8 +58,29 @@ void obj_data::free_next_content() {
 		next_content = nullptr;
 	}
 }
+int32_t obj_data::hp() {
+	return m_hp;
+}
+int32_t obj_data::armor_hp() {
+	return m_armor_hp;
+}
+int32_t obj_data::adjust_hp(int32_t amount) {
+	return m_hp += amount;
+}
+int32_t obj_data::adjust_armor_hp(int32_t amount) {
+	return m_armor_hp += amount;
+}
+void obj_data::set_hp(int32_t amount) {
+	m_hp = amount;
+}
+void obj_data::set_armor_hp(int32_t amount) {
+	m_armor_hp = amount;
+}
 void obj_data::init() {
 	d("[debug]obj_data::init()\n");
+	m_hp = 0;
+	m_armor_hp = 0;
+	corrode_end_tick=0;
 	forged = false;
 	visibility = STARTING_VISIBILITY;
 	feed_status = 0;
@@ -128,6 +149,8 @@ obj_data::obj_data(const obj_data& other) {
 #ifdef __MENTOC_OBJ_DATA_DEBUG_OUTPUT__
 	std::cerr << ("obj_data copy constructor") << ", name:'" << name.c_str() << "'\n";
 #endif
+	m_hp = other.m_hp;
+	m_armor_hp = other.m_armor_hp;
 }
 obj_data& obj_data::operator=(obj_data& other) {
 	forged = other.forged;

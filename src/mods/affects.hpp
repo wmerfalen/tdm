@@ -8,6 +8,7 @@
 #include <forward_list>
 #include <memory>
 
+#define __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
 #define maffects_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
 #else
@@ -23,15 +24,17 @@ namespace mods::affects {
 	using amount_t = int;
 	constexpr static amount_t DEFAULT_AMOUNT = 3;
 	static constexpr float TRACKED_DAMAGE_BONUS_MULTIPLIER = 0.15;
-	enum affect_t {
-		NONE = -1,
-		BLIND = 0,
-		DISORIENT = 1,
-		POISON = 2,
-		INTIMIDATED = 3,
-		SCANNED = 4,
-		TRACKED = 5,
-		__AFFECT_SIZE = 6
+	enum affect_t : uint16_t {
+		NONE=0,
+		BLIND,
+		DISORIENT,
+		POISON,
+		INTIMIDATED,
+		SCANNED,
+		TRACKED,
+		CORRODE,
+		BLEED,
+		__AFFECT_SIZE = 8,
 	};
 	constexpr static std::size_t AFFECT_DISSOLVE_COUNT = affect_t::__AFFECT_SIZE;
 	/** i.e.: AFFECT_MAP[affect_t::BLIND] will give us AFF_BLIND */
@@ -50,6 +53,8 @@ namespace mods::affects {
 		{"intimidated",affect_t::INTIMIDATED},
 		{"scanned",affect_t::SCANNED},
 		{"tracked",affect_t::TRACKED},
+		{"corrode",affect_t::CORRODE},
+		{"bleed",affect_t::BLEED},
 	};
 	//using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 	using affect_map_t = std::map<uint32_t,amount_t>;
@@ -127,8 +132,10 @@ namespace mods::affects {
 				return false;
 			}
 			bool has_affect(TAffects a) {
-				maffects_debug("[has_affect] " << a);
-				return m_affects[a];
+				if(m_affects[a]) {
+					maffects_debug("[has_affect] " << a << "amount:" << m_affects[a]);
+				}
+				return m_affects[a] > 0;
 			}
 			dissolver() {
 				for(auto& affect : m_affects) {
@@ -171,6 +178,12 @@ namespace mods::affects {
 			void affect(TAffects aff_id) {
 				affect(aff_id,mods::affects::DEFAULT_AMOUNT);
 			}
+			void clear_all() {
+				for(auto pair : m_affects) {
+					m_affects[pair.first] = 0;
+				}
+
+			}
 			void clear(TAffectsContainer affects) {
 				for(auto a : affects) {
 					m_affects[a] = 0;
@@ -181,10 +194,13 @@ namespace mods::affects {
 			void process_affect(TAffects affect) {
 				if(m_increment.find(affect) != m_increment.end()) {
 					++m_affects[affect];
+					++m_processed;
 				} else {
-					--m_affects[affect];
+					if(m_affects[affect] > 0) {
+						--m_affects[affect];
+						++m_processed;
+					}
 				}
-				++m_processed;
 				trigger_callback(affect);
 			}
 			bool has_max_amount(TAffects affect) {
@@ -291,6 +307,7 @@ namespace mods::affects {
 	void affect_player_str(std::vector<std::string> a,player_ptr_t p);
 	void str_affect_player(std::vector<std::string> a,player_ptr_t p);
 	std::vector<std::string>& affect_string_list_impl();
+	void player_died(player_ptr_t p);
 };
 std::vector<std::string>& affect_string_list();
 void str_affect_player(std::vector<std::string> a, player_ptr_t p);

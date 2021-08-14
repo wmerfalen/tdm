@@ -43,7 +43,7 @@ electric_damage_dice_sides: 4
 armor_penetration_damage_dice_count: 2
 armor_penetration_damage_dice_sides: 9
 damage_dice_count: 5 
-damage_dice_sides: 13
+damage_dice_sides: 3
 incendiary_damage_percent: 0
 explosive_damage_percent: 0
 shrapnel_damage_percent: 0

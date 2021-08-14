@@ -828,6 +828,9 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+		get_affect_dissolver().clear_all();
+		m_to_move = 0;
+		m_to_attack = 0;
 		m_damage_nerf_percent = 0.0;
 		m_practice_sessions = 0;
 		m_can_attack = 1;

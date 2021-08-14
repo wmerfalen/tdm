@@ -7,8 +7,9 @@
 
 namespace mods::weapons {
 	int corrosive_claymore_explode(obj_ptr_t& item);
+	void corrosive_claymore_installed(const uuid_t& obj_uuid);
 	struct corrosive_claymore {
-			static obj_ptr_t create();
+			static obj_ptr_t create(player_ptr_t& planter);
 			corrosive_claymore();
 			~corrosive_claymore() = default;
 			const room_rnum& room();
@@ -20,6 +21,9 @@ namespace mods::weapons {
 			void finished_installing();
 			void exploded();
 			obj_ptr_t obj();
+			void set_planter(player_ptr_t& player) {
+				m_installer = player->uuid();
+			}
 		protected:
 			obj_ptr_t m_obj;
 			std::pair<room_rnum,direction_t> m_claymore_room;

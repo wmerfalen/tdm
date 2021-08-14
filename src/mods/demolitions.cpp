@@ -6,7 +6,7 @@
 #include "object-utils.hpp"
 #include "classes/ghost.hpp"
 
-#ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
+#ifdef __MENTOC_MODS_DEMOLITIONS_DEBUG__
 #define mo_debug(A) std::cerr << "[mods::demolitions][debug]:" << A <<"\n";
 #else
 #define mo_debug(A)
@@ -18,7 +18,16 @@ namespace mods::demolitions {
 	void plant_claymore(player_ptr_t& player, int direction, obj_ptr_t& obj) {
 		player->send("You begin installing a %s at the foot of the %s entrance...\r\n", obj->name.c_str(), mods::globals::dir_to_str(direction, true).c_str());
 		mods::object_utils::set_is_installing(obj,player,direction);
-		player->block_for(CLAYMORE_INSTALLATION_TICS(), mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION, obj->uuid);
+		int ticks = CLAYMORE_INSTALLATION_TICS();
+		if(player->ghost()) {
+			mo_debug("ghost ticks. normal(" << ticks << ")");
+			ticks -= ticks * (GHOST_CLAYMORE_INSTALLATION_REDUCTION_PERCENT() * 0.01);
+			mo_debug("ghost ticks after nerf: (" << ticks << ")");
+		}
+		if(ticks < 0) {
+			ticks = 0;
+		}
+		player->block_for(ticks, mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION, obj->uuid);
 	}
 	std::vector<uuid_t> claymores_in(const room_rnum& room) {
 		if(room >= world_size()) {

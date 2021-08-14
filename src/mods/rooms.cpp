@@ -14,6 +14,27 @@ namespace mods::globals {
 	extern void glue_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room);
 };
 
+namespace mods::rooms {
+	void broadcast_injury(player_ptr_t victim) {
+		const auto& u = victim->uuid();
+		for(auto& p : mods::globals::get_room_list(victim->room())) {
+			if(!p->is_npc() && u != p->uuid()) {
+				p->sendln(CAT(victim->ucname()," is injured!"));
+			}
+		}
+	}
+	void broadcast_claymore_plant(const room_rnum& room,player_ptr_t& planter,const direction_t& direction,obj_ptr_t& claymore) {
+		const auto& u = planter->uuid();
+		for(auto& p : mods::globals::get_room_list(planter->room())) {
+			if(!p->is_npc() && u != p->uuid()) {
+				p->sendln(CAT(planter->ucname()," planted a ",claymore->name.c_str()," at the bottom of the ",dirstr(direction)," door."));
+			}
+		}
+
+	}
+};
+
+
 namespace mods::rooms::affects {
 	void process() {
 		for(auto it = needs_dissolve.begin(); it != needs_dissolve.end(); ++it) {

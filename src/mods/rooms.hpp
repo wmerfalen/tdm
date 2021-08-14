@@ -20,6 +20,8 @@ namespace mods::rooms {
 	void remove_nickname(const room_rnum& room);
 	/** Pavements */
 	void pave_once(room_rnum room, direction_t direction);
+	void broadcast_injury(player_ptr_t victim);
+	void broadcast_claymore_plant(const room_rnum& room,player_ptr_t& attacker,const direction_t& direction,obj_ptr_t& claymore);
 	static std::map<txt,std::string> texture_strings = {
 		{txt::AIR,"AIR"},
 		{txt::CARPET,"CARPET"},

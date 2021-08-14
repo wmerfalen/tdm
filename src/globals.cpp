@@ -1094,7 +1094,7 @@ namespace mods {
 			 * \param char_data* character pointer
 			 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
 			 */
-			void char_to_room(const room_rnum& room,char_data* ch) {
+			bool char_to_room(const room_rnum& room,char_data* ch) {
 				auto player = ptr(ch);
 				if(player->builder_data) {
 					player->builder_data->room_recorder.char_to_room(room);
@@ -1105,7 +1105,7 @@ namespace mods {
 				}
 				if(target_room >= room_list.size()) {
 					log("SYSERR: char_to_room failed for ch. Recontracted room is out of bounds: ",target_room);
-					return;
+					return false;
 				}
 				if(!mods::movement::char_move_to(player,target_room)) {
 #ifdef __MENTOC_SHOW_CHAR_MOVE_TO_FAILURE_MESSAGE__
@@ -1113,7 +1113,7 @@ namespace mods {
 #endif
 					player->set_room(ch->was_in_room);
 					mods::globals::room_list[ch->was_in_room].push_back(player);
-					return;
+					return false;
 				}
 				player->set_room(target_room);
 				mods::globals::room_list[target_room].push_back(player);
@@ -1123,7 +1123,7 @@ namespace mods {
 #endif
 					mods::mobs::room_watching::events::room_entry(player);
 				}
-				return;
+				return true;
 			}
 		};//end namespace rooms
 

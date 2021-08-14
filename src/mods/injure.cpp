@@ -1,5 +1,6 @@
 #include "injure.hpp"
 #include "player.hpp"
+#include "rooms.hpp"
 #ifdef __MENTOC_SHOW_MODS_APPLY_CRITICAL_DEBUG_OUTPUT__
 #define apcrit_debug(MSG) mentoc_prefix_debug("[mods::projectile::apply_critical_damage]")  << MSG << "\n";
 #else
@@ -9,7 +10,7 @@ extern void send_to_room_except(room_rnum room, player_ptr_t, const char *messg,
 
 namespace mods::injure {
 	void injure_player(player_ptr_t& person) {
-		send_to_room_except(person->room(), person,"%s is injured!\r\n",person->name().c_str());
+		mods::rooms::broadcast_injury(person);
 		person->position() = POS_INCAP;
 		person->hp() = mods::values::INJURED_HP();
 		if(IS_NPC(person->cd())) {

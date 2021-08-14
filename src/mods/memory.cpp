@@ -55,6 +55,10 @@ namespace mods::memory {
 		return s;
 	}
 	void print_footprints() {
+#ifdef __MENTOC_NO_FOOTPRINTS__
+		return;
+#endif
+
 		for(const auto& g : mods::mobs::generic_thief_list()) {
 			save_footprint(g);
 		}

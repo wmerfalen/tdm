@@ -49,12 +49,15 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_SHOW_CONTRACT_OUTPUT__=1 \
 	-D__MENTOC_SHOW_GAIN_EXP_DEBUG_OUTPUT__=1 \
 	-D__MENTOC_DISABLE_INJURE_DYNAMICS__=1 \
-	-D__MENTOC_DEBUG_EXTRACT_OBJ_OUTPUT__=1
+	-D__MENTOC_DEBUG_EXTRACT_OBJ_OUTPUT__=1 \
+	-D__MENTOC_NO_FOOTPRINTS__=1 \
+	-D__MENTOC_MODS_DEMOLITIONS_DEBUG__=1
 
 	#-Wno-format-zero-length -Wno-format-security\
 	#-Wuninitialized \
 	#-D__MENTOC_SHOW_IS_CORPSE_DEBUG_OUTPUT__=1 
 
+	#-D__MENTOC_SHOW_MODS_CORROSIVE_DEBUG_OUTPUT__=1
  	#-D__MENTOC_MODS_MOBS_chaotic_meth_addict_SHOW_DEBUG_OUTPUT__=1
 	#-D__MENTOC_CAN_CONTINUE_DEBUG__=1
 	#-D__MENTOC_SHOW_DAMAGE_TYPES_DEBUG__=1
@@ -180,8 +183,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/boosters/adrenaline-shot mods/unit-tests/class-sniper \
 					 mods/corrosive mods/weapons/corrosive-claymore \
 					 mods/shrapnel mods/weapons/shrapnel-claymore \
-					 mods/incendiary mods/radioactive mods/anti-matter mods/shock \
-					 mods/cryogenic
+					 mods/incendiary mods/radioactive mods/anti-matter mods/shock mods/cryogenic
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

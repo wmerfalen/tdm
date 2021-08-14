@@ -164,6 +164,13 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 		GET_MOVE(ch) -= need_movement;
 	}
 
+	was_in = IN_ROOM(ch);
+	auto to_room = world[was_in].dir_option[dir]->to_room;
+	mods::globals::rooms::char_from_room(ch);
+	if(!mods::globals::rooms::char_to_room(to_room,ch)) {
+		return 0;
+	}
+
 	if(!AFF_FLAGGED(ch, AFF_SNEAK)) {
 		char buf2[MAX_STRING_LENGTH];
 
@@ -176,11 +183,6 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	if(world[player->room()].has_texture(room_data::texture_type_t::ELEVATOR) && (dir == UP || dir == DOWN)) {
 		player->send("You move the elevator %s...\r\n",dir == UP ? "UP" : "DOWN");
 	}
-	was_in = IN_ROOM(ch);
-	auto to_room = world[was_in].dir_option[dir]->to_room;
-	mods::globals::rooms::char_from_room(ch);
-	mods::globals::rooms::char_to_room(to_room,ch);
-
 	if(!AFF_FLAGGED(ch, AFF_SNEAK) && !ghost_dissipated) {
 		act("$n has arrived.", TRUE, ch, 0, 0, TO_ROOM);
 	}

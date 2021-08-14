@@ -20,6 +20,7 @@
 #include "../classes/ghost.hpp"
 #include "../classes/breacher.hpp"
 #include "../classes/marine.hpp"
+#include "../corrosive.hpp"
 
 #ifdef __MENTOC_DAMAGE_TYPES_DEBUG_OUTPUT__
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -102,6 +103,9 @@ namespace mods::weapons::damage_types {
 		void die(char_data *ch) {
 			auto p = ptr(ch);
 			mods::levels::reduce_exp_from_dying(p);
+			p->get_affect_dissolver().clear_all();
+			mods::affects::player_died(p);
+			auto uuid = p->uuid();
 
 			if(!IS_NPC(ch)) {
 				REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
@@ -111,6 +115,7 @@ namespace mods::weapons::damage_types {
 
 			make_corpse(ch);
 			extract_char_final(ch);
+			mods::corrosive::unqueue_player(uuid);
 		}
 
 		void die(char_data* killer,char_data *victim) {
@@ -329,7 +334,6 @@ namespace mods::weapons::damage_types {
 
 					break;
 			}
-
 		}
 		void help_linkless(char_data *ch, char_data *victim, int dam, int attacktype) {
 			MENTOC_PREAMBLE();
@@ -396,6 +400,10 @@ namespace mods::weapons::damage_types {
 			stop_fighting(attacker->cd());
 			stop_fighting(victim->cd());
 			mods::weapons::damage_types::legacy::die(attacker->cd(),victim->cd());
+		}
+		void player_died(player_ptr_t& victim) {
+			stop_fighting(victim->cd());
+			mods::weapons::damage_types::legacy::die(victim->cd());
 		}
 	};//end namespace legacy
 
@@ -1269,6 +1277,16 @@ namespace mods::weapons::damage_types {
 		ADD_INTERPRETER_COMMAND(inc_damage,LVL_BUILDER);
 	}
 
+	void update_and_process_death(player_ptr_t attacker,player_ptr_t victim) {
+		mods::weapons::damage_types::legacy::update_position(victim->cd());
+		if(victim->position() == POS_DEAD) {
+			if(attacker) {
+				mods::weapons::damage_types::legacy::player_died(attacker,victim);
+			} else {
+				mods::weapons::damage_types::legacy::player_died(victim);
+			}
+		}
+	}
 };
 #ifdef DMG_DEBUG
 #undef DMG_DEBUG

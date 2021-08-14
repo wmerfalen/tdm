@@ -34,9 +34,19 @@
 				 -- [x] has xray shot
 				 	-- [x] targets don't need to be in line of sight
 				 -- can plant claymores of type:
-				 	-- [ ] corrosive 
+				 	-- [x] corrosive 
+						-- [x] corrosive damage is continuously dealt
+						-- [x] target gets blinded
+							-- [x] how long is determined by headgear/goggles/eyewear
+							-- [x] eyewear/goggles/helmet are best defence
+							-- [x] masks with high balisitic resistance percent work well too
 					-- [ ] shrapnel
+						-- [ ] shrapnel claymores cause BLEED
+							-- [ ] bleed damage is continuously dealt
+							-- [ ] bleed slows target by 10%
 					-- [x] explosive
+						-- [ ] explosions cause continuous fire damage
+				  -- [x] time to install claymore mines are reduced by 50%
 				 -- [ ] can mark and track an enemy
 				 	-- [ ] tracked enemies take more damage
 				 -- [ ] can target limb

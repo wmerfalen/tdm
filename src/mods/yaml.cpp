@@ -499,6 +499,8 @@ namespace mods::yaml {
 		o->vehicle()->type = (mw_vehicle)this->type;
 		(*w) = 0;
 		o->obj_flags.weapon_flags = 0;
+		o->set_hp(this->hp);
+		o->set_armor_hp(this->armor_hp);
 	}
 
 	void melee_description_t::fill_flags(obj_data* o) {

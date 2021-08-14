@@ -861,7 +861,16 @@ namespace mods {
 			void set_damage_nerf(const float& amount) {
 				m_damage_nerf_percent = amount;
 			}
+
+			auto& to_move() {
+				return m_to_move;
+			}
+			auto& to_attack() {
+				return m_to_attack;
+			}
 		protected:
+			int16_t m_to_move;
+			int16_t m_to_attack;
 			std::map<std::string,std::string> m_ada_data;
 			bool m_ada;
 			mods::string m_class_string;

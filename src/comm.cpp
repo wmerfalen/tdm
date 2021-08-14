@@ -33,6 +33,7 @@
 #include "mods/players/messages.hpp"
 #include "mods/scripted-sequence-runner.hpp"
 #include "mods/js.hpp"
+#include "mods/corrosive.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -947,6 +948,10 @@ void heartbeat(int pulse) {
 		mods::rooms::affects::process();
 	}
 
+	if(!(pulse % mods::corrosive::tick_resolution())) {
+		mods::corrosive::process_corrosion();
+	}
+
 	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION())) {
 		mods::rooms::process_fire_damage();
 	}
@@ -1129,6 +1134,7 @@ void send_prompt(player_ptr_t& player) {
 	if(player->paging()) {
 		return;
 	}
+	auto& a = player->get_affect_dissolver();
 	std::string hp = CAT(player->hp(),"H "),
 	            mana = CAT(player->mana(),"M "),
 	            move = CAT(player->move(),"V "),
@@ -1152,7 +1158,6 @@ void send_prompt(player_ptr_t& player) {
 	if(player->fighting()) {
 		fighting = CAT("{red}[",player->fighting()->name(),"]{/red}");
 	}
-	auto& a = player->get_affect_dissolver();
 	if(a.has_affect(mods::affects::affect_t::BLIND)) {
 		affects += "BLIND";
 	}
@@ -1166,25 +1171,37 @@ void send_prompt(player_ptr_t& player) {
 		if(affects.length()) {
 			affects += "|";
 		}
-		affects += "POISON:";
+		affects += "POISON";
 	}
 	if(a.has_affect(mods::affects::affect_t::INTIMIDATED)) {
 		if(affects.length()) {
 			affects += "|";
 		}
-		affects += "INTIMIDATED:";
+		affects += "INTIMIDATED";
 	}
 	if(a.has_affect(mods::affects::affect_t::SCANNED)) {
 		if(affects.length()) {
 			affects += "|";
 		}
-		affects += "SCANNED:";
+		affects += "SCANNED";
 	}
 	if(a.has_affect(mods::affects::affect_t::TRACKED)) {
 		if(affects.length()) {
 			affects += "|";
 		}
-		affects += "TRACKED:";
+		affects += "TRACKED";
+	}
+	if(a.has_affect(mods::affects::affect_t::CORRODE)) {
+		if(affects.length()) {
+			affects += "|";
+		}
+		affects += "CORRODE";
+	}
+	if(a.has_affect(mods::affects::affect_t::BLEED)) {
+		if(affects.length()) {
+			affects += "|";
+		}
+		affects += "BLEED";
 	}
 	if(player->primary() && player->primary()->has_rifle()) {
 		auto left = player->primary()->rifle_instance->ammo;
@@ -1195,7 +1212,7 @@ void send_prompt(player_ptr_t& player) {
 			ammo = CAT("{yel}[",left,"/",clip,"]{/yel}");
 		}
 	}
-	player->send(CAT("\r\n",start,affects,hp,mana,move,fighting,ammo,arrow).c_str());
+	player->send(CAT(affects,"\r\n",start,hp,mana,move,fighting,ammo,arrow).c_str());
 }
 
 

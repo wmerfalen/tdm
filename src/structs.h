@@ -809,6 +809,7 @@ struct obj_data {
 		bool contract;
 		bool forged;
 		bool matches_query(std::string_view);
+		uint64_t corrode_end_tick;
 		using visibility_t = uint8_t;
 		static constexpr visibility_t STARTING_VISIBILITY = 255;
 		visibility_t visibility;
@@ -1037,6 +1038,12 @@ struct obj_data {
 			return m_feed_file;
 		}
 		std::unique_ptr<rifle_instance_data<attachment_data_t,std::shared_ptr<obj_data>,uuid_t>> rifle_instance;
+		int32_t hp();
+		int32_t armor_hp();
+		int32_t adjust_hp(int32_t amount);
+		int32_t adjust_armor_hp(int32_t amount);
+		void set_hp(int32_t amount);
+		void set_armor_hp(int32_t amount);
 	protected:
 #define MENTOC_UPTR(r,data,CLASS_TYPE) std::shared_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
 		BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
@@ -1047,6 +1054,8 @@ struct obj_data {
 		location_data_t m_location_data;
 		std::string m_feed_file;
 		void free_next_content();
+		int32_t m_hp;
+		int32_t m_armor_hp;
 };
 /* ======================================================================= */
 

@@ -51,8 +51,12 @@ namespace mods::weapons::damage_types {
 	);
 	namespace legacy {
 		int damage(char_data *ch, char_data *victim, int dam, int attacktype);
+		void player_died(player_ptr_t& attacker,player_ptr_t& victim);
+		void player_died(player_ptr_t& victim);
+		void update_position(char_data* ch);
 	};
 	int get_legacy_attack_type(obj_ptr_t& weapon);
+	void update_and_process_death(player_ptr_t attacker,player_ptr_t victim);
 };
 #endif
 

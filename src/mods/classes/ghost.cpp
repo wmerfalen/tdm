@@ -216,7 +216,7 @@ namespace mods::classes {
 		m_dissipated = false;
 	}
 	void ghost::use_claymore(uuid_t object_uuid) {
-		/** TODO FIXME */
+		mods::weapons::corrosive_claymore_installed(object_uuid);
 	}
 	void ghost::replenish() {
 		static uint16_t call_count = 0;
@@ -404,7 +404,7 @@ namespace mods::classes {
 			return {false,"You don't have any claymore charges!",nullptr};
 		}
 		--m_corrosive_claymore_count;
-		return {true,"A {grn}corrosive{/grn} claymore charge is built",mods::weapons::corrosive_claymore::create()};
+		return {true,"A {grn}corrosive{/grn} claymore charge is built",mods::weapons::corrosive_claymore::create(m_player)};
 	}
 
 	std::tuple<bool,std::string,obj_ptr_t> ghost::build_shrapnel_claymore() {
