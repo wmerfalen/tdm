@@ -5729,7 +5729,7 @@ detect_size	mods/lmdb/shm.hpp	/^size_t shm::detect_size(const char* memory_id,in
 determine_heading_from_found_vehicles	mods/mobs/car-thief.cpp	/^	int8_t car_thief::determine_heading_from_found_vehicles() {$/;"	kind:function	line:396	class:mods::mobs::car_thief	signature:()
 determine_heading_from_found_vehicles	mods/mobs/generic-thief.cpp	/^	int8_t generic_thief::determine_heading_from_found_vehicles() {$/;"	kind:function	line:469	class:mods::mobs::generic_thief	signature:()
 determine_heading_from_found_victims	mods/mobs/chaotic-meth-addict.cpp	/^	int8_t chaotic_meth_addict::determine_heading_from_found_victims() {$/;"	kind:function	line:409	class:mods::mobs::chaotic_meth_addict	signature:()
-detexturize_room	mods/deferred.cpp	/^	void deferred::detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture) {$/;"	kind:function	line:93	class:mods::deferred	signature:(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture)
+detexturize_room	mods/deferred.cpp	/^	void deferred::detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture) {$/;"	kind:function	line:96	class:mods::deferred	signature:(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture)
 detexturize_room	mods/util.cpp	/^	void detexturize_room(room_rnum room_id, room_data::texture_type_t texture_type) {$/;"	kind:function	line:523	namespace:mods::util	signature:(room_rnum room_id, room_data::texture_type_t texture_type)
 device_exists	mods/mini-games.cpp	/^	bool device_exists(room_vnum vnum,int device_id) {$/;"	kind:function	line:27	namespace:mods::mini_games	signature:(room_vnum vnum,int device_id)
 device_id	mods/mini-games/line-up.cpp	/^	int line_up::device_id(){$/;"	kind:function	line:9	class:mods::mini_games::line_up	signature:()
@@ -8129,7 +8129,7 @@ item_types	constants.cpp	/^const char *item_types[] = {$/;"	kind:variable	line:3
 item_types	constants.hpp	/^const char *item_types[] = {$/;"	kind:variable	line:317
 items	mods/runners/includes.hpp	/^	namespace items {$/;"	kind:namespace	line:31	namespace:mods::runners	file:
 items	mods/runners/items.cpp	/^namespace mods::runners::items {$/;"	kind:namespace	line:12	class:mods::runners	file:
-iteration	mods/deferred.cpp	/^	void deferred::iteration() {$/;"	kind:function	line:83	class:mods::deferred	signature:()
+iteration	mods/deferred.cpp	/^	void deferred::iteration() {$/;"	kind:function	line:86	class:mods::deferred	signature:()
 itoa	mods/util.cpp	/^	std::string itoa(int number) {$/;"	kind:function	line:829	namespace:mods::util	signature:(int number)
 janitor	spec_assign.cpp	/^SPECIAL(janitor);$/;"	kind:variable	line:35
 janitor	spec_procs.cpp	/^SPECIAL(janitor);$/;"	kind:variable	line:49
@@ -10683,10 +10683,10 @@ push_encoded_ok	mods/builder/slotted-builder.hpp	/^			void push_encoded_ok(std::
 push_free_list	mail.cpp	/^void push_free_list(long pos) {$/;"	kind:function	line:72	signature:(long pos)
 push_profile	mods/builder/slotted-builder.hpp	/^			void push_profile(const std::shared_ptr<TOrmType>& profile) {$/;"	kind:function	line:519	struct:mods::builder::slotted_builder	file:	access:private	signature:(const std::shared_ptr<TOrmType>& profile)
 push_profile_with_fields	mods/builder/slotted-builder.hpp	/^			void push_profile_with_fields(const std::shared_ptr<TOrmType>& profile,const std::vector<std::string>& fields) {$/;"	kind:function	line:527	struct:mods::builder::slotted_builder	file:	access:private	signature:(const std::shared_ptr<TOrmType>& profile,const std::vector<std::string>& fields)
-push_step	mods/deferred.cpp	/^	void deferred::push_step(uint16_t ticks, std::size_t hash,const uuid_t& player_uuid) {$/;"	kind:function	line:100	class:mods::deferred	signature:(uint16_t ticks, std::size_t hash,const uuid_t& player_uuid)
+push_step	mods/deferred.cpp	/^	void deferred::push_step(uint16_t ticks, std::size_t hash,const uuid_t& player_uuid) {$/;"	kind:function	line:103	class:mods::deferred	signature:(uint16_t ticks, std::size_t hash,const uuid_t& player_uuid)
 push_ticks_event	mods/deferred.cpp	/^	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type) {$/;"	kind:function	line:15	class:mods::deferred	signature:(uint32_t ticks, std::tuple<uuid_t,uint32_t> type)
 push_ticks_event	mods/deferred.cpp	/^	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, uuid_t player_uuid,uint32_t ui_type) {$/;"	kind:function	line:11	class:mods::deferred	signature:(uint32_t ticks, uuid_t player_uuid,uint32_t ui_type)
-push_ticks_event	mods/deferred.cpp	/^	void push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type) {$/;"	kind:function	line:90	namespace:mods	signature:(uint32_t ticks, std::tuple<uuid_t,uint32_t> type)
+push_ticks_event	mods/deferred.cpp	/^	void push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type) {$/;"	kind:function	line:93	namespace:mods	signature:(uint32_t ticks, std::tuple<uuid_t,uint32_t> type)
 push_weapon_cooldown	mods/deferred.cpp	/^	void deferred::push_weapon_cooldown(const uint16_t& ticks, const uuid_t& player_uuid) {$/;"	kind:function	line:24	class:mods::deferred	signature:(const uint16_t& ticks, const uuid_t& player_uuid)
 put	mods/lmdb.cpp	/^	int _db_handle::put(std::string key,std::string value) {$/;"	kind:function	line:681	class:mods::lmdb::_db_handle	signature:(std::string key,std::string value)
 put	mods/lmdb.cpp	/^	int _db_handle::put(std::string key,std::string value,bool renew) {$/;"	kind:function	line:655	class:mods::lmdb::_db_handle	signature:(std::string key,std::string value,bool renew)

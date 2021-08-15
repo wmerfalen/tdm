@@ -68,6 +68,9 @@ namespace mods {
 				case deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION:
 				default:
 					player = ptr_by_uuid(std::get<0>(fe_tuple));
+					if(!player) {
+						break;
+					}
 					player->unblock_event(std::get<1>(fe_tuple));
 					break;
 			}
