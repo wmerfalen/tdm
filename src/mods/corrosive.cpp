@@ -9,6 +9,8 @@
 #include "interpreter.hpp"
 #include "weapons/damage-types.hpp"
 #include "rand.hpp"
+#include "weapons/damage-calculator.hpp"
+#include "weapons/elemental.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_CORROSIVE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::corrosive::debug]")  << MSG << "\n";
@@ -71,7 +73,116 @@ namespace mods::corrosive {
 		return list;
 	}
 
-	int corrode_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {
+	int corrode_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item,int damage) {
+		auto shield = victim->equipment(WEAR_SHIELD);
+		mods::weapons::damage_types::deal_hp_damage(victim,damage);
+		mods::weapons::elemental::perform_elemental_damage(attacker,victim,damage,ELEM_CORROSIVE);
+		mods::weapons::damage_types::update_and_process_death(attacker,victim);
+		if(victim->position() != POS_DEAD) {
+			auto ticks = CORROSIVE_CLAYMORE_CORRODE_TICKS();
+			mods::affects::affect_player_for({mods::affects::affect_t::CORRODE},victim,ticks);
+			m_debug("calling queue corrode player");
+			mods::corrosive::queue_corrode_player(item,victim,damage);
+			auto goggles = victim->equipment(WEAR_GOGGLES);
+			auto head = victim->equipment(WEAR_HEAD);
+			float tick_reduce = 0.0;
+			int blind_ticks = ticks;
+			if(goggles && goggles->has_armor()) {
+				if(goggles->armor()->attributes->classification.compare("BASIC") == 0) {
+					tick_reduce = 0.05;
+				}
+				if(goggles->armor()->attributes->classification.compare("ADVANCED") == 0) {
+					tick_reduce = 0.75;
+				}
+				if(goggles->armor()->attributes->classification.compare("ELITE") == 0) {
+					tick_reduce = 0.98;
+				}
+				switch((mods::yaml::durability_profile_type_t)goggles->armor()->attributes->durability_profile_enum) {
+					case mods::yaml::durability_profile_type_t::FLIMSY:
+						tick_reduce += 0.01;
+						break;
+					case mods::yaml::durability_profile_type_t::DECENT:
+						tick_reduce += 0.05;
+						break;
+					case mods::yaml::durability_profile_type_t::DURABLE:
+						tick_reduce += 0.15;
+						break;
+					case mods::yaml::durability_profile_type_t::HARDENED:
+						tick_reduce += 0.23;
+						break;
+					case mods::yaml::durability_profile_type_t::INDUSTRIAL_STRENGTH:
+						tick_reduce += 0.75;
+						break;
+					case mods::yaml::durability_profile_type_t::GODLIKE:
+						tick_reduce += 0.87;
+						break;
+					case mods::yaml::durability_profile_type_t::INDESTRUCTIBLE:
+						tick_reduce += 0.98;
+						break;
+					default:
+						break;
+				}
+				switch((mw_armor)goggles->armor()->attributes->type) {
+					case mw_armor::EYEWEAR:
+					case mw_armor::GOGGLES:
+						tick_reduce += 0.95;
+						break;
+					default:
+						break;
+				}
+			}
+			if(head && head->has_armor() && blind_ticks > 0) {
+				if(head->armor()->attributes->classification.compare("BASIC") == 0) {
+					tick_reduce += 0.05;
+				}
+				if(head->armor()->attributes->classification.compare("ADVANCED") == 0) {
+					tick_reduce += 0.75;
+				}
+				if(head->armor()->attributes->classification.compare("ELITE") == 0) {
+					tick_reduce += 0.98;
+				}
+				switch(head->armor()->attributes->durability_profile_enum) {
+					case mods::yaml::durability_profile_type_t::FLIMSY:
+						tick_reduce += 0.01;
+						break;
+					case mods::yaml::durability_profile_type_t::DECENT:
+						tick_reduce += 0.05;
+						break;
+					case mods::yaml::durability_profile_type_t::DURABLE:
+						tick_reduce += 0.15;
+						break;
+					case mods::yaml::durability_profile_type_t::HARDENED:
+						tick_reduce += 0.23;
+						break;
+					case mods::yaml::durability_profile_type_t::INDUSTRIAL_STRENGTH:
+						tick_reduce += 0.75;
+						break;
+					case mods::yaml::durability_profile_type_t::GODLIKE:
+						tick_reduce += 0.87;
+						break;
+					case mods::yaml::durability_profile_type_t::INDESTRUCTIBLE:
+						tick_reduce += 0.98;
+						break;
+					default:
+						break;
+				}
+				switch((mw_armor)head->armor()->attributes->type) {
+					case mw_armor::HELMET:
+						tick_reduce += 0.85;
+						break;
+					case mw_armor::MASK:
+						tick_reduce += head->armor()->attributes->balistic_resistance_percent * 0.01;
+						break;
+					default:
+					case mw_armor::HAT:
+						break;
+				}
+			}
+			blind_ticks = ticks - (tick_reduce * ticks);
+			if(blind_ticks > 0) {
+				mods::affects::affect_player_for({mods::affects::affect_t::BLIND},victim,ticks);
+			}
+		}
 		/**
 		 * corrosive damage against a player has the following effects:
 		 * 	- melee attackers take 2 turns to move instead of 1
@@ -80,7 +191,7 @@ namespace mods::corrosive {
 		 *  - continuous damage over N seconds
 		 *  - blindness over N seconds
 		 */
-		return 0;
+		return damage;
 	}
 	void process_players() {
 		std::vector<corrode_damage_t> player_removals;

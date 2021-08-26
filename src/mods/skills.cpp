@@ -139,7 +139,6 @@ namespace mods::skills {
 			screen += CAT("You are invisible.\r\n");
 		}
 
-		screen += std::get<1>(player->class_action("request_page","skills"));
 		screen += get_user_stats_page(player);
 		player->sendln(mods::util::mail_format("Your stats",header,screen,player->screen_width()));
 	}

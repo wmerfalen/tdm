@@ -29,6 +29,7 @@ namespace mods::builder::bookmarks {
 				return;
 			}
 		}
+		world[i].nickname.assign(vec_args[0]);
 		player->builder_data->bookmarks[vec_args[0]] = i;
 		ADMIN_DONE();
 	}
@@ -42,6 +43,13 @@ namespace mods::builder::bookmarks {
 		if(vec_args.size() < 1) {
 			player->errorln("You must specify a nickname");
 			return;
+		}
+		for(auto i=0; i < world.size(); i++) {
+			if(world[i].nickname.str().compare(vec_args[0].c_str()) == 0) {
+				char_from_room(player->cd());
+				char_to_room(player->cd(),i);
+				return;
+			}
 		}
 		auto room_id = player->builder_data->bookmarks[vec_args[0]];
 		if(room_id >= world.size()) {
@@ -69,6 +77,13 @@ namespace mods::builder::bookmarks {
 		if(vec_args.size() < 1) {
 			player->errorln("You must specify a nickname");
 			return;
+		}
+		for(auto i=0; i < world.size(); i++) {
+			if(world[i].nickname.str().compare(vec_args[0].c_str()) == 0) {
+				player->sendln(std::to_string(world[i].number));
+				player->set_scripted_response(std::to_string(world[i].number));
+				return;
+			}
 		}
 		auto room_id = player->builder_data->bookmarks[vec_args[0]];
 		if(room_id >= world.size()) {

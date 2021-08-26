@@ -3,7 +3,7 @@
 #include "../globals.hpp"
 
 namespace mods::corrosive {
-	int corrode_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item);
+	int corrode_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item,int damage);
 	void disable_electronics(room_rnum room);
 	void roll_melt_equipment_in_room(room_rnum room);
 	void roll_melt_equipment_on_player(player_ptr_t victim);

@@ -1011,6 +1011,7 @@ namespace mods::builder {
 		world[world_top].func = room->func;
 		world[world_top].contents = room->contents;
 		world[world_top].people = room->people;
+		world[world_top].nickname = room->nickname;
 		mods::globals::register_room(world_top);
 		return 0;
 	}

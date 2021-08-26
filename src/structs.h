@@ -1165,7 +1165,9 @@ struct room_data {
 			NARROW_NORTH_SOUTH,
 			ALLEY,
 			PARKING_LOT,
-			PARKING_STALL
+			PARKING_STALL,
+			SIDEWALK,
+			ATRIUM,
 		};
 		constexpr static std::array<texture_type_t,5> textures_that_have_levels = {
 			texture_type_t::RADIOACTIVE,

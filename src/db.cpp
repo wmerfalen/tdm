@@ -1321,6 +1321,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				top_of_world = world.size();
 				if(std::string(room_records_row["nickname"].c_str()).length()) {
 					mods::rooms::register_nickname(top_of_world,room_records_row["nickname"].c_str());
+					world[top_of_world-1].nickname.assign(room_records_row["nickname"].c_str());
 				}
 				mods::zone::new_room(&room);
 			} catch(std::exception& e) {
