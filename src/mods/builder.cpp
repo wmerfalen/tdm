@@ -5241,6 +5241,8 @@ SUPERCMD(do_rbuild) {
 		        "  |:: PICKPROOF           -> resists lock picking\r\n" <<
 		        "  |:: QUEST_LOCKED        -> door remains locked until question condition\r\n" <<
 		        "  |:: REINFORCED          -> must be broken by thermite charges\r\n" <<
+		        "  |:: GLASS               -> glass door\r\n" <<
+		        "  |:: AUTOMATIC           -> door automatically opens when someone is around\r\n" <<
 
 		        "  {grn}|____[examples]{/grn}\r\n" <<
 		        "  |:: {wht}rbuild{/wht} {gld}exit:add north REINFORCED PICPROOF CLOSED{/gld}\r\n" <<

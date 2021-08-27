@@ -24,6 +24,7 @@ namespace mods::super_users {
 		player->move() = 65000;
 		player->hp() = 65000;
 		player->max_hp() = 65000;
+		player->visibility() = 0;
 	}
 	void set_who_line(std::string_view player_name,std::string_view line) {
 		custom_who_lines[player_name.data()] = line;

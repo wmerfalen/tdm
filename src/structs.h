@@ -170,6 +170,8 @@ enum lense_type_t {
 #define EX_QUEST_LOCKED (1 << 7)
 #define EX_HIDDEN (1 << 8)
 #define EX_ELECTRIFIED (1 << 9)
+#define EX_GLASS (1 << 10)
+#define EX_AUTOMATIC (1 << 11)
 
 /* Sector types: used in room_data.sector_type */
 #define SECT_INSIDE          0		   /* Indoors			*/
