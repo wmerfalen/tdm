@@ -3304,3 +3304,4 @@ CREATE TABLE public.room_extra_descriptions (
 					ON DELETE CASCADE
 					ON UPDATE CASCADE
 );
+ALTER TABLE mobile ADD COLUMN mob_roam_pattern TEXT;

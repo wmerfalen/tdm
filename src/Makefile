@@ -185,6 +185,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/shrapnel mods/weapons/shrapnel-claymore \
 					 mods/incendiary mods/radioactive mods/anti-matter mods/shock mods/cryogenic \
 					 mods/mobs/shoplifter mods/mobs/shoplifter-behaviour-tree \
+					 mods/mobs/armed-guard mods/mobs/armed-guard-behaviour-tree \
 					 mods/mobs/behaviour-tree-list
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))

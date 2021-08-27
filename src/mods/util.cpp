@@ -1518,6 +1518,16 @@ namespace mods::util::args {
 		}
 		return list;
 	}
+	std::vector<std::string> parsed_args::gather_tokens_starting_at(std::size_t index) {
+		std::vector<std::string> s;
+		if(index >= vec_args.size()) {
+			return s;
+		}
+		for(int i =index; i < size; i++) {
+			s.emplace_back(vec_args[i]);
+		}
+		return s;
+	}
 	std::string parsed_args::at(std::size_t index) {
 		if(vec_args.size() > index) {
 			return vec_args[index];

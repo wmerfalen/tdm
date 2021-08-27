@@ -416,6 +416,12 @@ namespace mods {
 			void set_room(room_rnum r) {
 				cd()->in_room = r;
 			}
+			auto zone() {
+				if(world.size() > cd()->in_room) {
+					return world[cd()->in_room].zone;
+				}
+				return world[0].zone;
+			}
 			room_rnum& room() {
 				return cd()->in_room;
 			}

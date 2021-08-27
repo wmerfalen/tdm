@@ -1149,6 +1149,37 @@ namespace mods::builder {
 		std::cerr << red_str("zone_place[arg3.data()]:'") << arg3.data() << "'\n";
 		std::cerr << red_str("zone_table[") << zone_id << "].number:'" << std::to_string(zone_table[zone_id].number) << "'\n";
 		std::string yaml_file;
+		if(zone_command.compare("R") == 0) {
+			yaml_file = arg3.data();
+			try {
+				auto t = txn();
+				sql_compositor comp("zone_data",&t);
+				/**
+					 * arg1 = room_vnum
+					 * arg2 = max
+					 * arg3 = yaml csv
+					 */
+				auto sql = comp
+				           .insert()
+				           .into("zone_data")
+				.values({
+					{"zone_id",std::to_string(zone_table[zone_id].number)},
+					{"zone_command",zone_command.data()},
+					{"zone_if_flag",if_flag.data()},
+					{"zone_arg1",arg1.data()},
+					{"zone_arg2",arg2.data()},
+					{"zone_arg3","0"},
+					{"zone_yaml",yaml_file},
+				})
+				.sql();
+				mods::pq::exec(t,sql);
+				mods::pq::commit(t);
+			} catch(std::exception& e) {
+				REPORT_DB_ISSUE("error",e.what());
+				return {false,std::string("Exception occurred: ") + e.what()};
+			}
+			return {true,"Saved zone successfully."};
+		}
 		if(zone_command.compare("Y") == 0) {
 			yaml_file = arg1.data();
 			try {
@@ -2334,6 +2365,14 @@ SUPERCMD(do_mbuild) {
 		        "  {gld}|:: default_position {red}see mbuild help default_position{/red}{/gld}\r\n" <<
 		        "  {gld}|:: action {red}see mbuild help action{/red}{/gld}\r\n" <<
 
+		        " {grn}mbuild{/grn} {red}roam-pattern <mob_index> <type>{/red}\r\n" <<
+		        "  |--> will set the mob's roam pattern to <type>.\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}mbuild{/wht} {gld}roam-pattern 5 Allied Foods{/gld}\r\n" <<
+		        "  |:: (mob will roam where room title contains the string Allied Foods)\r\n" <<
+
+
+
 		        " {grn}mbuild{/grn} {red}extended-type <mob_id> <type>{/red}\r\n" <<
 		        "  |--> will set the mob's extended type to <type>. The list of\r\n" <<
 		        "  available mob types follow.\r\n" <<
@@ -2401,6 +2440,18 @@ SUPERCMD(do_mbuild) {
 			r_success(player,desc.c_str());
 			return;
 		}
+	}
+
+	/** roam-pattern <mob_index> <value> */
+	if(argshave()->int_at(1)->first_is("roam-pattern")->passed()) {
+		auto mob_index = intat(1);
+		if(mob_proto.size() <= mob_index) {
+			r_error(player, "Mob-id is out of bounds.");
+			return;
+		}
+		mob_proto[mob_index].mob_specials.roam_pattern.assign(args()->gather_strings_starting_at(2));
+		r_success(player,"Set roam pattern");
+		return;
 	}
 
 	{
@@ -4441,6 +4492,7 @@ SUPERCMD(do_zbuild) {
 		        "  {grn}|____[example]{/grn}\r\n" <<
 		        "  |:: {wht}zbuild{/wht} {gld}help{/gld}\r\n" <<
 		        "  |:: (this help menu will show up)\r\n" <<
+
 		        " {grn}zbuild{/grn} {red}new <virtual_number> <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>{/red}\r\n" <<
 		        "  |--> Creates a new zone and maps the parameters to each field in the database.\r\n" <<
 		        "  {grn}|____[example]{/grn}\r\n" <<
@@ -4450,25 +4502,41 @@ SUPERCMD(do_zbuild) {
 		        "  |:: used here. 90 is the lifespan and 2 is the most common reset \r\n" <<
 		        "  |:: mode so leave it at that for now. The 15 represents the virtual number \r\n" <<
 		        "  |:: which will be assigned to this zone.)\r\n" <<
+
 		        " {grn}zbuild{/grn} {red}list{/red}\r\n" <<
 		        "  |--> lists the current zones saved to the db\r\n" <<
 		        "  {grn}|____[example]{/grn}\r\n" <<
 		        "  |:: {wht}zbuild{/wht} {gld}list{/gld}\r\n"<<
+
 		        " {grn}zbuild{/grn} {red}delete <id>...<N>{/red}\r\n" <<
 		        "  |--> deletes the zone from the db with the id <id>. Multiple IDs can be specified.\r\n" <<
 		        "  |--> Please note that this command accepts the zone's id and NOT the virtual number for the zone.\r\n" <<
 		        "  {grn}|____[example]{/grn}\r\n" <<
 		        "  |:: {wht}zbuild{/wht} {gld}delete 1{/gld}\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}mob <zone_id> <mob_vnum> <room_vnum> <max> <if_flag>{/red}\r\n" <<
 		        "  |--> places the mob identified by mob_vnum in the room room_vnum\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}obj <zone_id> <obj_vnum> <room_vnum> <max> <if_flag>{/red}\r\n" <<
 		        "  |--> places object obj_vnum in room room_vnum\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}obj2mob <zone_id> <obj_vnum> <mob_vnum> <max> <if_flag>{/red}\r\n" <<
 		        "  |--> gives object obj_vnum to mob mob_vnum\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}obj2obj <zone_id> <obj_vnum> <obj_vnum2> <max> <if_flag>{/red}\r\n" <<
 		        "  |--> places object obj_vnum into object obj_vnum2\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}yaml <zone_id> <yaml> <room_vnum> <max> <if_flag>{/red}\r\n" <<
 		        "  |--> places the yaml file identified by yaml in the room room_vnum\r\n" <<
+
+		        " {grn}zbuild{/grn} {red}random-item-spawn <room_vnum> <max> <yaml>...[yaml-N]{/red}\r\n" <<
+		        "  |--> randomly place one of the specified yaml files in this room\r\n" <<
+
 		        "\r\n" <<
 		        " /-------------------------------------------------------------\\\r\n" <<
 		        " | P A V E M E N T S  S Y S T E M                   version 0.1|\r\n" <<
@@ -4615,6 +4683,23 @@ SUPERCMD(do_zbuild) {
 	if(argshave()->int_at(1)->first_is("place-list")->size_gt(1)->passed()) {
 		for(const auto& i : args()->gather_integers_starting_at(1)) {
 			display_zone_commands(i);
+		}
+		return;
+	}
+	//" {grn}zbuild{/grn} {red}random-item-spawn  <max> <yaml>...[yaml-N]{/red}\r\n" <<
+	if(argshave()->int_at(1)->first_is("random-item-spawn")->size_gt(2)->passed()) {
+		auto yaml_files = args()->gather_tokens_starting_at(3);
+		auto csv = IMPLODE(yaml_files,"|");
+		/**
+					 * arg1 = room_vnum
+					 * arg2 = max
+					 * arg3 = yaml csv
+					 */
+		auto result = mods::builder::zone_place(player->zone(),"R","0",std::to_string(player->vnum()),argat(1),csv);
+		if(!std::get<0>(result)) {
+			r_error(player,std::get<1>(result));
+		} else {
+			r_success(player,std::get<1>(result));
 		}
 		return;
 	}

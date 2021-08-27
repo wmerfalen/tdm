@@ -163,6 +163,29 @@ namespace mods::zone {
 			switch(ZCMD.command) {
 				case '*':			/* ignore command */
 					break;
+				case 'R': { /* random item spawn */
+						/**
+						 * arg1 = room_vnum
+						 * arg2 = max
+						 * arg3 = yaml csv
+						 */
+						z_debug(green_str("random item spawn: ") << ZCMD.arg1 << ", arg2:" << ZCMD.arg2 << ", arg3:" << ZCMD.arg3);
+						if(zone_command_upkeep(ZCMD)) {
+							/* TODO:
+							auto obj = mods::globals::read_mobile_ptr(ZCMD.arg1,VIRTUAL);
+							if(!obj) {
+								log(CAT("Warning: zone update failed to read this mob:",ZCMD.arg1).c_str());
+								break;
+							}
+							z_debug("cool, we found a mob. throwing him in a room now...");
+							char_from_room(obj->cd());
+							char_to_room(obj->cd(),real_room(ZCMD.arg2));
+							ZCMD.object_data.emplace_back(obj->uuid());
+							ZCMD.count = ZCMD.object_data.size();
+							*/
+						}
+					}
+					break;
 
 				case 'M': {		/* read a mobile */
 						/** this differs from legacy...

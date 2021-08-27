@@ -1,0 +1,48 @@
+# type: MACHETE
+# type: KNIFE
+# type: BRASS_KNUCKLES
+chance_to_injure: 12 #float, out of 100
+critical_chance: 10 #int16_t, out of 100
+damage_per_second: 24 #float, out of 100
+disorient_amount: 2 #float, out of 100
+damage_dice_count: 2 #int16_t, number of dice
+damage_dice_sides: 18 #int16_t, dice sides
+incendiary_damage: 0 #int16_t, damage
+explosive_damage: 0 #int16_t, damage
+shrapnel_damage: 0 #int16_t, damage
+corrosive_damage: 0 #int16_t, damage
+cryogenic_damage: 0 #int16_t, damage
+radioactive_damage: 0 #int16_t, damage
+emp_damage: 0 #int16_t, damage
+shock_damage: 0 #int16_t, damage
+anti_matter_damage: 0 #int16_t, damage
+stat_strength: 2 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 0 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 0 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 0 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 0 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 0 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 5 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 0 #int16_t, positive or negative amount to affect strategy stat
+stat_medical: 0 #int16_t, positive or negative amount to affect medical stat
+str_type: 'ICE_PICK' # enum, object type
+manufacturer: 'UN' # string, anything 
+name: 'An old screwdriver' # string, anything name of object 
+description: 'An old screwdriver'
+short_description: 'An old screwdriver'
+action_description: 'An old screwdriver'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+feed_file: 'screwdriver.yml'
+vnum: 163
