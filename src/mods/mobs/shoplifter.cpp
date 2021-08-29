@@ -8,6 +8,7 @@
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
+#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|m|cma") << a << "\n";
 #define cmem(a) mentoc_prefix_debug("[shoplifter][memory_footprint]") << a << "\n";
@@ -251,6 +252,9 @@ namespace mods::mobs {
 				case de::NO_PRIMARY_WIELDED_EVENT:
 					m_debug("No primary wieldded... wtf?");
 					m_weapon = player_ptr->primary();
+					if(!m_weapon) {
+						player_ptr->equip(create_object(ITEM_RIFLE,"rifle/mp5.yml"),WEAR_PRIMARY);
+					}
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
 					m_debug("cooldown in effect for primary");
@@ -468,17 +472,36 @@ namespace mods::mobs {
 		});
 		return who;
 	}
-	bool shoplifter::attack_anyone_in_same_room() {
-		for(auto& victim : mods::globals::get_room_list(room())) {
-			if(victim->is(cd())) {
-				continue;
-			}
-			auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,victim);
-			if(feedback.hits || feedback.damage) {
-				return true;
+	bool shoplifter::attack_anyone_near_room() {
+		static constexpr std::size_t BEST_DISTANCE = 1;
+		struct res {
+			direction_t direction;
+			char_data* player;
+			res() = delete;
+			res(direction_t d, char_data* p) : direction(d), player(p) {}
+		};
+		std::vector<res> finds;
+		for(const auto& direction : world[room()].directions()) {
+			for(const auto& scan : this->scan_attackable(direction)) {
+				if(scan.distance == BEST_DISTANCE) {
+					m_debug("best distance found: " << ptr(scan.ch)->name());
+					finds.emplace_back(res(direction,scan.ch));
+				}
 			}
 		}
-		return false;
+		if(finds.size() == 0) {
+			return false;
+		}
+		std::size_t index = rand_number(0,finds.size()-1);
+		this->set_hunting({finds[index].player->uuid});
+		auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
+		                    player_ptr,
+		                    primary(),
+		                    ptr(finds[index].player),
+		                    BEST_DISTANCE,
+		                    finds[index].direction
+		                );
+		return feedback.hits || feedback.damage;
 	}
 	void shoplifter::clear_state() {
 		m_scanned_items.clear();

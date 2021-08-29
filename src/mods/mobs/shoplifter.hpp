@@ -100,7 +100,7 @@ namespace mods::mobs {
 			uint8_t scan_depth() const;
 			player_ptr_t spawn_near_someone();
 			void attack(player_ptr_t& player);
-			bool attack_anyone_in_same_room();
+			bool attack_anyone_near_room();
 
 
 		private:
