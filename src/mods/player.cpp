@@ -268,9 +268,12 @@ namespace mods {
 		this->equip(obj,pos,true);
 	}
 	void player::unequip(const std::size_t& pos) {
+		unequip(pos,true);
+	}
+	void player::unequip(const std::size_t& pos, bool flush) {
 		if(pos < NUM_WEARS && m_equipment[pos]) {
 			//mods::stat_bonuses::player_unequip(uuid(),m_equipment[pos]->uuid);
-			if(!is_npc()) {
+			if(!is_npc() && flush) {
 				mods::orm::inventory::unequip(db_id(),m_equipment[pos],pos);
 			}
 			auto item = m_equipment[pos];
@@ -508,7 +511,7 @@ namespace mods {
 	void player::carry(obj_ptr_t obj) {
 		carry(obj,true);
 	}
-	void player::uncarry(obj_ptr_t obj) {
+	void player::uncarry(obj_ptr_t obj, bool flush) {
 
 		dbg("entrance");
 		dbg("trimming rifle attachments");
@@ -548,9 +551,12 @@ namespace mods {
 			}
 		}
 		dbg("carrying erased");
-		if(!is_npc()) {
+		if(!is_npc() && flush) {
 			mods::orm::inventory::uncarry(db_id(),obj);
 		}
+	}
+	void player::uncarry(obj_ptr_t obj) {
+		uncarry(obj,true);
 	}
 	std::vector<obj_data*> player::vcarrying() {
 		std::vector<obj_data*> list;

@@ -181,6 +181,7 @@ namespace mods {
 			obj_data* carrying();
 			std::vector<obj_data*> vcarrying();
 			void uncarry(obj_ptr_t obj);
+			void uncarry(obj_ptr_t obj,bool flush);
 			void carry(obj_ptr_t);
 			void carry(obj_ptr_t,bool flush);
 
@@ -637,6 +638,7 @@ namespace mods {
 			void equip(obj_ptr_t obj,int pos,bool flush);
 			void equip(uuid_t,int pos);
 			void unequip(const std::size_t& pos);
+			void unequip(const std::size_t& pos,bool flush);
 			void unequip_into_inventory(int pos);
 			obj_ptr_t equipment(int pos);
 			std::vector<affected_type>& get_affected_by() {

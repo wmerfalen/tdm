@@ -162,7 +162,12 @@ namespace mods::orm::inventory {
 
 
 	int16_t feed_player(player_ptr_t& player) {
-		auto remove = player->vcarrying();
+		for(auto obj : player->vcarrying()) {
+			player->uncarry(optr(obj),false);
+		}
+		for(auto i=0; i < NUM_WEARS; i++) {
+			player->unequip(i,false);
+		}
 		try {
 			auto select_transaction = txn();
 			sql_compositor comp("player_object",&select_transaction);
@@ -198,9 +203,6 @@ namespace mods::orm::inventory {
 					player->equip(std::move(obj),row["po_wear_position"].as<int>(),false);
 					continue;
 				}
-			}
-			for(auto obj : remove) {
-				player->uncarry(optr(obj));
 			}
 			d("[sql][feed_player] size: " << player_record.size() << "\n");
 			return player_record.size();
