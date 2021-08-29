@@ -211,6 +211,25 @@ namespace mods::builder {
 			return -5;
 		}
 	}
+	std::tuple<bool,std::string> save_mob_roam_pattern(int mob_id,std::string_view pattern) {
+		rb_debug("saving mob roam pattern");
+		try {
+			auto up_txn = txn();
+			sql_compositor comp("mobile",&up_txn);
+			auto room_sql = comp.update("mobile")
+			.set({
+				{"mob_roam_pattern",pattern.data()}
+			})
+			.where("mob_virtual_number",std::to_string(mob_proto[mob_id].nr))
+			.sql();
+			auto row = mods::pq::exec(up_txn,room_sql.data());
+			mods::pq::commit(up_txn);
+			return {1,"set targets successfully"};
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("save_mob_target exception: ",e.what());
+			return {false,CAT("failed: '",e.what(),"'")};
+		}
+	}
 	std::tuple<bool,std::string> save_mob_target(int mob_id,std::string targets) {
 		rb_debug("saving mob targets");
 		try {
@@ -2449,8 +2468,12 @@ SUPERCMD(do_mbuild) {
 			r_error(player, "Mob-id is out of bounds.");
 			return;
 		}
-		mob_proto[mob_index].mob_specials.roam_pattern.assign(args()->gather_strings_starting_at(2));
-		r_success(player,"Set roam pattern");
+		auto r = mods::builder::save_mob_roam_pattern(mob_index, args()->gather_strings_starting_at(2));
+		if(std::get<0>(r)) {
+			r_success(player,"Set roam pattern");
+		} else {
+			r_error(player,CAT("Failed to save roam pattern: '",std::get<1>(r),"'"));
+		}
 		return;
 	}
 

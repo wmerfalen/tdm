@@ -43,6 +43,7 @@
 #include "mods/orm/shop.hpp"
 #include "mods/object-utils.hpp"
 #include "mods/mobs/extended-types.hpp"
+#include "mods/mobs/roam-pattern.hpp"
 #include "mods/util.hpp"
 #include "mods/players/db-load.hpp"
 #include "mods/mini-games.hpp"
@@ -968,6 +969,9 @@ void parse_sql_mobiles() {
 		proto.mob_specials.extended_mob_type = static_cast<mods::mobs::extended_types_t>(row["mob_special_extended_type"].as<uint16_t>());
 		mob_proto.push_back(proto);
 		mob_proto.back().nr = proto.nr;
+		if(row["mob_roam_pattern"].is_null() == false) {
+			mods::mobs::roam_pattern::register_roam_pattern(proto.nr, row["mob_roam_pattern"].c_str());
+		}
 		if(row["mob_targets"].is_null() == false) {
 			mods::mobs::extended_types::register_targets(proto.nr, row["mob_targets"].c_str());
 		}

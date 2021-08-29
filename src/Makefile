@@ -186,7 +186,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/incendiary mods/radioactive mods/anti-matter mods/shock mods/cryogenic \
 					 mods/mobs/shoplifter mods/mobs/shoplifter-behaviour-tree \
 					 mods/mobs/armed-guard mods/mobs/armed-guard-behaviour-tree \
-					 mods/mobs/behaviour-tree-list
+					 mods/mobs/behaviour-tree-list mods/mobs/roam-pattern \
+					 mods/mobs/melee-combatant mods/mobs/melee-combatant-behaviour-tree
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

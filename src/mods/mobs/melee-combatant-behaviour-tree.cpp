@@ -2,7 +2,7 @@
 #include "../behaviour_tree_status.hpp"
 #include "../npc.hpp"
 #include "../behaviour_tree_impl.hpp"
-#include "shoplifter.hpp"
+#include "melee-combatant.hpp"
 #include "../weapons/damage-types.hpp"
 #include "../../comm.h"
 #include "../calc-visibility.hpp"
@@ -12,9 +12,9 @@
 #include "../mob-roam.hpp"
 #include "../query-objects.hpp"
 
-//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_shoplifter_BTREE_DEBUG_OUTPUT__
-#ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_shoplifter_BTREE_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << "[m.m.shoplifter.btree:" << __LINE__ << "]->" << a << "\n";
+//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_melee_combatant_BTREE_DEBUG_OUTPUT__
+#ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_melee_combatant_BTREE_DEBUG_OUTPUT__
+#define m_debug(a) std::cerr << "[m.m.melee_combatant.btree:" << __LINE__ << "]->" << a << "\n";
 #else
 #define m_debug(a)
 #endif
@@ -25,10 +25,10 @@ namespace mods::behaviour_tree_impl {
 	extern void add_tree(std::string sv_tree_name,node& n);
 };
 
-namespace mods::mobs::shoplifter_behaviour_tree {
+namespace mods::mobs::melee_combatant_behaviour_tree {
 	using namespace helpers;
 	using vec_player_data = mods::scan::vec_player_data;
-	using TArgumentType = std::shared_ptr<mods::mobs::shoplifter>;
+	using TArgumentType = std::shared_ptr<mods::mobs::melee_combatant>;
 	using TNode = mods::behaviour_tree_node<TArgumentType>;
 	using TStatus = mods::behaviour_tree_status;
 	using vec_player_data = mods::scan::vec_player_data;
@@ -128,7 +128,7 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 		});
 	}
 
-	void make_shoplifter_engage(TNode& tree) {
+	void make_melee_combatant_engage(TNode& tree) {
 		/**
 		 * SEQUENCE TREE
 		 * --------------
@@ -237,13 +237,13 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 	}//end find_target_near_me
 
 	std::deque<TNode>& trees() {
-		static TNode shoplifter_roam(TNode::SELECTOR);
-		static TNode shoplifter_hostile(TNode::SELECTOR);
+		static TNode melee_combatant_roam(TNode::SELECTOR);
+		static TNode melee_combatant_hostile(TNode::SELECTOR);
 		static bool bootstrapped = false;
 		static std::deque<TNode> s;
 		if(!bootstrapped) {
 			m_debug("bootstrapping");
-			shoplifter_roam.append_child(
+			melee_combatant_roam.append_child(
 			TNode::create_selector({
 				find_someone_to_attack(),
 				random_action(),
@@ -251,13 +251,13 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 				//perform_hostile_action(),
 			})
 			);
-			shoplifter_hostile.append_child(
+			melee_combatant_hostile.append_child(
 			TNode::create_sequence({
 			})
 			);
 			s = {
-				shoplifter_roam,
-				shoplifter_hostile,
+				melee_combatant_roam,
+				melee_combatant_hostile,
 			};
 			bootstrapped = true;
 		}
@@ -266,11 +266,11 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 
 	void run_trees() {
 		m_debug("run trees");
-		for(auto& shoplifter : shoplifter_list()) {
-			m_debug("checking shoplifter ptr");
-			if(shoplifter->has_tree() && shoplifter->alive() && shoplifter->capable()) {
-				m_debug("has tree. dispatching..." << shoplifter->get_tree());
-				trees()[shoplifter->get_tree()].run(shoplifter);
+		for(auto& melee_combatant : melee_combatant_list()) {
+			m_debug("checking melee_combatant ptr");
+			if(melee_combatant->has_tree() && melee_combatant->alive() && melee_combatant->capable()) {
+				m_debug("has tree. dispatching..." << melee_combatant->get_tree());
+				trees()[melee_combatant->get_tree()].run(melee_combatant);
 			}
 		}
 	}

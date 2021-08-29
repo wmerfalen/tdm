@@ -7,6 +7,7 @@
 #include "generic-thief.hpp"
 #include "chaotic-meth-addict.hpp"
 #include "shoplifter.hpp"
+#include "melee-combatant.hpp"
 #include "../behaviour_tree_impl.hpp"
 
 #ifdef  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
@@ -64,6 +65,11 @@ namespace mods::mobs {
 			case extended_types_t::SHOPLIFTER:
 				m_debug("[ found shoplifter ]");
 				shoplifter::create(mob_id, mods::mobs::extended_types::get_mobs_targets(ch->nr));
+				register_mob_with_btree = false;
+				break;
+			case extended_types_t::MELEE_COMBATANT:
+				m_debug("[ found melee_combatant ]");
+				melee_combatant::create(mob_id, mods::mobs::extended_types::get_mobs_targets(ch->nr));
 				register_mob_with_btree = false;
 				break;
 		}

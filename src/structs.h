@@ -1503,7 +1503,6 @@ struct mob_special_data {
 	uint16_t behaviour_tree;
 	uint64_t behaviour_tree_flags;
 	extended_mob_type_t extended_mob_type;
-	std::string roam_pattern;
 	int heading;
 	int previous_room;
 	mob_vnum vnum;

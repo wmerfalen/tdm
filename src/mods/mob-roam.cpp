@@ -1,6 +1,7 @@
 #include "mob-roam.hpp"
 #include <memory>
 #include "orm/mob-roam.hpp"
+#include "mobs/roam-pattern.hpp"
 
 namespace mods::mob_roam {
 	using roaming_data_t = std::vector<room_vnum>;
@@ -14,6 +15,10 @@ namespace mods::mob_roam {
 		const auto& it = roaming_data.find(npc->mob_specials.vnum);
 		if(it == roaming_data.end()) {
 			return false;
+		}
+		if(mods::mobs::roam_pattern::has_roam_pattern(npc->mob_specials.vnum) &&
+		        mods::mobs::roam_pattern::can_roam_to(npc->mob_specials.vnum,room_id)) {
+			return true;
 		}
 		return std::find(it->second.begin(),it->second.end(),vnum) != it->second.end();
 	}

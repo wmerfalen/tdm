@@ -24,6 +24,7 @@
 #include "mods/loops.hpp"
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/mob-roam.hpp"
+#include "mods/mobs/roam-pattern.hpp"
 #include "mods/interpreter-include.hpp"
 
 /* external globals */
