@@ -222,6 +222,8 @@ namespace mods::builder {
 			})
 			.where("mob_virtual_number",std::to_string(mob_proto[mob_id].nr))
 			.sql();
+			rb_debug("roam pattern update: ");
+			rb_debug(room_sql);
 			auto row = mods::pq::exec(up_txn,room_sql.data());
 			mods::pq::commit(up_txn);
 			return {1,"set targets successfully"};
