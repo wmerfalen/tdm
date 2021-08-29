@@ -1231,19 +1231,21 @@ void extract_char_final(char_data *ch) {
 	}
 
 	/* transfer objects to room, if any */
-	while(ch->carrying) {
-		obj = ch->carrying;
-		obj_from_char(obj);
-		obj_to_room(obj, IN_ROOM(ch));
-	}
-
-	/* transfer equipment to room, if any */
-	for(i = 0; i < NUM_WEARS; i++)
-		if(GET_EQ(ch, i)) {
-			auto tmp_eq = GET_EQ(ch, i);
-			unequip_char(ptr(ch), i);
-			obj_to_room(tmp_eq, IN_ROOM(ch));
+	if(IS_NPC(ch)) {
+		while(ch->carrying) {
+			obj = ch->carrying;
+			obj_from_char(obj);
+			obj_to_room(obj, IN_ROOM(ch));
 		}
+		/* transfer equipment to room, if any */
+		for(i = 0; i < NUM_WEARS; i++) {
+			if(GET_EQ(ch, i)) {
+				auto tmp_eq = GET_EQ(ch, i);
+				unequip_char(ptr(ch), i);
+				obj_to_room(tmp_eq, IN_ROOM(ch));
+			}
+		}
+	}
 
 	if(FIGHTING(ch)) {
 		stop_fighting(ch);

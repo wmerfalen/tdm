@@ -138,7 +138,7 @@ namespace mods::weapons::damage_types {
 
 			if(killer && !IS_NPC(killer)) {
 				auto obj = mods::loot::reward_player(p);
-				obj_to_char(obj,v);
+				obj_to_char(obj,p);
 			}
 			die(victim);
 			if(killer && !IS_NPC(killer)) {

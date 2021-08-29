@@ -366,8 +366,10 @@ void make_corpse(char_data *ch) {
 		GET_OBJ_TIMER(corpse) = max_pc_corpse_time;
 	}
 
-	/* transfer character's inventory to the corpse */
-	corpse->contains = player->carrying();
+	if(player->is_npc()) {
+		/* transfer character's inventory to the corpse */
+		corpse->contains = player->carrying();
+	}
 
 	for(o = corpse->contains; o != NULL; o = o->next_content) {
 		o->in_obj = corpse.get();	/** FIXME legacy */
@@ -376,23 +378,25 @@ void make_corpse(char_data *ch) {
 	object_list_new_owner(corpse.get(), NULL);/** FIXME legacy */
 
 	/* transfer character's equipment to the corpse */
-	for(i = 0; i < NUM_WEARS; i++) {
-		auto obj = player->equipment(i);
-		if(obj) {
-			player->unequip(i);
-			obj_to_obj(obj, corpse);
+	if(player->is_npc()) {
+		for(i = 0; i < NUM_WEARS; i++) {
+			auto obj = player->equipment(i);
+			if(obj) {
+				player->unequip(i);
+				obj_to_obj(obj, corpse);
+			}
 		}
+
+		/* transfer gold */
+		//if(player->gold() > 0) {
+		//	obj_to_obj(create_money(player->gold()), corpse);
+		//	player->gold() = 0;
+		//}
+
+		player->carry(nullptr);
+		player->carry_items() = 0;
+		player->carry_weight() = 0;
 	}
-
-	/* transfer gold */
-	//if(player->gold() > 0) {
-	//	obj_to_obj(create_money(player->gold()), corpse);
-	//	player->gold() = 0;
-	//}
-
-	player->carry(nullptr);
-	player->carry_items() = 0;
-	player->carry_weight() = 0;
 
 	obj_to_room(corpse, player->room());
 }

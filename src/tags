@@ -4949,7 +4949,7 @@ chan_verbs	mods/chat.cpp	/^	static std::vector<std::string> chan_verbs;$/;"	kind
 chance	mods/rand.cpp	/^	bool chance(uint8_t chance) {$/;"	kind:function	line:51	namespace:mods::rand	signature:(uint8_t chance)
 chance_to_injure	mods/weapon.hpp	/^			float chance_to_injure;$/;"	kind:member	line:160	struct:mods::weapon::yaml::rifle_description_t	file:	access:public
 change	structs.h	/^	int	change;	\/* How fast and what way does it change. *\/$/;"	kind:member	line:1891	struct:weather_data	file:	access:public
-change_alignment	fight.cpp	/^void change_alignment(char_data *ch, char_data *victim) {$/;"	kind:function	line:402	signature:(char_data *ch, char_data *victim)
+change_alignment	fight.cpp	/^void change_alignment(char_data *ch, char_data *victim) {$/;"	kind:function	line:406	signature:(char_data *ch, char_data *victim)
 change_visibility	mods/object-utils.cpp	/^	void change_visibility(obj_ptr_t& object, int amount) {$/;"	kind:function	line:67	namespace:mods::object_utils	signature:(obj_ptr_t& object, int amount)
 change_visibility	mods/player-utils.hpp	/^	static inline void change_visibility(T& player,int amount){$/;"	kind:function	line:28	namespace:mods::player_utils	signature:(T& player,int amount)
 channel	mods/chat.hpp	/^			channel(std::string_view name,std::string_view verb,bool b_private) :$/;"	kind:function	line:62	struct:mods::chat::channel	access:public	signature:(std::string_view name,std::string_view verb,bool b_private)
@@ -5239,7 +5239,7 @@ compositor	mods/jx.hpp	/^	struct compositor {$/;"	kind:struct	line:25	namespace:
 compositor	mods/sql.hpp	/^			compositor(str_object table, T* txn_ptr) :$/;"	kind:function	line:33	struct:mods::sql::compositor	access:public	signature:(str_object table, T* txn_ptr)
 compositor	mods/sql.hpp	/^	struct compositor {$/;"	kind:struct	line:29	namespace:mods::sql	file:
 compute_armor_class	fight.cpp	/^int compute_armor_class(char_data *ch) {$/;"	kind:function	line:147	signature:(char_data *ch)
-compute_thaco	fight.cpp	/^int compute_thaco(char_data *ch, char_data *victim) {$/;"	kind:function	line:838	signature:(char_data *ch, char_data *victim)
+compute_thaco	fight.cpp	/^int compute_thaco(char_data *ch, char_data *victim) {$/;"	kind:function	line:842	signature:(char_data *ch, char_data *victim)
 con	structs.h	/^	skill_measurement_t con;$/;"	kind:member	line:1344	struct:char_ability_data	file:	access:public
 con_app	constants.cpp	/^cpp_extern const struct con_app_type con_app[] = {$/;"	kind:variable	line:639	typeref:struct:con_app_type
 con_app	constants.hpp	/^cpp_extern const struct con_app_type con_app[] = {$/;"	kind:variable	line:642	typeref:struct:con_app_type
@@ -5524,8 +5524,8 @@ d	globals.hpp	53;"	kind:macro	line:53	file:
 d	globals.hpp	56;"	kind:macro	line:56	file:
 d	structs.h	47;"	kind:macro	line:47	file:
 d	structs.h	50;"	kind:macro	line:50	file:
-dam_message	fight.cpp	/^void dam_message(int dam, char_data *ch, char_data *victim,$/;"	kind:function	line:525	signature:(int dam, char_data *ch, char_data *victim, int w_type)
-damage	fight.cpp	/^int damage(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:827	signature:(char_data *ch, char_data *victim, int dam, int attacktype)
+dam_message	fight.cpp	/^void dam_message(int dam, char_data *ch, char_data *victim,$/;"	kind:function	line:529	signature:(int dam, char_data *ch, char_data *victim, int w_type)
+damage	fight.cpp	/^int damage(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:831	signature:(char_data *ch, char_data *victim, int dam, int attacktype)
 damage	mods/damage-event.hpp	/^	int damage;$/;"	kind:member	line:82	struct:feedback_t	file:	access:public
 damage	mods/weapon-types.hpp	/^		weapon_damage_t damage;$/;"	kind:member	line:12	struct:mods::weapon::weapon_type_statistics_t	file:	access:public
 damage	mods/weapons/damage-calculator.hpp	/^		int damage;$/;"	kind:member	line:87	struct:mods::weapons::damage_calculator::explosive_damage_t	file:	access:public
@@ -5649,7 +5649,7 @@ dd	act.informative.cpp	748;"	kind:macro	line:748	file:
 deactivate_account	mods/player.cpp	/^	void player::deactivate_account() {$/;"	kind:function	line:1131	class:mods::player	signature:()
 deal_damage	mods/weapons/damage-types.cpp	/^		void deal_damage(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:248	namespace:mods::weapons::damage_types::legacy	signature:(char_data *ch, char_data *victim, int dam, int attacktype)
 deal_hp_damage	mods/weapons/damage-types.cpp	/^	void deal_hp_damage(player_ptr_t& victim, uint16_t damage) {$/;"	kind:function	line:489	namespace:mods::weapons::damage_types	signature:(player_ptr_t& victim, uint16_t damage)
-death_cry	fight.cpp	/^void death_cry(char_data *ch) {$/;"	kind:function	line:412	signature:(char_data *ch)
+death_cry	fight.cpp	/^void death_cry(char_data *ch) {$/;"	kind:function	line:416	signature:(char_data *ch)
 debug	act.debug.cpp	/^namespace src::act::debug {$/;"	kind:namespace	line:302	class:src::act	file:
 debug	mods/db.hpp	10;"	kind:macro	line:10	file:
 debug	mods/db.hpp	8;"	kind:macro	line:8	file:
@@ -6659,14 +6659,14 @@ extra_flags	structs.h	/^	int \/*bitvector_t*\/	extra_flags;	\/* If it hums, glow
 extra_flags	structs.h	/^	int \/*bitvector_t*\/	extra_flags;$/;"	kind:member	line:1074	struct:obj_data::obj_file_elem	file:	access:public
 extract_after	mods/util.cpp	/^	std::string extract_after(std::string_view target, char this_char) {$/;"	kind:function	line:455	namespace:mods::util	signature:(std::string_view target, char this_char)
 extract_base_yaml_file	mods/rifle-attachments.cpp	/^	std::string rifle_attachments_t::extract_base_yaml_file(const encoding_t& line) {$/;"	kind:function	line:210	class:mods::rifle_attachments_t	signature:(const encoding_t& line)
-extract_char	handler.cpp	/^void extract_char(char_data *ch) {$/;"	kind:function	line:1304	signature:(char_data *ch)
+extract_char	handler.cpp	/^void extract_char(char_data *ch) {$/;"	kind:function	line:1306	signature:(char_data *ch)
 extract_char_final	handler.cpp	/^void extract_char_final(char_data *ch) {$/;"	kind:function	line:1168	signature:(char_data *ch)
 extract_character	mods/players/db-load.cpp	/^	void extract_character(player_ptr_t& player_ptr) {$/;"	kind:function	line:69	namespace:mods::players::db_load	signature:(player_ptr_t& player_ptr)
 extract_deep_reward	mods/util.cpp	/^	std::tuple<bool,int,std::string,strmap_t> extract_deep_reward(std::string reward) {$/;"	kind:function	line:412	namespace:mods::util	signature:(std::string reward)
 extract_int	mods/builder/slotted-builder.hpp	/^			std::optional<TExtractType> extract_int(std::string verb,std::string argument,std::size_t index) {$/;"	kind:function	line:468	struct:mods::builder::slotted_builder	access:protected	signature:(std::string verb,std::string argument,std::size_t index)
 extract_line_items	mods/deep-object-parser.cpp	/^	str_map_t deep_object_parser_t::extract_line_items(const std::string& line, const std::vector<std::string>& slot_names) {$/;"	kind:function	line:257	class:mods::deep_object_parser_t	signature:(const std::string& line, const std::vector<std::string>& slot_names)
 extract_obj	handler.cpp	/^void extract_obj(struct obj_data *obj) {$/;"	kind:function	line:1086	signature:(struct obj_data *obj)
-extract_pending_chars	handler.cpp	/^void extract_pending_chars() {$/;"	kind:function	line:1325	signature:()
+extract_pending_chars	handler.cpp	/^void extract_pending_chars() {$/;"	kind:function	line:1327	signature:()
 extract_profile	mods/builder/slotted-builder.hpp	/^			optional_orm_t extract_profile(std::string verb,std::string argument) {$/;"	kind:function	line:484	struct:mods::builder::slotted_builder	access:protected	signature:(std::string verb,std::string argument)
 extract_profile	mods/builder/slotted-builder.hpp	/^			optional_orm_t extract_profile(std::string verb,std::string argument,std::size_t index) {$/;"	kind:function	line:495	struct:mods::builder::slotted_builder	access:protected	signature:(std::string verb,std::string argument,std::size_t index)
 extract_reference_field_from_meta_key	mods/meta_utils.cpp	/^	std::string extract_reference_field_from_meta_key(const std::string& key){$/;"	kind:function	line:28	namespace:mods::meta_utils	signature:(const std::string& key)
@@ -6841,7 +6841,7 @@ find	mods/orm/fetcher.hpp	/^	TRowType&& find(const uint64_t& id){$/;"	kind:funct
 find	mods/orm/fetcher.hpp	/^	uint64_t find(std::string_view table_name,const uint64_t& id,TFunctionCallback callback){$/;"	kind:function	line:61	namespace:mods::orm::generator	signature:(std::string_view table_name,const uint64_t& id,TFunctionCallback callback)
 find_action	act.social.cpp	/^int find_action(int cmd) {$/;"	kind:function	line:59	signature:(int cmd)
 find_alias	interpreter.cpp	/^struct alias_data *find_alias(struct alias_data *alias_list, char *str) {$/;"	kind:function	line:1055	signature:(struct alias_data *alias_list, char *str)
-find_all_dots	handler.cpp	/^int find_all_dots(char *arg) {$/;"	kind:function	line:1763	signature:(char *arg)
+find_all_dots	handler.cpp	/^int find_all_dots(char *arg) {$/;"	kind:function	line:1765	signature:(char *arg)
 find_attackers	mods/mobs/armed-guard-behaviour-tree.cpp	/^	TChildNode find_attackers() {$/;"	kind:function	line:89	namespace:mods::mobs::armed_guard_behaviour_tree	signature:()
 find_attackers	mods/mobs/car-thief-behaviour-tree.cpp	/^	TChildNode find_attackers() {$/;"	kind:function	line:90	namespace:mods::mobs::car_thief_behaviour_tree	signature:()
 find_attackers	mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^	TChildNode find_attackers() {$/;"	kind:function	line:89	namespace:mods::mobs::chaotic_meth_addict_behaviour_tree	signature:()
@@ -7175,7 +7175,7 @@ generator	mods/forge-engine/item-type-chooser.hpp	/^		generator() : loaded(0) {}
 generator	mods/forge-engine/item-type-chooser.hpp	/^	struct generator {$/;"	kind:struct	line:9	namespace:mods::orm	file:
 generator	mods/orm/fetcher.hpp	/^namespace generator {$/;"	kind:namespace	line:33	namespace:mods::orm	file:
 generic_advance	mods/levels.cpp	/^	void generic_advance(player_ptr_t& player) {$/;"	kind:function	line:681	namespace:mods::levels	signature:(player_ptr_t& player)
-generic_find	handler.cpp	/^int generic_find(char *arg, bitvector_t bitvector, char_data *ch,$/;"	kind:function	line:1697	signature:(char *arg, bitvector_t bitvector, char_data *ch, char_data **tar_ch, struct obj_data **tar_obj)
+generic_find	handler.cpp	/^int generic_find(char *arg, bitvector_t bitvector, char_data *ch,$/;"	kind:function	line:1699	signature:(char *arg, bitvector_t bitvector, char_data *ch, char_data **tar_ch, struct obj_data **tar_obj)
 generic_import	act.builder.cpp	/^void generic_import(player_ptr_t& player,std::string_view type, const std::vector<std::string>& vec_args, std::string_view usage) {$/;"	kind:function	line:285	signature:(player_ptr_t& player,std::string_view type, const std::vector<std::string>& vec_args, std::string_view usage)
 generic_thief	mods/mobs/generic-thief.cpp	/^	generic_thief::generic_thief(const uuid_t& mob_uuid, std::string_view variation) {$/;"	kind:function	line:374	class:mods::mobs::generic_thief	signature:(const uuid_t& mob_uuid, std::string_view variation)
 generic_thief	mods/mobs/generic-thief.hpp	/^	struct generic_thief : public smart_mob {$/;"	kind:struct	line:14	namespace:mods::mobs	file:	inherits:smart_mob
@@ -7244,10 +7244,10 @@ get_captured_output	mods/player.cpp	/^	std::string_view player::get_captured_out
 get_char_num	handler.cpp	/^char_data *get_char_num(mob_rnum nr) {$/;"	kind:function	line:904	signature:(mob_rnum nr)
 get_char_pk_id	mods/js.cpp	/^		static duk_ret_t get_char_pk_id(duk_context *ctx) {$/;"	kind:function	line:789	namespace:mods::js	signature:(duk_context *ctx)
 get_char_room	handler.cpp	/^char_data *get_char_room(char *name, int *number, room_rnum room) {$/;"	kind:function	line:874	signature:(char *name, int *number, room_rnum room)
-get_char_room_vis	handler.cpp	/^char_data * get_char_room_vis(char_data *ch, char *name, int *number) {$/;"	kind:function	line:1442	signature:(char_data *ch, char *name, int *number)
-get_char_vis	handler.cpp	/^char_data *get_char_vis(char_data *ch, char *name, int *number, int where) {$/;"	kind:function	line:1527	signature:(char_data *ch, char *name, int *number, int where)
-get_char_vis	handler.cpp	/^player_ptr_t get_char_vis(player_ptr_t player, char *name, int *number, int where) {$/;"	kind:function	line:1517	signature:(player_ptr_t player, char *name, int *number, int where)
-get_char_world_vis	handler.cpp	/^char_data *get_char_world_vis(char_data *ch, char *name, int *number) {$/;"	kind:function	line:1475	signature:(char_data *ch, char *name, int *number)
+get_char_room_vis	handler.cpp	/^char_data * get_char_room_vis(char_data *ch, char *name, int *number) {$/;"	kind:function	line:1444	signature:(char_data *ch, char *name, int *number)
+get_char_vis	handler.cpp	/^char_data *get_char_vis(char_data *ch, char *name, int *number, int where) {$/;"	kind:function	line:1529	signature:(char_data *ch, char *name, int *number, int where)
+get_char_vis	handler.cpp	/^player_ptr_t get_char_vis(player_ptr_t player, char *name, int *number, int where) {$/;"	kind:function	line:1519	signature:(player_ptr_t player, char *name, int *number, int where)
+get_char_world_vis	handler.cpp	/^char_data *get_char_world_vis(char_data *ch, char *name, int *number) {$/;"	kind:function	line:1477	signature:(char_data *ch, char *name, int *number)
 get_check_money	act.item.cpp	/^void get_check_money(char_data *ch, struct obj_data *obj) {$/;"	kind:function	line:208	signature:(char_data *ch, struct obj_data *obj)
 get_children	mods/behaviour_tree_node.hpp	/^			children_t& get_children() const {$/;"	kind:function	line:122	struct:mods::behaviour_tree_node	access:public	signature:() const
 get_chunk	mods/player.hpp	/^			aligned_int_t get_chunk(chunk_type_t chunk) const {$/;"	kind:function	line:614	struct:mods::player	access:public	signature:(chunk_type_t chunk) const
@@ -7340,12 +7340,12 @@ get_next_attacking_priority	mods/mobs/shoplifter.cpp	/^	player_ptr_t shoplifter:
 get_node	mods/behaviour_tree.hpp	/^		node & get_node() const {$/;"	kind:function	line:41	struct:mods::behaviour_tree	access:public	signature:() const
 get_number	handler.cpp	/^int get_number(char **name) {$/;"	kind:function	line:817	signature:(char **name)
 get_obj_from_room	mods/world-configuration.cpp	/^		bool get_obj_from_room(){ return mods::world_conf::toggle::status_obj_from_room; }$/;"	kind:function	line:214	namespace:mods::world_conf::toggle	signature:()
-get_obj_in_equip_vis	handler.cpp	/^struct obj_data *get_obj_in_equip_vis(char_data *ch, char *arg, int *number, struct obj_data *equipment[]) {$/;"	kind:function	line:1600	signature:(char_data *ch, char *arg, int *number, struct obj_data *equipment[])
+get_obj_in_equip_vis	handler.cpp	/^struct obj_data *get_obj_in_equip_vis(char_data *ch, char *arg, int *number, struct obj_data *equipment[]) {$/;"	kind:function	line:1602	signature:(char_data *ch, char *arg, int *number, struct obj_data *equipment[])
 get_obj_in_list_num	handler.cpp	/^obj_data *get_obj_in_list_num(int num, struct obj_data *list) {$/;"	kind:function	line:843	signature:(int num, struct obj_data *list)
-get_obj_in_list_vis	handler.cpp	/^struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *number, struct obj_data *list) {$/;"	kind:function	line:1537	signature:(char_data *ch, char *name, int *number, struct obj_data *list)
+get_obj_in_list_vis	handler.cpp	/^struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *number, struct obj_data *list) {$/;"	kind:function	line:1539	signature:(char_data *ch, char *name, int *number, struct obj_data *list)
 get_obj_num	handler.cpp	/^struct obj_data *get_obj_num(obj_rnum nr) {$/;"	kind:function	line:857	signature:(obj_rnum nr)
-get_obj_pos_in_equip_vis	handler.cpp	/^int get_obj_pos_in_equip_vis(char_data *ch, char *arg, int *number, struct obj_data *equipment[]) {$/;"	kind:function	line:1622	signature:(char_data *ch, char *arg, int *number, struct obj_data *equipment[])
-get_obj_vis	handler.cpp	/^struct obj_data *get_obj_vis(char_data *ch, char *name, int *number) {$/;"	kind:function	line:1562	signature:(char_data *ch, char *name, int *number)
+get_obj_pos_in_equip_vis	handler.cpp	/^int get_obj_pos_in_equip_vis(char_data *ch, char *arg, int *number, struct obj_data *equipment[]) {$/;"	kind:function	line:1624	signature:(char_data *ch, char *arg, int *number, struct obj_data *equipment[])
+get_obj_vis	handler.cpp	/^struct obj_data *get_obj_vis(char_data *ch, char *name, int *number) {$/;"	kind:function	line:1564	signature:(char_data *ch, char *name, int *number)
 get_one_line	db.cpp	/^void get_one_line(FILE *fl, char *buf) {$/;"	kind:function	line:1785	signature:(FILE *fl, char *buf)
 get_overhead_map_height	mods/player.hpp	/^			uint8_t get_overhead_map_height() const {$/;"	kind:function	line:630	struct:mods::player	access:public	signature:() const
 get_overhead_map_width	mods/player.hpp	/^			uint8_t get_overhead_map_width() const {$/;"	kind:function	line:624	struct:mods::player	access:public	signature:() const
@@ -7356,7 +7356,7 @@ get_player_levels	mods/orm/player-skill-usage.cpp	/^	std::map<uint64_t,uint16_t>
 get_player_map	mods/db.cpp	/^int get_player_map(std::string_view player_name,std::string prefix, std::map<std::string,std::string>& values) {$/;"	kind:function	line:591	signature:(std::string_view player_name,std::string prefix, std::map<std::string,std::string>& values)
 get_player_map	mods/skill-orm-adaptor.cpp	/^	int get_player_map(player_ptr_t& player, std::vector<std::string,std::string>& skills) {$/;"	kind:function	line:14	namespace:mods::skill_orm_adaptor	signature:(player_ptr_t& player, std::vector<std::string,std::string>& skills)
 get_player_vector	mods/db.cpp	/^int get_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string>& values) {$/;"	kind:function	line:623	signature:(std::string_view player_name,std::string prefix, std::vector<std::string>& values)
-get_player_vis	handler.cpp	/^char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {$/;"	kind:function	line:1400	signature:(char_data *ch, char *name, int *number, int inroom)
+get_player_vis	handler.cpp	/^char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {$/;"	kind:function	line:1402	signature:(char_data *ch, char *name, int *number, int inroom)
 get_pluck_filter	mods/lmdb.cpp	/^	const std::vector<std::string>& _db_handle::get_pluck_filter() const {$/;"	kind:function	line:142	class:mods::lmdb::_db_handle	signature:() const
 get_prefs	mods/player.hpp	/^			auto get_prefs() {$/;"	kind:function	line:568	struct:mods::player	access:public	signature:()
 get_private	mods/chat.hpp	/^			bool get_private() const {$/;"	kind:function	line:70	struct:mods::chat::channel	access:public	signature:() const
@@ -7508,7 +7508,7 @@ green_str	mods/colors.hpp	/^static inline std::string green_str(TStr str){$/;"	k
 grenade	mods/weapon.hpp	/^		static constexpr uint64_t grenade = (1 << 1);$/;"	kind:member	line:32	struct:mods::weapon::mask	file:	access:public
 grenade_damage	mods/projectile.cpp	/^		int grenade_damage(player_ptr_t victim,obj_ptr_t projectile) {$/;"	kind:function	line:154	namespace:mods::projectile	signature:(player_ptr_t victim,obj_ptr_t projectile)
 grip	mods/rifle-attachments.hpp	/^			obj_ptr_t grip;$/;"	kind:member	line:19	struct:mods::rifle_attachments_t	file:	access:public
-group_gain	fight.cpp	/^void group_gain(char_data *ch, char_data *victim) {$/;"	kind:function	line:446	signature:(char_data *ch, char_data *victim)
+group_gain	fight.cpp	/^void group_gain(char_data *ch, char_data *victim) {$/;"	kind:function	line:450	signature:(char_data *ch, char_data *victim)
 guests	house.h	/^	long guests[MAX_GUESTS];	\/* idnums of house's guests	*\/$/;"	kind:member	line:15	struct:house_control_rec	file:	access:public
 guild	castle.cpp	/^SPECIAL(guild);$/;"	kind:variable	line:72
 guild	spec_assign.cpp	/^SPECIAL(guild);$/;"	kind:variable	line:32
@@ -7685,7 +7685,7 @@ highlight_strategy	mods/mini-games/line-up.hpp	/^		highlight_strategy_t highligh
 highlight_strategy	mods/mini-games/wires.hpp	/^		highlight_strategy_t highlight_strategy;$/;"	kind:member	line:75	struct:mods::mini_games::wires	file:	access:private
 history	structs.h	/^			history_type_t history;		\/* History of commands, for ! mostly.	*\/$/;"	kind:member	line:1694	struct:mods::descriptor_data	file:	access:public
 history_pos	structs.h	/^			history_pos_type_t history_pos;$/;"	kind:member	line:1695	struct:mods::descriptor_data	file:	access:public
-hit	fight.cpp	/^void hit(char_data *ch, char_data *victim, int type) {$/;"	kind:function	line:857	signature:(char_data *ch, char_data *victim, int type)
+hit	fight.cpp	/^void hit(char_data *ch, char_data *victim, int type) {$/;"	kind:function	line:861	signature:(char_data *ch, char_data *victim, int type)
 hit	mods/js.cpp	/^		static duk_ret_t hit(duk_context *ctx) {$/;"	kind:function	line:226	namespace:mods::js	signature:(duk_context *ctx)
 hit	mods/values.hpp	/^			static inline void hit(T& p){$/;"	kind:function	line:1470	namespace:mods::values::msg	signature:(T& p)
 hit	structs.h	/^	points_t hit;$/;"	kind:member	line:1380	struct:char_point_data	file:	access:public
@@ -9833,7 +9833,7 @@ mods	structs.cpp	/^namespace mods {$/;"	kind:namespace	line:7	file:
 mods	structs.h	/^namespace mods {$/;"	kind:namespace	line:1606	file:
 mods	structs.h	/^namespace mods {$/;"	kind:namespace	line:56	file:
 mods	utils.h	/^namespace mods {$/;"	kind:namespace	line:17	file:
-money_desc	handler.cpp	/^const char *money_desc(int amount) {$/;"	kind:function	line:1644	signature:(int amount)
+money_desc	handler.cpp	/^const char *money_desc(int amount) {$/;"	kind:function	line:1646	signature:(int amount)
 month	mods/date-time.cpp	/^	static uint8_t month;$/;"	kind:member	line:68	namespace:mods::date_time	file:
 month	structs.h	/^	int hours, day, month;$/;"	kind:member	line:1280	struct:time_info_data	file:	access:public
 month_name	constants.cpp	/^const char *month_name[] = {$/;"	kind:variable	line:775
@@ -10442,7 +10442,7 @@ perform_give	mods/contract-events.cpp	/^	void perform_give(char_data* ch, char_d
 perform_give	mods/contract-events.cpp	/^	void perform_give(player_ptr_t& giver, player_ptr_t& receiver,obj_ptr_t& object) {$/;"	kind:function	line:17	namespace:mods::contract_events	signature:(player_ptr_t& giver, player_ptr_t& receiver,obj_ptr_t& object)
 perform_give	mods/item.cpp	/^	std::tuple<int16_t,std::string> perform_give(player_ptr_t& player,player_ptr_t& vict,obj_ptr_t& obj) {$/;"	kind:function	line:29	namespace:mods::item	signature:(player_ptr_t& player,player_ptr_t& vict,obj_ptr_t& obj)
 perform_group	act.other.cpp	/^int perform_group(char_data *ch, char_data *vict) {$/;"	kind:function	line:380	signature:(char_data *ch, char_data *vict)
-perform_group_gain	fight.cpp	/^void perform_group_gain(char_data *ch, int base,$/;"	kind:function	line:428	signature:(char_data *ch, int base, char_data *victim)
+perform_group_gain	fight.cpp	/^void perform_group_gain(char_data *ch, int base,$/;"	kind:function	line:432	signature:(char_data *ch, int base, char_data *victim)
 perform_immort_invis	act.wizard.cpp	/^void perform_immort_invis(char_data *ch, int level) {$/;"	kind:function	line:1408	signature:(char_data *ch, int level)
 perform_immort_vis	act.wizard.cpp	/^void perform_immort_vis(char_data *ch) {$/;"	kind:function	line:1395	signature:(char_data *ch)
 perform_immort_where	act.informative.cpp	/^void perform_immort_where(char_data *ch, char *arg) {$/;"	kind:function	line:1667	signature:(char_data *ch, char *arg)
@@ -10463,7 +10463,7 @@ perform_socket_write	comm.cpp	/^ssize_t perform_socket_write(socket_t desc, cons
 perform_subst	comm.cpp	/^int perform_subst(mods::descriptor_data& t, char *orig, char *subst) {$/;"	kind:function	line:1973	signature:(mods::descriptor_data& t, char *orig, char *subst)
 perform_tell	act.comm.cpp	/^void perform_tell(char_data *ch, char_data *vict, char *arg) {$/;"	kind:function	line:108	signature:(char_data *ch, char_data *vict, char *arg)
 perform_thermite_breach	mods/doors.hpp	/^	static inline void perform_thermite_breach(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction) {$/;"	kind:function	line:194	namespace:mods::doors	signature:(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction)
-perform_violence	fight.cpp	/^void perform_violence() {$/;"	kind:function	line:1007	signature:()
+perform_violence	fight.cpp	/^void perform_violence() {$/;"	kind:function	line:1011	signature:()
 perform_wear	act.item.cpp	/^void perform_wear(char_data *ch, struct obj_data *obj, int where) {$/;"	kind:function	line:1379	signature:(char_data *ch, struct obj_data *obj, int where)
 perform_wear_with_confirmation	act.item.cpp	/^bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int where) {$/;"	kind:function	line:1274	signature:(player_ptr_t& player, obj_ptr_t& in_obj, int where)
 pet_shops	spec_assign.cpp	/^SPECIAL(pet_shops);$/;"	kind:variable	line:26
@@ -11190,7 +11190,7 @@ rentcode	structs.h	/^	int	rentcode;$/;"	kind:member	line:1085	struct:obj_data::r
 renum_world	db.cpp	/^void renum_world(void) {$/;"	kind:function	line:1466	signature:(void)
 renum_zone_table	db.cpp	/^void renum_zone_table(void) {$/;"	kind:function	line:1490	signature:(void)
 replace_all	globals.cpp	/^		std::string replace_all(std::string str, const std::string& from, const std::string& to) {$/;"	kind:function	line:140	namespace:mods::globals	signature:(std::string str, const std::string& from, const std::string& to)
-replace_string	fight.cpp	/^char *replace_string(const char *str, const char *weapon_singular, const char *weapon_plural) {$/;"	kind:function	line:492	signature:(const char *str, const char *weapon_singular, const char *weapon_plural)
+replace_string	fight.cpp	/^char *replace_string(const char *str, const char *weapon_singular, const char *weapon_plural) {$/;"	kind:function	line:496	signature:(const char *str, const char *weapon_singular, const char *weapon_plural)
 replacement	interpreter.h	/^	char *replacement;$/;"	kind:member	line:66	struct:alias_data	file:	access:public
 replenish	mods/classes/breacher.cpp	/^	void breacher::replenish() {$/;"	kind:function	line:15	class:mods::classes::breacher	signature:()
 replenish	mods/classes/engineer.cpp	/^	void engineer::replenish() {$/;"	kind:function	line:26	class:mods::classes::engineer	signature:()
@@ -12263,7 +12263,7 @@ skill_id	mods/orm/player-skill-points.hpp	/^		uint32_t skill_id;$/;"	kind:member
 skill_id	mods/orm/player-skill-points.hpp	/^		uint32_t skill_id;$/;"	kind:member	line:70	struct:mods::orm::player_skill_points	file:	access:public
 skill_id	mods/orm/player-skill-usage.hpp	/^		uint64_t skill_id;$/;"	kind:member	line:12	struct:mods::orm::player_skill_usage_record_t	file:	access:public
 skill_id	mods/orm/player-skill-usage.hpp	/^		uint64_t skill_id;$/;"	kind:member	line:70	struct:mods::orm::player_skill_usage	file:	access:public
-skill_message	fight.cpp	/^int skill_message(int dam, char_data *ch, char_data *vict,$/;"	kind:function	line:756	signature:(int dam, char_data *ch, char_data *vict, int attacktype)
+skill_message	fight.cpp	/^int skill_message(int dam, char_data *ch, char_data *vict,$/;"	kind:function	line:760	signature:(int dam, char_data *ch, char_data *vict, int attacktype)
 skill_name	mods/orm/skill-trees.hpp	/^		std::string skill_name;$/;"	kind:member	line:12	struct:mods::orm::skill_trees_record_t	file:	access:public
 skill_name	spell_parser.cpp	/^const char *skill_name(int num) {$/;"	kind:function	line:164	signature:(int num)
 skill_order	mods/orm/skill-trees.hpp	/^		uint16_t skill_order;$/;"	kind:member	line:16	struct:mods::orm::skill_trees_record_t	file:	access:public
