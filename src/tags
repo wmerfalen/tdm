@@ -723,17 +723,17 @@ DMG_DUMP	mods/weapons/damage-types.cpp	605;"	kind:macro	line:605	file:
 DONTSET	mods/flags.hpp	/^		DONTSET,$/;"	kind:enumerator	line:58	enum:mods::flags::plr	file:
 DOOR_IS_BREACHED	act.movement.cpp	512;"	kind:macro	line:512	file:
 DOOR_IS_CLOSED	act.movement.cpp	516;"	kind:macro	line:516	file:
-DOOR_IS_CLOSED	mods/doors.hpp	/^	static constexpr int8_t DOOR_IS_CLOSED = -3;$/;"	kind:member	line:254	namespace:mods::doors	file:
+DOOR_IS_CLOSED	mods/doors.hpp	/^	static constexpr int8_t DOOR_IS_CLOSED = -3;$/;"	kind:member	line:276	namespace:mods::doors	file:
 DOOR_IS_LOCKED	act.movement.cpp	517;"	kind:macro	line:517	file:
-DOOR_IS_LOCKED	mods/doors.hpp	/^	static constexpr int8_t DOOR_IS_LOCKED = -4;$/;"	kind:member	line:255	namespace:mods::doors	file:
+DOOR_IS_LOCKED	mods/doors.hpp	/^	static constexpr int8_t DOOR_IS_LOCKED = -4;$/;"	kind:member	line:277	namespace:mods::doors	file:
 DOOR_IS_OPEN	act.movement.cpp	503;"	kind:macro	line:503	file:
 DOOR_IS_OPENABLE	act.movement.cpp	499;"	kind:macro	line:499	file:
 DOOR_IS_PICKPROOF	act.movement.cpp	509;"	kind:macro	line:509	file:
-DOOR_IS_REINFORCED	mods/doors.hpp	/^	static constexpr int8_t DOOR_IS_REINFORCED = -5;$/;"	kind:member	line:256	namespace:mods::doors	file:
+DOOR_IS_REINFORCED	mods/doors.hpp	/^	static constexpr int8_t DOOR_IS_REINFORCED = -5;$/;"	kind:member	line:278	namespace:mods::doors	file:
 DOOR_IS_THERMITE	act.movement.cpp	514;"	kind:macro	line:514	file:
 DOOR_IS_UNLOCKED	act.movement.cpp	506;"	kind:macro	line:506	file:
 DOOR_KEY	act.movement.cpp	518;"	kind:macro	line:518	file:
-DOOR_OPENED_SUCCESSFULLY	mods/doors.hpp	/^	static constexpr int8_t DOOR_OPENED_SUCCESSFULLY = 0;$/;"	kind:member	line:251	namespace:mods::doors	file:
+DOOR_OPENED_SUCCESSFULLY	mods/doors.hpp	/^	static constexpr int8_t DOOR_OPENED_SUCCESSFULLY = 0;$/;"	kind:member	line:273	namespace:mods::doors	file:
 DOUSE	mods/item.hpp	/^		DOUSE = (1 << 8),$/;"	kind:enumerator	line:18	enum:mods::item::capability_t	file:
 DOUSE_OBJECT	mods/classes/pyrexia.hpp	/^				DOUSE_OBJECT,$/;"	kind:member	line:18	struct:mods::classes::pyrexia	typeref:enum:mods::classes::pyrexia::	file:	access:public
 DOUSE_ROOM	mods/classes/pyrexia.hpp	/^				DOUSE_ROOM,$/;"	kind:member	line:19	struct:mods::classes::pyrexia	typeref:enum:mods::classes::pyrexia::	file:	access:public
@@ -1312,7 +1312,7 @@ INTEGER_COLUMN	mods/builder.cpp	/^	INTEGER_COLUMN,$/;"	kind:enumerator	line:2112
 INTEL	mods/levels.hpp	/^	INTEL,$/;"	kind:enumerator	line:10	enum:uint8_t	file:
 INTELLIGENCE	mods/classes/base.hpp	/^				INTELLIGENCE,$/;"	kind:member	line:62	struct:mods::classes::base::ability_data_t	typeref:enum:mods::classes::base::ability_data_t::	file:	access:public
 INTIMIDATION	mods/classes/ghost.hpp	/^				INTIMIDATION,$/;"	kind:enumerator	line:31	enum:mods::classes::ghost::ability_t	file:
-INVALID_DIR_OPTION	mods/doors.hpp	/^	static constexpr int8_t INVALID_DIR_OPTION = -1;$/;"	kind:member	line:252	namespace:mods::doors	file:
+INVALID_DIR_OPTION	mods/doors.hpp	/^	static constexpr int8_t INVALID_DIR_OPTION = -1;$/;"	kind:member	line:274	namespace:mods::doors	file:
 INVALID_SLOT	mods/orm/orm-base.hpp	/^	static constexpr std::string_view INVALID_SLOT = "invalid slot";$/;"	kind:member	line:20	namespace:mods::orm	file:
 INVALID_SOCKET	comm.cpp	93;"	kind:macro	line:93	file:
 INVISIBLE	mods/flags.hpp	/^		INVISIBLE,$/;"	kind:enumerator	line:77	enum:mods::flags::aff	file:
@@ -1810,8 +1810,8 @@ MENTOC_LAZY	mods/orm/room.cpp	141;"	kind:macro	line:141	file:
 MENTOC_LAZY	mods/orm/room.cpp	168;"	kind:macro	line:168	file:
 MENTOC_LAZY	mods/rooms.hpp	102;"	kind:macro	line:102	file:
 MENTOC_LAZY	mods/rooms.hpp	120;"	kind:macro	line:120	file:
-MENTOC_LAZY_COMP	mods/doors.hpp	310;"	kind:macro	line:310	file:
-MENTOC_LAZY_COMP	mods/doors.hpp	323;"	kind:macro	line:323	file:
+MENTOC_LAZY_COMP	mods/doors.hpp	332;"	kind:macro	line:332	file:
+MENTOC_LAZY_COMP	mods/doors.hpp	345;"	kind:macro	line:345	file:
 MENTOC_LAZY_INT	mods/builder.cpp	1924;"	kind:macro	line:1924	file:
 MENTOC_LAZY_INT	mods/builder.cpp	1943;"	kind:macro	line:1943	file:
 MENTOC_LAZY_ME	mods/builder.cpp	3595;"	kind:macro	line:3595	file:
@@ -1835,8 +1835,8 @@ MENTOC_LAZY_SHOP	mods/builder.cpp	93;"	kind:macro	line:93	file:
 MENTOC_LAZY_STR	mods/builder.cpp	1908;"	kind:macro	line:1908	file:
 MENTOC_LAZY_STR	mods/builder.cpp	1923;"	kind:macro	line:1923	file:
 MENTOC_LIST_EXTRACT	mods/builder.hpp	165;"	kind:macro	line:165	file:
-MENTOC_MS_COMP	mods/doors.hpp	290;"	kind:macro	line:290	file:
-MENTOC_MS_COMP	mods/doors.hpp	307;"	kind:macro	line:307	file:
+MENTOC_MS_COMP	mods/doors.hpp	312;"	kind:macro	line:312	file:
+MENTOC_MS_COMP	mods/doors.hpp	329;"	kind:macro	line:329	file:
 MENTOC_NPC_CHECK	mods/player.cpp	82;"	kind:macro	line:82	file:
 MENTOC_NPC_CHECK_0	mods/player.cpp	83;"	kind:macro	line:83	file:
 MENTOC_OBI	mods/builder.cpp	41;"	kind:macro	line:41	file:
@@ -2190,7 +2190,7 @@ NOTRADE_MAGIC_USER	shop.h	156;"	kind:macro	line:156	file:
 NOTRADE_NEUTRAL	shop.h	155;"	kind:macro	line:155	file:
 NOTRADE_THIEF	shop.h	158;"	kind:macro	line:158	file:
 NOTRADE_WARRIOR	shop.h	159;"	kind:macro	line:159	file:
-NOT_A_DOOR	mods/doors.hpp	/^	static constexpr int8_t NOT_A_DOOR = -2;$/;"	kind:member	line:253	namespace:mods::doors	file:
+NOT_A_DOOR	mods/doors.hpp	/^	static constexpr int8_t NOT_A_DOOR = -2;$/;"	kind:member	line:275	namespace:mods::doors	file:
 NOT_IMPL	mods/flags.hpp	/^	constexpr static uint32_t NOT_IMPL = (1 << 22);$/;"	kind:member	line:14	namespace:mods::flags	file:
 NOT_LEARNED	mods/classes/base.hpp	/^			static constexpr float NOT_LEARNED = 0.0;$/;"	kind:member	line:25	struct:mods::classes::skill_t	file:	access:public
 NOT_OURS	mods/builder.cpp	/^	NOT_OURS,$/;"	kind:enumerator	line:2117	enum:parse_response_t	file:
@@ -4395,8 +4395,8 @@ aliased	structs.h	/^	int aliased;$/;"	kind:member	line:1597	struct:txt_block	fil
 aliases	structs.h	/^	struct alias_data *aliases;	\/* Character's aliases			*\/$/;"	kind:member	line:1481	struct:player_special_data	typeref:struct:player_special_data::alias_data	file:	access:public
 alignment	structs.h	/^	int	alignment;		\/* +-1000 for alignments                *\/$/;"	kind:member	line:1416	struct:char_special_data_saved	file:	access:public
 alive	mods/mobs/smart-mob.cpp	/^	bool smart_mob::alive() {$/;"	kind:function	line:304	class:mods::mobs::smart_mob	signature:()
-all_integral_flags	mods/doors.hpp	/^	static inline std::vector<exit_info_masks_t> all_integral_flags(int exit_info) {$/;"	kind:function	line:337	namespace:mods::doors	signature:(int exit_info)
-all_string_flags	mods/doors.hpp	/^	static inline std::vector<std::string> all_string_flags(int exit_info) {$/;"	kind:function	line:327	namespace:mods::doors	signature:(int exit_info)
+all_integral_flags	mods/doors.hpp	/^	static inline std::vector<exit_info_masks_t> all_integral_flags(int exit_info) {$/;"	kind:function	line:359	namespace:mods::doors	signature:(int exit_info)
+all_string_flags	mods/doors.hpp	/^	static inline std::vector<std::string> all_string_flags(int exit_info) {$/;"	kind:function	line:349	namespace:mods::doors	signature:(int exit_info)
 alloc	mods/lmdb/shm.hpp	/^        inline int alloc(size_t s,int f){ return alloc(::shm::memory_id,::shm::project_id,s,f); }$/;"	kind:function	line:35	class:gdns::shm	access:public	signature:(size_t s,int f)
 alloc	mods/lmdb/shm.hpp	/^int shm::alloc(const char* memory_id,int project_id,size_t memory_size,int flags){$/;"	kind:function	line:117	class:gdns::shm	signature:(const char* memory_id,int project_id,size_t memory_size,int flags)
 allow	mods/player-registration.cpp	/^	void allow(bool on_off) {$/;"	kind:function	line:7	namespace:mods::player_registration	signature:(bool on_off)
@@ -4592,7 +4592,7 @@ attackers_optimal_distance_away	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TC
 attacking_with	mods/player.hpp	/^			obj_data_ptr_t attacking_with() {$/;"	kind:function	line:745	struct:mods::player	access:public	signature:()
 attacking_with_type	mods/player.cpp	/^	int player::attacking_with_type() {$/;"	kind:function	line:2096	class:mods::player	signature:()
 attempt_direction	mods/classes/breacher.cpp	/^	void breacher::attempt_direction(direction_t dir) {$/;"	kind:function	line:74	class:mods::classes::breacher	signature:(direction_t dir)
-attempt_open	mods/doors.hpp	/^	static inline int8_t attempt_open(const room_rnum room,int8_t direction) {$/;"	kind:function	line:257	namespace:mods::doors	signature:(const room_rnum room,int8_t direction)
+attempt_open	mods/doors.hpp	/^	static inline int8_t attempt_open(const room_rnum room,int8_t direction) {$/;"	kind:function	line:279	namespace:mods::doors	signature:(const room_rnum room,int8_t direction)
 attribute_list	mods/builder/hqbuild.cpp	/^	std::string& attribute_list() {$/;"	kind:function	line:58	namespace:mods::builder::hqbuild	signature:()
 attributes	mods/forge-engine/generator.hpp	/^		std::vector<std::pair<explosive_attributes_t,uint32_t>> attributes;$/;"	kind:member	line:421	struct:mods::forge_engine::generated_explosive_t	file:	access:public
 authenticated	mods/player.hpp	/^			bool authenticated() const {$/;"	kind:function	line:560	struct:mods::player	access:public	signature:() const
@@ -6311,8 +6311,8 @@ door_entry_event	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::door_ent
 door_entry_event	mods/mobs/shoplifter.cpp	/^	void shoplifter::door_entry_event(player_ptr_t& player) {$/;"	kind:function	line:293	class:mods::mobs::shoplifter	signature:(player_ptr_t& player)
 door_event	mods/orm/door-event.hpp	/^		door_event() : id(0) {$/;"	kind:function	line:15	struct:mods::orm::door_event	access:public	signature:()
 door_event	mods/orm/door-event.hpp	/^	struct door_event : public mods::orm::orm_base<door_event,std::string> {$/;"	kind:struct	line:10	namespace:mods::orm	file:	inherits:mods::orm::orm_base
-door_explosion_event	mods/doors.hpp	/^	static inline void door_explosion_event(const room_rnum& room,obj_ptr_t& explosive,const int8_t& direction, bool dispose, bool pave) {$/;"	kind:function	line:127	namespace:mods::doors	signature:(const room_rnum& room,obj_ptr_t& explosive,const int8_t& direction, bool dispose, bool pave)
-door_explosion_event	mods/doors.hpp	/^	static inline void door_explosion_event(uuid_t player_uuid,uuid_t obj_uuid,int8_t direction) {$/;"	kind:function	line:150	namespace:mods::doors	signature:(uuid_t player_uuid,uuid_t obj_uuid,int8_t direction)
+door_explosion_event	mods/doors.hpp	/^	static inline void door_explosion_event(const room_rnum& room,obj_ptr_t& explosive,const int8_t& direction, bool dispose, bool pave) {$/;"	kind:function	line:149	namespace:mods::doors	signature:(const room_rnum& room,obj_ptr_t& explosive,const int8_t& direction, bool dispose, bool pave)
+door_explosion_event	mods/doors.hpp	/^	static inline void door_explosion_event(uuid_t player_uuid,uuid_t obj_uuid,int8_t direction) {$/;"	kind:function	line:172	namespace:mods::doors	signature:(uuid_t player_uuid,uuid_t obj_uuid,int8_t direction)
 doors	mods/doors.cpp	/^namespace mods::doors  {$/;"	kind:namespace	line:3	class:mods	file:
 doors	mods/doors.hpp	/^namespace mods::doors  {$/;"	kind:namespace	line:10	class:mods	file:
 dopr	bsd-snprintf.cpp	/^dopr(char *buffer, size_t maxlen, const char *format, va_list args) {$/;"	kind:function	line:159	file:	signature:(char *buffer, size_t maxlen, const char *format, va_list args)
@@ -7076,7 +7076,7 @@ from_direction	mods/damage-event.hpp	/^	uint8_t from_direction;$/;"	kind:member	
 from_direction	mods/mobs/mp-shotgunner.hpp	/^		direction_t from_direction;$/;"	kind:member	line:16	struct:mods::mobs::attack_history_t	file:	access:public
 from_dirstr	mods/doors.hpp	/^	static inline std::string from_dirstr(const int& direction) {$/;"	kind:function	line:86	namespace:mods::doors	signature:(const int& direction)
 from_room_id	mods/intent.hpp	/^		room_rnum						from_room_id;$/;"	kind:member	line:16	struct:mods::intent::intent_t	file:	access:public
-from_string	mods/doors.hpp	/^	static inline int from_string(std::string_view i) {$/;"	kind:function	line:309	namespace:mods::doors	signature:(std::string_view i)
+from_string	mods/doors.hpp	/^	static inline int from_string(std::string_view i) {$/;"	kind:function	line:331	namespace:mods::doors	signature:(std::string_view i)
 from_string	mods/mobs/extended-types.cpp	/^	std::optional<extended_types_t> from_string(std::string str) {$/;"	kind:function	line:99	namespace:mods::mobs::extended_types	signature:(std::string str)
 from_string	mods/orm/orm-base.hpp	/^	TObject from_string(std::string value) {$/;"	kind:function	line:40	namespace:mods::orm	signature:(std::string value)
 from_string	mods/orm/orm-base.hpp	/^	inline std::string from_string<std::string>(std::string value) {$/;"	kind:function	line:44	namespace:mods::orm	signature:(std::string value)
@@ -8178,9 +8178,9 @@ is_corrosive_claymore	mods/object-utils.cpp	/^	bool is_corrosive_claymore(const 
 is_dark	mods/rooms.cpp	/^	bool is_dark(room_rnum room) {$/;"	kind:function	line:653	namespace:mods::rooms	signature:(room_rnum room)
 is_destroy_door	mods/player-contract-instance.hpp	/^			bool is_destroy_door() const {$/;"	kind:function	line:64	struct:mods::contracts::player_contract_instance	access:public	signature:() const
 is_destroy_item	mods/player-contract-instance.hpp	/^			bool is_destroy_item() const {$/;"	kind:function	line:61	struct:mods::contracts::player_contract_instance	access:public	signature:() const
-is_dir_breachable	mods/doors.hpp	/^	static inline bool is_dir_breachable(const room_rnum  room, int8_t direction) {$/;"	kind:function	line:244	namespace:mods::doors	signature:(const room_rnum room, int8_t direction)
-is_dir_electrified	mods/doors.hpp	/^	static inline bool is_dir_electrified(const room_rnum room, int8_t direction) {$/;"	kind:function	line:236	namespace:mods::doors	signature:(const room_rnum room, int8_t direction)
-is_dir_thermite_breachable	mods/doors.hpp	/^	static inline bool is_dir_thermite_breachable(const room_rnum  room, int8_t direction) {$/;"	kind:function	line:279	namespace:mods::doors	signature:(const room_rnum room, int8_t direction)
+is_dir_breachable	mods/doors.hpp	/^	static inline bool is_dir_breachable(const room_rnum  room, int8_t direction) {$/;"	kind:function	line:266	namespace:mods::doors	signature:(const room_rnum room, int8_t direction)
+is_dir_electrified	mods/doors.hpp	/^	static inline bool is_dir_electrified(const room_rnum room, int8_t direction) {$/;"	kind:function	line:258	namespace:mods::doors	signature:(const room_rnum room, int8_t direction)
+is_dir_thermite_breachable	mods/doors.hpp	/^	static inline bool is_dir_thermite_breachable(const room_rnum  room, int8_t direction) {$/;"	kind:function	line:301	namespace:mods::doors	signature:(const room_rnum room, int8_t direction)
 is_direction	mods/builder.cpp	61;"	kind:macro	line:61	file:
 is_directory	mods/filesystem.hpp	/^	static inline bool is_directory(const std::string& path){$/;"	kind:function	line:10	namespace:mods::filesystem	signature:(const std::string& path)
 is_dissipated	mods/classes/ghost.cpp	/^	bool ghost::is_dissipated() const {$/;"	kind:function	line:90	class:mods::classes::ghost	signature:() const
@@ -8213,7 +8213,7 @@ is_number	interpreter.cpp	/^int is_number(const char *str) {$/;"	kind:function	l
 is_ok	shop.cpp	/^int is_ok(char_data *keeper, char_data *ch, int shop_nr) {$/;"	kind:function	line:189	signature:(char_data *keeper, char_data *ch, int shop_nr)
 is_ok_char	shop.cpp	/^int is_ok_char(char_data *keeper, char_data *ch, int shop_nr) {$/;"	kind:function	line:122	signature:(char_data *keeper, char_data *ch, int shop_nr)
 is_on_fire	mods/rooms.hpp	/^	static inline bool is_on_fire(TRoom room) {$/;"	kind:function	line:353	namespace:mods::rooms	signature:(TRoom room)
-is_open	mods/doors.hpp	/^	static inline bool is_open(const room_rnum  room, int8_t direction) {$/;"	kind:function	line:221	namespace:mods::doors	signature:(const room_rnum room, int8_t direction)
+is_open	mods/doors.hpp	/^	static inline bool is_open(const room_rnum  room, int8_t direction) {$/;"	kind:function	line:243	namespace:mods::doors	signature:(const room_rnum room, int8_t direction)
 is_open	shop.cpp	/^int is_open(char_data *keeper, int shop_nr, int msg) {$/;"	kind:function	line:161	signature:(char_data *keeper, int shop_nr, int msg)
 is_optional	mods/contract-steps.hpp	/^		bool 						is_optional;$/;"	kind:member	line:38	namespace:mods::contracts	file:
 is_owner	mods/object-utils.hpp	/^	bool is_owner(T& obj, PlayerT& player) {$/;"	kind:function	line:275	namespace:mods::object_utils	signature:(T& obj, PlayerT& player)
@@ -8928,7 +8928,7 @@ m_debug	mods/mobs/roam-pattern.cpp	5;"	kind:macro	line:5	file:
 m_debug	mods/mobs/roam-pattern.cpp	7;"	kind:macro	line:7	file:
 m_debug	mods/mobs/shoplifter-behaviour-tree.cpp	17;"	kind:macro	line:17	file:
 m_debug	mods/mobs/shoplifter-behaviour-tree.cpp	19;"	kind:macro	line:19	file:
-m_debug	mods/mobs/shoplifter-behaviour-tree.cpp	280;"	kind:macro	line:280	file:
+m_debug	mods/mobs/shoplifter-behaviour-tree.cpp	285;"	kind:macro	line:285	file:
 m_debug	mods/mobs/shoplifter.cpp	12;"	kind:macro	line:12	file:
 m_debug	mods/mobs/shoplifter.cpp	15;"	kind:macro	line:15	file:
 m_debug	mods/mobs/shoplifter.cpp	490;"	kind:macro	line:490	file:
@@ -9482,7 +9482,7 @@ mark_target	mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::mark_t
 marksmanship	mods/player.hpp	/^			uint16_t& marksmanship() {$/;"	kind:function	line:332	struct:mods::player	access:public	signature:()
 marksmanship	structs.h	/^	skill_measurement_t marksmanship;$/;"	kind:member	line:1348	struct:char_ability_data	file:	access:public
 mask	mods/weapon.hpp	/^	struct mask {$/;"	kind:struct	line:30	namespace:mods::weapon	file:
-mask_to_string	mods/doors.hpp	/^	static inline std::string mask_to_string(int i) {$/;"	kind:function	line:289	namespace:mods::doors	signature:(int i)
+mask_to_string	mods/doors.hpp	/^	static inline std::string mask_to_string(int i) {$/;"	kind:function	line:311	namespace:mods::doors	signature:(int i)
 master	structs.h	/^	char_data *master;             \/* Who is char following?        *\/$/;"	kind:member	line:1766	struct:char_data	file:	access:public
 mastered	mods/classes/base.cpp	/^	bool skill_t::mastered() const {$/;"	kind:function	line:72	class:mods::classes::skill_t	signature:() const
 match	mods/util.cpp	/^	bool match(std::string_view needle, const std::vector<std::string>& arg_list) {$/;"	kind:function	line:1351	namespace:mods::util::args	signature:(std::string_view needle, const std::vector<std::string>& arg_list)
@@ -10443,7 +10443,7 @@ perform_act	comm.cpp	/^void perform_act(const char *orig, char_data *ch, obj_dat
 perform_alias	interpreter.cpp	/^int perform_alias(mods::descriptor_data& d, char *orig, size_t maxlen) {$/;"	kind:function	line:1163	signature:(mods::descriptor_data& d, char *orig, size_t maxlen)
 perform_auto_login	comm.cpp	/^void perform_auto_login(player_ptr_t& player) {$/;"	kind:function	line:555	signature:(player_ptr_t& player)
 perform_blast_radius	mods/projectile.cpp	/^		void perform_blast_radius($/;"	kind:function	line:202	namespace:mods::projectile	signature:( room_rnum room_id, std::size_t blast_radius, obj_ptr_t device, uuid_t player_uuid)
-perform_breach	mods/doors.hpp	/^	static inline void perform_breach(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction) {$/;"	kind:function	line:171	namespace:mods::doors	signature:(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction)
+perform_breach	mods/doors.hpp	/^	static inline void perform_breach(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction) {$/;"	kind:function	line:193	namespace:mods::doors	signature:(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction)
 perform_damage	mods/weapons/damage-types.cpp	/^	feedback_t perform_damage($/;"	kind:function	line:410	namespace:mods::weapons::damage_types	signature:( player_ptr_t& player, player_ptr_t& victim, obj_ptr_t weapon, int dam, direction_t direction )
 perform_damage_cleanup	mods/weapons/damage-types.cpp	/^		int perform_damage_cleanup(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:352	namespace:mods::weapons::damage_types::legacy	signature:(char_data *ch, char_data *victim, int dam, int attacktype)
 perform_drop	act.item.cpp	/^int perform_drop(char_data *ch, struct obj_data *obj,$/;"	kind:function	line:450	signature:(char_data *ch, struct obj_data *obj, byte mode, const char *sname, room_rnum RDR)
@@ -10479,7 +10479,7 @@ perform_socket_read	comm.cpp	/^ssize_t perform_socket_read(socket_t desc, char *
 perform_socket_write	comm.cpp	/^ssize_t perform_socket_write(socket_t desc, const char *txt, size_t length) {$/;"	kind:function	line:1602	signature:(socket_t desc, const char *txt, size_t length)
 perform_subst	comm.cpp	/^int perform_subst(mods::descriptor_data& t, char *orig, char *subst) {$/;"	kind:function	line:1973	signature:(mods::descriptor_data& t, char *orig, char *subst)
 perform_tell	act.comm.cpp	/^void perform_tell(char_data *ch, char_data *vict, char *arg) {$/;"	kind:function	line:108	signature:(char_data *ch, char_data *vict, char *arg)
-perform_thermite_breach	mods/doors.hpp	/^	static inline void perform_thermite_breach(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction) {$/;"	kind:function	line:194	namespace:mods::doors	signature:(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction)
+perform_thermite_breach	mods/doors.hpp	/^	static inline void perform_thermite_breach(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction) {$/;"	kind:function	line:216	namespace:mods::doors	signature:(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction)
 perform_violence	fight.cpp	/^void perform_violence() {$/;"	kind:function	line:1011	signature:()
 perform_wear	act.item.cpp	/^void perform_wear(char_data *ch, struct obj_data *obj, int where) {$/;"	kind:function	line:1379	signature:(char_data *ch, struct obj_data *obj, int where)
 perform_wear_with_confirmation	act.item.cpp	/^bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int where) {$/;"	kind:function	line:1274	signature:(player_ptr_t& player, obj_ptr_t& in_obj, int where)
@@ -11018,7 +11018,7 @@ rand_xoroshiro	mods/rand.cpp	/^uint64_t rand_xoroshiro() {$/;"	kind:function	lin
 random_action	mods/mobs/armed-guard-behaviour-tree.cpp	/^	TChildNode random_action() {$/;"	kind:function	line:220	namespace:mods::mobs::armed_guard_behaviour_tree	signature:()
 random_action	mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^	TChildNode random_action() {$/;"	kind:function	line:220	namespace:mods::mobs::chaotic_meth_addict_behaviour_tree	signature:()
 random_action	mods/mobs/melee-combatant-behaviour-tree.cpp	/^	TChildNode random_action() {$/;"	kind:function	line:220	namespace:mods::mobs::melee_combatant_behaviour_tree	signature:()
-random_action	mods/mobs/shoplifter-behaviour-tree.cpp	/^	TChildNode random_action() {$/;"	kind:function	line:220	namespace:mods::mobs::shoplifter_behaviour_tree	signature:()
+random_action	mods/mobs/shoplifter-behaviour-tree.cpp	/^	TChildNode random_action() {$/;"	kind:function	line:225	namespace:mods::mobs::shoplifter_behaviour_tree	signature:()
 random_armor_type	mods/forge-engine/generator.hpp	/^			armor_types_t random_armor_type() {$/;"	kind:function	line:444	struct:mods::forge_engine::generator	access:public	signature:()
 random_attachment_type	mods/forge-engine/generator.hpp	/^			attachment_types_t random_attachment_type() {$/;"	kind:function	line:456	struct:mods::forge_engine::generator	access:public	signature:()
 random_direction	mods/util.cpp	/^	direction_t random_direction() {$/;"	kind:function	line:337	namespace:mods::util	signature:()
@@ -11610,7 +11610,7 @@ run_trees	mods/mobs/armed-guard-behaviour-tree.cpp	/^	void run_trees() {$/;"	kin
 run_trees	mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:267	namespace:mods::mobs::chaotic_meth_addict_behaviour_tree	signature:()
 run_trees	mods/mobs/generic-thief-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:270	namespace:mods::mobs::generic_thief_behaviour_tree	signature:()
 run_trees	mods/mobs/melee-combatant-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:267	namespace:mods::mobs::melee_combatant_behaviour_tree	signature:()
-run_trees	mods/mobs/shoplifter-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:267	namespace:mods::mobs::shoplifter_behaviour_tree	signature:()
+run_trees	mods/mobs/shoplifter-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:272	namespace:mods::mobs::shoplifter_behaviour_tree	signature:()
 run_zone_replenish	mods/intimidate.cpp	/^	void run_zone_replenish(){$/;"	kind:function	line:50	namespace:mods::zone	signature:()
 runners	mods/runners/includes.hpp	/^namespace mods::runners {$/;"	kind:namespace	line:17	class:mods	file:
 s	mods/rand.cpp	/^	static uint64_t s[4];$/;"	kind:member	line:114	namespace:mods::rand::xoroshiro	file:
@@ -12902,7 +12902,7 @@ trees	mods/mobs/armed-guard-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/
 trees	mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/;"	kind:function	line:239	namespace:mods::mobs::chaotic_meth_addict_behaviour_tree	signature:()
 trees	mods/mobs/generic-thief-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/;"	kind:function	line:227	namespace:mods::mobs::generic_thief_behaviour_tree	signature:()
 trees	mods/mobs/melee-combatant-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/;"	kind:function	line:239	namespace:mods::mobs::melee_combatant_behaviour_tree	signature:()
-trees	mods/mobs/shoplifter-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/;"	kind:function	line:239	namespace:mods::mobs::shoplifter_behaviour_tree	signature:()
+trees	mods/mobs/shoplifter-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/;"	kind:function	line:244	namespace:mods::mobs::shoplifter_behaviour_tree	signature:()
 triads	mods/player.cpp	/^	std::array<uint8_t,5> player::triads() {$/;"	kind:function	line:1844	class:mods::player	signature:()
 trigger_callback	mods/affects.hpp	/^			void trigger_callback(TAffects affect) {$/;"	kind:function	line:146	struct:mods::affects::dissolver	access:public	signature:(TAffects affect)
 trigger_callback_for_affect	mods/rooms.cpp	/^	void trigger_callback_for_affect(room_rnum room,affect_t affect) {$/;"	kind:function	line:52	namespace:mods::rooms::affects	signature:(room_rnum room,affect_t affect)

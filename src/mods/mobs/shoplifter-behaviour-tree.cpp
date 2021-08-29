@@ -164,6 +164,11 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 	TChildNode find_someone_to_attack() {
 		return TNode::create_selector({
 			TNode::create_leaf([](TArgumentType g) -> TStatus {
+				return TStatus::SUCCESS;
+				/**
+				 * Seems to be broken right now. when running the
+				 * breach charge code in room 128
+				 */
 				if(g->attack_anyone_in_same_room()) {
 					return TStatus::SUCCESS;
 				}

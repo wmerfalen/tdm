@@ -120,8 +120,30 @@ namespace mods::doors  {
 	}
 
 	static inline void pave_open_direction(room_rnum room, int8_t direction) {
+		if(!world[room].dir_option[direction]) {
+			world.emplace_back();
+			room_rnum room_id = world.size() - 1;
+			mods::globals::register_room(room_id);
+			std::string b = "breached";
+			int dbreached = EX_ISDOOR | EX_BREACHED;
+			world[room].set_dir_option(
+			    (byte)direction,
+			    b,
+			    b,
+			    dbreached,
+			    0,
+			    room_id
+			);
+			world[room_id].set_dir_option(
+			    OPPOSITE_DIR(direction),
+			    b,
+			    b,
+			    dbreached,
+			    0,
+			    room);
+			world[room].dir_option[direction]->to_room = room_id;
+		}
 		world[room].dir_option[direction]->exit_info = EX_ISDOOR | EX_BREACHED;
-		world[world[room].dir_option[direction]->to_room].dir_option[OPPOSITE_DIR(direction)]->exit_info = EX_ISDOOR | EX_BREACHED;
 	}
 
 	static inline void door_explosion_event(const room_rnum& room,obj_ptr_t& explosive,const int8_t& direction, bool dispose, bool pave) {
