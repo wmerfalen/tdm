@@ -34,7 +34,7 @@ reload_time: 3 #int, measured in ticks
 str_type: 'PISTOL'
 type: 'PISTOL' #string, type of weapon
 manufacturer: 'TN3 SMITH-x Industrial'
-name: 'Silenced PPK' #string
+name: 'A Uzi' #string
 #rarity types
 # COMMON
 # UNCOMMON

@@ -5,6 +5,7 @@
 	namespace A { extern void init(); };
 INIT(mods::players::banish);
 INIT(mods::rand);
+INIT(mods::loot_container);
 INIT(builder);
 INIT(mods::date_time);
 INIT(mods::integral_objects);
@@ -106,6 +107,7 @@ namespace mods::init {
 		mods::players::banish::init();
 		mods::projectile::init();
 		mods::boosters::adrenaline_shot_init::init();
+		mods::loot_container::init();
 	}
 };
 #endif
