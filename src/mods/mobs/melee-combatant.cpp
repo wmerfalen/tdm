@@ -334,7 +334,7 @@ namespace mods::mobs {
 		}
 		player_ptr = p;
 		auto ch = p->cd();
-		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::CHAOTIC_METH_ADDICT;
+		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::MELEE_COMBATANT;
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
@@ -351,7 +351,10 @@ namespace mods::mobs {
 		}
 	}
 	player_ptr_t melee_combatant::get_next_attacking_priority() {
-		return m_attackers.front();
+		if(!m_attackers.empty()) {
+			return m_attackers.front();
+		}
+		return nullptr;
 	}
 	void melee_combatant::extra_attack() {
 		m_debug("extra attack roll success");

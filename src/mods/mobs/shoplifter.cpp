@@ -17,6 +17,7 @@
 #define cmem(a)
 #endif
 namespace mods::mobs {
+	static constexpr std::size_t BEST_DISTANCE = 1;
 	namespace shoplifter_btree {
 		/**
 		 * @brief find the room with the most enemies, and go towards that direction
@@ -338,7 +339,7 @@ namespace mods::mobs {
 		}
 		player_ptr = p;
 		auto ch = p->cd();
-		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::CHAOTIC_METH_ADDICT;
+		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::SHOPLIFTER;
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
@@ -377,6 +378,11 @@ namespace mods::mobs {
 		for(const auto& attacker : m_attackers) {
 			auto results = mods::scan::los_find(player_ptr,attacker);
 			if(results.found == false) {
+				if(results.distance == BEST_DISTANCE) {
+					auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,primary(),attacker,results.distance,results.direction);
+					return;
+				}
+
 				if(m_attackers_last_direction.has_value()) {
 					move_to(m_attackers_last_direction.value());
 				}
@@ -385,12 +391,6 @@ namespace mods::mobs {
 			m_debug("distance:" << results.distance << ", direction: " << results.direction);
 			m_attackers_last_direction = results.direction;
 
-			if(attacker->room() == player_ptr->room()) {
-				auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,attacker);
-				if(feedback.hits == 0 || feedback.damage == 0) {
-					continue;
-				}
-			}
 		}
 	}
 
@@ -473,7 +473,6 @@ namespace mods::mobs {
 		return who;
 	}
 	bool shoplifter::attack_anyone_near_room() {
-		static constexpr std::size_t BEST_DISTANCE = 1;
 		struct res {
 			direction_t direction;
 			char_data* player;
@@ -483,7 +482,7 @@ namespace mods::mobs {
 		std::vector<res> finds;
 		for(const auto& direction : world[room()].directions()) {
 			for(const auto& scan : this->scan_attackable(direction)) {
-				if(scan.distance == BEST_DISTANCE) {
+				if(scan.distance == BEST_DISTANCE && !IS_NPC(scan.ch)) {
 					m_debug("best distance found: " << ptr(scan.ch)->name());
 					finds.emplace_back(res(direction,scan.ch));
 				}

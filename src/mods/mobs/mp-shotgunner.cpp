@@ -400,6 +400,9 @@ namespace mods::mobs {
 		}
 	}
 	player_ptr_t mp_shotgunner::get_next_attacking_priority() {
+		if(m_attackers.empty()) {
+			return nullptr;
+		}
 		return m_attackers.front();
 	}
 	std::pair<bool,std::string> mp_shotgunner::move_to(const direction_t& dir) {

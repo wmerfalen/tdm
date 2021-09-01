@@ -201,19 +201,6 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 				c->move_to(c->get_heading());
 				return TStatus::FAILURE;
 			}),
-#if __MENTOC_CHAOTIC_METH_ADDICT_CAN_SPAWN_NEAR_SOMEONE__
-			TNode::create_leaf([](TArgumentType g) -> TStatus {
-				if(mods::rand::chance(CHAOTIC_METH_ADDICT_SPAWN_NEAR_RANDOM_PLAYER_CHANCE())) {
-					auto who = g->spawn_near_someone();
-					if(!who) {
-						return TStatus::FAILURE;
-					}
-					g->attack(who);
-					return TStatus::SUCCESS;
-				}
-				return TStatus::FAILURE;
-			}),
-#endif
 		});//end create_sequence
 	}//end find_target_near_me
 

@@ -11,6 +11,7 @@
 #include "flashbang.hpp"
 #include "rooms.hpp"
 #include "injure.hpp"
+#include "explosive.hpp"
 #include "doors.hpp"
 #include "super-users.hpp"
 
@@ -345,6 +346,7 @@ namespace mods {
 			if(e.fire) {
 				damage += e.fire;
 				victim->sendln("An incendiary explosion causes you to take damage!");
+				mods::explosive::append_incendiary_damage_to_room(victim->room(),e.fire);
 			}
 			if(e.radiation) {
 				damage += e.radiation;
@@ -360,6 +362,7 @@ namespace mods {
 			}
 
 			mods::weapons::damage_types::deal_hp_damage(victim,damage);
+			mods::explosive::append_explosive_damage_to_room(victim->room(),damage);
 			return damage;
 		}
 		int chemical_damage(player_ptr_t victim, obj_ptr_t item) {

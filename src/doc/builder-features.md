@@ -1,5 +1,30 @@
 # Inventory of features
 
+# rules for lighting a fire
+	- a room can be lit on fire if it has the following:
+		- has VOLATILE texture AND one or more of the following occur
+			- an explosion occurs inside the room
+			- incendiary or explosive elemental damage is done to any receiver of damage in the room
+			- an incendiary or fragmentation grenade goes off in the room
+				- either by throwing or underbarrel, the delivery method doesn't matter
+			- an incendiary or explosive claymore goes off in the room
+			- someone misses a rifle attack to someone in the room
+	- propagating volatile fires in code
+		- mods::explosive::append_explosive_damage_to_room(room_id,damage);
+		- mods::explosive::append_incendiary_damage_to_room(room_id,damage);
+		- if room has `GLASS_WINDOWS` or `GLASS_CONTENTS` texture
+			- `mods::glass::scatter_room(room_id);` gets called and adds texture `SHATTERED_GLASS`
+		- when player or NPC enters room with `SHATTERED_GLASS` texture:
+			- if wearing footwear
+			- chances to cause foot damage per footwear armor classification
+				- basic: 80%
+				- advanced: 20%
+				- elite: 5%
+			- if mods::rand::chance(classification) 
+				- add BLEED to player
+				- BLEED affects player for 60 ticks
+					- causes 10hp damage every 10 ticks
+
 # Trim down classes 
 	- [ ] Marine
 		- Melee and rifles

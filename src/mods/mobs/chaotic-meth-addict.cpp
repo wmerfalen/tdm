@@ -351,7 +351,10 @@ namespace mods::mobs {
 		}
 	}
 	player_ptr_t chaotic_meth_addict::get_next_attacking_priority() {
-		return m_attackers.front();
+		if(!m_attackers.empty()) {
+			return m_attackers.front();
+		}
+		return nullptr;
 	}
 	void chaotic_meth_addict::extra_attack() {
 		m_debug("extra attack roll success");

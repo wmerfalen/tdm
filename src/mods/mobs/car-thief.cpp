@@ -339,7 +339,10 @@ namespace mods::mobs {
 		}
 	}
 	player_ptr_t car_thief::get_next_attacking_priority() {
-		return m_attackers.front();
+		if(!m_attackers.empty()) {
+			return m_attackers.front();
+		}
+		return nullptr;
 	}
 	void car_thief::melee_attack_within_range() {
 		m_debug("melee_attack_within_range");
