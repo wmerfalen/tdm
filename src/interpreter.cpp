@@ -708,7 +708,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** COMBAT MECHANICS */
 	/** ---------------- */
 	{ "shoot", POS_RESTING, do_snipe, 0, 0 },
-	{ "pref", POS_RESTING, do_pref, 0, 0 },
 	{ "hack", POS_RESTING, do_hack, 0, 0 },
 	{ "rotate_right", POS_RESTING, do_rotate_right, 0, 0 },
 	{ "rotate_left", POS_RESTING, do_rotate_left, 0, 0 },

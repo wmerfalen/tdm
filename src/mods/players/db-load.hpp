@@ -18,10 +18,12 @@ namespace mods::players::db_load {
 		CONTRACT_REWARD,
 		DISPLAY_ACMD,
 		DB_SAVE_CHAR,
-		PRACTICE_SKILL
+		PRACTICE_SKILL,
+		PREFS,
 	};
 	void load_aliases(player_ptr_t& player);
 	void save_from(player_ptr_t& player,save_from_t);
+	void save_prefs(player_ptr_t& player_ptr);
 	void extract_character(player_ptr_t& player);
 	void load_base_abilities(player_ptr_t& player);
 	int16_t save_new_char(player_ptr_t& player);

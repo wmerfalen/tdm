@@ -338,6 +338,9 @@ enum player_class_t {
 #define PRF_ROOMFLAGS	(1 << 21) /* Can see room flags (ROOM_x)	*/
 #define PRF_DISPAUTO	(1 << 22) /* Show prompt HP, MP, MV when < 30%.	*/
 #define PRF_OVERHEAD_MAP (1 << 23) /* show overhead map */
+#define PRF_NOREMINERS (1 << 24) /* show overhead map */
+#define PRF_NOCHAT (1 << 25)
+#define PRF_NONEWBIE (1 << 26)
 
 /* Affect bits: used in char_data.char_specials.saved.affected_by */
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */

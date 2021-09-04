@@ -228,6 +228,16 @@ namespace mods::bleed {
 			}
 		}
 	}
+	ACMD(do_bleed_me) {
+		player->sendln("Creating claymore");
+		int damage = 250;
+		auto device = create_object(ITEM_EXPLOSIVE,"explosive/claymore-mine.yml");
+		bleed_damage(player,player,device,damage);
+	}
+	void init() {
+		mods::interpreter::add_command("bleed_me", POS_RESTING, do_bleed_me, 0, 0);
+
+	}
 
 #undef m_error
 #undef m_debug

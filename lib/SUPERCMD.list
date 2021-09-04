@@ -25,6 +25,9 @@
 {yel}mods/zone{/yel}:->{grn}uuids{/grn}
 {yel}mods/zone{/yel}:->{grn}reset_zone{/grn}
 {yel}mods/players/messages{/yel}:->{grn}queue_message{/grn}
+{yel}mods/players/friendly-reminders{/yel}:->{grn}delete_reminder{/grn}
+{yel}mods/players/friendly-reminders{/yel}:->{grn}add_reminder{/grn}
+{yel}mods/players/friendly-reminders{/yel}:->{grn}list_reminder{/grn}
 {yel}mods/players/banish{/yel}:->{grn}force_out{/grn}
 {yel}mods/players/banish{/yel}:->{grn}set_banish_room{/grn}
 {yel}mods/players/banish{/yel}:->{grn}banish{/grn}

@@ -3,8 +3,10 @@
 
 #define INIT(A) \
 	namespace A { extern void init(); };
+INIT(mods::prefs);
 INIT(mods::players::banish);
 INIT(mods::rand);
+INIT(mods::bleed);
 INIT(mods::loot_container);
 INIT(builder);
 INIT(mods::date_time);
@@ -108,6 +110,8 @@ namespace mods::init {
 		mods::projectile::init();
 		mods::boosters::adrenaline_shot_init::init();
 		mods::loot_container::init();
+		mods::bleed::init();
+		mods::prefs::init();
 	}
 };
 #endif

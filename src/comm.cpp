@@ -30,10 +30,12 @@
 #include "mods/memory.hpp"
 #include "mods/orm/inventory.hpp"
 #include "mods/players/db-load.hpp"
+#include "mods/players/friendly-reminders.hpp"
 #include "mods/players/messages.hpp"
 #include "mods/scripted-sequence-runner.hpp"
 #include "mods/js.hpp"
 #include "mods/corrosive.hpp"
+#include "mods/bleed.hpp"
 #include "mods/mobs/behaviour-tree-list.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
@@ -944,6 +946,7 @@ void heartbeat(int pulse) {
 
 	if(!(pulse % mods::corrosive::tick_resolution())) {
 		mods::corrosive::process_corrosion();
+		mods::bleed::process_bleed();
 	}
 
 	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION())) {
@@ -998,6 +1001,9 @@ void heartbeat(int pulse) {
 
 	if(!(pulse % PULSE_USAGE)) {
 		record_usage();
+	}
+	if(!(pulse % PULSE_REMINDERS_TICK())) {
+		mods::players::friendly_reminders::send();
 	}
 
 	if(!(pulse % PULSE_TIMESAVE)) {

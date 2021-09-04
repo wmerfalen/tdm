@@ -27,6 +27,7 @@
 #include "mods/players/db-load.hpp"
 #include "mods/rate-limiting.hpp"
 #include "mods/players/db-load.hpp"
+#include "mods/prefs.hpp"
 
 /* extern variables */
 extern struct spell_info_type spell_info[];
@@ -985,60 +986,75 @@ ACMD(do_gen_tog) {
 		return;
 	}
 
+	int pref = 0;
 	switch(subcmd) {
 		case SCMD_NOSUMMON:
+			pref = PRF_SUMMONABLE;
 			result = PRF_TOG_CHK(ch, PRF_SUMMONABLE);
 			break;
 
 		case SCMD_NOHASSLE:
+			pref = PRF_NOHASSLE;
 			result = PRF_TOG_CHK(ch, PRF_NOHASSLE);
 			break;
 
 		case SCMD_BRIEF:
+			pref = PRF_BRIEF;
 			result = PRF_TOG_CHK(ch, PRF_BRIEF);
 			break;
 
 		case SCMD_COMPACT:
+			pref = PRF_COMPACT;
 			result = PRF_TOG_CHK(ch, PRF_COMPACT);
 			break;
 
 		case SCMD_NOTELL:
+			pref = PRF_NOTELL;
 			result = PRF_TOG_CHK(ch, PRF_NOTELL);
 			break;
 
 		case SCMD_NOAUCTION:
+			pref = PRF_NOAUCT;
 			result = PRF_TOG_CHK(ch, PRF_NOAUCT);
 			break;
 
 		case SCMD_DEAF:
+			pref = PRF_DEAF;
 			result = PRF_TOG_CHK(ch, PRF_DEAF);
 			break;
 
 		case SCMD_NOGOSSIP:
+			pref = PRF_NOGOSS;
 			result = PRF_TOG_CHK(ch, PRF_NOGOSS);
 			break;
 
 		case SCMD_NOGRATZ:
+			pref = PRF_NOGRATZ;
 			result = PRF_TOG_CHK(ch, PRF_NOGRATZ);
 			break;
 
 		case SCMD_NOWIZ:
+			pref = PRF_NOWIZ;
 			result = PRF_TOG_CHK(ch, PRF_NOWIZ);
 			break;
 
 		case SCMD_QUEST:
+			pref = PRF_QUEST;
 			result = PRF_TOG_CHK(ch, PRF_QUEST);
 			break;
 
 		case SCMD_ROOMFLAGS:
+			pref = PRF_ROOMFLAGS;
 			result = PRF_TOG_CHK(ch, PRF_ROOMFLAGS);
 			break;
 
 		case SCMD_NOREPEAT:
+			pref = PRF_NOREPEAT;
 			result = PRF_TOG_CHK(ch, PRF_NOREPEAT);
 			break;
 
 		case SCMD_HOLYLIGHT:
+			pref = PRF_HOLYLIGHT;
 			result = PRF_TOG_CHK(ch, PRF_HOLYLIGHT);
 			break;
 
@@ -1047,6 +1063,7 @@ ACMD(do_gen_tog) {
 			break;
 
 		case SCMD_AUTOEXIT:
+			pref = PRF_AUTOEXIT;
 			result = PRF_TOG_CHK(ch, PRF_AUTOEXIT);
 			break;
 
@@ -1055,6 +1072,7 @@ ACMD(do_gen_tog) {
 			break;
 
 		case SCMD_AUTOMAP:
+			pref = PRF_OVERHEAD_MAP;
 			result = PRF_TOG_CHK(ch,PRF_OVERHEAD_MAP);
 			break;
 
@@ -1068,7 +1086,7 @@ ACMD(do_gen_tog) {
 	} else {
 		send_to_char(ch, "%s", tog_messages[subcmd][TOG_OFF]);
 	}
-
+	mods::prefs::update_pref(player,pref,result);
 	/** Save the player's prefs in postgres */
 	mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::GEN_TOGGLE_ACMD);
 	return;

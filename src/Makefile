@@ -188,7 +188,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/armed-guard mods/mobs/armed-guard-behaviour-tree \
 					 mods/mobs/behaviour-tree-list mods/mobs/roam-pattern \
 					 mods/mobs/melee-combatant mods/mobs/melee-combatant-behaviour-tree \
-					 mods/loot-container mods/explosive mods/glass mods/bleed mods/armor
+					 mods/loot-container mods/explosive mods/glass mods/bleed mods/armor \
+					 mods/players/friendly-reminders
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

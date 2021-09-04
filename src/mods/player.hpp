@@ -566,7 +566,7 @@ namespace mods {
 			void set_prefs(long prefs) {
 				cd()->player_specials->saved.pref = prefs;
 			}
-			auto get_prefs() {
+			auto& get_prefs() {
 				return cd()->player_specials->saved.pref;
 			}
 			auto get_lense() {

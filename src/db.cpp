@@ -46,6 +46,7 @@
 #include "mods/mobs/roam-pattern.hpp"
 #include "mods/util.hpp"
 #include "mods/players/db-load.hpp"
+#include "mods/players/friendly-reminders.hpp"
 #include "mods/mini-games.hpp"
 #include "mods/integral-objects.hpp"
 #include "mods/db.hpp"
@@ -54,6 +55,7 @@
 #include "mods/mob-roam.hpp"
 #include "mods/util-map.hpp"
 #include "mods/rooms.hpp"
+#include "mods/prefs.hpp"
 
 namespace mods::zone {
 	extern void reset_zone(zone_rnum);
@@ -407,6 +409,9 @@ void boot_world(void) {
 		log("Loading shops.");
 		index_boot(DB_BOOT_SHP);
 	}
+
+	log("Loading friendly reminders...");
+	mods::players::friendly_reminders::load_from_db();
 }
 
 
@@ -2332,6 +2337,7 @@ bool parse_sql_player(player_ptr_t player_ptr) {
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
 		player_ptr->set_time_logon(time(0));
 		player_ptr->set_prefs(mods::util::stoi<long>(row["player_preferences"]));
+		mods::prefs::events::prefs_loaded_from_db(player_ptr);
 		player_ptr->practice_sessions() = row["player_practice_sessions"].as<uint16_t>();
 		str_map_t values;
 		get_player_map(player_ptr->name(),"mute-channels", values);

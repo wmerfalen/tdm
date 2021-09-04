@@ -69,6 +69,9 @@ namespace mods::players::db_load {
 	void extract_character(player_ptr_t& player_ptr) {
 		mods::players::db_load::save_from(player_ptr,save_from_t::EXTRACTION);
 	}
+	void save_prefs(player_ptr_t& player_ptr) {
+		mods::players::db_load::save_from(player_ptr,save_from_t::PREFS);
+	}
 	void save_from(player_ptr_t& player_ptr,save_from_t from) {
 		if(from != save_from_t::EXTRACTION) {
 			mods::orm::flush_player_rifle_attachments(player_ptr);
