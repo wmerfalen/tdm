@@ -1224,7 +1224,9 @@ namespace mods {
 			destruct_object(obj_uuid);
 			recursive_obj_list_erase(obj.get());
 			mods::rifle_attachments::erase(obj_uuid);
+#ifdef __MENTOC_SHOW_DISPOSE_OBJECT_DEBUG_OUTPUT__
 			std::cerr << green_str("USE_COUNT:") << obj.use_count() << "\n";
+#endif
 			if(obj.use_count()) {
 				obj.reset();
 			}

@@ -37,6 +37,7 @@
 #include "mods/corrosive.hpp"
 #include "mods/bleed.hpp"
 #include "mods/mobs/behaviour-tree-list.hpp"
+#include "mods/players/event-messages.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -1004,6 +1005,9 @@ void heartbeat(int pulse) {
 	}
 	if(!(pulse % PULSE_REMINDERS_TICK())) {
 		mods::players::friendly_reminders::send();
+	}
+	if(!(pulse % PULSE_EVENT_MESSAGES_TICK())) {
+		mods::players::event_messages::send();
 	}
 
 	if(!(pulse % PULSE_TIMESAVE)) {

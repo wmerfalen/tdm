@@ -30,6 +30,7 @@ namespace mods::mobs {
 		SHOPLIFTER,
 		ARMED_GUARD,
 		MELEE_COMBATANT,
+		DEFILER,
 	};
 	//vim sorcery: s/\t\t\([A-Z_]\+\),/\t\t{\1,"\1"},/g
 	static std::map<extended_types_t,std::string> ext_map = {
@@ -54,6 +55,7 @@ namespace mods::mobs {
 		{SHOPLIFTER,"SHOPLIFTER"},
 		{ARMED_GUARD,"ARMED_GUARD"},
 		{MELEE_COMBATANT,"MELEE_COMBATANT"},
+		{DEFILER,"DEFILER"},
 	};
 	void decorate(uuid_t mob_id);
 
@@ -94,6 +96,7 @@ namespace mods::mobs {
 		{SHOPLIFTER,"SHOPLIFTER"},
 		{ARMED_GUARD,"ARMED_GUARD"},
 		{MELEE_COMBATANT,"MELEE_COMBATANT"},
+		{DEFILER,"DEFILER"},
 	};
 	namespace extended_types {
 		using mob_rnum = uint32_t;

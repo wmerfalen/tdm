@@ -47,6 +47,7 @@
 #include "mods/util.hpp"
 #include "mods/players/db-load.hpp"
 #include "mods/players/friendly-reminders.hpp"
+#include "mods/players/event-messages.hpp"
 #include "mods/mini-games.hpp"
 #include "mods/integral-objects.hpp"
 #include "mods/db.hpp"
@@ -412,6 +413,9 @@ void boot_world(void) {
 
 	log("Loading friendly reminders...");
 	mods::players::friendly_reminders::load_from_db();
+
+	log("Loading event messages...");
+	mods::players::event_messages::load_from_db();
 }
 
 

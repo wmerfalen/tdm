@@ -28,6 +28,9 @@
 {yel}mods/players/friendly-reminders{/yel}:->{grn}delete_reminder{/grn}
 {yel}mods/players/friendly-reminders{/yel}:->{grn}add_reminder{/grn}
 {yel}mods/players/friendly-reminders{/yel}:->{grn}list_reminder{/grn}
+{yel}mods/players/event-messages{/yel}:->{grn}delete_event_message{/grn}
+{yel}mods/players/event-messages{/yel}:->{grn}add_event_message{/grn}
+{yel}mods/players/event-messages{/yel}:->{grn}list_event_message{/grn}
 {yel}mods/players/banish{/yel}:->{grn}force_out{/grn}
 {yel}mods/players/banish{/yel}:->{grn}set_banish_room{/grn}
 {yel}mods/players/banish{/yel}:->{grn}banish{/grn}

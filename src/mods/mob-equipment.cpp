@@ -5,9 +5,11 @@
 #include "screen-searcher.hpp"
 
 #ifdef  __MENTOC_MODS_MOBS_HELPERS_SHOW_DEBUG_OUTPUT__
-#define me_debug(a) mentoc_prefix_debug("mods::mob_equipment") << a << "\n";
+#define m_debug(a) mentoc_prefix_debug("mods::mob_equipment") << a << "\n";
+#define m_error(a) mentoc_prefix_debug("mods::mob_equipment") << a << "\n";
 #else
-#define me_debug(a) ;;
+#define m_debug(a) ;;
+#define m_error(a)
 #endif
 
 namespace mods::mob_equipment {
@@ -33,23 +35,26 @@ namespace mods::mob_equipment {
 		return meq_mappings()[mobvnum];
 	}
 	void decorate(const uuid_t& mob_uuid) {
+		m_debug("decorate entrance");
 		auto npc = npc_by_uuid(mob_uuid);
 		if(!npc) {
+			m_error("Couldn't find npc by uuid");
 			std::cerr << red_str("mods::mob_equipment::decorate ERROR: failed to find mob by uuid:'") << mob_uuid << "'\n";
 			return;
 		}
+		m_debug("Fetching list by mob vnum:" << npc->vnum());
 		const auto mapping = fetch_list_by_mob_vnum(npc->vnum());
 		for(unsigned i = 0; i < NUM_WEARS; i++) {
 			if(mapping[i].length() == 0) {
 				continue;
 			}
-			me_debug("Found slot at[" << i << "]:'" << green_str(mapping[i]) << "'\n");
+			m_debug("Found slot at[" << i << "]:'" << green_str(mapping[i]) << "'\n");
 			std::tuple<int,std::string> s = mods::util::extract_yaml_info_from_path(mapping[i]);
-			me_debug("Yaml info: " << std::get<0>(s) << ", '" << std::get<1>(s) << "'\n");
+			m_debug("Yaml info: " << std::get<0>(s) << ", '" << std::get<1>(s) << "'\n");
 			auto obj = create_object(std::get<0>(s),std::get<1>(s));
 			npc->equip(obj,i);
 		}
-		me_debug("Done equipping mob");
+		m_debug("Done equipping mob");
 	}
 	SUPERCMD(do_npc_report) {
 		ADMIN_REJECT();
@@ -62,4 +67,5 @@ namespace mods::mob_equipment {
 		mods::interpreter::add_command("npc_report", POS_RESTING, do_npc_report, LVL_BUILDER,0);
 	}
 };
-#undef me_debug
+#undef m_debug
+#undef m_error

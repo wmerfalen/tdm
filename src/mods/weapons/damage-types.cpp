@@ -12,7 +12,6 @@
 #include "../mobs/damage-event.hpp"
 #include "../calc-visibility.hpp"
 #include "../loot.hpp"
-#include "../loot-container.hpp"
 
 
 #include <variant>
@@ -138,7 +137,7 @@ namespace mods::weapons::damage_types {
 
 
 			if(killer && !IS_NPC(killer)) {
-				mods::loot_container::store(p,std::move(mods::loot::reward_player(p)));
+				mods::loot::events::player_killed_npc(p, v);
 			}
 			die(victim);
 			if(killer && !IS_NPC(killer)) {

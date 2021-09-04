@@ -62,8 +62,21 @@ namespace mods::rooms {
 		{txt::TRASHY,"TRASHY"},
 		{txt::FENCED,"FENCED"},
 		{txt::STREET,"STREET"},
-
+		{txt::GHETTO,"GHETTO"},
+		{txt::GANG_INFESTED,"GANG_INFESTED"},
+		{txt::ONRAMP,"ONRAMP"},
+		{txt::NARROW_EAST_WEST,"NARROW_EAST_WEST"},
+		{txt::NARROW_NORTH_SOUTH,"NARROW_NORTH_SOUTH"},
+		{txt::ALLEY,"ALLEY"},
+		{txt::PARKING_LOT,"PARKING_LOT"},
+		{txt::PARKING_STALL,"PARKING_STALL"},
+		{txt::SIDEWALK,"SIDEWALK"},
+		{txt::ATRIUM,"ATRIUM"},
+		{txt::TILE,"TILE"},
+		{txt::GLASS_CONTENTS,"GLASS_CONTENTS"},
+		{txt::FREEZING,"FREEZING"},
 	};
+
 	static const std::map<int,std::string> room_flag_strings = {
 		{ROOM_DARK, "ROOM_DARK"},
 		{ROOM_DEATH, "ROOM_DEATH"},
@@ -319,7 +332,7 @@ namespace mods::rooms {
 	 *
 	 * @return
 	 */
-	//bool is_dark(room_data& room);
+//bool is_dark(room_data& room);
 
 	/**
 	 * @brief returns true if room is smoking

@@ -17,4 +17,7 @@ namespace mods::loot {
 	obj_ptr_t reward_player(player_ptr_t& player);
 };
 
+namespace mods::loot::events {
+	void player_killed_npc(player_ptr_t& player,player_ptr_t& npc);
+};
 #endif

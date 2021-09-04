@@ -1175,6 +1175,7 @@ struct room_data {
 			ATRIUM,
 			TILE,
 			GLASS_CONTENTS,
+			FREEZING,
 		};
 		constexpr static std::array<texture_type_t,5> textures_that_have_levels = {
 			texture_type_t::RADIOACTIVE,

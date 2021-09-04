@@ -3,6 +3,8 @@
 
 #define INIT(A) \
 	namespace A { extern void init(); };
+INIT(mods::players::friendly_reminders);
+INIT(mods::players::event_messages);
 INIT(mods::prefs);
 INIT(mods::players::banish);
 INIT(mods::rand);
@@ -112,6 +114,8 @@ namespace mods::init {
 		mods::loot_container::init();
 		mods::bleed::init();
 		mods::prefs::init();
+		mods::players::friendly_reminders::init();
+		mods::players::event_messages::init();
 	}
 };
 #endif

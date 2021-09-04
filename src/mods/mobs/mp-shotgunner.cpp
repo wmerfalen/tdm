@@ -8,8 +8,10 @@
 
 #ifdef  __MENTOC_MODS_MOBS_MP_SHOTGUNNER_SHOW_DEBUG_OUTPUT__
 #define mps_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n";
+#define m_error(a) mentoc_prefix_debug("m|m|mps[ERROR]:") << a << "\n";
 #else
 #define mps_debug(a) ;;
+#define m_error(a) ;;
 #endif
 namespace mods::mobs {
 	/**! @NEW_BEHAVIOUR_TREE@ !**/
@@ -191,6 +193,10 @@ namespace mods::mobs {
 			}
 			auto weapon = player_ptr->primary();
 			auto secondary = player_ptr->secondary();
+			if(!weapon) {
+				m_error("mp-shotgunner doesnt have primary!");
+				return;
+			}
 
 			int decision = mp_shotgunner_btree::weighted_direction_decider(player_ptr);
 			if(decision == -1) {

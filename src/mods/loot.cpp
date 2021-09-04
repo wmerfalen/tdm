@@ -1,4 +1,5 @@
 #include "loot.hpp"
+#include "loot-container.hpp"
 #include "orm/rifle-index.hpp"
 
 #define __MENTOC_MODS_LOOT_SHOW_DEBUG_OUTPUT__
@@ -7,6 +8,12 @@
 #else
 #define m_debug(a)
 #endif
+namespace mods::loot::events {
+
+	void player_killed_npc(player_ptr_t& player,player_ptr_t& npc) {
+		mods::loot_container::store(player,std::move(mods::loot::reward_player(player)));
+	}
+};
 
 namespace mods::loot {
 	obj_ptr_t reward_player(player_ptr_t& player) {
