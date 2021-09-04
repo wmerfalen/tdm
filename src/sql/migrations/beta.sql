@@ -1,18 +1,15 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 10.11 (Debian 10.11-1.pgdg90+1)
--- Dumped by pg_dump version 10.11 (Debian 10.11-1.pgdg90+1)
-
-
-
--- \c postgres
--- DROP DATABASE mud;
 \c postgres
 DROP DATABASE mud;
 CREATE DATABASE mud WITH OWNER = postgres;
 \c mud
+
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.9 (Debian 11.9-0+deb10u1)
+-- Dumped by pg_dump version 11.9 (Debian 11.9-0+deb10u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -24,20 +21,6 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
 
 --
 -- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: 
@@ -52,162 +35,6 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
 COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
 
---
--- Name: player; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.player (
-    id SERIAL UNIQUE,
-    player_password character varying(1024) NOT NULL,
-    player_affection_plr_bitvector character varying(2048),
-    player_affection_bitvector character varying(2048),
-    player_name character varying(24) DEFAULT 'recruit'::character varying NOT NULL,
-    player_short_description character varying(512) DEFAULT 'A lonely recruit'::character varying NOT NULL,
-    player_long_description text,
-    player_action_bitvector integer DEFAULT 0 NOT NULL,
-    player_ability_strength integer DEFAULT 1 NOT NULL,
-    player_ability_strength_add integer DEFAULT 1 NOT NULL,
-    player_ability_intelligence integer DEFAULT 1 NOT NULL,
-    player_ability_wisdom integer DEFAULT 1 NOT NULL,
-    player_ability_dexterity integer DEFAULT 1 NOT NULL,
-    player_ability_constitution integer DEFAULT 1 NOT NULL,
-    player_ability_charisma integer DEFAULT 1 NOT NULL,
-    player_ability_alignment integer DEFAULT 0 NOT NULL,
-    player_attack_type integer DEFAULT 0 NOT NULL,
-    player_max_hitpoints integer DEFAULT 100 NOT NULL,
-    player_max_mana integer DEFAULT 100 NOT NULL,
-    player_max_move integer DEFAULT 100 NOT NULL,
-    player_gold integer DEFAULT 0 NOT NULL,
-    player_exp integer DEFAULT 0 NOT NULL,
-    player_sex character varying(1) DEFAULT 'M'::character varying NOT NULL,
-    player_hitpoints integer DEFAULT 100 NOT NULL,
-    player_mana integer DEFAULT 100 NOT NULL,
-    player_move integer DEFAULT 100 NOT NULL,
-    player_damroll integer DEFAULT 6 NOT NULL,
-    player_weight integer DEFAULT 10 NOT NULL,
-    player_height integer DEFAULT 60 NOT NULL,
-    player_class character varying(16) DEFAULT 'x'::character varying NOT NULL,
-    player_title character varying(24) DEFAULT 'recruit'::character varying,
-    player_hometown character varying(24) DEFAULT 'SLC'::character varying,
-    player_damnodice integer DEFAULT 3 NOT NULL,
-    player_damsizedice integer DEFAULT 6 NOT NULL,
-    player_type character varying(6) DEFAULT 'x'::character varying NOT NULL,
-    player_alignment integer DEFAULT 0 NOT NULL,
-    player_level integer DEFAULT 1 NOT NULL,
-    player_hitroll integer DEFAULT 3 NOT NULL,
-    player_armor integer DEFAULT 3 NOT NULL,
-    player_birth timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    player_time_played integer DEFAULT 0 NOT NULL,
-    player_logon timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    player_preferences character varying(2048),
-		PRIMARY KEY(id)
-);
-ALTER TABLE public.player OWNER TO postgres;
-
---
--- Name: zone; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.zone (
-    id SERIAL UNIQUE,
-    zone_virtual_number integer NOT NULL UNIQUE,
-    zone_start integer NOT NULL,
-    zone_end integer NOT NULL,
-    zone_name character varying(64) NOT NULL,
-    lifespan integer NOT NULL,
-    reset_mode integer NOT NULL
-);
-
-
-ALTER TABLE public.zone OWNER TO postgres;
-
-
-CREATE TABLE public.room (
-    id SERIAL,
-    room_number integer NOT NULL UNIQUE,
-    zone integer NOT NULL,
-    sector_type integer NOT NULL,
-    name character varying(256) NOT NULL,
-    description text NOT NULL,
-    ex_keyword character varying(256),
-    ex_description text,
-    light integer,
-    room_flag integer NOT NULL,
-		PRIMARY KEY(id),
-		CONSTRAINT fk_zone
-			FOREIGN KEY (zone)
-			REFERENCES public.zone(id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-
-
-ALTER TABLE public.room OWNER TO postgres;
-
-CREATE TABLE public.room_direction_data (
-    id SERIAL,
-    room_number integer NOT NULL,
-    exit_direction integer NOT NULL,
-    general_description character varying(256) NOT NULL,
-    keyword character varying(16),
-    exit_info integer,
-    exit_key integer,
-    to_room integer NOT NULL,
-		PRIMARY KEY(id),
-			CONSTRAINT fk_room_vnum
-				FOREIGN KEY(room_number)
-					REFERENCES public.room(room_number)
-					ON DELETE CASCADE
-					ON UPDATE CASCADE
-);
-
---
--- Name: mobile; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.mobile (
-    mob_id SERIAL UNIQUE,
-    mob_virtual_number integer NOT NULL UNIQUE,
-    mob_name character varying(256) NOT NULL,
-    mob_short_description character varying(64) NOT NULL,
-    mob_long_description character varying(512) NOT NULL,
-    mob_description text,
-    mob_action_bitvector character varying(2) NOT NULL,
-    mob_affection_bitvector character varying(2) NOT NULL,
-    mob_ability_strength integer NOT NULL,
-    mob_ability_strength_add integer NOT NULL,
-    mob_ability_intelligence integer NOT NULL,
-    mob_ability_wisdom integer NOT NULL,
-    mob_ability_dexterity integer NOT NULL,
-    mob_ability_constitution integer NOT NULL,
-    mob_ability_charisma integer NOT NULL,
-    mob_alignment integer NOT NULL,
-    mob_attack_type integer NOT NULL,
-    mob_level integer NOT NULL,
-    mob_hitroll integer NOT NULL,
-    mob_armor integer NOT NULL,
-    mob_max_hitpoints integer NOT NULL,
-    mob_max_mana integer NOT NULL,
-    mob_max_move integer NOT NULL,
-    mob_gold integer NOT NULL,
-    mob_exp integer NOT NULL,
-    mob_load_position integer NOT NULL,
-    mob_default_position integer NOT NULL,
-    mob_sex integer NOT NULL,
-    mob_hitpoints integer,
-    mob_mana integer NOT NULL,
-    mob_move integer NOT NULL,
-    mob_damnodice integer NOT NULL,
-    mob_damsizedice integer NOT NULL,
-    mob_damroll integer NOT NULL,
-    mob_weight integer NOT NULL,
-    mob_height integer NOT NULL,
-    mob_class integer NOT NULL,
-    mob_special_extended_type integer DEFAULT 0 NOT NULL
-);
-
-
-ALTER TABLE public.mobile OWNER TO postgres;
 
 --
 -- Name: armor_type_t; Type: TYPE; Schema: public; Owner: postgres
@@ -409,7 +236,7 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE public.affected_type (
-    id SERIAL,
+    id integer NOT NULL,
     aff_fk_id integer NOT NULL,
     aff_location integer NOT NULL,
     aff_modifier integer NOT NULL
@@ -419,43 +246,403 @@ CREATE TABLE public.affected_type (
 ALTER TABLE public.affected_type OWNER TO postgres;
 
 --
+-- Name: affected_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.affected_type_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.affected_type_id_seq OWNER TO postgres;
+
+--
+-- Name: affected_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.affected_type_id_seq OWNED BY public.affected_type.id;
+
+
+--
+-- Name: armor_index; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.armor_index (
+    id integer NOT NULL,
+    armor_filename character varying NOT NULL,
+    armor_type character varying NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.armor_index OWNER TO postgres;
+
+--
+-- Name: armor_index_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.armor_index_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.armor_index_id_seq OWNER TO postgres;
+
+--
+-- Name: armor_index_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.armor_index_id_seq OWNED BY public.armor_index.id;
+
+
+--
+-- Name: armor_locker; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.armor_locker (
+    id integer NOT NULL,
+    a_room_vnum integer[] NOT NULL,
+    a_yaml text[] NOT NULL
+);
+
+
+ALTER TABLE public.armor_locker OWNER TO postgres;
+
+--
+-- Name: armor_locker_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.armor_locker_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.armor_locker_id_seq OWNER TO postgres;
+
+--
+-- Name: armor_locker_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.armor_locker_id_seq OWNED BY public.armor_locker.id;
+
+
+--
 -- Name: camera_feed; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.camera_feed (
-    feed_id SERIAL,
+    feed_id integer NOT NULL,
     feed_type character varying(16) NOT NULL,
     feed_vnum integer NOT NULL,
     feed_room_vnum integer NOT NULL,
     feed_order integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-		PRIMARY KEY(feed_id),
-		CONSTRAINT fk_room_vnum
-			FOREIGN KEY (feed_room_vnum)
-				REFERENCES public.room(room_number)
-					ON DELETE CASCADE
-					ON UPDATE CASCADE
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
 ALTER TABLE public.camera_feed OWNER TO postgres;
 
+--
+-- Name: camera_feed_feed_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.camera_feed_feed_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.camera_feed_feed_id_seq OWNER TO postgres;
+
+--
+-- Name: camera_feed_feed_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.camera_feed_feed_id_seq OWNED BY public.camera_feed.feed_id;
+
+
+--
+-- Name: class_breacher; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.class_breacher (
+    breacher_id integer NOT NULL,
+    breacher_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.class_breacher OWNER TO postgres;
+
+--
+-- Name: class_breacher_breacher_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.class_breacher_breacher_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.class_breacher_breacher_id_seq OWNER TO postgres;
+
+--
+-- Name: class_breacher_breacher_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.class_breacher_breacher_id_seq OWNED BY public.class_breacher.breacher_id;
+
+
+--
+-- Name: class_engineer; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.class_engineer (
+    engineer_id integer NOT NULL,
+    engineer_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.class_engineer OWNER TO postgres;
+
+--
+-- Name: class_engineer_engineer_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.class_engineer_engineer_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.class_engineer_engineer_id_seq OWNER TO postgres;
+
+--
+-- Name: class_engineer_engineer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.class_engineer_engineer_id_seq OWNED BY public.class_engineer.engineer_id;
+
+
+--
+-- Name: class_ghost; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.class_ghost (
+    ghost_id integer NOT NULL,
+    ghost_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.class_ghost OWNER TO postgres;
+
+--
+-- Name: class_ghost_ghost_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.class_ghost_ghost_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.class_ghost_ghost_id_seq OWNER TO postgres;
+
+--
+-- Name: class_ghost_ghost_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.class_ghost_ghost_id_seq OWNED BY public.class_ghost.ghost_id;
+
+
+--
+-- Name: class_marine; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.class_marine (
+    marine_id integer NOT NULL,
+    marine_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.class_marine OWNER TO postgres;
+
+--
+-- Name: class_marine_marine_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.class_marine_marine_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.class_marine_marine_id_seq OWNER TO postgres;
+
+--
+-- Name: class_marine_marine_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.class_marine_marine_id_seq OWNED BY public.class_marine.marine_id;
+
+
+--
+-- Name: class_medic; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.class_medic (
+    medic_id integer NOT NULL,
+    medic_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.class_medic OWNER TO postgres;
+
+--
+-- Name: class_medic_medic_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.class_medic_medic_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.class_medic_medic_id_seq OWNER TO postgres;
+
+--
+-- Name: class_medic_medic_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.class_medic_medic_id_seq OWNED BY public.class_medic.medic_id;
+
+
+--
+-- Name: class_sniper; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.class_sniper (
+    sniper_id integer NOT NULL,
+    sniper_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.class_sniper OWNER TO postgres;
+
+--
+-- Name: class_sniper_sniper_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.class_sniper_sniper_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.class_sniper_sniper_id_seq OWNER TO postgres;
+
+--
+-- Name: class_sniper_sniper_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.class_sniper_sniper_id_seq OWNED BY public.class_sniper.sniper_id;
+
+
+--
+-- Name: class_support; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.class_support (
+    support_id integer NOT NULL,
+    support_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.class_support OWNER TO postgres;
+
+--
+-- Name: class_support_support_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.class_support_support_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.class_support_support_id_seq OWNER TO postgres;
+
+--
+-- Name: class_support_support_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.class_support_support_id_seq OWNED BY public.class_support.support_id;
+
+
+--
+-- Name: computer_terminal; Type: TABLE; Schema: public; Owner: postgres
+--
+
 CREATE TABLE public.computer_terminal (
-    id SERIAL,
+    id integer NOT NULL,
     terminal_room_vnum integer NOT NULL,
     terminal_type character varying DEFAULT 'chooser'::character varying NOT NULL,
     terminal_attaches_to character varying,
     terminal_name character varying NOT NULL,
     terminal_description text,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-		PRIMARY KEY(id),
-		CONSTRAINT fk_room_vnum
-			FOREIGN KEY (terminal_room_vnum)
-				REFERENCES public.room(room_number)
-					ON DELETE CASCADE
-					ON UPDATE CASCADE
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -465,6 +652,14 @@ ALTER TABLE public.computer_terminal OWNER TO postgres;
 -- Name: computer_terminal_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
+CREATE SEQUENCE public.computer_terminal_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 ALTER TABLE public.computer_terminal_id_seq OWNER TO postgres;
 
@@ -472,6 +667,174 @@ ALTER TABLE public.computer_terminal_id_seq OWNER TO postgres;
 -- Name: computer_terminal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
+ALTER SEQUENCE public.computer_terminal_id_seq OWNED BY public.computer_terminal.id;
+
+
+--
+-- Name: contract_step_callback; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.contract_step_callback (
+    id integer NOT NULL,
+    s_contract_vnum integer NOT NULL,
+    s_task_type text,
+    s_task_target text,
+    s_task_vnum integer,
+    s_sequence_vnum integer NOT NULL
+);
+
+
+ALTER TABLE public.contract_step_callback OWNER TO postgres;
+
+--
+-- Name: contract_step_callback_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.contract_step_callback_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.contract_step_callback_id_seq OWNER TO postgres;
+
+--
+-- Name: contract_step_callback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.contract_step_callback_id_seq OWNED BY public.contract_step_callback.id;
+
+
+--
+-- Name: contract_steps; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.contract_steps (
+    id integer NOT NULL,
+    s_contract_vnum integer NOT NULL,
+    s_task_type integer NOT NULL,
+    s_task_target integer NOT NULL,
+    s_description text NOT NULL,
+    s_object_yaml text,
+    s_mob_vnum integer,
+    s_room_vnum integer,
+    s_quota integer,
+    s_is_optional boolean DEFAULT false NOT NULL,
+    s_order integer NOT NULL,
+    s_reward_xp integer,
+    s_reward_money integer,
+    s_reward_1 text,
+    s_reward_2 text,
+    s_reward_3 text,
+    s_reward_4 text,
+    s_reward_5 text,
+    s_reward_6 text,
+    s_reward_7 text,
+    s_reward_8 text,
+    s_reward_9 text,
+    s_reward_10 text,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.contract_steps OWNER TO postgres;
+
+--
+-- Name: contract_steps_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.contract_steps_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.contract_steps_id_seq OWNER TO postgres;
+
+--
+-- Name: contract_steps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.contract_steps_id_seq OWNED BY public.contract_steps.id;
+
+
+--
+-- Name: contracts; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.contracts (
+    id integer NOT NULL,
+    c_vnum integer NOT NULL,
+    c_description text NOT NULL,
+    c_title text NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.contracts OWNER TO postgres;
+
+--
+-- Name: contracts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.contracts_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.contracts_id_seq OWNER TO postgres;
+
+--
+-- Name: contracts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.contracts_id_seq OWNED BY public.contracts.id;
+
+
+--
+-- Name: event_messages; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.event_messages (
+    id integer NOT NULL,
+    em_msg text NOT NULL
+);
+
+
+ALTER TABLE public.event_messages OWNER TO postgres;
+
+--
+-- Name: event_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.event_messages_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.event_messages_id_seq OWNER TO postgres;
+
+--
+-- Name: event_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.event_messages_id_seq OWNED BY public.event_messages.id;
 
 
 --
@@ -479,22 +842,117 @@ ALTER TABLE public.computer_terminal_id_seq OWNER TO postgres;
 --
 
 CREATE TABLE public.extra_description (
-    id SERIAL,
+    id integer NOT NULL,
     obj_fk_id integer NOT NULL,
     extra_keyword character varying(64),
-    extra_description character varying(1024),
-		PRIMARY KEY(id)
+    extra_description character varying(1024)
 );
 
 
 ALTER TABLE public.extra_description OWNER TO postgres;
 
+--
+-- Name: extra_description_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.extra_description_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.extra_description_id_seq OWNER TO postgres;
 
 --
 -- Name: extra_description_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
--- ALTER SEQUENCE public.extra_description_id_seq OWNED BY public.extra_description.id;
+ALTER SEQUENCE public.extra_description_id_seq OWNED BY public.extra_description.id;
+
+
+--
+-- Name: friendly_reminders; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.friendly_reminders (
+    id integer NOT NULL,
+    fr_msg text NOT NULL
+);
+
+
+ALTER TABLE public.friendly_reminders OWNER TO postgres;
+
+--
+-- Name: friendly_reminders_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.friendly_reminders_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.friendly_reminders_id_seq OWNER TO postgres;
+
+--
+-- Name: friendly_reminders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.friendly_reminders_id_seq OWNED BY public.friendly_reminders.id;
+
+
+--
+-- Name: hq_locations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hq_locations (
+    id integer NOT NULL,
+    hq_affiliation character varying(32),
+    hq_room_vnum integer NOT NULL,
+    hq_level integer DEFAULT 1 NOT NULL,
+    hq_basic_mob_count integer DEFAULT 10 NOT NULL,
+    hq_advanced_mob_count integer DEFAULT 10 NOT NULL,
+    hq_elite_mob_count integer DEFAULT 10 NOT NULL,
+    hq_suv_count integer DEFAULT 10 NOT NULL,
+    hq_sedan_count integer DEFAULT 20 NOT NULL,
+    hq_armored_van_count integer DEFAULT 2 NOT NULL,
+    hq_replenish_ticks integer DEFAULT 150 NOT NULL,
+    hq_replenish_basic_count integer DEFAULT 15 NOT NULL,
+    hq_replenish_advanced_count integer DEFAULT 10 NOT NULL,
+    hq_replenish_elite_count integer DEFAULT 2 NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.hq_locations OWNER TO postgres;
+
+--
+-- Name: hq_locations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hq_locations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hq_locations_id_seq OWNER TO postgres;
+
+--
+-- Name: hq_locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hq_locations_id_seq OWNED BY public.hq_locations.id;
 
 
 --
@@ -502,22 +960,37 @@ ALTER TABLE public.extra_description OWNER TO postgres;
 --
 
 CREATE TABLE public.integral_object (
-    object_id SERIAL,
+    object_id integer NOT NULL,
     object_room_vnum integer NOT NULL,
     object_type character varying(16) NOT NULL,
     object_vnum integer NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-		PRIMARY KEY(object_id),
-		CONSTRAINT fk_room_vnum
-			FOREIGN KEY (object_room_vnum)
-				REFERENCES public.room(room_number)
-					ON DELETE CASCADE
-					ON UPDATE CASCADE
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
 ALTER TABLE public.integral_object OWNER TO postgres;
+
+--
+-- Name: integral_object_object_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.integral_object_object_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.integral_object_object_id_seq OWNER TO postgres;
+
+--
+-- Name: integral_object_object_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.integral_object_object_id_seq OWNED BY public.integral_object.object_id;
 
 
 --
@@ -525,18 +998,12 @@ ALTER TABLE public.integral_object OWNER TO postgres;
 --
 
 CREATE TABLE public.karma (
-    karma_id SERIAL,
+    karma_id integer NOT NULL,
     karma_player_id integer NOT NULL,
     karma_alignment integer DEFAULT 0 NOT NULL,
     karma_cold_blooded_index integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-		PRIMARY KEY(karma_id),
-		CONSTRAINT fk_player_id
-			FOREIGN KEY (karma_player_id)
-				REFERENCES public.player(id)
-				ON DELETE CASCADE
-				ON UPDATE CASCADE
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -546,13 +1013,30 @@ ALTER TABLE public.karma OWNER TO postgres;
 -- Name: karma_karma_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
+CREATE SEQUENCE public.karma_karma_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.karma_karma_id_seq OWNER TO postgres;
+
+--
+-- Name: karma_karma_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.karma_karma_id_seq OWNED BY public.karma.karma_id;
+
 
 --
 -- Name: mini_game; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.mini_game (
-    game_id SERIAL,
+    game_id integer NOT NULL,
     game_type character varying(16) NOT NULL,
     game_vnum integer NOT NULL,
     game_name character varying(32),
@@ -560,48 +1044,204 @@ CREATE TABLE public.mini_game (
     game_room_vnum integer NOT NULL,
     game_order integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-		PRIMARY KEY(game_id),
-		CONSTRAINT fk_room_vnum
-			FOREIGN KEY (game_room_vnum)
-				REFERENCES public.room(room_number)
-					ON DELETE CASCADE
-					ON UPDATE CASCADE
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
 ALTER TABLE public.mini_game OWNER TO postgres;
 
 --
+-- Name: mini_game_game_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.mini_game_game_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mini_game_game_id_seq OWNER TO postgres;
+
+--
+-- Name: mini_game_game_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.mini_game_game_id_seq OWNED BY public.mini_game.game_id;
+
+
+--
 -- Name: mini_gunner_sentinel; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.mini_gunner_sentinel (
-    id SERIAL,
+    id integer NOT NULL,
     mgs_mob_vnum integer DEFAULT '-1'::integer NOT NULL,
     mgs_face_direction character varying(1) DEFAULT 'N'::character varying NOT NULL,
-    mgs_room_vnum integer NOT NULL,
-		PRIMARY KEY(id),
-		CONSTRAINT fk_room_vnum
-			FOREIGN KEY (mgs_room_vnum)
-				REFERENCES public.room(room_number)
-					ON DELETE CASCADE
-					ON UPDATE CASCADE,
-    CONSTRAINT fk_mob_vnum
-			FOREIGN KEY (mgs_mob_vnum)
-				REFERENCES public.mobile(mob_id)
-					ON DELETE CASCADE
-					ON UPDATE CASCADE
+    mgs_room_vnum integer NOT NULL
 );
 
 
 ALTER TABLE public.mini_gunner_sentinel OWNER TO postgres;
 
 --
+-- Name: mini_gunner_sentinel_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.mini_gunner_sentinel_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mini_gunner_sentinel_id_seq OWNER TO postgres;
+
+--
 -- Name: mini_gunner_sentinel_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
--- ALTER SEQUENCE public.mini_gunner_sentinel_id_seq OWNED BY public.mini_gunner_sentinel.id;
+ALTER SEQUENCE public.mini_gunner_sentinel_id_seq OWNED BY public.mini_gunner_sentinel.id;
+
+
+--
+-- Name: mob_equipment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.mob_equipment (
+    id integer NOT NULL,
+    meq_profile_name character varying(1024),
+    meq_vnum integer NOT NULL,
+    meq_light character varying(1024),
+    meq_finger_r character varying(1024),
+    meq_finger_l character varying(1024),
+    meq_neck_1 character varying(1024),
+    meq_neck_2 character varying(1024),
+    meq_body character varying(1024),
+    meq_head character varying(1024),
+    meq_legs character varying(1024),
+    meq_feet character varying(1024),
+    meq_hands character varying(1024),
+    meq_arms character varying(1024),
+    meq_shield character varying(1024),
+    meq_about character varying(1024),
+    meq_waist character varying(1024),
+    meq_wrist_r character varying(1024),
+    meq_wrist_l character varying(1024),
+    meq_wield character varying(1024),
+    meq_hold character varying(1024),
+    meq_secondary character varying(1024),
+    meq_shoulders_l character varying(1024),
+    meq_shoulders_r character varying(1024),
+    meq_backpack character varying(1024),
+    meq_goggles character varying(1024),
+    meq_vest_pack character varying(1024),
+    meq_elbow_l character varying(1024),
+    meq_elbow_r character varying(1024),
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.mob_equipment OWNER TO postgres;
+
+--
+-- Name: mob_equipment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.mob_equipment_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mob_equipment_id_seq OWNER TO postgres;
+
+--
+-- Name: mob_equipment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.mob_equipment_id_seq OWNED BY public.mob_equipment.id;
+
+
+--
+-- Name: mob_equipment_map; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.mob_equipment_map (
+    id integer NOT NULL,
+    mmap_mob_vnum integer NOT NULL,
+    mmap_mob_equipment_vnum integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.mob_equipment_map OWNER TO postgres;
+
+--
+-- Name: mob_equipment_map_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.mob_equipment_map_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mob_equipment_map_id_seq OWNER TO postgres;
+
+--
+-- Name: mob_equipment_map_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.mob_equipment_map_id_seq OWNED BY public.mob_equipment_map.id;
+
+
+--
+-- Name: mob_roam; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.mob_roam (
+    id integer NOT NULL,
+    mob_virtual_number integer NOT NULL,
+    room_virtual_number integer NOT NULL,
+    profile_name character varying(255)
+);
+
+
+ALTER TABLE public.mob_roam OWNER TO postgres;
+
+--
+-- Name: mob_roam_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.mob_roam_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mob_roam_id_seq OWNER TO postgres;
+
+--
+-- Name: mob_roam_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.mob_roam_id_seq OWNED BY public.mob_roam.id;
 
 
 --
@@ -609,48 +1249,118 @@ ALTER TABLE public.mini_gunner_sentinel OWNER TO postgres;
 --
 
 CREATE TABLE public.mob_zone (
-    id SERIAL,
+    id integer NOT NULL,
     zone_virtual_number integer NOT NULL,
     mob_virtual_number integer NOT NULL,
     room_virtual_number integer NOT NULL,
-    max_existing integer,
-		PRIMARY KEY (id),
-		CONSTRAINT fk_zone_virtual_number
-			FOREIGN KEY (zone_virtual_number)
-				REFERENCES public.zone(zone_virtual_number)
-				ON DELETE CASCADE
-				ON UPDATE CASCADE,
-		CONSTRAINT fk_mob_virtual_number
-			FOREIGN KEY (mob_virtual_number)
-				REFERENCES public.mobile(mob_virtual_number)
-				ON DELETE CASCADE
-				ON UPDATE CASCADE,
-		CONSTRAINT fk_room_virtual_number
-			FOREIGN KEY (room_virtual_number)
-				REFERENCES public.room(room_number)
-				ON DELETE CASCADE
-				ON UPDATE CASCADE
+    max_existing integer
 );
 
-
-CREATE TABLE public.mob_roam (
-    id SERIAL,
-    mob_virtual_number integer NOT NULL,
-    room_virtual_number integer NOT NULL,
-		PRIMARY KEY (id),
-		CONSTRAINT fk_mob_virtual_number
-			FOREIGN KEY (mob_virtual_number)
-				REFERENCES public.mobile(mob_virtual_number)
-				ON DELETE CASCADE
-				ON UPDATE CASCADE,
-		CONSTRAINT fk_room_virtual_number
-			FOREIGN KEY (room_virtual_number)
-				REFERENCES public.room(room_number)
-				ON DELETE CASCADE
-				ON UPDATE CASCADE
-);
 
 ALTER TABLE public.mob_zone OWNER TO postgres;
+
+--
+-- Name: mob_zone_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.mob_zone_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mob_zone_id_seq OWNER TO postgres;
+
+--
+-- Name: mob_zone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.mob_zone_id_seq OWNED BY public.mob_zone.id;
+
+
+--
+-- Name: mobile; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.mobile (
+    mob_id integer NOT NULL,
+    mob_virtual_number integer NOT NULL,
+    mob_name character varying(256) NOT NULL,
+    mob_short_description character varying(64) NOT NULL,
+    mob_long_description character varying(512) NOT NULL,
+    mob_description text,
+    mob_action_bitvector character varying(2) NOT NULL,
+    mob_affection_bitvector character varying(2) NOT NULL,
+    mob_ability_strength integer NOT NULL,
+    mob_ability_strength_add integer NOT NULL,
+    mob_ability_intelligence integer NOT NULL,
+    mob_ability_wisdom integer NOT NULL,
+    mob_ability_dexterity integer NOT NULL,
+    mob_ability_constitution integer NOT NULL,
+    mob_ability_charisma integer NOT NULL,
+    mob_alignment integer NOT NULL,
+    mob_attack_type integer NOT NULL,
+    mob_level integer NOT NULL,
+    mob_hitroll integer NOT NULL,
+    mob_armor integer NOT NULL,
+    mob_max_hitpoints integer NOT NULL,
+    mob_max_mana integer NOT NULL,
+    mob_max_move integer NOT NULL,
+    mob_gold integer NOT NULL,
+    mob_exp integer NOT NULL,
+    mob_load_position integer NOT NULL,
+    mob_default_position integer NOT NULL,
+    mob_sex integer NOT NULL,
+    mob_hitpoints integer,
+    mob_mana integer NOT NULL,
+    mob_move integer NOT NULL,
+    mob_damnodice integer NOT NULL,
+    mob_damsizedice integer NOT NULL,
+    mob_damroll integer NOT NULL,
+    mob_weight integer NOT NULL,
+    mob_height integer NOT NULL,
+    mob_class integer NOT NULL,
+    mob_special_extended_type integer DEFAULT 0 NOT NULL,
+    mob_targets text,
+    mob_roam_pattern text,
+    mob_ability_electronics integer DEFAULT 1 NOT NULL,
+    mob_ability_armor integer DEFAULT 1 NOT NULL,
+    mob_ability_marksmanship integer DEFAULT 1 NOT NULL,
+    mob_ability_sniping integer DEFAULT 1 NOT NULL,
+    mob_ability_demolitions integer DEFAULT 1 NOT NULL,
+    mob_ability_chemistry integer DEFAULT 1 NOT NULL,
+    mob_ability_weapon_handling integer DEFAULT 1 NOT NULL,
+    mob_ability_strategy integer DEFAULT 1 NOT NULL,
+    mob_ability_medical integer DEFAULT 1 NOT NULL
+);
+
+
+ALTER TABLE public.mobile OWNER TO postgres;
+
+--
+-- Name: mobile_mob_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.mobile_mob_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mobile_mob_id_seq OWNER TO postgres;
+
+--
+-- Name: mobile_mob_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.mobile_mob_id_seq OWNED BY public.mobile.mob_id;
+
 
 --
 -- Name: npc_dialogue; Type: TABLE; Schema: public; Owner: postgres
@@ -665,13 +1375,7 @@ CREATE TABLE public.npc_dialogue (
     dialogue_vnum integer NOT NULL,
     dialogue_order integer,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-		PRIMARY KEY(id),
-		CONSTRAINT fk_room_vnum
-			FOREIGN KEY (dialogue_mob_vnum)
-				REFERENCES public.mobile(mob_virtual_number)
-					ON DELETE CASCADE
-					ON UPDATE CASCADE
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -748,17 +1452,17 @@ CREATE TABLE public.object_armor (
     armor_hp integer DEFAULT 0 NOT NULL,
     armor_classification character varying(8) DEFAULT 'BASIC'::character varying NOT NULL,
     armor_worth integer DEFAULT 0 NOT NULL,
-		armor_incendiary_resistance_percent integer NOT NULL DEFAULT 0,
-		armor_explosive_resistance_percent integer NOT NULL DEFAULT 0,
-		armor_shrapnel_resistance_percent integer NOT NULL DEFAULT 0,
-		armor_corrosive_resistance_percent integer NOT NULL DEFAULT 0,
-		armor_cryogenic_resistance_percent integer NOT NULL DEFAULT 0,
-		armor_radiation_resistance_percent integer NOT NULL DEFAULT 0,
-		armor_emp_resistance_percent integer NOT NULL DEFAULT 0,
-		armor_shock_resistance_percent integer NOT NULL DEFAULT 0,
-		armor_anti_matter_resistance_percent integer NOT NULL DEFAULT 0,
-   	created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   	updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    armor_incendiary_resistance_percent integer DEFAULT 0 NOT NULL,
+    armor_explosive_resistance_percent integer DEFAULT 0 NOT NULL,
+    armor_shrapnel_resistance_percent integer DEFAULT 0 NOT NULL,
+    armor_corrosive_resistance_percent integer DEFAULT 0 NOT NULL,
+    armor_cryogenic_resistance_percent integer DEFAULT 0 NOT NULL,
+    armor_radiation_resistance_percent integer DEFAULT 0 NOT NULL,
+    armor_emp_resistance_percent integer DEFAULT 0 NOT NULL,
+    armor_shock_resistance_percent integer DEFAULT 0 NOT NULL,
+    armor_anti_matter_resistance_percent integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -807,27 +1511,27 @@ CREATE TABLE public.object_explosive (
     explosive_vnum integer NOT NULL,
     explosive_rarity public.rarity_t DEFAULT 'COMMON'::public.rarity_t NOT NULL,
     explosive_file character varying(2048),
-		explosive_incendiary_damage_dice_count integer NOT NULL DEFAULT 0,
-		explosive_incendiary_damage_dice_sides integer NOT NULL DEFAULT 0,
-		explosive_radiation_damage_dice_count integer NOT NULL DEFAULT 0,
-		explosive_radiation_damage_dice_sides integer NOT NULL DEFAULT 0,
-		explosive_chemical_damage_dice_count integer NOT NULL DEFAULT 0,
-		explosive_chemical_damage_dice_sides integer NOT NULL DEFAULT 0,
-		explosive_electric_damage_dice_count integer NOT NULL DEFAULT 0,
-		explosive_electric_damage_dice_sides integer NOT NULL DEFAULT 0,
-		explosive_armor_penetration_damage_dice_count integer NOT NULL DEFAULT 0,
-		explosive_armor_penetration_damage_dice_sides integer NOT NULL DEFAULT 0,
-		explosive_damage_dice_count integer NOT NULL DEFAULT 0,
-		explosive_damage_dice_sides integer NOT NULL DEFAULT 0,
-		explosive_incendiary_damage_percent integer NOT NULL DEFAULT 0,
-		explosive_explosive_damage_percent integer NOT NULL DEFAULT 0,
-		explosive_shrapnel_damage_percent integer NOT NULL DEFAULT 0,
-		explosive_corrosive_damage_percent integer NOT NULL DEFAULT 0,
-		explosive_cryogenic_damage_percent integer NOT NULL DEFAULT 0,
-		explosive_radiation_damage_percent integer NOT NULL DEFAULT 0,
-		explosive_emp_damage_percent integer NOT NULL DEFAULT 0,
-		explosive_shock_damage_percent integer NOT NULL DEFAULT 0,
-		explosive_anti_matter_damage_percent integer NOT NULL DEFAULT 0,
+    explosive_incendiary_damage_dice_count integer DEFAULT 0 NOT NULL,
+    explosive_incendiary_damage_dice_sides integer DEFAULT 0 NOT NULL,
+    explosive_radiation_damage_dice_count integer DEFAULT 0 NOT NULL,
+    explosive_radiation_damage_dice_sides integer DEFAULT 0 NOT NULL,
+    explosive_chemical_damage_dice_count integer DEFAULT 0 NOT NULL,
+    explosive_chemical_damage_dice_sides integer DEFAULT 0 NOT NULL,
+    explosive_electric_damage_dice_count integer DEFAULT 0 NOT NULL,
+    explosive_electric_damage_dice_sides integer DEFAULT 0 NOT NULL,
+    explosive_armor_penetration_damage_dice_count integer DEFAULT 0 NOT NULL,
+    explosive_armor_penetration_damage_dice_sides integer DEFAULT 0 NOT NULL,
+    explosive_damage_dice_count integer DEFAULT 0 NOT NULL,
+    explosive_damage_dice_sides integer DEFAULT 0 NOT NULL,
+    explosive_incendiary_damage_percent integer DEFAULT 0 NOT NULL,
+    explosive_explosive_damage_percent integer DEFAULT 0 NOT NULL,
+    explosive_shrapnel_damage_percent integer DEFAULT 0 NOT NULL,
+    explosive_corrosive_damage_percent integer DEFAULT 0 NOT NULL,
+    explosive_cryogenic_damage_percent integer DEFAULT 0 NOT NULL,
+    explosive_radiation_damage_percent integer DEFAULT 0 NOT NULL,
+    explosive_emp_damage_percent integer DEFAULT 0 NOT NULL,
+    explosive_shock_damage_percent integer DEFAULT 0 NOT NULL,
+    explosive_anti_matter_damage_percent integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -1018,29 +1722,29 @@ CREATE TABLE public.object_rifle (
     rifle_vnum integer NOT NULL,
     rifle_rarity public.rarity_t DEFAULT 'COMMON'::public.rarity_t NOT NULL,
     rifle_file character varying(2048),
-		rifle_incendiary_damage integer NOT NULL DEFAULT 0,
-		rifle_explosive_damage integer NOT NULL DEFAULT 0,
-		rifle_shrapnel_damage integer NOT NULL DEFAULT 0,
-		rifle_corrosive_damage integer NOT NULL DEFAULT 0,
-		rifle_cryogenic_damage integer NOT NULL DEFAULT 0,
-		rifle_radioactive_damage integer NOT NULL DEFAULT 0,
-		rifle_emp_damage integer NOT NULL DEFAULT 0,
-		rifle_shock_damage integer NOT NULL DEFAULT 0,
-		rifle_anti_matter_damage integer NOT NULL DEFAULT 0,
-		rifle_stat_strength integer NOT NULL DEFAULT 0,
-		rifle_stat_intelligence integer NOT NULL DEFAULT 0,
-		rifle_stat_wisdom integer NOT NULL DEFAULT 0,
-		rifle_stat_dexterity integer NOT NULL DEFAULT 0,
-		rifle_stat_constitution integer NOT NULL DEFAULT 0,
-		rifle_stat_electronics integer NOT NULL DEFAULT 0,
-		rifle_stat_armor integer NOT NULL DEFAULT 0,
-		rifle_stat_marksmanship integer NOT NULL DEFAULT 0,
-		rifle_stat_sniping integer NOT NULL DEFAULT 0,
-		rifle_stat_demolitions integer NOT NULL DEFAULT 0,
-		rifle_stat_chemistry integer NOT NULL DEFAULT 0,
-		rifle_stat_weapon_handling integer NOT NULL DEFAULT 0,
-		rifle_stat_strategy integer NOT NULL DEFAULT 0,
-		rifle_stat_medical integer NOT NULL DEFAULT 0,
+    rifle_incendiary_damage integer DEFAULT 0 NOT NULL,
+    rifle_explosive_damage integer DEFAULT 0 NOT NULL,
+    rifle_shrapnel_damage integer DEFAULT 0 NOT NULL,
+    rifle_corrosive_damage integer DEFAULT 0 NOT NULL,
+    rifle_cryogenic_damage integer DEFAULT 0 NOT NULL,
+    rifle_radioactive_damage integer DEFAULT 0 NOT NULL,
+    rifle_emp_damage integer DEFAULT 0 NOT NULL,
+    rifle_shock_damage integer DEFAULT 0 NOT NULL,
+    rifle_anti_matter_damage integer DEFAULT 0 NOT NULL,
+    rifle_stat_strength integer DEFAULT 0 NOT NULL,
+    rifle_stat_intelligence integer DEFAULT 0 NOT NULL,
+    rifle_stat_wisdom integer DEFAULT 0 NOT NULL,
+    rifle_stat_dexterity integer DEFAULT 0 NOT NULL,
+    rifle_stat_constitution integer DEFAULT 0 NOT NULL,
+    rifle_stat_electronics integer DEFAULT 0 NOT NULL,
+    rifle_stat_armor integer DEFAULT 0 NOT NULL,
+    rifle_stat_marksmanship integer DEFAULT 0 NOT NULL,
+    rifle_stat_sniping integer DEFAULT 0 NOT NULL,
+    rifle_stat_demolitions integer DEFAULT 0 NOT NULL,
+    rifle_stat_chemistry integer DEFAULT 0 NOT NULL,
+    rifle_stat_weapon_handling integer DEFAULT 0 NOT NULL,
+    rifle_stat_strategy integer DEFAULT 0 NOT NULL,
+    rifle_stat_medical integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -1108,6 +1812,111 @@ ALTER TABLE public.object_weapon_id_seq OWNER TO postgres;
 ALTER SEQUENCE public.object_weapon_id_seq OWNED BY public.object_weapon.id;
 
 
+--
+-- Name: player; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.player (
+    id integer NOT NULL,
+    player_password character varying(1024) NOT NULL,
+    player_affection_plr_bitvector character varying(2048),
+    player_affection_bitvector character varying(2048),
+    player_name character varying(24) DEFAULT 'recruit'::character varying NOT NULL,
+    player_short_description character varying(512) DEFAULT 'A lonely recruit'::character varying NOT NULL,
+    player_long_description text,
+    player_action_bitvector integer DEFAULT 0 NOT NULL,
+    player_ability_strength integer DEFAULT 1 NOT NULL,
+    player_ability_strength_add integer DEFAULT 1 NOT NULL,
+    player_ability_intelligence integer DEFAULT 1 NOT NULL,
+    player_ability_wisdom integer DEFAULT 1 NOT NULL,
+    player_ability_dexterity integer DEFAULT 1 NOT NULL,
+    player_ability_constitution integer DEFAULT 1 NOT NULL,
+    player_ability_charisma integer DEFAULT 1 NOT NULL,
+    player_ability_alignment integer DEFAULT 0 NOT NULL,
+    player_attack_type integer DEFAULT 0 NOT NULL,
+    player_max_hitpoints integer DEFAULT 100 NOT NULL,
+    player_max_mana integer DEFAULT 100 NOT NULL,
+    player_max_move integer DEFAULT 100 NOT NULL,
+    player_gold integer DEFAULT 0 NOT NULL,
+    player_exp integer DEFAULT 0 NOT NULL,
+    player_sex character varying(1) DEFAULT 'M'::character varying NOT NULL,
+    player_hitpoints integer DEFAULT 100 NOT NULL,
+    player_mana integer DEFAULT 100 NOT NULL,
+    player_move integer DEFAULT 100 NOT NULL,
+    player_damroll integer DEFAULT 6 NOT NULL,
+    player_weight integer DEFAULT 10 NOT NULL,
+    player_height integer DEFAULT 60 NOT NULL,
+    player_class character varying(16) DEFAULT 'x'::character varying NOT NULL,
+    player_title character varying(24) DEFAULT 'recruit'::character varying,
+    player_hometown character varying(24) DEFAULT 'SLC'::character varying,
+    player_damnodice integer DEFAULT 3 NOT NULL,
+    player_damsizedice integer DEFAULT 6 NOT NULL,
+    player_type character varying(6) DEFAULT 'x'::character varying NOT NULL,
+    player_alignment integer DEFAULT 0 NOT NULL,
+    player_level integer DEFAULT 1 NOT NULL,
+    player_hitroll integer DEFAULT 3 NOT NULL,
+    player_armor integer DEFAULT 3 NOT NULL,
+    player_birth timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    player_time_played integer DEFAULT 0 NOT NULL,
+    player_logon timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    player_preferences character varying(2048),
+    player_practice_sessions integer DEFAULT 1 NOT NULL
+);
+
+
+ALTER TABLE public.player OWNER TO postgres;
+
+--
+-- Name: player_base_ability; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.player_base_ability (
+    pba_id integer NOT NULL,
+    pba_player_id integer NOT NULL,
+    pba_str integer DEFAULT 0 NOT NULL,
+    pba_str_add integer DEFAULT 0 NOT NULL,
+    pba_intel integer DEFAULT 0 NOT NULL,
+    pba_wis integer DEFAULT 0 NOT NULL,
+    pba_dex integer DEFAULT 0 NOT NULL,
+    pba_con integer DEFAULT 0 NOT NULL,
+    pba_cha integer DEFAULT 0 NOT NULL,
+    pba_electronics integer DEFAULT 0 NOT NULL,
+    pba_armor integer DEFAULT 0 NOT NULL,
+    pba_marksmanship integer DEFAULT 0 NOT NULL,
+    pba_sniping integer DEFAULT 0 NOT NULL,
+    pba_demolitions integer DEFAULT 0 NOT NULL,
+    pba_chemistry integer DEFAULT 0 NOT NULL,
+    pba_weapon_handling integer DEFAULT 0 NOT NULL,
+    pba_strategy integer DEFAULT 0 NOT NULL,
+    pba_medical integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.player_base_ability OWNER TO postgres;
+
+--
+-- Name: player_base_ability_pba_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.player_base_ability_pba_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.player_base_ability_pba_id_seq OWNER TO postgres;
+
+--
+-- Name: player_base_ability_pba_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.player_base_ability_pba_id_seq OWNED BY public.player_base_ability.pba_id;
+
 
 --
 -- Name: player_classes; Type: TABLE; Schema: public; Owner: postgres
@@ -1142,6 +1951,44 @@ ALTER TABLE public.player_classes_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.player_classes_id_seq OWNED BY public.player_classes.id;
+
+
+--
+-- Name: player_contract_state; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.player_contract_state (
+    id integer NOT NULL,
+    pc_player_id integer NOT NULL,
+    pc_contract_vnum integer NOT NULL,
+    pc_state_data text,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.player_contract_state OWNER TO postgres;
+
+--
+-- Name: player_contract_state_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.player_contract_state_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.player_contract_state_id_seq OWNER TO postgres;
+
+--
+-- Name: player_contract_state_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.player_contract_state_id_seq OWNED BY public.player_contract_state.id;
 
 
 --
@@ -1184,6 +2031,15 @@ ALTER SEQUENCE public.player_flags_id_seq OWNED BY public.player_flags.id;
 -- Name: player_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
+CREATE SEQUENCE public.player_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
 ALTER TABLE public.player_id_seq OWNER TO postgres;
 
 --
@@ -1198,26 +2054,25 @@ ALTER SEQUENCE public.player_id_seq OWNED BY public.player.id;
 --
 
 CREATE TABLE public.player_object (
-    po_id integer NOT NULL,
+    id integer NOT NULL,
     po_player_id integer NOT NULL,
-    po_type public.player_object_type_t DEFAULT 'object'::public.player_object_type_t NOT NULL,
-    po_type_vnum integer,
+    po_type integer NOT NULL,
     po_type_id integer,
-    po_type_load character varying(4) DEFAULT 'id'::character varying NOT NULL,
-    po_wear_position integer NOT NULL,
-    po_in_inventory integer DEFAULT 0 NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    po_yaml text,
+    po_load_type integer NOT NULL,
+    po_wear_position integer,
+    po_in_inventory integer,
+    po_quantity integer DEFAULT 1 NOT NULL
 );
 
 
 ALTER TABLE public.player_object OWNER TO postgres;
 
 --
--- Name: player_object_po_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: player_object_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.player_object_po_id_seq
+CREATE SEQUENCE public.player_object_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -1226,13 +2081,13 @@ CREATE SEQUENCE public.player_object_po_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.player_object_po_id_seq OWNER TO postgres;
+ALTER TABLE public.player_object_id_seq OWNER TO postgres;
 
 --
--- Name: player_object_po_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: player_object_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.player_object_po_id_seq OWNED BY public.player_object.po_id;
+ALTER SEQUENCE public.player_object_id_seq OWNED BY public.player_object.id;
 
 
 --
@@ -1324,15 +2179,336 @@ ALTER SEQUENCE public.player_races_id_seq OWNED BY public.player_races.id;
 
 
 --
+-- Name: player_skill_points; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.player_skill_points (
+    id integer NOT NULL,
+    ps_skill_id integer NOT NULL,
+    ps_points integer DEFAULT 0 NOT NULL,
+    ps_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.player_skill_points OWNER TO postgres;
+
+--
+-- Name: player_skill_points_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.player_skill_points_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.player_skill_points_id_seq OWNER TO postgres;
+
+--
+-- Name: player_skill_points_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.player_skill_points_id_seq OWNED BY public.player_skill_points.id;
+
+
+--
+-- Name: player_skill_usage; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.player_skill_usage (
+    id integer NOT NULL,
+    ps_player_id integer NOT NULL,
+    ps_skill_id integer NOT NULL,
+    ps_usage_count integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.player_skill_usage OWNER TO postgres;
+
+--
+-- Name: player_skill_usage_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.player_skill_usage_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.player_skill_usage_id_seq OWNER TO postgres;
+
+--
+-- Name: player_skill_usage_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.player_skill_usage_id_seq OWNED BY public.player_skill_usage.id;
+
+
+--
+-- Name: rifle_attachment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rifle_attachment (
+    id integer NOT NULL,
+    rifle_player_id integer NOT NULL,
+    rifle_data text NOT NULL,
+    rifle_position text DEFAULT 'inventory'::text NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.rifle_attachment OWNER TO postgres;
+
+--
+-- Name: rifle_attachment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.rifle_attachment_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.rifle_attachment_id_seq OWNER TO postgres;
+
+--
+-- Name: rifle_attachment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.rifle_attachment_id_seq OWNED BY public.rifle_attachment.id;
+
+
+--
+-- Name: rifle_index; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rifle_index (
+    id integer NOT NULL,
+    rifle_filename character varying NOT NULL,
+    rifle_type character varying NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.rifle_index OWNER TO postgres;
+
+--
+-- Name: rifle_index_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.rifle_index_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.rifle_index_id_seq OWNER TO postgres;
+
+--
+-- Name: rifle_index_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.rifle_index_id_seq OWNED BY public.rifle_index.id;
+
+
+--
+-- Name: rifle_instance; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rifle_instance (
+    rifle_id integer NOT NULL,
+    rifle_accuracy_map_0 double precision DEFAULT 10.0,
+    rifle_accuracy_map_1 double precision DEFAULT 10.0,
+    rifle_accuracy_map_2 double precision DEFAULT 10.0,
+    rifle_accuracy_map_3 double precision DEFAULT 10.0,
+    rifle_damage_map_0 double precision DEFAULT 10.0,
+    rifle_damage_map_1 double precision DEFAULT 10.0,
+    rifle_damage_map_2 double precision DEFAULT 10.0,
+    rifle_damage_map_3 double precision DEFAULT 10.0,
+    rifle_rarity public.rarity_t DEFAULT 'COMMON'::public.rarity_t NOT NULL,
+    rifle_file character varying(32),
+    rifle_str_type character varying(32),
+    rifle_type character varying(32),
+    rifle_manufacturer character varying(32),
+    rifle_name character varying(32),
+    rifle_vnum integer,
+    rifle_ammo_max integer,
+    rifle_ammo_type character varying(32) DEFAULT 'SNIPER'::character varying NOT NULL,
+    rifle_chance_to_injure double precision,
+    rifle_clip_size integer,
+    rifle_cooldown_between_shots integer,
+    rifle_critical_chance integer,
+    rifle_critical_range integer,
+    rifle_damage_per_second double precision,
+    rifle_disorient_amount double precision,
+    rifle_headshot_bonus double precision,
+    rifle_max_range integer,
+    rifle_range_multiplier double precision,
+    rifle_reload_time integer,
+    rifle_rounds_per_minute integer,
+    rifle_muzzle_velocity integer,
+    rifle_effective_firing_range integer,
+    rifle_damage_dice_count integer,
+    rifle_damage_dice_sides integer,
+    rifle_incendiary_damage integer,
+    rifle_explosive_damage integer,
+    rifle_shrapnel_damage integer,
+    rifle_corrosive_damage integer,
+    rifle_cryogenic_damage integer,
+    rifle_radioactive_damage integer,
+    rifle_emp_damage integer,
+    rifle_shock_damage integer,
+    rifle_anti_matter_damage integer,
+    rifle_stat_strength integer,
+    rifle_stat_intelligence integer,
+    rifle_stat_wisdom integer,
+    rifle_stat_dexterity integer,
+    rifle_stat_constitution integer,
+    rifle_stat_electronics integer,
+    rifle_stat_armor integer,
+    rifle_stat_marksmanship integer,
+    rifle_stat_sniping integer,
+    rifle_stat_demolitions integer,
+    rifle_stat_chemistry integer,
+    rifle_stat_weapon_handling integer,
+    rifle_stat_strategy integer,
+    rifle_stat_medical integer,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.rifle_instance OWNER TO postgres;
+
+--
+-- Name: rifle_instance_rifle_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.rifle_instance_rifle_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.rifle_instance_rifle_id_seq OWNER TO postgres;
+
+--
+-- Name: rifle_instance_rifle_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.rifle_instance_rifle_id_seq OWNED BY public.rifle_instance.rifle_id;
+
+
+--
+-- Name: rifle_placements; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rifle_placements (
+    id integer NOT NULL,
+    ip_room_vnum integer NOT NULL,
+    ip_container_selector text,
+    ip_rifle_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.rifle_placements OWNER TO postgres;
+
+--
+-- Name: rifle_placements_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.rifle_placements_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.rifle_placements_id_seq OWNER TO postgres;
+
+--
+-- Name: rifle_placements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.rifle_placements_id_seq OWNED BY public.rifle_placements.id;
+
+
+--
 -- Name: room; Type: TABLE; Schema: public; Owner: postgres
 --
+
+CREATE TABLE public.room (
+    id integer NOT NULL,
+    room_number integer NOT NULL,
+    zone integer NOT NULL,
+    sector_type integer NOT NULL,
+    name character varying(256) NOT NULL,
+    description text NOT NULL,
+    ex_keyword character varying(256),
+    ex_description text,
+    light integer,
+    room_flag integer NOT NULL,
+    nickname text
+);
+
+
+ALTER TABLE public.room OWNER TO postgres;
 
 --
 -- Name: room_direction_data; Type: TABLE; Schema: public; Owner: postgres
 --
 
+CREATE TABLE public.room_direction_data (
+    id integer NOT NULL,
+    room_number integer NOT NULL,
+    exit_direction integer NOT NULL,
+    general_description character varying(256) NOT NULL,
+    keyword character varying(16),
+    exit_info integer,
+    exit_key integer,
+    to_room integer NOT NULL
+);
+
 
 ALTER TABLE public.room_direction_data OWNER TO postgres;
+
+--
+-- Name: room_direction_data_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.room_direction_data_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 ALTER TABLE public.room_direction_data_id_seq OWNER TO postgres;
 
@@ -1342,6 +2518,63 @@ ALTER TABLE public.room_direction_data_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.room_direction_data_id_seq OWNED BY public.room_direction_data.id;
 
+
+--
+-- Name: room_extra_descriptions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.room_extra_descriptions (
+    id integer NOT NULL,
+    red_room_vnum integer NOT NULL,
+    red_keyword text NOT NULL,
+    red_description text NOT NULL
+);
+
+
+ALTER TABLE public.room_extra_descriptions OWNER TO postgres;
+
+--
+-- Name: room_extra_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.room_extra_descriptions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.room_extra_descriptions_id_seq OWNER TO postgres;
+
+--
+-- Name: room_extra_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.room_extra_descriptions_id_seq OWNED BY public.room_extra_descriptions.id;
+
+
+--
+-- Name: room_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.room_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.room_id_seq OWNER TO postgres;
+
+--
+-- Name: room_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.room_id_seq OWNED BY public.room.id;
 
 
 --
@@ -1358,6 +2591,84 @@ CREATE SEQUENCE public.room_virtual_number_seq
 
 
 ALTER TABLE public.room_virtual_number_seq OWNER TO postgres;
+
+--
+-- Name: scripted_sequences; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.scripted_sequences (
+    id integer NOT NULL,
+    s_sequence_vnum integer NOT NULL
+);
+
+
+ALTER TABLE public.scripted_sequences OWNER TO postgres;
+
+--
+-- Name: scripted_sequences_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.scripted_sequences_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.scripted_sequences_id_seq OWNER TO postgres;
+
+--
+-- Name: scripted_sequences_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.scripted_sequences_id_seq OWNED BY public.scripted_sequences.id;
+
+
+--
+-- Name: scripted_steps; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.scripted_steps (
+    id integer NOT NULL,
+    s_sequence_vnum integer NOT NULL,
+    s_wait_ticks integer DEFAULT 0 NOT NULL,
+    s_mob integer,
+    s_obj integer,
+    s_room integer,
+    s_quantity integer,
+    s_order integer DEFAULT 0 NOT NULL,
+    s_interpret text,
+    s_yaml text,
+    s_type text NOT NULL,
+    s_dialogue text
+);
+
+
+ALTER TABLE public.scripted_steps OWNER TO postgres;
+
+--
+-- Name: scripted_steps_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.scripted_steps_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.scripted_steps_id_seq OWNER TO postgres;
+
+--
+-- Name: scripted_steps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.scripted_steps_id_seq OWNED BY public.scripted_steps.id;
+
 
 --
 -- Name: shop_objects; Type: TABLE; Schema: public; Owner: postgres
@@ -1401,13 +2712,7 @@ ALTER SEQUENCE public.shop_objects_shop_objects_id_seq OWNED BY public.shop_obje
 CREATE TABLE public.shop_rooms (
     shop_rooms_id integer NOT NULL,
     shop_vnum integer NOT NULL,
-    shop_room_vnum integer NOT NULL,
-		PRIMARY KEY(shop_rooms_id),
-		CONSTRAINT fk_room_vnum
-			FOREIGN KEY(shop_room_vnum)
-				REFERENCES public.room(room_number)
-					ON DELETE CASCADE
-					ON UPDATE CASCADE
+    shop_room_vnum integer NOT NULL
 );
 
 
@@ -1492,6 +2797,119 @@ ALTER TABLE public.shops_shop_id_seq OWNER TO postgres;
 ALTER SEQUENCE public.shops_shop_id_seq OWNED BY public.shops.shop_id;
 
 
+--
+-- Name: skill_points; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.skill_points (
+    id integer NOT NULL,
+    sp_level integer NOT NULL,
+    sp_points integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.skill_points OWNER TO postgres;
+
+--
+-- Name: skill_points_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.skill_points_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.skill_points_id_seq OWNER TO postgres;
+
+--
+-- Name: skill_points_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.skill_points_id_seq OWNED BY public.skill_points.id;
+
+
+--
+-- Name: skill_trees; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.skill_trees (
+    id integer NOT NULL,
+    skill_name character varying(255) NOT NULL,
+    skill_category character varying(255) NOT NULL,
+    skill_player_class character varying(255) NOT NULL,
+    skill_parent_id integer,
+    skill_order integer DEFAULT 0 NOT NULL,
+    skill_description text,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.skill_trees OWNER TO postgres;
+
+--
+-- Name: skill_trees_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.skill_trees_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.skill_trees_id_seq OWNER TO postgres;
+
+--
+-- Name: skill_trees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.skill_trees_id_seq OWNED BY public.skill_trees.id;
+
+
+--
+-- Name: skill_usage; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.skill_usage (
+    id integer NOT NULL,
+    player_id integer NOT NULL,
+    skill_name character varying(32) NOT NULL,
+    skill_level double precision DEFAULT 0.0 NOT NULL
+);
+
+
+ALTER TABLE public.skill_usage OWNER TO postgres;
+
+--
+-- Name: skill_usage_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.skill_usage_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.skill_usage_id_seq OWNER TO postgres;
+
+--
+-- Name: skill_usage_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.skill_usage_id_seq OWNED BY public.skill_usage.id;
+
 
 --
 -- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
@@ -1557,6 +2975,41 @@ ALTER SEQUENCE public.terminal_choices_id_seq OWNED BY public.terminal_choices.i
 
 
 --
+-- Name: weapon_locker; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.weapon_locker (
+    id integer NOT NULL,
+    w_room_vnum integer[] NOT NULL,
+    w_yaml text[] NOT NULL
+);
+
+
+ALTER TABLE public.weapon_locker OWNER TO postgres;
+
+--
+-- Name: weapon_locker_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.weapon_locker_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.weapon_locker_id_seq OWNER TO postgres;
+
+--
+-- Name: weapon_locker_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.weapon_locker_id_seq OWNED BY public.weapon_locker.id;
+
+
+--
 -- Name: world_configuration_start_rooms; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -1596,6 +3049,23 @@ ALTER SEQUENCE public.world_configuration_start_rooms_id_seq OWNED BY public.wor
 
 
 --
+-- Name: zone; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.zone (
+    id integer NOT NULL,
+    zone_virtual_number integer NOT NULL,
+    zone_start integer NOT NULL,
+    zone_end integer NOT NULL,
+    zone_name character varying(64) NOT NULL,
+    lifespan integer NOT NULL,
+    reset_mode integer NOT NULL
+);
+
+
+ALTER TABLE public.zone OWNER TO postgres;
+
+--
 -- Name: zone_data; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -1606,7 +3076,8 @@ CREATE TABLE public.zone_data (
     zone_if_flag character varying(1) NOT NULL,
     zone_arg1 integer NOT NULL,
     zone_arg2 integer NOT NULL,
-    zone_arg3 integer NOT NULL
+    zone_arg3 integer NOT NULL,
+    zone_yaml text
 );
 
 
@@ -1635,6 +3106,28 @@ ALTER SEQUENCE public.zone_data_id_seq OWNED BY public.zone_data.id;
 
 
 --
+-- Name: zone_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.zone_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.zone_id_seq OWNER TO postgres;
+
+--
+-- Name: zone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.zone_id_seq OWNED BY public.zone.id;
+
+
+--
 -- Name: affected_type id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1642,10 +3135,108 @@ ALTER TABLE ONLY public.affected_type ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: armor_index id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.armor_index ALTER COLUMN id SET DEFAULT nextval('public.armor_index_id_seq'::regclass);
+
+
+--
+-- Name: armor_locker id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.armor_locker ALTER COLUMN id SET DEFAULT nextval('public.armor_locker_id_seq'::regclass);
+
+
+--
 -- Name: camera_feed feed_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
--- ALTER TABLE ONLY public.camera_feed ALTER COLUMN feed_id SET DEFAULT nextval('public.camera_feed_feed_id_seq'::regclass);
+ALTER TABLE ONLY public.camera_feed ALTER COLUMN feed_id SET DEFAULT nextval('public.camera_feed_feed_id_seq'::regclass);
+
+
+--
+-- Name: class_breacher breacher_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_breacher ALTER COLUMN breacher_id SET DEFAULT nextval('public.class_breacher_breacher_id_seq'::regclass);
+
+
+--
+-- Name: class_engineer engineer_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_engineer ALTER COLUMN engineer_id SET DEFAULT nextval('public.class_engineer_engineer_id_seq'::regclass);
+
+
+--
+-- Name: class_ghost ghost_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_ghost ALTER COLUMN ghost_id SET DEFAULT nextval('public.class_ghost_ghost_id_seq'::regclass);
+
+
+--
+-- Name: class_marine marine_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_marine ALTER COLUMN marine_id SET DEFAULT nextval('public.class_marine_marine_id_seq'::regclass);
+
+
+--
+-- Name: class_medic medic_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_medic ALTER COLUMN medic_id SET DEFAULT nextval('public.class_medic_medic_id_seq'::regclass);
+
+
+--
+-- Name: class_sniper sniper_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_sniper ALTER COLUMN sniper_id SET DEFAULT nextval('public.class_sniper_sniper_id_seq'::regclass);
+
+
+--
+-- Name: class_support support_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_support ALTER COLUMN support_id SET DEFAULT nextval('public.class_support_support_id_seq'::regclass);
+
+
+--
+-- Name: computer_terminal id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.computer_terminal ALTER COLUMN id SET DEFAULT nextval('public.computer_terminal_id_seq'::regclass);
+
+
+--
+-- Name: contract_step_callback id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contract_step_callback ALTER COLUMN id SET DEFAULT nextval('public.contract_step_callback_id_seq'::regclass);
+
+
+--
+-- Name: contract_steps id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contract_steps ALTER COLUMN id SET DEFAULT nextval('public.contract_steps_id_seq'::regclass);
+
+
+--
+-- Name: contracts id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contracts ALTER COLUMN id SET DEFAULT nextval('public.contracts_id_seq'::regclass);
+
+
+--
+-- Name: event_messages id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.event_messages ALTER COLUMN id SET DEFAULT nextval('public.event_messages_id_seq'::regclass);
 
 
 --
@@ -1653,6 +3244,20 @@ ALTER TABLE ONLY public.affected_type ALTER COLUMN id SET DEFAULT nextval('publi
 --
 
 ALTER TABLE ONLY public.extra_description ALTER COLUMN id SET DEFAULT nextval('public.extra_description_id_seq'::regclass);
+
+
+--
+-- Name: friendly_reminders id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.friendly_reminders ALTER COLUMN id SET DEFAULT nextval('public.friendly_reminders_id_seq'::regclass);
+
+
+--
+-- Name: hq_locations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hq_locations ALTER COLUMN id SET DEFAULT nextval('public.hq_locations_id_seq'::regclass);
 
 
 --
@@ -1681,6 +3286,27 @@ ALTER TABLE ONLY public.mini_game ALTER COLUMN game_id SET DEFAULT nextval('publ
 --
 
 ALTER TABLE ONLY public.mini_gunner_sentinel ALTER COLUMN id SET DEFAULT nextval('public.mini_gunner_sentinel_id_seq'::regclass);
+
+
+--
+-- Name: mob_equipment id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_equipment ALTER COLUMN id SET DEFAULT nextval('public.mob_equipment_id_seq'::regclass);
+
+
+--
+-- Name: mob_equipment_map id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_equipment_map ALTER COLUMN id SET DEFAULT nextval('public.mob_equipment_map_id_seq'::regclass);
+
+
+--
+-- Name: mob_roam id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_roam ALTER COLUMN id SET DEFAULT nextval('public.mob_roam_id_seq'::regclass);
 
 
 --
@@ -1761,10 +3387,24 @@ ALTER TABLE ONLY public.player ALTER COLUMN id SET DEFAULT nextval('public.playe
 
 
 --
+-- Name: player_base_ability pba_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_base_ability ALTER COLUMN pba_id SET DEFAULT nextval('public.player_base_ability_pba_id_seq'::regclass);
+
+
+--
 -- Name: player_classes id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.player_classes ALTER COLUMN id SET DEFAULT nextval('public.player_classes_id_seq'::regclass);
+
+
+--
+-- Name: player_contract_state id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_contract_state ALTER COLUMN id SET DEFAULT nextval('public.player_contract_state_id_seq'::regclass);
 
 
 --
@@ -1775,10 +3415,10 @@ ALTER TABLE ONLY public.player_flags ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- Name: player_object po_id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: player_object id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.player_object ALTER COLUMN po_id SET DEFAULT nextval('public.player_object_po_id_seq'::regclass);
+ALTER TABLE ONLY public.player_object ALTER COLUMN id SET DEFAULT nextval('public.player_object_id_seq'::regclass);
 
 
 --
@@ -1796,10 +3436,52 @@ ALTER TABLE ONLY public.player_races ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- Name: player_skill_points id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_skill_points ALTER COLUMN id SET DEFAULT nextval('public.player_skill_points_id_seq'::regclass);
+
+
+--
+-- Name: player_skill_usage id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_skill_usage ALTER COLUMN id SET DEFAULT nextval('public.player_skill_usage_id_seq'::regclass);
+
+
+--
+-- Name: rifle_attachment id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_attachment ALTER COLUMN id SET DEFAULT nextval('public.rifle_attachment_id_seq'::regclass);
+
+
+--
+-- Name: rifle_index id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_index ALTER COLUMN id SET DEFAULT nextval('public.rifle_index_id_seq'::regclass);
+
+
+--
+-- Name: rifle_instance rifle_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_instance ALTER COLUMN rifle_id SET DEFAULT nextval('public.rifle_instance_rifle_id_seq'::regclass);
+
+
+--
+-- Name: rifle_placements id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_placements ALTER COLUMN id SET DEFAULT nextval('public.rifle_placements_id_seq'::regclass);
+
+
+--
 -- Name: room id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
--- ALTER TABLE ONLY public.room ALTER COLUMN id SET DEFAULT nextval('public.room_room_id_seq'::regclass);
+ALTER TABLE ONLY public.room ALTER COLUMN id SET DEFAULT nextval('public.room_id_seq'::regclass);
 
 
 --
@@ -1807,6 +3489,27 @@ ALTER TABLE ONLY public.player_races ALTER COLUMN id SET DEFAULT nextval('public
 --
 
 ALTER TABLE ONLY public.room_direction_data ALTER COLUMN id SET DEFAULT nextval('public.room_direction_data_id_seq'::regclass);
+
+
+--
+-- Name: room_extra_descriptions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.room_extra_descriptions ALTER COLUMN id SET DEFAULT nextval('public.room_extra_descriptions_id_seq'::regclass);
+
+
+--
+-- Name: scripted_sequences id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.scripted_sequences ALTER COLUMN id SET DEFAULT nextval('public.scripted_sequences_id_seq'::regclass);
+
+
+--
+-- Name: scripted_steps id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.scripted_steps ALTER COLUMN id SET DEFAULT nextval('public.scripted_steps_id_seq'::regclass);
 
 
 --
@@ -1831,10 +3534,38 @@ ALTER TABLE ONLY public.shops ALTER COLUMN shop_id SET DEFAULT nextval('public.s
 
 
 --
+-- Name: skill_points id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.skill_points ALTER COLUMN id SET DEFAULT nextval('public.skill_points_id_seq'::regclass);
+
+
+--
+-- Name: skill_trees id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.skill_trees ALTER COLUMN id SET DEFAULT nextval('public.skill_trees_id_seq'::regclass);
+
+
+--
+-- Name: skill_usage id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.skill_usage ALTER COLUMN id SET DEFAULT nextval('public.skill_usage_id_seq'::regclass);
+
+
+--
 -- Name: terminal_choices id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.terminal_choices ALTER COLUMN id SET DEFAULT nextval('public.terminal_choices_id_seq'::regclass);
+
+
+--
+-- Name: weapon_locker id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.weapon_locker ALTER COLUMN id SET DEFAULT nextval('public.weapon_locker_id_seq'::regclass);
 
 
 --
@@ -1867,6 +3598,47 @@ COPY public.affected_type (id, aff_fk_id, aff_location, aff_modifier) FROM stdin
 
 
 --
+-- Data for Name: armor_index; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.armor_index (id, armor_filename, armor_type, created_at, updated_at) FROM stdin;
+1	baklava.yml	head	2021-09-04 04:12:07.150447	2021-09-04 04:12:07.150447
+2	tactical-gas-mask.yml	head	2021-09-04 04:12:07.150913	2021-09-04 04:12:07.150913
+3	thermal-goggles.yml	goggles	2021-09-04 04:12:07.151313	2021-09-04 04:12:07.151313
+4	night-vision-goggles.yml	goggles	2021-09-04 04:12:07.151694	2021-09-04 04:12:07.151694
+5	titan-shoulder-pads.yml	shoulders	2021-09-04 04:12:07.152031	2021-09-04 04:12:07.152031
+6	xm-scorpio-shoulder-pads.yml	shoulders	2021-09-04 04:12:07.152365	2021-09-04 04:12:07.152365
+7	viper-shoulder-pads.yml	shoulders	2021-09-04 04:12:07.152703	2021-09-04 04:12:07.152703
+8	falcon-shoulder-pads.yml	shoulders	2021-09-04 04:12:07.153036	2021-09-04 04:12:07.153036
+9	basic-ballistic-vest.yml	vest	2021-09-04 04:12:07.153366	2021-09-04 04:12:07.153366
+10	falcon-ballistic-vest.yml	vest	2021-09-04 04:12:07.153696	2021-09-04 04:12:07.153696
+11	raven-ballistic-vest.yml	vest	2021-09-04 04:12:07.154141	2021-09-04 04:12:07.154141
+12	vulture-ballistic-vest.yml	vest	2021-09-04 04:12:07.154551	2021-09-04 04:12:07.154551
+13	xm-scorpio-slotted-vest-pack.yml	vestpack	2021-09-04 04:12:07.154923	2021-09-04 04:12:07.154923
+14	raven-ultralight-backpack.yml	backpack	2021-09-04 04:12:07.155321	2021-09-04 04:12:07.155321
+15	titan-gauntlets.yml	arms	2021-09-04 04:12:07.155703	2021-09-04 04:12:07.155703
+16	titan-elbow-guards.yml	elbow	2021-09-04 04:12:07.156063	2021-09-04 04:12:07.156063
+17	razor-gps-wrist-watch.yml	wrist	2021-09-04 04:12:07.156437	2021-09-04 04:12:07.156437
+18	xm-scorpio-tactical-gloves.yml	hands	2021-09-04 04:12:07.156781	2021-09-04 04:12:07.156781
+19	xm-scorpio-belt.yml	waist	2021-09-04 04:12:07.157173	2021-09-04 04:12:07.157173
+20	titan-shin-guards.yml	legs	2021-09-04 04:12:07.157519	2021-09-04 04:12:07.157519
+21	viper-leg-guards.yml	legs	2021-09-04 04:12:07.157893	2021-09-04 04:12:07.157893
+22	basic-boots.yml	feet	2021-09-04 04:12:07.158231	2021-09-04 04:12:07.158231
+23	xm50-ultralight-boots.yml	feet	2021-09-04 04:12:07.158612	2021-09-04 04:12:07.158612
+24	xm607-vulture-boots.yml	feet	2021-09-04 04:12:07.158979	2021-09-04 04:12:07.158979
+25	xm8-panama-combat-boots.yml	feet	2021-09-04 04:12:07.159364	2021-09-04 04:12:07.159364
+\.
+
+
+--
+-- Data for Name: armor_locker; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.armor_locker (id, a_room_vnum, a_yaml) FROM stdin;
+\.
+
+
+--
 -- Data for Name: camera_feed; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -1874,17 +3646,386 @@ COPY public.camera_feed (feed_id, feed_type, feed_vnum, feed_room_vnum, feed_ord
 \.
 
 
+--
+-- Data for Name: class_breacher; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.class_breacher (breacher_id, breacher_player_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: class_engineer; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.class_engineer (engineer_id, engineer_player_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: class_ghost; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.class_ghost (ghost_id, ghost_player_id, created_at, updated_at) FROM stdin;
+1	96	2021-09-04 04:25:30.215005	2021-09-04 04:25:30.215005
+\.
+
+
+--
+-- Data for Name: class_marine; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.class_marine (marine_id, marine_player_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: class_medic; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.class_medic (medic_id, medic_player_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: class_sniper; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.class_sniper (sniper_id, sniper_player_id, created_at, updated_at) FROM stdin;
+1	1	2021-09-04 04:12:07.132625	2021-09-04 04:12:07.132625
+\.
+
+
+--
+-- Data for Name: class_support; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.class_support (support_id, support_player_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: computer_terminal; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.computer_terminal (id, terminal_room_vnum, terminal_type, terminal_attaches_to, terminal_name, terminal_description, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: contract_step_callback; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.contract_step_callback (id, s_contract_vnum, s_task_type, s_task_target, s_task_vnum, s_sequence_vnum) FROM stdin;
+5	1	GOAL_FIND	TARGET_ROOM	143	1
+6	1	GOAL_FIND	TARGET_ROOM	144	2
+\.
+
+
+--
+-- Data for Name: contract_steps; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.contract_steps (id, s_contract_vnum, s_task_type, s_task_target, s_description, s_object_yaml, s_mob_vnum, s_room_vnum, s_quota, s_is_optional, s_order, s_reward_xp, s_reward_money, s_reward_1, s_reward_2, s_reward_3, s_reward_4, s_reward_5, s_reward_6, s_reward_7, s_reward_8, s_reward_9, s_reward_10, created_at, updated_at) FROM stdin;
+11	1	1	2	Find Doctor Land. Doctor Land is a ballistics expert and as such runs the majority of the new recruit shooting range\r\nactivities. You can find him in the gear room.	\N	0	266	0	f	0	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:23:41.878218	2021-09-04 04:23:41.878218
+12	1	1	2	Locate the TRITON Labs research scientist. He can give you the magazines that Doctor Land requires.\r\n	\N	0	143	0	f	1	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:23:41.879713	2021-09-04 04:23:41.879713
+13	1	1	2	Follow the TRITON Labs research scientist north to get the magazines.\r\n	\N	0	144	0	f	2	850	5000	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:23:41.881122	2021-09-04 04:23:41.881122
+14	1	1	0	Go back to Doctor Land with the magazines.\r\n	\N	603	0	0	f	3	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:23:41.882507	2021-09-04 04:23:41.882507
+15	1	512	0	Give all 4 magazines to Doctor Land so that he can find a way to build more.\r\n	\N	603	0	4	f	4	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:23:41.883921	2021-09-04 04:23:41.883921
+\.
+
+
+--
+-- Data for Name: contracts; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.contracts (id, c_vnum, c_description, c_title, created_at, updated_at) FROM stdin;
+5	1	Good evening, soldier. According to recent advances in our {yel}TRITON{/yel} sponsored laboratory a new kind of ammunition is being built.\r\n\r\nThe blueprint for this ammunition contains heavy amounts of radioactive isotopes from recently spent Uranium. Find the scientist in the armory to east of {blu}COBALT{/blu} Main hallway. He will give you the magazines he has made so far. Once you've acquired the magazines, I will give you further instructions over radio.\r\n{yel}Here are the contract instructions:{/yel}\r\n{yel}1) {grn}Find {blu}Doctor Land{/blu} {grn}in the Gear Room near the shooting range.{/grn}\r\n{yel}2) {grn}Find the TRITON Labs scientist. He will give you the magazines you need.\r\n{yel}3) {grn}Take the magazines to {blu}Doctor Land{/blu}.\r\n{yel}4) {grn}Talk to {blu}Doctor Land{/blu} on next steps...\r\n	Experimental {yel}High Velocity{/yel} magazines.	2021-09-04 04:23:41.876221	2021-09-04 04:23:41.876221
+\.
+
+
+--
+-- Data for Name: event_messages; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.event_messages (id, em_msg) FROM stdin;
+\.
+
+
+--
+-- Data for Name: extra_description; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.extra_description (id, obj_fk_id, extra_keyword, extra_description) FROM stdin;
+\.
+
+
+--
+-- Data for Name: friendly_reminders; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.friendly_reminders (id, fr_msg) FROM stdin;
+\.
+
+
+--
+-- Data for Name: hq_locations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hq_locations (id, hq_affiliation, hq_room_vnum, hq_level, hq_basic_mob_count, hq_advanced_mob_count, hq_elite_mob_count, hq_suv_count, hq_sedan_count, hq_armored_van_count, hq_replenish_ticks, hq_replenish_basic_count, hq_replenish_advanced_count, hq_replenish_elite_count, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: integral_object; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.integral_object (object_id, object_room_vnum, object_type, object_vnum, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: karma; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.karma (karma_id, karma_player_id, karma_alignment, karma_cold_blooded_index, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mini_game; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.mini_game (game_id, game_type, game_vnum, game_name, game_action, game_room_vnum, game_order, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mini_gunner_sentinel; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.mini_gunner_sentinel (id, mgs_mob_vnum, mgs_face_direction, mgs_room_vnum) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mob_equipment; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.mob_equipment (id, meq_profile_name, meq_vnum, meq_light, meq_finger_r, meq_finger_l, meq_neck_1, meq_neck_2, meq_body, meq_head, meq_legs, meq_feet, meq_hands, meq_arms, meq_shield, meq_about, meq_waist, meq_wrist_r, meq_wrist_l, meq_wield, meq_hold, meq_secondary, meq_shoulders_l, meq_shoulders_r, meq_backpack, meq_goggles, meq_vest_pack, meq_elbow_l, meq_elbow_r, created_at, updated_at) FROM stdin;
+1	triton-scientist	7	\N	\N	\N	\N	\N	armor/plain-white-lab-coat.yml	\N	armor/pale-brown-pants.yml	armor/static-free-shoes.yml	armor/rubber-gloves.yml	\N	\N	\N	\N	\N	\N	\N	gadget/triton-labs-yellow-key-fob.yml	\N	\N	\N	\N	armor/thick-glasses.yml	\N	\N	\N	2021-09-04 04:12:22.241931	2021-09-04 04:12:22.241931
+2	triton-volunteer-patient	8	\N	\N	\N	\N	\N	armor/hospital-gown.yml	\N	\N	armor/hospital-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/improvised-shank.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.247385	2021-09-04 04:12:22.247385
+3	triton-field-surgeon	9	\N	\N	\N	\N	\N	armor/plain-white-lab-coat.yml	\N	armor/pale-brown-pants.yml	armor/static-free-shoes.yml	armor/rubber-gloves.yml	\N	\N	\N	\N	\N	\N	melee/operating-scalpel.yml	\N	\N	\N	\N	\N	armor/operating-goggles.yml	\N	\N	\N	2021-09-04 04:12:22.252503	2021-09-04 04:12:22.252503
+4	doctor-land	6	\N	\N	\N	\N	\N	armor/vulture-pk3-ballistic-vest.yml	\N	armor/heavy-armament-tactical-pants.yml	armor/vulture-pk3-ballistic-boots.yml	armor/forge-xm3-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/ump45-vulture-modded.yml	gadget/ballistics-lab-blue-key-fob.yml	rifle/blackhawk-50cal-pistol.yml	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.26565	2021-09-04 04:12:22.26565
+5	waypoint-ave-car-thief	2	\N	\N	\N	\N	\N	armor/basic-ballistic-vest.yml	armor/baklava.yml	armor/dark-smithies-pants.yml	armor/red-brug-sneakers.yml	melee/brass-knuckles.yml	\N	\N	\N	\N	\N	\N	melee/crowbar.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.295644	2021-09-04 04:12:22.295644
+6	rogue-mp-shotgunner	3	\N	\N	\N	\N	\N	armor/basic-ballistic-vest.yml	\N	armor/mp-enforcer-pants.yml	armor/basic-boots.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/bf-39-shotgun.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.299795	2021-09-04 04:12:22.299795
+7	mp-enforcer	4	\N	\N	\N	\N	\N	armor/basic-ballistic-vest.yml	\N	armor/mp-enforcer-pants.yml	armor/basic-boots.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/hk45.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.320894	2021-09-04 04:12:22.320894
+8	mp-shotgunner	5	\N	\N	\N	\N	\N	armor/basic-ballistic-vest.yml	\N	armor/mp-enforcer-pants.yml	armor/basic-boots.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/bf-39-shotgun.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.326344	2021-09-04 04:12:22.326344
+9	ops-shield-shotgunner	15	\N	\N	\N	\N	\N	armor/basic-ballistic-vest.yml	\N	armor/mp-enforcer-pants.yml	armor/basic-boots.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/bf-39-shotgun.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.331595	2021-09-04 04:12:22.331595
+10	car-thief	10	\N	\N	\N	\N	\N	armor/basic-ballistic-vest.yml	armor/baklava.yml	armor/blue-jeans.yml	armor/plat-basketball-shoes.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	melee/crowbar.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.383806	2021-09-04 04:12:22.383806
+11	petty-thief	11	\N	\N	\N	\N	\N	\N	\N	armor/blue-jeans.yml	armor/plat-basketball-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/cheap-crowbar.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.395097	2021-09-04 04:12:22.395097
+12	kidnapper	12	\N	\N	\N	armor/dark-throne-necklace.yml	\N	armor/leather-trenchcoat.yml	armor/baklava.yml	armor/black-jeans.yml	armor/atom-fade-shoes.yml	armor/brown-leather-gloves.yml	\N	\N	\N	\N	\N	\N	melee/sickening-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.405272	2021-09-04 04:12:22.405272
+13	chaotic-meth-addict	13	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/sickening-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:22.416633	2021-09-04 04:12:22.416633
+16	retail-associate	109	\N	\N	\N	\N	\N	armor/allied-foods-shirt.yml	\N	armor/black-jeans.yml	armor/plain-black-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/retractable-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:23.883086	2021-09-04 04:12:23.883086
+17	shoplifter	110	\N	\N	\N	\N	\N	armor/blue-hoodie.yml	\N	armor/dusty-jeans.yml	armor/sloth-martins.yml	\N	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:23.894169	2021-09-04 04:12:23.894169
+\.
+
+
+--
+-- Data for Name: mob_equipment_map; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, created_at, updated_at) FROM stdin;
+18	600	7	2021-09-04 04:23:26.981479	2021-09-04 04:23:26.981479
+19	601	8	2021-09-04 04:23:26.988068	2021-09-04 04:23:26.988068
+20	602	9	2021-09-04 04:23:26.993713	2021-09-04 04:23:26.993713
+21	603	6	2021-09-04 04:23:27.008422	2021-09-04 04:23:27.008422
+22	406	2	2021-09-04 04:23:27.04276	2021-09-04 04:23:27.04276
+23	407	3	2021-09-04 04:23:27.047159	2021-09-04 04:23:27.047159
+24	500	4	2021-09-04 04:23:27.068704	2021-09-04 04:23:27.068704
+25	501	5	2021-09-04 04:23:27.074152	2021-09-04 04:23:27.074152
+26	502	15	2021-09-04 04:23:27.079717	2021-09-04 04:23:27.079717
+10	100	10	2021-09-04 04:12:22.385266	2021-09-04 04:12:22.385266
+11	101	11	2021-09-04 04:12:22.396441	2021-09-04 04:12:22.396441
+27	102	12	2021-09-04 04:23:27.155622	2021-09-04 04:23:27.155622
+13	103	13	2021-09-04 04:12:22.417965	2021-09-04 04:12:22.417965
+28	104	12	2021-09-04 04:23:27.177327	2021-09-04 04:23:27.177327
+29	105	13	2021-09-04 04:23:27.182288	2021-09-04 04:23:27.182288
+30	109	109	2021-09-04 04:23:27.352124	2021-09-04 04:23:27.352124
+31	110	110	2021-09-04 04:23:27.364886	2021-09-04 04:23:27.364886
+\.
+
+
+--
+-- Data for Name: mob_roam; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.mob_roam (id, mob_virtual_number, room_virtual_number, profile_name) FROM stdin;
+244	601	147	volunteer-patient
+245	601	148	volunteer-patient
+246	601	149	volunteer-patient
+247	601	150	volunteer-patient
+248	601	151	volunteer-patient
+249	601	152	volunteer-patient
+250	601	153	volunteer-patient
+251	601	154	volunteer-patient
+252	601	155	volunteer-patient
+253	601	156	volunteer-patient
+254	407	157	rogue-mp-shotgunner
+255	407	158	rogue-mp-shotgunner
+256	407	159	rogue-mp-shotgunner
+257	407	160	rogue-mp-shotgunner
+258	407	161	rogue-mp-shotgunner
+259	407	162	rogue-mp-shotgunner
+260	407	163	rogue-mp-shotgunner
+261	407	164	rogue-mp-shotgunner
+262	407	165	rogue-mp-shotgunner
+263	407	164	rogue-mp-shotgunner
+264	407	163	rogue-mp-shotgunner
+265	407	162	rogue-mp-shotgunner
+266	407	161	rogue-mp-shotgunner
+267	407	162	rogue-mp-shotgunner
+268	407	163	rogue-mp-shotgunner
+269	407	164	rogue-mp-shotgunner
+270	407	165	rogue-mp-shotgunner
+271	407	164	rogue-mp-shotgunner
+272	407	163	rogue-mp-shotgunner
+273	407	162	rogue-mp-shotgunner
+274	407	161	rogue-mp-shotgunner
+275	407	162	rogue-mp-shotgunner
+276	407	163	rogue-mp-shotgunner
+277	407	164	rogue-mp-shotgunner
+278	501	130	mp-shotgunner
+279	501	131	mp-shotgunner
+280	501	138	mp-shotgunner
+281	501	131	mp-shotgunner
+282	501	231	mp-shotgunner
+283	500	130	mp-enforcer
+284	500	131	mp-enforcer
+285	500	138	mp-enforcer
+286	500	131	mp-enforcer
+287	500	231	mp-enforcer
+288	500	230	mp-enforcer
+289	500	229	mp-enforcer
+290	500	228	mp-enforcer
+291	500	227	mp-enforcer
+292	500	226	mp-enforcer
+293	500	225	mp-enforcer
+294	500	224	mp-enforcer
+295	500	223	mp-enforcer
+296	500	222	mp-enforcer
+297	500	221	mp-enforcer
+298	500	220	mp-enforcer
+299	500	219	mp-enforcer
+300	500	218	mp-enforcer
+301	500	217	mp-enforcer
+302	500	216	mp-enforcer
+303	500	215	mp-enforcer
+304	500	214	mp-enforcer
+305	500	213	mp-enforcer
+306	500	212	mp-enforcer
+307	500	211	mp-enforcer
+308	500	210	mp-enforcer
+309	500	209	mp-enforcer
+310	500	208	mp-enforcer
+311	500	207	mp-enforcer
+312	500	206	mp-enforcer
+313	500	205	mp-enforcer
+314	500	204	mp-enforcer
+315	500	203	mp-enforcer
+316	500	202	mp-enforcer
+317	500	201	mp-enforcer
+318	500	200	mp-enforcer
+319	500	199	mp-enforcer
+320	500	198	mp-enforcer
+321	500	197	mp-enforcer
+322	500	196	mp-enforcer
+323	500	195	mp-enforcer
+324	500	194	mp-enforcer
+325	500	193	mp-enforcer
+326	500	141	mp-enforcer
+327	500	140	mp-enforcer
+328	500	139	mp-enforcer
+329	100	392	car-thief
+330	100	393	car-thief
+331	100	394	car-thief
+332	100	395	car-thief
+333	100	396	car-thief
+334	100	395	car-thief
+335	100	394	car-thief
+336	100	393	car-thief
+337	100	392	car-thief
+338	100	393	car-thief
+339	100	394	car-thief
+340	100	395	car-thief
+341	100	396	car-thief
+342	100	395	car-thief
+343	100	394	car-thief
+344	100	393	car-thief
+345	100	392	car-thief
+346	102	291	kidnapper
+347	102	292	kidnapper
+348	102	293	kidnapper
+349	102	294	kidnapper
+350	102	295	kidnapper
+351	102	329	kidnapper
+352	102	330	kidnapper
+353	102	331	kidnapper
+354	102	330	kidnapper
+355	102	329	kidnapper
+356	102	295	kidnapper
+357	102	296	kidnapper
+358	102	297	kidnapper
+359	102	298	kidnapper
+360	102	299	kidnapper
+361	102	300	kidnapper
+362	102	301	kidnapper
+363	102	316	kidnapper
+364	102	317	kidnapper
+365	102	322	kidnapper
+366	102	323	kidnapper
+367	102	324	kidnapper
+368	102	323	kidnapper
+369	102	322	kidnapper
+370	102	317	kidnapper
+371	102	316	kidnapper
+372	102	301	kidnapper
+373	102	302	kidnapper
+\.
+
+
+--
+-- Data for Name: mob_zone; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.mob_zone (id, zone_virtual_number, mob_virtual_number, room_virtual_number, max_existing) FROM stdin;
+\.
+
 
 --
 -- Data for Name: mobile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description, mob_long_description, mob_description, mob_action_bitvector, mob_affection_bitvector, mob_ability_strength, mob_ability_strength_add, mob_ability_intelligence, mob_ability_wisdom, mob_ability_dexterity, mob_ability_constitution, mob_ability_charisma, mob_alignment, mob_attack_type, mob_level, mob_hitroll, mob_armor, mob_max_hitpoints, mob_max_mana, mob_max_move, mob_gold, mob_exp, mob_load_position, mob_default_position, mob_sex, mob_hitpoints, mob_mana, mob_move, mob_damnodice, mob_damsizedice, mob_damroll, mob_weight, mob_height, mob_class, mob_special_extended_type) FROM stdin;
-1	1	chef  employee	A pissed looking Los  employee	A pissed looking Los  employee	This particular employee looks like he just got out of a federal penitentiary. He's most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.	8	0	25	0	25	0	25	0	25	0	0	0	0	0	250	250	250	5000	0	8	8	0	250	250	250	25	0	0	50	15	0	1
-2	100	dallas gibson gib g grim gibbs	{gld}Dallas {red}'Grim'{/red} {gld}Gibson{/gld}	{gld}Dallas {red}'Grim'{/red} {gld}Gibson the shopkeeper{/gld}	Short of stature and sharp as an eagle, this man may look like an under-powered elderly old man, but underneath that meek exterior lies a fierce beast.	8	0	2	0	2	0	2	0	2	0	0	0	20	0	70	15	30	25000	0	8	8	0	70	15	30	2	0	0	10	4	0	1
-3	101	dallas gibson gib g grim gibbs	{gld}Dallas {red}'Grim'{/red} {gld}Gibson{/gld}	{gld}Dallas {red}'Grim'{/red} {gld}Gibson the shopkeeper{/gld}	Short of stature and sharp as an eagle, this man may look like an under-powered elderly old man, but underneath that meek exterior lies a fierce beast.	8	0	2	0	2	0	2	0	2	0	0	0	0	0	70	15	30	25000	0	0	0	0	70	15	30	0	0	0	10	4	0	1
-11	410	Corporal James Taggart	Corporal James Tagger short description	Corporal James Tagger long description	Corporal James Tagger description	0	0	10	10	10	10	10	10	10	0	0	150	150	150	-1	-1	-1	0	9800	0	0	0	-1	-1	-1	50	50	50	80	9	0	0
-4	103	chef  employee	A pissed looking Los  employee	A pissed looking Los  employee	This particular employee looks like he just got out of a federal penitentiary. He's most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.	8	0	25	0	25	0	25	0	25	0	0	0	20	0	250	250	250	5000	0	0	0	0	250	250	250	0	0	0	50	15	0	2
+COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description, mob_long_description, mob_description, mob_action_bitvector, mob_affection_bitvector, mob_ability_strength, mob_ability_strength_add, mob_ability_intelligence, mob_ability_wisdom, mob_ability_dexterity, mob_ability_constitution, mob_ability_charisma, mob_alignment, mob_attack_type, mob_level, mob_hitroll, mob_armor, mob_max_hitpoints, mob_max_mana, mob_max_move, mob_gold, mob_exp, mob_load_position, mob_default_position, mob_sex, mob_hitpoints, mob_mana, mob_move, mob_damnodice, mob_damsizedice, mob_damroll, mob_weight, mob_height, mob_class, mob_special_extended_type, mob_targets, mob_roam_pattern, mob_ability_electronics, mob_ability_armor, mob_ability_marksmanship, mob_ability_sniping, mob_ability_demolitions, mob_ability_chemistry, mob_ability_weapon_handling, mob_ability_strategy, mob_ability_medical) FROM stdin;
+11	410	Corporal James Taggart	Corporal James Tagger short description	Corporal James Tagger long description	Corporal James Tagger description	0	0	10	10	10	10	10	10	10	0	0	150	150	150	-1	-1	-1	0	9800	0	0	0	-1	-1	-1	50	50	50	80	9	0	0	\N	\N	1	1	1	1	1	1	1	1	1
+1	1	chef  employee	A pissed looking Los  employee	A pissed looking Los  employee	This particular employee looks like he just got out of a federal penitentiary. He's most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.	8	0	25	0	25	0	25	0	25	0	0	0	0	0	250	250	250	5000	0	8	8	0	250	250	250	25	0	0	50	15	0	14	\N	\N	1	1	1	1	1	1	1	1	1
+25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	0	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2
+14	602	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	8	0	185	183	182	0	184	0	85	0	0	80	0	0	8580	815	240	85000	0	0	0	2	8580	815	240	-72	-70	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
+15	603	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	0	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
+17	407	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	25	0	0	5550	565	510	150	0	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	0	0	0	0	0	0	0	0	0
+18	500	A Military Police enforcer	A Military Police enforcer	A Military Police enforcer	A fit military police enforcer. He looks armed.	8	0	25	23	22	0	24	0	10	0	0	10	0	0	250	45	110	50	0	0	0	1	250	45	110	10	6	20	10	5	0	10	\N	\N	10	10	10	10	10	10	10	10	10
+19	501	A Military Police shotgunner	A Military Police shotgunner	A Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	40	0	0	5550	565	510	150	0	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10
+20	502	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	8	0	355	333	132	0	334	0	10	0	0	40	0	0	109550	1565	810	109150	0	0	0	1	109550	1565	810	115	48	340	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10
+2	100	A rugged car thief	A rugged car thief	A rugged car thief	A car thief stalking the area. He is armed.	8	0	18	13	2	0	34	0	0	0	0	10	0	0	350	45	610	750	0	0	0	1	350	45	610	30	6	20	10	5	0	14	\N	\N	15	5	15	8	0	0	18	0	0
+3	101	A petty thief	A petty thief	A petty thief	A petty thief is stalking the area.	8	0	4	4	2	0	4	0	0	0	0	5	0	0	100	15	110	750	0	0	0	1	100	15	110	2	6	10	4	5	0	14	\N	\N	5	4	5	2	0	0	4	0	0
+4	103	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict is manically patrolling the area.	8	0	13	6	2	0	13	0	0	0	0	13	0	0	650	25	310	4123	0	0	0	1	650	25	310	8	25	30	4	5	0	16	\N	\N	0	4	1	1	2	0	8	0	9
+22	104	A shoplifter	A shoplifter	A shoplifter	A shoplifter is stalking the area.	8	0	1	1	1	0	1	0	0	0	0	1	0	0	10	15	60	10	0	0	0	1	10	15	60	1	3	1	4	5	0	15	\N	\N	1	0	1	0	0	0	1	0	0
+23	105	A crackhead	A crackhead	A crackhead	A crackhead is stalking the area.	8	0	1	1	1	0	3	0	0	0	0	2	0	0	35	15	60	10	0	0	0	1	35	15	60	2	6	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0
+24	109	A retail associate	A retail associate	A retail associate	A retail associate tirelessly stocks shelves...	8	0	15	1	2	0	4	0	4	0	0	3	0	0	120	50	60	85	0	0	0	1	120	50	60	2	5	2	10	5	0	19	\N	\N	2	1	1	1	1	0	1	2	1
+12	600	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	0	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
+13	601	A volunteer patient	A volunteer patient	A volunteer patient	A volunteer patient stands here with dazed thousand mile stare.	8	0	185	183	10	0	184	0	1	0	0	15	0	0	880	25	240	0	0	0	0	1	880	25	240	8	90	115	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
+16	406	A suspicious looking car thief	A suspicious looking car thief	A suspicious looking car thief	A car thief equipped with brass knuckles and a crowbar. He is obviously armed.	8	0	25	23	22	0	24	0	10	0	0	15	0	0	150	45	510	950	0	0	0	1	150	45	510	20	16	20	5	5	0	0	\N	\N	0	0	0	0	0	0	0	0	0
+21	102	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	8	0	9	6	2	0	7	0	0	0	0	8	0	0	450	25	110	1123	0	0	0	1	450	25	110	3	25	20	4	5	0	15	\N	\N	0	10	8	3	0	0	5	0	0
 \.
 
 
@@ -1920,7 +4061,7 @@ COPY public.object (id, obj_item_number, obj_flags, obj_name, obj_description, o
 -- Data for Name: object_armor; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.object_armor (armor_id, armor_csv_capabilities, armor_csv_attach_to, armor_thac0, armor_weight_in_lbs, armor_fire_resistance_percent, armor_balistic_resistance_percent, armor_speed_profile, armor_offensive_damage_amount, armor_durability_profile, created_at, updated_at, armor_file, armor_str_type, armor_manufacturer, armor_name, armor_vnum, armor_rarity, armor_type, armor_hp, armor_classification, armor_worth) FROM stdin;
+COPY public.object_armor (armor_id, armor_csv_capabilities, armor_csv_attach_to, armor_thac0, armor_weight_in_lbs, armor_fire_resistance_percent, armor_balistic_resistance_percent, armor_speed_profile, armor_offensive_damage_amount, armor_durability_profile, armor_file, armor_str_type, armor_manufacturer, armor_name, armor_vnum, armor_rarity, armor_type, armor_hp, armor_classification, armor_worth, armor_incendiary_resistance_percent, armor_explosive_resistance_percent, armor_shrapnel_resistance_percent, armor_corrosive_resistance_percent, armor_cryogenic_resistance_percent, armor_radiation_resistance_percent, armor_emp_resistance_percent, armor_shock_resistance_percent, armor_anti_matter_resistance_percent, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -1928,7 +4069,7 @@ COPY public.object_armor (armor_id, armor_csv_capabilities, armor_csv_attach_to,
 -- Data for Name: object_explosive; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.object_explosive (explosive_id, explosive_alternate_explosion_type, explosive_chance_to_injure, explosive_critical_chance, explosive_critical_range, explosive_blast_radius, explosive_damage_per_second, explosive_disorient_amount, explosive_loudness_type, explosive_str_type, explosive_type, explosive_manufacturer, explosive_name, explosive_vnum, explosive_rarity, explosive_file, created_at, updated_at) FROM stdin;
+COPY public.object_explosive (explosive_id, explosive_alternate_explosion_type, explosive_chance_to_injure, explosive_critical_chance, explosive_critical_range, explosive_blast_radius, explosive_damage_per_second, explosive_disorient_amount, explosive_loudness_type, explosive_str_type, explosive_type, explosive_manufacturer, explosive_name, explosive_vnum, explosive_rarity, explosive_file, explosive_incendiary_damage_dice_count, explosive_incendiary_damage_dice_sides, explosive_radiation_damage_dice_count, explosive_radiation_damage_dice_sides, explosive_chemical_damage_dice_count, explosive_chemical_damage_dice_sides, explosive_electric_damage_dice_count, explosive_electric_damage_dice_sides, explosive_armor_penetration_damage_dice_count, explosive_armor_penetration_damage_dice_sides, explosive_damage_dice_count, explosive_damage_dice_sides, explosive_incendiary_damage_percent, explosive_explosive_damage_percent, explosive_shrapnel_damage_percent, explosive_corrosive_damage_percent, explosive_cryogenic_damage_percent, explosive_radiation_damage_percent, explosive_emp_damage_percent, explosive_shock_damage_percent, explosive_anti_matter_damage_percent, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -1956,6 +4097,14 @@ COPY public.object_gadget (gadget_id, gadget_csv_capabilities, gadget_csv_attach
 
 
 --
+-- Data for Name: object_rifle; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.object_rifle (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1, rifle_accuracy_map_2, rifle_accuracy_map_3, rifle_damage_map_0, rifle_damage_map_1, rifle_damage_map_2, rifle_damage_map_3, rifle_ammo_max, rifle_ammo_type, rifle_chance_to_injure, rifle_clip_size, rifle_cooldown_between_shots, rifle_critical_chance, rifle_critical_range, rifle_damage_per_second, rifle_disorient_amount, rifle_headshot_bonus, rifle_max_range, rifle_range_multiplier, rifle_reload_time, rifle_rounds_per_minute, rifle_muzzle_velocity, rifle_effective_firing_range, rifle_str_type, rifle_type, rifle_manufacturer, rifle_name, rifle_vnum, rifle_rarity, rifle_file, rifle_incendiary_damage, rifle_explosive_damage, rifle_shrapnel_damage, rifle_corrosive_damage, rifle_cryogenic_damage, rifle_radioactive_damage, rifle_emp_damage, rifle_shock_damage, rifle_anti_matter_damage, rifle_stat_strength, rifle_stat_intelligence, rifle_stat_wisdom, rifle_stat_dexterity, rifle_stat_constitution, rifle_stat_electronics, rifle_stat_armor, rifle_stat_marksmanship, rifle_stat_sniping, rifle_stat_demolitions, rifle_stat_chemistry, rifle_stat_weapon_handling, rifle_stat_strategy, rifle_stat_medical, created_at, updated_at) FROM stdin;
+\.
+
+
+--
 -- Data for Name: object_weapon; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -1972,12 +4121,21 @@ COPY public.object_weapon (id, obj_fk_id, obj_ammo_max, obj_ammo_type, obj_coold
 -- Data for Name: player; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences) FROM stdin;
-1	foKntnEF3KSXA	0	0	far	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	M	0	0	0	0	0	0	0	0	0	0	0	PC	0	0	0	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304
+COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences, player_practice_sessions) FROM stdin;
+96	$2a$06$OW7y5cqZH/LkEXpnsDmW3OKqxTrAdTKZ0x.BbCbrhzYjlk6oQFtcG	128	0	sniper	1	1	128	10	0	30	22	40	50	37	0	0	10	100	82	0	0	M	10	100	82	48	48	48	9	0	48	0	0	PC	0	1	48	0	2021-09-04 04:25:30.182404	0	2021-09-04 04:25:30.182404	8388848	3
+1	foKntnEF3KSXA	0	0	far	1	1	0	0	0	0	0	0	0	0	6500	0	65000	6500	65000	6500	6500	M	65000	6500	65000	53	52	52	9	1	52	0	0	PC	6500	1	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	1
 \.
-update public.player set player_max_hitpoints=65000,player_max_mana=65000,player_max_move=65000,player_hitpoints=65000,player_mana=65000,player_move=65000,player_damroll=90 where player_name='far';
 
-update public.player set player_ability_strength=6500, player_ability_strength_add=6500, player_ability_intelligence=6500, player_ability_wisdom=6500, player_ability_dexterity=6500, player_ability_constitution=6500, player_ability_charisma=6500, player_ability_alignment=6500, player_attack_type=6500, player_max_hitpoints=6500, player_max_mana=6500, player_max_move=6500, player_gold=6500, player_exp=6500, player_hitpoints=6500, player_mana=6500, player_move=6500, player_damroll=6500, player_class=1, player_damnodice=6500, player_damsizedice=6500, player_level=1, player_hitroll=6500, player_armor=6500 where player_name='far';
+
+--
+-- Data for Name: player_base_ability; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.player_base_ability (pba_id, pba_player_id, pba_str, pba_str_add, pba_intel, pba_wis, pba_dex, pba_con, pba_cha, pba_electronics, pba_armor, pba_marksmanship, pba_sniping, pba_demolitions, pba_chemistry, pba_weapon_handling, pba_strategy, pba_medical, created_at, updated_at) FROM stdin;
+2	96	10	0	30	22	40	50	37	30	17	27	20	5	30	27	30	45	2021-09-04 04:25:30.214342	2021-09-04 04:25:30.214342
+1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
+\.
+
 
 --
 -- Data for Name: player_classes; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -1988,12 +4146,35 @@ COPY public.player_classes (id, pclass_name, pclass_description) FROM stdin;
 
 
 --
+-- Data for Name: player_contract_state; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.player_contract_state (id, pc_player_id, pc_contract_vnum, pc_state_data, created_at, updated_at) FROM stdin;
+\.
+
+
+--
 -- Data for Name: player_flags; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.player_flags (id, player_id, chunk_index, flag_value) FROM stdin;
 \.
 
+
+--
+-- Data for Name: player_object; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.player_object (id, po_player_id, po_type, po_type_id, po_yaml, po_load_type, po_wear_position, po_in_inventory, po_quantity) FROM stdin;
+3	96	7	\N	titan-gauntlets.yml	2	10	0	1
+4	96	7	\N	titan-shin-guards.yml	2	7	0	1
+6	96	7	\N	basic-boots.yml	2	8	0	1
+8	96	7	\N	basic-ballistic-vest.yml	2	5	0	1
+10	96	7	\N	xm-scorpio-tactical-gloves.yml	2	9	0	1
+12	96	1	\N	psg1.yml	2	16	0	1
+13	96	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1
+14	96	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1
+\.
 
 
 --
@@ -2012,23 +4193,2253 @@ COPY public.player_races (id, prace_name, prace_description) FROM stdin;
 \.
 
 
-INSERT INTO public.zone (
-		id,
-    zone_virtual_number,
-    zone_start,
-    zone_end,
-    zone_name,
-    lifespan,
-    reset_mode
-) VALUES (1,1, 128,228, 'Hereford Base', 10, 0);
+--
+-- Data for Name: player_skill_points; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.player_skill_points (id, ps_skill_id, ps_points, ps_player_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: player_skill_usage; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.player_skill_usage (id, ps_player_id, ps_skill_id, ps_usage_count, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: rifle_attachment; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.rifle_attachment (id, rifle_player_id, rifle_data, rifle_position, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: rifle_index; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.rifle_index (id, rifle_filename, rifle_type, created_at, updated_at) FROM stdin;
+1	augpara.yml	smg	2021-09-04 04:12:07.136657	2021-09-04 04:12:07.136657
+2	fmg9.yml	smg	2021-09-04 04:12:07.137141	2021-09-04 04:12:07.137141
+3	mp5.yml	smg	2021-09-04 04:12:07.137541	2021-09-04 04:12:07.137541
+4	mp9.yml	smg	2021-09-04 04:12:07.137923	2021-09-04 04:12:07.137923
+5	p90.yml	smg	2021-09-04 04:12:07.138269	2021-09-04 04:12:07.138269
+6	tar21.yml	smg	2021-09-04 04:12:07.138675	2021-09-04 04:12:07.138675
+7	ump45.yml	smg	2021-09-04 04:12:07.139059	2021-09-04 04:12:07.139059
+8	l96aw.yml	sniper	2021-09-04 04:12:07.139481	2021-09-04 04:12:07.139481
+9	psg1.yml	sniper	2021-09-04 04:12:07.139872	2021-09-04 04:12:07.139872
+10	xm109.yml	sniper	2021-09-04 04:12:07.140248	2021-09-04 04:12:07.140248
+11	belt-fed-minigun.yml	lmg	2021-09-04 04:12:07.140632	2021-09-04 04:12:07.140632
+12	hk21.yml	lmg	2021-09-04 04:12:07.141027	2021-09-04 04:12:07.141027
+13	mk46.yml	lmg	2021-09-04 04:12:07.141378	2021-09-04 04:12:07.141378
+14	czp10.yml	pistol	2021-09-04 04:12:07.141737	2021-09-04 04:12:07.141737
+15	desert-eagle.yml	pistol	2021-09-04 04:12:07.142118	2021-09-04 04:12:07.142118
+16	glock.yml	pistol	2021-09-04 04:12:07.142496	2021-09-04 04:12:07.142496
+17	magnum-revolver.yml	pistol	2021-09-04 04:12:07.142846	2021-09-04 04:12:07.142846
+18	ppk.yml	pistol	2021-09-04 04:12:07.143192	2021-09-04 04:12:07.143192
+19	famas.yml	ar	2021-09-04 04:12:07.143541	2021-09-04 04:12:07.143541
+20	g36c.yml	ar	2021-09-04 04:12:07.143885	2021-09-04 04:12:07.143885
+21	m16a4.yml	ar	2021-09-04 04:12:07.144361	2021-09-04 04:12:07.144361
+22	m3.yml	ar	2021-09-04 04:12:07.1447	2021-09-04 04:12:07.1447
+23	m4.yml	ar	2021-09-04 04:12:07.145054	2021-09-04 04:12:07.145054
+24	scarh.yml	ar	2021-09-04 04:12:07.145397	2021-09-04 04:12:07.145397
+25	552-commando.yml	ar	2021-09-04 04:12:07.145735	2021-09-04 04:12:07.145735
+26	aug-a3.yml	ar	2021-09-04 04:12:07.146069	2021-09-04 04:12:07.146069
+27	saiga12.yml	shotgun	2021-09-04 04:12:07.146463	2021-09-04 04:12:07.146463
+28	sasg12.yml	shotgun	2021-09-04 04:12:07.146818	2021-09-04 04:12:07.146818
+29	uzi.yml	mp	2021-09-04 04:12:07.147184	2021-09-04 04:12:07.147184
+\.
+
+
+--
+-- Data for Name: rifle_instance; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1, rifle_accuracy_map_2, rifle_accuracy_map_3, rifle_damage_map_0, rifle_damage_map_1, rifle_damage_map_2, rifle_damage_map_3, rifle_rarity, rifle_file, rifle_str_type, rifle_type, rifle_manufacturer, rifle_name, rifle_vnum, rifle_ammo_max, rifle_ammo_type, rifle_chance_to_injure, rifle_clip_size, rifle_cooldown_between_shots, rifle_critical_chance, rifle_critical_range, rifle_damage_per_second, rifle_disorient_amount, rifle_headshot_bonus, rifle_max_range, rifle_range_multiplier, rifle_reload_time, rifle_rounds_per_minute, rifle_muzzle_velocity, rifle_effective_firing_range, rifle_damage_dice_count, rifle_damage_dice_sides, rifle_incendiary_damage, rifle_explosive_damage, rifle_shrapnel_damage, rifle_corrosive_damage, rifle_cryogenic_damage, rifle_radioactive_damage, rifle_emp_damage, rifle_shock_damage, rifle_anti_matter_damage, rifle_stat_strength, rifle_stat_intelligence, rifle_stat_wisdom, rifle_stat_dexterity, rifle_stat_constitution, rifle_stat_electronics, rifle_stat_armor, rifle_stat_marksmanship, rifle_stat_sniping, rifle_stat_demolitions, rifle_stat_chemistry, rifle_stat_weapon_handling, rifle_stat_strategy, rifle_stat_medical, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: rifle_placements; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.rifle_placements (id, ip_room_vnum, ip_container_selector, ip_rifle_id, created_at, updated_at) FROM stdin;
+\.
 
 
 --
 -- Data for Name: room; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.room (room_number, zone, sector_type, name, description, ex_keyword, ex_description, light, room_flag, id) FROM stdin;
-128	1	18	MP5 repo	The ebb and flow of traffic has worn down the tile floor here. You can't help but notice the pungent chemical smell that permeates every corner of this dingy hideout. The owner obviously doesn't care for appearances, but you can't really blame him. The idea of a clean weapons shop is a foreign concept. The very mention of the subject of cleanliness is instantly dismissed. A heavily armored door to the east is likely where all official business is conducted behind the scenes. You notice the stock loss prevention camera jutting from the corner of the room which has the best angle on every corner of the room.\r\n	\N	\N	0	16	20
+COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyword, ex_description, light, room_flag, nickname) FROM stdin;
+2	131	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	cofobcenter
+3	132	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
+4	133	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
+5	134	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
+6	135	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
+7	136	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
+8	137	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
+9	138	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
+10	139	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
+11	140	1	21	{blu}C.O.F.O.B:{/blu} - Southeast Corner	The hallway reaches north and south from here. A reduced temperature is like the result of the industrial grade internal air cooling system. It isn't much, but it beats the outside desert climate. The promise of coffee entices you, but you can't tell which direction it's coming from. \r\n	\N	\N	1	0	\N
+12	141	1	21	{blu}C.O.F.O.B:{/blu} - Armory Entrance	A cool draft moves through the bottom crack of the door to the Armory Entrance to the East.It seems the quality of air drastically differs depending on the people in charge of each department. The Sign above the door says in bold letters "Armory".\r\n	\N	\N	1	0	cofob-armory-entrance
+13	142	1	21	{blu}C.O.F.O.B:{/blu} - Armory	As you push through to the East, you notice a few recruits putting on standard issue gear. They ignore you as you take a look around. To the East is the buy station where you can make your purchases.\r\n	\N	\N	1	0	\N
+14	143	1	21	{blu}C.O.F.O.B:{/blu} - Armory Buy Station	You see an armor locker with standard issue equipment. Behind the counter is a {gld}list{/gld} of all the various items for sell. You can spend {grn}MP{/grn} (Mission Points) here to upgrade your loadout. To buy something, simply type {grn}"Buy ID"{/grn} where ID is the number next to the item you want in the output of the list command.\r\n	\N	\N	1	0	\N
+15	144	1	21	{blu}C.O.F.O.B:{/blu} - Armory Storage Room North	Standard issue armor and defensive utilities line the walls; none of which you can take as they are behind metal cages. There is, however, an Armor locker here with standard issue gear for anyone to take. \r\n	\N	\N	1	0	\N
+16	145	1	21	{blu}C.O.F.O.B:{/blu} - Armory Storage Room South	You enter the storage room and immediately notice the strong scent of sand, grime, and gasoline. A few bits of ammunition are strewn across the floor haphazardly. The Armory personnell either recently dug through the piles of ammo crates, or nobody bothered to clean this mess up. There seems to be a computer terminal on the East wall.\r\n	\N	\N	1	0	\N
+17	146	1	21	{blu}C.O.F.O.B:{/blu} - Armory - Secluded Room	A musty room with several freshly smoked cigars laying inside a deep ash tray the size of your fist. Someone was loading a Mossberg shotgun and haphazardly left it laying upon the couch as if it were a visitor. The T.V. appears to still be warm. Whoever was here is likely coming back soon. You have a feeling whoever was here will be back shortly.\r\n	\N	\N	1	0	\N
+18	147	1	21	{blu}C.O.F.O.B:{/blu} - Armory - Secluded Room - Weapons Cache	@FILL_ME@\r\n	\N	\N	1	0	\N
+19	148	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N
+21	150	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N
+22	151	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N
+24	153	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N
+25	154	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+26	155	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+27	156	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-basement-2
+28	157	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+29	158	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+30	159	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+31	160	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+32	161	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+33	162	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+34	163	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+35	164	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+36	165	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+37	166	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+38	167	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+39	168	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+40	169	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-basement-2
+41	170	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+42	171	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
+43	172	1	21	{blu}C.O.F.O.B:{/blu} - Basement 2 - Breach charges	@FILL_ME@\r\n	\N	\N	1	0	\N
+44	173	1	21	{blu}C.O.F.O.B:{/blu} - Basement 2 - Breach charges	@FILL_ME@\r\n	\N	\N	1	0	\N
+45	174	1	0	name	description	\N	\N	1	0	\N
+46	175	1	0	name	description	\N	\N	1	0	\N
+47	176	1	0	name	description	\N	\N	1	0	\N
+49	178	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
+50	179	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
+51	180	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1A	@FILL_ME@\r\n	\N	\N	1	0	\N
+52	181	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1A	@FILL_ME@\r\n	\N	\N	1	0	\N
+53	182	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1B	@FILL_ME@\r\n	\N	\N	1	0	\N
+54	183	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1B	@FILL_ME@\r\n	\N	\N	1	0	\N
+55	184	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
+56	185	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
+57	186	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2A	@FILL_ME@\r\n	\N	\N	1	0	\N
+58	187	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2A	@FILL_ME@\r\n	\N	\N	1	0	\N
+59	188	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2B	@FILL_ME@\r\n	\N	\N	1	0	\N
+60	189	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2B	@FILL_ME@\r\n	\N	\N	1	0	\N
+61	190	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
+62	191	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
+63	192	1	0	Waypoint North	@FILL_ME@\r\n	\N	\N	1	0	waypoint-car-garage-north-1
+64	193	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+65	194	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+66	195	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+67	196	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+68	197	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+69	198	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+71	200	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+72	201	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+73	202	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	cofob-mess-hall-upstairs
+74	203	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+75	204	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+76	205	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+77	206	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+78	207	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	cofob-stairs-A
+79	208	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+80	209	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+81	210	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+82	211	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+83	212	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+85	214	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+86	215	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+87	216	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+88	217	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+89	218	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+90	219	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+91	220	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+92	221	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+93	222	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+94	223	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+95	224	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Atop the stairs	The floor deviates from the other rooms in that it is made up of a reinforced steel grating. The choice for such a floor remains a mystery. The door to the west leads to the stairs that will take you to the underground portion of the base.\r\n	\N	\N	1	0	cofob-west-atop-stairs
+96	225	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Atop the stairs	The floor deviates from the other rooms in that it is made up of a reinforced steel grating. The choice for such a floor remains a mystery. The door to the west leads to the stairs that will take you to the underground portion of the base.\r\n	\N	\N	1	0	\N
+97	226	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+98	227	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+100	229	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+101	230	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+102	231	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	cofob-bind-to-center
+103	232	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N
+104	233	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N
+105	234	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N
+106	235	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N
+107	236	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+108	237	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	cofob-secondfloor-center
+109	238	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+110	239	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+111	240	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+112	241	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+113	242	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+114	243	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
+115	244	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
+116	245	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
+117	246	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
+118	247	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
+119	248	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
+120	249	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
+121	250	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
+122	251	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
+123	252	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
+124	253	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+125	254	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+126	255	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+127	256	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+130	259	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
+131	260	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
+132	261	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
+134	263	1	0	{blu}C.O.F.O.B:{/blu} - Server Room 1A	It's noisy and loud in here. The rack mounted servers are fervently whirring under the immense workloads. The ceiling is a grate with a large fan behind it. A complex looking locking mechanism protects rack mounted servers here. \r\n	\N	\N	1	0	\N
+135	264	1	0	{blu}C.O.F.O.B:{/blu} - Server Room 1B	Wall to wall rack mounted servers take up the entirety of this room. There is almost nowhere to stand. A haphazard array of ethernet cables snake chaotically to and from each server. Maintaining this must be a headache. \r\n	\N	\N	1	0	\N
+136	265	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+137	266	1	0	{blu}C.O.F.O.B:{/blu} - Gear room	A huge weapons rack is attached to the wall here. The rack contains rifles, pistols, ammunition, explosives, and breach charges.\r\n	\N	\N	1	0	cofob-gear-room
+138	267	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
+139	268	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
+140	269	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
+141	270	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
+142	271	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
+143	272	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
+144	273	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
+145	274	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Eastern DMZ corridor	Dirt stretches to the east towards a heavy containment door. Behind that door must be where you can leave the building. The corridor is dimly lit. The air is dry and smells of a combination of sweat and gasoline for some reason.\r\n	\N	\N	1	0	\N
+146	275	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Eastern DMZ corridor	Dirt stretches to the east towards a heavy containment door. Behind that door must be where you can leave the building. The corridor is dimly lit. The air is dry and smells of a combination of sweat and gasoline for some reason.\r\n	\N	\N	1	0	\N
+147	276	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Eastern DMZ corridor	Dirt stretches to the east towards a heavy containment door. Behind that door must be where you can leave the building. The corridor is dimly lit. The air is dry and smells of a combination of sweat and gasoline for some reason.\r\n	\N	\N	1	0	\N
+148	277	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Fenced off DMZ corridor	Beneath the floor here is an entrance to an underground tunnel. The only problem is that you can't seem to get it to move. To the east is the door to the outside world.A falcon engraving is above the door frame to the east.\r\n	\N	\N	1	0	\N
+149	278	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	abbotstart
+151	280	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+152	281	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+153	282	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+154	283	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+155	284	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+156	285	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+157	286	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+158	287	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+159	288	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+160	289	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	abbot-market-east-divergence
+161	290	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+162	291	1	0	Market Apartments - East entrance	An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You'd be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.\r\n	\N	\N	1	0	\N
+163	292	1	0	Market Apartments - East entrance	An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You'd be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.\r\n	\N	\N	1	0	\N
+164	293	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
+165	294	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
+166	295	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
+167	296	1	0	Market Apartments - Building 3	You see a two story apartment building with 8 units. Each apartment is a corner unit, but neither home could possibly be more than a studio unit. A few of the doors are closed, which you find peculiar. There can't possibly be anyone living there. Right?\r\n	\N	\N	1	0	\N
+168	297	1	0	Market Apartments - Stairs	Before you lie the stairs that will help you reach the second floor of building 3. The handrails are extremely hot to the touch due to baking here under the steady gaze of the sun over your shoulder.\r\n	\N	\N	1	0	\N
+169	298	1	0	Market Apartments - Stairs	Before you lie the stairs that will help you reach the second floor of building 3. The handrails are extremely hot to the touch due to baking here under the steady gaze of the sun over your shoulder.\r\n	\N	\N	1	0	\N
+171	300	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+172	301	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+173	302	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+174	303	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+175	304	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+176	305	1	0	Market Apartments - Building 3 - Unit 301	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
+177	306	1	0	Market Apartments - Building 3 - Unit 301	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
+178	307	1	0	Market Apartments - Building 3 - Unit 301 - Master Bedroom	A D.I.Y. home stove sits in the middle of the room. Aside from that, there's nothing to look at. The carpet has been pulled up in places. The walls are covered with massive holes and random burn marks.\r\n	\N	\N	1	0	\N
+179	308	1	0	Market Apartments - Building 3 - Unit 301 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N
+180	309	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+181	310	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+182	311	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+184	313	1	0	Market Apartments - Building 3 - Unit 303	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
+185	314	1	0	Market Apartments - Building 3 - Unit 303 - Master Bedroom	undefined\r\n	\N	\N	1	0	\N
+186	315	1	0	Market Apartments - Building 3 - Unit 303 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N
+187	316	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+188	317	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+189	318	1	0	Market Apartments - Building 3 - Unit 305	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
+190	319	1	0	Market Apartments - Building 3 - Unit 305	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
+191	320	1	0	Market Apartments - Building 3 - Unit 305 - Master Bedroom	undefined\r\n	\N	\N	1	0	\N
+192	321	1	0	Market Apartments - Building 3 - Unit 305 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N
+193	322	1	0	name	description	\N	\N	1	0	\N
+194	323	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+197	326	1	0	Market Apartments - Building 3 - Unit 307	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
+198	327	1	0	Market Apartments - Building 3 - Unit 307 - Master Bedroom	undefined\r\n	\N	\N	1	0	\N
+199	328	1	0	Market Apartments - Building 3 - Unit 307 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N
+200	329	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
+201	330	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
+202	331	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
+203	332	1	0	Market Apartments - Building 2	Building 1 is a two story building with 8 units with the added addition of an exercise room and what looks like the property manager's office. Both the exercise room and the office look surprisingly intact. You notice lots of fresh footprints to and from building 1 which disappear into the destruction of building 2. Despite the abandoned nature of the complex as a whole, someone is still finding use for these units.\r\n	\N	\N	1	0	\N
+204	333	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N
+205	334	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N
+206	335	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N
+207	336	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N
+208	337	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N
+209	338	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Descending the stairs	fill me\r\n	\N	\N	1	0	\N
+210	339	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Descending the stairs	fill me\r\n	\N	\N	1	0	\N
+211	340	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
+212	341	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
+213	342	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
+214	343	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
+215	344	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
+216	345	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
+217	346	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
+218	347	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+219	348	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+20	128	1	18	MP5 repo	Feeling over burdened by money?	\N	\N	0	16	\N
+1	130	1	21	{blu}COBALT:{/blu} {grn}Forward Operating Base{/grn} - Main Hallway	COBALT Air Force base. Ground zero for basic training. All initiates must follow rules and guidelines in your New Recruit handbook. Proceed {grn}North{/grn} recruit!\r\n	\N	\N	1	0	\N
+232	149	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N
+23	152	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N
+48	177	1	21	{blu}C.O.F.O.B:{/blu} - Basement 2 - Waypoint Avenue North Exit	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-waypoint-avenue-exit
+70	199	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Exit	Before you is a sturdy metal door that prevents the outside elements from making their way inside. The door simply says {yel}Eastern Exit{/yel}. The air is less cool as the corridor leading to the east lacks the sufficient air flow. There are no ventilation shafts leading to the east, but you can see through the tempered glass window on the door that a few military police are gaurding the exit to the city outside. \r\n	\N	\N	1	0	eastexit
+84	213	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+99	228	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
+128	257	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+221	350	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+222	351	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+223	352	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+224	353	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+225	354	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+226	355	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+227	356	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+228	357	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+229	358	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+230	359	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+231	360	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+129	258	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
+133	262	1	0	{blu}C.O.F.O.B:{/blu} - Commons area	A comfy looking couch and recliner welcome you to the engineering commons area. Three television screens mounted on the west wall display various graphs and statistics. A ping pong table is in the center of the room. Two large refridgerators are humming quietly in the corner. The north wall consists of large one-way tinted windows that overlook the training fields below. To the east is the entrance to server room 1B.\r\n	\N	\N	1	0	cofob-engineering-commons
+150	279	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
+170	299	1	0	Market Apartments - Stairs	Before you lie the stairs that will help you reach the second floor of building 3. The handrails are extremely hot to the touch due to baking here under the steady gaze of the sun over your shoulder.\r\n	\N	\N	1	0	\N
+183	312	1	0	Market Apartments - Building 3 - Unit 303	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
+195	324	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
+196	325	1	0	Market Apartments - Building 3 - Unit 307	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
+220	349	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
+233	361	1	0	{blu}Crenshaw{/blu} Highway overpass	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	crenshaw-overpass-start
+234	362	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+235	363	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+236	364	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+237	365	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N
+238	366	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N
+239	367	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N
+240	368	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N
+241	369	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N
+242	370	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N
+243	371	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+244	372	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+340	468	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	campo-conrad-drive-intersection
+245	373	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+246	374	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+247	375	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+248	376	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+249	377	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+250	378	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+251	379	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+252	380	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+253	381	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+254	382	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+255	383	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+256	384	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+257	385	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+258	386	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+259	387	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+260	388	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+261	389	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+262	390	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+263	391	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+264	392	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+265	393	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+266	394	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+267	395	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+268	396	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+269	397	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+270	398	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+271	399	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+272	400	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	crenshaw-northern-shipping-entrance
+273	401	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N
+274	402	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N
+275	403	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	shipyard-row-a
+276	404	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+277	405	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+278	406	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+279	407	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+280	408	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+281	409	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+282	410	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+283	411	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+284	412	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+285	413	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+286	414	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+287	415	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
+288	416	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+289	417	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+290	418	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+291	419	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+292	420	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+293	421	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+294	422	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+295	423	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+441	569	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
+296	424	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+297	425	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+298	426	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+299	427	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+300	428	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+301	429	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+302	430	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+303	431	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+304	432	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+305	433	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+306	434	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+307	435	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+308	436	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+309	437	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+310	438	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+311	439	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+312	440	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+313	441	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+314	442	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+315	443	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+316	444	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+317	445	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
+318	446	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N
+319	447	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N
+320	448	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N
+321	449	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N
+322	450	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
+323	451	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
+324	452	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
+325	453	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
+326	454	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
+327	455	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
+328	456	1	0	{blu}La Mesa{/blu} Kenwood Drive Intersection	You can take a left or right and you would be on Kenwood Drive. Go straight ahead and you can get back on Highway 94 East.\r\n	\N	\N	1	0	kenwood-drive-intersection
+329	457	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
+330	458	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
+331	459	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
+332	460	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
+333	461	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
+334	462	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
+335	463	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
+336	464	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	kenwood-drive-campo-road
+337	465	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N
+338	466	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N
+339	467	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N
+341	469	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+342	470	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+343	471	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+344	472	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+345	473	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+346	474	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+347	475	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+348	476	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+349	477	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+350	478	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+351	479	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+352	480	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+353	481	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+354	482	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+355	483	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+356	484	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+357	485	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+358	486	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+359	487	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+360	488	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+361	489	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+362	490	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+363	491	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+364	492	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
+365	493	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	campo-back-alley-church-entrance
+366	494	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	\N
+367	495	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	\N
+368	496	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	saint-vale-nw-parking-lot
+369	497	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+370	498	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+371	499	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+372	500	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+373	501	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+374	502	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+375	503	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+376	504	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+377	505	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+378	506	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+379	507	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+380	508	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	saint-vale-west-entrance
+381	509	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+382	510	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+383	511	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+384	512	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+385	513	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+386	514	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+387	515	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+388	516	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+389	517	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+390	518	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+391	519	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+392	520	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+393	521	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+394	522	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+395	523	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+396	524	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
+442	570	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
+397	525	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
+398	526	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
+399	527	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
+400	528	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
+401	529	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
+402	530	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
+403	531	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
+404	532	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
+405	533	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
+406	534	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	saint-vale-rear-east
+407	535	1	0	{blu}Saint Vale Church{/blu} Inside - Bathroom Hall	Oddly enough, this hallway is not air conditioned. The male bathroom is just to the west and the female bathroom is to the east.\r\n	\N	\N	1	0	\N
+408	536	1	0	{blu}Saint Vale Church{/blu} Inside - Bathroom Hall	Oddly enough, this hallway is not air conditioned. The male bathroom is just to the west and the female bathroom is to the east.\r\n	\N	\N	1	0	\N
+409	537	1	0	{blu}Saint Vale Church{/blu} Inside - Male Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N
+410	538	1	0	{blu}Saint Vale Church{/blu} Inside - Male Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N
+411	539	1	0	{blu}Saint Vale Church{/blu} Inside - Female Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N
+412	540	1	0	{blu}Saint Vale Church{/blu} Inside - Female Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N
+413	541	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
+443	571	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
+414	542	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
+415	543	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
+416	544	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
+417	545	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
+418	546	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
+419	547	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
+420	548	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
+421	549	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
+422	550	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
+423	551	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
+424	552	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
+425	553	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	saint-vale-altar
+426	554	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+427	555	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+428	556	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+429	557	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+430	558	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+431	559	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+432	560	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+433	561	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+434	562	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+435	563	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+436	564	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+437	565	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
+438	566	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
+439	567	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
+440	568	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
+444	572	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
+445	573	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
+446	574	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Entrance	A large green and white sign looms above your head. {grn}Allied Foods{/grn} is the main food source for the local community. It's central location is within walking distance for most of the residents.\r\n	\N	\N	1	0	\N
+447	575	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Carts	Four rows of black shopping carts are off to the left. The automatic door in front of you gives you a nice gust of cool air-conditioned air.\r\n	\N	\N	1	0	\N
+448	576	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N
+449	577	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N
+450	578	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	allied-foods-pharmacy-bend
+451	579	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N
+452	580	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N
+453	581	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N
+454	582	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
+455	583	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
+456	584	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
+457	585	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
+458	586	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
+459	587	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
+460	588	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
+461	589	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	allied-foods-shower-end
+462	590	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
+463	591	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
+464	592	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end
+465	593	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+466	594	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+467	595	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+468	596	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+469	597	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+470	598	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+471	599	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+472	600	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	allied-foods-alcohol-end
+473	601	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
+474	602	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
+475	603	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end
+476	604	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+477	605	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+478	606	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+479	607	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+480	608	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+481	609	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+482	610	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+483	611	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	allied-foods-alcohol-end2
+484	612	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
+485	613	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
+486	614	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end2
+487	615	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+488	616	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+489	617	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+490	618	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+491	619	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+492	620	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+493	621	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+494	622	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	allied-foods-alcohol-end3
+495	623	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
+496	624	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
+497	625	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end3
+498	626	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+499	627	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+500	628	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+501	629	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+502	630	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+503	631	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+504	632	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+505	633	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
+506	634	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
+507	635	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
+508	636	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end4
+509	637	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+510	638	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+511	639	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+512	640	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+513	641	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+514	642	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+515	643	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+516	644	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+517	645	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+518	646	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+519	647	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+520	648	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+521	649	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+522	650	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+523	651	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+524	652	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+525	653	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-isle
+526	654	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+527	655	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+528	656	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+529	657	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-1
+530	658	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+531	659	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+532	660	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+533	661	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-east-1
+534	662	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+535	663	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+536	664	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-2
+537	665	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+538	666	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+539	667	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-east-tie
+540	668	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+541	669	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+542	670	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+543	671	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-3
+544	672	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+545	673	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+546	674	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+547	675	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-west-1
+548	676	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+549	677	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+550	678	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-4
+551	679	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+552	680	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
+553	681	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-5
+554	682	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-spawn
+\.
+
+
+--
+-- Data for Name: room_direction_data; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.room_direction_data (id, room_number, exit_direction, general_description, keyword, exit_info, exit_key, to_room) FROM stdin;
+576	128	0	general_description	keyword	1	0	130
+577	130	0	general_description	keyword	1	0	131
+578	130	2	general description	keyword	1	0	128
+579	131	1	general_description	keyword	1	0	138
+580	131	2	general description	keyword	1	0	130
+581	131	3	general description	keyword	1	0	231
+582	132	1	general description	keyword	1	0	131
+583	132	3	general_description	keyword	1	0	230
+584	133	1	general description	keyword	1	0	132
+585	133	3	general_description	keyword	1	0	229
+586	134	1	general description	keyword	1	0	133
+587	134	3	general_description	keyword	1	0	228
+588	135	1	general description	keyword	1	0	134
+589	135	3	general_description	keyword	1	0	227
+590	136	1	general description	keyword	1	0	135
+591	136	3	general_description	keyword	1	0	226
+592	137	0	general_description	keyword	1	0	225
+593	137	1	general description	keyword	1	0	136
+594	138	1	general_description	keyword	1	0	139
+595	138	3	general description	keyword	1	0	131
+596	139	0	general_description	keyword	1	0	140
+597	139	3	general description	keyword	1	0	138
+598	140	0	general_description	keyword	1	0	141
+599	140	2	general description	keyword	1	0	139
+600	141	0	general_description	keyword	1	0	193
+601	141	1	general_description	keyword	1	0	142
+602	141	2	general description	keyword	1	0	140
+603	142	1	general_description	keyword	1	0	143
+604	142	3	general description	keyword	1	0	141
+605	143	0	general_description	keyword	1	0	144
+606	143	1	general_description	keyword	1	0	146
+607	143	2	general_description	keyword	1	0	145
+608	143	3	general description	keyword	1	0	142
+609	144	2	general description	keyword	1	0	143
+610	145	0	general description	keyword	1	0	143
+611	146	1	general_description	keyword	1	0	147
+612	146	3	general description	keyword	1	0	143
+613	147	3	general description	keyword	1	0	146
+614	147	5	general_description	keyword	1	0	148
+615	148	1	general_description	keyword	1	0	149
+616	148	4	general description	keyword	1	0	147
+617	150	3	general description	keyword	1	0	149
+618	150	5	general_description	keyword	1	0	151
+619	151	1	general_description	keyword	1	0	152
+620	151	4	general description	keyword	1	0	150
+621	152	1	general_description	keyword	1	0	153
+622	152	3	general description	keyword	1	0	151
+623	153	3	general description	keyword	1	0	152
+624	153	5	general_description	keyword	1	0	154
+625	154	1	general_description	keyword	1	0	155
+626	154	4	general description	keyword	1	0	153
+627	155	1	general_description	keyword	1	0	156
+628	155	3	general description	keyword	1	0	154
+629	156	2	general_description	keyword	1	0	157
+630	156	3	general description	keyword	1	0	155
+631	157	0	general description	keyword	1	0	156
+632	157	2	general_description	keyword	1	0	158
+633	158	0	general description	keyword	1	0	157
+634	158	2	general_description	keyword	1	0	159
+635	159	0	general description	keyword	1	0	158
+636	159	2	general_description	keyword	1	0	160
+637	160	0	general description	keyword	1	0	159
+638	160	2	general_description	keyword	1	0	161
+639	161	0	general description	keyword	1	0	160
+640	161	3	general_description	keyword	1	0	162
+641	162	1	general description	keyword	1	0	161
+642	162	3	general_description	keyword	1	0	163
+643	163	1	general description	keyword	1	0	162
+644	163	3	general_description	keyword	1	0	164
+645	164	1	general description	keyword	1	0	163
+646	164	3	general_description	keyword	1	0	165
+647	165	1	general description	keyword	1	0	164
+648	165	3	general_description	keyword	1	0	166
+649	166	0	general_description	keyword	1	0	167
+650	166	1	general description	keyword	1	0	165
+651	166	2	general_description	keyword	1	0	174
+652	167	0	general_description	keyword	1	0	168
+653	167	2	general description	keyword	1	0	166
+654	168	0	general_description	keyword	1	0	169
+655	168	2	general description	keyword	1	0	167
+656	169	0	general_description	keyword	1	0	170
+657	169	1	general_description	keyword	1	0	172
+658	169	2	general description	keyword	1	0	168
+659	170	0	general_description	keyword	1	0	171
+660	170	2	general description	keyword	1	0	169
+661	171	2	general description	keyword	1	0	170
+662	172	1	general_description	keyword	1	0	173
+663	172	3	general description	keyword	1	0	169
+664	173	3	general description	keyword	1	0	172
+665	174	0	general description	keyword	1	0	166
+666	174	2	general_description	keyword	1	0	175
+667	175	0	general description	keyword	1	0	174
+668	175	3	general_description	keyword	1	0	176
+669	176	1	general description	keyword	1	0	175
+670	176	3	general_description	keyword	1	0	177
+671	177	1	general description	keyword	1	0	176
+672	177	2	general_description	keyword	1	0	178
+673	178	0	general description	keyword	1	0	177
+674	178	2	general_description	keyword	1	0	179
+675	179	0	general description	keyword	1	0	178
+676	179	1	general_description	keyword	1	0	182
+677	179	2	general_description	keyword	1	0	184
+678	179	3	general_description	keyword	1	0	180
+679	180	1	general description	keyword	1	0	179
+680	180	3	general_description	keyword	1	0	181
+681	181	1	general description	keyword	1	0	180
+682	182	1	general_description	keyword	1	0	183
+683	182	3	general description	keyword	1	0	179
+684	183	3	general description	keyword	1	0	182
+685	184	0	general description	keyword	1	0	179
+686	184	2	general_description	keyword	1	0	185
+687	185	0	general description	keyword	1	0	184
+688	185	1	general_description	keyword	1	0	188
+689	185	2	general_description	keyword	1	0	190
+690	185	3	general_description	keyword	1	0	186
+691	186	1	general description	keyword	1	0	185
+692	186	3	general_description	keyword	1	0	187
+693	187	1	general description	keyword	1	0	186
+694	188	1	general_description	keyword	1	0	189
+695	188	3	general description	keyword	1	0	185
+696	189	3	general description	keyword	1	0	188
+697	190	0	general description	keyword	1	0	185
+698	190	2	general_description	keyword	1	0	191
+699	191	0	general description	keyword	1	0	190
+700	191	3	general_description	keyword	1	0	192
+701	192	1	general description	keyword	1	0	191
+702	193	0	general_description	keyword	1	0	194
+703	193	2	general description	keyword	1	0	141
+704	194	0	general_description	keyword	1	0	195
+705	194	2	general description	keyword	1	0	193
+706	195	0	general_description	keyword	1	0	196
+707	195	2	general description	keyword	1	0	194
+708	196	0	general_description	keyword	1	0	197
+709	196	2	general description	keyword	1	0	195
+710	197	0	general_description	keyword	1	0	198
+711	197	2	general description	keyword	1	0	196
+712	198	0	general_description	keyword	1	0	199
+713	198	2	general description	keyword	1	0	197
+714	199	0	general_description	keyword	1	0	200
+715	199	1	general_description	keyword	1	0	274
+716	199	2	general description	keyword	1	0	198
+717	200	0	general_description	keyword	1	0	201
+718	200	2	general description	keyword	1	0	199
+719	201	0	general_description	keyword	1	0	202
+720	201	2	general description	keyword	1	0	200
+721	202	0	general_description	keyword	1	0	203
+722	202	2	general description	keyword	1	0	201
+723	202	3	general_description	keyword	1	0	340
+724	203	0	general_description	keyword	1	0	204
+725	203	1	general_description	keyword	1	0	265
+726	203	2	general description	keyword	1	0	202
+727	204	2	general description	keyword	1	0	203
+728	204	3	general_description	keyword	1	0	205
+729	205	1	general description	keyword	1	0	204
+730	205	3	general_description	keyword	1	0	206
+731	206	1	general description	keyword	1	0	205
+732	206	3	general_description	keyword	1	0	207
+733	207	0	general_description	keyword	1	0	232
+734	207	1	general description	keyword	1	0	206
+735	207	3	general_description	keyword	1	0	208
+736	208	1	general description	keyword	1	0	207
+737	208	3	general_description	keyword	1	0	209
+738	209	1	general description	keyword	1	0	208
+739	209	3	general_description	keyword	1	0	210
+740	210	1	general description	keyword	1	0	209
+741	210	3	general_description	keyword	1	0	211
+742	211	1	general description	keyword	1	0	210
+743	211	3	general_description	keyword	1	0	212
+744	212	1	general description	keyword	1	0	211
+745	212	2	general_description	keyword	1	0	213
+746	213	0	general description	keyword	1	0	212
+747	213	2	general_description	keyword	1	0	214
+748	214	0	general description	keyword	1	0	213
+749	214	2	general_description	keyword	1	0	215
+750	215	0	general description	keyword	1	0	214
+751	215	2	general_description	keyword	1	0	216
+752	216	0	general description	keyword	1	0	215
+753	216	2	general_description	keyword	1	0	217
+754	217	0	general description	keyword	1	0	216
+755	217	2	general_description	keyword	1	0	218
+756	218	0	general description	keyword	1	0	217
+757	218	2	general_description	keyword	1	0	219
+758	219	0	general description	keyword	1	0	218
+759	219	2	general_description	keyword	1	0	220
+760	220	0	general description	keyword	1	0	219
+761	220	2	general_description	keyword	1	0	221
+762	221	0	general description	keyword	1	0	220
+763	221	2	general_description	keyword	1	0	222
+764	222	0	general description	keyword	1	0	221
+765	222	2	general_description	keyword	1	0	223
+766	223	0	general description	keyword	1	0	222
+767	223	2	general_description	keyword	1	0	224
+768	224	0	general description	keyword	1	0	223
+769	224	2	general_description	keyword	1	0	225
+770	224	3	general_description	keyword	1	0	338
+771	225	0	general description	keyword	1	0	224
+772	225	2	general_description	keyword	1	0	226
+773	226	0	general description	keyword	1	0	225
+774	226	1	general_description	keyword	1	0	227
+775	227	1	general_description	keyword	1	0	228
+776	227	3	general description	keyword	1	0	226
+777	228	1	general_description	keyword	1	0	229
+778	228	3	general description	keyword	1	0	227
+779	229	1	general_description	keyword	1	0	230
+780	229	3	general description	keyword	1	0	228
+781	230	1	general_description	keyword	1	0	231
+782	230	3	general description	keyword	1	0	229
+783	231	1	general description	keyword	1	0	131
+784	231	3	general description	keyword	1	0	230
+785	232	2	general description	keyword	1	0	207
+786	232	4	general_description	keyword	1	0	233
+787	233	0	general_description	keyword	1	0	234
+788	233	5	general description	keyword	1	0	232
+789	234	2	general description	keyword	1	0	233
+790	234	4	general_description	keyword	1	0	235
+791	235	0	general_description	keyword	1	0	236
+792	235	5	general description	keyword	1	0	234
+793	236	0	general_description	keyword	1	0	237
+794	236	2	general description	keyword	1	0	235
+795	237	0	general_description	keyword	1	0	243
+796	237	1	general_description	keyword	1	0	253
+797	237	2	general description	keyword	1	0	236
+798	237	3	general_description	keyword	1	0	238
+799	238	1	general description	keyword	1	0	237
+800	238	3	general_description	keyword	1	0	239
+801	239	1	general description	keyword	1	0	238
+802	239	3	general_description	keyword	1	0	240
+803	240	1	general description	keyword	1	0	239
+804	240	3	general_description	keyword	1	0	241
+805	241	1	general description	keyword	1	0	240
+806	241	3	general_description	keyword	1	0	242
+807	242	1	general description	keyword	1	0	241
+808	243	0	general_description	keyword	1	0	244
+809	243	2	general description	keyword	1	0	237
+810	244	1	general_description	keyword	1	0	245
+811	244	2	general description	keyword	1	0	243
+812	244	3	general_description	keyword	1	0	249
+813	245	0	general_description	keyword	1	0	246
+814	245	3	general description	keyword	1	0	244
+815	246	0	general_description	keyword	1	0	247
+816	246	2	general description	keyword	1	0	245
+817	247	0	general_description	keyword	1	0	248
+818	247	2	general description	keyword	1	0	246
+819	248	2	general description	keyword	1	0	247
+820	249	0	general_description	keyword	1	0	250
+821	249	1	general description	keyword	1	0	244
+822	250	0	general_description	keyword	1	0	251
+823	250	2	general description	keyword	1	0	249
+824	251	0	general_description	keyword	1	0	252
+825	251	2	general description	keyword	1	0	250
+826	252	2	general description	keyword	1	0	251
+827	253	1	general_description	keyword	1	0	254
+828	253	3	general description	keyword	1	0	237
+829	254	1	general_description	keyword	1	0	255
+830	254	3	general description	keyword	1	0	253
+831	255	1	general_description	keyword	1	0	256
+832	255	3	general description	keyword	1	0	254
+833	256	0	general_description	keyword	1	0	258
+834	256	1	general_description	keyword	1	0	257
+835	256	3	general description	keyword	1	0	255
+836	257	3	general description	keyword	1	0	256
+837	258	0	general_description	keyword	1	0	259
+838	258	2	general description	keyword	1	0	256
+839	259	0	general_description	keyword	1	0	260
+840	259	1	general_description	keyword	1	0	263
+841	259	2	general description	keyword	1	0	258
+842	260	0	general_description	keyword	1	0	261
+843	260	2	general description	keyword	1	0	259
+844	261	0	general_description	keyword	1	0	262
+845	261	2	general description	keyword	1	0	260
+846	262	1	general_description	keyword	1	0	264
+847	262	2	general description	keyword	1	0	261
+848	263	3	general description	keyword	1	0	259
+849	264	3	general description	keyword	1	0	262
+850	265	1	general_description	keyword	1	0	266
+851	265	3	general description	keyword	1	0	203
+852	266	0	general_description	keyword	1	0	267
+853	266	3	general description	keyword	1	0	265
+854	267	0	general_description	keyword	1	0	268
+855	267	2	general description	keyword	1	0	266
+856	268	0	general_description	keyword	1	0	269
+857	268	1	general_description	keyword	1	0	271
+858	268	2	general description	keyword	1	0	267
+859	268	3	general_description	keyword	1	0	270
+860	268	4	general_description	keyword	1	0	272
+861	268	5	general_description	keyword	1	0	273
+862	269	2	general description	keyword	1	0	268
+863	270	1	general description	keyword	1	0	268
+864	271	3	general description	keyword	1	0	268
+865	272	5	general description	keyword	1	0	268
+866	273	4	general description	keyword	1	0	268
+867	274	1	general_description	keyword	1	0	275
+868	274	3	general description	keyword	1	0	199
+869	275	1	general_description	keyword	1	0	276
+870	275	3	general description	keyword	1	0	274
+871	276	1	general_description	keyword	1	0	277
+872	276	3	general description	keyword	1	0	275
+873	277	1	general_description	keyword	1	0	278
+874	277	3	general description	keyword	1	0	276
+875	278	1	general_description	keyword	1	0	279
+876	278	3	general description	keyword	1	0	277
+877	279	0	general_description	keyword	1	0	280
+878	279	3	general description	keyword	1	0	278
+879	280	0	general_description	keyword	1	0	281
+880	280	2	general description	keyword	1	0	279
+881	281	0	general_description	keyword	1	0	282
+882	281	2	general description	keyword	1	0	280
+883	282	0	general_description	keyword	1	0	283
+884	282	2	general description	keyword	1	0	281
+885	283	0	general_description	keyword	1	0	284
+886	283	2	general description	keyword	1	0	282
+887	284	0	general_description	keyword	1	0	285
+888	284	2	general description	keyword	1	0	283
+889	285	0	general_description	keyword	1	0	286
+890	285	2	general description	keyword	1	0	284
+891	286	0	general_description	keyword	1	0	287
+892	286	2	general description	keyword	1	0	285
+893	287	0	general_description	keyword	1	0	288
+894	287	2	general description	keyword	1	0	286
+895	288	0	general_description	keyword	1	0	289
+896	288	2	general description	keyword	1	0	287
+897	289	0	general_description	keyword	1	0	290
+898	289	2	general description	keyword	1	0	288
+899	290	0	general_description	keyword	1	0	333
+900	290	2	general description	keyword	1	0	289
+901	290	3	general_description	keyword	1	0	291
+902	291	1	general description	keyword	1	0	290
+903	291	3	general_description	keyword	1	0	292
+904	292	0	general_description	keyword	1	0	293
+905	292	1	general description	keyword	1	0	291
+906	293	0	general_description	keyword	1	0	294
+907	293	2	general description	keyword	1	0	292
+908	294	2	general description	keyword	1	0	293
+909	294	3	general_description	keyword	1	0	295
+910	295	0	general_description	keyword	1	0	296
+911	295	1	general description	keyword	1	0	294
+912	295	3	general_description	keyword	1	0	329
+913	296	0	general_description	keyword	1	0	297
+914	296	2	general description	keyword	1	0	295
+915	297	2	general description	keyword	1	0	296
+916	297	4	general_description	keyword	1	0	298
+917	298	0	general_description	keyword	1	0	299
+918	298	5	general description	keyword	1	0	297
+919	299	2	general description	keyword	1	0	298
+920	299	4	general_description	keyword	1	0	300
+921	300	0	general_description	keyword	1	0	301
+922	300	5	general description	keyword	1	0	299
+923	301	1	general_description	keyword	1	0	316
+924	301	2	general description	keyword	1	0	300
+925	301	3	general_description	keyword	1	0	302
+926	302	1	general description	keyword	1	0	301
+927	302	3	general_description	keyword	1	0	303
+928	303	1	general description	keyword	1	0	302
+929	303	3	general_description	keyword	1	0	304
+930	304	0	general_description	keyword	1	0	305
+931	304	1	general description	keyword	1	0	303
+932	304	3	general_description	keyword	1	0	309
+933	305	0	general_description	keyword	1	0	306
+934	305	2	general description	keyword	1	0	304
+935	306	0	general_description	keyword	1	0	307
+936	306	1	general_description	keyword	1	0	308
+937	306	2	general description	keyword	1	0	305
+938	307	2	general description	keyword	1	0	306
+939	308	3	general description	keyword	1	0	306
+940	309	1	general description	keyword	1	0	304
+941	309	3	general_description	keyword	1	0	310
+942	310	1	general description	keyword	1	0	309
+943	310	3	general_description	keyword	1	0	311
+944	311	0	general_description	keyword	1	0	312
+945	311	1	general description	keyword	1	0	310
+946	312	0	general_description	keyword	1	0	313
+947	312	2	general description	keyword	1	0	311
+948	313	0	general_description	keyword	1	0	314
+949	313	1	general_description	keyword	1	0	315
+950	313	2	general description	keyword	1	0	312
+951	314	2	general description	keyword	1	0	313
+952	315	3	general description	keyword	1	0	313
+953	316	1	general_description	keyword	1	0	317
+954	316	3	general description	keyword	1	0	301
+955	317	0	general_description	keyword	1	0	318
+956	317	1	general_description	keyword	1	0	322
+957	317	3	general description	keyword	1	0	316
+958	318	0	general_description	keyword	1	0	319
+959	318	2	general description	keyword	1	0	317
+960	319	0	general_description	keyword	1	0	320
+961	319	1	general_description	keyword	1	0	321
+962	319	2	general description	keyword	1	0	318
+963	320	2	general description	keyword	1	0	319
+964	321	3	general description	keyword	1	0	319
+965	322	1	general_description	keyword	1	0	323
+966	322	3	general description	keyword	1	0	317
+967	323	1	general_description	keyword	1	0	324
+968	323	3	general description	keyword	1	0	322
+969	324	0	general_description	keyword	1	0	325
+970	324	3	general description	keyword	1	0	323
+971	325	0	general_description	keyword	1	0	326
+972	325	2	general description	keyword	1	0	324
+973	326	0	general_description	keyword	1	0	327
+974	326	1	general_description	keyword	1	0	328
+975	326	2	general description	keyword	1	0	325
+976	327	2	general description	keyword	1	0	326
+977	328	3	general description	keyword	1	0	326
+978	329	1	general description	keyword	1	0	295
+979	329	3	general_description	keyword	1	0	330
+980	330	1	general description	keyword	1	0	329
+981	330	3	general_description	keyword	1	0	331
+982	331	0	general_description	keyword	1	0	332
+983	331	1	general description	keyword	1	0	330
+984	332	2	general description	keyword	1	0	331
+985	333	0	general_description	keyword	1	0	334
+986	333	2	general description	keyword	1	0	290
+987	334	0	general_description	keyword	1	0	335
+988	334	2	general description	keyword	1	0	333
+989	335	0	general_description	keyword	1	0	336
+990	335	2	general description	keyword	1	0	334
+991	336	0	general_description	keyword	1	0	337
+992	336	2	general description	keyword	1	0	335
+993	337	2	general description	keyword	1	0	336
+994	338	1	general description	keyword	1	0	224
+995	338	5	general_description	keyword	1	0	339
+996	339	4	general description	keyword	1	0	338
+997	340	1	general description	keyword	1	0	202
+998	340	5	general_description	keyword	1	0	341
+999	341	3	general_description	keyword	1	0	342
+1000	341	4	general description	keyword	1	0	340
+1001	342	1	general description	keyword	1	0	341
+1002	342	3	general_description	keyword	1	0	343
+1003	343	1	general description	keyword	1	0	342
+1004	343	5	general_description	keyword	1	0	344
+1005	344	3	general_description	keyword	1	0	345
+1006	344	4	general description	keyword	1	0	343
+1007	345	1	general description	keyword	1	0	344
+1008	345	3	general_description	keyword	1	0	346
+1009	346	1	general description	keyword	1	0	345
+1010	346	2	general_description	keyword	1	0	347
+1011	347	0	general description	keyword	1	0	346
+1012	347	2	general_description	keyword	1	0	348
+1013	348	0	general description	keyword	1	0	347
+1014	348	1	general_description	keyword	1	0	349
+1015	349	1	general_description	keyword	1	0	350
+1016	349	3	general description	keyword	1	0	348
+1017	350	1	general_description	keyword	1	0	353
+1018	350	2	general_description	keyword	1	0	351
+1019	350	3	general description	keyword	1	0	349
+1020	351	0	general description	keyword	1	0	350
+1021	351	2	general_description	keyword	1	0	352
+1022	352	0	general description	keyword	1	0	351
+1023	353	1	general_description	keyword	1	0	354
+1024	353	3	general description	keyword	1	0	350
+1025	354	1	general_description	keyword	1	0	357
+1026	354	2	general_description	keyword	1	0	355
+1027	354	3	general description	keyword	1	0	353
+1028	355	0	general description	keyword	1	0	354
+1029	355	2	general_description	keyword	1	0	356
+1030	356	0	general description	keyword	1	0	355
+1031	357	1	general_description	keyword	1	0	358
+1032	357	3	general description	keyword	1	0	354
+1033	358	2	general_description	keyword	1	0	359
+1034	358	3	general description	keyword	1	0	357
+1035	359	0	general description	keyword	1	0	358
+1036	359	2	general_description	keyword	1	0	360
+1037	360	0	general description	keyword	1	0	359
+1038	128	0	general_description	keyword	1	0	130
+1039	130	0	general_description	keyword	1	0	131
+1040	130	2	general description	keyword	1	0	128
+1041	131	1	general_description	keyword	1	0	138
+1042	131	2	general description	keyword	1	0	130
+1043	131	3	general description	keyword	1	0	231
+1044	132	1	general description	keyword	1	0	131
+1045	132	3	general_description	keyword	1	0	230
+1046	133	1	general description	keyword	1	0	132
+1047	133	3	general_description	keyword	1	0	229
+1048	134	1	general description	keyword	1	0	133
+1049	134	3	general_description	keyword	1	0	228
+1050	135	1	general description	keyword	1	0	134
+1051	135	3	general_description	keyword	1	0	227
+1052	136	1	general description	keyword	1	0	135
+1053	136	3	general_description	keyword	1	0	226
+1054	137	0	general_description	keyword	1	0	225
+1055	137	1	general description	keyword	1	0	136
+1056	138	1	general_description	keyword	1	0	139
+1057	138	3	general description	keyword	1	0	131
+1058	139	0	general_description	keyword	1	0	140
+1059	139	3	general description	keyword	1	0	138
+1060	140	0	general_description	keyword	1	0	141
+1061	140	2	general description	keyword	1	0	139
+1062	141	0	general_description	keyword	1	0	193
+1063	141	1	general_description	keyword	1	0	142
+1064	141	2	general description	keyword	1	0	140
+1065	142	1	general_description	keyword	1	0	143
+1066	142	3	general description	keyword	1	0	141
+1067	143	0	general_description	keyword	1	0	144
+1068	143	1	general_description	keyword	1	0	146
+1069	143	2	general_description	keyword	1	0	145
+1070	143	3	general description	keyword	1	0	142
+1071	144	2	general description	keyword	1	0	143
+1072	145	0	general description	keyword	1	0	143
+1073	146	1	general_description	keyword	1	0	147
+1074	146	3	general description	keyword	1	0	143
+1075	147	3	general description	keyword	1	0	146
+1076	147	5	general_description	keyword	1	0	148
+1077	148	1	general_description	keyword	1	0	149
+1078	148	4	general description	keyword	1	0	147
+1079	149	1	general_description	keyword	1	0	150
+1080	149	3	general description	keyword	1	0	148
+1081	150	3	general description	keyword	1	0	149
+1082	150	5	general_description	keyword	1	0	151
+1083	151	1	general_description	keyword	1	0	152
+1084	151	4	general description	keyword	1	0	150
+1085	152	1	general_description	keyword	1	0	153
+1086	152	3	general description	keyword	1	0	151
+1087	153	3	general description	keyword	1	0	152
+1088	153	5	general_description	keyword	1	0	154
+1089	154	1	general_description	keyword	1	0	155
+1090	154	4	general description	keyword	1	0	153
+1091	155	1	general_description	keyword	1	0	156
+1092	155	3	general description	keyword	1	0	154
+1093	156	2	general_description	keyword	1	0	157
+1094	156	3	general description	keyword	1	0	155
+1095	157	0	general description	keyword	1	0	156
+1096	157	2	general_description	keyword	1	0	158
+1097	158	0	general description	keyword	1	0	157
+1098	158	2	general_description	keyword	1	0	159
+1099	159	0	general description	keyword	1	0	158
+1100	159	2	general_description	keyword	1	0	160
+1101	160	0	general description	keyword	1	0	159
+1102	160	2	general_description	keyword	1	0	161
+1103	161	0	general description	keyword	1	0	160
+1104	161	3	general_description	keyword	1	0	162
+1105	162	1	general description	keyword	1	0	161
+1106	162	3	general_description	keyword	1	0	163
+1107	163	1	general description	keyword	1	0	162
+1108	163	3	general_description	keyword	1	0	164
+1109	164	1	general description	keyword	1	0	163
+1110	164	3	general_description	keyword	1	0	165
+1111	165	1	general description	keyword	1	0	164
+1112	165	3	general_description	keyword	1	0	166
+1113	166	0	general_description	keyword	1	0	167
+1114	166	1	general description	keyword	1	0	165
+1115	166	2	general_description	keyword	1	0	174
+1116	167	0	general_description	keyword	1	0	168
+1117	167	2	general description	keyword	1	0	166
+1118	168	0	general_description	keyword	1	0	169
+1119	168	2	general description	keyword	1	0	167
+1120	169	0	general_description	keyword	1	0	170
+1121	169	1	general_description	keyword	1	0	172
+1122	169	2	general description	keyword	1	0	168
+1123	170	0	general_description	keyword	1	0	171
+1124	170	2	general description	keyword	1	0	169
+1125	171	2	general description	keyword	1	0	170
+1126	172	1	general_description	keyword	1	0	173
+1127	172	3	general description	keyword	1	0	169
+1128	173	3	general description	keyword	1	0	172
+1129	174	0	general description	keyword	1	0	166
+1130	174	2	general_description	keyword	1	0	175
+1131	175	0	general description	keyword	1	0	174
+1132	175	3	general_description	keyword	1	0	176
+1133	176	1	general description	keyword	1	0	175
+1134	176	3	general_description	keyword	1	0	177
+1135	177	1	general description	keyword	1	0	176
+1136	177	2	general_description	keyword	1	0	178
+1137	178	0	general description	keyword	1	0	177
+1138	178	2	general_description	keyword	1	0	179
+1139	179	0	general description	keyword	1	0	178
+1140	179	1	general_description	keyword	1	0	182
+1141	179	2	general_description	keyword	1	0	184
+1142	179	3	general_description	keyword	1	0	180
+1143	180	1	general description	keyword	1	0	179
+1144	180	3	general_description	keyword	1	0	181
+1145	181	1	general description	keyword	1	0	180
+1146	182	1	general_description	keyword	1	0	183
+1147	182	3	general description	keyword	1	0	179
+1148	183	3	general description	keyword	1	0	182
+1149	184	0	general description	keyword	1	0	179
+1150	184	2	general_description	keyword	1	0	185
+1151	185	0	general description	keyword	1	0	184
+1152	185	1	general_description	keyword	1	0	188
+1153	185	2	general_description	keyword	1	0	190
+1154	185	3	general_description	keyword	1	0	186
+1155	186	1	general description	keyword	1	0	185
+1156	186	3	general_description	keyword	1	0	187
+1157	187	1	general description	keyword	1	0	186
+1158	188	1	general_description	keyword	1	0	189
+1159	188	3	general description	keyword	1	0	185
+1160	189	3	general description	keyword	1	0	188
+1161	190	0	general description	keyword	1	0	185
+1162	190	2	general_description	keyword	1	0	191
+1163	191	0	general description	keyword	1	0	190
+1164	191	3	general_description	keyword	1	0	192
+1165	192	1	general description	keyword	1	0	191
+1166	193	0	general_description	keyword	1	0	194
+1167	193	2	general description	keyword	1	0	141
+1168	194	0	general_description	keyword	1	0	195
+1169	194	2	general description	keyword	1	0	193
+1170	195	0	general_description	keyword	1	0	196
+1171	195	2	general description	keyword	1	0	194
+1172	196	0	general_description	keyword	1	0	197
+1173	196	2	general description	keyword	1	0	195
+1174	197	0	general_description	keyword	1	0	198
+1175	197	2	general description	keyword	1	0	196
+1176	198	0	general_description	keyword	1	0	199
+1177	198	2	general description	keyword	1	0	197
+1178	199	0	general_description	keyword	1	0	200
+1179	199	1	general_description	keyword	1	0	274
+1180	199	2	general description	keyword	1	0	198
+1181	200	0	general_description	keyword	1	0	201
+1182	200	2	general description	keyword	1	0	199
+1183	201	0	general_description	keyword	1	0	202
+1184	201	2	general description	keyword	1	0	200
+1185	202	0	general_description	keyword	1	0	203
+1186	202	2	general description	keyword	1	0	201
+1187	202	3	general_description	keyword	1	0	340
+1188	203	0	general_description	keyword	1	0	204
+1189	203	1	general_description	keyword	1	0	265
+1190	203	2	general description	keyword	1	0	202
+1191	204	2	general description	keyword	1	0	203
+1192	204	3	general_description	keyword	1	0	205
+1193	205	1	general description	keyword	1	0	204
+1194	205	3	general_description	keyword	1	0	206
+1195	206	1	general description	keyword	1	0	205
+1196	206	3	general_description	keyword	1	0	207
+1197	207	0	general_description	keyword	1	0	232
+1198	207	1	general description	keyword	1	0	206
+1199	207	3	general_description	keyword	1	0	208
+1200	208	1	general description	keyword	1	0	207
+1201	208	3	general_description	keyword	1	0	209
+1202	209	1	general description	keyword	1	0	208
+1203	209	3	general_description	keyword	1	0	210
+1204	210	1	general description	keyword	1	0	209
+1205	210	3	general_description	keyword	1	0	211
+1206	211	1	general description	keyword	1	0	210
+1207	211	3	general_description	keyword	1	0	212
+1208	212	1	general description	keyword	1	0	211
+1209	212	2	general_description	keyword	1	0	213
+1210	213	0	general description	keyword	1	0	212
+1211	213	2	general_description	keyword	1	0	214
+1212	214	0	general description	keyword	1	0	213
+1213	214	2	general_description	keyword	1	0	215
+1214	215	0	general description	keyword	1	0	214
+1215	215	2	general_description	keyword	1	0	216
+1216	216	0	general description	keyword	1	0	215
+1217	216	2	general_description	keyword	1	0	217
+1218	217	0	general description	keyword	1	0	216
+1219	217	2	general_description	keyword	1	0	218
+1220	218	0	general description	keyword	1	0	217
+1221	218	2	general_description	keyword	1	0	219
+1222	219	0	general description	keyword	1	0	218
+1223	219	2	general_description	keyword	1	0	220
+1224	220	0	general description	keyword	1	0	219
+1225	220	2	general_description	keyword	1	0	221
+1226	221	0	general description	keyword	1	0	220
+1227	221	2	general_description	keyword	1	0	222
+1228	222	0	general description	keyword	1	0	221
+1229	222	2	general_description	keyword	1	0	223
+1230	223	0	general description	keyword	1	0	222
+1231	223	2	general_description	keyword	1	0	224
+1232	224	0	general description	keyword	1	0	223
+1233	224	2	general_description	keyword	1	0	225
+1234	224	3	general_description	keyword	1	0	338
+1235	225	0	general description	keyword	1	0	224
+1236	225	2	general_description	keyword	1	0	226
+1237	226	0	general description	keyword	1	0	225
+1238	226	1	general_description	keyword	1	0	227
+1239	227	1	general_description	keyword	1	0	228
+1240	227	3	general description	keyword	1	0	226
+1241	228	1	general_description	keyword	1	0	229
+1242	228	3	general description	keyword	1	0	227
+1243	229	1	general_description	keyword	1	0	230
+1244	229	3	general description	keyword	1	0	228
+1245	230	1	general_description	keyword	1	0	231
+1246	230	3	general description	keyword	1	0	229
+1247	231	1	general description	keyword	1	0	131
+1248	231	3	general description	keyword	1	0	230
+1249	232	2	general description	keyword	1	0	207
+1250	232	4	general_description	keyword	1	0	233
+1251	233	0	general_description	keyword	1	0	234
+1252	233	5	general description	keyword	1	0	232
+1253	234	2	general description	keyword	1	0	233
+1254	234	4	general_description	keyword	1	0	235
+1255	235	0	general_description	keyword	1	0	236
+1256	235	5	general description	keyword	1	0	234
+1257	236	0	general_description	keyword	1	0	237
+1258	236	2	general description	keyword	1	0	235
+1259	237	0	general_description	keyword	1	0	243
+1260	237	1	general_description	keyword	1	0	253
+1261	237	2	general description	keyword	1	0	236
+1262	237	3	general_description	keyword	1	0	238
+1263	238	1	general description	keyword	1	0	237
+1264	238	3	general_description	keyword	1	0	239
+1265	239	1	general description	keyword	1	0	238
+1266	239	3	general_description	keyword	1	0	240
+1267	240	1	general description	keyword	1	0	239
+1268	240	3	general_description	keyword	1	0	241
+1269	241	1	general description	keyword	1	0	240
+1270	241	3	general_description	keyword	1	0	242
+1271	242	1	general description	keyword	1	0	241
+1272	243	0	general_description	keyword	1	0	244
+1273	243	2	general description	keyword	1	0	237
+1274	244	1	general_description	keyword	1	0	245
+1275	244	2	general description	keyword	1	0	243
+1276	244	3	general_description	keyword	1	0	249
+1277	245	0	general_description	keyword	1	0	246
+1278	245	3	general description	keyword	1	0	244
+1279	246	0	general_description	keyword	1	0	247
+1280	246	2	general description	keyword	1	0	245
+1281	247	0	general_description	keyword	1	0	248
+1282	247	2	general description	keyword	1	0	246
+1283	248	2	general description	keyword	1	0	247
+1284	249	0	general_description	keyword	1	0	250
+1285	249	1	general description	keyword	1	0	244
+1286	250	0	general_description	keyword	1	0	251
+1287	250	2	general description	keyword	1	0	249
+1288	251	0	general_description	keyword	1	0	252
+1289	251	2	general description	keyword	1	0	250
+1290	252	2	general description	keyword	1	0	251
+1291	253	1	general_description	keyword	1	0	254
+1292	253	3	general description	keyword	1	0	237
+1293	254	1	general_description	keyword	1	0	255
+1294	254	3	general description	keyword	1	0	253
+1295	255	1	general_description	keyword	1	0	256
+1296	255	3	general description	keyword	1	0	254
+1297	256	0	general_description	keyword	1	0	258
+1298	256	1	general_description	keyword	1	0	257
+1299	256	3	general description	keyword	1	0	255
+1300	257	3	general description	keyword	1	0	256
+1301	258	0	general_description	keyword	1	0	259
+1302	258	2	general description	keyword	1	0	256
+1303	259	0	general_description	keyword	1	0	260
+1304	259	1	general_description	keyword	1	0	263
+1305	259	2	general description	keyword	1	0	258
+1306	260	0	general_description	keyword	1	0	261
+1307	260	2	general description	keyword	1	0	259
+1308	261	0	general_description	keyword	1	0	262
+1309	261	2	general description	keyword	1	0	260
+1310	262	1	general_description	keyword	1	0	264
+1311	262	2	general description	keyword	1	0	261
+1312	263	3	general description	keyword	1	0	259
+1313	264	3	general description	keyword	1	0	262
+1314	265	1	general_description	keyword	1	0	266
+1315	265	3	general description	keyword	1	0	203
+1316	266	0	general_description	keyword	1	0	267
+1317	266	3	general description	keyword	1	0	265
+1318	267	0	general_description	keyword	1	0	268
+1319	267	2	general description	keyword	1	0	266
+1320	268	0	general_description	keyword	1	0	269
+1321	268	1	general_description	keyword	1	0	271
+1322	268	2	general description	keyword	1	0	267
+1323	268	3	general_description	keyword	1	0	270
+1324	268	4	general_description	keyword	1	0	272
+1325	268	5	general_description	keyword	1	0	273
+1326	269	2	general description	keyword	1	0	268
+1327	270	1	general description	keyword	1	0	268
+1328	271	3	general description	keyword	1	0	268
+1329	272	5	general description	keyword	1	0	268
+1330	273	4	general description	keyword	1	0	268
+1331	274	1	general_description	keyword	1	0	275
+1332	274	3	general description	keyword	1	0	199
+1333	275	1	general_description	keyword	1	0	276
+1334	275	3	general description	keyword	1	0	274
+1335	276	1	general_description	keyword	1	0	277
+1336	276	3	general description	keyword	1	0	275
+1337	277	1	general_description	keyword	1	0	278
+1338	277	3	general description	keyword	1	0	276
+1339	278	1	general_description	keyword	1	0	279
+1340	278	3	general description	keyword	1	0	277
+1341	279	0	general_description	keyword	1	0	280
+1342	279	3	general description	keyword	1	0	278
+1343	280	0	general_description	keyword	1	0	281
+1344	280	2	general description	keyword	1	0	279
+1345	281	0	general_description	keyword	1	0	282
+1346	281	2	general description	keyword	1	0	280
+1347	282	0	general_description	keyword	1	0	283
+1348	282	2	general description	keyword	1	0	281
+1349	283	0	general_description	keyword	1	0	284
+1350	283	2	general description	keyword	1	0	282
+1351	284	0	general_description	keyword	1	0	285
+1352	284	2	general description	keyword	1	0	283
+1353	285	0	general_description	keyword	1	0	286
+1354	285	2	general description	keyword	1	0	284
+1355	286	0	general_description	keyword	1	0	287
+1356	286	2	general description	keyword	1	0	285
+1357	287	0	general_description	keyword	1	0	288
+1358	287	2	general description	keyword	1	0	286
+1359	288	0	general_description	keyword	1	0	289
+1360	288	2	general description	keyword	1	0	287
+1361	289	0	general_description	keyword	1	0	290
+1362	289	1	general_description	keyword	3137	0	574
+1363	289	2	general description	keyword	1	0	288
+1364	290	0	general_description	keyword	1	0	333
+1365	290	2	general description	keyword	1	0	289
+1366	290	3	general_description	keyword	1	0	291
+1367	291	1	general description	keyword	1	0	290
+1368	291	3	general_description	keyword	1	0	292
+1369	292	0	general_description	keyword	1	0	293
+1370	292	1	general description	keyword	1	0	291
+1371	293	0	general_description	keyword	1	0	294
+1372	293	2	general description	keyword	1	0	292
+1373	294	2	general description	keyword	1	0	293
+1374	294	3	general_description	keyword	1	0	295
+1375	295	0	general_description	keyword	1	0	296
+1376	295	1	general description	keyword	1	0	294
+1377	295	3	general_description	keyword	1	0	329
+1378	296	0	general_description	keyword	1	0	297
+1379	296	2	general description	keyword	1	0	295
+1380	297	2	general description	keyword	1	0	296
+1381	297	4	general_description	keyword	1	0	298
+1382	298	0	general_description	keyword	1	0	299
+1383	298	5	general description	keyword	1	0	297
+1384	299	2	general description	keyword	1	0	298
+1385	299	4	general_description	keyword	1	0	300
+1386	300	0	general_description	keyword	1	0	301
+1387	300	5	general description	keyword	1	0	299
+1388	301	1	general_description	keyword	1	0	316
+1389	301	2	general description	keyword	1	0	300
+1390	301	3	general_description	keyword	1	0	302
+1391	302	1	general description	keyword	1	0	301
+1392	302	3	general_description	keyword	1	0	303
+1393	303	1	general description	keyword	1	0	302
+1394	303	3	general_description	keyword	1	0	304
+1395	304	0	general_description	keyword	1	0	305
+1396	304	1	general description	keyword	1	0	303
+1397	304	3	general_description	keyword	1	0	309
+1398	305	0	general_description	keyword	1	0	306
+1399	305	2	general description	keyword	1	0	304
+1400	306	0	general_description	keyword	1	0	307
+1401	306	1	general_description	keyword	1	0	308
+1402	306	2	general description	keyword	1	0	305
+1403	307	2	general description	keyword	1	0	306
+1404	308	3	general description	keyword	1	0	306
+1405	309	1	general description	keyword	1	0	304
+1406	309	3	general_description	keyword	1	0	310
+1407	310	1	general description	keyword	1	0	309
+1408	310	3	general_description	keyword	1	0	311
+1409	311	0	general_description	keyword	1	0	312
+1410	311	1	general description	keyword	1	0	310
+1411	312	0	general_description	keyword	1	0	313
+1412	312	2	general description	keyword	1	0	311
+1413	313	0	general_description	keyword	1	0	314
+1414	313	1	general_description	keyword	1	0	315
+1415	313	2	general description	keyword	1	0	312
+1416	314	2	general description	keyword	1	0	313
+1417	315	3	general description	keyword	1	0	313
+1418	316	1	general_description	keyword	1	0	317
+1419	316	3	general description	keyword	1	0	301
+1420	317	0	general_description	keyword	1	0	318
+1421	317	1	general_description	keyword	1	0	322
+1422	317	3	general description	keyword	1	0	316
+1423	318	0	general_description	keyword	1	0	319
+1424	318	2	general description	keyword	1	0	317
+1425	319	0	general_description	keyword	1	0	320
+1426	319	1	general_description	keyword	1	0	321
+1427	319	2	general description	keyword	1	0	318
+1428	320	2	general description	keyword	1	0	319
+1429	321	3	general description	keyword	1	0	319
+1430	322	1	general_description	keyword	1	0	323
+1431	322	3	general description	keyword	1	0	317
+1432	323	1	general_description	keyword	1	0	324
+1433	323	3	general description	keyword	1	0	322
+1434	324	0	general_description	keyword	1	0	325
+1435	324	3	general description	keyword	1	0	323
+1436	325	0	general_description	keyword	1	0	326
+1437	325	1	general_description	keyword	1	0	361
+1438	325	2	general description	keyword	1	0	324
+1439	326	0	general_description	keyword	1	0	327
+1440	326	1	general_description	keyword	1	0	328
+1441	326	2	general description	keyword	1	0	325
+1442	327	2	general description	keyword	1	0	326
+1443	328	2	general_description	keyword	1	0	361
+1444	328	3	general description	keyword	1	0	326
+1445	329	1	general description	keyword	1	0	295
+1446	329	3	general_description	keyword	1	0	330
+1447	330	1	general description	keyword	1	0	329
+1448	330	3	general_description	keyword	1	0	331
+1449	331	0	general_description	keyword	1	0	332
+1450	331	1	general description	keyword	1	0	330
+1451	332	2	general description	keyword	1	0	331
+1452	333	0	general_description	keyword	1	0	334
+1453	333	2	general description	keyword	1	0	290
+1454	334	0	general_description	keyword	1	0	335
+1455	334	2	general description	keyword	1	0	333
+1456	335	0	general_description	keyword	1	0	336
+1457	335	2	general description	keyword	1	0	334
+1458	336	0	general_description	keyword	1	0	337
+1459	336	2	general description	keyword	1	0	335
+1460	337	2	general description	keyword	1	0	336
+1461	338	1	general description	keyword	1	0	224
+1462	338	5	general_description	keyword	1	0	339
+1463	339	4	general description	keyword	1	0	338
+1464	340	1	general description	keyword	1	0	202
+1465	340	5	general_description	keyword	1	0	341
+1466	341	3	general_description	keyword	1	0	342
+1467	341	4	general description	keyword	1	0	340
+1468	342	1	general description	keyword	1	0	341
+1469	342	3	general_description	keyword	1	0	343
+1470	343	1	general description	keyword	1	0	342
+1471	343	5	general_description	keyword	1	0	344
+1472	344	3	general_description	keyword	1	0	345
+1473	344	4	general description	keyword	1	0	343
+1474	345	1	general description	keyword	1	0	344
+1475	345	3	general_description	keyword	1	0	346
+1476	346	1	general description	keyword	1	0	345
+1477	346	2	general_description	keyword	1	0	347
+1478	347	0	general description	keyword	1	0	346
+1479	347	2	general_description	keyword	1	0	348
+1480	348	0	general description	keyword	1	0	347
+1481	348	1	general_description	keyword	1	0	349
+1482	349	1	general_description	keyword	1	0	350
+1483	349	3	general description	keyword	1	0	348
+1484	350	1	general_description	keyword	1	0	353
+1485	350	2	general_description	keyword	1	0	351
+1486	350	3	general description	keyword	1	0	349
+1487	351	0	general description	keyword	1	0	350
+1488	351	2	general_description	keyword	1	0	352
+1489	352	0	general description	keyword	1	0	351
+1490	353	1	general_description	keyword	1	0	354
+1491	353	3	general description	keyword	1	0	350
+1492	354	1	general_description	keyword	1	0	357
+1493	354	2	general_description	keyword	1	0	355
+1494	354	3	general description	keyword	1	0	353
+1495	355	0	general description	keyword	1	0	354
+1496	355	2	general_description	keyword	1	0	356
+1497	356	0	general description	keyword	1	0	355
+1498	357	1	general_description	keyword	1	0	358
+1499	357	3	general description	keyword	1	0	354
+1500	358	2	general_description	keyword	1	0	359
+1501	358	3	general description	keyword	1	0	357
+1502	359	0	general description	keyword	1	0	358
+1503	359	2	general_description	keyword	1	0	360
+1504	360	0	general description	keyword	1	0	359
+1505	361	1	general_description	keyword	1	0	362
+1506	361	3	general description	keyword	1	0	325
+1507	362	1	general_description	keyword	1	0	363
+1508	362	3	general description	keyword	1	0	361
+1509	363	1	general_description	keyword	1	0	364
+1510	363	3	general description	keyword	1	0	362
+1511	364	0	general_description	keyword	1	0	365
+1512	364	3	general description	keyword	1	0	363
+1513	365	0	general_description	keyword	1	0	366
+1514	365	2	general description	keyword	1	0	364
+1515	366	0	general_description	keyword	1	0	367
+1516	366	2	general description	keyword	1	0	365
+1517	367	1	general_description	keyword	1	0	368
+1518	367	2	general description	keyword	1	0	366
+1519	368	1	general_description	keyword	1	0	369
+1520	368	3	general description	keyword	1	0	367
+1521	369	1	general_description	keyword	1	0	370
+1522	369	3	general description	keyword	1	0	368
+1523	370	1	general_description	keyword	1	0	371
+1524	370	3	general description	keyword	1	0	369
+1525	371	1	general_description	keyword	1	0	372
+1526	371	3	general description	keyword	1	0	370
+1527	372	1	general_description	keyword	1	0	373
+1528	372	3	general description	keyword	1	0	371
+1529	373	1	general_description	keyword	1	0	374
+1530	373	3	general description	keyword	1	0	372
+1531	374	1	general_description	keyword	1	0	375
+1532	374	3	general description	keyword	1	0	373
+1533	375	1	general_description	keyword	1	0	376
+1534	375	3	general description	keyword	1	0	374
+1535	376	1	general_description	keyword	1	0	377
+1536	376	3	general description	keyword	1	0	375
+1537	377	1	general_description	keyword	1	0	378
+1538	377	3	general description	keyword	1	0	376
+1539	378	1	general_description	keyword	1	0	379
+1540	378	3	general description	keyword	1	0	377
+1541	379	1	general_description	keyword	1	0	380
+1542	379	3	general description	keyword	1	0	378
+1543	380	1	general_description	keyword	1	0	381
+1544	380	3	general description	keyword	1	0	379
+1545	381	1	general_description	keyword	1	0	382
+1546	381	3	general description	keyword	1	0	380
+1547	382	1	general_description	keyword	1	0	383
+1548	382	3	general description	keyword	1	0	381
+1549	383	1	general_description	keyword	1	0	384
+1550	383	3	general description	keyword	1	0	382
+1551	384	1	general_description	keyword	1	0	385
+1552	384	3	general description	keyword	1	0	383
+1553	385	1	general_description	keyword	1	0	386
+1554	385	3	general description	keyword	1	0	384
+1555	386	1	general_description	keyword	1	0	387
+1556	386	3	general description	keyword	1	0	385
+1557	387	1	general_description	keyword	1	0	388
+1558	387	3	general description	keyword	1	0	386
+1559	388	1	general_description	keyword	1	0	389
+1560	388	3	general description	keyword	1	0	387
+1561	389	1	general_description	keyword	1	0	390
+1562	389	3	general description	keyword	1	0	388
+1563	390	1	general_description	keyword	1	0	391
+1564	390	3	general description	keyword	1	0	389
+1565	391	1	general_description	keyword	1	0	392
+1566	391	3	general description	keyword	1	0	390
+1567	392	1	general_description	keyword	1	0	393
+1568	392	3	general description	keyword	1	0	391
+1569	393	1	general_description	keyword	1	0	394
+1570	393	3	general description	keyword	1	0	392
+1571	394	1	general_description	keyword	1	0	395
+1572	394	3	general description	keyword	1	0	393
+1573	395	1	general_description	keyword	1	0	396
+1574	395	3	general description	keyword	1	0	394
+1575	396	1	general_description	keyword	1	0	397
+1576	396	3	general description	keyword	1	0	395
+1577	397	1	general_description	keyword	1	0	398
+1578	397	3	general description	keyword	1	0	396
+1579	398	1	general_description	keyword	1	0	399
+1580	398	3	general description	keyword	1	0	397
+1581	399	1	general_description	keyword	1	0	400
+1582	399	3	general description	keyword	1	0	398
+1583	400	0	general_description	keyword	1	0	401
+1584	400	1	general_description	keyword	1	0	416
+1585	400	3	general description	keyword	1	0	399
+1586	401	0	general_description	keyword	1	0	402
+1587	401	2	general description	keyword	1	0	400
+1588	402	0	general_description	keyword	1	0	403
+1589	402	2	general description	keyword	1	0	401
+1590	403	1	general_description	keyword	1	0	404
+1591	403	2	general description	keyword	1	0	402
+1592	403	3	general_description	keyword	1	0	410
+1593	404	1	general_description	keyword	1	0	405
+1594	404	3	general description	keyword	1	0	403
+1595	405	0	general_description	keyword	1	0	406
+1596	405	3	general description	keyword	1	0	404
+1597	406	0	general_description	keyword	1	0	407
+1598	406	2	general description	keyword	1	0	405
+1599	407	1	general_description	keyword	1	0	408
+1600	407	2	general description	keyword	1	0	406
+1601	408	1	general_description	keyword	1	0	409
+1602	408	3	general description	keyword	1	0	407
+1603	409	3	general description	keyword	1	0	408
+1604	410	1	general description	keyword	1	0	403
+1605	410	3	general_description	keyword	1	0	411
+1606	411	0	general_description	keyword	1	0	412
+1607	411	1	general description	keyword	1	0	410
+1608	412	0	general_description	keyword	1	0	413
+1609	412	2	general description	keyword	1	0	411
+1610	413	2	general description	keyword	1	0	412
+1611	413	3	general_description	keyword	1	0	414
+1612	414	1	general description	keyword	1	0	413
+1613	414	3	general_description	keyword	1	0	415
+1614	415	1	general description	keyword	1	0	414
+1615	416	1	general_description	keyword	1	0	417
+1616	416	3	general description	keyword	1	0	400
+1617	417	1	general_description	keyword	1	0	418
+1618	417	3	general description	keyword	1	0	416
+1619	418	1	general_description	keyword	1	0	419
+1620	418	3	general description	keyword	1	0	417
+1621	419	1	general_description	keyword	1	0	420
+1622	419	3	general description	keyword	1	0	418
+1623	420	1	general_description	keyword	1	0	421
+1624	420	3	general description	keyword	1	0	419
+1625	421	1	general_description	keyword	1	0	422
+1626	421	3	general description	keyword	1	0	420
+1627	422	1	general_description	keyword	1	0	423
+1628	422	3	general description	keyword	1	0	421
+1629	423	1	general_description	keyword	1	0	424
+1630	423	3	general description	keyword	1	0	422
+1631	424	1	general_description	keyword	1	0	425
+1632	424	3	general description	keyword	1	0	423
+1633	425	1	general_description	keyword	1	0	426
+1634	425	3	general description	keyword	1	0	424
+1635	426	1	general_description	keyword	1	0	427
+1636	426	3	general description	keyword	1	0	425
+1637	427	1	general_description	keyword	1	0	428
+1638	427	3	general description	keyword	1	0	426
+1639	428	1	general_description	keyword	1	0	429
+1640	428	3	general description	keyword	1	0	427
+1641	429	1	general_description	keyword	1	0	430
+1642	429	3	general description	keyword	1	0	428
+1643	430	1	general_description	keyword	1	0	431
+1644	430	3	general description	keyword	1	0	429
+1645	431	1	general_description	keyword	1	0	432
+1646	431	3	general description	keyword	1	0	430
+1647	432	1	general_description	keyword	1	0	433
+1648	432	3	general description	keyword	1	0	431
+1649	433	1	general_description	keyword	1	0	434
+1650	433	3	general description	keyword	1	0	432
+1651	434	1	general_description	keyword	1	0	435
+1652	434	3	general description	keyword	1	0	433
+1653	435	1	general_description	keyword	1	0	436
+1654	435	3	general description	keyword	1	0	434
+1655	436	1	general_description	keyword	1	0	437
+1656	436	3	general description	keyword	1	0	435
+1657	437	1	general_description	keyword	1	0	438
+1658	437	3	general description	keyword	1	0	436
+1659	438	1	general_description	keyword	1	0	439
+1660	438	3	general description	keyword	1	0	437
+1661	439	1	general_description	keyword	1	0	440
+1662	439	3	general description	keyword	1	0	438
+1663	440	1	general_description	keyword	1	0	441
+1664	440	3	general description	keyword	1	0	439
+1665	441	1	general_description	keyword	1	0	442
+1666	441	3	general description	keyword	1	0	440
+1667	442	1	general_description	keyword	1	0	443
+1668	442	3	general description	keyword	1	0	441
+1669	443	1	general_description	keyword	1	0	444
+1670	443	3	general description	keyword	1	0	442
+1671	444	1	general_description	keyword	1	0	445
+1672	444	3	general description	keyword	1	0	443
+1673	445	2	general_description	keyword	1	0	446
+1674	445	3	general description	keyword	1	0	444
+1675	446	0	general description	keyword	1	0	445
+1676	446	2	general_description	keyword	1	0	447
+1677	447	0	general description	keyword	1	0	446
+1678	447	5	general_description	keyword	1	0	448
+1679	448	1	general_description	keyword	1	0	449
+1680	448	4	general description	keyword	1	0	447
+1681	449	1	general_description	keyword	1	0	450
+1682	449	3	general description	keyword	1	0	448
+1683	450	1	general_description	keyword	1	0	451
+1684	450	3	general description	keyword	1	0	449
+1685	451	1	general_description	keyword	1	0	452
+1686	451	3	general description	keyword	1	0	450
+1687	452	1	general_description	keyword	1	0	453
+1688	452	3	general description	keyword	1	0	451
+1689	453	1	general_description	keyword	1	0	454
+1690	453	3	general description	keyword	1	0	452
+1691	454	1	general_description	keyword	1	0	455
+1692	454	3	general description	keyword	1	0	453
+1693	455	1	general_description	keyword	1	0	456
+1694	455	3	general description	keyword	1	0	454
+1695	456	0	general_description	keyword	1	0	457
+1696	456	3	general description	keyword	1	0	455
+1697	457	0	general_description	keyword	1	0	458
+1698	457	2	general description	keyword	1	0	456
+1699	458	0	general_description	keyword	1	0	459
+1700	458	2	general description	keyword	1	0	457
+1701	459	0	general_description	keyword	1	0	460
+1702	459	2	general description	keyword	1	0	458
+1703	460	0	general_description	keyword	1	0	461
+1704	460	2	general description	keyword	1	0	459
+1705	461	0	general_description	keyword	1	0	462
+1706	461	2	general description	keyword	1	0	460
+1707	462	0	general_description	keyword	1	0	463
+1708	462	2	general description	keyword	1	0	461
+1709	463	0	general_description	keyword	1	0	464
+1710	463	2	general description	keyword	1	0	462
+1711	464	1	general_description	keyword	1	0	465
+1712	464	2	general description	keyword	1	0	463
+1713	465	1	general_description	keyword	1	0	466
+1714	465	3	general description	keyword	1	0	464
+1715	466	1	general_description	keyword	1	0	467
+1716	466	3	general description	keyword	1	0	465
+1717	467	1	general_description	keyword	1	0	468
+1718	467	3	general description	keyword	1	0	466
+1719	468	0	general_description	keyword	1	0	469
+1720	468	3	general description	keyword	1	0	467
+1721	469	0	general_description	keyword	1	0	470
+1722	469	2	general description	keyword	1	0	468
+1723	470	0	general_description	keyword	1	0	471
+1724	470	2	general description	keyword	1	0	469
+1725	471	0	general_description	keyword	1	0	472
+1726	471	2	general description	keyword	1	0	470
+1727	472	0	general_description	keyword	1	0	473
+1728	472	2	general description	keyword	1	0	471
+1729	473	0	general_description	keyword	1	0	474
+1730	473	2	general description	keyword	1	0	472
+1731	474	0	general_description	keyword	1	0	475
+1732	474	2	general description	keyword	1	0	473
+1733	475	0	general_description	keyword	1	0	476
+1734	475	2	general description	keyword	1	0	474
+1735	476	0	general_description	keyword	1	0	477
+1736	476	2	general description	keyword	1	0	475
+1737	477	0	general_description	keyword	1	0	478
+1738	477	2	general description	keyword	1	0	476
+1739	478	0	general_description	keyword	1	0	479
+1740	478	2	general description	keyword	1	0	477
+1741	479	0	general_description	keyword	1	0	480
+1742	479	2	general description	keyword	1	0	478
+1743	480	0	general_description	keyword	1	0	481
+1744	480	2	general description	keyword	1	0	479
+1745	481	0	general_description	keyword	1	0	482
+1746	481	2	general description	keyword	1	0	480
+1747	482	0	general_description	keyword	1	0	483
+1748	482	2	general description	keyword	1	0	481
+1749	483	0	general_description	keyword	1	0	484
+1750	483	2	general description	keyword	1	0	482
+1751	484	0	general_description	keyword	1	0	485
+1752	484	2	general description	keyword	1	0	483
+1753	485	0	general_description	keyword	1	0	486
+1754	485	2	general description	keyword	1	0	484
+1755	486	0	general_description	keyword	1	0	487
+1756	486	2	general description	keyword	1	0	485
+1757	487	0	general_description	keyword	1	0	488
+1758	487	2	general description	keyword	1	0	486
+1759	488	0	general_description	keyword	1	0	489
+1760	488	2	general description	keyword	1	0	487
+1761	489	0	general_description	keyword	1	0	490
+1762	489	2	general description	keyword	1	0	488
+1763	490	0	general_description	keyword	1	0	491
+1764	490	2	general description	keyword	1	0	489
+1765	491	0	general_description	keyword	1	0	492
+1766	491	2	general description	keyword	1	0	490
+1767	492	0	general_description	keyword	1	0	493
+1768	492	2	general description	keyword	1	0	491
+1769	493	1	general_description	keyword	1	0	494
+1770	493	2	general description	keyword	1	0	492
+1771	494	1	general_description	keyword	1	0	495
+1772	494	3	general description	keyword	1	0	493
+1773	495	1	general_description	keyword	1	0	496
+1774	495	3	general description	keyword	1	0	494
+1775	496	1	general_description	keyword	1	0	497
+1776	496	3	general description	keyword	1	0	495
+1777	497	1	general_description	keyword	1	0	498
+1778	497	3	general description	keyword	1	0	496
+1779	498	1	general_description	keyword	1	0	499
+1780	498	3	general description	keyword	1	0	497
+1781	499	1	general_description	keyword	1	0	500
+1782	499	3	general description	keyword	1	0	498
+1783	500	1	general_description	keyword	1	0	501
+1784	500	2	general_description	keyword	1	0	509
+1785	500	3	general description	keyword	1	0	499
+1786	501	1	general_description	keyword	1	0	502
+1787	501	3	general description	keyword	1	0	500
+1788	502	1	general_description	keyword	1	0	503
+1789	502	2	general_description	keyword	1	0	513
+1790	502	3	general description	keyword	1	0	501
+1791	503	1	general_description	keyword	1	0	504
+1792	503	3	general description	keyword	1	0	502
+1793	504	1	general_description	keyword	1	0	505
+1794	504	2	general_description	keyword	1	0	517
+1795	504	3	general description	keyword	1	0	503
+1796	505	1	general_description	keyword	1	0	506
+1797	505	3	general description	keyword	1	0	504
+1798	506	1	general_description	keyword	1	0	507
+1799	506	2	general_description	keyword	1	0	521
+1800	506	3	general description	keyword	1	0	505
+1801	507	1	general_description	keyword	1	0	508
+1802	507	3	general description	keyword	1	0	506
+1803	508	2	general_description	keyword	1	0	525
+1804	508	3	general description	keyword	1	0	507
+1805	509	0	general description	keyword	1	0	500
+1806	509	2	general_description	keyword	1	0	510
+1807	510	0	general description	keyword	1	0	509
+1808	510	2	general_description	keyword	1	0	511
+1809	511	0	general description	keyword	1	0	510
+1810	511	2	general_description	keyword	1	0	512
+1811	512	0	general description	keyword	1	0	511
+1812	513	0	general description	keyword	1	0	502
+1813	513	2	general_description	keyword	1	0	514
+1814	514	0	general description	keyword	1	0	513
+1815	514	2	general_description	keyword	1	0	515
+1816	515	0	general description	keyword	1	0	514
+1817	515	2	general_description	keyword	1	0	516
+1818	516	0	general description	keyword	1	0	515
+1819	517	0	general description	keyword	1	0	504
+1820	517	2	general_description	keyword	1	0	518
+1821	518	0	general description	keyword	1	0	517
+1822	518	2	general_description	keyword	1	0	519
+1823	519	0	general description	keyword	1	0	518
+1824	519	2	general_description	keyword	1	0	520
+1825	520	0	general description	keyword	1	0	519
+1826	521	0	general description	keyword	1	0	506
+1827	521	2	general_description	keyword	1	0	522
+1828	522	0	general description	keyword	1	0	521
+1829	522	2	general_description	keyword	1	0	523
+1830	523	0	general description	keyword	1	0	522
+1831	523	2	general_description	keyword	1	0	524
+1832	524	0	general description	keyword	1	0	523
+1833	525	0	general description	keyword	1	0	508
+1834	525	2	general_description	keyword	1	0	526
+1835	526	0	general description	keyword	1	0	525
+1836	526	2	general_description	keyword	1	0	527
+1837	527	0	general description	keyword	1	0	526
+1838	527	2	general_description	keyword	1	0	528
+1839	528	0	general description	keyword	1	0	527
+1840	528	2	general_description	keyword	1	0	529
+1841	529	0	general description	keyword	1	0	528
+1842	529	2	general_description	keyword	1	0	530
+1843	530	0	general description	keyword	1	0	529
+1844	530	1	general_description	keyword	1	0	531
+1845	531	1	general_description	keyword	1	0	532
+1846	531	3	general description	keyword	1	0	530
+1847	532	1	general_description	keyword	1	0	533
+1848	532	2	general_description	keyword	1	0	535
+1849	532	3	general description	keyword	1	0	531
+1850	533	1	general_description	keyword	1	0	534
+1851	533	3	general description	keyword	1	0	532
+1852	534	1	general_description	keyword	1	0	541
+1853	534	3	general description	keyword	1	0	533
+1854	535	0	general description	keyword	1	0	532
+1855	535	2	general_description	keyword	1	0	536
+1856	536	0	general description	keyword	1	0	535
+1857	536	1	general_description	keyword	1	0	537
+1858	536	3	general_description	keyword	1	0	539
+1859	537	1	general_description	keyword	1	0	538
+1860	537	3	general description	keyword	1	0	536
+1861	538	3	general description	keyword	1	0	537
+1862	539	1	general description	keyword	1	0	536
+1863	539	3	general_description	keyword	1	0	540
+1864	540	1	general description	keyword	1	0	539
+1865	541	1	general_description	keyword	1	0	542
+1866	541	3	general description	keyword	1	0	534
+1867	542	0	general_description	keyword	1	0	545
+1868	542	1	general_description	keyword	1	0	543
+1869	542	3	general description	keyword	1	0	541
+1870	543	1	general_description	keyword	1	0	544
+1871	543	3	general description	keyword	1	0	542
+1872	544	3	general description	keyword	1	0	543
+1873	545	0	general_description	keyword	1	0	546
+1874	545	2	general description	keyword	1	0	542
+1875	546	0	general_description	keyword	1	0	547
+1876	546	2	general description	keyword	1	0	545
+1877	547	0	general_description	keyword	1	0	548
+1878	547	1	general_description	keyword	1	0	556
+1879	547	2	general description	keyword	1	0	546
+1880	547	3	general_description	keyword	1	0	554
+1881	548	0	general_description	keyword	1	0	549
+1882	548	2	general description	keyword	1	0	547
+1883	549	0	general_description	keyword	1	0	550
+1884	549	1	general_description	keyword	1	0	560
+1885	549	2	general description	keyword	1	0	548
+1886	549	3	general_description	keyword	1	0	558
+1887	550	0	general_description	keyword	1	0	551
+1888	550	2	general description	keyword	1	0	549
+1889	551	0	general_description	keyword	1	0	552
+1890	551	1	general_description	keyword	1	0	564
+1891	551	2	general description	keyword	1	0	550
+1892	551	3	general_description	keyword	1	0	562
+1893	552	0	general_description	keyword	1	0	553
+1894	552	2	general description	keyword	1	0	551
+1895	553	1	general_description	keyword	1	0	566
+1896	553	2	general description	keyword	1	0	552
+1897	553	3	general_description	keyword	1	0	568
+1898	554	1	general description	keyword	1	0	547
+1899	554	3	general_description	keyword	1	0	555
+1900	555	1	general description	keyword	1	0	554
+1901	556	1	general_description	keyword	1	0	557
+1902	556	3	general description	keyword	1	0	547
+1903	557	3	general description	keyword	1	0	556
+1904	558	1	general description	keyword	1	0	549
+1905	558	3	general_description	keyword	1	0	559
+1906	559	1	general description	keyword	1	0	558
+1907	560	1	general_description	keyword	1	0	561
+1908	560	3	general description	keyword	1	0	549
+1909	561	3	general description	keyword	1	0	560
+1910	562	1	general description	keyword	1	0	551
+1911	562	3	general_description	keyword	1	0	563
+1912	563	1	general description	keyword	1	0	562
+1913	564	1	general_description	keyword	1	0	565
+1914	564	3	general description	keyword	1	0	551
+1915	565	3	general description	keyword	1	0	564
+1916	566	1	general_description	keyword	1	0	567
+1917	566	3	general description	keyword	1	0	553
+1918	567	0	general_description	keyword	1	0	571
+1919	567	3	general description	keyword	1	0	566
+1920	568	0	general_description	keyword	1	0	569
+1921	568	1	general description	keyword	1	0	553
+1922	569	2	general description	keyword	1	0	568
+1923	569	3	general_description	keyword	1	0	570
+1924	570	1	general description	keyword	1	0	569
+1925	571	1	general_description	keyword	1	0	572
+1926	571	2	general description	keyword	1	0	567
+1927	572	0	general_description	keyword	1	0	573
+1928	572	3	general description	keyword	1	0	571
+1929	573	2	general description	keyword	1	0	572
+1930	574	1	general_description	keyword	3137	0	575
+1931	574	3	general description	keyword	1	0	289
+1932	575	1	general_description	keyword	1	0	576
+1933	575	3	general description	keyword	1	0	574
+1934	576	1	general_description	keyword	1	0	577
+1935	576	3	general description	keyword	1	0	575
+1936	577	1	general_description	keyword	1	0	578
+1937	577	3	general description	keyword	1	0	576
+1938	578	0	general_description	keyword	1	0	579
+1939	578	1	general_description	keyword	1	0	582
+1940	578	3	general description	keyword	1	0	577
+1941	579	0	general_description	keyword	1	0	580
+1942	579	2	general description	keyword	1	0	578
+1943	580	0	general_description	keyword	1	0	581
+1944	580	2	general description	keyword	1	0	579
+1945	581	2	general description	keyword	1	0	580
+1946	582	1	general_description	keyword	1	0	583
+1947	582	3	general description	keyword	1	0	578
+1948	583	1	general_description	keyword	1	0	584
+1949	583	3	general description	keyword	1	0	582
+1950	584	1	general_description	keyword	1	0	585
+1951	584	3	general description	keyword	1	0	583
+1952	585	1	general_description	keyword	1	0	586
+1953	585	3	general description	keyword	1	0	584
+1954	586	1	general_description	keyword	1	0	587
+1955	586	3	general description	keyword	1	0	585
+1956	587	1	general_description	keyword	1	0	588
+1957	587	3	general description	keyword	1	0	586
+1958	588	1	general_description	keyword	1	0	589
+1959	588	3	general description	keyword	1	0	587
+1960	589	2	general_description	keyword	1	0	590
+1961	589	3	general description	keyword	1	0	588
+1962	590	0	general description	keyword	1	0	589
+1963	590	2	general_description	keyword	1	0	591
+1964	591	0	general description	keyword	1	0	590
+1965	591	2	general_description	keyword	1	0	592
+1966	592	0	general description	keyword	1	0	591
+1967	592	3	general_description	keyword	1	0	593
+1968	593	1	general description	keyword	1	0	592
+1969	593	3	general_description	keyword	1	0	594
+1970	594	1	general description	keyword	1	0	593
+1971	594	3	general_description	keyword	1	0	595
+1972	595	1	general description	keyword	1	0	594
+1973	595	3	general_description	keyword	1	0	596
+1974	596	1	general description	keyword	1	0	595
+1975	596	3	general_description	keyword	1	0	597
+1976	597	1	general description	keyword	1	0	596
+1977	597	3	general_description	keyword	1	0	598
+1978	598	1	general description	keyword	1	0	597
+1979	598	3	general_description	keyword	1	0	599
+1980	599	1	general description	keyword	1	0	598
+1981	599	3	general_description	keyword	1	0	600
+1982	600	1	general description	keyword	1	0	599
+1983	600	2	general_description	keyword	1	0	601
+1984	601	0	general description	keyword	1	0	600
+1985	601	2	general_description	keyword	1	0	602
+1986	602	0	general description	keyword	1	0	601
+1987	602	2	general_description	keyword	1	0	603
+1988	603	0	general description	keyword	1	0	602
+1989	603	1	general_description	keyword	1	0	604
+1990	604	1	general_description	keyword	1	0	605
+1991	604	3	general description	keyword	1	0	603
+1992	605	1	general_description	keyword	1	0	606
+1993	605	3	general description	keyword	1	0	604
+1994	606	1	general_description	keyword	1	0	607
+1995	606	3	general description	keyword	1	0	605
+1996	607	1	general_description	keyword	1	0	608
+1997	607	3	general description	keyword	1	0	606
+1998	608	1	general_description	keyword	1	0	609
+1999	608	3	general description	keyword	1	0	607
+2000	609	1	general_description	keyword	1	0	610
+2001	609	3	general description	keyword	1	0	608
+2002	610	1	general_description	keyword	1	0	611
+2003	610	3	general description	keyword	1	0	609
+2004	611	2	general_description	keyword	1	0	612
+2005	611	3	general description	keyword	1	0	610
+2006	612	0	general description	keyword	1	0	611
+2007	612	2	general_description	keyword	1	0	613
+2008	613	0	general description	keyword	1	0	612
+2009	613	2	general_description	keyword	1	0	614
+2010	614	0	general description	keyword	1	0	613
+2011	614	3	general_description	keyword	1	0	615
+2012	615	1	general description	keyword	1	0	614
+2013	615	3	general_description	keyword	1	0	616
+2014	616	1	general description	keyword	1	0	615
+2015	616	3	general_description	keyword	1	0	617
+2016	617	1	general description	keyword	1	0	616
+2017	617	3	general_description	keyword	1	0	618
+2018	618	1	general description	keyword	1	0	617
+2019	618	3	general_description	keyword	1	0	619
+2020	619	1	general description	keyword	1	0	618
+2021	619	3	general_description	keyword	1	0	620
+2022	620	1	general description	keyword	1	0	619
+2023	620	3	general_description	keyword	1	0	621
+2024	621	1	general description	keyword	1	0	620
+2025	621	3	general_description	keyword	1	0	622
+2026	622	1	general description	keyword	1	0	621
+2027	622	2	general_description	keyword	1	0	623
+2028	623	0	general description	keyword	1	0	622
+2029	623	2	general_description	keyword	1	0	624
+2030	624	0	general description	keyword	1	0	623
+2031	624	2	general_description	keyword	1	0	625
+2032	625	0	general description	keyword	1	0	624
+2033	625	1	general_description	keyword	1	0	626
+2034	626	1	general_description	keyword	1	0	627
+2035	626	3	general description	keyword	1	0	625
+2036	627	1	general_description	keyword	1	0	628
+2037	627	3	general description	keyword	1	0	626
+2038	628	1	general_description	keyword	1	0	629
+2039	628	3	general description	keyword	1	0	627
+2040	629	1	general_description	keyword	1	0	630
+2041	629	3	general description	keyword	1	0	628
+2042	630	1	general_description	keyword	1	0	631
+2043	630	3	general description	keyword	1	0	629
+2044	631	1	general_description	keyword	1	0	632
+2045	631	3	general description	keyword	1	0	630
+2046	632	1	general_description	keyword	1	0	633
+2047	632	3	general description	keyword	1	0	631
+2048	633	2	general_description	keyword	1	0	634
+2049	633	3	general description	keyword	1	0	632
+2050	634	0	general description	keyword	1	0	633
+2051	634	2	general_description	keyword	1	0	635
+2052	635	0	general description	keyword	1	0	634
+2053	635	2	general_description	keyword	1	0	636
+2054	636	0	general description	keyword	1	0	635
+2055	636	2	general_description	keyword	1	0	637
+2056	637	0	general description	keyword	1	0	636
+2057	637	2	general_description	keyword	1	0	638
+2058	638	0	general description	keyword	1	0	637
+2059	638	2	general_description	keyword	1	0	639
+2060	639	0	general description	keyword	1	0	638
+2061	639	2	general_description	keyword	1	0	640
+2062	640	0	general description	keyword	1	0	639
+2063	640	2	general_description	keyword	1	0	641
+2064	641	0	general description	keyword	1	0	640
+2065	641	2	general_description	keyword	1	0	642
+2066	642	0	general description	keyword	1	0	641
+2067	642	2	general_description	keyword	1	0	643
+2068	643	0	general description	keyword	1	0	642
+2069	643	2	general_description	keyword	1	0	644
+2070	644	0	general description	keyword	1	0	643
+2071	644	2	general_description	keyword	1	0	645
+2072	645	0	general description	keyword	1	0	644
+2073	645	2	general_description	keyword	1	0	646
+2074	646	0	general description	keyword	1	0	645
+2075	646	2	general_description	keyword	1	0	647
+2076	647	0	general description	keyword	1	0	646
+2077	647	2	general_description	keyword	1	0	648
+2078	648	0	general description	keyword	1	0	647
+2079	648	2	general_description	keyword	1	0	649
+2080	649	0	general description	keyword	1	0	648
+2081	649	2	general_description	keyword	1	0	650
+2082	650	0	general description	keyword	1	0	649
+2083	650	2	general_description	keyword	1	0	651
+2084	651	0	general description	keyword	1	0	650
+2085	651	2	general_description	keyword	1	0	652
+2086	652	0	general description	keyword	1	0	651
+2087	652	2	general_description	keyword	1	0	653
+2088	653	0	general description	keyword	1	0	652
+2089	653	1	general_description	keyword	1	0	654
+2090	653	2	general_description	keyword	1	0	682
+2091	653	3	general_description	keyword	1	0	668
+2092	654	1	general_description	keyword	1	0	655
+2093	654	2	general_description	keyword	1	0	667
+2094	654	3	general description	keyword	1	0	653
+2095	655	1	general_description	keyword	1	0	656
+2096	655	3	general description	keyword	1	0	654
+2097	656	1	general_description	keyword	1	0	657
+2098	656	3	general description	keyword	1	0	655
+2099	657	2	general_description	keyword	1	0	658
+2100	657	3	general description	keyword	1	0	656
+2101	658	0	general description	keyword	1	0	657
+2102	658	2	general_description	keyword	1	0	659
+2103	659	0	general description	keyword	1	0	658
+2104	659	2	general_description	keyword	1	0	660
+2105	660	0	general description	keyword	1	0	659
+2106	660	2	general_description	keyword	1	0	661
+2107	661	0	general description	keyword	1	0	660
+2108	661	3	general_description	keyword	1	0	662
+2109	662	1	general description	keyword	1	0	661
+2110	662	3	general_description	keyword	1	0	663
+2111	663	1	general description	keyword	1	0	662
+2112	663	3	general_description	keyword	1	0	664
+2113	664	0	general_description	keyword	1	0	665
+2114	664	1	general description	keyword	1	0	663
+2115	665	0	general_description	keyword	1	0	666
+2116	665	2	general description	keyword	1	0	664
+2117	666	0	general_description	keyword	1	0	667
+2118	666	2	general description	keyword	1	0	665
+2119	667	2	general description	keyword	1	0	666
+2120	667	3	general_description	keyword	1	0	682
+2121	668	1	general description	keyword	1	0	653
+2122	668	2	general_description	keyword	1	0	681
+2123	668	3	general_description	keyword	1	0	669
+2124	669	1	general description	keyword	1	0	668
+2125	669	3	general_description	keyword	1	0	670
+2126	670	1	general description	keyword	1	0	669
+2127	670	3	general_description	keyword	1	0	671
+2128	671	1	general description	keyword	1	0	670
+2129	671	2	general_description	keyword	1	0	672
+2130	672	0	general description	keyword	1	0	671
+2131	672	2	general_description	keyword	1	0	673
+2132	673	0	general description	keyword	1	0	672
+2133	673	2	general_description	keyword	1	0	674
+2134	674	0	general description	keyword	1	0	673
+2135	674	2	general_description	keyword	1	0	675
+2136	675	0	general description	keyword	1	0	674
+2137	675	1	general_description	keyword	1	0	676
+2138	676	1	general_description	keyword	1	0	677
+2139	676	3	general description	keyword	1	0	675
+2140	677	1	general_description	keyword	1	0	678
+2141	677	3	general description	keyword	1	0	676
+2142	678	0	general_description	keyword	1	0	679
+2143	678	3	general description	keyword	1	0	677
+2144	679	0	general_description	keyword	1	0	680
+2145	679	2	general description	keyword	1	0	678
+2146	680	0	general_description	keyword	1	0	681
+2147	680	2	general description	keyword	1	0	679
+2148	681	1	general_description	keyword	1	0	682
+2149	681	2	general description	keyword	1	0	680
+2150	682	0	general description	keyword	1	0	653
+2151	682	1	general description	keyword	1	0	667
+2152	682	3	general description	keyword	1	0	681
+\.
+
+
+--
+-- Data for Name: room_extra_descriptions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.room_extra_descriptions (id, red_room_vnum, red_keyword, red_description) FROM stdin;
+\.
+
+
+--
+-- Data for Name: scripted_sequences; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.scripted_sequences (id, s_sequence_vnum) FROM stdin;
+9	1
+11	2
+\.
+
+
+--
+-- Data for Name: scripted_steps; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.scripted_steps (id, s_sequence_vnum, s_wait_ticks, s_mob, s_obj, s_room, s_quantity, s_order, s_interpret, s_yaml, s_type, s_dialogue) FROM stdin;
 \.
 
 
@@ -2064,6 +6475,122 @@ COPY public.shop_rooms (shop_rooms_id, shop_vnum, shop_room_vnum) FROM stdin;
 COPY public.shops (shop_id, shop_vnum, shop_title, shop_description, shop_profit_buy, shop_profit_sell, shop_type, shop_no_such_item1, shop_no_such_item2, shop_missing_cash1, shop_missing_cash2, shop_do_not_buy, shop_message_buy, shop_message_sell, shop_temper1, shop_bitvector, shop_keeper, shop_with_who, shop_open1, shop_open2, shop_close1, shop_close2, shop_bankaccount, shop_lastsort, shop_flags) FROM stdin;
 2	2	MP5 repo	Feeling over burdened by money?	0	0	0	We don't carry that sort of thing here.	Look, we don't carry that...	No money, no product. Simple as that.	The precursor to buying guns is that you have to have money upfront...	I don't work with those types of items.	You got it. Here you go!	Nice. Maybe I can find some poor schmuck to sell this to...	0	0	0	0	0	0	0	0	0	0	0
 3	3	MP5 repo	Feeling over burdened by money?	0	0	0	We don't carry that sort of thing here.	Look, we don't carry that...	No money, no product. Simple as that.	The precursor to buying guns is that you have to have money upfront...	I don't work with those types of items.	You got it. Here you go!	Nice. Maybe I can find some poor schmuck to sell this to...	0	0	0	0	0	0	0	0	0	0	0
+\.
+
+
+--
+-- Data for Name: skill_points; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.skill_points (id, sp_level, sp_points, created_at, updated_at) FROM stdin;
+1	1	1	2021-09-04 04:12:07.161588	2021-09-04 04:12:07.161588
+2	2	1	2021-09-04 04:12:07.162076	2021-09-04 04:12:07.162076
+3	3	1	2021-09-04 04:12:07.162457	2021-09-04 04:12:07.162457
+4	4	1	2021-09-04 04:12:07.162818	2021-09-04 04:12:07.162818
+5	5	1	2021-09-04 04:12:07.163205	2021-09-04 04:12:07.163205
+6	6	1	2021-09-04 04:12:07.163581	2021-09-04 04:12:07.163581
+7	7	1	2021-09-04 04:12:07.163933	2021-09-04 04:12:07.163933
+8	8	1	2021-09-04 04:12:07.164266	2021-09-04 04:12:07.164266
+9	9	1	2021-09-04 04:12:07.164627	2021-09-04 04:12:07.164627
+10	10	1	2021-09-04 04:12:07.165068	2021-09-04 04:12:07.165068
+11	11	1	2021-09-04 04:12:07.165411	2021-09-04 04:12:07.165411
+12	12	1	2021-09-04 04:12:07.165783	2021-09-04 04:12:07.165783
+13	13	1	2021-09-04 04:12:07.166157	2021-09-04 04:12:07.166157
+14	14	1	2021-09-04 04:12:07.166533	2021-09-04 04:12:07.166533
+15	15	1	2021-09-04 04:12:07.166887	2021-09-04 04:12:07.166887
+16	16	1	2021-09-04 04:12:07.16723	2021-09-04 04:12:07.16723
+17	17	1	2021-09-04 04:12:07.167578	2021-09-04 04:12:07.167578
+18	18	1	2021-09-04 04:12:07.167912	2021-09-04 04:12:07.167912
+19	19	1	2021-09-04 04:12:07.168322	2021-09-04 04:12:07.168322
+20	20	1	2021-09-04 04:12:07.168692	2021-09-04 04:12:07.168692
+21	21	1	2021-09-04 04:12:07.169065	2021-09-04 04:12:07.169065
+22	22	1	2021-09-04 04:12:07.169414	2021-09-04 04:12:07.169414
+23	23	1	2021-09-04 04:12:07.169779	2021-09-04 04:12:07.169779
+24	24	1	2021-09-04 04:12:07.170146	2021-09-04 04:12:07.170146
+25	25	1	2021-09-04 04:12:07.170532	2021-09-04 04:12:07.170532
+26	26	1	2021-09-04 04:12:07.170887	2021-09-04 04:12:07.170887
+27	27	1	2021-09-04 04:12:07.1713	2021-09-04 04:12:07.1713
+28	28	1	2021-09-04 04:12:07.171643	2021-09-04 04:12:07.171643
+29	29	1	2021-09-04 04:12:07.172013	2021-09-04 04:12:07.172013
+30	30	1	2021-09-04 04:12:07.172343	2021-09-04 04:12:07.172343
+\.
+
+
+--
+-- Data for Name: skill_trees; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.skill_trees (id, skill_name, skill_category, skill_player_class, skill_parent_id, skill_order, skill_description, created_at, updated_at) FROM stdin;
+1	intel:1-tracking-shot	Technology	sniper	\N	0	\N	2021-09-04 04:12:07.176871	2021-09-04 04:12:07.176871
+2	intel:2-sensor-grenade	Technology	sniper	1	0	\N	2021-09-04 04:12:07.177414	2021-09-04 04:12:07.177414
+3	intel:3-xray-shot	Technology	sniper	2	1	\N	2021-09-04 04:12:07.177917	2021-09-04 04:12:07.177917
+4	intel:4-area-scan	Technology	sniper	\N	2	\N	2021-09-04 04:12:07.178419	2021-09-04 04:12:07.178419
+5	disrupt:1-chaff-grenade	Technology	sniper	\N	0	\N	2021-09-04 04:12:07.178899	2021-09-04 04:12:07.178899
+6	disrupt:2-emp-grenade	Technology	sniper	5	1	\N	2021-09-04 04:12:07.179282	2021-09-04 04:12:07.179282
+7	claymore:1-plant	Demolitions	sniper	\N	0	\N	2021-09-04 04:12:07.17979	2021-09-04 04:12:07.17979
+8	claymore:2-shrapnel	Demolitions	sniper	7	1	\N	2021-09-04 04:12:07.180228	2021-09-04 04:12:07.180228
+9	claymore:3-corrosive	Demolitions	sniper	8	1	\N	2021-09-04 04:12:07.180698	2021-09-04 04:12:07.180698
+10	guided-missile	Demolitions	sniper	\N	1	\N	2021-09-04 04:12:07.181205	2021-09-04 04:12:07.181205
+11	light-bandage	Medical	sniper	\N	1	\N	2021-09-04 04:12:07.181575	2021-09-04 04:12:07.181575
+12	suture	Medical	sniper	\N	1	\N	2021-09-04 04:12:07.181958	2021-09-04 04:12:07.181958
+13	adrenaline-shot	Medical	sniper	\N	1	\N	2021-09-04 04:12:07.182341	2021-09-04 04:12:07.182341
+14	underbarrel-grenade-launcher	Sniping	sniper	\N	1	\N	2021-09-04 04:12:07.182739	2021-09-04 04:12:07.182739
+15	underbarrel-shotgun	Sniping	sniper	\N	1	\N	2021-09-04 04:12:07.183109	2021-09-04 04:12:07.183109
+16	target-limb	Sniping	sniper	\N	1	\N	2021-09-04 04:12:07.1835	2021-09-04 04:12:07.1835
+\.
+
+
+--
+-- Data for Name: skill_usage; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.skill_usage (id, player_id, skill_name, skill_level) FROM stdin;
+1	1	ads	0
+2	1	stealth	0
+3	1	summon	0
+4	1	xray	0
+5	1	feign	0
+6	1	claymore	0
+7	1	intimidation	0
+8	1	cryo	0
+9	1	flash	0
+10	1	ts	0
+11	1	lb	0
+12	1	suture	0
+13	1	as	0
+14	1	emp	0
+15	1	chaff	0
+16	1	sensor	0
+17	1	ubs	0
+18	1	ubf	0
+19	1	gm	0
+20	1	limb	0
+21	1	smine	0
+22	1	cmine	0
+23	1	recon	0
+24	96	ads	0
+25	96	stealth	0
+26	96	summon	0
+27	96	xray	0
+28	96	feign	0
+29	96	claymore	0
+30	96	intimidation	0
+31	96	cryo	0
+32	96	flash	0
+33	96	ts	0
+34	96	lb	0
+35	96	suture	0
+36	96	as	0
+37	96	emp	0
+38	96	chaff	0
+39	96	sensor	0
+40	96	ubs	0
+41	96	ubf	0
+42	96	gm	0
+43	96	limb	0
+44	96	smine	0
+45	96	cmine	0
+46	96	recon	0
 \.
 
 
@@ -2104,11 +6631,171 @@ COPY public.terminal_choices (id, choice_terminal_id, choice_id, choice_title, c
 
 
 --
+-- Data for Name: weapon_locker; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.weapon_locker (id, w_room_vnum, w_yaml) FROM stdin;
+\.
+
+
+--
 -- Data for Name: world_configuration_start_rooms; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.world_configuration_start_rooms (id, mortal_start_room, immortal_start_room, created_at, is_active, idle_room, frozen_room) FROM stdin;
 4	128	128	2019-06-01 19:30:07.630823	t	0	0
+\.
+
+
+--
+-- Data for Name: zone; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.zone (id, zone_virtual_number, zone_start, zone_end, zone_name, lifespan, reset_mode) FROM stdin;
+1	1	128	228	Hereford Base	10	0
+\.
+
+
+--
+-- Data for Name: zone_data; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_arg2, zone_arg3, zone_yaml) FROM stdin;
+287	1	M	0	600	143	1	\N
+288	1	M	0	601	147	8	\N
+289	1	M	0	602	143	1	\N
+290	1	M	0	603	266	1	\N
+291	1	M	0	500	131	10	\N
+292	1	M	0	501	131	10	\N
+293	1	M	0	502	212	2	\N
+294	1	M	0	502	207	2	\N
+295	1	M	0	502	204	2	\N
+296	1	M	0	502	340	2	\N
+297	1	M	0	502	199	2	\N
+298	1	M	0	502	279	2	\N
+299	1	M	0	502	139	2	\N
+300	1	Y	0	0	402	1	#yaml|vehicle/p3-hunchbak.yml
+301	1	Y	0	0	400	1	#yaml|vehicle/p3-offroad-mx3.yml
+302	1	Y	0	0	399	1	#yaml|vehicle/prime-town-suv.yml
+303	1	Y	0	0	395	1	#yaml|vehicle/lxr-sunrise.yml
+304	1	Y	0	0	393	1	#yaml|vehicle/lxr-sport.yml
+305	1	Y	0	0	394	1	#yaml|vehicle/lxr-sport.yml
+306	1	M	0	100	393	2	\N
+307	1	M	0	100	394	2	\N
+308	1	M	0	100	395	2	\N
+309	1	M	0	100	396	2	\N
+310	1	M	0	100	398	2	\N
+311	1	M	0	100	400	2	\N
+312	1	M	0	100	399	2	\N
+313	1	M	0	100	401	2	\N
+314	1	M	0	100	402	2	\N
+315	1	M	0	101	316	5	\N
+316	1	M	0	101	317	5	\N
+317	1	M	0	101	322	5	\N
+318	1	M	0	101	323	5	\N
+319	1	M	0	101	324	5	\N
+320	1	M	0	101	325	5	\N
+321	1	M	0	101	306	5	\N
+322	1	M	0	101	308	5	\N
+323	1	M	0	102	290	2	\N
+324	1	M	0	102	291	2	\N
+325	1	M	0	102	292	2	\N
+326	1	M	0	102	294	2	\N
+327	1	M	0	102	295	2	\N
+328	1	M	0	102	331	2	\N
+329	1	M	0	102	298	2	\N
+330	1	M	0	102	303	2	\N
+331	1	M	0	102	310	2	\N
+332	1	M	0	102	317	2	\N
+333	1	M	0	102	324	2	\N
+334	1	M	0	103	407	1	\N
+335	1	M	0	103	409	1	\N
+336	1	M	0	103	413	1	\N
+337	1	M	0	103	282	1	\N
+338	1	M	0	103	284	1	\N
+339	1	M	0	103	286	1	\N
+340	1	M	0	103	292	1	\N
+341	1	M	0	103	293	1	\N
+342	1	R	0	575	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+343	1	R	0	576	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+344	1	R	0	577	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+345	1	R	0	578	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+346	1	R	0	579	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+347	1	R	0	580	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+348	1	R	0	581	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+349	1	R	0	582	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+350	1	R	0	583	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+351	1	R	0	584	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+352	1	R	0	585	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+353	1	R	0	586	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+354	1	R	0	587	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+355	1	R	0	588	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+356	1	R	0	589	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+357	1	R	0	590	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+358	1	R	0	591	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+359	1	R	0	592	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+360	1	R	0	593	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+361	1	R	0	594	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+362	1	R	0	595	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+363	1	R	0	596	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+364	1	R	0	597	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+365	1	R	0	598	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+366	1	R	0	599	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+367	1	R	0	600	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+368	1	R	0	601	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+369	1	R	0	602	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+370	1	R	0	603	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+371	1	R	0	604	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+372	1	R	0	605	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+373	1	R	0	606	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+374	1	R	0	607	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+375	1	R	0	608	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+376	1	R	0	609	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+377	1	R	0	610	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+378	1	R	0	611	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+379	1	R	0	612	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+380	1	R	0	613	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+381	1	R	0	614	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+382	1	R	0	615	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+383	1	R	0	616	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+384	1	R	0	617	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+385	1	R	0	618	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+386	1	R	0	619	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+387	1	R	0	620	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+388	1	R	0	621	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+389	1	R	0	622	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+390	1	R	0	623	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+391	1	R	0	624	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+392	1	R	0	625	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+393	1	R	0	626	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+394	1	R	0	627	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+395	1	R	0	628	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+396	1	R	0	629	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+397	1	R	0	630	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+398	1	R	0	631	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+399	1	R	0	632	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+400	1	R	0	633	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+401	1	R	0	634	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+402	1	R	0	635	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+403	1	R	0	636	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+404	1	M	0	109	578	16	\N
+405	1	M	0	109	589	16	\N
+406	1	M	0	109	600	16	\N
+407	1	M	0	109	611	16	\N
+408	1	M	0	109	622	16	\N
+409	1	M	0	109	592	16	\N
+410	1	M	0	109	614	16	\N
+411	1	M	0	109	625	16	\N
+412	1	M	0	109	636	16	\N
+413	1	M	0	110	578	16	\N
+414	1	M	0	110	589	16	\N
+415	1	M	0	110	600	16	\N
+416	1	M	0	110	611	16	\N
+417	1	M	0	110	622	16	\N
+418	1	M	0	110	592	16	\N
+419	1	M	0	110	614	16	\N
+420	1	M	0	110	625	16	\N
+421	1	M	0	110	636	16	\N
 \.
 
 
@@ -2120,10 +6807,73 @@ SELECT pg_catalog.setval('public.affected_type_id_seq', 1, false);
 
 
 --
+-- Name: armor_index_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.armor_index_id_seq', 25, true);
+
+
+--
+-- Name: armor_locker_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.armor_locker_id_seq', 1, false);
+
+
+--
 -- Name: camera_feed_feed_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.camera_feed_feed_id_seq', 1, false);
+
+
+--
+-- Name: class_breacher_breacher_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.class_breacher_breacher_id_seq', 1, false);
+
+
+--
+-- Name: class_engineer_engineer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.class_engineer_engineer_id_seq', 1, false);
+
+
+--
+-- Name: class_ghost_ghost_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.class_ghost_ghost_id_seq', 1, true);
+
+
+--
+-- Name: class_marine_marine_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.class_marine_marine_id_seq', 1, false);
+
+
+--
+-- Name: class_medic_medic_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.class_medic_medic_id_seq', 1, false);
+
+
+--
+-- Name: class_sniper_sniper_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.class_sniper_sniper_id_seq', 1, true);
+
+
+--
+-- Name: class_support_support_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.class_support_support_id_seq', 1, false);
 
 
 --
@@ -2134,10 +6884,52 @@ SELECT pg_catalog.setval('public.computer_terminal_id_seq', 1, true);
 
 
 --
+-- Name: contract_step_callback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.contract_step_callback_id_seq', 6, true);
+
+
+--
+-- Name: contract_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.contract_steps_id_seq', 15, true);
+
+
+--
+-- Name: contracts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.contracts_id_seq', 6, true);
+
+
+--
+-- Name: event_messages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.event_messages_id_seq', 1, false);
+
+
+--
 -- Name: extra_description_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.extra_description_id_seq', 10, true);
+
+
+--
+-- Name: friendly_reminders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.friendly_reminders_id_seq', 1, false);
+
+
+--
+-- Name: hq_locations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hq_locations_id_seq', 1, false);
 
 
 --
@@ -2169,6 +6961,27 @@ SELECT pg_catalog.setval('public.mini_gunner_sentinel_id_seq', 2, true);
 
 
 --
+-- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.mob_equipment_id_seq', 51, true);
+
+
+--
+-- Name: mob_equipment_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 31, true);
+
+
+--
+-- Name: mob_roam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.mob_roam_id_seq', 373, true);
+
+
+--
 -- Name: mob_zone_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2179,7 +6992,7 @@ SELECT pg_catalog.setval('public.mob_zone_id_seq', 1, false);
 -- Name: mobile_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mobile_mob_id_seq', 11, true);
+SELECT pg_catalog.setval('public.mobile_mob_id_seq', 25, true);
 
 
 --
@@ -2239,10 +7052,24 @@ SELECT pg_catalog.setval('public.object_weapon_id_seq', 5, true);
 
 
 --
+-- Name: player_base_ability_pba_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.player_base_ability_pba_id_seq', 2, true);
+
+
+--
 -- Name: player_classes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.player_classes_id_seq', 1, false);
+
+
+--
+-- Name: player_contract_state_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.player_contract_state_id_seq', 1, false);
 
 
 --
@@ -2256,14 +7083,14 @@ SELECT pg_catalog.setval('public.player_flags_id_seq', 1, false);
 -- Name: player_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_id_seq', 95, true);
+SELECT pg_catalog.setval('public.player_id_seq', 96, true);
 
 
 --
--- Name: player_object_po_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_object_po_id_seq', 797, true);
+SELECT pg_catalog.setval('public.player_object_id_seq', 14, true);
 
 
 --
@@ -2288,17 +7115,66 @@ SELECT pg_catalog.setval('public.player_races_id_seq', 1, false);
 
 
 --
+-- Name: player_skill_points_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.player_skill_points_id_seq', 1, false);
+
+
+--
+-- Name: player_skill_usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.player_skill_usage_id_seq', 1, false);
+
+
+--
+-- Name: rifle_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 1, false);
+
+
+--
+-- Name: rifle_index_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.rifle_index_id_seq', 29, true);
+
+
+--
+-- Name: rifle_instance_rifle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.rifle_instance_rifle_id_seq', 1, false);
+
+
+--
+-- Name: rifle_placements_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.rifle_placements_id_seq', 1, false);
+
+
+--
 -- Name: room_direction_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.room_direction_data_id_seq', 575, true);
+SELECT pg_catalog.setval('public.room_direction_data_id_seq', 2152, true);
 
 
 --
--- Name: room_room_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: room_extra_descriptions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
--- SELECT pg_catalog.setval('public.room_room_id_seq', 81, true);
+SELECT pg_catalog.setval('public.room_extra_descriptions_id_seq', 1, false);
+
+
+--
+-- Name: room_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.room_id_seq', 554, true);
 
 
 --
@@ -2306,6 +7182,20 @@ SELECT pg_catalog.setval('public.room_direction_data_id_seq', 575, true);
 --
 
 SELECT pg_catalog.setval('public.room_virtual_number_seq', 1, false);
+
+
+--
+-- Name: scripted_sequences_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.scripted_sequences_id_seq', 12, true);
+
+
+--
+-- Name: scripted_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.scripted_steps_id_seq', 42, true);
 
 
 --
@@ -2330,10 +7220,38 @@ SELECT pg_catalog.setval('public.shops_shop_id_seq', 3, true);
 
 
 --
+-- Name: skill_points_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.skill_points_id_seq', 30, true);
+
+
+--
+-- Name: skill_trees_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.skill_trees_id_seq', 16, true);
+
+
+--
+-- Name: skill_usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.skill_usage_id_seq', 46, true);
+
+
+--
 -- Name: terminal_choices_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.terminal_choices_id_seq', 6, true);
+
+
+--
+-- Name: weapon_locker_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.weapon_locker_id_seq', 1, false);
 
 
 --
@@ -2347,7 +7265,7 @@ SELECT pg_catalog.setval('public.world_configuration_start_rooms_id_seq', 4, tru
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_data_id_seq', 16, true);
+SELECT pg_catalog.setval('public.zone_data_id_seq', 421, true);
 
 
 --
@@ -2358,27 +7276,267 @@ SELECT pg_catalog.setval('public.zone_id_seq', 151, true);
 
 
 --
+-- Name: armor_index armor_index_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.armor_index
+    ADD CONSTRAINT armor_index_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: armor_locker armor_locker_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.armor_locker
+    ADD CONSTRAINT armor_locker_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: camera_feed camera_feed_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.camera_feed
+    ADD CONSTRAINT camera_feed_pkey PRIMARY KEY (feed_id);
+
+
+--
+-- Name: class_breacher class_breacher_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_breacher
+    ADD CONSTRAINT class_breacher_pkey PRIMARY KEY (breacher_id);
+
+
+--
+-- Name: class_engineer class_engineer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_engineer
+    ADD CONSTRAINT class_engineer_pkey PRIMARY KEY (engineer_id);
+
+
+--
+-- Name: class_ghost class_ghost_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_ghost
+    ADD CONSTRAINT class_ghost_pkey PRIMARY KEY (ghost_id);
+
+
+--
+-- Name: class_marine class_marine_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_marine
+    ADD CONSTRAINT class_marine_pkey PRIMARY KEY (marine_id);
+
+
+--
+-- Name: class_medic class_medic_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_medic
+    ADD CONSTRAINT class_medic_pkey PRIMARY KEY (medic_id);
+
+
+--
+-- Name: class_sniper class_sniper_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_sniper
+    ADD CONSTRAINT class_sniper_pkey PRIMARY KEY (sniper_id);
+
+
+--
+-- Name: class_support class_support_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_support
+    ADD CONSTRAINT class_support_pkey PRIMARY KEY (support_id);
+
+
+--
 -- Name: computer_terminal computer_terminal_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
--- ALTER TABLE ONLY public.computer_terminal
-    --ADD CONSTRAINT computer_terminal_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.computer_terminal
+    ADD CONSTRAINT computer_terminal_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contract_step_callback contract_step_callback_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contract_step_callback
+    ADD CONSTRAINT contract_step_callback_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contract_steps contract_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contract_steps
+    ADD CONSTRAINT contract_steps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contracts contracts_c_vnum_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contracts
+    ADD CONSTRAINT contracts_c_vnum_key UNIQUE (c_vnum);
+
+
+--
+-- Name: contracts contracts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contracts
+    ADD CONSTRAINT contracts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: event_messages event_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.event_messages
+    ADD CONSTRAINT event_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: extra_description extra_description_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.extra_description
+    ADD CONSTRAINT extra_description_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: friendly_reminders friendly_reminders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.friendly_reminders
+    ADD CONSTRAINT friendly_reminders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hq_locations hq_locations_hq_room_vnum_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hq_locations
+    ADD CONSTRAINT hq_locations_hq_room_vnum_key UNIQUE (hq_room_vnum);
+
+
+--
+-- Name: hq_locations hq_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hq_locations
+    ADD CONSTRAINT hq_locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: integral_object integral_object_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.integral_object
+    ADD CONSTRAINT integral_object_pkey PRIMARY KEY (object_id);
+
+
+--
+-- Name: karma karma_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.karma
+    ADD CONSTRAINT karma_pkey PRIMARY KEY (karma_id);
+
+
+--
+-- Name: mini_game mini_game_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mini_game
+    ADD CONSTRAINT mini_game_pkey PRIMARY KEY (game_id);
 
 
 --
 -- Name: mini_gunner_sentinel mini_gunner_sentinel_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
--- ALTER TABLE ONLY public.mini_gunner_sentinel
-    --ADD CONSTRAINT mini_gunner_sentinel_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.mini_gunner_sentinel
+    ADD CONSTRAINT mini_gunner_sentinel_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mob_equipment_map mob_equipment_map_mmap_mob_vnum_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_equipment_map
+    ADD CONSTRAINT mob_equipment_map_mmap_mob_vnum_key UNIQUE (mmap_mob_vnum);
+
+
+--
+-- Name: mob_equipment_map mob_equipment_map_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_equipment_map
+    ADD CONSTRAINT mob_equipment_map_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mob_equipment mob_equipment_meq_vnum_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_equipment
+    ADD CONSTRAINT mob_equipment_meq_vnum_key UNIQUE (meq_vnum);
+
+
+--
+-- Name: mob_equipment mob_equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_equipment
+    ADD CONSTRAINT mob_equipment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mob_roam mob_roam_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_roam
+    ADD CONSTRAINT mob_roam_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mob_zone mob_zone_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_zone
+    ADD CONSTRAINT mob_zone_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mobile mobile_mob_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mobile
+    ADD CONSTRAINT mobile_mob_id_key UNIQUE (mob_id);
+
+
+--
+-- Name: mobile mobile_mob_virtual_number_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mobile
+    ADD CONSTRAINT mobile_mob_virtual_number_key UNIQUE (mob_virtual_number);
 
 
 --
 -- Name: npc_dialogue npc_dialogue_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
--- ALTER TABLE ONLY public.npc_dialogue
-    --ADD CONSTRAINT npc_dialogue_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.npc_dialogue
+    ADD CONSTRAINT npc_dialogue_pkey PRIMARY KEY (id);
 
 
 --
@@ -2390,6 +7548,14 @@ ALTER TABLE ONLY public.player_classes
 
 
 --
+-- Name: player_contract_state player_contract_state_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_contract_state
+    ADD CONSTRAINT player_contract_state_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: player_flags player_flags_player_id_chunk_index_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2398,9 +7564,19 @@ ALTER TABLE ONLY public.player_flags
 
 
 --
+-- Name: player_object player_object_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_object
+    ADD CONSTRAINT player_object_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: player player_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
+ALTER TABLE ONLY public.player
+    ADD CONSTRAINT player_pkey PRIMARY KEY (id);
 
 
 --
@@ -2418,12 +7594,517 @@ ALTER TABLE ONLY public.player_race_perks
 ALTER TABLE ONLY public.player_races
     ADD CONSTRAINT player_races_pkey PRIMARY KEY (id);
 
+
+--
+-- Name: player_skill_points player_skill_points_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_skill_points
+    ADD CONSTRAINT player_skill_points_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: player_skill_usage player_skill_usage_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_skill_usage
+    ADD CONSTRAINT player_skill_usage_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rifle_attachment rifle_attachment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_attachment
+    ADD CONSTRAINT rifle_attachment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rifle_index rifle_index_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_index
+    ADD CONSTRAINT rifle_index_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rifle_instance rifle_instance_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_instance
+    ADD CONSTRAINT rifle_instance_pkey PRIMARY KEY (rifle_id);
+
+
+--
+-- Name: rifle_placements rifle_placements_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_placements
+    ADD CONSTRAINT rifle_placements_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: room_direction_data room_direction_data_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.room_direction_data
+    ADD CONSTRAINT room_direction_data_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: room_extra_descriptions room_extra_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.room_extra_descriptions
+    ADD CONSTRAINT room_extra_descriptions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: room room_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.room
+    ADD CONSTRAINT room_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: room room_room_number_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.room
+    ADD CONSTRAINT room_room_number_key UNIQUE (room_number);
+
+
+--
+-- Name: scripted_sequences scripted_sequences_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.scripted_sequences
+    ADD CONSTRAINT scripted_sequences_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: scripted_sequences scripted_sequences_s_sequence_vnum_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.scripted_sequences
+    ADD CONSTRAINT scripted_sequences_s_sequence_vnum_key UNIQUE (s_sequence_vnum);
+
+
+--
+-- Name: scripted_steps scripted_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.scripted_steps
+    ADD CONSTRAINT scripted_steps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: shop_rooms shop_rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.shop_rooms
+    ADD CONSTRAINT shop_rooms_pkey PRIMARY KEY (shop_rooms_id);
+
+
+--
+-- Name: skill_points skill_points_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.skill_points
+    ADD CONSTRAINT skill_points_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: skill_trees skill_trees_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.skill_trees
+    ADD CONSTRAINT skill_trees_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: skill_trees skill_trees_skill_player_class_skill_category_skill_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.skill_trees
+    ADD CONSTRAINT skill_trees_skill_player_class_skill_category_skill_name_key UNIQUE (skill_player_class, skill_category, skill_name);
+
+
+--
+-- Name: skill_usage skill_usage_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.skill_usage
+    ADD CONSTRAINT skill_usage_pkey PRIMARY KEY (id);
+
+
 --
 -- Name: terminal_choices terminal_choices_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.terminal_choices
     ADD CONSTRAINT terminal_choices_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: weapon_locker weapon_locker_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.weapon_locker
+    ADD CONSTRAINT weapon_locker_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: zone zone_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.zone
+    ADD CONSTRAINT zone_id_key UNIQUE (id);
+
+
+--
+-- Name: zone zone_zone_virtual_number_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.zone
+    ADD CONSTRAINT zone_zone_virtual_number_key UNIQUE (zone_virtual_number);
+
+
+--
+-- Name: contract_steps fk_contract_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contract_steps
+    ADD CONSTRAINT fk_contract_vnum FOREIGN KEY (s_contract_vnum) REFERENCES public.contracts(c_vnum) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: contract_step_callback fk_contract_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contract_step_callback
+    ADD CONSTRAINT fk_contract_vnum FOREIGN KEY (s_contract_vnum) REFERENCES public.contracts(c_vnum) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: player_contract_state fk_cvnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_contract_state
+    ADD CONSTRAINT fk_cvnum FOREIGN KEY (pc_contract_vnum) REFERENCES public.contracts(c_vnum) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: mob_equipment_map fk_meq_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_equipment_map
+    ADD CONSTRAINT fk_meq_vnum FOREIGN KEY (mmap_mob_equipment_vnum) REFERENCES public.mob_equipment(meq_vnum) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: mob_zone fk_mob_virtual_number; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_zone
+    ADD CONSTRAINT fk_mob_virtual_number FOREIGN KEY (mob_virtual_number) REFERENCES public.mobile(mob_virtual_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: mob_roam fk_mob_virtual_number; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_roam
+    ADD CONSTRAINT fk_mob_virtual_number FOREIGN KEY (mob_virtual_number) REFERENCES public.mobile(mob_virtual_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: mini_gunner_sentinel fk_mob_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mini_gunner_sentinel
+    ADD CONSTRAINT fk_mob_vnum FOREIGN KEY (mgs_mob_vnum) REFERENCES public.mobile(mob_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: mob_equipment_map fk_mob_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_equipment_map
+    ADD CONSTRAINT fk_mob_vnum FOREIGN KEY (mmap_mob_vnum) REFERENCES public.mobile(mob_virtual_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: skill_trees fk_parent_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.skill_trees
+    ADD CONSTRAINT fk_parent_id FOREIGN KEY (skill_parent_id) REFERENCES public.skill_trees(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: karma fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.karma
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (karma_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: class_marine fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_marine
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (marine_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: class_breacher fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_breacher
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (breacher_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: class_engineer fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_engineer
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (engineer_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: class_medic fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_medic
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (medic_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: class_support fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_support
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (support_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: class_ghost fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_ghost
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (ghost_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: class_sniper fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_sniper
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (sniper_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: player_skill_usage fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_skill_usage
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (ps_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: player_skill_points fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_skill_points
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (ps_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: player_contract_state fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_contract_state
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (pc_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: rifle_attachment fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_attachment
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (rifle_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: player_object fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_object
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (po_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: skill_usage fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.skill_usage
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: rifle_placements fk_rifle_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_placements
+    ADD CONSTRAINT fk_rifle_id FOREIGN KEY (ip_rifle_id) REFERENCES public.rifle_instance(rifle_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: mob_zone fk_room_virtual_number; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_zone
+    ADD CONSTRAINT fk_room_virtual_number FOREIGN KEY (room_virtual_number) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: mob_roam fk_room_virtual_number; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_roam
+    ADD CONSTRAINT fk_room_virtual_number FOREIGN KEY (room_virtual_number) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: room_direction_data fk_room_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.room_direction_data
+    ADD CONSTRAINT fk_room_vnum FOREIGN KEY (room_number) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: camera_feed fk_room_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.camera_feed
+    ADD CONSTRAINT fk_room_vnum FOREIGN KEY (feed_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: computer_terminal fk_room_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.computer_terminal
+    ADD CONSTRAINT fk_room_vnum FOREIGN KEY (terminal_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: integral_object fk_room_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.integral_object
+    ADD CONSTRAINT fk_room_vnum FOREIGN KEY (object_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: mini_game fk_room_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mini_game
+    ADD CONSTRAINT fk_room_vnum FOREIGN KEY (game_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: mini_gunner_sentinel fk_room_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mini_gunner_sentinel
+    ADD CONSTRAINT fk_room_vnum FOREIGN KEY (mgs_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: npc_dialogue fk_room_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.npc_dialogue
+    ADD CONSTRAINT fk_room_vnum FOREIGN KEY (dialogue_mob_vnum) REFERENCES public.mobile(mob_virtual_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: shop_rooms fk_room_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.shop_rooms
+    ADD CONSTRAINT fk_room_vnum FOREIGN KEY (shop_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: hq_locations fk_room_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hq_locations
+    ADD CONSTRAINT fk_room_vnum FOREIGN KEY (hq_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: room_extra_descriptions fk_room_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.room_extra_descriptions
+    ADD CONSTRAINT fk_room_vnum FOREIGN KEY (red_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: contract_step_callback fk_sequence_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contract_step_callback
+    ADD CONSTRAINT fk_sequence_vnum FOREIGN KEY (s_sequence_vnum) REFERENCES public.scripted_sequences(s_sequence_vnum) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: scripted_steps fk_sequence_vnum; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.scripted_steps
+    ADD CONSTRAINT fk_sequence_vnum FOREIGN KEY (s_sequence_vnum) REFERENCES public.scripted_sequences(s_sequence_vnum) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: player_skill_usage fk_skill_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_skill_usage
+    ADD CONSTRAINT fk_skill_id FOREIGN KEY (ps_skill_id) REFERENCES public.skill_trees(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: player_skill_points fk_skill_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_skill_points
+    ADD CONSTRAINT fk_skill_id FOREIGN KEY (ps_skill_id) REFERENCES public.skill_trees(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: room fk_zone; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.room
+    ADD CONSTRAINT fk_zone FOREIGN KEY (zone) REFERENCES public.zone(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: mob_zone fk_zone_virtual_number; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mob_zone
+    ADD CONSTRAINT fk_zone_virtual_number FOREIGN KEY (zone_virtual_number) REFERENCES public.zone(zone_virtual_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -2442,886 +8123,7 @@ ALTER TABLE ONLY public.player_race_perks
     ADD CONSTRAINT player_race_perks_prperk_id_fkey FOREIGN KEY (prperk_id) REFERENCES public.player_races(id);
 
 
-
 --
 -- PostgreSQL database dump complete
 --
-
-CREATE TABLE public.player_base_ability (
-		pba_id SERIAL,
-		pba_player_id INTEGER NOT NULL,
-		pba_str INTEGER NOT NULL DEFAULT 0,
-		pba_str_add INTEGER NOT NULL DEFAULT 0,
-		pba_intel INTEGER NOT NULL DEFAULT 0,
-		pba_wis INTEGER NOT NULL DEFAULT 0,
-		pba_dex INTEGER NOT NULL DEFAULT 0,
-		pba_con INTEGER NOT NULL DEFAULT 0,
-		pba_cha INTEGER NOT NULL DEFAULT 0,
-		pba_electronics INTEGER NOT NULL DEFAULT 0,
-		pba_armor INTEGER NOT NULL DEFAULT 0,
-		pba_marksmanship INTEGER NOT NULL DEFAULT 0,
-		pba_sniping INTEGER NOT NULL DEFAULT 0,
-		pba_demolitions INTEGER NOT NULL DEFAULT 0,
-		pba_chemistry INTEGER NOT NULL DEFAULT 0,
-		pba_weapon_handling INTEGER NOT NULL DEFAULT 0,
-		pba_strategy INTEGER NOT NULL DEFAULT 0,
-		pba_medical INTEGER NOT NULL DEFAULT 0,
-		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE public.class_marine (
-	marine_id SERIAL,
-	marine_player_id INTEGER NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY(marine_id),
-	CONSTRAINT fk_player_id
-		FOREIGN KEY (marine_player_id)
-		REFERENCES public.player(id)
-		ON DELETE CASCADE
-		ON UPDATE CASCADE
-);
-CREATE TABLE public.class_breacher (
-	breacher_id SERIAL,
-	breacher_player_id INTEGER NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY(breacher_id),
-	CONSTRAINT fk_player_id
-		FOREIGN KEY (breacher_player_id)
-		REFERENCES public.player(id)
-		ON DELETE CASCADE
-		ON UPDATE CASCADE
-);
-
-CREATE TABLE public.class_engineer (
-	engineer_id SERIAL,
-	engineer_player_id INTEGER NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY(engineer_id),
-	CONSTRAINT fk_player_id
-		FOREIGN KEY (engineer_player_id)
-		REFERENCES public.player(id)
-		ON DELETE CASCADE
-		ON UPDATE CASCADE
-);
-CREATE TABLE public.class_medic (
-	medic_id SERIAL,
-	medic_player_id INTEGER NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY(medic_id),
-	CONSTRAINT fk_player_id
-		FOREIGN KEY (medic_player_id)
-		REFERENCES public.player(id)
-		ON DELETE CASCADE
-		ON UPDATE CASCADE
-);
-CREATE TABLE public.class_support (
-	support_id SERIAL,
-	support_player_id INTEGER NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY(support_id),
-	CONSTRAINT fk_player_id
-		FOREIGN KEY (support_player_id)
-		REFERENCES public.player(id)
-		ON DELETE CASCADE
-		ON UPDATE CASCADE
-);
-CREATE TABLE public.class_ghost (
-	ghost_id SERIAL,
-	ghost_player_id INTEGER NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY(ghost_id),
-	CONSTRAINT fk_player_id
-		FOREIGN KEY (ghost_player_id)
-		REFERENCES public.player(id)
-		ON DELETE CASCADE
-		ON UPDATE CASCADE
-);
-CREATE TABLE public.class_sniper (
-	sniper_id SERIAL,
-	sniper_player_id INTEGER NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY(sniper_id),
-	CONSTRAINT fk_player_id
-		FOREIGN KEY (sniper_player_id)
-		REFERENCES public.player(id)
-		ON DELETE CASCADE
-		ON UPDATE CASCADE
-);
-insert into public.class_sniper (sniper_player_id) VALUES((SELECT id from public.player where player_name='far'));
-ALTER TABLE public.mob_roam ADD COLUMN profile_name varchar(255);
-CREATE TABLE public.rifle_index (
-  id SERIAL UNIQUE,
-	rifle_filename VARCHAR NOT NULL,
-	rifle_type VARCHAR NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id)
-);
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'augpara.yml', 'smg');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'fmg9.yml', 'smg');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'mp5.yml', 'smg');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'mp9.yml', 'smg');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'p90.yml', 'smg');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'tar21.yml', 'smg');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'ump45.yml', 'smg');
-
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'l96aw.yml', 'sniper');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'psg1.yml', 'sniper');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'xm109.yml', 'sniper');
-
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'belt-fed-minigun.yml', 'lmg');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'hk21.yml', 'lmg');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'mk46.yml', 'lmg');
-
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'czp10.yml', 'pistol');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'desert-eagle.yml', 'pistol');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'glock.yml', 'pistol');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'magnum-revolver.yml', 'pistol');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'ppk.yml', 'pistol');
-
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'famas.yml', 'ar');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'g36c.yml', 'ar');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'm16a4.yml', 'ar');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'm3.yml', 'ar');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'm4.yml', 'ar');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'scarh.yml', 'ar');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( '552-commando.yml', 'ar');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'aug-a3.yml', 'ar');
-
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'saiga12.yml', 'shotgun');
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'sasg12.yml', 'shotgun');
-
-INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'uzi.yml', 'mp');
-
-CREATE TABLE public.armor_index (
-  id SERIAL UNIQUE,
-	armor_filename VARCHAR NOT NULL,
-	armor_type VARCHAR NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id)
-);
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('baklava.yml','head');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('tactical-gas-mask.yml','head');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('thermal-goggles.yml','goggles');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('night-vision-goggles.yml','goggles');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('titan-shoulder-pads.yml','shoulders');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm-scorpio-shoulder-pads.yml','shoulders');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('viper-shoulder-pads.yml','shoulders');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('falcon-shoulder-pads.yml','shoulders');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('basic-ballistic-vest.yml','vest');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('falcon-ballistic-vest.yml','vest');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('raven-ballistic-vest.yml','vest');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('vulture-ballistic-vest.yml','vest');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm-scorpio-slotted-vest-pack.yml','vestpack');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('raven-ultralight-backpack.yml','backpack');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('titan-gauntlets.yml','arms');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('titan-elbow-guards.yml','elbow');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('razor-gps-wrist-watch.yml','wrist');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm-scorpio-tactical-gloves.yml','hands');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm-scorpio-belt.yml','waist');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('titan-shin-guards.yml','legs');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('viper-leg-guards.yml','legs');
-
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('basic-boots.yml','feet');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm50-ultralight-boots.yml','feet');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm607-vulture-boots.yml','feet');
-INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm8-panama-combat-boots.yml','feet');
-
-
-CREATE TABLE public.skill_points (
-  id SERIAL UNIQUE,
-	sp_level integer NOT NULL,
-	sp_points integer NOT NULL DEFAULT 0,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id)
-);
-
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(1, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(2, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(3, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(4, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(5, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(6, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(7, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(8, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(9, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(10, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(11, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(12, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(13, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(14, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(15, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(16, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(17, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(18, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(19, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(20, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(21, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(22, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(23, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(24, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(25, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(26, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(27, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(28, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(29, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(30, 1);
-
-
-
-CREATE TABLE public.skill_trees (
-  id SERIAL UNIQUE,
-	skill_name varchar(255) NOT NULL,
-	skill_category varchar(255) NOT NULL,
-	skill_player_class varchar(255) NOT NULL,
-	skill_parent_id integer,	-- refers back to the primary key of this table
-	skill_order integer NOT NULL DEFAULT 0,
-	skill_description TEXT,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	UNIQUE(skill_player_class,skill_category,skill_name),
-	PRIMARY KEY(id),
-		CONSTRAINT fk_parent_id
-			FOREIGN KEY (skill_parent_id)
-			REFERENCES public.skill_trees(id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'intel:1-tracking-shot',
-				'sniper',
-				'Technology',
-				NULL,
-				0
-			);
-
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'intel:2-sensor-grenade',
-				'sniper',
-				'Technology',
-				(SELECT id from public.skill_trees WHERE skill_name='intel:1-tracking-shot'),
-				0
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'intel:3-xray-shot',
-				'sniper',
-				'Technology',
-				(SELECT id from public.skill_trees WHERE skill_name='intel:2-sensor-grenade'),
-				1
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'intel:4-area-scan',
-				'sniper',
-				'Technology',
-				(SELECT id from public.skill_trees WHERE skill_name='intel:3-sensor-grenade'),
-				2
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'disrupt:1-chaff-grenade',
-				'sniper',
-				'Technology',
-				NULL,
-				0
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'disrupt:2-emp-grenade',
-				'sniper',
-				'Technology',
-				(SELECT id from public.skill_trees WHERE skill_name='disrupt:1-chaff-grenade'),
-				1
-			);
-
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'claymore:1-plant',
-				'sniper',
-				'Demolitions',
-				NULL,
-				0
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'claymore:2-shrapnel',
-				'sniper',
-				'Demolitions',
-				(SELECT id from public.skill_trees WHERE skill_name='claymore:1-plant'),
-				1
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'claymore:3-corrosive',
-				'sniper',
-				'Demolitions',
-				(SELECT id from public.skill_trees WHERE skill_name='claymore:2-shrapnel'),
-				1
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'guided-missile',
-				'sniper',
-				'Demolitions',
-				NULL,
-				1
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'light-bandage',
-				'sniper',
-				'Medical',
-				NULL,
-				1
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'suture',
-				'sniper',
-				'Medical',
-				NULL,
-				1
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'adrenaline-shot',
-				'sniper',
-				'Medical',
-				NULL,
-				1
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'underbarrel-grenade-launcher',
-				'sniper',
-				'Sniping',
-				NULL,
-				1
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'underbarrel-shotgun',
-				'sniper',
-				'Sniping',
-				NULL,
-				1
-			);
-INSERT INTO public.skill_trees (
-	skill_name,
-	skill_player_class,
-	skill_category,
-	skill_parent_id,
-	skill_order
-) VALUES(
-				'target-limb',
-				'sniper',
-				'Sniping',
-				NULL,
-				1
-			);
-
-CREATE TABLE public.player_skill_usage (
-	id SERIAL UNIQUE,
-	ps_player_id integer NOT NULL,
-	ps_skill_id integer NOT NULL,
-	ps_usage_count integer NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_player_id
-		FOREIGN KEY (ps_player_id)
-		REFERENCES public.player(id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE,
-		CONSTRAINT fk_skill_id
-		FOREIGN KEY (ps_skill_id)
-		REFERENCES public.skill_trees(id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-		);
-
-CREATE TABLE public.player_skill_points (
-  id SERIAL UNIQUE,
-	ps_skill_id integer NOT NULL,
-	ps_points integer NOT NULL DEFAULT 0,
-	ps_player_id integer NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_skill_id
-			FOREIGN KEY (ps_skill_id)
-			REFERENCES public.skill_trees(id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE,
-		CONSTRAINT fk_player_id
-			FOREIGN KEY (ps_player_id)
-			REFERENCES public.player(id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-
-CREATE TABLE public.rifle_instance (
-  rifle_id SERIAL UNIQUE,
-  rifle_accuracy_map_0 double precision DEFAULT 10.0,
-  rifle_accuracy_map_1 double precision DEFAULT 10.0,
-  rifle_accuracy_map_2 double precision DEFAULT 10.0,
-  rifle_accuracy_map_3 double precision DEFAULT 10.0,
-  rifle_damage_map_0 double precision DEFAULT 10.0,
-  rifle_damage_map_1 double precision DEFAULT 10.0,
-  rifle_damage_map_2 double precision DEFAULT 10.0,
-  rifle_damage_map_3 double precision DEFAULT 10.0,
-	rifle_rarity public.rarity_t DEFAULT 'COMMON'::public.rarity_t NOT NULL,
-	rifle_file VARCHAR(32),
-	rifle_str_type VARCHAR(16),
-	rifle_type VARCHAR(16),
-	rifle_manufacturer VARCHAR(32),
-	rifle_name VARCHAR(32),
-	rifle_vnum integer,
-	rifle_ammo_max integer,
-	rifle_ammo_type VARCHAR(16) NOT NULL DEFAULT 'SNIPER',
-	rifle_chance_to_injure FLOAT,
-	rifle_clip_size integer,
-	rifle_cooldown_between_shots integer,
-	rifle_critical_chance integer,
-	rifle_critical_range integer,
-	rifle_damage_per_second double precision,
-	rifle_disorient_amount double precision,
-	rifle_headshot_bonus double precision,
-	rifle_max_range integer,
-	rifle_range_multiplier double precision,
-	rifle_reload_time integer,
-	rifle_rounds_per_minute integer,
-	rifle_muzzle_velocity integer,
-	rifle_effective_firing_range integer,
-	rifle_damage_dice_count integer,
-	rifle_damage_dice_sides integer,
-	rifle_incendiary_damage integer,
-	rifle_explosive_damage integer,
-	rifle_shrapnel_damage integer,
-	rifle_corrosive_damage integer,
-	rifle_cryogenic_damage integer,
-	rifle_radioactive_damage integer,
-	rifle_emp_damage integer,
-	rifle_shock_damage integer,
-	rifle_anti_matter_damage integer,
-	rifle_stat_strength integer,
-	rifle_stat_intelligence integer,
-	rifle_stat_wisdom integer,
-	rifle_stat_dexterity integer,
-	rifle_stat_constitution integer,
-	rifle_stat_electronics integer,
-	rifle_stat_armor integer,
-	rifle_stat_marksmanship integer,
-	rifle_stat_sniping integer,
-	rifle_stat_demolitions integer,
-	rifle_stat_chemistry integer,
-	rifle_stat_weapon_handling integer,
-	rifle_stat_strategy integer,
-	rifle_stat_medical integer,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(rifle_id)
-);
-
-CREATE TABLE public.rifle_placements (
-  id SERIAL UNIQUE,
-	ip_room_vnum integer NOT NULL,
-	ip_container_selector TEXT,
-	ip_rifle_id integer NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_rifle_id
-			FOREIGN KEY (ip_rifle_id)
-			REFERENCES public.rifle_instance(rifle_id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-
-CREATE TABLE public.mob_equipment (
-	id SERIAL UNIQUE,
-	meq_profile_name varchar(1024),
-	meq_vnum integer UNIQUE NOT NULL,
-	meq_light varchar(1024),    
-	meq_finger_r varchar(1024), 
-	meq_finger_l varchar(1024), 
-	meq_neck_1 varchar(1024),    
-	meq_neck_2 varchar(1024),    
-	meq_body varchar(1024),     
-	meq_head varchar(1024),     
-	meq_legs varchar(1024),     
-	meq_feet varchar(1024),     
-	meq_hands varchar(1024),    
-	meq_arms varchar(1024),     
-	meq_shield varchar(1024),   
-	meq_about varchar(1024),    
-	meq_waist varchar(1024),    
-	meq_wrist_r varchar(1024),  
-	meq_wrist_l varchar(1024),  
-	meq_wield varchar(1024),    
-	meq_hold varchar(1024),     
-	meq_secondary varchar(1024),
-	meq_shoulders_l varchar(1024),
-	meq_shoulders_r varchar(1024),
-	meq_backpack varchar(1024),
-	meq_goggles varchar(1024),
-	meq_vest_pack varchar(1024),
-	meq_elbow_l varchar(1024),
-	meq_elbow_r varchar(1024),
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id)
-);
-CREATE TABLE public.mob_equipment_map (
-  id SERIAL UNIQUE,
-	mmap_mob_vnum integer NOT NULL UNIQUE,
-	mmap_mob_equipment_vnum integer NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_mob_vnum
-			FOREIGN KEY (mmap_mob_vnum)
-			REFERENCES public.mobile(mob_virtual_number)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE,
-		CONSTRAINT fk_meq_vnum
-			FOREIGN KEY (mmap_mob_equipment_vnum)
-			REFERENCES public.mob_equipment(meq_vnum)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-CREATE TABLE public.hq_locations (
-	id SERIAL UNIQUE,
-	hq_affiliation varchar(32),
-	hq_room_vnum integer UNIQUE NOT NULL,
-	hq_level integer NOT NULL DEFAULT 1,
-	hq_basic_mob_count integer NOT NULL DEFAULT 10,
-	hq_advanced_mob_count integer NOT NULL DEFAULT 10,
-	hq_elite_mob_count integer NOT NULL DEFAULT 10,
-	hq_suv_count integer NOT NULL DEFAULT 10,
-	hq_sedan_count integer NOT NULL DEFAULT 20,
-	hq_armored_van_count integer NOT NULL DEFAULT 2,
-	hq_replenish_ticks integer NOT NULL DEFAULT 150,
-	hq_replenish_basic_count integer NOT NULL DEFAULT 15,
-	hq_replenish_advanced_count integer NOT NULL DEFAULT 10,
-	hq_replenish_elite_count integer NOT NULL DEFAULT 2,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_room_vnum
-			FOREIGN KEY (hq_room_vnum)
-			REFERENCES public.room(room_number)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-CREATE TABLE public.contracts (
-	id SERIAL UNIQUE,
-	c_vnum integer NOT NULL UNIQUE,
-	c_description TEXT NOT NULL,
-	c_title TEXT NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id)
-);
-CREATE TABLE public.contract_steps (
-	id SERIAL UNIQUE,
-	s_contract_vnum integer not null,
-	s_task_type integer NOT NULL,
-	s_task_target integer NOT NULL,
-	s_description TEXT NOT NULL,
-	s_object_yaml TEXT,
-	s_mob_vnum integer,
-	s_room_vnum integer,
-	s_quota integer,
-	s_is_optional boolean NOT NULL DEFAULT false,
-	s_order integer not null,
-	s_reward_xp integer,
-	s_reward_money integer,
-	s_reward_1 text,
-	s_reward_2 text,
-	s_reward_3 text,
-	s_reward_4 text,
-	s_reward_5 text,
-	s_reward_6 text,
-	s_reward_7 text,
-	s_reward_8 text,
-	s_reward_9 text,
-	s_reward_10 text,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_contract_vnum
-			FOREIGN KEY (s_contract_vnum)
-			REFERENCES public.contracts(c_vnum)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-CREATE TABLE public.player_contract_state (
-	id SERIAL UNIQUE,
-	pc_player_id integer NOT NULL,
-	pc_contract_vnum integer NOT NULL,
-	pc_state_data TEXT,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_cvnum
-			FOREIGN KEY (pc_contract_vnum)
-			REFERENCES public.contracts(c_vnum)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE,
-		CONSTRAINT fk_player_id
-			FOREIGN KEY (pc_player_id)
-			REFERENCES public.player(id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-CREATE TABLE public.rifle_attachment (
-	id SERIAL UNIQUE,
-	rifle_player_id integer NOT NULL,
-	rifle_data TEXT NOT NULL,
-	rifle_position TEXT NOT NULL DEFAULT 'inventory',
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_player_id
-			FOREIGN KEY (rifle_player_id)
-			REFERENCES public.player(id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-
-ALTER TABLE public.room ADD COLUMN nickname TEXT; 
-CREATE TABLE public.scripted_sequences (
-	id SERIAL UNIQUE,
-	s_sequence_vnum INTEGER NOT NULL UNIQUE,
-	PRIMARY KEY(id)
-);
-CREATE TABLE public.contract_step_callback (
-	id SERIAL UNIQUE,
-		s_contract_vnum INTEGER NOT NULL,
-		s_task_type TEXT,
-		s_task_target TEXT,
-		s_task_vnum INTEGER,
-		s_sequence_vnum INTEGER NOT NULL,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_contract_vnum
-			FOREIGN KEY (s_contract_vnum)
-			REFERENCES public.contracts(c_vnum)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE,
-		CONSTRAINT fk_sequence_vnum
-			FOREIGN KEY (s_sequence_vnum)
-			REFERENCES public.scripted_sequences(s_sequence_vnum)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-CREATE TABLE public.scripted_steps (
-	id SERIAL UNIQUE,
-	s_sequence_vnum INTEGER NOT NULL,
-	s_wait_ticks INTEGER NOT NULL DEFAULT 0,
-	s_mob INTEGER,
-	s_obj INTEGER,
-	s_room INTEGER,
-	s_quantity INTEGER,
-	s_order INTEGER NOT NULL DEFAULT 0,
-	s_interpret TEXT,
-	s_yaml TEXT,
-	s_type TEXT NOT NULL,
-	s_dialogue TEXT,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_sequence_vnum
-			FOREIGN KEY (s_sequence_vnum)
-			REFERENCES public.scripted_sequences(s_sequence_vnum)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-
-CREATE TABLE public.weapon_locker (
-	id SERIAL UNIQUE,
-	w_room_vnum INTEGER[] NOT NULL,
-	w_yaml TEXT[] NOT NULL,
-	PRIMARY KEY(id)
-);
-
-CREATE TABLE public.armor_locker (
-	id SERIAL UNIQUE,
-	a_room_vnum INTEGER[] NOT NULL,
-	a_yaml TEXT[] NOT NULL,
-	PRIMARY KEY(id)
-);
-
-DROP TABLE public.player_object;
-CREATE TABLE public.player_object (
-    id SERIAL UNIQUE,
-    po_player_id integer NOT NULL,
-    po_type integer NOT NULL,
-    po_type_id integer,
-		po_yaml TEXT,
-    po_load_type integer NOT NULL,
-    po_wear_position integer,
-    po_in_inventory integer,
-		po_quantity integer NOT NULL DEFAULT 1,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_player_id
-			FOREIGN KEY (po_player_id)
-			REFERENCES public.player(id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-
-CREATE TABLE public.skill_usage (
-    id SERIAL UNIQUE,
-    player_id integer NOT NULL,
-    skill_name VARCHAR(32) NOT NULL,
-		skill_level float NOT NULL DEFAULT 0.0,
-	PRIMARY KEY(id),
-		CONSTRAINT fk_player_id
-			FOREIGN KEY (player_id)
-			REFERENCES public.player(id)
-			ON DELETE CASCADE
-			ON UPDATE CASCADE
-);
-
-ALTER TABLE public.player ADD COLUMN player_practice_sessions INTEGER NOT NULL DEFAULT 1;
-/** sets mini gunner extended types to car thief extended types */
-update public.mobile set mob_special_extended_type=14 where mob_special_extended_type=1;
-ALTER TABLE public.zone_data ADD COLUMN zone_yaml TEXT;
-ALTER TABLE public.rifle_instance ALTER COLUMN rifle_type TYPE VARCHAR(32);
-ALTER TABLE public.rifle_instance ALTER COLUMN rifle_ammo_type TYPE VARCHAR(32);
-ALTER TABLE public.rifle_instance ALTER COLUMN rifle_str_type TYPE VARCHAR(32);
-ALTER TABLE public.mobile ADD COLUMN mob_targets TEXT;
-update public.player set player_class=9 where player_name='far';
-
-CREATE TABLE public.room_extra_descriptions (
-    id SERIAL,
-    red_room_vnum integer NOT NULL,
-    red_keyword text NOT NULL,
-    red_description text NOT NULL,
-		PRIMARY KEY(id),
-			CONSTRAINT fk_room_vnum
-				FOREIGN KEY(red_room_vnum)
-					REFERENCES public.room(room_number)
-					ON DELETE CASCADE
-					ON UPDATE CASCADE
-);
-ALTER TABLE public.mobile ADD COLUMN mob_roam_pattern TEXT;
-CREATE TABLE public.friendly_reminders (
-    id SERIAL,
-    fr_msg text NOT NULL,
-		PRIMARY KEY(id)
-);
-CREATE TABLE public.event_messages (
-    id SERIAL,
-    em_msg text NOT NULL,
-		PRIMARY KEY(id)
-);
-ALTER TABLE public.mobile ADD COLUMN mob_ability_electronics INTEGER NOT NULL DEFAULT 1;
-ALTER TABLE public.mobile ADD COLUMN mob_ability_armor INTEGER NOT NULL DEFAULT 1;
-ALTER TABLE public.mobile ADD COLUMN mob_ability_marksmanship INTEGER NOT NULL DEFAULT 1;
-ALTER TABLE public.mobile ADD COLUMN mob_ability_sniping INTEGER NOT NULL DEFAULT 1;
-ALTER TABLE public.mobile ADD COLUMN mob_ability_demolitions INTEGER NOT NULL DEFAULT 1;
-ALTER TABLE public.mobile ADD COLUMN mob_ability_chemistry INTEGER NOT NULL DEFAULT 1;
-ALTER TABLE public.mobile ADD COLUMN mob_ability_weapon_handling INTEGER NOT NULL DEFAULT 1;
-ALTER TABLE public.mobile ADD COLUMN mob_ability_strategy INTEGER NOT NULL DEFAULT 1;
-ALTER TABLE public.mobile ADD COLUMN mob_ability_medical INTEGER NOT NULL DEFAULT 1;
 
