@@ -3285,12 +3285,12 @@ CREATE TABLE public.skill_usage (
 ALTER TABLE public.player ADD COLUMN player_practice_sessions INTEGER NOT NULL DEFAULT 1;
 /** sets mini gunner extended types to car thief extended types */
 update public.mobile set mob_special_extended_type=14 where mob_special_extended_type=1;
-ALTER TABLE zone_data ADD COLUMN zone_yaml TEXT;
-ALTER TABLE rifle_instance ALTER COLUMN rifle_type TYPE VARCHAR(32);
-ALTER TABLE rifle_instance ALTER COLUMN rifle_ammo_type TYPE VARCHAR(32);
-ALTER TABLE rifle_instance ALTER COLUMN rifle_str_type TYPE VARCHAR(32);
-ALTER TABLE mobile ADD COLUMN mob_targets TEXT;
-update player set player_class=9 where player_name='far';
+ALTER TABLE public.zone_data ADD COLUMN zone_yaml TEXT;
+ALTER TABLE public.rifle_instance ALTER COLUMN rifle_type TYPE VARCHAR(32);
+ALTER TABLE public.rifle_instance ALTER COLUMN rifle_ammo_type TYPE VARCHAR(32);
+ALTER TABLE public.rifle_instance ALTER COLUMN rifle_str_type TYPE VARCHAR(32);
+ALTER TABLE public.mobile ADD COLUMN mob_targets TEXT;
+update public.player set player_class=9 where player_name='far';
 
 CREATE TABLE public.room_extra_descriptions (
     id SERIAL,
@@ -3304,4 +3304,14 @@ CREATE TABLE public.room_extra_descriptions (
 					ON DELETE CASCADE
 					ON UPDATE CASCADE
 );
-ALTER TABLE mobile ADD COLUMN mob_roam_pattern TEXT;
+ALTER TABLE public.mobile ADD COLUMN mob_roam_pattern TEXT;
+CREATE TABLE public.friendly_reminders (
+    id SERIAL,
+    fr_msg text NOT NULL,
+		PRIMARY KEY(id)
+);
+CREATE TABLE public.event_messages (
+    id SERIAL,
+    em_msg text NOT NULL,
+		PRIMARY KEY(id)
+);
