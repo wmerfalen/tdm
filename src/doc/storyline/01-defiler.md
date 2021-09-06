@@ -13,9 +13,10 @@ large quantities of meat in freezer compartments, however this case is
 different. All meat shipments are the size of human adults. 
 
 # Quest 1: Infiltration of Allied Foods' butcher area
-We need you enter the Allied Foods marketplace and find take several samples
-of the meat that is being stored. Once you have the samples, bring them back
-to the TRITON science lab here in the COBALT Forward Operating Base.
+We need you to enter the Allied Foods marketplace and find anything 
+that may point toward illegal activity. I've got clearance from very high
+up on this one, and the district attorney is just itching to find a reason
+to blow the cover on this operation. 
 
 # Quest 1: Armed Resistance
 	- RADIO: "We did not expect for there to be armed guards, but it's also not
@@ -34,9 +35,34 @@ to the TRITON science lab here in the COBALT Forward Operating Base.
 	- RADIO: "Shit! We've detected several black SUV's on their way to your position
 		right now! Prepare for a fight!"
 # Quest 1: Killed off the MOBs from the SUV's
-	- RADIO: "Good job killing off the resistance. We will need to take samples of the 
-		meats in those bottom compartments. Grab the samples and head back to the 
-		TRITON Labs here on the COFOB."
+	- RADIO: "It looks like one heavily protected SUV is on the way. We believe this
+		vehicle is harboring the individual known simply as The Defiler. Get to the 
+		loading dock and wait for his arrival."
+# Quest 1: The Defiler shows up
+	- RADIO: "There he is! He's armed! Take him down!"
+
+# The Defiler - Mob analysis
+	# Theme
+	The general theme of The Defiler is one of utilizing death to his advantage
+	Think of a necromancer
+	# Special Moves
+		- Can detonate limbs and body parts
+		- Can possess corpses to stand up and chase+detonate near players
+		- Can sprout hands that come up from inside the floor and hold you down
+			- Sprouted players are stuck but can still use ranged attacks
+				- FLEE - does a 2d6 roll. if >= 10, immediately freed
+					- if >= 10, immediately freed
+					- if < 10, re-roll
+					- 3rd time, always freed
+				- getting freed from sprouts takes 1/4th movement points
+	# Telegraphed moves
+		- Can move very quickly through use of teleports...
+			- However, when he teleports near you, he laughs maniacally, thus giving his position away
+			- "You hear a maniacal laughter coming from the DIRECTION!"
+		- Right before firing SCAR-H, he screams: 
+			- "THE DARK LORD COMETH!"
+			- "LET'S MAKE A CORPSE!"
+			- "BLEED YOUR SOUL!"
 
 # Quest completion
 

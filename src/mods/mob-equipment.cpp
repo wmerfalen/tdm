@@ -6,7 +6,7 @@
 
 #ifdef  __MENTOC_MODS_MOBS_HELPERS_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("mods::mob_equipment") << a << "\n";
-#define m_error(a) mentoc_prefix_debug("mods::mob_equipment") << a << "\n";
+#define m_error(a) mentoc_prefix_debug("mods::mob_equipment[ERROR]") << a << "\n";
 #else
 #define m_debug(a) ;;
 #define m_error(a)
