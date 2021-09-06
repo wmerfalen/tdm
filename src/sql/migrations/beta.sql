@@ -4,6 +4,7 @@ CREATE DATABASE mud WITH OWNER = postgres;
 \c mud
 
 --
+--
 -- PostgreSQL database dump
 --
 
@@ -3716,8 +3717,8 @@ COPY public.computer_terminal (id, terminal_room_vnum, terminal_type, terminal_a
 --
 
 COPY public.contract_step_callback (id, s_contract_vnum, s_task_type, s_task_target, s_task_vnum, s_sequence_vnum) FROM stdin;
-7	1	GOAL_FIND	TARGET_ROOM	143	1
-8	1	GOAL_FIND	TARGET_ROOM	144	2
+9	1	GOAL_FIND	TARGET_ROOM	143	1
+10	1	GOAL_FIND	TARGET_ROOM	144	2
 \.
 
 
@@ -3726,11 +3727,11 @@ COPY public.contract_step_callback (id, s_contract_vnum, s_task_type, s_task_tar
 --
 
 COPY public.contract_steps (id, s_contract_vnum, s_task_type, s_task_target, s_description, s_object_yaml, s_mob_vnum, s_room_vnum, s_quota, s_is_optional, s_order, s_reward_xp, s_reward_money, s_reward_1, s_reward_2, s_reward_3, s_reward_4, s_reward_5, s_reward_6, s_reward_7, s_reward_8, s_reward_9, s_reward_10, created_at, updated_at) FROM stdin;
-16	1	1	2	Find Doctor Land. Doctor Land is a ballistics expert and as such runs the majority of the new recruit shooting range\r\nactivities. You can find him in the gear room.	\N	0	266	0	f	0	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 22:42:18.691019	2021-09-04 22:42:18.691019
-17	1	1	2	Locate the TRITON Labs research scientist. He can give you the magazines that Doctor Land requires.\r\n	\N	0	143	0	f	1	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 22:42:18.692451	2021-09-04 22:42:18.692451
-18	1	1	2	Follow the TRITON Labs research scientist north to get the magazines.\r\n	\N	0	144	0	f	2	850	5000	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 22:42:18.693809	2021-09-04 22:42:18.693809
-19	1	1	0	Go back to Doctor Land with the magazines.\r\n	\N	603	0	0	f	3	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 22:42:18.695174	2021-09-04 22:42:18.695174
-20	1	512	0	Give all 4 magazines to Doctor Land so that he can find a way to build more.\r\n	\N	603	0	4	f	4	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 22:42:18.6965	2021-09-04 22:42:18.6965
+21	1	1	2	Find Doctor Land. Doctor Land is a ballistics expert and as such runs the majority of the new recruit shooting range\r\nactivities. You can find him in the gear room.	\N	0	266	0	f	0	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:27.540974	2021-09-06 01:20:27.540974
+22	1	1	2	Locate the TRITON Labs research scientist. He can give you the magazines that Doctor Land requires.\r\n	\N	0	143	0	f	1	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:27.54226	2021-09-06 01:20:27.54226
+23	1	1	2	Follow the TRITON Labs research scientist north to get the magazines.\r\n	\N	0	144	0	f	2	850	5000	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:27.54348	2021-09-06 01:20:27.54348
+24	1	1	0	Go back to Doctor Land with the magazines.\r\n	\N	603	0	0	f	3	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:27.54471	2021-09-06 01:20:27.54471
+25	1	512	0	Give all 4 magazines to Doctor Land so that he can find a way to build more.\r\n	\N	603	0	4	f	4	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:27.545901	2021-09-06 01:20:27.545901
 \.
 
 
@@ -3739,7 +3740,7 @@ COPY public.contract_steps (id, s_contract_vnum, s_task_type, s_task_target, s_d
 --
 
 COPY public.contracts (id, c_vnum, c_description, c_title, created_at, updated_at) FROM stdin;
-7	1	Good evening, soldier. According to recent advances in our {yel}TRITON{/yel} sponsored laboratory a new kind of ammunition is being built.\r\n\r\nThe blueprint for this ammunition contains heavy amounts of radioactive isotopes from recently spent Uranium. Find the scientist in the armory to east of {blu}COBALT{/blu} Main hallway. He will give you the magazines he has made so far. Once you've acquired the magazines, I will give you further instructions over radio.\r\n{yel}Here are the contract instructions:{/yel}\r\n{yel}1) {grn}Find {blu}Doctor Land{/blu} {grn}in the Gear Room near the shooting range.{/grn}\r\n{yel}2) {grn}Find the TRITON Labs scientist. He will give you the magazines you need.\r\n{yel}3) {grn}Take the magazines to {blu}Doctor Land{/blu}.\r\n{yel}4) {grn}Talk to {blu}Doctor Land{/blu} on next steps...\r\n	Experimental {yel}High Velocity{/yel} magazines.	2021-09-04 22:42:18.689078	2021-09-04 22:42:18.689078
+9	1	Good evening, soldier. According to recent advances in our {yel}TRITON{/yel} sponsored laboratory a new kind of ammunition is being built.\r\n\r\nThe blueprint for this ammunition contains heavy amounts of radioactive isotopes from recently spent Uranium. Find the scientist in the armory to east of {blu}COBALT{/blu} Main hallway. He will give you the magazines he has made so far. Once you've acquired the magazines, I will give you further instructions over radio.\r\n{yel}Here are the contract instructions:{/yel}\r\n{yel}1) {grn}Find {blu}Doctor Land{/blu} {grn}in the Gear Room near the shooting range.{/grn}\r\n{yel}2) {grn}Find the TRITON Labs scientist. He will give you the magazines you need.\r\n{yel}3) {grn}Take the magazines to {blu}Doctor Land{/blu}.\r\n{yel}4) {grn}Talk to {blu}Doctor Land{/blu} on next steps...\r\n	Experimental {yel}High Velocity{/yel} magazines.	2021-09-06 01:20:27.539248	2021-09-06 01:20:27.539248
 \.
 
 
@@ -3829,6 +3830,8 @@ COPY public.mob_equipment (id, meq_profile_name, meq_vnum, meq_light, meq_finger
 17	shoplifter	110	\N	\N	\N	\N	\N	armor/blue-hoodie.yml	\N	armor/dusty-jeans.yml	armor/sloth-martins.yml	\N	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:23.894169	2021-09-04 04:12:23.894169
 69	armed-guard	14	\N	\N	\N	\N	\N	armor/falcon-ballistic-vest.yml	armor/baklava.yml	armor/mp-enforcer-pants.yml	armor/xm607-vulture-boots.yml	armor/forge-xm3-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	armor/titan-shoulder-pads.yml	armor/titan-shoulder-pads.yml	\N	\N	\N	armor/titan-elbow-guards.yml	armor/titan-elbow-guards.yml	2021-09-04 22:42:19.155625	2021-09-04 22:42:19.155625
 70	teller	107	\N	\N	\N	\N	\N	\N	\N	armor/leggings.yml	armor/dress-shoes.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 22:42:19.163143	2021-09-04 22:42:19.163143
+90	thug-lvl-2	112	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/sickening-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:28.213973	2021-09-06 01:20:28.213973
+91	hustler-lvl-3	113	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/brass-knuckles.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:28.231383	2021-09-06 01:20:28.231383
 \.
 
 
@@ -3854,6 +3857,8 @@ COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, creat
 29	105	13	2021-09-04 04:23:27.182288	2021-09-04 04:23:27.182288
 30	109	109	2021-09-04 04:23:27.352124	2021-09-04 04:23:27.352124
 31	110	110	2021-09-04 04:23:27.364886	2021-09-04 04:23:27.364886
+34	106	14	2021-09-06 01:20:27.887755	2021-09-06 01:20:27.887755
+35	107	107	2021-09-06 01:20:27.896475	2021-09-06 01:20:27.896475
 \.
 
 
@@ -3862,136 +3867,136 @@ COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, creat
 --
 
 COPY public.mob_roam (id, mob_virtual_number, room_virtual_number, profile_name) FROM stdin;
-374	601	147	volunteer-patient
-375	601	148	volunteer-patient
-376	601	149	volunteer-patient
-377	601	150	volunteer-patient
-378	601	151	volunteer-patient
-379	601	152	volunteer-patient
-380	601	153	volunteer-patient
-381	601	154	volunteer-patient
-382	601	155	volunteer-patient
-383	601	156	volunteer-patient
-384	407	157	rogue-mp-shotgunner
-385	407	158	rogue-mp-shotgunner
-386	407	159	rogue-mp-shotgunner
-387	407	160	rogue-mp-shotgunner
-388	407	161	rogue-mp-shotgunner
-389	407	162	rogue-mp-shotgunner
-390	407	163	rogue-mp-shotgunner
-391	407	164	rogue-mp-shotgunner
-392	407	165	rogue-mp-shotgunner
-393	407	164	rogue-mp-shotgunner
-394	407	163	rogue-mp-shotgunner
-395	407	162	rogue-mp-shotgunner
-396	407	161	rogue-mp-shotgunner
-397	407	162	rogue-mp-shotgunner
-398	407	163	rogue-mp-shotgunner
-399	407	164	rogue-mp-shotgunner
-400	407	165	rogue-mp-shotgunner
-401	407	164	rogue-mp-shotgunner
-402	407	163	rogue-mp-shotgunner
-403	407	162	rogue-mp-shotgunner
-404	407	161	rogue-mp-shotgunner
-405	407	162	rogue-mp-shotgunner
-406	407	163	rogue-mp-shotgunner
-407	407	164	rogue-mp-shotgunner
-408	501	130	mp-shotgunner
-409	501	131	mp-shotgunner
-410	501	138	mp-shotgunner
-411	501	131	mp-shotgunner
-412	501	231	mp-shotgunner
-413	500	130	mp-enforcer
-414	500	131	mp-enforcer
-415	500	138	mp-enforcer
-416	500	131	mp-enforcer
-417	500	231	mp-enforcer
-418	500	230	mp-enforcer
-419	500	229	mp-enforcer
-420	500	228	mp-enforcer
-421	500	227	mp-enforcer
-422	500	226	mp-enforcer
-423	500	225	mp-enforcer
-424	500	224	mp-enforcer
-425	500	223	mp-enforcer
-426	500	222	mp-enforcer
-427	500	221	mp-enforcer
-428	500	220	mp-enforcer
-429	500	219	mp-enforcer
-430	500	218	mp-enforcer
-431	500	217	mp-enforcer
-432	500	216	mp-enforcer
-433	500	215	mp-enforcer
-434	500	214	mp-enforcer
-435	500	213	mp-enforcer
-436	500	212	mp-enforcer
-437	500	211	mp-enforcer
-438	500	210	mp-enforcer
-439	500	209	mp-enforcer
-440	500	208	mp-enforcer
-441	500	207	mp-enforcer
-442	500	206	mp-enforcer
-443	500	205	mp-enforcer
-444	500	204	mp-enforcer
-445	500	203	mp-enforcer
-446	500	202	mp-enforcer
-447	500	201	mp-enforcer
-448	500	200	mp-enforcer
-449	500	199	mp-enforcer
-450	500	198	mp-enforcer
-451	500	197	mp-enforcer
-452	500	196	mp-enforcer
-453	500	195	mp-enforcer
-454	500	194	mp-enforcer
-455	500	193	mp-enforcer
-456	500	141	mp-enforcer
-457	500	140	mp-enforcer
-458	500	139	mp-enforcer
-459	100	392	car-thief
-460	100	393	car-thief
-461	100	394	car-thief
-462	100	395	car-thief
-463	100	396	car-thief
-464	100	395	car-thief
-465	100	394	car-thief
-466	100	393	car-thief
-467	100	392	car-thief
-468	100	393	car-thief
-469	100	394	car-thief
-470	100	395	car-thief
-471	100	396	car-thief
-472	100	395	car-thief
-473	100	394	car-thief
-474	100	393	car-thief
-475	100	392	car-thief
-476	102	291	kidnapper
-477	102	292	kidnapper
-478	102	293	kidnapper
-479	102	294	kidnapper
-480	102	295	kidnapper
-481	102	329	kidnapper
-482	102	330	kidnapper
-483	102	331	kidnapper
-484	102	330	kidnapper
-485	102	329	kidnapper
-486	102	295	kidnapper
-487	102	296	kidnapper
-488	102	297	kidnapper
-489	102	298	kidnapper
-490	102	299	kidnapper
-491	102	300	kidnapper
-492	102	301	kidnapper
-493	102	316	kidnapper
-494	102	317	kidnapper
-495	102	322	kidnapper
-496	102	323	kidnapper
-497	102	324	kidnapper
-498	102	323	kidnapper
-499	102	322	kidnapper
-500	102	317	kidnapper
-501	102	316	kidnapper
-502	102	301	kidnapper
-503	102	302	kidnapper
+504	601	147	volunteer-patient
+505	601	148	volunteer-patient
+506	601	149	volunteer-patient
+507	601	150	volunteer-patient
+508	601	151	volunteer-patient
+509	601	152	volunteer-patient
+510	601	153	volunteer-patient
+511	601	154	volunteer-patient
+512	601	155	volunteer-patient
+513	601	156	volunteer-patient
+514	407	157	rogue-mp-shotgunner
+515	407	158	rogue-mp-shotgunner
+516	407	159	rogue-mp-shotgunner
+517	407	160	rogue-mp-shotgunner
+518	407	161	rogue-mp-shotgunner
+519	407	162	rogue-mp-shotgunner
+520	407	163	rogue-mp-shotgunner
+521	407	164	rogue-mp-shotgunner
+522	407	165	rogue-mp-shotgunner
+523	407	164	rogue-mp-shotgunner
+524	407	163	rogue-mp-shotgunner
+525	407	162	rogue-mp-shotgunner
+526	407	161	rogue-mp-shotgunner
+527	407	162	rogue-mp-shotgunner
+528	407	163	rogue-mp-shotgunner
+529	407	164	rogue-mp-shotgunner
+530	407	165	rogue-mp-shotgunner
+531	407	164	rogue-mp-shotgunner
+532	407	163	rogue-mp-shotgunner
+533	407	162	rogue-mp-shotgunner
+534	407	161	rogue-mp-shotgunner
+535	407	162	rogue-mp-shotgunner
+536	407	163	rogue-mp-shotgunner
+537	407	164	rogue-mp-shotgunner
+538	501	130	mp-shotgunner
+539	501	131	mp-shotgunner
+540	501	138	mp-shotgunner
+541	501	131	mp-shotgunner
+542	501	231	mp-shotgunner
+543	500	130	mp-enforcer
+544	500	131	mp-enforcer
+545	500	138	mp-enforcer
+546	500	131	mp-enforcer
+547	500	231	mp-enforcer
+548	500	230	mp-enforcer
+549	500	229	mp-enforcer
+550	500	228	mp-enforcer
+551	500	227	mp-enforcer
+552	500	226	mp-enforcer
+553	500	225	mp-enforcer
+554	500	224	mp-enforcer
+555	500	223	mp-enforcer
+556	500	222	mp-enforcer
+557	500	221	mp-enforcer
+558	500	220	mp-enforcer
+559	500	219	mp-enforcer
+560	500	218	mp-enforcer
+561	500	217	mp-enforcer
+562	500	216	mp-enforcer
+563	500	215	mp-enforcer
+564	500	214	mp-enforcer
+565	500	213	mp-enforcer
+566	500	212	mp-enforcer
+567	500	211	mp-enforcer
+568	500	210	mp-enforcer
+569	500	209	mp-enforcer
+570	500	208	mp-enforcer
+571	500	207	mp-enforcer
+572	500	206	mp-enforcer
+573	500	205	mp-enforcer
+574	500	204	mp-enforcer
+575	500	203	mp-enforcer
+576	500	202	mp-enforcer
+577	500	201	mp-enforcer
+578	500	200	mp-enforcer
+579	500	199	mp-enforcer
+580	500	198	mp-enforcer
+581	500	197	mp-enforcer
+582	500	196	mp-enforcer
+583	500	195	mp-enforcer
+584	500	194	mp-enforcer
+585	500	193	mp-enforcer
+586	500	141	mp-enforcer
+587	500	140	mp-enforcer
+588	500	139	mp-enforcer
+589	100	392	car-thief
+590	100	393	car-thief
+591	100	394	car-thief
+592	100	395	car-thief
+593	100	396	car-thief
+594	100	395	car-thief
+595	100	394	car-thief
+596	100	393	car-thief
+597	100	392	car-thief
+598	100	393	car-thief
+599	100	394	car-thief
+600	100	395	car-thief
+601	100	396	car-thief
+602	100	395	car-thief
+603	100	394	car-thief
+604	100	393	car-thief
+605	100	392	car-thief
+606	102	291	kidnapper
+607	102	292	kidnapper
+608	102	293	kidnapper
+609	102	294	kidnapper
+610	102	295	kidnapper
+611	102	329	kidnapper
+612	102	330	kidnapper
+613	102	331	kidnapper
+614	102	330	kidnapper
+615	102	329	kidnapper
+616	102	295	kidnapper
+617	102	296	kidnapper
+618	102	297	kidnapper
+619	102	298	kidnapper
+620	102	299	kidnapper
+621	102	300	kidnapper
+622	102	301	kidnapper
+623	102	316	kidnapper
+624	102	317	kidnapper
+625	102	322	kidnapper
+626	102	323	kidnapper
+627	102	324	kidnapper
+628	102	323	kidnapper
+629	102	322	kidnapper
+630	102	317	kidnapper
+631	102	316	kidnapper
+632	102	301	kidnapper
+633	102	302	kidnapper
 \.
 
 
@@ -4029,6 +4034,8 @@ COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description,
 25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	0	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2
 26	106	An armed security guard	An armed security guard	An armed security guard	An armed security guard watches you closely.	8	0	28	23	25	0	54	0	0	0	0	20	0	0	950	245	610	2150	0	0	0	1	950	245	610	90	18	60	10	5	0	18	\N	\N	25	30	35	20	30	10	38	25	20
 27	107	A bank teller	A bank teller	A bank teller	A bank teller is obediently serving you	8	0	1	1	1	0	3	0	30	0	0	2	0	0	15	15	20	450	0	0	0	2	15	15	20	1	3	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0
+28	112	An agitated thug	An agitated thug	An agitated thug	An agitated thug looks for something to punch...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	10	100	82	18	0	0	0	1	10	100	82	1	8	10	10	5	0	15	\N	\N	2	3	3	2	3	1	3	2	2
+29	113	A muscular hustler	A muscular hustler	A muscular hustler	A muscular hustler looks for something to punch...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	15	100	82	48	0	0	0	1	15	100	82	2	12	18	10	5	0	15	\N	\N	4	5	5	4	7	0	8	3	4
 \.
 
 
@@ -4360,6 +4367,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 87	216	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
 125	254	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
 126	255	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
+127	256	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
 88	217	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
 89	218	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
 90	219	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
@@ -4396,7 +4404,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 122	251	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
 123	252	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
 124	253	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-127	256	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
 130	259	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
 131	260	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
 132	261	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
@@ -4841,7 +4848,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 563	692	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x2
 564	693	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x1
 565	694	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x0
-566	695	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-2x0
 567	696	1	0	{blu}Metro{/blu} Inside the Henley Fountain	You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.\r\n	\N	\N	1	0	metrofountain-2x1
 568	697	1	0	{blu}Metro{/blu} Inside the Henley Fountain	You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.\r\n	\N	\N	1	0	metrofountain-2x2
 569	698	1	0	{blu}Metro{/blu} Inside the Henley Fountain	You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.\r\n	\N	\N	1	0	metrofountain-2x3
@@ -4892,9 +4898,78 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 612	741	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
 613	742	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
 614	743	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-615	744	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	hartford-bank-west-valley-hidden-wall
 616	745	1	0	{blu}Hartford Bank Vault{/blu}	You find yourself in a heavily fortified bank vault. A scene that few people have the privilege of witnessing. Heavy bags of money line the walls. Giant stacks of money are organized into a neat pile on several tables in the middle of the room.\r\n	\N	\N	1	0	\N
 617	746	1	0	{blu}Hartford Bank Vault{/blu}	You find yourself in a heavily fortified bank vault. A scene that few people have the privilege of witnessing. Heavy bags of money line the walls. Giant stacks of money are organized into a neat pile on several tables in the middle of the room.\r\n	\N	\N	1	0	\N
+618	748	1	0	name	description	\N	\N	1	0	\N
+619	749	1	0	name	description	\N	\N	1	0	\N
+620	750	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-north-1
+615	744	1	0	{blu}Hartford Bank Vault{/blu}	You find yourself in a heavily fortified bank vault. A scene that few people have the privilege of witnessing. Heavy bags of money line the walls. Giant stacks of money are organized into a neat pile on several tables in the middle of the room.\r\n	\N	\N	1	0	hartford-bank-west-valley-hidden-wall
+621	751	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+623	753	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+624	754	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-north-2
+625	755	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+626	756	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+628	758	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+629	759	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+630	760	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+631	761	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-north-4
+632	762	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+633	763	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+634	764	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-north-5
+635	765	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+636	766	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+637	767	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+639	769	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	trolley-section-1
+640	770	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+641	771	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+642	772	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+643	773	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+644	774	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	trolley-section-2
+645	775	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+646	776	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+647	777	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+648	778	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+649	779	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	trolley-section-3
+650	780	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+651	781	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+652	782	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+653	783	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+566	695	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-2x0
+622	752	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+627	757	1	0	{blu}Market Street{/blu} - Euclid Avenue	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-north-3
+638	768	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	\N
+654	784	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. Unfortunately, it is not uncommon for thugs and criminals to frequent the Trolley.\r\n	\N	\N	1	0	trolley-section-4
+655	785	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-1
+656	786	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+657	787	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+658	788	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-2
+659	789	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+660	790	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+661	791	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-3
+662	792	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+663	793	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+664	794	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-4
+665	795	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+666	796	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+667	797	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-5
+668	798	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+669	799	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+670	800	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-6
+671	801	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+672	802	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+673	803	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-7
+674	804	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+675	805	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+676	806	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-8
+677	807	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+678	808	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+679	809	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-9
+680	810	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+681	811	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+682	812	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-10
+683	813	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+684	814	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
+685	815	1	0	{blu}Market Street{/blu} - Euclid Avenue - EAST	Euclid Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Euclid Avenue transformed from an intimidating gang-infested ghetto, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	euclid-east-11
 \.
 
 
@@ -6752,6 +6827,232 @@ COPY public.room_direction_data (id, room_number, exit_direction, general_descri
 2422	745	1	general_description	keyword	1	0	746
 2423	745	3	general description	keyword	1	0	744
 2424	746	3	general description	keyword	1	0	745
+2425	744	1	general_description	keyword	347	0	745
+2426	744	2	general description	keyword	1	0	743
+2427	744	3	general_description	keyword	1	0	748
+2428	748	1	general description	keyword	1	0	744
+2429	748	3	general_description	keyword	1	0	749
+2430	749	1	general description	keyword	347	0	748
+2431	744	1	general_description	keyword	347	0	745
+2432	744	2	general description	keyword	1	0	743
+2433	744	3	general_description	keyword	1	0	748
+2434	748	1	general description	keyword	1	0	744
+2435	748	3	general_description	keyword	1	0	749
+2436	749	1	general description	keyword	347	0	748
+2437	695	0	general_description	keyword	1	0	696
+2438	695	1	general_description	keyword	1	0	700
+2439	695	2	general_description	keyword	1	0	750
+2440	695	3	general description	keyword	1	0	694
+2441	750	0	general description	keyword	1	0	695
+2442	750	2	general_description	keyword	1	0	751
+2443	751	0	general description	keyword	1	0	750
+2444	751	2	general_description	keyword	1	0	752
+2445	752	0	general description	keyword	1	0	751
+2446	752	2	general_description	keyword	1	0	753
+2447	753	0	general description	keyword	1	0	752
+2448	753	2	general_description	keyword	1	0	754
+2449	754	0	general description	keyword	1	0	753
+2450	754	3	general_description	keyword	1	0	755
+2451	755	1	general description	keyword	1	0	754
+2452	755	3	general_description	keyword	1	0	756
+2453	756	1	general description	keyword	1	0	755
+2454	756	3	general_description	keyword	1	0	757
+2455	757	1	general description	keyword	1	0	756
+2456	757	2	general_description	keyword	1	0	758
+2457	758	0	general description	keyword	1	0	757
+2458	758	2	general_description	keyword	1	0	759
+2459	759	0	general description	keyword	1	0	758
+2460	759	2	general_description	keyword	1	0	760
+2461	760	0	general description	keyword	1	0	759
+2462	760	2	general_description	keyword	1	0	761
+2463	761	0	general description	keyword	1	0	760
+2464	761	3	general_description	keyword	1	0	762
+2465	762	1	general description	keyword	1	0	761
+2466	762	3	general_description	keyword	1	0	763
+2467	763	1	general description	keyword	1	0	762
+2468	763	3	general_description	keyword	1	0	764
+2469	764	1	general description	keyword	1	0	763
+2470	764	2	general_description	keyword	1	0	765
+2471	765	0	general description	keyword	1	0	764
+2472	765	2	general_description	keyword	1	0	766
+2473	766	0	general description	keyword	1	0	765
+2474	766	2	general_description	keyword	1	0	767
+2475	767	0	general description	keyword	1	0	766
+2476	767	2	general_description	keyword	1	0	768
+2477	768	0	general description	keyword	1	0	767
+2478	768	2	general_description	keyword	1	0	769
+2479	769	0	general description	keyword	1	0	768
+2480	769	3	general_description	keyword	1	0	770
+2481	770	1	general description	keyword	1	0	769
+2482	770	3	general_description	keyword	1	0	771
+2483	771	1	general description	keyword	1	0	770
+2484	771	3	general_description	keyword	1	0	772
+2485	772	1	general description	keyword	1	0	771
+2486	772	3	general_description	keyword	1	0	773
+2487	773	1	general description	keyword	1	0	772
+2488	773	3	general_description	keyword	1	0	774
+2489	774	1	general description	keyword	1	0	773
+2490	774	2	general_description	keyword	1	0	775
+2491	775	0	general description	keyword	1	0	774
+2492	775	2	general_description	keyword	1	0	776
+2493	776	0	general description	keyword	1	0	775
+2494	776	2	general_description	keyword	1	0	777
+2495	777	0	general description	keyword	1	0	776
+2496	777	2	general_description	keyword	1	0	778
+2497	778	0	general description	keyword	1	0	777
+2498	778	2	general_description	keyword	1	0	779
+2499	779	0	general description	keyword	1	0	778
+2500	779	3	general_description	keyword	1	0	780
+2501	780	1	general description	keyword	1	0	779
+2502	780	3	general_description	keyword	1	0	781
+2503	781	1	general description	keyword	1	0	780
+2504	781	3	general_description	keyword	1	0	782
+2505	782	1	general description	keyword	1	0	781
+2506	782	3	general_description	keyword	1	0	783
+2507	783	1	general description	keyword	1	0	782
+2508	783	3	general_description	keyword	1	0	784
+2509	784	1	general description	keyword	1	0	783
+2510	744	1	general_description	keyword	347	0	745
+2511	744	2	general description	keyword	1	0	743
+2512	744	3	general_description	keyword	1	0	748
+2513	748	1	general description	keyword	1	0	744
+2514	748	3	general_description	keyword	1	0	749
+2515	749	1	general description	keyword	347	0	748
+2516	695	0	general_description	keyword	1	0	696
+2517	695	1	general_description	keyword	1	0	700
+2518	695	2	general_description	keyword	1	0	750
+2519	695	3	general description	keyword	1	0	694
+2520	750	0	general description	keyword	1	0	695
+2521	750	2	general_description	keyword	1	0	751
+2522	751	0	general description	keyword	1	0	750
+2523	751	2	general_description	keyword	1	0	752
+2524	752	0	general description	keyword	1	0	751
+2525	752	2	general_description	keyword	1	0	753
+2526	753	0	general description	keyword	1	0	752
+2527	753	2	general_description	keyword	1	0	754
+2528	754	0	general description	keyword	1	0	753
+2529	754	2	general_description	keyword	1	0	785
+2530	754	3	general_description	keyword	1	0	755
+2531	755	1	general description	keyword	1	0	754
+2532	755	3	general_description	keyword	1	0	756
+2533	756	1	general description	keyword	1	0	755
+2534	756	3	general_description	keyword	1	0	757
+2535	757	1	general description	keyword	1	0	756
+2536	757	2	general_description	keyword	1	0	758
+2537	758	0	general description	keyword	1	0	757
+2538	758	2	general_description	keyword	1	0	759
+2539	759	0	general description	keyword	1	0	758
+2540	759	2	general_description	keyword	1	0	760
+2541	760	0	general description	keyword	1	0	759
+2542	760	2	general_description	keyword	1	0	761
+2543	761	0	general description	keyword	1	0	760
+2544	761	3	general_description	keyword	1	0	762
+2545	762	1	general description	keyword	1	0	761
+2546	762	3	general_description	keyword	1	0	763
+2547	763	1	general description	keyword	1	0	762
+2548	763	3	general_description	keyword	1	0	764
+2549	764	1	general description	keyword	1	0	763
+2550	764	2	general_description	keyword	1	0	765
+2551	765	0	general description	keyword	1	0	764
+2552	765	2	general_description	keyword	1	0	766
+2553	766	0	general description	keyword	1	0	765
+2554	766	2	general_description	keyword	1	0	767
+2555	767	0	general description	keyword	1	0	766
+2556	767	2	general_description	keyword	1	0	768
+2557	768	0	general description	keyword	1	0	767
+2558	768	2	general_description	keyword	1	0	769
+2559	769	0	general description	keyword	1	0	768
+2560	769	3	general_description	keyword	1	0	770
+2561	770	1	general description	keyword	1	0	769
+2562	770	3	general_description	keyword	1	0	771
+2563	771	1	general description	keyword	1	0	770
+2564	771	3	general_description	keyword	1	0	772
+2565	772	1	general description	keyword	1	0	771
+2566	772	3	general_description	keyword	1	0	773
+2567	773	1	general description	keyword	1	0	772
+2568	773	3	general_description	keyword	1	0	774
+2569	774	1	general description	keyword	1	0	773
+2570	774	2	general_description	keyword	1	0	775
+2571	775	0	general description	keyword	1	0	774
+2572	775	2	general_description	keyword	1	0	776
+2573	776	0	general description	keyword	1	0	775
+2574	776	2	general_description	keyword	1	0	777
+2575	777	0	general description	keyword	1	0	776
+2576	777	2	general_description	keyword	1	0	778
+2577	778	0	general description	keyword	1	0	777
+2578	778	2	general_description	keyword	1	0	779
+2579	779	0	general description	keyword	1	0	778
+2580	779	3	general_description	keyword	1	0	780
+2581	780	1	general description	keyword	1	0	779
+2582	780	3	general_description	keyword	1	0	781
+2583	781	1	general description	keyword	1	0	780
+2584	781	3	general_description	keyword	1	0	782
+2585	782	1	general description	keyword	1	0	781
+2586	782	3	general_description	keyword	1	0	783
+2587	783	1	general description	keyword	1	0	782
+2588	783	3	general_description	keyword	1	0	784
+2589	784	1	general description	keyword	1	0	783
+2590	785	0	general description	keyword	1	0	754
+2591	785	2	general_description	keyword	1	0	786
+2592	786	0	general description	keyword	1	0	785
+2593	786	2	general_description	keyword	1	0	787
+2594	787	0	general description	keyword	1	0	786
+2595	787	2	general_description	keyword	1	0	788
+2596	788	0	general description	keyword	1	0	787
+2597	788	2	general_description	keyword	1	0	789
+2598	789	0	general description	keyword	1	0	788
+2599	789	2	general_description	keyword	1	0	790
+2600	790	0	general description	keyword	1	0	789
+2601	790	2	general_description	keyword	1	0	791
+2602	791	0	general description	keyword	1	0	790
+2603	791	2	general_description	keyword	1	0	792
+2604	792	0	general description	keyword	1	0	791
+2605	792	2	general_description	keyword	1	0	793
+2606	793	0	general description	keyword	1	0	792
+2607	793	2	general_description	keyword	1	0	794
+2608	794	0	general description	keyword	1	0	793
+2609	794	2	general_description	keyword	1	0	795
+2610	795	0	general description	keyword	1	0	794
+2611	795	2	general_description	keyword	1	0	796
+2612	796	0	general description	keyword	1	0	795
+2613	796	2	general_description	keyword	1	0	797
+2614	797	0	general description	keyword	1	0	796
+2615	797	2	general_description	keyword	1	0	798
+2616	798	0	general description	keyword	1	0	797
+2617	798	2	general_description	keyword	1	0	799
+2618	799	0	general description	keyword	1	0	798
+2619	799	2	general_description	keyword	1	0	800
+2620	800	0	general description	keyword	1	0	799
+2621	800	2	general_description	keyword	1	0	801
+2622	801	0	general description	keyword	1	0	800
+2623	801	2	general_description	keyword	1	0	802
+2624	802	0	general description	keyword	1	0	801
+2625	802	2	general_description	keyword	1	0	803
+2626	803	0	general description	keyword	1	0	802
+2627	803	2	general_description	keyword	1	0	804
+2628	804	0	general description	keyword	1	0	803
+2629	804	2	general_description	keyword	1	0	805
+2630	805	0	general description	keyword	1	0	804
+2631	805	2	general_description	keyword	1	0	806
+2632	806	0	general description	keyword	1	0	805
+2633	806	2	general_description	keyword	1	0	807
+2634	807	0	general description	keyword	1	0	806
+2635	807	2	general_description	keyword	1	0	808
+2636	808	0	general description	keyword	1	0	807
+2637	808	2	general_description	keyword	1	0	809
+2638	809	0	general description	keyword	1	0	808
+2639	809	2	general_description	keyword	1	0	810
+2640	810	0	general description	keyword	1	0	809
+2641	810	2	general_description	keyword	1	0	811
+2642	811	0	general description	keyword	1	0	810
+2643	811	2	general_description	keyword	1	0	812
+2644	812	0	general description	keyword	1	0	811
+2645	812	2	general_description	keyword	1	0	813
+2646	813	0	general description	keyword	1	0	812
+2647	813	2	general_description	keyword	1	0	814
+2648	814	0	general description	keyword	1	0	813
+2649	814	2	general_description	keyword	1	0	815
+2650	815	0	general description	keyword	1	0	814
 \.
 
 
@@ -6768,8 +7069,8 @@ COPY public.room_extra_descriptions (id, red_room_vnum, red_keyword, red_descrip
 --
 
 COPY public.scripted_sequences (id, s_sequence_vnum) FROM stdin;
-13	1
-15	2
+17	1
+19	2
 \.
 
 
@@ -6999,149 +7300,189 @@ COPY public.zone (id, zone_virtual_number, zone_start, zone_end, zone_name, life
 --
 
 COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_arg2, zone_arg3, zone_yaml) FROM stdin;
-422	1	M	0	600	143	1	\N
-423	1	M	0	601	147	8	\N
-424	1	M	0	602	143	1	\N
-425	1	M	0	603	266	1	\N
-426	1	M	0	500	131	10	\N
-427	1	M	0	501	131	10	\N
-428	1	M	0	502	212	2	\N
-429	1	M	0	502	207	2	\N
-430	1	M	0	502	204	2	\N
-431	1	M	0	502	340	2	\N
-432	1	M	0	502	199	2	\N
-433	1	M	0	502	279	2	\N
-434	1	M	0	502	139	2	\N
-435	1	Y	0	0	402	1	#yaml|vehicle/p3-hunchbak.yml
-436	1	Y	0	0	400	1	#yaml|vehicle/p3-offroad-mx3.yml
-437	1	Y	0	0	399	1	#yaml|vehicle/prime-town-suv.yml
-438	1	Y	0	0	395	1	#yaml|vehicle/lxr-sunrise.yml
-439	1	Y	0	0	393	1	#yaml|vehicle/lxr-sport.yml
-440	1	Y	0	0	394	1	#yaml|vehicle/lxr-sport.yml
-441	1	M	0	100	393	2	\N
-442	1	M	0	100	394	2	\N
-443	1	M	0	100	395	2	\N
-444	1	M	0	100	396	2	\N
-445	1	M	0	100	398	2	\N
-446	1	M	0	100	400	2	\N
-447	1	M	0	100	399	2	\N
-448	1	M	0	100	401	2	\N
-449	1	M	0	100	402	2	\N
-450	1	M	0	101	316	5	\N
-451	1	M	0	101	317	5	\N
-452	1	M	0	101	322	5	\N
-453	1	M	0	101	323	5	\N
-454	1	M	0	101	324	5	\N
-455	1	M	0	101	325	5	\N
-456	1	M	0	101	306	5	\N
-457	1	M	0	101	308	5	\N
-458	1	M	0	102	290	2	\N
-459	1	M	0	102	291	2	\N
-460	1	M	0	102	292	2	\N
-461	1	M	0	102	294	2	\N
-462	1	M	0	102	295	2	\N
-463	1	M	0	102	331	2	\N
-464	1	M	0	102	298	2	\N
-465	1	M	0	102	303	2	\N
-466	1	M	0	102	310	2	\N
-467	1	M	0	102	317	2	\N
-468	1	M	0	102	324	2	\N
-469	1	M	0	103	407	1	\N
-470	1	M	0	103	409	1	\N
-471	1	M	0	103	413	1	\N
-472	1	M	0	103	282	1	\N
-473	1	M	0	103	284	1	\N
-474	1	M	0	103	286	1	\N
-475	1	M	0	103	292	1	\N
-476	1	M	0	103	293	1	\N
-477	1	R	0	575	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-478	1	R	0	576	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-479	1	R	0	577	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-480	1	R	0	578	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-481	1	R	0	579	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-482	1	R	0	580	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-483	1	R	0	581	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-484	1	R	0	582	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-485	1	R	0	583	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-486	1	R	0	584	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-487	1	R	0	585	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-488	1	R	0	586	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-489	1	R	0	587	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-490	1	R	0	588	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-491	1	R	0	589	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-492	1	R	0	590	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-493	1	R	0	591	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-494	1	R	0	592	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-495	1	R	0	593	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-496	1	R	0	594	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-497	1	R	0	595	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-498	1	R	0	596	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-499	1	R	0	597	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-500	1	R	0	598	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-501	1	R	0	599	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-502	1	R	0	600	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-503	1	R	0	601	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-504	1	R	0	602	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-505	1	R	0	603	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-506	1	R	0	604	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-507	1	R	0	605	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-508	1	R	0	606	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-509	1	R	0	607	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-510	1	R	0	608	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-511	1	R	0	609	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-512	1	R	0	610	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-513	1	R	0	611	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-514	1	R	0	612	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-515	1	R	0	613	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-516	1	R	0	614	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-517	1	R	0	615	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-518	1	R	0	616	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-519	1	R	0	617	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-520	1	R	0	618	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-521	1	R	0	619	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-522	1	R	0	620	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-523	1	R	0	621	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-524	1	R	0	622	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-525	1	R	0	623	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-526	1	R	0	624	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-527	1	R	0	625	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-528	1	R	0	626	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-529	1	R	0	627	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-530	1	R	0	628	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-531	1	R	0	629	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-532	1	R	0	630	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-533	1	R	0	631	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-534	1	R	0	632	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-535	1	R	0	633	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-536	1	R	0	634	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-537	1	R	0	635	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-538	1	R	0	636	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-539	1	M	0	109	578	16	\N
-540	1	M	0	109	589	16	\N
-541	1	M	0	109	600	16	\N
-542	1	M	0	109	611	16	\N
-543	1	M	0	109	622	16	\N
-544	1	M	0	109	592	16	\N
-545	1	M	0	109	614	16	\N
-546	1	M	0	109	625	16	\N
-547	1	M	0	109	636	16	\N
-548	1	M	0	110	578	16	\N
-549	1	M	0	110	589	16	\N
-550	1	M	0	110	600	16	\N
-551	1	M	0	110	611	16	\N
-552	1	M	0	110	622	16	\N
-553	1	M	0	110	592	16	\N
-554	1	M	0	110	614	16	\N
-555	1	M	0	110	625	16	\N
-556	1	M	0	110	636	16	\N
-557	1	M	0	106	729	1	\N
-558	1	M	0	106	730	1	\N
-559	1	M	0	106	731	1	\N
-560	1	M	0	106	732	1	\N
-561	1	M	0	107	729	1	\N
-562	1	M	0	107	730	1	\N
-563	1	M	0	107	731	1	\N
-564	1	M	0	107	732	1	\N
+565	1	M	0	600	143	1	\N
+566	1	M	0	601	147	8	\N
+567	1	M	0	602	143	1	\N
+568	1	M	0	603	266	1	\N
+569	1	M	0	500	131	10	\N
+570	1	M	0	501	131	10	\N
+571	1	M	0	502	212	2	\N
+572	1	M	0	502	207	2	\N
+573	1	M	0	502	204	2	\N
+574	1	M	0	502	340	2	\N
+575	1	M	0	502	199	2	\N
+576	1	M	0	502	279	2	\N
+577	1	M	0	502	139	2	\N
+578	1	Y	0	0	402	1	#yaml|vehicle/p3-hunchbak.yml
+579	1	Y	0	0	400	1	#yaml|vehicle/p3-offroad-mx3.yml
+580	1	Y	0	0	399	1	#yaml|vehicle/prime-town-suv.yml
+581	1	Y	0	0	395	1	#yaml|vehicle/lxr-sunrise.yml
+582	1	Y	0	0	393	1	#yaml|vehicle/lxr-sport.yml
+583	1	Y	0	0	394	1	#yaml|vehicle/lxr-sport.yml
+584	1	M	0	100	393	2	\N
+585	1	M	0	100	394	2	\N
+586	1	M	0	100	395	2	\N
+587	1	M	0	100	396	2	\N
+588	1	M	0	100	398	2	\N
+589	1	M	0	100	400	2	\N
+590	1	M	0	100	399	2	\N
+591	1	M	0	100	401	2	\N
+592	1	M	0	100	402	2	\N
+593	1	M	0	101	316	5	\N
+594	1	M	0	101	317	5	\N
+595	1	M	0	101	322	5	\N
+596	1	M	0	101	323	5	\N
+597	1	M	0	101	324	5	\N
+598	1	M	0	101	325	5	\N
+599	1	M	0	101	306	5	\N
+600	1	M	0	101	308	5	\N
+601	1	M	0	102	290	2	\N
+602	1	M	0	102	291	2	\N
+603	1	M	0	102	292	2	\N
+604	1	M	0	102	294	2	\N
+605	1	M	0	102	295	2	\N
+606	1	M	0	102	331	2	\N
+607	1	M	0	102	298	2	\N
+608	1	M	0	102	303	2	\N
+609	1	M	0	102	310	2	\N
+610	1	M	0	102	317	2	\N
+611	1	M	0	102	324	2	\N
+612	1	M	0	103	407	1	\N
+613	1	M	0	103	409	1	\N
+614	1	M	0	103	413	1	\N
+615	1	M	0	103	282	1	\N
+616	1	M	0	103	284	1	\N
+617	1	M	0	103	286	1	\N
+618	1	M	0	103	292	1	\N
+619	1	M	0	103	293	1	\N
+620	1	R	0	575	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+621	1	R	0	576	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+622	1	R	0	577	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+623	1	R	0	578	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+624	1	R	0	579	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+625	1	R	0	580	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+626	1	R	0	581	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+627	1	R	0	582	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+628	1	R	0	583	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+629	1	R	0	584	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+630	1	R	0	585	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+631	1	R	0	586	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+632	1	R	0	587	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+633	1	R	0	588	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+634	1	R	0	589	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+635	1	R	0	590	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+636	1	R	0	591	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+637	1	R	0	592	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+638	1	R	0	593	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+639	1	R	0	594	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+640	1	R	0	595	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+641	1	R	0	596	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+642	1	R	0	597	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+643	1	R	0	598	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+644	1	R	0	599	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+645	1	R	0	600	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+646	1	R	0	601	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+647	1	R	0	602	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+648	1	R	0	603	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+649	1	R	0	604	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+650	1	R	0	605	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+651	1	R	0	606	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+652	1	R	0	607	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+653	1	R	0	608	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+654	1	R	0	609	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+655	1	R	0	610	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+656	1	R	0	611	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+657	1	R	0	612	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+658	1	R	0	613	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+659	1	R	0	614	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+660	1	R	0	615	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+661	1	R	0	616	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+662	1	R	0	617	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+663	1	R	0	618	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+664	1	R	0	619	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+665	1	R	0	620	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+666	1	R	0	621	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+667	1	R	0	622	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+668	1	R	0	623	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+669	1	R	0	624	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+670	1	R	0	625	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+671	1	R	0	626	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+672	1	R	0	627	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+673	1	R	0	628	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+674	1	R	0	629	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+675	1	R	0	630	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+676	1	R	0	631	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+677	1	R	0	632	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+678	1	R	0	633	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+679	1	R	0	634	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+680	1	R	0	635	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+681	1	R	0	636	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+682	1	M	0	109	578	16	\N
+683	1	M	0	109	589	16	\N
+684	1	M	0	109	600	16	\N
+685	1	M	0	109	611	16	\N
+686	1	M	0	109	622	16	\N
+687	1	M	0	109	592	16	\N
+688	1	M	0	109	614	16	\N
+689	1	M	0	109	625	16	\N
+690	1	M	0	109	636	16	\N
+691	1	M	0	110	578	16	\N
+692	1	M	0	110	589	16	\N
+693	1	M	0	110	600	16	\N
+694	1	M	0	110	611	16	\N
+695	1	M	0	110	622	16	\N
+696	1	M	0	110	592	16	\N
+697	1	M	0	110	614	16	\N
+698	1	M	0	110	625	16	\N
+699	1	M	0	110	636	16	\N
+700	1	M	0	106	729	1	\N
+701	1	M	0	106	730	1	\N
+702	1	M	0	106	731	1	\N
+703	1	M	0	106	732	1	\N
+704	1	M	0	107	729	1	\N
+705	1	M	0	107	730	1	\N
+706	1	M	0	107	731	1	\N
+707	1	M	0	107	732	1	\N
+708	1	M	0	112	750	5	\N
+709	1	M	0	112	754	5	\N
+710	1	M	0	112	757	5	\N
+711	1	M	0	112	761	5	\N
+712	1	M	0	112	764	5	\N
+713	1	M	0	112	769	5	\N
+714	1	M	0	112	774	5	\N
+715	1	M	0	112	779	5	\N
+716	1	M	0	112	784	5	\N
+717	1	M	0	112	785	5	\N
+718	1	M	0	112	788	5	\N
+719	1	M	0	112	791	5	\N
+720	1	M	0	112	794	5	\N
+721	1	M	0	112	797	5	\N
+722	1	M	0	112	800	5	\N
+723	1	M	0	112	803	5	\N
+724	1	M	0	112	806	5	\N
+725	1	M	0	112	809	5	\N
+726	1	M	0	112	812	5	\N
+727	1	M	0	112	815	5	\N
+728	1	M	0	113	750	5	\N
+729	1	M	0	113	754	5	\N
+730	1	M	0	113	757	5	\N
+731	1	M	0	113	761	5	\N
+732	1	M	0	113	764	5	\N
+733	1	M	0	113	769	5	\N
+734	1	M	0	113	774	5	\N
+735	1	M	0	113	779	5	\N
+736	1	M	0	113	784	5	\N
+737	1	M	0	113	785	5	\N
+738	1	M	0	113	788	5	\N
+739	1	M	0	113	791	5	\N
+740	1	M	0	113	794	5	\N
+741	1	M	0	113	797	5	\N
+742	1	M	0	113	800	5	\N
+743	1	M	0	113	803	5	\N
+744	1	M	0	113	806	5	\N
+745	1	M	0	113	809	5	\N
+746	1	M	0	113	812	5	\N
+747	1	M	0	113	815	5	\N
 \.
 
 
@@ -7233,21 +7574,21 @@ SELECT pg_catalog.setval('public.computer_terminal_id_seq', 1, true);
 -- Name: contract_step_callback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contract_step_callback_id_seq', 8, true);
+SELECT pg_catalog.setval('public.contract_step_callback_id_seq', 10, true);
 
 
 --
 -- Name: contract_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contract_steps_id_seq', 20, true);
+SELECT pg_catalog.setval('public.contract_steps_id_seq', 25, true);
 
 
 --
 -- Name: contracts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contracts_id_seq', 8, true);
+SELECT pg_catalog.setval('public.contracts_id_seq', 10, true);
 
 
 --
@@ -7310,21 +7651,21 @@ SELECT pg_catalog.setval('public.mini_gunner_sentinel_id_seq', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_id_seq', 70, true);
+SELECT pg_catalog.setval('public.mob_equipment_id_seq', 91, true);
 
 
 --
 -- Name: mob_equipment_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 33, true);
+SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 37, true);
 
 
 --
 -- Name: mob_roam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_roam_id_seq', 503, true);
+SELECT pg_catalog.setval('public.mob_roam_id_seq', 633, true);
 
 
 --
@@ -7338,7 +7679,7 @@ SELECT pg_catalog.setval('public.mob_zone_id_seq', 1, false);
 -- Name: mobile_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mobile_mob_id_seq', 27, true);
+SELECT pg_catalog.setval('public.mobile_mob_id_seq', 29, true);
 
 
 --
@@ -7506,7 +7847,7 @@ SELECT pg_catalog.setval('public.rifle_placements_id_seq', 1, false);
 -- Name: room_direction_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.room_direction_data_id_seq', 2424, true);
+SELECT pg_catalog.setval('public.room_direction_data_id_seq', 2650, true);
 
 
 --
@@ -7520,7 +7861,7 @@ SELECT pg_catalog.setval('public.room_extra_descriptions_id_seq', 1, false);
 -- Name: room_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.room_id_seq', 617, true);
+SELECT pg_catalog.setval('public.room_id_seq', 685, true);
 
 
 --
@@ -7534,14 +7875,14 @@ SELECT pg_catalog.setval('public.room_virtual_number_seq', 1, false);
 -- Name: scripted_sequences_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.scripted_sequences_id_seq', 16, true);
+SELECT pg_catalog.setval('public.scripted_sequences_id_seq', 20, true);
 
 
 --
 -- Name: scripted_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.scripted_steps_id_seq', 56, true);
+SELECT pg_catalog.setval('public.scripted_steps_id_seq', 70, true);
 
 
 --
@@ -7611,7 +7952,7 @@ SELECT pg_catalog.setval('public.world_configuration_start_rooms_id_seq', 4, tru
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_data_id_seq', 564, true);
+SELECT pg_catalog.setval('public.zone_data_id_seq', 747, true);
 
 
 --
