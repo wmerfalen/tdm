@@ -270,8 +270,13 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 	void run_trees() {
 		m_debug("run trees");
 		for(auto& thief : generic_thief_list()) {
+			if(thief->has_tree() && !thief->alive()) {
+				m_debug("DEAD-WITH_TREE -- thief has tree but is dead. Removing...");
+				thief->btree_none();
+				continue;
+			}
 			m_debug("checking thief ptr");
-			if(thief->has_tree()) {
+			if(thief->has_tree() && thief->alive() && thief->capable()) {
 				m_debug("has tree. dispatching..." << thief->get_tree());
 				trees()[thief->get_tree()].run(thief);
 			}

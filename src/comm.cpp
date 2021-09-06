@@ -36,6 +36,7 @@
 #include "mods/js.hpp"
 #include "mods/corrosive.hpp"
 #include "mods/bleed.hpp"
+#include "mods/resting.hpp"
 #include "mods/mobs/behaviour-tree-list.hpp"
 #include "mods/players/event-messages.hpp"
 
@@ -943,6 +944,7 @@ void heartbeat(int pulse) {
 		/** Process affect dissolver ticks */
 		mods::affects::process();
 		mods::rooms::affects::process();
+		mods::resting::process_players_resting();
 	}
 
 	if(!(pulse % mods::corrosive::tick_resolution())) {

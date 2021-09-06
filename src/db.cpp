@@ -935,6 +935,8 @@ void parse_sql_mobiles() {
 		proto.points.armor = mods::util::stoi<int>(row["mob_armor"]);
 		proto.points.damroll = mods::util::stoi<int>(row["mob_damroll"]);
 
+		proto.mob_specials.init();
+
 		/* max hit = 0 is a flag that H, M, V is xdy+z */
 		GET_MAX_HIT(&proto) = mods::util::stoi<int>(row["mob_max_hitpoints"]);
 		GET_HIT(&proto) = mods::util::stoi<int>(row["mob_hitpoints"]);
@@ -945,6 +947,7 @@ void parse_sql_mobiles() {
 		proto.mob_specials.damnodice = mods::util::stoi<int>(row["mob_damnodice"]);
 		proto.mob_specials.damsizedice = mods::util::stoi<int>(row["mob_damsizedice"]);
 		proto.mob_specials.behaviour_tree = behaviour_tree::NONE;
+		proto.mob_specials.experience = mods::util::stoi<int>(row["mob_experience"]);
 		GET_GOLD(&proto) = mods::util::stoi<int>(row["mob_gold"]);
 		GET_EXP(&proto) = mods::util::stoi<int>(row["mob_exp"]);
 		GET_POS(&proto) = mods::util::stoi<int>(row["mob_load_position"]);
@@ -974,7 +977,6 @@ void parse_sql_mobiles() {
 		log("proto.nr: %d", proto.nr);
 #endif
 		proto.uuid = mods::globals::mob_uuid();
-		proto.mob_specials.init();
 		proto.mob_specials.extended_mob_type = static_cast<mods::mobs::extended_types_t>(row["mob_special_extended_type"].as<uint16_t>());
 		mob_proto.push_back(proto);
 		mob_proto.back().nr = proto.nr;

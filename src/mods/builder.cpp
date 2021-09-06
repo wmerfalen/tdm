@@ -1336,6 +1336,7 @@ namespace mods::builder {
 			p_map["mob_damroll"] = std::to_string(obj->points.damroll);
 			p_map["mob_class"] = "0"; //TODO: find this
 			p_map["mob_special_extended_type"] = std::to_string(obj->mob_specials.extended_mob_type);
+			p_map["mob_experience"] = std::to_string(obj->mob_specials.experience);
 			auto txn_02 = txn();
 			std::string sql = "";
 
@@ -2345,6 +2346,7 @@ SUPERCMD(do_mbuild) {
 		        "  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
 		        "  {gld}|:: virt{/gld}\r\n" <<
 		        "  {gld}|:: vnum{/gld} {grn}this is an alias of {/grn}{gld}virt{/gld}\r\n" <<
+		        "  {gld}|:: exp{/gld}\r\n" <<
 		        "  {gld}|:: name{/gld}\r\n" <<
 		        "  {gld}|:: short_description{/gld}\r\n" <<
 		        "  {gld}|:: long_description{/gld}\r\n" <<
@@ -3061,6 +3063,13 @@ SUPERCMD(do_mbuild) {
 				}
 				auto opt_vr_number = mods::util::stoi(arg_vec[3]);
 				obj->mob_specials.vnum = opt_vr_number.value();
+				r_success(player,"Saved");
+				return;
+			}
+
+			if(arg_vec[2].compare("exp") == 0) {
+				auto opt_vr_number = mods::util::stoi(arg_vec[3]);
+				obj->mob_specials.experience = opt_vr_number.value();
 				r_success(player,"Saved");
 				return;
 			}

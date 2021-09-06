@@ -568,7 +568,7 @@ namespace mods {
 				GET_EQ(mob->cd(), num_wears_i) = nullptr;
 			}
 			mob->cd()->carrying = nullptr;
-			mob->cd()->mob_specials = mob_proto[i].mob_specials;
+			mob->cd()->mob_specials.import(mob_proto[i].mob_specials);
 			mob->cd()->mob_specials.vnum = nr;
 			mob->cd()->points = mob_proto[i].points;
 			mob->cd()->real_abils = mob_proto[i].real_abils;

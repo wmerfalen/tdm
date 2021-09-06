@@ -181,6 +181,10 @@ namespace mods::levels {
 		if(attacker->is_npc()) {
 			return 0;
 		}
+		if(victim->is_npc()) {
+			gain_exp(attacker,victim->cd()->mob_specials.experience);
+			return victim->cd()->mob_specials.experience;
+		}
 		int32_t level_difference = attacker->level() - victim->level();
 		int gain = 0;
 		switch(level_difference) {
@@ -218,6 +222,13 @@ namespace mods::levels {
 	}
 
 	int gain_exp_from_killing(player_ptr_t& attacker,player_ptr_t& victim) {
+		if(attacker->is_npc()) {
+			return 0;
+		}
+		if(victim->is_npc()) {
+			gain_exp(attacker,victim->cd()->mob_specials.experience);
+			return victim->cd()->mob_specials.experience;
+		}
 		int32_t level_difference = attacker->level() - victim->level();
 		int gain = 0;
 		switch(level_difference) {
@@ -255,6 +266,9 @@ namespace mods::levels {
 	}
 
 	int reduce_exp_from_dying(player_ptr_t& player) {
+		/** TODO: implement this for later tiers... */
+		return 0;
+#if 0
 		if(player->is_npc()) {
 			return 0;
 		}
@@ -269,6 +283,7 @@ namespace mods::levels {
 			default:
 				return gain_exp(player,player->level() * TIER_ELITE_DEATH_EXP_LOSS());
 		}
+#endif
 	}
 
 	/**

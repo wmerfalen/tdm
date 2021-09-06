@@ -267,6 +267,10 @@ namespace mods::mobs::chaotic_meth_addict_behaviour_tree {
 	void run_trees() {
 		m_debug("run trees");
 		for(auto& meth : chaotic_meth_addict_list()) {
+			if(meth->has_tree() && !meth->alive()) {
+				meth->btree_none();
+				continue;
+			}
 			m_debug("checking meth ptr");
 			if(meth->has_tree() && meth->alive() && meth->capable()) {
 				m_debug("has tree. dispatching..." << meth->get_tree());

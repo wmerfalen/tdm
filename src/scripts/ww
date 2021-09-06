@@ -1,0 +1,7 @@
+#!/bin/bash
+echo alias nn snipe $1 north
+echo alias ww snipe $1 west
+echo alias ee snipe $1 east
+echo alias ss snipe $1 south
+echo alias uu snipe $1 up
+echo alias dd snipe $1 down

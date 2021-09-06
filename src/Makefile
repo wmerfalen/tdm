@@ -53,6 +53,8 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_NO_FOOTPRINTS__=1 \
 	-D__MENTOC_MODS_DEMOLITIONS_DEBUG__=1
 
+	#-D__MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__=1
+
 	#-D__MENTOC_MODS_MOBS_MP_SHOTGUNNER_SHOW_DEBUG_OUTPUT__=1 \
 	-D__MENTOC_MODS_MOBS_HELPERS_SHOW_DEBUG_OUTPUT__=1
 
@@ -193,7 +195,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/melee-combatant mods/mobs/melee-combatant-behaviour-tree \
 					 mods/loot-container mods/explosive mods/glass mods/bleed mods/armor \
 					 mods/players/friendly-reminders mods/players/event-messages \
-					 mods/mobs/defiler
+					 mods/mobs/defiler mods/resting
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

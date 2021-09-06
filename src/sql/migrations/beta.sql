@@ -1334,7 +1334,8 @@ CREATE TABLE public.mobile (
     mob_ability_chemistry integer DEFAULT 1 NOT NULL,
     mob_ability_weapon_handling integer DEFAULT 1 NOT NULL,
     mob_ability_strategy integer DEFAULT 1 NOT NULL,
-    mob_ability_medical integer DEFAULT 1 NOT NULL
+    mob_ability_medical integer DEFAULT 1 NOT NULL,
+    mob_experience integer DEFAULT 250 NOT NULL
 );
 
 
@@ -3859,6 +3860,8 @@ COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, creat
 31	110	110	2021-09-04 04:23:27.364886	2021-09-04 04:23:27.364886
 34	106	14	2021-09-06 01:20:27.887755	2021-09-06 01:20:27.887755
 35	107	107	2021-09-06 01:20:27.896475	2021-09-06 01:20:27.896475
+38	112	112	2021-09-06 02:04:34.330576	2021-09-06 02:04:34.330576
+39	113	113	2021-09-06 02:04:34.385077	2021-09-06 02:04:34.385077
 \.
 
 
@@ -4012,30 +4015,30 @@ COPY public.mob_zone (id, zone_virtual_number, mob_virtual_number, room_virtual_
 -- Data for Name: mobile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description, mob_long_description, mob_description, mob_action_bitvector, mob_affection_bitvector, mob_ability_strength, mob_ability_strength_add, mob_ability_intelligence, mob_ability_wisdom, mob_ability_dexterity, mob_ability_constitution, mob_ability_charisma, mob_alignment, mob_attack_type, mob_level, mob_hitroll, mob_armor, mob_max_hitpoints, mob_max_mana, mob_max_move, mob_gold, mob_exp, mob_load_position, mob_default_position, mob_sex, mob_hitpoints, mob_mana, mob_move, mob_damnodice, mob_damsizedice, mob_damroll, mob_weight, mob_height, mob_class, mob_special_extended_type, mob_targets, mob_roam_pattern, mob_ability_electronics, mob_ability_armor, mob_ability_marksmanship, mob_ability_sniping, mob_ability_demolitions, mob_ability_chemistry, mob_ability_weapon_handling, mob_ability_strategy, mob_ability_medical) FROM stdin;
-11	410	Corporal James Taggart	Corporal James Tagger short description	Corporal James Tagger long description	Corporal James Tagger description	0	0	10	10	10	10	10	10	10	0	0	150	150	150	-1	-1	-1	0	9800	0	0	0	-1	-1	-1	50	50	50	80	9	0	0	\N	\N	1	1	1	1	1	1	1	1	1
-1	1	chef  employee	A pissed looking Los  employee	A pissed looking Los  employee	This particular employee looks like he just got out of a federal penitentiary. He's most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.	8	0	25	0	25	0	25	0	25	0	0	0	0	0	250	250	250	5000	0	8	8	0	250	250	250	25	0	0	50	15	0	14	\N	\N	1	1	1	1	1	1	1	1	1
-12	600	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	0	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
-13	601	A volunteer patient	A volunteer patient	A volunteer patient	A volunteer patient stands here with dazed thousand mile stare.	8	0	185	183	10	0	184	0	1	0	0	15	0	0	880	25	240	0	0	0	0	1	880	25	240	8	90	115	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
-14	602	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	8	0	185	183	182	0	184	0	85	0	0	80	0	0	8580	815	240	85000	0	0	0	2	8580	815	240	-72	-70	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
-15	603	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	0	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
-16	406	A suspicious looking car thief	A suspicious looking car thief	A suspicious looking car thief	A car thief equipped with brass knuckles and a crowbar. He is obviously armed.	8	0	25	23	22	0	24	0	10	0	0	15	0	0	150	45	510	950	0	0	0	1	150	45	510	20	16	20	5	5	0	0	\N	\N	0	0	0	0	0	0	0	0	0
-17	407	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	25	0	0	5550	565	510	150	0	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	0	0	0	0	0	0	0	0	0
-18	500	A Military Police enforcer	A Military Police enforcer	A Military Police enforcer	A fit military police enforcer. He looks armed.	8	0	25	23	22	0	24	0	10	0	0	10	0	0	250	45	110	50	0	0	0	1	250	45	110	10	6	20	10	5	0	10	\N	\N	10	10	10	10	10	10	10	10	10
-19	501	A Military Police shotgunner	A Military Police shotgunner	A Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	40	0	0	5550	565	510	150	0	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10
-20	502	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	8	0	355	333	132	0	334	0	10	0	0	40	0	0	109550	1565	810	109150	0	0	0	1	109550	1565	810	115	48	340	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10
-2	100	A rugged car thief	A rugged car thief	A rugged car thief	A car thief stalking the area. He is armed.	8	0	18	13	2	0	34	0	0	0	0	10	0	0	350	45	610	750	0	0	0	1	350	45	610	30	6	20	10	5	0	14	\N	\N	15	5	15	8	0	0	18	0	0
-3	101	A petty thief	A petty thief	A petty thief	A petty thief is stalking the area.	8	0	4	4	2	0	4	0	0	0	0	5	0	0	100	15	110	750	0	0	0	1	100	15	110	2	6	10	4	5	0	14	\N	\N	5	4	5	2	0	0	4	0	0
-21	102	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	8	0	9	6	2	0	7	0	0	0	0	8	0	0	450	25	110	1123	0	0	0	1	450	25	110	3	25	20	4	5	0	15	\N	\N	0	10	8	3	0	0	5	0	0
-4	103	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict is manically patrolling the area.	8	0	13	6	2	0	13	0	0	0	0	13	0	0	650	25	310	4123	0	0	0	1	650	25	310	8	25	30	4	5	0	16	\N	\N	0	4	1	1	2	0	8	0	9
-22	104	A shoplifter	A shoplifter	A shoplifter	A shoplifter is stalking the area.	8	0	1	1	1	0	1	0	0	0	0	1	0	0	10	15	60	10	0	0	0	1	10	15	60	1	3	1	4	5	0	15	\N	\N	1	0	1	0	0	0	1	0	0
-23	105	A crackhead	A crackhead	A crackhead	A crackhead is stalking the area.	8	0	1	1	1	0	3	0	0	0	0	2	0	0	35	15	60	10	0	0	0	1	35	15	60	2	6	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0
-24	109	A retail associate	A retail associate	A retail associate	A retail associate tirelessly stocks shelves...	8	0	15	1	2	0	4	0	4	0	0	3	0	0	120	50	60	85	0	0	0	1	120	50	60	2	5	2	10	5	0	19	\N	\N	2	1	1	1	1	0	1	2	1
-25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	0	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2
-26	106	An armed security guard	An armed security guard	An armed security guard	An armed security guard watches you closely.	8	0	28	23	25	0	54	0	0	0	0	20	0	0	950	245	610	2150	0	0	0	1	950	245	610	90	18	60	10	5	0	18	\N	\N	25	30	35	20	30	10	38	25	20
-27	107	A bank teller	A bank teller	A bank teller	A bank teller is obediently serving you	8	0	1	1	1	0	3	0	30	0	0	2	0	0	15	15	20	450	0	0	0	2	15	15	20	1	3	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0
-28	112	An agitated thug	An agitated thug	An agitated thug	An agitated thug looks for something to punch...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	10	100	82	18	0	0	0	1	10	100	82	1	8	10	10	5	0	15	\N	\N	2	3	3	2	3	1	3	2	2
-29	113	A muscular hustler	A muscular hustler	A muscular hustler	A muscular hustler looks for something to punch...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	15	100	82	48	0	0	0	1	15	100	82	2	12	18	10	5	0	15	\N	\N	4	5	5	4	7	0	8	3	4
+COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description, mob_long_description, mob_description, mob_action_bitvector, mob_affection_bitvector, mob_ability_strength, mob_ability_strength_add, mob_ability_intelligence, mob_ability_wisdom, mob_ability_dexterity, mob_ability_constitution, mob_ability_charisma, mob_alignment, mob_attack_type, mob_level, mob_hitroll, mob_armor, mob_max_hitpoints, mob_max_mana, mob_max_move, mob_gold, mob_exp, mob_load_position, mob_default_position, mob_sex, mob_hitpoints, mob_mana, mob_move, mob_damnodice, mob_damsizedice, mob_damroll, mob_weight, mob_height, mob_class, mob_special_extended_type, mob_targets, mob_roam_pattern, mob_ability_electronics, mob_ability_armor, mob_ability_marksmanship, mob_ability_sniping, mob_ability_demolitions, mob_ability_chemistry, mob_ability_weapon_handling, mob_ability_strategy, mob_ability_medical, mob_experience) FROM stdin;
+11	410	Corporal James Taggart	Corporal James Tagger short description	Corporal James Tagger long description	Corporal James Tagger description	0	0	10	10	10	10	10	10	10	0	0	150	150	150	-1	-1	-1	0	9800	0	0	0	-1	-1	-1	50	50	50	80	9	0	0	\N	\N	1	1	1	1	1	1	1	1	1	250
+1	1	chef  employee	A pissed looking Los  employee	A pissed looking Los  employee	This particular employee looks like he just got out of a federal penitentiary. He's most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.	8	0	25	0	25	0	25	0	25	0	0	0	0	0	250	250	250	5000	0	8	8	0	250	250	250	25	0	0	50	15	0	14	\N	\N	1	1	1	1	1	1	1	1	1	250
+12	600	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	0	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	250
+13	601	A volunteer patient	A volunteer patient	A volunteer patient	A volunteer patient stands here with dazed thousand mile stare.	8	0	185	183	10	0	184	0	1	0	0	15	0	0	880	25	240	0	0	0	0	1	880	25	240	8	90	115	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	250
+14	602	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	8	0	185	183	182	0	184	0	85	0	0	80	0	0	8580	815	240	85000	0	0	0	2	8580	815	240	-72	-70	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	250
+15	603	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	0	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	250
+16	406	A suspicious looking car thief	A suspicious looking car thief	A suspicious looking car thief	A car thief equipped with brass knuckles and a crowbar. He is obviously armed.	8	0	25	23	22	0	24	0	10	0	0	15	0	0	150	45	510	950	0	0	0	1	150	45	510	20	16	20	5	5	0	0	\N	\N	0	0	0	0	0	0	0	0	0	250
+17	407	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	25	0	0	5550	565	510	150	0	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	0	0	0	0	0	0	0	0	0	250
+18	500	A Military Police enforcer	A Military Police enforcer	A Military Police enforcer	A fit military police enforcer. He looks armed.	8	0	25	23	22	0	24	0	10	0	0	10	0	0	250	45	110	50	0	0	0	1	250	45	110	10	6	20	10	5	0	10	\N	\N	10	10	10	10	10	10	10	10	10	250
+19	501	A Military Police shotgunner	A Military Police shotgunner	A Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	40	0	0	5550	565	510	150	0	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10	250
+20	502	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	8	0	355	333	132	0	334	0	10	0	0	40	0	0	109550	1565	810	109150	0	0	0	1	109550	1565	810	115	48	340	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10	250
+2	100	A rugged car thief	A rugged car thief	A rugged car thief	A car thief stalking the area. He is armed.	8	0	18	13	2	0	34	0	0	0	0	10	0	0	350	45	610	750	0	0	0	1	350	45	610	30	6	20	10	5	0	14	\N	\N	15	5	15	8	0	0	18	0	0	250
+3	101	A petty thief	A petty thief	A petty thief	A petty thief is stalking the area.	8	0	4	4	2	0	4	0	0	0	0	5	0	0	100	15	110	750	0	0	0	1	100	15	110	2	6	10	4	5	0	14	\N	\N	5	4	5	2	0	0	4	0	0	250
+21	102	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	8	0	9	6	2	0	7	0	0	0	0	8	0	0	450	25	110	1123	0	0	0	1	450	25	110	3	25	20	4	5	0	15	\N	\N	0	10	8	3	0	0	5	0	0	250
+4	103	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict is manically patrolling the area.	8	0	13	6	2	0	13	0	0	0	0	13	0	0	650	25	310	4123	0	0	0	1	650	25	310	8	25	30	4	5	0	16	\N	\N	0	4	1	1	2	0	8	0	9	250
+22	104	A shoplifter	A shoplifter	A shoplifter	A shoplifter is stalking the area.	8	0	1	1	1	0	1	0	0	0	0	1	0	0	10	15	60	10	0	0	0	1	10	15	60	1	3	1	4	5	0	15	\N	\N	1	0	1	0	0	0	1	0	0	250
+23	105	A crackhead	A crackhead	A crackhead	A crackhead is stalking the area.	8	0	1	1	1	0	3	0	0	0	0	2	0	0	35	15	60	10	0	0	0	1	35	15	60	2	6	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0	250
+24	109	A retail associate	A retail associate	A retail associate	A retail associate tirelessly stocks shelves...	8	0	15	1	2	0	4	0	4	0	0	3	0	0	120	50	60	85	0	0	0	1	120	50	60	2	5	2	10	5	0	19	\N	\N	2	1	1	1	1	0	1	2	1	250
+25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	0	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2	250
+26	106	An armed security guard	An armed security guard	An armed security guard	An armed security guard watches you closely.	8	0	28	23	25	0	54	0	0	0	0	20	0	0	950	245	610	2150	0	0	0	1	950	245	610	90	18	60	10	5	0	18	\N	\N	25	30	35	20	30	10	38	25	20	250
+27	107	A bank teller	A bank teller	A bank teller	A bank teller is obediently serving you	8	0	1	1	1	0	3	0	30	0	0	2	0	0	15	15	20	450	0	0	0	2	15	15	20	1	3	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0	250
+28	112	An agitated thug	An agitated thug	An agitated thug	An agitated thug looks for something to punch...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	250	100	82	18	0	0	0	1	250	100	82	1	8	10	10	5	0	15	\N	\N	2	3	3	2	3	1	3	2	2	250
+29	113	A muscular hustler	A muscular hustler	A muscular hustler	A muscular hustler looks for something to punch...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	350	100	82	48	0	0	0	1	350	100	82	2	12	18	10	5	0	15	\N	\N	4	5	5	4	7	0	8	3	4	250
 \.
 
 
@@ -4132,8 +4135,8 @@ COPY public.object_weapon (id, obj_fk_id, obj_ammo_max, obj_ammo_type, obj_coold
 --
 
 COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences, player_practice_sessions) FROM stdin;
-96	$2a$06$OW7y5cqZH/LkEXpnsDmW3OKqxTrAdTKZ0x.BbCbrhzYjlk6oQFtcG	128	0	sniper	1	1	128	10	0	30	22	40	50	37	0	0	10	100	82	0	0	M	10	100	82	48	48	48	9	0	48	0	0	PC	0	1	48	0	2021-09-04 04:25:30.182404	0	2021-09-04 04:25:30.182404	8388848	3
 1	foKntnEF3KSXA	0	0	far	1	1	0	0	0	0	0	0	0	0	6500	0	65000	6500	65000	6500	6500	M	65000	6500	65000	53	52	52	9	1	52	0	0	PC	6500	1	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	1
+96	$2a$06$OW7y5cqZH/LkEXpnsDmW3OKqxTrAdTKZ0x.BbCbrhzYjlk6oQFtcG	0	128	sniper	1	1	0	10	0	30	22	40	50	37	0	0	10	100	82	162	1819	M	-81	100	4	53	53	53	9	1	53	0	0	PC	0	1	53	0	2021-09-04 04:25:30.182404	0	2021-09-04 04:25:30.182404	8388848	0
 \.
 
 
@@ -4142,8 +4145,8 @@ COPY public.player (id, player_password, player_affection_plr_bitvector, player_
 --
 
 COPY public.player_base_ability (pba_id, pba_player_id, pba_str, pba_str_add, pba_intel, pba_wis, pba_dex, pba_con, pba_cha, pba_electronics, pba_armor, pba_marksmanship, pba_sniping, pba_demolitions, pba_chemistry, pba_weapon_handling, pba_strategy, pba_medical, created_at, updated_at) FROM stdin;
-2	96	10	0	30	22	40	50	37	30	17	27	20	5	30	27	30	45	2021-09-04 04:25:30.214342	2021-09-04 04:25:30.214342
 1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
+2	96	10	0	30	22	40	50	37	30	17	27	20	5	30	27	30	45	2021-09-04 04:25:30.214342	2021-09-04 04:25:30.214342
 \.
 
 
@@ -4269,6 +4272,28 @@ COPY public.rifle_index (id, rifle_filename, rifle_type, created_at, updated_at)
 --
 
 COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1, rifle_accuracy_map_2, rifle_accuracy_map_3, rifle_damage_map_0, rifle_damage_map_1, rifle_damage_map_2, rifle_damage_map_3, rifle_rarity, rifle_file, rifle_str_type, rifle_type, rifle_manufacturer, rifle_name, rifle_vnum, rifle_ammo_max, rifle_ammo_type, rifle_chance_to_injure, rifle_clip_size, rifle_cooldown_between_shots, rifle_critical_chance, rifle_critical_range, rifle_damage_per_second, rifle_disorient_amount, rifle_headshot_bonus, rifle_max_range, rifle_range_multiplier, rifle_reload_time, rifle_rounds_per_minute, rifle_muzzle_velocity, rifle_effective_firing_range, rifle_damage_dice_count, rifle_damage_dice_sides, rifle_incendiary_damage, rifle_explosive_damage, rifle_shrapnel_damage, rifle_corrosive_damage, rifle_cryogenic_damage, rifle_radioactive_damage, rifle_emp_damage, rifle_shock_damage, rifle_anti_matter_damage, rifle_stat_strength, rifle_stat_intelligence, rifle_stat_wisdom, rifle_stat_dexterity, rifle_stat_constitution, rifle_stat_electronics, rifle_stat_armor, rifle_stat_marksmanship, rifle_stat_sniping, rifle_stat_demolitions, rifle_stat_chemistry, rifle_stat_weapon_handling, rifle_stat_strategy, rifle_stat_medical, created_at, updated_at) FROM stdin;
+1	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	77	8	2	34	1	80	0	53	1	4.29999999999999982	2	10	1	10	1	1	0	1	1	1	0	1	1	1	1	0	0	1	1	0	0	0	0	1	1	1	1	0	0	2021-09-06 01:28:51.675323	2021-09-06 01:28:51.675323
+2	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	1	SHOTGUN	1	6	2	34	1	154	1	53	2	1	2	14	918	15	3	31	0	1	1	1	1	0	1	1	1	1	0	1	1	1	1	0	0	0	1	0	1	0	0	2021-09-06 01:57:11.43389	2021-09-06 01:57:11.43389
+3	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	20.5	6	1	6	1	25	1	55	1	0	4	1	1	2	3	24	1	1	1	0	1	1	1	1	0	1	1	0	0	1	1	0	1	1	1	0	0	0	0	2021-09-06 01:57:28.204973	2021-09-06 01:57:28.204973
+4	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	1	1	1	5	1	39	0	33	1	0	3	80	1	2	3	1	1	0	1	1	1	0	0	0	0	1	1	0	0	0	1	0	0	0	1	1	1	1	0	2021-09-06 01:59:56.640283	2021-09-06 01:59:56.640283
+5	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.8099999999999987	31	1	1	1	30	1	29	3	4.29999999999999982	5	1	1357	20	10	6	1	1	1	1	1	1	1	1	1	0	1	0	0	1	1	0	1	0	1	1	1	1	0	2021-09-06 02:00:02.293957	2021-09-06 02:00:02.293957
+6	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	6	2	34	1	80	1	53	1	4.29999999999999982	1	19	918	10	3	1	1	1	0	1	0	1	1	1	1	1	1	1	1	0	1	0	1	1	0	0	1	0	0	2021-09-06 02:08:25.716967	2021-09-06 02:08:25.716967
+7	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	75	PISTOL	1	9	1	5	1	21	1	1	1	1	3	80	40	3	4	16	1	1	0	1	1	1	0	1	1	1	1	1	0	0	0	0	1	1	1	1	1	1	0	2021-09-06 02:08:49.453172	2021-09-06 02:08:49.453172
+8	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	1	7	16	19	3	1	0	23	4	1	12	13	1818	512	2	53	1	1	0	1	1	1	0	0	1	0	1	1	0	0	1	0	1	1	0	0	1	1	0	2021-09-06 02:09:56.904971	2021-09-06 02:09:56.904971
+9	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	888	SUB_MACHINE_GUN	33	1	1	14	1	30	1	13	1	1	5	180	1	33	6	6	1	0	1	0	1	1	1	0	1	1	1	0	0	1	1	0	1	0	1	1	1	1	0	2021-09-06 02:11:28.277761	2021-09-06 02:11:28.277761
+10	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1	9	2	34	1	1	1	73	2	7	2	1	918	12	3	20	1	0	1	1	0	0	0	1	1	0	0	0	1	1	1	0	0	1	1	1	0	1	0	2021-09-06 02:48:16.222825	2021-09-06 02:48:16.222825
+11	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	20.5	6	1	5	1	36	1	33	1	0	1	1	40	3	1	26	1	1	1	1	0	0	0	1	1	0	1	1	1	1	0	0	1	0	0	1	1	0	0	2021-09-06 02:48:40.192837	2021-09-06 02:48:40.192837
+12	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	1	1	129	0	66	2	4.29999999999999982	2	1	920	10	1	20	0	0	1	1	1	1	1	1	1	1	1	1	0	0	0	0	1	0	1	1	0	0	0	2021-09-06 02:53:24.30776	2021-09-06 02:53:24.30776
+13	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	8	2	34	1	80	0	1	1	4.29999999999999982	3	10	918	1	3	20	1	1	0	1	1	1	0	1	1	1	0	0	0	1	0	0	1	1	1	0	1	0	0	2021-09-06 03:02:35.527086	2021-09-06 03:02:35.527086
+14	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	1	PISTOL	20.5	1	1	9	1	20	1	33	1	0	5	80	1	1	1	16	1	0	1	0	1	1	1	1	1	1	1	1	0	0	0	0	1	1	0	1	1	0	0	2021-09-06 03:04:47.023351	2021-09-06 03:04:47.023351
+15	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	73	6	2	1	1	80	0	1	4	1	2	10	918	10	3	20	1	1	1	1	1	1	1	0	1	1	0	1	1	1	1	0	1	1	0	1	1	0	0	2021-09-06 03:05:55.639243	2021-09-06 03:05:55.639243
+16	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	34	1	80	1	53	1	4.29999999999999982	2	1	918	1	5	1	1	0	1	1	0	1	1	1	1	0	1	1	1	0	1	0	0	1	1	0	1	1	0	2021-09-06 03:06:30.49336	2021-09-06 03:06:30.49336
+17	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	1	1	34.5300000000000011	1	61	1	0	5	8	1	2	5	20	1	0	1	1	1	0	1	1	1	1	1	0	1	1	1	0	0	1	0	0	0	1	0	2021-09-06 03:06:37.447102	2021-09-06 03:06:37.447102
+18	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	1	PISTOL	1	1	1	5	1	20	1	42	1	1	3	1	1	2	3	16	1	0	0	1	1	0	1	1	0	0	1	0	1	1	1	0	0	0	0	1	0	1	0	2021-09-06 03:08:25.046276	2021-09-06 03:08:25.046276
+19	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	1	7	2	1	5	1	0	20	4	4.29999999999999982	11	10	1818	775	5	54	0	1	1	0	0	1	1	1	1	1	0	0	1	1	1	0	0	1	1	1	0	0	0	2021-09-06 03:08:36.809308	2021-09-06 03:08:36.809308
+20	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	14	2	14	4	4.53000000000000025	3.14000000000000012	3	3	4.29999999999999982	1	80	1	2	6	1	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	1	1	1	1	1	0	2021-09-06 03:13:23.838239	2021-09-06 03:13:23.838239
+21	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	1	1	5	1	1	1	33	1	0	3	80	40	3	3	16	0	1	0	1	0	1	1	1	1	1	1	1	0	1	1	0	1	1	0	0	1	1	0	2021-09-06 03:14:24.90574	2021-09-06 03:14:24.90574
+22	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.810000000000000053	11	16	19	1	450	0	1	4	1	1	1	1	500	3	49	1	1	0	1	1	1	0	1	1	1	0	0	1	1	1	0	0	1	0	1	0	0	0	2021-09-06 03:17:24.397361	2021-09-06 03:17:24.397361
 \.
 
 
@@ -7211,15 +7236,12 @@ COPY public.skill_usage (id, player_id, skill_name, skill_level) FROM stdin;
 25	96	stealth	0
 26	96	summon	0
 27	96	xray	0
-28	96	feign	0
-29	96	claymore	0
 30	96	intimidation	0
 31	96	cryo	0
 32	96	flash	0
 33	96	ts	0
 34	96	lb	0
 35	96	suture	0
-36	96	as	0
 37	96	emp	0
 38	96	chaff	0
 39	96	sensor	0
@@ -7230,6 +7252,9 @@ COPY public.skill_usage (id, player_id, skill_name, skill_level) FROM stdin;
 44	96	smine	0
 45	96	cmine	0
 46	96	recon	0
+29	96	claymore	0.5
+28	96	feign	0.5
+36	96	as	0.5
 \.
 
 
@@ -7300,6 +7325,46 @@ COPY public.zone (id, zone_virtual_number, zone_start, zone_end, zone_name, life
 --
 
 COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_arg2, zone_arg3, zone_yaml) FROM stdin;
+748	1	M	0	112	750	5	\N
+749	1	M	0	112	754	5	\N
+750	1	M	0	112	757	5	\N
+751	1	M	0	112	761	5	\N
+752	1	M	0	112	764	5	\N
+753	1	M	0	112	769	5	\N
+754	1	M	0	112	774	5	\N
+755	1	M	0	112	779	5	\N
+756	1	M	0	112	784	5	\N
+757	1	M	0	112	785	5	\N
+758	1	M	0	112	788	5	\N
+759	1	M	0	112	791	5	\N
+760	1	M	0	112	794	5	\N
+761	1	M	0	112	797	5	\N
+762	1	M	0	112	800	5	\N
+763	1	M	0	112	803	5	\N
+764	1	M	0	112	806	5	\N
+765	1	M	0	112	809	5	\N
+766	1	M	0	112	812	5	\N
+767	1	M	0	112	815	5	\N
+768	1	M	0	113	750	5	\N
+769	1	M	0	113	754	5	\N
+770	1	M	0	113	757	5	\N
+771	1	M	0	113	761	5	\N
+772	1	M	0	113	764	5	\N
+773	1	M	0	113	769	5	\N
+774	1	M	0	113	774	5	\N
+775	1	M	0	113	779	5	\N
+776	1	M	0	113	784	5	\N
+777	1	M	0	113	785	5	\N
+778	1	M	0	113	788	5	\N
+779	1	M	0	113	791	5	\N
+780	1	M	0	113	794	5	\N
+781	1	M	0	113	797	5	\N
+782	1	M	0	113	800	5	\N
+783	1	M	0	113	803	5	\N
+784	1	M	0	113	806	5	\N
+785	1	M	0	113	809	5	\N
+786	1	M	0	113	812	5	\N
+787	1	M	0	113	815	5	\N
 565	1	M	0	600	143	1	\N
 566	1	M	0	601	147	8	\N
 567	1	M	0	602	143	1	\N
@@ -7443,46 +7508,6 @@ COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_
 705	1	M	0	107	730	1	\N
 706	1	M	0	107	731	1	\N
 707	1	M	0	107	732	1	\N
-708	1	M	0	112	750	5	\N
-709	1	M	0	112	754	5	\N
-710	1	M	0	112	757	5	\N
-711	1	M	0	112	761	5	\N
-712	1	M	0	112	764	5	\N
-713	1	M	0	112	769	5	\N
-714	1	M	0	112	774	5	\N
-715	1	M	0	112	779	5	\N
-716	1	M	0	112	784	5	\N
-717	1	M	0	112	785	5	\N
-718	1	M	0	112	788	5	\N
-719	1	M	0	112	791	5	\N
-720	1	M	0	112	794	5	\N
-721	1	M	0	112	797	5	\N
-722	1	M	0	112	800	5	\N
-723	1	M	0	112	803	5	\N
-724	1	M	0	112	806	5	\N
-725	1	M	0	112	809	5	\N
-726	1	M	0	112	812	5	\N
-727	1	M	0	112	815	5	\N
-728	1	M	0	113	750	5	\N
-729	1	M	0	113	754	5	\N
-730	1	M	0	113	757	5	\N
-731	1	M	0	113	761	5	\N
-732	1	M	0	113	764	5	\N
-733	1	M	0	113	769	5	\N
-734	1	M	0	113	774	5	\N
-735	1	M	0	113	779	5	\N
-736	1	M	0	113	784	5	\N
-737	1	M	0	113	785	5	\N
-738	1	M	0	113	788	5	\N
-739	1	M	0	113	791	5	\N
-740	1	M	0	113	794	5	\N
-741	1	M	0	113	797	5	\N
-742	1	M	0	113	800	5	\N
-743	1	M	0	113	803	5	\N
-744	1	M	0	113	806	5	\N
-745	1	M	0	113	809	5	\N
-746	1	M	0	113	812	5	\N
-747	1	M	0	113	815	5	\N
 \.
 
 
@@ -7651,14 +7676,14 @@ SELECT pg_catalog.setval('public.mini_gunner_sentinel_id_seq', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_id_seq', 91, true);
+SELECT pg_catalog.setval('public.mob_equipment_id_seq', 93, true);
 
 
 --
 -- Name: mob_equipment_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 37, true);
+SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 39, true);
 
 
 --
@@ -7777,7 +7802,7 @@ SELECT pg_catalog.setval('public.player_id_seq', 96, true);
 -- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_object_id_seq', 14, true);
+SELECT pg_catalog.setval('public.player_object_id_seq', 19, true);
 
 
 --
@@ -7833,7 +7858,7 @@ SELECT pg_catalog.setval('public.rifle_index_id_seq', 29, true);
 -- Name: rifle_instance_rifle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rifle_instance_rifle_id_seq', 1, false);
+SELECT pg_catalog.setval('public.rifle_instance_rifle_id_seq', 22, true);
 
 
 --
@@ -7952,7 +7977,7 @@ SELECT pg_catalog.setval('public.world_configuration_start_rooms_id_seq', 4, tru
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_data_id_seq', 747, true);
+SELECT pg_catalog.setval('public.zone_data_id_seq', 787, true);
 
 
 --

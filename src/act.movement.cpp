@@ -24,6 +24,7 @@
 #include "mods/classes/breacher.hpp"
 #include "mods/classes/ghost.hpp"
 #include "mods/contract-events.hpp"
+#include "mods/resting.hpp"
 
 /* external variables  */
 extern int tunnel_size;
@@ -748,6 +749,7 @@ ACMD(do_sleep) {
 			send_to_char(ch, "You go to sleep.");
 			act("$n lies down and falls asleep.", TRUE, ch, 0, 0, TO_ROOM);
 			GET_POS(ch) = POS_SLEEPING;
+			mods::resting::add_player_resting(player);
 			break;
 
 		case POS_SLEEPING:
@@ -792,6 +794,7 @@ ACMD(do_wake) {
 			act("You wake $M up.", FALSE, ch, 0, vict, TO_CHAR);
 			act("You are awakened by $n.", FALSE, ch, 0, vict, TO_VICT | TO_SLEEP);
 			GET_POS(vict) = POS_SITTING;
+			mods::resting::remove_player_resting(player);
 		}
 
 		if(!self) {
@@ -807,6 +810,7 @@ ACMD(do_wake) {
 		send_to_char(ch, "You awaken, and sit up.");
 		act("$n awakens.", TRUE, ch, 0, 0, TO_ROOM);
 		GET_POS(ch) = POS_SITTING;
+		mods::resting::remove_player_resting(player);
 	}
 }
 
