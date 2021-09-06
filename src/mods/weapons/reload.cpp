@@ -2,8 +2,10 @@
 #include "../interpreter-include.hpp"
 #include "damage-calculator.hpp"
 #include "../query-objects.hpp"
+#include "../orm/inventory.hpp"
 
 #define m_debug(a) std::cerr << "[mods::weapons::reload][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#define m_error(a) std::cerr << "[mods::weapons::reload][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #ifndef TO_ROOM
 #define TO_ROOM		1
 #endif
@@ -17,7 +19,7 @@ namespace mods::weapons::reload {
 		{mw_rifle::SUB_MACHINE_GUN,"sg3-smg-ammunition.yml"},
 		{mw_rifle::SNIPER,"sg3-sniper-ammunition.yml"},
 	};
-	void reload_weapon(player_ptr_t& player,obj_ptr_t weapon) {
+	std::pair<obj_ptr_t,obj_ptr_t> reload_weapon(player_ptr_t& player,obj_ptr_t weapon) {
 		m_debug("reloading weapon...");
 		uint16_t ticks = 6;
 		switch((mw_rifle)weapon->rifle()->type) {
@@ -65,7 +67,7 @@ namespace mods::weapons::reload {
 		}
 		if(!obj) {
 			player->send("You don't seem to have any ammunition for that weapon anywhere in your inventory!");
-			return;
+			return {nullptr,nullptr};
 		}
 
 		auto clip_size = weapon->rifle()->attributes->clip_size;
@@ -76,8 +78,50 @@ namespace mods::weapons::reload {
 
 		weapon->rifle_instance->ammo = clip_size;
 		player->send("You reload your %s with %d ammo.", weapon->name.c_str(), clip_size);
-		player->uncarry(obj,true);
-
+		if((obj->consumable()->attributes->capacity - clip_size) < 0) {
+			obj->consumable()->attributes->capacity = 0;
+		} else {
+			obj->consumable()->attributes->capacity -= clip_size;
+		}
+		player->uncarry(obj);
+		if(obj->consumable()->attributes->capacity > 0) {
+			/** Since we don't store the player_object.id field, this is a nasty little
+			 * hack that gets it done with a bit more overhead. The uncarry will remove
+			 * it from the inventory, but recarrying it will flush it to the db
+			 * properly. This is a minor inconvenience when in reality, it's probably
+			 * better to keep track of the player_object.id primary key.
+			 * so that we simply run an update query.
+			 * This is the most bug-free way to update that item in the inventory.
+			 */
+			player->carry(obj);
+		}
+		return {weapon,obj};
+	}
+	void reload_primary(player_ptr_t& player) {
+		auto pair = reload_weapon(player,player->primary());
+		auto weapon = pair.first;
+		auto ammo = pair.second;
+		{
+			std::tuple<bool,std::string> res = mods::orm::inventory::user_reloaded_primary(player);
+			if(!std::get<0>(res)) {
+				m_error("WARNING. Unable to flush DB changes for primary weapon reload! :'" << std::get<1>(res));
+			} else {
+				m_debug("Saved primary weapon reload data okay.");
+			}
+		}
+	}
+	void reload_secondary(player_ptr_t& player) {
+		auto pair = reload_weapon(player,player->secondary());
+		auto weapon = pair.first;
+		auto ammo = pair.second;
+		{
+			std::tuple<bool,std::string> res = mods::orm::inventory::user_reloaded_secondary(player);
+			if(!std::get<0>(res)) {
+				m_error("WARNING. Unable to flush DB changes for secondary weapon reload! :'" << std::get<1>(res));
+			} else {
+				m_debug("Saved secondary weapon reload data okay.");
+			}
+		}
 	}
 	/* TODO: Implement weapon tags in the obj_data data structure */
 	ACMD(do_reload) {
@@ -103,9 +147,15 @@ namespace mods::weapons::reload {
 			player->send("You aren't wielding a reloadable weapon in your [%s] slot.\r\n", primary ? "primary" : "secondary");
 			return;
 		}
-		reload_weapon(player,weapon);
+		if(secondary) {
+			reload_secondary(player);
+		} else {
+			reload_primary(player);
+		}
 	}
 	void init() {
 		mods::interpreter::add_command("reload", POS_RESTING, do_reload, 0,0);
 	}
 };
+#undef m_debug
+#undef m_error

@@ -9,6 +9,15 @@
 #include "../../globals.hpp"
 #include "rifle-attachment.hpp"
 
+#define __MENTOC_SHOW_INVENTORY_DEBUG_OUTPUT__
+#ifdef __MENTOC_SHOW_INVENTORY_DEBUG_OUTPUT__
+#define m_debug(a) std::cerr << "[mods::orm::inventory[file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#define m_error(a) std::cerr << "[mods::orm::inventory[file:" << __FILE__ << "][line:" << __LINE__ << "][ERROR]->" << a << "\n";
+#else
+#define m_debug(a)
+#define m_error(a)
+#endif
+
 extern obj_ptr_t read_object_ptr(obj_vnum nr, int type);
 extern obj_ptr_t blank_object();
 extern void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player);
@@ -21,10 +30,25 @@ namespace mods::orm::inventory {
 	static constexpr uint8_t I_PLACEHOLDER = 0;
 	static constexpr uint8_t I_FORGED = 1;
 	static constexpr uint8_t I_YAML= 2;
+	bool is_ammo(obj_ptr_t& eq) {
+		return eq->type == ITEM_CONSUMABLE && eq->has_consumable() && eq->consumable()->attributes->ammo_type.compare("NONE") != 0;
+	}
+	bool is_rifle(obj_ptr_t& eq) {
+		return eq->type == ITEM_RIFLE && eq->has_rifle();
+	}
 	std::map<std::string,std::string> export_object(obj_ptr_t eq,const uint64_t& db_id,const std::size_t& wear_position,bool inventory) {
 		std::map<std::string,std::string> mapped_values;
 		mapped_values["po_player_id"] = std::to_string(db_id);
 		mapped_values["po_type"] = std::to_string(eq->type);
+		m_debug("export object called");
+		if(is_ammo(eq)) {
+			m_debug("found ammo consumable. saving capacity...");
+			mapped_values["po_ammunition"] = std::to_string(eq->consumable()->attributes->capacity);
+		}
+		if(eq->type == ITEM_RIFLE) {
+			m_debug("Found ITEM RIFLE type. saving rifle instance ammo..." << eq->rifle_instance->ammo);
+			mapped_values["po_ammunition"] = std::to_string(eq->rifle_instance->ammo);
+		}
 		if(eq->forged) {
 			mapped_values["po_type_id"] = std::to_string(eq->db_id());
 			mapped_values["po_load_type"] = FORGED;
@@ -43,10 +67,16 @@ namespace mods::orm::inventory {
 	}
 
 	obj_data_ptr_t dynamic_fetch(mentoc_pqxx_result_t row) {
+		m_debug("dynamic fetch entry");
 		switch(row["po_load_type"].as<int>()) {
 			case I_FORGED: {
+					m_debug("dynamic fetching FORGED: " << row["id"].as<int>());
 					auto obj = create_object(ITEM_RIFLE,CAT("rifle|pkid:",row["po_type_id"].as<int>()));
 					obj->forged = true;
+					if(!row["po_ammunition"].is_null()) {
+						m_debug("po_ammunition set for item: " << row["id"].as<int>());
+						obj->rifle_instance->ammo = row["po_ammunition"].as<int>();
+					}
 					return std::move(obj);
 				}
 			case I_YAML: {
@@ -54,6 +84,15 @@ namespace mods::orm::inventory {
 						return nullptr;
 					}
 					auto obj = create_object(row["po_type"].as<int>(),row["po_yaml"].c_str());
+					if(!row["po_ammunition"].is_null() && is_ammo(obj)) {
+						m_debug("po_ammunition set for item: " << row["id"].as<int>());
+						obj->consumable()->attributes->capacity = row["po_ammunition"].as<int>();
+						m_debug("Set ammo successfully from database for ammunition");
+					}
+					if(!row["po_ammunition"].is_null() && is_rifle(obj)) {
+						m_debug("po_ammunition set for rifle: " << row["id"].as<int>());
+						obj->rifle_instance->ammo = row["po_ammunition"].as<int>();
+					}
 					return std::move(obj);
 				}
 			default:
@@ -190,6 +229,7 @@ namespace mods::orm::inventory {
 						break;
 				}
 				obj = nullptr;
+				m_debug("dynamic fetch for: " << row["po_yaml"].c_str());
 				obj = dynamic_fetch(row);
 				if(!obj) {
 					log("Failed to load user object: player[%s] po_id[%d]", player->name().c_str(),row["po_id"].as<int>());
@@ -212,5 +252,42 @@ namespace mods::orm::inventory {
 		}
 	}//end feed_player
 
+	std::tuple<bool,std::string> user_reloaded_position(player_ptr_t& player,int position) {
+		try {
+			auto update_txn = txn();
+			sql_compositor comp("player_object",&update_txn);
+			auto weapon = player->primary();
+			auto obj = export_object(weapon,player->db_id(),position,false);
+			auto ammo_count = obj["po_ammunition"];
+			obj.erase("po_ammunition");
+			auto player_sql = comp.update("player_object")
+			.set({
+				{"po_ammunition", ammo_count},
+			})
+			.where("po_wear_position",obj["po_wear_position"])
+			.op_and("po_player_id",obj["po_player_id"])
+			.op_and("po_yaml",obj["po_yaml"])
+			.op_and("po_type",obj["po_type"])
+			.op_and("po_load_type",obj["po_load_type"])
+			.sql();
+			m_debug("Running sql: '" << player_sql << "'");
+			auto player_record = mods::pq::exec(update_txn,player_sql);
+			mods::pq::commit(update_txn);
+			return {1,"saved"};
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE(": error saving reload: '",e.what());
+			return {0,CAT("Update failed: '",e.what(),"'")};
+		}
+	}
+	std::tuple<bool,std::string> user_reloaded_primary(player_ptr_t& player) {
+		return user_reloaded_position(player,WEAR_PRIMARY);
+	}
+
+	std::tuple<bool,std::string> user_reloaded_secondary(player_ptr_t& player) {
+		return user_reloaded_position(player,WEAR_SECONDARY);
+	}
+
 };
 
+#undef m_debug
+#undef m_error

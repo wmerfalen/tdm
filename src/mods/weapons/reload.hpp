@@ -8,7 +8,7 @@
 #include "../damage-event.hpp"
 
 namespace mods::weapons::reload {
-	void reload_weapon(player_ptr_t& player,obj_ptr_t weapon);
+	std::pair<obj_ptr_t,obj_ptr_t> reload_weapon(player_ptr_t& player,obj_ptr_t weapon);
 };
 #endif
 

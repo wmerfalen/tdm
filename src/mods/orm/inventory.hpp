@@ -16,6 +16,8 @@ namespace mods::orm::inventory {
 	std::tuple<bool,std::string> equip(const uint64_t& player_db_id,const std::size_t& position,obj_ptr_t& object);
 	std::tuple<bool,std::string> carry(const uint64_t& player_db_id,obj_ptr_t& object);
 	std::tuple<bool,std::string> uncarry(const uint64_t& player_db_id,obj_ptr_t& object);
+	std::tuple<bool,std::string> user_reloaded_primary(player_ptr_t& player);
+	std::tuple<bool,std::string> user_reloaded_secondary(player_ptr_t& player);
 };
 
 #endif
