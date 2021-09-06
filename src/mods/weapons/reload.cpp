@@ -1,13 +1,24 @@
 #include "reload.hpp"
 #include "../interpreter-include.hpp"
 #include "damage-calculator.hpp"
+#include "../query-objects.hpp"
 
-#define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#define m_debug(a) std::cerr << "[mods::weapons::reload][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #ifndef TO_ROOM
 #define TO_ROOM		1
 #endif
 namespace mods::weapons::reload {
+	static std::map<mw_rifle,std::string> ammo_map = {
+		{mw_rifle::ASSAULT_RIFLE,"sg3-ar-ammunition.yml"},
+		{mw_rifle::LIGHT_MACHINE_GUN,"sg3-lmg-ammunition.yml"},
+		{mw_rifle::MACHINE_PISTOL,"sg3-mp-ammunition.yml"},
+		{mw_rifle::PISTOL,"sg3-pistol-ammunition.yml"},
+		{mw_rifle::SHOTGUN,"sg3-shotgun-ammunition.yml"},
+		{mw_rifle::SUB_MACHINE_GUN,"sg3-smg-ammunition.yml"},
+		{mw_rifle::SNIPER,"sg3-sniper-ammunition.yml"},
+	};
 	void reload_weapon(player_ptr_t& player,obj_ptr_t weapon) {
+		m_debug("reloading weapon...");
 		uint16_t ticks = 6;
 		switch((mw_rifle)weapon->rifle()->type) {
 			case mw_rifle::LIGHT_MACHINE_GUN:
@@ -20,7 +31,6 @@ namespace mods::weapons::reload {
 
 			case mw_rifle::SHOTGUN:
 				ticks = mods::values::RELOAD_TICKS_SHOTGUN();
-				player->sendln("yuhhhhhhh");
 				break;
 
 			case mw_rifle::SNIPER:
@@ -41,8 +51,18 @@ namespace mods::weapons::reload {
 				log("SYSERR: warning, no rifle type given for reload. default to %d", ticks);
 				break;
 		}
-		/** TODO: honor the ticks and block the player for the specified time */
-		auto obj = player->get_ammo_for(weapon);
+		auto yaml_file = ammo_map[(mw_rifle)weapon->rifle()->type];
+		m_debug("looking for yaml file in players inventory: '" << yaml_file << "'");
+		std::vector<uuid_t> items = mods::query_objects::query_inventory_by_yaml(player, yaml_file);
+		obj_ptr_t obj = nullptr;
+		for(const auto& item_uuid : items) {
+			obj = optr_by_uuid(item_uuid);
+			if(!obj) {
+				continue;
+			}
+			m_debug("Found: " << obj->name.c_str());
+			break;
+		}
 		if(!obj) {
 			player->send("You don't seem to have any ammunition for that weapon anywhere in your inventory!");
 			return;
@@ -56,10 +76,7 @@ namespace mods::weapons::reload {
 
 		weapon->rifle_instance->ammo = clip_size;
 		player->send("You reload your %s with %d ammo.", weapon->name.c_str(), clip_size);
-		capacity -= clip_size;
-		if(obj->consumable()->attributes->capacity <= 0) {
-			player->consume_from_carrying(obj);
-		}
+		player->uncarry(obj,true);
 
 	}
 	/* TODO: Implement weapon tags in the obj_data data structure */

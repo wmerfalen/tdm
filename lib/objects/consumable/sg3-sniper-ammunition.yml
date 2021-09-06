@@ -26,7 +26,7 @@ adds_hitroll: 0 #int, amount of HITROLL it adds when consumed (can be negative)
 adds_damage_roll: 5 #int, amount of DAMROLL it adds when consumed (can be negative)
 ticks_until_zero: 0 #int, amount of game ticks until consumable wears off (can be negative)
 ammo_type: 'SNIPER' #string, ENUM any type of ITEM_RIFLE if this is ammunition
-capacity: 40 #int, usually used for ammunition. how much of this consumable is present (i.e.: bullets)
+capacity: 7 #int, usually used for ammunition. how much of this consumable is present (i.e.: bullets)
 adds_fire_damage: 2 #int, amount of fire damage it adds to the consumer
 adds_critical_chance: 9 #int, amount of points to add to critical chance of consumer
 adds_ammo_max: 40 #int, adds to ammo maximum of consumer

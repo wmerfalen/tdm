@@ -152,7 +152,7 @@ ACMD	mods/values.cpp	/^			ACMD(do_get_value) {$/;"	kind:function	line:3125	names
 ACMD	mods/values.cpp	/^			ACMD(do_list_values) {$/;"	kind:function	line:3186	namespace:mods::values	signature:(do_list_values)
 ACMD	mods/values.cpp	/^			ACMD(do_revert_value_to_default){$/;"	kind:function	line:3168	namespace:mods::values	signature:(do_revert_value_to_default)
 ACMD	mods/values.cpp	/^			ACMD(do_set_value) {$/;"	kind:function	line:3077	namespace:mods::values	signature:(do_set_value)
-ACMD	mods/weapons/reload.cpp	/^	ACMD(do_reload) {$/;"	kind:function	line:66	namespace:mods::weapons::reload	signature:(do_reload)
+ACMD	mods/weapons/reload.cpp	/^	ACMD(do_reload) {$/;"	kind:function	line:83	namespace:mods::weapons::reload	signature:(do_reload)
 ACMD	shop.cpp	/^ACMD(do_buy) {$/;"	kind:function	line:1058	signature:(do_buy)
 ACMD	shop.cpp	/^ACMD(do_list) {$/;"	kind:function	line:1052	signature:(do_list)
 ACMD_EXAMINE	boards.cpp	/^int ACMD_READ, ACMD_LOOK, ACMD_EXAMINE, ACMD_WRITE, ACMD_REMOVE;$/;"	kind:variable	line:82
@@ -3509,7 +3509,7 @@ TO_ROOM	mods/item.cpp	/^	static constexpr uint8_t TO_ROOM = 1;$/;"	kind:member	l
 TO_ROOM	mods/weapons/armor-calculator.cpp	22;"	kind:macro	line:22	file:
 TO_ROOM	mods/weapons/damage-calculator.cpp	21;"	kind:macro	line:21	file:
 TO_ROOM	mods/weapons/damage-types.cpp	38;"	kind:macro	line:38	file:
-TO_ROOM	mods/weapons/reload.cpp	7;"	kind:macro	line:7	file:
+TO_ROOM	mods/weapons/reload.cpp	8;"	kind:macro	line:8	file:
 TO_SLEEP	comm.h	67;"	kind:macro	line:67	file:
 TO_SLEEP	mods/chat.hpp	12;"	kind:macro	line:12	file:
 TO_SLEEP	mods/chat.hpp	53;"	kind:macro	line:53	file:
@@ -4461,6 +4461,7 @@ ammo	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	uint16_t attachment_shot
 ammo	structs.h	/^	uint16_t ammo;$/;"	kind:member	line:795	struct:obj_flag_data	file:	access:public
 ammo_adjustment	mods/player.cpp	/^	void player::ammo_adjustment(int increment) {$/;"	kind:function	line:658	class:mods::player	signature:(int increment)
 ammo_locker_list	mods/zone.cpp	/^	std::vector<room_vnum> ammo_locker_list;$/;"	kind:member	line:22	namespace:mods::zone	file:
+ammo_map	mods/weapons/reload.cpp	/^	static std::map<mw_rifle,std::string> ammo_map = {$/;"	kind:member	line:11	namespace:mods::weapons::reload	file:
 ammo_max	mods/weapon.hpp	/^			int ammo_max;$/;"	kind:member	line:159	struct:mods::weapon::yaml::rifle_description_t	file:	access:public
 ammo_max	structs.h	/^	uint16_t ammo_max;$/;"	kind:member	line:794	struct:obj_flag_data	file:	access:public
 ammo_type	mods/weapon.hpp	/^			std::string ammo_type;$/;"	kind:member	line:172	struct:mods::weapon::yaml::rifle_description_t	file:	access:public
@@ -6449,7 +6450,6 @@ dty_debug	mods/weapons/damage-calculator.cpp	15;"	kind:macro	line:15	file:
 dty_debug	mods/weapons/damage-calculator.cpp	17;"	kind:macro	line:17	file:
 dty_debug	mods/weapons/damage-types.cpp	26;"	kind:macro	line:26	file:
 dty_debug	mods/weapons/damage-types.cpp	28;"	kind:macro	line:28	file:
-dty_debug	mods/weapons/reload.cpp	5;"	kind:macro	line:5	file:
 duktape_context	mods/js.cpp	/^		static duk_context* duktape_context = nullptr;$/;"	kind:member	line:21	namespace:mods::js	file:
 dummy_list	mods/zone.cpp	/^	std::vector<room_vnum> dummy_list;$/;"	kind:member	line:26	namespace:mods::zone	file:
 dummy_mob	db.cpp	/^struct player_special_data dummy_mob;	\/* dummy spec area for mobs	*\/$/;"	kind:variable	line:150	typeref:struct:player_special_data
@@ -8136,7 +8136,7 @@ init	mods/weapons/attachment-frag-underbarrel.cpp	/^	void attachment_frag_underb
 init	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	void attachment_shotgun_underbarrel::init() {$/;"	kind:function	line:12	class:mods::weapons::attachment_shotgun_underbarrel	signature:()
 init	mods/weapons/damage-types.cpp	/^	void init() {$/;"	kind:function	line:1275	namespace:mods::weapons::damage_types	signature:()
 init	mods/weapons/elemental.cpp	/^	void init() {$/;"	kind:function	line:258	namespace:mods::weapons::elemental	signature:()
-init	mods/weapons/reload.cpp	/^	void init() {$/;"	kind:function	line:91	namespace:mods::weapons::reload	signature:()
+init	mods/weapons/reload.cpp	/^	void init() {$/;"	kind:function	line:108	namespace:mods::weapons::reload	signature:()
 init	mods/zone.cpp	/^	void init() {$/;"	kind:function	line:417	namespace:mods::zone	signature:()
 init	shop.cpp	/^void shop_data<TOrmType,T,R>::init() {$/;"	kind:function	line:1749	class:shop_data	signature:()
 init	structs.cpp	/^void char_data::init() {$/;"	kind:function	line:353	class:char_data	signature:()
@@ -9133,6 +9133,7 @@ m_debug	mods/weapons/corrosive-claymore.cpp	18;"	kind:macro	line:18	file:
 m_debug	mods/weapons/elemental.cpp	263;"	kind:macro	line:263	file:
 m_debug	mods/weapons/elemental.cpp	6;"	kind:macro	line:6	file:
 m_debug	mods/weapons/elemental.cpp	8;"	kind:macro	line:8	file:
+m_debug	mods/weapons/reload.cpp	6;"	kind:macro	line:6	file:
 m_debug	mods/weapons/shrapnel-claymore.cpp	134;"	kind:macro	line:134	file:
 m_debug	mods/weapons/shrapnel-claymore.cpp	14;"	kind:macro	line:14	file:
 m_debug	mods/weapons/shrapnel-claymore.cpp	16;"	kind:macro	line:16	file:
@@ -11362,13 +11363,13 @@ registration_allowed	mods/player-registration.cpp	/^	static bool registration_al
 release_zone	mods/builder.cpp	/^void release_zone(int zone) {$/;"	kind:function	line:170	signature:(int zone)
 release_zone	mods/zone.cpp	/^	void release_zone(int zone) {$/;"	kind:function	line:78	namespace:mods::zone	signature:(int zone)
 reload	mods/init.hpp	/^INIT(mods::weapons::reload);$/;"	kind:variable	line:48
-reload	mods/weapons/reload.cpp	/^namespace mods::weapons::reload {$/;"	kind:namespace	line:9	class:mods::weapons	file:
+reload	mods/weapons/reload.cpp	/^namespace mods::weapons::reload {$/;"	kind:namespace	line:10	class:mods::weapons	file:
 reload	mods/weapons/reload.hpp	/^namespace mods::weapons::reload {$/;"	kind:namespace	line:10	class:mods::weapons	file:
 reload_object	mods/weapon.cpp	/^	void reload_object(player_ptr_t& player, obj_ptr_t weapon,std::string_view with) {$/;"	kind:function	line:336	namespace:mods::weapon	signature:(player_ptr_t& player, obj_ptr_t weapon,std::string_view with)
 reload_primary_with	mods/weapon.cpp	/^	void reload_primary_with(player_ptr_t& player,std::string_view with_clip) {$/;"	kind:function	line:347	namespace:mods::weapon	signature:(player_ptr_t& player,std::string_view with_clip)
 reload_secondary_with	mods/weapon.cpp	/^	void reload_secondary_with(player_ptr_t& player,std::string_view with_clip) {$/;"	kind:function	line:355	namespace:mods::weapon	signature:(player_ptr_t& player,std::string_view with_clip)
 reload_time	mods/weapon.hpp	/^			int reload_time;$/;"	kind:member	line:171	struct:mods::weapon::yaml::rifle_description_t	file:	access:public
-reload_weapon	mods/weapons/reload.cpp	/^	void reload_weapon(player_ptr_t& player,obj_ptr_t weapon) {$/;"	kind:function	line:10	namespace:mods::weapons::reload	signature:(player_ptr_t& player,obj_ptr_t weapon)
+reload_weapon	mods/weapons/reload.cpp	/^	void reload_weapon(player_ptr_t& player,obj_ptr_t weapon) {$/;"	kind:function	line:20	namespace:mods::weapons::reload	signature:(player_ptr_t& player,obj_ptr_t weapon)
 remember	mobact.cpp	/^void remember(char_data *ch,char_data *victim) {$/;"	kind:function	line:233	signature:(char_data *ch,char_data *victim)
 remember_car	mods/mobs/car-thief.cpp	/^	void car_thief::remember_car(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:430	class:mods::mobs::car_thief	signature:(const mods::scan::vec_player_data_element& data)
 remember_event	mods/weapons/damage-decisions.hpp	/^	void remember_event(player_ptr_t& victim,player_ptr_t& attacker) {$/;"	kind:function	line:163	namespace:mods::weapons::damage_types	signature:(player_ptr_t& victim,player_ptr_t& attacker)
