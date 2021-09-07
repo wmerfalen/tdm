@@ -118,9 +118,12 @@
 				 * --[
 				 *  -- most well-balanced character
 				 *  -- all wielded assault rifles get:
-				 *  	-- +10% critical chance
-				 *  	-- +15% free ammunition
+				 *  	-- [x] +10% critical chance
+				 *  	-- [x] +15% free ammunition
 				 *  	-- underbarrel frag launcher (ammo replenishes)
+				 *  -- passive abilities
+				 *  	-- [x] Assault rifle effective range increased by 2 rooms
+				 *		-- [x] Assault rifles do 25% more damage
 				 *  -- received shrapnel and incendiary damage is reduced by 25%
 				 * 	-- "second wind" (passive)
 				 * 		-- if a hit would cause death, you have a 23% chance of

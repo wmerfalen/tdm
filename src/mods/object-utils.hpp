@@ -8,6 +8,7 @@ extern obj_ptr_t create_object(int type,std::string yaml_file);
 namespace mods::object_utils {
 	bool is_corrosive_claymore(const obj_ptr_t&);
 	bool is_shrapnel_claymore(const obj_ptr_t&);
+	bool is_assault_rifle(const obj_ptr_t&);
 	int get_yaml_type(std::string& yaml);
 	obj_ptr_t first_or_create(room_rnum room,std::string query, int type, std::string yaml_file);
 	bool assert_sane_object(std::string_view yaml);

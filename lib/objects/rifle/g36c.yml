@@ -8,7 +8,7 @@ accuracy_map: [
 ammo_max: 220 #integer
 ammo_type: '' #string, constant enum
 chance_to_injure: 4.23 #float, out of 100
-clip_size: 8 #integer
+clip_size: 36 #integer
 cooldown_between_shots: 2 #int, in ticks
 critical_chance: 14 #int, out of 100
 critical_range: 4 #integer, measured in rooms

@@ -2,6 +2,7 @@
 #include "../interpreter-include.hpp"
 #include "damage-calculator.hpp"
 #include "../query-objects.hpp"
+#include "../object-utils.hpp"
 #include "../orm/inventory.hpp"
 
 #define m_debug(a) std::cerr << "[mods::weapons::reload][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -78,6 +79,9 @@ namespace mods::weapons::reload {
 
 		weapon->rifle_instance->ammo = clip_size;
 		player->send("You reload your %s with %d ammo.", weapon->name.c_str(), clip_size);
+		if(player->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+			clip_size -= (clip_size * MARINE_AR_PASSIVE_EXTRA_AMMO_BONUS() * 0.01);
+		}
 		if((obj->consumable()->attributes->capacity - clip_size) < 0) {
 			obj->consumable()->attributes->capacity = 0;
 		} else {

@@ -154,6 +154,11 @@ namespace mods::weapons::damage_calculator {
 			auto base_damage = get_base_damage(attacker);
 			auto level_scaler = get_level_damage(attacker,victim);
 			auto weapon_damage = get_weapon_damage(attacker,weapon);
+			if(attacker->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+				int additional_damage = (MARINE_AR_PASSIVE_BONUS_DAMAGE() * 0.01) * weapon_damage;
+				attacker->sendln(CAT("{grn}[MARINE PASSIVE BONUS DAMAGE]: ",additional_damage,"{/grn}"));
+				weapon_damage += additional_damage;
+			}
 			float damage_nerf = victim->get_damage_nerf();
 			auto total_damage = base_damage + (level_scaler * weapon_damage);
 			if(total_damage > 0 && damage_nerf > 0) {
@@ -173,11 +178,15 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon
 	) {
 		if(weapon && weapon->has_rifle()) {
+			std::size_t additional_range = 0;
+			if(attacker->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+				additional_range = MARINE_AR_PASSIVE_RANGE_BONUS();
+			}
 			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 			if(rifle_attachment) {
-				return rifle_attachment->zoom_multiplier * weapon->rifle()->attributes->max_range;
+				return (rifle_attachment->zoom_multiplier * weapon->rifle()->attributes->max_range) + additional_range;
 			}
-			return weapon->rifle()->attributes->max_range;
+			return (weapon->rifle()->attributes->max_range) + additional_range;
 		} else {
 			return 0;
 		}
@@ -197,8 +206,8 @@ namespace mods::weapons::damage_calculator {
 		if(weapon->has_rifle() == false) {
 			return 0;
 		}
-		/** TODO: add ammunition count from rifle_attachment */
-		return weapon->rifle_instance->ammo;
+		auto ammo = weapon->rifle_instance->ammo;
+		return ammo;
 	}
 	/**
 	 * @brief pass in attacker, weapon, and amount you would like to reduce ammo by. this function will roll your free ammo chance and regenerate ammo chance. it will take the result of those rolls and give you the amount of ammo you should really deduct. may return negative number or zero when regenerated ammo or free ammo dice rolls succeed.

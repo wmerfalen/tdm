@@ -1,5 +1,6 @@
 #include "object-utils.hpp"
 #include "weapon-types.hpp"
+#include "rifle-attachments.hpp"
 
 namespace mods::object_utils {
 	bool is_corrosive_claymore(const obj_ptr_t& item) {
@@ -7,6 +8,13 @@ namespace mods::object_utils {
 	}
 	bool is_shrapnel_claymore(const obj_ptr_t& item) {
 		return item->explosive()->attributes->alternate_explosion_type.compare("SHRAPNEL") == 0;
+	}
+	bool is_assault_rifle(const obj_ptr_t& weapon) {
+		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
+		if(rifle_attachment) {
+			return rifle_attachment->base_object->rifle()->attributes->type == mw_rifle::ASSAULT_RIFLE;
+		}
+		return weapon->rifle()->attributes->type == mw_rifle::ASSAULT_RIFLE;
 	}
 	std::vector<std::string> object_types() {
 		/** !!*****************!! */

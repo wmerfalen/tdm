@@ -599,6 +599,9 @@ namespace mods::weapons::damage_types {
 		int damage_sides = weapon->rifle()->attributes->damage_dice_sides;
 		int crit_range = weapon->rifle()->attributes->critical_range;
 		int crit_chance = weapon->rifle()->attributes->critical_chance;
+		if(player->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+			crit_chance += MARINE_AR_PASSIVE_CRITICAL_CHANCE_BONUS();
+		}
 		int critical_bonus = 0;
 #ifdef __MENTOC_SHOW_DAMAGE_DUMP_DEBUG_OUTPUT__
 #define DMG_DUMP() \
@@ -807,7 +810,12 @@ namespace mods::weapons::damage_types {
 				log("SYSERR: warning, no rifle type given for decrease_spray_shot_ammo, default to 1");
 				break;
 		}
-		weapon->rifle_instance->ammo -= mods::weapons::damage_calculator::reduce_ammo(attacker,weapon,deduct);
+		int ammo = weapon->rifle_instance->ammo - mods::weapons::damage_calculator::reduce_ammo(attacker,weapon,deduct);
+		if(ammo < 0) {
+			weapon->rifle_instance->ammo = 0;
+		} else {
+			weapon->rifle_instance->ammo = ammo;
+		}
 	}
 	/**
 	 * @brief subtracts 1 from weapon ammo
@@ -852,7 +860,12 @@ namespace mods::weapons::damage_types {
 				log("SYSERR: warning, no rifle type given for decrease_single_shot_ammo, default to 1");
 				break;
 		}
-		weapon->rifle_instance->ammo -= mods::weapons::damage_calculator::reduce_ammo(attacker,weapon,deduct);
+		int ammo = weapon->rifle_instance->ammo - mods::weapons::damage_calculator::reduce_ammo(attacker,weapon,deduct);
+		if(ammo < 0) {
+			weapon->rifle_instance->ammo = 0;
+		} else {
+			weapon->rifle_instance->ammo = ammo;
+		}
 	}
 
 	/**
@@ -915,6 +928,9 @@ namespace mods::weapons::damage_types {
 		int crit_chance = weapon->rifle()->attributes->critical_chance;
 		int critical_bonus = 0;
 
+		if(player->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+			crit_chance += MARINE_AR_PASSIVE_CRITICAL_CHANCE_BONUS();
+		}
 		/** TODO: honor accuracy bonus */
 		/** TODO: honor max_range calculations */
 		/** calculate headshot */
@@ -1161,6 +1177,9 @@ namespace mods::weapons::damage_types {
 			player->damage_event(feedback);
 			md("is peaceful");
 			return feedback;
+		}
+		if(player->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+			crit_chance += MARINE_AR_PASSIVE_CRITICAL_CHANCE_BONUS();
 		}
 
 		/** calculate headshot */
