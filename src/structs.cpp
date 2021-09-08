@@ -689,6 +689,7 @@ void mob_special_data::init() {
 	this->heading = 0;
 	this->previous_room = 0;
 	this->experience = 0;
+	this->mp = 0;
 }
 void mob_special_data::import(const mob_special_data& other) {
 	this->watching_room = other.watching_room;
@@ -705,6 +706,7 @@ void mob_special_data::import(const mob_special_data& other) {
 	this->previous_room = other.previous_room;
 	this->vnum = other.vnum;
 	this->experience = other.experience;
+	this->mp = other.mp;
 }
 void mob_special_data::report(room_rnum room) {
 	for(auto& uuid : this->memory) {
@@ -723,6 +725,7 @@ void mob_special_data::report(room_rnum room) {
 	MR("heading",this->heading);
 	MR("previous_room",this->previous_room);
 	MR("experience",this->experience);
+	MR("mp",this->mp);
 #undef MR
 	for(auto m : msg) {
 		send_to_room(room, "Report: %s\r\n", m.c_str());
@@ -749,6 +752,7 @@ mob_special_data::~mob_special_data() {
 	this->behaviour_tree_flags = 0;
 	this->extended_mob_type = mods::mobs::extended_types_t::NONE;
 	this->experience = 0;
+	this->mp = 0;
 }
 char_point_data::char_point_data(const char_point_data& other) {
 	std::cerr << "[char_point_data]::copy constructor\n";

@@ -1513,6 +1513,7 @@ struct mob_special_data {
 	mob_vnum vnum;
 	bool watching_room;
 	uint16_t experience;
+	uint16_t mp;
 	void set_behaviour_tree(std::string_view name);
 	void clear_behaviour_tree();
 	mob_special_data() : memory({}),
@@ -1520,7 +1521,7 @@ struct mob_special_data {
 	                 damnodice(0),damsizedice(0),snipe_tracking(0),
 	                 behaviour_tree(0),behaviour_tree_flags(0),
 	                 extended_mob_type(extended_mob_type_t::NONE),
-	heading(NORTH), previous_room(0), vnum(0), watching_room(0), experience(0) {
+	heading(NORTH), previous_room(0), vnum(0), watching_room(0), experience(0), mp(0) {
 #ifdef __MENTOC_SHOW_STRUCTS_H_DEBUG_OUTPUT__
 		std::cerr << "[mob_special_data] default constructor\n";
 #endif

@@ -921,6 +921,9 @@ namespace mods::weapons::damage_types {
 
 		/** FIXME : grab weapon's accuracy and apply accurace modifications */
 
+		if(weapon->rifle()->attributes->base_stat_list->size() <= distance) {
+			distance = 0;
+		}
 		int dam = weapon->rifle()->attributes->base_stat_list->at(distance).damage;
 		int damage_dice = weapon->rifle()->attributes->damage_dice_count;
 		int damage_sides = weapon->rifle()->attributes->damage_dice_sides;
@@ -1163,6 +1166,9 @@ namespace mods::weapons::damage_types {
 		}
 		/** FIXME : grab weapon's accuracy and apply accurace modifications */
 		int dam = 0;
+		if(weapon->rifle()->attributes->base_stat_list->size() <= distance) {
+			distance = 0;
+		}
 		if(distance < weapon->rifle()->attributes->base_stat_list->size()) {
 			dam = weapon->rifle()->attributes->base_stat_list->at(distance).damage;
 			md("using base stat list: " << dam);

@@ -182,8 +182,8 @@ namespace mods::levels {
 			return 0;
 		}
 		if(victim->is_npc()) {
-			gain_exp(attacker,victim->cd()->mob_specials.experience);
-			return victim->cd()->mob_specials.experience;
+			gain_mp(attacker,victim->cd()->mob_specials.mp);
+			return victim->cd()->mob_specials.mp;
 		}
 		int32_t level_difference = attacker->level() - victim->level();
 		int gain = 0;

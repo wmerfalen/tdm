@@ -16,6 +16,13 @@ namespace mods::object_utils {
 		}
 		return weapon->rifle()->attributes->type == mw_rifle::ASSAULT_RIFLE;
 	}
+	bool is_sniper_rifle(const obj_ptr_t& weapon) {
+		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
+		if(rifle_attachment) {
+			return rifle_attachment->base_object->rifle()->attributes->type == mw_rifle::SNIPER;
+		}
+		return weapon->rifle()->attributes->type == mw_rifle::SNIPER;
+	}
 	std::vector<std::string> object_types() {
 		/** !!*****************!! */
 		/** !!UPDATE_ITEM_TYPES!! */

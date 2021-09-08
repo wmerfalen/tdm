@@ -182,6 +182,9 @@ namespace mods::weapons::damage_calculator {
 			if(attacker->marine() && mods::object_utils::is_assault_rifle(weapon)) {
 				additional_range = MARINE_AR_PASSIVE_RANGE_BONUS();
 			}
+			if(attacker->ghost() && mods::object_utils::is_sniper_rifle(weapon)) {
+				additional_range = GHOST_SNIPER_PASSIVE_RANGE_BONUS();
+			}
 			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 			if(rifle_attachment) {
 				return (rifle_attachment->zoom_multiplier * weapon->rifle()->attributes->max_range) + additional_range;

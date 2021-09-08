@@ -12,6 +12,7 @@ namespace mods::loot::events {
 
 	void player_killed_npc(player_ptr_t& player,player_ptr_t& npc) {
 		mods::loot_container::store(player,std::move(mods::loot::reward_player(player)));
+		player->sendln("{grn}A piece of loot was awarded to you.{/grn}");
 	}
 };
 
