@@ -4188,6 +4188,7 @@ __MENTOC_MODS_WEAPONS_SNIPER_RIFLE_L96AW_HEADER__	mods/weapons/sniper-rifle-l96a
 __MENTOC_MODS_WEAPONS_SNIPER_RIFLE_PSG1_HEADER__	mods/weapons/sniper-rifle-psg1.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_WEAPONS_armor_calculator_HEADER__	mods/weapons/armor-calculator.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_WEAPONS_attachment_frag_underbarrel_HEADER__	mods/weapons/attachment-frag-underbarrel.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_WEAPONS_attachment_printer_stock_HEADER__	mods/weapons/attachment-printer-stock.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_WEAPONS_attachment_shotgun_underbarrel_HEADER__	mods/weapons/attachment-shotgun-underbarrel.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_WEAPONS_corrosive_claymore_HEADER__	mods/weapons/corrosive-claymore.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_WEAPONS_shrapnel_claymore_HEADER__	mods/weapons/shrapnel-claymore.hpp	2;"	kind:macro	line:2	file:
@@ -4458,6 +4459,7 @@ alt_value_map	mods/values.cpp	/^		std::map<value_key_t,variants_t> alt_value_map
 ammo	mods/player.cpp	/^	uint16_t player::ammo() {$/;"	kind:function	line:597	class:mods::player	signature:()
 ammo	mods/rifle-instance-data.hpp	/^		uint16_t ammo;$/;"	kind:member	line:67	struct:rifle_instance_data	file:	access:public
 ammo	mods/weapons/attachment-frag-underbarrel.cpp	/^	uint16_t attachment_frag_underbarrel::ammo() {$/;"	kind:function	line:45	class:mods::weapons::attachment_frag_underbarrel	signature:()
+ammo	mods/weapons/attachment-printer-stock.cpp	/^	uint16_t attachment_printer_stock::ammo() {$/;"	kind:function	line:45	class:mods::weapons::attachment_printer_stock	signature:()
 ammo	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	uint16_t attachment_shotgun_underbarrel::ammo() {$/;"	kind:function	line:25	class:mods::weapons::attachment_shotgun_underbarrel	signature:()
 ammo	structs.h	/^	uint16_t ammo;$/;"	kind:member	line:795	struct:obj_flag_data	file:	access:public
 ammo_adjustment	mods/player.cpp	/^	void player::ammo_adjustment(int increment) {$/;"	kind:function	line:658	class:mods::player	signature:(int increment)
@@ -4608,6 +4610,7 @@ attach_points	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::vector<attach_point
 attach_points	mods/fluxkraft/shape-dictionary.cpp	/^		std::vector<attach_point_t> attach_points;$/;"	kind:member	line:67	struct:mods::fluxkraft::shape_description	file:	access:public
 attach_shotgun_underbarrel	mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::attach_shotgun_underbarrel() {$/;"	kind:function	line:355	class:mods::classes::ghost	signature:()
 attach_to	mods/weapons/attachment-frag-underbarrel.cpp	/^	std::tuple<bool,std::string> attachment_frag_underbarrel::attach_to(obj_ptr_t weapon, const uint8_t& player_tier) {$/;"	kind:function	line:57	class:mods::weapons::attachment_frag_underbarrel	signature:(obj_ptr_t weapon, const uint8_t& player_tier)
+attach_to	mods/weapons/attachment-printer-stock.cpp	/^	std::tuple<bool,std::string> attachment_printer_stock::attach_to(obj_ptr_t weapon, const uint8_t& player_tier) {$/;"	kind:function	line:57	class:mods::weapons::attachment_printer_stock	signature:(obj_ptr_t weapon, const uint8_t& player_tier)
 attach_to	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	std::tuple<bool,std::string> attachment_shotgun_underbarrel::attach_to(obj_ptr_t weapon, const uint8_t& player_tier) {$/;"	kind:function	line:37	class:mods::weapons::attachment_shotgun_underbarrel	signature:(obj_ptr_t weapon, const uint8_t& player_tier)
 attachment_description_t	mods/yaml.hpp	/^		attachment_description_t() {$/;"	kind:function	line:291	struct:mods::yaml::attachment_description_t	access:public	signature:()
 attachment_description_t	mods/yaml.hpp	/^	struct attachment_description_t : public yaml_description_t {$/;"	kind:struct	line:279	namespace:mods::yaml	file:	inherits:yaml_description_t
@@ -4616,6 +4619,8 @@ attachment_frag_underbarrel	mods/weapons/attachment-frag-underbarrel.hpp	/^	stru
 attachment_points	mods/fluxkraft/arcon-bar.hpp	/^			std::vector<char> attachment_points;$/;"	kind:member	line:19	struct:mods::fluxkraft::arcon::attach_point_t	file:	access:public
 attachment_points	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::vector<char> attachment_points;$/;"	kind:member	line:16	struct:mods::fluxkraft::arcon::attach_point_t	file:	access:public
 attachment_points	mods/fluxkraft/shape-dictionary.cpp	/^		std::vector<char> attachment_points;$/;"	kind:member	line:20	struct:mods::fluxkraft::attach_point_t	file:	access:public
+attachment_printer_stock	mods/weapons/attachment-printer-stock.cpp	/^	attachment_printer_stock::attachment_printer_stock() {$/;"	kind:function	line:41	class:mods::weapons::attachment_printer_stock	signature:()
+attachment_printer_stock	mods/weapons/attachment-printer-stock.hpp	/^	struct attachment_printer_stock {$/;"	kind:struct	line:8	namespace:mods::weapons	file:
 attachment_shotgun_underbarrel	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	attachment_shotgun_underbarrel::attachment_shotgun_underbarrel() {$/;"	kind:function	line:21	class:mods::weapons::attachment_shotgun_underbarrel	signature:()
 attachment_shotgun_underbarrel	mods/weapons/attachment-shotgun-underbarrel.hpp	/^	struct attachment_shotgun_underbarrel {$/;"	kind:struct	line:8	namespace:mods::weapons	file:
 attachments	mods/rifle-instance-data.hpp	/^		std::deque<TAttachmentData> attachments;$/;"	kind:member	line:68	struct:rifle_instance_data	file:	access:public
@@ -5360,6 +5365,7 @@ consumable_description_t	mods/yaml.hpp	/^	struct consumable_description_t : publ
 consume	mods/sensor-grenade.cpp	/^	void consume(uuid_t nade_uuid) {$/;"	kind:function	line:126	namespace:mods::sensor_grenade	signature:(uuid_t nade_uuid)
 consume_all	mods/players/messages.cpp	/^	void consume_all() {$/;"	kind:function	line:23	namespace:mods::players::messages	signature:()
 consume_ammo	mods/weapons/attachment-frag-underbarrel.cpp	/^	void attachment_frag_underbarrel::consume_ammo() {$/;"	kind:function	line:73	class:mods::weapons::attachment_frag_underbarrel	signature:()
+consume_ammo	mods/weapons/attachment-printer-stock.cpp	/^	void attachment_printer_stock::consume_ammo() {$/;"	kind:function	line:73	class:mods::weapons::attachment_printer_stock	signature:()
 consume_ammo	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	void attachment_shotgun_underbarrel::consume_ammo() {$/;"	kind:function	line:53	class:mods::weapons::attachment_shotgun_underbarrel	signature:()
 consume_from_carrying	mods/player.cpp	/^	void player::consume_from_carrying(obj_ptr_t& item) {$/;"	kind:function	line:1481	class:mods::player	signature:(obj_ptr_t& item)
 consume_scripted_response	mods/player.hpp	/^			std::string consume_scripted_response() {$/;"	kind:function	line:825	struct:mods::player	access:public	signature:()
@@ -5897,6 +5903,7 @@ destruct_now	mods/camera.cpp	/^	void camera::destruct_now() {$/;"	kind:function	
 destruct_object	globals.cpp	/^		void destruct_object(uuid_t uuid) {$/;"	kind:function	line:1184	namespace:mods::globals	signature:(uuid_t uuid)
 detach	mods/lmdb/shm.hpp	/^int shm::detach(){$/;"	kind:function	line:146	class:gdns::shm	signature:()
 detach	mods/weapons/attachment-frag-underbarrel.cpp	/^	std::tuple<bool,std::string> attachment_frag_underbarrel::detach() {$/;"	kind:function	line:49	class:mods::weapons::attachment_frag_underbarrel	signature:()
+detach	mods/weapons/attachment-printer-stock.cpp	/^	std::tuple<bool,std::string> attachment_printer_stock::detach() {$/;"	kind:function	line:49	class:mods::weapons::attachment_printer_stock	signature:()
 detach	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	std::tuple<bool,std::string> attachment_shotgun_underbarrel::detach() {$/;"	kind:function	line:29	class:mods::weapons::attachment_shotgun_underbarrel	signature:()
 detach_frag_underbarrel	mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::detach_frag_underbarrel() {$/;"	kind:function	line:539	class:mods::classes::ghost	signature:()
 detach_shotgun_underbarrel	mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::detach_shotgun_underbarrel() {$/;"	kind:function	line:351	class:mods::classes::ghost	signature:()
@@ -7027,6 +7034,7 @@ finished	mods/player-contract-instance.cpp	/^	bool player_contract_instance::fin
 finished_installing	mods/weapons/corrosive-claymore.cpp	/^	void corrosive_claymore::finished_installing() {$/;"	kind:function	line:113	class:mods::weapons::corrosive_claymore	signature:()
 finished_installing	mods/weapons/shrapnel-claymore.cpp	/^	void shrapnel_claymore::finished_installing() {$/;"	kind:function	line:112	class:mods::weapons::shrapnel_claymore	signature:()
 fire	mods/weapons/attachment-frag-underbarrel.cpp	/^	std::tuple<bool,std::string> attachment_frag_underbarrel::fire(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance) {$/;"	kind:function	line:13	class:mods::weapons::attachment_frag_underbarrel	signature:(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance)
+fire	mods/weapons/attachment-printer-stock.cpp	/^	std::tuple<bool,std::string> attachment_printer_stock::fire(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance) {$/;"	kind:function	line:13	class:mods::weapons::attachment_printer_stock	signature:(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance)
 fire	mods/weapons/damage-calculator.hpp	/^		int fire;$/;"	kind:member	line:82	struct:mods::weapons::damage_calculator::explosive_damage_t	file:	access:public
 fire_damage	mods/projectile.cpp	/^		int fire_damage(player_ptr_t victim,obj_ptr_t projectile) {$/;"	kind:function	line:161	namespace:mods::projectile	signature:(player_ptr_t victim,obj_ptr_t projectile)
 fire_frag	mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::fire_frag(const direction_t& direction,const uint8_t& distance) {$/;"	kind:function	line:542	class:mods::classes::ghost	signature:(const direction_t& direction,const uint8_t& distance)
@@ -8134,6 +8142,7 @@ init	mods/super-users.cpp	/^	void init() {$/;"	kind:function	line:164	namespace:
 init	mods/target-practice.cpp	/^	void init() {$/;"	kind:function	line:56	namespace:mods::target_practice	signature:()
 init	mods/values.cpp	/^			void init(){$/;"	kind:function	line:3227	namespace:mods::values	signature:()
 init	mods/weapons/attachment-frag-underbarrel.cpp	/^	void attachment_frag_underbarrel::init() {$/;"	kind:function	line:32	class:mods::weapons::attachment_frag_underbarrel	signature:()
+init	mods/weapons/attachment-printer-stock.cpp	/^	void attachment_printer_stock::init() {$/;"	kind:function	line:32	class:mods::weapons::attachment_printer_stock	signature:()
 init	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	void attachment_shotgun_underbarrel::init() {$/;"	kind:function	line:12	class:mods::weapons::attachment_shotgun_underbarrel	signature:()
 init	mods/weapons/damage-types.cpp	/^	void init() {$/;"	kind:function	line:1300	namespace:mods::weapons::damage_types	signature:()
 init	mods/weapons/elemental.cpp	/^	void init() {$/;"	kind:function	line:258	namespace:mods::weapons::elemental	signature:()
@@ -8288,6 +8297,7 @@ is_ammo	structs.h	/^	bool is_ammo;$/;"	kind:member	line:787	struct:obj_flag_data
 is_argument	globals.cpp	/^		bool is_argument(std::string_view argv,std::string_view test) {$/;"	kind:function	line:185	namespace:mods::globals	signature:(std::string_view argv,std::string_view test)
 is_assault_rifle	mods/object-utils.cpp	/^	bool is_assault_rifle(const obj_ptr_t& weapon) {$/;"	kind:function	line:12	namespace:mods::object_utils	signature:(const obj_ptr_t& weapon)
 is_attached	mods/weapons/attachment-frag-underbarrel.cpp	/^	bool attachment_frag_underbarrel::is_attached() const {$/;"	kind:function	line:69	class:mods::weapons::attachment_frag_underbarrel	signature:() const
+is_attached	mods/weapons/attachment-printer-stock.cpp	/^	bool attachment_printer_stock::is_attached() const {$/;"	kind:function	line:69	class:mods::weapons::attachment_printer_stock	signature:() const
 is_attached	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	bool attachment_shotgun_underbarrel::is_attached() const {$/;"	kind:function	line:49	class:mods::weapons::attachment_shotgun_underbarrel	signature:() const
 is_basic_protection	mods/armor.cpp	/^	bool is_basic_protection(obj_ptr_t& eq) {$/;"	kind:function	line:5	namespace:mods::armor	signature:(obj_ptr_t& eq)
 is_bladed_weapon	mods/object-utils.hpp	/^	bool is_bladed_weapon(T& obj) {$/;"	kind:function	line:288	namespace:mods::object_utils	signature:(T& obj)
@@ -8799,6 +8809,7 @@ m_attach_flamethrower_level	mods/classes/pyrexia.hpp	/^			skill_familiarity_t m_
 m_attach_incendiary_grenade_launcher_level	mods/classes/pyrexia.hpp	/^			skill_familiarity_t m_attach_incendiary_grenade_launcher_level;$/;"	kind:member	line:75	struct:mods::classes::pyrexia	file:	access:private
 m_attached	mods/lmdb/shm.hpp	/^        bool m_attached;$/;"	kind:member	line:59	class:gdns::shm	file:	access:private
 m_attached	mods/weapons/attachment-frag-underbarrel.hpp	/^			bool m_attached;$/;"	kind:member	line:23	struct:mods::weapons::attachment_frag_underbarrel	file:	access:protected
+m_attached	mods/weapons/attachment-printer-stock.hpp	/^			bool m_attached;$/;"	kind:member	line:23	struct:mods::weapons::attachment_printer_stock	file:	access:protected
 m_attached	mods/weapons/attachment-shotgun-underbarrel.hpp	/^			bool m_attached;$/;"	kind:member	line:22	struct:mods::weapons::attachment_shotgun_underbarrel	file:	access:protected
 m_attachments	mods/weapons/sniper-rifle-l96aw.hpp	/^			attachment_list_t m_attachments;$/;"	kind:member	line:19	struct:mods::weapons::sniper_rifle::l96aw	file:	access:protected
 m_attachments	mods/weapons/sniper-rifle-psg1.hpp	/^			attachment_list_t m_attachments;$/;"	kind:member	line:19	struct:mods::weapons::sniper_rifle::psg1	file:	access:protected
@@ -9132,6 +9143,9 @@ m_debug	mods/values.cpp	15;"	kind:macro	line:15	file:
 m_debug	mods/weapons/attachment-frag-underbarrel.cpp	10;"	kind:macro	line:10	file:
 m_debug	mods/weapons/attachment-frag-underbarrel.cpp	8;"	kind:macro	line:8	file:
 m_debug	mods/weapons/attachment-frag-underbarrel.cpp	94;"	kind:macro	line:94	file:
+m_debug	mods/weapons/attachment-printer-stock.cpp	10;"	kind:macro	line:10	file:
+m_debug	mods/weapons/attachment-printer-stock.cpp	8;"	kind:macro	line:8	file:
+m_debug	mods/weapons/attachment-printer-stock.cpp	94;"	kind:macro	line:94	file:
 m_debug	mods/weapons/attachment-shotgun-underbarrel.cpp	74;"	kind:macro	line:74	file:
 m_debug	mods/weapons/attachment-shotgun-underbarrel.cpp	7;"	kind:macro	line:7	file:
 m_debug	mods/weapons/attachment-shotgun-underbarrel.cpp	9;"	kind:macro	line:9	file:
@@ -9344,6 +9358,7 @@ m_node	mods/behaviour_tree.hpp	/^		node m_node;$/;"	kind:member	line:50	struct:m
 m_node_type	mods/behaviour_tree_node.hpp	/^			node_type_t m_node_type;$/;"	kind:member	line:131	struct:mods::behaviour_tree_node	file:	access:private
 m_obj	mods/boosters/adrenaline-shot.hpp	/^			obj_ptr_t m_obj;$/;"	kind:member	line:47	namespace:mods::boosters	file:	access:protected
 m_obj	mods/weapons/attachment-frag-underbarrel.hpp	/^			obj_ptr_t m_obj;$/;"	kind:member	line:21	struct:mods::weapons::attachment_frag_underbarrel	file:	access:protected
+m_obj	mods/weapons/attachment-printer-stock.hpp	/^			obj_ptr_t m_obj;$/;"	kind:member	line:21	struct:mods::weapons::attachment_printer_stock	file:	access:protected
 m_obj	mods/weapons/attachment-shotgun-underbarrel.hpp	/^			obj_ptr_t m_obj;$/;"	kind:member	line:20	struct:mods::weapons::attachment_shotgun_underbarrel	file:	access:protected
 m_obj	mods/weapons/corrosive-claymore.hpp	/^			obj_ptr_t m_obj;$/;"	kind:member	line:28	struct:mods::weapons::corrosive_claymore	file:	access:protected
 m_obj	mods/weapons/shrapnel-claymore.hpp	/^			obj_ptr_t m_obj;$/;"	kind:member	line:24	struct:mods::weapons::shrapnel_claymore	file:	access:protected
@@ -9492,6 +9507,7 @@ m_skill_usage	mods/orm/player-skill-usage.cpp	/^	std::map<uint64_t,uint16_t> m_s
 m_skills	mods/player.hpp	/^			std::map<int,uint16_t> m_skills;$/;"	kind:member	line:946	struct:mods::player	file:	access:private
 m_slot_list	mods/builder/slotted-builder.hpp	/^			std::vector<std::string> m_slot_list;$/;"	kind:member	line:27	struct:mods::builder::slotted_builder	file:	access:protected
 m_sniper_rifle	mods/weapons/attachment-frag-underbarrel.hpp	/^			obj_ptr_t m_sniper_rifle;$/;"	kind:member	line:22	struct:mods::weapons::attachment_frag_underbarrel	file:	access:protected
+m_sniper_rifle	mods/weapons/attachment-printer-stock.hpp	/^			obj_ptr_t m_sniper_rifle;$/;"	kind:member	line:22	struct:mods::weapons::attachment_printer_stock	file:	access:protected
 m_sniper_rifle	mods/weapons/attachment-shotgun-underbarrel.hpp	/^			obj_ptr_t m_sniper_rifle;$/;"	kind:member	line:21	struct:mods::weapons::attachment_shotgun_underbarrel	file:	access:protected
 m_sql	mods/sql.hpp	/^			std::string m_sql;$/;"	kind:member	line:535	struct:mods::sql::compositor	file:	access:private
 m_stat_boosts	mods/forge-engine/generated-armor.hpp	/^			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> m_stat_boosts;$/;"	kind:member	line:40	struct:mods::forge_engine::generated_armor_t	file:	access:private
@@ -10292,6 +10308,7 @@ obj	mods/scan.hpp	/^			obj_data* obj;$/;"	kind:member	line:22	struct:mods::scan:
 obj	mods/scripted-step.hpp	/^		obj_vnum obj;$/;"	kind:member	line:19	struct:mods::scripted_step	file:	access:public
 obj	mods/util.hpp	/^		obj_ptr_t obj;$/;"	kind:member	line:122	struct:mods::util::objdir_struct	file:	access:public
 obj	mods/weapons/attachment-frag-underbarrel.cpp	/^	obj_ptr_t attachment_frag_underbarrel::obj() {$/;"	kind:function	line:86	class:mods::weapons::attachment_frag_underbarrel	signature:()
+obj	mods/weapons/attachment-printer-stock.cpp	/^	obj_ptr_t attachment_printer_stock::obj() {$/;"	kind:function	line:86	class:mods::weapons::attachment_printer_stock	signature:()
 obj	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	obj_ptr_t attachment_shotgun_underbarrel::obj() {$/;"	kind:function	line:66	class:mods::weapons::attachment_shotgun_underbarrel	signature:()
 obj	mods/weapons/corrosive-claymore.cpp	/^	obj_ptr_t corrosive_claymore::obj() {$/;"	kind:function	line:106	class:mods::weapons::corrosive_claymore	signature:()
 obj	mods/weapons/pistol-czp10.hpp	/^			obj_data_ptr_t obj;$/;"	kind:member	line:18	struct:mods::weapons::pistol::czp10	file:	access:public
@@ -13486,6 +13503,8 @@ weapons	mods/projectile.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:
 weapons	mods/projectile.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:19	class:mods	file:
 weapons	mods/weapons/attachment-frag-underbarrel.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:12	class:mods	file:
 weapons	mods/weapons/attachment-frag-underbarrel.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:7	class:mods	file:
+weapons	mods/weapons/attachment-printer-stock.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:12	class:mods	file:
+weapons	mods/weapons/attachment-printer-stock.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:7	class:mods	file:
 weapons	mods/weapons/attachment-shotgun-underbarrel.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:11	class:mods	file:
 weapons	mods/weapons/attachment-shotgun-underbarrel.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:7	class:mods	file:
 weapons	mods/weapons/corrosive-claymore.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:21	class:mods	file:
@@ -13679,6 +13698,7 @@ zone_vnum	mods/index-type.hpp	/^typedef IDXTYPE zone_vnum;$/;"	kind:typedef	line
 zoom_multiplier	mods/rifle-attachments.hpp	/^			float zoom_multiplier;						\/** honored [ 2021-04-13 ] *\/$/;"	kind:member	line:72	struct:mods::rifle_attachments_t	file:	access:public
 ~_db_handle	mods/lmdb.cpp	/^	_db_handle::~_db_handle() {$/;"	kind:function	line:765	class:mods::lmdb::_db_handle	signature:()
 ~attachment_frag_underbarrel	mods/weapons/attachment-frag-underbarrel.cpp	/^	attachment_frag_underbarrel::~attachment_frag_underbarrel() {$/;"	kind:function	line:37	class:mods::weapons::attachment_frag_underbarrel	signature:()
+~attachment_printer_stock	mods/weapons/attachment-printer-stock.cpp	/^	attachment_printer_stock::~attachment_printer_stock() {$/;"	kind:function	line:37	class:mods::weapons::attachment_printer_stock	signature:()
 ~attachment_shotgun_underbarrel	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	attachment_shotgun_underbarrel::~attachment_shotgun_underbarrel() {$/;"	kind:function	line:17	class:mods::weapons::attachment_shotgun_underbarrel	signature:()
 ~char_data	structs.cpp	/^char_data::~char_data() {$/;"	kind:function	line:314	class:char_data	signature:()
 ~char_player_data	structs.cpp	/^char_player_data::~char_player_data() {$/;"	kind:function	line:235	class:char_player_data	signature:()
