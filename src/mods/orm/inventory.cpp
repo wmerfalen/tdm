@@ -27,9 +27,11 @@ namespace mods::orm::inventory {
 	static constexpr const char* PLACEHOLDER = "0";
 	static constexpr const char* FORGED = "1";
 	static constexpr const char* YAML = "2";
+	static constexpr const char* RIFLE_ATTACHMENT = "3";
 	static constexpr uint8_t I_PLACEHOLDER = 0;
 	static constexpr uint8_t I_FORGED = 1;
 	static constexpr uint8_t I_YAML= 2;
+	static constexpr uint8_t I_RIFLE_ATTACHMENT = 3;
 	bool is_ammo(obj_ptr_t& eq) {
 		return eq->type == ITEM_CONSUMABLE && eq->has_consumable() && eq->consumable()->attributes->ammo_type.compare("NONE") != 0;
 	}
@@ -54,7 +56,13 @@ namespace mods::orm::inventory {
 			mapped_values["po_load_type"] = FORGED;
 		} else {
 			mapped_values["po_load_type"] = YAML;
-			mapped_values["po_yaml"] = eq->feed_file();
+			auto rifle_attachment = mods::rifle_attachments::by_uuid(eq->uuid);
+			if(rifle_attachment) {
+				mapped_values["po_yaml"] = rifle_attachment->export_objects();
+				mapped_values["po_load_type"] = RIFLE_ATTACHMENT;
+			} else {
+				mapped_values["po_yaml"] = eq->feed_file();
+			}
 		}
 		if(inventory) {
 			mapped_values["po_in_inventory"] = "1";
@@ -66,7 +74,7 @@ namespace mods::orm::inventory {
 		return mapped_values;
 	}
 
-	obj_data_ptr_t dynamic_fetch(mentoc_pqxx_result_t row) {
+	obj_data_ptr_t dynamic_fetch(mentoc_pqxx_result_t row,player_ptr_t& player) {
 		m_debug("dynamic fetch entry");
 		switch(row["po_load_type"].as<int>()) {
 			case I_FORGED: {
@@ -78,6 +86,11 @@ namespace mods::orm::inventory {
 						obj->rifle_instance->ammo = row["po_ammunition"].as<int>();
 					}
 					return std::move(obj);
+				}
+			case I_RIFLE_ATTACHMENT: {
+					auto obj = mods::rifle_attachments::make(row["po_yaml"].c_str());
+					obj->set_owner_uuid(player->uuid());
+					return obj->base_object;
 				}
 			case I_YAML: {
 					if(row["po_yaml"].is_null()) {
@@ -226,11 +239,12 @@ namespace mods::orm::inventory {
 						continue;
 					case I_FORGED:
 					case I_YAML:
+					case I_RIFLE_ATTACHMENT:
 						break;
 				}
 				obj = nullptr;
 				m_debug("dynamic fetch for: " << row["po_yaml"].c_str());
-				obj = dynamic_fetch(row);
+				obj = dynamic_fetch(row,player);
 				if(!obj) {
 					log("Failed to load user object: player[%s] po_id[%d]", player->name().c_str(),row["po_id"].as<int>());
 					continue;

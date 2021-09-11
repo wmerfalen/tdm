@@ -232,6 +232,19 @@ void show_obj_to_char(struct obj_data *obj, char_data *ch, int mode) {
 	auto player = ptr(ch);
 	show_obj_to_char(o,player,mode,1);
 }
+bool look_at_weapon(player_ptr_t& player,obj_ptr_t& obj) {
+	if(is_rifle_attachment(obj.get())) {
+		player->sendln(mods::rifle_attachments::by_uuid(obj->uuid)->examine());
+		return true;
+	}
+	if(obj->action_description.length()) {
+		player->sendln("It's *NOT* a rifle attachment...");
+		player->send(obj->action_description);
+		return true;
+	}
+	player->sendln("You see nothing special...");
+	return false;
+}
 
 void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int count) {
 	auto obj = object.get();
@@ -305,15 +318,6 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 
 				case ITEM_WEAPON:
 				default:
-					if(obj->action_description.length() == 0 && obj->has_rifle() && obj->rifle()->attributes->is_rifle_attachment) {
-						player->sendln(mods::rifle_attachments::by_uuid(obj->uuid)->examine());
-						break;
-					}
-					if(obj->action_description.length()) {
-						player->send(obj->action_description);
-						break;
-					}
-					player->sendln("You see nothing special...");
 					break;
 			}
 
@@ -1187,6 +1191,10 @@ ACMD(do_examine) {
 	if(tmp_object) {
 		if(is_camera_feed(tmp_object)) {
 			look_into_camera_feed(player,tmp_object,0);
+			return;
+		}
+		auto object = optr(tmp_object);
+		if(look_at_weapon(player,object)) {
 			return;
 		}
 		if((GET_OBJ_TYPE(tmp_object) == ITEM_DRINKCON) ||
