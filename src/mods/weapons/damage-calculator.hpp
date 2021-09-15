@@ -18,15 +18,15 @@ namespace mods::weapons::damage_calculator {
 	    player_ptr_t& player,
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim,
-	    int16_t dam
+	    uint32_t dam
 	);
 	int calculate_constitution_resistance(
 	    player_ptr_t& player,
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim,
-	    int16_t dam
+	    uint32_t dam
 	);
-	int16_t calculate(
+	uint32_t calculate(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim
@@ -56,10 +56,10 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon,
 	    int16_t wants_to_reduce
 	);
-	int16_t calculate_bonus_damage(
+	uint32_t calculate_bonus_damage(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
-	    int16_t requested_damage
+	    uint32_t requested_damage
 	);
 	bool attack_disorients(
 	    player_ptr_t& attacker,
@@ -71,21 +71,21 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim
 	);
-	int calculate_sniper_extra_damage(
+	uint32_t calculate_sniper_extra_damage(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim,
-	    int dam
+	    uint32_t dam
 	);
 	struct explosive_damage_t {
-		int chemical;
-		int fire;
-		int radiation;
-		int electric;
-		int armor_pen;
-		int total;
-		int damage;
-		int critical;
+		uint32_t chemical;
+		uint32_t fire;
+		uint32_t radiation;
+		uint32_t electric;
+		uint32_t armor_pen;
+		uint32_t total;
+		uint32_t damage;
+		uint32_t critical;
 		bool injured;
 		explosive_damage_t() :
 			chemical(0),

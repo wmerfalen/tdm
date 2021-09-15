@@ -104,10 +104,10 @@ namespace mods {
 			player->sendln("[+] Done");
 		}
 		void init() {
-			mods::interpreter::add_command("vcarrying", POS_RESTING, do_vcarrying, 0,0);
-			mods::interpreter::add_command("instantiate_rifle_attachment", POS_RESTING, do_instantiate_rifle_attachment, LVL_BUILDER,0);
-			mods::interpreter::add_command("load_my_rifle_attachments", POS_RESTING, do_load_my_rifle_attachments, 0,0);
-			mods::interpreter::add_command("list_rifle_attachments", POS_RESTING, do_list_rifle_attachments, LVL_BUILDER,0);
+			mods::interpreter::add_user_command("vcarrying", do_vcarrying);
+			mods::interpreter::add_user_command("load_my_rifle_attachments",  do_load_my_rifle_attachments);
+			mods::interpreter::add_builder_command("instantiate_rifle_attachment", do_instantiate_rifle_attachment);
+			mods::interpreter::add_builder_command("list_rifle_attachments",  do_list_rifle_attachments);
 		}
 	};
 
@@ -142,7 +142,15 @@ namespace mods {
 		aimed_limb_accuracy_percent = 0;
 		underbarrel_launcher_type = "NONE";
 		damage_percent_bonus = 0;
-		set_level(1);
+		static const char* LEVEL_STR = "#level:";
+		auto level_position = line.find(LEVEL_STR);
+		if(level_position != std::string::npos) {
+			auto s = line.substr(level_position + strlen(LEVEL_STR));
+			auto i = mods::util::stoi<int>(s);
+			set_level(i);
+		} else {
+			set_level(1);
+		}
 
 		for(auto& pair : map) {
 			obj_ptr_t object;

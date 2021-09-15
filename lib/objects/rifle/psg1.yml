@@ -58,7 +58,7 @@ damage_map: [
 90.00,
 90.00
 ]
-damage_per_second: 450.0 #float
+base_damage: 450 #float
 disorient_amount: 0.0 #float
 headshot_bonus: 13.0 #float
 max_range: 4 #integer,measured in rooms
@@ -87,8 +87,8 @@ str_type: 'SNIPER'
 # DEFAULT
 rarity: 'COMMON'
 feed_file: 'psg1.yml'
-damage_dice_count: 2
-damage_dice_sides: 49
+damage_dice_count: 40
+damage_dice_sides: 12
 description: 'PSG-1 Sniper Rifle'
 short_description: 'PSG-1 Sniper Rifle'
 action_description: 'PSG-1 Sniper Rifle'

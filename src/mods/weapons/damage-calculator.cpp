@@ -147,7 +147,7 @@ namespace mods::weapons::damage_calculator {
 		) {
 			return roll_weapon(weapon);
 		}
-		int16_t calculate(
+		uint32_t calculate(
 		    player_ptr_t& attacker,
 		    obj_ptr_t& weapon,
 		    player_ptr_t& victim) {
@@ -263,10 +263,10 @@ namespace mods::weapons::damage_calculator {
 		}
 		return 0;/** FIXME */
 	};
-	int16_t calculate_bonus_damage(
+	uint32_t calculate_bonus_damage(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
-	    int16_t requested_damage
+	    uint32_t requested_damage
 	) {
 		if(weapon && weapon->has_rifle()) {
 			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
@@ -319,7 +319,7 @@ namespace mods::weapons::damage_calculator {
 		return mods::values::DEFAULT_DISORIENT_TICKS_FROM_RIFLE_ATTACK();
 	}
 
-	int16_t calculate(
+	uint32_t calculate(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim
@@ -330,7 +330,7 @@ namespace mods::weapons::damage_calculator {
 	    player_ptr_t& player,
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim,
-	    int16_t dam
+	    uint32_t dam
 	) {
 		float multiplier = BONUS_STRENGTH_MULTIPLIER();
 		switch(mods::levels::player_tier(player)) {
@@ -351,7 +351,7 @@ namespace mods::weapons::damage_calculator {
 	    player_ptr_t& player,
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim,
-	    int16_t dam
+	    uint32_t dam
 	) {
 		float multiplier = CONSTITUTION_STRENGTH_DAMPENER_MULTIPLIER();
 		switch(mods::levels::player_tier(victim)) {
@@ -368,7 +368,7 @@ namespace mods::weapons::damage_calculator {
 		}
 		return player->constitution() * multiplier;
 	}
-	int calculate_sniper_extra_damage(player_ptr_t& attacker,obj_ptr_t& weapon,player_ptr_t& victim,int dam) {
+	uint32_t calculate_sniper_extra_damage(player_ptr_t& attacker,obj_ptr_t& weapon,player_ptr_t& victim,uint32_t dam) {
 		float multiplier = SNIPER_CLASS_EXPERT_BONUS_DAMAGE_PER_TIER() * 0.01;
 		auto attacker_tier = tier(attacker);
 		return (multiplier * attacker_tier) * dam;

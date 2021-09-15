@@ -772,7 +772,7 @@ namespace mods::yaml {
 	void melee_description_t::generate_map() {
 		this->exported["melee_chance_to_injure"] = std::to_string(chance_to_injure);
 		this->exported["melee_critical_chance"] = std::to_string(critical_chance);
-		this->exported["melee_damage_per_second"] = std::to_string(damage_per_second);
+		this->exported["melee_base_damage"] = std::to_string(base_damage);
 		this->exported["melee_disorient_amount"] = std::to_string(disorient_amount);
 		this->exported["melee_str_type"] = str_type;
 		this->exported["melee_type"] = std::to_string(type);
@@ -823,7 +823,7 @@ namespace mods::yaml {
 		this->exported["rifle_cooldown_between_shots"] = std::to_string(cooldown_between_shots);
 		this->exported["rifle_critical_chance"] = std::to_string(critical_chance);
 		this->exported["rifle_critical_range"] = std::to_string(critical_range);
-		this->exported["rifle_damage_per_second"] = std::to_string(damage_per_second);
+		this->exported["rifle_base_damage"] = std::to_string(base_damage);
 		this->exported["rifle_disorient_amount"] = std::to_string(disorient_amount);
 		this->exported["rifle_headshot_bonus"] = std::to_string(headshot_bonus);
 		this->exported["rifle_max_range"] = std::to_string(max_range);

@@ -185,9 +185,16 @@ namespace mods::orm::inventory {
 				builder.op_and("po_load_type",FORGED)
 				.op_and("po_type_id",object->db_id());
 			} else {
-				builder
-				.op_and("po_load_type",YAML)
-				.op_and("po_yaml",object->feed_file());
+				auto rifle_attachment = mods::rifle_attachments::by_uuid(object->uuid);
+				if(rifle_attachment) {
+					builder
+					.op_and("po_load_type",RIFLE_ATTACHMENT)
+					.op_and("po_yaml",rifle_attachment->export_objects());
+				} else {
+					builder
+					.op_and("po_load_type",YAML)
+					.op_and("po_yaml",object->feed_file());
+				}
 			}
 			builder.limit(1);
 			auto record = mods::pq::exec(sel_txn,builder.sql());

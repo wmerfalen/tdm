@@ -66,7 +66,7 @@ namespace mods::orm {
 		int16_t rifle_cooldown_between_shots;
 		int16_t rifle_critical_chance;
 		int16_t rifle_critical_range;
-		float rifle_damage_per_second;
+		int rifle_base_damage;
 		float rifle_disorient_amount;
 		float rifle_headshot_bonus;
 		int16_t rifle_max_range;

@@ -162,7 +162,7 @@
 (int16_t,cooldown_between_shots,"#int16_t, ticks",2), \
 (int16_t,critical_chance,"#int16_t, out of 100",33), \
 (int16_t,critical_range,"#int16_t, rooms",3), \
-(float,damage_per_second,"#float, out of 100",44.0), \
+(int,base_damage,"#int, out of 100",44), \
 (float,disorient_amount,"#float, out of 100",3.0), \
 (float,headshot_bonus,"#float, static addition to hitroll",48.00), \
 (int16_t,max_range,"#int16_t, rooms",8), \
@@ -234,7 +234,7 @@
 #define MENTOC_MELEE_MEMBERS_TUPLE ( \
 (float,chance_to_injure,"#float, out of 100",10.0), \
 (int16_t,critical_chance,"#int16_t, out of 100",33), \
-(float,damage_per_second,"#float, out of 100",44.0), \
+(int,base_damage,"#int, base damage done",44), \
 (float,disorient_amount,"#float, out of 100",3.0), \
 (int16_t,damage_dice_count,"#int16_t, number of dice",2), \
 (int16_t,damage_dice_sides,"#int16_t, dice sides",6), \
@@ -294,7 +294,7 @@
 (float,critical_chance,"#float, percent",14.3), \
 (int,critical_range,"#int, rooms",2), \
 (int,blast_radius,"#int, rooms",2), \
-(float,damage_per_second,"#float, static base damage done",44.0), \
+(int,base_damage,"#int, static base damage done",44), \
 (float,disorient_amount,"#float, percent",13.0), \
 (int,range_modifier,"#int, positive or negative, range modifier in rooms",0), \
 (std::string,loudness_type,"#std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING","'LOUD'"), \
@@ -519,7 +519,7 @@
 (percent_t,chance_to_injure,"#float, percent",3.0), \
 (percent_t,critical_chance,"#float, percent",14.3), \
 (rooms_t,blast_radius,"#int, rooms",2), \
-(static_amount_t,damage_per_second,"#int, static base damage done",44.0), \
+(static_amount_t,base_damage,"#int, static base damage done",44), \
 (static_amount_t,disorient_amount,"#int, percent",13.0), \
 (int,loudness_type,"#int, 0=SILENT,1=SUSPICIOUS,2=LOUD,3=DEAFENING,4=WORLD_ENDING",2) \
 )

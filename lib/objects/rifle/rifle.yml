@@ -26,7 +26,7 @@ clip_size: 7 #int16_t, bullets
 cooldown_between_shots: 2 #int16_t, ticks
 critical_chance: 33 #int16_t, out of 100
 critical_range: 3 #int16_t, rooms
-damage_per_second: 44 #float, out of 100
+base_damage: 44 #float, out of 100
 disorient_amount: 3 #float, out of 100
 headshot_bonus: 48 #float, static addition to hitroll
 max_range: 8 #int16_t, rooms

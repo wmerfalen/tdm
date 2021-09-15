@@ -238,7 +238,6 @@ bool look_at_weapon(player_ptr_t& player,obj_ptr_t& obj) {
 		return true;
 	}
 	if(obj->action_description.length()) {
-		player->sendln("It's *NOT* a rifle attachment...");
 		player->send(obj->action_description);
 		return true;
 	}

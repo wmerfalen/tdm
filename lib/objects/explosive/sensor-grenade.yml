@@ -32,7 +32,7 @@ chance_to_injure: 0.0 #float, percent
 critical_chance: 0.0 #float, percent
 critical_range: 2 #int, rooms
 blast_radius: 2 #int, rooms
-damage_per_second: 0.0 #float, static base damage done
+base_damage: 0 #int, static base damage done
 disorient_amount: 0.0 #float, percent
 range_modifier: 2 #int, rooms
 

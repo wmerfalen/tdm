@@ -167,8 +167,8 @@ namespace mods::forge_engine {
 				case RIFLE_ATTRIBUTES_CRITICAL_RANGE:
 					attributes->critical_range = fetch(attr.second,attributes->critical_range);
 					break;
-				case RIFLE_ATTRIBUTES_DAMAGE_PER_SECOND:
-					attributes->damage_per_second = fetch(attr.second,attributes->damage_per_second);
+				case RIFLE_ATTRIBUTES_BASE_DAMAGE:
+					attributes->base_damage = fetch(attr.second,attributes->base_damage);
 					break;
 				case RIFLE_ATTRIBUTES_DISORIENT_AMOUNT:
 					attributes->disorient_amount = fetch(attr.second,attributes->disorient_amount);

@@ -31,7 +31,7 @@ chance_to_injure: 45.0 #float, percent
 critical_chance: 33.0 #float, percent
 critical_range: 1 #int, rooms
 blast_radius: 1 #int, rooms
-damage_per_second: 89.0 #float, static base damage done
+base_damage: 89 #int, static base damage done
 disorient_amount: 10.0 #float, percent
 range_modifier: 1 #int, rooms
 incendiary_damage_dice_count: 6

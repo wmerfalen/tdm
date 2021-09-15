@@ -147,7 +147,7 @@ namespace mods::weapon {
 				critical_chance(0),
 				critical_range(0),
 				range_multiplier(0),
-				damage_per_second(0),
+				base_damage(0),
 				disorient_amount(0),
 				headshot_bonus(0),
 				max_range(0),
@@ -164,7 +164,7 @@ namespace mods::weapon {
 			int critical_range;
 			float range_multiplier;
 			std::array<float,MAX_ROOM_DISTANCE> damage_map;
-			int damage_per_second;
+			int base_damage;
 			int disorient_amount;
 			int headshot_bonus;
 			int max_range;

@@ -18,7 +18,7 @@ damage_map: [
 10.00,
 10.00
 ]
-damage_per_second: 4.53 #float
+base_damage: 45 #float
 disorient_amount: 3.14 #float
 headshot_bonus: 3.0 #float
 max_range: 3 #integer,measured in rooms

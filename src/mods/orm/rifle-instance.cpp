@@ -62,7 +62,7 @@ namespace mods::orm {
 		this->rifle_cooldown_between_shots = obj->rifle()->attributes->cooldown_between_shots;
 		this->rifle_critical_chance = obj->rifle()->attributes->critical_chance;
 		this->rifle_critical_range = obj->rifle()->attributes->critical_range;
-		this->rifle_damage_per_second = obj->rifle()->attributes->damage_per_second;
+		this->rifle_base_damage = obj->rifle()->attributes->base_damage;
 		this->rifle_disorient_amount = obj->rifle()->attributes->disorient_amount;
 		this->rifle_headshot_bonus = obj->rifle()->attributes->headshot_bonus;
 		this->rifle_max_range = obj->rifle()->attributes->max_range;
@@ -122,7 +122,7 @@ namespace mods::orm {
 		obj->rifle()->attributes->cooldown_between_shots = this->rifle_cooldown_between_shots;
 		obj->rifle()->attributes->critical_chance = this->rifle_critical_chance;
 		obj->rifle()->attributes->critical_range = this->rifle_critical_range;
-		obj->rifle()->attributes->damage_per_second = this->rifle_damage_per_second;
+		obj->rifle()->attributes->base_damage = this->rifle_base_damage;
 		obj->rifle()->attributes->disorient_amount = this->rifle_disorient_amount;
 		obj->rifle()->attributes->headshot_bonus = this->rifle_headshot_bonus;
 		obj->rifle()->attributes->max_range = this->rifle_max_range;
@@ -218,7 +218,7 @@ namespace mods::orm {
 		values["rifle_cooldown_between_shots"] = std::to_string(this->rifle_cooldown_between_shots);
 		values["rifle_critical_chance"] = std::to_string(this->rifle_critical_chance);
 		values["rifle_critical_range"] = std::to_string(this->rifle_critical_range);
-		values["rifle_damage_per_second"] = to_string_with_precision(this->rifle_damage_per_second,2);
+		values["rifle_base_damage"] = std::to_string(this->rifle_base_damage);
 		values["rifle_disorient_amount"] = to_string_with_precision(this->rifle_disorient_amount,2);
 		values["rifle_headshot_bonus"] = std::to_string(this->rifle_headshot_bonus);
 		values["rifle_max_range"] = std::to_string(this->rifle_max_range);
@@ -340,8 +340,8 @@ namespace mods::orm {
 		if(!row["rifle_critical_range"].is_null()) {
 			this->rifle_critical_range = row["rifle_critical_range"].as<int16_t>();
 		}
-		if(!row["rifle_damage_per_second"].is_null()) {
-			this->rifle_damage_per_second = row["rifle_damage_per_second"].as<float>();
+		if(!row["rifle_base_damage"].is_null()) {
+			this->rifle_base_damage = row["rifle_base_damage"].as<int>();
 		}
 		if(!row["rifle_disorient_amount"].is_null()) {
 			this->rifle_disorient_amount = row["rifle_disorient_amount"].as<float>();
@@ -471,7 +471,7 @@ namespace mods::orm {
 		this->rifle_cooldown_between_shots = 0;
 		this->rifle_critical_chance = 0;
 		this->rifle_critical_range = 0;
-		this->rifle_damage_per_second = 0;
+		this->rifle_base_damage = 0;
 		this->rifle_disorient_amount = 0;
 		this->rifle_headshot_bonus = 0;
 		this->rifle_max_range = 0;

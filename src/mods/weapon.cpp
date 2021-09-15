@@ -223,7 +223,7 @@ namespace mods::weapon {
 		//obj->explosive()->attributes->critical_chance = 0.0;
 		//obj->explosive()->attributes->critical_range = 0;
 		//obj->explosive()->attributes->blast_radius = 2;
-		//obj->explosive()->attributes->damage_per_second = 0;
+		//obj->explosive()->attributes->base_damage = 0;
 		//obj->explosive()->attributes->disorient_amount = 0.0;
 		obj->ex_description.emplace_back("sensor grenade",obj->description.c_str());
 		return std::move(obj);

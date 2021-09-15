@@ -20,7 +20,7 @@ damage_map: [
 0.00,
 0.00
 ]
-damage_per_second: 30.00 #float
+base_damage: 30 #float
 disorient_amount: 0.01 #float
 headshot_bonus: 21.0 #float
 rounds_per_minute: 60 #integer, measured in bullets
