@@ -117,7 +117,7 @@ void mobile_activity(void) {
 		}
 
 		/* Mob Movement */
-		if(!MOB_FLAGGED(ch, MOB_SENTINEL) && (GET_POS(ch) == POS_STANDING) &&
+		if(!npc->has_tree() && !MOB_FLAGGED(ch, MOB_SENTINEL) && (GET_POS(ch) == POS_STANDING) &&
 		        ((door = rand_number(0, 18)) < NUM_OF_DIRS) && CAN_GO(ch, door) &&
 		        !ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_NOMOB | ROOM_DEATH) &&
 		        (!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
@@ -132,7 +132,7 @@ void mobile_activity(void) {
 		if(MOB_FLAGGED(ch, MOB_AGGRESSIVE | MOB_AGGR_TO_ALIGN)) {
 			found = FALSE;
 
-			std::cerr << green_str("Mob (uuid:") << npc->uuid() << "), npc->room():'" << npc->room() << "', plr->room():'" << npc->room() << "'\n";
+			//std::cerr << green_str("Mob (uuid:") << npc->uuid() << "), npc->room():'" << npc->room() << "', plr->room():'" << npc->room() << "'\n";
 			for(auto& plr : mods::globals::get_room_list(npc->room())) {
 				vict = plr->cd();
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {
@@ -164,7 +164,7 @@ void mobile_activity(void) {
 
 		/* Mob Memory */
 		if(MOB_FLAGGED(ch, MOB_MEMORY) && MEMORY(ch).size()) {
-			std::cerr << "mobile_activity: mob memory\n";
+			//std::cerr << "mobile_activity: mob memory\n";
 
 			found = FALSE;
 			for(auto& player_vict : mods::globals::get_room_list(IN_ROOM(ch))) {

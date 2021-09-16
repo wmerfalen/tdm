@@ -31,11 +31,11 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim
 	);
-	int16_t max_range(
+	uint8_t max_range(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
 	);
-	int16_t ammunition_amount(
+	uint16_t ammunition_amount(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
 	);
@@ -51,10 +51,10 @@ namespace mods::weapons::damage_calculator {
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
 	);
-	int16_t reduce_ammo(
+	uint16_t reduce_ammo(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
-	    int16_t wants_to_reduce
+	    uint16_t wants_to_reduce
 	);
 	uint32_t calculate_bonus_damage(
 	    player_ptr_t& attacker,
@@ -66,7 +66,7 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim
 	);
-	int16_t disorient_ticks(
+	uint16_t disorient_ticks(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim

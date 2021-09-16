@@ -12,7 +12,20 @@ enum triad : uint8_t {
 	ARMOR
 };
 namespace mods::levels {
-	static constexpr float FIRST_TIER = 10.0;
+	/**
+	 * Changing the FIRST_TIER value will have effects not only for
+	 * newer players, but for existing players as well.
+	 * The way that leveling works is that every stat and attribute (hp/mana/move)
+	 * is *assigned* to as opposed to *added to*.
+	 * So what this means is that if at some point you change FIRST_TIER to a
+	 * lower number, it would appear to existing players as if they are gaining less
+	 * or even subtracting from their existing stats/attributes when it comes time
+	 * for them to level up.
+	 *
+	 * So it should be noted here that this one constant is the determining factor
+	 * of how balanced the game is in accordance with players leveling up.
+	 */
+	static constexpr float FIRST_TIER = 33.0;
 	static constexpr float SECOND_TIER = FIRST_TIER * 0.75;
 	static constexpr float THIRD_TIER = FIRST_TIER * 0.50;
 	static constexpr float PASSIVE_TIER = FIRST_TIER * 0.25;

@@ -185,7 +185,11 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 		player->send("You move the elevator %s...\r\n",dir == UP ? "UP" : "DOWN");
 	}
 	if(!AFF_FLAGGED(ch, AFF_SNEAK) && !ghost_dissipated) {
-		act("$n has arrived.", TRUE, ch, 0, 0, TO_ROOM);
+		if(player->char_specials().fighting != nullptr) {
+			act("$n has arrived {red}[!]{/red}.", TRUE, ch, 0, 0, TO_ROOM);
+		} else {
+			act("$n has arrived.", TRUE, ch, 0, 0, TO_ROOM);
+		}
 	}
 
 
@@ -216,7 +220,7 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 	bool is_breacher = player->breacher() != nullptr;
 	bool is_exit = EXIT(ch, dir);
 
-	if(ch == NULL || dir < 0 || dir >= NUM_OF_DIRS || FIGHTING(ch)) {
+	if(ch == NULL || dir < 0 || dir >= NUM_OF_DIRS) {
 		log("SYSERR: perform_move received invalid parameters");
 		return (0);
 	}

@@ -145,10 +145,10 @@ namespace mods::weapons::damage_types {
 			}
 		}
 		void solo_gain(player_ptr_t& attacker,player_ptr_t& victim) {
-			attacker->sendln(CAT("You gain ",mods::levels::gain_exp_from_killing(attacker, victim)," experience points."));
+			attacker->sendln(CAT("{grn}You gain {yel}",mods::levels::gain_exp_from_killing(attacker, victim),"{/yel}{grn} experience points.{/grn}"));
 			auto mp = mods::levels::gain_mp_from_killing(attacker, victim);
 			if(mp) {
-				attacker->sendln(CAT("You gain ",mp," mission points."));
+				attacker->sendln(CAT("{grn}You gain {blu}",mp,"{/blu}{grn} mission points.{/grn}"));
 			}
 			change_alignment(attacker->cd(), victim->cd());
 		}

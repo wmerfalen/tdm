@@ -110,19 +110,23 @@ namespace mods::weapons::damage_calculator {
 					return LEVEL_DIFF_DEFAULT();
 			}
 		}
-		int16_t roll_weapon(
+		uint32_t roll_weapon(
 		    obj_ptr_t& weapon
 		) {
 			if(mods::weapons::damage_calculator::use_static_roll_weapon_amount) {
 				return mods::weapons::damage_calculator::static_roll_weapon_amount;
 			}
-			int16_t dice_count = 0, sides = 0;
+			uint32_t dice_count = 0, sides = 0,base_damage = 0;
 			if(weapon->has_rifle() == false) {
 				if(weapon->has_melee()) {
 					dice_count = weapon->melee()->attributes->damage_dice_count;
 					sides = weapon->melee()->attributes->damage_dice_sides;
+					base_damage = weapon->melee()->attributes->base_damage;
+#ifdef __MENTOC_SHOW_BASE_DAMAGE_REPORT__
+					std::cerr << "BASE_DAMAGE REPORT:: " << weapon->name.c_str() << " base_damage: " << base_damage << "\n";
+#endif
 					dty_debug("Weapon has melee obj type, so rolling for that:" << dice_count << "d" << sides);
-					return dice(dice_count,sides);
+					return dice(dice_count,sides) + base_damage;
 				}
 				dty_debug("Warning: rolling default 1d20 because player doesn't have rifle or melee extended obj types");
 				return dice(1,20);
@@ -134,11 +138,20 @@ namespace mods::weapons::damage_calculator {
 					             (rifle_attachment->get_level() * RIFLE_ATTACHMENT_LEVEL_MULTIPLIER());
 					sides = rifle_attachment->base_object->rifle()->attributes->damage_dice_sides *
 					        (rifle_attachment->get_level() * RIFLE_ATTACHMENT_LEVEL_MULTIPLIER());
+					base_damage = rifle_attachment->base_object->rifle()->attributes->base_damage;
+#ifdef __MENTOC_SHOW_BASE_DAMAGE_REPORT__
+					const auto& weapon = rifle_attachment->base_object;
+					std::cerr << "BASE_DAMAGE REPORT:: " << weapon->name.c_str() << " base_damage: " << base_damage << "\n";
+#endif
 				} else {
 					dice_count = weapon->rifle()->attributes->damage_dice_count;
 					sides = weapon->rifle()->attributes->damage_dice_sides;
+					base_damage = weapon->rifle()->attributes->base_damage;
+#ifdef __MENTOC_SHOW_BASE_DAMAGE_REPORT__
+					std::cerr << "BASE_DAMAGE REPORT:: " << weapon->name.c_str() << " base_damage: " << base_damage << "\n";
+#endif
 				}
-				return dice(dice_count,sides);
+				return dice(dice_count,sides) + base_damage;
 			}
 		}
 		int16_t get_weapon_damage(
@@ -151,21 +164,18 @@ namespace mods::weapons::damage_calculator {
 		    player_ptr_t& attacker,
 		    obj_ptr_t& weapon,
 		    player_ptr_t& victim) {
-			auto base_damage = get_base_damage(attacker);
-			auto level_scaler = get_level_damage(attacker,victim);
 			auto weapon_damage = get_weapon_damage(attacker,weapon);
 			if(attacker->marine() && mods::object_utils::is_assault_rifle(weapon)) {
-				int additional_damage = (MARINE_AR_PASSIVE_BONUS_DAMAGE() * 0.01) * weapon_damage;
+				auto additional_damage = (MARINE_AR_PASSIVE_BONUS_DAMAGE() * 0.01) * weapon_damage;
 				attacker->sendln(CAT("{grn}[MARINE PASSIVE BONUS DAMAGE]: ",additional_damage,"{/grn}"));
 				weapon_damage += additional_damage;
 			}
 			float damage_nerf = victim->get_damage_nerf();
-			auto total_damage = base_damage + (level_scaler * weapon_damage);
-			if(total_damage > 0 && damage_nerf > 0) {
-				total_damage -= (total_damage * 0.01 * damage_nerf);
-				return total_damage;
+			if(weapon_damage > 0 && damage_nerf > 0) {
+				weapon_damage -= (weapon_damage * 0.01 * damage_nerf);
+				return weapon_damage;
 			}
-			return total_damage;
+			return weapon_damage;
 		}
 	};
 
@@ -173,7 +183,7 @@ namespace mods::weapons::damage_calculator {
 	 * affects how far away a target can be.
 	 * powered by the zoom_multiplier on attachments
 	 */
-	int16_t max_range(
+	uint8_t max_range(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
 	) {
@@ -202,15 +212,14 @@ namespace mods::weapons::damage_calculator {
 	 *
 	 * @return
 	 */
-	int16_t ammunition_amount(
+	uint16_t ammunition_amount(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
 	) {
 		if(weapon->has_rifle() == false) {
 			return 0;
 		}
-		auto ammo = weapon->rifle_instance->ammo;
-		return ammo;
+		return  weapon->rifle_instance->ammo;
 	}
 	/**
 	 * @brief pass in attacker, weapon, and amount you would like to reduce ammo by. this function will roll your free ammo chance and regenerate ammo chance. it will take the result of those rolls and give you the amount of ammo you should really deduct. may return negative number or zero when regenerated ammo or free ammo dice rolls succeed.
@@ -221,15 +230,15 @@ namespace mods::weapons::damage_calculator {
 	 *
 	 * @return
 	 */
-	int16_t reduce_ammo(
+	uint16_t reduce_ammo(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
-	    int16_t wants_to_deduct
+	    uint16_t wants_to_deduct
 	) {
 		if(weapon->has_rifle() == false) {
 			return 0;/** TODO: make sure this doesnt screw something up */
 		}
-		int16_t ammo_reduction = wants_to_deduct;
+		uint16_t ammo_reduction = wants_to_deduct;
 		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 		if(!rifle_attachment) {
 			return wants_to_deduct;
@@ -240,10 +249,10 @@ namespace mods::weapons::damage_calculator {
 		}
 		if(mods::rand::chance(rifle_attachment->regenerate_ammo_chance)) {
 			dty_debug("Player rolled regenerated ammo " << green_str("SUCCESS") << "Chances were: " << rifle_attachment->regenerate_ammo_chance << "%");
-			int16_t regen = rand_number(
-			                    mods::values::REGENERATED_AMMO_LOW(),
-			                    mods::values::REGENERATED_AMMO_HIGH()
-			                );
+			auto regen = rand_number(
+			                 mods::values::REGENERATED_AMMO_LOW(),
+			                 mods::values::REGENERATED_AMMO_HIGH()
+			             );
 			dty_debug("Random amount of regenerated ammo: " << regen);
 			return ammo_reduction - regen;
 		}
@@ -311,7 +320,7 @@ namespace mods::weapons::damage_calculator {
 		}
 		return false;
 	}
-	int16_t disorient_ticks(
+	uint16_t disorient_ticks(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim
@@ -394,6 +403,7 @@ namespace mods::weapons::damage_calculator {
 		/** TODO handle blast radius attribute */
 		/** TODO handle loudness type */
 		e.damage = dice(attr->damage_dice_count,attr->damage_dice_sides);
+		e.damage += attr->base_damage;
 
 		if(dice(1,100) <= critical_chance) {
 			e.critical = e.damage * EXPLOSIVE_CRITICAL_MULTIPLIER();

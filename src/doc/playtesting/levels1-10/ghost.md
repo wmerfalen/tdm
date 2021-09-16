@@ -22,3 +22,14 @@ level 1-5 ghost class (ghost level 5 only has 100hp).
 # Recommended experience for level 1-5 mobs
 The magic number that seems to work well is 250. However, it does seem that this can get fairly grindy.
 In order to get to level 5, you'll need 20k experience
+
+
+# 2021-09-16 CHANGES
+- GHOST players at level 1 now have the following stats:
+	- 66 HP
+	- 173 mana points
+	- 165 move points
+
+- This is the better starting out values because the newbie level mobs should be a little tougher.
+Setting the thug mob (vnum 112) to have less hp than 300-400 would mean that one hit kills them
+from a stock PSG-1 

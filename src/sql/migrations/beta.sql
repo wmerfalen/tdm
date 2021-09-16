@@ -1,9 +1,3 @@
-\c postgres
-DROP DATABASE mud;
-CREATE DATABASE mud WITH OWNER = postgres;
-\c mud
-
---
 --
 -- PostgreSQL database dump
 --
@@ -1707,7 +1701,7 @@ CREATE TABLE public.object_rifle (
     rifle_cooldown_between_shots double precision,
     rifle_critical_chance double precision,
     rifle_critical_range integer,
-    rifle_damage_per_second double precision,
+    rifle_base_damage integer,
     rifle_disorient_amount double precision,
     rifle_headshot_bonus double precision,
     rifle_max_range integer,
@@ -2063,7 +2057,8 @@ CREATE TABLE public.player_object (
     po_load_type integer NOT NULL,
     po_wear_position integer,
     po_in_inventory integer,
-    po_quantity integer DEFAULT 1 NOT NULL
+    po_quantity integer DEFAULT 1 NOT NULL,
+    po_ammunition integer
 );
 
 
@@ -2358,7 +2353,7 @@ CREATE TABLE public.rifle_instance (
     rifle_cooldown_between_shots integer,
     rifle_critical_chance integer,
     rifle_critical_range integer,
-    rifle_damage_per_second double precision,
+    rifle_base_damage integer,
     rifle_disorient_amount double precision,
     rifle_headshot_bonus double precision,
     rifle_max_range integer,
@@ -3669,6 +3664,7 @@ COPY public.class_engineer (engineer_id, engineer_player_id, created_at, updated
 
 COPY public.class_ghost (ghost_id, ghost_player_id, created_at, updated_at) FROM stdin;
 1	96	2021-09-04 04:25:30.215005	2021-09-04 04:25:30.215005
+2	98	2021-09-14 23:33:16.631031	2021-09-14 23:33:16.631031
 \.
 
 
@@ -3677,6 +3673,7 @@ COPY public.class_ghost (ghost_id, ghost_player_id, created_at, updated_at) FROM
 --
 
 COPY public.class_marine (marine_id, marine_player_id, created_at, updated_at) FROM stdin;
+1	97	2021-09-07 11:11:48.98478	2021-09-07 11:11:48.98478
 \.
 
 
@@ -3831,8 +3828,8 @@ COPY public.mob_equipment (id, meq_profile_name, meq_vnum, meq_light, meq_finger
 17	shoplifter	110	\N	\N	\N	\N	\N	armor/blue-hoodie.yml	\N	armor/dusty-jeans.yml	armor/sloth-martins.yml	\N	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:23.894169	2021-09-04 04:12:23.894169
 69	armed-guard	14	\N	\N	\N	\N	\N	armor/falcon-ballistic-vest.yml	armor/baklava.yml	armor/mp-enforcer-pants.yml	armor/xm607-vulture-boots.yml	armor/forge-xm3-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	armor/titan-shoulder-pads.yml	armor/titan-shoulder-pads.yml	\N	\N	\N	armor/titan-elbow-guards.yml	armor/titan-elbow-guards.yml	2021-09-04 22:42:19.155625	2021-09-04 22:42:19.155625
 70	teller	107	\N	\N	\N	\N	\N	\N	\N	armor/leggings.yml	armor/dress-shoes.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 22:42:19.163143	2021-09-04 22:42:19.163143
-90	thug-lvl-2	112	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/sickening-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:28.213973	2021-09-06 01:20:28.213973
-91	hustler-lvl-3	113	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/brass-knuckles.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:28.231383	2021-09-06 01:20:28.231383
+90	thug-lvl-2	112	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/flimsy-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:28.213973	2021-09-06 01:20:28.213973
+91	hustler-lvl-3	113	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/weak-brass-knuckles.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:28.231383	2021-09-06 01:20:28.231383
 \.
 
 
@@ -4037,8 +4034,8 @@ COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description,
 25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	0	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2	250
 26	106	An armed security guard	An armed security guard	An armed security guard	An armed security guard watches you closely.	8	0	28	23	25	0	54	0	0	0	0	20	0	0	950	245	610	2150	0	0	0	1	950	245	610	90	18	60	10	5	0	18	\N	\N	25	30	35	20	30	10	38	25	20	250
 27	107	A bank teller	A bank teller	A bank teller	A bank teller is obediently serving you	8	0	1	1	1	0	3	0	30	0	0	2	0	0	15	15	20	450	0	0	0	2	15	15	20	1	3	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0	250
-28	112	An agitated thug	An agitated thug	An agitated thug	An agitated thug looks for something to punch...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	250	100	82	18	0	0	0	1	250	100	82	1	8	10	10	5	0	15	\N	\N	2	3	3	2	3	1	3	2	2	250
-29	113	A muscular hustler	A muscular hustler	A muscular hustler	A muscular hustler looks for something to punch...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	350	100	82	48	0	0	0	1	350	100	82	2	12	18	10	5	0	15	\N	\N	4	5	5	4	7	0	8	3	4	250
+28	112	An agitated thug	An agitated thug	An agitated thug	An agitated thug looks for something to punch...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	413	100	82	90	280	0	0	1	413	100	82	1	8	10	10	5	0	15	\N	\N	2	3	3	2	3	1	3	2	2	280
+29	113	A muscular hustler	A muscular hustler	A muscular hustler	A muscular hustler looks for something to punch...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	350	100	82	48	280	0	0	1	350	100	82	2	12	18	10	5	0	15	\N	\N	4	5	5	4	7	0	8	3	4	280
 \.
 
 
@@ -4113,7 +4110,7 @@ COPY public.object_gadget (gadget_id, gadget_csv_capabilities, gadget_csv_attach
 -- Data for Name: object_rifle; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.object_rifle (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1, rifle_accuracy_map_2, rifle_accuracy_map_3, rifle_damage_map_0, rifle_damage_map_1, rifle_damage_map_2, rifle_damage_map_3, rifle_ammo_max, rifle_ammo_type, rifle_chance_to_injure, rifle_clip_size, rifle_cooldown_between_shots, rifle_critical_chance, rifle_critical_range, rifle_damage_per_second, rifle_disorient_amount, rifle_headshot_bonus, rifle_max_range, rifle_range_multiplier, rifle_reload_time, rifle_rounds_per_minute, rifle_muzzle_velocity, rifle_effective_firing_range, rifle_str_type, rifle_type, rifle_manufacturer, rifle_name, rifle_vnum, rifle_rarity, rifle_file, rifle_incendiary_damage, rifle_explosive_damage, rifle_shrapnel_damage, rifle_corrosive_damage, rifle_cryogenic_damage, rifle_radioactive_damage, rifle_emp_damage, rifle_shock_damage, rifle_anti_matter_damage, rifle_stat_strength, rifle_stat_intelligence, rifle_stat_wisdom, rifle_stat_dexterity, rifle_stat_constitution, rifle_stat_electronics, rifle_stat_armor, rifle_stat_marksmanship, rifle_stat_sniping, rifle_stat_demolitions, rifle_stat_chemistry, rifle_stat_weapon_handling, rifle_stat_strategy, rifle_stat_medical, created_at, updated_at) FROM stdin;
+COPY public.object_rifle (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1, rifle_accuracy_map_2, rifle_accuracy_map_3, rifle_damage_map_0, rifle_damage_map_1, rifle_damage_map_2, rifle_damage_map_3, rifle_ammo_max, rifle_ammo_type, rifle_chance_to_injure, rifle_clip_size, rifle_cooldown_between_shots, rifle_critical_chance, rifle_critical_range, rifle_base_damage, rifle_disorient_amount, rifle_headshot_bonus, rifle_max_range, rifle_range_multiplier, rifle_reload_time, rifle_rounds_per_minute, rifle_muzzle_velocity, rifle_effective_firing_range, rifle_str_type, rifle_type, rifle_manufacturer, rifle_name, rifle_vnum, rifle_rarity, rifle_file, rifle_incendiary_damage, rifle_explosive_damage, rifle_shrapnel_damage, rifle_corrosive_damage, rifle_cryogenic_damage, rifle_radioactive_damage, rifle_emp_damage, rifle_shock_damage, rifle_anti_matter_damage, rifle_stat_strength, rifle_stat_intelligence, rifle_stat_wisdom, rifle_stat_dexterity, rifle_stat_constitution, rifle_stat_electronics, rifle_stat_armor, rifle_stat_marksmanship, rifle_stat_sniping, rifle_stat_demolitions, rifle_stat_chemistry, rifle_stat_weapon_handling, rifle_stat_strategy, rifle_stat_medical, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -4135,8 +4132,10 @@ COPY public.object_weapon (id, obj_fk_id, obj_ammo_max, obj_ammo_type, obj_coold
 --
 
 COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences, player_practice_sessions) FROM stdin;
-1	foKntnEF3KSXA	0	0	far	1	1	0	0	0	0	0	0	0	0	6500	0	65000	6500	65000	6500	6500	M	65000	6500	65000	53	52	52	9	1	52	0	0	PC	6500	1	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	1
-96	$2a$06$OW7y5cqZH/LkEXpnsDmW3OKqxTrAdTKZ0x.BbCbrhzYjlk6oQFtcG	0	128	sniper	1	1	0	10	0	30	22	40	50	37	0	0	10	100	82	162	1819	M	-81	100	4	53	53	53	9	1	53	0	0	PC	0	1	53	0	2021-09-04 04:25:30.182404	0	2021-09-04 04:25:30.182404	8388848	0
+97	$2a$06$pqvhyJJCbjGmlZAGem5HYe/iuHQgUyDSt5whYjUIoKO.CszNI.sRy	0	128	marine	1	1	0	60	0	60	45	120	180	75	0	0	120	100	291	0	8400	M	99	100	170	53	53	53	2	1	53	0	0	PC	0	3	53	0	2021-09-07 11:11:48.960526	0	2021-09-07 11:11:48.960526	8388736	7
+1	foKntnEF3KSXA	0	0	far	1	1	0	30	0	90	67	120	150	112	6094	0	65000	6500	65000	6518	6780	M	65000	6500	65000	53	53	53	9	1	53	0	0	PC	6094	3	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	5
+96	$2a$06$OW7y5cqZH/LkEXpnsDmW3OKqxTrAdTKZ0x.BbCbrhzYjlk6oQFtcG	0	128	sniper	1	1	0	50	0	150	112	200	250	187	0	0	100	100	386	252	26279	M	98	100	336	53	53	53	9	1	53	0	0	PC	0	5	53	0	2021-09-04 04:25:30.182404	0	2021-09-04 04:25:30.182404	8388848	0
+98	$2a$06$2Vbc1WO71fhfj/kZ3h5J.usvuqtLMOJvk9oypnoyWsh4d1pXWBniS	0	128	carl	1	1	0	50	0	150	112	200	250	187	0	0	100	100	727	216	3920	M	84	100	679	53	53	53	9	1	53	0	0	PC	0	5	53	0	2021-09-14 23:33:16.604572	0	2021-09-14 23:33:16.604572	8388720	11
 \.
 
 
@@ -4145,8 +4144,10 @@ COPY public.player (id, player_password, player_affection_plr_bitvector, player_
 --
 
 COPY public.player_base_ability (pba_id, pba_player_id, pba_str, pba_str_add, pba_intel, pba_wis, pba_dex, pba_con, pba_cha, pba_electronics, pba_armor, pba_marksmanship, pba_sniping, pba_demolitions, pba_chemistry, pba_weapon_handling, pba_strategy, pba_medical, created_at, updated_at) FROM stdin;
-1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
-2	96	10	0	30	22	40	50	37	30	17	27	20	5	30	27	30	45	2021-09-04 04:25:30.214342	2021-09-04 04:25:30.214342
+2	96	50	0	150	112	200	250	187	150	87	137	100	25	150	137	150	225	2021-09-04 04:25:30.214342	2021-09-04 04:25:30.214342
+3	97	60	0	60	45	120	180	75	60	105	75	60	15	60	75	60	90	2021-09-07 11:11:48.984162	2021-09-07 11:11:48.984162
+1	1	30	0	90	67	120	150	112	90	52	82	60	15	90	82	90	135	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
+4	98	50	0	150	112	200	250	187	150	87	137	100	25	150	137	150	225	2021-09-14 23:33:16.630307	2021-09-14 23:33:16.630307
 \.
 
 
@@ -4178,15 +4179,35 @@ COPY public.player_flags (id, player_id, chunk_index, flag_value) FROM stdin;
 -- Data for Name: player_object; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.player_object (id, po_player_id, po_type, po_type_id, po_yaml, po_load_type, po_wear_position, po_in_inventory, po_quantity) FROM stdin;
-3	96	7	\N	titan-gauntlets.yml	2	10	0	1
-4	96	7	\N	titan-shin-guards.yml	2	7	0	1
-6	96	7	\N	basic-boots.yml	2	8	0	1
-8	96	7	\N	basic-ballistic-vest.yml	2	5	0	1
-10	96	7	\N	xm-scorpio-tactical-gloves.yml	2	9	0	1
-12	96	1	\N	psg1.yml	2	16	0	1
-13	96	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1
-14	96	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1
+COPY public.player_object (id, po_player_id, po_type, po_type_id, po_yaml, po_load_type, po_wear_position, po_in_inventory, po_quantity, po_ammunition) FROM stdin;
+132	96	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	1
+131	96	1	\N	psg1.yml	2	16	0	1	7
+114	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+67	97	7	\N	basic-ballistic-vest.yml	2	5	0	1	\N
+69	97	7	\N	basic-boots.yml	2	8	0	1	\N
+71	97	7	\N	titan-gauntlets.yml	2	10	0	1	\N
+73	97	7	\N	titan-shin-guards.yml	2	7	0	1	\N
+139	98	7	\N	titan-elbow-guards.yml	2	26	0	1	\N
+75	97	7	\N	xm-scorpio-belt.yml	2	13	0	1	\N
+140	98	7	\N	basic-ballistic-vest.yml	2	5	0	1	\N
+77	97	7	\N	xm-scorpio-tactical-gloves.yml	2	9	0	1	\N
+141	98	7	\N	basic-boots.yml	2	8	0	1	\N
+142	98	7	\N	xm-scorpio-tactical-gloves.yml	2	9	0	1	\N
+143	98	1	\N	psg1.yml	2	3	0	1	7
+115	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+116	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+83	97	8	\N	sg3-ar-ammunition.yml	2	\N	1	1	48
+145	98	7	\N	titan-shin-guards.yml	2	7	0	1	\N
+84	97	8	\N	sg3-ar-ammunition.yml	2	\N	1	1	48
+80	97	1	\N	g36c.yml	2	16	0	1	36
+147	98	7	\N	xm-scorpio-belt.yml	2	13	0	1	\N
+152	98	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	29
+149	98	1	\N	psg1.yml	2	16	0	1	7
+3	96	7	\N	titan-gauntlets.yml	2	10	0	1	\N
+4	96	7	\N	titan-shin-guards.yml	2	7	0	1	\N
+6	96	7	\N	basic-boots.yml	2	8	0	1	\N
+8	96	7	\N	basic-ballistic-vest.yml	2	5	0	1	\N
+10	96	7	\N	xm-scorpio-tactical-gloves.yml	2	9	0	1	\N
 \.
 
 
@@ -4227,6 +4248,7 @@ COPY public.player_skill_usage (id, ps_player_id, ps_skill_id, ps_usage_count, c
 --
 
 COPY public.rifle_attachment (id, rifle_player_id, rifle_data, rifle_position, created_at, updated_at) FROM stdin;
+3774	1	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	primary	2021-09-14 18:48:53.786156	2021-09-14 18:48:53.786156
 \.
 
 
@@ -4271,7 +4293,7 @@ COPY public.rifle_index (id, rifle_filename, rifle_type, created_at, updated_at)
 -- Data for Name: rifle_instance; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1, rifle_accuracy_map_2, rifle_accuracy_map_3, rifle_damage_map_0, rifle_damage_map_1, rifle_damage_map_2, rifle_damage_map_3, rifle_rarity, rifle_file, rifle_str_type, rifle_type, rifle_manufacturer, rifle_name, rifle_vnum, rifle_ammo_max, rifle_ammo_type, rifle_chance_to_injure, rifle_clip_size, rifle_cooldown_between_shots, rifle_critical_chance, rifle_critical_range, rifle_damage_per_second, rifle_disorient_amount, rifle_headshot_bonus, rifle_max_range, rifle_range_multiplier, rifle_reload_time, rifle_rounds_per_minute, rifle_muzzle_velocity, rifle_effective_firing_range, rifle_damage_dice_count, rifle_damage_dice_sides, rifle_incendiary_damage, rifle_explosive_damage, rifle_shrapnel_damage, rifle_corrosive_damage, rifle_cryogenic_damage, rifle_radioactive_damage, rifle_emp_damage, rifle_shock_damage, rifle_anti_matter_damage, rifle_stat_strength, rifle_stat_intelligence, rifle_stat_wisdom, rifle_stat_dexterity, rifle_stat_constitution, rifle_stat_electronics, rifle_stat_armor, rifle_stat_marksmanship, rifle_stat_sniping, rifle_stat_demolitions, rifle_stat_chemistry, rifle_stat_weapon_handling, rifle_stat_strategy, rifle_stat_medical, created_at, updated_at) FROM stdin;
+COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1, rifle_accuracy_map_2, rifle_accuracy_map_3, rifle_damage_map_0, rifle_damage_map_1, rifle_damage_map_2, rifle_damage_map_3, rifle_rarity, rifle_file, rifle_str_type, rifle_type, rifle_manufacturer, rifle_name, rifle_vnum, rifle_ammo_max, rifle_ammo_type, rifle_chance_to_injure, rifle_clip_size, rifle_cooldown_between_shots, rifle_critical_chance, rifle_critical_range, rifle_base_damage, rifle_disorient_amount, rifle_headshot_bonus, rifle_max_range, rifle_range_multiplier, rifle_reload_time, rifle_rounds_per_minute, rifle_muzzle_velocity, rifle_effective_firing_range, rifle_damage_dice_count, rifle_damage_dice_sides, rifle_incendiary_damage, rifle_explosive_damage, rifle_shrapnel_damage, rifle_corrosive_damage, rifle_cryogenic_damage, rifle_radioactive_damage, rifle_emp_damage, rifle_shock_damage, rifle_anti_matter_damage, rifle_stat_strength, rifle_stat_intelligence, rifle_stat_wisdom, rifle_stat_dexterity, rifle_stat_constitution, rifle_stat_electronics, rifle_stat_armor, rifle_stat_marksmanship, rifle_stat_sniping, rifle_stat_demolitions, rifle_stat_chemistry, rifle_stat_weapon_handling, rifle_stat_strategy, rifle_stat_medical, created_at, updated_at) FROM stdin;
 1	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	77	8	2	34	1	80	0	53	1	4.29999999999999982	2	10	1	10	1	1	0	1	1	1	0	1	1	1	1	0	0	1	1	0	0	0	0	1	1	1	1	0	0	2021-09-06 01:28:51.675323	2021-09-06 01:28:51.675323
 2	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	1	SHOTGUN	1	6	2	34	1	154	1	53	2	1	2	14	918	15	3	31	0	1	1	1	1	0	1	1	1	1	0	1	1	1	1	0	0	0	1	0	1	0	0	2021-09-06 01:57:11.43389	2021-09-06 01:57:11.43389
 3	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	20.5	6	1	6	1	25	1	55	1	0	4	1	1	2	3	24	1	1	1	0	1	1	1	1	0	1	1	0	0	1	1	0	1	1	1	0	0	0	0	2021-09-06 01:57:28.204973	2021-09-06 01:57:28.204973
@@ -4288,12 +4310,95 @@ COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1
 14	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	1	PISTOL	20.5	1	1	9	1	20	1	33	1	0	5	80	1	1	1	16	1	0	1	0	1	1	1	1	1	1	1	1	0	0	0	0	1	1	0	1	1	0	0	2021-09-06 03:04:47.023351	2021-09-06 03:04:47.023351
 15	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	73	6	2	1	1	80	0	1	4	1	2	10	918	10	3	20	1	1	1	1	1	1	1	0	1	1	0	1	1	1	1	0	1	1	0	1	1	0	0	2021-09-06 03:05:55.639243	2021-09-06 03:05:55.639243
 16	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	34	1	80	1	53	1	4.29999999999999982	2	1	918	1	5	1	1	0	1	1	0	1	1	1	1	0	1	1	1	0	1	0	0	1	1	0	1	1	0	2021-09-06 03:06:30.49336	2021-09-06 03:06:30.49336
-17	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	1	1	34.5300000000000011	1	61	1	0	5	8	1	2	5	20	1	0	1	1	1	0	1	1	1	1	1	0	1	1	1	0	0	1	0	0	0	1	0	2021-09-06 03:06:37.447102	2021-09-06 03:06:37.447102
+17	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	1	1	35	1	61	1	0	5	8	1	2	5	20	1	0	1	1	1	0	1	1	1	1	1	0	1	1	1	0	0	1	0	0	0	1	0	2021-09-06 03:06:37.447102	2021-09-06 03:06:37.447102
 18	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	1	PISTOL	1	1	1	5	1	20	1	42	1	1	3	1	1	2	3	16	1	0	0	1	1	0	1	1	0	0	1	0	1	1	1	0	0	0	0	1	0	1	0	2021-09-06 03:08:25.046276	2021-09-06 03:08:25.046276
 19	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	1	7	2	1	5	1	0	20	4	4.29999999999999982	11	10	1818	775	5	54	0	1	1	0	0	1	1	1	1	1	0	0	1	1	1	0	0	1	1	1	0	0	0	2021-09-06 03:08:36.809308	2021-09-06 03:08:36.809308
-20	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	14	2	14	4	4.53000000000000025	3.14000000000000012	3	3	4.29999999999999982	1	80	1	2	6	1	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	1	1	1	1	1	0	2021-09-06 03:13:23.838239	2021-09-06 03:13:23.838239
+20	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	14	2	14	4	5	3.14000000000000012	3	3	4.29999999999999982	1	80	1	2	6	1	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	1	1	1	1	1	0	2021-09-06 03:13:23.838239	2021-09-06 03:13:23.838239
 21	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	1	1	5	1	1	1	33	1	0	3	80	40	3	3	16	0	1	0	1	0	1	1	1	1	1	1	1	0	1	1	0	1	1	0	0	1	1	0	2021-09-06 03:14:24.90574	2021-09-06 03:14:24.90574
 22	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.810000000000000053	11	16	19	1	450	0	1	4	1	1	1	1	500	3	49	1	1	0	1	1	1	0	1	1	1	0	0	1	1	1	0	0	1	0	1	0	0	0	2021-09-06 03:17:24.397361	2021-09-06 03:17:24.397361
+23	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	115	11	2	34	1	91	0	1	2	4.29999999999999982	3	1	918	1	1	20	1	1	0	1	1	0	0	0	1	0	0	0	1	0	1	0	1	0	1	1	1	1	0	2021-09-06 03:40:23.665692	2021-09-06 03:40:23.665692
+24	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	1	2	34	1	1	0	1	3	7	2	10	918	10	3	1	1	0	0	1	1	1	0	0	0	1	0	1	1	0	1	0	1	1	1	0	0	1	0	2021-09-06 03:42:49.10483	2021-09-06 03:42:49.10483
+25	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	8	2	34	1	117	1	53	2	1	3	10	918	13	1	20	0	1	1	1	1	0	1	1	1	0	1	0	0	1	1	0	0	1	1	0	0	1	0	2021-09-06 03:51:37.101185	2021-09-06 03:51:37.101185
+26	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81000000000000005	999	20	23	1	30	1	1	11	4.29999999999999982	33	180	1	26	1	140	1	1	0	1	0	1	1	0	1	0	0	1	1	1	0	0	1	1	1	0	1	1	0	2021-09-06 03:53:40.659097	2021-09-06 03:53:40.659097
+27	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1	MACHINE_PISTOL	32	37	1	14	1	30	1	21	3	1	5	1	1	20	1	6	1	1	1	0	1	1	0	1	1	1	0	1	1	0	1	0	0	1	0	0	1	1	0	2021-09-06 03:54:00.480819	2021-09-06 03:54:00.480819
+28	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	8	2	1	4	5	3.14000000000000012	3	1	4	8	80	24	1	1	1	1	1	0	1	1	0	1	1	1	1	0	1	1	1	1	0	1	0	0	1	1	1	0	2021-09-06 03:54:39.313207	2021-09-06 03:54:39.313207
+29	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	33	1	1	7	1	1	0	33	1	1	3	80	1	2	1	16	1	1	1	1	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	1	0	1	0	2021-09-06 03:54:48.391041	2021-09-06 03:54:48.391041
+30	10	10	10	10	10	10	10	10	COMMON	aug-a3.yml	ASSAULT_RIFLE	4	VI-AUG-IX	AUG A3	44	220	ASSAULT_RIFLE	4.23000000000000043	8	2	19	4	7	1	3	3	1	1	99	24	2	11	1	1	1	0	1	1	0	1	1	1	1	0	0	1	0	1	0	0	0	1	1	1	1	0	2021-09-06 03:58:07.458034	2021-09-06 03:58:07.458034
+31	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81000000000000005	999	20	1	1	30	0	23	7	4.29999999999999982	1	1	1	36	40	1	1	0	1	0	1	1	1	1	0	1	0	1	1	1	0	0	1	1	0	1	1	1	0	2021-09-06 04:00:21.032214	2021-09-06 04:00:21.032214
+32	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	0.810000000000000053	7	2	19	5	450	1	21	1	1	8	59	2	500	1	1	2	1	1	1	5	1	0	1	0	0	2	1	1	1	1	0	0	1	2	1	0	1	0	2021-09-06 04:00:25.350172	2021-09-06 04:00:25.350172
+33	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	30.8099999999999987	2	1	14	1	1	0	16	3	4.29999999999999982	5	1	1	44	29	1	0	1	0	1	1	1	2	1	2	1	1	1	0	1	0	0	1	1	1	0	0	1	0	2021-09-06 04:00:53.142172	2021-09-06 04:00:53.142172
+34	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	1	PISTOL	20	10	1	1	1	1	0	33	1	0	1	80	40	2	5	16	1	1	5	0	1	1	1	1	0	2	1	0	2	1	0	0	1	0	9	2	1	0	0	2021-09-06 04:01:03.958174	2021-09-06 04:01:03.958174
+35	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	1162	SUB_MACHINE_GUN	1	82	1	14	2	30	0	66	4	4.29999999999999982	10	1	1	1	6	6	1	1	1	1	1	1	2	1	1	0	2	0	1	0	2	0	1	0	1	2	2	0	0	2021-09-06 04:01:19.683189	2021-09-06 04:01:19.683189
+36	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	75	PISTOL	1	1	1	5	1	20	2	1	1	2	3	1	1	2	3	16	1	2	1	0	2	1	1	1	2	1	1	1	4	0	1	0	1	2	0	1	0	1	0	2021-09-06 04:01:46.176273	2021-09-06 04:01:46.176273
+37	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	13	1	1	1	23	0	1	2	0	1	1	40	3	3	1	1	0	2	5	2	0	1	1	1	1	0	1	1	1	2	0	1	0	0	0	0	1	0	2021-09-06 04:01:51.777233	2021-09-06 04:01:51.777233
+38	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	20.5	12	1	5	2	3	0	33	1	1	1	80	1	1	3	1	0	1	0	4	1	0	1	1	3	2	0	2	3	1	2	0	0	0	0	1	1	0	0	2021-09-06 04:03:22.246198	2021-09-06 04:03:22.246198
+39	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	1	ASSAULT_RIFLE	4	8	2	14	2	5	1	1	1	4.29999999999999982	5	80	24	2	6	19	1	1	1	2	2	0	1	0	2	1	2	1	1	2	2	0	0	1	2	1	0	0	0	2021-09-06 04:03:32.066198	2021-09-06 04:03:32.066198
+40	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	100	SHOTGUN	169	1	2	34	1	80	0	1	4	12	1	10	918	10	8	26	1	1	1	0	1	2	1	2	4	1	1	1	0	0	0	0	1	4	2	0	0	2	0	2021-09-06 04:11:31.980285	2021-09-06 04:11:31.980285
+41	10	10	10	10	10	10	10	10	COMMON	m16a4.yml	ASSAULT_RIFLE	4	Standard Issue	M16A4 Assault Rifle	25	220	ASSAULT_RIFLE	4.23000000000000043	1	2	14	1	5	3.14000000000000012	1	3	7	7	1	1	4	6	1	1	1	1	1	1	0	2	2	2	1	2	1	1	1	2	0	1	1	0	1	1	5	0	2021-09-06 04:12:25.294101	2021-09-06 04:12:25.294101
+42	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	189	PISTOL	0	14	6	2	1	2	2	57	1	8	5	9	1	2	1	36	2	1	7	1	2	1	3	7	2	2	2	0	1	3	1	0	9	1	0	3	1	0	0	2021-09-06 04:13:09.227471	2021-09-06 04:13:09.227471
+43	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81000000000000005	2	20	14	1	30	2	13	2	9	72	180	1	1	47	2	2	2	2	1	0	4	2	1	2	1	1	0	1	0	1	0	1	0	1	2	2	2	0	2021-09-06 04:13:23.551378	2021-09-06 04:13:23.551378
+44	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	20.5	26	1	5	1	2	1	33	1	1	1	6	40	2	1	16	4	1	9	0	2	3	1	0	0	1	0	1	0	2	1	0	2	3	0	1	3	1	0	2021-09-06 04:13:44.591935	2021-09-06 04:13:44.591935
+45	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	586	6	2	1	2	1	2	2	2	3	2	29	918	10	4	20	1	2	1	3	2	0	0	2	7	1	0	1	2	2	2	0	0	6	0	1	0	4	0	2021-09-06 04:21:24.352496	2021-09-06 04:21:24.352496
+46	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	2	ASSAULT_RIFLE	16	2	2	2	4	5	3.14000000000000012	6	2	4.29999999999999982	1	80	24	6	54	31	2	2	2	3	0	2	5	0	0	2	1	0	1	2	1	0	0	0	0	1	2	2	0	2021-09-06 04:21:40.381543	2021-09-06 04:21:40.381543
+47	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	11	3	35	1	125	1	1	2	10	2	2	2	1	0	0	0	0	0	0	0	0	0	0	2	0	2	2	1	0	6	3	2	0	0	0	0	2021-09-06 04:22:42.764595	2021-09-06 04:22:42.764595
+48	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	2	2	16	1	3	1620	2	13	4	1	9	10	1818	1	2	49	1	0	1	27	1	1	3	4	0	0	0	3	2	2	0	0	2	2	3	1	2	3	0	2021-09-06 04:22:46.863401	2021-09-06 04:22:46.863401
+49	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	30	13	1	5	1	62	0	3	2	0	1	80	1	7	2	1	1	5	2	1	2	2	0	2	3	0	1	1	0	19	1	0	0	1	4	0	2	0	0	2021-09-06 04:23:01.641628	2021-09-06 04:23:01.641628
+50	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	90	SNIPER	0.810000000000000053	21	16	8	3	450	0	2	7	15	1	12	1818	500	2	49	5	2	1	2	0	1	1	1	1	0	0	2	6	2	2	0	0	2	2	1	2	1	0	2021-09-06 04:23:35.951147	2021-09-06 04:23:35.951147
+51	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	115	17	2	34	1	80	1	53	4	10	3	20	918	10	4	2	2	1	0	0	2	10	2	1	1	0	1	0	2	1	1	0	0	3	2	0	2	7	0	2021-09-06 04:27:50.496627	2021-09-06 04:27:50.496627
+52	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	461	31	1	1	1	30	2	13	10	4.29999999999999982	1	2	818	2	21	19	2	4	2	2	1	1	1	2	2	0	2	3	0	2	3	0	0	0	1	1	3	3	0	2021-09-06 04:28:20.129768	2021-09-06 04:28:20.129768
+53	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	147	SHOTGUN	70	62	2	2	2	80	1	53	2	4.29999999999999982	2	10	918	21	3	2	0	1	2	3	2	0	3	2	0	1	2	1	3	2	2	0	0	0	0	1	0	0	0	2021-09-07 10:38:58.671814	2021-09-07 10:38:58.671814
+54	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	1	PISTOL	20.5	2	1	13	8	20	0	33	2	2	6	1	40	1	3	2	0	0	2	2	2	1	34	2	0	0	1	2	0	0	0	0	1	9	3	0	2	2	0	2021-09-07 10:39:50.158031	2021-09-07 10:39:50.158031
+55	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	3	MACHINE_PISTOL	20	13	1	2	5	20	0	42	1	0	9	290	40	1	3	3	2	1	1	2	0	11	1	0	1	0	2	2	0	1	1	0	7	2	0	1	2	2	0	2021-09-07 10:40:02.18301	2021-09-07 10:40:02.18301
+56	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	47	SHOTGUN	2	6	2	34	3	1	0	309	4	4.29999999999999982	2	1	918	82	1	59	1	1	1	1	0	2	0	1	1	2	2	0	2	0	0	0	2	2	1	1	3	1	0	2021-09-07 10:48:10.468071	2021-09-07 10:48:10.468071
+57	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	112	2	2	34	1	147	0	1	2	17	2	26	12	10	3	62	2	0	7	2	2	11	7	0	0	2	0	1	2	3	0	0	1	3	1	0	1	2	0	2021-09-07 10:54:48.821086	2021-09-07 10:54:48.821086
+58	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1	MACHINE_PISTOL	30.8099999999999987	1	1	2	3	108	2	1	8	4.29999999999999982	2	180	818	20	6	14	17	0	2	2	5	2	2	11	1	0	0	0	7	2	1	0	4	2	0	1	2	4	0	2021-09-07 10:55:09.614216	2021-09-07 10:55:09.614216
+59	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	220	ASSAULT_RIFLE	16	1	2	14	16	1	3.14000000000000012	1	2	4.29999999999999982	2	1	77	4	6	2	3	0	1	1	22	2	0	14	0	2	5	7	1	2	2	0	0	2	0	0	3	0	0	2021-09-07 10:55:32.641118	2021-09-07 10:55:32.641118
+60	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	458	ASSAULT_RIFLE	1	8	2	14	2	2	3.14000000000000012	1	2	4.29999999999999982	18	2	75	3	6	1	1	1	1	3	1	2	0	1	2	0	0	0	0	0	0	0	0	2	0	2	0	0	0	2021-09-07 10:56:19.699137	2021-09-07 10:56:19.699137
+61	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	2	ASSAULT_RIFLE	17	8	2	3	2	5	1	2	1	15	5	376	2	2	52	38	0	0	3	1	2	1	0	2	4	0	1	0	1	0	0	0	0	2	2	40	2	1	0	2021-09-07 10:57:40.930179	2021-09-07 10:57:40.930179
+62	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	1	SNIPER	2	7	2	19	3	2	2	3	4	1	8	16	1	500	8	54	2	0	2	1	0	3	4	1	19	0	1	3	1	1	0	0	0	19	4	1	2	0	0	2021-09-07 10:57:55.801265	2021-09-07 10:57:55.801265
+63	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	3717	LIGHT_MACHINE_GUN	3.81000000000000005	3278	20	21	3	30	0	2	2	3	33	2	818	149	186	1	2	9	2	8	7	0	2	3	49	2	1	2	0	0	2	0	9	0	2	0	0	1	0	2021-09-07 10:58:07.221686	2021-09-07 10:58:07.221686
+64	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	1	PISTOL	0	7	6	11	1	35	1	2	1	0	2	23	2	2	18	20	0	2	1	2	4	0	1	17	1	1	7	0	1	2	1	0	6	1	0	13	2	0	0	2021-09-07 10:58:18.857191	2021-09-07 10:58:18.857191
+65	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	6	2	34	1	1	0	1	7	4.29999999999999982	1	1	1390	1	1	20	0	1	1	0	1	1	1	1	0	1	1	0	1	1	0	0	1	0	1	0	0	1	0	2021-09-07 11:35:16.81688	2021-09-07 11:35:16.81688
+66	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	92	SNIPER	0.810000000000000053	12	16	19	3	1	0	13	1	1	9	18	1818	500	3	49	1	1	1	1	0	1	1	1	0	1	0	0	1	1	1	0	1	0	1	1	1	0	0	2021-09-07 11:37:13.543964	2021-09-07 11:37:13.543964
+67	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	1	SHOTGUN	70	1	2	34	1	1	1	53	2	4.29999999999999982	3	10	918	10	1	34	0	0	1	1	0	1	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-07 11:38:57.601084	2021-09-07 11:38:57.601084
+68	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	124	PISTOL	20.5	9	1	1	1	20	0	43	1	0	1	1	40	2	3	16	1	0	1	1	1	1	1	1	1	0	0	0	1	1	1	0	1	0	0	1	1	1	0	2021-09-07 11:40:06.99814	2021-09-07 11:40:06.99814
+69	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	14	13	1	8	1	20	1	35	1	0	3	1	40	1	3	16	0	1	1	1	1	0	1	1	1	1	1	0	0	1	1	0	1	1	1	1	0	0	0	2021-09-07 11:41:52.537095	2021-09-07 11:41:52.537095
+70	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	66	SHOTGUN	1	7	2	1	1	80	0	53	2	5	2	10	918	10	1	20	1	1	0	1	1	0	0	1	0	1	1	0	0	0	1	0	1	1	1	1	1	0	0	2021-09-07 13:53:42.597594	2021-09-07 13:53:42.597594
+71	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81000000000000005	2564	20	1	1	30	0	24	13	4.29999999999999982	44	180	818	53	40	1	1	0	1	1	1	0	1	0	1	0	1	1	1	1	0	0	1	1	0	0	1	1	0	2021-09-07 13:54:19.914426	2021-09-07 13:54:19.914426
+72	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	136	6	2	34	1	80	1	53	1	4.29999999999999982	2	1	1	10	1	1	1	0	1	1	1	1	0	1	1	0	1	1	1	0	0	0	0	1	1	0	1	1	0	2021-09-07 14:06:46.882602	2021-09-07 14:06:46.882602
+73	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81000000000000005	999	20	22	1	30	0	13	7	4.29999999999999982	33	180	818	20	40	140	1	1	1	1	0	1	1	1	0	0	1	1	1	0	1	0	0	0	1	0	1	1	0	2021-09-07 14:07:05.080684	2021-09-07 14:07:05.080684
+74	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	75	PISTOL	20.5	9	1	1	1	1	0	33	1	0	1	80	40	4	7	19	2	0	1	1	0	2	1	2	1	0	1	1	0	0	0	0	1	2	1	2	1	0	0	2021-09-07 14:07:13.03584	2021-09-07 14:07:13.03584
+75	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	220	ASSAULT_RIFLE	4.23000000000000043	8	2	14	1	5	3.14000000000000012	1	3	4.29999999999999982	11	80	2	2	1	1	0	1	1	1	1	1	4	0	1	1	1	1	0	1	0	0	1	1	1	0	2	2	0	2021-09-07 14:08:06.897732	2021-09-07 14:08:06.897732
+76	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	1	MACHINE_PISTOL	10.5	13	1	5	1	20	1	33	1	1	1	80	2	2	1	1	1	1	2	1	1	1	1	1	1	2	2	0	1	2	1	0	0	2	1	0	1	1	0	2021-09-07 14:08:08.725752	2021-09-07 14:08:08.725752
+77	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81000000000000005	1	20	14	1	30	1	1	8	4.29999999999999982	33	353	818	45	100	140	1	1	1	1	0	1	1	2	1	0	1	0	1	1	1	0	0	1	0	0	2	2	0	2021-09-07 14:09:34.865872	2021-09-07 14:09:34.865872
+78	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	1	SUB_MACHINE_GUN	1	1	1	14	1	84	0	30	3	4.29999999999999982	1	1	818	20	10	6	1	1	1	2	1	1	1	1	1	1	1	1	0	1	1	0	4	0	1	1	1	0	0	2021-09-07 14:09:53.320895	2021-09-07 14:09:53.320895
+79	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	2	PISTOL	20.5	21	1	5	3	20	1	33	1	0	8	276	40	2	4	16	2	1	1	1	0	0	1	1	2	1	1	1	2	1	1	0	0	0	1	0	1	0	0	2021-09-07 14:10:19.630963	2021-09-07 14:10:19.630963
+80	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	154	SHOTGUN	70	6	2	8	1	2	0	2	5	4.29999999999999982	8	2	918	10	2	20	2	2	87	1	1	9	0	8	9	4	0	0	3	1	0	0	2	0	1	6	1	1	0	2021-09-07 15:34:49.372159	2021-09-07 15:34:49.372159
+81	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1082	1	2	34	2	329	0	53	2	4.29999999999999982	2	81	918	2	3	2	8	2	1	2	1	1	1	1	1	3	1	1	0	4	2	0	4	4	1	4	2	1	0	2021-09-07 15:44:26.523537	2021-09-07 15:44:26.523537
+82	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	131	120	1	14	1	2	2	13	2	1	5	180	2	1	6	58	1	2	1	3	0	0	2	1	3	1	1	0	1	3	4	0	0	1	0	3	5	2	0	2021-09-07 15:47:20.881538	2021-09-07 15:47:20.881538
+83	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	1	2	1	1	80	1	1	5	2	2	2	918	7	11	20	2	3	7	0	6	1	2	0	18	0	2	3	2	1	0	0	2	2	4	0	0	2	0	2021-09-11 02:31:04.075813	2021-09-11 02:31:04.075813
+84	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	1	MACHINE_PISTOL	2	50	1	16	2	20	0	1	2	2	5	250	2	5	2	16	1	2	2	1	2	71	0	2	2	0	5	1	0	0	3	0	4	0	30	1	3	2	0	2021-09-11 02:31:11.598437	2021-09-11 02:31:11.598437
+85	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	400	SUB_MACHINE_GUN	2	31	1	14	2	2	0	18	1	1	2	180	818	76	10	2	3	0	7	0	22	3	1	21	1	2	0	1	3	6	0	0	4	11	0	2	0	17	0	2021-09-11 22:08:15.984399	2021-09-11 22:08:15.984399
+86	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	166	SHOTGUN	2	26	2	2	2	80	3	53	2	2	2	15	2778	10	7	37	1	1	2	0	4	3	10	1	0	1	2	0	4	2	9	0	0	1	0	0	2	1	0	2021-09-11 22:34:57.993684	2021-09-11 22:34:57.993684
+87	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	101	6	2	1	1	80	0	53	2	4.29999999999999982	2	10	918	1	1	1	1	1	0	1	1	0	1	1	1	1	1	0	1	1	0	0	1	0	1	0	1	1	0	2021-09-11 22:43:30.863845	2021-09-11 22:43:30.863845
+88	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	140	2	2	0	53	7	31	3	10	1	17	5	20	1	2	2	1	2	2	0	1	3	2	2	2	0	0	3	0	3	8	3	2	0	0	0	2021-09-14 23:05:31.476199	2021-09-14 23:05:31.476199
+89	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	1	16	16	19	3	82	8	60	1	4.29999999999999982	17	10	1818	2	2	29	2	12	0	0	2	4	4	3	1	1	2	4	2	9	2	0	0	10	2	0	2	0	0	2021-09-14 23:08:43.094794	2021-09-14 23:08:43.094794
+90	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	2	SHOTGUN	7	46	2	34	1	80	0	53	6	4.29999999999999982	5	10	2	10	7	811	0	0	0	0	0	0	0	0	0	4	4	9	2	4	0	0	2	0	0	2	2	1	0	2021-09-14 23:18:08.304107	2021-09-14 23:18:08.304107
+91	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	2	6	2	1	146	2	2	1	4	4	2	8	2	5	20	1	2	2	8	6	2	1	12	0	1	3	0	1	0	1	0	2	0	1	1	1	15	0	2021-09-14 23:18:30.652122	2021-09-14 23:18:30.652122
+92	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	1	6	2	34	1	118	0	53	2	1	2	10	1	12	3	20	1	0	1	1	1	1	1	1	1	1	0	0	0	1	0	0	0	0	1	0	1	0	0	2021-09-14 23:35:49.479445	2021-09-14 23:35:49.479445
+93	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	75	PISTOL	38	1	1	5	1	1	0	1	1	0	3	93	40	3	3	23	1	0	1	1	1	1	0	0	1	1	1	1	0	1	1	0	0	0	1	1	1	1	0	2021-09-14 23:35:59.910515	2021-09-14 23:35:59.910515
+94	90	10	0	0	90	40	9	0	COMMON	m3.yml	SHOTGUN	3	GBNT-3	M3	28	40	SHOTGUN	125	6	2	34	1	144	0	53	2	1	1	1	918	10	1	1	1	1	1	1	0	0	1	0	1	0	0	0	0	0	0	0	0	1	0	0	1	0	0	2021-09-14 23:39:15.773517	2021-09-14 23:39:15.773517
+95	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	6	2	1	1	1	2	1	2	6	2	10	1719	1	3	84	1	2	1	2	1	1	0	1	0	2	1	0	1	2	1	0	1	1	0	0	1	0	0	2021-09-14 23:42:41.011863	2021-09-14 23:42:41.011863
+96	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.8099999999999987	46	1	14	1	30	1	13	3	4.29999999999999982	2	8	2	20	1	19	2	8	0	2	1	1	2	2	2	1	0	2	43	3	1	0	2	0	0	1	3	0	0	2021-09-14 23:42:59.549552	2021-09-14 23:42:59.549552
+97	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	1	2	34	3	80	0	53	2	10	4	198	2563	10	7	4	1	2	2	1	2	0	2	3	1	2	1	1	2	2	0	0	1	5	0	2	0	0	0	2021-09-14 23:43:28.098499	2021-09-14 23:43:28.098499
+98	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	2	1	2	19	3	450	0	13	12	4.29999999999999982	22	2	1818	6001	3	159	3	1	7	3	2	0	1	2	2	8	0	1	2	1	3	0	1	2	1	1	2	0	0	2021-09-14 23:43:44.450572	2021-09-14 23:43:44.450572
+99	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	75	PISTOL	20.5	2	1	5	1	20	0	33	2	2	2	80	329	6	1	33	3	1	1	1	2	0	0	1	2	0	2	0	3	1	2	0	2	2	2	2	0	1	0	2021-09-14 23:44:17.215558	2021-09-14 23:44:17.215558
+100	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	127	SHOTGUN	70	12	2	34	18	80	2	7	2	7	2	10	918	10	3	5	1	2	2	1	0	1	1	1	0	4	1	1	2	2	4	0	0	1	0	4	2	6	0	2021-09-14 23:44:37.180693	2021-09-14 23:44:37.180693
+101	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	51	13	1	5	1	2	1	33	8	1	3	80	144	1	3	72	4	2	4	2	2	1	3	0	0	2	3	2	1	2	1	0	0	1	1	2	1	2	0	2021-09-14 23:44:50.870736	2021-09-14 23:44:50.870736
+102	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1373	MACHINE_PISTOL	30.8099999999999987	31	1	1	2	30	2	13	2	4	12	1	2774	72	1	2	13	2	0	2	0	1	1	2	6	3	0	2	4	1	0	0	1	2	0	1	1	2	0	2021-09-14 23:44:58.487728	2021-09-14 23:44:58.487728
+103	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	400	SUB_MACHINE_GUN	2	89	1	62	1	30	0	13	3	33	2	180	1	67	10	2	1	3	15	2	2	2	1	9	2	2	0	3	0	2	4	0	2	0	2	2	2	2	0	2021-09-14 23:45:13.896704	2021-09-14 23:45:13.896704
+104	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	195	MACHINE_PISTOL	10.5	2	1	2	2	1	2	48	1	2	12	1	144	2	2	2	2	6	0	0	3	1	1	8	1	0	1	0	2	2	1	0	1	2	1	1	0	1	0	2021-09-14 23:45:23.846735	2021-09-14 23:45:23.846735
+105	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	1	115	2	1	3	1540	1	23	4	4.29999999999999982	9	10	1818	3138	3	7	0	1	1	0	0	4	1	2	1	0	1	2	7	1	0	0	5	2	0	4	10	1	0	2021-09-14 23:45:34.064608	2021-09-14 23:45:34.064608
 \.
 
 
@@ -7233,28 +7338,67 @@ COPY public.skill_usage (id, player_id, skill_name, skill_level) FROM stdin;
 22	1	cmine	0
 23	1	recon	0
 24	96	ads	0
-25	96	stealth	0
 26	96	summon	0
 27	96	xray	0
 30	96	intimidation	0
 31	96	cryo	0
 32	96	flash	0
 33	96	ts	0
-34	96	lb	0
-35	96	suture	0
 37	96	emp	0
 38	96	chaff	0
-39	96	sensor	0
-40	96	ubs	0
-41	96	ubf	0
-42	96	gm	0
 43	96	limb	0
-44	96	smine	0
 45	96	cmine	0
 46	96	recon	0
 29	96	claymore	0.5
 28	96	feign	0.5
 36	96	as	0.5
+25	96	stealth	0.5
+39	96	sensor	0.5
+40	96	ubs	0.5
+41	96	ubf	0.5
+42	96	gm	0.5
+44	96	smine	0.5
+34	96	lb	0.5
+35	96	suture	0.5
+47	97	ts	0
+48	97	lb	0
+49	97	suture	0
+50	97	as	0
+51	97	emp	0
+52	97	chaff	0
+53	97	sensor	0
+54	97	ubs	0
+55	97	ubf	0
+56	97	gm	0
+57	97	limb	0
+58	97	claymore	0
+59	97	smine	0
+60	97	cmine	0
+61	97	xray	0
+62	97	recon	0
+63	98	ads	0
+64	98	stealth	0
+65	98	summon	0
+66	98	xray	0
+67	98	feign	0
+68	98	claymore	0
+69	98	intimidation	0
+70	98	cryo	0
+71	98	flash	0
+72	98	ts	0
+73	98	lb	0
+74	98	suture	0
+75	98	as	0
+76	98	emp	0
+77	98	chaff	0
+78	98	sensor	0
+79	98	ubs	0
+80	98	ubf	0
+81	98	gm	0
+82	98	limb	0
+83	98	smine	0
+84	98	cmine	0
+85	98	recon	0
 \.
 
 
@@ -7325,46 +7469,6 @@ COPY public.zone (id, zone_virtual_number, zone_start, zone_end, zone_name, life
 --
 
 COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_arg2, zone_arg3, zone_yaml) FROM stdin;
-748	1	M	0	112	750	5	\N
-749	1	M	0	112	754	5	\N
-750	1	M	0	112	757	5	\N
-751	1	M	0	112	761	5	\N
-752	1	M	0	112	764	5	\N
-753	1	M	0	112	769	5	\N
-754	1	M	0	112	774	5	\N
-755	1	M	0	112	779	5	\N
-756	1	M	0	112	784	5	\N
-757	1	M	0	112	785	5	\N
-758	1	M	0	112	788	5	\N
-759	1	M	0	112	791	5	\N
-760	1	M	0	112	794	5	\N
-761	1	M	0	112	797	5	\N
-762	1	M	0	112	800	5	\N
-763	1	M	0	112	803	5	\N
-764	1	M	0	112	806	5	\N
-765	1	M	0	112	809	5	\N
-766	1	M	0	112	812	5	\N
-767	1	M	0	112	815	5	\N
-768	1	M	0	113	750	5	\N
-769	1	M	0	113	754	5	\N
-770	1	M	0	113	757	5	\N
-771	1	M	0	113	761	5	\N
-772	1	M	0	113	764	5	\N
-773	1	M	0	113	769	5	\N
-774	1	M	0	113	774	5	\N
-775	1	M	0	113	779	5	\N
-776	1	M	0	113	784	5	\N
-777	1	M	0	113	785	5	\N
-778	1	M	0	113	788	5	\N
-779	1	M	0	113	791	5	\N
-780	1	M	0	113	794	5	\N
-781	1	M	0	113	797	5	\N
-782	1	M	0	113	800	5	\N
-783	1	M	0	113	803	5	\N
-784	1	M	0	113	806	5	\N
-785	1	M	0	113	809	5	\N
-786	1	M	0	113	812	5	\N
-787	1	M	0	113	815	5	\N
 565	1	M	0	600	143	1	\N
 566	1	M	0	601	147	8	\N
 567	1	M	0	602	143	1	\N
@@ -7508,6 +7612,46 @@ COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_
 705	1	M	0	107	730	1	\N
 706	1	M	0	107	731	1	\N
 707	1	M	0	107	732	1	\N
+788	1	M	0	112	750	5	\N
+789	1	M	0	112	754	5	\N
+790	1	M	0	112	757	5	\N
+791	1	M	0	112	761	5	\N
+792	1	M	0	112	764	5	\N
+793	1	M	0	112	769	5	\N
+794	1	M	0	112	774	5	\N
+795	1	M	0	112	779	5	\N
+796	1	M	0	112	784	5	\N
+797	1	M	0	112	785	5	\N
+798	1	M	0	112	788	5	\N
+799	1	M	0	112	791	5	\N
+800	1	M	0	112	794	5	\N
+801	1	M	0	112	797	5	\N
+802	1	M	0	112	800	5	\N
+803	1	M	0	112	803	5	\N
+804	1	M	0	112	806	5	\N
+805	1	M	0	112	809	5	\N
+806	1	M	0	112	812	5	\N
+807	1	M	0	112	815	5	\N
+808	1	M	0	113	750	5	\N
+809	1	M	0	113	754	5	\N
+810	1	M	0	113	757	5	\N
+811	1	M	0	113	761	5	\N
+812	1	M	0	113	764	5	\N
+813	1	M	0	113	769	5	\N
+814	1	M	0	113	774	5	\N
+815	1	M	0	113	779	5	\N
+816	1	M	0	113	784	5	\N
+817	1	M	0	113	785	5	\N
+818	1	M	0	113	788	5	\N
+819	1	M	0	113	791	5	\N
+820	1	M	0	113	794	5	\N
+821	1	M	0	113	797	5	\N
+822	1	M	0	113	800	5	\N
+823	1	M	0	113	803	5	\N
+824	1	M	0	113	806	5	\N
+825	1	M	0	113	809	5	\N
+826	1	M	0	113	812	5	\N
+827	1	M	0	113	815	5	\N
 \.
 
 
@@ -7557,14 +7701,14 @@ SELECT pg_catalog.setval('public.class_engineer_engineer_id_seq', 1, false);
 -- Name: class_ghost_ghost_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.class_ghost_ghost_id_seq', 1, true);
+SELECT pg_catalog.setval('public.class_ghost_ghost_id_seq', 2, true);
 
 
 --
 -- Name: class_marine_marine_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.class_marine_marine_id_seq', 1, false);
+SELECT pg_catalog.setval('public.class_marine_marine_id_seq', 1, true);
 
 
 --
@@ -7676,7 +7820,7 @@ SELECT pg_catalog.setval('public.mini_gunner_sentinel_id_seq', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_id_seq', 93, true);
+SELECT pg_catalog.setval('public.mob_equipment_id_seq', 95, true);
 
 
 --
@@ -7767,7 +7911,7 @@ SELECT pg_catalog.setval('public.object_weapon_id_seq', 5, true);
 -- Name: player_base_ability_pba_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_base_ability_pba_id_seq', 2, true);
+SELECT pg_catalog.setval('public.player_base_ability_pba_id_seq', 4, true);
 
 
 --
@@ -7795,14 +7939,14 @@ SELECT pg_catalog.setval('public.player_flags_id_seq', 1, false);
 -- Name: player_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_id_seq', 96, true);
+SELECT pg_catalog.setval('public.player_id_seq', 98, true);
 
 
 --
 -- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_object_id_seq', 19, true);
+SELECT pg_catalog.setval('public.player_object_id_seq', 152, true);
 
 
 --
@@ -7844,7 +7988,7 @@ SELECT pg_catalog.setval('public.player_skill_usage_id_seq', 1, false);
 -- Name: rifle_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 1, false);
+SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 3847, true);
 
 
 --
@@ -7858,7 +8002,7 @@ SELECT pg_catalog.setval('public.rifle_index_id_seq', 29, true);
 -- Name: rifle_instance_rifle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rifle_instance_rifle_id_seq', 22, true);
+SELECT pg_catalog.setval('public.rifle_instance_rifle_id_seq', 105, true);
 
 
 --
@@ -7949,7 +8093,7 @@ SELECT pg_catalog.setval('public.skill_trees_id_seq', 16, true);
 -- Name: skill_usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.skill_usage_id_seq', 46, true);
+SELECT pg_catalog.setval('public.skill_usage_id_seq', 85, true);
 
 
 --
@@ -7977,7 +8121,7 @@ SELECT pg_catalog.setval('public.world_configuration_start_rooms_id_seq', 4, tru
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_data_id_seq', 787, true);
+SELECT pg_catalog.setval('public.zone_data_id_seq', 827, true);
 
 
 --

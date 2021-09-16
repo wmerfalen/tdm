@@ -6,6 +6,7 @@
 #include "../orm/player-base-ability.hpp"
 #include "../pq.hpp"
 #include "../sql.hpp"
+#include "../levels.hpp"
 #include "../orm/player-skill-points.hpp"
 #include "../orm/player-skill-usage.hpp"
 #include "../orm/skill-trees.hpp"
@@ -28,6 +29,11 @@ namespace mods::players::db_load {
 	void game_entry(player_ptr_t& player) {
 		mods::orm::load_player_rifle_attachments(player);
 		mods::orm::inventory::feed_player(player);
+		/** A nasty little hack to level up the player if they somehow
+		 * have a surplus of exp that hasn't been used towards
+		 * leveling up
+		 */
+		mods::levels::gain_exp(player,0);
 	}
 
 	void sync_player_with_class_skills(const uint64_t& player_id,const std::string& player_class) {

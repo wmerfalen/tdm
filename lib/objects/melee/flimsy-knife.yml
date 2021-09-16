@@ -3,10 +3,10 @@
 # type: BRASS_KNUCKLES
 chance_to_injure: 5 #float, out of 100
 critical_chance: 2 #int16_t, out of 100
-base_damage: 1 #float, out of 100
+base_damage: 8 #float, out of 100
 disorient_amount: 0 #float, out of 100
-damage_dice_count: 1 #int16_t, number of dice
-damage_dice_sides: 3 #int16_t, dice sides
+damage_dice_count: 2 #int16_t, number of dice
+damage_dice_sides: 6 #int16_t, dice sides
 incendiary_damage: 0 #int16_t, damage
 explosive_damage: 0 #int16_t, damage
 shrapnel_damage: 0 #int16_t, damage

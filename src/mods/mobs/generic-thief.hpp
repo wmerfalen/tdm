@@ -124,12 +124,13 @@ namespace mods::mobs {
 			/**===================*/
 			int8_t determine_heading_from_found_vehicles();
 			void clear_scanned_items();
+			void increment_last_attack_significance();
 
 			/**================*/
 			/** combat helpers */
 			/**================*/
-			void melee_attack_within_range();
-			void move_closer_to_target();
+			bool melee_attack_within_range();
+			int8_t move_closer_to_target();
 
 			/** state management */
 			void remember_item(const mods::scan::vec_player_data_element& data);

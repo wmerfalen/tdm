@@ -274,6 +274,7 @@ namespace mods::chargen {
 			default:
 				break;
 		}
+		mods::levels::gain_exp(player,1);
 
 		return {1,"success"};
 	}

@@ -41,91 +41,91 @@ namespace mods::levels {
 				return 1;
 
 			case  2:
-				return 2500;
+				return 250;
 
 			case  3:
-				return 5000;
+				return 500;
 
 			case  4:
-				return 10000;
+				return 1000;
 
 			case  5:
-				return 20000;
+				return 2000;
 
 			case  6:
-				return 40000;
+				return 4000;
 
 			case  7:
-				return 60000;
+				return 6000;
 
 			case  8:
-				return 90000;
+				return 9000;
 
 			case  9:
-				return 135000;
+				return 13500;
 
 			case 10:
-				return 250000;
+				return 25000;
 
 			case 11:
-				return 375000;
+				return 37500;
 
 			case 12:
-				return 750000;
+				return 75000;
 
 			case 13:
-				return 1125000;
+				return 112500;
 
 			case 14:
-				return 1500000;
+				return 150000;
 
 			case 15:
-				return 1875000;
+				return 187500;
 
 			case 16:
-				return 2250000;
+				return 225000;
 
 			case 17:
-				return 2625000;
+				return 262500;
 
 			case 18:
-				return 3000000;
+				return 300000;
 
 			case 19:
-				return 3375000;
+				return 337500;
 
 			case 20:
-				return 3750000;
+				return 375000;
 
 			case 21:
-				return 4000000;
+				return 400000;
 
 			case 22:
-				return 4300000;
+				return 430000;
 
 			case 23:
-				return 4600000;
+				return 460000;
 
 			case 24:
-				return 4900000;
+				return 490000;
 
 			case 25:
-				return 5200000;
+				return 520000;
 
 			case 26:
-				return 5500000;
+				return 550000;
 
 			case 27:
-				return 5950000;
+				return 595000;
 
 			case 28:
-				return 6400000;
+				return 640000;
 
 			case 29:
-				return 6850000;
+				return 685000;
 
 			case 30:
-				return 7400000;
+				return 740000;
 
 			/* add new levels here */
 			default:
@@ -699,6 +699,8 @@ namespace mods::levels {
 		report_advances(s);
 		player->hp() = s[STAT_HP];
 		player->max_hp() = s[STAT_HP];
+		player->mana() = s[STAT_WISDOM] + s[STAT_INTELLIGENCE];
+		player->max_mana() = player->mana();
 		player->move() += s[STAT_CONSTITUTION];
 		player->max_move() = player->move();
 		player->strength() = s[STAT_STRENGTH];

@@ -135,6 +135,9 @@ namespace mods::mobs {
 					list->clear();
 				}
 			}
+			bool is_fighting() {
+				return player_ptr->char_specials().fighting != nullptr;
+			}
 
 		protected:
 			std::map<uint16_t,uint16_t> m_should_do;

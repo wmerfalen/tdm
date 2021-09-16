@@ -317,7 +317,6 @@ namespace mods {
 				return 0;
 			}
 			if(mods::rooms::is_peaceful(victim->room())) {
-				std::cerr << red_str("Not dispatching explosive_damage to peaceful room: ") << victim->room() << "\n";
 				return 0;
 			}
 			auto& attr = item->explosive()->attributes;

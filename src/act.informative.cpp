@@ -540,6 +540,7 @@ void list_one_char(char_data *i, char_data *ch) {
 		player->send(" (writing)");
 	}
 
+
 	if(i->drone) {
 		player->send(" is idling here.");
 	} else {
@@ -576,6 +577,10 @@ void list_one_char(char_data *i, char_data *ch) {
 
 	if(AFF_FLAGGED(i, AFF_SANCTUARY)) {
 		act(" ...$e glows with a bright light!", FALSE, i, 0, ch, TO_VICT);
+	}
+	if(FIGHTING(i)) {
+		/** TODO: if has been in combat/sniped by i, show this */
+		player->send(" {red}[!]{/red}");
 	}
 	player->send("\r\n");
 	if(ch->contract) {

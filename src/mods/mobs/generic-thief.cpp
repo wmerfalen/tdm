@@ -7,8 +7,9 @@
 #include "../scan.hpp"
 #include "../calc-visibility.hpp"
 
+#define  __MENTOC_MODS_MOBS_generic_thief_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_generic_thief_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n";
+#define m_debug(a) if(this->is_fighting()){ mentoc_prefix_debug("m|m|mps") << a << "\n"; }
 #else
 #define m_debug(a) ;;
 #endif
@@ -58,7 +59,7 @@ namespace mods::mobs {
 			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
 			if(should_fire == -1) {
 				/** FIXME */
-				m_debug("[stub] should_fire is -1, choose random direction");
+				//m_debug("[stub] should_fire is -1, choose random direction");
 			}
 			return should_fire;
 		}
@@ -77,7 +78,7 @@ namespace mods::mobs {
 		return m_targets;
 	}
 	void generic_thief::create(const uuid_t& mob_uuid, std::string_view targets) {
-		m_debug("generic_thief create on uuid:" << mob_uuid);
+		//m_debug("generic_thief create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
 			log("SYSERR: did not find player to populate generic_thief with: %d",mob_uuid);
@@ -98,7 +99,7 @@ namespace mods::mobs {
 		m_debug("##################################################################################" <<
 		        "[generic_thief] enemy spotted:" << room << "\n" <<
 		        "##################################################################################");
-		this->spray(player_ptr->get_watching());
+		//this->spray(player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}
 	void generic_thief::set_variation(const std::string& v) {
@@ -173,8 +174,6 @@ namespace mods::mobs {
 		using de = damage_event_t;
 		static const std::vector<de> pacify_events = {
 			de::TARGET_DEAD_EVENT,
-			de::TARGET_IN_PEACEFUL_ROOM_EVENT,
-			de::YOURE_IN_PEACEFUL_ROOM,
 		};
 		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const uuid_t& player) {
 			if(!this) {
@@ -213,19 +212,16 @@ namespace mods::mobs {
 			}
 			auto weapon = player_ptr->primary();
 
-			if(player_ptr->room() != attacker->room()) {
-				if(mods::calc_visibility::roll_victim_spots_attacker(player_ptr,attacker,feedback)) {
-					m_debug("generic thief (as victim) spots attacker!");
-					auto decision = feedback.from_direction;
-					move_to(decision);
-					set_heading(decision);
-				} else {
-					m_debug("generic thief (as victim) ***DOES NOT*** spot attacker!");
-				}
+			this->attacked(feedback);
+			if(player_ptr->room() != m_last_attacker->room()) {
+				m_debug("Moving toward sniiper..." << dirstr(feedback.from_direction));
+				move_to(feedback.from_direction);
 			}
-			if(player_ptr->room() == attacker->room()) {
-				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,attacker);
+			if(player_ptr->room() == m_last_attacker->room()) {
+				m_debug("attacking...");
+				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,m_last_attacker);
 			}
+			btree_hostile();
 		});
 
 		static const std::vector<de> desperation_move = {
@@ -409,6 +405,7 @@ namespace mods::mobs {
 		if(p) {
 			m_last_attacker = p;
 			m_attackers.emplace_front(p);
+			player_ptr->char_specials().fighting = p->cd();
 		}
 	}
 	player_ptr_t generic_thief::get_next_attacking_priority() {
@@ -417,7 +414,10 @@ namespace mods::mobs {
 		}
 		return nullptr;
 	}
-	void generic_thief::melee_attack_within_range() {
+	void generic_thief::increment_last_attack_significance() {
+
+	}
+	bool generic_thief::melee_attack_within_range() {
 		m_debug("melee_attack_within_range");
 		if(!m_weapon) {
 			m_weapon = player_ptr->primary();
@@ -430,39 +430,35 @@ namespace mods::mobs {
 			}
 		}
 		for(const auto& attacker : m_attackers) {
-			auto results = mods::scan::los_find(player_ptr,attacker);
-			if(results.found == false) {
-				if(m_attackers_last_direction.has_value()) {
-					move_to(m_attackers_last_direction.value());
-				}
-				continue;
-			}
-			m_debug("distance:" << results.distance << ", direction: " << results.direction);
-			if(results.distance > m_weapon->rifle()->attributes->max_range) {
-				move_to(results.direction);
-			}
-			m_attackers_last_direction = results.direction;
-
 			if(attacker->room() == player_ptr->room()) {
-				auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,player_ptr->primary(),attacker);
-				if(feedback.hits == 0 || feedback.damage == 0) {
-					continue;
-				}
+				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,player_ptr->primary(),attacker);
+				return true;
 			}
+
+			auto results = mods::scan::los_find(player_ptr,attacker);
+			move_to(results.direction);
+			m_debug("distance:" << results.distance << ", direction: " << results.direction);
+			m_attackers_last_direction = results.direction;
 		}
+		return false;
 	}
 
-	void generic_thief::move_closer_to_target() {
+	int8_t generic_thief::move_closer_to_target() {
 		uint8_t loops = 1;
 		if(mods::rand::chance(CAR_THIEF_EXTRA_LOOP_CHANCE())) {
 			++loops;
 		}
 		for(int i =0; i < loops; ++i) {
 			auto results = mods::scan::los_find(player_ptr,m_last_attacker);
-			if(results.found && results.distance >= m_weapon->rifle()->attributes->max_range) {
+			if(results.found && m_last_attacker->room() != this->room()) {
 				move_to(m_attackers_last_direction.value());
 			}
 		}
+		if(m_last_attacker->room() == this->room()) {
+			return 0;
+		}
+		auto results = mods::scan::los_find(player_ptr,m_last_attacker);
+		return results.distance;
 	}
 	/*
 	void generic_thief::move_closer_to_vehicle() {
@@ -499,6 +495,7 @@ namespace mods::mobs {
 	}
 #endif
 	void generic_thief::clear_scanned_items() {
+		m_debug(red_str("I'm clearing my scanned items"));
 		m_scanned_items.clear();
 	}
 	void generic_thief::remember_item(const mods::scan::vec_player_data_element& data) {
