@@ -7421,7 +7421,7 @@ get_id	db.h	/^		int64_t get_id() const {$/;"	kind:function	line:218	struct:zone_
 get_id_by_name	db.cpp	/^long get_id_by_name(const char *name) {$/;"	kind:function	line:2148	signature:(const char *name)
 get_iday	mods/date-time.cpp	/^	uint8_t get_iday() {$/;"	kind:function	line:108	namespace:mods::date_time	signature:()
 get_iday	mods/js.cpp	/^		static duk_ret_t get_iday(duk_context *ctx) {$/;"	kind:function	line:136	namespace:mods::js	signature:(duk_context *ctx)
-get_idle_room_vnum	mods/world-configuration.cpp	/^	int get_idle_room_vnum() {$/;"	kind:function	line:95	namespace:mods::world_conf	signature:()
+get_idle_room_vnum	mods/world-configuration.cpp	/^	int get_idle_room_vnum() {$/;"	kind:function	line:94	namespace:mods::world_conf	signature:()
 get_ihour	mods/date-time.cpp	/^	uint8_t get_ihour() {$/;"	kind:function	line:105	namespace:mods::date_time	signature:()
 get_ihour	mods/js.cpp	/^		static duk_ret_t get_ihour(duk_context *ctx) {$/;"	kind:function	line:120	namespace:mods::js	signature:(duk_context *ctx)
 get_immortal_start_room_vnum	mods/world-configuration.cpp	/^	int get_immortal_start_room_vnum() {$/;"	kind:function	line:69	namespace:mods::world_conf	signature:()
@@ -7468,7 +7468,7 @@ get_next_attacking_priority	mods/mobs/mp-shotgunner.cpp	/^	player_ptr_t mp_shotg
 get_next_attacking_priority	mods/mobs/shoplifter.cpp	/^	player_ptr_t shoplifter::get_next_attacking_priority() {$/;"	kind:function	line:357	class:mods::mobs::shoplifter	signature:()
 get_node	mods/behaviour_tree.hpp	/^		node & get_node() const {$/;"	kind:function	line:41	struct:mods::behaviour_tree	access:public	signature:() const
 get_number	handler.cpp	/^int get_number(char **name) {$/;"	kind:function	line:817	signature:(char **name)
-get_obj_from_room	mods/world-configuration.cpp	/^		bool get_obj_from_room() {$/;"	kind:function	line:212	namespace:mods::world_conf::toggle	signature:()
+get_obj_from_room	mods/world-configuration.cpp	/^		bool get_obj_from_room() {$/;"	kind:function	line:211	namespace:mods::world_conf::toggle	signature:()
 get_obj_in_equip_vis	handler.cpp	/^struct obj_data *get_obj_in_equip_vis(char_data *ch, char *arg, int *number, struct obj_data *equipment[]) {$/;"	kind:function	line:1602	signature:(char_data *ch, char *arg, int *number, struct obj_data *equipment[])
 get_obj_in_list_num	handler.cpp	/^obj_data *get_obj_in_list_num(int num, struct obj_data *list) {$/;"	kind:function	line:843	signature:(int num, struct obj_data *list)
 get_obj_in_list_vis	handler.cpp	/^struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *number, struct obj_data *list) {$/;"	kind:function	line:1539	signature:(char_data *ch, char *name, int *number, struct obj_data *list)
@@ -12240,7 +12240,7 @@ set_found_item	mods/mobs/defiler.cpp	/^	void defiler::set_found_item(bool status
 set_found_item	mods/mobs/generic-thief.cpp	/^	void generic_thief::set_found_item(bool status) {$/;"	kind:function	line:485	class:mods::mobs::generic_thief	signature:(bool status)
 set_found_item	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::set_found_item(bool status) {$/;"	kind:function	line:429	class:mods::mobs::melee_combatant	signature:(bool status)
 set_found_item	mods/mobs/shoplifter.cpp	/^	void shoplifter::set_found_item(bool status) {$/;"	kind:function	line:429	class:mods::mobs::shoplifter	signature:(bool status)
-set_frozen_room	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_frozen_room(room_vnum room_id) {$/;"	kind:function	line:126	namespace:mods::world_conf	signature:(room_vnum room_id)
+set_frozen_room	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_frozen_room(room_vnum room_id) {$/;"	kind:function	line:125	namespace:mods::world_conf	signature:(room_vnum room_id)
 set_ghost	mods/player.cpp	/^	void player::set_ghost(std::shared_ptr<mods::classes::ghost> g) {$/;"	kind:function	line:1816	class:mods::player	signature:(std::shared_ptr<mods::classes::ghost> g)
 set_god_mode	mods/player.cpp	/^	void player::set_god_mode(bool b) {$/;"	kind:function	line:1045	class:mods::player	signature:(bool b)
 set_heading	mods/mobs/mini-gunner.cpp	/^	void mini_gunner::set_heading(int dir) {$/;"	kind:function	line:222	class:mods::mobs::mini_gunner	signature:(int dir)
@@ -12250,8 +12250,8 @@ set_hp	structs.cpp	/^void obj_data::set_hp(int32_t amount) {$/;"	kind:function	l
 set_hunting	mods/mobs/mini-gunner.cpp	/^	void mini_gunner::set_hunting(const uuidvec_t& hunting) {$/;"	kind:function	line:275	class:mods::mobs::mini_gunner	signature:(const uuidvec_t& hunting)
 set_hunting	mods/mobs/smart-mob.cpp	/^	void smart_mob::set_hunting(const uuidvec_t& hunting) {$/;"	kind:function	line:198	class:mods::mobs::smart_mob	signature:(const uuidvec_t& hunting)
 set_id	db.h	/^		void set_id(int64_t i) {$/;"	kind:function	line:221	struct:zone_data	access:public	signature:(int64_t i)
-set_idle_room	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_idle_room(room_vnum room_id) {$/;"	kind:function	line:129	namespace:mods::world_conf	signature:(room_vnum room_id)
-set_immortal_start_room	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_immortal_start_room(room_vnum room_id) {$/;"	kind:function	line:133	namespace:mods::world_conf	signature:(room_vnum room_id)
+set_idle_room	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_idle_room(room_vnum room_id) {$/;"	kind:function	line:128	namespace:mods::world_conf	signature:(room_vnum room_id)
+set_immortal_start_room	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_immortal_start_room(room_vnum room_id) {$/;"	kind:function	line:132	namespace:mods::world_conf	signature:(room_vnum room_id)
 set_imp_mode	mods/player.cpp	/^	void player::set_imp_mode(bool b) {$/;"	kind:function	line:1048	class:mods::player	signature:(bool b)
 set_is_breaching	mods/object-utils.hpp	/^	void set_is_breaching(T& obj, P& player,int direction) {$/;"	kind:function	line:251	namespace:mods::object_utils	signature:(T& obj, P& player,int direction)
 set_is_installing	mods/object-utils.hpp	/^	void set_is_installing(T& obj, P& player,int direction) {$/;"	kind:function	line:258	namespace:mods::object_utils	signature:(T& obj, P& player,int direction)
@@ -12263,13 +12263,13 @@ set_logic	mods/behaviour_tree_node.hpp	/^			void set_logic(const callback_t& log
 set_marine	mods/player.cpp	/^	void player::set_marine(std::shared_ptr<mods::classes::marine> g) {$/;"	kind:function	line:1857	class:mods::player	signature:(std::shared_ptr<mods::classes::marine> g)
 set_max_amount	mods/affects.hpp	/^			void set_max_amount(TAffects affect, uint32_t max) {$/;"	kind:function	line:114	struct:mods::affects::dissolver	access:public	signature:(TAffects affect, uint32_t max)
 set_misc_pref	mods/player.hpp	/^			void set_misc_pref(misc_pref_enum_t bit,bool on_off) {$/;"	kind:function	line:706	struct:mods::player	access:public	signature:(misc_pref_enum_t bit,bool on_off)
-set_mortal_start_room	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_mortal_start_room(room_vnum room_id) {$/;"	kind:function	line:151	namespace:mods::world_conf	signature:(room_vnum room_id)
+set_mortal_start_room	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_mortal_start_room(room_vnum room_id) {$/;"	kind:function	line:150	namespace:mods::world_conf	signature:(room_vnum room_id)
 set_name	mods/builder.cpp	/^	void sandbox_data_t::set_name(std::string_view n) {$/;"	kind:function	line:580	class:mods::builder::sandbox_data_t	signature:(std::string_view n)
 set_name	mods/chat.cpp	/^	void channel::set_name(std::string_view name) {$/;"	kind:function	line:37	class:mods::chat::channel	signature:(std::string_view name)
 set_name	mods/player.cpp	/^	void player::set_name(std::string n) {$/;"	kind:function	line:618	class:mods::player	signature:(std::string n)
 set_node	mods/behaviour_tree.hpp	/^		void set_node(const node & btree_node){$/;"	kind:function	line:38	struct:mods::behaviour_tree	access:public	signature:(const node & btree_node)
 set_node_type	mods/behaviour_tree_node.hpp	/^			void set_node_type(const node_type_t& n) {$/;"	kind:function	line:119	struct:mods::behaviour_tree_node	access:public	signature:(const node_type_t& n)
-set_obj_from_room	mods/world-configuration.cpp	/^		void set_obj_from_room(bool b) {$/;"	kind:function	line:215	namespace:mods::world_conf::toggle	signature:(bool b)
+set_obj_from_room	mods/world-configuration.cpp	/^		void set_obj_from_room(bool b) {$/;"	kind:function	line:214	namespace:mods::world_conf::toggle	signature:(bool b)
 set_orm_list	mods/builder/slotted-builder.hpp	/^			void set_orm_list(orm_container_t* container) {$/;"	kind:function	line:73	struct:mods::builder::slotted_builder	access:public	signature:(orm_container_t* container)
 set_overhead_map_height	mods/player.hpp	/^			void set_overhead_map_height(uint8_t h) {$/;"	kind:function	line:634	struct:mods::player	access:public	signature:(uint8_t h)
 set_overhead_map_width	mods/player.hpp	/^			void set_overhead_map_width(uint8_t w) {$/;"	kind:function	line:628	struct:mods::player	access:public	signature:(uint8_t w)
@@ -12326,7 +12326,7 @@ set_title	limits.cpp	/^void set_title(player_ptr_t player, const char* title) {$
 set_title	mods/player.hpp	/^			void set_title(const std::string& t) {$/;"	kind:function	line:383	struct:mods::player	access:public	signature:(const std::string& t)
 set_type	mods/player.cpp	/^	void player::set_type(player_type_enum_t type) {$/;"	kind:function	line:134	class:mods::player	signature:(player_type_enum_t type)
 set_user	mods/auto-login.cpp	/^	void set_user(std::string_view user){$/;"	kind:function	line:3	namespace:mods::auto_login	signature:(std::string_view user)
-set_value	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_value(std::string_view column, room_vnum room_id) {$/;"	kind:function	line:105	namespace:mods::world_conf	signature:(std::string_view column, room_vnum room_id)
+set_value	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_value(std::string_view column, room_vnum room_id) {$/;"	kind:function	line:104	namespace:mods::world_conf	signature:(std::string_view column, room_vnum room_id)
 set_variation	mods/mobs/armed-guard.cpp	/^	void armed_guard::set_variation(const std::string& v) {$/;"	kind:function	line:89	class:mods::mobs::armed_guard	signature:(const std::string& v)
 set_variation	mods/mobs/car-thief.cpp	/^	void car_thief::set_variation(std::string v) {$/;"	kind:function	line:86	class:mods::mobs::car_thief	signature:(std::string v)
 set_variation	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::set_variation(const std::string& v) {$/;"	kind:function	line:89	class:mods::mobs::chaotic_meth_addict	signature:(const std::string& v)
@@ -12741,7 +12741,7 @@ states	globals.cpp	/^		ai_state_map states;$/;"	kind:member	line:86	namespace:mo
 static_roll_weapon_amount	mods/weapons/damage-calculator.cpp	/^	static int16_t static_roll_weapon_amount = 0;$/;"	kind:member	line:28	namespace:mods::weapons::damage_calculator	file:
 stats	mods/forge-engine/requirements.hpp	/^		std::vector<std::pair<stat_types_t,uint32_t>> stats;$/;"	kind:member	line:34	struct:mods::forge_engine::requirements_t	file:	access:public
 status	mods/behaviour_tree_node.hpp	/^				behaviour_tree_status status;$/;"	kind:member	line:28	struct:mods::behaviour_tree_node::__anon2	file:	access:public
-status_obj_from_room	mods/world-configuration.cpp	/^		bool status_obj_from_room;$/;"	kind:member	line:211	namespace:mods::world_conf::toggle	file:
+status_obj_from_room	mods/world-configuration.cpp	/^		bool status_obj_from_room;$/;"	kind:member	line:210	namespace:mods::world_conf::toggle	file:
 status_step_count	mods/lmdb.hpp	/^			constexpr static std::size_t status_step_count = 5;$/;"	kind:member	line:168	struct:mods::lmdb::_db_handle	file:	access:public
 stc	mods/drone.hpp	/^			void stc(const char* m) {$/;"	kind:function	line:55	struct:mods::drone_impl	access:public	signature:(const char* m)
 stc	mods/drone.hpp	/^			void stc(const std::string m) {$/;"	kind:function	line:52	struct:mods::drone_impl	access:public	signature:(const std::string m)
@@ -13109,7 +13109,7 @@ to_string_with_precision	mods/orm/rifle-instance.cpp	/^static inline std::string
 to_vk_from_string	mods/values.cpp	/^		value_key_t  to_vk_from_string(std::string s){$/;"	kind:function	line:766	namespace:mods::values	signature:(std::string s)
 todam	structs.h	/^	sh_int todam;    \/* Damage Bonus\/Penalty                *\/$/;"	kind:member	line:1874	struct:str_app_type	file:	access:public
 todirstr	mods/projectile.cpp	/^		std::string todirstr(int direction,bool prefix,bool suffix) {$/;"	kind:function	line:552	namespace:mods::projectile	signature:(int direction,bool prefix,bool suffix)
-toggle	mods/world-configuration.cpp	/^	namespace toggle {$/;"	kind:namespace	line:210	namespace:mods::world_conf	file:
+toggle	mods/world-configuration.cpp	/^	namespace toggle {$/;"	kind:namespace	line:209	namespace:mods::world_conf	file:
 toggle	mods/world-configuration.hpp	/^	namespace toggle {$/;"	kind:namespace	line:37	namespace:mods::world_conf	file:
 toggle_flag	mods/player.hpp	/^			aligned_int_t toggle_flag(chunk_type_t chunk,aligned_int_t bit) {$/;"	kind:function	line:607	struct:mods::player	access:public	signature:(chunk_type_t chunk,aligned_int_t bit)
 tohex	mods/util-conf.hpp	/^			std::string tohex(char c) {$/;"	kind:function	line:39	namespace:mods::util::conf	signature:(char c)
@@ -13267,7 +13267,7 @@ update_game	mods/orm/mini-game.hpp	/^		auto update_game(uint64_t pk_id,mods::min
 update_obj_file	mods/hell.hpp	/^	constexpr inline bool update_obj_file = false;$/;"	kind:member	line:19	namespace:mods::hell	file:
 update_obj_file	objsave.cpp	/^void update_obj_file(void) {$/;"	kind:function	line:342	signature:(void)
 update_object	handler.cpp	/^void update_object(struct obj_data *obj, int use) {$/;"	kind:function	line:1112	signature:(struct obj_data *obj, int use)
-update_or_insert	mods/world-configuration.cpp	/^	std::pair<bool,std::string> update_or_insert(std::string_view table,$/;"	kind:function	line:168	namespace:mods::world_conf	signature:(std::string_view table, mutable_map_t values,std::string_view where_column, std::string_view where_value)
+update_or_insert	mods/world-configuration.cpp	/^	std::pair<bool,std::string> update_or_insert(std::string_view table,$/;"	kind:function	line:167	namespace:mods::world_conf	signature:(std::string_view table, mutable_map_t values,std::string_view where_column, std::string_view where_value)
 update_player_affected_by	magic.cpp	/^void update_player_affected_by(player_ptr_t& player){$/;"	kind:function	line:83	signature:(player_ptr_t& player)
 update_player_data	mods/orm/player-contract-state.cpp	/^	std::tuple<int16_t,std::string> player_contract_state::update_player_data(const uint64_t& in_player_id,const contract_vnum_t& in_c_vnum,const std::string& buffer) {$/;"	kind:function	line:70	class:mods::orm::player_contract_state	signature:(const uint64_t& in_player_id,const contract_vnum_t& in_c_vnum,const std::string& buffer)
 update_pos	fight.cpp	/^void update_pos(char_data *victim) {$/;"	kind:function	line:256	signature:(char_data *victim)

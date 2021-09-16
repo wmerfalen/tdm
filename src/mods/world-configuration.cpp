@@ -79,7 +79,6 @@ namespace mods::world_conf {
 	 * mortal start
 	 */
 	int get_mortal_start_room_vnum() {
-		return 697;
 		auto record = select_value(mods::world_conf::START_ROOM_TABLE,
 		                           "mortal_start_room","is_active","1");
 		std::string mortal_start_room = "";
