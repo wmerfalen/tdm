@@ -185,11 +185,11 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 		player->send("You move the elevator %s...\r\n",dir == UP ? "UP" : "DOWN");
 	}
 	if(!AFF_FLAGGED(ch, AFF_SNEAK) && !ghost_dissipated) {
-		if(player->char_specials().fighting != nullptr) {
-			act("$n has arrived {red}[!]{/red}.", TRUE, ch, 0, 0, TO_ROOM);
-		} else {
-			act("$n has arrived.", TRUE, ch, 0, 0, TO_ROOM);
-		}
+		//if(player->is_fighting(i)){
+		//	act("$n has arrived {red}[!]{/red}.", TRUE, ch, 0, 0, TO_ROOM);
+		//} else {
+		act("$n has arrived$f.", TRUE, ch, 0, 0, TO_ROOM);
+		//}
 	}
 
 

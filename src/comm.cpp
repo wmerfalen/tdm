@@ -2490,9 +2490,10 @@ const char *ACTNULL = "<NULL>";
 /* higher-level communication: the act() function */
 void perform_act(const char *orig, char_data *ch, obj_data *obj,
                  const void *vict_obj, char_data *to) {
-	const char *i = NULL;
 	char lbuf[MAX_STRING_LENGTH], *buf, *j;
 	bool uppercasenext = FALSE;
+
+	std::string i = "";
 
 	buf = lbuf;
 
@@ -2508,59 +2509,67 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 					 *  	"$n leaves north."
 					 *
 					 */
-					i = strdup(mods::string(PERS(ch, to)).c_str());
+					i = mods::string(PERS(ch, to)).str();
 					break;
 
 				case 'N':
-					CHECK_NULL(vict_obj, strdup(mods::string(PERS((const char_data *) vict_obj, to).c_str())));
+					CHECK_NULL(vict_obj, mods::string(PERS((const char_data *) vict_obj, to)).str());
 					break;
 
 				case 'm':
-					i = strdup(mods::string(HMHR(ch)).c_str());
+					i = mods::string(HMHR(ch)).str();
 					break;
 
 				case 'M':
-					CHECK_NULL(vict_obj, strdup(mods::string(HMHR((const char_data *) vict_obj)).c_str()));
+					CHECK_NULL(vict_obj, mods::string(HMHR((const char_data *) vict_obj)).str());
 					break;
 
 				case 's':
-					i = strdup(mods::string(HSHR(ch)).c_str());
+					i = mods::string(HSHR(ch)).str();
 					break;
 
 				case 'S':
-					CHECK_NULL(vict_obj, strdup(mods::string(HSHR((const char_data *) vict_obj)).c_str()));
+					CHECK_NULL(vict_obj, mods::string(HSHR((const char_data *) vict_obj)).str());
 					break;
 
 				case 'e':
-					i = strdup(mods::string(HSSH(ch)).c_str());
+					i = mods::string(HSSH(ch)).str();
 					break;
 
 				case 'E':
-					CHECK_NULL(vict_obj, strdup(mods::string(HSSH((const char_data *) vict_obj)).c_str()));
+					CHECK_NULL(vict_obj, mods::string(HSSH((const char_data *) vict_obj)).str());
+					break;
+				case 'f': {
+						if(ch && to && ch->char_specials.fighting == to) {
+							i = "{red}[!]{/red}";
+						} else {
+							i = "";
+						}
+					}
 					break;
 
 				case 'o':
-					CHECK_NULL(obj, strdup(mods::string(OBJN(obj, to)).c_str()));
+					CHECK_NULL(obj, mods::string(OBJN(obj, to)).str());
 					break;
 
 				case 'O':
-					CHECK_NULL(vict_obj, strdup(mods::string(OBJN((const struct obj_data *) vict_obj, to)).c_str()));
+					CHECK_NULL(vict_obj, mods::string(OBJN((const struct obj_data *) vict_obj, to)).str());
 					break;
 
 				case 'p':
-					CHECK_NULL(obj, strdup(mods::string(OBJS(obj, to)).c_str()));
+					CHECK_NULL(obj, mods::string(OBJS(obj, to)).str());
 					break;
 
 				case 'P':
-					CHECK_NULL(vict_obj, strdup(mods::string(OBJS((const struct obj_data *) vict_obj, to)).c_str()));
+					CHECK_NULL(vict_obj, mods::string(OBJS((const struct obj_data *) vict_obj, to)).str());
 					break;
 
 				case 'a':
-					CHECK_NULL(obj, strdup(mods::string(SANA(obj)).c_str()));
+					CHECK_NULL(obj, mods::string(SANA(obj)).str());
 					break;
 
 				case 'A':
-					CHECK_NULL(vict_obj, strdup(mods::string(SANA((const struct obj_data *) vict_obj)).c_str()));
+					CHECK_NULL(vict_obj, mods::string(SANA((const struct obj_data *) vict_obj)).str());
 					break;
 
 				case 'T':
@@ -2568,7 +2577,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 					break;
 
 				case 'F':
-					CHECK_NULL(vict_obj, strdup(mods::string(fname((const char *) vict_obj)).c_str()));
+					CHECK_NULL(vict_obj, mods::string(fname((const char *) vict_obj)).str());
 					break;
 
 				/* uppercase previous word */
@@ -2598,13 +2607,12 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 					i = "";
 					break;
 			}
-
-			while((*buf = *(i++))) {
+			for(const auto& ch : i) {
+				*buf = ch;
 				if(uppercasenext && !isspace((int) *buf)) {
 					*buf = UPPER(*buf);
 					uppercasenext = FALSE;
 				}
-
 				buf++;
 			}
 

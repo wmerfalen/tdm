@@ -85,7 +85,6 @@ int find_action(int cmd) {
 	}
 }
 
-#define ACT_DEBUG(A) std::cerr << "[do_action][checkpoint: #" << A << "\n";
 
 ACMD(do_action) {
 	char buf[MAX_INPUT_LENGTH];
@@ -94,7 +93,6 @@ ACMD(do_action) {
 	char_data *vict;
 
 	if((act_nr = find_action(cmd)) < 0) {
-		ACT_DEBUG(1);
 		send_to_char(ch, "That action is not supported.");
 		return;
 	}
@@ -108,25 +106,20 @@ ACMD(do_action) {
 	}
 
 	if(!*buf) {
-		ACT_DEBUG(2);
 		send_to_char(ch, "%s", action->char_no_arg);
 		act(action->others_no_arg, action->hide, ch, 0, 0, TO_ROOM);
 		return;
 	}
 
 	if(!(vict = get_char_vis(ch, buf, NULL, FIND_CHAR_ROOM))) {
-		ACT_DEBUG(3);
 		send_to_char(ch, "%s", action->not_found);
 	} else if(vict == ch) {
-		ACT_DEBUG(4);
 		send_to_char(ch, "%s", action->char_auto);
 		act(action->others_auto, action->hide, ch, 0, 0, TO_ROOM);
 	} else {
 		if(GET_POS(vict) < action->min_victim_position) {
-		ACT_DEBUG(5);
 			act("$N is not in a proper position for that.", FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP);
 		} else {
-		ACT_DEBUG(6);
 			act(action->char_found, 0, ch, 0, vict, TO_CHAR | TO_SLEEP);
 			act(action->others_found, action->hide, ch, 0, vict, TO_NOTVICT);
 			act(action->vict_found, action->hide, ch, 0, vict, TO_VICT);
@@ -253,7 +246,7 @@ void free_social_messages(void) {
 
 void boot_social_messages(void) {
 	FILE *fl;
-	int nr, i, hide, min_pos, curr_soc = -1;
+	int nr, i, hide = -1, min_pos = -1, curr_soc = -1;
 	char next_soc[100];
 	struct social_messg temp;
 
@@ -273,13 +266,74 @@ void boot_social_messages(void) {
 
 	/* now read 'em */
 	for(;;) {
-		fscanf(fl, " %s ", next_soc);
+		std::string temp_buffer;
+		temp_buffer.clear();
+		for(auto i=0; i < 64; i++) {
+			auto ch = fgetc(fl);
+			if(isspace(ch)) {
+				break;
+			}
+			if(ch == '$') {
+				next_soc[0] = '$';
+				break;
+			}
+			temp_buffer += ch;
+		}
+		//std::cerr << "temp_buffer: '" << temp_buffer << "'\n";
+		memset(next_soc,0,sizeof(next_soc));
+		bcopy(temp_buffer.c_str(),next_soc,std::min(sizeof(next_soc) - 3,temp_buffer.length()));
+		//std::cerr << "next_soc: '" << next_soc << "'\n";
+		//fscanf(fl, " %s ", next_soc);
 
-		if(*next_soc == '$') {
+		if(next_soc[0] == '$') {
 			break;
 		}
 
-		if(fscanf(fl, " %d %d \n", &hide, &min_pos) != 2) {
+		bool hide_parsed = 0;
+		bool min_pos_parsed = 0;
+		bool eof = false;
+		for(auto i=0; i < 64; i++) {
+			char ch = (char)fgetc(fl);
+			//std::cerr << "read: '" << ch << "'\n";
+			if(ch == '\n') {
+				ch = fgetc(fl);
+				if(ch == EOF) {
+					eof = true;
+				} else {
+					ungetc(ch,fl);
+				}
+				//ungetc('\n',fl);
+				break;
+			}
+			if(isspace(ch)) {
+				//std::cerr << "found space\n";
+				continue;
+			}
+			if(isdigit((int)ch)) {
+				if(hide_parsed == false) {
+					std::string s;
+					s += ch;
+					//std::cerr << "hide: '" << s << "'\n";
+					hide = atoi(s.c_str());
+					hide_parsed = true;
+					continue;
+				}
+				if(min_pos_parsed == false) {
+					std::string s;
+					s += ch;
+					//std::cerr << "min_pos: '" << s << "'\n";
+					min_pos = atoi(s.c_str());
+					min_pos_parsed = true;
+					continue;
+				}
+			}
+		}
+		if(eof) {
+			break;
+		}
+		//std::cerr << "hide: " << hide << ", min_pos: " << min_pos << "\n";
+
+		if(!hide_parsed || !min_pos_parsed) {
 			log("SYSERR: format error in social file near social '%s'", next_soc);
 			exit(1);
 		}
@@ -303,6 +357,7 @@ void boot_social_messages(void) {
 #endif
 
 		soc_mess_list[curr_soc].char_no_arg = fread_action(fl, nr);
+		//std::cerr << " char-no arg: '" << soc_mess_list[curr_soc].char_no_arg << "'\n";
 		soc_mess_list[curr_soc].others_no_arg = fread_action(fl, nr);
 		soc_mess_list[curr_soc].char_found = fread_action(fl, nr);
 
