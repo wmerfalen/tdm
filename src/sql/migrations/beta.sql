@@ -3668,8 +3668,6 @@ COPY public.class_engineer (engineer_id, engineer_player_id, created_at, updated
 --
 
 COPY public.class_ghost (ghost_id, ghost_player_id, created_at, updated_at) FROM stdin;
-1	96	2021-09-04 04:25:30.215005	2021-09-04 04:25:30.215005
-2	98	2021-09-14 23:33:16.631031	2021-09-14 23:33:16.631031
 \.
 
 
@@ -3678,7 +3676,6 @@ COPY public.class_ghost (ghost_id, ghost_player_id, created_at, updated_at) FROM
 --
 
 COPY public.class_marine (marine_id, marine_player_id, created_at, updated_at) FROM stdin;
-1	97	2021-09-07 11:11:48.98478	2021-09-07 11:11:48.98478
 \.
 
 
@@ -4137,10 +4134,7 @@ COPY public.object_weapon (id, obj_fk_id, obj_ammo_max, obj_ammo_type, obj_coold
 --
 
 COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences, player_practice_sessions) FROM stdin;
-97	$2a$06$pqvhyJJCbjGmlZAGem5HYe/iuHQgUyDSt5whYjUIoKO.CszNI.sRy	0	128	marine	1	1	0	60	0	60	45	120	180	75	0	0	120	100	291	0	8400	M	99	100	170	53	53	53	2	1	53	0	0	PC	0	3	53	0	2021-09-07 11:11:48.960526	0	2021-09-07 11:11:48.960526	8388736	7
-1	foKntnEF3KSXA	0	0	far	1	1	0	30	0	90	67	120	150	112	6094	0	65000	6500	65000	6518	6780	M	65000	6500	65000	53	53	53	9	1	53	0	0	PC	6094	3	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	5
-96	$2a$06$OW7y5cqZH/LkEXpnsDmW3OKqxTrAdTKZ0x.BbCbrhzYjlk6oQFtcG	0	128	sniper	1	1	0	50	0	150	112	200	250	187	0	0	100	100	386	252	26279	M	98	100	336	53	53	53	9	1	53	0	0	PC	0	5	53	0	2021-09-04 04:25:30.182404	0	2021-09-04 04:25:30.182404	8388848	0
-98	$2a$06$2Vbc1WO71fhfj/kZ3h5J.usvuqtLMOJvk9oypnoyWsh4d1pXWBniS	0	128	carl	1	1	0	50	0	150	112	200	250	187	0	0	100	100	727	216	3920	M	84	100	679	53	53	53	9	1	53	0	0	PC	0	5	53	0	2021-09-14 23:33:16.604572	0	2021-09-14 23:33:16.604572	8388720	11
+1	foKntnEF3KSXA	0	0	far	1	1	0	231	0	693	519	924	1155	866	6094	0	462	1212	68630	6518	6780	M	462	1212	68630	53	53	53	9	1	53	0	0	PC	6094	7	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	13
 \.
 
 
@@ -4151,8 +4145,8 @@ COPY public.player (id, player_password, player_affection_plr_bitvector, player_
 COPY public.player_base_ability (pba_id, pba_player_id, pba_str, pba_str_add, pba_intel, pba_wis, pba_dex, pba_con, pba_cha, pba_electronics, pba_armor, pba_marksmanship, pba_sniping, pba_demolitions, pba_chemistry, pba_weapon_handling, pba_strategy, pba_medical, created_at, updated_at) FROM stdin;
 2	96	50	0	150	112	200	250	187	150	87	137	100	25	150	137	150	225	2021-09-04 04:25:30.214342	2021-09-04 04:25:30.214342
 3	97	60	0	60	45	120	180	75	60	105	75	60	15	60	75	60	90	2021-09-07 11:11:48.984162	2021-09-07 11:11:48.984162
-1	1	30	0	90	67	120	150	112	90	52	82	60	15	90	82	90	135	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
 4	98	50	0	150	112	200	250	187	150	87	137	100	25	150	137	150	225	2021-09-14 23:33:16.630307	2021-09-14 23:33:16.630307
+1	1	231	0	693	519	924	1155	866	693	404	635	462	115	693	635	693	1039	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
 \.
 
 
@@ -4185,34 +4179,10 @@ COPY public.player_flags (id, player_id, chunk_index, flag_value) FROM stdin;
 --
 
 COPY public.player_object (id, po_player_id, po_type, po_type_id, po_yaml, po_load_type, po_wear_position, po_in_inventory, po_quantity, po_ammunition) FROM stdin;
-132	96	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	1
-131	96	1	\N	psg1.yml	2	16	0	1	7
 114	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-67	97	7	\N	basic-ballistic-vest.yml	2	5	0	1	\N
-69	97	7	\N	basic-boots.yml	2	8	0	1	\N
-71	97	7	\N	titan-gauntlets.yml	2	10	0	1	\N
-73	97	7	\N	titan-shin-guards.yml	2	7	0	1	\N
-139	98	7	\N	titan-elbow-guards.yml	2	26	0	1	\N
-75	97	7	\N	xm-scorpio-belt.yml	2	13	0	1	\N
-140	98	7	\N	basic-ballistic-vest.yml	2	5	0	1	\N
-77	97	7	\N	xm-scorpio-tactical-gloves.yml	2	9	0	1	\N
-141	98	7	\N	basic-boots.yml	2	8	0	1	\N
-142	98	7	\N	xm-scorpio-tactical-gloves.yml	2	9	0	1	\N
-143	98	1	\N	psg1.yml	2	3	0	1	7
 115	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
 116	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-83	97	8	\N	sg3-ar-ammunition.yml	2	\N	1	1	48
-145	98	7	\N	titan-shin-guards.yml	2	7	0	1	\N
-84	97	8	\N	sg3-ar-ammunition.yml	2	\N	1	1	48
-80	97	1	\N	g36c.yml	2	16	0	1	36
-147	98	7	\N	xm-scorpio-belt.yml	2	13	0	1	\N
-152	98	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	29
-149	98	1	\N	psg1.yml	2	16	0	1	7
-3	96	7	\N	titan-gauntlets.yml	2	10	0	1	\N
-4	96	7	\N	titan-shin-guards.yml	2	7	0	1	\N
-6	96	7	\N	basic-boots.yml	2	8	0	1	\N
-8	96	7	\N	basic-ballistic-vest.yml	2	5	0	1	\N
-10	96	7	\N	xm-scorpio-tactical-gloves.yml	2	9	0	1	\N
+153	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
 \.
 
 
@@ -4253,7 +4223,7 @@ COPY public.player_skill_usage (id, ps_player_id, ps_skill_id, ps_usage_count, c
 --
 
 COPY public.rifle_attachment (id, rifle_player_id, rifle_data, rifle_position, created_at, updated_at) FROM stdin;
-3774	1	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	primary	2021-09-14 18:48:53.786156	2021-09-14 18:48:53.786156
+3852	1	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	primary	2021-09-16 01:35:43.153893	2021-09-16 01:35:43.153893
 \.
 
 
@@ -5042,6 +5012,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 621	751	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
 623	753	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
 624	754	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-2
+644	774	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	trolley-section-2
 625	755	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
 626	756	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
 628	758	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
@@ -5059,7 +5030,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 641	771	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
 642	772	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
 643	773	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-644	774	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	trolley-section-2
 645	775	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
 646	776	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
 647	777	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
@@ -7342,68 +7312,6 @@ COPY public.skill_usage (id, player_id, skill_name, skill_level) FROM stdin;
 21	1	smine	0
 22	1	cmine	0
 23	1	recon	0
-24	96	ads	0
-26	96	summon	0
-27	96	xray	0
-30	96	intimidation	0
-31	96	cryo	0
-32	96	flash	0
-33	96	ts	0
-37	96	emp	0
-38	96	chaff	0
-43	96	limb	0
-45	96	cmine	0
-46	96	recon	0
-29	96	claymore	0.5
-28	96	feign	0.5
-36	96	as	0.5
-25	96	stealth	0.5
-39	96	sensor	0.5
-40	96	ubs	0.5
-41	96	ubf	0.5
-42	96	gm	0.5
-44	96	smine	0.5
-34	96	lb	0.5
-35	96	suture	0.5
-47	97	ts	0
-48	97	lb	0
-49	97	suture	0
-50	97	as	0
-51	97	emp	0
-52	97	chaff	0
-53	97	sensor	0
-54	97	ubs	0
-55	97	ubf	0
-56	97	gm	0
-57	97	limb	0
-58	97	claymore	0
-59	97	smine	0
-60	97	cmine	0
-61	97	xray	0
-62	97	recon	0
-63	98	ads	0
-64	98	stealth	0
-65	98	summon	0
-66	98	xray	0
-67	98	feign	0
-68	98	claymore	0
-69	98	intimidation	0
-70	98	cryo	0
-71	98	flash	0
-72	98	ts	0
-73	98	lb	0
-74	98	suture	0
-75	98	as	0
-76	98	emp	0
-77	98	chaff	0
-78	98	sensor	0
-79	98	ubs	0
-80	98	ubf	0
-81	98	gm	0
-82	98	limb	0
-83	98	smine	0
-84	98	cmine	0
-85	98	recon	0
 \.
 
 
@@ -7951,7 +7859,7 @@ SELECT pg_catalog.setval('public.player_id_seq', 98, true);
 -- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_object_id_seq', 152, true);
+SELECT pg_catalog.setval('public.player_object_id_seq', 153, true);
 
 
 --
@@ -7993,7 +7901,7 @@ SELECT pg_catalog.setval('public.player_skill_usage_id_seq', 1, false);
 -- Name: rifle_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 3847, true);
+SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 3852, true);
 
 
 --
