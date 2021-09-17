@@ -592,6 +592,8 @@ namespace mods::util {
 				return "SYNDROME";
 			case player_class_t::MACHINIST:
 				return "MACHINIST";
+			case player_class_t::BREACHER:
+				return "BREACHER";
 			default:
 				return "UNKNOWN-CLASS";
 		}
