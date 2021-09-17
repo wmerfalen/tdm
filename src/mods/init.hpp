@@ -8,6 +8,7 @@ INIT(mods::players::event_messages);
 INIT(mods::prefs);
 INIT(mods::players::banish);
 INIT(mods::rand);
+INIT(mods::mp);
 INIT(mods::bleed);
 INIT(mods::loot_container);
 INIT(builder);
@@ -116,6 +117,7 @@ namespace mods::init {
 		mods::prefs::init();
 		mods::players::friendly_reminders::init();
 		mods::players::event_messages::init();
+		mods::mp::init();
 	}
 };
 #endif

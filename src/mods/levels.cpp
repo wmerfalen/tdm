@@ -591,17 +591,25 @@ namespace mods::levels {
 		           ;
 		switch(triads[MELEE]) {
 			case 1:
+				hp += level * (LOW_TRIAD * triads[MELEE]);
+				strength += level * (LOW_TRIAD * triads[MELEE]);
+				dexterity += level * (LOW_TRIAD * triads[MELEE]);
+				constitution += level * (LOW_TRIAD * triads[MELEE]);
+				armor += level * (LOW_TRIAD * triads[MELEE]);
+				break;
 			case 2:
+				hp += level * (MID_TRIAD * triads[MELEE]);
+				strength += level * (MID_TRIAD * triads[MELEE]);
+				dexterity += level * (MID_TRIAD * triads[MELEE]);
+				constitution += level * (MID_TRIAD * triads[MELEE]);
+
+				break;
 			case 3:
-				hp += level * (FIRST_TIER * triads[MELEE]);
-				strength += level * (FIRST_TIER * triads[MELEE]);
-				dexterity += level * (FIRST_TIER * triads[MELEE]);
-				constitution += level * (FIRST_TIER * triads[MELEE]);
+				hp += level * (HIGH_TRIAD * triads[MELEE]);
+				strength += level * (HIGH_TRIAD * triads[MELEE]);
+				dexterity += level * (HIGH_TRIAD * triads[MELEE]);
+				constitution += level * (HIGH_TRIAD * triads[MELEE]);
 
-				armor += level * (THIRD_TIER * triads[MELEE]);
-
-				charisma += level * (PASSIVE_TIER * triads[INTEL]);
-				medical += level * (PASSIVE_TIER * triads[INTEL]);
 				break;
 			default:
 				std::cerr << red_str("generic_advance_hp encountered odd MELEE triad:") << triads[MELEE] << "\n";
@@ -609,15 +617,21 @@ namespace mods::levels {
 		}
 		switch(triads[WEAPONS]) {
 			case 1:
+				weapon_handling += level * (LOW_TRIAD * triads[WEAPONS]);
+				sniping += level * (LOW_TRIAD * triads[WEAPONS]);
+				marksmanship += level * (LOW_TRIAD * triads[WEAPONS]);
+				//demolitions += level * (SPLIT_TIER * triads[WEAPONS]);
+				//armor += level * (PASSIVE_TIER * triads[MELEE]);
+				break;
 			case 2:
+				weapon_handling += level * (MID_TRIAD * triads[WEAPONS]);
+				sniping += level * (MID_TRIAD * triads[WEAPONS]);
+				marksmanship += level * (MID_TRIAD * triads[WEAPONS]);
+				break;
 			case 3:
-				weapon_handling += level * (FIRST_TIER * triads[WEAPONS]);
-				sniping += level * (FIRST_TIER * triads[WEAPONS]);
-				marksmanship += level * (FIRST_TIER * triads[WEAPONS]);
-
-				demolitions += level * (SPLIT_TIER * triads[WEAPONS]);
-
-				armor += level * (PASSIVE_TIER * triads[MELEE]);
+				weapon_handling += level * (HIGH_TRIAD * triads[WEAPONS]);
+				sniping += level * (HIGH_TRIAD * triads[WEAPONS]);
+				marksmanship += level * (HIGH_TRIAD * triads[WEAPONS]);
 				break;
 			default:
 				std::cerr << red_str("generic_advance_hp encountered odd WEAPONS triad:") << triads[WEAPONS] << "\n";
@@ -625,20 +639,37 @@ namespace mods::levels {
 		}
 		switch(triads[INTEL]) {
 			case 1:
-			case 2:
-			case 3:
-				intelligence += level * (FIRST_TIER * triads[INTEL]);
-				electronics += level * (FIRST_TIER * triads[INTEL]);
-				chemistry += level * (FIRST_TIER * triads[INTEL]);
-				strategy += level * (FIRST_TIER * triads[INTEL]);
-				medical += level * (FIRST_TIER * triads[INTEL]);
-				charisma += level * (FIRST_TIER * triads[INTEL]);
-
-				wisdom += level * (SECOND_TIER * triads[INTEL]);
-
+				intelligence += level * (LOW_TRIAD * triads[INTEL]);
+				electronics += level * (LOW_TRIAD * triads[INTEL]);
+				chemistry += level * (LOW_TRIAD * triads[INTEL]);
+				strategy += level * (LOW_TRIAD * triads[INTEL]);
+				medical += level * (LOW_TRIAD * triads[INTEL]);
+				charisma += level * (LOW_TRIAD * triads[INTEL]);
+				wisdom += level * (LOW_TRIAD* triads[INTEL]);
 				demolitions += level * (SPLIT_TIER * triads[WEAPONS]);
-
 				marksmanship += level * (PASSIVE_TIER * triads[INTEL]);
+				break;
+			case 2:
+				intelligence += level * (MID_TRIAD  * triads[INTEL]);
+				electronics += level * (MID_TRIAD  * triads[INTEL]);
+				chemistry += level * (MID_TRIAD  * triads[INTEL]);
+				strategy += level * (MID_TRIAD  * triads[INTEL]);
+				medical += level * (MID_TRIAD  * triads[INTEL]);
+				charisma += level * (MID_TRIAD  * triads[INTEL]);
+				wisdom += level * (MID_TRIAD * triads[INTEL]);
+				demolitions += level * (SPLIT_TIER * triads[WEAPONS]);
+				marksmanship += level * (PASSIVE_TIER * triads[INTEL]);
+				break;
+			case 3:
+				intelligence += level * (HIGH_TRIAD  * triads[INTEL]);
+				electronics += level * (HIGH_TRIAD  * triads[INTEL]);
+				chemistry += level * (HIGH_TRIAD  * triads[INTEL]);
+				strategy += level * (HIGH_TRIAD  * triads[INTEL]);
+				medical += level * (HIGH_TRIAD  * triads[INTEL]);
+				charisma += level * (HIGH_TRIAD  * triads[INTEL]);
+				wisdom += level * (HIGH_TRIAD * triads[INTEL]);
+				demolitions += level * (HIGH_TRIAD * triads[WEAPONS]);
+				marksmanship += level * (HIGH_TRIAD * triads[INTEL]);
 				break;
 			default:
 				std::cerr << red_str("generic_advance_hp encountered odd INTEL triad:") << triads[INTEL] << "\n";
@@ -646,11 +677,18 @@ namespace mods::levels {
 		}
 		switch(triads[SPEED]) {
 			case 1:
+				constitution += level * (LOW_TRIAD * triads[SPEED]);
+				dexterity += level * (LOW_TRIAD * triads[SPEED]);
+				weapon_handling += level * (PASSIVE_TIER * triads[SPEED]);
+				break;
 			case 2:
+				constitution += level * (MID_TRIAD * triads[SPEED]);
+				dexterity += level * (MID_TRIAD * triads[SPEED]);
+				weapon_handling += level * (PASSIVE_TIER * triads[SPEED]);
+				break;
 			case 3:
-				constitution += level * (FIRST_TIER * triads[SPEED]);
-				dexterity += level * (FIRST_TIER * triads[SPEED]);
-
+				constitution += level * (HIGH_TRIAD * triads[SPEED]);
+				dexterity += level * (HIGH_TRIAD * triads[SPEED]);
 				weapon_handling += level * (PASSIVE_TIER * triads[SPEED]);
 				break;
 			default:
@@ -659,14 +697,24 @@ namespace mods::levels {
 		}
 		switch(triads[ARMOR]) {
 			case 1:
-			case 2:
-			case 3:
-				hp += level * (FIRST_TIER * triads[ARMOR]);
-				constitution += level * (FIRST_TIER * triads[ARMOR]);
-				armor += level * (FIRST_TIER * triads[ARMOR]);
-
+				hp += level * (LOW_TRIAD * triads[ARMOR]);
+				constitution += level * (LOW_TRIAD * triads[ARMOR]);
+				armor += level * (LOW_TRIAD * triads[ARMOR]);
 				demolitions += level * (SPLIT_TIER_HALF * triads[WEAPONS]);
-
+				medical += level * (PASSIVE_TIER * triads[INTEL]);
+				break;
+			case 2:
+				hp += level * (MID_TRIAD * triads[ARMOR]);
+				constitution += level * (MID_TRIAD * triads[ARMOR]);
+				armor += level * (MID_TRIAD * triads[ARMOR]);
+				demolitions += level * (SPLIT_TIER_HALF * triads[WEAPONS]);
+				medical += level * (PASSIVE_TIER * triads[INTEL]);
+				break;
+			case 3:
+				hp += level * (HIGH_TRIAD * triads[ARMOR]);
+				constitution += level * (HIGH_TRIAD * triads[ARMOR]);
+				armor += level * (HIGH_TRIAD * triads[ARMOR]);
+				demolitions += level * (SPLIT_TIER_HALF * triads[WEAPONS]);
 				medical += level * (PASSIVE_TIER * triads[INTEL]);
 				break;
 			default:
@@ -701,7 +749,7 @@ namespace mods::levels {
 		player->max_hp() = s[STAT_HP];
 		player->mana() = s[STAT_WISDOM] + s[STAT_INTELLIGENCE];
 		player->max_mana() = player->mana();
-		player->move() += s[STAT_CONSTITUTION];
+		player->move() = s[STAT_CONSTITUTION];
 		player->max_move() = player->move();
 		player->strength() = s[STAT_STRENGTH];
 		player->constitution() = s[STAT_CONSTITUTION];

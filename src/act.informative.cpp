@@ -82,7 +82,6 @@ ACMD(do_givemegold);
 ACMD(do_drone);
 ACMD(do_look);
 ACMD(do_examine);
-ACMD(do_gold);
 ACMD(do_inventory);
 ACMD(do_equipment);
 ACMD(do_time);
@@ -1211,19 +1210,6 @@ ACMD(do_examine) {
 
 
 
-ACMD(do_gold) {
-	if(GET_GOLD(ch) == 0) {
-		player->sendln(STOCK_GOLD_BROKE_MESSAGE());
-	} else if(GET_GOLD(ch) == 1) {
-		player->sendln(STOCK_GOLD_ONE_MISERABLE_MESSAGE());
-	} else {
-		player->sendln(CAT(STOCK_GOLD_PREFIX_MESSAGE(),TOSTR(player->gold()),STOCK_GOLD_SUFFIX_MESSAGE()));
-	}
-}
-
-
-
-
 ACMD(do_inventory) {
 	player->sendln("You are carrying:");
 	list_obj_to_char(ch->carrying, ch, SHOW_OBJ_SHORT, TRUE);
@@ -2085,7 +2071,6 @@ namespace informative {
 		mods::interpreter::add_command("exits",POS_RESTING,do_exits,0,0);
 		mods::interpreter::add_command("gen_ps",POS_RESTING,do_gen_ps,0,0);
 		mods::interpreter::add_command("givemegold",POS_RESTING,do_givemegold,0,0);
-		mods::interpreter::add_command("gold",POS_RESTING,do_gold,0,0);
 		mods::interpreter::add_command("insult",POS_RESTING,do_insult,0,0);
 		mods::interpreter::add_command("inventory",POS_RESTING,do_inventory,0,0);
 		mods::interpreter::add_command("js",POS_RESTING,do_js,0,0);

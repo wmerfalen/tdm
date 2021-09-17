@@ -211,7 +211,6 @@ ACMD(do_gen_tog);
 ACMD(do_gen_write);
 ACMD(do_get);
 ACMD(do_give);
-ACMD(do_gold);
 ACMD(do_goto);
 ACMD(do_grab);
 ACMD(do_group);
@@ -513,7 +512,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "giggle", POS_RESTING, do_action, 0, 0 },
 	{ "glare", POS_RESTING, do_action, 0, 0 },
 	{ "goto", POS_SLEEPING, do_goto, LVL_IMMORT, 0 },
-	{ "gold", POS_RESTING, do_gold, 0, 0 },
 	{ "gossip", POS_SLEEPING, do_gen_comm, 0, SCMD_GOSSIP },
 	{ "group", POS_RESTING, do_group, 1, 0 },
 	{ "grab", POS_RESTING, do_grab, 0, 0 },

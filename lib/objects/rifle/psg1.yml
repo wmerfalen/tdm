@@ -59,8 +59,8 @@ damage_map: [
 90.00
 ]
 disorient_amount: 0.0 #float
-headshot_bonus: 13.0 #float
-max_range: 4 #integer,measured in rooms
+headshot_bonus: 53.0 #float
+max_range: 5 #integer,measured in rooms
 range_multiplier: 4.3 #float, multiplied by 
 reload_time: 9 #int, measured in ticks
 # types

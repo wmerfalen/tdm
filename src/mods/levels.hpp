@@ -31,6 +31,11 @@ namespace mods::levels {
 	static constexpr float PASSIVE_TIER = FIRST_TIER * 0.25;
 	static constexpr float SPLIT_TIER = FIRST_TIER * 0.10;
 	static constexpr float SPLIT_TIER_HALF = SPLIT_TIER / 2;
+
+	static constexpr float LOW_TRIAD = FIRST_TIER / 3;
+	static constexpr float MID_TRIAD = (FIRST_TIER / 3) * 2;
+	static constexpr float HIGH_TRIAD = FIRST_TIER;
+
 	static constexpr uint8_t MAX_PLAYER_LEVEL = 30;
 	static constexpr std::array<player_class_t,2> implemented_classes = {
 		GHOST,

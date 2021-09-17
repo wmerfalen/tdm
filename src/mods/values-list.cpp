@@ -566,9 +566,9 @@ STOCK_READ_WHAT_MESSAGE,"Read what?"
 STOCK_EXAMINE_MESSAGE,"Examine what?"
 STOCK_LOOK_INSIDE_MESSAGE,"When you look inside,you see:"
 STOCK_GOLD_BROKE_MESSAGE,"You're broke!"
-STOCK_GOLD_ONE_MISERABLE_MESSAGE,"You have one miserable little gold coin."
+STOCK_GOLD_ONE_MISERABLE_MESSAGE,"You have one miserable little mission point."
 STOCK_GOLD_PREFIX_MESSAGE,"You have "
-STOCK_GOLD_SUFFIX_MESSAGE," gold coins."
+STOCK_GOLD_SUFFIX_MESSAGE," mission points."
 MSG_YOU_FEIGN_DEATH,"You succesfully feign death. The enemy is none the wiser..."
 MSG_YOU_FAIL_FEIGN_DEATH,"You fail at feigning death...\r\nYou are on the ground and vulnerable!"
 ADVANCE_LEVEL_CONGRATS,"{grn}Congratulations on advancing,soldier! You are proving to be a well-rounded member of the {blu}Counter Terrorist Unit{/blu}."
@@ -577,6 +577,9 @@ ADVANCE_LEVEL_MESSAGE,"{grn}CONGRATS! You rise a level!{/grn}"
 ADVANCE_MULTIPLE_LEVELS_MESSAGE,"{grn}CONGRATS! You rise %d levels!{/grn}"
 
 [uint8_t]
+WEAPON_COOLDOWN_TICK_REMOVAL_TIER_ONE_MAX,6
+WEAPON_COOLDOWN_TICK_REMOVAL_TIER_TWO_MAX,9
+WEAPON_COOLDOWN_TICK_REMOVAL_TIER_THREE_MAX,12
 MARINE_AR_PASSIVE_EXTRA_AMMO_BONUS,15
 MARINE_AR_PASSIVE_CRITICAL_CHANCE_BONUS,10
 MARINE_AR_PASSIVE_RANGE_BONUS,2
