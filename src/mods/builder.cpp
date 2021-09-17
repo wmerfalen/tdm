@@ -1046,7 +1046,7 @@ namespace mods::builder {
 		std::size_t rid = room_id;
 
 		if(rid < mods::globals::room_list.size()) {
-			world[room_id].name = strdup(str_title.data());
+			world[room_id].name = str_title.data();
 			return true;
 		}
 
@@ -1056,7 +1056,7 @@ namespace mods::builder {
 		std::size_t rid = room_id;
 
 		if(rid < mods::globals::room_list.size()) {
-			world[room_id].description = strdup(str_description.data());
+			world[room_id].description = str_description.data();
 			return true;
 		}
 
@@ -1100,11 +1100,11 @@ namespace mods::builder {
 		}
 
 		if(description.value_or("-1").compare("-1") != 0) {
-			world[room_id].dir_option[direction]->general_description = strdup(description.value().data());
+			world[room_id].dir_option[direction]->general_description = description.value().data();
 		}
 
 		if(keywords.value_or("-1").compare("-1") != 0) {
-			world[room_id].dir_option[direction]->keyword = strdup(keywords.value().data());
+			world[room_id].dir_option[direction]->keyword = keywords.value().data();
 		}
 
 		world[room_id].dir_option[direction]->exit_info = exit_info.value_or(world[room_id].dir_option[direction]->exit_info);
@@ -1253,10 +1253,10 @@ namespace mods::builder {
 	char_data new_npc() {
 		char_data proto;
 		const char* foo = "foo";
-		proto.player.name = strdup(foo);
-		proto.player.short_descr = strdup(foo);
-		proto.player.long_descr = strdup(foo);
-		proto.player.description = strdup(foo);
+		proto.player.name = foo;
+		proto.player.short_descr = foo;
+		proto.player.long_descr = foo;
+		proto.player.description = foo;
 
 		SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
 		REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
@@ -4254,7 +4254,7 @@ SUPERCMD(do_obuild) {
 		};
 		auto get_strval = [&](std::string_view str) -> std::optional<char*> {
 			if(arg_vec[2].compare(str.data()) == 0) {
-				return strdup(arg_vec[3].c_str());
+				return arg_vec[3].data();
 			}
 
 			return std::nullopt;

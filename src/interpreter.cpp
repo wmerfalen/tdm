@@ -1052,6 +1052,8 @@ void command_interpreter(player_ptr_t& player, std::string in_argument) {
 
 
 struct alias_data *find_alias(struct alias_data *alias_list, char *str) {
+	return nullptr;
+#if 0
 	while(alias_list != NULL) {
 		if(*str == *alias_list->alias)	/* hey, every little bit counts :-) */
 			if(!strcmp(str, alias_list->alias)) {
@@ -1062,6 +1064,7 @@ struct alias_data *find_alias(struct alias_data *alias_list, char *str) {
 	}
 
 	return (NULL);
+#endif
 }
 
 
@@ -1082,63 +1085,7 @@ void free_alias(struct alias_data *a) {
 
 /* The interface to the outside world: do_alias */
 ACMD(do_alias) {
-	char arg[MAX_INPUT_LENGTH];
-	char *repl;
-	struct alias_data *a, *temp;
 
-	if(IS_NPC(ch)) {
-		return;
-	}
-
-	repl = any_one_arg(argument, arg);
-
-	if(!*arg) {			/* no argument specified -- list currently defined aliases */
-		send_to_char(ch, "Currently defined aliases:");
-
-		if((a = GET_ALIASES(ch)) == NULL) {
-			send_to_char(ch, " None.");
-		} else {
-			while(a != NULL) {
-				send_to_char(ch, "%-15s %s", a->alias, a->replacement);
-				a = a->next;
-			}
-		}
-	} else {			/* otherwise, add or remove aliases */
-		/* is this an alias we've already defined? */
-		if((a = find_alias(GET_ALIASES(ch), arg)) != NULL) {
-			REMOVE_FROM_LIST(a, GET_ALIASES(ch), next);
-			free_alias(a);
-		}
-
-		/* if no replacement string is specified, assume we want to delete */
-		if(!*repl) {
-			if(a == NULL) {
-				send_to_char(ch, "No such alias.");
-			} else {
-				send_to_char(ch, "Alias deleted.");
-			}
-		} else {			/* otherwise, either add or redefine an alias */
-			if(!str_cmp(arg, "alias")) {
-				send_to_char(ch, "You can't alias 'alias'.");
-				return;
-			}
-
-			CREATE(a, struct alias_data, 1);
-			a->alias = strdup(arg);
-			delete_doubledollar(repl);
-			a->replacement = strdup(repl);
-
-			if(strchr(repl, ALIAS_SEP_CHAR) || strchr(repl, ALIAS_VAR_CHAR)) {
-				a->type = ALIAS_COMPLEX;
-			} else {
-				a->type = ALIAS_SIMPLE;
-			}
-
-			a->next = GET_ALIASES(ch);
-			GET_ALIASES(ch) = a;
-			send_to_char(ch, "Alias added.");
-		}
-	}
 }
 
 /*
@@ -1160,92 +1107,7 @@ ACMD(do_alias) {
  *      have been placed at the front of the character's input queue.
  */
 int perform_alias(mods::descriptor_data& d, char *orig, size_t maxlen) {
-	char first_arg[MAX_INPUT_LENGTH], *ptr;
-	struct alias_data *a, *tmp;
-
-	/* Mobs don't have alaises. */
-	if(IS_NPC(d.character)) {
-		return (0);
-	}
-
-	/* bail out immediately if the guy doesn't have any aliases */
-	if((tmp = GET_ALIASES(d.character)) == NULL) {
-		return (0);
-	}
-
-	/* find the alias we're supposed to match */
-	ptr = any_one_arg(orig, first_arg);
-
-	/* bail out if it's null */
-	if(!*first_arg) {
-		return (0);
-	}
-
-	/* if the first arg is not an alias, return without doing anything */
-	if((a = find_alias(tmp, first_arg)) == NULL) {
-		return (0);
-	}
-
-	if(a->type == ALIAS_SIMPLE) {
-		strlcpy(orig, a->replacement, maxlen);
-		return (0);
-	} else {
-		//perform_complex_alias(d, ptr, a);
-		std::list<txt_block> temp_queue;
-		char *tokens[NUM_TOKENS], *temp, *write_point;
-		char buf2[MAX_RAW_INPUT_LENGTH], buf[MAX_RAW_INPUT_LENGTH];	/* raw? */
-		int num_of_tokens = 0, num;
-
-		/* First, parse the original string */
-		strcpy(buf2, ptr);	/* strcpy: OK (orig:MAX_INPUT_LENGTH < buf2:MAX_RAW_INPUT_LENGTH) */
-		temp = strtok(buf2, " ");
-
-		while(temp != NULL && num_of_tokens < NUM_TOKENS) {
-			tokens[num_of_tokens++] = temp;
-			temp = strtok(NULL, " ");
-		}
-
-		/* initialize */
-		write_point = buf;
-		//temp_queue.head = temp_queue.tail = NULL;
-
-		/* now parse the alias */
-		for(temp = a->replacement; *temp; temp++) {
-			if(*temp == ALIAS_SEP_CHAR) {
-				*write_point = '\0';
-				buf[MAX_INPUT_LENGTH - 1] = '\0';
-				//write_to_q(buf, &temp_queue, 1);
-				temp_queue.emplace_back(buf,1);
-				write_point = buf;
-			} else if(*temp == ALIAS_VAR_CHAR) {
-				temp++;
-
-				if((num = *temp - '1') < num_of_tokens && num >= 0) {
-					strcpy(write_point, tokens[num]);	/* strcpy: OK */
-					write_point += strlen(tokens[num]);
-				} else if(*temp == ALIAS_GLOB_CHAR) {
-					strcpy(write_point, ptr);		/* strcpy: OK */
-					write_point += strlen(ptr);
-				} else if((*(write_point++) = *temp) == '$') {	/* redouble $ for act safety */
-					*(write_point++) = '$';
-				}
-			} else {
-				*(write_point++) = *temp;
-			}
-		}
-
-		*write_point = '\0';
-		buf[MAX_INPUT_LENGTH - 1] = '\0';
-		//write_to_q(buf, &temp_queue, 1);
-		temp_queue.emplace_back(buf,1);
-
-		if(d.input.size() == 0) {
-			d.input = std::move(temp_queue);
-		} else {
-			std::copy(temp_queue.begin(),temp_queue.end(),d.input.end());
-		}
-		return 1;
-	}
+	return 0;
 }
 
 

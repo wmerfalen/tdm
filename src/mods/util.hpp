@@ -204,6 +204,28 @@ namespace mods::util {
 		ss >> m;
 		return m;
 	}
+	template <typename T>
+	static inline std::optional<T> file_fetch_integer(FILE* fp) {
+		std::string buffer = "";
+		for(std::size_t i=0; i < 16; i++) {
+			char ch = fgetc(fp);
+			if(isdigit(ch)) {
+				buffer += ch;
+				continue;
+			}
+			if(isspace(ch)) {
+				if(buffer.length()) {
+					//ungetc(ch,fp);
+					return mods::util::stoi<T>(buffer);
+				}
+				continue;
+			}
+		}
+		if(buffer.length()) {
+			return mods::util::stoi<T>(buffer);
+		}
+		return std::nullopt;
+	}
 	/*
 		template <typename T>
 			T stoi(const pqxx::tuple::reference & i){

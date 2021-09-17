@@ -164,7 +164,6 @@ namespace mods::players::db_load {
 		if(player_ptr->position() == CON_PLAYING) {
 			player_ptr->sendln("Your character has been saved.");
 		}
-		write_aliases(player_ptr->cd());
 	}
 
 	void set_reporter_lambda(reporter_t f) {
@@ -291,6 +290,5 @@ namespace mods::players::db_load {
 		}
 	}
 	void load_aliases(player_ptr_t& player) {
-		read_aliases(player->cd());
 	}
 };

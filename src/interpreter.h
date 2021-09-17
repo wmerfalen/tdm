@@ -61,13 +61,6 @@ struct command_info {
 extern const struct command_info cmd_info[];
 #endif
 
-struct alias_data {
-	char *alias;
-	char *replacement;
-	int type;
-	struct alias_data *next;
-};
-
 #define ALIAS_SIMPLE	0
 #define ALIAS_COMPLEX	1
 

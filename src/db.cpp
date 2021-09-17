@@ -599,16 +599,6 @@ void boot_db(void) {
 /* reset the time in the game from file */
 void reset_time(void) {
 	time_t beginning_of_time = 0;
-#if 0
-	FILE *bgtime;
-
-	if((bgtime = fopen(TIME_FILE, "r")) == NULL) {
-		log("SYSERR: Can't read from '%s' time file.", TIME_FILE);
-	} else {
-		fscanf(bgtime, "%ld\n", &beginning_of_time);
-		fclose(bgtime);
-	}
-#endif
 
 	if(beginning_of_time == 0) {
 		beginning_of_time = 650336715;
@@ -2375,14 +2365,6 @@ bool parse_sql_player(player_ptr_t player_ptr) {
 /* release memory allocated for a char struct */
 void free_char(char_data *ch) {
 	log("DEPRECATED: free_char");
-	alias_data *a;
-
-	if(ch->player_specials) {
-		while((a = GET_ALIASES(ch)) != NULL) {
-			GET_ALIASES(ch) = (GET_ALIASES(ch))->next;
-			free_alias(a);
-		}
-	}
 
 	while(ch->affected) {
 		affect_remove(ch, ch->affected);

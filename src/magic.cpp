@@ -64,7 +64,7 @@ int mag_savingthrow(char_data *ch, int type, int modifier) {
 		class_sav = GET_CLASS(ch);
 	}
 
-	/** TODO uncomment next line and do saving_throws 
+	/** TODO uncomment next line and do saving_throws
 	save = saving_throws(class_sav, type, GET_LEVEL(ch));
 	save += GET_SAVE(ch, type);
 	save += modifier;
@@ -80,8 +80,8 @@ int mag_savingthrow(char_data *ch, int type, int modifier) {
 #endif
 }
 
-void update_player_affected_by(player_ptr_t& player){
-	for(auto &af : player->get_affected_by()){
+void update_player_affected_by(player_ptr_t& player) {
+	for(auto& af : player->get_affected_by()) {
 		if(af.duration >= 1) {
 			af.duration--;
 		} else if(af.duration == -1) {	/* No action */
@@ -703,7 +703,7 @@ void mag_areas(int level, char_data *ch, int spellnum, int savetype) {
 
 	//for(tch = world[IN_ROOM(ch)].people; tch; tch = next_tch) {
 	//	next_tch = tch->next_in_room;
-	for(auto & plr : mods::globals::get_room_list(player)){
+	for(auto& plr : mods::globals::get_room_list(player)) {
 
 		tch = plr->cd();
 		/*
@@ -852,8 +852,8 @@ void mag_summons(int level, char_data *ch, struct obj_data *obj,
 
 		if(spellnum == SPELL_CLONE) {
 			/* Don't mess up the prototype; use new string copies. */
-			mob->player.name = strdup(GET_NAME(ch));
-			mob->player.short_descr = strdup(GET_NAME(ch));
+			mob->player.name = GET_NAME(ch);
+			mob->player.short_descr = GET_NAME(ch);
 		}
 
 		act(mag_summon_msgs[msg], FALSE, ch, 0, mob, TO_ROOM);

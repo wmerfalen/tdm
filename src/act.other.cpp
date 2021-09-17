@@ -134,13 +134,11 @@ ACMD(do_save) {
 	 */
 	if(auto_save && GET_LEVEL(ch) <= LVL_IMMORT) {
 		send_to_char(ch, "Saving aliases.");
-		write_aliases(ch);
 		return;
 	}
 
 	send_to_char(ch, "Saving %s and aliases.", GET_NAME(ch).c_str());
 
-	write_aliases(ch);
 	Crash_crashsave(ch);
 
 	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_HOUSE_CRASH)) {

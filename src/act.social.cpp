@@ -279,11 +279,8 @@ void boot_social_messages(void) {
 			}
 			temp_buffer += ch;
 		}
-		//std::cerr << "temp_buffer: '" << temp_buffer << "'\n";
 		memset(next_soc,0,sizeof(next_soc));
 		bcopy(temp_buffer.c_str(),next_soc,std::min(sizeof(next_soc) - 3,temp_buffer.length()));
-		//std::cerr << "next_soc: '" << next_soc << "'\n";
-		//fscanf(fl, " %s ", next_soc);
 
 		if(next_soc[0] == '$') {
 			break;
@@ -294,7 +291,6 @@ void boot_social_messages(void) {
 		bool eof = false;
 		for(auto i=0; i < 64; i++) {
 			char ch = (char)fgetc(fl);
-			//std::cerr << "read: '" << ch << "'\n";
 			if(ch == '\n') {
 				ch = fgetc(fl);
 				if(ch == EOF) {
@@ -302,18 +298,15 @@ void boot_social_messages(void) {
 				} else {
 					ungetc(ch,fl);
 				}
-				//ungetc('\n',fl);
 				break;
 			}
 			if(isspace(ch)) {
-				//std::cerr << "found space\n";
 				continue;
 			}
 			if(isdigit((int)ch)) {
 				if(hide_parsed == false) {
 					std::string s;
 					s += ch;
-					//std::cerr << "hide: '" << s << "'\n";
 					hide = atoi(s.c_str());
 					hide_parsed = true;
 					continue;
@@ -321,7 +314,6 @@ void boot_social_messages(void) {
 				if(min_pos_parsed == false) {
 					std::string s;
 					s += ch;
-					//std::cerr << "min_pos: '" << s << "'\n";
 					min_pos = atoi(s.c_str());
 					min_pos_parsed = true;
 					continue;
@@ -331,7 +323,6 @@ void boot_social_messages(void) {
 		if(eof) {
 			break;
 		}
-		//std::cerr << "hide: " << hide << ", min_pos: " << min_pos << "\n";
 
 		if(!hide_parsed || !min_pos_parsed) {
 			log("SYSERR: format error in social file near social '%s'", next_soc);
@@ -357,7 +348,6 @@ void boot_social_messages(void) {
 #endif
 
 		soc_mess_list[curr_soc].char_no_arg = fread_action(fl, nr);
-		//std::cerr << " char-no arg: '" << soc_mess_list[curr_soc].char_no_arg << "'\n";
 		soc_mess_list[curr_soc].others_no_arg = fread_action(fl, nr);
 		soc_mess_list[curr_soc].char_found = fread_action(fl, nr);
 
