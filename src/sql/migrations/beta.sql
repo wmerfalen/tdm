@@ -1,7 +1,7 @@
 \c postgres
 DROP DATABASE mud;
 CREATE DATABASE mud;
-\c mud
+\c mud;
 
 --
 -- PostgreSQL database dump
@@ -1333,8 +1333,7 @@ CREATE TABLE public.mobile (
     mob_ability_chemistry integer DEFAULT 1 NOT NULL,
     mob_ability_weapon_handling integer DEFAULT 1 NOT NULL,
     mob_ability_strategy integer DEFAULT 1 NOT NULL,
-    mob_ability_medical integer DEFAULT 1 NOT NULL,
-    mob_experience integer DEFAULT 250 NOT NULL
+    mob_ability_medical integer DEFAULT 1 NOT NULL
 );
 
 
@@ -3668,6 +3667,7 @@ COPY public.class_engineer (engineer_id, engineer_player_id, created_at, updated
 --
 
 COPY public.class_ghost (ghost_id, ghost_player_id, created_at, updated_at) FROM stdin;
+12	110	2021-09-18 01:42:45.198142	2021-09-18 01:42:45.198142
 \.
 
 
@@ -3717,8 +3717,8 @@ COPY public.computer_terminal (id, terminal_room_vnum, terminal_type, terminal_a
 --
 
 COPY public.contract_step_callback (id, s_contract_vnum, s_task_type, s_task_target, s_task_vnum, s_sequence_vnum) FROM stdin;
-9	1	GOAL_FIND	TARGET_ROOM	143	1
-10	1	GOAL_FIND	TARGET_ROOM	144	2
+11	1	GOAL_FIND	TARGET_ROOM	143	1
+12	1	GOAL_FIND	TARGET_ROOM	144	2
 \.
 
 
@@ -3727,11 +3727,11 @@ COPY public.contract_step_callback (id, s_contract_vnum, s_task_type, s_task_tar
 --
 
 COPY public.contract_steps (id, s_contract_vnum, s_task_type, s_task_target, s_description, s_object_yaml, s_mob_vnum, s_room_vnum, s_quota, s_is_optional, s_order, s_reward_xp, s_reward_money, s_reward_1, s_reward_2, s_reward_3, s_reward_4, s_reward_5, s_reward_6, s_reward_7, s_reward_8, s_reward_9, s_reward_10, created_at, updated_at) FROM stdin;
-21	1	1	2	Find Doctor Land. Doctor Land is a ballistics expert and as such runs the majority of the new recruit shooting range\r\nactivities. You can find him in the gear room.	\N	0	266	0	f	0	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:27.540974	2021-09-06 01:20:27.540974
-22	1	1	2	Locate the TRITON Labs research scientist. He can give you the magazines that Doctor Land requires.\r\n	\N	0	143	0	f	1	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:27.54226	2021-09-06 01:20:27.54226
-23	1	1	2	Follow the TRITON Labs research scientist north to get the magazines.\r\n	\N	0	144	0	f	2	850	5000	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:27.54348	2021-09-06 01:20:27.54348
-24	1	1	0	Go back to Doctor Land with the magazines.\r\n	\N	603	0	0	f	3	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:27.54471	2021-09-06 01:20:27.54471
-25	1	512	0	Give all 4 magazines to Doctor Land so that he can find a way to build more.\r\n	\N	603	0	4	f	4	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:27.545901	2021-09-06 01:20:27.545901
+26	1	1	2	Find Doctor Land. Doctor Land is a ballistics expert and as such runs the majority of the new recruit shooting range\r\nactivities. You can find him in the gear room.	\N	0	266	0	f	0	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.849428	2021-09-18 01:54:46.849428
+27	1	1	2	Locate the TRITON Labs research scientist. He can give you the magazines that Doctor Land requires.\r\n	\N	0	143	0	f	1	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.851098	2021-09-18 01:54:46.851098
+28	1	1	2	Follow the TRITON Labs research scientist north to get the magazines.\r\n	\N	0	144	0	f	2	850	5000	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.85257	2021-09-18 01:54:46.85257
+29	1	1	0	Go back to Doctor Land with the magazines.\r\n	\N	603	0	0	f	3	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.854077	2021-09-18 01:54:46.854077
+30	1	512	0	Give all 4 magazines to Doctor Land so that he can find a way to build more.\r\n	\N	603	0	4	f	4	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.855485	2021-09-18 01:54:46.855485
 \.
 
 
@@ -3740,7 +3740,7 @@ COPY public.contract_steps (id, s_contract_vnum, s_task_type, s_task_target, s_d
 --
 
 COPY public.contracts (id, c_vnum, c_description, c_title, created_at, updated_at) FROM stdin;
-9	1	Good evening, soldier. According to recent advances in our {yel}TRITON{/yel} sponsored laboratory a new kind of ammunition is being built.\r\n\r\nThe blueprint for this ammunition contains heavy amounts of radioactive isotopes from recently spent Uranium. Find the scientist in the armory to east of {blu}COBALT{/blu} Main hallway. He will give you the magazines he has made so far. Once you've acquired the magazines, I will give you further instructions over radio.\r\n{yel}Here are the contract instructions:{/yel}\r\n{yel}1) {grn}Find {blu}Doctor Land{/blu} {grn}in the Gear Room near the shooting range.{/grn}\r\n{yel}2) {grn}Find the TRITON Labs scientist. He will give you the magazines you need.\r\n{yel}3) {grn}Take the magazines to {blu}Doctor Land{/blu}.\r\n{yel}4) {grn}Talk to {blu}Doctor Land{/blu} on next steps...\r\n	Experimental {yel}High Velocity{/yel} magazines.	2021-09-06 01:20:27.539248	2021-09-06 01:20:27.539248
+11	1	Good evening, soldier. According to recent advances in our {yel}TRITON{/yel} sponsored laboratory a new kind of ammunition is being built.\r\n\r\nThe blueprint for this ammunition contains heavy amounts of radioactive isotopes from recently spent Uranium. Find the scientist in the armory to east of {blu}COBALT{/blu} Main hallway. He will give you the magazines he has made so far. Once you've acquired the magazines, I will give you further instructions over radio.\r\n{yel}Here are the contract instructions:{/yel}\r\n{yel}1) {grn}Find {blu}Doctor Land{/blu} {grn}in the Gear Room near the shooting range.{/grn}\r\n{yel}2) {grn}Find the TRITON Labs scientist. He will give you the magazines you need.\r\n{yel}3) {grn}Take the magazines to {blu}Doctor Land{/blu}.\r\n{yel}4) {grn}Talk to {blu}Doctor Land{/blu} on next steps...\r\n	Experimental {yel}High Velocity{/yel} magazines.	2021-09-18 01:54:46.847285	2021-09-18 01:54:46.847285
 \.
 
 
@@ -3840,6 +3840,8 @@ COPY public.mob_equipment (id, meq_profile_name, meq_vnum, meq_light, meq_finger
 --
 
 COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, created_at, updated_at) FROM stdin;
+38	112	112	2021-09-06 02:04:34.330576	2021-09-06 02:04:34.330576
+39	113	113	2021-09-06 02:04:34.385077	2021-09-06 02:04:34.385077
 18	600	7	2021-09-04 04:23:26.981479	2021-09-04 04:23:26.981479
 19	601	8	2021-09-04 04:23:26.988068	2021-09-04 04:23:26.988068
 20	602	9	2021-09-04 04:23:26.993713	2021-09-04 04:23:26.993713
@@ -3859,8 +3861,6 @@ COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, creat
 31	110	110	2021-09-04 04:23:27.364886	2021-09-04 04:23:27.364886
 34	106	14	2021-09-06 01:20:27.887755	2021-09-06 01:20:27.887755
 35	107	107	2021-09-06 01:20:27.896475	2021-09-06 01:20:27.896475
-38	112	112	2021-09-06 02:04:34.330576	2021-09-06 02:04:34.330576
-39	113	113	2021-09-06 02:04:34.385077	2021-09-06 02:04:34.385077
 \.
 
 
@@ -3869,136 +3869,136 @@ COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, creat
 --
 
 COPY public.mob_roam (id, mob_virtual_number, room_virtual_number, profile_name) FROM stdin;
-504	601	147	volunteer-patient
-505	601	148	volunteer-patient
-506	601	149	volunteer-patient
-507	601	150	volunteer-patient
-508	601	151	volunteer-patient
-509	601	152	volunteer-patient
-510	601	153	volunteer-patient
-511	601	154	volunteer-patient
-512	601	155	volunteer-patient
-513	601	156	volunteer-patient
-514	407	157	rogue-mp-shotgunner
-515	407	158	rogue-mp-shotgunner
-516	407	159	rogue-mp-shotgunner
-517	407	160	rogue-mp-shotgunner
-518	407	161	rogue-mp-shotgunner
-519	407	162	rogue-mp-shotgunner
-520	407	163	rogue-mp-shotgunner
-521	407	164	rogue-mp-shotgunner
-522	407	165	rogue-mp-shotgunner
-523	407	164	rogue-mp-shotgunner
-524	407	163	rogue-mp-shotgunner
-525	407	162	rogue-mp-shotgunner
-526	407	161	rogue-mp-shotgunner
-527	407	162	rogue-mp-shotgunner
-528	407	163	rogue-mp-shotgunner
-529	407	164	rogue-mp-shotgunner
-530	407	165	rogue-mp-shotgunner
-531	407	164	rogue-mp-shotgunner
-532	407	163	rogue-mp-shotgunner
-533	407	162	rogue-mp-shotgunner
-534	407	161	rogue-mp-shotgunner
-535	407	162	rogue-mp-shotgunner
-536	407	163	rogue-mp-shotgunner
-537	407	164	rogue-mp-shotgunner
-538	501	130	mp-shotgunner
-539	501	131	mp-shotgunner
-540	501	138	mp-shotgunner
-541	501	131	mp-shotgunner
-542	501	231	mp-shotgunner
-543	500	130	mp-enforcer
-544	500	131	mp-enforcer
-545	500	138	mp-enforcer
-546	500	131	mp-enforcer
-547	500	231	mp-enforcer
-548	500	230	mp-enforcer
-549	500	229	mp-enforcer
-550	500	228	mp-enforcer
-551	500	227	mp-enforcer
-552	500	226	mp-enforcer
-553	500	225	mp-enforcer
-554	500	224	mp-enforcer
-555	500	223	mp-enforcer
-556	500	222	mp-enforcer
-557	500	221	mp-enforcer
-558	500	220	mp-enforcer
-559	500	219	mp-enforcer
-560	500	218	mp-enforcer
-561	500	217	mp-enforcer
-562	500	216	mp-enforcer
-563	500	215	mp-enforcer
-564	500	214	mp-enforcer
-565	500	213	mp-enforcer
-566	500	212	mp-enforcer
-567	500	211	mp-enforcer
-568	500	210	mp-enforcer
-569	500	209	mp-enforcer
-570	500	208	mp-enforcer
-571	500	207	mp-enforcer
-572	500	206	mp-enforcer
-573	500	205	mp-enforcer
-574	500	204	mp-enforcer
-575	500	203	mp-enforcer
-576	500	202	mp-enforcer
-577	500	201	mp-enforcer
-578	500	200	mp-enforcer
-579	500	199	mp-enforcer
-580	500	198	mp-enforcer
-581	500	197	mp-enforcer
-582	500	196	mp-enforcer
-583	500	195	mp-enforcer
-584	500	194	mp-enforcer
-585	500	193	mp-enforcer
-586	500	141	mp-enforcer
-587	500	140	mp-enforcer
-588	500	139	mp-enforcer
-589	100	392	car-thief
-590	100	393	car-thief
-591	100	394	car-thief
-592	100	395	car-thief
-593	100	396	car-thief
-594	100	395	car-thief
-595	100	394	car-thief
-596	100	393	car-thief
-597	100	392	car-thief
-598	100	393	car-thief
-599	100	394	car-thief
-600	100	395	car-thief
-601	100	396	car-thief
-602	100	395	car-thief
-603	100	394	car-thief
-604	100	393	car-thief
-605	100	392	car-thief
-606	102	291	kidnapper
-607	102	292	kidnapper
-608	102	293	kidnapper
-609	102	294	kidnapper
-610	102	295	kidnapper
-611	102	329	kidnapper
-612	102	330	kidnapper
-613	102	331	kidnapper
-614	102	330	kidnapper
-615	102	329	kidnapper
-616	102	295	kidnapper
-617	102	296	kidnapper
-618	102	297	kidnapper
-619	102	298	kidnapper
-620	102	299	kidnapper
-621	102	300	kidnapper
-622	102	301	kidnapper
-623	102	316	kidnapper
-624	102	317	kidnapper
-625	102	322	kidnapper
-626	102	323	kidnapper
-627	102	324	kidnapper
-628	102	323	kidnapper
-629	102	322	kidnapper
-630	102	317	kidnapper
-631	102	316	kidnapper
-632	102	301	kidnapper
-633	102	302	kidnapper
+634	601	147	volunteer-patient
+635	601	148	volunteer-patient
+636	601	149	volunteer-patient
+637	601	150	volunteer-patient
+638	601	151	volunteer-patient
+639	601	152	volunteer-patient
+640	601	153	volunteer-patient
+641	601	154	volunteer-patient
+642	601	155	volunteer-patient
+643	601	156	volunteer-patient
+644	407	157	rogue-mp-shotgunner
+645	407	158	rogue-mp-shotgunner
+646	407	159	rogue-mp-shotgunner
+647	407	160	rogue-mp-shotgunner
+648	407	161	rogue-mp-shotgunner
+649	407	162	rogue-mp-shotgunner
+650	407	163	rogue-mp-shotgunner
+651	407	164	rogue-mp-shotgunner
+652	407	165	rogue-mp-shotgunner
+653	407	164	rogue-mp-shotgunner
+654	407	163	rogue-mp-shotgunner
+655	407	162	rogue-mp-shotgunner
+656	407	161	rogue-mp-shotgunner
+657	407	162	rogue-mp-shotgunner
+658	407	163	rogue-mp-shotgunner
+659	407	164	rogue-mp-shotgunner
+660	407	165	rogue-mp-shotgunner
+661	407	164	rogue-mp-shotgunner
+662	407	163	rogue-mp-shotgunner
+663	407	162	rogue-mp-shotgunner
+664	407	161	rogue-mp-shotgunner
+665	407	162	rogue-mp-shotgunner
+666	407	163	rogue-mp-shotgunner
+667	407	164	rogue-mp-shotgunner
+668	501	130	mp-shotgunner
+669	501	131	mp-shotgunner
+670	501	138	mp-shotgunner
+671	501	131	mp-shotgunner
+672	501	231	mp-shotgunner
+673	500	130	mp-enforcer
+674	500	131	mp-enforcer
+675	500	138	mp-enforcer
+676	500	131	mp-enforcer
+677	500	231	mp-enforcer
+678	500	230	mp-enforcer
+679	500	229	mp-enforcer
+680	500	228	mp-enforcer
+681	500	227	mp-enforcer
+682	500	226	mp-enforcer
+683	500	225	mp-enforcer
+684	500	224	mp-enforcer
+685	500	223	mp-enforcer
+686	500	222	mp-enforcer
+687	500	221	mp-enforcer
+688	500	220	mp-enforcer
+689	500	219	mp-enforcer
+690	500	218	mp-enforcer
+691	500	217	mp-enforcer
+692	500	216	mp-enforcer
+693	500	215	mp-enforcer
+694	500	214	mp-enforcer
+695	500	213	mp-enforcer
+696	500	212	mp-enforcer
+697	500	211	mp-enforcer
+698	500	210	mp-enforcer
+699	500	209	mp-enforcer
+700	500	208	mp-enforcer
+701	500	207	mp-enforcer
+702	500	206	mp-enforcer
+703	500	205	mp-enforcer
+704	500	204	mp-enforcer
+705	500	203	mp-enforcer
+706	500	202	mp-enforcer
+707	500	201	mp-enforcer
+708	500	200	mp-enforcer
+709	500	199	mp-enforcer
+710	500	198	mp-enforcer
+711	500	197	mp-enforcer
+712	500	196	mp-enforcer
+713	500	195	mp-enforcer
+714	500	194	mp-enforcer
+715	500	193	mp-enforcer
+716	500	141	mp-enforcer
+717	500	140	mp-enforcer
+718	500	139	mp-enforcer
+719	100	392	car-thief
+720	100	393	car-thief
+721	100	394	car-thief
+722	100	395	car-thief
+723	100	396	car-thief
+724	100	395	car-thief
+725	100	394	car-thief
+726	100	393	car-thief
+727	100	392	car-thief
+728	100	393	car-thief
+729	100	394	car-thief
+730	100	395	car-thief
+731	100	396	car-thief
+732	100	395	car-thief
+733	100	394	car-thief
+734	100	393	car-thief
+735	100	392	car-thief
+736	102	291	kidnapper
+737	102	292	kidnapper
+738	102	293	kidnapper
+739	102	294	kidnapper
+740	102	295	kidnapper
+741	102	329	kidnapper
+742	102	330	kidnapper
+743	102	331	kidnapper
+744	102	330	kidnapper
+745	102	329	kidnapper
+746	102	295	kidnapper
+747	102	296	kidnapper
+748	102	297	kidnapper
+749	102	298	kidnapper
+750	102	299	kidnapper
+751	102	300	kidnapper
+752	102	301	kidnapper
+753	102	316	kidnapper
+754	102	317	kidnapper
+755	102	322	kidnapper
+756	102	323	kidnapper
+757	102	324	kidnapper
+758	102	323	kidnapper
+759	102	322	kidnapper
+760	102	317	kidnapper
+761	102	316	kidnapper
+762	102	301	kidnapper
+763	102	302	kidnapper
 \.
 
 
@@ -4014,30 +4014,30 @@ COPY public.mob_zone (id, zone_virtual_number, mob_virtual_number, room_virtual_
 -- Data for Name: mobile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description, mob_long_description, mob_description, mob_action_bitvector, mob_affection_bitvector, mob_ability_strength, mob_ability_strength_add, mob_ability_intelligence, mob_ability_wisdom, mob_ability_dexterity, mob_ability_constitution, mob_ability_charisma, mob_alignment, mob_attack_type, mob_level, mob_hitroll, mob_armor, mob_max_hitpoints, mob_max_mana, mob_max_move, mob_gold, mob_exp, mob_load_position, mob_default_position, mob_sex, mob_hitpoints, mob_mana, mob_move, mob_damnodice, mob_damsizedice, mob_damroll, mob_weight, mob_height, mob_class, mob_special_extended_type, mob_targets, mob_roam_pattern, mob_ability_electronics, mob_ability_armor, mob_ability_marksmanship, mob_ability_sniping, mob_ability_demolitions, mob_ability_chemistry, mob_ability_weapon_handling, mob_ability_strategy, mob_ability_medical, mob_experience) FROM stdin;
-11	410	Corporal James Taggart	Corporal James Tagger short description	Corporal James Tagger long description	Corporal James Tagger description	0	0	10	10	10	10	10	10	10	0	0	150	150	150	-1	-1	-1	0	9800	0	0	0	-1	-1	-1	50	50	50	80	9	0	0	\N	\N	1	1	1	1	1	1	1	1	1	250
-1	1	chef  employee	A pissed looking Los  employee	A pissed looking Los  employee	This particular employee looks like he just got out of a federal penitentiary. He's most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.	8	0	25	0	25	0	25	0	25	0	0	0	0	0	250	250	250	5000	0	8	8	0	250	250	250	25	0	0	50	15	0	14	\N	\N	1	1	1	1	1	1	1	1	1	250
-12	600	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	0	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	250
-13	601	A volunteer patient	A volunteer patient	A volunteer patient	A volunteer patient stands here with dazed thousand mile stare.	8	0	185	183	10	0	184	0	1	0	0	15	0	0	880	25	240	0	0	0	0	1	880	25	240	8	90	115	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	250
-14	602	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	8	0	185	183	182	0	184	0	85	0	0	80	0	0	8580	815	240	85000	0	0	0	2	8580	815	240	-72	-70	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	250
-15	603	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	0	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	250
-16	406	A suspicious looking car thief	A suspicious looking car thief	A suspicious looking car thief	A car thief equipped with brass knuckles and a crowbar. He is obviously armed.	8	0	25	23	22	0	24	0	10	0	0	15	0	0	150	45	510	950	0	0	0	1	150	45	510	20	16	20	5	5	0	0	\N	\N	0	0	0	0	0	0	0	0	0	250
-17	407	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	25	0	0	5550	565	510	150	0	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	0	0	0	0	0	0	0	0	0	250
-18	500	A Military Police enforcer	A Military Police enforcer	A Military Police enforcer	A fit military police enforcer. He looks armed.	8	0	25	23	22	0	24	0	10	0	0	10	0	0	250	45	110	50	0	0	0	1	250	45	110	10	6	20	10	5	0	10	\N	\N	10	10	10	10	10	10	10	10	10	250
-19	501	A Military Police shotgunner	A Military Police shotgunner	A Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	40	0	0	5550	565	510	150	0	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10	250
-20	502	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	8	0	355	333	132	0	334	0	10	0	0	40	0	0	109550	1565	810	109150	0	0	0	1	109550	1565	810	115	48	340	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10	250
-2	100	A rugged car thief	A rugged car thief	A rugged car thief	A car thief stalking the area. He is armed.	8	0	18	13	2	0	34	0	0	0	0	10	0	0	350	45	610	750	0	0	0	1	350	45	610	30	6	20	10	5	0	14	\N	\N	15	5	15	8	0	0	18	0	0	250
-3	101	A petty thief	A petty thief	A petty thief	A petty thief is stalking the area.	8	0	4	4	2	0	4	0	0	0	0	5	0	0	100	15	110	750	0	0	0	1	100	15	110	2	6	10	4	5	0	14	\N	\N	5	4	5	2	0	0	4	0	0	250
-21	102	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	8	0	9	6	2	0	7	0	0	0	0	8	0	0	450	25	110	1123	0	0	0	1	450	25	110	3	25	20	4	5	0	15	\N	\N	0	10	8	3	0	0	5	0	0	250
-4	103	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict is manically patrolling the area.	8	0	13	6	2	0	13	0	0	0	0	13	0	0	650	25	310	4123	0	0	0	1	650	25	310	8	25	30	4	5	0	16	\N	\N	0	4	1	1	2	0	8	0	9	250
-22	104	A shoplifter	A shoplifter	A shoplifter	A shoplifter is stalking the area.	8	0	1	1	1	0	1	0	0	0	0	1	0	0	10	15	60	10	0	0	0	1	10	15	60	1	3	1	4	5	0	15	\N	\N	1	0	1	0	0	0	1	0	0	250
-23	105	A crackhead	A crackhead	A crackhead	A crackhead is stalking the area.	8	0	1	1	1	0	3	0	0	0	0	2	0	0	35	15	60	10	0	0	0	1	35	15	60	2	6	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0	250
-24	109	A retail associate	A retail associate	A retail associate	A retail associate tirelessly stocks shelves...	8	0	15	1	2	0	4	0	4	0	0	3	0	0	120	50	60	85	0	0	0	1	120	50	60	2	5	2	10	5	0	19	\N	\N	2	1	1	1	1	0	1	2	1	250
-25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	0	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2	250
-26	106	An armed security guard	An armed security guard	An armed security guard	An armed security guard watches you closely.	8	0	28	23	25	0	54	0	0	0	0	20	0	0	950	245	610	2150	0	0	0	1	950	245	610	90	18	60	10	5	0	18	\N	\N	25	30	35	20	30	10	38	25	20	250
-27	107	A bank teller	A bank teller	A bank teller	A bank teller is obediently serving you	8	0	1	1	1	0	3	0	30	0	0	2	0	0	15	15	20	450	0	0	0	2	15	15	20	1	3	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0	250
-28	112	An infected drone	An infected drone	An infected drone	An infected drone looks for something to infect...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	413	100	82	90	280	0	0	1	413	100	82	1	8	10	10	5	0	15	\N	\N	2	3	3	2	3	1	3	2	2	280
-29	113	An adapted drone	An adapted drone	An adapted drone	An adapted drone looks for something to infect...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	350	100	82	48	280	0	0	1	350	100	82	2	12	18	10	5	0	15	\N	\N	4	5	5	4	7	0	8	3	4	280
+COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description, mob_long_description, mob_description, mob_action_bitvector, mob_affection_bitvector, mob_ability_strength, mob_ability_strength_add, mob_ability_intelligence, mob_ability_wisdom, mob_ability_dexterity, mob_ability_constitution, mob_ability_charisma, mob_alignment, mob_attack_type, mob_level, mob_hitroll, mob_armor, mob_max_hitpoints, mob_max_mana, mob_max_move, mob_gold, mob_exp, mob_load_position, mob_default_position, mob_sex, mob_hitpoints, mob_mana, mob_move, mob_damnodice, mob_damsizedice, mob_damroll, mob_weight, mob_height, mob_class, mob_special_extended_type, mob_targets, mob_roam_pattern, mob_ability_electronics, mob_ability_armor, mob_ability_marksmanship, mob_ability_sniping, mob_ability_demolitions, mob_ability_chemistry, mob_ability_weapon_handling, mob_ability_strategy, mob_ability_medical) FROM stdin;
+11	410	Corporal James Taggart	Corporal James Tagger short description	Corporal James Tagger long description	Corporal James Tagger description	0	0	10	10	10	10	10	10	10	0	0	150	150	150	-1	-1	-1	0	50	0	0	0	-1	-1	-1	50	50	50	80	9	0	0	\N	\N	1	1	1	1	1	1	1	1	1
+1	1	chef  employee	A pissed looking Los  employee	A pissed looking Los  employee	This particular employee looks like he just got out of a federal penitentiary. He's most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.	8	0	25	0	25	0	25	0	25	0	0	0	0	0	250	250	250	5000	50	8	8	0	250	250	250	25	0	0	50	15	0	14	\N	\N	1	1	1	1	1	1	1	1	1
+28	112	An infected drone	An infected drone	An infected drone	An infected drone looks for something to infect...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	413	100	82	90	50	0	0	1	413	100	82	1	8	10	10	5	0	15	\N	\N	2	3	3	2	3	1	3	2	2
+29	113	An adapted drone	An adapted drone	An adapted drone	An adapted drone looks for something to infect...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	350	100	82	48	50	0	0	1	350	100	82	2	12	18	10	5	0	15	\N	\N	4	5	5	4	7	0	8	3	4
+12	600	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	30500	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
+13	601	A volunteer patient	A volunteer patient	A volunteer patient	A volunteer patient stands here with dazed thousand mile stare.	8	0	185	183	10	0	184	0	1	0	0	15	0	0	880	25	240	0	3500	0	0	1	880	25	240	8	90	115	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
+14	602	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	8	0	185	183	182	0	184	0	85	0	0	80	0	0	8580	815	240	85000	8500	0	0	2	8580	815	240	-72	-70	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
+15	603	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	30500	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
+16	406	A suspicious looking car thief	A suspicious looking car thief	A suspicious looking car thief	A car thief equipped with brass knuckles and a crowbar. He is obviously armed.	8	0	25	23	22	0	24	0	10	0	0	15	0	0	150	45	510	950	150	0	0	1	150	45	510	20	16	20	5	5	0	0	\N	\N	0	0	0	0	0	0	0	0	0
+17	407	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	25	0	0	5550	565	510	150	250	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	0	0	0	0	0	0	0	0	0
+18	500	A Military Police enforcer	A Military Police enforcer	A Military Police enforcer	A fit military police enforcer. He looks armed.	8	0	25	23	22	0	24	0	10	0	0	10	0	0	250	45	110	50	7050	0	0	1	250	45	110	10	6	20	10	5	0	10	\N	\N	10	10	10	10	10	10	10	10	10
+19	501	A Military Police shotgunner	A Military Police shotgunner	A Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	40	0	0	5550	565	510	150	7050	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10
+20	502	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	8	0	355	333	132	0	334	0	10	0	0	40	0	0	109550	1565	810	109150	20050	0	0	1	109550	1565	810	115	48	340	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10
+2	100	A rugged car thief	A rugged car thief	A rugged car thief	A car thief stalking the area. He is armed.	8	0	18	13	2	0	34	0	0	0	0	10	0	0	350	45	610	750	250	0	0	1	350	45	610	30	6	20	10	5	0	14	\N	\N	15	5	15	8	0	0	18	0	0
+3	101	A petty thief	A petty thief	A petty thief	A petty thief is stalking the area.	8	0	4	4	2	0	4	0	0	0	0	5	0	0	100	15	110	750	250	0	0	1	100	15	110	2	6	10	4	5	0	14	\N	\N	5	4	5	2	0	0	4	0	0
+21	102	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	8	0	9	6	2	0	7	0	0	0	0	8	0	0	450	25	110	1123	250	0	0	1	450	25	110	3	25	20	4	5	0	15	\N	\N	0	10	8	3	0	0	5	0	0
+4	103	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict is manically patrolling the area.	8	0	13	6	2	0	13	0	0	0	0	13	0	0	650	25	310	4123	250	0	0	1	650	25	310	8	25	30	4	5	0	16	\N	\N	0	4	1	1	2	0	8	0	9
+22	104	A shoplifter	A shoplifter	A shoplifter	A shoplifter is stalking the area.	8	0	1	1	1	0	1	0	0	0	0	1	0	0	10	15	60	10	250	0	0	1	10	15	60	1	3	1	4	5	0	15	\N	\N	1	0	1	0	0	0	1	0	0
+23	105	A crackhead	A crackhead	A crackhead	A crackhead is stalking the area.	8	0	1	1	1	0	3	0	0	0	0	2	0	0	35	15	60	10	250	0	0	1	35	15	60	2	6	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0
+24	109	A retail associate	A retail associate	A retail associate	A retail associate tirelessly stocks shelves...	8	0	15	1	2	0	4	0	4	0	0	3	0	0	120	50	60	85	580	0	0	1	120	50	60	2	5	2	10	5	0	19	\N	\N	2	1	1	1	1	0	1	2	1
+25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	580	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2
+26	106	An armed security guard	An armed security guard	An armed security guard	An armed security guard watches you closely.	8	0	28	23	25	0	54	0	0	0	0	20	0	0	950	245	610	2150	20044	0	0	1	950	245	610	90	18	60	10	5	0	18	\N	\N	25	30	35	20	30	10	38	25	20
+27	107	A bank teller	A bank teller	A bank teller	A bank teller is obediently serving you	8	0	1	1	1	0	3	0	30	0	0	2	0	0	15	15	20	450	580	0	0	2	15	15	20	1	3	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0
 \.
 
 
@@ -4134,7 +4134,8 @@ COPY public.object_weapon (id, obj_fk_id, obj_ammo_max, obj_ammo_type, obj_coold
 --
 
 COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences, player_practice_sessions) FROM stdin;
-1	foKntnEF3KSXA	0	0	far	1	1	0	231	0	693	519	924	1155	866	6094	0	462	1212	68630	6518	6780	M	462	1212	68630	53	53	53	9	1	53	0	0	PC	6094	7	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	13
+110	$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.	0	0	sniper	1	1	0	3	0	9	9	12	15	9	0	0	241	436	729	48	561	M	241	436	729	52	52	52	9	1	52	0	0	PC	0	3	52	0	2021-09-18 01:42:45.163952	0	2021-09-18 01:42:45.163952	8388736	7
+1	foKntnEF3KSXA	0	0	far	1	1	0	231	0	693	519	924	1155	866	4710	0	65000	1212	65000	6752	8740	M	65000	1212	65000	53	53	53	9	1	53	0	0	PC	4710	7	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	13
 \.
 
 
@@ -4146,6 +4147,18 @@ COPY public.player_base_ability (pba_id, pba_player_id, pba_str, pba_str_add, pb
 2	96	50	0	150	112	200	250	187	150	87	137	100	25	150	137	150	225	2021-09-04 04:25:30.214342	2021-09-04 04:25:30.214342
 3	97	60	0	60	45	120	180	75	60	105	75	60	15	60	75	60	90	2021-09-07 11:11:48.984162	2021-09-07 11:11:48.984162
 4	98	50	0	150	112	200	250	187	150	87	137	100	25	150	137	150	225	2021-09-14 23:33:16.630307	2021-09-14 23:33:16.630307
+5	99	330	0	2970	2970	3300	3630	2970	2970	660	4290	1320	2079	2970	2062	2970	3712	2021-09-16 02:18:01.678329	2021-09-16 02:18:01.678329
+14	108	6	0	19	19	25	31	19	19	12	15	15	32	20	13	19	18	2021-09-18 01:25:34.696188	2021-09-18 01:25:34.696188
+9	103	11	0	33	33	44	55	33	33	22	55	22	34	33	30	33	41	2021-09-17 02:13:34.628945	2021-09-17 02:13:34.628945
+10	104	1	0	3	3	4	5	3	3	2	5	2	4	3	10	3	11	2021-09-17 02:18:35.567437	2021-09-17 02:18:35.567437
+15	109	1	0	3	3	4	5	3	3	2	4	4	5	4	2	3	3	2021-09-18 01:37:53.530041	2021-09-18 01:37:53.530041
+12	106	15	0	46	46	61	77	46	46	30	77	30	69	46	146	46	161	2021-09-17 02:27:46.192218	2021-09-17 02:27:46.192218
+11	105	2	0	6	6	8	11	6	6	4	11	4	9	6	20	6	23	2021-09-17 02:23:06.268849	2021-09-17 02:23:06.268849
+8	102	99	0	11	11	110	209	11	11	99	52	44	9	11	52	11	19	2021-09-17 00:53:51.810107	2021-09-17 00:53:51.810107
+6	100	33	0	99	74	132	165	123	99	57	90	66	16	99	90	99	148	2021-09-16 03:18:37.232244	2021-09-16 03:18:37.232244
+13	107	3	0	9	9	12	15	9	9	6	8	8	15	10	6	9	15	2021-09-17 19:58:07.021327	2021-09-17 19:58:07.021327
+7	101	44	0	44	44	88	132	44	44	44	60	44	9	44	60	44	60	2021-09-17 00:53:22.86459	2021-09-17 00:53:22.86459
+16	110	3	0	9	9	12	15	9	9	6	8	8	15	10	6	9	9	2021-09-18 01:42:45.197498	2021-09-18 01:42:45.197498
 1	1	231	0	693	519	924	1155	866	693	404	635	462	115	693	635	693	1039	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
 \.
 
@@ -4179,10 +4192,112 @@ COPY public.player_flags (id, player_id, chunk_index, flag_value) FROM stdin;
 --
 
 COPY public.player_object (id, po_player_id, po_type, po_type_id, po_yaml, po_load_type, po_wear_position, po_in_inventory, po_quantity, po_ammunition) FROM stdin;
+263	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+264	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+274	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+275	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+283	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+289	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+295	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+298	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+301	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+305	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+306	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+323	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+324	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+325	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+328	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+332	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+160	1	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	36
+351	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+276	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+280	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+284	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+293	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+296	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+299	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+302	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+261	1	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	36
+326	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+329	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+161	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+162	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+352	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+163	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+164	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+165	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+166	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+167	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+168	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+169	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+170	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+171	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+172	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+173	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+174	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+175	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+176	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+177	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+178	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
 114	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
 115	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
 116	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
 153	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+154	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+155	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+179	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+180	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+181	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+182	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+183	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+184	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+185	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+186	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+187	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+188	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+189	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+252	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+253	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+254	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+255	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+256	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+257	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+258	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+259	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+260	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+245	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+246	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+247	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+248	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+249	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+250	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+251	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+262	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+282	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+288	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+294	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+297	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+300	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+303	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+304	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+322	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+327	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+330	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+331	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+350	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+367	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+368	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+369	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+375	110	7	\N	titan-elbow-guards.yml	2	26	0	1	\N
+376	110	7	\N	titan-gauntlets.yml	2	10	0	1	\N
+377	110	7	\N	titan-shin-guards.yml	2	7	0	1	\N
+378	110	7	\N	basic-boots.yml	2	8	0	1	\N
+379	110	7	\N	basic-ballistic-vest.yml	2	5	0	1	\N
+381	110	1	\N	psg1.yml	2	16	0	1	7
+382	110	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	50
+383	110	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	50
+384	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
+385	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
 \.
 
 
@@ -4223,7 +4338,7 @@ COPY public.player_skill_usage (id, ps_player_id, ps_skill_id, ps_usage_count, c
 --
 
 COPY public.rifle_attachment (id, rifle_player_id, rifle_data, rifle_position, created_at, updated_at) FROM stdin;
-3852	1	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	primary	2021-09-16 01:35:43.153893	2021-09-16 01:35:43.153893
+4842	1	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	primary	2021-09-18 01:55:00.320457	2021-09-18 01:55:00.320457
 \.
 
 
@@ -4374,6 +4489,75 @@ COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1
 103	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	400	SUB_MACHINE_GUN	2	89	1	62	1	30	0	13	3	33	2	180	1	67	10	2	1	3	15	2	2	2	1	9	2	2	0	3	0	2	4	0	2	0	2	2	2	2	0	2021-09-14 23:45:13.896704	2021-09-14 23:45:13.896704
 104	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	195	MACHINE_PISTOL	10.5	2	1	2	2	1	2	48	1	2	12	1	144	2	2	2	2	6	0	0	3	1	1	8	1	0	1	0	2	2	1	0	1	2	1	1	0	1	0	2021-09-14 23:45:23.846735	2021-09-14 23:45:23.846735
 105	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	1	115	2	1	3	1540	1	23	4	4.29999999999999982	9	10	1818	3138	3	7	0	1	1	0	0	4	1	2	1	0	1	2	7	1	0	0	5	2	0	4	10	1	0	2021-09-14 23:45:34.064608	2021-09-14 23:45:34.064608
+106	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	2	SHOTGUN	70	6	2	93	24	24	5	53	2	2	3	40	918	8	2	3	3	9	12	3	35	2	3	0	6	80	4	0	2	0	12	0	3	2	3	2	2	18	0	2021-09-16 02:07:36.873686	2021-09-16 02:07:36.873686
+107	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	3	ASSAULT_RIFLE	4	24	2	249	17	123	4	2	3	3	2	80	24	4	6	10	4	6	19	2	0	8	5	2	7	0	0	4	63	10	9	0	0	4	4	2	59	13	0	2021-09-16 02:07:57.898864	2021-09-16 02:07:57.898864
+108	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	2230	SUB_MACHINE_GUN	75	3	1	14	4	7	0	8	2	4.29999999999999982	5	180	3825	54	15	199	2	4	89	3	17	4	4	6	6	4	2	0	4	3	25	0	3	5	2	175	3	0	0	2021-09-16 02:08:02.030809	2021-09-16 02:08:02.030809
+109	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	141	SHOTGUN	4	2	2	34	1	3	4	53	2	4.29999999999999982	81	2	4	31	9	123	3	4	0	3	2	3	17	3	0	3	0	5	3	33	18	0	3	3	4	0	161	4	0	2021-09-16 02:08:15.453854	2021-09-16 02:08:15.453854
+110	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	47	SNIPER	0.810000000000000053	7	21	549	7	61	6	65	19	4.29999999999999982	4	10	1818	3218	21	11	3	3	3	4	2	3	0	3	19	0	5	3	4	4	0	0	3	3	2	2	2	0	0	2021-09-16 02:08:20.239637	2021-09-16 02:08:20.239637
+111	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	1	2	43	1	80	0	1	2	1	2	10	1323	12	5	38	0	0	1	1	1	1	1	1	1	0	0	1	1	1	1	0	1	1	0	1	1	1	0	2021-09-16 23:27:45.188054	2021-09-16 23:27:45.188054
+112	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	20.5	15	1	5	1	1	0	1	1	0	3	80	40	2	3	28	1	1	1	1	1	0	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-16 23:35:43.931376	2021-09-16 23:35:43.931376
+113	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	206	PISTOL	29	2	1	5	1	20	0	33	2	1	1	1	40	2	3	1	0	0	1	1	2	1	1	1	1	1	0	0	1	4	2	0	1	0	1	1	1	1	0	2021-09-16 23:35:57.520318	2021-09-16 23:35:57.520318
+114	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	100	SHOTGUN	70	2	2	34	1	80	2	1	2	2	1	10	1	10	8	20	2	1	2	2	1	2	1	2	0	0	0	1	0	0	2	0	1	1	1	1	1	1	0	2021-09-16 23:36:13.402217	2021-09-16 23:36:13.402217
+116	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	1	ASSAULT_RIFLE	2	2	2	1	4	45	2	4	3	14	5	4	2	2	1	10	3	1	0	1	10	4	3	0	2	2	0	7	0	1	0	0	0	2	4	1	0	3	0	2021-09-16 23:36:44.521348	2021-09-16 23:36:44.521348
+118	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	3	6	2	34	1	1	2	1	1	4.29999999999999982	2	10	1	10	3	127	2	3	3	2	0	1	2	8	0	1	1	1	0	0	6	0	2	1	1	0	2	3	0	2021-09-16 23:37:05.772357	2021-09-16 23:37:05.772357
+119	90	10	0	0	90	40	9	0	COMMON	m3.yml	SHOTGUN	3	GBNT-3	M3	28	2	SHOTGUN	70	6	2	1	1	155	1	3	3	4.29999999999999982	2	34	918	74	13	67	4	4	0	15	0	2	0	5	6	0	1	1	1	1	1	0	2	2	1	4	4	2	0	2021-09-16 23:37:18.426344	2021-09-16 23:37:18.426344
+120	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	4	1	6	11	1	34	2	33	1	0	21	8	1	1	2	20	0	4	2	2	0	2	13	2	1	0	2	2	2	0	4	0	13	3	2	0	4	2	0	2021-09-16 23:37:20.712351	2021-09-16 23:37:20.712351
+121	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	3.81000000000000005	1	20	2	1	1	0	2	2	4.29999999999999982	33	324	1344	20	80	1	0	1	6	0	1	5	2	1	1	2	1	1	1	0	2	0	2	1	0	2	4	0	0	2021-09-16 23:41:05.302512	2021-09-16 23:41:05.302512
+122	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	1	LIGHT_MACHINE_GUN	3.81000000000000005	19206	20	14	9	30	0	13	27	4.29999999999999982	1	438	818	1	40	558	1	2	0	1	9	2	1	5	1	14	0	2	4	0	1	0	0	1	2	4	4	2	0	2021-09-16 23:41:13.858541	2021-09-16 23:41:13.858541
+123	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.810000000000000053	2	21	2	3	252	4	13	4	4.29999999999999982	8	23	1818	1	21	9	14	1	3	1	2	0	1	2	0	2	0	2	0	4	1	0	4	2	1	1	2	1	0	2021-09-16 23:41:23.490425	2021-09-16 23:41:23.490425
+124	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	220	ASSAULT_RIFLE	13	2	2	14	2	45	1	3	3	14	5	80	1	2	1	2	2	4	8	1	0	1	0	3	1	1	2	1	0	0	0	0	2	1	0	2	0	0	0	2021-09-16 23:41:37.665403	2021-09-16 23:41:37.665403
+125	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	13	1	5	1	1	3	1	5	3	5	308	1	3	12	1	1	2	2	5	0	2	21	13	1	2	4	2	2	9	2	0	0	1	4	0	2	6	0	2021-09-16 23:41:43.832588	2021-09-16 23:41:43.832588
+126	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	20.5	6	1	2	2	3	3	2	1	2	60	80	40	7	2	187	8	3	14	3	3	2	11	0	15	0	3	4	2	12	5	0	0	3	24	0	3	0	0	2021-09-16 23:41:47.188541	2021-09-16 23:41:47.188541
+127	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	220	ASSAULT_RIFLE	518	91	2	2	4	223	2	3	3	4.29999999999999982	5	340	79	2	3	10	16	6	0	0	5	3	3	0	4	2	5	0	5	2	3	0	0	3	3	8	0	0	0	2021-09-16 23:41:49.369475	2021-09-16 23:41:49.369475
+128	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	19	999	20	14	2	2	2	2	39	11	33	3	2	8	3	3	9	3	2	8	2	8	0	5	3	0	7	0	4	2	0	0	3	0	14	0	0	0	0	2021-09-16 23:41:54.99946	2021-09-16 23:41:54.99946
+129	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	779	PISTOL	2	6	1	5	5	20	2	140	3	3	3	80	3	5	15	3	12	0	3	2	3	10	2	4	2	2	1	0	4	42	3	0	3	3	3	0	3	2	0	2021-09-16 23:41:58.892622	2021-09-16 23:41:58.892622
+130	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	9	ASSAULT_RIFLE	3	8	2	80	4	3	17	3	2	12	5	408	49	3	2	57	2	3	0	3	5	0	2	21	0	3	3	44	2	3	2	0	4	3	0	2	2	14	0	2021-09-16 23:42:00.832379	2021-09-16 23:42:00.832379
+131	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	2	31	1	63	3	2	2	3	2	4.29999999999999982	5	613	2	20	17	6	2	5	0	54	2	2	3	0	10	3	3	19	7	0	12	0	2	2	3	0	2	2	0	2021-09-16 23:42:04.939434	2021-09-16 23:42:04.939434
+132	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	2	PISTOL	2	9	1	3	2	20	3	33	1	12	3	3	179	164	3	16	2	0	3	3	17	3	3	3	3	3	2	0	2	2	4	0	2	2	0	23	3	3	0	2021-09-16 23:42:07.309542	2021-09-16 23:42:07.309542
+133	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	3	PISTOL	4	4	1	92	4	20	0	33	2	6	3	337	3	3	13	16	84	7	22	4	3	4	2	2	0	3	0	2	0	4	4	0	41	6	0	60	3	3	0	2021-09-16 23:42:08.832497	2021-09-16 23:42:08.832497
+134	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	208	4	2	34	1	2	0	53	3	4.29999999999999982	2	8	918	58	3	4	6	3	3	6	0	0	2	10	6	7	3	4	5	4	0	0	0	0	0	4	2	2	0	2021-09-16 23:42:10.128434	2021-09-16 23:42:10.128434
+135	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	2	999	20	69	3	64	0	4	7	3	33	180	818	126	9	4	0	0	2	17	21	5	112	24	3	0	4	6	4	4	0	0	5	116	2	0	3	2	0	2021-09-16 23:42:13.915874	2021-09-16 23:42:13.915874
+136	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	4	MACHINE_PISTOL	10.5	13	1	14	4	3	6	4	1	3	3	4	2	2	10	16	3	4	91	0	4	32	0	4	3	13	13	4	19	0	3	0	6	6	2	0	0	2	0	2021-09-16 23:42:15.757476	2021-09-16 23:42:15.757476
+137	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	11531	SUB_MACHINE_GUN	170	31	1	3	1	30	4	14	4	9	34	180	818	6	6	3	2	2	4	5	11	2	4	2	13	0	3	24	0	3	2	0	6	0	3	2	3	0	0	2021-09-16 23:42:17.37751	2021-09-16 23:42:17.37751
+138	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	13	1	5	1	4	0	33	1	0	3	80	40	11	13	16	5	2	1367	4	4	0	21	0	3	0	3	2	0	0	76	0	2	2	4	0	57	3	0	2021-09-16 23:42:20.082517	2021-09-16 23:42:20.082517
+139	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	11	3	20	47	3	30	0	13	3	3	4	2	818	66	40	140	514	4	0	10	3	3	4	0	49	5	26	2	2	19	8	0	4	2	3	0	4	0	0	2021-09-16 23:42:21.261413	2021-09-16 23:42:21.261413
+142	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	20	2	4	4	38	0	53	5	4.29999999999999982	19	10	18	2	3	20	215	3	2	0	2	26	4	2	2	0	3	3	5	3	23	0	12	12	2	4	5	3	0	2021-09-17 00:06:22.501847	2021-09-17 00:06:22.501847
+143	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	400	SUB_MACHINE_GUN	30.8099999999999987	3	1	14	1	206	4	3	3	80	66	2	818	20	18	6	2	3	2	3	4	12	2	0	2	22	0	6	17	21	6	0	0	2	4	26	2	0	0	2021-09-17 00:06:28.107491	2021-09-17 00:06:28.107491
+144	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	999	LIGHT_MACHINE_GUN	2	13	20	271	1	5	4	4	7	3	3	5	2	4	5	140	2	0	0	2	3	4	4	5	14	0	16	16	0	6	7	0	4	2	9	3	4	0	0	2021-09-17 00:06:53.128907	2021-09-17 00:06:53.128907
+145	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	1746	SUB_MACHINE_GUN	10	190	1	3	1	30	0	13	47	4.29999999999999982	6	4	818	20	57	2	4	10	4	13	6	72	5	2	0	4	0	2	3	4	4	0	29	3	5	4	4	6	0	2021-09-17 00:07:08.100927	2021-09-17 00:07:08.100927
+146	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	311	SHOTGUN	5	32	2	34	2	4	0	3	4	4.29999999999999982	2	4	19	10	2	12	0	74	4	0	2	17	3	32	20	2	16	546	4	3	5	0	2	6	2	2	4	2	0	2021-09-17 00:19:32.432101	2021-09-17 00:19:32.432101
+147	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	4	SHOTGUN	489	44	2	4	3	2	0	53	6	19	8	3	3	5	3	4	3	4	5	20	0	21	3	19	4	4	0	5	3	281	5	0	3	5	3	0	2	7	0	2021-09-17 00:19:36.334133	2021-09-17 00:19:36.334133
+148	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.8099999999999987	20	1	2	1	68	4	13	3	21	36	180	6479	20	2	208	3	11	56	15	0	0	2	2	3	0	0	4	45	22	0	0	5	5	0	4	5	3	0	2021-09-17 00:19:37.303205	2021-09-17 00:19:37.303205
+149	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	3	SHOTGUN	3	3	2	34	3	80	4	178	26	3	2	181	918	3	4	20	4	6	3	4	3	51	4	25	3	4	3	2	3	0	2	0	4	3	0	0	0	3	0	2021-09-17 00:46:53.68857	2021-09-17 00:46:53.68857
+150	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	146	SHOTGUN	387	6	2	34	1	80	4	53	3	4	2	10	918	21	11	3	0	0	4	2	12	0	14	3	6	2	3	3	2	2	4	0	4	4	0	0	2	24	0	2021-09-17 00:52:59.358813	2021-09-17 00:52:59.358813
+151	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	2	SHOTGUN	70	47	2	34	1	628	3	53	2	5	2	5	7	65	3	4	15	6	6	2	3	0	9	0	0	0	197	4	0	0	2	0	38	2	21	2	5	2	0	2021-09-17 01:33:01.729627	2021-09-17 01:33:01.729627
+152	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	5	ASSAULT_RIFLE	24	8	2	4	5	5	3.14000000000000012	3	4	2	21	80	91	4	23	5	125	4	4	21	5	5	0	4	249	5	24	5	2	0	4	0	4	0	0	0	5	2	0	2021-09-17 01:33:04.75737	2021-09-17 01:33:04.75737
+153	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	73	SNIPER	0.810000000000000053	53	2	19	3	15	0	13	5	30	2	55	2	1843	15	40	16	3	3	2	3	12	0	21	2	3	145	4	0	2	2	0	4	4	15	21	2	3	0	2021-09-17 01:33:05.290392	2021-09-17 01:33:05.290392
+140	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	15	2	39	19	4	450	0	80	4	2	246	4	1818	500	4	271	6	4	4	4	5	2	3	4	0	0	0	2	128	4	3	0	0	5	0	25	3	2	0	2021-09-16 23:42:22.548445	2021-09-16 23:42:22.548445
+115	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	155	SNIPER	0.810000000000000053	7	39	1	3	450	0	2	1	4.29999999999999982	8	10	2590	6	4	209	2	1	1	2	1	1	0	7	0	2	7	2	0	3	1	0	1	5	0	2	0	2	0	2021-09-16 23:36:33.761333	2021-09-16 23:36:33.761333
+117	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	1	8	39	19	3	1332	1	2	4	16	2	10	2	975	1	324	3	5	3	2	2	1	2	0	2	1	1	0	2	1	3	0	7	3	0	3	2	2	0	2021-09-16 23:36:54.692448	2021-09-16 23:36:54.692448
+141	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	2	14	39	4	3	2	0	3	4	26	54	10	6340	7	8	40	19	5	3	10	88	3	21	4	4	2	2	2	4	6	4	0	5	0	4	4	0	3	0	2021-09-16 23:42:23.841449	2021-09-16 23:42:23.841449
+154	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	381	6	2	34	2	80	5	53	7	4.29999999999999982	2	10	2	2	13	20	4	4	4	3	3	4	0	4	3	5	7	0	3	15	18	0	2	3	18	8	4	13	0	2021-09-17 01:46:31.106286	2021-09-17 01:46:31.106286
+155	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	254	SHOTGUN	5	25	2	34	7	2	0	25	6	19	2	18	918	10	4	20	5	3	41	4	0	5	5	5	0	0	4	2	4	5	7	0	3	6	2	34	10	5	0	2021-09-17 01:46:41.943902	2021-09-17 01:46:41.943902
+156	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	4	3	21	3	129	61	6	5	34	5	18	4	1818	3159	939	33	22	0	0	38	40	120	0	30	12	2	703	0	19	0	17	0	12	0	0	14	2	2	0	2021-09-17 01:46:52.492051	2021-09-17 01:46:52.492051
+157	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	220	ASSAULT_RIFLE	2	3	2	14	4	103	46	4	4	5	4	5	24	3	6	10	4	37	0	3	3	2	5	27	133	0	2	5	5	6	6	0	3	4	0	0	3	7	0	2021-09-17 01:47:03.78067	2021-09-17 01:47:03.78067
+158	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	1	6	2	34	1	1	1	53	2	4.29999999999999982	2	10	1453	10	1	34	1	1	1	1	0	1	0	1	1	1	0	1	0	1	1	0	1	1	0	1	0	1	0	2021-09-18 01:27:39.936028	2021-09-18 01:27:39.936028
+159	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	0.810000000000000053	7	2	35	3	450	1	17	4	1	1	10	1818	500	1	1	1	0	1	1	1	0	0	0	1	1	1	1	0	1	1	0	1	1	1	0	1	1	0	2021-09-18 01:28:53.380809	2021-09-18 01:28:53.380809
+160	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	4	999	20	14	1	2	0	13	1	2	33	180	1	1	40	173	1	1	1	0	1	0	0	1	1	1	1	1	1	0	0	0	1	1	1	1	0	0	0	2021-09-18 01:30:06.037856	2021-09-18 01:30:06.037856
+161	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	220	ASSAULT_RIFLE	4.23000000000000043	8	2	35	1	45	3.14000000000000012	3	1	4.29999999999999982	1	1	1	1	6	1	0	1	2	0	1	2	2	1	2	0	2	2	2	1	0	0	2	1	0	0	1	0	0	2021-09-18 01:30:12.186423	2021-09-18 01:30:12.186423
+162	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	30.8099999999999987	31	1	2	1	30	0	2	1	1	1	471	818	51	2	6	2	1	2	1	0	2	0	2	4	0	6	0	0	2	6	0	2	1	3	0	0	1	0	2021-09-18 01:30:18.64502	2021-09-18 01:30:18.64502
+163	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	4	LIGHT_MACHINE_GUN	5	999	20	2	1	70	0	1	1	1	248	1438	818	20	40	1	1	1	1	2	4	2	3	0	3	0	0	0	2	1	0	0	0	1	0	0	0	2	0	2021-09-18 01:30:39.448915	2021-09-18 01:30:39.448915
+164	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	1091	SUB_MACHINE_GUN	2	31	1	144	1	1	2	13	3	14	5	2	4239	48	6	6	3	2	2	1	2	0	1	0	2	1	1	3	3	0	2	0	3	0	2	2	0	1	0	2021-09-18 01:30:45.796981	2021-09-18 01:30:45.796981
+165	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	0.810000000000000053	7	6	43	1	61	0	53	5	4.29999999999999982	1	2	2	934	1	2	3	0	1	2	2	0	1	3	0	1	0	2	0	1	1	0	2	3	1	2	0	2	0	2021-09-18 01:31:39.066818	2021-09-18 01:31:39.066818
+166	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1	6	2	90	4	80	1	53	2	1	2	2	3169	2	1	2	1	8	0	1	6	2	4	1	1	1	0	0	0	4	1	0	2	2	1	1	4	0	0	2021-09-18 01:31:41.977839	2021-09-18 01:31:41.977839
+167	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	2	281	2	97	1	80	2	53	2	1	2	2	918	2	48	20	4	2	2	1	1	2	2	0	14	2	6	0	6	1	0	0	2	1	1	1	0	4	0	2021-09-18 01:32:18.631009	2021-09-18 01:32:18.631009
+168	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	69	121	1	5	1	2	2	5	2	2	1	2	40	2	2	79	1	0	3	9	3	2	2	0	3	5	4	2	2	0	2	0	2	18	0	20	0	3	0	2021-09-18 01:32:25.682925	2021-09-18 01:32:25.682925
+169	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.810000000000000053	10	6	19	10	1	1	1	5	4.29999999999999982	2	10	1818	500	4	43	2	0	2	0	1	7	37	3	2	2	6	4	5	4	0	0	0	4	1	0	2	3	0	2021-09-18 01:32:40.296917	2021-09-18 01:32:40.296917
+170	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	6	2	1	2	155	15	2	2	4.29999999999999982	2	10	918	1	1	20	8	1	2	0	2	2	1	2	0	4	1	0	2	16	0	0	4	1	2	0	2	4	0	2021-09-18 01:34:54.528826	2021-09-18 01:34:54.528826
+171	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	1	PISTOL	20.5	1	1	8	1	20	0	2	1	2	3	1	40	2	3	16	3	2	2	1	1	4	15	2	0	2	4	5	0	2	1	0	2	5	2	1	1	1	0	2021-09-18 01:35:00.363254	2021-09-18 01:35:00.363254
+172	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	475	ASSAULT_RIFLE	2	1	2	2	5	194	1	1	20	4.29999999999999982	5	80	5	9	6	10	0	6	2	3	1	2	1	4	1	1	3	2	2	4	3	0	1	0	2	0	4	0	0	2021-09-18 01:35:25.11697	2021-09-18 01:35:25.11697
+173	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	47	SHOTGUN	70	6	2	34	1	1	1	1	1	4.29999999999999982	2	1	1577	10	5	1	0	1	0	1	1	1	0	1	1	1	1	0	1	1	0	0	1	1	0	1	0	1	0	2021-09-18 01:43:24.324088	2021-09-18 01:43:24.324088
+174	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	1	2	1	1	80	0	53	1	1	2	1	918	10	5	1	1	0	0	1	1	0	1	1	1	1	1	0	1	0	1	0	0	1	0	1	1	1	0	2021-09-18 01:46:20.098382	2021-09-18 01:46:20.098382
 \.
 
 
@@ -7174,8 +7358,8 @@ COPY public.room_extra_descriptions (id, red_room_vnum, red_keyword, red_descrip
 --
 
 COPY public.scripted_sequences (id, s_sequence_vnum) FROM stdin;
-17	1
-19	2
+21	1
+23	2
 \.
 
 
@@ -7312,6 +7496,29 @@ COPY public.skill_usage (id, player_id, skill_name, skill_level) FROM stdin;
 21	1	smine	0
 22	1	cmine	0
 23	1	recon	0
+309	110	ads	0
+310	110	stealth	0
+311	110	summon	0
+312	110	xray	0
+313	110	feign	0
+314	110	claymore	0
+315	110	intimidation	0
+316	110	cryo	0
+317	110	flash	0
+318	110	ts	0
+319	110	lb	0
+320	110	suture	0
+321	110	as	0
+322	110	emp	0
+323	110	chaff	0
+324	110	sensor	0
+325	110	ubs	0
+326	110	ubf	0
+327	110	gm	0
+328	110	limb	0
+329	110	smine	0
+330	110	cmine	0
+331	110	recon	0
 \.
 
 
@@ -7382,189 +7589,149 @@ COPY public.zone (id, zone_virtual_number, zone_start, zone_end, zone_name, life
 --
 
 COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_arg2, zone_arg3, zone_yaml) FROM stdin;
-565	1	M	0	600	143	1	\N
-566	1	M	0	601	147	8	\N
-567	1	M	0	602	143	1	\N
-568	1	M	0	603	266	1	\N
-569	1	M	0	500	131	10	\N
-570	1	M	0	501	131	10	\N
-571	1	M	0	502	212	2	\N
-572	1	M	0	502	207	2	\N
-573	1	M	0	502	204	2	\N
-574	1	M	0	502	340	2	\N
-575	1	M	0	502	199	2	\N
-576	1	M	0	502	279	2	\N
-577	1	M	0	502	139	2	\N
-578	1	Y	0	0	402	1	#yaml|vehicle/p3-hunchbak.yml
-579	1	Y	0	0	400	1	#yaml|vehicle/p3-offroad-mx3.yml
-580	1	Y	0	0	399	1	#yaml|vehicle/prime-town-suv.yml
-581	1	Y	0	0	395	1	#yaml|vehicle/lxr-sunrise.yml
-582	1	Y	0	0	393	1	#yaml|vehicle/lxr-sport.yml
-583	1	Y	0	0	394	1	#yaml|vehicle/lxr-sport.yml
-584	1	M	0	100	393	2	\N
-585	1	M	0	100	394	2	\N
-586	1	M	0	100	395	2	\N
-587	1	M	0	100	396	2	\N
-588	1	M	0	100	398	2	\N
-589	1	M	0	100	400	2	\N
-590	1	M	0	100	399	2	\N
-591	1	M	0	100	401	2	\N
-592	1	M	0	100	402	2	\N
-593	1	M	0	101	316	5	\N
-594	1	M	0	101	317	5	\N
-595	1	M	0	101	322	5	\N
-596	1	M	0	101	323	5	\N
-597	1	M	0	101	324	5	\N
-598	1	M	0	101	325	5	\N
-599	1	M	0	101	306	5	\N
-600	1	M	0	101	308	5	\N
-601	1	M	0	102	290	2	\N
-602	1	M	0	102	291	2	\N
-603	1	M	0	102	292	2	\N
-604	1	M	0	102	294	2	\N
-605	1	M	0	102	295	2	\N
-606	1	M	0	102	331	2	\N
-607	1	M	0	102	298	2	\N
-608	1	M	0	102	303	2	\N
-609	1	M	0	102	310	2	\N
-610	1	M	0	102	317	2	\N
-611	1	M	0	102	324	2	\N
-612	1	M	0	103	407	1	\N
-613	1	M	0	103	409	1	\N
-614	1	M	0	103	413	1	\N
-615	1	M	0	103	282	1	\N
-616	1	M	0	103	284	1	\N
-617	1	M	0	103	286	1	\N
-618	1	M	0	103	292	1	\N
-619	1	M	0	103	293	1	\N
-620	1	R	0	575	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-621	1	R	0	576	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-622	1	R	0	577	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-623	1	R	0	578	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-624	1	R	0	579	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-625	1	R	0	580	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-626	1	R	0	581	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-627	1	R	0	582	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-628	1	R	0	583	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-629	1	R	0	584	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-630	1	R	0	585	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-631	1	R	0	586	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-632	1	R	0	587	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-633	1	R	0	588	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-634	1	R	0	589	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-635	1	R	0	590	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-636	1	R	0	591	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-637	1	R	0	592	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-638	1	R	0	593	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-639	1	R	0	594	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-640	1	R	0	595	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-641	1	R	0	596	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-642	1	R	0	597	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-643	1	R	0	598	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-644	1	R	0	599	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-645	1	R	0	600	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-646	1	R	0	601	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-647	1	R	0	602	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-648	1	R	0	603	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-649	1	R	0	604	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-650	1	R	0	605	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-651	1	R	0	606	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-652	1	R	0	607	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-653	1	R	0	608	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-654	1	R	0	609	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-655	1	R	0	610	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-656	1	R	0	611	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-657	1	R	0	612	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-658	1	R	0	613	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-659	1	R	0	614	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-660	1	R	0	615	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-661	1	R	0	616	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-662	1	R	0	617	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-663	1	R	0	618	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-664	1	R	0	619	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-665	1	R	0	620	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-666	1	R	0	621	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-667	1	R	0	622	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-668	1	R	0	623	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-669	1	R	0	624	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-670	1	R	0	625	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-671	1	R	0	626	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-672	1	R	0	627	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-673	1	R	0	628	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-674	1	R	0	629	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-675	1	R	0	630	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-676	1	R	0	631	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-677	1	R	0	632	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-678	1	R	0	633	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-679	1	R	0	634	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-680	1	R	0	635	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-681	1	R	0	636	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
-682	1	M	0	109	578	16	\N
-683	1	M	0	109	589	16	\N
-684	1	M	0	109	600	16	\N
-685	1	M	0	109	611	16	\N
-686	1	M	0	109	622	16	\N
-687	1	M	0	109	592	16	\N
-688	1	M	0	109	614	16	\N
-689	1	M	0	109	625	16	\N
-690	1	M	0	109	636	16	\N
-691	1	M	0	110	578	16	\N
-692	1	M	0	110	589	16	\N
-693	1	M	0	110	600	16	\N
-694	1	M	0	110	611	16	\N
-695	1	M	0	110	622	16	\N
-696	1	M	0	110	592	16	\N
-697	1	M	0	110	614	16	\N
-698	1	M	0	110	625	16	\N
-699	1	M	0	110	636	16	\N
-700	1	M	0	106	729	1	\N
-701	1	M	0	106	730	1	\N
-702	1	M	0	106	731	1	\N
-703	1	M	0	106	732	1	\N
-704	1	M	0	107	729	1	\N
-705	1	M	0	107	730	1	\N
-706	1	M	0	107	731	1	\N
-707	1	M	0	107	732	1	\N
-788	1	M	0	112	750	5	\N
-789	1	M	0	112	754	5	\N
-790	1	M	0	112	757	5	\N
-791	1	M	0	112	761	5	\N
-792	1	M	0	112	764	5	\N
-793	1	M	0	112	769	5	\N
-794	1	M	0	112	774	5	\N
-795	1	M	0	112	779	5	\N
-796	1	M	0	112	784	5	\N
-797	1	M	0	112	785	5	\N
-798	1	M	0	112	788	5	\N
-799	1	M	0	112	791	5	\N
-800	1	M	0	112	794	5	\N
-801	1	M	0	112	797	5	\N
-802	1	M	0	112	800	5	\N
-803	1	M	0	112	803	5	\N
-804	1	M	0	112	806	5	\N
-805	1	M	0	112	809	5	\N
-806	1	M	0	112	812	5	\N
-807	1	M	0	112	815	5	\N
-808	1	M	0	113	750	5	\N
-809	1	M	0	113	754	5	\N
-810	1	M	0	113	757	5	\N
-811	1	M	0	113	761	5	\N
-812	1	M	0	113	764	5	\N
-813	1	M	0	113	769	5	\N
-814	1	M	0	113	774	5	\N
-815	1	M	0	113	779	5	\N
-816	1	M	0	113	784	5	\N
-817	1	M	0	113	785	5	\N
-818	1	M	0	113	788	5	\N
-819	1	M	0	113	791	5	\N
-820	1	M	0	113	794	5	\N
-821	1	M	0	113	797	5	\N
-822	1	M	0	113	800	5	\N
-823	1	M	0	113	803	5	\N
-824	1	M	0	113	806	5	\N
-825	1	M	0	113	809	5	\N
-826	1	M	0	113	812	5	\N
-827	1	M	0	113	815	5	\N
+828	1	M	0	600	143	1	\N
+829	1	M	0	601	147	8	\N
+830	1	M	0	602	143	1	\N
+831	1	M	0	603	266	1	\N
+832	1	M	0	500	131	10	\N
+833	1	M	0	501	131	10	\N
+834	1	M	0	502	212	2	\N
+835	1	M	0	502	207	2	\N
+836	1	M	0	502	204	2	\N
+837	1	M	0	502	340	2	\N
+838	1	M	0	502	199	2	\N
+839	1	M	0	502	279	2	\N
+840	1	M	0	502	139	2	\N
+841	1	Y	0	0	402	1	#yaml|vehicle/p3-hunchbak.yml
+842	1	Y	0	0	400	1	#yaml|vehicle/p3-offroad-mx3.yml
+843	1	Y	0	0	399	1	#yaml|vehicle/prime-town-suv.yml
+844	1	Y	0	0	395	1	#yaml|vehicle/lxr-sunrise.yml
+845	1	Y	0	0	393	1	#yaml|vehicle/lxr-sport.yml
+846	1	Y	0	0	394	1	#yaml|vehicle/lxr-sport.yml
+847	1	M	0	100	393	2	\N
+848	1	M	0	100	394	2	\N
+849	1	M	0	100	395	2	\N
+850	1	M	0	100	396	2	\N
+851	1	M	0	100	398	2	\N
+852	1	M	0	100	400	2	\N
+853	1	M	0	100	399	2	\N
+854	1	M	0	100	401	2	\N
+855	1	M	0	100	402	2	\N
+856	1	M	0	101	316	5	\N
+857	1	M	0	101	317	5	\N
+858	1	M	0	101	322	5	\N
+859	1	M	0	101	323	5	\N
+860	1	M	0	101	324	5	\N
+861	1	M	0	101	325	5	\N
+862	1	M	0	101	306	5	\N
+863	1	M	0	101	308	5	\N
+864	1	M	0	102	290	2	\N
+865	1	M	0	102	291	2	\N
+866	1	M	0	102	292	2	\N
+867	1	M	0	102	294	2	\N
+868	1	M	0	102	295	2	\N
+869	1	M	0	102	331	2	\N
+870	1	M	0	102	298	2	\N
+871	1	M	0	102	303	2	\N
+872	1	M	0	102	310	2	\N
+873	1	M	0	102	317	2	\N
+874	1	M	0	102	324	2	\N
+875	1	M	0	103	407	1	\N
+876	1	M	0	103	409	1	\N
+877	1	M	0	103	413	1	\N
+878	1	M	0	103	282	1	\N
+879	1	M	0	103	284	1	\N
+880	1	M	0	103	286	1	\N
+881	1	M	0	103	292	1	\N
+882	1	M	0	103	293	1	\N
+883	1	R	0	575	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+884	1	R	0	576	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+885	1	R	0	577	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+886	1	R	0	578	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+887	1	R	0	579	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+888	1	R	0	580	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+889	1	R	0	581	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+890	1	R	0	582	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+891	1	R	0	583	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+892	1	R	0	584	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+893	1	R	0	585	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+894	1	R	0	586	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+895	1	R	0	587	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+896	1	R	0	588	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+897	1	R	0	589	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+898	1	R	0	590	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+899	1	R	0	591	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+900	1	R	0	592	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+901	1	R	0	593	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+902	1	R	0	594	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+903	1	R	0	595	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+904	1	R	0	596	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+905	1	R	0	597	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+906	1	R	0	598	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+907	1	R	0	599	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+908	1	R	0	600	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+909	1	R	0	601	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+910	1	R	0	602	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+911	1	R	0	603	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+912	1	R	0	604	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+913	1	R	0	605	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+914	1	R	0	606	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+915	1	R	0	607	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+916	1	R	0	608	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+917	1	R	0	609	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+918	1	R	0	610	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+919	1	R	0	611	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+920	1	R	0	612	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+921	1	R	0	613	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+922	1	R	0	614	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+923	1	R	0	615	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+924	1	R	0	616	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+925	1	R	0	617	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+926	1	R	0	618	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+927	1	R	0	619	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+928	1	R	0	620	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+929	1	R	0	621	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+930	1	R	0	622	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+931	1	R	0	623	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+932	1	R	0	624	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+933	1	R	0	625	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+934	1	R	0	626	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+935	1	R	0	627	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+936	1	R	0	628	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+937	1	R	0	629	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+938	1	R	0	630	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+939	1	R	0	631	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+940	1	R	0	632	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+941	1	R	0	633	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+942	1	R	0	634	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+943	1	R	0	635	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+944	1	R	0	636	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
+945	1	M	0	109	578	16	\N
+946	1	M	0	109	589	16	\N
+947	1	M	0	109	600	16	\N
+948	1	M	0	109	611	16	\N
+949	1	M	0	109	622	16	\N
+950	1	M	0	109	592	16	\N
+951	1	M	0	109	614	16	\N
+952	1	M	0	109	625	16	\N
+953	1	M	0	109	636	16	\N
+954	1	M	0	110	578	16	\N
+955	1	M	0	110	589	16	\N
+956	1	M	0	110	600	16	\N
+957	1	M	0	110	611	16	\N
+958	1	M	0	110	622	16	\N
+959	1	M	0	110	592	16	\N
+960	1	M	0	110	614	16	\N
+961	1	M	0	110	625	16	\N
+962	1	M	0	110	636	16	\N
+963	1	M	0	106	729	1	\N
+964	1	M	0	106	730	1	\N
+965	1	M	0	106	731	1	\N
+966	1	M	0	106	732	1	\N
+967	1	M	0	107	729	1	\N
+968	1	M	0	107	730	1	\N
+969	1	M	0	107	731	1	\N
+970	1	M	0	107	732	1	\N
 \.
 
 
@@ -7600,7 +7767,7 @@ SELECT pg_catalog.setval('public.camera_feed_feed_id_seq', 1, false);
 -- Name: class_breacher_breacher_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.class_breacher_breacher_id_seq', 1, false);
+SELECT pg_catalog.setval('public.class_breacher_breacher_id_seq', 1, true);
 
 
 --
@@ -7614,14 +7781,14 @@ SELECT pg_catalog.setval('public.class_engineer_engineer_id_seq', 1, false);
 -- Name: class_ghost_ghost_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.class_ghost_ghost_id_seq', 2, true);
+SELECT pg_catalog.setval('public.class_ghost_ghost_id_seq', 12, true);
 
 
 --
 -- Name: class_marine_marine_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.class_marine_marine_id_seq', 1, true);
+SELECT pg_catalog.setval('public.class_marine_marine_id_seq', 2, true);
 
 
 --
@@ -7656,21 +7823,21 @@ SELECT pg_catalog.setval('public.computer_terminal_id_seq', 1, true);
 -- Name: contract_step_callback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contract_step_callback_id_seq', 10, true);
+SELECT pg_catalog.setval('public.contract_step_callback_id_seq', 12, true);
 
 
 --
 -- Name: contract_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contract_steps_id_seq', 25, true);
+SELECT pg_catalog.setval('public.contract_steps_id_seq', 30, true);
 
 
 --
 -- Name: contracts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contracts_id_seq', 10, true);
+SELECT pg_catalog.setval('public.contracts_id_seq', 12, true);
 
 
 --
@@ -7733,7 +7900,7 @@ SELECT pg_catalog.setval('public.mini_gunner_sentinel_id_seq', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_id_seq', 95, true);
+SELECT pg_catalog.setval('public.mob_equipment_id_seq', 114, true);
 
 
 --
@@ -7747,7 +7914,7 @@ SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 39, true);
 -- Name: mob_roam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_roam_id_seq', 633, true);
+SELECT pg_catalog.setval('public.mob_roam_id_seq', 763, true);
 
 
 --
@@ -7824,7 +7991,7 @@ SELECT pg_catalog.setval('public.object_weapon_id_seq', 5, true);
 -- Name: player_base_ability_pba_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_base_ability_pba_id_seq', 4, true);
+SELECT pg_catalog.setval('public.player_base_ability_pba_id_seq', 16, true);
 
 
 --
@@ -7852,14 +8019,14 @@ SELECT pg_catalog.setval('public.player_flags_id_seq', 1, false);
 -- Name: player_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_id_seq', 98, true);
+SELECT pg_catalog.setval('public.player_id_seq', 110, true);
 
 
 --
 -- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_object_id_seq', 153, true);
+SELECT pg_catalog.setval('public.player_object_id_seq', 385, true);
 
 
 --
@@ -7901,7 +8068,7 @@ SELECT pg_catalog.setval('public.player_skill_usage_id_seq', 1, false);
 -- Name: rifle_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 3852, true);
+SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 4842, true);
 
 
 --
@@ -7915,7 +8082,7 @@ SELECT pg_catalog.setval('public.rifle_index_id_seq', 29, true);
 -- Name: rifle_instance_rifle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rifle_instance_rifle_id_seq', 105, true);
+SELECT pg_catalog.setval('public.rifle_instance_rifle_id_seq', 174, true);
 
 
 --
@@ -7957,14 +8124,14 @@ SELECT pg_catalog.setval('public.room_virtual_number_seq', 1, false);
 -- Name: scripted_sequences_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.scripted_sequences_id_seq', 20, true);
+SELECT pg_catalog.setval('public.scripted_sequences_id_seq', 24, true);
 
 
 --
 -- Name: scripted_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.scripted_steps_id_seq', 70, true);
+SELECT pg_catalog.setval('public.scripted_steps_id_seq', 84, true);
 
 
 --
@@ -8006,7 +8173,7 @@ SELECT pg_catalog.setval('public.skill_trees_id_seq', 16, true);
 -- Name: skill_usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.skill_usage_id_seq', 85, true);
+SELECT pg_catalog.setval('public.skill_usage_id_seq', 331, true);
 
 
 --
@@ -8034,7 +8201,7 @@ SELECT pg_catalog.setval('public.world_configuration_start_rooms_id_seq', 4, tru
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_data_id_seq', 827, true);
+SELECT pg_catalog.setval('public.zone_data_id_seq', 970, true);
 
 
 --

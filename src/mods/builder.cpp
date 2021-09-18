@@ -1319,7 +1319,6 @@ namespace mods::builder {
 			p_map["mob_max_move"] = mods::util::itoa(obj->points.max_move);
 			p_map["mob_armor"] = "0";// FIXME mods::util::itoa(obj->real_abils.armor);
 			p_map["mob_gold"] = mods::util::itoa(obj->points.gold);
-			p_map["mob_exp"] = mods::util::itoa(obj->points.exp);
 			p_map["mob_hitroll"] = mods::util::itoa(obj->points.hitroll);
 			p_map["mob_default_position"] = mods::util::itoa(obj->mob_specials.default_pos);
 			p_map["mob_damnodice"] = mods::util::itoa(obj->mob_specials.damnodice);
@@ -1336,7 +1335,7 @@ namespace mods::builder {
 			p_map["mob_damroll"] = std::to_string(obj->points.damroll);
 			p_map["mob_class"] = "0"; //TODO: find this
 			p_map["mob_special_extended_type"] = std::to_string(obj->mob_specials.extended_mob_type);
-			p_map["mob_experience"] = std::to_string(obj->mob_specials.experience);
+			p_map["mob_exp"] = std::to_string(obj->mob_specials.experience);
 			auto txn_02 = txn();
 			std::string sql = "";
 

@@ -937,9 +937,9 @@ void parse_sql_mobiles() {
 		proto.mob_specials.damnodice = mods::util::stoi<int>(row["mob_damnodice"]);
 		proto.mob_specials.damsizedice = mods::util::stoi<int>(row["mob_damsizedice"]);
 		proto.mob_specials.behaviour_tree = behaviour_tree::NONE;
-		proto.mob_specials.experience = mods::util::stoi<int>(row["mob_experience"]);
+		proto.mob_specials.experience = mods::util::stoi<int>(row["mob_exp"]);
 		proto.mob_specials.mp = mods::util::stoi<int>(row["mob_gold"]);
-		GET_EXP(&proto) = mods::util::stoi<int>(row["mob_exp"]);
+		//GET_EXP(&proto) = mods::util::stoi<int>(row["mob_exp"]);
 		GET_POS(&proto) = mods::util::stoi<int>(row["mob_load_position"]);
 		GET_DEFAULT_POS(&proto) = mods::util::stoi<int>(row["mob_load_position"]);
 		GET_SEX(&proto) = mods::util::stoi<int>(row["mob_sex"]);
