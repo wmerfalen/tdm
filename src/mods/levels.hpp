@@ -79,7 +79,7 @@ namespace mods::levels {
 		STAT_INDEXES_SIZE = STAT_CHARISMA + 1,
 	};
 	void report_advances(std::array<float,STAT_INDEXES_SIZE> stats);
-	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level);
+	std::array<uint16_t,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level);
 	std::array<uint8_t,5> get_triads_by_class(player_class_t);
 	void init();
 	int csv_export_report();

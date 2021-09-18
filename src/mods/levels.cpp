@@ -14,6 +14,7 @@
 #define m_debug(A)
 #endif
 
+extern player_ptr_t new_player();
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 extern int immort_level_ok;
@@ -294,7 +295,7 @@ namespace mods::levels {
 	}
 
 
-	void report_advances(std::array<float,STAT_INDEXES_SIZE> stats) {
+	void report_advances(std::array<uint16_t,STAT_INDEXES_SIZE> stats) {
 		std::cerr <<
 		          "hp:" << stats[STAT_HP] << "\n"\
 		          << "strength:		" << stats[STAT_STRENGTH] << "\n"\
@@ -553,10 +554,10 @@ namespace mods::levels {
 	uint8_t player_tier(player_ptr_t& player) {
 		return player->level() / 10 + 1;
 	}
-	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {
 
-		std::array<float,STAT_INDEXES_SIZE> s = {0};
-		float
+	std::array<uint16_t,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {
+		std::array<uint16_t,STAT_INDEXES_SIZE> s = {0};
+		uint16_t
 		/** melee and armor related */
 		hp = 0,	/** also speed related */
 		mana = 0,
@@ -586,7 +587,7 @@ namespace mods::levels {
 		armor = 0,
 
 		/** armor and intel related */
-		medical = 0,
+		medical = level * 3,
 
 		/** unclassified */
 		charisma = 0
@@ -627,16 +628,19 @@ namespace mods::levels {
 				weapon_handling += level * (LOW_TRIAD);
 				sniping += level * (LOW_TRIAD);
 				marksmanship += level * (LOW_TRIAD);
+				demolitions += level * (LOW_TRIAD);
 				break;
 			case 2:
 				weapon_handling += level * (MID_TRIAD);
 				sniping += level * (MID_TRIAD);
 				marksmanship += level * (MID_TRIAD);
+				demolitions += level * (MID_TRIAD);
 				break;
 			case 3:
 				weapon_handling += level * (HIGH_TRIAD);
 				sniping += level * (HIGH_TRIAD);
 				marksmanship += level * (HIGH_TRIAD);
+				demolitions += level * (HIGH_TRIAD);
 				break;
 			default:
 				std::cerr << red_str("generic_advance_hp encountered odd WEAPONS triad:") << triads[WEAPONS] << "\n";
@@ -648,11 +652,9 @@ namespace mods::levels {
 				electronics += level * (LOW_TRIAD);
 				chemistry += level * (LOW_TRIAD);
 				strategy += level * (LOW_TRIAD);
-				medical += level * (LOW_TRIAD);
 				charisma += level * (LOW_TRIAD);
 				wisdom += level * (LOW_TRIAD);
-				demolitions += level * (SPLIT_TIER);
-				marksmanship += level * (PASSIVE_TIER);
+				demolitions += level * (LOW_TRIAD);
 				mana += level * (LOW_TRIAD);
 				break;
 			case 2:
@@ -660,11 +662,9 @@ namespace mods::levels {
 				electronics += level * (MID_TRIAD);
 				chemistry += level * (MID_TRIAD);
 				strategy += level * (MID_TRIAD);
-				medical += level * (MID_TRIAD);
 				charisma += level * (MID_TRIAD);
 				wisdom += level * (MID_TRIAD);
-				demolitions += level * (SPLIT_TIER);
-				marksmanship += level * (PASSIVE_TIER);
+				demolitions += level * (MID_TRIAD);
 				mana += level * (MID_TRIAD);
 				break;
 			case 3:
@@ -672,11 +672,9 @@ namespace mods::levels {
 				electronics += level * (HIGH_TRIAD);
 				chemistry += level * (HIGH_TRIAD);
 				strategy += level * (HIGH_TRIAD);
-				medical += level * (HIGH_TRIAD);
 				charisma += level * (HIGH_TRIAD);
 				wisdom += level * (HIGH_TRIAD);
 				demolitions += level * (HIGH_TRIAD);
-				marksmanship += level * (HIGH_TRIAD);
 				mana += level * (HIGH_TRIAD);
 				break;
 			default:
@@ -687,21 +685,18 @@ namespace mods::levels {
 			case 1:
 				constitution += level * (LOW_TRIAD);
 				dexterity += level * (LOW_TRIAD);
-				weapon_handling += level * (PASSIVE_TIER);
 				move += level * (LOW_TRIAD);
 				mana += level * LOW_TRIAD;//always
 				break;
 			case 2:
 				constitution += level * (MID_TRIAD);
 				dexterity += level * (MID_TRIAD);
-				weapon_handling += level * (PASSIVE_TIER);
 				move += level * (MID_TRIAD);
 				mana += level * LOW_TRIAD;//always
 				break;
 			case 3:
 				constitution += level * (HIGH_TRIAD);
 				dexterity += level * (HIGH_TRIAD);
-				weapon_handling += level * (PASSIVE_TIER);
 				move += level * (HIGH_TRIAD);
 				mana += level * LOW_TRIAD;//always
 				break;
@@ -714,24 +709,18 @@ namespace mods::levels {
 				hp += level * (LOW_TRIAD);
 				constitution += level * (LOW_TRIAD);
 				armor += level * (LOW_TRIAD);
-				demolitions += level * (SPLIT_TIER_HALF);
-				medical += level * (PASSIVE_TIER);
 				move += level * HIGH_TRIAD;// inverse
 				break;
 			case 2:
 				hp += level * (MID_TRIAD);
 				constitution += level * (MID_TRIAD);
 				armor += level * (MID_TRIAD);
-				demolitions += level * (SPLIT_TIER_HALF);
-				medical += level * (PASSIVE_TIER);
 				move += level * MID_TRIAD;//inverse
 				break;
 			case 3:
 				hp += level * (HIGH_TRIAD);
 				constitution += level * (HIGH_TRIAD);
 				armor += level * (HIGH_TRIAD);
-				demolitions += level * (SPLIT_TIER_HALF);
-				medical += level * (PASSIVE_TIER);
 				move += level * LOW_TRIAD;//inverse
 				break;
 			default:
@@ -759,10 +748,70 @@ namespace mods::levels {
 		return s;
 	}
 
+	std::array<uint16_t,STAT_INDEXES_SIZE> calculate_based_on_player(player_ptr_t& player) {
+		auto stats = calculate_based_on_triads(player->triads(),player->level());
+		switch(player->get_class()) {
+			case player_class_t::GHOST:  {
+					/**
+					 * ghosts
+					 * -------
+					 *  Get +2 sniping
+					 *  Get +2 marksmanship
+					 *  Get +1 chemistry
+					 */
+					stats[STAT_SNIPING] += 2;
+					stats[STAT_MARKSMANSHIP] += 2;
+					stats[STAT_CHEMISTRY] += 1;
+					//stats[STAT_MANA] /= 2.3;
+					//stats[STAT_MOVE] /= 2.3;
+					break;
+				}
+			case player_class_t::MARINE: {
+					/**
+					 * marines
+					 * --------
+					 *  Get +2 Constitution
+					 *  Get +2 weapon handling
+					 *  Get +1 medical
+					 */
+					stats[STAT_CONSTITUTION] += 2;
+					stats[STAT_WEAPON_HANDLING] += 2;
+					stats[STAT_MEDICAL] += 1;
+					/**
+					 * Nerfs
+					 */
+					//stats[STAT_MANA] /= 3;
+					//stats[STAT_MOVE] /= 2.1;
+					break;
+				}
+			case player_class_t::BREACHER: {
+					/**
+					 * Breachers
+					 * ----------
+					 *  Get +2 Armor
+					 *  Get +2 demolitions
+					 *  Get +1 strength
+					 */
+					stats[STAT_ARMOR] += 2;
+					stats[STAT_DEMOLITIONS] += 2;
+					stats[STAT_STRENGTH] += 1;
+					/**
+					 * Nerfs
+					 */
+					//stats[STAT_MANA] /= 3.5;
+					//stats[STAT_MOVE] /= 3;
+					break;
+				}
+			default: {
+					std::cerr << "warning: unknown class passed to calculate_based_on_player!\n";
+					break;
+				}
+		}
+		return stats;
+	}
 
 	void generic_advance(player_ptr_t& player) {
-		auto triads = player->triads();
-		auto s = calculate_based_on_triads(triads,player->level());
+		auto s = calculate_based_on_player(player);
 		report_advances(s);
 		player->hp() = s[STAT_HP];
 		player->max_hp() = s[STAT_HP];
@@ -820,8 +869,11 @@ namespace mods::levels {
 		        }) {
 			for(unsigned player_level = 1; player_level <= LVL_IMMORT; ++player_level) {
 				std::string str_class = mods::util::player_class_to_string(player_class);
-				auto triads = mods::levels::get_triads_by_class(player_class);
-				auto stats = mods::levels::calculate_based_on_triads(triads,player_level);
+				auto player = new_player();
+				player->set_class(player_class);
+				player->level() = player_level;
+
+				auto stats = mods::levels::calculate_based_on_player(player);
 				std::string s;
 				s = str_class + "," + std::to_string(player_level) + ",";
 				fwrite(s.c_str(),sizeof(char),s.length(),fp);

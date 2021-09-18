@@ -44,7 +44,8 @@ namespace mods::classes {
 				TARGET_LIMB,
 				SHRAPNEL_CLAYMORE,
 				CORROSIVE_CLAYMORE,
-				REQUEST_RECON
+				REQUEST_RECON,
+				MARK_TARGET,
 			};
 			std::vector<ability_data_t>& get_abilities() {
 				return m_abilities;
@@ -164,6 +165,7 @@ namespace mods::classes {
 			uint8_t m_tracking_shot_charges;
 			std::map<std::string,bool> m_preferences;
 
+			skill_t m_mark_target;
 			skill_t m_tracking_shot;
 			skill_t m_light_bandage;
 			skill_t m_suture;

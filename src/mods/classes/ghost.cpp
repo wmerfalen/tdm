@@ -158,6 +158,10 @@ namespace mods::classes {
 			m_player->sendln("It looks like you still need to train that skill");
 			return {0, "It looks like you still need to train that skill"};
 		}
+		auto s = roll_skill_success(FEIGN_DEATH);
+		if(!std::get<0>(s)) {
+			return {0,std::get<1>(s)};
+		}
 		if(m_feign_death.awful() || m_feign_death.terrible() || m_feign_death.okay()) {
 			duration = GHOST_FEIGN_DEATH_INITIATE_DURATION() + dice(3,6);
 		}
@@ -196,6 +200,10 @@ namespace mods::classes {
 	std::tuple<bool,std::string> ghost::dissipate() {
 		if(m_dissipate_charges == 0) {
 			return {false,"{red}You don't have any dissipate charges{/red}"};
+		}
+		auto s = roll_skill_success(STEALTH);
+		if(!std::get<0>(s)) {
+			return s;
 		}
 		--m_dissipate_charges;
 		m_player->visibility() = 0;
@@ -331,6 +339,7 @@ namespace mods::classes {
 		}
 		auto s = roll_skill_success(ADRENALINE_SHOT);
 		if(std::get<0>(s)) {
+			m_adrenaline_shot.use_skill(m_player);
 			return m_ad_shot.inject(m_player);
 		}
 		return s;
@@ -358,6 +367,7 @@ namespace mods::classes {
 		}
 		auto s = roll_skill_success(UB_SHOTGUN);
 		if(std::get<0>(s)) {
+			m_ub_shotgun.use_skill(m_player);
 			return m_shotgun_ub.attach_to(m_player->primary(),tier(m_player));
 		}
 		return s;
@@ -369,6 +379,10 @@ namespace mods::classes {
 		}
 	}
 	std::tuple<bool,std::string> ghost::suture() {
+		auto s = roll_skill_success(SUTURE);
+		if(!std::get<0>(s)) {
+			return s;
+		}
 		static const std::array<uint8_t,3> suture_tier_duration = {
 			SUTURE_TIER_ONE_TICKS(),
 			SUTURE_TIER_TWO_TICKS(),
@@ -377,15 +391,11 @@ namespace mods::classes {
 		std::size_t tier = mods::levels::player_tier(m_player) - 1;
 		std::size_t index = std::clamp(tier,(std::size_t)0,(std::size_t)2);
 		m_heal_mode = HEAL_MODE_SUTURE;
-		auto s = roll_skill_success(SUTURE);
-		if(std::get<0>(s)) {
-			s = mods::medic::set_is_suturing(m_player,suture_tier_duration[index]);
-			if(!std::get<0>(s)) {
-				return s;
-			}
-			--m_medkit_count;
+		s = mods::medic::set_is_suturing(m_player,suture_tier_duration[index]);
+		if(!std::get<0>(s)) {
 			return s;
 		}
+		--m_medkit_count;
 		return s;
 	}
 	void ghost::consume_shotgun_underbarrel_ammo() {
@@ -399,20 +409,28 @@ namespace mods::classes {
 		return {true,"A claymore charge is built",create_object(ITEM_EXPLOSIVE,"claymore-mine.yml")};
 	}
 	std::tuple<bool,std::string,obj_ptr_t> ghost::build_corrosive_claymore() {
-		m_corrosive_claymore_count = 10;
 		if(m_corrosive_claymore_count == 0) {
 			return {false,"You don't have any claymore charges!",nullptr};
 		}
+		auto s = roll_skill_success(CORROSIVE_CLAYMORE);
+		if(!std::get<0>(s)) {
+			return {std::get<0>(s),std::get<1>(s),nullptr};
+		}
 		--m_corrosive_claymore_count;
+		m_plant_corrosive_claymore.use_skill(m_player);
 		return {true,"A {grn}corrosive{/grn} claymore charge is built",mods::weapons::corrosive_claymore::create(m_player)};
 	}
 
 	std::tuple<bool,std::string,obj_ptr_t> ghost::build_shrapnel_claymore() {
-		m_corrosive_claymore_count = 10;
 		if(m_shrapnel_claymore_count == 0) {
 			return {false,"You don't have any claymore charges!",nullptr};
 		}
+		auto s = roll_skill_success(SHRAPNEL_CLAYMORE);
+		if(!std::get<0>(s)) {
+			return {std::get<0>(s),std::get<1>(s),nullptr};
+		}
 		--m_shrapnel_claymore_count;
+		m_plant_shrapnel_claymore.use_skill(m_player);
 		return {true,"A {yel}shrapnel{/yel} claymore charge is built",create_object(ITEM_EXPLOSIVE,"shrapnel-claymore-mine.yml")};
 	}
 
@@ -440,6 +458,10 @@ namespace mods::classes {
 		if(!victim || victim->visibility() == 0) {
 			return {0,"Cannot find your victim!"};
 		}
+		auto s = roll_skill_success(XRAY_SHOT);
+		if(!std::get<0>(s)) {
+			return s;
+		}
 		auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
 		                    m_player,
 		                    weapon,
@@ -447,6 +469,7 @@ namespace mods::classes {
 		                    distance,
 		                    direction
 		                );
+		m_xray_shot.use_skill(m_player);
 		return {1,"stub"};
 	}
 	void ghost::target_died(uuid_t target) {
@@ -459,6 +482,11 @@ namespace mods::classes {
 		if(m_target == 0) {
 			return {0,"Couldn't find a target that matches that string."};
 		}
+		auto s = roll_skill_success(MARK_TARGET);
+		if(!std::get<0>(s)) {
+			return s;
+		}
+		/** TODO: need to add mark target as a skill */
 		return {1,"Marked target"};
 	}
 
@@ -491,6 +519,11 @@ namespace mods::classes {
 					if(!victim) {
 						return {false,"You could not locate your victim! Are they dead?"};
 					}
+					auto s = roll_skill_success(TRACKING_SHOT);
+					--m_tracking_shot_charges;
+					if(!std::get<0>(s)) {
+						return s;
+					}
 					feedback_t feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
 					                          m_player,
 					                          m_player->primary(),
@@ -503,8 +536,8 @@ namespace mods::classes {
 						return {false,"You missed your target!"};
 					}
 
-					--m_tracking_shot_charges;
 					mods::affects::affect_player_for(mods::affects::to_affect({"tracked"}),ptr(result.ch),SKILL_SNIPER_TRACKING_SHOT_TICKS());
+					m_tracking_shot.use_skill(m_player);
 					return {1,"You tag your target!"};
 				}
 			}
@@ -532,6 +565,7 @@ namespace mods::classes {
 		}
 		auto s = roll_skill_success(UB_FRAG);
 		if(std::get<0>(s)) {
+			m_ub_frag.use_skill(m_player);
 			return m_frag_ub.attach_to(m_player->primary(),tier(m_player));
 		}
 		return s;
