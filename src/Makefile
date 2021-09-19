@@ -196,7 +196,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/loot-container mods/explosive mods/glass mods/bleed mods/armor \
 					 mods/players/friendly-reminders mods/players/event-messages \
 					 mods/mobs/defiler mods/resting mods/weapons/damage-decisions \
-					 mods/mp
+					 mods/mp mods/classes/contagion mods/orm/contagion
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

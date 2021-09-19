@@ -51,6 +51,18 @@ namespace mods::chargen {
 		    "| STATS                       |\r\n"
 		    "|-----------------------------|\r\n"
 		    "| MELEE          | 1          |\r\n"
+		    "| WEAPONS        | 3          |\r\n"
+		    "| INTEL          | 2          |\r\n"
+		    "| SPEED          | 3          |\r\n"
+		    "| ARMOR          | 1          |\r\n"
+		    " \\-----------------------------+\r\n"
+		);
+		classes.emplace_back(
+		    "CONTAGION:\r\n"
+		    " /----------------------------\r\n"
+		    "| STATS                       |\r\n"
+		    "|-----------------------------|\r\n"
+		    "| MELEE          | 1          |\r\n"
 		    "| WEAPONS        | 2          |\r\n"
 		    "| INTEL          | 3          |\r\n"
 		    "| SPEED          | 3          |\r\n"
@@ -76,6 +88,9 @@ namespace mods::chargen {
 		}
 		if(str_class.compare("GHOST") == 0) {
 			player->sendln(chargen_triads_for(GHOST));
+		}
+		if(str_class.compare("CONTAGION") == 0) {
+			player->sendln(chargen_triads_for(CONTAGION));
 		}
 		player->send("Press enter to go back to the class list.");
 	}
@@ -195,6 +210,9 @@ namespace mods::chargen {
 			case player_class_t::BREACHER:
 				player->sendln(chargen_triads_for(BREACHER));
 				break;
+			case player_class_t::CONTAGION:
+				player->sendln(chargen_triads_for(CONTAGION));
+				break;
 			case player_class_t::GHOST:
 				player->sendln(chargen_triads_for(GHOST));
 				break;
@@ -212,8 +230,11 @@ namespace mods::chargen {
 			case player_class_t::BREACHER:
 				return classes[2];
 				break;
+			case player_class_t::CONTAGION:
+				return classes[4];
+				break;
 			case player_class_t::GHOST:
-				return classes[5];
+				return classes[3];
 				break;
 			default:
 				return "Unknown class selected.";
@@ -269,6 +290,11 @@ namespace mods::chargen {
 			case GHOST: {
 					mods::orm::ghost ghost_orm;
 					ghost_orm.initialize_row(player);
+				}
+				break;
+			case CONTAGION: {
+					mods::orm::contagion contagion_orm;
+					contagion_orm.initialize_row(player);
 				}
 				break;
 			default:

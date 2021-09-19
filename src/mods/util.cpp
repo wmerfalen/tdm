@@ -1092,6 +1092,9 @@ namespace mods::util {
 	*/
 // --
 	player_class_t to_player_class(std::string_view str) {
+		if(is_lower_match(str,"CONTAGION")) {
+			return player_class_t::CONTAGION;
+		}
 		if(is_lower_match(str,"SNIPER")) {
 			return player_class_t::SNIPER;
 		}

@@ -1810,6 +1810,12 @@ namespace mods {
 	std::map<std::string,std::string>& player::get_ada_data() {
 		return m_ada_data;
 	}
+	std::shared_ptr<mods::classes::contagion>& player::contagion() {
+		return m_contagion;
+	}
+	void player::set_contagion(std::shared_ptr<mods::classes::contagion> g) {
+		m_contagion = g;
+	}
 	std::shared_ptr<mods::classes::ghost>& player::ghost() {
 		return m_ghost;
 	}

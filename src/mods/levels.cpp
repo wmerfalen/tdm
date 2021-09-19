@@ -382,6 +382,52 @@ namespace mods::levels {
 					3, // SPEED
 					1, // ARMOR
 				};
+			case CONTAGION:
+				/**
+				 * --[
+				 *  -- life tap
+				 *  	-- damage done to target adds life and mana to self
+				 *
+				 *  -- corpse explosion
+				 *  	-- can detonate target corpse by firing a shell into it
+				 *  	-- [ level 10 ] --
+				 *  		-- unlocks shrapnel corpse explosion
+				 *  			-- does 25% shrapnel damage
+				 *  	-- [ level 15 ] --
+				 *  		-- unlocks corrosive corpse explosion
+				 *  			-- does 30% corrosive damage
+				 *  	-- [ level 23 ] --
+				 *  		-- unlocks hellfire corpse explosion
+				 *  			-- does incendiary, radioactive, and anti-matter damage
+				 *  				-- each 120% damage
+				 *
+				 *
+				 * -- attract
+				 *		-- draw enemies into a specific room
+				 *
+				 * -- confuse
+				 * 		-- attacker loses concentration and becomes temporarily blinded
+				 *
+				 * -- hellfire incantation
+				 *  	-- target becomes ingulfed in fire, continuously dealing incendiary damage
+				 *
+				 *	-- detonate limb
+				 *		-- detonate target limb causing
+				 *			-- 150% explosive damage to surrounding enemies
+				 *		-- follows semantics of targetting limbs (left vs right, etc)
+				 *
+				 *	-- "Suffering Shot"
+				 *  	-- fire special ammunition which sticks to the target and deals damage continuously
+				 *  		for 50 ticks
+				 *  -- [
+				 */
+				return {
+					1, // MELEE
+					2, // WEAPONS
+					3, // INTEL
+					3, // SPEED
+					1, // ARMOR
+				};
 			case GHOST:
 				/**
 				 * --[
@@ -407,8 +453,8 @@ namespace mods::levels {
 				 */
 				return {
 					1, // MELEE
-					2, // WEAPONS
-					3, // INTEL
+					3, // WEAPONS
+					2, // INTEL
 					3, // SPEED
 					1, // ARMOR
 				};

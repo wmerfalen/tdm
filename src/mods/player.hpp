@@ -681,6 +681,9 @@ namespace mods {
 			std::shared_ptr<mods::classes::ghost>& ghost();
 			void set_ghost(std::shared_ptr<mods::classes::ghost> g);
 
+			std::shared_ptr<mods::classes::contagion>& contagion();
+			void set_contagion(std::shared_ptr<mods::classes::contagion> g);
+
 			std::shared_ptr<mods::classes::pyrexia>& pyrexia();
 			void set_pyrexia(std::shared_ptr<mods::classes::pyrexia> g);
 			std::shared_ptr<mods::classes::forge>& forge();
@@ -932,6 +935,7 @@ namespace mods {
 			std::shared_ptr<mods::classes::marine> m_marine;
 			std::shared_ptr<mods::classes::breacher> m_breacher;
 			std::shared_ptr<mods::classes::ghost> m_ghost;
+			std::shared_ptr<mods::classes::contagion> m_contagion;
 
 			FILE* m_histfile_fp;
 			bool m_histfile_on;

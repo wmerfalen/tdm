@@ -315,6 +315,7 @@ player_class_t parse_class(std::string a) {
 		class_map["4F"] = player_class_t::CLASS_FORGE;
 		class_map["4S"] = player_class_t::CLASS_SYNDROME;
 		class_map["4M"] = player_class_t::CLASS_MACHINIST;
+		class_map["1C"] = player_class_t::CLASS_CONTAGION;
 		initialized = true;
 	}
 	std::string trimmed = "";

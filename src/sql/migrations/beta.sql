@@ -414,6 +414,42 @@ ALTER SEQUENCE public.class_breacher_breacher_id_seq OWNED BY public.class_breac
 
 
 --
+-- Name: class_contagion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.class_contagion (
+    contagion_id integer NOT NULL,
+    contagion_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.class_contagion OWNER TO postgres;
+
+--
+-- Name: class_contagion_contagion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.class_contagion_contagion_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.class_contagion_contagion_id_seq OWNER TO postgres;
+
+--
+-- Name: class_contagion_contagion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.class_contagion_contagion_id_seq OWNED BY public.class_contagion.contagion_id;
+
+
+--
 -- Name: class_engineer; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3163,6 +3199,13 @@ ALTER TABLE ONLY public.class_breacher ALTER COLUMN breacher_id SET DEFAULT next
 
 
 --
+-- Name: class_contagion contagion_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_contagion ALTER COLUMN contagion_id SET DEFAULT nextval('public.class_contagion_contagion_id_seq'::regclass);
+
+
+--
 -- Name: class_engineer engineer_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3651,6 +3694,14 @@ COPY public.camera_feed (feed_id, feed_type, feed_vnum, feed_room_vnum, feed_ord
 --
 
 COPY public.class_breacher (breacher_id, breacher_player_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: class_contagion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.class_contagion (contagion_id, contagion_player_id, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -4338,7 +4389,7 @@ COPY public.player_skill_usage (id, ps_player_id, ps_skill_id, ps_usage_count, c
 --
 
 COPY public.rifle_attachment (id, rifle_player_id, rifle_data, rifle_position, created_at, updated_at) FROM stdin;
-4842	1	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	primary	2021-09-18 01:55:00.320457	2021-09-18 01:55:00.320457
+4890	1	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	primary	2021-09-18 04:04:21.874679	2021-09-18 04:04:21.874679
 \.
 
 
@@ -7771,6 +7822,13 @@ SELECT pg_catalog.setval('public.class_breacher_breacher_id_seq', 1, true);
 
 
 --
+-- Name: class_contagion_contagion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.class_contagion_contagion_id_seq', 1, false);
+
+
+--
 -- Name: class_engineer_engineer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -8068,7 +8126,7 @@ SELECT pg_catalog.setval('public.player_skill_usage_id_seq', 1, false);
 -- Name: rifle_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 4842, true);
+SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 4890, true);
 
 
 --
@@ -8241,6 +8299,14 @@ ALTER TABLE ONLY public.camera_feed
 
 ALTER TABLE ONLY public.class_breacher
     ADD CONSTRAINT class_breacher_pkey PRIMARY KEY (breacher_id);
+
+
+--
+-- Name: class_contagion class_contagion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_contagion
+    ADD CONSTRAINT class_contagion_pkey PRIMARY KEY (contagion_id);
 
 
 --
@@ -8889,6 +8955,14 @@ ALTER TABLE ONLY public.player_object
 
 ALTER TABLE ONLY public.skill_usage
     ADD CONSTRAINT fk_player_id FOREIGN KEY (player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: class_contagion fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.class_contagion
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (contagion_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
