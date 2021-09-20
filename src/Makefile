@@ -196,11 +196,12 @@ buildobj = act.informative act.item act.medic \
 					 mods/loot-container mods/explosive mods/glass mods/bleed mods/armor \
 					 mods/players/friendly-reminders mods/players/event-messages \
 					 mods/mobs/defiler mods/resting mods/weapons/damage-decisions \
-					 mods/mp mods/classes/contagion mods/orm/contagion
+					 mods/mp mods/classes/contagion mods/orm/contagion \
+					 mods/melee/combat-order mods/melee/stance mods/melee/main
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team $(builddir)/mods/boosters
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team $(builddir)/mods/boosters $(builddir)/mods/melee
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT) $(post_build_args)
 
 clean:
@@ -224,6 +225,8 @@ clean:
 		rm -f $(builddir)/mods/unit-tests/*.o \
 		rm -f $(builddir)/mods/unit-tests/*.d 
 
+$(builddir)/mods/melee:
+	mkdir -p $(builddir)/mods/melee
 $(builddir)/mods/response-team:
 	mkdir -p $(builddir)/mods/response-team
 $(builddir)/mods/fluxkraft:

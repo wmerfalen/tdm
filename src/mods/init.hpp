@@ -58,6 +58,8 @@ INIT(mods::scripted_sequence_runner);
 INIT(src::act::debug);
 INIT(mods::projectile);
 INIT(mods::boosters::adrenaline_shot_init);
+INIT(mods::melee::combat_order);
+INIT(mods::melee::stance);
 #undef INIT
 
 
@@ -118,6 +120,8 @@ namespace mods::init {
 		mods::players::friendly_reminders::init();
 		mods::players::event_messages::init();
 		mods::mp::init();
+		mods::melee::combat_order::init();
+		mods::melee::stance::init();
 	}
 };
 #endif

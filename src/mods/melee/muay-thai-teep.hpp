@@ -5,16 +5,16 @@
 #include "../damage-event.hpp"
 
 namespace mods::melee::muay_thai {
-	int teep(
+	uint16_t teep(
 	    player_ptr_t& attacker,
 	    player_ptr_t& victim,
-	    int16_t dam
+	    uint16_t dam
 	);
 
 	float roll_critical_damage_reduction(
 	    player_ptr_t& attacker,
 	    player_ptr_t& victim,
-	    int16_t dam
+	    uint16_t dam
 	);
 };
 #endif

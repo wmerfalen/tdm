@@ -20,6 +20,23 @@
 
 namespace mods::melee::stance {
 	using de = damage_event_t;
+	ACMD(do_stance) {
+		/**
+		 * stance <type>
+		 */
 
+		/**
+		 * Example:
+		 * stance aggro
+		 * stance balanced
+		 * stance passive
+		 */
+
+	}
+
+	void init() {
+		mods::interpreter::add_user_command("stance",do_stance);
+
+	}
 };
 

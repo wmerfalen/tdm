@@ -182,9 +182,10 @@ ACMD(do_insult) {
 
 
 char *fread_action(FILE *fl, int nr) {
-	char buf[MAX_STRING_LENGTH];
+	char buf[MAX_STRING_LENGTH+1];
 
 	fgets(buf, MAX_STRING_LENGTH, fl);
+	buf[MAX_STRING_LENGTH] = '\0';
 
 	if(feof(fl)) {
 		log("SYSERR: fread_action: unexpected EOF near action #%d", nr);

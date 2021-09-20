@@ -38,6 +38,11 @@
 		- Heavy Melee favorite
 		- Tank character
 		- Slow
+	
+	- [ ] Contagion
+		- Necromancer spell caster
+		- Decent weapons
+		- fast, but low armor
 
 # 2021-07-16
 	- [ ] Implement these game dynamics for each class

@@ -861,6 +861,18 @@ namespace mods {
 			void update_contract_status();
 			contract_list_t& contracts();
 
+			void add_melee_order(std::string_view attack);
+			std::vector<std::string>& get_melee_order() {
+				return m_melee_combat_order;
+			}
+			void clear_melee_order() {
+				m_melee_combat_order.clear();
+			}
+			void set_stance(std::string_view stance);
+			std::string& get_stance() {
+				return m_stance;
+			}
+
 			/** TODO: power this by user preferences */
 			std::size_t screen_width() const {
 				return 80;
@@ -984,6 +996,9 @@ namespace mods {
 			mods::util::stopwatch_t m_timer;
 			int m_cooldown_ticks;
 			uint16_t m_practice_sessions;
+			std::vector<std::string> m_melee_combat_order;
+			std::string m_stance;
+			std::size_t m_current_melee_index;
 	};
 };
 

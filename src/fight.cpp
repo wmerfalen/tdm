@@ -193,8 +193,9 @@ void load_messages(void) {
 	FILE *fl;
 	int i, type;
 	struct message_type *messages;
-	char chk[128];
+	char chk[129];
 
+	chk[128] = '\0';
 	if(!(fl = fopen(MESS_FILE, "r"))) {
 		log("SYSERR: Error reading combat message file %s: %s", MESS_FILE, strerror(errno));
 		exit(1);

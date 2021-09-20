@@ -834,6 +834,9 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+		m_melee_combat_order.clear();
+		m_stance = "balanced";
+		m_current_melee_index = 0;
 		get_affect_dissolver().clear_all();
 		m_to_move = 0;
 		m_to_attack = 0;
@@ -2137,6 +2140,9 @@ namespace mods {
 		}
 		return {0,"Unimplemented"};
 
+	}
+	void player::add_melee_order(std::string_view technique) {
+		m_melee_combat_order.emplace_back(technique.data());
 	}
 
 };
