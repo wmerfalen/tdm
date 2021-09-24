@@ -45,6 +45,17 @@
 	- Higher Dex causes 20% chance to cut open target's face causing bleed
 
 
+# Transitional techniques
+## Clinch
+	- Description: Grab hold and control the target's head and neck using both hands
+	- Opens up techniques:
+		- Elbow L/R
+		- Knee to Head L/R
+		- Knee to stomach L/R
+		- Hip toss
+		- Drop Seoinage
+		- Inner leg trip L/R
+
 
 # Judo throws
 
@@ -78,13 +89,35 @@
 	- *DEP_FREE*
 	- *FLOWS_FROM* Jab (L), Cross, (R), Front Kick (R)
 	- *STARTS_FLOW* Front Kick (R), Elbow (L), Uppercut(R)
-	ACMD(do_knife_disarm) { }
-	ACMD(do_knee_left) { }
-	ACMD(do_knee_right) { }
+
 ## Oblique L/R
 	- Uses constitution
 	- Higher Strength causes 15% chance to break target leg
 
+## Knee to Head L/R
+	- Uses dex, strength, Con
+	- *DEP_FREE*
+	- *FLOWS_FROM* Clinch, Elbow, Knee
+	- *STARTS_FLOW* Knee, Elbow, Hip Toss
+	- *STARTS_FLOW* Knee, Inner leg trip
+
+## Knee to Body L/R
+	- Uses dex, str, con
+	- *DEP_FREE*
+	- *FLOWS_FROM* Clinch or Elbow
+	- *STARTS_FLOW* Knee, Ippon Seoinage
+
+# Disarming techniques
+## Knife disarm
+	- Difficult to land, but when landed, can remove weapon from attacker
+	- Uses Speed, Dex, and Weapon Handling attribute
+		- On slower enemies, has high chance of success
+		- Uses the practice skill system in that the more you use it the better you get at it
+	- Brainstorm: Might make this only a passive technique
+
+## Pistol disarm
+	- Uses Speed, Dex, and Weapon handling attribute
+	- Brainstorm: Might make this only a passive technique
 
 
 

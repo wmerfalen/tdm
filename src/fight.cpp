@@ -29,6 +29,7 @@
 #include "mods/rand.hpp"
 #include "mods/loot.hpp"
 #include "mods/classes/ghost.hpp"
+#include "mods/melee/combat-order.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
 #define MOD_SNIPE_DISTANCE_THACO 5
@@ -879,20 +880,26 @@ void hit(char_data *ch, char_data *victim, int type) {
 	                   player->ghost() && player->ghost()->underbarrel() &&
 	                   std::string(player->ghost()->underbarrel()->attachment()->attributes->underbarrel_launcher_type).compare("SHOTGUN") == 0
 	               ) ? player->ghost()->underbarrel() : nullptr;
-	if(same_room) {
-		if(ub) {
-			mods::weapons::damage_types::rifle_attack_with_feedback(
-			    player,
-			    player->primary(),
-			    victim_ptr,
-			    0,
-			    NORTH);
-			return;
-		} else if(primary_can_attack_same_room) {
-			wielded_weapon = primary;
-		} else if(secondary_can_attack_same_room) {
-			wielded_weapon = secondary;
-		}
+	if(same_room && ub) {
+		mods::weapons::damage_types::rifle_attack_with_feedback(
+		    player,
+		    player->primary(),
+		    victim_ptr,
+		    0,
+		    NORTH);
+		return;
+	}
+	auto& combat_order = player->get_combat_order();
+	if(same_room && combat_order.size()) {
+		set_fighting(ch,victim);
+		auto vptr = ptr(victim);
+		mods::melee::combat_order::dispatch_player(player,vptr);
+		return;
+	}
+	if(primary_can_attack_same_room) {
+		wielded_weapon = primary;
+	} else if(secondary_can_attack_same_room) {
+		wielded_weapon = secondary;
 	}
 	auto hands_ptr = player->equipment(WEAR_HANDS);
 	if(hands_ptr && hands_ptr->has_melee() && hands_ptr->melee()->attributes->type == mw_melee::BRASS_KNUCKLES && !wielded_weapon) {

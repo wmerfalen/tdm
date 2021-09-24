@@ -130,6 +130,7 @@ namespace mods {
 		this->clear_all_affected();
 		this->clear_all_affected_plr();
 		set_type(type);
+		set_class(player_class_t::GHOST);
 	}
 	void player::set_type(player_type_enum_t type) {
 		/**
@@ -834,7 +835,8 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
-		m_melee_combat_order.clear();
+		m_triads = {0,0,0,0,0};
+		m_combat_order.clear();
 		m_stance = "balanced";
 		m_current_melee_index = 0;
 		get_affect_dissolver().clear_all();
@@ -2141,8 +2143,8 @@ namespace mods {
 		return {0,"Unimplemented"};
 
 	}
-	void player::add_melee_order(std::string_view technique) {
-		m_melee_combat_order.emplace_back(technique.data());
+	void player::add_combat_order(std::string_view technique) {
+		m_combat_order.emplace_back(technique.data());
 	}
 
 };

@@ -3,20 +3,10 @@
 
 #include "../../globals.hpp"
 #include "../damage-event.hpp"
+#include "combat-order.hpp"
 
 namespace mods::melee::main {
-	/**
-	 * set first move
-	 */
-	void set_first(player_ptr_t& player, std::string_view technique) {
-
-	}
-	void set_second(player_ptr_t& player, std::string_view technique) {
-
-	}
-	void set_third(player_ptr_t& player, std::string_view technique) {
-
-	}
+	void dispatch_player(player_ptr_t& player);
 };
 #endif
 

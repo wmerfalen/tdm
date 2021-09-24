@@ -809,6 +809,21 @@ namespace mods {
 			void rate_limit_hit(int action);
 
 			std::array<uint8_t,5> triads();
+			auto melee_triad() {
+				return this->triads()[0];
+			}
+			auto weapons_triad() {
+				return this->triads()[1];
+			}
+			auto intel_triad() {
+				return this->triads()[2];
+			}
+			auto speed_triad() {
+				return this->triads()[3];
+			}
+			auto armor_triad() {
+				return this->triads()[4];
+			}
 			void admin_success(std::string_view msg);
 			void admin_fail(std::string_view msg);
 
@@ -861,12 +876,18 @@ namespace mods {
 			void update_contract_status();
 			contract_list_t& contracts();
 
-			void add_melee_order(std::string_view attack);
-			std::vector<std::string>& get_melee_order() {
-				return m_melee_combat_order;
+			void add_combat_order(std::string_view attack);
+			std::vector<std::string>& get_combat_order() {
+				return m_combat_order;
 			}
-			void clear_melee_order() {
-				m_melee_combat_order.clear();
+			void set_combat_order_index(uint8_t i) {
+				m_current_melee_index = i;
+			}
+			auto& get_combat_order_index() {
+				return m_current_melee_index;
+			}
+			void clear_combat_order() {
+				m_combat_order.clear();
 			}
 			void set_stance(std::string_view stance);
 			std::string& get_stance() {
@@ -996,7 +1017,7 @@ namespace mods {
 			mods::util::stopwatch_t m_timer;
 			int m_cooldown_ticks;
 			uint16_t m_practice_sessions;
-			std::vector<std::string> m_melee_combat_order;
+			std::vector<std::string> m_combat_order;
 			std::string m_stance;
 			std::size_t m_current_melee_index;
 	};

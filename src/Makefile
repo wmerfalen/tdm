@@ -197,7 +197,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/players/friendly-reminders mods/players/event-messages \
 					 mods/mobs/defiler mods/resting mods/weapons/damage-decisions \
 					 mods/mp mods/classes/contagion mods/orm/contagion \
-					 mods/melee/combat-order mods/melee/stance mods/melee/main
+					 mods/melee/combat-order mods/melee/stance mods/melee/main \
+					 mods/melee/damage-types
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
