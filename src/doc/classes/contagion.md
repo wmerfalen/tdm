@@ -27,6 +27,8 @@
 		- Player summons a rope around target's neck
 		- Target continues to suffocate, losing HP
 		
+	- Detonate Limb
+		- Cause target arm/leg to explode causing damage to room inhabitants
 
 ## semi-passive abilities that cause damage ##
 	- Shredded cantrip
@@ -111,6 +113,9 @@
 		- Player dissects a corpse and consumes it's organs
 			- Gains HP, Mana, Movement equal to 25% of the 
 				HP, Mana, and Movement of the NPC or PC that died
+
+	- Suffering Shot
+		- 
 
 ## Abilities that raise the dead ##
 	- Recruit

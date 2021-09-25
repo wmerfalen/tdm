@@ -14,6 +14,7 @@
 #include "explosive.hpp"
 #include "doors.hpp"
 #include "super-users.hpp"
+#include "corpse.hpp"
 
 #include "interpreter.hpp"
 #include "classes/ghost.hpp"
@@ -216,6 +217,8 @@ namespace mods {
 				mods::weapons::shrapnel_claymore_perform_blast_radius(room_id,device);
 				return;
 			}
+			bool propagate_bones = mods::object_utils::is_corpse_explosion(device);
+
 			pbr_debug("perform blast radius entry");
 			auto current_room = room_id;
 			auto type = device->explosive()->type;
@@ -280,7 +283,12 @@ namespace mods {
 								//	person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
 								//	mods::weapons::shrapnel_claymore_explode(person,device);
 								//} else {
-								person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+								if(propagate_bones) {
+									person->sendln("A corpse explodes causing bones and teeth to tear through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+									mods::corpse::perform_corpse_blast_radius(person,device,blast_count,opposite);
+								} else {
+									person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+								}
 								damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
 								person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
 								explosive_damage(person, device);
@@ -412,12 +420,17 @@ namespace mods {
 				return mods::weapons::shrapnel_claymore_explode(victim,object);
 			}
 
+			bool propagate_bones = mods::object_utils::is_corpse_explosion(object);
 			switch(type) {
 				default:
 					log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);
 					return -5;
 				case mw_explosive::REMOTE_EXPLOSIVE:
 					does_damage = true;
+					if(propagate_bones) {
+						send_to_room(room_id,"A corpse explodes!\r\n");
+						break;
+					}
 					send_to_room(room_id,"A %s explodes!\r\n",object->name.c_str());
 					break;
 				case mw_explosive::REMOTE_CHEMICAL:
@@ -470,6 +483,9 @@ namespace mods {
 						return -5;
 					case mw_explosive::REMOTE_EXPLOSIVE:
 						mods::projectile::explosive_damage(person,object);
+						if(propagate_bones) {
+							mods::corpse::deal_corpse_explosion_damage_to(person,object);
+						}
 						break;
 					case mw_explosive::REMOTE_CHEMICAL:
 						mods::projectile::chemical_damage(person,object);
@@ -509,6 +525,9 @@ namespace mods {
 			}
 			explode_debug("calling perform blast radius");
 			mods::projectile::perform_blast_radius(room_id,blast_radius,object,player_uuid);
+			//TODO if(propagate_bones) {
+			//		mods::corpse::dispose_corpse(object_uuid);
+			//	}
 			if(dispose) {
 				mods::globals::dispose_object(object_uuid);
 			}

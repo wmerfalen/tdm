@@ -30,6 +30,7 @@
 #include "mods/loot.hpp"
 #include "mods/classes/ghost.hpp"
 #include "mods/melee/combat-order.hpp"
+#include "mods/corpse.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
 #define MOD_SNIPE_DISTANCE_THACO 5
@@ -339,68 +340,7 @@ void stop_fighting(char_data *ch) {
 
 void make_corpse(char_data *ch) {
 	MENTOC_PREAMBLE();
-	char buf2[MAX_NAME_LENGTH + 64];
-	obj_data *o;
-	int i;
-
-	auto corpse = blank_object();
-
-	memset(buf2,0,sizeof(buf2));
-	snprintf(buf2, sizeof(buf2), "The corpse of %s is lying here.", player->name().c_str());
-	corpse->description.assign(buf2);
-	corpse->name.assign(corpse->description.str());
-
-	memset(buf2,0,sizeof(buf2));
-	snprintf(buf2, sizeof(buf2), "The corpse of %s", player->name().c_str());
-	corpse->short_description.assign(buf2);
-
-	GET_OBJ_TYPE(corpse) = ITEM_CONTAINER;
-	GET_OBJ_WEAR(corpse) = ITEM_WEAR_TAKE;
-	GET_OBJ_EXTRA(corpse) = ITEM_NODONATE;
-	GET_OBJ_VAL(corpse, 0) = 0;	/* You can't store stuff in a corpse */
-	GET_OBJ_VAL(corpse, 3) = 1;	/* corpse identifier */
-	GET_OBJ_WEIGHT(corpse) = player->weight() + player->carry_weight();
-	GET_OBJ_RENT(corpse) = 100000;
-
-	if(IS_NPC(ch)) {
-		GET_OBJ_TIMER(corpse) = max_npc_corpse_time;
-	} else {
-		GET_OBJ_TIMER(corpse) = max_pc_corpse_time;
-	}
-
-	if(player->is_npc()) {
-		/* transfer character's inventory to the corpse */
-		corpse->contains = player->carrying();
-	}
-
-	for(o = corpse->contains; o != NULL; o = o->next_content) {
-		o->in_obj = corpse.get();	/** FIXME legacy */
-	}
-
-	object_list_new_owner(corpse.get(), NULL);/** FIXME legacy */
-
-	/* transfer character's equipment to the corpse */
-	if(player->is_npc()) {
-		for(i = 0; i < NUM_WEARS; i++) {
-			auto obj = player->equipment(i);
-			if(obj) {
-				player->unequip(i);
-				obj_to_obj(obj, corpse);
-			}
-		}
-
-		/* transfer gold */
-		//if(player->gold() > 0) {
-		//	obj_to_obj(create_money(player->gold()), corpse);
-		//	player->gold() = 0;
-		//}
-
-		player->carry(nullptr);
-		player->carry_items() = 0;
-		player->carry_weight() = 0;
-	}
-
-	obj_to_room(corpse, player->room());
+	mods::corpse::make_corpse(player);
 }
 
 

@@ -61,6 +61,7 @@ INIT(mods::boosters::adrenaline_shot_init);
 INIT(mods::melee::combat_order);
 INIT(mods::melee::stance);
 INIT(mods::melee::main);
+INIT(mods::corpse);
 #undef INIT
 
 
@@ -124,6 +125,7 @@ namespace mods::init {
 		mods::melee::combat_order::init();
 		mods::melee::stance::init();
 		mods::melee::main::init();
+		mods::corpse::init();
 	}
 };
 #endif

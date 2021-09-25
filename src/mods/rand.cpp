@@ -27,10 +27,10 @@ namespace mods::rand {
 		}
 		player->sendln(CAT(intat(0),"d",intat(1),": HIGH(",intat(0) * intat(1),") LOW(",intat(0),") AVERAGE(",((intat(1) + 1)/2) * intat(0),")"));
 	}
-	int roll(int number, int size) {
+	uint32_t roll(uint32_t number, uint32_t size) {
 		static std::random_device rd;
 		static std::mt19937 serious_generator(rd());
-		static std::map<int,std::uniform_int_distribution<int>> popular_distributions;
+		static std::map<uint32_t,std::uniform_int_distribution<uint32_t>> popular_distributions;
 		if(number < 0) {
 			rand_debug("SYSERR: roll() should not receive a negative number for count dice");
 			return -1;
@@ -38,10 +38,10 @@ namespace mods::rand {
 		auto search = popular_distributions.find(size);
 		if(search == popular_distributions.end()) {
 			rand_debug("[static initialization of distribution] number/size:" << number << "/" << size);
-			popular_distributions[size] = std::uniform_int_distribution<int>(1,size);
+			popular_distributions[size] = std::uniform_int_distribution<uint32_t>(1,size);
 		}
-		int result = 0;
-		int rolls = number;
+		uint32_t result = 0;
+		uint32_t rolls = number;
 		while(rolls-- > 0) {
 			result += popular_distributions[size](serious_generator);
 		}
@@ -58,18 +58,18 @@ namespace mods::rand {
 };
 
 /* creates a random number in interval [from;to] */
-int rand_number(int from, int to) {
+uint32_t rand_number(uint32_t from, uint32_t to) {
 	static std::random_device rd;
 	static std::mt19937 serious_generator(rd());
-	static std::map<std::tuple<int,int>,std::uniform_int_distribution<int>> distributions;
-	std::tuple<int,uint64_t> f(from,to);
+	static std::map<std::tuple<uint32_t,uint32_t>,std::uniform_int_distribution<uint32_t>> distributions;
+	std::tuple<uint32_t,uint64_t> f(from,to);
 	if(distributions.find(f) == distributions.end()) {
 		rand_debug("distribution inserting..");
-		distributions[f] = std::uniform_int_distribution<int>(from,to);
+		distributions[f] = std::uniform_int_distribution<uint32_t>(from,to);
 	}
 	/* error checking in case people call this incorrectly */
 	if(from > to) {
-		int tmp = from;
+		uint32_t tmp = from;
 		from = to;
 		to = tmp;
 		log("SYSERR: rand_number() should be called with lowest, then highest. (%d, %d), not (%d, %d).", from, to, to, from);
@@ -77,8 +77,8 @@ int rand_number(int from, int to) {
 	return distributions[f](serious_generator);
 }
 
-int dice(int num,int size) {
-	int roll = mods::rand::roll(num,size);
+uint32_t dice(uint32_t num,uint32_t size) {
+	uint32_t roll = mods::rand::roll(num,size);
 	rand_debug("(dice) dice: num,size:" << num << "," << size << "| roll:" << roll);
 	return roll;
 }
@@ -106,7 +106,7 @@ namespace mods::rand::xoroshiro {
 		 a 64-bit seed, we suggest to seed a splitmix64 generator and use its
 		 output to fill s. */
 
-	static inline uint64_t rotl(const uint64_t x, int k) {
+	static inline uint64_t rotl(const uint64_t x, uint32_t k) {
 		return (x << k) | (x >> (64 - k));
 	}
 
@@ -142,8 +142,8 @@ namespace mods::rand::xoroshiro {
 		uint64_t s1 = 0;
 		uint64_t s2 = 0;
 		uint64_t s3 = 0;
-		for(int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
-			for(int b = 0; b < 64; b++) {
+		for(uint32_t i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
+			for(uint32_t b = 0; b < 64; b++) {
 				if(JUMP[i] & UINT64_C(1) << b) {
 					s0 ^= s[0];
 					s1 ^= s[1];
@@ -173,8 +173,8 @@ namespace mods::rand::xoroshiro {
 		uint64_t s1 = 0;
 		uint64_t s2 = 0;
 		uint64_t s3 = 0;
-		for(int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
-			for(int b = 0; b < 64; b++) {
+		for(uint32_t i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
+			for(uint32_t b = 0; b < 64; b++) {
 				if(LONG_JUMP[i] & UINT64_C(1) << b) {
 					s0 ^= s[0];
 					s1 ^= s[1];

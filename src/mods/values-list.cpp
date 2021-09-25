@@ -378,7 +378,9 @@ LEVEL_DIFF_FOOBAR_TEST,10.0
 ARMOR_CRIT_DAMAGE_MULTIPLIER,0.011134
 
 [std::string]
-MSG_YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK,"{grn}*** Your expertly deal bonus damage ***{/grn}"
+MSG_HIT_BY_TEETH_AND_BONES,"{red}*** You've been hit by teeth and bones ***{/red}"
+MSG_YOU_INFLICT_CORPSE_EXPLOSION,"{grn}*** Your corpse explosion deals damage ***{/grn}"
+MSG_YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK,"{grn}*** You expertly deal bonus damage ***{/grn}"
 MSG_HIT_BY_BONUS_INNATE_SNIPER_RIFLE_ATTACK,"{red}*** You've been hit by a precision sniper rifle ***{/red}"
 CHAOTIC_METH_ADDICT_PSV_RANDOM_ACT,"$n looks at you with utter contempt!|$n's nose starts bleeding profusely...|$n manically scratches at invisible insects crawling all over.|$n is looking for something to hurt!"
 MSG_NO_PRACTICE_SESSIONS,"You don't have any practice sessions."
@@ -577,6 +579,7 @@ ADVANCE_LEVEL_MESSAGE,"{grn}CONGRATS! You rise a level!{/grn}"
 ADVANCE_MULTIPLE_LEVELS_MESSAGE,"{grn}CONGRATS! You rise %d levels!{/grn}"
 
 [uint8_t]
+CORPSE_EXPLOSION_TICK_COUNTDOWN,33
 WEAPON_COOLDOWN_TICK_REMOVAL_TIER_ONE_MAX,2
 WEAPON_COOLDOWN_TICK_REMOVAL_TIER_TWO_MAX,3
 WEAPON_COOLDOWN_TICK_REMOVAL_TIER_THREE_MAX,6

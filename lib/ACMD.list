@@ -34,6 +34,7 @@
 ./mods/mini-games/wires.cpp:->plug_cable
 ./mods/contracts.cpp:	->contract
 ./mods/weapons/reload.cpp:	->reload
+./mods/corpse.cpp:	->corpse_me
 ./mods/loot-container.cpp:	->show_loot
 ./mods/loot-container.cpp:	->take_loot
 ./mods/loot-container.cpp:	->list_loot

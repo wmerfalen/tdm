@@ -4,6 +4,9 @@
 
 extern std::deque<room_data> world;
 extern player_ptr_t ptr_by_uuid(uuid_t);
+namespace mods::corpse {
+	extern void explode(const uuid_t&);
+};
 namespace mods {
 	deferred::lambda_queue_iterator deferred::push(uint64_t ticks_in_future,std::function<void()> lambda) {
 		return m_q.insert(std::make_pair(ticks_in_future + m_tick,lambda));
@@ -62,6 +65,9 @@ namespace mods {
 			auto fe_tuple = fe->second;
 			std::shared_ptr<mods::player> player = nullptr;
 			switch(std::get<1>(fe_tuple)) {
+				case deferred::EVENT_CORPSE_EXPLODE:
+					mods::corpse::explode(std::get<0>(fe_tuple));
+					break;
 				case deferred::EVENT_OBJECT_DESTRUCT:
 					mods::globals::destruct_object(std::get<0>(fe_tuple));
 					break;
