@@ -258,7 +258,14 @@ namespace mods {
 							QUEUE_TEXTURE_REMOVAL(NON_HAZARDOUS_SMOKE,current_room);
 							break;
 					}
-					for(auto& person : mods::globals::get_room_list(current_room)) {
+					auto persons = mods::globals::get_room_list(current_room);
+					std::set<uuid_t> processed;
+					for(unsigned i=0; i < persons.size(); i++) {
+						auto& person = persons[i];
+						if(processed.find(person->uuid()) != processed.cend()) {
+							continue;
+						}
+						processed.insert(person->uuid());
 						if(mods::super_users::player_is(person)) {
 							continue;
 						}
@@ -285,7 +292,11 @@ namespace mods {
 								//} else {
 								if(propagate_bones) {
 									person->sendln("A corpse explodes causing bones and teeth to tear through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-									mods::corpse::perform_corpse_blast_radius(person,device,blast_count,opposite);
+									if(mods::corpse::perform_corpse_blast_radius(person,device,blast_count,opposite)) {
+										persons = mods::globals::get_room_list(current_room);
+										i =0;
+										continue;
+									}
 								} else {
 									person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
 								}
