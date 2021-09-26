@@ -6,6 +6,7 @@
 #include "classes/pyrexia.hpp"
 #include "classes/forge.hpp"
 #include "classes/syndrome.hpp"
+#include "classes/contagion.hpp"
 #include <memory>
 
 namespace mods::replenish {
@@ -15,6 +16,7 @@ namespace mods::replenish {
 	void register_breacher(uuid_t);
 	void register_engineer(uuid_t);
 	void register_ghost(uuid_t);
+	void register_contagion(uuid_t);
 	void register_medic(uuid_t);
 	void register_support(uuid_t);
 	void run();

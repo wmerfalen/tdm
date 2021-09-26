@@ -473,10 +473,18 @@ namespace mods {
 				return 1;
 			}
 
-			for(auto& person : mods::globals::get_room_list(room_id)) {
+			std::set<uuid_t> processed;
+			auto room_list = mods::globals::get_room_list(room_id);
+			for(unsigned i=0; i < room_list.size(); i++) {
+				auto& person = room_list[i];
 				if(mods::super_users::player_is(person)) {
+					processed.insert(person->uuid());
 					continue;
 				}
+				if(processed.find(person->uuid()) != processed.cend()) {
+					continue;
+				}
+				processed.insert(person->uuid());
 				switch(type) {
 					default:
 						log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);
@@ -484,7 +492,11 @@ namespace mods {
 					case mw_explosive::REMOTE_EXPLOSIVE:
 						mods::projectile::explosive_damage(person,object);
 						if(propagate_bones) {
-							mods::corpse::deal_corpse_explosion_damage_to(person,object);
+							if(mods::corpse::deal_corpse_explosion_damage_to(person,object)) {
+								room_list = mods::globals::get_room_list(room_id);
+								i = 0;
+								continue;
+							}
 						}
 						break;
 					case mw_explosive::REMOTE_CHEMICAL:

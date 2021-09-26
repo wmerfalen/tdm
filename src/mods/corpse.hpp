@@ -10,8 +10,14 @@ namespace mods::corpse {
 	void corpse_explode(player_ptr_t& attacker,obj_ptr_t& corpse,const uint16_t& damage);
 	void queue_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage);
 	void process_corpse_explosion();
-	void perform_corpse_blast_radius(player_ptr_t& victim,obj_ptr_t& explosive_device,uint8_t bast_count,const direction_t& from);
-	void deal_corpse_explosion_damage_to(player_ptr_t& victim,obj_ptr_t& explosive_device);
+	/**
+	 * Return true if target died
+	 */
+	bool perform_corpse_blast_radius(player_ptr_t& victim,obj_ptr_t& explosive_device,uint8_t bast_count,const direction_t& from);
+	/**
+	 * Return true if target died
+	 */
+	bool deal_corpse_explosion_damage_to(player_ptr_t& victim,obj_ptr_t& explosive_device);
 	constexpr uint8_t tick_resolution() {
 		return 20;
 	}

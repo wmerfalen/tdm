@@ -58,7 +58,7 @@ namespace mods::classes {
 				MORBID_INSIGHT,
 				CONFUSE,
 			};
-			std::vector<ability_data_t>& get_abilities() {
+			std::vector<ability_data_t>& get_abilities() override {
 				return m_abilities;
 			}
 
@@ -88,6 +88,7 @@ namespace mods::classes {
 			std::tuple<bool,std::string> intimidate_target(uuid_t npc_uuid);
 
 			std::pair<int16_t,std::string> cast_corpse_explosion(obj_ptr_t& corpse);
+			std::pair<int16_t,std::string> cast_minor_shielding();
 
 			/** database routines */
 			int16_t load_by_player(player_ptr_t&);

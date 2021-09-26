@@ -2,6 +2,7 @@
 ./shop.cpp:->buy
 ./mods/rifle-attachments.cpp:		->vcarrying
 ./mods/prefs.cpp:	->pref
+./mods/classes/contagion.cpp:	->invoke
 ./mods/classes/pyrexia.cpp:->fire_nade
 ./mods/classes/ghost.cpp:	->light_bandage
 ./mods/classes/ghost.cpp:	->build_corrosive_claymore

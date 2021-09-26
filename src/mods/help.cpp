@@ -496,16 +496,16 @@ namespace mods::help::pages {
 	                    "this documentation was written on 2020-11-16."
 	                    ;
 	HELP_STR h_pathogen_ammunition \
-	    = "usage: cast 'pathogen ammunition' [primary|secondary]\r\n"
+	    = "usage: invoke pathogen_ammunition [primary|secondary]\r\n"
 	      "description: Loads a special magazine into your primary or secondary weapon.\r\n"
 	      "Pathogen ammunition infects your ammunition with a genetically engineered\r\n"
 	      "virus that continues to deal poison damage to a target for a period of time.\r\n"
-	      "example: cast 'pathogen ammunition' primary\r\n"
-	      "example: cast 'pathogen ammunition' # this is equivalent to {grn}cast 'pathogen ammunition' primary{/grn}\r\n"
+	      "example: invoke pathogen_ammunition primary\r\n"
+	      "example: invoke pathogen_ammunition # this is equivalent to {grn}invoke pathogen_ammunition primary{/grn}\r\n"
 	      "\r\n"
 	      "this documentation was written on 2021-09-25."
 	      ;
-	HELP_STR grim_aura= "usage: cast 'grim aura'   \r\n"
+	HELP_STR grim_aura= "usage: invoke grim_aura   \r\n"
 	                    "description: \r\n"
 	                    "- +15% damage done by melee/ranged attacks\r\n"
 	                    "- damage taken is reduced by 15%\r\n"
@@ -513,13 +513,13 @@ namespace mods::help::pages {
 	                    "\r\n"
 	                    "this documentation was written on 2021-09-25.";
 
-	HELP_STR melt= "usage: cast 'melt' <target>  \r\n"
+	HELP_STR melt= "usage: invoke melt <target>  \r\n"
 	               "- Player places hands on target\r\n"
 	               "- Target is set on fire and blinded for 50 ticks\r\n"
 	               "\r\n"
 	               "this documentation was written on 2021-09-25.";
 
-	HELP_STR suffocate= "usage: cast 'suffocate' <target>  \r\n"
+	HELP_STR suffocate= "usage: invoke suffocate <target>  \r\n"
 	                    "- Player summons a rope around target's neck\r\n"
 	                    "- Target continues to suffocate, losing HP\r\n"
 	                    "\r\n"
@@ -529,19 +529,19 @@ namespace mods::help::pages {
 	                           "- Place a trap in the room that causes targets to bleed\r\n"
 	                           "\r\n"
 	                           "this documentation was written on 2021-09-25.";
-	HELP_STR muscle_memory= "usage: cast 'muscle memory'  \r\n"
+	HELP_STR muscle_memory= "usage: invoke muscle_memory  \r\n"
 	                        "- Muscle Memory\r\n"
 	                        "- Once you die\r\n"
 	                        " You can order your corpse to explode\r\n"
 	                        "\r\n"
 	                        "this documentation was written on 2021-09-25.";
-	HELP_STR hellfire_circle= "usage: cast 'hellfire circle'   \r\n"
+	HELP_STR hellfire_circle= "usage: invoke hellfire_circle   \r\n"
 	                          "- Hellfire Circle\r\n"
 	                          "	- Reduces incendiary, explosive damage\r\n"
 	                          "	- Reduces CQC, melee damage by 25%\r\n"
 	                          "\r\n"
 	                          "this documentation was written on 2021-09-25.";
-	HELP_STR particle_deceleration= "usage: cast 'particle deceleration'\r\n"
+	HELP_STR particle_deceleration= "usage: invoke particle_deceleration\r\n"
 	                                "- Particle Deceleration\r\n"
 	                                "	- Create an aura around player that slows the velocity of attacks\r\n"
 	                                "		- Reduces damage done by ranged weapons\r\n"
@@ -553,17 +553,18 @@ namespace mods::help::pages {
 	                         "	- Chance of taking damage is reduced by 30%\r\n"
 	                         "\r\n"
 	                         "this documentation was written on 2021-09-25.";
-	HELP_STR minor_shielding= "usage: cast 'minor shielding'   \r\n"
+	HELP_STR minor_shielding= "usage: invoke minor_shielding   \r\n"
 	                          "- Minor shielding\r\n"
 	                          "	- Create a ballistic resistant shielding around self\r\n"
+	                          " - Lasts for 33 ticks per level\r\n"
 	                          "\r\n"
 	                          "this documentation was written on 2021-09-25.";
-	HELP_STR cursed_ballistics= "usage: cast 'cursed ballistics'    \r\n"
+	HELP_STR cursed_ballistics= "usage: invoke cursed_ballistics    \r\n"
 	                            "- Cursed Ballistics\r\n"
 	                            "	- Worn armor becomes more effective at the cost of movement points\r\n"
 	                            "\r\n"
 	                            "this documentation was written on 2021-09-25.";
-	HELP_STR neutron_shield= "usage: cast 'neutron shield'\r\n"
+	HELP_STR neutron_shield= "usage: invoke neutron_shield\r\n"
 	                         "- Neutron Shield\r\n"
 	                         "	- Creates a shield that\r\n"
 	                         "		- dampens radioactive, cryogenic, and anti-matter damage\r\n"
@@ -571,7 +572,7 @@ namespace mods::help::pages {
 	                         "	- Radioactive charges can be released as a ranged attack but only while NS is active\r\n"
 	                         "\r\n"
 	                         "this documentation was written on 2021-09-25.";
-	HELP_STR bladed_array= "usage: cast 'bladed array'  \r\n"
+	HELP_STR bladed_array= "usage: invoke bladed_array  \r\n"
 	                       "- Bladed Array\r\n"
 	                       "	- Each piece of worn armor causes bladed knife damage to melee attackers\r\n"
 	                       "	- CQC attacks:\r\n"
@@ -579,7 +580,7 @@ namespace mods::help::pages {
 	                       "		- cause HP damage to attacker\r\n"
 	                       "\r\n"
 	                       "this documentation was written on 2021-09-25.";
-	HELP_STR roots_of_mayhem= "usage: cast 'roots_of_mayhem' <target> <direction>\r\n"
+	HELP_STR roots_of_mayhem= "usage: invoke roots_of_mayhem <target> <direction>\r\n"
 	                          "- Roots of mayhem\r\n"
 	                          "	- Cause the dead to reach up from beneath a target\r\n"
 	                          "	- Target is stuck in place and can only use ranged attacks\r\n"
@@ -587,43 +588,43 @@ namespace mods::help::pages {
 	                          "\r\n"
 	                          "this documentation was written on 2021-09-25.";
 
-	HELP_STR morbid_doubt= "usage: cast 'morbid doubt' <target>\r\n"
+	HELP_STR morbid_doubt= "usage: invoke morbid_doubt <target>\r\n"
 	                       "- Morbid doubt\r\n"
 	                       "	- Forces target to turn their weapon against themselves\r\n"
 	                       "\r\n"
 	                       "this documentation was written on 2021-09-25.";
-	HELP_STR intimidate= "usage: cast 'intimidate' <target>\r\n"
+	HELP_STR intimidate= "usage: invoke intimidate <target>\r\n"
 	                     "- Intimidate\r\n"
 	                     "	- Target becomes fearful/intimidated for 33 ticks\r\n"
 	                     "		- A fearful target is afraid to attack or respond to attacks\r\n"
 	                     "\r\n"
 	                     "this documentation was written on 2021-09-25.";
-	HELP_STR force_out= "usage: cast 'force out' <target> <direction>\r\n"
+	HELP_STR force_out= "usage: invoke force_out <target> <direction>\r\n"
 	                    "- Force out\r\n"
 	                    "	- Force target to move in a specific direction\r\n"
 	                    "\r\n"
 	                    "this documentation was written on 2021-09-25.";
-	HELP_STR leech= "usage: cast 'leech' <target> <direction>\r\n"
+	HELP_STR leech= "usage: invoke leech <target> <direction>\r\n"
 	                "- Leech\r\n"
 	                "	- Fire several devices at target.\r\n"
 	                "	- Target gets BLEED for 30 ticks\r\n"
 	                "		- Player gets hp equal to the bleed damage\r\n"
 	                "\r\n"
 	                "this documentation was written on 2021-09-25.";
-	HELP_STR parasitic_corpse_tap= "usage: cast 'parasitic corpse tap' <target>\r\n"
+	HELP_STR parasitic_corpse_tap= "usage: invoke parasitic_corpse_tap <target>\r\n"
 	                               "- Parasitic Corpse Tap\r\n"
 	                               "	- Walk up to any corpse and absorb hp,mana,movement points\r\n"
 	                               "	- Corpse dissipates once done\r\n"
 	                               "\r\n"
 	                               "this documentation was written on 2021-09-25.";
-	HELP_STR extract_organs= "usage: cast 'extract_organs' <target>\r\n"
+	HELP_STR extract_organs= "usage: invoke extract_organs <target>\r\n"
 	                         "- Extract Organs\r\n"
 	                         "	- Player dissects a corpse and consumes it's organs\r\n"
 	                         "		- Gains HP, Mana, Movement equal to 25% of the \r\n"
 	                         "			HP, Mana, and Movement of the NPC or PC that died\r\n"
 	                         "\r\n"
 	                         "this documentation was written on 2021-09-25.";
-	HELP_STR recruit= "usage: cast 'recruit' <target> \r\n"
+	HELP_STR recruit= "usage: invoke recruit <target> \r\n"
 	                  "- Recruit\r\n"
 	                  "	- Walk up to any corpse\r\n"
 	                  "	- Place hex on corpse\r\n"
@@ -632,7 +633,7 @@ namespace mods::help::pages {
 	                  "\r\n"
 	                  "this documentation was written on 2021-09-25.";
 
-	HELP_STR demonic_incantation= "usage: cast 'demonic incantation' <target>\r\n"
+	HELP_STR demonic_incantation= "usage: invoke demonic_incantation <target>\r\n"
 	                              "- Demonic incantation\r\n"
 	                              "	- Must have 1 demonic incantation charge from 'Recruit' skill\r\n"
 	                              "	- Raise target corpse.\r\n"
@@ -640,46 +641,46 @@ namespace mods::help::pages {
 	                              "\r\n"
 	                              "this documentation was written on 2021-09-25.";
 
-	HELP_STR shadow_sight= "usage: cast 'shadow sight'\r\n"
+	HELP_STR shadow_sight= "usage: invoke shadow_sight\r\n"
 	                       "- Shadow sight\r\n"
 	                       "	- Player has night vision\r\n"
 	                       "\r\n"
 	                       "this documentation was written on 2021-09-25.";
-	HELP_STR morbid_insight= "usage: cast 'morbid insight' <target> <direction>\r\n"
+	HELP_STR morbid_insight= "usage: invoke morbid_insight <target> <direction>\r\n"
 	                         "- Morbid Insight\r\n"
 	                         "	- Player can detect nearby enemies if corpses are nearby\r\n"
 	                         "	- Player can detect HP/Mana/Move points of target if corpse is nearby\r\n"
 	                         "\r\n"
 	                         "this documentation was written on 2021-09-25.";
 
-	HELP_STR life_tap= "usage: cast 'life tap' <target>\r\n"
+	HELP_STR life_tap= "usage: invoke life_tap <target>\r\n"
 	                   "- Life Tap\r\n"
 	                   "	- Damage done to a target that's been the target of life tap will increase your HP/Mana/Movement points\r\n"
 	                   "\r\n"
 	                   "this documentation was written on 2021-09-25.";
-	HELP_STR corpse_explosion= "usage: cast 'corpse explosion' <target>\r\n"
+	HELP_STR corpse_explosion= "usage: invoke corpse_explosion <target>\r\n"
 	                           "- Corpse explosion\r\n"
 	                           "	- Cause target corpse to detonate\r\n"
 	                           "\r\n"
 	                           "this documentation was written on 2021-09-25.";
-	HELP_STR attract= "usage: cast 'attract' <direction>\r\n"
+	HELP_STR attract= "usage: invoke attract <direction>\r\n"
 	                  "- Attract\r\n"
 	                  "	- Get the attention of target, causing them to attack something else\r\n"
 	                  "\r\n"
 	                  "this documentation was written on 2021-09-25.";
-	HELP_STR confuse= "usage: cast 'confuse' <target>\r\n"
+	HELP_STR confuse= "usage: invoke confuse <target>\r\n"
 	                  "- Confuse\r\n"
 	                  "	- Target loses focus and forgets who he is fighting.\r\n"
 	                  "\r\n"
 	                  "this documentation was written on 2021-09-25.";
-	HELP_STR hellfire_incantation= "usage: cast 'hellfire incantation'\r\n"
+	HELP_STR hellfire_incantation= "usage: invoke hellfire_incantation\r\n"
 	                               "- Hellfire Incantation\r\n"
 	                               "	- Adds incendiary and radioactive damage to all damage dealt\r\n"
 	                               "	- Lasts 99 ticks\r\n"
 	                               "\r\n"
 	                               "this documentation was written on 2021-09-25.";
 
-	HELP_STR detonate_limb= "usage: cast 'detonate limb' <target> <direction>\r\n"
+	HELP_STR detonate_limb= "usage: invoke detonate_limb <target> <direction>\r\n"
 	                        "- Detonate Limb\r\n"
 	                        "	- Cause target arm/leg to explode causing damage to room inhabitants\r\n"
 	                        "\r\n"
@@ -688,6 +689,18 @@ namespace mods::help::pages {
 };
 
 namespace mods::help {
+	std::string send_topic(std::string_view topic) {
+		std::string line = topic.data();
+		line += " - help ";
+		for(auto ch : topic) {
+			if(isspace(ch)) {
+				line += "_";
+				continue;
+			}
+			line += tolower(ch);
+		}
+		return line;
+	}
 	void fetch_mortal_help(std::vector<std::string>& screen) {
 		std::string guts,error;
 		mods::filesystem::file_get_contents("../lib/ACMD.list", guts,error);
@@ -865,6 +878,8 @@ namespace mods::help {
 		M_MATCH("summon_extraction",h_summon_extraction);
 		M_MATCH("xray_shot",h_xray_shot);
 		M_MATCH("reload",h_reload);
+
+		/** CONTAGION SKILLS */
 		M_MATCH("pathogen_ammunition",h_pathogen_ammunition);
 		M_MATCH("grim_aura",grim_aura);
 		M_MATCH("melt",melt);
@@ -951,50 +966,51 @@ namespace mods::help {
 		};
 		send_class_header(player,"BREACHER");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"BREACHER");
 	}
 
+
 	void send_contagion_help_menu(player_ptr_t& player) {
 		static std::vector<std::string> topics = {
-			"Pathogen Ammunition - help pathogen_ammunition",
-			"Grim Aura - help grim_aura",
-			"Melt - help melt",
-			"Suffocate - help suffocate",
-			"Shredded Cantrip - help shredded_cantrip",
-			"Muscle Memory - help muscle_memory",
-			"Hellfire Circle - help hellfire_circle",
-			"Particle Deceleration - help particle_deceleration",
-			"Ghastly Double - help ghastly_double",
-			"Minor Shielding - help minor_shielding",
-			"Cursed Ballistics - help cursed_ballistics",
-			"Neutron Shield - help neutron_shield",
-			"Bladed Array - help bladed_array",
-			"Roots of Mayhem - help roots_of_mayhem",
-			"Morbid Doubt - help morbid_doubt",
-			"Intimidate - help intimidate",
-			"Force Out - help force_out",
-			"Leech - help leech",
-			"Parasitic Corpse Tap - help parasitic_corpse_tap",
-			"Extract Organs - help extract_organs",
-			"Recruit - help recruit",
-			"Demonic Incantation - help demonic_incantation",
-			"Shadow Sight - help shadow_sight",
-			"Morbid Insight - help morbid_insight",
-			"Life Tap - help life_tap",
-			"Corpse Explosion - help corpse_explosion",
-			"Shrapnel Corpse Explosion - help corpse_explosion",
-			"Corrosive Corpse Explosion - help corpse_explosion",
-			"Hellfire Corpse Explosion - help corpse_explosion",
-			"Attract - help attract",
-			"Confuse - help confuse",
-			"Hellfire Incantation - help hellfire_incantation",
-			"Detonate Limb - help detonate_limb",
+			"Pathogen Ammunition",
+			"Grim Aura",
+			"Melt",
+			"Suffocate",
+			"Shredded Cantrip",
+			"Muscle Memory",
+			"Hellfire Circle",
+			"Particle Deceleration",
+			"Ghastly Double",
+			"Minor Shielding",
+			"Cursed Ballistics",
+			"Neutron Shield",
+			"Bladed Array",
+			"Roots of Mayhem",
+			"Morbid Doubt",
+			"Intimidate",
+			"Force Out",
+			"Leech",
+			"Parasitic Corpse Tap",
+			"Extract Organs",
+			"Recruit",
+			"Demonic Incantation",
+			"Shadow Sight",
+			"Morbid Insight",
+			"Life Tap",
+			"Corpse Explosion",
+			"Shrapnel Corpse Explosion",
+			"Corrosive Corpse Explosion",
+			"Hellfire Corpse Explosion",
+			"Attract",
+			"Confuse",
+			"Hellfire Incantation",
+			"Detonate Limb",
 		};
 		send_class_header(player,"CONTAGION");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"CONTAGION");
 	}
@@ -1008,7 +1024,7 @@ namespace mods::help {
 		};
 		send_class_header(player,"GHOST");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"GHOST");
 	}
@@ -1016,7 +1032,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"MARKSMAN");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"MARKSMAN");
 
@@ -1025,7 +1041,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"BANDIT");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"BANDIT");
 
@@ -1034,7 +1050,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"BUTCHER");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"BUTCHER");
 
@@ -1043,7 +1059,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"STRIKER");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"STRIKER");
 
@@ -1052,7 +1068,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"OBSTRUCTOR");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"OBSTRUCTOR");
 
@@ -1061,7 +1077,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"MALADY");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"MALADY");
 
@@ -1070,7 +1086,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"PYREXIA");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"PYREXIA");
 
@@ -1079,7 +1095,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"DEALER");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"DEALER");
 
@@ -1088,7 +1104,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"FORGE");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"FORGE");
 
@@ -1097,7 +1113,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"SYNDROME");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"SYNDROME");
 
@@ -1106,7 +1122,7 @@ namespace mods::help {
 		static std::vector<std::string> topics = { };
 		send_class_header(player,"MACHINIST");
 		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"MACHINIST");
 

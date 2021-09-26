@@ -2,6 +2,7 @@
 #include "affects.hpp"
 #include "skills.hpp"
 #include "armor.hpp"
+#include "levels.hpp"
 
 #include "rooms.hpp"
 #include "injure.hpp"
@@ -61,25 +62,36 @@ namespace mods::corpse {
 
 	static constexpr std::size_t BONE_SHARD_MINIMUM = 3;
 	static constexpr std::size_t BONE_SHARD_MAXIMUM = 33;
-	void perform_corpse_blast_radius(player_ptr_t& victim,obj_ptr_t& device,uint8_t blast_count,const direction_t& from_direction) {
+	bool perform_corpse_blast_radius(player_ptr_t& victim,obj_ptr_t& device,uint8_t blast_count,const direction_t& from_direction) {
 		feedback_t f;
 		f.from_direction = from_direction;
 		f.hits = rand_number(BONE_SHARD_MINIMUM,BONE_SHARD_MAXIMUM);
-		f.damage = roll(device->explosive()) / blast_count;
+		f.damage = roll(device->explosive());
+		if(blast_count) {
+			f.damage /=  blast_count;
+		}
 		f.attacker = device->get_owner();
 		f.damage_event = HIT_BY_TEETH_AND_BONES;
+		victim->hp() -= f.damage;
 		victim->damage_event(f);
 
+		update_pos(victim->cd());
+		bool dead = victim->position() == POS_DEAD;
 		auto attacker = ptr_by_uuid(device->get_owner());
 		if(!attacker) {
-			return;
+			return dead;
 		}
+
 		f.from_direction = NORTH;
 		f.damage_event = YOU_INFLICTED_CORPSE_EXPLOSION_DAMAGE;
 		attacker->damage_event(f);
+		if(dead) {
+			mods::weapons::damage_types::legacy::player_died(attacker,victim);
+		}
+		return dead;
 	}
 
-	void deal_corpse_explosion_damage_to(player_ptr_t& victim,obj_ptr_t& device) {
+	bool deal_corpse_explosion_damage_to(player_ptr_t& victim,obj_ptr_t& device) {
 		feedback_t f;
 		f.from_direction = NORTH;
 		f.hits = rand_number(BONE_SHARD_MINIMUM,BONE_SHARD_MAXIMUM);
@@ -87,14 +99,20 @@ namespace mods::corpse {
 		f.attacker = device->get_owner();
 		f.damage_event = HIT_BY_TEETH_AND_BONES;
 		victim->damage_event(f);
-
+		update_pos(victim->cd());
+		bool dead = victim->position() == POS_DEAD;
 		auto attacker = ptr_by_uuid(device->get_owner());
 		if(!attacker) {
-			return;
+			return dead;
 		}
+
 		f.from_direction = NORTH;
 		f.damage_event = YOU_INFLICTED_CORPSE_EXPLOSION_DAMAGE;
 		attacker->damage_event(f);
+		if(dead) {
+			mods::weapons::damage_types::legacy::player_died(attacker,victim);
+		}
+		return dead;
 	}
 	obj_ptr_t make_corpse(player_ptr_t& victim) {
 		char buf2[MAX_NAME_LENGTH + 64];
@@ -132,10 +150,10 @@ namespace mods::corpse {
 		}
 
 		for(o = corpse->contains; o != NULL; o = o->next_content) {
-			o->in_obj = corpse.get();	/** FIXME legacy */
+			o->in_obj = corpse.get();	/** FIXME mods::weapons::damage_types::legacy */
 		}
 
-		object_list_new_owner(corpse.get(), NULL);/** FIXME legacy */
+		object_list_new_owner(corpse.get(), NULL);/** FIXME mods::weapons::damage_types::legacy */
 
 		/* transfer character's equipment to the corpse */
 		if(victim->is_npc()) {
@@ -152,6 +170,7 @@ namespace mods::corpse {
 			victim->carry_weight() = 0;
 		}
 
+		corpse->is_corpse = true;
 		obj_to_room(corpse.get(), victim->room());
 		return corpse;
 	}
@@ -166,11 +185,12 @@ namespace mods::corpse {
 	 */
 	ACMD(do_corpse_me) {
 		player->sendln("Creating corpse");
-		uint16_t damage = 250;
-		auto corpse = make_corpse(player);
-		player->sendln(CAT("Current: ",std::distance(corpse_explosions.cbegin(),corpse_explosions.cend())));
-		queue_corpse_explode(corpse,player,damage);
-		player->sendln(CAT("After: ",std::distance(corpse_explosions.cbegin(),corpse_explosions.cend())));
+		auto obj = make_corpse(player);
+		mods::globals::register_object(obj);
+		player->sendln("There you go");
+		//player->sendln(CAT("Current: ",std::distance(corpse_explosions.cbegin(),corpse_explosions.cend())));
+		//queue_corpse_explode(corpse,player,damage);
+		//player->sendln(CAT("After: ",std::distance(corpse_explosions.cbegin(),corpse_explosions.cend())));
 	}
 	void queue_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage) {
 		corpse_explosions.push_front({attacker,corpse,damage});

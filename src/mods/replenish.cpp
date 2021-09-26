@@ -21,13 +21,16 @@ namespace mods::replenish {
 	using breacher_ptr_t = std::shared_ptr<mods::classes::breacher>;
 	using marine_ptr_t = std::shared_ptr<mods::classes::marine>;
 	using ghost_ptr_t = std::shared_ptr<mods::classes::ghost>;
+	using contagion_ptr_t = std::shared_ptr<mods::classes::contagion>;
 	static std::vector<uuid_t> marine_list;
 	static std::vector<uuid_t> breacher_list;
 	static std::vector<uuid_t> ghost_list;
+	static std::vector<uuid_t> contagion_list;
 
 	static std::map<uuid_t,marine_ptr_t> marine_ptrs;
 	static std::map<uuid_t,breacher_ptr_t> breacher_ptrs;
 	static std::map<uuid_t,ghost_ptr_t> ghost_ptrs;
+	static std::map<uuid_t,contagion_ptr_t> contagion_ptrs;
 
 	void register_marine(uuid_t marine) {
 		marine_list.emplace_back(marine);
@@ -40,6 +43,10 @@ namespace mods::replenish {
 	void register_ghost(uuid_t ghost) {
 		ghost_list.emplace_back(ghost);
 		ghost_ptrs[ghost] = ptr_by_uuid(ghost)->ghost();
+	}
+	void register_contagion(uuid_t contagion) {
+		contagion_list.emplace_back(contagion);
+		contagion_ptrs[contagion] = ptr_by_uuid(contagion)->contagion();
 	}
 	void destroy_player(uuid_t player_uuid) {
 		if(std::find(marine_list.begin(),marine_list.end(),player_uuid) != marine_list.end()) {

@@ -20,6 +20,7 @@
 #include "armor/basic-protection.hpp"
 #include "classes/super-user-fiddler.hpp"
 #include "classes/ghost.hpp"
+#include "classes/contagion.hpp"
 #include "classes/breacher.hpp"
 #include "classes/marine.hpp"
 #include "demolitions.hpp"
@@ -2134,6 +2135,9 @@ namespace mods {
 			if(m_breacher) {
 				return m_breacher->practice(param);
 			}
+			if(m_contagion) {
+				return m_contagion->practice(param);
+			}
 		}
 		if(func.compare("request_page") == 0) {
 			if(m_ghost) {
@@ -2144,6 +2148,9 @@ namespace mods {
 			}
 			if(m_marine) {
 				return {1,m_marine->request_page_for(param)};
+			}
+			if(m_contagion) {
+				return {1,m_contagion->request_page_for(param)};
 			}
 		}
 		return {0,"Unimplemented"};

@@ -1,38 +1,46 @@
 #include "contagion.hpp"
+#include "../interpreter.hpp"
+#include "../corpse.hpp"
+#include "../object-utils.hpp"
+#include "../calc-visibility.hpp"
 #include "../orm/inventory.hpp"
 
 namespace mods::classes {
 	contagion::contagion() {
-		init();
+		this->init();
+	}
+	contagion::contagion(player_ptr_t p) {
+		this->init();
+		load_by_player(p);
 	}
 
 	void contagion::init() {
 		using skillset_t = ability_data_t::skillset_t;
 		m_abilities = {
-			{PATHOGEN_AMMUNITION,"patho","PATHOGEN_AMMUNITION",skillset_t::INTELLIGENCE,&m_pathogen_ammunition},
+			{PATHOGEN_AMMUNITION,"patho","Pathogen Ammunition",skillset_t::INTELLIGENCE,&m_pathogen_ammunition},
 			{GRIM_AURA,"aura","Grim Aura",skillset_t::INTELLIGENCE,&m_grim_aura},
 			{MELT,"melt","Melt",skillset_t::INTELLIGENCE,&m_melt},
-			{SUFFOCATE,"suff","SUFFOCATE",skillset_t::INTELLIGENCE,&m_suffocate},
-			{SHREDDED_CANTRIP,"shred","SHREDDED_CANTRIP",skillset_t::INTELLIGENCE,&m_shredded_cantrip},
-			{MUSCLE_MEMORY,"mm","MUSCLE_MEMORY",skillset_t::INTELLIGENCE,&m_muscle_memory},
-			{HELLFIRE_CIRCLE,"hfc","HELLFIRE_CIRCLE",skillset_t::INTELLIGENCE,&m_hellfire_circle},
-			{PARTICLE_DECELERATION,"pardec","PARTICLE_DECELERATION",skillset_t::INTELLIGENCE,&m_particle_deceleration},
-			{GHASTLY_DOUBLE,"gd","GHASTLY_DOUBLE",skillset_t::INTELLIGENCE,&m_ghastly_double},
-			{MINOR_SHIELDING,"ms","MINOR_SHIELDING",skillset_t::INTELLIGENCE,&m_minor_shielding},
-			{CURSED_BALLISTICS,"curb","CURSED_BALLISTICS",skillset_t::INTELLIGENCE,&m_cursed_ballistics},
-			{NEUTRON_SHIELD,"ns","NEUTRON_SHIELD",skillset_t::INTELLIGENCE,&m_neutron_shield},
-			{BLADED_ARRAY,"ba","BLADED_ARRAY",skillset_t::INTELLIGENCE,&m_bladed_array},
-			{ROOTS_OF_MAYHEM,"rom","ROOTS_OF_MAYHEM",skillset_t::INTELLIGENCE,&m_roots_of_mayhem},
-			{MORBID_DOUBT,"mord","MORBID_DOUBT",skillset_t::INTELLIGENCE,&m_morbid_doubt},
-			{INTIMIDATE,"int","INTIMIDATE",skillset_t::INTELLIGENCE,&m_intimidate},
-			{FORCE_OUT,"force","FORCE_OUT",skillset_t::INTELLIGENCE,&m_force_out},
-			{LEECH,"leech","LEECH",skillset_t::INTELLIGENCE,&m_leech},
-			{PARASITIC_CORPSE_TAP,"pctap","PARASITIC_CORPSE_TAP",skillset_t::INTELLIGENCE,&m_parasitic_corpse_tap},
-			{EXTRACT_ORGANS,"extr","EXTRACT_ORGANS",skillset_t::INTELLIGENCE,&m_extract_organs},
-			{RECRUIT,"rec","RECRUIT",skillset_t::INTELLIGENCE,&m_recruit},
-			{DEMONIC_INCANTATION,"demi","DEMONIC_INCANTATION",skillset_t::INTELLIGENCE,&m_demonic_incantation},
-			{SHADOW_SIGHT,"ss","SHADOW_SIGHT",skillset_t::INTELLIGENCE,&m_shadow_sight},
-			{MORBID_INSIGHT,"mi","MORBID_INSIGHT",skillset_t::INTELLIGENCE,&m_morbid_insight},
+			{SUFFOCATE,"suff","Suffocate",skillset_t::INTELLIGENCE,&m_suffocate},
+			{SHREDDED_CANTRIP,"shred","Shredded Cantrip",skillset_t::INTELLIGENCE,&m_shredded_cantrip},
+			{MUSCLE_MEMORY,"mm","Muscle Memory",skillset_t::INTELLIGENCE,&m_muscle_memory},
+			{HELLFIRE_CIRCLE,"hfc","Hellfire Circle",skillset_t::INTELLIGENCE,&m_hellfire_circle},
+			{PARTICLE_DECELERATION,"pardec","Particle Deceleration",skillset_t::INTELLIGENCE,&m_particle_deceleration},
+			{GHASTLY_DOUBLE,"gd","Ghastly Double",skillset_t::INTELLIGENCE,&m_ghastly_double},
+			{MINOR_SHIELDING,"ms","Minor Shielding",skillset_t::INTELLIGENCE,&m_minor_shielding},
+			{CURSED_BALLISTICS,"curb","Cursed Ballistics",skillset_t::INTELLIGENCE,&m_cursed_ballistics},
+			{NEUTRON_SHIELD,"ns","Neutron Shield",skillset_t::INTELLIGENCE,&m_neutron_shield},
+			{BLADED_ARRAY,"ba","Bladed Array",skillset_t::INTELLIGENCE,&m_bladed_array},
+			{ROOTS_OF_MAYHEM,"rom","Roots of Mayhem",skillset_t::INTELLIGENCE,&m_roots_of_mayhem},
+			{MORBID_DOUBT,"mord","Morbid Doubt",skillset_t::INTELLIGENCE,&m_morbid_doubt},
+			{INTIMIDATE,"int","Intimidate",skillset_t::INTELLIGENCE,&m_intimidate},
+			{FORCE_OUT,"force","Force Out",skillset_t::INTELLIGENCE,&m_force_out},
+			{LEECH,"leech","Leech",skillset_t::INTELLIGENCE,&m_leech},
+			{PARASITIC_CORPSE_TAP,"pctap","Parasitic Corpse Tap",skillset_t::INTELLIGENCE,&m_parasitic_corpse_tap},
+			{EXTRACT_ORGANS,"extr","Extract Organs",skillset_t::INTELLIGENCE,&m_extract_organs},
+			{RECRUIT,"rec","Recruit",skillset_t::INTELLIGENCE,&m_recruit},
+			{DEMONIC_INCANTATION,"demi","Demonic Incantation",skillset_t::INTELLIGENCE,&m_demonic_incantation},
+			{SHADOW_SIGHT,"ss","Shadow Sight",skillset_t::INTELLIGENCE,&m_shadow_sight},
+			{MORBID_INSIGHT,"mi","Morbid Insight",skillset_t::INTELLIGENCE,&m_morbid_insight},
 			{LIFE_TAP,"tap","Life Tap",skillset_t::INTELLIGENCE,&m_life_tap},
 			{CORPSE_EXPLOSION,"ce","Corpse Explosion",skillset_t::DEMOLITIONS,&m_corpse_explosion},
 			{SHRAPNEL_CORPSE_EXPLOSION,"sce","Shrapnel Corpse Explosion",skillset_t::DEMOLITIONS,&m_shrapnel_corpse_explosion},
@@ -46,9 +54,6 @@ namespace mods::classes {
 	}
 	void contagion::set_player(player_ptr_t p) {
 		m_player = p;
-	}
-	contagion::contagion(player_ptr_t p) {
-		load_by_player(p);
 	}
 
 	int16_t contagion::new_player(player_ptr_t& player) {
@@ -79,11 +84,38 @@ namespace mods::classes {
 	std::shared_ptr<contagion> create_contagion(player_ptr_t& in_player) {
 		return std::move(std::make_shared<contagion>(in_player));
 	}
+	std::pair<int16_t,std::string> contagion::cast_minor_shielding() {
+		if(m_minor_shielding.not_learned()) {
+			return {0,"It looks like you still need to train that skill"};
+		}
+		auto s = roll_skill_success(CORPSE_EXPLOSION);
+		if(!std::get<0>(s)) {
+			return {0,std::get<1>(s)};
+		}
+		uint16_t ticks = 0;
+		if(m_minor_shielding.awful() || m_minor_shielding.terrible() || m_minor_shielding.okay()) {
+			ticks = dice(10, 28) + 1 + (m_player->level() / 4);
+		}
+		if(m_minor_shielding.learned()) {
+			ticks = dice(20, 28) + 3 + (m_player->level() / 4);
+		}
+
+		if(m_minor_shielding.mastered() || m_minor_shielding.elite()) {
+			ticks = 100 + dice(30, 28) + (m_player->level() *33);
+		}
+
+		m_player->sendln(CAT("Ticks: ",ticks));
+		return {1,CAT("You enable minor shielding for ",ticks," ticks")};
+	}
 	/** Contagion class abilities */
 	std::pair<int16_t,std::string> contagion::cast_corpse_explosion(obj_ptr_t& corpse) {
 		if(m_corpse_explosion.not_learned()) {
 			return {0,"It looks like you still need to train that skill"};
 		}
+		if(m_player->mana() < CORPSE_EXPLOSION_MANA_COST()) {
+			return {0,"You don't have enough mana!"};
+		}
+		m_player->mana() -= CORPSE_EXPLOSION_MANA_COST();
 		auto s = roll_skill_success(CORPSE_EXPLOSION);
 		if(!std::get<0>(s)) {
 			return {0,std::get<1>(s)};
@@ -99,7 +131,74 @@ namespace mods::classes {
 		if(m_corpse_explosion.mastered() || m_corpse_explosion.elite()) {
 			damage = 100 + dice(30, 28);
 		}
+		mods::corpse::queue_corpse_explode(corpse,m_player,damage);
 		m_player->sendln(CAT("Damage: ",damage));
 		return {1,"You rig a corpse to explode!"};
+	}
+};
+namespace mods::class_abilities::contagion {
+	ACMD(do_invoke) {
+		if(!player->contagion()) {
+			player->sendln("Invoke what? You're not a CONTAGION.");
+			return;
+		}
+		/** This is the main entry point of all spells
+		 * that the necro can cast. 'invoke' is a command
+		 * that *only* a necro can call to use their spells
+		 * and abilities.
+		 */
+		if(argshave()->first_is("corpse_explosion")->size_gt(1)->passed()) {
+			player->sendln("corpse explosion");
+			auto list = world[player->room()].contents;
+			for(auto i = list; i; i = i->next_content) {
+				if(!i) {
+					break;
+				}
+				if(CAN_SEE_OBJ(ch, i)) {
+					auto item = optr(i);
+					auto s = mods::calc_visibility::can_see_object(player,item);
+					if(!std::get<0>(s)) {
+						continue;
+					} else {
+						/** TODO: test for this syntax: 3.corpse */
+						if(mods::util::fuzzy_match(argat(1),i->name.str()) && mods::object_utils::is_corpse(item)) {
+							auto cast_status = player->contagion()->cast_corpse_explosion(item);
+							player->sendln(std::get<1>(cast_status));
+							return;
+						}
+					}
+				}
+			}
+			return;
+		}
+		if(argshave()->first_is("pathogen_ammunition")->passed()) {
+			player->sendln("Pathogen ammunition!");
+			return;
+		}
+		if(argshave()->first_is("grim_aura")->passed()) {
+			player->sendln("grim aura!");
+			return;
+		}
+		if(argshave()->first_is("melt")->size_gt(1)->passed()) {
+			player->sendln("melt!");
+			return;
+		}
+		if(argshave()->first_is("suffocate")->passed()) {
+			player->sendln("suffocate!");
+			return;
+		}
+		if(argshave()->first_is("shredded_cantrip")->size_gt(1)->passed()) {
+			player->sendln("shredded_cantrip!");
+			return;
+		}
+		if(argshave()->first_is("muscle_memory")->passed()) {
+			player->sendln("muscle_memory!");
+			return;
+		}
+		player->sendln("Invoke");
+	}
+
+	void init() {
+		mods::interpreter::add_command("invoke", POS_RESTING, do_invoke, 0,0);
 	}
 };

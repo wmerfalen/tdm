@@ -194,6 +194,10 @@ namespace mods::players::db_load {
 				player->set_ghost(mods::classes::create_ghost(player));
 				mods::replenish::register_ghost(player->uuid());
 				break;
+			case CONTAGION:
+				player->set_contagion(mods::classes::create_contagion(player));
+				mods::replenish::register_contagion(player->uuid());
+				break;
 			default:
 				report(p_class,"Unable to create class. unknown class");
 				break;

@@ -38,6 +38,9 @@
 		- Once you die
 			- You can order your corpse to explode
 
+	- Hellfire Incantation
+		- Adds incendiary and radioactive damage to all damage dealt
+		- Lasts 99 ticks
 
 ## Abilities that prevent damage ##
 	- Hellfire Circle

@@ -78,6 +78,7 @@ void obj_data::set_armor_hp(int32_t amount) {
 }
 void obj_data::init() {
 	d("[debug]obj_data::init()\n");
+	is_corpse = 0;
 	m_hp = 0;
 	m_armor_hp = 0;
 	corrode_end_tick=0;
@@ -124,6 +125,7 @@ int16_t obj_data::feed(int16_t in_type,std::string_view feed_file) {
 #ifdef __MENTOC_OBJ_DATA_DEBUG_OUTPUT__
 	std::cerr << "obj_data::feed(int item_type, string feed_file)\n";
 #endif
+	is_corpse = 0;
 	this->feed_status = 2;
 	this->m_feed_file = feed_file.data();
 	this->type = in_type;
@@ -151,8 +153,10 @@ obj_data::obj_data(const obj_data& other) {
 #endif
 	m_hp = other.m_hp;
 	m_armor_hp = other.m_armor_hp;
+	is_corpse = other.is_corpse;
 }
 obj_data& obj_data::operator=(obj_data& other) {
+	is_corpse = other.is_corpse;
 	forged = other.forged;
 	feed(other.type,other.m_feed_file);
 	action_description = other.action_description;

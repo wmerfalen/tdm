@@ -812,6 +812,7 @@ struct obj_affected_type {
 /* ================== Memory Structure for Objects ================== */
 struct obj_data {
 		bool contract;
+		bool is_corpse;
 		bool forged;
 		bool matches_query(std::string_view);
 		uint64_t corrode_end_tick;
@@ -826,6 +827,7 @@ struct obj_data {
 		obj_data() = delete;
 		obj_data(std::string item_type,std::string_view feed_file);
 		obj_data(int item_type,std::string_view feed_file) :
+			is_corpse(0),
 			item_number(0),in_room(-1),name(""),
 			description(""),short_description(""),
 			action_description(""),

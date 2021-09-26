@@ -23,6 +23,7 @@ INIT(mods::class_abilities);
 INIT(mods::class_abilities::breacher);
 INIT(mods::class_abilities::marine);
 INIT(mods::class_abilities::ghost);
+INIT(mods::class_abilities::contagion);
 INIT(mods::values);
 INIT(mods::skills);
 INIT(mods::rate_limiting);
@@ -75,6 +76,7 @@ namespace mods::init {
 		//mods::class_abilities::init();
 		//mods::class_abilities::forge::init();
 		mods::class_abilities::ghost::init();
+		mods::class_abilities::contagion::init();
 		mods::class_abilities::marine::init();
 		mods::class_abilities::breacher::init();
 		mods::values::init();
