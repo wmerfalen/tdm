@@ -495,6 +495,153 @@ namespace mods::help::pages {
 	                    "\r\n"
 	                    "this documentation was written on 2020-11-16."
 	                    ;
+	HELP_STR h_pathogen_ammunition \
+	    = "usage: cast 'pathogen ammunition' [primary|secondary]\r\n"
+	      "description: Loads a special magazine into your primary or secondary weapon.\r\n"
+	      "Pathogen ammunition infects your ammunition with a genetically engineered\r\n"
+	      "virus that continues to deal poison damage to a target for a period of time.\r\n"
+	      "example: cast 'pathogen ammunition' primary\r\n"
+	      "example: cast 'pathogen ammunition' # this is equivalent to {grn}cast 'pathogen ammunition' primary{/grn}\r\n"
+	      "\r\n"
+	      "this documentation was written on 2021-09-25."
+	      ;
+	HELP_STR grim_aura= "usage: cast 'grim aura'   \r\n"
+	                    "description: \r\n"
+	                    "- +15% damage done by melee/ranged attacks\r\n"
+	                    "- damage taken is reduced by 15%\r\n"
+	                    "- Player gets 15% of their max hp added to their current hp\r\n"
+	                    "\r\n"
+	                    "this documentation was written on 2021-09-25.";
+
+	HELP_STR melt= "usage: cast 'melt' <target>  \r\n"
+	               "- Player places hands on target\r\n"
+	               "- Target is set on fire and blinded for 50 ticks\r\n"
+	               "\r\n"
+	               "this documentation was written on 2021-09-25.";
+
+	HELP_STR suffocate= "usage: cast 'suffocate' <target>  \r\n"
+	                    "- Player summons a rope around target's neck\r\n"
+	                    "- Target continues to suffocate, losing HP\r\n"
+	                    "\r\n"
+	                    "this documentation was written on 2021-09-25.";
+	HELP_STR shredded_cantrip= "usage:     \r\n"
+	                           "- Shredded cantrip\r\n"
+	                           "- Place a trap in the room that causes targets to bleed\r\n"
+	                           "\r\n"
+	                           "this documentation was written on 2021-09-25.";
+	HELP_STR muscle_memory= "usage: cast 'muscle memory'  \r\n"
+	                        "- Muscle Memory\r\n"
+	                        "- Once you die\r\n"
+	                        " You can order your corpse to explode\r\n"
+	                        "\r\n"
+	                        "this documentation was written on 2021-09-25.";
+	HELP_STR hellfire_circle= "usage: cast 'hellfire circle'   \r\n"
+	                          "- Hellfire Circle\r\n"
+	                          "	- Reduces incendiary, explosive damage\r\n"
+	                          "	- Reduces CQC, melee damage by 25%\r\n"
+	                          "\r\n"
+	                          "this documentation was written on 2021-09-25.";
+	HELP_STR particle_deceleration= "usage: cast 'particle deceleration'\r\n"
+	                                "- Particle Deceleration\r\n"
+	                                "	- Create an aura around player that slows the velocity of attacks\r\n"
+	                                "		- Reduces damage done by ranged weapons\r\n"
+	                                "\r\n"
+	                                "this documentation was written on 2021-09-25.";
+	HELP_STR ghastly_double= "usage:     \r\n"
+	                         "- Ghastly double\r\n"
+	                         "	- Create an illusion that there are two of you\r\n"
+	                         "	- Chance of taking damage is reduced by 30%\r\n"
+	                         "\r\n"
+	                         "this documentation was written on 2021-09-25.";
+	HELP_STR minor_shielding= "usage: cast 'minor shielding'   \r\n"
+	                          "- Minor shielding\r\n"
+	                          "	- Create a ballistic resistant shielding around self\r\n"
+	                          "\r\n"
+	                          "this documentation was written on 2021-09-25.";
+	HELP_STR cursed_ballistics= "usage: cast 'cursed ballistics'    \r\n"
+	                            "- Cursed Ballistics\r\n"
+	                            "	- Worn armor becomes more effective at the cost of movement points\r\n"
+	                            "\r\n"
+	                            "this documentation was written on 2021-09-25.";
+	HELP_STR neutron_shield= "usage: cast 'neutron shield'\r\n"
+	                         "- Neutron Shield\r\n"
+	                         "	- Creates a shield that\r\n"
+	                         "		- dampens radioactive, cryogenic, and anti-matter damage\r\n"
+	                         "	- Each bullet absorbed while Neutron Shield is active becomes a radioactive charge\r\n"
+	                         "	- Radioactive charges can be released as a ranged attack but only while NS is active\r\n"
+	                         "\r\n"
+	                         "this documentation was written on 2021-09-25.";
+	HELP_STR bladed_array= "usage: cast 'bladed array'  \r\n"
+	                       "- Bladed Array\r\n"
+	                       "	- Each piece of worn armor causes bladed knife damage to melee attackers\r\n"
+	                       "	- CQC attacks:\r\n"
+	                       "		- throw, wrestle, grab, clinch\r\n"
+	                       "		- cause HP damage to attacker\r\n"
+	                       "\r\n"
+	                       "this documentation was written on 2021-09-25.";
+	HELP_STR roots_of_mayhem= "usage: cast 'roots_of_mayhem' <target> <direction>\r\n"
+	                          "- Roots of mayhem\r\n"
+	                          "	- Cause the dead to reach up from beneath a target\r\n"
+	                          "	- Target is stuck in place and can only use ranged attacks\r\n"
+	                          "	- Target cannot move or flee until spell is over\r\n"
+	                          "\r\n"
+	                          "this documentation was written on 2021-09-25.";
+
+	HELP_STR morbid_doubt= "usage: cast 'morbid doubt' <target>\r\n"
+	                       "- Morbid doubt\r\n"
+	                       "	- Forces target to turn their weapon against themselves\r\n"
+	                       "\r\n"
+	                       "this documentation was written on 2021-09-25.";
+	HELP_STR intimidate= "usage: cast 'intimidate' <target>\r\n"
+	                     "- Intimidate\r\n"
+	                     "	- Target becomes fearful/intimidated for 33 ticks\r\n"
+	                     "		- A fearful target is afraid to attack or respond to attacks\r\n"
+	                     "\r\n"
+	                     "this documentation was written on 2021-09-25.";
+	HELP_STR force_out= "usage: cast 'force out' <target> <direction>\r\n"
+	                    "- Force out\r\n"
+	                    "	- Force target to move in a specific direction\r\n"
+	                    "\r\n"
+	                    "this documentation was written on 2021-09-25.";
+	HELP_STR leech= "usage: cast 'leech' <target> <direction>\r\n"
+	                "- Leech\r\n"
+	                "	- Fire several devices at target.\r\n"
+	                "	- Target gets BLEED for 30 ticks\r\n"
+	                "		- Player gets hp equal to the bleed damage\r\n"
+	                "\r\n"
+	                "this documentation was written on 2021-09-25.";
+	HELP_STR parasitic_corpse_tap= "usage: cast 'parasitic corpse tap' <target>\r\n"
+	                               "- Parasitic Corpse Tap\r\n"
+	                               "	- Walk up to any corpse and absorb hp,mana,movement points\r\n"
+	                               "	- Corpse dissipates once done\r\n"
+	                               "\r\n"
+	                               "this documentation was written on 2021-09-25.";
+	HELP_STR extract_organs= "usage: cast 'extract_organs' <target>\r\n"
+	                         "- Extract Organs\r\n"
+	                         "	- Player dissects a corpse and consumes it's organs\r\n"
+	                         "		- Gains HP, Mana, Movement equal to 25% of the \r\n"
+	                         "			HP, Mana, and Movement of the NPC or PC that died\r\n"
+	                         "\r\n"
+	                         "this documentation was written on 2021-09-25.";
+	HELP_STR recruit= "usage: cast 'recruit' <target> \r\n"
+	                  "- Recruit\r\n"
+	                  "	- Walk up to any corpse\r\n"
+	                  "	- Place hex on corpse\r\n"
+	                  "	- Add 1 demonic incantation charge for every 2 corpse this is done to\r\n"
+	                  "	- Corpse dissipates once done\r\n"
+	                  "\r\n"
+	                  "this documentation was written on 2021-09-25.";
+
+	HELP_STR demonic_incantation= "usage:     \r\n";
+	HELP_STR shadow_sight= "usage:     \r\n";
+	HELP_STR morbid_insight= "usage:     \r\n";
+	HELP_STR life_tap= "usage:     \r\n";
+	HELP_STR corpse_explosion= "usage:     \r\n";
+	HELP_STR attract= "usage:     \r\n";
+	HELP_STR confuse= "usage:     \r\n";
+	HELP_STR hellfire_incantation= "usage:     \r\n";
+	HELP_STR detonate_limb= "usage:     \r\n";
+};
 #undef HELP_STR
 };
 
@@ -641,7 +788,7 @@ namespace mods::help {
 			player->sendln(CAT("{blu}",it->second.second,"{/blu}"));
 			return false;
 		}
-#define M_MATCH(A,SUBJECT) if(matches_many(A,topic)){ player->sendln(CAT("{blu}",pages::SUBJECT,"{/blu}")); return false; }
+#define M_MATCH(A,SUBJECT) if(matches_many(A,topic)){ player->sendln(CAT(pages::SUBJECT)); return false; }
 		M_MATCH("practice",h_practice);
 		M_MATCH("sniper",h_sniper);
 		M_MATCH("throw,grenade",h_grenade);
@@ -676,263 +823,327 @@ namespace mods::help {
 		M_MATCH("summon_extraction",h_summon_extraction);
 		M_MATCH("xray_shot",h_xray_shot);
 		M_MATCH("reload",h_reload);
+		M_MATCH("pathogen_ammunition",h_pathogen_ammunition);
+		M_MATCH("grim_aura",grim_aura);
+		M_MATCH("melt",melt);
+		M_MATCH("suffocate",suffocate);
+		M_MATCH("shredded_cantrip",shredded_cantrip);
+		M_MATCH("muscle_memory",muscle_memory);
+		M_MATCH("hellfire_circle",hellfire_circle);
+		M_MATCH("particle_deceleration",particle_deceleration);
+		M_MATCH("ghastly_double",ghastly_double);
+		M_MATCH("minor_shielding",minor_shielding);
+		M_MATCH("cursed_ballistics",cursed_ballistics);
+		M_MATCH("neutron_shield",neutron_shield);
+		M_MATCH("bladed_array",bladed_array);
+		M_MATCH("roots_of_mayhem",roots_of_mayhem);
+		M_MATCH("morbid_doubt",morbid_doubt);
+		M_MATCH("intimidate",intimidate);
+		M_MATCH("force_out",force_out);
+		M_MATCH("leech",leech);
+		M_MATCH("parasitic_corpse_tap",parasitic_corpse_tap);
+		M_MATCH("extract_organs",extract_organs);
+		M_MATCH("recruit",recruit);
+		M_MATCH("demonic_incantation",demonic_incantation);
+		M_MATCH("shadow_sight",shadow_sight);
+		M_MATCH("morbid_insight",morbid_insight);
+		M_MATCH("life_tap",life_tap);
+		M_MATCH("corpse_explosion",corpse_explosion);
+		M_MATCH("attract",attract);
+		M_MATCH("confuse",confuse);
+		M_MATCH("hellfire_incantation",hellfire_incantation);
+		M_MATCH("detonate_limb",detonate_limb);
+	};
 #undef M_MATCH
+	return true;
+}
+
+
+
+void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level level) {
+	registered_help_commands[command] = {level,contents};
+}
+
+
+bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help) {
+	bool show = false;
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() == 0 && zero_is_help) {
+		show = true;
+	}
+	if(!show && !mods::util::parse_help(argument)) {
 		return true;
 	}
+	return send_help(from,player);
+}
 
 
+void send_class_header(player_ptr_t& player,std::string_view class_name) {
+	uint8_t len = class_name.length();
+	uint8_t bar_count = len + 2 + strlen(" class menu =");
+	std::string header = "";
+	for(unsigned i=0; i < bar_count; ++i) {
+		header += "=";
+	}
+	header += CAT("\r\n= ",class_name.data()," class menu =\r\n");
+	for(unsigned i=0; i < bar_count; ++i) {
+		header += "=";
+	}
+	player->sendln(header);
+}
 
-	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level level) {
-		registered_help_commands[command] = {level,contents};
+
+void send_class_footer(player_ptr_t& player,std::string_view class_name) {
+	uint8_t len = class_name.length();
+	uint8_t bar_count = len + 2 + strlen(" class menu =");
+	std::string header = "";
+	for(unsigned i=0; i < bar_count; ++i) {
+		header += "=";
+	}
+	player->sendln(header);
+}
+
+void send_breacher_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = {
+		"Special Ability - To use your explosive shot, simply move toward a closed door or surface twice. The first time you "
+		" move toward the door/surface, it will tell you to move that direction once more to explode it.\r\n"
+	};
+	send_class_header(player,"BREACHER");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"BREACHER");
+}
+
+void send_contagion_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = {
+		"Pathogen Ammunition - help pathogen_ammunition",
+		"Grim Aura - help grim_aura",
+		"Melt - help melt",
+		"Suffocate - help suffocate",
+		"Shredded Cantrip - help shredded_cantrip",
+		"Muscle Memory - help muscle_memory",
+		"Hellfire Circle - help hellfire_circle",
+		"Particle Deceleration - help particle_deceleration",
+		"Ghastly Double - help ghastly_double",
+		"Minor Shielding - help minor_shielding",
+		"Cursed Ballistics - help cursed_ballistics",
+		"Neutron Shield - help neutron_shield",
+		"Bladed Array - help bladed_array",
+		"Roots of Mayhem - help roots_of_mayhem",
+		"Morbid Doubt - help morbid_doubt",
+		"Intimidate - help intimidate",
+		"Force Out - help force_out",
+		"Leech - help leech",
+		"Parasitic Corpse Tap - help parasitic_corpse_tap",
+		"Extract Organs - help extract_organs",
+		"Recruit - help recruit",
+		"Demonic Incantation - help demonic_incantation",
+		"Shadow Sight - help shadow_sight",
+		"Morbid Insight - help morbid_insight",
+		"Life Tap - help life_tap",
+		"Corpse Explosion - help corpse_explosion",
+		"Shrapnel Corpse Explosion - help corpse_explosion",
+		"Corrosive Corpse Explosion - help corpse_explosion",
+		"Hellfire Corpse Explosion - help corpse_explosion",
+		"Attract - help attract",
+		"Confuse - help confuse",
+		"Hellfire Incantation - help hellfire_incantation",
+		"Detonate Limb - help detonate_limb",
+	};
+	send_class_header(player,"CONTAGION");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"CONTAGION");
+}
+void send_ghost_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = {
+		"plant_claymore",
+		"penetrating_shot",
+		"intimidate",
+		"toss_cryogenic_grenade",
+		"use_flash_underbarrel",
+	};
+	send_class_header(player,"GHOST");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"GHOST");
+}
+void send_marksman_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"MARKSMAN");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"MARKSMAN");
+
+}
+void send_bandit_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"BANDIT");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"BANDIT");
+
+}
+void send_butcher_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"BUTCHER");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"BUTCHER");
+
+}
+void send_striker_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"STRIKER");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"STRIKER");
+
+}
+void send_obstructor_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"OBSTRUCTOR");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"OBSTRUCTOR");
+
+}
+void send_malady_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"MALADY");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"MALADY");
+
+}
+void send_pyrexia_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"PYREXIA");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"PYREXIA");
+
+}
+void send_dealer_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"DEALER");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"DEALER");
+
+}
+void send_forge_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"FORGE");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"FORGE");
+
+}
+void send_syndrome_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"SYNDROME");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"SYNDROME");
+
+}
+void send_machinist_help_menu(player_ptr_t& player) {
+	static std::vector<std::string> topics = { };
+	send_class_header(player,"MACHINIST");
+	for(auto topic : topics) {
+		player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+	}
+	send_class_footer(player,"MACHINIST");
+
+}
+
+
+ACMD(do_help) {
+	if(IS_NPC(ch)) {
+		return;
+	}
+	std::vector<std::string> screen;
+
+	mods::help::fetch_mortal_help(screen);
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() == 0) {
+		switch(player->get_class()) {
+			case player_class_t::CLASS_CONTAGION:
+				mods::help::send_contagion_help_menu(player);
+				break;
+			case player_class_t::CLASS_GHOST:
+				mods::help::send_ghost_help_menu(player);
+				break;
+			case player_class_t::CLASS_MARKSMAN:
+				mods::help::send_marksman_help_menu(player);
+				break;
+			case player_class_t::CLASS_BANDIT:
+				mods::help::send_bandit_help_menu(player);
+				break;
+			case player_class_t::CLASS_BUTCHER:
+				mods::help::send_butcher_help_menu(player);
+				break;
+			case player_class_t::CLASS_STRIKER:
+				mods::help::send_striker_help_menu(player);
+				break;
+			case player_class_t::CLASS_OBSTRUCTOR:
+				mods::help::send_obstructor_help_menu(player);
+				break;
+			case player_class_t::CLASS_MALADY:
+				mods::help::send_malady_help_menu(player);
+				break;
+			case player_class_t::CLASS_PYREXIA:
+				mods::help::send_pyrexia_help_menu(player);
+				break;
+			case player_class_t::CLASS_DEALER:
+				mods::help::send_dealer_help_menu(player);
+				break;
+			case player_class_t::CLASS_FORGE:
+				mods::help::send_forge_help_menu(player);
+				break;
+			case player_class_t::CLASS_SYNDROME:
+				mods::help::send_syndrome_help_menu(player);
+				break;
+			case player_class_t::CLASS_MACHINIST:
+				mods::help::send_machinist_help_menu(player);
+				break;
+			default:
+				break;
+		}
 	}
 
-
-	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help) {
-		bool show = false;
-		auto vec_args = PARSE_ARGS();
-		if(vec_args.size() == 0 && zero_is_help) {
-			show = true;
-		}
-		if(!show && !mods::util::parse_help(argument)) {
-			return true;
-		}
-		return send_help(from,player);
+	if(player->implementor_mode() || player->builder_mode()) {
+		mods::help::fetch_builder_help(screen);
 	}
 
-
-	void send_class_header(player_ptr_t& player,std::string_view class_name) {
-		uint8_t len = class_name.length();
-		uint8_t bar_count = len + 2 + strlen(" class menu =");
-		std::string header = "";
-		for(unsigned i=0; i < bar_count; ++i) {
-			header += "=";
-		}
-		header += CAT("\r\n= ",class_name.data()," class menu =\r\n");
-		for(unsigned i=0; i < bar_count; ++i) {
-			header += "=";
-		}
-		player->sendln(header);
-	}
-
-
-	void send_class_footer(player_ptr_t& player,std::string_view class_name) {
-		uint8_t len = class_name.length();
-		uint8_t bar_count = len + 2 + strlen(" class menu =");
-		std::string header = "";
-		for(unsigned i=0; i < bar_count; ++i) {
-			header += "=";
-		}
-		player->sendln(header);
-	}
-
-	void send_breacher_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = {
-			"Special Ability - To use your explosive shot, simply move toward a closed door or surface twice. The first time you "
-			" move toward the door/surface, it will tell you to move that direction once more to explode it.\r\n"
-		};
-		send_class_header(player,"BREACHER");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"BREACHER");
-	}
-
-	void send_contagion_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = {
-		};
-		send_class_header(player,"CONTAGION");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"CONTAGION");
-	}
-	void send_ghost_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = {
-			"plant_claymore",
-			"penetrating_shot",
-			"intimidate",
-			"toss_cryogenic_grenade",
-			"use_flash_underbarrel",
-		};
-		send_class_header(player,"GHOST");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"GHOST");
-	}
-	void send_marksman_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"MARKSMAN");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"MARKSMAN");
-
-	}
-	void send_bandit_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"BANDIT");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"BANDIT");
-
-	}
-	void send_butcher_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"BUTCHER");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"BUTCHER");
-
-	}
-	void send_striker_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"STRIKER");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"STRIKER");
-
-	}
-	void send_obstructor_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"OBSTRUCTOR");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"OBSTRUCTOR");
-
-	}
-	void send_malady_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"MALADY");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"MALADY");
-
-	}
-	void send_pyrexia_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"PYREXIA");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"PYREXIA");
-
-	}
-	void send_dealer_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"DEALER");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"DEALER");
-
-	}
-	void send_forge_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"FORGE");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"FORGE");
-
-	}
-	void send_syndrome_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"SYNDROME");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"SYNDROME");
-
-	}
-	void send_machinist_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"MACHINIST");
-		for(auto topic : topics) {
-			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
-		}
-		send_class_footer(player,"MACHINIST");
-
-	}
-
-
-	ACMD(do_help) {
-		if(IS_NPC(ch)) {
+	if(argshave()->size_gt(0)->passed()) {
+		if(send_help(argat(0), player)) {
+			player->pager_start();
+			player->sendln("No specific help screen found for that. Searching every command...");
+			mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
+			player->pager_end();
+			player->page(0);
 			return;
 		}
-		std::vector<std::string> screen;
-
-		mods::help::fetch_mortal_help(screen);
-		auto vec_args = PARSE_ARGS();
-		if(vec_args.size() == 0) {
-			switch(player->get_class()) {
-				case player_class_t::CLASS_CONTAGION:
-					mods::help::send_contagion_help_menu(player);
-					break;
-				case player_class_t::CLASS_GHOST:
-					mods::help::send_ghost_help_menu(player);
-					break;
-				case player_class_t::CLASS_MARKSMAN:
-					mods::help::send_marksman_help_menu(player);
-					break;
-				case player_class_t::CLASS_BANDIT:
-					mods::help::send_bandit_help_menu(player);
-					break;
-				case player_class_t::CLASS_BUTCHER:
-					mods::help::send_butcher_help_menu(player);
-					break;
-				case player_class_t::CLASS_STRIKER:
-					mods::help::send_striker_help_menu(player);
-					break;
-				case player_class_t::CLASS_OBSTRUCTOR:
-					mods::help::send_obstructor_help_menu(player);
-					break;
-				case player_class_t::CLASS_MALADY:
-					mods::help::send_malady_help_menu(player);
-					break;
-				case player_class_t::CLASS_PYREXIA:
-					mods::help::send_pyrexia_help_menu(player);
-					break;
-				case player_class_t::CLASS_DEALER:
-					mods::help::send_dealer_help_menu(player);
-					break;
-				case player_class_t::CLASS_FORGE:
-					mods::help::send_forge_help_menu(player);
-					break;
-				case player_class_t::CLASS_SYNDROME:
-					mods::help::send_syndrome_help_menu(player);
-					break;
-				case player_class_t::CLASS_MACHINIST:
-					mods::help::send_machinist_help_menu(player);
-					break;
-				default:
-					break;
-			}
-		}
-
-		if(player->implementor_mode() || player->builder_mode()) {
-			mods::help::fetch_builder_help(screen);
-		}
-
-		if(argshave()->size_gt(0)->passed()) {
-			if(send_help(argat(0), player)) {
-				player->pager_start();
-				player->sendln("No specific help screen found for that. Searching every command...");
-				mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
-				player->pager_end();
-				player->page(0);
-				return;
-			}
-		}
 	}
+}
 
-	void init() {
-		mods::interpreter::add_command("builder_help", POS_RESTING, do_help, LVL_BUILDER,0);
-		mods::interpreter::add_command("help", POS_RESTING, do_help, 0,0);
-	}
+void init() {
+	mods::interpreter::add_command("builder_help", POS_RESTING, do_help, LVL_BUILDER,0);
+	mods::interpreter::add_command("help", POS_RESTING, do_help, 0,0);
+}
 };
