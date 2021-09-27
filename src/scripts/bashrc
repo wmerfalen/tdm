@@ -132,9 +132,6 @@ function gshv(){ # vim -p $(gsho $@)
 function vb(){
 	vim ~/.bashrc
 }
-function ll(){
-	ls -al $@
-}
 function get-vim-plug(){
 	curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 }
@@ -160,3 +157,182 @@ function vv(){ # vim ~/.vimrc
 	vim ~/.vimrc
 }
 export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --follow --exclude .git --exclude boost --exclude build --exclude mods/php --exclude duktape-2.2.0 --exclude libpqxx --exclude  doc/doxygen --exclude duktape'
+function mentoc_sty(){ # ehco $STY
+	echo -ne "\033[04;31m$STY"
+}
+function base(){ # cd to base webroot dir
+	cd $WEBROOT
+}
+function updir(){ # set current pwd for screen sesh
+	screen -X chdir $(pwd)
+}
+function host_id(){
+	#X=$(hostname)
+	X='--VIRTUAL_BOX--'
+	echo -ne "\033[36m|${X}|\033[m"
+}
+export PS1='\[\033[37m\]$(host_id)$(parse_pwd)::\[\033[42m\]\[\033[40m\]\[\033[31m\] \[$(parse_git_branch)\] \[\033[31m\]\[$(mentoc_sty)\]\[\033[32m\]\[$(color_reset)\]\n-> \[$(color_reset)\]'
+
+function lmdb-str(){ # find strings in lmdb database
+	cd $WEBROOT/../; strings ./data/data.mdb 
+}
+function lmdb-str-less(){ # find strings in lmdb database | less
+	lmdb-str | less
+}
+function lmdb-watch(){ # watch strings in lmdb
+	cd $WEBROOT/../;
+	while [[ 1 ]]; do 
+		strings ./data/data.mdb
+		sleep 2
+	done
+}
+function pwd-is-webroot(){ # change WEBROOT=$PWD
+	export WEBROOT=$PWD
+}
+export BIN=~/bin
+function spell-check(){ # spellcheck $1
+	echo "$@" > /tmp/foo 
+	aspell --lang=en check /tmp/foo
+}
+function sdr(){ # screen -d -r $1
+	if [[ "$1" == "b" ]]; then
+		screen -d -r node-bot
+		if [[ $? -eq 1 ]]; then
+			cd $NODE_BOT_ROOT; screen -S node-bot 
+		fi
+		return
+	fi
+	if [[ "$1" == "m" ]]; then
+		screen -d -r mud
+		if [[ $? -eq 1 ]]; then
+			cd $WEBROOT ; screen -S mud
+		fi
+		return
+	fi
+	if [[ "$1" == "mr" ]]; then
+		screen -d -r mud-run
+		if [[ $? -eq 1 ]]; then
+			cd $WEBROOT ; screen -S mud-run
+		fi
+		return
+	fi
+	if [[ "$1" == "mc" ]]; then
+		screen -d -r mud-client
+		if [[ $? -eq 1 ]]; then
+			cd $WEBROOT ; screen -S mud-client
+		fi
+		return
+	fi
+	if [[ "$1" == "n" ]]; then
+		screen -d -r nasm
+		if [[ $? -eq 1 ]]; then
+			cd ~/code/code/nasm-01 ; screen -S nasm
+		fi
+		return
+	fi
+	if [[ "$1" == "mud" ]]; then
+		screen -d -r 'mud'
+		return
+	fi
+	if [[ "$1" == "t" ]]; then
+		screen -d -r 't-mud'
+		return
+	fi
+	if [[ "$1" == "gc" ]]; then
+		screen -d -r 'gc-mud'
+		return
+	fi
+
+	screen -d -r $1
+}
+
+function vim-grp(){ # use grp but open results in tabs
+	vim -p $(grp bound_to | awk '{print $1}' | cut -d ':' -f 1 | sort | uniq)
+}
+
+function links2(){
+	/usr/bin/links2 -socks-proxy 127.0.0.1:9090 $@
+}
+function wget(){
+	/usr/bin/wget $@
+}
+
+#[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+alias grp='/bin/grep -n -s -I --exclude-dir={doc,libpqxx,boost-cpp,sql,duktape,hana,liblmdb,gsl,duktape-1n.2.0,build,yaml-cpp,boost_1_72_0} --exclude=tags --exclude="*.js"  --exclude-dir=mods/lmdb/liblmdb --exclude="cscope.*" -r '
+
+function sync-apt(){ # scp's the necessary files up to apt.bnull.net beta server
+	scp /home/xkold/code/code/siege-mud/src/mods/lib/liblmdb.so vox@apt.bnull.net:~/mud/bin/liblmdb 
+	scp /home/xkold/code/code/siege-mud/src/build/duktape/duktape.o vox@apt.bnull.net:~/mud/ 
+	scp /home/xkold/code/code/siege-mud/bin/circle vox@apt.bnull.net:~/mud/bin 
+	scp -r /home/xkold/code/code/siege-mud/lib/ vox@apt.bnull.net:~/mud/
+	scp /var/chroot/lemp/tmp/mud_dev_beta.sql vox@apt.bnull.net:~/mud/
+	scp -r /home/xkold/code/code/siege-mud/data/ vox@apt.bnull.net:~/mud/
+}
+function copy-pasta(){ # copy the output of one command to clipboard
+	xclip -selection clipboard
+}
+function edit-crontab(){ # edits crontab using vim.basic
+	EDITOR=/usr/bin/vim /usr/bin/crontab -e
+}
+function ss-state(){ # show xssstate -i ; xssstate -t ; xssstate -s
+	xssstate -i ; xssstate -t ; xssstate -s
+}
+export PATH
+export WEBROOT=~/cmpp/src
+export NODE_BOT_ROOT=~/code/tyrion/src
+function ty(){
+	cd $NODE_BOT_ROOT
+	screen -S tyrion -- vim .
+}
+function vimp(){
+	cut -d':' -f 1 | sort | uniq > ~/tmp/vimp
+	vim -p $(cat ~/tmp/vimp)
+}
+function mud(){ #
+	cd $WEBROOT
+	screen -S mud
+}
+function tm(){ #
+	cd $WEBROOT
+	cd ../bin/tintin-scripts
+	screen -S t-mud
+}
+function gm(){ #
+	cd $WEBROOT
+	screen -S gc-mud
+}
+function gl(){ # git log $@
+	git log $@
+}
+function vv(){ # vim ~/.vimrc
+	vim ~/.vimrc
+}
+function is(){ # cd ~/code/item-id-server
+	cd ~/code/item-id-server
+	screen -S item-id-server
+}
+function fip(){ # grab WAN IP
+	/usr/bin/curl 'https://ipecho.net/' --silent | grep 'Your IP is ' | cut -d'>' -f 2 | awk '{print $4}' | cut -d '<' -f 1
+}
+function npm-patch(){
+	npm version patch -m $@
+}
+function npm-publish(){
+	npm publish --access=public ./
+}
+function tc(){
+	~/bin/tt-wrapper.sh contagion
+}
+function tf(){
+	~/bin/tt-wrapper.sh far
+}
+function tb(){
+	~/bin/tt-wrapper.sh breacher
+}
+function tmarine(){
+	~/bin/tt-wrapper.sh marine
+}
+function ts(){
+	~/bin/tt-wrapper.sh sniper
+}

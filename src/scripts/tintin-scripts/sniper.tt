@@ -1,0 +1,9 @@
+#read common.tt
+#alias start
+{
+	#session t 127.0.0.1 4000;
+	#delay 0.1 sniper;
+	#delay 0.2 foo;
+	#delay 0.8 #cr;
+	#delay 0.9 1;
+}

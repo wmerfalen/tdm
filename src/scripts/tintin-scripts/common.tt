@@ -1,0 +1,93 @@
+#ALIAS {bootup}
+{
+	#delay 0.1 get vest armor;
+	#delay 1.1 get boots armor;
+	#delay 1.3 get shin armor;
+	#delay 1.5 get gauntlets armor;
+	#delay 1.8 get elbow armor;
+	#delay 1.9 wear all;
+	#delay 2.0 get PSG weapons;
+	#delay 2.3 wield PSG;
+	#delay 2.5 get sniper ammo;
+	#delay 2.8 get sniper ammo;
+	#delay 3.0 autoexit;
+	#delay 3.2 automap;
+}
+{5}
+
+#ALIAS {ee}
+{
+	snipe drone east
+}
+{5}
+
+#ALIAS {nn}
+{
+	snipe drone north
+}
+{5}
+
+#ALIAS {ss}
+{
+	snipe drone south
+}
+{5}
+
+#ALIAS {ww}
+{
+	snipe drone west
+}
+{5}
+
+#CONFIG           {AUTO TAB}  {5000}
+#CONFIG           {BUFFER SIZE}  {20000}
+#CONFIG           {CHARSET}  {UTF-8}
+#CONFIG           {COLOR MODE}  {256}
+#CONFIG           {COLOR PATCH}  {OFF}
+#CONFIG           {COMMAND COLOR}  {<078>}
+#CONFIG           {COMMAND ECHO}  {ON}
+#CONFIG           {CONNECT RETRY}  {0}
+#CONFIG           {HISTORY SIZE}  {1000}
+#CONFIG           {LOG}  {RAW}
+#CONFIG           {PACKET PATCH}  {0.00}
+#CONFIG           {RANDOM SEED}  {AUTO}
+#CONFIG           {REPEAT CHAR}  {!}
+#CONFIG           {REPEAT ENTER}  {OFF}
+#CONFIG           {SCREEN READER}  {OFF}
+#CONFIG           {SCROLL LOCK}  {ON}
+#CONFIG           {SPEEDWALK}  {OFF}
+#CONFIG           {TINTIN CHAR}  {#}
+#CONFIG           {VERBATIM}  {OFF}
+#CONFIG           {VERBATIM CHAR}  {\}
+#CONFIG           {VERBOSE}  {OFF}
+#CONFIG           {WORDWRAP}  {ON}
+#PATHDIR          {d}  {u}  {32}
+#PATHDIR          {e}  {w}  {2}
+#PATHDIR          {n}  {s}  {1}
+#PATHDIR          {ne}  {sw}  {3}
+#PATHDIR          {nw}  {se}  {9}
+#PATHDIR          {s}  {n}  {4}
+#PATHDIR          {se}  {nw}  {6}
+#PATHDIR          {sw}  {ne}  {12}
+#PATHDIR          {u}  {d}  {16}
+#PATHDIR          {w}  {e}  {8}
+
+#ALIAS {SDRONE}
+{
+	#textin speed-to-drone.tt 0.2
+}
+
+#ALIAS {runco}
+{
+	combat_order set jab cross uppercut
+}
+
+#alias rundis
+{
+	combat_order set jab cross uppercut
+	#delay 1.0 dispatch ;
+	#delay 1.2 dispatch ;
+	#delay 1.4 dispatch ;
+	#delay 1.6 dispatch ;
+	#delay 1.8 dispatch ;
+}

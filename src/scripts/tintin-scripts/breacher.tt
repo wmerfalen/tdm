@@ -1,0 +1,11 @@
+#read common.tt
+
+#alias start
+{
+	#split;
+	#session t 127.0.0.1 4000;
+	#delay 0.1 breacher;
+	#delay 0.2 foo;
+	#delay 0.3 #cr;
+	#delay 0.4 1;
+}

@@ -1,0 +1,20 @@
+#read common.tt
+
+#alias csv
+{
+	#delay 0.1 csv_export_levels;
+}
+
+#alias start
+{
+	#session t 127.0.0.1 4000;
+	#delay 0.1 far;
+	#delay 0.2 foo;
+	#delay 0.3 #cr;
+	#delay 0.4 1;
+	#delay 0.9 csv_export_levels
+	#delay 1.0 n;
+	#delay 1.2 n;
+	#delay 1.4 n;
+	#delay 1.5 corpse_me;
+}
