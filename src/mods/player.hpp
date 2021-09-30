@@ -374,9 +374,7 @@ namespace mods {
 				return cd()->points.damroll;
 			}
 			auto& level() {
-				//auto level = mods::classes::mock_player_level(this->uuid(),m_char_data->player.level);
-				//m_char_data->player.level = level;
-				return m_char_data->player.level;
+				return cd()->player.level;
 			}
 			auto& weight() {
 				return cd()->player.weight;

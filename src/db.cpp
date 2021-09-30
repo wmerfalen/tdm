@@ -2237,7 +2237,8 @@ bool parse_sql_player(player_ptr_t player_ptr) {
 		player_ptr->exp() = mods::util::stoi<uint32_t>(row["player_exp"]);
 		player_ptr->sex() = std::string(row["player_sex"].c_str()).compare("M") == 0 ? SEX_MALE : SEX_FEMALE;
 
-		player_ptr->level() = mods::util::stoi<uint8_t>(row["player_level"]);
+		player_ptr->level() = mods::util::stoi<uint16_t>(row["player_level"]);
+
 
 		/** damroll, hitroll, weight, height */
 		player_ptr->damroll() = mods::util::stoi<sbyte>(row["player_damroll"]);

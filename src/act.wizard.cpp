@@ -1662,15 +1662,6 @@ SUPERCMD(do_last) {
 		return;
 	}
 
-	if((chdata.level > GET_LEVEL(ch)) && (GET_LEVEL(ch) < LVL_IMPL)) {
-		player->sendln("You are not sufficiently godly for that!");
-		return;
-	}
-
-	player->send("[%5ld] [%2d %s] %-12s : %-18s : %-20s",
-	             chdata.char_specials_saved.idnum, chdata.level,
-	             class_abbrevs[(int) chdata.chclass], chdata.name.c_str(), chdata.host.c_str(),
-	             ctime(&chdata.last_logon));
 }
 
 
@@ -2124,7 +2115,7 @@ SUPERCMD(do_show) {
 			}
 
 			player->send("Player: %-12s (%s) [%2d %s]", vbuf.name.c_str(),
-			             genders[(int) vbuf.sex], vbuf.level, class_abbrevs[(int) vbuf.chclass]);
+			             genders[(int) vbuf.sex], 0, class_abbrevs[(int) vbuf.chclass]);
 			player->send("Au: %-8d  Bal: %-8d  Exp: %-8d  Align: %-5d",
 			             vbuf.points.gold, vbuf.points.bank_gold, vbuf.points.exp,
 			             vbuf.char_specials_saved.alignment);

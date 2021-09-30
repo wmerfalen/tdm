@@ -159,6 +159,7 @@ namespace mods::chargen {
 		if(data["accept"].compare("confirm-class") == 0 && mods::util::match_any_lower(argument, {"y","yes"},3)) {
 			player_class_t pclass = mods::util::to_player_class(str_class);
 			player->set_class(pclass);
+			player->level() = 1;
 			std::tuple<bool,std::string> make_char_status = mods::chargen::make_char(player,pclass);
 			if(!std::get<0>(make_char_status)) {
 				player->send("\r\n%s\r\n",std::get<1>(make_char_status).data());
@@ -256,6 +257,7 @@ namespace mods::chargen {
 		REMOVE_BIT(MOB_FLAGS(player->cd()), MOB_ISNPC);
 		player->set_db_id(0);
 		GET_CLASS(player->cd()) = class_type;
+		player->level() = 1;
 		if(mods::players::db_load::save_new_char(player) == 0) {
 			if(mods::players::db_load::load_char_pkid(player) < 0) {
 				log("SYSERR: couldn't load character's pkid: '%s'",player->name().c_str());
@@ -300,7 +302,7 @@ namespace mods::chargen {
 			default:
 				break;
 		}
-		mods::levels::gain_exp(player,1);
+		mods::levels::gain_exp(player,1000);
 
 		return {1,"success"};
 	}

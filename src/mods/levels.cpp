@@ -21,19 +21,6 @@ extern int immort_level_ok;
 namespace mods::levels {
 	static constexpr uint32_t EXP_MAX = 10000000;
 	int level_exp(int level) {
-		if(level > LVL_IMPL || level < 0) {
-			log("SYSERR: Requesting exp for invalid level %d!", level);
-			return 0;
-		}
-
-		/*
-		 * Gods have exp close to EXP_MAX.  This statement should never have to
-		 * changed, regardless of how many mortal or immortal levels exist.
-		 */
-		if(level > LVL_IMMORT) {
-			return EXP_MAX - ((LVL_IMPL - level) * 1000);
-		}
-
 		return 500 * (level - 1) * level;
 	}
 	int gain_exp(player_ptr_t& player,int gain) {
@@ -47,8 +34,7 @@ namespace mods::levels {
 			player->level() = 1;
 			advance_level(player);
 		}
-		while(player->level() < LVL_IMMORT - immort_level_ok &&
-		        player->exp() >= mods::levels::level_exp(player->level() + 1)) {
+		while(player->exp() >= mods::levels::level_exp(player->level() + 1)) {
 			player->level() += 1;
 			num_levels++;
 			advance_level(player);

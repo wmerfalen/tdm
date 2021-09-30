@@ -1306,10 +1306,10 @@ struct char_player_data {
 		mods::string long_descr;   /* for 'look'			       */
 		mods::string description;  /* Extra descriptions                   */
 		mods::string title;        /* PC / NPC's title                     */
-		uint8_t sex;           /* PC / NPC's sex                       */
-		uint8_t chclass;       /* PC / NPC's class		       */
-		uint8_t level;         /* PC / NPC's level                     */
-		uint8_t hometown;    /* PC s Hometown (zone)                 */
+		uint16_t sex;           /* PC / NPC's sex                       */
+		uint16_t chclass;       /* PC / NPC's class		       */
+		uint16_t level;         /* PC / NPC's level                     */
+		uint16_t hometown;    /* PC s Hometown (zone)                 */
 		struct time_data time;  /* PC's AGE in days                 */
 		ubyte weight;       /* PC / NPC's weight                    */
 		ubyte height;       /* PC / NPC's height                    */
@@ -1802,7 +1802,6 @@ struct char_file_u {
 	mods::string title;
 	byte sex;
 	byte chclass;
-	uint8_t level;
 	sh_int hometown;
 	time_t birth;   /* Time of birth of character     */
 	int	played;    /* Number of secs played in total */
