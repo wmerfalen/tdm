@@ -630,13 +630,13 @@ enum extra_flags_t {
 
 
 /** New enum 2019-06 */
-enum player_level {
+enum player_level_t : uint8_t {
 	LVL_MORTAL = 0,
-	LVL_IMMORT = 31,
-	LVL_GOD = 32,
-	LVL_GRGOD = 33,
-	LVL_BUILDER = 34,
-	LVL_IMPL = 35
+	LVL_IMMORT = 251,
+	LVL_GOD = 252,
+	LVL_GRGOD = 253,
+	LVL_BUILDER = 254,
+	LVL_IMPL = 255,
 };
 /* other #defined constants **********************************************/
 
@@ -650,12 +650,12 @@ enum player_level {
  * LVL_IMMORT should always be the LOWEST immortal level.  The number of
  * mortal levels will always be LVL_IMMORT - 1.
  */
-#define LVL_IMPL	player_level::LVL_IMPL
-#define LVL_BUILDER player_level::LVL_BUILDER
-#define LVL_GRGOD	player_level::LVL_GRGOD
-#define LVL_GOD		player_level::LVL_GOD
-#define LVL_IMMORT	player_level::LVL_IMMORT
-#define LVL_MORTAL player_level::LVL_MORTAL
+#define LVL_IMPL	player_level_t::LVL_IMPL
+#define LVL_BUILDER player_level_t::LVL_BUILDER
+#define LVL_GRGOD	player_level_t::LVL_GRGOD
+#define LVL_GOD		player_level_t::LVL_GOD
+#define LVL_IMMORT	player_level_t::LVL_IMMORT
+#define LVL_MORTAL player_level_t::LVL_MORTAL
 
 /* Level of the 'freeze' command */
 #define LVL_FREEZE	LVL_GRGOD

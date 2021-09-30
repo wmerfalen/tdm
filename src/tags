@@ -130,7 +130,7 @@ ACMD	mods/contracts.cpp	/^	ACMD(do_contract) {$/;"	kind:function	line:87	namespa
 ACMD	mods/corpse.cpp	/^	ACMD(do_corpse_me) {$/;"	kind:function	line:186	namespace:mods::corpse	signature:(do_corpse_me)
 ACMD	mods/date-time.cpp	/^	ACMD(do_moon_phase) {$/;"	kind:function	line:233	namespace:mods::date_time	signature:(do_moon_phase)
 ACMD	mods/help.cpp	/^	ACMD(do_help) {$/;"	kind:function	line:1132	namespace:mods::help	signature:(do_help)
-ACMD	mods/levels.cpp	/^	ACMD(do_exp) {$/;"	kind:function	line:986	namespace:mods::levels	signature:(do_exp)
+ACMD	mods/levels.cpp	/^	ACMD(do_exp) {$/;"	kind:function	line:879	namespace:mods::levels	signature:(do_exp)
 ACMD	mods/loot-container.cpp	/^	ACMD(do_list_loot) {$/;"	kind:function	line:86	namespace:mods::loot_container	signature:(do_list_loot)
 ACMD	mods/loot-container.cpp	/^	ACMD(do_show_loot) {$/;"	kind:function	line:46	namespace:mods::loot_container	signature:(do_show_loot)
 ACMD	mods/loot-container.cpp	/^	ACMD(do_take_loot) {$/;"	kind:function	line:66	namespace:mods::loot_container	signature:(do_take_loot)
@@ -1702,18 +1702,18 @@ LUNATIC_WEAR_WEAPON_ATTACHMENT	mods/values-list.cpp	/^LUNATIC_WEAR_WEAPON_ATTACH
 LUNATIC_WEAR_WIELD	mods/values-list.cpp	/^LUNATIC_WEAR_WIELD,"objects\/rifle\/uzi-machine-pistol.yml"$/;"	kind:variable	line:465
 LUNATIC_WEAR_WRIST_L	mods/values-list.cpp	/^LUNATIC_WEAR_WRIST_L,""$/;"	kind:variable	line:463
 LUNATIC_WEAR_WRIST_R	mods/values-list.cpp	/^LUNATIC_WEAR_WRIST_R,""$/;"	kind:variable	line:462
-LVL_BUILDER	structs.h	/^	LVL_BUILDER = 34,$/;"	kind:enumerator	line:638	enum:player_level	file:
+LVL_BUILDER	structs.h	/^	LVL_BUILDER = 254,$/;"	kind:enumerator	line:638	enum:uint8_t	file:
 LVL_BUILDER	structs.h	654;"	kind:macro	line:654	file:
 LVL_FREEZE	structs.h	661;"	kind:macro	line:661	file:
-LVL_GOD	structs.h	/^	LVL_GOD = 32,$/;"	kind:enumerator	line:636	enum:player_level	file:
+LVL_GOD	structs.h	/^	LVL_GOD = 252,$/;"	kind:enumerator	line:636	enum:uint8_t	file:
 LVL_GOD	structs.h	656;"	kind:macro	line:656	file:
-LVL_GRGOD	structs.h	/^	LVL_GRGOD = 33,$/;"	kind:enumerator	line:637	enum:player_level	file:
+LVL_GRGOD	structs.h	/^	LVL_GRGOD = 253,$/;"	kind:enumerator	line:637	enum:uint8_t	file:
 LVL_GRGOD	structs.h	655;"	kind:macro	line:655	file:
-LVL_IMMORT	structs.h	/^	LVL_IMMORT = 31,$/;"	kind:enumerator	line:635	enum:player_level	file:
+LVL_IMMORT	structs.h	/^	LVL_IMMORT = 251,$/;"	kind:enumerator	line:635	enum:uint8_t	file:
 LVL_IMMORT	structs.h	657;"	kind:macro	line:657	file:
-LVL_IMPL	structs.h	/^	LVL_IMPL = 35$/;"	kind:enumerator	line:639	enum:player_level	file:
+LVL_IMPL	structs.h	/^	LVL_IMPL = 255,$/;"	kind:enumerator	line:639	enum:uint8_t	file:
 LVL_IMPL	structs.h	653;"	kind:macro	line:653	file:
-LVL_MORTAL	structs.h	/^	LVL_MORTAL = 0,$/;"	kind:enumerator	line:634	enum:player_level	file:
+LVL_MORTAL	structs.h	/^	LVL_MORTAL = 0,$/;"	kind:enumerator	line:634	enum:uint8_t	file:
 LVL_MORTAL	structs.h	658;"	kind:macro	line:658	file:
 M16A4	mods/orm/marine.hpp	/^		const std::string M16A4 = "M16A4";$/;"	kind:member	line:11	struct:mods::orm::marine	file:	access:public
 M16A4	mods/weapon.hpp	/^			M16A4 = 1,$/;"	kind:enumerator	line:511	enum:mods::weapon::marine::primary_choice_t	file:
@@ -3449,8 +3449,8 @@ SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_uninstall_camera_feed) {$/;"	ki
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_uninstall_sign) {$/;"	kind:function	line:312	signature:(do_uninstall_sign)
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_uninstall_weapon_locker) {$/;"	kind:function	line:205	signature:(do_uninstall_weapon_locker)
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_weapon_locker_quota) {$/;"	kind:function	line:267	signature:(do_weapon_locker_quota)
-SUPERCMD	mods/levels.cpp	/^	SUPERCMD(do_award_exp_by_name) {$/;"	kind:function	line:943	namespace:mods::levels	signature:(do_award_exp_by_name)
-SUPERCMD	mods/levels.cpp	/^	SUPERCMD(do_csv_export_levels) {$/;"	kind:function	line:975	namespace:mods::levels	signature:(do_csv_export_levels)
+SUPERCMD	mods/levels.cpp	/^	SUPERCMD(do_award_exp_by_name) {$/;"	kind:function	line:836	namespace:mods::levels	signature:(do_award_exp_by_name)
+SUPERCMD	mods/levels.cpp	/^	SUPERCMD(do_csv_export_levels) {$/;"	kind:function	line:868	namespace:mods::levels	signature:(do_csv_export_levels)
 SUPERCMD	mods/loot.cpp	/^	SUPERCMD(do_add_armor_index) {$/;"	kind:function	line:116	namespace:mods::loot	signature:(do_add_armor_index)
 SUPERCMD	mods/loot.cpp	/^	SUPERCMD(do_add_rifle_index) {$/;"	kind:function	line:84	namespace:mods::loot	signature:(do_add_rifle_index)
 SUPERCMD	mods/loot.cpp	/^	SUPERCMD(do_reward) {$/;"	kind:function	line:27	namespace:mods::loot	signature:(do_reward)
@@ -4486,7 +4486,7 @@ adrenaline_shot_init	mods/boosters/adrenaline-shot.cpp	/^	namespace adrenaline_s
 adrenaline_shot_init	mods/init.hpp	/^INIT(mods::boosters::adrenaline_shot_init);$/;"	kind:variable	line:61
 advance	mods/player-contract-instance.cpp	/^	std::tuple<bool,std::string> player_contract_instance::advance() {$/;"	kind:function	line:148	class:mods::contracts::player_contract_instance	signature:()
 advance_level	class.cpp	/^void advance_level(char_data *ch) {$/;"	kind:function	line:1026	signature:(char_data *ch)
-advance_level	mods/levels.cpp	/^	void advance_level(player_ptr_t& player) {$/;"	kind:function	line:893	namespace:mods::levels	signature:(player_ptr_t& player)
+advance_level	mods/levels.cpp	/^	void advance_level(player_ptr_t& player) {$/;"	kind:function	line:786	namespace:mods::levels	signature:(player_ptr_t& player)
 advanced_protection	mods/armor/advanced-protection.cpp	/^	advanced_protection::advanced_protection(uuid_t player_uuid) {$/;"	kind:function	line:23	class:mods::armor::advanced_protection	signature:(uuid_t player_uuid)
 advanced_protection	mods/armor/advanced-protection.hpp	/^	struct advanced_protection {$/;"	kind:struct	line:8	namespace:mods::armor	file:
 aff_abils	mods/player.hpp	/^			char_ability_data& aff_abils() {	 \/* Abils with spells\/stones\/etc  *\/$/;"	kind:function	line:274	struct:mods::player	access:public	signature:()
@@ -5045,8 +5045,8 @@ calculate	mods/weapons/damage-calculator.cpp	/^		uint32_t calculate($/;"	kind:fu
 calculate	mods/weapons/damage-calculator.cpp	/^	uint32_t calculate($/;"	kind:function	line:331	namespace:mods::weapons::damage_calculator	signature:( player_ptr_t& attacker, obj_ptr_t& weapon, player_ptr_t& victim )
 calculate_armor_attribute_resistance	mods/melee/muay-thai-teep.cpp	/^	int calculate_armor_attribute_resistance($/;"	kind:function	line:35	namespace:mods::weapons::armor_calculator	signature:( player_ptr_t& player, obj_ptr_t& weapon, player_ptr_t& victim, int16_t dam )
 calculate_armor_attribute_resistance	mods/weapons/armor-calculator.cpp	/^	int calculate_armor_attribute_resistance($/;"	kind:function	line:35	namespace:mods::weapons::armor_calculator	signature:( player_ptr_t& player, obj_ptr_t& weapon, player_ptr_t& victim, int16_t dam )
-calculate_based_on_player	mods/levels.cpp	/^	std::array<uint16_t,STAT_INDEXES_SIZE> calculate_based_on_player(player_ptr_t& player) {$/;"	kind:function	line:797	namespace:mods::levels	signature:(player_ptr_t& player)
-calculate_based_on_triads	mods/levels.cpp	/^	std::array<uint16_t,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {$/;"	kind:function	line:604	namespace:mods::levels	signature:(std::array<uint8_t,5> triads,int level)
+calculate_based_on_player	mods/levels.cpp	/^	std::array<uint16_t,STAT_INDEXES_SIZE> calculate_based_on_player(player_ptr_t& player) {$/;"	kind:function	line:690	namespace:mods::levels	signature:(player_ptr_t& player)
+calculate_based_on_triads	mods/levels.cpp	/^	std::array<uint16_t,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {$/;"	kind:function	line:497	namespace:mods::levels	signature:(std::array<uint8_t,5> triads,int level)
 calculate_bonus_damage	mods/weapons/damage-calculator.cpp	/^	uint32_t calculate_bonus_damage($/;"	kind:function	line:275	namespace:mods::weapons::damage_calculator	signature:( player_ptr_t& attacker, obj_ptr_t& weapon, uint32_t requested_damage )
 calculate_constitution_resistance	mods/weapons/damage-calculator.cpp	/^	int calculate_constitution_resistance($/;"	kind:function	line:359	namespace:mods::weapons::damage_calculator	signature:( player_ptr_t& player, obj_ptr_t& weapon, player_ptr_t& victim, uint32_t dam )
 calculate_critical_damage	mods/armor/advanced-protection.cpp	/^	float advanced_protection::calculate_critical_damage(feedback_t& damage) {$/;"	kind:function	line:41	class:mods::armor::advanced_protection	signature:(feedback_t& damage)
@@ -5742,7 +5742,7 @@ cryogenicist	spec_assign.cpp	/^SPECIAL(cryogenicist);$/;"	kind:variable	line:30
 crypto	mods/crypto.cpp	/^namespace mods::crypto {$/;"	kind:namespace	line:3	class:mods	file:
 crypto	mods/crypto.hpp	/^namespace mods::crypto {$/;"	kind:namespace	line:13	class:mods	file:
 cstr	globals.hpp	89;"	kind:macro	line:89	file:
-csv_export_report	mods/levels.cpp	/^	int csv_export_report() {$/;"	kind:function	line:904	namespace:mods::levels	signature:()
+csv_export_report	mods/levels.cpp	/^	int csv_export_report() {$/;"	kind:function	line:797	namespace:mods::levels	signature:()
 ctypes	act.informative.cpp	/^const char *ctypes[] = {$/;"	kind:variable	line:1850
 current_block	mods/player.cpp	/^	uint32_t player::current_block() {$/;"	kind:function	line:1440	class:mods::player	signature:()
 current_player	globals.cpp	/^		player_ptr_t current_player;$/;"	kind:member	line:95	namespace:mods::globals	file:
@@ -7387,11 +7387,11 @@ gain_condition	limits.cpp	/^void gain_condition(char_data *ch, int condition, in
 gain_entry	mods/player-contract-instance.cpp	/^	void player_contract_instance::gain_entry(const room_rnum& room_id) {$/;"	kind:function	line:614	class:mods::contracts::player_contract_instance	signature:(const room_rnum& room_id)
 gain_entry_to_room	mods/contract-events.cpp	/^	void gain_entry_to_room(player_ptr_t& player,const room_rnum& room_id) {$/;"	kind:function	line:34	namespace:mods::contract_events	signature:(player_ptr_t& player,const room_rnum& room_id)
 gain_exp	limits.cpp	/^	void gain_exp(char_data *ch, int gain) {$/;"	kind:function	line:275	namespace:legacy	signature:(char_data *ch, int gain)
-gain_exp	mods/levels.cpp	/^	int gain_exp(player_ptr_t& player,int gain) {$/;"	kind:function	line:146	namespace:mods::levels	signature:(player_ptr_t& player,int gain)
-gain_exp_from_killing	mods/levels.cpp	/^	int gain_exp_from_killing(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:225	namespace:mods::levels	signature:(player_ptr_t& attacker,player_ptr_t& victim)
+gain_exp	mods/levels.cpp	/^	int gain_exp(player_ptr_t& player,int gain) {$/;"	kind:function	line:39	namespace:mods::levels	signature:(player_ptr_t& player,int gain)
+gain_exp_from_killing	mods/levels.cpp	/^	int gain_exp_from_killing(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:118	namespace:mods::levels	signature:(player_ptr_t& attacker,player_ptr_t& victim)
 gain_exp_regardless	limits.cpp	/^	void gain_exp_regardless(char_data *ch, int gain) {$/;"	kind:function	line:327	namespace:legacy	signature:(char_data *ch, int gain)
-gain_mp	mods/levels.cpp	/^	void gain_mp(player_ptr_t& player,int gain) {$/;"	kind:function	line:178	namespace:mods::levels	signature:(player_ptr_t& player,int gain)
-gain_mp_from_killing	mods/levels.cpp	/^	int gain_mp_from_killing(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:181	namespace:mods::levels	signature:(player_ptr_t& attacker,player_ptr_t& victim)
+gain_mp	mods/levels.cpp	/^	void gain_mp(player_ptr_t& player,int gain) {$/;"	kind:function	line:71	namespace:mods::levels	signature:(player_ptr_t& player,int gain)
+gain_mp_from_killing	mods/levels.cpp	/^	int gain_mp_from_killing(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:74	namespace:mods::levels	signature:(player_ptr_t& attacker,player_ptr_t& victim)
 game	mods/mini-games.cpp	/^	line_up& game(room_vnum vnum,int id) {$/;"	kind:function	line:9	namespace:mods::mini_games	signature:(room_vnum vnum,int id)
 game_action	mods/orm/mini-game.hpp	/^		std::string game_action;$/;"	kind:member	line:63	struct:mods::orm::mini_game	file:	access:public
 game_entry	mods/players/db-load.cpp	/^	void game_entry(player_ptr_t& player) {$/;"	kind:function	line:29	namespace:mods::players::db_load	signature:(player_ptr_t& player)
@@ -7467,7 +7467,7 @@ generator	mods/forge-engine/generator.hpp	/^	struct generator {$/;"	kind:struct	
 generator	mods/forge-engine/item-type-chooser.hpp	/^		generator() : loaded(0) {}$/;"	kind:function	line:11	struct:mods::orm::generator	access:public	signature:()
 generator	mods/forge-engine/item-type-chooser.hpp	/^	struct generator {$/;"	kind:struct	line:9	namespace:mods::orm	file:
 generator	mods/orm/fetcher.hpp	/^namespace generator {$/;"	kind:namespace	line:33	namespace:mods::orm	file:
-generic_advance	mods/levels.cpp	/^	void generic_advance(player_ptr_t& player) {$/;"	kind:function	line:859	namespace:mods::levels	signature:(player_ptr_t& player)
+generic_advance	mods/levels.cpp	/^	void generic_advance(player_ptr_t& player) {$/;"	kind:function	line:752	namespace:mods::levels	signature:(player_ptr_t& player)
 generic_find	handler.cpp	/^int generic_find(char *arg, bitvector_t bitvector, char_data *ch,$/;"	kind:function	line:1699	signature:(char *arg, bitvector_t bitvector, char_data *ch, char_data **tar_ch, struct obj_data **tar_obj)
 generic_import	act.builder.cpp	/^void generic_import(player_ptr_t& player,std::string_view type, const std::vector<std::string>& vec_args, std::string_view usage) {$/;"	kind:function	line:285	signature:(player_ptr_t& player,std::string_view type, const std::vector<std::string>& vec_args, std::string_view usage)
 generic_thief	mods/mobs/generic-thief.cpp	/^	generic_thief::generic_thief(const uuid_t& mob_uuid, std::string_view variation) {$/;"	kind:function	line:370	class:mods::mobs::generic_thief	signature:(const uuid_t& mob_uuid, std::string_view variation)
@@ -7717,7 +7717,7 @@ get_tree	mods/mobs/melee-combatant.cpp	/^	melee_combatant::btree_t melee_combata
 get_tree	mods/mobs/shoplifter.cpp	/^	shoplifter::btree_t shoplifter::get_tree() {$/;"	kind:function	line:126	class:mods::mobs::shoplifter	signature:()
 get_tree	mods/mobs/smart-mob.cpp	/^	uint16_t smart_mob::get_tree() {$/;"	kind:function	line:177	class:mods::mobs::smart_mob	signature:()
 get_trees	mods/mobs/car-thief-behaviour-tree.cpp	/^	std::map<std::string,node&> get_trees() {$/;"	kind:function	line:263	namespace:mods::mobs::car_thief_behaviour_tree	signature:()
-get_triads_by_class	mods/levels.cpp	/^	std::array<uint8_t,5> get_triads_by_class(player_class_t c) {$/;"	kind:function	line:336	namespace:mods::levels	signature:(player_class_t c)
+get_triads_by_class	mods/levels.cpp	/^	std::array<uint8_t,5> get_triads_by_class(player_class_t c) {$/;"	kind:function	line:229	namespace:mods::levels	signature:(player_class_t c)
 get_type	mods/weapon.cpp	/^	std::variant<mw_rifle,mw_explosive,mw_drone> get_type(obj_data_ptr_t& o) {$/;"	kind:function	line:99	namespace:mods::weapon	signature:(obj_data_ptr_t& o)
 get_type_string	mods/player-contract-instance.cpp	/^	std::string player_contract_instance::get_type_string() const {$/;"	kind:function	line:308	class:mods::contracts::player_contract_instance	signature:() const
 get_type_string	mods/player.cpp	/^	std::string player::get_type_string() {$/;"	kind:function	line:1493	class:mods::player	signature:()
@@ -8250,7 +8250,7 @@ init	mods/init.hpp	/^	static inline void init() {$/;"	kind:function	line:70	name
 init	mods/init.hpp	/^namespace mods::init {$/;"	kind:namespace	line:69	class:mods	file:
 init	mods/integral-objects.cpp	/^	void init() {$/;"	kind:function	line:322	namespace:mods::integral_objects	signature:()
 init	mods/karma.cpp	/^	void init(){$/;"	kind:function	line:7	namespace:mods	signature:()
-init	mods/levels.cpp	/^	void init() {$/;"	kind:function	line:991	namespace:mods::levels	signature:()
+init	mods/levels.cpp	/^	void init() {$/;"	kind:function	line:884	namespace:mods::levels	signature:()
 init	mods/lmdb/conf.cpp	/^void conf<StringType>::init(void){$/;"	kind:function	line:247	class:gdns::conf	signature:(void)
 init	mods/lmdb/db.hpp	/^				bool init(gsl::not_null<const char*> file,gsl::not_null<const char*> db_name){$/;"	kind:function	line:216	struct:gdns::lmdb::client	access:public	signature:(gsl::not_null<const char*> file,gsl::not_null<const char*> db_name)
 init	mods/lmdb/db.hpp	/^			bool init(const char* file, const char* dbi_name,int flags, int perms){$/;"	kind:function	line:242	struct:gdns::lmdb::server	access:public	signature:(const char* file, const char* dbi_name,int flags, int perms)
@@ -8673,7 +8673,7 @@ legacy	mods/weapons/damage-types.hpp	/^	namespace legacy {$/;"	kind:namespace	li
 len	shop.h	/^	int len;$/;"	kind:member	line:118	struct:stack_data	file:	access:public
 length	modify.cpp	/^int length[] = {$/;"	kind:variable	line:50
 length	mods/string.cpp	/^	unsigned int string::length() const {$/;"	kind:function	line:55	class:mods::string	signature:() const
-level	act.wizard.cpp	/^	const char level;$/;"	kind:member	line:2304	struct:set_struct	file:	access:public
+level	act.wizard.cpp	/^	const player_level_t level;$/;"	kind:member	line:2304	struct:set_struct	file:	access:public
 level	boards.h	/^	int	level;        \/* level of poster *\/$/;"	kind:member	line:22	struct:board_msginfo	file:	access:public
 level	mods/forge-engine/value-scaler.hpp	/^		float level;$/;"	kind:member	line:20	struct:mods::forge_engine::value_scaler	file:	access:public
 level	mods/orm/skill-points.hpp	/^		uint16_t level;$/;"	kind:member	line:11	struct:mods::orm::skill_points_record_t	file:	access:public
@@ -9249,7 +9249,7 @@ m_debug	mods/glass.cpp	13;"	kind:macro	line:13	file:
 m_debug	mods/glass.cpp	16;"	kind:macro	line:16	file:
 m_debug	mods/levels.cpp	12;"	kind:macro	line:12	file:
 m_debug	mods/levels.cpp	14;"	kind:macro	line:14	file:
-m_debug	mods/levels.cpp	997;"	kind:macro	line:997	file:
+m_debug	mods/levels.cpp	890;"	kind:macro	line:890	file:
 m_debug	mods/loot-container.cpp	5;"	kind:macro	line:5	file:
 m_debug	mods/loot-container.cpp	7;"	kind:macro	line:7	file:
 m_debug	mods/loot.cpp	7;"	kind:macro	line:7	file:
@@ -11102,8 +11102,8 @@ player_special_data_saved	structs.h	/^struct player_special_data_saved {$/;"	kin
 player_specials	structs.h	/^	std::shared_ptr<player_special_data> player_specials; \/* PC specials		  *\/$/;"	kind:member	line:1750	struct:char_data	file:	access:public
 player_specials_saved	structs.h	/^	struct player_special_data_saved player_specials_saved;$/;"	kind:member	line:1814	struct:char_file_u	typeref:struct:char_file_u::player_special_data_saved	file:	access:public
 player_table	db.cpp	/^std::deque<player_index_element> player_table;	\/* index to plr file	 *\/$/;"	kind:variable	line:117
-player_tier	mods/levels.cpp	/^	uint8_t player_tier(const uint8_t& level) {$/;"	kind:function	line:597	namespace:mods::levels	signature:(const uint8_t& level)
-player_tier	mods/levels.cpp	/^	uint8_t player_tier(player_ptr_t& player) {$/;"	kind:function	line:600	namespace:mods::levels	signature:(player_ptr_t& player)
+player_tier	mods/levels.cpp	/^	uint8_t player_tier(const uint8_t& level) {$/;"	kind:function	line:490	namespace:mods::levels	signature:(const uint8_t& level)
+player_tier	mods/levels.cpp	/^	uint8_t player_tier(player_ptr_t& player) {$/;"	kind:function	line:493	namespace:mods::levels	signature:(player_ptr_t& player)
 player_uncarry	mods/stat-bonuses.cpp	/^	void player_uncarry(uuid_t player_uuid, uuid_t object_uuid) {$/;"	kind:function	line:21	namespace:mods::stat_bonuses	signature:(uuid_t player_uuid, uuid_t object_uuid)
 player_unequip	mods/stat-bonuses.cpp	/^	void player_unequip(uuid_t player_uuid,uuid_t object_uuid) {$/;"	kind:function	line:73	namespace:mods::stat_bonuses	signature:(uuid_t player_uuid,uuid_t object_uuid)
 player_utils	mods/player-utils.hpp	/^namespace mods::player_utils {$/;"	kind:namespace	line:5	class:mods	file:
@@ -11617,7 +11617,7 @@ red_str	mods/colors.hpp	/^static inline std::string red_str(TStr str){$/;"	kind:
 reduce_ammo	mods/weapons/damage-calculator.cpp	/^	uint16_t reduce_ammo($/;"	kind:function	line:233	namespace:mods::weapons::damage_calculator	signature:( player_ptr_t& attacker, obj_ptr_t& weapon, uint16_t wants_to_deduct )
 reduce_durability_points	mods/weapons/damage-calculator.cpp	/^	int16_t reduce_durability_points($/;"	kind:function	line:261	namespace:mods::weapons::damage_calculator	signature:( player_ptr_t& attacker, obj_ptr_t& weapon )
 reduce_elemental_resistance	mods/weapons/elemental.cpp	/^	int reduce_elemental_resistance(int requested_damage, int16_t resistance) {$/;"	kind:function	line:16	namespace:mods::weapons::elemental	signature:(int requested_damage, int16_t resistance)
-reduce_exp_from_dying	mods/levels.cpp	/^	int reduce_exp_from_dying(player_ptr_t& player) {$/;"	kind:function	line:269	namespace:mods::levels	signature:(player_ptr_t& player)
+reduce_exp_from_dying	mods/levels.cpp	/^	int reduce_exp_from_dying(player_ptr_t& player) {$/;"	kind:function	line:162	namespace:mods::levels	signature:(player_ptr_t& player)
 reduce_explosive_damage_using_armor	mods/armor/basic-protection.cpp	/^	int basic_protection::reduce_explosive_damage_using_armor(obj_ptr_t& explosive,int damage,int where) {$/;"	kind:function	line:67	class:mods::armor::basic_protection	signature:(obj_ptr_t& explosive,int damage,int where)
 reflect_munitions	mods/weapons/damage-event-broadcaster.hpp	/^	void reflect_munitions(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction) {$/;"	kind:function	line:142	namespace:mods::weapons::damage_types	signature:(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction)
 refresh_armor_index	mods/forge-engine/generated-armor.cpp	/^	static bool refresh_armor_index = true;$/;"	kind:member	line:15	namespace:mods::forge_engine	file:
@@ -11638,7 +11638,7 @@ register_custom_command	mods/builder/slotted-builder.hpp	/^			status_response_t 
 register_custom_non_profile_command	mods/builder/slotted-builder.hpp	/^			status_response_t register_custom_non_profile_command(std::string verb, auto lambda) {$/;"	kind:function	line:119	struct:mods::builder::slotted_builder	access:public	signature:(std::string verb, auto lambda)
 register_damage_event_callback	mods/player.cpp	/^	void player::register_damage_event_callback(const std::vector<damage_event_t>& events,damage_event_callback_t cb) {$/;"	kind:function	line:1593	class:mods::player	signature:(const std::vector<damage_event_t>& events,damage_event_callback_t cb)
 register_ghost	mods/replenish.cpp	/^	void register_ghost(uuid_t ghost) {$/;"	kind:function	line:43	namespace:mods::replenish	signature:(uuid_t ghost)
-register_help_command_with_permission	mods/help.cpp	/^	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level level) {$/;"	kind:function	line:919	namespace:mods::help	signature:(const std::string& command, const std::string& contents,player_level level)
+register_help_command_with_permission	mods/help.cpp	/^	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level_t level) {$/;"	kind:function	line:919	namespace:mods::help	signature:(const std::string& command, const std::string& contents,player_level_t level)
 register_indexed_accumulator_command	mods/builder/slotted-builder.hpp	/^			status_response_t register_indexed_accumulator_command(std::string verb, std::string_view signature,auto lambda) {$/;"	kind:function	line:129	struct:mods::builder::slotted_builder	access:public	signature:(std::string verb, std::string_view signature,auto lambda)
 register_integral_accumulator_command	mods/builder/slotted-builder.hpp	/^			status_response_t register_integral_accumulator_command(std::string verb, std::string_view signature,auto lambda) {$/;"	kind:function	line:135	struct:mods::builder::slotted_builder	access:public	signature:(std::string verb, std::string_view signature,auto lambda)
 register_intent_to_attack	mods/intent.cpp	/^	void register_intent_to_attack($/;"	kind:function	line:6	namespace:mods::intent	signature:( uuid_t player, std::vector<uuid_t> targets, uint8_t direction )
@@ -11662,7 +11662,7 @@ register_shop	globals.hpp	/^		void register_shop(TShopPtr shop) {$/;"	kind:funct
 register_signature	mods/builder/slotted-builder.hpp	/^			void register_signature(std::string_view verb,std::string_view sig) {$/;"	kind:function	line:86	struct:mods::builder::slotted_builder	access:public	signature:(std::string_view verb,std::string_view sig)
 register_targets	mods/mobs/extended-types.cpp	/^	void register_targets(const mob_rnum& vnum, std::string_view items) {$/;"	kind:function	line:91	namespace:mods::mobs::extended_types	signature:(const mob_rnum& vnum, std::string_view items)
 registered_admin_help_commands	mods/help.cpp	/^	static std::map<std::string,std::string> registered_admin_help_commands;$/;"	kind:member	line:824	namespace:mods::help	file:
-registered_help_commands	mods/help.cpp	/^	static std::map<std::string,std::pair<player_level,std::string>> registered_help_commands;$/;"	kind:member	line:823	namespace:mods::help	file:
+registered_help_commands	mods/help.cpp	/^	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;$/;"	kind:member	line:823	namespace:mods::help	file:
 registration_allowed	mods/player-registration.cpp	/^	static bool registration_allowed = 1;$/;"	kind:member	line:6	namespace:mods::player_registration	file:
 release_zone	mods/builder.cpp	/^void release_zone(int zone) {$/;"	kind:function	line:170	signature:(int zone)
 release_zone	mods/zone.cpp	/^	void release_zone(int zone) {$/;"	kind:function	line:78	namespace:mods::zone	signature:(int zone)
@@ -11758,7 +11758,7 @@ report	mods/mobs/shoplifter.cpp	/^	str_map_t shoplifter::report() {$/;"	kind:fun
 report	mods/player.cpp	/^	void player::report() {$/;"	kind:function	line:1512	class:mods::player	signature:()
 report	mods/players/db-load.cpp	/^	void report(int64_t code, std::string_view msg) {$/;"	kind:function	line:173	namespace:mods::players::db_load	signature:(int64_t code, std::string_view msg)
 report	structs.cpp	/^void mob_special_data::report(room_rnum room) {$/;"	kind:function	line:715	class:mob_special_data	signature:(room_rnum room)
-report_advances	mods/levels.cpp	/^	void report_advances(std::array<uint16_t,STAT_INDEXES_SIZE> stats) {$/;"	kind:function	line:298	namespace:mods::levels	signature:(std::array<uint16_t,STAT_INDEXES_SIZE> stats)
+report_advances	mods/levels.cpp	/^	void report_advances(std::array<uint16_t,STAT_INDEXES_SIZE> stats) {$/;"	kind:function	line:191	namespace:mods::levels	signature:(std::array<uint16_t,STAT_INDEXES_SIZE> stats)
 report_db_issue	mods/db-report.hpp	/^static inline void report_db_issue(std::string_view message,std::string_view exception_message) {$/;"	kind:function	line:24	file:	signature:(std::string_view message,std::string_view exception_message)
 report_error	mods/builder.hpp	/^	void report_error(T player,std::string_view message) {$/;"	kind:function	line:117	namespace:mods::builder	signature:(T player,std::string_view message)
 report_function	mods/players/db-load.cpp	/^	static reporter_t report_function;$/;"	kind:member	line:27	namespace:mods::players::db_load	file:
@@ -11834,7 +11834,7 @@ reward_9	mods/contract-steps.hpp	/^		std::string     reward_9;$/;"	kind:member	l
 reward_money	mods/contract-steps.hpp	/^		uint32_t        reward_money;$/;"	kind:member	line:40	namespace:mods::contracts	file:
 reward_player	mods/forge-engine/generator.cpp	/^	obj_ptr_t reward_player(player_ptr_t& player) {$/;"	kind:function	line:121	namespace:mods::forge_engine	signature:(player_ptr_t& player)
 reward_player	mods/loot.cpp	/^	obj_ptr_t reward_player(player_ptr_t& player) {$/;"	kind:function	line:20	namespace:mods::loot	signature:(player_ptr_t& player)
-reward_player_for_advancing_levels	mods/levels.cpp	/^	void reward_player_for_advancing_levels(player_ptr_t& player) {$/;"	kind:function	line:293	namespace:mods::levels	signature:(player_ptr_t& player)
+reward_player_for_advancing_levels	mods/levels.cpp	/^	void reward_player_for_advancing_levels(player_ptr_t& player) {$/;"	kind:function	line:186	namespace:mods::levels	signature:(player_ptr_t& player)
 reward_xp	mods/contract-steps.hpp	/^		uint32_t        reward_xp;$/;"	kind:member	line:39	namespace:mods::contracts	file:
 rifle	mods/injure.cpp	/^	namespace rifle {$/;"	kind:namespace	line:70	namespace:mods::injure	file:
 rifle	mods/injure.hpp	/^	namespace rifle {$/;"	kind:namespace	line:11	namespace:mods::injure	file:

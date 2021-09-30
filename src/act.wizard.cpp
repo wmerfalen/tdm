@@ -2033,9 +2033,9 @@ SUPERCMD(do_show) {
 
 	struct show_struct {
 		const char *cmd;
-		const char level;
+		const player_level_t level;
 	} fields[] = {
-		{ "nothing",	0  },				/* 0 */
+		{ "nothing",	LVL_MORTAL  },				/* 0 */
 		{ "zones",		LVL_IMMORT },			/* 1 */
 		{ "player",		LVL_GOD },
 		{ "rent",		LVL_GOD },
@@ -2046,7 +2046,7 @@ SUPERCMD(do_show) {
 		{ "shops",		LVL_IMMORT },
 		{ "houses",		LVL_GOD },
 		{ "snoop",		LVL_GRGOD },			/* 10 */
-		{ "\n", 0 }
+		{ "\n", LVL_MORTAL }
 	};
 
 	skip_spaces(&argument);
@@ -2301,7 +2301,7 @@ SUPERCMD(do_show) {
 /* The set options available */
 struct set_struct {
 	const char *cmd;
-	const char level;
+	const player_level_t level;
 	const char pcnpc;
 	const char type;
 } set_fields[] = {
@@ -2356,7 +2356,7 @@ struct set_struct {
 	{ "age",		LVL_GRGOD,	BOTH,	NUMBER },
 	{ "height",		LVL_GOD,	BOTH,	NUMBER },
 	{ "weight",		LVL_GOD,	BOTH,	NUMBER },  /* 50 */
-	{ "\n", 0, BOTH, MISC }
+	{ "\n", LVL_MORTAL, BOTH, MISC }
 };
 
 

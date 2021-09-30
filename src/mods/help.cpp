@@ -820,7 +820,7 @@ namespace mods::help {
 			current += ch;
 		}
 	}
-	static std::map<std::string,std::pair<player_level,std::string>> registered_help_commands;
+	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;
 	static std::map<std::string,std::string> registered_admin_help_commands;
 
 	bool matches_many(const std::string& items,std::string_view from) {
@@ -916,7 +916,7 @@ namespace mods::help {
 
 
 
-	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level level) {
+	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level_t level) {
 		registered_help_commands[command] = {level,contents};
 	}
 

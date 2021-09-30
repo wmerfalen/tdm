@@ -77,7 +77,7 @@ namespace mods {
 			using entity_id = uuid_t;
 			using affect_dissolver_t = mods::affects::dissolver<affect_t,affect_list_t,affect_map_t,uuid_t>;
 		public:
-			using 	access_level_t = player_level;
+			using 	access_level_t = player_level_t;
 			using   class_type = mods::classes::types;
 			using 	descriptor_data_t = std::deque<descriptor_data>;
 			using 	descriptor_data_iterator_t = descriptor_data_t::iterator;
