@@ -40,6 +40,7 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_USE_LMDB=1 \
 	-I$(yamlcpp) -L$(yamllib) \
 	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\" \
+	-D__MENTOC_SUPER_USERS_ARE_INVINCIBLE__=1 \
 	-D__MENTOC_SHOW_SNIPE_HIT_STATS__=1 \
 	-DMENTOC_LIB_DIR=\"$(CURDIR)/../lib/\" \
 	-D__MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__=1 \

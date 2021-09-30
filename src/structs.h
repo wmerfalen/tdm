@@ -1382,6 +1382,7 @@ struct char_ability_data {
  */
 struct char_point_data {
 	using points_t = int32_t;
+	using upoints_t = uint32_t;
 	points_t mana;
 	points_t max_mana;     /* Max mana for PC/NPC			   */
 	points_t hit;
@@ -1392,7 +1393,7 @@ struct char_point_data {
 	points_t armor;        /* Internal -100..100, external -10..10 AC */
 	points_t gold;           /* Money carried                           */
 	points_t bank_gold;	/* Gold the char has in a bank account	   */
-	points_t exp;            /* The experience of the player            */
+	upoints_t exp;            /* The experience of the player            */
 
 	points_t hitroll;       /* Any bonus or penalty to the hit roll    */
 	points_t damroll;       /* Any bonus or penalty to the damage roll */
@@ -1801,7 +1802,7 @@ struct char_file_u {
 	mods::string title;
 	byte sex;
 	byte chclass;
-	byte level;
+	uint8_t level;
 	sh_int hometown;
 	time_t birth;   /* Time of birth of character     */
 	int	played;    /* Number of secs played in total */

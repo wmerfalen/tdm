@@ -2208,7 +2208,6 @@ bool parse_sql_player(player_ptr_t player_ptr) {
 		log("SYSERR: failed loading player's class [player name:'%s'] error code: %d, message: '%s'", player_ptr->name().c_str(), code, msg.data());
 	});
 	for(auto&& row: db_get_by_meta("player","player_name",player_ptr->name().c_str())) {
-		int temp = 0;
 		player_ptr->set_db_id(row["id"].as<int>());
 		player_ptr->clear_all_affected();
 		player_ptr->clear_all_affected_plr();
@@ -2235,11 +2234,10 @@ bool parse_sql_player(player_ptr_t player_ptr) {
 
 		/** gold, exp, sex */
 		player_ptr->gold() = mods::util::stoi<int>(row["player_gold"]);
-		player_ptr->exp() = mods::util::stoi<int>(row["player_exp"]);
+		player_ptr->exp() = mods::util::stoi<uint32_t>(row["player_exp"]);
 		player_ptr->sex() = std::string(row["player_sex"].c_str()).compare("M") == 0 ? SEX_MALE : SEX_FEMALE;
 
-		temp = mods::util::stoi<int>(row["player_level"]);
-		player_ptr->level() = temp;
+		player_ptr->level() = mods::util::stoi<uint8_t>(row["player_level"]);
 
 		/** damroll, hitroll, weight, height */
 		player_ptr->damroll() = mods::util::stoi<sbyte>(row["player_damroll"]);
