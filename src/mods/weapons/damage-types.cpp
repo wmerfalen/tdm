@@ -251,7 +251,9 @@ namespace mods::weapons::damage_types {
 				return;
 			}
 #endif
-			ptr(victim)->hp() -= dam;
+			if(vplayer) {
+				vplayer->hp() -= dam;
+			}
 		}
 
 		void update_position(char_data* ch) {

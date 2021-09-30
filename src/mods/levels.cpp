@@ -34,7 +34,7 @@ namespace mods::levels {
 			return EXP_MAX - ((LVL_IMPL - level) * 1000);
 		}
 
-		return (500 * pow(level,2)) - 500 * level;
+		return 500 * (level - 1) * level;
 	}
 	int gain_exp(player_ptr_t& player,int gain) {
 		if(IS_NPC(player->cd())) {

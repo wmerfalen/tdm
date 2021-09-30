@@ -1883,11 +1883,6 @@ namespace mods {
 		m_breacher = g;
 	}
 
-	uint8_t& player::level() {
-		uint8_t level = mods::classes::mock_player_level(this->uuid(),m_char_data->player.level);
-		m_char_data->player.level = level;
-		return m_char_data->player.level;
-	}
 	int16_t& player::incendiary_resistance_percent() {
 		return m_incendiary_resistance_percent;
 	}

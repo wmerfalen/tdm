@@ -305,66 +305,66 @@ namespace mods {
 			}
 
 			/** base stats - start */
-			uint16_t& strength() {
+			auto& strength() {
 				return this->real_abils().str;
 			}
-			uint16_t& constitution() {
+			auto& constitution() {
 				return this->real_abils().con;
 			}
-			uint16_t& dexterity() {
+			auto& dexterity() {
 				return this->real_abils().dex;
 			}
-			uint16_t& intelligence() {
+			auto& intelligence() {
 				return this->real_abils().intel;
 			}
-			uint16_t& wisdom() {
+			auto& wisdom() {
 				return this->real_abils().wis;
 			}
-			uint16_t& electronics() {
+			auto& electronics() {
 				return this->real_abils().electronics;
 			}
-			uint16_t& chemistry() {
+			auto& chemistry() {
 				return this->real_abils().chemistry;
 			}
-			uint16_t& strategy() {
+			auto& strategy() {
 				return this->real_abils().strategy;
 			}
-			uint16_t& marksmanship() {
+			auto& marksmanship() {
 				return this->real_abils().marksmanship;
 			}
-			uint16_t& sniping() {
+			auto& sniping() {
 				return this->real_abils().sniping;
 			}
-			uint16_t& weapon_handling() {
+			auto& weapon_handling() {
 				return this->real_abils().weapon_handling;
 			}
-			uint16_t& demolitions() {
+			auto& demolitions() {
 				return this->real_abils().demolitions;
 			}
-			uint16_t& real_armor() {
+			auto& real_armor() {
 				return this->real_abils().armor;
 			}
-			uint16_t& medical() {
+			auto& medical() {
 				return this->real_abils().medical;
 			}
-			uint16_t& charisma() {
+			auto& charisma() {
 				return this->real_abils().cha;
 			}
 			/** base stats - end */
 
-			sh_int& armor() {
+			auto& armor() {
 				return cd()->points.armor;
 			}
-			int& gold() {
+			auto& gold() {
 				return cd()->points.gold;
 			}
-			int& mp() {
+			auto& mp() {
 				return this->gold();
 			}
-			int& bank_gold() {
+			auto& bank_gold() {
 				return cd()->points.bank_gold;
 			}
-			int& exp() {
+			auto& exp() {
 				return cd()->points.exp;
 			}
 			auto& hitroll() {
@@ -373,11 +373,15 @@ namespace mods {
 			auto& damroll() {
 				return cd()->points.damroll;
 			}
-			uint8_t& level();
-			ubyte& weight() {
+			auto& level() {
+				//auto level = mods::classes::mock_player_level(this->uuid(),m_char_data->player.level);
+				//m_char_data->player.level = level;
+				return m_char_data->player.level;
+			}
+			auto& weight() {
 				return cd()->player.weight;
 			}
-			ubyte& height() {
+			auto& height() {
 				return cd()->player.height;
 			}
 			void set_title(const std::string& t) {
@@ -395,10 +399,10 @@ namespace mods {
 			mods::string& description() {
 				return cd()->player.description;
 			}
-			uint8_t& chclass() {
+			auto& chclass() {
 				return cd()->player.chclass;
 			}
-			uint8_t& hometown() {
+			auto& hometown() {
 				return cd()->player.hometown;
 			}
 			time_data& ch_time() {
@@ -411,7 +415,7 @@ namespace mods {
 			void set_sex(byte s) {
 				cd()->player.sex = s;
 			}
-			uint8_t& sex() {
+			auto& sex() {
 				return cd()->player.sex;
 			}
 			void set_room(room_rnum r) {
