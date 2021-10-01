@@ -9,6 +9,8 @@ namespace mods::corpse {
 	obj_ptr_t make_corpse(player_ptr_t& victim);
 	void corpse_explode(player_ptr_t& attacker,obj_ptr_t& corpse,const uint16_t& damage);
 	void queue_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage);
+	void queue_hellfire_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage);
+	void queue_shrapnel_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage);
 	void process_corpse_explosion();
 	/**
 	 * Return true if target died

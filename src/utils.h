@@ -110,6 +110,7 @@ void	gain_condition(char_data *ch, int condition, int value);
 void	check_idling(char_data *ch);
 void	point_update(void);
 void	update_pos(char_data *victim);
+void	update_pos(player_ptr_t& victim);
 
 /* various constants *****************************************************/
 

@@ -914,6 +914,10 @@ namespace mods {
 			auto& to_attack() {
 				return m_to_attack;
 			}
+
+			bool is_dead() {
+				return this->position() == POS_DEAD;
+			}
 		protected:
 			int16_t m_to_move;
 			int16_t m_to_attack;

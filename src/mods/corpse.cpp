@@ -1,4 +1,6 @@
 #include "corpse.hpp"
+#include "fire.hpp"
+#include "shrapnel.hpp"
 #include "affects.hpp"
 #include "skills.hpp"
 #include "armor.hpp"
@@ -36,10 +38,11 @@ namespace mods::corpse {
 		corpse_explosive_t(
 		    player_ptr_t& attacker_ptr,
 		    obj_ptr_t& corpse_ptr,
-		    const uint16_t& in_base_damage) :
+		    const uint16_t& in_base_damage,
+		    std::string_view yaml) :
 			base_damage(in_base_damage),
 			corpse(corpse_ptr),
-			charge(create_object(ITEM_EXPLOSIVE,"corpse-charge.yml")),
+			charge(create_object(ITEM_EXPLOSIVE,yaml.data())),
 			countdown(CORPSE_EXPLOSION_TICK_COUNTDOWN()),
 			room_id(attacker_ptr->room()),
 			attacker(attacker_ptr->uuid()) {
@@ -99,6 +102,14 @@ namespace mods::corpse {
 		f.attacker = device->get_owner();
 		f.damage_event = HIT_BY_TEETH_AND_BONES;
 		victim->damage_event(f);
+
+		if(mods::object_utils::is_hellfire_corpse_charge(device)) {
+			mods::fire::deploy_fire_damage_to_victim_via_device(victim,device);
+			mods::fire::set_fire_to_room_via_device(victim->room(),device);
+		}
+		if(mods::object_utils::is_shrapnel_corpse_charge(device)) {
+			mods::shrapnel::deploy_shrapnel_damage_to(victim,device);
+		}
 		update_pos(victim->cd());
 		bool dead = victim->position() == POS_DEAD;
 		auto attacker = ptr_by_uuid(device->get_owner());
@@ -192,8 +203,14 @@ namespace mods::corpse {
 		//queue_corpse_explode(corpse,player,damage);
 		//player->sendln(CAT("After: ",std::distance(corpse_explosions.cbegin(),corpse_explosions.cend())));
 	}
+	void queue_hellfire_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage) {
+		corpse_explosions.push_front({attacker,corpse,damage,"hellfire-corpse-charge.yml"});
+	}
+	void queue_shrapnel_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage) {
+		corpse_explosions.push_front({attacker,corpse,damage,"shrapnel-corpse-charge.yml"});
+	}
 	void queue_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage) {
-		corpse_explosions.push_front({attacker,corpse,damage});
+		corpse_explosions.push_front({attacker,corpse,damage,"corpse-charge.yml"});
 	}
 	void explode(const uint64_t& id) {
 		for(const auto& corpse : corpse_explosions) {

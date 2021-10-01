@@ -2944,6 +2944,7 @@ SUPERCMD(do_mbuild) {
 		*player << "{red}" << #display_name << "{/red}: " << obj->struct_member << "\r\n";
 		MENTOC_SHOW_OBJ(name,player.name.c_str());
 		MENTOC_SHOW_OBJ(virtual_number,mob_specials.vnum);
+		MENTOC_SHOW_OBJ(experience,mob_specials.experience);
 		MENTOC_SHOW_OBJ(short_description,player.short_descr.c_str());
 		MENTOC_SHOW_OBJ(long_description,player.long_descr.c_str());
 		MENTOC_SHOW_OBJ(description,player.description.c_str());
@@ -3053,6 +3054,7 @@ SUPERCMD(do_mbuild) {
 			MENTOC_OBI2(mob_specials.damsizedice,damsizedice);
 			MENTOC_OBI2(mob_specials.attack_type,attack_type);
 			MENTOC_OBI2(mob_specials.damsizedice,damsizedice);
+			MENTOC_OBI2(mob_specials.experience,exp);
 
 
 			if(arg_vec[2].compare("virt") == 0 || arg_vec[2].compare("vnum") == 0) {

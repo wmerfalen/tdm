@@ -4,6 +4,9 @@
 
 extern std::deque<room_data> world;
 extern player_ptr_t ptr_by_uuid(uuid_t);
+namespace mods::classes {
+	extern void contagion_event_over(const std::tuple<uuid_t,uint32_t>& s);
+};
 namespace mods::corpse {
 	extern void explode(const uuid_t&);
 };
@@ -65,6 +68,9 @@ namespace mods {
 			auto fe_tuple = fe->second;
 			std::shared_ptr<mods::player> player = nullptr;
 			switch(std::get<1>(fe_tuple)) {
+				case deferred::EVENT_CONTAGION_MINOR_SHIELDING_OVER:
+					mods::classes::contagion_event_over(fe_tuple);
+					break;
 				case deferred::EVENT_CORPSE_EXPLODE:
 					mods::corpse::explode(std::get<0>(fe_tuple));
 					break;

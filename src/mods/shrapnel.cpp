@@ -1,6 +1,7 @@
 #include "shrapnel.hpp"
 #include "affects.hpp"
 #include "skills.hpp"
+#include "rand.hpp"
 
 #include "rooms.hpp"
 #include "injure.hpp"
@@ -20,6 +21,29 @@ namespace mods::shrapnel {
 	using affect_vector_t = mods::affects::affect_vector_t;
 	using affect_t = mods::affects::affect_t;
 	using texture_type_t = room_data::texture_type_t;
+
+	static constexpr uint8_t SHRAPNEL_HITS_MINIMUM = 3;
+	static constexpr uint8_t SHRAPNEL_HITS_MAXIMUM = 13;
+
+	bool deploy_shrapnel_damage_to(player_ptr_t& victim,obj_ptr_t& device) {
+		feedback_t f;
+		f.from_direction = NORTH;
+		f.hits = rand_number(SHRAPNEL_HITS_MINIMUM,SHRAPNEL_HITS_MAXIMUM);
+		f.damage = roll(device->explosive());
+		f.attacker = device->get_owner();
+		f.damage_event = HIT_BY_SHRAPNEL_DAMAGE;
+		victim->damage_event(f);
+
+		update_pos(victim);
+
+		f.damage_event = YOU_INFLICTED_SHRAPNEL_DAMAGE;
+		auto attacker = ptr_by_uuid(f.attacker);
+		if(attacker) {
+			attacker->damage_event(f);
+		}
+
+		return victim->is_dead();
+	}
 
 	int shrapnel_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {
 		/**

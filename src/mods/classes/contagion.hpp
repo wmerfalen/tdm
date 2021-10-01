@@ -88,6 +88,8 @@ namespace mods::classes {
 			std::tuple<bool,std::string> intimidate_target(uuid_t npc_uuid);
 
 			std::pair<int16_t,std::string> cast_corpse_explosion(obj_ptr_t& corpse);
+			std::pair<int16_t,std::string> cast_hellfire_corpse_explosion(obj_ptr_t& corpse);
+			std::pair<int16_t,std::string> cast_shrapnel_corpse_explosion(obj_ptr_t& corpse);
 			std::pair<int16_t,std::string> cast_minor_shielding();
 
 			/** database routines */

@@ -255,20 +255,24 @@ void load_messages(void) {
 	fclose(fl);
 }
 
-
 void update_pos(char_data *victim) {
-	if((GET_HIT(victim) > 0) && (GET_POS(victim) > POS_STUNNED)) {
+	auto vict = ptr(victim);
+	update_pos(vict);
+}
+
+void	update_pos(player_ptr_t& victim) {
+	if((victim->hp() > 0) && (victim->position() > POS_STUNNED)) {
 		return;
-	} else if(GET_HIT(victim) > 0) {
-		GET_POS(victim) = POS_STANDING;
-	} else if(GET_HIT(victim) <= -11) {
-		GET_POS(victim) = POS_DEAD;
-	} else if(GET_HIT(victim) <= -6) {
-		GET_POS(victim) = POS_MORTALLYW;
-	} else if(GET_HIT(victim) <= -3) {
-		GET_POS(victim) = POS_INCAP;
+	} else if(victim->hp() > 0) {
+		victim->position() = POS_STANDING;
+	} else if(victim->hp() <= -11) {
+		victim->position() = POS_DEAD;
+	} else if(victim->hp() <= -6) {
+		victim->position() = POS_MORTALLYW;
+	} else if(victim->hp() <= -3) {
+		victim->position() = POS_INCAP;
 	} else {
-		GET_POS(victim) = POS_STUNNED;
+		victim->position() = POS_STUNNED;
 	}
 }
 
