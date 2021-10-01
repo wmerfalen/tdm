@@ -1,9 +1,17 @@
+function! Javascript_file()
+	set filetype=javascript
+	"map <c-u> :! ~/bin/tdd tyrion<CR>
+	map <c-u> :! ~/bin/tdd xtract<CR>
+	
+endfunction
 "execute pathogen#infect()
 set encoding=utf-8
 set fileencoding=utf-8
 call plug#begin('~/.vim/plugged')
 "Plug 'StanAngeloff/php.vim'
 "Plug 'shawncplus/phpcomplete.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'dkprice/vim-easygrep'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'bfrg/vim-cpp-modern'
@@ -15,6 +23,9 @@ Plug 'mattn/emmet-vim'
 Plug 'mattn/webapi-vim'
 Plug 'preservim/nerdtree'
 Plug 'junegunn/fzf'
+Plug 'stephpy/vim-php-cs-fixer'
+"Plug 'xavierd/clang_complete'
+"Plug 'tenfyzhong/CompleteParameter.vim'
 "Plug 'atom/fuzzy-finder'
 "Plug 'Rip-Rip/clang_complete'
 call plug#end()
@@ -23,21 +34,32 @@ set number
 set rnu
 set shiftwidth=2
 set tabstop=2
-set term=xterm-256color
-"set term=screen-256color
+"set term=xterm-256color
+set term=screen-256color
 syntax on
 filetype plugin indent on
-function! Javascript_file()
-	set filetype=javascript
-	map <leader>l :! ~/bin/node -c %<CR>
-endfunction
 function! Php_file()
  set filetype=php
-let g:user_emmet_settings = (
-\  join( readfile( expand( '~/.snippets_custom.json' ) ), "\n" ) )
-let g:user_emmet_mode='a'
+ "set tags=$INSITE_ETAGS
+ map <leader>l :! php -l %<CR>
+ "map <c-u> :! ~/bin/tdd.sh<CR>
+"let g:user_emmet_settings = (
+"\  join( readfile( expand( '~/.snippets_custom.json' ) ), "\n" ) )
+"let g:user_emmet_mode='a'
+"let g:user_emmet_settings = {
+"        \  'php' : {
+"        \    'extends' : 'html',
+"        \    'filters' : 'c',
+"        \  },
+"        \  'xml' : {
+"        \    'extends' : 'html',
+"        \  },
+"        \  'haml' : {
+"        \    'extends' : 'html',
+"        \  },
+"        \}
 endfunction
-"autocmd! BufWritePost *.php :call Gen_tags()
+autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
 au BufRead,BufNewFile *.php :call Php_file()
 au BufRead,BufNewFile *.js :call Javascript_file()
 au BufRead,BufNewFile *.tpl set filetype=html
@@ -52,8 +74,9 @@ endfunction
 function! Cpp_make()
 	exec ":cexpr system('make -f $WEBROOT/Makefile -j 16') | cw"
 endfunction
-map <c-u> :make -j 16 -f $WEBROOT/Makefile <bar> cw<cr>
-nnoremap <C-c><C-c> :! cd $WEBROOT && make clean<CR>
+"nnoremap <c-u> :make -j 8 -f $WEBROOT/Makefile<bar> cw<cr>
+
+
 set updatecount=0 updatetime=0
 
 function! Cpp_Gen_tags()
@@ -70,26 +93,14 @@ function! Cpp_MakeClean()
 	exec "!" . cleaner
 endfunction
 function! Tinker_cpp_file()
-	set filetype=cpp
-	nnoremap <F3> :call MakeClean()<CR>
-	nnoremap <F4> :cnext<CR>
-	let found = 0
-	let max = 2
-	while found != 1 && max > 0
-		let max -= 1
-		if(!filereadable(fnamemodify("tags",":p")))
-			cd ../
-		else
-			let found = 1
-			let &tags=fnamemodify("tags",":p")
-		endif
-	endwhile
 endfunction
 
 function! Autogen_Values_Script()
 	exec ":silent ! $WEBROOT/scripts/vk-creator.sh 2>/dev/null &"
 endfunction
 function! Cpp_file()
+map <c-u> :make -j 16 -f $WEBROOT/Makefile <bar> cw<cr>
+map <C-c><C-c> :! cd $WEBROOT && make clean<CR>
 	if strlen(@%)
 		hi TerrorAttnLabels ctermfg=black ctermbg=red
 		hi HellYeah ctermfg=7 ctermbg=3 cterm=bold
@@ -99,8 +110,8 @@ function! Cpp_file()
 		match PointerContainer /std::shared_ptr/
 		highlight PointerContainer ctermfg=151
 		match PointerContainer /std::unique_ptr/
+		"set foldmethod=syntax
 		set tags=$WEBROOT/tags
-		map <leader>l :tabnew $WEBROOT/../lib<CR>
 	endif
 endfunction
 
@@ -150,7 +161,6 @@ map <leader><leader>v :tabnew ~/.vimrc<cr>
 map <leader><leader>s :so ~/.vimrc<cr>
 map <leader>w :w<cr>
 map <leader>q :q<cr>
-map <leader>qa :qa<cr>
 map <leader>m :call Mods()<cr>
 "map <leader>l :call Lib()<cr>
 map <leader><leader>c :call ModsClasses()<cr>
@@ -178,9 +188,108 @@ map <leader>sp :call SetPaste()<cr>
 
 " I *really* like elda. Very nice
 function! ColorSet()
-	color alduin
-endfunction
+	" color alto dark
+	" color native
+	" color nature
+	"color abstract
+	
+	" 
+	"color abbott
+	"color alduin
 
+	" tango
+	"color meta5
+	" color orbital
+	" xterm
+	"color meta5
+	
+	" gaia dark
+	"color nature
+	"color abstract
+	
+	" seabed dark
+	" color nature
+	"color alduin
+
+	" white on black
+	"color magellan
+	"color maroloccio
+	"current
+	"color fahrenheit
+	"color nature
+
+	" color calmar256-dark
+	" color kate
+	"color kalahari
+	"color unicon
+	
+	" use with dark pastels xfce4-terminal theme
+	" and Terminus Regular 8pt
+
+	" EXTREMELY sexy when using green on black
+	" EXTREMELY sexy when using bionis dark
+	"color heroku-terminal
+	"color getafe
+	"color ghostbuster
+	"color archery
+
+	" use with caprice dark xfce4-terminal theme
+	"color fahrenheit
+	"color meta5
+
+	"color harlequin
+	"color h80
+	"color nature
+	"color made_of_code
+	"color magellan
+	"color manxome
+	"color martin_krischik
+	"color anderson
+	"color orbital
+	
+	" use with white on black
+	"color orbital
+	
+	" use with seabed dark
+	"color kate
+	"
+	"color abstract
+	
+	" use this with redshift to a low number
+	"color alduin
+
+	"color afterglow
+	" use with green on black
+	"color kaltex
+	
+	"color orbital
+	"color abstract
+	"color meta5
+	
+	color made_of_code
+	"color ego
+	"color zazen
+	"color earthburn
+endfunction
+call ColorSet()
+" mellow looks cool with the bionis dark theme in xfce4-terminal
+" color mellow
+"
+"color zazen
+"color carvedwood
+
+" awesome 'into the breach' colorscheme if using 'termina dark' color profile
+function! NativeColor()
+	"color earendel
+endfunction
+"color elflord
+"color fahrenheit
+
+
+" remote from tiny laptop
+function! LaptopColor()
+	color hemisu
+endfunction
 function! SetNoPaste()
 	set nopaste
 endfunction
@@ -188,6 +297,7 @@ function! SetPaste()
 	set paste
 endfunction
 set guifont=Terminus\ Bold\ 14
+" source ~/.vim/cscope_maps.vim
 
 function! FoldSyntax()
   set foldmethod=syntax
@@ -210,23 +320,54 @@ function! YesNumber()
 	exec ":set number"
 	exec ":set rnu"
 endfunction
-	
+function! EditMakefile()
+	exec ":tabnew $WEBROOT/Makefile"
+endfunction
+
+function! FeedFile()
+	:g/^feed_file.*$/d
+	:g/^vnum:.*$/d
+	normal GG
+	:r ! $WEBROOT/scripts/feed-file.sh %
+	:r ! $WEBROOT/scripts/vnum-crawl.sh
+endfunction
 	
 	
 
-map <leader>fi :call FoldIndent()<CR>
-map <leader>fs :call FoldSyntax()<CR>
+"map <leader>fi :call FoldIndent()<CR>
+"map <leader>fs :call FoldSyntax()<CR>
 set rtp+=~/.fzf
 map <leader>z :call Fuzz()<CR>
 map <leader>co :copen<CR>
-map <leader>d :Dox<CR>
+source $WEBROOT/scripts/doxygen.vim
+map <leader>x :Dox<CR>
 map <leader>i :color nature<CR>
 map <leader>c :call ColorSet()<CR>
 map = :tabm +1<CR>
 map - :tabm -1<CR>
 map <leader><leader>nn :call NoNumber()<CR>
 map <leader><leader>on :call YesNumber()<CR>
-map <leader>v :tabnew $WEBROOT/mods/values-list.cpp<CR>
+map <leader>V :tabnew $WEBROOT/mods/values-list.cpp<CR>
 map <leader>d :tabnew $WEBROOT/doc/builder-features.md<CR>
 map <leader>j :tabnew $WEBROOT/../lib/js/profiles/far.js<CR>
 map <leader>o :tabnew $WEBROOT/../lib/objects/<CR>
+map <leader>t :tabnew $WEBROOT/mods/item-types.hpp<CR>
+map <leader>vnc :call FeedFile()<CR>
+map <leader>b :tabnew $WEBROOT/sql/migrations/beta.sql<CR>
+map <leader>n :! node -c %<CR>
+map <leader>gb :Gblame<CR>
+function! CalcTotalSql()
+	exec "! X=$(cat % | grep 'sp_points) VALUES' | cut -d',' -f 3 | sed -e 's|);$| + |gi'); echo $X | sed -e 's|+$||g' | bc"
+endfunction
+map <leader>cj :call CalcTotalSql()<CR>
+map <leader>k :call EditMakefile()<CR>
+"let g:clang_library_path='/usr/lib/llvm-7/lib'
+"let g:clang_user_options = '-std=c++20'
+"let g:clang_auto_user_options = '.clang_complete'
+"let g:clang_complete_copen='1'
+set completeopt+=preview
+	"map <c-u> :! ~/bin/tdd golf<CR>
+
+
+" GOES REALLY WELL WITH TANGO THEME!!!
+color nord
