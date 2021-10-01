@@ -135,6 +135,31 @@ namespace mods::classes {
 
 		return {1,CAT("You enable minor shielding for ",ticks," ticks")};
 	}
+	std::tuple<int16_t,std::string> contagion::drag_corpse(obj_ptr_t& corpse,const direction_t& direction) {
+		if(m_drag_corpse.not_learned()) {
+			return {0,"It looks like you still need to train that skill"};
+		}
+		if(m_player->mana() < DRAG_CORPSE_MANA_COST()) {
+			return {0,"You don't have enough mana!"};
+		}
+		auto s = roll_skill_success(DRAG_CORPSE);
+		if(!std::get<0>(s)) {
+			return {0,std::get<1>(s)};
+		}
+		m_player->mana() -= DRAG_CORPSE_MANA_COST();
+		uint16_t force = 0;
+		if(m_drag_corpse.awful() || m_drag_corpse.terrible() || m_drag_corpse.okay()) {
+			force = dice(10, 28) + 1 + (m_player->level() / 4);
+		}
+		if(m_drag_corpse.learned()) {
+			force = dice(20, 28) + 3 + (m_player->level() / 4);
+		}
+
+		if(m_drag_corpse.mastered() || m_drag_corpse.elite()) {
+			force = 100 + dice(30, 28);
+		}
+		return mods::corpse::drag_corpse(m_player,corpse,direction,force);
+	}
 	/** Contagion class abilities */
 	std::pair<int16_t,std::string> contagion::cast_shrapnel_corpse_explosion(obj_ptr_t& corpse) {
 		if(m_shrapnel_corpse_explosion.not_learned()) {
@@ -143,11 +168,11 @@ namespace mods::classes {
 		if(m_player->mana() < HELLFIRE_CORPSE_EXPLOSION_MANA_COST()) {
 			return {0,"You don't have enough mana!"};
 		}
-		m_player->mana() -= HELLFIRE_CORPSE_EXPLOSION_MANA_COST();
 		auto s = roll_skill_success(HELLFIRE_CORPSE_EXPLOSION);
 		if(!std::get<0>(s)) {
 			return {0,std::get<1>(s)};
 		}
+		m_player->mana() -= HELLFIRE_CORPSE_EXPLOSION_MANA_COST();
 		uint16_t damage = 0;
 		if(m_shrapnel_corpse_explosion.awful() || m_shrapnel_corpse_explosion.terrible() || m_shrapnel_corpse_explosion.okay()) {
 			damage = dice(10, 28) + 1 + (m_player->level() / 4);
@@ -170,11 +195,11 @@ namespace mods::classes {
 		if(m_player->mana() < HELLFIRE_CORPSE_EXPLOSION_MANA_COST()) {
 			return {0,"You don't have enough mana!"};
 		}
-		m_player->mana() -= HELLFIRE_CORPSE_EXPLOSION_MANA_COST();
 		auto s = roll_skill_success(HELLFIRE_CORPSE_EXPLOSION);
 		if(!std::get<0>(s)) {
 			return {0,std::get<1>(s)};
 		}
+		m_player->mana() -= HELLFIRE_CORPSE_EXPLOSION_MANA_COST();
 		uint16_t damage = 0;
 		if(m_hellfire_corpse_explosion.awful() || m_hellfire_corpse_explosion.terrible() || m_hellfire_corpse_explosion.okay()) {
 			damage = dice(10, 28) + 1 + (m_player->level() / 4);
@@ -197,11 +222,11 @@ namespace mods::classes {
 		if(m_player->mana() < CORPSE_EXPLOSION_MANA_COST()) {
 			return {0,"You don't have enough mana!"};
 		}
-		m_player->mana() -= CORPSE_EXPLOSION_MANA_COST();
 		auto s = roll_skill_success(CORPSE_EXPLOSION);
 		if(!std::get<0>(s)) {
 			return {0,std::get<1>(s)};
 		}
+		m_player->mana() -= CORPSE_EXPLOSION_MANA_COST();
 		uint16_t damage = 0;
 		if(m_corpse_explosion.awful() || m_corpse_explosion.terrible() || m_corpse_explosion.okay()) {
 			damage = dice(10, 28) + 1 + (m_player->level() / 4);
@@ -225,40 +250,29 @@ namespace mods::class_abilities::contagion {
 		SHRAPNEL_CORPSE_EXPLOSION,
 	};
 	void do_corpse_explosion(player_ptr_t& player,auto argument,const corpse_explosion_type_t& type) {
-		auto list = world[player->room()].contents;
-		for(auto i = list; i; i = i->next_content) {
-			if(!i) {
-				break;
-			}
-			if(CAN_SEE_OBJ(player->cd(), i)) {
-				auto item = optr(i);
-				auto s = mods::calc_visibility::can_see_object(player,item);
-				if(!std::get<0>(s)) {
-					continue;
-				} else {
-					/** TODO: test for this syntax: 3.corpse */
-					if(mods::util::fuzzy_match(argat(1),i->name.str()) && mods::object_utils::is_corpse(item)) {
-						switch(type) {
-							default:
-							case corpse_explosion_type_t::NORMAL_CORPSE_EXPLOSION: {
-									auto cast_status = player->contagion()->cast_corpse_explosion(item);
-									player->sendln(std::get<1>(cast_status));
-									return;
-								}
-							case corpse_explosion_type_t::HELLFIRE_CORPSE_EXPLOSION: {
-									auto cast_status = player->contagion()->cast_hellfire_corpse_explosion(item);
-									player->sendln(std::get<1>(cast_status));
-									return;
-								}
-							case corpse_explosion_type_t::SHRAPNEL_CORPSE_EXPLOSION: {
-									auto cast_status = player->contagion()->cast_shrapnel_corpse_explosion(item);
-									player->sendln(std::get<1>(cast_status));
-									return;
-								}
-						}
-					}
+		auto status = mods::corpse::pick_corpse_from_room_by_argument(player, argument);
+		if(std::get<0>(status) == 0) {
+			player->sendln(std::get<1>(status));
+			return;
+		}
+		auto item = std::get<2>(status);
+		switch(type) {
+			default:
+			case corpse_explosion_type_t::NORMAL_CORPSE_EXPLOSION: {
+					auto cast_status = player->contagion()->cast_corpse_explosion(item);
+					player->sendln(std::get<1>(cast_status));
+					return;
 				}
-			}
+			case corpse_explosion_type_t::HELLFIRE_CORPSE_EXPLOSION: {
+					auto cast_status = player->contagion()->cast_hellfire_corpse_explosion(item);
+					player->sendln(std::get<1>(cast_status));
+					return;
+				}
+			case corpse_explosion_type_t::SHRAPNEL_CORPSE_EXPLOSION: {
+					auto cast_status = player->contagion()->cast_shrapnel_corpse_explosion(item);
+					player->sendln(std::get<1>(cast_status));
+					return;
+				}
 		}
 	}
 	ACMD(do_invoke) {
@@ -281,6 +295,21 @@ namespace mods::class_abilities::contagion {
 		}
 		if(argshave()->first_is("shrapnel_corpse_explosion")->size_gt(1)->passed()) {
 			do_corpse_explosion(player,argument,corpse_explosion_type_t::SHRAPNEL_CORPSE_EXPLOSION);
+			return;
+		}
+		if(argshave()->first_is("drag_corpse")->size_gt(2)->passed()) {
+			auto status = mods::corpse::pick_corpse_from_room_by_argument(player, argument);
+			if(std::get<0>(status) == 0) {
+				player->sendln(std::get<1>(status));
+				return;
+			}
+			auto parsed = mods::util::parse_objdir(player,argument);
+			if(parsed.dir < 0) {
+				player->sendln("Use a valid direction");
+				return;
+			}
+			player->sendln(CAT("Direction: ",argat(2)));
+			player->contagion()->drag_corpse(std::get<2>(status),parsed.dir);
 			return;
 		}
 		if(argshave()->first_is("minor_shielding")->size_gt(0)->passed()) {

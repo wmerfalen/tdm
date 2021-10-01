@@ -5,6 +5,7 @@
 #include "skills.hpp"
 #include "armor.hpp"
 #include "levels.hpp"
+#include "calc-visibility.hpp"
 
 #include "rooms.hpp"
 #include "injure.hpp"
@@ -60,6 +61,48 @@ namespace mods::corpse {
 		room_rnum room_id;
 		uuid_t attacker;
 	};
+	std::tuple<bool,std::string,obj_ptr_t> pick_corpse_from_room_by_argument(player_ptr_t& player, std::string_view in_argument) {
+		const char* argument = in_argument.data();
+		auto list = world[player->room()].contents;
+		for(auto i = list; i; i = i->next_content) {
+			if(!i) {
+				break;
+			}
+			if(CAN_SEE_OBJ(player->cd(), i)) {
+				auto item = optr(i);
+				auto s = mods::calc_visibility::can_see_object(player,item);
+				if(!std::get<0>(s)) {
+					continue;
+				} else {
+					/** TODO: test for this syntax: 3.corpse */
+					if(mods::util::fuzzy_match(argat(1),i->name.str()) && mods::object_utils::is_corpse(item)) {
+						return {1,"",item};
+					}
+				}
+			}
+		}
+		return {0,"Couldn't find a corpse",nullptr};
+	}
+	uint16_t get_corpse_weight(obj_ptr_t& corpse) {
+		/**
+		 * We really only want to catch instances of special corpses.
+		 * For the most part, we return zero unless it's a corpse
+		 * that belongs to a very high level NPC or boss mob.
+		 */
+		return 0;
+	}
+	std::tuple<int16_t,std::string> drag_corpse(player_ptr_t& dragger,obj_ptr_t& corpse,const direction_t& direction,const uint16_t& force) {
+		if(force < get_corpse_weight(corpse)) {
+			return {0,"You try to but the corpse just weighs too much!"};
+		}
+		/** 1) Pick up corpse */
+		/** 2) block dragger for N ticks */
+		/** 3) act("$n picks up $i and starts dragging it..."); */
+		/** 4) act("$n takes $i <direction>..."); */
+		/** 5) move direction */
+		/** 6) drop corpse. unblock event */
+		return {1,CAT("You drag a corpse ",dirstr(direction))};
+	}
 	using corpse_explosions_t = std::forward_list<corpse_explosive_t>;
 	static corpse_explosions_t corpse_explosions;
 

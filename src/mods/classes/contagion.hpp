@@ -57,6 +57,7 @@ namespace mods::classes {
 				SHADOW_SIGHT,
 				MORBID_INSIGHT,
 				CONFUSE,
+				DRAG_CORPSE,
 			};
 			std::vector<ability_data_t>& get_abilities() override {
 				return m_abilities;
@@ -91,6 +92,7 @@ namespace mods::classes {
 			std::pair<int16_t,std::string> cast_hellfire_corpse_explosion(obj_ptr_t& corpse);
 			std::pair<int16_t,std::string> cast_shrapnel_corpse_explosion(obj_ptr_t& corpse);
 			std::pair<int16_t,std::string> cast_minor_shielding();
+			std::tuple<int16_t,std::string> drag_corpse(obj_ptr_t& corpse,const direction_t& direction);
 
 			/** database routines */
 			int16_t load_by_player(player_ptr_t&);
@@ -117,6 +119,8 @@ namespace mods::classes {
 			skill_t m_shrapnel_corpse_explosion;
 			skill_t m_corrosive_corpse_explosion;
 			skill_t m_hellfire_corpse_explosion;
+
+			skill_t m_drag_corpse;
 
 			skill_t m_pathogen_ammunition;
 			skill_t m_grim_aura;
