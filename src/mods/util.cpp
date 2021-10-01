@@ -906,6 +906,13 @@ namespace mods::util {
 		return make_from(get_obj_in_list_vis(player->cd(), buffer.data(), &number, player->carrying()));
 	}
 
+	std::optional<direction_t> parse_direction_optional(std::string_view arg) {
+		int dir = parse_direction(arg);
+		if(dir == -1) {
+			return std::nullopt;
+		}
+		return (direction_t)dir;
+	}
 	int parse_direction(std::string_view arg) {
 
 		int i = 0;

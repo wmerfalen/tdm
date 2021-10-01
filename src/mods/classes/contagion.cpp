@@ -72,6 +72,7 @@ namespace mods::classes {
 			{CONFUSE,"cf","Confuse",skillset_t::STRATEGY,&m_confuse},
 			{HELLFIRE_INCANTATION,"hell","Hellfire Incantation",skillset_t::DEMOLITIONS,&m_hellfire_incantation},
 			{DETONATE_LIMB,"det","Detonate Limb",skillset_t::DEMOLITIONS,&m_detonate_limb},
+			{DRAG_CORPSE,"drag","Drag Corpse",skillset_t::STRENGTH,&m_drag_corpse},
 		};
 	}
 	void contagion::set_player(player_ptr_t p) {
@@ -303,13 +304,13 @@ namespace mods::class_abilities::contagion {
 				player->sendln(std::get<1>(status));
 				return;
 			}
-			auto parsed = mods::util::parse_objdir(player,argument);
-			if(parsed.dir < 0) {
+			auto opt_dir = mods::util::parse_direction_optional(argat(2));
+			if(!opt_dir.has_value()) {
 				player->sendln("Use a valid direction");
 				return;
 			}
-			player->sendln(CAT("Direction: ",argat(2)));
-			player->contagion()->drag_corpse(std::get<2>(status),parsed.dir);
+			player->sendln(CAT("Direction: ",dirstr(opt_dir.value())));
+			player->contagion()->drag_corpse(std::get<2>(status),opt_dir.value());
 			return;
 		}
 		if(argshave()->first_is("minor_shielding")->size_gt(0)->passed()) {

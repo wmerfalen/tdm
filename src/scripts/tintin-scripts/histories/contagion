@@ -1,62 +1,3 @@
-flee
-w
-ee
-l
-flee
-e
-flee
-n
-d
-s
-n
-d
-n
-e
-n
-e
-d
-e
-d
-e
-d
-e
-s
-w
-s
-w
-s
-ss
-w
-ws
-s
-w
-n
-corpse_me
-invoke corpse_explosion corpse
-s
-l
-n
-s
-score
-l
-scan
-l
-SDRONE
-nn
-flee
-s
-n
-ss
-s
-n
-invoke corpse_explosion corpse
-w
-i
-score
-l
-e
-invoke corpse_explosion corpse
-w
 i
 score
 e
@@ -298,3 +239,62 @@ boot
 bootup
 i
 l
+bootup
+autoexit
+automap
+l
+corpse_me
+invoke corpse_explosion corpse
+practice corpse_explosion
+practice ce
+practice hce
+invoke hellfire_corpse_explosion Corpse
+invoke hellfire_corpse_explosion corpse
+n
+corpse_me
+invoke hellfire_corpse_explosion corpse
+invoke hellfire_corpse_explosion Corpse
+l
+invoke hellfire_corpse_explosion corpse
+invoke hellfire_corpse_explosion corpse n
+invoke hellfire_corpse_explosion
+invoke hellfire_corpse_explosion Corpse
+invoke hellfire_corpse_explosion c
+invoke hellfire_corpse_explosion contagion
+l
+invoke hellfire_corpse_explosion corpse
+prac
+score
+skills
+ls
+skills
+practice drag
+l
+n
+corpse_me
+invoke drag_corpse corpse north
+l
+invoke drag_corpse Corpse north
+n
+corpse_me
+invoke drag_corpse Corpse north
+n
+e
+corpse_me
+invoke drag_corpse Corpse north
+invoke drag_corpse corpse north
+l
+n
+corpse_me
+invoke drag_corpse corpse west
+n
+corpse_me
+invoke drag_corpse corpse west
+n
+corpse_me
+invoke drag_corpse corpse west
+invoke drag_corpse Corpse west
+invoke drag_corpse corpse west
+n
+corpse_me
+invoke drag_corpse corpse west

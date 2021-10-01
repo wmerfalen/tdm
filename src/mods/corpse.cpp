@@ -18,6 +18,8 @@
 #include "weapons/damage-calculator.hpp"
 #include "weapons/elemental.hpp"
 
+extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
+
 #define __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::corpse::debug]")  << MSG << "\n";
@@ -62,7 +64,7 @@ namespace mods::corpse {
 		uuid_t attacker;
 	};
 	std::tuple<bool,std::string,obj_ptr_t> pick_corpse_from_room_by_argument(player_ptr_t& player, std::string_view in_argument) {
-		const char* argument = in_argument.data();
+		const char* argument = in_argument.substr(1).data();
 		auto list = world[player->room()].contents;
 		for(auto i = list; i; i = i->next_content) {
 			if(!i) {
@@ -101,6 +103,17 @@ namespace mods::corpse {
 		/** 4) act("$n takes $i <direction>..."); */
 		/** 5) move direction */
 		/** 6) drop corpse. unblock event */
+		act(CAT("$n picks up a corpse and starts dragging it ",dirstr(direction),"...").c_str(),TRUE,dragger->cd(),0,0,TO_ROOM);
+		if(world[dragger->room()].dir_option == nullptr) {
+			return {0,"You can't go that direction!"};
+		}
+		/** TODO: check if door closed */
+		auto room = world[dragger->room()].dir_option[direction]->to_room;
+		obj_from_room(corpse);
+		char_from_room(dragger->cd());
+		char_to_room(dragger->cd(),room);
+		act(CAT("$n drags a corpse into the room from the ",dirstr(OPPOSITE_DIR(direction)),"...").c_str(),TRUE,dragger->cd(),0,0,TO_ROOM);
+		obj_to_room(corpse.get(),room);
 		return {1,CAT("You drag a corpse ",dirstr(direction))};
 	}
 	using corpse_explosions_t = std::forward_list<corpse_explosive_t>;

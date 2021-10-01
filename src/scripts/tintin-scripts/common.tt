@@ -91,3 +91,57 @@
 	#delay 1.6 dispatch ;
 	#delay 1.8 dispatch ;
 }
+
+#ALIAS {MPS}
+{
+	#alias {nn} {snipe shotgun north};
+	#alias {ww} {snipe shotgun west};
+	#alias {ee} {snipe shotgun east};
+	#alias {ss} {snipe shotgun south};
+	#alias {uu} {snipe shotgun up};
+	#alias {dd} {snipe shotgun down};
+}
+#ALIAS {MPE}
+{
+	#alias {nn} {snipe enforcer north};
+	#alias {ww} {snipe enforcer west};
+	#alias {ee} {snipe enforcer east};
+	#alias {ss} {snipe enforcer south};
+	#alias {uu} {snipe enforcer up};
+	#alias {dd} {snipe enforcer down};
+}
+
+#ALIAS {MPD}
+{
+	#alias {nn} {snipe drone north};
+	#alias {ww} {snipe drone west};
+	#alias {ee} {snipe drone east};
+	#alias {ss} {snipe drone south};
+	#alias {uu} {snipe drone up};
+	#alias {dd} {snipe drone down};
+}
+
+#ALIAS {MPT}
+{
+	#alias {nn} {snipe thief north};
+	#alias {ww} {snipe thief west};
+	#alias {ee} {snipe thief east};
+	#alias {ss} {snipe thief south};
+	#alias {uu} {snipe thief up};
+	#alias {dd} {snipe thief down};
+}
+
+#ALIAS {MPK}
+{
+	#alias {nn} {snipe kidnapper north};
+	#alias {ww} {snipe kidnapper west};
+	#alias {ee} {snipe kidnapper east};
+	#alias {ss} {snipe kidnapper south};
+	#alias {uu} {snipe kidnapper up};
+	#alias {dd} {snipe kidnapper down};
+}
+
+#ALIAS {SKID}
+{
+	#textin speed-to-kidnappers.tt 0.2
+}
