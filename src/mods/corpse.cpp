@@ -105,13 +105,18 @@ namespace mods::corpse {
 		/** 6) drop corpse. unblock event */
 		act(CAT("$n picks up a corpse and starts dragging it ",dirstr(direction),"...").c_str(),TRUE,dragger->cd(),0,0,TO_ROOM);
 		if(world[dragger->room()].dir_option == nullptr) {
-			return {0,"You can't go that direction!"};
+			return {0,"That direction does not exist in this room."};
 		}
-		/** TODO: check if door closed */
+		if(!mods::doors::is_open(dragger->room(),direction)) {
+			return {0,"You cannot go that direction. Is it open?"};
+		}
 		auto room = world[dragger->room()].dir_option[direction]->to_room;
 		obj_from_room(corpse);
-		char_from_room(dragger->cd());
-		char_to_room(dragger->cd(),room);
+		/** If returns zero, it failed miserably */
+		if(0 == do_simple_move(dragger->cd(),direction,0)) {
+			obj_to_room(corpse.get(),room);
+			return {0,"You failed to move."};
+		}
 		act(CAT("$n drags a corpse into the room from the ",dirstr(OPPOSITE_DIR(direction)),"...").c_str(),TRUE,dragger->cd(),0,0,TO_ROOM);
 		obj_to_room(corpse.get(),room);
 		return {1,CAT("You drag a corpse ",dirstr(direction))};

@@ -6,6 +6,10 @@
 #include "../orm/inventory.hpp"
 
 namespace mods::classes {
+	static constexpr std::string_view PATHOGEN_AMMUNITION_YAML = "pox-ordinance-pathogen-ammunition.yml";
+	obj_ptr_t create_pathogen_ammunition_attachment() {
+		return create_object(ITEM_ATTACHMENT,PATHOGEN_AMMUNITION_YAML.data());
+	}
 	void contagion_event_over(const std::tuple<uuid_t,uint32_t>& s) {
 		switch(std::get<1>(s)) {
 			case deferred::EVENT_CONTAGION_MINOR_SHIELDING_OVER: {
@@ -129,7 +133,6 @@ namespace mods::classes {
 		if(m_minor_shielding.elite()) {
 			ticks = 200 + dice(40, 28) + (m_player->level() *33);
 		}
-		m_player->sendln(CAT("Ticks: ",ticks));
 		mods::globals::defer_queue->push_ticks_event(ticks, {m_player->uuid(), mods::deferred::EVENT_CONTAGION_MINOR_SHIELDING_OVER});
 		m_player->add_damage_nerf(CONTAGION_MINOR_SHIELDING_DAMAGE_NERF_AMOUNT());
 		m_player->hp() += CONTAGION_MINOR_SHIELDING_HP_LEVEL_MULTIPLIER() * m_player->level();
@@ -149,17 +152,25 @@ namespace mods::classes {
 		}
 		m_player->mana() -= DRAG_CORPSE_MANA_COST();
 		uint16_t force = 0;
+		uint16_t movement_cost = 0;
 		if(m_drag_corpse.awful() || m_drag_corpse.terrible() || m_drag_corpse.okay()) {
 			force = dice(10, 28) + 1 + (m_player->level() / 4);
+			movement_cost = dice(DRAG_CORPSE_MOVEMENT_COST_CRAP_DICE(),DRAG_CORPSE_MOVEMENT_COST_CRAP_SIDES());
 		}
 		if(m_drag_corpse.learned()) {
 			force = dice(20, 28) + 3 + (m_player->level() / 4);
+			movement_cost = dice(DRAG_CORPSE_MOVEMENT_COST_LEARNED_DICE(),DRAG_CORPSE_MOVEMENT_COST_LEARNED_SIDES());
 		}
 
 		if(m_drag_corpse.mastered() || m_drag_corpse.elite()) {
 			force = 100 + dice(30, 28);
+			movement_cost = dice(DRAG_CORPSE_MOVEMENT_COST_MASTERED_DICE(),DRAG_CORPSE_MOVEMENT_COST_MASTERED_SIDES());
 		}
-		return mods::corpse::drag_corpse(m_player,corpse,direction,force);
+		auto ret = mods::corpse::drag_corpse(m_player,corpse,direction,force);
+		if(std::get<0>(ret) != 0) {
+			m_player->move() -= movement_cost;
+		}
+		return ret;
 	}
 	/** Contagion class abilities */
 	std::pair<int16_t,std::string> contagion::cast_shrapnel_corpse_explosion(obj_ptr_t& corpse) {
@@ -186,7 +197,6 @@ namespace mods::classes {
 			damage = 100 + dice(30, 28);
 		}
 		mods::corpse::queue_shrapnel_corpse_explode(corpse,m_player,damage);
-		m_player->sendln(CAT("Damage: ",damage));
 		return {1,"You rig a corpse to explode!"};
 	}
 	std::pair<int16_t,std::string> contagion::cast_hellfire_corpse_explosion(obj_ptr_t& corpse) {
@@ -213,7 +223,6 @@ namespace mods::classes {
 			damage = 100 + dice(30, 28);
 		}
 		mods::corpse::queue_hellfire_corpse_explode(corpse,m_player,damage);
-		m_player->sendln(CAT("Damage: ",damage));
 		return {1,"You rig a corpse to explode!"};
 	}
 	std::pair<int16_t,std::string> contagion::cast_corpse_explosion(obj_ptr_t& corpse) {
@@ -240,7 +249,6 @@ namespace mods::classes {
 			damage = 100 + dice(30, 28);
 		}
 		mods::corpse::queue_corpse_explode(corpse,m_player,damage);
-		m_player->sendln(CAT("Damage: ",damage));
 		return {1,"You rig a corpse to explode!"};
 	}
 };
@@ -310,7 +318,7 @@ namespace mods::class_abilities::contagion {
 				return;
 			}
 			player->sendln(CAT("Direction: ",dirstr(opt_dir.value())));
-			player->contagion()->drag_corpse(std::get<2>(status),opt_dir.value());
+			player->sendln(std::get<1>(player->contagion()->drag_corpse(std::get<2>(status),opt_dir.value())));
 			return;
 		}
 		if(argshave()->first_is("minor_shielding")->size_gt(0)->passed()) {
