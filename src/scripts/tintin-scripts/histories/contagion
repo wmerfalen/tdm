@@ -1,8 +1,4 @@
 flee
-w
-ee
-l
-flee
 e
 flee
 n
@@ -297,4 +293,8 @@ l
 boot
 bootup
 i
+l
+bootup
+autoexit
+automap
 l
