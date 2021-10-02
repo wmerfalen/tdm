@@ -22,6 +22,7 @@
 #include "constants.h"
 #include "globals.hpp"
 #include "mods/extern.hpp"
+#include "mods/rifle.hpp"
 #include "mods/contracts.hpp"
 #include "mods/drone.hpp"
 #include "mods/util.hpp"
@@ -193,12 +194,6 @@ SUPERCMD(do_jstest) {
 	*player << "Test suite loaded...\r\n";
 	return;
 }
-bool is_rifle_attachment(obj_data* obj) {
-	if(!obj->has_rifle()) {
-		return false;
-	}
-	return !!mods::rifle_attachments::by_uuid(obj->uuid);
-}
 bool is_camera_feed(obj_data* obj) {
 	return obj->has_gadget() && obj->gadget()->attributes->vnum_list.size();
 }
@@ -232,7 +227,7 @@ void show_obj_to_char(struct obj_data *obj, char_data *ch, int mode) {
 	show_obj_to_char(o,player,mode,1);
 }
 bool look_at_weapon(player_ptr_t& player,obj_ptr_t& obj) {
-	if(is_rifle_attachment(obj.get())) {
+	if(mods::rifle::is_rifle_attachment(obj.get())) {
 		player->sendln(mods::rifle_attachments::by_uuid(obj->uuid)->examine());
 		return true;
 	}

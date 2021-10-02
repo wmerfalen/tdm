@@ -1,9 +1,8 @@
-#ifndef __MENTOC_MODS_combat_composer_HEADER__
-#define __MENTOC_MODS_combat_composer_HEADER__
+#ifndef __MENTOC_MODS_combat_HEADER__
+#define __MENTOC_MODS_combat_HEADER__
 #include "../globals.hpp"
-#include "rifle.hpp"
 
-namespace mods::combat_composer {
+namespace mods::combat {
 	/**
 	 * Handles both ranged and immediate targets
 	 */
