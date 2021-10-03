@@ -10,7 +10,7 @@
 #define m_debug(a)
 #endif
 namespace mods::weapons {
-	std::tuple<bool,std::string> attachment_pathogen_ammunition::fire(obj_ptr_t& base_weapon,player_ptr_t& victim) {
+	std::tuple<bool,std::string> attachment_pathogen_ammunition::fire(player_ptr_t& victim) {
 		if(!m_attached) {
 			return {0,"Not attached!"};
 		}

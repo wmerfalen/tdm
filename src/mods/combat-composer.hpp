@@ -98,7 +98,7 @@ namespace mods::combat_composer {
 	   			Assault rifles:
 	   				- 10% critical chance
 	  
-	   4) Calculate damage
+	   4) Calculate damage (including elemental)
 	   		 YAML file dependants
 	   			rifle:
 	   				- base damage
@@ -190,8 +190,15 @@ namespace mods::combat_composer {
 	   			- received disorient attacks reduced by 50%
 				 BREACHER abilities:
 				  - received shrapnel and explosive damage reduced by 25%
+
+		6) Calculate armor penetration amount
+			- Affect HP of armor with respect to armor durability profile
 	  
 	   8) Consume ammunition or stats (if needed)
+		 		yaml file attributes
+		 			attachments:
+						- free ammo chance
+						- regenerate ammo chance
 	   		 MARINE abilities:
 	   			Assault rifles:
 	   				- 15% free ammunition
