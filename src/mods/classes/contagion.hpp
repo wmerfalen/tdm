@@ -7,6 +7,7 @@
 using contagion_orm_t = mods::orm::contagion;
 namespace mods::classes {
 	struct contagion : base {
+			static constexpr std::string_view PATHOGEN_AMMUNITION_YAML = "pox-ordinance-pathogen-ammunition.yml";
 			friend class mods::classes::super_user_fiddler;
 
 			//using shotgun_ub_t = mods::weapons::attachment_shotgun_underbarrel;

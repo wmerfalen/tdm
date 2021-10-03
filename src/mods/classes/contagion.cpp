@@ -6,9 +6,8 @@
 #include "../orm/inventory.hpp"
 
 namespace mods::classes {
-	static constexpr std::string_view PATHOGEN_AMMUNITION_YAML = "pox-ordinance-pathogen-ammunition.yml";
 	obj_ptr_t create_pathogen_ammunition_attachment() {
-		return create_object(ITEM_ATTACHMENT,PATHOGEN_AMMUNITION_YAML.data());
+		return create_object(ITEM_ATTACHMENT,contagion::PATHOGEN_AMMUNITION_YAML.data());
 	}
 	void contagion_event_over(const std::tuple<uuid_t,uint32_t>& s) {
 		switch(std::get<1>(s)) {

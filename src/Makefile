@@ -1,3 +1,4 @@
+CURDIR = $(WEBROOT)
 src = .
 builddir = build
 #CC = /usr/bin/clang++-8
@@ -199,7 +200,9 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/defiler mods/resting mods/weapons/damage-decisions \
 					 mods/mp mods/classes/contagion mods/orm/contagion \
 					 mods/melee/combat-order mods/melee/stance mods/melee/main \
-					 mods/melee/damage-types mods/corpse mods/fire
+					 mods/melee/damage-types mods/corpse mods/fire \
+					 mods/weapons/attachment-pathogen-ammunition \
+					 mods/damage-composer
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
