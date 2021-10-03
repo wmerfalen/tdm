@@ -1,3 +1,4 @@
+#if 0
 #include "combat-composer.hpp"
 #include "fire.hpp"
 #include "shrapnel.hpp"
@@ -290,3 +291,4 @@ namespace mods::combat_composer {
 #undef m_error
 #undef m_debug
 };
+#endif
