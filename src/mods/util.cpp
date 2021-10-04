@@ -356,6 +356,7 @@ namespace mods::util {
 	}
 
 	bool is_lower_match(std::string_view str1,std::string_view str2) {
+		std::cerr << "is lower match: '" << str1 << "' and '" << str2 << "'\n";
 		unsigned int sz = str1.size();
 		if(str2.size() != sz) {
 			return false;

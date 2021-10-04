@@ -67,6 +67,7 @@ namespace mods::contracts {
 
 namespace mods {
 	struct player {
+			typedef void (*func_t)(player_ptr_t&,player_ptr_t&);
 			using contract_vnum_t = uint32_t;
 			using contract_list_t = std::forward_list<std::shared_ptr<mods::contracts::player_contract_instance>>;
 			using damage = damage_event_t;
@@ -878,8 +879,8 @@ namespace mods {
 			void update_contract_status();
 			contract_list_t& contracts();
 
-			void add_combat_order(std::string_view attack);
-			std::vector<std::string>& get_combat_order() {
+			void add_combat_order(std::pair<uint16_t,func_t> c);
+			std::vector<std::pair<uint16_t,func_t>>& get_combat_order() {
 				return m_combat_order;
 			}
 			void set_combat_order_index(uint8_t i) {
@@ -1023,7 +1024,7 @@ namespace mods {
 			mods::util::stopwatch_t m_timer;
 			int m_cooldown_ticks;
 			uint16_t m_practice_sessions;
-			std::vector<std::string> m_combat_order;
+			std::vector<std::pair<uint16_t,func_t>> m_combat_order;
 			std::string m_stance;
 			std::size_t m_current_melee_index;
 	};

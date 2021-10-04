@@ -2151,8 +2151,8 @@ namespace mods {
 		return {0,"Unimplemented"};
 
 	}
-	void player::add_combat_order(std::string_view technique) {
-		m_combat_order.emplace_back(technique.data());
+	void player::add_combat_order(std::pair<uint16_t,func_t> technique) {
+		m_combat_order.emplace_back(technique);
 	}
 
 };

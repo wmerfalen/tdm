@@ -30,6 +30,7 @@
 #include "mods/loot.hpp"
 #include "mods/classes/ghost.hpp"
 #include "mods/melee/combat-order.hpp"
+#include "mods/melee/main.hpp"
 #include "mods/corpse.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
@@ -837,7 +838,7 @@ void hit(char_data *ch, char_data *victim, int type) {
 	if(same_room && combat_order.size()) {
 		set_fighting(ch,victim);
 		auto vptr = ptr(victim);
-		mods::melee::combat_order::dispatch_player(player,vptr);
+		mods::melee::main::dispatch_player(player,vptr);
 		return;
 	}
 	if(primary_can_attack_same_room) {
