@@ -2408,7 +2408,7 @@ namespace mods {
 		m_rct->hitroll -= c.adds_hitroll;
 		m_rct->damage_roll -= c.adds_damage_roll;
 		m_rct->reload_time -= c.adds_reload_time;
-		m_rct->muzzle_velocity += c.adds_muzzle_velocity;
+		m_rct->muzzle_velocity -= c.adds_muzzle_velocity;
 	}
 };
 
