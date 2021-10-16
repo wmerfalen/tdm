@@ -30,6 +30,41 @@ namespace mods {
 	void deferred::push_weapon_cooldown(const uint16_t& ticks, const uuid_t& player_uuid) {
 		push_ticks_event(ticks,player_uuid,EVENT_WEAPON_COOLDOWN_FINISHED);
 	}
+	void deferred::push_consumable_wears_off(const uuid_t& player_uuid, const uint16_t& ticks, obj_ptr_t& consumable) {
+		auto tick = m_tick + ticks;
+		consumable_removal_description_t c;
+		c.player = player_uuid;
+		c.expiration_tick = tick;
+		c.consumable = *(consumable->consumable()->attributes.get());
+
+		m_consumables.emplace_back(c);
+		m_q.insert(
+		    std::make_pair(
+		        tick,
+		[&]() {
+			auto it = m_consumables.begin();
+			bool found = 0;
+			for(; it != m_consumables.end(); ++it) {
+				if(c.player == player_uuid && c.expiration_tick == m_tick) {
+					found = 1;
+					break;
+				}
+			}
+			if(!found) {
+				return;
+			}
+
+
+			auto p = ptr_by_uuid(player_uuid);
+			if(!p) {
+				return;
+			}
+			p->consumed_object_wears_off(it->consumable);
+			m_consumables.erase(it);
+		}
+		    )
+		);
+	}
 	uint32_t deferred::get_ticks_per_minute() {
 		return m_ticks_per_minute_sample;
 	}

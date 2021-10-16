@@ -503,12 +503,11 @@ namespace mods::combat_composer {
 	/**
 	 * Handles both ranged and immediate targets
 	 */
-	void snipe_target(player_ptr_t& attacker,std::string_view target, direction_t direction,obj_ptr_t& weapon) {
-
+	void snipe_target(player_ptr_t& attacker,phases::target_t target, obj_ptr_t& weapon) {
 		/**
 		 * Phase 1: Target acquisition.
 		 */
-		auto opt_target = acquire_ranged_target(attacker, {target,direction},weapon);
+		auto opt_target = phases::acquire_ranged_target(attacker, target,weapon);
 		bool cant_find_target = !opt_target.has_value();
 
 		if(cant_find_target) {
@@ -552,5 +551,8 @@ namespace mods::combat_composer {
 		//feedback.from_direction = OPPOSITE_DIR(direction);
 		//feedback.attacker = attacker->uuid();
 
+	}
+	void snipe_target(player_ptr_t& attacker,std::string_view target, direction_t direction,uint8_t distance,obj_ptr_t& weapon) {
+		snipe_target(attacker,phases::target_t(target,direction),weapon);
 	}
 };//end namespace combat_composer

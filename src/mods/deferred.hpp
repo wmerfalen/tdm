@@ -31,6 +31,11 @@ namespace mods {
 		uint64_t next_event_tick;
 		uint64_t add;
 	};
+	struct consumable_removal_description_t {
+		uuid_t player;
+		mods::yaml::consumable_description_t consumable;
+		uint64_t expiration_tick;
+	};
 	class deferred {
 		public:
 			constexpr static uint32_t EVENT_OBJECT_DESTRUCT = 0;
@@ -79,6 +84,7 @@ namespace mods {
 			    uint64_t add
 			);
 			void push_weapon_cooldown(const uint16_t& ticks, const uuid_t& player_uuid);
+			void push_consumable_wears_off(const uuid_t& player,const uint16_t& ticks, obj_ptr_t& item);
 			void push_step(uint16_t ticks,std::size_t hash,const uuid_t& player_uuid);
 			void iteration();
 			void detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture);
@@ -105,6 +111,7 @@ namespace mods {
 			time_t m_time_tracker;
 			uint32_t m_ticks_per_minute;
 			uint32_t m_ticks_per_minute_sample;
+			std::vector<consumable_removal_description_t> m_consumables;
 		private:
 			void tick();
 	};

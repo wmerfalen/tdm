@@ -37,6 +37,7 @@ namespace mods {
 		float zoom_magnification;
 		int16_t max_range;
 		int16_t critical_chance;
+		int16_t chance_to_injure;
 		float zoom_multiplier;
 		int16_t aimed_limb_accuracy_percent;
 		int16_t accuracy;
@@ -69,6 +70,11 @@ namespace mods {
 		vision_t vision;
 		int16_t recoil_reduction;
 		int16_t muzzle_velocity;
+
+		int16_t reload_time;
+		int16_t cooldown_between_shots;
+		int16_t ammo_max;
+		int16_t clip_size;
 
 		int16_t base_damage;
 		int16_t base_percent;
@@ -114,6 +120,7 @@ namespace mods {
 			zoom_magnification(0),
 			max_range(0),
 			critical_chance(0),
+			chance_to_injure(0),
 			zoom_multiplier(0),
 			aimed_limb_accuracy_percent(0),
 			accuracy(0),
@@ -123,6 +130,10 @@ namespace mods {
 			vision((vision_t)0),
 			recoil_reduction(0),
 			muzzle_velocity(0),
+			reload_time(0),
+			cooldown_between_shots(0),
+			ammo_max(0),
+			clip_size(0),
 			base_damage(0),
 			base_percent(0),
 			damage_dice_count(0),

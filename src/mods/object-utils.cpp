@@ -9,6 +9,9 @@ namespace mods::object_utils {
 	bool is_corpse_explosion(const obj_ptr_t& item) {
 		return item->has_explosive() && std::string(item->feed_file().data()).compare("corpse-charge.yml") == 0;
 	}
+	bool is_consumable(const obj_ptr_t& item) {
+		return item->has_consumable();
+	}
 	bool is_hellfire_corpse_charge(const obj_ptr_t& device) {
 		return device->has_explosive() && std::string(device->feed_file().data()).compare("hellfire-corpse-charge.yml") == 0;
 	}

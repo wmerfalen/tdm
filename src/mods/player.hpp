@@ -440,6 +440,8 @@ namespace mods {
 
 
 			void consume_from_carrying(obj_ptr_t& item);
+			void consume_object(obj_ptr_t& item);
+			void consumed_object_wears_off(const mods::yaml::consumable_description_t& c);
 
 			mods::string weapon_name();
 

@@ -2326,6 +2326,90 @@ namespace mods {
 		}
 		return m_rct_calculated;
 	}
+	void player::consume_object(obj_ptr_t& item) {
+		if(mods::object_utils::is_consumable(item) && item->consumable()->attributes->consumed_by.compare("HUMAN") == 0) {
+			/**
+			 * TODO: Awesome idea!
+			 * If the consumed_by is not a HUMAN, then we could techincally
+			 * have a class like the syndrome class or some type of cybernetic
+			 * class consume it and gain buffs/nerfs from the consumable
+			 */
+			auto& c = item->consumable()->attributes;
+			this->hp() += c->adds_hp;
+			this->move() += c->adds_movement;
+			m_rct->max_range += c->adds_room_range;
+			m_rct->stat_strength += c->adds_strength;
+			m_rct->stat_intelligence += c->adds_intelligence;
+			m_rct->stat_dexterity += c->adds_dexterity;
+			m_rct->stat_constitution += c->adds_constitution;
+			m_rct->stat_wisdom += c->adds_wisdom;
+
+			this->weight() += c->adds_weight;
+			this->exp() += c->adds_experience;
+			/** TODO: FIXME: Need to figure out how to process these
+			 */
+			//m_rct->armor_class += c->adds_armor_class;
+
+			// TODO FIXME figure out how to add this: adds_fire_damage: 2 #int, amount of fire damage it adds to the consumer
+			m_rct->critical_chance += c->adds_critical_chance;
+			//TODO FIXME figure out how to add all of these
+			//adds_ammo_max: 40 #int, adds to ammo maximum of consumer
+			//adds_clip_size: 0 #int, bullets
+			//adds_cooldown_between_shots: 2 #int, ticks(can be negative)
+
+			m_rct->chance_to_injure += c->adds_chance_to_injure;
+			m_rct->headshot_bonus += c->adds_headshot_bonus;
+			m_rct->critical_range.second += c->adds_critical_range;
+			m_rct->max_range += c->adds_max_range;
+			m_rct->damage_dice_count += c->adds_damage_dice_count;
+			m_rct->damage_dice_sides += c->adds_damage_dice_sides;
+			m_rct->disorient_amount += c->adds_disorient_amount;
+			m_rct->hitroll += c->adds_hitroll;
+			m_rct->damage_roll += c->adds_damage_roll;
+			m_rct->reload_time += c->adds_reload_time;
+			m_rct->muzzle_velocity += c->adds_muzzle_velocity;
+
+			mods::globals::defer_queue->push_consumable_wears_off(this->uuid(),c->ticks_until_zero,item);
+		}
+	}
+	void player::consumed_object_wears_off(const mods::yaml::consumable_description_t& c) {
+		/**
+		 * TODO: Awesome idea!
+		 * If the consumed_by is not a HUMAN, then we could techincally
+		 * have a class like the syndrome class or some type of cybernetic
+		 * class consume it and gain buffs/nerfs from the consumable
+		 */
+		m_rct->max_range -= c.adds_room_range;
+		m_rct->stat_strength -= c.adds_strength;
+		m_rct->stat_intelligence -= c.adds_intelligence;
+		m_rct->stat_dexterity -= c.adds_dexterity;
+		m_rct->stat_constitution -= c.adds_constitution;
+		m_rct->stat_wisdom -= c.adds_wisdom;
+
+		this->weight() -= c.adds_weight;
+		/** TODO: FIXME: Need to figure out how to process these
+		 */
+		//m_rct->armor_class += c.adds_armor_class;
+
+		// TODO FIXME figure out how to add this: adds_fire_damage: 2 #int, amount of fire damage it adds to the consumer
+		m_rct->critical_chance -= c.adds_critical_chance;
+		//TODO FIXME figure out how to add all of these
+		//adds_ammo_max: 40 #int, adds to ammo maximum of consumer
+		//adds_clip_size: 0 #int, bullets
+		//adds_cooldown_between_shots: 2 #int, ticks(can be negative)
+
+		m_rct->chance_to_injure -= c.adds_chance_to_injure;
+		m_rct->headshot_bonus -= c.adds_headshot_bonus;
+		m_rct->critical_range.second -= c.adds_critical_range;
+		m_rct->max_range -= c.adds_max_range;
+		m_rct->damage_dice_count -= c.adds_damage_dice_count;
+		m_rct->damage_dice_sides -= c.adds_damage_dice_sides;
+		m_rct->disorient_amount -= c.adds_disorient_amount;
+		m_rct->hitroll -= c.adds_hitroll;
+		m_rct->damage_roll -= c.adds_damage_roll;
+		m_rct->reload_time -= c.adds_reload_time;
+		m_rct->muzzle_velocity += c.adds_muzzle_velocity;
+	}
 };
 
 #undef dbg
