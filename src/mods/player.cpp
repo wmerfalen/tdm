@@ -321,7 +321,7 @@ namespace mods {
 			sendln("Un-equipping...");
 		}
 #endif
-		if(!rifle && item && item->has_rifle()) {
+		if(!rifle && item && item->has_rifle() && pos == WEAR_PRIMARY) {
 #ifdef __equip_debug__
 			sendln("You have a regular rifle. running attr feed...");
 			sendln(CAT("Rifle name: ",item->rifle()->attributes->name));
@@ -400,7 +400,7 @@ namespace mods {
 
 
 		}
-		if(rifle) {
+		if(rifle && pos == WEAR_PRIMARY) {
 #ifdef __equip_debug__
 			sendln("You have a rifle attachment. feeding attributes...");
 #endif
