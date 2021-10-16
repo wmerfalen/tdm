@@ -29,12 +29,14 @@
 #include "mods/weapon.hpp"
 #include "mods/help.hpp"
 #include "mods/weapons/damage-types.hpp"
+#include "mods/damage-event.hpp"
 #include "mods/interpreter.hpp"
 #include "mods/levels.hpp"
 #include "mods/calc-visibility.hpp"
 #include "mods/projectile.hpp"
 #include "mods/combat-composer.hpp"
 
+using de = damage_event_t;
 /* extern variables */
 extern int pk_allowed;
 extern void three_arguments(char*,char*,char*,char*);
@@ -147,6 +149,10 @@ ACMD(do_snipe) {
 		return;
 	}
 	auto weapon = player->primary();
+	if(!weapon || !weapon->has_rifle()) {
+		player->damage_event(de::NO_PRIMARY_WIELDED_EVENT);
+		return;
+	}
 	mods::combat_composer::snipe_target(player,vec_args[0], direction,0,weapon);
 }
 

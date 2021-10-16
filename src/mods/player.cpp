@@ -967,6 +967,7 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+		m_luck = 0;
 		m_triads = {0,0,0,0,0};
 		m_stance = "balanced";
 		m_current_melee_index = 0;
@@ -1737,6 +1738,13 @@ namespace mods {
 		switch(feedback.damage_event) {
 			default:
 				break;
+			case damage_event_t::GUNFIRE_WHIZZED_BY_FROM:
+				this->queue_up(CAT(MSG_GUNFIRE_WHIZZED_BY_FROM_THE_PREFIX(),
+				                   MSG_GUNFIRE_WHIZZED_BY_FROM_THE(),
+				                   dirstr(feedback.from_direction),
+				                   MSG_GUNFIRE_WHIZZED_BY_FROM_THE_SUFFIX()
+				                  ));
+				break;
 			case damage_event_t::YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK:
 				this->queue_up(CAT(MSG_YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"]"));
 				break;
@@ -1898,6 +1906,9 @@ namespace mods {
 				break;
 			case damage_event_t::YOU_INFLICTED_CORPSE_EXPLOSION_DAMAGE:
 				sendln(CAT(MSG_YOU_INFLICT_CORPSE_EXPLOSION(),"[",feedback.damage,"]"));
+				break;
+			case damage_event_t::YOU_WERE_INFLICTED_WITH_BAD_LUCK:
+				sendln(MSG_YOU_WERE_INFLICTED_BY_BAD_LUCK());
 				break;
 		}
 	}
@@ -2409,6 +2420,9 @@ namespace mods {
 		m_rct->damage_roll -= c.adds_damage_roll;
 		m_rct->reload_time -= c.adds_reload_time;
 		m_rct->muzzle_velocity -= c.adds_muzzle_velocity;
+	}
+	std::shared_ptr<mods::ranged_combat_totals> player::get_ranged_combat_totals() {
+		return m_rct;
 	}
 };
 

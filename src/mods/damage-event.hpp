@@ -79,7 +79,10 @@ enum damage_event_t : uint16_t {
 	YOU_GOT_HIT_BY_INCENDIARY_AMMO,
 	YOU_INFLICTED_INCENDIARY_AMMO,
 	YOU_DISORIENTED_SOMEONE_EVENT,
-	YOU_ARE_DISORIENTED_EVENT
+	YOU_ARE_DISORIENTED_EVENT,
+
+	YOU_WERE_INFLICTED_WITH_BAD_LUCK,
+	GUNFIRE_WHIZZED_BY_FROM,
 };
 #include <functional>
 using uuid_t = uint64_t;
@@ -93,7 +96,12 @@ struct feedback_t {
 	feedback_t(damage_event_t e) :
 		damage_event(e),
 		damage(0),hits(0),from_direction(0),
-		attacker(0) { }
+		attacker(0) {}
+	feedback_t(damage_event_t e,uint8_t dir) :
+		damage_event(e),
+		damage(0),hits(0),from_direction(dir),
+		attacker(0) {
+	}
 	damage_event_t damage_event;
 	int damage;
 	uint16_t hits;

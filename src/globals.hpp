@@ -286,7 +286,7 @@ static inline uint64_t future_tick(uint64_t add) {
 #define PLAYER_CAN(A) if(!player->can(A)){ player->sendln("Wrong class."); return; }
 #define SHOULD_RATE_LIMIT(SRL_EVENT) if(mods::rate_limiting::should_throttle(mods::rate_limiting::action_t::SRL_EVENT,player)){ player->errorln("You must wait until you can do that again."); return; } else{ mods::rate_limiting::rate_limit_hit(mods::rate_limiting::action_t::SRL_EVENT,player); }
 #define SEND_HELP(topic) mods::help::send_help(topic,player);
-#define tier(player) std::max(player->level() / 5, 1)
+#define tier(player) (player->level() / 10)
 namespace util = mods::util;
 std::size_t world_size();
 static inline std::vector<direction_t>& directions() {

@@ -384,6 +384,10 @@ LEVEL_DIFF_FOOBAR_TEST,10.0
 ARMOR_CRIT_DAMAGE_MULTIPLIER,0.011134
 
 [std::string]
+MSG_GUNFIRE_WHIZZED_BY_FROM_THE_PREFIX,"{red}*** "
+MSG_GUNFIRE_WHIZZED_BY_FROM_THE_SUFFIX," ***{/red}"
+MSG_GUNFIRE_WHIZZED_BY_FROM_THE,"You narrowly dodge gunfire from the "
+MSG_YOU_WERE_INFLICTED_BY_BAD_LUCK,"{red}*** Bad luck! You missed your target! ***{/red}"
 MSG_HIT_BY_TEETH_AND_BONES,"{red}*** You've been hit by teeth and bones ***{/red}"
 MSG_YOU_INFLICT_CORPSE_EXPLOSION,"{grn}*** Your corpse explosion deals damage ***{/grn}"
 MSG_YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK,"{grn}*** You expertly deal bonus damage ***{/grn}"

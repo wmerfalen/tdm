@@ -3,6 +3,13 @@
 #include "rifle-attachments.hpp"
 
 namespace mods::object_utils {
+	bool check_rifle_type(const auto& item, const mw_rifle& type) {
+		auto rifle_attachment = mods::rifle_attachments::by_uuid(item->uuid);
+		if(rifle_attachment) {
+			return rifle_attachment->base_object->rifle()->attributes->type == type;
+		}
+		return item->has_rifle() && item->rifle()->attributes->type == type;
+	}
 	bool is_corpse(const obj_ptr_t& item) {
 		return item->is_corpse;
 	}
@@ -11,6 +18,9 @@ namespace mods::object_utils {
 	}
 	bool is_consumable(const obj_ptr_t& item) {
 		return item->has_consumable();
+	}
+	bool is_smg(const obj_ptr_t& item) {
+		return check_rifle_type(item,mw_rifle::SUB_MACHINE_GUN);
 	}
 	bool is_hellfire_corpse_charge(const obj_ptr_t& device) {
 		return device->has_explosive() && std::string(device->feed_file().data()).compare("hellfire-corpse-charge.yml") == 0;
@@ -25,25 +35,13 @@ namespace mods::object_utils {
 		return item->explosive()->attributes->alternate_explosion_type.compare("SHRAPNEL") == 0;
 	}
 	bool is_shotgun(const obj_ptr_t& weapon) {
-		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
-		if(rifle_attachment) {
-			return rifle_attachment->base_object->rifle()->attributes->type == mw_rifle::SHOTGUN;
-		}
-		return weapon->rifle()->attributes->type == mw_rifle::SHOTGUN;
+		return check_rifle_type(weapon,mw_rifle::SHOTGUN);
 	}
 	bool is_assault_rifle(const obj_ptr_t& weapon) {
-		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
-		if(rifle_attachment) {
-			return rifle_attachment->base_object->rifle()->attributes->type == mw_rifle::ASSAULT_RIFLE;
-		}
-		return weapon->rifle()->attributes->type == mw_rifle::ASSAULT_RIFLE;
+		return check_rifle_type(weapon,mw_rifle::ASSAULT_RIFLE);
 	}
 	bool is_sniper_rifle(const obj_ptr_t& weapon) {
-		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
-		if(rifle_attachment) {
-			return rifle_attachment->base_object->rifle()->attributes->type == mw_rifle::SNIPER;
-		}
-		return weapon->rifle()->attributes->type == mw_rifle::SNIPER;
+		return check_rifle_type(weapon,mw_rifle::SNIPER);
 	}
 	std::vector<std::string> object_types() {
 		/** !!*****************!! */

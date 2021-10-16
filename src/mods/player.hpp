@@ -305,6 +305,9 @@ namespace mods {
 			auto& max_move() {
 				return cd()->points.max_move;
 			}
+			auto& luck() {
+				return m_luck;
+			}
 
 			/** base stats - start */
 			auto& strength() {
@@ -922,6 +925,7 @@ namespace mods {
 			bool is_dead() {
 				return this->position() == POS_DEAD;
 			}
+			std::shared_ptr<mods::ranged_combat_totals> get_ranged_combat_totals();
 			std::shared_ptr<mods::ranged_combat_totals> calculate_ranged_combat_totals(obj_ptr_t& weapon);
 		protected:
 			int16_t m_to_move;
@@ -1033,6 +1037,7 @@ namespace mods {
 			std::size_t m_current_melee_index;
 			std::shared_ptr<mods::ranged_combat_totals> m_rct;
 			std::shared_ptr<mods::ranged_combat_totals> m_rct_calculated;
+			int32_t m_luck;
 	};
 };
 
