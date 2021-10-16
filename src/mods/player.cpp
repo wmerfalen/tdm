@@ -259,7 +259,9 @@ namespace mods {
 				mods::orm::inventory::equip(db_id(),pos,in_object);
 			}
 
-			perform_equip_calculations(pos,true);
+			if(flush) {
+				perform_equip_calculations(pos,true);
+			}
 			this->m_sync_equipment();
 			//mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
 		}
@@ -281,7 +283,9 @@ namespace mods {
 			auto item = m_equipment[pos];
 
 			eqd("perform equip calculations");
-			perform_equip_calculations(pos,false);
+			if(flush) {
+				perform_equip_calculations(pos,false);
+			}
 			m_equipment[pos]->worn_by = nullptr;
 			m_equipment[pos]->worn_on = -1;
 			m_equipment[pos] = nullptr;
@@ -310,7 +314,19 @@ namespace mods {
 		const auto& item = m_equipment[pos];
 		/** TODO melee */
 		auto rifle = mods::rifle_attachments::by_uuid(item->uuid);
-		if(item->has_rifle()) {
+#ifdef __equip_debug__
+		if(equip) {
+			sendln("Equipping...");
+		} else {
+			sendln("Un-equipping...");
+		}
+#endif
+		if(!rifle && item && item->has_rifle()) {
+#ifdef __equip_debug__
+			sendln("You have a regular rifle. running attr feed...");
+			sendln(CAT("Rifle name: ",item->rifle()->attributes->name));
+			sendln(CAT("Critical chance: ", item->rifle()->attributes->critical_chance));
+#endif
 			m_rct->stat_strength = aff_abils().str += (equip ? 1 : -1) * item->rifle()->attributes->stat_strength;
 			m_rct->stat_intelligence = aff_abils().intel += (equip ? 1 : -1) * item->rifle()->attributes->stat_intelligence;
 			m_rct->stat_wisdom = aff_abils().wis +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_wisdom;
@@ -383,36 +399,39 @@ namespace mods {
 
 
 
-			if(rifle) {
-				m_rct->incendiary_percent = m_incendiary_damage_percent += (equip ? 1 : -1) * rifle->incendiary_damage_percent;
-				m_rct->explosive_percent = m_explosive_damage_percent += (equip ? 1 : -1) * rifle->explosive_damage_percent;
-				m_rct->shrapnel_percent = m_shrapnel_damage_percent += (equip ? 1 : -1) *  rifle->shrapnel_damage_percent;
-				m_rct->corrosive_percent = m_corrosive_damage_percent += (equip ? 1 : -1) * rifle->corrosive_damage_percent;
-				m_rct->cryogenic_percent = m_cryogenic_damage_percent += (equip ? 1 : -1) * rifle->cryogenic_damage_percent;
-				m_rct->radioactive_percent = m_radiation_damage_percent += (equip ? 1 : -1) * rifle->radiation_damage_percent;
-				m_rct->emp_percent = m_emp_damage_percent += (equip ? 1 : -1) * rifle->emp_damage_percent;
-				m_rct->shock_percent = m_shock_damage_percent += (equip ? 1 : -1) * rifle->shock_damage_percent;
-				m_rct->anti_matter_percent = m_anti_matter_damage_percent += (equip ? 1 : -1) * rifle->anti_matter_damage_percent;
-				//FIXME doesn't exist on rifle attachment m_rct->zoom_magnification += (equip ? 1 : -1) * rifle->zoom_magnification;
-				m_rct->incendiary_damage  += (equip ? 1 : -1) * rifle->incendiary_damage;
-				m_rct->explosive_damage  += (equip ? 1 : -1) * rifle->explosive_damage;
-				m_rct->shrapnel_damage  += (equip ? 1 : -1) *  rifle->shrapnel_damage;
-				m_rct->corrosive_damage  += (equip ? 1 : -1) * rifle->corrosive_damage;
-				m_rct->cryogenic_damage  += (equip ? 1 : -1) * rifle->cryogenic_damage;
-				m_rct->radioactive_damage  += (equip ? 1 : -1) * rifle->radioactive_damage;
-				m_rct->emp_damage  += (equip ? 1 : -1) * rifle->emp_damage;
-				m_rct->shock_damage  += (equip ? 1 : -1) * rifle->shock_damage;
-				m_rct->anti_matter_damage += (equip ? 1 : -1) * rifle->anti_matter_damage;
+		}
+		if(rifle) {
+#ifdef __equip_debug__
+			sendln("You have a rifle attachment. feeding attributes...");
+#endif
+			m_rct->incendiary_percent = m_incendiary_damage_percent += (equip ? 1 : -1) * rifle->incendiary_damage_percent;
+			m_rct->explosive_percent = m_explosive_damage_percent += (equip ? 1 : -1) * rifle->explosive_damage_percent;
+			m_rct->shrapnel_percent = m_shrapnel_damage_percent += (equip ? 1 : -1) *  rifle->shrapnel_damage_percent;
+			m_rct->corrosive_percent = m_corrosive_damage_percent += (equip ? 1 : -1) * rifle->corrosive_damage_percent;
+			m_rct->cryogenic_percent = m_cryogenic_damage_percent += (equip ? 1 : -1) * rifle->cryogenic_damage_percent;
+			m_rct->radioactive_percent = m_radiation_damage_percent += (equip ? 1 : -1) * rifle->radiation_damage_percent;
+			m_rct->emp_percent = m_emp_damage_percent += (equip ? 1 : -1) * rifle->emp_damage_percent;
+			m_rct->shock_percent = m_shock_damage_percent += (equip ? 1 : -1) * rifle->shock_damage_percent;
+			m_rct->anti_matter_percent = m_anti_matter_damage_percent += (equip ? 1 : -1) * rifle->anti_matter_damage_percent;
+			//FIXME doesn't exist on rifle attachment m_rct->zoom_magnification += (equip ? 1 : -1) * rifle->zoom_magnification;
+			m_rct->incendiary_damage  += (equip ? 1 : -1) * rifle->incendiary_damage;
+			m_rct->explosive_damage  += (equip ? 1 : -1) * rifle->explosive_damage;
+			m_rct->shrapnel_damage  += (equip ? 1 : -1) *  rifle->shrapnel_damage;
+			m_rct->corrosive_damage  += (equip ? 1 : -1) * rifle->corrosive_damage;
+			m_rct->cryogenic_damage  += (equip ? 1 : -1) * rifle->cryogenic_damage;
+			m_rct->radioactive_damage  += (equip ? 1 : -1) * rifle->radioactive_damage;
+			m_rct->emp_damage  += (equip ? 1 : -1) * rifle->emp_damage;
+			m_rct->shock_damage  += (equip ? 1 : -1) * rifle->shock_damage;
+			m_rct->anti_matter_damage += (equip ? 1 : -1) * rifle->anti_matter_damage;
 
-				m_rct->zoom_multiplier += (equip ? 1 : -1) * rifle->zoom_multiplier;
-				m_rct->damage_percent_bonus += (equip ? 1 : -1) * rifle->damage_percent_bonus;
-				m_rct->armor_penetration += (equip ? 1 : -1) * rifle->armor_penetration_amount;
-				m_rct->zoom_multiplier += (equip ? 1 : -1) * rifle->zoom_multiplier;
-				m_rct->aimed_limb_accuracy_percent += (equip ? 1 : -1) * rifle->aimed_limb_accuracy_percent;
-				m_rct->base_damage += (equip ? 1 : -1) * rifle->base_damage;
-				m_rct->damage_dice_count += (equip ? 1 : -1) * rifle->damage_dice_count;
-				m_rct->damage_dice_sides += (equip ? 1 : -1) * rifle->damage_dice_sides;
-			}
+			m_rct->zoom_multiplier += (equip ? 1 : -1) * rifle->zoom_multiplier;
+			m_rct->damage_percent_bonus += (equip ? 1 : -1) * rifle->damage_percent_bonus;
+			m_rct->armor_penetration += (equip ? 1 : -1) * rifle->armor_penetration_amount;
+			m_rct->zoom_multiplier += (equip ? 1 : -1) * rifle->zoom_multiplier;
+			m_rct->aimed_limb_accuracy_percent += (equip ? 1 : -1) * rifle->aimed_limb_accuracy_percent;
+			m_rct->base_damage += (equip ? 1 : -1) * rifle->base_damage;
+			m_rct->damage_dice_count += (equip ? 1 : -1) * rifle->damage_dice_count;
+			m_rct->damage_dice_sides += (equip ? 1 : -1) * rifle->damage_dice_sides;
 		}
 		if(item->has_armor()) {
 			//thac0

@@ -12,7 +12,7 @@ ammo_max: 400 #integer
 ammo_type: 'SUB_MACHINE_GUN' #string, constant enum
 chance_to_injure: 30.813 #float, out of 100 
 clip_size: 31 #integer
-cooldown_between_shots: 1 #int, in ticks
+cooldown_between_shots: 2 #int, in ticks
 critical_chance: 14 #int, out of 100
 critical_range: 1 #integer, measured in rooms
 damage_map: [

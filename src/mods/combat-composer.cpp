@@ -353,8 +353,10 @@ namespace mods::combat_composer {
 		calculated_damage_t calculate_weapon_damage(player_ptr_t& attacker,acquired_target_t& found_target,obj_ptr_t& weapon,std::pair<int,int> hsc);
 
 		namespace state {
+			static player_ptr_t attacker;
 			static std::shared_ptr<mods::ranged_combat_totals> current;
 #define RCT state::current
+#define ATKR state::attacker
 		};
 		bool attack_disorients(
 		    player_ptr_t& attacker,
@@ -595,7 +597,8 @@ namespace mods::combat_composer {
 			const auto& distance = found_target.distance;
 			feedback_t feedback;
 			int headshot = 0, crit = 0;
-			if(distance <= RCT->critical_range.second && distance >= RCT->critical_range.first && dice(1,100) < RCT->critical_chance) {
+			auto crit_roll = dice(1,100);
+			if(distance <= RCT->critical_range.second && distance >= RCT->critical_range.first && crit_roll < (RCT->critical_chance % 100)) {
 				crit = dice(
 				           RCT->damage_dice_count,
 				           RCT->damage_dice_sides
@@ -709,6 +712,7 @@ namespace mods::combat_composer {
 
 		std::optional<acquired_target_t> acquire_ranged_target(player_ptr_t& attacker,target_t target,obj_ptr_t& weapon) {
 			state::current = attacker->calculate_ranged_combat_totals(weapon);
+			state::attacker = attacker;
 			vpd scan;
 			/**
 			 * TODO: will have to change find_type_t::ANY to include DEAD for contagion's
@@ -803,7 +807,7 @@ namespace mods::combat_composer {
 				- [x] Shotguns deal same room damage at 2-3 rooms away
 
 				 BREACHER abilities:
-				 	- all wielded weapons get +10% explosive damage
+				 	- [x] all wielded weapons get +10% explosive damage
 				  - can remotely seal a room for the purpose of amplifying detonations
 				  - breaching doors causes room inhabitants to take damage from explosion
 				  -- "breach and clear"
@@ -812,11 +816,11 @@ namespace mods::combat_composer {
 				   -- "knockdown"
 				   	-- fire a shot that knocks the enemy to the ground
 				   	-- knocked down enemies take more damage and are vulnerable to "detain"
-				   -- Shotguns deal 10% extra damage
-				   -- SMG's deal 10% extra damage
-				   -- SMG's have corrossive damage
+				   -- [x] Shotguns deal 10% extra damage
+				   -- [x] SMG's deal 10% extra damage
+				   -- [x] SMG's have corrossive damage
 				   	-- corrossive damage from SMG's cause enemy armor to be less effective
-				  -- SMG's in same-room engagements have a chance of dealing shotgun damage
+				  -- [x] SMG's in same-room engagements have a chance of dealing shotgun damage
 					*/
 			const auto& distance = found_target.distance;
 			d.damage = RCT->base_damage;
@@ -848,7 +852,48 @@ namespace mods::combat_composer {
 					}
 				}
 			}
-			/** TODO: do breacher */
+			if(attacker->breacher()) {
+				d.explosive_damage += (0.10 * d.damage);
+				if(mods::object_utils::is_shotgun(weapon)) {
+					d.damage += (0.10 * d.damage);
+				}
+				if(mods::object_utils::is_smg(weapon)) {
+					d.damage += (0.10 * d.damage);
+					//mods::corrosive::corrode_damage(attacker,found_target.target,weapon,d.damage);
+					if(distance <= 1 && mods::rand::chance(BREACHER_SMG_SHOTGUN_CHANCE())) {
+						d.shrapnel_damage += d.damage / 4; //TODO: make values
+					}
+				}
+			}
+
+
+			if(RCT->incendiary_damage) {
+				d.incendiary_damage += RCT->incendiary_damage;
+			}
+			if(RCT->explosive_damage) {
+				d.explosive_damage += RCT->explosive_damage;
+			}
+			if(RCT->shrapnel_damage) {
+				d.shrapnel_damage += RCT->shrapnel_damage;
+			}
+			if(RCT->corrosive_damage) {
+				d.corrosive_damage += RCT->corrosive_damage;
+			}
+			if(RCT->cryogenic_damage) {
+				d.cryogenic_damage += RCT->cryogenic_damage;
+			}
+			if(RCT->radioactive_damage) {
+				d.radioactive_damage += RCT->radioactive_damage;
+			}
+			if(RCT->anti_matter_damage) {
+				d.anti_matter_damage += RCT->anti_matter_damage;
+			}
+			if(RCT->emp_damage) {
+				d.emp_damage += RCT->emp_damage;
+			}
+			if(RCT->shock_damage) {
+				d.shock_damage += RCT->shock_damage;
+			}
 			if(RCT->incendiary_percent) {
 				d.incendiary_damage += d.damage * (0.01 * RCT->incendiary_percent);
 			}
@@ -1001,6 +1046,7 @@ namespace mods::combat_composer {
 			if(d.shock_damage) {
 				mods::weapons::elemental::perform_elemental_damage(attacker,victim,d.shock_damage,ELEM_SHOCK);
 			}
+			RCT->report(attacker);
 
 		}
 	};//end namespace phases
