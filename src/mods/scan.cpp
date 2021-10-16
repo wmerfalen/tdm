@@ -74,7 +74,7 @@ namespace mods::scan {
 		los_scan_direction(ch,depth,vec_room_list,direction, find_type_t::ANY);
 	}
 
-	void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction, find_type_t type) {
+	void los_scan_direction(char_data* ch,int in_depth,vec_player_data* vec_room_list,int direction, find_type_t type) {
 		std::string s_dir;
 		auto i_d = direction;
 		LOS_SCAN_DIRECTION_DEBUG("scan directions: current dir: " << i_d);
@@ -84,7 +84,12 @@ namespace mods::scan {
 			LOS_SCAN_DIRECTION_DEBUG("in_room is nowhere");
 			return;
 		}
+		if(in_depth <= 0) {
+			std::cerr << "los_scan_direction: received invalid depth value\n";
+			return;
+		}
 
+		int depth = std::min(55,in_depth);
 		auto current_exit = EXIT(ch,i_d);
 		auto next_room = 0;
 

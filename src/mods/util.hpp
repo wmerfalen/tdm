@@ -417,6 +417,7 @@ namespace mods::util::args {
 		std::vector<uuid_t> gather_uuids_starting_at(std::size_t index);
 		std::string gather_strings_starting_at(std::size_t index);
 		std::vector<std::string> gather_tokens_starting_at(std::size_t index);
+		std::vector<std::string> gather_max_tokens_starting_at(std::size_t index,std::size_t max_elements);
 
 		std::string at(std::size_t index);
 		int int_at(std::size_t index);

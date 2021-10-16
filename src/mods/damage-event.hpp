@@ -9,6 +9,7 @@
  * -will, 2020-09-06
  */
 enum damage_event_t : uint16_t {
+	DAMAGE_EVENT_NOTHING = 0,
 	ATTACKER_NARROWLY_MISSED_YOU_EVENT,
 	YOU_ARE_INJURED_EVENT,
 	TARGET_DEAD_EVENT,
@@ -84,6 +85,15 @@ enum damage_event_t : uint16_t {
 using uuid_t = uint64_t;
 using damage_info_t = std::tuple<int,uuid_t>;
 struct feedback_t {
+	feedback_t() : damage_event(DAMAGE_EVENT_NOTHING),
+		damage(0),
+		hits(0),
+		from_direction(0),
+		attacker(0) {}
+	feedback_t(damage_event_t e) :
+		damage_event(e),
+		damage(0),hits(0),from_direction(0),
+		attacker(0) { }
 	damage_event_t damage_event;
 	int damage;
 	uint16_t hits;

@@ -116,6 +116,7 @@ namespace mods {
 		m_rifle_yaml_file = map["base"];
 		base_object = create_object(ITEM_RIFLE,map["base"]);
 		base_object->rifle()->attributes->is_rifle_attachment = true;
+		base_damage = base_object->rifle()->attributes->base_damage;
 		incendiary_damage_percent = 0;
 		explosive_damage_percent = 0;
 		shrapnel_damage_percent = 0;

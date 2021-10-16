@@ -297,6 +297,9 @@ namespace mods {
 		}
 	}
 	void player::perform_equip_calculations(int pos,bool equip) {
+		if(!m_rct) {
+			m_rct = std::make_shared<mods::ranged_combat_totals>();
+		}
 		/**
 		 * TODO: honor basic armor protection
 		 * TODO: honor advanced armor protection
@@ -306,32 +309,86 @@ namespace mods {
 		 */
 		const auto& item = m_equipment[pos];
 		/** TODO melee */
+		auto rifle = mods::rifle_attachments::by_uuid(item->uuid);
 		if(item->has_rifle()) {
-			aff_abils().str += (equip ? 1 : -1) * item->rifle()->attributes->stat_strength;
-			aff_abils().intel += (equip ? 1 : -1) * item->rifle()->attributes->stat_intelligence;
-			aff_abils().wis +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_wisdom;
-			aff_abils().dex += (equip ? 1 : -1) * item->rifle()->attributes->stat_dexterity;
-			aff_abils().con += (equip ? 1 : -1) * item->rifle()->attributes->stat_constitution;
-			aff_abils().electronics +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_electronics;
-			aff_abils().armor += (equip ? 1 : -1) * item->rifle()->attributes->stat_armor;
-			aff_abils().marksmanship +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_marksmanship;
-			aff_abils().sniping +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_sniping;
-			aff_abils().demolitions +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_demolitions;
-			aff_abils().chemistry +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_chemistry;
-			aff_abils().weapon_handling +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_weapon_handling;
-			aff_abils().strategy +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_strategy;
-			aff_abils().medical +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_medical;
-			auto rifle = mods::rifle_attachments::by_uuid(item->uuid);
+			m_rct->stat_strength = aff_abils().str += (equip ? 1 : -1) * item->rifle()->attributes->stat_strength;
+			m_rct->stat_intelligence = aff_abils().intel += (equip ? 1 : -1) * item->rifle()->attributes->stat_intelligence;
+			m_rct->stat_wisdom = aff_abils().wis +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_wisdom;
+			m_rct->stat_dexterity = aff_abils().dex += (equip ? 1 : -1) * item->rifle()->attributes->stat_dexterity;
+			m_rct->stat_constitution = aff_abils().con += (equip ? 1 : -1) * item->rifle()->attributes->stat_constitution;
+			m_rct->stat_electronics = aff_abils().electronics +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_electronics;
+			m_rct->stat_armor = aff_abils().armor += (equip ? 1 : -1) * item->rifle()->attributes->stat_armor;
+			m_rct->stat_marksmanship = aff_abils().marksmanship +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_marksmanship;
+			m_rct->stat_sniping = aff_abils().sniping +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_sniping;
+			m_rct->stat_demolitions = aff_abils().demolitions +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_demolitions;
+			m_rct->stat_chemistry = aff_abils().chemistry +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_chemistry;
+			m_rct->stat_weapon_handling = aff_abils().weapon_handling +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_weapon_handling;
+			m_rct->stat_strategy = aff_abils().strategy +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_strategy;
+			m_rct->stat_medical = aff_abils().medical +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_medical;
+			m_rct->max_range += (equip ? 1 : -1) * item->rifle()->attributes->max_range;
+			m_rct->critical_chance += (equip ? 1 : -1) * item->rifle()->attributes->critical_chance;
+			m_rct->base_damage += (equip ? 1 : -1) * item->rifle()->attributes->base_damage;
+
+			//m_rct->accuracy += (equip ? 1 : -1) * item->rifle()->attributes->accuracy;
+			/*
+			 * TODO: how to calculate these?
+			std::pair<int16_t,int16_t> crit_range;
+			std::pair<int16_t,int16_t> effective_range;
+			* TODO: where to get these?
+			std::vector<uuid_t> tracked;
+			std::vector<uuid_t> marked;
+			*/
+			/**
+			 * VIABLE TARGETS FLAGS
+			 * ----------------------------
+			 * bits:
+			 * 1 -> can hit same room
+			 * 2 -> can hit ranged
+			 * 4 -> can hit doors
+			 * 8 -> can hit objects
+			 * 16 -> can hit cars
+			 *
+			 */
+
+			uint32_t viable_targets =0;
+			switch(item->rifle()->attributes->type) {
+				case mw_rifle::SNIPER:
+					viable_targets &= ~(CAN_HIT_SAME_ROOM);
+					viable_targets |= (CAN_HIT_RANGED);
+					break;
+				case mw_rifle::PISTOL:
+					viable_targets |= (CAN_HIT_SAME_ROOM);
+					break;
+				case mw_rifle::SHOTGUN:
+					viable_targets |= (CAN_HIT_SAME_ROOM);
+					viable_targets &= ~(CAN_HIT_RANGED);
+					break;
+				default:
+					viable_targets |= (CAN_HIT_SAME_ROOM);
+					viable_targets |= (CAN_HIT_RANGED);
+					break;
+			}
+			m_rct->viable_targets = (mods::viable_targets_t)viable_targets;
+
+
+
 			if(rifle) {
-				m_incendiary_damage_percent += (equip ? 1 : -1) * rifle->incendiary_damage_percent;
-				m_explosive_damage_percent += (equip ? 1 : -1) * rifle->explosive_damage_percent;
-				m_shrapnel_damage_percent += (equip ? 1 : -1) *  rifle->shrapnel_damage_percent;
-				m_corrosive_damage_percent += (equip ? 1 : -1) * rifle->corrosive_damage_percent;
-				m_cryogenic_damage_percent += (equip ? 1 : -1) * rifle->cryogenic_damage_percent;
-				m_radiation_damage_percent += (equip ? 1 : -1) * rifle->radiation_damage_percent;
-				m_emp_damage_percent += (equip ? 1 : -1) * rifle->emp_damage_percent;
-				m_shock_damage_percent += (equip ? 1 : -1) * rifle->shock_damage_percent;
-				m_anti_matter_damage_percent += (equip ? 1 : -1) * rifle->anti_matter_damage_percent;
+				m_rct->incendiary_percent = m_incendiary_damage_percent += (equip ? 1 : -1) * rifle->incendiary_damage_percent;
+				m_rct->explosive_percent = m_explosive_damage_percent += (equip ? 1 : -1) * rifle->explosive_damage_percent;
+				m_rct->shrapnel_percent = m_shrapnel_damage_percent += (equip ? 1 : -1) *  rifle->shrapnel_damage_percent;
+				m_rct->corrosive_percent = m_corrosive_damage_percent += (equip ? 1 : -1) * rifle->corrosive_damage_percent;
+				m_rct->cryogenic_percent = m_cryogenic_damage_percent += (equip ? 1 : -1) * rifle->cryogenic_damage_percent;
+				m_rct->radioactive_percent = m_radiation_damage_percent += (equip ? 1 : -1) * rifle->radiation_damage_percent;
+				m_rct->emp_percent = m_emp_damage_percent += (equip ? 1 : -1) * rifle->emp_damage_percent;
+				m_rct->shock_percent = m_shock_damage_percent += (equip ? 1 : -1) * rifle->shock_damage_percent;
+				m_rct->anti_matter_percent = m_anti_matter_damage_percent += (equip ? 1 : -1) * rifle->anti_matter_damage_percent;
+				//FIXME doesn't exist on rifle attachment m_rct->zoom_magnification += (equip ? 1 : -1) * rifle->zoom_magnification;
+				m_rct->zoom_multiplier += (equip ? 1 : -1) * rifle->zoom_multiplier;
+				m_rct->damage_percent_bonus += (equip ? 1 : -1) * rifle->damage_percent_bonus;
+				m_rct->armor_penetration += (equip ? 1 : -1) * rifle->armor_penetration_amount;
+				m_rct->zoom_multiplier += (equip ? 1 : -1) * rifle->zoom_multiplier;
+				m_rct->aimed_limb_accuracy_percent += (equip ? 1 : -1) * rifle->aimed_limb_accuracy_percent;
+				m_rct->base_damage += (equip ? 1 : -1) * rifle->base_damage;
 			}
 		}
 		if(item->has_armor()) {
@@ -388,6 +445,7 @@ namespace mods {
 			aff_abils().weapon_handling +=(equip ? 1 : -1) *  item->armor()->attributes->stat_weapon_handling;
 			aff_abils().strategy +=(equip ? 1 : -1) *  item->armor()->attributes->stat_strategy;
 			aff_abils().medical +=(equip ? 1 : -1) *  item->armor()->attributes->stat_medical;
+
 			/** TODO honor thac0 */
 			/** TODO honor weight_in_lbs */
 			m_incendiary_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->incendiary_resistance_percent;
@@ -409,6 +467,31 @@ namespace mods {
 			hp,
 			classification,
 			*/
+			uint16_t vision = 0;
+			switch(item->armor()->attributes->type) {
+				case mw_armor::GOGGLES:
+					if(item->armor()->attributes->csv_capabilities.find("provides:night-vision") != std::string::npos) {
+						if(equip) {
+							vision |= HAS_NIGHT_VISION;
+						} else {
+							vision &= ~(HAS_NIGHT_VISION);
+						}
+					}
+					if(item->armor()->attributes->csv_capabilities.find("provides:thermal-vision") != std::string::npos) {
+						if(equip) {
+							vision |= HAS_THERMALS;
+						} else {
+							vision &= ~(HAS_THERMALS);
+						}
+					}
+					break;
+				default:
+					break;
+			}
+			/**
+			 * TODO: Also take into account any class abilities that provide shadow sight
+			 */
+			m_rct->vision = (vision_t)vision;
 		}
 		if(m_equipment[pos]->obj_flags.type_flag == ITEM_ARMOR) {
 			int factor = 1;
@@ -448,6 +531,54 @@ namespace mods {
 				mods::globals::affect_room_light(room(),light);
 			}
 		}
+		m_rct->stat_strength = aff_abils().str;
+		m_rct->stat_intelligence = aff_abils().intel;
+		m_rct->stat_wisdom = aff_abils().wis;
+		m_rct->stat_dexterity = aff_abils().dex;
+		m_rct->stat_constitution = aff_abils().con;
+		m_rct->stat_electronics = aff_abils().electronics;
+		m_rct->stat_armor = aff_abils().armor;
+		m_rct->stat_marksmanship = aff_abils().marksmanship;
+		m_rct->stat_sniping = aff_abils().sniping;
+		m_rct->stat_demolitions = aff_abils().demolitions;
+		m_rct->stat_chemistry = aff_abils().chemistry;
+		m_rct->stat_weapon_handling = aff_abils().weapon_handling;
+		m_rct->stat_strategy = aff_abils().strategy;
+		m_rct->stat_medical = aff_abils().medical;
+		/**
+			* 1) Target acquisition
+				 Yaml file dependants:
+					rifle:
+						- zoom magnification
+						- max range
+						- critical range
+					- range multiplier
+					- effective firing range
+					attachments:
+						- zoom multiplier
+						- aimed limb accuracy points
+					armor:
+						- stat weapon handling
+						- stat sniping
+					consumable:
+						- adds room range
+						- adds critical range
+						- adds max range
+
+				 GHOST abilities:
+					- marked/tracked enemy
+					- snipe doors, objects, cars, etc
+
+				 CONTAGION abilities:
+					- Shadow sight
+					- Morbid Insight
+						- player can detect nearby enemies if a corpse is nearby
+
+				 MARINE abilities:
+					- Assault rifles
+		 			- Assault rifle effective range increased by 2 rooms
+						*/
+
 		this->m_sync_equipment();
 
 	}
@@ -837,9 +968,9 @@ namespace mods {
 	}
 	void player::init() {
 		m_triads = {0,0,0,0,0};
-		m_combat_order.clear();
 		m_stance = "balanced";
 		m_current_melee_index = 0;
+		m_combat_order.clear();
 		get_affect_dissolver().clear_all();
 		m_to_move = 0;
 		m_to_attack = 0;
@@ -958,18 +1089,18 @@ namespace mods {
 		SET_BIT(AFF_FLAGS(cd()), flag);
 		set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 	}
-	//void player::affect(mods::flags::aff flag){
-	//	SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
-	//	set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
-	//}
+//void player::affect(mods::flags::aff flag){
+//	SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+//	set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
+//}
 	void player::remove_affect(uint64_t flag) {
 		REMOVE_BIT(AFF_FLAGS(cd()), flag);
 		remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 	}
-	//void player::remove_affect(mods::flags::aff flag){
-	//	REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
-	//	remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
-	//}
+//void player::remove_affect(mods::flags::aff flag){
+//	REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+//	remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
+//}
 	void player::clear_all_affected() {
 		m_flags[mods::flags::chunk_type_t::LEGACY_AFF] = 0;
 		AFF_FLAGS(cd()) = 0;
@@ -992,18 +1123,18 @@ namespace mods {
 		SET_BIT(PLR_FLAGS(cd()), flag);
 		set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 	}
-	//void player::affect_plr(mods::flags::plr flag){
-	//	SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
-	//	set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
-	//}
+//void player::affect_plr(mods::flags::plr flag){
+//	SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+//	set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
+//}
 	void player::remove_affect_plr(uint64_t flag) {
 		REMOVE_BIT(PLR_FLAGS(cd()), flag);
 		remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 	}
-	//void player::remove_affect_plr(mods::flags::plr flag){
-	//	REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
-	//	remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
-	//}
+//void player::remove_affect_plr(mods::flags::plr flag){
+//	REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+//	remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
+//}
 	void player::clear_all_affected_plr() {
 		PLR_FLAGS(cd()) = 0;
 	}
@@ -2154,7 +2285,47 @@ namespace mods {
 	void player::add_combat_order(std::pair<uint16_t,func_t> technique) {
 		m_combat_order.emplace_back(technique);
 	}
-
+	std::shared_ptr<mods::ranged_combat_totals> player::calculate_ranged_combat_totals(obj_ptr_t& weapon) {
+		auto m_rct_calculated = m_rct;
+		if(this->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+			/**
+			 * Class ability (MARINE):
+			 * Assault rifles do 25% more damage
+			 */
+			m_rct_calculated->base_damage = m_rct->base_damage + (0.25 * m_rct->base_damage);
+			/**
+			 * Class ability (MARINE):
+			 * AR's have +10% at criticals
+			 */
+			m_rct_calculated->critical_chance += 10;
+			std::pair<int16_t,int16_t> pair = m_rct->effective_range;
+			/**
+			 * Class ability (MARINE):
+			 * AR's give +2 rooms to effective range
+			 */
+			m_rct_calculated->critical_chance += 10;
+			m_rct_calculated->effective_range = std::make_pair<>(pair.first,pair.second + 2);
+			/**
+			 * Class ability (MARINE):
+			 * AR's have 10% chance of dealing incendiary damage
+			 */
+			m_rct_calculated->elemental_chances.emplace_back(std::make_pair<>(10,mods::elemental_types_t::ELEM_INCENDIARY));
+		}
+		if(this->marine() && mods::object_utils::is_shotgun(weapon)) {
+			/**
+			 * Class ability (MARINE):
+			 * Shotguns do same room damage at 2-3 rooms away
+			 */
+			m_rct_calculated->effective_range = std::make_pair<>(0,m_rct->effective_range.second);
+		}
+		if(this->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+			m_rct_calculated->max_range += MARINE_AR_PASSIVE_RANGE_BONUS();
+		}
+		if(this->ghost() && mods::object_utils::is_sniper_rifle(weapon)) {
+			m_rct_calculated->max_range += GHOST_SNIPER_PASSIVE_RANGE_BONUS();
+		}
+		return m_rct_calculated;
+	}
 };
 
 #undef dbg

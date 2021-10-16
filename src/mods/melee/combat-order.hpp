@@ -7,9 +7,16 @@
 
 namespace mods::melee::main {
 #define MENTOC_TECHNIQUES_SEQUENCE \
-		(JAB) \
-		(CROSS) \
-		(UPPERCUT) \
+		(JAB_TO_HEAD) \
+		(JAB_TO_BODY) \
+		(CROSS_TO_HEAD) \
+		(CROSS_TO_BODY) \
+		(LEFT_HOOK_TO_HEAD) \
+		(RIGHT_HOOK_TO_HEAD) \
+		(LEFT_HOOK_TO_BODY) \
+		(RIGHT_HOOK_TO_BODY) \
+		(LEFT_UPPERCUT) \
+		(RIGHT_UPPERCUT) \
 		(LEFT_ELBOW) \
 		(RIGHT_ELBOW) \
 		(RIGHT_UPWARD_ELBOW) \
@@ -82,6 +89,16 @@ namespace mods::melee::main {
 		return std::nullopt;
 	}
 
+#define MENTOC_LIST_TECHNIQUES_IMPL(r,data,ENUM_TYPE) \
+	proficiency = player->name();\
+	player->sendln(CAT("{grn}",BOOST_PP_STRINGIZE(ENUM_TYPE),"{/grn} - proficiency: {blu}[",proficiency,"]{/blu}"));
+
+	static inline void send_player_techniques(player_ptr_t& player) {
+		std::string proficiency;
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_LIST_TECHNIQUES_IMPL,~,MENTOC_TECHNIQUES_SEQUENCE);
+	}
+
+
 };//end combat order namespace
 
 namespace mods::melee::combat_order {
@@ -93,5 +110,6 @@ namespace mods::melee::combat_order {
 #undef MENTOC_STR_TO_ENUM_IMPL
 #undef MENTOC_ENUM_TO_FUNCTION_IMPL
 #undef MENTOC_ENUM_TO_STRING_IMPL
+#undef MENTOC_LIST_TECHNIQUES_IMPL
 #endif
 

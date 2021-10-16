@@ -8,7 +8,7 @@
 #include "../rand.hpp"
 #include "value-scaler.hpp"
 #include "requirements.hpp"
-#include "elemental-enum.hpp"
+#include "../elemental.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::generator]")  << MSG << "\n";
@@ -445,10 +445,10 @@ namespace mods::forge_engine {
 				return (armor_types_t)(this->roll_between((uint8_t)__ARMOR_WEAR_FIRST, (uint8_t)__ARMOR_WEAR_LAST));
 			}
 			elemental_types_t random_elemental_type() {
-				return (elemental_types_t)(this->roll_between((uint8_t)__ELEM_FIRST, (uint8_t)__ELEM_LAST));
+				return (elemental_types_t)(this->roll_between((uint8_t)1, (uint8_t)(mods::elemental_types_t::__ELEM_LAST-1)));
 			}
 			elemental_types_t random_elemental_resistance(armor_types_t type) {
-				return (elemental_types_t)(this->roll_between((uint8_t)__ELEM_FIRST, (uint8_t)__ELEM_LAST));
+				return (elemental_types_t)(this->roll_between((uint8_t)1, (uint8_t)(mods::elemental_types_t::__ELEM_LAST-1)));
 			}
 			explosive_types_t random_explosive_type() {
 				return (explosive_types_t)(this->roll_between((uint8_t)__EXPLOSIVE_TYPE_FIRST, (uint8_t)__EXPLOSIVE_TYPE_LAST));

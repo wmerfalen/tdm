@@ -40,30 +40,67 @@ namespace mods::melee::main {
 		/**
 		 * Upper body techniques
 		 */
-		void JAB(player_ptr_t& attacker, player_ptr_t& victim) {
-			/**
-			 * Uses dexterity.
-			 * 	- Dexterity determines speed of attack
-			 *
-			 * Force of attack
-			 * 	- strength * melee points * constitution
-			 */
+		void JAB_TO_HEAD(player_ptr_t& attacker, player_ptr_t& victim) {
 			auto dex = attacker->dexterity();
 			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
 			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("jab");
+			attacker->sendln("jab to head");
 		}
-		void CROSS(player_ptr_t& attacker,player_ptr_t& victim) {
+		void JAB_TO_BODY(player_ptr_t& attacker, player_ptr_t& victim) {
 			auto dex = attacker->dexterity();
 			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
 			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("cross");
+			attacker->sendln("jab to body");
 		}
-		void UPPERCUT(player_ptr_t& attacker,player_ptr_t& victim) {
+		void CROSS_TO_HEAD(player_ptr_t& attacker, player_ptr_t& victim) {
 			auto dex = attacker->dexterity();
 			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
 			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("uppercut");
+			attacker->sendln("cross to head");
+		}
+		void CROSS_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
+			auto dex = attacker->dexterity();
+			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+			attacker->sendln("cross to body");
+		}
+		void LEFT_UPPERCUT(player_ptr_t& attacker,player_ptr_t& victim) {
+			auto dex = attacker->dexterity();
+			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+			attacker->sendln("left uppercut");
+		}
+
+		void LEFT_HOOK_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
+			auto dex = attacker->dexterity();
+			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+			attacker->sendln("left hook to head");
+		}
+		void RIGHT_HOOK_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
+			auto dex = attacker->dexterity();
+			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+			attacker->sendln("right hook to head");
+		}
+		void LEFT_HOOK_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
+			auto dex = attacker->dexterity();
+			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+			attacker->sendln("left hook to body");
+		}
+		void RIGHT_HOOK_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
+			auto dex = attacker->dexterity();
+			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+			attacker->sendln("right hook to body");
+		}
+
+		void RIGHT_UPPERCUT(player_ptr_t& attacker,player_ptr_t& victim) {
+			auto dex = attacker->dexterity();
+			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+			attacker->sendln("right uppercut");
 		}
 
 		void LEFT_ELBOW(player_ptr_t& attacker,player_ptr_t& victim) {
@@ -216,14 +253,31 @@ namespace mods::melee::main {
 		static std::vector<std::pair<technique_t,technique_t>> state;
 		static bool set = false;
 		if(!set) {
-			state.emplace_back(std::make_pair<> (t::JAB,t::CROSS));
-			state.emplace_back(std::make_pair<>(t::JAB,t::RIGHT_ELBOW));
+			state.emplace_back(std::make_pair<>(t::JAB_TO_HEAD,t::CROSS_TO_HEAD));
+			state.emplace_back(std::make_pair<>(t::JAB_TO_HEAD,t::CROSS_TO_BODY));
+			state.emplace_back(std::make_pair<>(t::CROSS_TO_BODY,t::LEFT_UPPERCUT));
+			state.emplace_back(std::make_pair<>(t::JAB_TO_HEAD,t::JAB_TO_HEAD));
+			state.emplace_back(std::make_pair<>(t::JAB_TO_HEAD,t::RIGHT_ELBOW));
+
 			state.emplace_back(std::make_pair<>(t::RIGHT_ELBOW,t::RIGHT_UPWARD_ELBOW));
+
 			state.emplace_back(std::make_pair<>(t::LEFT_ELBOW,t::LEFT_UPWARD_ELBOW));
-			state.emplace_back(std::make_pair<>(t::CROSS,t::UPPERCUT));
-			state.emplace_back(std::make_pair<>(t::CROSS,t::RIGHT_FRONT_KICK));
-			state.emplace_back(std::make_pair<>(t::CROSS,t::LEFT_ELBOW));
-			state.emplace_back(std::make_pair<>(t::CROSS,t::RIGHT_TEEP));
+			state.emplace_back(std::make_pair<>(t::LEFT_HOOK_TO_HEAD,t::CROSS_TO_HEAD));
+			state.emplace_back(std::make_pair<>(t::LEFT_UPPERCUT,t::RIGHT_HOOK_TO_BODY));
+			state.emplace_back(std::make_pair<>(t::LEFT_UPPERCUT,t::CROSS_TO_HEAD));
+			state.emplace_back(std::make_pair<>(t::LEFT_HOOK_TO_BODY,t::CROSS_TO_BODY));
+			state.emplace_back(std::make_pair<>(t::LEFT_HOOK_TO_BODY,t::CROSS_TO_HEAD));
+
+			state.emplace_back(std::make_pair<>(t::RIGHT_UPPERCUT,t::LEFT_HOOK_TO_HEAD));
+			state.emplace_back(std::make_pair<>(t::RIGHT_HOOK_TO_BODY,t::LEFT_HOOK_TO_BODY));
+
+			state.emplace_back(std::make_pair<>(t::CROSS_TO_HEAD,t::RIGHT_FRONT_KICK));
+			state.emplace_back(std::make_pair<>(t::CROSS_TO_HEAD,t::LEFT_ELBOW));
+			state.emplace_back(std::make_pair<>(t::CROSS_TO_HEAD,t::RIGHT_TEEP));
+			state.emplace_back(std::make_pair<>(t::CROSS_TO_HEAD,t::LEFT_UPPERCUT));
+			state.emplace_back(std::make_pair<>(t::CROSS_TO_HEAD,t::LEFT_HOOK_TO_HEAD));
+			state.emplace_back(std::make_pair<>(t::CROSS_TO_HEAD,t::LEFT_HOOK_TO_BODY));
+
 			state.emplace_back(std::make_pair<>(t::RIGHT_TEEP,t::LEFT_KICK_TO_HEAD));
 			state.emplace_back(std::make_pair<>(t::LEFT_ELBOW,t::RIGHT_ELBOW));
 			state.emplace_back(std::make_pair<>(t::LEFT_ELBOW,t::RIGHT_KNEE_TO_HEAD));
@@ -285,22 +339,18 @@ namespace mods::melee::main {
 		 */
 		player->clear_combat_order();
 		int i=0;
-		static constexpr uint8_t MAX_TECHNIQUES = 3;
-		for(const auto& technique : args()->gather_tokens_starting_at(0)) {
+		static constexpr uint8_t MAX_TECHNIQUES = __MENTOC_MAX_COMBAT_ORDER_ENTRIES__;
+		for(const auto& technique : args()->gather_max_tokens_starting_at(0,MAX_TECHNIQUES)) {
 			if(i++ >= MAX_TECHNIQUES) {
 				break;
 			}
-			player->sendln(CAT("Setting Technique: '",technique,"'..."));
-			if(mods::util::is_lower_match(technique,"JAB")) {
-				player->sendln("looks like it...");
-			}
 			auto tech = to_technique_enum(technique);
-			player->sendln(CAT("Tech:",tech));
 			auto func = get_technique_function((t)tech);
 			if(func.has_value() == false) {
 				player->sendln(CAT("Cannot set combat order for: {red}'",technique,"'{/red}!"));
 				continue;
 			}
+			player->sendln(CAT("Setting Technique: '",technique,"'..."));
 			player->add_combat_order(std::make_pair<> (tech,func.value()));
 		}
 		player->sendln("Your combat order is now...");

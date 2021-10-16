@@ -38,7 +38,7 @@ namespace mods {
 		extern int directions[];
 		constexpr unsigned num_directions = 6;
 		using room_list_t = std::array<std::vector<room_rnum>,num_directions>;
-		enum find_type_t {
+		enum find_type_t : uint8_t {
 			NPC = (1 << 1),
 			ALIVE = (1 << 2),
 			DEAD = (1 << 3),

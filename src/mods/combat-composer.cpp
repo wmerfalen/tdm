@@ -2,9 +2,19 @@
 #include "rifle.hpp"
 #include "scan.hpp"
 #include "player.hpp"
+#include "ranged-combat-totals.hpp"
+#include "damage-event.hpp"
+#include "rooms.hpp"
+#include "object-utils.hpp"
 
+#ifdef __MENTOC_SHOW_DAMAGE_TYPES_DEBUG__
+#define m_debug(A) std::cerr << green_str("combat_composer_debug:") << A << "\n";
+#else
+#define m_debug(A)
+#endif
 namespace mods::combat_composer {
 	using vpd = mods::scan::vec_player_data;
+	using de = damage_event_t;
 	enum attack_type_t {
 		RANGED,
 		PROXY, /** i.e.: though a drone */
@@ -18,12 +28,7 @@ namespace mods::combat_composer {
 		MELEE_MANA, /** same room melee attack */
 	};
 
-	/**
-	 * Handles both ranged and immediate targets
-	 */
-	void snipe_target(player_ptr_t& attacker,std::string_view target, direction_t direction,uint8_t distance,obj_ptr_t& weapon) {
 
-	}
 
 	/**
 	 * Handles spraying only
@@ -48,7 +53,12 @@ namespace mods::combat_composer {
 		    || calculated and fed to each step to determine success and if flow     ||
 		    || continues, stops, or gets redirected (i.e.: if a miss)               ||
 				||======================================================================||
+				*/
 
+		/**
+		 *
+		   TODO: verify all of these are being accounted for
+			 in the ranged combat totals function in mods::player (player.cpp)
 		   1) Target acquisition
 		   		 Yaml file dependants:
 		   			rifle:
@@ -77,7 +87,7 @@ namespace mods::combat_composer {
 		   			- Morbid Insight
 		   				- player can detect nearby enemies if a corpse is nearby
 
-		   		 MARINE abilities:
+		   		 MARINE abilities: [ FULFILLED IN PLAYER.CPP ]
 		   			- Assault rifles
 		    			- Assault rifle effective range increased by 2 rooms
 
@@ -87,7 +97,12 @@ namespace mods::combat_composer {
 		   		 - melee/cqc/grappling attack and target not in same room
 		   		 - is mana attack and not enough mana
 		   		 - target is dead (with exceptions from contagion)
+		 *
+		 */
 
+
+
+		/**
 		   2) Roll accuracy check
 		   		 YAML file dependants
 		   			rifle:
@@ -237,7 +252,30 @@ namespace mods::combat_composer {
 		struct target_t {
 			std::string target_name;
 			direction_t direction;
-			uint8_t distance;
+			bool is_corpse;
+			bool is_object;
+			bool is_character;
+			target_t(std::string_view _target_name,
+			         direction_t _direction,
+			         bool _is_corpse,
+			         bool _is_object,
+			         bool _is_character
+			        ) : target_name(_target_name),
+				direction(_direction),
+				is_corpse(_is_corpse),
+				is_object(_is_object),
+				is_character(_is_character)
+			{}
+			target_t(std::string_view _target_name,
+			         direction_t _direction) :
+				target_name(_target_name),
+				direction(_direction),
+				is_corpse(0),
+				is_object(0),
+				is_character(1)
+			{}
+			target_t() = delete;
+			~target_t() = default;
 		};
 
 		struct acquired_target_t {
@@ -389,10 +427,16 @@ namespace mods::combat_composer {
 
 		}
 
+
 		std::optional<acquired_target_t> acquire_ranged_target(player_ptr_t& attacker,target_t target,obj_ptr_t& weapon) {
-			auto calculation = calculate_range(attacker,weapon);
+			auto rct = attacker->calculate_ranged_combat_totals(weapon);
 			vpd scan;
-			mods::scan::los_scan_direction(attacker->cd(),calculation.max_range,&scan,target.direction,mods::scan::find_type_t::ALIVE);
+			/**
+			 * TODO: will have to change find_type_t::ANY to include DEAD for contagion's
+			 * corpse sniping capabilities
+			 */
+			mods::scan::los_scan_direction(attacker->cd(),rct->max_range,&scan,target.direction,mods::scan::find_type_t::NPC_AND_PLAYER);
+			obj_ptr_t victim = nullptr;
 			if(attacker->ghost()) {
 				/* TODO:
 				GHOST abilities:
@@ -411,9 +455,25 @@ namespace mods::combat_composer {
 			- Assault rifles
 				- Assault rifle effective range increased by 2 rooms
 			*/
+			//auto max_range = mods::weapons::damage_calculator::max_range(attacker,weapon);
+
+			acquired_target_t found;
+			for(auto&& scanned_target : scan) {
+				if(mods::util::fuzzy_match(target.target_name,scanned_target.obj->name.c_str())) {
+					if(scanned_target.distance > rct->max_range) {
+						attacker->sendln("That target is out of range!");
+						return std::nullopt;
+					}
+					found.target = ptr(scanned_target.ch);
+					found.direction = target.direction;
+					found.distance = scanned_target.distance;
+					return found;
+				}
+			}
 
 			return std::nullopt;
 		}
+
 		std::vector<acquired_target_t> acquire_room(player_ptr_t& attacker,target_t target,obj_ptr_t& weapon) {
 			std::vector<acquired_target_t> targets;
 			auto calculation = calculate_range(attacker,weapon);
@@ -424,4 +484,73 @@ namespace mods::combat_composer {
 		}
 
 	};//end namespace phases
+
+
+	bool can_snipe(player_ptr_t& attacker,obj_ptr_t weapon) {
+		if(!weapon) {
+			attacker->damage_event(feedback_t(de::NO_PRIMARY_WIELDED_EVENT));
+			m_debug("no primary!");
+			return false;
+		}
+		if(!weapon->has_rifle()) {
+			attacker->damage_event(feedback_t(de::NO_PRIMARY_WIELDED_EVENT));
+			m_debug("no primary rifle(2)");
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Handles both ranged and immediate targets
+	 */
+	void snipe_target(player_ptr_t& attacker,std::string_view target, direction_t direction,obj_ptr_t& weapon) {
+
+		/**
+		 * Phase 1: Target acquisition.
+		 */
+		auto opt_target = acquire_ranged_target(attacker, {target,direction},weapon);
+		bool cant_find_target = !opt_target.has_value();
+
+		if(cant_find_target) {
+			m_debug("couldn't find target!");
+			attacker->damage_event(feedback_t(de::COULDNT_FIND_TARGET_EVENT));
+			m_debug(feedback.dump());
+			return;
+		}
+		auto victim = std::move(opt_target.value().target);
+
+		if(mods::rooms::is_peaceful(attacker->room())) {
+			attacker->damage_event(feedback_t(de::YOURE_IN_PEACEFUL_ROOM));
+			m_debug("is_peaceful room");
+			return;
+		}
+
+		if(mods::rooms::is_peaceful(victim->room())) {
+			attacker->damage_event(feedback_t(de::TARGET_IN_PEACEFUL_ROOM_EVENT));
+			m_debug("target is in peaceful room");
+			return;
+		}
+
+		if(!attacker->can_attack_again()) {
+			attacker->damage_event(feedback_t(de::COOLDOWN_IN_EFFECT_EVENT));
+			m_debug("can't attack again");
+			return;
+		}
+
+		/* Check ammo */
+		if(mods::object_utils::get_ammo(weapon) == 0) {
+			attacker->damage_event(feedback_t(de::OUT_OF_AMMO_EVENT));
+			m_debug("out of ammo");
+			return;
+		}
+
+		/**
+		 * Phase 2: accuracy roll
+		 */
+
+		//feedback_t feedback;
+		//feedback.from_direction = OPPOSITE_DIR(direction);
+		//feedback.attacker = attacker->uuid();
+
+	}
 };//end namespace combat_composer

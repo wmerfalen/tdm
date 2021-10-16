@@ -33,6 +33,7 @@
 #include "mods/levels.hpp"
 #include "mods/calc-visibility.hpp"
 #include "mods/projectile.hpp"
+#include "mods/combat-composer.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -145,7 +146,8 @@ ACMD(do_snipe) {
 		player->sendln("Invalid direction");
 		return;
 	}
-	mods::weapons::damage_types::rifle_attack_by_name(player,vec_args[0],direction);
+	auto weapon = player->primary();
+	mods::combat_composer::snipe_target(player,vec_args[0], direction,0,weapon);
 }
 
 ACMD(do_spray) {

@@ -356,7 +356,6 @@ namespace mods::util {
 	}
 
 	bool is_lower_match(std::string_view str1,std::string_view str2) {
-		std::cerr << "is lower match: '" << str1 << "' and '" << str2 << "'\n";
 		unsigned int sz = str1.size();
 		if(str2.size() != sz) {
 			return false;
@@ -1530,6 +1529,16 @@ namespace mods::util::args {
 			}
 		}
 		return list;
+	}
+	std::vector<std::string> parsed_args::gather_max_tokens_starting_at(std::size_t index,std::size_t max_elements) {
+		std::vector<std::string> s;
+		if(index >= vec_args.size()) {
+			return s;
+		}
+		for(int i =index; i < size && i < max_elements; i++) {
+			s.emplace_back(vec_args[i]);
+		}
+		return s;
 	}
 	std::vector<std::string> parsed_args::gather_tokens_starting_at(std::size_t index) {
 		std::vector<std::string> s;

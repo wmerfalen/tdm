@@ -56,6 +56,7 @@ namespace mods {
 			uint16_t get_level() const {
 				return m_rifle_level;
 			}
+			int16_t base_damage;
 			int16_t incendiary_damage_percent;
 			int16_t explosive_damage_percent;
 			int16_t shrapnel_damage_percent;

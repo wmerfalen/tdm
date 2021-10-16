@@ -13,7 +13,7 @@
 # type: GLOVES
 # type: SHIELD
 # type: MASK
-csv_capabilities: 'TBA' #csv, strings free-form TBA
+csv_capabilities: 'provides:night-vision' #csv, strings free-form TBA
 csv_attach_to: 'TBA' #csv, strings attach to various kinds of items TBA
 thac0: 50 #int
 weight_in_lbs: 5 #float, weight in lbs

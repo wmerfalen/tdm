@@ -64,6 +64,7 @@ namespace mods::contracts {
 	struct player_contract_instance;
 };
 
+#include "ranged-combat-totals.hpp"
 
 namespace mods {
 	struct player {
@@ -890,7 +891,7 @@ namespace mods {
 				return m_current_melee_index;
 			}
 			void clear_combat_order() {
-				m_combat_order.clear();
+				std::fill(m_combat_order.begin(),m_combat_order.end(),std::make_pair<>(0,nullptr));
 			}
 			void set_stance(std::string_view stance);
 			std::string& get_stance() {
@@ -919,6 +920,7 @@ namespace mods {
 			bool is_dead() {
 				return this->position() == POS_DEAD;
 			}
+			std::shared_ptr<mods::ranged_combat_totals> calculate_ranged_combat_totals(obj_ptr_t& weapon);
 		protected:
 			int16_t m_to_move;
 			int16_t m_to_attack;
@@ -1027,6 +1029,8 @@ namespace mods {
 			std::vector<std::pair<uint16_t,func_t>> m_combat_order;
 			std::string m_stance;
 			std::size_t m_current_melee_index;
+			std::shared_ptr<mods::ranged_combat_totals> m_rct;
+			std::shared_ptr<mods::ranged_combat_totals> m_rct_calculated;
 	};
 };
 

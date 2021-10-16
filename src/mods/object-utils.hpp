@@ -10,6 +10,7 @@ namespace mods::object_utils {
 	bool is_shrapnel_claymore(const obj_ptr_t&);
 	bool is_assault_rifle(const obj_ptr_t&);
 	bool is_sniper_rifle(const obj_ptr_t&);
+	bool is_shotgun(const obj_ptr_t&);
 	bool is_corpse_explosion(const obj_ptr_t&);
 	bool is_hellfire_corpse_charge(const obj_ptr_t&);
 	bool is_shrapnel_corpse_charge(const obj_ptr_t&);

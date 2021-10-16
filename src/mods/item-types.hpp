@@ -818,6 +818,7 @@ namespace mods {
 	enum elemental_types_t {
 		ELEM_NONE = 0,
 		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ELEMENTAL_TYPES_SEQUENCE)
+		__ELEM_LAST,
 	};
 };
 
