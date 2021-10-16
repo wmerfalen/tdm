@@ -328,6 +328,17 @@ namespace mods {
 			m_rct->max_range += (equip ? 1 : -1) * item->rifle()->attributes->max_range;
 			m_rct->critical_chance += (equip ? 1 : -1) * item->rifle()->attributes->critical_chance;
 			m_rct->base_damage += (equip ? 1 : -1) * item->rifle()->attributes->base_damage;
+			m_rct->damage_dice_count += (equip ? 1 : -1) * item->rifle()->attributes->damage_dice_count;
+			m_rct->damage_dice_sides += (equip ? 1 : -1) * item->rifle()->attributes->damage_dice_sides;
+			m_rct->incendiary_damage += (equip ? 1 : -1) * item->rifle()->attributes->incendiary_damage;
+			m_rct->explosive_damage += (equip ? 1 : -1) * item->rifle()->attributes->explosive_damage;
+			m_rct->shrapnel_damage += (equip ? 1 : -1) * item->rifle()->attributes->shrapnel_damage;
+			m_rct->corrosive_damage += (equip ? 1 : -1) * item->rifle()->attributes->corrosive_damage;
+			m_rct->cryogenic_damage += (equip ? 1 : -1) * item->rifle()->attributes->cryogenic_damage;
+			m_rct->radioactive_damage += (equip ? 1 : -1) * item->rifle()->attributes->radioactive_damage;
+			m_rct->emp_damage += (equip ? 1 : -1) * item->rifle()->attributes->emp_damage;
+			m_rct->shock_damage += (equip ? 1 : -1) * item->rifle()->attributes->shock_damage;
+			m_rct->anti_matter_damage += (equip ? 1 : -1) * item->rifle()->attributes->anti_matter_damage;
 
 			//m_rct->accuracy += (equip ? 1 : -1) * item->rifle()->attributes->accuracy;
 			/*
@@ -383,12 +394,24 @@ namespace mods {
 				m_rct->shock_percent = m_shock_damage_percent += (equip ? 1 : -1) * rifle->shock_damage_percent;
 				m_rct->anti_matter_percent = m_anti_matter_damage_percent += (equip ? 1 : -1) * rifle->anti_matter_damage_percent;
 				//FIXME doesn't exist on rifle attachment m_rct->zoom_magnification += (equip ? 1 : -1) * rifle->zoom_magnification;
+				m_rct->incendiary_damage  += (equip ? 1 : -1) * rifle->incendiary_damage;
+				m_rct->explosive_damage  += (equip ? 1 : -1) * rifle->explosive_damage;
+				m_rct->shrapnel_damage  += (equip ? 1 : -1) *  rifle->shrapnel_damage;
+				m_rct->corrosive_damage  += (equip ? 1 : -1) * rifle->corrosive_damage;
+				m_rct->cryogenic_damage  += (equip ? 1 : -1) * rifle->cryogenic_damage;
+				m_rct->radioactive_damage  += (equip ? 1 : -1) * rifle->radioactive_damage;
+				m_rct->emp_damage  += (equip ? 1 : -1) * rifle->emp_damage;
+				m_rct->shock_damage  += (equip ? 1 : -1) * rifle->shock_damage;
+				m_rct->anti_matter_damage += (equip ? 1 : -1) * rifle->anti_matter_damage;
+
 				m_rct->zoom_multiplier += (equip ? 1 : -1) * rifle->zoom_multiplier;
 				m_rct->damage_percent_bonus += (equip ? 1 : -1) * rifle->damage_percent_bonus;
 				m_rct->armor_penetration += (equip ? 1 : -1) * rifle->armor_penetration_amount;
 				m_rct->zoom_multiplier += (equip ? 1 : -1) * rifle->zoom_multiplier;
 				m_rct->aimed_limb_accuracy_percent += (equip ? 1 : -1) * rifle->aimed_limb_accuracy_percent;
 				m_rct->base_damage += (equip ? 1 : -1) * rifle->base_damage;
+				m_rct->damage_dice_count += (equip ? 1 : -1) * rifle->damage_dice_count;
+				m_rct->damage_dice_sides += (equip ? 1 : -1) * rifle->damage_dice_sides;
 			}
 		}
 		if(item->has_armor()) {
@@ -1744,6 +1767,9 @@ namespace mods {
 				                   dirstr(feedback.from_direction),
 				                   MSG_GUNFIRE_WHIZZED_BY_FROM_THE_SUFFIX()
 				                  ));
+				break;
+			case damage_event_t::YOU_INFLICTED_SNIPE_DAMAGE:
+				this->queue_up(CAT("{grn}*** You snipe your target *** [",std::to_string(feedback.damage),"]{/grn}"));
 				break;
 			case damage_event_t::YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK:
 				this->queue_up(CAT(MSG_YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"]"));

@@ -35,15 +35,15 @@ namespace mods {
 
 	struct ranged_combat_totals {
 		float zoom_magnification;
-		int16_t max_range;
-		int16_t critical_chance;
-		int16_t chance_to_injure;
+		int max_range;
+		int critical_chance;
+		int chance_to_injure;
 		float zoom_multiplier;
-		int16_t aimed_limb_accuracy_percent;
-		int16_t accuracy;
+		int aimed_limb_accuracy_percent;
+		int accuracy;
 
-		std::pair<int8_t,int8_t> critical_range;
-		std::pair<int8_t,int8_t> effective_range;
+		std::pair<int,int> critical_range;
+		std::pair<int,int> effective_range;
 		std::vector<uuid_t> tracked;
 		std::vector<uuid_t> marked;
 		/**
@@ -68,52 +68,62 @@ namespace mods {
 		 * 8 -> has morbid insight
 		 */
 		vision_t vision;
-		int16_t recoil_reduction;
-		int16_t muzzle_velocity;
+		int recoil_reduction;
+		int muzzle_velocity;
 
-		int16_t reload_time;
-		int16_t cooldown_between_shots;
-		int16_t ammo_max;
-		int16_t clip_size;
+		int reload_time;
+		int cooldown_between_shots;
+		int ammo_max;
+		int clip_size;
 
-		int16_t base_damage;
-		int16_t base_percent;
-		int16_t damage_dice_count;
-		int16_t damage_dice_sides;
-		int16_t armor_penetration;
+		int base_damage;
+		int base_percent;
+		int damage_dice_count;
+		int damage_dice_sides;
+		int armor_penetration;
 
-		int16_t damage_percent_bonus;
-		int16_t headshot_bonus;
+		int damage_percent_bonus;
+		int headshot_bonus;
 
-		int16_t hitroll;
-		int16_t damage_roll;
+		int hitroll;
+		int damage_roll;
 
-		int16_t incendiary_percent;
-		int16_t explosive_percent;
-		int16_t shrapnel_percent;
-		int16_t corrosive_percent;
-		int16_t cryogenic_percent;
-		int16_t radioactive_percent;
-		int16_t emp_percent;
-		int16_t shock_percent;
-		int16_t anti_matter_percent;
+		int incendiary_percent;
+		int explosive_percent;
+		int shrapnel_percent;
+		int corrosive_percent;
+		int cryogenic_percent;
+		int radioactive_percent;
+		int emp_percent;
+		int shock_percent;
+		int anti_matter_percent;
 
-		int16_t disorient_amount;
+		int incendiary_damage;
+		int explosive_damage;
+		int shrapnel_damage;
+		int corrosive_damage;
+		int cryogenic_damage;
+		int radioactive_damage;
+		int emp_damage;
+		int shock_damage;
+		int anti_matter_damage;
 
-		int16_t stat_strength;
-		int16_t stat_intelligence;
-		int16_t stat_wisdom;
-		int16_t stat_dexterity;
-		int16_t stat_constitution;
-		int16_t stat_electronics;
-		int16_t stat_armor;
-		int16_t stat_marksmanship;
-		int16_t stat_sniping;
-		int16_t stat_demolitions;
-		int16_t stat_chemistry;
-		int16_t stat_weapon_handling;
-		int16_t stat_strategy;
-		int16_t stat_medical;
+		int disorient_amount;
+
+		int stat_strength;
+		int stat_intelligence;
+		int stat_wisdom;
+		int stat_dexterity;
+		int stat_constitution;
+		int stat_electronics;
+		int stat_armor;
+		int stat_marksmanship;
+		int stat_sniping;
+		int stat_demolitions;
+		int stat_chemistry;
+		int stat_weapon_handling;
+		int stat_strategy;
+		int stat_medical;
 
 		std::vector<std::pair<uint8_t,mods::elemental_types_t>> elemental_chances;
 		ranged_combat_totals() :
@@ -153,6 +163,16 @@ namespace mods {
 			emp_percent(0),
 			shock_percent(0),
 			anti_matter_percent(0),
+
+			incendiary_damage(0),
+			explosive_damage(0),
+			shrapnel_damage(0),
+			corrosive_damage(0),
+			cryogenic_damage(0),
+			radioactive_damage(0),
+			emp_damage(0),
+			shock_damage(0),
+			anti_matter_damage(0),
 
 			disorient_amount(0),
 

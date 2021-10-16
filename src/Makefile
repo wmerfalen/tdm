@@ -204,7 +204,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/melee/damage-types mods/corpse mods/fire \
 					 mods/weapons/attachment-pathogen-ammunition \
 					 mods/combat-composer mods/rifle mods/combat \
-					 mods/player-utils
+					 mods/player-utils mods/weapons/legacy-combat
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

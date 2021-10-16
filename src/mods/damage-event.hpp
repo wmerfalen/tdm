@@ -83,6 +83,7 @@ enum damage_event_t : uint16_t {
 
 	YOU_WERE_INFLICTED_WITH_BAD_LUCK,
 	GUNFIRE_WHIZZED_BY_FROM,
+	YOU_INFLICTED_SNIPE_DAMAGE,
 };
 #include <functional>
 using uuid_t = uint64_t;
