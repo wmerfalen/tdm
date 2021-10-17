@@ -27,9 +27,6 @@ namespace mods {
 	void deferred::cancel_event(event_queue_iterator it) {
 		m_ticks_event_type.erase(it);
 	}
-	void deferred::push_weapon_cooldown(const uint16_t& ticks, const uuid_t& player_uuid) {
-		push_ticks_event(ticks,player_uuid,EVENT_WEAPON_COOLDOWN_FINISHED);
-	}
 	void deferred::push_consumable_wears_off(const uuid_t& player_uuid, const uint16_t& ticks, obj_ptr_t& consumable) {
 		auto tick = m_tick + ticks;
 		consumable_removal_description_t c;

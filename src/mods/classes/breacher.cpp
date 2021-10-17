@@ -19,7 +19,6 @@ namespace mods::classes {
 			call_count = 0;
 			if(m_explosive_shot_charges + 1 < BREACHER_EXPLOSIVE_SHOT_MAX_COUNT() * tier) {
 				++m_explosive_shot_charges;
-				m_player->sendln("{grn}An explosive shot has been added to your G36C{/grn}");
 			}
 		}
 	}
@@ -45,13 +44,6 @@ namespace mods::classes {
 			return result;
 		}
 		set_player(player);
-
-		/** TODO: create catchy name using the deep object parser */
-		auto primary = create_object(ITEM_RIFLE,"mp5.yml");
-		player->equip(primary,WEAR_PRIMARY);
-		player->equip(create_object(ITEM_RIFLE,"sasg12.yml"),WEAR_SECONDARY);
-		auto fatal = create_object(ITEM_EXPLOSIVE,"flashbang-grenade.yml");
-		player->carry(fatal);
 		return result;
 	}
 	/* constructors and destructors */

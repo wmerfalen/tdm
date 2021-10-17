@@ -45,7 +45,7 @@ namespace mods {
 			constexpr static uint32_t EVENT_PLAYER_REVIVE_SUCCESSFUL = 4;
 			constexpr static uint32_t EVENT_PLAYER_FINISHES_FEIGN_DEATH = 5;
 			constexpr static uint32_t EVENT_PLAYER_GOES_VISIBLE = 6;
-			constexpr static uint32_t EVENT_WEAPON_COOLDOWN_FINISHED = 7;
+			constexpr static uint32_t ____OPEN_SLOT_AVAILABLE___ = 7;
 			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_HEALING = 8;
 			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_SMALL = 9;
 			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_MEDIUM = 10;
@@ -83,7 +83,6 @@ namespace mods {
 			    uint64_t next_event_tick,
 			    uint64_t add
 			);
-			void push_weapon_cooldown(const uint16_t& ticks, const uuid_t& player_uuid);
 			void push_consumable_wears_off(const uuid_t& player,const uint16_t& ticks, obj_ptr_t& item);
 			void push_step(uint16_t ticks,std::size_t hash,const uuid_t& player_uuid);
 			void iteration();

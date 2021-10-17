@@ -301,9 +301,6 @@ namespace mods {
 		}
 	}
 	void player::perform_equip_calculations(int pos,bool equip) {
-		if(!m_rct) {
-			m_rct = std::make_shared<mods::ranged_combat_totals>();
-		}
 		/**
 		 * TODO: honor basic armor protection
 		 * TODO: honor advanced armor protection
@@ -636,15 +633,20 @@ namespace mods {
 		return true; //FIXME:
 	}
 	void player::weapon_cooldown_start(const int& ticks) {
-		mods::globals::defer_queue->push_weapon_cooldown(ticks,uuid());
+		m_cooldown_start_tick = CURRENT_TICK();
 		m_can_attack = 0;
 		m_timer.reset();
 		m_cooldown_ticks = ticks;
 	}
 	void player::weapon_cooldown_clear() {
 		m_can_attack = 1;
+		m_cooldown_start_tick = m_cooldown_ticks = 0;
+		m_timer.reset();
 	}
-	const bool& player::can_attack_again() const {
+	const bool& player::can_attack_again() {
+		if(m_cooldown_start_tick + m_cooldown_ticks <= CURRENT_TICK()) {
+			m_can_attack = 1;
+		}
 		return m_can_attack;
 	}
 	bool player::carrying_ammo_of_type(const mw_rifle& type) {
@@ -1009,6 +1011,7 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+		m_cooldown_start_tick = 0;
 		m_luck = 0;
 		m_triads = {0,0,0,0,0};
 		m_stance = "balanced";
@@ -1093,6 +1096,7 @@ namespace mods {
 		m_emp_resistance_percent = 0;
 		m_shock_resistance_percent = 0;
 		m_anti_matter_resistance_percent = 0;
+		m_rct = std::make_shared<mods::ranged_combat_totals>();
 	}
 	void player::set_cd(char_data* ch) {
 		m_char_data = ch;
@@ -1595,13 +1599,6 @@ namespace mods {
 					send_to_room_except(this->room(), {this->uuid(),revive_target->uuid()},
 					                    "%s is revived by %s!",this->name().c_str(),revive_target->name().c_str()
 					                   );
-					break;
-				}
-			case mods::deferred::EVENT_WEAPON_COOLDOWN_FINISHED: {
-					m_can_attack = 1;
-#ifdef __MENTOC_TELL_PLAYER_WHEN_COOLDOWN_FINISHES__
-					sendln(CAT("{grn}Cooldown finished. ",m_cooldown_ticks," took ", m_timer.elapsed()));
-#endif
 					break;
 				}
 			default:
@@ -2346,11 +2343,6 @@ namespace mods {
 		if(this->marine() && mods::object_utils::is_assault_rifle(weapon)) {
 			/**
 			 * Class ability (MARINE):
-			 * Assault rifles do 25% more damage
-			 */
-			m_rct_calculated->base_damage = m_rct->base_damage + (0.25 * m_rct->base_damage);
-			/**
-			 * Class ability (MARINE):
 			 * AR's have +10% at criticals
 			 */
 			m_rct_calculated->critical_chance += 10;
@@ -2359,7 +2351,6 @@ namespace mods {
 			 * Class ability (MARINE):
 			 * AR's give +2 rooms to effective range
 			 */
-			m_rct_calculated->critical_chance += 10;
 			m_rct_calculated->effective_range = std::make_pair<>(pair.first,pair.second + 2);
 			/**
 			 * Class ability (MARINE):
@@ -2379,6 +2370,9 @@ namespace mods {
 		}
 		if(this->ghost() && mods::object_utils::is_sniper_rifle(weapon)) {
 			m_rct_calculated->max_range += GHOST_SNIPER_PASSIVE_RANGE_BONUS();
+		}
+		if(this->breacher() && mods::object_utils::is_shotgun(weapon)) {
+			m_rct_calculated->effective_range.second = m_rct_calculated->effective_range.second + 2;
 		}
 		return m_rct_calculated;
 	}

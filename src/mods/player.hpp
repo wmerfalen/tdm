@@ -456,7 +456,7 @@ namespace mods {
 			/* weapon cooldown functions */
 			void weapon_cooldown_clear();
 			void weapon_cooldown_start(const int& ticks);
-			const bool& can_attack_again() const;
+			const bool& can_attack_again();
 
 			/* communication functions */
 			void stc_room(const room_rnum&);
@@ -1031,6 +1031,7 @@ namespace mods {
 			bool m_can_attack;
 			mods::util::stopwatch_t m_timer;
 			int m_cooldown_ticks;
+			uint64_t m_cooldown_start_tick;
 			uint16_t m_practice_sessions;
 			std::vector<std::pair<uint16_t,func_t>> m_combat_order;
 			std::string m_stance;

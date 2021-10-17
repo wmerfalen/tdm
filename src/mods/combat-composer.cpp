@@ -19,6 +19,7 @@
 namespace mods::combat_composer {
 	using vpd = mods::scan::vec_player_data;
 	using de = damage_event_t;
+	using namespace mods::object_utils;
 	enum attack_type_t {
 		RANGED,
 		PROXY, /** i.e.: though a drone */
@@ -410,7 +411,6 @@ namespace mods::combat_composer {
 				m_debug("Warning! player tier returned unsupported value. Defaulting to 1");
 				log("SYSERR: player_tier returned an invalid value. Using default of 1!");
 			}
-			tier = std::clamp(tier,(uint8_t)1,(uint8_t)3);
 			int cooldown = 0;
 			if(attackers_weapon->has_rifle()) {
 				m_debug("weapon has rifle");
@@ -490,6 +490,7 @@ namespace mods::combat_composer {
 			 */
 			int32_t success_chance = 0;
 			auto& victim = target.target;
+			int adjust_max_roll = 0;
 			const auto& distance = target.distance;
 			if(distance >= RCT->effective_range.first && distance <= RCT->effective_range.second) {
 				md("Target in effective range");
@@ -500,11 +501,11 @@ namespace mods::combat_composer {
 				success_chance += 50;
 			}
 			if(attacker->ghost()) {
-				if(mods::object_utils::is_sniper_rifle(weapon)) {
+				if(is_sniper_rifle(weapon)) {
 					md("You are a ghost and wielding a sniper rifle");
 					success_chance += 100;
 				}
-				if(mods::object_utils::is_smg(weapon)) {
+				if(is_smg(weapon)) {
 					if(distance <= RCT->effective_range.second) {
 						md("You are a ghost and within SMG effective range");
 						success_chance += 50;
@@ -512,10 +513,10 @@ namespace mods::combat_composer {
 				}
 			}
 			if(attacker->marine()) {
-				if(mods::object_utils::is_assault_rifle(weapon)) {
+				if(is_assault_rifle(weapon)) {
 					success_chance += 70;
 				}
-				if(mods::object_utils::is_shotgun(weapon) && RCT->effective_range.second >= distance) {
+				if(is_shotgun(weapon) && RCT->effective_range.second >= distance) {
 					success_chance += 150;
 				}
 			}
@@ -529,6 +530,23 @@ namespace mods::combat_composer {
 					}
 				}
 			}
+			if(attacker->breacher()) {
+				bool shotty = is_shotgun(weapon);
+				bool smg = is_smg(weapon);
+				if(shotty) {
+					if(distance <= 3) {
+						success_chance += 50;
+					}
+				}
+				if(smg) {
+					if(distance <= 5) {
+						success_chance += 50;
+					}
+				}
+				if(smg || shotty) {
+					adjust_max_roll = 20;
+				}
+			}
 
 			if(mods::calc_visibility::is_visible(attacker,victim)) {
 				md("Is visible");
@@ -536,7 +554,7 @@ namespace mods::combat_composer {
 			} else {
 				md("Not visible!");
 			}
-			auto roll = rand_number(1,100);
+			auto roll = rand_number(1,100 + adjust_max_roll);
 			md("success_chance is.. ");
 			md(success_chance);
 			md("roll is...");
@@ -711,6 +729,7 @@ namespace mods::combat_composer {
 
 
 		std::optional<acquired_target_t> acquire_ranged_target(player_ptr_t& attacker,target_t target,obj_ptr_t& weapon) {
+
 			state::current = attacker->calculate_ranged_combat_totals(weapon);
 			state::attacker = attacker;
 			vpd scan;
@@ -718,15 +737,14 @@ namespace mods::combat_composer {
 			 * TODO: will have to change find_type_t::ANY to include DEAD for contagion's
 			 * corpse sniping capabilities
 			 */
-			mods::scan::los_scan_direction(attacker->cd(),RCT->max_range,&scan,target.direction,mods::scan::find_type_t::NPC_AND_PLAYER);
-			obj_ptr_t victim = nullptr;
-			if(attacker->ghost()) {
-				/* TODO:
-				GHOST abilities:
-				- marked/tracked enemy
-				- snipe doors, objects, cars, etc
-				*/
-			}
+			mods::scan::los_scan_direction(attacker->cd(),RCT->max_range,&scan,target.direction);//,mods::scan::find_type_t::NPC_AND_PLAYER);
+			//if(attacker->ghost()) {
+			//	/* TODO:
+			//	GHOST abilities:
+			//	- marked/tracked enemy
+			//	- snipe doors, objects, cars, etc
+			//	*/
+			//}
 
 			/** TODO:
 			CONTAGION abilities:
@@ -741,8 +759,11 @@ namespace mods::combat_composer {
 			//auto max_range = mods::weapons::damage_calculator::max_range(attacker,weapon);
 
 			acquired_target_t found;
-			for(auto&& scanned_target : scan) {
-				auto victim = ptr(scanned_target.ch);
+			for(auto& scanned_target : scan) {
+				player_ptr_t victim = nullptr;
+				if(scanned_target.ch && scanned_target.uuid) {
+					victim = ptr_by_uuid(scanned_target.uuid);
+				}
 				if(!victim) {
 					continue;
 				}
@@ -751,7 +772,7 @@ namespace mods::combat_composer {
 						attacker->sendln("That target is out of range!");
 						return std::nullopt;
 					}
-					found.target = ptr(scanned_target.ch);
+					found.target = victim;
 					found.direction = target.direction;
 					found.distance = scanned_target.distance;
 					return found;
@@ -798,7 +819,7 @@ namespace mods::combat_composer {
 				 GHOST abilities:
 					Sniper rifles:
 				 		- [x] Extra 10.5% damage per tier
-				 		- tracked enemies take more damage
+				 		- [ ] tracked enemies take more damage
 
 			 MARINE abilities:
 				- Assault rifles
@@ -813,13 +834,13 @@ namespace mods::combat_composer {
 				  -- "breach and clear"
 				   	-- breach a door and immediatel throw a flash bang into the room
 				   	-- inhabitants get disoriented and take more damage
-				   -- "knockdown"
-				   	-- fire a shot that knocks the enemy to the ground
-				   	-- knocked down enemies take more damage and are vulnerable to "detain"
+				   -- [ ] "knockdown"
+				   	-- [ ] fire a shot that knocks the enemy to the ground
+				   	-- [ ] knocked down enemies take more damage and are vulnerable to "detain"
 				   -- [x] Shotguns deal 10% extra damage
 				   -- [x] SMG's deal 10% extra damage
 				   -- [x] SMG's have corrossive damage
-				   	-- corrossive damage from SMG's cause enemy armor to be less effective
+				   	-- [x] corrossive damage from SMG's cause enemy armor to be less effective
 				  -- [x] SMG's in same-room engagements have a chance of dealing shotgun damage
 					*/
 			const auto& distance = found_target.distance;
@@ -834,18 +855,19 @@ namespace mods::combat_composer {
 			}
 			d.critical_damage = hsc.second;
 			if(attacker->ghost()) {
-				if(mods::object_utils::is_sniper_rifle(weapon)) {
+				if(is_sniper_rifle(weapon)) {
 					d.damage += ((0.105 * tier(attacker)) * d.damage);//TODO: find the values equiv to this
 				}
+				/** TODO: if enemy is tracked, it takes more damaged */
 			}
 			if(attacker->marine()) {
-				if(mods::object_utils::is_assault_rifle(weapon)) {
+				if(is_assault_rifle(weapon)) {
 					d.damage += (0.25 * d.damage); //TODO: find values equiv to this
 					if(mods::rand::chance(10)) {//TODO values
 						d.incendiary_damage += dice(tier(attacker) * 10,tier(attacker) * 10);//TODO values
 					}
 				}
-				if(mods::object_utils::is_shotgun(weapon)) {
+				if(is_shotgun(weapon)) {
 					if(distance > 1 && distance <= 3) { //TODO: values
 						//TODO: need to define same room damage of shotgun
 						d.damage += d.damage * distance;
@@ -854,16 +876,17 @@ namespace mods::combat_composer {
 			}
 			if(attacker->breacher()) {
 				d.explosive_damage += (0.10 * d.damage);
-				if(mods::object_utils::is_shotgun(weapon)) {
+				if(is_shotgun(weapon)) {
 					d.damage += (0.10 * d.damage);
 				}
-				if(mods::object_utils::is_smg(weapon)) {
+				if(is_smg(weapon)) {
 					d.damage += (0.10 * d.damage);
-					//mods::corrosive::corrode_damage(attacker,found_target.target,weapon,d.damage);
 					if(distance <= 1 && mods::rand::chance(BREACHER_SMG_SHOTGUN_CHANCE())) {
 						d.shrapnel_damage += d.damage / 4; //TODO: make values
 					}
+					d.corrosive_damage += dice(tier(attacker) * 3, tier(attacker) * 6);//TODO values
 				}
+				/** TODO: roll chance to kockdown opponent */
 			}
 
 
@@ -1133,12 +1156,13 @@ namespace mods::combat_composer {
 		auto opt_target = phases::acquire_ranged_target(attacker, target,weapon);
 		bool cant_find_target = !opt_target.has_value();
 
-		if(cant_find_target) {
+		if((opt_target.has_value() && opt_target.value().target == nullptr) || cant_find_target) {
 			m_debug("couldn't find target!");
 			attacker->damage_event(feedback_t(de::COULDNT_FIND_TARGET_EVENT));
 			m_debug(feedback.dump());
 			return;
 		}
+
 		auto found_target = opt_target.value();
 		auto& victim = found_target.target;
 
@@ -1161,7 +1185,7 @@ namespace mods::combat_composer {
 		}
 
 		/* Check ammo */
-		if(mods::object_utils::get_ammo(weapon) == 0) {
+		if(get_ammo(weapon) == 0) {
 			attacker->damage_event(feedback_t(de::OUT_OF_AMMO_EVENT));
 			m_debug("out of ammo");
 			return;
