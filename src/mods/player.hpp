@@ -927,6 +927,7 @@ namespace mods {
 			}
 			std::shared_ptr<mods::ranged_combat_totals> get_ranged_combat_totals();
 			std::shared_ptr<mods::ranged_combat_totals> calculate_ranged_combat_totals(obj_ptr_t& weapon);
+			std::shared_ptr<mods::ranged_combat_totals> calculate_ranged_combat_totals();
 		protected:
 			int16_t m_to_move;
 			int16_t m_to_attack;

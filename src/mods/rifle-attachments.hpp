@@ -91,6 +91,7 @@ namespace mods {
 			int16_t armor_penetration_amount;	/** honored partially (adds 10% bonus if it's non-zero. doesn't affect if lte zero) */
 			int16_t disorient_amount;
 			int16_t durability_profile;
+			int16_t cooldown_between_shots;
 			/** --#=================================================#-- */
 			/** --[ SECTION END:   ((( Fairly easy to implement ))) ]-- */
 			/** --#=================================================#-- */

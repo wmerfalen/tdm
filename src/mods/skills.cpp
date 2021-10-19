@@ -141,6 +141,13 @@ namespace mods::skills {
 
 		screen += get_user_stats_page(player);
 		player->sendln(mods::util::mail_format("Your stats",header,screen,player->screen_width()));
+		player->sendln("{grn}----[ Ranged combat stats ]---------------------------------------{/grn}");
+		if(player->primary() && player->primary()->has_rifle()) {
+			player->calculate_ranged_combat_totals()->report(player);
+		} else {
+			player->sendln("Primary is not a rifle. No stats to report.");
+		}
+		player->sendln("{grn}------------------------------------------------------------------{/grn}");
 	}
 
 	void train_user_skill(player_ptr_t& player,std::string_view skill) {

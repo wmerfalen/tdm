@@ -41,6 +41,41 @@
 #define NPC_SEND_DEBUG(a)
 #endif
 
+template <typename T,typename F>
+void sub_clamp(T& orig, F sub) {
+	if(orig - sub < 0) {
+		orig = 0;
+		return;
+	}
+	orig -= sub;
+}
+template <typename T,typename F,typename X>
+void equip_clamp(T& orig,F& aux,bool equip,X offset) {
+	if(equip) {
+		orig += offset;
+		aux += offset;
+	} else {
+		if(orig - offset < 0) {
+			orig = 0;
+			aux = 0;
+		} else {
+			orig -= offset;
+			aux -= offset;
+		}
+	}
+}
+template <typename T,typename X>
+void equip_clamp(T& orig,bool equip,X offset) {
+	if(equip) {
+		orig += offset;
+	} else {
+		if(orig - offset < 0) {
+			orig = 0;
+		} else {
+			orig -= offset;
+		}
+	}
+}
 
 /**
  * TODO: All these stc* functions need to be altered to accomodate
@@ -259,9 +294,7 @@ namespace mods {
 				mods::orm::inventory::equip(db_id(),pos,in_object);
 			}
 
-			if(flush) {
-				perform_equip_calculations(pos,true);
-			}
+			perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
 			//mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
 		}
@@ -283,9 +316,7 @@ namespace mods {
 			auto item = m_equipment[pos];
 
 			eqd("perform equip calculations");
-			if(flush) {
-				perform_equip_calculations(pos,false);
-			}
+			perform_equip_calculations(pos,false);
 			m_equipment[pos]->worn_by = nullptr;
 			m_equipment[pos]->worn_on = -1;
 			m_equipment[pos] = nullptr;
@@ -322,36 +353,36 @@ namespace mods {
 #ifdef __equip_debug__
 			sendln("You have a regular rifle. running attr feed...");
 			sendln(CAT("Rifle name: ",item->rifle()->attributes->name));
-			sendln(CAT("Critical chance: ", item->rifle()->attributes->critical_chance));
 #endif
-			m_rct->stat_strength = aff_abils().str += (equip ? 1 : -1) * item->rifle()->attributes->stat_strength;
-			m_rct->stat_intelligence = aff_abils().intel += (equip ? 1 : -1) * item->rifle()->attributes->stat_intelligence;
-			m_rct->stat_wisdom = aff_abils().wis +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_wisdom;
-			m_rct->stat_dexterity = aff_abils().dex += (equip ? 1 : -1) * item->rifle()->attributes->stat_dexterity;
-			m_rct->stat_constitution = aff_abils().con += (equip ? 1 : -1) * item->rifle()->attributes->stat_constitution;
-			m_rct->stat_electronics = aff_abils().electronics +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_electronics;
-			m_rct->stat_armor = aff_abils().armor += (equip ? 1 : -1) * item->rifle()->attributes->stat_armor;
-			m_rct->stat_marksmanship = aff_abils().marksmanship +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_marksmanship;
-			m_rct->stat_sniping = aff_abils().sniping +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_sniping;
-			m_rct->stat_demolitions = aff_abils().demolitions +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_demolitions;
-			m_rct->stat_chemistry = aff_abils().chemistry +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_chemistry;
-			m_rct->stat_weapon_handling = aff_abils().weapon_handling +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_weapon_handling;
-			m_rct->stat_strategy = aff_abils().strategy +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_strategy;
-			m_rct->stat_medical = aff_abils().medical +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_medical;
-			m_rct->max_range += (equip ? 1 : -1) * item->rifle()->attributes->max_range;
-			m_rct->critical_chance += (equip ? 1 : -1) * item->rifle()->attributes->critical_chance;
-			m_rct->base_damage += (equip ? 1 : -1) * item->rifle()->attributes->base_damage;
-			m_rct->damage_dice_count += (equip ? 1 : -1) * item->rifle()->attributes->damage_dice_count;
-			m_rct->damage_dice_sides += (equip ? 1 : -1) * item->rifle()->attributes->damage_dice_sides;
-			m_rct->incendiary_damage += (equip ? 1 : -1) * item->rifle()->attributes->incendiary_damage;
-			m_rct->explosive_damage += (equip ? 1 : -1) * item->rifle()->attributes->explosive_damage;
-			m_rct->shrapnel_damage += (equip ? 1 : -1) * item->rifle()->attributes->shrapnel_damage;
-			m_rct->corrosive_damage += (equip ? 1 : -1) * item->rifle()->attributes->corrosive_damage;
-			m_rct->cryogenic_damage += (equip ? 1 : -1) * item->rifle()->attributes->cryogenic_damage;
-			m_rct->radioactive_damage += (equip ? 1 : -1) * item->rifle()->attributes->radioactive_damage;
-			m_rct->emp_damage += (equip ? 1 : -1) * item->rifle()->attributes->emp_damage;
-			m_rct->shock_damage += (equip ? 1 : -1) * item->rifle()->attributes->shock_damage;
-			m_rct->anti_matter_damage += (equip ? 1 : -1) * item->rifle()->attributes->anti_matter_damage;
+			equip_clamp(m_rct->stat_strength,aff_abils().str,equip, item->rifle()->attributes->stat_strength);
+			equip_clamp(m_rct->stat_intelligence,aff_abils().intel,equip,item->rifle()->attributes->stat_intelligence);
+			equip_clamp(m_rct->stat_wisdom,aff_abils().wis,equip, item->rifle()->attributes->stat_wisdom);
+			equip_clamp(m_rct->stat_dexterity,aff_abils().dex,equip,item->rifle()->attributes->stat_dexterity);
+			equip_clamp(m_rct->stat_constitution,aff_abils().con,equip,item->rifle()->attributes->stat_constitution);
+			equip_clamp(m_rct->stat_electronics,aff_abils().electronics, equip,item->rifle()->attributes->stat_electronics);
+			equip_clamp(m_rct->stat_armor,aff_abils().armor,equip,item->rifle()->attributes->stat_armor);
+			equip_clamp(m_rct->stat_marksmanship,aff_abils().marksmanship,equip,  item->rifle()->attributes->stat_marksmanship);
+			equip_clamp(m_rct->stat_sniping,aff_abils().sniping,equip,  item->rifle()->attributes->stat_sniping);
+			equip_clamp(m_rct->stat_demolitions,aff_abils().demolitions,equip,  item->rifle()->attributes->stat_demolitions);
+			equip_clamp(m_rct->stat_chemistry,aff_abils().chemistry,equip,  item->rifle()->attributes->stat_chemistry);
+			equip_clamp(m_rct->stat_weapon_handling,aff_abils().weapon_handling,equip,  item->rifle()->attributes->stat_weapon_handling);
+			equip_clamp(m_rct->stat_strategy = aff_abils().strategy,equip,  item->rifle()->attributes->stat_strategy);
+			equip_clamp(m_rct->stat_medical = aff_abils().medical,equip,  item->rifle()->attributes->stat_medical);
+			equip_clamp(m_rct->max_range,equip,item->rifle()->attributes->max_range);
+			equip_clamp(m_rct->critical_chance,equip,item->rifle()->attributes->critical_chance);
+			equip_clamp(m_rct->base_damage,equip,item->rifle()->attributes->base_damage);
+			equip_clamp(m_rct->damage_dice_count,equip,item->rifle()->attributes->damage_dice_count);
+			equip_clamp(m_rct->damage_dice_sides,equip,item->rifle()->attributes->damage_dice_sides);
+			equip_clamp(m_rct->incendiary_damage,equip,item->rifle()->attributes->incendiary_damage);
+			equip_clamp(m_rct->explosive_damage,equip,item->rifle()->attributes->explosive_damage);
+			equip_clamp(m_rct->shrapnel_damage,equip,item->rifle()->attributes->shrapnel_damage);
+			equip_clamp(m_rct->corrosive_damage,equip,item->rifle()->attributes->corrosive_damage);
+			equip_clamp(m_rct->cryogenic_damage,equip,item->rifle()->attributes->cryogenic_damage);
+			equip_clamp(m_rct->radioactive_damage,equip,item->rifle()->attributes->radioactive_damage);
+			equip_clamp(m_rct->emp_damage,equip,item->rifle()->attributes->emp_damage);
+			equip_clamp(m_rct->shock_damage,equip,item->rifle()->attributes->shock_damage);
+			equip_clamp(m_rct->anti_matter_damage,equip,item->rifle()->attributes->anti_matter_damage);
+			equip_clamp(m_rct->cooldown_between_shots,equip,item->rifle()->attributes->cooldown_between_shots);
 
 			//m_rct->accuracy += (equip ? 1 : -1) * item->rifle()->attributes->accuracy;
 			/*
@@ -401,34 +432,36 @@ namespace mods {
 #ifdef __equip_debug__
 			sendln("You have a rifle attachment. feeding attributes...");
 #endif
-			m_rct->incendiary_percent = m_incendiary_damage_percent += (equip ? 1 : -1) * rifle->incendiary_damage_percent;
-			m_rct->explosive_percent = m_explosive_damage_percent += (equip ? 1 : -1) * rifle->explosive_damage_percent;
-			m_rct->shrapnel_percent = m_shrapnel_damage_percent += (equip ? 1 : -1) *  rifle->shrapnel_damage_percent;
-			m_rct->corrosive_percent = m_corrosive_damage_percent += (equip ? 1 : -1) * rifle->corrosive_damage_percent;
-			m_rct->cryogenic_percent = m_cryogenic_damage_percent += (equip ? 1 : -1) * rifle->cryogenic_damage_percent;
-			m_rct->radioactive_percent = m_radiation_damage_percent += (equip ? 1 : -1) * rifle->radiation_damage_percent;
-			m_rct->emp_percent = m_emp_damage_percent += (equip ? 1 : -1) * rifle->emp_damage_percent;
-			m_rct->shock_percent = m_shock_damage_percent += (equip ? 1 : -1) * rifle->shock_damage_percent;
-			m_rct->anti_matter_percent = m_anti_matter_damage_percent += (equip ? 1 : -1) * rifle->anti_matter_damage_percent;
-			//FIXME doesn't exist on rifle attachment m_rct->zoom_magnification += (equip ? 1 : -1) * rifle->zoom_magnification;
-			m_rct->incendiary_damage  += (equip ? 1 : -1) * rifle->incendiary_damage;
-			m_rct->explosive_damage  += (equip ? 1 : -1) * rifle->explosive_damage;
-			m_rct->shrapnel_damage  += (equip ? 1 : -1) *  rifle->shrapnel_damage;
-			m_rct->corrosive_damage  += (equip ? 1 : -1) * rifle->corrosive_damage;
-			m_rct->cryogenic_damage  += (equip ? 1 : -1) * rifle->cryogenic_damage;
-			m_rct->radioactive_damage  += (equip ? 1 : -1) * rifle->radioactive_damage;
-			m_rct->emp_damage  += (equip ? 1 : -1) * rifle->emp_damage;
-			m_rct->shock_damage  += (equip ? 1 : -1) * rifle->shock_damage;
-			m_rct->anti_matter_damage += (equip ? 1 : -1) * rifle->anti_matter_damage;
+			equip_clamp(m_rct->incendiary_percent,m_incendiary_damage_percent,equip, rifle->incendiary_damage_percent);
+			equip_clamp(m_rct->explosive_percent,m_explosive_damage_percent,equip, rifle->explosive_damage_percent);
+			equip_clamp(m_rct->shrapnel_percent,m_shrapnel_damage_percent,equip,  rifle->shrapnel_damage_percent);
+			equip_clamp(m_rct->corrosive_percent,m_corrosive_damage_percent,equip, rifle->corrosive_damage_percent);
+			equip_clamp(m_rct->cryogenic_percent,m_cryogenic_damage_percent,equip, rifle->cryogenic_damage_percent);
+			equip_clamp(m_rct->radioactive_percent,m_radiation_damage_percent,equip, rifle->radiation_damage_percent);
+			equip_clamp(m_rct->emp_percent,m_emp_damage_percent,equip, rifle->emp_damage_percent);
+			equip_clamp(m_rct->shock_percent,m_shock_damage_percent,equip, rifle->shock_damage_percent);
+			equip_clamp(m_rct->anti_matter_percent,m_anti_matter_damage_percent,equip, rifle->anti_matter_damage_percent);
 
-			m_rct->zoom_multiplier += (equip ? 1 : -1) * rifle->zoom_multiplier;
-			m_rct->damage_percent_bonus += (equip ? 1 : -1) * rifle->damage_percent_bonus;
-			m_rct->armor_penetration += (equip ? 1 : -1) * rifle->armor_penetration_amount;
-			m_rct->zoom_multiplier += (equip ? 1 : -1) * rifle->zoom_multiplier;
-			m_rct->aimed_limb_accuracy_percent += (equip ? 1 : -1) * rifle->aimed_limb_accuracy_percent;
-			m_rct->base_damage += (equip ? 1 : -1) * rifle->base_damage;
-			m_rct->damage_dice_count += (equip ? 1 : -1) * rifle->damage_dice_count;
-			m_rct->damage_dice_sides += (equip ? 1 : -1) * rifle->damage_dice_sides;
+			//FIXME doesn't exist on rifle attachment m_rct->zoom_magnification += (equip ? 1 : -1) * rifle->zoom_magnification;
+
+			equip_clamp(m_rct->incendiary_damage,equip, rifle->incendiary_damage);
+			equip_clamp(m_rct->explosive_damage,equip, rifle->explosive_damage);
+			equip_clamp(m_rct->shrapnel_damage,equip,  rifle->shrapnel_damage);
+			equip_clamp(m_rct->corrosive_damage,equip, rifle->corrosive_damage);
+			equip_clamp(m_rct->cryogenic_damage,equip, rifle->cryogenic_damage);
+			equip_clamp(m_rct->radioactive_damage,equip, rifle->radioactive_damage);
+			equip_clamp(m_rct->emp_damage,equip, rifle->emp_damage);
+			equip_clamp(m_rct->shock_damage,equip, rifle->shock_damage);
+			equip_clamp(m_rct->anti_matter_damage,equip, rifle->anti_matter_damage);
+			equip_clamp(m_rct->zoom_multiplier,equip, rifle->zoom_multiplier);
+			equip_clamp(m_rct->damage_percent_bonus,equip, rifle->damage_percent_bonus);
+			equip_clamp(m_rct->armor_penetration,equip, rifle->armor_penetration_amount);
+			equip_clamp(m_rct->zoom_multiplier,equip, rifle->zoom_multiplier);
+			equip_clamp(m_rct->aimed_limb_accuracy_percent,equip, rifle->aimed_limb_accuracy_percent);
+			equip_clamp(m_rct->base_damage,equip, rifle->base_damage);
+			equip_clamp(m_rct->damage_dice_count,equip, rifle->damage_dice_count);
+			equip_clamp(m_rct->damage_dice_sides,equip, rifle->damage_dice_sides);
+			equip_clamp(m_rct->cooldown_between_shots,equip, rifle->cooldown_between_shots);
 		}
 		if(item->has_armor()) {
 			//thac0
@@ -470,32 +503,32 @@ namespace mods {
 					m_elite_protection->unequip(pos);
 				}
 			}
-			aff_abils().str += (equip ? 1 : -1) * item->armor()->attributes->stat_strength;
-			aff_abils().intel += (equip ? 1 : -1) * item->armor()->attributes->stat_intelligence;
-			aff_abils().wis +=(equip ? 1 : -1) *  item->armor()->attributes->stat_wisdom;
-			aff_abils().dex += (equip ? 1 : -1) * item->armor()->attributes->stat_dexterity;
-			aff_abils().con += (equip ? 1 : -1) * item->armor()->attributes->stat_constitution;
-			aff_abils().electronics +=(equip ? 1 : -1) *  item->armor()->attributes->stat_electronics;
-			aff_abils().armor += (equip ? 1 : -1) * item->armor()->attributes->stat_armor;
-			aff_abils().marksmanship +=(equip ? 1 : -1) *  item->armor()->attributes->stat_marksmanship;
-			aff_abils().sniping +=(equip ? 1 : -1) *  item->armor()->attributes->stat_sniping;
-			aff_abils().demolitions +=(equip ? 1 : -1) *  item->armor()->attributes->stat_demolitions;
-			aff_abils().chemistry +=(equip ? 1 : -1) *  item->armor()->attributes->stat_chemistry;
-			aff_abils().weapon_handling +=(equip ? 1 : -1) *  item->armor()->attributes->stat_weapon_handling;
-			aff_abils().strategy +=(equip ? 1 : -1) *  item->armor()->attributes->stat_strategy;
-			aff_abils().medical +=(equip ? 1 : -1) *  item->armor()->attributes->stat_medical;
+			equip_clamp(aff_abils().str,equip, item->armor()->attributes->stat_strength);
+			equip_clamp(aff_abils().intel,equip, item->armor()->attributes->stat_intelligence);
+			equip_clamp(aff_abils().wis,equip,  item->armor()->attributes->stat_wisdom);
+			equip_clamp(aff_abils().dex,equip, item->armor()->attributes->stat_dexterity);
+			equip_clamp(aff_abils().con,equip, item->armor()->attributes->stat_constitution);
+			equip_clamp(aff_abils().electronics,equip,  item->armor()->attributes->stat_electronics);
+			equip_clamp(aff_abils().armor,equip, item->armor()->attributes->stat_armor);
+			equip_clamp(aff_abils().marksmanship,equip,  item->armor()->attributes->stat_marksmanship);
+			equip_clamp(aff_abils().sniping,equip,  item->armor()->attributes->stat_sniping);
+			equip_clamp(aff_abils().demolitions,equip,  item->armor()->attributes->stat_demolitions);
+			equip_clamp(aff_abils().chemistry,equip,  item->armor()->attributes->stat_chemistry);
+			equip_clamp(aff_abils().weapon_handling,equip,  item->armor()->attributes->stat_weapon_handling);
+			equip_clamp(aff_abils().strategy,equip,  item->armor()->attributes->stat_strategy);
+			equip_clamp(aff_abils().medical,equip,  item->armor()->attributes->stat_medical);
 
 			/** TODO honor thac0 */
 			/** TODO honor weight_in_lbs */
-			m_incendiary_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->incendiary_resistance_percent;
-			m_explosive_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->explosive_resistance_percent;
-			m_shrapnel_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->shrapnel_resistance_percent;
-			m_corrosive_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->corrosive_resistance_percent;
-			m_cryogenic_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->cryogenic_resistance_percent;
-			m_radiation_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->radiation_resistance_percent;
-			m_emp_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->emp_resistance_percent;
-			m_shock_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->shock_resistance_percent;
-			m_anti_matter_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->anti_matter_resistance_percent;
+			equip_clamp(m_incendiary_resistance_percent,equip,item->armor()->attributes->incendiary_resistance_percent);
+			equip_clamp(m_explosive_resistance_percent,equip,item->armor()->attributes->explosive_resistance_percent);
+			equip_clamp(m_shrapnel_resistance_percent,equip,item->armor()->attributes->shrapnel_resistance_percent);
+			equip_clamp(m_corrosive_resistance_percent,equip,item->armor()->attributes->corrosive_resistance_percent);
+			equip_clamp(m_cryogenic_resistance_percent,equip,item->armor()->attributes->cryogenic_resistance_percent);
+			equip_clamp(m_radiation_resistance_percent,equip,item->armor()->attributes->radiation_resistance_percent);
+			equip_clamp(m_emp_resistance_percent,equip,item->armor()->attributes->emp_resistance_percent);
+			equip_clamp(m_shock_resistance_percent,equip,item->armor()->attributes->shock_resistance_percent);
+			equip_clamp(m_anti_matter_resistance_percent,equip,item->armor()->attributes->anti_matter_resistance_percent);
 			/**
 			 * TODO: honor these armor attributes
 			offensive_damage_amount
@@ -619,6 +652,47 @@ namespace mods {
 						*/
 
 		this->m_sync_equipment();
+		m_rct_calculated->assign(m_rct.get());
+		{
+			auto weapon = primary();
+			if(!weapon) {
+				return;
+			}
+			if(this->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+				/**
+				 * Class ability (MARINE):
+				 * AR's have +10% at criticals
+				 */
+				m_rct_calculated->critical_chance += 10;
+				std::pair<int16_t,int16_t> pair = m_rct->effective_range;
+				/**
+				 * Class ability (MARINE):
+				 * AR's give +2 rooms to effective range
+				 */
+				m_rct_calculated->effective_range = std::make_pair<>(pair.first,pair.second + 2);
+				/**
+				 * Class ability (MARINE):
+				 * AR's have 10% chance of dealing incendiary damage
+				 */
+				m_rct_calculated->elemental_chances.emplace_back(std::make_pair<>(10,mods::elemental_types_t::ELEM_INCENDIARY));
+			}
+			if(this->marine() && mods::object_utils::is_shotgun(weapon)) {
+				/**
+				 * Class ability (MARINE):
+				 * Shotguns do same room damage at 2-3 rooms away
+				 */
+				m_rct_calculated->effective_range = std::make_pair<>(0,m_rct->effective_range.second);
+			}
+			if(this->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+				m_rct_calculated->max_range += MARINE_AR_PASSIVE_RANGE_BONUS();
+			}
+			if(this->ghost() && mods::object_utils::is_sniper_rifle(weapon)) {
+				m_rct_calculated->max_range += GHOST_SNIPER_PASSIVE_RANGE_BONUS();
+			}
+			if(this->breacher() && mods::object_utils::is_shotgun(weapon)) {
+				m_rct_calculated->effective_range.second = m_rct_calculated->effective_range.second + 2;
+			}
+		}
 
 	}
 	bool player::has_weapon_capability(uint8_t type) {
@@ -1097,6 +1171,7 @@ namespace mods {
 		m_shock_resistance_percent = 0;
 		m_anti_matter_resistance_percent = 0;
 		m_rct = std::make_shared<mods::ranged_combat_totals>();
+		m_rct_calculated = std::make_shared<mods::ranged_combat_totals>();
 	}
 	void player::set_cd(char_data* ch) {
 		m_char_data = ch;
@@ -2338,42 +2413,10 @@ namespace mods {
 	void player::add_combat_order(std::pair<uint16_t,func_t> technique) {
 		m_combat_order.emplace_back(technique);
 	}
+	std::shared_ptr<mods::ranged_combat_totals> player::calculate_ranged_combat_totals() {
+		return m_rct_calculated;
+	}
 	std::shared_ptr<mods::ranged_combat_totals> player::calculate_ranged_combat_totals(obj_ptr_t& weapon) {
-		auto m_rct_calculated = m_rct;
-		if(this->marine() && mods::object_utils::is_assault_rifle(weapon)) {
-			/**
-			 * Class ability (MARINE):
-			 * AR's have +10% at criticals
-			 */
-			m_rct_calculated->critical_chance += 10;
-			std::pair<int16_t,int16_t> pair = m_rct->effective_range;
-			/**
-			 * Class ability (MARINE):
-			 * AR's give +2 rooms to effective range
-			 */
-			m_rct_calculated->effective_range = std::make_pair<>(pair.first,pair.second + 2);
-			/**
-			 * Class ability (MARINE):
-			 * AR's have 10% chance of dealing incendiary damage
-			 */
-			m_rct_calculated->elemental_chances.emplace_back(std::make_pair<>(10,mods::elemental_types_t::ELEM_INCENDIARY));
-		}
-		if(this->marine() && mods::object_utils::is_shotgun(weapon)) {
-			/**
-			 * Class ability (MARINE):
-			 * Shotguns do same room damage at 2-3 rooms away
-			 */
-			m_rct_calculated->effective_range = std::make_pair<>(0,m_rct->effective_range.second);
-		}
-		if(this->marine() && mods::object_utils::is_assault_rifle(weapon)) {
-			m_rct_calculated->max_range += MARINE_AR_PASSIVE_RANGE_BONUS();
-		}
-		if(this->ghost() && mods::object_utils::is_sniper_rifle(weapon)) {
-			m_rct_calculated->max_range += GHOST_SNIPER_PASSIVE_RANGE_BONUS();
-		}
-		if(this->breacher() && mods::object_utils::is_shotgun(weapon)) {
-			m_rct_calculated->effective_range.second = m_rct_calculated->effective_range.second + 2;
-		}
 		return m_rct_calculated;
 	}
 	void player::consume_object(obj_ptr_t& item) {
@@ -2429,36 +2472,36 @@ namespace mods {
 		 * have a class like the syndrome class or some type of cybernetic
 		 * class consume it and gain buffs/nerfs from the consumable
 		 */
-		m_rct->max_range -= c.adds_room_range;
-		m_rct->stat_strength -= c.adds_strength;
-		m_rct->stat_intelligence -= c.adds_intelligence;
-		m_rct->stat_dexterity -= c.adds_dexterity;
-		m_rct->stat_constitution -= c.adds_constitution;
-		m_rct->stat_wisdom -= c.adds_wisdom;
+		sub_clamp(m_rct->max_range,c.adds_room_range);
+		sub_clamp(m_rct->stat_strength,c.adds_strength);
+		sub_clamp(m_rct->stat_intelligence,c.adds_intelligence);
+		sub_clamp(m_rct->stat_dexterity,c.adds_dexterity);
+		sub_clamp(m_rct->stat_constitution,c.adds_constitution);
+		sub_clamp(m_rct->stat_wisdom,c.adds_wisdom);
 
-		this->weight() -= c.adds_weight;
+		sub_clamp(this->weight(),c.adds_weight);
 		/** TODO: FIXME: Need to figure out how to process these
 		 */
 		//m_rct->armor_class += c.adds_armor_class;
 
 		// TODO FIXME figure out how to add this: adds_fire_damage: 2 #int, amount of fire damage it adds to the consumer
-		m_rct->critical_chance -= c.adds_critical_chance;
+		sub_clamp(m_rct->critical_chance,c.adds_critical_chance);
 		//TODO FIXME figure out how to add all of these
 		//adds_ammo_max: 40 #int, adds to ammo maximum of consumer
 		//adds_clip_size: 0 #int, bullets
 		//adds_cooldown_between_shots: 2 #int, ticks(can be negative)
 
-		m_rct->chance_to_injure -= c.adds_chance_to_injure;
-		m_rct->headshot_bonus -= c.adds_headshot_bonus;
-		m_rct->critical_range.second -= c.adds_critical_range;
-		m_rct->max_range -= c.adds_max_range;
-		m_rct->damage_dice_count -= c.adds_damage_dice_count;
-		m_rct->damage_dice_sides -= c.adds_damage_dice_sides;
-		m_rct->disorient_amount -= c.adds_disorient_amount;
-		m_rct->hitroll -= c.adds_hitroll;
-		m_rct->damage_roll -= c.adds_damage_roll;
-		m_rct->reload_time -= c.adds_reload_time;
-		m_rct->muzzle_velocity -= c.adds_muzzle_velocity;
+		sub_clamp(m_rct->chance_to_injure,c.adds_chance_to_injure);
+		sub_clamp(m_rct->headshot_bonus,c.adds_headshot_bonus);
+		sub_clamp(m_rct->critical_range.second,c.adds_critical_range);
+		sub_clamp(m_rct->max_range,c.adds_max_range);
+		sub_clamp(m_rct->damage_dice_count,c.adds_damage_dice_count);
+		sub_clamp(m_rct->damage_dice_sides,c.adds_damage_dice_sides);
+		sub_clamp(m_rct->disorient_amount,c.adds_disorient_amount);
+		sub_clamp(m_rct->hitroll,c.adds_hitroll);
+		sub_clamp(m_rct->damage_roll,c.adds_damage_roll);
+		sub_clamp(m_rct->reload_time,c.adds_reload_time);
+		sub_clamp(m_rct->muzzle_velocity,c.adds_muzzle_velocity);
 	}
 	std::shared_ptr<mods::ranged_combat_totals> player::get_ranged_combat_totals() {
 		return m_rct;

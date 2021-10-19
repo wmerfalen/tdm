@@ -688,6 +688,7 @@ enum player_level_t : uint8_t {
 #define PULSE_USAGE	(5 * 60 RL_SEC)	/* 5 mins */
 #define PULSE_TIMESAVE	(30 * 60 RL_SEC) /* should be >= SECS_PER_MUD_HOUR */
 #define PULSE_REPLENISH (3600 RL_SEC)
+#define PULSE_PRINT_TICKS_PER_MINUTE (60 RL_SEC)
 
 /* Variables for the output buffering system */
 #define MAX_SOCK_BUF            (12 * 1024) /* Size of kernel's sock buf   */

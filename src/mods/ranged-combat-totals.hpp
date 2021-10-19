@@ -35,15 +35,15 @@ namespace mods {
 
 	struct ranged_combat_totals {
 		float zoom_magnification;
-		int max_range;
-		int critical_chance;
-		int chance_to_injure;
+		uint16_t max_range;
+		uint16_t critical_chance;
+		uint16_t chance_to_injure;
 		float zoom_multiplier;
-		int aimed_limb_accuracy_percent;
+		uint16_t aimed_limb_accuracy_percent;
 		int accuracy;
 
-		std::pair<int,int> critical_range;
-		std::pair<int,int> effective_range;
+		std::pair<uint8_t,uint8_t> critical_range;
+		std::pair<uint8_t,uint8_t> effective_range;
 		std::vector<uuid_t> tracked;
 		std::vector<uuid_t> marked;
 		/**
@@ -71,59 +71,59 @@ namespace mods {
 		int recoil_reduction;
 		int muzzle_velocity;
 
-		int reload_time;
-		int cooldown_between_shots;
-		int ammo_max;
-		int clip_size;
+		uint8_t reload_time;
+		uint8_t cooldown_between_shots;
+		uint16_t ammo_max;
+		uint8_t clip_size;
 
-		int base_damage;
-		int base_percent;
-		int damage_dice_count;
-		int damage_dice_sides;
-		int armor_penetration;
+		uint16_t base_damage;
+		uint16_t base_percent;
+		uint16_t damage_dice_count;
+		uint16_t damage_dice_sides;
+		uint16_t armor_penetration;
 
-		int damage_percent_bonus;
-		int headshot_bonus;
+		uint16_t damage_percent_bonus;
+		uint16_t headshot_bonus;
 
-		int hitroll;
-		int damage_roll;
+		uint16_t hitroll;
+		uint16_t damage_roll;
 
-		int incendiary_percent;
-		int explosive_percent;
-		int shrapnel_percent;
-		int corrosive_percent;
-		int cryogenic_percent;
-		int radioactive_percent;
-		int emp_percent;
-		int shock_percent;
-		int anti_matter_percent;
+		uint16_t incendiary_percent;
+		uint16_t explosive_percent;
+		uint16_t shrapnel_percent;
+		uint16_t corrosive_percent;
+		uint16_t cryogenic_percent;
+		uint16_t radioactive_percent;
+		uint16_t emp_percent;
+		uint16_t shock_percent;
+		uint16_t anti_matter_percent;
 
-		int incendiary_damage;
-		int explosive_damage;
-		int shrapnel_damage;
-		int corrosive_damage;
-		int cryogenic_damage;
-		int radioactive_damage;
-		int emp_damage;
-		int shock_damage;
-		int anti_matter_damage;
+		uint16_t incendiary_damage;
+		uint16_t explosive_damage;
+		uint16_t shrapnel_damage;
+		uint16_t corrosive_damage;
+		uint16_t cryogenic_damage;
+		uint16_t radioactive_damage;
+		uint16_t emp_damage;
+		uint16_t shock_damage;
+		uint16_t anti_matter_damage;
 
-		int disorient_amount;
+		uint16_t disorient_amount;
 
-		int stat_strength;
-		int stat_intelligence;
-		int stat_wisdom;
-		int stat_dexterity;
-		int stat_constitution;
-		int stat_electronics;
-		int stat_armor;
-		int stat_marksmanship;
-		int stat_sniping;
-		int stat_demolitions;
-		int stat_chemistry;
-		int stat_weapon_handling;
-		int stat_strategy;
-		int stat_medical;
+		uint16_t stat_strength;
+		uint16_t stat_intelligence;
+		uint16_t stat_wisdom;
+		uint16_t stat_dexterity;
+		uint16_t stat_constitution;
+		uint16_t stat_electronics;
+		uint16_t stat_armor;
+		uint16_t stat_marksmanship;
+		uint16_t stat_sniping;
+		uint16_t stat_demolitions;
+		uint16_t stat_chemistry;
+		uint16_t stat_weapon_handling;
+		uint16_t stat_strategy;
+		uint16_t stat_medical;
 
 		std::vector<std::pair<uint8_t,mods::elemental_types_t>> elemental_chances;
 		ranged_combat_totals() :
@@ -329,6 +329,74 @@ namespace mods {
 			marked = other.marked;
 			return *this;
 		}
+		void assign(ranged_combat_totals* other) {
+			ranged_combat_totals();
+			zoom_magnification = other->zoom_magnification;
+			max_range = other->max_range;
+			critical_chance = other->critical_chance;
+			chance_to_injure = other->chance_to_injure;
+			zoom_multiplier = other->zoom_multiplier;
+			aimed_limb_accuracy_percent = other->aimed_limb_accuracy_percent;
+			accuracy = other->accuracy;
+			critical_range = other->critical_range;
+			effective_range = other->effective_range;
+			viable_targets = other->viable_targets;
+			vision = other->vision;
+			recoil_reduction = other->recoil_reduction;
+			muzzle_velocity = other->muzzle_velocity;
+			reload_time = other->reload_time;
+			cooldown_between_shots = other->cooldown_between_shots;
+			ammo_max = other->ammo_max;
+			clip_size = other->clip_size;
+			base_damage = other->base_damage;
+			base_percent = other->base_percent;
+			damage_dice_count = other->damage_dice_count;
+			damage_dice_sides = other->damage_dice_sides;
+			armor_penetration = other->armor_penetration;
+			damage_percent_bonus = other->damage_percent_bonus;
+			headshot_bonus = other->headshot_bonus;
+			hitroll = other->hitroll;
+			damage_roll = other->damage_roll;
+
+			incendiary_percent = other->incendiary_percent;
+			explosive_percent = other->explosive_percent;
+			shrapnel_percent = other->shrapnel_percent;
+			corrosive_percent = other->corrosive_percent;
+			cryogenic_percent = other->cryogenic_percent;
+			radioactive_percent = other->radioactive_percent;
+			emp_percent = other->emp_percent;
+			shock_percent = other->shock_percent;
+			anti_matter_percent = other->anti_matter_percent;
+
+			incendiary_damage = other->incendiary_damage;
+			explosive_damage = other->explosive_damage;
+			shrapnel_damage = other->shrapnel_damage;
+			corrosive_damage = other->corrosive_damage;
+			cryogenic_damage = other->cryogenic_damage;
+			radioactive_damage = other->radioactive_damage;
+			emp_damage = other->emp_damage;
+			shock_damage = other->shock_damage;
+			anti_matter_damage = other->anti_matter_damage;
+
+			disorient_amount = other->disorient_amount;
+
+			stat_strength = other->stat_strength;
+			stat_intelligence = other->stat_intelligence;
+			stat_wisdom = other->stat_wisdom;
+			stat_dexterity = other->stat_dexterity;
+			stat_constitution = other->stat_constitution;
+			stat_electronics = other->stat_electronics;
+			stat_armor = other->stat_armor;
+			stat_marksmanship = other->stat_marksmanship;
+			stat_sniping = other->stat_sniping;
+			stat_demolitions = other->stat_demolitions;
+			stat_chemistry = other->stat_chemistry;
+			stat_weapon_handling = other->stat_weapon_handling;
+			stat_strategy = other->stat_strategy;
+			stat_medical = other->stat_medical;
+			tracked = other->tracked;
+			marked = other->marked;
+		}
 		~ranged_combat_totals() = default;
 		template <typename T>
 		void report(T p) {
@@ -508,6 +576,35 @@ namespace mods {
 			}
 			if(stat_medical > 0) {
 				p->sendln(CAT("stat_medical:",stat_medical));
+			}
+			p->sendln("Viable targets: ");
+			if(viable_targets & CAN_HIT_SAME_ROOM) {
+				p->sendln("Same room");
+			}
+			if(viable_targets & CAN_HIT_RANGED) {
+				p->sendln("Ranged");
+			}
+			if(viable_targets & CAN_HIT_DOORS) {
+				p->sendln("Doors");
+			}
+			if(viable_targets & CAN_HIT_OBJECTS) {
+				p->sendln("Objects");
+			}
+			if(viable_targets & CAN_HIT_CARS) {
+				p->sendln("Cars");
+			}
+			p->sendln("Vision modes: ");
+			if(vision & HAS_NIGHT_VISION) {
+				p->sendln("Night vision");
+			}
+			if(vision & HAS_THERMALS) {
+				p->sendln("Thermals");
+			}
+			if(vision & HAS_SHADOW_SIGHT) {
+				p->sendln("Shadow sight");
+			}
+			if(vision & HAS_MORBID_INSIGHT) {
+				p->sendln("Morbid insight");
 			}
 		}
 	};

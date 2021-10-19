@@ -128,6 +128,7 @@ namespace mods {
 		anti_matter_damage = base_object->rifle()->attributes->anti_matter_damage;
 		emp_damage = base_object->rifle()->attributes->emp_damage;
 		shock_damage = base_object->rifle()->attributes->shock_damage;
+		cooldown_between_shots = base_object->rifle()->attributes->cooldown_between_shots;
 		incendiary_damage_percent = 0;
 		explosive_damage_percent = 0;
 		shrapnel_damage_percent = 0;

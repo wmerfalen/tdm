@@ -15,6 +15,7 @@
 #include "mobs/damage-event.hpp"
 #include "weapons/elemental.hpp"
 #include "weapons/legacy-combat.hpp"
+#include "interpreter.hpp"
 
 namespace mods::combat_composer {
 	using vpd = mods::scan::vec_player_data;
@@ -33,6 +34,12 @@ namespace mods::combat_composer {
 		MELEE_MANA, /** same room melee attack */
 	};
 
+	ACMD(do_print_rct) {
+		player->calculate_ranged_combat_totals()->report(player);
+	}
+	void init() {
+		mods::interpreter::add_user_command("print_rct",do_print_rct);
+	}
 
 
 	/**
@@ -401,42 +408,9 @@ namespace mods::combat_composer {
 
 
 		int calculate_weapon_cooldown(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& attackers_weapon, feedback_t& feedback) {
-			static const float modifiers[] = {0,
-			                                  WEAPON_COOLDOWN_MODIFIER_TIER_ONE(),
-			                                  WEAPON_COOLDOWN_MODIFIER_TIER_TWO(),
-			                                  WEAPON_COOLDOWN_MODIFIER_TIER_THREE()
-			                                 };
-			auto tier = mods::levels::player_tier(attacker);
-			if(tier >= sizeof(modifiers)) {
-				m_debug("Warning! player tier returned unsupported value. Defaulting to 1");
-				log("SYSERR: player_tier returned an invalid value. Using default of 1!");
-			}
-			int cooldown = 0;
-			if(attackers_weapon->has_rifle()) {
-				m_debug("weapon has rifle");
-				cooldown = attackers_weapon->rifle()->attributes->cooldown_between_shots;
-				m_debug("rifle's cooldown: " << cooldown);
-			}
-			uint16_t tick_removal = attacker->weapon_handling() * modifiers[tier];
-			switch(tier) {
-				case 1:
-					tick_removal = std::clamp(tick_removal,(uint16_t)0,(uint16_t)WEAPON_COOLDOWN_TICK_REMOVAL_TIER_ONE_MAX());
-					break;
-				case 2:
-					tick_removal = std::clamp(tick_removal,(uint16_t)0,(uint16_t)WEAPON_COOLDOWN_TICK_REMOVAL_TIER_TWO_MAX());
-					break;
-				case 3:
-					tick_removal = std::clamp(tick_removal,(uint16_t)0,(uint16_t)WEAPON_COOLDOWN_TICK_REMOVAL_TIER_THREE_MAX());
-					break;
-				default:
-					tick_removal = 0;
-			}
-			attacker->sendln(CAT("Cooldown ticks: ",cooldown, ". {red}[-",tick_removal,"]{/red}"));
-			cooldown -= tick_removal;
-			m_debug("attacker level: " << attacker->level() << ", tier:" << tier);
-			m_debug("cooldown *AFTER* weapon_handling modifier: " << cooldown << ", modifier: " << attacker->weapon_handling() * modifiers[tier]);
-			return cooldown < 0 ? 0 : cooldown;
+			return attackers_weapon->rifle()->attributes->cooldown_between_shots;
 		}
+
 		void set_player_weapon_cooldown(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& attackers_weapon, feedback_t& feedback) {
 			auto cooldown = calculate_weapon_cooldown(attacker,victim,attackers_weapon,feedback);
 			if(cooldown <= 0) {
@@ -552,6 +526,7 @@ namespace mods::combat_composer {
 				md("Is visible");
 				success_chance += 50;
 			} else {
+				success_chance -= 100;
 				md("Not visible!");
 			}
 			auto roll = rand_number(1,100 + adjust_max_roll);
@@ -680,54 +655,6 @@ namespace mods::combat_composer {
 		std::vector<acquired_target_t> acquire_room(player_ptr_t& attacker,target_t target,obj_ptr_t& weapon);
 
 
-		calculation_t calculate_range(player_ptr_t& attacker,obj_ptr_t& weapon) {
-			calculation_t c;
-			using namespace mods::rifle;
-			auto zoom = get_zoom_magnification(weapon);
-			c.max_range = get_max_range(weapon);
-			c.critical_range = get_critical_range(weapon);
-			auto range_mult = get_range_multiplier(weapon);
-			if(range_mult > 0.0) {
-				c.max_range *= range_mult;
-			}
-			if(zoom > 0.0) {
-				c.max_range *= zoom;
-			}
-			c.effective_range = {get_effective_firing_range(weapon),c.critical_range};
-			c.max_range += 0.05 * attacker->weapon_handling();
-			c.critical_range -= 0.05 * attacker->sniping();
-			return c;
-
-			/** TODO: honor attachments:
-			attachments:
-				- zoom multiplier
-				- aimed limb accuracy points
-			*/
-			/** TODO: honor consumed items
-			consumable:
-				- adds room range
-				- adds critical range
-				- adds max range
-			*/
-
-			/** TODO: honor class abilities
-			GHOST abilities:
-			- marked/tracked enemy
-			- snipe doors, objects, cars, etc
-
-			CONTAGION abilities:
-			- Shadow sight
-			- Morbid Insight
-				- player can detect nearby enemies if a corpse is nearby
-
-			MARINE abilities:
-			- Assault rifles
-				- Assault rifle effective range increased by 2 rooms
-					*/
-
-		}
-
-
 		std::optional<acquired_target_t> acquire_ranged_target(player_ptr_t& attacker,target_t target,obj_ptr_t& weapon) {
 
 			state::current = attacker->calculate_ranged_combat_totals(weapon);
@@ -844,6 +771,8 @@ namespace mods::combat_composer {
 				  -- [x] SMG's in same-room engagements have a chance of dealing shotgun damage
 					*/
 			const auto& distance = found_target.distance;
+			md("base damage");
+			RCT->report(attacker);
 			d.damage = RCT->base_damage;
 			d.damage += dice(RCT->damage_dice_count,RCT->damage_dice_sides);
 			if(RCT->damage_percent_bonus) {
