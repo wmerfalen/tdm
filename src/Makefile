@@ -204,12 +204,12 @@ buildobj = act.informative act.item act.medic \
 					 mods/melee/combat-order mods/melee/stance mods/melee/main \
 					 mods/melee/damage-types mods/corpse mods/fire \
 					 mods/weapons/attachment-pathogen-ammunition \
-					 mods/combat-composer mods/rifle mods/combat \
+					 mods/combat-composer/snipe-target mods/rifle mods/combat \
 					 mods/player-utils mods/weapons/legacy-combat
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team $(builddir)/mods/boosters $(builddir)/mods/melee
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team $(builddir)/mods/boosters $(builddir)/mods/melee $(builddir)/mods/combat-composer
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT) $(post_build_args)
 
 clean:
@@ -245,6 +245,8 @@ $(builddir)/mods/mini-games:
 	mkdir -p $(builddir)/mods/mini-games
 $(builddir)/mods/classes:
 	mkdir -p $(builddir)/mods/classes
+$(builddir)/mods/combat-composer:
+	mkdir -p $(builddir)/mods/combat-composer
 $(duktapeout): 
 	mkdir -p $(duktapeout)
 $(builddir)/mods/testing/lmdb:

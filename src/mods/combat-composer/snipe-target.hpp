@@ -1,7 +1,7 @@
-#ifndef __MENTOC_MODS_combat_composer_HEADER__
-#define __MENTOC_MODS_combat_composer_HEADER__
-#include "../globals.hpp"
-#include "rifle.hpp"
+#ifndef __MENTOC_MODS_combat_composer_snipe_target_HEADER__
+#define __MENTOC_MODS_combat_composer_snipe_target_HEADER__
+#include "../../globals.hpp"
+#include "../rifle.hpp"
 
 namespace mods::combat_composer {
 	/**

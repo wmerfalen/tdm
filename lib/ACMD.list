@@ -40,6 +40,7 @@
 ./mods/loot-container.cpp:	->show_loot
 ./mods/loot-container.cpp:	->take_loot
 ./mods/loot-container.cpp:	->list_loot
+./mods/combat-composer/snipe-target.cpp:	->print_rct
 ./mods/skills.cpp:	->score
 ./mods/skills.cpp:	->buy_practice
 ./mods/skills.cpp:	->skills

@@ -1221,7 +1221,7 @@ void send_prompt(player_ptr_t& player) {
 			ammo = CAT("{yel}[",left,"/",clip,"]{/yel}");
 		}
 	}
-	player->send(CAT(affects,"\r\n",start,hp,mana,move,fighting,ammo,arrow).c_str());
+	player->send(CAT(affects,"\r\n{grn}",player->name(),"::{/grn}",start,hp,mana,move,fighting,ammo,arrow).c_str());
 }
 
 
