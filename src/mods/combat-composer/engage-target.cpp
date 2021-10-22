@@ -922,10 +922,8 @@ namespace mods::combat_composer::engage {
 
 };//end namespace combat_composer
 namespace mods::combat_composer {
-	/**
-	 * Handles both ranged and immediate targets
-	 */
-	bool engage_target(player_ptr_t& attacker,std::string_view target_name, obj_ptr_t& weapon) {
+	bool engage_target(player_ptr_t& attacker,player_ptr_t& victim, obj_ptr_t& weapon) {
+		attacker->sendln("{grn}[++] Engaging target... [++]{/grn}");
 		using namespace mods::combat_composer::engage::phases;
 		/**
 		 * First check that the weapon can snipe
@@ -937,18 +935,6 @@ namespace mods::combat_composer {
 		/**
 		 * Phase 1: Target acquisition.
 		 */
-		auto opt_target = acquire_immediate_target(attacker, target_name,weapon);
-		bool cant_find_target = !opt_target.has_value();
-
-		if(cant_find_target) {
-			m_debug("couldn't find target!");
-			attacker->damage_event(feedback_t(de::COULDNT_FIND_TARGET_EVENT));
-			m_debug(feedback.dump());
-			return true;
-		}
-
-		auto victim = opt_target.value();
-
 		if(mods::rooms::is_peaceful(attacker->room())) {
 			attacker->damage_event(feedback_t(de::YOURE_IN_PEACEFUL_ROOM));
 			m_debug("is_peaceful room");
@@ -1005,5 +991,34 @@ namespace mods::combat_composer {
 		perform_cleanup(attacker,victim,weapon);
 
 		return true;
+	}
+	/**
+	 * Handles both ranged and immediate targets
+	 */
+	bool engage_target(player_ptr_t& attacker,std::string_view target_name, obj_ptr_t& weapon) {
+		attacker->sendln("{grn}[++] Engaging target... [++]{/grn}");
+		using namespace mods::combat_composer::engage::phases;
+		/**
+		 * First check that the weapon can snipe
+		 */
+		if(!can_engage(attacker,weapon)) {
+			/** can_snipe sends DE messages for us */
+			return true;
+		}
+		/**
+		 * Phase 1: Target acquisition.
+		 */
+		auto opt_target = acquire_immediate_target(attacker, target_name,weapon);
+		bool cant_find_target = !opt_target.has_value();
+
+		if(cant_find_target) {
+			m_debug("couldn't find target!");
+			attacker->damage_event(feedback_t(de::COULDNT_FIND_TARGET_EVENT));
+			m_debug(feedback.dump());
+			return true;
+		}
+
+		auto victim = opt_target.value();
+		return engage_target(attacker,victim,weapon);
 	}
 };//end combat_composer

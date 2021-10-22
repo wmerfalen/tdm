@@ -32,6 +32,7 @@
 #include "mods/melee/combat-order.hpp"
 #include "mods/melee/main.hpp"
 #include "mods/corpse.hpp"
+#include "mods/combat-composer/engage-target.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
 #define MOD_SNIPE_DISTANCE_THACO 5
@@ -859,8 +860,7 @@ void hit(char_data *ch, char_data *victim, int type) {
 		auto& combat_order = player->get_combat_order();
 		if(combat_order.size()) {
 			set_fighting(ch,victim);
-			auto vptr = ptr(victim);
-			mods::melee::main::dispatch_player(player,vptr);
+			mods::melee::main::dispatch_player(player,victim_ptr);
 			return;
 		}
 	}
@@ -869,17 +869,26 @@ void hit(char_data *ch, char_data *victim, int type) {
 		if(secondary_can_attack_same_room) {
 			wielded_weapon = secondary;
 			player->set_attacking_with(wielded_weapon);
+			if(wielded_weapon) {
+				mods::combat_composer::engage_target(player,victim_ptr,wielded_weapon);
+				return;
+			}
 		} else {
 			do_ballistics = true;
 		}
 	}
 	if(do_ballistics) {
+		wielded_weapon = nullptr;
 		if(primary_can_attack_same_room) {
 			wielded_weapon = primary;
 			player->set_attacking_with(wielded_weapon);
 		} else if(secondary_can_attack_same_room) {
 			wielded_weapon = secondary;
 			player->set_attacking_with(wielded_weapon);
+		}
+		if(wielded_weapon) {
+			mods::combat_composer::engage_target(player,victim_ptr,wielded_weapon);
+			return;
 		}
 	}
 	ch->last_fight_timestamp = time(NULL);
@@ -893,11 +902,10 @@ void hit(char_data *ch, char_data *victim, int type) {
 	}
 
 	if(wielded_weapon && wielded_weapon->has_melee()) {
-		auto vptr = ptr(victim);
 		mods::weapons::damage_types::melee_damage_with_feedback(
 		    player,
 		    wielded_weapon,
-		    vptr);
+		    victim_ptr);
 		return;
 	}
 
