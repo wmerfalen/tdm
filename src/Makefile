@@ -207,7 +207,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/weapons/attachment-pathogen-ammunition \
 					 mods/combat-composer/snipe-target mods/rifle mods/combat \
 					 mods/player-utils mods/weapons/legacy-combat \
-					 mods/combat-composer/engage-target
+					 mods/combat-composer/engage-target mods/combat-composer/spray-target \
+					 mods/combat-composer/shared
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

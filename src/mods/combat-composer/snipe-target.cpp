@@ -20,74 +20,14 @@
 #include "skill-increment.hpp"
 
 namespace mods::combat_composer {
-	using vpd = mods::scan::vec_player_data;
-	using de = damage_event_t;
-	using namespace mods::object_utils;
-	enum attack_type_t {
-		RANGED,
-		PROXY, /** i.e.: though a drone */
-		MELEE_WEAPON,
-		CQC, /** fists, elbows, knees, kicks */
-		JUDO_THROW,
-		SUBMISSION,
-		WRESTLING,
-		DEMOLITIONS,
-		RANGED_MANA, /** i.e.: a magic missile */
-		MELEE_MANA, /** same room melee attack */
-	};
-
 	ACMD(do_print_rct) {
 		player->calculate_ranged_combat_totals()->report(player);
 	}
 	void init() {
-		mods::interpreter::add_user_command("print_rct",do_print_rct);
+		::mods::interpreter::add_user_command("print_rct",do_print_rct);
 	}
 
 
-	/**
-	 * Handles spraying only
-	 */
-	void spray_target(player_ptr_t& attacker,direction_t direction,obj_ptr_t& weapon) {
-
-	}
-
-	/**
-	 * Handles launching only
-	 */
-	void launch_towards(player_ptr_t& attacker,direction_t direction,uint8_t distance,obj_ptr_t& weapon) {
-
-	}
-	namespace ammunition {
-		uint16_t reduce_ammo(
-		    player_ptr_t& attacker,
-		    obj_ptr_t& weapon,
-		    uint16_t wants_to_deduct
-		) {
-			if(weapon->has_rifle() == false) {
-				return 0;/** TODO: make sure this doesnt screw something up */
-			}
-			uint16_t ammo_reduction = wants_to_deduct;
-			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
-			if(!rifle_attachment) {
-				return wants_to_deduct;
-			}
-			if(mods::rand::chance(rifle_attachment->free_ammo_chance)) {
-				m_debug("Player rolled free ammo " << green_str("SUCCESS") << "Chances were: " << rifle_attachment->free_ammo_chance << "%");
-				ammo_reduction = 0;
-			}
-			if(mods::rand::chance(rifle_attachment->regenerate_ammo_chance)) {
-				m_debug("Player rolled regenerated ammo " << green_str("SUCCESS") << "Chances were: " << rifle_attachment->regenerate_ammo_chance << "%");
-				auto regen = rand_number(
-				                 mods::values::REGENERATED_AMMO_LOW(),
-				                 mods::values::REGENERATED_AMMO_HIGH()
-				             );
-				m_debug("Random amount of regenerated ammo: " << regen);
-				return ammo_reduction - regen;
-			}
-			return ammo_reduction;
-		}
-	};
-	void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) ;
 	namespace phases {
 		/**
 		 */
@@ -287,76 +227,6 @@ namespace mods::combat_composer {
 		   				- 15% free ammunition
 
 		 */
-		struct calculation_t {
-			int16_t max_range;
-			int16_t critical_range;
-			std::pair<int16_t,int16_t> effective_range;
-			uint16_t stat_boosts;
-		};
-
-		struct target_t {
-			std::string target_name;
-			direction_t direction;
-			bool is_corpse;
-			bool is_object;
-			bool is_character;
-			target_t(std::string_view _target_name,
-			         direction_t _direction,
-			         bool _is_corpse,
-			         bool _is_object,
-			         bool _is_character
-			        ) : target_name(_target_name),
-				direction(_direction),
-				is_corpse(_is_corpse),
-				is_object(_is_object),
-				is_character(_is_character)
-			{}
-			target_t(std::string_view _target_name,
-			         direction_t _direction) :
-				target_name(_target_name),
-				direction(_direction),
-				is_corpse(0),
-				is_object(0),
-				is_character(1)
-			{}
-			target_t() = delete;
-			~target_t() = default;
-		};
-
-		struct acquired_target_t {
-			player_ptr_t target;
-			direction_t direction;
-			uint16_t distance;
-		};
-
-		struct calculated_damage_t {
-			int damage;
-			int headshot_damage;
-			int critical_damage;
-			int incendiary_damage;
-			int explosive_damage;
-			int shrapnel_damage;
-			int corrosive_damage;
-			int cryogenic_damage;
-			int radioactive_damage;
-			int emp_damage;
-			int shock_damage;
-			int anti_matter_damage;
-			calculated_damage_t() :
-				damage(0),
-				headshot_damage(0),
-				critical_damage(0),
-				incendiary_damage(0),
-				explosive_damage(0),
-				shrapnel_damage(0),
-				corrosive_damage(0),
-				cryogenic_damage(0),
-				radioactive_damage(0),
-				emp_damage(0),
-				shock_damage(0),
-				anti_matter_damage(0) {}
-			~calculated_damage_t() = default;
-		};
 		calculation_t calculate_range(player_ptr_t& attacker,obj_ptr_t& weapon);
 		bool roll_accuracy(player_ptr_t& attacker,acquired_target_t& target,obj_ptr_t& weapon);
 		std::pair<int,int> roll_critical(player_ptr_t& attacker,acquired_target_t& found_target,obj_ptr_t& weapon);
@@ -368,59 +238,6 @@ namespace mods::combat_composer {
 #define RCT state::current
 #define ATKR state::attacker
 		};
-		bool attack_disorients(
-		    player_ptr_t& attacker,
-		    obj_ptr_t& weapon,
-		    player_ptr_t& victim
-		) {
-			if(!weapon) {
-				return false;
-			}
-			if(weapon->has_rifle()) {
-				auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
-				if(rifle_attachment && mods::rand::chance(rifle_attachment->disorient_amount)) {
-					/** TODO: calculate disorient resistance of victim */
-					m_debug("Attack disorients player!");
-					return true;
-				}
-				m_debug("Attack fails to disorient player");
-				return false;
-			} else if(weapon->has_melee()) {
-				/** TODO */
-				if(mods::rand::chance(weapon->melee()->attributes->disorient_amount)) {
-					/** TODO: calculate disorient resistance of victim */
-					m_debug("Attack disorients player!");
-					return true;
-				}
-			}
-			return false;
-		}
-		uint16_t disorient_ticks(
-		    player_ptr_t& attacker,
-		    obj_ptr_t& weapon,
-		    player_ptr_t& victim
-		) {
-			return mods::values::DEFAULT_DISORIENT_TICKS_FROM_RIFLE_ATTACK();
-		}
-		void remember_event(player_ptr_t& victim,player_ptr_t& attacker) {
-			if(IS_NPC(victim->cd())) {
-				remember(victim->cd(),attacker->cd());
-			}
-		}
-
-
-		int calculate_weapon_cooldown(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& attackers_weapon, feedback_t& feedback) {
-			return attackers_weapon->rifle()->attributes->cooldown_between_shots;
-		}
-
-		void set_player_weapon_cooldown(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& attackers_weapon, feedback_t& feedback) {
-			auto cooldown = calculate_weapon_cooldown(attacker,victim,attackers_weapon,feedback);
-			if(cooldown <= 0) {
-				attacker->weapon_cooldown_clear();
-			} else {
-				attacker->weapon_cooldown_start(cooldown);
-			}
-		}
 
 		/**
 		 * Usage:
@@ -441,7 +258,7 @@ namespace mods::combat_composer {
 			m_debug("decreasing ammo");
 			decrease_single_shot_ammo(attacker,weapon);
 			attacker->set_fight_timestamp();
-			set_player_weapon_cooldown(attacker,found_target.target,weapon, feedback);
+			mods::combat_composer::phases::set_player_weapon_cooldown(attacker,weapon);
 			mods::combat_composer::skill_increment::increment(attacker,weapon);
 		}
 		/**
@@ -541,34 +358,6 @@ namespace mods::combat_composer {
 			md(roll);
 			return success_chance > roll;
 		}
-		void report_headshot(player_ptr_t& attacker, player_ptr_t& victim, int dam, direction_t& direction) {
-			feedback_t feedback;
-			feedback.hits = 1;
-			feedback.damage = dam;
-			feedback.attacker = attacker->uuid();
-			feedback.damage_event = de::YOU_DEALT_HEADSHOT_WITH_RIFLE_ATTACK;
-			attacker->damage_event(feedback);
-
-			feedback.from_direction = OPPOSITE_DIR(direction);
-			feedback.damage_event =de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK;
-			victim->damage_event(feedback);
-
-			attacker->send(MSG_HEADSHOT().c_str());
-		}
-		void report_crit(player_ptr_t& attacker, player_ptr_t& victim, int dam, direction_t& direction) {
-			feedback_t feedback;
-			attacker->send(MSG_CRITICAL().c_str());
-			feedback.damage = dam;
-			feedback.hits = 1;
-
-			feedback.damage_event = de::YOU_DEALT_CRITICAL_RIFLE_ATTACK;
-			attacker->damage_event(feedback);
-
-			feedback.from_direction = OPPOSITE_DIR(direction);
-			feedback.damage_event =de::HIT_BY_CRITICAL_RIFLE_ATTACK;
-			victim->damage_event(feedback);
-		}
-
 		/**
 		 * Usage:
 		 * -- calculate headshot, critical chance --
@@ -1028,56 +817,6 @@ namespace mods::combat_composer {
 	}
 
 	/**
-	 * @brief subtracts 1 from weapon ammo
-	 *
-	 * @param weapon
-	 */
-	void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) {
-		/** TODO: if weapon has a bullet printer mod, calculate ammo */
-		if(weapon->rifle_instance->ammo == 0) {
-			return;
-		}
-		int16_t deduct = 0;
-		switch((mw_rifle)weapon->rifle()->attributes->type) {
-			case mw_rifle::LIGHT_MACHINE_GUN:
-				deduct = mods::values::SINGLE_SHOT_LIGHT_MACHINE_GUN();
-				break;
-
-			case mw_rifle::SUB_MACHINE_GUN:
-				deduct = mods::values::SINGLE_SHOT_SUB_MACHINE_GUN();
-				break;
-
-			case mw_rifle::SHOTGUN:
-				deduct = mods::values::SINGLE_SHOT_SHOTGUN();
-				break;
-
-			case mw_rifle::SNIPER:
-				deduct = mods::values::SINGLE_SHOT_SNIPER();
-				break;
-
-			case mw_rifle::ASSAULT_RIFLE:
-				deduct = mods::values::SINGLE_SHOT_ASSAULT_RIFLE();
-				break;
-			case mw_rifle::HANDGUN:
-			case mw_rifle::PISTOL:
-				deduct = mods::values::SINGLE_SHOT_HANDGUN();
-				break;
-			case mw_rifle::MACHINE_PISTOL:
-				deduct = mods::values::SINGLE_SHOT_MACHINE_PISTOL();
-				break;
-			default:
-				deduct = 1;
-				log("SYSERR: warning, no rifle type given for decrease_single_shot_ammo, default to 1");
-				break;
-		}
-		int ammo = weapon->rifle_instance->ammo - ammunition::reduce_ammo(attacker,weapon,deduct);
-		if(ammo < 0) {
-			weapon->rifle_instance->ammo = 0;
-		} else {
-			weapon->rifle_instance->ammo = ammo;
-		}
-	}
-	/**
 	 * Handles both ranged and immediate targets
 	 */
 	void snipe_target(player_ptr_t& attacker,phases::target_t target, obj_ptr_t& weapon) {
@@ -1135,7 +874,7 @@ namespace mods::combat_composer {
 		if(!roll_accuracy(attacker,found_target,weapon)) {
 			attacker->damage_event(feedback_t(de::YOU_MISSED_YOUR_TARGET_EVENT));
 			victim->damage_event(feedback_t(de::GUNFIRE_WHIZZED_BY_FROM,OPPOSITE_DIR(target.direction)));
-			decrease_single_shot_ammo(attacker,weapon);
+			mods::combat_composer::phases::decrease_single_shot_ammo(attacker,weapon);
 			m_debug("Roll accuracy check failed for " << attacker->name());
 			return;
 		}

@@ -2,6 +2,7 @@
 #define __MENTOC_MODS_combat_composer_engage_target_HEADER__
 #include "../../globals.hpp"
 #include "../rifle.hpp"
+#include "shared.hpp"
 
 namespace mods::combat_composer {
 	/**

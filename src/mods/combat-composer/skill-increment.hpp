@@ -1,3 +1,5 @@
+#ifndef __MENTOC_MODS_COMBAT_COMPOSER_SKILL_INCREMENT_HEADER__
+#define __MENTOC_MODS_COMBAT_COMPOSER_SKILL_INCREMENT_HEADER__
 #include "snipe-target.hpp"
 #include "../rifle.hpp"
 #include "../scan.hpp"
@@ -50,3 +52,4 @@ namespace mods::combat_composer::skill_increment {
 		}
 	}
 };//end namespace mods::combat_composer::skill_increment
+#endif
