@@ -211,6 +211,15 @@ namespace mods::skills {
 		return std::get<1>(s);
 	}
 
+	void increment_player_combat_usage(player_ptr_t& player,std::string_view skill_name) {
+
+	}
+	void increment_player_cqc_usage(player_ptr_t& player,std::string_view skill_name) {
+
+	}
+	void increment_player_defense_usage(player_ptr_t& player,std::string_view skill_name) {
+
+	}
 
 	ACMD(do_buy_practice) {
 		DO_HELP("buy_practice");

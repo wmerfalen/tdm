@@ -224,48 +224,19 @@ namespace mods::combat_composer::engage {
 
 		 */
 
-		struct target_t {
-			std::string target_name;
-			direction_t direction;
-			bool is_corpse;
-			bool is_object;
-			bool is_character;
-			target_t(std::string_view _target_name,
-			         direction_t _direction,
-			         bool _is_corpse,
-			         bool _is_object,
-			         bool _is_character
-			        ) : target_name(_target_name),
-				direction(_direction),
-				is_corpse(_is_corpse),
-				is_object(_is_object),
-				is_character(_is_character)
-			{}
-			target_t(std::string_view _target_name,
-			         direction_t _direction) :
-				target_name(_target_name),
-				direction(_direction),
-				is_corpse(0),
-				is_object(0),
-				is_character(1)
-			{}
-			target_t() = delete;
-			~target_t() = default;
-		};
-
 		struct calculated_damage_t {
-			int damage;
-			int headshot_damage;
-			int critical_damage;
-			int incendiary_damage;
-			int explosive_damage;
-			int shrapnel_damage;
-			int corrosive_damage;
-			int cryogenic_damage;
-			int radioactive_damage;
-			int emp_damage;
-			int shock_damage;
-			int anti_matter_damage;
+			uint16_t damage;
+			uint16_t headshot_damage;
+			uint16_t critical_damage;
+			uint16_t incendiary_damage;
+			uint16_t explosive_damage;
+			uint16_t shrapnel_damage;
+			uint16_t corrosive_damage;
+			uint16_t cryogenic_damage;
+			uint16_t radioactive_damage;
+			uint16_t emp_damage;
+			uint16_t shock_damage;
+			uint16_t anti_matter_damage;
 			calculated_damage_t() :
 				damage(0),
 				headshot_damage(0),
@@ -365,7 +336,11 @@ namespace mods::combat_composer::engage {
 		 * }
 		 */
 		bool roll_accuracy(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon) {
+#ifdef send_attacker_accuracy_stats
 #define md(A) attacker->sendln(CAT("Debug: ",A));
+#else
+#define md(A) /** */
+#endif
 			/** Weapon handling trait adds 2% chance of hit per tier */
 			/** If GHOST class, add 2% chance of hit per tier */
 			/** Take into account RCT values:
@@ -636,7 +611,9 @@ namespace mods::combat_composer::engage {
 				  -- [x] SMG's in same-room engagements have a chance of dealing shotgun damage
 					*/
 			md("base damage");
+#ifdef report_rct_to_attacker
 			RCT->report(attacker);
+#endif
 			d.damage = RCT->base_damage;
 			d.damage += dice(RCT->damage_dice_count,RCT->damage_dice_sides);
 			if(RCT->damage_percent_bonus) {
@@ -851,7 +828,9 @@ namespace mods::combat_composer::engage {
 			if(d.shock_damage) {
 				mods::weapons::elemental::perform_elemental_damage(attacker,victim,d.shock_damage,ELEM_SHOCK);
 			}
+#ifdef report_rct_to_attacker
 			RCT->report(attacker);
+#endif
 
 		}
 		bool can_engage(player_ptr_t& attacker,obj_ptr_t weapon) {

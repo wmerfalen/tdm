@@ -39,7 +39,7 @@ namespace mods::classes {
 		m_dissipate_charges = 10;
 		m_dissipated = 0;
 		using skillset_t = ability_data_t::skillset_t;
-		m_abilities = {
+		m_abilities = create_abilities({
 			{AERIAL_DRONE_SCAN,"ads","Aerial Drone Scan",skillset_t::ELECTRONICS,&m_drone_scan},
 			{STEALTH,"stealth","stealth",skillset_t::INTELLIGENCE,&m_stealth},
 			{SUMMON_EXTRACTION,"summon","Summon Extraction", skillset_t::STRATEGY,&m_summon_extraction},
@@ -64,7 +64,10 @@ namespace mods::classes {
 			{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",skillset_t::DEMOLITIONS,&m_plant_shrapnel_claymore},
 			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",skillset_t::DEMOLITIONS,&m_plant_corrosive_claymore},
 			{REQUEST_RECON,"recon","Request Recon",skillset_t::INTELLIGENCE,&m_request_recon},
-		};
+		});
+		/**
+		 * REQUIRED
+		 */
 		m_adrenaline_shot_charges = 0;
 		m_target = 0;
 		m_engaged = 0;

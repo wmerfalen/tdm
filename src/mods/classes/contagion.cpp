@@ -41,7 +41,7 @@ namespace mods::classes {
 
 	void contagion::init() {
 		using skillset_t = ability_data_t::skillset_t;
-		m_abilities = {
+		m_abilities = create_abilities({
 			{PATHOGEN_AMMUNITION,"patho","Pathogen Ammunition",skillset_t::INTELLIGENCE,&m_pathogen_ammunition},
 			{GRIM_AURA,"aura","Grim Aura",skillset_t::INTELLIGENCE,&m_grim_aura},
 			{MELT,"melt","Melt",skillset_t::INTELLIGENCE,&m_melt},
@@ -76,7 +76,7 @@ namespace mods::classes {
 			{HELLFIRE_INCANTATION,"hell","Hellfire Incantation",skillset_t::DEMOLITIONS,&m_hellfire_incantation},
 			{DETONATE_LIMB,"det","Detonate Limb",skillset_t::DEMOLITIONS,&m_detonate_limb},
 			{DRAG_CORPSE,"drag","Drag Corpse",skillset_t::STRENGTH,&m_drag_corpse},
-		};
+		});
 	}
 	void contagion::set_player(player_ptr_t p) {
 		m_player = p;

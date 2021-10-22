@@ -453,7 +453,11 @@ namespace mods::combat_composer {
 		 * }
 		 */
 		bool roll_accuracy(player_ptr_t& attacker,acquired_target_t& target,obj_ptr_t& weapon) {
+#ifdef send_attacker_accuracy_stats
 #define md(A) attacker->sendln(CAT("Debug: ",A));
+#else
+#define md(A) /** */
+#endif
 			/** Weapon handling trait adds 2% chance of hit per tier */
 			/** If GHOST class, add 2% chance of hit per tier */
 			/** Take into account RCT values:
@@ -772,7 +776,9 @@ namespace mods::combat_composer {
 					*/
 			const auto& distance = found_target.distance;
 			md("base damage");
+#ifdef report_rct_to_attacker
 			RCT->report(attacker);
+#endif
 			d.damage = RCT->base_damage;
 			d.damage += dice(RCT->damage_dice_count,RCT->damage_dice_sides);
 			if(RCT->damage_percent_bonus) {
@@ -998,7 +1004,9 @@ namespace mods::combat_composer {
 			if(d.shock_damage) {
 				mods::weapons::elemental::perform_elemental_damage(attacker,victim,d.shock_damage,ELEM_SHOCK);
 			}
+#ifdef report_rct_to_attacker
 			RCT->report(attacker);
+#endif
 
 		}
 	};//end namespace phases
