@@ -1,0 +1,22 @@
+{
+  "name": "tdmud-builder-web-portal",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "debug": "^2.6.9",
+    "express": "^4.16.4",
+    "express-session": "^1.17.2",
+    "helmet": "^4.6.0",
+    "http-errors": "^1.6.3",
+    "jade": "^1.11.0",
+    "morgan": "^1.9.1"
+  },
+  "main": "app.js",
+  "author": "William Merfalen <null@fluxkraft-os.net> (https://github.com/wmerfalen)",
+  "license": "ISC",
+  "description": ""
+}

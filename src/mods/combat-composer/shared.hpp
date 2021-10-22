@@ -135,6 +135,7 @@ namespace mods::combat_composer {
 		int calculate_weapon_cooldown(player_ptr_t& attacker,obj_ptr_t& attackers_weapon);
 
 		void set_player_weapon_cooldown(player_ptr_t& attacker,obj_ptr_t& attackers_weapon);
+		void set_player_spray_weapon_cooldown(player_ptr_t& attacker,obj_ptr_t& attackers_weapon);
 
 		void report_headshot(player_ptr_t& attacker, player_ptr_t& victim, int dam, direction_t& direction);
 		void report_crit(player_ptr_t& attacker, player_ptr_t& victim, int dam, direction_t& direction);

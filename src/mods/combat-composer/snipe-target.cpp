@@ -24,7 +24,7 @@ namespace mods::combat_composer {
 		player->calculate_ranged_combat_totals()->report(player);
 	}
 	void init() {
-		::mods::interpreter::add_user_command("print_rct",do_print_rct);
+		mods::interpreter::add_user_command("print_rct",do_print_rct);
 	}
 
 

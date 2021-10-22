@@ -20,9 +20,6 @@
 #include "skill-increment.hpp"
 #include "shared.hpp"
 
-using vpd = mods::scan::vec_player_data;
-using de = damage_event_t;
-using namespace mods::object_utils;
 namespace mods::combat_composer {
 	namespace spray_state {
 		static player_ptr_t attacker;
@@ -164,11 +161,12 @@ namespace mods::combat_composer {
 		calculated_damage_t calculate_weapon_damage(player_ptr_t& attacker,const target_list_t& targets,obj_ptr_t& weapon);
 
 		void perform_cleanup(player_ptr_t& attacker,obj_ptr_t& weapon) {
+			attacker->sendln("Perform cleanup");
 			feedback_t feedback;
 			m_debug("decreasing ammo");
 			mods::combat_composer::phases::decrease_spray_shot_ammo(attacker,weapon);
 			attacker->set_fight_timestamp();
-			mods::combat_composer::phases::set_player_weapon_cooldown(attacker,weapon);
+			mods::combat_composer::phases::set_player_spray_weapon_cooldown(attacker,weapon);
 			mods::combat_composer::skill_increment::increment(attacker,weapon);
 		}
 
@@ -263,9 +261,12 @@ namespace mods::combat_composer {
 				return room_damages;
 			}
 			for(const auto& target : collect_spray_targets(attacker,direction,weapon)) {
+				if((rand_number(1,100) % 2) == 0) {
+					continue;
+				}
 				calculated_damage_t d;
-				d.damage = RCT->base_damage;
-				d.damage += dice(RCT->damage_dice_count,RCT->damage_dice_sides);
+				d.damage = RCT->base_damage / SPRAY_BASE_DAMAGE_DIVISOR();
+				d.damage += dice(RCT->damage_dice_count / SPRAY_DICE_COUNT_DIVISOR(),RCT->damage_dice_sides / SPRAY_DICE_SIDES_DIVISOR());
 				if(RCT->damage_percent_bonus) {
 					d.damage += (0.01 * RCT->damage_percent_bonus) * d.damage;
 				}
@@ -277,84 +278,103 @@ namespace mods::combat_composer {
 				}
 				if(attacker->marine()) {
 					if(is_assault_rifle(weapon)) {
-						d.damage += (0.08 * d.damage); //TODO: find values equiv to this
-						if(mods::rand::chance(10)) {//TODO values
-							d.incendiary_damage += dice(tier(attacker) * 8,tier(attacker) * 5);//TODO values
+						d.damage += (MARINE_AR_SPRAY_BASE_DAMAGE_MULTIPLIER() * d.damage);
+						if(mods::rand::chance(MARINE_AR_SPRAY_INCENDIARY_CHANCE())) {
+							d.incendiary_damage += dice(tier(attacker) * MARINE_AR_SPRAY_INC_TIER_DICE_COUNT_MULTIPLIER(),tier(attacker) * MARINE_AR_SPRAY_INC_TIER_DICE_SIDES_MULTIPLIER());
 						}
 					}
 					if(is_shotgun(weapon)) {
-						d.damage += d.damage * 0.08;
+						d.damage += d.damage * MARINE_AR_SPRAY_SHOTGUN_BONUS();
 					}
 				}
 				if(attacker->breacher()) {
-					d.explosive_damage += (0.08 * d.damage);
+					d.explosive_damage += (BREACHER_SPRAY_EXPLOSIVE_DAMAGE_MULTIPLIER() * d.damage);
 					if(is_shotgun(weapon)) {
-						d.damage += (0.08 * d.damage);
+						d.damage += (BREACHER_SPRAY_SHOTGUN_BONUS_DAMAGE_MULTIPLIER() * d.damage);
 					}
 					if(is_smg(weapon)) {
-						d.damage += (0.08 * d.damage);
+						d.damage += (BREACHER_SPRAY_SMG_DAMAGE_MULTIPLIER() * d.damage);
 						if(mods::rand::chance(BREACHER_SMG_SHOTGUN_CHANCE())) {
-							d.shrapnel_damage += d.damage / 8.5; //TODO: make values
+							d.shrapnel_damage += d.damage / BREACHER_SMG_SHRAPNEL_DAMAGE_DIVISOR();
 						}
-						d.corrosive_damage += dice(tier(attacker) * 2, tier(attacker) * 4);//TODO values
+						d.corrosive_damage += dice(tier(attacker) * BREACHER_SMG_CORROSIVE_TIER_DICE_COUNT_MULTIPLIER(), tier(attacker) * BREACHER_SMG_CORROSIVE_TIER_DICE_SIDES_MULTIPLIER());
 					}
 					/** TODO: roll chance to kockdown opponent */
 				}
+				static const float spray_elemental_divisor = SPRAY_ELEMENTAL_DAMAGE_DIVISOR();
 
 
 				if(RCT->incendiary_damage) {
 					d.incendiary_damage += RCT->incendiary_damage;
+					d.incendiary_damage /= spray_elemental_divisor;
 				}
 				if(RCT->explosive_damage) {
 					d.explosive_damage += RCT->explosive_damage;
+					d.explosive_damage /= spray_elemental_divisor;
 				}
 				if(RCT->shrapnel_damage) {
 					d.shrapnel_damage += RCT->shrapnel_damage;
+					d.shrapnel_damage /= spray_elemental_divisor;
 				}
 				if(RCT->corrosive_damage) {
 					d.corrosive_damage += RCT->corrosive_damage;
+					d.corrosive_damage /= spray_elemental_divisor;
 				}
 				if(RCT->cryogenic_damage) {
 					d.cryogenic_damage += RCT->cryogenic_damage;
+					d.cryogenic_damage /= spray_elemental_divisor;
 				}
 				if(RCT->radioactive_damage) {
 					d.radioactive_damage += RCT->radioactive_damage;
+					d.radioactive_damage /= spray_elemental_divisor;
 				}
 				if(RCT->anti_matter_damage) {
 					d.anti_matter_damage += RCT->anti_matter_damage;
+					d.anti_matter_damage /= spray_elemental_divisor;
 				}
 				if(RCT->emp_damage) {
 					d.emp_damage += RCT->emp_damage;
+					d.emp_damage /= spray_elemental_divisor;
 				}
 				if(RCT->shock_damage) {
 					d.shock_damage += RCT->shock_damage;
+					d.shock_damage /= spray_elemental_divisor;
 				}
 				if(RCT->incendiary_percent) {
 					d.incendiary_damage += d.damage * (0.01 * RCT->incendiary_percent);
+					d.incendiary_damage /= spray_elemental_divisor;
 				}
 				if(RCT->explosive_percent) {
 					d.explosive_damage += d.damage * (0.01 * RCT->explosive_percent);
+					d.explosive_damage /= spray_elemental_divisor;
 				}
 				if(RCT->shrapnel_percent) {
 					d.shrapnel_damage += d.damage * (0.01 * RCT->shrapnel_percent);
+					d.shrapnel_damage /= spray_elemental_divisor;
 				}
 				if(RCT->corrosive_percent) {
 					d.corrosive_damage += d.damage * (0.01 * RCT->corrosive_percent);
+					d.corrosive_damage /= spray_elemental_divisor;
 				}
 				if(RCT->cryogenic_percent) {
 					d.cryogenic_damage += d.damage * (0.01 * RCT->cryogenic_percent);
+					d.cryogenic_damage /= spray_elemental_divisor;
 				}
 				if(RCT->radioactive_percent) {
 					d.radioactive_damage += d.damage * (0.01 * RCT->radioactive_percent);
+					d.radioactive_damage /= spray_elemental_divisor;
 				}
 				if(RCT->anti_matter_percent) {
 					d.anti_matter_damage += d.damage * (0.01 * RCT->anti_matter_percent);
+					d.anti_matter_damage /= spray_elemental_divisor;
 				}
 				if(RCT->emp_percent) {
 					d.emp_damage += d.damage * (0.01 * RCT->emp_percent);
+					d.emp_damage /= spray_elemental_divisor;
 				}
 				if(RCT->shock_percent) {
 					d.shock_damage += d.damage * (0.01 * RCT->shock_percent);
+					d.shock_damage /= spray_elemental_divisor;
 				}
 				room_damages[target->uuid()] = d;
 			}

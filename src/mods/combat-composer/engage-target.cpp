@@ -19,9 +19,6 @@
 #include "skill-increment.hpp"
 
 
-using vpd = mods::scan::vec_player_data;
-using de = damage_event_t;
-using namespace mods::object_utils;
 
 namespace mods::combat_composer::engage {
 

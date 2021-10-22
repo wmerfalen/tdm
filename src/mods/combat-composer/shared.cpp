@@ -141,12 +141,7 @@ namespace mods::combat_composer {
 					log("SYSERR: warning, no rifle type given for decrease_single_shot_ammo, default to 1");
 					break;
 			}
-			int ammo = weapon->rifle_instance->ammo - ammunition::reduce_ammo(attacker,weapon,deduct);
-			if(ammo < 0) {
-				weapon->rifle_instance->ammo = 0;
-			} else {
-				weapon->rifle_instance->ammo = ammo;
-			}
+			sub_clamp(weapon->rifle_instance->ammo,mods::combat_composer::ammunition::reduce_ammo(attacker,weapon,deduct));
 		}
 		/**
 		 * @brief subtracts 1 from weapon ammo
@@ -240,6 +235,14 @@ namespace mods::combat_composer {
 
 		void set_player_weapon_cooldown(player_ptr_t& attacker,obj_ptr_t& attackers_weapon) {
 			auto cooldown = attackers_weapon->rifle()->attributes->cooldown_between_shots;
+			if(cooldown <= 0) {
+				attacker->weapon_cooldown_clear();
+			} else {
+				attacker->weapon_cooldown_start(cooldown);
+			}
+		}
+		void set_player_spray_weapon_cooldown(player_ptr_t& attacker,obj_ptr_t& attackers_weapon) {
+			auto cooldown = attackers_weapon->rifle()->attributes->cooldown_between_shots * 3.5;
 			if(cooldown <= 0) {
 				attacker->weapon_cooldown_clear();
 			} else {
