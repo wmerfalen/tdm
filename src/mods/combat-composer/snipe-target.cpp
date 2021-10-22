@@ -9,6 +9,7 @@
 #include "../player-utils.hpp"
 #include "../calc-visibility.hpp"
 #include "../classes/ghost.hpp"
+#include "../classes/includes.hpp"
 #include "../levels.hpp"
 
 #include "../../fight.hpp"
@@ -16,6 +17,7 @@
 #include "../weapons/elemental.hpp"
 #include "../weapons/legacy-combat.hpp"
 #include "../interpreter.hpp"
+#include "skill-increment.hpp"
 
 namespace mods::combat_composer {
 	using vpd = mods::scan::vec_player_data;
@@ -440,8 +442,7 @@ namespace mods::combat_composer {
 			decrease_single_shot_ammo(attacker,weapon);
 			attacker->set_fight_timestamp();
 			set_player_weapon_cooldown(attacker,found_target.target,weapon, feedback);
-			m_debug("cooldown set");
-			return;
+			mods::combat_composer::skill_increment::increment(attacker,weapon);
 		}
 		/**
 		 * Usage:

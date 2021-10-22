@@ -16,6 +16,7 @@
 #include "../weapons/elemental.hpp"
 #include "../weapons/legacy-combat.hpp"
 #include "../interpreter.hpp"
+#include "skill-increment.hpp"
 
 
 using vpd = mods::scan::vec_player_data;
@@ -324,6 +325,7 @@ namespace mods::combat_composer::engage {
 			attacker->set_fight_timestamp();
 			set_player_weapon_cooldown(attacker,victim,weapon, feedback);
 			m_debug("cooldown set");
+			mods::combat_composer::skill_increment::increment(attacker,weapon);
 			return;
 		}
 		/**

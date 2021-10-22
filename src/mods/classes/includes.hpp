@@ -1,3 +1,5 @@
+#ifndef __MENTOC_MODS_CLASSES_INCLUDES_HEADER__
+#define __MENTOC_MODS_CLASSES_INCLUDES_HEADER__
 #include "marine.hpp"
 #include "breacher.hpp"
 #include "ghost.hpp"
@@ -142,3 +144,4 @@ namespace mods::classes {
 		}
 	}
 };
+#endif
