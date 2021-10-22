@@ -837,6 +837,11 @@ void hit(char_data *ch, char_data *victim, int type) {
 	}
 	if(player->rules_of_engagement() == ROM_AUXILIARY) {
 		if(ub && ub_has_ammo) {
+			/**
+			 * This just indirectly calls underbarrel_shotgun_attack_with_feedback()
+			 * so, for now, this is fine, but we'll want to have engage_target handle
+			 * this.
+			 */
 			mods::weapons::damage_types::rifle_attack_with_feedback(
 			    player,
 			    player->primary(),

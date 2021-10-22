@@ -11260,7 +11260,7 @@ perform_socket_write	comm.cpp	/^ssize_t perform_socket_write(socket_t desc, cons
 perform_subst	comm.cpp	/^int perform_subst(mods::descriptor_data& t, char *orig, char *subst) {$/;"	kind:function	line:1988	signature:(mods::descriptor_data& t, char *orig, char *subst)
 perform_tell	act.comm.cpp	/^void perform_tell(char_data *ch, char_data *vict, char *arg) {$/;"	kind:function	line:108	signature:(char_data *ch, char_data *vict, char *arg)
 perform_thermite_breach	mods/doors.hpp	/^	static inline void perform_thermite_breach(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction) {$/;"	kind:function	line:216	namespace:mods::doors	signature:(uuid_t obj_uuid,uuid_t player_uuid,int8_t direction)
-perform_violence	fight.cpp	/^void perform_violence() {$/;"	kind:function	line:1003	signature:()
+perform_violence	fight.cpp	/^void perform_violence() {$/;"	kind:function	line:1008	signature:()
 perform_wear	act.item.cpp	/^void perform_wear(char_data *ch, struct obj_data *obj, int where) {$/;"	kind:function	line:1379	signature:(char_data *ch, struct obj_data *obj, int where)
 perform_wear_with_confirmation	act.item.cpp	/^bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int where) {$/;"	kind:function	line:1274	signature:(player_ptr_t& player, obj_ptr_t& in_obj, int where)
 pet_shops	spec_assign.cpp	/^SPECIAL(pet_shops);$/;"	kind:variable	line:26
