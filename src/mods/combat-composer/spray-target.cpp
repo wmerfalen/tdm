@@ -39,7 +39,6 @@ namespace mods::combat_composer {
 #define STATE_FROM_DIR spray_state::from_direction
 	};
 
-	void decrease_spray_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon);
 	namespace phases {
 		std::forward_list<player_ptr_t> collect_spray_targets(player_ptr_t& attacker,direction_t direction,obj_ptr_t& weapon);
 		/**
@@ -167,7 +166,7 @@ namespace mods::combat_composer {
 		void perform_cleanup(player_ptr_t& attacker,obj_ptr_t& weapon) {
 			feedback_t feedback;
 			m_debug("decreasing ammo");
-			decrease_spray_shot_ammo(attacker,weapon);
+			mods::combat_composer::phases::decrease_spray_shot_ammo(attacker,weapon);
 			attacker->set_fight_timestamp();
 			mods::combat_composer::phases::set_player_weapon_cooldown(attacker,weapon);
 			mods::combat_composer::skill_increment::increment(attacker,weapon);
@@ -278,26 +277,26 @@ namespace mods::combat_composer {
 				}
 				if(attacker->marine()) {
 					if(is_assault_rifle(weapon)) {
-						d.damage += (0.15 * d.damage); //TODO: find values equiv to this
+						d.damage += (0.08 * d.damage); //TODO: find values equiv to this
 						if(mods::rand::chance(10)) {//TODO values
-							d.incendiary_damage += dice(tier(attacker) * 10,tier(attacker) * 10);//TODO values
+							d.incendiary_damage += dice(tier(attacker) * 8,tier(attacker) * 5);//TODO values
 						}
 					}
 					if(is_shotgun(weapon)) {
-						d.damage += d.damage * 0.10;
+						d.damage += d.damage * 0.08;
 					}
 				}
 				if(attacker->breacher()) {
-					d.explosive_damage += (0.10 * d.damage);
+					d.explosive_damage += (0.08 * d.damage);
 					if(is_shotgun(weapon)) {
-						d.damage += (0.10 * d.damage);
+						d.damage += (0.08 * d.damage);
 					}
 					if(is_smg(weapon)) {
-						d.damage += (0.10 * d.damage);
+						d.damage += (0.08 * d.damage);
 						if(mods::rand::chance(BREACHER_SMG_SHOTGUN_CHANCE())) {
-							d.shrapnel_damage += d.damage / 5.5; //TODO: make values
+							d.shrapnel_damage += d.damage / 8.5; //TODO: make values
 						}
-						d.corrosive_damage += dice(tier(attacker) * 3, tier(attacker) * 6);//TODO values
+						d.corrosive_damage += dice(tier(attacker) * 2, tier(attacker) * 4);//TODO values
 					}
 					/** TODO: roll chance to kockdown opponent */
 				}
@@ -503,51 +502,6 @@ namespace mods::combat_composer {
 		return true;
 	}
 
-	/**
-	 * @brief subtracts 1 from weapon ammo
-	 *
-	 * @param weapon
-	 */
-	void decrease_spray_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) {
-		/** TODO: if weapon has a bullet printer mod, calculate ammo */
-		if(weapon->rifle_instance->ammo == 0) {
-			return;
-		}
-		int16_t deduct = 0;
-		switch((mw_rifle)weapon->rifle()->attributes->type) {
-			case mw_rifle::LIGHT_MACHINE_GUN:
-				deduct = mods::values::SPRAY_SHOT_LIGHT_MACHINE_GUN();
-				break;
-
-			case mw_rifle::SUB_MACHINE_GUN:
-				deduct = mods::values::SPRAY_SHOT_SUB_MACHINE_GUN();
-				break;
-
-			case mw_rifle::SHOTGUN:
-				deduct = mods::values::SPRAY_SHOT_SHOTGUN();
-				break;
-
-			case mw_rifle::SNIPER:
-				deduct = mods::values::SPRAY_SHOT_SNIPER();
-				break;
-
-			case mw_rifle::ASSAULT_RIFLE:
-				deduct = mods::values::SPRAY_SHOT_ASSAULT_RIFLE();
-				break;
-			case mw_rifle::HANDGUN:
-			case mw_rifle::PISTOL:
-				deduct = mods::values::SPRAY_SHOT_HANDGUN();
-				break;
-			case mw_rifle::MACHINE_PISTOL:
-				deduct = mods::values::SPRAY_SHOT_MACHINE_PISTOL();
-				break;
-			default:
-				deduct = 1;
-				log("SYSERR: warning, no rifle type given for decrease_single_shot_ammo, default to 1");
-				break;
-		}
-		sub_clamp(weapon->rifle_instance->ammo,mods::combat_composer::ammunition::reduce_ammo(attacker,weapon,deduct));
-	}
 	/**
 	 * Handles both ranged and immediate targets
 	 */

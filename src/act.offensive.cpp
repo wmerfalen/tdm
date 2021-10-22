@@ -34,8 +34,7 @@
 #include "mods/levels.hpp"
 #include "mods/calc-visibility.hpp"
 #include "mods/projectile.hpp"
-#include "mods/combat-composer/snipe-target.hpp"
-#include "mods/combat-composer/engage-target.hpp"
+#include "mods/combat-composer/includes.hpp"
 
 using de = damage_event_t;
 /* extern variables */
@@ -169,7 +168,8 @@ ACMD(do_spray) {
 		player->sendln("Invalid direction");
 		return;
 	}
-	mods::weapons::damage_types::spray_direction(player,direction);
+	auto weapon = player->primary();
+	mods::combat_composer::spray_target(player,direction,weapon);
 }
 
 ACMD(do_silencers_on) {

@@ -141,6 +141,7 @@ namespace mods::combat_composer {
 
 
 		void decrease_same_room_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon);
+		void decrease_spray_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon);
 		/**
 		 * @brief subtracts 1 from weapon ammo
 		 *

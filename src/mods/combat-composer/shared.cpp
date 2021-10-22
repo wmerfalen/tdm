@@ -58,6 +58,51 @@ namespace mods::combat_composer {
 		 *
 		 * @param weapon
 		 */
+		void decrease_spray_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) {
+			/** TODO: if weapon has a bullet printer mod, calculate ammo */
+			if(weapon->rifle_instance->ammo == 0) {
+				return;
+			}
+			int16_t deduct = 0;
+			switch((mw_rifle)weapon->rifle()->attributes->type) {
+				case mw_rifle::LIGHT_MACHINE_GUN:
+					deduct = mods::values::SPRAY_SHOT_LIGHT_MACHINE_GUN();
+					break;
+
+				case mw_rifle::SUB_MACHINE_GUN:
+					deduct = mods::values::SPRAY_SHOT_SUB_MACHINE_GUN();
+					break;
+
+				case mw_rifle::SHOTGUN:
+					deduct = mods::values::SPRAY_SHOT_SHOTGUN();
+					break;
+
+				case mw_rifle::SNIPER:
+					deduct = mods::values::SPRAY_SHOT_SNIPER();
+					break;
+
+				case mw_rifle::ASSAULT_RIFLE:
+					deduct = mods::values::SPRAY_SHOT_ASSAULT_RIFLE();
+					break;
+				case mw_rifle::HANDGUN:
+				case mw_rifle::PISTOL:
+					deduct = mods::values::SPRAY_SHOT_HANDGUN();
+					break;
+				case mw_rifle::MACHINE_PISTOL:
+					deduct = mods::values::SPRAY_SHOT_MACHINE_PISTOL();
+					break;
+				default:
+					deduct = 1;
+					log("SYSERR: warning, no rifle type given for decrease_single_shot_ammo, default to 1");
+					break;
+			}
+			sub_clamp(weapon->rifle_instance->ammo,mods::combat_composer::ammunition::reduce_ammo(attacker,weapon,deduct));
+		}
+		/**
+		 * @brief subtracts 1 from weapon ammo
+		 *
+		 * @param weapon
+		 */
 		void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) {
 			/** TODO: if weapon has a bullet printer mod, calculate ammo */
 			if(weapon->rifle_instance->ammo == 0) {
