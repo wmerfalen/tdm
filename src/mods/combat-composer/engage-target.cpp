@@ -201,11 +201,16 @@ namespace mods::combat_composer::engage {
 		std::pair<int,int> roll_critical(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon);
 		calculated_damage_t calculate_weapon_damage(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,std::pair<int,int> hsc);
 
-		namespace state {
+		namespace engage_state {
 			static player_ptr_t attacker;
 			static std::shared_ptr<mods::ranged_combat_totals> current;
-#define RCT state::current
-#define ATKR state::attacker
+#ifdef RCT
+#undef RCT
+#undef ATKR
+#endif
+
+#define RCT engage_state::current
+#define ATKR engage_state::attacker
 		};
 
 		void perform_cleanup(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon) {
@@ -383,8 +388,8 @@ namespace mods::combat_composer::engage {
 		 * viable targets. <-- TODO
 		 */
 		std::optional<player_ptr_t> acquire_immediate_target(player_ptr_t& attacker,std::string_view target,obj_ptr_t& weapon) {
-			state::current = attacker->calculate_ranged_combat_totals(weapon);
-			state::attacker = attacker;
+			RCT = attacker->calculate_ranged_combat_totals(weapon);
+			ATKR = attacker;
 
 
 			//if(attacker->ghost()) {

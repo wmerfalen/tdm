@@ -232,11 +232,11 @@ namespace mods::combat_composer {
 		std::pair<int,int> roll_critical(player_ptr_t& attacker,acquired_target_t& found_target,obj_ptr_t& weapon);
 		calculated_damage_t calculate_weapon_damage(player_ptr_t& attacker,acquired_target_t& found_target,obj_ptr_t& weapon,std::pair<int,int> hsc);
 
-		namespace state {
+		namespace snipe_state {
 			static player_ptr_t attacker;
 			static std::shared_ptr<mods::ranged_combat_totals> current;
-#define RCT state::current
-#define ATKR state::attacker
+#define RCT snipe_state::current
+#define ATKR snipe_state::attacker
 		};
 
 		/**
@@ -451,8 +451,8 @@ namespace mods::combat_composer {
 
 		std::optional<acquired_target_t> acquire_ranged_target(player_ptr_t& attacker,target_t target,obj_ptr_t& weapon) {
 
-			state::current = attacker->calculate_ranged_combat_totals(weapon);
-			state::attacker = attacker;
+			RCT = attacker->calculate_ranged_combat_totals(weapon);
+			ATKR = attacker;
 			vpd scan;
 			/**
 			 * TODO: will have to change find_type_t::ANY to include DEAD for contagion's

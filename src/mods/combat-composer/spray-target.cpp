@@ -506,9 +506,9 @@ namespace mods::combat_composer {
 	 * Handles both ranged and immediate targets
 	 */
 	void spray_target(player_ptr_t& attacker,direction_t direction, obj_ptr_t& weapon) {
-		spray_state::current = attacker->calculate_ranged_combat_totals(weapon);
-		spray_state::attacker = attacker;
-		spray_state::from_direction = OPPOSITE_DIR(direction);
+		RCT = attacker->calculate_ranged_combat_totals(weapon);
+		ATKR = attacker;
+		STATE_FROM_DIR = OPPOSITE_DIR(direction);
 		/**
 		 * First check that the weapon can spray
 		 */
