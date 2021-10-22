@@ -189,6 +189,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/chaotic-meth-addict mods/mobs/chaotic-meth-addict-behaviour-tree \
 					 mods/weapons/attachment-shotgun-underbarrel \
 					 mods/memory mods/weapons/attachment-frag-underbarrel mods/unit-tests/frag-underbarrel \
+					 mods/weapons/attachment-underbarrel \
 					 mods/boosters/adrenaline-shot mods/unit-tests/class-sniper \
 					 mods/corrosive mods/weapons/corrosive-claymore \
 					 mods/shrapnel mods/weapons/shrapnel-claymore \
@@ -205,7 +206,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/melee/damage-types mods/corpse mods/fire \
 					 mods/weapons/attachment-pathogen-ammunition \
 					 mods/combat-composer/snipe-target mods/rifle mods/combat \
-					 mods/player-utils mods/weapons/legacy-combat
+					 mods/player-utils mods/weapons/legacy-combat \
+					 mods/combat-composer/engage-target
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
@@ -231,7 +233,13 @@ clean:
 		rm -f $(builddir)/mods/builder/*.o \
 		rm -f $(builddir)/mods/builder/*.d \
 		rm -f $(builddir)/mods/unit-tests/*.o \
-		rm -f $(builddir)/mods/unit-tests/*.d 
+		rm -f $(builddir)/mods/unit-tests/*.d \
+		rm -f $(builddir)/mods/combat-composer/*.o \
+		rm -f $(builddir)/mods/combat-composer/*.d \
+		rm -f $(builddir)/mods/weapons/*.o \
+		rm -f $(builddir)/mods/weapons/*.d \
+		rm -f $(builddir)/mods/melee/*.o \
+		rm -f $(builddir)/mods/melee/*.d 
 
 $(builddir)/mods/melee:
 	mkdir -p $(builddir)/mods/melee

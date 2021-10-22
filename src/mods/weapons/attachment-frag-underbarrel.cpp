@@ -30,8 +30,7 @@ namespace mods::weapons {
 		return {0,"*** CLICK ***"};
 	}
 	void attachment_frag_underbarrel::init() {
-		m_attached = false;
-		m_obj = nullptr;
+		attachment_underbarrel::init();
 		m_sniper_rifle = nullptr;
 	}
 	attachment_frag_underbarrel::~attachment_frag_underbarrel() {
@@ -40,10 +39,6 @@ namespace mods::weapons {
 
 	attachment_frag_underbarrel::attachment_frag_underbarrel() {
 		init();
-	}
-
-	uint16_t attachment_frag_underbarrel::ammo() {
-		return m_obj ? m_obj->obj_flags.ammo : 0;
 	}
 
 	std::tuple<bool,std::string> attachment_frag_underbarrel::detach() {
@@ -58,16 +53,15 @@ namespace mods::weapons {
 		if(m_attached) {
 			return {true,"Already attached."};
 		}
-		m_obj = create_object(ITEM_ATTACHMENT,"attachment/sniper-class-frag-ub.yml");
+		m_obj = create_object(ITEM_ATTACHMENT,"sniper-class-frag-ub.yml");
+		if(!m_obj->attachment()) {
+			return {false,"Attachment issue!"};
+		}
 		m_obj->obj_flags.ammo = m_obj->attachment()->attributes->ammunition_amount;
 		m_sniper_rifle = weapon;
 		m_attached = true;
 		m_obj->obj_flags.ammo += player_tier * 2;
 		return {true,CAT("You attach a frag underbarrel to ",weapon->name)};
-	}
-
-	bool attachment_frag_underbarrel::is_attached() const {
-		return m_attached;
 	}
 
 	void attachment_frag_underbarrel::consume_ammo() {
@@ -82,12 +76,6 @@ namespace mods::weapons {
 				m_attached = false;
 			}
 		}
-	}
-	obj_ptr_t attachment_frag_underbarrel::obj() {
-		if(m_attached) {
-			return m_obj;
-		}
-		return nullptr;
 	}
 
 };

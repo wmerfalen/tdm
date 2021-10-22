@@ -41,42 +41,6 @@
 #define NPC_SEND_DEBUG(a)
 #endif
 
-template <typename T,typename F>
-void sub_clamp(T& orig, F sub) {
-	if(orig - sub < 0) {
-		orig = 0;
-		return;
-	}
-	orig -= sub;
-}
-template <typename T,typename F,typename X>
-void equip_clamp(T& orig,F& aux,bool equip,X offset) {
-	if(equip) {
-		orig += offset;
-		aux += offset;
-	} else {
-		if(orig - offset < 0) {
-			orig = 0;
-			aux = 0;
-		} else {
-			orig -= offset;
-			aux -= offset;
-		}
-	}
-}
-template <typename T,typename X>
-void equip_clamp(T& orig,bool equip,X offset) {
-	if(equip) {
-		orig += offset;
-	} else {
-		if(orig - offset < 0) {
-			orig = 0;
-		} else {
-			orig -= offset;
-		}
-	}
-}
-
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -1085,6 +1049,7 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+		m_rules_of_engagement = mods::combat::rules_of_engagement_t::ROM_BALLISTIC;
 		m_cooldown_start_tick = 0;
 		m_luck = 0;
 		m_triads = {0,0,0,0,0};

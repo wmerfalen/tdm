@@ -10,6 +10,10 @@ namespace mods::object_utils {
 		}
 		return item->has_rifle() && item->rifle()->attributes->type == type;
 	}
+	bool is_shotgun_underbarrel(const obj_ptr_t& item) {
+		return item->has_attachment() && item->attachment()->attributes->type == mw_attachment::UNDER_BARREL &&
+		       item->attachment()->attributes->underbarrel_launcher_type.compare("SHOTGUN") == 0;
+	}
 	bool is_corpse(const obj_ptr_t& item) {
 		return item->is_corpse;
 	}

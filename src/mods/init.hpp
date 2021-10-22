@@ -3,6 +3,7 @@
 
 #define INIT(A) \
 	namespace A { extern void init(); };
+INIT(mods::combat::commands);
 INIT(mods::combat_composer);
 INIT(mods::players::friendly_reminders);
 INIT(mods::players::event_messages);
@@ -130,6 +131,7 @@ namespace mods::init {
 		mods::melee::main::init();
 		mods::corpse::init();
 		mods::combat_composer::init();
+		mods::combat::commands::init();
 	}
 };
 #endif

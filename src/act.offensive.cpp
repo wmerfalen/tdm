@@ -34,7 +34,8 @@
 #include "mods/levels.hpp"
 #include "mods/calc-visibility.hpp"
 #include "mods/projectile.hpp"
-#include "mods/combat-composer.hpp"
+#include "mods/combat-composer/snipe-target.hpp"
+#include "mods/combat-composer/engage-target.hpp"
 
 using de = damage_event_t;
 /* extern variables */
@@ -346,8 +347,12 @@ ACMD(do_hit) {
 
 	one_argument(argument, arg);
 
+	auto weapon = player->primary();
 	if(!*arg) {
 		send_to_char(ch, "Hit who?");
+	} else if(weapon != nullptr && mods::combat_composer::engage_target(player,std::string(arg),weapon)) {
+		/** Handled. We can return; */
+		return;
 	} else if(!(vict = get_char_vis(ch, arg, NULL, FIND_CHAR_ROOM))) {
 		send_to_char(ch, "They don't seem to be here.");
 	} else if(vict == ch) {

@@ -1,6 +1,6 @@
 #ifndef __MENTOC_MODS_WEAPONS_LEGACY_COMBAT_HEADER__
 #define __MENTOC_MODS_WEAPONS_LEGACY_COMBAT_HEADER__
-#include "../combat-composer.hpp"
+//#include "../combat-composer.hpp"
 #include "../rifle.hpp"
 #include "../scan.hpp"
 #include "../player.hpp"

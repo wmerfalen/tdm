@@ -3,24 +3,20 @@
 
 #include "../weapon.hpp"
 #include "../pqxx-types.hpp"
+#include "attachment-underbarrel.hpp"
 
 namespace mods::weapons {
-	struct attachment_frag_underbarrel {
+	struct attachment_frag_underbarrel : public attachment_underbarrel {
 			attachment_frag_underbarrel();
 			~attachment_frag_underbarrel();
 
-			obj_ptr_t obj();
-			bool is_attached() const;
 			void init();
 			std::tuple<bool,std::string> attach_to(obj_ptr_t weapon, const uint8_t& player_tier);
 			std::tuple<bool,std::string> detach();
-			uint16_t ammo();
 			void consume_ammo();
 			std::tuple<bool,std::string> fire(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance);
 		protected:
-			obj_ptr_t m_obj;
 			obj_ptr_t m_sniper_rifle;
-			bool m_attached;
 	};
 };
 #endif

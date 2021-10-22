@@ -3,6 +3,12 @@
 #include "../globals.hpp"
 
 namespace mods::combat {
+	enum rules_of_engagement_t : uint8_t {
+		ROM_BALLISTIC = 0,
+		ROM_CQC,
+		ROM_AUXILIARY,
+		ROM_SECONDARY
+	};
 	namespace immediate {
 		/**
 		 * For attacking targets (with a rifle) in the same room.

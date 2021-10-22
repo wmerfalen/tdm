@@ -807,6 +807,7 @@ using vpd = mods::scan::vec_player_data;
 
 void hit(char_data *ch, char_data *victim, int type) {
 	MENTOC_PREAMBLE();
+	using namespace mods::combat;
 	auto victim_ptr_opt = ptr_opt(victim);
 	if(!victim_ptr_opt.has_value()) {
 		log("SYSERR: found null victim ptr... returning prematurely");
@@ -825,32 +826,62 @@ void hit(char_data *ch, char_data *victim, int type) {
 	                   player->ghost() && player->ghost()->underbarrel() &&
 	                   std::string(player->ghost()->underbarrel()->attachment()->attributes->underbarrel_launcher_type).compare("SHOTGUN") == 0
 	               ) ? player->ghost()->underbarrel() : nullptr;
-	if(same_room && ub) {
-		mods::weapons::damage_types::rifle_attack_with_feedback(
-		    player,
-		    player->primary(),
-		    victim_ptr,
-		    0,
-		    NORTH);
+	bool ub_has_ammo = ub && player->ghost() && player->ghost()->get_shotgun_underbarrel_wrapper().ammo() > 0;
+
+	bool do_ballistics = player->rules_of_engagement() == ROM_BALLISTIC;
+	bool do_cqc = player->rules_of_engagement() == ROM_CQC;
+	if(!same_room) {
+		player->sendln("You must be in the same room to hit someone");
 		return;
 	}
-	auto& combat_order = player->get_combat_order();
-	if(same_room && combat_order.size()) {
-		set_fighting(ch,victim);
-		auto vptr = ptr(victim);
-		mods::melee::main::dispatch_player(player,vptr);
-		return;
+	if(player->rules_of_engagement() == ROM_AUXILIARY) {
+		if(ub && ub_has_ammo) {
+			mods::weapons::damage_types::rifle_attack_with_feedback(
+			    player,
+			    player->primary(),
+			    victim_ptr,
+			    0,
+			    NORTH);
+			return;
+		}
+		if(player->primary() == nullptr) {
+			do_cqc = true;
+		} else {
+			do_ballistics = true;
+		}
 	}
-	if(primary_can_attack_same_room) {
-		wielded_weapon = primary;
-	} else if(secondary_can_attack_same_room) {
-		wielded_weapon = secondary;
+	if(do_cqc || (do_ballistics && player->primary() == nullptr && player->secondary() == nullptr)) {
+		auto hands_ptr = player->equipment(WEAR_HANDS);
+		if(hands_ptr && hands_ptr->has_melee() && hands_ptr->melee()->attributes->type == mw_melee::BRASS_KNUCKLES && !wielded_weapon) {
+			wielded_weapon = hands_ptr;
+		}
+		player->set_attacking_with(wielded_weapon);
+		auto& combat_order = player->get_combat_order();
+		if(combat_order.size()) {
+			set_fighting(ch,victim);
+			auto vptr = ptr(victim);
+			mods::melee::main::dispatch_player(player,vptr);
+			return;
+		}
 	}
-	auto hands_ptr = player->equipment(WEAR_HANDS);
-	if(hands_ptr && hands_ptr->has_melee() && hands_ptr->melee()->attributes->type == mw_melee::BRASS_KNUCKLES && !wielded_weapon) {
-		wielded_weapon = hands_ptr;
+	if(player->rules_of_engagement() == ROM_SECONDARY) {
+		wielded_weapon = nullptr;
+		if(secondary_can_attack_same_room) {
+			wielded_weapon = secondary;
+			player->set_attacking_with(wielded_weapon);
+		} else {
+			do_ballistics = true;
+		}
 	}
-	player->set_attacking_with(wielded_weapon);
+	if(do_ballistics) {
+		if(primary_can_attack_same_room) {
+			wielded_weapon = primary;
+			player->set_attacking_with(wielded_weapon);
+		} else if(secondary_can_attack_same_room) {
+			wielded_weapon = secondary;
+			player->set_attacking_with(wielded_weapon);
+		}
+	}
 	ch->last_fight_timestamp = time(NULL);
 	/* Do some sanity checking, in case someone flees, etc. */
 	if(IN_ROOM(ch) != IN_ROOM(victim)) {

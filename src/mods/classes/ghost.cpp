@@ -362,6 +362,15 @@ namespace mods::classes {
 	}
 
 	std::tuple<bool,std::string> ghost::attach_shotgun_underbarrel() {
+		if(!m_player) {
+			return {0,"No player pointer set!"};
+		}
+		if(!m_player->primary()) {
+			return {0,"You aren't wielding a primary weapon!"};
+		}
+		if(!m_player->primary()->has_rifle()) {
+			return {0,"You aren't wielding a rifle!"};
+		}
 		if(m_shotgun_ub.is_attached() && m_shotgun_ub.ammo()) {
 			return {1,"Already attached. To detach, use 'detach_shotgun_underbarrel'."};
 		}
@@ -371,6 +380,12 @@ namespace mods::classes {
 			return m_shotgun_ub.attach_to(m_player->primary(),tier(m_player));
 		}
 		return s;
+	}
+	ghost::shotgun_ub_t& ghost::get_shotgun_underbarrel_wrapper() {
+		return m_shotgun_ub;
+	}
+	ghost::frag_ub_t& ghost::get_frag_underbarrel_wrapper() {
+		return m_frag_ub;
 	}
 	void ghost::unblock_healing() {
 		m_player->sendln("Unblock healing");
@@ -658,6 +673,14 @@ namespace mods::class_abilities::ghost {
 	ACMD(do_attach_shotgun_underbarrel) {
 		PLAYER_CAN("ghost.attach_shotgun_underbarrel");
 		DO_HELP("attach_shotgun_underbarrel");
+		if(!player->primary()) {
+			player->sendln("You are not wielding a weapon!");
+			return;
+		}
+		if(!player->primary()->has_rifle()) {
+			player->sendln("You must be wielding a rifle of some sort!");
+			return;
+		}
 		if(player->ghost()) {
 			auto status = player->ghost()->attach_shotgun_underbarrel();
 			player->sendln(std::get<1>(status));

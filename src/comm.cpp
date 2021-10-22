@@ -1144,22 +1144,22 @@ void send_prompt(player_ptr_t& player) {
 		return;
 	}
 	auto& a = player->get_affect_dissolver();
-	std::string hp = CAT(player->hp(),"/",player->max_hp(),"H "),
-	            mana = CAT(player->mana(),"/",player->max_mana(),"M "),
-	            move = CAT(player->move(),"/",player->max_move(),"V "),
+	std::string hp = CAT(player->hp(),"H "),
+	            mana = CAT(player->mana(),"M "),
+	            move = CAT(player->move(),"V "),
 	            fighting = "",
 	            arrow = "{grn}> {/grn}",
 	            start = "",
 	            ammo = "",
 	            affects = "";
 	if(player->hp() < (player->max_hp() * 0.01)) {
-		hp = CAT("{red}",player->hp(),"{/red}/",player->max_hp(),"H ");
+		hp = CAT("{red}",player->hp(),"{/red}H ");
 	}
 	if(player->mana() < (player->max_mana() * 0.01)) {
-		mana = CAT("{red}",player->mana(),"{/red}/",player->max_mana(),"M ");
+		mana = CAT("{red}",player->mana(),"{/red}M ");
 	}
 	if(player->move() < (player->max_move() * 0.01)) {
-		move = CAT("{red}",player->move(),"{/red}/",player->max_move(),"V ");
+		move = CAT("{red}",player->move(),"{/red}V ");
 	}
 	if(player->ghost() && player->ghost()->is_dissipated()) {
 		start = "{yel}(:INVIS:){/yel}";

@@ -56,6 +56,7 @@ using lambda_queue_t = std::multimap<uint64_t,std::function<void()>>;
 using event_queue_t = std::multimap<uint32_t,std::tuple<uuid_t,uint32_t>>;
 using lambda_queue_iterator = lambda_queue_t::iterator;
 using event_queue_iterator = event_queue_t::iterator;
+#include "combat.hpp"
 
 namespace mods::globals {
 	extern player_ptr_t player_nobody;
@@ -928,6 +929,9 @@ namespace mods {
 			std::shared_ptr<mods::ranged_combat_totals> get_ranged_combat_totals();
 			std::shared_ptr<mods::ranged_combat_totals> calculate_ranged_combat_totals(obj_ptr_t& weapon);
 			std::shared_ptr<mods::ranged_combat_totals> calculate_ranged_combat_totals();
+			auto& rules_of_engagement() {
+				return m_rules_of_engagement;
+			}
 		protected:
 			int16_t m_to_move;
 			int16_t m_to_attack;
@@ -1040,6 +1044,7 @@ namespace mods {
 			std::shared_ptr<mods::ranged_combat_totals> m_rct;
 			std::shared_ptr<mods::ranged_combat_totals> m_rct_calculated;
 			int32_t m_luck;
+			mods::combat::rules_of_engagement_t m_rules_of_engagement;
 	};
 };
 
