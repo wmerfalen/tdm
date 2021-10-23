@@ -9,6 +9,12 @@ namespace mods::classes {
 	obj_ptr_t create_pathogen_ammunition_attachment() {
 		return create_object(ITEM_ATTACHMENT,contagion::PATHOGEN_AMMUNITION_YAML.data());
 	}
+
+	/**
+	 * Global handler for all events that are CONTAGION related.
+	 * Handles things like removing the minor shielding buffs
+	 * when the spell time has reached zero.
+	 */
 	void contagion_event_over(const std::tuple<uuid_t,uint32_t>& s) {
 		switch(std::get<1>(s)) {
 			case deferred::EVENT_CONTAGION_MINOR_SHIELDING_OVER: {
@@ -110,6 +116,10 @@ namespace mods::classes {
 	std::shared_ptr<contagion> create_contagion(player_ptr_t& in_player) {
 		return std::move(std::make_shared<contagion>(in_player));
 	}
+
+	/**
+	 * Minor shielding. Not very OP, but better than nothing.
+	 */
 	std::pair<int16_t,std::string> contagion::cast_minor_shielding() {
 		if(m_minor_shielding.not_learned()) {
 			return {0,"It looks like you still need to train that skill"};
@@ -138,6 +148,10 @@ namespace mods::classes {
 
 		return {1,CAT("You enable minor shielding for ",ticks," ticks")};
 	}
+
+	/**
+	 * Drag a corpse from room to room
+	 */
 	std::tuple<int16_t,std::string> contagion::drag_corpse(obj_ptr_t& corpse,const direction_t& direction) {
 		if(m_drag_corpse.not_learned()) {
 			return {0,"It looks like you still need to train that skill"};
@@ -198,6 +212,10 @@ namespace mods::classes {
 		mods::corpse::queue_shrapnel_corpse_explode(corpse,m_player,damage);
 		return {1,"You rig a corpse to explode!"};
 	}
+
+	/**
+	 * Cast HELLFIRE variant of corpse explosion
+	 */
 	std::pair<int16_t,std::string> contagion::cast_hellfire_corpse_explosion(obj_ptr_t& corpse) {
 		if(m_hellfire_corpse_explosion.not_learned()) {
 			return {0,"It looks like you still need to train that skill"};
@@ -224,6 +242,10 @@ namespace mods::classes {
 		mods::corpse::queue_hellfire_corpse_explode(corpse,m_player,damage);
 		return {1,"You rig a corpse to explode!"};
 	}
+
+	/**
+	 * Cast regular corpse explosion
+	 */
 	std::pair<int16_t,std::string> contagion::cast_corpse_explosion(obj_ptr_t& corpse) {
 		if(m_corpse_explosion.not_learned()) {
 			return {0,"It looks like you still need to train that skill"};

@@ -34,6 +34,7 @@
 {yel}mods/players/banish{/yel}:->{grn}force_out{/grn}
 {yel}mods/players/banish{/yel}:->{grn}set_banish_room{/grn}
 {yel}mods/players/banish{/yel}:->{grn}banish{/grn}
+{yel}mods/json/npc-export{/yel}:->{grn}json_export{/grn}
 {yel}mods/fluxkraft/arcon-bar.hpp:		->generate_bar{/grn}
 {yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}procgen_random_amount{/grn}
 {yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}generate_zone{/grn}

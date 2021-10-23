@@ -208,11 +208,12 @@ buildobj = act.informative act.item act.medic \
 					 mods/combat-composer/snipe-target mods/rifle mods/combat \
 					 mods/player-utils mods/weapons/legacy-combat \
 					 mods/combat-composer/engage-target mods/combat-composer/spray-target \
-					 mods/combat-composer/shared
+					 mods/combat-composer/shared \
+					 mods/json/export
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team $(builddir)/mods/boosters $(builddir)/mods/melee $(builddir)/mods/combat-composer
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team $(builddir)/mods/boosters $(builddir)/mods/melee $(builddir)/mods/combat-composer $(builddir)/mods/json
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT) $(post_build_args)
 
 clean:
@@ -239,9 +240,13 @@ clean:
 		rm -f $(builddir)/mods/combat-composer/*.d \
 		rm -f $(builddir)/mods/weapons/*.o \
 		rm -f $(builddir)/mods/weapons/*.d \
+		rm -f $(builddir)/mods/json/*.o \
+		rm -f $(builddir)/mods/json/*.d \
 		rm -f $(builddir)/mods/melee/*.o \
 		rm -f $(builddir)/mods/melee/*.d 
 
+$(builddir)/mods/json:
+	mkdir -p $(builddir)/mods/json
 $(builddir)/mods/melee:
 	mkdir -p $(builddir)/mods/melee
 $(builddir)/mods/response-team:

@@ -22,8 +22,7 @@
 #define TO_ROOM		1
 #endif
 
-namespace mods::melee::main {
-	using t = technique_t;
+namespace mods::melee::main::moves {
 	/**
 	 * Explanation of attack characteristics
 	 * -------------------------------------
@@ -37,251 +36,252 @@ namespace mods::melee::main {
 	 *  		tick as opposed to the next round of ticks
 	 *  	- certain attacks flow into each other nicely. i.e.: jab, cross
 	 */
-	namespace moves {
-		/**
-		 * Upper body techniques
-		 */
-		void JAB_TO_HEAD(player_ptr_t& attacker, player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("jab to head");
-			mods::classes::increment_technique(attacker,"cqc_jab_to_head");
-		}
-		void JAB_TO_BODY(player_ptr_t& attacker, player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("jab to body");
-			mods::classes::increment_technique(attacker,"cqc_jab_to_body");
-		}
-		void CROSS_TO_HEAD(player_ptr_t& attacker, player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("cross to head");
-			mods::classes::increment_technique(attacker,"cqc_cross_to_head");
-		}
-		void CROSS_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("cross to body");
-			mods::classes::increment_technique(attacker,"cqc_cross_to_body");
-		}
-		void LEFT_UPPERCUT(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left uppercut");
-			mods::classes::increment_technique(attacker,"cqc_left_uppercut");
-		}
+	/**
+	 * Upper body techniques
+	 */
+	void JAB_TO_HEAD(player_ptr_t& attacker, player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("jab to head");
+		mods::classes::increment_technique(attacker,"cqc_jab_to_head");
+	}
+	void JAB_TO_BODY(player_ptr_t& attacker, player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("jab to body");
+		mods::classes::increment_technique(attacker,"cqc_jab_to_body");
+	}
+	void CROSS_TO_HEAD(player_ptr_t& attacker, player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("cross to head");
+		mods::classes::increment_technique(attacker,"cqc_cross_to_head");
+	}
+	void CROSS_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("cross to body");
+		mods::classes::increment_technique(attacker,"cqc_cross_to_body");
+	}
+	void LEFT_UPPERCUT(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left uppercut");
+		mods::classes::increment_technique(attacker,"cqc_left_uppercut");
+	}
 
-		void LEFT_HOOK_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left hook to head");
-			mods::classes::increment_technique(attacker,"cqc_left_hook_to_head");
-		}
-		void RIGHT_HOOK_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right hook to head");
-			mods::classes::increment_technique(attacker,"cqc_right_hook_to_head");
-		}
-		void LEFT_HOOK_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left hook to body");
-			mods::classes::increment_technique(attacker,"cqc_left_hook_to_body");
-		}
-		void RIGHT_HOOK_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right hook to body");
-			mods::classes::increment_technique(attacker,"cqc_right_hook_to_body");
-		}
+	void LEFT_HOOK_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left hook to head");
+		mods::classes::increment_technique(attacker,"cqc_left_hook_to_head");
+	}
+	void RIGHT_HOOK_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right hook to head");
+		mods::classes::increment_technique(attacker,"cqc_right_hook_to_head");
+	}
+	void LEFT_HOOK_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left hook to body");
+		mods::classes::increment_technique(attacker,"cqc_left_hook_to_body");
+	}
+	void RIGHT_HOOK_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right hook to body");
+		mods::classes::increment_technique(attacker,"cqc_right_hook_to_body");
+	}
 
-		void RIGHT_UPPERCUT(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right uppercut");
-			mods::classes::increment_technique(attacker,"cqc_right_uppercut");
-		}
+	void RIGHT_UPPERCUT(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right uppercut");
+		mods::classes::increment_technique(attacker,"cqc_right_uppercut");
+	}
 
-		void LEFT_ELBOW(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left_elbow");
-			mods::classes::increment_technique(attacker,"cqc_left_elbow");
-		}
-		void RIGHT_ELBOW(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right_elbow");
-			mods::classes::increment_technique(attacker,"cqc_right_elbow");
+	void LEFT_ELBOW(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left_elbow");
+		mods::classes::increment_technique(attacker,"cqc_left_elbow");
+	}
+	void RIGHT_ELBOW(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right_elbow");
+		mods::classes::increment_technique(attacker,"cqc_right_elbow");
 
-		}
-		void RIGHT_OBLIQUE(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right_oblique");
-			mods::classes::increment_technique(attacker,"cqc_right_oblique");
+	}
+	void RIGHT_OBLIQUE(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right_oblique");
+		mods::classes::increment_technique(attacker,"cqc_right_oblique");
 
-		}
-		void LEFT_OBLIQUE(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left_oblique");
-			mods::classes::increment_technique(attacker,"cqc_left_oblique");
+	}
+	void LEFT_OBLIQUE(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left_oblique");
+		mods::classes::increment_technique(attacker,"cqc_left_oblique");
 
-		}
-		void LEFT_TEEP(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left_teep");
-			mods::classes::increment_technique(attacker,"cqc_left_teep");
+	}
+	void LEFT_TEEP(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left_teep");
+		mods::classes::increment_technique(attacker,"cqc_left_teep");
 
-		}
-		void RIGHT_TEEP(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right_teep");
+	}
+	void RIGHT_TEEP(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right_teep");
 
-			mods::classes::increment_technique(attacker,"cqc_right_teep");
-		}
-		void LEFT_FRONT_KICK(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left_front_kick");
-			mods::classes::increment_technique(attacker,"cqc_left_front_kick");
+		mods::classes::increment_technique(attacker,"cqc_right_teep");
+	}
+	void LEFT_FRONT_KICK(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left_front_kick");
+		mods::classes::increment_technique(attacker,"cqc_left_front_kick");
 
-		}
-		void RIGHT_FRONT_KICK(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right front kick");
-			mods::classes::increment_technique(attacker,"cqc_right_front_kick");
+	}
+	void RIGHT_FRONT_KICK(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right front kick");
+		mods::classes::increment_technique(attacker,"cqc_right_front_kick");
 
-		}
-		void RIGHT_KICK_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right kick to head");
-			mods::classes::increment_technique(attacker,"cqc_right_kick_to_head");
-		}
-		void LEFT_KICK_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right kick to head");
-			mods::classes::increment_technique(attacker,"cqc_left_kick_to_head");
-		}
-		void RIGHT_KNEE_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right knee to head");
-			mods::classes::increment_technique(attacker,"cqc_right_knee_to_head");
-		}
-		void LEFT_KNEE_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left knee to head");
-			mods::classes::increment_technique(attacker,"cqc_left_knee_to_head");
+	}
+	void RIGHT_KICK_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right kick to head");
+		mods::classes::increment_technique(attacker,"cqc_right_kick_to_head");
+	}
+	void LEFT_KICK_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right kick to head");
+		mods::classes::increment_technique(attacker,"cqc_left_kick_to_head");
+	}
+	void RIGHT_KNEE_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right knee to head");
+		mods::classes::increment_technique(attacker,"cqc_right_knee_to_head");
+	}
+	void LEFT_KNEE_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left knee to head");
+		mods::classes::increment_technique(attacker,"cqc_left_knee_to_head");
 
-		}
-		void LEFT_KNEE_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left knee to body");
-			mods::classes::increment_technique(attacker,"cqc_left_knee_to_body");
+	}
+	void LEFT_KNEE_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left knee to body");
+		mods::classes::increment_technique(attacker,"cqc_left_knee_to_body");
 
-		}
-		void RIGHT_KNEE_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right knee to body");
-			mods::classes::increment_technique(attacker,"cqc_right_knee_to_body");
+	}
+	void RIGHT_KNEE_TO_BODY(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right knee to body");
+		mods::classes::increment_technique(attacker,"cqc_right_knee_to_body");
 
-		}
-		void KNIFE_DISARM(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("knife disarm");
-			mods::classes::increment_technique(attacker,"cqc_knife_disarm");
+	}
+	void KNIFE_DISARM(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("knife disarm");
+		mods::classes::increment_technique(attacker,"cqc_knife_disarm");
 
-		}
-		void PISTOL_DISARM(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("pistol disarm");
-			mods::classes::increment_technique(attacker,"cqc_pistol_disarm");
+	}
+	void PISTOL_DISARM(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("pistol disarm");
+		mods::classes::increment_technique(attacker,"cqc_pistol_disarm");
 
-		}
-		void RIGHT_UPWARD_ELBOW(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("right upward elbow");
-			mods::classes::increment_technique(attacker,"cqc_right_upward_elbow");
-		}
-		void LEFT_UPWARD_ELBOW(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left upward elbow");
-			mods::classes::increment_technique(attacker,"cqc_left_upward_elbow");
-		}
-		void RIGHT_LEG_KICK(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left upward elbow");
-			mods::classes::increment_technique(attacker,"cqc_right_leg_kick");
-		}
-		void LEFT_LEG_KICK(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left upward elbow");
-			mods::classes::increment_technique(attacker,"cqc_left_leg_kick");
-		}
-		void RIGHT_STOMP_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left upward elbow");
-			mods::classes::increment_technique(attacker,"cqc_right_stomp_to_head");
-		}
-		void LEFT_STOMP_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
-			auto dex = attacker->dexterity();
-			auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
-			mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
-			attacker->sendln("left upward elbow");
-			mods::classes::increment_technique(attacker,"cqc_left_stomp_to_head");
-		}
-	};//end namespace moves
+	}
+	void RIGHT_UPWARD_ELBOW(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("right upward elbow");
+		mods::classes::increment_technique(attacker,"cqc_right_upward_elbow");
+	}
+	void LEFT_UPWARD_ELBOW(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left upward elbow");
+		mods::classes::increment_technique(attacker,"cqc_left_upward_elbow");
+	}
+	void RIGHT_LEG_KICK(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left upward elbow");
+		mods::classes::increment_technique(attacker,"cqc_right_leg_kick");
+	}
+	void LEFT_LEG_KICK(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left upward elbow");
+		mods::classes::increment_technique(attacker,"cqc_left_leg_kick");
+	}
+	void RIGHT_STOMP_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left upward elbow");
+		mods::classes::increment_technique(attacker,"cqc_right_stomp_to_head");
+	}
+	void LEFT_STOMP_TO_HEAD(player_ptr_t& attacker,player_ptr_t& victim) {
+		auto dex = attacker->dexterity();
+		auto force = attacker->strength() * attacker->melee_triad() * attacker->level();
+		mods::melee::damage_types::cqc_damage_with_feedback(attacker,victim,force * (dex * 0.1));
+		attacker->sendln("left upward elbow");
+		mods::classes::increment_technique(attacker,"cqc_left_stomp_to_head");
+	}
+};//end namespace moves
 
+namespace mods::melee::main {
+	using t = technique_t;
 	static inline std::vector<std::pair<technique_t,technique_t>>& flow_states() {
 		static std::vector<std::pair<technique_t,technique_t>> state;
 		static bool set = false;
@@ -425,5 +425,4 @@ namespace mods::melee::main {
 		mods::interpreter::add_user_command("list_combat_order",do_list_combat_order);
 		mods::interpreter::add_user_command("clear_combat_order",do_clear_combat_order);
 	}
-};
-
+}; //end namespace mods::melee::main::moves

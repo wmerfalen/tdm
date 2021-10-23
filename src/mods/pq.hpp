@@ -329,6 +329,47 @@ static inline std::tuple<int16_t,std::string> load_all(TObject& s) {
 	}
 	return {UNKNOWN_ERROR,"unknown"};
 }
+template <typename TObject,typename sql_compositor>
+static inline std::tuple<int16_t,std::string> select_row_to_json(std::string_view table,TObject& s) {
+	try {
+		auto json_txn = txn();
+		sql_compositor comp(table.data(),&json_txn);
+		auto aggregate_sql = comp.select_row_to_json(table.data())
+		                     .from(table.data())
+		                     .sql();
+		auto result_set = mods::pq::exec(json_txn,aggregate_sql);
+		mods::pq::commit(json_txn);
+		if(result_set.size()) {
+			s->feed_multi(result_set);
+			return {FETCHED_OKAY,"okay"};
+		}
+		return {NO_RESULTS,"no results"};
+	} catch(std::exception& e) {
+		return {EXCEPTION_OCCURRED,e.what()};
+	}
+	return {UNKNOWN_ERROR,"unknown"};
+}
+template <typename TObject,typename sql_compositor>
+static inline std::tuple<int16_t,std::string> json_agg(std::string_view table,TObject& s) {
+	try {
+		auto json_txn = txn();
+		sql_compositor comp(table.data(),&json_txn);
+		auto aggregate_sql = comp.select_json_agg(table.data())
+		                     .from(table.data())
+		                     .sql();
+		auto result_set = mods::pq::exec(json_txn,aggregate_sql);
+		mods::pq::commit(json_txn);
+		if(result_set.size()) {
+			s->feed_multi(result_set);
+			return {FETCHED_OKAY,"okay"};
+		}
+		return {NO_RESULTS,"no results"};
+	} catch(std::exception& e) {
+		return {EXCEPTION_OCCURRED,e.what()};
+	}
+	return {UNKNOWN_ERROR,"unknown"};
+}
+
 template <typename TContainerObject,typename sql_compositor>
 static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,
                                                          std::string_view where,

@@ -12,7 +12,7 @@
 #include "../mob-roam.hpp"
 #include "../query-objects.hpp"
 
-#define  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__
+//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__
 #define m_debug(a) if(ct->is_fighting()){ std::cerr << "[m.m.generic-thief.btree:" << __LINE__ << "]->" << a << "\n"; }
 #else
