@@ -22,6 +22,7 @@ namespace mods::object_utils {
 	obj_ptr_t first_or_create(room_rnum room,std::string query, int type, std::string yaml_file);
 	bool assert_sane_object(std::string_view yaml);
 	std::vector<std::string> object_types();
+	bool can_wield_in_secondary(const obj_ptr_t& item);
 
 	/** I understand that this may seem like it should be in the yaml.hpp file
 	 * instead of here in object_utils, but the only time we're catching
@@ -289,6 +290,9 @@ namespace mods::object_utils {
 	bool can_attack_same_room(T& obj) {
 		if(obj->has_melee()) {
 			return true;
+		}
+		if(obj->rifle()->attributes->type == mw_rifle::SNIPER) {
+			return false;
 		}
 		return obj->rifle()->attributes->base_stat_list->at(0).allow;
 	}

@@ -3,7 +3,7 @@
 
 #define INIT(A) \
 	namespace A { extern void init(); };
-INIT(mods::json::npc_export);
+INIT(mods::json);
 INIT(mods::combat::commands);
 INIT(mods::combat_composer);
 INIT(mods::players::friendly_reminders);
@@ -133,7 +133,7 @@ namespace mods::init {
 		mods::corpse::init();
 		mods::combat_composer::init();
 		mods::combat::commands::init();
-		mods::json::npc_export::init();
+		mods::json::init();
 	}
 };
 #endif

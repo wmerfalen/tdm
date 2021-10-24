@@ -34,6 +34,10 @@ namespace mods::combat_composer {
 #define RCT spray_state::current
 #define ATKR spray_state::attacker
 #define STATE_FROM_DIR spray_state::from_direction
+#define INIT_RCT() \
+		RCT = attacker->calculate_ranged_combat_totals(weapon);\
+		ATKR = attacker;\
+		STATE_FROM_DIR = OPPOSITE_DIR(direction);
 	};
 
 	namespace phases {
@@ -260,9 +264,11 @@ namespace mods::combat_composer {
 				attacker->sendln("You cannot spray with a sniper rifle!");
 				return room_damages;
 			}
+			uint8_t max_targets_hit = tier(attacker);
+			uint8_t targets_hit = 0;
 			for(const auto& target : collect_spray_targets(attacker,direction,weapon)) {
-				if((rand_number(1,100) % 2) == 0) {
-					continue;
+				if(targets_hit++ >= max_targets_hit) {
+					break;
 				}
 				calculated_damage_t d;
 				d.damage = RCT->base_damage / SPRAY_BASE_DAMAGE_DIVISOR();
@@ -526,9 +532,7 @@ namespace mods::combat_composer {
 	 * Handles both ranged and immediate targets
 	 */
 	void spray_target(player_ptr_t& attacker,direction_t direction, obj_ptr_t& weapon) {
-		RCT = attacker->calculate_ranged_combat_totals(weapon);
-		ATKR = attacker;
-		STATE_FROM_DIR = OPPOSITE_DIR(direction);
+		INIT_RCT();
 		/**
 		 * First check that the weapon can spray
 		 */
@@ -554,3 +558,7 @@ namespace mods::combat_composer {
 	}
 
 };//end namespace combat_composer
+#undef RCT
+#undef ATKR
+#undef STATE_FROM_DIR
+#undef INIT_RCT

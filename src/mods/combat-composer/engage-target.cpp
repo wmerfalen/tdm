@@ -21,6 +21,21 @@
 
 
 namespace mods::combat_composer::engage {
+	namespace engage_state {
+		static player_ptr_t attacker;
+		static std::shared_ptr<mods::ranged_combat_totals> current;
+#ifdef RCT
+#undef RCT
+#undef ATKR
+#endif
+
+#define RCT mods::combat_composer::engage::engage_state::current
+#define ATKR mods::combat_composer::engage::engage_state::attacker
+#define INIT_RCT(A) \
+		RCT = A->get_ranged_combat_totals();\
+		ATKR = A;
+	};
+
 
 	void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) ;
 	namespace phases {
@@ -198,18 +213,6 @@ namespace mods::combat_composer::engage {
 		std::pair<int,int> roll_critical(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon);
 		calculated_damage_t calculate_weapon_damage(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,std::pair<int,int> hsc);
 
-		namespace engage_state {
-			static player_ptr_t attacker;
-			static std::shared_ptr<mods::ranged_combat_totals> current;
-#ifdef RCT
-#undef RCT
-#undef ATKR
-#endif
-
-#define RCT engage_state::current
-#define ATKR engage_state::attacker
-		};
-
 		void perform_cleanup(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon) {
 			feedback_t feedback;
 			m_debug("decreasing ammo");
@@ -329,13 +332,13 @@ namespace mods::combat_composer::engage {
 				           RCT->damage_dice_count,
 				           RCT->damage_dice_sides
 				       );
-				::mods::combat_composer::phases::report_crit(attacker,victim,crit,dir);
+				mods::combat_composer::phases::report_crit(attacker,victim,crit,dir);
 			}
 			/** calculate headshot */
 			if(rolled_a_headshot) {
 				/** TODO: evaluate damage if wearing super strong headgear */
 				headshot = victim->hp() / HEADSHOT_DIVISOR();
-				::mods::combat_composer::phases::report_headshot(attacker,victim,headshot,dir);
+				mods::combat_composer::phases::report_headshot(attacker,victim,headshot,dir);
 				m_debug("headshot");
 			}
 			m_debug("checking crit range");
@@ -385,8 +388,7 @@ namespace mods::combat_composer::engage {
 		 * viable targets. <-- TODO
 		 */
 		std::optional<player_ptr_t> acquire_immediate_target(player_ptr_t& attacker,std::string_view target,obj_ptr_t& weapon) {
-			RCT = attacker->calculate_ranged_combat_totals(weapon);
-			ATKR = attacker;
+			INIT_RCT(attacker);
 
 
 			//if(attacker->ghost()) {
@@ -652,9 +654,9 @@ namespace mods::combat_composer::engage {
 					mods::mobs::damage_event::sniped(victim,feedback);
 				}
 				m_debug("checking disorient");
-				if(::mods::combat_composer::phases::attack_disorients(attacker,weapon,victim)) {
+				if(mods::combat_composer::phases::attack_disorients(attacker,weapon,victim)) {
 					m_debug("disorients");
-					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,::mods::combat_composer::phases::disorient_ticks(attacker,weapon,victim));
+					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::combat_composer::phases::disorient_ticks(attacker,weapon,victim));
 					feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;
 					/** TODO: maybe make this random to disorient the attacker ? >:) EVIL GENIUS */
 					victim->damage_event(feedback);
@@ -727,6 +729,8 @@ namespace mods::combat_composer::engage {
 };//end combat_composer
 namespace mods::combat_composer {
 	bool engage_target(player_ptr_t& attacker,player_ptr_t& victim, obj_ptr_t& weapon) {
+		INIT_RCT(attacker);
+
 		attacker->sendln("{grn}[++] Engaging target... [++]{/grn}");
 		using namespace mods::combat_composer::engage::phases;
 		/**
@@ -786,7 +790,12 @@ namespace mods::combat_composer {
 		/**
 		 * Phase 4: Calculate damage
 		 */
-		auto damage = calculate_weapon_damage(attacker,victim,weapon,extra_damage);
+		auto damage = calculate_weapon_damage(
+		                  attacker,
+		                  victim,
+		                  weapon,
+		                  extra_damage
+		              );
 
 		/**
 		 * Phase 5: Apply damage to victim
@@ -800,6 +809,7 @@ namespace mods::combat_composer {
 	 * Handles both ranged and immediate targets
 	 */
 	bool engage_target(player_ptr_t& attacker,std::string_view target_name, obj_ptr_t& weapon) {
+		INIT_RCT(attacker);
 		attacker->sendln("{grn}[++] Engaging target... [++]{/grn}");
 		using namespace mods::combat_composer::engage::phases;
 		/**
@@ -826,3 +836,6 @@ namespace mods::combat_composer {
 		return engage_target(attacker,victim,weapon);
 	}
 };//end namespace combat_composer
+#undef RCT
+#undef ATKR
+#undef INIT_RCT

@@ -809,6 +809,10 @@ using vpd = mods::scan::vec_player_data;
 void hit(char_data *ch, char_data *victim, int type) {
 	MENTOC_PREAMBLE();
 	using namespace mods::combat;
+	if(!victim) {
+		log("SYSERR: hit passed a null victim pointer");
+		return;
+	}
 	auto victim_ptr_opt = ptr_opt(victim);
 	if(!victim_ptr_opt.has_value()) {
 		log("SYSERR: found null victim ptr... returning prematurely");

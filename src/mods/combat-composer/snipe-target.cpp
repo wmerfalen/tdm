@@ -20,6 +20,16 @@
 #include "skill-increment.hpp"
 
 namespace mods::combat_composer {
+	namespace snipe_state {
+		static player_ptr_t attacker;
+		static std::shared_ptr<mods::ranged_combat_totals> current;
+#define RCT mods::combat_composer::snipe_state::current
+#define ATKR mods::combat_composer::snipe_state::attacker
+#define INIT_RCT() \
+			RCT = attacker->get_ranged_combat_totals();\
+			ATKR = attacker
+	};
+
 	ACMD(do_print_rct) {
 		player->calculate_ranged_combat_totals()->report(player);
 	}
@@ -231,13 +241,6 @@ namespace mods::combat_composer {
 		bool roll_accuracy(player_ptr_t& attacker,acquired_target_t& target,obj_ptr_t& weapon);
 		std::pair<int,int> roll_critical(player_ptr_t& attacker,acquired_target_t& found_target,obj_ptr_t& weapon);
 		calculated_damage_t calculate_weapon_damage(player_ptr_t& attacker,acquired_target_t& found_target,obj_ptr_t& weapon,std::pair<int,int> hsc);
-
-		namespace snipe_state {
-			static player_ptr_t attacker;
-			static std::shared_ptr<mods::ranged_combat_totals> current;
-#define RCT snipe_state::current
-#define ATKR snipe_state::attacker
-		};
 
 		/**
 		 * Usage:
@@ -820,6 +823,7 @@ namespace mods::combat_composer {
 	 * Handles both ranged and immediate targets
 	 */
 	void snipe_target(player_ptr_t& attacker,phases::target_t target, obj_ptr_t& weapon) {
+		INIT_RCT();
 		/**
 		 * First check that the weapon can snipe
 		 */
@@ -897,6 +901,10 @@ namespace mods::combat_composer {
 
 	}
 	void snipe_target(player_ptr_t& attacker,std::string_view target, direction_t direction,uint8_t distance,obj_ptr_t& weapon) {
+		INIT_RCT();
 		snipe_target(attacker,phases::target_t(target,direction),weapon);
 	}
 };//end namespace combat_composer
+#undef RCT
+#undef ATKR
+#undef INIT_RCT

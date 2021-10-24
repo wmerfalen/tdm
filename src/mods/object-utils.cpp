@@ -3,6 +3,26 @@
 #include "rifle-attachments.hpp"
 
 namespace mods::object_utils {
+	bool can_wield_in_secondary(const obj_ptr_t& item) {
+		if(item->has_rifle() == false) {
+			return false;
+		}
+		if(item->has_melee()) {
+			return true;
+		}
+		switch(item->rifle()->attributes->type) {
+			default:
+			case mw_rifle::SNIPER:
+			case mw_rifle::LIGHT_MACHINE_GUN:
+			case mw_rifle::ASSAULT_RIFLE:
+				return false;
+			case mw_rifle::MACHINE_PISTOL:
+			case mw_rifle::PISTOL:
+			case mw_rifle::SHOTGUN:
+			case mw_rifle::SUB_MACHINE_GUN:
+				return true;
+		}
+	}
 	bool check_rifle_type(const auto& item, const mw_rifle& type) {
 		auto rifle_attachment = mods::rifle_attachments::by_uuid(item->uuid);
 		if(rifle_attachment) {
