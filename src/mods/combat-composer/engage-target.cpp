@@ -648,9 +648,10 @@ namespace mods::combat_composer::engage {
 				feedback.damage_event = de::HIT_BY_RIFLE_ATTACK;
 				victim->damage_event(feedback);
 
-				feedback.damage_event = de::YOU_INFLICTED_SNIPE_DAMAGE;
+				feedback.damage_event = de::YOU_INFLICTED_SAME_ROOM_DAMAGE;
 				attacker->damage_event(feedback);
 				if(victim->is_npc()) {
+					feedback.damage_event = de::HIT_BY_RIFLE_ATTACK;
 					mods::mobs::damage_event::sniped(victim,feedback);
 				}
 				m_debug("checking disorient");

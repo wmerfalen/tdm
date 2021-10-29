@@ -579,6 +579,166 @@ void dam_message(int dam, char_data *ch, char_data *victim,
 		"$n suppresses you with LMG fire!!"
 	};
 
+	static dam_weapon_type msg_MACHETE = {
+		"$n rips into $N with a MACHETE!",
+		"You rip into $N with your MACHETE!!",
+		"$n rips into you with a MACHETE!!"
+	};
+	static dam_weapon_type msg_KNIFE = {
+		"$n attempts to murder $N with a KNIFE!",
+		"You attempt to murder $N with your KNIFE!!",
+		"$n attempts to murder you with a KNIFE!!"
+	};
+	static dam_weapon_type msg_CROWBAR = {
+		"$n fatally crushes $N with a CROWBAR!",
+		"You fatally crush $N with your CROWBAR!!",
+		"$n fatally crushes you with a CROWBAR!!"
+	};
+	static dam_weapon_type msg_CHAIN = {
+		"$n bashes $N with a CHAIN!",
+		"You bash $N with your CHAIN!!",
+		"$n bashes you with a CHAIN!!"
+	};
+	static dam_weapon_type msg_WOODEN_BASEBALL_BAT = {
+		"$n brutalizes into $N with an WOODEN BASEBALL BAT!",
+		"You brutalize $N with your WOODEN BASEBALL BAT!!",
+		"$n brutalizes you with a WOODEN BASEBALL BAT!!"
+	};
+	static dam_weapon_type msg_ALUMINUM_BASEBALL_BAT = {
+		"$n brutalizes into $N with an ALUMINUM BASEBALL BAT!",
+		"You brutalize $N with your ALUMINUM BASEBALL BAT!!",
+		"$n brutalizes you with a ALUMINUM BASEBALL BAT!!"
+	};
+	static dam_weapon_type msg_HAMMER = {
+		"$n smahes $N with a HAMMER!",
+		"You smash $N with your HAMMER!!",
+		"$n smahes you with a HAMMER!!"
+	};
+	static dam_weapon_type msg_SLEDGEHAMMER = {
+		"$n crushes $N with a SLEDGE HAMMER!",
+		"You crush $N with your SLEDGE HAMMER!!",
+		"$n crushes you with a SLEDGE HAMMER!!"
+	};
+	static dam_weapon_type msg_BATON = {
+		"$n crushes $N with a BATON!",
+		"You crush $N with your BATON!!",
+		"$n crushes you with a BATON!!"
+	};
+	static dam_weapon_type msg_HOCKEY_STICK = {
+		"$n assaults $N with a HOCKEY STICK!",
+		"You assault $N with your HOCKEY STICK!!",
+		"$n assaults you with a HOCKEY STICK!!"
+	};
+	static dam_weapon_type msg_AXE = {
+		"$n attempts to murder $N with a AXE!",
+		"You attempt to murder $N with your AXE!!",
+		"$n attempts to murder you with a AXE!!"
+	};
+	static dam_weapon_type msg_SHOVEL = {
+		"$n slam $N with a SHOVEL!",
+		"You slam $N with your SHOVEL!!",
+		"$n slam you with a SHOVEL!!"
+	};
+	static dam_weapon_type msg_PICKAXE = {
+		"$n rips into $N with a PICKAXE!",
+		"You rip into $N with your PICKAXE!!",
+		"$n rips into you with a PICKAXE!!"
+	};
+	static dam_weapon_type msg_KATANA = {
+		"$n rips up $N with a KATANA!",
+		"You rip up $N with your KATANA!!",
+		"$n rips up you with a KATANA!!"
+	};
+	static dam_weapon_type msg_MACE = {
+		"$n fatally crushes $N with a MACE!",
+		"You fatally crush $N with your MACE!!",
+		"$n fatally crushes you with a MACE!!"
+	};
+	static dam_weapon_type msg_LONGSWORD = {
+		"$n fatally dismembers $N with a LONGSWORD!",
+		"You fatally dismember $N with your LONGSWORD!!",
+		"$n fatally dismembers you with a LONGSWORD!!"
+	};
+	static dam_weapon_type msg_NUNCHAKU = {
+		"$n assaults $N with a NUNCHAKU!",
+		"You assault $N with your NUNCHAKU!!",
+		"$n assaults you with a NUNCHAKU!!"
+	};
+	static dam_weapon_type msg_NAGINATA = {
+		"$n rips into $N with a NAGINATA!",
+		"You rip into $N with your NAGINATA!!",
+		"$n rips into you with a NAGINATA!!"
+	};
+	static dam_weapon_type msg_DAGGER = {
+		"$n stabs $N with a DAGGER!",
+		"You stab $N with your DAGGER!!",
+		"$n stabs you with a DAGGER!!"
+	};
+	static dam_weapon_type msg_SCYTHE = {
+		"$n morbidly slashes into $N with a SCYTHE!",
+		"You morbidly slash into $N with your SCYTHE!!",
+		"$n morbidly slashes into you with a SCYTHE!!"
+	};
+	static dam_weapon_type msg_SHURIKEN = {
+		"$n rips into $N with a SHURIKEN!",
+		"You rip into $N with your SHURIKEN!!",
+		"$n rips into you with a SHURIKEN!!"
+	};
+	static dam_weapon_type msg_SPEAR = {
+		"$n disembowels $N with a SPEAR!",
+		"You disembowel $N with your SPEAR!!",
+		"$n disembowels you with a SPEAR!!"
+	};
+	static dam_weapon_type msg_PIKE = {
+		"$n rips into $N with a PIKE!",
+		"You rip into $N with your PIKE!!",
+		"$n rips into you with a PIKE!!"
+	};
+	static dam_weapon_type msg_HALBERD = {
+		"$n rips into $N with a HALBERD!",
+		"You rip into $N with your HALBERD!!",
+		"$n rips into you with a HALBERD!!"
+	};
+	static dam_weapon_type msg_LANCE = {
+		"$n rips into $N with a LANCE!",
+		"You rip into $N with your LANCE!!",
+		"$n rips into you with a LANCE!!"
+	};
+	static dam_weapon_type msg_TRIDENT = {
+		"$n rips into $N with a TRIDENT!",
+		"You rip into $N with your TRIDENT!!",
+		"$n rips into you with a TRIDENT!!"
+	};
+	static dam_weapon_type msg_QUARTERSTAFF = {
+		"$n crushes $N with a QUARTER STAFF!",
+		"You crush $N with your QUARTER STAFF!!",
+		"$n crushes you with a QUARTER STAFF!!"
+	};
+	static dam_weapon_type msg_REBAR = {
+		"$n brutalizes $N with a REBAR!",
+		"You brutalize $N with your REBAR!!",
+		"$n brutalizes you with a REBAR!!"
+	};
+	static dam_weapon_type msg_SICKLE = {
+		"$n morbidly rips apart $N with a SICKLE!",
+		"You morbidly rip apart $N with your SICKLE!!",
+		"$n morbidly rips apart you with a SICKLE!!"
+	};
+	static dam_weapon_type msg_ICE_PICK = {
+		"$n forcefully stabs $N with a ICE PICK!",
+		"You forcefully stab $N with your ICE PICK!!",
+		"$n forcefully stabs you with a ICE PICK!!"
+	};
+	static dam_weapon_type msg_CHAINSAW = {
+		"$n rips into $N with a CHAINSAW!",
+		"You rip into $N with your CHAINSAW!!",
+		"$n rips into you with a CHAINSAW!!"
+	};
+	static dam_weapon_type msg_BRASS_KNUCKLES = {
+		"$n brutally assaults $N with a BRASS KNUCKLES!",
+		"You brutally assault $N with your BRASS KNUCKLES!!",
+		"$n brutally assaults you with a BRASS KNUCKLES!!"
+	};
 	const char* to_room = nullptr;
 	const char* to_char = nullptr;
 	const char* to_victim = nullptr;
@@ -632,14 +792,203 @@ void dam_message(int dam, char_data *ch, char_data *victim,
 			}
 		}
 		if(player->attacking_with()->has_melee()) {
-			/** TODO */
-#if 0
-			switch(player->attacking_with_type()) {
+			switch(player->attacking_with()->melee()->attributes->type) {
+				case mw_melee::MACHETE:
+					to_room = msg_MACHETE.to_room;
+					to_char=msg_MACHETE.to_char;
+					to_victim = msg_MACHETE.to_victim;
+					break;
+
+				case mw_melee::KNIFE:
+					to_room = msg_KNIFE.to_room;
+					to_char=msg_KNIFE.to_char;
+					to_victim = msg_KNIFE.to_victim;
+					break;
+
+				case mw_melee::CROWBAR:
+					to_room = msg_CROWBAR.to_room;
+					to_char=msg_CROWBAR.to_char;
+					to_victim = msg_CROWBAR.to_victim;
+					break;
+
+				case mw_melee::CHAIN:
+					to_room = msg_CHAIN.to_room;
+					to_char=msg_CHAIN.to_char;
+					to_victim = msg_CHAIN.to_victim;
+					break;
+
+				case mw_melee::WOODEN_BASEBALL_BAT:
+					to_room = msg_WOODEN_BASEBALL_BAT.to_room;
+					to_char=msg_WOODEN_BASEBALL_BAT.to_char;
+					to_victim = msg_WOODEN_BASEBALL_BAT.to_victim;
+					break;
+
+				case mw_melee::ALUMINUM_BASEBALL_BAT:
+					to_room = msg_ALUMINUM_BASEBALL_BAT.to_room;
+					to_char=msg_ALUMINUM_BASEBALL_BAT.to_char;
+					to_victim = msg_ALUMINUM_BASEBALL_BAT.to_victim;
+					break;
+
+				case mw_melee::HAMMER:
+					to_room = msg_HAMMER.to_room;
+					to_char=msg_HAMMER.to_char;
+					to_victim = msg_HAMMER.to_victim;
+					break;
+
+				case mw_melee::SLEDGEHAMMER:
+					to_room = msg_SLEDGEHAMMER.to_room;
+					to_char=msg_SLEDGEHAMMER.to_char;
+					to_victim = msg_SLEDGEHAMMER.to_victim;
+					break;
+
+				case mw_melee::BATON:
+					to_room = msg_BATON.to_room;
+					to_char=msg_BATON.to_char;
+					to_victim = msg_BATON.to_victim;
+					break;
+
+				case mw_melee::HOCKEY_STICK:
+					to_room = msg_HOCKEY_STICK.to_room;
+					to_char=msg_HOCKEY_STICK.to_char;
+					to_victim = msg_HOCKEY_STICK.to_victim;
+					break;
+
+				case mw_melee::AXE:
+					to_room = msg_AXE.to_room;
+					to_char=msg_AXE.to_char;
+					to_victim = msg_AXE.to_victim;
+					break;
+
+				case mw_melee::SHOVEL:
+					to_room = msg_SHOVEL.to_room;
+					to_char=msg_SHOVEL.to_char;
+					to_victim = msg_SHOVEL.to_victim;
+					break;
+
+				case mw_melee::PICKAXE:
+					to_room = msg_PICKAXE.to_room;
+					to_char=msg_PICKAXE.to_char;
+					to_victim = msg_PICKAXE.to_victim;
+					break;
+
+				case mw_melee::KATANA:
+					to_room = msg_KATANA.to_room;
+					to_char=msg_KATANA.to_char;
+					to_victim = msg_KATANA.to_victim;
+					break;
+
+				case mw_melee::MACE:
+					to_room = msg_MACE.to_room;
+					to_char=msg_MACE.to_char;
+					to_victim = msg_MACE.to_victim;
+					break;
+
+				case mw_melee::LONGSWORD:
+					to_room = msg_LONGSWORD.to_room;
+					to_char=msg_LONGSWORD.to_char;
+					to_victim = msg_LONGSWORD.to_victim;
+					break;
+
+				case mw_melee::NUNCHAKU:
+					to_room = msg_NUNCHAKU.to_room;
+					to_char=msg_NUNCHAKU.to_char;
+					to_victim = msg_NUNCHAKU.to_victim;
+					break;
+
+				case mw_melee::NAGINATA:
+					to_room = msg_NAGINATA.to_room;
+					to_char=msg_NAGINATA.to_char;
+					to_victim = msg_NAGINATA.to_victim;
+					break;
+
+				case mw_melee::DAGGER:
+					to_room = msg_DAGGER.to_room;
+					to_char=msg_DAGGER.to_char;
+					to_victim = msg_DAGGER.to_victim;
+					break;
+
+				case mw_melee::SCYTHE:
+					to_room = msg_SCYTHE.to_room;
+					to_char=msg_SCYTHE.to_char;
+					to_victim = msg_SCYTHE.to_victim;
+					break;
+
+				case mw_melee::SHURIKEN:
+					to_room = msg_SHURIKEN.to_room;
+					to_char=msg_SHURIKEN.to_char;
+					to_victim = msg_SHURIKEN.to_victim;
+					break;
+
+				case mw_melee::SPEAR:
+					to_room = msg_SPEAR.to_room;
+					to_char=msg_SPEAR.to_char;
+					to_victim = msg_SPEAR.to_victim;
+					break;
+
+				case mw_melee::PIKE:
+					to_room = msg_PIKE.to_room;
+					to_char=msg_PIKE.to_char;
+					to_victim = msg_PIKE.to_victim;
+					break;
+
+				case mw_melee::HALBERD:
+					to_room = msg_HALBERD.to_room;
+					to_char=msg_HALBERD.to_char;
+					to_victim = msg_HALBERD.to_victim;
+					break;
+
+				case mw_melee::LANCE:
+					to_room = msg_LANCE.to_room;
+					to_char=msg_LANCE.to_char;
+					to_victim = msg_LANCE.to_victim;
+					break;
+
+				case mw_melee::TRIDENT:
+					to_room = msg_TRIDENT.to_room;
+					to_char=msg_TRIDENT.to_char;
+					to_victim = msg_TRIDENT.to_victim;
+					break;
+
+				case mw_melee::QUARTERSTAFF:
+					to_room = msg_QUARTERSTAFF.to_room;
+					to_char=msg_QUARTERSTAFF.to_char;
+					to_victim = msg_QUARTERSTAFF.to_victim;
+					break;
+
+				case mw_melee::REBAR:
+					to_room = msg_REBAR.to_room;
+					to_char=msg_REBAR.to_char;
+					to_victim = msg_REBAR.to_victim;
+					break;
+
+				case mw_melee::SICKLE:
+					to_room = msg_SICKLE.to_room;
+					to_char=msg_SICKLE.to_char;
+					to_victim = msg_SICKLE.to_victim;
+					break;
+
+				case mw_melee::ICE_PICK:
+					to_room = msg_ICE_PICK.to_room;
+					to_char=msg_ICE_PICK.to_char;
+					to_victim = msg_ICE_PICK.to_victim;
+					break;
+
+				case mw_melee::CHAINSAW:
+					to_room = msg_CHAINSAW.to_room;
+					to_char=msg_CHAINSAW.to_char;
+					to_victim = msg_CHAINSAW.to_victim;
+					break;
+
+				case mw_melee::BRASS_KNUCKLES:
+					to_room = msg_BRASS_KNUCKLES.to_room;
+					to_char=msg_BRASS_KNUCKLES.to_char;
+					to_victim = msg_BRASS_KNUCKLES.to_victim;
+					break;
+
 				default:
 					to_room = "heh";
 					break;
 			}
-#endif
 		}
 	}
 
@@ -660,19 +1009,19 @@ void dam_message(int dam, char_data *ch, char_data *victim,
 
 	if(dam == 0) {
 		msgnum = 0;
-	} else if(dam <= 2) {
+	} else if(dam <= 100) {
 		msgnum = 1;
-	} else if(dam <= 4) {
+	} else if(dam <= 400) {
 		msgnum = 2;
-	} else if(dam <= 6) {
+	} else if(dam <= 600) {
 		msgnum = 3;
-	} else if(dam <= 10) {
+	} else if(dam <= 1000) {
 		msgnum = 4;
-	} else if(dam <= 14) {
+	} else if(dam <= 1400) {
 		msgnum = 5;
-	} else if(dam <= 19) {
+	} else if(dam <= 1900) {
 		msgnum = 6;
-	} else if(dam <= 23) {
+	} else if(dam <= 2300) {
 		msgnum = 7;
 	} else {
 		msgnum = 8;

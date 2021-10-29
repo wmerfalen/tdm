@@ -8,14 +8,146 @@
 #include <stack>
 #include <forward_list>
 #include "../scan.hpp"
+#include "resistance.hpp"
 
 namespace mods::mobs {
 	using tick_t = uint64_t;
 	struct defiler : public smart_mob {
+			static constexpr mob_vnum MOB_VNUM = 666;
+			/**
+			 * Brainstorming some ideas for the DEFILER
+			 *
+			 * - Perhaps this could be a pure melee boss?
+			 *   - Throwing daggers from far off
+			 *   - Uses corpse explosion
+			 *   - Uses Chainsaw to attack
+			 *   - Uses barbed wire to ensnare you
+			 * - Weaknesses
+			 *   - Uses NIGHT VISION goggles, so he can see you,
+			 *   but is susceptible to flashbangs or rooms that
+			 *   are on fire
+			 * - Weapons
+			 *   - Radioactive Daggers (THROWING)
+			 *   - Butcher Knife (MELEE)
+			 *   - Barbed wire (ensnaring)
+			 *
+			 * - Resistances
+			 *   - BLEED
+			 *   - SHRAPNEL
+			 * -
+			 *
+			 */
+			enum telegraph_action_type : uint8_t {
+				ENSNARING_YOU,
+				CORPSE_EXPLOSION,
+				DAGGER_THROW,
+				CHAINSAW_ATTACK,
+			};
+			static constexpr std::string_view BACKPACK_WEAPON = "rifle/defiler-scarh.yml";
+			static constexpr std::string_view DESCRIPTION =
+			    "The DEFILER\r\n"
+			    "Loadout:\r\n"
+			    "Eyes: armor/night-vision-goggles.yml\r\n"
+			    "Head: armor/titanium-mask.yml\r\n"
+			    "Body: armor/sleeveless-kevlar-vest.yml\r\n"
+			    "Belt: armor/gas-canister-extended-belt.yml\r\n"
+			    "Legs: armor/titan-shielding-leg-armor.yml\r\n"
+			    "Primary: rifle/scarh.yml\r\n"
+			    "Seconary: melee/shock-naginata.yml\r\n"
+			    ;
+			static constexpr std::string_view ABILITIES =
+			    "Ability 1:\r\n"
+			    "-------------------------------------------------------------------\r\n"
+			    "[ ] Ensnare target\r\n"
+			    " - Throws an impact grenade that causes a quick hardening substance to wrap\r\n"
+			    "   the target's feet.\r\n"
+			    " - DURATION: 3 seconds\r\n"
+			    " - During duration:\r\n"
+			    "    - Player cannot move, or flee\r\n"
+			    "    - Player can snipe\r\n"
+			    "    - Player cannot use explosive devices\r\n"
+			    "Ability 2:\r\n"
+			    "-------------------------------------------------------------------\r\n"
+			    "[ ] Corpse explosion\r\n"
+			    " - Fires a projectile which causes a corpse to explode on impact\r\n"
+			    "";
+			static constexpr std::string_view PHASES =
+			    "PHASES\r\n"
+			    "-------------------------------------------------------------------\r\n"
+
+			    "CORROSION WEAKNESS PHASE\r\n"
+			    " [ ] Defiler is susceptible to corrosive attacks.\r\n"
+			    " -- Corrosion will cause his armor to be less reliable\r\n"
+			    " -- At 75 percent health, his boots and shin guards will be completely deteriorated\r\n"
+			    "    from the corrosive effects.\r\n"
+
+			    "GLASS SHARDS WEARKNESS PHASE\r\n"
+			    " [ ] Defiler, having had his boots and shin guards made useless, will now be susceptible to\r\n"
+			    "     BLEED attacks. Particularly with broken glass and shrapnel.\r\n"
+			    "  -- This will cause blood to give away his location\r\n"
+
+			    "CORPSE EXPLOSION PHASE\r\n"
+			    " [ ] You'll notice that every room has a corpse in it. This is on purpose.\r\n"
+			    "     Defiler will detonate these corpses when you are near them.\r\n"
+
+			    "ENSNARING PHASE\r\n"
+			    " [ ] Defiler, upon finding you, will use the Roots of Mayhem skill which will ensnare the player\r\n"
+			    "  -- Player cannot move for 3 seconds.\r\n"
+			    "  -- Player can snipe and use any ranged attacks\r\n"
+			    "  -- Player will have -50 movement points once ensnare is done\r\n"
+
+			    "NIGHT VISION PHASE\r\n"
+			    " [ ] Defiler will use his night vision goggles and turn off all lights.\r\n"
+			    "  - Counter this with:\r\n"
+			    "  	- [ ] Igniting fires in each room by destroying the bottles of alcohol and setting fire to them.\r\n"
+
+			    "FLASHBANG WEAKNESS PHASE\r\n"
+			    " [ ] Defiler uses night vision goggles at all times.\r\n"
+			    "  - A flashbang grenade will blind him for twice as many ticks as normal.\r\n"
+
+			    "DAGGER PHASE\r\n"
+			    " [ ] Defiler can throw daggers extremely far distances.\r\n"
+			    "  - When the player gets hit, they must type 'pull dagger' to remove it\r\n"
+			    "   - Player endures bleed for N ticks according to roll of dice\r\n"
+			    "\r\n"
+
+			    "";
+			static constexpr std::string_view WEAKNESSES =
+			    "Weakness 1:\r\n"
+			    "-------------------------------------------------------------------\r\n"
+			    "[ ] Flashbangs cause Defiler to have prolonged blindness\r\n"
+			    " - The Defiler must wear the night vision goggles attached to his eyes\r\n"
+			    " - This means that any bright flashes of light will be amplified and blindness will ensue\r\n"
+			    "\r\n"
+			    "Weakness 2:\r\n"
+			    "-------------------------------------------------------------------\r\n"
+			    "[ ] Corrosive damage can reduce the effectiveness of his armor.\r\n"
+			    "\r\n"
+			    "Weakness 3:\r\n"
+			    "-------------------------------------------------------------------\r\n"
+			    "[ ] The Defiler is very susceptible to bleeding.\r\n"
+			    " - The Defailer has an odd genetic condition that makes him susceptible to bleed out if\r\n"
+			    "   a large enough cut were made.\r\n"
+			    " - In addition, Shrapnel can cause the Defailer to bleed profusely.\r\n"
+			    "\r\n"
+			    "Other notes:\r\n"
+			    "-------------------------------------------------------------------\r\n"
+			    "\r\n"
+			    "It is possible to beat the Defiler by:\r\n"
+			    " - corrosive shotguns.\r\n"
+			    " - Shrapnel or Corrosive claymore mines\r\n"
+			    " - Shrapnel or Corrosive grenades\r\n"
+			    "";
+
 			enum btree_t : int16_t {
-				SHOPL_NONE = -1,
-				SHOPL_ROAM = 0,
-				SHOPL_HOSTILE,
+				DEFILER_NONE = -1,
+				DEFILER_ROAM = 0,
+				DEFILER_HOSTILE,
+				DEFILER_DAGGER_ATTACK,
+				DEFILER_CORPSE_EXPLOSION_ATTACK,
+				DEFILER_ENSNARE_ATTACK,
+				DEFILER_DESPERATION_MOVE,
+				DEFILER_LAST_DITCH_EFFORT_MOVE,
 			};
 			using uuidlist_t = std::forward_list<uuid_t>;
 			static constexpr uint16_t SHOULD_DO_ROAM = 0;
@@ -103,6 +235,37 @@ namespace mods::mobs {
 			bool attack_anyone_in_same_room();
 
 
+
+			/**===========*/
+			/** Abilities */
+			/**===========*/
+			void ensnare(player_ptr_t& player);
+			void corpse_explosion_near(player_ptr_t& player);
+			void throw_daggers_toward(player_ptr_t& player);
+
+			/**==============
+			 * Weaknesses
+			 *===============*/
+			void flash_bang_me();
+
+			/**
+			 * Area screams
+			 */
+			void shout_to_area(uint8_t e_msg);
+
+
+			/**
+			 * =============================
+			 * Telegraphs
+			 * -- What is a telegraph?
+			 *  In hand to hand combat, a telegraph is a "tell"
+			 *  If you "telegraph your punch" it means your body betrays you
+			 *  and gives the opponent a hint that you are goign to throw a punch
+			 *
+			 *==============================
+			 */
+			void telegraph_action(uint8_t action);
+
 		private:
 			player_ptr_t get_next_attacking_priority();
 			player_ptr_t m_last_attacker;
@@ -114,6 +277,7 @@ namespace mods::mobs {
 			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;
 			bool m_found_item;
 			std::vector<std::string> m_random_acts;
+			std::forward_list<obj_ptr_t> m_backpack;
 	};
 
 	std::forward_list<std::shared_ptr<defiler>>& defiler_list();

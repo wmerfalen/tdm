@@ -1824,6 +1824,9 @@ namespace mods {
 				                   MSG_GUNFIRE_WHIZZED_BY_FROM_THE_SUFFIX()
 				                  ));
 				break;
+			case damage_event_t::YOU_INFLICTED_SAME_ROOM_DAMAGE:
+				this->queue_up(CAT("{grn}*** You hit your target *** [",std::to_string(feedback.damage),"]{/grn}"));
+				break;
 			case damage_event_t::YOU_INFLICTED_SNIPE_DAMAGE:
 				this->queue_up(CAT("{grn}*** You snipe your target *** [",std::to_string(feedback.damage),"]{/grn}"));
 				break;

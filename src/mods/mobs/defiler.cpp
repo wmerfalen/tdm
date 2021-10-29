@@ -9,13 +9,14 @@
 #include "../calc-visibility.hpp"
 
 #ifdef  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) mentoc_prefix_debug("m|m|cma") << a << "\n";
+#define m_debug(a) mentoc_prefix_debug("defiler") << a << "\n";
 #define cmem(a) mentoc_prefix_debug("[defiler][memory_footprint]") << a << "\n";
 #else
 #define m_debug(a)
 #define cmem(a)
 #endif
 namespace mods::mobs {
+
 	namespace defiler_btree {
 		/**
 		 * @brief find the room with the most enemies, and go towards that direction
@@ -26,15 +27,12 @@ namespace mods::mobs {
 		 * @return
 		 */
 		uint8_t weighted_direction_decider(player_ptr_t& mob,player_ptr_t victim) {
-			int depth = CAR_THIEF_SCAN_DEPTH();
+			uint8_t depth = DEFILER_SCAN_DEPTH();
 			mods::scan::vec_player_data vpd;
 			mods::scan::los_scan_for_players(mob->cd(),depth,&vpd);
 			std::map<uint8_t,int> scores;
 			for(auto v : vpd) {
 				if(!ptr_by_uuid(v.uuid)) {
-					continue;
-				}
-				if(mods::rooms::is_peaceful(v.room_rnum)) {
 					continue;
 				}
 				if(victim && victim->uuid() == v.uuid) {
@@ -58,6 +56,11 @@ namespace mods::mobs {
 			return should_fire;
 		}
 	};// end namespace defiler_btree
+
+	/**
+	 * - TODO: as soon as we spawn the defiler, we need to place him in the
+	 *   room where he will meet the quest taker
+	 */
 	void defiler::create(const uuid_t& mob_uuid, std::string_view targets) {
 		m_debug("defiler create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
@@ -69,11 +72,19 @@ namespace mods::mobs {
 		g->btree_roam();
 		mods::mobs::defiler_list().push_front(g);
 	}
+
+
+	/**
+	 * - TODO: This will likely have to involve telegraphs
+	 */
 	void defiler::perform_random_act() {
 		act_to_room(m_random_acts[rand_number(0,m_random_acts.size()-1)]);
 	}
 
 	/**
+	 * - TODO: when enemies are spotted, we give away the defiler
+	 *   location by shouting a taunt. This will be part of the
+	 *   telegraph
 	 * @brief callback when someone spotted
 	 *
 	 * @param room
@@ -86,14 +97,26 @@ namespace mods::mobs {
 		//this->spray(player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}
+
+	/**
+	 * There are no variations to the defiler, so this code
+	 * should be ignored
+	 */
 	void defiler::set_variation(const std::string& v) {
 		for(const auto& type : EXPLODE(v,' ')) {
 			std::cerr << green_str("defiler::variation:") << type << "\n";
 		}
 	}
+
+	/**
+	 * TODO: include stats (hp,mana,etc) and who the Defiler is currently
+	 * hunting
+	 */
 	str_map_t defiler::report() {
 		return usages();
 	}
+
+
 	str_map_t defiler::usages() {
 		str_map_t m;
 		m = base_usages();
@@ -115,27 +138,41 @@ namespace mods::mobs {
 		}
 		return m;
 	}
+
+
+	/** =================================================================*/
+	/** =================================================================*/
+	/** === B E H A V I O U R  T R E E S                                 */
+	/** =================================================================*/
+	/** =================================================================*/
+
 	void defiler::set_behavior_tree_directly(const defiler::btree_t& t) {
 		m_debug("setting tree id directly to: " << t);
 		cd()->mob_specials.behaviour_tree = (uint16_t)t;
 	}
 	bool defiler::has_tree() {
-		return cd()->mob_specials.behaviour_tree != defiler::btree_t::SHOPL_NONE;
+		return cd()->mob_specials.behaviour_tree != defiler::btree_t::DEFILER_NONE;
 	}
 	defiler::btree_t defiler::get_tree() {
 		return (btree_t)cd()->mob_specials.behaviour_tree;
 	}
 	void defiler::btree_none() {
-		set_behaviour_tree_directly(defiler::btree_t::SHOPL_NONE);
+		set_behaviour_tree_directly(defiler::btree_t::DEFILER_NONE);
 	}
 	void defiler::btree_roam() {
-		set_behavior_tree_directly(defiler::btree_t::SHOPL_ROAM);
+		set_behavior_tree_directly(defiler::btree_t::DEFILER_ROAM);
 
 	}
 	void defiler::btree_hostile() {
-		set_behavior_tree_directly(defiler::btree_t::SHOPL_HOSTILE);
+		set_behavior_tree_directly(defiler::btree_t::DEFILER_HOSTILE);
 
 	}
+
+	/** =================================================================*/
+	/** =================================================================*/
+	/** === DAMAGE CALLBACKS */
+	/** =================================================================*/
+	/** =================================================================*/
 	/**
 	 * @brief damage_events registered here
 	 */
@@ -287,9 +324,23 @@ namespace mods::mobs {
 			this->set_heading(decision);
 		});
 	}
+
+	/**
+	 * TODO: if this is used, it needs to return true
+	 */
 	bool defiler::is_rival(player_ptr_t& player) {
-		return false;
+		return true;
 	}
+
+	/**
+	 * - TODO: React according to which mode the Defiler is in
+	 * 		- [ ] Ensnaring mode causes snare to be immediately set on player
+	 * 			- [ ] Defiler moves away and throws daggers
+	 * 		- [ ] Corpse explosion mode causes corpse to explode
+	 * 		- [ ] Dagger mode causes Defiler to throw daggers at player's legs
+	 * 			- [ ] Player cannot move until daggers taken out
+	 * 		- [ ] Chainsaw mode causes Defiler to attack player with Chainsaw
+	 */
 	void defiler::door_entry_event(player_ptr_t& player) {
 		if(player->is_npc()) {
 			if(is_rival(player)) {
@@ -299,6 +350,10 @@ namespace mods::mobs {
 			}
 		}
 	}
+
+	/**
+	 * - TODO: add quest taker permanently to memory
+	 */
 	void defiler::init() {
 		smart_mob::init();
 		m_should_do_max[SHOULD_DO_ROAM] = LOWLY_SECURITY_ROAM_TICK();
@@ -342,6 +397,10 @@ namespace mods::mobs {
 		bootstrap_equipment();
 		m_weapon = player()->primary();
 	}
+
+	/**
+	 * - TODO: Agony scream and disappearance
+	 */
 	void defiler::attacked(const feedback_t& feedback) {
 		auto p = ptr_by_uuid(feedback.attacker);
 		if(p) {
@@ -350,12 +409,23 @@ namespace mods::mobs {
 			cmem("{m_attackers.size}:" << std::distance(m_attackers.cbegin(),m_attackers.cend()));
 		}
 	}
+
+	/**
+	 * - TODO: Must always return quest taker
+	 */
 	player_ptr_t defiler::get_next_attacking_priority() {
 		if(!m_attackers.empty()) {
 			return m_attackers.front();
 		}
 		return nullptr;
 	}
+
+	/**
+	 * - TODO: for each mode, determines if the following will happen
+	 *   - [ ] Ensnaring, throw dagger
+	 *   - [ ] Dagger, snipe
+	 *   - [ ] Corpse Explosion, snipe/engage
+	 */
 	void defiler::extra_attack() {
 		m_debug("extra attack roll success");
 		auto attacker = player()->fighting();
@@ -457,6 +527,12 @@ namespace mods::mobs {
 	uint8_t defiler::scan_depth() const {
 		return CHAOTIC_METH_ADDICT_SCAN_DEPTH();
 	}
+
+
+	/**
+	 * - This is actually something that would prove very useful
+	 * - This would fulfill the "unfair" role that bosses in video games usually have
+	 */
 	player_ptr_t defiler::spawn_near_someone() {
 		player_ptr_t who = nullptr;
 		mods::loops::foreach_player([&](auto player) -> bool {
@@ -471,6 +547,11 @@ namespace mods::mobs {
 		});
 		return who;
 	}
+
+	/**
+	 * - TODO: we'll want to make this not just _anyone_ but instead the
+	 *   person who is undergoing the quest to take down the boss
+	 */
 	bool defiler::attack_anyone_in_same_room() {
 		for(auto& victim : mods::globals::get_room_list(room())) {
 			if(victim->is(cd())) {
@@ -483,6 +564,10 @@ namespace mods::mobs {
 		}
 		return false;
 	}
+
+	/**
+	 * - TODO: we'll want to not clear the quest taker
+	 */
 	void defiler::clear_state() {
 		m_scanned_items.clear();
 		m_hostiles.clear();
@@ -490,5 +575,29 @@ namespace mods::mobs {
 		m_remembered_items.clear();
 	}
 };
+namespace mods::mobs::defiler_init {
+
+	void init() {
+		/**
+		 * Builds resistance to shrapnel and incendiary damage
+		 */
+		using namespace mods::mobs::resistance;
+		using ele = mods::elemental_types_t;
+		using un = unit_type_t;
+		std::vector<resistance_t> rezzes;
+		static constexpr const resistance_t r[] = {
+			{100.0,un::PERCENTAGE,ele::ELEM_SHRAPNEL},
+			{100.0,un::PERCENTAGE,ele::ELEM_INCENDIARY},
+		};
+		for(const auto& rez : r) {
+			rezzes.emplace_back(rez);
+		}
+
+		register_resistances_for_mob_vnum(
+		    mods::mobs::defiler::MOB_VNUM,
+		    rezzes
+		);
+	}
+};//end mods::mobs::defiler_init
 #undef m_debug
 #undef cmem

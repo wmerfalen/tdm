@@ -1,0 +1,89 @@
+# type: SHOTGUN
+# type: ASSAULT_RIFLE
+# type: SUB_MACHINE_GUN
+# type: SNIPER
+# type: HANDGUN
+# type: PISTOL
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+incendiary_damage: 0 #int16_t, damage
+explosive_damage: 0 #int16_t, damage
+shrapnel_damage: 0 #int16_t, damage
+corrosive_damage: 0 #int16_t, damage
+cryogenic_damage: 112 #int16_t, damage
+radioactive_damage: 0 #int16_t, damage
+emp_damage: 0 #int16_t, damage
+shock_damage: 0 #int16_t, damage
+anti_matter_damage: 0 #int16_t, damage
+stat_strength: 0 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 0 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 0 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 0 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 0 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 0 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 0 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 0 #int16_t, positive or negative amount to affect strategy stat
+stat_medical: 0 #int16_t, positive or negative amount to affect medical stat
+#rarity types
+# accuracy map
+accuracy_map: [
+90.00,
+10.00,
+0.00,
+0.00
+]
+rounds_per_minute: 180
+muzzle_velocity: 4818 # Feet per second
+effective_firing_range: 20 # feet
+ammo_max: 400 #integer
+ammo_type: 'SUB_MACHINE_GUN' #string, constant enum
+chance_to_injure: 63.813 #float, out of 100 
+clip_size: 31 #integer
+cooldown_between_shots: 3 #int, in ticks
+critical_chance: 39 #int, out of 100
+critical_range: 2 #integer, measured in rooms
+damage_map: [
+80.00,
+40.00,
+0.00,
+0.00
+]
+base_damage: 410 #float
+disorient_amount: 0.0 #float
+headshot_bonus: 23.0 #float
+max_range: 7 #integer,measured in rooms
+range_multiplier: 0 #float, multiplied by 
+reload_time: 9 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 1  # enum, object type
+manufacturer: 'DXGR-1' # string, anything 
+name: 'Defiler FMG-9' # string, anything name of object 
+str_type: 'SUB_MACHINE_GUN'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'RARE'
+description: 'A Defiler FMG-9 is lying here.'
+short_description: 'a Defiler FMG-9'
+action_description: 'Defiler FMG-9'
+damage_dice_count: 16 
+damage_dice_sides: 16
+feed_file: 'defiler-fmg9.yml'
+vnum: 193

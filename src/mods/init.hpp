@@ -3,6 +3,7 @@
 
 #define INIT(A) \
 	namespace A { extern void init(); };
+INIT(mods::mobs::defiler_init);
 INIT(mods::json);
 INIT(mods::combat::commands);
 INIT(mods::combat_composer);
@@ -134,6 +135,7 @@ namespace mods::init {
 		mods::combat_composer::init();
 		mods::combat::commands::init();
 		mods::json::init();
+		mods::mobs::defiler_init::init();
 	}
 };
 #endif

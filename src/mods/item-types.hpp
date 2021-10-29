@@ -155,33 +155,33 @@
 (LIGHT_MACHINE_GUN)
 
 #define MENTOC_RIFLE_MEMBERS_TUPLE ( \
-(int16_t,ammo_max,"#int16_t, bullets",30), \
+(uint16_t,ammo_max,"#uint16_t, bullets",30), \
 (std::string,ammo_type,"#string, enum","'SNIPER'"), \
 (float,chance_to_injure,"#float, out of 100",10.0), \
-(int16_t,clip_size,"#int16_t, bullets",7), \
-(int16_t,cooldown_between_shots,"#int16_t, ticks",2), \
-(int16_t,critical_chance,"#int16_t, out of 100",33), \
-(int16_t,critical_range,"#int16_t, rooms",3), \
-(int,base_damage,"#int, out of 100",44), \
+(uint16_t,clip_size,"#uint16_t, bullets",7), \
+(uint16_t,cooldown_between_shots,"#uint16_t, ticks",2), \
+(uint16_t,critical_chance,"#uint16_t, out of 100",33), \
+(uint16_t,critical_range,"#uint16_t, rooms",3), \
+(uint16_t,base_damage,"#uint16_t, base damage. will always apply",44), \
 (float,disorient_amount,"#float, out of 100",3.0), \
 (float,headshot_bonus,"#float, static addition to hitroll",48.00), \
-(int16_t,max_range,"#int16_t, rooms",8), \
+(uint16_t,max_range,"#uint16_t, rooms",8), \
 (float,range_multiplier,"#float, TBA",1.0), \
-(int16_t,reload_time,"#int16_t, ticks",3), \
-(int16_t,rounds_per_minute,"#int16_t, bullets",8), \
-(int16_t,muzzle_velocity,"#int16_t, TBA",1), \
-(int16_t,effective_firing_range,"#int16_t, rooms",2), \
-(int16_t,damage_dice_count,"#int16_t, number of dice",2), \
-(int16_t,damage_dice_sides,"#int16_t, dice sides",6), \
-(int16_t,incendiary_damage,"#int16_t, damage",0), \
-(int16_t,explosive_damage,"#int16_t, damage",0), \
-(int16_t,shrapnel_damage,"#int16_t, damage",0), \
-(int16_t,corrosive_damage,"#int16_t, damage",0), \
-(int16_t,cryogenic_damage,"#int16_t, damage",0), \
-(int16_t,radioactive_damage,"#int16_t, damage",0), \
-(int16_t,emp_damage,"#int16_t, damage",0), \
-(int16_t,shock_damage,"#int16_t, damage",0), \
-(int16_t,anti_matter_damage,"#int16_t, damage",0), \
+(uint16_t,reload_time,"#uint16_t, ticks",3), \
+(uint16_t,rounds_per_minute,"#uint16_t, bullets",8), \
+(uint16_t,muzzle_velocity,"#uint16_t, TBA",1), \
+(uint16_t,effective_firing_range,"#uint16_t, rooms",2), \
+(uint16_t,damage_dice_count,"#uint16_t, number of dice",2), \
+(uint16_t,damage_dice_sides,"#uint16_t, dice sides",6), \
+(uint16_t,incendiary_damage,"#uint16_t, damage",0), \
+(uint16_t,explosive_damage,"#uint16_t, damage",0), \
+(uint16_t,shrapnel_damage,"#uint16_t, damage",0), \
+(uint16_t,corrosive_damage,"#uint16_t, damage",0), \
+(uint16_t,cryogenic_damage,"#uint16_t, damage",0), \
+(uint16_t,radioactive_damage,"#uint16_t, damage",0), \
+(uint16_t,emp_damage,"#uint16_t, damage",0), \
+(uint16_t,shock_damage,"#uint16_t, damage",0), \
+(uint16_t,anti_matter_damage,"#uint16_t, damage",0), \
 (int16_t,stat_strength,"#int16_t, positive or negative amount to affect strength stat",0), \
 (int16_t,stat_intelligence,"#int16_t, positive or negative amount to affect intelligence stat",0), \
 (int16_t,stat_wisdom,"#int16_t, positive or negative amount to affect wisdom stat",0), \
