@@ -4886,12 +4886,12 @@ attachment_underbarrel	mods/weapons/attachment-underbarrel.hpp	/^	struct attachm
 attachments	mods/rifle-instance-data.hpp	/^		std::deque<TAttachmentData> attachments;$/;"	kind:member	line:68	struct:rifle_instance_data	file:	access:public
 attack	mods/mobs/armed-guard.cpp	/^	void armed_guard::attack(player_ptr_t& player) {$/;"	kind:function	line:396	class:mods::mobs::armed_guard	signature:(player_ptr_t& player)
 attack	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::attack(player_ptr_t& player) {$/;"	kind:function	line:396	class:mods::mobs::chaotic_meth_addict	signature:(player_ptr_t& player)
-attack	mods/mobs/defiler.cpp	/^	void defiler::attack(player_ptr_t& player) {$/;"	kind:function	line:466	class:mods::mobs::defiler	signature:(player_ptr_t& player)
+attack	mods/mobs/defiler.cpp	/^	void defiler::attack(player_ptr_t& player) {$/;"	kind:function	line:467	class:mods::mobs::defiler	signature:(player_ptr_t& player)
 attack	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::attack(player_ptr_t& player) {$/;"	kind:function	line:396	class:mods::mobs::melee_combatant	signature:(player_ptr_t& player)
 attack	mods/mobs/shoplifter.cpp	/^	void shoplifter::attack(player_ptr_t& player) {$/;"	kind:function	line:396	class:mods::mobs::shoplifter	signature:(player_ptr_t& player)
 attack_anyone_in_same_room	mods/mobs/armed-guard.cpp	/^	bool armed_guard::attack_anyone_in_same_room() {$/;"	kind:function	line:474	class:mods::mobs::armed_guard	signature:()
 attack_anyone_in_same_room	mods/mobs/chaotic-meth-addict.cpp	/^	bool chaotic_meth_addict::attack_anyone_in_same_room() {$/;"	kind:function	line:474	class:mods::mobs::chaotic_meth_addict	signature:()
-attack_anyone_in_same_room	mods/mobs/defiler.cpp	/^	bool defiler::attack_anyone_in_same_room() {$/;"	kind:function	line:555	class:mods::mobs::defiler	signature:()
+attack_anyone_in_same_room	mods/mobs/defiler.cpp	/^	bool defiler::attack_anyone_in_same_room() {$/;"	kind:function	line:556	class:mods::mobs::defiler	signature:()
 attack_anyone_in_same_room	mods/mobs/melee-combatant.cpp	/^	bool melee_combatant::attack_anyone_in_same_room() {$/;"	kind:function	line:474	class:mods::mobs::melee_combatant	signature:()
 attack_anyone_near_room	mods/mobs/shoplifter.cpp	/^	bool shoplifter::attack_anyone_near_room() {$/;"	kind:function	line:474	class:mods::mobs::shoplifter	signature:()
 attack_disorients	mods/combat-composer/shared.cpp	/^		bool attack_disorients($/;"	kind:function	line:191	namespace:mods::combat_composer::phases	signature:( player_ptr_t& attacker, obj_ptr_t& weapon, player_ptr_t& victim )
@@ -5512,13 +5512,13 @@ clear_rooms	mods/mob-roam.cpp	/^	void roam_recorder::clear_rooms() {$/;"	kind:fu
 clear_scanned_cars	mods/mobs/car-thief.cpp	/^	void car_thief::clear_scanned_cars() {$/;"	kind:function	line:427	class:mods::mobs::car_thief	signature:()
 clear_scanned_items	mods/mobs/armed-guard.cpp	/^	void armed_guard::clear_scanned_items() {$/;"	kind:function	line:437	class:mods::mobs::armed_guard	signature:()
 clear_scanned_items	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::clear_scanned_items() {$/;"	kind:function	line:437	class:mods::mobs::chaotic_meth_addict	signature:()
-clear_scanned_items	mods/mobs/defiler.cpp	/^	void defiler::clear_scanned_items() {$/;"	kind:function	line:507	class:mods::mobs::defiler	signature:()
+clear_scanned_items	mods/mobs/defiler.cpp	/^	void defiler::clear_scanned_items() {$/;"	kind:function	line:508	class:mods::mobs::defiler	signature:()
 clear_scanned_items	mods/mobs/generic-thief.cpp	/^	void generic_thief::clear_scanned_items() {$/;"	kind:function	line:497	class:mods::mobs::generic_thief	signature:()
 clear_scanned_items	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::clear_scanned_items() {$/;"	kind:function	line:437	class:mods::mobs::melee_combatant	signature:()
 clear_scanned_items	mods/mobs/shoplifter.cpp	/^	void shoplifter::clear_scanned_items() {$/;"	kind:function	line:437	class:mods::mobs::shoplifter	signature:()
 clear_state	mods/mobs/armed-guard.cpp	/^	void armed_guard::clear_state() {$/;"	kind:function	line:486	class:mods::mobs::armed_guard	signature:()
 clear_state	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::clear_state() {$/;"	kind:function	line:486	class:mods::mobs::chaotic_meth_addict	signature:()
-clear_state	mods/mobs/defiler.cpp	/^	void defiler::clear_state() {$/;"	kind:function	line:571	class:mods::mobs::defiler	signature:()
+clear_state	mods/mobs/defiler.cpp	/^	void defiler::clear_state() {$/;"	kind:function	line:572	class:mods::mobs::defiler	signature:()
 clear_state	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::clear_state() {$/;"	kind:function	line:486	class:mods::mobs::melee_combatant	signature:()
 clear_state	mods/mobs/shoplifter.cpp	/^	void shoplifter::clear_state() {$/;"	kind:function	line:504	class:mods::mobs::shoplifter	signature:()
 clear_static_roll_weapon_amount	mods/weapons/damage-calculator.cpp	/^	void clear_static_roll_weapon_amount() {$/;"	kind:function	line:33	namespace:mods::weapons::damage_calculator	signature:()
@@ -5560,7 +5560,7 @@ cmem	mods/mobs/chaotic-meth-addict.cpp	16;"	kind:macro	line:16	file:
 cmem	mods/mobs/chaotic-meth-addict.cpp	494;"	kind:macro	line:494	file:
 cmem	mods/mobs/defiler.cpp	13;"	kind:macro	line:13	file:
 cmem	mods/mobs/defiler.cpp	16;"	kind:macro	line:16	file:
-cmem	mods/mobs/defiler.cpp	603;"	kind:macro	line:603	file:
+cmem	mods/mobs/defiler.cpp	604;"	kind:macro	line:604	file:
 cmem	mods/mobs/melee-combatant.cpp	13;"	kind:macro	line:13	file:
 cmem	mods/mobs/melee-combatant.cpp	16;"	kind:macro	line:16	file:
 cmem	mods/mobs/melee-combatant.cpp	494;"	kind:macro	line:494	file:
@@ -6206,8 +6206,8 @@ defiler_behaviour_tree	mods/mobs/defiler-behaviour-tree.cpp	/^namespace mods::mo
 defiler_behaviour_tree	mods/mobs/defiler-behaviour-tree.hpp	/^namespace mods::mobs::defiler_behaviour_tree {$/;"	kind:namespace	line:7	class:mods::mobs	file:
 defiler_btree	mods/mobs/defiler.cpp	/^	namespace defiler_btree {$/;"	kind:namespace	line:20	namespace:mods::mobs	file:
 defiler_init	mods/init.hpp	/^INIT(mods::mobs::defiler_init);$/;"	kind:variable	line:6
-defiler_init	mods/mobs/defiler.cpp	/^namespace mods::mobs::defiler_init {$/;"	kind:namespace	line:578	class:mods::mobs	file:
-defiler_list	mods/mobs/defiler.cpp	/^	std::forward_list<std::shared_ptr<defiler>>& defiler_list() {$/;"	kind:function	line:523	namespace:mods::mobs	signature:()
+defiler_init	mods/mobs/defiler.cpp	/^namespace mods::mobs::defiler_init {$/;"	kind:namespace	line:579	class:mods::mobs	file:
+defiler_list	mods/mobs/defiler.cpp	/^	std::forward_list<std::shared_ptr<defiler>>& defiler_list() {$/;"	kind:function	line:524	namespace:mods::mobs	signature:()
 definition	mods/sql.hpp	/^			compositor<T>& definition(const std::vector<std::string>& members) {$/;"	kind:function	line:84	struct:mods::sql::compositor	access:public	signature:(const std::vector<std::string>& members)
 del	mods/lmdb.cpp	/^	int _db_handle::del(std::string key) {$/;"	kind:function	line:586	class:mods::lmdb::_db_handle	signature:(std::string key)
 del	mods/sql.hpp	/^			compositor<T>& del() {$/;"	kind:function	line:64	struct:mods::sql::compositor	access:public	signature:()
@@ -6340,7 +6340,7 @@ determine_heading_from_found_vehicles	mods/mobs/car-thief.cpp	/^	int8_t car_thie
 determine_heading_from_found_vehicles	mods/mobs/generic-thief.cpp	/^	int8_t generic_thief::determine_heading_from_found_vehicles() {$/;"	kind:function	line:468	class:mods::mobs::generic_thief	signature:()
 determine_heading_from_found_victims	mods/mobs/armed-guard.cpp	/^	int8_t armed_guard::determine_heading_from_found_victims() {$/;"	kind:function	line:412	class:mods::mobs::armed_guard	signature:()
 determine_heading_from_found_victims	mods/mobs/chaotic-meth-addict.cpp	/^	int8_t chaotic_meth_addict::determine_heading_from_found_victims() {$/;"	kind:function	line:412	class:mods::mobs::chaotic_meth_addict	signature:()
-determine_heading_from_found_victims	mods/mobs/defiler.cpp	/^	int8_t defiler::determine_heading_from_found_victims() {$/;"	kind:function	line:482	class:mods::mobs::defiler	signature:()
+determine_heading_from_found_victims	mods/mobs/defiler.cpp	/^	int8_t defiler::determine_heading_from_found_victims() {$/;"	kind:function	line:483	class:mods::mobs::defiler	signature:()
 determine_heading_from_found_victims	mods/mobs/melee-combatant.cpp	/^	int8_t melee_combatant::determine_heading_from_found_victims() {$/;"	kind:function	line:412	class:mods::mobs::melee_combatant	signature:()
 determine_heading_from_found_victims	mods/mobs/shoplifter.cpp	/^	int8_t shoplifter::determine_heading_from_found_victims() {$/;"	kind:function	line:412	class:mods::mobs::shoplifter	signature:()
 detexturize_room	mods/deferred.cpp	/^	void deferred::detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture) {$/;"	kind:function	line:140	class:mods::deferred	signature:(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture)
@@ -7294,7 +7294,7 @@ extended_types	mods/mobs/extended-types.cpp	/^namespace mods::mobs::extended_typ
 extended_types	mods/mobs/extended-types.hpp	/^	namespace extended_types {$/;"	kind:namespace	line:101	namespace:mods::mobs	file:
 extra_attack	mods/mobs/armed-guard.cpp	/^	void armed_guard::extra_attack() {$/;"	kind:function	line:359	class:mods::mobs::armed_guard	signature:()
 extra_attack	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::extra_attack() {$/;"	kind:function	line:359	class:mods::mobs::chaotic_meth_addict	signature:()
-extra_attack	mods/mobs/defiler.cpp	/^	void defiler::extra_attack() {$/;"	kind:function	line:429	class:mods::mobs::defiler	signature:()
+extra_attack	mods/mobs/defiler.cpp	/^	void defiler::extra_attack() {$/;"	kind:function	line:430	class:mods::mobs::defiler	signature:()
 extra_attack	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::extra_attack() {$/;"	kind:function	line:359	class:mods::mobs::melee_combatant	signature:()
 extra_attack	mods/mobs/shoplifter.cpp	/^	void shoplifter::extra_attack() {$/;"	kind:function	line:360	class:mods::mobs::shoplifter	signature:()
 extra_bits	constants.cpp	/^const char *extra_bits[] = {$/;"	kind:variable	line:369
@@ -7705,7 +7705,7 @@ found	mods/js.cpp	/^				bool found;$/;"	kind:member	line:43	struct:mods::js::uti
 found	mods/scan.hpp	/^			bool found;$/;"	kind:member	line:33	struct:mods::scan::find_results_t	file:	access:public
 found_item	mods/mobs/armed-guard.cpp	/^	void armed_guard::found_item(mods::scan::vec_player_data_element const& item) {$/;"	kind:function	line:448	class:mods::mobs::armed_guard	signature:(mods::scan::vec_player_data_element const& item)
 found_item	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::found_item(mods::scan::vec_player_data_element const& item) {$/;"	kind:function	line:448	class:mods::mobs::chaotic_meth_addict	signature:(mods::scan::vec_player_data_element const& item)
-found_item	mods/mobs/defiler.cpp	/^	void defiler::found_item(mods::scan::vec_player_data_element const& item) {$/;"	kind:function	line:518	class:mods::mobs::defiler	signature:(mods::scan::vec_player_data_element const& item)
+found_item	mods/mobs/defiler.cpp	/^	void defiler::found_item(mods::scan::vec_player_data_element const& item) {$/;"	kind:function	line:519	class:mods::mobs::defiler	signature:(mods::scan::vec_player_data_element const& item)
 found_item	mods/mobs/generic-thief.cpp	/^	void generic_thief::found_item(mods::scan::vec_player_data_element const& item) {$/;"	kind:function	line:508	class:mods::mobs::generic_thief	signature:(mods::scan::vec_player_data_element const& item)
 found_item	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::found_item(mods::scan::vec_player_data_element const& item) {$/;"	kind:function	line:448	class:mods::mobs::melee_combatant	signature:(mods::scan::vec_player_data_element const& item)
 found_item	mods/mobs/shoplifter.cpp	/^	void shoplifter::found_item(mods::scan::vec_player_data_element const& item) {$/;"	kind:function	line:448	class:mods::mobs::shoplifter	signature:(mods::scan::vec_player_data_element const& item)
@@ -7713,7 +7713,7 @@ found_vehicle	mods/mobs/car-thief.cpp	/^	void car_thief::found_vehicle(const mod
 found_witness	mods/mobs/armed-guard.cpp	/^	void armed_guard::found_witness(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:432	class:mods::mobs::armed_guard	signature:(const mods::scan::vec_player_data_element& data)
 found_witness	mods/mobs/car-thief.cpp	/^	void car_thief::found_witness(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:419	class:mods::mobs::car_thief	signature:(const mods::scan::vec_player_data_element& data)
 found_witness	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::found_witness(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:432	class:mods::mobs::chaotic_meth_addict	signature:(const mods::scan::vec_player_data_element& data)
-found_witness	mods/mobs/defiler.cpp	/^	void defiler::found_witness(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:502	class:mods::mobs::defiler	signature:(const mods::scan::vec_player_data_element& data)
+found_witness	mods/mobs/defiler.cpp	/^	void defiler::found_witness(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:503	class:mods::mobs::defiler	signature:(const mods::scan::vec_player_data_element& data)
 found_witness	mods/mobs/generic-thief.cpp	/^	void generic_thief::found_witness(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:488	class:mods::mobs::generic_thief	signature:(const mods::scan::vec_player_data_element& data)
 found_witness	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::found_witness(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:432	class:mods::mobs::melee_combatant	signature:(const mods::scan::vec_player_data_element& data)
 found_witness	mods/mobs/shoplifter.cpp	/^	void shoplifter::found_witness(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:432	class:mods::mobs::shoplifter	signature:(const mods::scan::vec_player_data_element& data)
@@ -8068,7 +8068,7 @@ get_rate_limit_types_help	mods/rate-limiting.cpp	/^	static const char* get_rate_
 get_remembered_cars	mods/mobs/car-thief.cpp	/^	const car_thief::uuidlist_t& car_thief::get_remembered_cars() const {$/;"	kind:function	line:434	class:mods::mobs::car_thief	signature:() const
 get_remembered_items	mods/mobs/armed-guard.cpp	/^	const armed_guard::uuidlist_t& armed_guard::get_remembered_items() const {$/;"	kind:function	line:445	class:mods::mobs::armed_guard	signature:() const
 get_remembered_items	mods/mobs/chaotic-meth-addict.cpp	/^	const chaotic_meth_addict::uuidlist_t& chaotic_meth_addict::get_remembered_items() const {$/;"	kind:function	line:445	class:mods::mobs::chaotic_meth_addict	signature:() const
-get_remembered_items	mods/mobs/defiler.cpp	/^	const defiler::uuidlist_t& defiler::get_remembered_items() const {$/;"	kind:function	line:515	class:mods::mobs::defiler	signature:() const
+get_remembered_items	mods/mobs/defiler.cpp	/^	const defiler::uuidlist_t& defiler::get_remembered_items() const {$/;"	kind:function	line:516	class:mods::mobs::defiler	signature:() const
 get_remembered_items	mods/mobs/generic-thief.cpp	/^	const generic_thief::uuidlist_t& generic_thief::get_remembered_items() const {$/;"	kind:function	line:505	class:mods::mobs::generic_thief	signature:() const
 get_remembered_items	mods/mobs/melee-combatant.cpp	/^	const melee_combatant::uuidlist_t& melee_combatant::get_remembered_items() const {$/;"	kind:function	line:445	class:mods::mobs::melee_combatant	signature:() const
 get_remembered_items	mods/mobs/shoplifter.cpp	/^	const shoplifter::uuidlist_t& shoplifter::get_remembered_items() const {$/;"	kind:function	line:445	class:mods::mobs::shoplifter	signature:() const
@@ -8313,7 +8313,7 @@ has_flag	mods/player.hpp	/^			bool has_flag(chunk_type_t chunk,aligned_int_t bit
 has_found_car	mods/mobs/car-thief.cpp	/^	bool car_thief::has_found_car() {$/;"	kind:function	line:413	class:mods::mobs::car_thief	signature:()
 has_found_item	mods/mobs/armed-guard.cpp	/^	bool armed_guard::has_found_item() {$/;"	kind:function	line:426	class:mods::mobs::armed_guard	signature:()
 has_found_item	mods/mobs/chaotic-meth-addict.cpp	/^	bool chaotic_meth_addict::has_found_item() {$/;"	kind:function	line:426	class:mods::mobs::chaotic_meth_addict	signature:()
-has_found_item	mods/mobs/defiler.cpp	/^	bool defiler::has_found_item() {$/;"	kind:function	line:496	class:mods::mobs::defiler	signature:()
+has_found_item	mods/mobs/defiler.cpp	/^	bool defiler::has_found_item() {$/;"	kind:function	line:497	class:mods::mobs::defiler	signature:()
 has_found_item	mods/mobs/generic-thief.cpp	/^	bool generic_thief::has_found_item() {$/;"	kind:function	line:482	class:mods::mobs::generic_thief	signature:()
 has_found_item	mods/mobs/melee-combatant.cpp	/^	bool melee_combatant::has_found_item() {$/;"	kind:function	line:426	class:mods::mobs::melee_combatant	signature:()
 has_found_item	mods/mobs/shoplifter.cpp	/^	bool shoplifter::has_found_item() {$/;"	kind:function	line:426	class:mods::mobs::shoplifter	signature:()
@@ -8689,7 +8689,7 @@ init	mods/mobs/armed-guard.cpp	/^	void armed_guard::init() {$/;"	kind:function	l
 init	mods/mobs/car-thief.cpp	/^	void car_thief::init() {$/;"	kind:function	line:281	class:mods::mobs::car_thief	signature:()
 init	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::init() {$/;"	kind:function	line:302	class:mods::mobs::chaotic_meth_addict	signature:()
 init	mods/mobs/defiler.cpp	/^	void defiler::init() {$/;"	kind:function	line:357	class:mods::mobs::defiler	signature:()
-init	mods/mobs/defiler.cpp	/^	void init() {$/;"	kind:function	line:580	namespace:mods::mobs::defiler_init	signature:()
+init	mods/mobs/defiler.cpp	/^	void init() {$/;"	kind:function	line:581	namespace:mods::mobs::defiler_init	signature:()
 init	mods/mobs/generic-thief.cpp	/^	void generic_thief::init() {$/;"	kind:function	line:351	class:mods::mobs::generic_thief	signature:()
 init	mods/mobs/lowly-security.cpp	/^	void lowly_security::init() {$/;"	kind:function	line:136	class:mods::mobs::lowly_security	signature:()
 init	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::init() {$/;"	kind:function	line:302	class:mods::mobs::melee_combatant	signature:()
@@ -9769,7 +9769,7 @@ m_debug	mods/mobs/defiler-behaviour-tree.cpp	19;"	kind:macro	line:19	file:
 m_debug	mods/mobs/defiler-behaviour-tree.cpp	280;"	kind:macro	line:280	file:
 m_debug	mods/mobs/defiler.cpp	12;"	kind:macro	line:12	file:
 m_debug	mods/mobs/defiler.cpp	15;"	kind:macro	line:15	file:
-m_debug	mods/mobs/defiler.cpp	602;"	kind:macro	line:602	file:
+m_debug	mods/mobs/defiler.cpp	603;"	kind:macro	line:603	file:
 m_debug	mods/mobs/extended-types.cpp	129;"	kind:macro	line:129	file:
 m_debug	mods/mobs/extended-types.cpp	16;"	kind:macro	line:16	file:
 m_debug	mods/mobs/extended-types.cpp	18;"	kind:macro	line:18	file:
@@ -10553,7 +10553,7 @@ medical	structs.h	/^	skill_measurement_t medical;$/;"	kind:member	line:1362	stru
 melee_attack_within_range	mods/mobs/armed-guard.cpp	/^	void armed_guard::melee_attack_within_range() {$/;"	kind:function	line:367	class:mods::mobs::armed_guard	signature:()
 melee_attack_within_range	mods/mobs/car-thief.cpp	/^	void car_thief::melee_attack_within_range() {$/;"	kind:function	line:347	class:mods::mobs::car_thief	signature:()
 melee_attack_within_range	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::melee_attack_within_range() {$/;"	kind:function	line:367	class:mods::mobs::chaotic_meth_addict	signature:()
-melee_attack_within_range	mods/mobs/defiler.cpp	/^	void defiler::melee_attack_within_range() {$/;"	kind:function	line:437	class:mods::mobs::defiler	signature:()
+melee_attack_within_range	mods/mobs/defiler.cpp	/^	void defiler::melee_attack_within_range() {$/;"	kind:function	line:438	class:mods::mobs::defiler	signature:()
 melee_attack_within_range	mods/mobs/generic-thief.cpp	/^	bool generic_thief::melee_attack_within_range() {$/;"	kind:function	line:420	class:mods::mobs::generic_thief	signature:()
 melee_attack_within_range	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::melee_attack_within_range() {$/;"	kind:function	line:367	class:mods::mobs::melee_combatant	signature:()
 melee_attack_within_range	mods/mobs/shoplifter.cpp	/^	void shoplifter::melee_attack_within_range() {$/;"	kind:function	line:368	class:mods::mobs::shoplifter	signature:()
@@ -10866,7 +10866,7 @@ move	structs.h	/^	points_t move;$/;"	kind:member	line:1391	struct:char_point_dat
 move_closer_to_target	mods/mobs/armed-guard.cpp	/^	void armed_guard::move_closer_to_target() {$/;"	kind:function	line:400	class:mods::mobs::armed_guard	signature:()
 move_closer_to_target	mods/mobs/car-thief.cpp	/^	void car_thief::move_closer_to_target() {$/;"	kind:function	line:382	class:mods::mobs::car_thief	signature:()
 move_closer_to_target	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::move_closer_to_target() {$/;"	kind:function	line:400	class:mods::mobs::chaotic_meth_addict	signature:()
-move_closer_to_target	mods/mobs/defiler.cpp	/^	void defiler::move_closer_to_target() {$/;"	kind:function	line:470	class:mods::mobs::defiler	signature:()
+move_closer_to_target	mods/mobs/defiler.cpp	/^	void defiler::move_closer_to_target() {$/;"	kind:function	line:471	class:mods::mobs::defiler	signature:()
 move_closer_to_target	mods/mobs/generic-thief.cpp	/^	int8_t generic_thief::move_closer_to_target() {$/;"	kind:function	line:446	class:mods::mobs::generic_thief	signature:()
 move_closer_to_target	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::move_closer_to_target() {$/;"	kind:function	line:400	class:mods::mobs::melee_combatant	signature:()
 move_closer_to_target	mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::move_closer_to_target() {$/;"	kind:function	line:458	class:mods::mobs::mp_shotgunner	signature:()
@@ -12247,7 +12247,7 @@ remember_event	mods/melee/damage-types.cpp	/^	void remember_event(player_ptr_t& 
 remember_event	mods/weapons/damage-decisions.cpp	/^	void remember_event(player_ptr_t& victim,player_ptr_t& attacker) {$/;"	kind:function	line:189	namespace:mods::weapons::damage_types	signature:(player_ptr_t& victim,player_ptr_t& attacker)
 remember_item	mods/mobs/armed-guard.cpp	/^	void armed_guard::remember_item(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:440	class:mods::mobs::armed_guard	signature:(const mods::scan::vec_player_data_element& data)
 remember_item	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::remember_item(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:440	class:mods::mobs::chaotic_meth_addict	signature:(const mods::scan::vec_player_data_element& data)
-remember_item	mods/mobs/defiler.cpp	/^	void defiler::remember_item(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:510	class:mods::mobs::defiler	signature:(const mods::scan::vec_player_data_element& data)
+remember_item	mods/mobs/defiler.cpp	/^	void defiler::remember_item(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:511	class:mods::mobs::defiler	signature:(const mods::scan::vec_player_data_element& data)
 remember_item	mods/mobs/generic-thief.cpp	/^	void generic_thief::remember_item(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:501	class:mods::mobs::generic_thief	signature:(const mods::scan::vec_player_data_element& data)
 remember_item	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::remember_item(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:440	class:mods::mobs::melee_combatant	signature:(const mods::scan::vec_player_data_element& data)
 remember_item	mods/mobs/shoplifter.cpp	/^	void shoplifter::remember_item(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:440	class:mods::mobs::shoplifter	signature:(const mods::scan::vec_player_data_element& data)
@@ -12885,7 +12885,7 @@ scan	mods/scan.hpp	/^	namespace scan {$/;"	kind:namespace	line:19	namespace:mods
 scan_attackable	mods/mobs/smart-mob.cpp	/^	mods::scan::vec_player_data smart_mob::scan_attackable(const direction_t& dir) {$/;"	kind:function	line:326	class:mods::mobs::smart_mob	signature:(const direction_t& dir)
 scan_depth	mods/mobs/armed-guard.cpp	/^	uint8_t armed_guard::scan_depth() const {$/;"	kind:function	line:457	class:mods::mobs::armed_guard	signature:() const
 scan_depth	mods/mobs/chaotic-meth-addict.cpp	/^	uint8_t chaotic_meth_addict::scan_depth() const {$/;"	kind:function	line:457	class:mods::mobs::chaotic_meth_addict	signature:() const
-scan_depth	mods/mobs/defiler.cpp	/^	uint8_t defiler::scan_depth() const {$/;"	kind:function	line:527	class:mods::mobs::defiler	signature:() const
+scan_depth	mods/mobs/defiler.cpp	/^	uint8_t defiler::scan_depth() const {$/;"	kind:function	line:528	class:mods::mobs::defiler	signature:() const
 scan_depth	mods/mobs/melee-combatant.cpp	/^	uint8_t melee_combatant::scan_depth() const {$/;"	kind:function	line:457	class:mods::mobs::melee_combatant	signature:() const
 scan_depth	mods/mobs/shoplifter.cpp	/^	uint8_t shoplifter::scan_depth() const {$/;"	kind:function	line:457	class:mods::mobs::shoplifter	signature:() const
 scan_depth	mods/mobs/smart-mob.cpp	/^	uint8_t smart_mob::scan_depth() const {$/;"	kind:function	line:332	class:mods::mobs::smart_mob	signature:() const
@@ -13118,7 +13118,7 @@ set_flag_absolute	mods/rooms.cpp	/^	void set_flag_absolute(room_rnum room, int f
 set_found_car	mods/mobs/car-thief.cpp	/^	void car_thief::set_found_car(bool status) {$/;"	kind:function	line:416	class:mods::mobs::car_thief	signature:(bool status)
 set_found_item	mods/mobs/armed-guard.cpp	/^	void armed_guard::set_found_item(bool status) {$/;"	kind:function	line:429	class:mods::mobs::armed_guard	signature:(bool status)
 set_found_item	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::set_found_item(bool status) {$/;"	kind:function	line:429	class:mods::mobs::chaotic_meth_addict	signature:(bool status)
-set_found_item	mods/mobs/defiler.cpp	/^	void defiler::set_found_item(bool status) {$/;"	kind:function	line:499	class:mods::mobs::defiler	signature:(bool status)
+set_found_item	mods/mobs/defiler.cpp	/^	void defiler::set_found_item(bool status) {$/;"	kind:function	line:500	class:mods::mobs::defiler	signature:(bool status)
 set_found_item	mods/mobs/generic-thief.cpp	/^	void generic_thief::set_found_item(bool status) {$/;"	kind:function	line:485	class:mods::mobs::generic_thief	signature:(bool status)
 set_found_item	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::set_found_item(bool status) {$/;"	kind:function	line:429	class:mods::mobs::melee_combatant	signature:(bool status)
 set_found_item	mods/mobs/shoplifter.cpp	/^	void shoplifter::set_found_item(bool status) {$/;"	kind:function	line:429	class:mods::mobs::shoplifter	signature:(bool status)
@@ -13572,7 +13572,7 @@ spare7	house.h	/^	long spare7;$/;"	kind:member	line:24	struct:house_control_rec	
 spare7	structs.h	/^	int	spare7;$/;"	kind:member	line:1103	struct:obj_data::rent_info	file:	access:public
 spawn_near_someone	mods/mobs/armed-guard.cpp	/^	player_ptr_t armed_guard::spawn_near_someone() {$/;"	kind:function	line:460	class:mods::mobs::armed_guard	signature:()
 spawn_near_someone	mods/mobs/chaotic-meth-addict.cpp	/^	player_ptr_t chaotic_meth_addict::spawn_near_someone() {$/;"	kind:function	line:460	class:mods::mobs::chaotic_meth_addict	signature:()
-spawn_near_someone	mods/mobs/defiler.cpp	/^	player_ptr_t defiler::spawn_near_someone() {$/;"	kind:function	line:536	class:mods::mobs::defiler	signature:()
+spawn_near_someone	mods/mobs/defiler.cpp	/^	player_ptr_t defiler::spawn_near_someone() {$/;"	kind:function	line:537	class:mods::mobs::defiler	signature:()
 spawn_near_someone	mods/mobs/melee-combatant.cpp	/^	player_ptr_t melee_combatant::spawn_near_someone() {$/;"	kind:function	line:460	class:mods::mobs::melee_combatant	signature:()
 spawn_near_someone	mods/mobs/shoplifter.cpp	/^	player_ptr_t shoplifter::spawn_near_someone() {$/;"	kind:function	line:460	class:mods::mobs::shoplifter	signature:()
 special	interpreter.cpp	/^int special(char_data *ch, int cmd, char *arg) {$/;"	kind:function	line:1386	signature:(char_data *ch, int cmd, char *arg)

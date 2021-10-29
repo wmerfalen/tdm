@@ -425,6 +425,7 @@ namespace mods::mobs {
 	 *   - [ ] Ensnaring, throw dagger
 	 *   - [ ] Dagger, snipe
 	 *   - [ ] Corpse Explosion, snipe/engage
+	 *   - [ ] Chainsaw,
 	 */
 	void defiler::extra_attack() {
 		m_debug("extra attack roll success");
