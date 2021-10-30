@@ -210,7 +210,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/combat-composer/engage-target mods/combat-composer/spray-target \
 					 mods/combat-composer/shared \
 					 mods/json/export \
-					 mods/mobs/resistance
+					 mods/mobs/resistance mods/find mods/contract-defiler
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

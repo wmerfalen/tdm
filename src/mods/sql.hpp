@@ -24,6 +24,7 @@ namespace mods::values {
 	extern bool ECHO_ALL_SQL_COMMANDS();
 };
 
+#define __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
 namespace mods::sql {
 	static inline std::string sanitize_table(std::string_view table_name) {
 		std::string cleaned = "";

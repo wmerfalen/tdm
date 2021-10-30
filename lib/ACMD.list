@@ -46,6 +46,7 @@
 ./mods/skills.cpp:	->skills
 ./mods/skills.cpp:	->practice
 ./mods/combat.cpp:		->set_rules_of_engagement
+./mods/mobs/defiler.cpp:	->bioscan
 ./mods/melee/main.cpp:	->set_combat_order
 ./mods/melee/main.cpp:	->list_combat_order
 ./mods/melee/main.cpp:	->clear_combat_order

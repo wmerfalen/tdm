@@ -13,7 +13,13 @@ large quantities of meat in freezer compartments, however this case is
 different. All meat shipments are the size of human adults. 
 
 # Quest 1: Infiltration of Allied Foods' butcher area
-We need you to enter the Allied Foods marketplace and find anything 
+We need you to enter the Allied Foods marketplace and find the butcher
+section and search through the freezer section. Remember: our intelligence
+reports say that an the Allied Foods marketplace is a front for human
+trafficking.. particularly organ harvesting. We need you to pick up a biometric
+scanner from Doctor Magnus Ortem at the TRITON Laboratory. You will use
+this biometric scanner to test various samples in the Allied Foods
+hidden freezer section in the south end of the store.
 that may point toward illegal activity. I've got clearance from very high
 up on this one, and the district attorney is just itching to find a reason
 to blow the cover on this operation. 

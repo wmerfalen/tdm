@@ -7,6 +7,8 @@
 #include "../scan.hpp"
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
+#include "../contract-steps.hpp"
+#include "../interpreter.hpp"
 
 #ifdef  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("defiler") << a << "\n";
@@ -577,7 +579,37 @@ namespace mods::mobs {
 	}
 };
 namespace mods::mobs::defiler_init {
+	static constexpr std::array<obj_vnum,2> has_human_remains  = {
+		197, /** 12 ounce steak */
+		198, /** frozen liver */
+	};
 
+	ACMD(do_bioscan) {
+		static constexpr std::string_view usage = "usage: bioscan <target>\r\nexample: bioscan meat\r\n";
+		if(argshave()->size_gt(0)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		if(!player->has_contract()) {
+			player->sendln("Scan all you want, but you're not currently under contract.");
+			return;
+		}
+		if(argshave()->size_gt(0)->passed()) {
+			auto target = argat(0);
+			auto obj = OBJFIND(target,player);
+			if(!obj) {
+				player->sendln("Couldn't find anything!");
+				return;
+			} else {
+				if(std::find(has_human_remains.cbegin(),has_human_remains.cend(),obj->item_number) != has_human_remains.cend()) {
+					player->contract_custom_event(mods::contracts::custom_events_t::CEV_HUMAN_REMAINS_FOUND,obj->uuid);
+					player->sendln("{grn}[+] Positive read: {red}HUMAN REMAINS{/red}");
+				} else {
+					player->sendln("{red}[-] Negative read{/red}");
+				}
+			}
+		}
+	}
 	void init() {
 		/**
 		 * Builds resistance to shrapnel and incendiary damage
@@ -598,6 +630,7 @@ namespace mods::mobs::defiler_init {
 		    mods::mobs::defiler::MOB_VNUM,
 		    rezzes
 		);
+		mods::interpreter::add_user_command("bioscan",do_bioscan);
 	}
 };//end mods::mobs::defiler_init
 #undef m_debug

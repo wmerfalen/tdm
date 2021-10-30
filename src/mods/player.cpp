@@ -2474,6 +2474,16 @@ namespace mods {
 	std::shared_ptr<mods::ranged_combat_totals> player::get_ranged_combat_totals() {
 		return m_rct;
 	}
+	void player::contract_custom_event(mods::contracts::custom_events_t event,uuid_t id) {
+		if(!m_contract) {
+			return;
+		}
+		for(auto& c : contracts()) {
+			if(c->is_custom_event()) {
+				c->custom_event(event,id);
+			}
+		}
+	}
 };
 
 #undef dbg

@@ -7,6 +7,9 @@ namespace mods::orm {
 };
 
 namespace mods::contracts {
+	enum custom_events_t : uint32_t {
+		CEV_HUMAN_REMAINS_FOUND,
+	};
 	struct contract_step {
 		enum task_type_t : uint16_t {
 			GOAL_FIND = (1 << 0),
@@ -18,7 +21,8 @@ namespace mods::contracts {
 			GOAL_PROTECT = (1 << 6),
 			GOAL_TALK_TO = (1 << 7),
 			GOAL_INSTALL = (1 << 8),
-			GOAL_GIVE = (1 << 9)
+			GOAL_GIVE = (1 << 9),
+			GOAL_CUSTOM_EVENT = (1 << 10),
 		};
 		enum task_target_t : uint16_t {
 			TARGET_MOB = 0,

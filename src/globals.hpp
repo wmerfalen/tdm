@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include "mods/util.hpp"
 #include "mods/help.hpp"
+#include "mods/find.hpp"
 
 template <typename T,typename F>
 static inline void sub_clamp(T& orig, F sub) {
@@ -328,4 +329,5 @@ static inline std::vector<direction_t>& directions() {
 	static std::vector<direction_t> directions = { NORTH,EAST,SOUTH,WEST,UP,DOWN };
 	return directions;
 }
+#define OBJFIND(NAME,player) mods::find::obj(NAME,player)
 #endif
