@@ -1,0 +1,59 @@
+# type: AMMUNITION
+# type: FOOD
+# type: PILLS
+# type: HERBS
+# type: HALLUCINOGENS
+# type: PEDS
+# type: GASOLINE
+# type: TRANQUILIZER_DARTS
+csv_capabilities: '' #csv, strings free-form TBA
+csv_attach_to: '' #csv, strings attach to various kinds of items TBA
+weight_in_lbs: 1 #int, weight in lbs
+consumed_by: 'HUMAN' #string, ENUM HUMAN,VEHICLE,ATTACHMENT,DRONE,GADGET,RIFLE,TRAP 
+adds_hp: 3 #int,  amount of hp it adds when consumed (can be negative)
+adds_movement: 3 #int, amount of movement it adds when consumed (can be negative)
+adds_room_range: 0 #int, amount of rooms it adds when consumed (can be negative)
+adds_strength: 7 #int, amount of STR it adds when consumed (can be negative)
+adds_intelligence: 0 #int, amount of INT it adds when consumed (can be negative)
+adds_charisma: 0 #int, amount of CHA it adds when consumed (can be negative)
+adds_dexterity: 0 #int, amount of DEX it adds when consumed (can be negative)
+adds_constitution: 2 #int, amount of CON it adds when consumed (can be negative)
+adds_wisdom: 0 #int, amount of WIS it adds when consumed (can be negative)
+adds_weight: 1 #int, amount of weight it adds when consumed (can be negative)
+adds_experience: 0 #int, amount of EXP it adds when consumed (can be negative)
+adds_armor_class: 3 #int, amount of AC it adds when consumed (can be negative)
+adds_hitroll: 2 #int, amount of HITROLL it adds when consumed (can be negative)
+adds_damage_roll: 2 #int, amount of DAMROLL it adds when consumed (can be negative)
+ticks_until_zero: 150 #int, amount of game ticks until consumable wears off (can be negative)
+ammo_type: '' #string, ENUM any type of ITEM_RIFLE if this is ammunition
+capacity: 0 #int, usually used for ammunition. how much of this consumable is present (i.e.: bullets)
+adds_fire_damage: 0 #int, amount of fire damage it adds to the consumer
+adds_critical_chance: 11 #int, amount of points to add to critical chance of consumer
+adds_ammo_max: 0 #int, adds to ammo maximum of consumer
+adds_chance_to_injure: 0 #float, out of 100
+adds_clip_size: 0 #int, bullets
+adds_cooldown_between_shots: 0 #int, ticks (can be negative)
+adds_critical_range: 1 #int, rooms (can be negative)
+adds_disorient_amount: 0 #float, out of 100
+adds_headshot_bonus: 0 #float, static addition to hitroll
+adds_max_range: 0 #int, rooms
+adds_reload_time: 0 #int, ticks
+adds_muzzle_velocity: 0 #int, TBA
+adds_damage_dice_count: 2 #int, number of dice
+adds_damage_dice_sides: 2 #int, dice sides
+str_type: 'FOOD' # enum, object type
+manufacturer: 'Allied foods' # string, anything 
+name: 'pigs feet' # string, anything name of object 
+description: 'pigs feet'
+short_description: 'pigs feet'
+action_description: 'pigs feet'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+feed_file: 'pigs-feet.yml'
+vnum: 199
