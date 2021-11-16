@@ -3,6 +3,8 @@
 #include "weapons/damage-types.hpp"
 #include "weapons/elemental.hpp"
 #include "rand.hpp"
+#include "builder.hpp"
+#include "zone.hpp"
 extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
 extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
 extern int next_room_vnum();
@@ -730,6 +732,55 @@ namespace mods::rooms {
 
 		return false;
 	}
+
+	std::string m(std::map<std::string,std::string>& d,std::string_view key,std::string_view fallback) {
+		if(d.find(key.data()) != d.cend()) {
+			return d[key.data()];
+		}
+		return fallback.data();
+	}
+	template <typename T>
+	T im(std::map<std::string,std::string>& d,std::string_view key,T fallback) {
+		if(d.find(key.data()) != d.cend()) {
+			return mods::util::stoi<T>(d[key.data()]);
+		}
+		return fallback;
+	}
+
+	/**
+	 * For creating rooms in an ad-hoc way
+	 */
+	room_data& create_room(std::map<std::string,std::string> data) {
+
+#define mapor(A,B) m(data,A,B)
+#define imapor(A,B) im(data,A,B)
+		room_data room;
+		room.name.assign(mapor("name","name"));
+		room.description.assign(mapor("description","description"));
+#ifdef __MENTOC_SHOW_PARSE_SQL_ROOMS_DEBUG__
+		log("DEBUG: room: %d name: (%s), description: (%s)",mods::util::stoi<int>(room_records_row["id"].c_str()),room.name.c_str(),room.description.c_str());
+#endif
+		room.number = imapor("room_number",next_room_vnum());
+#ifdef __MENTOC_SHOW_PARSE_SQL_ROOMS_DEBUG__
+		log("parse_sql_rooms: room.number (%d)",room.number);
+#endif
+		room.zone = real_zone(imapor("zone",0));
+		room.sector_type = imapor("sector_type",0);
+		room.light = imapor("light",0);
+
+		world.emplace_back(room);
+		mods::globals::register_room(world.size());
+		mods::rooms::set_sector_type(world.size()-1,imapor("sector_type",0));
+		mods::rooms::set_flag_absolute(world.size()-1,imapor("room_flag",0));
+		top_of_world = world.size();
+		std::string nick = mapor("nickname","");
+		if(nick.length()) {
+			mods::rooms::register_nickname(top_of_world,nick);
+			world[top_of_world-1].nickname.assign(nick);
+		}
+		mods::zone::new_room(&room);
+		return world.back();
+	}
 };//End namespace mods::rooms
 
 namespace mods::rooms::gods {
@@ -795,4 +846,5 @@ cleanup:
 		player->sendln(msg);
 		return;
 	}
+
 }; // end namespace mods::rooms::gods

@@ -18,6 +18,8 @@ namespace mods::object_utils {
 	bool is_corpse(const obj_ptr_t&);
 	bool is_consumable(const obj_ptr_t&);
 	bool is_shotgun_underbarrel(const obj_ptr_t&);
+	bool is_rifle(const obj_ptr_t&);
+	bool is_melee(const obj_ptr_t&);
 	int get_yaml_type(std::string& yaml);
 	obj_ptr_t first_or_create(room_rnum room,std::string query, int type, std::string yaml_file);
 	bool assert_sane_object(std::string_view yaml);

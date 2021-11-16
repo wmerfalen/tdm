@@ -934,6 +934,10 @@ namespace mods {
 			auto& rules_of_engagement() {
 				return m_rules_of_engagement;
 			}
+			void lockdown(bool b);
+			bool is_locked_down() const {
+				return m_locked_down;
+			}
 		protected:
 			int16_t m_to_move;
 			int16_t m_to_attack;
@@ -952,6 +956,7 @@ namespace mods {
 			bool m_moving_to_room;
 
 		private:
+			bool m_locked_down;
 			std::string m_scripted_response;
 			void write_to_char(std::string_view msg, bool newline,bool plain);
 			uuid_t m_attacker_uuid;

@@ -503,11 +503,13 @@ namespace mods::combat_composer {
 	bool can_spray(player_ptr_t& attacker,obj_ptr_t weapon) {
 		if(!weapon) {
 			attacker->damage_event(feedback_t(de::NO_PRIMARY_WIELDED_EVENT));
+			std::cerr << __FUNCTION__ << ":" << __LINE__ << "-> NO_PRIMARY FOR " << attacker->name() << "\n";
 			m_debug("no primary!");
 			return false;
 		}
 		if(!weapon->has_rifle()) {
 			attacker->damage_event(feedback_t(de::NO_PRIMARY_WIELDED_EVENT));
+			std::cerr << __FUNCTION__ << ":" << __LINE__ << "-> NO_PRIMARY FOR " << attacker->name() << "\n";
 			m_debug("no primary rifle(2)");
 			return false;
 		}

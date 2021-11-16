@@ -95,6 +95,7 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	);
+#define stub_debug(V) if(player->name().compare("a kidnapper") == 0){ std::cerr << player->name() << "::" << __FUNCTION__ << ":" << __LINE__ << " AGAINST: '" << V << "'\n"; }
 
 
 
@@ -415,6 +416,7 @@ namespace mods::weapons::damage_types {
 	    int dam,
 	    direction_t direction
 	) {
+		stub_debug(victim->name());
 		feedback_t feedback;
 		if(victim->position() > POS_DEAD) {
 			md("victim position > DEAD");
@@ -584,6 +586,7 @@ namespace mods::weapons::damage_types {
 	}
 
 	feedback_t spray_direction_with_feedback(player_ptr_t& player,int direction) {
+		stub_debug("none");
 		using de = damage_event_t;
 		feedback_t feedback;
 		auto weapon = player->primary();
@@ -694,6 +697,7 @@ namespace mods::weapons::damage_types {
 	}//end spray_direction function
 
 	void rifle_attack_object_by_name(player_ptr_t& player,std::string_view target_object,int direction) {
+		stub_debug("none");
 		feedback_t feedback;
 		auto weapon = player->primary();
 
@@ -730,6 +734,7 @@ namespace mods::weapons::damage_types {
 	 * @param direction
 	 */
 	void rifle_attack_by_name(player_ptr_t& player,std::string_view victim_name,int direction) {
+		stub_debug(victim_name);
 		feedback_t feedback;
 		auto weapon = player->primary();
 
@@ -890,6 +895,7 @@ namespace mods::weapons::damage_types {
 			return;
 		}
 #endif
+		stub_debug(victim->name());
 		auto feedback = rifle_attack_with_feedback(player,weapon,victim,distance,direction);
 		mods::weapons::elemental::process_elemental_damage(player,weapon,victim,feedback);
 	}
@@ -901,6 +907,7 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	) {
+		stub_debug(victim->name.c_str());
 		rifle_attack_object_with_feedback(player,weapon,victim,distance,direction);
 	}
 
@@ -911,6 +918,7 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	) {
+		stub_debug(victim->name.c_str());
 		std::tuple<int,uuid_t> sentinel;
 
 		feedback_t feedback;
@@ -1005,6 +1013,7 @@ namespace mods::weapons::damage_types {
 	    obj_ptr_t weapon,
 	    player_ptr_t victim
 	) {
+		stub_debug(victim->name());
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
 		feedback_t feedback;
@@ -1085,6 +1094,7 @@ namespace mods::weapons::damage_types {
 	    player_ptr_t& player,
 	    player_ptr_t victim) {
 
+		stub_debug(victim->name());
 		feedback_t feedback;
 
 		auto ub = player->ghost()->underbarrel();
@@ -1139,6 +1149,7 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	) {
+		stub_debug(victim->name());
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
 

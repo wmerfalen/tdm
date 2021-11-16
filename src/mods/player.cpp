@@ -1049,6 +1049,7 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+		m_locked_down = false;
 		m_rules_of_engagement = mods::combat::rules_of_engagement_t::ROM_BALLISTIC;
 		m_cooldown_start_tick = 0;
 		m_luck = 0;
@@ -2483,6 +2484,9 @@ namespace mods {
 				c->custom_event(event,id);
 			}
 		}
+	}
+	void player::lockdown(bool b) {
+		m_locked_down = b;
 	}
 };
 

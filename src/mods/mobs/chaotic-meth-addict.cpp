@@ -181,6 +181,7 @@ namespace mods::mobs {
 				}
 			}
 			if(player_ptr->room() == attacker->room()) {
+				//std::cerr << "cma attack via enrage_if\n";
 				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,attacker);
 			}
 		});
@@ -385,6 +386,7 @@ namespace mods::mobs {
 			m_attackers_last_direction = results.direction;
 
 			if(attacker->room() == player_ptr->room()) {
+				//std::cerr << "cma melee attack within range\n";
 				auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,attacker);
 				if(feedback.hits == 0 || feedback.damage == 0) {
 					continue;
@@ -476,6 +478,7 @@ namespace mods::mobs {
 			if(victim->is(cd())) {
 				continue;
 			}
+			//std::cerr << "cma attack anyone in room\n";
 			auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,victim);
 			if(feedback.hits || feedback.damage) {
 				return true;

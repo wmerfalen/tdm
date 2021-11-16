@@ -42,6 +42,7 @@
 #include "mods/players/db-load.hpp"
 #include "mods/orm/rifle-attachment.hpp"
 #include "mods/filesystem.hpp"
+#include "mods/interpreter.hpp"
 
 namespace mods::interpreter {
 	extern command_info& get_command(std::string_view,player_ptr_t&);
@@ -321,7 +322,6 @@ ACMD(do_sbuild);
 ACMD(do_chanmgr);
 ACMD(do_zbuild);
 ACMD(do_rnumlist);
-ACMD(do_rnumtele);
 ACMD(do_pref);
 ACMD(do_rbuild);
 ACMD(do_rbuild_sandbox);
@@ -773,8 +773,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "sbuild", POS_RESTING, do_sbuild, LVL_GOD, 0 },
 	{ "zbuild", POS_RESTING, do_zbuild, LVL_IMMORT, 0 },
 	{ "chanmgr", POS_RESTING, do_chanmgr, LVL_IMMORT, 0 },
-	{ "rnumtele", POS_RESTING, do_rnumtele, LVL_IMMORT, 0 },
-	{ "rnumlist", POS_RESTING, do_rnumlist, LVL_IMMORT, 0 },
 	{ "rbuild", POS_RESTING, do_rbuild, LVL_IMMORT, 0 },
 	{ "rbuild_sandbox", POS_RESTING, do_rbuild_sandbox, LVL_IMMORT, 0 },
 	{ "room_dark", POS_RESTING, do_room_dark, LVL_IMMORT, 0 },

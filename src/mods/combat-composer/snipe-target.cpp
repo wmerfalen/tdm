@@ -808,28 +808,29 @@ namespace mods::combat_composer {
 	bool can_snipe(player_ptr_t& attacker,obj_ptr_t weapon) {
 		if(!weapon) {
 			attacker->damage_event(feedback_t(de::NO_PRIMARY_WIELDED_EVENT));
+			std::cerr << __FUNCTION__ << ":" << __LINE__ << "-> NO_PRIMARY FOR " << attacker->name() << "\n";
 			m_debug("no primary!");
 			return false;
 		}
 		if(!weapon->has_rifle()) {
 			attacker->damage_event(feedback_t(de::NO_PRIMARY_WIELDED_EVENT));
+			std::cerr << __FUNCTION__ << ":" << __LINE__ << "-> NO_PRIMARY FOR " << attacker->name() << "\n";
 			m_debug("no primary rifle(2)");
 			return false;
 		}
 		return true;
 	}
 
-	/**
-	 * Handles both ranged and immediate targets
-	 */
-	void snipe_target(player_ptr_t& attacker,phases::target_t target, obj_ptr_t& weapon) {
-		INIT_RCT();
+	std::tuple<bool,phases::acquired_target_t> get_target(
+	    player_ptr_t& attacker,
+	    phases::target_t& target,
+	    obj_ptr_t& weapon) {
 		/**
 		 * First check that the weapon can snipe
 		 */
 		if(!can_snipe(attacker,weapon)) {
 			/** can_snipe sends DE messages for us */
-			return;
+			return {false,phases::acquired_target_t{}};
 		}
 		/**
 		 * Phase 1: Target acquisition.
@@ -841,11 +842,27 @@ namespace mods::combat_composer {
 			m_debug("couldn't find target!");
 			attacker->damage_event(feedback_t(de::COULDNT_FIND_TARGET_EVENT));
 			m_debug(feedback.dump());
-			return;
+			return {false,phases::acquired_target_t{}};
 		}
 
-		auto found_target = opt_target.value();
-		auto& victim = found_target.target;
+		return {true, opt_target.value()};
+	}
+
+
+	/**
+	 * Handles both ranged and immediate targets
+	 */
+	void snipe_target(
+	    player_ptr_t& attacker,
+	    player_ptr_t& victim,
+	    direction_t direction,
+	    uint8_t distance,
+	    obj_ptr_t& weapon
+	) {
+		phases::acquired_target_t found_target;
+		found_target.target = victim;
+		found_target.direction = direction;
+		found_target.distance = distance;
 
 		if(mods::rooms::is_peaceful(attacker->room())) {
 			attacker->damage_event(feedback_t(de::YOURE_IN_PEACEFUL_ROOM));
@@ -877,7 +894,7 @@ namespace mods::combat_composer {
 		 */
 		if(!roll_accuracy(attacker,found_target,weapon)) {
 			attacker->damage_event(feedback_t(de::YOU_MISSED_YOUR_TARGET_EVENT));
-			victim->damage_event(feedback_t(de::GUNFIRE_WHIZZED_BY_FROM,OPPOSITE_DIR(target.direction)));
+			victim->damage_event(feedback_t(de::GUNFIRE_WHIZZED_BY_FROM,OPPOSITE_DIR(direction)));
 			mods::combat_composer::phases::decrease_single_shot_ammo(attacker,weapon);
 			m_debug("Roll accuracy check failed for " << attacker->name());
 			return;
@@ -899,7 +916,19 @@ namespace mods::combat_composer {
 		apply_damage_to_victim(attacker,found_target,weapon,damage);
 		perform_cleanup(attacker,found_target,weapon);
 
+
 	}
+	void snipe_target(player_ptr_t& attacker,phases::target_t target, obj_ptr_t& weapon) {
+		INIT_RCT();
+		auto status = get_target(attacker,target,weapon);
+		if(!std::get<0>(status)) {
+			return;
+		}
+		auto victim = std::move(std::get<1>(status));
+		snipe_target(attacker,victim.target,victim.direction,victim.distance,weapon);
+	}
+
+
 	void snipe_target(player_ptr_t& attacker,std::string_view target, direction_t direction,uint8_t distance,obj_ptr_t& weapon) {
 		INIT_RCT();
 		snipe_target(attacker,phases::target_t(target,direction),weapon);

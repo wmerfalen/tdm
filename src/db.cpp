@@ -1280,6 +1280,18 @@ void set_coordinates() {
 /* load the rooms */
 std::tuple<int16_t,std::string> parse_sql_rooms() {
 	top_of_world = 0;
+	const auto& frozen_room_vnum = mods::world_conf::get_frozen_room_vnum();
+	mods::rooms::create_room({
+		{"name","Frozen"},
+		{"description","It's cold. You can't do anything."},
+		{"room_number",std::to_string(frozen_room_vnum)},
+		/** these are the default values..
+		{"zone","0"},
+		{"sector_type","0"},
+		{"light","0"},
+		*/
+	});
+
 	mods::pq::result room_records,room_description_data_records;
 	try {
 		//siege=# \d room

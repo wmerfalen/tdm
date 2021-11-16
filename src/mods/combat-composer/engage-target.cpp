@@ -709,6 +709,7 @@ namespace mods::combat_composer::engage {
 		bool can_engage(player_ptr_t& attacker,obj_ptr_t weapon) {
 			if(!weapon) {
 				attacker->damage_event(feedback_t(de::NO_PRIMARY_WIELDED_EVENT));
+				std::cerr << __FUNCTION__ << ":" << __LINE__ << "-> NO_PRIMARY FOR " << attacker->name() << "\n";
 				m_debug("no primary!");
 				return false;
 			}

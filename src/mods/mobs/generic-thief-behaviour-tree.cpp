@@ -14,7 +14,7 @@
 
 //#define  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__
-#define m_debug(a) if(ct->is_fighting()){ std::cerr << "[m.m.generic-thief.btree:" << __LINE__ << "]->" << a << "\n"; }
+#define m_debug(a)  std::cerr << "[m.m.generic-thief.btree:" << __LINE__ << "]->" << a << "\n";
 #else
 #define m_debug(a)
 #endif
@@ -83,6 +83,8 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 			}
 			ct->watch_directions(world[ct->room()].directions());
 			ct->set_heading(should_fire);
+			ct->move_to(ct->get_heading());
+			ct->melee_attack_within_range();
 			return TStatus::SUCCESS;
 		});
 	}
@@ -114,22 +116,50 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 					should_fire = pair.first;
 				}
 			}
-			if(should_fire == -1) {
-				//FIXME mg->set_heading(go_random_direction(mg->player()));
-				/** this HAS to be after the previous line because
-				 * in the previous line we are going in a random direction
-				 */
-				mg->watch_directions(world[mg->room()].directions());
+			auto primary = mg->player()->primary();
+			auto secondary = mg->player()->secondary();
+			if(!primary && !secondary) {
+				std::cerr << "[generic_thief] has no primary!\n";
 				return TStatus::FAILURE;
 			}
-			mg->watch_directions(world[mg->room()].directions());
-			mg->set_heading(should_fire);
-			return TStatus::SUCCESS;
+			obj_ptr_t attacking_with = nullptr;
+			if(!primary && secondary) {
+				attacking_with = secondary;
+			}
+			if(!attacking_with) {
+				std::cerr << "[generic_thief] has no weapon!\n";
+				return TStatus::FAILURE;
+			}
+			if(mods::object_utils::is_rifle(attacking_with)) {
+				if(should_fire == -1) {
+					//FIXME mg->set_heading(go_random_direction(mg->player()));
+					/** this HAS to be after the previous line because
+					 * in the previous line we are going in a random direction
+					 */
+					mg->watch_directions(world[mg->room()].directions());
+					return TStatus::FAILURE;
+				}
+				mg->watch_directions(world[mg->room()].directions());
+				mg->set_heading(should_fire);
+				mg->rifle_attack_within_range();
+				return TStatus::SUCCESS;
+			}
+			if(mods::object_utils::is_melee(attacking_with)) {
+				mg->watch_directions(world[mg->room()].directions());
+				mg->set_heading(should_fire);
+				mg->move_to(mg->get_heading());
+				mg->melee_attack_within_range();
+				return TStatus::SUCCESS;
+			}
+			return TStatus::FAILURE;
 		});
 	}
 	TChildNode attack_if_possible() {
 		return TNode::create_leaf([](TArgumentType ct) -> TStatus {
 			if(ct->melee_attack_within_range()) {
+				return TStatus::SUCCESS;
+			}
+			if(ct->rifle_attack_within_range()) {
 				return TStatus::SUCCESS;
 			}
 			return TStatus::FAILURE;
@@ -240,7 +270,7 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 		});//end create_sequence
 	}//end find_target_near_me
 
-	std::deque<TNode>& trees() {
+	std::deque<TNode>& get_trees() {
 		static TNode generic_thief_roam(TNode::SELECTOR);
 		static TNode generic_thief_hostile(TNode::SELECTOR);
 		static TNode generic_thief_witness_hunting(TNode::SELECTOR);
@@ -249,6 +279,14 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 		static bool bootstrapped = false;
 		static std::deque<TNode> s;
 		if(!bootstrapped) {
+			/**
+			 * Thief roaming behaviour
+			 * --- TODO
+			 * [1]
+			 *
+			 *
+			 *
+			 */
 			generic_thief_roam.append_child(
 			TNode::create_selector({
 				find_target_near_me(),
@@ -288,14 +326,14 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 	void run_trees() {
 		for(auto& thief : generic_thief_list()) {
 			if(thief->has_tree() && !thief->alive()) {
-				//m_debug("DEAD-WITH_TREE -- thief has tree but is dead. Removing...");
+				m_debug("DEAD-WITH_TREE -- thief has tree but is dead. Removing...");
 				thief->btree_none();
 				continue;
 			}
 			//m_debug("checking thief ptr");
 			if(thief->has_tree() && thief->alive() && thief->capable()) {
-				//m_debug("has tree. dispatching..." << thief->get_tree());
-				trees()[thief->get_tree()].run(thief);
+				m_debug("has tree. dispatching..." << thief->get_tree());
+				get_trees()[thief->get_tree()].run(thief);
 			}
 		}
 	}

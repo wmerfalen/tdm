@@ -99,6 +99,8 @@ namespace mods::mobs {
 			/**=====================================*/
 			/** hunting helpers */
 			feedback_t& spray(uint8_t dir);
+			void snipe(player_ptr_t victim,direction_t direction,uint8_t distance);
+			void melee_attack(player_ptr_t victim);
 
 
 			/** behaviour tree helpers */
@@ -129,6 +131,7 @@ namespace mods::mobs {
 			/**================*/
 			/** combat helpers */
 			/**================*/
+			bool rifle_attack_within_range();
 			bool melee_attack_within_range();
 			int8_t move_closer_to_target();
 
@@ -144,14 +147,18 @@ namespace mods::mobs {
 			std::forward_list<target_t>& parse_targets(std::string_view targets);
 			std::forward_list<target_t>& get_targets();
 
-
-
 			/** rival npc helpers */
 			bool is_rival(player_ptr_t& player);
 
 			std::string_view type() {
 				return "generic_thief";
 			}
+
+			std::string summarize(bool regen);
+
+			virtual bool should_steal_from(player_ptr_t& victim);
+			virtual bool roll_steal_success(player_ptr_t& victim);
+
 
 		private:
 			std::forward_list<target_t> m_targets;

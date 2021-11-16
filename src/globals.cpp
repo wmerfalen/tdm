@@ -27,6 +27,7 @@
 #include "mods/replenish.hpp"
 #include "config.hpp"
 #include "mods/movement.hpp"
+#include "mods/interpreter.hpp"
 
 namespace mods::mob_equipment {
 	extern void decorate(const uuid_t& mob_uuid);
@@ -787,8 +788,8 @@ namespace mods {
 			}
 		}
 
-
 		bool command_interpreter(player_ptr_t player,std::string_view in_argument) {
+			const bool locked_down = player->is_locked_down();
 #ifdef __MENTOC_WRITE_HISTFILE__
 			if(player->authenticated()) {
 				player->write_histfile(in_argument);
@@ -797,6 +798,12 @@ namespace mods {
 			std::string argument = in_argument.data();
 			auto vec_args = PARSE_ARGS();
 			if(player->paging()) {
+				if(locked_down) {
+					player->pager_clear();
+					player->pager_end();
+					mods::interpreter::douchebags::locked_down_player_always(player);
+					return false;
+				}
 				if(vec_args.size() == 0) {
 					player->pager_next_page();
 					return false;
@@ -813,6 +820,10 @@ namespace mods {
 				return false;
 			}
 			if(vec_args.size()) {
+				if(locked_down) {
+					mods::interpreter::douchebags::locked_down_player_always(player);
+					return false;
+				}
 				if(mods::chat::handle_chat(player,argument)) {
 					return false;
 				}
@@ -881,6 +892,10 @@ namespace mods {
 					player->done();
 					return false;
 				}
+			}
+			if(locked_down) {
+				mods::interpreter::douchebags::locked_down_player_always(player);
+				return false;
 			}
 			if(mods::drone::started(player->uuid())) {
 				d("drone started. interpretting");

@@ -520,6 +520,7 @@ namespace mods::rooms {
 	 */
 	void process_fire_damage();
 	void word_wrap_description(player_ptr_t& player,room_rnum);
+	room_data& create_room(std::map<std::string,std::string> data);
 
 };//end namespace
 #endif

@@ -88,6 +88,7 @@ namespace mods::weapons::damage_types {
 		}
 
 		if(!weapon) {
+			std::cerr << "[can-continue] fails with player: '" << player->name() << "'\n";
 			feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
 			player->damage_event(feedback);
 			md("no primary!");
@@ -97,6 +98,7 @@ namespace mods::weapons::damage_types {
 			case ITEM_RIFLE:
 				if(!weapon->has_rifle()) {
 					feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
+					std::cerr << "[can-continue] NO RIFLE :: fails with player: '" << player->name() << "'\n";
 					player->damage_event(feedback);
 					md("no primary rifle(2)");
 					return {false,feedback};
@@ -117,6 +119,7 @@ namespace mods::weapons::damage_types {
 				break;
 			case ITEM_MELEE:
 				if(weapon && weapon->has_melee() == false) {
+					std::cerr << "[can-continue] DOESNT HAVE MELEE FOR WEAPON :: fails with player: '" << player->name() << "'\n";
 					feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
 					player->damage_event(feedback);
 					md("no primary melee");

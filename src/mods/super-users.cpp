@@ -4,10 +4,78 @@
 #include <set>
 #include "interpreter.hpp"
 #include "movement.hpp"
+#include "pfind.hpp"
+#include "../handler.h"
+#include "world-configuration.hpp"
+#include "jx.hpp"
 
 extern void exit_with(int);
 
 namespace mods::super_users {
+	SUPERCMD(do_vnumtele) {
+		if(argshave()->int_at(0)->passed() == false) {
+			player->sendln("Usage: vnumtele <room-vnum>");
+			return;
+		}
+		auto vnum = intat(0);
+		auto room_id = real_room(vnum);
+		if(room_id == NOWHERE) {
+			player->sendln("That room vnum goes to nowhere.");
+			return;
+		}
+		char_from_room(player->cd());
+		char_to_room(player->cd(),room_id);
+		command_interpreter(player,"l");
+	}
+
+	/**
+	 * The only argument to this should be the page that you
+	 * are interested in.
+	 */
+	SUPERCMD(do_rnumlist) {
+
+		constexpr unsigned int max_char = 11;
+		std::array<char,max_char> room_id;
+		std::fill(room_id.begin(),room_id.end(),0);
+		one_argument(argument,&room_id[0],max_char);
+		auto r = mods::util::stoi(&room_id[0]);
+		if(r.value_or(-1) == -1) {
+			*player << "{red}Invalid room number{/red}\r\n";
+			return;
+		}
+
+		mods::jx::compositor jx;
+		unsigned room_ctr = 0;
+		if(!player->is_executing_js()) {
+			player->pager_start();
+		} else {
+			jx.array_start("rooms");
+		}
+		for(auto& room : world) {
+			++room_ctr;
+			if(player->is_executing_js()) {
+				jx.object_start("")
+				.push("index",room_ctr)
+				.push("number",room.number)
+				.push("zone",room.zone)
+				.push("name",room.name)
+				.object_end();
+				if(room_ctr >= mods::builder::RNUMLIST_MAX_PER_CALL) {
+					break;
+				}
+			} else {
+				*player << "{gld}[" << std::to_string(room_ctr) << "]{/gld} :->{red} [" <<
+				        room.name.c_str() << "]{/red}";
+			}
+		}
+		if(player->is_executing_js()) {
+			jx.array_end();
+			*player << jx.get();
+		} else {
+			player->pager_end();
+			player->page(0);
+		}
+	}
 	static std::set<std::string> super_users;
 	static std::set<std::string> invisible_super_users;
 	static bool super_users_initialized = 0;
@@ -95,6 +163,82 @@ SUPERCMD(do_add_super_user) {
 	ADMIN_FAIL();
 }
 
+SUPERCMD(do_ban_player) {
+	DO_HELP("admin:ban_player");
+	ADMIN_REJECT();
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() > 0) {
+		for(auto name : vec_args) {
+			auto p = mods::pfind::optby_name(name.c_str());
+			if(!p.has_value()) {
+				player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
+			} else {
+				auto douche = p.value();
+				player->send("[+] Placing player on lockdown...");
+				douche->lockdown(true);
+				player->sendln("{grn}[DONE]{/grn}");
+
+				player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+				char_from_room(douche->cd());
+				char_to_room(douche->cd(),mods::world_conf::real_frozen());
+				player->sendln("{grn}[DONE]{/grn}");
+			}
+		}
+		ADMIN_DONE();
+		return;
+	}
+	ADMIN_FAIL();
+}
+
+SUPERCMD(do_pull_player) {
+	DO_HELP("admin:pull_player");
+	ADMIN_REJECT();
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() > 0) {
+		for(auto name : vec_args) {
+			auto p = mods::pfind::optby_name(name.c_str());
+			if(!p.has_value()) {
+				player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
+			} else {
+				auto douche = p.value();
+				player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+				char_from_room(douche->cd());
+				char_to_room(douche->cd(),player->room());
+				player->sendln("{grn}[DONE]{/grn}");
+			}
+		}
+		ADMIN_DONE();
+		return;
+	}
+	ADMIN_FAIL();
+}
+SUPERCMD(do_lock_player) {
+	DO_HELP("admin:lock_player");
+	ADMIN_REJECT();
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() > 0) {
+		for(auto name : vec_args) {
+			auto p = mods::pfind::optby_name(name.c_str());
+			if(!p.has_value()) {
+				player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
+			} else {
+				auto douche = p.value();
+				player->send("[+] Placing player on lockdown...");
+				douche->lockdown(true);
+				player->sendln("{grn}[DONE]{/grn}");
+				player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+				char_from_room(douche->cd());
+				char_to_room(douche->cd(),player->room());
+				player->sendln("{grn}[DONE]{/grn}");
+			}
+		}
+		ADMIN_DONE();
+		return;
+	}
+	ADMIN_FAIL();
+}
+
+
 SUPERCMD(do_get_super_user_list) {
 	DO_HELP("get_super_user_list");
 	ADMIN_REJECT();
@@ -163,5 +307,9 @@ SUPERCMD(do_shutdown_mud) {
 namespace mods::super_users {
 	void init() {
 		mods::interpreter::add_command("sdm", POS_RESTING, do_shutdown_mud, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:pull_player", POS_RESTING, do_pull_player, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:lock_player", POS_RESTING, do_lock_player, LVL_BUILDER,0);
+		mods::interpreter::add_command("vnumtele", POS_RESTING, do_vnumtele, LVL_BUILDER,0);
+		mods::interpreter::add_command("rnumlist", POS_RESTING, do_rnumlist, LVL_BUILDER,0);
 	}
 };

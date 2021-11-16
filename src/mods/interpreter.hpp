@@ -14,6 +14,9 @@ namespace mods::interpreter {
 	void add_builder_command(std::string command_string, acmd_function);
 	void add_user_command(std::string command_string, acmd_function);
 	command_info& get_command(std::string_view,player_ptr_t&);
+	namespace douchebags {
+		void locked_down_player_always(player_ptr_t& player);
+	};
 };
 
 #ifndef ADD_BUILDER_COMMAND

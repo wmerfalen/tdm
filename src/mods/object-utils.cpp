@@ -3,6 +3,16 @@
 #include "rifle-attachments.hpp"
 
 namespace mods::object_utils {
+	bool is_rifle(const obj_ptr_t& item) {
+		auto rifle_attachment = mods::rifle_attachments::by_uuid(item->uuid);
+		if(rifle_attachment) {
+			return true;
+		}
+		return item->has_rifle();
+	}
+	bool is_melee(const obj_ptr_t& item) {
+		return item->has_melee();
+	}
 	bool can_wield_in_secondary(const obj_ptr_t& item) {
 		if(item->has_rifle() == false) {
 			return false;

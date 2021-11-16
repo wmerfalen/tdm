@@ -90,8 +90,8 @@ namespace mods::players::banish {
 		player->sendln("usage: banish <all> # will banish everyone besides you");
 	}
 	void init() {
-		ADD_BUILDER_COMMAND("force_out",do_force_out);
-		ADD_BUILDER_COMMAND("banish",do_banish);
-		ADD_BUILDER_COMMAND("set_banish_room",do_set_banish_room);
+		ADD_BUILDER_COMMAND("admin:force_out",do_force_out);
+		ADD_BUILDER_COMMAND("admin:banish",do_banish);
+		ADD_BUILDER_COMMAND("admin:set_banish_room",do_set_banish_room);
 	}
 };

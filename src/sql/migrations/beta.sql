@@ -7622,7 +7622,7 @@ COPY public.weapon_locker (id, w_room_vnum, w_yaml) FROM stdin;
 --
 
 COPY public.world_configuration_start_rooms (id, mortal_start_room, immortal_start_room, created_at, is_active, idle_room, frozen_room) FROM stdin;
-4	128	128	2019-06-01 19:30:07.630823	t	0	0
+4	128	128	2019-06-01 19:30:07.630823	t	45 46
 \.
 
 
