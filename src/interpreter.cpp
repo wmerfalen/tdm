@@ -43,6 +43,7 @@
 #include "mods/orm/rifle-attachment.hpp"
 #include "mods/filesystem.hpp"
 #include "mods/interpreter.hpp"
+#include "mods/message-server.hpp"
 
 namespace mods::interpreter {
 	extern command_info& get_command(std::string_view,player_ptr_t&);
@@ -1559,6 +1560,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 					mudlog(NRM, LVL_GOD, TRUE, "Request for login denied for %s [%s] (wizlock)", p->name().c_str(), p->host().c_str());
 					return;
 				}
+				mods::message_server::user_logged_in(p);
 
 
 				if(p->level() >= LVL_IMMORT) {

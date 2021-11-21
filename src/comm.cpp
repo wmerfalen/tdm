@@ -41,6 +41,7 @@
 #include "mods/players/event-messages.hpp"
 #include "mods/message-server.hpp"
 #include "mods/ban-system.hpp"
+#include "mods/message-server.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -280,15 +281,8 @@ void exit_with(int code) {
 	mods::db_report::close();
 	circle_shutdown = 1;
 }
-/***********************************************************************
- *  main game loop and related stuff                                    *
- ***********************************************************************/
 
-int main(int argc, char **argv) {
-	atexit(atexit_handler);
-	if(mods::globals::init(argc,argv) == 0) {
-		return 0;
-	}
+void run_game() {
 	ush_int port;
 	const char *dir;
 
@@ -339,6 +333,19 @@ int main(int argc, char **argv) {
 	}
 
 	log("Done.");
+}
+/***********************************************************************
+ *  main game loop and related stuff                                    *
+ ***********************************************************************/
+
+int main(int argc, char **argv) {
+	atexit(atexit_handler);
+	if(mods::globals::init(argc,argv) == 0) {
+		return 0;
+	}
+	mods::message_server::spawn();
+	std::thread(run_game).join();
+
 	return (0);
 }
 
@@ -1551,11 +1558,14 @@ int new_descriptor(socket_t s) {
 	player->set_socket(desc);
 	/* find the sitename */
 	from = gethostbyaddr((char *) &peer.sin_addr, sizeof(peer.sin_addr), AF_INET);
+	mods::message_server::new_connection(peer,from);
 	log("getting user ip");
 	player->set_ip(inet_ntoa(peer.sin_addr));
+	mods::message_server::new_connection(peer,from);
 	log("user ip is: %s",player->ip().c_str());
 	if(mods::ban_system::ip::is_banned(peer)) {
 		log("refusing new connection. User is banned by ip: %s",player->ip());
+		mods::message_server::user_connection_rejected(peer,from);
 		return MENTOC_PLAYER_IS_BANNED;
 	}
 	if(!from) {
@@ -1567,6 +1577,7 @@ int new_descriptor(socket_t s) {
 	}
 	if(mods::ban_system::hostname::is_banned(player->host())) {
 		log("refusing new connection. User is banned by hostname: %s, ip address: %s",player->host(), player->ip());
+		mods::message_server::user_connection_rejected(peer,from);
 		return MENTOC_PLAYER_IS_BANNED;
 	}
 

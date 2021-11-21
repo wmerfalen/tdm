@@ -17,6 +17,7 @@
 #include "world-configuration.hpp"
 #include "interpreter.hpp"
 #include "players/db-load.hpp"
+#include "message-server.hpp"
 
 #include "player.hpp"
 
@@ -30,6 +31,7 @@ namespace mods::ban_system {
 		if(orm.saved_success == false) {
 			return {0,"Failed to save"};
 		}
+		//TODO: mods::message_server::ban_player(player);
 		return {1,"saved"};
 	}
 	std::tuple<bool,std::string> unban_ip(std::string_view ip) {
@@ -38,6 +40,7 @@ namespace mods::ban_system {
 		if(orm.saved_success == false) {
 			return {0,"Failed to save"};
 		}
+		//TODO: mods::message_server::unban_ip(ip);
 		return {1,"saved"};
 	}
 	std::tuple<bool,std::string> unban_hostname(std::string_view hostname) {
@@ -46,6 +49,7 @@ namespace mods::ban_system {
 		if(orm.saved_success == false) {
 			return {0,"Failed to save"};
 		}
+		//TODO: mods::message_server::unban_hostname(ip);
 		return {1,"saved"};
 	}
 	std::tuple<bool,std::string> unban_username(std::string_view username) {
@@ -63,6 +67,10 @@ namespace mods::ban_system {
 		if(orm.saved_success == false) {
 			return {0,"Failed to save"};
 		}
+		{
+			auto str = ip.data();
+			mods::message_server::ban_ip(str);
+		}
 		return {1,"saved"};
 	}
 	std::tuple<bool,std::string> ban_hostname(std::string_view hostname) {
@@ -71,6 +79,10 @@ namespace mods::ban_system {
 		if(orm.saved_success == false) {
 			return {0,"Failed to save"};
 		}
+		{
+			auto str = hostname.data();
+			mods::message_server::ban_hostname(str);
+		}
 		return {1,"saved"};
 	}
 	std::tuple<bool,std::string> ban_username(std::string_view username) {
@@ -78,6 +90,10 @@ namespace mods::ban_system {
 		orm.ban_username(username);
 		if(orm.saved_success == false) {
 			return {0,"Failed to save"};
+		}
+		{
+			auto str = username.data();
+			mods::message_server::ban_username(str);
 		}
 		return {1,"saved"};
 	}
@@ -155,62 +171,51 @@ namespace mods::ban_system {
 		mods::ban_system::unban_username(username);
 		admin->sendln("{grn}[DONE]{/grn}");
 	}
-	void ban_player_via(player_ptr_t& admin,const auto& vec_args,ban_type_t type) {
-		for(auto name : vec_args) {
-			auto p = mods::pfind::optby_name(name.c_str());
-			if(!p.has_value()) {
-				if(type & BAN_BY_USERNAME || type & BAN_BY_ALL) {
-					admin->send(CAT("[+] Banning player '",name,"' by user name...").c_str());
-					mods::ban_system::ban_username(name.c_str());
-					mods::players::db_load::delete_char_by_name(name);
-					admin->sendln("{grn}[DONE]{/grn}");
-				} else {
-					if(type & BAN_BY_IP) {
-						admin->sendln(
-						    CAT("{red}[-] Cannot ban player '",name,"' by IP since they are not logged in...")
-						);
-						admin->sendln("Please consider using admin:ban:user to ban the user by user name");
-					}
-					if(type & BAN_BY_HOST) {
-						admin->sendln(
-						    CAT("{red}[-] Cannot ban player '",name,"' by HOST since they are not logged in...")
-						);
-						admin->sendln("Please consider using admin:ban:user to ban the user by user name");
-					}
-				}
-			} else {
-				auto douche = p.value();
-				admin->send(CAT("[+] Placing player '",name,"' on lockdown...").c_str());
-				douche->lockdown(true);
-				admin->sendln("{grn}[DONE]{/grn}");
+	void ban_ip(player_ptr_t& admin,std::string_view ip) {
+		admin->send(CAT("[+] Beginning ban process for ip '",ip.data(),"'...").c_str());
+		mods::ban_system::ban_ip(ip);
+		admin->sendln("{grn}[DONE]{/grn}");
+	}
+	void ban_hostname(player_ptr_t& admin,std::string_view hostname) {
+		admin->send(CAT("[+] Beginning ban process for host '",hostname.data(),"'...").c_str());
+		mods::ban_system::ban_hostname(hostname);
+		admin->sendln("{grn}[DONE]{/grn}");
+	}
+	void ban_username(player_ptr_t& admin,std::string_view username) {
+		admin->send(CAT("[+] Beginning ban process for user '",username.data(),"'...").c_str());
+		mods::ban_system::ban_username(username);
+		admin->sendln("{grn}[DONE]{/grn}");
+	}
+	void ban_player(player_ptr_t& admin,std::string player_name) {
+		auto p = mods::pfind::optby_name(player_name.c_str());
+		if(!p.has_value()) {
+			admin->sendln("{red} [-] Can't band player's IP or Hostname since they aren't connected..{/red}");
+			admin->send(CAT("[+] Banning player '",player_name,"' by user name...").c_str());
+			mods::ban_system::ban_username(player_name);
+			admin->sendln("{grn}[DONE]{/grn}");
+			admin->send("  - [+] Destroying player instance in game world...");
+			mods::players::db_load::delete_char_by_name(player_name);
+			admin->sendln("{grn}[DONE]{/grn}");
+			admin->sendln(CAT("{grn}[Completed PARTIAL ban process for player: '",player_name,"'{/grn}"));
+			return;
+		} else {
+			auto douche = p.value();
+			admin->send(CAT("[+] Placing player '",player_name,"' on lockdown...").c_str());
+			douche->lockdown(true);
+			admin->sendln("{grn}[DONE]{/grn}");
 
-				admin->send(CAT("[+] Pulling player '",name,"'...").c_str());
-				char_from_room(douche->cd());
-				char_to_room(douche->cd(),mods::world_conf::real_frozen());
-				admin->send(CAT("[+] Beginning ban process for '",name,"'...").c_str());
-				if(type & BAN_BY_ALL) {
-					admin->send("  - [+] Banning by IP, Hostname, and username...");
-					mods::ban_system::ban_player(douche);
-				} else if(type & BAN_BY_IP) {
-					admin->send("  - [+] Banning player by IP...");
-					mods::ban_system::ban_ip(douche->ip());
-					admin->sendln("{grn}[DONE]{/grn}");
-				} else if(type & BAN_BY_HOST) {
-					admin->send(CAT("  - [+] Banning player by hostname '",douche->host(),"'...").c_str());
-					mods::ban_system::ban_hostname(douche->host());
-					admin->sendln("{grn}[DONE]{/grn}");
-				} else if(type & BAN_BY_USERNAME) {
-					admin->send(CAT("  - [+] Banning player by username '",douche->name(),"'...").c_str());
-					mods::ban_system::ban_username(douche->name());
-					admin->sendln("{grn}[DONE]{/grn}");
-				}
-				admin->send("  - [+] Deleting player from database...");
-				mods::players::db_load::delete_char(douche);
-				admin->sendln("{grn}[DONE]{/grn}");
-				admin->send("  - [+] Destroying player instance in game world...");
-				destroy_player(std::move(douche));
-				admin->sendln(CAT("{grn}[Completed ban process for player: '",name,"'{/grn}"));
-			}
+			admin->send(CAT("[+] Pulling player '",player_name,"'...").c_str());
+			char_from_room(douche->cd());
+			char_to_room(douche->cd(),mods::world_conf::real_frozen());
+			admin->send(CAT("[+] Beginning ban process for '",player_name,"'...").c_str());
+			admin->send("  - [+] Banning by IP, Hostname, and username...");
+			mods::ban_system::ban_player(douche);
+			admin->send("  - [+] Deleting player from database...");
+			mods::players::db_load::delete_char(douche);
+			admin->sendln("{grn}[DONE]{/grn}");
+			admin->send("  - [+] Destroying player instance in game world...");
+			destroy_player(std::move(douche));
+			admin->sendln(CAT("{grn}[Completed ban process for player: '",player_name,"'{/grn}"));
 		}
 	}
 
@@ -316,7 +321,7 @@ namespace mods::ban_system {
 		auto vec_args = PARSE_ARGS();
 		if(vec_args.size() > 0) {
 			for(auto username : vec_args) {
-				unban_ip(player,username);
+				unban_username(player,username);
 			}
 			ADMIN_DONE();
 			return;
@@ -327,41 +332,39 @@ namespace mods::ban_system {
 		DO_HELP("admin:ban:*");
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
-		if(vec_args.size() > 0) {
-			ban_player_via(player,vec_args,BAN_BY_ALL);
-			return;
+		player->sendln("WE ARE IN DO_BAN!!!!!");
+		player->sendln("WE ARE IN DO_BAN!!!!!");
+		player->sendln("WE ARE IN DO_BAN!!!!!");
+		player->sendln("WE ARE IN DO_BAN!!!!!");
+		player->sendln("WE ARE IN DO_BAN!!!!!");
+		player->sendln("WE ARE IN DO_BAN!!!!!");
+		for(const auto& name : vec_args) {
+			ban_player(player,name);
 		}
-		ADMIN_FAIL();
 	}
 	ADMINCMD(do_ban_user) {
 		DO_HELP("admin:ban:user");
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
-		if(vec_args.size() > 0) {
-			ban_player_via(player,vec_args,BAN_BY_USERNAME);
-			return;
+		for(const auto& username : vec_args) {
+			ban_username(player,username);
 		}
-		ADMIN_FAIL();
 	}
 	ADMINCMD(do_ban_ip) {
 		DO_HELP("admin:ban:ip");
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
-		if(vec_args.size() > 0) {
-			ban_player_via(player,vec_args,BAN_BY_IP);
-			return;
+		for(const auto& ip : vec_args) {
+			ban_ip(player,ip);
 		}
-		ADMIN_FAIL();
 	}
 	ADMINCMD(do_ban_host) {
 		DO_HELP("admin:ban:host");
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
-		if(vec_args.size() > 0) {
-			ban_player_via(player,vec_args,BAN_BY_HOST);
-			return;
+		for(const auto& host : vec_args) {
+			ban_hostname(player,host);
 		}
-		ADMIN_FAIL();
 	}
 	ADMINCMD(do_pull) {
 		DO_HELP("admin:pull");

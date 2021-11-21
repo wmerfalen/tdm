@@ -73,13 +73,33 @@ namespace mods::orm::admin {
 			return true;
 		}
 		return true;
-
 	}
+
 	bool banned::unban_hostname(std::string_view hostname) {
+		auto tup = this->read<banned>(this,this->hostname_column(),hostname);
+		if(std::get<0>(tup) == NO_RESULTS) {
+			m_debug("could not find a row to delete by hostname '" << hostname << "'");
+			return false;
+		}
+		auto removal_status = this->remove();
+		if(ORM_SUCCESS(removal_status)) {
+			m_debug("unban_hostname successfully removed a record from the db for hostname: '" << hostname << "'");
+			return true;
+		}
 		return true;
 	}
-	bool banned::unban_username(std::string_view username) {
 
+	bool banned::unban_username(std::string_view username) {
+		auto tup = this->read<banned>(this,this->username_column(),username);
+		if(std::get<0>(tup) == NO_RESULTS) {
+			m_debug("could not find a row to delete by username '" << username << "'");
+			return false;
+		}
+		auto removal_status = this->remove();
+		if(ORM_SUCCESS(removal_status)) {
+			m_debug("unban_username successfully removed a record from the db for username: '" << username << "'");
+			return true;
+		}
 		return true;
 	}
 	uint64_t banned::ban_ip(std::string_view ip) {

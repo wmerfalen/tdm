@@ -49,6 +49,7 @@
  * output.
  */
 
+static constexpr std::size_t MAX_PLAYER_NAME_LENGTH = 16;
 namespace mods::stat_bonuses {
 	extern void player_equip(uuid_t player_uuid,uuid_t object_uuid);
 	extern void player_unequip(uuid_t player_uuid,uuid_t object_uuid);
@@ -829,7 +830,8 @@ namespace mods {
 	std::string player::ucname() {
 		return m_ucname;
 	}
-	void player::set_name(std::string n) {
+	void player::set_name(std::string in_name) {
+		std::string n = in_name.substr(0,MAX_PLAYER_NAME_LENGTH-1);
 		cd()->player.name.assign(n);
 		m_name = n;
 		m_ucname = m_name;

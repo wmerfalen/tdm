@@ -95,7 +95,7 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	#-D__MENTOC_USE_PQXX_RESULT__=1 
-LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2 -L/usr/local/lib -lzmq
+LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2 -L/usr/local/lib -lzmq -lpthread
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard act.demolitions alias ban boards bsd-snprintf castle \
@@ -212,8 +212,9 @@ buildobj = act.informative act.item act.medic \
 					 mods/combat-composer/shared \
 					 mods/json/export \
 					 mods/mobs/resistance mods/find mods/contract-defiler \
-					 mods/message-server \
-					 mods/orm/admin/frozen mods/ban-system mods/orm/admin/banned
+					 mods/message-server mods/message-parser \
+					 mods/orm/admin/frozen mods/ban-system mods/orm/admin/banned \
+					 mods/orm/user-logins
 
 					 #mods/orm/admin/muted \
 

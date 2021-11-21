@@ -9137,30 +9137,41 @@ ALTER TABLE ONLY public.player_race_perks
 -- PostgreSQL database dump complete
 --
 
+DROP TABLE public.banned;
 CREATE TABLE public.banned (
-    id serial,
+    id serial PRIMARY KEY,
     b_ip_address inet,
 		b_hostname varchar(255),
-		b_username varchar(255),
+		b_username varchar(16),
 		b_enforce BOOLEAN NOT NULL DEFAULT TRUE,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+DROP TABLE public.muted;
 CREATE TABLE public.muted (
-    id serial,
+    id serial PRIMARY KEY,
     m_ip_address inet,
-		m_username varchar(255),
+		m_username varchar(16),
 		m_hostname varchar(255),
 		m_enforce BOOLEAN NOT NULL DEFAULT TRUE,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 
+DROP TABLE public.frozen;
 CREATE TABLE public.frozen (
-    id serial,
+    id serial PRIMARY KEY,
     f_ip_address inet,
 		f_hostname varchar(255),
-		f_username varchar(255),
+		f_username varchar(16),
 		f_enforce BOOLEAN NOT NULL DEFAULT TRUE,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+DROP TABLE public.user_logins;
+CREATE TABLE public.user_logins (
+	id serial PRIMARY KEY,
+	u_ip_address inet NOT NULL,
+	u_username varchar(16) NOT NULL,
+	UNIQUE(u_ip_address,u_username)
 );
