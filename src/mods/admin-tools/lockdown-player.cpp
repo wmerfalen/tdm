@@ -16,6 +16,8 @@
 #include "../pfind.hpp"
 #include "../world-configuration.hpp"
 #include "../interpreter.hpp"
+#include "../ban-system.hpp"
+#include "../players/db-load.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[mods::admin_tools::lockdown][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -27,149 +29,11 @@
 
 extern void write_aliases(char_data *ch);
 extern void read_aliases(char_data *ch);
+extern int destroy_player(player_ptr_t&& player);
 
 namespace mods::admin_tools::lockdown {
 	static reporter_t report_function;
 	static bool reporter_function_set = false;
-	void game_entry(player_ptr_t& player) {
-		mods::orm::load_player_rifle_attachments(player);
-		mods::orm::inventory::feed_player(player);
-		/** A nasty little hack to level up the player if they somehow
-		 * have a surplus of exp that hasn't been used towards
-		 * leveling up
-		 */
-		mods::levels::gain_exp(player,0);
-	}
-
-	void sync_player_with_class_skills(const uint64_t& player_id,const std::string& player_class) {
-		mods::orm::skill_trees tree;
-		std::string pc = "";
-		for(auto ch : player_class) {
-			pc += std::tolower(ch);
-		}
-		auto r = tree.load_by_class(pc);
-		mods::orm::player_skill_points ps;
-		ps.rows.clear();
-		ps.load_by_player(player_id);
-		bool found = false;
-		std::map<uint32_t,uint16_t> missing;
-		for(const auto& row : tree.rows) {
-			found = false;
-			for(const auto& prow : ps.rows) {
-				if(prow.skill_id == row.id) {
-					m_debug(green_str("Found skill id: ") << prow.skill_id);
-					found = true;
-					break;
-				}
-			}
-			if(!found) {
-				m_crit(red_str("Missing player skill id for player: ") << player_id << ", skill: '" << row.skill_name << "'");
-				missing[row.id] = 0;
-			}
-		}
-		if(missing.size()) {
-			ps.rows.clear();
-			m_crit(red_str("Player has missing skill tree members. Populating..."));
-			ps.populate(player_id,missing);
-			ps.save();
-			m_debug(green_str("Remedied."));
-		}
-		mods::orm::player_skill_usage_upkeep(player_id,player_class);
-	}
-
-	void extract_character(player_ptr_t& player_ptr) {
-		mods::admin_tools::lockdown::save_from(player_ptr,save_from_t::EXTRACTION);
-	}
-	void save_prefs(player_ptr_t& player_ptr) {
-		mods::admin_tools::lockdown::save_from(player_ptr,save_from_t::PREFS);
-	}
-	void save_from(player_ptr_t& player_ptr,save_from_t from) {
-		if(from != save_from_t::EXTRACTION) {
-			mods::orm::flush_player_rifle_attachments(player_ptr);
-		}
-		auto ch = player_ptr->cd();
-		std::map<std::string,std::string> values;
-		values["player_affection_plr_bitvector"] = std::to_string(player_ptr->get_affected_plr());
-		values["player_affection_bitvector"] = std::to_string(player_ptr->get_affected());
-
-		if(values["player_affection_plr_bitvector"].length() == 0) {
-			values.erase("player_affection_plr_bitvector");
-		}
-		if(values["player_affection_bitvector"].length() == 0) {
-			values.erase("player_affection_bitvector");
-		}
-
-		values["player_name"] = player_ptr->name().c_str();
-		values["player_short_description"] = std::to_string(ch->player.short_descr);
-		values["player_long_description"] = std::to_string(ch->player.long_descr);
-		values["player_action_bitvector"] = (std::to_string(ch->char_specials.saved.act));
-		values["player_ability_strength"] = (std::to_string(ch->real_abils.str));
-		values["player_ability_strength_add"] = (std::to_string(ch->real_abils.str_add));
-		values["player_ability_intelligence"] = (std::to_string(ch->real_abils.intel));
-		values["player_ability_wisdom"] = (std::to_string(ch->real_abils.wis));
-		values["player_ability_dexterity"] = (std::to_string(ch->real_abils.dex));
-		values["player_ability_constitution"] = (std::to_string(ch->real_abils.con));
-		values["player_ability_charisma"] = (std::to_string(ch->real_abils.cha));
-		values["player_ability_alignment"] = (std::to_string(ch->char_specials.saved.alignment));
-		values["player_attack_type"] = (std::to_string(ch->real_abils.con));
-		values["player_ability_constitution"] = (std::to_string(ch->real_abils.con));
-		values["player_max_mana"] = (std::to_string(player_ptr->max_mana()));
-		values["player_max_move"] = (std::to_string(player_ptr->max_move()));
-		values["player_gold"] = (std::to_string(player_ptr->gold()));
-		values["player_exp"] = (std::to_string(player_ptr->exp()));
-		values["player_sex"] = player_ptr->sex() == SEX_FEMALE ? std::string("F") : std::string("M");
-		values["player_hitpoints"] = (std::to_string(player_ptr->hp()));
-		values["player_max_hitpoints"] = (std::to_string(player_ptr->max_hp()));
-		values["player_mana"] = (std::to_string(player_ptr->mana()));
-		values["player_move"] = (std::to_string(player_ptr->move()));
-		values["player_damroll"] = (std::to_string(player_ptr->damroll()));
-		values["player_weight"] = (std::to_string(player_ptr->weight()));
-		values["player_height"] = (std::to_string(player_ptr->height()));
-		values["player_class"] = std::to_string(player_ptr->get_class());
-		values["player_title"] = std::to_string(player_ptr->title());
-		values["player_hometown"] = (std::to_string(player_ptr->hometown()));
-		values["player_damnodice"] = std::string("0");
-		values["player_damsizedice"] = std::string("0");
-		values["player_attack_type"] = std::string("0");
-		values["player_type"] = std::string("PC");
-		values["player_alignment"] = std::to_string(
-		                                 ch->char_specials.saved.alignment);
-		values["player_level"] = std::to_string(player_ptr->level());
-		values["player_hitroll"] = std::to_string(player_ptr->cd()->points.hitroll);
-		values["player_armor"] = std::to_string(player_ptr->cd()->points.armor);
-		values["player_preferences"] = std::to_string(player_ptr->get_prefs());
-		values["player_practice_sessions"] = std::to_string(player_ptr->practice_sessions());
-		try {
-			auto up_txn = txn();
-			mods::sql::compositor comp("player",&up_txn);
-			auto up_sql = comp
-			              .update("player")
-			              .set(values)
-			              .where("id","=",std::to_string(player_ptr->db_id()))
-			              .sql();
-			mods::pq::exec(up_txn,up_sql);
-			mods::pq::commit(up_txn);
-		} catch(std::exception& e) {
-			log(CAT("SYSERR:Failed saving player!:", e.what()).c_str());
-		}
-		values.clear();
-
-		switch(player_ptr->get_class()) {
-			default:
-				break;
-			case player_class_t::GHOST:
-				player_ptr->ghost()->save();
-				break;
-		}
-		mods::orm::player_base_ability pba;
-		auto status = pba.save_by_player(player_ptr);
-		if(0 != status) {
-			m_crit(red_str("Warning: couldn't save player_ptr's base abilities...") << "status: " << status << " for player_ptr:'" << player_ptr->name().c_str() << "'");
-		}
-		if(player_ptr->position() == CON_PLAYING) {
-			player_ptr->sendln("Your character has been saved.");
-		}
-	}
 
 	void set_reporter_lambda(reporter_t f) {
 		report_function = f;
@@ -183,124 +47,70 @@ namespace mods::admin_tools::lockdown {
 		}
 		report_function(code,msg);
 	}
-	void set_class(player_ptr_t& player, player_class_t p_class) {
-		m_debug(green_str("set_class called for player uuid:") << player->uuid());
-		player->set_class(p_class);
-		switch(p_class) {
-			case MARINE:
-				player->set_marine(mods::classes::create_marine(player));
-				mods::replenish::register_marine(player->uuid());
-				break;
-			case BREACHER:
-				player->set_breacher(mods::classes::create_breacher(player));
-				mods::replenish::register_breacher(player->uuid());
-				break;
-			case GHOST:
-				player->set_ghost(mods::classes::create_ghost(player));
-				mods::replenish::register_ghost(player->uuid());
-				break;
-			case CONTAGION:
-				player->set_contagion(mods::classes::create_contagion(player));
-				mods::replenish::register_contagion(player->uuid());
-				break;
-			default:
-				report(p_class,"Unable to create class. unknown class");
-				break;
-		}
-	}
-	void load_skill_points(player_ptr_t& player) {
-		//
-	}
-	void load_base_abilities(player_ptr_t& player) {
-		mods::orm::player_base_ability pba;
-		pba.feed_player(player);
-	}
+	enum ban_type_t : uint8_t {
+		BAN_BY_IP = (1 << 0),
+		BAN_BY_HOST = (1 << 1),
+		BAN_BY_USERNAME = (1 << 2),
+		BAN_BY_ALL = (BAN_BY_IP | BAN_BY_HOST | BAN_BY_USERNAME),
+	};
+	void ban_player_via(player_ptr_t& admin,const auto& vec_args,ban_type_t type) {
+		for(auto name : vec_args) {
+			auto p = mods::pfind::optby_name(name.c_str());
+			if(!p.has_value()) {
+				if(type & BAN_BY_USERNAME || type & BAN_BY_ALL) {
+					admin->send(CAT("[+] Banning player '",name,"' by user name...").c_str());
+					mods::ban_system::ban_username(name.c_str());
+					mods::players::db_load::delete_char_by_name(name);
+					admin->sendln("{grn}[DONE]{/grn}");
+				} else {
+					if(type & BAN_BY_IP) {
+						admin->sendln(
+						    CAT("{red}[-] Cannot ban player '",name,"' by IP since they are not logged in...")
+						);
+						admin->sendln("Please consider using admin:ban:user to ban the user by user name");
+					}
+					if(type & BAN_BY_HOST) {
+						admin->sendln(
+						    CAT("{red}[-] Cannot ban player '",name,"' by HOST since they are not logged in...")
+						);
+						admin->sendln("Please consider using admin:ban:user to ban the user by user name");
+					}
+				}
+			} else {
+				auto douche = p.value();
+				admin->send(CAT("[+] Placing player '",name,"' on lockdown...").c_str());
+				douche->lockdown(true);
+				admin->sendln("{grn}[DONE]{/grn}");
 
-	int save_player_password(player_ptr_t& player,std::string_view password) {
-		try {
-			std::map<std::string,std::string> values;
-			values["player_password"] = password.data();
-			auto up_txn = txn();
-			mods::sql::compositor comp("player",&up_txn);
-			auto up_sql = comp
-			              .update("player")
-			              .set_with_password(values, "player_password")
-			              .where("id","=",std::to_string(player->db_id()))
-			              .sql();
-			mods::pq::exec(up_txn,up_sql);
-			mods::pq::commit(up_txn);
-			return 0;
-		} catch(std::exception& e) {
-			auto msg = CAT("Player:'",player->db_id(),"/name:'",player->name().c_str(),"'.. Unable to save player password!:'",e.what(),"'");
-			report(-1,msg);
-			log(CAT("SYSERR: ",msg).c_str());
-			return -1;
-		}
-	}
-
-	int16_t save_new_char(player_ptr_t& player) {
-		try {
-			std::map<std::string,std::string> values;
-			mods::db::lmdb_export_char(player,values);
-			auto insert_transaction = txn();
-			mods::sql::compositor comp("player",&insert_transaction);
-			auto up_sql = comp
-			              .insert()
-			              .into("player")
-			              .values_with_password(values, "player_password")
-			              .sql();
-			values.clear();
-			mods::pq::exec(insert_transaction,up_sql);
-			mods::pq::commit(insert_transaction);
-			return 0;
-		} catch(std::exception& e) {
-			REPORT_DB_ISSUE("error inserting new character",e.what());
-			return -1;
-		}
-	}
-
-	int16_t load_char_pkid(player_ptr_t& player) {
-		try {
-			auto select_transaction = txn();
-			mods::sql::compositor comp("player",&select_transaction);
-			auto player_sql = comp.select("id")
-			                  .from("player")
-			                  .where("player_name","=",player->name())
-			                  .sql();
-			auto player_record = mods::pq::exec(select_transaction,player_sql);
-			if(player_record.size()) {
-				player->set_db_id(player_record[0]["id"].as<int>(0));
-				return 0;
+				admin->send(CAT("[+] Pulling player '",name,"'...").c_str());
+				char_from_room(douche->cd());
+				char_to_room(douche->cd(),mods::world_conf::real_frozen());
+				admin->send(CAT("[+] Beginning ban process for '",name,"'...").c_str());
+				if(type & BAN_BY_ALL) {
+					admin->send("  - [+] Banning by IP, Hostname, and username...");
+					mods::ban_system::ban_player(douche);
+				} else if(type & BAN_BY_IP) {
+					admin->send("  - [+] Banning player by IP...");
+					mods::ban_system::ban_ip(douche->ip());
+					admin->sendln("{grn}[DONE]{/grn}");
+				} else if(type & BAN_BY_HOST) {
+					admin->send(CAT("  - [+] Banning player by hostname '",douche->host(),"'...").c_str());
+					mods::ban_system::ban_hostname(douche->host());
+					admin->sendln("{grn}[DONE]{/grn}");
+				} else if(type & BAN_BY_USERNAME) {
+					admin->send(CAT("  - [+] Banning player by username '",douche->name(),"'...").c_str());
+					mods::ban_system::ban_username(douche->name());
+					admin->sendln("{grn}[DONE]{/grn}");
+				}
+				admin->send("  - [+] Deleting player from database...");
+				mods::players::db_load::delete_char(douche);
+				admin->sendln("{grn}[DONE]{/grn}");
+				admin->send("  - [+] Destroying player instance in game world...");
+				destroy_player(std::move(douche));
+				admin->sendln(CAT("{grn}[Completed ban process for player: '",name,"'{/grn}"));
 			}
-			log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
-			return -1;
-		} catch(std::exception& e) {
-			REPORT_DB_ISSUE("error loading character by pkid",e.what());
-			return -2;
 		}
 	}
-	int16_t delete_char(player_ptr_t& player) {
-		try {
-			std::map<std::string,std::string> values;
-			mods::db::lmdb_export_char(player,values);
-			auto delete_txn = txn();
-			mods::sql::compositor comp("player",&delete_txn);
-			auto del_sql = comp
-			               .del()
-			               .from("player")
-			               .where("player_name","=",values["player_name"])
-			               .sql();
-			mods::pq::exec(delete_txn,del_sql);
-			mods::pq::commit(delete_txn);
-			return 0;
-		} catch(std::exception& e) {
-			REPORT_DB_ISSUE("error deleting character",e.what());
-			return -1;
-		}
-	}
-	void load_aliases(player_ptr_t& player) {
-	}
-
 
 	ADMINCMD(do_mute) {
 		DO_HELP("admin:mute");
@@ -314,12 +124,10 @@ namespace mods::admin_tools::lockdown {
 				} else {
 					auto douche = p.value();
 					player->send("[+] Placing player on lockdown...");
+					/**
+					 * TODO: implement mods::player::can_talk(bool );
+					 */
 					douche->lockdown(true);
-					player->sendln("{grn}[DONE]{/grn}");
-
-					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
-					char_from_room(douche->cd());
-					char_to_room(douche->cd(),mods::world_conf::real_frozen());
 					player->sendln("{grn}[DONE]{/grn}");
 				}
 			}
@@ -401,27 +209,41 @@ namespace mods::admin_tools::lockdown {
 		ADMIN_FAIL();
 	}
 	ADMINCMD(do_ban) {
-		DO_HELP("admin:ban");
+		DO_HELP("admin:ban:*");
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
 		if(vec_args.size() > 0) {
-			for(auto name : vec_args) {
-				auto p = mods::pfind::optby_name(name.c_str());
-				if(!p.has_value()) {
-					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
-				} else {
-					auto douche = p.value();
-					player->send("[+] Placing player on lockdown...");
-					douche->lockdown(true);
-					player->sendln("{grn}[DONE]{/grn}");
-
-					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
-					char_from_room(douche->cd());
-					char_to_room(douche->cd(),mods::world_conf::real_frozen());
-					player->sendln("{grn}[DONE]{/grn}");
-				}
-			}
-			ADMIN_DONE();
+			ban_player_via(player,vec_args,BAN_BY_ALL);
+			return;
+		}
+		ADMIN_FAIL();
+	}
+	ADMINCMD(do_ban_user) {
+		DO_HELP("admin:ban:user");
+		ADMIN_REJECT();
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() > 0) {
+			ban_player_via(player,vec_args,BAN_BY_USERNAME);
+			return;
+		}
+		ADMIN_FAIL();
+	}
+	ADMINCMD(do_ban_ip) {
+		DO_HELP("admin:ban:ip");
+		ADMIN_REJECT();
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() > 0) {
+			ban_player_via(player,vec_args,BAN_BY_IP);
+			return;
+		}
+		ADMIN_FAIL();
+	}
+	ADMINCMD(do_ban_host) {
+		DO_HELP("admin:ban:host");
+		ADMIN_REJECT();
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() > 0) {
+			ban_player_via(player,vec_args,BAN_BY_HOST);
 			return;
 		}
 		ADMIN_FAIL();
@@ -453,7 +275,10 @@ namespace mods::admin_tools::lockdown {
 		void init() {
 			ADD_ADMIN_COMMAND("admin:mute",do_mute);
 			ADD_ADMIN_COMMAND("admin:unmute",do_unmute);
-			ADD_ADMIN_COMMAND("admin:ban",do_ban);
+			ADD_ADMIN_COMMAND("admin:ban:ip",do_ban_ip);
+			ADD_ADMIN_COMMAND("admin:ban:host",do_ban_host);
+			ADD_ADMIN_COMMAND("admin:ban:user",do_ban_user);
+			ADD_ADMIN_COMMAND("admin:ban:*",do_ban);
 			ADD_ADMIN_COMMAND("admin:unban",do_unban);
 			ADD_ADMIN_COMMAND("admin:pull",  do_pull);
 		}

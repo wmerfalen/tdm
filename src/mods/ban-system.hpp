@@ -8,6 +8,10 @@ typedef int socket_t;
 #include <array>
 #include "../globals.hpp"
 namespace mods::ban_system {
+	std::tuple<bool,std::string> ban_player(player_ptr_t& player);
+	std::tuple<bool,std::string> ban_username(std::string_view username);
+	std::tuple<bool,std::string> ban_ip(std::string_view ip);
+	std::tuple<bool,std::string> ban_hostname(std::string_view hostname);
 	namespace ip {
 		bool is_banned(std::string ip_address);
 		bool is_banned(const sockaddr_in& peer);

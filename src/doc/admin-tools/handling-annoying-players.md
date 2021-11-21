@@ -6,13 +6,36 @@ In the following example, the problematic player in question is 'Jake'.
 Jake has tried to create a player, or has completed the player creation process.
 For whatever reason, he needs to be banned from connecting.
 
-Ban command: `admin:ban <player>`
+## Banning by IP adress
 
-This command will ban not only the player, but the IP address of that user.
+Ban command: `admin:ban:ip <player>...[playerN]`
 
-Any attemps to try to create the same player name will add that IP address to the
-banned players list and their account registration will be stopped.
+This will ban the user by their IP address only. It will not ban them by
+their hostname or username.
 
+- To ban by IP, hostname (if any), and username use the `admin:ban:*` command.
+
+## Banning by hostname
+
+Ban command: `admin:ban:host <player>...[playerN]`
+
+If a user has a hostname that they are connected via, this will ban by that hostname.
+
+This will not ban the user by their username or IP.
+
+- To ban by IP, hostname (if any), and username use the `admin:ban:*` command.
+
+## Banning by user name
+
+Ban command: `admin:ban:user <player>...[playerN]`
+
+This will ban a user by their user name. It will not ban them by IP or hostname.
+
+- To ban by IP, hostname (if any), and username use the `admin:ban:*` command.
+
+## Banning by IP, hostname, and username
+
+Ban command: `admin:ban:* <player>...[playerN]`
 
 # Muting players
 It's sometimes desirable to mute a player instead of outright banning them.

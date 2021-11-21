@@ -179,12 +179,15 @@ ADD_BUILDER_COMMAND	mods/interpreter.hpp	28;"	kind:macro	line:28	file:
 ADD_INTERPRETER_COMMAND	mods/interpreter-include.hpp	8;"	kind:macro	line:8	file:
 ADD_USER_COMMAND	mods/interpreter.hpp	26;"	kind:macro	line:26	file:
 ADMINCMD	interpreter.h	16;"	kind:macro	line:16	file:
-ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_ban) {$/;"	kind:function	line:403	namespace:mods::admin_tools::lockdown	signature:(do_ban)
-ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_banish) {$/;"	kind:function	line:359	namespace:mods::admin_tools::lockdown	signature:(do_banish)
-ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_mute) {$/;"	kind:function	line:305	namespace:mods::admin_tools::lockdown	signature:(do_mute)
-ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_pull) {$/;"	kind:function	line:429	namespace:mods::admin_tools::lockdown	signature:(do_pull)
-ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_unban) {$/;"	kind:function	line:377	namespace:mods::admin_tools::lockdown	signature:(do_unban)
-ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_unmute) {$/;"	kind:function	line:332	namespace:mods::admin_tools::lockdown	signature:(do_unmute)
+ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_ban) {$/;"	kind:function	line:211	namespace:mods::admin_tools::lockdown	signature:(do_ban)
+ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_ban_host) {$/;"	kind:function	line:241	namespace:mods::admin_tools::lockdown	signature:(do_ban_host)
+ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_ban_ip) {$/;"	kind:function	line:231	namespace:mods::admin_tools::lockdown	signature:(do_ban_ip)
+ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_ban_user) {$/;"	kind:function	line:221	namespace:mods::admin_tools::lockdown	signature:(do_ban_user)
+ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_banish) {$/;"	kind:function	line:167	namespace:mods::admin_tools::lockdown	signature:(do_banish)
+ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_mute) {$/;"	kind:function	line:115	namespace:mods::admin_tools::lockdown	signature:(do_mute)
+ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_pull) {$/;"	kind:function	line:251	namespace:mods::admin_tools::lockdown	signature:(do_pull)
+ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_unban) {$/;"	kind:function	line:185	namespace:mods::admin_tools::lockdown	signature:(do_unban)
+ADMINCMD	mods/admin-tools/lockdown-player.cpp	/^	ADMINCMD(do_unmute) {$/;"	kind:function	line:140	namespace:mods::admin_tools::lockdown	signature:(do_unmute)
 ADMIN_DONE	globals.hpp	318;"	kind:macro	line:318	file:
 ADMIN_FAIL	globals.hpp	319;"	kind:macro	line:319	file:
 ADMIN_REJECT	globals.hpp	320;"	kind:macro	line:320	file:
@@ -4983,11 +4986,16 @@ backstab_mult	class.cpp	/^int backstab_mult(int level) {$/;"	kind:function	line:
 bad_pws	structs.h	/^			byte	bad_pws;		\/* number of bad pw attemps this login	*\/$/;"	kind:member	line:1683	struct:mods::descriptor_data	file:	access:public
 bad_pws	structs.h	/^	ubyte bad_pws;		\/* number of bad password attemps	*\/$/;"	kind:member	line:1467	struct:player_special_data_saved	file:	access:public
 balanced_stance_t	mods/melee/stance.hpp	/^	struct balanced_stance_t {$/;"	kind:struct	line:11	namespace:mods::melee::stance	file:
+ban_hostname	mods/ban-system.cpp	/^	std::tuple<bool,std::string> ban_hostname(std::string_view hostname) {$/;"	kind:function	line:27	namespace:mods::ban_system	signature:(std::string_view hostname)
+ban_ip	mods/ban-system.cpp	/^	std::tuple<bool,std::string> ban_ip(std::string_view ip) {$/;"	kind:function	line:19	namespace:mods::ban_system	signature:(std::string_view ip)
 ban_list	ban.cpp	/^struct ban_list_element *ban_list = NULL;$/;"	kind:variable	line:23	typeref:struct:ban_list_element
 ban_list_element	db.h	/^struct ban_list_element {$/;"	kind:struct	line:294	file:
+ban_player	mods/ban-system.cpp	/^	std::tuple<bool,std::string> ban_player(player_ptr_t& player) {$/;"	kind:function	line:11	namespace:mods::ban_system	signature:(player_ptr_t& player)
+ban_player_via	mods/admin-tools/lockdown-player.cpp	/^	void ban_player_via(player_ptr_t& admin,const auto& vec_args,ban_type_t type) {$/;"	kind:function	line:56	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& admin,const auto& vec_args,ban_type_t type)
 ban_system	mods/ban-system.cpp	/^namespace mods::ban_system {$/;"	kind:namespace	line:10	class:mods	file:
 ban_system	mods/ban-system.hpp	/^namespace mods::ban_system {$/;"	kind:namespace	line:10	class:mods	file:
 ban_types	ban.cpp	/^const char *ban_types[] = {$/;"	kind:variable	line:37
+ban_username	mods/ban-system.cpp	/^	std::tuple<bool,std::string> ban_username(std::string_view username) {$/;"	kind:function	line:35	namespace:mods::ban_system	signature:(std::string_view username)
 banish	mods/init.hpp	/^INIT(mods::players::banish);$/;"	kind:variable	line:16
 banish	mods/players/banish.cpp	/^namespace mods::players::banish {$/;"	kind:namespace	line:16	class:mods::players	file:
 banish	mods/players/banish.hpp	/^namespace mods::players::banish {$/;"	kind:namespace	line:6	class:mods::players	file:
@@ -5679,7 +5687,7 @@ command_interpreter	interpreter.cpp	/^void command_interpreter(player_ptr_t& pla
 command_pointer	interpreter.h	/^	void	(*command_pointer)$/;"	kind:member	line:50	struct:command_info	file:	access:public
 command_t	mods/builder.cpp	/^	command_t($/;"	kind:function	line:2136	struct:command_t	access:public	signature:( str_t in_table, str_map_t in_column_mappings, str_t in_name, str_t in_format, size_t in_arguments, int in_mob_vnum_argument, int in_mob_id_argument, save_function_t in_save_function )
 command_t	mods/builder.cpp	/^struct command_t {$/;"	kind:struct	line:2122	file:
-commands	mods/admin-tools/lockdown-player.cpp	/^	namespace commands {$/;"	kind:namespace	line:452	namespace:mods::admin_tools::lockdown	file:
+commands	mods/admin-tools/lockdown-player.cpp	/^	namespace commands {$/;"	kind:namespace	line:274	namespace:mods::admin_tools::lockdown	file:
 commands	mods/banning/ban-user.cpp	/^	namespace commands {$/;"	kind:namespace	line:101	namespace:mods::banning::user	file:
 commands	mods/combat.cpp	/^	namespace commands {$/;"	kind:namespace	line:34	namespace:mods::combat	file:
 commands	mods/init.hpp	/^INIT(mods::admin_tools::lockdown::commands);$/;"	kind:variable	line:9
@@ -6291,8 +6299,8 @@ delete_by_vnum	mods/builder/meqbuild.cpp	/^		bool delete_by_vnum(const uint64_t&
 delete_by_vnum	mods/builder/meqbuild.cpp	/^		bool delete_by_vnum(meqbuild_vnum_t vnum) {$/;"	kind:function	line:25	struct:mods::builder::meqbuild::meqbuild_interface	access:public	signature:(meqbuild_vnum_t vnum)
 delete_by_vnum	mods/builder/seqbuild.cpp	/^		bool delete_by_vnum(const uint64_t& vnum) {$/;"	kind:function	line:641	namespace:mods::builder::seqbuild::map	signature:(const uint64_t& vnum)
 delete_by_vnum	mods/builder/seqbuild.cpp	/^		bool delete_by_vnum(seqbuild_vnum_t vnum) {$/;"	kind:function	line:55	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(seqbuild_vnum_t vnum)
-delete_char	mods/admin-tools/lockdown-player.cpp	/^	int16_t delete_char(player_ptr_t& player) {$/;"	kind:function	line:282	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player)
-delete_char	mods/players/db-load.cpp	/^	int16_t delete_char(player_ptr_t& player) {$/;"	kind:function	line:277	namespace:mods::players::db_load	signature:(player_ptr_t& player)
+delete_char	mods/players/db-load.cpp	/^	int16_t delete_char(player_ptr_t& player) {$/;"	kind:function	line:295	namespace:mods::players::db_load	signature:(player_ptr_t& player)
+delete_char_by_name	mods/players/db-load.cpp	/^	int16_t delete_char_by_name(std::string_view user) {$/;"	kind:function	line:277	namespace:mods::players::db_load	signature:(std::string_view user)
 delete_doubledollar	interpreter.cpp	/^char *delete_doubledollar(char *string) {$/;"	kind:function	line:1190	signature:(char *string)
 delete_foobar_profile	mods/orm/mob-roam.cpp	/^	void mob_roam::delete_foobar_profile() {$/;"	kind:function	line:21	class:mods::orm::mob_roam	signature:()
 delete_from	mods/orm/base.hpp	/^		static inline std::tuple<int16_t,std::string> delete_from(TObject& obj) {$/;"	kind:function	line:50	struct:mods::orm::base	access:public	signature:(TObject& obj)
@@ -6366,7 +6374,7 @@ destroy_direction	mods/builder.cpp	/^	bool destroy_direction(room_rnum room_id,i
 destroy_door	mods/player-contract-instance.cpp	/^	void player_contract_instance::destroy_door(const room_rnum& room_id,const int8_t& direction) {$/;"	kind:function	line:524	class:mods::contracts::player_contract_instance	signature:(const room_rnum& room_id,const int8_t& direction)
 destroy_item	mods/player-contract-instance.cpp	/^	void player_contract_instance::destroy_item(obj_ptr_t& object) {$/;"	kind:function	line:505	class:mods::contracts::player_contract_instance	signature:(obj_ptr_t& object)
 destroy_player	comm.cpp	/^int destroy_player(player_ptr_t&& player) {$/;"	kind:function	line:1440	signature:(player_ptr_t&& player)
-destroy_player	mods/players/destroy-player.cpp	/^	void destroy_player(uuid_t player_uuid){$/;"	kind:function	line:15	namespace:mods::players::destroy_player	signature:(uuid_t player_uuid)
+destroy_player	mods/players/destroy-player.cpp	/^	void destroy_player(uuid_t player_uuid) {$/;"	kind:function	line:15	namespace:mods::players::destroy_player	signature:(uuid_t player_uuid)
 destroy_player	mods/players/destroy-player.cpp	/^namespace mods::players::destroy_player {$/;"	kind:namespace	line:14	class:mods::players	file:
 destroy_player	mods/players/destroy-player.hpp	/^namespace mods::players::destroy_player {$/;"	kind:namespace	line:6	class:mods::players	file:
 destroy_player	mods/replenish.cpp	/^	void destroy_player(uuid_t player_uuid) {$/;"	kind:function	line:51	namespace:mods::replenish	signature:(uuid_t player_uuid)
@@ -7373,7 +7381,6 @@ extract_after	mods/util.cpp	/^	std::string extract_after(std::string_view target
 extract_base_yaml_file	mods/rifle-attachments.cpp	/^	std::string rifle_attachments_t::extract_base_yaml_file(const encoding_t& line) {$/;"	kind:function	line:231	class:mods::rifle_attachments_t	signature:(const encoding_t& line)
 extract_char	handler.cpp	/^void extract_char(char_data *ch) {$/;"	kind:function	line:1306	signature:(char_data *ch)
 extract_char_final	handler.cpp	/^void extract_char_final(char_data *ch) {$/;"	kind:function	line:1168	signature:(char_data *ch)
-extract_character	mods/admin-tools/lockdown-player.cpp	/^	void extract_character(player_ptr_t& player_ptr) {$/;"	kind:function	line:80	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player_ptr)
 extract_character	mods/players/db-load.cpp	/^	void extract_character(player_ptr_t& player_ptr) {$/;"	kind:function	line:75	namespace:mods::players::db_load	signature:(player_ptr_t& player_ptr)
 extract_deep_reward	mods/util.cpp	/^	std::tuple<bool,int,std::string,strmap_t> extract_deep_reward(std::string reward) {$/;"	kind:function	line:412	namespace:mods::util	signature:(std::string reward)
 extract_int	mods/builder/slotted-builder.hpp	/^			std::optional<TExtractType> extract_int(std::string verb,std::string argument,std::size_t index) {$/;"	kind:function	line:468	struct:mods::builder::slotted_builder	access:protected	signature:(std::string verb,std::string argument,std::size_t index)
@@ -7841,7 +7848,6 @@ gain_mp	mods/levels.cpp	/^	void gain_mp(player_ptr_t& player,int gain) {$/;"	kin
 gain_mp_from_killing	mods/levels.cpp	/^	int gain_mp_from_killing(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:60	namespace:mods::levels	signature:(player_ptr_t& attacker,player_ptr_t& victim)
 game	mods/mini-games.cpp	/^	line_up& game(room_vnum vnum,int id) {$/;"	kind:function	line:9	namespace:mods::mini_games	signature:(room_vnum vnum,int id)
 game_action	mods/orm/mini-game.hpp	/^		std::string game_action;$/;"	kind:member	line:63	struct:mods::orm::mini_game	file:	access:public
-game_entry	mods/admin-tools/lockdown-player.cpp	/^	void game_entry(player_ptr_t& player) {$/;"	kind:function	line:34	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player)
 game_entry	mods/banning/ban-by-ip.cpp	/^	void game_entry(player_ptr_t& player) {$/;"	kind:function	line:29	namespace:mods::banning::by_ip	signature:(player_ptr_t& player)
 game_entry	mods/banning/ban-user.cpp	/^	void game_entry(player_ptr_t& player) {$/;"	kind:function	line:29	namespace:mods::banning::user	signature:(player_ptr_t& player)
 game_entry	mods/players/db-load.cpp	/^	void game_entry(player_ptr_t& player) {$/;"	kind:function	line:29	namespace:mods::players::db_load	signature:(player_ptr_t& player)
@@ -8493,8 +8499,8 @@ host	structs.h	/^			mods::string host;		\/* hostname				*\/$/;"	kind:member	line
 host	structs.h	/^	mods::string host;	\/* host of last logon *\/$/;"	kind:member	line:1821	struct:char_file_u	file:	access:public
 hostent	mods/lmdb/gethostbyname.cpp	/^} hostent;$/;"	kind:typedef	line:19	typeref:struct:_hostent	file:
 hostile_targets	mods/mobs/smart-mob.hpp	/^			vec_t<uuid_t> hostile_targets;$/;"	kind:member	line:146	struct:mods::mobs::smart_mob	file:	access:protected
-hostname	mods/ban-system.cpp	/^	namespace hostname {$/;"	kind:namespace	line:11	namespace:mods::ban_system	file:
-hostname	mods/ban-system.hpp	/^	namespace hostname {$/;"	kind:namespace	line:15	namespace:mods::ban_system	file:
+hostname	mods/ban-system.cpp	/^	namespace hostname {$/;"	kind:namespace	line:43	namespace:mods::ban_system	file:
+hostname	mods/ban-system.hpp	/^	namespace hostname {$/;"	kind:namespace	line:19	namespace:mods::ban_system	file:
 hour	mods/date-time.cpp	/^	static uint8_t hour;$/;"	kind:member	line:66	namespace:mods::date_time	file:
 hours	structs.h	/^	int hours, day, month;$/;"	kind:member	line:1288	struct:time_info_data	file:	access:public
 house_control	house.cpp	/^struct house_control_rec house_control[MAX_HOUSES];$/;"	kind:variable	line:28	typeref:struct:house_control_rec
@@ -8695,7 +8701,7 @@ init	act.demolitions.cpp	/^	void init() {$/;"	kind:function	line:250	namespace:d
 init	act.informative.cpp	/^	void init() {$/;"	kind:function	line:2066	namespace:informative	signature:()
 init	globals.cpp	/^		int init(int argc,char** argv) {$/;"	kind:function	line:199	namespace:mods::globals	signature:(int argc,char** argv)
 init	mobact.cpp	/^	void init() {$/;"	kind:function	line:316	namespace:mods::mobact	signature:()
-init	mods/admin-tools/lockdown-player.cpp	/^		void init() {$/;"	kind:function	line:453	namespace:mods::admin_tools::lockdown::commands	signature:()
+init	mods/admin-tools/lockdown-player.cpp	/^		void init() {$/;"	kind:function	line:275	namespace:mods::admin_tools::lockdown::commands	signature:()
 init	mods/armor/advanced-protection.cpp	/^	void advanced_protection::init() {$/;"	kind:function	line:16	class:mods::armor::advanced_protection	signature:()
 init	mods/armor/basic-protection.cpp	/^	void basic_protection::init() {$/;"	kind:function	line:16	class:mods::armor::basic_protection	signature:()
 init	mods/armor/elite-protection.cpp	/^	void elite_protection::init() {$/;"	kind:function	line:16	class:mods::armor::elite_protection	signature:()
@@ -8977,8 +8983,8 @@ inverse_task_string_map	mods/contract-steps.cpp	/^	std::map<task_t,std::string> 
 invis_level	structs.h	/^	sh_int invis_level;		\/* level of invisibility		*\/$/;"	kind:member	line:1464	struct:player_special_data_saved	file:	access:public
 invisible	mods/super-users.cpp	/^	bool invisible(player_ptr_t& player) {$/;"	kind:function	line:137	namespace:mods::super_users	signature:(player_ptr_t& player)
 invisible_super_users	mods/super-users.cpp	/^	static std::set<std::string> invisible_super_users;$/;"	kind:member	line:80	namespace:mods::super_users	file:
-ip	mods/ban-system.cpp	/^	namespace ip {$/;"	kind:namespace	line:27	namespace:mods::ban_system	file:
-ip	mods/ban-system.hpp	/^	namespace ip {$/;"	kind:namespace	line:11	namespace:mods::ban_system	file:
+ip	mods/ban-system.cpp	/^	namespace ip {$/;"	kind:namespace	line:59	namespace:mods::ban_system	file:
+ip	mods/ban-system.hpp	/^	namespace ip {$/;"	kind:namespace	line:15	namespace:mods::ban_system	file:
 ip	mods/player.cpp	/^	std::string player::ip() const {$/;"	kind:function	line:1361	class:mods::player	signature:() const
 irl	mods/date-time.cpp	/^namespace mods::date_time::irl {$/;"	kind:namespace	line:10	class:mods::date_time	file:
 irl	mods/date-time.hpp	/^	namespace irl {$/;"	kind:namespace	line:51	namespace:mods::date_time	file:
@@ -8993,11 +8999,11 @@ is_argument	globals.cpp	/^		bool is_argument(std::string_view argv,std::string_v
 is_assault_rifle	mods/object-utils.cpp	/^	bool is_assault_rifle(const obj_ptr_t& weapon) {$/;"	kind:function	line:74	namespace:mods::object_utils	signature:(const obj_ptr_t& weapon)
 is_attached	mods/weapons/attachment-pathogen-ammunition.cpp	/^	bool attachment_pathogen_ammunition::is_attached() const {$/;"	kind:function	line:109	class:mods::weapons::attachment_pathogen_ammunition	signature:() const
 is_attached	mods/weapons/attachment-underbarrel.cpp	/^	bool attachment_underbarrel::is_attached() const {$/;"	kind:function	line:37	class:mods::weapons::attachment_underbarrel	signature:() const
-is_banned	mods/ban-system.cpp	/^		bool is_banned(const sockaddr_in& peer) {$/;"	kind:function	line:19	namespace:mods::ban_system::hostname	signature:(const sockaddr_in& peer)
-is_banned	mods/ban-system.cpp	/^		bool is_banned(const sockaddr_in& peer) {$/;"	kind:function	line:35	namespace:mods::ban_system::ip	signature:(const sockaddr_in& peer)
-is_banned	mods/ban-system.cpp	/^		bool is_banned(std::string hostname) {$/;"	kind:function	line:12	namespace:mods::ban_system::hostname	signature:(std::string hostname)
-is_banned	mods/ban-system.cpp	/^		bool is_banned(std::string ip_address) {$/;"	kind:function	line:28	namespace:mods::ban_system::ip	signature:(std::string ip_address)
-is_banned	mods/ban-system.cpp	/^		bool is_banned(std::string user_name) {$/;"	kind:function	line:43	namespace:mods::ban_system::username	signature:(std::string user_name)
+is_banned	mods/ban-system.cpp	/^		bool is_banned(const sockaddr_in& peer) {$/;"	kind:function	line:51	namespace:mods::ban_system::hostname	signature:(const sockaddr_in& peer)
+is_banned	mods/ban-system.cpp	/^		bool is_banned(const sockaddr_in& peer) {$/;"	kind:function	line:67	namespace:mods::ban_system::ip	signature:(const sockaddr_in& peer)
+is_banned	mods/ban-system.cpp	/^		bool is_banned(std::string hostname) {$/;"	kind:function	line:44	namespace:mods::ban_system::hostname	signature:(std::string hostname)
+is_banned	mods/ban-system.cpp	/^		bool is_banned(std::string ip_address) {$/;"	kind:function	line:60	namespace:mods::ban_system::ip	signature:(std::string ip_address)
+is_banned	mods/ban-system.cpp	/^		bool is_banned(std::string user_name) {$/;"	kind:function	line:75	namespace:mods::ban_system::username	signature:(std::string user_name)
 is_basic_protection	mods/armor.cpp	/^	bool is_basic_protection(obj_ptr_t& eq) {$/;"	kind:function	line:5	namespace:mods::armor	signature:(obj_ptr_t& eq)
 is_bladed_weapon	mods/object-utils.hpp	/^	bool is_bladed_weapon(T& obj) {$/;"	kind:function	line:302	namespace:mods::object_utils	signature:(T& obj)
 is_blocked	mods/player.cpp	/^	bool player::is_blocked() {$/;"	kind:function	line:1587	class:mods::player	signature:()
@@ -9274,8 +9280,7 @@ lmdb_write_values	mods/db.cpp	/^	tuple_status_t lmdb_write_values($/;"	kind:func
 load	mods/classes/base.cpp	/^	std::tuple<bool,std::string> skill_t::load(player_ptr_t& player,std::string_view skill_name) {$/;"	kind:function	line:108	class:mods::classes::skill_t	signature:(player_ptr_t& player,std::string_view skill_name)
 load	mods/karma.cpp	/^	void load(player_ptr_t& player){$/;"	kind:function	line:12	namespace:mods	signature:(player_ptr_t& player)
 load	mods/mini-games.cpp	/^	void load(mini_game_payload_t g) {$/;"	kind:function	line:16	namespace:mods::mini_games	signature:(mini_game_payload_t g)
-load_aliases	mods/admin-tools/lockdown-player.cpp	/^	void load_aliases(player_ptr_t& player) {$/;"	kind:function	line:301	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player)
-load_aliases	mods/players/db-load.cpp	/^	void load_aliases(player_ptr_t& player) {$/;"	kind:function	line:296	namespace:mods::players::db_load	signature:(player_ptr_t& player)
+load_aliases	mods/players/db-load.cpp	/^	void load_aliases(player_ptr_t& player) {$/;"	kind:function	line:314	namespace:mods::players::db_load	signature:(player_ptr_t& player)
 load_all	mods/builder/conbuild.cpp	/^		void load_all() {$/;"	kind:function	line:606	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:()
 load_all	mods/builder/hqbuild.cpp	/^	void load_all() {$/;"	kind:function	line:11	namespace:mods::builder::hqbuild	signature:()
 load_all	mods/builder/meqbuild.cpp	/^		void load_all() {$/;"	kind:function	line:112	struct:mods::builder::meqbuild::meqbuild_interface	access:public	signature:()
@@ -9304,7 +9309,6 @@ load_all_scripted_steps	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::st
 load_all_skill_points	mods/orm/skill-points.cpp	/^	std::tuple<int16_t,std::string> load_all_skill_points(std::map<uint16_t,uint16_t>* storage_ptr) {$/;"	kind:function	line:65	namespace:mods::orm	signature:(std::map<uint16_t,uint16_t>* storage_ptr)
 load_banned	ban.cpp	/^void load_banned(void) {$/;"	kind:function	line:46	signature:(void)
 load_banned	mods/hell.hpp	/^	constexpr inline bool load_banned = false;$/;"	kind:member	line:17	namespace:mods::hell	file:
-load_base_abilities	mods/admin-tools/lockdown-player.cpp	/^	void load_base_abilities(player_ptr_t& player) {$/;"	kind:function	line:214	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player)
 load_base_abilities	mods/players/db-load.cpp	/^	void load_base_abilities(player_ptr_t& player) {$/;"	kind:function	line:209	namespace:mods::players::db_load	signature:(player_ptr_t& player)
 load_base_functions	mods/js.cpp	/^		void load_base_functions() {$/;"	kind:function	line:969	namespace:mods::js	signature:()
 load_by_class	mods/orm/skill-trees.cpp	/^	std::tuple<int16_t,std::string> skill_trees::load_by_class(std::string_view player_class) {$/;"	kind:function	line:74	class:mods::orm::skill_trees	signature:(std::string_view player_class)
@@ -9355,7 +9359,6 @@ load_c_functions	mods/js.cpp	/^		void load_c_functions() {$/;"	kind:function	lin
 load_c_functions	mods/js.cpp	/^		void load_c_functions(duk_context *ctx) {$/;"	kind:function	line:1299	namespace:mods::js	signature:(duk_context *ctx)
 load_c_require_functions	mods/js.cpp	/^		void load_c_require_functions() {$/;"	kind:function	line:957	namespace:mods::js	signature:()
 load_c_test_functions	mods/js.cpp	/^		void load_c_test_functions() {$/;"	kind:function	line:962	namespace:mods::js	signature:()
-load_char_pkid	mods/admin-tools/lockdown-player.cpp	/^	int16_t load_char_pkid(player_ptr_t& player) {$/;"	kind:function	line:262	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player)
 load_char_pkid	mods/banning/ban-user.cpp	/^	int16_t load_char_pkid(player_ptr_t& player) {$/;"	kind:function	line:80	namespace:mods::banning::user	signature:(player_ptr_t& player)
 load_char_pkid	mods/players/db-load.cpp	/^	int16_t load_char_pkid(player_ptr_t& player) {$/;"	kind:function	line:257	namespace:mods::players::db_load	signature:(player_ptr_t& player)
 load_decoded_step_data	mods/player-contract-instance.cpp	/^	void player_contract_instance::load_decoded_step_data() {$/;"	kind:function	line:104	class:mods::contracts::player_contract_instance	signature:()
@@ -9385,7 +9388,6 @@ load_record	mods/db.cpp	/^	int load_record(const std::string& table, const std::
 load_record_by_meta	mods/db.cpp	/^	int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_map_t& out_record) {$/;"	kind:function	line:523	namespace:mods::db	signature:(const std::string& table, mutable_map_t* values,mutable_map_t& out_record)
 load_room	structs.h	/^	room_vnum load_room;		\/* Which room to place char in		*\/$/;"	kind:member	line:1465	struct:player_special_data_saved	file:	access:public
 load_skill_by_player	mods/classes/base.cpp	/^	std::tuple<bool,std::string> skill_t::load_skill_by_player(std::string_view skill_name, player_ptr_t& player) {$/;"	kind:function	line:14	class:mods::classes::skill_t	signature:(std::string_view skill_name, player_ptr_t& player)
-load_skill_points	mods/admin-tools/lockdown-player.cpp	/^	void load_skill_points(player_ptr_t& player) {$/;"	kind:function	line:211	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player)
 load_skill_points	mods/players/db-load.cpp	/^	void load_skill_points(player_ptr_t& player) {$/;"	kind:function	line:206	namespace:mods::players::db_load	signature:(player_ptr_t& player)
 load_skill_usages	mods/orm/sniper.cpp	/^	void sniper::load_skill_usages() {$/;"	kind:function	line:6	class:mods::orm::sniper	signature:()
 load_trees	mods/behaviour_tree_impl.cpp	/^	void load_trees() {$/;"	kind:function	line:109	namespace:mods::behaviour_tree_impl	signature:()
@@ -9442,7 +9444,7 @@ location	structs.h	/^	byte location;        \/* Tells which ability to change(AP
 location	structs.h	/^	byte location;      \/* Which ability to change (APPLY_XXX) *\/$/;"	kind:member	line:809	struct:obj_affected_type	file:	access:public
 location	structs.h	/^	sh_int location;$/;"	kind:member	line:1077	struct:obj_data::obj_file_elem	file:	access:public
 lock	mods/doors.cpp	/^	void lock(room_rnum room_id,direction_t dir) {$/;"	kind:function	line:20	namespace:mods::doors	signature:(room_rnum room_id,direction_t dir)
-lockdown	mods/admin-tools/lockdown-player.cpp	/^namespace mods::admin_tools::lockdown {$/;"	kind:namespace	line:31	class:mods::admin_tools	file:
+lockdown	mods/admin-tools/lockdown-player.cpp	/^namespace mods::admin_tools::lockdown {$/;"	kind:namespace	line:34	class:mods::admin_tools	file:
 lockdown	mods/admin-tools/lockdown-player.hpp	/^namespace mods::admin_tools::lockdown {$/;"	kind:namespace	line:7	class:mods::admin_tools	file:
 lockdown	mods/player.cpp	/^	void player::lockdown(bool b) {$/;"	kind:function	line:2493	class:mods::player	signature:(bool b)
 locked_down_player_always	mods/interpreter.cpp	/^		void locked_down_player_always(player_ptr_t& douche) {$/;"	kind:function	line:74	namespace:mods::interpreter::douchebags	signature:(player_ptr_t& douche)
@@ -9691,8 +9693,8 @@ m_craft_incendiary_underbarrel_level	mods/classes/forge.hpp	/^			skill_familiari
 m_craft_shotgun_underbarrel_level	mods/classes/forge.hpp	/^			skill_familiarity_t m_craft_shotgun_underbarrel_level;$/;"	kind:member	line:58	struct:mods::classes::forge	file:	access:private
 m_craft_silencer_level	mods/classes/forge.hpp	/^			skill_familiarity_t m_craft_silencer_level;$/;"	kind:member	line:61	struct:mods::classes::forge	file:	access:private
 m_create_wall_of_fire_level	mods/classes/pyrexia.hpp	/^			skill_familiarity_t m_create_wall_of_fire_level;$/;"	kind:member	line:77	struct:mods::classes::pyrexia	file:	access:private
-m_crit	mods/admin-tools/lockdown-player.cpp	22;"	kind:macro	line:22	file:
-m_crit	mods/admin-tools/lockdown-player.cpp	25;"	kind:macro	line:25	file:
+m_crit	mods/admin-tools/lockdown-player.cpp	24;"	kind:macro	line:24	file:
+m_crit	mods/admin-tools/lockdown-player.cpp	27;"	kind:macro	line:27	file:
 m_crit	mods/armor/advanced-protection.cpp	14;"	kind:macro	line:14	file:
 m_crit	mods/armor/advanced-protection.cpp	67;"	kind:macro	line:67	file:
 m_crit	mods/armor/advanced-protection.cpp	9;"	kind:macro	line:9	file:
@@ -9756,8 +9758,8 @@ m_dbi_opened	mods/lmdb.hpp	/^			bool m_dbi_opened;$/;"	kind:member	line:208	stru
 m_deallocate	mods/string.cpp	/^	void string::m_deallocate() {$/;"	kind:function	line:183	class:mods::string	signature:()
 m_debug	fight.hpp	14;"	kind:macro	line:14	file:
 m_debug	fight.hpp	16;"	kind:macro	line:16	file:
-m_debug	mods/admin-tools/lockdown-player.cpp	21;"	kind:macro	line:21	file:
-m_debug	mods/admin-tools/lockdown-player.cpp	24;"	kind:macro	line:24	file:
+m_debug	mods/admin-tools/lockdown-player.cpp	23;"	kind:macro	line:23	file:
+m_debug	mods/admin-tools/lockdown-player.cpp	26;"	kind:macro	line:26	file:
 m_debug	mods/armor/advanced-protection.cpp	6;"	kind:macro	line:6	file:
 m_debug	mods/armor/advanced-protection.cpp	8;"	kind:macro	line:8	file:
 m_debug	mods/armor/basic-protection.cpp	6;"	kind:macro	line:6	file:
@@ -12427,7 +12429,7 @@ replenish_command	mods/intimidate.hpp	/^	struct replenish_command {$/;"	kind:str
 replenish_command	mods/zone.hpp	/^	struct replenish_command {$/;"	kind:struct	line:15	namespace:mods::zone	file:
 replenish_notify	mods/classes/contagion.cpp	/^	void contagion::replenish_notify(std::string_view v) {$/;"	kind:function	line:110	class:mods::classes::contagion	signature:(std::string_view v)
 replenish_notify	mods/classes/ghost.cpp	/^	void ghost::replenish_notify(std::string_view v) {$/;"	kind:function	line:84	class:mods::classes::ghost	signature:(std::string_view v)
-report	mods/admin-tools/lockdown-player.cpp	/^	void report(int64_t code, std::string_view msg) {$/;"	kind:function	line:178	namespace:mods::admin_tools::lockdown	signature:(int64_t code, std::string_view msg)
+report	mods/admin-tools/lockdown-player.cpp	/^	void report(int64_t code, std::string_view msg) {$/;"	kind:function	line:42	namespace:mods::admin_tools::lockdown	signature:(int64_t code, std::string_view msg)
 report	mods/banning/ban-by-ip.cpp	/^	void report(int64_t code, std::string_view msg) {$/;"	kind:function	line:39	namespace:mods::banning::by_ip	signature:(int64_t code, std::string_view msg)
 report	mods/banning/ban-user.cpp	/^	void report(int64_t code, std::string_view msg) {$/;"	kind:function	line:71	namespace:mods::banning::user	signature:(int64_t code, std::string_view msg)
 report	mods/bleed.cpp	/^		std::string report() {$/;"	kind:function	line:39	struct:mods::bleed::bleed_damage_t	access:public	signature:()
@@ -12452,7 +12454,7 @@ report_advances	mods/levels.cpp	/^	void report_advances(std::array<uint16_t,STAT
 report_crit	mods/combat-composer/shared.cpp	/^		void report_crit(player_ptr_t& attacker, player_ptr_t& victim, int dam, direction_t& direction) {$/;"	kind:function	line:266	namespace:mods::combat_composer::phases	signature:(player_ptr_t& attacker, player_ptr_t& victim, int dam, direction_t& direction)
 report_db_issue	mods/db-report.hpp	/^static inline void report_db_issue(std::string_view message,std::string_view exception_message) {$/;"	kind:function	line:24	file:	signature:(std::string_view message,std::string_view exception_message)
 report_error	mods/builder.hpp	/^	void report_error(T player,std::string_view message) {$/;"	kind:function	line:122	namespace:mods::builder	signature:(T player,std::string_view message)
-report_function	mods/admin-tools/lockdown-player.cpp	/^	static reporter_t report_function;$/;"	kind:member	line:32	namespace:mods::admin_tools::lockdown	file:
+report_function	mods/admin-tools/lockdown-player.cpp	/^	static reporter_t report_function;$/;"	kind:member	line:35	namespace:mods::admin_tools::lockdown	file:
 report_function	mods/banning/ban-by-ip.cpp	/^	static reporter_t report_function;$/;"	kind:member	line:27	namespace:mods::banning::by_ip	file:
 report_function	mods/banning/ban-user.cpp	/^	static reporter_t report_function;$/;"	kind:member	line:27	namespace:mods::banning::user	file:
 report_function	mods/players/db-load.cpp	/^	static reporter_t report_function;$/;"	kind:member	line:27	namespace:mods::players::db_load	file:
@@ -12467,7 +12469,7 @@ report_success	mods/builder.hpp	/^	void report_success(T player,std::string_view
 report_violence	mods/response-team/radio.cpp	/^	void report_violence(uuid_t mob_uuid, std::string_view message) {$/;"	kind:function	line:96	namespace:mods::response_team::radio	signature:(uuid_t mob_uuid, std::string_view message)
 report_yaml_exception	mods/object-utils.hpp	/^	static inline void report_yaml_exception(TException& e,std::vector<std::string>& items_fed) {$/;"	kind:function	line:112	namespace:mods::object_utils	signature:(TException& e,std::vector<std::string>& items_fed)
 report_yaml_message	mods/object-utils.cpp	/^	void report_yaml_message(std::string_view msg) {$/;"	kind:function	line:132	namespace:mods::object_utils	signature:(std::string_view msg)
-reporter_function_set	mods/admin-tools/lockdown-player.cpp	/^	static bool reporter_function_set = false;$/;"	kind:member	line:33	namespace:mods::admin_tools::lockdown	file:
+reporter_function_set	mods/admin-tools/lockdown-player.cpp	/^	static bool reporter_function_set = false;$/;"	kind:member	line:36	namespace:mods::admin_tools::lockdown	file:
 reporter_function_set	mods/banning/ban-by-ip.cpp	/^	static bool reporter_function_set = false;$/;"	kind:member	line:28	namespace:mods::banning::by_ip	file:
 reporter_function_set	mods/banning/ban-user.cpp	/^	static bool reporter_function_set = false;$/;"	kind:member	line:28	namespace:mods::banning::user	file:
 reporter_function_set	mods/players/db-load.cpp	/^	static bool reporter_function_set = false;$/;"	kind:member	line:28	namespace:mods::players::db_load	file:
@@ -12969,7 +12971,6 @@ save_counts	mods/memory.cpp	/^	void save_counts(std::map<uuid_t,T>& map,std::str
 save_dummy	mods/target-practice-db.cpp	/^	void save_dummy(player_ptr_t& player, std::vector<std::string>& args) {$/;"	kind:function	line:24	namespace:mods::target_practice_db	signature:(player_ptr_t& player, std::vector<std::string>& args)
 save_error_logs	mods/orm/orm-base.hpp	/^			bool save_error_logs;$/;"	kind:member	line:71	struct:mods::orm::orm_base	file:	access:public
 save_footprint	mods/memory.cpp	/^	void save_footprint(T& ptr) {$/;"	kind:function	line:29	namespace:mods::memory	signature:(T& ptr)
-save_from	mods/admin-tools/lockdown-player.cpp	/^	void save_from(player_ptr_t& player_ptr,save_from_t from) {$/;"	kind:function	line:86	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player_ptr,save_from_t from)
 save_from	mods/players/db-load.cpp	/^	void save_from(player_ptr_t& player_ptr,save_from_t from) {$/;"	kind:function	line:81	namespace:mods::players::db_load	signature:(player_ptr_t& player_ptr,save_from_t from)
 save_function	mods/builder.cpp	/^	save_function_t save_function;$/;"	kind:member	line:2133	struct:command_t	file:	access:public
 save_hostile_targets	mods/mobs/smart-mob.cpp	/^	void smart_mob::save_hostile_targets(vec_t<uuid_t>& t) {$/;"	kind:function	line:264	class:mods::mobs::smart_mob	signature:(vec_t<uuid_t>& t)
@@ -12980,15 +12981,12 @@ save_mob_roam_pattern	mods/builder.cpp	/^	std::tuple<bool,std::string> save_mob_
 save_mob_target	mods/builder.cpp	/^	std::tuple<bool,std::string> save_mob_target(int mob_id,std::string targets) {$/;"	kind:function	line:235	namespace:mods::builder	signature:(int mob_id,std::string targets)
 save_mud_time	db.cpp	/^void save_mud_time(struct time_info_data *when) {$/;"	kind:function	line:647	signature:(struct time_info_data *when)
 save_new	mods/orm/integral-object.cpp	/^	int16_t integral_object::save_new(){$/;"	kind:function	line:22	class:mods::orm::integral_object	signature:()
-save_new_char	mods/admin-tools/lockdown-player.cpp	/^	int16_t save_new_char(player_ptr_t& player) {$/;"	kind:function	line:241	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player)
 save_new_char	mods/db.cpp	/^	tuple_status_t save_new_char($/;"	kind:function	line:379	namespace:mods::db	signature:( player_ptr_t player_ptr)
 save_new_char	mods/players/db-load.cpp	/^	int16_t save_new_char(player_ptr_t& player) {$/;"	kind:function	line:236	namespace:mods::players::db_load	signature:(player_ptr_t& player)
 save_object	mods/builder.cpp	/^	std::pair<bool,std::string> save_object(int item_number,int obj_type,std::string feed_file) {$/;"	kind:function	line:1367	namespace:mods::builder	signature:(int item_number,int obj_type,std::string feed_file)
 save_object_vector	mods/builder_util.hpp	/^	void save_object_vector($/;"	kind:function	line:118	namespace:mods::builder_util	signature:( player_ptr_t& player, const std::string& argument, VectorObjectType& vector_objects, std::function<std::pair<bool,std::string>(typename VectorObjectType::value_type&)> save_function )
 save_player	mods/builder.cpp	/^	std::pair<bool,std::string> save_player(char_data* obj) {$/;"	kind:function	line:1271	namespace:mods::builder	signature:(char_data* obj)
-save_player_password	mods/admin-tools/lockdown-player.cpp	/^	int save_player_password(player_ptr_t& player,std::string_view password) {$/;"	kind:function	line:219	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player,std::string_view password)
 save_player_password	mods/players/db-load.cpp	/^	int save_player_password(player_ptr_t& player,std::string_view password) {$/;"	kind:function	line:214	namespace:mods::players::db_load	signature:(player_ptr_t& player,std::string_view password)
-save_prefs	mods/admin-tools/lockdown-player.cpp	/^	void save_prefs(player_ptr_t& player_ptr) {$/;"	kind:function	line:83	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player_ptr)
 save_prefs	mods/players/db-load.cpp	/^	void save_prefs(player_ptr_t& player_ptr) {$/;"	kind:function	line:78	namespace:mods::players::db_load	signature:(player_ptr_t& player_ptr)
 save_record	mods/db.cpp	/^	tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::string pk_id) {$/;"	kind:function	line:195	namespace:mods::db	signature:(const std::string& table,mutable_map_t* values,std::string pk_id)
 save_record_get_id	mods/db.cpp	/^	aligned_int_t save_record_get_id($/;"	kind:function	line:109	namespace:mods::db	signature:( const std::string& table, mutable_map_t* values)
@@ -13220,7 +13218,6 @@ set_cd	mods/player.cpp	/^	void player::set_cd(char_data* ch) {$/;"	kind:function
 set_char_on_descriptor	mods/player.cpp	/^	void player::set_char_on_descriptor(std::deque<descriptor_data>::iterator it) {$/;"	kind:function	line:1039	class:mods::player	signature:(std::deque<descriptor_data>::iterator it)
 set_char_pk_id	mods/js.cpp	/^		static duk_ret_t set_char_pk_id(duk_context *ctx) {$/;"	kind:function	line:775	namespace:mods::js	signature:(duk_context *ctx)
 set_children	mods/behaviour_tree_node.hpp	/^			void set_children(const children_t& child_nodes) {$/;"	kind:function	line:116	struct:mods::behaviour_tree_node	access:public	signature:(const children_t& child_nodes)
-set_class	mods/admin-tools/lockdown-player.cpp	/^	void set_class(player_ptr_t& player, player_class_t p_class) {$/;"	kind:function	line:186	namespace:mods::admin_tools::lockdown	signature:(player_ptr_t& player, player_class_t p_class)
 set_class	mods/orm/chargen.cpp	/^		void player_classes::set_class(player_class_t pclass){$/;"	kind:function	line:85	class:mods::orm::player_classes	signature:(player_class_t pclass)
 set_class	mods/player.cpp	/^	void player::set_class(player_class_t c) {$/;"	kind:function	line:2018	class:mods::player	signature:(player_class_t c)
 set_class	mods/players/db-load.cpp	/^	void set_class(player_ptr_t& player, player_class_t p_class) {$/;"	kind:function	line:181	namespace:mods::players::db_load	signature:(player_ptr_t& player, player_class_t p_class)
@@ -13320,7 +13317,7 @@ set_private	mods/chat.hpp	/^			void set_private(bool b_private) {$/;"	kind:funct
 set_queue_behaviour	structs.h	/^			void set_queue_behaviour(queue_behaviour_enum_t queue_behaviour) {$/;"	kind:function	line:1672	struct:mods::descriptor_data	access:public	signature:(queue_behaviour_enum_t queue_behaviour)
 set_rate_limit	mods/rate-limiting.cpp	/^	void set_rate_limit(action_t action,int times,int seconds) {$/;"	kind:function	line:51	namespace:mods::rate_limiting	signature:(action_t action,int times,int seconds)
 set_rate_limit_help	mods/rate-limiting.cpp	/^	static const char* set_rate_limit_help = "usage: set_rate_limit <action> <times> <seconds>";$/;"	kind:member	line:84	namespace:mods::rate_limiting	file:
-set_reporter_lambda	mods/admin-tools/lockdown-player.cpp	/^	void set_reporter_lambda(reporter_t f) {$/;"	kind:function	line:174	namespace:mods::admin_tools::lockdown	signature:(reporter_t f)
+set_reporter_lambda	mods/admin-tools/lockdown-player.cpp	/^	void set_reporter_lambda(reporter_t f) {$/;"	kind:function	line:38	namespace:mods::admin_tools::lockdown	signature:(reporter_t f)
 set_reporter_lambda	mods/banning/ban-by-ip.cpp	/^	void set_reporter_lambda(reporter_t f) {$/;"	kind:function	line:35	namespace:mods::banning::by_ip	signature:(reporter_t f)
 set_reporter_lambda	mods/banning/ban-user.cpp	/^	void set_reporter_lambda(reporter_t f) {$/;"	kind:function	line:67	namespace:mods::banning::user	signature:(reporter_t f)
 set_reporter_lambda	mods/players/db-load.cpp	/^	void set_reporter_lambda(reporter_t f) {$/;"	kind:function	line:169	namespace:mods::players::db_load	signature:(reporter_t f)
@@ -13958,7 +13955,6 @@ sync_equipment	mods/armor/advanced-protection.cpp	/^	void advanced_protection::s
 sync_equipment	mods/armor/basic-protection.cpp	/^	void basic_protection::sync_equipment(uuid_t player_uuid) {$/;"	kind:function	line:49	class:mods::armor::basic_protection	signature:(uuid_t player_uuid)
 sync_equipment	mods/armor/elite-protection.cpp	/^	void elite_protection::sync_equipment(uuid_t player_uuid) {$/;"	kind:function	line:49	class:mods::armor::elite_protection	signature:(uuid_t player_uuid)
 sync_player_skill_usage	mods/orm/player-skill-usage.cpp	/^	std::tuple<int16_t,std::string> sync_player_skill_usage(const uint64_t& player_id, std::map<uint64_t,uint16_t>& usage) {$/;"	kind:function	line:87	namespace:mods::orm	signature:(const uint64_t& player_id, std::map<uint64_t,uint16_t>& usage)
-sync_player_with_class_skills	mods/admin-tools/lockdown-player.cpp	/^	void sync_player_with_class_skills(const uint64_t& player_id,const std::string& player_class) {$/;"	kind:function	line:44	namespace:mods::admin_tools::lockdown	signature:(const uint64_t& player_id,const std::string& player_class)
 sync_player_with_class_skills	mods/players/db-load.cpp	/^	void sync_player_with_class_skills(const uint64_t& player_id,const std::string& player_class) {$/;"	kind:function	line:39	namespace:mods::players::db_load	signature:(const uint64_t& player_id,const std::string& player_class)
 syndrome	mods/classes/syndrome.cpp	/^		syndrome::syndrome(){$/;"	kind:function	line:45	class:mods::classes::syndrome	signature:()
 syndrome	mods/classes/syndrome.cpp	/^		syndrome::syndrome(player_ptr_t p){$/;"	kind:function	line:16	class:mods::classes::syndrome	signature:(player_ptr_t p)
@@ -14428,8 +14424,8 @@ user	mods/banning/ban-user.hpp	/^namespace mods::banning::user {$/;"	kind:namesp
 user_reloaded_position	mods/orm/inventory.cpp	/^	std::tuple<bool,std::string> user_reloaded_position(player_ptr_t& player,int position) {$/;"	kind:function	line:277	namespace:mods::orm::inventory	signature:(player_ptr_t& player,int position)
 user_reloaded_primary	mods/orm/inventory.cpp	/^	std::tuple<bool,std::string> user_reloaded_primary(player_ptr_t& player) {$/;"	kind:function	line:304	namespace:mods::orm::inventory	signature:(player_ptr_t& player)
 user_reloaded_secondary	mods/orm/inventory.cpp	/^	std::tuple<bool,std::string> user_reloaded_secondary(player_ptr_t& player) {$/;"	kind:function	line:308	namespace:mods::orm::inventory	signature:(player_ptr_t& player)
-username	mods/ban-system.cpp	/^	namespace username {$/;"	kind:namespace	line:42	namespace:mods::ban_system	file:
-username	mods/ban-system.hpp	/^	namespace username {$/;"	kind:namespace	line:19	namespace:mods::ban_system	file:
+username	mods/ban-system.cpp	/^	namespace username {$/;"	kind:namespace	line:74	namespace:mods::ban_system	file:
+username	mods/ban-system.hpp	/^	namespace username {$/;"	kind:namespace	line:23	namespace:mods::ban_system	file:
 util	mods/deferred.hpp	/^namespace mods::util {$/;"	kind:namespace	line:15	class:mods	file:
 util	mods/help.hpp	/^namespace mods::util {$/;"	kind:namespace	line:11	class:mods	file:
 util	mods/lmdb/db.hpp	/^	struct util{$/;"	kind:struct	line:39	namespace:gdns	file:

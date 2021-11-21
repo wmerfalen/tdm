@@ -1,0 +1,9 @@
+{yel}mods/admin-tools/lockdown-player{/yel}:->{grn}admin:mute{/grn}
+{yel}mods/admin-tools/lockdown-player{/yel}:->{grn}admin:unmute{/grn}
+{yel}mods/admin-tools/lockdown-player{/yel}:->{grn}admin:banish{/grn}
+{yel}mods/admin-tools/lockdown-player{/yel}:->{grn}admin:unban{/grn}
+{yel}mods/admin-tools/lockdown-player{/yel}:->{grn}admin:ban{/grn}
+{yel}mods/admin-tools/lockdown-player{/yel}:->{grn}admin:ban_user{/grn}
+{yel}mods/admin-tools/lockdown-player{/yel}:->{grn}admin:ban_ip{/grn}
+{yel}mods/admin-tools/lockdown-player{/yel}:->{grn}admin:ban_host{/grn}
+{yel}mods/admin-tools/lockdown-player{/yel}:->{grn}admin:pull{/grn}

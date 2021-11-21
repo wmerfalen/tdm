@@ -8,6 +8,38 @@
 #include "orm/admin/banned.hpp"
 
 namespace mods::ban_system {
+	std::tuple<bool,std::string> ban_player(player_ptr_t& player) {
+		mods::orm::admin::banned orm;
+		orm.ban_player(player);
+		if(orm.saved_success == false) {
+			return {0,"Failed to save"};
+		}
+		return {1,"saved"};
+	}
+	std::tuple<bool,std::string> ban_ip(std::string_view ip) {
+		mods::orm::admin::banned orm;
+		orm.ban_ip(ip);
+		if(orm.saved_success == false) {
+			return {0,"Failed to save"};
+		}
+		return {1,"saved"};
+	}
+	std::tuple<bool,std::string> ban_hostname(std::string_view hostname) {
+		mods::orm::admin::banned orm;
+		orm.ban_hostname(hostname);
+		if(orm.saved_success == false) {
+			return {0,"Failed to save"};
+		}
+		return {1,"saved"};
+	}
+	std::tuple<bool,std::string> ban_username(std::string_view username) {
+		mods::orm::admin::banned orm;
+		orm.ban_username(username);
+		if(orm.saved_success == false) {
+			return {0,"Failed to save"};
+		}
+		return {1,"saved"};
+	}
 	namespace hostname {
 		bool is_banned(std::string hostname) {
 			std::cerr << "is_banned(hostname): " << hostname << "\n";
