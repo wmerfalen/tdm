@@ -54,7 +54,8 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_DEBUG_EXTRACT_OBJ_OUTPUT__=1 \
 	-D__MENTOC_NO_FOOTPRINTS__=1 \
 	-D__MENTOC_MODS_DEMOLITIONS_DEBUG__=1 \
-	-D__MENTOC_MAX_COMBAT_ORDER_ENTRIES__=9
+	-D__MENTOC_MAX_COMBAT_ORDER_ENTRIES__=9 \
+	-D__MENTOC_PLUGIN_CONTENT__=1
 	#-D__equip_debug__=1
 
 	#-D__MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__=1
@@ -94,7 +95,7 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	#-D__MENTOC_USE_PQXX_RESULT__=1 
-LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2
+LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2 -L/usr/local/lib -lzmq
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard act.demolitions alias ban boards bsd-snprintf castle \
@@ -210,11 +211,24 @@ buildobj = act.informative act.item act.medic \
 					 mods/combat-composer/engage-target mods/combat-composer/spray-target \
 					 mods/combat-composer/shared \
 					 mods/json/export \
-					 mods/mobs/resistance mods/find mods/contract-defiler
+					 mods/mobs/resistance mods/find mods/contract-defiler \
+					 mods/banning/ban-user mods/banning/ban-by-ip \
+					 mods/admin-tools/lockdown-player mods/message-server \
+					 mods/orm/admin/frozen mods/ban-system mods/orm/admin/banned
+
+					 #mods/orm/admin/muted \
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team $(builddir)/mods/boosters $(builddir)/mods/melee $(builddir)/mods/combat-composer $(builddir)/mods/json
+all: $(builddir) $(builddir)/mods/classes \
+	$(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql \
+	$(builddir)/mods/orm $(builddir)/mods/orm/admin \
+	$(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder \
+	$(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players \
+	$(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) \
+	$(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team \
+	$(builddir)/mods/boosters $(builddir)/mods/melee $(builddir)/mods/combat-composer $(builddir)/mods/json \
+	$(builddir)/mods/banning $(builddir)/mods/admin-tools
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT) $(post_build_args)
 
 clean:
@@ -223,6 +237,8 @@ clean:
 		mods/*.d mods/orm/*.o mods/orm/*.d \
 		mods/classes/*.o mods/classes/*.d mods/mobs/*.o mods/mobs/*.d \
 		mods/armor/*.o mods/armor/*.d mods/players/*.o mods/players/*.d) \
+		rm -f $(builddir)/mods/orm/admin/*.o \
+		rm -f $(builddir)/mods/orm/admin/*.d  \
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
 		rm -f $(builddir)/mods/testing/lmdb/*.d  \
 		rm -f $(builddir)/mods/mini-games/*.o \
@@ -241,11 +257,21 @@ clean:
 		rm -f $(builddir)/mods/combat-composer/*.d \
 		rm -f $(builddir)/mods/weapons/*.o \
 		rm -f $(builddir)/mods/weapons/*.d \
+		rm -f $(builddir)/mods/banning/*.o \
+		rm -f $(builddir)/mods/banning/*.d \
+		rm -f $(builddir)/mods/admin-tools/*.o \
+		rm -f $(builddir)/mods/admin-tools/*.d \
 		rm -f $(builddir)/mods/json/*.o \
 		rm -f $(builddir)/mods/json/*.d \
 		rm -f $(builddir)/mods/melee/*.o \
 		rm -f $(builddir)/mods/melee/*.d 
 
+$(builddir)/mods/orm/admin:
+	mkdir -p $(builddir)/mods/orm/admin
+$(builddir)/mods/admin-tools:
+	mkdir -p $(builddir)/mods/admin-tools
+$(builddir)/mods/banning:
+	mkdir -p $(builddir)/mods/banning
 $(builddir)/mods/json:
 	mkdir -p $(builddir)/mods/json
 $(builddir)/mods/melee:

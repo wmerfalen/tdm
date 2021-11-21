@@ -11,6 +11,11 @@
 #include "../orm/player-skill-usage.hpp"
 #include "../orm/skill-trees.hpp"
 #include "../orm/rifle-attachment.hpp"
+#include "../movement.hpp"
+#include "../players/banish.hpp"
+#include "../pfind.hpp"
+#include "../world-configuration.hpp"
+#include "../interpreter.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[mods::admin_tools::lockdown][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -295,4 +300,162 @@ namespace mods::admin_tools::lockdown {
 	}
 	void load_aliases(player_ptr_t& player) {
 	}
+
+
+	ADMINCMD(do_mute) {
+		DO_HELP("admin:mute");
+		ADMIN_REJECT();
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() > 0) {
+			for(auto name : vec_args) {
+				auto p = mods::pfind::optby_name(name.c_str());
+				if(!p.has_value()) {
+					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
+				} else {
+					auto douche = p.value();
+					player->send("[+] Placing player on lockdown...");
+					douche->lockdown(true);
+					player->sendln("{grn}[DONE]{/grn}");
+
+					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+					char_from_room(douche->cd());
+					char_to_room(douche->cd(),mods::world_conf::real_frozen());
+					player->sendln("{grn}[DONE]{/grn}");
+				}
+			}
+			ADMIN_DONE();
+			return;
+		}
+		ADMIN_FAIL();
+	}
+
+	ADMINCMD(do_unmute) {
+		DO_HELP("admin:unmute");
+		ADMIN_REJECT();
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() > 0) {
+			for(auto name : vec_args) {
+				auto p = mods::pfind::optby_name(name.c_str());
+				if(!p.has_value()) {
+					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
+				} else {
+					auto douche = p.value();
+					player->send("[+] Placing player on lockdown...");
+					douche->lockdown(true);
+					player->sendln("{grn}[DONE]{/grn}");
+
+					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+					char_from_room(douche->cd());
+					char_to_room(douche->cd(),mods::world_conf::real_frozen());
+					player->sendln("{grn}[DONE]{/grn}");
+				}
+			}
+			ADMIN_DONE();
+			return;
+		}
+		ADMIN_FAIL();
+	}
+
+	ADMINCMD(do_banish) {
+		if(argshave()->size_gt(1)->first_is("except")->passed()) {
+			auto keep = args()->gather_uuids_starting_at(1);
+			keep.emplace_back(player->uuid());
+			auto cnt = mods::movement::banish_except(player->room(),mods::players::banish::room(),keep);
+			player->sendln(CAT("Forced ",cnt," people out"));
+			return;
+		}
+		if(argshave()->first_is("all")->passed()) {
+			std::vector<uuid_t> keep = {player->uuid()};
+			auto cnt = mods::movement::banish_except(player->room(),mods::players::banish::room(), keep);
+			player->sendln(CAT("Forced ",cnt," people out"));
+			return;
+		}
+		player->sendln("usage: banish <except> <uuid>...[uuid-N]");
+		player->sendln("usage: banish <all> # will banish everyone besides you");
+	}
+
+	ADMINCMD(do_unban) {
+		DO_HELP("admin:unban");
+		ADMIN_REJECT();
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() > 0) {
+			for(auto name : vec_args) {
+				auto p = mods::pfind::optby_name(name.c_str());
+				if(!p.has_value()) {
+					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
+				} else {
+					auto douche = p.value();
+					player->send("[+] Removing player's lockdown status...");
+					douche->lockdown(false);
+					player->sendln("{grn}[DONE]{/grn}");
+
+					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+					char_from_room(douche->cd());
+					char_to_room(douche->cd(),mods::world_conf::real_mortal_start());
+					player->sendln("{grn}[DONE]{/grn}");
+				}
+			}
+			ADMIN_DONE();
+			return;
+		}
+		ADMIN_FAIL();
+	}
+	ADMINCMD(do_ban) {
+		DO_HELP("admin:ban");
+		ADMIN_REJECT();
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() > 0) {
+			for(auto name : vec_args) {
+				auto p = mods::pfind::optby_name(name.c_str());
+				if(!p.has_value()) {
+					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
+				} else {
+					auto douche = p.value();
+					player->send("[+] Placing player on lockdown...");
+					douche->lockdown(true);
+					player->sendln("{grn}[DONE]{/grn}");
+
+					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+					char_from_room(douche->cd());
+					char_to_room(douche->cd(),mods::world_conf::real_frozen());
+					player->sendln("{grn}[DONE]{/grn}");
+				}
+			}
+			ADMIN_DONE();
+			return;
+		}
+		ADMIN_FAIL();
+	}
+	ADMINCMD(do_pull) {
+		DO_HELP("admin:pull");
+		ADMIN_REJECT();
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() > 0) {
+			for(auto name : vec_args) {
+				auto p = mods::pfind::optby_name(name.c_str());
+				if(!p.has_value()) {
+					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
+				} else {
+					auto douche = p.value();
+					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+					char_from_room(douche->cd());
+					char_to_room(douche->cd(),player->room());
+					player->sendln("{grn}[DONE]{/grn}");
+				}
+			}
+			ADMIN_DONE();
+			return;
+		}
+		ADMIN_FAIL();
+	}
+
+	namespace commands {
+		void init() {
+			ADD_ADMIN_COMMAND("admin:mute",do_mute);
+			ADD_ADMIN_COMMAND("admin:unmute",do_unmute);
+			ADD_ADMIN_COMMAND("admin:ban",do_ban);
+			ADD_ADMIN_COMMAND("admin:unban",do_unban);
+			ADD_ADMIN_COMMAND("admin:pull",  do_pull);
+		}
+	};
 };

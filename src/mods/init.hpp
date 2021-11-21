@@ -3,10 +3,13 @@
 
 #define INIT(A) \
 	namespace A { extern void init(); };
-INIT(mods::mobs::defiler_init);
+/**
+ * Community edition
+ */
+INIT(mods::admin_tools::lockdown::commands);
+INIT(mods::banning::by_ip::commands);
 INIT(mods::json);
 INIT(mods::combat::commands);
-INIT(mods::combat_composer);
 INIT(mods::players::friendly_reminders);
 INIT(mods::players::event_messages);
 INIT(mods::prefs);
@@ -24,10 +27,6 @@ INIT(informative);
 INIT(mods::query_objects);
 INIT(mods::target_practice);
 INIT(mods::class_abilities);
-INIT(mods::class_abilities::breacher);
-INIT(mods::class_abilities::marine);
-INIT(mods::class_abilities::ghost);
-INIT(mods::class_abilities::contagion);
 INIT(mods::values);
 INIT(mods::skills);
 INIT(mods::rate_limiting);
@@ -44,7 +43,6 @@ INIT(mods::builder::hqbuild);
 INIT(mods::contracts);
 INIT(mods::players::messages);
 INIT(mods::builder::conbuild);
-INIT(demolitions);
 INIT(mods::rifle_attachments);
 INIT(mods::super_users);
 INIT(mods::builder::bookmarks);
@@ -62,11 +60,21 @@ INIT(mods::scripted_sequence_events);
 INIT(mods::scripted_sequence_runner);
 INIT(src::act::debug);
 INIT(mods::projectile);
-INIT(mods::boosters::adrenaline_shot_init);
 INIT(mods::melee::combat_order);
 INIT(mods::melee::stance);
 INIT(mods::melee::main);
 INIT(mods::corpse);
+INIT(mods::banning::user::commands);
+
+/**
+ * Grey area
+ */
+INIT(mods::combat_composer);
+
+#ifdef __MENTOC_PLUGIN_CONTENT__
+#include "plugins/init.hpp"
+#endif
+
 #undef INIT
 
 
@@ -79,10 +87,6 @@ namespace mods::init {
 		mods::target_practice::init();
 		//mods::class_abilities::init();
 		//mods::class_abilities::forge::init();
-		mods::class_abilities::ghost::init();
-		mods::class_abilities::contagion::init();
-		mods::class_abilities::marine::init();
-		mods::class_abilities::breacher::init();
 		mods::values::init();
 		mods::skills::init();
 		mods::rate_limiting::init();
@@ -101,8 +105,6 @@ namespace mods::init {
 		mods::players::messages::init();
 		::offensive::init();
 		::builder::init();
-		::demolitions::init();
-		mods::rifle_attachments::init();
 		mods::super_users::init();
 		::informative::init();
 		mods::builder::bookmarks::init();
@@ -121,7 +123,6 @@ namespace mods::init {
 		src::act::debug::init();
 		mods::players::banish::init();
 		mods::projectile::init();
-		mods::boosters::adrenaline_shot_init::init();
 		mods::loot_container::init();
 		mods::bleed::init();
 		mods::prefs::init();
@@ -135,7 +136,12 @@ namespace mods::init {
 		mods::combat_composer::init();
 		mods::combat::commands::init();
 		mods::json::init();
-		mods::mobs::defiler_init::init();
+		mods::admin_tools::lockdown::commands::init();
+		mods::banning::user::commands::init();
+
+#ifdef __MENTOC_PLUGIN_CONTENT__
+		mods::plugins::init::init();
+#endif
 	}
 };
 #endif

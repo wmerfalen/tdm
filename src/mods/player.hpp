@@ -551,6 +551,8 @@ namespace mods {
 			void set_state(int);
 			int state();
 			void set_host(std::string host);
+			void set_ip(std::string ip);
+			std::string ip() const;
 			std::string host() const;
 
 			/* captured output */
@@ -1052,6 +1054,8 @@ namespace mods {
 			std::shared_ptr<mods::ranged_combat_totals> m_rct_calculated;
 			int32_t m_luck;
 			mods::combat::rules_of_engagement_t m_rules_of_engagement;
+			std::string m_host;
+			std::string m_ip;
 	};
 };
 

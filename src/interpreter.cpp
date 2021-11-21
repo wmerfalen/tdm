@@ -11,7 +11,7 @@
 #define __INTERPRETER_C__
 
 #include "globals.hpp"
-#include "mods/ban_system.hpp"
+#include "mods/ban-system.hpp"
 
 #include "conf.h"
 #include "sysdep.h"
@@ -1460,6 +1460,12 @@ void nanny(player_ptr_t p, char * in_arg) {
 					write_to_output(d, "Invalid name, please try another.\r\nName: ");
 					return;
 				}
+				if(mods::ban_system::username::is_banned(arg)) {
+					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (siteban)", p->name().c_str(), p->host().c_str());
+					write_to_output(d, "Sorry, new characters are not allowed from your site!\r\n");
+					p->set_state(CON_CLOSE);
+					return;
+				}
 
 				p->set_name(arg);
 				p->set_db_id(0);
@@ -1477,7 +1483,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 		case CON_NAME_CNFRM:		/* wait for conf. of new name    */
 			if(arg[0] == 'Y' || arg[0] == 'y') {
-				if(mods::ban_system::isbanned(p->host().c_str())) {
+				if(mods::ban_system::username::is_banned(p->name())) {
 					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (siteban)", p->name().c_str(), p->host().c_str());
 					write_to_output(d, "Sorry, new characters are not allowed from your site!\r\n");
 					p->set_state(CON_CLOSE);
@@ -1546,14 +1552,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 				/* Password was correct. */
 				load_result = p->get_bad_password_count();
 				p->set_bad_password_count(0);
-
-				if(mods::ban_system::isbanned(p->host().c_str()) &&
-				        !p->has_affect_plr(PLR_SITEOK)) {
-					write_to_output(d, "Sorry, this char has not been cleared for login from your site!\r\n");
-					p->set_state(CON_CLOSE);
-					mudlog(NRM, LVL_GOD, TRUE, "Connection attempt for %s denied from %s", p->name().c_str(), p->host().c_str());
-					return;
-				}
 
 				if(p->level() < circle_restrict) {
 					write_to_output(d, "The game is temporarily restricted.. try again later.\r\n");

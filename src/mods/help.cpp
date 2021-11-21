@@ -869,26 +869,45 @@ namespace mods::help {
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Values System ]:-                         {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}disable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
 			"{gld}revert_value_to_default{/gld} -- {grn}revert a value back to factory default{/grn}",
 			"{gld}list_values{/gld} -- {grn}list all available values{/grn}",
 			"{gld}list_value{/gld} -- {grn}alias of list_values{/grn}",
 			"{gld}set_value{/gld} -- {grn}set value to specific value{/grn}",
 			"{gld}get_value{/gld} -- {grn}display a specific value{/grn}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Admin Commands ]:-                        {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}admin:disable_registration{/gld} -- {grn}disable new player registration[builder-utils]{/grn}",
+			"{gld}admin:banish{/gld} -- {grn}force a player out of your room(not permanent)[debugging-players][bad-players]{/grn}",
+			"{gld}admin:pull{/gld} -- {grn}transfer a player to your room (not permanent)[debugging-players]{/grn}",
+
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Punishing Players ]:-                     {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}admin:ban{/gld} -- {grn}ban a player[bad-players]{/grn}",
+			"{gld}admin:mute{/gld} -- {grn}mute a player[bad-players]{/grn}",
+			"{gld}admin:unban{/gld} -- {grn}unban a player[bad-players]{/grn}",
+			"{gld}admin:unmute{/gld} -- {grn}un-mute a player[bad-players]{/grn}",
 		};
 		for(const auto& line : builder_screen) {
 			screen.emplace_back(line);
 		}
 		std::string guts,error;
-		mods::filesystem::file_get_contents("../lib/SUPERCMD.list", guts,error);
-		std::string current = "";
-		for(auto ch : guts) {
-			if(ch == '\n') {
-				screen.emplace_back(current);
-				current.clear();
-				continue;
+		for(const auto& file : {
+		            "../lib/SUPERCMD.list","../lib/ADMINCMD.list"
+		        }) {
+			guts.clear();
+			error.clear();
+			mods::filesystem::file_get_contents(file, guts,error);
+			std::string current = "";
+			for(auto ch : guts) {
+				if(ch == '\n') {
+					screen.emplace_back(current);
+					current.clear();
+					continue;
+				}
+				current += ch;
 			}
-			current += ch;
 		}
 	}
 	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;

@@ -163,80 +163,6 @@ SUPERCMD(do_add_super_user) {
 	ADMIN_FAIL();
 }
 
-SUPERCMD(do_ban_player) {
-	DO_HELP("admin:ban_player");
-	ADMIN_REJECT();
-	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() > 0) {
-		for(auto name : vec_args) {
-			auto p = mods::pfind::optby_name(name.c_str());
-			if(!p.has_value()) {
-				player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
-			} else {
-				auto douche = p.value();
-				player->send("[+] Placing player on lockdown...");
-				douche->lockdown(true);
-				player->sendln("{grn}[DONE]{/grn}");
-
-				player->send(CAT("[+] Pulling player '",name,"'...").c_str());
-				char_from_room(douche->cd());
-				char_to_room(douche->cd(),mods::world_conf::real_frozen());
-				player->sendln("{grn}[DONE]{/grn}");
-			}
-		}
-		ADMIN_DONE();
-		return;
-	}
-	ADMIN_FAIL();
-}
-
-SUPERCMD(do_pull_player) {
-	DO_HELP("admin:pull_player");
-	ADMIN_REJECT();
-	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() > 0) {
-		for(auto name : vec_args) {
-			auto p = mods::pfind::optby_name(name.c_str());
-			if(!p.has_value()) {
-				player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
-			} else {
-				auto douche = p.value();
-				player->send(CAT("[+] Pulling player '",name,"'...").c_str());
-				char_from_room(douche->cd());
-				char_to_room(douche->cd(),player->room());
-				player->sendln("{grn}[DONE]{/grn}");
-			}
-		}
-		ADMIN_DONE();
-		return;
-	}
-	ADMIN_FAIL();
-}
-SUPERCMD(do_lock_player) {
-	DO_HELP("admin:lock_player");
-	ADMIN_REJECT();
-	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() > 0) {
-		for(auto name : vec_args) {
-			auto p = mods::pfind::optby_name(name.c_str());
-			if(!p.has_value()) {
-				player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
-			} else {
-				auto douche = p.value();
-				player->send("[+] Placing player on lockdown...");
-				douche->lockdown(true);
-				player->sendln("{grn}[DONE]{/grn}");
-				player->send(CAT("[+] Pulling player '",name,"'...").c_str());
-				char_from_room(douche->cd());
-				char_to_room(douche->cd(),player->room());
-				player->sendln("{grn}[DONE]{/grn}");
-			}
-		}
-		ADMIN_DONE();
-		return;
-	}
-	ADMIN_FAIL();
-}
 
 
 SUPERCMD(do_get_super_user_list) {
@@ -307,8 +233,6 @@ SUPERCMD(do_shutdown_mud) {
 namespace mods::super_users {
 	void init() {
 		mods::interpreter::add_command("sdm", POS_RESTING, do_shutdown_mud, LVL_BUILDER,0);
-		mods::interpreter::add_command("admin:pull_player", POS_RESTING, do_pull_player, LVL_BUILDER,0);
-		mods::interpreter::add_command("admin:lock_player", POS_RESTING, do_lock_player, LVL_BUILDER,0);
 		mods::interpreter::add_command("vnumtele", POS_RESTING, do_vnumtele, LVL_BUILDER,0);
 		mods::interpreter::add_command("rnumlist", POS_RESTING, do_rnumlist, LVL_BUILDER,0);
 	}

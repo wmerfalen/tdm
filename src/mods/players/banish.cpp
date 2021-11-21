@@ -54,6 +54,9 @@ namespace mods::players::banish {
 		player->errorln("usage: force_out <n|e|s|w|d|u>");
 	}
 	static room_rnum banish_room;
+	room_rnum room() {
+		return banish_room;
+	}
 	SUPERCMD(do_set_banish_room) {
 		if(argshave()->size_gt(0)->first_is_any({"this","here"})->passed()) {
 			banish_room = player->room();

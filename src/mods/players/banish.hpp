@@ -4,6 +4,7 @@
 #include "../../globals.hpp"
 
 namespace mods::players::banish {
+	room_rnum room();
 };
 
 #endif

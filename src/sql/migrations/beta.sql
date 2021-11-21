@@ -9137,3 +9137,30 @@ ALTER TABLE ONLY public.player_race_perks
 -- PostgreSQL database dump complete
 --
 
+CREATE TABLE public.banned (
+    id serial,
+    b_ip_address inet,
+		b_hostname varchar(255),
+		b_username varchar(255),
+		b_enforce BOOLEAN NOT NULL DEFAULT TRUE,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE public.muted (
+    id serial,
+    m_ip_address inet,
+		m_username varchar(255),
+		m_hostname varchar(255),
+		m_enforce BOOLEAN NOT NULL DEFAULT TRUE,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+
+CREATE TABLE public.frozen (
+    id serial,
+    f_ip_address inet,
+		f_hostname varchar(255),
+		f_username varchar(255),
+		f_enforce BOOLEAN NOT NULL DEFAULT TRUE,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);

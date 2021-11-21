@@ -39,6 +39,8 @@
 #include "mods/resting.hpp"
 #include "mods/mobs/behaviour-tree-list.hpp"
 #include "mods/players/event-messages.hpp"
+#include "mods/message-server.hpp"
+#include "mods/ban-system.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -207,6 +209,13 @@ void signal_setup(void);
 void game_loop(socket_t mother_desc);
 socket_t init_socket(ush_int port);
 int new_descriptor(socket_t s);
+
+static int constexpr MENTOC_PLAYER_IS_BANNED = -1;
+static int constexpr MENTOC_FULL_SERVER = -2;
+static int constexpr MENTOC_SEND_BUF_FAILED = -3;
+static int constexpr MENTOC_INVALID_SOCKET = -4;
+
+
 int get_max_players(void);
 int process_output(mods::descriptor_data& in_t);
 int process_input(mods::descriptor_data& t);
@@ -677,6 +686,26 @@ void game_loop(socket_t mother_desc) {
 				std::cerr << "[fd == mother desc]\n";
 #endif
 				new_desc = new_descriptor(mother_desc);
+				if(new_desc <= 0) {
+					switch(new_desc) {
+						case MENTOC_PLAYER_IS_BANNED:
+							log("new_descriptor: player is banned");
+							break;
+						case MENTOC_FULL_SERVER:
+							log("new_descriptor: mud is full");
+							break;
+						case MENTOC_SEND_BUF_FAILED:
+							log("new_descriptor: send buf failed");
+							break;
+						case MENTOC_INVALID_SOCKET:
+							log("new_descriptor: invalid socket");
+							break;
+						default:
+							log("new_descriptor: unknown error returned: %d",new_desc);
+							break;
+					}
+					break;
+				}
 				operating_socket = new_desc;
 				epoll_ev.events = EPOLLIN; // new connection is a read event
 				epoll_ev.data.fd = new_desc; // user data
@@ -1496,7 +1525,8 @@ int new_descriptor(socket_t s) {
 	if((desc = accept(s, (struct sockaddr *) &peer, &i)) == INVALID_SOCKET) {
 		perror("SYSERR: accept");
 		destroy_socket(desc);//TODO: merge destroy_socket functionality into deregister_player process
-		return (-1);
+		log("SYSERR: accept failed for socket");
+		return MENTOC_INVALID_SOCKET;
 	}
 
 	/* keep it from blocking */
@@ -1506,30 +1536,38 @@ int new_descriptor(socket_t s) {
 	if(set_sendbuf(desc) < 0) {
 		log("SYSERR: set_sendbuf failed");
 		destroy_socket(desc);
-		return (0);
+		return MENTOC_SEND_BUF_FAILED;
 	}
 
 	if(++sockets_connected >= max_players) {
 		write_to_descriptor(desc, "Sorry, CircleMUD is full right now... please try again later!\r\n");
 		log("Rejected user due to full server");
 		destroy_socket(desc);
-		return (0);
+		return MENTOC_FULL_SERVER;
 	}
 
 	/** player_uuid() called in constructor */
 	auto player = new_player();
 	player->set_socket(desc);
 	/* find the sitename */
-	if(nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
-	                                                sizeof(peer.sin_addr), AF_INET))) {
-		/* resolution failed */
-		if(!nameserver_is_slow) {
-			log("SYSERR: gethostbyaddr");
-		}
+	from = gethostbyaddr((char *) &peer.sin_addr, sizeof(peer.sin_addr), AF_INET);
+	log("getting user ip");
+	player->set_ip(inet_ntoa(peer.sin_addr));
+	log("user ip is: %s",player->ip().c_str());
+	if(mods::ban_system::ip::is_banned(peer)) {
+		log("refusing new connection. User is banned by ip: %s",player->ip());
+		return MENTOC_PLAYER_IS_BANNED;
+	}
+	if(!from) {
+		log("SYSERR: failed to get host by addr");
 		/* find the numeric site address */
 		player->set_host(inet_ntoa(peer.sin_addr));
 	} else {
 		player->set_host(from->h_name);
+	}
+	if(mods::ban_system::hostname::is_banned(player->host())) {
+		log("refusing new connection. User is banned by hostname: %s, ip address: %s",player->host(), player->ip());
+		return MENTOC_PLAYER_IS_BANNED;
 	}
 
 	/* determine if the site is banned */

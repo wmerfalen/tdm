@@ -86,7 +86,6 @@ namespace mods {
 
 
 	void player::set_shared_ptr(player_ptr_t& self_ptr) {
-		deprecated("set_shared_ptr");
 		return;
 		/*
 			 m_self_ptr = self_ptr;
@@ -1049,6 +1048,8 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+		m_host.clear();
+		m_ip.clear();
 		m_locked_down = false;
 		m_rules_of_engagement = mods::combat::rules_of_engagement_t::ROM_BALLISTIC;
 		m_cooldown_start_tick = 0;
@@ -1349,15 +1350,19 @@ namespace mods {
 		}
 	}
 	void player::set_host(std::string host) {
+		m_host = host;
 		if(m_desc) {
 			m_desc->host = host;
 		}
 	}
+	void player::set_ip(std::string ip) {
+		m_ip = ip;
+	}
+	std::string player::ip() const {
+		return m_ip;
+	}
 	std::string player::host() const {
-		if(m_desc) {
-			return m_desc->host.c_str();
-		}
-		return "unknown";
+		return m_host;
 	}
 	void player::deactivate_account() {
 		/** TODO: what do we need to do to deactivate the account?

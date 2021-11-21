@@ -51,3 +51,18 @@ grep -R 'ACMD(do_' . | grep -vE '^./doc/' | grep -vE '^tags:' | grep -v 'scripts
 
 cd $WEBROOT
 grep -R 'SUPERCMD(do_' . | grep -vE '^./doc/' | grep -vE '^tags:' | grep -v 'scripts/vk-data' | grep '{' | sed -E 's|.cpp:[0-9]+:||g' | sed  -E 's|SUPERCMD\(do_|->|g' | sed -E 's|^\./||g' | sed -E 's|\).*\{||g' | sed -E 's|\.cpp:\s+|.cpp:|g' | sed -E 's|^|{yel}|' | sed -E 's|\.cpp:->|{/yel}:->{grn}|g' | sed -E 's|$|{/grn}|g'  > $WEBROOT/../lib/SUPERCMD.list &
+
+cd $WEBROOT
+grep -R 'ADMINCMD(do_' . | 
+	grep -vE '^./doc/' | 
+	grep -vE '^tags:' | 
+	grep -v 'scripts/vk-data' | 
+	grep '{' | 
+	sed -E 's|.cpp:[0-9]+:||g' |
+	sed -E 's|ADMINCMD\(do_|->|g' |
+	sed -E 's|^\./||g' |
+	sed -E 's|\).*\{||g' |
+	sed -E 's|\.cpp:\s+|.cpp:|g' |
+	sed -E 's|^|{yel}|' |
+	sed -E 's|\.cpp:->|{/yel}:->{grn}admin:|g' |
+	sed -E 's|$|{/grn}|g'  > $WEBROOT/../lib/ADMINCMD.list &

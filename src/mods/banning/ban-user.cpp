@@ -97,4 +97,10 @@ namespace mods::banning::user {
 			return -2;
 		}
 	}
+
+	namespace commands {
+		void init() {
+
+		}
+	};
 };

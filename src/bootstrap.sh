@@ -37,6 +37,10 @@ export CXX=$(which g++-8)
 cmake ..
 make
 sudo make install
+echo "# done installing zeromq..."
+
+echo "# status: cloning zeromq header-only client library..."
+git clone 'https://github.com/zeromq/cppzmq'
 
 echo "#############################################################"
 echo " VERY IMPORTANT!!!"
