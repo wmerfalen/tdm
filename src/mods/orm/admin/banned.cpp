@@ -2,6 +2,12 @@
 #include "../../player.hpp"
 
 namespace mods::orm::admin {
+#define __MENTOC_SHOW_MODS_ORM_ADMIN_BAN_DEBUG_OUTPUT__
+#ifdef __MENTOC_SHOW_MODS_ORM_ADMIN_BAN_DEBUG_OUTPUT__
+#define m_debug(MSG) mentoc_prefix_debug("[mods::orm::admin::banned]")  << MSG << "\n";
+#else
+#define m_debug(MSG) ;;
+#endif
 
 	/*
 	 * @brief this should be called when you create a banned player for the first time
@@ -54,6 +60,27 @@ namespace mods::orm::admin {
 			saved_success = true;
 		}
 		return id;
+	}
+	bool banned::unban_ip(std::string_view ip) {
+		auto tup = this->read<banned>(this,this->ip_column(),ip);
+		if(std::get<0>(tup) == NO_RESULTS) {
+			m_debug("could not find a row to delete by ip '" << ip << "'");
+			return false;
+		}
+		auto removal_status = this->remove();
+		if(ORM_SUCCESS(removal_status)) {
+			m_debug("unban_ip successfully removed a record from the db for ip: '" << ip << "'");
+			return true;
+		}
+		return true;
+
+	}
+	bool banned::unban_hostname(std::string_view hostname) {
+		return true;
+	}
+	bool banned::unban_username(std::string_view username) {
+
+		return true;
 	}
 	uint64_t banned::ban_ip(std::string_view ip) {
 		init();
@@ -130,4 +157,5 @@ namespace mods::orm::admin {
 		b_enforce = 1;
 	}
 
+#undef m_debug
 };

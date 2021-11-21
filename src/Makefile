@@ -212,8 +212,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/combat-composer/shared \
 					 mods/json/export \
 					 mods/mobs/resistance mods/find mods/contract-defiler \
-					 mods/banning/ban-user mods/banning/ban-by-ip \
-					 mods/admin-tools/lockdown-player mods/message-server \
+					 mods/message-server \
 					 mods/orm/admin/frozen mods/ban-system mods/orm/admin/banned
 
 					 #mods/orm/admin/muted \

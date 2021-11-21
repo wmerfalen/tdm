@@ -6,8 +6,6 @@
 /**
  * Community edition
  */
-INIT(mods::admin_tools::lockdown::commands);
-INIT(mods::banning::by_ip::commands);
 INIT(mods::json);
 INIT(mods::combat::commands);
 INIT(mods::players::friendly_reminders);
@@ -64,7 +62,7 @@ INIT(mods::melee::combat_order);
 INIT(mods::melee::stance);
 INIT(mods::melee::main);
 INIT(mods::corpse);
-INIT(mods::banning::user::commands);
+INIT(mods::ban_system::commands);
 
 /**
  * Grey area
@@ -136,8 +134,7 @@ namespace mods::init {
 		mods::combat_composer::init();
 		mods::combat::commands::init();
 		mods::json::init();
-		mods::admin_tools::lockdown::commands::init();
-		mods::banning::user::commands::init();
+		mods::ban_system::commands::init();
 
 #ifdef __MENTOC_PLUGIN_CONTENT__
 		mods::plugins::init::init();
