@@ -227,7 +227,7 @@ all: $(builddir) $(builddir)/mods/classes \
 	$(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) \
 	$(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team \
 	$(builddir)/mods/boosters $(builddir)/mods/melee $(builddir)/mods/combat-composer $(builddir)/mods/json \
-	$(builddir)/mods/banning $(builddir)/mods/admin-tools
+	$(builddir)/mods/admin-tools
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT) $(post_build_args)
 
 clean:
@@ -256,8 +256,6 @@ clean:
 		rm -f $(builddir)/mods/combat-composer/*.d \
 		rm -f $(builddir)/mods/weapons/*.o \
 		rm -f $(builddir)/mods/weapons/*.d \
-		rm -f $(builddir)/mods/banning/*.o \
-		rm -f $(builddir)/mods/banning/*.d \
 		rm -f $(builddir)/mods/admin-tools/*.o \
 		rm -f $(builddir)/mods/admin-tools/*.d \
 		rm -f $(builddir)/mods/json/*.o \
@@ -269,8 +267,6 @@ $(builddir)/mods/orm/admin:
 	mkdir -p $(builddir)/mods/orm/admin
 $(builddir)/mods/admin-tools:
 	mkdir -p $(builddir)/mods/admin-tools
-$(builddir)/mods/banning:
-	mkdir -p $(builddir)/mods/banning
 $(builddir)/mods/json:
 	mkdir -p $(builddir)/mods/json
 $(builddir)/mods/melee:
