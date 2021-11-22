@@ -1559,10 +1559,7 @@ int new_descriptor(socket_t s) {
 	/* find the sitename */
 	from = gethostbyaddr((char *) &peer.sin_addr, sizeof(peer.sin_addr), AF_INET);
 	mods::message_server::new_connection(peer,from);
-	log("getting user ip");
 	player->set_ip(inet_ntoa(peer.sin_addr));
-	mods::message_server::new_connection(peer,from);
-	log("user ip is: %s",player->ip().c_str());
 	if(mods::ban_system::ip::is_banned(peer)) {
 		log("refusing new connection. User is banned by ip: %s",player->ip());
 		mods::message_server::user_connection_rejected(peer,from);

@@ -1533,7 +1533,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 				p->set_state(CON_CLOSE);
 				return;
 			} else {
-				/** FIXME: log user IP and all this stuff into postgres */
 				if(login(p->name(),arg) == false) {
 					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", p->name().c_str(), p->host().c_str());
 					p->increment_bad_password_count();
@@ -1560,7 +1559,8 @@ void nanny(player_ptr_t p, char * in_arg) {
 					mudlog(NRM, LVL_GOD, TRUE, "Request for login denied for %s [%s] (wizlock)", p->name().c_str(), p->host().c_str());
 					return;
 				}
-				mods::message_server::user_logged_in(p);
+				std::cerr << "player ip: '" << p->ip() << "'\n";
+				mods::message_server::user_logged_in(p);//,p->ip());
 
 
 				if(p->level() >= LVL_IMMORT) {

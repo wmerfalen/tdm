@@ -1050,8 +1050,8 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
-		m_host.clear();
-		m_ip.clear();
+		//m_host.clear();
+		//m_ip.clear();
 		m_locked_down = false;
 		m_rules_of_engagement = mods::combat::rules_of_engagement_t::ROM_BALLISTIC;
 		m_cooldown_start_tick = 0;
@@ -1358,9 +1358,15 @@ namespace mods {
 		}
 	}
 	void player::set_ip(std::string ip) {
+		if(m_desc) {
+			m_desc->ip = ip;
+		}
 		m_ip = ip;
 	}
 	std::string player::ip() const {
+		if(m_desc) {
+			return m_desc->ip.str();
+		}
 		return m_ip;
 	}
 	std::string player::host() const {

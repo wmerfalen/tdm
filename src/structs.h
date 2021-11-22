@@ -1640,6 +1640,7 @@ namespace mods {
 			}
 			void clear() {
 				/* Clear out the entire struct */
+				ip.clear();
 				descriptor = 0;
 				bad_pws = 0;
 				idle_tics = 0;
@@ -1680,6 +1681,7 @@ namespace mods {
 			}
 			socket_t	descriptor;	/* file descriptor for socket		*/
 			mods::string host;		/* hostname				*/
+			mods::string ip;
 			byte	bad_pws;		/* number of bad pw attemps this login	*/
 			byte idle_tics;		/* tics idle at password prompt		*/
 			int bufptr;
