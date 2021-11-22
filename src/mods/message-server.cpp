@@ -7,6 +7,17 @@
 
 namespace mods::message_server {
 #define IS_CHANNEL(A) list[0].compare(A) == 0
+#ifdef __MENTOC_SHOW_ZEROMQ_DEBUG__
+#define m_debug(A) mentoc_prefix_debug(CAT(__FILE__,":",__LINE__,":",__FUNCTION__)) << A << "\n";
+#define debug_dump_list() 		for(auto i = 0; i < list.size(); i++) {\
+				m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n");\
+				m_debug("[" << i << "]->'" << list[i] << "'\n");\
+				m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n");\
+			}
+#else
+#define m_debug(A)
+#define debug_dump_list()
+#endif
 
 	struct channel_message_t {
 		uint16_t channel;
@@ -26,27 +37,52 @@ namespace mods::message_server {
 	}
 
 
+	static constexpr int16_t PARSE_OKAY = 0;
+	static constexpr int16_t INVALID_HEADER_SIZE = -1;
+	static constexpr int16_t RECV_FAILED = -2;
+	static constexpr int16_t MISSING_MESSAGES = -3;
 
-	std::tuple<bool,channel_message_t,std::vector<std::string>> parse_multipart_message(zmq::socket_t* subscriber) {
+	std::string parse_error_to_string(const int16_t& e) {
+		switch(e) {
+			case INVALID_HEADER_SIZE:
+				return "INVALID_HEADER_SIZE";
+			case RECV_FAILED:
+				return "RECV_FAILED";
+			case MISSING_MESSAGES:
+				return "MISSING_MESSAGES";
+			case PARSE_OKAY:
+				return "PARSE_OKAY";
+			default:
+				return "unknown";
+		}
+	}
+
+	std::tuple<int16_t,channel_message_t,std::vector<std::string>> parse_multipart_message(zmq::socket_t* subscriber) {
+		channel_message_t m;
 		std::vector<zmq::message_t> msg;
 		zmq::recv_result_t result =
 		    zmq::recv_multipart(*subscriber, std::back_inserter(msg));
+		if(!result) {
+			return {RECV_FAILED,m,{}};
+		}
 		assert(result && "recv failed");
+		if(*result <= 1) {
+			return {MISSING_MESSAGES,m,{}};
+		}
 		assert(*result > 1);
 
-		channel_message_t m;
 		memcpy(&m,msg[1].data(),header_size);
 
 		auto channel_name = to_string((channel_t)m.channel);
-		std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
-		std::cerr << "CHANNEL NAME: -----['" << channel_name << "']-----------\n";
-		std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
+		m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
+		m_debug("CHANNEL NAME: -----['" << channel_name << "']-----------");
+		m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
 		std::vector<char> raw_message;
 		if(msg[1].size() <= header_size) {
-			std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
-			std::cerr << "INVALID HEADER SIZE " << __FUNCTION__ << ":" << __FILE__ << "\n";
-			std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
-			return {0,m,{}};
+			m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
+			m_debug("INVALID HEADER SIZE ");
+			m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
+			return {INVALID_HEADER_SIZE,m,{}};
 		}
 		int data_size = msg[1].size() - header_size;
 		assert(data_size > 0);
@@ -54,12 +90,10 @@ namespace mods::message_server {
 		char* message_start = (char*)msg[1].data();
 		memcpy(&raw_message[0],&message_start[header_size],data_size);
 		std::vector<std::string> list = mods::message_parser::extract_entries(&message_start[header_size]);
-		for(auto i = 0; i < list.size(); i++) {
-			std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
-			std::cerr << "[" << i << "]->'" << list[i] << "'\n";
-			std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
-		}
-		return {1,m,list};
+
+		debug_dump_list();
+
+		return {PARSE_OKAY,m,list};
 	}
 
 
@@ -73,16 +107,14 @@ namespace mods::message_server {
 		while(!shutdown_now) {
 			// Receive all parts of the message
 			auto tuple = parse_multipart_message(&subscriber);
-			bool parsed_okay = std::get<0>(tuple);
+			bool parsed_okay = std::get<0>(tuple) == PARSE_OKAY;
 			//const auto& m = std::get<1>(tuple);
 			const auto& list = std::get<2>(tuple);
 			if(!parsed_okay) {
-				log("%s failed to parse multipart message",__FUNCTION__);
+				log("SYSERR: %s failed to parse multipart message (error:'%s')",__FUNCTION__,parse_error_to_string(std::get<0>(tuple)));
 				continue;
 			}
 
-			//std::cout << "Thread2: [" << messages[0].to_string() << "] "
-			//          << messages[1].to_string() << std::endl;
 			if(list[0].compare("NOW") == 0) {
 				shutdown_now = true;
 				continue;
@@ -90,7 +122,7 @@ namespace mods::message_server {
 		}
 	}
 	void user_connection_logger() {
-		std::cerr << "user_connection_logger ENTRY\n";
+		m_debug("user_connection_logger ENTRY\n");
 		zmq::socket_t subscriber(fetch_context(), zmq::socket_type::sub);
 		subscriber.connect(mods::message_server::queue.data());
 
@@ -101,32 +133,49 @@ namespace mods::message_server {
 
 		while(!shutdown_now) {
 			auto tuple = parse_multipart_message(&subscriber);
-			bool parsed_okay = std::get<0>(tuple);
+			bool parsed_okay = std::get<0>(tuple) == PARSE_OKAY;
 			//const auto& m = std::get<1>(tuple);
 			const auto& list = std::get<2>(tuple);
 			if(!parsed_okay) {
-				log("%s failed to parse multipart message",__FUNCTION__);
+				log("SYSERR: %s failed to parse multipart message (error:'%s')",__FUNCTION__,parse_error_to_string(std::get<0>(tuple)));
 				continue;
 			}
-			for(auto i = 0; i < list.size(); i++) {
-				std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
-				std::cerr << "[" << i << "]->'" << list[i] << "'\n";
-				std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
-			}
+
+			debug_dump_list();
+
 			assert(list.size() > 1);
 			mods::orm::user_logins orm;
 			orm.user_logged_in(list[0],list[1]);
 		}
 	}
 
-#if 0
 	void admin_subscriber() {
+		m_debug("ENTRY");
+		zmq::socket_t subscriber(fetch_context(), zmq::socket_type::sub);
+		subscriber.connect(mods::message_server::queue.data());
+
+		subscribe_to(&subscriber, {
+			CHAN_USER_LOGGED_IN,
+		});
+
+
 		while(!shutdown_now) {
-			std::cerr << "\n###:-" << __FUNCTION__ << "-:###\n";
-			std::this_thread::sleep_for(std::chrono::milliseconds(60000));
+			auto tuple = parse_multipart_message(&subscriber);
+			bool parsed_okay = std::get<0>(tuple) == PARSE_OKAY;
+			//const auto& m = std::get<1>(tuple);
+			const auto& list = std::get<2>(tuple);
+			if(!parsed_okay) {
+				log("SYSERR: %s failed to parse multipart message (error:'%s')",__FUNCTION__,parse_error_to_string(std::get<0>(tuple)));
+				continue;
+			}
+
+			debug_dump_list();
+
+			assert(list.size() > 1);
+			mods::orm::user_logins orm;
+			orm.user_logged_in(list[0],list[1]);
 		}
 	}
-#endif
 
 	struct message_t_string_adaptor_t {
 		message_t_string_adaptor_t(const zmq::message_t& m) : str(m.to_string()) {}
@@ -158,13 +207,15 @@ namespace mods::message_server {
 		while(!shutdown_now) {
 			// Receive all parts of the message
 			auto tuple = parse_multipart_message(&subscriber);
-			if(!std::get<0>(tuple)) {
-				log("%s failed to parse multipart message", __FUNCTION__);
+			if(std::get<0>(tuple) != PARSE_OKAY) {
+				log("SYSERR: %s failed to parse multipart message (error:'%s')",__FUNCTION__,parse_error_to_string(std::get<0>(tuple)));
 				continue;
 			}
 			const auto& m = std::get<1>(tuple);
 			const auto& list = std::get<2>(tuple);
 			const char* channel = to_string((channel_t)m.channel).c_str();
+
+			debug_dump_list();
 
 			switch((channel_t)m.channel) {
 				case CHAN_NEW_CONNECTION:
@@ -204,8 +255,8 @@ namespace mods::message_server {
 		publish(CHAN_NEW_CONNECTION,send_msgs);
 	}
 	void user_logged_in(player_ptr_t& player) {
-		std::cerr << __FUNCTION__ << "player->ip(): '" << player->ip() << "'\n";
-		std::cerr << __FUNCTION__ << "player->desc().ip: '" << player->desc().ip.str() << "'\n";
+		m_debug(__FUNCTION__ << "player->ip(): '" << player->ip() << "'\n");
+		m_debug(__FUNCTION__ << "player->desc().ip: '" << player->desc().ip.str() << "'\n");
 		std::vector<std::string> payload = {
 			player->ip(),
 			player->host(),
@@ -277,9 +328,9 @@ namespace mods::message_server {
 
 
 	void spawn() {
-		//thread_list().push_front(std::thread(admin_subscriber));
-		//thread_list().push_front(std::thread(user_connection_subscriber));
-		//thread_list().push_front(std::thread(shutdown_subscriber));
+		thread_list().push_front(std::thread(admin_subscriber));
+		thread_list().push_front(std::thread(user_connection_subscriber));
+		thread_list().push_front(std::thread(shutdown_subscriber));
 		thread_list().push_front(std::thread(user_connection_logger));
 		for(auto& thread : thread_list()) {
 			thread.detach();

@@ -13,13 +13,13 @@ namespace mods::message_parser {
 		std::vector<std::string> entries;
 		bool size_parsed = 0;
 		std::string size;
-		//static constexpr std::size_t MAX_SIZE_LENGTH = 6;
+		static constexpr std::size_t MAX_SIZE_LENGTH = 6;
 		uint16_t actual_size = 0;
 		bool capture_size = 0;
 		bool capture_payload = 0;
 		std::size_t payload_counter = 0;
 		std::string payload_buffer;
-		//std::size_t size_length = 0;
+		std::size_t size_length = 0;
 
 		std::size_t i = 0;
 		for(; i < msg.length(); i++) {
@@ -27,14 +27,14 @@ namespace mods::message_parser {
 			if(!size_parsed) {
 				if(ch == '{') {
 					capture_size = 1;
-					//size_length = 0;
+					size_length = 0;
 					continue;
 				}
 				if(capture_size) {
-					//if(isdigit(ch) && ++size_length >= MAX_SIZE_LENGTH) {
-					//	std::cerr << "Funky looking size specifier " << __FILE__ << ":" << __LINE__ << ". Aborting...\n";
-					//	return {"funky-looking-spec for ","size spec weirdly high",msg.data()};
-					//}
+					if(isdigit(ch) && ++size_length >= MAX_SIZE_LENGTH) {
+						std::cerr << "Funky looking size specifier " << __FILE__ << ":" << __LINE__ << ". Aborting...\n";
+						return {"funky-looking-spec for ","size spec weirdly high",msg.data()};
+					}
 					if(isdigit(ch)) {
 						size += ch;
 						continue;
@@ -53,8 +53,8 @@ namespace mods::message_parser {
 						payload_buffer.clear();
 						continue;
 					}
-					//std::cerr << "SYNTAX-ERROR: expecting digit or close string size. instead, got: '" << ch << "'. Aborting...\n";
-					//return {"syntax error","expecting digit or close stirng size at offset:",std::to_string(i),"instead",msg.data()};
+					std::cerr << "SYNTAX-ERROR: expecting digit or close string size. instead, got: '" << ch << "'. Aborting...\n";
+					return {"syntax error","expecting digit or close stirng size at offset:",std::to_string(i),"instead",msg.data()};
 				}
 				continue;
 			}
@@ -69,7 +69,7 @@ namespace mods::message_parser {
 					payload_counter = 0;
 					capture_payload = 0;
 					actual_size = 0;
-					//size_length = 0;
+					size_length = 0;
 					size.clear();
 				}
 			}
