@@ -1938,12 +1938,12 @@ MENTOC_F_IMPORT	mods/object-utils.hpp	427;"	kind:macro	line:427	file:
 MENTOC_HACK_USED	mods/chat.hpp	13;"	kind:macro	line:13	file:
 MENTOC_HACK_USED	mods/chat.hpp	54;"	kind:macro	line:54	file:
 MENTOC_INVALID_SOCKET	comm.cpp	/^static int constexpr MENTOC_INVALID_SOCKET = -4;$/;"	kind:variable	line:217	file:
-MENTOC_ITEM_PARSE	mods/util.cpp	1293;"	kind:macro	line:1293	file:
-MENTOC_ITEM_PARSE	mods/util.cpp	1299;"	kind:macro	line:1299	file:
-MENTOC_ITEM_PARSE	mods/util.cpp	1306;"	kind:macro	line:1306	file:
-MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1289;"	kind:macro	line:1289	file:
-MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1298;"	kind:macro	line:1298	file:
-MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1302;"	kind:macro	line:1302	file:
+MENTOC_ITEM_PARSE	mods/util.cpp	1281;"	kind:macro	line:1281	file:
+MENTOC_ITEM_PARSE	mods/util.cpp	1287;"	kind:macro	line:1287	file:
+MENTOC_ITEM_PARSE	mods/util.cpp	1294;"	kind:macro	line:1294	file:
+MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1277;"	kind:macro	line:1277	file:
+MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1286;"	kind:macro	line:1286	file:
+MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	1290;"	kind:macro	line:1290	file:
 MENTOC_LAZY	mods/orm/room.cpp	111;"	kind:macro	line:111	file:
 MENTOC_LAZY	mods/orm/room.cpp	134;"	kind:macro	line:134	file:
 MENTOC_LAZY	mods/orm/room.cpp	141;"	kind:macro	line:141	file:
@@ -1956,14 +1956,14 @@ MENTOC_LAZY_INT	mods/builder.cpp	1924;"	kind:macro	line:1924	file:
 MENTOC_LAZY_INT	mods/builder.cpp	1943;"	kind:macro	line:1943	file:
 MENTOC_LAZY_ME	mods/builder.cpp	3605;"	kind:macro	line:3605	file:
 MENTOC_LAZY_ME	mods/builder.cpp	3614;"	kind:macro	line:3614	file:
+MENTOC_LAZY_ME	mods/util.cpp	1184;"	kind:macro	line:1184	file:
 MENTOC_LAZY_ME	mods/util.cpp	1196;"	kind:macro	line:1196	file:
-MENTOC_LAZY_ME	mods/util.cpp	1208;"	kind:macro	line:1208	file:
+MENTOC_LAZY_ME	mods/util.cpp	1203;"	kind:macro	line:1203	file:
 MENTOC_LAZY_ME	mods/util.cpp	1215;"	kind:macro	line:1215	file:
-MENTOC_LAZY_ME	mods/util.cpp	1227;"	kind:macro	line:1227	file:
+MENTOC_LAZY_ME	mods/util.cpp	1216;"	kind:macro	line:1216	file:
 MENTOC_LAZY_ME	mods/util.cpp	1228;"	kind:macro	line:1228	file:
-MENTOC_LAZY_ME	mods/util.cpp	1240;"	kind:macro	line:1240	file:
+MENTOC_LAZY_ME	mods/util.cpp	1235;"	kind:macro	line:1235	file:
 MENTOC_LAZY_ME	mods/util.cpp	1247;"	kind:macro	line:1247	file:
-MENTOC_LAZY_ME	mods/util.cpp	1259;"	kind:macro	line:1259	file:
 MENTOC_LAZY_POS	act.debug.cpp	231;"	kind:macro	line:231	file:
 MENTOC_LAZY_POS	act.debug.cpp	246;"	kind:macro	line:246	file:
 MENTOC_LAZY_POS	act.debug.cpp	257;"	kind:macro	line:257	file:
@@ -4805,8 +4805,8 @@ arg3	db.h	/^	int	arg3;		\/*                                      *\/$/;"	kind:me
 argat	mods/util.hpp	481;"	kind:macro	line:481	file:
 arglist	mods/util.hpp	/^	T arglist(std::string in_arglist_argument) {$/;"	kind:function	line:153	namespace:mods::util	signature:(std::string in_arglist_argument)
 arglist_parser	mods/util.hpp	/^	struct arglist_parser {$/;"	kind:struct	line:457	namespace:mods::util::args	file:
-args	mods/util.cpp	/^namespace mods::util::args {$/;"	kind:namespace	line:1362	class:mods::util	file:
-args	mods/util.cpp	/^namespace mods::util::args {$/;"	kind:namespace	line:1401	class:mods::util	file:
+args	mods/util.cpp	/^namespace mods::util::args {$/;"	kind:namespace	line:1350	class:mods::util	file:
+args	mods/util.cpp	/^namespace mods::util::args {$/;"	kind:namespace	line:1389	class:mods::util	file:
 args	mods/util.hpp	/^namespace mods::util::args {$/;"	kind:namespace	line:393	class:mods::util	file:
 args	mods/util.hpp	480;"	kind:macro	line:480	file:
 argsat	mods/util.hpp	484;"	kind:macro	line:484	file:
@@ -4885,7 +4885,7 @@ assign	mods/string.cpp	/^	void string::assign(const std::string& other) {$/;"	ki
 assign	mods/string.cpp	/^	void string::assign(mentoc_pqxx_result_t other) {$/;"	kind:function	line:107	class:mods::string	signature:(mentoc_pqxx_result_t other)
 assign	mods/string.cpp	/^	void string::assign(mentoc_pqxx_result_t::reference str) {$/;"	kind:function	line:115	class:mods::string	signature:(mentoc_pqxx_result_t::reference str)
 assign	mods/string.cpp	/^	void string::assign(nullptr_t a) {$/;"	kind:function	line:111	class:mods::string	signature:(nullptr_t a)
-assign	mods/util.cpp	/^	void parsed_args::assign(const std::string& argument) {$/;"	kind:function	line:1415	class:mods::util::args::parsed_args	signature:(const std::string& argument)
+assign	mods/util.cpp	/^	void parsed_args::assign(const std::string& argument) {$/;"	kind:function	line:1403	class:mods::util::args::parsed_args	signature:(const std::string& argument)
 assign_kings_castle	castle.cpp	/^void assign_kings_castle(void) {$/;"	kind:function	line:128	signature:(void)
 assign_m	mods/string.cpp	/^	void string::assign_m(const mods::string& other) {$/;"	kind:function	line:119	class:mods::string	signature:(const mods::string& other)
 assign_mobiles	mods/hell.hpp	/^	constexpr inline bool assign_mobiles = false;$/;"	kind:member	line:9	namespace:mods::hell	file:
@@ -4895,7 +4895,7 @@ assign_objects	spec_assign.cpp	/^void assign_objects() {$/;"	kind:function	line:
 assign_rooms	mods/hell.hpp	/^	constexpr inline bool assign_rooms = false;$/;"	kind:member	line:12	namespace:mods::hell	file:
 assign_the_shopkeepers	mods/hell.hpp	/^	constexpr inline bool assign_the_shopkeepers = false;$/;"	kind:member	line:10	namespace:mods::hell	file:
 assign_the_shopkeepers	shop.cpp	/^void assign_the_shopkeepers(void) {$/;"	kind:function	line:1272	signature:(void)
-at	mods/util.cpp	/^	std::string parsed_args::at(std::size_t index) {$/;"	kind:function	line:1553	class:mods::util::args::parsed_args	signature:(std::size_t index)
+at	mods/util.cpp	/^	std::string parsed_args::at(std::size_t index) {$/;"	kind:function	line:1541	class:mods::util::args::parsed_args	signature:(std::size_t index)
 atexit_handler	comm.cpp	/^void atexit_handler() {$/;"	kind:function	line:274	signature:()
 atrium	house.h	/^	room_vnum atrium;		\/* vnum of atrium		*\/$/;"	kind:member	line:9	struct:house_control_rec	file:	access:public
 attach_flamethrower	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::attach_flamethrower(obj_ptr_t& weapon){$/;"	kind:function	line:157	class:mods::classes::pyrexia	signature:(obj_ptr_t& weapon)
@@ -5989,7 +5989,7 @@ create_object	db.cpp	/^obj_ptr_t create_object(int type,std::string yaml_file) {
 create_object_from_index	db.cpp	/^obj_ptr_t create_object_from_index(std::size_t proto_index) {$/;"	kind:function	line:2042	signature:(std::size_t proto_index)
 create_object_opt	db.cpp	/^std::tuple<bool,obj_ptr_t> create_object_opt(int type,std::string yaml_file) {$/;"	kind:function	line:2018	signature:(int type,std::string yaml_file)
 create_pathogen_ammunition_attachment	mods/classes/contagion.cpp	/^	obj_ptr_t create_pathogen_ammunition_attachment() {$/;"	kind:function	line:9	namespace:mods::classes	signature:()
-create_pkid_object	mods/util.cpp	/^	obj_ptr_t create_pkid_object(std::string_view in_schema) {$/;"	kind:function	line:1328	namespace:mods::util	signature:(std::string_view in_schema)
+create_pkid_object	mods/util.cpp	/^	obj_ptr_t create_pkid_object(std::string_view in_schema) {$/;"	kind:function	line:1316	namespace:mods::util	signature:(std::string_view in_schema)
 create_player	mods/player-scaffolding.cpp	/^	player_ptr_t player_scaffolding::create_player() {$/;"	kind:function	line:77	class:mods::player_scaffolding	signature:()
 create_psyop	mods/classes/psyop.cpp	/^	std::shared_ptr<psyop> create_psyop(player_ptr_t &in_player){$/;"	kind:function	line:42	namespace:mods::classes	signature:(player_ptr_t &in_player)
 create_pyrexia	mods/classes/pyrexia.cpp	/^		std::shared_ptr<pyrexia> create_pyrexia(player_ptr_t &in_player){$/;"	kind:function	line:69	namespace:mods::classes	signature:(player_ptr_t &in_player)
@@ -6450,7 +6450,7 @@ die_msg	structs.h	/^	struct msg_type die_msg;	\/* messages when death			*\/$/;"	
 dimensions_t	mods/builder/rectangle-layouts.hpp	/^	struct dimensions_t {$/;"	kind:struct	line:6	namespace:mods::builder::rectangle_layouts	file:
 dir	graph.cpp	/^	char dir;$/;"	kind:member	line:46	struct:bfs_queue_struct	file:	access:public
 dir	mods/util.hpp	/^		int dir;$/;"	kind:member	line:123	struct:mods::util::objdir_struct	file:	access:public
-dir_exists	mods/util.cpp	/^	bool dir_exists(const char* dir) {$/;"	kind:function	line:868	namespace:mods::util	signature:(const char* dir)
+dir_exists	mods/util.cpp	/^	bool dir_exists(const char* dir) {$/;"	kind:function	line:856	namespace:mods::util	signature:(const char* dir)
 dir_int	globals.cpp	/^		int dir_int(char dir) {$/;"	kind:function	line:1031	namespace:mods::globals	signature:(char dir)
 dir_option	mods/builder.cpp	/^	std::optional<std::string> dir_option(room_rnum room_id,int direction,std::optional<std::string_view> description,$/;"	kind:function	line:1070	namespace:mods::builder	signature:(room_rnum room_id,int direction,std::optional<std::string_view> description, std::optional<std::string_view> keywords, std::optional<int> exit_info, std::optional<int> key, std::optional<room_rnum> to_room )
 dir_option	structs.h	/^		room_direction_data *dir_option[NUM_OF_DIRS]; \/* Directions *\/$/;"	kind:member	line:1217	struct:obj_data	file:	access:public
@@ -6462,8 +6462,8 @@ direction	mods/intent.hpp	/^		uint8_t 						direction;$/;"	kind:member	line:15	s
 direction	mods/scan.hpp	/^			int direction;$/;"	kind:member	line:34	struct:mods::scan::find_results_t	file:	access:public
 direction	mods/scan.hpp	/^			uint8_t direction;$/;"	kind:member	line:25	struct:mods::scan::vec_player_data_element	file:	access:public
 direction	structs.h	/^	int direction;$/;"	kind:member	line:1923	struct:guild_info_type	file:	access:public
-direction_at	mods/util.cpp	/^	check_parsed_args* check_parsed_args::direction_at(std::size_t index) {$/;"	kind:function	line:1643	class:mods::util::args::check_parsed_args	signature:(std::size_t index)
-direction_at	mods/util.cpp	/^	std::optional<direction_t> parsed_args::direction_at(std::size_t index) {$/;"	kind:function	line:1574	class:mods::util::args::parsed_args	signature:(std::size_t index)
+direction_at	mods/util.cpp	/^	check_parsed_args* check_parsed_args::direction_at(std::size_t index) {$/;"	kind:function	line:1631	class:mods::util::args::check_parsed_args	signature:(std::size_t index)
+direction_at	mods/util.cpp	/^	std::optional<direction_t> parsed_args::direction_at(std::size_t index) {$/;"	kind:function	line:1562	class:mods::util::args::parsed_args	signature:(std::size_t index)
 directional_dirstr	mods/doors.hpp	/^	static inline std::string directional_dirstr(const int& direction) {$/;"	kind:function	line:32	namespace:mods::doors	signature:(const int& direction)
 directions	globals.hpp	/^static inline std::vector<direction_t>& directions() {$/;"	kind:function	line:328	file:	signature:()
 directions	mods/scan.cpp	/^	int directions[] = { NORTH,EAST,SOUTH,WEST,UP,DOWN };$/;"	kind:member	line:12	namespace:mods::scan	file:
@@ -7142,7 +7142,7 @@ equipment_types	constants.cpp	/^const char *equipment_types[] = {$/;"	kind:varia
 equipment_types	constants.hpp	/^const char *equipment_types[] = {$/;"	kind:variable	line:284
 erase	mods/rifle-attachments.cpp	/^		void erase(const uuid_t& uuid) {$/;"	kind:function	line:40	namespace:mods::rifle_attachments	signature:(const uuid_t& uuid)
 erase_queued_items	mods/affects.hpp	/^			void erase_queued_items() {$/;"	kind:function	line:262	struct:mods::affects::dissolver	access:public	signature:()
-err	mods/util.cpp	/^namespace mods::util::err {$/;"	kind:namespace	line:1354	class:mods::util	file:
+err	mods/util.cpp	/^namespace mods::util::err {$/;"	kind:namespace	line:1342	class:mods::util	file:
 err	mods/util.hpp	/^namespace mods::util::err {$/;"	kind:namespace	line:389	class:mods::util	file:
 error	mods/db.hpp	/^namespace mods::lmdb::error { $/;"	kind:namespace	line:13	class:mods::lmdb	file:
 error	mods/mobs/mini-gunner.hpp	/^			bool error;$/;"	kind:member	line:106	struct:mods::mobs::mini_gunner	file:	access:private
@@ -7150,7 +7150,7 @@ error	mods/mobs/smart-mob.hpp	/^			bool error;$/;"	kind:member	line:156	struct:m
 error	mods/player.hpp	/^			void error(std::string_view msg) {$/;"	kind:function	line:807	struct:mods::player	access:public	signature:(std::string_view msg)
 error_log	mods/sql.cpp	/^	void error_log(std::string_view msg) {$/;"	kind:function	line:6	namespace:mods::sql	signature:(std::string_view msg)
 errorln	mods/player.hpp	/^			void errorln(std::string_view msg) {$/;"	kind:function	line:810	struct:mods::player	access:public	signature:(std::string_view msg)
-errors	mods/util.cpp	/^	std::string check_parsed_args::errors() {$/;"	kind:function	line:1665	class:mods::util::args::check_parsed_args	signature:()
+errors	mods/util.cpp	/^	std::string check_parsed_args::errors() {$/;"	kind:function	line:1653	class:mods::util::args::check_parsed_args	signature:()
 eval_string	mods/js.cpp	/^		void eval_string(duk_context* ctx,const std::string& str) {$/;"	kind:function	line:944	namespace:mods::js	signature:(duk_context* ctx,const std::string& str)
 eval_string	mods/js.cpp	/^		void eval_string(std::string_view str) {$/;"	kind:function	line:951	namespace:mods::js	signature:(std::string_view str)
 evaluate_expression	shop.cpp	/^int evaluate_expression(struct obj_data *obj, char *expr) {$/;"	kind:function	line:253	signature:(struct obj_data *obj, char *expr)
@@ -7211,7 +7211,7 @@ explain_make	mods/builder/rectangle-layouts.cpp	/^	std::string_view explain_make
 explode	mods/corpse.cpp	/^	void explode(const uint64_t& id) {$/;"	kind:function	line:276	namespace:mods::corpse	signature:(const uint64_t& id)
 explode	mods/projectile.cpp	/^		int8_t explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid) {$/;"	kind:function	line:559	namespace:mods::projectile	signature:(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid)
 explode	mods/projectile.cpp	/^		int8_t explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid, bool dispose) {$/;"	kind:function	line:400	namespace:mods::projectile	signature:(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid, bool dispose)
-explode	mods/util.cpp	/^	std::vector<std::string> explode(char delim,std::string& haystack) {$/;"	kind:function	line:1162	namespace:mods::util	signature:(char delim,std::string& haystack)
+explode	mods/util.cpp	/^	std::vector<std::string> explode(char delim,std::string& haystack) {$/;"	kind:function	line:1150	namespace:mods::util	signature:(char delim,std::string& haystack)
 explode_debug	mods/projectile.cpp	24;"	kind:macro	line:24	file:
 explode_debug	mods/projectile.cpp	26;"	kind:macro	line:26	file:
 explode_frag_here	mods/projectile.cpp	/^		std::tuple<bool,std::string> explode_frag_here(player_ptr_t& attacker, obj_ptr_t& frag, const room_rnum room_id) {$/;"	kind:function	line:791	namespace:mods::projectile	signature:(player_ptr_t& attacker, obj_ptr_t& frag, const room_rnum room_id)
@@ -7408,13 +7408,13 @@ extract_profile	mods/builder/slotted-builder.hpp	/^			optional_orm_t extract_pro
 extract_profile	mods/builder/slotted-builder.hpp	/^			optional_orm_t extract_profile(std::string verb,std::string argument,std::size_t index) {$/;"	kind:function	line:495	struct:mods::builder::slotted_builder	access:protected	signature:(std::string verb,std::string argument,std::size_t index)
 extract_reference_field_from_meta_key	mods/meta_utils.cpp	/^	std::string extract_reference_field_from_meta_key(const std::string& key){$/;"	kind:function	line:28	namespace:mods::meta_utils	signature:(const std::string& key)
 extract_until	mods/util.cpp	/^	std::string extract_until(std::string_view target, char this_char) {$/;"	kind:function	line:471	namespace:mods::util	signature:(std::string_view target, char this_char)
-extract_yaml_info_from_path	mods/util.cpp	/^	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path) {$/;"	kind:function	line:1269	namespace:mods::util	signature:(std::string_view path)
+extract_yaml_info_from_path	mods/util.cpp	/^	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path) {$/;"	kind:function	line:1257	namespace:mods::util	signature:(std::string_view path)
 extract_yaml_reward	mods/util.cpp	/^	std::tuple<bool,int,std::string> extract_yaml_reward(std::string reward) {$/;"	kind:function	line:386	namespace:mods::util	signature:(std::string reward)
 extractions_pending	handler.cpp	/^int extractions_pending = 0;$/;"	kind:variable	line:28
 f_import_rooms	globals.cpp	/^		bool f_import_rooms;$/;"	kind:member	line:95	namespace:mods::globals	file:
 face_direction	mods/mobs/mini-gunner.hpp	/^		static inline std::string face_direction(std::string value) {$/;"	kind:function	line:114	namespace:mods::mobs::mg::orm	signature:(std::string value)
 factory	mods/orm/factory.hpp	/^namespace mods::orm::factory {$/;"	kind:namespace	line:11	class:mods::orm	file:
-failed	mods/util.cpp	/^	bool check_parsed_args::failed() {$/;"	kind:function	line:1640	class:mods::util::args::check_parsed_args	signature:()
+failed	mods/util.cpp	/^	bool check_parsed_args::failed() {$/;"	kind:function	line:1628	class:mods::util::args::check_parsed_args	signature:()
 feed	mods/classes/base.cpp	/^	int16_t skill_t::feed(const pqxx::result::reference& row) {$/;"	kind:function	line:103	class:mods::classes::skill_t	signature:(const pqxx::result::reference& row)
 feed	mods/forge-engine/item-type-chooser.cpp	/^	int16_t generator::feed(const pqxx::result::reference & r){$/;"	kind:function	line:3	class:mods::forge_engine::generator	signature:(const pqxx::result::reference & r)
 feed	mods/orm/base.cpp	/^	int16_t base::feed(const pqxx::result::reference & r){$/;"	kind:function	line:3	class:mods::orm::base	signature:(const pqxx::result::reference & r)
@@ -7534,10 +7534,10 @@ fetch_builder_help	mods/help.cpp	/^	void fetch_builder_help(std::vector<std::str
 fetch_by_meta	mods/orm/fetcher.hpp	/^	std::vector<TRowType>&& fetch_by_meta(std::string_view column,std::string_view value) {$/;"	kind:function	line:21	namespace:mods::orm	signature:(std::string_view column,std::string_view value)
 fetch_by_meta	mods/orm/fetcher.hpp	/^	uint64_t fetch_by_meta(std::string_view table_name,$/;"	kind:function	line:42	namespace:mods::orm::generator	signature:(std::string_view table_name, std::string_view column,std::string_view value, TFunctionCallback callback)
 fetch_context	mods/message-server.hpp	/^	static inline zmq::context_t& fetch_context() {$/;"	kind:function	line:66	namespace:mods::message_server	signature:()
-fetch_integer	mods/util.cpp	/^	int parsed_args::fetch_integer(std::size_t index) {$/;"	kind:function	line:1402	class:mods::util::args::parsed_args	signature:(std::size_t index)
+fetch_integer	mods/util.cpp	/^	int parsed_args::fetch_integer(std::size_t index) {$/;"	kind:function	line:1390	class:mods::util::args::parsed_args	signature:(std::size_t index)
 fetch_list_by_mob_vnum	mods/mob-equipment.cpp	/^	std::array<std::string,NUM_WEARS> fetch_list_by_mob_vnum(mob_vnum mobvnum) {$/;"	kind:function	line:34	namespace:mods::mob_equipment	signature:(mob_vnum mobvnum)
 fetch_mortal_help	mods/help.cpp	/^	void fetch_mortal_help(std::vector<std::string>& screen) {$/;"	kind:function	line:775	namespace:mods::help	signature:(std::vector<std::string>& screen)
-fetch_parsed_integer	mods/util.cpp	/^	int parsed_args::fetch_parsed_integer(std::size_t index) {$/;"	kind:function	line:1405	class:mods::util::args::parsed_args	signature:(std::size_t index)
+fetch_parsed_integer	mods/util.cpp	/^	int parsed_args::fetch_parsed_integer(std::size_t index) {$/;"	kind:function	line:1393	class:mods::util::args::parsed_args	signature:(std::size_t index)
 fetch_valid_elemental_types	mods/elemental.hpp	/^	static inline const std::vector<elemental_types_t>& fetch_valid_elemental_types() {$/;"	kind:function	line:6	namespace:mods	signature:()
 fetch_valid_elemental_types	mods/forge-engine/elemental-enum.hpp	/^	static inline const std::vector<elemental_types_t>& fetch_valid_elemental_types() {$/;"	kind:function	line:7	namespace:mods::forge_engine	signature:()
 fiddler	mods/super-users.hpp	/^	static std::shared_ptr<mods::classes::super_user_fiddler> fiddler;$/;"	kind:member	line:21	namespace:mods::super_users	file:
@@ -7676,10 +7676,10 @@ fire_status	structs.h	/^		fire_status_t& fire_status() {$/;"	kind:function	line:
 fire_status_start	structs.h	/^		void fire_status_start() {$/;"	kind:function	line:1249	struct:obj_data	access:public	signature:()
 fire_weapon	mods/rifle-instance-data.hpp	/^	void fire_weapon(){$/;"	kind:function	line:23	struct:heat	access:public	signature:()
 first_alpha_is_any	mods/util.cpp	/^	bool first_alpha_is_any(std::string_view line,std::string_view any) {$/;"	kind:function	line:507	namespace:mods::util	signature:(std::string_view line,std::string_view any)
-first_is	mods/util.cpp	/^	bool parsed_args::first_is(std::string_view list_string) {$/;"	kind:function	line:1419	class:mods::util::args::parsed_args	signature:(std::string_view list_string)
-first_is	mods/util.cpp	/^	check_parsed_args* check_parsed_args::first_is(std::string_view list_string) {$/;"	kind:function	line:1600	class:mods::util::args::check_parsed_args	signature:(std::string_view list_string)
-first_is_any	mods/util.cpp	/^	bool parsed_args::first_is_any(std::vector<std::string> list_string) {$/;"	kind:function	line:1422	class:mods::util::args::parsed_args	signature:(std::vector<std::string> list_string)
-first_is_any	mods/util.cpp	/^	check_parsed_args* check_parsed_args::first_is_any(std::vector<std::string> list_string) {$/;"	kind:function	line:1604	class:mods::util::args::check_parsed_args	signature:(std::vector<std::string> list_string)
+first_is	mods/util.cpp	/^	bool parsed_args::first_is(std::string_view list_string) {$/;"	kind:function	line:1407	class:mods::util::args::parsed_args	signature:(std::string_view list_string)
+first_is	mods/util.cpp	/^	check_parsed_args* check_parsed_args::first_is(std::string_view list_string) {$/;"	kind:function	line:1588	class:mods::util::args::check_parsed_args	signature:(std::string_view list_string)
+first_is_any	mods/util.cpp	/^	bool parsed_args::first_is_any(std::vector<std::string> list_string) {$/;"	kind:function	line:1410	class:mods::util::args::parsed_args	signature:(std::vector<std::string> list_string)
+first_is_any	mods/util.cpp	/^	check_parsed_args* check_parsed_args::first_is_any(std::vector<std::string> list_string) {$/;"	kind:function	line:1592	class:mods::util::args::check_parsed_args	signature:(std::vector<std::string> list_string)
 first_or_create	mods/integral-objects-db.cpp	/^	obj_ptr_t first_or_create(room_vnum room,std::string query, int type, std::string yaml_file) {$/;"	kind:function	line:84	namespace:mods::integral_objects_db	signature:(room_vnum room,std::string query, int type, std::string yaml_file)
 first_values	mods/mini-games/line-up.hpp	/^		std::vector<uint8_t> first_values;$/;"	kind:member	line:38	namespace:mods::mini_games	file:	access:private
 fixtures	mods/bugs-fixtures.cpp	/^	void fixtures(std::string from, std::string msg){$/;"	kind:function	line:6	namespace:mods::bugs	signature:(std::string from, std::string msg)
@@ -7878,13 +7878,13 @@ game_room_vnum	mods/orm/mini-game.hpp	/^		room_vnum_t game_room_vnum;$/;"	kind:m
 game_room_vnum_list	mods/orm/mini-game.hpp	/^		std::vector<room_vnum_t> game_room_vnum_list;$/;"	kind:member	line:69	struct:mods::orm::mini_game	file:	access:public
 game_type	mods/orm/mini-game.hpp	/^		std::string game_type;$/;"	kind:member	line:60	struct:mods::orm::mini_game	file:	access:public
 game_vnum	mods/orm/mini-game.hpp	/^		game_vnum_t game_vnum;$/;"	kind:member	line:61	struct:mods::orm::mini_game	file:	access:public
-gather_integers_starting_at	mods/util.cpp	/^	std::vector<int> parsed_args::gather_integers_starting_at(std::size_t index) {$/;"	kind:function	line:1514	class:mods::util::args::parsed_args	signature:(std::size_t index)
-gather_max_tokens_starting_at	mods/util.cpp	/^	std::vector<std::string> parsed_args::gather_max_tokens_starting_at(std::size_t index,std::size_t max_elements) {$/;"	kind:function	line:1533	class:mods::util::args::parsed_args	signature:(std::size_t index,std::size_t max_elements)
+gather_integers_starting_at	mods/util.cpp	/^	std::vector<int> parsed_args::gather_integers_starting_at(std::size_t index) {$/;"	kind:function	line:1502	class:mods::util::args::parsed_args	signature:(std::size_t index)
+gather_max_tokens_starting_at	mods/util.cpp	/^	std::vector<std::string> parsed_args::gather_max_tokens_starting_at(std::size_t index,std::size_t max_elements) {$/;"	kind:function	line:1521	class:mods::util::args::parsed_args	signature:(std::size_t index,std::size_t max_elements)
 gather_room	mods/sensor-grenade.cpp	/^	void gather_room(uuid_t nade_uuid,room_rnum& room,uint8_t from_direction) {$/;"	kind:function	line:112	namespace:mods::sensor_grenade	signature:(uuid_t nade_uuid,room_rnum& room,uint8_t from_direction)
 gather_scripted_steps_by_sequence_vnum	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> gather_scripted_steps_by_sequence_vnum($/;"	kind:function	line:198	namespace:mods::orm	signature:( const sequence_vnum_t& sequence_vnum, std::deque<std::shared_ptr<mods::orm::scripted_step>>* in_list_ptr )
-gather_strings_starting_at	mods/util.cpp	/^	std::string parsed_args::gather_strings_starting_at(std::size_t index) {$/;"	kind:function	line:1520	class:mods::util::args::parsed_args	signature:(std::size_t index)
-gather_tokens_starting_at	mods/util.cpp	/^	std::vector<std::string> parsed_args::gather_tokens_starting_at(std::size_t index) {$/;"	kind:function	line:1543	class:mods::util::args::parsed_args	signature:(std::size_t index)
-gather_uuids_starting_at	mods/util.cpp	/^	std::vector<uuid_t> parsed_args::gather_uuids_starting_at(std::size_t index) {$/;"	kind:function	line:1517	class:mods::util::args::parsed_args	signature:(std::size_t index)
+gather_strings_starting_at	mods/util.cpp	/^	std::string parsed_args::gather_strings_starting_at(std::size_t index) {$/;"	kind:function	line:1508	class:mods::util::args::parsed_args	signature:(std::size_t index)
+gather_tokens_starting_at	mods/util.cpp	/^	std::vector<std::string> parsed_args::gather_tokens_starting_at(std::size_t index) {$/;"	kind:function	line:1531	class:mods::util::args::parsed_args	signature:(std::size_t index)
+gather_uuids_starting_at	mods/util.cpp	/^	std::vector<uuid_t> parsed_args::gather_uuids_starting_at(std::size_t index) {$/;"	kind:function	line:1505	class:mods::util::args::parsed_args	signature:(std::size_t index)
 gdns	mods/lmdb/conf.cpp	/^namespace gdns {$/;"	kind:namespace	line:3	file:
 gdns	mods/lmdb/conf.hpp	/^namespace gdns {$/;"	kind:namespace	line:6	file:
 gdns	mods/lmdb/db.hpp	/^namespace gdns {$/;"	kind:namespace	line:38	file:
@@ -8184,7 +8184,7 @@ get_slot_list	mods/orm/contracts.hpp	/^		static inline std::vector<std::string> 
 get_slot_list	mods/orm/hq.hpp	/^		static std::vector<std::string> get_slot_list() {$/;"	kind:function	line:11	struct:mods::orm::hq	access:public	signature:()
 get_slot_list	mods/orm/mob-equipment.hpp	/^		static std::vector<std::string> get_slot_list() {$/;"	kind:function	line:14	struct:mods::orm::mob_equipment	access:public	signature:()
 get_stance	mods/player.hpp	/^			std::string& get_stance() {$/;"	kind:function	line:907	struct:mods::player	access:public	signature:()
-get_string	mods/util.cpp	/^	std::string get_string(int _errno) {$/;"	kind:function	line:1355	namespace:mods::util::err	signature:(int _errno)
+get_string	mods/util.cpp	/^	std::string get_string(int _errno) {$/;"	kind:function	line:1343	namespace:mods::util::err	signature:(int _errno)
 get_string_from_target	mods/contract-steps.cpp	/^	std::string get_string_from_target(target_t target) {$/;"	kind:function	line:98	namespace:mods::contracts	signature:(target_t target)
 get_string_list_from_task_flags	mods/contract-steps.cpp	/^	std::vector<std::string> get_string_list_from_task_flags(task_t task) {$/;"	kind:function	line:89	namespace:mods::contracts	signature:(task_t task)
 get_super_user_list	mods/js.cpp	/^		static duk_ret_t get_super_user_list(duk_context *ctx) {$/;"	kind:function	line:83	namespace:mods::js	signature:(duk_context *ctx)
@@ -8248,7 +8248,7 @@ give_find_vict	act.item.cpp	/^char_data *give_find_vict(char_data *ch, char *arg
 give_item	mods/player-contract-instance.cpp	/^	void player_contract_instance::give_item(obj_ptr_t& object,player_ptr_t& mob) {$/;"	kind:function	line:707	class:mods::contracts::player_contract_instance	signature:(obj_ptr_t& object,player_ptr_t& mob)
 glass	mods/glass.cpp	/^namespace mods::glass {$/;"	kind:namespace	line:21	class:mods	file:
 glass	mods/glass.hpp	/^namespace mods::glass {$/;"	kind:namespace	line:5	class:mods	file:
-glob	mods/util.cpp	/^	directory_list_t glob(std::string_view path) {$/;"	kind:function	line:837	namespace:mods::util	signature:(std::string_view path)
+glob	mods/util.cpp	/^	directory_list_t glob(std::string_view path) {$/;"	kind:function	line:825	namespace:mods::util	signature:(std::string_view path)
 global_engineer_drone_bomb	mods/classes/engineer.cpp	/^	static obj_ptr_t& global_engineer_drone_bomb() {$/;"	kind:function	line:11	namespace:mods::classes	signature:()
 global_list	mods/rifle-attachments.cpp	/^		std::map<uuid_t,std::shared_ptr<mods::rifle_attachments_t>>& global_list() {$/;"	kind:function	line:57	namespace:mods::rifle_attachments	signature:()
 globals	comm.cpp	/^namespace mods::globals {$/;"	kind:namespace	line:126	class:mods	file:
@@ -8653,11 +8653,11 @@ idle_tics	structs.h	/^			byte idle_tics;		\/* tics idle at password prompt		*\/$
 idle_void	config.cpp	/^int idle_void = 8;$/;"	kind:variable	line:79
 idnum	structs.h	/^	long	idnum;			\/* player's idnum; -1 for mobiles	*\/$/;"	kind:member	line:1426	struct:char_special_data_saved	file:	access:public
 if_flag	db.h	/^	bool if_flag;	\/* if TRUE: exe only if preceding exe'd *\/$/;"	kind:member	line:165	struct:reset_com	file:	access:public
-if_nth_has_either	mods/util.cpp	/^	bool parsed_args::if_nth_has_either(std::size_t index,std::vector<std::string> list_string) {$/;"	kind:function	line:1508	class:mods::util::args::parsed_args	signature:(std::size_t index,std::vector<std::string> list_string)
-if_nth_has_either	mods/util.cpp	/^	check_parsed_args* check_parsed_args::if_nth_has_either(std::size_t index,std::vector<std::string> list_string) {$/;"	kind:function	line:1612	class:mods::util::args::check_parsed_args	signature:(std::size_t index,std::vector<std::string> list_string)
+if_nth_has_either	mods/util.cpp	/^	bool parsed_args::if_nth_has_either(std::size_t index,std::vector<std::string> list_string) {$/;"	kind:function	line:1496	class:mods::util::args::parsed_args	signature:(std::size_t index,std::vector<std::string> list_string)
+if_nth_has_either	mods/util.cpp	/^	check_parsed_args* check_parsed_args::if_nth_has_either(std::size_t index,std::vector<std::string> list_string) {$/;"	kind:function	line:1600	class:mods::util::args::check_parsed_args	signature:(std::size_t index,std::vector<std::string> list_string)
 im	mods/rooms.cpp	/^	T im(std::map<std::string,std::string>& d,std::string_view key,T fallback) {$/;"	kind:function	line:743	namespace:mods::rooms	signature:(std::map<std::string,std::string>& d,std::string_view key,T fallback)
 imapor	mods/rooms.cpp	756;"	kind:macro	line:756	file:
-imatch	mods/util.cpp	/^	bool imatch(std::string_view needle, const std::vector<std::string>& arg_list) {$/;"	kind:function	line:1371	namespace:mods::util::args	signature:(std::string_view needle, const std::vector<std::string>& arg_list)
+imatch	mods/util.cpp	/^	bool imatch(std::string_view needle, const std::vector<std::string>& arg_list) {$/;"	kind:function	line:1359	namespace:mods::util::args	signature:(std::string_view needle, const std::vector<std::string>& arg_list)
 immediate	mods/combat.hpp	/^	namespace immediate {$/;"	kind:namespace	line:12	namespace:mods::combat	file:
 immlist	db.cpp	/^char *immlist = NULL;		\/* list of peon gods		 *\/$/;"	kind:variable	line:140
 immort_level_ok	config.cpp	/^int immort_level_ok = 1;$/;"	kind:variable	line:119
@@ -8950,10 +8950,10 @@ instigate	mods/js.cpp	/^		static duk_ret_t instigate(duk_context *ctx) {$/;"	kin
 int_app	constants.cpp	/^cpp_extern const struct int_app_type int_app[] = {$/;"	kind:variable	line:671	typeref:struct:int_app_type
 int_app	constants.hpp	/^cpp_extern const struct int_app_type int_app[] = {$/;"	kind:variable	line:674	typeref:struct:int_app_type
 int_app_type	structs.h	/^struct int_app_type {$/;"	kind:struct	line:1890	file:
-int_at	mods/util.cpp	/^	check_parsed_args* check_parsed_args::int_at(std::size_t index) {$/;"	kind:function	line:1656	class:mods::util::args::check_parsed_args	signature:(std::size_t index)
-int_at	mods/util.cpp	/^	check_parsed_args* check_parsed_args::int_at(std::vector<std::size_t> index) {$/;"	kind:function	line:1660	class:mods::util::args::check_parsed_args	signature:(std::vector<std::size_t> index)
-int_at	mods/util.cpp	/^	int parsed_args::int_at(std::size_t index) {$/;"	kind:function	line:1570	class:mods::util::args::parsed_args	signature:(std::size_t index)
-int_map	mods/util.cpp	/^	std::map<std::size_t,int> parsed_args::int_map(std::vector<std::size_t> indexes) {$/;"	kind:function	line:1584	class:mods::util::args::parsed_args	signature:(std::vector<std::size_t> indexes)
+int_at	mods/util.cpp	/^	check_parsed_args* check_parsed_args::int_at(std::size_t index) {$/;"	kind:function	line:1644	class:mods::util::args::check_parsed_args	signature:(std::size_t index)
+int_at	mods/util.cpp	/^	check_parsed_args* check_parsed_args::int_at(std::vector<std::size_t> index) {$/;"	kind:function	line:1648	class:mods::util::args::check_parsed_args	signature:(std::vector<std::size_t> index)
+int_at	mods/util.cpp	/^	int parsed_args::int_at(std::size_t index) {$/;"	kind:function	line:1558	class:mods::util::args::parsed_args	signature:(std::size_t index)
+int_map	mods/util.cpp	/^	std::map<std::size_t,int> parsed_args::int_map(std::vector<std::size_t> indexes) {$/;"	kind:function	line:1572	class:mods::util::args::parsed_args	signature:(std::vector<std::size_t> indexes)
 int_types	mods/values.cpp	/^static const std::vector<value_key_t> int_types = {$/;"	kind:member	line:1604	namespace:mods::values	file:
 intat	mods/util.hpp	482;"	kind:macro	line:482	file:
 integral_list	mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& integral_list() const {$/;"	kind:function	line:89	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
@@ -9160,7 +9160,7 @@ item_types	constants.hpp	/^const char *item_types[] = {$/;"	kind:variable	line:3
 items	mods/runners/includes.hpp	/^	namespace items {$/;"	kind:namespace	line:31	namespace:mods::runners	file:
 items	mods/runners/items.cpp	/^namespace mods::runners::items {$/;"	kind:namespace	line:12	class:mods::runners	file:
 iteration	mods/deferred.cpp	/^	void deferred::iteration() {$/;"	kind:function	line:130	class:mods::deferred	signature:()
-itoa	mods/util.cpp	/^	std::string itoa(int number) {$/;"	kind:function	line:831	namespace:mods::util	signature:(int number)
+itoa	mods/util.cpp	/^	std::string itoa(int number) {$/;"	kind:function	line:819	namespace:mods::util	signature:(int number)
 janitor	spec_assign.cpp	/^SPECIAL(janitor);$/;"	kind:variable	line:35
 janitor	spec_procs.cpp	/^SPECIAL(janitor);$/;"	kind:variable	line:49
 jerry	castle.cpp	/^SPECIAL(jerry);$/;"	kind:variable	line:71
@@ -10558,7 +10558,7 @@ make_char	mods/chargen.cpp	/^	std::tuple<bool,std::string> make_char(player_ptr_
 make_corpse	fight.cpp	/^void make_corpse(char_data *ch) {$/;"	kind:function	line:347	signature:(char_data *ch)
 make_corpse	mods/corpse.cpp	/^	obj_ptr_t make_corpse(player_ptr_t& victim) {$/;"	kind:function	line:189	namespace:mods::corpse	signature:(player_ptr_t& victim)
 make_defiler_engage	mods/mobs/defiler-behaviour-tree.cpp	/^	void make_defiler_engage(TNode& tree) {$/;"	kind:function	line:131	namespace:mods::mobs::defiler_behaviour_tree	signature:(TNode& tree)
-make_from	mods/util.cpp	/^	obj_ptr_t make_from(obj_data* o) {$/;"	kind:function	line:1035	namespace:mods::util	signature:(obj_data* o)
+make_from	mods/util.cpp	/^	obj_ptr_t make_from(obj_data* o) {$/;"	kind:function	line:1023	namespace:mods::util	signature:(obj_data* o)
 make_generic_thief_engage	mods/mobs/generic-thief-behaviour-tree.cpp	/^	void make_generic_thief_engage(TNode& tree) {$/;"	kind:function	line:178	namespace:mods::mobs::generic_thief_behaviour_tree	signature:(TNode& tree)
 make_lowly_security	mods/mobs/lowly-security-behaviour-tree.hpp	/^	void make_lowly_security(TNode& tree) {$/;"	kind:function	line:374	namespace:mods::mobs::lowly_security_behaviour_tree	signature:(TNode& tree)
 make_lowly_security_engage	mods/mobs/lowly-security-behaviour-tree.hpp	/^	void make_lowly_security_engage(TNode& tree) {$/;"	kind:function	line:232	namespace:mods::mobs::lowly_security_behaviour_tree	signature:(TNode& tree)
@@ -10609,7 +10609,7 @@ mask	mods/weapon.hpp	/^	struct mask {$/;"	kind:struct	line:30	namespace:mods::we
 mask_to_string	mods/doors.hpp	/^	static inline std::string mask_to_string(int i) {$/;"	kind:function	line:311	namespace:mods::doors	signature:(int i)
 master	structs.h	/^	char_data *master;             \/* Who is char following?        *\/$/;"	kind:member	line:1779	struct:char_data	file:	access:public
 mastered	mods/classes/base.cpp	/^	bool skill_t::mastered() const {$/;"	kind:function	line:72	class:mods::classes::skill_t	signature:() const
-match	mods/util.cpp	/^	bool match(std::string_view needle, const std::vector<std::string>& arg_list) {$/;"	kind:function	line:1363	namespace:mods::util::args	signature:(std::string_view needle, const std::vector<std::string>& arg_list)
+match	mods/util.cpp	/^	bool match(std::string_view needle, const std::vector<std::string>& arg_list) {$/;"	kind:function	line:1351	namespace:mods::util::args	signature:(std::string_view needle, const std::vector<std::string>& arg_list)
 match_any	mods/util.cpp	/^	bool match_any(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch) {$/;"	kind:function	line:349	namespace:mods::util	signature:(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch)
 match_any_lower	mods/util.cpp	/^	bool match_any_lower(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch) {$/;"	kind:function	line:371	namespace:mods::util	signature:(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch)
 match_any_of	globals.hpp	/^	static inline bool match_any_of(std::vector<TString> items,TString target) {$/;"	kind:function	line:254	namespace:txt	signature:(std::vector<TString> items,TString target)
@@ -11078,14 +11078,14 @@ mtp_debug	mods/target-practice-db.cpp	38;"	kind:macro	line:38	file:
 mtp_debug	mods/target-practice.cpp	11;"	kind:macro	line:11	file:
 mtp_debug	mods/target-practice.cpp	13;"	kind:macro	line:13	file:
 mtp_debug	mods/target-practice.cpp	62;"	kind:macro	line:62	file:
-mu_debug	mods/util.cpp	1676;"	kind:macro	line:1676	file:
+mu_debug	mods/util.cpp	1664;"	kind:macro	line:1664	file:
 mu_debug	mods/util.cpp	18;"	kind:macro	line:18	file:
 mu_debug	mods/util.cpp	20;"	kind:macro	line:20	file:
 muay_thai	mods/melee/muay-thai-teep.hpp	/^namespace mods::melee::muay_thai {$/;"	kind:namespace	line:7	class:mods::melee	file:
 mud_time_passed	utils.cpp	/^struct time_info_data *mud_time_passed(time_t t2, time_t t1) {$/;"	kind:function	line:419	signature:(time_t t2, time_t t1)
 mud_time_to_secs	utils.cpp	/^time_t mud_time_to_secs(struct time_info_data *now) {$/;"	kind:function	line:440	signature:(struct time_info_data *now)
 mudlog	utils.cpp	/^void mudlog(int type, int level, int file, const char *str, ...) {$/;"	kind:function	line:301	signature:(int type, int level, int file, const char *str, ...)
-multi	mods/util.cpp	/^	std::vector<std::string> parsed_args::multi(std::vector<std::size_t> indexes) {$/;"	kind:function	line:1559	class:mods::util::args::parsed_args	signature:(std::vector<std::size_t> indexes)
+multi	mods/util.cpp	/^	std::vector<std::string> parsed_args::multi(std::vector<std::size_t> indexes) {$/;"	kind:function	line:1547	class:mods::util::args::parsed_args	signature:(std::vector<std::size_t> indexes)
 muscle_memory	mods/help.cpp	/^	HELP_STR muscle_memory= "usage: invoke muscle_memory  \\r\\n"$/;"	kind:member	line:603	namespace:mods::help::pages	file:
 muzzle	mods/rifle-attachments.hpp	/^			obj_ptr_t muzzle;$/;"	kind:member	line:21	struct:mods::rifle_attachments_t	file:	access:public
 muzzle_velocity	mods/ranged-combat-totals.hpp	/^		int muzzle_velocity;$/;"	kind:member	line:72	struct:mods::ranged_combat_totals	file:	access:public
@@ -11224,17 +11224,17 @@ npc_class_types	constants.hpp	/^const char *npc_class_types[] = {$/;"	kind:varia
 npc_steal	spec_procs.cpp	/^void npc_steal(char_data *ch, char_data *victim) {$/;"	kind:function	line:352	signature:(char_data *ch, char_data *victim)
 nput	mods/lmdb.cpp	/^	int _db_handle::nput(void* key,std::size_t key_size,void* value,std::size_t v_size) {$/;"	kind:function	line:607	class:mods::lmdb::_db_handle	signature:(void* key,std::size_t key_size,void* value,std::size_t v_size)
 nr	structs.h	/^	mob_rnum nr;                          \/* Mob's rnum			  *\/$/;"	kind:member	line:1741	struct:char_data	file:	access:public
-nth_has_integer	mods/util.cpp	/^	bool parsed_args::nth_has_integer(std::size_t index) {$/;"	kind:function	line:1490	class:mods::util::args::parsed_args	signature:(std::size_t index)
-nth_has_integer	mods/util.cpp	/^	bool parsed_args::nth_has_integer(std::vector<std::size_t> indices) {$/;"	kind:function	line:1497	class:mods::util::args::parsed_args	signature:(std::vector<std::size_t> indices)
-nth_has_integer	mods/util.cpp	/^	check_parsed_args* check_parsed_args::nth_has_integer(std::size_t index) {$/;"	kind:function	line:1616	class:mods::util::args::check_parsed_args	signature:(std::size_t index)
-nth_has_integer	mods/util.cpp	/^	check_parsed_args* check_parsed_args::nth_has_integer(std::vector<std::size_t> index) {$/;"	kind:function	line:1620	class:mods::util::args::check_parsed_args	signature:(std::vector<std::size_t> index)
-nth_is	mods/util.cpp	/^	bool parsed_args::nth_is(std::size_t index,std::string_view str) {$/;"	kind:function	line:1428	class:mods::util::args::parsed_args	signature:(std::size_t index,std::string_view str)
+nth_has_integer	mods/util.cpp	/^	bool parsed_args::nth_has_integer(std::size_t index) {$/;"	kind:function	line:1478	class:mods::util::args::parsed_args	signature:(std::size_t index)
+nth_has_integer	mods/util.cpp	/^	bool parsed_args::nth_has_integer(std::vector<std::size_t> indices) {$/;"	kind:function	line:1485	class:mods::util::args::parsed_args	signature:(std::vector<std::size_t> indices)
+nth_has_integer	mods/util.cpp	/^	check_parsed_args* check_parsed_args::nth_has_integer(std::size_t index) {$/;"	kind:function	line:1604	class:mods::util::args::check_parsed_args	signature:(std::size_t index)
+nth_has_integer	mods/util.cpp	/^	check_parsed_args* check_parsed_args::nth_has_integer(std::vector<std::size_t> index) {$/;"	kind:function	line:1608	class:mods::util::args::check_parsed_args	signature:(std::vector<std::size_t> index)
+nth_is	mods/util.cpp	/^	bool parsed_args::nth_is(std::size_t index,std::string_view str) {$/;"	kind:function	line:1416	class:mods::util::args::parsed_args	signature:(std::size_t index,std::string_view str)
 nth_is	mods/util.hpp	/^	static inline bool nth_is(std::size_t n,const std::vector<T> vec_args,std::string_view search) {$/;"	kind:function	line:72	namespace:mods::util	signature:(std::size_t n,const std::vector<T> vec_args,std::string_view search)
-nth_is_any	mods/util.cpp	/^	bool parsed_args::nth_is_any(std::size_t index,std::vector<std::string> list_string) {$/;"	kind:function	line:1425	class:mods::util::args::parsed_args	signature:(std::size_t index,std::vector<std::string> list_string)
-nth_is_any	mods/util.cpp	/^	check_parsed_args* check_parsed_args::nth_is_any(std::size_t index,std::vector<std::string> list_string) {$/;"	kind:function	line:1608	class:mods::util::args::check_parsed_args	signature:(std::size_t index,std::vector<std::string> list_string)
+nth_is_any	mods/util.cpp	/^	bool parsed_args::nth_is_any(std::size_t index,std::vector<std::string> list_string) {$/;"	kind:function	line:1413	class:mods::util::args::parsed_args	signature:(std::size_t index,std::vector<std::string> list_string)
+nth_is_any	mods/util.cpp	/^	check_parsed_args* check_parsed_args::nth_is_any(std::size_t index,std::vector<std::string> list_string) {$/;"	kind:function	line:1596	class:mods::util::args::check_parsed_args	signature:(std::size_t index,std::vector<std::string> list_string)
 nth_is_any	mods/util.hpp	/^	static inline bool nth_is_any(std::size_t n,const std::vector<T> vec_args,const std::vector<T>& list_string) {$/;"	kind:function	line:63	namespace:mods::util	signature:(std::size_t n,const std::vector<T> vec_args,const std::vector<T>& list_string)
-nth_matches	mods/util.cpp	/^	bool parsed_args::nth_matches(std::size_t index,std::string_view regex) {$/;"	kind:function	line:1432	class:mods::util::args::parsed_args	signature:(std::size_t index,std::string_view regex)
-nth_matches_any	mods/util.cpp	/^	bool parsed_args::nth_matches_any(std::size_t index,std::vector<std::string_view> regexes) {$/;"	kind:function	line:1445	class:mods::util::args::parsed_args	signature:(std::size_t index,std::vector<std::string_view> regexes)
+nth_matches	mods/util.cpp	/^	bool parsed_args::nth_matches(std::size_t index,std::string_view regex) {$/;"	kind:function	line:1420	class:mods::util::args::parsed_args	signature:(std::size_t index,std::string_view regex)
+nth_matches_any	mods/util.cpp	/^	bool parsed_args::nth_matches_any(std::size_t index,std::vector<std::string_view> regexes) {$/;"	kind:function	line:1433	class:mods::util::args::parsed_args	signature:(std::size_t index,std::vector<std::string_view> regexes)
 null_time	comm.cpp	/^struct timeval null_time;	\/* zero-valued time structure *\/$/;"	kind:variable	line:149	typeref:struct:timeval
 num_directions	mods/scan.hpp	/^		constexpr unsigned num_directions = 6;$/;"	kind:member	line:39	namespace:mods::scan	file:
 num_followers_charmed	utils.cpp	/^int num_followers_charmed(char_data *ch) {$/;"	kind:function	line:520	signature:(char_data *ch)
@@ -11544,25 +11544,25 @@ parse_class	class.cpp	/^player_class_t parse_class(std::string a) {$/;"	kind:fun
 parse_csv_to_task_flag	mods/contract-steps.cpp	/^	task_t parse_csv_to_task_flag(std::string_view csv) {$/;"	kind:function	line:114	namespace:mods::contracts	signature:(std::string_view csv)
 parse_dimensions	mods/builder/coordinates.cpp	/^	std::tuple<bool,str_vec_t> parse_dimensions(str_t input,dimensions_t* output){$/;"	kind:function	line:90	namespace:mods::builder::rectangle_layouts	signature:(str_t input,dimensions_t* output)
 parse_dimensions	mods/builder/rectangle-layouts.cpp	/^	std::tuple<bool,str_vec_t> parse_dimensions(str_t input,dimensions_t* output){$/;"	kind:function	line:90	namespace:mods::builder::rectangle_layouts	signature:(str_t input,dimensions_t* output)
-parse_direction	mods/util.cpp	/^	int parse_direction(std::string_view arg) {$/;"	kind:function	line:916	namespace:mods::util	signature:(std::string_view arg)
-parse_direction	mods/util.cpp	/^	int parse_direction(std::string_view arg, int start_at, int* last_index) {$/;"	kind:function	line:948	namespace:mods::util	signature:(std::string_view arg, int start_at, int* last_index)
-parse_direction_count	mods/util.cpp	/^	std::tuple<bool,direction_t,uint8_t> parse_direction_count(std::vector<std::string>& vec_args) {$/;"	kind:function	line:996	namespace:mods::util	signature:(std::vector<std::string>& vec_args)
-parse_direction_count_optional	mods/util.cpp	/^	std::optional<std::pair<direction_t,uint8_t>> parse_direction_count_optional(std::vector<std::string>& vec_args) {$/;"	kind:function	line:1005	namespace:mods::util	signature:(std::vector<std::string>& vec_args)
-parse_direction_optional	mods/util.cpp	/^	std::optional<direction_t> parse_direction_optional(std::string_view arg) {$/;"	kind:function	line:909	namespace:mods::util	signature:(std::string_view arg)
+parse_direction	mods/util.cpp	/^	int parse_direction(std::string_view arg) {$/;"	kind:function	line:904	namespace:mods::util	signature:(std::string_view arg)
+parse_direction	mods/util.cpp	/^	int parse_direction(std::string_view arg, int start_at, int* last_index) {$/;"	kind:function	line:936	namespace:mods::util	signature:(std::string_view arg, int start_at, int* last_index)
+parse_direction_count	mods/util.cpp	/^	std::tuple<bool,direction_t,uint8_t> parse_direction_count(std::vector<std::string>& vec_args) {$/;"	kind:function	line:984	namespace:mods::util	signature:(std::vector<std::string>& vec_args)
+parse_direction_count_optional	mods/util.cpp	/^	std::optional<std::pair<direction_t,uint8_t>> parse_direction_count_optional(std::vector<std::string>& vec_args) {$/;"	kind:function	line:993	namespace:mods::util	signature:(std::vector<std::string>& vec_args)
+parse_direction_optional	mods/util.cpp	/^	std::optional<direction_t> parse_direction_optional(std::string_view arg) {$/;"	kind:function	line:897	namespace:mods::util	signature:(std::string_view arg)
 parse_enhanced_mob	db.cpp	/^void parse_enhanced_mob(FILE *mob_f, int i, int nr) {$/;"	kind:function	line:1751	signature:(FILE *mob_f, int i, int nr)
 parse_error_to_string	mods/message-server.cpp	/^	std::string parse_error_to_string(const int16_t& e) {$/;"	kind:function	line:48	namespace:mods::message_server	signature:(const int16_t& e)
 parse_espec	db.cpp	/^void parse_espec(char *buf, int i, int nr) {$/;"	kind:function	line:1736	signature:(char *buf, int i, int nr)
-parse_help	mods/util.cpp	/^	bool parse_help(std::string_view argument) {$/;"	kind:function	line:1047	namespace:mods::util	signature:(std::string_view argument)
+parse_help	mods/util.cpp	/^	bool parse_help(std::string_view argument) {$/;"	kind:function	line:1035	namespace:mods::util	signature:(std::string_view argument)
 parse_ip	comm.cpp	/^int parse_ip(const char *addr, struct in_addr *inaddr) {$/;"	kind:function	line:1368	signature:(const char *addr, struct in_addr *inaddr)
 parse_ip	comm.cpp	/^int parse_ip(const char *addr, struct in_addr *inaddr) {$/;"	kind:function	line:1375	signature:(const char *addr, struct in_addr *inaddr)
 parse_ip	comm.cpp	/^int parse_ip(const char *addr, struct in_addr *inaddr) {$/;"	kind:function	line:1389	signature:(const char *addr, struct in_addr *inaddr)
 parse_mobile	db.cpp	/^void parse_mobile(FILE *mob_f, int nr) {$/;"	kind:function	line:1772	signature:(FILE *mob_f, int nr)
 parse_multipart_message	mods/message-server.cpp	/^	std::tuple<int16_t,channel_message_t,std::vector<std::string>> parse_multipart_message(zmq::socket_t* subscriber) {$/;"	kind:function	line:63	namespace:mods::message_server	signature:(zmq::socket_t* subscriber)
-parse_objdir	mods/util.cpp	/^	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg) {$/;"	kind:function	line:1014	namespace:mods::util	signature:(player_ptr_t& player,std::string_view arg)
+parse_objdir	mods/util.cpp	/^	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg) {$/;"	kind:function	line:1002	namespace:mods::util	signature:(player_ptr_t& player,std::string_view arg)
 parse_object	db.cpp	/^char *parse_object(FILE *obj_f, int nr) {$/;"	kind:function	line:1781	signature:(FILE *obj_f, int nr)
-parse_object	mods/util.cpp	/^	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index) {$/;"	kind:function	line:884	namespace:mods::util	signature:(player_ptr_t& player,std::string_view arg, int start_at, int* last_index)
-parse_object_vec	mods/util.cpp	/^	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args) {$/;"	kind:function	line:877	namespace:mods::util	signature:(player_ptr_t& player,std::vector<std::string>& vec_args)
-parse_object_with_capability	mods/util.cpp	/^	obj_ptr_t parse_object_with_capability(player_ptr_t& player,std::string_view arg, int start_at, int* last_index, mods::weapon::type::type_list type, std::vector<int>& types) {$/;"	kind:function	line:968	namespace:mods::util	signature:(player_ptr_t& player,std::string_view arg, int start_at, int* last_index, mods::weapon::type::type_list type, std::vector<int>& types)
+parse_object	mods/util.cpp	/^	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index) {$/;"	kind:function	line:872	namespace:mods::util	signature:(player_ptr_t& player,std::string_view arg, int start_at, int* last_index)
+parse_object_vec	mods/util.cpp	/^	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args) {$/;"	kind:function	line:865	namespace:mods::util	signature:(player_ptr_t& player,std::vector<std::string>& vec_args)
+parse_object_with_capability	mods/util.cpp	/^	obj_ptr_t parse_object_with_capability(player_ptr_t& player,std::string_view arg, int start_at, int* last_index, mods::weapon::type::type_list type, std::vector<int>& types) {$/;"	kind:function	line:956	namespace:mods::util	signature:(player_ptr_t& player,std::string_view arg, int start_at, int* last_index, mods::weapon::type::type_list type, std::vector<int>& types)
 parse_rarity	mods/yaml.cpp	/^	float parse_rarity(const std::string& rarity_string) {$/;"	kind:function	line:116	namespace:mods::yaml	signature:(const std::string& rarity_string)
 parse_simple_mob	db.cpp	/^void parse_simple_mob(FILE *mob_f, int i, int nr) {$/;"	kind:function	line:1568	signature:(FILE *mob_f, int i, int nr)
 parse_sql_mobiles	db.cpp	/^void parse_sql_mobiles() {$/;"	kind:function	line:858	signature:()
@@ -11576,7 +11576,7 @@ parse_targets	mods/mobs/generic-thief.cpp	/^	std::forward_list<generic_thief::ta
 parsed	mods/util.hpp	/^		parsed_args parsed;$/;"	kind:member	line:458	struct:mods::util::args::arglist_parser	file:	access:public
 parsed_args	mods/util.hpp	/^	struct parsed_args {$/;"	kind:struct	line:396	namespace:mods::util::args	file:
 particle_deceleration	mods/help.cpp	/^	HELP_STR particle_deceleration= "usage: invoke particle_deceleration\\r\\n"$/;"	kind:member	line:615	namespace:mods::help::pages	file:
-passed	mods/util.cpp	/^	bool check_parsed_args::passed() {$/;"	kind:function	line:1632	class:mods::util::args::check_parsed_args	signature:()
+passed	mods/util.cpp	/^	bool check_parsed_args::passed() {$/;"	kind:function	line:1620	class:mods::util::args::check_parsed_args	signature:()
 passed_map	mods/util.hpp	/^			std::map<std::string,bool> passed_map;$/;"	kind:member	line:433	struct:mods::util::args::check_parsed_args	file:	access:public
 passwd	structs.h	/^		mods::string passwd;$/;"	kind:member	line:1318	struct:char_player_data	file:	access:public
 password	mods/auto-login.hpp	/^	static std::string password;$/;"	kind:member	line:9	namespace:mods::auto_login	file:
@@ -12558,8 +12558,8 @@ resolver	mods/lmdb/db.hpp	/^	struct resolver {$/;"	kind:struct	line:260	namespac
 resting	mods/resting.cpp	/^namespace mods::resting {$/;"	kind:namespace	line:14	class:mods	file:
 resting	mods/resting.hpp	/^namespace mods::resting {$/;"	kind:namespace	line:6	class:mods	file:
 result	mods/orm/orm-base.hpp	/^			orm_result_t result() const {$/;"	kind:function	line:277	struct:mods::orm::orm_base	access:public	signature:() const
-result	mods/util.cpp	/^	void check_parsed_args::result(std::string f,std::size_t index,bool passed) {$/;"	kind:function	line:1596	class:mods::util::args::check_parsed_args	signature:(std::string f,std::size_t index,bool passed)
-result	mods/util.cpp	/^	void check_parsed_args::result(std::string f,std::string value,bool passed) {$/;"	kind:function	line:1592	class:mods::util::args::check_parsed_args	signature:(std::string f,std::string value,bool passed)
+result	mods/util.cpp	/^	void check_parsed_args::result(std::string f,std::size_t index,bool passed) {$/;"	kind:function	line:1584	class:mods::util::args::check_parsed_args	signature:(std::string f,std::size_t index,bool passed)
+result	mods/util.cpp	/^	void check_parsed_args::result(std::string f,std::string value,bool passed) {$/;"	kind:function	line:1580	class:mods::util::args::check_parsed_args	signature:(std::string f,std::string value,bool passed)
 result_set	mods/orm/mini-game.hpp	/^		pqxx::result result_set;$/;"	kind:member	line:68	struct:mods::orm::mini_game	file:	access:public
 retrieve_item	mods/player-contract-instance.cpp	/^	void player_contract_instance::retrieve_item(obj_ptr_t& object) {$/;"	kind:function	line:543	class:mods::contracts::player_contract_instance	signature:(obj_ptr_t& object)
 returning	mods/sql.hpp	/^			compositor<T>& returning(str_object column) {$/;"	kind:function	line:547	struct:mods::sql::compositor	access:public	signature:(str_object column)
@@ -12948,7 +12948,7 @@ sandbox_data_t	mods/builder.cpp	/^	sandbox_data_t::sandbox_data_t() : m_name("")
 sandbox_data_t	mods/builder.hpp	/^	struct sandbox_data_t {$/;"	kind:struct	line:66	namespace:mods::builder	file:
 sandboxes	mods/builder.cpp	/^	sandbox_list_t sandboxes;$/;"	kind:member	line:571	namespace:mods::builder	file:
 sane_dir	mods/doors.cpp	/^	bool sane_dir(const room_rnum& room_id,const direction_t& dir) {$/;"	kind:function	line:4	namespace:mods::doors	signature:(const room_rnum& room_id,const direction_t& dir)
-sanitize	mods/util.cpp	/^	std::function<void(const std::string&,std::string&)> sanitize = [](const std::string& command,std::string& sanitized) {$/;"	kind:member	line:859	namespace:mods::util	file:
+sanitize	mods/util.cpp	/^	std::function<void(const std::string&,std::string&)> sanitize = [](const std::string& command,std::string& sanitized) {$/;"	kind:member	line:847	namespace:mods::util	file:
 sanitize_file	mods/filesystem.hpp	/^	static inline std::string sanitize_file(std::string_view file) {$/;"	kind:function	line:85	namespace:mods::filesystem	signature:(std::string_view file)
 sanitize_key	mods/lmdb.cpp	/^std::string sanitize_key(std::string key) {$/;"	kind:function	line:821	signature:(std::string key)
 sanitize_table	mods/sql.hpp	/^	static inline std::string sanitize_table(std::string_view table_name) {$/;"	kind:function	line:29	namespace:mods::sql	signature:(std::string_view table_name)
@@ -13016,8 +13016,8 @@ save_footprint	mods/memory.cpp	/^	void save_footprint(T& ptr) {$/;"	kind:functio
 save_from	mods/players/db-load.cpp	/^	void save_from(player_ptr_t& player_ptr,save_from_t from) {$/;"	kind:function	line:81	namespace:mods::players::db_load	signature:(player_ptr_t& player_ptr,save_from_t from)
 save_function	mods/builder.cpp	/^	save_function_t save_function;$/;"	kind:member	line:2133	struct:command_t	file:	access:public
 save_hostile_targets	mods/mobs/smart-mob.cpp	/^	void smart_mob::save_hostile_targets(vec_t<uuid_t>& t) {$/;"	kind:function	line:264	class:mods::mobs::smart_mob	signature:(vec_t<uuid_t>& t)
-save_integer	mods/util.cpp	/^	parsed_args* parsed_args::save_integer(const std::vector<std::size_t>& index) {$/;"	kind:function	line:1461	class:mods::util::args::parsed_args	signature:(const std::vector<std::size_t>& index)
-save_integer	mods/util.cpp	/^	parsed_args* parsed_args::save_integer(std::size_t index) {$/;"	kind:function	line:1467	class:mods::util::args::parsed_args	signature:(std::size_t index)
+save_integer	mods/util.cpp	/^	parsed_args* parsed_args::save_integer(const std::vector<std::size_t>& index) {$/;"	kind:function	line:1449	class:mods::util::args::parsed_args	signature:(const std::vector<std::size_t>& index)
+save_integer	mods/util.cpp	/^	parsed_args* parsed_args::save_integer(std::size_t index) {$/;"	kind:function	line:1455	class:mods::util::args::parsed_args	signature:(std::size_t index)
 save_item_to_db	mods/db.cpp	/^void save_item_to_db(player_ptr_t& player, std::string section_name, std::vector<std::string>& args) {$/;"	kind:function	line:646	signature:(player_ptr_t& player, std::string section_name, std::vector<std::string>& args)
 save_mob_roam_pattern	mods/builder.cpp	/^	std::tuple<bool,std::string> save_mob_roam_pattern(int mob_id,std::string_view pattern) {$/;"	kind:function	line:214	namespace:mods::builder	signature:(int mob_id,std::string_view pattern)
 save_mob_target	mods/builder.cpp	/^	std::tuple<bool,std::string> save_mob_target(int mob_id,std::string targets) {$/;"	kind:function	line:235	namespace:mods::builder	signature:(int mob_id,std::string targets)
@@ -13112,7 +13112,7 @@ seal_room	mods/runners/movement.cpp	/^	void seal_room(step_ptr_t step,direction_
 search	mods/players/search.hpp	/^					search(const scan_results& s) : m_scan_results(s) {$/;"	kind:function	line:15	class:mods::player::util::search	access:public	signature:(const scan_results& s)
 search	mods/players/search.hpp	/^			class search {$/;"	kind:class	line:12	namespace:mods::player::util	file:
 search_block	interpreter.cpp	/^int search_block(char *arg, const char **list, int exact) { \/** FIXME: arg 2  *\/$/;"	kind:function	line:1122	signature:(char *arg, const char **list, int exact)
-search_screen	mods/screen-searcher.hpp	/^	void search_screen(TPlayerPtr& player, const std::vector<std::string>& screen, const std::vector<std::string>& vec_args, std::size_t limit){$/;"	kind:function	line:12	namespace:mods	signature:(TPlayerPtr& player, const std::vector<std::string>& screen, const std::vector<std::string>& vec_args, std::size_t limit)
+search_screen	mods/screen-searcher.hpp	/^	void search_screen(TPlayerPtr& player, const std::vector<std::string>& screen, const std::vector<std::string>& vec_args, std::size_t limit) {$/;"	kind:function	line:12	namespace:mods	signature:(TPlayerPtr& player, const std::vector<std::string>& screen, const std::vector<std::string>& vec_args, std::size_t limit)
 second_	mods/util.hpp	/^			typedef std::chrono::duration<double, std::ratio<1> > second_;$/;"	kind:typedef	line:39	class:mods::util::stopwatch_t	file:	access:private
 secondary	mods/player.cpp	/^	obj_data_ptr_t player::secondary() {$/;"	kind:function	line:1688	class:mods::player	signature:()
 section_key	mods/db.cpp	/^	std::string section_key(std::string section_name,std::string prefix, std::string type) {$/;"	kind:function	line:10	namespace:mods::db	signature:(std::string section_name,std::string prefix, std::string type)
@@ -13602,8 +13602,8 @@ site	db.h	/^	char	site[BANNED_SITE_LENGTH+1];$/;"	kind:member	line:295	struct:ba
 siteok_everyone	config.cpp	/^int siteok_everyone = TRUE;$/;"	kind:variable	line:248
 size	mods/message-server.cpp	/^		std::size_t size;$/;"	kind:member	line:29	struct:mods::message_server::channel_message_t	file:	access:public
 size	mods/util.hpp	/^		std::size_t size;$/;"	kind:member	line:397	struct:mods::util::args::parsed_args	file:	access:public
-size_eq	mods/util.cpp	/^	check_parsed_args* check_parsed_args::size_eq(std::size_t size) {$/;"	kind:function	line:1628	class:mods::util::args::check_parsed_args	signature:(std::size_t size)
-size_gt	mods/util.cpp	/^	check_parsed_args* check_parsed_args::size_gt(std::size_t size) {$/;"	kind:function	line:1624	class:mods::util::args::check_parsed_args	signature:(std::size_t size)
+size_eq	mods/util.cpp	/^	check_parsed_args* check_parsed_args::size_eq(std::size_t size) {$/;"	kind:function	line:1616	class:mods::util::args::check_parsed_args	signature:(std::size_t size)
+size_gt	mods/util.cpp	/^	check_parsed_args* check_parsed_args::size_gt(std::size_t size) {$/;"	kind:function	line:1612	class:mods::util::args::check_parsed_args	signature:(std::size_t size)
 skill	mods/classes/pyrexia.hpp	/^				skillset_t skill;$/;"	kind:member	line:29	struct:mods::classes::pyrexia::skillset_info_t	file:	access:public
 skill	mods/player.cpp	/^	uint16_t player::skill(int t) {$/;"	kind:function	line:1815	class:mods::player	signature:(int t)
 skill_category	mods/orm/skill-trees.hpp	/^		std::string skill_category;$/;"	kind:member	line:13	struct:mods::orm::skill_trees_record_t	file:	access:public
@@ -13890,7 +13890,7 @@ stim_pistol_ammo	mods/classes/medic.cpp	/^	uint8_t& medic::stim_pistol_ammo() {$
 stock	mods/rifle-attachments.hpp	/^			obj_ptr_t stock;$/;"	kind:member	line:23	struct:mods::rifle_attachments_t	file:	access:public
 stoi	mods/orm/util.hpp	/^	T stoi(const std::string& i) {$/;"	kind:function	line:27	namespace:mods::orm::util	signature:(const std::string& i)
 stoi	mods/pq.hpp	/^T stoi(const std::string& i) {$/;"	kind:function	line:220	signature:(const std::string& i)
-stoi	mods/util.cpp	/^	std::optional<int> stoi(std::string_view str) {$/;"	kind:function	line:824	namespace:mods::util	signature:(std::string_view str)
+stoi	mods/util.cpp	/^	std::optional<int> stoi(std::string_view str) {$/;"	kind:function	line:812	namespace:mods::util	signature:(std::string_view str)
 stoi	mods/util.hpp	/^	T stoi(const pqxx::result::reference& i) {$/;"	kind:function	line:242	namespace:mods::util	signature:(const pqxx::result::reference& i)
 stoi	mods/util.hpp	/^	T stoi(const std::string& i) {$/;"	kind:function	line:200	namespace:mods::util	signature:(const std::string& i)
 stoi_optional	mods/util.hpp	/^	std::optional<T> stoi_optional(std::string_view str) {$/;"	kind:function	line:253	namespace:mods::util	signature:(std::string_view str)
@@ -13911,7 +13911,7 @@ stopwatch_t	mods/util.hpp	/^			stopwatch_t() : beg_(clock_::now()) {}$/;"	kind:f
 stopwatch_t	mods/util.hpp	/^	class stopwatch_t {$/;"	kind:class	line:26	namespace:mods::util	file:
 store	mods/loot-container.cpp	/^	void store(player_ptr_t& player, obj_ptr_t&& obj) {$/;"	kind:function	line:18	namespace:mods::loot_container	signature:(player_ptr_t& player, obj_ptr_t&& obj)
 store_mail	mail.cpp	/^void store_mail(long to, long from, char *message_pointer) {$/;"	kind:function	line:297	signature:(long to, long from, char *message_pointer)
-stoul	mods/util.cpp	/^	std::optional<unsigned> stoul(std::string_view str) {$/;"	kind:function	line:817	namespace:mods::util	signature:(std::string_view str)
+stoul	mods/util.cpp	/^	std::optional<unsigned> stoul(std::string_view str) {$/;"	kind:function	line:805	namespace:mods::util	signature:(std::string_view str)
 str	mods/message-server.cpp	/^		std::string str;$/;"	kind:member	line:211	struct:mods::message_server::message_t_string_adaptor_t	file:	access:public
 str	mods/string.cpp	/^	std::string string::str() const {$/;"	kind:function	line:154	class:mods::string	signature:() const
 str	structs.h	/^			char	**str;			\/* for the modify-str system		*\/$/;"	kind:member	line:1700	struct:mods::descriptor_data	file:	access:public
@@ -14189,10 +14189,10 @@ to_direction	mods/util.hpp	/^	int to_direction(TStringObject str) {$/;"	kind:fun
 to_dirstr	mods/doors.hpp	/^	static inline std::string to_dirstr(const int& direction) {$/;"	kind:function	line:68	namespace:mods::doors	signature:(const int& direction)
 to_durability_profile	mods/yaml.hpp	/^	static inline durability_profile_type_t to_durability_profile(std::string_view dp) {$/;"	kind:function	line:122	namespace:mods::yaml	signature:(std::string_view dp)
 to_hex_digit	mods/util-conf.hpp	/^			char to_hex_digit(unsigned int target) {$/;"	kind:function	line:55	namespace:mods::util::conf	signature:(unsigned int target)
-to_int_range	mods/util.cpp	/^std::vector<T> to_int_range(auto begin,auto end, const std::vector<std::string>& vec_args) {$/;"	kind:function	line:1381	signature:(auto begin,auto end, const std::vector<std::string>& vec_args)
-to_int_range	mods/util.cpp	/^std::vector<T> to_int_range(const std::vector<std::string>& vec_args,std::size_t index) {$/;"	kind:function	line:1390	signature:(const std::vector<std::string>& vec_args,std::size_t index)
+to_int_range	mods/util.cpp	/^std::vector<T> to_int_range(auto begin,auto end, const std::vector<std::string>& vec_args) {$/;"	kind:function	line:1369	signature:(auto begin,auto end, const std::vector<std::string>& vec_args)
+to_int_range	mods/util.cpp	/^std::vector<T> to_int_range(const std::vector<std::string>& vec_args,std::size_t index) {$/;"	kind:function	line:1378	signature:(const std::vector<std::string>& vec_args,std::size_t index)
 to_move	mods/player.hpp	/^			auto& to_move() {$/;"	kind:function	line:923	struct:mods::player	access:public	signature:()
-to_player_class	mods/util.cpp	/^	player_class_t to_player_class(std::string_view str) {$/;"	kind:function	line:1101	namespace:mods::util	signature:(std::string_view str)
+to_player_class	mods/util.cpp	/^	player_class_t to_player_class(std::string_view str) {$/;"	kind:function	line:1089	namespace:mods::util	signature:(std::string_view str)
 to_room	structs.h	/^	room_rnum to_room;		\/* Where direction leads (NOWHERE)	*\/$/;"	kind:member	line:1118	struct:obj_data::room_direction_data	file:	access:public
 to_string	globals.hpp	/^inline std::string const& to_string(std::string const& s) {$/;"	kind:function	line:286	class:std	signature:(std::string const& s)
 to_string	mods/aoe.hpp	/^	static inline std::string to_string(const types_t& type) {$/;"	kind:function	line:31	namespace:mods::aoe	signature:(const types_t& type)
@@ -14804,7 +14804,7 @@ yaml	mods/weapon.hpp	/^	namespace yaml {$/;"	kind:namespace	line:139	namespace:m
 yaml	mods/yaml.cpp	/^namespace mods::yaml {$/;"	kind:namespace	line:20	class:mods	file:
 yaml	mods/yaml.hpp	/^namespace mods::yaml {$/;"	kind:namespace	line:11	class:mods	file:
 yaml	mods/yaml.hpp	/^namespace mods::yaml {$/;"	kind:namespace	line:66	class:mods	file:
-yaml_caps_to_lower	mods/util.cpp	/^	std::string yaml_caps_to_lower(std::string type) {$/;"	kind:function	line:1243	namespace:mods::util	signature:(std::string type)
+yaml_caps_to_lower	mods/util.cpp	/^	std::string yaml_caps_to_lower(std::string type) {$/;"	kind:function	line:1231	namespace:mods::util	signature:(std::string type)
 yaml_description_t	mods/yaml.hpp	/^		yaml_description_t() :$/;"	kind:function	line:149	struct:mods::yaml::yaml_description_t	access:public	signature:()
 yaml_description_t	mods/yaml.hpp	/^	struct yaml_description_t {$/;"	kind:struct	line:147	namespace:mods::yaml	file:
 yaml_feed_exceptions	mods/object-utils.hpp	/^	static yaml_exception_list_t yaml_feed_exceptions;$/;"	kind:member	line:75	namespace:mods::object_utils	file:
@@ -14818,15 +14818,15 @@ yaml_file	mods/weapon.hpp	/^	static inline std::string yaml_file(sentinel::prima
 yaml_file	mods/weapon.hpp	/^	static inline std::string yaml_file(sniper::primary_choice_t s) {$/;"	kind:function	line:720	namespace:mods::weapon	signature:(sniper::primary_choice_t s)
 yaml_file	mods/weapon.hpp	/^	static inline std::string yaml_file(support::primary_choice_t s) {$/;"	kind:function	line:700	namespace:mods::weapon	signature:(support::primary_choice_t s)
 yaml_file_doesnt_exist	mods/object-utils.hpp	/^	static inline void yaml_file_doesnt_exist(std::string from_where) {$/;"	kind:function	line:92	namespace:mods::object_utils	signature:(std::string from_where)
-yaml_file_exists	mods/util.cpp	/^	bool yaml_file_exists(std::string path) {$/;"	kind:function	line:1320	namespace:mods::util	signature:(std::string path)
-yaml_file_path_is_sane	mods/util.cpp	/^	bool yaml_file_path_is_sane(std::string path) {$/;"	kind:function	line:1189	namespace:mods::util	signature:(std::string path)
+yaml_file_exists	mods/util.cpp	/^	bool yaml_file_exists(std::string path) {$/;"	kind:function	line:1308	namespace:mods::util	signature:(std::string path)
+yaml_file_path_is_sane	mods/util.cpp	/^	bool yaml_file_path_is_sane(std::string path) {$/;"	kind:function	line:1177	namespace:mods::util	signature:(std::string path)
 yaml_import	mods/object-utils.hpp	/^	static inline obj_ptr_t yaml_import(std::string object_type,std::string in_yaml_file) {$/;"	kind:function	line:394	namespace:mods::object_utils	signature:(std::string object_type,std::string in_yaml_file)
 yaml_initiator	mods/object-utils.hpp	/^	static std::string yaml_initiator = "";$/;"	kind:member	line:35	namespace:mods::object_utils	file:
-yaml_int_to_string	mods/util.cpp	/^	std::string yaml_int_to_string(int type) {$/;"	kind:function	line:1192	namespace:mods::util	signature:(int type)
+yaml_int_to_string	mods/util.cpp	/^	std::string yaml_int_to_string(int type) {$/;"	kind:function	line:1180	namespace:mods::util	signature:(int type)
 yaml_list	mods/forge-engine/generated-armor.cpp	/^	const std::vector<std::string>& generated_armor_t::yaml_list(armor_types_t t) {$/;"	kind:function	line:112	class:mods::forge_engine::generated_armor_t	signature:(armor_types_t t)
 yaml_list	mods/forge-engine/generated-rifle.cpp	/^	const std::vector<std::string>& generated_rifle_t::yaml_list(rifle_types_t t) {$/;"	kind:function	line:60	class:mods::forge_engine::generated_rifle_t	signature:(rifle_types_t t)
 yaml_map	mods/rifle-attachments.cpp	/^	std::map<std::string,std::string> rifle_attachments_t::yaml_map() {$/;"	kind:function	line:238	class:mods::rifle_attachments_t	signature:()
-yaml_string_to_int	mods/util.cpp	/^	int yaml_string_to_int(std::string type) {$/;"	kind:function	line:1211	namespace:mods::util	signature:(std::string type)
+yaml_string_to_int	mods/util.cpp	/^	int yaml_string_to_int(std::string type) {$/;"	kind:function	line:1199	namespace:mods::util	signature:(std::string type)
 yaml_transaction_id	mods/object-utils.hpp	/^	static uint32_t yaml_transaction_id = 0;$/;"	kind:member	line:36	namespace:mods::object_utils	file:
 year	mods/date-time.cpp	/^	static uint8_t year;$/;"	kind:member	line:69	namespace:mods::date_time	file:
 year	structs.h	/^	sh_int year;$/;"	kind:member	line:1289	struct:time_info_data	file:	access:public
