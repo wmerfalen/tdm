@@ -991,13 +991,7 @@ void heartbeat(int pulse) {
 	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION())) {
 		mods::rooms::process_fire_damage();
 	}
-	if(!(pulse % PULSE_PRINT_MEMORY_FOOTPRINTS)) {
-		mods::memory::print_footprints();
-	}
 
-	if(!(pulse % PULSE_PRINT_TICKS_PER_MINUTE)) {
-		log(CAT("Ticks per minute: ",mods::globals::defer_queue->get_ticks_per_minute()).c_str());
-	}
 	if(!(pulse % PULSE_ZONE)) {
 #ifdef __MENTOC_SHOW_ZONE_PULSE_CALL_DEBUG_OUTPUT__
 		std::cerr << green_str("pulse % PULSE_ZONE. calling mods::zone::zone_update()") << "\n";
@@ -1041,9 +1035,6 @@ void heartbeat(int pulse) {
 		}
 	}
 
-	if(!(pulse % PULSE_USAGE)) {
-		record_usage();
-	}
 	if(!(pulse % PULSE_REMINDERS_TICK())) {
 		mods::players::friendly_reminders::send();
 	}

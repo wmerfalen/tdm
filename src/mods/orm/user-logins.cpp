@@ -34,7 +34,7 @@ namespace mods::orm {
 	}
 	int16_t user_logins::load_by_username(std::string username) {
 		init();
-		return std::get<0>(this->read<user_logins>(this,this->username_column(),username));
+		return std::get<0>(this->read_normalized<user_logins>(this,this->username_column(),username));
 	}
 	void user_logins::feed_multi(pqxx::result& in_rows) {
 		rows.clear();

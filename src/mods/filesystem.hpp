@@ -81,6 +81,18 @@ namespace mods::filesystem {
 		return cleaned;
 	}
 
+
+	static inline std::string sanitize_file(std::string_view file) {
+		std::string cleaned = "";
+
+		for(const auto& ch : file) {
+			if(isalpha(ch) || isdigit(ch) || ch == '.' || ch == '_') {
+				cleaned += ch;
+			}
+		}
+		return cleaned;
+	}
+
 	static inline void append_to_logins_file(std::string_view user_name, std::string_view ip) {
 		std::string cleaned = sanitize_user_name(user_name);
 
@@ -109,13 +121,7 @@ namespace mods::filesystem {
 				mkdir(base_dir.data(),0755);
 			}
 		}
-		//std::cerr << "####################################################################\n";
-		//std::cerr << "# USER DIR: '" << base_dir << "'\n";
-		//std::cerr << "####################################################################\n";
-		base_dir += CAT("/",file.data());
-		//std::cerr << "####################################################################\n";
-		//std::cerr << "# FILE: '" << base_dir << "'\n";
-		//std::cerr << "####################################################################\n";
+		base_dir += CAT("/",sanitize_file(file.data()));
 		file_append(base_dir,guts);
 	}
 };//end namespace

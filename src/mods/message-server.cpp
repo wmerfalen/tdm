@@ -6,7 +6,9 @@
 #include "orm/connector.hpp"
 #include "message-parser.hpp"
 #include "filesystem.hpp"
+#include "memory.hpp"
 
+extern void record_usage();
 namespace mods::message_server {
 #ifdef __MENTOC_SHOW_ZEROMQ_DEBUG__
 #define m_debug(A) mentoc_prefix_debug(CAT(__FILE__,":",__LINE__,":",__FUNCTION__)) << A << "\n";
@@ -122,11 +124,19 @@ namespace mods::message_server {
 			}
 		}
 	}
+
+	/**
+	 * Called every time a user connects and authenticates
+	 * fully (username and password accepted) and is
+	 * read to enter the game.
+	 */
 	void user_connection_logger() {
 		m_debug("ENTRY");
 		zmq::socket_t subscriber(fetch_context(), zmq::socket_type::sub);
 		subscriber.connect(mods::message_server::queue.data());
-		std::unique_ptr<pqxx::connection> pq_con = mods::orm::connector::make();
+		auto pq_con = mods::orm::connector::make();
+		mods::orm::user_logins orm;
+		orm.use_connection(pq_con.get());
 
 		subscribe_to(&subscriber, {
 			CHAN_USER_LOGGED_IN,
@@ -146,9 +156,19 @@ namespace mods::message_server {
 			debug_dump_list();
 
 			assert(list.size() > 1);
-			mods::orm::user_logins orm;
-			orm.use_connection(pq_con.get());
-			orm.user_logged_in(list[0],list[2]);
+			orm.ip_addresses.clear();
+			orm.rows.clear();
+			orm.load_by_username(list[2]);
+			bool found = false;
+			for(const auto& ip : orm.ip_addresses) {
+				if(ip.compare(list[0].c_str()) == 0) {
+					found = true;
+					break;
+				}
+			}
+			if(!found) {
+				orm.user_logged_in(list[0],list[2]);
+			}
 		}
 	}
 
@@ -285,6 +305,18 @@ namespace mods::message_server {
 		publish(CHAN_BAN_USERNAME,username);
 	}
 
+	/**
+	 * Casually timed minute tasks that the main thread doesn't necessarily *have* to do.
+	 */
+	void minute_tasks() {
+		while(!shutdown_now) {
+			log(CAT("Ticks per minute: ",mods::globals::defer_queue->get_ticks_per_minute()).c_str());
+			mods::memory::print_footprints();
+			record_usage();
+			std::this_thread::sleep_for(std::chrono::milliseconds(60 * 1000));
+		}
+	}
+
 	void user_connection_rejected(const sockaddr_in& peer,hostent* from) {
 		std::vector<std::string> payload = {
 			inet_ntoa(peer.sin_addr),
@@ -308,22 +340,14 @@ namespace mods::message_server {
 		return buffer;
 	}
 	void publish(const channel_t& channel, const std::string&  msg) {
-#ifdef __MENTOC_USE_TCP_ZEROMQ__
-		auto& publisher = push_socket();
-#else
 		auto& publisher = pub_socket();
-#endif
 		std::string m = CAT("{",msg.length(),"}",msg);
 		auto buffer = construct_payload(channel,m,++message_counter,true);
 		publisher.send(zmq::buffer(to_string(channel)),zmq::send_flags::sndmore);
 		publisher.send(zmq::const_buffer((void*)buffer.data(),buffer.size()));
 	}
 	void publish(const channel_t& channel, const std::vector<std::string>& list) {
-#ifdef __MENTOC_USE_TCP_ZEROMQ__
-		auto& publisher = push_socket();
-#else
 		auto& publisher = pub_socket();
-#endif
 		const auto& message_id = ++message_counter;
 		std::string msg;
 		for(auto i = 0; i < list.size(); i++) {
@@ -339,6 +363,7 @@ namespace mods::message_server {
 		thread_list().push_front(std::thread(user_connection_subscriber));
 		thread_list().push_front(std::thread(shutdown_subscriber));
 		thread_list().push_front(std::thread(user_connection_logger));
+		thread_list().push_front(std::thread(minute_tasks));
 		for(auto& thread : thread_list()) {
 			thread.detach();
 		}
