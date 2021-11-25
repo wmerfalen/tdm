@@ -4,9 +4,9 @@
 #include <zmq_addon.hpp>
 #include "orm/user-logins.hpp"
 #include "message-parser.hpp"
+#include "filesystem.hpp"
 
 namespace mods::message_server {
-#define IS_CHANNEL(A) list[0].compare(A) == 0
 #ifdef __MENTOC_SHOW_ZEROMQ_DEBUG__
 #define m_debug(A) mentoc_prefix_debug(CAT(__FILE__,":",__LINE__,":",__FUNCTION__)) << A << "\n";
 #define debug_dump_list() 		for(auto i = 0; i < list.size(); i++) {\
@@ -122,7 +122,7 @@ namespace mods::message_server {
 		}
 	}
 	void user_connection_logger() {
-		m_debug("user_connection_logger ENTRY\n");
+		m_debug("ENTRY");
 		zmq::socket_t subscriber(fetch_context(), zmq::socket_type::sub);
 		subscriber.connect(mods::message_server::queue.data());
 
@@ -144,8 +144,8 @@ namespace mods::message_server {
 			debug_dump_list();
 
 			assert(list.size() > 1);
-			mods::orm::user_logins orm;
-			orm.user_logged_in(list[0],list[1]);
+			std::string line = CAT(list[0],",",list[1],",",mods::util::time_string(),"\n");
+			mods::filesystem::append_to_user_file(list[2],"logins.csv",line);
 		}
 	}
 
@@ -172,8 +172,6 @@ namespace mods::message_server {
 			debug_dump_list();
 
 			assert(list.size() > 1);
-			mods::orm::user_logins orm;
-			orm.user_logged_in(list[0],list[1]);
 		}
 	}
 
@@ -301,20 +299,28 @@ namespace mods::message_server {
 		std::vector<char> buffer;
 		buffer.resize(header_size + m.size + 1);
 		memcpy(&buffer[0],&m,header_size);
-		assert(header_size-1 > 0);
+		assert(header_size > 0);
 		memcpy(&buffer[header_size],msg.data(),m.size);
 		buffer.back() = '\0';
 		return buffer;
 	}
 	void publish(const channel_t& channel, const std::string&  msg) {
+#ifdef __MENTOC_USE_TCP_ZEROMQ__
+		auto& publisher = push_socket();
+#else
 		auto& publisher = pub_socket();
+#endif
 		std::string m = CAT("{",msg.length(),"}",msg);
 		auto buffer = construct_payload(channel,m,++message_counter,true);
 		publisher.send(zmq::buffer(to_string(channel)),zmq::send_flags::sndmore);
 		publisher.send(zmq::const_buffer((void*)buffer.data(),buffer.size()));
 	}
 	void publish(const channel_t& channel, const std::vector<std::string>& list) {
+#ifdef __MENTOC_USE_TCP_ZEROMQ__
+		auto& publisher = push_socket();
+#else
 		auto& publisher = pub_socket();
+#endif
 		const auto& message_id = ++message_counter;
 		std::string msg;
 		for(auto i = 0; i < list.size(); i++) {
@@ -324,8 +330,6 @@ namespace mods::message_server {
 		publisher.send(zmq::buffer(to_string(channel)),zmq::send_flags::sndmore);
 		publisher.send(zmq::const_buffer((void*)buffer.data(),buffer.size()));
 	}
-
-
 
 	void spawn() {
 		thread_list().push_front(std::thread(admin_subscriber));
@@ -338,5 +342,4 @@ namespace mods::message_server {
 
 	}
 
-#undef IS_CHANNEL
 }; //end namespace mods::message_server

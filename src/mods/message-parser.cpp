@@ -3,12 +3,24 @@
 #include "util.hpp"
 
 namespace mods::message_parser {
+#ifdef __MENTOC_SHOW_ZEROMQ_DEBUG__
+#define m_debug(A) mentoc_prefix_debug(CAT(__FILE__,":",__LINE__,":",__FUNCTION__)) << A << "\n";
+#define debug_dump_list() 		for(auto i = 0; i < list.size(); i++) {\
+				m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n");\
+				m_debug("[" << i << "]->'" << list[i] << "'\n");\
+				m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n");\
+			}
+#else
+#define m_debug(A)
+#define debug_dump_list()
+#endif
+
 	std::vector<std::string> extract_entries(std::string_view msg) {
-		std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
-		std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
-		std::cerr << "msg: '" << msg << "'\n";
-		std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
-		std::cerr << "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n";
+		m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n");
+		m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n");
+		m_debug("msg: '" << msg << "'\n");
+		m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n");
+		m_debug("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\n");
 
 		std::vector<std::string> entries;
 		bool size_parsed = 0;
@@ -76,4 +88,5 @@ namespace mods::message_parser {
 		}
 		return entries;
 	}
+#undef m_debug
 };//end namespace mods::message_parser

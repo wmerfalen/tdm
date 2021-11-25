@@ -17,12 +17,6 @@ namespace mods::orm {
 	 * @return
 	 */
 	void user_logins::user_logged_in(std::string ip,std::string user_name) {
-		this->read_normalized<user_logins>(this,this->username_column(),user_name);
-		for(const auto& stored_ip : ip_addresses) {
-			if(stored_ip.compare(ip.c_str()) == 0) {
-				return;
-			}
-		}
 		init();
 		u_username = user_name;
 		u_ip_address = ip;
