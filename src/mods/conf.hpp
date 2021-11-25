@@ -29,5 +29,7 @@ namespace mods::conf {
 	constexpr static std::string_view postgres_port = "5432";
 #endif
 	std::string pq_connection(std::map<std::string,std::string>);
+	std::string pq_connection();
+	void set_credentials(std::map<std::string,std::string>);
 };
 #endif

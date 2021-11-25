@@ -59,11 +59,15 @@ namespace mods::orm {
 
 	template <typename TClassType,typename TPrimaryType>
 	struct orm_base {
+			void use_connection(pqxx::connection* pq_con) {
+				m_con = pq_con;
+			}
 			const char* table = "player-unknowns";
 			strmap_t exported_data;
 			std::vector<std::string> accumulators;
 			orm_base() {
 				save_error_logs = false;
+				m_con = mods::globals::pq_con.get();
 			}
 			virtual const std::vector<std::string>& accumulator_slot_list() const {
 				return accumulators;
@@ -265,6 +269,7 @@ namespace mods::orm {
 			}
 
 			bool loaded;
+			pqxx::connection* m_con;
 			uint64_t id;
 			long created_at;
 			long updated_at;

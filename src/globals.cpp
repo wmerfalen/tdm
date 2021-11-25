@@ -424,13 +424,14 @@ namespace mods {
 			}
 			bool connected_to_postgres = false;
 			try {
-				std::string connection_string = mods::conf::pq_connection({
+				mods::conf::set_credentials({
 					{"port",postgres_port},
 					{"user",postgres_user},
 					{"password",postgres_password},
 					{"host",postgres_host},
 					{"dbname",postgres_dbname}}
-				                                                         ).c_str();
+				                           );
+				std::string connection_string = mods::conf::pq_connection().c_str();
 				pq_con = std::make_unique<pqxx::connection>(connection_string.c_str());
 				connected_to_postgres = true;
 			} catch(const std::exception& e) {

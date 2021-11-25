@@ -37,6 +37,9 @@ namespace mods::globals {
 inline mods::pq::transaction txn() {
 	return mods::pq::transaction(*mods::globals::pq_con);
 }
+inline mods::pq::transaction txn(pqxx::connection* connection_to_use) {
+	return mods::pq::transaction(*connection_to_use);
+}
 
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 

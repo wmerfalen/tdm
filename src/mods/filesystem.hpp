@@ -81,7 +81,7 @@ namespace mods::filesystem {
 		return cleaned;
 	}
 
-	static inline void append_to_user_file(std::string_view user_name, std::string_view file,const std::string& guts) {
+	static inline void append_to_logins_file(std::string_view user_name, std::string_view ip) {
 		std::string cleaned = sanitize_user_name(user_name);
 
 		std::string base_dir = current_working_directory() + "/../log";
@@ -93,13 +93,29 @@ namespace mods::filesystem {
 				mkdir(base_dir.data(),0755);
 			}
 		}
-		std::cerr << "####################################################################\n";
-		std::cerr << "# USER DIR: '" << base_dir << "'\n";
-		std::cerr << "####################################################################\n";
+		base_dir += CAT("/logins.csv");
+		file_append(base_dir,CAT(user_name.data(),",",ip.data(),",",mods::util::time_string()));
+	}
+
+	static inline void append_to_user_logins_file(std::string_view user_name, std::string_view file,const std::string& guts) {
+		std::string cleaned = sanitize_user_name(user_name);
+
+		std::string base_dir = current_working_directory() + "/../log";
+		for(const std::string& dir : {
+		            "logins",cleaned.c_str()
+		        }) {
+			base_dir += CAT("/",dir);
+			if(is_directory(base_dir) == false) {
+				mkdir(base_dir.data(),0755);
+			}
+		}
+		//std::cerr << "####################################################################\n";
+		//std::cerr << "# USER DIR: '" << base_dir << "'\n";
+		//std::cerr << "####################################################################\n";
 		base_dir += CAT("/",file.data());
-		std::cerr << "####################################################################\n";
-		std::cerr << "# FILE: '" << base_dir << "'\n";
-		std::cerr << "####################################################################\n";
+		//std::cerr << "####################################################################\n";
+		//std::cerr << "# FILE: '" << base_dir << "'\n";
+		//std::cerr << "####################################################################\n";
 		file_append(base_dir,guts);
 	}
 };//end namespace

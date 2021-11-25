@@ -3,6 +3,7 @@
 #include <zmq.hpp>
 #include <zmq_addon.hpp>
 #include "orm/user-logins.hpp"
+#include "orm/connector.hpp"
 #include "message-parser.hpp"
 #include "filesystem.hpp"
 
@@ -125,6 +126,7 @@ namespace mods::message_server {
 		m_debug("ENTRY");
 		zmq::socket_t subscriber(fetch_context(), zmq::socket_type::sub);
 		subscriber.connect(mods::message_server::queue.data());
+		std::unique_ptr<pqxx::connection> pq_con = mods::orm::connector::make();
 
 		subscribe_to(&subscriber, {
 			CHAN_USER_LOGGED_IN,
@@ -144,8 +146,9 @@ namespace mods::message_server {
 			debug_dump_list();
 
 			assert(list.size() > 1);
-			std::string line = CAT(list[0],",",list[1],",",mods::util::time_string(),"\n");
-			mods::filesystem::append_to_user_file(list[2],"logins.csv",line);
+			mods::orm::user_logins orm;
+			orm.use_connection(pq_con.get());
+			orm.user_logged_in(list[0],list[2]);
 		}
 	}
 
