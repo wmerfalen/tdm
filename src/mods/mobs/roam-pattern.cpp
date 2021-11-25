@@ -34,7 +34,7 @@ namespace mods::mobs::roam_pattern {
 		std::string storage;
 		if(has_roam_pattern(vnum,&storage)) {
 			m_debug("mob has roam pattern: " << vnum << ", itis: '" << storage << "'");
-			if(world[room_id].name.str().find_first_of(storage.c_str()) != std::string::npos) {
+			if(world[room_id].name.str().find(storage.c_str()) != std::string::npos) {
 				m_debug("matched");
 				return true;
 			}

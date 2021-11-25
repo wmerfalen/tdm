@@ -330,4 +330,26 @@ static inline std::vector<direction_t>& directions() {
 	return directions;
 }
 #define OBJFIND(NAME,player) mods::find::obj(NAME,player)
+static inline std::pair<bool,std::shared_ptr<room_data>> room(auto player) {
+	if(player->room() > world.size()) {
+		return {0,nullptr};
+	}
+	return {1,world[player->room()]};
+}
+template <typename T>
+static inline auto pluck_random(T c) {
+	T a;
+	if(c.size() == 0) {
+		return a;
+	}
+	return c[rand_number(0,c.size()-1)];
+}
+template <typename T>
+static inline auto pluck_random_ref(const T& c) {
+	T a;
+	if(c.size() == 0) {
+		return a;
+	}
+	return c[rand_number(0,c.size()-1)];
+}
 #endif

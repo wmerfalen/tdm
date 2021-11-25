@@ -201,7 +201,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/melee-combatant mods/mobs/melee-combatant-behaviour-tree \
 					 mods/loot-container mods/explosive mods/glass mods/bleed mods/armor \
 					 mods/players/friendly-reminders mods/players/event-messages \
-					 mods/mobs/defiler mods/resting mods/weapons/damage-decisions \
+					 mods/mobs/defiler mods/mobs/defiler-behaviour-tree \
+					 mods/resting mods/weapons/damage-decisions \
 					 mods/mp mods/classes/contagion mods/orm/contagion \
 					 mods/melee/combat-order mods/melee/stance mods/melee/main \
 					 mods/melee/damage-types mods/corpse mods/fire \
@@ -211,7 +212,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/combat-composer/engage-target mods/combat-composer/spray-target \
 					 mods/combat-composer/shared \
 					 mods/json/export \
-					 mods/mobs/resistance mods/find mods/contract-defiler \
+					 mods/mobs/resistance mods/find mods/contract-defiler mods/sneak \
 					 mods/message-server mods/message-parser \
 					 mods/orm/admin/frozen mods/ban-system mods/orm/admin/banned \
 					 mods/orm/user-logins

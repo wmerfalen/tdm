@@ -1,4 +1,18 @@
 # The Defiler
+- Frozen section of Allied Food Market
+- Wields:
+	- SCAR-H plus incendiary rounds
+	- Shock Naginata
+- Behaviour:
+	- Is a stationary target
+	- Snipes from his room
+	- If gets sniped, phases out of room and into a random one
+	- Ensnares victims using demonic incantations
+
+
+
+
+# The Defiler
 
 Reports of an underground organization have been circulating regarding the 
 Allied Foods market. From what we can gather, the market has not hired from

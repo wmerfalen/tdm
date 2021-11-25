@@ -28,4 +28,7 @@ namespace mods::rand {
 	}
 };
 uint64_t rand_xoroshiro();
+static inline bool chance(uint8_t chance) {
+	return mods::rand::chance(chance);
+}
 #endif

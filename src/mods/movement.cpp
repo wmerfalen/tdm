@@ -41,6 +41,47 @@ namespace mods::movement {
 		player->moving_to_room() = move;
 		return move;
 	}
+#if 0
+	bool necromancer_move_to(player_ptr_t& player,const room_rnum& room, uint8_t necrowalk_skill_level) {
+		player->moving_to_room() = true;
+		bool move = true;
+		auto& current = player->room();
+		auto list = mods::demolitions::claymores_in(room);
+		/** current room */
+		int8_t exit = -1;
+		int8_t heading = -1;
+		for(const auto& dir : world[current].directions()) {
+			if(world[current].dir_option[dir] && world[current].dir_option[dir]->to_room == room) {
+				exit = OPPOSITE_DIR(dir);
+				heading = dir;
+				break;
+			}
+		}
+#ifdef __MENTOC_NECROWALK_CANNOT_IGNORE_CLAYMORES__
+		/** check the current room. if the exit the user is trying has
+		 * a claymore. blow it up
+		 */
+		for(const auto& obj_uuid : mods::demolitions::claymores_in(current)) {
+			auto obj = optr_by_uuid(obj_uuid);
+			if(obj->get_owner() != player->uuid() && mods::object_utils::claymore_installed_at(obj) == heading) {
+				mods::projectile::explode(current,obj->uuid,player->uuid());
+				player->moving_to_room() = false;
+				return false;
+			}
+		}
+		for(const auto& obj_uuid : list) {
+			auto obj = optr_by_uuid(obj_uuid);
+			if(obj->get_owner() != player->uuid() && mods::object_utils::claymore_installed_at(obj) == exit) {
+				mods::projectile::explode(room,obj->uuid,player->uuid());
+				move = false;
+			}
+		}
+#endif
+		player->moving_to_room() = move;
+		return move;
+
+	}
+#endif
 	bool force_move_to(player_ptr_t& player,const room_rnum& target_room) {
 		if(target_room < world.size()) {
 			std::string msg = "You leave the room";

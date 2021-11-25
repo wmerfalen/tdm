@@ -143,7 +143,7 @@ namespace mods::mobs {
 				DEFILER_NONE = -1,
 				DEFILER_ROAM = 0,
 				DEFILER_HOSTILE,
-				DEFILER_DAGGER_ATTACK,
+				//DEFILER_DAGGER_ATTACK,
 				DEFILER_CORPSE_EXPLOSION_ATTACK,
 				DEFILER_ENSNARE_ATTACK,
 				DEFILER_DESPERATION_MOVE,
@@ -167,6 +167,20 @@ namespace mods::mobs {
 			void set_behavior_tree_directly(const btree_t& t);
 			bool has_tree();
 			btree_t get_tree();
+
+
+			/**
+			 * When certain criteria is met, the defiler will respond accordingly.
+			 * These functions help keep track of what that criteria is
+			 */
+
+			/**
+			 * Model the behaviour of the defiler slightly after the
+			 * first boss in nuclear throne.
+			 *
+			 * [hostile]
+			 */
+			void hostile_phase_1();
 
 			/**====================================================*/
 			/** preferred construct method */
@@ -206,6 +220,7 @@ namespace mods::mobs {
 			void found_item(const mods::scan::vec_player_data_element& data);
 			void attacked(const feedback_t& feedback);
 			void door_entry_event(player_ptr_t& player);
+			void found_target(player_ptr_t& player);
 
 			/**===================*/
 			/** calculate heading */
@@ -226,6 +241,7 @@ namespace mods::mobs {
 			const uuidlist_t& get_remembered_items() const;
 			bool has_found_item();
 			void set_found_item(bool status);
+			std::vector<std::string>& roaming_patterns() const;
 
 			/** rival npc helpers */
 			bool is_rival(player_ptr_t& player);
@@ -253,6 +269,8 @@ namespace mods::mobs {
 			 */
 			void shout_to_area(uint8_t e_msg);
 
+			using weapons_list_t = std::array<obj_ptr_t,4>;
+			virtual weapons_list_t& weapons();
 
 			/**
 			 * =============================
@@ -265,6 +283,8 @@ namespace mods::mobs {
 			 *==============================
 			 */
 			void telegraph_action(uint8_t action);
+			void reset_last_attacker();
+			std::pair<bool,std::string> move_to(const direction_t& dir) override;
 
 		private:
 			player_ptr_t get_next_attacking_priority();
@@ -278,6 +298,8 @@ namespace mods::mobs {
 			bool m_found_item;
 			std::vector<std::string> m_random_acts;
 			std::forward_list<obj_ptr_t> m_backpack;
+			weapons_list_t m_weapons;
+			uint8_t m_cant_find;
 	};
 
 	std::forward_list<std::shared_ptr<defiler>>& defiler_list();
