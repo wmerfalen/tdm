@@ -202,6 +202,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/loot-container mods/explosive mods/glass mods/bleed mods/armor \
 					 mods/players/friendly-reminders mods/players/event-messages \
 					 mods/mobs/defiler mods/mobs/defiler-behaviour-tree \
+					 mods/ensnare \
 					 mods/resting mods/weapons/damage-decisions \
 					 mods/mp mods/classes/contagion mods/orm/contagion \
 					 mods/melee/combat-order mods/melee/stance mods/melee/main \
@@ -215,7 +216,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/resistance mods/find mods/contract-defiler mods/sneak \
 					 mods/message-server mods/message-parser \
 					 mods/orm/admin/frozen mods/ban-system mods/orm/admin/banned \
-					 mods/orm/user-logins
+					 mods/orm/user-logins \
+					 mods/admin-tools/stay mods/orm/admin/stay
 
 					 #mods/orm/admin/muted \
 

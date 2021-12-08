@@ -63,6 +63,8 @@ INIT(mods::melee::stance);
 INIT(mods::melee::main);
 INIT(mods::corpse);
 INIT(mods::ban_system::commands);
+INIT(mods::ensnare);
+INIT(mods::admin_tools::stay);
 
 /**
  * Grey area
@@ -135,6 +137,8 @@ namespace mods::init {
 		mods::combat::commands::init();
 		mods::json::init();
 		mods::ban_system::commands::init();
+		mods::ensnare::init();
+		mods::admin_tools::stay::init();
 
 #ifdef __MENTOC_PLUGIN_CONTENT__
 		mods::plugins::init::init();

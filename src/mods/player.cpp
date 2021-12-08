@@ -313,6 +313,7 @@ namespace mods {
 			sendln("Un-equipping...");
 		}
 #endif
+
 		if(!rifle && item && item->has_rifle() && pos == WEAR_PRIMARY) {
 #ifdef __equip_debug__
 			sendln("You have a regular rifle. running attr feed...");
@@ -426,6 +427,15 @@ namespace mods {
 			equip_clamp(m_rct->damage_dice_count,equip, rifle->damage_dice_count);
 			equip_clamp(m_rct->damage_dice_sides,equip, rifle->damage_dice_sides);
 			equip_clamp(m_rct->cooldown_between_shots,equip, rifle->cooldown_between_shots);
+			equip_clamp(m_rct->thermal_range, equip, rifle->thermal_range);
+			equip_clamp(m_rct->night_vision_range, equip, rifle->night_vision_range);
+			if(equip) {
+				m_thermal_range += rifle->thermal_range;
+				m_night_vision_range += rifle->night_vision_range;
+			} else {
+				m_thermal_range -= rifle->thermal_range;
+				m_night_vision_range -= rifle->night_vision_range;
+			}
 		}
 		if(item->has_armor()) {
 			//thac0
@@ -509,15 +519,19 @@ namespace mods {
 					if(item->armor()->attributes->csv_capabilities.find("provides:night-vision") != std::string::npos) {
 						if(equip) {
 							vision |= HAS_NIGHT_VISION;
+							m_night_vision_range += NIGHT_VISION_RANGE_BASE();
 						} else {
 							vision &= ~(HAS_NIGHT_VISION);
+							m_night_vision_range -= NIGHT_VISION_RANGE_BASE();
 						}
 					}
 					if(item->armor()->attributes->csv_capabilities.find("provides:thermal-vision") != std::string::npos) {
 						if(equip) {
 							vision |= HAS_THERMALS;
+							m_thermal_range += THERMAL_VISION_RANGE_BASE();
 						} else {
 							vision &= ~(HAS_THERMALS);
+							m_thermal_range -= THERMAL_VISION_RANGE_BASE();
 						}
 					}
 					break;
@@ -1050,6 +1064,10 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+		m_can_move = true;
+		m_thermal_range = 0;
+		m_night_vision_range = 0;
+		m_ensnared_amount = 0;
 		//m_host.clear();
 		//m_ip.clear();
 		m_locked_down = false;

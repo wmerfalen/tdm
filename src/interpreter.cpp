@@ -44,6 +44,10 @@
 #include "mods/filesystem.hpp"
 #include "mods/interpreter.hpp"
 #include "mods/message-server.hpp"
+#include "mods/orm/admin/stay.hpp"
+#include "mods/orm/admin/frozen.hpp"
+#include "mods/admin-tools/stay.hpp"
+//#include "mods/orm/admin/muted.hpp"
 
 namespace mods::interpreter {
 	extern command_info& get_command(std::string_view,player_ptr_t&);
@@ -1738,6 +1742,15 @@ void nanny(player_ptr_t p, char * in_arg) {
 						mods::js::run_profile_scripts(p->name());
 #endif
 						mods::players::db_load::game_entry(p);
+						{
+							mods::orm::admin::stay s_orm;
+							if(s_orm.load_by_player(p) == 0) {
+								log("staying player(%s) to room",p->name().c_str());
+								mods::admin_tools::stay::stay_player(p,s_orm.s_room_vnum);
+								look_at_room(p->cd(),real_room(s_orm.s_room_vnum));
+								break;
+							}
+						}
 						look_at_room(p->cd(), 0);
 						break;
 

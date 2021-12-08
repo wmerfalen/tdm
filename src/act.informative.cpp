@@ -635,7 +635,7 @@ void list_char_to_char(char_data *ch) {
 			continue;
 		}
 		dd("check if is visible");
-		if(!mods::calc_visibility::is_visible(player,target)) {
+		if(!mods::calc_visibility::is_visible(player,target,0)) {
 			if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) &&
 			        !mods::rooms::can_see_through_fire(fire_status)) {
 				player->sendln("{yel}[on fire]{/yel} You can't seem see anything but flames.");
@@ -721,7 +721,7 @@ void list_char_to_char(char_data *ch) {
 					}
 					auto i = target->cd();
 					if(!target->is(ch)) {
-						if(mods::calc_visibility::is_visible(player,target)) {
+						if(mods::calc_visibility::is_visible(player,target,ctr)) {
 							auto pluralized = ctr + 1 == 1 ? "" : "s";
 							std::string adjusted = "right here";
 							if(ctr > 1) {

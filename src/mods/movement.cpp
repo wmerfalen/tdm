@@ -3,9 +3,23 @@
 #include "projectile.hpp"
 #include "object-utils.hpp"
 #include "rooms.hpp"
+#include "rand.hpp"
 
 namespace mods::movement {
 	bool char_move_to(player_ptr_t& player,const room_rnum& room) {
+		if(!player->can_move()) {
+			return false;
+		}
+		if(player->ensnared_amount() > 0) {
+			player->ensnared_amount() -= mods::rand::roll(1,10);
+		}
+		if(player->ensnared_amount() > 0) {
+			player->sendln("You try to move but can't!");
+			return false;
+		}
+		if(player->ensnared_amount() < 0) {
+			player->ensnared_amount() = 0;
+		}
 		player->moving_to_room() = true;
 		bool move = true;
 		auto& current = player->room();

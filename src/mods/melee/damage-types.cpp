@@ -181,7 +181,7 @@ namespace mods::melee::damage_types {
 		feedback.damage = 0;
 		feedback.from_direction = NORTH;
 
-		if(!victim || !mods::calc_visibility::is_visible(player,victim)) {
+		if(!victim || !mods::calc_visibility::is_visible(player,victim,0)) {
 			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
 			player->damage_event(feedback);
 			md("victim not present. ignoring");

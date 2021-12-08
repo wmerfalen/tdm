@@ -144,6 +144,12 @@ namespace mods::scan {
 					    ||
 					    (type & find_type_t::NPC && IS_NPC(character->cd()))
 					) {
+						if((type & find_type_t::PLAYERS) && IS_NPC(character->cd())) {
+							continue;
+						}
+						if(type & find_type_t::NPC && !IS_NPC(character->cd())) {
+							continue;
+						}
 						vec_room_list->push_back({});
 						auto& pushed_item = vec_room_list->back();
 						pushed_item.obj = nullptr;

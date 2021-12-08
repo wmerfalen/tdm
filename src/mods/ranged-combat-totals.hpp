@@ -124,6 +124,8 @@ namespace mods {
 		uint16_t stat_weapon_handling;
 		uint16_t stat_strategy;
 		uint16_t stat_medical;
+		int16_t thermal_range;
+		int16_t night_vision_range;
 
 		std::vector<std::pair<uint8_t,mods::elemental_types_t>> elemental_chances;
 		ranged_combat_totals() :
@@ -189,7 +191,9 @@ namespace mods {
 			stat_chemistry(0),
 			stat_weapon_handling(0),
 			stat_strategy(0),
-			stat_medical(0) {
+			stat_medical(0),
+			thermal_range(0),
+			night_vision_range(0) {
 			tracked.clear();
 			marked.clear();
 		}
@@ -259,6 +263,8 @@ namespace mods {
 			stat_medical(other.stat_medical) {
 			tracked = other.tracked;
 			marked = other.marked;
+			thermal_range = other.thermal_range;
+			night_vision_range = other.night_vision_range;
 		}
 		ranged_combat_totals& operator=(ranged_combat_totals& other) {
 			ranged_combat_totals();
@@ -327,6 +333,8 @@ namespace mods {
 			stat_medical = other.stat_medical;
 			tracked = other.tracked;
 			marked = other.marked;
+			thermal_range = other.thermal_range;
+			night_vision_range = other.night_vision_range;
 			return *this;
 		}
 		void assign(ranged_combat_totals* other) {
@@ -396,6 +404,8 @@ namespace mods {
 			stat_medical = other->stat_medical;
 			tracked = other->tracked;
 			marked = other->marked;
+			thermal_range = other->thermal_range;
+			night_vision_range = other->night_vision_range;
 		}
 		~ranged_combat_totals() = default;
 		template <typename T>
@@ -606,6 +616,8 @@ namespace mods {
 			if(vision & HAS_MORBID_INSIGHT) {
 				p->sendln("Morbid insight");
 			}
+			p->sendln(CAT("Thermal range: ",thermal_range));
+			p->sendln(CAT("Night vision range: ",night_vision_range));
 		}
 	};
 };//end namespace mods

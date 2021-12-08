@@ -729,6 +729,12 @@ namespace mods {
 			/** viewing modifiers */
 			bool has_night_vision() const;
 			bool has_thermal_vision() const;
+			auto& thermal_range() {
+				return m_thermal_range;
+			}
+			auto& night_vision_range() {
+				return m_night_vision_range;
+			}
 
 			/** visibility */
 			char_data::visibility_t& visibility();
@@ -940,7 +946,14 @@ namespace mods {
 			bool is_locked_down() const {
 				return m_locked_down;
 			}
+			auto& ensnared_amount() {
+				return m_ensnared_amount;
+			}
+			bool& can_move() {
+				return m_can_move;
+			}
 		protected:
+			bool m_can_move;
 			int16_t m_to_move;
 			int16_t m_to_attack;
 			std::map<std::string,std::string> m_ada_data;
@@ -956,6 +969,7 @@ namespace mods {
 			std::shared_ptr<char_data> m_shared_ptr;
 			std::vector<affected_type> m_affected_by;
 			bool m_moving_to_room;
+			int16_t m_ensnared_amount;
 
 		private:
 			bool m_locked_down;
@@ -1056,6 +1070,8 @@ namespace mods {
 			mods::combat::rules_of_engagement_t m_rules_of_engagement;
 			std::string m_host;
 			std::string m_ip;
+			int16_t m_thermal_range;
+			int16_t m_night_vision_range;
 	};
 };
 

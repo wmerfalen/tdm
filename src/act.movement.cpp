@@ -224,6 +224,9 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 		log("SYSERR: perform_move received invalid parameters");
 		return (0);
 	}
+	if(!player->can_move()) {
+		return 0;
+	}
 
 	bool exit_closed = is_exit && EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) /* !mods */
 	                   && !EXIT_FLAGGED(EXIT(ch,dir),EX_BREACHED) &&

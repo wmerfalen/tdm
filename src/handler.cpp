@@ -215,7 +215,7 @@ void affect_modify(char_data *ch, byte loc, sbyte mod,
 			break;
 
 		default:
-			log("SYSERR: Unknown apply adjust %d attempt (%s, affect_modify).", loc, __FILE__);
+			//log("SYSERR: Unknown apply adjust %d attempt (%s, affect_modify).", loc, __FILE__);
 			break;
 
 	} /* switch */

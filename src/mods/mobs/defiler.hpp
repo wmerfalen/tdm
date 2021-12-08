@@ -286,6 +286,21 @@ namespace mods::mobs {
 			void reset_last_attacker();
 			std::pair<bool,std::string> move_to(const direction_t& dir) override;
 
+			void telegraph(player_ptr_t& victim,std::string_view saying);
+			void shout(std::string_view message);
+
+			enum status_t : uint8_t {
+				IDLING,
+				LOOKING_FOR_A_FIGHT,
+			};
+			bool is(status_t status);
+
+			/**
+			 * Scan for targets to attack
+			 */
+			void scan_for_targets();
+			void hunt(uuid_t target);
+
 		private:
 			player_ptr_t get_next_attacking_priority();
 			player_ptr_t m_last_attacker;
@@ -300,6 +315,11 @@ namespace mods::mobs {
 			std::forward_list<obj_ptr_t> m_backpack;
 			weapons_list_t m_weapons;
 			uint8_t m_cant_find;
+			status_t m_status;
+
+
+			std::vector<std::pair<uuid_t,direction_t>> m_scanned_targets;
+			uuid_t m_hunt;
 	};
 
 	std::forward_list<std::shared_ptr<defiler>>& defiler_list();

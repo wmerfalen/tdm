@@ -56,7 +56,7 @@ namespace mods::mobs::defiler_behaviour_tree {
 				if(!ptr) {
 					continue;
 				}
-				if(!mods::calc_visibility::is_visible(ct->uuid,v.uuid)) {
+				if(!mods::calc_visibility::is_visible(ct->uuid,v.uuid,v.distance)) {
 					continue;
 				}
 				if(mods::rooms::is_peaceful(v.room_rnum)) {
@@ -97,7 +97,7 @@ namespace mods::mobs::defiler_behaviour_tree {
 				if(!ptr) {
 					continue;
 				}
-				if(!mods::calc_visibility::is_visible(mg->uuid,v.uuid)) {
+				if(!mods::calc_visibility::is_visible(mg->uuid,v.uuid,v.distance)) {
 					continue;
 				}
 				if(mods::rooms::is_peaceful(v.room_rnum)) {
@@ -240,11 +240,13 @@ namespace mods::mobs::defiler_behaviour_tree {
 	using defiler_t = std::shared_ptr<mods::mobs::defiler>;
 	void defiler_entry(defiler_t& defiler) {
 		defiler->btree_hostile();
-		defiler->hostile_phase_1();
-		//if(defiler.is(LOOKING_FOR_A_FIGHT)) {
-		//	defiler.roam();
-		//	return;
-		//}
+		//defiler->hostile_phase_1();
+		m_debug("checking is fighting");
+		if(defiler->is(defiler::status_t::LOOKING_FOR_A_FIGHT)) {
+			m_debug("scanning for targets");
+			defiler->scan_for_targets();
+			return;
+		}
 		//if(defiler.is(FIGHTING_SOMEONE)) {
 		//	/** Get a list of targets within the same room */
 

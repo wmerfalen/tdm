@@ -31,4 +31,7 @@ uint64_t rand_xoroshiro();
 static inline bool chance(uint8_t chance) {
 	return mods::rand::chance(chance);
 }
+static inline uint32_t roll(uint32_t num,uint32_t size) {
+	return mods::rand::roll(num,size);
+}
 #endif

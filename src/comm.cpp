@@ -36,6 +36,7 @@
 #include "mods/js.hpp"
 #include "mods/corrosive.hpp"
 #include "mods/bleed.hpp"
+#include "mods/ensnare.hpp"
 #include "mods/resting.hpp"
 #include "mods/mobs/behaviour-tree-list.hpp"
 #include "mods/mobs/defiler-behaviour-tree.hpp"
@@ -988,6 +989,7 @@ void heartbeat(int pulse) {
 	if(!(pulse % mods::corrosive::tick_resolution())) {
 		mods::corrosive::process_corrosion();
 		mods::bleed::process_bleed();
+		mods::ensnare::process_ensnare();
 	}
 
 	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION())) {
@@ -1240,6 +1242,12 @@ void send_prompt(player_ptr_t& player) {
 			affects += "|";
 		}
 		affects += "BLEED";
+	}
+	if(a.has_affect(mods::affects::affect_t::SLOWED)) {
+		if(affects.length()) {
+			affects += "|";
+		}
+		affects += "SLOWED";
 	}
 	if(player->primary() && player->primary()->has_rifle()) {
 		auto left = player->primary()->rifle_instance->ammo;

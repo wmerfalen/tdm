@@ -9175,3 +9175,10 @@ CREATE TABLE public.user_logins (
 	u_username varchar(16) NOT NULL,
 	UNIQUE(u_ip_address,u_username)
 );
+CREATE TABLE public.stay (
+	id serial PRIMARY KEY,
+	s_room_vnum integer NOT NULL,
+	s_username varchar(16) NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	UNIQUE(s_username)
+);

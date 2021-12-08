@@ -92,6 +92,8 @@ namespace mods {
 			int16_t disorient_amount;
 			int16_t durability_profile;
 			int16_t cooldown_between_shots;
+			int16_t thermal_range;
+			int16_t night_vision_range;
 			/** --#=================================================#-- */
 			/** --[ SECTION END:   ((( Fairly easy to implement ))) ]-- */
 			/** --#=================================================#-- */

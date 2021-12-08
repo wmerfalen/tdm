@@ -347,7 +347,7 @@ namespace mods::combat_composer {
 				}
 			}
 
-			if(mods::calc_visibility::is_visible(attacker,victim)) {
+			if(mods::calc_visibility::is_visible(attacker,victim,distance)) {
 				md("Is visible");
 				success_chance += 50;
 			} else {

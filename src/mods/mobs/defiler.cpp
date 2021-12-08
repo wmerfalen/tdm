@@ -13,6 +13,7 @@
 #include "../weapons/reload.hpp"
 #include "../combat-composer/includes.hpp"
 #include "../sneak.hpp"
+#include "../ensnare.hpp"
 
 #ifdef m_debug
 #undef m_debug
@@ -251,6 +252,7 @@ namespace mods::mobs {
 				}
 			}
 			if(player_ptr->room() == attacker->room()) {
+				/** TODO: change this to the combat composer equivalent */
 				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,attacker);
 			}
 		});
@@ -262,23 +264,11 @@ namespace mods::mobs {
 
 		static const std::vector<de> taunt_if = {
 			de::YOU_INFLICTED_INCENDIARY_DAMAGE,
-			de::YOU_INFLICTED_RADIOACTIVE_DAMAGE,
-			de::YOU_INFLICTED_ANTI_MATTER_DAMAGE,
-			de::YOU_INFLICTED_CORROSIVE_DAMAGE,
-			de::YOU_INFLICTED_EMP_DAMAGE,
-			de::YOU_INFLICTED_EXPLOSIVE_DAMAGE,
-			de::YOU_INFLICTED_SHRAPNEL_DAMAGE,
-			de::YOU_INFLICTED_CRYOGENIC_DAMAGE,
-			de::YOU_INFLICTED_SHOCK_DAMAGE,
 			de::YOU_DEALT_HEADSHOT_WITH_RIFLE_ATTACK,
-			de::YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK,
 			de::YOU_DEALT_CRITICAL_RIFLE_ATTACK,
 			de::YOU_INFLICTED_MELEE_ATTACK,
 			de::YOU_INFLICTED_BLADED_MELEE_ATTACK,
-			de::YOU_INFLICTED_BLUNT_MELEE_ATTACK,
-			de::YOU_REFLECTED_MUNITIONS_EVENT,
 			de::YOU_INJURED_SOMEONE_EVENT,
-			de::YOU_INFLICTED_AR_SHRAPNEL,
 			de::YOU_INFLICTED_INCENDIARY_AMMO,
 			de::YOU_DISORIENTED_SOMEONE_EVENT,
 		};
@@ -332,11 +322,8 @@ namespace mods::mobs {
 					break;
 				case de::COULDNT_FIND_TARGET_EVENT:
 					m_debug("Can't find target");
-					++m_cant_find;
-					if(m_cant_find > 3) {
-						m_debug("Resetting target");
-						this->reset_last_attacker();
-					}
+					m_debug("Resetting target");
+					this->reset_last_attacker();
 					break;
 				default:
 					m_debug("Weird status. unknown");
@@ -413,6 +400,7 @@ namespace mods::mobs {
 		}
 		m_cant_find = 0;
 		cmem("m_random_acts:" << m_random_acts.size());
+		m_status = defiler::status_t::LOOKING_FOR_A_FIGHT;
 	};
 
 	/**
@@ -512,31 +500,26 @@ namespace mods::mobs {
 					/** move any direction away to do a snipe attack */
 					auto dir = random_room_direction(victim->room());
 					this->move_to(dir);
-					mods::combat_composer::snipe_target(player_ptr,victim->name().c_str(), dir,0,weapon);
-					return;
+					mods::combat_composer::snipe_target(player_ptr,victim->name().c_str(), OPPOSITE_DIR(dir),0,weapon);
 				} else {
 					for(const auto& dir : world[player_ptr->room()].directions()) {
 						if(!victim) {
 							this->reset_last_attacker();
 							return;
 						}
-						mods::combat_composer::snipe_target(player_ptr,victim->name().c_str(),dir,0,weapon);
+						mods::combat_composer::snipe_target(player_ptr,victim->name().c_str(),OPPOSITE_DIR(dir),0,weapon);
 					}
-					return;
 				}
 			} else if(mods::object_utils::is_melee(weapon)) {
 				if(!victim) {
 					this->reset_last_attacker();
 					return;
 				}
+				m_last_attacker = victim;
+				m_weapon = weapon;
 				if(victim->room() == player_ptr->room()) {
 					melee_attack_within_range();
-				} else {
-					char_from_room(cd());
-					char_to_room(cd(),victim->room());
-					melee_attack_within_range();
 				}
-				return;
 			}
 		}
 	}
@@ -546,20 +529,57 @@ namespace mods::mobs {
 
 
 
+	/**
+	 * This is the main entry point. For the time being, it was much easier to just
+	 * call this routine than it was to run the whole behaviour tree flow.
+	 * As you'll see in the defiler behaviour tree .cpp file, we don't run behaviour
+	 * trees for the defiler. Instead we grab the class ptr and call this method.
+	 *
+	 * TODO: use corpse explosion
+	 */
 	void defiler::hostile_phase_1() {
 
-		if(m_last_attacker && m_last_attacker->position() != POS_DEAD) {
+		if(m_last_attacker && m_last_attacker->position() != POS_DEAD && m_last_attacker->room() == player_ptr->room()) {
 			this->attack(m_last_attacker);
 			return;
 		}
-		auto target = spawn_near_someone();
-		if(!target) {
-			return;
+		player_ptr_t target = nullptr;
+		for(uint8_t i=0; i < 5; i++) {
+			target = spawn_near_someone();
+			if(target && target->position() > POS_DEAD) {
+				m_last_attacker = target;
+				m_verbose("spawned near someone. attacking them");
+				this->telegraph(target,"You truly think you can hide from me?!");
+				//if(!mods::ensnare::is_ensnared(target)) {
+				//	this->ensnare(target);
+				//}
+				this->attack(target);
+				return;
+			}
 		}
-		if(target->position() > POS_DEAD) {
-			m_verbose("spawned near someone. attacking them");
-			this->attack(target);
-		}
+		this->shout("The astral plane feeds me with intel! YOU CANNOT HIDE FOREVER");
+	}
+
+	bool defiler::is(defiler::status_t status) {
+		return m_status == status;
+	}
+
+	void defiler::telegraph(player_ptr_t& victim,std::string_view saying) {
+		victim->sendln(saying);
+	}
+
+	void defiler::shout(std::string_view message) {
+
+	}
+
+	void defiler::ensnare(player_ptr_t& victim) {
+		auto barbed_wire = create_object(ITEM_GADGET,"demonic-snares.yml");
+		mods::ensnare::ensnare_damage(
+		    player_ptr,
+		    victim,
+		    barbed_wire,
+		    barbed_wire->gadget()->attributes->damage_points);
+
 	}
 
 	/**
@@ -596,37 +616,49 @@ namespace mods::mobs {
 		auto attacker = player()->fighting();
 		if(m_weapon && attacker->room() == this->room()) {
 			m_debug("i have a weapon and i'm using it against who i'm fighting");
+			/** TODO: change this to the combat composer equivalent */
 			mods::weapons::damage_types::melee_damage_with_feedback(player(),m_weapon,attacker);
 		}
 	}
 	void defiler::melee_attack_within_range() {
-		m_debug("melee_attack_within_range");
-		if(m_last_attacker) {
-			if(m_last_attacker->position() == POS_DEAD) {
-				m_debug("Our target is dead!");
-				m_attackers.remove(m_last_attacker);
-				m_last_attacker = get_next_attacking_priority();
+		bool use_last_attacker = false;
+		if(m_last_attacker && m_last_attacker->position() > POS_DEAD && m_last_attacker->room() == player_ptr->room()) {
+			use_last_attacker = true;
+		}
+
+		if(!use_last_attacker) {
+			for(auto target : room_list(player_ptr->room())) {
+				if(target && target->position() > POS_DEAD && target->is(player_ptr) == false &&
+				        mods::calc_visibility::is_visible(/** observer */ player_ptr,/** target */ target,0)) {
+					m_last_attacker = target;
+					use_last_attacker = true;
+					break;
+				}
 			}
 		}
-		for(const auto& attacker : m_attackers) {
-			auto results = mods::scan::los_find(player_ptr,attacker);
-			if(results.found == false) {
-				if(m_attackers_last_direction.has_value()) {
-					move_to(m_attackers_last_direction.value());
-				}
-				continue;
+		if(use_last_attacker) {
+			m_debug("melee_attack_within_range");
+			if(m_last_attacker && m_last_attacker->position() == POS_DEAD) {
+				m_debug("Our target is dead!");
+				m_attackers.remove(m_last_attacker);
+				this->reset_last_attacker();
+				return;
 			}
-			m_debug("distance:" << results.distance << ", direction: " << results.direction);
-			m_attackers_last_direction = results.direction;
-
-			if(attacker->room() == player_ptr->room()) {
-				auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,attacker);
-				if(feedback.hits == 0 || feedback.damage == 0) {
-					continue;
-				}
+			/** TODO: change this to the combat composer equivalent */
+			mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,m_last_attacker);
+			return;
+		} else {
+			auto target = this->spawn_near_someone();
+			if(target) {
+				m_last_attacker = target;
+				melee_attack_within_range();
+				return;
 			}
 		}
 	}
+
+
+
 	std::pair<bool,std::string> defiler::move_to(const direction_t& dir) {
 		auto old_vis = player_ptr->visibility();
 		auto room_id = player_ptr->room();
@@ -709,20 +741,63 @@ namespace mods::mobs {
 
 	}
 
+	void defiler::scan_for_targets() {
+		uint8_t depth = DEFILER_SCAN_DEPTH();
+		mods::scan::vec_player_data vpd;
+		mods::scan::los_scan_for_players(cd(),depth,&vpd);
+
+		m_scanned_targets.clear();
+
+		for(auto v : vpd) {
+			if(!ptr_by_uuid(v.uuid)) {
+				continue;
+			}
+			m_scanned_targets.emplace_back(std::make_pair<>(v.uuid,v.direction));
+		}
+		if(m_scanned_targets.size() == 0) {
+			return;
+		}
+
+		std::size_t index = mods::rand::roll(1,m_scanned_targets.size());
+		index = std::clamp(index,(std::size_t)0,(std::size_t)m_scanned_targets.size()-1);
+		hunt(m_scanned_targets[index].first);
+		auto status = move_to(m_scanned_targets[index].second);
+		if(std::get<0>(status)) {
+			m_debug("Moving toward: " << dirstr(m_scanned_targets[index].second));
+		} else {
+			m_debug("Failed to move toward " << dirstr(m_scanned_targets[index].second) << ": why: '" << std::get<1>(status) << "'");
+		}
+	}
+
+	void defiler::hunt(uuid_t target) {
+		m_hunt = target;
+	}
 	/**
 	 * - This is actually something that would prove very useful
 	 * - This would fulfill the "unfair" role that bosses in video games usually have
 	 */
 	player_ptr_t defiler::spawn_near_someone() {
 		player_ptr_t who = nullptr;
+		/** OPTIMIZATION: use a vector of uuid's that are in allied market area and iterate over those */
 		mods::loops::foreach_player([&,this](auto player) -> bool {
+			if(!player) {
+				return true;
+			}
 			if(player->position() <= POS_STUNNED) {
 				return true;
 			}
 			if(mods::mobs::roam_pattern::can_roam_to(defiler::MOB_VNUM,player->room()) && chance(50)) {
 				m_debug("You madman! The DEFILER IS GOING TO TELEPORT!!!");
 				who = player;
-				//player->sendln("Beware! The DEFILER approaches!");
+				m_last_attacker = player;
+				player->sendln("A demonic force approaches...");
+				/**
+				 * FIXME
+				 * How it __SHOULD__ work:
+				 * Instead of spawning into the very same room, the defiler should
+				 * spawn between 2 and 5 rooms away (if possible)
+				 * FIXME
+				 */
 				char_from_room(cd());
 				char_to_room(cd(),player->room());
 				return false;
@@ -741,6 +816,7 @@ namespace mods::mobs {
 			if(victim->is(cd())) {
 				continue;
 			}
+			/** TODO: change this to the combat composer equivalent */
 			auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,victim);
 			if(feedback.hits || feedback.damage) {
 				return true;

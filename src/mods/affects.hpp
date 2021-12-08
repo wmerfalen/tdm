@@ -34,6 +34,7 @@ namespace mods::affects {
 		TRACKED,
 		CORRODE,
 		BLEED,
+		SLOWED,
 		__AFFECT_SIZE = 8,
 	};
 	constexpr static std::size_t AFFECT_DISSOLVE_COUNT = affect_t::__AFFECT_SIZE;
@@ -55,6 +56,7 @@ namespace mods::affects {
 		{"tracked",affect_t::TRACKED},
 		{"corrode",affect_t::CORRODE},
 		{"bleed",affect_t::BLEED},
+		{"slowed",affect_t::SLOWED},
 	};
 	//using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 	using affect_map_t = std::map<uint32_t,amount_t>;

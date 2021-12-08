@@ -7,6 +7,9 @@ namespace mods::chat {
 	static std::vector<mods::chat::channel> chan;
 	static std::vector<std::string> chan_verbs;
 	bool handle_chat(player_ptr_t& player,std::string_view argument) {
+		if(!argument.length()) {
+			return false;
+		}
 		auto vec_args = PARSE_ARGS();
 		for(auto verb : mods::chat::chan_verbs) {
 			if(mods::util::is_lower_match(CAT("no",verb),vec_args[0])) {

@@ -155,6 +155,8 @@ namespace mods {
 		aimed_limb_accuracy_percent = 0;
 		underbarrel_launcher_type = "NONE";
 		damage_percent_bonus = 0;
+		thermal_range = 0;
+		night_vision_range = 0;
 		static const char* LEVEL_STR = "#level:";
 		auto level_position = line.find(LEVEL_STR);
 		if(level_position != std::string::npos) {
@@ -224,6 +226,9 @@ namespace mods {
 				accuracy_points += object->attachment()->attributes->accuracy_points;
 				underbarrel_launcher_type = object->attachment()->attributes->underbarrel_launcher_type;
 				loudness_reduction += object->attachment()->attributes->loudness_reduction;
+
+				thermal_range += object->attachment()->attributes->thermal_range;
+				night_vision_range += object->attachment()->attributes->night_vision_range;
 			}
 		}
 		base_object->action_description = this->examine();
@@ -301,6 +306,8 @@ namespace mods {
 		           "aimed_limb_accuracy_percent: ",a->aimed_limb_accuracy_percent,"\r\n",
 		           "underbarrel_launcher_type: ",a->underbarrel_launcher_type,"\r\n",
 		           "damage_percent_bonus: ",a->damage_percent_bonus,"\r\n",
+		           "thermal_range: ",a->thermal_range,"\r\n",
+		           "night_vision_range: ",a->night_vision_range,"\r\n",
 		           "str_type: ",a->str_type,"\r\n");
 	}
 	std::map<std::string,std::string> rifle_attachments_t::friendly_map() {

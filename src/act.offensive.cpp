@@ -219,7 +219,7 @@ ACMD(do_scan) { /* !mods */
 		if(!found_player) {
 			continue;
 		}
-		if(!mods::calc_visibility::is_visible(player,found_player)) {
+		if(!mods::calc_visibility::is_visible(player,found_player,e.distance)) {
 			continue;
 		}
 		std::string line;

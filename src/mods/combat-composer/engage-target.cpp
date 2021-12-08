@@ -286,7 +286,7 @@ namespace mods::combat_composer::engage {
 				}
 			}
 
-			if(mods::calc_visibility::is_visible(attacker,victim)) {
+			if(mods::calc_visibility::is_visible(attacker,victim,0)) {
 				md("Is visible");
 				success_chance += 50;
 			} else {
