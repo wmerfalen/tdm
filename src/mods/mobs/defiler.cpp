@@ -550,9 +550,9 @@ namespace mods::mobs {
 				m_last_attacker = target;
 				m_verbose("spawned near someone. attacking them");
 				this->telegraph(target,"You truly think you can hide from me?!");
-				//if(!mods::ensnare::is_ensnared(target)) {
-				//	this->ensnare(target);
-				//}
+				if(!mods::ensnare::is_ensnared(target)) {
+					this->ensnare(target);
+				}
 				this->attack(target);
 				return;
 			}
@@ -748,24 +748,56 @@ namespace mods::mobs {
 
 		m_scanned_targets.clear();
 
+		auto victim = ptr_by_uuid(m_hunt);
+		if(victim && victim->room() == player_ptr->room()) {
+			mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,primary(),victim);
+			set_fighting(cd(),victim->cd());
+			hunt(victim->uuid());
+			return;
+		}
 		for(auto v : vpd) {
 			if(!ptr_by_uuid(v.uuid)) {
 				continue;
 			}
-			m_scanned_targets.emplace_back(std::make_pair<>(v.uuid,v.direction));
+			if(v.uuid == m_hunt) {
+				victim = ptr_by_uuid(v.uuid);
+				move_to(v.direction);
+				if(victim->room() == player_ptr->room()) {
+					mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,primary(),victim);
+					set_fighting(cd(),victim->cd());
+					hunt(v.uuid);
+					return;
+				}
+			}
+
+			m_scanned_targets.emplace_back(v.uuid,v.direction,v.distance);
 		}
 		if(m_scanned_targets.size() == 0) {
+			btree_roam();
 			return;
 		}
 
 		std::size_t index = mods::rand::roll(1,m_scanned_targets.size());
 		index = std::clamp(index,(std::size_t)0,(std::size_t)m_scanned_targets.size()-1);
-		hunt(m_scanned_targets[index].first);
-		auto status = move_to(m_scanned_targets[index].second);
-		if(std::get<0>(status)) {
-			m_debug("Moving toward: " << dirstr(m_scanned_targets[index].second));
-		} else {
-			m_debug("Failed to move toward " << dirstr(m_scanned_targets[index].second) << ": why: '" << std::get<1>(status) << "'");
+		hunt(std::get<0>(m_scanned_targets[index]));
+		victim = ptr_by_uuid(std::get<0>(m_scanned_targets[index]));
+		if(!victim) {
+			std::cerr << "defiler found a bunk uuid_t\n";
+			btree_roam();
+			return;
+		}
+		auto weapon = primary();
+		if(weapon && weapon->has_rifle()) {
+			mods::combat_composer::snipe_target(player_ptr,victim,std::get<1>(m_scanned_targets[index]),std::get<2>(m_scanned_targets[index]),weapon);
+			return;
+		} else if(weapon && weapon->has_melee()) {
+			auto status = move_to(std::get<1>(m_scanned_targets[index]));
+			if(std::get<0>(status)) {
+				m_debug("Moving toward: " << dirstr(std::get<1>(m_scanned_targets[index])));
+			} else {
+				m_debug("Failed to move toward " << dirstr(std::get<1>(m_scanned_targets[index])) << ": why: '" << std::get<1>(status) << "'");
+			}
+			attack_anyone_in_same_room();
 		}
 	}
 
@@ -819,6 +851,7 @@ namespace mods::mobs {
 			/** TODO: change this to the combat composer equivalent */
 			auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,victim);
 			if(feedback.hits || feedback.damage) {
+				hunt(victim->uuid());
 				return true;
 			}
 		}

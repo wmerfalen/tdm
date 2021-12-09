@@ -148,7 +148,7 @@ ACMD	mods/mini-games/line-up.cpp	/^ACMD(do_reset_hack) {$/;"	kind:function	line:
 ACMD	mods/mini-games/line-up.cpp	/^ACMD(do_rotate_left) {$/;"	kind:function	line:232	signature:(do_rotate_left)
 ACMD	mods/mini-games/line-up.cpp	/^ACMD(do_rotate_right) {$/;"	kind:function	line:228	signature:(do_rotate_right)
 ACMD	mods/mini-games/wires.cpp	/^ACMD(do_plug_cable){$/;"	kind:function	line:113	signature:(do_plug_cable)
-ACMD	mods/mobs/defiler.cpp	/^	ACMD(do_bioscan) {$/;"	kind:function	line:844	namespace:mods::mobs::defiler_init	signature:(do_bioscan)
+ACMD	mods/mobs/defiler.cpp	/^	ACMD(do_bioscan) {$/;"	kind:function	line:877	namespace:mods::mobs::defiler_init	signature:(do_bioscan)
 ACMD	mods/mp.cpp	/^	ACMD(do_mp) {$/;"	kind:function	line:18	namespace:mods::mp	signature:(do_mp)
 ACMD	mods/orm/player-base-ability.cpp	/^		ACMD(do_save_my_pba) {$/;"	kind:function	line:177	namespace:mods::orm::pba	signature:(do_save_my_pba)
 ACMD	mods/prefs.cpp	/^	ACMD(do_pref) {$/;"	kind:function	line:79	namespace:mods::prefs	signature:(do_pref)
@@ -180,7 +180,7 @@ ADD_INTERPRETER_COMMAND	mods/interpreter-include.hpp	8;"	kind:macro	line:8	file:
 ADD_USER_COMMAND	mods/interpreter.hpp	26;"	kind:macro	line:26	file:
 ADMINCMD	interpreter.h	16;"	kind:macro	line:16	file:
 ADMINCMD	mods/admin-tools/stay.cpp	/^	ADMINCMD(do_stay) {$/;"	kind:function	line:38	namespace:mods::admin_tools::stay	signature:(do_stay)
-ADMINCMD	mods/admin-tools/stay.cpp	/^	ADMINCMD(do_unstay) {$/;"	kind:function	line:63	namespace:mods::admin_tools::stay	signature:(do_unstay)
+ADMINCMD	mods/admin-tools/stay.cpp	/^	ADMINCMD(do_unstay) {$/;"	kind:function	line:60	namespace:mods::admin_tools::stay	signature:(do_unstay)
 ADMINCMD	mods/ban-system.cpp	/^	ADMINCMD(do_ban) {$/;"	kind:function	line:331	namespace:mods::ban_system	signature:(do_ban)
 ADMINCMD	mods/ban-system.cpp	/^	ADMINCMD(do_ban_host) {$/;"	kind:function	line:361	namespace:mods::ban_system	signature:(do_ban_host)
 ADMINCMD	mods/ban-system.cpp	/^	ADMINCMD(do_ban_ip) {$/;"	kind:function	line:353	namespace:mods::ban_system	signature:(do_ban_ip)
@@ -1907,10 +1907,10 @@ MENTOC_CF	mods/yaml.hpp	102;"	kind:macro	line:102	file:
 MENTOC_CF	mods/yaml.hpp	84;"	kind:macro	line:84	file:
 MENTOC_CF	mods/yaml.hpp	89;"	kind:macro	line:89	file:
 MENTOC_CF	mods/yaml.hpp	93;"	kind:macro	line:93	file:
-MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	358;"	kind:macro	line:358	file:
-MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	373;"	kind:macro	line:373	file:
-MENTOC_CHECK_TYPE	mods/orm/orm-base.hpp	321;"	kind:macro	line:321	file:
-MENTOC_COLUMN_LIST_IMPL	mods/orm/orm-base.hpp	335;"	kind:macro	line:335	file:
+MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	368;"	kind:macro	line:368	file:
+MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	383;"	kind:macro	line:383	file:
+MENTOC_CHECK_TYPE	mods/orm/orm-base.hpp	331;"	kind:macro	line:331	file:
+MENTOC_COLUMN_LIST_IMPL	mods/orm/orm-base.hpp	345;"	kind:macro	line:345	file:
 MENTOC_COMMAND_MACROS	mods/interpreter.hpp	23;"	kind:macro	line:23	file:
 MENTOC_DATA_CLASS	mods/weapon-types.hpp	137;"	kind:macro	line:137	file:
 MENTOC_DATA_CLASS	mods/weapon-types.hpp	86;"	kind:macro	line:86	file:
@@ -1987,25 +1987,25 @@ MENTOC_OBJ_DATA_STAT_GEN	structs.cpp	170;"	kind:macro	line:170	file:
 MENTOC_OBJ_INITIALIZE_CONSTRUCTOR	structs.cpp	113;"	kind:macro	line:113	file:
 MENTOC_OBS	mods/builder.cpp	43;"	kind:macro	line:43	file:
 MENTOC_OBS2	mods/builder.cpp	44;"	kind:macro	line:44	file:
-MENTOC_ORM_CLASS	mods/orm/orm-base.hpp	420;"	kind:macro	line:420	file:
-MENTOC_ORM_COLUMN_LIST_FOR	mods/orm/orm-base.hpp	338;"	kind:macro	line:338	file:
-MENTOC_ORM_EXPORT_CLASS	mods/orm/orm-base.hpp	298;"	kind:macro	line:298	file:
-MENTOC_ORM_FEED_CLASS	mods/orm/orm-base.hpp	323;"	kind:macro	line:323	file:
-MENTOC_ORM_FEED_IMPL	mods/orm/orm-base.hpp	346;"	kind:macro	line:346	file:
-MENTOC_ORM_FEED_ROW_INTEGRAL_IMPL	mods/orm/orm-base.hpp	315;"	kind:macro	line:315	file:
-MENTOC_ORM_FEED_ROW_STRING_IMPL	mods/orm/orm-base.hpp	312;"	kind:macro	line:312	file:
-MENTOC_ORM_FEED_ROW_STRING_VECTOR_IMPL	mods/orm/orm-base.hpp	318;"	kind:macro	line:318	file:
-MENTOC_ORM_GENERATE_MAP_IMPL	mods/orm/orm-base.hpp	293;"	kind:macro	line:293	file:
-MENTOC_ORM_INIT	mods/orm/orm-base.hpp	307;"	kind:macro	line:307	file:
-MENTOC_ORM_INIT_IMPL	mods/orm/orm-base.hpp	304;"	kind:macro	line:304	file:
-MENTOC_ORM_MEMBER_VARS_FOR	mods/orm/orm-base.hpp	331;"	kind:macro	line:331	file:
-MENTOC_ORM_MEMBER_VARS_IMPL	mods/orm/orm-base.hpp	328;"	kind:macro	line:328	file:
-MENTOC_ORM_SET_FUNCTION	mods/orm/orm-base.hpp	375;"	kind:macro	line:375	file:
-MENTOC_ORM_SET_IMPL	mods/orm/orm-base.hpp	367;"	kind:macro	line:367	file:
-MENTOC_ORM_SLOT_LIST_FOR	mods/orm/orm-base.hpp	360;"	kind:macro	line:360	file:
-MENTOC_ORM_SLOT_LIST_IMPL	mods/orm/orm-base.hpp	355;"	kind:macro	line:355	file:
-MENTOC_ORM_SLOT_TYPES_FOR	mods/orm/orm-base.hpp	384;"	kind:macro	line:384	file:
-MENTOC_ORM_SLOT_TYPE_STRING_IMPL	mods/orm/orm-base.hpp	381;"	kind:macro	line:381	file:
+MENTOC_ORM_CLASS	mods/orm/orm-base.hpp	430;"	kind:macro	line:430	file:
+MENTOC_ORM_COLUMN_LIST_FOR	mods/orm/orm-base.hpp	348;"	kind:macro	line:348	file:
+MENTOC_ORM_EXPORT_CLASS	mods/orm/orm-base.hpp	308;"	kind:macro	line:308	file:
+MENTOC_ORM_FEED_CLASS	mods/orm/orm-base.hpp	333;"	kind:macro	line:333	file:
+MENTOC_ORM_FEED_IMPL	mods/orm/orm-base.hpp	356;"	kind:macro	line:356	file:
+MENTOC_ORM_FEED_ROW_INTEGRAL_IMPL	mods/orm/orm-base.hpp	325;"	kind:macro	line:325	file:
+MENTOC_ORM_FEED_ROW_STRING_IMPL	mods/orm/orm-base.hpp	322;"	kind:macro	line:322	file:
+MENTOC_ORM_FEED_ROW_STRING_VECTOR_IMPL	mods/orm/orm-base.hpp	328;"	kind:macro	line:328	file:
+MENTOC_ORM_GENERATE_MAP_IMPL	mods/orm/orm-base.hpp	303;"	kind:macro	line:303	file:
+MENTOC_ORM_INIT	mods/orm/orm-base.hpp	317;"	kind:macro	line:317	file:
+MENTOC_ORM_INIT_IMPL	mods/orm/orm-base.hpp	314;"	kind:macro	line:314	file:
+MENTOC_ORM_MEMBER_VARS_FOR	mods/orm/orm-base.hpp	341;"	kind:macro	line:341	file:
+MENTOC_ORM_MEMBER_VARS_IMPL	mods/orm/orm-base.hpp	338;"	kind:macro	line:338	file:
+MENTOC_ORM_SET_FUNCTION	mods/orm/orm-base.hpp	385;"	kind:macro	line:385	file:
+MENTOC_ORM_SET_IMPL	mods/orm/orm-base.hpp	377;"	kind:macro	line:377	file:
+MENTOC_ORM_SLOT_LIST_FOR	mods/orm/orm-base.hpp	370;"	kind:macro	line:370	file:
+MENTOC_ORM_SLOT_LIST_IMPL	mods/orm/orm-base.hpp	365;"	kind:macro	line:365	file:
+MENTOC_ORM_SLOT_TYPES_FOR	mods/orm/orm-base.hpp	394;"	kind:macro	line:394	file:
+MENTOC_ORM_SLOT_TYPE_STRING_IMPL	mods/orm/orm-base.hpp	391;"	kind:macro	line:391	file:
 MENTOC_PAGINATED_LIST	mods/builder.hpp	201;"	kind:macro	line:201	file:
 MENTOC_PLAYER_IS_BANNED	comm.cpp	/^static int constexpr MENTOC_PLAYER_IS_BANNED = -1;$/;"	kind:variable	line:216	file:
 MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	1281;"	kind:macro	line:1281	file:
@@ -4936,7 +4936,7 @@ attack	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::attack(player_ptr_
 attack	mods/mobs/shoplifter.cpp	/^	void shoplifter::attack(player_ptr_t& player) {$/;"	kind:function	line:396	class:mods::mobs::shoplifter	signature:(player_ptr_t& player)
 attack_anyone_in_same_room	mods/mobs/armed-guard.cpp	/^	bool armed_guard::attack_anyone_in_same_room() {$/;"	kind:function	line:474	class:mods::mobs::armed_guard	signature:()
 attack_anyone_in_same_room	mods/mobs/chaotic-meth-addict.cpp	/^	bool chaotic_meth_addict::attack_anyone_in_same_room() {$/;"	kind:function	line:476	class:mods::mobs::chaotic_meth_addict	signature:()
-attack_anyone_in_same_room	mods/mobs/defiler.cpp	/^	bool defiler::attack_anyone_in_same_room() {$/;"	kind:function	line:814	class:mods::mobs::defiler	signature:()
+attack_anyone_in_same_room	mods/mobs/defiler.cpp	/^	bool defiler::attack_anyone_in_same_room() {$/;"	kind:function	line:846	class:mods::mobs::defiler	signature:()
 attack_anyone_in_same_room	mods/mobs/melee-combatant.cpp	/^	bool melee_combatant::attack_anyone_in_same_room() {$/;"	kind:function	line:474	class:mods::mobs::melee_combatant	signature:()
 attack_anyone_near_room	mods/mobs/shoplifter.cpp	/^	bool shoplifter::attack_anyone_near_room() {$/;"	kind:function	line:474	class:mods::mobs::shoplifter	signature:()
 attack_disorients	mods/combat-composer/shared.cpp	/^		bool attack_disorients($/;"	kind:function	line:191	namespace:mods::combat_composer::phases	signature:( player_ptr_t& attacker, obj_ptr_t& weapon, player_ptr_t& victim )
@@ -5564,7 +5564,7 @@ clear_camera	mods/player.cpp	/^	void player::clear_camera() {$/;"	kind:function	
 clear_captured_output	mods/player.cpp	/^	void player::clear_captured_output() {$/;"	kind:function	line:174	class:mods::player	signature:()
 clear_combat_order	mods/player.hpp	/^			void clear_combat_order() {$/;"	kind:function	line:909	struct:mods::player	access:public	signature:()
 clear_custom_command	mods/builder/slotted-builder.hpp	/^			void clear_custom_command(std::string verb) {$/;"	kind:function	line:332	struct:mods::builder::slotted_builder	access:public	signature:(std::string verb)
-clear_errors	mods/orm/orm-base.hpp	/^			void clear_errors() {$/;"	kind:function	line:237	struct:mods::orm::orm_base	access:public	signature:()
+clear_errors	mods/orm/orm-base.hpp	/^			void clear_errors() {$/;"	kind:function	line:247	struct:mods::orm::orm_base	access:public	signature:()
 clear_free_list	mail.cpp	/^void clear_free_list(void) {$/;"	kind:function	line:111	signature:(void)
 clear_list_if_count	mods/mobs/smart-mob.hpp	/^			static inline void clear_list_if_count(T* list,std::size_t size) {$/;"	kind:function	line:133	struct:mods::mobs::smart_mob	access:public	signature:(T* list,std::size_t size)
 clear_obj_ptrs	mods/armor/advanced-protection.cpp	/^	void advanced_protection::clear_obj_ptrs() {$/;"	kind:function	line:20	class:mods::armor::advanced_protection	signature:()
@@ -5584,7 +5584,7 @@ clear_scanned_items	mods/mobs/shoplifter.cpp	/^	void shoplifter::clear_scanned_i
 clear_sneak	mods/sneak.cpp	/^	void clear_sneak(player_ptr_t& player) {$/;"	kind:function	line:17	namespace:mods::sneak	signature:(player_ptr_t& player)
 clear_state	mods/mobs/armed-guard.cpp	/^	void armed_guard::clear_state() {$/;"	kind:function	line:486	class:mods::mobs::armed_guard	signature:()
 clear_state	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::clear_state() {$/;"	kind:function	line:489	class:mods::mobs::chaotic_meth_addict	signature:()
-clear_state	mods/mobs/defiler.cpp	/^	void defiler::clear_state() {$/;"	kind:function	line:831	class:mods::mobs::defiler	signature:()
+clear_state	mods/mobs/defiler.cpp	/^	void defiler::clear_state() {$/;"	kind:function	line:864	class:mods::mobs::defiler	signature:()
 clear_state	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::clear_state() {$/;"	kind:function	line:486	class:mods::mobs::melee_combatant	signature:()
 clear_state	mods/mobs/shoplifter.cpp	/^	void shoplifter::clear_state() {$/;"	kind:function	line:504	class:mods::mobs::shoplifter	signature:()
 clear_static_roll_weapon_amount	mods/weapons/damage-calculator.cpp	/^	void clear_static_roll_weapon_amount() {$/;"	kind:function	line:33	namespace:mods::weapons::damage_calculator	signature:()
@@ -5626,7 +5626,7 @@ cmem	mods/mobs/chaotic-meth-addict.cpp	16;"	kind:macro	line:16	file:
 cmem	mods/mobs/chaotic-meth-addict.cpp	497;"	kind:macro	line:497	file:
 cmem	mods/mobs/defiler.cpp	25;"	kind:macro	line:25	file:
 cmem	mods/mobs/defiler.cpp	28;"	kind:macro	line:28	file:
-cmem	mods/mobs/defiler.cpp	894;"	kind:macro	line:894	file:
+cmem	mods/mobs/defiler.cpp	927;"	kind:macro	line:927	file:
 cmem	mods/mobs/melee-combatant.cpp	13;"	kind:macro	line:13	file:
 cmem	mods/mobs/melee-combatant.cpp	16;"	kind:macro	line:16	file:
 cmem	mods/mobs/melee-combatant.cpp	494;"	kind:macro	line:494	file:
@@ -5661,7 +5661,7 @@ column_prefix	mods/orm/mini-game.hpp	/^		std::string column_prefix() const { ret
 column_prefix	mods/orm/mob-equipment-map.hpp	/^		std::string column_prefix() {$/;"	kind:function	line:14	struct:mods::orm::mob_equipment_map	access:public	signature:()
 column_prefix	mods/orm/mob-equipment.hpp	/^		std::string column_prefix() {$/;"	kind:function	line:50	struct:mods::orm::mob_equipment	access:public	signature:()
 column_prefix	mods/orm/mob-roam.hpp	/^		std::string column_prefix() const {$/;"	kind:function	line:33	struct:mods::orm::mob_roam	access:public	signature:() const
-column_prefix	mods/orm/orm-base.hpp	/^			virtual std::string column_prefix() {$/;"	kind:function	line:245	struct:mods::orm::orm_base	access:public	signature:()
+column_prefix	mods/orm/orm-base.hpp	/^			virtual std::string column_prefix() {$/;"	kind:function	line:255	struct:mods::orm::orm_base	access:public	signature:()
 column_prefix	mods/orm/player-base-ability.hpp	/^		std::string column_prefix(){ return "pba_"; }$/;"	kind:function	line:11	struct:mods::orm::player_base_ability	access:public	signature:()
 column_prefix	mods/orm/player-contract-state.hpp	/^		std::string column_prefix() const {$/;"	kind:function	line:18	struct:mods::orm::player_contract_state	access:public	signature:() const
 column_prefix	mods/orm/player-skill-points.hpp	/^		std::string column_prefix() const {$/;"	kind:function	line:35	struct:mods::orm::player_skill_points	access:public	signature:() const
@@ -6033,7 +6033,7 @@ created_at	mods/orm/medic.hpp	/^		long created_at;$/;"	kind:member	line:42	struc
 created_at	mods/orm/mini-game.hpp	/^		long created_at;$/;"	kind:member	line:66	struct:mods::orm::mini_game	file:	access:public
 created_at	mods/orm/mob-equipment-map.hpp	/^		long created_at;$/;"	kind:member	line:56	struct:mods::orm::mob_equipment_map	file:	access:public
 created_at	mods/orm/mob-equipment.hpp	/^		long created_at;$/;"	kind:member	line:113	struct:mods::orm::mob_equipment	file:	access:public
-created_at	mods/orm/orm-base.hpp	/^			long created_at;$/;"	kind:member	line:274	struct:mods::orm::orm_base	file:	access:public
+created_at	mods/orm/orm-base.hpp	/^			long created_at;$/;"	kind:member	line:284	struct:mods::orm::orm_base	file:	access:public
 created_at	mods/orm/player-base-ability.hpp	/^		long created_at;$/;"	kind:member	line:54	struct:mods::orm::player_base_ability	file:	access:public
 created_at	mods/orm/player-contract-state.hpp	/^		long created_at;$/;"	kind:member	line:57	struct:mods::orm::player_contract_state	file:	access:public
 created_at	mods/orm/pyrexia.hpp	/^		long created_at;$/;"	kind:member	line:57	struct:mods::orm::pyrexia	file:	access:public
@@ -6293,7 +6293,7 @@ defiler_behaviour_tree	mods/mobs/defiler-behaviour-tree.cpp	/^namespace mods::mo
 defiler_behaviour_tree	mods/mobs/defiler-behaviour-tree.hpp	/^namespace mods::mobs::defiler_behaviour_tree {$/;"	kind:namespace	line:9	class:mods::mobs	file:
 defiler_btree	mods/mobs/defiler.cpp	/^	namespace defiler_btree {$/;"	kind:namespace	line:39	namespace:mods::mobs	file:
 defiler_entry	mods/mobs/defiler-behaviour-tree.cpp	/^	void defiler_entry(defiler_t& defiler) {$/;"	kind:function	line:241	namespace:mods::mobs::defiler_behaviour_tree	signature:(defiler_t& defiler)
-defiler_init	mods/mobs/defiler.cpp	/^namespace mods::mobs::defiler_init {$/;"	kind:namespace	line:838	class:mods::mobs	file:
+defiler_init	mods/mobs/defiler.cpp	/^namespace mods::mobs::defiler_init {$/;"	kind:namespace	line:871	class:mods::mobs	file:
 defiler_init	mods/plugins/init.hpp	/^INIT(mods::mobs::defiler_init);$/;"	kind:variable	line:17
 defiler_list	mods/mobs/defiler.cpp	/^	std::forward_list<std::shared_ptr<defiler>>& defiler_list() {$/;"	kind:function	line:732	namespace:mods::mobs	signature:()
 definition	mods/sql.hpp	/^			compositor<T>& definition(const std::vector<std::string>& members) {$/;"	kind:function	line:85	struct:mods::sql::compositor	access:public	signature:(const std::vector<std::string>& members)
@@ -7349,7 +7349,7 @@ export_class	mods/orm/mob-equipment-map.cpp	/^	strmap_t mob_equipment_map::expor
 export_class	mods/orm/mob-equipment.cpp	/^	strmap_t mob_equipment::export_class() {$/;"	kind:function	line:131	class:mods::orm::mob_equipment	signature:()
 export_class	mods/orm/mob-roam.cpp	/^	strmap_t mob_roam::export_class() {$/;"	kind:function	line:67	class:mods::orm::mob_roam	signature:()
 export_class	mods/orm/mob-roam.hpp	/^		strmap_t export_class() {$/;"	kind:function	line:13	struct:mods::orm::mob_roam_record_t	access:public	signature:()
-export_class	mods/orm/orm-base.hpp	/^			virtual strmap_t export_class() {$/;"	kind:function	line:265	struct:mods::orm::orm_base	access:public	signature:()
+export_class	mods/orm/orm-base.hpp	/^			virtual strmap_t export_class() {$/;"	kind:function	line:275	struct:mods::orm::orm_base	access:public	signature:()
 export_class	mods/orm/player-base-ability.cpp	/^	strmap_t player_base_ability::export_class() {$/;"	kind:function	line:17	class:mods::orm::player_base_ability	signature:()
 export_class	mods/orm/player-contract-state.cpp	/^	strmap_t player_contract_state::export_class() {$/;"	kind:function	line:43	class:mods::orm::player_contract_state	signature:()
 export_class	mods/orm/player-skill-points.cpp	/^	strmap_t player_skill_points::export_class() {$/;"	kind:function	line:40	class:mods::orm::player_skill_points	signature:()
@@ -7463,7 +7463,7 @@ feed	mods/orm/marine.cpp	/^	int16_t marine::feed(const pqxx::result::reference& 
 feed	mods/orm/medic.cpp	/^	int16_t medic::feed(const pqxx::result::reference& row) {$/;"	kind:function	line:37	class:mods::orm::medic	signature:(const pqxx::result::reference& row)
 feed	mods/orm/mob-equipment-map.cpp	/^	int16_t mob_equipment_map::feed(const pqxx::result::reference& row) {$/;"	kind:function	line:33	class:mods::orm::mob_equipment_map	signature:(const pqxx::result::reference& row)
 feed	mods/orm/mob-equipment.cpp	/^	int16_t mob_equipment::feed(const pqxx::result::reference& row) {$/;"	kind:function	line:199	class:mods::orm::mob_equipment	signature:(const pqxx::result::reference& row)
-feed	mods/orm/orm-base.hpp	/^			virtual int16_t feed(const pqxx::result::reference&) {$/;"	kind:function	line:262	struct:mods::orm::orm_base	access:public	signature:(const pqxx::result::reference&)
+feed	mods/orm/orm-base.hpp	/^			virtual int16_t feed(const pqxx::result::reference&) {$/;"	kind:function	line:272	struct:mods::orm::orm_base	access:public	signature:(const pqxx::result::reference&)
 feed	mods/orm/player-base-ability.cpp	/^	int16_t player_base_ability::feed(const pqxx::result::reference& row) {$/;"	kind:function	line:69	class:mods::orm::player_base_ability	signature:(const pqxx::result::reference& row)
 feed	mods/orm/player-contract-state.hpp	/^		int16_t feed(const pqxx::result::reference&) {$/;"	kind:function	line:34	struct:mods::orm::player_contract_state	access:public	signature:(const pqxx::result::reference&)
 feed	mods/orm/pyrexia.cpp	/^	int16_t pyrexia::feed(const pqxx::result::reference & row){$/;"	kind:function	line:46	class:mods::orm::pyrexia	signature:(const pqxx::result::reference & row)
@@ -8069,7 +8069,7 @@ get_dump	mods/forge-engine/generated-rifle.cpp	/^	std::string generated_rifle_t:
 get_dump	mods/forge-engine/value-scaler.cpp	/^	std::string value_scaler::get_dump() {$/;"	kind:function	line:40	class:mods::forge_engine::value_scaler	signature:()
 get_dump	mods/orm/rifle-instance.cpp	/^	std::string& rifle_instance::get_dump() {$/;"	kind:function	line:259	class:mods::orm::rifle_instance	signature:()
 get_effective_firing_range	mods/rifle.cpp	/^	int16_t get_effective_firing_range(obj_ptr_t& weapon) {$/;"	kind:function	line:50	namespace:mods::rifle	signature:(obj_ptr_t& weapon)
-get_error_log	mods/orm/orm-base.hpp	/^			std::vector<std::string> get_error_log() const {$/;"	kind:function	line:231	struct:mods::orm::orm_base	access:public	signature:() const
+get_error_log	mods/orm/orm-base.hpp	/^			std::vector<std::string> get_error_log() const {$/;"	kind:function	line:241	struct:mods::orm::orm_base	access:public	signature:() const
 get_existing	mods/drone.cpp	/^		uuid_t  get_existing(uuid_t  owner_uuid) {$/;"	kind:function	line:81	namespace:mods::drone	signature:(uuid_t owner_uuid)
 get_explosive_type	mods/object-utils.hpp	/^	inline mw_explosive get_explosive_type<uuid_t>(uuid_t& obj_uuid) {$/;"	kind:function	line:231	namespace:mods::object_utils	signature:(uuid_t& obj_uuid)
 get_explosive_type	mods/object-utils.hpp	/^	static inline mw_explosive get_explosive_type(T& obj) {$/;"	kind:function	line:227	namespace:mods::object_utils	signature:(T& obj)
@@ -8103,7 +8103,7 @@ get_imp_mode	mods/player.hpp	/^			bool get_imp_mode() {$/;"	kind:function	line:1
 get_increment	mods/classes/base.cpp	/^	float skill_t::get_increment() {$/;"	kind:function	line:8	class:mods::classes::skill_t	signature:()
 get_iyear	mods/date-time.cpp	/^	uint8_t get_iyear() {$/;"	kind:function	line:114	namespace:mods::date_time	signature:()
 get_iyear	mods/js.cpp	/^		static duk_ret_t get_iyear(duk_context *ctx) {$/;"	kind:function	line:144	namespace:mods::js	signature:(duk_context *ctx)
-get_last_error	mods/orm/orm-base.hpp	/^			std::string get_last_error() const {$/;"	kind:function	line:234	struct:mods::orm::orm_base	access:public	signature:() const
+get_last_error	mods/orm/orm-base.hpp	/^			std::string get_last_error() const {$/;"	kind:function	line:244	struct:mods::orm::orm_base	access:public	signature:() const
 get_last_error	mods/player-scaffolding.cpp	/^	std::vector<std::string>* player_scaffolding::get_last_error(){$/;"	kind:function	line:21	class:mods::player_scaffolding	signature:()
 get_last_seen	mods/mobs/mini-gunner.cpp	/^	tick_t mini_gunner::get_last_seen(uuid_t player) {$/;"	kind:function	line:293	class:mods::mobs::mini_gunner	signature:(uuid_t player)
 get_last_seen	mods/mobs/smart-mob.cpp	/^	tick_t smart_mob::get_last_seen(uuid_t player) {$/;"	kind:function	line:216	class:mods::mobs::smart_mob	signature:(uuid_t player)
@@ -8429,7 +8429,7 @@ has_found_item	mods/mobs/defiler.cpp	/^	bool defiler::has_found_item() {$/;"	kin
 has_found_item	mods/mobs/generic-thief.cpp	/^	bool generic_thief::has_found_item() {$/;"	kind:function	line:556	class:mods::mobs::generic_thief	signature:()
 has_found_item	mods/mobs/melee-combatant.cpp	/^	bool melee_combatant::has_found_item() {$/;"	kind:function	line:426	class:mods::mobs::melee_combatant	signature:()
 has_found_item	mods/mobs/shoplifter.cpp	/^	bool shoplifter::has_found_item() {$/;"	kind:function	line:426	class:mods::mobs::shoplifter	signature:()
-has_human_remains	mods/mobs/defiler.cpp	/^	static constexpr std::array<obj_vnum,2> has_human_remains  = {$/;"	kind:member	line:839	namespace:mods::mobs::defiler_init	file:
+has_human_remains	mods/mobs/defiler.cpp	/^	static constexpr std::array<obj_vnum,2> has_human_remains  = {$/;"	kind:member	line:872	namespace:mods::mobs::defiler_init	file:
 has_inventory_capability	mods/player.cpp	/^	bool player::has_inventory_capability(int type) {$/;"	kind:function	line:684	class:mods::player	signature:(int type)
 has_key	act.movement.cpp	/^int has_key(char_data *ch, obj_vnum key) {$/;"	kind:function	line:341	signature:(char_data *ch, obj_vnum key)
 has_lowly_security_ptr	mods/mobs/lowly-security.hpp	/^static inline bool has_lowly_security_ptr(uuid_t u) {$/;"	kind:function	line:61	file:	signature:(uuid_t u)
@@ -8573,7 +8573,7 @@ hqbuild	mods/builder/hqbuild.cpp	/^namespace mods::builder::hqbuild {$/;"	kind:n
 hqbuild	mods/init.hpp	/^INIT(mods::builder::hqbuild);$/;"	kind:variable	line:40
 hsort	db.cpp	/^int hsort(const void *a, const void *b) {$/;"	kind:function	line:1895	signature:(const void *a, const void *b)
 human_remains_found	mods/contract-defiler.cpp	/^	bool human_remains_found(player_ptr_t player,uuid_t obj_uuid) {$/;"	kind:function	line:16	namespace:mods::contract_defiler	signature:(player_ptr_t player,uuid_t obj_uuid)
-hunt	mods/mobs/defiler.cpp	/^	void defiler::hunt(uuid_t target) {$/;"	kind:function	line:772	class:mods::mobs::defiler	signature:(uuid_t target)
+hunt	mods/mobs/defiler.cpp	/^	void defiler::hunt(uuid_t target) {$/;"	kind:function	line:804	class:mods::mobs::defiler	signature:(uuid_t target)
 hunt_hostile_targets	mods/mobs/smart-mob.cpp	/^	void smart_mob::hunt_hostile_targets() {$/;"	kind:function	line:286	class:mods::mobs::smart_mob	signature:()
 hunt_victim	graph.cpp	/^void hunt_victim(char_data *ch) {$/;"	kind:function	line:237	signature:(char_data *ch)
 hunting	mods/mobs/mini-gunner.hpp	/^			uuidvec_t hunting;$/;"	kind:member	line:99	struct:mods::mobs::mini_gunner	file:	access:private
@@ -8612,7 +8612,7 @@ id	mods/orm/medic.hpp	/^		uint64_t id;$/;"	kind:member	line:39	struct:mods::orm:
 id	mods/orm/mob-equipment-map.hpp	/^		uint64_t id;$/;"	kind:member	line:53	struct:mods::orm::mob_equipment_map	file:	access:public
 id	mods/orm/mob-equipment.hpp	/^		uint64_t id;$/;"	kind:member	line:83	struct:mods::orm::mob_equipment	file:	access:public
 id	mods/orm/mob-roam.hpp	/^		id_type_t id;$/;"	kind:member	line:70	struct:mods::orm::mob_roam	file:	access:public
-id	mods/orm/orm-base.hpp	/^			uint64_t id;$/;"	kind:member	line:273	struct:mods::orm::orm_base	file:	access:public
+id	mods/orm/orm-base.hpp	/^			uint64_t id;$/;"	kind:member	line:283	struct:mods::orm::orm_base	file:	access:public
 id	mods/orm/player-contract-state.hpp	/^		uint64_t id;$/;"	kind:member	line:53	struct:mods::orm::player_contract_state	file:	access:public
 id	mods/orm/player-skill-points.hpp	/^		uint64_t id;$/;"	kind:member	line:11	struct:mods::orm::player_skill_points_record_t	file:	access:public
 id	mods/orm/player-skill-usage.hpp	/^		uint64_t id;$/;"	kind:member	line:11	struct:mods::orm::player_skill_usage_record_t	file:	access:public
@@ -8656,7 +8656,7 @@ id_column	mods/orm/mini-game.hpp	/^		std::string id_column() const { return "gam
 id_column	mods/orm/mob-equipment-map.hpp	/^		std::string id_column() {$/;"	kind:function	line:17	struct:mods::orm::mob_equipment_map	access:public	signature:()
 id_column	mods/orm/mob-equipment.hpp	/^		std::string id_column() {$/;"	kind:function	line:53	struct:mods::orm::mob_equipment	access:public	signature:()
 id_column	mods/orm/mob-roam.hpp	/^		std::string id_column() const {$/;"	kind:function	line:36	struct:mods::orm::mob_roam	access:public	signature:() const
-id_column	mods/orm/orm-base.hpp	/^			virtual std::string id_column() {$/;"	kind:function	line:248	struct:mods::orm::orm_base	access:public	signature:()
+id_column	mods/orm/orm-base.hpp	/^			virtual std::string id_column() {$/;"	kind:function	line:258	struct:mods::orm::orm_base	access:public	signature:()
 id_column	mods/orm/player-base-ability.hpp	/^		std::string id_column(){ return "pba_id"; }$/;"	kind:function	line:12	struct:mods::orm::player_base_ability	access:public	signature:()
 id_column	mods/orm/player-contract-state.hpp	/^		std::string id_column() const {$/;"	kind:function	line:21	struct:mods::orm::player_contract_state	access:public	signature:() const
 id_column	mods/orm/player-skill-points.hpp	/^		std::string id_column() const {$/;"	kind:function	line:38	struct:mods::orm::player_skill_points	access:public	signature:() const
@@ -8748,7 +8748,7 @@ init	act.demolitions.cpp	/^	void init() {$/;"	kind:function	line:250	namespace:d
 init	act.informative.cpp	/^	void init() {$/;"	kind:function	line:2066	namespace:informative	signature:()
 init	globals.cpp	/^		int init(int argc,char** argv) {$/;"	kind:function	line:199	namespace:mods::globals	signature:(int argc,char** argv)
 init	mobact.cpp	/^	void init() {$/;"	kind:function	line:316	namespace:mods::mobact	signature:()
-init	mods/admin-tools/stay.cpp	/^	void init() {$/;"	kind:function	line:91	namespace:mods::admin_tools::stay	signature:()
+init	mods/admin-tools/stay.cpp	/^	void init() {$/;"	kind:function	line:85	namespace:mods::admin_tools::stay	signature:()
 init	mods/armor/advanced-protection.cpp	/^	void advanced_protection::init() {$/;"	kind:function	line:16	class:mods::armor::advanced_protection	signature:()
 init	mods/armor/basic-protection.cpp	/^	void basic_protection::init() {$/;"	kind:function	line:16	class:mods::armor::basic_protection	signature:()
 init	mods/armor/elite-protection.cpp	/^	void elite_protection::init() {$/;"	kind:function	line:16	class:mods::armor::elite_protection	signature:()
@@ -8816,7 +8816,7 @@ init	mods/mobs/armed-guard.cpp	/^	void armed_guard::init() {$/;"	kind:function	l
 init	mods/mobs/car-thief.cpp	/^	void car_thief::init() {$/;"	kind:function	line:281	class:mods::mobs::car_thief	signature:()
 init	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::init() {$/;"	kind:function	line:303	class:mods::mobs::chaotic_meth_addict	signature:()
 init	mods/mobs/defiler.cpp	/^	void defiler::init() {$/;"	kind:function	line:387	class:mods::mobs::defiler	signature:()
-init	mods/mobs/defiler.cpp	/^	void init() {$/;"	kind:function	line:870	namespace:mods::mobs::defiler_init	signature:()
+init	mods/mobs/defiler.cpp	/^	void init() {$/;"	kind:function	line:903	namespace:mods::mobs::defiler_init	signature:()
 init	mods/mobs/generic-thief.cpp	/^	void generic_thief::init() {$/;"	kind:function	line:355	class:mods::mobs::generic_thief	signature:()
 init	mods/mobs/lowly-security.cpp	/^	void lowly_security::init() {$/;"	kind:function	line:136	class:mods::mobs::lowly_security	signature:()
 init	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::init() {$/;"	kind:function	line:302	class:mods::mobs::melee_combatant	signature:()
@@ -9478,7 +9478,7 @@ loaded	mods/orm/mini-game.hpp	/^		bool loaded;$/;"	kind:member	line:70	struct:mo
 loaded	mods/orm/mob-equipment-map.hpp	/^		bool loaded;$/;"	kind:member	line:58	struct:mods::orm::mob_equipment_map	file:	access:public
 loaded	mods/orm/mob-equipment.hpp	/^		bool loaded;$/;"	kind:member	line:115	struct:mods::orm::mob_equipment	file:	access:public
 loaded	mods/orm/mob-roam.hpp	/^		bool loaded;$/;"	kind:member	line:75	struct:mods::orm::mob_roam	file:	access:public
-loaded	mods/orm/orm-base.hpp	/^			bool loaded;$/;"	kind:member	line:271	struct:mods::orm::orm_base	file:	access:public
+loaded	mods/orm/orm-base.hpp	/^			bool loaded;$/;"	kind:member	line:281	struct:mods::orm::orm_base	file:	access:public
 loaded	mods/orm/player-base-ability.hpp	/^		bool loaded;$/;"	kind:member	line:56	struct:mods::orm::player_base_ability	file:	access:public
 loaded	mods/orm/player-contract-state.hpp	/^		bool loaded;$/;"	kind:member	line:51	struct:mods::orm::player_contract_state	file:	access:public
 loaded	mods/orm/player-skill-points.hpp	/^		bool loaded;$/;"	kind:member	line:67	struct:mods::orm::player_skill_points	file:	access:public
@@ -9689,7 +9689,7 @@ m_claymores	mods/classes/forge.hpp	/^			std::deque<obj_ptr_t> m_claymores;$/;"	k
 m_clear_status	mods/lmdb.hpp	/^			void m_clear_status() {$/;"	kind:function	line:211	struct:mods::lmdb::_db_handle	file:	access:private	signature:()
 m_closed	mods/lmdb.hpp	/^			bool m_closed;$/;"	kind:member	line:210	struct:mods::lmdb::_db_handle	file:	access:private
 m_combat_order	mods/player.hpp	/^			std::vector<std::pair<uint16_t,func_t>> m_combat_order;$/;"	kind:member	line:1064	struct:mods::player	file:	access:private
-m_con	mods/orm/orm-base.hpp	/^			pqxx::connection* m_con;$/;"	kind:member	line:272	struct:mods::orm::orm_base	file:	access:public
+m_con	mods/orm/orm-base.hpp	/^			pqxx::connection* m_con;$/;"	kind:member	line:282	struct:mods::orm::orm_base	file:	access:public
 m_config_file	mods/lmdb/conf.hpp	/^std::string m_config_file;$/;"	kind:member	line:11	struct:gdns::conf	file:	access:private
 m_confuse	mods/classes/contagion.hpp	/^			skill_t m_confuse;$/;"	kind:member	line:116	struct:mods::classes::contagion	file:	access:private
 m_consumables	mods/deferred.hpp	/^			std::vector<consumable_removal_description_t> m_consumables;$/;"	kind:member	line:113	class:mods::deferred	file:	access:protected
@@ -9933,7 +9933,7 @@ m_debug	mods/mobs/defiler-behaviour-tree.cpp	302;"	kind:macro	line:302	file:
 m_debug	mods/mobs/defiler.cpp	19;"	kind:macro	line:19	file:
 m_debug	mods/mobs/defiler.cpp	24;"	kind:macro	line:24	file:
 m_debug	mods/mobs/defiler.cpp	27;"	kind:macro	line:27	file:
-m_debug	mods/mobs/defiler.cpp	893;"	kind:macro	line:893	file:
+m_debug	mods/mobs/defiler.cpp	926;"	kind:macro	line:926	file:
 m_debug	mods/mobs/extended-types.cpp	128;"	kind:macro	line:128	file:
 m_debug	mods/mobs/extended-types.cpp	15;"	kind:macro	line:15	file:
 m_debug	mods/mobs/extended-types.cpp	17;"	kind:macro	line:17	file:
@@ -10125,7 +10125,7 @@ m_error	mods/shrapnel.cpp	20;"	kind:macro	line:20	file:
 m_error	mods/shrapnel.cpp	69;"	kind:macro	line:69	file:
 m_error	mods/weapons/reload.cpp	173;"	kind:macro	line:173	file:
 m_error	mods/weapons/reload.cpp	9;"	kind:macro	line:9	file:
-m_error_log	mods/orm/orm-base.hpp	/^			std::vector<std::string> m_error_log;$/;"	kind:member	line:290	struct:mods::orm::orm_base	file:	access:private
+m_error_log	mods/orm/orm-base.hpp	/^			std::vector<std::string> m_error_log;$/;"	kind:member	line:300	struct:mods::orm::orm_base	file:	access:private
 m_errors	mods/player-scaffolding.hpp	/^			std::vector<std::string> m_errors;$/;"	kind:member	line:72	struct:mods::player_scaffolding	file:	access:protected
 m_ex_descriptions	structs.h	/^		std::vector<mods::extra_desc_data> m_ex_descriptions;$/;"	kind:member	line:1266	struct:obj_data	file:	access:protected
 m_executing_js	mods/player.hpp	/^			bool         m_executing_js;$/;"	kind:member	line:982	struct:mods::player	file:	access:private
@@ -10226,7 +10226,7 @@ m_last_attacker	mods/mobs/generic-thief.hpp	/^			player_ptr_t m_last_attacker;$/
 m_last_attacker	mods/mobs/melee-combatant.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:108	namespace:mods::mobs	file:	access:private
 m_last_attacker	mods/mobs/mp-shotgunner.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:68	struct:mods::mobs::mp_shotgunner	file:	access:private
 m_last_attacker	mods/mobs/shoplifter.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:108	namespace:mods::mobs	file:	access:private
-m_last_error	mods/orm/orm-base.hpp	/^			std::string m_last_error;$/;"	kind:member	line:289	struct:mods::orm::orm_base	file:	access:private
+m_last_error	mods/orm/orm-base.hpp	/^			std::string m_last_error;$/;"	kind:member	line:299	struct:mods::orm::orm_base	file:	access:private
 m_leech	mods/classes/contagion.hpp	/^			skill_t m_leech;$/;"	kind:member	line:143	struct:mods::classes::contagion	file:	access:private
 m_lense_type	mods/player.hpp	/^			lense_type_t m_lense_type;$/;"	kind:member	line:965	struct:mods::player	file:	access:protected
 m_level	mods/boosters/adrenaline-shot.hpp	/^			level_t m_level;$/;"	kind:member	line:46	namespace:mods::boosters	file:	access:protected
@@ -10367,7 +10367,7 @@ m_rct	mods/player.hpp	/^			std::shared_ptr<mods::ranged_combat_totals> m_rct;$/;
 m_rct_calculated	mods/player.hpp	/^			std::shared_ptr<mods::ranged_combat_totals> m_rct_calculated;$/;"	kind:member	line:1068	struct:mods::player	file:	access:private
 m_realloc	mods/string.cpp	/^	void string::m_realloc() {$/;"	kind:function	line:205	class:mods::string	signature:()
 m_recruit	mods/classes/contagion.hpp	/^			skill_t m_recruit;$/;"	kind:member	line:146	struct:mods::classes::contagion	file:	access:private
-m_register_error	mods/orm/orm-base.hpp	/^			void m_register_error(std::tuple<int16_t,std::string>& t) {$/;"	kind:function	line:283	struct:mods::orm::orm_base	file:	access:private	signature:(std::tuple<int16_t,std::string>& t)
+m_register_error	mods/orm/orm-base.hpp	/^			void m_register_error(std::tuple<int16_t,std::string>& t) {$/;"	kind:function	line:293	struct:mods::orm::orm_base	file:	access:private	signature:(std::tuple<int16_t,std::string>& t)
 m_reinforce_weapon_level	mods/classes/forge.hpp	/^			skill_familiarity_t m_reinforce_weapon_level;$/;"	kind:member	line:69	struct:mods::classes::forge	file:	access:private
 m_remembered_cars	mods/mobs/car-thief.hpp	/^			uuidlist_t m_remembered_cars;$/;"	kind:member	line:93	struct:mods::mobs::car_thief	file:	access:private
 m_remembered_items	mods/mobs/armed-guard.hpp	/^			uuidlist_t m_remembered_items;$/;"	kind:member	line:113	namespace:mods::mobs	file:	access:private
@@ -10382,7 +10382,7 @@ m_request_recon	mods/classes/ghost.hpp	/^			skill_t m_request_recon;$/;"	kind:me
 m_request_recon	mods/classes/marine.hpp	/^			skill_t m_request_recon;$/;"	kind:member	line:75	namespace:mods::classes	file:	access:private
 m_requirements	mods/forge-engine/generated-armor.hpp	/^			requirements_t m_requirements;$/;"	kind:member	line:36	struct:mods::forge_engine::generated_armor_t	file:	access:private
 m_requirements	mods/forge-engine/generated-rifle.hpp	/^			requirements_t m_requirements;$/;"	kind:member	line:35	struct:mods::forge_engine::generated_rifle_t	file:	access:private
-m_result	mods/orm/orm-base.hpp	/^			orm_result_t m_result;$/;"	kind:member	line:281	struct:mods::orm::orm_base	file:	access:protected
+m_result	mods/orm/orm-base.hpp	/^			orm_result_t m_result;$/;"	kind:member	line:291	struct:mods::orm::orm_base	file:	access:protected
 m_returning	mods/sql.hpp	/^			std::string m_returning;$/;"	kind:member	line:563	struct:mods::sql::compositor	file:	access:private
 m_rifle_level	mods/rifle-attachments.hpp	/^			uint16_t m_rifle_level;$/;"	kind:member	line:119	struct:mods::rifle_attachments_t	file:	access:private
 m_rifle_yaml_file	mods/rifle-attachments.hpp	/^			std::string m_rifle_yaml_file;$/;"	kind:member	line:117	struct:mods::rifle_attachments_t	file:	access:private
@@ -10402,7 +10402,7 @@ m_scanned_items	mods/mobs/defiler.hpp	/^			std::vector<mods::scan::vec_player_da
 m_scanned_items	mods/mobs/generic-thief.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:170	namespace:mods::mobs	file:	access:private
 m_scanned_items	mods/mobs/melee-combatant.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:112	namespace:mods::mobs	file:	access:private
 m_scanned_items	mods/mobs/shoplifter.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:112	namespace:mods::mobs	file:	access:private
-m_scanned_targets	mods/mobs/defiler.hpp	/^			std::vector<std::pair<uuid_t,direction_t>> m_scanned_targets;$/;"	kind:member	line:321	namespace:mods::mobs	file:	access:private
+m_scanned_targets	mods/mobs/defiler.hpp	/^			std::vector<std::tuple<uuid_t,direction_t,uint8_t>> m_scanned_targets;$/;"	kind:member	line:321	namespace:mods::mobs	file:	access:private
 m_scripted_response	mods/player.hpp	/^			std::string m_scripted_response;$/;"	kind:member	line:976	struct:mods::player	file:	access:private
 m_seal_off_room_with_wall_of_fire_level	mods/classes/pyrexia.hpp	/^			skill_familiarity_t m_seal_off_room_with_wall_of_fire_level;$/;"	kind:member	line:78	struct:mods::classes::pyrexia	file:	access:private
 m_seal_room	mods/classes/medic.hpp	/^			skill_t m_seal_room;$/;"	kind:member	line:197	struct:mods::classes::medic	file:	access:private
@@ -11986,7 +11986,7 @@ primary_key_name	mods/orm/mob-equipment-map.hpp	/^		std::string primary_key_name
 primary_key_name	mods/orm/mob-equipment.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:56	struct:mods::orm::mob_equipment	access:public	signature:()
 primary_key_name	mods/orm/mob-roam.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:23	struct:mods::orm::mob_roam_record_t	access:public	signature:()
 primary_key_name	mods/orm/mob-roam.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:45	struct:mods::orm::mob_roam	access:public	signature:()
-primary_key_name	mods/orm/orm-base.hpp	/^			virtual std::string primary_key_name() {$/;"	kind:function	line:253	struct:mods::orm::orm_base	access:public	signature:()
+primary_key_name	mods/orm/orm-base.hpp	/^			virtual std::string primary_key_name() {$/;"	kind:function	line:263	struct:mods::orm::orm_base	access:public	signature:()
 primary_key_name	mods/orm/player-base-ability.hpp	/^		std::string primary_key_name() { return this->id_column(); }$/;"	kind:function	line:13	struct:mods::orm::player_base_ability	access:public	signature:()
 primary_key_name	mods/orm/player-contract-state.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:25	struct:mods::orm::player_contract_state	access:public	signature:()
 primary_key_name	mods/orm/player-skill-points.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:25	struct:mods::orm::player_skill_points_record_t	access:public	signature:()
@@ -12029,7 +12029,7 @@ primary_key_value	mods/orm/mini-game.hpp	/^		std::string primary_key_value(){ re
 primary_key_value	mods/orm/mob-equipment-map.hpp	/^		std::string primary_key_value() {$/;"	kind:function	line:23	struct:mods::orm::mob_equipment_map	access:public	signature:()
 primary_key_value	mods/orm/mob-equipment.hpp	/^		std::string primary_key_value() {$/;"	kind:function	line:59	struct:mods::orm::mob_equipment	access:public	signature:()
 primary_key_value	mods/orm/mob-roam.hpp	/^		std::string primary_key_value() {$/;"	kind:function	line:48	struct:mods::orm::mob_roam	access:public	signature:()
-primary_key_value	mods/orm/orm-base.hpp	/^			virtual std::string primary_key_value() {$/;"	kind:function	line:256	struct:mods::orm::orm_base	access:public	signature:()
+primary_key_value	mods/orm/orm-base.hpp	/^			virtual std::string primary_key_value() {$/;"	kind:function	line:266	struct:mods::orm::orm_base	access:public	signature:()
 primary_key_value	mods/orm/player-base-ability.hpp	/^		std::string primary_key_value() { return std::to_string(this->pba_id); }$/;"	kind:function	line:14	struct:mods::orm::player_base_ability	access:public	signature:()
 primary_key_value	mods/orm/player-contract-state.hpp	/^		std::string primary_key_value() {$/;"	kind:function	line:28	struct:mods::orm::player_contract_state	access:public	signature:()
 primary_key_value	mods/orm/player-skill-points.cpp	/^	std::string player_skill_points::primary_key_value() {$/;"	kind:function	line:26	class:mods::orm::player_skill_points	signature:()
@@ -12060,7 +12060,7 @@ primary_type	mods/orm/marine.hpp	/^		primary_choice_t primary_type(){$/;"	kind:f
 primary_type	mods/orm/medic.hpp	/^		primary_choice_t primary_type(){$/;"	kind:function	line:29	struct:mods::orm::medic	access:public	signature:()
 primary_type	mods/orm/mob-equipment-map.hpp	/^		primary_choice_t primary_type() {$/;"	kind:function	line:44	struct:mods::orm::mob_equipment_map	access:public	signature:()
 primary_type	mods/orm/mob-equipment.hpp	/^		primary_choice_t primary_type() {$/;"	kind:function	line:74	struct:mods::orm::mob_equipment	access:public	signature:()
-primary_type	mods/orm/orm-base.hpp	/^			virtual TPrimaryType primary_type() {$/;"	kind:function	line:259	struct:mods::orm::orm_base	access:public	signature:()
+primary_type	mods/orm/orm-base.hpp	/^			virtual TPrimaryType primary_type() {$/;"	kind:function	line:269	struct:mods::orm::orm_base	access:public	signature:()
 primary_type	mods/orm/player-contract-state.hpp	/^		std::string primary_type() {$/;"	kind:function	line:31	struct:mods::orm::player_contract_state	access:public	signature:()
 primary_type	mods/orm/sniper.hpp	/^		primary_choice_t primary_type() {$/;"	kind:function	line:41	struct:mods::orm::sniper	access:public	signature:()
 primary_type	mods/orm/support.hpp	/^		primary_choice_t primary_type(){$/;"	kind:function	line:29	struct:mods::orm::support	access:public	signature:()
@@ -12482,7 +12482,8 @@ remember_item	mods/mobs/melee-combatant.cpp	/^	void melee_combatant::remember_it
 remember_item	mods/mobs/shoplifter.cpp	/^	void shoplifter::remember_item(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:440	class:mods::mobs::shoplifter	signature:(const mods::scan::vec_player_data_element& data)
 reminders	mods/players/friendly-reminders.cpp	/^	static std::vector<std::string> reminders;$/;"	kind:member	line:19	namespace:mods::players::friendly_reminders	file:
 remove	mods/affects.hpp	/^			void remove(TAffects id) {$/;"	kind:function	line:271	struct:mods::affects::dissolver	access:public	signature:(TAffects id)
-remove	mods/orm/orm-base.hpp	/^			std::tuple<int16_t,std::string> remove() {$/;"	kind:function	line:222	struct:mods::orm::orm_base	access:public	signature:()
+remove	mods/orm/orm-base.hpp	/^			std::tuple<int16_t,std::string> remove() {$/;"	kind:function	line:232	struct:mods::orm::orm_base	access:public	signature:()
+remove	mods/orm/orm-base.hpp	/^			std::tuple<int16_t,std::string> remove(TClass* c) {$/;"	kind:function	line:223	struct:mods::orm::orm_base	access:public	signature:(TClass* c)
 remove	mods/pq.hpp	/^	std::tuple<int16_t,std::string> remove() {$/;"	kind:function	line:640	struct:orm_base	access:public	signature:()
 remove	mods/super-users.cpp	/^	bool remove(std::string_view name) {$/;"	kind:function	line:119	namespace:mods::super_users	signature:(std::string_view name)
 remove_affect	mods/player.cpp	/^	void player::remove_affect(uint64_t flag) {$/;"	kind:function	line:1205	class:mods::player	signature:(uint64_t flag)
@@ -12504,7 +12505,7 @@ remove_replenish	mods/intimidate.cpp	/^void remove_replenish(room_vnum room,std:
 remove_replenish	mods/zone.cpp	/^	void remove_replenish(room_vnum room,std::string type) {$/;"	kind:function	line:69	namespace:mods::zone	signature:(room_vnum room,std::string type)
 remove_room	mods/orm/shop.cpp	/^	int16_t shop::remove_room(room_vnum room){$/;"	kind:function	line:56	class:mods::orm::shop	signature:(room_vnum room)
 remove_room_dissolve_affect	mods/rooms.cpp	/^	void remove_room_dissolve_affect(room_rnum room, affect_t item) {$/;"	kind:function	line:92	namespace:mods::rooms::affects	signature:(room_rnum room, affect_t item)
-remove_stay	mods/admin-tools/stay.cpp	/^	void remove_stay(player_ptr_t& douche) {$/;"	kind:function	line:18	namespace:mods::admin_tools::stay	signature:(player_ptr_t& douche)
+remove_stay	mods/admin-tools/stay.cpp	/^	void remove_stay(std::string name) {$/;"	kind:function	line:18	namespace:mods::admin_tools::stay	signature:(std::string name)
 remove_subscriber	mods/chat.cpp	/^	void channel::remove_subscriber(const socket_t& sock) {$/;"	kind:function	line:61	class:mods::chat::channel	signature:(const socket_t& sock)
 remove_super_user	mods/js.cpp	/^		static duk_ret_t remove_super_user(duk_context *ctx) {$/;"	kind:function	line:87	namespace:mods::js	signature:(duk_context *ctx)
 remove_texture	structs.cpp	/^void room_data::remove_texture(texture_type_t t) {$/;"	kind:function	line:464	class:room_data	signature:(texture_type_t t)
@@ -12620,7 +12621,7 @@ resolver	mods/lmdb/db.hpp	/^		resolver(){$/;"	kind:function	line:261	struct:gdns
 resolver	mods/lmdb/db.hpp	/^	struct resolver {$/;"	kind:struct	line:260	namespace:gdns::lmdb	file:
 resting	mods/resting.cpp	/^namespace mods::resting {$/;"	kind:namespace	line:14	class:mods	file:
 resting	mods/resting.hpp	/^namespace mods::resting {$/;"	kind:namespace	line:6	class:mods	file:
-result	mods/orm/orm-base.hpp	/^			orm_result_t result() const {$/;"	kind:function	line:277	struct:mods::orm::orm_base	access:public	signature:() const
+result	mods/orm/orm-base.hpp	/^			orm_result_t result() const {$/;"	kind:function	line:287	struct:mods::orm::orm_base	access:public	signature:() const
 result	mods/util.cpp	/^	void check_parsed_args::result(std::string f,std::size_t index,bool passed) {$/;"	kind:function	line:1584	class:mods::util::args::check_parsed_args	signature:(std::string f,std::size_t index,bool passed)
 result	mods/util.cpp	/^	void check_parsed_args::result(std::string f,std::string value,bool passed) {$/;"	kind:function	line:1580	class:mods::util::args::check_parsed_args	signature:(std::string f,std::string value,bool passed)
 result_set	mods/orm/mini-game.hpp	/^		pqxx::result result_set;$/;"	kind:member	line:68	struct:mods::orm::mini_game	file:	access:public
@@ -13106,7 +13107,7 @@ save_string_field	mods/orm/orm-base.hpp	/^	inline void save_string_field<std::ve
 save_string_field	mods/orm/orm-base.hpp	/^	void save_string_field(T field,std::string_view field_name,strmap_t* exported_data) {$/;"	kind:function	line:52	namespace:mods::orm	signature:(T field,std::string_view field_name,strmap_t* exported_data)
 save_targets	mods/mobs/mini-gunner.cpp	/^	void mini_gunner::save_targets(vec_t<uuid_t>& t) {$/;"	kind:function	line:338	class:mods::mobs::mini_gunner	signature:(vec_t<uuid_t>& t)
 save_targets	mods/mobs/smart-mob.cpp	/^	void smart_mob::save_targets(vec_t<uuid_t>& t) {$/;"	kind:function	line:261	class:mods::mobs::smart_mob	signature:(vec_t<uuid_t>& t)
-save_to_db	mods/admin-tools/stay.cpp	/^	void save_to_db(player_ptr_t& douche, room_vnum r_vnum) {$/;"	kind:function	line:22	namespace:mods::admin_tools::stay	signature:(player_ptr_t& douche, room_vnum r_vnum)
+save_to_db	mods/admin-tools/stay.cpp	/^	void save_to_db(std::string name, room_vnum r_vnum) {$/;"	kind:function	line:22	namespace:mods::admin_tools::stay	signature:(std::string name, room_vnum r_vnum)
 save_to_db	mods/builder.cpp	/^	int save_to_db(room_rnum in_room,std::string& error_string) {$/;"	kind:function	line:806	namespace:mods::builder	signature:(room_rnum in_room,std::string& error_string)
 save_to_db	mods/builder_util.hpp	/^	std::pair<bool,std::string> save_to_db($/;"	kind:function	line:22	namespace:mods::builder_util	signature:( const std::string& table_name, const std::string& primary_key, const PKValueType& pk_value, value_callback fill_value_function, post_modify_callback post_modify_values_function )
 save_to_lmdb	mods/values.cpp	/^		void save_to_lmdb(std::string key,std::string value){$/;"	kind:function	line:2444	namespace:mods::values	signature:(std::string key,std::string value)
@@ -13833,7 +13834,7 @@ spawn	mods/message-encoder.cpp	/^	void spawn() {$/;"	kind:function	line:75	names
 spawn	mods/message-server.cpp	/^	void spawn() {$/;"	kind:function	line:361	namespace:mods::message_server	signature:()
 spawn_near_someone	mods/mobs/armed-guard.cpp	/^	player_ptr_t armed_guard::spawn_near_someone() {$/;"	kind:function	line:460	class:mods::mobs::armed_guard	signature:()
 spawn_near_someone	mods/mobs/chaotic-meth-addict.cpp	/^	player_ptr_t chaotic_meth_addict::spawn_near_someone() {$/;"	kind:function	line:462	class:mods::mobs::chaotic_meth_addict	signature:()
-spawn_near_someone	mods/mobs/defiler.cpp	/^	player_ptr_t defiler::spawn_near_someone() {$/;"	kind:function	line:779	class:mods::mobs::defiler	signature:()
+spawn_near_someone	mods/mobs/defiler.cpp	/^	player_ptr_t defiler::spawn_near_someone() {$/;"	kind:function	line:811	class:mods::mobs::defiler	signature:()
 spawn_near_someone	mods/mobs/melee-combatant.cpp	/^	player_ptr_t melee_combatant::spawn_near_someone() {$/;"	kind:function	line:460	class:mods::mobs::melee_combatant	signature:()
 spawn_near_someone	mods/mobs/shoplifter.cpp	/^	player_ptr_t shoplifter::spawn_near_someone() {$/;"	kind:function	line:460	class:mods::mobs::shoplifter	signature:()
 special	interpreter.cpp	/^int special(char_data *ch, int cmd, char *arg) {$/;"	kind:function	line:1389	signature:(char_data *ch, int cmd, char *arg)
@@ -14130,7 +14131,7 @@ table_name	mods/orm/mob-equipment-map.hpp	/^		std::string table_name() {$/;"	kin
 table_name	mods/orm/mob-equipment.hpp	/^		std::string table_name() const {$/;"	kind:function	line:11	struct:mods::orm::mob_equipment	access:public	signature:() const
 table_name	mods/orm/mob-roam.hpp	/^		std::string table_name() const {$/;"	kind:function	line:20	struct:mods::orm::mob_roam_record_t	access:public	signature:() const
 table_name	mods/orm/mob-roam.hpp	/^		std::string table_name() const {$/;"	kind:function	line:30	struct:mods::orm::mob_roam	access:public	signature:() const
-table_name	mods/orm/orm-base.hpp	/^			virtual std::string table_name() {$/;"	kind:function	line:242	struct:mods::orm::orm_base	access:public	signature:()
+table_name	mods/orm/orm-base.hpp	/^			virtual std::string table_name() {$/;"	kind:function	line:252	struct:mods::orm::orm_base	access:public	signature:()
 table_name	mods/orm/player-base-ability.hpp	/^		std::string table_name(){ return "player_base_ability"; }$/;"	kind:function	line:10	struct:mods::orm::player_base_ability	access:public	signature:()
 table_name	mods/orm/player-contract-state.hpp	/^		std::string table_name() const {$/;"	kind:function	line:15	struct:mods::orm::player_contract_state	access:public	signature:() const
 table_name	mods/orm/player-skill-points.hpp	/^		std::string table_name() const {$/;"	kind:function	line:22	struct:mods::orm::player_skill_points_record_t	access:public	signature:() const
@@ -14529,7 +14530,7 @@ updated_at	mods/orm/medic.hpp	/^		long updated_at;$/;"	kind:member	line:43	struc
 updated_at	mods/orm/mini-game.hpp	/^		long updated_at;$/;"	kind:member	line:67	struct:mods::orm::mini_game	file:	access:public
 updated_at	mods/orm/mob-equipment-map.hpp	/^		long updated_at;$/;"	kind:member	line:57	struct:mods::orm::mob_equipment_map	file:	access:public
 updated_at	mods/orm/mob-equipment.hpp	/^		long updated_at;$/;"	kind:member	line:114	struct:mods::orm::mob_equipment	file:	access:public
-updated_at	mods/orm/orm-base.hpp	/^			long updated_at;$/;"	kind:member	line:275	struct:mods::orm::orm_base	file:	access:public
+updated_at	mods/orm/orm-base.hpp	/^			long updated_at;$/;"	kind:member	line:285	struct:mods::orm::orm_base	file:	access:public
 updated_at	mods/orm/player-base-ability.hpp	/^		long updated_at;$/;"	kind:member	line:55	struct:mods::orm::player_base_ability	file:	access:public
 updated_at	mods/orm/player-contract-state.hpp	/^		long updated_at;$/;"	kind:member	line:58	struct:mods::orm::player_contract_state	file:	access:public
 updated_at	mods/orm/pyrexia.hpp	/^		long updated_at;$/;"	kind:member	line:58	struct:mods::orm::pyrexia	file:	access:public

@@ -318,7 +318,7 @@ namespace mods::mobs {
 			status_t m_status;
 
 
-			std::vector<std::pair<uuid_t,direction_t>> m_scanned_targets;
+			std::vector<std::tuple<uuid_t,direction_t,uint8_t>> m_scanned_targets;
 			uuid_t m_hunt;
 	};
 
