@@ -74,7 +74,6 @@ namespace mods::admin_tools::stay {
 					player->send("[+] Removing player from stand-still...");
 					douche->can_move() = true;
 					player->sendln("{grn}[DONE]{/grn}");
-
 					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
 					char_from_room(douche->cd());
 					char_to_room(douche->cd(),mods::world_conf::real_mortal_start());

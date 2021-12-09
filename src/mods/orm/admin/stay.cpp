@@ -25,9 +25,10 @@ namespace mods::orm::admin {
 	}
 	int16_t stay::remove_for(player_ptr_t& player) {
 		init();
-		load_by_player(player);
+		load_by_player_name(player->name().c_str());
 		if(loaded) {
-			return std::get<0>(this->remove());
+			std::cerr << "REMOVING WHERE PLAYER IS: '" << player->name().c_str() << "'\n";
+			return std::get<0>(this->remove<stay>(this));
 		}
 		return -1;
 	}
@@ -46,7 +47,10 @@ namespace mods::orm::admin {
 		init();
 		auto s = this->read<stay>(this,this->player_name_column(),player_name);
 		std::cerr << green_str("read:") << "player: '" << player_name << "', [0]:" << std::get<0>(s) << ", [1]: '" << std::get<1>(s) << "'\n";
-		return std::get<0>(this->read<stay>(this,this->player_name_column(),player_name));
+		if(ORM_SUCCESS(s)) {
+			loaded = true;
+		}
+		return std::get<0>(s);
 	}
 	int16_t stay::feed(const pqxx::result::reference& row) {
 		init();
