@@ -11,6 +11,18 @@ namespace mods::orm::admin {
 	 *
 	 * @return
 	 */
+	uint64_t stay::initialize_row(std::string player, const room_vnum& r_vnum) {
+		init();
+		s_username = player;
+		s_room_vnum = r_vnum;
+		auto status = this->create<stay>(this);
+		if(ORM_SUCCESS(status)) {
+			created_at = time(nullptr);
+			loaded = 1;
+			id = std::get<2>(status);
+		}
+		return id;
+	}
 	uint64_t stay::initialize_row(player_ptr_t& player, const room_vnum& r_vnum) {
 		init();
 		s_username = player->name().c_str();
@@ -22,6 +34,15 @@ namespace mods::orm::admin {
 			id = std::get<2>(status);
 		}
 		return id;
+	}
+	int16_t stay::remove_for(std::string player) {
+		init();
+		load_by_player_name(player);
+		if(loaded) {
+			std::cerr << "REMOVING WHERE PLAYER IS: '" << player << "'\n";
+			return std::get<0>(this->remove<stay>(this));
+		}
+		return -1;
 	}
 	int16_t stay::remove_for(player_ptr_t& player) {
 		init();

@@ -33,9 +33,11 @@ namespace mods::orm::admin {
 		~stay() = default;
 
 		uint64_t initialize_row(player_ptr_t& player, const room_vnum& r_vnum);
+		uint64_t initialize_row(std::string player, const room_vnum& r_vnum);
 		int16_t feed(const pqxx::result::reference&);
 		int16_t load_by_player(player_ptr_t& player);
 		int16_t remove_for(player_ptr_t& player);
+		int16_t remove_for(std::string player);
 		void init();
 		strmap_t export_class();
 		int16_t save() {

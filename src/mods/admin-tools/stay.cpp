@@ -15,13 +15,13 @@
 
 
 namespace mods::admin_tools::stay {
-	void remove_stay(player_ptr_t& douche) {
+	void remove_stay(std::string name) {
 		mods::orm::admin::stay s_orm;
-		s_orm.remove_for(douche);
+		s_orm.remove_for(name);
 	}
-	void save_to_db(player_ptr_t& douche, room_vnum r_vnum) {
+	void save_to_db(std::string name, room_vnum r_vnum) {
 		mods::orm::admin::stay s_orm;
-		s_orm.initialize_row(douche,r_vnum);
+		s_orm.initialize_row(name,r_vnum);
 	}
 	void stay_player(player_ptr_t& douche, room_vnum r_vnum) {
 		douche->can_move() = true;
@@ -42,17 +42,14 @@ namespace mods::admin_tools::stay {
 		if(vec_args.size() > 0) {
 			for(auto name : vec_args) {
 				auto p = mods::pfind::optby_name(name.c_str());
-				if(!p.has_value()) {
-					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
-				} else {
-					auto douche = p.value();
-
+				if(p.has_value()) {
 					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+					auto douche = p.value();
 					stay_player(douche,player->vnum());
-					remove_stay(douche);
-					save_to_db(douche,player->vnum());
-					player->sendln("{grn}[DONE]{/grn}");
 				}
+				remove_stay(name);
+				save_to_db(name,player->vnum());
+				player->sendln("{grn}[DONE]{/grn}");
 			}
 			ADMIN_DONE();
 			return;
@@ -68,8 +65,6 @@ namespace mods::admin_tools::stay {
 			for(auto name : vec_args) {
 				auto p = mods::pfind::optby_name(name.c_str());
 				if(!p.has_value()) {
-					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
-				} else {
 					auto douche = p.value();
 					player->send("[+] Removing player from stand-still...");
 					douche->can_move() = true;
@@ -78,9 +73,9 @@ namespace mods::admin_tools::stay {
 					char_from_room(douche->cd());
 					char_to_room(douche->cd(),mods::world_conf::real_mortal_start());
 					unstay_player(douche);
-					remove_stay(douche);
-					player->sendln("{grn}[DONE]{/grn}");
 				}
+				remove_stay(name);
+				player->sendln("{grn}[DONE]{/grn}");
 			}
 			ADMIN_DONE();
 			return;
