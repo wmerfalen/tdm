@@ -104,7 +104,7 @@ namespace mods::chat {
 		}
 	}
 	void setup_public_channels() {
-		auto chans = EXPLODE(DEFAULT_PUBLIC_CHANNELS(),'|');
+		auto chans = EXPLODE(DEFAULT_PUBLIC_CHANNELS(),',');
 		for(auto& channel : chans) {
 			add_public_channel(channel,channel);
 		}

@@ -39,7 +39,6 @@ namespace mods::orm::admin {
 		init();
 		load_by_player_name(player);
 		if(loaded) {
-			std::cerr << "REMOVING WHERE PLAYER IS: '" << player << "'\n";
 			return std::get<0>(this->remove<stay>(this));
 		}
 		return -1;
@@ -48,7 +47,6 @@ namespace mods::orm::admin {
 		init();
 		load_by_player_name(player->name().c_str());
 		if(loaded) {
-			std::cerr << "REMOVING WHERE PLAYER IS: '" << player->name().c_str() << "'\n";
 			return std::get<0>(this->remove<stay>(this));
 		}
 		return -1;
@@ -67,7 +65,6 @@ namespace mods::orm::admin {
 	int16_t stay::load_by_player_name(std::string_view player_name) {
 		init();
 		auto s = this->read<stay>(this,this->player_name_column(),player_name);
-		std::cerr << green_str("read:") << "player: '" << player_name << "', [0]:" << std::get<0>(s) << ", [1]: '" << std::get<1>(s) << "'\n";
 		if(ORM_SUCCESS(s)) {
 			loaded = true;
 		}
