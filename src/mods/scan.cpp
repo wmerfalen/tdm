@@ -134,6 +134,7 @@ namespace mods::scan {
 					});
 
 				}
+				bool anyone = !(type & find_type_t::PLAYERS) && !(type & find_type_t::NPC);
 				for(auto character : mods::globals::get_room_list(room_id)) {
 					if(
 					    (type & find_type_t::DEAD && character->position() == POS_DEAD)
@@ -144,21 +145,21 @@ namespace mods::scan {
 					    ||
 					    (type & find_type_t::NPC && IS_NPC(character->cd()))
 					) {
-						if((type & find_type_t::PLAYERS) && IS_NPC(character->cd())) {
-							continue;
+						if(
+						    ((type & find_type_t::PLAYERS) && !IS_NPC(character->cd())) ||
+						    (type & find_type_t::NPC && IS_NPC(character->cd())) ||
+						    anyone
+						) {
+							vec_room_list->push_back({});
+							auto& pushed_item = vec_room_list->back();
+							pushed_item.obj = nullptr;
+							pushed_item.ch = character->cd();
+							pushed_item.uuid = character->uuid();
+							pushed_item.distance = ++ctr;
+							pushed_item.direction = i_d;
+							pushed_item.room_rnum = room_id;
+							LOS_SCAN_DIRECTION_DEBUG("moved item to list");
 						}
-						if(type & find_type_t::NPC && !IS_NPC(character->cd())) {
-							continue;
-						}
-						vec_room_list->push_back({});
-						auto& pushed_item = vec_room_list->back();
-						pushed_item.obj = nullptr;
-						pushed_item.ch = character->cd();
-						pushed_item.uuid = character->uuid();
-						pushed_item.distance = ++ctr;
-						pushed_item.direction = i_d;
-						pushed_item.room_rnum = room_id;
-						LOS_SCAN_DIRECTION_DEBUG("moved item to list");
 					}
 				}
 			}
