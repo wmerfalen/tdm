@@ -21,7 +21,7 @@ extern int immort_level_ok;
 namespace mods::levels {
 	static constexpr uint32_t EXP_MAX = 10000000;
 	int level_exp(int level) {
-		return 500 * (level - 1) * level;
+		return 250 * (level - 1) * level;
 	}
 	int gain_exp(player_ptr_t& player,int gain) {
 		if(IS_NPC(player->cd())) {
