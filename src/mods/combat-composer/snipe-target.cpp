@@ -274,8 +274,10 @@ namespace mods::combat_composer {
 		 * }
 		 */
 		bool roll_accuracy(player_ptr_t& attacker,acquired_target_t& target,obj_ptr_t& weapon) {
+#define send_attacker_accuracy_stats
+#define FOR_WHOM "sniper"
 #ifdef send_attacker_accuracy_stats
-#define md(A) attacker->sendln(CAT("Debug: ",A));
+#define md(A) if(attacker->name().compare(FOR_WHOM) == 0){ attacker->sendln(CAT("Debug: ",A)); }
 #else
 #define md(A) /** */
 #endif

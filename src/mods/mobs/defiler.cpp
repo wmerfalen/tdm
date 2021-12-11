@@ -252,8 +252,7 @@ namespace mods::mobs {
 				}
 			}
 			if(player_ptr->room() == attacker->room()) {
-				/** TODO: change this to the combat composer equivalent */
-				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,attacker);
+				melee_attack(attacker);
 			}
 		});
 
@@ -616,8 +615,7 @@ namespace mods::mobs {
 		auto attacker = player()->fighting();
 		if(m_weapon && attacker->room() == this->room()) {
 			m_debug("i have a weapon and i'm using it against who i'm fighting");
-			/** TODO: change this to the combat composer equivalent */
-			mods::weapons::damage_types::melee_damage_with_feedback(player(),m_weapon,attacker);
+			melee_attack(attacker);
 		}
 	}
 	void defiler::melee_attack_within_range() {
@@ -644,8 +642,7 @@ namespace mods::mobs {
 				this->reset_last_attacker();
 				return;
 			}
-			/** TODO: change this to the combat composer equivalent */
-			mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,m_last_attacker);
+			melee_attack(m_last_attacker);
 			return;
 		} else {
 			auto target = this->spawn_near_someone();
@@ -740,6 +737,16 @@ namespace mods::mobs {
 	void defiler::found_target(player_ptr_t& player) {
 
 	}
+	bool defiler::melee_attack(player_ptr_t& victim) {
+		m_weapon = primary();
+		auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,victim);
+		if(feedback.hits) {
+			set_fighting(cd(),victim->cd());
+			hunt(victim->uuid());
+			return true;
+		}
+		return false;
+	}
 
 	void defiler::scan_for_targets() {
 		uint8_t depth = DEFILER_SCAN_DEPTH();
@@ -750,9 +757,7 @@ namespace mods::mobs {
 
 		auto victim = ptr_by_uuid(m_hunt);
 		if(victim && victim->room() == player_ptr->room()) {
-			mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,primary(),victim);
-			set_fighting(cd(),victim->cd());
-			hunt(victim->uuid());
+			melee_attack(victim);
 			return;
 		}
 		for(auto v : vpd) {
@@ -763,9 +768,7 @@ namespace mods::mobs {
 				victim = ptr_by_uuid(v.uuid);
 				move_to(v.direction);
 				if(victim->room() == player_ptr->room()) {
-					mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,primary(),victim);
-					set_fighting(cd(),victim->cd());
-					hunt(v.uuid);
+					melee_attack(victim);
 					return;
 				}
 			}
@@ -848,10 +851,7 @@ namespace mods::mobs {
 			if(victim->is(cd())) {
 				continue;
 			}
-			/** TODO: change this to the combat composer equivalent */
-			auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,victim);
-			if(feedback.hits || feedback.damage) {
-				hunt(victim->uuid());
+			if(melee_attack(victim)) {
 				return true;
 			}
 		}

@@ -6,10 +6,11 @@
 #include "player-utils.hpp"
 #include "object-utils.hpp"
 
-//#define __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
+#define __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
 #ifdef __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
-#define mcv_debug(MSG) mentoc_prefix_debug("[mods::calc_visibility]")  << info << "|" << MSG << "\n" \
-			<< "dump: " << dump << "\n";
+#define FOR_WHOM "sniper"
+#define mcv_debug(MSG) if(std::string(observer->name().c_str()).compare(FOR_WHOM) == 0){ mentoc_prefix_debug("[mods::calc_visibility]")  << info << "|" << MSG << "\n" \
+			<< "dump: " << dump << "\n"; }
 #else
 #define mcv_debug(MSG)
 #endif
@@ -163,14 +164,15 @@ namespace mods::calc_visibility {
 			mcv_debug("Observer has special vision and room is on fire");
 			return {false,"Observer has special vision and room is on fire"};
 		}
-		if((room_is_dark || smoked_room) && thermal_range >= distance) {
-			mcv_debug("Observer has special vision + dark/smoked + thermal range is sufficient");
-			return {true,"Observer has special vision + dark/smoked + thermal range is sufficient"};
-		}
-		if((room_is_dark || !smoked_room) && night_vision_range >= distance) {
-			mcv_debug("Observer has special vision + dark + !smoked + night vision range is sufficient");
-			return {true,"Observer has night vision + dark + !smoked + night vision range is sufficient"};
-		}
+		/** TODO: fix this crap */
+		//if((room_is_dark || smoked_room) && thermal_range >= distance) {
+		//	mcv_debug("Observer has special vision + dark/smoked + thermal range is sufficient");
+		//	return {true,"Observer has special vision + dark/smoked + thermal range is sufficient"};
+		//}
+		//if((room_is_dark || !smoked_room) && (0 != night_vision_range) && night_vision_range >= distance) {
+		//	mcv_debug("vision + dark + !smoked + night vision range is sufficient");
+		//	return {true,"Observer has night vision + dark + !smoked + night vision range is sufficient"};
+		//}
 		if((is_dissipated || invisible) && (thermal_range <= 0 || thermal_range <= distance)) {
 			mcv_debug("target dissipated/invisible");
 			return {false,"target dissipated/invisible"};

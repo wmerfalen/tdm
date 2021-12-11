@@ -756,24 +756,35 @@ namespace mods::class_abilities::ghost {
 		}
 		player->sendln(std::get<1>(status));
 	}
+	ACMD(do_inject_adrenaline_shot) {
+		PLAYER_CAN("ghost.adrenaline_shot");
+		DO_HELP_WITH_ZERO("ghost.adrenaline_shot");
+		auto status = player->ghost()->inject_adrenaline_shot();
+		if(!std::get<0>(status)) {
+			player->errorln(std::get<1>(status));
+			return;
+		}
+		player->sendln(std::get<1>(status));
+	}
 
 	void init() {
-		mods::interpreter::add_command("dissipate", POS_RESTING, do_dissipate, 0,0);
-		mods::interpreter::add_command("mark", POS_RESTING, do_mark_target, 0,0);
-		mods::interpreter::add_command("mark_target", POS_RESTING, do_mark_target, 0,0);
-		mods::interpreter::add_command("tracking_shot", POS_RESTING, do_tracking_shot, 0,0);
-		mods::interpreter::add_command("engage", POS_RESTING, do_engage, 0,0);
-		mods::interpreter::add_command("disengage", POS_RESTING, do_disengage, 0,0);
-		mods::interpreter::add_command("xray_shot", POS_RESTING, do_xray_shot, 0,0);
-		mods::interpreter::add_command("build_claymore", POS_RESTING, do_build_claymore, 0,0);
-		mods::interpreter::add_command("light_bandage", POS_RESTING, do_light_bandage, 0,0);
-		mods::interpreter::add_command("attach_shotgun", POS_RESTING, do_attach_shotgun_underbarrel, 0,0);
-		mods::interpreter::add_command("detach_shotgun", POS_RESTING, do_detach_shotgun_underbarrel, 0,0);
-		mods::interpreter::add_command("attach_frag", POS_RESTING, do_attach_frag_underbarrel, 0,0);
-		mods::interpreter::add_command("detach_frag", POS_RESTING, do_detach_frag_underbarrel, 0,0);
-		mods::interpreter::add_command("fire", POS_RESTING, do_fire, 0,0);
-		mods::interpreter::add_command("build_claymore", POS_RESTING, do_build_claymore, 0,0);
-		mods::interpreter::add_command("build_corrosive_claymore", POS_RESTING, do_build_corrosive_claymore, 0,0);
+		mods::interpreter::add_command("ghost:adrenaline_shot", POS_RESTING, do_inject_adrenaline_shot, 0,0);
+		mods::interpreter::add_command("ghost:dissipate", POS_RESTING, do_dissipate, 0,0);
+		mods::interpreter::add_command("ghost:mark", POS_RESTING, do_mark_target, 0,0);
+		mods::interpreter::add_command("ghost:mark_target", POS_RESTING, do_mark_target, 0,0);
+		mods::interpreter::add_command("ghost:tracking_shot", POS_RESTING, do_tracking_shot, 0,0);
+		mods::interpreter::add_command("ghost:engage", POS_RESTING, do_engage, 0,0);
+		mods::interpreter::add_command("ghost:disengage", POS_RESTING, do_disengage, 0,0);
+		mods::interpreter::add_command("ghost:xray_shot", POS_RESTING, do_xray_shot, 0,0);
+		mods::interpreter::add_command("ghost:build_claymore", POS_RESTING, do_build_claymore, 0,0);
+		mods::interpreter::add_command("ghost:light_bandage", POS_RESTING, do_light_bandage, 0,0);
+		mods::interpreter::add_command("ghost:attach_shotgun", POS_RESTING, do_attach_shotgun_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:detach_shotgun", POS_RESTING, do_detach_shotgun_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:attach_frag", POS_RESTING, do_attach_frag_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:detach_frag", POS_RESTING, do_detach_frag_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:fire", POS_RESTING, do_fire, 0,0);
+		mods::interpreter::add_command("ghost:build_claymore", POS_RESTING, do_build_claymore, 0,0);
+		mods::interpreter::add_command("ghost:build_corrosive_claymore", POS_RESTING, do_build_corrosive_claymore, 0,0);
 		mods::interpreter::add_command("build_shrapnel_claymore", POS_RESTING, do_build_shrapnel_claymore, 0,0);
 	}
 };

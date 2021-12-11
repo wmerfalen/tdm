@@ -234,6 +234,7 @@ namespace mods::mobs {
 			void melee_attack_within_range();
 			void move_closer_to_target();
 			void extra_attack();
+			bool melee_attack(player_ptr_t& victim);
 
 			/** state management */
 			void clear_state();

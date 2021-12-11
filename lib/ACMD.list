@@ -19,6 +19,7 @@
 ./mods/classes/ghost.cpp:	->detach_frag_underbarrel
 ./mods/classes/ghost.cpp:	->fire
 ./mods/classes/ghost.cpp:	->dissipate
+./mods/classes/ghost.cpp:	->inject_adrenaline_shot
 ./mods/classes/engineer.cpp:	->drone_bomb
 ./mods/classes/breacher.cpp:->teep
 ./mods/rifle.cpp:	->rifle_me
