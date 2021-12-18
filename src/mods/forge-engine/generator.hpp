@@ -21,6 +21,26 @@ namespace mods::forge_engine {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	using random_number_type_t = uint64_t;
 	obj_ptr_t reward_player(player_ptr_t& player, mob_vnum vict);
+	obj_ptr_t reward_player_with(std::string_view type,player_ptr_t& player, mob_vnum vict);
+	/**
+	 * roll a random integer
+	 */
+	template <typename TRandomType>
+	static inline TRandomType roll_xoroshiro() {
+		TRandomType x = rand_xoroshiro();
+		if(x == 0) {
+			return 0;
+		}
+		return x % std::numeric_limits<TRandomType>::max();
+	}
+	static inline float roll_float(float LO, float HI) {
+		return LO + static_cast <float>(rand_xoroshiro()) / (static_cast <float>(UINT64_MAX/ (HI-LO)));
+	}
+	template <typename TUintWidth>
+	static inline TUintWidth roll_between(TUintWidth LO, TUintWidth HI) {
+		return LO + static_cast <TUintWidth>(rand_xoroshiro()) / (static_cast <TUintWidth>(std::numeric_limits<TUintWidth>::max()/ (HI-LO)));
+	}
+
 
 	/**
 	 * [key]: ESA = Elemental/Stat/Attribute
@@ -74,6 +94,7 @@ namespace mods::forge_engine {
 		__RIFLE_TYPE_LAST=RIFLE_TYPE_LIGHT_MACHINE_GUN
 	};
 	enum rifle_attributes_t {
+		__NO_ATTRIBUTE__ = 0,
 		RIFLE_ATTRIBUTES_AMMO_MAX = 1,
 		RIFLE_ATTRIBUTES_CHANCE_TO_INJURE,
 		RIFLE_ATTRIBUTES_CLIP_SIZE,
@@ -93,6 +114,7 @@ namespace mods::forge_engine {
 		RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES,
 		__RIFLE_ATTRIBUTES_FIRST = RIFLE_ATTRIBUTES_AMMO_MAX,
 		__RIFLE_ATTRIBUTES_LAST = RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES
+
 	};
 	enum explosive_types_t {
 		EXPLOSIVE_TYPE_FRAG_GRENADE = 1,

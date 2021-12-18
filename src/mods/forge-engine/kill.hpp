@@ -9,6 +9,7 @@
 #include "value-scaler.hpp"
 #include "requirements.hpp"
 #include "../elemental.hpp"
+#include "../weapon.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::kill]")  << MSG << "\n";
@@ -20,6 +21,7 @@ extern std::deque<char_data> mob_proto;
 
 namespace mods::forge_engine {
 	struct kill_t {
+			using mw_rifle = mods::weapon::type::rifle;
 			mob_vnum victim;
 			player_ptr_t killer;
 			kill_t();

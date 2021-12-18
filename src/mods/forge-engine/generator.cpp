@@ -63,12 +63,6 @@ namespace mods::forge_engine {
 
 
 
-	std::vector<std::pair<rifle_attributes_t, std::variant<uint32_t, float>>> generator::generate_rifle_attributes(
-	    kill_t& player) {
-		return generate_random_mixed<rifle_attributes_t, uint32_t> (valid_rifle_attributes, player);
-	}
-
-
 
 	std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generator::generate_rifle_elemental_boosts(
 	    kill_t& player) {
@@ -135,6 +129,12 @@ namespace mods::forge_engine {
 		return reqs;
 	}
 
+	obj_ptr_t reward_player_with(std::string_view type,player_ptr_t& player, mob_vnum victim) {
+		kill_t k(player,victim);
+		auto rifle = mods::forge_engine::generated_rifle_t(k,type).roll();
+		mods::orm::rifle_instance orm_layer(rifle);
+		return rifle;
+	}
 
 	/** wrapper function that ultimately decides the player's randomized item */
 	obj_ptr_t reward_player(player_ptr_t& player, mob_vnum victim) {

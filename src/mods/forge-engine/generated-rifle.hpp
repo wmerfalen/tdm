@@ -19,9 +19,18 @@ namespace mods::forge_engine {
 	void rifle_index_changed();
 	using kill_t = mods::forge_engine::kill_t;
 
+	using attributes_t = std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>>;
+	struct attribute_limits_t {
+		rifle_attributes_t attribute;
+		int low;
+		int high;
+		int overpowered;
+	};
+
 	struct generated_rifle_t {
 			generated_rifle_t() = delete;
 			generated_rifle_t (kill_t& player);
+			generated_rifle_t (kill_t& player,std::string_view type);
 			obj_ptr_t roll();
 			void send_stats_to_player(player_ptr_t& player);
 			std::string get_dump();
@@ -31,7 +40,12 @@ namespace mods::forge_engine {
 			void fill_stats(obj_ptr_t& rifle);
 			const std::vector<std::string>& yaml_list(rifle_types_t);
 			void load_from_sql();
+			attributes_t generate_rifle_attributes();
+			attribute_limits_t fetch_limits(const rifle_attributes_t& which);
+			void init();
+
 		private:
+			bool m_force_type;
 			kill_t m_player;
 			rifle_types_t m_type;
 			requirements_t m_requirements;
