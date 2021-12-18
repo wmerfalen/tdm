@@ -4805,6 +4805,7 @@ apply_stealth_to_player	mods/classes/ghost.cpp	/^	void ghost::apply_stealth_to_p
 apply_tracked_bonus_damage	mods/affects.cpp	/^	int apply_tracked_bonus_damage(int damage) {$/;"	kind:function	line:18	namespace:mods::affects	signature:(int damage)
 apply_types	constants.cpp	/^const char *apply_types[] = {$/;"	kind:variable	line:392
 apply_types	constants.hpp	/^const char *apply_types[] = {$/;"	kind:variable	line:391
+ar_limits	mods/forge-engine/generated-rifle.cpp	/^	static const std::vector<attribute_limits_t> ar_limits = {$/;"	kind:member	line:352	namespace:mods::forge_engine	file:
 ar_shrapnel	mods/weapons/damage-event-broadcaster.hpp	/^	void ar_shrapnel(const int& from_direction, player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:128	namespace:mods::weapons::damage_types	signature:(const int& from_direction, player_ptr_t& attacker,player_ptr_t& victim)
 arcon	mods/fluxkraft/arcon-bar.cpp	/^namespace mods::fluxkraft::arcon {$/;"	kind:namespace	line:3	class:mods::fluxkraft	file:
 arcon	mods/fluxkraft/arcon-bar.hpp	/^	namespace arcon {$/;"	kind:namespace	line:15	namespace:mods::fluxkraft	file:
@@ -7570,13 +7571,13 @@ feedback_t	mods/damage-event.hpp	/^struct feedback_t {$/;"	kind:struct	line:92	f
 feign_death	mods/classes/ghost.cpp	/^	std::pair<int16_t,std::string> ghost::feign_death() {$/;"	kind:function	line:158	class:mods::classes::ghost	signature:()
 feign_death_done	mods/classes/ghost.cpp	/^	void ghost::feign_death_done() {$/;"	kind:function	line:154	class:mods::classes::ghost	signature:()
 fetch	mods/forge-engine/util.hpp	/^	int16_t fetch(std::variant<uint32_t,float>& v,TOriginalValue original) {$/;"	kind:function	line:5	namespace:mods::forge_engine	signature:(std::variant<uint32_t,float>& v,TOriginalValue original)
-fetch_attribute_limit	mods/forge-engine/generated-rifle.cpp	/^	attribute_limits_t fetch_attribute_limit(const std::vector<attribute_limits_t>& limits, const rifle_attributes_t& which) {$/;"	kind:function	line:356	namespace:mods::forge_engine	signature:(const std::vector<attribute_limits_t>& limits, const rifle_attributes_t& which)
+fetch_attribute_limit	mods/forge-engine/generated-rifle.cpp	/^	attribute_limits_t fetch_attribute_limit(const std::vector<attribute_limits_t>& limits, const rifle_attributes_t& which) {$/;"	kind:function	line:519	namespace:mods::forge_engine	signature:(const std::vector<attribute_limits_t>& limits, const rifle_attributes_t& which)
 fetch_builder_help	mods/help.cpp	/^	void fetch_builder_help(std::vector<std::string>& screen) {$/;"	kind:function	line:788	namespace:mods::help	signature:(std::vector<std::string>& screen)
 fetch_by_meta	mods/orm/fetcher.hpp	/^	std::vector<TRowType>&& fetch_by_meta(std::string_view column,std::string_view value) {$/;"	kind:function	line:21	namespace:mods::orm	signature:(std::string_view column,std::string_view value)
 fetch_by_meta	mods/orm/fetcher.hpp	/^	uint64_t fetch_by_meta(std::string_view table_name,$/;"	kind:function	line:42	namespace:mods::orm::generator	signature:(std::string_view table_name, std::string_view column,std::string_view value, TFunctionCallback callback)
 fetch_context	mods/message-server.hpp	/^	static inline zmq::context_t& fetch_context() {$/;"	kind:function	line:66	namespace:mods::message_server	signature:()
 fetch_integer	mods/util.cpp	/^	int parsed_args::fetch_integer(std::size_t index) {$/;"	kind:function	line:1390	class:mods::util::args::parsed_args	signature:(std::size_t index)
-fetch_limits	mods/forge-engine/generated-rifle.cpp	/^	attribute_limits_t generated_rifle_t::fetch_limits(const rifle_attributes_t& which) {$/;"	kind:function	line:364	class:mods::forge_engine::generated_rifle_t	signature:(const rifle_attributes_t& which)
+fetch_limits	mods/forge-engine/generated-rifle.cpp	/^	attribute_limits_t generated_rifle_t::fetch_limits(const rifle_attributes_t& which) {$/;"	kind:function	line:527	class:mods::forge_engine::generated_rifle_t	signature:(const rifle_attributes_t& which)
 fetch_list_by_mob_vnum	mods/mob-equipment.cpp	/^	std::array<std::string,NUM_WEARS> fetch_list_by_mob_vnum(mob_vnum mobvnum) {$/;"	kind:function	line:34	namespace:mods::mob_equipment	signature:(mob_vnum mobvnum)
 fetch_mortal_help	mods/help.cpp	/^	void fetch_mortal_help(std::vector<std::string>& screen) {$/;"	kind:function	line:775	namespace:mods::help	signature:(std::vector<std::string>& screen)
 fetch_parsed_integer	mods/util.cpp	/^	int parsed_args::fetch_parsed_integer(std::size_t index) {$/;"	kind:function	line:1393	class:mods::util::args::parsed_args	signature:(std::size_t index)
@@ -7973,7 +7974,7 @@ generate_random	mods/forge-engine/generator.hpp	/^			std::vector<std::pair<TEnum
 generate_random_class	mods/forge-engine/generator.hpp	/^			player_class_types_t generate_random_class(player_ptr_t& player) {$/;"	kind:function	line:483	struct:mods::forge_engine::generator	access:public	signature:(player_ptr_t& player)
 generate_random_mixed	mods/forge-engine/generator.hpp	/^			std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> generate_random_mixed($/;"	kind:function	line:563	struct:mods::forge_engine::generator	access:public	signature:( const std::vector<TEnumType>& valid_attributes,kill_t& kill )
 generate_requirements	mods/forge-engine/generator.cpp	/^	requirements_t generator::generate_requirements(kill_t& kill) {$/;"	kind:function	line:109	class:mods::forge_engine::generator	signature:(kill_t& kill)
-generate_rifle_attributes	mods/forge-engine/generated-rifle.cpp	/^	generated_attributes_t generated_rifle_t::generate_rifle_attributes() {$/;"	kind:function	line:388	class:mods::forge_engine::generated_rifle_t	signature:()
+generate_rifle_attributes	mods/forge-engine/generated-rifle.cpp	/^	generated_attributes_t generated_rifle_t::generate_rifle_attributes() {$/;"	kind:function	line:551	class:mods::forge_engine::generated_rifle_t	signature:()
 generate_rifle_elemental_boosts	mods/forge-engine/generator.cpp	/^	std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generator::generate_rifle_elemental_boosts($/;"	kind:function	line:67	class:mods::forge_engine::generator	signature:( kill_t& player)
 generate_rifle_stat_boosts	mods/forge-engine/generator.cpp	/^	std::vector<std::pair<stat_types_t, std::variant<uint32_t, float>>> generator::generate_rifle_stat_boosts($/;"	kind:function	line:52	class:mods::forge_engine::generator	signature:( kill_t& player)
 generate_stat_page	structs.cpp	/^std::string obj_data::generate_stat_page() {$/;"	kind:function	line:169	class:obj_data	signature:()
@@ -8090,7 +8091,7 @@ get_db_id	mods/player.cpp	/^	aligned_int_t player::get_db_id() const {$/;"	kind:
 get_dir	mods/js.hpp	/^				inline std::string_view get_dir() {$/;"	kind:function	line:66	struct:mods::js::include	access:public	signature:()
 get_drone	mods/drone.cpp	/^		void get_drone(uuid_t  owner_uuid) {$/;"	kind:function	line:69	namespace:mods::drone	signature:(uuid_t owner_uuid)
 get_dump	mods/forge-engine/generated-armor.cpp	/^	std::string generated_armor_t::get_dump() {$/;"	kind:function	line:209	class:mods::forge_engine::generated_armor_t	signature:()
-get_dump	mods/forge-engine/generated-rifle.cpp	/^	std::string generated_rifle_t::get_dump() {$/;"	kind:function	line:464	class:mods::forge_engine::generated_rifle_t	signature:()
+get_dump	mods/forge-engine/generated-rifle.cpp	/^	std::string generated_rifle_t::get_dump() {$/;"	kind:function	line:627	class:mods::forge_engine::generated_rifle_t	signature:()
 get_dump	mods/forge-engine/value-scaler.cpp	/^	std::string value_scaler::get_dump() {$/;"	kind:function	line:40	class:mods::forge_engine::value_scaler	signature:()
 get_dump	mods/orm/rifle-instance.cpp	/^	std::string& rifle_instance::get_dump() {$/;"	kind:function	line:263	class:mods::orm::rifle_instance	signature:()
 get_effective_firing_range	mods/rifle.cpp	/^	int16_t get_effective_firing_range(obj_ptr_t& weapon) {$/;"	kind:function	line:50	namespace:mods::rifle	signature:(obj_ptr_t& weapon)
@@ -9149,7 +9150,7 @@ is_night_vision_camera	mods/object-utils.hpp	/^	inline bool is_night_vision_came
 is_night_vision_camera	mods/object-utils.hpp	/^	inline bool is_night_vision_camera(uuid_t& obj_uuid) {$/;"	kind:function	line:206	namespace:mods::object_utils	signature:(uuid_t& obj_uuid)
 is_night_vision_camera	mods/object-utils.hpp	/^	static inline bool is_night_vision_camera(T obj) {$/;"	kind:function	line:198	namespace:mods::object_utils	signature:(T obj)
 is_night_vision_camera	mods/object-utils.hpp	/^	static inline bool is_night_vision_camera(T& obj) {$/;"	kind:function	line:190	namespace:mods::object_utils	signature:(T& obj)
-is_no_attribute	mods/forge-engine/generated-rifle.cpp	/^	bool is_no_attribute(const auto& m) {$/;"	kind:function	line:353	namespace:mods::forge_engine	signature:(const auto& m)
+is_no_attribute	mods/forge-engine/generated-rifle.cpp	/^	bool is_no_attribute(const auto& m) {$/;"	kind:function	line:516	namespace:mods::forge_engine	signature:(const auto& m)
 is_nobody	mods/player.hpp	/^			bool is_nobody() const {$/;"	kind:function	line:716	struct:mods::player	access:public	signature:() const
 is_npc	mods/player.cpp	/^	bool player::is_npc() const {$/;"	kind:function	line:2178	class:mods::player	signature:() const
 is_number	interpreter.cpp	/^int is_number(const char *str) {$/;"	kind:function	line:1167	signature:(const char *str)
@@ -9367,6 +9368,7 @@ lmdb_nput	mods/db.cpp	/^	int lmdb_nput(void* key,std::size_t key_size,$/;"	kind:
 lmdb_put	mods/db.cpp	/^	void lmdb_put(std::string key,std::string value) {$/;"	kind:function	line:325	namespace:mods::db	signature:(std::string key,std::string value)
 lmdb_renew	mods/db.cpp	/^	void lmdb_renew() {$/;"	kind:function	line:228	namespace:mods::db	signature:()
 lmdb_write_values	mods/db.cpp	/^	tuple_status_t lmdb_write_values($/;"	kind:function	line:399	namespace:mods::db	signature:( const std::string& table, mutable_map_t* values,std::string pk_id)
+lmg_limits	mods/forge-engine/generated-rifle.cpp	/^	static const std::vector<attribute_limits_t> lmg_limits = {$/;"	kind:member	line:460	namespace:mods::forge_engine	file:
 load	mods/classes/base.cpp	/^	std::tuple<bool,std::string> skill_t::load(player_ptr_t& player,std::string_view skill_name) {$/;"	kind:function	line:108	class:mods::classes::skill_t	signature:(player_ptr_t& player,std::string_view skill_name)
 load	mods/karma.cpp	/^	void load(player_ptr_t& player){$/;"	kind:function	line:12	namespace:mods	signature:(player_ptr_t& player)
 load	mods/mini-games.cpp	/^	void load(mini_game_payload_t g) {$/;"	kind:function	line:16	namespace:mods::mini_games	signature:(mini_game_payload_t g)
@@ -9909,7 +9911,7 @@ m_debug	mods/forge-engine/generated-armor.hpp	14;"	kind:macro	line:14	file:
 m_debug	mods/forge-engine/generated-armor.hpp	47;"	kind:macro	line:47	file:
 m_debug	mods/forge-engine/generated-rifle.cpp	10;"	kind:macro	line:10	file:
 m_debug	mods/forge-engine/generated-rifle.cpp	12;"	kind:macro	line:12	file:
-m_debug	mods/forge-engine/generated-rifle.cpp	499;"	kind:macro	line:499	file:
+m_debug	mods/forge-engine/generated-rifle.cpp	662;"	kind:macro	line:662	file:
 m_debug	mods/forge-engine/generated-rifle.hpp	11;"	kind:macro	line:11	file:
 m_debug	mods/forge-engine/generated-rifle.hpp	13;"	kind:macro	line:13	file:
 m_debug	mods/forge-engine/generated-rifle.hpp	61;"	kind:macro	line:61	file:
@@ -11302,7 +11304,7 @@ night_vision_range	mods/player.hpp	/^			auto& night_vision_range() {$/;"	kind:fu
 night_vision_range	mods/ranged-combat-totals.hpp	/^		int16_t night_vision_range;$/;"	kind:member	line:128	struct:mods::ranged_combat_totals	file:	access:public
 night_vision_range	mods/rifle-attachments.hpp	/^			int16_t night_vision_range;$/;"	kind:member	line:96	struct:mods::rifle_attachments_t	file:	access:public
 nitems	structs.h	/^	int	nitems;$/;"	kind:member	line:1095	struct:obj_data::rent_info	file:	access:public
-no_attribute	mods/forge-engine/generated-rifle.cpp	/^	static const attribute_limits_t no_attribute = {__NO_ATTRIBUTE__,0,0,0};$/;"	kind:member	line:352	namespace:mods::forge_engine	file:
+no_attribute	mods/forge-engine/generated-rifle.cpp	/^	static const attribute_limits_t no_attribute = {__NO_ATTRIBUTE__,0,0,0};$/;"	kind:member	line:515	namespace:mods::forge_engine	file:
 no_command	mods/interpreter.cpp	/^	static command_info no_command = {$/;"	kind:member	line:19	namespace:mods::interpreter	file:
 no_mail	db.cpp	/^int no_mail = 0;		\/* mail disabled?		 *\/$/;"	kind:variable	line:122
 no_rent_check	db.cpp	/^int no_rent_check = 0;		\/* skip rent check on boot?	 *\/$/;"	kind:variable	line:124
@@ -12822,7 +12824,7 @@ roaming_profile_name	mods/mob-roam.cpp	/^	std::string_view roam_recorder::roamin
 roll	mods/fluxkraft/generator.cpp	/^	bool generator::roll<bool>() {$/;"	kind:function	line:22	class:mods::fluxkraft::generator	signature:()
 roll	mods/fluxkraft/generator.hpp	/^			TRandomType roll() {$/;"	kind:function	line:38	struct:mods::fluxkraft::generator	access:public	signature:()
 roll	mods/forge-engine/generated-armor.cpp	/^	obj_ptr_t generated_armor_t::roll() {$/;"	kind:function	line:182	class:mods::forge_engine::generated_armor_t	signature:()
-roll	mods/forge-engine/generated-rifle.cpp	/^	obj_ptr_t generated_rifle_t::roll() {$/;"	kind:function	line:441	class:mods::forge_engine::generated_rifle_t	signature:()
+roll	mods/forge-engine/generated-rifle.cpp	/^	obj_ptr_t generated_rifle_t::roll() {$/;"	kind:function	line:604	class:mods::forge_engine::generated_rifle_t	signature:()
 roll	mods/forge-engine/generator.cpp	/^	bool generator::roll<bool>() {$/;"	kind:function	line:25	class:mods::forge_engine::generator	signature:()
 roll	mods/forge-engine/generator.hpp	/^			TRandomType roll() {$/;"	kind:function	line:622	struct:mods::forge_engine::generator	access:public	signature:()
 roll	mods/rand.cpp	/^	uint32_t roll(uint32_t number, uint32_t size) {$/;"	kind:function	line:30	namespace:mods::rand	signature:(uint32_t number, uint32_t size)
@@ -13302,7 +13304,7 @@ send_results_multi	mods/sensor-grenade.cpp	/^	void send_results_multi(uuid_t nad
 send_rifle_damage	mods/weapons/damage-event-broadcaster.hpp	/^	void send_rifle_damage(int hits,const int& dam,const direction_t& direction,player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon, feedback_t& feedback) {$/;"	kind:function	line:63	namespace:mods::weapons::damage_types	signature:(int hits,const int& dam,const direction_t& direction,player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon, feedback_t& feedback)
 send_rules_of_engagement_to_player	mods/skills.cpp	/^	void send_rules_of_engagement_to_player(player_ptr_t& player,bool color) {$/;"	kind:function	line:57	namespace:mods::skills	signature:(player_ptr_t& player,bool color)
 send_stats_to_player	mods/forge-engine/generated-armor.cpp	/^	void generated_armor_t::send_stats_to_player(player_ptr_t& player) {$/;"	kind:function	line:205	class:mods::forge_engine::generated_armor_t	signature:(player_ptr_t& player)
-send_stats_to_player	mods/forge-engine/generated-rifle.cpp	/^	void generated_rifle_t::send_stats_to_player(player_ptr_t& player) {$/;"	kind:function	line:460	class:mods::forge_engine::generated_rifle_t	signature:(player_ptr_t& player)
+send_stats_to_player	mods/forge-engine/generated-rifle.cpp	/^	void generated_rifle_t::send_stats_to_player(player_ptr_t& player) {$/;"	kind:function	line:623	class:mods::forge_engine::generated_rifle_t	signature:(player_ptr_t& player)
 send_striker_help_menu	mods/help.cpp	/^	void send_striker_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1151	namespace:mods::help	signature:(player_ptr_t& player)
 send_syndrome_help_menu	mods/help.cpp	/^	void send_syndrome_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1205	namespace:mods::help	signature:(player_ptr_t& player)
 send_target_dead	mods/weapons/damage-event-broadcaster.hpp	/^	feedback_t send_target_dead(player_ptr_t& attacker,player_ptr_t& victim,feedback_t& feedback) {$/;"	kind:function	line:10	namespace:mods::weapons::damage_types	signature:(player_ptr_t& attacker,player_ptr_t& victim,feedback_t& feedback)
@@ -13807,6 +13809,7 @@ smart_mob	mods/mobs/smart-mob.hpp	/^	struct smart_mob {$/;"	kind:struct	line:14	
 smash_tilde	modify.cpp	/^void smash_tilde(char *str) {$/;"	kind:function	line:70	signature:(char *str)
 smg	mods/weapons/smg-mp5.cpp	/^namespace mods::weapons::smg {$/;"	kind:namespace	line:6	class:mods::weapons	file:
 smg	mods/weapons/smg-mp5.hpp	/^namespace mods::weapons::smg {$/;"	kind:namespace	line:8	class:mods::weapons	file:
+smg_limits	mods/forge-engine/generated-rifle.cpp	/^	static const std::vector<attribute_limits_t> smg_limits = {$/;"	kind:member	line:406	namespace:mods::forge_engine	file:
 smoke_room	mods/projectile.cpp	/^		void smoke_room(room_rnum room) {$/;"	kind:function	line:172	namespace:mods::projectile	signature:(room_rnum room)
 snake	spec_assign.cpp	/^SPECIAL(snake);$/;"	kind:variable	line:37
 snake	spec_procs.cpp	/^SPECIAL(snake);$/;"	kind:variable	line:43
