@@ -1,0 +1,60 @@
+# Level 5, FAMAS
+# Appraisal 0/10
+
+rifle_accuracy_map_0: 10.000000
+rifle_accuracy_map_1: 10.000000
+rifle_accuracy_map_2: 10.000000
+rifle_accuracy_map_3: 10.000000
+rifle_ammo_max: 539
+rifle_ammo_type:
+rifle_anti_matter_damage: 0
+rifle_base_damage: 123
+rifle_chance_to_injure: 1.000000
+rifle_clip_size: 2                # BROKEN (UNUSABLE WITH reload_time of 6 SECONDS!!!)
+rifle_cooldown_between_shots: 2
+rifle_corrosive_damage: 1
+rifle_critical_chance: 37
+rifle_critical_range: 1
+rifle_cryogenic_damage: 2
+rifle_damage_dice_count: 18
+rifle_damage_dice_sides: 1        # BROKEN
+rifle_damage_map_0: 10.000000
+rifle_damage_map_1: 10.000000
+rifle_damage_map_2: 10.000000
+rifle_damage_map_3: 10.000000
+rifle_disorient_amount: 3.140000
+rifle_effective_firing_range: 6
+rifle_emp_damage: 0
+rifle_explosive_damage: 3
+rifle_file: famas.yml
+rifle_headshot_bonus: 14.000000
+rifle_incendiary_damage: 0
+rifle_manufacturer: SK-10
+rifle_max_range: 10
+rifle_muzzle_velocity: 106
+rifle_name: A FAMAS Assault Rifle
+rifle_radioactive_damage: 2
+rifle_range_multiplier: 4.300000
+rifle_rarity: COMMON
+rifle_reload_time: 19             # BROKEN (6 seconds)
+rifle_rounds_per_minute: 80
+rifle_shock_damage: 3
+rifle_shrapnel_damage: 1
+rifle_stat_armor: 0
+rifle_stat_chemistry: 2
+rifle_stat_constitution: 1
+rifle_stat_demolitions: 0
+rifle_stat_dexterity: 0
+rifle_stat_electronics: 2
+rifle_stat_intelligence: 0
+rifle_stat_marksmanship: 1
+rifle_stat_medical: 0
+rifle_stat_sniping: 1
+rifle_stat_strategy: 9
+rifle_stat_strength: 2
+rifle_stat_weapon_handling: 1
+rifle_stat_wisdom: 0
+rifle_str_type: ASSAULT_RIFLE
+rifle_type: 4
+rifle_vnum: 27
+

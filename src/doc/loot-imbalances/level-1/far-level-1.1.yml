@@ -1,0 +1,58 @@
+far::65000H 1453M 65000V [7/7]> stats PSG
+rifle_accuracy_map_0: 0.000000
+rifle_accuracy_map_1: 20.000000
+rifle_accuracy_map_2: 90.000000
+rifle_accuracy_map_3: 90.000000
+rifle_ammo_max: 76
+rifle_ammo_type: SNIPER
+rifle_anti_matter_damage: 1
+rifle_base_damage: 61
+rifle_chance_to_injure: 0.813000			# pathetic
+rifle_clip_size: 7
+rifle_cooldown_between_shots: 24			# approximately 7 seconds? INSANE
+rifle_corrosive_damage: 0
+rifle_critical_chance: 1
+rifle_critical_range: 3
+rifle_cryogenic_damage: 0
+rifle_damage_dice_count: 1						# pathetic
+rifle_damage_dice_sides: 1						# pathetic
+rifle_damage_map_0: 10.000000
+rifle_damage_map_1: 20.000000
+rifle_damage_map_2: 90.000000
+rifle_damage_map_3: 90.000000
+rifle_disorient_amount: 1.000000
+rifle_effective_firing_range: 500			# INSANE GAME-BREAKING
+rifle_emp_damage: 1										# pathetic
+rifle_explosive_damage: 0
+rifle_file: psg1.yml
+rifle_headshot_bonus: 53.000000				# okay
+rifle_incendiary_damage: 1
+rifle_manufacturer: PF-TDN
+rifle_max_range: 1										# pathetic
+rifle_muzzle_velocity: 1818						# seems high. verify
+rifle_name: PSG1
+rifle_radioactive_damage: 1
+rifle_range_multiplier: 1.000000
+rifle_rarity: COMMON
+rifle_reload_time: 1									# instantaneous. not bad
+rifle_rounds_per_minute: 10
+rifle_shock_damage: 1
+rifle_shrapnel_damage: 1
+rifle_stat_armor: 0
+rifle_stat_chemistry: 1
+rifle_stat_constitution: 1
+rifle_stat_demolitions: 1
+rifle_stat_dexterity: 0
+rifle_stat_electronics: 0
+rifle_stat_intelligence: 0
+rifle_stat_marksmanship: 1
+rifle_stat_medical: 0
+rifle_stat_sniping: 1
+rifle_stat_strategy: 1
+rifle_stat_strength: 1
+rifle_stat_weapon_handling: 1
+rifle_stat_wisdom: 0
+rifle_str_type: SNIPER
+rifle_type: 6
+rifle_vnum: 8
+
