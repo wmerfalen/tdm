@@ -14,7 +14,7 @@ namespace mods::forge_engine {
 	extern mods::forge_engine::generator item_generator;
 };
 namespace mods::loot {
-	obj_ptr_t reward_player(player_ptr_t& player);
+	obj_ptr_t reward_player(player_ptr_t& player,mob_vnum victim);
 };
 
 namespace mods::loot::events {

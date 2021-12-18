@@ -29,10 +29,14 @@ namespace mods::forge_engine {
 		this->init();
 	}
 	void generator::init() {
+#ifdef MENTOC_DEBUG
 		std::cerr << "init ";
+#endif
 	}
 	generator::~generator() {
-		std::cout << "[generator::~generator]\n";
+#ifdef MENTOC_DEBUG
+		std::cerr << "[generator::~generator]\n";
+#endif
 	}
 
 	/********************/
@@ -42,20 +46,32 @@ namespace mods::forge_engine {
 		uint32_t size = std::distance(valid_rifle_types.begin(), valid_rifle_types.end());
 		return valid_rifle_types.at(this->roll<uint32_t>() % size);
 	}
+
+
+
 	std::vector<std::pair<stat_types_t, std::variant<uint32_t, float>>> generator::generate_rifle_stat_boosts(
-	    player_ptr_t& player) {
+	    kill_t& player) {
 		return generate_random_mixed<stat_types_t, uint32_t> (valid_rifle_stats_boosts, player);
 	}
+
+
+
 	rifle_attributes_t generator::random_rifle_attribute() {
 		uint32_t size = std::distance(valid_rifle_attributes.begin(), valid_rifle_attributes.end());
 		return valid_rifle_attributes.at(this->roll<uint32_t>() % size);
 	}
+
+
+
 	std::vector<std::pair<rifle_attributes_t, std::variant<uint32_t, float>>> generator::generate_rifle_attributes(
-	    player_ptr_t& player) {
+	    kill_t& player) {
 		return generate_random_mixed<rifle_attributes_t, uint32_t> (valid_rifle_attributes, player);
 	}
+
+
+
 	std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generator::generate_rifle_elemental_boosts(
-	    player_ptr_t& player) {
+	    kill_t& player) {
 		return generate_random_mixed<elemental_types_t, uint32_t> (valid_elemental_types, player);
 	}
 
@@ -64,19 +80,19 @@ namespace mods::forge_engine {
 	/** armor functions */
 	/********************/
 	std::vector<std::pair<armor_attributes_t, std::variant<uint32_t, float>>> generator::generate_armor_attributes(
-	    player_ptr_t& player) {
+	    kill_t& player) {
 		return generate_random_mixed<armor_attributes_t, uint32_t> (valid_armor_attributes, player);
 	}
 	std::vector<std::pair<stat_types_t, std::variant<uint32_t, float>>> generator::generate_armor_stat_boosts(
-	    player_ptr_t& player) {
+	    kill_t& player) {
 		return generate_random_mixed<stat_types_t, uint32_t> (valid_armor_stats, player);
 	}
 	std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generator::generate_armor_elemental_boosts(
-	    player_ptr_t& player) {
+	    kill_t& player) {
 		return generate_random_mixed<elemental_types_t, uint32_t> (valid_elemental_types, player);
 	}
 	std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generator::generate_armor_elemental_resistances(
-	    player_ptr_t& player) {
+	    kill_t& player) {
 		return generate_random_mixed<elemental_types_t, uint32_t> (valid_elemental_types, player);
 	}
 
@@ -84,7 +100,7 @@ namespace mods::forge_engine {
 	/** explosive functions */
 	/************************/
 	std::vector<std::pair<explosive_attributes_t, std::variant<uint32_t, float>>> generator::generate_explosive_attributes(
-	    player_ptr_t& player) {
+	    kill_t& player) {
 		return generate_random_mixed<explosive_attributes_t, uint32_t> (valid_explosive_attributes, player);
 	}
 
@@ -94,7 +110,10 @@ namespace mods::forge_engine {
 		uint32_t size = std::distance(active_item_types.begin(), active_item_types.end());
 		return active_item_types.at(this->roll<uint32_t>() % size);
 	}
-	requirements_t generator::generate_requirements(player_ptr_t& player) {
+
+
+	requirements_t generator::generate_requirements(kill_t& kill) {
+		auto player = kill.killer;
 		requirements_t reqs;
 		reqs.minimum_player_level = 0;
 
@@ -118,8 +137,9 @@ namespace mods::forge_engine {
 
 
 	/** wrapper function that ultimately decides the player's randomized item */
-	obj_ptr_t reward_player(player_ptr_t& player) {
-		auto rifle = mods::forge_engine::generated_rifle_t(player).roll();
+	obj_ptr_t reward_player(player_ptr_t& player, mob_vnum victim) {
+		kill_t k(player,victim);
+		auto rifle = mods::forge_engine::generated_rifle_t(k).roll();
 		mods::orm::rifle_instance orm_layer(rifle);
 		return rifle;
 #ifdef __MENTOC_REWARD_ALL_TYPES__

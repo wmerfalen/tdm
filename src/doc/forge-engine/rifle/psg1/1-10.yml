@@ -1,0 +1,54 @@
+incendiary_damage: 0
+explosive_damage: 0
+shrapnel_damage: 0
+corrosive_damage: 0
+cryogenic_damage: 0
+radioactive_damage: 0
+emp_damage: 0
+shock_damage: 0
+anti_matter_damage: 0
+stat_strength: 0
+stat_intelligence: 0
+stat_wisdom: 0
+stat_dexterity: 0
+stat_constitution: 0
+stat_electronics: 0
+stat_armor: 0
+stat_marksmanship: 0
+stat_sniping: 0
+stat_demolitions: 0
+stat_chemistry: 0
+stat_weapon_handling: 0
+stat_strategy: 0
+stat_medical: 0
+accuracy_map: [
+0.00,
+20.00,
+90.00,
+90.00
+]
+rounds_per_minute: 10
+muzzle_velocity: 1818
+effective_firing_range: 500
+ammo_max: 70
+ammo_type: 'SNIPER'
+chance_to_injure: 0.813
+clip_size: 7
+cooldown_between_shots: 24
+critical_chance: 19
+critical_range: 3
+damage_map: [
+10.00,
+20.00,
+90.00,
+90.00
+]
+disorient_amount: 0.0
+headshot_bonus: 53.0
+max_range: 5
+range_multiplier: 4.3
+reload_time: 9
+rarity: 'COMMON'
+damage_dice_count: 21
+damage_dice_sides: 9
+base_damage: 61

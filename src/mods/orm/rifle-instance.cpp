@@ -18,6 +18,10 @@ namespace mods::orm {
 		this->initialize_row(obj);
 	}
 	void rifle_instance::import_object(obj_ptr_t& obj) {
+		if(!obj || !obj.get()) {
+			log("SYSERR: import_object failed to fetch from null ptr!");
+			return;
+		}
 		this->rifle_id = obj->rifle()->attributes->id;
 		this->rifle_accuracy_map_0 = obj->rifle()->attributes->accuracy_map[0];
 		this->rifle_accuracy_map_1 = obj->rifle()->attributes->accuracy_map[1];

@@ -11,6 +11,8 @@
 #define m_debug(MSG) ;;
 #endif
 
+extern std::deque<char_data> mob_proto;
+
 namespace mods::forge_engine {
 	extern generator item_generator;
 	static bool refresh_rifle_index = true;
@@ -97,12 +99,72 @@ namespace mods::forge_engine {
 		fill_elemental_damage_generic(obj,m_elemental_damages,obj->rifle()->attributes.get());
 	}
 
-	generated_rifle_t::generated_rifle_t (player_ptr_t& player) {
-		m_player = player;
+	generated_rifle_t::generated_rifle_t (kill_t& kill) {
+		m_player = kill;
 		load_from_sql();
+	}
+	bool generated_rifle_t::compute_weapon_cost() {
+		m_player.find_mob();
+		/**
+		 * Find the mob by the VNUM
+		 */
+		auto opt_mob = m_player.cd();
+		if(opt_mob.has_value() == false) {
+			log("SYSERR: couldn't find mob[vnum:'%d'] to reward player[name:'%s']!", m_player.victim, m_player.killer->name().c_str());
+			m_player.killer->sendln(
+			    CAT("{red}######################################################{/red}\r\n",
+			        "{red}Not rewarding a weapon because we couldn't find  {/red}\r\n",
+			        "{red}the NPC you killed!                              {/red}\r\n",
+			        "{red}Please report this to an admin.                  {/red}\r\n",
+			        "{red}NPC vnum:",m_player.victim,"{/red}\r\n",
+			        "{red}######################################################{/red}\r\n"
+			       )
+			);
+			return false;
+		}
+		char_data& mob = opt_mob.value();
+		/**
+		 * Compute the cost of the weapon
+		 */
+		/**
+		 * Player level multiplied by 10 is the base cost in MP
+		 */
+		m_player.set_cost(m_player.killer->level() * 10);
+
+		/**
+		 * How much exp does the NPC have?
+		 */
+		m_player.add_cost(mob.mob_specials.experience);
+
+		/**
+		 * How much MP does the NPC have?
+		 */
+		m_player.add_cost(mob.mob_specials.mp);
+
+		/**
+		 * How many hitpoints does the NPC have?
+		 */
+		m_player.add_cost(mob.points.max_hit / m_player.killer->max_hp());
+
+		/**
+		 * How high of a level is the NPC to the killer?
+		 */
+		m_player.add_cost(mob.player.level - m_player.killer->level());
+
+		/**
+		 * How much mana does the NPC have compared to the killer?
+		 */
+		m_player.add_cost(mob.points.max_mana - m_player.killer->max_mana());
+
+		return true;
 	}
 
 	obj_ptr_t generated_rifle_t::roll() {
+
+		if(!compute_weapon_cost()) {
+			log("WARNING: rolling for a piece of loot without sufficient cost adjustments");
+		}
+
 		m_type = mods::forge_engine::item_generator.random_rifle_type();
 		m_requirements = mods::forge_engine::item_generator.generate_requirements(m_player);
 		m_attributes = mods::forge_engine::item_generator.generate_rifle_attributes(m_player);

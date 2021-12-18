@@ -1,0 +1,60 @@
+# Level 5, UMP-45 SMG
+# Appraisal: 3/10
+
+rifle_accuracy_map_0: 90.000000
+rifle_accuracy_map_1: 10.000000
+rifle_accuracy_map_2: 0.000000
+rifle_accuracy_map_3: 0.000000
+rifle_ammo_max: 400									# HIGH
+rifle_ammo_type: SUB_MACHINE_GUN
+rifle_anti_matter_damage: 0
+rifle_base_damage: 30
+rifle_chance_to_injure: 30.813000
+rifle_clip_size: 31
+rifle_cooldown_between_shots: 1			# OP+INSANE
+rifle_corrosive_damage: 1
+rifle_critical_chance: 1
+rifle_critical_range: 3
+rifle_cryogenic_damage: 1
+rifle_damage_dice_count: 2					# DISCUSS: fine with 1 as cooldown?
+rifle_damage_dice_sides: 6					# DISCUSS: fine with 1 as cooldown?
+rifle_damage_map_0: 80.000000
+rifle_damage_map_1: 40.000000
+rifle_damage_map_2: 0.000000
+rifle_damage_map_3: 0.000000
+rifle_disorient_amount: 5.000000
+rifle_effective_firing_range: 20
+rifle_emp_damage: 1
+rifle_explosive_damage: 1
+rifle_file: ump45.yml
+rifle_headshot_bonus: 13.000000
+rifle_incendiary_damage: 1
+rifle_manufacturer: PN/P
+rifle_max_range: 3
+rifle_muzzle_velocity: 3925					# LIKELY BROKEN
+rifle_name: UMP-45
+rifle_radioactive_damage: 3
+rifle_range_multiplier: 1.000000		# USELESS
+rifle_rarity: COMMON
+rifle_reload_time: 5								# OP+INSANE
+rifle_rounds_per_minute: 2					# BROKEN
+rifle_shock_damage: 2
+rifle_shrapnel_damage: 8
+rifle_stat_armor: 0
+rifle_stat_chemistry: 14
+rifle_stat_constitution: 1
+rifle_stat_demolitions: 2
+rifle_stat_dexterity: 0
+rifle_stat_electronics: 0
+rifle_stat_intelligence: 1
+rifle_stat_marksmanship: 0
+rifle_stat_medical: 0
+rifle_stat_sniping: 2
+rifle_stat_strategy: 1
+rifle_stat_strength: 1
+rifle_stat_weapon_handling: 3
+rifle_stat_wisdom: 2
+rifle_str_type: SUB_MACHINE_GUN
+rifle_type: 5
+rifle_vnum: 32
+

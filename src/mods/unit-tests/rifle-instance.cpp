@@ -51,7 +51,7 @@ TEST_CASE("A rifle instance can be saved and loaded to the db") {
 
 	SECTION("when a forge engine object is created, it is saved to the rifle_instance table") {
 		auto player = new_player();
-		auto rifle = mods::forge_engine::reward_player(player);
+		auto rifle = mods::forge_engine::reward_player(player, 1);
 		auto ammo_max = rifle->rifle()->attributes->ammo_max;
 		auto obj = create_object(ITEM_RIFLE,CAT("rifle|pkid:",rifle->db_id()));
 		REQUIRE(ammo_max == obj->rifle()->attributes->ammo_max);

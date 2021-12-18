@@ -9,6 +9,7 @@
 #include "value-scaler.hpp"
 #include "requirements.hpp"
 #include "../elemental.hpp"
+#include "kill.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::generator]")  << MSG << "\n";
@@ -19,7 +20,8 @@
 namespace mods::forge_engine {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	using random_number_type_t = uint64_t;
-	obj_ptr_t reward_player(player_ptr_t& player);
+	obj_ptr_t reward_player(player_ptr_t& player, mob_vnum vict);
+
 	/**
 	 * [key]: ESA = Elemental/Stat/Attribute
 	 * [key]: CSL = Class/Stat/Level
@@ -430,16 +432,16 @@ namespace mods::forge_engine {
 
 			generator();
 			~generator();
-			std::vector<std::pair<armor_attributes_t,std::variant<uint32_t,float>>> generate_armor_attributes(player_ptr_t& player);
-			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_armor_elemental_boosts(player_ptr_t& player);
-			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_armor_stat_boosts(player_ptr_t& player);
-			std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generate_armor_elemental_resistances(player_ptr_t& player);
+			std::vector<std::pair<armor_attributes_t,std::variant<uint32_t,float>>> generate_armor_attributes(kill_t& player);
+			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_armor_elemental_boosts(kill_t& player);
+			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_armor_stat_boosts(kill_t& player);
+			std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generate_armor_elemental_resistances(kill_t& player);
 
 
-			std::vector<std::pair<explosive_attributes_t,std::variant<uint32_t,float>>> generate_explosive_attributes(player_ptr_t& player);
-			std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes(player_ptr_t& player);
-			rifle_attributes_t random_rifle_attribute();
-			rifle_types_t random_rifle_type();
+			std::vector<std::pair<explosive_attributes_t,std::variant<uint32_t,float>>> generate_explosive_attributes(kill_t& player);
+
+
+
 			item_types_t random_item_type();
 			armor_types_t random_armor_type() {
 				return (armor_types_t)(this->roll_between((uint8_t)__ARMOR_WEAR_FIRST, (uint8_t)__ARMOR_WEAR_LAST));
@@ -462,10 +464,13 @@ namespace mods::forge_engine {
 
 			/** random rifle functions */
 			/** random rifle functions */
-			requirements_t generate_requirements(player_ptr_t& player);
+			requirements_t generate_requirements(kill_t& player);
+			std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes(kill_t& player);
+			rifle_attributes_t random_rifle_attribute();
+			rifle_types_t random_rifle_type();
+			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_rifle_stat_boosts(kill_t& player);
+			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_rifle_elemental_boosts(kill_t& player);
 
-			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_rifle_stat_boosts(player_ptr_t& player);
-			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_rifle_elemental_boosts(player_ptr_t& player);
 			/**
 			*  rifles
 			* 		-> CSL requirements
@@ -534,8 +539,10 @@ namespace mods::forge_engine {
 			 */
 			template <typename TEnumType,typename TUintWidth>
 			std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> generate_random_mixed(
-			    const std::vector<TEnumType>& valid_attributes,player_ptr_t& player
+			    const std::vector<TEnumType>& valid_attributes,kill_t& kill
 			) {
+				auto player = kill.killer;
+				//auto victim = kill.victim;
 				value_scaler scale(player);
 				std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> attributes;
 				if(valid_attributes.size() == 0) {

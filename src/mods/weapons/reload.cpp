@@ -16,6 +16,7 @@ namespace mods::weapons::reload {
 		{mw_rifle::ASSAULT_RIFLE,"opsix-incendiary-ar-clip.yml"},
 		{mw_rifle::LIGHT_MACHINE_GUN,"sg3-lmg-ammunition.yml"},
 		{mw_rifle::MACHINE_PISTOL,"sg3-mp-ammunition.yml"},
+		{mw_rifle::MACHINE_PISTOL,"sg3-pistol-ammunition.yml"},
 		{mw_rifle::PISTOL,"sg3-pistol-ammunition.yml"},
 		{mw_rifle::SHOTGUN,"sg3-shotgun-ammunition.yml"},
 		{mw_rifle::SUB_MACHINE_GUN,"sg3-smg-ammunition.yml"},

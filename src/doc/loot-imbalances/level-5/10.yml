@@ -1,0 +1,61 @@
+# Level 5, SAIGA-12 Shotgun
+# Appraisal: 1/10
+
+rifle_accuracy_map_0: 90.000000
+rifle_accuracy_map_1: 10.000000
+rifle_accuracy_map_2: 0.000000
+rifle_accuracy_map_3: 0.000000
+rifle_ammo_max: 6
+rifle_ammo_type: SHOTGUN
+rifle_anti_matter_damage: 0
+rifle_base_damage: 3              # PATHETIC
+rifle_chance_to_injure: 1.000000
+rifle_clip_size: 6
+rifle_cooldown_between_shots: 2
+rifle_corrosive_damage: 2
+rifle_critical_chance: 34
+rifle_critical_range: 1
+rifle_cryogenic_damage: 0
+rifle_damage_dice_count: 3        # PATHETIC
+rifle_damage_dice_sides: 2        # PATHETIC
+rifle_damage_map_0: 90.000000
+rifle_damage_map_1: 40.000000
+rifle_damage_map_2: 9.000000
+rifle_damage_map_3: 0.000000
+rifle_disorient_amount: 0.000000
+rifle_effective_firing_range: 1
+rifle_emp_damage: 4
+rifle_explosive_damage: 2
+rifle_file: saiga12.yml
+rifle_headshot_bonus: 192.000000  # OP
+rifle_incendiary_damage: 1
+rifle_manufacturer: R.S.S.
+rifle_max_range: 1
+rifle_muzzle_velocity: 918
+rifle_name: SAIGA-12
+rifle_radioactive_damage: 1
+rifle_range_multiplier: 4.300000
+rifle_rarity: COMMON
+rifle_reload_time: 4
+rifle_rounds_per_minute: 2
+rifle_shock_damage: 4
+rifle_shrapnel_damage: 1
+rifle_stat_armor: 0
+rifle_stat_chemistry: 4
+rifle_stat_constitution: 29
+rifle_stat_demolitions: 1
+rifle_stat_dexterity: 0
+rifle_stat_electronics: 2
+rifle_stat_intelligence: 1
+rifle_stat_marksmanship: 2
+rifle_stat_medical: 0
+rifle_stat_sniping: 0
+rifle_stat_strategy: 4
+rifle_stat_strength: 2
+rifle_stat_weapon_handling: 3
+rifle_stat_wisdom: 0
+rifle_str_type: SHOTGUN
+rifle_type: 3
+rifle_vnum: 39
+
+

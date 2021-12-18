@@ -174,7 +174,8 @@ namespace mods::forge_engine {
 	}
 
 	generated_armor_t::generated_armor_t (player_ptr_t& player) {
-		m_player = player;
+		/** TODO: change the parameter to kill_t */
+		m_player.killer = player;
 		load_from_sql();
 	}
 

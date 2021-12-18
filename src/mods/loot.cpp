@@ -11,14 +11,16 @@
 namespace mods::loot::events {
 
 	void player_killed_npc(player_ptr_t& player,player_ptr_t& npc) {
-		mods::loot_container::store(player,std::move(mods::loot::reward_player(player)));
-		player->sendln("{grn}A piece of loot was awarded to you.{/grn}");
+		mods::loot_container::store(player,std::move(mods::loot::reward_player(player,npc->cd()->mob_specials.vnum)));
+		player->sendln("{grn}#######################################{/grn}");
+		player->sendln("{grn}# A piece of loot was awarded to you! #{/grn}");
+		player->sendln("{grn}#######################################{/grn}");
 	}
 };
 
 namespace mods::loot {
-	obj_ptr_t reward_player(player_ptr_t& player) {
-		return std::move(mods::forge_engine::reward_player(player));
+	obj_ptr_t reward_player(player_ptr_t& player,mob_vnum victim) {
+		return std::move(mods::forge_engine::reward_player(player,victim));
 	}
 
 	/**
@@ -55,7 +57,7 @@ namespace mods::loot {
 				}
 
 				player->level() = level;
-				player->carry(reward_player(player));
+				player->carry(reward_player(player,mob_proto[0].mob_specials.vnum));
 			}
 		}
 		/** generate rifle */

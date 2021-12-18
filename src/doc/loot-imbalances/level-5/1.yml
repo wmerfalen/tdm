@@ -1,14 +1,17 @@
+# level 5, PSG-1
+# Appraisal: 0/10
+
 rifle_accuracy_map_0: 0.000000
 rifle_accuracy_map_1: 20.000000
 rifle_accuracy_map_2: 90.000000
 rifle_accuracy_map_3: 90.000000
-rifle_ammo_max: 1									# WTF LOL
+rifle_ammo_max: 1									# WTF LOL [BAL/DMG]
 rifle_ammo_type: SNIPER
 rifle_anti_matter_damage: 0
 rifle_base_damage: 61
 rifle_chance_to_injure: 0.813000
 rifle_clip_size: 9
-rifle_cooldown_between_shots: 24	# approximately 8 seconds BALANCE with DPS
+rifle_cooldown_between_shots: 24	# BROKEN [BAL/DMG]
 rifle_corrosive_damage: 2
 rifle_critical_chance: 19
 rifle_critical_range: 14					# better: 4

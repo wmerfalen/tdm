@@ -135,7 +135,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/injure mods/skills  mods/help mods/rooms \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \
 					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \
-					 mods/mobs/smart-mob \
+					 mods/mobs/smart-mob mods/mobs/find \
 					 mods/mobs/lowly-security mods/mobs/lowly-security-behaviour-tree \
 					 mods/mobs/mp-shotgunner mods/mobs/mp-shotgunner-behaviour-tree \
 					 mods/armor/basic-protection mods/armor/advanced-protection mods/armor/elite-protection \
@@ -159,7 +159,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/forge-engine/generator mods/forge-engine/value-scaler \
 					 mods/loot mods/forge-engine/generated-rifle mods/orm/rifle-index \
 					 mods/forge-engine/generated-armor mods/orm/armor-index \
-					 mods/forge-engine/util mods/stat-bonuses \
+					 mods/forge-engine/util mods/forge-engine/kill mods/stat-bonuses \
 					 mods/orm/skill-points mods/unit-tests/skill-points \
 					 mods/orm/player-skill-points mods/unit-tests/damage-types \
 					 mods/unit-tests/elemental mods/unit-tests/elemental-armor-resistances \
@@ -217,7 +217,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/message-server mods/message-parser \
 					 mods/orm/admin/frozen mods/ban-system mods/orm/admin/banned \
 					 mods/orm/user-logins \
-					 mods/admin-tools/stay mods/orm/admin/stay
+					 mods/admin-tools/stay mods/orm/admin/stay 
 
 					 #mods/orm/admin/muted \
 

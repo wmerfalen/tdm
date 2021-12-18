@@ -16,6 +16,7 @@
 
 namespace mods::forge_engine {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+	using kill_t = mods::forge_engine::kill_t;
 
 	void armor_index_changed();
 	struct generated_armor_t {
@@ -31,7 +32,7 @@ namespace mods::forge_engine {
 			const std::vector<std::string>& yaml_list(armor_types_t type);
 			void load_from_sql();
 		private:
-			player_ptr_t m_player;
+			kill_t m_player;
 			armor_types_t m_type;
 			requirements_t m_requirements;
 			std::vector<std::pair<armor_attributes_t,std::variant<uint32_t,float>>> m_attributes;

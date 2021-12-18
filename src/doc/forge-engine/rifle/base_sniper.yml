@@ -1,0 +1,55 @@
+# accuracy map
+accuracy_map: [
+10.00,
+10.00,
+10.00,
+10.00
+]
+rounds_per_minute: 10
+muzzle_velocity: 4018 # Feet per second
+effective_firing_range: 1500 # feet
+ammo_max: 80 #integer
+ammo_type: 'SNIPER' #string, constant enum
+chance_to_injure: 0.00113 #float, out of 100 
+clip_size: 7 #integer
+cooldown_between_shots: 4 #int, in ticks
+critical_chance: 30 #int, out of 100
+critical_range: 4 #integer, measured in rooms
+damage_map: [
+10.00,
+10.00,
+10.00,
+10.00
+]
+base_damage: 100 #float
+disorient_amount: 0.001 #float
+headshot_bonus: 43.0 #float
+max_range: 5 #integer,measured in rooms
+range_multiplier: 4.3 #float, multiplied by 
+reload_time: 8 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 'SNIPER' # enum, object type
+manufacturer: 'ZDX-Node' # string, anything 
+name: 'A Sniper Rifle' # string, anything name of object 
+vnum: 2 # integer, unique identifier
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+description: 'A ZDX-Node Sniper Rifle is lying here'
+short_description: 'a ZDX-Node Sniper Rifle'
+action_description: 'ZDX-Node Sniper Rifle'
+damage_dice_count: 2
+damage_dice_sides: 32

@@ -1,7 +1,7 @@
 #!/bin/bash
 DIR=$(pwd)
 sudo apt-get update
-sudo apt-get -y install cmake libssl-dev libpqxx-dev libtool
+sudo apt-get -y install cmake libssl-dev libpqxx-dev libtool libfcgi-dev spawn-fcgi nginx curl
 mkdir build
 rm -rf yaml-cpp
 git clone 'https://github.com/jbeder/yaml-cpp'

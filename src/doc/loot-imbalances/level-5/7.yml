@@ -1,0 +1,60 @@
+# Level 5, Magnum revolver
+# Appraisal: 4/10
+
+rifle_accuracy_map_0: 80.000000
+rifle_accuracy_map_1: 40.000000
+rifle_accuracy_map_2: 13.000000
+rifle_accuracy_map_3: 5.000000
+rifle_ammo_max: 75
+rifle_ammo_type: PISTOL
+rifle_anti_matter_damage: 1
+rifle_base_damage: 1
+rifle_chance_to_injure: 20.500999
+rifle_clip_size: 6									# DISCUSS
+rifle_cooldown_between_shots: 1			# OP
+rifle_corrosive_damage: 1
+rifle_critical_chance: 5
+rifle_critical_range: 1
+rifle_cryogenic_damage: 2
+rifle_damage_dice_count: 2
+rifle_damage_dice_sides: 194				# OP
+rifle_damage_map_0: 50.000000
+rifle_damage_map_1: 25.000000
+rifle_damage_map_2: 10.000000
+rifle_damage_map_3: 1.000000
+rifle_disorient_amount: 9.000000
+rifle_effective_firing_range: 1
+rifle_emp_damage: 2
+rifle_explosive_damage: 1
+rifle_file: magnum-revolver.yml
+rifle_headshot_bonus: 33.000000
+rifle_incendiary_damage: 2
+rifle_manufacturer: TN3 SMITH-x Industrial
+rifle_max_range: 1
+rifle_muzzle_velocity: 40
+rifle_name: Magnum Revolver
+rifle_radioactive_damage: 2
+rifle_range_multiplier: 6.000000
+rifle_rarity: RARE
+rifle_reload_time: 3								# OP
+rifle_rounds_per_minute: 632
+rifle_shock_damage: 0
+rifle_shrapnel_damage: 4
+rifle_stat_armor: 0
+rifle_stat_chemistry: 3
+rifle_stat_constitution: 3
+rifle_stat_demolitions: 3
+rifle_stat_dexterity: 2
+rifle_stat_electronics: 2
+rifle_stat_intelligence: 0
+rifle_stat_marksmanship: 1
+rifle_stat_medical: 0
+rifle_stat_sniping: 0
+rifle_stat_strategy: 6
+rifle_stat_strength: 2
+rifle_stat_weapon_handling: 0
+rifle_stat_wisdom: 1
+rifle_str_type: PISTOL
+rifle_type: 8
+rifle_vnum: 40
+
