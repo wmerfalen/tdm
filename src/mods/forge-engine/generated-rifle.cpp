@@ -30,6 +30,11 @@ namespace mods::forge_engine {
 		refresh_rifle_index = true;
 	}
 
+	/**
+	 * Forward declare this so we can call it from load_from_sql()
+	 */
+	void ral_loader();
+
 	void generated_rifle_t::load_from_sql() {
 		static std::map<std::string,std::vector<std::string>> data;
 		if(refresh_rifle_index) {
@@ -59,6 +64,7 @@ namespace mods::forge_engine {
 				machine_pistols = row.second;
 			}
 		}
+		ral_loader();
 	}
 	const std::vector<std::string>& generated_rifle_t::yaml_list(rifle_types_t t) {
 		switch(t) {
@@ -240,279 +246,57 @@ namespace mods::forge_engine {
 
 
 
-	static const std::vector<attribute_limits_t> pistol_limits = {
-		{
-			RIFLE_ATTRIBUTES_AMMO_MAX,3,16,80
-		},
-		{
-			RIFLE_ATTRIBUTES_CHANCE_TO_INJURE,0,80,100
-		},
-		{
-			RIFLE_ATTRIBUTES_COOLDOWN_BETWEEN_SHOTS,6,12,3
-		},
-		{
-			RIFLE_ATTRIBUTES_CLIP_SIZE,6,21,40
-		},
-		{
-			RIFLE_ATTRIBUTES_CRITICAL_CHANCE,0,120,250
-		},
-		{
-			RIFLE_ATTRIBUTES_CRITICAL_RANGE,0,3,0
-		},
-		{
-			RIFLE_ATTRIBUTES_BASE_DAMAGE,10,250,350
-		},
-		{
-			RIFLE_ATTRIBUTES_DISORIENT_AMOUNT,0,80,120
-		},
-		{
-			RIFLE_ATTRIBUTES_HEADSHOT_BONUS,0,50,150
-		},
-		{
-			RIFLE_ATTRIBUTES_MAX_RANGE,0,4,20
-		},
-		{
-			RIFLE_ATTRIBUTES_RANGE_MULTIPLIER,0,3,10
-		},
-		{
-			RIFLE_ATTRIBUTES_RELOAD_TIME,3,15,0
-		},
-		{
-			RIFLE_ATTRIBUTES_ROUNDS_PER_MINUTE,20,180,250
-		},
-		{
-			/** TBA */
-			RIFLE_ATTRIBUTES_MUZZLE_VELOCITY,40,40,180
-		},
-		{
-			RIFLE_ATTRIBUTES_EFFECTIVE_FIRING_RANGE,0,5,0
-		},
-		{
-			RIFLE_ATTRIBUTES_DAMAGE_DICE_COUNT,3,10,25
-		},
-		{
-			RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES,6,30,80
-		}
-	};
+	static std::vector<attribute_limits_t> pistol_limits;
+	static std::vector<attribute_limits_t> sniper_limits;
+	static std::vector<attribute_limits_t> ar_limits;
+	static std::vector<attribute_limits_t> smg_limits;
+	static std::vector<attribute_limits_t> lmg_limits;
+	static std::vector<attribute_limits_t> shotgun_limits;
+	static std::vector<attribute_limits_t> machine_pistol_limits;
+	static attribute_limits_t no_attribute = {__NO_ATTRIBUTE__,0,0,0};
 
-	static const std::vector<attribute_limits_t> sniper_limits = {
-		{
-			RIFLE_ATTRIBUTES_AMMO_MAX,6,16,35
-		},
-		{
-			RIFLE_ATTRIBUTES_CHANCE_TO_INJURE,0,90,580
-		},
-		{
-			RIFLE_ATTRIBUTES_COOLDOWN_BETWEEN_SHOTS,9,21,3
-		},
-		{
-			RIFLE_ATTRIBUTES_CLIP_SIZE,1,12,32
-		},
-		{
-			RIFLE_ATTRIBUTES_CRITICAL_CHANCE,0,100,950
-		},
-		{
-			RIFLE_ATTRIBUTES_CRITICAL_RANGE,3,9,1
-		},
-		{
-			RIFLE_ATTRIBUTES_BASE_DAMAGE,50,550,1950
-		},
-		{
-			RIFLE_ATTRIBUTES_DISORIENT_AMOUNT,0,80,220
-		},
-		{
-			RIFLE_ATTRIBUTES_HEADSHOT_BONUS,0,450,2350
-		},
-		{
-			RIFLE_ATTRIBUTES_MAX_RANGE,6,12,35
-		},
-		{
-			RIFLE_ATTRIBUTES_RANGE_MULTIPLIER,0,6,12
-		},
-		{
-			RIFLE_ATTRIBUTES_RELOAD_TIME,6,21,0
-		},
-		{
-			RIFLE_ATTRIBUTES_ROUNDS_PER_MINUTE,6,60,120
-		},
-		{
-			/** TBA */
-			RIFLE_ATTRIBUTES_MUZZLE_VELOCITY,40,140,980
-		},
-		{
-			RIFLE_ATTRIBUTES_EFFECTIVE_FIRING_RANGE,3,9,3
-		},
-		{
-			RIFLE_ATTRIBUTES_DAMAGE_DICE_COUNT,6,30,85
-		},
-		{
-			RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES,20,80,380
+	/**
+	 * Call this to load all attr limit data from the db
+	 */
+	void ral_loader() {
+		pistol_limits.clear();
+		sniper_limits.clear();
+		ar_limits.clear();
+		smg_limits.clear();
+		lmg_limits.clear();
+		shotgun_limits.clear();
+		machine_pistol_limits.clear();
+		auto rows = mods::orm::admin::load_all_rifle_attribute_limits();
+		for(const auto& r : rows) {
+			attribute_limits_t limit;
+			limit.attribute = from_string(r.attribute);
+			limit.low = r.low;
+			limit.high = r.high;
+			limit.overpowered = r.overpowered;
+			m_debug(r.attribute << " id: " << r.id << ", low:" << r.low << ", high:" << r.high << ", op:" << r.overpowered << ", type:'" << r.type << "'");
+			if(r.type.compare("SHOTGUN") == 0) {
+				shotgun_limits.emplace_back(limit);
+			}
+			if(r.type.compare("PISTOL") == 0) {
+				pistol_limits.emplace_back(limit);
+			}
+			if(r.type.compare("MACHINE_PISTOL") == 0) {
+				machine_pistol_limits.emplace_back(limit);
+			}
+			if(r.type.compare("AR") == 0) {
+				ar_limits.emplace_back(limit);
+			}
+			if(r.type.compare("SMG") == 0) {
+				smg_limits.emplace_back(limit);
+			}
+			if(r.type.compare("LMG") == 0) {
+				lmg_limits.emplace_back(limit);
+			}
+			if(r.type.compare("SNIPER") == 0) {
+				sniper_limits.emplace_back(limit);
+			}
 		}
-	};
-	static const std::vector<attribute_limits_t> ar_limits = {
-		{
-			RIFLE_ATTRIBUTES_AMMO_MAX,64,250,735
-		},
-		{
-			RIFLE_ATTRIBUTES_CHANCE_TO_INJURE,0,40,230
-		},
-		{
-			RIFLE_ATTRIBUTES_COOLDOWN_BETWEEN_SHOTS,3,9,3
-		},
-		{
-			RIFLE_ATTRIBUTES_CLIP_SIZE,21,89,120
-		},
-		{
-			RIFLE_ATTRIBUTES_CRITICAL_CHANCE,0,30,280
-		},
-		{
-			RIFLE_ATTRIBUTES_CRITICAL_RANGE,0,5,2
-		},
-		{
-			RIFLE_ATTRIBUTES_BASE_DAMAGE,21,48,110
-		},
-		{
-			RIFLE_ATTRIBUTES_DISORIENT_AMOUNT,0,30,90
-		},
-		{
-			RIFLE_ATTRIBUTES_HEADSHOT_BONUS,15,120,480
-		},
-		{
-			RIFLE_ATTRIBUTES_MAX_RANGE,2,9,18
-		},
-		{
-			RIFLE_ATTRIBUTES_RANGE_MULTIPLIER,0,2,4
-		},
-		{
-			RIFLE_ATTRIBUTES_RELOAD_TIME,6,15,3
-		},
-		{
-			RIFLE_ATTRIBUTES_ROUNDS_PER_MINUTE,32,280,513
-		},
-		{
-			/** TBA */
-			RIFLE_ATTRIBUTES_MUZZLE_VELOCITY,17,70,111
-		},
-		{
-			RIFLE_ATTRIBUTES_EFFECTIVE_FIRING_RANGE,1,5,2
-		},
-		{
-			RIFLE_ATTRIBUTES_DAMAGE_DICE_COUNT,3,21,41
-		},
-		{
-			RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES,13,37,70
-		}
-	};
-	static const std::vector<attribute_limits_t> smg_limits = {
-		{
-			RIFLE_ATTRIBUTES_AMMO_MAX,64,250,410
-		},
-		{
-			RIFLE_ATTRIBUTES_CHANCE_TO_INJURE,0,81,90
-		},
-		{
-			RIFLE_ATTRIBUTES_COOLDOWN_BETWEEN_SHOTS,3,6,3
-		},
-		{
-			RIFLE_ATTRIBUTES_CLIP_SIZE,15,54,110
-		},
-		{
-			RIFLE_ATTRIBUTES_CRITICAL_CHANCE,0,20,40
-		},
-		{
-			RIFLE_ATTRIBUTES_CRITICAL_RANGE,0,3,0
-		},
-		{
-			RIFLE_ATTRIBUTES_BASE_DAMAGE,9,32,70
-		},
-		{
-			RIFLE_ATTRIBUTES_DISORIENT_AMOUNT,0,54,190
-		},
-		{
-			RIFLE_ATTRIBUTES_HEADSHOT_BONUS,11,93,110
-		},
-		{
-			RIFLE_ATTRIBUTES_MAX_RANGE,0,3,8
-		},
-		{
-			RIFLE_ATTRIBUTES_RANGE_MULTIPLIER,0,1,3
-		},
-		{
-			RIFLE_ATTRIBUTES_RELOAD_TIME,3,9,3
-		},
-		{
-			RIFLE_ATTRIBUTES_ROUNDS_PER_MINUTE,52,311,223
-		},
-		{
-			/** TBA */
-			RIFLE_ATTRIBUTES_MUZZLE_VELOCITY,9,35,50
-		},
-		{
-			RIFLE_ATTRIBUTES_EFFECTIVE_FIRING_RANGE,0,2,1
-		},
-		{
-			RIFLE_ATTRIBUTES_DAMAGE_DICE_COUNT,2,16,25
-		},
-		{
-			RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES,8,19,32
-		}
-	};
-	static const std::vector<attribute_limits_t> lmg_limits = {
-		{
-			RIFLE_ATTRIBUTES_AMMO_MAX,110,480,820
-		},
-		{
-			RIFLE_ATTRIBUTES_CHANCE_TO_INJURE,0,32,42
-		},
-		{
-			RIFLE_ATTRIBUTES_COOLDOWN_BETWEEN_SHOTS,1,6,0
-		},
-		{
-			RIFLE_ATTRIBUTES_CLIP_SIZE,75,340,540
-		},
-		{
-			RIFLE_ATTRIBUTES_CRITICAL_CHANCE,0,38,49
-		},
-		{
-			RIFLE_ATTRIBUTES_CRITICAL_RANGE,1,8,3
-		},
-		{
-			RIFLE_ATTRIBUTES_BASE_DAMAGE,19,82,120
-		},
-		{
-			RIFLE_ATTRIBUTES_DISORIENT_AMOUNT,0,32,110
-		},
-		{
-			RIFLE_ATTRIBUTES_HEADSHOT_BONUS,23,113,190
-		},
-		{
-			RIFLE_ATTRIBUTES_MAX_RANGE,3,13,19
-		},
-		{
-			RIFLE_ATTRIBUTES_RANGE_MULTIPLIER,2,8,9
-		},
-		{
-			RIFLE_ATTRIBUTES_RELOAD_TIME,9,49,6
-			// left off here TODO
-		},
-		{
-			RIFLE_ATTRIBUTES_ROUNDS_PER_MINUTE,52,311,223
-		},
-		{
-			/** TBA */
-			RIFLE_ATTRIBUTES_MUZZLE_VELOCITY,9,35,50
-		},
-		{
-			RIFLE_ATTRIBUTES_EFFECTIVE_FIRING_RANGE,0,2,1
-		},
-		{
-			RIFLE_ATTRIBUTES_DAMAGE_DICE_COUNT,2,16,25
-		},
-		{
-			RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES,8,19,32
-		}
-	};
-	static const attribute_limits_t no_attribute = {__NO_ATTRIBUTE__,0,0,0};
+	}
 	bool is_no_attribute(const auto& m) {
 		return m.attribute == __NO_ATTRIBUTE__;
 	}
@@ -527,21 +311,22 @@ namespace mods::forge_engine {
 	attribute_limits_t generated_rifle_t::fetch_limits(const rifle_attributes_t& which) {
 		switch(m_type) {
 			case rifle_types_t::RIFLE_TYPE_SHOTGUN:
-				break;
+				return fetch_attribute_limit(shotgun_limits,which);
 			case rifle_types_t::RIFLE_TYPE_ASSAULT_RIFLE:
-				break;
+				return fetch_attribute_limit(ar_limits,which);
 			case rifle_types_t::RIFLE_TYPE_SUB_MACHINE_GUN:
-				break;
+				return fetch_attribute_limit(smg_limits,which);
 			case rifle_types_t::RIFLE_TYPE_SNIPER:
 				return fetch_attribute_limit(sniper_limits,which);
 			case rifle_types_t::RIFLE_TYPE_HANDGUN:
 			case rifle_types_t::RIFLE_TYPE_PISTOL:
 				return fetch_attribute_limit(pistol_limits,which);
 			case rifle_types_t::RIFLE_TYPE_MACHINE_PISTOL:
-				break;
+				return fetch_attribute_limit(machine_pistol_limits,which);
 			case rifle_types_t::RIFLE_TYPE_LIGHT_MACHINE_GUN:
-				break;
+				return fetch_attribute_limit(lmg_limits,which);
 			default:
+				log("SYSERR: invalid rifle type('%d') given to fetch_limits()",m_type);
 				break;
 		}
 		return no_attribute;

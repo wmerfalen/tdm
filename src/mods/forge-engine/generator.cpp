@@ -39,6 +39,64 @@ namespace mods::forge_engine {
 #endif
 	}
 
+	rifle_attributes_t from_string(std::string t) {
+		if(t.compare("RIFLE_ATTRIBUTES_AMMO_MAX") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_AMMO_MAX;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_CHANCE_TO_INJURE") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_CHANCE_TO_INJURE;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_CLIP_SIZE") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_CLIP_SIZE;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_COOLDOWN_BETWEEN_SHOTS") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_COOLDOWN_BETWEEN_SHOTS;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_CRITICAL_CHANCE") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_CRITICAL_CHANCE;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_CRITICAL_RANGE") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_CRITICAL_RANGE;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_BASE_DAMAGE") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_BASE_DAMAGE;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_DISORIENT_AMOUNT") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_DISORIENT_AMOUNT;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_HEADSHOT_BONUS") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_HEADSHOT_BONUS;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_MAX_RANGE") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_MAX_RANGE;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_RANGE_MULTIPLIER") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_RANGE_MULTIPLIER;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_RELOAD_TIME") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_RELOAD_TIME;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_ROUNDS_PER_MINUTE") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_ROUNDS_PER_MINUTE;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_MUZZLE_VELOCITY") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_MUZZLE_VELOCITY;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_EFFECTIVE_FIRING_RANGE") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_EFFECTIVE_FIRING_RANGE;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_DAMAGE_DICE_COUNT") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_DAMAGE_DICE_COUNT;
+		}
+		if(t.compare("RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES") == 0) {
+			return rifle_attributes_t::RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES;
+		}
+		return rifle_attributes_t::__NO_ATTRIBUTE__;
+	}
+
+
+
+
 	/********************/
 	/** rifle functions */
 	/********************/

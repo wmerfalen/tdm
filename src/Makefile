@@ -217,7 +217,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/message-server mods/message-parser \
 					 mods/orm/admin/frozen mods/ban-system mods/orm/admin/banned \
 					 mods/orm/user-logins \
-					 mods/admin-tools/stay mods/orm/admin/stay 
+					 mods/admin-tools/stay mods/orm/admin/stay mods/orm/admin/rifle-attribute-limits
 
 					 #mods/orm/admin/muted \
 

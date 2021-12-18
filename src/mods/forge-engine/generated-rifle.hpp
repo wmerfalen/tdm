@@ -6,6 +6,7 @@
 #include "value-scaler.hpp"
 #include "requirements.hpp"
 #include "generator.hpp"
+#include "../orm/admin/rifle-attribute-limits.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::generated_rifle]")  << MSG << "\n";
@@ -26,6 +27,7 @@ namespace mods::forge_engine {
 		int high;
 		int overpowered;
 	};
+	using attribute_limits_orm_t = mods::orm::admin::rifle_attribute_limits;
 
 	struct generated_rifle_t {
 			generated_rifle_t() = delete;

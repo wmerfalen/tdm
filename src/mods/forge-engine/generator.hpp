@@ -643,6 +643,8 @@ namespace mods::forge_engine {
 	std::string to_string(rifle_attributes_t t);
 	std::string to_string(armor_attributes_t t);
 
+	rifle_attributes_t from_string(std::string t);
+
 	void send_requirements(requirements_t& requirements, player_ptr_t& player);
 
 
