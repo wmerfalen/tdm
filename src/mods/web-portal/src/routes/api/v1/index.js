@@ -1,13 +1,10 @@
 var express = require('express')
 var router = express.Router()
 
-const PREFIX = '/api/v1/'
-const r = uri => PREFIX + uri
+const login = require(__dirname + '/admin/');
+login.routes(router);
 
-/* Login route */
-router.post(r('/login'), (req, res, next) => {
-	console.log(req)
-  res.send('respond with a resource')
-})
+const ral = require(__dirname + '/forge-engine/rifle-attribute-limits');
+ral.routes(router);
 
 module.exports = router
