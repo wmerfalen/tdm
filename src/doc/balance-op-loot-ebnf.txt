@@ -22,6 +22,35 @@
 (ELEM_SHOCK) \
 (ELEM_ANTI_MATTER) \
 
+		# Levels at which elemental damages get unlocked
+			tier 1:
+				- explosive
+			tier 2:
+				- all of above plus...
+				- incendiary
+			tier 3:
+				- all of above plus...
+				- shock
+			tier 4:
+				- all of above plus...
+				- shrapnel
+			tier 5:
+				- all of above plus...
+				- corrosive
+			tier 6:
+				- all of above plus...
+				- cryogenic
+			tier 7:
+				- all of above plus...
+				- radioactive
+			tier 8:
+				- all of above plus...
+				- emp
+			tier 9:
+				- all of above plus...
+				- anti matter
+
+
    - shotguns:
      - damage dice count versus damage dice sides
    

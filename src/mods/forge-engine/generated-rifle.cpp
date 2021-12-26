@@ -649,97 +649,103 @@ namespace mods::forge_engine {
 			log_section("");
 		}// End rifle type of sniper
 
-	}
+		//if(m_type == rifle_types_t::RIFLE_TYPE_SHOTGUN) {
+		//	auto attr = m_instance->rifle()->attributes.get();
+		//	log_section("cooldown 1");
+		//	if(roll_overpowered("cooldown_between_shots")) {
 
-	void generated_rifle_t::clamp_rifle_attributes() {
-		auto attr = m_instance->rifle()->attributes.get();
-		static constexpr uint16_t MAX_CRITICAL_RANGE = 16;
-		log_section("clamp");
-		log_gen("clamp check");
-		if(attr->critical_range > MAX_CRITICAL_RANGE) {
-			log_gen(CAT("critical_range violation: ",attr->critical_range));
-			attr->critical_range = rand_number(3,16);
-		}
-		static constexpr uint16_t MAX_RANGE_MULTIPLIER = 12;
-		if(attr->range_multiplier > MAX_RANGE_MULTIPLIER) {
-			log_gen(CAT("range_multiplier violation: ",attr->range_multiplier));
-			attr->range_multiplier = rand_number(2,12);
-		}
-		static constexpr uint16_t MAX_CHANCE_TO_INJURE = 200;
-		if(attr->chance_to_injure > MAX_CHANCE_TO_INJURE) {
-			log_gen(CAT("chance_to_injure violation: ",attr->chance_to_injure));
-			attr->chance_to_injure = rand_number(1,200);
-		}
-		static constexpr uint16_t MAX_COOLDOWN_BETWEEN_SHOTS = 26;
-		if(attr->cooldown_between_shots > MAX_COOLDOWN_BETWEEN_SHOTS) {
-			log_gen(CAT("cooldown_between_shots violation: ",attr->cooldown_between_shots));
-			attr->cooldown_between_shots = rand_number(1,26);
-		}
-		log_section("");
-	}
-	obj_ptr_t generated_rifle_t::roll() {
+		//	}
+		//}
 
-		log_section("");
-		log_gen("-[START]----------------------------------------------------------");
-		if(!compute_weapon_cost()) {
-			::log("WARNING: rolling for a piece of loot without sufficient cost adjustments");
-		}
-
-		if(!m_force_type) {
-			m_type = mods::forge_engine::item_generator.random_rifle_type();
-		}
-		m_requirements = mods::forge_engine::item_generator.generate_requirements(m_player);
-		m_attributes = this->generate_rifle_attributes();
-		m_elemental_damages = mods::forge_engine::item_generator.generate_rifle_elemental_boosts(m_player);
-		m_stat_boosts = mods::forge_engine::item_generator.generate_rifle_stat_boosts(m_player);
-
-		m_instance = create_object(ITEM_RIFLE,random_yaml(yaml_list(m_type)));
-		this->fill(m_instance);
-		this->balance_rifle_attributes();
-		this->clamp_rifle_attributes();
-		m_instance->forged = true;
-		log_gen("-[ END ]----------------------------------------------------------");
-		log_section("");
-		return m_instance;
-	}
-
-	void generated_rifle_t::send_stats_to_player(player_ptr_t& player) {
-		player->send("%s\r\n", get_dump().c_str());
-	}
-
-	std::string generated_rifle_t::get_dump() {
-		std::string output;
-		output += "---- start of dump ----\r\n";
-		output += CAT("random rifle type: ", to_string(m_type), "\r\n");
-
-		for(auto& req : m_attributes) {
-			if(std::holds_alternative<float> (req.second)) {
-				output += CAT("attribute: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
-			} else {
-				output += CAT("attribute: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
+		void generated_rifle_t::clamp_rifle_attributes() {
+			auto attr = m_instance->rifle()->attributes.get();
+			static constexpr uint16_t MAX_CRITICAL_RANGE = 16;
+			log_section("clamp");
+			log_gen("clamp check");
+			if(attr->critical_range > MAX_CRITICAL_RANGE) {
+				log_gen(CAT("critical_range violation: ",attr->critical_range));
+				attr->critical_range = rand_number(3,16);
 			}
-		}
-
-		for(auto& req : m_stat_boosts) {
-			if(std::holds_alternative<float> (req.second)) {
-				output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
-			} else if(std::holds_alternative<uint32_t> (req.second)) {
-				output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
+			static constexpr uint16_t MAX_RANGE_MULTIPLIER = 12;
+			if(attr->range_multiplier > MAX_RANGE_MULTIPLIER) {
+				log_gen(CAT("range_multiplier violation: ",attr->range_multiplier));
+				attr->range_multiplier = rand_number(2,12);
 			}
-		}
-
-		for(auto& req : m_elemental_damages) {
-			if(std::holds_alternative<float> (req.second)) {
-				output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
-			} else if(std::holds_alternative<uint32_t> (req.second)) {
-				output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
+			static constexpr uint16_t MAX_CHANCE_TO_INJURE = 200;
+			if(attr->chance_to_injure > MAX_CHANCE_TO_INJURE) {
+				log_gen(CAT("chance_to_injure violation: ",attr->chance_to_injure));
+				attr->chance_to_injure = rand_number(1,200);
 			}
+			static constexpr uint16_t MAX_COOLDOWN_BETWEEN_SHOTS = 26;
+			if(attr->cooldown_between_shots > MAX_COOLDOWN_BETWEEN_SHOTS) {
+				log_gen(CAT("cooldown_between_shots violation: ",attr->cooldown_between_shots));
+				attr->cooldown_between_shots = rand_number(1,26);
+			}
+			log_section("");
+		}
+		obj_ptr_t generated_rifle_t::roll() {
+
+			log_section("");
+			log_gen("-[START]----------------------------------------------------------");
+			if(!compute_weapon_cost()) {
+				::log("WARNING: rolling for a piece of loot without sufficient cost adjustments");
+			}
+
+			if(!m_force_type) {
+				m_type = mods::forge_engine::item_generator.random_rifle_type();
+			}
+			m_requirements = mods::forge_engine::item_generator.generate_requirements(m_player);
+			m_attributes = this->generate_rifle_attributes();
+			m_elemental_damages = mods::forge_engine::item_generator.generate_rifle_elemental_boosts(m_player);
+			m_stat_boosts = mods::forge_engine::item_generator.generate_rifle_stat_boosts(m_player);
+
+			m_instance = create_object(ITEM_RIFLE,random_yaml(yaml_list(m_type)));
+			this->fill(m_instance);
+			this->balance_rifle_attributes();
+			this->clamp_rifle_attributes();
+			m_instance->forged = true;
+			log_gen("-[ END ]----------------------------------------------------------");
+			log_section("");
+			return m_instance;
 		}
 
-		output += CAT("\r\n", get_requirements_string(m_requirements), "\r\n");
-		output += "---- End of dump ----\r\n";
-		return output;
-	}
+		void generated_rifle_t::send_stats_to_player(player_ptr_t& player) {
+			player->send("%s\r\n", get_dump().c_str());
+		}
 
-};//end namespace mods::forge_engine
+		std::string generated_rifle_t::get_dump() {
+			std::string output;
+			output += "---- start of dump ----\r\n";
+			output += CAT("random rifle type: ", to_string(m_type), "\r\n");
+
+			for(auto& req : m_attributes) {
+				if(std::holds_alternative<float> (req.second)) {
+					output += CAT("attribute: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
+				} else {
+					output += CAT("attribute: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
+				}
+			}
+
+			for(auto& req : m_stat_boosts) {
+				if(std::holds_alternative<float> (req.second)) {
+					output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
+				} else if(std::holds_alternative<uint32_t> (req.second)) {
+					output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
+				}
+			}
+
+			for(auto& req : m_elemental_damages) {
+				if(std::holds_alternative<float> (req.second)) {
+					output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
+				} else if(std::holds_alternative<uint32_t> (req.second)) {
+					output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
+				}
+			}
+
+			output += CAT("\r\n", get_requirements_string(m_requirements), "\r\n");
+			output += "---- End of dump ----\r\n";
+			return output;
+		}
+
+	};//end namespace mods::forge_engine
 #undef m_debug
