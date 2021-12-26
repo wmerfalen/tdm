@@ -9554,3 +9554,6 @@ VALUES
 		(
 			'MACHINE_PISTOL','RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES',5,11,22
 		);
+
+INSERT INTO public.world_configuration_start_rooms (mortal_start_room, immortal_start_room, is_active) 
+VALUES(128,128,'1');
