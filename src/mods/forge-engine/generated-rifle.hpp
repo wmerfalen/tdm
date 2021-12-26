@@ -20,8 +20,9 @@ namespace mods::forge_engine {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	void rifle_index_changed();
 	using kill_t = mods::forge_engine::kill_t;
+	using variant_t = std::variant<uint32_t,float>;
 
-	using attributes_t = std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>>;
+	using attributes_t = std::vector<std::pair<rifle_attributes_t,variant_t>>;
 	struct attribute_limits_t {
 		rifle_attributes_t attribute;
 		int low;
@@ -31,7 +32,7 @@ namespace mods::forge_engine {
 	using attribute_limits_orm_t = mods::orm::admin::rifle_attribute_limits;
 
 	struct generated_rifle_t {
-			using attr_pair_t = std::pair<rifle_attributes_t,std::variant<uint32_t,float>>;
+			using attr_pair_t = std::pair<rifle_attributes_t,variant_t>;
 			generated_rifle_t() = delete;
 			generated_rifle_t (kill_t& player);
 			generated_rifle_t (kill_t& player,std::string_view type);
@@ -42,12 +43,24 @@ namespace mods::forge_engine {
 			void fill_attributes(obj_ptr_t& rifle);
 			void fill_elemental(obj_ptr_t& rifle);
 			void fill_stats(obj_ptr_t& rifle);
+			/**
+			 * Balancing rifle attributes
+			 */
+			void balance_rifle_attributes();
+
+			/**
+			 * Mainly used so that values aren't game breaking...
+			 * i.e.: critical_range: 1014
+			 */
+			void clamp_rifle_attributes();
+
+
 			const std::vector<std::string>& yaml_list(rifle_types_t);
 			void load_from_sql();
 			attributes_t generate_rifle_attributes();
 			attribute_limits_t fetch_limits(const rifle_attributes_t& which);
 			void init();
-			std::pair<bool,std::variant<uint32_t,float>> get_attribute(rifle_attributes_t attr) {
+			std::pair<bool,variant_t> get_attribute(rifle_attributes_t attr) {
 				for(auto p : m_attributes) {
 					if(p.first == attr) {
 						return {true,p.second};
@@ -56,15 +69,19 @@ namespace mods::forge_engine {
 				return {false,(uint32_t)0};
 			}
 
-
 		private:
+			bool roll_overpowered(std::string_view which_stat);
+			void log_gen(std::string_view);
+			void log_section(std::string_view);
+			std::string m_section;
+
 			bool m_force_type;
 			kill_t m_player;
 			rifle_types_t m_type;
 			requirements_t m_requirements;
-			std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> m_attributes;
-			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> m_elemental_damages;
-			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> m_stat_boosts;
+			std::vector<std::pair<rifle_attributes_t,variant_t>> m_attributes;
+			std::vector<std::pair<elemental_types_t,variant_t>> m_elemental_damages;
+			std::vector<std::pair<stat_types_t,variant_t>> m_stat_boosts;
 			obj_ptr_t m_instance;
 			bool compute_weapon_cost();
 	};

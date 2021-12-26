@@ -23,7 +23,7 @@ namespace mods::forge_engine {
 
 	template <>
 	bool generator::roll<bool>() {
-		return rand_xoroshiro() & 1;
+		return roll_bool();
 	}
 	generator::generator() {
 		this->init();

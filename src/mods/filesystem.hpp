@@ -124,6 +124,22 @@ namespace mods::filesystem {
 		base_dir += CAT("/",sanitize_file(file.data()));
 		file_append(base_dir,guts);
 	}
+
+	static inline void append_to_forge_engine_log_file(std::string_view type, std::string_view msg) {
+		std::string cleaned = sanitize_user_name(type);
+
+		std::string base_dir = current_working_directory() + "/../log";
+		for(const std::string& dir : {
+		            "forge-engine",cleaned.c_str()
+		        }) {
+			base_dir += CAT("/",dir);
+			if(is_directory(base_dir) == false) {
+				mkdir(base_dir.data(),0755);
+			}
+		}
+		base_dir += CAT("/generated.txt");
+		file_append(base_dir,CAT(mods::util::time_string(),":",type.data(),"->",msg.data(),"\n"));
+	}
 };//end namespace
 
 #endif

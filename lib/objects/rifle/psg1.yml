@@ -44,7 +44,7 @@ accuracy_map: [
 ]
 rounds_per_minute: 10
 muzzle_velocity: 1818 # Feet per second
-effective_firing_range: 500 # feet
+effective_firing_range: 3 # feet
 ammo_max: 70 #integer
 ammo_type: 'SNIPER' #string, constant enum
 chance_to_injure: 0.813 #float, out of 100 

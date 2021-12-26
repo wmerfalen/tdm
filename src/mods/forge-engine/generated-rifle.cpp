@@ -2,6 +2,7 @@
 #include "generator.hpp"
 #include "../interpreter.hpp"
 #include "../super-users.hpp"
+#include "../filesystem.hpp"
 #include "util.hpp"
 #include "../orm/rifle-index.hpp"
 
@@ -26,6 +27,11 @@ namespace mods::forge_engine {
 	static std::vector<std::string> machine_pistols;
 	static std::vector<std::string> empty;
 
+	using generated_attributes_t = std::vector<std::pair<rifle_attributes_t, std::variant<uint32_t, float>>>;
+
+	/*
+	 * Any time the rifle indexes change, you need to call this function.
+	 */
 	void rifle_index_changed() {
 		refresh_rifle_index = true;
 	}
@@ -35,6 +41,11 @@ namespace mods::forge_engine {
 	 */
 	void ral_loader();
 
+	/**
+	 * This loads the following items from sql:
+	 * - the valid yaml files for all rifle types
+	 * - rifle attribute limits (via ral_loader())
+	 */
 	void generated_rifle_t::load_from_sql() {
 		static std::map<std::string,std::vector<std::string>> data;
 		if(refresh_rifle_index) {
@@ -66,6 +77,11 @@ namespace mods::forge_engine {
 		}
 		ral_loader();
 	}
+
+	/**
+	 * Pass in a rifle type, and it will return the list of
+	 * yaml files that are valid for that rifle type.
+	 */
 	const std::vector<std::string>& generated_rifle_t::yaml_list(rifle_types_t t) {
 		switch(t) {
 			case RIFLE_TYPE_SHOTGUN:
@@ -90,6 +106,9 @@ namespace mods::forge_engine {
 	}
 
 
+	/**
+	 * Initializes the object. Called from constructors
+	 */
 	void generated_rifle_t::init() {
 		m_force_type = false;
 		m_player = {};
@@ -100,6 +119,11 @@ namespace mods::forge_engine {
 		m_stat_boosts.clear();
 		m_instance = nullptr;
 	}
+
+	/**
+	 * Mostly used when converting rifle types from the varchar
+	 * inside postgres on the rifle attribute limits table.
+	 */
 	rifle_types_t to_rifle_type_from_string(std::string_view t) {
 		if(t.compare("SHOTGUN") == 0) {
 			return rifle_types_t::RIFLE_TYPE_SHOTGUN;
@@ -127,6 +151,11 @@ namespace mods::forge_engine {
 		}
 		return rifle_types_t::RIFLE_TYPE_SNIPER;
 	}
+
+	/**
+	 * Various functions to fill an object from the stats
+	 * that were generated
+	 */
 	void generated_rifle_t::fill(obj_ptr_t& obj) {
 		fill_attributes(obj);
 		fill_elemental(obj);
@@ -143,6 +172,16 @@ namespace mods::forge_engine {
 		fill_elemental_damage_generic(obj,m_elemental_damages,obj->rifle()->attributes.get());
 	}
 
+	/** -- end fill functions */
+
+
+	/**
+	 * -- constructors --
+	 *
+	 */
+	/**
+	 * pass the kill and the type of rifle to generate
+	 */
 	generated_rifle_t::generated_rifle_t (kill_t& kill,std::string_view type) {
 		this->init();
 		m_force_type = true;
@@ -150,11 +189,18 @@ namespace mods::forge_engine {
 		m_player = kill;
 		load_from_sql();
 	}
+	/**
+	 * pass the kill
+	 */
 	generated_rifle_t::generated_rifle_t (kill_t& kill) {
 		this->init();
 		m_player = kill;
 		load_from_sql();
 	}
+	/**
+	 * -- end constructors
+	 */
+
 	bool generated_rifle_t::compute_weapon_cost() {
 		m_player.find_mob();
 		/**
@@ -162,7 +208,7 @@ namespace mods::forge_engine {
 		 */
 		auto opt_mob = m_player.cd();
 		if(opt_mob.has_value() == false) {
-			log("SYSERR: couldn't find mob[vnum:'%d'] to reward player[name:'%s']!", m_player.victim, m_player.killer->name().c_str());
+			::log("SYSERR: couldn't find mob[vnum:'%d'] to reward player[name:'%s']!", m_player.victim, m_player.killer->name().c_str());
 			m_player.killer->sendln(
 			    CAT("{red}######################################################{/red}\r\n",
 			        "{red}Not rewarding a weapon because we couldn't find  {/red}\r\n",
@@ -326,13 +372,12 @@ namespace mods::forge_engine {
 			case rifle_types_t::RIFLE_TYPE_LIGHT_MACHINE_GUN:
 				return fetch_attribute_limit(lmg_limits,which);
 			default:
-				log("SYSERR: invalid rifle type('%d') given to fetch_limits()",m_type);
+				::log("SYSERR: invalid rifle type('%d') given to fetch_limits()",m_type);
 				break;
 		}
 		return no_attribute;
 	}
 
-	using generated_attributes_t = std::vector<std::pair<rifle_attributes_t, std::variant<uint32_t, float>>>;
 	generated_attributes_t generated_rifle_t::generate_rifle_attributes() {
 		//auto victim = kill.victim;
 		value_scaler scale(m_player.killer);
@@ -340,24 +385,24 @@ namespace mods::forge_engine {
 		if(valid_rifle_attributes.size() == 0) {
 			return m_attributes;
 		}
-		uint8_t i = std::clamp(roll_xoroshiro<uint8_t>(), (uint8_t)0, (uint8_t)(scale.max_stats));
+		uint8_t i = std::clamp((uint8_t)rand_xoroshiro(), (uint8_t)0, (uint8_t)(scale.max_stats));
 		if(!i) {
 			return m_attributes;
 		}
 		while(i-- > 0) {
-			const auto& attr = valid_rifle_attributes.at(roll_xoroshiro<uint16_t>() % valid_rifle_attributes.size());
+			const auto& attr = valid_rifle_attributes.at((uint16_t)rand_xoroshiro() % valid_rifle_attributes.size());
 			auto limit = this->fetch_limits(attr);
 			auto low = limit.low;
 			auto high = limit.high;
 			auto op = limit.overpowered;
 
-			if(roll_xoroshiro<bool>()) {
+			if(roll_bool()) {
 				auto float_roll = roll_float(scale.stat_low,scale.stat_high);
 				if(is_no_attribute(limit)) {
 					m_attributes.emplace_back(attr,float_roll);
 					continue;
 				}
-				bool is_overpowered = roll_xoroshiro<bool>();
+				bool is_overpowered = roll_bool();
 				if(is_overpowered) {
 					m_attributes.emplace_back(attr,roll_float(scale.stat_low,roll_float(scale.stat_high,op)));
 				} else {
@@ -369,7 +414,7 @@ namespace mods::forge_engine {
 					m_attributes.emplace_back(attr,int_roll);
 					continue;
 				}
-				bool is_overpowered = roll_xoroshiro<bool>();
+				bool is_overpowered = roll_bool();
 				if(is_overpowered) {
 					m_attributes.emplace_back(attr,roll_between<uint32_t>(scale.uint_low,roll_between(scale.uint_high,(uint32_t)op)));
 				} else {
@@ -380,16 +425,264 @@ namespace mods::forge_engine {
 		return m_attributes;
 	}
 
-	/**
-	 * #########################################################################
-	 * Giant Rifle attributes randomization code
-	 * #########################################################################
-	 */
+	void generated_rifle_t::log_section(std::string_view section) {
+		m_section = section;
+	}
 
+	void generated_rifle_t::log_gen(std::string_view msg) {
+		mods::filesystem::append_to_forge_engine_log_file(to_string(m_type), CAT("[",m_section,"]",msg.data()));
+	}
+
+	/**
+	 * Roll an overpowered stat
+	 */
+	bool generated_rifle_t::roll_overpowered(std::string_view which_stat) {
+		bool ok = roll_bool();
+		if(ok) {
+			log_gen(CAT("[",which_stat.data(),"]: Rolled successful overpowered!"));
+		} else {
+			log_gen(CAT("[",which_stat.data(),"]: Failed overpower roll."));
+		}
+		return ok;
+	}
+
+	/**
+	 * This function is ideally going to be the catalyst to what might
+	 * be a domain specific language. Currently, I document the logic
+	 * for this function at src/doc/balanc-op-loot-ebnf.txt.
+	 * While it would be ideal to have this as a DSL for content creators,
+	 * the need right now is not urgent, mainly because I'm the only one
+	 * creating content. When we get more builders and need a DSL, then
+	 * we can convert this logic into an interpretted grammar.
+	 */
+	void generated_rifle_t::balance_rifle_attributes() {
+		// - sniper:
+		// 	- (if high) EFR + ZMAG, then ->
+		//			CBS (nerf raise) (op lower)
+
+		if(m_type == rifle_types_t::RIFLE_TYPE_SNIPER) {
+			/**
+			 * Balance a sniper rifle
+			 */
+			/**
+			 * Balance ratio for effective_firing_range + range_multiplier to
+			 * cooldown_between_shots.
+			 *
+			 * This means cooldown_between_shots multiplied by COOLDOWN_BETWEEN_SHOTS_RATIO
+			 * must always equal effective_firing_range + range_multiplier
+			 * But __ONLY__ if we are balancing the rifle. If we are making the rifle
+			 * overpowered, then this stat does not come into play.
+			 */
+			static constexpr float COOLDOWN_BETWEEN_SHOTS_LIMITER = 2.5;
+
+
+			auto attr = m_instance->rifle()->attributes.get();
+			log_section("cooldown 1");
+			if(roll_overpowered("cooldown_between_shots")) {
+				/**
+				 * [ MAKE OVERPOWERED ]
+				 * If the effective_firing_range or range_multiplier is high, then
+				 * buff (decrease) the cooldown_between_shots
+				 */
+				log_gen(CAT(" generating OP stats for cooldown_between_shots"));
+				if(attr->cooldown_between_shots >= (attr->effective_firing_range + attr->range_multiplier) / COOLDOWN_BETWEEN_SHOTS_LIMITER) {
+					uint32_t deduction = 0;
+					int cbs = attr->cooldown_between_shots - deduction;
+					auto before = attr->cooldown_between_shots;
+					if(cbs <= 0) {
+						attr->cooldown_between_shots = 3;
+					} else {
+						attr->cooldown_between_shots -= deduction;
+					}
+					log_gen(CAT("{OP} cooldown_between_shots BEFORE:'",before,"' AFTER:'",attr->cooldown_between_shots,"'"));
+				}
+			} else {
+				/**
+				 * [ BALANCE ]
+				 * If the effective_firing_range is high, or the range_multiplier is high,
+				 * then nerf (increase) the cooldown_between_shots.
+				 */
+				log_gen(CAT("*NOT* generating OP stats for cooldown_between_shots"));
+				auto before = attr->cooldown_between_shots;
+				if(attr->cooldown_between_shots < (attr->effective_firing_range + attr->range_multiplier) / COOLDOWN_BETWEEN_SHOTS_LIMITER) {
+					attr->cooldown_between_shots = (attr->effective_firing_range + attr->range_multiplier) / COOLDOWN_BETWEEN_SHOTS_LIMITER;
+				}
+				log_gen(CAT("{BALANCE} cooldown_between_shots BEFORE:'",before,"' AFTER:'",attr->cooldown_between_shots,"'"));
+			}
+
+			//	- (if has) ELEM_SHRAPNEL, then ->
+			//			ZMAG (nerf zero) (op higher)
+			//			MXRNG (nerf (clamp,3)) (op raise)
+
+			log_section("shrapnel eq");
+			if(attr->shrapnel_damage) {
+				log_gen(CAT("sniper rifle has shrapnel_damage of:'",attr->shrapnel_damage,"'. balance/op rule in effect"));
+				auto before = attr->range_multiplier;
+				auto range_before = attr->max_range;
+				if(roll_overpowered("range_multiplier")) {
+					/**
+					 * [ MAKE OVERPOWERED ]
+					 * Add a range_multiplier between 2 and 4
+					 */
+					attr->range_multiplier += rand_number(2,4);
+					log_gen(CAT("{OP} range_multiplier BEFORE:'",before,"' AFTER:'",attr->range_multiplier,"'"));
+					attr->max_range += rand_number(1,6);
+					log_gen(CAT("{OP} max_range BEFORE:'",range_before,"' AFTER:'",attr->max_range,"'"));
+				} else {
+					/**
+					 * [ BALANCE ]
+					 * If sniper rifle has shrapnel damage, nerf (turn to zero) the range_multiplier
+					 * and nerf (clamp) max_range to 3
+					 */
+					if(attr->range_multiplier > 3) {
+						attr->range_multiplier = 0;
+					}
+					if(attr->max_range > 3) {
+						attr->max_range = 3;
+					}
+					log_gen(CAT("{BALANCE} range_multiplier BEFORE:'",before,"' AFTER:'",attr->range_multiplier,"'"));
+					log_gen(CAT("{BALANCE} max_range BEFORE:'",range_before,"' AFTER:'",attr->max_range,"'"));
+				}
+			}
+			//	- (if high) CLIPSZ (and low) CBS, then ->
+			//			[*ALL-DMG-ATTRS*] (nerf lower) (op raise)
+			static constexpr uint8_t CLIP_SIZE_THRESHOLD = 5;
+			static constexpr uint8_t FAST_COOLDOWN_BETWEEN_SHOTS = 9;
+			log_section("clip size 1");
+			if(attr->clip_size > CLIP_SIZE_THRESHOLD && attr->cooldown_between_shots <= FAST_COOLDOWN_BETWEEN_SHOTS) {
+				log_gen(CAT("detected low clip_size of: '",attr->clip_size,"' taking action.."));
+				auto before = attr->clip_size;
+				if(roll_overpowered("clip_size")) {
+					/**
+					 * [ MAKE OVERPOWERED ]
+					 * If clip size is fairly low, to make this weapon overpowered, we
+					 * increase the clip size
+					 */
+					attr->clip_size += rand_number(3,4);
+					log_gen(CAT("{OP} clip_size BEFORE:'",before,"' AFTER:'",attr->clip_size,"'"));
+					{
+						auto base_dam_before = attr->base_damage;
+						attr->base_damage += rand_number(15,120);
+						log_gen(CAT("{OP} base_damage BEFORE:'",base_dam_before,"' AFTER:'",attr->base_damage,"'"));
+					}
+					{
+						auto dds_before = attr->damage_dice_sides;
+						attr->damage_dice_sides += rand_number(15,120);
+						log_gen(CAT("{OP} damage_dice_sides BEFORE:'",dds_before,"' AFTER:'",attr->damage_dice_sides,"'"));
+					}
+					{
+						auto ddc_before = attr->damage_dice_count;
+						attr->damage_dice_count += rand_number(3,22);
+						log_gen(CAT("{OP} damage_dice_count BEFORE:'",ddc_before,"' AFTER:'",attr->damage_dice_count,"'"));
+					}
+				} else {
+					/**
+					 * [ BALANCE ]
+					 * High clip size and low cooldown need all damage output to be lowered.
+					 * It's simply way too OP to have that combination with a high damage output.
+					 */
+
+					{
+						/**
+						 * [ FIRST ]
+						 * Reduce base_damage
+						 */
+						auto before = attr->base_damage;
+						attr->base_damage = (attr->clip_size * 10) + (rand_number(1,20));
+						log_gen(CAT("{BALANCE} base_damage BEFORE:'",before,"' AFTER:'",attr->base_damage,"'"));
+					}
+					{
+						/**
+						 * [ SECOND ]
+						 * Reduce damage_dice_count
+						 */
+						auto before = attr->damage_dice_count;
+						attr->damage_dice_count = (attr->clip_size * 2) + (rand_number(1,8));
+						log_gen(CAT("{BALANCE} damage_dice_count BEFORE:'",before,"' AFTER:'",attr->damage_dice_count,"'"));
+					}
+				}
+			}
+
+			//	- (if low) CLIPSZ, then ->
+			//			[*ALL-DMG-ATTRS*] (nerf raise) (op (mult,2))
+			//			CLIPSZ (op (mult,2))
+			static constexpr uint8_t LOW_CLIP_SIZE_THRESHOLD = 5;
+			log_section("clip size 2");
+			if(attr->clip_size < LOW_CLIP_SIZE_THRESHOLD) {
+				log_gen(CAT("detected low clip_size of: '",attr->clip_size,"' taking action.."));
+				if(roll_overpowered("clip_size")) {
+					auto before = attr->clip_size;
+					/**
+					 * [ MAKE OVERPOWERED ]
+					 * If clip size is fairly low, to make this weapon overpowered, we
+					 * increase the clip size
+					 */
+					attr->clip_size += rand_number(3,4);
+					log_gen(CAT("{OP} clip_size BEFORE:'",before,"' AFTER:'",attr->clip_size,"'"));
+				} else {
+					/**
+					 * [ BALANCE ]
+					 * High clip size and low cooldown need all damage output to be lowered.
+					 * It's simply way too OP to have that combination with a high damage output.
+					 */
+
+					{
+						/**
+						 * [ FIRST ]
+						 * Reduce base_damage
+						 */
+						auto before = attr->base_damage;
+						attr->base_damage = (attr->clip_size * 10) + (rand_number(1,20));
+						log_gen(CAT("{BALANCE} base_damage BEFORE:'",before,"' AFTER:'",attr->base_damage,"'"));
+					}
+					{
+						/**
+						 * [ SECOND ]
+						 * Reduce damage_dice_count
+						 */
+						auto before = attr->damage_dice_count;
+						attr->damage_dice_count = (attr->clip_size * 2) + (rand_number(1,8));
+						log_gen(CAT("{BALANCE} damage_dice_count BEFORE:'",before,"' AFTER:'",attr->damage_dice_count,"'"));
+					}
+				}
+			}
+			log_section("");
+		}// End rifle type of sniper
+
+	}
+
+	void generated_rifle_t::clamp_rifle_attributes() {
+		auto attr = m_instance->rifle()->attributes.get();
+		static constexpr uint16_t MAX_CRITICAL_RANGE = 16;
+		log_section("clamp");
+		log_gen("clamp check");
+		if(attr->critical_range > MAX_CRITICAL_RANGE) {
+			log_gen(CAT("critical_range violation: ",attr->critical_range));
+			attr->critical_range = rand_number(3,16);
+		}
+		static constexpr uint16_t MAX_RANGE_MULTIPLIER = 12;
+		if(attr->range_multiplier > MAX_RANGE_MULTIPLIER) {
+			log_gen(CAT("range_multiplier violation: ",attr->range_multiplier));
+			attr->range_multiplier = rand_number(2,12);
+		}
+		static constexpr uint16_t MAX_CHANCE_TO_INJURE = 200;
+		if(attr->chance_to_injure > MAX_CHANCE_TO_INJURE) {
+			log_gen(CAT("chance_to_injure violation: ",attr->chance_to_injure));
+			attr->chance_to_injure = rand_number(1,200);
+		}
+		static constexpr uint16_t MAX_COOLDOWN_BETWEEN_SHOTS = 26;
+		if(attr->cooldown_between_shots > MAX_COOLDOWN_BETWEEN_SHOTS) {
+			log_gen(CAT("cooldown_between_shots violation: ",attr->cooldown_between_shots));
+			attr->cooldown_between_shots = rand_number(1,26);
+		}
+		log_section("");
+	}
 	obj_ptr_t generated_rifle_t::roll() {
 
+		log_section("");
+		log_gen("-[START]----------------------------------------------------------");
 		if(!compute_weapon_cost()) {
-			log("WARNING: rolling for a piece of loot without sufficient cost adjustments");
+			::log("WARNING: rolling for a piece of loot without sufficient cost adjustments");
 		}
 
 		if(!m_force_type) {
@@ -399,9 +692,14 @@ namespace mods::forge_engine {
 		m_attributes = this->generate_rifle_attributes();
 		m_elemental_damages = mods::forge_engine::item_generator.generate_rifle_elemental_boosts(m_player);
 		m_stat_boosts = mods::forge_engine::item_generator.generate_rifle_stat_boosts(m_player);
+
 		m_instance = create_object(ITEM_RIFLE,random_yaml(yaml_list(m_type)));
 		this->fill(m_instance);
+		this->balance_rifle_attributes();
+		this->clamp_rifle_attributes();
 		m_instance->forged = true;
+		log_gen("-[ END ]----------------------------------------------------------");
+		log_section("");
 		return m_instance;
 	}
 

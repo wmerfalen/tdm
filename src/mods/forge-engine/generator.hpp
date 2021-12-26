@@ -22,22 +22,17 @@ namespace mods::forge_engine {
 	using random_number_type_t = uint64_t;
 	obj_ptr_t reward_player(player_ptr_t& player, mob_vnum vict);
 	obj_ptr_t reward_player_with(std::string_view type,player_ptr_t& player, mob_vnum vict);
-	/**
-	 * roll a random integer
-	 */
-	template <typename TRandomType>
-	static inline TRandomType roll_xoroshiro() {
-		TRandomType x = rand_xoroshiro();
-		if(x == 0) {
-			return 0;
-		}
-		return x % std::numeric_limits<TRandomType>::max();
-	}
 	static inline float roll_float(float LO, float HI) {
+		if(LO == HI) {
+			return LO;
+		}
 		return LO + static_cast <float>(rand_xoroshiro()) / (static_cast <float>(UINT64_MAX/ (HI-LO)));
 	}
 	template <typename TUintWidth>
 	static inline TUintWidth roll_between(TUintWidth LO, TUintWidth HI) {
+		if(LO == HI) {
+			return LO;
+		}
 		return LO + static_cast <TUintWidth>(rand_xoroshiro()) / (static_cast <TUintWidth>(std::numeric_limits<TUintWidth>::max()/ (HI-LO)));
 	}
 
