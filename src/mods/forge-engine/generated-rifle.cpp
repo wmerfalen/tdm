@@ -649,13 +649,50 @@ namespace mods::forge_engine {
 			log_section("");
 		}// End rifle type of sniper
 
-		//if(m_type == rifle_types_t::RIFLE_TYPE_SHOTGUN) {
-		//	auto attr = m_instance->rifle()->attributes.get();
-		//	log_section("cooldown 1");
-		//	if(roll_overpowered("cooldown_between_shots")) {
+		/**
+		 * General rules around shotguns
+		 *
+		 * [ BALANCE ] if high damage, then CBS += rand()
+		 * [ OP ] if high damage, then lower CBS
+		 *
+		 * [BALANCE] if high damage, then maxrange clamp(2)
+		 * [OP] if high damage, then maxrange += rand(1,3)
+		 *
+		 * [BALANCE] if low damage, then lower CBS
+		 * [OP] if low damage, then maxrange += rand(1,3)
+		 *
+		 * [BALANCE] if low CBS, then lower [*ALL-DAMAGES*]
+		 * [OP] if low CBS, then raise [*ALL-DAMAGES*]
+		 *
+		 * [BALANCE] if low reloadtime, then lower clipsize
+		 * [OP] if low reloadtime, then raise clipsize
+		 *
+		 * [BALANCE] if low efr, then raise dicecount, lower dicesides
+		 * [OP] if low efr, then raise dicecount, raise dicesides
+		 *
+		 * [BALANCE] if critrange > 1, then maxrange clamp(2)
+		 * [OP] if critrange > 1, then maxrange += rand(1,3)
+		 *
+		 * [LUCKY] if headshotbonus == 0, then headshotbonus = scaled_headshot_bonus(player)
+		 * [BALANCE] if headshotbonus > 0, then critchance = headshotbonus / 2
+		 * [OP] if headshotbonus > 0, then critchance = scaled_op_critchance(player)
+		 *
+		 * [LUCKY] if cryo == 0, then cryo = rand(50,350)
+		 * [BALANCE] if incendiary > 0 and cryo > 0, then
+		 * 		if (rand(1,10) % 2 == 0){
+		 * 			incendiary = 0
+		 * 		}else{
+		 * 			cryo = 0
+		 * 		}
+		 * [BALANCE] if cryo > 0 and incendiary > 0, then incendiary /= 2
+		 */
+		if(m_type == rifle_types_t::RIFLE_TYPE_SHOTGUN) {
+			auto attr = m_instance->rifle()->attributes.get();
+			log_section("cooldown 1");
+			if(roll_overpowered("cooldown_between_shots")) {
 
-		//	}
-		//}
+			}
+		}
 
 		void generated_rifle_t::clamp_rifle_attributes() {
 			auto attr = m_instance->rifle()->attributes.get();

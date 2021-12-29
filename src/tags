@@ -9931,7 +9931,7 @@ m_debug	mods/forge-engine/generated-armor.hpp	14;"	kind:macro	line:14	file:
 m_debug	mods/forge-engine/generated-armor.hpp	47;"	kind:macro	line:47	file:
 m_debug	mods/forge-engine/generated-rifle.cpp	11;"	kind:macro	line:11	file:
 m_debug	mods/forge-engine/generated-rifle.cpp	13;"	kind:macro	line:13	file:
-m_debug	mods/forge-engine/generated-rifle.cpp	751;"	kind:macro	line:751	file:
+m_debug	mods/forge-engine/generated-rifle.cpp	788;"	kind:macro	line:788	file:
 m_debug	mods/forge-engine/generated-rifle.hpp	13;"	kind:macro	line:13	file:
 m_debug	mods/forge-engine/generated-rifle.hpp	15;"	kind:macro	line:15	file:
 m_debug	mods/forge-engine/generated-rifle.hpp	251;"	kind:macro	line:251	file:
