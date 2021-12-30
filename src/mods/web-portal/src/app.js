@@ -1,4 +1,5 @@
 console.log("entry");
+require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -9,6 +10,28 @@ const session = require('express-session');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const apiRouter = require('./routes/api/v1/');
+let sequelize = null;
+
+async function db(){
+	const { Sequelize } = require('sequelize');
+
+	// Option 1: Passing a connection URI
+	sequelize = new Sequelize(process.env.DB_STRING) // Example for postgres
+
+	console.log(sequelize);
+	try {
+			await sequelize.authenticate();
+			console.log('Connection has been established successfully.');
+		return true;
+	} catch (error) {
+			console.error('Unable to connect to the database:', error);
+		return false;
+	}
+}
+if(!db()){
+	console.error('Error connecting to the db');
+	return;
+}
 
 const app = express();
 const dev = false;
@@ -51,4 +74,5 @@ app.use(session({
 }))
 
 console.log('exporting')
+module.exports = app;
 module.exports = app;
