@@ -597,7 +597,7 @@ namespace mods::forge_engine {
 						 * Reduce damage_dice_count
 						 */
 						auto before = attr->damage_dice_count;
-						attr->damage_dice_count = (attr->clip_size * 2) + (rand_number(1,8));
+						attr->damage_dice_count = (attr->clip_size / 2.5) + (rand_number(1,8));
 						log_gen(CAT("{BALANCE} damage_dice_count BEFORE:'",before,"' AFTER:'",attr->damage_dice_count,"'"));
 					}
 				}
@@ -641,7 +641,7 @@ namespace mods::forge_engine {
 						 * Reduce damage_dice_count
 						 */
 						auto before = attr->damage_dice_count;
-						attr->damage_dice_count = (attr->clip_size * 2) + (rand_number(1,8));
+						attr->damage_dice_count = (attr->clip_size / 2.5) + (rand_number(1,8));
 						log_gen(CAT("{BALANCE} damage_dice_count BEFORE:'",before,"' AFTER:'",attr->damage_dice_count,"'"));
 					}
 				}
@@ -686,103 +686,235 @@ namespace mods::forge_engine {
 		 * 		}
 		 * [BALANCE] if cryo > 0 and incendiary > 0, then incendiary /= 2
 		 */
-		if(m_type == rifle_types_t::RIFLE_TYPE_SHOTGUN) {
-			auto attr = m_instance->rifle()->attributes.get();
-			log_section("cooldown 1");
-			if(roll_overpowered("cooldown_between_shots")) {
+	}
+	uint16_t generated_rifle_t::clamp_critical_range() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->critical_range,critical_range());
+	}
+	uint16_t generated_rifle_t::clamp_range_multiplier() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->range_multiplier,range_multiplier());
+	}
+	uint16_t generated_rifle_t::clamp_chance_to_injure() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->chance_to_injure,chance_to_injure());
+	}
+	uint16_t generated_rifle_t::clamp_cooldown_between_shots() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->cooldown_between_shots,cooldown_between_shots());
+	}
+	uint16_t generated_rifle_t::clamp_damage_dice_count() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->damage_dice_count,damage_dice_count());
+	}
+	uint16_t generated_rifle_t::clamp_damage_dice_sides() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->damage_dice_sides,damage_dice_sides());
+	}
+	uint16_t generated_rifle_t::clamp_ammo_max() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->ammo_max,ammo_max());
+	}
+	uint16_t generated_rifle_t::clamp_clip_size() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->clip_size,clip_size());
+	}
+	uint16_t generated_rifle_t::clamp_critical_chance() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->critical_chance,critical_chance());
+	}
+	uint16_t generated_rifle_t::clamp_disorient_amount() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->disorient_amount,disorient_amount());
+	}
+	uint16_t generated_rifle_t::clamp_headshot_bonus() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->headshot_bonus,headshot_bonus());
+	}
+	uint16_t generated_rifle_t::clamp_max_range() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->max_range,max_range());
+	}
+	uint16_t generated_rifle_t::clamp_reload_time() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->reload_time,reload_time());
+	}
+	uint16_t generated_rifle_t::clamp_rounds_per_minute() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->rounds_per_minute,rounds_per_minute());
+	}
+	uint16_t generated_rifle_t::clamp_muzzle_velocity() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->muzzle_velocity,muzzle_velocity());
+	}
+	uint16_t generated_rifle_t::clamp_effective_firing_range() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->effective_firing_range,effective_firing_range());
+	}
+	uint16_t generated_rifle_t::clamp_incendiary_damage() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->incendiary_damage,incendiary_damage());
+	}
+	uint16_t generated_rifle_t::clamp_explosive_damage() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->explosive_damage,explosive_damage());
+	}
+	uint16_t generated_rifle_t::clamp_shrapnel_damage() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->shrapnel_damage,shrapnel_damage());
+	}
+	uint16_t generated_rifle_t::clamp_corrosive_damage() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->corrosive_damage,corrosive_damage());
+	}
+	uint16_t generated_rifle_t::clamp_cryogenic_damage() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->cryogenic_damage,cryogenic_damage());
+	}
+	uint16_t generated_rifle_t::clamp_radioactive_damage() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->radioactive_damage,radioactive_damage());
+	}
+	uint16_t generated_rifle_t::clamp_emp_damage() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->emp_damage,emp_damage());
+	}
+	uint16_t generated_rifle_t::clamp_shock_damage() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->shock_damage,shock_damage());
+	}
+	uint16_t generated_rifle_t::clamp_anti_matter_damage() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->anti_matter_damage,anti_matter_damage());
+	}
+	uint16_t generated_rifle_t::clamp_base_damage() {
+		auto attr = m_instance->rifle()->attributes.get();
+		return clamp_using(attr->base_damage,base_damage());
+	}
 
+	void generated_rifle_t::clamp_rifle_attributes() {
+		auto attr = m_instance->rifle()->attributes.get();
+		//static constexpr uint16_t MAX_CRITICAL_RANGE = 16;
+		log_section("clamp");
+		log_gen("clamp check");
+		log_gen(CAT("critical_range clamping in progress: ",attr->critical_range));
+		attr->critical_range = clamp_critical_range();
+		log_gen(CAT("range_multiplier clamping in progress: ",attr->range_multiplier));
+		attr->range_multiplier = clamp_range_multiplier();
+		log_gen(CAT("chance_to_injure clamping in progress: ",attr->chance_to_injure));
+		attr->chance_to_injure = clamp_chance_to_injure();
+		log_gen(CAT("cooldown_between_shots clamping in progress: ",attr->cooldown_between_shots));
+		attr->cooldown_between_shots = clamp_cooldown_between_shots();
+		log_gen(CAT("damage_dice_count clamping in progress: ",attr->damage_dice_count));
+		attr->damage_dice_count = clamp_damage_dice_count();
+		log_gen(CAT("damage_dice_sides clamping in progress: ",attr->damage_dice_sides));
+		attr->damage_dice_sides = clamp_damage_dice_sides();
+		log_gen(CAT("ammo_max clamping in progress: ",attr->ammo_max));
+		attr->ammo_max = clamp_ammo_max();
+		log_gen(CAT("clip_size clamping in progress: ",attr->clip_size));
+		attr->clip_size = clamp_clip_size();
+		log_gen(CAT("critical_chance clamping in progress: ",attr->critical_chance));
+		attr->critical_chance = clamp_critical_chance();
+		log_gen(CAT("base_damage clamping in progress: ",attr->base_damage));
+		attr->base_damage = clamp_base_damage();
+		log_gen(CAT("disorient_amount clamping in progress: ",attr->disorient_amount));
+		attr->disorient_amount = clamp_disorient_amount();
+		log_gen(CAT("headshot_bonus clamping in progress: ",attr->headshot_bonus));
+		attr->headshot_bonus = clamp_headshot_bonus();
+		log_gen(CAT("max_range clamping in progress: ",attr->max_range));
+		attr->max_range = clamp_max_range();
+		log_gen(CAT("reload_time clamping in progress: ",attr->reload_time));
+		attr->reload_time = clamp_reload_time();
+		log_gen(CAT("rounds_per_minute clamping in progress: ",attr->rounds_per_minute));
+		attr->rounds_per_minute = clamp_rounds_per_minute();
+		log_gen(CAT("muzzle_velocity clamping in progress: ",attr->muzzle_velocity));
+		attr->muzzle_velocity = clamp_muzzle_velocity();
+		log_gen(CAT("effective_firing_range clamping in progress: ",attr->effective_firing_range));
+		attr->effective_firing_range = clamp_effective_firing_range();
+		log_gen(CAT("incendiary_damage clamping in progress: ",attr->incendiary_damage));
+		attr->incendiary_damage = clamp_incendiary_damage();
+		log_gen(CAT("explosive_damage clamping in progress: ",attr->explosive_damage));
+		attr->explosive_damage = clamp_explosive_damage();
+		log_gen(CAT("shrapnel_damage clamping in progress: ",attr->shrapnel_damage));
+		attr->shrapnel_damage = clamp_shrapnel_damage();
+		log_gen(CAT("corrosive_damage clamping in progress: ",attr->corrosive_damage));
+		attr->corrosive_damage = clamp_corrosive_damage();
+		log_gen(CAT("cryogenic_damage clamping in progress: ",attr->cryogenic_damage));
+		attr->cryogenic_damage = clamp_cryogenic_damage();
+		log_gen(CAT("radioactive_damage clamping in progress: ",attr->radioactive_damage));
+		attr->radioactive_damage = clamp_radioactive_damage();
+		log_gen(CAT("emp_damage clamping in progress: ",attr->emp_damage));
+		attr->emp_damage = clamp_emp_damage();
+		log_gen(CAT("shock_damage clamping in progress: ",attr->shock_damage));
+		attr->shock_damage = clamp_shock_damage();
+		log_gen(CAT("anti_matter_damage clamping in progress: ",attr->anti_matter_damage));
+		attr->anti_matter_damage = clamp_anti_matter_damage();
+
+		log_section("");
+	}
+	obj_ptr_t generated_rifle_t::roll() {
+
+		log_section("");
+		log_gen("-[START]----------------------------------------------------------");
+		if(!compute_weapon_cost()) {
+			::log("WARNING: rolling for a piece of loot without sufficient cost adjustments");
+		}
+
+		if(!m_force_type) {
+			m_type = mods::forge_engine::item_generator.random_rifle_type(m_player.killer);
+		}
+		m_requirements = mods::forge_engine::item_generator.generate_requirements(m_player);
+		m_attributes = this->generate_rifle_attributes();
+		m_elemental_damages = mods::forge_engine::item_generator.generate_rifle_elemental_boosts(m_player);
+		m_stat_boosts = mods::forge_engine::item_generator.generate_rifle_stat_boosts(m_player);
+
+		m_instance = create_object(ITEM_RIFLE,random_yaml(yaml_list(m_type)));
+		this->fill(m_instance);
+		this->balance_rifle_attributes();
+		this->clamp_rifle_attributes();
+		m_instance->forged = true;
+		log_gen("-[ END ]----------------------------------------------------------");
+		log_section("");
+		return m_instance;
+	}
+
+	void generated_rifle_t::send_stats_to_player(player_ptr_t& player) {
+		player->send("%s\r\n", get_dump().c_str());
+	}
+
+	std::string generated_rifle_t::get_dump() {
+		std::string output;
+		output += "---- start of dump ----\r\n";
+		output += CAT("random rifle type: ", to_string(m_type), "\r\n");
+
+		for(auto& req : m_attributes) {
+			if(std::holds_alternative<float> (req.second)) {
+				output += CAT("attribute: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
+			} else {
+				output += CAT("attribute: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
 			}
 		}
 
-		void generated_rifle_t::clamp_rifle_attributes() {
-			auto attr = m_instance->rifle()->attributes.get();
-			static constexpr uint16_t MAX_CRITICAL_RANGE = 16;
-			log_section("clamp");
-			log_gen("clamp check");
-			if(attr->critical_range > MAX_CRITICAL_RANGE) {
-				log_gen(CAT("critical_range violation: ",attr->critical_range));
-				attr->critical_range = rand_number(3,16);
+		for(auto& req : m_stat_boosts) {
+			if(std::holds_alternative<float> (req.second)) {
+				output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
+			} else if(std::holds_alternative<uint32_t> (req.second)) {
+				output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
 			}
-			static constexpr uint16_t MAX_RANGE_MULTIPLIER = 12;
-			if(attr->range_multiplier > MAX_RANGE_MULTIPLIER) {
-				log_gen(CAT("range_multiplier violation: ",attr->range_multiplier));
-				attr->range_multiplier = rand_number(2,12);
-			}
-			static constexpr uint16_t MAX_CHANCE_TO_INJURE = 200;
-			if(attr->chance_to_injure > MAX_CHANCE_TO_INJURE) {
-				log_gen(CAT("chance_to_injure violation: ",attr->chance_to_injure));
-				attr->chance_to_injure = rand_number(1,200);
-			}
-			static constexpr uint16_t MAX_COOLDOWN_BETWEEN_SHOTS = 26;
-			if(attr->cooldown_between_shots > MAX_COOLDOWN_BETWEEN_SHOTS) {
-				log_gen(CAT("cooldown_between_shots violation: ",attr->cooldown_between_shots));
-				attr->cooldown_between_shots = rand_number(1,26);
-			}
-			log_section("");
-		}
-		obj_ptr_t generated_rifle_t::roll() {
-
-			log_section("");
-			log_gen("-[START]----------------------------------------------------------");
-			if(!compute_weapon_cost()) {
-				::log("WARNING: rolling for a piece of loot without sufficient cost adjustments");
-			}
-
-			if(!m_force_type) {
-				m_type = mods::forge_engine::item_generator.random_rifle_type();
-			}
-			m_requirements = mods::forge_engine::item_generator.generate_requirements(m_player);
-			m_attributes = this->generate_rifle_attributes();
-			m_elemental_damages = mods::forge_engine::item_generator.generate_rifle_elemental_boosts(m_player);
-			m_stat_boosts = mods::forge_engine::item_generator.generate_rifle_stat_boosts(m_player);
-
-			m_instance = create_object(ITEM_RIFLE,random_yaml(yaml_list(m_type)));
-			this->fill(m_instance);
-			this->balance_rifle_attributes();
-			this->clamp_rifle_attributes();
-			m_instance->forged = true;
-			log_gen("-[ END ]----------------------------------------------------------");
-			log_section("");
-			return m_instance;
 		}
 
-		void generated_rifle_t::send_stats_to_player(player_ptr_t& player) {
-			player->send("%s\r\n", get_dump().c_str());
+		for(auto& req : m_elemental_damages) {
+			if(std::holds_alternative<float> (req.second)) {
+				output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
+			} else if(std::holds_alternative<uint32_t> (req.second)) {
+				output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
+			}
 		}
 
-		std::string generated_rifle_t::get_dump() {
-			std::string output;
-			output += "---- start of dump ----\r\n";
-			output += CAT("random rifle type: ", to_string(m_type), "\r\n");
+		output += CAT("\r\n", get_requirements_string(m_requirements), "\r\n");
+		output += "---- End of dump ----\r\n";
+		return output;
+	}
 
-			for(auto& req : m_attributes) {
-				if(std::holds_alternative<float> (req.second)) {
-					output += CAT("attribute: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
-				} else {
-					output += CAT("attribute: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
-				}
-			}
-
-			for(auto& req : m_stat_boosts) {
-				if(std::holds_alternative<float> (req.second)) {
-					output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
-				} else if(std::holds_alternative<uint32_t> (req.second)) {
-					output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
-				}
-			}
-
-			for(auto& req : m_elemental_damages) {
-				if(std::holds_alternative<float> (req.second)) {
-					output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<float> (req.second)), "\r\n");
-				} else if(std::holds_alternative<uint32_t> (req.second)) {
-					output += CAT("stat_boost: ", to_string(req.first), ": ", std::to_string(std::get<uint32_t> (req.second)), "\r\n");
-				}
-			}
-
-			output += CAT("\r\n", get_requirements_string(m_requirements), "\r\n");
-			output += "---- End of dump ----\r\n";
-			return output;
-		}
-
-	};//end namespace mods::forge_engine
+};//end namespace mods::forge_engine
 #undef m_debug

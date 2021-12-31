@@ -105,6 +105,54 @@ namespace mods::forge_engine {
 		return valid_rifle_types.at(this->roll<uint32_t>() % size);
 	}
 
+	struct type_chances_t {
+		rifle_types_t type;
+		uint8_t chance;
+	};
+	rifle_types_t roll_type(const auto& tier,rifle_types_t fallback) {
+		for(const auto& ch : tier) {
+			if(chance(ch.chance)) {
+				return ch.type;
+			}
+		}
+		return fallback;
+	}
+	rifle_types_t generator::random_rifle_type(player_ptr_t& player) {
+		static const std::vector<type_chances_t> tier_one = {
+			{rifle_types_t::RIFLE_TYPE_SNIPER,5},
+			{rifle_types_t::RIFLE_TYPE_LIGHT_MACHINE_GUN,5},	// 10
+			{rifle_types_t::RIFLE_TYPE_PISTOL,20},	// 30
+			{rifle_types_t::RIFLE_TYPE_MACHINE_PISTOL,20}, // 50
+			{rifle_types_t::RIFLE_TYPE_SHOTGUN,20},	// 70
+			{rifle_types_t::RIFLE_TYPE_SUB_MACHINE_GUN,30},	// 100
+		};
+		if(player->level() < 25) {
+			return roll_type(tier_one,rifle_types_t::RIFLE_TYPE_PISTOL);
+		}
+		static const std::vector<type_chances_t> tier_two = {
+			{rifle_types_t::RIFLE_TYPE_SNIPER,15},
+			{rifle_types_t::RIFLE_TYPE_LIGHT_MACHINE_GUN,15},	// 30
+			{rifle_types_t::RIFLE_TYPE_PISTOL,10},	// 40
+			{rifle_types_t::RIFLE_TYPE_MACHINE_PISTOL,15}, // 55
+			{rifle_types_t::RIFLE_TYPE_SHOTGUN,25},	// 80
+			{rifle_types_t::RIFLE_TYPE_SUB_MACHINE_GUN,20},	// 100
+		};
+		if(player->level() < 35 && player->level() >= 25) {
+			return roll_type(tier_two,rifle_types_t::RIFLE_TYPE_SUB_MACHINE_GUN);
+		}
+		if(player->level() < 75 && player->level() >= 35) {
+			static const std::vector<type_chances_t> tier_three = {
+				{rifle_types_t::RIFLE_TYPE_SNIPER,35},
+				{rifle_types_t::RIFLE_TYPE_LIGHT_MACHINE_GUN,25},	// 60
+				{rifle_types_t::RIFLE_TYPE_PISTOL,10},	// 70
+				{rifle_types_t::RIFLE_TYPE_MACHINE_PISTOL,10}, // 80
+				{rifle_types_t::RIFLE_TYPE_SHOTGUN,10},	// 90
+				{rifle_types_t::RIFLE_TYPE_SUB_MACHINE_GUN,10},	// 100
+			};
+			return roll_type(tier_three,rifle_types_t::RIFLE_TYPE_SNIPER);
+		}
+		return random_rifle_type();
+	}
 
 
 	std::vector<std::pair<stat_types_t, std::variant<uint32_t, float>>> generator::generate_rifle_stat_boosts(

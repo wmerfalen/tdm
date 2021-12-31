@@ -485,6 +485,7 @@ namespace mods::forge_engine {
 			std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes(kill_t& player);
 			rifle_attributes_t random_rifle_attribute();
 			rifle_types_t random_rifle_type();
+			rifle_types_t random_rifle_type(player_ptr_t& player);
 			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_rifle_stat_boosts(kill_t& player);
 			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_rifle_elemental_boosts(kill_t& player);
 

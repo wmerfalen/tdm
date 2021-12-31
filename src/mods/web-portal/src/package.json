@@ -22,5 +22,8 @@
   "main": "app.js",
   "author": "William Merfalen <null@fluxkraft-os.net> (https://github.com/wmerfalen)",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "prettier": "^2.5.1"
+  }
 }

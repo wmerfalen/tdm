@@ -907,7 +907,7 @@ namespace mods {
 				return m_current_melee_index;
 			}
 			void clear_combat_order() {
-				std::fill(m_combat_order.begin(),m_combat_order.end(),std::make_pair<>(0,nullptr));
+				m_combat_order.clear();
 			}
 			void set_stance(std::string_view stance);
 			std::string& get_stance() {
