@@ -1,6 +1,10 @@
+# Frontend code
+	- Write a fetch() wrapper to make calls using JWT
+
 # Create user
 	- role
 	- admin level
+
 # Login page
 	- uses jwt tokens
 	- calls `/api/v1/session`
