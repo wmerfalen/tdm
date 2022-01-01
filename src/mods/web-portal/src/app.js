@@ -1,4 +1,3 @@
-console.log("entry");
 require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
@@ -22,7 +21,9 @@ async function db() {
 
   try {
     await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
+    if (process.env.VERBOSE) {
+      console.log("Connection has been established successfully.");
+    }
     return true;
   } catch (error) {
     console.error("Unable to connect to the database:", error);
@@ -36,20 +37,19 @@ if (!db()) {
 let parent_state = {
   sequelize,
 };
-const orm_objects = require(__dirname + "/db/").boot(sequelize);
 
 const app = express();
 const dev = false;
 
 // view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
+//app.set("views", path.join(__dirname, "views"));
+//app.set("view engine", "jade");
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+//app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+//app.use(express.static(path.join(__dirname, "public")));
 
 const jwt = require(__dirname + "/auth/jwt/");
 app.use(app_prefix, indexRouter);
@@ -82,5 +82,4 @@ app.use(
   })
 );
 
-console.log("exporting");
 module.exports = app;

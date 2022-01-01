@@ -1,5 +1,6 @@
 "use strict";
 const { DataTypes, Model } = require("sequelize");
+const { prune } = require("@mentoc/utils").array;
 
 module.exports = {
   routes: async function (router, { orm_dir, parent_state }) {
@@ -13,6 +14,8 @@ module.exports = {
       return res.json(row);
     });
     router.post("/rifle-attribute-limits", async function (req, res, next) {
+      /** TODO: take req.body and feed it to create */
+      //let data = req.body;
       const sniper = await ral_orm.create({
         ral_type: "SNIPER",
         ral_attribute: "effective_firing_range",
