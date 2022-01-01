@@ -12,13 +12,13 @@ const usersRouter = require("./routes/users");
 const apiRouter = require("./routes/api/v1/");
 let sequelize = null;
 
+const app_prefix = process.env.APP_PREFIX || "/td";
 async function db() {
   const { Sequelize } = require("sequelize");
 
   // Option 1: Passing a connection URI
   sequelize = new Sequelize(process.env.DB_STRING); // Example for postgres
 
-  console.log(sequelize);
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
@@ -47,9 +47,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/api/v1", apiRouter);
+const jwt = require(__dirname + "/auth/jwt/");
+app.use(app_prefix, indexRouter);
+app.use(`${app_prefix}/users`, [jwt.authenticate_middleware, usersRouter]);
+app.use(`${app_prefix}/api/v1`, [jwt.authenticate_middleware, apiRouter]);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -69,7 +70,7 @@ app.use(function (err, req, res, next) {
 app.set("trust proxy", 1); // trust first proxy
 app.use(
   session({
-    secret: "oaiwejfosijdfoijsdaf",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: dev === true },
@@ -77,5 +78,4 @@ app.use(
 );
 
 console.log("exporting");
-module.exports = app;
 module.exports = app;
