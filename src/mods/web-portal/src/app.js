@@ -33,7 +33,10 @@ if (!db()) {
   console.error("Error connecting to the db");
   return;
 }
-require(__dirname + "/db/").boot(sequelize);
+let parent_state = {
+  sequelize,
+};
+const orm_objects = require(__dirname + "/db/").boot(sequelize);
 
 const app = express();
 const dev = false;
@@ -52,7 +55,7 @@ const jwt = require(__dirname + "/auth/jwt/");
 app.use(app_prefix, indexRouter);
 app.use(`${app_prefix}/users`, [jwt.authenticate_middleware, usersRouter]);
 //app.use(`${app_prefix}/api/v1`, [jwt.authenticate_middleware, apiRouter]);
-app.use(`${app_prefix}/api/v1/orm/`, [ormRouter]);
+app.use(`${app_prefix}/api/v1/orm/`, [ormRouter(parent_state)]);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
