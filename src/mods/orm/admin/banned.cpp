@@ -67,7 +67,7 @@ namespace mods::orm::admin {
 			m_debug("could not find a row to delete by ip '" << ip << "'");
 			return false;
 		}
-		auto removal_status = this->remove();
+		auto removal_status = this->remove(this);
 		if(ORM_SUCCESS(removal_status)) {
 			m_debug("unban_ip successfully removed a record from the db for ip: '" << ip << "'");
 			return true;
@@ -81,7 +81,7 @@ namespace mods::orm::admin {
 			m_debug("could not find a row to delete by hostname '" << hostname << "'");
 			return false;
 		}
-		auto removal_status = this->remove();
+		auto removal_status = this->remove(this);
 		if(ORM_SUCCESS(removal_status)) {
 			m_debug("unban_hostname successfully removed a record from the db for hostname: '" << hostname << "'");
 			return true;
@@ -95,7 +95,7 @@ namespace mods::orm::admin {
 			m_debug("could not find a row to delete by username '" << username << "'");
 			return false;
 		}
-		auto removal_status = this->remove();
+		auto removal_status = this->remove(this);
 		if(ORM_SUCCESS(removal_status)) {
 			m_debug("unban_username successfully removed a record from the db for username: '" << username << "'");
 			return true;

@@ -229,15 +229,21 @@ namespace mods::orm {
 				}
 				return status;
 			}
-			std::tuple<int16_t,std::string> remove() {
-				auto status = mods::orm::util::delete_from<orm_base,sql_compositor>(this);
-				m_result = status;
-				if(ORM_FAILURE(status)) {
-					m_register_error(status);
-					mods::sql::error_log(CAT("[orm_base::remove] failed: '",std::get<1>(status),"'"));
-				}
-				return status;
-			}
+			//std::tuple<int16_t,std::string> remove() {
+			//	std::cerr << "######+===========================================\n";
+			//	std::cerr << "######+===========================================\n";
+			//	std::cerr << "######+ DEPRECATED. DO NOT CALL orm_base::remove()!!!\n";
+			//	std::cerr << "######+===========================================\n";
+			//	std::cerr << "######+===========================================\n";
+			//	sleep(1);
+			//	auto status = mods::orm::util::delete_from<orm_base,sql_compositor>(this);
+			//	m_result = status;
+			//	if(ORM_FAILURE(status)) {
+			//		m_register_error(status);
+			//		mods::sql::error_log(CAT("[orm_base::remove] failed: '",std::get<1>(status),"'"));
+			//	}
+			//	return status;
+			//}
 			std::vector<std::string> get_error_log() const {
 				return m_error_log;
 			}

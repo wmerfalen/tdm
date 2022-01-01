@@ -7,9 +7,9 @@
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	struct mob_equipment_map : public mods::orm::orm_base<mob_equipment_map,uint8_t> {
-		const char* table = "mob_equipment_map";
+		static constexpr const char* table = "mob_equipment_map";
 		std::string table_name() {
-			return table;
+			return  "mob_equipment_map";
 		}
 		std::string column_prefix() {
 			return "mmap_";

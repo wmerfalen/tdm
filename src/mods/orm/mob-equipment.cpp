@@ -2,7 +2,7 @@
 
 namespace mods::orm {
 	bool mob_equipment::destroy() {
-		auto status = this->remove();
+		auto status = this->remove(this);
 		return ORM_SUCCESS(status);
 	}
 	uint64_t mob_equipment::initialize_row(std::string_view profile_name, uint64_t vnum) {

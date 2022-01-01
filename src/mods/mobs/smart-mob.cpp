@@ -3,12 +3,35 @@
 #include "helpers.hpp"
 #include "../mob-equipment.hpp"
 
+//#define  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
-#define sm_debug(a) mentoc_prefix_debug("mods::mobs::smart_mob") << a << "\n";
+#define sm_debug(a) mentoc_prefix_debug("mods::mobs::smart_mob") << green_str("smart_mob") << a  << "\n";
 #else
 #define sm_debug(a) ;;
 #endif
 namespace mods::mobs {
+	//static std::shared_ptr<mods::ranged_combat_totals> current;
+	int smart_mob::optimal_range() const {
+		//current = nullptr;
+		if(!player_ptr) {
+			return -1;
+		}
+		auto weapon = player_ptr->primary();
+		if(!weapon) {
+			return -2;
+		}
+		if(!mods::object_utils::is_rifle(weapon)) {
+			return -3;
+		}
+		//current = player_ptr->get_ranged_combat_totals();
+		//if(!current) {
+		//	return -4;
+		//}
+		//sm_debug("optimal_range: " << (int)current->effective_range.first);
+		//sm_debug("optimal_range (2): " << (int)current->effective_range.second);
+		//return current->effective_range.first;
+		return weapon->rifle()->attributes->effective_firing_range;
+	}
 	smart_mob::smart_mob() {
 		this->init();
 	}

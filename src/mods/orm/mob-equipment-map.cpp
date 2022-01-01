@@ -2,7 +2,7 @@
 
 namespace mods::orm {
 	bool mob_equipment_map::destroy() {
-		auto status = this->remove();
+		auto status = this->remove(this);
 		return ORM_SUCCESS(status);
 	}
 	uint64_t mob_equipment_map::initialize_row(const uint64_t& mob_vn, const uint64_t& equipment_vnum) {

@@ -142,6 +142,7 @@ namespace mods::mobs {
 			void refill_ammo() {
 				player_ptr->primary()->rifle_instance->ammo = 255;
 			}
+			int optimal_range() const;
 		protected:
 			std::map<uint16_t,uint16_t> m_should_do;
 			std::map<uint16_t,uint16_t> m_should_do_max;

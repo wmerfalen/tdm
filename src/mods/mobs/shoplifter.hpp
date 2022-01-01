@@ -102,7 +102,7 @@ namespace mods::mobs {
 			void attack(player_ptr_t& player);
 			bool attack_anyone_near_room();
 
-
+			int best_distance();
 		private:
 			player_ptr_t get_next_attacking_priority();
 			player_ptr_t m_last_attacker;
@@ -114,6 +114,7 @@ namespace mods::mobs {
 			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;
 			bool m_found_item;
 			std::vector<std::string> m_random_acts;
+			int m_optimal_range;
 	};
 
 	std::forward_list<std::shared_ptr<shoplifter>>& shoplifter_list();

@@ -7,8 +7,6 @@ module.exports = {
       "/forge-engine/rifle-attribute-limits").make(parent_state.sequelize);
     router.get("/rifle-attribute-limits", async function (req, res, next) {
       return res.json(await ral_orm.model().findAll());
-      const row = await ral_orm.findById(req.params.id).catch(console.error);
-      return res.json(row);
     });
     router.get("/rifle-attribute-limits/:id", async function (req, res, next) {
       const row = await ral_orm.findById(req.params.id).catch(console.error);

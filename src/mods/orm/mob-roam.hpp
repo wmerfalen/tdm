@@ -27,6 +27,7 @@ namespace mods::orm {
 
 	struct mob_roam : public mods::orm::orm_base<mob_roam,std::string> {
 		using primary_choice_t = std::string;
+		const char* table = "mob_roam";
 		std::string table_name() const {
 			return "mob_roam";
 		}

@@ -292,7 +292,7 @@ namespace mods::mobs {
 					player_ptr->primary()->rifle_instance->ammo = 255;
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
-					m_debug("No primary wieldded... wtf?");// << this->summarize(true));
+					m_debug("No primary wieldded... wtf? (" << player_ptr->name().c_str() << ")");// << this->summarize(true));
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
 					m_debug("cooldown in effect for primary");

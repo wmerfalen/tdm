@@ -8,12 +8,14 @@
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
-#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
+//#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) mentoc_prefix_debug("m|m|cma") << a << "\n";
+#define m_debug(a) mentoc_prefix_debug("m|m|shoplifter") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
+#define m_debug_plain(a) mentoc_prefix_debug("m|m|shoplifter") << a << "\n";
 #define cmem(a) mentoc_prefix_debug("[shoplifter][memory_footprint]") << a << "\n";
 #else
 #define m_debug(a)
+#define m_debug_plain(a)
 #define cmem(a)
 #endif
 namespace mods::mobs {
@@ -55,13 +57,13 @@ namespace mods::mobs {
 			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
 			if(should_fire == -1) {
 				/** FIXME */
-				m_debug("[stub] should_fire is -1, choose random direction");
+				m_debug_plain("[stub] should_fire is -1, choose random direction");
 			}
 			return should_fire;
 		}
 	};// end namespace shoplifter_btree
 	void shoplifter::create(const uuid_t& mob_uuid, std::string_view targets) {
-		m_debug("shoplifter create on uuid:" << mob_uuid);
+		m_debug_plain("shoplifter create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
 			log("SYSERR: did not find player to populate shoplifter with: %d",mob_uuid);
@@ -174,12 +176,12 @@ namespace mods::mobs {
 
 			if(player_ptr->room() != attacker->room()) {
 				if(mods::calc_visibility::roll_victim_spots_attacker(player_ptr,attacker,feedback)) {
-					m_debug("generic thief (as victim) spots attacker!");
+					m_debug("shoplifter (as victim) spots attacker!");
 					auto decision = feedback.from_direction;
 					move_to(decision);
 					set_heading(decision);
 				} else {
-					m_debug("generic thief (as victim) ***DOES NOT*** spot attacker!");
+					m_debug("shoplifter (as victim) ***DOES NOT*** spot attacker!");
 				}
 			}
 			if(player_ptr->room() == attacker->room()) {
@@ -252,10 +254,11 @@ namespace mods::mobs {
 					refill_ammo();
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
-					m_debug("No primary wieldded... wtf?");
+					m_debug("No primary wielded... wtf? (" << player_ptr->name().c_str() << ")");
 					m_weapon = player_ptr->primary();
 					if(!m_weapon) {
 						player_ptr->equip(create_object(ITEM_RIFLE,"rifle/mp5.yml"),WEAR_PRIMARY);
+						exit(400);
 					}
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
@@ -347,6 +350,7 @@ namespace mods::mobs {
 		this->set_variation(variation.data());
 		bootstrap_equipment();
 		m_weapon = player()->primary();
+		m_optimal_range = optimal_range();
 	}
 	void shoplifter::attacked(const feedback_t& feedback) {
 		auto p = ptr_by_uuid(feedback.attacker);
@@ -358,6 +362,16 @@ namespace mods::mobs {
 	}
 	player_ptr_t shoplifter::get_next_attacking_priority() {
 		return m_attackers.front();
+	}
+	int shoplifter::best_distance() {
+		m_optimal_range = optimal_range();
+		m_debug("optimal range return: '" << (int)m_optimal_range << "'");
+		if(m_optimal_range < 0) {
+			m_debug("best distance for me (" << player_ptr->name().c_str() << ") is:" << BEST_DISTANCE);
+			return BEST_DISTANCE;
+		}
+		m_debug("best distance for me (" << player_ptr->name().c_str() << ") is:" << m_optimal_range);
+		return m_optimal_range;
 	}
 	void shoplifter::extra_attack() {
 		m_debug("extra attack roll success");
@@ -379,7 +393,7 @@ namespace mods::mobs {
 		for(const auto& attacker : m_attackers) {
 			auto results = mods::scan::los_find(player_ptr,attacker);
 			if(results.found == false) {
-				if(results.distance == BEST_DISTANCE) {
+				if(results.distance == best_distance()) {
 					auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,primary(),attacker,results.distance,results.direction);
 					return;
 				}
@@ -442,7 +456,7 @@ namespace mods::mobs {
 	void shoplifter::remember_item(const mods::scan::vec_player_data_element& data) {
 		clear_list_if_count(&m_remembered_items,10);
 		m_remembered_items.push_front(data.uuid);
-		cmem("m_remembered_items:" << std::distance(m_remembered_items.cbegin(),m_remembered_items.cend()));
+		cmem("m_remembered_items: (" << player_ptr->name().c_str() << ") " << std::distance(m_remembered_items.cbegin(),m_remembered_items.cend()));
 	}
 	const shoplifter::uuidlist_t& shoplifter::get_remembered_items() const {
 		return m_remembered_items;
@@ -450,7 +464,7 @@ namespace mods::mobs {
 	void shoplifter::found_item(mods::scan::vec_player_data_element const& item) {
 		clear_list_if_count(&m_scanned_items,10);
 		m_scanned_items.emplace_back(item);
-		cmem("m_scanned_items:" << m_scanned_items.size());
+		cmem("m_scanned_items: (" << player_ptr->name().c_str() << ") " << m_scanned_items.size());
 	}
 	std::forward_list<std::shared_ptr<shoplifter>>& shoplifter_list() {
 		static std::forward_list<std::shared_ptr<shoplifter>> s;
@@ -483,7 +497,7 @@ namespace mods::mobs {
 		std::vector<res> finds;
 		for(const auto& direction : world[room()].directions()) {
 			for(const auto& scan : this->scan_attackable(direction)) {
-				if(scan.distance == BEST_DISTANCE && !IS_NPC(scan.ch)) {
+				if(scan.distance == best_distance() && !IS_NPC(scan.ch)) {
 					m_debug("best distance found: " << ptr(scan.ch)->name());
 					finds.emplace_back(res(direction,scan.ch));
 				}
@@ -498,7 +512,7 @@ namespace mods::mobs {
 		                    player_ptr,
 		                    primary(),
 		                    ptr(finds[index].player),
-		                    BEST_DISTANCE,
+		                    best_distance(),
 		                    finds[index].direction
 		                );
 		return feedback.hits || feedback.damage;
@@ -511,4 +525,5 @@ namespace mods::mobs {
 	}
 };
 #undef m_debug
+#undef m_debug_plain
 #undef cmem

@@ -671,7 +671,6 @@ namespace mods {
 				m_rct_calculated->effective_range.second = m_rct_calculated->effective_range.second + 2;
 			}
 		}
-
 	}
 	bool player::has_weapon_capability(uint8_t type) {
 		auto w = rifle();
