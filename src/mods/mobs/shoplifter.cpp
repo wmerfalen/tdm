@@ -8,6 +8,7 @@
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
+#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|m|cma") << a << "\n";
 #define cmem(a) mentoc_prefix_debug("[shoplifter][memory_footprint]") << a << "\n";
@@ -248,6 +249,7 @@ namespace mods::mobs {
 			switch(feedback.damage_event) {
 				case de::OUT_OF_AMMO_EVENT:
 					m_debug("DAMN! OUT OF AMMO!");
+					refill_ammo();
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
 					m_debug("No primary wieldded... wtf?");
