@@ -2,6 +2,11 @@
 const jwt = require("jsonwebtoken");
 
 let obj = {};
+
+/**
+ * @param {string} username the user's username to encode. This doesn't have to be a username and could easily be a combination of data.
+ * @return {string} token
+ */
 obj.generate_user_token = function (username) {
   return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: "1800s" });
 };

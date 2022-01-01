@@ -9,6 +9,7 @@ const session = require("express-session");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const ormRouter = require("./routes/api/v1/orm/");
 const apiRouter = require("./routes/api/v1/");
 let sequelize = null;
 
@@ -50,7 +51,8 @@ app.use(express.static(path.join(__dirname, "public")));
 const jwt = require(__dirname + "/auth/jwt/");
 app.use(app_prefix, indexRouter);
 app.use(`${app_prefix}/users`, [jwt.authenticate_middleware, usersRouter]);
-app.use(`${app_prefix}/api/v1`, [jwt.authenticate_middleware, apiRouter]);
+//app.use(`${app_prefix}/api/v1`, [jwt.authenticate_middleware, apiRouter]);
+app.use(`${app_prefix}/api/v1/orm/`, [ormRouter]);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
