@@ -1,0 +1,48 @@
+# accuracy map
+accuracy_map: [
+20.00,
+40.00,
+50.00,
+80.00
+]
+ammo_max: 220 #integer
+ammo_type: '' #string, constant enum
+chance_to_injure: 24.23 #float, out of 100
+clip_size: 32 #integer
+cooldown_between_shots: 3 #int, in ticks
+critical_chance: 24 #int, out of 100
+critical_range: 2 #integer, measured in rooms
+damage_map: [
+10.00,
+10.00,
+10.00,
+10.00
+]
+base_damage: 845 #float
+disorient_amount: 73.14 #float
+headshot_bonus: 183.0 #float
+max_range: 4 #integer,measured in rooms
+range_multiplier: 2 #float, multiplied by 
+reload_time: 7 #int, measured in ticks
+rounds_per_minute: 80
+muzzle_velocity: 824
+effective_firing_range: 2
+manufacturer: 'CEREBUS ENG'
+type: 'ASSAULT_RIFLE' #string, type of weapon
+str_type: 'ASSAULT_RIFLE' #string, type of weapon
+name: 'heavily modified Cerberus SCAR-H Assault Rifle' #string
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: COMMON
+description: 'A heavily modified Cerberus SCAR-H Assault Rifle is lying here.'
+short_description: 'a heavily modified Cerberus SCAR-H Assault Rifle'
+action_description: 'heavily modified Cerberus SCAR-H Assault Rifle'
+damage_dice_count: 26
+damage_dice_sides: 33
+feed_file: 'orthos-scarh.yml'
+vnum: 203

@@ -1,0 +1,48 @@
+# accuracy map
+accuracy_map: [
+90.00,
+90.00,
+40.00,
+20.00
+]
+ammo_max: 320 #integer
+ammo_type: '' #string, constant enum
+chance_to_injure: 34.23 #float, out of 100
+clip_size: 32 #integer
+cooldown_between_shots: 3 #int, in ticks
+critical_chance: 12 #int, out of 100
+critical_range: 2 #integer, measured in rooms
+damage_map: [
+410.00,
+810.00,
+510.00,
+110.00
+]
+base_damage: 245 #float
+disorient_amount: 31 #float
+headshot_bonus: 89.0 #float
+max_range: 3 #integer,measured in rooms
+range_multiplier: 0 #float, multiplied by 
+reload_time: 6 #int, measured in ticks
+rounds_per_minute: 380
+muzzle_velocity: 224
+effective_firing_range: 2
+manufacturer: 'CERBERUS ENG'
+type: 'ASSAULT_RIFLE' #string, type of weapon
+str_type: 'ASSAULT_RIFLE' #string, type of weapon
+name: 'Heavily modified AUG A3'  #string
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: COMMON
+description: 'A heavily modified AUG A3 is lying here.'
+short_description: 'a heavily modified AUG A3'
+action_description: 'heavily modified AUG A3'
+damage_dice_count: 36
+damage_dice_sides: 19
+feed_file: 'orthos-aug-a3.yml'
+vnum: 205
