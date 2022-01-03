@@ -11,7 +11,13 @@
 
 namespace mods::mobs {
 	using tick_t = uint64_t;
+	static std::vector<uuid_t> orthos_agent_uuid_list;
 	struct orthos_agent : public smart_mob {
+			static bool is_orthos_agent(const uuid_t& mob_uuid) {
+				return std::find(orthos_agent_uuid_list.cbegin(),
+				                 orthos_agent_uuid_list.cend(),
+				                 mob_uuid) != orthos_agent_uuid_list.cend();
+			}
 			enum btree_t : int16_t {
 				SHOPL_NONE = -1,
 				SHOPL_ROAM = 0,
@@ -103,6 +109,16 @@ namespace mods::mobs {
 			bool attack_anyone_near_room();
 
 			int best_distance();
+
+
+			/**
+			 * Extremely simplified attacking behaviour.
+			 * This will take place of actual behaviour trees as the trees
+			 * tend to be overkill for what we want to achieve
+			 */
+			void attack_mode();
+			void watch_everywhere();
+			void door_entry_event(player_ptr_t& player,const room_rnum room_id);
 		private:
 			player_ptr_t get_next_attacking_priority();
 			player_ptr_t m_last_attacker;
@@ -115,8 +131,15 @@ namespace mods::mobs {
 			bool m_found_item;
 			std::vector<std::string> m_random_acts;
 			int m_optimal_range;
+
+
+			bool m_watching_everywhere;
+			std::shared_ptr<mods::ranged_combat_totals> RCT;
 	};
 
 	std::forward_list<std::shared_ptr<orthos_agent>>& orthos_agent_list();
+	namespace orthos_callbacks {
+		bool dispatch_watcher(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id);
+	};
 };
 #endif

@@ -8,7 +8,7 @@
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
-#define  __MENTOC_MODS_MOBS_orthos_agent_SHOW_DEBUG_OUTPUT__
+//#define  __MENTOC_MODS_MOBS_orthos_agent_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_orthos_agent_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|m|orthos_agent") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
 #define m_debug_plain(a) mentoc_prefix_debug("m|m|orthos_agent") << a << "\n";
@@ -72,9 +72,10 @@ namespace mods::mobs {
 		auto g = std::make_shared<orthos_agent>(mob_uuid,targets.data());
 		g->btree_roam();
 		mods::mobs::orthos_agent_list().push_front(g);
+		orthos_agent_uuid_list.emplace_back(mob_uuid);
 	}
 	void orthos_agent::perform_random_act() {
-		act_to_room(m_random_acts[rand_number(0,m_random_acts.size()-1)]);
+		//act_to_room(m_random_acts[rand_number(0,m_random_acts.size()-1)]);
 	}
 
 	/**
@@ -84,6 +85,9 @@ namespace mods::mobs {
 	 * @param player
 	 */
 	void orthos_agent::enemy_spotted(room_rnum room,uuid_t player) {
+		std::cerr << "##################################################################################" <<
+		          "[orthos_agent] enemy spotted:" << room << "\n" <<
+		          "##################################################################################\n";
 		m_debug("##################################################################################" <<
 		        "[orthos_agent] enemy spotted:" << room << "\n" <<
 		        "##################################################################################");
@@ -140,12 +144,6 @@ namespace mods::mobs {
 		set_behavior_tree_directly(orthos_agent::btree_t::SHOPL_HOSTILE);
 
 	}
-	/*
-	void orthos_agent::bootstrap_equipment() {
-		m_weapon = create_object(ITEM_RIFLE,"defiler-scarh.yml");
-		player_ptr->equip(m_weapon,WEAR_PRIMARY);
-	}
-	*/
 	/**
 	 * @brief damage_events registered here
 	 */
@@ -260,12 +258,7 @@ namespace mods::mobs {
 					refill_ammo();
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
-					m_debug("No primary wielded... wtf? (" << player_ptr->name().c_str() << ")");
-					m_weapon = player_ptr->primary();
-					if(!m_weapon) {
-						player_ptr->equip(create_object(ITEM_RIFLE,"defiler-scarh.yml"),WEAR_PRIMARY);
-						/** TODO: FIXME URGENT: NEED WHATEVER MOB EQUIPMENT I HAVE */
-					}
+					log(CAT("SYSERR: orthos_agent -> No primary wielded... wtf? (",player_ptr->name(),")").c_str());
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
 					m_debug("cooldown in effect for primary");
@@ -305,15 +298,13 @@ namespace mods::mobs {
 	bool orthos_agent::is_rival(player_ptr_t& player) {
 		return false;
 	}
-	void orthos_agent::door_entry_event(player_ptr_t& player) {
-		if(player->is_npc()) {
-			if(is_rival(player)) {
-				btree_roam();
-				//TODO: attack_with_melee(player);
-				//player->sendln(CAT("I am:",uuid," and I'm Watching you"));
-			}
-		}
-	}
+	//void orthos_agent::door_entry_event(player_ptr_t& player) {
+	//	if(player->is_npc()) {
+	//		std::cerr << "man, you gotta be a real low life to go around sniping other npcs\n";
+	//		return;
+	//	}
+	//	player->sendln("Oh, I got yo azz now");
+	//}
 	void orthos_agent::init() {
 		smart_mob::init();
 		m_should_do_max[SHOULD_DO_ROAM] = LOWLY_SECURITY_ROAM_TICK();
@@ -328,9 +319,14 @@ namespace mods::mobs {
 		for(const auto& msg : EXPLODE(CHAOTIC_METH_ADDICT_PSV_RANDOM_ACT(),'|')) {
 			m_random_acts.emplace_back(msg);
 		}
+		m_watching_everywhere = false;
+		this->RCT = nullptr;
 		cmem("m_random_acts:" << m_random_acts.size());
 	};
 
+	void orthos_agent::watch_everywhere() {
+		mods::mobs::helpers::watch_multiple(world[this->room()].directions(),this->cd(),10);
+	}
 	/**
 	 * @brief preferred constructor method
 	 *
@@ -530,6 +526,63 @@ namespace mods::mobs {
 		m_attackers.clear();
 		m_remembered_items.clear();
 	}
+	void orthos_agent::door_entry_event(player_ptr_t& victim,const room_rnum room_id) {
+		std::tuple<bool,direction_t,int> r = mods::scan::los_find_player_with_depth(player_ptr,victim,RCT->max_range);
+		if(std::get<0>(r)) {
+			auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
+			                    player_ptr,
+			                    this->primary(),
+			                    victim,
+			                    std::get<2>(r),
+			                    std::get<1>(r)
+			                );
+		}
+	}
+
+	void orthos_agent::attack_mode() {
+		m_debug(green_str("-----------------------------"));
+		m_debug(green_str("Orthos agent simplified btree"));
+		m_debug(green_str("-----------------------------"));
+
+		if(!this->RCT) {
+			this->RCT = player()->get_ranged_combat_totals();
+		}
+		/** it is imperative that this be called AFTER get ranged combat totals */
+		if(!m_watching_everywhere) {
+			this->watch_everywhere();
+			m_watching_everywhere = true;
+		}
+		/** Scan for players */
+		int depth = RCT->max_range;
+		mods::scan::vec_player_data vpd;
+		mods::scan::los_scan_for_players(this->cd(),depth,&vpd);
+		std::map<uint8_t,int> scores;
+		for(auto&& v : vpd) {
+			auto victim = ptr_by_uuid(v.uuid);
+			if(!victim) {
+				continue;
+			}
+			if(mods::rooms::is_peaceful(v.room_rnum)) {
+				continue;
+			}
+			if(IS_NPC(victim->cd())) {
+				continue;
+			}
+			auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(this->player(),this->primary(),victim,v.distance,v.direction);
+		}
+
+	}
+	namespace orthos_callbacks {
+		bool dispatch_watcher(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id) {
+			for(auto& agent : orthos_agent_list()) {
+				if(agent->uuid == orthos_agent_uuid) {
+					agent->door_entry_event(player,room_id);
+					return true;
+				}
+			}
+			return false;
+		}
+	};
 };
 #undef m_debug
 #undef m_debug_plain

@@ -1202,10 +1202,10 @@ namespace mods::weapons::damage_types {
 		}
 
 		/** calculate headshot */
-		auto headshot_roll = dice(1,100) + (mods::skills::player_can(player,"HEADSHOT_CHANCE") ? mods::values::HEADSHOT_SKILL_MODIFIER() : 0);
-		if(headshot_roll >= 95) {
+		auto headshot_roll = dice(10,50) + (mods::skills::player_can(player,"HEADSHOT_CHANCE") ? mods::values::HEADSHOT_SKILL_MODIFIER() : 0);
+		if(headshot_roll > 450) {
 			/** TODO: evaluate damage if wearing super strong headgear */
-			int headshot_damage = victim->hp() / HEADSHOT_DIVISOR();
+			int headshot_damage = victim->hp();// / HEADSHOT_DIVISOR();
 			dam = headshot_damage;
 			feedback.hits = 1;
 			feedback.damage = dam;

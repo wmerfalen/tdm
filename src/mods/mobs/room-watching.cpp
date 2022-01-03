@@ -3,8 +3,19 @@
 #include "../scan.hpp"
 #include "../mobs/mini-gunner.hpp"
 #include "../mobs/car-thief.hpp"
+#include "../mobs/orthos-agent.hpp"
 #include <map>
 #include <set>
+//#define __DEBUG__
+#ifdef __DEBUG__
+#define m_debug(a) log(a)
+#else
+#define m_debug(a)
+#endif
+namespace mods::mobs::orthos_callbacks {
+	extern bool dispatch_watcher(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id);
+};
+
 namespace mods::mobs::room_watching {
 	std::vector<room_rnum> watch_list;
 	std::map<room_rnum,std::vector<uuid_t>> watch_map;
@@ -19,12 +30,15 @@ namespace mods::mobs::room_watching {
 		p->set_watching(direction);
 	}
 	void watch_room(player_ptr_t& mob) {
+		m_debug("watch room 1");
 		world[mob->room()].watchers.insert(mob);
 	}
 	void unwatch_room(player_ptr_t& mob) {
+		m_debug("unwatch room 1");
 		world[mob->room()].watchers.erase(mob);
 	}
 	void stop_watching(uuid_t mob) {
+		m_debug(" stop watch room 1");
 		mods::scan::room_list_t room_list;
 		for(auto& pair : watch_map) {
 			mods::util::vector_erase(pair.second,mob);
@@ -32,24 +46,38 @@ namespace mods::mobs::room_watching {
 	}
 	namespace events {
 		void room_entry(player_ptr_t& player) {
+			m_debug("room entry 1");
 			for(auto& watcher : world[player->room()].watchers) {
+				if(mods::mobs::orthos_callbacks::dispatch_watcher(watcher->uuid(),player,player->room())) {
+					m_debug("found orthos agent in room entry");
+					continue;
+				}
 				auto c = car_thief_ptr(watcher->uuid());
 				if(c) {
 					c->door_entry_event(player);
 				}
 			}
-			if(player->visibility() == 0) {
-				return;
-			}
+			//if(player->visibility() == 0) {
+			//	return;
+			//}
+			m_debug("map time");
 			for(auto& mob_uuid : watch_map[player->room()]) {
+				//if(mods::mobs::orthos_agent::is_orthos_agent(mob_uuid)) {
+				if(mods::mobs::orthos_callbacks::dispatch_watcher(mob_uuid,player,player->room())) {
+					m_debug("found orthos agent in room entry");
+					continue;
+				}
+				//}
 				if(has_mini_gunner_ptr(mob_uuid)) {
 					mini_gunner_ptr(mob_uuid)->enemy_spotted(player->room(),player->uuid());
 				}
 			}
 		}
 		void room_exit(player_ptr_t& player) {
+			m_debug("room exit 1");
 		}
 		void room_entry(const room_rnum& room,const uuid_t& player) {
+			m_debug("room entry 2");
 			if(std::find(watch_list.begin(),watch_list.end(),room) != watch_list.end()) {
 				auto player_ptr = ptr_by_uuid(player);
 				if(!player_ptr) {

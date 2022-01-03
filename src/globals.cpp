@@ -587,6 +587,7 @@ namespace mods {
 			GET_POS(mob->cd()) = POS_STANDING;
 			mob->uuid() = player_uuid();
 			register_player(mob);
+			mob->cd()->mob_specials.vnum = nr;
 			mods::mobs::decorate(mob->uuid());
 			mods::mob_equipment::decorate(mob->uuid());
 			return mob;
