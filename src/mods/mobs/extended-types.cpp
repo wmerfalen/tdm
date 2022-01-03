@@ -9,8 +9,10 @@
 #include "shoplifter.hpp"
 #include "melee-combatant.hpp"
 #include "defiler.hpp"
+#include "orthos-agent.hpp"
 #include "../behaviour_tree_impl.hpp"
 
+#define  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|mobs") << a << "\n";
 #else
@@ -25,6 +27,11 @@ namespace mods::mobs {
 			return;
 		}
 		auto ch = p->cd();
+		m_debug("_------------------------------_");
+		m_debug("mob vnum: '" << red_str(CAT(ch->mob_specials.vnum)) << "'");
+		m_debug(red_str("_------------------------------_"));
+
+		const auto& vnum = ch->mob_specials.vnum;
 		m_debug("extended_mob_type for mob_id:'" << ch->mob_specials.extended_mob_type << "', mob_id:'" << mob_id << "'");
 		bool register_mob_with_btree = true;
 		switch(ch->mob_specials.extended_mob_type) {
@@ -55,27 +62,33 @@ namespace mods::mobs {
 				break;
 			case extended_types_t::GENERIC_THIEF:
 				m_debug("[ found generic thief ]");
-				generic_thief::create(mob_id, mods::mobs::extended_types::get_mobs_targets(ch->nr));
+				generic_thief::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum));
 				register_mob_with_btree = false;
 				break;
 			case extended_types_t::CHAOTIC_METH_ADDICT:
 				m_debug("[ found chaotic meth addict ]");
-				chaotic_meth_addict::create(mob_id, mods::mobs::extended_types::get_mobs_targets(ch->nr));
+				chaotic_meth_addict::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum));
 				register_mob_with_btree = false;
 				break;
 			case extended_types_t::SHOPLIFTER:
 				m_debug("[ found shoplifter ]");
-				shoplifter::create(mob_id, mods::mobs::extended_types::get_mobs_targets(ch->nr));
+				m_debug("SHOPLIFTER VNUM: '" << vnum << "'");
+				shoplifter::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum));
 				register_mob_with_btree = false;
 				break;
 			case extended_types_t::MELEE_COMBATANT:
 				m_debug("[ found melee_combatant ]");
-				melee_combatant::create(mob_id, mods::mobs::extended_types::get_mobs_targets(ch->nr));
+				melee_combatant::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum));
 				register_mob_with_btree = false;
 				break;
 			case extended_types_t::DEFILER:
 				m_debug("[ found defiler ]");
-				defiler::create(mob_id, mods::mobs::extended_types::get_mobs_targets(ch->nr));
+				defiler::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum));
+				register_mob_with_btree = false;
+				break;
+			case extended_types_t::ORTHOS_AGENT:
+				m_debug("[ found orthos agent ]");
+				orthos_agent::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum));
 				register_mob_with_btree = false;
 				break;
 		}

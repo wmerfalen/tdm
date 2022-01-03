@@ -2,7 +2,7 @@
 #include "../behaviour_tree_status.hpp"
 #include "../npc.hpp"
 #include "../behaviour_tree_impl.hpp"
-#include "shoplifter.hpp"
+#include "orthos-agent.hpp"
 #include "../weapons/damage-types.hpp"
 #include "../../comm.h"
 #include "../calc-visibility.hpp"
@@ -12,9 +12,9 @@
 #include "../mob-roam.hpp"
 #include "../query-objects.hpp"
 
-//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_shoplifter_BTREE_DEBUG_OUTPUT__
-#ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_shoplifter_BTREE_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << "[m.m.shoplifter.btree:" << __LINE__ << "]->" << a << "\n";
+//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_orthos_agent_BTREE_DEBUG_OUTPUT__
+#ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_orthos_agent_BTREE_DEBUG_OUTPUT__
+#define m_debug(a) std::cerr << "[m.m.orthos_agent.btree:" << __LINE__ << "]->" << a << "\n";
 #else
 #define m_debug(a)
 #endif
@@ -25,10 +25,10 @@ namespace mods::behaviour_tree_impl {
 	extern void add_tree(std::string sv_tree_name,node& n);
 };
 
-namespace mods::mobs::shoplifter_behaviour_tree {
+namespace mods::mobs::orthos_agent_behaviour_tree {
 	using namespace helpers;
 	using vec_player_data = mods::scan::vec_player_data;
-	using TArgumentType = std::shared_ptr<mods::mobs::shoplifter>;
+	using TArgumentType = std::shared_ptr<mods::mobs::orthos_agent>;
 	using TNode = mods::behaviour_tree_node<TArgumentType>;
 	using TStatus = mods::behaviour_tree_status;
 	using vec_player_data = mods::scan::vec_player_data;
@@ -128,7 +128,7 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 		});
 	}
 
-	void make_shoplifter_engage(TNode& tree) {
+	void make_orthos_agent_engage(TNode& tree) {
 		/**
 		 * SEQUENCE TREE
 		 * --------------
@@ -224,13 +224,13 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 	}//end find_target_near_me
 
 	std::deque<TNode>& trees() {
-		static TNode shoplifter_roam(TNode::SELECTOR);
-		static TNode shoplifter_hostile(TNode::SELECTOR);
+		static TNode orthos_agent_roam(TNode::SELECTOR);
+		static TNode orthos_agent_hostile(TNode::SELECTOR);
 		static bool bootstrapped = false;
 		static std::deque<TNode> s;
 		if(!bootstrapped) {
 			m_debug("bootstrapping");
-			shoplifter_roam.append_child(
+			orthos_agent_roam.append_child(
 			TNode::create_selector({
 				find_someone_to_attack(),
 				random_action(),
@@ -238,13 +238,13 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 				//perform_hostile_action(),
 			})
 			);
-			shoplifter_hostile.append_child(
+			orthos_agent_hostile.append_child(
 			TNode::create_sequence({
 			})
 			);
 			s = {
-				shoplifter_roam,
-				shoplifter_hostile,
+				orthos_agent_roam,
+				orthos_agent_hostile,
 			};
 			bootstrapped = true;
 		}
@@ -253,11 +253,11 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 
 	void run_trees() {
 		m_debug("run trees");
-		for(auto& shoplifter : shoplifter_list()) {
-			m_debug("checking shoplifter ptr");
-			if(shoplifter->has_tree() && shoplifter->alive() && shoplifter->capable()) {
-				m_debug("has tree. dispatching..." << shoplifter->get_tree());
-				trees()[shoplifter->get_tree()].run(shoplifter);
+		for(auto& orthos_agent : orthos_agent_list()) {
+			m_debug("checking orthos_agent ptr");
+			if(orthos_agent->has_tree() && orthos_agent->alive() && orthos_agent->capable()) {
+				m_debug("has tree. dispatching..." << orthos_agent->get_tree());
+				trees()[orthos_agent->get_tree()].run(orthos_agent);
 			}
 		}
 	}

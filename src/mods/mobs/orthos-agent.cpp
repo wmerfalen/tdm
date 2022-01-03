@@ -1,4 +1,4 @@
-#include "shoplifter.hpp"
+#include "orthos-agent.hpp"
 #include "../weapons/damage-types.hpp"
 #include "../scan.hpp"
 #include "../rooms.hpp"
@@ -8,11 +8,11 @@
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
-#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
-#ifdef  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) mentoc_prefix_debug("m|m|shoplifter") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
-#define m_debug_plain(a) mentoc_prefix_debug("m|m|shoplifter") << a << "\n";
-#define cmem(a) mentoc_prefix_debug("[shoplifter][memory_footprint]") << a << "\n";
+#define  __MENTOC_MODS_MOBS_orthos_agent_SHOW_DEBUG_OUTPUT__
+#ifdef  __MENTOC_MODS_MOBS_orthos_agent_SHOW_DEBUG_OUTPUT__
+#define m_debug(a) mentoc_prefix_debug("m|m|orthos_agent") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
+#define m_debug_plain(a) mentoc_prefix_debug("m|m|orthos_agent") << a << "\n";
+#define cmem(a) mentoc_prefix_debug("[orthos_agent][memory_footprint]") << a << "\n";
 #else
 #define m_debug(a)
 #define m_debug_plain(a)
@@ -20,7 +20,7 @@
 #endif
 namespace mods::mobs {
 	static constexpr std::size_t BEST_DISTANCE = 1;
-	namespace shoplifter_btree {
+	namespace orthos_agent_btree {
 		/**
 		 * @brief find the room with the most enemies, and go towards that direction
 		 *
@@ -61,19 +61,19 @@ namespace mods::mobs {
 			}
 			return should_fire;
 		}
-	};// end namespace shoplifter_btree
-	void shoplifter::create(const uuid_t& mob_uuid, std::string_view targets) {
-		m_debug_plain("shoplifter create on uuid:" << mob_uuid);
+	};// end namespace orthos_agent_btree
+	void orthos_agent::create(const uuid_t& mob_uuid, std::string_view targets) {
+		m_debug_plain("orthos_agent create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
-			log("SYSERR: did not find player to populate shoplifter with: %d",mob_uuid);
+			log("SYSERR: did not find player to populate orthos_agent with: %d",mob_uuid);
 			return;
 		}
-		auto g = std::make_shared<shoplifter>(mob_uuid,targets.data());
+		auto g = std::make_shared<orthos_agent>(mob_uuid,targets.data());
 		g->btree_roam();
-		mods::mobs::shoplifter_list().push_front(g);
+		mods::mobs::orthos_agent_list().push_front(g);
 	}
-	void shoplifter::perform_random_act() {
+	void orthos_agent::perform_random_act() {
 		act_to_room(m_random_acts[rand_number(0,m_random_acts.size()-1)]);
 	}
 
@@ -83,22 +83,22 @@ namespace mods::mobs {
 	 * @param room
 	 * @param player
 	 */
-	void shoplifter::enemy_spotted(room_rnum room,uuid_t player) {
+	void orthos_agent::enemy_spotted(room_rnum room,uuid_t player) {
 		m_debug("##################################################################################" <<
-		        "[shoplifter] enemy spotted:" << room << "\n" <<
+		        "[orthos_agent] enemy spotted:" << room << "\n" <<
 		        "##################################################################################");
 		//this->spray(player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}
-	void shoplifter::set_variation(const std::string& v) {
+	void orthos_agent::set_variation(const std::string& v) {
 		for(const auto& type : EXPLODE(v,' ')) {
-			std::cerr << green_str("shoplifter::variation:") << type << "\n";
+			std::cerr << green_str("orthos_agent::variation:") << type << "\n";
 		}
 	}
-	str_map_t shoplifter::report() {
+	str_map_t orthos_agent::report() {
 		return usages();
 	}
-	str_map_t shoplifter::usages() {
+	str_map_t orthos_agent::usages() {
 		str_map_t m;
 		m = base_usages();
 		std::size_t rem_size = 0, attackers = 0, hostiles = 0;
@@ -119,29 +119,29 @@ namespace mods::mobs {
 		}
 		return m;
 	}
-	void shoplifter::set_behavior_tree_directly(const shoplifter::btree_t& t) {
+	void orthos_agent::set_behavior_tree_directly(const orthos_agent::btree_t& t) {
 		m_debug("setting tree id directly to: " << t);
 		cd()->mob_specials.behaviour_tree = (uint16_t)t;
 	}
-	bool shoplifter::has_tree() {
-		return cd()->mob_specials.behaviour_tree != shoplifter::btree_t::SHOPL_NONE;
+	bool orthos_agent::has_tree() {
+		return cd()->mob_specials.behaviour_tree != orthos_agent::btree_t::SHOPL_NONE;
 	}
-	shoplifter::btree_t shoplifter::get_tree() {
+	orthos_agent::btree_t orthos_agent::get_tree() {
 		return (btree_t)cd()->mob_specials.behaviour_tree;
 	}
-	void shoplifter::btree_none() {
-		set_behaviour_tree_directly(shoplifter::btree_t::SHOPL_NONE);
+	void orthos_agent::btree_none() {
+		set_behaviour_tree_directly(orthos_agent::btree_t::SHOPL_NONE);
 	}
-	void shoplifter::btree_roam() {
-		set_behavior_tree_directly(shoplifter::btree_t::SHOPL_ROAM);
+	void orthos_agent::btree_roam() {
+		set_behavior_tree_directly(orthos_agent::btree_t::SHOPL_ROAM);
 
 	}
-	void shoplifter::btree_hostile() {
-		set_behavior_tree_directly(shoplifter::btree_t::SHOPL_HOSTILE);
+	void orthos_agent::btree_hostile() {
+		set_behavior_tree_directly(orthos_agent::btree_t::SHOPL_HOSTILE);
 
 	}
 	/*
-	void shoplifter::bootstrap_equipment() {
+	void orthos_agent::bootstrap_equipment() {
 		m_weapon = create_object(ITEM_RIFLE,"defiler-scarh.yml");
 		player_ptr->equip(m_weapon,WEAR_PRIMARY);
 	}
@@ -149,7 +149,7 @@ namespace mods::mobs {
 	/**
 	 * @brief damage_events registered here
 	 */
-	void shoplifter::setup_damage_callbacks() {
+	void orthos_agent::setup_damage_callbacks() {
 		using de = damage_event_t;
 		static const std::vector<de> pacify_events = {
 			de::TARGET_DEAD_EVENT,
@@ -182,12 +182,12 @@ namespace mods::mobs {
 
 			if(player_ptr->room() != attacker->room()) {
 				if(mods::calc_visibility::roll_victim_spots_attacker(player_ptr,attacker,feedback)) {
-					m_debug("shoplifter (as victim) spots attacker!");
+					m_debug("orthos_agent (as victim) spots attacker!");
 					auto decision = feedback.from_direction;
 					move_to(decision);
 					set_heading(decision);
 				} else {
-					m_debug("shoplifter (as victim) ***DOES NOT*** spot attacker!");
+					m_debug("orthos_agent (as victim) ***DOES NOT*** spot attacker!");
 				}
 			}
 			if(player_ptr->room() == attacker->room()) {
@@ -288,7 +288,7 @@ namespace mods::mobs {
 				return;
 			}
 			auto& room = world[player_ptr->room()];
-			int decision = shoplifter_btree::weighted_direction_decider(player_ptr,nullptr);
+			int decision = orthos_agent_btree::weighted_direction_decider(player_ptr,nullptr);
 			if(decision == -1) {
 				for(auto dir : room.directions()) {
 					if(room.dir_option[dir] && mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false) {
@@ -302,10 +302,10 @@ namespace mods::mobs {
 			this->set_heading(decision);
 		});
 	}
-	bool shoplifter::is_rival(player_ptr_t& player) {
+	bool orthos_agent::is_rival(player_ptr_t& player) {
 		return false;
 	}
-	void shoplifter::door_entry_event(player_ptr_t& player) {
+	void orthos_agent::door_entry_event(player_ptr_t& player) {
 		if(player->is_npc()) {
 			if(is_rival(player)) {
 				btree_roam();
@@ -314,7 +314,7 @@ namespace mods::mobs {
 			}
 		}
 	}
-	void shoplifter::init() {
+	void orthos_agent::init() {
 		smart_mob::init();
 		m_should_do_max[SHOULD_DO_ROAM] = LOWLY_SECURITY_ROAM_TICK();
 		m_should_do_max[SHOULD_DO_RANDOM_TRIVIAL] = LOWLY_SECURITY_RANDOM_TRIVIAL_TICK();
@@ -337,19 +337,19 @@ namespace mods::mobs {
 	 * @param mob_uuid
 	 * @param variation
 	 */
-	shoplifter::shoplifter(const uuid_t& mob_uuid, std::string_view variation) {
+	orthos_agent::orthos_agent(const uuid_t& mob_uuid, std::string_view variation) {
 		this->init();
 		this->uuid = mob_uuid;
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
-			log("SYSERR: did not find player to populate shoplifter with: %d",mob_uuid);
+			log("SYSERR: did not find player to populate orthos_agent with: %d",mob_uuid);
 			this->loaded = false;
 			this->error = true;
 			return;
 		}
 		player_ptr = p;
 		auto ch = p->cd();
-		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::SHOPLIFTER;
+		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::ORTHOS_AGENT;
 		this->cd()->mob_specials.vnum = p->cd()->mob_specials.vnum;
 		this->setup_damage_callbacks();
 		this->loaded = true;
@@ -359,7 +359,7 @@ namespace mods::mobs {
 		m_weapon = player()->primary();
 		m_optimal_range = optimal_range();
 	}
-	void shoplifter::attacked(const feedback_t& feedback) {
+	void orthos_agent::attacked(const feedback_t& feedback) {
 		auto p = ptr_by_uuid(feedback.attacker);
 		if(p) {
 			m_last_attacker = p;
@@ -367,10 +367,10 @@ namespace mods::mobs {
 			cmem("{m_attackers.size}:" << std::distance(m_attackers.cbegin(),m_attackers.cend()));
 		}
 	}
-	player_ptr_t shoplifter::get_next_attacking_priority() {
+	player_ptr_t orthos_agent::get_next_attacking_priority() {
 		return m_attackers.front();
 	}
-	int shoplifter::best_distance() {
+	int orthos_agent::best_distance() {
 		m_optimal_range = optimal_range();
 		m_debug("optimal range return: '" << (int)m_optimal_range << "'");
 		if(m_optimal_range < 0) {
@@ -380,7 +380,7 @@ namespace mods::mobs {
 		m_debug("best distance for me (" << player_ptr->name().c_str() << ") is:" << m_optimal_range);
 		return m_optimal_range;
 	}
-	void shoplifter::extra_attack() {
+	void orthos_agent::extra_attack() {
 		m_debug("extra attack roll success");
 		auto attacker = player()->fighting();
 		if(m_weapon && attacker->room() == this->room()) {
@@ -388,7 +388,7 @@ namespace mods::mobs {
 			mods::weapons::damage_types::melee_damage_with_feedback(player(),m_weapon,attacker);
 		}
 	}
-	void shoplifter::melee_attack_within_range() {
+	void orthos_agent::melee_attack_within_range() {
 		m_debug("melee_attack_within_range");
 		if(m_last_attacker) {
 			if(m_last_attacker->position() == POS_DEAD) {
@@ -416,11 +416,11 @@ namespace mods::mobs {
 		}
 	}
 
-	void shoplifter::attack(player_ptr_t& player) {
+	void orthos_agent::attack(player_ptr_t& player) {
 		m_last_attacker = player;
 		melee_attack_within_range();
 	}
-	void shoplifter::move_closer_to_target() {
+	void orthos_agent::move_closer_to_target() {
 		uint8_t loops = 1;
 		if(mods::rand::chance(CAR_THIEF_EXTRA_LOOP_CHANCE())) {
 			++loops;
@@ -432,7 +432,7 @@ namespace mods::mobs {
 			}
 		}
 	}
-	int8_t shoplifter::determine_heading_from_found_victims() {
+	int8_t orthos_agent::determine_heading_from_found_victims() {
 		std::map<direction_t,std::size_t> weights;
 		for(const auto& spot : m_scanned_items) {
 			++weights[spot.direction];
@@ -446,41 +446,41 @@ namespace mods::mobs {
 		}
 		return direction;
 	}
-	bool shoplifter::has_found_item() {
+	bool orthos_agent::has_found_item() {
 		return m_found_item;
 	}
-	void shoplifter::set_found_item(bool status) {
+	void orthos_agent::set_found_item(bool status) {
 		m_found_item = status;
 	}
-	void shoplifter::found_witness(const mods::scan::vec_player_data_element& data) {
+	void orthos_agent::found_witness(const mods::scan::vec_player_data_element& data) {
 		clear_list_if_count(&m_hostiles,10);
 		m_hostiles.emplace_front(data);
 		cmem("m_hostiles:" << std::distance(m_hostiles.cbegin(),m_hostiles.cend()));
 	}
-	void shoplifter::clear_scanned_items() {
+	void orthos_agent::clear_scanned_items() {
 		m_scanned_items.clear();
 	}
-	void shoplifter::remember_item(const mods::scan::vec_player_data_element& data) {
+	void orthos_agent::remember_item(const mods::scan::vec_player_data_element& data) {
 		clear_list_if_count(&m_remembered_items,10);
 		m_remembered_items.push_front(data.uuid);
 		cmem("m_remembered_items: (" << player_ptr->name().c_str() << ") " << std::distance(m_remembered_items.cbegin(),m_remembered_items.cend()));
 	}
-	const shoplifter::uuidlist_t& shoplifter::get_remembered_items() const {
+	const orthos_agent::uuidlist_t& orthos_agent::get_remembered_items() const {
 		return m_remembered_items;
 	}
-	void shoplifter::found_item(mods::scan::vec_player_data_element const& item) {
+	void orthos_agent::found_item(mods::scan::vec_player_data_element const& item) {
 		clear_list_if_count(&m_scanned_items,10);
 		m_scanned_items.emplace_back(item);
 		cmem("m_scanned_items: (" << player_ptr->name().c_str() << ") " << m_scanned_items.size());
 	}
-	std::forward_list<std::shared_ptr<shoplifter>>& shoplifter_list() {
-		static std::forward_list<std::shared_ptr<shoplifter>> s;
+	std::forward_list<std::shared_ptr<orthos_agent>>& orthos_agent_list() {
+		static std::forward_list<std::shared_ptr<orthos_agent>> s;
 		return s;
 	}
-	uint8_t shoplifter::scan_depth() const {
+	uint8_t orthos_agent::scan_depth() const {
 		return CHAOTIC_METH_ADDICT_SCAN_DEPTH();
 	}
-	player_ptr_t shoplifter::spawn_near_someone() {
+	player_ptr_t orthos_agent::spawn_near_someone() {
 		player_ptr_t who = nullptr;
 		mods::loops::foreach_player([&](auto player) -> bool {
 			if(rand_number(1,10) > rand_number(1,10)) {
@@ -494,7 +494,7 @@ namespace mods::mobs {
 		});
 		return who;
 	}
-	bool shoplifter::attack_anyone_near_room() {
+	bool orthos_agent::attack_anyone_near_room() {
 		struct res {
 			direction_t direction;
 			char_data* player;
@@ -524,7 +524,7 @@ namespace mods::mobs {
 		                );
 		return feedback.hits || feedback.damage;
 	}
-	void shoplifter::clear_state() {
+	void orthos_agent::clear_state() {
 		m_scanned_items.clear();
 		m_hostiles.clear();
 		m_attackers.clear();

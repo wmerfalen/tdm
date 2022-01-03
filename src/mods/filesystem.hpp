@@ -140,6 +140,22 @@ namespace mods::filesystem {
 		base_dir += CAT("/generated.txt");
 		file_append(base_dir,CAT(mods::util::time_string(),":",type.data(),"->",msg.data(),"\n"));
 	}
+
+	static inline void append_to_mob_file(std::string_view mob_name, std::string_view msg) {
+		std::string cleaned = sanitize_user_name(mob_name);
+
+		std::string base_dir = current_working_directory() + "/../log";
+		for(const std::string& dir : {
+		            "mob-debug",cleaned.c_str()
+		        }) {
+			base_dir += CAT("/",dir);
+			if(is_directory(base_dir) == false) {
+				mkdir(base_dir.data(),0755);
+			}
+		}
+		base_dir += CAT("/debug.log");
+		file_append(base_dir,CAT(mob_name.data(),",",msg.data(),",",mods::util::time_string()));
+	}
 };//end namespace
 
 #endif

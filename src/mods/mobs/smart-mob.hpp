@@ -51,7 +51,7 @@ namespace mods::mobs {
 			bool has_tree();
 			uint16_t get_tree();
 			void populate_from_meqbuild_profile();
-			void bootstrap_equipment();
+			virtual void bootstrap_equipment();
 
 			/**================*/
 			/** debugging info */

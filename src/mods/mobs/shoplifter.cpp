@@ -8,7 +8,7 @@
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
-//#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
+#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|m|shoplifter") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
 #define m_debug_plain(a) mentoc_prefix_debug("m|m|shoplifter") << a << "\n";
@@ -140,6 +140,12 @@ namespace mods::mobs {
 		set_behavior_tree_directly(shoplifter::btree_t::SHOPL_HOSTILE);
 
 	}
+	/*
+	void shoplifter::bootstrap_equipment() {
+		m_weapon = create_object(ITEM_RIFLE,"defiler-scarh.yml");
+		player_ptr->equip(m_weapon,WEAR_PRIMARY);
+	}
+	*/
 	/**
 	 * @brief damage_events registered here
 	 */
@@ -257,8 +263,8 @@ namespace mods::mobs {
 					m_debug("No primary wielded... wtf? (" << player_ptr->name().c_str() << ")");
 					m_weapon = player_ptr->primary();
 					if(!m_weapon) {
-						player_ptr->equip(create_object(ITEM_RIFLE,"rifle/mp5.yml"),WEAR_PRIMARY);
-						exit(400);
+						player_ptr->equip(create_object(ITEM_RIFLE,"defiler-scarh.yml"),WEAR_PRIMARY);
+						/** TODO: FIXME URGENT: NEED WHATEVER MOB EQUIPMENT I HAVE */
 					}
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
@@ -344,6 +350,7 @@ namespace mods::mobs {
 		player_ptr = p;
 		auto ch = p->cd();
 		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::SHOPLIFTER;
+		this->cd()->mob_specials.vnum = p->cd()->mob_specials.vnum;
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;

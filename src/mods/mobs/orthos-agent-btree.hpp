@@ -1,10 +1,10 @@
-#ifndef  __MENTOC_MODS_MOBS_shoplifter_BEHAVIOUR_TREE_HEADER__
-#define  __MENTOC_MODS_MOBS_shoplifter_BEHAVIOUR_TREE_HEADER__
+#ifndef  __MENTOC_MODS_MOBS_orthos_agent_BEHAVIOUR_TREE_HEADER__
+#define  __MENTOC_MODS_MOBS_orthos_agent_BEHAVIOUR_TREE_HEADER__
 
-#include "shoplifter.hpp"
+#include "orthos_agent.hpp"
 #include "../radio.hpp"
 
-namespace mods::mobs::shoplifter_behaviour_tree {
+namespace mods::mobs::orthos_agent_behaviour_tree {
 	/**
 	 * Generic behaviour tree
 	 * ----------------------------
@@ -29,7 +29,7 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 	 */
 	using namespace helpers;
 	using vec_player_data = mods::scan::vec_player_data;
-	using TArgumentType = std::shared_ptr<mods::mobs::shoplifter>;
+	using TArgumentType = std::shared_ptr<mods::mobs::orthos_agent>;
 	using TStatus = mods::behaviour_tree_status;
 	using vec_player_data = mods::scan::vec_player_data;
 	using TChildNode = mods::behaviour_tree_node<TArgumentType>::child_node_t;
@@ -53,9 +53,9 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 	TChildNode report_hostile_activity();
 	TChildNode engage_hostile();
 
-	void make_shoplifter_roam(TNode&);
-	void make_shoplifter_hostile(TNode&);
-	void make_shoplifter_wimpy(TNode&);
+	void make_orthos_agent_roam(TNode&);
+	void make_orthos_agent_hostile(TNode&);
+	void make_orthos_agent_wimpy(TNode&);
 
 	void run_trees();
 };//end namespace

@@ -1,5 +1,5 @@
-#ifndef __MENTOC_MODS_MOBS_shoplifter_HEADER__
-#define  __MENTOC_MODS_MOBS_shoplifter_HEADER__
+#ifndef __MENTOC_MODS_MOBS_orthos_agent_HEADER__
+#define  __MENTOC_MODS_MOBS_orthos_agent_HEADER__
 
 #include "../../globals.hpp"
 #include "../damage-event.hpp"
@@ -11,7 +11,7 @@
 
 namespace mods::mobs {
 	using tick_t = uint64_t;
-	struct shoplifter : public smart_mob {
+	struct orthos_agent : public smart_mob {
 			enum btree_t : int16_t {
 				SHOPL_NONE = -1,
 				SHOPL_ROAM = 0,
@@ -39,9 +39,9 @@ namespace mods::mobs {
 			/**====================================================*/
 			/** preferred construct method */
 			/**====================================================*/
-			shoplifter(const uuid_t& mob_uuid,std::string_view variation);
-			shoplifter() = delete;
-			virtual ~shoplifter() = default;
+			orthos_agent(const uuid_t& mob_uuid,std::string_view variation);
+			orthos_agent() = delete;
+			virtual ~orthos_agent() = default;
 
 			/**================*/
 			/** debugging info */
@@ -49,7 +49,7 @@ namespace mods::mobs {
 			str_map_t report();
 			str_map_t usages();
 			std::string_view type() {
-				return "shoplifter";
+				return "orthos_agent";
 			}
 
 			/**=====================================*/
@@ -117,6 +117,6 @@ namespace mods::mobs {
 			int m_optimal_range;
 	};
 
-	std::forward_list<std::shared_ptr<shoplifter>>& shoplifter_list();
+	std::forward_list<std::shared_ptr<orthos_agent>>& orthos_agent_list();
 };
 #endif
