@@ -20,6 +20,11 @@ namespace mods::mobs::room_watching {
 	std::vector<room_rnum> watch_list;
 	std::map<room_rnum,std::vector<uuid_t>> watch_map;
 	void watch_direction(uuid_t mob,room_rnum room, direction_t direction,depth_t depth) {
+		static int call_count = 0;
+		if((++call_count % 20) == 0) {
+			call_count = 0;
+			log("room_watching usages. watch_map: %d watch_list: %d",watch_map.size(),watch_list.size());
+		}
 		mods::scan::room_list_t room_list;
 		mods::scan::los_list_by_room(room,room_list,depth);
 		for(auto& room_id : room_list[direction]) {
@@ -28,6 +33,7 @@ namespace mods::mobs::room_watching {
 		}
 		auto p = ptr_by_uuid(mob);
 		p->set_watching(direction);
+
 	}
 	void watch_room(player_ptr_t& mob) {
 		m_debug("watch room 1");

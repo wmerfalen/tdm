@@ -354,7 +354,7 @@ namespace mods::weapons::legacy {
 				case mw_rifle::LIGHT_MACHINE_GUN:
 					return TYPE_LIGHT_MACHINE_GUN;
 				default:
-					log("SYSERR: invalid rifle type");
+					log("SYSERR: invalid rifle type %s name('%s')",__FUNCTION__,weapon->name.c_str());
 					return TYPE_SNIPE;
 			}
 		}

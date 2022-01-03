@@ -524,8 +524,10 @@ namespace mods::weapons::damage_types {
 					return TYPE_SUB_MACHINE_GUN;
 				case mw_rifle::LIGHT_MACHINE_GUN:
 					return TYPE_LIGHT_MACHINE_GUN;
+				case mw_rifle::ASSAULT_RIFLE:
+					return TYPE_ASSAULT_RIFLE;
 				default:
-					log("SYSERR: invalid rifle type");
+					log("SYSERR: invalid rifle type %s:%s:%d name('%s')",__FILE__,__FUNCTION__,__LINE__,weapon->name.c_str());
 					return TYPE_SNIPE;
 			}
 		}
