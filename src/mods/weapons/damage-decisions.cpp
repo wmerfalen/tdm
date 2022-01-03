@@ -18,7 +18,7 @@ namespace mods::weapons::damage_types {
 	bool can_be_injured(player_ptr_t& victim);
 	bool attack_injures(player_ptr_t& player,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t feedback) {
 		if(DISABLE_INJURE_ROLL()) {
-			std::cerr << red_str("DISABLE_INJURE_ROLL is set. Not rolling injury.") << "\n";
+			cdebug(red_str("DISABLE_INJURE_ROLL is set. Not rolling injury."));
 			return 0;
 		}
 		if(mods::super_users::player_is(victim)) {
@@ -88,7 +88,7 @@ namespace mods::weapons::damage_types {
 		}
 
 		if(!weapon) {
-			std::cerr << "[can-continue] fails with player: '" << player->name() << "'\n";
+			md("[can-continue] fails with player: '" << player->name() << "'");
 			feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
 			player->damage_event(feedback);
 			md("no primary!");
@@ -98,7 +98,7 @@ namespace mods::weapons::damage_types {
 			case ITEM_RIFLE:
 				if(!weapon->has_rifle()) {
 					feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
-					std::cerr << "[can-continue] NO RIFLE :: fails with player: '" << player->name() << "'\n";
+					md("[can-continue] NO RIFLE :: fails with player: '" << player->name() << "'");
 					player->damage_event(feedback);
 					md("no primary rifle(2)");
 					return {false,feedback};
@@ -119,7 +119,7 @@ namespace mods::weapons::damage_types {
 				break;
 			case ITEM_MELEE:
 				if(weapon && weapon->has_melee() == false) {
-					std::cerr << "[can-continue] DOESNT HAVE MELEE FOR WEAPON :: fails with player: '" << player->name() << "'\n";
+					md("[can-continue] DOESNT HAVE MELEE FOR WEAPON :: fails with player: '" << player->name() << "'");
 					feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
 					player->damage_event(feedback);
 					md("no primary melee");
