@@ -49,7 +49,61 @@ function make(sequelize) {
       updatedAt: "updated_at",
     }
   );
-  return new Base(RifleAttributeLimits);
+  const obj = new Base(RifleAttributeLimits);
+  obj.validRifleTypes = () => [
+    "SNIPER",
+    "PISTOL",
+    "HANDGUN",
+    "MACHINE_PISTOL",
+    "SUB_MACHINE_GUN",
+    "LIGHT_MACHINE_GUN",
+    "SHOTGUN",
+    "ASSAULT_RIFLE",
+  ];
+  obj.validAttributes = () => [
+    "ammo_max",
+    "ammo_type",
+    "chance_to_injure",
+    "clip_size",
+    "cooldown_between_shots",
+    "critical_chance",
+    "critical_range",
+    "base_damage",
+    "disorient_amount",
+    "headshot_bonus",
+    "max_range",
+    "range_multiplier",
+    "reload_time",
+    "rounds_per_minute",
+    "muzzle_velocity",
+    "effective_firing_range",
+    "damage_dice_count",
+    "damage_dice_sides",
+    "incendiary_damage",
+    "explosive_damage",
+    "shrapnel_damage",
+    "corrosive_damage",
+    "cryogenic_damage",
+    "radioactive_damage",
+    "emp_damage",
+    "shock_damage",
+    "anti_matter_damage",
+    "stat_strength",
+    "stat_intelligence",
+    "stat_wisdom",
+    "stat_dexterity",
+    "stat_constitution",
+    "stat_electronics",
+    "stat_armor",
+    "stat_marksmanship",
+    "stat_sniping",
+    "stat_demolitions",
+    "stat_chemistry",
+    "stat_weapon_handling",
+    "stat_strategy",
+    "stat_medical",
+  ];
+  return obj;
 }
 module.exports = {
   make,
