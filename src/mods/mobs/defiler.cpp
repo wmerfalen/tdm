@@ -538,6 +538,7 @@ namespace mods::mobs {
 		/** it is imperative that this be called AFTER get ranged combat totals */
 		if(!m_watching_everywhere) {
 			mods::mobs::helpers::watch_multiple(world[this->room()].directions(),this->cd(),10);
+			m_watching_everywhere = true;
 		}
 		/** Scan for players */
 		int depth = 5;//RCT->max_range;
