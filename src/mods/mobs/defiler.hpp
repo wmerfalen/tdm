@@ -321,6 +321,8 @@ namespace mods::mobs {
 
 			std::vector<std::tuple<uuid_t,direction_t,uint8_t>> m_scanned_targets;
 			uuid_t m_hunt;
+			std::shared_ptr<mods::ranged_combat_totals> RCT;
+			bool m_watching_everywhere;
 	};
 
 	std::forward_list<std::shared_ptr<defiler>>& defiler_list();

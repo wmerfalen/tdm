@@ -1,24 +1,26 @@
 "use strict";
 const { DataTypes, Model } = require("sequelize");
 const { prune } = require("@mentoc/utils").array;
-const RU = require(__dirname + "/../../../../../utils/request");
+const RU = require("$/utils/request");
 const { body } = require("express-validator");
 
 module.exports = {
-  routes: async function (router, { orm_dir, parent_state }) {
-    const ral_orm = require(orm_dir +
-      "/forge-engine/rifle-attribute-limits").make(parent_state.sequelize);
+  routes: async function (router, { parent_state }) {
+    const ral_orm =
+      require("$/db/orm/forge-engine/rifle-attribute-limits").make(
+        parent_state.sequelize
+      );
     router.get("/rifle-attribute-limits", async function (req, res, next) {
       return res.json(await ral_orm.model().findAll());
     });
     router.get(
-      "/rifle-attribute-limits/valid/ral_type",
+      "/rifle-attribute-limits/enumerate/ral_type",
       async function (req, res, next) {
         return res.json(ral_orm.validRifleTypes());
       }
     );
     router.get(
-      "/rifle-attribute-limits/valid/ral_attribute",
+      "/rifle-attribute-limits/enumerate/ral_attribute",
       async function (req, res, next) {
         return res.json(ral_orm.validAttributes());
       }
@@ -50,10 +52,10 @@ module.exports = {
         return res.json(sniper);
       }
     );
-    router.delete("/rifle-attribute-limits", function (req, res, next) {
+    router.delete("/rifle-attribute-limits/:id", function (req, res, next) {
       res.json({ heh: "you bet" });
     });
-    router.put("/rifle-attribute-limits", function (req, res, next) {
+    router.put("/rifle-attribute-limits/:id", function (req, res, next) {
       res.json({ heh: "you bet" });
     });
   },

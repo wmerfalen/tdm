@@ -1,6 +1,6 @@
 "use strict";
 const { Sequelize, DataTypes, Model } = require("sequelize");
-const Base = require(__dirname + "/../base");
+const Base = require("$/db/orm/base");
 
 class RifleAttributeLimits extends Model {}
 

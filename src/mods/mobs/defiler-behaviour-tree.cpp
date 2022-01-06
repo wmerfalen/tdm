@@ -239,14 +239,14 @@ namespace mods::mobs::defiler_behaviour_tree {
 
 	using defiler_t = std::shared_ptr<mods::mobs::defiler>;
 	void defiler_entry(defiler_t& defiler) {
-		defiler->btree_hostile();
-		//defiler->hostile_phase_1();
-		m_debug("checking is fighting");
-		if(defiler->is(defiler::status_t::LOOKING_FOR_A_FIGHT)) {
-			m_debug("scanning for targets");
-			defiler->scan_for_targets();
-			return;
-		}
+		//defiler->btree_hostile();
+		defiler->hostile_phase_1();
+		//m_debug("checking is fighting");
+		//if(defiler->is(defiler::status_t::LOOKING_FOR_A_FIGHT)) {
+		//	m_debug("scanning for targets");
+		//	defiler->scan_for_targets();
+		//	return;
+		//}
 		//if(defiler.is(FIGHTING_SOMEONE)) {
 		//	/** Get a list of targets within the same room */
 
@@ -288,13 +288,20 @@ namespace mods::mobs::defiler_behaviour_tree {
 	void run_trees() {
 		m_debug("run trees");
 		for(auto& defiler : defiler_list()) {
-			m_debug("checking defiler ptr");
-			if(defiler->has_tree() && defiler->alive() && defiler->capable()) {
+			if(defiler->alive() && defiler->capable()) {
 				m_debug("has tree. dispatching..." << defiler->get_tree());
-				defiler_entry(defiler);
-				//trees()[defiler->get_tree()].run(defiler);
+				defiler->hostile_phase_1();
+				continue;
 			}
 		}
+		//trees()[defiler->get_tree()].run(defiler);
+		//		m_debug("checking defiler ptr");
+		//		if(defiler->has_tree() && defiler->alive() && defiler->capable()) {
+		//			m_debug("has tree. dispatching..." << defiler->get_tree());
+		//			defiler_entry(defiler);
+		//			//trees()[defiler->get_tree()].run(defiler);
+		//		}
+		//	}
 	}
 
 };

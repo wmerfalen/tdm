@@ -384,6 +384,8 @@ namespace mods::mobs {
 	 * - TODO: add quest taker permanently to memory
 	 */
 	void defiler::init() {
+		this->RCT = nullptr;
+		m_watching_everywhere = false;
 		smart_mob::init();
 		m_should_do_max[SHOULD_DO_ROAM] = LOWLY_SECURITY_ROAM_TICK();
 		m_should_do_max[SHOULD_DO_RANDOM_TRIVIAL] = LOWLY_SECURITY_RANDOM_TRIVIAL_TICK();
@@ -525,39 +527,71 @@ namespace mods::mobs {
 
 
 
-
-
-
-	/**
-	 * This is the main entry point. For the time being, it was much easier to just
-	 * call this routine than it was to run the whole behaviour tree flow.
-	 * As you'll see in the defiler behaviour tree .cpp file, we don't run behaviour
-	 * trees for the defiler. Instead we grab the class ptr and call this method.
-	 *
-	 * TODO: use corpse explosion
-	 */
 	void defiler::hostile_phase_1() {
+		m_debug(green_str("-----------------------------"));
+		m_debug(green_str("defiler simplified btree"));
+		m_debug(green_str("-----------------------------"));
 
-		if(m_last_attacker && m_last_attacker->position() != POS_DEAD && m_last_attacker->room() == player_ptr->room()) {
-			this->attack(m_last_attacker);
-			return;
+		if(!this->RCT) {
+			this->RCT = player()->get_ranged_combat_totals();
 		}
-		player_ptr_t target = nullptr;
-		for(uint8_t i=0; i < 5; i++) {
-			target = spawn_near_someone();
-			if(target && target->position() > POS_DEAD) {
-				m_last_attacker = target;
-				m_verbose("spawned near someone. attacking them");
-				this->telegraph(target,"You truly think you can hide from me?!");
-				if(!mods::ensnare::is_ensnared(target)) {
-					this->ensnare(target);
-				}
-				this->attack(target);
-				return;
+		/** it is imperative that this be called AFTER get ranged combat totals */
+		if(!m_watching_everywhere) {
+			mods::mobs::helpers::watch_multiple(world[this->room()].directions(),this->cd(),10);
+		}
+		/** Scan for players */
+		int depth = 5;//RCT->max_range;
+		mods::scan::vec_player_data vpd;
+		mods::scan::los_scan_for_players(this->cd(),depth,&vpd);
+		std::map<uint8_t,int> scores;
+		for(auto&& v : vpd) {
+			auto victim = ptr_by_uuid(v.uuid);
+			if(!victim) {
+				continue;
 			}
+			if(mods::rooms::is_peaceful(v.room_rnum)) {
+				continue;
+			}
+			if(IS_NPC(victim->cd())) {
+				continue;
+			}
+			auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(this->player(),this->primary(),victim,v.distance,v.direction);
 		}
-		this->shout("The astral plane feeds me with intel! YOU CANNOT HIDE FOREVER");
+
 	}
+
+
+
+//	/**
+//	 * This is the main entry point. For the time being, it was much easier to just
+//	 * call this routine than it was to run the whole behaviour tree flow.
+//	 * As you'll see in the defiler behaviour tree .cpp file, we don't run behaviour
+//	 * trees for the defiler. Instead we grab the class ptr and call this method.
+//	 *
+//	 * TODO: use corpse explosion
+//	 */
+//	void defiler::hostile_phase_1() {
+//
+//		if(m_last_attacker && m_last_attacker->position() != POS_DEAD && m_last_attacker->room() == player_ptr->room()) {
+//			this->attack(m_last_attacker);
+//			return;
+//		}
+//		player_ptr_t target = nullptr;
+//		for(uint8_t i=0; i < 5; i++) {
+//			target = spawn_near_someone();
+//			if(target && target->position() > POS_DEAD) {
+//				m_last_attacker = target;
+//				m_verbose("spawned near someone. attacking them");
+//				this->telegraph(target,"You truly think you can hide from me?!");
+//				if(!mods::ensnare::is_ensnared(target)) {
+//					this->ensnare(target);
+//				}
+//				this->attack(target);
+//				return;
+//			}
+//		}
+//		this->shout("The astral plane feeds me with intel! YOU CANNOT HIDE FOREVER");
+//	}
 
 	bool defiler::is(defiler::status_t status) {
 		return m_status == status;

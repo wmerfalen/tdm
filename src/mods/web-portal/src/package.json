@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "npx nodemon ./bin/www",
-    "test": "jest"
+    "test": "jest",
+		"postinstall": "npx basetag link"
   },
   "dependencies": {
     "@mentoc/utils": "^1.0.11",
@@ -29,6 +30,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "basetag": "^2.0.1",
     "jest": "^27.4.7",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1"
