@@ -46,15 +46,7 @@ module.exports = {
           ],
           true
         );
-        const sniper = await ral_orm.create({
-          ral_type: "SNIPER",
-          ral_attribute: "effective_firing_range",
-          ral_low: 1,
-          ral_high: 10,
-          ral_overpowered: 30,
-          ral_start_level: 1,
-          ral_end_level: 10,
-        });
+        const sniper = await ral_orm.create(data);
         return res.json(sniper);
       }
     );

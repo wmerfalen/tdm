@@ -1,9 +1,16 @@
 "use strict";
+const pluck = require(__dirname + "/pry");
 
 const req = {};
 req.set_body = function (b) {
   req.body = b;
 };
+
+/**
+ * Body is a namespace under the req parent utility object.
+ * It should hold all functionality required to interact with
+ * express JS' Request.body property.
+ */
 req.body = {
   body: null,
   set: (b) => {
@@ -17,16 +24,7 @@ req.body = {
     if (!r && !req.body.body) {
       throw new Error(`Missing request object. Did you call req.body.set?`);
     }
-    let plucked = {};
-    for (let key of items) {
-      if (typeof r.body[key] === "undefined") {
-        if (throw_on_missing) {
-          throw new Error(`Missing parameter ${key} in body of request`);
-        }
-      }
-      plucked[key] = r.body[key];
-    }
-    return plucked;
+    return pry.pluck(r, items, throw_on_missing);
   },
 };
 
