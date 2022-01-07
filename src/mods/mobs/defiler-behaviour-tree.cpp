@@ -290,6 +290,7 @@ namespace mods::mobs::defiler_behaviour_tree {
 		for(auto& defiler : defiler_list()) {
 			if(defiler->alive() && defiler->capable()) {
 				m_debug("has tree. dispatching..." << defiler->get_tree());
+				defiler->start_turn();
 				defiler->hostile_phase_1();
 				continue;
 			}

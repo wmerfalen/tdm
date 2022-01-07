@@ -157,6 +157,12 @@ ACMD(do_recall) {
 		*player << "Ah Ah Ahh... You didn't say the magic word...";
 		return;
 	}
+	if(mods::super_users::player_is(player)) {
+		char_from_room(ch);
+		char_to_room(ch,mods::world_conf::real_mortal_start());
+		look_at_room(ch,0);
+		return;
+	}
 
 	//TODO: combat cooldown should prevent recall for 20 seconds
 	if(time(NULL) < ch->last_fight_timestamp + 20) {

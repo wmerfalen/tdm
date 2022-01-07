@@ -1030,6 +1030,16 @@ void command_interpreter(player_ptr_t& player, std::string in_argument) {
 					break;
 
 				case POS_FIGHTING:
+					if(mods::super_users::player_is(player)) {
+						player->position() = POS_STANDING;
+						auto ptr = player->fighting();
+						if(ptr) {
+							stop_fighting(ptr->cd());
+						}
+						stop_fighting(player->cd());
+						((*command.command_pointer)(ch, line, cmd, command.subcmd,player));
+						return;
+					}
 					send_to_char(ch, "No way!  You're fighting for your life!");
 					break;
 			}

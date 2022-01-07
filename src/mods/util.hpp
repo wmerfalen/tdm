@@ -15,6 +15,7 @@ static inline std::string operator "" _s(const char* s,uint64_t i) {
 }
 #endif
 #include "weapon-types.hpp"
+#include "colors.hpp"
 
 extern std::deque<room_data> world;
 extern int get_number(char **name);
@@ -23,6 +24,10 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+	template <typename TStr>
+	static inline TStr strip_color(TStr s) {
+		return mods::colors::strip_color(s);
+	}
 	class stopwatch_t {
 		public:
 			stopwatch_t() : beg_(clock_::now()) {}

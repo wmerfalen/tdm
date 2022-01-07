@@ -1196,7 +1196,7 @@ void send_prompt(player_ptr_t& player) {
 		start = "{yel}(:INVIS:){/yel}";
 	}
 	if(player->fighting()) {
-		fighting = CAT("{red}[",player->fighting()->name(),"]{/red}");
+		fighting = CAT("{red}[{/red}",mods::util::strip_color(player->fighting()->name()),"{red}]{/red}");
 	}
 	if(a.has_affect(mods::affects::affect_t::BLIND)) {
 		affects += "BLIND";

@@ -12,6 +12,11 @@
 
 namespace mods::mobs {
 	using tick_t = uint64_t;
+	struct target_t {
+		uuid_t uuid;
+		direction_t direction;
+		uint16_t distance;
+	};
 	struct defiler : public smart_mob {
 			static constexpr mob_vnum MOB_VNUM = 666;
 			/**
@@ -169,18 +174,30 @@ namespace mods::mobs {
 			btree_t get_tree();
 
 
-			/**
-			 * When certain criteria is met, the defiler will respond accordingly.
-			 * These functions help keep track of what that criteria is
-			 */
-
-			/**
-			 * Model the behaviour of the defiler slightly after the
-			 * first boss in nuclear throne.
-			 *
-			 * [hostile]
-			 */
+			/**====================================================*/
+			/** START: SIMPLIFIED ATTACK LOOP */
+			/**====================================================*/
+			void start_turn();
+			std::vector<player_ptr_t> m_same_room_targets;
+			player_ptr_t m_engaged_target;
+			bool find_same_room_targets();
 			void hostile_phase_1();
+			feedback_t rifle_attack(const target_t& target);
+			void rct_upkeep();
+			std::optional<target_t> acquire_target();
+			bool find_someone_to_attack();
+			std::tuple<bool,std::vector<direction_t>> roam_towards(direction_t direction);
+			std::vector<target_t> m_targets;
+			feedback_t m_last_attack;
+			std::size_t m_hostile_phase_1_attempts;
+
+			/**====================================================*/
+			/** END: SIMPLIFIED ATTACK LOOP */
+			/**====================================================*/
+
+
+
+
 
 			/**====================================================*/
 			/** preferred construct method */
@@ -192,6 +209,9 @@ namespace mods::mobs {
 			/**================*/
 			/** debugging info */
 			/**================*/
+			bool debug_mode_on();
+			bool m_debug_mode;
+			void mention(std::string_view msg);
 			str_map_t report();
 			str_map_t usages();
 			std::string_view type() {
