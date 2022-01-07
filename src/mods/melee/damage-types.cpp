@@ -12,6 +12,7 @@
 #include "../calc-visibility.hpp"
 #include "../loot.hpp"
 #include "../weapons/damage-types.hpp"
+#include "../players/messages.hpp"
 
 
 #include <variant>
@@ -89,6 +90,9 @@ namespace mods::melee::damage_types {
 		stop_fighting(attacker->cd());
 		stop_fighting(victim->cd());
 		mods::weapons::damage_types::legacy::die(attacker->cd(),victim->cd());
+		if(!victim->is_npc()) {
+			mods::players::messages::consume_messages_by_player(victim->uuid());
+		}
 	}
 	void player_died(player_ptr_t& victim) {
 		stop_fighting(victim->cd());

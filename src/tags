@@ -1454,7 +1454,7 @@ IS_THIEF	utils.h	509;"	kind:macro	line:509	file:
 IS_WARRIOR	utils.h	513;"	kind:macro	line:513	file:
 IS_WEAPON	fight.cpp	131;"	kind:macro	line:131	file:
 IS_WEAPON	fight.hpp	26;"	kind:macro	line:26	file:
-IS_WEAPON	mods/melee/damage-types.cpp	60;"	kind:macro	line:60	file:
+IS_WEAPON	mods/melee/damage-types.cpp	61;"	kind:macro	line:61	file:
 IS_WEAPON	mods/weapons/damage-types.cpp	60;"	kind:macro	line:60	file:
 IS_WEAPON_LOADED	mods/weapon.hpp	15;"	kind:macro	line:15	file:
 ITEM_ANTI_CLERIC	structs.h	520;"	kind:macro	line:520	file:
@@ -2083,7 +2083,7 @@ MENU	config.cpp	/^const char *MENU =$/;"	kind:variable	line:269
 MESS_FILE	db.h	91;"	kind:macro	line:91	file:
 METAL_HATCH	structs.h	/^			METAL_HATCH,$/;"	kind:member	line:1147	struct:obj_data::room_data	typeref:enum:obj_data::room_data::	file:	access:public
 METAL_WALL	structs.h	/^			METAL_WALL,$/;"	kind:member	line:1148	struct:obj_data::room_data	typeref:enum:obj_data::room_data::	file:	access:public
-MFEEDBACK	mods/melee/damage-types.cpp	69;"	kind:macro	line:69	file:
+MFEEDBACK	mods/melee/damage-types.cpp	70;"	kind:macro	line:70	file:
 MFEEDBACK	mods/weapons/damage-decisions.cpp	208;"	kind:macro	line:208	file:
 MFEEDBACK	mods/weapons/damage-event-broadcaster.hpp	166;"	kind:macro	line:166	file:
 MFEEDBACK	mods/weapons/damage-types.cpp	69;"	kind:macro	line:69	file:
@@ -3759,7 +3759,7 @@ TO_OBJ_PTR	utils.h	556;"	kind:macro	line:556	file:
 TO_ROOM	comm.h	63;"	kind:macro	line:63	file:
 TO_ROOM	mods/item.cpp	/^	static constexpr uint8_t TO_ROOM = 1;$/;"	kind:member	line:24	namespace:mods::item	file:
 TO_ROOM	mods/melee/combat-order.cpp	22;"	kind:macro	line:22	file:
-TO_ROOM	mods/melee/damage-types.cpp	38;"	kind:macro	line:38	file:
+TO_ROOM	mods/melee/damage-types.cpp	39;"	kind:macro	line:39	file:
 TO_ROOM	mods/melee/main.cpp	22;"	kind:macro	line:22	file:
 TO_ROOM	mods/melee/muay-thai-teep.cpp	22;"	kind:macro	line:22	file:
 TO_ROOM	mods/melee/stance.cpp	18;"	kind:macro	line:18	file:
@@ -4549,7 +4549,7 @@ __MENTOC_SHOW_MODS_FIRE_DEBUG_OUTPUT__	mods/fire.cpp	18;"	kind:macro	line:18	fil
 __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__	mods/forge-engine/generated-rifle.cpp	9;"	kind:macro	line:9	file:
 __MENTOC_SHOW_MODS_GLASS_DEBUG_OUTPUT__	mods/glass.cpp	11;"	kind:macro	line:11	file:
 __MENTOC_SHOW_MODS_ORM_ADMIN_USER_LOGINS_DEBUG_OUTPUT__	mods/orm/user-logins.cpp	5;"	kind:macro	line:5	file:
-__MENTOC_SHOW_MODS_PLAYERS_DESTROY_PLAYER_DEBUG_OUTPUT__	mods/players/destroy-player.cpp	4;"	kind:macro	line:4	file:
+__MENTOC_SHOW_MODS_PLAYERS_DESTROY_PLAYER_DEBUG_OUTPUT__	mods/players/destroy-player.cpp	5;"	kind:macro	line:5	file:
 __MENTOC_SHOW_MODS_PLAYERS_MESSAGES_DEBUG_OUTPUT__	mods/players/messages.cpp	6;"	kind:macro	line:6	file:
 __MENTOC_SHOW_MODS_PLAYERS_banish_DEBUG_OUTPUT__	mods/players/banish.cpp	6;"	kind:macro	line:6	file:
 __MENTOC_SHOW_MODS_PLAYERS_event_messages_DEBUG_OUTPUT__	mods/players/event-messages.cpp	8;"	kind:macro	line:8	file:
@@ -6033,10 +6033,10 @@ countdown	mods/corpse.cpp	/^		uint16_t countdown;$/;"	kind:member	line:62	struct
 cpp_extern	sysdep.h	400;"	kind:macro	line:400	file:
 cpp_extern	sysdep.h	402;"	kind:macro	line:402	file:
 cqc_abilities	mods/classes/base.cpp	/^	base::ability_list_t& base::cqc_abilities() {$/;"	kind:function	line:358	class:mods::classes::base	signature:()
-cqc_can_continue	mods/melee/damage-types.cpp	/^	std::tuple<bool,feedback_t> cqc_can_continue(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:140	namespace:mods::melee::damage_types	signature:(player_ptr_t& attacker,player_ptr_t& victim)
+cqc_can_continue	mods/melee/damage-types.cpp	/^	std::tuple<bool,feedback_t> cqc_can_continue(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:144	namespace:mods::melee::damage_types	signature:(player_ptr_t& attacker,player_ptr_t& victim)
 cqc_cross_to_body	mods/classes/base.hpp	/^			skill_t& cqc_cross_to_body() {$/;"	kind:function	line:174	namespace:mods::classes	signature:()
 cqc_cross_to_head	mods/classes/base.hpp	/^			skill_t& cqc_cross_to_head() {$/;"	kind:function	line:171	namespace:mods::classes	signature:()
-cqc_damage_with_feedback	mods/melee/damage-types.cpp	/^	feedback_t cqc_damage_with_feedback($/;"	kind:function	line:166	namespace:mods::melee::damage_types	signature:( player_ptr_t& player, player_ptr_t victim, uint16_t dam )
+cqc_damage_with_feedback	mods/melee/damage-types.cpp	/^	feedback_t cqc_damage_with_feedback($/;"	kind:function	line:170	namespace:mods::melee::damage_types	signature:( player_ptr_t& player, player_ptr_t victim, uint16_t dam )
 cqc_jab_to_body	mods/classes/base.hpp	/^			skill_t& cqc_jab_to_body() {$/;"	kind:function	line:168	namespace:mods::classes	signature:()
 cqc_jab_to_head	mods/classes/base.hpp	/^			skill_t& cqc_jab_to_head() {$/;"	kind:function	line:165	namespace:mods::classes	signature:()
 cqc_knife_disarm	mods/classes/base.hpp	/^			skill_t& cqc_knife_disarm() {$/;"	kind:function	line:237	namespace:mods::classes	signature:()
@@ -6256,7 +6256,7 @@ damage_percent_bonus	mods/ranged-combat-totals.hpp	/^		uint16_t damage_percent_b
 damage_percent_bonus	mods/rifle-attachments.hpp	/^			int16_t damage_percent_bonus;			\/** honored [ 2021-04-13 ] *\/$/;"	kind:member	line:89	struct:mods::rifle_attachments_t	file:	access:public
 damage_roll	mods/ranged-combat-totals.hpp	/^		uint16_t damage_roll;$/;"	kind:member	line:89	struct:mods::ranged_combat_totals	file:	access:public
 damage_types	mods/init.hpp	/^INIT(mods::weapons::damage_types);$/;"	kind:variable	line:36
-damage_types	mods/melee/damage-types.cpp	/^namespace mods::melee::damage_types {$/;"	kind:namespace	line:66	class:mods::melee	file:
+damage_types	mods/melee/damage-types.cpp	/^namespace mods::melee::damage_types {$/;"	kind:namespace	line:67	class:mods::melee	file:
 damage_types	mods/melee/damage-types.hpp	/^namespace mods::melee::damage_types {$/;"	kind:namespace	line:13	class:mods::melee	file:
 damage_types	mods/projectile.cpp	/^namespace mods::weapons::damage_types {$/;"	kind:namespace	line:45	class:mods::weapons	file:
 damage_types	mods/unit-tests/damage-types.cpp	/^namespace mods::weapons::damage_types {$/;"	kind:namespace	line:20	class:mods::weapons	file:
@@ -6522,8 +6522,8 @@ destroy_direction	mods/builder.cpp	/^	bool destroy_direction(room_rnum room_id,i
 destroy_door	mods/player-contract-instance.cpp	/^	void player_contract_instance::destroy_door(const room_rnum& room_id,const int8_t& direction) {$/;"	kind:function	line:524	class:mods::contracts::player_contract_instance	signature:(const room_rnum& room_id,const int8_t& direction)
 destroy_item	mods/player-contract-instance.cpp	/^	void player_contract_instance::destroy_item(obj_ptr_t& object) {$/;"	kind:function	line:505	class:mods::contracts::player_contract_instance	signature:(obj_ptr_t& object)
 destroy_player	comm.cpp	/^int destroy_player(player_ptr_t&& player) {$/;"	kind:function	line:1448	signature:(player_ptr_t&& player)
-destroy_player	mods/players/destroy-player.cpp	/^	void destroy_player(uuid_t player_uuid) {$/;"	kind:function	line:15	namespace:mods::players::destroy_player	signature:(uuid_t player_uuid)
-destroy_player	mods/players/destroy-player.cpp	/^namespace mods::players::destroy_player {$/;"	kind:namespace	line:14	class:mods::players	file:
+destroy_player	mods/players/destroy-player.cpp	/^	void destroy_player(uuid_t player_uuid) {$/;"	kind:function	line:16	namespace:mods::players::destroy_player	signature:(uuid_t player_uuid)
+destroy_player	mods/players/destroy-player.cpp	/^namespace mods::players::destroy_player {$/;"	kind:namespace	line:15	class:mods::players	file:
 destroy_player	mods/players/destroy-player.hpp	/^namespace mods::players::destroy_player {$/;"	kind:namespace	line:6	class:mods::players	file:
 destroy_player	mods/replenish.cpp	/^	void destroy_player(uuid_t player_uuid) {$/;"	kind:function	line:51	namespace:mods::replenish	signature:(uuid_t player_uuid)
 destroy_shops	shop.cpp	/^void destroy_shops(void) {$/;"	kind:function	line:1551	signature:(void)
@@ -7107,8 +7107,8 @@ dsd	mods/player.cpp	40;"	kind:macro	line:40	file:
 dts_are_dumps	config.cpp	/^int dts_are_dumps = YES;$/;"	kind:variable	line:86
 dty_debug	mods/melee/combat-order.cpp	16;"	kind:macro	line:16	file:
 dty_debug	mods/melee/combat-order.cpp	18;"	kind:macro	line:18	file:
-dty_debug	mods/melee/damage-types.cpp	26;"	kind:macro	line:26	file:
-dty_debug	mods/melee/damage-types.cpp	28;"	kind:macro	line:28	file:
+dty_debug	mods/melee/damage-types.cpp	27;"	kind:macro	line:27	file:
+dty_debug	mods/melee/damage-types.cpp	29;"	kind:macro	line:29	file:
 dty_debug	mods/melee/main.cpp	16;"	kind:macro	line:16	file:
 dty_debug	mods/melee/main.cpp	18;"	kind:macro	line:18	file:
 dty_debug	mods/melee/muay-thai-teep.cpp	16;"	kind:macro	line:16	file:
@@ -9942,8 +9942,8 @@ m_crit	mods/players/banish.cpp	12;"	kind:macro	line:12	file:
 m_crit	mods/players/banish.cpp	9;"	kind:macro	line:9	file:
 m_crit	mods/players/db-load.cpp	17;"	kind:macro	line:17	file:
 m_crit	mods/players/db-load.cpp	20;"	kind:macro	line:20	file:
-m_crit	mods/players/destroy-player.cpp	10;"	kind:macro	line:10	file:
-m_crit	mods/players/destroy-player.cpp	7;"	kind:macro	line:7	file:
+m_crit	mods/players/destroy-player.cpp	11;"	kind:macro	line:11	file:
+m_crit	mods/players/destroy-player.cpp	8;"	kind:macro	line:8	file:
 m_crit	mods/players/event-messages.cpp	11;"	kind:macro	line:11	file:
 m_crit	mods/players/event-messages.cpp	14;"	kind:macro	line:14	file:
 m_crit	mods/players/friendly-reminders.cpp	11;"	kind:macro	line:11	file:
@@ -10172,8 +10172,8 @@ m_debug	mods/players/banish.cpp	11;"	kind:macro	line:11	file:
 m_debug	mods/players/banish.cpp	8;"	kind:macro	line:8	file:
 m_debug	mods/players/db-load.cpp	16;"	kind:macro	line:16	file:
 m_debug	mods/players/db-load.cpp	19;"	kind:macro	line:19	file:
-m_debug	mods/players/destroy-player.cpp	6;"	kind:macro	line:6	file:
-m_debug	mods/players/destroy-player.cpp	9;"	kind:macro	line:9	file:
+m_debug	mods/players/destroy-player.cpp	10;"	kind:macro	line:10	file:
+m_debug	mods/players/destroy-player.cpp	7;"	kind:macro	line:7	file:
 m_debug	mods/players/event-messages.cpp	10;"	kind:macro	line:10	file:
 m_debug	mods/players/event-messages.cpp	13;"	kind:macro	line:13	file:
 m_debug	mods/players/friendly-reminders.cpp	10;"	kind:macro	line:10	file:
@@ -10923,8 +10923,8 @@ mcv_debug	mods/calc-visibility.cpp	15;"	kind:macro	line:15	file:
 mcv_debug	mods/calc-visibility.cpp	245;"	kind:macro	line:245	file:
 md	mods/combat-composer/engage-target.cpp	238;"	kind:macro	line:238	file:
 md	mods/combat-composer/snipe-target.cpp	280;"	kind:macro	line:280	file:
-md	mods/melee/damage-types.cpp	32;"	kind:macro	line:32	file:
-md	mods/melee/damage-types.cpp	34;"	kind:macro	line:34	file:
+md	mods/melee/damage-types.cpp	33;"	kind:macro	line:33	file:
+md	mods/melee/damage-types.cpp	35;"	kind:macro	line:35	file:
 md	mods/weapons/damage-decisions.cpp	133;"	kind:macro	line:133	file:
 md	mods/weapons/damage-decisions.cpp	56;"	kind:macro	line:56	file:
 md	mods/weapons/damage-decisions.cpp	58;"	kind:macro	line:58	file:
@@ -11087,7 +11087,7 @@ minor_shielding	mods/help.cpp	/^	HELP_STR minor_shielding= "usage: invoke minor_
 minute_tasks	mods/message-server.cpp	/^	void minute_tasks() {$/;"	kind:function	line:311	namespace:mods::message_server	signature:()
 miss_att	structs.h	/^	sh_int miss_att;$/;"	kind:member	line:1872	struct:dex_app_type	file:	access:public
 miss_msg	structs.h	/^	struct msg_type miss_msg;	\/* messages when miss			*\/$/;"	kind:member	line:1847	struct:message_type	typeref:struct:message_type::msg_type	file:	access:public
-missed	mods/melee/damage-types.cpp	/^	void missed(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:127	namespace:mods::melee::damage_types	signature:(player_ptr_t& attacker,player_ptr_t& victim)
+missed	mods/melee/damage-types.cpp	/^	void missed(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:131	namespace:mods::melee::damage_types	signature:(player_ptr_t& attacker,player_ptr_t& victim)
 missed	mods/values.hpp	/^			static inline void missed(T& p){$/;"	kind:function	line:1630	namespace:mods::values::msg	signature:(T& p)
 missed	mods/weapons/damage-event-broadcaster.hpp	/^	void missed(player_ptr_t& player,player_ptr_t& victim) {$/;"	kind:function	line:118	namespace:mods::weapons::damage_types	signature:(player_ptr_t& player,player_ptr_t& victim)
 missing_cash1	shop.h	/^	mods::string missing_cash1;		\/* Message if keeper hasn't got cash	*\/$/;"	kind:member	line:41	struct:shop_data	file:	access:public
@@ -12041,8 +12041,8 @@ player_contract_state	mods/orm/player-contract-state.cpp	/^	player_contract_stat
 player_contract_state	mods/orm/player-contract-state.hpp	/^	struct player_contract_state : public mods::orm::orm_base<player_contract_state,std::string> {$/;"	kind:struct	line:13	namespace:mods::orm	file:	inherits:mods::orm::orm_base
 player_contract_state_table_name	mods/orm/player-contract-state.hpp	/^	static constexpr std::string_view player_contract_state_table_name = "player_contract_state";$/;"	kind:member	line:10	namespace:mods::orm	file:
 player_died	mods/affects.cpp	/^	void player_died(player_ptr_t p) {$/;"	kind:function	line:14	namespace:mods::affects	signature:(player_ptr_t p)
-player_died	mods/melee/damage-types.cpp	/^	void player_died(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:80	namespace:mods::melee::damage_types	signature:(player_ptr_t& attacker,player_ptr_t& victim)
-player_died	mods/melee/damage-types.cpp	/^	void player_died(player_ptr_t& victim) {$/;"	kind:function	line:93	namespace:mods::melee::damage_types	signature:(player_ptr_t& victim)
+player_died	mods/melee/damage-types.cpp	/^	void player_died(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:81	namespace:mods::melee::damage_types	signature:(player_ptr_t& attacker,player_ptr_t& victim)
+player_died	mods/melee/damage-types.cpp	/^	void player_died(player_ptr_t& victim) {$/;"	kind:function	line:97	namespace:mods::melee::damage_types	signature:(player_ptr_t& victim)
 player_died	mods/weapons/damage-types.cpp	/^		void player_died(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:396	namespace:mods::weapons::damage_types::legacy	signature:(player_ptr_t& attacker,player_ptr_t& victim)
 player_died	mods/weapons/damage-types.cpp	/^		void player_died(player_ptr_t& victim) {$/;"	kind:function	line:406	namespace:mods::weapons::damage_types::legacy	signature:(player_ptr_t& victim)
 player_died	mods/weapons/legacy-combat.cpp	/^	void player_died(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:331	namespace:mods::weapons::legacy	signature:(player_ptr_t& attacker,player_ptr_t& victim)
@@ -12718,7 +12718,7 @@ reload_weapon	mods/weapons/reload.cpp	/^	std::pair<obj_ptr_t,obj_ptr_t> reload_w
 remember	mobact.cpp	/^void remember(char_data *ch,char_data *victim) {$/;"	kind:function	line:233	signature:(char_data *ch,char_data *victim)
 remember_car	mods/mobs/car-thief.cpp	/^	void car_thief::remember_car(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:430	class:mods::mobs::car_thief	signature:(const mods::scan::vec_player_data_element& data)
 remember_event	mods/combat-composer/shared.cpp	/^		void remember_event(player_ptr_t& victim,player_ptr_t& attacker) {$/;"	kind:function	line:225	namespace:mods::combat_composer::phases	signature:(player_ptr_t& victim,player_ptr_t& attacker)
-remember_event	mods/melee/damage-types.cpp	/^	void remember_event(player_ptr_t& victim,player_ptr_t& attacker) {$/;"	kind:function	line:160	namespace:mods::melee::damage_types	signature:(player_ptr_t& victim,player_ptr_t& attacker)
+remember_event	mods/melee/damage-types.cpp	/^	void remember_event(player_ptr_t& victim,player_ptr_t& attacker) {$/;"	kind:function	line:164	namespace:mods::melee::damage_types	signature:(player_ptr_t& victim,player_ptr_t& attacker)
 remember_event	mods/weapons/damage-decisions.cpp	/^	void remember_event(player_ptr_t& victim,player_ptr_t& attacker) {$/;"	kind:function	line:192	namespace:mods::weapons::damage_types	signature:(player_ptr_t& victim,player_ptr_t& attacker)
 remember_item	mods/mobs/armed-guard.cpp	/^	void armed_guard::remember_item(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:440	class:mods::mobs::armed_guard	signature:(const mods::scan::vec_player_data_element& data)
 remember_item	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::remember_item(const mods::scan::vec_player_data_element& data) {$/;"	kind:function	line:442	class:mods::mobs::chaotic_meth_addict	signature:(const mods::scan::vec_player_data_element& data)
@@ -13483,7 +13483,7 @@ send_class_header	mods/help.cpp	/^	void send_class_header(player_ptr_t& player,s
 send_combat_messages	mods/weapons/damage-types.cpp	/^		void send_combat_messages(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:264	namespace:mods::weapons::damage_types::legacy	signature:(char_data *ch, char_data *victim, int dam, int attacktype)
 send_combat_messages	mods/weapons/legacy-combat.cpp	/^	void send_combat_messages(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:197	namespace:mods::weapons::legacy	signature:(char_data *ch, char_data *victim, int dam, int attacktype)
 send_contagion_help_menu	mods/help.cpp	/^	void send_contagion_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1066	namespace:mods::help	signature:(player_ptr_t& player)
-send_cqc_damage	mods/melee/damage-types.cpp	/^	std::tuple<feedback_t,feedback_t> send_cqc_damage(const int& hits, const int& dam, player_ptr_t& attacker, player_ptr_t& victim) {$/;"	kind:function	line:98	namespace:mods::melee::damage_types	signature:(const int& hits, const int& dam, player_ptr_t& attacker, player_ptr_t& victim)
+send_cqc_damage	mods/melee/damage-types.cpp	/^	std::tuple<feedback_t,feedback_t> send_cqc_damage(const int& hits, const int& dam, player_ptr_t& attacker, player_ptr_t& victim) {$/;"	kind:function	line:102	namespace:mods::melee::damage_types	signature:(const int& hits, const int& dam, player_ptr_t& attacker, player_ptr_t& victim)
 send_dealer_help_menu	mods/help.cpp	/^	void send_dealer_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1187	namespace:mods::help	signature:(player_ptr_t& player)
 send_forge_help_menu	mods/help.cpp	/^	void send_forge_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1196	namespace:mods::help	signature:(player_ptr_t& player)
 send_ghost_help_menu	mods/help.cpp	/^	void send_ghost_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1108	namespace:mods::help	signature:(player_ptr_t& player)

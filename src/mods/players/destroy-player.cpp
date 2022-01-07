@@ -1,4 +1,5 @@
 #include "destroy-player.hpp"
+#include "messages.hpp"
 #include "../replenish.hpp"
 
 #define __MENTOC_SHOW_MODS_PLAYERS_DESTROY_PLAYER_DEBUG_OUTPUT__
@@ -19,5 +20,6 @@ namespace mods::players::destroy_player {
 		 * Especially as long as destroy_player exists in comm.cpp
 		 */
 		mods::replenish::destroy_player(player_uuid);
+		mods::players::messages::consume_messages_by_player(player_uuid);
 	}
 };
