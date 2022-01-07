@@ -2388,7 +2388,7 @@ NO_PRIMARY_WIELDED_EVENT	mods/damage-event.hpp	/^	NO_PRIMARY_WIELDED_EVENT,$/;"	
 NO_RESULTS	mods/orm/util.hpp	/^	static constexpr int8_t NO_RESULTS = 1;$/;"	kind:member	line:34	namespace:mods::orm::util	file:
 NO_RESULTS	mods/pq.hpp	/^static constexpr int8_t NO_RESULTS = 1;$/;"	kind:variable	line:227	file:
 NPC	act.wizard.cpp	2278;"	kind:macro	line:2278	file:
-NPC_SEND_DEBUG	mods/player.cpp	2534;"	kind:macro	line:2534	file:
+NPC_SEND_DEBUG	mods/player.cpp	2531;"	kind:macro	line:2531	file:
 NPC_SEND_DEBUG	mods/player.cpp	36;"	kind:macro	line:36	file:
 NPC_SEND_DEBUG	mods/player.cpp	41;"	kind:macro	line:41	file:
 NRM	utils.h	120;"	kind:macro	line:120	file:
@@ -4669,7 +4669,7 @@ add	mods/super-users.cpp	/^	bool add(std::string_view name) {$/;"	kind:function	
 add_affected_by	mods/player.hpp	/^			std::vector<affected_type>& add_affected_by(affected_type&& add_this) {$/;"	kind:function	line:660	struct:mods::player	access:public	signature:(affected_type&& add_this)
 add_builder_command	mods/interpreter.cpp	/^	void add_builder_command(std::string command_string, acmd_function func) {$/;"	kind:function	line:48	namespace:mods::interpreter	signature:(std::string command_string, acmd_function func)
 add_callback	mods/rooms.cpp	/^	void add_callback(room_rnum room, affect_t affect, callback_t f) {$/;"	kind:function	line:57	namespace:mods::rooms::affects	signature:(room_rnum room, affect_t affect, callback_t f)
-add_combat_order	mods/player.cpp	/^	void player::add_combat_order(std::pair<uint16_t,func_t> technique) {$/;"	kind:function	line:2420	class:mods::player	signature:(std::pair<uint16_t,func_t> technique)
+add_combat_order	mods/player.cpp	/^	void player::add_combat_order(std::pair<uint16_t,func_t> technique) {$/;"	kind:function	line:2417	class:mods::player	signature:(std::pair<uint16_t,func_t> technique)
 add_command	mods/interpreter.cpp	/^	void add_command(std::string command_string, byte position, acmd_function func, sh_int minimum_level,int subcmd) {$/;"	kind:function	line:36	namespace:mods::interpreter	signature:(std::string command_string, byte position, acmd_function func, sh_int minimum_level,int subcmd)
 add_cost	mods/forge-engine/kill.cpp	/^	void kill_t::add_cost(int32_t c) {$/;"	kind:function	line:44	class:mods::forge_engine::kill_t	signature:(int32_t c)
 add_damage_nerf	mods/player.cpp	/^	void player::add_damage_nerf(const float& amount) {$/;"	kind:function	line:1059	class:mods::player	signature:(const float& amount)
@@ -5021,7 +5021,7 @@ attacker	mods/mobs/mp-shotgunner.hpp	/^		uuid_t attacker;$/;"	kind:member	line:1
 attacker_msg	structs.h	/^	char	*attacker_msg;  \/* message to attacker *\/$/;"	kind:member	line:1839	struct:msg_type	file:	access:public
 attackers_optimal_distance_away	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode attackers_optimal_distance_away() {$/;"	kind:function	line:292	namespace:mods::mobs::mp_shotgunner_behaviour_tree	signature:()
 attacking_with	mods/player.hpp	/^			obj_data_ptr_t attacking_with() {$/;"	kind:function	line:767	struct:mods::player	access:public	signature:()
-attacking_with_type	mods/player.cpp	/^	int player::attacking_with_type() {$/;"	kind:function	line:2375	class:mods::player	signature:()
+attacking_with_type	mods/player.cpp	/^	int player::attacking_with_type() {$/;"	kind:function	line:2372	class:mods::player	signature:()
 attempt_direction	mods/classes/breacher.cpp	/^	void breacher::attempt_direction(direction_t dir) {$/;"	kind:function	line:66	class:mods::classes::breacher	signature:(direction_t dir)
 attempt_open	mods/doors.hpp	/^	static inline int8_t attempt_open(const room_rnum room,int8_t direction) {$/;"	kind:function	line:279	namespace:mods::doors	signature:(const room_rnum room,int8_t direction)
 attract	mods/help.cpp	/^	HELP_STR attract= "usage: invoke attract <direction>\\r\\n"$/;"	kind:member	line:737	namespace:mods::help::pages	file:
@@ -5357,8 +5357,8 @@ calculate_limb_damage	mods/armor/advanced-protection.cpp	/^	float advanced_prote
 calculate_limb_damage	mods/armor/basic-protection.cpp	/^	float basic_protection::calculate_limb_damage(feedback_t& damage,int where) {$/;"	kind:function	line:31	class:mods::armor::basic_protection	signature:(feedback_t& damage,int where)
 calculate_limb_damage	mods/armor/elite-protection.cpp	/^	float elite_protection::calculate_limb_damage(feedback_t& damage,int where) {$/;"	kind:function	line:31	class:mods::armor::elite_protection	signature:(feedback_t& damage,int where)
 calculate_practice_sessions_from_mission_points	mods/skills.cpp	/^	int calculate_practice_sessions_from_mission_points(player_ptr_t& player) {$/;"	kind:function	line:33	namespace:mods::skills	signature:(player_ptr_t& player)
-calculate_ranged_combat_totals	mods/player.cpp	/^	std::shared_ptr<mods::ranged_combat_totals> player::calculate_ranged_combat_totals() {$/;"	kind:function	line:2423	class:mods::player	signature:()
-calculate_ranged_combat_totals	mods/player.cpp	/^	std::shared_ptr<mods::ranged_combat_totals> player::calculate_ranged_combat_totals(obj_ptr_t& weapon) {$/;"	kind:function	line:2426	class:mods::player	signature:(obj_ptr_t& weapon)
+calculate_ranged_combat_totals	mods/player.cpp	/^	std::shared_ptr<mods::ranged_combat_totals> player::calculate_ranged_combat_totals() {$/;"	kind:function	line:2420	class:mods::player	signature:()
+calculate_ranged_combat_totals	mods/player.cpp	/^	std::shared_ptr<mods::ranged_combat_totals> player::calculate_ranged_combat_totals(obj_ptr_t& weapon) {$/;"	kind:function	line:2423	class:mods::player	signature:(obj_ptr_t& weapon)
 calculate_shrapnel_rooms	mods/projectile.cpp	/^		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_ptr_t held_object,std::size_t blast_radius) {$/;"	kind:function	line:569	namespace:mods::projectile	signature:(room_rnum room, obj_ptr_t held_object,std::size_t blast_radius)
 calculate_skill_points_by_level	mods/orm/skill-points.cpp	/^	uint16_t skill_points::calculate_skill_points_by_level(uint16_t player_level) {$/;"	kind:function	line:53	class:mods::orm::skill_points	signature:(uint16_t player_level)
 calculate_sniper_extra_damage	mods/weapons/damage-calculator.cpp	/^	uint32_t calculate_sniper_extra_damage(player_ptr_t& attacker,obj_ptr_t& weapon,player_ptr_t& victim,uint32_t dam) {$/;"	kind:function	line:380	namespace:mods::weapons::damage_calculator	signature:(player_ptr_t& attacker,obj_ptr_t& weapon,player_ptr_t& victim,uint32_t dam)
@@ -5592,7 +5592,7 @@ class_abbrevs	class.cpp	/^const char *class_abbrevs[] = {$/;"	kind:variable	line
 class_abilities	mods/class-abilities.cpp	/^namespace mods::class_abilities {$/;"	kind:namespace	line:16	class:mods	file:
 class_abilities	mods/class-abilities.hpp	/^namespace mods::class_abilities {$/;"	kind:namespace	line:6	class:mods	file:
 class_abilities	mods/init.hpp	/^INIT(mods::class_abilities);$/;"	kind:variable	line:27
-class_action	mods/player.cpp	/^	std::tuple<bool,std::string> player::class_action(std::string_view func,std::string_view param) {$/;"	kind:function	line:2387	class:mods::player	signature:(std::string_view func,std::string_view param)
+class_action	mods/player.cpp	/^	std::tuple<bool,std::string> player::class_action(std::string_view func,std::string_view param) {$/;"	kind:function	line:2384	class:mods::player	signature:(std::string_view func,std::string_view param)
 class_is_implemented	mods/levels.hpp	/^	static inline bool class_is_implemented(player_class_t pc) {$/;"	kind:function	line:52	namespace:mods::levels	signature:(player_class_t pc)
 classes	mods/chargen.cpp	/^	static std::vector<std::string> classes;$/;"	kind:member	line:21	namespace:mods::chargen	file:
 classes	mods/classes/advance-levels.hpp	/^namespace mods::classes {$/;"	kind:namespace	line:5	class:mods	file:
@@ -5875,10 +5875,10 @@ consume_ammo	mods/weapons/attachment-underbarrel.cpp	/^	void attachment_underbar
 consume_cost	mods/forge-engine/kill.cpp	/^	void kill_t::consume_cost(int32_t c) {$/;"	kind:function	line:47	class:mods::forge_engine::kill_t	signature:(int32_t c)
 consume_from_carrying	mods/player.cpp	/^	void player::consume_from_carrying(obj_ptr_t& item) {$/;"	kind:function	line:1729	class:mods::player	signature:(obj_ptr_t& item)
 consume_messages_by_player	mods/players/messages.cpp	/^	void consume_messages_by_player(const uuid_t& player_uuid) {$/;"	kind:function	line:38	namespace:mods::players::messages	signature:(const uuid_t& player_uuid)
-consume_object	mods/player.cpp	/^	void player::consume_object(obj_ptr_t& item) {$/;"	kind:function	line:2429	class:mods::player	signature:(obj_ptr_t& item)
+consume_object	mods/player.cpp	/^	void player::consume_object(obj_ptr_t& item) {$/;"	kind:function	line:2426	class:mods::player	signature:(obj_ptr_t& item)
 consume_scripted_response	mods/player.hpp	/^			std::string consume_scripted_response() {$/;"	kind:function	line:862	struct:mods::player	access:public	signature:()
 consume_shotgun_underbarrel_ammo	mods/classes/ghost.cpp	/^	void ghost::consume_shotgun_underbarrel_ammo() {$/;"	kind:function	line:419	class:mods::classes::ghost	signature:()
-consumed_object_wears_off	mods/player.cpp	/^	void player::consumed_object_wears_off(const mods::yaml::consumable_description_t& c) {$/;"	kind:function	line:2475	class:mods::player	signature:(const mods::yaml::consumable_description_t& c)
+consumed_object_wears_off	mods/player.cpp	/^	void player::consumed_object_wears_off(const mods::yaml::consumable_description_t& c) {$/;"	kind:function	line:2472	class:mods::player	signature:(const mods::yaml::consumable_description_t& c)
 contact_hq_for_camera_spots	mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto contact_hq_for_camera_spots() {$/;"	kind:function	line:305	namespace:mods::mobs::mini_gunner_behaviour_tree	signature:()
 contagion	mods/classes/contagion.cpp	/^	contagion::contagion() {$/;"	kind:function	line:40	class:mods::classes::contagion	signature:()
 contagion	mods/classes/contagion.cpp	/^	contagion::contagion(player_ptr_t p) {$/;"	kind:function	line:43	class:mods::classes::contagion	signature:(player_ptr_t p)
@@ -5910,7 +5910,7 @@ contract	structs.h	/^		bool contract;$/;"	kind:member	line:1127	struct:obj_data:
 contract	structs.h	/^		bool contract;$/;"	kind:member	line:815	struct:obj_data	file:	access:public
 contract	structs.h	/^	bool contract;$/;"	kind:member	line:1119	struct:obj_data::room_direction_data	file:	access:public
 contract	structs.h	/^	bool contract;$/;"	kind:member	line:1720	struct:char_data	file:	access:public
-contract_custom_event	mods/player.cpp	/^	void player::contract_custom_event(mods::contracts::custom_events_t event,uuid_t id) {$/;"	kind:function	line:2516	class:mods::player	signature:(mods::contracts::custom_events_t event,uuid_t id)
+contract_custom_event	mods/player.cpp	/^	void player::contract_custom_event(mods::contracts::custom_events_t event,uuid_t id) {$/;"	kind:function	line:2513	class:mods::player	signature:(mods::contracts::custom_events_t event,uuid_t id)
 contract_defiler	mods/contract-defiler.cpp	/^namespace mods::contract_defiler {$/;"	kind:namespace	line:12	class:mods	file:
 contract_defiler	mods/contract-defiler.hpp	/^namespace mods::contract_defiler {$/;"	kind:namespace	line:5	class:mods	file:
 contract_destroy_item	mods/player.cpp	/^	void player::contract_destroy_item(obj_ptr_t& object) {$/;"	kind:function	line:2221	class:mods::player	signature:(obj_ptr_t& object)
@@ -5966,7 +5966,7 @@ contracts	mods/orm/contracts.hpp	/^		contracts(const pqxx::row& row) {$/;"	kind:
 contracts	mods/orm/contracts.hpp	/^	struct contracts : public mods::orm::orm_base<contracts,std::string> {$/;"	kind:struct	line:12	namespace:mods::orm	file:	inherits:mods::orm::orm_base
 contracts	mods/player-contract-instance.cpp	/^namespace mods::contracts {$/;"	kind:namespace	line:19	class:mods	file:
 contracts	mods/player-contract-instance.hpp	/^namespace mods::contracts {$/;"	kind:namespace	line:5	class:mods	file:
-contracts	mods/player.cpp	/^	player::contract_list_t& player::contracts() {$/;"	kind:function	line:2354	class:mods::player	signature:()
+contracts	mods/player.cpp	/^	player::contract_list_t& player::contracts() {$/;"	kind:function	line:2351	class:mods::player	signature:()
 contracts	mods/player.hpp	/^namespace mods::contracts {$/;"	kind:namespace	line:64	class:mods	file:
 contracts_with_callbacks	mods/scripted-sequence-events.cpp	/^	std::vector<contract_vnum_t> contracts_with_callbacks;$/;"	kind:member	line:12	namespace:mods::scripted_sequence_events	file:
 control	mods/message-server.cpp	/^		uint16_t control;$/;"	kind:member	line:27	struct:mods::message_server::channel_message_t	file:	access:public
@@ -6323,7 +6323,7 @@ db_set	mods/js.cpp	/^		static duk_ret_t db_set(duk_context *ctx) {$/;"	kind:func
 db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	kind:function	line:889	namespace:mods::js	signature:(duk_context *ctx)
 db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob_vnum,str_map_t values) {$/;"	kind:function	line:139	namespace:mods::mobs::mg::orm	signature:(mob_vnum mob_vnum,str_map_t values)
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	kind:function	line:71	file:	signature:(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value)
-dbg	mods/player.cpp	2531;"	kind:macro	line:2531	file:
+dbg	mods/player.cpp	2528;"	kind:macro	line:2528	file:
 dbg	mods/player.cpp	33;"	kind:macro	line:33	file:
 dbg	mods/player.cpp	38;"	kind:macro	line:38	file:
 dbg_print	mods/contract-defiler.cpp	10;"	kind:macro	line:10	file:
@@ -7101,7 +7101,7 @@ drone_simulate	mods/player.hpp	/^			bool& drone_simulate() {$/;"	kind:function	l
 drone_simulate	structs.h	/^	bool drone_simulate;$/;"	kind:member	line:1747	struct:char_data	file:	access:public
 drone_uuid	mods/player.hpp	/^			uuid_t& drone_uuid() {$/;"	kind:function	line:820	struct:mods::player	access:public	signature:()
 drone_uuid	structs.h	/^	uuid_t drone_uuid;$/;"	kind:member	line:1748	struct:char_data	file:	access:public
-dsd	mods/player.cpp	2533;"	kind:macro	line:2533	file:
+dsd	mods/player.cpp	2530;"	kind:macro	line:2530	file:
 dsd	mods/player.cpp	35;"	kind:macro	line:35	file:
 dsd	mods/player.cpp	40;"	kind:macro	line:40	file:
 dts_are_dumps	config.cpp	/^int dts_are_dumps = YES;$/;"	kind:variable	line:86
@@ -7276,7 +7276,7 @@ env	mods/lmdb/db.hpp	/^			std::unique_ptr<gdns_env> env;$/;"	kind:member	line:10
 epoch_string	mods/date-time.cpp	/^	std::string epoch_string() {$/;"	kind:function	line:11	namespace:mods::date_time::irl	signature:()
 epoll_ev	comm.cpp	/^epoll_event epoll_ev;$/;"	kind:variable	line:157
 epoll_fd	comm.cpp	/^int epoll_fd = -1;$/;"	kind:variable	line:156
-eqd	mods/player.cpp	2532;"	kind:macro	line:2532	file:
+eqd	mods/player.cpp	2529;"	kind:macro	line:2529	file:
 eqd	mods/player.cpp	34;"	kind:macro	line:34	file:
 eqd	mods/player.cpp	39;"	kind:macro	line:39	file:
 equip	mods/armor/advanced-protection.cpp	/^	void advanced_protection::equip(int where,uuid_t obj) {$/;"	kind:function	line:63	class:mods::armor::advanced_protection	signature:(int where,uuid_t obj)
@@ -8318,7 +8318,7 @@ get_ptable_by_name	db.cpp	/^long get_ptable_by_name(const char *name) {$/;"	kind
 get_purchase_obj	shop.cpp	/^struct obj_data *get_purchase_obj(char_data *ch, char *arg,$/;"	kind:function	line:498	signature:(char_data *ch, char *arg, char_data *keeper, int shop_nr, int msg)
 get_queue_behaviour	structs.h	/^			queue_behaviour_enum_t get_queue_behaviour() const {$/;"	kind:function	line:1676	struct:mods::descriptor_data	access:public	signature:() const
 get_range_multiplier	mods/rifle.cpp	/^	float get_range_multiplier(obj_ptr_t& weapon) {$/;"	kind:function	line:47	namespace:mods::rifle	signature:(obj_ptr_t& weapon)
-get_ranged_combat_totals	mods/player.cpp	/^	std::shared_ptr<mods::ranged_combat_totals> player::get_ranged_combat_totals() {$/;"	kind:function	line:2513	class:mods::player	signature:()
+get_ranged_combat_totals	mods/player.cpp	/^	std::shared_ptr<mods::ranged_combat_totals> player::get_ranged_combat_totals() {$/;"	kind:function	line:2510	class:mods::player	signature:()
 get_rate_limit_data	mods/player.cpp	/^	player::rate_limit_data_t& player::get_rate_limit_data(int action) {$/;"	kind:function	line:2111	class:mods::player	signature:(int action)
 get_rate_limit_types_help	mods/rate-limiting.cpp	/^	static const char* get_rate_limit_types_help = "usage: get_rate_limit_types";$/;"	kind:member	line:85	namespace:mods::rate_limiting	file:
 get_remembered_cars	mods/mobs/car-thief.cpp	/^	const car_thief::uuidlist_t& car_thief::get_remembered_cars() const {$/;"	kind:function	line:434	class:mods::mobs::car_thief	signature:() const
@@ -9667,7 +9667,7 @@ location	structs.h	/^	byte location;        \/* Tells which ability to change(AP
 location	structs.h	/^	byte location;      \/* Which ability to change (APPLY_XXX) *\/$/;"	kind:member	line:809	struct:obj_affected_type	file:	access:public
 location	structs.h	/^	sh_int location;$/;"	kind:member	line:1077	struct:obj_data::obj_file_elem	file:	access:public
 lock	mods/doors.cpp	/^	void lock(room_rnum room_id,direction_t dir) {$/;"	kind:function	line:20	namespace:mods::doors	signature:(room_rnum room_id,direction_t dir)
-lockdown	mods/player.cpp	/^	void player::lockdown(bool b) {$/;"	kind:function	line:2526	class:mods::player	signature:(bool b)
+lockdown	mods/player.cpp	/^	void player::lockdown(bool b) {$/;"	kind:function	line:2523	class:mods::player	signature:(bool b)
 locked_down_player_always	mods/interpreter.cpp	/^		void locked_down_player_always(player_ptr_t& douche) {$/;"	kind:function	line:74	namespace:mods::interpreter::douchebags	signature:(player_ptr_t& douche)
 log	utils.cpp	/^void log(const char* format,...) {$/;"	kind:function	line:41	signature:(const char* format,...)
 log	utils.cpp	/^void log(mods::string n) {$/;"	kind:function	line:37	signature:(mods::string n)
@@ -11304,7 +11304,7 @@ movement_loss	constants.cpp	/^int movement_loss[] = {$/;"	kind:variable	line:749
 movement_loss	constants.hpp	/^int movement_loss[] =$/;"	kind:variable	line:753
 moves	mods/melee/combat-order.hpp	/^	namespace moves {$/;"	kind:namespace	line:73	namespace:mods::melee::main	file:
 moves	mods/melee/main.cpp	/^namespace mods::melee::main::moves {$/;"	kind:namespace	line:25	class:mods::melee::main	file:
-moving_to_room	mods/player.cpp	/^	bool& player::moving_to_room() {$/;"	kind:function	line:2351	class:mods::player	signature:()
+moving_to_room	mods/player.cpp	/^	bool& player::moving_to_room() {$/;"	kind:function	line:2348	class:mods::player	signature:()
 mp	mods/init.hpp	/^INIT(mods::mp);$/;"	kind:variable	line:16
 mp	mods/mp.cpp	/^namespace mods::mp {$/;"	kind:namespace	line:10	class:mods	file:
 mp	mods/mp.hpp	/^namespace mods::mp {$/;"	kind:namespace	line:6	class:mods	file:
@@ -12175,7 +12175,7 @@ prace_description	mods/orm/chargen.hpp	/^		std::string prace_description;$/;"	ki
 prace_name	mods/orm/chargen.hpp	/^		std::string prace_name;$/;"	kind:member	line:37	struct:mods::orm::player_races	file:	access:public
 practice	mods/classes/base.cpp	/^	std::tuple<bool,std::string> base::practice(std::string_view skill) {$/;"	kind:function	line:219	class:mods::classes::base	signature:(std::string_view skill)
 practice	mods/classes/base.cpp	/^	std::tuple<bool,std::string> skill_t::practice(player_ptr_t& player) {$/;"	kind:function	line:39	class:mods::classes::skill_t	signature:(player_ptr_t& player)
-practice_sessions	mods/player.cpp	/^	uint16_t& player::practice_sessions() {$/;"	kind:function	line:2384	class:mods::player	signature:()
+practice_sessions	mods/player.cpp	/^	uint16_t& player::practice_sessions() {$/;"	kind:function	line:2381	class:mods::player	signature:()
 practice_skill	mods/skills.cpp	/^	std::string practice_skill(player_ptr_t& player,std::string_view skill) {$/;"	kind:function	line:201	namespace:mods::skills	signature:(player_ptr_t& player,std::string_view skill)
 pre_game	mods/debug-pre-game.hpp	/^namespace mods::debug::pre_game {$/;"	kind:namespace	line:41	class:mods::debug	file:
 pre_game_loop	globals.cpp	/^		void pre_game_loop() {$/;"	kind:function	line:528	namespace:mods::globals	signature:()
@@ -14159,7 +14159,7 @@ start	mods/drone.cpp	/^		void start(uuid_t  owner_uuid) {$/;"	kind:function	line
 start	mods/mob-roam.cpp	/^	std::tuple<int16_t,std::string> roam_recorder::start() {$/;"	kind:function	line:68	class:mods::mob_roam::roam_recorder	signature:()
 start	mods/mob-roam.cpp	/^	std::tuple<int16_t,std::string> start(player_ptr_t& player, const std::vector<mob_vnum>& mobs, std::string_view profile_name) {$/;"	kind:function	line:115	namespace:mods::mob_roam	signature:(player_ptr_t& player, const std::vector<mob_vnum>& mobs, std::string_view profile_name)
 start_contract	mods/contracts.cpp	/^	void start_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {$/;"	kind:function	line:70	namespace:mods::contracts	signature:(player_ptr_t& player, contract_vnum_t contract_vnum)
-start_contract	mods/player.cpp	/^	void player::start_contract(const contract_vnum_t& contract_vnum) {$/;"	kind:function	line:2357	class:mods::player	signature:(const contract_vnum_t& contract_vnum)
+start_contract	mods/player.cpp	/^	void player::start_contract(const contract_vnum_t& contract_vnum) {$/;"	kind:function	line:2354	class:mods::player	signature:(const contract_vnum_t& contract_vnum)
 start_fire_dissolver	mods/rooms.cpp	/^	void start_fire_dissolver(room_rnum room) {$/;"	kind:function	line:199	namespace:mods::rooms	signature:(room_rnum room)
 start_histfile	mods/player.cpp	/^	void player::start_histfile() {$/;"	kind:function	line:1442	class:mods::player	signature:()
 start_or_resume_contract	mods/player-contract-instance.cpp	/^	std::tuple<bool,std::string> player_contract_instance::start_or_resume_contract(contract_vnum_t in_vnum) {$/;"	kind:function	line:240	class:mods::contracts::player_contract_instance	signature:(contract_vnum_t in_vnum)
@@ -14247,7 +14247,7 @@ stop	mods/mob-roam.cpp	/^	std::tuple<int16_t,std::string> roam_recorder::stop() 
 stop	mods/mob-roam.cpp	/^	std::tuple<int16_t,std::string> stop(player_ptr_t& player, std::string_view profile_name) {$/;"	kind:function	line:120	namespace:mods::mob_roam	signature:(player_ptr_t& player, std::string_view profile_name)
 stop_contract	mods/contracts.cpp	/^	std::tuple<bool,std::string> stop_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {$/;"	kind:function	line:74	namespace:mods::contracts	signature:(player_ptr_t& player, contract_vnum_t contract_vnum)
 stop_contract	mods/player-contract-instance.cpp	/^	void player_contract_instance::stop_contract() {$/;"	kind:function	line:25	class:mods::contracts::player_contract_instance	signature:()
-stop_contract	mods/player.cpp	/^	void player::stop_contract(const contract_vnum_t& contract_vnum) {$/;"	kind:function	line:2362	class:mods::player	signature:(const contract_vnum_t& contract_vnum)
+stop_contract	mods/player.cpp	/^	void player::stop_contract(const contract_vnum_t& contract_vnum) {$/;"	kind:function	line:2359	class:mods::player	signature:(const contract_vnum_t& contract_vnum)
 stop_fighting	fight.cpp	/^void stop_fighting(char_data *ch) {$/;"	kind:function	line:331	signature:(char_data *ch)
 stop_fire_dissolver	mods/rooms.hpp	/^	static inline void stop_fire_dissolver(room_rnum room) {$/;"	kind:function	line:391	namespace:mods::rooms	signature:(room_rnum room)
 stop_follower	utils.cpp	/^void stop_follower(char_data *ch) {$/;"	kind:function	line:481	signature:(char_data *ch)
@@ -14776,7 +14776,7 @@ update	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> update(TObjec
 update	mods/sql.hpp	/^			compositor<T>& update(str_object table) {$/;"	kind:function	line:104	struct:mods::sql::compositor	access:public	signature:(str_object table)
 update_and_process_death	mods/weapons/damage-types.cpp	/^	void update_and_process_death(player_ptr_t attacker,player_ptr_t victim) {$/;"	kind:function	line:1319	namespace:mods::weapons::damage_types	signature:(player_ptr_t attacker,player_ptr_t victim)
 update_char_objects	handler.cpp	/^void update_char_objects(char_data *ch) {$/;"	kind:function	line:1130	signature:(char_data *ch)
-update_contract_status	mods/player.cpp	/^	void player::update_contract_status() {$/;"	kind:function	line:2348	class:mods::player	signature:()
+update_contract_status	mods/player.cpp	/^	void player::update_contract_status() {$/;"	kind:function	line:2345	class:mods::player	signature:()
 update_game	mods/orm/mini-game.hpp	/^		auto update_game(uint64_t pk_id,mods::mini_games::mini_game_payload_t game){$/;"	kind:function	line:54	struct:mods::orm::mini_game	access:public	signature:(uint64_t pk_id,mods::mini_games::mini_game_payload_t game)
 update_obj_file	mods/hell.hpp	/^	constexpr inline bool update_obj_file = false;$/;"	kind:member	line:19	namespace:mods::hell	file:
 update_obj_file	objsave.cpp	/^void update_obj_file(void) {$/;"	kind:function	line:342	signature:(void)
