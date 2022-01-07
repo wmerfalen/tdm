@@ -2334,11 +2334,16 @@ namespace mods {
 		}
 	}
 	void player::queue_up(std::string_view msg) {
-		if(position() == POS_DEAD || !moving_to_room()) {
+		if(moving_to_room()) {
+			this->sendln("moving to room");
+		}
+		if(this->position() == POS_DEAD || moving_to_room() == false) {
 			sendln(msg);
 			return;
 		}
-		mods::players::messages::queue(this->uuid(),CAT("\r\n",msg.data(),"\r\n"));
+		if(moving_to_room()) {
+			mods::players::messages::queue(this->uuid(),CAT("\r\n",msg.data(),"\r\n"));
+		}
 	}
 	void player::update_contract_status() {
 		m_contract = m_char_data->contract = m_contract_size;

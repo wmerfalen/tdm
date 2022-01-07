@@ -21,7 +21,7 @@ namespace mods::movement {
 			player->ensnared_amount() = 0;
 		}
 		player->moving_to_room() = true;
-		bool move = true;
+		bool moving_to_room = true;
 		auto& current = player->room();
 		auto list = mods::demolitions::claymores_in(room);
 		/** current room */
@@ -49,11 +49,11 @@ namespace mods::movement {
 			auto obj = optr_by_uuid(obj_uuid);
 			if(obj->get_owner() != player->uuid() && mods::object_utils::claymore_installed_at(obj) == exit) {
 				mods::projectile::explode(room,obj->uuid,player->uuid());
-				move = false;
+				moving_to_room = false;
 			}
 		}
-		player->moving_to_room() = move;
-		return move;
+		player->moving_to_room() = moving_to_room;
+		return moving_to_room;
 	}
 #if 0
 	bool necromancer_move_to(player_ptr_t& player,const room_rnum& room, uint8_t necrowalk_skill_level) {
@@ -112,8 +112,10 @@ namespace mods::movement {
 			mods::globals::room_list[target_room].push_back(player);
 
 			player->sendln(msg);
+			player->moving_to_room() = false;
 			return true;
 		}
+		player->moving_to_room() = false;
 		return false;
 	}
 	std::size_t force_room_to(const room_rnum& existing_room,const room_rnum& target_room) {

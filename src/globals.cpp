@@ -1130,6 +1130,7 @@ namespace mods {
 #endif
 					player->set_room(ch->was_in_room);
 					mods::globals::room_list[ch->was_in_room].push_back(player);
+					player->moving_to_room() = false;
 					return false;
 				}
 				player->set_room(target_room);
@@ -1140,6 +1141,7 @@ namespace mods {
 #endif
 					mods::mobs::room_watching::events::room_entry(player);
 				}
+				player->moving_to_room() = false;
 				return true;
 			}
 		};//end namespace rooms
