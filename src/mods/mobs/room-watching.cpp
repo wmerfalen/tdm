@@ -4,6 +4,7 @@
 #include "../mobs/mini-gunner.hpp"
 #include "../mobs/car-thief.hpp"
 #include "../mobs/orthos-agent.hpp"
+#include "../mobs/defiler.hpp"
 #include <map>
 #include <set>
 //#define __DEBUG__
@@ -51,9 +52,20 @@ namespace mods::mobs::room_watching {
 		}
 	}
 	namespace events {
+
+		/**
+		 *
+		 * This is horribly inefficient. There has to be a better way to do this.
+		 * There really should be a smart_mob pointer stored with each watcher.
+		 *
+		 *
+		 */
 		void room_entry(player_ptr_t& player) {
 			m_debug("room entry 1");
 			for(auto& watcher : world[player->room()].watchers) {
+				if(mods::mobs::defiler_callbacks::dispatch_watcher(watcher->uuid(),player,player->room())) {
+					continue;
+				}
 				if(mods::mobs::orthos_callbacks::dispatch_watcher(watcher->uuid(),player,player->room())) {
 					m_debug("found orthos agent in room entry");
 					continue;
@@ -68,6 +80,9 @@ namespace mods::mobs::room_watching {
 			//}
 			m_debug("map time");
 			for(auto& mob_uuid : watch_map[player->room()]) {
+				if(mods::mobs::defiler_callbacks::dispatch_watcher(mob_uuid,player,player->room())) {
+					continue;
+				}
 				//if(mods::mobs::orthos_agent::is_orthos_agent(mob_uuid)) {
 				if(mods::mobs::orthos_callbacks::dispatch_watcher(mob_uuid,player,player->room())) {
 					m_debug("found orthos agent in room entry");

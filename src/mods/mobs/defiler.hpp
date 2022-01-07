@@ -301,6 +301,7 @@ namespace mods::mobs {
 			 */
 			void scan_for_targets();
 			void hunt(uuid_t target);
+			void door_entry_event(player_ptr_t& player,const room_rnum room_id);
 
 		private:
 			player_ptr_t get_next_attacking_priority();
@@ -326,5 +327,8 @@ namespace mods::mobs {
 	};
 
 	std::forward_list<std::shared_ptr<defiler>>& defiler_list();
+	namespace defiler_callbacks {
+		bool dispatch_watcher(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id);
+	};
 };
 #endif

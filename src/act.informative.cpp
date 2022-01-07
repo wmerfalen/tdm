@@ -40,6 +40,7 @@
 #include "mods/overhead_map.hpp"
 #include "mods/js.hpp"
 #include "mods/contract-events.hpp"
+#include "mods/players/messages.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -894,6 +895,8 @@ void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 	if(contract) {
 		mods::contract_events::find_room(player,room);
 	}
+	mods::players::messages::consume_messages_by_player(player->uuid());
+
 }
 
 

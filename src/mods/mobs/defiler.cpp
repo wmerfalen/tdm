@@ -361,24 +361,24 @@ namespace mods::mobs {
 		return true;
 	}
 
-	/**
-	 * - TODO: React according to which mode the Defiler is in
-	 * 		- [ ] Ensnaring mode causes snare to be immediately set on player
-	 * 			- [ ] Defiler moves away and throws daggers
-	 * 		- [ ] Corpse explosion mode causes corpse to explode
-	 * 		- [ ] Dagger mode causes Defiler to throw daggers at player's legs
-	 * 			- [ ] Player cannot move until daggers taken out
-	 * 		- [ ] Chainsaw mode causes Defiler to attack player with Chainsaw
-	 */
-	void defiler::door_entry_event(player_ptr_t& player) {
-		if(player->is_npc()) {
-			if(is_rival(player)) {
-				btree_roam();
-				//TODO: attack_with_melee(player);
-				//player->sendln(CAT("I am:",uuid," and I'm Watching you"));
-			}
-		}
-	}
+	///**
+	// * - TODO: React according to which mode the Defiler is in
+	// * 		- [ ] Ensnaring mode causes snare to be immediately set on player
+	// * 			- [ ] Defiler moves away and throws daggers
+	// * 		- [ ] Corpse explosion mode causes corpse to explode
+	// * 		- [ ] Dagger mode causes Defiler to throw daggers at player's legs
+	// * 			- [ ] Player cannot move until daggers taken out
+	// * 		- [ ] Chainsaw mode causes Defiler to attack player with Chainsaw
+	// */
+	//void defiler::door_entry_event(player_ptr_t& player) {
+	//	if(player->is_npc()) {
+	//		if(is_rival(player)) {
+	//			btree_roam();
+	//			//TODO: attack_with_melee(player);
+	//			//player->sendln(CAT("I am:",uuid," and I'm Watching you"));
+	//		}
+	//	}
+	//}
 
 	/**
 	 * - TODO: add quest taker permanently to memory
@@ -418,11 +418,12 @@ namespace mods::mobs {
 			log("SYSERR: did not find player to populate defiler with: %d",mob_uuid);
 			this->loaded = false;
 			this->error = true;
+			sleep(60);
 			return;
 		}
 		player_ptr = p;
 		auto ch = p->cd();
-		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::MELEE_COMBATANT;
+		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::ORTHOS_AGENT;
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
@@ -537,11 +538,11 @@ namespace mods::mobs {
 		}
 		/** it is imperative that this be called AFTER get ranged combat totals */
 		if(!m_watching_everywhere) {
-			mods::mobs::helpers::watch_multiple(world[this->room()].directions(),this->cd(),10);
+			mods::mobs::helpers::watch_multiple(world[this->room()].directions(),this->cd(),RCT->max_range);
 			m_watching_everywhere = true;
 		}
 		/** Scan for players */
-		int depth = 5;//RCT->max_range;
+		int depth = RCT->max_range;
 		mods::scan::vec_player_data vpd;
 		mods::scan::los_scan_for_players(this->cd(),depth,&vpd);
 		std::map<uint8_t,int> scores;
@@ -902,6 +903,31 @@ namespace mods::mobs {
 		m_attackers.clear();
 		m_remembered_items.clear();
 	}
+	void defiler::door_entry_event(player_ptr_t& victim,const room_rnum room_id) {
+		std::tuple<bool,direction_t,int> r = mods::scan::los_find_player_with_depth(this->player(),victim->uuid(),RCT->max_range);
+		if(std::get<0>(r)) {
+			auto weapon = this->player()->primary();
+			mods::combat_composer::snipe_target(
+			    this->player(),
+			    victim->name().c_str(),
+			    std::get<1>(r),
+			    0,
+			    weapon
+			);
+		}
+	}
+	namespace defiler_callbacks {
+		bool dispatch_watcher(const uuid_t& defiler_uuid,player_ptr_t& player, const room_rnum& room_id) {
+			uint32_t ctr =0;
+			for(auto& defiler : defiler_list()) {
+				if(defiler->uuid == defiler_uuid) {
+					defiler->door_entry_event(player,room_id);
+					++ctr;
+				}
+			}
+			return ctr;
+		}
+	};
 };
 namespace mods::mobs::defiler_init {
 	static constexpr std::array<obj_vnum,2> has_human_remains  = {

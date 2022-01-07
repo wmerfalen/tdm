@@ -2334,8 +2334,11 @@ namespace mods {
 		}
 	}
 	void player::queue_up(std::string_view msg) {
+		if(moving_to_room()) {
+			mods::players::messages::queue(this->uuid(),CAT("\r\n",msg.data(),"\r\n"));
+			return;
+		}
 		sendln(msg);
-		//mods::players::messages::queue(db_id(),msg);
 	}
 	void player::update_contract_status() {
 		m_contract = m_char_data->contract = m_contract_size;

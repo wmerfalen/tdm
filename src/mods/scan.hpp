@@ -54,6 +54,7 @@ namespace mods {
 		void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction);
 		int los_find_player(player_ptr_t& player,player_ptr_t& victim,int depth);
 		std::tuple<bool,direction_t,int> los_find_player_with_depth(player_ptr_t& player,player_ptr_t& victim,int depth);
+		std::tuple<bool,direction_t,int> los_find_player_with_depth(player_ptr_t& player,const uuid_t& victim,int depth);
 
 		/**
 		 * Simply list rooms within line of sight for recursive_depth depth

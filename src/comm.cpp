@@ -855,7 +855,6 @@ void game_loop(socket_t mother_desc) {
 				continue;
 			}
 		}
-		mods::players::messages::consume_all();
 
 		/* Print prompts for other descriptors who had no other output */
 		for(auto& p : mods::globals::player_list) {
@@ -865,6 +864,7 @@ void game_loop(socket_t mother_desc) {
 				continue;
 			}
 		}
+		//mods::players::messages::consume_all();
 
 		handle_disconnects();
 #ifdef __MENTOC_USE_LEGACY_SLEEP_CODE__
