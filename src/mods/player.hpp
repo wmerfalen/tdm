@@ -792,7 +792,6 @@ namespace mods {
 			direction_t get_watching() {
 				return this->m_watching;
 			}
-			int screen_width();
 			room_vnum vnum();
 
 			/** for shift left/right defuse/hack games */
@@ -915,9 +914,7 @@ namespace mods {
 			}
 
 			/** TODO: power this by user preferences */
-			std::size_t screen_width() const {
-				return 80;
-			}
+			uint8_t screen_width() const;
 			uint16_t& practice_sessions();
 			std::tuple<bool,std::string> class_action(std::string_view func,std::string_view param);
 			void add_damage_nerf(const float& amount);
@@ -1072,6 +1069,7 @@ namespace mods {
 			std::string m_ip;
 			int16_t m_thermal_range;
 			int16_t m_night_vision_range;
+			uint8_t m_screen_width;
 	};
 };
 

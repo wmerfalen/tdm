@@ -2825,7 +2825,7 @@ SUPERCMD(do_set) {
 		}
 
 		if(is_file) {
-			char_to_store(vict, &tmp_store);
+			//char_to_store(vict, &tmp_store);
 			player->sendln("Saved in file.");
 		}
 	}

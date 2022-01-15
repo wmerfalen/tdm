@@ -6,6 +6,7 @@
 #include "extended-types.hpp"
 #include "roam-pattern.hpp"
 #include "../scan.hpp"
+#include "../mob-roam.hpp"
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 #include "../contract-steps.hpp"
@@ -36,53 +37,6 @@
 
 namespace mods::mobs {
 
-	namespace defiler_btree {
-		/**
-		 * @brief find the room with the most enemies, and go towards that direction
-		 *
-		 * @param mob
-		 * @param victim
-		 *
-		 * @return
-		 */
-		uint8_t weighted_direction_decider(player_ptr_t& mob,player_ptr_t victim) {
-			uint8_t depth = DEFILER_SCAN_DEPTH();
-			mods::scan::vec_player_data vpd;
-			mods::scan::los_scan_for_players(mob->cd(),depth,&vpd);
-			std::map<uint8_t,int> scores;
-			for(auto v : vpd) {
-				if(!ptr_by_uuid(v.uuid)) {
-					continue;
-				}
-				if(victim && victim->uuid() == v.uuid) {
-					scores[v.direction] += 2;
-				}
-				++scores[v.direction];
-			}
-			int should_fire = -1;
-			int max = 0;
-			for(auto pair : scores) {
-				if(pair.second > max) {
-					max = pair.second;
-					should_fire = pair.first;
-				}
-			}
-			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
-			if(should_fire == -1) {
-				/** FIXME */
-				m_debug("[stub] should_fire is -1, choose random direction");
-			}
-			return should_fire;
-		}
-	};// end namespace defiler_btree
-
-	std::vector<std::string>& defiler::roaming_patterns() const {
-		static std::vector<std::string> patterns = {
-			"Butcher", "Allied Market"
-		};
-		return patterns;
-	}
-
 	/**
 	 * - TODO: as soon as we spawn the defiler, we need to place him in the
 	 *   room where he will meet the quest taker
@@ -95,57 +49,21 @@ namespace mods::mobs {
 			return;
 		}
 		auto g = std::make_shared<defiler>(mob_uuid,targets.data());
-		g->btree_roam();
 		mods::mobs::defiler_list().push_front(g);
 		for(const auto& pat : {
-		            "Butcher","Allied Market"
+		            "Butcher"
 		        }) {
 			mods::mobs::roam_pattern::register_roam_pattern(defiler::MOB_VNUM,pat);
 		}
 	}
 
 
-	/**
-	 * - TODO: This will likely have to involve telegraphs
-	 */
-	void defiler::perform_random_act() {
-		act_to_room(m_random_acts[rand_number(0,m_random_acts.size()-1)]);
-	}
-
-	/**
-	 * - TODO: when enemies are spotted, we give away the defiler
-	 *   location by shouting a taunt. This will be part of the
-	 *   telegraph
-	 * @brief callback when someone spotted
-	 *
-	 * @param room
-	 * @param player
-	 */
-	void defiler::enemy_spotted(room_rnum room,uuid_t player) {
-		m_verbose("##################################################################################" <<
-		          "[defiler] enemy spotted:" << room << "\n" <<
-		          "##################################################################################");
-		//this->spray(player_ptr->get_watching());
-		this->last_seen[player] = CURRENT_TICK();
-	}
-
-	/**
-	 * There are no variations to the defiler, so this code
-	 * should be ignored
-	 */
-	void defiler::set_variation(const std::string& v) {
-		/*
-		for(const auto& type : EXPLODE(v,' ')) {
-			m_verbose("defiler::variation:" << type << "\n");
-		}
-		*/
-	}
 	bool defiler::debug_mode_on() {
 		return m_debug_mode;
 	}
 
 	void defiler::mention(std::string_view msg) {
-		if(this->debug_mode_on()) {
+		if(1 || this->debug_mode_on()) {
 			std::cerr << green_str("DEFILER REPORT:") << "============================================\n";
 			std::cerr << green_str("DEFILER REPORT:") << msg << "\n";
 			std::cerr << green_str("DEFILER REPORT:") << "============================================\n";
@@ -185,35 +103,6 @@ namespace mods::mobs {
 
 	/** =================================================================*/
 	/** =================================================================*/
-	/** === B E H A V I O U R  T R E E S                                 */
-	/** =================================================================*/
-	/** =================================================================*/
-
-	void defiler::set_behavior_tree_directly(const defiler::btree_t& t) {
-		m_verbose("setting tree id directly to: " << t);
-		cd()->mob_specials.behaviour_tree = (uint16_t)t;
-	}
-	bool defiler::has_tree() {
-		return cd()->mob_specials.behaviour_tree != defiler::btree_t::DEFILER_NONE;
-	}
-	defiler::btree_t defiler::get_tree() {
-		return (btree_t)cd()->mob_specials.behaviour_tree;
-	}
-	void defiler::btree_none() {
-		set_behaviour_tree_directly(defiler::btree_t::DEFILER_NONE);
-	}
-	void defiler::btree_roam() {
-		set_behavior_tree_directly(defiler::btree_t::DEFILER_ROAM);
-
-
-	}
-	void defiler::btree_hostile() {
-		set_behavior_tree_directly(defiler::btree_t::DEFILER_HOSTILE);
-
-	}
-
-	/** =================================================================*/
-	/** =================================================================*/
 	/** === DAMAGE CALLBACKS */
 	/** =================================================================*/
 	/** =================================================================*/
@@ -228,12 +117,8 @@ namespace mods::mobs {
 			de::YOURE_IN_PEACEFUL_ROOM,
 		};
 		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
 			m_debug("pacify events");
-			btree_roam();
+			roam(5);
 		});
 
 		static const std::vector<de> enrage_if = {
@@ -262,7 +147,7 @@ namespace mods::mobs {
 				}
 			}
 			if(player_ptr->room() == attacker->room()) {
-				melee_attack(attacker);
+				//melee_attack(attacker);
 			}
 		});
 
@@ -309,10 +194,6 @@ namespace mods::mobs {
 			de::COULDNT_FIND_TARGET_EVENT,
 		};
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
 			switch(feedback.damage_event) {
 				case de::OUT_OF_AMMO_EVENT: //{
 					//		/** TODO: I *REALLY* need this to work! */
@@ -333,7 +214,7 @@ namespace mods::mobs {
 				case de::COULDNT_FIND_TARGET_EVENT:
 					m_debug("Can't find target");
 					m_debug("Resetting target");
-					this->reset_last_attacker();
+					//this->reset_last_attacker();
 					break;
 				default:
 					m_debug("Weird status. unknown");
@@ -341,28 +222,6 @@ namespace mods::mobs {
 			}
 		});
 
-		player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
-			if(player_ptr->room() >= world.size()) {
-				return;
-			}
-			auto& room = world[player_ptr->room()];
-			int decision = defiler_btree::weighted_direction_decider(player_ptr,nullptr);
-			if(decision == -1) {
-				for(auto dir : room.directions()) {
-					if(room.dir_option[dir] && mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false) {
-						decision = dir;
-						break;
-					}
-				}
-			}
-			this->cd()->mob_specials.previous_room = player_ptr->room();
-			move_to(decision);
-			this->set_heading(decision);
-		});
 	}
 
 	/**
@@ -413,7 +272,7 @@ namespace mods::mobs {
 		m_cant_find = 0;
 		cmem("m_random_acts:" << m_random_acts.size());
 		m_status = defiler::status_t::LOOKING_FOR_A_FIGHT;
-		m_debug_mode = true;// TODO change this
+		m_debug_mode = DEFILER_DEBUG_MODE_ON();
 	};
 
 	/**
@@ -430,7 +289,6 @@ namespace mods::mobs {
 			log("SYSERR: did not find player to populate defiler with: %d",mob_uuid);
 			this->loaded = false;
 			this->error = true;
-			sleep(60);
 			return;
 		}
 		player_ptr = p;
@@ -439,7 +297,7 @@ namespace mods::mobs {
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
-		this->set_variation(variation.data());
+		//this->set_variation(variation.data());
 		bootstrap_equipment();
 		m_weapon = player()->primary();
 		std::fill(m_weapons.begin(),m_weapons.end(),nullptr);
@@ -451,26 +309,6 @@ namespace mods::mobs {
 			m_weapons[i++] = player_ptr->secondary();
 		}
 	}
-	//std::vector<std::pair<direction_t,player_ptr_t>> scan_for_any_targets(player_ptr_t& player) {
-	//	std::vector<std::pair<direction_t,player_ptr_t>> targets;
-	//	for(const auto& dir : room(player)->directions()) {
-	//		auto f = scan_attackable(dir);
-	//		auto target = ptr_by_uuid(f.uuid);
-	//		if(target) {
-	//			targets.emplace_back(std::make_pair<>(dir,target));
-	//		}
-	//	}
-	//	return targets;
-	//}
-	//
-
-
-
-
-
-
-
-
 
 
 	defiler::weapons_list_t& defiler::weapons() {
@@ -488,49 +326,9 @@ namespace mods::mobs {
 	}
 
 
-	void defiler::reset_last_attacker() {
-		m_debug("Resetting last attacker data");
-		m_attackers.clear();
-		m_last_attacker = nullptr;
-		m_cant_find = 0;
-		m_attackers_last_direction = std::nullopt;
-	}
-
-	void defiler::attack(player_ptr_t& victim) {
-		if(!victim) {
-			return;
-		}
-		m_last_attacker = victim;
-
-		for(auto weapon : {
-		            player_ptr->primary(),player_ptr->secondary()
-		        }) {
-			if(!weapon) {
-				continue;
-			}
-			if(mods::object_utils::is_rifle(weapon)) {
-				if(victim->room() == room()) {
-					/** move any direction away to do a snipe attack */
-					auto dir = random_room_direction(victim->room());
-					this->move_to(dir);
-					mods::combat_composer::snipe_target(player_ptr,victim->name().c_str(), OPPOSITE_DIR(dir),0,weapon);
-				} else {
-					for(const auto& dir : world[player_ptr->room()].directions()) {
-						mods::combat_composer::snipe_target(player_ptr,victim->name().c_str(),OPPOSITE_DIR(dir),0,weapon);
-					}
-				}
-			} else if(mods::object_utils::is_melee(weapon)) {
-				m_last_attacker = victim;
-				m_weapon = weapon;
-				if(victim->room() == room()) {
-					melee_attack_within_range();
-				}
-			}
-		}
-	}
-
-
-
+	/**====================================================*/
+	/** START: SIMPLIFIED ATTACK LOOP */
+	/**====================================================*/
 	void defiler::start_turn() {
 		/** This function is called every time our turn occurs
 		 * during the event loop
@@ -568,7 +366,7 @@ namespace mods::mobs {
 		 */
 		auto target = acquire_target();
 		if(target.has_value()) {
-			m_last_attack = rifle_attack(target.value());
+			rifle_attack(target.value());
 			mention("I found an existing target");
 			return;
 		}
@@ -592,40 +390,50 @@ namespace mods::mobs {
 			auto found = mods::rand::shuffle_container(m_targets)[0];
 			auto victim = ptr_by_uuid(found.uuid);
 			if(!victim) {
-				/** WARNING: FIXME RECURSION WITHOUT LIMITS */
-				++m_hostile_phase_1_attempts;
-				if(m_hostile_phase_1_attempts > 30) {
-					m_hostile_phase_1_attempts = 0;
-					return;
-				}
-				hostile_phase_1();
 				return;
 			}
-			m_last_attack = rifle_attack(found);
+			rifle_attack(found);
 			/** it is imperative that this be called AFTER get ranged combat totals */
 			if(!m_watching_everywhere) {
-				mods::mobs::helpers::watch_multiple(world[this->room()].directions(),this->cd(),RCT->max_range);
+				mods::mobs::helpers::watch_multiple(world[room()].directions(),cd(),RCT->max_range);
 				m_watching_everywhere = true;
 			}
 			return;
 		}
-		//mention("I didn't find anyone to attack...");
+		mention("I didn't find anyone to attack...");
+		roam(5);
 	}
-	feedback_t defiler::rifle_attack(const target_t& target) {
+	void defiler::rifle_attack(const target_t& target) {
 		auto victim = ptr_by_uuid(target.uuid);
 		if(!victim) {
-			return {};
+			return ;
 		}
-		return mods::weapons::damage_types::rifle_attack_with_feedback(player(),primary(),victim,target.distance,target.direction);
+		auto weapon = primary();
+		mods::combat_composer::snipe_target(player_ptr,victim,target.direction,(uint8_t)target.distance,weapon);
+		save_attack_direction(target.direction);
+		return ;
 	}
-	std::tuple<bool,std::vector<direction_t>> defiler::roam_towards(direction_t direction) {
-		std::vector<direction_t> alternatives = world[room()].directions();
-		set_heading(direction);
-		auto s = move_to(direction);
-		if(std::get<0>(s)) {
-			return {true,{}};
+	void defiler::roam(uint8_t times) {
+		if(times == 0) {
+			return;
 		}
-		return {false,alternatives};
+		auto chase = determine_chase_direction();
+		if(!world[room()].dir_option[chase]) {
+			chase = mods::rand::shuffle_container(world[room()].directions())[0];
+			set_heading(chase);
+			move_to(chase);
+			return;
+		}
+		if(world[room()].dir_option[chase] && mods::mobs::roam_pattern::can_roam_to(defiler::MOB_VNUM, world[room()].dir_option[chase]->to_room)) {
+			auto s = move_to(chase);
+			if(!std::get<0>(s)) {
+				chase = mods::rand::shuffle_container(world[room()].directions())[0];
+			} else {
+				return;
+			}
+		} else {
+			chase = mods::rand::shuffle_container(world[room()].directions())[0];
+		}
 	}
 	void defiler::rct_upkeep() {
 		if(!this->RCT) {
@@ -654,6 +462,9 @@ namespace mods::mobs {
 		}
 		if(found.size() == 0) {
 			return std::nullopt;
+		}
+		if(found.size() == 1) {
+			return found[0];
 		}
 		return mods::rand::shuffle_container(found)[0];
 	}
@@ -685,39 +496,11 @@ namespace mods::mobs {
 		}
 		return m_targets.size() > 0;
 	}
+	/**====================================================*/
+	/** END: SIMPLIFIED ATTACK LOOP */
+	/**====================================================*/
 
 
-
-//	/**
-//	 * This is the main entry point. For the time being, it was much easier to just
-//	 * call this routine than it was to run the whole behaviour tree flow.
-//	 * As you'll see in the defiler behaviour tree .cpp file, we don't run behaviour
-//	 * trees for the defiler. Instead we grab the class ptr and call this method.
-//	 *
-//	 * TODO: use corpse explosion
-//	 */
-//	void defiler::hostile_phase_1() {
-//
-//		if(m_last_attacker && m_last_attacker->position() != POS_DEAD && m_last_attacker->room() == player_ptr->room()) {
-//			this->attack(m_last_attacker);
-//			return;
-//		}
-//		player_ptr_t target = nullptr;
-//		for(uint8_t i=0; i < 5; i++) {
-//			target = spawn_near_someone();
-//			if(target && target->position() > POS_DEAD) {
-//				m_last_attacker = target;
-//				m_verbose("spawned near someone. attacking them");
-//				this->telegraph(target,"You truly think you can hide from me?!");
-//				if(!mods::ensnare::is_ensnared(target)) {
-//					this->ensnare(target);
-//				}
-//				this->attack(target);
-//				return;
-//			}
-//		}
-//		this->shout("The astral plane feeds me with intel! YOU CANNOT HIDE FOREVER");
-//	}
 
 	bool defiler::is(defiler::status_t status) {
 		return m_status == status;
@@ -754,16 +537,6 @@ namespace mods::mobs {
 	}
 
 	/**
-	 * - TODO: Must always return quest taker
-	 */
-	player_ptr_t defiler::get_next_attacking_priority() {
-		if(!m_attackers.empty()) {
-			return m_attackers.front();
-		}
-		return nullptr;
-	}
-
-	/**
 	 * - TODO: for each mode, determines if the following will happen
 	 *   - [ ] Ensnaring, throw dagger
 	 *   - [ ] Dagger, snipe
@@ -775,46 +548,8 @@ namespace mods::mobs {
 		auto attacker = player()->fighting();
 		if(m_weapon && attacker->room() == this->room()) {
 			m_debug("i have a weapon and i'm using it against who i'm fighting");
-			melee_attack(attacker);
 		}
 	}
-	void defiler::melee_attack_within_range() {
-		bool use_last_attacker = false;
-		if(m_last_attacker && m_last_attacker->position() > POS_DEAD && m_last_attacker->room() == player_ptr->room()) {
-			use_last_attacker = true;
-		}
-
-		if(!use_last_attacker) {
-			for(auto target : room_list(player_ptr->room())) {
-				if(target && target->position() > POS_DEAD && target->is(player_ptr) == false &&
-				        mods::calc_visibility::is_visible(/** observer */ player_ptr,/** target */ target,0)) {
-					m_last_attacker = target;
-					use_last_attacker = true;
-					break;
-				}
-			}
-		}
-		if(use_last_attacker) {
-			m_debug("melee_attack_within_range");
-			if(m_last_attacker && m_last_attacker->position() == POS_DEAD) {
-				m_debug("Our target is dead!");
-				m_attackers.remove(m_last_attacker);
-				this->reset_last_attacker();
-				return;
-			}
-			melee_attack(m_last_attacker);
-			return;
-		} else {
-			auto target = this->spawn_near_someone();
-			if(target) {
-				m_last_attacker = target;
-				melee_attack_within_range();
-				return;
-			}
-		}
-	}
-
-
 
 	std::pair<bool,std::string> defiler::move_to(const direction_t& dir) {
 		auto old_vis = player_ptr->visibility();
@@ -845,47 +580,6 @@ namespace mods::mobs {
 			}
 		}
 	}
-	int8_t defiler::determine_heading_from_found_victims() {
-		std::map<direction_t,std::size_t> weights;
-		for(const auto& spot : m_scanned_items) {
-			++weights[spot.direction];
-		}
-		int direction = -1, count = 0;
-		for(const auto& pair : weights) {
-			if(pair.second > count) {
-				direction = pair.first;
-				count = pair.second;
-			}
-		}
-		return direction;
-	}
-	bool defiler::has_found_item() {
-		return m_found_item;
-	}
-	void defiler::set_found_item(bool status) {
-		m_found_item = status;
-	}
-	void defiler::found_witness(const mods::scan::vec_player_data_element& data) {
-		clear_list_if_count(&m_hostiles,10);
-		m_hostiles.emplace_front(data);
-		cmem("m_hostiles:" << std::distance(m_hostiles.cbegin(),m_hostiles.cend()));
-	}
-	void defiler::clear_scanned_items() {
-		m_scanned_items.clear();
-	}
-	void defiler::remember_item(const mods::scan::vec_player_data_element& data) {
-		clear_list_if_count(&m_remembered_items,10);
-		m_remembered_items.push_front(data.uuid);
-		cmem("m_remembered_items:" << std::distance(m_remembered_items.cbegin(),m_remembered_items.cend()));
-	}
-	const defiler::uuidlist_t& defiler::get_remembered_items() const {
-		return m_remembered_items;
-	}
-	void defiler::found_item(mods::scan::vec_player_data_element const& item) {
-		clear_list_if_count(&m_scanned_items,10);
-		m_scanned_items.emplace_back(item);
-		cmem("m_scanned_items:" << m_scanned_items.size());
-	}
 	std::forward_list<std::shared_ptr<defiler>>& defiler_list() {
 		static std::forward_list<std::shared_ptr<defiler>> s;
 		return s;
@@ -894,139 +588,6 @@ namespace mods::mobs {
 		return 8;
 	}
 
-	void defiler::found_target(player_ptr_t& player) {
-
-	}
-	bool defiler::melee_attack(player_ptr_t& victim) {
-		m_weapon = primary();
-		auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,victim);
-		if(feedback.hits) {
-			set_fighting(cd(),victim->cd());
-			hunt(victim->uuid());
-			return true;
-		}
-		return false;
-	}
-
-	void defiler::scan_for_targets() {
-		uint8_t depth = DEFILER_SCAN_DEPTH();
-		mods::scan::vec_player_data vpd;
-		mods::scan::los_scan_for_players(cd(),depth,&vpd);
-
-		m_scanned_targets.clear();
-
-		auto victim = ptr_by_uuid(m_hunt);
-		if(victim && victim->room() == player_ptr->room()) {
-			melee_attack(victim);
-			return;
-		}
-		for(auto v : vpd) {
-			if(!ptr_by_uuid(v.uuid)) {
-				continue;
-			}
-			if(v.uuid == m_hunt) {
-				victim = ptr_by_uuid(v.uuid);
-				move_to(v.direction);
-				if(victim->room() == player_ptr->room()) {
-					melee_attack(victim);
-					return;
-				}
-			}
-
-			m_scanned_targets.emplace_back(v.uuid,v.direction,v.distance);
-		}
-		if(m_scanned_targets.size() == 0) {
-			btree_roam();
-			return;
-		}
-
-		std::size_t index = mods::rand::roll(1,m_scanned_targets.size());
-		index = std::clamp(index,(std::size_t)0,(std::size_t)m_scanned_targets.size()-1);
-		hunt(std::get<0>(m_scanned_targets[index]));
-		victim = ptr_by_uuid(std::get<0>(m_scanned_targets[index]));
-		if(!victim) {
-			std::cerr << "defiler found a bunk uuid_t\n";
-			btree_roam();
-			return;
-		}
-		auto weapon = primary();
-		if(weapon && weapon->has_rifle()) {
-			mods::combat_composer::snipe_target(player_ptr,victim,std::get<1>(m_scanned_targets[index]),std::get<2>(m_scanned_targets[index]),weapon);
-			return;
-		} else if(weapon && weapon->has_melee()) {
-			auto status = move_to(std::get<1>(m_scanned_targets[index]));
-			if(std::get<0>(status)) {
-				m_debug("Moving toward: " << dirstr(std::get<1>(m_scanned_targets[index])));
-			} else {
-				m_debug("Failed to move toward " << dirstr(std::get<1>(m_scanned_targets[index])) << ": why: '" << std::get<1>(status) << "'");
-			}
-			attack_anyone_in_same_room();
-		}
-	}
-
-	void defiler::hunt(uuid_t target) {
-		m_hunt = target;
-	}
-	/**
-	 * - This is actually something that would prove very useful
-	 * - This would fulfill the "unfair" role that bosses in video games usually have
-	 */
-	player_ptr_t defiler::spawn_near_someone() {
-		player_ptr_t who = nullptr;
-		/** OPTIMIZATION: use a vector of uuid's that are in allied market area and iterate over those */
-		mods::loops::foreach_player([&,this](auto player) -> bool {
-			if(!player) {
-				return true;
-			}
-			if(player->position() <= POS_STUNNED) {
-				return true;
-			}
-			if(mods::mobs::roam_pattern::can_roam_to(defiler::MOB_VNUM,player->room()) && chance(50)) {
-				m_debug("You madman! The DEFILER IS GOING TO TELEPORT!!!");
-				who = player;
-				m_last_attacker = player;
-				player->sendln("A demonic force approaches...");
-				/**
-				 * FIXME
-				 * How it __SHOULD__ work:
-				 * Instead of spawning into the very same room, the defiler should
-				 * spawn between 2 and 5 rooms away (if possible)
-				 * FIXME
-				 */
-				char_from_room(cd());
-				char_to_room(cd(),player->room());
-				return false;
-			}
-			return true;
-		});
-		return who;
-	}
-
-	/**
-	 * - TODO: we'll want to make this not just _anyone_ but instead the
-	 *   person who is undergoing the quest to take down the boss
-	 */
-	bool defiler::attack_anyone_in_same_room() {
-		for(auto& victim : mods::globals::get_room_list(room())) {
-			if(victim->is(cd())) {
-				continue;
-			}
-			if(melee_attack(victim)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * - TODO: we'll want to not clear the quest taker
-	 */
-	void defiler::clear_state() {
-		m_scanned_items.clear();
-		m_hostiles.clear();
-		m_attackers.clear();
-		m_remembered_items.clear();
-	}
 	void defiler::door_entry_event(player_ptr_t& victim,const room_rnum room_id) {
 		std::tuple<bool,direction_t,int> r = mods::scan::los_find_player_with_depth(this->player(),victim->uuid(),RCT->max_range);
 		if(std::get<0>(r)) {

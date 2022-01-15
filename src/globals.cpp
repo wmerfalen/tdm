@@ -28,6 +28,7 @@
 #include "config.hpp"
 #include "mods/movement.hpp"
 #include "mods/interpreter.hpp"
+#include "mods/boot-flags.hpp"
 
 namespace mods::mob_equipment {
 	extern void decorate(const uuid_t& mob_uuid);
@@ -216,6 +217,7 @@ namespace mods {
 			bool run_unit_tests = false;
 
 			while(++pos < argc) {
+#define SAVE(OPT) mods::boot_flags::save_value(OPT)
 				if(argv[pos]) {
 					argument = argv[pos];
 				} else {
@@ -227,6 +229,7 @@ namespace mods {
 					          << "--auto-password=password Automatically login and use password on connection [use only for development]\n"
 					          << "--testing=<suite>	Launch test suite\n"
 					          << "--import-rooms 	Run the import rooms routine\n"
+					          << "--import-help-pages Import help pages to sql\n"
 					          << "--hell 	Start the mud in HELL mode\n"
 					          << "--lmdb-name=<name> use name as lmdb db name\n"
 					          << "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
@@ -266,14 +269,24 @@ namespace mods {
 					migrations.push_back(std::make_tuple<>("down",migration_id));
 					continue;
 				}
+				if(argument.compare("--import-help-pages-delete-first") == 0) {
+					SAVE(argument);
+					continue;
+				}
 
+				if(argument.compare("--import-help-pages") == 0) {
+					SAVE(argument);
+					continue;
+				}
 				if(strncmp(argv[pos],"--show-tics",11) == 0) {
 					show_tics = true;
+					//SAVE(argument,true);
 					continue;
 				}
 
 				if(strncmp(argv[pos],"--auto-login=",13) == 0) {
 					mods::auto_login::set_user(argument.substr(13,argument.length()-13));
+					//SAVE(argument, argument.substr(13,argument.length()-13));
 					continue;
 				}
 				if(strncmp(argv[pos],"--run-profile-scripts=",22) == 0) {
@@ -284,6 +297,7 @@ namespace mods {
 					if(argument[22] == '1') {
 						std::cerr << "[cli conf]: enabling profile scripts\n";
 						config::run_profile_scripts = true;
+						//SAVE(argument, true);
 					}
 					continue;
 				}
@@ -293,23 +307,28 @@ namespace mods {
 				}
 				if(strncmp(argv[pos],"--testing=",10) == 0) {
 					f_test_suite = argument.substr(10,argument.length()-10);
+					//SAVE(argument, true);
 					continue;
 				}
 				if(strncmp(argv[pos],"--unit-tests",12) == 0) {
 					run_unit_tests = true;
+					//SAVE(argument, true);
 					continue;
 				}
 				if(strncmp(argv[pos],"--import-rooms",14) == 0) {
 					f_import_rooms = true;
+					//SAVE(argument, true);
 					continue;
 				}
 				if(strncmp(argv[pos],"--hell",6) == 0) {
 					boot_type = BOOT_HELL;
+					//SAVE(argument, true);
 					continue;
 				}
 				if(strncmp(argv[pos],"--lmdb-name=",12) == 0) {
 					lmdb_name = argument.substr(12,argument.length()-12);
 					log((std::string("DEBUG: found lmdb db name: ") + lmdb_name).c_str());
+					//SAVE(argument, lmdb_name);
 					continue;
 				}
 				if(strncmp(argv[pos],"--postgres-pw-file=",19) == 0) {
@@ -356,6 +375,7 @@ namespace mods {
 						mods::globals::shutdown();
 					} else {
 						postgres_host = argument.substr(16,argument.length()-16);
+						//SAVE(argument,postgres_host);
 						continue;
 					}
 				}
@@ -365,6 +385,7 @@ namespace mods {
 						mods::globals::shutdown();
 					} else {
 						postgres_user = argument.substr(16,argument.length()-16);
+						//SAVE(argument,postgres_user);
 						continue;
 					}
 				}
@@ -374,6 +395,7 @@ namespace mods {
 						mods::globals::shutdown();
 					} else {
 						postgres_dbname = argument.substr(18,argument.length()-14);
+						//SAVE(argument,postgres_dbname);
 						continue;
 					}
 				}
@@ -383,6 +405,7 @@ namespace mods {
 						mods::globals::shutdown();
 					} else {
 						postgres_port = argument.substr(16,argument.length()-16);
+						//SAVE(argument,postgres_port);
 						continue;
 					}
 				}
@@ -393,6 +416,7 @@ namespace mods {
 					} else {
 						lmdb_dir = argument.substr(11,argument.length()-11);
 						log((std::string("DEBUG: found lmdb directory: ")+ lmdb_dir).c_str());
+						//SAVE(argument,lmdb_dir);
 						continue;
 					}
 				}
@@ -473,6 +497,7 @@ namespace mods {
 				mods::unit_tests::run();
 				mods::globals::shutdown();
 			}
+#undef SAVE
 			return 1; //proceed with game boot
 		}
 		void post_boot_db() {
@@ -720,13 +745,23 @@ namespace mods {
 			{"wht","\033[37m"},
 			{"yel","\033[93m"}
 		};
+		/**
+		 * Also handles {hr} (horizontal rule)
+		 */
 		std::string custom_color_eval(std::string_view buffer,std::map<std::string_view,std::string_view> custom_color_map) {
+			static constexpr std::string_view HORIZONTAL_RULE = "--------------------------------------------------------------------------------\r\n";
 			std::map<std::string_view,std::string_view> colors = custom_color_map;
 			std::string final_buffer = "";
 			const std::size_t len = buffer.length();
 			for(std::size_t i=0; i < len; i++) {
-				auto current_char = buffer[i];
+				const auto current_char = buffer[i];
 				if(current_char == '{') {
+					if(len > i + 3 && buffer[i+3] == '}' &&
+					        buffer[i+1] == 'h' && buffer[i+2] == 'r') {
+						final_buffer += HORIZONTAL_RULE;
+						i += 3;
+						continue;
+					}
 					if(len > i + 5 && buffer[i+5] == '}' &&
 					        buffer[i+1] == '/') {
 						i += 5;

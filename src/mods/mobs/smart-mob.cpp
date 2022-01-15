@@ -377,6 +377,12 @@ namespace mods::mobs {
 		}
 		return m;
 	}
+	void smart_mob::save_attack_direction(const direction_t& direction) {
+		m_last_attack_direction = direction;
+	}
+	direction_t smart_mob::determine_chase_direction() {
+		return m_last_attack_direction;
+	}
 };
 #if 0
 #endif

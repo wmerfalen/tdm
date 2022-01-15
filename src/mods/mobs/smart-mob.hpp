@@ -144,7 +144,10 @@ namespace mods::mobs {
 			}
 			int optimal_range() const;
 
+			void save_attack_direction(const direction_t& direction);
+			direction_t determine_chase_direction();
 		protected:
+			direction_t m_last_attack_direction;
 			std::map<uint16_t,uint16_t> m_should_do;
 			std::map<uint16_t,uint16_t> m_should_do_max;
 			std::array<std::string,NUM_WEARS> wear_list;

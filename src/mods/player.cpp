@@ -1063,6 +1063,7 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+		m_screen_width = 80;
 		m_can_move = true;
 		m_thermal_range = 0;
 		m_night_vision_range = 0;
@@ -2047,9 +2048,12 @@ namespace mods {
 		m_triads = mods::levels::get_triads_by_class(m_class);
 		GET_CLASS(m_char_data) = m_class;
 	}
-	int player::screen_width() {
-		return 80;//mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
+	uint8_t player::screen_width() const {
+		return m_screen_width;
 	}
+	//int player::screen_width() {
+	//	return m_screen_width;//mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
+	//}
 	std::tuple<uint32_t,uint8_t> player::currently_hacking() {
 		return {m_currently_hacking,m_hacking_row};
 	}

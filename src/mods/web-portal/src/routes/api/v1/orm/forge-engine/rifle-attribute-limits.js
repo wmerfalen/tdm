@@ -6,13 +6,18 @@ const { body } = require("express-validator");
 
 module.exports = {
   routes: async function (router, { parent_state }) {
+    const seq = parent_state.sequelize;
     const ral_orm =
-      require("$/db/orm/forge-engine/rifle-attribute-limits").make(
-        parent_state.sequelize
-      );
+      require("$/db/orm/forge-engine/rifle-attribute-limits").make(seq);
     router.get("/rifle-attribute-limits", async function (req, res, next) {
-      return res.json(await ral_orm.model().findAll());
+      return res.json(await ral_orm.findAll());
     });
+    router.get(
+      "/rifle-attribute-limits/metadata",
+      async function (req, res, next) {
+        return res.json(await ral_orm.count(null, "count"));
+      }
+    );
     router.get(
       "/rifle-attribute-limits/enumerate/ral_type",
       async function (req, res, next) {

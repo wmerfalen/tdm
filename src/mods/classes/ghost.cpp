@@ -462,7 +462,7 @@ namespace mods::classes {
 	std::tuple<bool,std::string> ghost::xray_shot() {
 		auto weapon = m_player->primary();
 		if(!weapon || weapon->has_rifle() == false || weapon->rifle()->attributes->type != mw_rifle::SNIPER) {
-			return {0,"You must be wielding a ghost rifle!"};
+			return {0,"You must be wielding a sniper rifle!"};
 		}
 		if(!m_engaged) {
 			return {0,"You must first use the 'engage' command"};
@@ -500,17 +500,17 @@ namespace mods::classes {
 		if(m_target == 0) {
 			return {0,"Couldn't find a target that matches that string."};
 		}
-		auto s = roll_skill_success(MARK_TARGET);
-		if(!std::get<0>(s)) {
-			return s;
-		}
+		//auto s = roll_skill_success(MARK_TARGET);
+		//if(!std::get<0>(s)) {
+		//	return s;
+		//}
 		/** TODO: need to add mark target as a skill */
 		return {1,"Marked target"};
 	}
 
 	std::tuple<bool,std::string> ghost::engage() {
 		if(m_target == 0) {
-			return {0,"You have not marked a target yet!"};
+			return {0,"You have not marked a target yet! See ghost:mark"};
 		}
 		auto ptr = ptr_by_uuid(m_target);
 		if(!ptr) {
@@ -725,16 +725,16 @@ namespace mods::class_abilities::ghost {
 		PLAYER_CAN("ghost.fire");
 		DO_HELP("fire");
 		static constexpr const char* usage = "fire <direction> <distance>\r\n";
-		if(argshave()->size_gt(2)->passed() == false) {
+		if(argshave()->size_gt(1)->passed() == false) {
 			player->sendln(usage);
 			return;
 		}
-		auto dir = mods::util::to_direction(argat(1));
+		auto dir = mods::util::to_direction(argat(0));
 		if(dir < 0) {
 			player->sendln("Invalid direction.");
 			return;
 		}
-		auto distance = mods::util::stoi_optional<uint8_t>(argat(2));
+		auto distance = mods::util::stoi_optional<uint8_t>(argat(1));
 		if(distance.has_value() == false) {
 			player->sendln("Invalid distance.");
 			return;

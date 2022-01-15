@@ -178,17 +178,17 @@ namespace mods::mobs {
 			/** START: SIMPLIFIED ATTACK LOOP */
 			/**====================================================*/
 			void start_turn();
-			std::vector<player_ptr_t> m_same_room_targets;
-			player_ptr_t m_engaged_target;
 			bool find_same_room_targets();
 			void hostile_phase_1();
-			feedback_t rifle_attack(const target_t& target);
+			void rifle_attack(const target_t& target);
 			void rct_upkeep();
 			std::optional<target_t> acquire_target();
 			bool find_someone_to_attack();
-			std::tuple<bool,std::vector<direction_t>> roam_towards(direction_t direction);
+			void roam(uint8_t times);
+
+			std::vector<player_ptr_t> m_same_room_targets;
+			player_ptr_t m_engaged_target;
 			std::vector<target_t> m_targets;
-			feedback_t m_last_attack;
 			std::size_t m_hostile_phase_1_attempts;
 
 			/**====================================================*/
@@ -225,17 +225,11 @@ namespace mods::mobs {
 			feedback_t& spray(uint8_t dir);
 
 
-			/** behaviour tree helpers */
-			void btree_none();
-			void btree_roam();
-			void btree_hostile();
-			void perform_random_act();
-
 			/**=================*/
 			/** event callbacks */
 			/**=================*/
 			void setup_damage_callbacks();
-			void enemy_spotted(room_rnum room,uuid_t player);
+			//void enemy_spotted(room_rnum room,uuid_t player);
 			void found_witness(const mods::scan::vec_player_data_element& data);
 			void found_item(const mods::scan::vec_player_data_element& data);
 			void attacked(const feedback_t& feedback);

@@ -861,6 +861,7 @@ namespace mods::combat_composer {
 	    uint8_t distance,
 	    obj_ptr_t& weapon
 	) {
+		INIT_RCT();
 		phases::acquired_target_t found_target;
 		found_target.target = victim;
 		found_target.direction = direction;

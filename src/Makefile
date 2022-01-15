@@ -23,7 +23,9 @@ boostdir = $(CURDIR)/boost
 thirdparty = $(duktape) $(lmdb)
 gdbflags = -ggdb -g
 #post_build_args = strip-all
-optimization = -O2
+optimization =
+# TODO: for prod builds, uncomment this
+#optimization = -O2
 warnings_list = -Wall -Wunused-result \
 	-Wno-format-zero-length -Wno-format-security \
 	-Wuninitialized \
@@ -218,7 +220,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/admin/frozen mods/ban-system mods/orm/admin/banned \
 					 mods/orm/user-logins \
 					 mods/admin-tools/stay mods/orm/admin/stay mods/orm/admin/rifle-attribute-limits \
-					 mods/mobs/orthos-agent mods/mobs/orthos-agent-btree
+					 mods/mobs/orthos-agent mods/mobs/orthos-agent-btree \
+					 mods/boot-flags
 
 					 #mods/orm/admin/muted \
 
