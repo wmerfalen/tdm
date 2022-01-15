@@ -749,7 +749,7 @@ namespace mods {
 		 * Also handles {hr} (horizontal rule)
 		 */
 		std::string custom_color_eval(std::string_view buffer,std::map<std::string_view,std::string_view> custom_color_map) {
-			static constexpr std::string_view HORIZONTAL_RULE = "--------------------------------------------------------------------------------\r\n";
+			static constexpr std::string_view HORIZONTAL_RULE = "------------------------------------------------\r\n";
 			std::map<std::string_view,std::string_view> colors = custom_color_map;
 			std::string final_buffer = "";
 			const std::size_t len = buffer.length();
