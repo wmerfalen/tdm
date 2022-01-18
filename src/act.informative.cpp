@@ -218,10 +218,10 @@ void look_into_camera_feed(player_ptr_t& player, obj_data* obj, int mode) {
 			player->sendln("{blu}You peer into the camera feed...{/blu}");
 			player->sendln(CAT("{grn}Room title:{/grn}",world[room].name.c_str()));
 			player->sendln(CAT("{grn}Room description:{/grn}",world[room].description.c_str()));
-			player->send("{grn}Room occupants:{/grn}");
+			player->sendx("{grn}Room occupants:{/grn}");
 			list_char_to_char(player->cd());
-			player->send("\r\n{blu}* * * End of Camera Feed * * *{/blu}\r\n");
-			player->send(CCNRM(ch, C_NRM));
+			player->sendln("\r\n{blu}* * * End of Camera Feed * * *{/blu}");
+			player->sendx(CCNRM(ch, C_NRM));
 			return;
 		}
 		player->sendln("You see nothing but static...");
@@ -275,7 +275,7 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 		case SHOW_OBJ_SHORT:
 		case ITEM_WEAPON:
 			if(count > 1) {
-				player->send(CAT("(",std::to_string(count),") ").c_str());
+				player->sendx(CAT("(",std::to_string(count),") "));
 			}
 			break;
 		default:
@@ -313,7 +313,7 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 					return;
 
 				case ITEM_DRINKCON:
-					player->send("It looks like a drink container.");
+					player->sendx("It looks like a drink container.");
 					break;
 
 				case ITEM_WEAPON:
@@ -546,7 +546,7 @@ void list_one_char(char_data *i, char_data *ch) {
 		player->send(" is idling here.");
 	} else {
 		if(GET_POS(i) != POS_FIGHTING) {
-			player->send(positions[(int) GET_POS(i)]);
+			player->sendx(positions[(int) GET_POS(i)]);
 		} else {
 			if(FIGHTING(i)) {
 				player->send(" is here, fighting ");
@@ -555,7 +555,7 @@ void list_one_char(char_data *i, char_data *ch) {
 					player->send("YOU!");
 				} else {
 					if(IN_ROOM(i) == IN_ROOM(FIGHTING(i))) {
-						player->send("%s!",iptr->fighting()->name().c_str());
+						player->sendx(CAT(iptr->fighting()->name(),"!"));
 					} else {
 						player->send("someone who has already left!");
 					}

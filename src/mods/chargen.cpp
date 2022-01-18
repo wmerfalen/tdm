@@ -92,7 +92,7 @@ namespace mods::chargen {
 		if(str_class.compare("CONTAGION") == 0) {
 			player->sendln(chargen_triads_for(CONTAGION));
 		}
-		player->send("Press enter to go back to the class list.");
+		player->sendx("Press enter to go back to the class list.");
 	}
 
 	int create_char_from_registration(player_ptr_t& p,std::string argument) {
@@ -101,7 +101,7 @@ namespace mods::chargen {
 		std::tuple<bool,std::string> make_char_status;
 		make_char_status = mods::chargen::make_char(p,pclass);
 		if(!std::get<0>(make_char_status)) {
-			p->send("\r\nAn error occurred: %s\r\n", std::get<1>(make_char_status).data());
+			p->sendln(CAT("\r\nAn error occurred: ", std::get<1>(make_char_status)));
 			p->set_state(CON_CLOSE);
 			mods::chargen::undo_make_char(p);
 			mods::globals::unregister_authenticated_player(p);
@@ -135,7 +135,7 @@ namespace mods::chargen {
 		auto str_class = mods::util::extract_until(classes[ctr],':');
 		player->sendln("To display the stats for this class, {yel}type {grn}stats{/grn}.");
 		player->sendln(CAT("To display the next class, {yel}type {grn}next.{/grn}, or {grn}n{/grn} for short. If you would like to choose this class {yel}type {grn}choose ",str_class,"{/grn}"));
-		player->send("Your choice: ");
+		player->sendx("Your choice: ");
 		player->set_state(CON_BLIND_CHARGEN_TAKE_OVER);
 		player->set_ada_data("accept","class-menu");
 		return;
@@ -178,7 +178,7 @@ namespace mods::chargen {
 		if(data["accept"].compare("class-menu") == 0 && mods::util::is_lower_match(argument, CAT("choose ",str_class))) {
 			player->set_ada_data("current-class",std::to_string(class_counter));
 			player->set_ada_data("accept", "confirm-class");
-			player->send(CAT("Are you sure you want to choose the ", str_class, " as your class? Yes or No: ").c_str());
+			player->sendx(CAT("Are you sure you want to choose the ", str_class, " as your class? Yes or No: "));
 			return;
 		}
 		if(data["accept"].compare("class-menu") == 0 && mods::util::match_any(argument, {"n","next"},4)) {
@@ -194,7 +194,7 @@ namespace mods::chargen {
 	}
 
 	void show_blind_friendly_chargen_prompt(player_ptr_t& player) {
-		player->send("You are about to choose your class. Do you need us to format the menu to accomodate for screen readers? Type Yes or No:");
+		player->sendx("You are about to choose your class. Do you need us to format the menu to accomodate for screen readers? Type Yes or No:");
 	}
 	void show_class_menu(player_ptr_t& player) {
 		//if(player->needs_ada()){
@@ -221,7 +221,7 @@ namespace mods::chargen {
 				player->sendln("No stats page for the class you picked. Something has gone wrong...");
 				break;
 		}
-		player->send("Press enter to go back to the class menu.");
+		player->sendx("Press enter to go back to the class menu.");
 	}
 	std::string get_class_description(player_class_t p_class) {
 		switch(p_class) {

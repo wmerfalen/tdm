@@ -2,15 +2,15 @@
 		namespace msg {
 			template <typename T>
 			static inline void crit(T& p){
-				p->send(MSG_CRITICAL().c_str());
+				p->sendx(MSG_CRITICAL().c_str());
 			}
 			template <typename T>
 			static inline void headshot(T& p){
-				p->send(MSG_HEADSHOT().c_str());
+				p->sendx(MSG_HEADSHOT().c_str());
 			}
 			template <typename T>
 			static inline void hit(T& p){
-				p->send(MSG_HIT().c_str());
+				p->sendx(MSG_HIT().c_str());
 			}
 			template <typename T>
 			static inline void outofammo(T& p){
