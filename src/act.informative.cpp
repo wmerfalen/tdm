@@ -239,7 +239,7 @@ bool look_at_weapon(player_ptr_t& player,obj_ptr_t& obj) {
 		return true;
 	}
 	if(obj->action_description.length()) {
-		player->send(obj->action_description);
+		player->sendln(obj->action_description);
 		return true;
 	}
 	player->sendln("You see nothing special...");
@@ -452,7 +452,7 @@ void look_at_char(char_data *i, char_data *ch) {
 	}
 
 	if(i->player.description) {
-		player->send(i->player.description);
+		player->sendln(i->player.description);
 	} else {
 		act("You see nothing special about $m.\r\n", FALSE, i, 0, ch, TO_VICT);
 	}
@@ -465,7 +465,7 @@ void look_at_char(char_data *i, char_data *ch) {
 	for(j = 0; j < NUM_WEARS; j++) {
 		auto obj = iptr->equipment(j);
 		if(obj) {
-			player->send(wear_where[j]);
+			player->sendln(wear_where[j]);
 			//if(!CAN_SEE_OBJ(ch, obj.get())) {
 			//	player->sendln("<unknown>");
 			//} else {
@@ -555,7 +555,7 @@ void list_one_char(char_data *i, char_data *ch) {
 					player->send("YOU!");
 				} else {
 					if(IN_ROOM(i) == IN_ROOM(FIGHTING(i))) {
-						player->send(CAT(iptr->fighting()->name().c_str(),"!").c_str());
+						player->send("%s!",iptr->fighting()->name().c_str());
 					} else {
 						player->send("someone who has already left!");
 					}
@@ -582,7 +582,7 @@ void list_one_char(char_data *i, char_data *ch) {
 	if(ch == FIGHTING(i)) {
 		player->send(" {red}[!]{/red}");
 	}
-	player->send("\r\n");
+	player->sendln();
 	if(ch->contract) {
 		mods::contract_events::find_mob(player,iptr);
 	}
@@ -914,7 +914,7 @@ void look_in_direction(char_data *ch, int dir) {
 	MENTOC_PREAMBLE();
 	if(EXIT(ch, dir)) {
 		if(EXIT(ch, dir)->general_description) {
-			player->send(EXIT(ch, dir)->general_description);
+			player->sendln(EXIT(ch, dir)->general_description);
 		} else {
 			player->sendln("You see nothing special.");
 		}
@@ -955,7 +955,7 @@ void look_in_obj(char_data *ch, char *arg) {
 			if(OBJVAL_FLAGGED(obj, CONT_CLOSED)) {
 				player->sendln("It is closed.");
 			} else {
-				player->send(fname(obj->name));
+				player->sendln(fname(obj->name));
 
 				switch(bits) {
 					case FIND_OBJ_INV:
@@ -1098,7 +1098,7 @@ void look_at_target(char_data *ch, char *arg) {
 			if(!ex) {
 				continue;
 			}
-			player->send(ex);
+			player->sendln(ex);
 			found = TRUE;
 			break;
 		}
@@ -1111,7 +1111,7 @@ void look_at_target(char_data *ch, char *arg) {
 			if(!ex) {
 				continue;
 			}
-			player->send(ex);
+			player->sendln(ex);
 			found = true;
 			break;
 		}
@@ -1237,11 +1237,11 @@ ACMD(do_equipment) {
 	for(i = 0; i < NUM_WEARS; i++) {
 		if(GET_EQ(ch, i)) {
 			if(CAN_SEE_OBJ(ch, GET_EQ(ch, i))) {
-				player->send(wear_where[i]);
+				player->sendln(wear_where[i]);
 				show_obj_to_char(GET_EQ(ch, i), ch, SHOW_OBJ_SHORT);
 				found = TRUE;
 			} else {
-				player->send(wear_where[i]);
+				player->sendln(wear_where[i]);
 				player->sendln("Something.");
 				found = TRUE;
 			}
@@ -1427,12 +1427,12 @@ ACMD(do_users) {
 					break;
 
 				default:
-					player->send(USERS_FORMAT);
+					player->sendln(USERS_FORMAT);
 					return;
 			}				/* end of switch */
 
 		} else {			/* endif */
-			player->send(USERS_FORMAT);
+			player->sendln(USERS_FORMAT);
 			return;
 		}
 	}				/* end while (parser) */

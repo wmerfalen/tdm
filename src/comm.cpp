@@ -1258,7 +1258,7 @@ void send_prompt(player_ptr_t& player) {
 			ammo = CAT("{yel}[",left,"/",clip,"]{/yel}");
 		}
 	}
-	player->send(CAT(affects,"\r\n{grn}",player->name(),"::{/grn}",start,hp,mana,move,fighting,ammo,arrow).c_str());
+	player->sendx(CAT(affects,"\r\n{grn}",player->name(),"::{/grn}",start,hp,mana,move,fighting,ammo,arrow));
 }
 
 
@@ -2440,7 +2440,7 @@ void send_to_room_except(room_rnum room, const std::vector<player_ptr_t>& except
 			}
 		}
 		if(send) {
-			player->send(messg, args);
+			player->sendln(messg);//, args);
 		}
 	}
 	va_end(args);
@@ -2465,7 +2465,7 @@ void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char 
 			}
 		}
 		if(emplace) {
-			player->send(messg, args);
+			player->sendln(messg);//, args);
 		}
 	}
 	va_end(args);
@@ -2485,7 +2485,7 @@ void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, 
 	va_start(args, messg);
 	for(auto& p : mods::globals::get_room_list(room)) {
 		if(std::find(except.begin(),except.end(),p->cd()) == except.end()) {
-			p->send(messg, args);
+			p->sendln(messg);//, args);
 		}
 	}
 	va_end(args);
@@ -2505,7 +2505,7 @@ void send_to_room_except(room_rnum room, player_ptr_t except_me, const char *mes
 	va_start(args, messg);
 	for(auto& p : mods::globals::get_room_list(room)) {
 		if(u != p->uuid()) {
-			p->send(messg, args);
+			p->sendln(messg);//, args);
 		}
 	}
 	va_end(args);
@@ -2524,7 +2524,7 @@ void send_to_room(room_rnum room, const char *messg, ...) {
 
 	va_start(args, messg);
 	for(auto& p : mods::globals::get_room_list(room)) {
-		p->send(messg,args);
+		p->sendln(messg);//,args);
 	}
 	va_end(args);
 }

@@ -177,7 +177,7 @@ SUPERCMD(do_get_super_user_list) {
 		mods::search_screen(player, screen, vec_args, 64);
 		return;
 	}
-	player->send(mods::super_users::get_list().c_str());
+	player->sendln(mods::super_users::get_list().c_str());
 }
 SUPERCMD(do_remove_super_user) {
 	DO_HELP("remove_super_user");

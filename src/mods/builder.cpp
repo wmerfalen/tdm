@@ -1713,7 +1713,7 @@ SUPERCMD(do_sbuild) {
 
 		auto result = shop_proto[index.value()].save();
 		if(std::get<0>(result)) {
-			player->send("%d\n", std::get<1>(result));
+			player->sendln(CAT(std::get<1>(result)));
 			r_success(player,"Shop saved.");
 			return;
 		}
@@ -2432,7 +2432,7 @@ SUPERCMD(do_mbuild) {
 			cmd->print_command(player);
 		}
 		for(const auto& line : mods::mob_roam::roam_recorder_help_screen()) {
-			player->send("%s\r\n",line.c_str());
+			player->sendln(line);
 		}
 		player->sendln("");
 		player->pager_end();

@@ -468,9 +468,13 @@ namespace mods {
 			void stc(const mods::string& m);
 			void stc(int m);
 			void stc(std::string_view);
+			void sendln();
 			void sendln(std::string_view str);
+			void sendln(const std::vector<std::string>&);
 			void send(const std::vector<std::string>&);
 			void sendln(mods::string& str);
+			void sendx(mods::string& str);
+			void sendx(std::string_view str);
 			/** 'plain' sendln (no color eval needed) */
 			void psendln(std::string_view str);
 			void psendln(mods::string& str);

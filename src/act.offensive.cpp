@@ -302,7 +302,7 @@ ACMD(do_assist) {
 	if(!*arg) {
 		player->psendln("Whom do you wish to assist?");
 	} else if(!(helpee = get_char_vis(player, arg, NULL, FIND_CHAR_ROOM))) {
-		player->send(NOPERSON);
+		player->sendln(NOPERSON);
 	} else if(helpee->is(ch)) {
 		player->psendln("You can't help yourself any more than this!");
 	} else {

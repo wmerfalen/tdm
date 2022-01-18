@@ -2527,6 +2527,26 @@ namespace mods {
 	void player::lockdown(bool b) {
 		m_locked_down = b;
 	}
+	void player::sendln() {
+		MENTOC_NPC_CHECK(str.str());
+		write_to_char("", 1,0);
+		desc().has_prompt = 0;
+	}
+	void player::sendln(const std::vector<std::string>& screen) {
+		for(const auto& line : screen) {
+			this->sendln(line);
+		}
+	}
+	void player::sendx(mods::string& str) {
+		MENTOC_NPC_CHECK(str.str());
+		write_to_char(str.view(), 0,0);
+		desc().has_prompt = 0;
+	}
+	void player::sendx(std::string_view str) {
+		MENTOC_NPC_CHECK(str.str());
+		write_to_char(str.data(), 0,0);
+		desc().has_prompt = 0;
+	}
 };
 
 #undef dbg

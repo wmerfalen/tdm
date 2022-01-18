@@ -133,7 +133,7 @@ namespace mods::chargen {
 		}
 		player->sendln(classes[ctr]);
 		auto str_class = mods::util::extract_until(classes[ctr],':');
-		player->send("To display the stats for this class, {yel}type {grn}stats{/grn}.\r\n");
+		player->sendln("To display the stats for this class, {yel}type {grn}stats{/grn}.");
 		player->sendln(CAT("To display the next class, {yel}type {grn}next.{/grn}, or {grn}n{/grn} for short. If you would like to choose this class {yel}type {grn}choose ",str_class,"{/grn}"));
 		player->send("Your choice: ");
 		player->set_state(CON_BLIND_CHARGEN_TAKE_OVER);
@@ -162,7 +162,7 @@ namespace mods::chargen {
 			player->level() = 1;
 			std::tuple<bool,std::string> make_char_status = mods::chargen::make_char(player,pclass);
 			if(!std::get<0>(make_char_status)) {
-				player->send("\r\n%s\r\n",std::get<1>(make_char_status).data());
+				player->sendln(CAT("\r\n",std::get<1>(make_char_status).data()));
 				player->set_state(CON_CLOSE);
 				mods::chargen::undo_make_char(player);
 				mods::globals::unregister_authenticated_player(player);
@@ -178,7 +178,7 @@ namespace mods::chargen {
 		if(data["accept"].compare("class-menu") == 0 && mods::util::is_lower_match(argument, CAT("choose ",str_class))) {
 			player->set_ada_data("current-class",std::to_string(class_counter));
 			player->set_ada_data("accept", "confirm-class");
-			player->send("%s", CAT("Are you sure you want to choose the ", str_class, " as your class? Yes or No: ").c_str());
+			player->send(CAT("Are you sure you want to choose the ", str_class, " as your class? Yes or No: ").c_str());
 			return;
 		}
 		if(data["accept"].compare("class-menu") == 0 && mods::util::match_any(argument, {"n","next"},4)) {

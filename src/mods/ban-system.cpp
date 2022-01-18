@@ -157,32 +157,32 @@ namespace mods::ban_system {
 		BAN_BY_ALL = (BAN_BY_IP | BAN_BY_HOST | BAN_BY_USERNAME),
 	};
 	void unban_ip(player_ptr_t& admin,std::string_view ip) {
-		admin->send(CAT("[+] Beginning un-ban process for ip '",ip.data(),"'...").c_str());
+		admin->sendln(CAT("[+] Beginning un-ban process for ip '",ip.data(),"'...").c_str());
 		mods::ban_system::unban_ip(ip);
 		admin->sendln("{grn}[DONE]{/grn}");
 	}
 	void unban_hostname(player_ptr_t& admin,std::string_view hostname) {
-		admin->send(CAT("[+] Beginning un-ban process for host '",hostname.data(),"'...").c_str());
+		admin->sendln(CAT("[+] Beginning un-ban process for host '",hostname.data(),"'...").c_str());
 		mods::ban_system::unban_hostname(hostname);
 		admin->sendln("{grn}[DONE]{/grn}");
 	}
 	void unban_username(player_ptr_t& admin,std::string_view username) {
-		admin->send(CAT("[+] Beginning un-ban process for user '",username.data(),"'...").c_str());
+		admin->sendln(CAT("[+] Beginning un-ban process for user '",username.data(),"'...").c_str());
 		mods::ban_system::unban_username(username);
 		admin->sendln("{grn}[DONE]{/grn}");
 	}
 	void ban_ip(player_ptr_t& admin,std::string_view ip) {
-		admin->send(CAT("[+] Beginning ban process for ip '",ip.data(),"'...").c_str());
+		admin->sendln(CAT("[+] Beginning ban process for ip '",ip.data(),"'...").c_str());
 		mods::ban_system::ban_ip(ip);
 		admin->sendln("{grn}[DONE]{/grn}");
 	}
 	void ban_hostname(player_ptr_t& admin,std::string_view hostname) {
-		admin->send(CAT("[+] Beginning ban process for host '",hostname.data(),"'...").c_str());
+		admin->sendln(CAT("[+] Beginning ban process for host '",hostname.data(),"'...").c_str());
 		mods::ban_system::ban_hostname(hostname);
 		admin->sendln("{grn}[DONE]{/grn}");
 	}
 	void ban_username(player_ptr_t& admin,std::string_view username) {
-		admin->send(CAT("[+] Beginning ban process for user '",username.data(),"'...").c_str());
+		admin->sendln(CAT("[+] Beginning ban process for user '",username.data(),"'...").c_str());
 		mods::ban_system::ban_username(username);
 		admin->sendln("{grn}[DONE]{/grn}");
 	}
@@ -190,30 +190,30 @@ namespace mods::ban_system {
 		auto p = mods::pfind::optby_name(player_name.c_str());
 		if(!p.has_value()) {
 			admin->sendln("{red} [-] Can't band player's IP or Hostname since they aren't connected..{/red}");
-			admin->send(CAT("[+] Banning player '",player_name,"' by user name...").c_str());
+			admin->sendln(CAT("[+] Banning player '",player_name,"' by user name...").c_str());
 			mods::ban_system::ban_username(player_name);
 			admin->sendln("{grn}[DONE]{/grn}");
-			admin->send("  - [+] Destroying player instance in game world...");
+			admin->sendln("  - [+] Destroying player instance in game world...");
 			mods::players::db_load::delete_char_by_name(player_name);
 			admin->sendln("{grn}[DONE]{/grn}");
 			admin->sendln(CAT("{grn}[Completed PARTIAL ban process for player: '",player_name,"'{/grn}"));
 			return;
 		} else {
 			auto douche = p.value();
-			admin->send(CAT("[+] Placing player '",player_name,"' on lockdown...").c_str());
+			admin->sendln(CAT("[+] Placing player '",player_name,"' on lockdown...").c_str());
 			douche->lockdown(true);
 			admin->sendln("{grn}[DONE]{/grn}");
 
-			admin->send(CAT("[+] Pulling player '",player_name,"'...").c_str());
+			admin->sendln(CAT("[+] Pulling player '",player_name,"'...").c_str());
 			char_from_room(douche->cd());
 			char_to_room(douche->cd(),mods::world_conf::real_frozen());
-			admin->send(CAT("[+] Beginning ban process for '",player_name,"'...").c_str());
-			admin->send("  - [+] Banning by IP, Hostname, and username...");
+			admin->sendln(CAT("[+] Beginning ban process for '",player_name,"'...").c_str());
+			admin->sendln("  - [+] Banning by IP, Hostname, and username...");
 			mods::ban_system::ban_player(douche);
-			admin->send("  - [+] Deleting player from database...");
+			admin->sendln("  - [+] Deleting player from database...");
 			mods::players::db_load::delete_char(douche);
 			admin->sendln("{grn}[DONE]{/grn}");
-			admin->send("  - [+] Destroying player instance in game world...");
+			admin->sendln("  - [+] Destroying player instance in game world...");
 			destroy_player(std::move(douche));
 			admin->sendln(CAT("{grn}[Completed ban process for player: '",player_name,"'{/grn}"));
 		}
@@ -230,7 +230,7 @@ namespace mods::ban_system {
 					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
 				} else {
 					auto douche = p.value();
-					player->send("[+] Placing player on lockdown...");
+					player->sendln("[+] Placing player on lockdown...");
 					/**
 					 * TODO: implement mods::player::can_talk(bool );
 					 */
@@ -255,11 +255,11 @@ namespace mods::ban_system {
 					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
 				} else {
 					auto douche = p.value();
-					player->send("[+] Placing player on lockdown...");
+					player->sendln("[+] Placing player on lockdown...");
 					douche->lockdown(true);
 					player->sendln("{grn}[DONE]{/grn}");
 
-					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+					player->sendln(CAT("[+] Pulling player '",name,"'...").c_str());
 					char_from_room(douche->cd());
 					char_to_room(douche->cd(),mods::world_conf::real_frozen());
 					player->sendln("{grn}[DONE]{/grn}");
@@ -377,7 +377,7 @@ namespace mods::ban_system {
 					player->sendln(CAT("[ERROR] couldn't find player by name '",name,"'"));
 				} else {
 					auto douche = p.value();
-					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+					player->sendln(CAT("[+] Pulling player '",name,"'...").c_str());
 					char_from_room(douche->cd());
 					char_to_room(douche->cd(),player->room());
 					player->sendln("{grn}[DONE]{/grn}");

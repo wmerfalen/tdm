@@ -261,11 +261,11 @@ namespace mods::combat_composer {
 			feedback.damage_event =de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK;
 			victim->damage_event(feedback);
 
-			attacker->send(MSG_HEADSHOT().c_str());
+			attacker->sendln(MSG_HEADSHOT().c_str());
 		}
 		void report_crit(player_ptr_t& attacker, player_ptr_t& victim, int dam, direction_t& direction) {
 			feedback_t feedback;
-			attacker->send(MSG_CRITICAL().c_str());
+			attacker->sendln(MSG_CRITICAL().c_str());
 			feedback.damage = dam;
 			feedback.hits = 1;
 

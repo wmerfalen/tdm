@@ -293,7 +293,7 @@ namespace mods::weapons::damage_types {
 					}
 				}
 			}
-			/* Use send_to_char -- act() doesn't send message if you are DEAD. */
+			/* Use send_to_char -- act() doesn't sendln message if you are DEAD. */
 			switch(GET_POS(victim)) {
 				case POS_MORTALLYW:
 					act("$n is mortally wounded, and will die soon, if not aided.", TRUE, victim, 0, 0, TO_ROOM);
@@ -649,7 +649,7 @@ namespace mods::weapons::damage_types {
 				continue;
 			}
 			if(dice(1,(100 * scanned_target.distance)) <= calculate_spray_chance(player)) {
-				player->send(MSG_HIT().c_str());
+				player->sendln(MSG_HIT().c_str());
 				int spray_damage = 0;
 				spray_damage = dice(damage_dice,damage_sides);
 				//spray_damage += weapon->rifle()->attributes->base_stat_list->at(scanned_target.distance).damage;
@@ -659,13 +659,13 @@ namespace mods::weapons::damage_types {
 			}
 			/** calculate headshot */
 			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_HEADSHOT_CHANCE()) {
-				player->send(MSG_HEADSHOT().c_str());
+				player->sendln(MSG_HEADSHOT().c_str());
 				dam = victim->hp();
 				MFEEDBACK(1,dam,de::YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK);
 			}
 			if(scanned_target.distance == crit_range) {
 				if(dice(1,(100 * scanned_target.distance)) <= crit_chance) {
-					player->send(MSG_CRITICAL().c_str());
+					player->sendln(MSG_CRITICAL().c_str());
 					critical_bonus = dice(
 					                     damage_dice,
 					                     damage_sides
@@ -950,7 +950,7 @@ namespace mods::weapons::damage_types {
 		/** TODO: honor max_range calculations */
 		/** calculate headshot */
 		if(distance == crit_range && dice(1,100) <= crit_chance) {
-			player->send(MSG_CRITICAL().c_str());
+			player->sendln(MSG_CRITICAL().c_str());
 			critical_bonus = dice(
 			                     damage_dice,
 			                     damage_sides
@@ -1117,7 +1117,7 @@ namespace mods::weapons::damage_types {
 		//	feedback.damage_event =de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK;
 		//	victim->damage_event(feedback);
 
-		//	player->send(MSG_HEADSHOT().c_str());
+		//	player->sendln(MSG_HEADSHOT().c_str());
 		//	md("headshot");
 		//}
 
@@ -1219,14 +1219,14 @@ namespace mods::weapons::damage_types {
 			feedback.damage_event =de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK;
 			victim->damage_event(feedback);
 
-			player->send(MSG_HEADSHOT().c_str());
+			player->sendln(MSG_HEADSHOT().c_str());
 			md("headshot");
 		}
 		md("checking crit range");
 		if(distance == crit_range) {
 			md("is crit range");
 			if(dice(1,100) <= crit_chance) {
-				player->send(MSG_CRITICAL().c_str());
+				player->sendln(MSG_CRITICAL().c_str());
 				critical_bonus = dice(
 				                     damage_dice,
 				                     damage_sides
@@ -1308,7 +1308,7 @@ namespace mods::weapons::damage_types {
 			return;
 		}
 		player->incendiary_resistance_percent() = resistance;
-		player->send("Your resistance: %f\r\n",player->incendiary_resistance_percent());
+		player->sendln(CAT("Your resistance: ",player->incendiary_resistance_percent()));
 		mods::weapons::elemental::incendiary_damage(player,player,damage);
 	}
 

@@ -45,7 +45,7 @@ namespace mods::players::messages {
 				if(!ptr) {
 					continue;
 				}
-				ptr->send(item.second.data());
+				ptr->sendln(item.second.data());
 				ptr->desc().flush_output();
 			}
 		}
@@ -57,7 +57,7 @@ namespace mods::players::messages {
 			if(!ptr) {
 				continue;
 			}
-			ptr->send(item.second.c_str());
+			ptr->sendln(item.second.c_str());
 			ptr->desc().flush_output();
 		}
 		player_messages.clear();

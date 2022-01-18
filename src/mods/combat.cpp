@@ -35,7 +35,7 @@ namespace mods::combat {
 		ACMD(do_set_rules_of_engagement) {
 			const static char* usage = "usage: set_rules_of_engagement <ballistic|cqc|auxiliary|aux|secondary>\r\n";
 			if(argshave()->size_gt(0)->passed() == false) {
-				player->send(usage);
+				player->sendln(usage);
 				return;
 			}
 			player->sendln(CAT("argat(0): '",argat(0),"'"));

@@ -227,12 +227,12 @@ namespace mods::weapons::elemental {
 	}
 
 	void room_fire_damage(player_ptr_t& player,uint16_t damage) {
-		player->send(mods::values::MSG_FIRE_DAMAGE().c_str(),damage);
+		player->sendln(CAT(mods::values::MSG_FIRE_DAMAGE(),damage));
 		mods::weapons::damage_types::deal_hp_damage(player,damage);
 	}
 
 	void room_smoke_damage(player_ptr_t& player, uint16_t damage) {
-		player->send(mods::values::MSG_SMOKE_DAMAGE().c_str(),damage);
+		player->sendln(CAT(mods::values::MSG_SMOKE_DAMAGE(),damage));
 		mods::weapons::damage_types::deal_hp_damage(player,damage);
 	}
 
@@ -255,7 +255,7 @@ namespace mods::weapons::elemental {
 		}
 		auto obj = create_object(ITEM_RIFLE,"g36c.yml");
 		player->incendiary_resistance_percent() = resistance;
-		player->send("Your resistance: %f\r\n",player->incendiary_resistance_percent());
+		player->sendln(CAT("Your resistance: ",player->incendiary_resistance_percent()));
 		incendiary_damage(player,player,damage);
 	}
 

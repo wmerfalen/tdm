@@ -43,7 +43,7 @@ namespace mods::admin_tools::stay {
 			for(auto name : vec_args) {
 				auto p = mods::pfind::optby_name(name.c_str());
 				if(p.has_value()) {
-					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+					player->sendln(CAT("[+] Pulling player '",name,"'...").c_str());
 					auto douche = p.value();
 					stay_player(douche,player->vnum());
 				}
@@ -66,10 +66,10 @@ namespace mods::admin_tools::stay {
 				auto p = mods::pfind::optby_name(name.c_str());
 				if(!p.has_value()) {
 					auto douche = p.value();
-					player->send("[+] Removing player from stand-still...");
+					player->sendln("[+] Removing player from stand-still...");
 					douche->can_move() = true;
 					player->sendln("{grn}[DONE]{/grn}");
-					player->send(CAT("[+] Pulling player '",name,"'...").c_str());
+					player->sendln(CAT("[+] Pulling player '",name,"'...").c_str());
 					char_from_room(douche->cd());
 					char_to_room(douche->cd(),mods::world_conf::real_mortal_start());
 					unstay_player(douche);

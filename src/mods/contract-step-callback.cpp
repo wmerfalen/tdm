@@ -82,7 +82,7 @@ namespace mods {
 		if(args()->first_is("reload")) {
 			player->sendln("Reloading...");
 			std::tuple<int16_t,std::string> status = mods::orm::load_all_contract_step_callbacks();
-			player->send(CAT("code: ",std::get<0>(status),", msg: '",std::get<1>(status),"'\r\n").c_str());
+			player->sendln(CAT("code: ",std::get<0>(status),", msg: '",std::get<1>(status),"'"));
 			player->sendln("Done.");
 			return;
 		}

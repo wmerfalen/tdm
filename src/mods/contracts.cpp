@@ -95,12 +95,12 @@ namespace mods::contracts {
 			player->sendln("Listing...");
 			for(const auto& c : player->contracts()) {
 				if(c->finished()) {
-					player->send(CAT("{grn}Finished{/grn}:\t{yel}[",c->vnum(),"]{/yel}::{grn}",c->title().data(),"{/grn}\r\n").c_str());
+					player->sendln(CAT("{grn}Finished{/grn}:\t{yel}[",c->vnum(),"]{/yel}::{grn}",c->title().data(),"{/grn}").c_str());
 					continue;
 				}
-				player->send(CAT("{red}Unfinished{/red}:\t{yel}[",c->vnum(),"]{/yel}::{grn}",c->title().data(),"{/grn}\r\n").c_str());
+				player->sendln(CAT("{red}Unfinished{/red}:\t{yel}[",c->vnum(),"]{/yel}::{grn}",c->title().data(),"{/grn}").c_str());
 				if(args()->first_is_any({"step","steps"})) {
-					player->send(c->pretty_dump_step().data());
+					player->sendln(c->pretty_dump_step().data());
 				}
 			}
 			player->sendln("Done listing...");
@@ -116,7 +116,7 @@ namespace mods::contracts {
 					player->sendln(CAT("{grn}Contract ID:{yel}",v,"{/yel}\r\n\r\n",
 					                   "{grn}----[ BEGIN TRANSCRIPT ]----{/grn}\r\n\r\n",
 					                   c->description.data(),"\r\n",
-					                   "{/grn}----[ END TRANSCRIPT ]----{/grn}\r\n"));
+					                   "{/grn}----[ END TRANSCRIPT ]----{/grn}"));
 					return;
 				}
 			}
@@ -128,7 +128,7 @@ namespace mods::contracts {
 		if(argshave()->first_is("list")->passed()) {
 			player->sendln("Listing...");
 			for(const auto& con : contract_master_list()) {
-				player->sendln(CAT("{yel}[{/yel}",con->vnum,"{yel}]:{/yel} {grn}'",con->title,"'{/grn}\r\n"));
+				player->sendln(CAT("{yel}[{/yel}",con->vnum,"{yel}]:{/yel} {grn}'",con->title,"'{/grn}"));
 			}
 			player->sendln("Done listing.");
 			return;
@@ -138,20 +138,20 @@ namespace mods::contracts {
 			contract_num = args()->fetch_parsed_integer(1);
 
 			if(contract_num == -1) {
-				*player << "{red}Invalid contract number.{/red}\r\n";
+				player->sendln("{red}Invalid contract number.{/red}");
 				return;
 			}
 			/** find the contract by vnum */
 			auto opt_contract = find_contract(contract_num);
 			if(opt_contract.has_value() == false) {
-				player->send("{red}We could not find a contract with that vnum{/red}\r\n");
+				player->sendln("{red}We could not find a contract with that vnum{/red}");
 				return;
 			}
 		}
 
 		if(args()->first_is("join")) {
 			if(has_contract(player)) {
-				player->send("{red}You are already part of a contract. Quit or finish that one before starting a new contract.{/red}\r\n");
+				player->sendln("{red}You are already part of a contract. Quit or finish that one before starting a new contract.{/red}");
 				return;
 			}
 			start_contract(player,contract_num);
@@ -161,7 +161,7 @@ namespace mods::contracts {
 
 		if(args()->first_is("leave")) {
 			stop_contract(player,contract_num);
-			*player << "{red}You have left the contract.{/red}\n";
+			player->sendln("{red}You have left the contract.{/red}");
 			mods::contracts::punish_for_leaving_contract(player,contract_num);
 			return;
 		}

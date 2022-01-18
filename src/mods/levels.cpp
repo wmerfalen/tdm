@@ -45,7 +45,7 @@ namespace mods::levels {
 				if(num_levels == 1) {
 					player->sendln(ADVANCE_LEVEL_MESSAGE());
 				} else {
-					player->send(ADVANCE_MULTIPLE_LEVELS_MESSAGE().c_str(),num_levels);
+					player->sendln(CAT(ADVANCE_MULTIPLE_LEVELS_MESSAGE(),num_levels));
 				}
 				//set_title(ch, NULL);
 			}
