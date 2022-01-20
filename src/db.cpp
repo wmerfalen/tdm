@@ -1334,6 +1334,9 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				world.emplace_back(room);
 				mods::globals::register_room(world.size());
 				mods::rooms::set_sector_type(world.size()-1,room_records_row["sector_type"].as<int>());
+				if(!room_records_row["textures"].is_null()) {
+					mods::rooms::set_room_textures(world.size()-1,room_records_row["textures"].c_str());
+				}
 				mods::rooms::set_flag_absolute(world.size()-1,room_records_row["room_flag"].as<int>(0));
 				top_of_world = world.size();
 				if(std::string(room_records_row["nickname"].c_str()).length()) {

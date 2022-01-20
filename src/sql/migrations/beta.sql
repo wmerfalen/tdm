@@ -1,7 +1,7 @@
--- \c postgres
--- DROP DATABASE mud;
--- CREATE DATABASE mud;
--- \c mud;
+ \c postgres
+ DROP DATABASE mud;
+ CREATE DATABASE mud;
+ \c mud;
 
 --
 -- PostgreSQL database dump
@@ -9573,3 +9573,6 @@ ALTER TABLE ONLY public.help_topics
 -- PostgreSQL database dump complete
 --
 
+ALTER TABLE public.room ADD COLUMN textures TEXT;
+
+DELETE FROM public.player_object;

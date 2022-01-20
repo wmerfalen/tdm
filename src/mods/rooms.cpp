@@ -274,6 +274,36 @@ namespace mods::rooms {
 		}
 		return std::nullopt;
 	}
+	void set_room_textures(room_rnum room_id, std::string textures) {
+		if(textures.length() == 0) {
+			world[room_id].textures().clear();
+			return;
+		}
+		std::string current = "";
+		for(const auto& ch : textures) {
+			if(isspace(ch)) {
+				continue;
+			}
+			if(ch == ',') {
+				if(current.length()) {
+					auto opt = texture_from_string(current);
+					if(opt.has_value()) {
+						world[room_id].add_texture(opt.value());
+					}
+					current.clear();
+					continue;
+				}
+				continue;
+			}
+			current += ch;
+		}
+		if(current.length()) {
+			auto opt = texture_from_string(current);
+			if(opt.has_value()) {
+				world[room_id].add_texture(opt.value());
+			}
+		}
+	}
 	void set_sector_type(room_rnum room_id, int sector_type) {
 		using txt = room_data::texture_type_t;
 		switch((sector_type_t)sector_type) {

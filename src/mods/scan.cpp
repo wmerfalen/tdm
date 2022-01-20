@@ -114,7 +114,7 @@ namespace mods::scan {
 			return;
 		}
 		if(in_depth <= 0) {
-			std::cerr << "los_scan_direction: received invalid depth value\n";
+			//std::cerr << "los_scan_direction: received invalid depth value\n";
 			return;
 		}
 

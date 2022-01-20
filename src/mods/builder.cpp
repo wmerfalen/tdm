@@ -829,6 +829,14 @@ namespace mods::builder {
 		values["description"] = world[in_room].description.c_str();
 		values["room_number"] = std::to_string(world[in_room].number);
 		values["nickname"] = world[in_room].nickname.c_str();
+		std::string textures = "";
+		for(const auto& int_texture : world[in_room].textures()) {
+			std::optional<std::string> str = mods::rooms::texture_to_string(int_texture);
+			if(str.has_value()) {
+				textures += CAT(",",str.value());
+			}
+		}
+		values["textures"] = textures;
 
 
 		std::array<char,16> num;
@@ -5201,145 +5209,141 @@ SUPERCMD(do_rbuild) {
 		                      "  {gld}|:: BFS_MARK -> (R) breath-first srch mrk\r\n" <<
 		                      "{/gld}" <<
 
-		                      /*
-		                      " {grn}NEW FEATURE [as of: 2019-03]{/grn}\r\n" <<
-		                      " {red}FEATURE: Room textures{/red}\r\n" <<
+		                      " {red}Room textures{/red}\r\n" <<
 		                      " {grn}rbuild{/grn} {red}<texture:add> <type1> ... <typeN>{/red}\r\n" <<
 		                      "  |--> Set the room's texture type. A room can have multiple texture types.\r\n" <<
 		                      "  |:: {yel}-:[{/yel}{grn}types{/grn}{yel}]:-{/yel}\r\n" <<
-		                      "  |:: \r\n"
-		                      ;
-		                      for(auto & pair : mods::rooms::texture_strings){
-		                      	player->send("  {gld}|:: %s{/gld}\r\n",pair.second.c_str());
-		                      }
-		                      *player <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}texture GRASS OUTSIDE{/gld}\r\n" <<
+		                      "  |:: \r\n" ;
+		for(auto& pair : mods::rooms::texture_strings) {
+			player->send("  {gld}|:: %s{/gld}\r\n",pair.second.c_str());
+		}
+		*player <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}texture GRASS OUTSIDE{/gld}\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}<texture:remove> <type1> ... <typeN>{/red}\r\n" <<
-		                      "  |--> Delete the textures listed after the delete keyword.\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}texture:remove GRASS OUTSIDE{/gld}\r\n" <<
+		        " {grn}rbuild{/grn} {red}<texture:remove> <type1> ... <typeN>{/red}\r\n" <<
+		        "  |--> Delete the textures listed after the delete keyword.\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}texture:remove GRASS OUTSIDE{/gld}\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}<texture:clear>{/red}\r\n" <<
-		                      "  |--> Deletes all textures in the current room. WARNING: This does not prompt for confirmation!\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}texture:clear{/gld}\r\n" <<
-		                      */
+		        " {grn}rbuild{/grn} {red}<texture:clear>{/red}\r\n" <<
+		        "  |--> Deletes all textures in the current room. WARNING: This does not prompt for confirmation!\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}texture:clear{/gld}\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}<set> <rnum> <number>{/red}\r\n" <<
-		                      "  |--> Set the real room number of the current room\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}set rnum 1204{/gld}\r\n" <<
-		                      "  |:: (next time you do 'rbuild room' it will display 1204)\r\n" <<
+		        " {grn}rbuild{/grn} {red}<set> <rnum> <number>{/red}\r\n" <<
+		        "  |--> Set the real room number of the current room\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}set rnum 1204{/gld}\r\n" <<
+		        "  |:: (next time you do 'rbuild room' it will display 1204)\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}<room>{/red}\r\n" <<
-		                      "  |--> get the real room number of the room\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}room{/gld}\r\n"<<
+		        " {grn}rbuild{/grn} {red}<room>{/red}\r\n" <<
+		        "  |--> get the real room number of the room\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}room{/gld}\r\n"<<
 
-		                      " {grn}rbuild{/grn} {red}<save>{/red}\r\n" <<
-		                      "  |--> save the current room you are standing in\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}save{/gld}\r\n"<<
+		        " {grn}rbuild{/grn} {red}<save>{/red}\r\n" <<
+		        "  |--> save the current room you are standing in\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}save{/gld}\r\n"<<
 
-		                      " {grn}rbuild{/grn} {red}ed <delete> <N>{/red}\n" <<  /** TODO: needs impl */
-		                      "  |--> deletes the ed number N with this room\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}ed delete 3{/gld}\r\n" <<
+		        " {grn}rbuild{/grn} {red}ed <delete> <N>{/red}\n" <<  /** TODO: needs impl */
+		        "  |--> deletes the ed number N with this room\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}ed delete 3{/gld}\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}ed <list>{/red}\r\n" << 	/** TODO needs impl */
-		                      "  |--> lists the current ed structures currently associated with this room\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}ed list{/gld}\r\n" <<
+		        " {grn}rbuild{/grn} {red}ed <list>{/red}\r\n" << 	/** TODO needs impl */
+		        "  |--> lists the current ed structures currently associated with this room\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}ed list{/gld}\r\n" <<
 
 
-		                      " {grn}rbuild{/grn} {red}ed <save-all>{/red}\r\n" << /** TODO: needs impl */
-		                      "  |--> saves all ed entries\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
+		        " {grn}rbuild{/grn} {red}ed <save-all>{/red}\r\n" << /** TODO: needs impl */
+		        "  |--> saves all ed entries\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
 
 
-		                      " {grn}rbuild{/grn} {red}ed <show> <N>{/red}\r\n" <<  /** TODO: needs impl */
-		                      "  |--> lists the current ed structures currently associated with this room\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
+		        " {grn}rbuild{/grn} {red}ed <show> <N>{/red}\r\n" <<  /** TODO: needs impl */
+		        "  |--> lists the current ed structures currently associated with this room\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
 
 
-		                      " {grn}rbuild{/grn} {red}ed <new>{/red}\r\n" <<  /** TODO: needs impl */
-		                      "  |--> creates an ed for this room\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}ed new{/gld}\r\n" <<
+		        " {grn}rbuild{/grn} {red}ed <new>{/red}\r\n" <<  /** TODO: needs impl */
+		        "  |--> creates an ed for this room\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}ed new{/gld}\r\n" <<
 
 
-		                      " {grn}rbuild{/grn} {red}ed <N> <keyword> <value>{/red}\r\n" <<  /** TODO: needs impl */
-		                      "  |--> sets the Nth keyword to <value>\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}ed 3 keyword {/gld}\"sign gold wall\"\r\n" <<
+		        " {grn}rbuild{/grn} {red}ed <N> <keyword> <value>{/red}\r\n" <<  /** TODO: needs impl */
+		        "  |--> sets the Nth keyword to <value>\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}ed 3 keyword {/gld}\"sign gold wall\"\r\n" <<
 
 
-		                      " {grn}rbuild{/grn} {red}ed <N> <description> <value>{/red}\r\n" <<  /** TODO: needs impl */
-		                      "  |--> sets the Nth description to <value>\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}ed 3 description {/gld}\"A very long passage about newbie rules, etc, etc, ...\"\r\n" <<
+		        " {grn}rbuild{/grn} {red}ed <N> <description> <value>{/red}\r\n" <<  /** TODO: needs impl */
+		        "  |--> sets the Nth description to <value>\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}ed 3 description {/gld}\"A very long passage about newbie rules, etc, etc, ...\"\r\n" <<
 
 
-		                      " {grn}rbuild{/grn} {red}<create> <direction>{/red}\r\n" <<
-		                      "  |--> creates a room to the direction you choose (neswud)\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}create north{/gld}\r\n" <<
-		                      "  |:: (the room to the north will be a brand new defaulted room)\r\n" <<
+		        " {grn}rbuild{/grn} {red}<create> <direction>{/red}\r\n" <<
+		        "  |--> creates a room to the direction you choose (neswud)\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}create north{/gld}\r\n" <<
+		        "  |:: (the room to the north will be a brand new defaulted room)\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}<bind> <direction> <room_vnum>{/red}\r\n" <<
-		                      "  |--> bind a room to a direction\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n"<<
-		                      "  |:: {wht}rbuild{/wht} {gld}bind north 127{/gld}\r\n"<<
-		                      "  |:: (the room to the north will lead to the room with a vnum of 127)\r\n" <<
+		        " {grn}rbuild{/grn} {red}<bind> <direction> <room_vnum>{/red}\r\n" <<
+		        "  |--> bind a room to a direction\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n"<<
+		        "  |:: {wht}rbuild{/wht} {gld}bind north 127{/gld}\r\n"<<
+		        "  |:: (the room to the north will lead to the room with a vnum of 127)\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}<bind-mark> <direction> <bookmark-name>{/red}\r\n" <<
-		                      "  |--> bind a BOOKMARKED room to a direction\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n"<<
-		                      "  |:: {wht}rbuild{/wht} {gld}bind-mark north cofobcenter{/gld}\r\n"<<
-		                      "  |:: (the room to the north will lead to the room bookmarked with 'cofobcenter')\r\n" <<
+		        " {grn}rbuild{/grn} {red}<bind-mark> <direction> <bookmark-name>{/red}\r\n" <<
+		        "  |--> bind a BOOKMARKED room to a direction\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n"<<
+		        "  |:: {wht}rbuild{/wht} {gld}bind-mark north cofobcenter{/gld}\r\n"<<
+		        "  |:: (the room to the north will lead to the room bookmarked with 'cofobcenter')\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}<title> <string>{/red}\r\n" <<
-		                      "  |--> set the current room title to string\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}title Taco Bell Employee Lounge{/gld}\r\n" <<
-		                      "  |:: (the room's title will be the above title)\r\n" <<
+		        " {grn}rbuild{/grn} {red}<title> <string>{/red}\r\n" <<
+		        "  |--> set the current room title to string\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}title Taco Bell Employee Lounge{/gld}\r\n" <<
+		        "  |:: (the room's title will be the above title)\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}<description> <string>{/red}\r\n" <<
-		                      "  |--> set the current room description to string\r\n" <<
-		                      "  {grn}|____[example]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}description The room is filled with boxes of taco bell...{/gld}\r\n" <<
-		                      "  |:: (the room's description will be the above description)\r\n" <<
+		        " {grn}rbuild{/grn} {red}<description> <string>{/red}\r\n" <<
+		        "  |--> set the current room description to string\r\n" <<
+		        "  {grn}|____[example]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}description The room is filled with boxes of taco bell...{/gld}\r\n" <<
+		        "  |:: (the room's description will be the above description)\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}<destroy> <direction>{/red}\r\n" <<
-		                      "  |--> destroy a room direction\r\n" <<
-		                      "  {grn}|____[examples]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}destroy north{/gld}\r\n" <<
-		                      "  |:: (north will no longer be an exit)\r\n" <<
+		        " {grn}rbuild{/grn} {red}<destroy> <direction>{/red}\r\n" <<
+		        "  |--> destroy a room direction\r\n" <<
+		        "  {grn}|____[examples]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}destroy north{/gld}\r\n" <<
+		        "  |:: (north will no longer be an exit)\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}<dopt> <direction> <item> <value>{/red}\r\n" <<
-		                      "  |--> set dir_option item to value\r\n" <<
-		                      "  {grn}|____[possible items]{/grn}\r\n" <<
-		                      "  |:: gen                 -> The general description of the room\r\n" <<
-		                      "  |:: keyword             -> The keyword of the room direction\r\n" <<
-		                      "  |:: key                 -> Integer key that is accepted for this exit\r\n" <<
-		                      "  |:: to_room             -> The room number that this exit leads to\r\n" <<
-		                      "  |:: to_vnum             -> The room vnum that this exit leads to\r\n"   <<
-		                      "  |:: to_mark             -> The room with the bookmark specified\r\n"    <<
-		                      "  {grn}|____[examples]{/grn}\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}dopt north gen To the north you see the Taco Bell bathroom.{/gld}\r\n" <<
-		                      "  |:: (When you do 'look north' you will see the above description)\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}dopt north keyword bathroom{/gld}\r\n" <<
-		                      "  |:: (when you do 'open bathroom' it will open the door to the north)\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}dopt north key 123{/gld}\r\n" <<
-		                      "  |:: (the north exit will require a key numbered 123)\r\n" <<
-		                      "  |:: {wht}rbuild{/wht} {gld}dopt north to_room 27{/gld}\r\n" <<
-		                      "  |:: (the north room will lead to room number 27)\r\n" <<
+		        " {grn}rbuild{/grn} {red}<dopt> <direction> <item> <value>{/red}\r\n" <<
+		        "  |--> set dir_option item to value\r\n" <<
+		        "  {grn}|____[possible items]{/grn}\r\n" <<
+		        "  |:: gen                 -> The general description of the room\r\n" <<
+		        "  |:: keyword             -> The keyword of the room direction\r\n" <<
+		        "  |:: key                 -> Integer key that is accepted for this exit\r\n" <<
+		        "  |:: to_room             -> The room number that this exit leads to\r\n" <<
+		        "  |:: to_vnum             -> The room vnum that this exit leads to\r\n"   <<
+		        "  |:: to_mark             -> The room with the bookmark specified\r\n"    <<
+		        "  {grn}|____[examples]{/grn}\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}dopt north gen To the north you see the Taco Bell bathroom.{/gld}\r\n" <<
+		        "  |:: (When you do 'look north' you will see the above description)\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}dopt north keyword bathroom{/gld}\r\n" <<
+		        "  |:: (when you do 'open bathroom' it will open the door to the north)\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}dopt north key 123{/gld}\r\n" <<
+		        "  |:: (the north exit will require a key numbered 123)\r\n" <<
+		        "  |:: {wht}rbuild{/wht} {gld}dopt north to_room 27{/gld}\r\n" <<
+		        "  |:: (the north room will lead to room number 27)\r\n" <<
 
-		                      " {grn}rbuild{/grn} {red}sector-type <sectortype>{/red}\r\n" <<
-		                      "  |--> add a flag to the specified door\r\n" <<
-		                      "  {grn}|____[possible items]{/grn}\r\n";
+		        " {grn}rbuild{/grn} {red}sector-type <sectortype>{/red}\r\n" <<
+		        "  |--> add a flag to the specified door\r\n" <<
+		        "  {grn}|____[possible items]{/grn}\r\n";
 		for(auto& pair : mods::rooms::sector_strings) {
 			*player << "  |:: " << pair.second << "\r\n";
 		}

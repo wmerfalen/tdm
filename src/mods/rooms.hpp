@@ -238,6 +238,7 @@ namespace mods::rooms {
 	};
 
 	void set_sector_type(room_rnum room_id, int sector_type);
+	void set_room_textures(room_rnum room_id, std::string textures);
 	std::optional<sector_type_t> sector_from_string(std::string m);
 	static inline bool is_peaceful(room_rnum room) {
 		return world[room].room_flags & ROOM_PEACEFUL;

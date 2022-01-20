@@ -20,7 +20,7 @@
 #undef m_debug
 #endif
 
-#define  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
+//#define  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("defiler") << a << "\n";
 #define cmem(a) mentoc_prefix_debug("[defiler][memory_footprint]") << a << "\n";
@@ -63,7 +63,7 @@ namespace mods::mobs {
 	}
 
 	void defiler::mention(std::string_view msg) {
-		if(1 || this->debug_mode_on()) {
+		if(this->debug_mode_on()) {
 			std::cerr << green_str("DEFILER REPORT:") << "============================================\n";
 			std::cerr << green_str("DEFILER REPORT:") << msg << "\n";
 			std::cerr << green_str("DEFILER REPORT:") << "============================================\n";

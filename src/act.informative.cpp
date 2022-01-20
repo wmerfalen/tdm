@@ -883,7 +883,7 @@ void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 	}
 
 	for(auto& t : world[room].textures()) {
-		player->send("[%s]", mods::rooms::texture_to_string(t).value_or(std::string("unknown")).c_str());
+		player->sendx(CAT("[",mods::rooms::texture_to_string(t).value_or("unknown-texture"),"]"));
 	}
 	if(world[room].textures().size()) {
 		player->send("\r\n");
