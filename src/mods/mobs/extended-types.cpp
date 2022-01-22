@@ -12,7 +12,7 @@
 #include "orthos-agent.hpp"
 #include "../behaviour_tree_impl.hpp"
 
-//#define  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
+#define  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|mobs") << a << "\n";
 #else

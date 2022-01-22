@@ -1282,7 +1282,7 @@ namespace mods::builder {
 			auto result_01 = mods::pq::exec(txn_01,sql_compositor("mobile",&txn_01)
 			                                .select("mob_id")
 			                                .from("mobile")
-			                                .where("mob_virtual_number","=",mods::util::itoa(obj->mob_specials.vnum))
+			                                .where("mob_virtual_number","=",std::to_string(obj->mob_specials.vnum))
 			                                .sql()
 			                               );
 			mods::pq::commit(txn_01);
@@ -1296,7 +1296,7 @@ namespace mods::builder {
 			MENTOC_PLAYER_NULL_CHECK(player.description);
 
 			sql_compositor::value_map p_map;
-			p_map["mob_virtual_number"] = mods::util::itoa(obj->mob_specials.vnum);
+			p_map["mob_virtual_number"] = std::to_string(obj->mob_specials.vnum);
 			p_map["mob_name"] = obj->player.name.c_str();
 			p_map["mob_short_description"] = obj->player.short_descr.c_str();
 			p_map["mob_long_description"] = obj->player.long_descr.c_str();
@@ -1352,7 +1352,7 @@ namespace mods::builder {
 				sql = sql_compositor("mobile",&txn_02)
 				      .update("mobile")
 				      .set(p_map)
-				      .where("mob_virtual_number","=",mods::util::itoa(obj->mob_specials.vnum))
+				      .where("mob_virtual_number","=",std::to_string(obj->mob_specials.vnum))
 				      .sql();
 			} else {
 				//Insert

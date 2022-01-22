@@ -963,6 +963,7 @@ void parse_sql_mobiles() {
 		}
 
 		proto.nr = mods::util::stoi<decltype(proto.nr)>(row["mob_virtual_number"]);
+		proto.mob_specials.vnum = mods::util::stoi<decltype(proto.mob_specials.vnum)>(row["mob_virtual_number"]);
 #ifdef __MENTOC_SHOW_PARSE_MOB_OUTPUT__
 		log("proto.nr: %d", proto.nr);
 #endif

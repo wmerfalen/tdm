@@ -293,7 +293,7 @@ namespace mods::mobs {
 		}
 		player_ptr = p;
 		auto ch = p->cd();
-		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::ORTHOS_AGENT;
+		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::DEFILER;
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
