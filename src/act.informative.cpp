@@ -465,7 +465,7 @@ void look_at_char(char_data *i, char_data *ch) {
 	for(j = 0; j < NUM_WEARS; j++) {
 		auto obj = iptr->equipment(j);
 		if(obj) {
-			player->sendln(wear_where[j]);
+			player->sendx(wear_where[j]);
 			//if(!CAN_SEE_OBJ(ch, obj.get())) {
 			//	player->sendln("<unknown>");
 			//} else {
