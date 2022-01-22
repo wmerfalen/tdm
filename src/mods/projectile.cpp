@@ -442,29 +442,29 @@ namespace mods {
 						send_to_room(room_id,"A corpse explodes!\r\n");
 						break;
 					}
-					send_to_room(room_id,"A %s explodes!\r\n",object->name.c_str());
+					send_to_room(room_id,CAT("A ",object->name.c_str()," explodes!\r\n").c_str());
 					break;
 				case mw_explosive::REMOTE_CHEMICAL:
 					does_damage = true;
-					send_to_room(room_id,"A %s explodes! A noxious chemical is released!\r\n",object->name.c_str());
+					send_to_room(room_id,CAT("A ",object->name.c_str()," explodes! A noxious chemical is released!\r\n").c_str());
 					QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,room_id);
 					break;
 				case mw_explosive::CLAYMORE_MINE:
 					does_damage = true;
-					send_to_room(room_id,"An explosion catches you off guard as a {red}%s{/red} {yel}DETONATES!!!{/yel}\r\n",object->name.c_str());
+					send_to_room(room_id,CAT("An explosion catches you off guard as a {red}",object->name.c_str(),"{/red} {yel}DETONATES!!!{/yel}\r\n").c_str());
 					explosive_damage(victim, object);
 					break;
 				case mw_explosive::FRAG_GRENADE:
 					does_damage = true;
-					send_to_room(room_id,"A %s explodes!\r\n",object->name.c_str());
+					send_to_room(room_id,CAT("A ",object->name.c_str()," explodes!\r\n").c_str());
 					break;
 				case mw_explosive::INCENDIARY_GRENADE:
 					does_damage = true;
-					send_to_room(room_id,"A %s explodes! The room turns into a fiery blaze!\r\n",object->name.c_str());
+					send_to_room(room_id,CAT("A ",object->name.c_str()," explodes! The room turns into a fiery blaze!\r\n").c_str());
 					mods::rooms::start_fire_dissolver(room_id);
 					break;
 				case mw_explosive::EMP_GRENADE:
-					send_to_room(room_id,"A %s explodes!\r\n",object->name.c_str());
+					send_to_room(room_id,CAT("A ",object->name.c_str()," explodes!\r\n").c_str());
 					QUEUE_TEXTURE_REMOVAL(EMP,room_id);
 					break;
 				case mw_explosive::SMOKE_GRENADE:
@@ -475,7 +475,7 @@ namespace mods {
 					send_to_room(room_id,"Your senses become scattered as a bright flash of light fills the room!\r\n");
 					break;
 				case mw_explosive::SENSOR_GRENADE:
-					send_to_room(room_id,"A %s scans the room.\r\n", object->name.c_str());
+					send_to_room(room_id,CAT("A ",object->name.c_str()," scans the room.\r\n").c_str());
 					break;
 			}
 
