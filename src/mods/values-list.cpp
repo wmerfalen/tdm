@@ -10,6 +10,7 @@ FIRE_DAMAGE_TICK_RESOLUTION,30
 FLASHBANG_COOLDOWN_TICKS,3
 FIRE_EVERY_N_TICKS,400
 FIRE_WOODEN_ADDITIONAL_TICKS,80
+FIRE_VOLATILE_ADDITIONAL_TICKS,300
 FIRE_CARPET_ADDITIONAL_TICKS,60
 FRAG_GRENADE_TICKS,6
 EMP_GRENADE_TICKS,6
@@ -510,16 +511,16 @@ MSG_TARGET_DEAD,"It appears that your target is dead."
 MSG_YOURE_INJURED,"You are injured!"
 MSG_YOU_ARE_DISORIENTED,"You become disoriented!"
 MSG_YOU_DISORIENT_SOMEONE,"You disorient your target!"
-MSG_FIRE_DAMAGE,"[%d] You suffer burns from the roaring fire!\r\n"
-MSG_EXPLOSIVE_DAMAGE,"[%d] You take EXPLOSIVE damage!\r\n"
-MSG_SHRAPNEL_DAMAGE,"[%d] You are shredded by SHRAPNEL!\r\n"
-MSG_CORROSIVE_DAMAGE,"[%d] You take CORROSIVE damage!\r\n"
-MSG_CRYOGENIC_DAMAGE,"[%d] You take CRYOGENIC damage!\r\n"
-MSG_RADIOACTIVE_DAMAGE,"[%d] You take RADIOACTIVE damage!\r\n"
-MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\r\n"
-MSG_EMP_DAMAGE,"[%d] You take EMP damage!\r\n"
-MSG_SHOCK_DAMAGE,"[%d] You take SHOCK damage!\r\n"
-MSG_SMOKE_DAMAGE,"[%d] You struggle to breath as smoke fills your lungs!\r\n"
+MSG_FIRE_DAMAGE,"You suffer burns from the roaring fire!\r\n"
+MSG_EXPLOSIVE_DAMAGE,"You take EXPLOSIVE damage!\r\n"
+MSG_SHRAPNEL_DAMAGE,"You are shredded by SHRAPNEL!\r\n"
+MSG_CORROSIVE_DAMAGE,"You take CORROSIVE damage!\r\n"
+MSG_CRYOGENIC_DAMAGE,"You take CRYOGENIC damage!\r\n"
+MSG_RADIOACTIVE_DAMAGE,"You take RADIOACTIVE damage!\r\n"
+MSG_ANTI_MATTER_DAMAGE,"You take ANTI-MATTER damage!\r\n"
+MSG_EMP_DAMAGE,"You take EMP damage!\r\n"
+MSG_SHOCK_DAMAGE,"You take SHOCK damage!\r\n"
+MSG_SMOKE_DAMAGE,"You struggle to breath as smoke fills your lungs!\r\n"
 MSG_NARROWLY_MISSED_ME,"You just barely get out of the way of a potentially fatal shot!\r\n"
 MSG_YOU_GOT_HIT_BY_INCENDIARY_AMMO,"{yel} Your equipment burns from incendiary damage! {/yel}"
 MSG_YOU_INFLICTED_INCENDIARY_AMMO,"{grn} You inflict incendiary damage on your target! {/grn}"
@@ -601,9 +602,8 @@ STOCK_GOLD_SUFFIX_MESSAGE," mission points."
 MSG_YOU_FEIGN_DEATH,"You succesfully feign death. The enemy is none the wiser..."
 MSG_YOU_FAIL_FEIGN_DEATH,"You fail at feigning death...\r\nYou are on the ground and vulnerable!"
 ADVANCE_LEVEL_CONGRATS,"{grn}Congratulations on advancing,soldier! You are proving to be a well-rounded member of the {blu}Counter Terrorist Unit{/blu}."
-CHARGEN_TRIADS_FORMAT,"Melee: %d\r\nWeapons: %d\r\nIntel: %d\r\nSpeed: %d\r\nArmor: %d\r\n"
 ADVANCE_LEVEL_MESSAGE,"{grn}CONGRATS! You rise a level!{/grn}"
-ADVANCE_MULTIPLE_LEVELS_MESSAGE,"{grn}CONGRATS! You rise %d levels!{/grn}"
+ADVANCE_MULTIPLE_LEVELS_MESSAGE,"{grn}CONGRATS! You leveled up!{/grn}"
 
 [uint8_t]
 MARINE_AR_SPRAY_INCENDIARY_CHANCE,3

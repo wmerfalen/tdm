@@ -443,25 +443,30 @@ namespace mods {
 						break;
 					}
 					send_to_room(room_id,CAT("A ",object->name.c_str()," explodes!\r\n").c_str());
+					mods::explosive::append_explosive_damage_to_room(room_id, object);
 					break;
 				case mw_explosive::REMOTE_CHEMICAL:
 					does_damage = true;
 					send_to_room(room_id,CAT("A ",object->name.c_str()," explodes! A noxious chemical is released!\r\n").c_str());
 					QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,room_id);
+					mods::explosive::append_explosive_damage_to_room(room_id, object);
 					break;
 				case mw_explosive::CLAYMORE_MINE:
 					does_damage = true;
 					send_to_room(room_id,CAT("An explosion catches you off guard as a {red}",object->name.c_str(),"{/red} {yel}DETONATES!!!{/yel}\r\n").c_str());
 					explosive_damage(victim, object);
+					mods::explosive::append_explosive_damage_to_room(room_id, object);
 					break;
 				case mw_explosive::FRAG_GRENADE:
 					does_damage = true;
 					send_to_room(room_id,CAT("A ",object->name.c_str()," explodes!\r\n").c_str());
+					mods::explosive::append_explosive_damage_to_room(room_id, object);
 					break;
 				case mw_explosive::INCENDIARY_GRENADE:
 					does_damage = true;
 					send_to_room(room_id,CAT("A ",object->name.c_str()," explodes! The room turns into a fiery blaze!\r\n").c_str());
 					mods::rooms::start_fire_dissolver(room_id);
+					mods::explosive::append_explosive_damage_to_room(room_id, object);
 					break;
 				case mw_explosive::EMP_GRENADE:
 					send_to_room(room_id,CAT("A ",object->name.c_str()," explodes!\r\n").c_str());

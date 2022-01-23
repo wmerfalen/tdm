@@ -40,12 +40,15 @@ namespace mods::levels {
 			advance_level(player);
 			is_altered = TRUE;
 			if(is_altered) {
-				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(player->cd())), TRUE, "%s advanced %d level%s to level %d.",
-				       player->name().c_str(), num_levels, num_levels == 1 ? "" : "s", player->level());
+				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(player->cd())), TRUE,
+				       CAT(player->name().c_str()," advanced ",num_levels," level", num_levels == 1 ? "" : "s",
+				           "to reach level ",
+				           player->level(),".")
+				      );
 				if(num_levels == 1) {
 					player->sendln(ADVANCE_LEVEL_MESSAGE());
 				} else {
-					player->sendln(CAT(ADVANCE_MULTIPLE_LEVELS_MESSAGE(),num_levels));
+					player->sendln(CAT("{grn}CONGRATS! You leveled up ",num_levels," levels!{/grn}"));
 				}
 				//set_title(ch, NULL);
 			}

@@ -221,6 +221,10 @@ namespace mods::rooms {
 		}
 		world[room].add_texture(txt::ON_FIRE);
 		uint32_t ticks = FIRE_EVERY_N_TICKS();
+		bool is_volatile = world[room].has_texture(txt::VOLATILE);
+		if(is_volatile) {
+			ticks += FIRE_VOLATILE_ADDITIONAL_TICKS();
+		}
 		if(world[room].has_texture(txt::WOODEN_WALLS)) {
 			ticks += FIRE_WOODEN_ADDITIONAL_TICKS();
 		}
@@ -228,7 +232,7 @@ namespace mods::rooms {
 			ticks += mods::values::FIRE_CARPET_ADDITIONAL_TICKS();
 		}
 		fs initial_status = fs::KINDLING;
-		if(has_textures(room, {txt::DRY, txt::GRASS})) {
+		if(has_textures(room, {txt::DRY, txt::GRASS}) || is_volatile) {
 			initial_status = fs::COMPLETELY_ON_FIRE;
 		}
 		world[room].texture_level(txt::ON_FIRE) = initial_status;

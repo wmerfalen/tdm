@@ -8,7 +8,7 @@
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
-#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
+//#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|m|shoplifter") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
 #define m_debug_plain(a) mentoc_prefix_debug("m|m|shoplifter") << a << "\n";

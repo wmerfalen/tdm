@@ -54,10 +54,10 @@
 ./mods/melee/main.cpp:	->dispatch
 ./mods/melee/stance.cpp:	->stance
 ./mods/mp.cpp:	->mp
-./mods/values.cpp:	->set_value
-./mods/values.cpp:	->get_value
-./mods/values.cpp:	->revert_value_to_default
-./mods/values.cpp:	->list_values
+./mods/values.cpp:			->set_value
+./mods/values.cpp:			->get_value
+./mods/values.cpp:			->revert_value_to_default
+./mods/values.cpp:			->list_values
 ./mods/orm/player-base-ability.cpp:		->save_my_pba
 ./act.item.cpp:->put
 ./act.item.cpp:->get

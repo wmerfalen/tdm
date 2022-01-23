@@ -71,10 +71,13 @@ namespace mods::chargen {
 		);
 	};
 	std::string chargen_triads_for(player_class_t pclass) {
-		std::array<uint8_t,5> triads = mods::levels::get_triads_by_class(pclass);
-		std::array<char,1024> buffer = {0};
-		snprintf(&buffer[0],1024,CHARGEN_TRIADS_FORMAT().c_str(),triads[MELEE],triads[WEAPONS],triads[INTEL],triads[SPEED],triads[ARMOR]);
-		return std::string(&buffer[0]);
+		return CAT(
+		           "Melee: ", triads[MELEE],"\r\n",
+		           "Weapons: ",triads[WEAPONS],"\r\n",
+		           "Intel: ",triads[INTEL],"\r\n",
+		           "Speed: ",triads[SPEED],"\r\n",
+		           "Armor: ",triads[ARMOR],"\r\n"
+		       );
 	}
 	void show_blind_stats(player_ptr_t& player) {
 		auto data = player->get_ada_data();

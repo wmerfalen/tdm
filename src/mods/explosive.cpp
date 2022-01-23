@@ -4,6 +4,7 @@
 #include "skills.hpp"
 
 #include "rooms.hpp"
+#include "rand.hpp"
 #include "injure.hpp"
 #include "doors.hpp"
 #include "super-users.hpp"
@@ -40,36 +41,65 @@ namespace mods::explosive {
 		return 0;
 	}
 	void deploy_volatile_explosion(const room_rnum& room_id) {
+		log("deploy_volatile_explosion on room %d",room_id);
 		mods::rooms::start_fire_dissolver(room_id);
 		if(world[room_id].has_texture(room_data::texture_type_t::GLASS_WINDOWS) ||
 		        world[room_id].has_texture(room_data::texture_type_t::GLASS_CONTENTS)) {
 			mods::glass::scatter_room(room_id);
 		}
 	}
-	static std::map<room_rnum,int32_t> volatile_damage;
+	//static std::map<room_rnum,int32_t> volatile_damage;
 	void append_explosive_damage_to_room(const room_rnum& room_id, int32_t damage) {
-		if(!world[room_id].has_texture(room_data::texture_type_t::VOLATILE)) {
-			return;
-		}
+		//if(!world[room_id].has_texture(room_data::texture_type_t::VOLATILE)) {
+		//	return;
+		//}
 		/** room has volatile. if damage is greater than threshold, light it on fire */
-		volatile_damage[room_id] += damage;
-		if(volatile_damage[room_id] >= EXPLOSIVE_VOLATILE_ROOM_DAMAGE_THRESHOLD()) {
-			m_debug("starting room on fire as it exceeds *explosive* damage threshold");
-			volatile_damage[room_id] /= 2;
-			deploy_volatile_explosion(room_id);
+		//volatile_damage[room_id] += damage;
+		//log("volatile_damage[%d] is %d",room_id,volatile_damage[room_id]);
+		//if(volatile_damage[room_id] >= EXPLOSIVE_VOLATILE_ROOM_DAMAGE_THRESHOLD()) {
+		//	m_debug("starting room on fire as it exceeds *explosive* damage threshold");
+		//	volatile_damage[room_id] /= 2;
+		deploy_volatile_explosion(room_id);
+		//}
+	}
+	uint32_t calculate_room_damage(const obj_ptr_t& device) {
+		uint32_t damage = 0;
+		const auto& attributes =  device->explosive()->attributes;
+		damage = attributes->base_damage;
+		int damage_roll = roll(device->explosive());
+		damage += damage_roll;
+		if(attributes->explosive_damage_percent) {
+			damage += damage_roll * attributes->explosive_damage_percent * 0.01;
 		}
+		if(attributes->shrapnel_damage_percent) {
+			damage += damage_roll * attributes->shrapnel_damage_percent * 0.01;
+		}
+		if(attributes->anti_matter_damage_percent) {
+			damage += damage_roll * attributes->anti_matter_damage_percent * 0.01;
+		}
+		return damage;
+	}
+
+	void append_explosive_damage_to_room(const room_rnum& room_id, const obj_ptr_t& device) {
+		//volatile_damage[room_id] += calculate_room_damage(device);
+		//log("volatile_damage[%d] is %d",room_id,volatile_damage[room_id]);
+		deploy_volatile_explosion(room_id);
+		//if(volatile_damage[room_id] >= EXPLOSIVE_VOLATILE_ROOM_DAMAGE_THRESHOLD()) {
+		//	m_debug("starting room on fire as it exceeds *explosive* damage threshold");
+		//	volatile_damage[room_id] /= 2;
+		//}
 	}
 	void append_incendiary_damage_to_room(const room_rnum& room_id, int32_t damage) {
-		if(!world[room_id].has_texture(room_data::texture_type_t::VOLATILE)) {
-			return;
-		}
+		//if(!world[room_id].has_texture(room_data::texture_type_t::VOLATILE)) {
+		//	return;
+		//}
 		/** room has volatile. if damage is greater than threshold, light it on fire */
-		volatile_damage[room_id] += damage;
-		if(volatile_damage[room_id] >= INCENDIARY_VOLATILE_ROOM_DAMAGE_THRESHOLD()) {
-			m_debug("starting room on fire as it exceeds *incendiary* damage threshold");
-			volatile_damage[room_id] /= 2;
-			deploy_volatile_explosion(room_id);
-		}
+		deploy_volatile_explosion(room_id);
+		//volatile_damage[room_id] += damage;
+		//if(volatile_damage[room_id] >= INCENDIARY_VOLATILE_ROOM_DAMAGE_THRESHOLD()) {
+		//	m_debug("starting room on fire as it exceeds *incendiary* damage threshold");
+		//	volatile_damage[room_id] /= 2;
+		//}
 	}
 	void burn_electronics(room_rnum room) {
 		return;

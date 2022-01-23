@@ -22,6 +22,7 @@ vk_FIRE_DAMAGE_TICK_RESOLUTION,
 vk_FLASHBANG_COOLDOWN_TICKS,
 vk_FIRE_EVERY_N_TICKS,
 vk_FIRE_WOODEN_ADDITIONAL_TICKS,
+vk_FIRE_VOLATILE_ADDITIONAL_TICKS,
 vk_FIRE_CARPET_ADDITIONAL_TICKS,
 vk_FRAG_GRENADE_TICKS,
 vk_EMP_GRENADE_TICKS,
@@ -607,7 +608,6 @@ vk_STOCK_GOLD_SUFFIX_MESSAGE,
 vk_MSG_YOU_FEIGN_DEATH,
 vk_MSG_YOU_FAIL_FEIGN_DEATH,
 vk_ADVANCE_LEVEL_CONGRATS,
-vk_CHARGEN_TRIADS_FORMAT,
 vk_ADVANCE_LEVEL_MESSAGE,
 vk_ADVANCE_MULTIPLE_LEVELS_MESSAGE,
 vk_MARINE_AR_SPRAY_INCENDIARY_CHANCE,
@@ -832,6 +832,7 @@ CGET(int,FIRE_DAMAGE_TICK_RESOLUTION);
 CGET(int,FLASHBANG_COOLDOWN_TICKS);
 CGET(int,FIRE_EVERY_N_TICKS);
 CGET(int,FIRE_WOODEN_ADDITIONAL_TICKS);
+CGET(int,FIRE_VOLATILE_ADDITIONAL_TICKS);
 CGET(int,FIRE_CARPET_ADDITIONAL_TICKS);
 CGET(int,FRAG_GRENADE_TICKS);
 CGET(int,EMP_GRENADE_TICKS);
@@ -1417,7 +1418,6 @@ CGET(std::string,STOCK_GOLD_SUFFIX_MESSAGE);
 CGET(std::string,MSG_YOU_FEIGN_DEATH);
 CGET(std::string,MSG_YOU_FAIL_FEIGN_DEATH);
 CGET(std::string,ADVANCE_LEVEL_CONGRATS);
-CGET(std::string,CHARGEN_TRIADS_FORMAT);
 CGET(std::string,ADVANCE_LEVEL_MESSAGE);
 CGET(std::string,ADVANCE_MULTIPLE_LEVELS_MESSAGE);
 CGET(uint8_t,MARINE_AR_SPRAY_INCENDIARY_CHANCE);
@@ -1614,15 +1614,15 @@ CGET(uint32_t,SNIPER_XRAY_SHOT_MAX_COUNT);
 		namespace msg {
 			template <typename T>
 			static inline void crit(T& p){
-				p->send(MSG_CRITICAL().c_str());
+				p->sendx(MSG_CRITICAL().c_str());
 			}
 			template <typename T>
 			static inline void headshot(T& p){
-				p->send(MSG_HEADSHOT().c_str());
+				p->sendx(MSG_HEADSHOT().c_str());
 			}
 			template <typename T>
 			static inline void hit(T& p){
-				p->send(MSG_HIT().c_str());
+				p->sendx(MSG_HIT().c_str());
 			}
 			template <typename T>
 			static inline void outofammo(T& p){

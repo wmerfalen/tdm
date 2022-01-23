@@ -36,6 +36,7 @@ case vk_FIRE_DAMAGE_TICK_RESOLUTION: return "FIRE_DAMAGE_TICK_RESOLUTION";
 case vk_FLASHBANG_COOLDOWN_TICKS: return "FLASHBANG_COOLDOWN_TICKS";
 case vk_FIRE_EVERY_N_TICKS: return "FIRE_EVERY_N_TICKS";
 case vk_FIRE_WOODEN_ADDITIONAL_TICKS: return "FIRE_WOODEN_ADDITIONAL_TICKS";
+case vk_FIRE_VOLATILE_ADDITIONAL_TICKS: return "FIRE_VOLATILE_ADDITIONAL_TICKS";
 case vk_FIRE_CARPET_ADDITIONAL_TICKS: return "FIRE_CARPET_ADDITIONAL_TICKS";
 case vk_FRAG_GRENADE_TICKS: return "FRAG_GRENADE_TICKS";
 case vk_EMP_GRENADE_TICKS: return "EMP_GRENADE_TICKS";
@@ -621,7 +622,6 @@ case vk_STOCK_GOLD_SUFFIX_MESSAGE: return "STOCK_GOLD_SUFFIX_MESSAGE";
 case vk_MSG_YOU_FEIGN_DEATH: return "MSG_YOU_FEIGN_DEATH";
 case vk_MSG_YOU_FAIL_FEIGN_DEATH: return "MSG_YOU_FAIL_FEIGN_DEATH";
 case vk_ADVANCE_LEVEL_CONGRATS: return "ADVANCE_LEVEL_CONGRATS";
-case vk_CHARGEN_TRIADS_FORMAT: return "CHARGEN_TRIADS_FORMAT";
 case vk_ADVANCE_LEVEL_MESSAGE: return "ADVANCE_LEVEL_MESSAGE";
 case vk_ADVANCE_MULTIPLE_LEVELS_MESSAGE: return "ADVANCE_MULTIPLE_LEVELS_MESSAGE";
 case vk_MARINE_AR_SPRAY_INCENDIARY_CHANCE: return "MARINE_AR_SPRAY_INCENDIARY_CHANCE";
@@ -828,6 +828,7 @@ if(!s.compare("FIRE_DAMAGE_TICK_RESOLUTION")){ return vk_FIRE_DAMAGE_TICK_RESOLU
 if(!s.compare("FLASHBANG_COOLDOWN_TICKS")){ return vk_FLASHBANG_COOLDOWN_TICKS;}
 if(!s.compare("FIRE_EVERY_N_TICKS")){ return vk_FIRE_EVERY_N_TICKS;}
 if(!s.compare("FIRE_WOODEN_ADDITIONAL_TICKS")){ return vk_FIRE_WOODEN_ADDITIONAL_TICKS;}
+if(!s.compare("FIRE_VOLATILE_ADDITIONAL_TICKS")){ return vk_FIRE_VOLATILE_ADDITIONAL_TICKS;}
 if(!s.compare("FIRE_CARPET_ADDITIONAL_TICKS")){ return vk_FIRE_CARPET_ADDITIONAL_TICKS;}
 if(!s.compare("FRAG_GRENADE_TICKS")){ return vk_FRAG_GRENADE_TICKS;}
 if(!s.compare("EMP_GRENADE_TICKS")){ return vk_EMP_GRENADE_TICKS;}
@@ -1413,7 +1414,6 @@ if(!s.compare("STOCK_GOLD_SUFFIX_MESSAGE")){ return vk_STOCK_GOLD_SUFFIX_MESSAGE
 if(!s.compare("MSG_YOU_FEIGN_DEATH")){ return vk_MSG_YOU_FEIGN_DEATH;}
 if(!s.compare("MSG_YOU_FAIL_FEIGN_DEATH")){ return vk_MSG_YOU_FAIL_FEIGN_DEATH;}
 if(!s.compare("ADVANCE_LEVEL_CONGRATS")){ return vk_ADVANCE_LEVEL_CONGRATS;}
-if(!s.compare("CHARGEN_TRIADS_FORMAT")){ return vk_CHARGEN_TRIADS_FORMAT;}
 if(!s.compare("ADVANCE_LEVEL_MESSAGE")){ return vk_ADVANCE_LEVEL_MESSAGE;}
 if(!s.compare("ADVANCE_MULTIPLE_LEVELS_MESSAGE")){ return vk_ADVANCE_MULTIPLE_LEVELS_MESSAGE;}
 if(!s.compare("MARINE_AR_SPRAY_INCENDIARY_CHANCE")){ return vk_MARINE_AR_SPRAY_INCENDIARY_CHANCE;}
@@ -1619,6 +1619,7 @@ vk_FIRE_DAMAGE_TICK_RESOLUTION,
 vk_FLASHBANG_COOLDOWN_TICKS,
 vk_FIRE_EVERY_N_TICKS,
 vk_FIRE_WOODEN_ADDITIONAL_TICKS,
+vk_FIRE_VOLATILE_ADDITIONAL_TICKS,
 vk_FIRE_CARPET_ADDITIONAL_TICKS,
 vk_FRAG_GRENADE_TICKS,
 vk_EMP_GRENADE_TICKS,
@@ -2210,7 +2211,6 @@ vk_STOCK_GOLD_SUFFIX_MESSAGE,
 vk_MSG_YOU_FEIGN_DEATH,
 vk_MSG_YOU_FAIL_FEIGN_DEATH,
 vk_ADVANCE_LEVEL_CONGRATS,
-vk_CHARGEN_TRIADS_FORMAT,
 vk_ADVANCE_LEVEL_MESSAGE,
 vk_ADVANCE_MULTIPLE_LEVELS_MESSAGE,
 };
@@ -2527,6 +2527,7 @@ CGET_DEF(int,FIRE_DAMAGE_TICK_RESOLUTION,30);
 CGET_DEF(int,FLASHBANG_COOLDOWN_TICKS,3);
 CGET_DEF(int,FIRE_EVERY_N_TICKS,400);
 CGET_DEF(int,FIRE_WOODEN_ADDITIONAL_TICKS,80);
+CGET_DEF(int,FIRE_VOLATILE_ADDITIONAL_TICKS,300);
 CGET_DEF(int,FIRE_CARPET_ADDITIONAL_TICKS,60);
 CGET_DEF(int,FRAG_GRENADE_TICKS,6);
 CGET_DEF(int,EMP_GRENADE_TICKS,6);
@@ -3021,16 +3022,16 @@ CGET_DEF(std::string,MSG_TARGET_DEAD,"It appears that your target is dead.");
 CGET_DEF(std::string,MSG_YOURE_INJURED,"You are injured!");
 CGET_DEF(std::string,MSG_YOU_ARE_DISORIENTED,"You become disoriented!");
 CGET_DEF(std::string,MSG_YOU_DISORIENT_SOMEONE,"You disorient your target!");
-CGET_DEF(std::string,MSG_FIRE_DAMAGE,"[%d] You suffer burns from the roaring fire!\r\n");
-CGET_DEF(std::string,MSG_EXPLOSIVE_DAMAGE,"[%d] You take EXPLOSIVE damage!\r\n");
-CGET_DEF(std::string,MSG_SHRAPNEL_DAMAGE,"[%d] You are shredded by SHRAPNEL!\r\n");
-CGET_DEF(std::string,MSG_CORROSIVE_DAMAGE,"[%d] You take CORROSIVE damage!\r\n");
-CGET_DEF(std::string,MSG_CRYOGENIC_DAMAGE,"[%d] You take CRYOGENIC damage!\r\n");
-CGET_DEF(std::string,MSG_RADIOACTIVE_DAMAGE,"[%d] You take RADIOACTIVE damage!\r\n");
-CGET_DEF(std::string,MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\r\n");
-CGET_DEF(std::string,MSG_EMP_DAMAGE,"[%d] You take EMP damage!\r\n");
-CGET_DEF(std::string,MSG_SHOCK_DAMAGE,"[%d] You take SHOCK damage!\r\n");
-CGET_DEF(std::string,MSG_SMOKE_DAMAGE,"[%d] You struggle to breath as smoke fills your lungs!\r\n");
+CGET_DEF(std::string,MSG_FIRE_DAMAGE,"You suffer burns from the roaring fire!\r\n");
+CGET_DEF(std::string,MSG_EXPLOSIVE_DAMAGE,"You take EXPLOSIVE damage!\r\n");
+CGET_DEF(std::string,MSG_SHRAPNEL_DAMAGE,"You are shredded by SHRAPNEL!\r\n");
+CGET_DEF(std::string,MSG_CORROSIVE_DAMAGE,"You take CORROSIVE damage!\r\n");
+CGET_DEF(std::string,MSG_CRYOGENIC_DAMAGE,"You take CRYOGENIC damage!\r\n");
+CGET_DEF(std::string,MSG_RADIOACTIVE_DAMAGE,"You take RADIOACTIVE damage!\r\n");
+CGET_DEF(std::string,MSG_ANTI_MATTER_DAMAGE,"You take ANTI-MATTER damage!\r\n");
+CGET_DEF(std::string,MSG_EMP_DAMAGE,"You take EMP damage!\r\n");
+CGET_DEF(std::string,MSG_SHOCK_DAMAGE,"You take SHOCK damage!\r\n");
+CGET_DEF(std::string,MSG_SMOKE_DAMAGE,"You struggle to breath as smoke fills your lungs!\r\n");
 CGET_DEF(std::string,MSG_NARROWLY_MISSED_ME,"You just barely get out of the way of a potentially fatal shot!\r\n");
 CGET_DEF(std::string,MSG_YOU_GOT_HIT_BY_INCENDIARY_AMMO,"{yel} Your equipment burns from incendiary damage! {/yel}");
 CGET_DEF(std::string,MSG_YOU_INFLICTED_INCENDIARY_AMMO,"{grn} You inflict incendiary damage on your target! {/grn}");
@@ -3112,9 +3113,8 @@ CGET_DEF(std::string,STOCK_GOLD_SUFFIX_MESSAGE," mission points.");
 CGET_DEF(std::string,MSG_YOU_FEIGN_DEATH,"You succesfully feign death. The enemy is none the wiser...");
 CGET_DEF(std::string,MSG_YOU_FAIL_FEIGN_DEATH,"You fail at feigning death...\r\nYou are on the ground and vulnerable!");
 CGET_DEF(std::string,ADVANCE_LEVEL_CONGRATS,"{grn}Congratulations on advancing,soldier! You are proving to be a well-rounded member of the {blu}Counter Terrorist Unit{/blu}.");
-CGET_DEF(std::string,CHARGEN_TRIADS_FORMAT,"Melee: %d\r\nWeapons: %d\r\nIntel: %d\r\nSpeed: %d\r\nArmor: %d\r\n");
 CGET_DEF(std::string,ADVANCE_LEVEL_MESSAGE,"{grn}CONGRATS! You rise a level!{/grn}");
-CGET_DEF(std::string,ADVANCE_MULTIPLE_LEVELS_MESSAGE,"{grn}CONGRATS! You rise %d levels!{/grn}");
+CGET_DEF(std::string,ADVANCE_MULTIPLE_LEVELS_MESSAGE,"{grn}CONGRATS! You leveled up!{/grn}");
 CGET_DEF(uint8_t,MARINE_AR_SPRAY_INCENDIARY_CHANCE,3);
 CGET_DEF(uint8_t,MARINE_AR_SPRAY_INC_TIER_DICE_COUNT_MULTIPLIER,3);
 CGET_DEF(uint8_t,MARINE_AR_SPRAY_INC_TIER_DICE_SIDES_MULTIPLIER,3);
