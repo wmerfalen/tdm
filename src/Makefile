@@ -37,6 +37,7 @@ FLAGS = $(gdbflags) $(optimization) \
 	-std=c++2a -fconcepts -fpermissive -MMD \
 	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-Imods/catch2/Catch2/src -Lmods/catch2/Catch2/build/src \
+	-Ilibzmq/include -Icppzmq \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 \

@@ -71,6 +71,7 @@ namespace mods::chargen {
 		);
 	};
 	std::string chargen_triads_for(player_class_t pclass) {
+		auto triads = mods::levels::get_triads_by_class(pclass);
 		return CAT(
 		           "Melee: ", triads[MELEE],"\r\n",
 		           "Weapons: ",triads[WEAPONS],"\r\n",

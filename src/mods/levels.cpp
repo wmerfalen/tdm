@@ -43,7 +43,7 @@ namespace mods::levels {
 				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(player->cd())), TRUE,
 				       CAT(player->name().c_str()," advanced ",num_levels," level", num_levels == 1 ? "" : "s",
 				           "to reach level ",
-				           player->level(),".")
+				           player->level(),".").c_str()
 				      );
 				if(num_levels == 1) {
 					player->sendln(ADVANCE_LEVEL_MESSAGE());

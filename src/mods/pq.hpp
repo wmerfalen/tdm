@@ -21,6 +21,36 @@ typedef int socket_t;
 #include <optional>
 #include "sql.hpp"
 
+#define REPORT_DB_ISSUE(MENTOC_MESSAGE,MENTOC_EXCEPTION_MESSAGE) report_db_issue(__FILE__,__LINE__,MENTOC_MESSAGE,MENTOC_EXCEPTION_MESSAGE)
+namespace mods::util {
+	std::string time_string();
+};
+
+namespace mods::db_report {
+	static std::unique_ptr<std::fstream> log_file;
+	static bool initialized = 0;
+	static inline void close() {
+		if(log_file) {
+			log_file->flush();
+			log_file->close();
+			initialized = 0;
+		}
+	}
+};
+static inline void report_db_issue(std::string file,std::size_t line,std::string_view message,std::string_view exception_message) {
+	using namespace mods::db_report;
+	if(!initialized) {
+		log_file = std::make_unique<std::fstream>("database-errors.log",std::ios::out | std::ios::app);
+		initialized = 1;
+	}
+	(*log_file) << "[date:" << ::mods::util::time_string() << "]: file:'" << file << 
+		"',line:'" << line << "', message: '" << message.data() << "'|exception:'" << exception_message.data() << "'\n";
+	log_file->flush();
+	std::cerr << mods::colors::red_str("[database issue]:") << " file:'" << file << 
+		"',line:'" << line << "',(message:'" << message.data() << "')" << 
+		"(exception:'" << mods::colors::red_str(exception_message.data()) << "')\n";
+}
+
 using namespace mods::colors;
 namespace mods::pq {
 	using transaction = pqxx::work;
@@ -43,9 +73,10 @@ inline mods::pq::transaction txn(pqxx::connection* connection_to_use) {
 
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
-static inline void REPORT_DB_ISSUE(std::string issue,std::string exception_message) {
-	std::cerr << red_str("[DATABASE ISSUE]->") << issue << ", " << red_str("EXCEPTION: '") << red_str(exception_message) << "'\n";
-}
+//static inline void REPORT_DB_ISSUE(std::string issue,std::string exception_message) {
+//	report_db_issue(issue,exception_message);
+//	std::cerr << red_str("[DATABASE ISSUE]->") << issue << ", " << red_str("EXCEPTION: '") << red_str(exception_message) << "'\n";
+//}
 
 using str_map_t = std::map<std::string,std::string>;
 #define ORM_SUCCESS(a) std::get<0>(a) == 0
