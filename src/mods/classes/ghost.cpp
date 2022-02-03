@@ -120,6 +120,9 @@ namespace mods::classes {
 			m_player->sendln("It looks like you still need to train that skill");
 			return;
 		}
+		/**
+		 * TODO: if the weight of gear and equipment is low, then stealth will last longer
+		 */
 		if(m_stealth.awful() || m_stealth.terrible() || m_stealth.okay()) {
 			stealth = dice(1, 8) + 1 + (m_player->level() / 4);
 		}

@@ -1,14 +1,9 @@
- \c postgres
- DROP DATABASE mud;
- CREATE DATABASE mud;
- \c mud;
-
 --
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.9 (Debian 11.9-0+deb10u1)
--- Dumped by pg_dump version 11.9 (Debian 11.9-0+deb10u1)
+-- Dumped from database version 10.11 (Debian 10.11-1.pgdg90+1)
+-- Dumped by pg_dump version 10.11 (Debian 10.11-1.pgdg90+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -20,6 +15,43 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+DROP DATABASE IF EXISTS mud;
+--
+-- Name: mud; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE mud WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'C.UTF-8' LC_CTYPE = 'C.UTF-8';
+
+
+ALTER DATABASE mud OWNER TO postgres;
+
+\connect mud
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
 
 --
 -- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: 
@@ -336,6 +368,44 @@ ALTER TABLE public.armor_locker_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.armor_locker_id_seq OWNED BY public.armor_locker.id;
+
+
+--
+-- Name: banned; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.banned (
+    id integer NOT NULL,
+    b_ip_address inet,
+    b_hostname character varying(255),
+    b_username character varying(16),
+    b_enforce boolean DEFAULT true NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.banned OWNER TO postgres;
+
+--
+-- Name: banned_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.banned_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.banned_id_seq OWNER TO postgres;
+
+--
+-- Name: banned_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.banned_id_seq OWNED BY public.banned.id;
 
 
 --
@@ -943,6 +1013,119 @@ ALTER SEQUENCE public.friendly_reminders_id_seq OWNED BY public.friendly_reminde
 
 
 --
+-- Name: frozen; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.frozen (
+    id integer NOT NULL,
+    f_ip_address inet,
+    f_hostname character varying(255),
+    f_username character varying(16),
+    f_enforce boolean DEFAULT true NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.frozen OWNER TO postgres;
+
+--
+-- Name: frozen_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.frozen_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.frozen_id_seq OWNER TO postgres;
+
+--
+-- Name: frozen_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.frozen_id_seq OWNED BY public.frozen.id;
+
+
+--
+-- Name: help_pages; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.help_pages (
+    id integer NOT NULL,
+    hp_section character varying NOT NULL,
+    hp_cmd character varying NOT NULL,
+    hp_content text NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.help_pages OWNER TO postgres;
+
+--
+-- Name: help_pages_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.help_pages_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.help_pages_id_seq OWNER TO postgres;
+
+--
+-- Name: help_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.help_pages_id_seq OWNED BY public.help_pages.id;
+
+
+--
+-- Name: help_topics; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.help_topics (
+    id integer NOT NULL,
+    ht_section character varying NOT NULL,
+    ht_cmd character varying NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.help_topics OWNER TO postgres;
+
+--
+-- Name: help_topics_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.help_topics_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.help_topics_id_seq OWNER TO postgres;
+
+--
+-- Name: help_topics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.help_topics_id_seq OWNED BY public.help_topics.id;
+
+
+--
 -- Name: hq_locations; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -1395,6 +1578,44 @@ ALTER TABLE public.mobile_mob_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.mobile_mob_id_seq OWNED BY public.mobile.mob_id;
+
+
+--
+-- Name: muted; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.muted (
+    id integer NOT NULL,
+    m_ip_address inet,
+    m_username character varying(16),
+    m_hostname character varying(255),
+    m_enforce boolean DEFAULT true NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.muted OWNER TO postgres;
+
+--
+-- Name: muted_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.muted_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.muted_id_seq OWNER TO postgres;
+
+--
+-- Name: muted_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.muted_id_seq OWNED BY public.muted.id;
 
 
 --
@@ -2329,6 +2550,48 @@ ALTER SEQUENCE public.rifle_attachment_id_seq OWNED BY public.rifle_attachment.i
 
 
 --
+-- Name: rifle_attribute_limits; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rifle_attribute_limits (
+    id integer NOT NULL,
+    ral_type character varying(16) NOT NULL,
+    ral_attribute character varying(128) NOT NULL,
+    ral_low integer NOT NULL,
+    ral_high integer NOT NULL,
+    ral_overpowered integer NOT NULL,
+    ral_start_level integer NOT NULL,
+    ral_end_level integer NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.rifle_attribute_limits OWNER TO postgres;
+
+--
+-- Name: rifle_attribute_limits_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.rifle_attribute_limits_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.rifle_attribute_limits_id_seq OWNER TO postgres;
+
+--
+-- Name: rifle_attribute_limits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.rifle_attribute_limits_id_seq OWNED BY public.rifle_attribute_limits.id;
+
+
+--
 -- Name: rifle_index; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -2509,7 +2772,8 @@ CREATE TABLE public.room (
     ex_description text,
     light integer,
     room_flag integer NOT NULL,
-    nickname text
+    nickname text,
+    textures text
 );
 
 
@@ -2948,6 +3212,42 @@ ALTER SEQUENCE public.skill_usage_id_seq OWNED BY public.skill_usage.id;
 
 
 --
+-- Name: stay; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.stay (
+    id integer NOT NULL,
+    s_room_vnum integer NOT NULL,
+    s_username character varying(16) NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.stay OWNER TO postgres;
+
+--
+-- Name: stay_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.stay_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stay_id_seq OWNER TO postgres;
+
+--
+-- Name: stay_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.stay_id_seq OWNED BY public.stay.id;
+
+
+--
 -- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3008,6 +3308,41 @@ ALTER TABLE public.terminal_choices_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.terminal_choices_id_seq OWNED BY public.terminal_choices.id;
+
+
+--
+-- Name: user_logins; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_logins (
+    id integer NOT NULL,
+    u_ip_address inet NOT NULL,
+    u_username character varying(16) NOT NULL
+);
+
+
+ALTER TABLE public.user_logins OWNER TO postgres;
+
+--
+-- Name: user_logins_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.user_logins_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_logins_id_seq OWNER TO postgres;
+
+--
+-- Name: user_logins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.user_logins_id_seq OWNED BY public.user_logins.id;
 
 
 --
@@ -3185,6 +3520,13 @@ ALTER TABLE ONLY public.armor_locker ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- Name: banned id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.banned ALTER COLUMN id SET DEFAULT nextval('public.banned_id_seq'::regclass);
+
+
+--
 -- Name: camera_feed feed_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3297,6 +3639,27 @@ ALTER TABLE ONLY public.friendly_reminders ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
+-- Name: frozen id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.frozen ALTER COLUMN id SET DEFAULT nextval('public.frozen_id_seq'::regclass);
+
+
+--
+-- Name: help_pages id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.help_pages ALTER COLUMN id SET DEFAULT nextval('public.help_pages_id_seq'::regclass);
+
+
+--
+-- Name: help_topics id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.help_topics ALTER COLUMN id SET DEFAULT nextval('public.help_topics_id_seq'::regclass);
+
+
+--
 -- Name: hq_locations id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3364,6 +3727,13 @@ ALTER TABLE ONLY public.mob_zone ALTER COLUMN id SET DEFAULT nextval('public.mob
 --
 
 ALTER TABLE ONLY public.mobile ALTER COLUMN mob_id SET DEFAULT nextval('public.mobile_mob_id_seq'::regclass);
+
+
+--
+-- Name: muted id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.muted ALTER COLUMN id SET DEFAULT nextval('public.muted_id_seq'::regclass);
 
 
 --
@@ -3500,6 +3870,13 @@ ALTER TABLE ONLY public.rifle_attachment ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- Name: rifle_attribute_limits id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_attribute_limits ALTER COLUMN id SET DEFAULT nextval('public.rifle_attribute_limits_id_seq'::regclass);
+
+
+--
 -- Name: rifle_index id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3598,10 +3975,24 @@ ALTER TABLE ONLY public.skill_usage ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: stay id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stay ALTER COLUMN id SET DEFAULT nextval('public.stay_id_seq'::regclass);
+
+
+--
 -- Name: terminal_choices id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.terminal_choices ALTER COLUMN id SET DEFAULT nextval('public.terminal_choices_id_seq'::regclass);
+
+
+--
+-- Name: user_logins id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_logins ALTER COLUMN id SET DEFAULT nextval('public.user_logins_id_seq'::regclass);
 
 
 --
@@ -3678,6 +4069,14 @@ COPY public.armor_index (id, armor_filename, armor_type, created_at, updated_at)
 --
 
 COPY public.armor_locker (id, a_room_vnum, a_yaml) FROM stdin;
+\.
+
+
+--
+-- Data for Name: banned; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.banned (id, b_ip_address, b_hostname, b_username, b_enforce, created_at) FROM stdin;
 \.
 
 
@@ -3770,6 +4169,7 @@ COPY public.computer_terminal (id, terminal_room_vnum, terminal_type, terminal_a
 COPY public.contract_step_callback (id, s_contract_vnum, s_task_type, s_task_target, s_task_vnum, s_sequence_vnum) FROM stdin;
 11	1	GOAL_FIND	TARGET_ROOM	143	1
 12	1	GOAL_FIND	TARGET_ROOM	144	2
+15	24	GOAL_GIVE	TARGET_MOB	143	26
 \.
 
 
@@ -3778,11 +4178,16 @@ COPY public.contract_step_callback (id, s_contract_vnum, s_task_type, s_task_tar
 --
 
 COPY public.contract_steps (id, s_contract_vnum, s_task_type, s_task_target, s_description, s_object_yaml, s_mob_vnum, s_room_vnum, s_quota, s_is_optional, s_order, s_reward_xp, s_reward_money, s_reward_1, s_reward_2, s_reward_3, s_reward_4, s_reward_5, s_reward_6, s_reward_7, s_reward_8, s_reward_9, s_reward_10, created_at, updated_at) FROM stdin;
-26	1	1	2	Find Doctor Land. Doctor Land is a ballistics expert and as such runs the majority of the new recruit shooting range\r\nactivities. You can find him in the gear room.	\N	0	266	0	f	0	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.849428	2021-09-18 01:54:46.849428
-27	1	1	2	Locate the TRITON Labs research scientist. He can give you the magazines that Doctor Land requires.\r\n	\N	0	143	0	f	1	850	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.851098	2021-09-18 01:54:46.851098
-28	1	1	2	Follow the TRITON Labs research scientist north to get the magazines.\r\n	\N	0	144	0	f	2	850	5000	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.85257	2021-09-18 01:54:46.85257
-29	1	1	0	Go back to Doctor Land with the magazines.\r\n	\N	603	0	0	f	3	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.854077	2021-09-18 01:54:46.854077
-30	1	512	0	Give all 4 magazines to Doctor Land so that he can find a way to build more.\r\n	\N	603	0	4	f	4	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.855485	2021-09-18 01:54:46.855485
+41	24	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.277468	2022-02-01 03:04:51.277468
+26	1	1	2	You've got the scanner? Great! Now head to Allied Foods marketplace. It is northeast from here.\r\nYou will want to look for the {yel}Slaughter Isle{/yel}. Use your BIOMETRIC scanner to \r\ncheck the meat products for the presence of {red}HUMAN REMAINS{/red}\r\n\r\n\r\nOnce you've found positive results we will radio you with your next objective.	\N	0	266	0	f	0	120	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.849428	2021-09-18 01:54:46.849428
+42	24	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.293908	2022-02-01 03:04:51.293908
+27	1	1024	1	Locate the slaughter isle to begin testing the foods using your biometric scanner.We need atleast 4 positive bioscan results.{blu}Hint: type {yel}bioscan <target>{/yel}	\N	0	653	0	f	1	1100	560	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.851098	2021-09-18 01:54:46.851098
+43	24	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.310587	2022-02-01 03:04:51.310587
+28	1	1	2	Take the biometric scanner back to Doctor Magnus Ortem. We will need to decide next steps.	\N	0	143	0	f	2	850	500	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.85257	2021-09-18 01:54:46.85257
+44	24	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.327242	2022-02-01 03:04:51.327242
+29	1	1	0	Go back to Doctor Land with the biometric scanner.	\N	603	0	0	f	3	50	50	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.854077	2021-09-18 01:54:46.854077
+45	24	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.343902	2022-02-01 03:04:51.343902
+30	1	512	0	Give the biometric scanner to Doctor Land.	\N	603	0	4	f	4	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.855485	2021-09-18 01:54:46.855485
 \.
 
 
@@ -3792,6 +4197,7 @@ COPY public.contract_steps (id, s_contract_vnum, s_task_type, s_task_target, s_d
 
 COPY public.contracts (id, c_vnum, c_description, c_title, created_at, updated_at) FROM stdin;
 11	1	Good evening, soldier. According to recent advances in our {yel}TRITON{/yel} sponsored laboratory a new kind of ammunition is being built.\r\n\r\nThe blueprint for this ammunition contains heavy amounts of radioactive isotopes from recently spent Uranium. Find the scientist in the armory to east of {blu}COBALT{/blu} Main hallway. He will give you the magazines he has made so far. Once you've acquired the magazines, I will give you further instructions over radio.\r\n{yel}Here are the contract instructions:{/yel}\r\n{yel}1) {grn}Find {blu}Doctor Land{/blu} {grn}in the Gear Room near the shooting range.{/grn}\r\n{yel}2) {grn}Find the TRITON Labs scientist. He will give you the magazines you need.\r\n{yel}3) {grn}Take the magazines to {blu}Doctor Land{/blu}.\r\n{yel}4) {grn}Talk to {blu}Doctor Land{/blu} on next steps...\r\n	Experimental {yel}High Velocity{/yel} magazines.	2021-09-18 01:54:46.847285	2021-09-18 01:54:46.847285
+17	24	We need you to go to the TRITON Lab and ask Doctor Land for the \r\nBIOMETRIC scanner. He should be expecting you.\r\n{yel}Here are the contract instructions:{/yel}\r\n{yel}1) {grn}Find {blu}Doctor Land{/blu} {grn}in the TRITON Lab{/grn}\r\n{yel}2) {grn}{yel}ask{/yel} {blu}Doctor Land{/blu}{grn} for the BIOMETRIC scanner{/grn}	Get the BIOMETRIC scanner from Doctor Land	2022-02-01 03:04:51.255491	2022-02-01 03:04:51.255491
 \.
 
 
@@ -3816,6 +4222,242 @@ COPY public.extra_description (id, obj_fk_id, extra_keyword, extra_description) 
 --
 
 COPY public.friendly_reminders (id, fr_msg) FROM stdin;
+\.
+
+
+--
+-- Data for Name: frozen; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.frozen (id, f_ip_address, f_hostname, f_username, f_enforce, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: help_pages; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.help_pages (id, hp_section, hp_cmd, hp_content, created_at, updated_at) FROM stdin;
+1372	allow_skill	allow_skill	usage: allow_skill <player_name> <skill|all> \r\ndescription: this command will take a player name and a skill as the second\r\nargument. You can also pass in 'all' as the second argument and it will\r\nallow all skills available.\r\nExample: allow_skill player1 basic-armor\r\nExample: allow_skill player1 all\r\n\r\nthis documentation was written on 2020-09-06.	2022-01-15 00:16:35.010127	2022-01-15 00:16:35.010127
+1373	attract	attract	usage: invoke attract <direction>\r\n- Attract\r\n\t- Get the attention of target, causing them to attack something else\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.011136	2022-01-15 00:16:35.011136
+1374	bladed_array	bladed_array	usage: invoke bladed_array  \r\n- Bladed Array\r\n\t- Each piece of worn armor causes bladed knife damage to melee attackers\r\n\t- CQC attacks:\r\n\t\t- throw, wrestle, grab, clinch\r\n\t\t- cause HP damage to attacker\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.011971	2022-01-15 00:16:35.011971
+1417	roots_of_mayhem	roots_of_mayhem	usage: invoke roots_of_mayhem <target> <direction>\r\n- Roots of mayhem\r\n\t- Cause the dead to reach up from beneath a target\r\n\t- Target is stuck in place and can only use ranged attacks\r\n\t- Target cannot move or flee until spell is over\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.038987	2022-01-15 00:16:35.038987
+1418	set_ammo	set_ammo	usage: set_ammo <weapon> <number>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-15.	2022-01-15 00:16:35.039619	2022-01-15 00:16:35.039619
+1375	camera,claymore,install,uninstall	camera,claymore,install,uninstall	usage: install <object> <direction>\r\ndescription: the 'install' command is used to install \r\ndevices like cameras or claymore mines. To install a claymore\r\nmine, you would simply type 'install claymore north'. This would\r\ninstall the claymore to the north exit of the room. Any NPC that\r\nleaves or enters the current room through the northern exit will\r\nbe met with an explosion.\r\n\r\nThe other use case of the 'install' command is to install cameras\r\nonto a wall inside a room. To install a camera on the north side of\r\nthe room, you would type 'install camera north'.\r\n\r\nTo remove the device, use the 'uninstall' command\r\nType 'help uninstall' for more information.\r\n\r\nTo cancel the installation of a device while you are currently\r\ninstalling it, you must type 'cancel'\r\n\r\nFor more information: see the help manual for the following keywords:\r\n'cancel','camera','claymore','install','uninstall'\r\n\r\nThis documentation was written on 2020-03-29.	2022-01-15 00:16:35.01271	2022-01-15 00:16:35.01271
+1376	cancel	cancel	usage: cancel\r\ndescription: the 'cancel' command is used to stop the install\r\ncommand. If you are installing a camera on the wall, it takes a\r\ncertain amount of time before that process is done. In that time,\r\nyou are vulnerable to attacks.\r\n\r\nFor more information: see the help manual for the following keywords:\r\n'cancel','camera','claymore','install','uninstall'\r\n\r\nThis documentation was written on 2020-03-29.	2022-01-15 00:16:35.013444	2022-01-15 00:16:35.013444
+1377	combat,roe,rules_of_engagement,cqc,sniping,kill,engage	combat,roe,rules_of_engagement,cqc,sniping,kill,engage	 Rules of engagement\r\n{hr} There are different ranges of combat in TD.\r\n {blu}1) Ranged combat{/blu}\r\n {blu}2) Close quarters combat{/blu}\r\n\r\n When you use the 'snipe' command and hit a target that is a few rooms away   \r\n from you, you are engaging in ranged combat. You are free to move around and \r\n do not need to flee from combat. As long as your target doesn't walk into    \r\n the room you reside in and subsequently attack you, you are safe to move     \r\n around freely.                                                               \r\n                                                                              \r\n However, if you choose to go into the same room as your target, or if your   \r\n target moves to your room, you are now in Close Quarters Combat range.       \r\n                                                                              \r\n When you are engaged in CQC, the dynamics of battle change. If you are       \r\n wielding a Sniper rifle, you will not be able to hit your target as sniper   \r\n rifles only work on targets that are not in the same room as you.            \r\n                                                                              \r\n Now if you were to use any other type of ranged weapon like an A.R., or a    \r\n sub-machine gun, you could continue doing battle with your target even if    \r\n they are in the same room as you.                                            \r\n                                                                              \r\n There some exceptions to this rule. Mainly, if you have an underbarrel       \r\n attachment like a shotgun underbarrel attached to your sniper rifle.         \r\n                                                                              \r\n If you are wielding a weapoon in your SECONDARY position, you would be able  \r\n use that weapon in CQC range. All weapons that can be wielded in the         \r\n SECONDARY position can seemlessly deal damage to targets in the CQC range.   \r\n                                                                              \r\n But sometimes you want more control over how you react to a target that goes \r\n from RANGED comat to CQC combat. This is where Rules of Engagement come into \r\n play.                                                                        \r\n                                                                              \r\n Rules of engagement allow you to dictate how you respond to an enemy closing \r\n the distance on you. There are different types of rules of engagement        \r\n available to you:                                                            \r\n\r\n {blu}1) Ballistic{/blu}\r\n {blu}2) CQC{/blu} \r\n {blu}3) Auxiliary{/blu}\r\n {blu}4) Secondary{/blu}\r\n\r\n {blu}Ballistic{/blu}\r\n When your rules of engagement are set to Ballistic, when a target closes the \r\n distance and appears in your room, you will continune to use your primary    \r\n weapon as long as your primary is not a sniper rifle                         \r\n\r\n {blu}CQC{/blu}\r\n When your rules of engagement are set to CQC, when a target closes the       \r\n distance and appears in your room, you will use hand to hand combat.         \r\n If you have set a combat order (see the helpfile for combat_ordere), you will\r\n proceed to throw the maneuvers you specified.                                \r\n\r\n\r\n {blu}Auxiliary{/blu}\r\n When your rules of engagement are set to Auxiliary, when a target closes the \r\n distance and appears in your room, you will use the underbarrel attachment   \r\n on your primary weapon to engage your target. This will work as long as your \r\n attachment has ammunition.\r\n\r\n {blu}Secondary{/blu}\r\n When your rules of engagement are set to Secondary, when a target closes the \r\n distance and appears in your room, you will use the weapon in your secondary \r\n position.\r\n\r\n	2022-01-15 00:16:35.014126	2022-01-15 00:16:35.014126
+1378	conceal	conceal	usage: conceal <item>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.014932	2022-01-15 00:16:35.014932
+1379	confuse	confuse	usage: invoke confuse <target>\r\n- Confuse\r\n\t- Target loses focus and forgets who he is fighting.\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.015689	2022-01-15 00:16:35.015689
+1380	contract,contracts,quest,quests	contract,contracts,quest,quests	usage: contract <list>\r\nusage: contract <join> <N>\r\nusage: contract <leave> <N>\r\nusage: contract <step>\r\nusage: contract <current>\r\nusage: contract <show|describe> <N>\r\nThis documentation was written on 2021-06-06.	2022-01-15 00:16:35.016358	2022-01-15 00:16:35.016358
+1381	corpse_explosion	corpse_explosion	usage: invoke corpse_explosion <target>\r\n- Corpse explosion\r\n\t- Cause target corpse to detonate\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.01702	2022-01-15 00:16:35.01702
+1382	cursed_ballistics	cursed_ballistics	usage: invoke cursed_ballistics    \r\n- Cursed Ballistics\r\n\t- Worn armor becomes more effective at the cost of movement points\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.017679	2022-01-15 00:16:35.017679
+1383	demonic_incantation	demonic_incantation	usage: invoke demonic_incantation <target>\r\n- Demonic incantation\r\n\t- Must have 1 demonic incantation charge from 'Recruit' skill\r\n\t- Raise target corpse.\r\n\t\t- Corpse can be ordered to attack target\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.018356	2022-01-15 00:16:35.018356
+1384	detonate_limb	detonate_limb	usage: invoke detonate_limb <target> <direction>\r\n- Detonate Limb\r\n\t- Cause target arm/leg to explode causing damage to room inhabitants\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.019017	2022-01-15 00:16:35.019017
+1385	extract_organs	extract_organs	usage: invoke extract_organs <target>\r\n- Extract Organs\r\n\t- Player dissects a corpse and consumes it's organs\r\n\t\t- Gains HP, Mana, Movement equal to 25 percent of the \r\n\t\t\tHP, Mana, and Movement of the NPC or PC that died\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.019652	2022-01-15 00:16:35.019652
+1386	feign_death	feign_death	usage: feign_death\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.020308	2022-01-15 00:16:35.020308
+1387	force_out	force_out	usage: invoke force_out <target> <direction>\r\n- Force out\r\n\t- Force target to move in a specific direction\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.020918	2022-01-15 00:16:35.020918
+1388	ghastly_double	ghastly_double	usage:     \r\n- Ghastly double\r\n\t- Create an illusion that there are two of you\r\n\t- Chance of taking damage is reduced by 30 percent\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.021522	2022-01-15 00:16:35.021522
+1389	go_dark	go_dark	usage: go_dark\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.022103	2022-01-15 00:16:35.022103
+1390	grim_aura	grim_aura	usage: invoke grim_aura   \r\ndescription: \r\n- +15 percent damage done by melee/ranged attacks\r\n- damage taken is reduced by 15 percent\r\n- Player gets 15 percent of their max hp added to their current hp\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.022623	2022-01-15 00:16:35.022623
+1391	hellfire_circle	hellfire_circle	usage: invoke hellfire_circle   \r\n- Hellfire Circle\r\n\t- Reduces incendiary, explosive damage\r\n\t- Reduces CQC, melee damage by 25 percent\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.023153	2022-01-15 00:16:35.023153
+1392	hellfire_incantation	hellfire_incantation	usage: invoke hellfire_incantation\r\n- Hellfire Incantation\r\n\t- Adds incendiary and radioactive damage to all damage dealt\r\n\t- Lasts 99 ticks\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.023763	2022-01-15 00:16:35.023763
+1393	install_camera_feed	install_camera_feed	usage: install_camera_feed <name> <id>...[id_N]\r\ndescription: installs a camera feed identified by 'name'.\r\nThe room virtual numbers you pass after the name of the camera feed will be the rooms\r\nthat you would like to be shown on the camera feed.\r\n{blu}Example: {yel}install_camera_feed "Camera Feed A" 20 21 22 23 24{/yel}\r\n\r\n{blu}this documentation was written on 2020-09-26.{/blu}	2022-01-15 00:16:35.024306	2022-01-15 00:16:35.024306
+1394	install_minigame	install_minigame	usage: install_minigame <name> <type> <difficulty> <unlock-event>\r\ndescription: installs a mini game identified by 'name'.\r\nValid types:\r\n{blu}line-up: Will show a series of rows that the user has to line up accordingly\r\n{blu}wires: will show a series of wires and allow the user to attach them\r\nValid difficulties:\r\neasy\r\nmedium\r\nhard\r\nimpossible\r\n\r\nThe unlock-event will be one of the following:\r\nunlock <direction>\r\nlock <direction>\r\ntoggle <direction>\r\n\r\nThe unlock-event can also work with several directions separated by commas\r\nThe unlock-event can work with room virtual numbers and directions\r\nunlock vnum:40 <direction>\r\nlock vnum:40 <direction>\r\ntoggle vnum:40 <direction>\r\nIf the unlock-event is neither of the above strings, then it will be fed to the system\r\nand handled accordingly.\r\nExample of a custom event:\r\n{blu}Example: {yel}install_minigame "North Door Lock" medium custom "custom event. handled by system"{/yel}\r\nThe 'custom' keyword takes whatever you pass in and the system interprets it. This is for adding custom events\r\nthat might work in the future or if the developers have a custom even that allow you to do special things.\r\nAs of this writing, there are no custom events. 2020-09-28\r\n{blu}Example: {yel}install_minigame "North Door Lock" line-up medium unlock north{/yel}\r\n{blu}Example: {yel}install_minigame "North Door Lock" line-up medium unlock vnum:40 north,south,east,west{/yel}\r\n{blu}Example: {yel}install_minigame "North Door Lock" line-up medium toggle vnum:40 south,west,up{/yel}\r\n\r\n{blu}this documentation was written on 2020-09-28.{/blu}	2022-01-15 00:16:35.02483	2022-01-15 00:16:35.02483
+1395	intimidate	intimidate	usage: intimidate <target>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.025395	2022-01-15 00:16:35.025395
+1396	leech	leech	usage: invoke leech <target> <direction>\r\n- Leech\r\n\t- Fire several devices at target.\r\n\t- Target gets BLEED for 30 ticks\r\n\t\t- Player gets hp equal to the bleed damage\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.025927	2022-01-15 00:16:35.025927
+1397	life_tap	life_tap	usage: invoke life_tap <target>\r\n- Life Tap\r\n\t- Damage done to a target that's been the target of life tap will increase your HP/Mana/Movement points\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.02646	2022-01-15 00:16:35.02646
+1398	list_minigame	list_minigame	usage: list_minigame\r\ndescription: lists all the mini games in the current room. This command is needed to pass the id of the minigame\r\nto the uninstall_minigame command.\r\n\r\n{blu}this documentation was written on 2020-09-28.{/blu}	2022-01-15 00:16:35.026984	2022-01-15 00:16:35.026984
+1399	melt	melt	usage: invoke melt <target>  \r\n- Player places hands on target\r\n- Target is set on fire and blinded for 50 ticks\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.02754	2022-01-15 00:16:35.02754
+1400	minor_shielding	minor_shielding	usage: invoke minor_shielding   \r\n- Minor shielding\r\n\t- Create a ballistic resistant shielding around self\r\n - Lasts for 33 ticks per level\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.028138	2022-01-15 00:16:35.028138
+1401	morbid_doubt	morbid_doubt	usage: invoke morbid_doubt <target>\r\n- Morbid doubt\r\n\t- Forces target to turn their weapon against themselves\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.02873	2022-01-15 00:16:35.02873
+1402	morbid_insight	morbid_insight	usage: invoke morbid_insight <target> <direction>\r\n- Morbid Insight\r\n\t- Player can detect nearby enemies if corpses are nearby\r\n\t- Player can detect HP/Mana/Move points of target if corpse is nearby\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.029332	2022-01-15 00:16:35.029332
+1403	muscle_memory	muscle_memory	usage: invoke muscle_memory  \r\n- Muscle Memory\r\n- Once you die\r\n You can order your corpse to explode\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.029925	2022-01-15 00:16:35.029925
+1404	neutron_shield	neutron_shield	usage: invoke neutron_shield\r\n- Neutron Shield\r\n\t- Creates a shield that\r\n\t\t- dampens radioactive, cryogenic, and anti-matter damage\r\n\t- Each bullet absorbed while Neutron Shield is active becomes a radioactive charge\r\n\t- Radioactive charges can be released as a ranged attack but only while NS is active\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.030524	2022-01-15 00:16:35.030524
+1405	parasitic_corpse_tap	parasitic_corpse_tap	usage: invoke parasitic_corpse_tap <target>\r\n- Parasitic Corpse Tap\r\n\t- Walk up to any corpse and absorb hp,mana,movement points\r\n\t- Corpse dissipates once done\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.031129	2022-01-15 00:16:35.031129
+1406	particle_deceleration	particle_deceleration	usage: invoke particle_deceleration\r\n- Particle Deceleration\r\n\t- Create an aura around player that slows the velocity of attacks\r\n\t\t- Reduces damage done by ranged weapons\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.031858	2022-01-15 00:16:35.031858
+1407	pathogen_ammunition	pathogen_ammunition	usage: invoke pathogen_ammunition [primary|secondary]\r\ndescription: Loads a special magazine into your primary or secondary weapon.\r\nPathogen ammunition infects your ammunition with a genetically engineered\r\nvirus that continues to deal poison damage to a target for a period of time.\r\nexample: invoke pathogen_ammunition primary\r\nexample: invoke pathogen_ammunition # this is equivalent to {grn}invoke pathogen_ammunition primary{/grn}\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.032508	2022-01-15 00:16:35.032508
+1408	penetrating_shot	penetrating_shot	usage: penetrating_shot <target>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.033174	2022-01-15 00:16:35.033174
+1409	plant_claymore	plant_claymore	usage: plant_claymore <direction>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.033834	2022-01-15 00:16:35.033834
+1410	plug_cable	plug_cable	usage: plug_cable <id>\r\ndescription: plugs into the ethernet port identified by 'id'.\r\n{blu}Example: {yel}plug_cable A{/yel}\r\n\r\n{blu}this documentation was written on 2020-10-02.{/blu}	2022-01-15 00:16:35.034487	2022-01-15 00:16:35.034487
+1411	practice	practice	usage: practice <help>\r\nusage: practice <skill-shorthand>\r\nsee also:\r\n skills train\r\n	2022-01-15 00:16:35.035149	2022-01-15 00:16:35.035149
+1412	recruit	recruit	usage: invoke recruit <target> \r\n- Recruit\r\n\t- Walk up to any corpse\r\n\t- Place hex on corpse\r\n\t- Add 1 demonic incantation charge for every 2 corpse this is done to\r\n\t- Corpse dissipates once done\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.035811	2022-01-15 00:16:35.035811
+1413	registration_status,enable_registration,disable_registration	registration_status,enable_registration,disable_registration	usage: enable_registration\r\nusage: disable_registration\r\nusage: registration_status\r\ndescription: depending on which command you call, it will enable/disable player\r\nregistration until you specify otherwise.\r\n{blu}Example: {yel}enable_registration{/yel}\r\nregistration_status will tell you if player registration is enabled or not.\r\n\r\n{blu}this documentation was written on 2020-09-11.{/blu}	2022-01-15 00:16:35.036438	2022-01-15 00:16:35.036438
+1414	reload	reload	usage: reload [primary|secondary]\r\ndescription: reloads either your primary or secondary. If neither is supplied will automatically reload your primary.\r\nexample: reload primary\r\nexample: reload # this is equivalent to {grn}reload primary{/grn}\r\nexample: reload secondary\r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.037096	2022-01-15 00:16:35.037096
+1415	room_dark	room_dark	usage: room_dark <on|off>\r\ndescription: \r\n\r\nexample: \r\n\r\nthis documentation was written on 2020-11-15.	2022-01-15 00:16:35.037728	2022-01-15 00:16:35.037728
+1416	room_fire	room_fire	usage: room_fire <on|off> [level]\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-15.	2022-01-15 00:16:35.03835	2022-01-15 00:16:35.03835
+1419	set_npc_position	set_npc_position	usage: set_npc_position <UUID> <POSITION>\r\ndescription: valid positions include: \r\nDEAD        -> dead\r\nMORTALLYW   -> mortally wounded\r\nINCAP       -> incapacitated\r\nSTUNNED     -> stunned\r\nSLEEPING    -> sleeping\r\nRESTING     -> resting\r\nSITTING     -> sitting\r\nFIGHTING    -> fighting\r\nSTANDING    -> standing\r\n\r\nThis command is not case-sensitive.\r\n\r\nexample: set_npc_position 45 INCAP\r\n\r\nNote: to grab an npc's uuid, go to the same room as it and type room_list_uuid\r\n\r\nFor more information: see the help manual for the following keywords:\r\n'room_list_uuid', 'set_npc_position', 'set_position'\r\n\r\nthis documentation was written on 2020-06-26.	2022-01-15 00:16:35.040245	2022-01-15 00:16:35.040245
+1420	set_position	set_position	usage: set_position <POSITION>\r\ndescription: valid positions include: \r\nDEAD        -> dead\r\nMORTALLYW   -> mortally wounded\r\nINCAP       -> incapacitated\r\nSTUNNED     -> stunned\r\nSLEEPING    -> sleeping\r\nRESTING     -> resting\r\nSITTING     -> sitting\r\nFIGHTING    -> fighting\r\nSTANDING    -> standing\r\n\r\nThis command is not case-sensitive.\r\n\r\nexample: set_position INCAP\r\n\r\nthis documentation was written on 2020-06-26.	2022-01-15 00:16:35.040913	2022-01-15 00:16:35.040913
+1421	shadow_sight	shadow_sight	usage: invoke shadow_sight\r\n- Shadow sight\r\n\t- Player has night vision\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.041547	2022-01-15 00:16:35.041547
+1422	shredded_cantrip	shredded_cantrip	usage:     \r\n- Shredded cantrip\r\n- Place a trap in the room that causes targets to bleed\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.042172	2022-01-15 00:16:35.042172
+1423	skills,skill	skills,skill	usage: skills [show] [skill_name]...[skill_N]\r\ndescription: This command will show you your proficiencies with each skill.\r\nTo see a detailed description of a skill, type: {grn}skills show <skill>{/grn}\r\n{blu}Example: {yel}skills show spray-chance{/yel}\r\n{blu}NOTE: you can specify multiple skills\r\nExample: {yel}skills show spray-chance basic-armor mold{/yel}\r\n\r\n{blu}this documentation was written on 2020-09-10.{/blu}	2022-01-15 00:16:35.042785	2022-01-15 00:16:35.042785
+1424	sniper	sniper	____________________ \r\n   S N I P I N G    |\r\n____________________|\r\n Ability:     X-ray shot\r\n Command:     xray_shot <no-args>\r\n{hr} Description: Hit a target through walls or doors. X-ray shot does not requi-\r\n              you to have your target within your line of sight. You can be  \r\n              several rooms away and still do damage to your target.         \r\n\r\n Usage: xray_shot\r\n\r\nE X A M P L E\r\n{hr}{grn}$>{/grn} mark Enforcer \r\n{grn}::{/grn} CONFIRM :: Marked target\r\n{grn}$>{/grn} engage \r\n{grn}::{/grn} CALIBRATE :: Okay -: Target locked :-\r\n{grn}$>{/grn} xray_shot \r\nYou OBLITERATE A Military Police enforcer with your deadly snipe!!\r\n{grn}$>{/grn} disengage \r\n{grn}::{/grn} DISENGAGED\r\n{grn}$>{/grn} xray_shot \r\n{grn}::{/grn} NO TARGET CALIBRATED\r\n                                  \r\n{hr} Ability: Tracking Shot \r\n Command: tracking_shot <target> <direction>\r\n{hr} Description: targets that are marked take extra damage.\r\n{hr} Ability: Mark Target\r\n Command: mark <target>\r\n{hr} Description: For use with x-ray shot.\r\n{hr} Ability: Mark Target\r\n Command: mark <target>\r\n{hr} Description: For use with x-ray shot.\r\n{hr} Ability: Attach frag grenade underbarrel\r\n Command: attach_frag\r\n{hr} Description: Attaches a fragmentation grenade launcher to your primary.\r\n Once you've attached the launcher, use {grn}fire <direction> <count>{/grn}\r\n{hr}E X A M P L E \r\n{hr}{grn}$>{/grn} attach_frag \r\n{grn}You attach an PWM Grenade Launcher to your primary weapon{/grn}\r\n{grn}$>{/grn} fire north 3 \r\n{grn}You launch a fragmentation grenade way off to the north!{/grn}\r\n{hr} Description: For use with x-ray shot.\r\n{grn}target_limb{/grn}: specify the limb to target.\r\n{grn}tracking_shot{/grn}: tracking your target.\r\n{yel}Usage:{/yel}{grn}tracking_shot <target> <direction>{/grn}\r\n{yel}Example:{/yel}\r\n{grn}$> tracking_shot enforcer east{/grn}\r\n{grn}You tag your target!{/grn}\r\nTagged enemies take extra damage.\r\n ____________________ \r\n|      Healing       |\r\n|____________________|\r\n{grn}light_bandage{/grn}: use to regain some hp\r\n{grn}suture{/grn}: regain more hp than light_bandage but at the cost of movement points\r\n{grn}adrenaline_shot{/grn}: inject yourself with adrenaline and get +5 armor, +5 movement, and +3 strength\r\n ____________________ \r\n|     Demolitions    |\r\n|____________________|\r\n{grn}build_claymore{/grn}: creates a claymore in your inventory (if you have a charge left).\r\n{grn}build_shrapnel_claymore{/grn}: creates a {grn}shrapnel{/grn} claymore in your inventory (if you have a charge left).\r\n{grn}build_corrosive_claymore{/grn}: creates a {grn}corrosive{/grn} claymore in your inventory (if you have a charge left).\r\n{grn}guided_missile{/grn}: pre-program a guided missile to travel and detonate at the end of the path.\r\n{yel}Usage:{/yel}{grn}guided_missile <direction>...[direction]\r\n{yel}Example:{/yel}{grn}guided_missile n e e n n w{/grn}\r\nThe above example will send a guided missile along the path until it reaches the last direction (west)\r\nupon which it will detonate in that room.\r\n ____________________ \r\n|     I N T E L      |\r\n|____________________|\r\n{grn}build_emp{/grn}: creates an EMP grenade in your inventory (if you have a charge left).\r\n{grn}build_chaff{/grn}: creates a Chaff grenade in your inventory (if you have a charge left).\r\n{grn}build_sensor{/grn}: creates a Sensor grenade in your inventory (if you have a charge left).\r\n{grn}request_recon{/grn}: creates a Sensor grenade in your inventory (if you have a charge left).\r\n\r\n{grn}attach_shotgun{/grn}: activate an underbarrel shotgun with 5 shells pre-loaded.\r\n  {yel}Usage:{/yel}{grn}attach_shotgun{/grn}\r\n  Once you've attached the shotgun, the next same-room fire fight you're in will use the underbarrel\r\n  shotgun until it's ammo is depleted. Once the shotgun's ammo is depleted, you will switch back to your\r\n  primary weapon's main attack.\r\n{grn}attach_frag{/grn}: activate an underbarrel grenade launcher with 3 grenades pre-loaded.\r\n{yel}Usage:{/yel}{grn}attach_frag{/grn}\r\nOnce you've attached the launcher, use {grn}fire <direction> <count>{/grn}\r\n{yel}Example:{/yel}\r\n{grn}$> attach_frag{/grn}\r\n{grn}You attach an PWM Grenade Launcher to your primary weapon{/grn}\r\n{grn}$> fire north 3{/grn}\r\n{grn}You launch a fragmentation grenade way off to the north!{/grn}\r\n{grn}target_limb{/grn}: specify the limb to target.\r\n{yel}Usage:{/yel}{grn}target_limb <right-arm|left-arm|none>\r\n{yel}Example:{/yel}\r\n{grn}$> target_limb right-arm{/grn}\r\n{grn}You start targeting the right arm of your opponents.{/grn}\r\n{grn}$> snipe Enforcer west{/grn}\r\n{grn}You OBLITERATE A Military Police enforcer with your deadly snipe!!{/grn}\r\n{grn}*** LIMB DAMAGE (right-arm) [ INTEGRITY: POOR ] ***\r\n{grn}$> snipe Enforcer west{/grn}\r\n{grn}You OBLITERATE A Military Police enforcer with your deadly snipe!!{/grn}\r\n{grn}*** LIMB DAMAGE (right-arm) [ INTEGRITY: USELESS ] ***\r\n\r\nOnce a limb reaches {yel}USELESS{/yel}, the limb is effectively destroyed.\r\n\r\n|-----------------------|\r\n| A note on handed-ness |\r\n|-----------------------|\r\n Every NPC is right-handed by default. An NPC uses their left hand to utilize a secondary weapon such \r\n as a pistol. NPC's will use their right hand to utilize their primary weapon. This goes for rifles and melee weapons.\r\n{hr}\r\n{hr} Limb damage and effects on {grn}MELEE{/grn} primary weapon\r\n{hr} LIMB EFFECTS \r\n{hr} Right arm: 1 or more of the below will occur...\r\n            * 30 percent reduced chance to hit target \r\n            * 1l percent damage reduction for 33 ticks\r\n            * reduce dice sides by 10-25 percent for 45 ticks \r\n{hr} Left arm:  1 or more of the below will occur...\r\n            * next 3 attacks do half damage     \r\n{hr} Limb damage and effects on {grn}RIFLE{/grn} primary weapon\r\n{hr} LIMB EFFECTS \r\n{hr} Right arm: 1 or more of the below will occur...\r\n            * 25 percent reduced damage with primary weapon\r\n            * 33 percent chance of jamming primary weapon\r\n            * 40 percent penalty to accuracy\r\n            * 20 percent chance of dropping primary weapon\r\n            * 14 percent chance of primary magazine emptying\r\n{hr} Left arm:  1 or more of the below will occur...\r\n            * 35 percent less likely to deal critical shots\r\n            * add 15 ticks to cooldown between shots\r\n            * 25 percent damage reduction for 60 ticks\r\n{hr}{grn}xray_shot{/grn}: specify the limb to target.\r\n\r\n	2022-01-15 00:16:35.043456	2022-01-15 00:16:35.043456
+1425	suffocate	suffocate	usage: invoke suffocate <target>  \r\n- Player summons a rope around target's neck\r\n- Target continues to suffocate, losing HP\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.044299	2022-01-15 00:16:35.044299
+1426	summon_extraction	summon_extraction	usage: summon_extraction\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.044955	2022-01-15 00:16:35.044955
+1427	throw,grenade	throw,grenade	usage: throw <direction> [room_count=4]\r\nexample: \r\n $ get frag backpack\r\n $ hold frag\r\n $ throw north 2\r\n This will throw a frag 2 rooms away\r\n NOTE:\r\nAll grenades are thrown as far as they can up to a maximum amount of 4 rooms away\r\nor however many rooms before it reaches a dead-end\r\nsee: help grenade	2022-01-15 00:16:35.045588	2022-01-15 00:16:35.045588
+1428	toss_cryogenic_grenade	toss_cryogenic_grenade	usage: toss_cryogenic_grenade <direction> <rooms>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.046216	2022-01-15 00:16:35.046216
+1429	uninstall_camera_feed	uninstall_camera_feed	usage: uninstall_camera_feed <name>\r\ndescription: uninstalls the camera feed identified by 'name'.\r\n{blu}Example: {yel}uninstall_camera_feed "Camera Feed A"{/yel}\r\n\r\n{blu}this documentation was written on 2020-09-26.{/blu}	2022-01-15 00:16:35.046871	2022-01-15 00:16:35.046871
+1430	uninstall_minigame	uninstall_minigame	usage: uninstall_minigame <id>\r\ndescription: uninstalls the currently installed mini game identified by the id you pass in.\r\nTo see the ID's of the mini games currently installed in this room, see the list_minigame command.\r\n{blu}Example: {yel}uninstall_minigame "North Door Lock"{/yel}\r\n\r\n{blu}this documentation was written on 2020-09-28.{/blu}	2022-01-15 00:16:35.047496	2022-01-15 00:16:35.047496
+1431	use_flash_underbarrel	use_flash_underbarrel	usage: use_flash_underbarrel\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.048139	2022-01-15 00:16:35.048139
+1432	xray_shot	xray_shot	usage: xray_shot\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.048779	2022-01-15 00:16:35.048779
+1433	yaml_example	yaml_example	usage: yaml_example <list> <object_type>\r\ndescription: this command will take an object type and write an example yaml file.\r\nyou can optionally send the string list as the only argument to this function\r\nand it will spit out all the possible object types.\r\n\r\nThe main function of yaml_example is to write an example file for the object type you specify.\r\n\r\nExample: yaml_example drone\r\nThe above example will write to /lib/objects/drone.yml\r\n\r\nthis documentation was written on 2020-09-08.	2022-01-15 00:16:35.049411	2022-01-15 00:16:35.049411
+1434	yaml_log	yaml_log	usage: yaml_log \r\ndescription: the yaml_log command has two types of usages.\r\n1) calling yaml_log with no arguments will send you the current yaml log\r\n2) calling yaml_log the same way you would call yaml_import\r\nExample: yaml_log RIFLE g36c.yml\r\nThe above example will attempt to import and give you the g36c.yml file.\r\nShould any exceptions with the yaml import occur, you can see the log\r\nof those errors by calling yaml_log with no arguments.\r\n\r\nthis documentation was written on 2020-09-02.	2022-01-15 00:16:35.05005	2022-01-15 00:16:35.05005
+\.
+
+
+--
+-- Data for Name: help_topics; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.help_topics (id, ht_section, ht_cmd, created_at, updated_at) FROM stdin;
+1	chat	gossip	2022-01-14 20:39:15.449942	2022-01-14 20:39:15.449942
+2	chat	ooc	2022-01-14 20:39:15.452513	2022-01-14 20:39:15.452513
+3	chat	newbie	2022-01-14 20:39:15.454504	2022-01-14 20:39:15.454504
+4	chat	grats	2022-01-14 20:39:15.456546	2022-01-14 20:39:15.456546
+5	date	and	2022-01-14 20:39:15.458451	2022-01-14 20:39:15.458451
+6	date	time	2022-01-14 20:39:15.460486	2022-01-14 20:39:15.460486
+7	date	moon_phase	2022-01-14 20:39:15.462489	2022-01-14 20:39:15.462489
+8	date	time	2022-01-14 20:39:15.464475	2022-01-14 20:39:15.464475
+9	contracts	contract	2022-01-14 20:39:15.466022	2022-01-14 20:39:15.466022
+10	loot	list_loot	2022-01-14 20:39:15.467492	2022-01-14 20:39:15.467492
+11	loot	take_loot	2022-01-14 20:39:15.468922	2022-01-14 20:39:15.468922
+12	loot	show_loot	2022-01-14 20:39:15.470247	2022-01-14 20:39:15.470247
+13	objects	get	2022-01-14 20:39:15.471364	2022-01-14 20:39:15.471364
+14	objects	put	2022-01-14 20:39:15.472435	2022-01-14 20:39:15.472435
+15	objects	junk	2022-01-14 20:39:15.473556	2022-01-14 20:39:15.473556
+16	objects	drop	2022-01-14 20:39:15.474645	2022-01-14 20:39:15.474645
+17	objects	throw	2022-01-14 20:39:15.475607	2022-01-14 20:39:15.475607
+18	preferences	prefs	2022-01-14 20:39:15.476558	2022-01-14 20:39:15.476558
+19	shops	buy	2022-01-14 20:39:15.477514	2022-01-14 20:39:15.477514
+20	shops	list	2022-01-14 20:39:15.478422	2022-01-14 20:39:15.478422
+21	stats	score	2022-01-14 20:39:15.479308	2022-01-14 20:39:15.479308
+22	stats	skills	2022-01-14 20:39:15.480251	2022-01-14 20:39:15.480251
+23	stats	exp	2022-01-14 20:39:15.481087	2022-01-14 20:39:15.481087
+24	ranged	combat	2022-01-14 20:39:15.481873	2022-01-14 20:39:15.481873
+25	ranged	snipe	2022-01-14 20:39:15.48263	2022-01-14 20:39:15.48263
+26	ranged	scan	2022-01-14 20:39:15.483423	2022-01-14 20:39:15.483423
+27	ranged	spray	2022-01-14 20:39:15.484188	2022-01-14 20:39:15.484188
+28	ranged	reload	2022-01-14 20:39:15.48495	2022-01-14 20:39:15.48495
+29	melee	combat	2022-01-14 20:39:15.485638	2022-01-14 20:39:15.485638
+30	melee	kill	2022-01-14 20:39:15.486319	2022-01-14 20:39:15.486319
+31	melee	set_rules_of_gengagement	2022-01-14 20:39:15.486999	2022-01-14 20:39:15.486999
+32	melee	set_combat_order	2022-01-14 20:39:15.487729	2022-01-14 20:39:15.487729
+33	melee	list_combat_order	2022-01-14 20:39:15.488512	2022-01-14 20:39:15.488512
+34	melee	clear_combat_order	2022-01-14 20:39:15.489229	2022-01-14 20:39:15.489229
+35	melee	dispatch	2022-01-14 20:39:15.489893	2022-01-14 20:39:15.489893
+36	melee	stance	2022-01-14 20:39:15.490525	2022-01-14 20:39:15.490525
+37	hacking	hack	2022-01-14 20:39:15.491224	2022-01-14 20:39:15.491224
+38	hacking	rotate_right	2022-01-14 20:39:15.491919	2022-01-14 20:39:15.491919
+39	hacking	rotate_left	2022-01-14 20:39:15.492574	2022-01-14 20:39:15.492574
+40	hacking	next_row	2022-01-14 20:39:15.493271	2022-01-14 20:39:15.493271
+41	hacking	reset_hack	2022-01-14 20:39:15.493899	2022-01-14 20:39:15.493899
+42	hacking	plug_cable	2022-01-14 20:39:15.494521	2022-01-14 20:39:15.494521
+43	progression	score	2022-01-14 20:39:15.495195	2022-01-14 20:39:15.495195
+44	progression	buy_practice	2022-01-14 20:39:15.495763	2022-01-14 20:39:15.495763
+45	progression	skills	2022-01-14 20:39:15.496433	2022-01-14 20:39:15.496433
+46	progression	practice	2022-01-14 20:39:15.49709	2022-01-14 20:39:15.49709
+47	progression	mp	2022-01-14 20:39:15.497664	2022-01-14 20:39:15.497664
+48	progression	levels	2022-01-14 20:39:15.498218	2022-01-14 20:39:15.498218
+49	world	put	2022-01-14 20:39:15.498692	2022-01-14 20:39:15.498692
+50	world	get	2022-01-14 20:39:15.499132	2022-01-14 20:39:15.499132
+51	world	drop	2022-01-14 20:39:15.499606	2022-01-14 20:39:15.499606
+52	world	give	2022-01-14 20:39:15.500064	2022-01-14 20:39:15.500064
+53	world	drink	2022-01-14 20:39:15.500486	2022-01-14 20:39:15.500486
+54	world	eat	2022-01-14 20:39:15.500933	2022-01-14 20:39:15.500933
+55	world	pour	2022-01-14 20:39:15.501369	2022-01-14 20:39:15.501369
+56	world	wear	2022-01-14 20:39:15.501792	2022-01-14 20:39:15.501792
+57	world	wield	2022-01-14 20:39:15.502272	2022-01-14 20:39:15.502272
+58	world	grab	2022-01-14 20:39:15.502713	2022-01-14 20:39:15.502713
+59	world	remove	2022-01-14 20:39:15.503145	2022-01-14 20:39:15.503145
+60	items	inventory	2022-01-14 20:39:15.503584	2022-01-14 20:39:15.503584
+61	items	equipment	2022-01-14 20:39:15.50403	2022-01-14 20:39:15.50403
+62	items	drone	2022-01-14 20:39:15.504458	2022-01-14 20:39:15.504458
+63	session	quit	2022-01-14 20:39:15.504887	2022-01-14 20:39:15.504887
+64	droning	drone	2022-01-14 20:39:15.50531	2022-01-14 20:39:15.50531
+65	helpful	recall	2022-01-14 20:39:15.505734	2022-01-14 20:39:15.505734
+66	chat	who	2022-01-14 20:39:15.50618	2022-01-14 20:39:15.50618
+67	chat	users	2022-01-14 20:39:15.506618	2022-01-14 20:39:15.506618
+68	informative	exits	2022-01-14 20:39:15.50705	2022-01-14 20:39:15.50705
+69	informative	look	2022-01-14 20:39:15.507489	2022-01-14 20:39:15.507489
+70	informative	examine	2022-01-14 20:39:15.507938	2022-01-14 20:39:15.507938
+71	informative	weather	2022-01-14 20:39:15.508369	2022-01-14 20:39:15.508369
+72	informative	gen_ps	2022-01-14 20:39:15.508799	2022-01-14 20:39:15.508799
+73	informative	where	2022-01-14 20:39:15.50925	2022-01-14 20:39:15.50925
+74	informative	consider	2022-01-14 20:39:15.509693	2022-01-14 20:39:15.509693
+75	informative	diagnose	2022-01-14 20:39:15.510102	2022-01-14 20:39:15.510102
+76	informative	color	2022-01-14 20:39:15.510501	2022-01-14 20:39:15.510501
+77	informative	toggle	2022-01-14 20:39:15.510905	2022-01-14 20:39:15.510905
+78	informative	commands	2022-01-14 20:39:15.511314	2022-01-14 20:39:15.511314
+79	informative	view	2022-01-14 20:39:15.511713	2022-01-14 20:39:15.511713
+80	other	quit	2022-01-14 20:39:15.512103	2022-01-14 20:39:15.512103
+81	other	save	2022-01-14 20:39:15.512486	2022-01-14 20:39:15.512486
+82	other	not_here	2022-01-14 20:39:15.512879	2022-01-14 20:39:15.512879
+83	other	sneak	2022-01-14 20:39:15.513258	2022-01-14 20:39:15.513258
+84	other	hide	2022-01-14 20:39:15.513646	2022-01-14 20:39:15.513646
+85	other	steal	2022-01-14 20:39:15.51403	2022-01-14 20:39:15.51403
+86	other	visible	2022-01-14 20:39:15.514423	2022-01-14 20:39:15.514423
+87	other	title	2022-01-14 20:39:15.514807	2022-01-14 20:39:15.514807
+88	other	group	2022-01-14 20:39:15.515189	2022-01-14 20:39:15.515189
+89	other	ungroup	2022-01-14 20:39:15.51559	2022-01-14 20:39:15.51559
+90	other	report	2022-01-14 20:39:15.515973	2022-01-14 20:39:15.515973
+91	other	split	2022-01-14 20:39:15.516359	2022-01-14 20:39:15.516359
+92	other	use	2022-01-14 20:39:15.516748	2022-01-14 20:39:15.516748
+93	other	wimpy	2022-01-14 20:39:15.517132	2022-01-14 20:39:15.517132
+94	other	display	2022-01-14 20:39:15.517526	2022-01-14 20:39:15.517526
+95	other	gen_write	2022-01-14 20:39:15.517903	2022-01-14 20:39:15.517903
+96	other	gen_tog	2022-01-14 20:39:15.518292	2022-01-14 20:39:15.518292
+97	builder(admin)	flush_holding	2022-01-14 20:39:15.518687	2022-01-14 20:39:15.518687
+98	builder(admin)	hold_anything	2022-01-14 20:39:15.519075	2022-01-14 20:39:15.519075
+99	builder(admin)	uuid	2022-01-14 20:39:15.519478	2022-01-14 20:39:15.519478
+100	offensive	throw	2022-01-14 20:39:15.519865	2022-01-14 20:39:15.519865
+101	offensive	snipe_object	2022-01-14 20:39:15.520259	2022-01-14 20:39:15.520259
+102	offensive	snipe	2022-01-14 20:39:15.520645	2022-01-14 20:39:15.520645
+103	offensive	spray	2022-01-14 20:39:15.521034	2022-01-14 20:39:15.521034
+104	offensive	silencers_on	2022-01-14 20:39:15.521433	2022-01-14 20:39:15.521433
+105	offensive	silencers_off	2022-01-14 20:39:15.521817	2022-01-14 20:39:15.521817
+106	offensive	go_loud	2022-01-14 20:39:15.522206	2022-01-14 20:39:15.522206
+107	offensive	engagement_mode	2022-01-14 20:39:15.522611	2022-01-14 20:39:15.522611
+108	offensive	regroup	2022-01-14 20:39:15.522997	2022-01-14 20:39:15.522997
+109	offensive	command_sequence	2022-01-14 20:39:15.5234	2022-01-14 20:39:15.5234
+110	offensive	scan	2022-01-14 20:39:15.523786	2022-01-14 20:39:15.523786
+111	offensive	assist	2022-01-14 20:39:15.524176	2022-01-14 20:39:15.524176
+112	offensive	hit	2022-01-14 20:39:15.52456	2022-01-14 20:39:15.52456
+113	offensive	kill	2022-01-14 20:39:15.524943	2022-01-14 20:39:15.524943
+114	offensive	backstab	2022-01-14 20:39:15.525337	2022-01-14 20:39:15.525337
+115	offensive	order	2022-01-14 20:39:15.52572	2022-01-14 20:39:15.52572
+116	offensive	flee	2022-01-14 20:39:15.526103	2022-01-14 20:39:15.526103
+117	offensive	bash	2022-01-14 20:39:15.526497	2022-01-14 20:39:15.526497
+118	offensive	rescue	2022-01-14 20:39:15.526899	2022-01-14 20:39:15.526899
+119	offensive	kick	2022-01-14 20:39:15.527284	2022-01-14 20:39:15.527284
+120	defensive	heal	2022-01-14 20:39:15.527702	2022-01-14 20:39:15.527702
+121	defensive	revive	2022-01-14 20:39:15.528086	2022-01-14 20:39:15.528086
+122	movement	move	2022-01-14 20:39:15.528472	2022-01-14 20:39:15.528472
+123	movement	gen_door	2022-01-14 20:39:15.528858	2022-01-14 20:39:15.528858
+124	movement	enter	2022-01-14 20:39:15.529286	2022-01-14 20:39:15.529286
+125	movement	leave	2022-01-14 20:39:15.529658	2022-01-14 20:39:15.529658
+126	movement	stand	2022-01-14 20:39:15.530029	2022-01-14 20:39:15.530029
+127	movement	sit	2022-01-14 20:39:15.530402	2022-01-14 20:39:15.530402
+128	movement	rest	2022-01-14 20:39:15.530767	2022-01-14 20:39:15.530767
+129	movement	sleep	2022-01-14 20:39:15.531132	2022-01-14 20:39:15.531132
+130	movement	wake	2022-01-14 20:39:15.531529	2022-01-14 20:39:15.531529
+131	movement	follow	2022-01-14 20:39:15.531906	2022-01-14 20:39:15.531906
+132	weapon-introspection	stats	2022-01-14 20:39:15.532297	2022-01-14 20:39:15.532297
+133	demolitions	cancel	2022-01-14 20:39:15.532666	2022-01-14 20:39:15.532666
+134	demolitions	install	2022-01-14 20:39:15.533021	2022-01-14 20:39:15.533021
+135	demolitions	uninstall	2022-01-14 20:39:15.533391	2022-01-14 20:39:15.533391
+136	demolitions	breach	2022-01-14 20:39:15.533748	2022-01-14 20:39:15.533748
+137	demolitions	thermite	2022-01-14 20:39:15.53412	2022-01-14 20:39:15.53412
+138	informative	room_vnum	2022-01-14 20:39:15.534471	2022-01-14 20:39:15.534471
+139	helpful	alias	2022-01-14 20:39:15.534829	2022-01-14 20:39:15.534829
+140	communication	say	2022-01-14 20:39:15.535192	2022-01-14 20:39:15.535192
+141	communication	gsay	2022-01-14 20:39:15.535552	2022-01-14 20:39:15.535552
+142	communication	tell	2022-01-14 20:39:15.535911	2022-01-14 20:39:15.535911
+143	communication	reply	2022-01-14 20:39:15.536266	2022-01-14 20:39:15.536266
+144	communication	spec_comm	2022-01-14 20:39:15.536629	2022-01-14 20:39:15.536629
+145	communication	write	2022-01-14 20:39:15.536988	2022-01-14 20:39:15.536988
+146	communication	gen_comm	2022-01-14 20:39:15.537349	2022-01-14 20:39:15.537349
+147	communication	qcomm	2022-01-14 20:39:15.537701	2022-01-14 20:39:15.537701
+148	social	action	2022-01-14 20:39:15.538053	2022-01-14 20:39:15.538053
+149	social	insult	2022-01-14 20:39:15.538408	2022-01-14 20:39:15.538408
 \.
 
 
@@ -3880,9 +4522,20 @@ COPY public.mob_equipment (id, meq_profile_name, meq_vnum, meq_light, meq_finger
 16	retail-associate	109	\N	\N	\N	\N	\N	armor/allied-foods-shirt.yml	\N	armor/black-jeans.yml	armor/plain-black-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/retractable-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:23.883086	2021-09-04 04:12:23.883086
 17	shoplifter	110	\N	\N	\N	\N	\N	armor/blue-hoodie.yml	\N	armor/dusty-jeans.yml	armor/sloth-martins.yml	\N	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 04:12:23.894169	2021-09-04 04:12:23.894169
 69	armed-guard	14	\N	\N	\N	\N	\N	armor/falcon-ballistic-vest.yml	armor/baklava.yml	armor/mp-enforcer-pants.yml	armor/xm607-vulture-boots.yml	armor/forge-xm3-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	armor/titan-shoulder-pads.yml	armor/titan-shoulder-pads.yml	\N	\N	\N	armor/titan-elbow-guards.yml	armor/titan-elbow-guards.yml	2021-09-04 22:42:19.155625	2021-09-04 22:42:19.155625
-70	teller	107	\N	\N	\N	\N	\N	\N	\N	armor/leggings.yml	armor/dress-shoes.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-04 22:42:19.163143	2021-09-04 22:42:19.163143
-90	thug-lvl-2	112	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/flimsy-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:28.213973	2021-09-06 01:20:28.213973
-91	hustler-lvl-3	113	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/weak-brass-knuckles.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-06 01:20:28.231383	2021-09-06 01:20:28.231383
+115	car-thief	100	\N	\N	\N	\N	\N	armor/basic-ballistic-vest.yml	armor/baklava.yml	armor/blue-jeans.yml	armor/plat-basketball-shoes.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	melee/crowbar.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:27.252772	2022-02-01 01:43:27.252772
+116	petty-thief	101	\N	\N	\N	\N	\N	\N	\N	armor/blue-jeans.yml	armor/plat-basketball-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/cheap-crowbar.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:27.384903	2022-02-01 01:43:27.384903
+117	kidnapper	102	\N	\N	\N	armor/dark-throne-necklace.yml	\N	armor/leather-trenchcoat.yml	armor/baklava.yml	armor/black-jeans.yml	armor/atom-fade-shoes.yml	armor/brown-leather-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:27.517425	2022-02-01 01:43:27.517425
+118	chaotic-meth-addict	103	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/sickening-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:27.676684	2022-02-01 01:43:27.676684
+119	shoplifter	104	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	armor/baklava.yml	armor/blue-jeans.yml	armor/atom-fade-shoes.yml	armor/brown-leather-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:27.809019	2022-02-01 01:43:27.809019
+120	crackhead	105	\N	\N	\N	\N	\N	\N	\N	armor/blue-jeans.yml	armor/plat-basketball-shoes.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:27.942669	2022-02-01 01:43:27.942669
+121	armed-guard	106	\N	\N	\N	\N	\N	armor/falcon-ballistic-vest.yml	armor/baklava.yml	armor/mp-enforcer-pants.yml	armor/xm607-vulture-boots.yml	armor/forge-xm3-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	armor/titan-shoulder-pads.yml	armor/titan-shoulder-pads.yml	\N	\N	\N	armor/titan-elbow-guards.yml	armor/titan-elbow-guards.yml	2022-02-01 01:43:29.858195	2022-02-01 01:43:29.858195
+122	teller	107	\N	\N	\N	\N	\N	\N	\N	armor/leggings.yml	armor/dress-shoes.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:29.95304	2022-02-01 01:43:29.95304
+123	infected-drone-lvl-2	112	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/flimsy-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:34.105307	2022-02-01 01:43:34.105307
+124	hustler-lvl-3	113	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/weak-brass-knuckles.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:34.347014	2022-02-01 01:43:34.347014
+132	orthos-guard	503	\N	\N	\N	\N	\N	armor/vulture-ballistic-vest.yml	\N	armor/titan-shin-guards.yml	armor/xm50-ultralight-boots.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/orthos-aug-a3.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 16:49:10.066679	2022-02-01 16:49:10.066679
+133	orthos-sniper	504	\N	\N	\N	\N	\N	armor/vulture-ballistic-vest.yml	\N	armor/titan-shin-guards.yml	armor/xm50-ultralight-boots.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/orthos-l96aw.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 16:49:10.216828	2022-02-01 16:49:10.216828
+131	defiler	666	\N	\N	\N	\N	\N	armor/falcon-ballistic-vest.yml	\N	armor/mp-enforcer-pants.yml	armor/xm50-ultralight-boots.yml	armor/xm-scorpio-tactical-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/defiler-scarh.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:06:24.886311	2022-02-01 03:06:24.886311
+134	orthos-menace	505	\N	\N	\N	\N	\N	armor/raven-ballistic-vest.yml	\N	armor/viper-leg-guards.yml	armor/xm50-ultralight-boots.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/orthos-scarh.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 16:49:10.325195	2022-02-01 16:49:10.325195
 \.
 
 
@@ -3891,8 +4544,6 @@ COPY public.mob_equipment (id, meq_profile_name, meq_vnum, meq_light, meq_finger
 --
 
 COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, created_at, updated_at) FROM stdin;
-38	112	112	2021-09-06 02:04:34.330576	2021-09-06 02:04:34.330576
-39	113	113	2021-09-06 02:04:34.385077	2021-09-06 02:04:34.385077
 18	600	7	2021-09-04 04:23:26.981479	2021-09-04 04:23:26.981479
 19	601	8	2021-09-04 04:23:26.988068	2021-09-04 04:23:26.988068
 20	602	9	2021-09-04 04:23:26.993713	2021-09-04 04:23:26.993713
@@ -3902,16 +4553,19 @@ COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, creat
 24	500	4	2021-09-04 04:23:27.068704	2021-09-04 04:23:27.068704
 25	501	5	2021-09-04 04:23:27.074152	2021-09-04 04:23:27.074152
 26	502	15	2021-09-04 04:23:27.079717	2021-09-04 04:23:27.079717
-10	100	10	2021-09-04 04:12:22.385266	2021-09-04 04:12:22.385266
-11	101	11	2021-09-04 04:12:22.396441	2021-09-04 04:12:22.396441
-27	102	12	2021-09-04 04:23:27.155622	2021-09-04 04:23:27.155622
-13	103	13	2021-09-04 04:12:22.417965	2021-09-04 04:12:22.417965
-28	104	12	2021-09-04 04:23:27.177327	2021-09-04 04:23:27.177327
-29	105	13	2021-09-04 04:23:27.182288	2021-09-04 04:23:27.182288
 30	109	109	2021-09-04 04:23:27.352124	2021-09-04 04:23:27.352124
 31	110	110	2021-09-04 04:23:27.364886	2021-09-04 04:23:27.364886
-34	106	14	2021-09-06 01:20:27.887755	2021-09-06 01:20:27.887755
-35	107	107	2021-09-06 01:20:27.896475	2021-09-06 01:20:27.896475
+10	100	100	2021-09-04 04:12:22.385266	2021-09-04 04:12:22.385266
+11	101	101	2021-09-04 04:12:22.396441	2021-09-04 04:12:22.396441
+27	102	102	2021-09-04 04:23:27.155622	2021-09-04 04:23:27.155622
+13	103	103	2021-09-04 04:12:22.417965	2021-09-04 04:12:22.417965
+28	104	104	2021-09-04 04:23:27.177327	2021-09-04 04:23:27.177327
+29	105	105	2021-09-04 04:23:27.182288	2021-09-04 04:23:27.182288
+34	106	106	2021-09-06 01:20:27.887755	2021-09-06 01:20:27.887755
+45	666	666	2022-02-01 03:06:24.986389	2022-02-01 03:06:24.986389
+46	503	503	2022-02-01 16:49:10.091732	2022-02-01 16:49:10.091732
+47	504	504	2022-02-01 16:49:10.233468	2022-02-01 16:49:10.233468
+48	505	505	2022-02-01 16:49:10.341863	2022-02-01 16:49:10.341863
 \.
 
 
@@ -4005,51 +4659,24 @@ COPY public.mob_roam (id, mob_virtual_number, room_virtual_number, profile_name)
 716	500	141	mp-enforcer
 717	500	140	mp-enforcer
 718	500	139	mp-enforcer
-719	100	392	car-thief
-720	100	393	car-thief
-721	100	394	car-thief
-722	100	395	car-thief
-723	100	396	car-thief
-724	100	395	car-thief
-725	100	394	car-thief
-726	100	393	car-thief
-727	100	392	car-thief
-728	100	393	car-thief
-729	100	394	car-thief
-730	100	395	car-thief
-731	100	396	car-thief
-732	100	395	car-thief
-733	100	394	car-thief
-734	100	393	car-thief
-735	100	392	car-thief
-736	102	291	kidnapper
-737	102	292	kidnapper
-738	102	293	kidnapper
-739	102	294	kidnapper
-740	102	295	kidnapper
-741	102	329	kidnapper
-742	102	330	kidnapper
-743	102	331	kidnapper
-744	102	330	kidnapper
-745	102	329	kidnapper
-746	102	295	kidnapper
-747	102	296	kidnapper
-748	102	297	kidnapper
-749	102	298	kidnapper
-750	102	299	kidnapper
-751	102	300	kidnapper
-752	102	301	kidnapper
-753	102	316	kidnapper
-754	102	317	kidnapper
-755	102	322	kidnapper
-756	102	323	kidnapper
-757	102	324	kidnapper
-758	102	323	kidnapper
-759	102	322	kidnapper
-760	102	317	kidnapper
-761	102	316	kidnapper
-762	102	301	kidnapper
-763	102	302	kidnapper
+764	102	130	kidnapper
+765	102	131	kidnapper
+766	102	231	kidnapper
+767	102	230	kidnapper
+768	102	229	kidnapper
+769	102	228	kidnapper
+770	102	229	kidnapper
+771	102	230	kidnapper
+772	102	231	kidnapper
+773	102	131	kidnapper
+774	102	138	kidnapper
+775	102	139	kidnapper
+776	102	138	kidnapper
+777	102	131	kidnapper
+778	102	231	kidnapper
+779	102	230	kidnapper
+780	102	229	kidnapper
+781	102	228	kidnapper
 \.
 
 
@@ -4068,8 +4695,6 @@ COPY public.mob_zone (id, zone_virtual_number, mob_virtual_number, room_virtual_
 COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description, mob_long_description, mob_description, mob_action_bitvector, mob_affection_bitvector, mob_ability_strength, mob_ability_strength_add, mob_ability_intelligence, mob_ability_wisdom, mob_ability_dexterity, mob_ability_constitution, mob_ability_charisma, mob_alignment, mob_attack_type, mob_level, mob_hitroll, mob_armor, mob_max_hitpoints, mob_max_mana, mob_max_move, mob_gold, mob_exp, mob_load_position, mob_default_position, mob_sex, mob_hitpoints, mob_mana, mob_move, mob_damnodice, mob_damsizedice, mob_damroll, mob_weight, mob_height, mob_class, mob_special_extended_type, mob_targets, mob_roam_pattern, mob_ability_electronics, mob_ability_armor, mob_ability_marksmanship, mob_ability_sniping, mob_ability_demolitions, mob_ability_chemistry, mob_ability_weapon_handling, mob_ability_strategy, mob_ability_medical) FROM stdin;
 11	410	Corporal James Taggart	Corporal James Tagger short description	Corporal James Tagger long description	Corporal James Tagger description	0	0	10	10	10	10	10	10	10	0	0	150	150	150	-1	-1	-1	0	50	0	0	0	-1	-1	-1	50	50	50	80	9	0	0	\N	\N	1	1	1	1	1	1	1	1	1
 1	1	chef  employee	A pissed looking Los  employee	A pissed looking Los  employee	This particular employee looks like he just got out of a federal penitentiary. He's most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.	8	0	25	0	25	0	25	0	25	0	0	0	0	0	250	250	250	5000	50	8	8	0	250	250	250	25	0	0	50	15	0	14	\N	\N	1	1	1	1	1	1	1	1	1
-28	112	An infected drone	An infected drone	An infected drone	An infected drone looks for something to infect...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	413	100	82	90	50	0	0	1	413	100	82	1	8	10	10	5	0	15	\N	\N	2	3	3	2	3	1	3	2	2
-29	113	An adapted drone	An adapted drone	An adapted drone	An adapted drone looks for something to infect...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	350	100	82	48	50	0	0	1	350	100	82	2	12	18	10	5	0	15	\N	\N	4	5	5	4	7	0	8	3	4
 12	600	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	30500	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
 13	601	A volunteer patient	A volunteer patient	A volunteer patient	A volunteer patient stands here with dazed thousand mile stare.	8	0	185	183	10	0	184	0	1	0	0	15	0	0	880	25	240	0	3500	0	0	1	880	25	240	8	90	115	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
 14	602	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	8	0	185	183	182	0	184	0	85	0	0	80	0	0	8580	815	240	85000	8500	0	0	2	8580	815	240	-72	-70	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
@@ -4079,16 +4704,30 @@ COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description,
 18	500	A Military Police enforcer	A Military Police enforcer	A Military Police enforcer	A fit military police enforcer. He looks armed.	8	0	25	23	22	0	24	0	10	0	0	10	0	0	250	45	110	50	7050	0	0	1	250	45	110	10	6	20	10	5	0	10	\N	\N	10	10	10	10	10	10	10	10	10
 19	501	A Military Police shotgunner	A Military Police shotgunner	A Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	40	0	0	5550	565	510	150	7050	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10
 20	502	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	8	0	355	333	132	0	334	0	10	0	0	40	0	0	109550	1565	810	109150	20050	0	0	1	109550	1565	810	115	48	340	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10
+24	109	A retail associate	A retail associate	A retail associate	A retail associate tirelessly stocks shelves...	8	0	15	1	2	0	4	0	4	0	0	3	0	0	120	50	60	85	580	0	0	1	120	50	60	2	5	2	10	5	0	19	\N	\N	2	1	1	1	1	0	1	2	1
+25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	580	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2
 2	100	A rugged car thief	A rugged car thief	A rugged car thief	A car thief stalking the area. He is armed.	8	0	18	13	2	0	34	0	0	0	0	10	0	0	350	45	610	750	250	0	0	1	350	45	610	30	6	20	10	5	0	14	\N	\N	15	5	15	8	0	0	18	0	0
 3	101	A petty thief	A petty thief	A petty thief	A petty thief is stalking the area.	8	0	4	4	2	0	4	0	0	0	0	5	0	0	100	15	110	750	250	0	0	1	100	15	110	2	6	10	4	5	0	14	\N	\N	5	4	5	2	0	0	4	0	0
-21	102	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	8	0	9	6	2	0	7	0	0	0	0	8	0	0	450	25	110	1123	250	0	0	1	450	25	110	3	25	20	4	5	0	15	\N	\N	0	10	8	3	0	0	5	0	0
+21	102	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	8	0	9	6	2	0	7	0	0	0	0	8	0	0	1450	25	510	1123	250	0	0	1	1450	25	510	10	25	20	4	5	0	15	\N	\N	0	10	8	3	0	0	5	0	0
 4	103	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict is manically patrolling the area.	8	0	13	6	2	0	13	0	0	0	0	13	0	0	650	25	310	4123	250	0	0	1	650	25	310	8	25	30	4	5	0	16	\N	\N	0	4	1	1	2	0	8	0	9
 22	104	A shoplifter	A shoplifter	A shoplifter	A shoplifter is stalking the area.	8	0	1	1	1	0	1	0	0	0	0	1	0	0	10	15	60	10	250	0	0	1	10	15	60	1	3	1	4	5	0	15	\N	\N	1	0	1	0	0	0	1	0	0
 23	105	A crackhead	A crackhead	A crackhead	A crackhead is stalking the area.	8	0	1	1	1	0	3	0	0	0	0	2	0	0	35	15	60	10	250	0	0	1	35	15	60	2	6	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0
-24	109	A retail associate	A retail associate	A retail associate	A retail associate tirelessly stocks shelves...	8	0	15	1	2	0	4	0	4	0	0	3	0	0	120	50	60	85	580	0	0	1	120	50	60	2	5	2	10	5	0	19	\N	\N	2	1	1	1	1	0	1	2	1
-25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	580	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2
 26	106	An armed security guard	An armed security guard	An armed security guard	An armed security guard watches you closely.	8	0	28	23	25	0	54	0	0	0	0	20	0	0	950	245	610	2150	20044	0	0	1	950	245	610	90	18	60	10	5	0	18	\N	\N	25	30	35	20	30	10	38	25	20
 27	107	A bank teller	A bank teller	A bank teller	A bank teller is obediently serving you	8	0	1	1	1	0	3	0	30	0	0	2	0	0	15	15	20	450	580	0	0	2	15	15	20	1	3	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0
+28	112	An infected drone	An infected drone	An infected drone	An infected drone lumbers hugrily towards you...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	493	100	82	95	100	0	0	1	493	100	82	1	8	10	10	5	0	15	\N	Market Street	2	3	3	2	3	1	3	2	2
+29	113	An adapted drone	An adapted drone 	An adapted drone 	An adapted drone looks for something to infect...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	350	100	82	88	100	0	0	1	350	100	82	2	12	18	10	5	0	15	\N	Market Street	4	5	5	4	7	0	8	3	4
+30	666	{red}DEFILER{/red}	{red}DEFILER{/red}	{red}DEFILER{/red}	{red}DEFILER{/red}	8	0	22	13	12	0	14	0	1	0	0	20	0	0	3820	830	160	42080	8050	0	0	1	3820	830	160	16	16	12	10	5	0	20	\N	Butcher	12	20	13	12	11	10	11	18	1
+31	503	An Orthos guard	An Orthos guard	An Orthos guard	An Orthos guard regards you indifferently.	8	0	55	23	52	0	54	0	20	0	0	20	0	0	5850	245	110	250	8950	0	0	1	5850	245	110	20	16	30	10	5	0	21	\N	Psi-Tech	20	20	20	20	20	20	20	20	20
+32	504	An Orthos sniper	An Orthos sniper	An Orthos sniper	An Orthos sniper lies here... waiting..	8	0	35	33	32	0	34	0	10	0	0	20	0	0	6550	865	510	950	9050	0	0	1	6550	865	510	25	28	30	10	6	0	21	\N	Psi-Tech	80	10	110	90	10	10	90	10	10
+33	505	An Orthos menace	An Orthos menace	An Orthos menace	An Orthos menace	8	0	55	33	32	0	34	0	0	0	0	20	0	0	8550	1565	910	2150	5050	0	0	1	8050	1565	910	115	48	340	10	6	0	21	\N	Psi-Tech	80	50	40	30	80	0	40	20	0
+\.
+
+
+--
+-- Data for Name: muted; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.muted (id, m_ip_address, m_username, m_hostname, m_enforce, created_at) FROM stdin;
 \.
 
 
@@ -4186,7 +4825,7 @@ COPY public.object_weapon (id, obj_fk_id, obj_ammo_max, obj_ammo_type, obj_coold
 
 COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences, player_practice_sessions) FROM stdin;
 110	$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.	0	0	sniper	1	1	0	3	0	9	9	12	15	9	0	0	241	436	729	48	561	M	241	436	729	52	52	52	9	1	52	0	0	PC	0	3	52	0	2021-09-18 01:42:45.163952	0	2021-09-18 01:42:45.163952	8388736	7
-1	foKntnEF3KSXA	0	0	far	1	1	0	231	0	693	519	924	1155	866	4710	0	65000	1212	65000	6752	8740	M	65000	1212	65000	53	53	53	9	1	53	0	0	PC	4710	7	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	13
+1	foKntnEF3KSXA	0	0	far	1	1	0	231	0	693	519	924	1155	866	4710	0	65000	1212	65000	6753	8740	M	65000	1212	65000	53	53	53	9	1	53	0	0	PC	4710	7	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	13
 \.
 
 
@@ -4243,112 +4882,6 @@ COPY public.player_flags (id, player_id, chunk_index, flag_value) FROM stdin;
 --
 
 COPY public.player_object (id, po_player_id, po_type, po_type_id, po_yaml, po_load_type, po_wear_position, po_in_inventory, po_quantity, po_ammunition) FROM stdin;
-263	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-264	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-274	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-275	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-283	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-289	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-295	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-298	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-301	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-305	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-306	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-323	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-324	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-325	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-328	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-332	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-160	1	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	36
-351	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-276	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-280	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-284	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-293	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-296	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-299	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-302	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-261	1	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	36
-326	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-329	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-161	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-162	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-352	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-163	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-164	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-165	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-166	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-167	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-168	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-169	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-170	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-171	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-172	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-173	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-174	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-175	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-176	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-177	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-178	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-114	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-115	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-116	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-153	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-154	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-155	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-179	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-180	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-181	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-182	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-183	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-184	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-185	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-186	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-187	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-188	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-189	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-252	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-253	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-254	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-255	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-256	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-257	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-258	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-259	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-260	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-245	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-246	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-247	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-248	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-249	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-250	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-251	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-262	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-282	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-288	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-294	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-297	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-300	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-303	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-304	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-322	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-327	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-330	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-331	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-350	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-367	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-368	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-369	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-375	110	7	\N	titan-elbow-guards.yml	2	26	0	1	\N
-376	110	7	\N	titan-gauntlets.yml	2	10	0	1	\N
-377	110	7	\N	titan-shin-guards.yml	2	7	0	1	\N
-378	110	7	\N	basic-boots.yml	2	8	0	1	\N
-379	110	7	\N	basic-ballistic-vest.yml	2	5	0	1	\N
-381	110	1	\N	psg1.yml	2	16	0	1	7
-382	110	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	50
-383	110	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	50
-384	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
-385	1	1	\N	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	3	16	0	1	7
 \.
 
 
@@ -4389,7 +4922,14 @@ COPY public.player_skill_usage (id, ps_player_id, ps_skill_id, ps_usage_count, c
 --
 
 COPY public.rifle_attachment (id, rifle_player_id, rifle_data, rifle_position, created_at, updated_at) FROM stdin;
-4890	1	psg1.yml{barrel:anti-matter-barrel.yml,magazine:depleted-uranium-magazine.yml,sight:four-x-sight.yml,stock:printer-stock.yml,under_barrel:taser-underbarrel.yml}#level:30	primary	2021-09-18 04:04:21.874679	2021-09-18 04:04:21.874679
+\.
+
+
+--
+-- Data for Name: rifle_attribute_limits; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.rifle_attribute_limits (id, ral_type, ral_attribute, ral_low, ral_high, ral_overpowered, ral_start_level, ral_end_level, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -4525,6 +5065,7 @@ COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1
 88	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	140	2	2	0	53	7	31	3	10	1	17	5	20	1	2	2	1	2	2	0	1	3	2	2	2	0	0	3	0	3	8	3	2	0	0	0	2021-09-14 23:05:31.476199	2021-09-14 23:05:31.476199
 89	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	1	16	16	19	3	82	8	60	1	4.29999999999999982	17	10	1818	2	2	29	2	12	0	0	2	4	4	3	1	1	2	4	2	9	2	0	0	10	2	0	2	0	0	2021-09-14 23:08:43.094794	2021-09-14 23:08:43.094794
 90	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	2	SHOTGUN	7	46	2	34	1	80	0	53	6	4.29999999999999982	5	10	2	10	7	811	0	0	0	0	0	0	0	0	0	4	4	9	2	4	0	0	2	0	0	2	2	1	0	2021-09-14 23:18:08.304107	2021-09-14 23:18:08.304107
+114	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	100	SHOTGUN	70	2	2	34	1	80	2	1	2	2	1	10	1	10	8	20	2	1	2	2	1	2	1	2	0	0	0	1	0	0	2	0	1	1	1	1	1	1	0	2021-09-16 23:36:13.402217	2021-09-16 23:36:13.402217
 91	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	2	6	2	1	146	2	2	1	4	4	2	8	2	5	20	1	2	2	8	6	2	1	12	0	1	3	0	1	0	1	0	2	0	1	1	1	15	0	2021-09-14 23:18:30.652122	2021-09-14 23:18:30.652122
 92	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	1	6	2	34	1	118	0	53	2	1	2	10	1	12	3	20	1	0	1	1	1	1	1	1	1	1	0	0	0	1	0	0	0	0	1	0	1	0	0	2021-09-14 23:35:49.479445	2021-09-14 23:35:49.479445
 93	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	75	PISTOL	38	1	1	5	1	1	0	1	1	0	3	93	40	3	3	23	1	0	1	1	1	1	0	0	1	1	1	1	0	1	1	0	0	0	1	1	1	1	0	2021-09-14 23:35:59.910515	2021-09-14 23:35:59.910515
@@ -4548,7 +5089,6 @@ COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1
 111	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	1	2	43	1	80	0	1	2	1	2	10	1323	12	5	38	0	0	1	1	1	1	1	1	1	0	0	1	1	1	1	0	1	1	0	1	1	1	0	2021-09-16 23:27:45.188054	2021-09-16 23:27:45.188054
 112	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	20.5	15	1	5	1	1	0	1	1	0	3	80	40	2	3	28	1	1	1	1	1	0	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-16 23:35:43.931376	2021-09-16 23:35:43.931376
 113	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	206	PISTOL	29	2	1	5	1	20	0	33	2	1	1	1	40	2	3	1	0	0	1	1	2	1	1	1	1	1	0	0	1	4	2	0	1	0	1	1	1	1	0	2021-09-16 23:35:57.520318	2021-09-16 23:35:57.520318
-114	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	100	SHOTGUN	70	2	2	34	1	80	2	1	2	2	1	10	1	10	8	20	2	1	2	2	1	2	1	2	0	0	0	1	0	0	2	0	1	1	1	1	1	1	0	2021-09-16 23:36:13.402217	2021-09-16 23:36:13.402217
 116	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	1	ASSAULT_RIFLE	2	2	2	1	4	45	2	4	3	14	5	4	2	2	1	10	3	1	0	1	10	4	3	0	2	2	0	7	0	1	0	0	0	2	4	1	0	3	0	2021-09-16 23:36:44.521348	2021-09-16 23:36:44.521348
 118	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	3	6	2	34	1	1	2	1	1	4.29999999999999982	2	10	1	10	3	127	2	3	3	2	0	1	2	8	0	1	1	1	0	0	6	0	2	1	1	0	2	3	0	2021-09-16 23:37:05.772357	2021-09-16 23:37:05.772357
 119	90	10	0	0	90	40	9	0	COMMON	m3.yml	SHOTGUN	3	GBNT-3	M3	28	2	SHOTGUN	70	6	2	1	1	155	1	3	3	4.29999999999999982	2	34	918	74	13	67	4	4	0	15	0	2	0	5	6	0	1	1	1	1	1	0	2	2	1	4	4	2	0	2021-09-16 23:37:18.426344	2021-09-16 23:37:18.426344
@@ -4624,692 +5164,781 @@ COPY public.rifle_placements (id, ip_room_vnum, ip_container_selector, ip_rifle_
 -- Data for Name: room; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyword, ex_description, light, room_flag, nickname) FROM stdin;
-2	131	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	cofobcenter
-3	132	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
-4	133	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
-5	134	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
-6	135	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
-7	136	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
-8	137	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
-9	138	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
-10	139	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N
-11	140	1	21	{blu}C.O.F.O.B:{/blu} - Southeast Corner	The hallway reaches north and south from here. A reduced temperature is like the result of the industrial grade internal air cooling system. It isn't much, but it beats the outside desert climate. The promise of coffee entices you, but you can't tell which direction it's coming from. \r\n	\N	\N	1	0	\N
-12	141	1	21	{blu}C.O.F.O.B:{/blu} - Armory Entrance	A cool draft moves through the bottom crack of the door to the Armory Entrance to the East.It seems the quality of air drastically differs depending on the people in charge of each department. The Sign above the door says in bold letters "Armory".\r\n	\N	\N	1	0	cofob-armory-entrance
-13	142	1	21	{blu}C.O.F.O.B:{/blu} - Armory	As you push through to the East, you notice a few recruits putting on standard issue gear. They ignore you as you take a look around. To the East is the buy station where you can make your purchases.\r\n	\N	\N	1	0	\N
-14	143	1	21	{blu}C.O.F.O.B:{/blu} - Armory Buy Station	You see an armor locker with standard issue equipment. Behind the counter is a {gld}list{/gld} of all the various items for sell. You can spend {grn}MP{/grn} (Mission Points) here to upgrade your loadout. To buy something, simply type {grn}"Buy ID"{/grn} where ID is the number next to the item you want in the output of the list command.\r\n	\N	\N	1	0	\N
-15	144	1	21	{blu}C.O.F.O.B:{/blu} - Armory Storage Room North	Standard issue armor and defensive utilities line the walls; none of which you can take as they are behind metal cages. There is, however, an Armor locker here with standard issue gear for anyone to take. \r\n	\N	\N	1	0	\N
-16	145	1	21	{blu}C.O.F.O.B:{/blu} - Armory Storage Room South	You enter the storage room and immediately notice the strong scent of sand, grime, and gasoline. A few bits of ammunition are strewn across the floor haphazardly. The Armory personnell either recently dug through the piles of ammo crates, or nobody bothered to clean this mess up. There seems to be a computer terminal on the East wall.\r\n	\N	\N	1	0	\N
-17	146	1	21	{blu}C.O.F.O.B:{/blu} - Armory - Secluded Room	A musty room with several freshly smoked cigars laying inside a deep ash tray the size of your fist. Someone was loading a Mossberg shotgun and haphazardly left it laying upon the couch as if it were a visitor. The T.V. appears to still be warm. Whoever was here is likely coming back soon. You have a feeling whoever was here will be back shortly.\r\n	\N	\N	1	0	\N
-18	147	1	21	{blu}C.O.F.O.B:{/blu} - Armory - Secluded Room - Weapons Cache	@FILL_ME@\r\n	\N	\N	1	0	\N
-19	148	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N
-21	150	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N
-22	151	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N
-24	153	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N
-25	154	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-26	155	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-27	156	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-basement-2
-28	157	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-29	158	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-30	159	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-31	160	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-32	161	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-33	162	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-34	163	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-35	164	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-36	165	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-37	166	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-38	167	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-39	168	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-40	169	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-basement-2
-41	170	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-42	171	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N
-43	172	1	21	{blu}C.O.F.O.B:{/blu} - Basement 2 - Breach charges	@FILL_ME@\r\n	\N	\N	1	0	\N
-44	173	1	21	{blu}C.O.F.O.B:{/blu} - Basement 2 - Breach charges	@FILL_ME@\r\n	\N	\N	1	0	\N
-45	174	1	0	name	description	\N	\N	1	0	\N
-46	175	1	0	name	description	\N	\N	1	0	\N
-47	176	1	0	name	description	\N	\N	1	0	\N
-49	178	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
-50	179	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
-51	180	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1A	@FILL_ME@\r\n	\N	\N	1	0	\N
-52	181	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1A	@FILL_ME@\r\n	\N	\N	1	0	\N
-53	182	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1B	@FILL_ME@\r\n	\N	\N	1	0	\N
-54	183	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1B	@FILL_ME@\r\n	\N	\N	1	0	\N
-55	184	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
-56	185	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
-57	186	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2A	@FILL_ME@\r\n	\N	\N	1	0	\N
-58	187	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2A	@FILL_ME@\r\n	\N	\N	1	0	\N
-59	188	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2B	@FILL_ME@\r\n	\N	\N	1	0	\N
-60	189	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2B	@FILL_ME@\r\n	\N	\N	1	0	\N
-61	190	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
-62	191	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N
-64	193	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-65	194	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-66	195	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-67	196	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-68	197	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-69	198	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-71	200	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-72	201	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-73	202	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	cofob-mess-hall-upstairs
-74	203	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-75	204	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-76	205	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-77	206	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-78	207	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	cofob-stairs-A
-79	208	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-80	209	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-81	210	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-82	211	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-83	212	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-85	214	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-86	215	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-87	216	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-125	254	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-126	255	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-127	256	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-88	217	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-89	218	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-90	219	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-91	220	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-92	221	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-93	222	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-94	223	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-95	224	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Atop the stairs	The floor deviates from the other rooms in that it is made up of a reinforced steel grating. The choice for such a floor remains a mystery. The door to the west leads to the stairs that will take you to the underground portion of the base.\r\n	\N	\N	1	0	cofob-west-atop-stairs
-96	225	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Atop the stairs	The floor deviates from the other rooms in that it is made up of a reinforced steel grating. The choice for such a floor remains a mystery. The door to the west leads to the stairs that will take you to the underground portion of the base.\r\n	\N	\N	1	0	\N
-97	226	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-98	227	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-100	229	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-101	230	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-102	231	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	cofob-bind-to-center
-103	232	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N
-104	233	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N
-105	234	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N
-106	235	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N
-107	236	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-108	237	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	cofob-secondfloor-center
-109	238	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-110	239	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-111	240	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-112	241	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-113	242	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-114	243	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
-115	244	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
-116	245	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
-117	246	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
-118	247	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
-119	248	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
-120	249	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
-121	250	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
-122	251	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
-123	252	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N
-124	253	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-130	259	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
-131	260	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
-132	261	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
-134	263	1	0	{blu}C.O.F.O.B:{/blu} - Server Room 1A	It's noisy and loud in here. The rack mounted servers are fervently whirring under the immense workloads. The ceiling is a grate with a large fan behind it. A complex looking locking mechanism protects rack mounted servers here. \r\n	\N	\N	1	0	\N
-135	264	1	0	{blu}C.O.F.O.B:{/blu} - Server Room 1B	Wall to wall rack mounted servers take up the entirety of this room. There is almost nowhere to stand. A haphazard array of ethernet cables snake chaotically to and from each server. Maintaining this must be a headache. \r\n	\N	\N	1	0	\N
-136	265	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-137	266	1	0	{blu}C.O.F.O.B:{/blu} - Gear room	A huge weapons rack is attached to the wall here. The rack contains rifles, pistols, ammunition, explosives, and breach charges.\r\n	\N	\N	1	0	cofob-gear-room
-138	267	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
-139	268	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
-140	269	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
-141	270	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
-142	271	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
-143	272	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
-144	273	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N
-145	274	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Eastern DMZ corridor	Dirt stretches to the east towards a heavy containment door. Behind that door must be where you can leave the building. The corridor is dimly lit. The air is dry and smells of a combination of sweat and gasoline for some reason.\r\n	\N	\N	1	0	\N
-146	275	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Eastern DMZ corridor	Dirt stretches to the east towards a heavy containment door. Behind that door must be where you can leave the building. The corridor is dimly lit. The air is dry and smells of a combination of sweat and gasoline for some reason.\r\n	\N	\N	1	0	\N
-147	276	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Eastern DMZ corridor	Dirt stretches to the east towards a heavy containment door. Behind that door must be where you can leave the building. The corridor is dimly lit. The air is dry and smells of a combination of sweat and gasoline for some reason.\r\n	\N	\N	1	0	\N
-148	277	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Fenced off DMZ corridor	Beneath the floor here is an entrance to an underground tunnel. The only problem is that you can't seem to get it to move. To the east is the door to the outside world.A falcon engraving is above the door frame to the east.\r\n	\N	\N	1	0	\N
-149	278	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	abbotstart
-151	280	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-152	281	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-153	282	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-154	283	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-155	284	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-156	285	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-157	286	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-237	365	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N
-158	287	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-159	288	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-160	289	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	abbot-market-east-divergence
-161	290	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-162	291	1	0	Market Apartments - East entrance	An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You'd be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.\r\n	\N	\N	1	0	\N
-163	292	1	0	Market Apartments - East entrance	An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You'd be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.\r\n	\N	\N	1	0	\N
-164	293	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
-165	294	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
-166	295	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
-167	296	1	0	Market Apartments - Building 3	You see a two story apartment building with 8 units. Each apartment is a corner unit, but neither home could possibly be more than a studio unit. A few of the doors are closed, which you find peculiar. There can't possibly be anyone living there. Right?\r\n	\N	\N	1	0	\N
-168	297	1	0	Market Apartments - Stairs	Before you lie the stairs that will help you reach the second floor of building 3. The handrails are extremely hot to the touch due to baking here under the steady gaze of the sun over your shoulder.\r\n	\N	\N	1	0	\N
-169	298	1	0	Market Apartments - Stairs	Before you lie the stairs that will help you reach the second floor of building 3. The handrails are extremely hot to the touch due to baking here under the steady gaze of the sun over your shoulder.\r\n	\N	\N	1	0	\N
-171	300	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-172	301	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-173	302	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-174	303	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-175	304	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-176	305	1	0	Market Apartments - Building 3 - Unit 301	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
-177	306	1	0	Market Apartments - Building 3 - Unit 301	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
-178	307	1	0	Market Apartments - Building 3 - Unit 301 - Master Bedroom	A D.I.Y. home stove sits in the middle of the room. Aside from that, there's nothing to look at. The carpet has been pulled up in places. The walls are covered with massive holes and random burn marks.\r\n	\N	\N	1	0	\N
-179	308	1	0	Market Apartments - Building 3 - Unit 301 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N
-180	309	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-181	310	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-182	311	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-184	313	1	0	Market Apartments - Building 3 - Unit 303	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
-185	314	1	0	Market Apartments - Building 3 - Unit 303 - Master Bedroom	undefined\r\n	\N	\N	1	0	\N
-186	315	1	0	Market Apartments - Building 3 - Unit 303 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N
-187	316	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-188	317	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-189	318	1	0	Market Apartments - Building 3 - Unit 305	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
-190	319	1	0	Market Apartments - Building 3 - Unit 305	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
-191	320	1	0	Market Apartments - Building 3 - Unit 305 - Master Bedroom	undefined\r\n	\N	\N	1	0	\N
-192	321	1	0	Market Apartments - Building 3 - Unit 305 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N
-193	322	1	0	name	description	\N	\N	1	0	\N
-194	323	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-197	326	1	0	Market Apartments - Building 3 - Unit 307	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
-198	327	1	0	Market Apartments - Building 3 - Unit 307 - Master Bedroom	undefined\r\n	\N	\N	1	0	\N
-199	328	1	0	Market Apartments - Building 3 - Unit 307 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N
-200	329	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
-201	330	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
-202	331	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N
-203	332	1	0	Market Apartments - Building 2	Building 1 is a two story building with 8 units with the added addition of an exercise room and what looks like the property manager's office. Both the exercise room and the office look surprisingly intact. You notice lots of fresh footprints to and from building 1 which disappear into the destruction of building 2. Despite the abandoned nature of the complex as a whole, someone is still finding use for these units.\r\n	\N	\N	1	0	\N
-204	333	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N
-205	334	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N
-206	335	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N
-207	336	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N
-208	337	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N
-209	338	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Descending the stairs	fill me\r\n	\N	\N	1	0	\N
-210	339	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Descending the stairs	fill me\r\n	\N	\N	1	0	\N
-211	340	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
-212	341	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
-213	342	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
-214	343	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
-215	344	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
-216	345	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
-217	346	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N
-218	347	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-219	348	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-20	128	1	18	MP5 repo	Feeling over burdened by money?	\N	\N	0	16	\N
-1	130	1	21	{blu}COBALT:{/blu} {grn}Forward Operating Base{/grn} - Main Hallway	COBALT Air Force base. Ground zero for basic training. All initiates must follow rules and guidelines in your New Recruit handbook. Proceed {grn}North{/grn} recruit!\r\n	\N	\N	1	0	\N
-232	149	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N
-23	152	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N
-48	177	1	21	{blu}C.O.F.O.B:{/blu} - Basement 2 - Waypoint Avenue North Exit	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-waypoint-avenue-exit
-70	199	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Exit	Before you is a sturdy metal door that prevents the outside elements from making their way inside. The door simply says {yel}Eastern Exit{/yel}. The air is less cool as the corridor leading to the east lacks the sufficient air flow. There are no ventilation shafts leading to the east, but you can see through the tempered glass window on the door that a few military police are gaurding the exit to the city outside. \r\n	\N	\N	1	0	eastexit
-84	213	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-99	228	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N
-128	257	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N
-221	350	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-222	351	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-223	352	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-224	353	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-225	354	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-226	355	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-227	356	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-228	357	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-229	358	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-230	359	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-231	360	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-129	258	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N
-133	262	1	0	{blu}C.O.F.O.B:{/blu} - Commons area	A comfy looking couch and recliner welcome you to the engineering commons area. Three television screens mounted on the west wall display various graphs and statistics. A ping pong table is in the center of the room. Two large refridgerators are humming quietly in the corner. The north wall consists of large one-way tinted windows that overlook the training fields below. To the east is the entrance to server room 1B.\r\n	\N	\N	1	0	cofob-engineering-commons
-150	279	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N
-170	299	1	0	Market Apartments - Stairs	Before you lie the stairs that will help you reach the second floor of building 3. The handrails are extremely hot to the touch due to baking here under the steady gaze of the sun over your shoulder.\r\n	\N	\N	1	0	\N
-183	312	1	0	Market Apartments - Building 3 - Unit 303	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
-195	324	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N
-196	325	1	0	Market Apartments - Building 3 - Unit 307	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N
-220	349	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N
-233	361	1	0	{blu}Crenshaw{/blu} Highway overpass	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	crenshaw-overpass-start
-234	362	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-235	363	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-236	364	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-432	560	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-238	366	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N
-239	367	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N
-240	368	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N
-241	369	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N
-242	370	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N
-243	371	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-244	372	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-340	468	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	campo-conrad-drive-intersection
-245	373	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-246	374	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-247	375	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-248	376	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-249	377	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-250	378	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-251	379	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-252	380	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-253	381	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-254	382	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-255	383	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-433	561	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-256	384	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-257	385	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-258	386	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-259	387	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-260	388	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-261	389	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-262	390	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-263	391	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-264	392	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-265	393	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-266	394	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-267	395	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-268	396	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-269	397	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-270	398	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-271	399	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-272	400	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	crenshaw-northern-shipping-entrance
-273	401	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N
-274	402	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N
-275	403	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	shipyard-row-a
-276	404	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-277	405	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-278	406	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-279	407	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-280	408	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-281	409	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-282	410	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-283	411	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-284	412	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-285	413	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-286	414	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-287	415	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N
-288	416	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-289	417	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-423	551	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
-290	418	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-291	419	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-292	420	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-293	421	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-294	422	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-295	423	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-441	569	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
-296	424	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-297	425	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-298	426	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-299	427	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-300	428	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-301	429	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-302	430	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-303	431	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-304	432	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-305	433	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-424	552	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
-306	434	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-307	435	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-308	436	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-309	437	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-310	438	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-311	439	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-312	440	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-313	441	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-314	442	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-315	443	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-316	444	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-317	445	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N
-318	446	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N
-319	447	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N
-320	448	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N
-321	449	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N
-322	450	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
-323	451	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
-324	452	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
-325	453	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
-326	454	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
-327	455	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N
-328	456	1	0	{blu}La Mesa{/blu} Kenwood Drive Intersection	You can take a left or right and you would be on Kenwood Drive. Go straight ahead and you can get back on Highway 94 East.\r\n	\N	\N	1	0	kenwood-drive-intersection
-329	457	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
-330	458	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
-331	459	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
-332	460	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
-333	461	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
-334	462	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
-335	463	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N
-336	464	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	kenwood-drive-campo-road
-337	465	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N
-338	466	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N
-339	467	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N
-341	469	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-342	470	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-343	471	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-344	472	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-345	473	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-346	474	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-347	475	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-348	476	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-425	553	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	saint-vale-altar
-349	477	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-350	478	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-351	479	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-352	480	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-353	481	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-354	482	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-355	483	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-356	484	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-357	485	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-358	486	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-359	487	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-360	488	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-361	489	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-362	490	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-426	554	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-363	491	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-364	492	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N
-365	493	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	campo-back-alley-church-entrance
-366	494	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	\N
-367	495	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	\N
-368	496	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	saint-vale-nw-parking-lot
-369	497	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-370	498	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-371	499	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-372	500	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-373	501	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-374	502	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-375	503	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-376	504	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-427	555	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-428	556	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-377	505	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-378	506	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-379	507	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-380	508	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	saint-vale-west-entrance
-381	509	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-382	510	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-383	511	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-384	512	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-385	513	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-386	514	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-387	515	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-388	516	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-389	517	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-429	557	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-430	558	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-390	518	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-391	519	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-392	520	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-393	521	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-394	522	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-395	523	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-396	524	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N
-442	570	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
-397	525	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
-398	526	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
-399	527	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
-400	528	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
-401	529	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
-402	530	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N
-431	559	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-403	531	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
-404	532	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
-405	533	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
-406	534	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	saint-vale-rear-east
-407	535	1	0	{blu}Saint Vale Church{/blu} Inside - Bathroom Hall	Oddly enough, this hallway is not air conditioned. The male bathroom is just to the west and the female bathroom is to the east.\r\n	\N	\N	1	0	\N
-408	536	1	0	{blu}Saint Vale Church{/blu} Inside - Bathroom Hall	Oddly enough, this hallway is not air conditioned. The male bathroom is just to the west and the female bathroom is to the east.\r\n	\N	\N	1	0	\N
-409	537	1	0	{blu}Saint Vale Church{/blu} Inside - Male Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N
-410	538	1	0	{blu}Saint Vale Church{/blu} Inside - Male Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N
-411	539	1	0	{blu}Saint Vale Church{/blu} Inside - Female Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N
-412	540	1	0	{blu}Saint Vale Church{/blu} Inside - Female Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N
-413	541	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
-443	571	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
-414	542	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
-415	543	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
-416	544	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N
-417	545	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
-418	546	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
-419	547	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
-420	548	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
-421	549	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
-422	550	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N
-434	562	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-435	563	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-436	564	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-437	565	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N
-438	566	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
-439	567	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
-440	568	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
-444	572	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
-445	573	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N
-446	574	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Entrance	A large green and white sign looms above your head. {grn}Allied Foods{/grn} is the main food source for the local community. It's central location is within walking distance for most of the residents.\r\n	\N	\N	1	0	\N
-447	575	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Carts	Four rows of black shopping carts are off to the left. The automatic door in front of you gives you a nice gust of cool air-conditioned air.\r\n	\N	\N	1	0	\N
-448	576	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N
-449	577	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N
-450	578	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	allied-foods-pharmacy-bend
-451	579	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N
-452	580	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N
-453	581	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N
-454	582	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
-455	583	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
-456	584	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
-457	585	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
-458	586	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
-459	587	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
-460	588	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N
-461	589	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	allied-foods-shower-end
-462	590	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
-463	591	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
-464	592	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end
-465	593	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-466	594	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-467	595	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-468	596	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-469	597	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-470	598	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-471	599	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-472	600	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	allied-foods-alcohol-end
-473	601	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
-474	602	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
-475	603	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end
-476	604	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-477	605	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-478	606	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-479	607	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-480	608	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-481	609	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-482	610	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-483	611	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	allied-foods-alcohol-end2
-484	612	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
-485	613	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
-486	614	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end2
-487	615	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-488	616	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-489	617	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-490	618	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-491	619	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-492	620	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-493	621	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-494	622	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	allied-foods-alcohol-end3
-495	623	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
-496	624	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
-497	625	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end3
-498	626	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-499	627	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-500	628	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-501	629	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-502	630	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-503	631	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-504	632	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-505	633	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N
-506	634	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
-507	635	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N
-508	636	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end4
-509	637	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-510	638	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-511	639	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-512	640	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-513	641	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-514	642	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-515	643	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-516	644	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-517	645	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-518	646	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-519	647	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-520	648	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-521	649	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-522	650	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-523	651	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-524	652	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-525	653	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-isle
-526	654	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-527	655	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-528	656	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-529	657	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-1
-530	658	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-531	659	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-532	660	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-533	661	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-east-1
-534	662	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-535	663	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-536	664	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-2
-537	665	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-538	666	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-539	667	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-east-tie
-540	668	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-541	669	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-542	670	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-543	671	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-3
-544	672	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-545	673	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-546	674	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-547	675	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-west-1
-548	676	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-549	677	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-550	678	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-4
-551	679	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-552	680	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N
-553	681	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-5
-554	682	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-spawn
-63	192	1	0	Waypoint North	@FILL_ME@\r\n	\N	\N	1	0	waypoint-car-garage-north-1
-556	685	1	0	{blu}Metro{/blu} Bornald Road	The road to the heart of Metro City is a bustling hive of busy upper city residents. While the majority of the people who work in Downtown Metro are mid to upper class citizens, a large disproportionate chunk of the people who gather here are drugged out degenerates. Several homeless families make camp right in the middle of the sidewalk: their life for all to judge. \r\n	\N	\N	1	0	\N
-557	686	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-starting-point
-558	687	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-3x3
-559	688	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-3x4
-560	689	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-2x4
-561	690	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x4
-563	692	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x2
-564	693	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x1
-565	694	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x0
-567	696	1	0	{blu}Metro{/blu} Inside the Henley Fountain	You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.\r\n	\N	\N	1	0	metrofountain-2x1
-568	697	1	0	{blu}Metro{/blu} Inside the Henley Fountain	You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.\r\n	\N	\N	1	0	metrofountain-2x2
-569	698	1	0	{blu}Metro{/blu} Inside the Henley Fountain	You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.\r\n	\N	\N	1	0	metrofountain-2x3
-570	699	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-3x1
-571	700	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-3x0
-572	701	1	0	name	description	\N	\N	1	0	\N
-573	702	1	0	{blu}Metro{/blu} Haven Street sidewalk	Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.\r\n	\N	\N	1	0	\N
-574	703	1	0	{blu}Metro{/blu} Haven Street sidewalk	Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.\r\n	\N	\N	1	0	\N
-575	704	1	0	{blu}Metro{/blu} Haven Street sidewalk	Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.\r\n	\N	\N	1	0	\N
-576	705	1	0	{blu}Metro{/blu} Haven Street sidewalk	Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.\r\n	\N	\N	1	0	bank-west-alley-start
-577	706	1	0	{blu}Metro{/blu} Haven Street sidewalk	Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.\r\n	\N	\N	1	0	\N
-578	707	1	0	{blu}Metro{/blu} Hartford Bank entrance	A delightful awning above your head provides sanctuary from the blazing heat of the sun. Two automatic doors to the north welcome you to Hartford bank.\r\n	\N	\N	1	0	\N
-579	708	1	0	{blu}Metro{/blu} Hartford Bank entrance	A delightful awning above your head provides sanctuary from the blazing heat of the sun. Two automatic doors to the north welcome you to Hartford bank.\r\n	\N	\N	1	0	\N
-580	709	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-581	710	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-555	684	1	0	{blu}Metro{/blu} Bornald Road	The road to the heart of Metro City is a bustling hive of busy upper city residents. While the majority of the people who work in Downtown Metro are mid to upper class citizens, a large disproportionate chunk of the people who gather here are drugged out degenerates. Several homeless families make camp right in the middle of the sidewalk: their life for all to judge. \r\n	\N	\N	1	0	\N
-583	712	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-584	713	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-585	714	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-586	715	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-587	716	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	hartford-atrium-west
-588	717	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-589	718	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	hartford-atrium-center
-590	719	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-591	720	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	hartford-atrium-east
-592	721	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-593	722	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-594	723	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N
-595	724	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N
-596	725	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N
-597	726	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N
-598	727	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N
-599	728	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N
-600	729	1	0	{blu}Hartford Bank{/blu} - Teller A	You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. \r\n	\N	\N	1	0	hartford-teller-a
-601	730	1	0	{blu}Hartford Bank{/blu} - Teller B	You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. \r\n	\N	\N	1	0	hartford-teller-b
-602	731	1	0	{blu}Hartford Bank{/blu} - Teller C	You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. \r\n	\N	\N	1	0	hartford-teller-c
-603	732	1	0	{blu}Hartford Bank{/blu} - Teller D	You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. \r\n	\N	\N	1	0	hartford-teller-d
-562	691	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x3
-582	711	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N
-604	733	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-605	734	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-606	735	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-607	736	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-608	737	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-609	738	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-610	739	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-611	740	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-612	741	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-613	742	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-614	743	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N
-616	745	1	0	{blu}Hartford Bank Vault{/blu}	You find yourself in a heavily fortified bank vault. A scene that few people have the privilege of witnessing. Heavy bags of money line the walls. Giant stacks of money are organized into a neat pile on several tables in the middle of the room.\r\n	\N	\N	1	0	\N
-617	746	1	0	{blu}Hartford Bank Vault{/blu}	You find yourself in a heavily fortified bank vault. A scene that few people have the privilege of witnessing. Heavy bags of money line the walls. Giant stacks of money are organized into a neat pile on several tables in the middle of the room.\r\n	\N	\N	1	0	\N
-618	748	1	0	name	description	\N	\N	1	0	\N
-619	749	1	0	name	description	\N	\N	1	0	\N
-620	750	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-1
-615	744	1	0	{blu}Hartford Bank Vault{/blu}	You find yourself in a heavily fortified bank vault. A scene that few people have the privilege of witnessing. Heavy bags of money line the walls. Giant stacks of money are organized into a neat pile on several tables in the middle of the room.\r\n	\N	\N	1	0	hartford-bank-west-valley-hidden-wall
-621	751	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-623	753	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-624	754	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-2
-644	774	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	trolley-section-2
-625	755	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-626	756	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-628	758	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-629	759	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-630	760	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-631	761	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-4
-632	762	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-633	763	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-634	764	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-5
-635	765	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-636	766	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-637	767	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-639	769	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	trolley-section-1
-640	770	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-641	771	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-642	772	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-643	773	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-645	775	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-646	776	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-647	777	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-648	778	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-649	779	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	trolley-section-3
-650	780	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-651	781	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-652	782	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-653	783	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-566	695	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-2x0
-622	752	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-627	757	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-3
-638	768	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N
-654	784	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	trolley-section-4
-655	785	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-1
-656	786	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-657	787	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-658	788	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-2
-659	789	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-660	790	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-661	791	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-3
-662	792	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-663	793	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-664	794	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-4
-665	795	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-666	796	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-667	797	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-5
-668	798	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-669	799	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-670	800	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-6
-671	801	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-672	802	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-673	803	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-7
-674	804	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-675	805	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-676	806	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-8
-677	807	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-678	808	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-679	809	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-9
-680	810	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-681	811	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-682	812	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-10
-683	813	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-684	814	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N
-685	815	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-11
+COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyword, ex_description, light, room_flag, nickname, textures) FROM stdin;
+2	131	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	cofobcenter	\N
+3	132	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
+4	133	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
+5	134	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
+6	135	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
+7	136	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
+8	137	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
+9	138	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
+10	139	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
+11	140	1	21	{blu}C.O.F.O.B:{/blu} - Southeast Corner	The hallway reaches north and south from here. A reduced temperature is like the result of the industrial grade internal air cooling system. It isn't much, but it beats the outside desert climate. The promise of coffee entices you, but you can't tell which direction it's coming from. \r\n	\N	\N	1	0	\N	\N
+12	141	1	21	{blu}C.O.F.O.B:{/blu} - Armory Entrance	A cool draft moves through the bottom crack of the door to the Armory Entrance to the East.It seems the quality of air drastically differs depending on the people in charge of each department. The Sign above the door says in bold letters "Armory".\r\n	\N	\N	1	0	cofob-armory-entrance	\N
+13	142	1	21	{blu}C.O.F.O.B:{/blu} - Armory	As you push through to the East, you notice a few recruits putting on standard issue gear. They ignore you as you take a look around. To the East is the buy station where you can make your purchases.\r\n	\N	\N	1	0	\N	\N
+14	143	1	21	{blu}C.O.F.O.B:{/blu} - Armory Buy Station	You see an armor locker with standard issue equipment. Behind the counter is a {gld}list{/gld} of all the various items for sell. You can spend {grn}MP{/grn} (Mission Points) here to upgrade your loadout. To buy something, simply type {grn}"Buy ID"{/grn} where ID is the number next to the item you want in the output of the list command.\r\n	\N	\N	1	0	\N	\N
+15	144	1	21	{blu}C.O.F.O.B:{/blu} - Armory Storage Room North	Standard issue armor and defensive utilities line the walls; none of which you can take as they are behind metal cages. There is, however, an Armor locker here with standard issue gear for anyone to take. \r\n	\N	\N	1	0	\N	\N
+16	145	1	21	{blu}C.O.F.O.B:{/blu} - Armory Storage Room South	You enter the storage room and immediately notice the strong scent of sand, grime, and gasoline. A few bits of ammunition are strewn across the floor haphazardly. The Armory personnell either recently dug through the piles of ammo crates, or nobody bothered to clean this mess up. There seems to be a computer terminal on the East wall.\r\n	\N	\N	1	0	\N	\N
+17	146	1	21	{blu}C.O.F.O.B:{/blu} - Armory - Secluded Room	A musty room with several freshly smoked cigars laying inside a deep ash tray the size of your fist. Someone was loading a Mossberg shotgun and haphazardly left it laying upon the couch as if it were a visitor. The T.V. appears to still be warm. Whoever was here is likely coming back soon. You have a feeling whoever was here will be back shortly.\r\n	\N	\N	1	0	\N	\N
+18	147	1	21	{blu}C.O.F.O.B:{/blu} - Armory - Secluded Room - Weapons Cache	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+19	148	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+21	150	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+22	151	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+24	153	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+25	154	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+26	155	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+27	156	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-basement-2	\N
+28	157	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+29	158	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+30	159	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+31	160	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+32	161	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+33	162	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+34	163	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+35	164	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+36	165	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+37	166	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+38	167	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+39	168	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+40	169	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-basement-2	\N
+41	170	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+42	171	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+43	172	1	21	{blu}C.O.F.O.B:{/blu} - Basement 2 - Breach charges	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+44	173	1	21	{blu}C.O.F.O.B:{/blu} - Basement 2 - Breach charges	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+45	174	1	0	name	description	\N	\N	1	0	\N	\N
+46	175	1	0	name	description	\N	\N	1	0	\N	\N
+47	176	1	0	name	description	\N	\N	1	0	\N	\N
+49	178	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+50	179	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+51	180	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1A	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+52	181	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1A	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+53	182	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1B	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+54	183	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 1B	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+55	184	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+56	185	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+57	186	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2A	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+58	187	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2A	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+59	188	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2B	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+60	189	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2B	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+61	190	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+62	191	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+64	193	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+65	194	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+66	195	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+67	196	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+68	197	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+69	198	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+71	200	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+72	201	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+73	202	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	cofob-mess-hall-upstairs	\N
+74	203	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+75	204	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+76	205	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+77	206	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+78	207	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	cofob-stairs-A	\N
+79	208	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+80	209	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+81	210	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+82	211	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+83	212	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+85	214	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+86	215	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+87	216	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+125	254	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+126	255	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+127	256	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+88	217	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+185	314	1	0	Market Apartments - Building 3 - Unit 303 - Master Bedroom	undefined\r\n	\N	\N	1	0	\N	\N
+89	218	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+90	219	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+91	220	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+92	221	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+93	222	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+94	223	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+95	224	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Atop the stairs	The floor deviates from the other rooms in that it is made up of a reinforced steel grating. The choice for such a floor remains a mystery. The door to the west leads to the stairs that will take you to the underground portion of the base.\r\n	\N	\N	1	0	cofob-west-atop-stairs	\N
+96	225	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Atop the stairs	The floor deviates from the other rooms in that it is made up of a reinforced steel grating. The choice for such a floor remains a mystery. The door to the west leads to the stairs that will take you to the underground portion of the base.\r\n	\N	\N	1	0	\N	\N
+97	226	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+98	227	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+100	229	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+101	230	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+102	231	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	cofob-bind-to-center	\N
+103	232	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+104	233	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+105	234	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+106	235	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+107	236	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+108	237	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	cofob-secondfloor-center	\N
+109	238	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+110	239	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+111	240	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+112	241	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+113	242	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+114	243	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+115	244	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+116	245	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+117	246	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+118	247	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+119	248	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+120	249	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+121	250	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+122	251	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+123	252	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+124	253	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+130	259	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N	\N
+131	260	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N	\N
+132	261	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N	\N
+134	263	1	0	{blu}C.O.F.O.B:{/blu} - Server Room 1A	It's noisy and loud in here. The rack mounted servers are fervently whirring under the immense workloads. The ceiling is a grate with a large fan behind it. A complex looking locking mechanism protects rack mounted servers here. \r\n	\N	\N	1	0	\N	\N
+135	264	1	0	{blu}C.O.F.O.B:{/blu} - Server Room 1B	Wall to wall rack mounted servers take up the entirety of this room. There is almost nowhere to stand. A haphazard array of ethernet cables snake chaotically to and from each server. Maintaining this must be a headache. \r\n	\N	\N	1	0	\N	\N
+136	265	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+137	266	1	0	{blu}C.O.F.O.B:{/blu} - Gear room	A huge weapons rack is attached to the wall here. The rack contains rifles, pistols, ammunition, explosives, and breach charges.\r\n	\N	\N	1	0	cofob-gear-room	\N
+138	267	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+139	268	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+140	269	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+141	270	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+142	271	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+143	272	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+144	273	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+145	274	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Eastern DMZ corridor	Dirt stretches to the east towards a heavy containment door. Behind that door must be where you can leave the building. The corridor is dimly lit. The air is dry and smells of a combination of sweat and gasoline for some reason.\r\n	\N	\N	1	0	\N	\N
+146	275	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Eastern DMZ corridor	Dirt stretches to the east towards a heavy containment door. Behind that door must be where you can leave the building. The corridor is dimly lit. The air is dry and smells of a combination of sweat and gasoline for some reason.\r\n	\N	\N	1	0	\N	\N
+147	276	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Eastern DMZ corridor	Dirt stretches to the east towards a heavy containment door. Behind that door must be where you can leave the building. The corridor is dimly lit. The air is dry and smells of a combination of sweat and gasoline for some reason.\r\n	\N	\N	1	0	\N	\N
+148	277	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Fenced off DMZ corridor	Beneath the floor here is an entrance to an underground tunnel. The only problem is that you can't seem to get it to move. To the east is the door to the outside world.A falcon engraving is above the door frame to the east.\r\n	\N	\N	1	0	\N	\N
+149	278	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	abbotstart	\N
+152	281	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+153	282	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+154	283	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+155	284	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+156	285	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+157	286	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+237	365	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N	\N
+158	287	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+159	288	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+160	289	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	abbot-market-east-divergence	\N
+161	290	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+162	291	1	0	Market Apartments - East entrance	An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You'd be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.\r\n	\N	\N	1	0	\N	\N
+163	292	1	0	Market Apartments - East entrance	An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You'd be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.\r\n	\N	\N	1	0	\N	\N
+164	293	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N	\N
+165	294	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N	\N
+166	295	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N	\N
+167	296	1	0	Market Apartments - Building 3	You see a two story apartment building with 8 units. Each apartment is a corner unit, but neither home could possibly be more than a studio unit. A few of the doors are closed, which you find peculiar. There can't possibly be anyone living there. Right?\r\n	\N	\N	1	0	\N	\N
+168	297	1	0	Market Apartments - Stairs	Before you lie the stairs that will help you reach the second floor of building 3. The handrails are extremely hot to the touch due to baking here under the steady gaze of the sun over your shoulder.\r\n	\N	\N	1	0	\N	\N
+169	298	1	0	Market Apartments - Stairs	Before you lie the stairs that will help you reach the second floor of building 3. The handrails are extremely hot to the touch due to baking here under the steady gaze of the sun over your shoulder.\r\n	\N	\N	1	0	\N	\N
+171	300	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+172	301	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+173	302	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+174	303	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+175	304	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+176	305	1	0	Market Apartments - Building 3 - Unit 301	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N	\N
+177	306	1	0	Market Apartments - Building 3 - Unit 301	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N	\N
+178	307	1	0	Market Apartments - Building 3 - Unit 301 - Master Bedroom	A D.I.Y. home stove sits in the middle of the room. Aside from that, there's nothing to look at. The carpet has been pulled up in places. The walls are covered with massive holes and random burn marks.\r\n	\N	\N	1	0	\N	\N
+179	308	1	0	Market Apartments - Building 3 - Unit 301 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N	\N
+180	309	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+181	310	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+182	311	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+184	313	1	0	Market Apartments - Building 3 - Unit 303	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N	\N
+186	315	1	0	Market Apartments - Building 3 - Unit 303 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N	\N
+187	316	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+188	317	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+189	318	1	0	Market Apartments - Building 3 - Unit 305	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N	\N
+190	319	1	0	Market Apartments - Building 3 - Unit 305	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N	\N
+191	320	1	0	Market Apartments - Building 3 - Unit 305 - Master Bedroom	undefined\r\n	\N	\N	1	0	\N	\N
+192	321	1	0	Market Apartments - Building 3 - Unit 305 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N	\N
+193	322	1	0	name	description	\N	\N	1	0	\N	\N
+194	323	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+197	326	1	0	Market Apartments - Building 3 - Unit 307	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N	\N
+198	327	1	0	Market Apartments - Building 3 - Unit 307 - Master Bedroom	undefined\r\n	\N	\N	1	0	\N	\N
+199	328	1	0	Market Apartments - Building 3 - Unit 307 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N	\N
+200	329	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N	\N
+201	330	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N	\N
+202	331	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N	\N
+203	332	1	0	Market Apartments - Building 2	Building 1 is a two story building with 8 units with the added addition of an exercise room and what looks like the property manager's office. Both the exercise room and the office look surprisingly intact. You notice lots of fresh footprints to and from building 1 which disappear into the destruction of building 2. Despite the abandoned nature of the complex as a whole, someone is still finding use for these units.\r\n	\N	\N	1	0	\N	\N
+204	333	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N	\N
+205	334	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N	\N
+206	335	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N	\N
+208	337	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N	\N
+209	338	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Descending the stairs	fill me\r\n	\N	\N	1	0	\N	\N
+210	339	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Descending the stairs	fill me\r\n	\N	\N	1	0	\N	\N
+211	340	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
+212	341	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
+213	342	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
+214	343	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
+215	344	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
+216	345	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
+217	346	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
+218	347	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+219	348	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+20	128	1	18	MP5 repo	Feeling over burdened by money?	\N	\N	0	16	\N	\N
+1	130	1	21	{blu}COBALT:{/blu} {grn}Forward Operating Base{/grn} - Main Hallway	COBALT Air Force base. Ground zero for basic training. All initiates must follow rules and guidelines in your New Recruit handbook. Proceed {grn}North{/grn} recruit!\r\n	\N	\N	1	0	\N	\N
+232	149	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+23	152	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+48	177	1	21	{blu}C.O.F.O.B:{/blu} - Basement 2 - Waypoint Avenue North Exit	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-waypoint-avenue-exit	\N
+70	199	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Exit	Before you is a sturdy metal door that prevents the outside elements from making their way inside. The door simply says {yel}Eastern Exit{/yel}. The air is less cool as the corridor leading to the east lacks the sufficient air flow. There are no ventilation shafts leading to the east, but you can see through the tempered glass window on the door that a few military police are gaurding the exit to the city outside. \r\n	\N	\N	1	0	eastexit	\N
+84	213	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+99	228	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
+128	257	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+221	350	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+222	351	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+223	352	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+224	353	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+225	354	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+226	355	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+227	356	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+228	357	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+333	461	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+334	462	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+229	358	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+230	359	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+231	360	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+129	258	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N	\N
+133	262	1	0	{blu}C.O.F.O.B:{/blu} - Commons area	A comfy looking couch and recliner welcome you to the engineering commons area. Three television screens mounted on the west wall display various graphs and statistics. A ping pong table is in the center of the room. Two large refridgerators are humming quietly in the corner. The north wall consists of large one-way tinted windows that overlook the training fields below. To the east is the entrance to server room 1B.\r\n	\N	\N	1	0	cofob-engineering-commons	\N
+150	279	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+170	299	1	0	Market Apartments - Stairs	Before you lie the stairs that will help you reach the second floor of building 3. The handrails are extremely hot to the touch due to baking here under the steady gaze of the sun over your shoulder.\r\n	\N	\N	1	0	\N	\N
+183	312	1	0	Market Apartments - Building 3 - Unit 303	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N	\N
+195	324	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+196	325	1	0	Market Apartments - Building 3 - Unit 307	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N	\N
+220	349	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+233	361	1	0	{blu}Crenshaw{/blu} Highway overpass	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	crenshaw-overpass-start	\N
+234	362	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+235	363	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+236	364	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+432	560	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+238	366	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N	\N
+239	367	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N	\N
+240	368	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N	\N
+241	369	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N	\N
+242	370	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N	\N
+243	371	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+244	372	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+340	468	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	campo-conrad-drive-intersection	\N
+245	373	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+246	374	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+247	375	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+248	376	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+249	377	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+250	378	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+251	379	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+252	380	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+253	381	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+254	382	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+255	383	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+433	561	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+256	384	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+257	385	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+258	386	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+335	463	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+259	387	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+260	388	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+261	389	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+262	390	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+263	391	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+264	392	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+265	393	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+266	394	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+267	395	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+268	396	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+269	397	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+270	398	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+271	399	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+272	400	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	crenshaw-northern-shipping-entrance	\N
+273	401	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N	\N
+274	402	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N	\N
+275	403	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	shipyard-row-a	\N
+276	404	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+277	405	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+278	406	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+279	407	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+280	408	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+281	409	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+282	410	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+283	411	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+284	412	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+285	413	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+286	414	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+287	415	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+288	416	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+289	417	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+423	551	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
+290	418	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+291	419	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+292	420	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+336	464	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	kenwood-drive-campo-road	\N
+293	421	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+294	422	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+295	423	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+441	569	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
+296	424	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+297	425	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+298	426	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+299	427	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+300	428	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+301	429	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+302	430	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+303	431	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+304	432	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+305	433	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+424	552	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
+306	434	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+307	435	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+308	436	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+309	437	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+310	438	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+311	439	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+312	440	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+313	441	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+314	442	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+315	443	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+316	444	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+317	445	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+318	446	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N	\N
+319	447	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N	\N
+320	448	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N	\N
+321	449	1	0	{blu}La Mesa{/blu} Campo Road Exit	Exit 10B to Campo Road.\r\n	\N	\N	1	0	\N	\N
+322	450	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N	\N
+323	451	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N	\N
+324	452	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N	\N
+325	453	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N	\N
+326	454	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N	\N
+327	455	1	0	{blu}La Mesa{/blu} Exit 10B On Ramp	A bright orange sign on the right hand shoulder says {yel}END ROAD WORK{/yel}. You see a diamond shaped yellow sign with a black arrow pointing upwards and a {red}red{/red} octagon.The road slopes downwards and on the road you see 'STOP AHEAD' written in white painted on the ground. A narrow shoulder on your right is guarded by a grey metal and wooden railing.\r\n	\N	\N	1	0	\N	\N
+328	456	1	0	{blu}La Mesa{/blu} Kenwood Drive Intersection	You can take a left or right and you would be on Kenwood Drive. Go straight ahead and you can get back on Highway 94 East.\r\n	\N	\N	1	0	kenwood-drive-intersection	\N
+329	457	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+330	458	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+331	459	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+332	460	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+337	465	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N	\N
+338	466	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N	\N
+339	467	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N	\N
+341	469	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+342	470	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+343	471	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+344	472	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+345	473	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+346	474	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+347	475	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+348	476	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+425	553	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	saint-vale-altar	\N
+349	477	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+350	478	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+351	479	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+352	480	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+353	481	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+354	482	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+355	483	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+356	484	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+357	485	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+358	486	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+359	487	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+360	488	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+361	489	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+362	490	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+426	554	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+363	491	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+364	492	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+365	493	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	campo-back-alley-church-entrance	\N
+366	494	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	\N	\N
+367	495	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	\N	\N
+368	496	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	saint-vale-nw-parking-lot	\N
+369	497	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+370	498	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+371	499	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+372	500	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+373	501	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+374	502	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+375	503	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+376	504	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+427	555	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+428	556	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+377	505	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+378	506	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+379	507	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+444	572	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
+597	726	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N	\N
+380	508	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	saint-vale-west-entrance	\N
+381	509	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+382	510	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+383	511	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+384	512	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+385	513	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+386	514	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+387	515	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+388	516	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+389	517	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+429	557	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+430	558	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+390	518	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+391	519	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+392	520	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row B	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+393	521	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+394	522	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+395	523	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+396	524	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row C	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
+442	570	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
+397	525	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N	\N
+398	526	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N	\N
+399	527	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N	\N
+400	528	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N	\N
+401	529	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N	\N
+402	530	1	0	{blu}Saint Vale Church{/blu} Inside	Sanctuary. A well ventilated and air conditioned cathedral. The west entrance of Saint Vale Church lets a little bit of outside light leak inside as the door closes automatically behind you. The smell of incense and blown out candles is hard to ignore, yet it's a very pleasant and calming feeling. Each of the fifty rows of seating is 100 feet across. Whoever built this Church had significant amounts of money, possibly even ludicrous amounts. \r\n	\N	\N	1	0	\N	\N
+431	559	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+403	531	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N	\N
+404	532	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N	\N
+405	533	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N	\N
+445	573	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
+406	534	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	saint-vale-rear-east	\N
+407	535	1	0	{blu}Saint Vale Church{/blu} Inside - Bathroom Hall	Oddly enough, this hallway is not air conditioned. The male bathroom is just to the west and the female bathroom is to the east.\r\n	\N	\N	1	0	\N	\N
+408	536	1	0	{blu}Saint Vale Church{/blu} Inside - Bathroom Hall	Oddly enough, this hallway is not air conditioned. The male bathroom is just to the west and the female bathroom is to the east.\r\n	\N	\N	1	0	\N	\N
+409	537	1	0	{blu}Saint Vale Church{/blu} Inside - Male Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N	\N
+410	538	1	0	{blu}Saint Vale Church{/blu} Inside - Male Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N	\N
+411	539	1	0	{blu}Saint Vale Church{/blu} Inside - Female Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N	\N
+412	540	1	0	{blu}Saint Vale Church{/blu} Inside - Female Bathroom	The walls are painted a soothing orange and white color and the ceiling fan generates a constant white noise hum that lulls you into a meditative state.\r\n	\N	\N	1	0	\N	\N
+413	541	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N	\N
+443	571	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
+414	542	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N	\N
+415	543	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N	\N
+416	544	1	0	{blu}Saint Vale Church{/blu} Inside - Rear Hall	The wall to the south is made of a repurposed sort of brick layering that makes it almost look as if it was a design decision that came long after the architecture of the church was already decided. Something seems very off about this wall and you almost feel like you are being watched here. A door leading to the bathroom hallway is to the south of here. You can take a seat in one of the many rows of seating to the north of here.\r\n	\N	\N	1	0	\N	\N
+417	545	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
+418	546	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
+419	547	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
+420	548	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
+421	549	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
+422	550	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
+434	562	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+435	563	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+436	564	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+437	565	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
+438	566	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
+439	567	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
+440	568	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
+446	574	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Entrance	A large green and white sign looms above your head. {grn}Allied Foods{/grn} is the main food source for the local community. It's central location is within walking distance for most of the residents.\r\n	\N	\N	1	0	\N	\N
+447	575	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Carts	Four rows of black shopping carts are off to the left. The automatic door in front of you gives you a nice gust of cool air-conditioned air.\r\n	\N	\N	1	0	\N	\N
+448	576	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
+449	577	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
+450	578	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	allied-foods-pharmacy-bend	\N
+451	579	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
+452	580	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
+453	581	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
+454	582	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
+455	583	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
+456	584	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
+457	585	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
+458	586	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
+459	587	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
+460	588	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
+461	589	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	allied-foods-shower-end	\N
+462	590	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
+463	591	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
+464	592	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end	\N
+465	593	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+466	594	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+467	595	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+468	596	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+469	597	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+470	598	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+471	599	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+472	600	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	allied-foods-alcohol-end	\N
+473	601	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
+474	602	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
+475	603	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end	\N
+476	604	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+477	605	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+478	606	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+479	607	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+480	608	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+481	609	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+482	610	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+483	611	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	allied-foods-alcohol-end2	\N
+484	612	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
+485	613	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
+486	614	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end2	\N
+487	615	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+488	616	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+489	617	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+490	618	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+491	619	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+492	620	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+493	621	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+494	622	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 3	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	allied-foods-alcohol-end3	\N
+495	623	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
+496	624	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
+497	625	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end3	\N
+498	626	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+499	627	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+500	628	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+501	629	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+502	630	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+503	631	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+504	632	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+505	633	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 4	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+506	634	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
+507	635	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
+508	636	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end4	\N
+509	637	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+510	638	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+511	639	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+512	640	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+513	641	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+514	642	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+595	724	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N	\N
+515	643	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+516	644	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+517	645	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+518	646	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+519	647	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+520	648	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+521	649	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+522	650	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+523	651	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+524	652	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+525	653	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-isle	\N
+526	654	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+527	655	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+528	656	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+529	657	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-1	\N
+530	658	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+531	659	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+532	660	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+533	661	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-east-1	\N
+534	662	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+535	663	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+536	664	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-2	\N
+537	665	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+538	666	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+539	667	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-east-tie	\N
+540	668	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+541	669	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+542	670	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+543	671	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-3	\N
+544	672	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+545	673	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+546	674	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+547	675	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-west-1	\N
+548	676	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+549	677	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+550	678	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-4	\N
+551	679	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+552	680	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+553	681	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-5	\N
+554	682	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-spawn	\N
+63	192	1	0	Waypoint North	@FILL_ME@\r\n	\N	\N	1	0	waypoint-car-garage-north-1	\N
+556	685	1	0	{blu}Metro{/blu} Bornald Road	The road to the heart of Metro City is a bustling hive of busy upper city residents. While the majority of the people who work in Downtown Metro are mid to upper class citizens, a large disproportionate chunk of the people who gather here are drugged out degenerates. Several homeless families make camp right in the middle of the sidewalk: their life for all to judge. \r\n	\N	\N	1	0	\N	\N
+557	686	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-starting-point	\N
+558	687	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-3x3	\N
+559	688	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-3x4	\N
+560	689	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-2x4	\N
+561	690	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x4	\N
+563	692	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x2	\N
+564	693	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x1	\N
+565	694	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x0	\N
+567	696	1	0	{blu}Metro{/blu} Inside the Henley Fountain	You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.\r\n	\N	\N	1	0	metrofountain-2x1	\N
+568	697	1	0	{blu}Metro{/blu} Inside the Henley Fountain	You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.\r\n	\N	\N	1	0	metrofountain-2x2	\N
+569	698	1	0	{blu}Metro{/blu} Inside the Henley Fountain	You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.\r\n	\N	\N	1	0	metrofountain-2x3	\N
+570	699	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-3x1	\N
+571	700	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-3x0	\N
+572	701	1	0	name	description	\N	\N	1	0	\N	\N
+573	702	1	0	{blu}Metro{/blu} Haven Street sidewalk	Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.\r\n	\N	\N	1	0	\N	\N
+596	725	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N	\N
+574	703	1	0	{blu}Metro{/blu} Haven Street sidewalk	Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.\r\n	\N	\N	1	0	\N	\N
+575	704	1	0	{blu}Metro{/blu} Haven Street sidewalk	Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.\r\n	\N	\N	1	0	\N	\N
+576	705	1	0	{blu}Metro{/blu} Haven Street sidewalk	Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.\r\n	\N	\N	1	0	bank-west-alley-start	\N
+577	706	1	0	{blu}Metro{/blu} Haven Street sidewalk	Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.\r\n	\N	\N	1	0	\N	\N
+578	707	1	0	{blu}Metro{/blu} Hartford Bank entrance	A delightful awning above your head provides sanctuary from the blazing heat of the sun. Two automatic doors to the north welcome you to Hartford bank.\r\n	\N	\N	1	0	\N	\N
+579	708	1	0	{blu}Metro{/blu} Hartford Bank entrance	A delightful awning above your head provides sanctuary from the blazing heat of the sun. Two automatic doors to the north welcome you to Hartford bank.\r\n	\N	\N	1	0	\N	\N
+580	709	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+581	710	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+555	684	1	0	{blu}Metro{/blu} Bornald Road	The road to the heart of Metro City is a bustling hive of busy upper city residents. While the majority of the people who work in Downtown Metro are mid to upper class citizens, a large disproportionate chunk of the people who gather here are drugged out degenerates. Several homeless families make camp right in the middle of the sidewalk: their life for all to judge. \r\n	\N	\N	1	0	\N	\N
+583	712	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+584	713	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+585	714	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+586	715	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+587	716	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	hartford-atrium-west	\N
+588	717	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+589	718	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	hartford-atrium-center	\N
+590	719	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+591	720	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	hartford-atrium-east	\N
+592	721	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+593	722	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+594	723	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N	\N
+598	727	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N	\N
+599	728	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N	\N
+600	729	1	0	{blu}Hartford Bank{/blu} - Teller A	You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. \r\n	\N	\N	1	0	hartford-teller-a	\N
+601	730	1	0	{blu}Hartford Bank{/blu} - Teller B	You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. \r\n	\N	\N	1	0	hartford-teller-b	\N
+602	731	1	0	{blu}Hartford Bank{/blu} - Teller C	You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. \r\n	\N	\N	1	0	hartford-teller-c	\N
+603	732	1	0	{blu}Hartford Bank{/blu} - Teller D	You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. \r\n	\N	\N	1	0	hartford-teller-d	\N
+562	691	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-1x3	\N
+582	711	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
+604	733	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+605	734	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+606	735	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+607	736	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+608	737	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+609	738	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+610	739	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+611	740	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+612	741	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+613	742	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+614	743	1	0	{blu}Hartford Bank West Alley{/blu}	If you hadn't known there was a bank just to the east of here, you'd think you were in the worst time of dystopian nightmare. The ground is littered with used needles, broken glass, and human feces. The very thought of sleeping here makes you cringe, yet you see that many homeless people call this home by evidence of the makeshift shelters made of cardboard and newspaper fragments.\r\n	\N	\N	1	0	\N	\N
+616	745	1	0	{blu}Hartford Bank Vault{/blu}	You find yourself in a heavily fortified bank vault. A scene that few people have the privilege of witnessing. Heavy bags of money line the walls. Giant stacks of money are organized into a neat pile on several tables in the middle of the room.\r\n	\N	\N	1	0	\N	\N
+617	746	1	0	{blu}Hartford Bank Vault{/blu}	You find yourself in a heavily fortified bank vault. A scene that few people have the privilege of witnessing. Heavy bags of money line the walls. Giant stacks of money are organized into a neat pile on several tables in the middle of the room.\r\n	\N	\N	1	0	\N	\N
+618	748	1	0	name	description	\N	\N	1	0	\N	\N
+619	749	1	0	name	description	\N	\N	1	0	\N	\N
+620	750	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-1	\N
+615	744	1	0	{blu}Hartford Bank Vault{/blu}	You find yourself in a heavily fortified bank vault. A scene that few people have the privilege of witnessing. Heavy bags of money line the walls. Giant stacks of money are organized into a neat pile on several tables in the middle of the room.\r\n	\N	\N	1	0	hartford-bank-west-valley-hidden-wall	\N
+621	751	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+623	753	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+624	754	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-2	\N
+644	774	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	trolley-section-2	\N
+625	755	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+626	756	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+628	758	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+629	759	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+630	760	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+631	761	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-4	\N
+632	762	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+633	763	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+634	764	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-5	\N
+635	765	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+636	766	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+637	767	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+639	769	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	trolley-section-1	\N
+640	770	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+641	771	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+642	772	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+643	773	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+645	775	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+646	776	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+647	777	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+648	778	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+649	779	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	trolley-section-3	\N
+650	780	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+651	781	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+652	782	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+653	783	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+566	695	1	0	{blu}Metro{/blu} Henley Fountain	A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it's recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.\r\n	\N	\N	1	0	metrofountain-2x0	\N
+622	752	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+627	757	1	0	{blu}Market Street{/blu} - Thompson Avenue	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-north-3	\N
+638	768	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	\N	\N
+654	784	1	0	{blu}Market Street{/blu} - Trolley Station	Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. \r\n	\N	\N	1	0	trolley-section-4	\N
+655	785	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-1	\N
+656	786	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+657	787	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+658	788	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-2	\N
+659	789	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+660	790	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+661	791	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-3	\N
+662	792	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+663	793	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+664	794	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-4	\N
+665	795	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+666	796	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+667	797	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-5	\N
+668	798	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+669	799	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+670	800	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-6	\N
+671	801	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+672	802	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+673	803	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-7	\N
+674	804	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+675	805	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+676	806	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-8	\N
+677	807	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+678	808	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+679	809	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-9	\N
+680	810	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+681	811	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+682	812	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-10	\N
+683	813	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+684	814	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	\N	\N
+685	815	1	0	{blu}Market Street{/blu} - Thompson Avenue - EAST	Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it's problems, it's by far a lot safer than it used to be. \r\n	\N	\N	1	0	thompson-east-11	\N
+689	821	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+690	822	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+691	823	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+692	824	1	0	{blu}Crenshaw{/blu} Highway overpass - North	The ramp curves to the north. To the east you see a long stretch of highway that disappears over the horizon. You see a shipyard far off to the northeast. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+693	825	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+694	826	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+695	827	1	0	{blu}Crenshaw{/blu} Highway 94 East	Six lanes of traffic move for off to the east as far as the eye can see. You see hills of varying heights hugging the highway's north and south sides. There is sparse greenery along the freeway. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+696	828	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+697	829	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+698	830	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+699	831	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+700	832	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+764	896	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	psi-tech-atrium-2	,INSIDE,METAL_WALL,TILE
+151	280	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
+687	819	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+688	820	1	0	{blu}Crenshaw{/blu} Highway overpass - Ramp	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+765	897	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
+705	837	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+706	838	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+707	839	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+708	840	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+709	841	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+710	842	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+711	843	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+712	844	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+713	845	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+714	846	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+715	847	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+716	848	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+702	834	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+703	835	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+704	836	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+721	853	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+722	854	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+723	855	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+724	856	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+725	857	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	crenshaw-northern-shipping-entrance	,AIR,DESERT,DRY,OUTSIDE
+726	858	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+727	859	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+728	860	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	shipyard-row-a	,AIR,DESERT,DRY,OUTSIDE
+729	861	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+730	862	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+731	863	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+732	864	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+718	850	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+719	851	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+720	852	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+738	870	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - West courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	psi-tech-sniper-post-west	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+686	818	1	0	{blu}Crenshaw{/blu} Highway overpass	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	crenshaw-overpass-start	,AIR,DESERT,DRY,OUTSIDE
+701	833	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+717	849	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+733	865	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+734	866	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+739	871	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+740	872	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+741	873	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	psi-tech-sentry-gun-a	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+742	874	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - South entrance	Large marble pillars 6 feet in diameter flank you on both sides. Every ten feet a new row of pillars. The entrance to {blu}Psi-Tech{/blu} is heavily guarded. An array of cameras at the end of the atrium monitor your movements.\r\n	\N	\N	1	0	psi-tech-guard-a	,DRY,OUTSIDE
+743	875	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - South entrance	Large marble pillars 6 feet in diameter flank you on both sides. Every ten feet a new row of pillars. The entrance to {blu}Psi-Tech{/blu} is heavily guarded. An array of cameras at the end of the atrium monitor your movements.\r\n	\N	\N	1	0	psi-tech-south-door	,DRY,OUTSIDE
+207	336	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	psi-tech-start	\N
+735	867	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - West courtyard entrance	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+736	868	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - West courtyard entrance	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+737	869	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - West courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+744	876	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - South entrance	Large marble pillars 6 feet in diameter flank you on both sides. Every ten feet a new row of pillars. The entrance to {blu}Psi-Tech{/blu} is heavily guarded. An array of cameras at the end of the atrium monitor your movements.\r\n	\N	\N	1	0	psi-tech-guard-b	,DRY,OUTSIDE
+745	877	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	psi-tech-sentry-gun-b	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+746	878	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+747	879	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+748	880	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+749	881	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+750	882	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard	The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.\r\n	\N	\N	1	0	psi-tech-sniper-post-east	,GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK
+751	883	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - East courtyard	This side of the {blu}Psi-Tech{/blu} building has a peculiar lack of windows and entrances. A soft humming sound gives you the impression that a power generator is nearby, though you cannot possibly imagine where.\r\n	\N	\N	1	0	\N	,DRY,OUTSIDE,NARROW_NORTH_SOUTH,SIDEWALK
+752	884	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - East courtyard	This side of the {blu}Psi-Tech{/blu} building has a peculiar lack of windows and entrances. A soft humming sound gives you the impression that a power generator is nearby, though you cannot possibly imagine where.\r\n	\N	\N	1	0	psi-tech-drop-off-start	,DRY,OUTSIDE,NARROW_NORTH_SOUTH,SIDEWALK
+753	885	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - East courtyard	This side of the {blu}Psi-Tech{/blu} building has a peculiar lack of windows and entrances. A soft humming sound gives you the impression that a power generator is nearby, though you cannot possibly imagine where.\r\n	\N	\N	1	0	\N	,DRY,OUTSIDE,NARROW_NORTH_SOUTH,SIDEWALK
+754	886	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - East courtyard	This side of the {blu}Psi-Tech{/blu} building has a peculiar lack of windows and entrances. A soft humming sound gives you the impression that a power generator is nearby, though you cannot possibly imagine where.\r\n	\N	\N	1	0	\N	,DRY,OUTSIDE,NARROW_NORTH_SOUTH,SIDEWALK
+755	887	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - East courtyard	This side of the {blu}Psi-Tech{/blu} building has a peculiar lack of windows and entrances. A soft humming sound gives you the impression that a power generator is nearby, though you cannot possibly imagine where.\r\n	\N	\N	1	0	\N	,DRY,OUTSIDE,NARROW_NORTH_SOUTH,SIDEWALK
+756	888	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - East courtyard	This side of the {blu}Psi-Tech{/blu} building has a peculiar lack of windows and entrances. A soft humming sound gives you the impression that a power generator is nearby, though you cannot possibly imagine where.\r\n	\N	\N	1	0	\N	,DRY,OUTSIDE,NARROW_NORTH_SOUTH,SIDEWALK
+757	889	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-1	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
+758	890	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-2	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
+759	891	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-3	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
+760	892	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-4	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
+761	893	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-5	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
+762	894	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	psi-tech-atrium	,INSIDE,METAL_WALL,TILE
+763	895	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
+766	898	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
+767	899	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
+768	900	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
+769	901	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
+770	902	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
+771	903	1	0	name	description	\N	\N	1	0	\N	\N
+772	904	1	0	name	description	\N	\N	1	0	psi-tech-hatch	,INSIDE,METAL_HATCH,TILE
+773	905	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
+774	906	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
 \.
 
 
@@ -7393,6 +8022,589 @@ COPY public.room_direction_data (id, room_number, exit_direction, general_descri
 2648	814	0	general description	keyword	1	0	813
 2649	814	2	general_description	keyword	1	0	815
 2650	815	0	general description	keyword	1	0	814
+2651	280	0	general_description	keyword	1	0	281
+2652	280	1	general_description	keyword	1	0	818
+2653	280	2	general description	keyword	1	0	279
+2654	818	1	general_description	keyword	1	0	819
+2655	818	3	general description	keyword	1	0	280
+2656	819	1	general_description	keyword	1	0	820
+2657	819	3	general description	keyword	1	0	818
+2658	820	1	general_description	keyword	1	0	821
+2659	820	3	general description	keyword	1	0	819
+2660	821	0	general_description	keyword	1	0	822
+2661	821	3	general description	keyword	1	0	820
+2662	822	0	general_description	keyword	1	0	823
+2663	822	2	general description	keyword	1	0	821
+2664	823	0	general_description	keyword	1	0	824
+2665	823	2	general description	keyword	1	0	822
+2666	824	1	general_description	keyword	1	0	825
+2667	824	2	general description	keyword	1	0	823
+2668	825	1	general_description	keyword	1	0	826
+2669	825	3	general description	keyword	1	0	824
+2670	826	1	general_description	keyword	1	0	827
+2671	826	3	general description	keyword	1	0	825
+2672	827	1	general_description	keyword	1	0	828
+2673	827	3	general description	keyword	1	0	826
+2674	828	1	general_description	keyword	1	0	829
+2675	828	3	general description	keyword	1	0	827
+2676	829	1	general_description	keyword	1	0	830
+2677	829	3	general description	keyword	1	0	828
+2678	830	1	general_description	keyword	1	0	831
+2679	830	3	general description	keyword	1	0	829
+2680	831	1	general_description	keyword	1	0	832
+2681	831	3	general description	keyword	1	0	830
+2682	832	1	general_description	keyword	1	0	833
+2683	832	3	general description	keyword	1	0	831
+2684	833	1	general_description	keyword	1	0	834
+2685	833	3	general description	keyword	1	0	832
+2686	834	1	general_description	keyword	1	0	835
+2687	834	3	general description	keyword	1	0	833
+2688	835	1	general_description	keyword	1	0	836
+2689	835	3	general description	keyword	1	0	834
+2690	836	1	general_description	keyword	1	0	837
+2691	836	3	general description	keyword	1	0	835
+2692	837	1	general_description	keyword	1	0	838
+2693	837	3	general description	keyword	1	0	836
+2694	838	1	general_description	keyword	1	0	839
+2695	838	3	general description	keyword	1	0	837
+2696	839	1	general_description	keyword	1	0	840
+2697	839	3	general description	keyword	1	0	838
+2698	840	1	general_description	keyword	1	0	841
+2699	840	3	general description	keyword	1	0	839
+2700	841	1	general_description	keyword	1	0	842
+2701	841	3	general description	keyword	1	0	840
+2702	842	1	general_description	keyword	1	0	843
+2703	842	3	general description	keyword	1	0	841
+2704	843	1	general_description	keyword	1	0	844
+2705	843	3	general description	keyword	1	0	842
+2706	844	1	general_description	keyword	1	0	845
+2707	844	3	general description	keyword	1	0	843
+2708	845	1	general_description	keyword	1	0	846
+2709	845	3	general description	keyword	1	0	844
+2710	846	1	general_description	keyword	1	0	847
+2711	846	3	general description	keyword	1	0	845
+2712	847	1	general_description	keyword	1	0	848
+2713	847	3	general description	keyword	1	0	846
+2714	848	1	general_description	keyword	1	0	849
+2715	848	3	general description	keyword	1	0	847
+2716	849	1	general_description	keyword	1	0	850
+2717	849	3	general description	keyword	1	0	848
+2718	850	1	general_description	keyword	1	0	851
+2719	850	3	general description	keyword	1	0	849
+2720	851	1	general_description	keyword	1	0	852
+2721	851	3	general description	keyword	1	0	850
+2722	852	1	general_description	keyword	1	0	853
+2723	852	3	general description	keyword	1	0	851
+2724	853	1	general_description	keyword	1	0	854
+2725	853	3	general description	keyword	1	0	852
+2726	854	1	general_description	keyword	1	0	855
+2727	854	3	general description	keyword	1	0	853
+2728	855	1	general_description	keyword	1	0	856
+2729	855	3	general description	keyword	1	0	854
+2730	856	1	general_description	keyword	1	0	857
+2731	856	3	general description	keyword	1	0	855
+2732	857	0	general_description	keyword	1	0	858
+2733	857	3	general description	keyword	1	0	856
+2734	858	0	general_description	keyword	1	0	859
+2735	858	2	general description	keyword	1	0	857
+2736	859	0	general_description	keyword	1	0	860
+2737	859	2	general description	keyword	1	0	858
+2738	860	1	general_description	keyword	1	0	861
+2739	860	2	general description	keyword	1	0	859
+2740	861	1	general_description	keyword	1	0	862
+2741	861	3	general description	keyword	1	0	860
+2742	862	0	general_description	keyword	1	0	863
+2743	862	3	general description	keyword	1	0	861
+2744	863	0	general_description	keyword	1	0	864
+2745	863	2	general description	keyword	1	0	862
+2746	864	1	general_description	keyword	1	0	865
+2747	864	2	general description	keyword	1	0	863
+2748	865	1	general_description	keyword	1	0	866
+2749	865	3	general description	keyword	1	0	864
+2750	866	3	general description	keyword	1	0	865
+2751	280	0	general_description	keyword	1	0	281
+2752	280	1	general_description	keyword	1	0	818
+2753	280	2	general description	keyword	1	0	279
+2754	818	1	general_description	keyword	1	0	819
+2755	818	3	general description	keyword	1	0	280
+2756	819	1	general_description	keyword	1	0	820
+2757	819	3	general description	keyword	1	0	818
+2758	820	1	general_description	keyword	1	0	821
+2759	820	3	general description	keyword	1	0	819
+2760	821	0	general_description	keyword	1	0	822
+2761	821	3	general description	keyword	1	0	820
+2762	822	0	general_description	keyword	1	0	823
+2763	822	2	general description	keyword	1	0	821
+2764	823	0	general_description	keyword	1	0	824
+2765	823	2	general description	keyword	1	0	822
+2766	824	1	general_description	keyword	1	0	825
+2767	824	2	general description	keyword	1	0	823
+2768	825	1	general_description	keyword	1	0	826
+2769	825	3	general description	keyword	1	0	824
+2770	826	1	general_description	keyword	1	0	827
+2771	826	3	general description	keyword	1	0	825
+2772	827	1	general_description	keyword	1	0	828
+2773	827	3	general description	keyword	1	0	826
+2774	828	1	general_description	keyword	1	0	829
+2775	828	3	general description	keyword	1	0	827
+2776	829	1	general_description	keyword	1	0	830
+2777	829	3	general description	keyword	1	0	828
+2778	830	1	general_description	keyword	1	0	831
+2779	830	3	general description	keyword	1	0	829
+2780	831	1	general_description	keyword	1	0	832
+2781	831	3	general description	keyword	1	0	830
+2782	832	1	general_description	keyword	1	0	833
+2783	832	3	general description	keyword	1	0	831
+2784	833	1	general_description	keyword	1	0	834
+2785	833	3	general description	keyword	1	0	832
+2786	834	1	general_description	keyword	1	0	835
+2787	834	3	general description	keyword	1	0	833
+2788	835	1	general_description	keyword	1	0	836
+2789	835	3	general description	keyword	1	0	834
+2790	836	1	general_description	keyword	1	0	837
+2791	836	3	general description	keyword	1	0	835
+2792	837	1	general_description	keyword	1	0	838
+2793	837	3	general description	keyword	1	0	836
+2794	838	1	general_description	keyword	1	0	839
+2795	838	3	general description	keyword	1	0	837
+2796	839	1	general_description	keyword	1	0	840
+2797	839	3	general description	keyword	1	0	838
+2798	840	1	general_description	keyword	1	0	841
+2799	840	3	general description	keyword	1	0	839
+2800	841	1	general_description	keyword	1	0	842
+2801	841	3	general description	keyword	1	0	840
+2802	842	1	general_description	keyword	1	0	843
+2803	842	3	general description	keyword	1	0	841
+2804	843	1	general_description	keyword	1	0	844
+2805	843	3	general description	keyword	1	0	842
+2806	844	1	general_description	keyword	1	0	845
+2807	844	3	general description	keyword	1	0	843
+2808	845	1	general_description	keyword	1	0	846
+2809	845	3	general description	keyword	1	0	844
+2810	846	1	general_description	keyword	1	0	847
+2811	846	3	general description	keyword	1	0	845
+2812	847	1	general_description	keyword	1	0	848
+2813	847	3	general description	keyword	1	0	846
+2814	848	1	general_description	keyword	1	0	849
+2815	848	3	general description	keyword	1	0	847
+2816	849	1	general_description	keyword	1	0	850
+2817	849	3	general description	keyword	1	0	848
+2818	850	1	general_description	keyword	1	0	851
+2819	850	3	general description	keyword	1	0	849
+2820	851	1	general_description	keyword	1	0	852
+2821	851	3	general description	keyword	1	0	850
+2822	852	1	general_description	keyword	1	0	853
+2823	852	3	general description	keyword	1	0	851
+2824	853	1	general_description	keyword	1	0	854
+2825	853	3	general description	keyword	1	0	852
+2826	854	1	general_description	keyword	1	0	855
+2827	854	3	general description	keyword	1	0	853
+2828	855	1	general_description	keyword	1	0	856
+2829	855	3	general description	keyword	1	0	854
+2830	856	1	general_description	keyword	1	0	857
+2831	856	3	general description	keyword	1	0	855
+2832	857	0	general_description	keyword	1	0	858
+2833	857	3	general description	keyword	1	0	856
+2834	858	0	general_description	keyword	1	0	859
+2835	858	2	general description	keyword	1	0	857
+2836	859	0	general_description	keyword	1	0	860
+2837	859	2	general description	keyword	1	0	858
+2838	860	1	general_description	keyword	1	0	861
+2839	860	2	general description	keyword	1	0	859
+2840	861	1	general_description	keyword	1	0	862
+2841	861	3	general description	keyword	1	0	860
+2842	862	0	general_description	keyword	1	0	863
+2843	862	3	general description	keyword	1	0	861
+2844	863	0	general_description	keyword	1	0	864
+2845	863	2	general description	keyword	1	0	862
+2846	864	1	general_description	keyword	1	0	865
+2847	864	2	general description	keyword	1	0	863
+2848	865	1	general_description	keyword	1	0	866
+2849	865	3	general description	keyword	1	0	864
+2850	866	3	general description	keyword	1	0	865
+2851	280	0	general_description	keyword	1	0	281
+2852	280	1	general_description	keyword	1	0	818
+2853	280	2	general description	keyword	1	0	279
+2854	818	1	general_description	keyword	1	0	819
+2855	818	3	general description	keyword	1	0	280
+2856	819	1	general_description	keyword	1	0	820
+2857	819	3	general description	keyword	1	0	818
+2858	820	1	general_description	keyword	1	0	821
+2859	820	3	general description	keyword	1	0	819
+2860	821	0	general_description	keyword	1	0	822
+2861	821	3	general description	keyword	1	0	820
+2862	822	0	general_description	keyword	1	0	823
+2863	822	2	general description	keyword	1	0	821
+2864	823	0	general_description	keyword	1	0	824
+2865	823	2	general description	keyword	1	0	822
+2866	824	1	general_description	keyword	1	0	825
+2867	824	2	general description	keyword	1	0	823
+2868	825	1	general_description	keyword	1	0	826
+2869	825	3	general description	keyword	1	0	824
+2870	826	1	general_description	keyword	1	0	827
+2871	826	3	general description	keyword	1	0	825
+2872	827	1	general_description	keyword	1	0	828
+2873	827	3	general description	keyword	1	0	826
+2874	828	1	general_description	keyword	1	0	829
+2875	828	3	general description	keyword	1	0	827
+2876	829	1	general_description	keyword	1	0	830
+2877	829	3	general description	keyword	1	0	828
+2878	830	1	general_description	keyword	1	0	831
+2879	830	3	general description	keyword	1	0	829
+2880	831	1	general_description	keyword	1	0	832
+2881	831	3	general description	keyword	1	0	830
+2882	832	1	general_description	keyword	1	0	833
+2883	832	3	general description	keyword	1	0	831
+2884	833	1	general_description	keyword	1	0	834
+2885	833	3	general description	keyword	1	0	832
+2886	834	1	general_description	keyword	1	0	835
+2887	834	3	general description	keyword	1	0	833
+2888	835	1	general_description	keyword	1	0	836
+2889	835	3	general description	keyword	1	0	834
+2890	836	1	general_description	keyword	1	0	837
+2891	836	3	general description	keyword	1	0	835
+2892	837	1	general_description	keyword	1	0	838
+2893	837	3	general description	keyword	1	0	836
+2894	838	1	general_description	keyword	1	0	839
+2895	838	3	general description	keyword	1	0	837
+2896	839	1	general_description	keyword	1	0	840
+2897	839	3	general description	keyword	1	0	838
+2898	840	1	general_description	keyword	1	0	841
+2899	840	3	general description	keyword	1	0	839
+2900	841	1	general_description	keyword	1	0	842
+2901	841	3	general description	keyword	1	0	840
+2902	842	1	general_description	keyword	1	0	843
+2903	842	3	general description	keyword	1	0	841
+2904	843	1	general_description	keyword	1	0	844
+2905	843	3	general description	keyword	1	0	842
+2906	844	1	general_description	keyword	1	0	845
+2907	844	3	general description	keyword	1	0	843
+2908	845	1	general_description	keyword	1	0	846
+2909	845	3	general description	keyword	1	0	844
+2910	846	1	general_description	keyword	1	0	847
+2911	846	3	general description	keyword	1	0	845
+2912	847	1	general_description	keyword	1	0	848
+2913	847	3	general description	keyword	1	0	846
+2914	848	1	general_description	keyword	1	0	849
+2915	848	3	general description	keyword	1	0	847
+2916	849	1	general_description	keyword	1	0	850
+2917	849	3	general description	keyword	1	0	848
+2918	850	1	general_description	keyword	1	0	851
+2919	850	3	general description	keyword	1	0	849
+2920	851	1	general_description	keyword	1	0	852
+2921	851	3	general description	keyword	1	0	850
+2922	852	1	general_description	keyword	1	0	853
+2923	852	3	general description	keyword	1	0	851
+2924	853	1	general_description	keyword	1	0	854
+2925	853	3	general description	keyword	1	0	852
+2926	854	1	general_description	keyword	1	0	855
+2927	854	3	general description	keyword	1	0	853
+2928	855	1	general_description	keyword	1	0	856
+2929	855	3	general description	keyword	1	0	854
+2930	856	1	general_description	keyword	1	0	857
+2931	856	3	general description	keyword	1	0	855
+2932	857	0	general_description	keyword	1	0	858
+2933	857	3	general description	keyword	1	0	856
+2934	858	0	general_description	keyword	1	0	859
+2935	858	2	general description	keyword	1	0	857
+2936	859	0	general_description	keyword	1	0	860
+2937	859	2	general description	keyword	1	0	858
+2938	860	1	general_description	keyword	1	0	861
+2939	860	2	general description	keyword	1	0	859
+2940	861	1	general_description	keyword	1	0	862
+2941	861	3	general description	keyword	1	0	860
+2942	862	0	general_description	keyword	1	0	863
+2943	862	3	general description	keyword	1	0	861
+2944	863	0	general_description	keyword	1	0	864
+2945	863	2	general description	keyword	1	0	862
+2946	864	1	general_description	keyword	1	0	865
+2947	864	2	general description	keyword	1	0	863
+2948	865	1	general_description	keyword	1	0	866
+2949	865	3	general description	keyword	1	0	864
+2950	866	3	general description	keyword	1	0	865
+2951	280	0	general_description	keyword	1	0	281
+2952	280	1	general_description	keyword	1	0	818
+2953	280	2	general description	keyword	1	0	279
+2954	818	1	general_description	keyword	1	0	819
+2955	818	3	general description	keyword	1	0	280
+2956	819	1	general_description	keyword	1	0	820
+2957	819	3	general description	keyword	1	0	818
+2958	820	1	general_description	keyword	1	0	821
+2959	820	3	general description	keyword	1	0	819
+2960	821	0	general_description	keyword	1	0	822
+2961	821	3	general description	keyword	1	0	820
+2962	822	0	general_description	keyword	1	0	823
+2963	822	2	general description	keyword	1	0	821
+2964	823	0	general_description	keyword	1	0	824
+2965	823	2	general description	keyword	1	0	822
+2966	824	1	general_description	keyword	1	0	825
+2967	824	2	general description	keyword	1	0	823
+2968	825	1	general_description	keyword	1	0	826
+2969	825	3	general description	keyword	1	0	824
+2970	826	1	general_description	keyword	1	0	827
+2971	826	3	general description	keyword	1	0	825
+2972	827	1	general_description	keyword	1	0	828
+2973	827	3	general description	keyword	1	0	826
+2974	828	1	general_description	keyword	1	0	829
+2975	828	3	general description	keyword	1	0	827
+2976	829	1	general_description	keyword	1	0	830
+2977	829	3	general description	keyword	1	0	828
+2978	830	1	general_description	keyword	1	0	831
+2979	830	3	general description	keyword	1	0	829
+2980	831	1	general_description	keyword	1	0	832
+2981	831	3	general description	keyword	1	0	830
+2982	832	1	general_description	keyword	1	0	833
+2983	832	3	general description	keyword	1	0	831
+2984	833	1	general_description	keyword	1	0	834
+2985	833	3	general description	keyword	1	0	832
+2986	834	1	general_description	keyword	1	0	835
+2987	834	3	general description	keyword	1	0	833
+2988	835	1	general_description	keyword	1	0	836
+2989	835	3	general description	keyword	1	0	834
+2990	836	1	general_description	keyword	1	0	837
+2991	836	3	general description	keyword	1	0	835
+2992	837	1	general_description	keyword	1	0	838
+2993	837	3	general description	keyword	1	0	836
+2994	838	1	general_description	keyword	1	0	839
+2995	838	3	general description	keyword	1	0	837
+2996	839	1	general_description	keyword	1	0	840
+2997	839	3	general description	keyword	1	0	838
+2998	840	1	general_description	keyword	1	0	841
+2999	840	3	general description	keyword	1	0	839
+3000	841	1	general_description	keyword	1	0	842
+3001	841	3	general description	keyword	1	0	840
+3002	842	1	general_description	keyword	1	0	843
+3003	842	3	general description	keyword	1	0	841
+3004	843	1	general_description	keyword	1	0	844
+3005	843	3	general description	keyword	1	0	842
+3006	844	1	general_description	keyword	1	0	845
+3007	844	3	general description	keyword	1	0	843
+3008	845	1	general_description	keyword	1	0	846
+3009	845	3	general description	keyword	1	0	844
+3010	846	1	general_description	keyword	1	0	847
+3011	846	3	general description	keyword	1	0	845
+3012	847	1	general_description	keyword	1	0	848
+3013	847	3	general description	keyword	1	0	846
+3014	848	1	general_description	keyword	1	0	849
+3015	848	3	general description	keyword	1	0	847
+3016	849	1	general_description	keyword	1	0	850
+3017	849	3	general description	keyword	1	0	848
+3018	850	1	general_description	keyword	1	0	851
+3019	850	3	general description	keyword	1	0	849
+3020	851	1	general_description	keyword	1	0	852
+3021	851	3	general description	keyword	1	0	850
+3022	852	1	general_description	keyword	1	0	853
+3023	852	3	general description	keyword	1	0	851
+3024	853	1	general_description	keyword	1	0	854
+3025	853	3	general description	keyword	1	0	852
+3026	854	1	general_description	keyword	1	0	855
+3027	854	3	general description	keyword	1	0	853
+3028	855	1	general_description	keyword	1	0	856
+3029	855	3	general description	keyword	1	0	854
+3030	856	1	general_description	keyword	1	0	857
+3031	856	3	general description	keyword	1	0	855
+3032	857	0	general_description	keyword	1	0	858
+3033	857	3	general description	keyword	1	0	856
+3034	858	0	general_description	keyword	1	0	859
+3035	858	2	general description	keyword	1	0	857
+3036	859	0	general_description	keyword	1	0	860
+3037	859	2	general description	keyword	1	0	858
+3038	860	1	general_description	keyword	1	0	861
+3039	860	2	general description	keyword	1	0	859
+3040	861	1	general_description	keyword	1	0	862
+3041	861	3	general description	keyword	1	0	860
+3042	862	0	general_description	keyword	1	0	863
+3043	862	3	general description	keyword	1	0	861
+3044	863	0	general_description	keyword	1	0	864
+3045	863	2	general description	keyword	1	0	862
+3046	864	1	general_description	keyword	1	0	865
+3047	864	2	general description	keyword	1	0	863
+3048	865	1	general_description	keyword	1	0	866
+3049	865	3	general description	keyword	1	0	864
+3050	866	3	general description	keyword	1	0	865
+3051	280	0	general_description	keyword	1	0	281
+3052	280	1	general_description	keyword	1	0	818
+3053	280	2	general description	keyword	1	0	279
+3054	818	1	general_description	keyword	1	0	819
+3055	818	3	general description	keyword	1	0	280
+3056	819	1	general_description	keyword	1	0	820
+3057	819	3	general description	keyword	1	0	818
+3058	820	1	general_description	keyword	1	0	821
+3059	820	3	general description	keyword	1	0	819
+3060	821	0	general_description	keyword	1	0	822
+3061	821	3	general description	keyword	1	0	820
+3062	822	0	general_description	keyword	1	0	823
+3063	822	2	general description	keyword	1	0	821
+3064	823	0	general_description	keyword	1	0	824
+3065	823	2	general description	keyword	1	0	822
+3066	824	1	general_description	keyword	1	0	825
+3067	824	2	general description	keyword	1	0	823
+3068	825	1	general_description	keyword	1	0	826
+3069	825	3	general description	keyword	1	0	824
+3070	826	1	general_description	keyword	1	0	827
+3071	826	3	general description	keyword	1	0	825
+3072	827	1	general_description	keyword	1	0	828
+3073	827	3	general description	keyword	1	0	826
+3074	828	1	general_description	keyword	1	0	829
+3075	828	3	general description	keyword	1	0	827
+3076	829	1	general_description	keyword	1	0	830
+3077	829	3	general description	keyword	1	0	828
+3078	830	1	general_description	keyword	1	0	831
+3079	830	3	general description	keyword	1	0	829
+3080	831	1	general_description	keyword	1	0	832
+3081	831	3	general description	keyword	1	0	830
+3082	832	1	general_description	keyword	1	0	833
+3083	832	3	general description	keyword	1	0	831
+3084	833	1	general_description	keyword	1	0	834
+3085	833	3	general description	keyword	1	0	832
+3086	834	1	general_description	keyword	1	0	835
+3087	834	3	general description	keyword	1	0	833
+3088	835	1	general_description	keyword	1	0	836
+3089	835	3	general description	keyword	1	0	834
+3090	836	1	general_description	keyword	1	0	837
+3091	836	3	general description	keyword	1	0	835
+3092	837	1	general_description	keyword	1	0	838
+3093	837	3	general description	keyword	1	0	836
+3094	838	1	general_description	keyword	1	0	839
+3095	838	3	general description	keyword	1	0	837
+3096	839	1	general_description	keyword	1	0	840
+3097	839	3	general description	keyword	1	0	838
+3098	840	1	general_description	keyword	1	0	841
+3099	840	3	general description	keyword	1	0	839
+3100	841	1	general_description	keyword	1	0	842
+3101	841	3	general description	keyword	1	0	840
+3102	842	1	general_description	keyword	1	0	843
+3103	842	3	general description	keyword	1	0	841
+3104	843	1	general_description	keyword	1	0	844
+3105	843	3	general description	keyword	1	0	842
+3106	844	1	general_description	keyword	1	0	845
+3107	844	3	general description	keyword	1	0	843
+3108	845	1	general_description	keyword	1	0	846
+3109	845	3	general description	keyword	1	0	844
+3110	846	1	general_description	keyword	1	0	847
+3111	846	3	general description	keyword	1	0	845
+3112	847	1	general_description	keyword	1	0	848
+3113	847	3	general description	keyword	1	0	846
+3114	848	1	general_description	keyword	1	0	849
+3115	848	3	general description	keyword	1	0	847
+3116	849	1	general_description	keyword	1	0	850
+3117	849	3	general description	keyword	1	0	848
+3118	850	1	general_description	keyword	1	0	851
+3119	850	3	general description	keyword	1	0	849
+3120	851	1	general_description	keyword	1	0	852
+3121	851	3	general description	keyword	1	0	850
+3122	852	1	general_description	keyword	1	0	853
+3123	852	3	general description	keyword	1	0	851
+3124	853	1	general_description	keyword	1	0	854
+3125	853	3	general description	keyword	1	0	852
+3126	854	1	general_description	keyword	1	0	855
+3127	854	3	general description	keyword	1	0	853
+3128	855	1	general_description	keyword	1	0	856
+3129	855	3	general description	keyword	1	0	854
+3130	856	1	general_description	keyword	1	0	857
+3131	856	3	general description	keyword	1	0	855
+3132	857	0	general_description	keyword	1	0	858
+3133	857	3	general description	keyword	1	0	856
+3134	858	0	general_description	keyword	1	0	859
+3135	858	2	general description	keyword	1	0	857
+3136	859	0	general_description	keyword	1	0	860
+3137	859	2	general description	keyword	1	0	858
+3138	860	1	general_description	keyword	1	0	861
+3139	860	2	general description	keyword	1	0	859
+3140	861	1	general_description	keyword	1	0	862
+3141	861	3	general description	keyword	1	0	860
+3142	862	0	general_description	keyword	1	0	863
+3143	862	3	general description	keyword	1	0	861
+3144	863	0	general_description	keyword	1	0	864
+3145	863	2	general description	keyword	1	0	862
+3146	864	1	general_description	keyword	1	0	865
+3147	864	2	general description	keyword	1	0	863
+3148	865	1	general_description	keyword	1	0	866
+3149	865	3	general description	keyword	1	0	864
+3150	866	3	general description	keyword	1	0	865
+3151	336	0	general_description	keyword	1	0	337
+3152	336	1	general_description	keyword	1	0	867
+3153	336	2	general description	keyword	1	0	335
+3154	867	1	general_description	keyword	1	0	868
+3155	867	3	general description	keyword	1	0	336
+3156	868	0	general_description	keyword	1	0	869
+3157	868	3	general description	keyword	1	0	867
+3158	869	0	general_description	keyword	1	0	870
+3159	869	2	general description	keyword	1	0	868
+3160	870	1	general_description	keyword	1	0	871
+3161	870	2	general description	keyword	1	0	869
+3162	871	1	general_description	keyword	1	0	872
+3163	871	3	general description	keyword	1	0	870
+3164	872	1	general_description	keyword	1	0	873
+3165	872	3	general description	keyword	1	0	871
+3166	873	0	general_description	keyword	1	0	874
+3167	873	3	general description	keyword	1	0	872
+3168	874	1	general_description	keyword	1	0	875
+3169	874	2	general description	keyword	1	0	873
+3170	875	0	general_description	keyword	1	0	894
+3171	875	1	general_description	keyword	1	0	876
+3172	875	3	general description	keyword	1	0	874
+3173	876	2	general_description	keyword	1	0	877
+3174	876	3	general description	keyword	1	0	875
+3175	877	0	general description	keyword	1	0	876
+3176	877	1	general_description	keyword	1	0	878
+3177	878	1	general_description	keyword	1	0	879
+3178	878	3	general description	keyword	1	0	877
+3179	879	1	general_description	keyword	1	0	880
+3180	879	3	general description	keyword	1	0	878
+3181	880	1	general_description	keyword	1	0	881
+3182	880	3	general description	keyword	1	0	879
+3183	881	1	general_description	keyword	1	0	882
+3184	881	3	general description	keyword	1	0	880
+3185	882	0	general_description	keyword	1	0	883
+3186	882	3	general description	keyword	1	0	881
+3187	883	0	general_description	keyword	1	0	884
+3188	883	2	general description	keyword	1	0	882
+3189	884	0	general_description	keyword	1	0	885
+3190	884	1	general_description	keyword	1	0	889
+3191	884	2	general description	keyword	1	0	883
+3192	885	0	general_description	keyword	1	0	886
+3193	885	2	general description	keyword	1	0	884
+3194	886	1	general_description	keyword	1	0	887
+3195	886	2	general description	keyword	1	0	885
+3196	887	0	general_description	keyword	1	0	888
+3197	887	3	general description	keyword	1	0	886
+3198	888	2	general description	keyword	1	0	887
+3199	889	1	general_description	keyword	1	0	890
+3200	889	3	general description	keyword	1	0	884
+3201	890	1	general_description	keyword	1	0	891
+3202	890	3	general description	keyword	1	0	889
+3203	891	0	general_description	keyword	1	0	892
+3204	891	3	general description	keyword	1	0	890
+3205	892	1	general_description	keyword	1	0	893
+3206	892	2	general description	keyword	1	0	891
+3207	893	3	general description	keyword	1	0	892
+3208	894	0	general_description	keyword	1	0	895
+3209	894	2	general description	keyword	1	0	875
+3210	895	0	general_description	keyword	1	0	896
+3211	895	2	general description	keyword	1	0	894
+3212	896	0	general_description	keyword	1	0	897
+3213	896	2	general description	keyword	1	0	895
+3214	897	0	general_description	keyword	1	0	898
+3215	897	1	general_description	keyword	1	0	903
+3216	897	2	general description	keyword	1	0	896
+3217	897	3	general_description	keyword	1	0	899
+3218	898	2	general description	keyword	1	0	897
+3219	899	1	general description	keyword	1	0	897
+3220	899	3	general_description	keyword	1	0	900
+3221	900	1	general description	keyword	1	0	899
+3222	900	3	general_description	keyword	1	0	901
+3223	901	1	general description	keyword	1	0	900
+3224	901	3	general_description	keyword	1	0	902
+3225	902	1	general description	keyword	1	0	901
+3226	903	1	general_description	keyword	1	0	904
+3227	903	3	general description	keyword	1	0	897
+3228	904	1	general_description	keyword	1	0	905
+3229	904	3	general description	keyword	1	0	903
+3230	904	5	A	metal	0	4	128
+3231	905	1	general_description	keyword	1	0	906
+3232	905	3	general description	keyword	1	0	904
+3233	906	3	general description	keyword	1	0	905
 \.
 
 
@@ -7411,6 +8623,7 @@ COPY public.room_extra_descriptions (id, red_room_vnum, red_keyword, red_descrip
 COPY public.scripted_sequences (id, s_sequence_vnum) FROM stdin;
 21	1
 23	2
+27	26
 \.
 
 
@@ -7419,6 +8632,13 @@ COPY public.scripted_sequences (id, s_sequence_vnum) FROM stdin;
 --
 
 COPY public.scripted_steps (id, s_sequence_vnum, s_wait_ticks, s_mob, s_obj, s_room, s_quantity, s_order, s_interpret, s_yaml, s_type, s_dialogue) FROM stdin;
+99	26	9	600	0	143	0	0	\N	\N	act	$n looks up from a messy desk full of detailed readouts..
+100	26	9	600	0	143	0	1	\N	\N	dialogue	The scanner? Give it here...
+101	26	3	600	0	143	0	2	\N	\N	act	$n attaches a long orange cable to the bottom of the biometric scanner
+102	26	3	600	0	143	0	3	\N	\N	dialogue	Yes... these are definitely human remains. Though I do see an advanced type of mutation occurring. It's almost as if this sample were taken off of a living breathing human. I don't understand how this sort of thing could be possible. It defies all scientific explanation.
+103	26	3	600	0	143	0	4	\N	\N	act	$n types a few commands into a computer terminal.
+104	26	3	600	0	143	0	5	\N	\N	dialogue	I will get these results to my international colleagues for further study. I will give Corporal Crawford the results of my studies. That is all for now...
+105	26	3	600	0	143	0	6	\N	\N	act	$n rubs his temples in an effort to quell a severe migraine...
 \.
 
 
@@ -7570,6 +8790,53 @@ COPY public.skill_usage (id, player_id, skill_name, skill_level) FROM stdin;
 329	110	smine	0
 330	110	cmine	0
 331	110	recon	0
+332	1	wpn-assault-rifles	0
+333	1	wpn-sniper-rifles	0
+334	1	wpn-sub-machine-guns	0
+335	1	wpn-shotguns	0
+336	1	wpn-pistols	0
+337	1	wpn-machine-pistols	0
+338	1	wpn-light-machine-guns	0
+339	1	cqc-jab-to-head	0
+340	1	cqc-jab-to-body	0
+341	1	cqc-cross-to-head	0
+342	1	cqc-cross-to-body	0
+343	1	cqc-left-hook-to-head	0
+344	1	cqc-right-hook-to-head	0
+345	1	cqc-left-hook-to-body	0
+346	1	cqc-right-hook-to-body	0
+347	1	cqc-left-uppercut	0
+348	1	cqc-right-uppercut	0
+349	1	cqc-left-elbow	0
+350	1	cqc-right-elbow	0
+351	1	cqc-right-upward-elbow	0
+352	1	cqc-left-upward-elbow	0
+353	1	cqc-right-oblique	0
+354	1	cqc-left-oblique	0
+355	1	cqc-left-teep	0
+356	1	cqc-right-teep	0
+357	1	cqc-left-front-kick	0
+358	1	cqc-right-front-kick	0
+359	1	cqc-left-knee-to-head	0
+360	1	cqc-right-knee-to-head	0
+361	1	cqc-left-knee-to-body	0
+362	1	cqc-right-knee-to-body	0
+363	1	cqc-knife-disarm	0
+364	1	cqc-pistol-disarm	0
+365	1	cqc-right-leg-kick	0
+366	1	cqc-left-leg-kick	0
+367	1	cqc-right-kick-to-head	0
+368	1	cqc-left-kick-to-head	0
+369	1	cqc-right-stomp-to-head	0
+370	1	cqc-left-stomp-to-head	0
+\.
+
+
+--
+-- Data for Name: stay; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.stay (id, s_room_vnum, s_username, created_at) FROM stdin;
 \.
 
 
@@ -7610,6 +8877,15 @@ COPY public.terminal_choices (id, choice_terminal_id, choice_id, choice_title, c
 
 
 --
+-- Data for Name: user_logins; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.user_logins (id, u_ip_address, u_username) FROM stdin;
+1	127.0.0.1	far
+\.
+
+
+--
 -- Data for Name: weapon_locker; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -7622,7 +8898,7 @@ COPY public.weapon_locker (id, w_room_vnum, w_yaml) FROM stdin;
 --
 
 COPY public.world_configuration_start_rooms (id, mortal_start_room, immortal_start_room, created_at, is_active, idle_room, frozen_room) FROM stdin;
-4	128	128	2019-06-01 19:30:07.630823	t	45 46
+5	128	128	2022-02-01 01:40:03.476734	t	0	0
 \.
 
 
@@ -7659,42 +8935,6 @@ COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_
 844	1	Y	0	0	395	1	#yaml|vehicle/lxr-sunrise.yml
 845	1	Y	0	0	393	1	#yaml|vehicle/lxr-sport.yml
 846	1	Y	0	0	394	1	#yaml|vehicle/lxr-sport.yml
-847	1	M	0	100	393	2	\N
-848	1	M	0	100	394	2	\N
-849	1	M	0	100	395	2	\N
-850	1	M	0	100	396	2	\N
-851	1	M	0	100	398	2	\N
-852	1	M	0	100	400	2	\N
-853	1	M	0	100	399	2	\N
-854	1	M	0	100	401	2	\N
-855	1	M	0	100	402	2	\N
-856	1	M	0	101	316	5	\N
-857	1	M	0	101	317	5	\N
-858	1	M	0	101	322	5	\N
-859	1	M	0	101	323	5	\N
-860	1	M	0	101	324	5	\N
-861	1	M	0	101	325	5	\N
-862	1	M	0	101	306	5	\N
-863	1	M	0	101	308	5	\N
-864	1	M	0	102	290	2	\N
-865	1	M	0	102	291	2	\N
-866	1	M	0	102	292	2	\N
-867	1	M	0	102	294	2	\N
-868	1	M	0	102	295	2	\N
-869	1	M	0	102	331	2	\N
-870	1	M	0	102	298	2	\N
-871	1	M	0	102	303	2	\N
-872	1	M	0	102	310	2	\N
-873	1	M	0	102	317	2	\N
-874	1	M	0	102	324	2	\N
-875	1	M	0	103	407	1	\N
-876	1	M	0	103	409	1	\N
-877	1	M	0	103	413	1	\N
-878	1	M	0	103	282	1	\N
-879	1	M	0	103	284	1	\N
-880	1	M	0	103	286	1	\N
-881	1	M	0	103	292	1	\N
-882	1	M	0	103	293	1	\N
 883	1	R	0	575	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
 884	1	R	0	576	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
 885	1	R	0	577	1	0	melee/improvised-shank.yml|melee/screwdriver.yml|
@@ -7775,14 +9015,119 @@ COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_
 960	1	M	0	110	614	16	\N
 961	1	M	0	110	625	16	\N
 962	1	M	0	110	636	16	\N
-963	1	M	0	106	729	1	\N
-964	1	M	0	106	730	1	\N
-965	1	M	0	106	731	1	\N
-966	1	M	0	106	732	1	\N
-967	1	M	0	107	729	1	\N
-968	1	M	0	107	730	1	\N
-969	1	M	0	107	731	1	\N
-970	1	M	0	107	732	1	\N
+971	1	Y	0	0	402	1	#yaml|vehicle/p3-hunchbak.yml
+972	1	Y	0	0	400	1	#yaml|vehicle/p3-offroad-mx3.yml
+973	1	Y	0	0	399	1	#yaml|vehicle/prime-town-suv.yml
+974	1	Y	0	0	395	1	#yaml|vehicle/lxr-sunrise.yml
+975	1	Y	0	0	393	1	#yaml|vehicle/lxr-sport.yml
+976	1	Y	0	0	394	1	#yaml|vehicle/lxr-sport.yml
+977	1	M	0	100	393	2	\N
+978	1	M	0	100	394	2	\N
+979	1	M	0	100	395	2	\N
+980	1	M	0	100	396	2	\N
+981	1	M	0	100	398	2	\N
+982	1	M	0	100	400	2	\N
+983	1	M	0	100	399	2	\N
+984	1	M	0	100	401	2	\N
+985	1	M	0	100	402	2	\N
+986	1	M	0	101	316	5	\N
+987	1	M	0	101	317	5	\N
+988	1	M	0	101	322	5	\N
+989	1	M	0	101	323	5	\N
+990	1	M	0	101	324	5	\N
+991	1	M	0	101	325	5	\N
+992	1	M	0	101	306	5	\N
+993	1	M	0	101	308	5	\N
+994	1	M	0	102	290	2	\N
+995	1	M	0	102	291	2	\N
+996	1	M	0	102	292	2	\N
+997	1	M	0	102	294	2	\N
+998	1	M	0	102	295	2	\N
+999	1	M	0	102	331	2	\N
+1000	1	M	0	102	298	2	\N
+1001	1	M	0	102	303	2	\N
+1002	1	M	0	102	310	2	\N
+1003	1	M	0	102	317	2	\N
+1004	1	M	0	102	324	2	\N
+1005	1	M	0	103	407	1	\N
+1006	1	M	0	103	409	1	\N
+1007	1	M	0	103	413	1	\N
+1008	1	M	0	103	282	1	\N
+1009	1	M	0	103	284	1	\N
+1010	1	M	0	103	286	1	\N
+1011	1	M	0	103	292	1	\N
+1012	1	M	0	103	293	1	\N
+1013	1	M	0	104	589	5	\N
+1014	1	M	0	104	592	5	\N
+1015	1	M	0	104	600	5	\N
+1016	1	M	0	104	603	5	\N
+1017	1	M	0	104	611	5	\N
+1018	1	M	0	104	614	5	\N
+1019	1	M	0	104	622	5	\N
+1020	1	M	0	104	625	5	\N
+1021	1	M	0	104	633	5	\N
+1022	1	M	0	106	729	1	\N
+1023	1	M	0	106	730	1	\N
+1024	1	M	0	106	731	1	\N
+1025	1	M	0	106	732	1	\N
+1026	1	M	0	107	729	1	\N
+1027	1	M	0	107	730	1	\N
+1028	1	M	0	107	731	1	\N
+1029	1	M	0	107	732	1	\N
+1030	1	M	0	112	750	5	\N
+1031	1	M	0	112	754	5	\N
+1032	1	M	0	112	757	5	\N
+1033	1	M	0	112	761	5	\N
+1034	1	M	0	112	764	5	\N
+1035	1	M	0	112	769	5	\N
+1036	1	M	0	112	774	5	\N
+1037	1	M	0	112	779	5	\N
+1038	1	M	0	112	784	5	\N
+1039	1	M	0	112	785	5	\N
+1040	1	M	0	112	788	5	\N
+1041	1	M	0	112	791	5	\N
+1042	1	M	0	112	794	5	\N
+1043	1	M	0	112	797	5	\N
+1044	1	M	0	112	800	5	\N
+1045	1	M	0	112	803	5	\N
+1046	1	M	0	112	806	5	\N
+1047	1	M	0	112	809	5	\N
+1048	1	M	0	112	812	5	\N
+1049	1	M	0	112	815	5	\N
+1050	1	M	0	113	750	5	\N
+1051	1	M	0	113	754	5	\N
+1052	1	M	0	113	757	5	\N
+1053	1	M	0	113	761	5	\N
+1054	1	M	0	113	764	5	\N
+1055	1	M	0	113	769	5	\N
+1056	1	M	0	113	774	5	\N
+1057	1	M	0	113	779	5	\N
+1058	1	M	0	113	784	5	\N
+1059	1	M	0	113	785	5	\N
+1060	1	M	0	113	788	5	\N
+1061	1	M	0	113	791	5	\N
+1062	1	M	0	113	794	5	\N
+1063	1	M	0	113	797	5	\N
+1064	1	M	0	113	800	5	\N
+1065	1	M	0	113	803	5	\N
+1066	1	M	0	113	806	5	\N
+1067	1	M	0	113	809	5	\N
+1068	1	M	0	113	812	5	\N
+1069	1	M	0	113	815	5	\N
+1079	1	Y	0	0	889	1	#yaml|vehicle/p3-hunchbak.yml
+1080	1	Y	0	0	890	1	#yaml|vehicle/p3-offroad-mx3.yml
+1081	1	Y	0	0	891	1	#yaml|vehicle/prime-town-suv.yml
+1082	1	Y	0	0	892	1	#yaml|vehicle/lxr-sunrise.yml
+1083	1	Y	0	0	893	1	#yaml|vehicle/lxr-sport.yml
+1086	1	M	0	666	682	1	\N
+1087	1	M	0	503	874	1	\N
+1088	1	M	0	503	876	1	\N
+1089	1	M	0	504	870	2	\N
+1090	1	M	0	504	882	2	\N
+1091	1	M	0	505	894	1	\N
+1092	1	M	0	505	896	1	\N
+1093	1	M	0	505	0	1	\N
+1094	1	M	0	505	0	1	\N
 \.
 
 
@@ -7805,6 +9150,13 @@ SELECT pg_catalog.setval('public.armor_index_id_seq', 25, true);
 --
 
 SELECT pg_catalog.setval('public.armor_locker_id_seq', 1, false);
+
+
+--
+-- Name: banned_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.banned_id_seq', 1, false);
 
 
 --
@@ -7881,21 +9233,21 @@ SELECT pg_catalog.setval('public.computer_terminal_id_seq', 1, true);
 -- Name: contract_step_callback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contract_step_callback_id_seq', 12, true);
+SELECT pg_catalog.setval('public.contract_step_callback_id_seq', 15, true);
 
 
 --
 -- Name: contract_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contract_steps_id_seq', 30, true);
+SELECT pg_catalog.setval('public.contract_steps_id_seq', 45, true);
 
 
 --
 -- Name: contracts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contracts_id_seq', 12, true);
+SELECT pg_catalog.setval('public.contracts_id_seq', 18, true);
 
 
 --
@@ -7917,6 +9269,27 @@ SELECT pg_catalog.setval('public.extra_description_id_seq', 10, true);
 --
 
 SELECT pg_catalog.setval('public.friendly_reminders_id_seq', 1, false);
+
+
+--
+-- Name: frozen_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.frozen_id_seq', 1, false);
+
+
+--
+-- Name: help_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.help_pages_id_seq', 1434, true);
+
+
+--
+-- Name: help_topics_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.help_topics_id_seq', 149, true);
 
 
 --
@@ -7958,21 +9331,21 @@ SELECT pg_catalog.setval('public.mini_gunner_sentinel_id_seq', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_id_seq', 114, true);
+SELECT pg_catalog.setval('public.mob_equipment_id_seq', 134, true);
 
 
 --
 -- Name: mob_equipment_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 39, true);
+SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 48, true);
 
 
 --
 -- Name: mob_roam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_roam_id_seq', 763, true);
+SELECT pg_catalog.setval('public.mob_roam_id_seq', 781, true);
 
 
 --
@@ -7986,7 +9359,14 @@ SELECT pg_catalog.setval('public.mob_zone_id_seq', 1, false);
 -- Name: mobile_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mobile_mob_id_seq', 29, true);
+SELECT pg_catalog.setval('public.mobile_mob_id_seq', 33, true);
+
+
+--
+-- Name: muted_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.muted_id_seq', 1, false);
 
 
 --
@@ -8084,7 +9464,7 @@ SELECT pg_catalog.setval('public.player_id_seq', 110, true);
 -- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_object_id_seq', 385, true);
+SELECT pg_catalog.setval('public.player_object_id_seq', 406, true);
 
 
 --
@@ -8126,7 +9506,14 @@ SELECT pg_catalog.setval('public.player_skill_usage_id_seq', 1, false);
 -- Name: rifle_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 4890, true);
+SELECT pg_catalog.setval('public.rifle_attachment_id_seq', 4980, true);
+
+
+--
+-- Name: rifle_attribute_limits_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.rifle_attribute_limits_id_seq', 1, false);
 
 
 --
@@ -8154,7 +9541,7 @@ SELECT pg_catalog.setval('public.rifle_placements_id_seq', 1, false);
 -- Name: room_direction_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.room_direction_data_id_seq', 2650, true);
+SELECT pg_catalog.setval('public.room_direction_data_id_seq', 3233, true);
 
 
 --
@@ -8168,7 +9555,7 @@ SELECT pg_catalog.setval('public.room_extra_descriptions_id_seq', 1, false);
 -- Name: room_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.room_id_seq', 685, true);
+SELECT pg_catalog.setval('public.room_id_seq', 774, true);
 
 
 --
@@ -8182,14 +9569,14 @@ SELECT pg_catalog.setval('public.room_virtual_number_seq', 1, false);
 -- Name: scripted_sequences_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.scripted_sequences_id_seq', 24, true);
+SELECT pg_catalog.setval('public.scripted_sequences_id_seq', 27, true);
 
 
 --
 -- Name: scripted_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.scripted_steps_id_seq', 84, true);
+SELECT pg_catalog.setval('public.scripted_steps_id_seq', 105, true);
 
 
 --
@@ -8231,7 +9618,14 @@ SELECT pg_catalog.setval('public.skill_trees_id_seq', 16, true);
 -- Name: skill_usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.skill_usage_id_seq', 331, true);
+SELECT pg_catalog.setval('public.skill_usage_id_seq', 370, true);
+
+
+--
+-- Name: stay_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.stay_id_seq', 1, false);
 
 
 --
@@ -8239,6 +9633,13 @@ SELECT pg_catalog.setval('public.skill_usage_id_seq', 331, true);
 --
 
 SELECT pg_catalog.setval('public.terminal_choices_id_seq', 6, true);
+
+
+--
+-- Name: user_logins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.user_logins_id_seq', 1, true);
 
 
 --
@@ -8252,14 +9653,14 @@ SELECT pg_catalog.setval('public.weapon_locker_id_seq', 1, false);
 -- Name: world_configuration_start_rooms_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.world_configuration_start_rooms_id_seq', 4, true);
+SELECT pg_catalog.setval('public.world_configuration_start_rooms_id_seq', 5, true);
 
 
 --
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_data_id_seq', 970, true);
+SELECT pg_catalog.setval('public.zone_data_id_seq', 1094, true);
 
 
 --
@@ -8283,6 +9684,14 @@ ALTER TABLE ONLY public.armor_index
 
 ALTER TABLE ONLY public.armor_locker
     ADD CONSTRAINT armor_locker_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: banned banned_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.banned
+    ADD CONSTRAINT banned_pkey PRIMARY KEY (id);
 
 
 --
@@ -8422,6 +9831,30 @@ ALTER TABLE ONLY public.friendly_reminders
 
 
 --
+-- Name: frozen frozen_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.frozen
+    ADD CONSTRAINT frozen_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: help_pages help_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.help_pages
+    ADD CONSTRAINT help_pages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: help_topics help_topics_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.help_topics
+    ADD CONSTRAINT help_topics_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: hq_locations hq_locations_hq_room_vnum_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8534,6 +9967,14 @@ ALTER TABLE ONLY public.mobile
 
 
 --
+-- Name: muted muted_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.muted
+    ADD CONSTRAINT muted_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: npc_dialogue npc_dialogue_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8619,6 +10060,14 @@ ALTER TABLE ONLY public.player_skill_usage
 
 ALTER TABLE ONLY public.rifle_attachment
     ADD CONSTRAINT rifle_attachment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rifle_attribute_limits rifle_attribute_limits_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rifle_attribute_limits
+    ADD CONSTRAINT rifle_attribute_limits_pkey PRIMARY KEY (id);
 
 
 --
@@ -8742,11 +10191,43 @@ ALTER TABLE ONLY public.skill_usage
 
 
 --
+-- Name: stay stay_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stay
+    ADD CONSTRAINT stay_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stay stay_s_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stay
+    ADD CONSTRAINT stay_s_username_key UNIQUE (s_username);
+
+
+--
 -- Name: terminal_choices terminal_choices_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.terminal_choices
     ADD CONSTRAINT terminal_choices_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_logins user_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_logins
+    ADD CONSTRAINT user_logins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_logins user_logins_u_ip_address_u_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_logins
+    ADD CONSTRAINT user_logins_u_ip_address_u_username_key UNIQUE (u_ip_address, u_username);
 
 
 --
@@ -9134,445 +10615,13 @@ ALTER TABLE ONLY public.player_race_perks
 
 
 --
--- PostgreSQL database dump complete
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
 
-DROP TABLE IF EXISTS public.banned;
-CREATE TABLE public.banned (
-    id serial PRIMARY KEY,
-    b_ip_address inet,
-		b_hostname varchar(255),
-		b_username varchar(16),
-		b_enforce BOOLEAN NOT NULL DEFAULT TRUE,
-		created_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
-DROP TABLE IF EXISTS public.muted;
-CREATE TABLE public.muted (
-    id serial PRIMARY KEY,
-    m_ip_address inet,
-		m_username varchar(16),
-		m_hostname varchar(255),
-		m_enforce BOOLEAN NOT NULL DEFAULT TRUE,
-		created_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
-
-DROP TABLE IF EXISTS public.frozen;
-CREATE TABLE public.frozen (
-    id serial PRIMARY KEY,
-    f_ip_address inet,
-		f_hostname varchar(255),
-		f_username varchar(16),
-		f_enforce BOOLEAN NOT NULL DEFAULT TRUE,
-		created_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
-DROP TABLE IF EXISTS public.user_logins;
-CREATE TABLE public.user_logins (
-	id serial PRIMARY KEY,
-	u_ip_address inet NOT NULL,
-	u_username varchar(16) NOT NULL,
-	UNIQUE(u_ip_address,u_username)
-);
-CREATE TABLE public.stay (
-	id serial PRIMARY KEY,
-	s_room_vnum integer NOT NULL,
-	s_username varchar(16) NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-	UNIQUE(s_username)
-);
-
-
-DROP TABLE IF EXISTS public.rifle_attribute_limits;
-CREATE TABLE public.rifle_attribute_limits (
-	id serial PRIMARY KEY,
-	ral_type varchar(16) NOT NULL,
-	ral_attribute varchar(128) NOT NULL,
-	ral_low INTEGER NOT NULL,
-	ral_high INTEGER NOT NULL,
-	ral_overpowered INTEGER NOT NULL,
- 	ral_start_level  integer NOT NULL,
-	ral_end_level  integer NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
-INSERT INTO public.world_configuration_start_rooms (mortal_start_room, immortal_start_room, is_active) 
-VALUES(128,128,'1');
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 11.9 (Debian 11.9-0+deb10u1)
--- Dumped by pg_dump version 11.9 (Debian 11.9-0+deb10u1)
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
-
---
--- Name: help_pages; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.help_pages (
-    id integer NOT NULL,
-    hp_section character varying NOT NULL,
-    hp_cmd character varying NOT NULL,
-    hp_content text NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL
-);
-
-
-ALTER TABLE public.help_pages OWNER TO postgres;
-
---
--- Name: help_pages_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.help_pages_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.help_pages_id_seq OWNER TO postgres;
-
---
--- Name: help_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.help_pages_id_seq OWNED BY public.help_pages.id;
-
-
---
--- Name: help_topics; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.help_topics (
-    id integer NOT NULL,
-    ht_section character varying NOT NULL,
-    ht_cmd character varying NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL
-);
-
-
-ALTER TABLE public.help_topics OWNER TO postgres;
-
---
--- Name: help_topics_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.help_topics_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.help_topics_id_seq OWNER TO postgres;
-
---
--- Name: help_topics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.help_topics_id_seq OWNED BY public.help_topics.id;
-
-
---
--- Name: help_pages id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.help_pages ALTER COLUMN id SET DEFAULT nextval('public.help_pages_id_seq'::regclass);
-
-
---
--- Name: help_topics id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.help_topics ALTER COLUMN id SET DEFAULT nextval('public.help_topics_id_seq'::regclass);
-
-
---
--- Data for Name: help_pages; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.help_pages (id, hp_section, hp_cmd, hp_content, created_at, updated_at) FROM stdin;
-1372	allow_skill	allow_skill	usage: allow_skill <player_name> <skill|all> \r\ndescription: this command will take a player name and a skill as the second\r\nargument. You can also pass in 'all' as the second argument and it will\r\nallow all skills available.\r\nExample: allow_skill player1 basic-armor\r\nExample: allow_skill player1 all\r\n\r\nthis documentation was written on 2020-09-06.	2022-01-15 00:16:35.010127	2022-01-15 00:16:35.010127
-1373	attract	attract	usage: invoke attract <direction>\r\n- Attract\r\n\t- Get the attention of target, causing them to attack something else\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.011136	2022-01-15 00:16:35.011136
-1374	bladed_array	bladed_array	usage: invoke bladed_array  \r\n- Bladed Array\r\n\t- Each piece of worn armor causes bladed knife damage to melee attackers\r\n\t- CQC attacks:\r\n\t\t- throw, wrestle, grab, clinch\r\n\t\t- cause HP damage to attacker\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.011971	2022-01-15 00:16:35.011971
-1417	roots_of_mayhem	roots_of_mayhem	usage: invoke roots_of_mayhem <target> <direction>\r\n- Roots of mayhem\r\n\t- Cause the dead to reach up from beneath a target\r\n\t- Target is stuck in place and can only use ranged attacks\r\n\t- Target cannot move or flee until spell is over\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.038987	2022-01-15 00:16:35.038987
-1418	set_ammo	set_ammo	usage: set_ammo <weapon> <number>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-15.	2022-01-15 00:16:35.039619	2022-01-15 00:16:35.039619
-1375	camera,claymore,install,uninstall	camera,claymore,install,uninstall	usage: install <object> <direction>\r\ndescription: the 'install' command is used to install \r\ndevices like cameras or claymore mines. To install a claymore\r\nmine, you would simply type 'install claymore north'. This would\r\ninstall the claymore to the north exit of the room. Any NPC that\r\nleaves or enters the current room through the northern exit will\r\nbe met with an explosion.\r\n\r\nThe other use case of the 'install' command is to install cameras\r\nonto a wall inside a room. To install a camera on the north side of\r\nthe room, you would type 'install camera north'.\r\n\r\nTo remove the device, use the 'uninstall' command\r\nType 'help uninstall' for more information.\r\n\r\nTo cancel the installation of a device while you are currently\r\ninstalling it, you must type 'cancel'\r\n\r\nFor more information: see the help manual for the following keywords:\r\n'cancel','camera','claymore','install','uninstall'\r\n\r\nThis documentation was written on 2020-03-29.	2022-01-15 00:16:35.01271	2022-01-15 00:16:35.01271
-1376	cancel	cancel	usage: cancel\r\ndescription: the 'cancel' command is used to stop the install\r\ncommand. If you are installing a camera on the wall, it takes a\r\ncertain amount of time before that process is done. In that time,\r\nyou are vulnerable to attacks.\r\n\r\nFor more information: see the help manual for the following keywords:\r\n'cancel','camera','claymore','install','uninstall'\r\n\r\nThis documentation was written on 2020-03-29.	2022-01-15 00:16:35.013444	2022-01-15 00:16:35.013444
-1377	combat,roe,rules_of_engagement,cqc,sniping,kill,engage	combat,roe,rules_of_engagement,cqc,sniping,kill,engage	 Rules of engagement\r\n{hr} There are different ranges of combat in TD.\r\n {blu}1) Ranged combat{/blu}\r\n {blu}2) Close quarters combat{/blu}\r\n\r\n When you use the 'snipe' command and hit a target that is a few rooms away   \r\n from you, you are engaging in ranged combat. You are free to move around and \r\n do not need to flee from combat. As long as your target doesn't walk into    \r\n the room you reside in and subsequently attack you, you are safe to move     \r\n around freely.                                                               \r\n                                                                              \r\n However, if you choose to go into the same room as your target, or if your   \r\n target moves to your room, you are now in Close Quarters Combat range.       \r\n                                                                              \r\n When you are engaged in CQC, the dynamics of battle change. If you are       \r\n wielding a Sniper rifle, you will not be able to hit your target as sniper   \r\n rifles only work on targets that are not in the same room as you.            \r\n                                                                              \r\n Now if you were to use any other type of ranged weapon like an A.R., or a    \r\n sub-machine gun, you could continue doing battle with your target even if    \r\n they are in the same room as you.                                            \r\n                                                                              \r\n There some exceptions to this rule. Mainly, if you have an underbarrel       \r\n attachment like a shotgun underbarrel attached to your sniper rifle.         \r\n                                                                              \r\n If you are wielding a weapoon in your SECONDARY position, you would be able  \r\n use that weapon in CQC range. All weapons that can be wielded in the         \r\n SECONDARY position can seemlessly deal damage to targets in the CQC range.   \r\n                                                                              \r\n But sometimes you want more control over how you react to a target that goes \r\n from RANGED comat to CQC combat. This is where Rules of Engagement come into \r\n play.                                                                        \r\n                                                                              \r\n Rules of engagement allow you to dictate how you respond to an enemy closing \r\n the distance on you. There are different types of rules of engagement        \r\n available to you:                                                            \r\n\r\n {blu}1) Ballistic{/blu}\r\n {blu}2) CQC{/blu} \r\n {blu}3) Auxiliary{/blu}\r\n {blu}4) Secondary{/blu}\r\n\r\n {blu}Ballistic{/blu}\r\n When your rules of engagement are set to Ballistic, when a target closes the \r\n distance and appears in your room, you will continune to use your primary    \r\n weapon as long as your primary is not a sniper rifle                         \r\n\r\n {blu}CQC{/blu}\r\n When your rules of engagement are set to CQC, when a target closes the       \r\n distance and appears in your room, you will use hand to hand combat.         \r\n If you have set a combat order (see the helpfile for combat_ordere), you will\r\n proceed to throw the maneuvers you specified.                                \r\n\r\n\r\n {blu}Auxiliary{/blu}\r\n When your rules of engagement are set to Auxiliary, when a target closes the \r\n distance and appears in your room, you will use the underbarrel attachment   \r\n on your primary weapon to engage your target. This will work as long as your \r\n attachment has ammunition.\r\n\r\n {blu}Secondary{/blu}\r\n When your rules of engagement are set to Secondary, when a target closes the \r\n distance and appears in your room, you will use the weapon in your secondary \r\n position.\r\n\r\n	2022-01-15 00:16:35.014126	2022-01-15 00:16:35.014126
-1378	conceal	conceal	usage: conceal <item>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.014932	2022-01-15 00:16:35.014932
-1379	confuse	confuse	usage: invoke confuse <target>\r\n- Confuse\r\n\t- Target loses focus and forgets who he is fighting.\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.015689	2022-01-15 00:16:35.015689
-1380	contract,contracts,quest,quests	contract,contracts,quest,quests	usage: contract <list>\r\nusage: contract <join> <N>\r\nusage: contract <leave> <N>\r\nusage: contract <step>\r\nusage: contract <current>\r\nusage: contract <show|describe> <N>\r\nThis documentation was written on 2021-06-06.	2022-01-15 00:16:35.016358	2022-01-15 00:16:35.016358
-1381	corpse_explosion	corpse_explosion	usage: invoke corpse_explosion <target>\r\n- Corpse explosion\r\n\t- Cause target corpse to detonate\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.01702	2022-01-15 00:16:35.01702
-1382	cursed_ballistics	cursed_ballistics	usage: invoke cursed_ballistics    \r\n- Cursed Ballistics\r\n\t- Worn armor becomes more effective at the cost of movement points\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.017679	2022-01-15 00:16:35.017679
-1383	demonic_incantation	demonic_incantation	usage: invoke demonic_incantation <target>\r\n- Demonic incantation\r\n\t- Must have 1 demonic incantation charge from 'Recruit' skill\r\n\t- Raise target corpse.\r\n\t\t- Corpse can be ordered to attack target\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.018356	2022-01-15 00:16:35.018356
-1384	detonate_limb	detonate_limb	usage: invoke detonate_limb <target> <direction>\r\n- Detonate Limb\r\n\t- Cause target arm/leg to explode causing damage to room inhabitants\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.019017	2022-01-15 00:16:35.019017
-1385	extract_organs	extract_organs	usage: invoke extract_organs <target>\r\n- Extract Organs\r\n\t- Player dissects a corpse and consumes it's organs\r\n\t\t- Gains HP, Mana, Movement equal to 25 percent of the \r\n\t\t\tHP, Mana, and Movement of the NPC or PC that died\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.019652	2022-01-15 00:16:35.019652
-1386	feign_death	feign_death	usage: feign_death\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.020308	2022-01-15 00:16:35.020308
-1387	force_out	force_out	usage: invoke force_out <target> <direction>\r\n- Force out\r\n\t- Force target to move in a specific direction\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.020918	2022-01-15 00:16:35.020918
-1388	ghastly_double	ghastly_double	usage:     \r\n- Ghastly double\r\n\t- Create an illusion that there are two of you\r\n\t- Chance of taking damage is reduced by 30 percent\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.021522	2022-01-15 00:16:35.021522
-1389	go_dark	go_dark	usage: go_dark\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.022103	2022-01-15 00:16:35.022103
-1390	grim_aura	grim_aura	usage: invoke grim_aura   \r\ndescription: \r\n- +15 percent damage done by melee/ranged attacks\r\n- damage taken is reduced by 15 percent\r\n- Player gets 15 percent of their max hp added to their current hp\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.022623	2022-01-15 00:16:35.022623
-1391	hellfire_circle	hellfire_circle	usage: invoke hellfire_circle   \r\n- Hellfire Circle\r\n\t- Reduces incendiary, explosive damage\r\n\t- Reduces CQC, melee damage by 25 percent\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.023153	2022-01-15 00:16:35.023153
-1392	hellfire_incantation	hellfire_incantation	usage: invoke hellfire_incantation\r\n- Hellfire Incantation\r\n\t- Adds incendiary and radioactive damage to all damage dealt\r\n\t- Lasts 99 ticks\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.023763	2022-01-15 00:16:35.023763
-1393	install_camera_feed	install_camera_feed	usage: install_camera_feed <name> <id>...[id_N]\r\ndescription: installs a camera feed identified by 'name'.\r\nThe room virtual numbers you pass after the name of the camera feed will be the rooms\r\nthat you would like to be shown on the camera feed.\r\n{blu}Example: {yel}install_camera_feed "Camera Feed A" 20 21 22 23 24{/yel}\r\n\r\n{blu}this documentation was written on 2020-09-26.{/blu}	2022-01-15 00:16:35.024306	2022-01-15 00:16:35.024306
-1394	install_minigame	install_minigame	usage: install_minigame <name> <type> <difficulty> <unlock-event>\r\ndescription: installs a mini game identified by 'name'.\r\nValid types:\r\n{blu}line-up: Will show a series of rows that the user has to line up accordingly\r\n{blu}wires: will show a series of wires and allow the user to attach them\r\nValid difficulties:\r\neasy\r\nmedium\r\nhard\r\nimpossible\r\n\r\nThe unlock-event will be one of the following:\r\nunlock <direction>\r\nlock <direction>\r\ntoggle <direction>\r\n\r\nThe unlock-event can also work with several directions separated by commas\r\nThe unlock-event can work with room virtual numbers and directions\r\nunlock vnum:40 <direction>\r\nlock vnum:40 <direction>\r\ntoggle vnum:40 <direction>\r\nIf the unlock-event is neither of the above strings, then it will be fed to the system\r\nand handled accordingly.\r\nExample of a custom event:\r\n{blu}Example: {yel}install_minigame "North Door Lock" medium custom "custom event. handled by system"{/yel}\r\nThe 'custom' keyword takes whatever you pass in and the system interprets it. This is for adding custom events\r\nthat might work in the future or if the developers have a custom even that allow you to do special things.\r\nAs of this writing, there are no custom events. 2020-09-28\r\n{blu}Example: {yel}install_minigame "North Door Lock" line-up medium unlock north{/yel}\r\n{blu}Example: {yel}install_minigame "North Door Lock" line-up medium unlock vnum:40 north,south,east,west{/yel}\r\n{blu}Example: {yel}install_minigame "North Door Lock" line-up medium toggle vnum:40 south,west,up{/yel}\r\n\r\n{blu}this documentation was written on 2020-09-28.{/blu}	2022-01-15 00:16:35.02483	2022-01-15 00:16:35.02483
-1395	intimidate	intimidate	usage: intimidate <target>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.025395	2022-01-15 00:16:35.025395
-1396	leech	leech	usage: invoke leech <target> <direction>\r\n- Leech\r\n\t- Fire several devices at target.\r\n\t- Target gets BLEED for 30 ticks\r\n\t\t- Player gets hp equal to the bleed damage\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.025927	2022-01-15 00:16:35.025927
-1397	life_tap	life_tap	usage: invoke life_tap <target>\r\n- Life Tap\r\n\t- Damage done to a target that's been the target of life tap will increase your HP/Mana/Movement points\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.02646	2022-01-15 00:16:35.02646
-1398	list_minigame	list_minigame	usage: list_minigame\r\ndescription: lists all the mini games in the current room. This command is needed to pass the id of the minigame\r\nto the uninstall_minigame command.\r\n\r\n{blu}this documentation was written on 2020-09-28.{/blu}	2022-01-15 00:16:35.026984	2022-01-15 00:16:35.026984
-1399	melt	melt	usage: invoke melt <target>  \r\n- Player places hands on target\r\n- Target is set on fire and blinded for 50 ticks\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.02754	2022-01-15 00:16:35.02754
-1400	minor_shielding	minor_shielding	usage: invoke minor_shielding   \r\n- Minor shielding\r\n\t- Create a ballistic resistant shielding around self\r\n - Lasts for 33 ticks per level\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.028138	2022-01-15 00:16:35.028138
-1401	morbid_doubt	morbid_doubt	usage: invoke morbid_doubt <target>\r\n- Morbid doubt\r\n\t- Forces target to turn their weapon against themselves\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.02873	2022-01-15 00:16:35.02873
-1402	morbid_insight	morbid_insight	usage: invoke morbid_insight <target> <direction>\r\n- Morbid Insight\r\n\t- Player can detect nearby enemies if corpses are nearby\r\n\t- Player can detect HP/Mana/Move points of target if corpse is nearby\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.029332	2022-01-15 00:16:35.029332
-1403	muscle_memory	muscle_memory	usage: invoke muscle_memory  \r\n- Muscle Memory\r\n- Once you die\r\n You can order your corpse to explode\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.029925	2022-01-15 00:16:35.029925
-1404	neutron_shield	neutron_shield	usage: invoke neutron_shield\r\n- Neutron Shield\r\n\t- Creates a shield that\r\n\t\t- dampens radioactive, cryogenic, and anti-matter damage\r\n\t- Each bullet absorbed while Neutron Shield is active becomes a radioactive charge\r\n\t- Radioactive charges can be released as a ranged attack but only while NS is active\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.030524	2022-01-15 00:16:35.030524
-1405	parasitic_corpse_tap	parasitic_corpse_tap	usage: invoke parasitic_corpse_tap <target>\r\n- Parasitic Corpse Tap\r\n\t- Walk up to any corpse and absorb hp,mana,movement points\r\n\t- Corpse dissipates once done\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.031129	2022-01-15 00:16:35.031129
-1406	particle_deceleration	particle_deceleration	usage: invoke particle_deceleration\r\n- Particle Deceleration\r\n\t- Create an aura around player that slows the velocity of attacks\r\n\t\t- Reduces damage done by ranged weapons\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.031858	2022-01-15 00:16:35.031858
-1407	pathogen_ammunition	pathogen_ammunition	usage: invoke pathogen_ammunition [primary|secondary]\r\ndescription: Loads a special magazine into your primary or secondary weapon.\r\nPathogen ammunition infects your ammunition with a genetically engineered\r\nvirus that continues to deal poison damage to a target for a period of time.\r\nexample: invoke pathogen_ammunition primary\r\nexample: invoke pathogen_ammunition # this is equivalent to {grn}invoke pathogen_ammunition primary{/grn}\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.032508	2022-01-15 00:16:35.032508
-1408	penetrating_shot	penetrating_shot	usage: penetrating_shot <target>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.033174	2022-01-15 00:16:35.033174
-1409	plant_claymore	plant_claymore	usage: plant_claymore <direction>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.033834	2022-01-15 00:16:35.033834
-1410	plug_cable	plug_cable	usage: plug_cable <id>\r\ndescription: plugs into the ethernet port identified by 'id'.\r\n{blu}Example: {yel}plug_cable A{/yel}\r\n\r\n{blu}this documentation was written on 2020-10-02.{/blu}	2022-01-15 00:16:35.034487	2022-01-15 00:16:35.034487
-1411	practice	practice	usage: practice <help>\r\nusage: practice <skill-shorthand>\r\nsee also:\r\n skills train\r\n	2022-01-15 00:16:35.035149	2022-01-15 00:16:35.035149
-1412	recruit	recruit	usage: invoke recruit <target> \r\n- Recruit\r\n\t- Walk up to any corpse\r\n\t- Place hex on corpse\r\n\t- Add 1 demonic incantation charge for every 2 corpse this is done to\r\n\t- Corpse dissipates once done\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.035811	2022-01-15 00:16:35.035811
-1413	registration_status,enable_registration,disable_registration	registration_status,enable_registration,disable_registration	usage: enable_registration\r\nusage: disable_registration\r\nusage: registration_status\r\ndescription: depending on which command you call, it will enable/disable player\r\nregistration until you specify otherwise.\r\n{blu}Example: {yel}enable_registration{/yel}\r\nregistration_status will tell you if player registration is enabled or not.\r\n\r\n{blu}this documentation was written on 2020-09-11.{/blu}	2022-01-15 00:16:35.036438	2022-01-15 00:16:35.036438
-1414	reload	reload	usage: reload [primary|secondary]\r\ndescription: reloads either your primary or secondary. If neither is supplied will automatically reload your primary.\r\nexample: reload primary\r\nexample: reload # this is equivalent to {grn}reload primary{/grn}\r\nexample: reload secondary\r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.037096	2022-01-15 00:16:35.037096
-1415	room_dark	room_dark	usage: room_dark <on|off>\r\ndescription: \r\n\r\nexample: \r\n\r\nthis documentation was written on 2020-11-15.	2022-01-15 00:16:35.037728	2022-01-15 00:16:35.037728
-1416	room_fire	room_fire	usage: room_fire <on|off> [level]\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-15.	2022-01-15 00:16:35.03835	2022-01-15 00:16:35.03835
-1419	set_npc_position	set_npc_position	usage: set_npc_position <UUID> <POSITION>\r\ndescription: valid positions include: \r\nDEAD        -> dead\r\nMORTALLYW   -> mortally wounded\r\nINCAP       -> incapacitated\r\nSTUNNED     -> stunned\r\nSLEEPING    -> sleeping\r\nRESTING     -> resting\r\nSITTING     -> sitting\r\nFIGHTING    -> fighting\r\nSTANDING    -> standing\r\n\r\nThis command is not case-sensitive.\r\n\r\nexample: set_npc_position 45 INCAP\r\n\r\nNote: to grab an npc's uuid, go to the same room as it and type room_list_uuid\r\n\r\nFor more information: see the help manual for the following keywords:\r\n'room_list_uuid', 'set_npc_position', 'set_position'\r\n\r\nthis documentation was written on 2020-06-26.	2022-01-15 00:16:35.040245	2022-01-15 00:16:35.040245
-1420	set_position	set_position	usage: set_position <POSITION>\r\ndescription: valid positions include: \r\nDEAD        -> dead\r\nMORTALLYW   -> mortally wounded\r\nINCAP       -> incapacitated\r\nSTUNNED     -> stunned\r\nSLEEPING    -> sleeping\r\nRESTING     -> resting\r\nSITTING     -> sitting\r\nFIGHTING    -> fighting\r\nSTANDING    -> standing\r\n\r\nThis command is not case-sensitive.\r\n\r\nexample: set_position INCAP\r\n\r\nthis documentation was written on 2020-06-26.	2022-01-15 00:16:35.040913	2022-01-15 00:16:35.040913
-1421	shadow_sight	shadow_sight	usage: invoke shadow_sight\r\n- Shadow sight\r\n\t- Player has night vision\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.041547	2022-01-15 00:16:35.041547
-1422	shredded_cantrip	shredded_cantrip	usage:     \r\n- Shredded cantrip\r\n- Place a trap in the room that causes targets to bleed\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.042172	2022-01-15 00:16:35.042172
-1423	skills,skill	skills,skill	usage: skills [show] [skill_name]...[skill_N]\r\ndescription: This command will show you your proficiencies with each skill.\r\nTo see a detailed description of a skill, type: {grn}skills show <skill>{/grn}\r\n{blu}Example: {yel}skills show spray-chance{/yel}\r\n{blu}NOTE: you can specify multiple skills\r\nExample: {yel}skills show spray-chance basic-armor mold{/yel}\r\n\r\n{blu}this documentation was written on 2020-09-10.{/blu}	2022-01-15 00:16:35.042785	2022-01-15 00:16:35.042785
-1424	sniper	sniper	____________________ \r\n   S N I P I N G    |\r\n____________________|\r\n Ability:     X-ray shot\r\n Command:     xray_shot <no-args>\r\n{hr} Description: Hit a target through walls or doors. X-ray shot does not requi-\r\n              you to have your target within your line of sight. You can be  \r\n              several rooms away and still do damage to your target.         \r\n\r\n Usage: xray_shot\r\n\r\nE X A M P L E\r\n{hr}{grn}$>{/grn} mark Enforcer \r\n{grn}::{/grn} CONFIRM :: Marked target\r\n{grn}$>{/grn} engage \r\n{grn}::{/grn} CALIBRATE :: Okay -: Target locked :-\r\n{grn}$>{/grn} xray_shot \r\nYou OBLITERATE A Military Police enforcer with your deadly snipe!!\r\n{grn}$>{/grn} disengage \r\n{grn}::{/grn} DISENGAGED\r\n{grn}$>{/grn} xray_shot \r\n{grn}::{/grn} NO TARGET CALIBRATED\r\n                                  \r\n{hr} Ability: Tracking Shot \r\n Command: tracking_shot <target> <direction>\r\n{hr} Description: targets that are marked take extra damage.\r\n{hr} Ability: Mark Target\r\n Command: mark <target>\r\n{hr} Description: For use with x-ray shot.\r\n{hr} Ability: Mark Target\r\n Command: mark <target>\r\n{hr} Description: For use with x-ray shot.\r\n{hr} Ability: Attach frag grenade underbarrel\r\n Command: attach_frag\r\n{hr} Description: Attaches a fragmentation grenade launcher to your primary.\r\n Once you've attached the launcher, use {grn}fire <direction> <count>{/grn}\r\n{hr}E X A M P L E \r\n{hr}{grn}$>{/grn} attach_frag \r\n{grn}You attach an PWM Grenade Launcher to your primary weapon{/grn}\r\n{grn}$>{/grn} fire north 3 \r\n{grn}You launch a fragmentation grenade way off to the north!{/grn}\r\n{hr} Description: For use with x-ray shot.\r\n{grn}target_limb{/grn}: specify the limb to target.\r\n{grn}tracking_shot{/grn}: tracking your target.\r\n{yel}Usage:{/yel}{grn}tracking_shot <target> <direction>{/grn}\r\n{yel}Example:{/yel}\r\n{grn}$> tracking_shot enforcer east{/grn}\r\n{grn}You tag your target!{/grn}\r\nTagged enemies take extra damage.\r\n ____________________ \r\n|      Healing       |\r\n|____________________|\r\n{grn}light_bandage{/grn}: use to regain some hp\r\n{grn}suture{/grn}: regain more hp than light_bandage but at the cost of movement points\r\n{grn}adrenaline_shot{/grn}: inject yourself with adrenaline and get +5 armor, +5 movement, and +3 strength\r\n ____________________ \r\n|     Demolitions    |\r\n|____________________|\r\n{grn}build_claymore{/grn}: creates a claymore in your inventory (if you have a charge left).\r\n{grn}build_shrapnel_claymore{/grn}: creates a {grn}shrapnel{/grn} claymore in your inventory (if you have a charge left).\r\n{grn}build_corrosive_claymore{/grn}: creates a {grn}corrosive{/grn} claymore in your inventory (if you have a charge left).\r\n{grn}guided_missile{/grn}: pre-program a guided missile to travel and detonate at the end of the path.\r\n{yel}Usage:{/yel}{grn}guided_missile <direction>...[direction]\r\n{yel}Example:{/yel}{grn}guided_missile n e e n n w{/grn}\r\nThe above example will send a guided missile along the path until it reaches the last direction (west)\r\nupon which it will detonate in that room.\r\n ____________________ \r\n|     I N T E L      |\r\n|____________________|\r\n{grn}build_emp{/grn}: creates an EMP grenade in your inventory (if you have a charge left).\r\n{grn}build_chaff{/grn}: creates a Chaff grenade in your inventory (if you have a charge left).\r\n{grn}build_sensor{/grn}: creates a Sensor grenade in your inventory (if you have a charge left).\r\n{grn}request_recon{/grn}: creates a Sensor grenade in your inventory (if you have a charge left).\r\n\r\n{grn}attach_shotgun{/grn}: activate an underbarrel shotgun with 5 shells pre-loaded.\r\n  {yel}Usage:{/yel}{grn}attach_shotgun{/grn}\r\n  Once you've attached the shotgun, the next same-room fire fight you're in will use the underbarrel\r\n  shotgun until it's ammo is depleted. Once the shotgun's ammo is depleted, you will switch back to your\r\n  primary weapon's main attack.\r\n{grn}attach_frag{/grn}: activate an underbarrel grenade launcher with 3 grenades pre-loaded.\r\n{yel}Usage:{/yel}{grn}attach_frag{/grn}\r\nOnce you've attached the launcher, use {grn}fire <direction> <count>{/grn}\r\n{yel}Example:{/yel}\r\n{grn}$> attach_frag{/grn}\r\n{grn}You attach an PWM Grenade Launcher to your primary weapon{/grn}\r\n{grn}$> fire north 3{/grn}\r\n{grn}You launch a fragmentation grenade way off to the north!{/grn}\r\n{grn}target_limb{/grn}: specify the limb to target.\r\n{yel}Usage:{/yel}{grn}target_limb <right-arm|left-arm|none>\r\n{yel}Example:{/yel}\r\n{grn}$> target_limb right-arm{/grn}\r\n{grn}You start targeting the right arm of your opponents.{/grn}\r\n{grn}$> snipe Enforcer west{/grn}\r\n{grn}You OBLITERATE A Military Police enforcer with your deadly snipe!!{/grn}\r\n{grn}*** LIMB DAMAGE (right-arm) [ INTEGRITY: POOR ] ***\r\n{grn}$> snipe Enforcer west{/grn}\r\n{grn}You OBLITERATE A Military Police enforcer with your deadly snipe!!{/grn}\r\n{grn}*** LIMB DAMAGE (right-arm) [ INTEGRITY: USELESS ] ***\r\n\r\nOnce a limb reaches {yel}USELESS{/yel}, the limb is effectively destroyed.\r\n\r\n|-----------------------|\r\n| A note on handed-ness |\r\n|-----------------------|\r\n Every NPC is right-handed by default. An NPC uses their left hand to utilize a secondary weapon such \r\n as a pistol. NPC's will use their right hand to utilize their primary weapon. This goes for rifles and melee weapons.\r\n{hr}\r\n{hr} Limb damage and effects on {grn}MELEE{/grn} primary weapon\r\n{hr} LIMB EFFECTS \r\n{hr} Right arm: 1 or more of the below will occur...\r\n            * 30 percent reduced chance to hit target \r\n            * 1l percent damage reduction for 33 ticks\r\n            * reduce dice sides by 10-25 percent for 45 ticks \r\n{hr} Left arm:  1 or more of the below will occur...\r\n            * next 3 attacks do half damage     \r\n{hr} Limb damage and effects on {grn}RIFLE{/grn} primary weapon\r\n{hr} LIMB EFFECTS \r\n{hr} Right arm: 1 or more of the below will occur...\r\n            * 25 percent reduced damage with primary weapon\r\n            * 33 percent chance of jamming primary weapon\r\n            * 40 percent penalty to accuracy\r\n            * 20 percent chance of dropping primary weapon\r\n            * 14 percent chance of primary magazine emptying\r\n{hr} Left arm:  1 or more of the below will occur...\r\n            * 35 percent less likely to deal critical shots\r\n            * add 15 ticks to cooldown between shots\r\n            * 25 percent damage reduction for 60 ticks\r\n{hr}{grn}xray_shot{/grn}: specify the limb to target.\r\n\r\n	2022-01-15 00:16:35.043456	2022-01-15 00:16:35.043456
-1425	suffocate	suffocate	usage: invoke suffocate <target>  \r\n- Player summons a rope around target's neck\r\n- Target continues to suffocate, losing HP\r\n\r\nthis documentation was written on 2021-09-25.	2022-01-15 00:16:35.044299	2022-01-15 00:16:35.044299
-1426	summon_extraction	summon_extraction	usage: summon_extraction\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.044955	2022-01-15 00:16:35.044955
-1427	throw,grenade	throw,grenade	usage: throw <direction> [room_count=4]\r\nexample: \r\n $ get frag backpack\r\n $ hold frag\r\n $ throw north 2\r\n This will throw a frag 2 rooms away\r\n NOTE:\r\nAll grenades are thrown as far as they can up to a maximum amount of 4 rooms away\r\nor however many rooms before it reaches a dead-end\r\nsee: help grenade	2022-01-15 00:16:35.045588	2022-01-15 00:16:35.045588
-1428	toss_cryogenic_grenade	toss_cryogenic_grenade	usage: toss_cryogenic_grenade <direction> <rooms>\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.046216	2022-01-15 00:16:35.046216
-1429	uninstall_camera_feed	uninstall_camera_feed	usage: uninstall_camera_feed <name>\r\ndescription: uninstalls the camera feed identified by 'name'.\r\n{blu}Example: {yel}uninstall_camera_feed "Camera Feed A"{/yel}\r\n\r\n{blu}this documentation was written on 2020-09-26.{/blu}	2022-01-15 00:16:35.046871	2022-01-15 00:16:35.046871
-1430	uninstall_minigame	uninstall_minigame	usage: uninstall_minigame <id>\r\ndescription: uninstalls the currently installed mini game identified by the id you pass in.\r\nTo see the ID's of the mini games currently installed in this room, see the list_minigame command.\r\n{blu}Example: {yel}uninstall_minigame "North Door Lock"{/yel}\r\n\r\n{blu}this documentation was written on 2020-09-28.{/blu}	2022-01-15 00:16:35.047496	2022-01-15 00:16:35.047496
-1431	use_flash_underbarrel	use_flash_underbarrel	usage: use_flash_underbarrel\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.048139	2022-01-15 00:16:35.048139
-1432	xray_shot	xray_shot	usage: xray_shot\r\ndescription: \r\nexample: \r\n\r\nthis documentation was written on 2020-11-16.	2022-01-15 00:16:35.048779	2022-01-15 00:16:35.048779
-1433	yaml_example	yaml_example	usage: yaml_example <list> <object_type>\r\ndescription: this command will take an object type and write an example yaml file.\r\nyou can optionally send the string list as the only argument to this function\r\nand it will spit out all the possible object types.\r\n\r\nThe main function of yaml_example is to write an example file for the object type you specify.\r\n\r\nExample: yaml_example drone\r\nThe above example will write to /lib/objects/drone.yml\r\n\r\nthis documentation was written on 2020-09-08.	2022-01-15 00:16:35.049411	2022-01-15 00:16:35.049411
-1434	yaml_log	yaml_log	usage: yaml_log \r\ndescription: the yaml_log command has two types of usages.\r\n1) calling yaml_log with no arguments will send you the current yaml log\r\n2) calling yaml_log the same way you would call yaml_import\r\nExample: yaml_log RIFLE g36c.yml\r\nThe above example will attempt to import and give you the g36c.yml file.\r\nShould any exceptions with the yaml import occur, you can see the log\r\nof those errors by calling yaml_log with no arguments.\r\n\r\nthis documentation was written on 2020-09-02.	2022-01-15 00:16:35.05005	2022-01-15 00:16:35.05005
-\.
-
-
---
--- Data for Name: help_topics; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.help_topics (id, ht_section, ht_cmd, created_at, updated_at) FROM stdin;
-1	chat	gossip	2022-01-14 20:39:15.449942	2022-01-14 20:39:15.449942
-2	chat	ooc	2022-01-14 20:39:15.452513	2022-01-14 20:39:15.452513
-3	chat	newbie	2022-01-14 20:39:15.454504	2022-01-14 20:39:15.454504
-4	chat	grats	2022-01-14 20:39:15.456546	2022-01-14 20:39:15.456546
-5	date	and	2022-01-14 20:39:15.458451	2022-01-14 20:39:15.458451
-6	date	time	2022-01-14 20:39:15.460486	2022-01-14 20:39:15.460486
-7	date	moon_phase	2022-01-14 20:39:15.462489	2022-01-14 20:39:15.462489
-8	date	time	2022-01-14 20:39:15.464475	2022-01-14 20:39:15.464475
-9	contracts	contract	2022-01-14 20:39:15.466022	2022-01-14 20:39:15.466022
-10	loot	list_loot	2022-01-14 20:39:15.467492	2022-01-14 20:39:15.467492
-11	loot	take_loot	2022-01-14 20:39:15.468922	2022-01-14 20:39:15.468922
-12	loot	show_loot	2022-01-14 20:39:15.470247	2022-01-14 20:39:15.470247
-13	objects	get	2022-01-14 20:39:15.471364	2022-01-14 20:39:15.471364
-14	objects	put	2022-01-14 20:39:15.472435	2022-01-14 20:39:15.472435
-15	objects	junk	2022-01-14 20:39:15.473556	2022-01-14 20:39:15.473556
-16	objects	drop	2022-01-14 20:39:15.474645	2022-01-14 20:39:15.474645
-17	objects	throw	2022-01-14 20:39:15.475607	2022-01-14 20:39:15.475607
-18	preferences	prefs	2022-01-14 20:39:15.476558	2022-01-14 20:39:15.476558
-19	shops	buy	2022-01-14 20:39:15.477514	2022-01-14 20:39:15.477514
-20	shops	list	2022-01-14 20:39:15.478422	2022-01-14 20:39:15.478422
-21	stats	score	2022-01-14 20:39:15.479308	2022-01-14 20:39:15.479308
-22	stats	skills	2022-01-14 20:39:15.480251	2022-01-14 20:39:15.480251
-23	stats	exp	2022-01-14 20:39:15.481087	2022-01-14 20:39:15.481087
-24	ranged	combat	2022-01-14 20:39:15.481873	2022-01-14 20:39:15.481873
-25	ranged	snipe	2022-01-14 20:39:15.48263	2022-01-14 20:39:15.48263
-26	ranged	scan	2022-01-14 20:39:15.483423	2022-01-14 20:39:15.483423
-27	ranged	spray	2022-01-14 20:39:15.484188	2022-01-14 20:39:15.484188
-28	ranged	reload	2022-01-14 20:39:15.48495	2022-01-14 20:39:15.48495
-29	melee	combat	2022-01-14 20:39:15.485638	2022-01-14 20:39:15.485638
-30	melee	kill	2022-01-14 20:39:15.486319	2022-01-14 20:39:15.486319
-31	melee	set_rules_of_gengagement	2022-01-14 20:39:15.486999	2022-01-14 20:39:15.486999
-32	melee	set_combat_order	2022-01-14 20:39:15.487729	2022-01-14 20:39:15.487729
-33	melee	list_combat_order	2022-01-14 20:39:15.488512	2022-01-14 20:39:15.488512
-34	melee	clear_combat_order	2022-01-14 20:39:15.489229	2022-01-14 20:39:15.489229
-35	melee	dispatch	2022-01-14 20:39:15.489893	2022-01-14 20:39:15.489893
-36	melee	stance	2022-01-14 20:39:15.490525	2022-01-14 20:39:15.490525
-37	hacking	hack	2022-01-14 20:39:15.491224	2022-01-14 20:39:15.491224
-38	hacking	rotate_right	2022-01-14 20:39:15.491919	2022-01-14 20:39:15.491919
-39	hacking	rotate_left	2022-01-14 20:39:15.492574	2022-01-14 20:39:15.492574
-40	hacking	next_row	2022-01-14 20:39:15.493271	2022-01-14 20:39:15.493271
-41	hacking	reset_hack	2022-01-14 20:39:15.493899	2022-01-14 20:39:15.493899
-42	hacking	plug_cable	2022-01-14 20:39:15.494521	2022-01-14 20:39:15.494521
-43	progression	score	2022-01-14 20:39:15.495195	2022-01-14 20:39:15.495195
-44	progression	buy_practice	2022-01-14 20:39:15.495763	2022-01-14 20:39:15.495763
-45	progression	skills	2022-01-14 20:39:15.496433	2022-01-14 20:39:15.496433
-46	progression	practice	2022-01-14 20:39:15.49709	2022-01-14 20:39:15.49709
-47	progression	mp	2022-01-14 20:39:15.497664	2022-01-14 20:39:15.497664
-48	progression	levels	2022-01-14 20:39:15.498218	2022-01-14 20:39:15.498218
-49	world	put	2022-01-14 20:39:15.498692	2022-01-14 20:39:15.498692
-50	world	get	2022-01-14 20:39:15.499132	2022-01-14 20:39:15.499132
-51	world	drop	2022-01-14 20:39:15.499606	2022-01-14 20:39:15.499606
-52	world	give	2022-01-14 20:39:15.500064	2022-01-14 20:39:15.500064
-53	world	drink	2022-01-14 20:39:15.500486	2022-01-14 20:39:15.500486
-54	world	eat	2022-01-14 20:39:15.500933	2022-01-14 20:39:15.500933
-55	world	pour	2022-01-14 20:39:15.501369	2022-01-14 20:39:15.501369
-56	world	wear	2022-01-14 20:39:15.501792	2022-01-14 20:39:15.501792
-57	world	wield	2022-01-14 20:39:15.502272	2022-01-14 20:39:15.502272
-58	world	grab	2022-01-14 20:39:15.502713	2022-01-14 20:39:15.502713
-59	world	remove	2022-01-14 20:39:15.503145	2022-01-14 20:39:15.503145
-60	items	inventory	2022-01-14 20:39:15.503584	2022-01-14 20:39:15.503584
-61	items	equipment	2022-01-14 20:39:15.50403	2022-01-14 20:39:15.50403
-62	items	drone	2022-01-14 20:39:15.504458	2022-01-14 20:39:15.504458
-63	session	quit	2022-01-14 20:39:15.504887	2022-01-14 20:39:15.504887
-64	droning	drone	2022-01-14 20:39:15.50531	2022-01-14 20:39:15.50531
-65	helpful	recall	2022-01-14 20:39:15.505734	2022-01-14 20:39:15.505734
-66	chat	who	2022-01-14 20:39:15.50618	2022-01-14 20:39:15.50618
-67	chat	users	2022-01-14 20:39:15.506618	2022-01-14 20:39:15.506618
-68	informative	exits	2022-01-14 20:39:15.50705	2022-01-14 20:39:15.50705
-69	informative	look	2022-01-14 20:39:15.507489	2022-01-14 20:39:15.507489
-70	informative	examine	2022-01-14 20:39:15.507938	2022-01-14 20:39:15.507938
-71	informative	weather	2022-01-14 20:39:15.508369	2022-01-14 20:39:15.508369
-72	informative	gen_ps	2022-01-14 20:39:15.508799	2022-01-14 20:39:15.508799
-73	informative	where	2022-01-14 20:39:15.50925	2022-01-14 20:39:15.50925
-74	informative	consider	2022-01-14 20:39:15.509693	2022-01-14 20:39:15.509693
-75	informative	diagnose	2022-01-14 20:39:15.510102	2022-01-14 20:39:15.510102
-76	informative	color	2022-01-14 20:39:15.510501	2022-01-14 20:39:15.510501
-77	informative	toggle	2022-01-14 20:39:15.510905	2022-01-14 20:39:15.510905
-78	informative	commands	2022-01-14 20:39:15.511314	2022-01-14 20:39:15.511314
-79	informative	view	2022-01-14 20:39:15.511713	2022-01-14 20:39:15.511713
-80	other	quit	2022-01-14 20:39:15.512103	2022-01-14 20:39:15.512103
-81	other	save	2022-01-14 20:39:15.512486	2022-01-14 20:39:15.512486
-82	other	not_here	2022-01-14 20:39:15.512879	2022-01-14 20:39:15.512879
-83	other	sneak	2022-01-14 20:39:15.513258	2022-01-14 20:39:15.513258
-84	other	hide	2022-01-14 20:39:15.513646	2022-01-14 20:39:15.513646
-85	other	steal	2022-01-14 20:39:15.51403	2022-01-14 20:39:15.51403
-86	other	visible	2022-01-14 20:39:15.514423	2022-01-14 20:39:15.514423
-87	other	title	2022-01-14 20:39:15.514807	2022-01-14 20:39:15.514807
-88	other	group	2022-01-14 20:39:15.515189	2022-01-14 20:39:15.515189
-89	other	ungroup	2022-01-14 20:39:15.51559	2022-01-14 20:39:15.51559
-90	other	report	2022-01-14 20:39:15.515973	2022-01-14 20:39:15.515973
-91	other	split	2022-01-14 20:39:15.516359	2022-01-14 20:39:15.516359
-92	other	use	2022-01-14 20:39:15.516748	2022-01-14 20:39:15.516748
-93	other	wimpy	2022-01-14 20:39:15.517132	2022-01-14 20:39:15.517132
-94	other	display	2022-01-14 20:39:15.517526	2022-01-14 20:39:15.517526
-95	other	gen_write	2022-01-14 20:39:15.517903	2022-01-14 20:39:15.517903
-96	other	gen_tog	2022-01-14 20:39:15.518292	2022-01-14 20:39:15.518292
-97	builder(admin)	flush_holding	2022-01-14 20:39:15.518687	2022-01-14 20:39:15.518687
-98	builder(admin)	hold_anything	2022-01-14 20:39:15.519075	2022-01-14 20:39:15.519075
-99	builder(admin)	uuid	2022-01-14 20:39:15.519478	2022-01-14 20:39:15.519478
-100	offensive	throw	2022-01-14 20:39:15.519865	2022-01-14 20:39:15.519865
-101	offensive	snipe_object	2022-01-14 20:39:15.520259	2022-01-14 20:39:15.520259
-102	offensive	snipe	2022-01-14 20:39:15.520645	2022-01-14 20:39:15.520645
-103	offensive	spray	2022-01-14 20:39:15.521034	2022-01-14 20:39:15.521034
-104	offensive	silencers_on	2022-01-14 20:39:15.521433	2022-01-14 20:39:15.521433
-105	offensive	silencers_off	2022-01-14 20:39:15.521817	2022-01-14 20:39:15.521817
-106	offensive	go_loud	2022-01-14 20:39:15.522206	2022-01-14 20:39:15.522206
-107	offensive	engagement_mode	2022-01-14 20:39:15.522611	2022-01-14 20:39:15.522611
-108	offensive	regroup	2022-01-14 20:39:15.522997	2022-01-14 20:39:15.522997
-109	offensive	command_sequence	2022-01-14 20:39:15.5234	2022-01-14 20:39:15.5234
-110	offensive	scan	2022-01-14 20:39:15.523786	2022-01-14 20:39:15.523786
-111	offensive	assist	2022-01-14 20:39:15.524176	2022-01-14 20:39:15.524176
-112	offensive	hit	2022-01-14 20:39:15.52456	2022-01-14 20:39:15.52456
-113	offensive	kill	2022-01-14 20:39:15.524943	2022-01-14 20:39:15.524943
-114	offensive	backstab	2022-01-14 20:39:15.525337	2022-01-14 20:39:15.525337
-115	offensive	order	2022-01-14 20:39:15.52572	2022-01-14 20:39:15.52572
-116	offensive	flee	2022-01-14 20:39:15.526103	2022-01-14 20:39:15.526103
-117	offensive	bash	2022-01-14 20:39:15.526497	2022-01-14 20:39:15.526497
-118	offensive	rescue	2022-01-14 20:39:15.526899	2022-01-14 20:39:15.526899
-119	offensive	kick	2022-01-14 20:39:15.527284	2022-01-14 20:39:15.527284
-120	defensive	heal	2022-01-14 20:39:15.527702	2022-01-14 20:39:15.527702
-121	defensive	revive	2022-01-14 20:39:15.528086	2022-01-14 20:39:15.528086
-122	movement	move	2022-01-14 20:39:15.528472	2022-01-14 20:39:15.528472
-123	movement	gen_door	2022-01-14 20:39:15.528858	2022-01-14 20:39:15.528858
-124	movement	enter	2022-01-14 20:39:15.529286	2022-01-14 20:39:15.529286
-125	movement	leave	2022-01-14 20:39:15.529658	2022-01-14 20:39:15.529658
-126	movement	stand	2022-01-14 20:39:15.530029	2022-01-14 20:39:15.530029
-127	movement	sit	2022-01-14 20:39:15.530402	2022-01-14 20:39:15.530402
-128	movement	rest	2022-01-14 20:39:15.530767	2022-01-14 20:39:15.530767
-129	movement	sleep	2022-01-14 20:39:15.531132	2022-01-14 20:39:15.531132
-130	movement	wake	2022-01-14 20:39:15.531529	2022-01-14 20:39:15.531529
-131	movement	follow	2022-01-14 20:39:15.531906	2022-01-14 20:39:15.531906
-132	weapon-introspection	stats	2022-01-14 20:39:15.532297	2022-01-14 20:39:15.532297
-133	demolitions	cancel	2022-01-14 20:39:15.532666	2022-01-14 20:39:15.532666
-134	demolitions	install	2022-01-14 20:39:15.533021	2022-01-14 20:39:15.533021
-135	demolitions	uninstall	2022-01-14 20:39:15.533391	2022-01-14 20:39:15.533391
-136	demolitions	breach	2022-01-14 20:39:15.533748	2022-01-14 20:39:15.533748
-137	demolitions	thermite	2022-01-14 20:39:15.53412	2022-01-14 20:39:15.53412
-138	informative	room_vnum	2022-01-14 20:39:15.534471	2022-01-14 20:39:15.534471
-139	helpful	alias	2022-01-14 20:39:15.534829	2022-01-14 20:39:15.534829
-140	communication	say	2022-01-14 20:39:15.535192	2022-01-14 20:39:15.535192
-141	communication	gsay	2022-01-14 20:39:15.535552	2022-01-14 20:39:15.535552
-142	communication	tell	2022-01-14 20:39:15.535911	2022-01-14 20:39:15.535911
-143	communication	reply	2022-01-14 20:39:15.536266	2022-01-14 20:39:15.536266
-144	communication	spec_comm	2022-01-14 20:39:15.536629	2022-01-14 20:39:15.536629
-145	communication	write	2022-01-14 20:39:15.536988	2022-01-14 20:39:15.536988
-146	communication	gen_comm	2022-01-14 20:39:15.537349	2022-01-14 20:39:15.537349
-147	communication	qcomm	2022-01-14 20:39:15.537701	2022-01-14 20:39:15.537701
-148	social	action	2022-01-14 20:39:15.538053	2022-01-14 20:39:15.538053
-149	social	insult	2022-01-14 20:39:15.538408	2022-01-14 20:39:15.538408
-\.
-
-
---
--- Name: help_pages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.help_pages_id_seq', 1434, true);
-
-
---
--- Name: help_topics_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.help_topics_id_seq', 149, true);
-
-
---
--- Name: help_pages help_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.help_pages
-    ADD CONSTRAINT help_pages_pkey PRIMARY KEY (id);
-
-
---
--- Name: help_topics help_topics_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.help_topics
-    ADD CONSTRAINT help_topics_pkey PRIMARY KEY (id);
+GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
 -- PostgreSQL database dump complete
 --
 
-ALTER TABLE public.room ADD COLUMN textures TEXT;
-
-DELETE FROM public.player_object;
