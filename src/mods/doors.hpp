@@ -195,7 +195,12 @@ namespace mods::doors  {
 		auto player = ptr_by_uuid(player_uuid);
 		auto dir_str = directional_dirstr(direction).c_str();
 		auto room = player->room();
-		player->send("You carefully place a %s on the %s door...\r\n",holding->name.c_str(),dir_str);
+		player->sendln(
+		    //"You carefully place a %s on the %s door...\r\n",holding->name.c_str(),dir_str);
+		    CAT(
+		        "You carefully place a ", holding->name.c_str()," on the ", dir_str, " door..."
+		    )
+		);
 		send_to_room_except(room, {player},"%s carefully places a %s on the %s door...",player->name().c_str(),holding->name.c_str(),dir_str);
 		player->unequip(WEAR_HOLD);
 		mods::object_utils::set_is_breaching(holding,player,direction);
@@ -204,7 +209,12 @@ namespace mods::doors  {
 			auto holding = optr_by_uuid(obj_uuid);
 			auto player = ptr_by_uuid(player_uuid);
 			auto room = player->room();
-			player->send("\r\n{gld}*** CLICK ***{/gld}\r\nYou activate the trigger on the %s...\r\n\r\n", holding->name.c_str());
+			player->sendln(
+			    CAT(
+			        "\r\n{gld}*** CLICK ***{/gld}\r\nYou activate the trigger on the ",
+			        holding->name.c_str(), "...\r\n"
+			    )
+			);
 			send_to_room_except(room, {player},"\r\n{gld}*** CLICK ***{/gld}\r\n%s activates the trigger on %s...\r\n",player->name().c_str(),holding->name.c_str());
 		});
 
@@ -218,7 +228,13 @@ namespace mods::doors  {
 		auto player = ptr_by_uuid(player_uuid);
 		auto room = player->room();
 		auto dir_str = directional_dirstr(direction).c_str();
-		player->send("You carefully place a %s on the %s door...\r\n",holding->name.c_str(),dir_str);
+		player->sendln(
+		    CAT(
+		        "You carefully place a ",holding->name.c_str(),
+		        " on the ", dir_str,
+		        " door..."
+		    )
+		);
 		player->unequip(WEAR_HOLD);
 		mods::object_utils::set_is_breaching(holding,player,direction);
 		send_to_room_except(room, {player},"%s carefully places a %s on the %s door...",player->name().c_str(),holding->name.c_str(),dir_str);
@@ -227,7 +243,11 @@ namespace mods::doors  {
 			auto holding = optr_by_uuid(obj_uuid);
 			auto player = ptr_by_uuid(player_uuid);
 			auto room = player->room();
-			player->send("\r\n{gld}*** CLICK ***{/gld}\r\nYou activate the trigger on the %s...\r\n", holding->name.c_str());
+			player->sendln(
+			    CAT(
+			        "\r\n{gld}*** CLICK ***{/gld}\r\nYou activate the trigger on the ", holding->name.c_str(),"..."
+			    )
+			);
 			send_to_room_except(room, {player},"\r\n{gld}*** CLICK ***{/gld}\r\n%s activates the trigger on %s...\r\n",player->name().c_str(),holding->name.c_str());
 		});
 		mods::globals::defer_queue->push(mods::object_utils::THERMITE_BREACH_TICKS_DURATION / 2,[player_uuid,direction]() {

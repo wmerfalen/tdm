@@ -3319,7 +3319,9 @@ CGET_DEF(uint32_t,SNIPER_XRAY_SHOT_MAX_COUNT,10);
 					player->errorln(usage);
 					return;
 				}
-				player->send(vec_args);
+				for(const auto & v : vec_args){
+					player->sendln(v);
+				}
 				mods::values::save_to_lmdb(vec_args[0],vec_args[1]);
 				mods::values::load_from_lmdb(vec_args[0]);
 				value_key_t key = to_vk_from_string(vec_args[0]);
@@ -3435,7 +3437,9 @@ CGET_DEF(uint32_t,SNIPER_XRAY_SHOT_MAX_COUNT,10);
 					player->sendln(CAN_BE_SEARCHED());
 					return;
 				}
-				player->send(screen);
+				for(const auto & line : screen){
+					player->sendln(line);
+				}
 				player->sendln("Done listing.");
 				player->sendln(CAN_BE_SEARCHED());
 				ADMIN_DONE();

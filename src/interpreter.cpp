@@ -120,7 +120,7 @@ SUPERCMD(do_room_list) {
 	}
 }
 ACMD(do_room_vnum) {
-	player->send("%d\r\n",player->vnum());
+	player->sendln(CAT(player->vnum()));
 }
 
 SUPERCMD(do_js_help);

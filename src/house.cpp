@@ -219,7 +219,13 @@ void House_listrent(char_data *ch, room_vnum vnum) {
 		}
 
 		if(!feof(fl) && (obj = Obj_from_store(object, &i)) != NULL) {
-			player->send(" [%5d] (%5dau) %s\r\n", GET_OBJ_VNUM(obj), GET_OBJ_RENT(obj), obj->short_description);
+			//" [%5d] (%5dau) %s\r\n", GET_OBJ_VNUM(obj), GET_OBJ_RENT(obj), obj->short_description);
+			player->sendln(
+			    CAT(
+			        " [", GET_OBJ_VNUM(obj), "] ",
+			        "(", GET_OBJ_RENT(obj), "au) ",obj->short_description
+			    )
+			);
 			free_obj(obj);
 		}
 	}

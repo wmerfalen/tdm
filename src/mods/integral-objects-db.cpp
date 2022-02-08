@@ -48,12 +48,20 @@ namespace mods::integral_objects_db {
 		std::string value = "";
 		std::string prefix = identifier.data();
 		auto status = mods::db::put_section_vector("catchy-name",prefix, {name.data(),deep_object_description.data()});
-		player->send("status: %d\r\n",status);
+		player->sendln(
+		    CAT(
+		        "status: ",status
+		    )
+		);
 		std::vector<std::string> values;
 		status = mods::db::get_section_vector("catchy-name",prefix,values);
-		player->send("get status: %d\r\nTo confirm, we placed these values...\r\n",status);
+		player->sendln(
+		    CAT(
+		        "get status: ",status,"\r\nTo confirm, we placed these values..."
+		    )
+		);
 		for(auto line : values) {
-			player->send("[item]: '%s'\r\n",line.c_str());
+			player->sendln(CAT("[item]: '",line.c_str(),"'"));
 		}
 		player->sendln("Done listing.");
 	}
@@ -64,22 +72,38 @@ namespace mods::integral_objects_db {
 	void remove_camera_feed(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
 		auto status = delete_section_vector("camera-feed",std::to_string(world[player->room()].number));
-		player->send("delete status: %d\r\n",status);
+		player->sendln(
+		    CAT(
+		        "delete status: ",status
+		    )
+		);
 	}
 	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
 		auto status = delete_section_vector("weapon-locker",std::to_string(world[player->room()].number));
-		player->send("delete status: %d\r\n",status);
+		player->sendln(
+		    CAT(
+		        "delete status: ",status
+		    )
+		);
 	}
 	void remove_ammo_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
 		auto status = delete_section_vector("ammo-locker",std::to_string(world[player->room()].number));
-		player->send("delete status: %d\r\n",status);
+		player->sendln(
+		    CAT(
+		        "delete status: ",status
+		    )
+		);
 	}
 	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
 		auto status = delete_section_vector("armor-locker",std::to_string(world[player->room()].number));
-		player->send("delete status: %d\r\n",status);
+		player->sendln(
+		    CAT(
+		        "delete status: ",status
+		    )
+		);
 	}
 
 	obj_ptr_t first_or_create(room_vnum room,std::string query, int type, std::string yaml_file) {

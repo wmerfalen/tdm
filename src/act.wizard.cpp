@@ -402,7 +402,11 @@ void do_stat_room(char_data *ch) {
 	int i,  column;
 	struct obj_data *j;
 
-	player->send("Room name: %c%s%c", CCCYN(ch, C_NRM), rm.name.c_str(), CCNRM(ch, C_NRM));
+	player->sendln(
+	    CAT(
+	        "Room name: ", CCCYN(ch, C_NRM), rm.name.c_str(), CCNRM(ch, C_NRM)
+	    )
+	);
 
 	sprinttype(rm.sector_type, sector_types, buf2, sizeof(buf2));
 	player->sendln(TOSTR("Zone: [") + //%3d], VNum: [%s%5d%s], RNum: [%5d], Type: %s",
@@ -483,10 +487,13 @@ void do_stat_room(char_data *ch) {
 
 		sprintbit(rm.dir_option[i]->exit_info, exit_bits, buf2, sizeof(buf2));
 
-		player->send("Exit %s%-5s%s:  To: [%s], Key: [%5d], Keywrd: %s, Type: %s%s",
-		             CCCYN(ch, C_NRM), dirs[i], CCNRM(ch, C_NRM), buf1, rm.dir_option[i]->key,
-		             rm.dir_option[i]->keyword.length() ? rm.dir_option[i]->keyword.c_str() : "None", buf2,
-		             rm.dir_option[i]->general_description.c_str() ? rm.dir_option[i]->general_description.c_str() : "  No exit description.");
+		//"Exit %s%-5s%s:  To: [%s], Key: [%5d], Keywrd: %s, Type: %s%s",
+		player->sendln(
+		    "[stub] fixme"
+		);
+		//         CCCYN(ch, C_NRM), dirs[i], CCNRM(ch, C_NRM), buf1, rm.dir_option[i]->key,
+		//         rm.dir_option[i]->keyword.length() ? rm.dir_option[i]->keyword.c_str() : "None", buf2,
+		//         rm.dir_option[i]->general_description.c_str() ? rm.dir_option[i]->general_description.c_str() : "  No exit description.");
 	}
 }
 
@@ -663,6 +670,7 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 
 void do_stat_character(char_data *ch, char_data *k) {
 	MENTOC_PREAMBLE();
+#if 0
 	char buf[MAX_STRING_LENGTH];
 	int i, i2, column, found = FALSE;
 	struct obj_data *j;
@@ -818,6 +826,8 @@ void do_stat_character(char_data *ch, char_data *k) {
 			player->sendln("");
 		}
 	}
+#endif
+	player->sendln("[stub] not implemented");
 }
 
 
@@ -1229,7 +1239,9 @@ const char *logtypes[] = {
 };
 
 SUPERCMD(do_syslog) {
+	player->sendln("[stub] not implemented");
 
+#if 0
 	char arg[MAX_INPUT_LENGTH];
 	int tp;
 
@@ -1250,6 +1262,7 @@ SUPERCMD(do_syslog) {
 	SET_BIT(PRF_FLAGS(ch), (PRF_LOG1 * (tp & 1)) | (PRF_LOG2 * (tp & 2) >> 1));
 
 	player->send("Your syslog is now %s.", logtypes[tp]);
+#endif
 }
 
 
@@ -1288,7 +1301,11 @@ SUPERCMD(do_advance) {
 	}
 
 	if(newlevel > LVL_IMPL) {
-		player->send("%d is the highest possible level.", LVL_IMPL);
+		player->sendln(
+		    CAT(
+		        LVL_IMPL," is the highest possible level."
+		    )
+		);
 		return;
 	}
 
@@ -1425,7 +1442,12 @@ void perform_immort_invis(char_data *ch, int level) {
 	}
 
 	GET_INVIS_LEV(ch) = level;
-	player->send("Your invisibility level is %d.", level);
+	player->sendln(
+	    CAT(
+	        "Your invisibility level is ", level
+	    )
+	);
+
 }
 
 
@@ -1571,8 +1593,16 @@ SUPERCMD(do_dc) {
 			STATE(d) = CON_CLOSE;
 		}
 
-		player->send("Connection #%d closed.", num_to_dc);
-		log("(GC) Connection closed by %s.", GET_NAME(ch).c_str());
+		player->sendln(
+		    CAT(
+		        "Connection #",(int)num_to_dc," closed."
+		    )
+		);
+		log(
+		    CAT(
+		        "(GC) Connection closed by ", GET_NAME(ch).c_str(),"."
+		    ).c_str()
+		);
 	}
 }
 
@@ -1602,15 +1632,27 @@ SUPERCMD(do_wizlock) {
 
 	switch(circle_restrict) {
 		case 0:
-			player->send("The game is %s completely open.", when);
+			player->sendln(
+			    CAT(
+			        "The game is ",when," completely open."
+			    )
+			);
 			break;
 
 		case 1:
-			player->send("The game is %s closed to new players.", when);
+			player->sendln(
+			    CAT(
+			        "The game is ",when," closed to new players."
+			    )
+			);
 			break;
 
 		default:
-			player->send("Only level %d and above may enter the game %s.", circle_restrict, when);
+			player->sendln(
+			    CAT(
+			        "Only level ",circle_restrict," and above may enter the game ",  when,"."
+			    )
+			);
 			break;
 	}
 }
@@ -1632,14 +1674,24 @@ SUPERCMD(do_date) {
 	*(tmstr + strlen(tmstr) - 1) = '\0';
 
 	if(subcmd == SCMD_DATE) {
-		player->send("Current machine time: %s", tmstr);
+		player->sendln(
+		    CAT(
+		        "Current machine time: ", tmstr
+		    )
+		);
 	} else {
 		mytime = time(0) - boot_time;
 		d = mytime / 86400;
 		h = (mytime / 3600) % 24;
 		m = (mytime / 60) % 60;
 
-		player->send("Up since %s: %d day%s, %d:%02d", tmstr, d, d == 1 ? "" : "s", h, m);
+		//"Up since %s: %d day%s, %d:%02d", tmstr, d, d == 1 ? "" : "s", h, m);
+		player->sendln(
+		    CAT(
+		        "Up since ", tmstr,": ", d, "day",d == 1 ? "" : "s",", ",
+		        h,":", m
+		    )
+		);
 	}
 }
 
@@ -1770,10 +1822,16 @@ SUPERCMD(do_wiznet) {
 					continue;
 				}
 
-				player->send("  %-*s%s%s%s", MAX_NAME_LENGTH, GET_NAME(d.character).c_str(),
-				             PLR_FLAGGED(d.character, PLR_WRITING) ? " (Writing)" : "",
-				             PLR_FLAGGED(d.character, PLR_MAILING) ? " (Writing mail)" : "",
-				             PRF_FLAGGED(d.character, PRF_NOWIZ) ? " (Offline)" : "");
+				//player->sendln("  %-*s%s%s%s", MAX_NAME_LENGTH, GET_NAME(d.character).c_str(),
+				player->sendln(
+				    CAT(
+				        std::string(" ",MAX_NAME_LENGTH),
+				        GET_NAME(d.character).c_str(),
+				        PLR_FLAGGED(d.character, PLR_WRITING) ? " (Writing)" : "",
+				        PLR_FLAGGED(d.character, PLR_MAILING) ? " (Writing mail)" : "",
+				        PRF_FLAGGED(d.character, PRF_NOWIZ) ? " (Offline)" : ""
+				    )
+				);
 			}
 
 			return;
@@ -1864,7 +1922,12 @@ SUPERCMD(do_zreset) {
 
 	if(i <= top_of_zone_table) {
 		reset_zone(i);
-		player->send("Reset zone %d (#%d): %s.", i, zone_table[i].number, zone_table[i].name.c_str());
+		//"Reset zone %d (#%d): %s.", i, zone_table[i].number, zone_table[i].name.c_str());
+		player->sendln(
+		    CAT(
+		        "Reset zone ", i," (#",zone_table[i].number,"): ", zone_table[i].name,"."
+		    )
+		);
 		mudlog(NRM, MAX(LVL_GRGOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s reset zone %d (%s)", GET_NAME(ch).c_str(), i, zone_table[i].name.c_str());
 	} else {
 		player->sendln("Invalid zone number.");
@@ -1907,9 +1970,18 @@ SUPERCMD(do_wizutil) {
 				player->sendln("Rerolled...");
 				roll_real_abils(vict);
 				log("(GC) %s has rerolled %s.", GET_NAME(ch).c_str(), GET_NAME(vict).c_str());
-				player->send("New stats: Str %d/%d, Int %d, Wis %d, Dex %d, Con %d, Cha %d",
-				             GET_STR(vict), GET_ADD(vict), GET_INT(vict), GET_WIS(vict),
-				             GET_DEX(vict), GET_CON(vict), GET_CHA(vict));
+				//"New stats: Str %d/%d, Int %d, Wis %d, Dex %d, Con %d, Cha %d",
+				/** TODO: add additional stats, triads, speed, etc */
+				player->sendln(
+				    CAT(
+				        "New stats: Str ", GET_STR(vict), "/", GET_ADD(vict), ", ",
+				        "Int ", GET_INT(vict), ", ",
+				        "Wis ", GET_WIS(vict), ", ",
+				        "Dex ",       GET_DEX(vict),", ",
+				        "Con ",       GET_CON(vict),", ",
+				        "Cha ",       GET_CHA(vict),", "
+				    )
+				);
 				break;
 
 			case SCMD_PARDON:
@@ -1928,14 +2000,23 @@ SUPERCMD(do_wizutil) {
 				result = PLR_TOG_CHK(vict, PLR_NOTITLE);
 				mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) Notitle %s for %s by %s.",
 				       ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
-				player->send("(GC) Notitle %s for %s by %s.", ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
-				break;
+				//"(GC) Notitle %s for %s by %s.", ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
+				player->sendln(
+				    CAT(
+				        "(GC) Notitle ", ONOFF(result), " for ",GET_NAME(vict), " by ", GET_NAME(ch), "."
+				    )
+				);
 
 			case SCMD_SQUELCH:
 				result = PLR_TOG_CHK(vict, PLR_NOSHOUT);
 				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) Squelch %s for %s by %s.",
 				       ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
-				player->send("(GC) Squelch %s for %s by %s.", ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
+				//"(GC) Squelch %s for %s by %s.", ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
+				player->sendln(
+				    CAT(
+				        "(GC) Squelch ", ONOFF(result), " for ", GET_NAME(vict), " by ",GET_NAME(ch)
+				    )
+				);
 				break;
 
 			case SCMD_FREEZE:
@@ -1964,8 +2045,15 @@ SUPERCMD(do_wizutil) {
 				}
 
 				if(GET_FREEZE_LEV(vict) > GET_LEVEL(ch)) {
-					player->send("Sorry, a level %d God froze %s... you can't unfreeze %s.",
-					             GET_FREEZE_LEV(vict), GET_NAME(vict).c_str(), HMHR(vict));
+					//"Sorry, a level %d God froze %s... you can't unfreeze %s.",
+					//       GET_FREEZE_LEV(vict), GET_NAME(vict).c_str(), HMHR(vict));
+					player->sendln(
+					    CAT(
+					        "Sorry, a level ", GET_FREEZE_LEV(vict), " God froze ",
+					        GET_NAME(vict).c_str(), "... you can't unfreeze ",
+					        HMHR(vict),"."
+					    )
+					);
 					return;
 				}
 
@@ -2047,7 +2135,12 @@ SUPERCMD(do_show) {
 
 		for(j = 0, i = 1; fields[i].level; i++)
 			if(fields[i].level <= GET_LEVEL(ch)) {
-				player->send("%-15s%s", fields[i].cmd, (!(++j % 5) ? "" : ""));
+				//player->send("%-15s%s", fields[i].cmd, (!(++j % 5) ? "" : ""));
+				player->sendx(
+				    CAT(
+				        fields[i].cmd, (!(++j % 5) ? "" : "")
+				    )
+				);
 			}
 
 		player->sendln("");
@@ -2114,6 +2207,8 @@ SUPERCMD(do_show) {
 				return;
 			}
 
+			/** TODO uncomment this and fix */
+#if 0
 			player->send("Player: %-12s (%s) [%2d %s]", vbuf.name.c_str(),
 			             genders[(int) vbuf.sex], 0, class_abbrevs[(int) vbuf.chclass]);
 			player->send("Au: %-8d  Bal: %-8d  Exp: %-8d  Align: %-5d",
@@ -2122,6 +2217,7 @@ SUPERCMD(do_show) {
 			/* ctime() uses static buffer: do not combine. */
 			player->send("Started: %-20.16s  ", ctime(&vbuf.birth));
 			player->send("Last: %-20.16s  Played: %3dh %2dm", ctime(&vbuf.last_logon), vbuf.played / 3600, vbuf.played / 60 % 60);
+#endif
 			break;
 
 		/* show rent */
@@ -2255,7 +2351,10 @@ SUPERCMD(do_show) {
 				}
 
 				i++;
+#if 0
+				// TODO fix this if wanted
 				player->send("%-10s - snooped by %s.", GET_NAME(d.snooping->character).c_str(), GET_NAME(d.character).c_str());
+#endif
 			}
 
 			if(i == 0) {
@@ -2393,10 +2492,12 @@ int perform_set(char_data *ch, char_data *vict, int mode,
 			return (0);
 		}
 
-		player->send("%s %s for %s.", set_fields[mode].cmd, ONOFF(on), GET_NAME(vict).c_str());
+		//TODO uncomment
+		//player->send("%s %s for %s.", set_fields[mode].cmd, ONOFF(on), GET_NAME(vict).c_str());
 	} else if(set_fields[mode].type == NUMBER) {
 		value = atoi(val_arg);
-		player->send("%s's %s set to %d.", GET_NAME(vict).c_str(), set_fields[mode].cmd, value);
+		//TODO uncomment
+		//player->send("%s's %s set to %d.", GET_NAME(vict).c_str(), set_fields[mode].cmd, value);
 	} else {
 		player->sendln(OK);
 	}
@@ -2412,12 +2513,14 @@ int perform_set(char_data *ch, char_data *vict, int mode,
 
 		case 2:
 			set_title(vict, val_arg);
-			player->send("%s's title is now: %s", GET_NAME(vict).c_str(), GET_TITLE(vict).c_str());
+			//TODO uncomment
+			//player->send("%s's title is now: %s", GET_NAME(vict).c_str(), GET_TITLE(vict).c_str());
 			break;
 
 		case 3:
 			SET_OR_REMOVE(PRF_FLAGS(vict), PRF_SUMMONABLE);
-			player->send("Nosummon %s for %s.", ONOFF(!on), GET_NAME(vict).c_str());
+			//TODO uncomment
+			//player->send("Nosummon %s for %s.", ONOFF(!on), GET_NAME(vict).c_str());
 			break;
 
 		case 4:
@@ -2595,12 +2698,14 @@ int perform_set(char_data *ch, char_data *vict, int mode,
 		case 31:
 			if(!str_cmp(val_arg, "off")) {
 				GET_COND(vict, (mode - 29)) = -1; /* warning: magic number here */
-				player->send("%s's %s now off.", GET_NAME(vict).c_str(), set_fields[mode].cmd);
+				//TODO uncomment
+				//player->send("%s's %s now off.", GET_NAME(vict).c_str(), set_fields[mode].cmd);
 			} else if(is_number(val_arg)) {
 				value = atoi(val_arg);
 				RANGE(0, 24);
 				GET_COND(vict, (mode - 29)) = value; /* and here too */
-				player->send("%s's %s set to %d.", GET_NAME(vict).c_str(), set_fields[mode].cmd, value);
+				//TODO uncomment
+				//player->send("%s's %s set to %d.", GET_NAME(vict).c_str(), set_fields[mode].cmd, value);
 			} else {
 				player->sendln("Must be 'off' or a value from 0 to 24.");
 				return (0);
@@ -2677,7 +2782,12 @@ int perform_set(char_data *ch, char_data *vict, int mode,
 				if(real_room(rvnum) != NOWHERE) {
 					SET_BIT(PLR_FLAGS(vict), PLR_LOADROOM);
 					GET_LOADROOM(vict) = rvnum;
-					player->send("%s will enter at room #%d.", GET_NAME(vict).c_str(), GET_LOADROOM(vict));
+					player->sendln(
+					    CAT(
+					        GET_NAME(vict).c_str(),
+					        " will enter at room #",  GET_LOADROOM(vict),"."
+					    )
+					);
 				} else {
 					player->sendln("That room does not exist!");
 					return (0);

@@ -36,7 +36,11 @@ namespace mods::classes {
 			return;
 		}
 		set_player_level_mock(player->uuid(),level);
-		player->send("Set your level to %d\r\n",player->level());
+		player->sendln(
+		    CAT(
+		        "Set your level to ",player->level()
+		    )
+		);
 	}
 
 	void init() {

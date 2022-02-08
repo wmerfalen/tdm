@@ -647,12 +647,20 @@ void save_item_to_db(player_ptr_t& player, std::string section_name, std::vector
 	std::string value = "";
 	std::string prefix = std::to_string(world[player->room()].number);
 	auto status = mods::db::put_section_vector(section_name,prefix, args);
-	player->send("status: %d\r\n",status);
+	player->sendln(CAT("status: ",status));
 	std::vector<std::string> values;
 	status = mods::db::get_section_vector(section_name,prefix,values);
-	player->send("get status: %d\r\nTo confirm, we placed these values...\r\n",status);
+	player->sendln(
+	    CAT(
+	        "get status: ",status,"To confirm, we placed these values..."
+	    )
+	);
 	for(auto line : values) {
-		player->send("[item]: '%s'\r\n",line.c_str());
+		player->sendln(
+		    CAT(
+		        "[item]: '",line.c_str(),"'"
+		    )
+		);
 	}
 	player->sendln("Done listing.");
 }

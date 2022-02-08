@@ -780,7 +780,12 @@ namespace mods {
 			                    verb.data(),
 			                    object->short_description.c_str(),
 			                    str_dir.c_str());
-			player->send("You %s a %s %s!\r\n", verb.data(), object->name.c_str(),str_dir.c_str());
+			player->sendln(
+			    //"You %s a %s %s!\r\n", verb.data(), object->name.c_str(),str_dir.c_str());
+			    CAT(
+			        "You ", verb.data()," a ", object->name.c_str()," ",str_dir.c_str(),"!"
+			    )
+			);
 			player->unequip(WEAR_HOLD);
 			auto room_id = travel_to(player->room(), direction, depth, object);
 			explode_in_future(room_id, ticks, object->uuid,player->uuid());

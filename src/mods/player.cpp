@@ -944,15 +944,6 @@ namespace mods {
 		ammo->consumable()->attributes->capacity += increment;
 		return ammo->consumable()->attributes->capacity;
 	}
-	void player::send(const std::vector<std::string>& list) {
-		for(auto& item : list) {
-			if(m_do_paging) {
-				queue_page_fragment(item.c_str());
-			} else {
-				sendln(item);
-			}
-		}
-	}
 	void player::psendln(std::string_view str) {
 		MENTOC_NPC_CHECK(str.data());
 		if(desc().has_prompt) {
@@ -1065,7 +1056,7 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
-				m_weight_index = player::weight_index_t::WEIGHT_NORMAL;
+		m_weight_index = player::weight_index_t::WEIGHT_NORMAL;
 		m_equipment_hash = 0;
 		m_screen_width = 80;
 		m_can_move = true;
@@ -1510,74 +1501,6 @@ namespace mods {
 	}
 	void player::queue_send_fragment(const char *message, ...) {
 	}
-	size_t player::send(const char *messg, ...) {
-		MENTOC_NPC_CHECK_0(messg);
-		if(desc().has_prompt) {
-			write_to_char("\r\n",0,0);
-		}
-		if(m_do_paging) {
-			static constexpr int txt_buffer_size_total = MAX_STRING_LENGTH;
-			static constexpr int txt_buffer_size_allowable = txt_buffer_size_total - 12;
-			std::array<char,txt_buffer_size_total> txt;
-			std::fill(txt.begin(),txt.end(),0);
-			const char *text_overflow = "**OVERFLOW**\r\n";
-			int size = 0;
-			va_list args;
-			va_start(args, messg);
-			size = vsnprintf(&txt[0], txt_buffer_size_allowable, messg, args);
-			if(size == 0) {
-				return 0;
-			}
-			if(size < 0) {
-				size = txt_buffer_size_allowable;
-				int offset = size - strlen(text_overflow);
-				if(offset < 0) {
-					offset = 0;
-				}
-				if(offset >= txt_buffer_size_total) {
-					offset = txt_buffer_size_total - strlen(text_overflow);
-				}
-				strncpy(&txt[0] + offset, text_overflow,strlen(text_overflow)+1);
-			} else {
-				txt[std::min(size,txt_buffer_size_allowable)] = '\0';
-			}
-			va_end(args);
-			queue_page_fragment(&txt[0]);
-			return 0;
-		}
-		if(messg && *messg) {
-			size_t left;
-			va_list args;
-			va_start(args, messg);
-			left = vwrite_to_output(*(cd()->desc), messg, args);
-			va_end(args);
-			desc().has_prompt = 0;
-			return left;
-		}
-		desc().has_prompt = 0;
-		return 0;
-	}
-
-	size_t player::godsend(const char *messg, ...) {
-		MENTOC_NPC_CHECK_0(messg);
-		if(!m_god_mode) {
-			return 0;
-		}
-		if(messg && *messg) {
-			size_t left;
-			va_list args;
-
-			va_start(args, messg);
-			left = vwrite_to_output(*(cd()->desc), messg, args);
-			va_end(args);
-			desc().has_prompt = 0;
-			return left;
-		}
-
-		desc().has_prompt = 0;
-		return 0;
-	}
-
 
 	player::affect_dissolver_t& player::get_affect_dissolver() {
 		return m_affects;
@@ -1649,7 +1572,11 @@ namespace mods {
 					if(m_char_data->contract) {
 						contract_install_item(target);
 					}
-					this->send("\r\nYou successfully deploy a %s\r\n", obj->name.c_str());
+					this->sendln(
+					    CAT(
+					        "\r\nYou successfully deploy a ", obj->name.c_str()
+					    )
+					);
 					break;
 				}
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_BREACH: {
@@ -1667,9 +1594,18 @@ namespace mods {
 					}
 					revive_target->hp() = mods::values::REVIVE_HP();
 					revive_target->position() = POS_STANDING;
-					this->send("{grn}You revive %s!{/grn}\r\n",revive_target->name().c_str());
+					this->sendln(
+					    CAT(
+					        "{grn}You revive ",revive_target->name().c_str(),"!{/grn}"
+					    )
+					);
 					if(!IS_NPC(revive_target->cd())) {
-						revive_target->send("%s {grn}revives you!{/grn}\r\n", this->name().c_str());
+						revive_target->sendln(
+						    CAT(
+						        this->name().c_str(),
+						        " {grn}revives you!{/grn}"
+						    )
+						);
 						revive_target->sendln("{grn}You dust yourself off and get to your feet!");
 					}
 					send_to_room_except(this->room(), {this->uuid(),revive_target->uuid()},

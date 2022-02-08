@@ -939,7 +939,7 @@ namespace mods {
 				return mods::drone::interpret(player->uuid(),in_argument.data());
 			}
 			if(player->room_pave_mode()) {
-				player->send("[paving]\r\n");
+				player->sendln("[paving]");
 				//If is a direction and that direction is not an exit,
 				//then pave a way to that exit
 				int door = 0;

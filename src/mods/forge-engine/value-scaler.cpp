@@ -35,7 +35,15 @@ namespace mods::forge_engine {
 		max_stats = level + 10;
 	}
 	void value_scaler::dump() {
-		player->send("stat_low: %f\nstat_high: %f\nuint_low: %d\nuint_high: %d\nmax_stats: %d\n\n",stat_low,stat_high,uint_low,uint_high, max_stats);
+		player->sendln(
+		    CAT(
+		        "stat_low: ",stat_low,"\n",
+		        "stat_high: ",stat_high,"\n",
+		        "uint_low: ",uint_low,"\n",
+		        "uint_high: ",uint_high,"\n",
+		        "max_stats: ",max_stats,"\n"
+		    )
+		);
 	}
 	std::string value_scaler::get_dump() {
 		std::vector<char> buffer;
@@ -71,7 +79,11 @@ namespace mods::forge_engine {
 				}
 				player->level() = level;
 				value_scaler scale(player);
-				player->send("value_scale: %s\r\n",scale.get_dump().c_str());
+				player->sendln(
+				    CAT(
+				        "value_scale: ",scale.get_dump().c_str()
+				    )
+				);
 			}
 			player->level() = saved_level;
 		}

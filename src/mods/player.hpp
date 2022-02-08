@@ -479,7 +479,6 @@ namespace mods {
 			void sendln();
 			void sendln(std::string_view str);
 			void sendln(const std::vector<std::string>&);
-			void send(const std::vector<std::string>&);
 			void sendln(mods::string& str);
 			void sendx(mods::string& str);
 			void sendx(std::string_view str);
@@ -488,8 +487,8 @@ namespace mods {
 			void psendln(mods::string& str);
 			void raw_send(const mods::string&);
 			void done();
-			size_t send(const char *messg, ...);
-			size_t godsend(const char *messg, ...);
+			//size_t send(const char *messg, ...);
+			//size_t godsend(const char *messg, ...);
 
 			/* pager functions */
 			player&             pager_start();
@@ -824,10 +823,10 @@ namespace mods {
 			std::map<std::string,std::string>& get_ada_data();
 
 			void error(std::string_view msg) {
-				send("{red}%s{/red}", msg.data());
+				sendx(CAT("{red}",msg.data(),"{/red}"));
 			}
 			void errorln(std::string_view msg) {
-				send("{red}%s{/red}\r\n", msg.data());
+				sendx(CAT("{red}",msg.data(),"{/red}"));
 			}
 
 			uuid_t& drone_uuid() {

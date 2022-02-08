@@ -203,7 +203,7 @@ namespace mods::forge_engine {
 	}
 
 	void generated_armor_t::send_stats_to_player(player_ptr_t& player) {
-		player->send("%s\r\n", get_dump().c_str());
+		player->sendln(get_dump().c_str());
 	}
 
 	std::string generated_armor_t::get_dump() {

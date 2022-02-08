@@ -14,7 +14,11 @@ namespace mods {
 			for(auto& line : screen) {
 				for(auto& arg : vec_args) {
 					if(mods::util::fuzzy_match(arg.substr(0,std::min<std::size_t>(limit,arg.length())),line)) {
-						player->send("This line matched your search of {grn}'%s'{/grn}:", arg.c_str());
+						player->sendx(
+						    CAT(
+						        "This line matched your search of {grn}'",arg.c_str(),"'{/grn}:"
+						    )
+						);
 						player->sendln(line);
 					}
 				}

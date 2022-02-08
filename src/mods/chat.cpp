@@ -13,7 +13,11 @@ namespace mods::chat {
 		auto vec_args = PARSE_ARGS();
 		for(auto verb : mods::chat::chan_verbs) {
 			if(mods::util::is_lower_match(CAT("no",verb),vec_args[0])) {
-				player->send("Turning {grn}OFF{/grn} '%s' channel...\r\n",verb.c_str());
+				player->sendln(
+				    CAT(
+				        "Turning {grn}OFF{/grn} '",verb,"' channel..."
+				    )
+				);
 				PLAYER_SET(CAT("no",verb),"1");
 				return true;
 			}
@@ -92,7 +96,18 @@ namespace mods::chat {
 			if(muted.compare("1") == 0) {
 				continue;
 			}
-			player->send("\r\n{yel}[{/yel}{blu}%s{/blu}{yel}][{/yel}{blu}%s{/blu}{yel}]->{/yel}%s\r\n",this->get_name().data(),user.data(),mods::globals::strip_colors(message).c_str());
+			//"\r\n{yel}[{/yel}{blu}%s{/blu}{yel}][{/yel}{blu}%s{/blu}{yel}]->{/yel}%s\r\n",this->get_name().data(),user.data(),mods::globals::strip_colors(message).c_str());
+			player->sendln(
+			    CAT(
+			        "\r\n{yel}[{/yel}{blu}",
+			        this->get_name().data(),
+			        "{/blu}{yel}][{/yel}{blu}",
+			        user.data(),
+			        "{/blu}{yel}]->{/yel}",
+			        mods::globals::strip_colors(message).c_str()
+			    )
+			);
+
 		}
 	}
 	void transmit(std::string verb,std::string_view player_name,std::string_view message) {

@@ -28,7 +28,11 @@ namespace mods::target_practice_db {
 	void remove_dummy(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
 		auto status = delete_section_vector("dummy",std::to_string(world[player->room()].number));
-		player->send("delete status: %d\r\n",status);
+		player->sendln(
+		    CAT(
+		        "delete status: ",status
+		    )
+		);
 	}
 	void queue_dummy_on_room(room_vnum room) {
 		dummy_queue.emplace_back(room);

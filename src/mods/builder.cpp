@@ -2214,12 +2214,25 @@ struct command_t {
 		return INCOMPLETE;
 	}
 	void print_command(player_ptr_t& player) {
-		player->send(" {grn}mbuild{/grn} {red}%s %s{/red}\r\n",this->name.c_str(),this->format.c_str());
-		player->send("  {gld}|:: -:[keys]:-{/gld}\r\n");
+		//" {grn}mbuild{/grn} {red}%s %s{/red}\r\n",this->name.c_str(),this->format.c_str());
+		player->sendln(
+		    CAT(
+		        " {grn}mbuild{/grn} {red}",this->name.c_str()," ",this->format.c_str(),"{/red}"
+		    )
+		);
+		player->sendln("  {gld}|:: -:[keys]:-{/gld}");
 		for(auto& pair : column_mappings) {
-			player->send("  {gld}|::%s {/gld}\r\n",pair.first.c_str());
+			player->sendln(
+			    CAT(
+			        "  {gld}|::",pair.first.c_str()," {/gld}"
+			    )
+			);
 		}
-		player->send(" {grn}mbuild{/grn} {red}%s <mob-id> save{/red}\r\n",this->name.c_str());
+		player->sendln(
+		    CAT(
+		        " {grn}mbuild{/grn} {red}",this->name.c_str()," <mob-id> save{/red}"
+		    )
+		);
 	}
 };
 static std::list<std::shared_ptr<command_t>> mob_commands;
@@ -3845,11 +3858,24 @@ SUPERCMD(do_obuild) {
 				.object_end();
 			} else {
 				if(obj->short_description) {
-					player->send("{gld}[%d]{/gld} :->{red}%s{/red}\r\n",object_id,obj->short_description);
+					player->sendln(
+					    CAT(
+					        "{gld}[",object_id,"]{/gld} :->{red}",obj->short_description,"{/red}"
+					    )
+					);
 				} else if(obj->name) {
-					player->send("{gld}[%d]{/gld} :->{red}%s{/red}\r\n",object_id,obj->name);
+					player->sendln(
+					    CAT(
+					        "{gld}[",object_id,obj->name,"]{/gld} :->{red}",
+					        obj->name,"{/red}"
+					    )
+					);
 				} else {
-					player->send("{gld}[%d]{/gld} :->{red}%s{/red}\r\n",object_id,"<null>");
+					player->sendln(
+					    CAT(
+					        "{gld}[",object_id, "]{/gld} :->{red}<null>{/red}"
+					    )
+					);
 				}
 			}
 			object_id++;
@@ -4208,7 +4234,12 @@ SUPERCMD(do_obuild) {
 		MENTOC_BITVECTOR(ITEM_ANTI_THIEF);
 		MENTOC_BITVECTOR(ITEM_ANTI_WARRIOR);
 		MENTOC_BITVECTOR(ITEM_NOSELL);
-		player->send("{red}obj_file: {/red} {grn}'%s'{/grn}\r\n",obj->feed_file().length() ? obj->feed_file().data() : "");
+		player->sendln(
+		    CAT(
+		        "{red}obj_file: {/red} {grn}'",obj->feed_file().length() ? obj->feed_file().data() : "",
+		        "'{/grn}"
+		    )
+		);
 
 		for(unsigned index = 0;
 		        index < MAX_OBJ_AFFECT; index++) {
@@ -5215,7 +5246,12 @@ SUPERCMD(do_rbuild) {
 		                      "  |:: {yel}-:[{/yel}{grn}types{/grn}{yel}]:-{/yel}\r\n" <<
 		                      "  |:: \r\n" ;
 		for(auto& pair : mods::rooms::texture_strings) {
-			player->send("  {gld}|:: %s{/gld}\r\n",pair.second.c_str());
+			//"  {gld}|:: %s{/gld}\r\n",pair.second.c_str());
+			player->sendln(
+			    CAT(
+			        "  {gld}|:: ",pair.second.c_str(),"{/gld}"
+			    )
+			);
 		}
 		*player <<
 		        "  {grn}|____[example]{/grn}\r\n" <<
@@ -6292,7 +6328,7 @@ namespace mods::builder {
 		DO_HELP_WITH_ZERO("nset");
 		auto vec_args = PARSE_ARGS();
 		if(vec_args.size() == 0) {
-			player->send("usage: nset <nickname>\r\n");
+			player->sendln("usage: nset <nickname>");
 			player->errorln("Invalid number of arguments");
 			return;
 		}

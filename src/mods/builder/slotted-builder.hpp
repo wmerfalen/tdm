@@ -417,7 +417,12 @@ namespace mods::builder {
 			void display_slot_list() {
 				std::string list;
 				for(const auto& item : m_slot_list) {
-					m_builder_ptr->send("  {gld}|:: %s{/gld}\r\n",item.data());
+					m_builder_ptr->sendln(
+					    CAT(
+					        "  {gld}|:: ",item.data(),
+					        "{/gld}"
+					    )
+					);
 				}
 			}
 			void display_signatures() {

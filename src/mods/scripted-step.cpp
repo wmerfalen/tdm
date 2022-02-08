@@ -81,7 +81,7 @@ namespace mods {
 			/** find the scripted_step by vnum */
 			auto opt_scripted_step = find_scripted_step(scripted_step_num);
 			if(opt_scripted_step.has_value() == false) {
-				player->send("{red}We could not find a scripted_step with that vnum{/red}\r\n");
+				player->sendln("{red}We could not find a scripted_step with that vnum{/red}");
 				return;
 			}
 		}

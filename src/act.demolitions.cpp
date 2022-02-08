@@ -99,7 +99,7 @@ ACMD(do_install) {
 
 	if(mods::object_utils::is_camera(parsed.obj)) {
 		parsed.obj->in_room = player->room();
-		player->send("You begin installing a %s onto the %s wall...\r\n", obj_name.c_str(), mods::globals::dir_to_str(parsed.dir, true).c_str());
+		player->sendln(CAT("You begin installing a ", obj_name.c_str(), " onto the ", mods::globals::dir_to_str(parsed.dir, true).c_str(), " wall..."));
 		mods::object_utils::set_is_installing(parsed.obj,player,parsed.dir);
 		player->set_camera(parsed.obj);
 		player->block_for(CAMERA_INSTALLATION_TICS(), mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION, parsed.obj->uuid);
@@ -168,13 +168,13 @@ ACMD(do_uninstall) {
 			player->sendln("You don't own that device.");
 			return;
 		}
-		player->send("You begin removing a %s from the %s wall...", obj_name.c_str(), mods::globals::dir_to_str(parsed.dir, true).c_str());
+		player->sendln(CAT("You begin removing a ", obj_name.c_str()," from the ", mods::globals::dir_to_str(parsed.dir, true), " wall..."));
 		player->clear_camera();
 		player->set_camera_viewing(false);
 		parsed.obj->set_location_data(0);
 		obj_from_room(parsed.obj);
 		player->carry(parsed.obj);
-		player->send("\r\nYou place a %s into your inventory.\r\n", parsed.obj->name.c_str());
+		player->sendln(CAT("\r\nYou place a ", parsed.obj->name.c_str(), " into your inventory."));
 		return;
 	}
 	player->sendln("You're not holding an item that can do that.");
@@ -206,7 +206,7 @@ ACMD(do_breach) {
 		player->sendln("You attempt to place the breach charge but notice that the door is {blu}ELECTRIFIED{/blu}!!!");
 		auto dam = dice(16,6); /** TODO: need to calculate resistences and what not */
 		GET_HIT(player->cd()) -= dam; /** FIXME ^ */
-		player->send("{red}[%d]{/red} you are {blu}ELECTROCUTED{/blu} by the door!",dam);
+		player->sendln(CAT("{red}[", dam, "]{/red} you are {blu}ELECTROCUTED{/blu} by the door!"));
 		return;
 	}
 
@@ -239,7 +239,7 @@ ACMD(do_thermite) {
 		player->sendln("You attempt to place the breach charge but notice that the door is {blu}ELECTRIFIED{/blu}!!!");
 		auto dam = mods::rand::roll(16,6); /** TODO: need to calculate resistences and what not */
 		GET_HIT(player->cd()) -= dam; /** FIXME ^ */
-		player->send("{red}[%d]{/red} you are {blu}ELECTROCUTED{/blu} by the door!",dam);
+		player->sendln(CAT("{red}[",dam,"]{/red} you are {blu}ELECTROCUTED{/blu} by the door!"));
 		return;
 	}
 

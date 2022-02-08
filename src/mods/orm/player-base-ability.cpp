@@ -179,12 +179,21 @@ namespace mods::orm {
 			auto vec_args = PARSE_ARGS();
 			mods::orm::player_base_ability pba;
 			auto status = pba.load_by_player(player->db_id());
-			player->send("Status: %d\r\n",status);
+			player->sendln(
+			    CAT("Status: ",status)
+			);
 			pba.dump();
 			status = pba.save_by_player(player);
-			player->send("SVP status: %d\r\n",status);
+			player->sendln(
+			    CAT(
+			        "SVP status: ",status)
+			);
 			status = pba.load_by_player(player->db_id());
-			player->send("LVP Status: %d\r\n",status);
+			player->sendln(
+			    CAT(
+			        "LVP Status: ",status
+			    )
+			);
 			pba.dump();
 		};
 

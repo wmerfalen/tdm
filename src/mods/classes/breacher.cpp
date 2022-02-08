@@ -79,7 +79,12 @@ namespace mods::classes {
 			return;
 		}
 		if(m_push_count[p] < 2 && m_explosive_shot_charges) {
-			m_player->send("{grn}You ready an explosive charge toward the %s door...{/grn}\r\n",dirstr(dir).c_str());
+			m_player->sendln(
+			    CAT(
+			        "{grn}You ready an explosive charge toward the ",dirstr(dir).c_str(),
+			        " door...{/grn}"
+			    )
+			);
 		}
 	}
 	std::shared_ptr<breacher> create_breacher(player_ptr_t& in_player) {

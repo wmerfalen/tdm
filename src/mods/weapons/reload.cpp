@@ -76,7 +76,7 @@ namespace mods::weapons::reload {
 			}
 		}
 		if(!obj) {
-			player->send("You don't seem to have any ammunition for that weapon anywhere in your inventory!");
+			player->sendln("You don't seem to have any ammunition for that weapon anywhere in your inventory!");
 			return {nullptr,nullptr};
 		}
 
@@ -87,7 +87,12 @@ namespace mods::weapons::reload {
 		}
 
 		weapon->rifle_instance->ammo = clip_size;
-		player->send("You reload your %s with %d ammo.", weapon->name.c_str(), clip_size);
+		player->sendln(
+		    CAT(
+		        "You reload your ", weapon->name.c_str(),
+		        "with ",clip_size," ammo."
+		    )
+		);
 		if(player->marine() && mods::object_utils::is_assault_rifle(weapon)) {
 			clip_size -= (clip_size * MARINE_AR_PASSIVE_EXTRA_AMMO_BONUS() * 0.01);
 		}
@@ -157,7 +162,13 @@ namespace mods::weapons::reload {
 		}
 
 		if(!weapon || !weapon->has_rifle()) {
-			player->send("You aren't wielding a reloadable weapon in your [%s] slot.\r\n", primary ? "primary" : "secondary");
+			player->sendln(
+			    CAT(
+			        "You aren't wielding a reloadable weapon in your [",
+			        primary ? "primary" : "secondary",
+			        "] slot."
+			    )
+			);
 			return;
 		}
 		if(secondary) {

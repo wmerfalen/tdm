@@ -941,7 +941,12 @@ namespace mods::help {
 	bool send_help(std::string_view topic, std::shared_ptr<mods::player>& player) {
 		auto it = registered_help_commands.find(topic.data());
 		if(registered_help_commands.end() != it && ((int)player->level()) >= ((int)it->second.first)) {
-			player->send("your player level: %d, second.first: %d\r\n",player->level(),it->second.first);
+			//"your player level: %d, second.first: %d\r\n",player->level(),it->second.first);
+			player->sendln(
+			    CAT(
+			        "your player level: ",player->level(),", second.first: ",it->second.first
+			    )
+			);
 			player->sendln(CAT("{blu}",it->second.second,"{/blu}"));
 			return false;
 		}

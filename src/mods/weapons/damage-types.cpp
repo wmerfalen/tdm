@@ -977,21 +977,16 @@ namespace mods::weapons::damage_types {
 		}
 
 #ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
-		player->send(
-		    "dice roll[%d]\r\n"
-		    "damage: [%d]\r\n"
-		    "critical_bonus: [%d]\r\n"
-		    "damage_dice [%d]\r\n"
-		    "damage_sides [%d]\r\n"
-		    "crit_range [%d]\r\n"
-		    "crit_chance [%d]\r\n",
-		    dice_roll,
-		    dam,
-		    critical_bonus,
-		    damage_dice,
-		    damage_sides,
-		    crit_range,
-		    crit_chance
+		player->sendln(
+		    CAT(
+		        "dice roll[",dice_roll,"]\r\n",
+		        "damage: [",damage_dice,"]\r\n",
+		        "critical_bonus: [",critical_bonus,"]\r\n",
+		        "damage_dice [",damage_dice,"]\r\n",
+		        "damage_sides [",damage_sides,"]\r\n",
+		        "crit_range [",crit_range,"]\r\n",
+		        "crit_chance [",crit_chance,"]\r\n"
+		    )
 		);
 #endif
 
@@ -1253,21 +1248,16 @@ namespace mods::weapons::damage_types {
 			dam += sniper_class_damage;
 		}
 #ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
-		player->send(
-		    "dice roll[%d]\r\n"
-		    "damage: [%d]\r\n"
-		    "critical_bonus: [%d]\r\n"
-		    "damage_dice [%d]\r\n"
-		    "damage_slides [%d]\r\n"
-		    "crit_range [%d]\r\n"
-		    "crit_chance [%d]\r\n",
-		    dice_roll,
-		    dam,
-		    critical_bonus,
-		    damage_dice,
-		    damage_sides,
-		    crit_range,
-		    crit_chance
+		player->sendln(
+		    CAT(
+		        "dice roll[",dice_roll,"]\r\n",
+		        "damage: [",damage_dice,"]\r\n",
+		        "critical_bonus: [",critical_bonus,"]\r\n",
+		        "damage_dice [",damage_dice,"]\r\n",
+		        "damage_sides [",damage_sides,"]\r\n",
+		        "crit_range [",crit_range,"]\r\n",
+		        "crit_chance [",crit_chance,"]\r\n"
+		    )
 		);
 #endif
 		md("dice_roll: " << dice_roll << ", dam:" << dam << "critical_bonus: " << critical_bonus <<

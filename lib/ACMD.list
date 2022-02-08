@@ -1,59 +1,9 @@
-./act.movement.cpp:->move
-./act.movement.cpp:->gen_door
-./act.movement.cpp:->enter
-./act.movement.cpp:->leave
-./act.movement.cpp:->stand
-./act.movement.cpp:->sit
-./act.movement.cpp:->rest
-./act.movement.cpp:->sleep
-./act.movement.cpp:->wake
-./act.movement.cpp:->follow
-./act.other.cpp:->quit
-./act.other.cpp:->save
-./act.other.cpp:->not_here
-./act.other.cpp:->sneak
-./act.other.cpp:->hide
-./act.other.cpp:->steal
-./act.other.cpp:->visible
-./act.other.cpp:->title
-./act.other.cpp:->group
-./act.other.cpp:->ungroup
-./act.other.cpp:->report
-./act.other.cpp:->split
-./act.other.cpp:->use
-./act.other.cpp:->wimpy
-./act.other.cpp:->display
-./act.other.cpp:->gen_write
-./act.other.cpp:->gen_tog
-./act.social.cpp:->action
-./act.social.cpp:->insult
-./act.demolitions.cpp:->cancel
-./act.demolitions.cpp:->install
-./act.demolitions.cpp:->uninstall
-./act.demolitions.cpp:->breach
-./act.demolitions.cpp:->thermite
-./act.builder.cpp:->flush_holding
-./act.builder.cpp:->hold_anything
-./act.builder.cpp:->uuid
-./act.medic.cpp:->heal
-./act.medic.cpp:->revive
-./house.cpp:->hcontrol
-./house.cpp:->house
-./mods/contracts.cpp:	->contract
-./mods/bleed.cpp:	->bleed_me
-./mods/weapons/reload.cpp:	->reload
-./mods/mini-games/wires.cpp:->plug_cable
-./mods/mini-games/line-up.cpp:->hack
-./mods/mini-games/line-up.cpp:->rotate_right
-./mods/mini-games/line-up.cpp:->rotate_left
-./mods/mini-games/line-up.cpp:->next_row
-./mods/mini-games/line-up.cpp:->reset_hack
-./mods/values.cpp:			->set_value
-./mods/values.cpp:			->get_value
-./mods/values.cpp:			->revert_value_to_default
-./mods/values.cpp:			->list_values
-./mods/classes/engineer.cpp:	->drone_bomb
-./mods/classes/breacher.cpp:->teep
+./shop.cpp:->list
+./shop.cpp:->buy
+./mods/rifle-attachments.cpp:		->vcarrying
+./mods/prefs.cpp:	->pref
+./mods/classes/contagion.cpp:	->invoke
+./mods/classes/pyrexia.cpp:->fire_nade
 ./mods/classes/ghost.cpp:	->light_bandage
 ./mods/classes/ghost.cpp:	->build_corrosive_claymore
 ./mods/classes/ghost.cpp:	->build_shrapnel_claymore
@@ -70,35 +20,59 @@
 ./mods/classes/ghost.cpp:	->fire
 ./mods/classes/ghost.cpp:	->dissipate
 ./mods/classes/ghost.cpp:	->inject_adrenaline_shot
-./mods/classes/pyrexia.cpp:->fire_nade
-./mods/classes/contagion.cpp:	->invoke
-./mods/rifle-attachments.cpp:		->vcarrying
-./mods/projectile.cpp:		->fragtest_east
-./mods/date-time.cpp:	->moon_phase
-./mods/corpse.cpp:	->corpse_me
-./mods/scripted-step.cpp:	->scripted_step
-./mods/levels.cpp:	->exp
-./mods/combat.cpp:		->set_rules_of_engagement
-./mods/combat-composer/snipe-target.cpp:	->print_rct
+./mods/classes/engineer.cpp:	->drone_bomb
+./mods/classes/breacher.cpp:->teep
 ./mods/rifle.cpp:	->rifle_me
-./mods/mp.cpp:	->mp
-./mods/orm/player-base-ability.cpp:		->save_my_pba
-./mods/prefs.cpp:	->pref
+./mods/bleed.cpp:	->bleed_me
+./mods/help.cpp:	->help
+./mods/levels.cpp:	->exp
+./mods/date-time.cpp:	->moon_phase
+./mods/scripted-step.cpp:	->scripted_step
+./mods/projectile.cpp:		->fragtest_east
+./mods/mini-games/line-up.cpp:->hack
+./mods/mini-games/line-up.cpp:->rotate_right
+./mods/mini-games/line-up.cpp:->rotate_left
+./mods/mini-games/line-up.cpp:->next_row
+./mods/mini-games/line-up.cpp:->reset_hack
+./mods/mini-games/wires.cpp:->plug_cable
+./mods/contracts.cpp:	->contract
+./mods/weapons/reload.cpp:	->reload
+./mods/corpse.cpp:	->corpse_me
+./mods/loot-container.cpp:	->show_loot
+./mods/loot-container.cpp:	->take_loot
+./mods/loot-container.cpp:	->list_loot
+./mods/combat-composer/snipe-target.cpp:	->print_rct
+./mods/skills.cpp:	->score
+./mods/skills.cpp:	->buy_practice
+./mods/skills.cpp:	->skills
+./mods/skills.cpp:	->practice
+./mods/combat.cpp:		->set_rules_of_engagement
+./mods/mobs/defiler.cpp:	->bioscan
 ./mods/melee/main.cpp:	->set_combat_order
 ./mods/melee/main.cpp:	->list_combat_order
 ./mods/melee/main.cpp:	->clear_combat_order
 ./mods/melee/main.cpp:	->dispatch
 ./mods/melee/stance.cpp:	->stance
-./mods/loot-container.cpp:	->show_loot
-./mods/loot-container.cpp:	->take_loot
-./mods/loot-container.cpp:	->list_loot
-./mods/mobs/defiler.cpp:	->bioscan
-./mods/skills.cpp:	->score
-./mods/skills.cpp:	->buy_practice
-./mods/skills.cpp:	->skills
-./mods/skills.cpp:	->practice
-./mods/help.cpp:	->help
-./graph.cpp:->track
+./mods/mp.cpp:	->mp
+./mods/values.cpp:			->set_value
+./mods/values.cpp:			->get_value
+./mods/values.cpp:			->revert_value_to_default
+./mods/values.cpp:			->list_values
+./mods/orm/player-base-ability.cpp:		->save_my_pba
+./act.item.cpp:->put
+./act.item.cpp:->get
+./act.item.cpp:->drop
+./act.item.cpp:->give
+./act.item.cpp:->drink
+./act.item.cpp:->eat
+./act.item.cpp:->pour
+./act.item.cpp:->wear
+./act.item.cpp:->wield
+./act.item.cpp:->grab
+./act.item.cpp:->remove
+./house.cpp:->hcontrol
+./house.cpp:->house
+./limits.cpp:->idle
 ./act.informative.cpp:->drone
 ./act.informative.cpp:->recall
 ./act.informative.cpp:->preferences
@@ -120,7 +94,26 @@
 ./act.informative.cpp:->toggle
 ./act.informative.cpp:->commands
 ./act.informative.cpp:->view
-./act.wizard.cpp:->stat
+./act.other.cpp:->quit
+./act.other.cpp:->save
+./act.other.cpp:->not_here
+./act.other.cpp:->sneak
+./act.other.cpp:->hide
+./act.other.cpp:->steal
+./act.other.cpp:->visible
+./act.other.cpp:->title
+./act.other.cpp:->group
+./act.other.cpp:->ungroup
+./act.other.cpp:->report
+./act.other.cpp:->split
+./act.other.cpp:->use
+./act.other.cpp:->wimpy
+./act.other.cpp:->display
+./act.other.cpp:->gen_write
+./act.other.cpp:->gen_tog
+./act.builder.cpp:->flush_holding
+./act.builder.cpp:->hold_anything
+./act.builder.cpp:->uuid
 ./modify.cpp:->skillset
 ./act.offensive.cpp:->throw
 ./act.offensive.cpp:->snipe_object
@@ -142,8 +135,28 @@
 ./act.offensive.cpp:->bash
 ./act.offensive.cpp:->rescue
 ./act.offensive.cpp:->kick
-./shop.cpp:->list
-./shop.cpp:->buy
+./act.medic.cpp:->heal
+./act.medic.cpp:->revive
+./act.movement.cpp:->move
+./act.movement.cpp:->gen_door
+./act.movement.cpp:->enter
+./act.movement.cpp:->leave
+./act.movement.cpp:->stand
+./act.movement.cpp:->sit
+./act.movement.cpp:->rest
+./act.movement.cpp:->sleep
+./act.movement.cpp:->wake
+./act.movement.cpp:->follow
+./act.wizard.cpp:->stat
+./act.demolitions.cpp:->cancel
+./act.demolitions.cpp:->install
+./act.demolitions.cpp:->uninstall
+./act.demolitions.cpp:->breach
+./act.demolitions.cpp:->thermite
+./interpreter.cpp:->unimplemented
+./interpreter.cpp:->room_vnum
+./interpreter.cpp:->alias
+./graph.cpp:->track
 ./act.comm.cpp:->say
 ./act.comm.cpp:->gsay
 ./act.comm.cpp:->tell
@@ -152,18 +165,5 @@
 ./act.comm.cpp:->write
 ./act.comm.cpp:->gen_comm
 ./act.comm.cpp:->qcomm
-./limits.cpp:->idle
-./act.item.cpp:->put
-./act.item.cpp:->get
-./act.item.cpp:->drop
-./act.item.cpp:->give
-./act.item.cpp:->drink
-./act.item.cpp:->eat
-./act.item.cpp:->pour
-./act.item.cpp:->wear
-./act.item.cpp:->wield
-./act.item.cpp:->grab
-./act.item.cpp:->remove
-./interpreter.cpp:->unimplemented
-./interpreter.cpp:->room_vnum
-./interpreter.cpp:->alias
+./act.social.cpp:->action
+./act.social.cpp:->insult

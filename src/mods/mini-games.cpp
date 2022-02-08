@@ -36,7 +36,7 @@ namespace mods::mini_games {
 			player->sendln("No devices in this room");
 			return;
 		}
-		player->send("Listing devices...\r\n");
+		player->sendln("Listing devices...");
 		for(auto& hackable : devices[player->vnum()]) {
 			player->sendln(CAT("device #", std::to_string(hackable.device_id()), "\r\n"));
 		}

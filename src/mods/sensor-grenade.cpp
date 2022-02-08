@@ -163,7 +163,14 @@ namespace mods::sensor_grenade {
 					}
 				}
 			}
-			player->send("\r\n[%d] target%s scanned.\r\n",scan_count, scan_count != 1 ? "s" : "");
+			//"\r\n[%d] target%s scanned.\r\n",scan_count, scan_count != 1 ? "s" : "");
+			player->sendln(
+			    CAT(
+			        "\r\n[",scan_count,"] ",
+			        " target",scan_count != 1 ? "s" : "",
+			        " scanned."
+			    )
+			);
 		} else {
 			gather_room(nade_uuid,room_id,from_direction);
 			send_results(nade_uuid,player_uuid);

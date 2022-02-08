@@ -850,7 +850,14 @@ namespace mods::levels {
 		}
 		int used_to = found_player->exp();
 		mods::levels::gain_exp(found_player,opt.value());
-		player->send("Player '%s' used to have %d experience points and now has %d\r\n",found_player->name().c_str(),used_to,found_player->exp());
+		player->sendln(
+		    CAT(
+		        "Player '",found_player->name().c_str(),
+		        "' used to have ",
+		        used_to,
+		        " experience points and now has ",found_player->exp()
+		    )
+		);
 		player->sendln("Done.");
 		ADMIN_DONE();
 	}
@@ -866,7 +873,11 @@ namespace mods::levels {
 		ADMIN_DONE();
 	}
 	ACMD(do_exp) {
-		player->send("{grn}You have %d experience points.{/grn}\r\n",player->exp());
+		player->sendln(
+		    CAT(
+		        "{grn}You have ",player->exp()," experience points.{/grn}"
+		    )
+		);
 	}
 
 

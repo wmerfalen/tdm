@@ -35,9 +35,19 @@ namespace mods::shop  {
 				return;
 			}
 			player->mp() -= mp;
-			player->send("You spend %d mp.\r\n", mp);
+			player->sendln(
+			    CAT(
+			        "You spend ", mp,
+			        " mp."
+			    )
+			);
 			player->carry(read_object_ptr(s_obj_rnum,REAL));
-			player->send("You carry a %s in your inventory.\r\n", obj_proto[s_obj_rnum].name.c_str());
+			//"You carry a %s in your inventory.\r\n", obj_proto[s_obj_rnum].name.c_str()
+			player->sendln(
+			    CAT(
+			        "You carry a ", obj_proto[s_obj_rnum].name.c_str(),", in your inventory."
+			    )
+			);
 			return;
 		}
 	}

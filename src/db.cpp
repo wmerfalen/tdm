@@ -1793,7 +1793,11 @@ int vnum_object(char *searchname, char_data *ch) {
 
 	for(nr = 0; nr <= top_of_objt; nr++)
 		if(isname(searchname, obj_proto[nr].name)) {
-			player->send("%3d. [%5d] %s\r\n", ++found, obj_index[nr].vnum, obj_proto[nr].short_description.c_str());
+			player->sendln(
+			    //"%3d. [%5d] %s\r\n", ++found, obj_index[nr].vnum, obj_proto[nr].short_description.c_str());
+			    CAT(
+			        ++found, ". [",obj_index[nr].vnum, "] ",obj_proto[nr].short_description.c_str())
+			);
 		}
 
 	return (found);
