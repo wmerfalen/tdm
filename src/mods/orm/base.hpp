@@ -1,6 +1,5 @@
 #ifndef __MENTOC_MODS_ORM_BASE_HEADER__
 #define __MENTOC_MODS_ORM_BASE_HEADER__
-#include "../db-report.hpp"
 #include <iostream>
 #include <vector>
 #include "../player.hpp"

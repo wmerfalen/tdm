@@ -71,6 +71,13 @@ namespace mods::contracts {
 namespace mods {
 	struct player {
 			typedef void (*func_t)(player_ptr_t&,player_ptr_t&);
+			using equipment_hash_t = uint64_t;
+			enum weight_index_t : uint8_t {
+				WEIGHT_FAST = 3,
+				WEIGHT_NORMAL = 2,
+				WEIGHT_ENCUMBERED = 1,
+				WEIGHT_SLUGGISH = 0,
+			};
 			using contract_vnum_t = uint32_t;
 			using contract_list_t = std::forward_list<std::shared_ptr<mods::contracts::player_contract_instance>>;
 			using damage = damage_event_t;
@@ -261,6 +268,7 @@ namespace mods {
 			int&	carry_weight() {
 				return this->char_specials().carry_weight;
 			}
+			const weight_index_t effective_weight_index() const;
 			byte& carry_items() {
 				return this->char_specials().carry_items;
 			}
@@ -657,6 +665,8 @@ namespace mods {
 			void unequip(const std::size_t& pos);
 			void unequip(const std::size_t& pos,bool flush);
 			void unequip_into_inventory(int pos);
+
+			const equipment_hash_t& equipment_hash() const;
 			obj_ptr_t equipment(int pos);
 			std::vector<affected_type>& get_affected_by() {
 				return m_affected_by;
@@ -973,6 +983,7 @@ namespace mods {
 			int16_t m_ensnared_amount;
 
 		private:
+			equipment_hash_t m_equipment_hash;
 			bool m_locked_down;
 			std::string m_scripted_response;
 			void write_to_char(std::string_view msg, bool newline,bool plain);
@@ -1074,6 +1085,7 @@ namespace mods {
 			int16_t m_thermal_range;
 			int16_t m_night_vision_range;
 			uint8_t m_screen_width;
+			weight_index_t m_weight_index;
 	};
 };
 

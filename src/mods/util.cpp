@@ -1005,6 +1005,40 @@ namespace mods::util {
 		auto dir = mods::util::parse_direction(arg, last_index+1, nullptr);
 		return { obj, dir };
 	}
+	obj_ptr_t parse_owned_room_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index) {
+		//int i, number;
+		static constexpr std::size_t max_len = MAX_INPUT_LENGTH;
+		std::string buffer;
+		int ctr = start_at;
+		if(ctr < 0) {
+			return nullptr;
+		}
+		while(isspace(arg[ctr]) && ++ctr < max_len && ctr < arg.length()) {}
+		while(!isspace(arg[ctr]) && ctr < max_len && ctr < arg.length()) {
+			buffer += arg[ctr++];
+		}
+		if(last_index) {
+			*last_index = ctr;
+		}
+		//char* tmp_name = buffer.data();
+		//if(!(number = get_number(&tmp_name))) {
+		//return nullptr;
+		//}
+		for(const auto& obj : world[player->room()].contents_container()) {
+			if(obj && obj->get_owner() == player->uuid() && isname(buffer.data(), obj->name.c_str())) { // && --number == 0) {
+				return obj;
+			}
+		}
+		return nullptr;//make_from(get_obj_in_list_vis(player->cd(), buffer.data(), &number, player->carrying()));
+	}
+
+	objdir_t parse_owned_room_objdir(player_ptr_t& player,std::string_view arg) {
+		int last_index = 0;
+		auto obj = mods::util::parse_owned_room_object(player, arg, 0,&last_index);
+		auto dir = mods::util::parse_direction(arg, last_index+1, nullptr);
+		return { obj, dir };
+	}
+
 	/*
 		objdir_t expect_explosive_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_explosive>& types){
 

@@ -2702,6 +2702,9 @@ int perform_set(char_data *ch, char_data *vict, int mode,
 			break;
 
 		case 45:
+			player->sendln("This command has been disabled.");
+			return 0;
+#if 0
 			if(GET_IDNUM(ch) > 1) {
 				player->sendln("Please don't use this command, yet.");
 				return (0);
@@ -2712,9 +2715,9 @@ int perform_set(char_data *ch, char_data *vict, int mode,
 				return (0);
 			}
 
-			GET_PASSWD(vict).assign(CRYPT(val_arg, GET_NAME(vict)));
 			player->send("Password changed to '%s'.", val_arg);
 			break;
+#endif
 
 		case 46:
 			SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NODELETE);

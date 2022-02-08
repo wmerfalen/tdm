@@ -1,5 +1,6 @@
 function! Javascript_file()
 	set filetype=javascript
+	map <leader>f Neoformat
 	"map <c-u> :! ~/bin/tdd tyrion<CR>
 	map <c-u> :! ~/bin/tdd xtract<CR>
 	
@@ -8,26 +9,23 @@ endfunction
 set encoding=utf-8
 set fileencoding=utf-8
 call plug#begin('~/.vim/plugged')
-"Plug 'StanAngeloff/php.vim'
-"Plug 'shawncplus/phpcomplete.vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'dkprice/vim-easygrep'
-Plug 'octol/vim-cpp-enhanced-highlight'
+"Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'sbdchd/neoformat'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'bfrg/vim-cpp-modern'
 Plug 'tpope/vim-fugitive'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'noah/vim256-color'
 Plug 'flazz/vim-colorschemes'
-Plug 'mattn/emmet-vim'
-Plug 'mattn/webapi-vim'
+Plug 'pangloss/vim-javascript'
+"Plug 'mattn/emmet-vim'
+"Plug 'mattn/webapi-vim'
 Plug 'preservim/nerdtree'
 Plug 'junegunn/fzf'
-Plug 'stephpy/vim-php-cs-fixer'
 "Plug 'xavierd/clang_complete'
 "Plug 'tenfyzhong/CompleteParameter.vim'
-"Plug 'atom/fuzzy-finder'
 "Plug 'Rip-Rip/clang_complete'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
 call plug#end()
 set autoindent
 set number
@@ -59,12 +57,6 @@ function! Php_file()
 "        \  },
 "        \}
 endfunction
-autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
-au BufRead,BufNewFile *.php :call Php_file()
-au BufRead,BufNewFile *.js :call Javascript_file()
-au BufRead,BufNewFile *.tpl set filetype=html
-au BufRead,BufNewFile *.html set filetype=html
-au BufRead,BufNewFile *.blade.php set filetype=php
 set updatecount=0 updatetime=0
 set incsearch
 set background=dark
@@ -228,7 +220,7 @@ function! ColorSet()
 
 	" EXTREMELY sexy when using green on black
 	" EXTREMELY sexy when using bionis dark
-	"color heroku-terminal
+	color heroku-terminal
 	"color getafe
 	"color ghostbuster
 	"color archery
@@ -297,8 +289,9 @@ function! SetPaste()
 	set paste
 endfunction
 set guifont=Terminus\ Bold\ 14
-" source ~/.vim/cscope_maps.vim
-
+source ~/.vim/cscope_maps.vim
+set nocscopeverbose
+cs add ~/cscope.out
 function! FoldSyntax()
   set foldmethod=syntax
   normal zM
@@ -336,6 +329,8 @@ endfunction
 
 "map <leader>fi :call FoldIndent()<CR>
 "map <leader>fs :call FoldSyntax()<CR>
+map <leader>fdm :set foldmethod=manual<CR>
+map <leader>fds :set foldmethod=syntax<CR>
 set rtp+=~/.fzf
 map <leader>z :call Fuzz()<CR>
 map <leader>co :copen<CR>
@@ -355,6 +350,7 @@ map <leader>t :tabnew $WEBROOT/mods/item-types.hpp<CR>
 map <leader>vnc :call FeedFile()<CR>
 map <leader>b :tabnew $WEBROOT/sql/migrations/beta.sql<CR>
 map <leader>n :! node -c %<CR>
+map <leader>l :! node -c %<CR>
 map <leader>gb :Gblame<CR>
 function! CalcTotalSql()
 	exec "! X=$(cat % | grep 'sp_points) VALUES' | cut -d',' -f 3 | sed -e 's|);$| + |gi'); echo $X | sed -e 's|+$||g' | bc"
@@ -370,4 +366,26 @@ set completeopt+=preview
 
 
 " GOES REALLY WELL WITH TANGO THEME!!!
-color nord
+"color nord
+"color orbital
+"color nedit
+set foldmethod=syntax
+"color fahrenheit
+"color meta5
+"color abstract
+"color alduin
+"color abbott
+"color orbital
+set foldmethod=manual
+"let g:neoformat_try_node_exe = 1
+"autocmd BufWritePre *.js Neoformat
+"let g:neoformat_only_msg_on_error = 1
+"let g:prettier#autoformat_require_pragma = 0
+"let g:prettier#autoformat = 1
+"let g:prettier#exec_cmd_path = "/home/xkold/bin/node-dir/node-v14.16.0-linux-x64/bin/prettier"
+" when running at every change you may want to disable quickfix
+" let g:prettier#quickfix_enabled = 0
+"
+"autocmd TextChanged,InsertLeave *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.svelte,*.yaml,*.html PrettierAsync
+color heroku-terminal
+au BufRead,BufNewFile *.js :call Javascript_file()

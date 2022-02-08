@@ -16,8 +16,22 @@ extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::demolitions {
 	void plant_claymore(player_ptr_t& player, int direction, obj_ptr_t& obj) {
-		player->send("You begin installing a %s at the foot of the %s entrance...\r\n", obj->name.c_str(), mods::globals::dir_to_str(direction, true).c_str());
+		player->sendln(CAT("You begin installing a ",obj->name.c_str()," at the foot of the ",mods::globals::dir_to_str(direction, true).c_str(), " entrance..."));
 		mods::object_utils::set_is_installing(obj,player,direction);
+		int ticks = CLAYMORE_INSTALLATION_TICS();
+		if(player->ghost()) {
+			mo_debug("ghost ticks. normal(" << ticks << ")");
+			ticks -= ticks * (GHOST_CLAYMORE_INSTALLATION_REDUCTION_PERCENT() * 0.01);
+			mo_debug("ghost ticks after nerf: (" << ticks << ")");
+		}
+		if(ticks < 0) {
+			ticks = 0;
+		}
+		player->block_for(ticks, mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION, obj->uuid);
+	}
+	void uninstall_claymore(player_ptr_t& player, int direction, obj_ptr_t& obj) {
+		player->sendln(CAT("You begin {red}uninstalling{/red} a ", obj->name.c_str(), " at the foot of the ", mods::globals::dir_to_str(direction, true).c_str()," entrance..."));
+		mods::object_utils::set_is_uninstalling(obj,player,direction);
 		int ticks = CLAYMORE_INSTALLATION_TICS();
 		if(player->ghost()) {
 			mo_debug("ghost ticks. normal(" << ticks << ")");

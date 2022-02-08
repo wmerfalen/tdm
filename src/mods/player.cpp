@@ -260,6 +260,7 @@ namespace mods {
 
 			perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
+			++m_equipment_hash;
 			//mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
 		}
 	}
@@ -286,6 +287,7 @@ namespace mods {
 			m_equipment[pos] = nullptr;
 
 			this->m_sync_equipment();
+			++m_equipment_hash;
 		}
 	}
 	void player::unequip_into_inventory(int pos) {
@@ -1063,6 +1065,8 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+				m_weight_index = player::weight_index_t::WEIGHT_NORMAL;
+		m_equipment_hash = 0;
 		m_screen_width = 80;
 		m_can_move = true;
 		m_thermal_range = 0;
@@ -2546,6 +2550,9 @@ namespace mods {
 		MENTOC_NPC_CHECK(str.str());
 		write_to_char(str.data(), 0,0);
 		desc().has_prompt = 0;
+	}
+	const player::weight_index_t player::effective_weight_index() const {
+		return m_weight_index;
 	}
 };
 

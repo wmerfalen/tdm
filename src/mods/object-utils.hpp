@@ -155,8 +155,10 @@ namespace mods::object_utils {
 
 	constexpr static bitvector_t STATUS_INSTALLING = (1 << 0);
 	constexpr static bitvector_t STATUS_BREACHING = (1 << 1);
+	constexpr static bitvector_t STATUS_UNINSTALLING = (1 << 2);
 	constexpr static obj_data::location_data_t INSTALL_MASK = 16;
 	constexpr static obj_data::location_data_t BREACH_MASK = 32;
+	constexpr static obj_data::location_data_t UNINSTALL_MASK = 64;
 	constexpr static uint8_t INSTALL_TICKS_DURATION = 30;
 	constexpr static uint8_t BREACH_TICKS_DURATION = 15;
 	constexpr static uint8_t THERMITE_BREACH_TICKS_DURATION = 35;
@@ -271,6 +273,13 @@ namespace mods::object_utils {
 		obj->in_room = player->room();
 		obj->set_owner(player->uuid());
 		obj->set_location_data(direction + INSTALL_MASK);
+	}
+	template <typename T,typename P>
+	void set_is_uninstalling(T& obj, P& player,int direction) {
+		obj->obj_flags.bitvector |= STATUS_UNINSTALLING;
+		obj->in_room = player->room();
+		obj->set_owner(player->uuid());
+		obj->set_location_data(direction + UNINSTALL_MASK);
 	}
 	template <typename T>
 	int8_t claymore_installed_at(T& obj) {

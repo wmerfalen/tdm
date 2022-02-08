@@ -12,11 +12,6 @@ namespace mods::memory {
 namespace mods::mobs {
 	using tick_t = uint64_t;
 	struct smart_mob {
-		enum weight_index_t : uint8_t {
-			WEIGHT_FAST,
-			WEIGHT_NORMAL,
-			WEIGHT_ENCUMBERED,
-		};
 			/**====================================================*/
 			/** factory and destruct */
 			/**====================================================*/
@@ -152,10 +147,6 @@ namespace mods::mobs {
 			void save_attack_direction(const direction_t& direction);
 			direction_t determine_chase_direction();
 
-			/**
-			 * TODO: effective_weight_index();
-			 */
-			weight_index_t effective_weight_index();
 		protected:
 			direction_t m_last_attack_direction;
 			std::map<uint16_t,uint16_t> m_should_do;

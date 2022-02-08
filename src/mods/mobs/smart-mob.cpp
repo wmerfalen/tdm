@@ -3,7 +3,8 @@
 #include "helpers.hpp"
 #include "../mob-equipment.hpp"
 
-//#define  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__ #ifdef  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
+//#define  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__ 
+#ifdef  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
 #define sm_debug(a) mentoc_prefix_debug("mods::mobs::smart_mob") << green_str("smart_mob") << a  << "\n";
 #else
 #define sm_debug(a) ;;
@@ -381,29 +382,6 @@ namespace mods::mobs {
 	}
 	direction_t smart_mob::determine_chase_direction() {
 		return m_last_attack_direction;
-	}
-	weight_index_t smart_mob::effective_weight_index(){
-		/** 
-		 * Weight ratio calculation
-		 */
-		/**
-		 * Armor attributes:
-		 * weight_in_lbs
-		 * speed_profile
-		 * durability_profile
-		 * classification
-		 * thac0
-		 */
-
-		/**
-		 * Player stats that increase mobility
-		 * _effective_ dexterity
-		 */
-
-		/**
-		 * Player class triads that increase mobility
-		 * speed
-		 */
 	}
 };
 #if 0

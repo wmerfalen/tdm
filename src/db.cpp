@@ -10,7 +10,6 @@
 
 #define __DB_C__
 
-#include "mods/db-report.hpp"
 #include "conf.h"
 #include "sysdep.h"
 
@@ -433,79 +432,6 @@ void free_extra_descriptions(struct extra_descr_data *edesc) {
 	std::cerr << "[stub]: free_extra_descriptions - things will break if malloc()'d\n";
 #endif
 }
-
-
-/* Free the world, in a memory allocation sense. */
-void destroy_db(void) {
-	//mods::globals::db->commit();
-	//mods::globals::db->close();
-	//	ssize_t cnt, itr;
-	//	char_data *chtmp;
-	//
-	/* Active Mobiles & Players */
-	//
-	//	while(character_list) {
-	//		chtmp = character_list;
-	//		character_list = character_list->next;
-	//		free_char(chtmp);
-	//	}
-	//
-	//	/* Active Objects */
-	//	/* object_list frees itself thanks to destructors !mods */
-	//
-	//	/* Rooms */
-	//	for(cnt = 0; cnt <= top_of_world; cnt++) {
-	//		free_extra_descriptions(world[cnt].ex_description);
-	//
-	//		for(itr = 0; itr < NUM_OF_DIRS; itr++) {
-	//			if(!world[cnt].dir_option[itr]) {
-	//				continue;
-	//			}
-	//
-	//			/** TODO: make dir_option elements not crappy malloc'd :) */
-	//			if(world[cnt].dir_option[itr]->general_description) {
-	//			}
-	//
-	//			free(world[cnt].dir_option[itr]);
-	//		}
-	//	}
-	//
-	//	/* We don't need to free the world since it's a std::vector now !mods */
-	//	//free(world);
-	//
-	//	/* Objects */
-	//	for(cnt = 0; cnt <= top_of_objt; cnt++) {
-	//		if(obj_proto[cnt].name) {
-	//			free(obj_proto[cnt].name);
-	//		}
-	//
-	//		if(obj_proto[cnt].description) {
-	//			free(obj_proto[cnt].description);
-	//		}
-	//
-	//		if(obj_proto[cnt].short_description) {
-	//			free(obj_proto[cnt].short_description);
-	//		}
-	//
-	//		if(obj_proto[cnt].action_description) {
-	//			free(obj_proto[cnt].action_description);
-	//		}
-	//
-	//		free_extra_descriptions(obj_proto[cnt].ex_description);
-	//	}
-	//
-	//	/* Mobiles */
-	//	for(cnt = 0; cnt <= top_of_mobt; cnt++) {
-	//		while(mob_proto[cnt].affected) {
-	//			affect_remove(&mob_proto[cnt], mob_proto[cnt].affected);
-	//		}
-	//	}
-	//
-	//	/* Shops */
-	//	destroy_shops();
-	//std::cerr << "[stub]: destory_db - things will break if malloc()'d\n";
-}
-
 
 
 /* body of the booting system */
@@ -1031,69 +957,6 @@ int parse_sql_objects() {
 				proto.affected[i].modifier = 0;
 			}
 
-			//unsigned aff_index = 0;
-
-			//if(aff_rows.size()){
-			//	for(auto aff_row : aff_rows) {
-			//		if(aff_index >= MAX_OBJ_AFFECT) {
-			//			log(
-			//					(std::string(
-			//											 "WARNING: sql has more affected rows than allowed on object #")
-			//					 + std::to_string(mods::util::stoi<int>(row["obj_item_number"]))
-			//					).c_str()
-			//				 );
-			//			break;
-			//		}
-			//		proto.affected[aff_index].location = mods::util::stoi<int>(row["aff_location"]);
-			//		proto.affected[aff_index].modifier = mods::util::stoi<int>(row["aff_modifier"]);
-			//		++aff_index;
-			//	}
-			//}
-
-#if 0
-#define MENTOC_STR(sql_name,obj_name) \
-			if(mods::string(row[#sql_name]).length()){\
-				proto.obj_name = \
-				strdup((row[#sql_name]).c_str());\
-			}else{\
-				proto.obj_name = strdup("<proto.obj_name>");\
-			}
-			//if(row["obj_short_description"].as<std::string>().length() == 0){
-			//	proto.short_description.assign("<default short description>");
-			//}else{
-			//	proto.short_description.assign(row["obj_short_description"].c_str());
-			//}
-			//if(row["obj_action_description"].as<std::string>().length() == 0){
-			//	proto.action_description.assign("<default action description>");
-			//}else{
-			//	proto.action_description.assign(row["obj_action_description"].c_str());
-			//}
-			//auto ed_rows = db_get_by_meta("extra_description","obj_fk_id",row["id"]);
-
-			//if(ed_rows.size()) {
-			//	for(auto ed_row : ed_rows){
-			//		proto.ex_description.emplace_back(row["extra_keyword"], row["extra_description"]);
-			//	}
-			//}else{
-			//	proto.ex_description.emplace_back("keyword","description");
-			//}
-
-			//proto.worn_on = mods::util::stoi<int>(row["obj_worn_on"]);
-			//proto.type = mods::util::stoi<int>(row["obj_type"]);
-			//proto.ammo = 0;
-			//auto flag_rows = db_get_by_meta("object_flags","obj_fk_id",(row["id"]));
-			//if(flag_rows.size() > 0){
-			//	proto.obj_flags.feed(flag_rows[0]);
-			//}else{
-			//	//proto.obj_flags.init();
-			//}
-
-			/** TODO: this needs to be filled in by postgres. We need to
-			 * check if it's a weapon, if so, load the fields in proto with
-			 * whatever is in the database.
-			 */
-
-#endif
 			proto.carried_by = proto.worn_by = nullptr;
 			proto.next_content = nullptr;
 			proto.contains = nullptr;
@@ -2222,6 +2085,7 @@ bool parse_sql_player(player_ptr_t player_ptr) {
 	/** TODO: make sure sql injection is not possible here */
 	mods::players::db_load::set_reporter_lambda([&player_ptr](int64_t code,std::string_view msg) {
 		log("SYSERR: failed loading player's class [player name:'%s'] error code: %d, message: '%s'", player_ptr->name().c_str(), code, msg.data());
+		REPORT_DB_ISSUE("failed loading player's class",CAT("failed loading player's class [player name:'",player_ptr->name(),"'] error code: ",code,", message: '",msg.data(),"'"));
 	});
 	for(auto&& row: db_get_by_meta("player","player_name",player_ptr->name().c_str())) {
 		player_ptr->set_db_id(row["id"].as<int>());

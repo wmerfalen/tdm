@@ -11,7 +11,6 @@
 #define __COMM_C__
 
 #include "globals.hpp"
-#include "mods/db-report.hpp"
 #include <array>
 #include "conf.h"
 #include "sysdep.h"
@@ -317,9 +316,6 @@ void run_game() {
 		log("Running game on port %d.", port);
 		init_game(port);
 	}
-
-	log("Clearing game world.");
-	destroy_db();
 
 	if(!scheck) {
 		log("Clearing other memory.");

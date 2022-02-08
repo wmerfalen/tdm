@@ -141,16 +141,28 @@ namespace mods::classes {
 			m_player->sendln("It looks like you still need to train that skill");
 			return;
 		}
+		uint8_t weight_index = (uint8_t)target->effective_weight_index();
 		if(m_stealth.awful() || m_stealth.terrible() || m_stealth.okay()) {
-			stealth = dice(1, 8) + 1 + (m_player->level() / 4);
+			stealth = dice(1, 8) + 1 + (m_player->level() / 4) + dice(1,weight_index);
 		}
 
 		if(m_stealth.learned()) {
-			stealth = dice(3, 8) + 3 + (m_player->level() / 4);
+			stealth = dice(3, 8) + 3 + (m_player->level() / 4) + dice(weight_index,10);
 		}
 
-		if(m_stealth.mastered() || m_stealth.elite()) {
-			stealth = 100 + dice(3, 8);
+		if(m_stealth.mastered()) {
+			/**
+			 * Maximum: 2.15 minutes
+			 * values: 50,3,40,10,8
+			 */
+			stealth = 50 + dice(3, 40) + dice(weight_index * 10, 8);
+		}
+		if(m_stealth.elite()) {
+			/**
+			 * Maximum 3.66 minutes
+			 * values: 64, 5, 40, 12, 12
+			 */
+			stealth = 64 + dice(5, 40) + dice(weight_index * 12,12);
 		}
 		mods::player_utils::change_visibility(target,- stealth);
 	}

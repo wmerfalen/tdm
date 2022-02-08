@@ -283,7 +283,6 @@ room_rnum& GET_WAS_IN(char_data* player);
 			 (ch)->player.short_descr : GET_PC_NAME(ch))
 #define GET_TITLE(ch)   ((ch)->player.title)
 #define GET_LEVEL(ch)   ((ch)->player.level)
-#define GET_PASSWD(ch)	((ch)->player.passwd)
 #define GET_PFILEPOS(ch)((ch)->pfilepos)
 
 /*

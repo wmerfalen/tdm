@@ -144,6 +144,7 @@ ACMD(do_uninstall) {
 		return;
 	}
 	auto parsed = mods::util::parse_objdir(player,argument);
+	auto room_parsed = mods::util::parse_owned_room_objdir(player,argument);
 	if(!parsed.obj) {
 		player->sendln("You don't have anything that matches that description");
 		return;

@@ -343,10 +343,12 @@ namespace mods::util {
 	std::optional<std::pair<direction_t,uint8_t>> parse_direction_count_optional(std::vector<std::string>& vec_args);
 	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args);
 	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index);
+	obj_ptr_t parse_owned_room_object(player_ptr_t& player,std::string_view arg);
 	int parse_direction(std::string_view arg, int start_at, int* last_index);
 	int parse_direction(std::string_view arg);
 	std::optional<direction_t> parse_direction_optional(std::string_view arg);
 	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg);
+	objdir_t parse_owned_room_objdir(player_ptr_t& player,std::string_view arg);
 	static constexpr uint8_t CAP_SINGLE = 0;
 	static constexpr uint8_t CAP_ANY = 0;
 	static constexpr uint8_t CAP_ALL = 0;
