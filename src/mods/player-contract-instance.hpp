@@ -91,6 +91,9 @@ namespace mods::contracts {
 			bool is_install_item() const {
 				return m_goal & task_t::GOAL_INSTALL;
 			}
+			bool is_uninstall_item() const {
+				return m_goal & task_t::GOAL_UNINSTALL;
+			}
 
 			void save_step_data();
 			void stop_contract();
@@ -119,6 +122,7 @@ namespace mods::contracts {
 			void gain_entry(const room_rnum& room_id);
 			void talk_to(player_ptr_t& mob);
 			void install_item(const uuid_t& obj_uuid);
+			void uninstall_item(const uuid_t& obj_uuid);
 			std::string_view title() const {
 				return m_contract_copy->title;
 			}

@@ -7,6 +7,7 @@
 
 namespace mods::contract_events {
 	void install_item(const uuid_t& player_uuid,const uuid_t& obj_uuid);
+	void uninstall_item(const uuid_t& player_uuid,const uuid_t& obj_uuid);
 
 	void perform_give(char_data* ch, char_data* target,obj_data* object);
 	void perform_get(char_data* receiver,obj_data* object);

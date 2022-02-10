@@ -62,6 +62,8 @@ namespace mods::demolitions {
 			player->ghost()->use_claymore(object_uuid);
 		}
 	}
+	void set_done_uninstalling(uuid_t object_uuid,uuid_t player_uuid) {
+	}
 
 };
 

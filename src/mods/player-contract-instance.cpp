@@ -699,6 +699,25 @@ namespace mods::contracts {
 		}
 
 	}
+	void player_contract_instance::uninstall_item(const uuid_t& obj_uuid) {
+		if(!m_current_step) {
+			return;
+		}
+		if(m_current_step->goal & task_t::GOAL_UNINSTALL &&
+		        m_current_step->target == target_t::TARGET_ITEM) {
+			auto object = optr_by_uuid(obj_uuid);
+			if(!object) {
+				return;
+			}
+			if(m_current_step->object_yaml.compare(object->feed_file().data()) == 0) {
+				++m_quota;/** TODO FIXME INITIALIZE THIS */
+				if(m_quota >= m_current_step->quota) {
+					this->advance();
+				}
+				return;
+			}
+		}
+	}
 	/**
 	 * @brief
 	 *

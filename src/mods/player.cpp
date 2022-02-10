@@ -49,6 +49,7 @@
  * output.
  */
 
+extern void obj_from_room(obj_ptr_t in_object);
 static constexpr std::size_t MAX_PLAYER_NAME_LENGTH = 16;
 namespace mods::stat_bonuses {
 	extern void player_equip(uuid_t player_uuid,uuid_t object_uuid);
@@ -1579,6 +1580,27 @@ namespace mods {
 					);
 					break;
 				}
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_UNINSTALLATION: {
+					auto obj = optr_by_uuid(target);
+					if(!obj) {
+						break;
+					}
+					obj_from_room(obj);
+					carry(obj);
+					mods::object_utils::set_done_uninstalling(obj);
+					if(mods::object_utils::is_claymore(obj)) {
+						mods::demolitions::set_done_uninstalling(target,this->uuid());
+					}
+					if(m_char_data->contract) {
+						contract_uninstall_item(target);
+					}
+					this->sendln(
+					    CAT(
+					        "\r\nYou successfully uninstall a ", obj->name.c_str()
+					    )
+					);
+					break;
+				}
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_BREACH: {
 					auto obj = optr_by_uuid(target);
 					if(!obj) {
@@ -2264,6 +2286,16 @@ namespace mods {
 		for(auto& c : contracts()) {
 			if(c->is_install_item()) {
 				c->install_item(item_uuid);
+			}
+		}
+	}
+	void player::contract_uninstall_item(const uuid_t& item_uuid) {
+		if(!m_contract) {
+			return;
+		}
+		for(auto& c : contracts()) {
+			if(c->is_uninstall_item()) {
+				c->uninstall_item(item_uuid);
 			}
 		}
 	}

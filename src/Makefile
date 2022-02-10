@@ -25,7 +25,7 @@ gdbflags = -ggdb -g
 #post_build_args = strip-all
 optimization =
 # TODO: for prod builds, uncomment this
-#optimization = -O2
+optimization = -O2
 warnings_list = -Wall -Wunused-result \
 	-Wno-format-zero-length -Wno-format-security \
 	-Wuninitialized \

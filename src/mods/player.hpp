@@ -902,6 +902,7 @@ namespace mods {
 			void contract_gain_entry(const room_rnum& room_id);
 			void contract_talk_to(player_ptr_t& mob);
 			void contract_install_item(const uuid_t& object_uuid);
+			void contract_uninstall_item(const uuid_t& object_uuid);
 			void contract_custom_event(mods::contracts::custom_events_t event,uuid_t id);
 			void queue_up(std::string_view);
 			bool& moving_to_room();

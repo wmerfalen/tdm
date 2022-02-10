@@ -290,6 +290,10 @@ namespace mods::object_utils {
 		obj->obj_flags.bitvector ^= STATUS_INSTALLING;
 	}
 	template <typename T>
+	void set_done_uninstalling(T& obj) {
+		obj->obj_flags.bitvector ^= STATUS_UNINSTALLING;
+	}
+	template <typename T>
 	void set_done_breaching(T& obj) {
 		obj->obj_flags.bitvector ^= STATUS_INSTALLING;
 	}

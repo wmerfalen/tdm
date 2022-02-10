@@ -23,6 +23,7 @@ namespace mods::contracts {
 			GOAL_INSTALL = (1 << 8),
 			GOAL_GIVE = (1 << 9),
 			GOAL_CUSTOM_EVENT = (1 << 10),
+			GOAL_UNINSTALL = (1 << 11),
 		};
 		enum task_target_t : uint16_t {
 			TARGET_MOB = 0,
