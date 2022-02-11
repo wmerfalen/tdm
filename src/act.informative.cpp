@@ -815,7 +815,10 @@ void do_auto_exits(char_data *ch) {
 			continue;
 		}
 
-		player->sendx(CAT(TOSTR(dirs[door])[0]," "));
+		std::string dir = dirs[door];
+		dir[1] = ' ';
+		dir[2] = '\0';
+		player->sendx(dir);
 		slen++;
 	}
 
