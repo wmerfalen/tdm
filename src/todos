@@ -1,0 +1,362 @@
+act.movement.cpp:556:		/* TODO: !mods Add thermite and regularly breached doors */
+act.movement.cpp:582:		/* TODO: Thermite door */
+act.other.cpp:795:		/** TODO save prefs to lmdb */
+scripts/todo.sh:2:grep -r --exclude-dir=lmdb --exclude-dir=php --exclude-dir=GSL --exclude-dir=duktape-2.2.0\* --exclude-dir=gsl --exclude-dir=boost\* TODO
+db.cpp:1067:			res.line = 0; //TODO: mods::util::stoi<int>(zone_data_row["line"]);
+db.cpp:2089:	/** TODO: make sure sql injection is not possible here */
+db.cpp:2523: * TODO: Add checks for unknown bitvectors.
+act.demolitions.cpp:162:		/** TODO uninstall claymore and put back in inventory */
+act.demolitions.cpp:207:		auto dam = dice(16,6); /** TODO: need to calculate resistences and what not */
+act.demolitions.cpp:213:	/** TODO move this to demolitions namespace */
+act.demolitions.cpp:240:		auto dam = mods::rand::roll(16,6); /** TODO: need to calculate resistences and what not */
+act.demolitions.cpp:246:	/** TODO move this to demolitions namespace */
+magic.cpp:67:	/** TODO uncomment next line and do saving_throws
+structs.cpp:338:	/** TODO: m_carrying */
+structs.cpp:371:	/** TODO: do something smart with this.. maybe call .init() on them
+structs.cpp:382:	/** TODO: m_carrying */
+structs.cpp:423:			/** TODO: if we have mobs in this room, mark it with a red indicator to simulate heat signatures */
+act.builder.cpp:258:/** TODO: generalize this file system ls interface for use with other stuff */
+act.builder.cpp:573:		/** TODO */
+act.builder.cpp:577:		/** TODO */
+mods/contracts.cpp:80:		/** TODO: dock player mp */
+mods/schema.hpp:11:/*!TODO: Implement boost::hana into this class.*/
+mods/weapons/shrapnel-claymore.cpp:49:		/** TODO handle critical range attribute */
+mods/weapons/shrapnel-claymore.cpp:50:		/** TODO handle blast radius attribute */
+mods/weapons/shrapnel-claymore.cpp:51:		/** TODO handle loudness type */
+mods/weapons/damage-types.cpp:471:					/** TODO: maybe make this random to disorient the player ? >:) EVIL GENIUS */
+mods/weapons/damage-types.cpp:785:		/** TODO: if weapon has a bullet printer mod, calculate ammo */
+mods/weapons/damage-types.cpp:835:		/** TODO: if weapon has a bullet printer mod, calculate ammo */
+mods/weapons/damage-types.cpp:949:		/** TODO: honor accuracy bonus */
+mods/weapons/damage-types.cpp:950:		/** TODO: honor max_range calculations */
+mods/weapons/damage-types.cpp:963:			/** TODO: process damage on object here */
+mods/weapons/damage-types.cpp:993:		/** TODO: honor accuracy bonuses */
+mods/weapons/damage-types.cpp:1002:		/** TODO: process damage on object here */
+mods/weapons/damage-types.cpp:1101:		//	/** TODO: evaluate dam if wearing super strong headgear */
+mods/weapons/damage-types.cpp:1204:			/** TODO: evaluate damage if wearing super strong headgear */
+mods/weapons/sniper-rifle.cpp:11:	//	/** TODO: fill the uuid in */
+mods/weapons/sniper-rifle.cpp:15:	//	/** TODO: determine clip size */
+mods/weapons/sniper-rifle.cpp:17:	//	/** TODO: needs to be whatever the rifle's max is */
+mods/weapons/reload.cpp:144:	/* TODO: Implement weapon tags in the obj_data data structure */
+mods/weapons/damage-calculator.cpp:239:			return 0;/** TODO: make sure this doesnt screw something up */
+mods/weapons/damage-calculator.cpp:266:			/** TODO: reduce from melee weapon */
+mods/weapons/damage-calculator.cpp:271:			/** TODO: honor durability points */
+mods/weapons/damage-calculator.cpp:285:					/** TODO: honor this in a better way. amount should probably scale */
+mods/weapons/damage-calculator.cpp:291:			/** TODO fill me */
+mods/weapons/damage-calculator.cpp:307:				/** TODO: calculate disorient resistance of victim */
+mods/weapons/damage-calculator.cpp:314:			/** TODO */
+mods/weapons/damage-calculator.cpp:316:				/** TODO: calculate disorient resistance of victim */
+mods/weapons/damage-calculator.cpp:402:		/** TODO handle critical range attribute */
+mods/weapons/damage-calculator.cpp:403:		/** TODO handle blast radius attribute */
+mods/weapons/damage-calculator.cpp:404:		/** TODO handle loudness type */
+mods/karma.cpp:8:		//TODO: mods::orm::karma db;
+mods/karma.cpp:9:		//TODO: db.load_all();
+mods/forge-engine/generator.cpp:220:		/** TODO: game balancing: these values need to be tweaked */
+mods/forge-engine/generator.cpp:227:			/** TODO: mess with this a bit */
+mods/forge-engine/generator.cpp:256:			/** TODO */
+mods/forge-engine/generator.cpp:262:			/** TODO */
+mods/forge-engine/value-scaler.cpp:20:		/** TODO need to balance this */
+mods/forge-engine/generated-armor.cpp:177:		/** TODO: change the parameter to kill_t */
+mods/forge-engine/value-scaler.hpp:37:		/** TODO: game balancing: these values need to be tweaked */
+mods/calc-visibility.cpp:21:		const bool invisible = false; /**TODO: target->visibility() == 0;*/
+mods/calc-visibility.cpp:56:		/** TODO scan objects
+mods/calc-visibility.cpp:62:		/** TODO: track objects
+mods/calc-visibility.cpp:88:		/** TODO: visibility for objects
+mods/calc-visibility.cpp:167:		/** TODO: fix this crap */
+mods/calc-visibility.cpp:206:			/** 1) allow attacker to use passive abilities to avoid being spotted TODO */
+mods/drone.hpp:58:			/* TODO: Operator << for sending to the character */
+mods/player.cpp:45: * TODO: All these stc* functions need to be altered to accomodate
+mods/player.cpp:138:		 * TODO: If it's a drone, then the appropriate drone flags need to be set
+mods/player.cpp:139:		 * TODO: if it's a mob, then it needs to have IS_NPC return true.. so, set that flag
+mods/player.cpp:140:		 * TODO: if it's a player, set the IS_NPC flag to false. Also, figure out how to handle descriptor_data
+mods/player.cpp:302:		 * TODO: honor basic armor protection
+mods/player.cpp:303:		 * TODO: honor advanced armor protection
+mods/player.cpp:304:		 * TODO: honor elite armor protection
+mods/player.cpp:305:		 * TODO: if item is a deep object, calculate buffs/nerfs
+mods/player.cpp:306:		 * TODO: if item has buffs to specific skills (i.e.: strength or intelligence) store them
+mods/player.cpp:309:		/** TODO melee */
+mods/player.cpp:356:			 * TODO: how to calculate these?
+mods/player.cpp:359:			* TODO: where to get these?
+mods/player.cpp:497:			/** TODO honor thac0 */
+mods/player.cpp:498:			/** TODO honor weight_in_lbs */
+mods/player.cpp:509:			 * TODO: honor these armor attributes
+mods/player.cpp:544:			 * TODO: Also take into account any class abilities that provide shadow sight
+mods/player.cpp:570:		//TODO: FIXME: perform updated modern logic of the below code
+mods/player.cpp:717:	/** TODO: do this */
+mods/player.cpp:838:		/** TODO: FIXME */
+mods/player.cpp:877:		/* TODO: find a better way to do this. this loops through all objects in the game and checks if the person carrying it is the current player */
+mods/player.cpp:1389:		/** TODO: what do we need to do to deactivate the account?
+mods/player.cpp:1657:		/** TODO */
+mods/player.cpp:1661:		/** TODO */
+mods/player.cpp:2164:	/** TODO: */
+mods/player.cpp:2175:	/** TODO: */
+mods/player.cpp:2206:	/** TODO: */
+mods/player.cpp:2217:	/** TODO: */
+mods/player.cpp:2228:	/** TODO: */
+mods/player.cpp:2249:	/** TODO: */
+mods/player.cpp:2373:			 * TODO: Awesome idea!
+mods/player.cpp:2390:			/** TODO: FIXME: Need to figure out how to process these
+mods/player.cpp:2394:			// TODO FIXME figure out how to add this: adds_fire_damage: 2 #int, amount of fire damage it adds to the consumer
+mods/player.cpp:2396:			//TODO FIXME figure out how to add all of these
+mods/player.cpp:2418:		 * TODO: Awesome idea!
+mods/player.cpp:2431:		/** TODO: FIXME: Need to figure out how to process these
+mods/player.cpp:2435:		// TODO FIXME figure out how to add this: adds_fire_damage: 2 #int, amount of fire damage it adds to the consumer
+mods/player.cpp:2437:		//TODO FIXME figure out how to add all of these
+mods/db.cpp:420:		/** TODO: instead of using the char_data accesses, create functions(or use existing ones) on mods::player object */
+mods/builder/seqbuild.cpp:377:					/** TODO DO THIS
+mods/classes/support.cpp:37:		/** TODO: create catchy name using the deep object parser */
+mods/classes/engineer.cpp:82:		/** TODO: create catchy name using the deep object parser */
+mods/classes/syndrome.cpp:13:		/** TODO fill me in */
+mods/classes/marine.hpp:14:				/** TODO: need to brainstorm the marine's abilities */
+mods/classes/marine.hpp:59:			/** TODO: need to brainstorm the marine's abilities */
+mods/classes/ghost.cpp:33:		/** TODO fill me in */
+mods/classes/ghost.cpp:129:		 * TODO: if the weight of gear and equipment is low, then stealth will last longer
+mods/classes/ghost.cpp:532:		/** TODO: need to add mark target as a skill */
+mods/classes/forge.cpp:18:		/** TODO fill me in */
+mods/classes/pyrexia.cpp:20:		/** TODO fill me in */
+mods/corrosive.cpp:260:				/** TODO: dispose object here */
+mods/corrosive.cpp:305:		/** TODO: uncomment when object damage is fleshed out */
+mods/player-scaffolding.cpp:8:		/* TODO: create a function that loads an initializes an entire player
+mods/player-scaffolding.cpp:15:		/* TODO: create a function that loads and initializes an entire player
+mods/player-scaffolding.cpp:94:		/** TODO: !uncertainty! -> question: "Does this need to be uncommented?" */
+mods/player-scaffolding.cpp:98:		/** TODO: Check if we need to manually assign ch->desc */
+mods/unit-tests/visibility.cpp:2:/** FIXME TODO This test appears to be broken */
+mods/player-scaffolding.hpp:16:			//TODO: player_scaffolding(std::string_view player_name);
+mods/rifle-attachments.cpp:211:				/** TODO: honor these */
+mods/ban-system.cpp:34:		//TODO: mods::message_server::ban_player(player);
+mods/ban-system.cpp:43:		//TODO: mods::message_server::unban_ip(ip);
+mods/ban-system.cpp:52:		//TODO: mods::message_server::unban_hostname(ip);
+mods/ban-system.cpp:235:					 * TODO: implement mods::player::can_talk(bool );
+mods/acl/config-parser.cpp:134:            //TODO: Make sure this is storing rules
+mods/acl/config-parser.cpp:604:            //TODO:
+mods/acl/config-parser.cpp:666:            //TODO: generate rules based on m_current_access_type, m_current_extended_class, and m_current_class
+mods/acl/config-parser.cpp:678:            //TODO: generate rules based on m_current_access_type, m_current_extended_class, and m_current_class
+mods/yaml.cpp:11:#define MELEE_STUB(A) std::cerr << red_str("TODO stub: MELEE ") << "\n";
+mods/yaml.cpp:15:#define VEHICLE_STUB(A) std::cerr << red_str("TODO stub: VEHICLE ") << "\n";
+mods/yaml.cpp:435:		/** TODO: */
+mods/projectile.cpp:92:			/** TODO: calculate blast radius to remove smoke textures from those rooms */
+mods/projectile.cpp:100:			/** TODO: fill this function */
+mods/projectile.cpp:104:			/** TODO: fill this function */
+mods/projectile.cpp:114:			/** TODO: fill this function */
+mods/projectile.cpp:170:			/** TODO: disable electronics */
+mods/projectile.cpp:173:			/** TODO: cause limited visibility and smoke texture */
+mods/projectile.cpp:318:								/** TODO */
+mods/projectile.cpp:322:								/** TODO */
+mods/projectile.cpp:350:			/** TODO handle critical range attribute */
+mods/projectile.cpp:351:			/** TODO handle blast radius attribute */
+mods/projectile.cpp:352:			/** TODO handle loudness type */
+mods/projectile.cpp:423:			std::size_t blast_radius = object->explosive()->attributes->blast_radius;	/** TODO: grab from explosive()->blast_radius */
+mods/projectile.cpp:556:			//TODO if(propagate_bones) {
+mods/projectile.cpp:568:		 * TODO: place the grenade on the floor so that some crazy bastards can potentially throw it back,
+mods/projectile.cpp:579:				room_rnum r = resolve_room(room, direction,blast_radius); /** TODO: use blast_radius as dynamic var */
+mods/projectile.cpp:812:			/** TODO honor travel_distance and explode at the maximum distance */
+mods/projectile.cpp:822:			/** TODO: if anyone is holding a shield inside this room, blow it up here */
+mods/player-contract-instance.cpp:493:			/** TODO: FIXME: need to add direction/door to sql */
+mods/player-contract-instance.cpp:531:			/** TODO: FIXME: need to add direction/door to sql */
+mods/player-contract-instance.cpp:589:				++m_quota;/** TODO FIXME INITIALIZE THIS */
+mods/player-contract-instance.cpp:612:			/** TODO: FIXME: need to add direction/door to sql */
+mods/player-contract-instance.cpp:651:			/** TODO: FIXME: need to add direction/door to sql */
+mods/player-contract-instance.cpp:693:				++m_quota;/** TODO FIXME INITIALIZE THIS */
+mods/ai_state.hpp:41:			/* TODO: Operator << for sending to the character */
+mods/corpse.cpp:79:					/** TODO: test for this syntax: 3.corpse */
+mods/weapon.hpp:40:	/** TODO: store in db. !DIABLO */
+mods/builder-data.cpp:15:	//		/** TODO: I want this functionality to be done next
+mods/levels.cpp:152:		/** TODO: implement this for later tiers... */
+mods/levels.cpp:234:				 *  		-- TODO: flesh out this ability
+mods/player.hpp:231:			/** TODO these need to go */
+mods/player.hpp:498:			/** TODO: all these queueing functions and overloaded operators need to accomodate
+mods/player.hpp:579:			/** TODO: call a CRM function. In fact, maybe don't even
+mods/player.hpp:929:			/** TODO: power this by user preferences */
+mods/catch2.hpp:4636:// TODO: Ideally this would be also constrained against the various char types,
+mods/catch2.hpp:6498:        // TODO equivalent keep_memory()
+mods/catch2.hpp:17341:        // TODO: Check testGroupStats.aborting and act accordingly.
+mods/catch.hpp:10863:		// TODO: Check testGroupStats.aborting and act accordingly.
+mods/weapon.cpp:188:		///** TODO: determine clip size */
+mods/weapon.cpp:190:		///** TODO: needs to be whatever the rifle's max is */
+mods/weapon.cpp:258:		/** TODO: determine clip size */
+mods/weapon.cpp:260:		/** TODO: needs to be whatever the rifle's max is */
+mods/weapon.cpp:281:		/** TODO: determine clip size */
+mods/weapon.cpp:283:		/** TODO: needs to be whatever the rifle's max is */
+mods/cron.hpp:22:			/* TODO: Operator << for sending to the character */
+mods/behaviour_tree_impl.cpp:184:						/** TODO: if no ammo, search for ammo */
+mods/behaviour_tree_impl.cpp:185:						/** TODO: */
+mods/combat-composer/snipe-target.cpp:55:		   TODO: verify all of these are being accounted for
+mods/combat-composer/snipe-target.cpp:403:				/** TODO: evaluate damage if wearing super strong headgear */
+mods/combat-composer/snipe-target.cpp:463:			 * TODO: will have to change find_type_t::ANY to include DEAD for contagion's
+mods/combat-composer/snipe-target.cpp:468:			//	/* TODO:
+mods/combat-composer/snipe-target.cpp:475:			/** TODO:
+mods/combat-composer/snipe-target.cpp:589:					d.damage += ((0.105 * tier(attacker)) * d.damage);//TODO: find the values equiv to this
+mods/combat-composer/snipe-target.cpp:591:				/** TODO: if enemy is tracked, it takes more damaged */
+mods/combat-composer/snipe-target.cpp:595:					d.damage += (0.25 * d.damage); //TODO: find values equiv to this
+mods/combat-composer/snipe-target.cpp:596:					if(mods::rand::chance(10)) {//TODO values
+mods/combat-composer/snipe-target.cpp:597:						d.incendiary_damage += dice(tier(attacker) * 10,tier(attacker) * 10);//TODO values
+mods/combat-composer/snipe-target.cpp:601:					if(distance > 1 && distance <= 3) { //TODO: values
+mods/combat-composer/snipe-target.cpp:602:						//TODO: need to define same room damage of shotgun
+mods/combat-composer/snipe-target.cpp:615:						d.shrapnel_damage += d.damage / 4; //TODO: make values
+mods/combat-composer/snipe-target.cpp:617:					d.corrosive_damage += dice(tier(attacker) * 3, tier(attacker) * 6);//TODO values
+mods/combat-composer/snipe-target.cpp:619:				/** TODO: roll chance to kockdown opponent */
+mods/combat-composer/snipe-target.cpp:759:					/** TODO: maybe make this random to disorient the attacker ? >:) EVIL GENIUS */
+mods/combat-composer/spray-target.cpp:181:			 * TODO: will have to change find_type_t::ANY to include DEAD for contagion's
+mods/combat-composer/spray-target.cpp:283:					/** TODO: if enemy is tracked, it takes more damaged */
+mods/combat-composer/spray-target.cpp:308:					/** TODO: roll chance to kockdown opponent */
+mods/combat-composer/shared.cpp:31:				return 0;/** TODO: make sure this doesnt screw something up */
+mods/combat-composer/shared.cpp:62:			/** TODO: if weapon has a bullet printer mod, calculate ammo */
+mods/combat-composer/shared.cpp:107:			/** TODO: if weapon has a bullet printer mod, calculate ammo */
+mods/combat-composer/shared.cpp:152:			/** TODO: if weapon has a bullet printer mod, calculate ammo */
+mods/combat-composer/shared.cpp:202:					/** TODO: calculate disorient resistance of victim */
+mods/combat-composer/shared.cpp:209:				/** TODO */
+mods/combat-composer/shared.cpp:211:					/** TODO: calculate disorient resistance of victim */
+mods/combat-composer/engage-target.cpp:55:		   TODO: verify all of these are being accounted for
+mods/combat-composer/engage-target.cpp:219:			/** TODO: decrease spray amount instead of single shot */
+mods/combat-composer/engage-target.cpp:339:				/** TODO: evaluate damage if wearing super strong headgear */
+mods/combat-composer/engage-target.cpp:388:		 * viable targets. <-- TODO
+mods/combat-composer/engage-target.cpp:395:			//	/* TODO:
+mods/combat-composer/engage-target.cpp:402:			/** TODO:
+mods/combat-composer/engage-target.cpp:501:					d.damage += ((0.105 * tier(attacker)) * d.damage);//TODO: find the values equiv to this
+mods/combat-composer/engage-target.cpp:503:				/** TODO: if enemy is tracked, it takes more damaged */
+mods/combat-composer/engage-target.cpp:507:					d.damage += (0.25 * d.damage); //TODO: find values equiv to this
+mods/combat-composer/engage-target.cpp:508:					if(mods::rand::chance(10)) {//TODO values
+mods/combat-composer/engage-target.cpp:509:						d.incendiary_damage += dice(tier(attacker) * 10,tier(attacker) * 10);//TODO values
+mods/combat-composer/engage-target.cpp:521:						d.shrapnel_damage += d.damage / 4; //TODO: make values
+mods/combat-composer/engage-target.cpp:523:					d.corrosive_damage += dice(tier(attacker) * 3, tier(attacker) * 6);//TODO values
+mods/combat-composer/engage-target.cpp:525:				/** TODO: roll chance to kockdown opponent */
+mods/combat-composer/engage-target.cpp:662:					/** TODO: maybe make this random to disorient the attacker ? >:) EVIL GENIUS */
+mods/combat-composer/engage-target.cpp:779:			 * TODO: need same room equivalent to this
+mods/rooms.cpp:728:		/** TODO: honor this */
+mods/scripted-sequences.cpp:76:				s->interpret.clear(); /** FIXME TODO */
+mods/stat-bonuses.cpp:19:		/** TODO */
+mods/stat-bonuses.cpp:22:		/** TODO */
+mods/target-practice.cpp:18:		//TODO:
+mods/orm/contracts.cpp:101:				r.mob_uuid = 0;//TODO FIXME
+mods/orm/contracts.cpp:103:				r.object_uuid = 0;//TODO FIXME
+mods/orm/skill-trees.cpp:27:			/** TODO
+mods/orm/chargen.cpp:43:		/** TODO: FIXME: std::shared_ptr<player_classes> sktree_class_ptr; */
+mods/orm/chargen.cpp:50:		/** TODO: FIXME: std::shared_ptr<skill_trees> sktree_skill_parent_id_ptr;//INTEGER REFERENCES skill_trees(id), */
+mods/orm/chargen.cpp:66:		/** TODO FIXME 
+mods/orm/chargen.cpp:79:		/** TODO FIXME 
+mods/orm/syndrome.hpp:35:		/** TODO */
+mods/js.cpp:268:			/** TODO: get array from duktape */
+mods/js.cpp:286:			/** TODO: get array from duktape */
+mods/js.cpp:306:			/** TODO: get array from duktape */
+mods/js.cpp:431:			/** TODO: get array from duktape */
+mods/js.cpp:579:			/** TODO: get array from duktape */
+mods/js.cpp:1115:			/** TODO: get array from duktape */
+mods/sensor-grenade.cpp:25:		return true; /** TODO: return false if player has stealth */
+mods/melee/damage-types.cpp:114:		/** TODO: find analogue for this
+mods/melee/damage-types.cpp:118:		 * TODO: find analogue for this
+mods/melee/damage-types.cpp:196:		 * TODO: find analogues/create code to support these two bonuses
+mods/melee/damage-types.cpp:238:		/** TODO: find analogue for this:
+mods/damage-event.hpp:121:		/** TODO: dump injured and damage_info */
+mods/mobs/mp-shotgunner.cpp:52:			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+mods/mobs/mp-shotgunner.cpp:397:		this->weapon_heat += 20; /** TODO: */
+mods/mobs/defiler.cpp:41:	 * - TODO: as soon as we spawn the defiler, we need to place him in the
+mods/mobs/defiler.cpp:73:	 * TODO: include stats (hp,mana,etc) and who the Defiler is currently
+mods/mobs/defiler.cpp:199:					//		/** TODO: I *REALLY* need this to work! */
+mods/mobs/defiler.cpp:228:	 * TODO: if this is used, it needs to return true
+mods/mobs/defiler.cpp:235:	// * - TODO: React according to which mode the Defiler is in
+mods/mobs/defiler.cpp:247:	//			//TODO: attack_with_melee(player);
+mods/mobs/defiler.cpp:254:	 * - TODO: add quest taker permanently to memory
+mods/mobs/defiler.cpp:357:		 * TODO: if MELEE fighting someone...
+mods/mobs/defiler.cpp:361:		 * TODO: if already in ranged combat...
+mods/mobs/defiler.cpp:528:	 * - TODO: Agony scream and disappearance
+mods/mobs/defiler.cpp:540:	 * - TODO: for each mode, determines if the following will happen
+mods/mobs/chaotic-meth-addict.cpp:53:			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+mods/mobs/chaotic-meth-addict.cpp:298:				//TODO: attack_with_melee(player);
+mods/mobs/lowly-security.cpp:48:			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+mods/mobs/lowly-security.cpp:179:		this->weapon_heat += 20; /** TODO: */
+mods/mobs/melee-combatant.cpp:53:			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+mods/mobs/melee-combatant.cpp:297:				//TODO: attack_with_melee(player);
+mods/mobs/car-thief.cpp:55:			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+mods/mobs/car-thief.cpp:276:				//TODO: attack_with_melee(player);
+mods/mobs/car-thief.cpp:331:		this->weapon_heat += 20; /** TODO: */
+mods/mobs/shoplifter.cpp:57:			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+mods/mobs/shoplifter.cpp:267:						/** TODO: FIXME URGENT: NEED WHATEVER MOB EQUIPMENT I HAVE */
+mods/mobs/shoplifter.cpp:312:				//TODO: attack_with_melee(player);
+mods/mobs/smart-mob.cpp:145:		/** TODO: wear all equipment as per the list setup in meqbuild command */
+mods/mobs/lowly-security-behaviour-tree.hpp:61:			/** TODO: replace this mg->shout(random_key_string(LOWLY_SECURITY_RANDOM_ATTACK_YELL_STRINGS())); */
+mods/mobs/mp-shotgunner-behaviour-tree.cpp:73:			/** TODO: replace this mg->shout(random_key_string(LOWLY_SECURITY_RANDOM_ATTACK_YELL_STRINGS())); */
+mods/mobs/armed-guard.cpp:53:			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+mods/mobs/armed-guard.cpp:297:				//TODO: attack_with_melee(player);
+mods/mobs/car-thief-behaviour-tree.cpp:197:						if(obj->has_vehicle()) { // TODO: std::get<0>(mods::calc_visibility::can_see_object(g->player(),obj)) && obj->has_vehicle()) {
+mods/mobs/generic-thief-behaviour-tree.cpp:241:						if(obj->has_vehicle()) { // TODO: std::get<0>(mods::calc_visibility::can_see_object(ct->player(),obj)) && obj->has_vehicle()) {
+mods/mobs/generic-thief-behaviour-tree.cpp:284:			 * --- TODO
+mods/mobs/generic-thief.cpp:66:			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+mods/mobs/generic-thief.cpp:350:				//TODO: attack_with_melee(player);
+mods/mobs/generic-thief.cpp:405:			this->weapon_heat += 20; /** TODO: */
+mods/mobs/mini-gunner.cpp:50:		/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+mods/mobs/mini-gunner.cpp:236:		this->weapon_heat += 20; /** TODO: */
+mods/mobs/orthos-agent.cpp:57:			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+mods/builder.cpp:1344:			p_map["mob_class"] = "0"; //TODO: find this
+mods/builder.cpp:1474:				//	/** TODO: transactional behaviour wanted here. (rollback) */
+mods/builder.cpp:1978:			/** TODO: make sure that if this is an existing shop, that we update it via db_id */
+mods/builder.cpp:1979:			//TODO: figure out how to handle thiss_map["shop_id"] = mods::util::itoa(shop.db_id);
+mods/builder.cpp:2297:		/* TODO */
+mods/builder.cpp:2300:		/* TODO */
+mods/builder.cpp:2303:		/* TODO */
+mods/builder.cpp:2759:			 * TODO: The plan from 2019-02-15 is to build this code out below
+mods/builder.cpp:2774:			 * should be tested using some sort of js test suites. TODO
+mods/builder.cpp:2840:	/** TODO: create copy command */
+mods/builder.cpp:3617:		//TODO: !mundane make this a function
+mods/builder.cpp:3665:		//TODO: !mundane make this a function
+mods/builder.cpp:3943:		//TODO !mundane make these flag code fragments into a function
+mods/builder.cpp:4117:		//TODO: !mundane make this a function
+mods/builder.cpp:4270:		//TODO !mundane make these flag code fragments into a function
+mods/builder.cpp:5032:		//TODO: take this logic and store it in interpreter.cpp so we can reuse it
+mods/builder.cpp:5286:		        " {grn}rbuild{/grn} {red}ed <delete> <N>{/red}\n" <<  /** TODO: needs impl */
+mods/builder.cpp:5291:		        " {grn}rbuild{/grn} {red}ed <list>{/red}\r\n" << 	/** TODO needs impl */
+mods/builder.cpp:5297:		        " {grn}rbuild{/grn} {red}ed <save-all>{/red}\r\n" << /** TODO: needs impl */
+mods/builder.cpp:5302:		        " {grn}rbuild{/grn} {red}ed <show> <N>{/red}\r\n" <<  /** TODO: needs impl */
+mods/builder.cpp:5307:		        " {grn}rbuild{/grn} {red}ed <new>{/red}\r\n" <<  /** TODO: needs impl */
+mods/builder.cpp:5313:		        " {grn}rbuild{/grn} {red}ed <N> <keyword> <value>{/red}\r\n" <<  /** TODO: needs impl */
+mods/builder.cpp:5319:		        " {grn}rbuild{/grn} {red}ed <N> <description> <value>{/red}\r\n" <<  /** TODO: needs impl */
+mods/builder.cpp:6303:					/** TODO: transactional behaviour wanted here. (rollback) */
+mods/skills.cpp:267:		return true;/** TODO */
+mods/skills.cpp:271:		return true; /** TODO */
+mods/item.hpp:9:	/** TODO: finish this */
+mods/armor/basic-protection.cpp:81:				/** TODO: we may have to pass in damage instead of reduced as second param */
+mods/zone.cpp:174:							/* TODO:
+mods/injure.cpp:33:			/** TODO: be smarter about how we calculate this.. possibly.. */
+structs.h:552:/** TODO: phase out */
+structs.h:793:	/** TODO: need to phase this out and use new weapon flags */
+structs.h:950:		/** TODO: mods::weapon::feed_caps(this, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT }); */\
+structs.h:1279:	/* TODO: replace this with std::vector<char_data*> */
+structs.h:1304:/** TODO place this is the db */
+structs.h:1319:	/** TODO: phase this out */
+structs.h:1343:/** TODO place this in the db */
+structs.h:1378:/** TODO: construct this using a "player template" identifier
+structs.h:1763:	/** TODO: convert to std::vector */
+structs.h:1766:	/** TODO: convert to forward list or std::vector */
+structs.h:1772:	/** TODO: our ultimate goal is to completely get rid of these linked list members */
+structs.h:1786:	/** TODO: this needs to go into a different structure. Preferably mob_specials. */
+structs.h:1789:	/** TODO: this needs to go elsewhere. There is no reason why this should
+act.informative.cpp:167:	//TODO: combat cooldown should prevent recall for 20 seconds
+act.informative.cpp:686:			/** TODO: needs testing */
+act.informative.cpp:742:	/** TODO: thermal vision distance is short. you can only see adjacent rooms and even then the sight is limited. */
+act.informative.cpp:1868:			/* TODO !test !integrity */
+act.informative.cpp:2081:	//TODO uncomment
+comm.cpp:766:				/** TODO: destroy_player needs to properly remove from all the player refs in mods::globals */
+comm.cpp:782:			 * TODO: this is breaking mortal start room and recall
+comm.cpp:1429:/** TODO: in order to fix the zero-socket issue, we
+comm.cpp:1531:		destroy_socket(desc);//TODO: merge destroy_socket functionality into deregister_player process
+comm.cpp:2143:	/** !TODO: do we use deregister_player here? */
+act.wizard.cpp:1974:				/** TODO: add additional stats, triads, speed, etc */
+act.wizard.cpp:2210:			/** TODO uncomment this and fix */
+act.wizard.cpp:2355:				// TODO fix this if wanted
+act.wizard.cpp:2495:		//TODO uncomment
+act.wizard.cpp:2499:		//TODO uncomment
+act.wizard.cpp:2516:			//TODO uncomment
+act.wizard.cpp:2522:			//TODO uncomment
+act.wizard.cpp:2701:				//TODO uncomment
+act.wizard.cpp:2707:				//TODO uncomment
+globals.cpp:90:		//std::vector<std::vector<char_data*>> room_list; /**!TODO turn this into std::shared_ptr<...> */
+globals.cpp:437:			/** TODO: make configurable */
+globals.cpp:1065:			/** UNUSED TODO CLEAN UP*/
+globals.cpp:1105:			//TODO: if this is used, correct it
+globals.cpp:1308:			/** TODO remove from room_list */
+doxygen.conf:622:# The GENERATE_TODOLIST tag can be used to enable (YES) or disable (NO) the todo
+doxygen.conf:626:GENERATE_TODOLIST      = YES
+Makefile:27:# TODO: for prod builds, uncomment this
+shop.cpp:1678:	/** TODO */
+globals.hpp:321:#define TODO(a) std::cerr << green_str("[TODO]: ") << a << " [file]: " << __FILE__ << "[line]:" << __LINE__ << "\n";
+spells.h:161:/** TODO: phase out the defined constants and use the enum instead */
+spells.cpp:174:		/*TODO !test !integrity */
+interpreter.cpp:1000:		//TODO: change PLR_FLAGGED call to player->member method call
