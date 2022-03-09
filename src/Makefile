@@ -1,3 +1,4 @@
+CURDIR = $(WEBROOT)
 src = .
 builddir = build
 #CC = /usr/bin/clang++-8
@@ -22,6 +23,8 @@ boostdir = $(CURDIR)/boost
 thirdparty = $(duktape) $(lmdb)
 gdbflags = -ggdb -g
 #post_build_args = strip-all
+optimization =
+# TODO: for prod builds, uncomment this
 optimization = -O2
 warnings_list = -Wall -Wunused-result \
 	-Wno-format-zero-length -Wno-format-security \
@@ -34,6 +37,7 @@ FLAGS = $(gdbflags) $(optimization) \
 	-std=c++2a -fconcepts -fpermissive -MMD \
 	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-Imods/catch2/Catch2/src -Lmods/catch2/Catch2/build/src \
+	-Ilibzmq/include -Icppzmq \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 \
@@ -52,7 +56,10 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_DISABLE_INJURE_DYNAMICS__=1 \
 	-D__MENTOC_DEBUG_EXTRACT_OBJ_OUTPUT__=1 \
 	-D__MENTOC_NO_FOOTPRINTS__=1 \
-	-D__MENTOC_MODS_DEMOLITIONS_DEBUG__=1
+	-D__MENTOC_MODS_DEMOLITIONS_DEBUG__=1 \
+	-D__MENTOC_MAX_COMBAT_ORDER_ENTRIES__=9 \
+	-D__MENTOC_PLUGIN_CONTENT__=1
+	#-D__equip_debug__=1
 
 	#-D__MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__=1
 
@@ -91,7 +98,7 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	#-D__MENTOC_USE_PQXX_RESULT__=1 
-LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2
+LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2 -L/usr/local/lib -lzmq -lpthread
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard act.demolitions alias ban boards bsd-snprintf castle \
@@ -131,7 +138,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/injure mods/skills  mods/help mods/rooms \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \
 					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \
-					 mods/mobs/smart-mob \
+					 mods/mobs/smart-mob mods/mobs/find \
 					 mods/mobs/lowly-security mods/mobs/lowly-security-behaviour-tree \
 					 mods/mobs/mp-shotgunner mods/mobs/mp-shotgunner-behaviour-tree \
 					 mods/armor/basic-protection mods/armor/advanced-protection mods/armor/elite-protection \
@@ -155,7 +162,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/forge-engine/generator mods/forge-engine/value-scaler \
 					 mods/loot mods/forge-engine/generated-rifle mods/orm/rifle-index \
 					 mods/forge-engine/generated-armor mods/orm/armor-index \
-					 mods/forge-engine/util mods/stat-bonuses \
+					 mods/forge-engine/util mods/forge-engine/kill mods/stat-bonuses \
 					 mods/orm/skill-points mods/unit-tests/skill-points \
 					 mods/orm/player-skill-points mods/unit-tests/damage-types \
 					 mods/unit-tests/elemental mods/unit-tests/elemental-armor-resistances \
@@ -186,6 +193,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/chaotic-meth-addict mods/mobs/chaotic-meth-addict-behaviour-tree \
 					 mods/weapons/attachment-shotgun-underbarrel \
 					 mods/memory mods/weapons/attachment-frag-underbarrel mods/unit-tests/frag-underbarrel \
+					 mods/weapons/attachment-underbarrel \
 					 mods/boosters/adrenaline-shot mods/unit-tests/class-sniper \
 					 mods/corrosive mods/weapons/corrosive-claymore \
 					 mods/shrapnel mods/weapons/shrapnel-claymore \
@@ -196,14 +204,39 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/melee-combatant mods/mobs/melee-combatant-behaviour-tree \
 					 mods/loot-container mods/explosive mods/glass mods/bleed mods/armor \
 					 mods/players/friendly-reminders mods/players/event-messages \
-					 mods/mobs/defiler mods/resting mods/weapons/damage-decisions \
+					 mods/mobs/defiler mods/mobs/defiler-behaviour-tree \
+					 mods/ensnare \
+					 mods/resting mods/weapons/damage-decisions \
 					 mods/mp mods/classes/contagion mods/orm/contagion \
 					 mods/melee/combat-order mods/melee/stance mods/melee/main \
-					 mods/melee/damage-types mods/corpse
+					 mods/melee/damage-types mods/corpse mods/fire \
+					 mods/weapons/attachment-pathogen-ammunition \
+					 mods/combat-composer/snipe-target mods/rifle mods/combat \
+					 mods/player-utils mods/weapons/legacy-combat \
+					 mods/combat-composer/engage-target mods/combat-composer/spray-target \
+					 mods/combat-composer/shared \
+					 mods/json/export \
+					 mods/mobs/resistance mods/find mods/contract-defiler mods/sneak \
+					 mods/message-server mods/message-parser \
+					 mods/orm/admin/frozen mods/ban-system mods/orm/admin/banned \
+					 mods/orm/user-logins \
+					 mods/admin-tools/stay mods/orm/admin/stay mods/orm/admin/rifle-attribute-limits \
+					 mods/mobs/orthos-agent mods/mobs/orthos-agent-btree \
+					 mods/boot-flags
+
+					 #mods/orm/admin/muted \
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team $(builddir)/mods/boosters $(builddir)/mods/melee
+all: $(builddir) $(builddir)/mods/classes \
+	$(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql \
+	$(builddir)/mods/orm $(builddir)/mods/orm/admin \
+	$(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder \
+	$(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players \
+	$(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) \
+	$(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team \
+	$(builddir)/mods/boosters $(builddir)/mods/melee $(builddir)/mods/combat-composer $(builddir)/mods/json \
+	$(builddir)/mods/admin-tools
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT) $(post_build_args)
 
 clean:
@@ -212,6 +245,8 @@ clean:
 		mods/*.d mods/orm/*.o mods/orm/*.d \
 		mods/classes/*.o mods/classes/*.d mods/mobs/*.o mods/mobs/*.d \
 		mods/armor/*.o mods/armor/*.d mods/players/*.o mods/players/*.d) \
+		rm -f $(builddir)/mods/orm/admin/*.o \
+		rm -f $(builddir)/mods/orm/admin/*.d  \
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
 		rm -f $(builddir)/mods/testing/lmdb/*.d  \
 		rm -f $(builddir)/mods/mini-games/*.o \
@@ -225,8 +260,24 @@ clean:
 		rm -f $(builddir)/mods/builder/*.o \
 		rm -f $(builddir)/mods/builder/*.d \
 		rm -f $(builddir)/mods/unit-tests/*.o \
-		rm -f $(builddir)/mods/unit-tests/*.d 
+		rm -f $(builddir)/mods/unit-tests/*.d \
+		rm -f $(builddir)/mods/combat-composer/*.o \
+		rm -f $(builddir)/mods/combat-composer/*.d \
+		rm -f $(builddir)/mods/weapons/*.o \
+		rm -f $(builddir)/mods/weapons/*.d \
+		rm -f $(builddir)/mods/admin-tools/*.o \
+		rm -f $(builddir)/mods/admin-tools/*.d \
+		rm -f $(builddir)/mods/json/*.o \
+		rm -f $(builddir)/mods/json/*.d \
+		rm -f $(builddir)/mods/melee/*.o \
+		rm -f $(builddir)/mods/melee/*.d 
 
+$(builddir)/mods/orm/admin:
+	mkdir -p $(builddir)/mods/orm/admin
+$(builddir)/mods/admin-tools:
+	mkdir -p $(builddir)/mods/admin-tools
+$(builddir)/mods/json:
+	mkdir -p $(builddir)/mods/json
 $(builddir)/mods/melee:
 	mkdir -p $(builddir)/mods/melee
 $(builddir)/mods/response-team:
@@ -239,6 +290,8 @@ $(builddir)/mods/mini-games:
 	mkdir -p $(builddir)/mods/mini-games
 $(builddir)/mods/classes:
 	mkdir -p $(builddir)/mods/classes
+$(builddir)/mods/combat-composer:
+	mkdir -p $(builddir)/mods/combat-composer
 $(duktapeout): 
 	mkdir -p $(duktapeout)
 $(builddir)/mods/testing/lmdb:

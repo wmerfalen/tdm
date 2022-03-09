@@ -1,0 +1,57 @@
+# type: FRAG_GRENADE
+# type: INCENDIARY_GRENADE
+# type: REMOTE_EXPLOSIVE
+# type: REMOTE_CHEMICAL
+# type: EMP_GRENADE
+# type: SMOKE_GRENADE
+# type: C4
+# type: BREACH_CHARGE
+# type: FLASHBANG_GRENADE
+# type: SENSOR_GRENADE
+str_type: 'REMOTE_EXPLOSIVE'
+type: 'REMOTE_EXPLOSIVE'
+manufacturer: 'NF-A0 Explosives' # string, anything 
+name: 'SHRAPNEL explosive corpse charge' # string, anything name of object 
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+description: 'A SHRAPNEL explosive corpse charge is lying here.'
+short_description: 'a SHRAPNEL explosive corpse charge'
+action_description: 'a SHRAPNEL explosive corpse charge'
+alternate_explosion_type: 'NONE' #std::string, ENUM NONE,SCAN
+loudness_type: 'DEAFENING' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
+chance_to_injure: 33.0 #float, percent
+critical_chance: 43.0 #float, percent
+critical_range: 1 #int, rooms
+blast_radius: 2 #int, rooms
+base_damage: 589 #int, static base damage done
+disorient_amount: 25.5 #float, percent
+range_modifier: 1 #int, rooms
+incendiary_damage_dice_count: 38 
+incendiary_damage_dice_sides: 30
+radiation_damage_dice_count: 0
+radiation_damage_dice_sides: 0
+chemical_damage_dice_count: 0
+chemical_damage_dice_sides: 0
+electric_damage_dice_count: 0
+electric_damage_dice_sides: 0
+armor_penetration_damage_dice_count: 2
+armor_penetration_damage_dice_sides: 9
+damage_dice_count: 20 
+damage_dice_sides: 38
+incendiary_damage_percent: 0 
+explosive_damage_percent: 80 
+shrapnel_damage_percent: 350
+corrosive_damage_percent: 0 
+cryogenic_damage_percent: 0
+radiation_damage_percent: 2
+emp_damage_percent: 0
+shock_damage_percen: 0
+anti_matter_damage_percent: 0
+feed_file: 'shrapnel-corpse-charge.yml'
+vnum: 190

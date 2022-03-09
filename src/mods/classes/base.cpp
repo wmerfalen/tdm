@@ -342,6 +342,62 @@ namespace mods::classes {
 		           );
 		return page;
 	}
+	base::ability_list_t& base::weapon_abilities() {
+		using skillset_t = ability_data_t::skillset_t;
+		m_weapon_abilities = {
+			{ASSAULT_RIFLES,"wpn-assault-rifles","Assault Rifles",skillset_t::WEAPON_HANDLING,&m_wpn_assault_rifles},
+			{SNIPER_RIFLES,"wpn-sniper-rifles","Sniper Rifles",skillset_t::WEAPON_HANDLING,&m_wpn_sniper_rifles},
+			{SUB_MACHINE_GUNS,"wpn-sub-machine-guns","Sub Machine Guns",skillset_t::WEAPON_HANDLING,&m_wpn_sub_machine_guns},
+			{SHOTGUNS,"wpn-shotguns","Shotguns",skillset_t::WEAPON_HANDLING,&m_wpn_shotguns},
+			{PISTOLS,"wpn-pistols","Pistols",skillset_t::WEAPON_HANDLING,&m_wpn_pistols},
+			{MACHINE_PISTOLS,"wpn-machine-pistols","Machine Pistols",skillset_t::WEAPON_HANDLING,&m_wpn_machine_pistols},
+			{LIGHT_MACHINE_GUNS,"wpn-light-machine-guns","Light Machine Guns",skillset_t::WEAPON_HANDLING,&m_wpn_light_machine_guns},
+		};
+		return m_weapon_abilities;
+	}
+	base::ability_list_t& base::cqc_abilities() {
+		using skillset_t = ability_data_t::skillset_t;
+		m_cqc_abilities = {
+			{JAB_TO_HEAD,"cqc-jab-to-head","Jab to head",skillset_t::STRENGTH,&m_cqc_jab_to_head},
+			{JAB_TO_BODY,"cqc-jab-to-body","Jab to body",skillset_t::STRENGTH,&m_cqc_jab_to_body},
+			{CROSS_TO_HEAD,"cqc-cross-to-head","Cross to head",skillset_t::STRENGTH,&m_cqc_cross_to_head},
+			{CROSS_TO_BODY,"cqc-cross-to-body","Cross to body",skillset_t::STRENGTH,&m_cqc_cross_to_body},
+			{LEFT_HOOK_TO_HEAD,"cqc-left-hook-to-head","Left hook to head",skillset_t::STRENGTH,&m_cqc_left_hook_to_head},
+			{RIGHT_HOOK_TO_HEAD,"cqc-right-hook-to-head","Right hook to head",skillset_t::STRENGTH,&m_cqc_right_hook_to_head},
+			{LEFT_HOOK_TO_BODY,"cqc-left-hook-to-body","Left hook to body",skillset_t::STRENGTH,&m_cqc_left_hook_to_body},
+			{RIGHT_HOOK_TO_BODY,"cqc-right-hook-to-body","Right hook to body",skillset_t::STRENGTH,&m_cqc_right_hook_to_body},
+			{LEFT_UPPERCUT,"cqc-left-uppercut","Left uppercut",skillset_t::STRENGTH,&m_cqc_left_uppercut},
+			{RIGHT_UPPERCUT,"cqc-right-uppercut","Right uppercut",skillset_t::STRENGTH,&m_cqc_right_uppercut},
+			{LEFT_ELBOW,"cqc-left-elbow","Left elbow",skillset_t::STRENGTH,&m_cqc_left_elbow},
+			{RIGHT_ELBOW,"cqc-right-elbow","Right elbow",skillset_t::STRENGTH,&m_cqc_right_elbow},
+			{RIGHT_UPWARD_ELBOW,"cqc-right-upward-elbow","Right upward elbow",skillset_t::STRENGTH,&m_cqc_right_upward_elbow},
+			{LEFT_UPWARD_ELBOW,"cqc-left-upward-elbow","Left upward elbow",skillset_t::STRENGTH,&m_cqc_left_upward_elbow},
+			{RIGHT_OBLIQUE,"cqc-right-oblique","Right oblique",skillset_t::STRENGTH,&m_cqc_right_oblique},
+			{LEFT_OBLIQUE,"cqc-left-oblique","Left oblique",skillset_t::STRENGTH,&m_cqc_left_oblique},
+			{LEFT_TEEP,"cqc-left-teep","Left teep",skillset_t::STRENGTH,&m_cqc_left_teep},
+			{RIGHT_TEEP,"cqc-right-teep","Right teep",skillset_t::STRENGTH,&m_cqc_right_teep},
+			{LEFT_FRONT_KICK,"cqc-left-front-kick","Left front kick",skillset_t::STRENGTH,&m_cqc_left_front_kick},
+			{RIGHT_FRONT_KICK,"cqc-right-front-kick","Right front kick",skillset_t::STRENGTH,&m_cqc_right_front_kick},
+			{LEFT_KNEE_TO_HEAD,"cqc-left-knee-to-head","Left knee to head",skillset_t::STRENGTH,&m_cqc_left_knee_to_head},
+			{RIGHT_KNEE_TO_HEAD,"cqc-right-knee-to-head","Right knee to head",skillset_t::STRENGTH,&m_cqc_right_knee_to_head},
+			{LEFT_KNEE_TO_BODY,"cqc-left-knee-to-body","Left knee to body",skillset_t::STRENGTH,&m_cqc_left_knee_to_body},
+			{RIGHT_KNEE_TO_BODY,"cqc-right-knee-to-body","Right knee to body",skillset_t::STRENGTH,&m_cqc_right_knee_to_body},
+			{KNIFE_DISARM,"cqc-knife-disarm","Knife disarm",skillset_t::STRENGTH,&m_cqc_knife_disarm},
+			{PISTOL_DISARM,"cqc-pistol-disarm","Pistol disarm",skillset_t::STRENGTH,&m_cqc_pistol_disarm},
+			{RIGHT_LEG_KICK,"cqc-right-leg-kick","Right leg kick",skillset_t::STRENGTH,&m_cqc_right_leg_kick},
+			{LEFT_LEG_KICK,"cqc-left-leg-kick","Left leg kick",skillset_t::STRENGTH,&m_cqc_left_leg_kick},
+			{RIGHT_KICK_TO_HEAD,"cqc-right-kick-to-head","Right kick to head",skillset_t::STRENGTH,&m_cqc_right_kick_to_head},
+			{LEFT_KICK_TO_HEAD,"cqc-left-kick-to-head","Left kick to head",skillset_t::STRENGTH,&m_cqc_left_kick_to_head},
+			{RIGHT_STOMP_TO_HEAD,"cqc-right-stomp-to-head","Right stomp to head",skillset_t::STRENGTH,&m_cqc_right_stomp_to_head},
+			{LEFT_STOMP_TO_HEAD,"cqc-left-stomp-to-head","Left stomp to head",skillset_t::STRENGTH,&m_cqc_left_stomp_to_head},
+		};
+		return m_cqc_abilities;
+	}
+	base::ability_list_t base::create_abilities(ability_list_t additional_list) {
+		additional_list.insert(additional_list.end(),weapon_abilities().begin(),weapon_abilities().end());
+		additional_list.insert(additional_list.end(),cqc_abilities().begin(),cqc_abilities().end());
+		return additional_list;
+	}
 
 	void base::report(std::vector<std::string> msgs) {
 		mods::bugs::fixtures(mods::classes::to_string(this->kind()), IMPLODE(msgs,""));

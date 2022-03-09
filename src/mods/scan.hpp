@@ -38,7 +38,7 @@ namespace mods {
 		extern int directions[];
 		constexpr unsigned num_directions = 6;
 		using room_list_t = std::array<std::vector<room_rnum>,num_directions>;
-		enum find_type_t {
+		enum find_type_t : uint8_t {
 			NPC = (1 << 1),
 			ALIVE = (1 << 2),
 			DEAD = (1 << 3),
@@ -53,6 +53,8 @@ namespace mods {
 		void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction,find_type_t f);
 		void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction);
 		int los_find_player(player_ptr_t& player,player_ptr_t& victim,int depth);
+		std::tuple<bool,direction_t,int> los_find_player_with_depth(player_ptr_t& player,player_ptr_t& victim,int depth);
+		std::tuple<bool,direction_t,int> los_find_player_with_depth(player_ptr_t& player,const uuid_t& victim,int depth);
 
 		/**
 		 * Simply list rooms within line of sight for recursive_depth depth

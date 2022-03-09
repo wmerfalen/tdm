@@ -688,6 +688,7 @@ enum player_level_t : uint8_t {
 #define PULSE_USAGE	(5 * 60 RL_SEC)	/* 5 mins */
 #define PULSE_TIMESAVE	(30 * 60 RL_SEC) /* should be >= SECS_PER_MUD_HOUR */
 #define PULSE_REPLENISH (3600 RL_SEC)
+#define PULSE_PRINT_TICKS_PER_MINUTE (60 RL_SEC)
 
 /* Variables for the output buffering system */
 #define MAX_SOCK_BUF            (12 * 1024) /* Size of kernel's sock buf   */
@@ -1178,6 +1179,8 @@ struct room_data {
 			TILE,
 			GLASS_CONTENTS,
 			FREEZING,
+			REINFORCED_WALLS,
+			METAL_FLOORS,
 		};
 		constexpr static std::array<texture_type_t,5> textures_that_have_levels = {
 			texture_type_t::RADIOACTIVE,
@@ -1300,25 +1303,22 @@ struct time_data {
 /* general player-related info, usually PC's and NPC's */
 /** TODO place this is the db */
 struct char_player_data {
-		constexpr static unsigned max_pwd_length = MAX_PWD_LENGTH+1;
-		mods::string name;	       /* PC / NPC s name (kill ...  )         */
-		mods::string short_descr;  /* for NPC 'actions'                    */
-		mods::string long_descr;   /* for 'look'			       */
-		mods::string description;  /* Extra descriptions                   */
-		mods::string title;        /* PC / NPC's title                     */
-		uint16_t sex;           /* PC / NPC's sex                       */
-		uint16_t chclass;       /* PC / NPC's class		       */
-		uint16_t level;         /* PC / NPC's level                     */
-		uint16_t hometown;    /* PC s Hometown (zone)                 */
-		struct time_data time;  /* PC's AGE in days                 */
-		ubyte weight;       /* PC / NPC's weight                    */
-		ubyte height;       /* PC / NPC's height                    */
-		/** TODO: phase this out */
-		mods::string passwd;
-		char_player_data();
-		~char_player_data() = default;
-	private:
-		std::array<char,max_pwd_length>	m_passwd; /* character's password      */
+	constexpr static unsigned max_pwd_length = MAX_PWD_LENGTH+1;
+	mods::string name;	       /* PC / NPC s name (kill ...  )         */
+	mods::string short_descr;  /* for NPC 'actions'                    */
+	mods::string long_descr;   /* for 'look'			       */
+	mods::string description;  /* Extra descriptions                   */
+	mods::string title;        /* PC / NPC's title                     */
+	uint16_t sex;           /* PC / NPC's sex                       */
+	uint16_t chclass;       /* PC / NPC's class		       */
+	uint16_t level;         /* PC / NPC's level                     */
+	uint16_t hometown;    /* PC s Hometown (zone)                 */
+	struct time_data time;  /* PC's AGE in days                 */
+	ubyte weight;       /* PC / NPC's weight                    */
+	ubyte height;       /* PC / NPC's height                    */
+	/** TODO: phase this out */
+	char_player_data();
+	~char_player_data() = default;
 };
 
 static constexpr uint8_t BONUS_STR = 0;
@@ -1639,6 +1639,7 @@ namespace mods {
 			}
 			void clear() {
 				/* Clear out the entire struct */
+				ip.clear();
 				descriptor = 0;
 				bad_pws = 0;
 				idle_tics = 0;
@@ -1679,6 +1680,7 @@ namespace mods {
 			}
 			socket_t	descriptor;	/* file descriptor for socket		*/
 			mods::string host;		/* hostname				*/
+			mods::string ip;
 			byte	bad_pws;		/* number of bad pw attemps this login	*/
 			byte idle_tics;		/* tics idle at password prompt		*/
 			int bufptr;

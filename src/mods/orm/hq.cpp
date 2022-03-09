@@ -2,7 +2,7 @@
 
 namespace mods::orm {
 	bool hq::destroy() {
-		auto status = this->remove();
+		auto status = this->remove(this);
 		return ORM_SUCCESS(status);
 	}
 	uint64_t hq::initialize_row(std::string_view affiliation, room_vnum rvnum,uint16_t level) {

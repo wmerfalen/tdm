@@ -24,14 +24,24 @@ namespace mods::values {
 	extern bool ECHO_ALL_SQL_COMMANDS();
 };
 
+//#define __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
 namespace mods::sql {
+	static inline std::string sanitize_table(std::string_view table_name) {
+		std::string cleaned = "";
+		for(const auto& ch : table_name) {
+			if(isalpha(ch) || isdigit(ch) || ch == '_') {
+				cleaned += ch;
+			}
+		}
+		return cleaned;
+	}
 	template <typename T>
 	struct compositor {
 			constexpr static int query_parts = 5;
 			compositor() = delete;
 			~compositor() = default;
 			compositor(str_object table, T* txn_ptr) :
-				m_table(table), m_txn_ptr(txn_ptr) {
+				m_table(sanitize_table(table)), m_txn_ptr(txn_ptr) {
 			}
 			typedef std::map<std::string, std::string> value_map;
 			compositor<T>& select(str_object fields) {
@@ -40,12 +50,24 @@ namespace mods::sql {
 				m_query[0] = sql;
 				return *this;
 			}
+			compositor<T>& select_json_agg(std::string_view table) {
+				m_query[0] = "SELECT json_agg(";
+				m_query[0] += sanitize_table(table);
+				m_query[0] += ") ";
+				return *this;
+			}
+			compositor<T>& select_row_to_json(std::string_view table) {
+				m_query[0] = "SELECT row_to_json(";
+				m_query[0] += sanitize_table(table);
+				m_query[0] += ") ";
+				return *this;
+			}
 			compositor<T>& del() {
 				m_query[0] = "DELETE ";
 				return *this;
 			}
 			compositor<T>& from(str_object table) {
-				m_table = table.data();
+				m_table = sanitize_table(table);
 				std::string sql = " FROM ";
 				sql += m_table + " ";
 				m_query[1] = sql;
@@ -56,7 +78,7 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& table(str_object table) {
-				m_table = table.data();
+				m_table = sanitize_table(table);
 				m_query[1] = m_table + " ";
 				return *this;
 			}
@@ -81,7 +103,7 @@ namespace mods::sql {
 
 			compositor<T>& update(str_object table) {
 				m_query[0] = "UPDATE ";
-				m_query[1] = m_table = table;
+				m_query[1] = m_table = sanitize_table(table);
 				return *this;
 			}
 
@@ -144,7 +166,7 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& into(str_object table) {
-				m_query[1] = m_table = table.data();
+				m_query[1] = m_table = sanitize_table(table);
 				return *this;
 			}
 			compositor<T>& values_with_password(const value_map& values, std::string_view password_field) {
@@ -227,27 +249,27 @@ namespace mods::sql {
 			}
 			compositor<T>& left_join(std::string_view table) {
 				m_current_join = std::string("LEFT JOIN ")
-				                 + std::string(table.data()) + " ";
+				                 + sanitize_table(table) + " ";
 				return *this;
 			}
 			compositor<T>& left_outer_join(std::string_view table) {
 				m_current_join = std::string("LEFT OUTER JOIN ")
-				                 + std::string(table.data()) + " ";
+				                 + sanitize_table(table) + " ";
 				return *this;
 			}
 			compositor<T>& right_join(std::string_view table) {
 				m_current_join = std::string("RIGHT JOIN ")
-				                 + std::string(table.data()) + " ";
+				                 + sanitize_table(table) + " ";
 				return *this;
 			}
 			compositor<T>& right_outer_join(std::string_view table) {
 				m_current_join = std::string("RIGHT OUTER JOIN ")
-				                 + std::string(table.data()) + " ";
+				                 + sanitize_table(table) + " ";
 				return *this;
 			}
 			compositor<T>& inner_join(std::string_view table) {
 				m_current_join = std::string("INNER JOIN ")
-				                 + std::string(table.data()) + " ";
+				                 + sanitize_table(table) + " ";
 				return *this;
 			}
 			compositor<T>& on(std::string_view lhs,

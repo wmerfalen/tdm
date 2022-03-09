@@ -6,6 +6,13 @@
 #include "extended-types.hpp"
 #include "../scan.hpp"
 #include "../calc-visibility.hpp"
+#include "../object-utils.hpp"
+#include "../combat-composer/includes.hpp"
+#include "../melee/main.hpp"
+
+#ifdef m_debug
+#undef m_debug
+#endif
 
 #define  __MENTOC_MODS_MOBS_generic_thief_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_generic_thief_SHOW_DEBUG_OUTPUT__
@@ -64,6 +71,11 @@ namespace mods::mobs {
 			return should_fire;
 		}
 	};// end namespace generic_thief_btree
+
+
+	/**
+	 * Grab the targets string and convert them to an in-memory list.
+	 */
 	std::forward_list<generic_thief::target_t>& generic_thief::parse_targets(std::string_view targets) {
 		for(const auto& item : EXPLODE(targets.data(),' ')) {
 			auto target = str_to_target(item);
@@ -74,9 +86,18 @@ namespace mods::mobs {
 		}
 		return m_targets;
 	}
+	/**
+	 * Fetches the parsed targets
+	 */
 	std::forward_list<generic_thief::target_t>& generic_thief::get_targets()  {
 		return m_targets;
 	}
+
+
+
+	/***
+	 * Entry point that essentially is an init function of sorts.
+	 */
 	void generic_thief::create(const uuid_t& mob_uuid, std::string_view targets) {
 		//m_debug("generic_thief create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
@@ -107,6 +128,16 @@ namespace mods::mobs {
 			std::cerr << green_str("generic_thief::variation:") << type << "\n";
 		}
 	}
+
+
+
+	/**
+	 * Unfinished idea with very little behind it.
+	 */
+	bool generic_thief::is_rival(player_ptr_t& player) {
+		return false;
+	}
+
 	str_map_t generic_thief::report() {
 		return usages();
 	}
@@ -134,6 +165,11 @@ namespace mods::mobs {
 		}
 		return m;
 	}
+	/**
+	 * =====================================================================================
+	 * === UTILITY FUNCTIONS
+	 * =====================================================================================
+	 */
 	void generic_thief::set_behavior_tree_directly(const generic_thief::btree_t& t) {
 		m_debug("setting tree id directly to: " << t);
 		cd()->mob_specials.behaviour_tree = (uint16_t)t;
@@ -167,6 +203,9 @@ namespace mods::mobs {
 		set_behavior_tree_directly(generic_thief::btree_t::GT_ATTEMPT_THIEVERY);
 	}
 
+
+
+
 	/**
 	 * @brief damage_events registered here
 	 */
@@ -176,11 +215,6 @@ namespace mods::mobs {
 			de::TARGET_DEAD_EVENT,
 		};
 		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!this) {
-				std::cerr << type().data() << red_str(" THIS IS NULL!!!!") << "\n";
-				sleep(10);
-				return;
-			}
 			if(!ptr_by_uuid(player)) {
 				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
 				return;
@@ -197,11 +231,6 @@ namespace mods::mobs {
 			de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK,
 		};
 		player_ptr->register_damage_event_callback(enrage_if,[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!this) {
-				std::cerr << type().data() << red_str(" THIS IS NULL!!!!") << "\n";
-				sleep(10);
-				return;
-			}
 			if(!ptr_by_uuid(player)) {
 				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
 				return;
@@ -213,13 +242,22 @@ namespace mods::mobs {
 			auto weapon = player_ptr->primary();
 
 			this->attacked(feedback);
-			if(player_ptr->room() != m_last_attacker->room()) {
-				m_debug("Moving toward sniiper..." << dirstr(feedback.from_direction));
-				move_to(feedback.from_direction);
-			}
-			if(player_ptr->room() == m_last_attacker->room()) {
-				m_debug("attacking...");
-				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,m_last_attacker);
+
+			/**
+			 * If we have a melee weapon
+			 */
+			if(mods::object_utils::is_melee(weapon)) {
+				if(player_ptr->room() != m_last_attacker->room()) {
+					m_debug("Moving toward sniiper..." << dirstr(feedback.from_direction));
+					move_to(feedback.from_direction);
+				}
+				if(player_ptr->room() == attacker->room()) {
+					m_debug("attacking...");
+					mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,attacker);
+					hit(player_ptr->cd(),attacker->cd(),0);
+				}
+			} else if(mods::object_utils::is_rifle(weapon)) {
+
 			}
 			btree_hostile();
 		});
@@ -229,47 +267,16 @@ namespace mods::mobs {
 			de::YOU_MISSED_YOUR_TARGET_EVENT,
 		};
 
-		static const std::vector<de> taunt_if = {
-			de::YOU_INFLICTED_INCENDIARY_DAMAGE,
-			de::YOU_INFLICTED_RADIOACTIVE_DAMAGE,
-			de::YOU_INFLICTED_ANTI_MATTER_DAMAGE,
-			de::YOU_INFLICTED_CORROSIVE_DAMAGE,
-			de::YOU_INFLICTED_EMP_DAMAGE,
-			de::YOU_INFLICTED_EXPLOSIVE_DAMAGE,
-			de::YOU_INFLICTED_SHRAPNEL_DAMAGE,
-			de::YOU_INFLICTED_CRYOGENIC_DAMAGE,
-			de::YOU_INFLICTED_SHOCK_DAMAGE,
-			de::YOU_DEALT_HEADSHOT_WITH_RIFLE_ATTACK,
-			de::YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK,
-			de::YOU_DEALT_CRITICAL_RIFLE_ATTACK,
-			de::YOU_INFLICTED_MELEE_ATTACK,
-			de::YOU_INFLICTED_BLADED_MELEE_ATTACK,
-			de::YOU_INFLICTED_BLUNT_MELEE_ATTACK,
-			de::YOU_REFLECTED_MUNITIONS_EVENT,
+		static const std::vector<de> steal_money_if = {
 			de::YOU_INJURED_SOMEONE_EVENT,
-			de::YOU_INFLICTED_AR_SHRAPNEL,
-			de::YOU_INFLICTED_INCENDIARY_AMMO,
 			de::YOU_DISORIENTED_SOMEONE_EVENT,
 		};
 
-		static const std::vector<de> whine_if = {
-			de::YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK,
-			de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK,
+		static const std::vector<de> panic_if = {
 			de::HIT_BY_CRITICAL_SPRAY_ATTACK,
 			de::HIT_BY_CRITICAL_RIFLE_ATTACK,
-			de::YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT,
-			de::YOU_GOT_HIT_BY_AR_SHRAPNEL,
-			de::YOU_GOT_HIT_BY_INCENDIARY_AMMO,
 			de::YOU_ARE_DISORIENTED_EVENT,
-			de::HIT_BY_INCENDIARY_DAMAGE,
-			de::HIT_BY_RADIOACTIVE_DAMAGE,
-			de::HIT_BY_ANTI_MATTER_DAMAGE,
-			de::HIT_BY_CORROSIVE_DAMAGE,
-			de::HIT_BY_EMP_DAMAGE,
-			de::HIT_BY_EXPLOSIVE_DAMAGE,
-			de::HIT_BY_SHRAPNEL_DAMAGE,
-			de::HIT_BY_CRYOGENIC_DAMAGE,
-			de::HIT_BY_SHOCK_DAMAGE,
+			de::YOU_ARE_INJURED_EVENT,
 		};
 
 		static const std::vector<de> upkeep_if = {
@@ -279,22 +286,13 @@ namespace mods::mobs {
 			de::COULDNT_FIND_TARGET_EVENT,
 		};
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!this) {
-				std::cerr << type().data() << red_str(" THIS IS NULL!!!!") << "\n";
-				sleep(10);
-				return;
-			}
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
 			switch(feedback.damage_event) {
 				case de::OUT_OF_AMMO_EVENT:
 					m_debug("DAMN! OUT OF AMMO!");
 					player_ptr->primary()->rifle_instance->ammo = 255;
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
-					m_debug("No primary wieldded... wtf?");
+					m_debug("No primary wieldded... wtf? (" << player_ptr->name().c_str() << ")");// << this->summarize(true));
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
 					m_debug("cooldown in effect for primary");
@@ -309,15 +307,6 @@ namespace mods::mobs {
 		});
 
 		player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!this) {
-				std::cerr << type().data() << red_str(" THIS IS NULL!!!!") << "\n";
-				sleep(10);
-				return;
-			}
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
 			if(player_ptr->room() >= world.size()) {
 				return;
 			}
@@ -336,8 +325,23 @@ namespace mods::mobs {
 			this->set_heading(decision);
 		});
 	}
-	bool generic_thief::is_rival(player_ptr_t& player) {
-		return false;
+	std::string generic_thief::summarize(bool regen) {
+		static std::vector<std::string> sum;
+		static std::string str;
+		if(sum.size() && !regen) {
+			return str;
+		}
+		sum.clear();
+		str.clear();
+		const auto p = ptr_by_uuid(this->uuid);
+		sum.emplace_back(CAT("uuid: ",this->uuid));
+		sum.emplace_back(CAT("name: ",(p ? p->name() : "<UNKNOWN>")));
+		sum.emplace_back(CAT("primary: ",(p && p->primary() ? p->primary()->name.c_str() : "-")));
+		sum.emplace_back(CAT("secondary: ",(p && p->secondary() ? p->secondary()->name.c_str() : "-")));
+		for(const auto& line : sum) {
+			str += line + "\r\n";
+		}
+		return str;
 	}
 	void generic_thief::door_entry_event(player_ptr_t& player) {
 		if(player->is_npc()) {
@@ -396,9 +400,21 @@ namespace mods::mobs {
 	feedback_t& generic_thief::spray(uint8_t dir) {
 		m_debug("SPRAYING: " << dirstr(dir));
 		this->spray_direction = dir;
-		this->last_attack = mods::weapons::damage_types::spray_direction_with_feedback(player_ptr,dir);
-		this->weapon_heat += 20; /** TODO: */
+		if(this->player()->primary() && this->player()->primary()->has_rifle()) {
+			this->last_attack = mods::weapons::damage_types::spray_direction_with_feedback(player_ptr,dir);
+			this->weapon_heat += 20; /** TODO: */
+		} else {
+			m_debug("Not spraying as this mob doesn't have a sprayable weapon");
+		}
 		return this->last_attack;
+	}
+	void generic_thief::snipe(player_ptr_t victim,direction_t direction,uint8_t distance) {
+		auto weapon = this->primary();
+		auto player = this->player();
+		mods::combat_composer::snipe_target(this->player(),victim,direction,distance,weapon);
+	}
+	void generic_thief::melee_attack(player_ptr_t victim) {
+		hit(this->player()->cd(),victim->cd(),0);
 	}
 	void generic_thief::attacked(const feedback_t& feedback) {
 		auto p = ptr_by_uuid(feedback.attacker);
@@ -417,6 +433,29 @@ namespace mods::mobs {
 	void generic_thief::increment_last_attack_significance() {
 
 	}
+	bool generic_thief::rifle_attack_within_range() {
+		m_debug("rifle_attack_within_range");
+		if(!m_weapon) {
+			m_weapon = player_ptr->primary();
+		}
+		if(m_last_attacker) {
+			if(m_last_attacker->position() == POS_DEAD) {
+				m_debug("Our target is dead!");
+				m_attackers.remove(m_last_attacker);
+				m_last_attacker = get_next_attacking_priority();
+			}
+		}
+		for(const auto& attacker : m_attackers) {
+			auto results = mods::scan::los_find(player_ptr,attacker);
+			if(results.found) {
+				this->snipe(attacker,results.direction,results.distance);
+				m_debug("distance:" << results.distance << ", direction: " << results.direction);
+				m_attackers_last_direction = results.direction;
+				return true;
+			}
+		}
+		return false;
+	}
 	bool generic_thief::melee_attack_within_range() {
 		m_debug("melee_attack_within_range");
 		if(!m_weapon) {
@@ -429,14 +468,19 @@ namespace mods::mobs {
 				m_last_attacker = get_next_attacking_priority();
 			}
 		}
+		auto us = this->player()->cd();
 		for(const auto& attacker : m_attackers) {
 			if(attacker->room() == player_ptr->room()) {
-				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,player_ptr->primary(),attacker);
+				hit(us, attacker->cd(), 0);
 				return true;
 			}
 
 			auto results = mods::scan::los_find(player_ptr,attacker);
 			move_to(results.direction);
+			if(attacker->room() == player_ptr->room()) {
+				hit(us, attacker->cd(), 0);
+				return true;
+			}
 			m_debug("distance:" << results.distance << ", direction: " << results.direction);
 			m_attackers_last_direction = results.direction;
 		}
@@ -479,6 +523,36 @@ namespace mods::mobs {
 		}
 		return direction;
 	}
+
+	/**
+	 * ===================
+	 * = Pilfer dynamics =
+	 * ===================
+	 */
+	/**
+	 * steal_from and roll_steal_success are both virtual functions
+	 * since we want child classes to be able to make their own
+	 * decisions for who and how well they can steal from.
+	 */
+	bool generic_thief::should_steal_from(player_ptr_t& victim) {
+		return mods::rand::chance(25);
+	}
+	bool generic_thief::roll_steal_success(player_ptr_t& victim) {
+		float chance = (victim->dexterity() / this->player()->dexterity()) / 5 * 100;
+		if(chance <= 0) {
+			return mods::rand::chance(1);
+		}
+		return mods::rand::chance(chance);
+	}
+	/**
+	 * =======================
+	 * = END Pilfer dynamics =
+	 * =======================
+	 */
+
+
+
+
 	bool generic_thief::has_found_item() {
 		return m_found_item;
 	}

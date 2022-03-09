@@ -4,9 +4,79 @@
 #include "player.hpp"
 #include "interpreter-include.hpp"
 #include "filesystem.hpp"
+#define __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__
+#include "util-map.hpp"
+#include "boot-flags.hpp"
 
 namespace mods::help::pages {
 #define HELP_STR static constexpr const char*
+	HELP_STR h_combat=
+	    " Rules of engagement\r\n"
+	    "{hr}"
+	    " There are different ranges of combat in TD.\r\n"
+	    " 1) Ranged combat\r\n"
+	    " 2) Close quarters combat\r\n"
+	    "\r\n"
+	    " When you use the 'snipe' command and hit a target that is a few rooms away   \r\n"
+	    " from you, you are engaging in ranged combat. You are free to move around and \r\n"
+	    " do not need to flee from combat. As long as your target doesn't walk into    \r\n"
+	    " the room you reside in and subsequently attack you, you are safe to move     \r\n"
+	    " around freely.                                                               \r\n"
+	    "                                                                              \r\n"
+	    " However, if you choose to go into the same room as your target, or if your   \r\n"
+	    " target moves to your room, you are now in Close Quarters Combat range.       \r\n"
+	    "                                                                              \r\n"
+	    " When you are engaged in CQC, the dynamics of battle change. If you are       \r\n"
+	    " wielding a Sniper rifle, you will not be able to hit your target as sniper   \r\n"
+	    " rifles only work on targets that are not in the same room as you.            \r\n"
+	    "                                                                              \r\n"
+	    " Now if you were to use any other type of ranged weapon like an A.R., or a    \r\n"
+	    " sub-machine gun, you could continue doing battle with your target even if    \r\n"
+	    " they are in the same room as you.                                            \r\n"
+	    "                                                                              \r\n"
+	    " There some exceptions to this rule. Mainly, if you have an underbarrel       \r\n"
+	    " attachment like a shotgun underbarrel attached to your sniper rifle.         \r\n"
+	    "                                                                              \r\n"
+	    " If you are wielding a weapoon in your SECONDARY position, you would be able  \r\n"
+	    " use that weapon in CQC range. All weapons that can be wielded in the         \r\n"
+	    " SECONDARY position can seemlessly deal damage to targets in the CQC range.   \r\n"
+	    "                                                                              \r\n"
+	    " But sometimes you want more control over how you react to a target that goes \r\n"
+	    " from RANGED comat to CQC combat. This is where Rules of Engagement come into \r\n"
+	    " play.                                                                        \r\n"
+	    "                                                                              \r\n"
+	    " Rules of engagement allow you to dictate how you respond to an enemy closing \r\n"
+	    " the distance on you. There are different types of rules of engagement        \r\n"
+	    " available to you:                                                            \r\n"
+	    "\r\n"
+	    " 1) Ballistic\r\n"
+	    " 2) CQC \r\n"
+	    " 3) Auxiliary\r\n"
+	    " 4) Secondary\r\n"
+	    "\r\n"
+	    " Ballistic\r\n"
+	    " When your rules of engagement are set to Ballistic, when a target closes the \r\n"
+	    " distance and appears in your room, you will continune to use your primary    \r\n"
+	    " weapon as long as your primary is not a sniper rifle                         \r\n"
+	    "\r\n"
+	    " CQC\r\n"
+	    " When your rules of engagement are set to CQC, when a target closes the       \r\n"
+	    " distance and appears in your room, you will use hand to hand combat.         \r\n"
+	    " If you have set a combat order (see the helpfile for combat_ordere), you will\r\n"
+	    " proceed to throw the maneuvers you specified.                                \r\n"
+	    "\r\n\r\n"
+	    " Auxiliary\r\n"
+	    " When your rules of engagement are set to Auxiliary, when a target closes the \r\n"
+	    " distance and appears in your room, you will use the underbarrel attachment   \r\n"
+	    " on your primary weapon to engage your target. This will work as long as your \r\n"
+	    " attachment has ammunition.\r\n"
+	    "\r\n"
+	    " Secondary\r\n"
+	    " When your rules of engagement are set to Secondary, when a target closes the \r\n"
+	    " distance and appears in your room, you will use the weapon in your secondary \r\n"
+	    " position.\r\n"
+	    "\r\n"
+	    ;
 	HELP_STR h_practice=
 	    "usage: practice <help>\r\n"
 	    "usage: practice <skill-shorthand>\r\n"
@@ -14,161 +84,158 @@ namespace mods::help::pages {
 	    " skills train\r\n"
 	    ;
 	HELP_STR h_sniper=
-	    "{/grn}|--------------------------------------------------------------------------------|\r\n"
-	    "{/grn}|   ____________________                                                         |\r\n"
-	    "{/grn}|  |   S N I P I N G    |                                                        |\r\n"
-	    "{/grn}|  |____________________|________________________________________________________|\r\n"
-	    "{/grn}|  | Ability:     X-ray shot                                                     |\r\n"
-	    "{/grn}|  | Command:     xray_shot <no-args>                                            |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  | Description: Hit a target through walls or doors. X-ray shot does not requi-|\r\n"
-	    "{/grn}|  |              you to have your target within your line of sight. You can be  |\r\n"
-	    "{/grn}|  |              several rooms away and still do damage to your target.         |\r\n"
-	    "{/grn}|  |                                                                             |\r\n"
-	    "{/grn}|  | Usage: xray_shot                                                            |\r\n"
-	    "{/grn}|  |                                                                             |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  |   E X A M P L E                                                             |\r\n"
-	    "{/grn}|  |   --------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  |   {grn}$>{/grn} mark Enforcer                                                          |\r\n"
-	    "{/grn}|  |   {grn}::{/grn} CONFIRM :: Marked target                                               |\r\n"
-	    "{/grn}|  |   {grn}$>{/grn} engage                                                                 |\r\n"
-	    "{/grn}|  |   {grn}::{/grn} CALIBRATE :: Okay -: Target locked :-                                  |\r\n"
-	    "{/grn}|  |   {grn}$>{/grn} xray_shot                                                              |\r\n"
-	    "{/grn}|  |   You OBLITERATE A Military Police enforcer with your deadly snipe!!        |\r\n"
-	    "{/grn}|  |   {grn}$>{/grn} disengage                                                              |\r\n"
-	    "{/grn}|  |   {grn}::{/grn} DISENGAGED                                                             |\r\n"
-	    "{/grn}|  |   {grn}$>{/grn} xray_shot                                                              |\r\n"
-	    "{/grn}|  |   {grn}::{/grn} NO TARGET CALIBRATED                                                   |\r\n"
-	    "{/grn}|  |                                                                             |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  | Ability:     Tracking Shot                                                  |\r\n"
-	    "{/grn}|  | Command:     tracking_shot <target> <direction>                             |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  | Description: targets that are marked take extra damage.                     |\r\n"
-	    "{/grn}|  |                                                                             |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  | Ability:     Mark Target                                                    |\r\n"
-	    "{/grn}|  | Command:     mark <target>                                                  |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  | Description: For use with x-ray shot.                                       |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  | Ability:     Mark Target                                                    |\r\n"
-	    "{/grn}|  | Command:     mark <target>                                                  |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  | Description: For use with x-ray shot.                                       |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  | Ability:     Attach frag grenade underbarrel                                |\r\n"
-	    "{/grn}|  | Command:     attach_frag                                                    |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  | Description: Attaches a fragmentation grenade launcher to your primary.     |\r\n"
-	    "{/grn}|  | Once you've attached the launcher, use {grn}fire <direction> <count>{/grn}             |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  |   E X A M P L E                                                             |\r\n"
-	    "{/grn}|  |   --------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  |   {grn}$>{/grn} attach_frag                                                            |\r\n"
-	    "{/grn}|  |   {grn}You attach an PWM Grenade Launcher to your primary weapon{/grn}                 |\r\n"
-	    "{/grn}|  |   {grn}$>{/grn} fire north 3                                                           |\r\n"
-	    "{/grn}|  |   {grn}You launch a fragmentation grenade way off to the north!{/grn}                  |\r\n"
-	    "{/grn}|  |-----------------------------------------------------------------------------|\r\n"
-	    "{/grn}|  | Description: For use with x-ray shot.                                       |\r\n"
-
-	    "{grn}target_limb{/grn}: specify the limb to target.\r\n"
-	    "  {grn}tracking_shot{/grn}: tracking your target.\r\n"
-	    "  {yel}Usage:{/yel}{grn}tracking_shot <target> <direction>{/grn}\r\n"
-	    "  {yel}Example:{/yel}\r\n"
-	    "  {grn}$> tracking_shot enforcer east{/grn}\r\n"
-	    "  {grn}You tag your target!{/grn}\r\n"
-	    "  Tagged enemies take extra damage.\r\n"
-	    "   ____________________ \r\n"
-	    "  |      Healing       |\r\n"
-	    "  |____________________|\r\n"
-	    "  {grn}light_bandage{/grn}: use to regain some hp\r\n"
-	    "  {grn}suture{/grn}: regain more hp than light_bandage but at the cost of movement points\r\n"
-	    "  {grn}adrenaline_shot{/grn}: inject yourself with adrenaline and get +5 armor, +5 movement, and +3 strength\r\n"
-	    "   ____________________ \r\n"
-	    "  |     Demolitions    |\r\n"
-	    "  |____________________|\r\n"
-	    "  {grn}build_claymore{/grn}: creates a claymore in your inventory (if you have a charge left).\r\n"
-	    "  {grn}build_shrapnel_claymore{/grn}: creates a {grn}shrapnel{/grn} claymore in your inventory (if you have a charge left).\r\n"
-	    "  {grn}build_corrosive_claymore{/grn}: creates a {grn}corrosive{/grn} claymore in your inventory (if you have a charge left).\r\n"
-	    "  {grn}guided_missile{/grn}: pre-program a guided missile to travel and detonate at the end of the path.\r\n"
-	    "  {yel}Usage:{/yel}{grn}guided_missile <direction>...[direction]\r\n"
-	    "  {yel}Example:{/yel}{grn}guided_missile n e e n n w{/grn}\r\n"
-	    "  The above example will send a guided missile along the path until it reaches the last direction (west)\r\n"
-	    "  upon which it will detonate in that room.\r\n"
-	    "   ____________________ \r\n"
-	    "  |     I N T E L      |\r\n"
-	    "  |____________________|\r\n"
-	    "{grn}build_emp{/grn}: creates an EMP grenade in your inventory (if you have a charge left).\r\n"
-	    "{grn}build_chaff{/grn}: creates a Chaff grenade in your inventory (if you have a charge left).\r\n"
-	    "{grn}build_sensor{/grn}: creates a Sensor grenade in your inventory (if you have a charge left).\r\n"
-	    "{grn}request_recon{/grn}: creates a Sensor grenade in your inventory (if you have a charge left).\r\n"
+	    "____________________ \r\n"
+	    "   S N I P I N G    |\r\n"
+	    "____________________|\r\n"
+	    " Ability:     X-ray shot\r\n"
+	    " Command:     xray_shot <no-args>\r\n"
+	    "{hr}"
+	    " Description: Hit a target through walls or doors. X-ray shot does not requi-\r\n"
+	    "              you to have your target within your line of sight. You can be  \r\n"
+	    "              several rooms away and still do damage to your target.         \r\n"
 	    "\r\n"
-	    "{grn}attach_shotgun{/grn}: activate an underbarrel shotgun with 5 shells pre-loaded.\r\n"
-	    "  {yel}Usage:{/yel}{grn}attach_shotgun{/grn}\r\n"
+	    " Usage: xray_shot\r\n"
+	    "\r\n"
+	    "E X A M P L E\r\n"
+	    "{hr}"
+	    "$> mark Enforcer \r\n"
+	    ":: CONFIRM :: Marked target\r\n"
+	    "$> engage \r\n"
+	    ":: CALIBRATE :: Okay -: Target locked :-\r\n"
+	    "$> xray_shot \r\n"
+	    "You OBLITERATE A Military Police enforcer with your deadly snipe!!\r\n"
+	    "$> disengage \r\n"
+	    ":: DISENGAGED\r\n"
+	    "$> xray_shot \r\n"
+	    ":: NO TARGET CALIBRATED\r\n"
+	    "                                  \r\n"
+	    "{hr}"
+	    " Ability: Tracking Shot \r\n"
+	    " Command: tracking_shot <target> <direction>\r\n"
+	    "{hr}"
+	    " Description: targets that are marked take extra damage.\r\n"
+	    "{hr}"
+	    " Ability: Mark Target\r\n"
+	    " Command: mark <target>\r\n"
+	    "{hr}"
+	    " Description: For use with x-ray shot.\r\n"
+	    "{hr}"
+	    " Ability: Mark Target\r\n"
+	    " Command: mark <target>\r\n"
+	    "{hr}"
+	    " Description: For use with x-ray shot.\r\n"
+	    "{hr}"
+	    " Ability: Attach frag grenade underbarrel\r\n"
+	    " Command: attach_frag\r\n"
+	    "{hr}"
+	    " Description: Attaches a fragmentation grenade launcher to your primary.\r\n"
+	    " Once you've attached the launcher, use fire <direction> <count>\r\n"
+	    "{hr}"
+	    "E X A M P L E \r\n"
+	    "{hr}"
+	    "$> attach_frag \r\n"
+	    "You attach an PWM Grenade Launcher to your primary weapon\r\n"
+	    "$> fire north 3 \r\n"
+	    "You launch a fragmentation grenade way off to the north!\r\n"
+	    "{hr}"
+	    " Description: For use with x-ray shot.\r\n"
+
+	    "target_limb: specify the limb to target.\r\n"
+	    "tracking_shot: tracking your target.\r\n"
+	    "Usage:tracking_shot <target> <direction>\r\n"
+	    "Example:\r\n"
+	    "$> tracking_shot enforcer east\r\n"
+	    "You tag your target!\r\n"
+	    "Tagged enemies take extra damage.\r\n"
+	    " ____________________ \r\n"
+	    "|      Healing       |\r\n"
+	    "|____________________|\r\n"
+	    "light_bandage: use to regain some hp\r\n"
+	    "suture: regain more hp than light_bandage but at the cost of movement points\r\n"
+	    "adrenaline_shot: inject yourself with adrenaline and get +5 armor, +5 movement, and +3 strength\r\n"
+	    " ____________________ \r\n"
+	    "|     Demolitions    |\r\n"
+	    "|____________________|\r\n"
+	    "build_claymore: creates a claymore in your inventory (if you have a charge left).\r\n"
+	    "build_shrapnel_claymore: creates a shrapnel claymore in your inventory (if you have a charge left).\r\n"
+	    "build_corrosive_claymore: creates a corrosive claymore in your inventory (if you have a charge left).\r\n"
+	    "guided_missile: pre-program a guided missile to travel and detonate at the end of the path.\r\n"
+	    "Usage:guided_missile <direction>...[direction]\r\n"
+	    "Example:guided_missile n e e n n w\r\n"
+	    "The above example will send a guided missile along the path until it reaches the last direction (west)\r\n"
+	    "upon which it will detonate in that room.\r\n"
+	    " ____________________ \r\n"
+	    "|     I N T E L      |\r\n"
+	    "|____________________|\r\n"
+	    "build_emp: creates an EMP grenade in your inventory (if you have a charge left).\r\n"
+	    "build_chaff: creates a Chaff grenade in your inventory (if you have a charge left).\r\n"
+	    "build_sensor: creates a Sensor grenade in your inventory (if you have a charge left).\r\n"
+	    "request_recon: creates a Sensor grenade in your inventory (if you have a charge left).\r\n"
+	    "\r\n"
+	    "attach_shotgun: activate an underbarrel shotgun with 5 shells pre-loaded.\r\n"
+	    "  Usage:attach_shotgun\r\n"
 	    "  Once you've attached the shotgun, the next same-room fire fight you're in will use the underbarrel\r\n"
 	    "  shotgun until it's ammo is depleted. Once the shotgun's ammo is depleted, you will switch back to your\r\n"
 	    "  primary weapon's main attack.\r\n"
-	    "{grn}attach_frag{/grn}: activate an underbarrel grenade launcher with 3 grenades pre-loaded.\r\n"
-	    "  {yel}Usage:{/yel}{grn}attach_frag{/grn}\r\n"
-	    "  Once you've attached the launcher, use {grn}fire <direction> <count>{/grn}\r\n"
-	    "  {yel}Example:{/yel}\r\n"
-	    "  {grn}$> attach_frag{/grn}\r\n"
-	    "  {grn}You attach an PWM Grenade Launcher to your primary weapon{/grn}\r\n"
-	    "  {grn}$> fire north 3{/grn}\r\n"
-	    "  {grn}You launch a fragmentation grenade way off to the north!{/grn}\r\n"
-	    "{grn}target_limb{/grn}: specify the limb to target.\r\n"
-	    "  {yel}Usage:{/yel}{grn}target_limb <right-arm|left-arm|none>\r\n"
-	    "  {yel}Example:{/yel}\r\n"
-	    "  {grn}$> target_limb right-arm{/grn}\r\n"
-	    "  {grn}You start targeting the right arm of your opponents.{/grn}\r\n"
-	    "  {grn}$> snipe Enforcer west{/grn}\r\n"
-	    "  {grn}You OBLITERATE A Military Police enforcer with your deadly snipe!!{/grn}\r\n"
-	    "  {grn}*** LIMB DAMAGE (right-arm) [ INTEGRITY: POOR ] ***\r\n"
-	    "  {grn}$> snipe Enforcer west{/grn}\r\n"
-	    "  {grn}You OBLITERATE A Military Police enforcer with your deadly snipe!!{/grn}\r\n"
-	    "  {grn}*** LIMB DAMAGE (right-arm) [ INTEGRITY: USELESS ] ***\r\n"
-	    "  \r\n"
-	    "  Once a limb reaches {yel}USELESS{/yel}, the limb is effectively destroyed.\r\n"
-	    "  \r\n"
-	    "  | A note on handed-ness                                                                                |\r\n"
-	    "  |------------------------------------------------------------------------------------------------------|\r\n"
-	    "  | Every NPC is right-handed by default. An NPC uses their left hand to utilize a secondary weapon such |\r\n"
-	    "  | as a pistol. NPC's will use their right hand to utilize their primary weapon. This goes for rifles   |\r\n"
-	    "  | and melee weapons.                                                                                   |\r\n"
-	    "  |------------------------------------------------------------------------------------------------------|\r\n"
-	    "  \r\n"
-	    "  ----------------------------------------------------------------\r\n"
-	    "  | Limb damage and effects on {grn}MELEE{/grn} primary weapon              |\r\n"
-	    "  +--------------------------------------------------------------+\r\n"
-	    "  | LIMB           | EFFECTS                                     |\r\n"
-	    "  |----------------+---------------------------------------------|\r\n"
-	    "  | Right arm:     | 1 or more of the below will occur...        |\r\n"
-	    "  |                | * 30\% reduced chance to hit target         |\r\n"
-	    "  |                | * 1l\% damage reduction for 33 ticks        |\r\n"
-	    "  |                | * reduce dice sides by 10-25\% for 45 ticks |\r\n"
-	    "  |----------------+---------------------------------------------|\r\n"
-	    "  | Left arm:      | 1 or more of the below will occur...        |\r\n"
-	    "  |                | * next 3 attacks do half damage             |\r\n"
-	    "  |----------------+---------------------------------------------|\r\n"
-	    "  | Limb damage and effects on {grn}RIFLE{/grn} primary weapon              |\r\n"
-	    "  +----------------+---------------------------------------------+\r\n"
-	    "  | LIMB           | EFFECTS                                     |\r\n"
-	    "  |----------------|---------------------------------------------|\r\n"
-	    "  | Right arm:     | 1 or more of the below will occur...        |\r\n"
-	    "  |                | * 25\% reduced damage with primary weapon   |\r\n"
-	    "  |                | * 33\% chance of jamming primary weapon     |\r\n"
-	    "  |                | * 40\% penalty to accuracy                  |\r\n"
-	    "  |                | * 20\% chance of dropping primary weapon    |\r\n"
-	    "  |                | * 14\% chance of primary magazine emptying  |\r\n"
-	    "  |----------------|---------------------------------------------|\r\n"
-	    "  | Left arm:      | 1 or more of the below will occur...        |\r\n"
-	    "  |                | * 35\% less likely to deal critical shots   |\r\n"
-	    "  |                | * add 15 ticks to cooldown between shots    |\r\n"
-	    "  |                | * 25\% damage reduction for 60 ticks        |\r\n"
-	    "  |----------------|---------------------------------------------|\r\n"
-	    "{grn}xray_shot{/grn}: specify the limb to target.\r\n"
+	    "attach_frag: activate an underbarrel grenade launcher with 3 grenades pre-loaded.\r\n"
+	    "Usage:attach_frag\r\n"
+	    "Once you've attached the launcher, use fire <direction> <count>\r\n"
+	    "Example:\r\n"
+	    "$> attach_frag\r\n"
+	    "You attach an PWM Grenade Launcher to your primary weapon\r\n"
+	    "$> fire north 3\r\n"
+	    "You launch a fragmentation grenade way off to the north!\r\n"
+	    "target_limb: specify the limb to target.\r\n"
+	    "Usage:target_limb <right-arm|left-arm|none>\r\n"
+	    "Example:\r\n"
+	    "$> target_limb right-arm\r\n"
+	    "You start targeting the right arm of your opponents.\r\n"
+	    "$> snipe Enforcer west\r\n"
+	    "You OBLITERATE A Military Police enforcer with your deadly snipe!!\r\n"
+	    "*** LIMB DAMAGE (right-arm) [ INTEGRITY: POOR ] ***\r\n"
+	    "$> snipe Enforcer west\r\n"
+	    "You OBLITERATE A Military Police enforcer with your deadly snipe!!\r\n"
+	    "*** LIMB DAMAGE (right-arm) [ INTEGRITY: USELESS ] ***\r\n"
+	    "\r\n"
+	    "Once a limb reaches USELESS, the limb is effectively destroyed.\r\n"
+	    "\r\n"
+	    "|-----------------------|\r\n"
+	    "| A note on handed-ness |\r\n"
+	    "|-----------------------|\r\n"
+	    " Every NPC is right-handed by default. An NPC uses their left hand to utilize a secondary weapon such \r\n"
+	    " as a pistol. NPC's will use their right hand to utilize their primary weapon. This goes for rifles and melee weapons.\r\n"
+	    "{hr}"
+	    "\r\n"
+	    "{hr}"
+	    " Limb damage and effects on MELEE primary weapon\r\n"
+	    "{hr}"
+	    " LIMB EFFECTS \r\n"
+	    "{hr}"
+	    " Right arm: 1 or more of the below will occur...\r\n"
+	    "            * 30 percent reduced chance to hit target \r\n"
+	    "            * 1l percent damage reduction for 33 ticks\r\n"
+	    "            * reduce dice sides by 10-25 percent for 45 ticks \r\n"
+	    "{hr}"
+	    " Left arm:  1 or more of the below will occur...\r\n"
+	    "            * next 3 attacks do half damage     \r\n"
+	    "{hr}"
+	    " Limb damage and effects on RIFLE primary weapon\r\n"
+	    "{hr}"
+	    " LIMB EFFECTS \r\n"
+	    "{hr}"
+	    " Right arm: 1 or more of the below will occur...\r\n"
+	    "            * 25 percent reduced damage with primary weapon\r\n"
+	    "            * 33 percent chance of jamming primary weapon\r\n"
+	    "            * 40 percent penalty to accuracy\r\n"
+	    "            * 20 percent chance of dropping primary weapon\r\n"
+	    "            * 14 percent chance of primary magazine emptying\r\n"
+	    "{hr}"
+	    " Left arm:  1 or more of the below will occur...\r\n"
+	    "            * 35 percent less likely to deal critical shots\r\n"
+	    "            * add 15 ticks to cooldown between shots\r\n"
+	    "            * 25 percent damage reduction for 60 ticks\r\n"
+	    "{hr}"
+	    "xray_shot: specify the limb to target.\r\n"
 	    "\r\n";
 
 	HELP_STR h_contract = "usage: contract <list>\r\n"
@@ -310,42 +377,42 @@ namespace mods::help::pages {
 	                          ;
 	HELP_STR h_skills = "usage: skills [show] [skill_name]...[skill_N]\r\n"
 	                    "description: This command will show you your proficiencies with each skill.\r\n"
-	                    "To see a detailed description of a skill, type: {grn}skills show <skill>{/grn}\r\n"
-	                    "{blu}Example: {yel}skills show spray-chance{/yel}\r\n"
-	                    "{blu}NOTE: you can specify multiple skills\r\n"
-	                    "Example: {yel}skills show spray-chance basic-armor mold{/yel}\r\n"
+	                    "To see a detailed description of a skill, type: skills show <skill>\r\n"
+	                    "Example: skills show spray-chance\r\n"
+	                    "NOTE: you can specify multiple skills\r\n"
+	                    "Example: skills show spray-chance basic-armor mold\r\n"
 	                    "\r\n"
-	                    "{blu}this documentation was written on 2020-09-10.{/blu}"
+	                    "this documentation was written on 2020-09-10."
 	                    ;
 	HELP_STR h_enable_registration = "usage: enable_registration\r\n"
 	                                 "usage: disable_registration\r\n"
 	                                 "usage: registration_status\r\n"
 	                                 "description: depending on which command you call, it will enable/disable player\r\n"
 	                                 "registration until you specify otherwise.\r\n"
-	                                 "{blu}Example: {yel}enable_registration{/yel}\r\n"
+	                                 "Example: enable_registration\r\n"
 	                                 "registration_status will tell you if player registration is enabled or not.\r\n"
 	                                 "\r\n"
-	                                 "{blu}this documentation was written on 2020-09-11.{/blu}"
+	                                 "this documentation was written on 2020-09-11."
 	                                 ;
 	HELP_STR h_install_camera_feed = "usage: install_camera_feed <name> <id>...[id_N]\r\n"
 	                                 "description: installs a camera feed identified by 'name'.\r\n"
 	                                 "The room virtual numbers you pass after the name of the camera feed will be the rooms\r\n"
 	                                 "that you would like to be shown on the camera feed.\r\n"
-	                                 "{blu}Example: {yel}install_camera_feed \"Camera Feed A\" 20 21 22 23 24{/yel}\r\n"
+	                                 "Example: install_camera_feed \"Camera Feed A\" 20 21 22 23 24\r\n"
 	                                 "\r\n"
-	                                 "{blu}this documentation was written on 2020-09-26.{/blu}"
+	                                 "this documentation was written on 2020-09-26."
 	                                 ;
 	HELP_STR h_uninstall_camera_feed = "usage: uninstall_camera_feed <name>\r\n"
 	                                   "description: uninstalls the camera feed identified by 'name'.\r\n"
-	                                   "{blu}Example: {yel}uninstall_camera_feed \"Camera Feed A\"{/yel}\r\n"
+	                                   "Example: uninstall_camera_feed \"Camera Feed A\"\r\n"
 	                                   "\r\n"
-	                                   "{blu}this documentation was written on 2020-09-26.{/blu}"
+	                                   "this documentation was written on 2020-09-26."
 	                                   ;
 	HELP_STR h_install_minigame = "usage: install_minigame <name> <type> <difficulty> <unlock-event>\r\n"
 	                              "description: installs a mini game identified by 'name'.\r\n"
 	                              "Valid types:\r\n"
-	                              "{blu}line-up: Will show a series of rows that the user has to line up accordingly\r\n"
-	                              "{blu}wires: will show a series of wires and allow the user to attach them\r\n"
+	                              "line-up: Will show a series of rows that the user has to line up accordingly\r\n"
+	                              "wires: will show a series of wires and allow the user to attach them\r\n"
 	                              "Valid difficulties:\r\n"
 	                              "easy\r\n"
 	                              "medium\r\n"
@@ -365,35 +432,35 @@ namespace mods::help::pages {
 	                              "If the unlock-event is neither of the above strings, then it will be fed to the system\r\n"
 	                              "and handled accordingly.\r\n"
 	                              "Example of a custom event:\r\n"
-	                              "{blu}Example: {yel}install_minigame \"North Door Lock\" medium custom \"custom event. handled by system\"{/yel}\r\n"
+	                              "Example: install_minigame \"North Door Lock\" medium custom \"custom event. handled by system\"\r\n"
 	                              "The 'custom' keyword takes whatever you pass in and the system interprets it. This is for adding custom events\r\n"
 	                              "that might work in the future or if the developers have a custom even that allow you to do special things.\r\n"
 	                              "As of this writing, there are no custom events. 2020-09-28\r\n"
 
-	                              "{blu}Example: {yel}install_minigame \"North Door Lock\" line-up medium unlock north{/yel}\r\n"
-	                              "{blu}Example: {yel}install_minigame \"North Door Lock\" line-up medium unlock vnum:40 north,south,east,west{/yel}\r\n"
-	                              "{blu}Example: {yel}install_minigame \"North Door Lock\" line-up medium toggle vnum:40 south,west,up{/yel}\r\n"
+	                              "Example: install_minigame \"North Door Lock\" line-up medium unlock north\r\n"
+	                              "Example: install_minigame \"North Door Lock\" line-up medium unlock vnum:40 north,south,east,west\r\n"
+	                              "Example: install_minigame \"North Door Lock\" line-up medium toggle vnum:40 south,west,up\r\n"
 	                              "\r\n"
-	                              "{blu}this documentation was written on 2020-09-28.{/blu}"
+	                              "this documentation was written on 2020-09-28."
 	                              ;
 	HELP_STR h_list_minigame = "usage: list_minigame\r\n"
 	                           "description: lists all the mini games in the current room. This command is needed to pass the id of the minigame\r\n"
 	                           "to the uninstall_minigame command.\r\n"
 	                           "\r\n"
-	                           "{blu}this documentation was written on 2020-09-28.{/blu}"
+	                           "this documentation was written on 2020-09-28."
 	                           ;
 	HELP_STR h_uninstall_minigame = "usage: uninstall_minigame <id>\r\n"
 	                                "description: uninstalls the currently installed mini game identified by the id you pass in.\r\n"
 	                                "To see the ID's of the mini games currently installed in this room, see the list_minigame command.\r\n"
-	                                "{blu}Example: {yel}uninstall_minigame \"North Door Lock\"{/yel}\r\n"
+	                                "Example: uninstall_minigame \"North Door Lock\"\r\n"
 	                                "\r\n"
-	                                "{blu}this documentation was written on 2020-09-28.{/blu}"
+	                                "this documentation was written on 2020-09-28."
 	                                ;
 	HELP_STR h_plug_cable = "usage: plug_cable <id>\r\n"
 	                        "description: plugs into the ethernet port identified by 'id'.\r\n"
-	                        "{blu}Example: {yel}plug_cable A{/yel}\r\n"
+	                        "Example: plug_cable A\r\n"
 	                        "\r\n"
-	                        "{blu}this documentation was written on 2020-10-02.{/blu}"
+	                        "this documentation was written on 2020-10-02."
 	                        ;
 	HELP_STR h_edit_object = "usage: edit_object <id> <attribute> <value>\r\n"
 	                         "description: attributes include: \r\n"
@@ -490,7 +557,7 @@ namespace mods::help::pages {
 	HELP_STR h_reload = "usage: reload [primary|secondary]\r\n"
 	                    "description: reloads either your primary or secondary. If neither is supplied will automatically reload your primary.\r\n"
 	                    "example: reload primary\r\n"
-	                    "example: reload # this is equivalent to {grn}reload primary{/grn}\r\n"
+	                    "example: reload # this is equivalent to reload primary\r\n"
 	                    "example: reload secondary\r\n"
 	                    "\r\n"
 	                    "this documentation was written on 2020-11-16."
@@ -501,15 +568,15 @@ namespace mods::help::pages {
 	      "Pathogen ammunition infects your ammunition with a genetically engineered\r\n"
 	      "virus that continues to deal poison damage to a target for a period of time.\r\n"
 	      "example: invoke pathogen_ammunition primary\r\n"
-	      "example: invoke pathogen_ammunition # this is equivalent to {grn}invoke pathogen_ammunition primary{/grn}\r\n"
+	      "example: invoke pathogen_ammunition # this is equivalent to invoke pathogen_ammunition primary\r\n"
 	      "\r\n"
 	      "this documentation was written on 2021-09-25."
 	      ;
 	HELP_STR grim_aura= "usage: invoke grim_aura   \r\n"
 	                    "description: \r\n"
-	                    "- +15% damage done by melee/ranged attacks\r\n"
-	                    "- damage taken is reduced by 15%\r\n"
-	                    "- Player gets 15% of their max hp added to their current hp\r\n"
+	                    "- +15 percent damage done by melee/ranged attacks\r\n"
+	                    "- damage taken is reduced by 15 percent\r\n"
+	                    "- Player gets 15 percent of their max hp added to their current hp\r\n"
 	                    "\r\n"
 	                    "this documentation was written on 2021-09-25.";
 
@@ -538,7 +605,7 @@ namespace mods::help::pages {
 	HELP_STR hellfire_circle= "usage: invoke hellfire_circle   \r\n"
 	                          "- Hellfire Circle\r\n"
 	                          "	- Reduces incendiary, explosive damage\r\n"
-	                          "	- Reduces CQC, melee damage by 25%\r\n"
+	                          "	- Reduces CQC, melee damage by 25 percent\r\n"
 	                          "\r\n"
 	                          "this documentation was written on 2021-09-25.";
 	HELP_STR particle_deceleration= "usage: invoke particle_deceleration\r\n"
@@ -550,7 +617,7 @@ namespace mods::help::pages {
 	HELP_STR ghastly_double= "usage:     \r\n"
 	                         "- Ghastly double\r\n"
 	                         "	- Create an illusion that there are two of you\r\n"
-	                         "	- Chance of taking damage is reduced by 30%\r\n"
+	                         "	- Chance of taking damage is reduced by 30 percent\r\n"
 	                         "\r\n"
 	                         "this documentation was written on 2021-09-25.";
 	HELP_STR minor_shielding= "usage: invoke minor_shielding   \r\n"
@@ -620,7 +687,7 @@ namespace mods::help::pages {
 	HELP_STR extract_organs= "usage: invoke extract_organs <target>\r\n"
 	                         "- Extract Organs\r\n"
 	                         "	- Player dissects a corpse and consumes it's organs\r\n"
-	                         "		- Gains HP, Mana, Movement equal to 25% of the \r\n"
+	                         "		- Gains HP, Mana, Movement equal to 25 percent of the \r\n"
 	                         "			HP, Mana, and Movement of the NPC or PC that died\r\n"
 	                         "\r\n"
 	                         "this documentation was written on 2021-09-25.";
@@ -798,26 +865,45 @@ namespace mods::help {
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Values System ]:-                         {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}disable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
 			"{gld}revert_value_to_default{/gld} -- {grn}revert a value back to factory default{/grn}",
 			"{gld}list_values{/gld} -- {grn}list all available values{/grn}",
 			"{gld}list_value{/gld} -- {grn}alias of list_values{/grn}",
 			"{gld}set_value{/gld} -- {grn}set value to specific value{/grn}",
 			"{gld}get_value{/gld} -- {grn}display a specific value{/grn}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Admin Commands ]:-                        {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}admin:disable_registration{/gld} -- {grn}disable new player registration[builder-utils]{/grn}",
+			"{gld}admin:banish{/gld} -- {grn}force a player out of your room(not permanent)[debugging-players][bad-players]{/grn}",
+			"{gld}admin:pull{/gld} -- {grn}transfer a player to your room (not permanent)[debugging-players]{/grn}",
+
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Punishing Players ]:-                     {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}admin:ban{/gld} -- {grn}ban a player[bad-players]{/grn}",
+			"{gld}admin:mute{/gld} -- {grn}mute a player[bad-players]{/grn}",
+			"{gld}admin:unban{/gld} -- {grn}unban a player[bad-players]{/grn}",
+			"{gld}admin:unmute{/gld} -- {grn}un-mute a player[bad-players]{/grn}",
 		};
 		for(const auto& line : builder_screen) {
 			screen.emplace_back(line);
 		}
 		std::string guts,error;
-		mods::filesystem::file_get_contents("../lib/SUPERCMD.list", guts,error);
-		std::string current = "";
-		for(auto ch : guts) {
-			if(ch == '\n') {
-				screen.emplace_back(current);
-				current.clear();
-				continue;
+		for(const auto& file : {
+		            "../lib/SUPERCMD.list","../lib/ADMINCMD.list"
+		        }) {
+			guts.clear();
+			error.clear();
+			mods::filesystem::file_get_contents(file, guts,error);
+			std::string current = "";
+			for(auto ch : guts) {
+				if(ch == '\n') {
+					screen.emplace_back(current);
+					current.clear();
+					continue;
+				}
+				current += ch;
 			}
-			current += ch;
 		}
 	}
 	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;
@@ -834,86 +920,50 @@ namespace mods::help {
 		}
 		return false;
 	}
-
+	auto find_page_for(auto topic) {
+		const auto table = "help_pages";
+		try {
+			auto up_txn = txn();
+			sql_compositor comp(table,&up_txn);
+			auto room_sql = comp.select("hp_content")
+			                .from(table)
+			                .where("hp_section","LIKE",CAT("%",topic.data(),"%"))
+			                .sql();
+#ifdef __DEBUG_HELP_PAGES_SQL__
+			std::cerr << room_sql.data() << "\n";
+#endif
+			return mods::pq::exec(up_txn,room_sql.data());
+		} catch(std::exception& e) {
+			return mods::pq::result();
+		}
+	}
 
 	bool send_help(std::string_view topic, std::shared_ptr<mods::player>& player) {
 		auto it = registered_help_commands.find(topic.data());
 		if(registered_help_commands.end() != it && ((int)player->level()) >= ((int)it->second.first)) {
-			player->send("your player level: %d, second.first: %d\r\n",player->level(),it->second.first);
+			//"your player level: %d, second.first: %d\r\n",player->level(),it->second.first);
+			player->sendln(
+			    CAT(
+			        "your player level: ",player->level(),", second.first: ",it->second.first
+			    )
+			);
 			player->sendln(CAT("{blu}",it->second.second,"{/blu}"));
 			return false;
 		}
-#define M_MATCH(A,SUBJECT) if(matches_many(A,topic)){ player->sendln(CAT(pages::SUBJECT)); return false; }
-		M_MATCH("practice",h_practice);
-		M_MATCH("sniper",h_sniper);
-		M_MATCH("throw,grenade",h_grenade);
-		M_MATCH("camera,claymore,install,uninstall",h_install);
-		M_MATCH("cancel",h_cancel);
-		M_MATCH("set_position",h_set_position);
-		M_MATCH("set_npc_position",h_set_npc_position);
-		M_MATCH("contract,contracts,quest,quests",h_contract);
-		M_MATCH("yaml_log",h_yaml_log);
-		M_MATCH("allow_skill",h_allow_skill);
-		M_MATCH("yaml_example",h_yaml_example);
-		M_MATCH("skills,skill",h_skills);
-		M_MATCH("registration_status,enable_registration,disable_registration",h_enable_registration);
-		M_MATCH("install_camera_feed",h_install_camera_feed);
-		M_MATCH("uninstall_camera_feed",h_uninstall_camera_feed);
-		M_MATCH("install_minigame",h_install_minigame);
-		M_MATCH("list_minigame",h_list_minigame);
-		M_MATCH("uninstall_minigame",h_uninstall_minigame);
-		M_MATCH("plug_cable",h_plug_cable);
-		M_MATCH("room_dark",h_room_dark);
-		M_MATCH("room_fire",h_room_fire);
-		M_MATCH("set_ammo",h_set_ammo);
 
-		M_MATCH("plant_claymore",h_plant_claymore);
-		M_MATCH("penetrating_shot",h_penetrating_shot);
-		M_MATCH("intimidate",h_intimidate);
-		M_MATCH("toss_cryogenic_grenade",h_toss_cryogenic_grenade);
-		M_MATCH("use_flash_underbarrel",h_use_flash_underbarrel);
-		M_MATCH("go_dark",h_go_dark);
-		M_MATCH("conceal",h_conceal);
-		M_MATCH("feign_death",h_feign_death);
-		M_MATCH("summon_extraction",h_summon_extraction);
-		M_MATCH("xray_shot",h_xray_shot);
-		M_MATCH("reload",h_reload);
-
-		/** CONTAGION SKILLS */
-		M_MATCH("pathogen_ammunition",h_pathogen_ammunition);
-		M_MATCH("grim_aura",grim_aura);
-		M_MATCH("melt",melt);
-		M_MATCH("suffocate",suffocate);
-		M_MATCH("shredded_cantrip",shredded_cantrip);
-		M_MATCH("muscle_memory",muscle_memory);
-		M_MATCH("hellfire_circle",hellfire_circle);
-		M_MATCH("particle_deceleration",particle_deceleration);
-		M_MATCH("ghastly_double",ghastly_double);
-		M_MATCH("minor_shielding",minor_shielding);
-		M_MATCH("cursed_ballistics",cursed_ballistics);
-		M_MATCH("neutron_shield",neutron_shield);
-		M_MATCH("bladed_array",bladed_array);
-		M_MATCH("roots_of_mayhem",roots_of_mayhem);
-		M_MATCH("morbid_doubt",morbid_doubt);
-		M_MATCH("intimidate",intimidate);
-		M_MATCH("force_out",force_out);
-		M_MATCH("leech",leech);
-		M_MATCH("parasitic_corpse_tap",parasitic_corpse_tap);
-		M_MATCH("extract_organs",extract_organs);
-		M_MATCH("recruit",recruit);
-		M_MATCH("demonic_incantation",demonic_incantation);
-		M_MATCH("shadow_sight",shadow_sight);
-		M_MATCH("morbid_insight",morbid_insight);
-		M_MATCH("life_tap",life_tap);
-		M_MATCH("corpse_explosion",corpse_explosion);
-		M_MATCH("attract",attract);
-		M_MATCH("confuse",confuse);
-		M_MATCH("hellfire_incantation",hellfire_incantation);
-		M_MATCH("detonate_limb",detonate_limb);
-#undef M_MATCH
+		auto rows =  find_page_for(topic);
+		for(const auto& row : rows) {
+			player->sendln(row["hp_content"].c_str());
+		}
+		if(rows.size()) {
+			return false;
+		}
 		return true;
 	};
 
+	void send_topics_help_menu(player_ptr_t& player) {
+		player->sendln("[TOPICS HELP MENU STUB]");
+	}
 
 
 	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level_t level) {
@@ -1016,11 +1066,31 @@ namespace mods::help {
 	}
 	void send_ghost_help_menu(player_ptr_t& player) {
 		static std::vector<std::string> topics = {
+			"ghost:adrenaline_shot",
+			"ghost:dissipate",
+			"ghost:mark",
+			"ghost:mark_target",
+			"ghost:tracking_shot",
+			"ghost:engage",
+			"ghost:disengage",
+			"ghost:xray_shot",
+			"ghost:build_claymore",
+			"ghost:light_bandage",
+			"ghost:attach_shotgun",
+			"ghost:detach_shotgun",
+			"ghost:attach_frag",
+			"ghost:detach_frag",
+			"ghost:fire",
+			"ghost:build_claymore",
+			"ghost:build_corrosive_claymore",
+			"build_shrapnel_claymore",
 			"plant_claymore",
 			"penetrating_shot",
 			"intimidate",
 			"toss_cryogenic_grenade",
 			"use_flash_underbarrel",
+			"attach_frag",
+			"attach_shotgun",
 		};
 		send_class_header(player,"GHOST");
 		for(auto topic : topics) {
@@ -1183,6 +1253,8 @@ namespace mods::help {
 			}
 		}
 
+		send_topics_help_menu(player);
+
 		if(player->implementor_mode() || player->builder_mode()) {
 			mods::help::fetch_builder_help(screen);
 		}
@@ -1197,9 +1269,133 @@ namespace mods::help {
 				return;
 			}
 		}
+
+	}
+
+	void place_in_sql() {
+		auto delete_first = boot_flag("--import-help-pages-delete-first");
+		auto import_pages = boot_flag("--import-help-pages");
+		if(!import_pages) {
+			log("boot flag for help pages isn't present...");
+			return;
+		} else {
+			log("boot flag for help pages is there");
+		}
+		if(delete_first) {
+			log("Preparing help pages. Deleting existing data...");
+			try {
+				auto txn2 = txn();
+				auto sql = sql_compositor("help_pages",&txn2)
+				           .del()
+				           .from("help_pages")
+				           .sql();
+				mods::pq::exec(txn2,sql);
+				mods::pq::commit(txn2);
+			} catch(std::exception& e) {
+				REPORT_DB_ISSUE("failed",e.what());
+				std::cerr << std::string("failed: ") + e.what() << "\n";
+			}
+			log("Existing help pages deleted.");
+		}
+		using namespace mods::help::pages;
+		std::map<std::string,std::string> pages = {
+			{"combat,roe,rules_of_engagement,cqc,sniping,kill,engage",h_combat},
+			{"practice",h_practice},
+			{"sniper",h_sniper},
+			{"throw,grenade",h_grenade},
+			{"camera,claymore,install,uninstall",h_install},
+			{"cancel",h_cancel},
+			{"set_position",h_set_position},
+			{"set_npc_position",h_set_npc_position},
+			{"contract,contracts,quest,quests",h_contract},
+			{"yaml_log",h_yaml_log},
+			{"allow_skill",h_allow_skill},
+			{"yaml_example",h_yaml_example},
+			{"skills,skill",h_skills},
+			{"registration_status,enable_registration,disable_registration",h_enable_registration},
+			{"install_camera_feed",h_install_camera_feed},
+			{"uninstall_camera_feed",h_uninstall_camera_feed},
+			{"install_minigame",h_install_minigame},
+			{"list_minigame",h_list_minigame},
+			{"uninstall_minigame",h_uninstall_minigame},
+			{"plug_cable",h_plug_cable},
+			{"room_dark",h_room_dark},
+			{"room_fire",h_room_fire},
+			{"set_ammo",h_set_ammo},
+
+			{"plant_claymore",h_plant_claymore},
+			{"penetrating_shot",h_penetrating_shot},
+			{"intimidate",h_intimidate},
+			{"toss_cryogenic_grenade",h_toss_cryogenic_grenade},
+			{"use_flash_underbarrel",h_use_flash_underbarrel},
+			{"go_dark",h_go_dark},
+			{"conceal",h_conceal},
+			{"feign_death",h_feign_death},
+			{"summon_extraction",h_summon_extraction},
+			{"xray_shot",h_xray_shot},
+			{"reload",h_reload},
+
+			/** CONTAGION SKILLS */
+			{"pathogen_ammunition",h_pathogen_ammunition},
+			{"grim_aura",grim_aura},
+			{"melt",melt},
+			{"suffocate",suffocate},
+			{"shredded_cantrip",shredded_cantrip},
+			{"muscle_memory",muscle_memory},
+			{"hellfire_circle",hellfire_circle},
+			{"particle_deceleration",particle_deceleration},
+			{"ghastly_double",ghastly_double},
+			{"minor_shielding",minor_shielding},
+			{"cursed_ballistics",cursed_ballistics},
+			{"neutron_shield",neutron_shield},
+			{"bladed_array",bladed_array},
+			{"roots_of_mayhem",roots_of_mayhem},
+			{"morbid_doubt",morbid_doubt},
+			{"intimidate",intimidate},
+			{"force_out",force_out},
+			{"leech",leech},
+			{"parasitic_corpse_tap",parasitic_corpse_tap},
+			{"extract_organs",extract_organs},
+			{"recruit",recruit},
+			{"demonic_incantation",demonic_incantation},
+			{"shadow_sight",shadow_sight},
+			{"morbid_insight",morbid_insight},
+			{"life_tap",life_tap},
+			{"corpse_explosion",corpse_explosion},
+			{"attract",attract},
+			{"confuse",confuse},
+			{"hellfire_incantation",hellfire_incantation},
+			{"detonate_limb",detonate_limb},
+		};
+		auto place = [&](auto section, auto cmd, auto content) {
+			try {
+				auto txn2 = txn();
+				auto sql = sql_compositor("help_pages",&txn2)
+				           .insert()
+				           .into("help_pages")
+				.values({
+					{"hp_section", section},
+					{"hp_cmd", cmd},
+					{"hp_content", content},
+				})
+				.sql();
+				mods::pq::exec(txn2,sql);
+				mods::pq::commit(txn2);
+			} catch(std::exception& e) {
+				REPORT_DB_ISSUE("failed",e.what());
+				std::cerr << std::string("failed: ") + e.what() << "\n";
+			}
+		};
+		log("Importing help pages...");
+		for(const auto& pair : pages) {
+			const std::string f = pair.first;
+			place(f,f,pair.second);
+		}
+		log("Done importing help pages.");
 	}
 
 	void init() {
+		place_in_sql();
 		mods::interpreter::add_command("builder_help", POS_RESTING, do_help, LVL_BUILDER,0);
 		mods::interpreter::add_command("help", POS_RESTING, do_help, 0,0);
 	}

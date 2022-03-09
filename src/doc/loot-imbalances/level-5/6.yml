@@ -1,0 +1,61 @@
+# Level 5, HK-21 LMG
+# Appraisal: 2/10
+
+rifle_accuracy_map_0: 90.000000
+rifle_accuracy_map_1: 10.000000
+rifle_accuracy_map_2: 0.000000
+rifle_accuracy_map_3: 0.000000
+rifle_ammo_max: 4926                # OP+INSANE
+rifle_ammo_type: LIGHT_MACHINE_GUN
+rifle_anti_matter_damage: 1
+rifle_base_damage: 30
+rifle_chance_to_injure: 2.000000
+rifle_clip_size: 999                # OP+INSANE
+rifle_cooldown_between_shots: 20    # BROKEN
+rifle_corrosive_damage: 3
+rifle_critical_chance: 1
+rifle_critical_range: 1
+rifle_cryogenic_damage: 1
+rifle_damage_dice_count: 1          # DISCUSS
+rifle_damage_dice_sides: 140        # DISCUSS
+rifle_damage_map_0: 80.000000
+rifle_damage_map_1: 40.000000
+rifle_damage_map_2: 0.000000
+rifle_damage_map_3: 0.000000
+rifle_disorient_amount: 0.000000
+rifle_effective_firing_range: 20    # BROKEN
+rifle_emp_damage: 0
+rifle_explosive_damage: 1
+rifle_file: hk21.yml
+rifle_headshot_bonus: 13.000000
+rifle_incendiary_damage: 1
+rifle_manufacturer: TN-33Y
+rifle_max_range: 12
+rifle_muzzle_velocity: 6375
+rifle_name: HK-21 Light Machine Gun
+rifle_radioactive_damage: 16
+rifle_range_multiplier: 1.000000
+rifle_rarity: COMMON
+rifle_reload_time: 2                # OP+INSANE
+rifle_rounds_per_minute: 180
+rifle_shock_damage: 0
+rifle_shrapnel_damage: 8
+rifle_stat_armor: 0
+rifle_stat_chemistry: 4
+rifle_stat_constitution: 0
+rifle_stat_demolitions: 4
+rifle_stat_dexterity: 1
+rifle_stat_electronics: 2
+rifle_stat_intelligence: 2
+rifle_stat_marksmanship: 12
+rifle_stat_medical: 0
+rifle_stat_sniping: 0
+rifle_stat_strategy: 0
+rifle_stat_strength: 1
+rifle_stat_weapon_handling: 0
+rifle_stat_wisdom: 2
+rifle_str_type: LIGHT_MACHINE_GUN
+rifle_type: 10
+rifle_vnum: 33
+
+

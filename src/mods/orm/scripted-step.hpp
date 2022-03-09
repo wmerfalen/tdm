@@ -44,7 +44,7 @@ namespace mods::orm {
 		MENTOC_ORM_CLASS(SCSTEP_MEMBERS_TUPLE,"scripted_steps");
 
 		std::string primary_key_value();
-		uint64_t initialize_row(const sequence_vnum_t& i_vnum);
+		uint64_t initialize_row(const sequence_vnum_t& i_vnum,std::string_view type);
 		void load_multi(const pqxx::result::reference&);
 
 		void destroy();

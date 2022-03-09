@@ -83,7 +83,11 @@ namespace mods::weapons::elemental {
 				break;
 		}
 		if(feedback.damage > 0) {
-			victim->hp() -= feedback.damage;
+			if(feedback.damage >= victim->hp()) {
+				victim->hp() = 0;
+			} else {
+				victim->hp() -= feedback.damage;
+			}
 			if(victim->is_npc()) {
 				mods::mobs::damage_event::received_elemental_damage(victim,feedback);
 			}
@@ -109,34 +113,34 @@ namespace mods::weapons::elemental {
 		perform_elemental_damage(attacker,victim,requested_damage,type);
 	}
 	void incendiary_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		process_elemental_damage(attacker,victim,requested_damage,ELEM_INCENDIARY);
+		perform_elemental_damage(attacker,victim,requested_damage,ELEM_INCENDIARY);
 	}
 
 	void explosive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		process_elemental_damage(attacker,victim,requested_damage,ELEM_EXPLOSIVE);
+		perform_elemental_damage(attacker,victim,requested_damage,ELEM_EXPLOSIVE);
 	}
 
 	void shrapnel_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		process_elemental_damage(attacker,victim,requested_damage,ELEM_SHRAPNEL);
+		perform_elemental_damage(attacker,victim,requested_damage,ELEM_SHRAPNEL);
 	}
 
 	void corrosive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		process_elemental_damage(attacker,victim,requested_damage,ELEM_CORROSIVE);
+		perform_elemental_damage(attacker,victim,requested_damage,ELEM_CORROSIVE);
 	}
 	void cryogenic_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		process_elemental_damage(attacker,victim,requested_damage,ELEM_CRYOGENIC);
+		perform_elemental_damage(attacker,victim,requested_damage,ELEM_CRYOGENIC);
 	}
 	void radioactive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		process_elemental_damage(attacker,victim,requested_damage,ELEM_RADIOACTIVE);
+		perform_elemental_damage(attacker,victim,requested_damage,ELEM_RADIOACTIVE);
 	}
 	void emp_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		process_elemental_damage(attacker,victim,requested_damage,ELEM_EMP);
+		perform_elemental_damage(attacker,victim,requested_damage,ELEM_EMP);
 	}
 	void shock_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		process_elemental_damage(attacker,victim,requested_damage,ELEM_SHOCK);
+		perform_elemental_damage(attacker,victim,requested_damage,ELEM_SHOCK);
 	}
 	void anti_matter_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {
-		process_elemental_damage(attacker,victim,requested_damage,ELEM_ANTI_MATTER);
+		perform_elemental_damage(attacker,victim,requested_damage,ELEM_ANTI_MATTER);
 	}
 
 	/**
@@ -223,12 +227,12 @@ namespace mods::weapons::elemental {
 	}
 
 	void room_fire_damage(player_ptr_t& player,uint16_t damage) {
-		player->send(mods::values::MSG_FIRE_DAMAGE().c_str(),damage);
+		player->sendln(CAT("[",damage,"] ",mods::values::MSG_FIRE_DAMAGE()));
 		mods::weapons::damage_types::deal_hp_damage(player,damage);
 	}
 
 	void room_smoke_damage(player_ptr_t& player, uint16_t damage) {
-		player->send(mods::values::MSG_SMOKE_DAMAGE().c_str(),damage);
+		player->sendln(CAT("[",damage,"] ",mods::values::MSG_SMOKE_DAMAGE(),damage));
 		mods::weapons::damage_types::deal_hp_damage(player,damage);
 	}
 
@@ -251,7 +255,7 @@ namespace mods::weapons::elemental {
 		}
 		auto obj = create_object(ITEM_RIFLE,"g36c.yml");
 		player->incendiary_resistance_percent() = resistance;
-		player->send("Your resistance: %f\r\n",player->incendiary_resistance_percent());
+		player->sendln(CAT("Your resistance: ",player->incendiary_resistance_percent()));
 		incendiary_damage(player,player,damage);
 	}
 

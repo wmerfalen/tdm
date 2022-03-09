@@ -11,10 +11,12 @@
 #define TO_ROOM		1
 #endif
 namespace mods::weapons::reload {
-	static std::map<mw_rifle,std::string> ammo_map = {
+	static std::vector<std::pair<mw_rifle,std::string>> ammo_map = {
 		{mw_rifle::ASSAULT_RIFLE,"sg3-ar-ammunition.yml"},
+		{mw_rifle::ASSAULT_RIFLE,"opsix-incendiary-ar-clip.yml"},
 		{mw_rifle::LIGHT_MACHINE_GUN,"sg3-lmg-ammunition.yml"},
 		{mw_rifle::MACHINE_PISTOL,"sg3-mp-ammunition.yml"},
+		{mw_rifle::MACHINE_PISTOL,"sg3-pistol-ammunition.yml"},
 		{mw_rifle::PISTOL,"sg3-pistol-ammunition.yml"},
 		{mw_rifle::SHOTGUN,"sg3-shotgun-ammunition.yml"},
 		{mw_rifle::SUB_MACHINE_GUN,"sg3-smg-ammunition.yml"},
@@ -54,20 +56,27 @@ namespace mods::weapons::reload {
 				log("SYSERR: warning, no rifle type given for reload. default to %d", ticks);
 				break;
 		}
-		auto yaml_file = ammo_map[(mw_rifle)weapon->rifle()->type];
-		m_debug("looking for yaml file in players inventory: '" << yaml_file << "'");
-		std::vector<uuid_t> items = mods::query_objects::query_inventory_by_yaml(player, yaml_file);
 		obj_ptr_t obj = nullptr;
-		for(const auto& item_uuid : items) {
-			obj = optr_by_uuid(item_uuid);
-			if(!obj) {
-				continue;
+		for(const auto& pair : ammo_map) {
+			if(pair.first == weapon->rifle()->type) {
+				auto yaml_file = pair.second;
+				m_debug("looking for yaml file in players inventory: '" << yaml_file << "'");
+				std::vector<uuid_t> items = mods::query_objects::query_inventory_by_yaml(player, yaml_file);
+				for(const auto& item_uuid : items) {
+					obj = optr_by_uuid(item_uuid);
+					if(!obj) {
+						continue;
+					}
+					m_debug("Found: " << obj->name.c_str());
+					break;
+				}
 			}
-			m_debug("Found: " << obj->name.c_str());
-			break;
+			if(obj) {
+				break;
+			}
 		}
 		if(!obj) {
-			player->send("You don't seem to have any ammunition for that weapon anywhere in your inventory!");
+			player->sendln("You don't seem to have any ammunition for that weapon anywhere in your inventory!");
 			return {nullptr,nullptr};
 		}
 
@@ -78,7 +87,12 @@ namespace mods::weapons::reload {
 		}
 
 		weapon->rifle_instance->ammo = clip_size;
-		player->send("You reload your %s with %d ammo.", weapon->name.c_str(), clip_size);
+		player->sendln(
+		    CAT(
+		        "You reload your ", weapon->name.c_str(),
+		        "with ",clip_size," ammo."
+		    )
+		);
 		if(player->marine() && mods::object_utils::is_assault_rifle(weapon)) {
 			clip_size -= (clip_size * MARINE_AR_PASSIVE_EXTRA_AMMO_BONUS() * 0.01);
 		}
@@ -148,7 +162,13 @@ namespace mods::weapons::reload {
 		}
 
 		if(!weapon || !weapon->has_rifle()) {
-			player->send("You aren't wielding a reloadable weapon in your [%s] slot.\r\n", primary ? "primary" : "secondary");
+			player->sendln(
+			    CAT(
+			        "You aren't wielding a reloadable weapon in your [",
+			        primary ? "primary" : "secondary",
+			        "] slot."
+			    )
+			);
 			return;
 		}
 		if(secondary) {

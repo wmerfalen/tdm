@@ -75,6 +75,8 @@ namespace mods::rooms {
 		{txt::TILE,"TILE"},
 		{txt::GLASS_CONTENTS,"GLASS_CONTENTS"},
 		{txt::FREEZING,"FREEZING"},
+		{txt::REINFORCED_WALLS,"REINFORCED_WALLS"},
+		{txt::METAL_FLOORS,"METAL_FLOORS"},
 	};
 
 	static const std::map<int,std::string> room_flag_strings = {
@@ -238,6 +240,7 @@ namespace mods::rooms {
 	};
 
 	void set_sector_type(room_rnum room_id, int sector_type);
+	void set_room_textures(room_rnum room_id, std::string textures);
 	std::optional<sector_type_t> sector_from_string(std::string m);
 	static inline bool is_peaceful(room_rnum room) {
 		return world[room].room_flags & ROOM_PEACEFUL;
@@ -520,6 +523,7 @@ namespace mods::rooms {
 	 */
 	void process_fire_damage();
 	void word_wrap_description(player_ptr_t& player,room_rnum);
+	room_data& create_room(std::map<std::string,std::string> data);
 
 };//end namespace
 #endif

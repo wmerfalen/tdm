@@ -1255,14 +1255,19 @@ void wear_message(char_data *ch, struct obj_data *obj, int where) {
 		},
 
 		{
-			"$n wields $p.",
-			"You wield $p."
+			"$n wields $p as $s primary.",
+			"You wield $p as your primary."
 		},
 
 		{
 			"$n grabs $p.",
 			"You grab $p."
-		}
+		},
+		{
+			"$n wields $p as $s secondary.",
+			"You wield $p as your secondary."
+		},
+
 	};
 
 	act(wear_messages[where][0], TRUE, ch, obj, 0, TO_ROOM);
@@ -1348,6 +1353,14 @@ bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int
 		if(GET_EQ(ch, where)) {
 			where++;
 		}
+
+	if(mods::object_utils::can_wield_in_secondary(in_obj) && where == WEAR_PRIMARY && player->primary() != nullptr && player->secondary() == nullptr) {
+		wear_message(ch,obj,WEAR_SECONDARY);
+		player->equip(obj->uuid,WEAR_SECONDARY);
+		player->uncarry(optr_by_uuid(obj->uuid));
+		return 1;
+	}
+
 
 	if(GET_EQ(ch, where)) {
 		player->sendln(already_wearing[where]);

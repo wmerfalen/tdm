@@ -13,6 +13,7 @@
 
 #define ACMD(mentoc_function_name) void mentoc_function_name(char_data *ch, char* argument, int cmd, int subcmd, player_ptr_t& player)
 #define SUPERCMD(mentoc_function_name) void mentoc_function_name(char_data *ch, char* argument, int cmd, int subcmd, player_ptr_t& player)
+#define ADMINCMD(mentoc_function_name) void mentoc_function_name(char_data *ch, char* argument, int cmd, int subcmd, player_ptr_t& player)
 
 ACMD(do_move);
 

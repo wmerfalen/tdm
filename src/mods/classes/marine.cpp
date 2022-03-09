@@ -7,7 +7,7 @@ namespace mods::classes {
 	}
 	void marine::init() {
 		using s = base::ability_data_t::skillset_t;
-		m_abilities = {
+		m_abilities = create_abilities({
 			{TRACKING_SHOT,"ts","Tracking Shot",s::SNIPING,&m_tracking_shot},
 			{LIGHT_BANDAGE,"lb","Light Bandage",s::MEDICAL,&m_light_bandage},
 			{SUTURE,"suture","Suture",s::MEDICAL,&m_suture},
@@ -24,7 +24,7 @@ namespace mods::classes {
 			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",s::DEMOLITIONS,&m_plant_corrosive_claymore},
 			{XRAY_SHOT,"xray","X-Ray Shot",s::SNIPING,&m_xray_shot},
 			{REQUEST_RECON,"recon","Request Recon",s::INTELLIGENCE,&m_request_recon},
-		};
+		});
 	}
 
 	void marine::replenish() {

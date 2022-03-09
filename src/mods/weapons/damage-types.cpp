@@ -95,6 +95,7 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	);
+#define stub_debug(V) if(player->name().compare("a kidnapper") == 0){ std::cerr << player->name() << "::" << __FUNCTION__ << ":" << __LINE__ << " AGAINST: '" << V << "'\n"; }
 
 
 
@@ -292,7 +293,7 @@ namespace mods::weapons::damage_types {
 					}
 				}
 			}
-			/* Use send_to_char -- act() doesn't send message if you are DEAD. */
+			/* Use send_to_char -- act() doesn't sendln message if you are DEAD. */
 			switch(GET_POS(victim)) {
 				case POS_MORTALLYW:
 					act("$n is mortally wounded, and will die soon, if not aided.", TRUE, victim, 0, 0, TO_ROOM);
@@ -415,6 +416,7 @@ namespace mods::weapons::damage_types {
 	    int dam,
 	    direction_t direction
 	) {
+		stub_debug(victim->name());
 		feedback_t feedback;
 		if(victim->position() > POS_DEAD) {
 			md("victim position > DEAD");
@@ -522,8 +524,10 @@ namespace mods::weapons::damage_types {
 					return TYPE_SUB_MACHINE_GUN;
 				case mw_rifle::LIGHT_MACHINE_GUN:
 					return TYPE_LIGHT_MACHINE_GUN;
+				case mw_rifle::ASSAULT_RIFLE:
+					return TYPE_ASSAULT_RIFLE;
 				default:
-					log("SYSERR: invalid rifle type");
+					log("SYSERR: invalid rifle type %s:%s:%d name('%s')",__FILE__,__FUNCTION__,__LINE__,weapon->name.c_str());
 					return TYPE_SNIPE;
 			}
 		}
@@ -584,6 +588,7 @@ namespace mods::weapons::damage_types {
 	}
 
 	feedback_t spray_direction_with_feedback(player_ptr_t& player,int direction) {
+		stub_debug("none");
 		using de = damage_event_t;
 		feedback_t feedback;
 		auto weapon = player->primary();
@@ -644,7 +649,7 @@ namespace mods::weapons::damage_types {
 				continue;
 			}
 			if(dice(1,(100 * scanned_target.distance)) <= calculate_spray_chance(player)) {
-				player->send(MSG_HIT().c_str());
+				player->sendln(MSG_HIT().c_str());
 				int spray_damage = 0;
 				spray_damage = dice(damage_dice,damage_sides);
 				//spray_damage += weapon->rifle()->attributes->base_stat_list->at(scanned_target.distance).damage;
@@ -654,13 +659,13 @@ namespace mods::weapons::damage_types {
 			}
 			/** calculate headshot */
 			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_HEADSHOT_CHANCE()) {
-				player->send(MSG_HEADSHOT().c_str());
+				player->sendln(MSG_HEADSHOT().c_str());
 				dam = victim->hp();
 				MFEEDBACK(1,dam,de::YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK);
 			}
 			if(scanned_target.distance == crit_range) {
 				if(dice(1,(100 * scanned_target.distance)) <= crit_chance) {
-					player->send(MSG_CRITICAL().c_str());
+					player->sendln(MSG_CRITICAL().c_str());
 					critical_bonus = dice(
 					                     damage_dice,
 					                     damage_sides
@@ -694,6 +699,7 @@ namespace mods::weapons::damage_types {
 	}//end spray_direction function
 
 	void rifle_attack_object_by_name(player_ptr_t& player,std::string_view target_object,int direction) {
+		stub_debug("none");
 		feedback_t feedback;
 		auto weapon = player->primary();
 
@@ -730,6 +736,7 @@ namespace mods::weapons::damage_types {
 	 * @param direction
 	 */
 	void rifle_attack_by_name(player_ptr_t& player,std::string_view victim_name,int direction) {
+		stub_debug(victim_name);
 		feedback_t feedback;
 		auto weapon = player->primary();
 
@@ -758,7 +765,7 @@ namespace mods::weapons::damage_types {
 					player->sendln("That target is out of range!");
 					return;
 				}
-				if(!mods::calc_visibility::is_visible(player,victim)) {
+				if(!mods::calc_visibility::is_visible(player,victim,scanned_target.distance)) {
 					feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
 					player->damage_event(feedback);
 					return;
@@ -890,6 +897,7 @@ namespace mods::weapons::damage_types {
 			return;
 		}
 #endif
+		stub_debug(victim->name());
 		auto feedback = rifle_attack_with_feedback(player,weapon,victim,distance,direction);
 		mods::weapons::elemental::process_elemental_damage(player,weapon,victim,feedback);
 	}
@@ -901,6 +909,7 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	) {
+		stub_debug(victim->name.c_str());
 		rifle_attack_object_with_feedback(player,weapon,victim,distance,direction);
 	}
 
@@ -911,6 +920,7 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	) {
+		stub_debug(victim->name.c_str());
 		std::tuple<int,uuid_t> sentinel;
 
 		feedback_t feedback;
@@ -940,7 +950,7 @@ namespace mods::weapons::damage_types {
 		/** TODO: honor max_range calculations */
 		/** calculate headshot */
 		if(distance == crit_range && dice(1,100) <= crit_chance) {
-			player->send(MSG_CRITICAL().c_str());
+			player->sendln(MSG_CRITICAL().c_str());
 			critical_bonus = dice(
 			                     damage_dice,
 			                     damage_sides
@@ -967,21 +977,16 @@ namespace mods::weapons::damage_types {
 		}
 
 #ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
-		player->send(
-		    "dice roll[%d]\r\n"
-		    "damage: [%d]\r\n"
-		    "critical_bonus: [%d]\r\n"
-		    "damage_dice [%d]\r\n"
-		    "damage_sides [%d]\r\n"
-		    "crit_range [%d]\r\n"
-		    "crit_chance [%d]\r\n",
-		    dice_roll,
-		    dam,
-		    critical_bonus,
-		    damage_dice,
-		    damage_sides,
-		    crit_range,
-		    crit_chance
+		player->sendln(
+		    CAT(
+		        "dice roll[",dice_roll,"]\r\n",
+		        "damage: [",damage_dice,"]\r\n",
+		        "critical_bonus: [",critical_bonus,"]\r\n",
+		        "damage_dice [",damage_dice,"]\r\n",
+		        "damage_sides [",damage_sides,"]\r\n",
+		        "crit_range [",crit_range,"]\r\n",
+		        "crit_chance [",crit_chance,"]\r\n"
+		    )
 		);
 #endif
 
@@ -1005,6 +1010,7 @@ namespace mods::weapons::damage_types {
 	    obj_ptr_t weapon,
 	    player_ptr_t victim
 	) {
+		stub_debug(victim->name());
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
 		feedback_t feedback;
@@ -1019,7 +1025,7 @@ namespace mods::weapons::damage_types {
 		feedback.damage = 0;
 		feedback.from_direction = NORTH;
 
-		if(!victim || !mods::calc_visibility::is_visible(player,victim)) {
+		if(!victim || !mods::calc_visibility::is_visible(player,victim,0)) {
 			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
 			player->damage_event(feedback);
 			md("victim not present. ignoring");
@@ -1085,6 +1091,7 @@ namespace mods::weapons::damage_types {
 	    player_ptr_t& player,
 	    player_ptr_t victim) {
 
+		stub_debug(victim->name());
 		feedback_t feedback;
 
 		auto ub = player->ghost()->underbarrel();
@@ -1105,7 +1112,7 @@ namespace mods::weapons::damage_types {
 		//	feedback.damage_event =de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK;
 		//	victim->damage_event(feedback);
 
-		//	player->send(MSG_HEADSHOT().c_str());
+		//	player->sendln(MSG_HEADSHOT().c_str());
 		//	md("headshot");
 		//}
 
@@ -1139,6 +1146,7 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	) {
+		stub_debug(victim->name());
 		using de = damage_event_t;
 		std::tuple<int,uuid_t> sentinel;
 
@@ -1191,10 +1199,10 @@ namespace mods::weapons::damage_types {
 		}
 
 		/** calculate headshot */
-		auto headshot_roll = dice(1,100) + (mods::skills::player_can(player,"HEADSHOT_CHANCE") ? mods::values::HEADSHOT_SKILL_MODIFIER() : 0);
-		if(headshot_roll >= 95) {
+		auto headshot_roll = dice(10,50) + (mods::skills::player_can(player,"HEADSHOT_CHANCE") ? mods::values::HEADSHOT_SKILL_MODIFIER() : 0);
+		if(headshot_roll > 450) {
 			/** TODO: evaluate damage if wearing super strong headgear */
-			int headshot_damage = victim->hp() / HEADSHOT_DIVISOR();
+			int headshot_damage = victim->hp();// / HEADSHOT_DIVISOR();
 			dam = headshot_damage;
 			feedback.hits = 1;
 			feedback.damage = dam;
@@ -1206,14 +1214,14 @@ namespace mods::weapons::damage_types {
 			feedback.damage_event =de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK;
 			victim->damage_event(feedback);
 
-			player->send(MSG_HEADSHOT().c_str());
+			player->sendln(MSG_HEADSHOT().c_str());
 			md("headshot");
 		}
 		md("checking crit range");
 		if(distance == crit_range) {
 			md("is crit range");
 			if(dice(1,100) <= crit_chance) {
-				player->send(MSG_CRITICAL().c_str());
+				player->sendln(MSG_CRITICAL().c_str());
 				critical_bonus = dice(
 				                     damage_dice,
 				                     damage_sides
@@ -1240,21 +1248,16 @@ namespace mods::weapons::damage_types {
 			dam += sniper_class_damage;
 		}
 #ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
-		player->send(
-		    "dice roll[%d]\r\n"
-		    "damage: [%d]\r\n"
-		    "critical_bonus: [%d]\r\n"
-		    "damage_dice [%d]\r\n"
-		    "damage_slides [%d]\r\n"
-		    "crit_range [%d]\r\n"
-		    "crit_chance [%d]\r\n",
-		    dice_roll,
-		    dam,
-		    critical_bonus,
-		    damage_dice,
-		    damage_sides,
-		    crit_range,
-		    crit_chance
+		player->sendln(
+		    CAT(
+		        "dice roll[",dice_roll,"]\r\n",
+		        "damage: [",damage_dice,"]\r\n",
+		        "critical_bonus: [",critical_bonus,"]\r\n",
+		        "damage_dice [",damage_dice,"]\r\n",
+		        "damage_sides [",damage_sides,"]\r\n",
+		        "crit_range [",crit_range,"]\r\n",
+		        "crit_chance [",crit_chance,"]\r\n"
+		    )
 		);
 #endif
 		md("dice_roll: " << dice_roll << ", dam:" << dam << "critical_bonus: " << critical_bonus <<
@@ -1295,7 +1298,7 @@ namespace mods::weapons::damage_types {
 			return;
 		}
 		player->incendiary_resistance_percent() = resistance;
-		player->send("Your resistance: %f\r\n",player->incendiary_resistance_percent());
+		player->sendln(CAT("Your resistance: ",player->incendiary_resistance_percent()));
 		mods::weapons::elemental::incendiary_damage(player,player,damage);
 	}
 

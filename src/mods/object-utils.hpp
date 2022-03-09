@@ -9,13 +9,22 @@ namespace mods::object_utils {
 	bool is_corrosive_claymore(const obj_ptr_t&);
 	bool is_shrapnel_claymore(const obj_ptr_t&);
 	bool is_assault_rifle(const obj_ptr_t&);
+	bool is_smg(const obj_ptr_t&);
 	bool is_sniper_rifle(const obj_ptr_t&);
+	bool is_shotgun(const obj_ptr_t&);
 	bool is_corpse_explosion(const obj_ptr_t&);
+	bool is_hellfire_corpse_charge(const obj_ptr_t&);
+	bool is_shrapnel_corpse_charge(const obj_ptr_t&);
 	bool is_corpse(const obj_ptr_t&);
+	bool is_consumable(const obj_ptr_t&);
+	bool is_shotgun_underbarrel(const obj_ptr_t&);
+	bool is_rifle(const obj_ptr_t&);
+	bool is_melee(const obj_ptr_t&);
 	int get_yaml_type(std::string& yaml);
 	obj_ptr_t first_or_create(room_rnum room,std::string query, int type, std::string yaml_file);
 	bool assert_sane_object(std::string_view yaml);
 	std::vector<std::string> object_types();
+	bool can_wield_in_secondary(const obj_ptr_t& item);
 
 	/** I understand that this may seem like it should be in the yaml.hpp file
 	 * instead of here in object_utils, but the only time we're catching
@@ -146,8 +155,10 @@ namespace mods::object_utils {
 
 	constexpr static bitvector_t STATUS_INSTALLING = (1 << 0);
 	constexpr static bitvector_t STATUS_BREACHING = (1 << 1);
+	constexpr static bitvector_t STATUS_UNINSTALLING = (1 << 2);
 	constexpr static obj_data::location_data_t INSTALL_MASK = 16;
 	constexpr static obj_data::location_data_t BREACH_MASK = 32;
+	constexpr static obj_data::location_data_t UNINSTALL_MASK = 64;
 	constexpr static uint8_t INSTALL_TICKS_DURATION = 30;
 	constexpr static uint8_t BREACH_TICKS_DURATION = 15;
 	constexpr static uint8_t THERMITE_BREACH_TICKS_DURATION = 35;
@@ -263,6 +274,13 @@ namespace mods::object_utils {
 		obj->set_owner(player->uuid());
 		obj->set_location_data(direction + INSTALL_MASK);
 	}
+	template <typename T,typename P>
+	void set_is_uninstalling(T& obj, P& player,int direction) {
+		obj->obj_flags.bitvector |= STATUS_UNINSTALLING;
+		obj->in_room = player->room();
+		obj->set_owner(player->uuid());
+		obj->set_location_data(direction + UNINSTALL_MASK);
+	}
 	template <typename T>
 	int8_t claymore_installed_at(T& obj) {
 		return obj->location_data() - INSTALL_MASK;
@@ -270,6 +288,10 @@ namespace mods::object_utils {
 	template <typename T>
 	void set_done_installing(T& obj) {
 		obj->obj_flags.bitvector ^= STATUS_INSTALLING;
+	}
+	template <typename T>
+	void set_done_uninstalling(T& obj) {
+		obj->obj_flags.bitvector ^= STATUS_UNINSTALLING;
 	}
 	template <typename T>
 	void set_done_breaching(T& obj) {
@@ -283,6 +305,9 @@ namespace mods::object_utils {
 	bool can_attack_same_room(T& obj) {
 		if(obj->has_melee()) {
 			return true;
+		}
+		if(obj->rifle()->attributes->type == mw_rifle::SNIPER) {
+			return false;
 		}
 		return obj->rifle()->attributes->base_stat_list->at(0).allow;
 	}

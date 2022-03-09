@@ -331,8 +331,9 @@ namespace mods::builder::seqbuild {
 					return {0,"Invalid or missing profile vnum"};
 				}
 				step_list.emplace_back(std::make_shared<mods::orm::scripted_step>());
-				step_list.back()->initialize_row(profile->vnum());
-				return {1,CAT("Created step (pkid:",step_list.back()->id,") for sequence vnum: ",profile->vnum(),". Step count is now: ",step_list.size())};
+				auto& step = step_list.back();
+				step->initialize_row(profile->vnum(),"placeholder");
+				return {1,CAT("Created step (pkid:",step->id,") for sequence vnum: ",profile->vnum(),". Step count is now: ",step_list.size())};
 			});
 			/**
 			 * ==========================================

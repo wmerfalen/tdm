@@ -14,6 +14,7 @@ function usage(){
 	echo "  --read                                                             "
 	echo "  --help                                                             "
 	echo "  --db=postgres_db_name                                              "
+	echo "  --import-help-pages                                                "
 	echo "  --run-migration-up=migration-name-without.sql                      "
 	echo "  --run-up-migration=migration-name-without.sql                      "
 	echo "  --run-migration-down=migration-name-without.sql                    "
@@ -42,8 +43,17 @@ HELL=0
 UNIT_TESTS=0
 MENTOC_READ_LINE_FIRST=0
 MENTOC_NO_GDB=0
+export LD_LIBRARY_PATH=/usr/local/lib
 for arg in "$@"
 do
+	if [[ $arg == "--import-help-pages" ]]; then
+		IMPORT_HELP="--import-help-pages"
+		continue
+	fi
+	if [[ $arg == "--import-help-pages-delete-first" ]]; then
+		IMPORT_HELP_DELETE="--import-help-pages-delete-first"
+		continue
+	fi
 	if [[ $arg == "--no-gdb" ]]; then
 		GDB=./bin/circle
 		continue
@@ -206,7 +216,7 @@ function start_gdb_process(){
 				--postgres-port=$MENTOC_POSTGRES_PORT \
 				--postgres-pw-file=$MENTOC_POSTGRES_PW_FILE \
 				--run-profile-scripts=1 \
-				$UNIT $@
+				$IMPORT_HELP $IMPORT_HELP_DELETE $UNIT $@
 		else
 			$GDB --eval-command=run --args ./bin/circle \
 				--auto-login=far --auto-password=foo \
@@ -216,7 +226,7 @@ function start_gdb_process(){
 				--postgres-port=$MENTOC_POSTGRES_PORT \
 				--postgres-pw-file=$MENTOC_POSTGRES_PW_FILE \
 				--run-profile-scripts=1 \
-				$UNIT $@
+				$IMPORT_HELP $IMPORT_HELP_DELETE $UNIT $@
 		fi
 	else
 		if [[ ! -z "$MENTOC_NO_AUTO_RUN" ]]; then
@@ -227,7 +237,7 @@ function start_gdb_process(){
 				--postgres-port=$MENTOC_POSTGRES_PORT \
 				--postgres-pw-file=$MENTOC_POSTGRES_PW_FILE \
 				--run-profile-scripts=1 \
-				$UNIT $@
+				$IMPORT_HELP $IMPORT_HELP_DELETE $UNIT $@
 		else
 			$GDB --eval-command=run --args ./bin/circle \
 				--lmdb-dir=$MENTOC_DATA_DIR --lmdb-name=$MENTOC_LMDB_DBNAME \
@@ -236,7 +246,7 @@ function start_gdb_process(){
 				--postgres-port=$MENTOC_POSTGRES_PORT \
 				--postgres-pw-file=$MENTOC_POSTGRES_PW_FILE \
 				--run-profile-scripts=1 \
-				$UNIT $@ 
+				$IMPORT_HELP $IMPORT_HELP_DELETE $UNIT $@
 		fi
 	fi
 }

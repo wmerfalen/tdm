@@ -1,7 +1,7 @@
 #!/bin/bash
 DIR=$(pwd)
 sudo apt-get update
-sudo apt-get -y install cmake libssl-dev libpqxx-dev
+sudo apt-get -y install cmake libssl-dev libpqxx-dev libtool libfcgi-dev spawn-fcgi nginx curl
 mkdir build
 rm -rf yaml-cpp
 git clone 'https://github.com/jbeder/yaml-cpp'
@@ -26,6 +26,21 @@ cmake ..
 make
 cd $DIR
 echo "# done fetching Catch2"
+
+echo "# status: installing zeromq..."
+git clone 'https://github.com/zeromq/libzmq'
+cd libzmq
+./autogen.sh
+mkdir build
+cd build
+export CXX=$(which g++-8)
+cmake ..
+make
+sudo make install
+echo "# done installing zeromq..."
+
+echo "# status: cloning zeromq header-only client library..."
+git clone 'https://github.com/zeromq/cppzmq'
 
 echo "#############################################################"
 echo " VERY IMPORTANT!!!"

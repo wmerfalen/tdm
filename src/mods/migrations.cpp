@@ -4,9 +4,6 @@
 namespace mods::migrations {
 #define m_debug(a) std::cerr << "migrations-debug: " << a << "\n";
 
-	void REPORT_DB_ISSUE(std::string issue,std::string exception_message){
-		log("SYSERR: MIGRATIONS ISSUE '%s' '%s'", issue.c_str(), exception_message.c_str());
-	}
 	std::tuple<int,std::string> strip_identifier(std::string identifier){
 		std::string stripped;
 		for(auto ch : identifier){

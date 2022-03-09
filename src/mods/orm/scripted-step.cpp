@@ -10,9 +10,11 @@ namespace mods::orm {
 		}
 		return status;
 	}
-	uint64_t scripted_step::initialize_row(const sequence_vnum_t& i_vnum) {
+	uint64_t scripted_step::initialize_row(const sequence_vnum_t& i_vnum,std::string_view type) {
 		init();
 		s_sequence_vnum = i_vnum;
+		s_type = type.data();
+		s_order = 0;
 		auto status = this->create<scripted_step>(this);
 		if(ORM_SUCCESS(status)) {
 			loaded = 1;

@@ -38,6 +38,7 @@ Listed below are the commands and an extended walkthrough on how to build a cont
 			- `GOAL_PROTECT`
 			- `GOAL_TALK_TO`
 			- `GOAL_INSTALL`
+			- `GOAL_CUSTOM_EVENT`
 		`s_task_target`: can be one of:
 			- `TARGET_MOB`
 			- `TARGET_ITEM`
@@ -76,6 +77,15 @@ Listed below are the commands and an extended walkthrough on how to build a cont
 # Deleting steps
 		- `conbuild delete-step <vnum> <step-id>...[step-id-N]`
 		- Same syntax as save except this just deletes those steps
+
+# Using the `custom_event` task type
+		- by using `GOAL_CUSTOM_EVENT` as a task type, you essentially allow for custom
+		handling of any arbitrary event. This has to be handled in player-contract-instance.cpp
+		for it to have any meaning. The default mode is for it to be a quota task. If the custom
+		event is called enough times to fulfill the quota, the contract moves forward. 
+		- Currently, the only custom event that is delegated to another .cpp file
+		is the `CEV_HUMAN_REMAINS_FOUND` event for the Defiler contract.
+			- see `mods/contract-defiler.hpp` and the accompanied `.cpp` file
 
 # An extended example
 	```

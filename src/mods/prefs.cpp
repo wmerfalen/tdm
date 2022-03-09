@@ -4,6 +4,7 @@
 #include "../interpreter.hpp"
 
 namespace mods::prefs {
+	static constexpr uint8_t MAX_SCREEN_WIDTH = 200;
 	static std::map<std::string,int> pref_map{
 		{"automap",PRF_OVERHEAD_MAP},
 		{"autoexit",PRF_AUTOEXIT},
@@ -89,6 +90,9 @@ namespace mods::prefs {
 			*player << "{gld}" << line << "{/gld}\r\n";
 			auto width = PLAYER_GET("screen_width");
 			int w = mods::util::stoi(width).value_or(80);
+			if(w < 0) {
+				w = 80;
+			}
 			for(const auto& pair : mods::prefs::pref_map) {
 				std::string v = PLAYER_GET(pair.first);
 				player->sendln(CAT("      ",pair.first.c_str(),": ",v.c_str()));
@@ -108,13 +112,18 @@ namespace mods::prefs {
 			PLAYER_SET("screen_width",&value[0]);
 			auto v_int = mods::util::stoi(&value[0]);
 
-			if(v_int.value_or(-1) == -1) {
+			if(v_int.value_or(-1) <= 0) {
 				*player << "{red}Invalid width{/red}\r\n";
 				return;
 			}
-
-			PLAYER_SET("screen_width",&value[0]);
-			*player << "{gld}Screen width set to: " << &value[0] << "\r\n";
+			if(v_int.value() > MAX_SCREEN_WIDTH) {
+				player->sendln(CAT("{yel}Please note, we capped your screen width to ",MAX_SCREEN_WIDTH,"{/yel}"));
+				PLAYER_SET("screen_width",std::to_string(MAX_SCREEN_WIDTH));
+				player->sendln(CAT("{gld}Screen width set to: ",MAX_SCREEN_WIDTH));
+			} else {
+				PLAYER_SET("screen_width",&value[0]);
+				player->sendln(CAT("{gld}Screen width set to: ",value[0]));
+			}
 			return;
 		}
 		for(const auto& pair : mods::prefs::pref_map) {

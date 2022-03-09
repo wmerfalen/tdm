@@ -15,6 +15,7 @@ static inline std::string operator "" _s(const char* s,uint64_t i) {
 }
 #endif
 #include "weapon-types.hpp"
+#include "colors.hpp"
 
 extern std::deque<room_data> world;
 extern int get_number(char **name);
@@ -23,6 +24,10 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+	template <typename TStr>
+	static inline TStr strip_color(TStr s) {
+		return mods::colors::strip_color(s);
+	}
 	class stopwatch_t {
 		public:
 			stopwatch_t() : beg_(clock_::now()) {}
@@ -338,9 +343,12 @@ namespace mods::util {
 	std::optional<std::pair<direction_t,uint8_t>> parse_direction_count_optional(std::vector<std::string>& vec_args);
 	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args);
 	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index);
+	obj_ptr_t parse_owned_room_object(player_ptr_t& player,std::string_view arg);
 	int parse_direction(std::string_view arg, int start_at, int* last_index);
 	int parse_direction(std::string_view arg);
+	std::optional<direction_t> parse_direction_optional(std::string_view arg);
 	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg);
+	objdir_t parse_owned_room_objdir(player_ptr_t& player,std::string_view arg);
 	static constexpr uint8_t CAP_SINGLE = 0;
 	static constexpr uint8_t CAP_ANY = 0;
 	static constexpr uint8_t CAP_ALL = 0;
@@ -416,6 +424,7 @@ namespace mods::util::args {
 		std::vector<uuid_t> gather_uuids_starting_at(std::size_t index);
 		std::string gather_strings_starting_at(std::size_t index);
 		std::vector<std::string> gather_tokens_starting_at(std::size_t index);
+		std::vector<std::string> gather_max_tokens_starting_at(std::size_t index,std::size_t max_elements);
 
 		std::string at(std::size_t index);
 		int int_at(std::size_t index);

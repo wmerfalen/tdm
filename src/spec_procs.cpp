@@ -140,8 +140,6 @@ void list_skills(char_data *ch) {
 	size_t len = 0;
 	char buf2[MAX_STRING_LENGTH];
 
-	/** TODO: Devise practice system !medium */
-	/** TODO: Once practice system in place, list them here */
 	len = snprintf(buf2, sizeof(buf2), "You have %d practice session remaining.\r\n"
 	               "You know of the following %ss:\r\n", 0,
 	               SPLSKL(ch));
@@ -197,7 +195,6 @@ SPECIAL(guild) {
 
 	send_to_char(ch, "You practice for a while...");
 
-	/** TODO: decrement practice session here */
 	percent = GET_SKILL(ch, skill_num);
 	percent += MIN(MAXGAIN(ch), MAX(MINGAIN(ch), int_app[GET_INT(ch)].learn));
 

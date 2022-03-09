@@ -44,13 +44,13 @@ namespace mods::behaviour_tree_impl {
 		return dispatch_ptr(*it);
 	}
 	int8_t dispatch_ptr(argument_type& ch) {
-		switch(ch.mob_specials().extended_mob_type) {
-			case mob_special_data::extended_mob_type_t::GENERIC_THIEF:
-			case mob_special_data::extended_mob_type_t::CHAOTIC_METH_ADDICT:
-				return dispatch_status_t::AS_YOU_WERE;
-			default:
-				break;
-		}
+		//switch(ch.mob_specials().extended_mob_type) {
+		//	case mob_special_data::extended_mob_type_t::GENERIC_THIEF:
+		//	case mob_special_data::extended_mob_type_t::CHAOTIC_METH_ADDICT:
+		//		return dispatch_status_t::AS_YOU_WERE;
+		//	default:
+		//		break;
+		//}
 		bti_debug("dispatching behaviour tree on: " << ch.name().c_str());
 		if(ch.mob_specials().behaviour_tree == 0) {
 			bti_debug("As you were... ");

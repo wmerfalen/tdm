@@ -29,11 +29,14 @@
 #include "mods/weapon.hpp"
 #include "mods/help.hpp"
 #include "mods/weapons/damage-types.hpp"
+#include "mods/damage-event.hpp"
 #include "mods/interpreter.hpp"
 #include "mods/levels.hpp"
 #include "mods/calc-visibility.hpp"
 #include "mods/projectile.hpp"
+#include "mods/combat-composer/includes.hpp"
 
+using de = damage_event_t;
 /* extern variables */
 extern int pk_allowed;
 extern void three_arguments(char*,char*,char*,char*);
@@ -145,7 +148,12 @@ ACMD(do_snipe) {
 		player->sendln("Invalid direction");
 		return;
 	}
-	mods::weapons::damage_types::rifle_attack_by_name(player,vec_args[0],direction);
+	auto weapon = player->primary();
+	if(!weapon || !weapon->has_rifle()) {
+		player->damage_event(de::NO_PRIMARY_WIELDED_EVENT);
+		return;
+	}
+	mods::combat_composer::snipe_target(player,vec_args[0], direction,0,weapon);
 }
 
 ACMD(do_spray) {
@@ -160,7 +168,8 @@ ACMD(do_spray) {
 		player->sendln("Invalid direction");
 		return;
 	}
-	mods::weapons::damage_types::spray_direction(player,direction);
+	auto weapon = player->primary();
+	mods::combat_composer::spray_target(player,direction,weapon);
 }
 
 ACMD(do_silencers_on) {
@@ -210,7 +219,7 @@ ACMD(do_scan) { /* !mods */
 		if(!found_player) {
 			continue;
 		}
-		if(!mods::calc_visibility::is_visible(player,found_player)) {
+		if(!mods::calc_visibility::is_visible(player,found_player,e.distance)) {
 			continue;
 		}
 		std::string line;
@@ -293,7 +302,7 @@ ACMD(do_assist) {
 	if(!*arg) {
 		player->psendln("Whom do you wish to assist?");
 	} else if(!(helpee = get_char_vis(player, arg, NULL, FIND_CHAR_ROOM))) {
-		player->send(NOPERSON);
+		player->sendln(NOPERSON);
 	} else if(helpee->is(ch)) {
 		player->psendln("You can't help yourself any more than this!");
 	} else {
@@ -338,8 +347,12 @@ ACMD(do_hit) {
 
 	one_argument(argument, arg);
 
+	auto weapon = player->primary();
 	if(!*arg) {
 		send_to_char(ch, "Hit who?");
+	} else if(weapon != nullptr && mods::combat_composer::engage_target(player,std::string(arg),weapon)) {
+		/** Handled. We can return; */
+		return;
 	} else if(!(vict = get_char_vis(ch, arg, NULL, FIND_CHAR_ROOM))) {
 		send_to_char(ch, "They don't seem to be here.");
 	} else if(vict == ch) {

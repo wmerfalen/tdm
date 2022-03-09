@@ -4,60 +4,43 @@
 #include "../rooms.hpp"
 #include "helpers.hpp"
 #include "extended-types.hpp"
+#include "roam-pattern.hpp"
 #include "../scan.hpp"
+#include "../mob-roam.hpp"
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
+#include "../contract-steps.hpp"
+#include "../interpreter.hpp"
+#include "../weapons/reload.hpp"
+#include "../combat-composer/includes.hpp"
+#include "../sneak.hpp"
+#include "../ensnare.hpp"
 
+#ifdef m_debug
+#undef m_debug
+#endif
+
+//#define  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) mentoc_prefix_debug("m|m|cma") << a << "\n";
+#define m_debug(a) mentoc_prefix_debug("defiler") << a << "\n";
 #define cmem(a) mentoc_prefix_debug("[defiler][memory_footprint]") << a << "\n";
 #else
 #define m_debug(a)
 #define cmem(a)
 #endif
+
+#ifdef __MENTOC_MODS_MOBS_DEFILER_VERBOSE__
+#define m_verbose(a) mentoc_prefix_debug("defiler") << a << "\n";
+#else
+#define m_verbose(a)
+#endif
+
 namespace mods::mobs {
-	namespace defiler_btree {
-		/**
-		 * @brief find the room with the most enemies, and go towards that direction
-		 *
-		 * @param mob
-		 * @param victim
-		 *
-		 * @return
-		 */
-		uint8_t weighted_direction_decider(player_ptr_t& mob,player_ptr_t victim) {
-			int depth = CAR_THIEF_SCAN_DEPTH();
-			mods::scan::vec_player_data vpd;
-			mods::scan::los_scan_for_players(mob->cd(),depth,&vpd);
-			std::map<uint8_t,int> scores;
-			for(auto v : vpd) {
-				if(!ptr_by_uuid(v.uuid)) {
-					continue;
-				}
-				if(mods::rooms::is_peaceful(v.room_rnum)) {
-					continue;
-				}
-				if(victim && victim->uuid() == v.uuid) {
-					scores[v.direction] += 2;
-				}
-				++scores[v.direction];
-			}
-			int should_fire = -1;
-			int max = 0;
-			for(auto pair : scores) {
-				if(pair.second > max) {
-					max = pair.second;
-					should_fire = pair.first;
-				}
-			}
-			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
-			if(should_fire == -1) {
-				/** FIXME */
-				m_debug("[stub] should_fire is -1, choose random direction");
-			}
-			return should_fire;
-		}
-	};// end namespace defiler_btree
+
+	/**
+	 * - TODO: as soon as we spawn the defiler, we need to place him in the
+	 *   room where he will meet the quest taker
+	 */
 	void defiler::create(const uuid_t& mob_uuid, std::string_view targets) {
 		m_debug("defiler create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
@@ -66,34 +49,35 @@ namespace mods::mobs {
 			return;
 		}
 		auto g = std::make_shared<defiler>(mob_uuid,targets.data());
-		g->btree_roam();
 		mods::mobs::defiler_list().push_front(g);
-	}
-	void defiler::perform_random_act() {
-		act_to_room(m_random_acts[rand_number(0,m_random_acts.size()-1)]);
-	}
-
-	/**
-	 * @brief callback when someone spotted
-	 *
-	 * @param room
-	 * @param player
-	 */
-	void defiler::enemy_spotted(room_rnum room,uuid_t player) {
-		m_debug("##################################################################################" <<
-		        "[defiler] enemy spotted:" << room << "\n" <<
-		        "##################################################################################");
-		//this->spray(player_ptr->get_watching());
-		this->last_seen[player] = CURRENT_TICK();
-	}
-	void defiler::set_variation(const std::string& v) {
-		for(const auto& type : EXPLODE(v,' ')) {
-			std::cerr << green_str("defiler::variation:") << type << "\n";
+		for(const auto& pat : {
+		            "Butcher"
+		        }) {
+			mods::mobs::roam_pattern::register_roam_pattern(defiler::MOB_VNUM,pat);
 		}
 	}
+
+
+	bool defiler::debug_mode_on() {
+		return m_debug_mode;
+	}
+
+	void defiler::mention(std::string_view msg) {
+		if(this->debug_mode_on()) {
+			std::cerr << green_str("DEFILER REPORT:") << "============================================\n";
+			std::cerr << green_str("DEFILER REPORT:") << msg << "\n";
+			std::cerr << green_str("DEFILER REPORT:") << "============================================\n";
+		}
+	}
+	/**
+	 * TODO: include stats (hp,mana,etc) and who the Defiler is currently
+	 * hunting
+	 */
 	str_map_t defiler::report() {
 		return usages();
 	}
+
+
 	str_map_t defiler::usages() {
 		str_map_t m;
 		m = base_usages();
@@ -115,27 +99,13 @@ namespace mods::mobs {
 		}
 		return m;
 	}
-	void defiler::set_behavior_tree_directly(const defiler::btree_t& t) {
-		m_debug("setting tree id directly to: " << t);
-		cd()->mob_specials.behaviour_tree = (uint16_t)t;
-	}
-	bool defiler::has_tree() {
-		return cd()->mob_specials.behaviour_tree != defiler::btree_t::SHOPL_NONE;
-	}
-	defiler::btree_t defiler::get_tree() {
-		return (btree_t)cd()->mob_specials.behaviour_tree;
-	}
-	void defiler::btree_none() {
-		set_behaviour_tree_directly(defiler::btree_t::SHOPL_NONE);
-	}
-	void defiler::btree_roam() {
-		set_behavior_tree_directly(defiler::btree_t::SHOPL_ROAM);
 
-	}
-	void defiler::btree_hostile() {
-		set_behavior_tree_directly(defiler::btree_t::SHOPL_HOSTILE);
 
-	}
+	/** =================================================================*/
+	/** =================================================================*/
+	/** === DAMAGE CALLBACKS */
+	/** =================================================================*/
+	/** =================================================================*/
 	/**
 	 * @brief damage_events registered here
 	 */
@@ -147,12 +117,8 @@ namespace mods::mobs {
 			de::YOURE_IN_PEACEFUL_ROOM,
 		};
 		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
 			m_debug("pacify events");
-			btree_roam();
+			roam(5);
 		});
 
 		static const std::vector<de> enrage_if = {
@@ -181,7 +147,7 @@ namespace mods::mobs {
 				}
 			}
 			if(player_ptr->room() == attacker->room()) {
-				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,attacker);
+				//melee_attack(attacker);
 			}
 		});
 
@@ -192,23 +158,11 @@ namespace mods::mobs {
 
 		static const std::vector<de> taunt_if = {
 			de::YOU_INFLICTED_INCENDIARY_DAMAGE,
-			de::YOU_INFLICTED_RADIOACTIVE_DAMAGE,
-			de::YOU_INFLICTED_ANTI_MATTER_DAMAGE,
-			de::YOU_INFLICTED_CORROSIVE_DAMAGE,
-			de::YOU_INFLICTED_EMP_DAMAGE,
-			de::YOU_INFLICTED_EXPLOSIVE_DAMAGE,
-			de::YOU_INFLICTED_SHRAPNEL_DAMAGE,
-			de::YOU_INFLICTED_CRYOGENIC_DAMAGE,
-			de::YOU_INFLICTED_SHOCK_DAMAGE,
 			de::YOU_DEALT_HEADSHOT_WITH_RIFLE_ATTACK,
-			de::YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK,
 			de::YOU_DEALT_CRITICAL_RIFLE_ATTACK,
 			de::YOU_INFLICTED_MELEE_ATTACK,
 			de::YOU_INFLICTED_BLADED_MELEE_ATTACK,
-			de::YOU_INFLICTED_BLUNT_MELEE_ATTACK,
-			de::YOU_REFLECTED_MUNITIONS_EVENT,
 			de::YOU_INJURED_SOMEONE_EVENT,
-			de::YOU_INFLICTED_AR_SHRAPNEL,
 			de::YOU_INFLICTED_INCENDIARY_AMMO,
 			de::YOU_DISORIENTED_SOMEONE_EVENT,
 		};
@@ -240,13 +194,15 @@ namespace mods::mobs {
 			de::COULDNT_FIND_TARGET_EVENT,
 		};
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
 			switch(feedback.damage_event) {
-				case de::OUT_OF_AMMO_EVENT:
+				case de::OUT_OF_AMMO_EVENT: //{
+					//		/** TODO: I *REALLY* need this to work! */
+					//		auto ammo = create_object(ITEM_CONSUMABLE,"opsix-incendiary-ar-clip.yml");
+					//		player_ptr->carry(ammo);
+					//	}
+					//	mods::weapons::reload::reload_weapon(player_ptr,player_ptr->primary());
 					m_debug("DAMN! OUT OF AMMO!");
+					refill_ammo();
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
 					m_debug("No primary wieldded... wtf?");
@@ -257,6 +213,8 @@ namespace mods::mobs {
 					break;
 				case de::COULDNT_FIND_TARGET_EVENT:
 					m_debug("Can't find target");
+					m_debug("Resetting target");
+					//this->reset_last_attacker();
 					break;
 				default:
 					m_debug("Weird status. unknown");
@@ -264,42 +222,40 @@ namespace mods::mobs {
 			}
 		});
 
-		player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
-			if(player_ptr->room() >= world.size()) {
-				return;
-			}
-			auto& room = world[player_ptr->room()];
-			int decision = defiler_btree::weighted_direction_decider(player_ptr,nullptr);
-			if(decision == -1) {
-				for(auto dir : room.directions()) {
-					if(room.dir_option[dir] && mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false) {
-						decision = dir;
-						break;
-					}
-				}
-			}
-			this->cd()->mob_specials.previous_room = player_ptr->room();
-			move_to(decision);
-			this->set_heading(decision);
-		});
 	}
+
+	/**
+	 * TODO: if this is used, it needs to return true
+	 */
 	bool defiler::is_rival(player_ptr_t& player) {
-		return false;
+		return true;
 	}
-	void defiler::door_entry_event(player_ptr_t& player) {
-		if(player->is_npc()) {
-			if(is_rival(player)) {
-				btree_roam();
-				//TODO: attack_with_melee(player);
-				//player->sendln(CAT("I am:",uuid," and I'm Watching you"));
-			}
-		}
-	}
+
+	///**
+	// * - TODO: React according to which mode the Defiler is in
+	// * 		- [ ] Ensnaring mode causes snare to be immediately set on player
+	// * 			- [ ] Defiler moves away and throws daggers
+	// * 		- [ ] Corpse explosion mode causes corpse to explode
+	// * 		- [ ] Dagger mode causes Defiler to throw daggers at player's legs
+	// * 			- [ ] Player cannot move until daggers taken out
+	// * 		- [ ] Chainsaw mode causes Defiler to attack player with Chainsaw
+	// */
+	//void defiler::door_entry_event(player_ptr_t& player) {
+	//	if(player->is_npc()) {
+	//		if(is_rival(player)) {
+	//			btree_roam();
+	//			//TODO: attack_with_melee(player);
+	//			//player->sendln(CAT("I am:",uuid," and I'm Watching you"));
+	//		}
+	//	}
+	//}
+
+	/**
+	 * - TODO: add quest taker permanently to memory
+	 */
 	void defiler::init() {
+		this->RCT = nullptr;
+		m_watching_everywhere = false;
 		smart_mob::init();
 		m_should_do_max[SHOULD_DO_ROAM] = LOWLY_SECURITY_ROAM_TICK();
 		m_should_do_max[SHOULD_DO_RANDOM_TRIVIAL] = LOWLY_SECURITY_RANDOM_TRIVIAL_TICK();
@@ -313,7 +269,10 @@ namespace mods::mobs {
 		for(const auto& msg : EXPLODE(CHAOTIC_METH_ADDICT_PSV_RANDOM_ACT(),'|')) {
 			m_random_acts.emplace_back(msg);
 		}
+		m_cant_find = 0;
 		cmem("m_random_acts:" << m_random_acts.size());
+		m_status = defiler::status_t::LOOKING_FOR_A_FIGHT;
+		m_debug_mode = DEFILER_DEBUG_MODE_ON();
 	};
 
 	/**
@@ -334,69 +293,281 @@ namespace mods::mobs {
 		}
 		player_ptr = p;
 		auto ch = p->cd();
-		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::MELEE_COMBATANT;
+		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::DEFILER;
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
-		this->set_variation(variation.data());
+		//this->set_variation(variation.data());
 		bootstrap_equipment();
 		m_weapon = player()->primary();
+		std::fill(m_weapons.begin(),m_weapons.end(),nullptr);
+		std::size_t i= 0;
+		if(player_ptr->primary()) {
+			m_weapons[i++] = player_ptr->primary();
+		}
+		if(player_ptr->secondary()) {
+			m_weapons[i++] = player_ptr->secondary();
+		}
 	}
+
+
+	defiler::weapons_list_t& defiler::weapons() {
+		return m_weapons;
+	}
+
+
+
+	direction_t random_room_direction(auto room_id) {
+		if(world.size() < room_id) {
+			return NORTH;
+		}
+		auto& room = world[room_id];
+		return room.directions()[rand_number(0,room.directions().size()-1)];
+	}
+
+
+	/**====================================================*/
+	/** START: SIMPLIFIED ATTACK LOOP */
+	/**====================================================*/
+	void defiler::start_turn() {
+		/** This function is called every time our turn occurs
+		 * during the event loop
+		 */
+		m_hostile_phase_1_attempts = 0;
+	}
+	bool defiler::find_same_room_targets() {
+		m_same_room_targets.clear();
+		for(auto& player : room_list(room())) {
+			if(player->is_npc()) {
+				mention("player is an npc. skipping");
+				continue;
+			}
+			m_same_room_targets.emplace_back(player);
+		}
+		return m_same_room_targets.size();
+	}
+	void defiler::hostile_phase_1() {
+#ifdef DEFILER_SIMPLIFIED_BTREE_DEBUG
+		m_debug(green_str("-----------------------------"));
+		m_debug(green_str("defiler simplified btree"));
+		m_debug(green_str("-----------------------------"));
+#endif
+
+		/**
+		 * TODO: if MELEE fighting someone...
+		 */
+
+		/**
+		 * TODO: if already in ranged combat...
+		 */
+
+		/**
+		 * if i need a target...
+		 */
+		auto target = acquire_target();
+		if(target.has_value()) {
+			rifle_attack(target.value());
+			mention("I found an existing target");
+			return;
+		}
+		mention("Looking for same room targets");
+		if(find_same_room_targets()) {
+			mention("Found same room target");
+			auto target = mods::rand::shuffle_container(m_same_room_targets)[0];
+			auto weapon = primary();
+			m_engaged_target = nullptr;
+			if(mods::combat_composer::engage_target(player_ptr,target,weapon)) {
+				mention("Engaged target");
+				m_engaged_target = target;
+			} else {
+				mention("Could not engage target");
+			}
+			return;
+		}
+		m_targets.clear();
+		mention("Looking for someone to attack");
+		if(find_someone_to_attack()) {
+			auto found = mods::rand::shuffle_container(m_targets)[0];
+			auto victim = ptr_by_uuid(found.uuid);
+			if(!victim) {
+				return;
+			}
+			rifle_attack(found);
+			/** it is imperative that this be called AFTER get ranged combat totals */
+			if(!m_watching_everywhere) {
+				mods::mobs::helpers::watch_multiple(world[room()].directions(),cd(),RCT->max_range);
+				m_watching_everywhere = true;
+			}
+			return;
+		}
+		mention("I didn't find anyone to attack...");
+		roam(5);
+	}
+	void defiler::rifle_attack(const target_t& target) {
+		auto victim = ptr_by_uuid(target.uuid);
+		if(!victim) {
+			return ;
+		}
+		auto weapon = primary();
+		mods::combat_composer::snipe_target(player_ptr,victim,target.direction,(uint8_t)target.distance,weapon);
+		save_attack_direction(target.direction);
+		return ;
+	}
+	void defiler::roam(uint8_t times) {
+		if(times == 0) {
+			return;
+		}
+		auto chase = determine_chase_direction();
+		if(!world[room()].dir_option[chase]) {
+			chase = mods::rand::shuffle_container(world[room()].directions())[0];
+			set_heading(chase);
+			move_to(chase);
+			return;
+		}
+		if(world[room()].dir_option[chase] && mods::mobs::roam_pattern::can_roam_to(defiler::MOB_VNUM, world[room()].dir_option[chase]->to_room)) {
+			auto s = move_to(chase);
+			if(!std::get<0>(s)) {
+				chase = mods::rand::shuffle_container(world[room()].directions())[0];
+			} else {
+				return;
+			}
+		} else {
+			chase = mods::rand::shuffle_container(world[room()].directions())[0];
+		}
+	}
+	void defiler::rct_upkeep() {
+		if(!this->RCT) {
+			this->RCT = player_ptr->get_ranged_combat_totals();
+		}
+	}
+	std::optional<target_t> defiler::acquire_target() {
+		std::vector<target_t> found;
+		rct_upkeep();
+		int depth = RCT->max_range;
+		mods::scan::vec_player_data vpd;
+		mods::scan::los_scan_for_players(this->cd(),depth,&vpd);
+		std::map<uint8_t,int> scores;
+		for(auto&& v : vpd) {
+			auto victim = ptr_by_uuid(v.uuid);
+			if(!victim) {
+				continue;
+			}
+			if(mods::rooms::is_peaceful(v.room_rnum)) {
+				continue;
+			}
+			if(IS_NPC(victim->cd())) {
+				continue;
+			}
+			found.emplace_back(target_t{v.uuid,v.direction,v.distance});
+		}
+		if(found.size() == 0) {
+			return std::nullopt;
+		}
+		if(found.size() == 1) {
+			return found[0];
+		}
+		return mods::rand::shuffle_container(found)[0];
+	}
+	bool defiler::find_someone_to_attack() {
+		int depth = RCT->max_range;
+		mods::scan::vec_player_data vpd;
+		mods::scan::los_scan_for_players(this->cd(),depth,&vpd);
+		std::map<uint8_t,int> scores;
+		for(auto&& v : vpd) {
+			auto victim = ptr_by_uuid(v.uuid);
+			if(!victim) {
+				continue;
+			}
+			if(mods::rooms::is_peaceful(v.room_rnum)) {
+				continue;
+			}
+			if(IS_NPC(victim->cd())) {
+				continue;
+			}
+			if(m_targets.cend() == std::find_if(
+			            m_targets.cbegin(),
+			            m_targets.cend(),
+			[&v](const auto& t) -> bool {
+			return t.uuid == v.uuid;
+		})
+		  ) {
+				m_targets.emplace_back(target_t{v.uuid,v.direction,v.distance});
+			}
+		}
+		return m_targets.size() > 0;
+	}
+	/**====================================================*/
+	/** END: SIMPLIFIED ATTACK LOOP */
+	/**====================================================*/
+
+
+
+	bool defiler::is(defiler::status_t status) {
+		return m_status == status;
+	}
+
+	void defiler::telegraph(player_ptr_t& victim,std::string_view saying) {
+		victim->sendln(saying);
+	}
+
+	void defiler::shout(std::string_view message) {
+
+	}
+
+	void defiler::ensnare(player_ptr_t& victim) {
+		auto barbed_wire = create_object(ITEM_GADGET,"demonic-snares.yml");
+		mods::ensnare::ensnare_damage(
+		    player_ptr,
+		    victim,
+		    barbed_wire,
+		    barbed_wire->gadget()->attributes->damage_points);
+
+	}
+
+	/**
+	 * - TODO: Agony scream and disappearance
+	 */
 	void defiler::attacked(const feedback_t& feedback) {
 		auto p = ptr_by_uuid(feedback.attacker);
 		if(p) {
 			m_last_attacker = p;
 			m_attackers.emplace_front(p);
-			cmem("{m_attackers.size}:" << std::distance(m_attackers.cbegin(),m_attackers.cend()));
+			//cmem("{m_attackers.size}:" << std::distance(m_attackers.cbegin(),m_attackers.cend()));
 		}
 	}
-	player_ptr_t defiler::get_next_attacking_priority() {
-		if(!m_attackers.empty()) {
-			return m_attackers.front();
-		}
-		return nullptr;
-	}
+
+	/**
+	 * - TODO: for each mode, determines if the following will happen
+	 *   - [ ] Ensnaring, throw dagger
+	 *   - [ ] Dagger, snipe
+	 *   - [ ] Corpse Explosion, snipe/engage
+	 *   - [ ] Chainsaw,
+	 */
 	void defiler::extra_attack() {
 		m_debug("extra attack roll success");
 		auto attacker = player()->fighting();
 		if(m_weapon && attacker->room() == this->room()) {
 			m_debug("i have a weapon and i'm using it against who i'm fighting");
-			mods::weapons::damage_types::melee_damage_with_feedback(player(),m_weapon,attacker);
-		}
-	}
-	void defiler::melee_attack_within_range() {
-		m_debug("melee_attack_within_range");
-		if(m_last_attacker) {
-			if(m_last_attacker->position() == POS_DEAD) {
-				m_debug("Our target is dead!");
-				m_attackers.remove(m_last_attacker);
-				m_last_attacker = get_next_attacking_priority();
-			}
-		}
-		for(const auto& attacker : m_attackers) {
-			auto results = mods::scan::los_find(player_ptr,attacker);
-			if(results.found == false) {
-				if(m_attackers_last_direction.has_value()) {
-					move_to(m_attackers_last_direction.value());
-				}
-				continue;
-			}
-			m_debug("distance:" << results.distance << ", direction: " << results.direction);
-			m_attackers_last_direction = results.direction;
-
-			if(attacker->room() == player_ptr->room()) {
-				auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,attacker);
-				if(feedback.hits == 0 || feedback.damage == 0) {
-					continue;
-				}
-			}
 		}
 	}
 
-	void defiler::attack(player_ptr_t& player) {
-		m_last_attacker = player;
-		melee_attack_within_range();
+	std::pair<bool,std::string> defiler::move_to(const direction_t& dir) {
+		auto old_vis = player_ptr->visibility();
+		auto room_id = player_ptr->room();
+		auto opt = world[room_id].dir_option[dir];
+		if(opt && opt->to_room <= world.size()) {
+			mods::mobs::room_watching::unwatch_room(player_ptr);
+			player_ptr->visibility() = 0;
+			mods::sneak::apply_absolute_sneak(player_ptr,100);
+			perform_move(player_ptr->cd(),dir,0);
+			player_ptr->visibility() = old_vis;
+			mods::sneak::clear_sneak(player_ptr);
+			return {true,"moved"};
+		}
+		return {false,"stayed"};
+
 	}
+
 	void defiler::move_closer_to_target() {
 		uint8_t loops = 1;
 		if(mods::rand::chance(CAR_THIEF_EXTRA_LOOP_CHANCE())) {
@@ -409,86 +580,94 @@ namespace mods::mobs {
 			}
 		}
 	}
-	int8_t defiler::determine_heading_from_found_victims() {
-		std::map<direction_t,std::size_t> weights;
-		for(const auto& spot : m_scanned_items) {
-			++weights[spot.direction];
-		}
-		int direction = -1, count = 0;
-		for(const auto& pair : weights) {
-			if(pair.second > count) {
-				direction = pair.first;
-				count = pair.second;
-			}
-		}
-		return direction;
-	}
-	bool defiler::has_found_item() {
-		return m_found_item;
-	}
-	void defiler::set_found_item(bool status) {
-		m_found_item = status;
-	}
-	void defiler::found_witness(const mods::scan::vec_player_data_element& data) {
-		clear_list_if_count(&m_hostiles,10);
-		m_hostiles.emplace_front(data);
-		cmem("m_hostiles:" << std::distance(m_hostiles.cbegin(),m_hostiles.cend()));
-	}
-	void defiler::clear_scanned_items() {
-		m_scanned_items.clear();
-	}
-	void defiler::remember_item(const mods::scan::vec_player_data_element& data) {
-		clear_list_if_count(&m_remembered_items,10);
-		m_remembered_items.push_front(data.uuid);
-		cmem("m_remembered_items:" << std::distance(m_remembered_items.cbegin(),m_remembered_items.cend()));
-	}
-	const defiler::uuidlist_t& defiler::get_remembered_items() const {
-		return m_remembered_items;
-	}
-	void defiler::found_item(mods::scan::vec_player_data_element const& item) {
-		clear_list_if_count(&m_scanned_items,10);
-		m_scanned_items.emplace_back(item);
-		cmem("m_scanned_items:" << m_scanned_items.size());
-	}
 	std::forward_list<std::shared_ptr<defiler>>& defiler_list() {
 		static std::forward_list<std::shared_ptr<defiler>> s;
 		return s;
 	}
 	uint8_t defiler::scan_depth() const {
-		return CHAOTIC_METH_ADDICT_SCAN_DEPTH();
+		return 8;
 	}
-	player_ptr_t defiler::spawn_near_someone() {
-		player_ptr_t who = nullptr;
-		mods::loops::foreach_player([&](auto player) -> bool {
-			if(rand_number(1,10) > rand_number(1,10)) {
-				who = player;
-				player->sendln("Beware! A meth addict approaches!");
-				char_from_room(cd());
-				char_to_room(cd(),player->room());
-				return false;
-			}
-			return true;
-		});
-		return who;
+
+	void defiler::door_entry_event(player_ptr_t& victim,const room_rnum room_id) {
+		std::tuple<bool,direction_t,int> r = mods::scan::los_find_player_with_depth(this->player(),victim->uuid(),RCT->max_range);
+		if(std::get<0>(r)) {
+			auto weapon = this->player()->primary();
+			mods::combat_composer::snipe_target(
+			    this->player(),
+			    victim->name().c_str(),
+			    std::get<1>(r),
+			    0,
+			    weapon
+			);
+		}
 	}
-	bool defiler::attack_anyone_in_same_room() {
-		for(auto& victim : mods::globals::get_room_list(room())) {
-			if(victim->is(cd())) {
-				continue;
+	namespace defiler_callbacks {
+		bool dispatch_watcher(const uuid_t& defiler_uuid,player_ptr_t& player, const room_rnum& room_id) {
+			uint32_t ctr =0;
+			for(auto& defiler : defiler_list()) {
+				if(defiler->uuid == defiler_uuid) {
+					defiler->door_entry_event(player,room_id);
+					++ctr;
+				}
 			}
-			auto feedback = mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,m_weapon,victim);
-			if(feedback.hits || feedback.damage) {
-				return true;
+			return ctr;
+		}
+	};
+};
+namespace mods::mobs::defiler_init {
+	static constexpr std::array<obj_vnum,2> has_human_remains  = {
+		197, /** 12 ounce steak */
+		198, /** frozen liver */
+	};
+
+	ACMD(do_bioscan) {
+		static constexpr std::string_view usage = "usage: bioscan <target>\r\nexample: bioscan meat\r\n";
+		if(argshave()->size_gt(0)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		if(!player->has_contract()) {
+			player->sendln("Scan all you want, but you're not currently under contract.");
+			return;
+		}
+		if(argshave()->size_gt(0)->passed()) {
+			auto target = argat(0);
+			auto obj = OBJFIND(target,player);
+			if(!obj) {
+				player->sendln("Couldn't find anything!");
+				return;
+			} else {
+				if(std::find(has_human_remains.cbegin(),has_human_remains.cend(),obj->item_number) != has_human_remains.cend()) {
+					player->contract_custom_event(mods::contracts::custom_events_t::CEV_HUMAN_REMAINS_FOUND,obj->uuid);
+					player->sendln("{grn}[+] Positive read: {red}HUMAN REMAINS{/red}");
+				} else {
+					player->sendln("{red}[-] Negative read{/red}");
+				}
 			}
 		}
-		return false;
 	}
-	void defiler::clear_state() {
-		m_scanned_items.clear();
-		m_hostiles.clear();
-		m_attackers.clear();
-		m_remembered_items.clear();
+	void init() {
+		/**
+		 * Builds resistance to shrapnel and incendiary damage
+		 */
+		using namespace mods::mobs::resistance;
+		using ele = mods::elemental_types_t;
+		using un = unit_type_t;
+		std::vector<resistance_t> rezzes;
+		static constexpr const resistance_t r[] = {
+			{100.0,un::PERCENTAGE,ele::ELEM_SHRAPNEL},
+			{100.0,un::PERCENTAGE,ele::ELEM_INCENDIARY},
+		};
+		for(const auto& rez : r) {
+			rezzes.emplace_back(rez);
+		}
+
+		register_resistances_for_mob_vnum(
+		    mods::mobs::defiler::MOB_VNUM,
+		    rezzes
+		);
+		mods::interpreter::add_user_command("bioscan",do_bioscan);
 	}
-};
+};//end mods::mobs::defiler_init
 #undef m_debug
 #undef cmem

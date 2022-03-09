@@ -28,4 +28,13 @@ namespace mods::rand {
 	}
 };
 uint64_t rand_xoroshiro();
+static inline bool chance(uint8_t chance) {
+	return mods::rand::chance(chance);
+}
+static inline uint32_t roll(uint32_t num,uint32_t size) {
+	return mods::rand::roll(num,size);
+}
+static inline bool roll_bool() {
+	return (rand_xoroshiro() % 2) == 0;
+}
 #endif

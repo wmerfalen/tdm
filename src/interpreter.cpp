@@ -11,7 +11,7 @@
 #define __INTERPRETER_C__
 
 #include "globals.hpp"
-#include "mods/ban_system.hpp"
+#include "mods/ban-system.hpp"
 
 #include "conf.h"
 #include "sysdep.h"
@@ -42,6 +42,12 @@
 #include "mods/players/db-load.hpp"
 #include "mods/orm/rifle-attachment.hpp"
 #include "mods/filesystem.hpp"
+#include "mods/interpreter.hpp"
+#include "mods/message-server.hpp"
+#include "mods/orm/admin/stay.hpp"
+#include "mods/orm/admin/frozen.hpp"
+#include "mods/admin-tools/stay.hpp"
+//#include "mods/orm/admin/muted.hpp"
 
 namespace mods::interpreter {
 	extern command_info& get_command(std::string_view,player_ptr_t&);
@@ -114,7 +120,7 @@ SUPERCMD(do_room_list) {
 	}
 }
 ACMD(do_room_vnum) {
-	player->send("%d\r\n",player->vnum());
+	player->sendln(CAT(player->vnum()));
 }
 
 SUPERCMD(do_js_help);
@@ -321,7 +327,6 @@ ACMD(do_sbuild);
 ACMD(do_chanmgr);
 ACMD(do_zbuild);
 ACMD(do_rnumlist);
-ACMD(do_rnumtele);
 ACMD(do_pref);
 ACMD(do_rbuild);
 ACMD(do_rbuild_sandbox);
@@ -773,8 +778,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "sbuild", POS_RESTING, do_sbuild, LVL_GOD, 0 },
 	{ "zbuild", POS_RESTING, do_zbuild, LVL_IMMORT, 0 },
 	{ "chanmgr", POS_RESTING, do_chanmgr, LVL_IMMORT, 0 },
-	{ "rnumtele", POS_RESTING, do_rnumtele, LVL_IMMORT, 0 },
-	{ "rnumlist", POS_RESTING, do_rnumlist, LVL_IMMORT, 0 },
 	{ "rbuild", POS_RESTING, do_rbuild, LVL_IMMORT, 0 },
 	{ "rbuild_sandbox", POS_RESTING, do_rbuild_sandbox, LVL_IMMORT, 0 },
 	{ "room_dark", POS_RESTING, do_room_dark, LVL_IMMORT, 0 },
@@ -1027,6 +1030,16 @@ void command_interpreter(player_ptr_t& player, std::string in_argument) {
 					break;
 
 				case POS_FIGHTING:
+					if(mods::super_users::player_is(player)) {
+						player->position() = POS_STANDING;
+						auto ptr = player->fighting();
+						if(ptr) {
+							stop_fighting(ptr->cd());
+						}
+						stop_fighting(player->cd());
+						((*command.command_pointer)(ch, line, cmd, command.subcmd,player));
+						return;
+					}
 					send_to_char(ch, "No way!  You're fighting for your life!");
 					break;
 			}
@@ -1462,6 +1475,12 @@ void nanny(player_ptr_t p, char * in_arg) {
 					write_to_output(d, "Invalid name, please try another.\r\nName: ");
 					return;
 				}
+				if(mods::ban_system::username::is_banned(arg)) {
+					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (siteban)", p->name().c_str(), p->host().c_str());
+					write_to_output(d, "Sorry, new characters are not allowed from your site!\r\n");
+					p->set_state(CON_CLOSE);
+					return;
+				}
 
 				p->set_name(arg);
 				p->set_db_id(0);
@@ -1479,7 +1498,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 		case CON_NAME_CNFRM:		/* wait for conf. of new name    */
 			if(arg[0] == 'Y' || arg[0] == 'y') {
-				if(mods::ban_system::isbanned(p->host().c_str())) {
+				if(mods::ban_system::username::is_banned(p->name())) {
 					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (siteban)", p->name().c_str(), p->host().c_str());
 					write_to_output(d, "Sorry, new characters are not allowed from your site!\r\n");
 					p->set_state(CON_CLOSE);
@@ -1528,7 +1547,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 				p->set_state(CON_CLOSE);
 				return;
 			} else {
-				/** FIXME: log user IP and all this stuff into postgres */
 				if(login(p->name(),arg) == false) {
 					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", p->name().c_str(), p->host().c_str());
 					p->increment_bad_password_count();
@@ -1549,20 +1567,14 @@ void nanny(player_ptr_t p, char * in_arg) {
 				load_result = p->get_bad_password_count();
 				p->set_bad_password_count(0);
 
-				if(mods::ban_system::isbanned(p->host().c_str()) &&
-				        !p->has_affect_plr(PLR_SITEOK)) {
-					write_to_output(d, "Sorry, this char has not been cleared for login from your site!\r\n");
-					p->set_state(CON_CLOSE);
-					mudlog(NRM, LVL_GOD, TRUE, "Connection attempt for %s denied from %s", p->name().c_str(), p->host().c_str());
-					return;
-				}
-
 				if(p->level() < circle_restrict) {
 					write_to_output(d, "The game is temporarily restricted.. try again later.\r\n");
 					p->set_state(CON_CLOSE);
 					mudlog(NRM, LVL_GOD, TRUE, "Request for login denied for %s [%s] (wizlock)", p->name().c_str(), p->host().c_str());
 					return;
 				}
+				std::cerr << "player ip: '" << p->ip() << "'\n";
+				mods::message_server::user_logged_in(p);//,p->ip());
 
 
 				if(p->level() >= LVL_IMMORT) {
@@ -1740,6 +1752,15 @@ void nanny(player_ptr_t p, char * in_arg) {
 						mods::js::run_profile_scripts(p->name());
 #endif
 						mods::players::db_load::game_entry(p);
+						{
+							mods::orm::admin::stay s_orm;
+							if(s_orm.load_by_player(p) == 0) {
+								log("staying player(%s) to room",p->name().c_str());
+								mods::admin_tools::stay::stay_player(p,s_orm.s_room_vnum);
+								look_at_room(p->cd(),real_room(s_orm.s_room_vnum));
+								break;
+							}
+						}
 						look_at_room(p->cd(), 0);
 						break;
 

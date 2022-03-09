@@ -182,7 +182,12 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 
 
 	if(world[player->room()].has_texture(room_data::texture_type_t::ELEVATOR) && (dir == UP || dir == DOWN)) {
-		player->send("You move the elevator %s...\r\n",dir == UP ? "UP" : "DOWN");
+		player->sendln(
+		    CAT(
+		        "You move the elevator ",dir == UP ? "UP" : "DOWN",
+		        "..."
+		    )
+		);
 	}
 	if(!AFF_FLAGGED(ch, AFF_SNEAK) && !ghost_dissipated) {
 		//if(player->is_fighting(i)){
@@ -223,6 +228,9 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 	if(ch == NULL || dir < 0 || dir >= NUM_OF_DIRS) {
 		log("SYSERR: perform_move received invalid parameters");
 		return (0);
+	}
+	if(!player->can_move()) {
+		return 0;
 	}
 
 	bool exit_closed = is_exit && EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) /* !mods */

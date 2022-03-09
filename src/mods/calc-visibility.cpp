@@ -6,10 +6,11 @@
 #include "player-utils.hpp"
 #include "object-utils.hpp"
 
-//#define __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
+#define __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
 #ifdef __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
-#define mcv_debug(MSG) mentoc_prefix_debug("[mods::calc_visibility]")  << info << "|" << MSG << "\n" \
-			<< "dump: " << dump << "\n";
+#define FOR_WHOM "far"
+#define mcv_debug(MSG) if(std::string(observer->name().c_str()).compare(FOR_WHOM) == 0){ mentoc_prefix_debug("[mods::calc_visibility]")  << info << "|" << MSG << "\n" \
+			<< "dump: " << dump << "\n"; }
 #else
 #define mcv_debug(MSG)
 #endif
@@ -96,7 +97,7 @@ namespace mods::calc_visibility {
 	}
 
 
-	std::tuple<bool,std::string> is_visible_with_reason(player_ptr_t& observer,player_ptr_t& target) {
+	std::tuple<bool,std::string> is_visible_with_reason(player_ptr_t& observer,player_ptr_t& target, uint8_t distance=0) {
 		if(!target) {
 			return {1,"object dead"};
 		}
@@ -114,6 +115,8 @@ namespace mods::calc_visibility {
 		const bool target_is_scanned = mods::player_utils::is_scanned(target);
 		const bool target_is_tracked = target->has_affect(AFF_TRACKED);
 		auto camera = observer->get_camera();
+		const auto& thermal_range = observer->thermal_range();
+		const auto& night_vision_range = observer->night_vision_range();
 		//auto room = observer->viewing_room();
 		//auto fire_status = mods::rooms::get_fire_status(room);
 		//bool camera_is_thermal = camera != nullptr ? mods::object_utils::is_thermal_camera(camera->object_uuid()) : false;
@@ -134,6 +137,9 @@ namespace mods::calc_visibility {
 		                       "room_is_dark: ",room_is_dark,"\n",
 		                       "target_is_sneaking: ",target_is_sneaking,"\n",
 		                       "observer_is_affected_by_emp: ",observer_is_affected_by_emp,"\n",
+		                       "observer_thermal_range:", thermal_range, "\n",
+		                       "observer_night_vision_range:", night_vision_range,"\n",
+		                       "distance:", distance,"\n",
 		                       "target_is_scanned: ",target_is_scanned,"\n",
 		                       "target_is_tracked: ",target_is_tracked,"\n");
 #endif
@@ -149,10 +155,6 @@ namespace mods::calc_visibility {
 		if(target_is_tracked) {
 			return {true,"Target is tracked"};
 		}
-		if(is_dissipated || invisible) {
-			mcv_debug("target dissipated/invisible");
-			return {false,"target dissipated/invisible"};
-		}
 		if(observer_is_affected_by_emp && (observer_has_thermals || observer_has_night_vision) &&
 		        (room_is_dark || smoked_room || room_on_fire)) {
 			mcv_debug("observer affected by emp + special vision + dark/smoked/fire");
@@ -162,6 +164,19 @@ namespace mods::calc_visibility {
 			mcv_debug("Observer has special vision and room is on fire");
 			return {false,"Observer has special vision and room is on fire"};
 		}
+		/** TODO: fix this crap */
+		//if((room_is_dark || smoked_room) && thermal_range >= distance) {
+		//	mcv_debug("Observer has special vision + dark/smoked + thermal range is sufficient");
+		//	return {true,"Observer has special vision + dark/smoked + thermal range is sufficient"};
+		//}
+		//if((room_is_dark || !smoked_room) && (0 != night_vision_range) && night_vision_range >= distance) {
+		//	mcv_debug("vision + dark + !smoked + night vision range is sufficient");
+		//	return {true,"Observer has night vision + dark + !smoked + night vision range is sufficient"};
+		//}
+		if((is_dissipated || invisible) && (thermal_range <= 0 || thermal_range <= distance)) {
+			mcv_debug("target dissipated/invisible");
+			return {false,"target dissipated/invisible"};
+		}
 		if(observer_has_thermals && (room_is_dark || smoked_room) && !same_room) {
 			mcv_debug("Observer has special vision + dark/smoked + not in same room");
 			return {false,"Observer has special vision + dark/smoked + not in same room"};
@@ -169,10 +184,6 @@ namespace mods::calc_visibility {
 		if(observer_has_night_vision && (room_is_dark || smoked_room) && !same_room) {
 			mcv_debug("Observer has night vision + dark/smoked + not in same room");
 			return {false,"Observer has night vision + dark/smoked + not in same room"};
-		}
-		if(target_is_sneaking && (observer_has_thermals || observer_has_night_vision) && !same_room) {
-			mcv_debug("target is sneaking + observer has special vision + not in same room");
-			return {false,"target is sneaking + observer has special vision + not in same room"};
 		}
 		if(target_is_sneaking && !observer_has_thermals && !observer_has_night_vision) {
 			mcv_debug("target is sneaking + observer has normal vision");
@@ -200,10 +211,10 @@ namespace mods::calc_visibility {
 			return false;
 		}
 	}
-	bool is_visible(player_ptr_t& observer,player_ptr_t& target) {
-		return std::get<0>(is_visible_with_reason(observer,target));
+	bool is_visible(player_ptr_t& observer,player_ptr_t& target,uint8_t distance) {
+		return std::get<0>(is_visible_with_reason(observer,target,distance));
 	}
-	bool is_visible(uuid_t observer_uuid,uuid_t target_uuid) {
+	bool is_visible(uuid_t observer_uuid,uuid_t target_uuid,uint8_t distance) {
 		auto target = ptr_by_uuid(target_uuid);
 		auto observer = ptr_by_uuid(observer_uuid);
 		if(!target) {
@@ -218,7 +229,7 @@ namespace mods::calc_visibility {
 #endif
 			return false;
 		}
-		return is_visible(observer,target);
+		return is_visible(observer,target,distance);
 	}
 	bool player_can_see_obj(player_ptr_t& player,obj_ptr_t& obj) {
 		return true; /* FIXME */

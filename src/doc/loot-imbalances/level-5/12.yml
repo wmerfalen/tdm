@@ -1,0 +1,60 @@
+# Level 5, G36C AR
+# Appraisal 0/10
+
+rifle_accuracy_map_0: 10.000000
+rifle_accuracy_map_1: 10.000000
+rifle_accuracy_map_2: 10.000000
+rifle_accuracy_map_3: 10.000000
+rifle_ammo_max: 386
+rifle_ammo_type:
+rifle_anti_matter_damage: 4
+rifle_base_damage: 2							# pathetic
+rifle_chance_to_injure: 2.000000
+rifle_clip_size: 36
+rifle_cooldown_between_shots: 2
+rifle_corrosive_damage: 5
+rifle_critical_chance: 14
+rifle_critical_range: 4
+rifle_cryogenic_damage: 5
+rifle_damage_dice_count: 1				# pathetic
+rifle_damage_dice_sides: 10				# pathetic
+rifle_damage_map_0: 10.000000
+rifle_damage_map_1: 10.000000
+rifle_damage_map_2: 10.000000
+rifle_damage_map_3: 10.000000
+rifle_disorient_amount: 2.000000
+rifle_effective_firing_range: 2
+rifle_emp_damage: 2
+rifle_explosive_damage: 6
+rifle_file: g36c.yml
+rifle_headshot_bonus: 3.000000
+rifle_incendiary_damage: 4
+rifle_manufacturer: Heckler & Koch
+rifle_max_range: 14
+rifle_muzzle_velocity: 2
+rifle_name: G36C Assault Rifle
+rifle_radioactive_damage: 0
+rifle_range_multiplier: 4.300000
+rifle_rarity: COMMON
+rifle_reload_time: 1
+rifle_rounds_per_minute: 1
+rifle_shock_damage: 2
+rifle_shrapnel_damage: 0
+rifle_stat_armor: 0
+rifle_stat_chemistry: 0
+rifle_stat_constitution: 0
+rifle_stat_demolitions: 0
+rifle_stat_dexterity: 0
+rifle_stat_electronics: 0
+rifle_stat_intelligence: 0
+rifle_stat_marksmanship: 0
+rifle_stat_medical: 0
+rifle_stat_sniping: 3
+rifle_stat_strategy: 1
+rifle_stat_strength: 0
+rifle_stat_weapon_handling: 0
+rifle_stat_wisdom: 0
+rifle_str_type: ASSAULT_RIFLE
+rifle_type: 4
+rifle_vnum: 46
+

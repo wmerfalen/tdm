@@ -6,7 +6,7 @@
 #include "combat-order.hpp"
 
 namespace mods::melee::main {
-	void dispatch_player(player_ptr_t& player);
+	void dispatch_player(player_ptr_t& attacker,player_ptr_t& victim);
 };
 #endif
 

@@ -1,0 +1,60 @@
+# Appraisal: N/10
+# Play-test: 5/10
+
+rifle_accuracy_map_0: 80.000000
+rifle_accuracy_map_1: 40.000000
+rifle_accuracy_map_2: 13.000000
+rifle_accuracy_map_3: 5.000000
+rifle_ammo_max: 541							# OP+INSANE
+rifle_ammo_type: PISTOL
+rifle_anti_matter_damage: 59		# OP
+rifle_base_damage: 4
+rifle_chance_to_injure: 199.000000	# OP+INSANE
+rifle_clip_size: 3							# BALANCE WITH DPS
+rifle_cooldown_between_shots: 1
+rifle_corrosive_damage: 5
+rifle_critical_chance: 5
+rifle_critical_range: 66				# BROKEN
+rifle_cryogenic_damage: 3
+rifle_damage_dice_count: 13			# OP
+rifle_damage_dice_sides: 16			# OP
+rifle_damage_map_0: 50.000000
+rifle_damage_map_1: 25.000000
+rifle_damage_map_2: 10.000000
+rifle_damage_map_3: 1.000000
+rifle_disorient_amount: 41.000000			# OP
+rifle_effective_firing_range: 8			# OP
+rifle_emp_damage: 218			# OP
+rifle_explosive_damage: 47			# OP
+rifle_file: czp10.yml
+rifle_headshot_bonus: 33.000000
+rifle_incendiary_damage: 6
+rifle_manufacturer: TN3 SMITH-x Industrial
+rifle_max_range: 5
+rifle_muzzle_velocity: 391
+rifle_name: CZP10 pistol
+rifle_radioactive_damage: 40
+rifle_range_multiplier: 6.000000			# OP
+rifle_rarity: RARE
+rifle_reload_time: 4
+rifle_rounds_per_minute: 80
+rifle_shock_damage: 0
+rifle_shrapnel_damage: 5
+rifle_stat_armor: 0
+rifle_stat_chemistry: 5
+rifle_stat_constitution: 0
+rifle_stat_demolitions: 4
+rifle_stat_dexterity: 0
+rifle_stat_electronics: 9
+rifle_stat_intelligence: 5
+rifle_stat_marksmanship: 5
+rifle_stat_medical: 0
+rifle_stat_sniping: 6
+rifle_stat_strategy: 16
+rifle_stat_strength: 5
+rifle_stat_weapon_handling: 0
+rifle_stat_wisdom: 16
+rifle_str_type: PISTOL
+rifle_type: 8
+rifle_vnum: 7
+

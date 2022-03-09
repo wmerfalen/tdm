@@ -12,6 +12,35 @@ namespace mods::scan {
 	int directions[] = { NORTH,EAST,SOUTH,WEST,UP,DOWN };
 	constexpr static std::size_t MAX_DEPTH = 6;
 
+	std::tuple<bool,direction_t,int> los_find_player_with_depth(player_ptr_t& player,const uuid_t& victim_uuid,int depth) {
+		vec_player_data vec_room_list;
+		auto directions = world[player->room()].directions();
+		for(auto i_d : directions) {
+			vec_room_list.clear();
+			los_scan_direction(player->cd(),depth,&vec_room_list,i_d,find_type_t::PLAYERS);
+			for(auto info : vec_room_list) {
+				if(info.ch->uuid == victim_uuid) {
+					return {true,i_d,info.distance};
+				}
+			}
+		}
+		return {false,NORTH,-1};
+	}
+	std::tuple<bool,direction_t,int> los_find_player_with_depth(player_ptr_t& player,player_ptr_t& victim,int depth) {
+		vec_player_data vec_room_list;
+		auto directions = world[player->room()].directions();
+		const auto& victim_uuid = victim->uuid();
+		for(auto i_d : directions) {
+			vec_room_list.clear();
+			los_scan_direction(player->cd(),depth,&vec_room_list,i_d,find_type_t::PLAYERS);
+			for(auto info : vec_room_list) {
+				if(info.ch->uuid == victim_uuid) {
+					return {true,i_d,info.distance};
+				}
+			}
+		}
+		return {false,NORTH,-1};
+	}
 	int los_find_player(player_ptr_t& player,player_ptr_t& victim,int depth) {
 		vec_player_data vec_room_list;
 		auto directions = world[player->room()].directions();
@@ -74,7 +103,7 @@ namespace mods::scan {
 		los_scan_direction(ch,depth,vec_room_list,direction, find_type_t::ANY);
 	}
 
-	void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction, find_type_t type) {
+	void los_scan_direction(char_data* ch,int in_depth,vec_player_data* vec_room_list,int direction, find_type_t type) {
 		std::string s_dir;
 		auto i_d = direction;
 		LOS_SCAN_DIRECTION_DEBUG("scan directions: current dir: " << i_d);
@@ -84,7 +113,12 @@ namespace mods::scan {
 			LOS_SCAN_DIRECTION_DEBUG("in_room is nowhere");
 			return;
 		}
+		if(in_depth <= 0) {
+			//std::cerr << "los_scan_direction: received invalid depth value\n";
+			return;
+		}
 
+		int depth = std::min(55,in_depth);
 		auto current_exit = EXIT(ch,i_d);
 		auto next_room = 0;
 
@@ -129,6 +163,7 @@ namespace mods::scan {
 					});
 
 				}
+				bool anyone = !(type & find_type_t::PLAYERS) && !(type & find_type_t::NPC);
 				for(auto character : mods::globals::get_room_list(room_id)) {
 					if(
 					    (type & find_type_t::DEAD && character->position() == POS_DEAD)
@@ -139,15 +174,21 @@ namespace mods::scan {
 					    ||
 					    (type & find_type_t::NPC && IS_NPC(character->cd()))
 					) {
-						vec_room_list->push_back({});
-						auto& pushed_item = vec_room_list->back();
-						pushed_item.obj = nullptr;
-						pushed_item.ch = character->cd();
-						pushed_item.uuid = character->uuid();
-						pushed_item.distance = ++ctr;
-						pushed_item.direction = i_d;
-						pushed_item.room_rnum = room_id;
-						LOS_SCAN_DIRECTION_DEBUG("moved item to list");
+						if(
+						    ((type & find_type_t::PLAYERS) && !IS_NPC(character->cd())) ||
+						    (type & find_type_t::NPC && IS_NPC(character->cd())) ||
+						    anyone
+						) {
+							vec_room_list->push_back({});
+							auto& pushed_item = vec_room_list->back();
+							pushed_item.obj = nullptr;
+							pushed_item.ch = character->cd();
+							pushed_item.uuid = character->uuid();
+							pushed_item.distance = ++ctr;
+							pushed_item.direction = i_d;
+							pushed_item.room_rnum = room_id;
+							LOS_SCAN_DIRECTION_DEBUG("moved item to list");
+						}
 					}
 				}
 			}

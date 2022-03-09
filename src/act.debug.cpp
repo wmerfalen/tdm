@@ -41,13 +41,13 @@ SUPERCMD(do_wait_ticks) {
 	});
 }
 SUPERCMD(do_get_ticks_per_minute) {
-	player->send("[%d] ticks per minute\r\n",mods::globals::defer_queue->get_ticks_per_minute());
-	player->send("[%d] affects processer ticks per minute\r\n",mods::affects::get_ticks_per_minute());
+	player->sendln(CAT("[",mods::globals::defer_queue->get_ticks_per_minute(),"] ticks per minute..."));
+	player->sendln(CAT("[",mods::affects::get_ticks_per_minute(),"] affects processer ticks per minute"));
 }
 
 SUPERCMD(do_feed_player) {
 	auto status = mods::orm::inventory::feed_player(player);
-	player->send("[%d] status\r\n",status);
+	player->sendln(CAT("[",status,"] status"));
 }
 SUPERCMD(do_givemenades) {
 
@@ -136,7 +136,7 @@ SUPERCMD(do_set_ammo) {
 		return;
 	}
 	if(!(bits = generic_find(argument, FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
-		player->send("There doesn't seem to be %s %s here.\r\n", AN(argument), argument);
+		player->sendln(CAT("There doesn't seem to be ",AN(argument), " ",argument," here."));
 		return;
 	}
 	int ammo = mods::util::stoi(vec_args[1]).value_or(-1);
@@ -145,7 +145,7 @@ SUPERCMD(do_set_ammo) {
 		return;
 	}
 	obj->obj_flags.ammo = ammo;
-	player->send("Set %s ammo count to %d\r\n",obj->name.c_str(),ammo);
+	player->sendln(CAT("Set ",obj->name.c_str()," ammo count to ",ammo));
 }
 
 SUPERCMD(do_giveme_frag_grenades) {
@@ -199,7 +199,7 @@ SUPERCMD(do_point_update) {
 SUPERCMD(do_room_list_uuid) {
 	player->sendln("Beginning room list...");
 	for(auto& p : room_list(player->room())) {
-		player->send("uuid: [%d] name: '%s'\r\n",p->uuid(),p->name().c_str());
+		player->sendln(CAT("uuid: [", p->uuid()," ] name: '",p->name(),"'"));
 	}
 	player->sendln("Done listing.");
 }
@@ -227,11 +227,11 @@ SUPERCMD(do_set_npc_position) {
 		player->sendln("unable to find anyone with that uuid");
 		return;
 	}
-	player->send("player with that uuid: '%s'\r\n", target.value()->name().c_str());
+	player->sendln(CAT("player with that uuid: '", target.value()->name().c_str(),"'"));
 #define MENTOC_LAZY_POS(a,b)\
 	if(mods::util::is_lower_match(vec_args[1],#a)){\
 		target.value()->position() = b;\
-		player->send("{grn}Set position to: %s on %s\r\n{/grn}",#a,target.value()->name().c_str());\
+		player->sendln(CAT("{grn}Set position to: ",#a," on ",target.value()->name().c_str(),"{/grn}"));\
 		return;\
 	}
 	MENTOC_LAZY_POS(DEAD,POS_DEAD);
@@ -257,7 +257,7 @@ SUPERCMD(do_set_position) {
 #define MENTOC_LAZY_POS(a,b)\
 	if(mods::util::is_lower_match(vec_args[0],#a)){\
 		player->position() = b;\
-		player->send("{grn}Set your position to: %s\r\n{/grn}",#a);\
+		player->sendln(CAT("{grn}Set your position to: ",#a,"{/grn}"));\
 		return;\
 	}
 	MENTOC_LAZY_POS(DEAD,POS_DEAD);
@@ -295,7 +295,7 @@ SUPERCMD(do_zero_socket) {
 
 SUPERCMD(do_show_tics) {
 	auto state = mods::debug::debug_state->show_tics();
-	player->send("Toggling %s\r\n", state ? "{red}off{/red}" : "{grn}on{/grn}");
+	player->sendln(CAT("Toggling ", state ? "{red}off{/red}" : "{grn}on{/grn}"));
 	mods::debug::debug_state->show_tics(!state);
 }
 

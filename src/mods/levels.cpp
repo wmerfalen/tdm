@@ -21,7 +21,7 @@ extern int immort_level_ok;
 namespace mods::levels {
 	static constexpr uint32_t EXP_MAX = 10000000;
 	int level_exp(int level) {
-		return 500 * (level - 1) * level;
+		return 250 * (level - 1) * level;
 	}
 	int gain_exp(player_ptr_t& player,int gain) {
 		if(IS_NPC(player->cd())) {
@@ -40,12 +40,15 @@ namespace mods::levels {
 			advance_level(player);
 			is_altered = TRUE;
 			if(is_altered) {
-				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(player->cd())), TRUE, "%s advanced %d level%s to level %d.",
-				       player->name().c_str(), num_levels, num_levels == 1 ? "" : "s", player->level());
+				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(player->cd())), TRUE,
+				       CAT(player->name().c_str()," advanced ",num_levels," level", num_levels == 1 ? "" : "s",
+				           "to reach level ",
+				           player->level(),".").c_str()
+				      );
 				if(num_levels == 1) {
 					player->sendln(ADVANCE_LEVEL_MESSAGE());
 				} else {
-					player->send(ADVANCE_MULTIPLE_LEVELS_MESSAGE().c_str(),num_levels);
+					player->sendln(CAT("{grn}CONGRATS! You leveled up ",num_levels," levels!{/grn}"));
 				}
 				//set_title(ch, NULL);
 			}
@@ -847,7 +850,14 @@ namespace mods::levels {
 		}
 		int used_to = found_player->exp();
 		mods::levels::gain_exp(found_player,opt.value());
-		player->send("Player '%s' used to have %d experience points and now has %d\r\n",found_player->name().c_str(),used_to,found_player->exp());
+		player->sendln(
+		    CAT(
+		        "Player '",found_player->name().c_str(),
+		        "' used to have ",
+		        used_to,
+		        " experience points and now has ",found_player->exp()
+		    )
+		);
 		player->sendln("Done.");
 		ADMIN_DONE();
 	}
@@ -863,7 +873,11 @@ namespace mods::levels {
 		ADMIN_DONE();
 	}
 	ACMD(do_exp) {
-		player->send("{grn}You have %d experience points.{/grn}\r\n",player->exp());
+		player->sendln(
+		    CAT(
+		        "{grn}You have ",player->exp()," experience points.{/grn}"
+		    )
+		);
 	}
 
 

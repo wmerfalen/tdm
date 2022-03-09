@@ -8,7 +8,8 @@
 #include "../rand.hpp"
 #include "value-scaler.hpp"
 #include "requirements.hpp"
-#include "elemental-enum.hpp"
+#include "../elemental.hpp"
+#include "kill.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::generator]")  << MSG << "\n";
@@ -19,7 +20,23 @@
 namespace mods::forge_engine {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	using random_number_type_t = uint64_t;
-	obj_ptr_t reward_player(player_ptr_t& player);
+	obj_ptr_t reward_player(player_ptr_t& player, mob_vnum vict);
+	obj_ptr_t reward_player_with(std::string_view type,player_ptr_t& player, mob_vnum vict);
+	static inline float roll_float(float LO, float HI) {
+		if(LO == HI) {
+			return LO;
+		}
+		return LO + static_cast <float>(rand_xoroshiro()) / (static_cast <float>(UINT64_MAX/ (HI-LO)));
+	}
+	template <typename TUintWidth>
+	static inline TUintWidth roll_between(TUintWidth LO, TUintWidth HI) {
+		if(LO == HI) {
+			return LO;
+		}
+		return LO + static_cast <TUintWidth>(rand_xoroshiro()) / (static_cast <TUintWidth>(std::numeric_limits<TUintWidth>::max()/ (HI-LO)));
+	}
+
+
 	/**
 	 * [key]: ESA = Elemental/Stat/Attribute
 	 * [key]: CSL = Class/Stat/Level
@@ -72,6 +89,7 @@ namespace mods::forge_engine {
 		__RIFLE_TYPE_LAST=RIFLE_TYPE_LIGHT_MACHINE_GUN
 	};
 	enum rifle_attributes_t {
+		__NO_ATTRIBUTE__ = 0,
 		RIFLE_ATTRIBUTES_AMMO_MAX = 1,
 		RIFLE_ATTRIBUTES_CHANCE_TO_INJURE,
 		RIFLE_ATTRIBUTES_CLIP_SIZE,
@@ -91,6 +109,7 @@ namespace mods::forge_engine {
 		RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES,
 		__RIFLE_ATTRIBUTES_FIRST = RIFLE_ATTRIBUTES_AMMO_MAX,
 		__RIFLE_ATTRIBUTES_LAST = RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES
+
 	};
 	enum explosive_types_t {
 		EXPLOSIVE_TYPE_FRAG_GRENADE = 1,
@@ -430,25 +449,25 @@ namespace mods::forge_engine {
 
 			generator();
 			~generator();
-			std::vector<std::pair<armor_attributes_t,std::variant<uint32_t,float>>> generate_armor_attributes(player_ptr_t& player);
-			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_armor_elemental_boosts(player_ptr_t& player);
-			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_armor_stat_boosts(player_ptr_t& player);
-			std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generate_armor_elemental_resistances(player_ptr_t& player);
+			std::vector<std::pair<armor_attributes_t,std::variant<uint32_t,float>>> generate_armor_attributes(kill_t& player);
+			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_armor_elemental_boosts(kill_t& player);
+			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_armor_stat_boosts(kill_t& player);
+			std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generate_armor_elemental_resistances(kill_t& player);
 
 
-			std::vector<std::pair<explosive_attributes_t,std::variant<uint32_t,float>>> generate_explosive_attributes(player_ptr_t& player);
-			std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes(player_ptr_t& player);
-			rifle_attributes_t random_rifle_attribute();
-			rifle_types_t random_rifle_type();
+			std::vector<std::pair<explosive_attributes_t,std::variant<uint32_t,float>>> generate_explosive_attributes(kill_t& player);
+
+
+
 			item_types_t random_item_type();
 			armor_types_t random_armor_type() {
 				return (armor_types_t)(this->roll_between((uint8_t)__ARMOR_WEAR_FIRST, (uint8_t)__ARMOR_WEAR_LAST));
 			}
 			elemental_types_t random_elemental_type() {
-				return (elemental_types_t)(this->roll_between((uint8_t)__ELEM_FIRST, (uint8_t)__ELEM_LAST));
+				return (elemental_types_t)(this->roll_between((uint8_t)1, (uint8_t)(mods::elemental_types_t::__ELEM_LAST-1)));
 			}
 			elemental_types_t random_elemental_resistance(armor_types_t type) {
-				return (elemental_types_t)(this->roll_between((uint8_t)__ELEM_FIRST, (uint8_t)__ELEM_LAST));
+				return (elemental_types_t)(this->roll_between((uint8_t)1, (uint8_t)(mods::elemental_types_t::__ELEM_LAST-1)));
 			}
 			explosive_types_t random_explosive_type() {
 				return (explosive_types_t)(this->roll_between((uint8_t)__EXPLOSIVE_TYPE_FIRST, (uint8_t)__EXPLOSIVE_TYPE_LAST));
@@ -462,10 +481,14 @@ namespace mods::forge_engine {
 
 			/** random rifle functions */
 			/** random rifle functions */
-			requirements_t generate_requirements(player_ptr_t& player);
+			requirements_t generate_requirements(kill_t& player);
+			std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes(kill_t& player);
+			rifle_attributes_t random_rifle_attribute();
+			rifle_types_t random_rifle_type();
+			rifle_types_t random_rifle_type(player_ptr_t& player);
+			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_rifle_stat_boosts(kill_t& player);
+			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_rifle_elemental_boosts(kill_t& player);
 
-			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_rifle_stat_boosts(player_ptr_t& player);
-			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_rifle_elemental_boosts(player_ptr_t& player);
 			/**
 			*  rifles
 			* 		-> CSL requirements
@@ -534,8 +557,10 @@ namespace mods::forge_engine {
 			 */
 			template <typename TEnumType,typename TUintWidth>
 			std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> generate_random_mixed(
-			    const std::vector<TEnumType>& valid_attributes,player_ptr_t& player
+			    const std::vector<TEnumType>& valid_attributes,kill_t& kill
 			) {
+				auto player = kill.killer;
+				//auto victim = kill.victim;
 				value_scaler scale(player);
 				std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> attributes;
 				if(valid_attributes.size() == 0) {
@@ -613,6 +638,8 @@ namespace mods::forge_engine {
 	std::string to_string(rifle_types_t t);
 	std::string to_string(rifle_attributes_t t);
 	std::string to_string(armor_attributes_t t);
+
+	rifle_attributes_t from_string(std::string t);
 
 	void send_requirements(requirements_t& requirements, player_ptr_t& player);
 

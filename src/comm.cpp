@@ -11,7 +11,6 @@
 #define __COMM_C__
 
 #include "globals.hpp"
-#include "mods/db-report.hpp"
 #include <array>
 #include "conf.h"
 #include "sysdep.h"
@@ -36,9 +35,14 @@
 #include "mods/js.hpp"
 #include "mods/corrosive.hpp"
 #include "mods/bleed.hpp"
+#include "mods/ensnare.hpp"
 #include "mods/resting.hpp"
 #include "mods/mobs/behaviour-tree-list.hpp"
+#include "mods/mobs/defiler-behaviour-tree.hpp"
 #include "mods/players/event-messages.hpp"
+#include "mods/message-server.hpp"
+#include "mods/ban-system.hpp"
+#include "mods/message-server.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -207,6 +211,13 @@ void signal_setup(void);
 void game_loop(socket_t mother_desc);
 socket_t init_socket(ush_int port);
 int new_descriptor(socket_t s);
+
+static int constexpr MENTOC_PLAYER_IS_BANNED = -1;
+static int constexpr MENTOC_FULL_SERVER = -2;
+static int constexpr MENTOC_SEND_BUF_FAILED = -3;
+static int constexpr MENTOC_INVALID_SOCKET = -4;
+
+
 int get_max_players(void);
 int process_output(mods::descriptor_data& in_t);
 int process_input(mods::descriptor_data& t);
@@ -271,15 +282,8 @@ void exit_with(int code) {
 	mods::db_report::close();
 	circle_shutdown = 1;
 }
-/***********************************************************************
- *  main game loop and related stuff                                    *
- ***********************************************************************/
 
-int main(int argc, char **argv) {
-	atexit(atexit_handler);
-	if(mods::globals::init(argc,argv) == 0) {
-		return 0;
-	}
+void run_game() {
 	ush_int port;
 	const char *dir;
 
@@ -313,9 +317,6 @@ int main(int argc, char **argv) {
 		init_game(port);
 	}
 
-	log("Clearing game world.");
-	destroy_db();
-
 	if(!scheck) {
 		log("Clearing other memory.");
 		free_player_index();	/* db.c */
@@ -330,6 +331,19 @@ int main(int argc, char **argv) {
 	}
 
 	log("Done.");
+}
+/***********************************************************************
+ *  main game loop and related stuff                                    *
+ ***********************************************************************/
+
+int main(int argc, char **argv) {
+	atexit(atexit_handler);
+	if(mods::globals::init(argc,argv) == 0) {
+		return 0;
+	}
+	mods::message_server::spawn();
+	std::thread(run_game).join();
+
 	return (0);
 }
 
@@ -677,6 +691,26 @@ void game_loop(socket_t mother_desc) {
 				std::cerr << "[fd == mother desc]\n";
 #endif
 				new_desc = new_descriptor(mother_desc);
+				if(new_desc <= 0) {
+					switch(new_desc) {
+						case MENTOC_PLAYER_IS_BANNED:
+							log("new_descriptor: player is banned");
+							break;
+						case MENTOC_FULL_SERVER:
+							log("new_descriptor: mud is full");
+							break;
+						case MENTOC_SEND_BUF_FAILED:
+							log("new_descriptor: send buf failed");
+							break;
+						case MENTOC_INVALID_SOCKET:
+							log("new_descriptor: invalid socket");
+							break;
+						default:
+							log("new_descriptor: unknown error returned: %d",new_desc);
+							break;
+					}
+					break;
+				}
 				operating_socket = new_desc;
 				epoll_ev.events = EPOLLIN; // new connection is a read event
 				epoll_ev.data.fd = new_desc; // user data
@@ -817,7 +851,6 @@ void game_loop(socket_t mother_desc) {
 				continue;
 			}
 		}
-		mods::players::messages::consume_all();
 
 		/* Print prompts for other descriptors who had no other output */
 		for(auto& p : mods::globals::player_list) {
@@ -827,6 +860,7 @@ void game_loop(socket_t mother_desc) {
 				continue;
 			}
 		}
+		//mods::players::messages::consume_all();
 
 		handle_disconnects();
 #ifdef __MENTOC_USE_LEGACY_SLEEP_CODE__
@@ -933,6 +967,7 @@ void run_behaviour_trees() {
 			}
 		}
 	}
+	mods::mobs::defiler_behaviour_tree::run_trees();
 	rb_bht_debug("run_behaviour_trees [RETURN]");
 }
 
@@ -950,13 +985,11 @@ void heartbeat(int pulse) {
 	if(!(pulse % mods::corrosive::tick_resolution())) {
 		mods::corrosive::process_corrosion();
 		mods::bleed::process_bleed();
+		mods::ensnare::process_ensnare();
 	}
 
 	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION())) {
 		mods::rooms::process_fire_damage();
-	}
-	if(!(pulse % PULSE_PRINT_MEMORY_FOOTPRINTS)) {
-		mods::memory::print_footprints();
 	}
 
 	if(!(pulse % PULSE_ZONE)) {
@@ -1002,9 +1035,6 @@ void heartbeat(int pulse) {
 		}
 	}
 
-	if(!(pulse % PULSE_USAGE)) {
-		record_usage();
-	}
 	if(!(pulse % PULSE_REMINDERS_TICK())) {
 		mods::players::friendly_reminders::send();
 	}
@@ -1162,7 +1192,7 @@ void send_prompt(player_ptr_t& player) {
 		start = "{yel}(:INVIS:){/yel}";
 	}
 	if(player->fighting()) {
-		fighting = CAT("{red}[",player->fighting()->name(),"]{/red}");
+		fighting = CAT("{red}[{/red}",mods::util::strip_color(player->fighting()->name()),"{red}]{/red}");
 	}
 	if(a.has_affect(mods::affects::affect_t::BLIND)) {
 		affects += "BLIND";
@@ -1209,6 +1239,12 @@ void send_prompt(player_ptr_t& player) {
 		}
 		affects += "BLEED";
 	}
+	if(a.has_affect(mods::affects::affect_t::SLOWED)) {
+		if(affects.length()) {
+			affects += "|";
+		}
+		affects += "SLOWED";
+	}
 	if(player->primary() && player->primary()->has_rifle()) {
 		auto left = player->primary()->rifle_instance->ammo;
 		auto clip = player->primary()->rifle()->attributes->clip_size;
@@ -1218,7 +1254,7 @@ void send_prompt(player_ptr_t& player) {
 			ammo = CAT("{yel}[",left,"/",clip,"]{/yel}");
 		}
 	}
-	player->send(CAT(affects,"\r\n",start,hp,mana,move,fighting,ammo,arrow).c_str());
+	player->sendx(CAT(affects,"\r\n{grn}",player->name(),"::{/grn}",start,hp,mana,move,fighting,ammo,arrow));
 }
 
 
@@ -1493,7 +1529,8 @@ int new_descriptor(socket_t s) {
 	if((desc = accept(s, (struct sockaddr *) &peer, &i)) == INVALID_SOCKET) {
 		perror("SYSERR: accept");
 		destroy_socket(desc);//TODO: merge destroy_socket functionality into deregister_player process
-		return (-1);
+		log("SYSERR: accept failed for socket");
+		return MENTOC_INVALID_SOCKET;
 	}
 
 	/* keep it from blocking */
@@ -1503,30 +1540,39 @@ int new_descriptor(socket_t s) {
 	if(set_sendbuf(desc) < 0) {
 		log("SYSERR: set_sendbuf failed");
 		destroy_socket(desc);
-		return (0);
+		return MENTOC_SEND_BUF_FAILED;
 	}
 
 	if(++sockets_connected >= max_players) {
 		write_to_descriptor(desc, "Sorry, CircleMUD is full right now... please try again later!\r\n");
 		log("Rejected user due to full server");
 		destroy_socket(desc);
-		return (0);
+		return MENTOC_FULL_SERVER;
 	}
 
 	/** player_uuid() called in constructor */
 	auto player = new_player();
 	player->set_socket(desc);
 	/* find the sitename */
-	if(nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
-	                                                sizeof(peer.sin_addr), AF_INET))) {
-		/* resolution failed */
-		if(!nameserver_is_slow) {
-			log("SYSERR: gethostbyaddr");
-		}
+	from = gethostbyaddr((char *) &peer.sin_addr, sizeof(peer.sin_addr), AF_INET);
+	mods::message_server::new_connection(peer,from);
+	player->set_ip(inet_ntoa(peer.sin_addr));
+	if(mods::ban_system::ip::is_banned(peer)) {
+		log("refusing new connection. User is banned by ip: %s",player->ip());
+		mods::message_server::user_connection_rejected(peer,from);
+		return MENTOC_PLAYER_IS_BANNED;
+	}
+	if(!from) {
+		log("SYSERR: failed to get host by addr");
 		/* find the numeric site address */
 		player->set_host(inet_ntoa(peer.sin_addr));
 	} else {
 		player->set_host(from->h_name);
+	}
+	if(mods::ban_system::hostname::is_banned(player->host())) {
+		log("refusing new connection. User is banned by hostname: %s, ip address: %s",player->host(), player->ip());
+		mods::message_server::user_connection_rejected(peer,from);
+		return MENTOC_PLAYER_IS_BANNED;
 	}
 
 	/* determine if the site is banned */
@@ -2390,7 +2436,7 @@ void send_to_room_except(room_rnum room, const std::vector<player_ptr_t>& except
 			}
 		}
 		if(send) {
-			player->send(messg, args);
+			player->sendln(messg);//, args);
 		}
 	}
 	va_end(args);
@@ -2415,7 +2461,7 @@ void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char 
 			}
 		}
 		if(emplace) {
-			player->send(messg, args);
+			player->sendln(messg);//, args);
 		}
 	}
 	va_end(args);
@@ -2435,7 +2481,7 @@ void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, 
 	va_start(args, messg);
 	for(auto& p : mods::globals::get_room_list(room)) {
 		if(std::find(except.begin(),except.end(),p->cd()) == except.end()) {
-			p->send(messg, args);
+			p->sendln(messg);//, args);
 		}
 	}
 	va_end(args);
@@ -2455,7 +2501,7 @@ void send_to_room_except(room_rnum room, player_ptr_t except_me, const char *mes
 	va_start(args, messg);
 	for(auto& p : mods::globals::get_room_list(room)) {
 		if(u != p->uuid()) {
-			p->send(messg, args);
+			p->sendln(messg);//, args);
 		}
 	}
 	va_end(args);
@@ -2474,7 +2520,7 @@ void send_to_room(room_rnum room, const char *messg, ...) {
 
 	va_start(args, messg);
 	for(auto& p : mods::globals::get_room_list(room)) {
-		p->send(messg,args);
+		p->sendln(messg);//,args);
 	}
 	va_end(args);
 }

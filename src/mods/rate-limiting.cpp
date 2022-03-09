@@ -99,7 +99,9 @@ namespace mods::rate_limiting {
 			return;
 		}
 		player->sendln("Starting list...");
-		player->send(mods::rate_limiting::action_strings);
+		for(const auto& str : mods::rate_limiting::action_strings) {
+			player->sendln(str);
+		}
 		player->sendln("Done listing.");
 		player->sendln(CAN_BE_SEARCHED());
 		ADMIN_DONE();
@@ -148,7 +150,9 @@ namespace mods::rate_limiting {
 		if(vec_args.size()) {
 			mods::search_screen(player,screen, vec_args, limit);
 		} else {
-			player->send(screen);
+			for(const auto& line : screen) {
+				player->sendln(line);
+			}
 		}
 		player->sendln("Done listing.");
 		player->sendln(CAN_BE_SEARCHED());

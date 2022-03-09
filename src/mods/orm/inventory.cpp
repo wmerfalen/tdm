@@ -261,6 +261,7 @@ namespace mods::orm::inventory {
 					continue;
 				}
 				if(row["po_wear_position"].is_null() == false) {
+					m_debug("equippping " << row["po_yaml"].c_str() << "to " << row["po_wear_position"].as<int>());
 					player->equip(std::move(obj),row["po_wear_position"].as<int>(),false);
 					continue;
 				}

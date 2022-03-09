@@ -339,122 +339,8 @@ ACMD(do_write) {
 	}
 }
 
-/**********************************************************************
- * generalized communication func, originally by Fred C. Merkel (Torg) *
-  *********************************************************************/
-
 ACMD(do_gen_comm) {
-	char color_on[24];
-
-	/* Array of flags which must _not_ be set in order for comm to be heard */
-	int channels[] = {
-		0,
-		PRF_DEAF,
-		PRF_NOGOSS,
-		PRF_NOAUCT,
-		PRF_NOGRATZ,
-		0
-	};
-
-	/*
-	 * com_msgs: [0] Message if you can't perform the action because of noshout
-	 *           [1] name of the action
-	 *           [2] message if you're not on the channel
-	 *           [3] a color string.
-	 */
-	const char *com_msgs[][4] = {
-		{
-			"You cannot holler!!\r\n",
-			"holler",
-			"",
-			KYEL
-		},
-
-		{
-			"You cannot shout!!\r\n",
-			"shout",
-			"Turn off your noshout flag first!\r\n",
-			KYEL
-		},
-
-		{
-			"You cannot gossip!!\r\n",
-			"gossip",
-			"You aren't even on the channel!\r\n",
-			KYEL
-		},
-
-		{
-			"You cannot auction!!\r\n",
-			"auction",
-			"You aren't even on the channel!\r\n",
-			KMAG
-		},
-
-		{
-			"You cannot congratulate!\r\n",
-			"congrat",
-			"You aren't even on the channel!\r\n",
-			KGRN
-		}
-	};
-
-	/* to keep pets, etc from being ordered to shout */
-	if(!ch->has_desc) {
-		return;
-	}
-
-	if(PLR_FLAGGED(ch, PLR_NOSHOUT)) {
-		send_to_char(ch, "%s", com_msgs[subcmd][0]);
-		return;
-	}
-
-	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_SOUNDPROOF)) {
-		send_to_char(ch, "The walls seem to absorb your words.");
-		return;
-	}
-
-	/* level_can_shout defined in config.c */
-	if(GET_LEVEL(ch) < level_can_shout) {
-		send_to_char(ch, "You must be at least level %d before you can %s.", level_can_shout, com_msgs[subcmd][1]);
-		return;
-	}
-
-	/* make sure the char is on the channel */
-	if(PRF_FLAGGED(ch, channels[subcmd])) {
-		send_to_char(ch, "%s", com_msgs[subcmd][2]);
-		return;
-	}
-
-	/* skip leading spaces */
-	skip_spaces(&argument);
-
-	/* make sure that there is something there to say! */
-	if(!*argument) {
-		send_to_char(ch, "Yes, %s, fine, %s we must, but WHAT???", com_msgs[subcmd][1], com_msgs[subcmd][1]);
-		return;
-	}
-
-	if(subcmd == SCMD_HOLLER) {
-		if(GET_MOVE(ch) < holler_move_cost) {
-			send_to_char(ch, "You're too exhausted to holler.");
-			return;
-		} else {
-			GET_MOVE(ch) -= holler_move_cost;
-		}
-	}
-
-	/* set up the color on code */
-	strlcpy(color_on, com_msgs[subcmd][3], sizeof(color_on));
-
-	/* first, set up strings to be given to the communicator */
-	if(PRF_FLAGGED(ch, PRF_NOREPEAT)) {
-		send_to_char(ch, "%s", OK);
-	} else {
-		send_to_char(ch, "%sYou %s, '%s'%s", COLOR_LEV(ch) >= C_CMP ? color_on : "", com_msgs[subcmd][1], argument, CCNRM(ch, C_CMP));
-	}
-
-	mods::chat::communicate<player_ptr_t,std::string_view>(player,com_msgs[subcmd][1],argument);
+	mods::chat::handle_chat(player,argument);
 }
 
 
@@ -486,7 +372,7 @@ ACMD(do_qcomm) {
 			strlcpy(buf, argument, sizeof(buf));
 		}
 
-		for(auto & i : descriptor_list)
+		for(auto& i : descriptor_list)
 			if(STATE(i) == CON_PLAYING && i.character->uuid != ch->uuid && PRF_FLAGGED(i.character, PRF_QUEST)) {
 				act(buf, 0, ch, 0, i.character, TO_VICT | TO_SLEEP);
 			}

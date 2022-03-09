@@ -31,6 +31,11 @@ namespace mods {
 		uint64_t next_event_tick;
 		uint64_t add;
 	};
+	struct consumable_removal_description_t {
+		uuid_t player;
+		mods::yaml::consumable_description_t consumable;
+		uint64_t expiration_tick;
+	};
 	class deferred {
 		public:
 			constexpr static uint32_t EVENT_OBJECT_DESTRUCT = 0;
@@ -40,12 +45,14 @@ namespace mods {
 			constexpr static uint32_t EVENT_PLAYER_REVIVE_SUCCESSFUL = 4;
 			constexpr static uint32_t EVENT_PLAYER_FINISHES_FEIGN_DEATH = 5;
 			constexpr static uint32_t EVENT_PLAYER_GOES_VISIBLE = 6;
-			constexpr static uint32_t EVENT_WEAPON_COOLDOWN_FINISHED = 7;
+			constexpr static uint32_t ____OPEN_SLOT_AVAILABLE___ = 7;
 			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_HEALING = 8;
 			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_SMALL = 9;
 			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_MEDIUM = 10;
 			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_LARGE = 11;
 			constexpr static uint32_t EVENT_CORPSE_EXPLODE = 12;
+			constexpr static uint32_t EVENT_CONTAGION_MINOR_SHIELDING_OVER = 13;
+			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_UNINSTALLATION = 14;
 			constexpr static uint64_t TICK_RESOLUTION = 3;
 			using seconds = uint16_t;
 			using lambda_queue_t = std::multimap<uint64_t,std::function<void()>>;
@@ -77,7 +84,7 @@ namespace mods {
 			    uint64_t next_event_tick,
 			    uint64_t add
 			);
-			void push_weapon_cooldown(const uint16_t& ticks, const uuid_t& player_uuid);
+			void push_consumable_wears_off(const uuid_t& player,const uint16_t& ticks, obj_ptr_t& item);
 			void push_step(uint16_t ticks,std::size_t hash,const uuid_t& player_uuid);
 			void iteration();
 			void detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture);
@@ -104,6 +111,7 @@ namespace mods {
 			time_t m_time_tracker;
 			uint32_t m_ticks_per_minute;
 			uint32_t m_ticks_per_minute_sample;
+			std::vector<consumable_removal_description_t> m_consumables;
 		private:
 			void tick();
 	};

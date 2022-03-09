@@ -124,6 +124,10 @@ namespace mods::classes {
 
 			obj_ptr_t underbarrel();
 
+			/** Return the wrapper class */
+			shotgun_ub_t& get_shotgun_underbarrel_wrapper();
+			frag_ub_t& get_frag_underbarrel_wrapper();
+
 			void target_died(uuid_t);
 			void unblock_healing();
 			std::tuple<bool,std::string> mark_target(std::string_view target);

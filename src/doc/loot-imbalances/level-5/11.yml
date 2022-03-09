@@ -1,0 +1,61 @@
+# Level 5, M16 AR
+# Appraisal: 2/10
+
+rifle_accuracy_map_0: 10.000000
+rifle_accuracy_map_1: 10.000000
+rifle_accuracy_map_2: 10.000000
+rifle_accuracy_map_3: 10.000000
+rifle_ammo_max: 2								# BROKEN
+rifle_ammo_type:
+rifle_anti_matter_damage: 1
+rifle_base_damage: 172
+rifle_chance_to_injure: 8.000000
+rifle_clip_size: 8							# PATHETIC [unless balanced]
+rifle_cooldown_between_shots: 2
+rifle_corrosive_damage: 3
+rifle_critical_chance: 2
+rifle_critical_range: 4
+rifle_cryogenic_damage: 1
+rifle_damage_dice_count: 13
+rifle_damage_dice_sides: 2
+rifle_damage_map_0: 10.000000
+rifle_damage_map_1: 10.000000
+rifle_damage_map_2: 10.000000
+rifle_damage_map_3: 10.000000
+rifle_disorient_amount: 3.140000
+rifle_effective_firing_range: 2
+rifle_emp_damage: 2
+rifle_explosive_damage: 1
+rifle_file: m16a4.yml
+rifle_headshot_bonus: 1.000000
+rifle_incendiary_damage: 3
+rifle_manufacturer: Standard Issue
+rifle_max_range: 3
+rifle_muzzle_velocity: 24
+rifle_name: M16A4 Assault Rifle
+rifle_radioactive_damage: 1
+rifle_range_multiplier: 2.000000
+rifle_rarity: COMMON
+rifle_reload_time: 2						# OP
+rifle_rounds_per_minute: 80
+rifle_shock_damage: 0
+rifle_shrapnel_damage: 9
+rifle_stat_armor: 0
+rifle_stat_chemistry: 0
+rifle_stat_constitution: 0
+rifle_stat_demolitions: 0
+rifle_stat_dexterity: 4
+rifle_stat_electronics: 2
+rifle_stat_intelligence: 1
+rifle_stat_marksmanship: 2
+rifle_stat_medical: 0
+rifle_stat_sniping: 2
+rifle_stat_strategy: 4
+rifle_stat_strength: 7
+rifle_stat_weapon_handling: 2
+rifle_stat_wisdom: 2
+rifle_str_type: ASSAULT_RIFLE
+rifle_type: 4
+rifle_vnum: 25
+
+

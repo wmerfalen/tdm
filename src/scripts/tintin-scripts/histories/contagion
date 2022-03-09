@@ -298,3 +298,151 @@ bootup
 autoexit
 automap
 l
+corpse_me
+invoke corpse_explosion corpse
+practice corpse_explosion
+practice ce
+practice hce
+invoke hellfire_corpse_explosion Corpse
+invoke hellfire_corpse_explosion corpse
+n
+corpse_me
+invoke hellfire_corpse_explosion corpse
+invoke hellfire_corpse_explosion Corpse
+l
+invoke hellfire_corpse_explosion corpse
+invoke hellfire_corpse_explosion corpse n
+invoke hellfire_corpse_explosion
+invoke hellfire_corpse_explosion Corpse
+invoke hellfire_corpse_explosion c
+invoke hellfire_corpse_explosion contagion
+l
+invoke hellfire_corpse_explosion corpse
+prac
+score
+skills
+ls
+skills
+practice drag
+l
+n
+corpse_me
+invoke drag_corpse corpse north
+l
+invoke drag_corpse Corpse north
+n
+corpse_me
+invoke drag_corpse Corpse north
+n
+e
+corpse_me
+invoke drag_corpse Corpse north
+invoke drag_corpse corpse north
+l
+n
+corpse_me
+invoke drag_corpse corpse west
+n
+corpse_me
+invoke drag_corpse corpse west
+n
+corpse_me
+invoke drag_corpse corpse west
+invoke drag_corpse Corpse west
+invoke drag_corpse corpse west
+n
+corpse_me
+invoke drag_corpse corpse west
+y
+foo
+m
+next
+choose CONTAGION
+y
+1
+bootup
+l
+n
+w
+e
+l
+e
+s
+n
+w
+e
+s
+n
+w
+e
+n
+e
+d
+e
+d
+e
+d
+e
+s
+w
+n
+w
+n
+e
+w
+n
+s
+w
+s
+w
+s
+w
+e
+w
+e
+s
+n
+s
+w
+s
+w
+s
+w
+s
+w
+e
+ee
+e
+n
+e
+n
+e
+n
+nn
+e
+n
+e
+n
+nn
+n
+e
+n
+s
+w
+n
+w
+n
+s
+e
+s
+d
+n
+w
+l
+list
+lis
+list
+help shop
+view 1
+l
+sbuild

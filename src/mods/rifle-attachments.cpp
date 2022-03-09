@@ -116,6 +116,19 @@ namespace mods {
 		m_rifle_yaml_file = map["base"];
 		base_object = create_object(ITEM_RIFLE,map["base"]);
 		base_object->rifle()->attributes->is_rifle_attachment = true;
+		base_damage = base_object->rifle()->attributes->base_damage;
+		damage_dice_count = base_object->rifle()->attributes->damage_dice_count;
+		damage_dice_sides = base_object->rifle()->attributes->damage_dice_sides;
+		incendiary_damage = base_object->rifle()->attributes->incendiary_damage;
+		explosive_damage = base_object->rifle()->attributes->explosive_damage;
+		shrapnel_damage = base_object->rifle()->attributes->shrapnel_damage;
+		corrosive_damage = base_object->rifle()->attributes->corrosive_damage;
+		cryogenic_damage = base_object->rifle()->attributes->cryogenic_damage;
+		radioactive_damage = base_object->rifle()->attributes->radioactive_damage;
+		anti_matter_damage = base_object->rifle()->attributes->anti_matter_damage;
+		emp_damage = base_object->rifle()->attributes->emp_damage;
+		shock_damage = base_object->rifle()->attributes->shock_damage;
+		cooldown_between_shots = base_object->rifle()->attributes->cooldown_between_shots;
 		incendiary_damage_percent = 0;
 		explosive_damage_percent = 0;
 		shrapnel_damage_percent = 0;
@@ -132,7 +145,7 @@ namespace mods {
 		durability_profile = 0;
 		accuracy_points = 0;
 		incendiary_damage = 0;
-		radiation_damage = 0;
+		radioactive_damage = 0;
 		armor_penetration_amount = 0;
 		disorient_amount = 0;
 		recoil_reduction = 0;
@@ -142,6 +155,8 @@ namespace mods {
 		aimed_limb_accuracy_percent = 0;
 		underbarrel_launcher_type = "NONE";
 		damage_percent_bonus = 0;
+		thermal_range = 0;
+		night_vision_range = 0;
 		static const char* LEVEL_STR = "#level:";
 		auto level_position = line.find(LEVEL_STR);
 		if(level_position != std::string::npos) {
@@ -199,7 +214,7 @@ namespace mods {
 				damage_percent_bonus += object->attachment()->attributes->damage_percent_bonus;
 				durability_profile += object->attachment()->attributes->durability_profile;
 				incendiary_damage += object->attachment()->attributes->incendiary_damage;
-				radiation_damage += object->attachment()->attributes->radiation_damage;
+				radioactive_damage += object->attachment()->attributes->radiation_damage;
 				armor_penetration_amount += object->attachment()->attributes->armor_penetration_amount;
 				disorient_amount += object->attachment()->attributes->disorient_amount;
 				free_ammo_chance += object->attachment()->attributes->free_ammo_chance;
@@ -211,6 +226,9 @@ namespace mods {
 				accuracy_points += object->attachment()->attributes->accuracy_points;
 				underbarrel_launcher_type = object->attachment()->attributes->underbarrel_launcher_type;
 				loudness_reduction += object->attachment()->attributes->loudness_reduction;
+
+				thermal_range += object->attachment()->attributes->thermal_range;
+				night_vision_range += object->attachment()->attributes->night_vision_range;
 			}
 		}
 		base_object->action_description = this->examine();
@@ -288,6 +306,8 @@ namespace mods {
 		           "aimed_limb_accuracy_percent: ",a->aimed_limb_accuracy_percent,"\r\n",
 		           "underbarrel_launcher_type: ",a->underbarrel_launcher_type,"\r\n",
 		           "damage_percent_bonus: ",a->damage_percent_bonus,"\r\n",
+		           "thermal_range: ",a->thermal_range,"\r\n",
+		           "night_vision_range: ",a->night_vision_range,"\r\n",
 		           "str_type: ",a->str_type,"\r\n");
 	}
 	std::map<std::string,std::string> rifle_attachments_t::friendly_map() {

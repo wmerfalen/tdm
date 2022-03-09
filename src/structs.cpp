@@ -258,9 +258,6 @@ char_player_data::char_player_data() {
 	memset(&time,0,sizeof(time));
 	weight = 0;
 	height = 0;
-	/** TODO: phase this out */
-	passwd.assign("");
-	std::fill(m_passwd.begin(),m_passwd.end(),0);
 }
 char_data::char_data(char_data* o) {
 #ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__

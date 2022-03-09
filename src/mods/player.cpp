@@ -41,7 +41,6 @@
 #define NPC_SEND_DEBUG(a)
 #endif
 
-
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -50,6 +49,8 @@
  * output.
  */
 
+extern void obj_from_room(obj_ptr_t in_object);
+static constexpr std::size_t MAX_PLAYER_NAME_LENGTH = 16;
 namespace mods::stat_bonuses {
 	extern void player_equip(uuid_t player_uuid,uuid_t object_uuid);
 	extern void player_unequip(uuid_t player_uuid,uuid_t object_uuid);
@@ -87,7 +88,6 @@ namespace mods {
 
 
 	void player::set_shared_ptr(player_ptr_t& self_ptr) {
-		deprecated("set_shared_ptr");
 		return;
 		/*
 			 m_self_ptr = self_ptr;
@@ -261,6 +261,7 @@ namespace mods {
 
 			perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
+			++m_equipment_hash;
 			//mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
 		}
 	}
@@ -287,6 +288,7 @@ namespace mods {
 			m_equipment[pos] = nullptr;
 
 			this->m_sync_equipment();
+			++m_equipment_hash;
 		}
 	}
 	void player::unequip_into_inventory(int pos) {
@@ -306,32 +308,136 @@ namespace mods {
 		 */
 		const auto& item = m_equipment[pos];
 		/** TODO melee */
-		if(item->has_rifle()) {
-			aff_abils().str += (equip ? 1 : -1) * item->rifle()->attributes->stat_strength;
-			aff_abils().intel += (equip ? 1 : -1) * item->rifle()->attributes->stat_intelligence;
-			aff_abils().wis +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_wisdom;
-			aff_abils().dex += (equip ? 1 : -1) * item->rifle()->attributes->stat_dexterity;
-			aff_abils().con += (equip ? 1 : -1) * item->rifle()->attributes->stat_constitution;
-			aff_abils().electronics +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_electronics;
-			aff_abils().armor += (equip ? 1 : -1) * item->rifle()->attributes->stat_armor;
-			aff_abils().marksmanship +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_marksmanship;
-			aff_abils().sniping +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_sniping;
-			aff_abils().demolitions +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_demolitions;
-			aff_abils().chemistry +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_chemistry;
-			aff_abils().weapon_handling +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_weapon_handling;
-			aff_abils().strategy +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_strategy;
-			aff_abils().medical +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_medical;
-			auto rifle = mods::rifle_attachments::by_uuid(item->uuid);
-			if(rifle) {
-				m_incendiary_damage_percent += (equip ? 1 : -1) * rifle->incendiary_damage_percent;
-				m_explosive_damage_percent += (equip ? 1 : -1) * rifle->explosive_damage_percent;
-				m_shrapnel_damage_percent += (equip ? 1 : -1) *  rifle->shrapnel_damage_percent;
-				m_corrosive_damage_percent += (equip ? 1 : -1) * rifle->corrosive_damage_percent;
-				m_cryogenic_damage_percent += (equip ? 1 : -1) * rifle->cryogenic_damage_percent;
-				m_radiation_damage_percent += (equip ? 1 : -1) * rifle->radiation_damage_percent;
-				m_emp_damage_percent += (equip ? 1 : -1) * rifle->emp_damage_percent;
-				m_shock_damage_percent += (equip ? 1 : -1) * rifle->shock_damage_percent;
-				m_anti_matter_damage_percent += (equip ? 1 : -1) * rifle->anti_matter_damage_percent;
+		auto rifle = mods::rifle_attachments::by_uuid(item->uuid);
+#ifdef __equip_debug__
+		if(equip) {
+			sendln("Equipping...");
+		} else {
+			sendln("Un-equipping...");
+		}
+#endif
+
+		if(!rifle && item && item->has_rifle() && pos == WEAR_PRIMARY) {
+#ifdef __equip_debug__
+			sendln("You have a regular rifle. running attr feed...");
+			sendln(CAT("Rifle name: ",item->rifle()->attributes->name));
+#endif
+			equip_clamp(m_rct->stat_strength,aff_abils().str,equip, item->rifle()->attributes->stat_strength);
+			equip_clamp(m_rct->stat_intelligence,aff_abils().intel,equip,item->rifle()->attributes->stat_intelligence);
+			equip_clamp(m_rct->stat_wisdom,aff_abils().wis,equip, item->rifle()->attributes->stat_wisdom);
+			equip_clamp(m_rct->stat_dexterity,aff_abils().dex,equip,item->rifle()->attributes->stat_dexterity);
+			equip_clamp(m_rct->stat_constitution,aff_abils().con,equip,item->rifle()->attributes->stat_constitution);
+			equip_clamp(m_rct->stat_electronics,aff_abils().electronics, equip,item->rifle()->attributes->stat_electronics);
+			equip_clamp(m_rct->stat_armor,aff_abils().armor,equip,item->rifle()->attributes->stat_armor);
+			equip_clamp(m_rct->stat_marksmanship,aff_abils().marksmanship,equip,  item->rifle()->attributes->stat_marksmanship);
+			equip_clamp(m_rct->stat_sniping,aff_abils().sniping,equip,  item->rifle()->attributes->stat_sniping);
+			equip_clamp(m_rct->stat_demolitions,aff_abils().demolitions,equip,  item->rifle()->attributes->stat_demolitions);
+			equip_clamp(m_rct->stat_chemistry,aff_abils().chemistry,equip,  item->rifle()->attributes->stat_chemistry);
+			equip_clamp(m_rct->stat_weapon_handling,aff_abils().weapon_handling,equip,  item->rifle()->attributes->stat_weapon_handling);
+			equip_clamp(m_rct->stat_strategy = aff_abils().strategy,equip,  item->rifle()->attributes->stat_strategy);
+			equip_clamp(m_rct->stat_medical = aff_abils().medical,equip,  item->rifle()->attributes->stat_medical);
+			equip_clamp(m_rct->max_range,equip,item->rifle()->attributes->max_range);
+			equip_clamp(m_rct->critical_chance,equip,item->rifle()->attributes->critical_chance);
+			equip_clamp(m_rct->base_damage,equip,item->rifle()->attributes->base_damage);
+			equip_clamp(m_rct->damage_dice_count,equip,item->rifle()->attributes->damage_dice_count);
+			equip_clamp(m_rct->damage_dice_sides,equip,item->rifle()->attributes->damage_dice_sides);
+			equip_clamp(m_rct->incendiary_damage,equip,item->rifle()->attributes->incendiary_damage);
+			equip_clamp(m_rct->explosive_damage,equip,item->rifle()->attributes->explosive_damage);
+			equip_clamp(m_rct->shrapnel_damage,equip,item->rifle()->attributes->shrapnel_damage);
+			equip_clamp(m_rct->corrosive_damage,equip,item->rifle()->attributes->corrosive_damage);
+			equip_clamp(m_rct->cryogenic_damage,equip,item->rifle()->attributes->cryogenic_damage);
+			equip_clamp(m_rct->radioactive_damage,equip,item->rifle()->attributes->radioactive_damage);
+			equip_clamp(m_rct->emp_damage,equip,item->rifle()->attributes->emp_damage);
+			equip_clamp(m_rct->shock_damage,equip,item->rifle()->attributes->shock_damage);
+			equip_clamp(m_rct->anti_matter_damage,equip,item->rifle()->attributes->anti_matter_damage);
+			equip_clamp(m_rct->cooldown_between_shots,equip,item->rifle()->attributes->cooldown_between_shots);
+
+			//m_rct->accuracy += (equip ? 1 : -1) * item->rifle()->attributes->accuracy;
+			/*
+			 * TODO: how to calculate these?
+			std::pair<int16_t,int16_t> crit_range;
+			std::pair<int16_t,int16_t> effective_range;
+			* TODO: where to get these?
+			std::vector<uuid_t> tracked;
+			std::vector<uuid_t> marked;
+			*/
+			/**
+			 * VIABLE TARGETS FLAGS
+			 * ----------------------------
+			 * bits:
+			 * 1 -> can hit same room
+			 * 2 -> can hit ranged
+			 * 4 -> can hit doors
+			 * 8 -> can hit objects
+			 * 16 -> can hit cars
+			 *
+			 */
+
+			uint32_t viable_targets =0;
+			switch(item->rifle()->attributes->type) {
+				case mw_rifle::SNIPER:
+					viable_targets &= ~(CAN_HIT_SAME_ROOM);
+					viable_targets |= (CAN_HIT_RANGED);
+					break;
+				case mw_rifle::PISTOL:
+					viable_targets |= (CAN_HIT_SAME_ROOM);
+					break;
+				case mw_rifle::SHOTGUN:
+					viable_targets |= (CAN_HIT_SAME_ROOM);
+					viable_targets &= ~(CAN_HIT_RANGED);
+					break;
+				default:
+					viable_targets |= (CAN_HIT_SAME_ROOM);
+					viable_targets |= (CAN_HIT_RANGED);
+					break;
+			}
+			m_rct->viable_targets = (mods::viable_targets_t)viable_targets;
+
+
+
+		}
+		if(rifle && pos == WEAR_PRIMARY) {
+#ifdef __equip_debug__
+			sendln("You have a rifle attachment. feeding attributes...");
+#endif
+			equip_clamp(m_rct->incendiary_percent,m_incendiary_damage_percent,equip, rifle->incendiary_damage_percent);
+			equip_clamp(m_rct->explosive_percent,m_explosive_damage_percent,equip, rifle->explosive_damage_percent);
+			equip_clamp(m_rct->shrapnel_percent,m_shrapnel_damage_percent,equip,  rifle->shrapnel_damage_percent);
+			equip_clamp(m_rct->corrosive_percent,m_corrosive_damage_percent,equip, rifle->corrosive_damage_percent);
+			equip_clamp(m_rct->cryogenic_percent,m_cryogenic_damage_percent,equip, rifle->cryogenic_damage_percent);
+			equip_clamp(m_rct->radioactive_percent,m_radiation_damage_percent,equip, rifle->radiation_damage_percent);
+			equip_clamp(m_rct->emp_percent,m_emp_damage_percent,equip, rifle->emp_damage_percent);
+			equip_clamp(m_rct->shock_percent,m_shock_damage_percent,equip, rifle->shock_damage_percent);
+			equip_clamp(m_rct->anti_matter_percent,m_anti_matter_damage_percent,equip, rifle->anti_matter_damage_percent);
+
+			//FIXME doesn't exist on rifle attachment m_rct->zoom_magnification += (equip ? 1 : -1) * rifle->zoom_magnification;
+
+			equip_clamp(m_rct->incendiary_damage,equip, rifle->incendiary_damage);
+			equip_clamp(m_rct->explosive_damage,equip, rifle->explosive_damage);
+			equip_clamp(m_rct->shrapnel_damage,equip,  rifle->shrapnel_damage);
+			equip_clamp(m_rct->corrosive_damage,equip, rifle->corrosive_damage);
+			equip_clamp(m_rct->cryogenic_damage,equip, rifle->cryogenic_damage);
+			equip_clamp(m_rct->radioactive_damage,equip, rifle->radioactive_damage);
+			equip_clamp(m_rct->emp_damage,equip, rifle->emp_damage);
+			equip_clamp(m_rct->shock_damage,equip, rifle->shock_damage);
+			equip_clamp(m_rct->anti_matter_damage,equip, rifle->anti_matter_damage);
+			equip_clamp(m_rct->zoom_multiplier,equip, rifle->zoom_multiplier);
+			equip_clamp(m_rct->damage_percent_bonus,equip, rifle->damage_percent_bonus);
+			equip_clamp(m_rct->armor_penetration,equip, rifle->armor_penetration_amount);
+			equip_clamp(m_rct->zoom_multiplier,equip, rifle->zoom_multiplier);
+			equip_clamp(m_rct->aimed_limb_accuracy_percent,equip, rifle->aimed_limb_accuracy_percent);
+			equip_clamp(m_rct->base_damage,equip, rifle->base_damage);
+			equip_clamp(m_rct->damage_dice_count,equip, rifle->damage_dice_count);
+			equip_clamp(m_rct->damage_dice_sides,equip, rifle->damage_dice_sides);
+			equip_clamp(m_rct->cooldown_between_shots,equip, rifle->cooldown_between_shots);
+			equip_clamp(m_rct->thermal_range, equip, rifle->thermal_range);
+			equip_clamp(m_rct->night_vision_range, equip, rifle->night_vision_range);
+			if(equip) {
+				m_thermal_range += rifle->thermal_range;
+				m_night_vision_range += rifle->night_vision_range;
+			} else {
+				m_thermal_range -= rifle->thermal_range;
+				m_night_vision_range -= rifle->night_vision_range;
 			}
 		}
 		if(item->has_armor()) {
@@ -374,31 +480,32 @@ namespace mods {
 					m_elite_protection->unequip(pos);
 				}
 			}
-			aff_abils().str += (equip ? 1 : -1) * item->armor()->attributes->stat_strength;
-			aff_abils().intel += (equip ? 1 : -1) * item->armor()->attributes->stat_intelligence;
-			aff_abils().wis +=(equip ? 1 : -1) *  item->armor()->attributes->stat_wisdom;
-			aff_abils().dex += (equip ? 1 : -1) * item->armor()->attributes->stat_dexterity;
-			aff_abils().con += (equip ? 1 : -1) * item->armor()->attributes->stat_constitution;
-			aff_abils().electronics +=(equip ? 1 : -1) *  item->armor()->attributes->stat_electronics;
-			aff_abils().armor += (equip ? 1 : -1) * item->armor()->attributes->stat_armor;
-			aff_abils().marksmanship +=(equip ? 1 : -1) *  item->armor()->attributes->stat_marksmanship;
-			aff_abils().sniping +=(equip ? 1 : -1) *  item->armor()->attributes->stat_sniping;
-			aff_abils().demolitions +=(equip ? 1 : -1) *  item->armor()->attributes->stat_demolitions;
-			aff_abils().chemistry +=(equip ? 1 : -1) *  item->armor()->attributes->stat_chemistry;
-			aff_abils().weapon_handling +=(equip ? 1 : -1) *  item->armor()->attributes->stat_weapon_handling;
-			aff_abils().strategy +=(equip ? 1 : -1) *  item->armor()->attributes->stat_strategy;
-			aff_abils().medical +=(equip ? 1 : -1) *  item->armor()->attributes->stat_medical;
+			equip_clamp(aff_abils().str,equip, item->armor()->attributes->stat_strength);
+			equip_clamp(aff_abils().intel,equip, item->armor()->attributes->stat_intelligence);
+			equip_clamp(aff_abils().wis,equip,  item->armor()->attributes->stat_wisdom);
+			equip_clamp(aff_abils().dex,equip, item->armor()->attributes->stat_dexterity);
+			equip_clamp(aff_abils().con,equip, item->armor()->attributes->stat_constitution);
+			equip_clamp(aff_abils().electronics,equip,  item->armor()->attributes->stat_electronics);
+			equip_clamp(aff_abils().armor,equip, item->armor()->attributes->stat_armor);
+			equip_clamp(aff_abils().marksmanship,equip,  item->armor()->attributes->stat_marksmanship);
+			equip_clamp(aff_abils().sniping,equip,  item->armor()->attributes->stat_sniping);
+			equip_clamp(aff_abils().demolitions,equip,  item->armor()->attributes->stat_demolitions);
+			equip_clamp(aff_abils().chemistry,equip,  item->armor()->attributes->stat_chemistry);
+			equip_clamp(aff_abils().weapon_handling,equip,  item->armor()->attributes->stat_weapon_handling);
+			equip_clamp(aff_abils().strategy,equip,  item->armor()->attributes->stat_strategy);
+			equip_clamp(aff_abils().medical,equip,  item->armor()->attributes->stat_medical);
+
 			/** TODO honor thac0 */
 			/** TODO honor weight_in_lbs */
-			m_incendiary_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->incendiary_resistance_percent;
-			m_explosive_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->explosive_resistance_percent;
-			m_shrapnel_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->shrapnel_resistance_percent;
-			m_corrosive_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->corrosive_resistance_percent;
-			m_cryogenic_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->cryogenic_resistance_percent;
-			m_radiation_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->radiation_resistance_percent;
-			m_emp_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->emp_resistance_percent;
-			m_shock_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->shock_resistance_percent;
-			m_anti_matter_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->anti_matter_resistance_percent;
+			equip_clamp(m_incendiary_resistance_percent,equip,item->armor()->attributes->incendiary_resistance_percent);
+			equip_clamp(m_explosive_resistance_percent,equip,item->armor()->attributes->explosive_resistance_percent);
+			equip_clamp(m_shrapnel_resistance_percent,equip,item->armor()->attributes->shrapnel_resistance_percent);
+			equip_clamp(m_corrosive_resistance_percent,equip,item->armor()->attributes->corrosive_resistance_percent);
+			equip_clamp(m_cryogenic_resistance_percent,equip,item->armor()->attributes->cryogenic_resistance_percent);
+			equip_clamp(m_radiation_resistance_percent,equip,item->armor()->attributes->radiation_resistance_percent);
+			equip_clamp(m_emp_resistance_percent,equip,item->armor()->attributes->emp_resistance_percent);
+			equip_clamp(m_shock_resistance_percent,equip,item->armor()->attributes->shock_resistance_percent);
+			equip_clamp(m_anti_matter_resistance_percent,equip,item->armor()->attributes->anti_matter_resistance_percent);
 			/**
 			 * TODO: honor these armor attributes
 			offensive_damage_amount
@@ -409,6 +516,35 @@ namespace mods {
 			hp,
 			classification,
 			*/
+			uint16_t vision = 0;
+			switch(item->armor()->attributes->type) {
+				case mw_armor::GOGGLES:
+					if(item->armor()->attributes->csv_capabilities.find("provides:night-vision") != std::string::npos) {
+						if(equip) {
+							vision |= HAS_NIGHT_VISION;
+							m_night_vision_range += NIGHT_VISION_RANGE_BASE();
+						} else {
+							vision &= ~(HAS_NIGHT_VISION);
+							m_night_vision_range -= NIGHT_VISION_RANGE_BASE();
+						}
+					}
+					if(item->armor()->attributes->csv_capabilities.find("provides:thermal-vision") != std::string::npos) {
+						if(equip) {
+							vision |= HAS_THERMALS;
+							m_thermal_range += THERMAL_VISION_RANGE_BASE();
+						} else {
+							vision &= ~(HAS_THERMALS);
+							m_thermal_range -= THERMAL_VISION_RANGE_BASE();
+						}
+					}
+					break;
+				default:
+					break;
+			}
+			/**
+			 * TODO: Also take into account any class abilities that provide shadow sight
+			 */
+			m_rct->vision = (vision_t)vision;
 		}
 		if(m_equipment[pos]->obj_flags.type_flag == ITEM_ARMOR) {
 			int factor = 1;
@@ -448,8 +584,96 @@ namespace mods {
 				mods::globals::affect_room_light(room(),light);
 			}
 		}
-		this->m_sync_equipment();
+		m_rct->stat_strength = aff_abils().str;
+		m_rct->stat_intelligence = aff_abils().intel;
+		m_rct->stat_wisdom = aff_abils().wis;
+		m_rct->stat_dexterity = aff_abils().dex;
+		m_rct->stat_constitution = aff_abils().con;
+		m_rct->stat_electronics = aff_abils().electronics;
+		m_rct->stat_armor = aff_abils().armor;
+		m_rct->stat_marksmanship = aff_abils().marksmanship;
+		m_rct->stat_sniping = aff_abils().sniping;
+		m_rct->stat_demolitions = aff_abils().demolitions;
+		m_rct->stat_chemistry = aff_abils().chemistry;
+		m_rct->stat_weapon_handling = aff_abils().weapon_handling;
+		m_rct->stat_strategy = aff_abils().strategy;
+		m_rct->stat_medical = aff_abils().medical;
+		/**
+			* 1) Target acquisition
+				 Yaml file dependants:
+					rifle:
+						- zoom magnification
+						- max range
+						- critical range
+					- range multiplier
+					- effective firing range
+					attachments:
+						- zoom multiplier
+						- aimed limb accuracy points
+					armor:
+						- stat weapon handling
+						- stat sniping
+					consumable:
+						- adds room range
+						- adds critical range
+						- adds max range
 
+				 GHOST abilities:
+					- marked/tracked enemy
+					- snipe doors, objects, cars, etc
+
+				 CONTAGION abilities:
+					- Shadow sight
+					- Morbid Insight
+						- player can detect nearby enemies if a corpse is nearby
+
+				 MARINE abilities:
+					- Assault rifles
+		 			- Assault rifle effective range increased by 2 rooms
+						*/
+
+		this->m_sync_equipment();
+		m_rct_calculated->assign(m_rct.get());
+		{
+			auto weapon = primary();
+			if(!weapon) {
+				return;
+			}
+			if(this->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+				/**
+				 * Class ability (MARINE):
+				 * AR's have +10% at criticals
+				 */
+				m_rct_calculated->critical_chance += 10;
+				std::pair<int16_t,int16_t> pair = m_rct->effective_range;
+				/**
+				 * Class ability (MARINE):
+				 * AR's give +2 rooms to effective range
+				 */
+				m_rct_calculated->effective_range = std::make_pair<>(pair.first,pair.second + 2);
+				/**
+				 * Class ability (MARINE):
+				 * AR's have 10% chance of dealing incendiary damage
+				 */
+				m_rct_calculated->elemental_chances.emplace_back(std::make_pair<>(10,mods::elemental_types_t::ELEM_INCENDIARY));
+			}
+			if(this->marine() && mods::object_utils::is_shotgun(weapon)) {
+				/**
+				 * Class ability (MARINE):
+				 * Shotguns do same room damage at 2-3 rooms away
+				 */
+				m_rct_calculated->effective_range = std::make_pair<>(0,m_rct->effective_range.second);
+			}
+			if(this->marine() && mods::object_utils::is_assault_rifle(weapon)) {
+				m_rct_calculated->max_range += MARINE_AR_PASSIVE_RANGE_BONUS();
+			}
+			if(this->ghost() && mods::object_utils::is_sniper_rifle(weapon)) {
+				m_rct_calculated->max_range += GHOST_SNIPER_PASSIVE_RANGE_BONUS();
+			}
+			if(this->breacher() && mods::object_utils::is_shotgun(weapon)) {
+				m_rct_calculated->effective_range.second = m_rct_calculated->effective_range.second + 2;
+			}
+		}
 	}
 	bool player::has_weapon_capability(uint8_t type) {
 		auto w = rifle();
@@ -463,15 +687,20 @@ namespace mods {
 		return true; //FIXME:
 	}
 	void player::weapon_cooldown_start(const int& ticks) {
-		mods::globals::defer_queue->push_weapon_cooldown(ticks,uuid());
+		m_cooldown_start_tick = CURRENT_TICK();
 		m_can_attack = 0;
 		m_timer.reset();
 		m_cooldown_ticks = ticks;
 	}
 	void player::weapon_cooldown_clear() {
 		m_can_attack = 1;
+		m_cooldown_start_tick = m_cooldown_ticks = 0;
+		m_timer.reset();
 	}
-	const bool& player::can_attack_again() const {
+	const bool& player::can_attack_again() {
+		if(m_cooldown_start_tick + m_cooldown_ticks <= CURRENT_TICK()) {
+			m_can_attack = 1;
+		}
 		return m_can_attack;
 	}
 	bool player::carrying_ammo_of_type(const mw_rifle& type) {
@@ -617,7 +846,8 @@ namespace mods {
 	std::string player::ucname() {
 		return m_ucname;
 	}
-	void player::set_name(std::string n) {
+	void player::set_name(std::string in_name) {
+		std::string n = in_name.substr(0,MAX_PLAYER_NAME_LENGTH-1);
 		cd()->player.name.assign(n);
 		m_name = n;
 		m_ucname = m_name;
@@ -714,15 +944,6 @@ namespace mods {
 		}
 		ammo->consumable()->attributes->capacity += increment;
 		return ammo->consumable()->attributes->capacity;
-	}
-	void player::send(const std::vector<std::string>& list) {
-		for(auto& item : list) {
-			if(m_do_paging) {
-				queue_page_fragment(item.c_str());
-			} else {
-				sendln(item);
-			}
-		}
 	}
 	void player::psendln(std::string_view str) {
 		MENTOC_NPC_CHECK(str.data());
@@ -836,10 +1057,23 @@ namespace mods {
 		return m_damage_nerf_percent;
 	}
 	void player::init() {
+		m_weight_index = player::weight_index_t::WEIGHT_NORMAL;
+		m_equipment_hash = 0;
+		m_screen_width = 80;
+		m_can_move = true;
+		m_thermal_range = 0;
+		m_night_vision_range = 0;
+		m_ensnared_amount = 0;
+		//m_host.clear();
+		//m_ip.clear();
+		m_locked_down = false;
+		m_rules_of_engagement = mods::combat::rules_of_engagement_t::ROM_BALLISTIC;
+		m_cooldown_start_tick = 0;
+		m_luck = 0;
 		m_triads = {0,0,0,0,0};
-		m_combat_order.clear();
 		m_stance = "balanced";
 		m_current_melee_index = 0;
+		m_combat_order.clear();
 		get_affect_dissolver().clear_all();
 		m_to_move = 0;
 		m_to_attack = 0;
@@ -919,6 +1153,8 @@ namespace mods {
 		m_emp_resistance_percent = 0;
 		m_shock_resistance_percent = 0;
 		m_anti_matter_resistance_percent = 0;
+		m_rct = std::make_shared<mods::ranged_combat_totals>();
+		m_rct_calculated = std::make_shared<mods::ranged_combat_totals>();
 	}
 	void player::set_cd(char_data* ch) {
 		m_char_data = ch;
@@ -958,18 +1194,18 @@ namespace mods {
 		SET_BIT(AFF_FLAGS(cd()), flag);
 		set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 	}
-	//void player::affect(mods::flags::aff flag){
-	//	SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
-	//	set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
-	//}
+//void player::affect(mods::flags::aff flag){
+//	SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+//	set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
+//}
 	void player::remove_affect(uint64_t flag) {
 		REMOVE_BIT(AFF_FLAGS(cd()), flag);
 		remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 	}
-	//void player::remove_affect(mods::flags::aff flag){
-	//	REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
-	//	remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
-	//}
+//void player::remove_affect(mods::flags::aff flag){
+//	REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+//	remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
+//}
 	void player::clear_all_affected() {
 		m_flags[mods::flags::chunk_type_t::LEGACY_AFF] = 0;
 		AFF_FLAGS(cd()) = 0;
@@ -992,18 +1228,18 @@ namespace mods {
 		SET_BIT(PLR_FLAGS(cd()), flag);
 		set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 	}
-	//void player::affect_plr(mods::flags::plr flag){
-	//	SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
-	//	set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
-	//}
+//void player::affect_plr(mods::flags::plr flag){
+//	SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+//	set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
+//}
 	void player::remove_affect_plr(uint64_t flag) {
 		REMOVE_BIT(PLR_FLAGS(cd()), flag);
 		remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 	}
-	//void player::remove_affect_plr(mods::flags::plr flag){
-	//	REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
-	//	remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
-	//}
+//void player::remove_affect_plr(mods::flags::plr flag){
+//	REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+//	remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
+//}
 	void player::clear_all_affected_plr() {
 		PLR_FLAGS(cd()) = 0;
 	}
@@ -1130,15 +1366,25 @@ namespace mods {
 		}
 	}
 	void player::set_host(std::string host) {
+		m_host = host;
 		if(m_desc) {
 			m_desc->host = host;
 		}
 	}
-	std::string player::host() const {
+	void player::set_ip(std::string ip) {
 		if(m_desc) {
-			return m_desc->host.c_str();
+			m_desc->ip = ip;
 		}
-		return "unknown";
+		m_ip = ip;
+	}
+	std::string player::ip() const {
+		if(m_desc) {
+			return m_desc->ip.str();
+		}
+		return m_ip;
+	}
+	std::string player::host() const {
+		return m_host;
 	}
 	void player::deactivate_account() {
 		/** TODO: what do we need to do to deactivate the account?
@@ -1256,74 +1502,6 @@ namespace mods {
 	}
 	void player::queue_send_fragment(const char *message, ...) {
 	}
-	size_t player::send(const char *messg, ...) {
-		MENTOC_NPC_CHECK_0(messg);
-		if(desc().has_prompt) {
-			write_to_char("\r\n",0,0);
-		}
-		if(m_do_paging) {
-			static constexpr int txt_buffer_size_total = MAX_STRING_LENGTH;
-			static constexpr int txt_buffer_size_allowable = txt_buffer_size_total - 12;
-			std::array<char,txt_buffer_size_total> txt;
-			std::fill(txt.begin(),txt.end(),0);
-			const char *text_overflow = "**OVERFLOW**\r\n";
-			int size = 0;
-			va_list args;
-			va_start(args, messg);
-			size = vsnprintf(&txt[0], txt_buffer_size_allowable, messg, args);
-			if(size == 0) {
-				return 0;
-			}
-			if(size < 0) {
-				size = txt_buffer_size_allowable;
-				int offset = size - strlen(text_overflow);
-				if(offset < 0) {
-					offset = 0;
-				}
-				if(offset >= txt_buffer_size_total) {
-					offset = txt_buffer_size_total - strlen(text_overflow);
-				}
-				strncpy(&txt[0] + offset, text_overflow,strlen(text_overflow)+1);
-			} else {
-				txt[std::min(size,txt_buffer_size_allowable)] = '\0';
-			}
-			va_end(args);
-			queue_page_fragment(&txt[0]);
-			return 0;
-		}
-		if(messg && *messg) {
-			size_t left;
-			va_list args;
-			va_start(args, messg);
-			left = vwrite_to_output(*(cd()->desc), messg, args);
-			va_end(args);
-			desc().has_prompt = 0;
-			return left;
-		}
-		desc().has_prompt = 0;
-		return 0;
-	}
-
-	size_t player::godsend(const char *messg, ...) {
-		MENTOC_NPC_CHECK_0(messg);
-		if(!m_god_mode) {
-			return 0;
-		}
-		if(messg && *messg) {
-			size_t left;
-			va_list args;
-
-			va_start(args, messg);
-			left = vwrite_to_output(*(cd()->desc), messg, args);
-			va_end(args);
-			desc().has_prompt = 0;
-			return left;
-		}
-
-		desc().has_prompt = 0;
-		return 0;
-	}
-
 
 	player::affect_dissolver_t& player::get_affect_dissolver() {
 		return m_affects;
@@ -1395,7 +1573,32 @@ namespace mods {
 					if(m_char_data->contract) {
 						contract_install_item(target);
 					}
-					this->send("\r\nYou successfully deploy a %s\r\n", obj->name.c_str());
+					this->sendln(
+					    CAT(
+					        "\r\nYou successfully deploy a ", obj->name.c_str()
+					    )
+					);
+					break;
+				}
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_UNINSTALLATION: {
+					auto obj = optr_by_uuid(target);
+					if(!obj) {
+						break;
+					}
+					obj_from_room(obj);
+					carry(obj);
+					mods::object_utils::set_done_uninstalling(obj);
+					if(mods::object_utils::is_claymore(obj)) {
+						mods::demolitions::set_done_uninstalling(target,this->uuid());
+					}
+					if(m_char_data->contract) {
+						contract_uninstall_item(target);
+					}
+					this->sendln(
+					    CAT(
+					        "\r\nYou successfully uninstall a ", obj->name.c_str()
+					    )
+					);
 					break;
 				}
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_BREACH: {
@@ -1413,21 +1616,23 @@ namespace mods {
 					}
 					revive_target->hp() = mods::values::REVIVE_HP();
 					revive_target->position() = POS_STANDING;
-					this->send("{grn}You revive %s!{/grn}\r\n",revive_target->name().c_str());
+					this->sendln(
+					    CAT(
+					        "{grn}You revive ",revive_target->name().c_str(),"!{/grn}"
+					    )
+					);
 					if(!IS_NPC(revive_target->cd())) {
-						revive_target->send("%s {grn}revives you!{/grn}\r\n", this->name().c_str());
+						revive_target->sendln(
+						    CAT(
+						        this->name().c_str(),
+						        " {grn}revives you!{/grn}"
+						    )
+						);
 						revive_target->sendln("{grn}You dust yourself off and get to your feet!");
 					}
 					send_to_room_except(this->room(), {this->uuid(),revive_target->uuid()},
 					                    "%s is revived by %s!",this->name().c_str(),revive_target->name().c_str()
 					                   );
-					break;
-				}
-			case mods::deferred::EVENT_WEAPON_COOLDOWN_FINISHED: {
-					m_can_attack = 1;
-#ifdef __MENTOC_TELL_PLAYER_WHEN_COOLDOWN_FINISHES__
-					sendln(CAT("{grn}Cooldown finished. ",m_cooldown_ticks," took ", m_timer.elapsed()));
-#endif
 					break;
 				}
 			default:
@@ -1606,6 +1811,19 @@ namespace mods {
 		switch(feedback.damage_event) {
 			default:
 				break;
+			case damage_event_t::GUNFIRE_WHIZZED_BY_FROM:
+				this->queue_up(CAT(MSG_GUNFIRE_WHIZZED_BY_FROM_THE_PREFIX(),
+				                   MSG_GUNFIRE_WHIZZED_BY_FROM_THE(),
+				                   dirstr(feedback.from_direction),
+				                   MSG_GUNFIRE_WHIZZED_BY_FROM_THE_SUFFIX()
+				                  ));
+				break;
+			case damage_event_t::YOU_INFLICTED_SAME_ROOM_DAMAGE:
+				this->queue_up(CAT("{grn}*** You hit your target *** [",std::to_string(feedback.damage),"]{/grn}"));
+				break;
+			case damage_event_t::YOU_INFLICTED_SNIPE_DAMAGE:
+				this->queue_up(CAT("{grn}*** You snipe your target *** [",std::to_string(feedback.damage),"]{/grn}"));
+				break;
 			case damage_event_t::YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK:
 				this->queue_up(CAT(MSG_YOU_INFLICTED_BONUS_INNATE_SNIPER_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"]"));
 				break;
@@ -1768,6 +1986,9 @@ namespace mods {
 			case damage_event_t::YOU_INFLICTED_CORPSE_EXPLOSION_DAMAGE:
 				sendln(CAT(MSG_YOU_INFLICT_CORPSE_EXPLOSION(),"[",feedback.damage,"]"));
 				break;
+			case damage_event_t::YOU_WERE_INFLICTED_WITH_BAD_LUCK:
+				sendln(MSG_YOU_WERE_INFLICTED_BY_BAD_LUCK());
+				break;
 		}
 	}
 	/*
@@ -1789,9 +2010,12 @@ namespace mods {
 		m_triads = mods::levels::get_triads_by_class(m_class);
 		GET_CLASS(m_char_data) = m_class;
 	}
-	int player::screen_width() {
-		return 80;//mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
+	uint8_t player::screen_width() const {
+		return m_screen_width;
 	}
+	//int player::screen_width() {
+	//	return m_screen_width;//mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
+	//}
 	std::tuple<uint32_t,uint8_t> player::currently_hacking() {
 		return {m_currently_hacking,m_hacking_row};
 	}
@@ -2065,6 +2289,16 @@ namespace mods {
 			}
 		}
 	}
+	void player::contract_uninstall_item(const uuid_t& item_uuid) {
+		if(!m_contract) {
+			return;
+		}
+		for(auto& c : contracts()) {
+			if(c->is_uninstall_item()) {
+				c->uninstall_item(item_uuid);
+			}
+		}
+	}
 	void player::contract_give_item(obj_ptr_t& object,player_ptr_t& mob) {
 		if(!m_contract) {
 			return;
@@ -2076,8 +2310,13 @@ namespace mods {
 		}
 	}
 	void player::queue_up(std::string_view msg) {
-		sendln(msg);
-		//mods::players::messages::queue(db_id(),msg);
+		if(this->position() == POS_DEAD || moving_to_room() == false) {
+			sendln(msg);
+			return;
+		}
+		if(moving_to_room()) {
+			mods::players::messages::queue(this->uuid(),CAT("\r\n",msg.data(),"\r\n"));
+		}
 	}
 	void player::update_contract_status() {
 		m_contract = m_char_data->contract = m_contract_size;
@@ -2151,10 +2390,138 @@ namespace mods {
 		return {0,"Unimplemented"};
 
 	}
-	void player::add_combat_order(std::string_view technique) {
-		m_combat_order.emplace_back(technique.data());
+	void player::add_combat_order(std::pair<uint16_t,func_t> technique) {
+		m_combat_order.emplace_back(technique);
 	}
+	std::shared_ptr<mods::ranged_combat_totals> player::calculate_ranged_combat_totals() {
+		return m_rct_calculated;
+	}
+	std::shared_ptr<mods::ranged_combat_totals> player::calculate_ranged_combat_totals(obj_ptr_t& weapon) {
+		return m_rct_calculated;
+	}
+	void player::consume_object(obj_ptr_t& item) {
+		if(mods::object_utils::is_consumable(item) && item->consumable()->attributes->consumed_by.compare("HUMAN") == 0) {
+			/**
+			 * TODO: Awesome idea!
+			 * If the consumed_by is not a HUMAN, then we could techincally
+			 * have a class like the syndrome class or some type of cybernetic
+			 * class consume it and gain buffs/nerfs from the consumable
+			 */
+			auto& c = item->consumable()->attributes;
+			this->hp() += c->adds_hp;
+			this->move() += c->adds_movement;
+			m_rct->max_range += c->adds_room_range;
+			m_rct->stat_strength += c->adds_strength;
+			m_rct->stat_intelligence += c->adds_intelligence;
+			m_rct->stat_dexterity += c->adds_dexterity;
+			m_rct->stat_constitution += c->adds_constitution;
+			m_rct->stat_wisdom += c->adds_wisdom;
 
+			this->weight() += c->adds_weight;
+			this->exp() += c->adds_experience;
+			/** TODO: FIXME: Need to figure out how to process these
+			 */
+			//m_rct->armor_class += c->adds_armor_class;
+
+			// TODO FIXME figure out how to add this: adds_fire_damage: 2 #int, amount of fire damage it adds to the consumer
+			m_rct->critical_chance += c->adds_critical_chance;
+			//TODO FIXME figure out how to add all of these
+			//adds_ammo_max: 40 #int, adds to ammo maximum of consumer
+			//adds_clip_size: 0 #int, bullets
+			//adds_cooldown_between_shots: 2 #int, ticks(can be negative)
+
+			m_rct->chance_to_injure += c->adds_chance_to_injure;
+			m_rct->headshot_bonus += c->adds_headshot_bonus;
+			m_rct->critical_range.second += c->adds_critical_range;
+			m_rct->max_range += c->adds_max_range;
+			m_rct->damage_dice_count += c->adds_damage_dice_count;
+			m_rct->damage_dice_sides += c->adds_damage_dice_sides;
+			m_rct->disorient_amount += c->adds_disorient_amount;
+			m_rct->hitroll += c->adds_hitroll;
+			m_rct->damage_roll += c->adds_damage_roll;
+			m_rct->reload_time += c->adds_reload_time;
+			m_rct->muzzle_velocity += c->adds_muzzle_velocity;
+
+			mods::globals::defer_queue->push_consumable_wears_off(this->uuid(),c->ticks_until_zero,item);
+		}
+	}
+	void player::consumed_object_wears_off(const mods::yaml::consumable_description_t& c) {
+		/**
+		 * TODO: Awesome idea!
+		 * If the consumed_by is not a HUMAN, then we could techincally
+		 * have a class like the syndrome class or some type of cybernetic
+		 * class consume it and gain buffs/nerfs from the consumable
+		 */
+		sub_clamp(m_rct->max_range,c.adds_room_range);
+		sub_clamp(m_rct->stat_strength,c.adds_strength);
+		sub_clamp(m_rct->stat_intelligence,c.adds_intelligence);
+		sub_clamp(m_rct->stat_dexterity,c.adds_dexterity);
+		sub_clamp(m_rct->stat_constitution,c.adds_constitution);
+		sub_clamp(m_rct->stat_wisdom,c.adds_wisdom);
+
+		sub_clamp(this->weight(),c.adds_weight);
+		/** TODO: FIXME: Need to figure out how to process these
+		 */
+		//m_rct->armor_class += c.adds_armor_class;
+
+		// TODO FIXME figure out how to add this: adds_fire_damage: 2 #int, amount of fire damage it adds to the consumer
+		sub_clamp(m_rct->critical_chance,c.adds_critical_chance);
+		//TODO FIXME figure out how to add all of these
+		//adds_ammo_max: 40 #int, adds to ammo maximum of consumer
+		//adds_clip_size: 0 #int, bullets
+		//adds_cooldown_between_shots: 2 #int, ticks(can be negative)
+
+		sub_clamp(m_rct->chance_to_injure,c.adds_chance_to_injure);
+		sub_clamp(m_rct->headshot_bonus,c.adds_headshot_bonus);
+		sub_clamp(m_rct->critical_range.second,c.adds_critical_range);
+		sub_clamp(m_rct->max_range,c.adds_max_range);
+		sub_clamp(m_rct->damage_dice_count,c.adds_damage_dice_count);
+		sub_clamp(m_rct->damage_dice_sides,c.adds_damage_dice_sides);
+		sub_clamp(m_rct->disorient_amount,c.adds_disorient_amount);
+		sub_clamp(m_rct->hitroll,c.adds_hitroll);
+		sub_clamp(m_rct->damage_roll,c.adds_damage_roll);
+		sub_clamp(m_rct->reload_time,c.adds_reload_time);
+		sub_clamp(m_rct->muzzle_velocity,c.adds_muzzle_velocity);
+	}
+	std::shared_ptr<mods::ranged_combat_totals> player::get_ranged_combat_totals() {
+		return m_rct;
+	}
+	void player::contract_custom_event(mods::contracts::custom_events_t event,uuid_t id) {
+		if(!m_contract) {
+			return;
+		}
+		for(auto& c : contracts()) {
+			if(c->is_custom_event()) {
+				c->custom_event(event,id);
+			}
+		}
+	}
+	void player::lockdown(bool b) {
+		m_locked_down = b;
+	}
+	void player::sendln() {
+		MENTOC_NPC_CHECK(str.str());
+		write_to_char("", 1,0);
+		desc().has_prompt = 0;
+	}
+	void player::sendln(const std::vector<std::string>& screen) {
+		for(const auto& line : screen) {
+			this->sendln(line);
+		}
+	}
+	void player::sendx(mods::string& str) {
+		MENTOC_NPC_CHECK(str.str());
+		write_to_char(str.view(), 0,0);
+		desc().has_prompt = 0;
+	}
+	void player::sendx(std::string_view str) {
+		MENTOC_NPC_CHECK(str.str());
+		write_to_char(str.data(), 0,0);
+		desc().has_prompt = 0;
+	}
+	const player::weight_index_t player::effective_weight_index() const {
+		return m_weight_index;
+	}
 };
 
 #undef dbg

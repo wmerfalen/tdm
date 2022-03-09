@@ -7,5 +7,6 @@ namespace mods::shrapnel {
 	void damage_electronics(room_rnum room);
 	void roll_damage_equipment_in_room(room_rnum room);
 	void roll_damage_equipment_on_player(player_ptr_t victim);
+	bool deploy_shrapnel_damage_to(player_ptr_t& victim,obj_ptr_t& device);
 };
 #endif

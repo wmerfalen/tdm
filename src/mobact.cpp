@@ -309,7 +309,7 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 namespace mods::mobact {
 	SUPERCMD(do_mobact) {
 		ADMIN_REJECT();
-		player->send("Running...");
+		player->sendx("Running...");
 		mobile_activity();
 		ADMIN_DONE();
 	}

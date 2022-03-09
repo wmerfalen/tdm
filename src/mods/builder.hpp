@@ -23,6 +23,11 @@ typedef int socket_t;
 void r_error(const player_ptr_t& player,std::string_view msg);
 void r_success(const player_ptr_t& player,std::string_view msg);
 void r_status(const player_ptr_t& player,std::string_view msg);
+extern int next_room_number();
+extern int next_obj_number();
+extern int next_zone_number();
+extern int next_mob_number();
+
 namespace mods::builder {
 	std::tuple<int8_t,std::string> pave_on(player_ptr_t& player,std::string_view sandbox_name);
 	std::tuple<int8_t,std::string> pave_continue(player_ptr_t& player);

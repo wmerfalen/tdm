@@ -11,10 +11,6 @@ namespace mods::forge_engine {
 		}
 		return std::get<float>(v) * (original);
 	}
-	template <typename TUintWidth>
-	TUintWidth roll_between(TUintWidth LO, TUintWidth HI) {
-		return LO + static_cast <TUintWidth>(rand_xoroshiro()) / (static_cast <TUintWidth>(std::numeric_limits<TUintWidth>::max()/ (HI-LO)));
-	}
 	std::string random_yaml(const std::vector<std::string>& files);
 
 	std::string get_requirements_string(requirements_t& requirements);

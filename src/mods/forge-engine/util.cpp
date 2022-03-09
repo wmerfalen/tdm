@@ -323,7 +323,7 @@ namespace mods::forge_engine {
 	}
 
 	void send_requirements(requirements_t& requirements, player_ptr_t& player) {
-		player->send("%s\r\n", get_requirements_string(requirements).c_str());
+		player->sendln(get_requirements_string(requirements).c_str());
 	}
 
 };//end namespace mods::forge_engine::util

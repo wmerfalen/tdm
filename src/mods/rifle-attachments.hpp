@@ -56,6 +56,7 @@ namespace mods {
 			uint16_t get_level() const {
 				return m_rifle_level;
 			}
+			int16_t base_damage;
 			int16_t incendiary_damage_percent;
 			int16_t explosive_damage_percent;
 			int16_t shrapnel_damage_percent;
@@ -66,19 +67,33 @@ namespace mods {
 			int16_t shock_damage_percent;
 			int16_t anti_matter_damage_percent;
 
+			int16_t incendiary_damage;
+			int16_t explosive_damage;
+			int16_t shrapnel_damage;
+			int16_t corrosive_damage;
+			int16_t cryogenic_damage;
+			int16_t radioactive_damage;
+			int16_t anti_matter_damage;
+			int16_t emp_damage;
+			int16_t shock_damage;
+
+			int16_t damage_dice_count;
+			int16_t damage_dice_sides;
+
 			/** --#=================================================#-- */
 			/** --[ SECTION START: ((( Fairly easy to implement ))) ]-- */
 			/** --#=================================================#-- */
 			float zoom_multiplier;						/** honored [ 2021-04-13 ] */
 			int16_t free_ammo_chance; 				/** honored [ 2021-04-13 ] */
 			int16_t regenerate_ammo_chance; 	/** honored [ 2021-04-13 ] */
-			int16_t incendiary_damage;				/** honored [ ? (see elemental.cpp) ] */
-			int16_t radiation_damage;					/** honored [ ? (see elemental.cpp) ] */
 			int16_t damage_percent_bonus;			/** honored [ 2021-04-13 ] */
 			int16_t ammunition_amount;				/** honored [ 2021-04-13 ] */
 			int16_t armor_penetration_amount;	/** honored partially (adds 10% bonus if it's non-zero. doesn't affect if lte zero) */
 			int16_t disorient_amount;
 			int16_t durability_profile;
+			int16_t cooldown_between_shots;
+			int16_t thermal_range;
+			int16_t night_vision_range;
 			/** --#=================================================#-- */
 			/** --[ SECTION END:   ((( Fairly easy to implement ))) ]-- */
 			/** --#=================================================#-- */

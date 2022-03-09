@@ -53,6 +53,7 @@ namespace mods::contracts {
 			{"GOAL_TALK_TO",task_t::GOAL_TALK_TO},
 			{"GOAL_INSTALL",task_t::GOAL_INSTALL},
 			{"GOAL_GIVE",task_t::GOAL_GIVE},
+			{"GOAL_CUSTOM_EVENT",task_t::GOAL_CUSTOM_EVENT},
 		};
 	}
 	std::map<std::string,target_t> target_string_map() {
@@ -75,6 +76,7 @@ namespace mods::contracts {
 			{task_t::GOAL_TALK_TO,"GOAL_TALK_TO"},
 			{task_t::GOAL_INSTALL,"GOAL_INSTALL"},
 			{task_t::GOAL_GIVE,"GOAL_GIVE"},
+			{task_t::GOAL_CUSTOM_EVENT,"GOAL_CUSTOM_EVENT"},
 		};
 	}
 	std::map<target_t,std::string> inverse_target_string_map() {

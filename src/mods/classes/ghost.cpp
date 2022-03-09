@@ -31,7 +31,12 @@ namespace mods::classes {
 	};
 	void ghost_advance_level(player_ptr_t& player) {
 		/** TODO fill me in */
-		player->send("[stub] file:%s line:%d\r\n",__FILE__,__LINE__);
+		player->sendln(
+		    CAT(
+		        "[stub] file:",__FILE__,
+		        "line:",__LINE__
+		    )
+		);
 	}
 	void ghost::init() {
 		m_scanned.clear();
@@ -39,7 +44,7 @@ namespace mods::classes {
 		m_dissipate_charges = 10;
 		m_dissipated = 0;
 		using skillset_t = ability_data_t::skillset_t;
-		m_abilities = {
+		m_abilities = create_abilities({
 			{AERIAL_DRONE_SCAN,"ads","Aerial Drone Scan",skillset_t::ELECTRONICS,&m_drone_scan},
 			{STEALTH,"stealth","stealth",skillset_t::INTELLIGENCE,&m_stealth},
 			{SUMMON_EXTRACTION,"summon","Summon Extraction", skillset_t::STRATEGY,&m_summon_extraction},
@@ -64,7 +69,10 @@ namespace mods::classes {
 			{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",skillset_t::DEMOLITIONS,&m_plant_shrapnel_claymore},
 			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",skillset_t::DEMOLITIONS,&m_plant_corrosive_claymore},
 			{REQUEST_RECON,"recon","Request Recon",skillset_t::INTELLIGENCE,&m_request_recon},
-		};
+		});
+		/**
+		 * REQUIRED
+		 */
 		m_adrenaline_shot_charges = 0;
 		m_target = 0;
 		m_engaged = 0;
@@ -117,6 +125,9 @@ namespace mods::classes {
 			m_player->sendln("It looks like you still need to train that skill");
 			return;
 		}
+		/**
+		 * TODO: if the weight of gear and equipment is low, then stealth will last longer
+		 */
 		if(m_stealth.awful() || m_stealth.terrible() || m_stealth.okay()) {
 			stealth = dice(1, 8) + 1 + (m_player->level() / 4);
 		}
@@ -135,16 +146,28 @@ namespace mods::classes {
 			m_player->sendln("It looks like you still need to train that skill");
 			return;
 		}
+		uint8_t weight_index = (uint8_t)target->effective_weight_index();
 		if(m_stealth.awful() || m_stealth.terrible() || m_stealth.okay()) {
-			stealth = dice(1, 8) + 1 + (m_player->level() / 4);
+			stealth = dice(1, 8) + 1 + (m_player->level() / 4) + dice(1,weight_index);
 		}
 
 		if(m_stealth.learned()) {
-			stealth = dice(3, 8) + 3 + (m_player->level() / 4);
+			stealth = dice(3, 8) + 3 + (m_player->level() / 4) + dice(weight_index,10);
 		}
 
-		if(m_stealth.mastered() || m_stealth.elite()) {
-			stealth = 100 + dice(3, 8);
+		if(m_stealth.mastered()) {
+			/**
+			 * Maximum: 2.15 minutes
+			 * values: 50,3,40,10,8
+			 */
+			stealth = 50 + dice(3, 40) + dice(weight_index * 10, 8);
+		}
+		if(m_stealth.elite()) {
+			/**
+			 * Maximum 3.66 minutes
+			 * values: 64, 5, 40, 12, 12
+			 */
+			stealth = 64 + dice(5, 40) + dice(weight_index * 12,12);
 		}
 		mods::player_utils::change_visibility(target,- stealth);
 	}
@@ -210,7 +233,12 @@ namespace mods::classes {
 		uint32_t ticks = GHOST_DISSIPATE_TICKS_DURATION() * tier(m_player);
 		mods::globals::defer_queue->push_ticks_event(ticks,m_player->uuid(),mods::deferred::EVENT_PLAYER_GOES_VISIBLE);
 #ifdef __MENTOC_SHOW_GHOST_TIME_WHEN_DISSIPATE_WEARS_OFF__
-		m_player->send("%s tick count: (%d)\r\n",mods::date_time::irl::now().c_str(),ticks);
+		m_player->sendln(
+		    CAT(
+		        mods::date_time::irl::now().c_str(),
+		        " tick count: (",ticks,")"
+		    )
+		);
 #endif
 		m_dissipated = true;
 		return {true,"{grn}You dissipate into nothing...{/grn}"};
@@ -219,7 +247,7 @@ namespace mods::classes {
 		m_player->visibility() = char_data::STARTING_VISIBILITY;
 		m_player->sendln("Your dissipation invisibility wears off...");
 #ifdef __MENTOC_SHOW_GHOST_TIME_WHEN_DISSIPATE_WEARS_OFF__
-		m_player->send("%s\r\n",mods::date_time::irl::now().c_str());
+		m_player->sendln(mods::date_time::irl::now().c_str());
 #endif
 		m_dissipated = false;
 	}
@@ -362,6 +390,15 @@ namespace mods::classes {
 	}
 
 	std::tuple<bool,std::string> ghost::attach_shotgun_underbarrel() {
+		if(!m_player) {
+			return {0,"No player pointer set!"};
+		}
+		if(!m_player->primary()) {
+			return {0,"You aren't wielding a primary weapon!"};
+		}
+		if(!m_player->primary()->has_rifle()) {
+			return {0,"You aren't wielding a rifle!"};
+		}
 		if(m_shotgun_ub.is_attached() && m_shotgun_ub.ammo()) {
 			return {1,"Already attached. To detach, use 'detach_shotgun_underbarrel'."};
 		}
@@ -371,6 +408,12 @@ namespace mods::classes {
 			return m_shotgun_ub.attach_to(m_player->primary(),tier(m_player));
 		}
 		return s;
+	}
+	ghost::shotgun_ub_t& ghost::get_shotgun_underbarrel_wrapper() {
+		return m_shotgun_ub;
+	}
+	ghost::frag_ub_t& ghost::get_frag_underbarrel_wrapper() {
+		return m_frag_ub;
 	}
 	void ghost::unblock_healing() {
 		m_player->sendln("Unblock healing");
@@ -444,7 +487,7 @@ namespace mods::classes {
 	std::tuple<bool,std::string> ghost::xray_shot() {
 		auto weapon = m_player->primary();
 		if(!weapon || weapon->has_rifle() == false || weapon->rifle()->attributes->type != mw_rifle::SNIPER) {
-			return {0,"You must be wielding a ghost rifle!"};
+			return {0,"You must be wielding a sniper rifle!"};
 		}
 		if(!m_engaged) {
 			return {0,"You must first use the 'engage' command"};
@@ -482,17 +525,17 @@ namespace mods::classes {
 		if(m_target == 0) {
 			return {0,"Couldn't find a target that matches that string."};
 		}
-		auto s = roll_skill_success(MARK_TARGET);
-		if(!std::get<0>(s)) {
-			return s;
-		}
+		//auto s = roll_skill_success(MARK_TARGET);
+		//if(!std::get<0>(s)) {
+		//	return s;
+		//}
 		/** TODO: need to add mark target as a skill */
 		return {1,"Marked target"};
 	}
 
 	std::tuple<bool,std::string> ghost::engage() {
 		if(m_target == 0) {
-			return {0,"You have not marked a target yet!"};
+			return {0,"You have not marked a target yet! See ghost:mark"};
 		}
 		auto ptr = ptr_by_uuid(m_target);
 		if(!ptr) {
@@ -658,6 +701,14 @@ namespace mods::class_abilities::ghost {
 	ACMD(do_attach_shotgun_underbarrel) {
 		PLAYER_CAN("ghost.attach_shotgun_underbarrel");
 		DO_HELP("attach_shotgun_underbarrel");
+		if(!player->primary()) {
+			player->sendln("You are not wielding a weapon!");
+			return;
+		}
+		if(!player->primary()->has_rifle()) {
+			player->sendln("You must be wielding a rifle of some sort!");
+			return;
+		}
 		if(player->ghost()) {
 			auto status = player->ghost()->attach_shotgun_underbarrel();
 			player->sendln(std::get<1>(status));
@@ -699,16 +750,16 @@ namespace mods::class_abilities::ghost {
 		PLAYER_CAN("ghost.fire");
 		DO_HELP("fire");
 		static constexpr const char* usage = "fire <direction> <distance>\r\n";
-		if(argshave()->size_gt(2)->passed() == false) {
+		if(argshave()->size_gt(1)->passed() == false) {
 			player->sendln(usage);
 			return;
 		}
-		auto dir = mods::util::to_direction(argat(1));
+		auto dir = mods::util::to_direction(argat(0));
 		if(dir < 0) {
 			player->sendln("Invalid direction.");
 			return;
 		}
-		auto distance = mods::util::stoi_optional<uint8_t>(argat(2));
+		auto distance = mods::util::stoi_optional<uint8_t>(argat(1));
 		if(distance.has_value() == false) {
 			player->sendln("Invalid distance.");
 			return;
@@ -730,24 +781,35 @@ namespace mods::class_abilities::ghost {
 		}
 		player->sendln(std::get<1>(status));
 	}
+	ACMD(do_inject_adrenaline_shot) {
+		PLAYER_CAN("ghost.adrenaline_shot");
+		DO_HELP_WITH_ZERO("ghost.adrenaline_shot");
+		auto status = player->ghost()->inject_adrenaline_shot();
+		if(!std::get<0>(status)) {
+			player->errorln(std::get<1>(status));
+			return;
+		}
+		player->sendln(std::get<1>(status));
+	}
 
 	void init() {
-		mods::interpreter::add_command("dissipate", POS_RESTING, do_dissipate, 0,0);
-		mods::interpreter::add_command("mark", POS_RESTING, do_mark_target, 0,0);
-		mods::interpreter::add_command("mark_target", POS_RESTING, do_mark_target, 0,0);
-		mods::interpreter::add_command("tracking_shot", POS_RESTING, do_tracking_shot, 0,0);
-		mods::interpreter::add_command("engage", POS_RESTING, do_engage, 0,0);
-		mods::interpreter::add_command("disengage", POS_RESTING, do_disengage, 0,0);
-		mods::interpreter::add_command("xray_shot", POS_RESTING, do_xray_shot, 0,0);
-		mods::interpreter::add_command("build_claymore", POS_RESTING, do_build_claymore, 0,0);
-		mods::interpreter::add_command("light_bandage", POS_RESTING, do_light_bandage, 0,0);
-		mods::interpreter::add_command("attach_shotgun", POS_RESTING, do_attach_shotgun_underbarrel, 0,0);
-		mods::interpreter::add_command("detach_shotgun", POS_RESTING, do_detach_shotgun_underbarrel, 0,0);
-		mods::interpreter::add_command("attach_frag", POS_RESTING, do_attach_frag_underbarrel, 0,0);
-		mods::interpreter::add_command("detach_frag", POS_RESTING, do_detach_frag_underbarrel, 0,0);
-		mods::interpreter::add_command("fire", POS_RESTING, do_fire, 0,0);
-		mods::interpreter::add_command("build_claymore", POS_RESTING, do_build_claymore, 0,0);
-		mods::interpreter::add_command("build_corrosive_claymore", POS_RESTING, do_build_corrosive_claymore, 0,0);
+		mods::interpreter::add_command("ghost:adrenaline_shot", POS_RESTING, do_inject_adrenaline_shot, 0,0);
+		mods::interpreter::add_command("ghost:dissipate", POS_RESTING, do_dissipate, 0,0);
+		mods::interpreter::add_command("ghost:mark", POS_RESTING, do_mark_target, 0,0);
+		mods::interpreter::add_command("ghost:mark_target", POS_RESTING, do_mark_target, 0,0);
+		mods::interpreter::add_command("ghost:tracking_shot", POS_RESTING, do_tracking_shot, 0,0);
+		mods::interpreter::add_command("ghost:engage", POS_RESTING, do_engage, 0,0);
+		mods::interpreter::add_command("ghost:disengage", POS_RESTING, do_disengage, 0,0);
+		mods::interpreter::add_command("ghost:xray_shot", POS_RESTING, do_xray_shot, 0,0);
+		mods::interpreter::add_command("ghost:build_claymore", POS_RESTING, do_build_claymore, 0,0);
+		mods::interpreter::add_command("ghost:light_bandage", POS_RESTING, do_light_bandage, 0,0);
+		mods::interpreter::add_command("ghost:attach_shotgun", POS_RESTING, do_attach_shotgun_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:detach_shotgun", POS_RESTING, do_detach_shotgun_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:attach_frag", POS_RESTING, do_attach_frag_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:detach_frag", POS_RESTING, do_detach_frag_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:fire", POS_RESTING, do_fire, 0,0);
+		mods::interpreter::add_command("ghost:build_claymore", POS_RESTING, do_build_claymore, 0,0);
+		mods::interpreter::add_command("ghost:build_corrosive_claymore", POS_RESTING, do_build_corrosive_claymore, 0,0);
 		mods::interpreter::add_command("build_shrapnel_claymore", POS_RESTING, do_build_shrapnel_claymore, 0,0);
 	}
 };

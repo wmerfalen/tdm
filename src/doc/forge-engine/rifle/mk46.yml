@@ -1,0 +1,57 @@
+# accuracy map
+vnum: 78
+accuracy_map: [
+90.00,
+10.00,
+0.00,
+0.00
+]
+rounds_per_minute: 180
+muzzle_velocity: 818 # Feet per second
+effective_firing_range: 20 # feet
+ammo_max: 999 #integer
+ammo_type: 'LIGHT_MACHINE_GUN' #string, constant enum
+chance_to_injure: 3.813 #float, out of 100 
+clip_size: 999 #integer
+cooldown_between_shots: 20 #int, in ticks
+critical_chance: 14 #int, out of 100
+critical_range: 1 #integer, measured in rooms
+damage_map: [
+80.00,
+40.00,
+0.00,
+0.00
+]
+base_damage: 30 #float
+disorient_amount: 0.0 #float
+headshot_bonus: 13.0 #float
+max_range: 7 #integer,measured in rooms
+range_multiplier: 4.3 #float, multiplied by 
+reload_time: 33 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 'LIGHT_MACHINE_GUN'  # enum, object type
+manufacturer: 'TN-33Y' # string, anything 
+name: 'MK-46 Light Machine Gun' # string, anything name of object 
+str_type: 'LIGHT_MACHINE_GUN'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+feed_file: 'mk46.yml'
+description: 'A TN-33Y MK-46 LMG is lying here.'
+short_description: 'TN-33Y MK-46'
+action_description: 'TN-33Y MK-46'
+damage_dice_count: 40
+damage_dice_sides: 140

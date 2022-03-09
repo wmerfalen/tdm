@@ -56,7 +56,7 @@ namespace mods::mobs::melee_combatant_behaviour_tree {
 				if(!ptr) {
 					continue;
 				}
-				if(!mods::calc_visibility::is_visible(ct->uuid,v.uuid)) {
+				if(!mods::calc_visibility::is_visible(ct->uuid,v.uuid,v.distance)) {
 					continue;
 				}
 				if(mods::rooms::is_peaceful(v.room_rnum)) {
@@ -97,7 +97,7 @@ namespace mods::mobs::melee_combatant_behaviour_tree {
 				if(!ptr) {
 					continue;
 				}
-				if(!mods::calc_visibility::is_visible(mg->uuid,v.uuid)) {
+				if(!mods::calc_visibility::is_visible(mg->uuid,v.uuid,v.distance)) {
 					continue;
 				}
 				if(mods::rooms::is_peaceful(v.room_rnum)) {

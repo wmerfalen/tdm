@@ -314,7 +314,7 @@ SUPERCMD(do_uninstall_sign) {
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	auto status = mods::db::delete_section_vector("sign",std::to_string(world[player->room()].number));
-	player->send("delete status: %d\r\n",status);
+	player->sendln(CAT("delete status: ",status));
 	ADMIN_DONE();
 }
 

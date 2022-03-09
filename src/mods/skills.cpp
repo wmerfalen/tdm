@@ -36,6 +36,31 @@ namespace mods::skills {
 		}
 		return player->mp() / PRICE_PER_PRACTICE_SESSION();
 	}
+	std::string get_rules_of_engagement(player_ptr_t& player) {
+		using namespace mods::combat;
+		switch(player->rules_of_engagement()) {
+			default:
+			case ROM_BALLISTIC:
+				return "BALLISTIC";
+				break;
+			case ROM_CQC:
+				return "CQC";
+				break;
+			case ROM_AUXILIARY:
+				return "AUXILIARY";
+				break;
+			case ROM_SECONDARY:
+				return "SECONDARY";
+				break;
+		}
+	}
+	void send_rules_of_engagement_to_player(player_ptr_t& player,bool color) {
+		if(color) {
+			player->sendln(CAT("{grn}Rules of engagement:{/grn}{red}",get_rules_of_engagement(player),"{/red}{/grn}"));
+		} else {
+			player->sendln(CAT("Rules of engagement:",get_rules_of_engagement(player)));
+		}
+	}
 	std::string get_user_stats_page(player_ptr_t& player) {
 		return CAT("{hr}\r\n",
 		           "Stats:\r\n",
@@ -141,6 +166,15 @@ namespace mods::skills {
 
 		screen += get_user_stats_page(player);
 		player->sendln(mods::util::mail_format("Your stats",header,screen,player->screen_width()));
+		player->sendln("{grn}----[ Ranged combat stats ]---------------------------------------{/grn}");
+		if(player->primary() && player->primary()->has_rifle()) {
+			player->calculate_ranged_combat_totals()->report(player);
+		} else {
+			player->sendln("Primary is not a rifle. No stats to report.");
+		}
+		player->sendln("{grn}------------------------------------------------------------------{/grn}");
+		send_rules_of_engagement_to_player(player,true);
+		player->sendln("End of output.");
 	}
 
 	void train_user_skill(player_ptr_t& player,std::string_view skill) {
@@ -177,6 +211,15 @@ namespace mods::skills {
 		return std::get<1>(s);
 	}
 
+	void increment_player_combat_usage(player_ptr_t& player,std::string_view skill_name) {
+
+	}
+	void increment_player_cqc_usage(player_ptr_t& player,std::string_view skill_name) {
+
+	}
+	void increment_player_defense_usage(player_ptr_t& player,std::string_view skill_name) {
+
+	}
 
 	ACMD(do_buy_practice) {
 		DO_HELP("buy_practice");
@@ -197,7 +240,11 @@ namespace mods::skills {
 
 	ACMD(do_skills) {
 		DO_HELP("skills");
-		player->sendln(mods::util::mail_format("Your skills","",std::get<1>(player->class_action("request_page","skills")),player->screen_width()));
+		player->sendln(mods::util::mail_format(
+		                   "Your skills",
+		                   "",
+		                   std::get<1>(player->class_action("request_page","skills")),
+		                   player->screen_width()));
 	}
 
 	ACMD(do_practice) {

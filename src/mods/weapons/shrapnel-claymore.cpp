@@ -6,6 +6,7 @@
 #include "../../db.h"
 #include "../../globals.hpp"
 #include "../projectile.hpp"
+#include "../explosive.hpp"
 #include "../player.hpp"
 #include "../demolitions.hpp"
 #include "../injure.hpp"
@@ -77,6 +78,7 @@ namespace mods::weapons {
 		}
 		auto u = item->uuid;
 
+		mods::explosive::append_explosive_damage_to_room(item->in_room, item);
 		mods::weapons::damage_types::deal_hp_damage(victim,damage);
 		mods::weapons::elemental::perform_elemental_damage(nullptr,victim,damage,ELEM_CORROSIVE);
 		obj_from_room(item);

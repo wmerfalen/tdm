@@ -3,6 +3,8 @@
 
 #include "defiler.hpp"
 #include "../radio.hpp"
+#include "../behaviour_tree.hpp"
+#include "helpers.hpp"
 
 namespace mods::mobs::defiler_behaviour_tree {
 	/**
@@ -53,9 +55,9 @@ namespace mods::mobs::defiler_behaviour_tree {
 	TChildNode report_hostile_activity();
 	TChildNode engage_hostile();
 
-	void make_defiler_roam(TNode&);
-	void make_defiler_hostile(TNode&);
-	void make_defiler_wimpy(TNode&);
+	//void make_defiler_roam(TNode&);
+	//void make_defiler_hostile(TNode&);
+	//void make_defiler_wimpy(TNode&);
 
 	void run_trees();
 };//end namespace

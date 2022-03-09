@@ -274,6 +274,24 @@ namespace mods::players::db_load {
 			return -2;
 		}
 	}
+	int16_t delete_char_by_name(std::string_view user) {
+		try {
+			std::map<std::string,std::string> values;
+			auto delete_txn = txn();
+			mods::sql::compositor comp("player",&delete_txn);
+			auto del_sql = comp
+			               .del()
+			               .from("player")
+			               .where("player_name","=",user)
+			               .sql();
+			mods::pq::exec(delete_txn,del_sql);
+			mods::pq::commit(delete_txn);
+			return 0;
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("error deleting character",e.what());
+			return -1;
+		}
+	}
 	int16_t delete_char(player_ptr_t& player) {
 		try {
 			std::map<std::string,std::string> values;

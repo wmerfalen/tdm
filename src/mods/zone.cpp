@@ -363,14 +363,14 @@ namespace mods::zone {
 	SUPERCMD(do_list_zone_table) {
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
-		player->send("Listing...\r\n");
+		player->sendln("Listing...");
 		for(const auto& zone : zone_table) {
-			player->send(CAT("[vnum:",zone.number,"] -> '",zone.name,"'\r\n").c_str());
+			player->sendln(CAT("[vnum:",zone.number,"] -> '",zone.name,"'").c_str());
 			for(const auto& cmd : zone.cmd) {
 				player->sendln(CAT("[zone_cmd if_flag]:",cmd.if_flag));
 			}
 		}
-		player->send("Done listing...\r\n");
+		player->sendln("Done listing...");
 		ADMIN_DONE();
 	}
 	SUPERCMD(do_uuids) {
@@ -398,9 +398,9 @@ namespace mods::zone {
 		}
 		for(const auto& arg : vec_args) {
 			if(arg.compare("this") == 0) {
-				player->send(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
+				player->sendln(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
 				mods::zone::reset_zone(world[player->room()].zone);
-				player->send("[+] Done\r\n");
+				player->sendln("[+] Done");
 				continue;
 			}
 			auto i = mods::util::stoi(arg).value_or(-1);
@@ -408,9 +408,9 @@ namespace mods::zone {
 				player->errorln(CAT("Invalid zone id: ",arg,". skipping..."));
 				continue;
 			}
-			player->send(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
+			player->sendln(CAT("Resetting [",world[player->room()].zone,"]..."));
 			mods::zone::reset_zone(i);
-			player->send("[+] Done\r\n");
+			player->sendln("[+] Done");
 		}
 		ADMIN_DONE();
 	}

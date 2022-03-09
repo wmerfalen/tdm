@@ -16,7 +16,43 @@
 #include <unordered_map>
 #include "mods/util.hpp"
 #include "mods/help.hpp"
+#include "mods/find.hpp"
 
+template <typename T,typename F>
+static inline void sub_clamp(T& orig, F sub) {
+	if(orig - sub < 0) {
+		orig = 0;
+		return;
+	}
+	orig -= sub;
+}
+template <typename T,typename F,typename X>
+static inline void equip_clamp(T& orig,F& aux,bool equip,X offset) {
+	if(equip) {
+		orig += offset;
+		aux += offset;
+	} else {
+		if(orig - offset < 0) {
+			orig = 0;
+			aux = 0;
+		} else {
+			orig -= offset;
+			aux -= offset;
+		}
+	}
+}
+template <typename T,typename X>
+static inline void equip_clamp(T& orig,bool equip,X offset) {
+	if(equip) {
+		orig += offset;
+	} else {
+		if(orig - offset < 0) {
+			orig = 0;
+		} else {
+			orig -= offset;
+		}
+	}
+}
 #define MENTOC_PREAMBLE() auto player = ptr(ch)
 
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
@@ -37,7 +73,7 @@
 #define LMDBRENEW() mods::db::lmdb_renew()
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 #define MENTOC_DEPRECATED(mentoc_deprecated_argument_a) log("SYSERR:[%s] deprecated %s:%d",mentoc_deprecated_argument_a,__FILE__,__LINE__);
-#define deprecated(mentoc_deprecated_argument_a) log("SYSERR:[%s] deprecated %s:%d",mentoc_deprecated_argument_a,__FILE__,__LINE__);
+//#define deprecated(mentoc_deprecated_argument_a) log("SYSERR:[%s] deprecated %s:%d",mentoc_deprecated_argument_a,__FILE__,__LINE__);
 #define MOBTOSTR(__mob) "\n[mob_dump]\nname: '" << __mob->player.name.c_str() << "'\n"\
 	"\n[mob_dump]\nuuid: '" << __mob->uuid() << "'\n"
 #define DO_HELP(from) if(!mods::help::should_continue(from,argument,player,0)){ return; }
@@ -286,11 +322,34 @@ static inline uint64_t future_tick(uint64_t add) {
 #define PLAYER_CAN(A) if(!player->can(A)){ player->sendln("Wrong class."); return; }
 #define SHOULD_RATE_LIMIT(SRL_EVENT) if(mods::rate_limiting::should_throttle(mods::rate_limiting::action_t::SRL_EVENT,player)){ player->errorln("You must wait until you can do that again."); return; } else{ mods::rate_limiting::rate_limit_hit(mods::rate_limiting::action_t::SRL_EVENT,player); }
 #define SEND_HELP(topic) mods::help::send_help(topic,player);
-#define tier(player) std::max(player->level() / 5, 1)
+#define tier(player) (std::min(player->level() / 10,1))
 namespace util = mods::util;
 std::size_t world_size();
 static inline std::vector<direction_t>& directions() {
 	static std::vector<direction_t> directions = { NORTH,EAST,SOUTH,WEST,UP,DOWN };
 	return directions;
+}
+#define OBJFIND(NAME,player) mods::find::obj(NAME,player)
+static inline std::pair<bool,std::shared_ptr<room_data>> room(auto player) {
+	if(player->room() > world.size()) {
+		return {0,nullptr};
+	}
+	return {1,world[player->room()]};
+}
+template <typename T>
+static inline auto pluck_random(T c) {
+	T a;
+	if(c.size() == 0) {
+		return a;
+	}
+	return c[rand_number(0,c.size()-1)];
+}
+template <typename T>
+static inline auto pluck_random_ref(const T& c) {
+	T a;
+	if(c.size() == 0) {
+		return a;
+	}
+	return c[rand_number(0,c.size()-1)];
 }
 #endif

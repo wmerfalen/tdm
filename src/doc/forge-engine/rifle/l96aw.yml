@@ -1,0 +1,80 @@
+# accuracy map
+accuracy_map: [
+0.00,
+20.00,
+90.00,
+90.00
+]
+rounds_per_minute: 10
+muzzle_velocity: 1818 # Feet per second
+effective_firing_range: 500 # feet
+ammo_max: 130 #integer
+ammo_type: 'SNIPER' #string, constant enum
+chance_to_injure: 28 #float, out of 100 
+clip_size: 13 #integer
+cooldown_between_shots: 9 #int, in ticks
+critical_chance: 38 #int, out of 100
+critical_range: 3 #integer, measured in rooms
+damage_map: [
+10.00,
+20.00,
+90.00,
+90.00
+]
+base_damage: 93 #float
+disorient_amount: 0.0 #float
+headshot_bonus: 33.0 #float
+max_range: 8 #integer,measured in rooms
+range_multiplier: 4.3 #float, multiplied by 
+reload_time: 8 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 'SNIPER'  # enum, object type
+manufacturer: 'Heckler and Koch' # string, anything 
+name: 'L96 Arctic Warfare' # string, anything name of object 
+vnum: 24 # integer, unique identifier
+str_type: 'SNIPER'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+feed_file: 'l96aw.yml'
+damage_dice_count: 21
+damage_dice_sides: 18
+description: 'L96 Arctic Warfare Sniper Rifle'
+short_description: 'L96 Arctic Warfare Sniper Rifle'
+action_description: 'L96 Arctic Warfare Sniper Rifle'
+incendiary_damage: 0 #int16_t, damage
+explosive_damage: 0 #int16_t, damage
+shrapnel_damage: 0 #int16_t, damage
+corrosive_damage: 0 #int16_t, damage
+cryogenic_damage: 0 #int16_t, damage
+radioactive_damage: 0 #int16_t, damage
+emp_damage: 0 #int16_t, damage
+shock_damage: 0 #int16_t, damage
+anti_matter_damage: 0 #int16_t, damage
+stat_strength: 0 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 0 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 0 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 0 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 0 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 0 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 0 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 0 #int16_t, positive or negative amount to affect strategy stat
+stat_medical: 0 #int16_t, positive or negative amount to affect medical stat

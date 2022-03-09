@@ -11,6 +11,7 @@ namespace mods::explosive {
 	void burning_clears_up(room_rnum room);
 	void propagate_burning_blast(room_rnum& room_id,obj_ptr_t device);
 
+	void append_explosive_damage_to_room(const room_rnum& room_id, const obj_ptr_t& device);
 	void append_explosive_damage_to_room(const room_rnum& room_id, int32_t damage);
 	void append_incendiary_damage_to_room(const room_rnum& room_id, int32_t damage);
 

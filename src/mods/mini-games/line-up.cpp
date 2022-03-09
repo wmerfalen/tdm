@@ -6,14 +6,14 @@
 #include "../util.hpp"
 
 namespace mods::mini_games {
-	int line_up::device_id(){
+	int line_up::device_id() {
 		return m_device_id;
 	}
-	void line_up::set_device_id(int i){
+	void line_up::set_device_id(int i) {
 		m_device_id = i;
 	}
 
-	int line_up::row_count(){
+	int line_up::row_count() {
 		return solutions.size();
 	}
 	line_up::line_up() {
@@ -21,7 +21,7 @@ namespace mods::mini_games {
 		needs_regen = true;
 		highlight_strategy = HIGHLIGHT_ODD_NUMBER;
 	}
-	void line_up::seed(){
+	void line_up::seed() {
 		int from = FROM;
 		int to=TO;
 		position_count = rand_number(from,to);
@@ -32,15 +32,15 @@ namespace mods::mini_games {
 		positions.clear();
 		rows.clear();
 		first_values.clear();
-		for(int i=0; i < position_count;i++){
+		for(int i=0; i < position_count; i++) {
 			solutions.emplace_back(rand_number(1,position_count));
 		}
-		for(int p = 0; p < position_count; p++){
+		for(int p = 0; p < position_count; p++) {
 			std::vector<uint8_t> row;
 			row.reserve(position_count);
 			int odd_number = random_odd_number(from,to);
 			row.emplace_back(odd_number);
-			for(int i=1; i < position_count; i++){
+			for(int i=1; i < position_count; i++) {
 				row.emplace_back(random_even_number(from,to));
 			}
 			int current_solution = solutions[p];
@@ -48,21 +48,21 @@ namespace mods::mini_games {
 			do {
 				mods::util::shuffle(row);
 				int ictr = 1;
-				for(auto c : row){
-					if((c % 2) == 1){
+				for(auto c : row) {
+					if((c % 2) == 1) {
 						odd_position = ictr;
 						break;
 					}
 					ictr++;
 				}
-			}while(odd_position == current_solution);
+			} while(odd_position == current_solution);
 			first_values.emplace_back(row[0]);
 			rows.emplace_back(row);
 		}
 		original_rows = rows;
 	}
-	bool line_up::should_highlight(int row, uint8_t value){
-		switch(highlight_strategy){
+	bool line_up::should_highlight(int row, uint8_t value) {
+		switch(highlight_strategy) {
 			case HIGHLIGHT_EVEN_NUMBER:
 				return !(value % 2);
 			case HIGHLIGHT_FIRST_NUMBER:
@@ -73,12 +73,12 @@ namespace mods::mini_games {
 				return false;
 		}
 	}
-	std::string line_up::get_body(){
-		if(!needs_regen){
+	std::string line_up::get_body() {
+		if(!needs_regen) {
 			return body_content;
 		}
 		body_content = "[solutions]\r\n";
-		for(auto & s : solutions){
+		for(auto& s : solutions) {
 			body_content += "[";
 			body_content += std::to_string(s);
 			body_content += "]";
@@ -87,17 +87,17 @@ namespace mods::mini_games {
 		body_content += "\r\n";
 		int ctr = 1;
 		int row_counter = 0;
-		for(auto & row : rows){
+		for(auto& row : rows) {
 			body_content += "[row ";
 			body_content += std::to_string(ctr++) + "]->";
-			for(auto n : row){
-				if(should_highlight(row_counter,n)){
+			for(auto n : row) {
+				if(should_highlight(row_counter,n)) {
 					body_content += "{grn}";
 				}
 				body_content += "[";
 				body_content += std::to_string(n);
 				body_content += "] ";
-				if(should_highlight(row_counter,n)){
+				if(should_highlight(row_counter,n)) {
 					body_content += "{/grn}";
 				}
 			}
@@ -107,25 +107,25 @@ namespace mods::mini_games {
 		needs_regen = false;
 		return body_content;
 	}
-	std::string line_up::invalid_row(){
+	std::string line_up::invalid_row() {
 		return std::string("{red}Invalid row{/red}\r\n") + get_body().data();
 	}
-	std::string line_up::rotate_left(int in_row){
-		if(in_row == 0){
+	std::string line_up::rotate_left(int in_row) {
+		if(in_row == 0) {
 			in_row = 1;
 		}
 		int row = in_row -1;
-		if(row < 0){
+		if(row < 0) {
 			return invalid_row();
 		}
-		if(row >= position_count){
+		if(row >= position_count) {
 			return invalid_row();
 		}
 		std::vector<uint8_t> items;
 		items.reserve(position_count);
 		bool first = true;
-		for(auto & i : rows[row]){
-			if(first){
+		for(auto& i : rows[row]) {
+			if(first) {
 				first = false;
 				continue;
 			}
@@ -136,26 +136,26 @@ namespace mods::mini_games {
 		needs_regen = true;
 		return get_body();
 	}
-	void line_up::reset(){
+	void line_up::reset() {
 		rows = original_rows;
 		needs_regen = true;
 		get_body();
 	}
-	std::string line_up::rotate_right(int in_row){
-		if(in_row == 0){
+	std::string line_up::rotate_right(int in_row) {
+		if(in_row == 0) {
 			in_row = 1;
 		}
 		int row = in_row -1;
-		if(row < 0){
+		if(row < 0) {
 			return invalid_row();
 		}
-		if(row >= position_count){
+		if(row >= position_count) {
 			return invalid_row();
 		}
 		std::vector<uint8_t> items;
 		items.reserve(position_count);
 		items.emplace_back(rows[row].back());
-		for(auto & i : rows[row]){
+		for(auto& i : rows[row]) {
 			items.emplace_back(i);
 		}
 		items.pop_back();
@@ -164,62 +164,76 @@ namespace mods::mini_games {
 		return get_body();
 	}
 
-	void rotate_right(player_ptr_t& player){
-		auto t = player->currently_hacking();
-		auto id = std::get<0>(t); auto row = std::get<1>(t);
-		if(!mods::mini_games::device_exists(player->vnum(),id)){
-			player->sendln("There is no device to hack in this room that goes by that ID");
-			return;
-		}
-		player->send("Current row value: %d/%d\r\n", row,mods::mini_games::game(player->vnum(),id).row_count());
-		player->sendln(mods::mini_games::game(player->vnum(),id).rotate_right(row));
-	}
-	void rotate_left(player_ptr_t& player){
-		auto t = player->currently_hacking();
-		auto id = std::get<0>(t); auto row = std::get<1>(t);
-		if(!mods::mini_games::device_exists(player->vnum(),id)){
-			player->sendln("There is no device to hack in this room that goes by that ID");
-			return;
-		}
-		player->send("Current row value: %d/%d\r\n", row,mods::mini_games::game(player->vnum(),id).row_count());
-		player->sendln(mods::mini_games::game(player->vnum(),id).rotate_left(row));
-	}
-	void reset_hack(player_ptr_t& player){
+	void rotate_right(player_ptr_t& player) {
 		auto t = player->currently_hacking();
 		auto id = std::get<0>(t);
-		if(!mods::mini_games::device_exists(player->vnum(),id)){
+		auto row = std::get<1>(t);
+		if(!mods::mini_games::device_exists(player->vnum(),id)) {
+			player->sendln("There is no device to hack in this room that goes by that ID");
+			return;
+		}
+		player->sendln(
+		    CAT(
+		        "Current row value: ", row,"/",mods::mini_games::game(player->vnum(),id).row_count()
+		    )
+		);
+		player->sendln(mods::mini_games::game(player->vnum(),id).rotate_right(row));
+	}
+	void rotate_left(player_ptr_t& player) {
+		auto t = player->currently_hacking();
+		auto id = std::get<0>(t);
+		auto row = std::get<1>(t);
+		if(!mods::mini_games::device_exists(player->vnum(),id)) {
+			player->sendln("There is no device to hack in this room that goes by that ID");
+			return;
+		}
+		player->sendln(
+		    CAT(
+		        "Current row value: ", row,"/",mods::mini_games::game(player->vnum(),id).row_count()
+		    )
+		);
+		player->sendln(mods::mini_games::game(player->vnum(),id).rotate_left(row));
+	}
+	void reset_hack(player_ptr_t& player) {
+		auto t = player->currently_hacking();
+		auto id = std::get<0>(t);
+		if(!mods::mini_games::device_exists(player->vnum(),id)) {
 			player->sendln("There is no device to hack in this room that goes by that ID");
 			return;
 		}
 		mods::mini_games::game(player->vnum(),id);
 	}
-	void next_row(player_ptr_t& player){
+	void next_row(player_ptr_t& player) {
 		auto t = player->currently_hacking();
 		auto id = std::get<0>(t);
-		if(!mods::mini_games::device_exists(player->vnum(),id)){
+		if(!mods::mini_games::device_exists(player->vnum(),id)) {
 			player->sendln("There is no device to hack in this room that goes by that ID");
 			return;
 		}
 		auto row = std::get<1>(t);
 		row += 1;
-		if(row > mods::mini_games::game(player->vnum(),id).row_count()){
+		if(row > mods::mini_games::game(player->vnum(),id).row_count()) {
 			row = 1;
 		}
 		player->set_currently_hacking(id,row);
-		player->send("Current row value: %d/%d\r\n", row,mods::mini_games::game(player->vnum(),id).row_count());
+		player->sendln(
+		    CAT(
+		        "Current row value: ", row,"/",mods::mini_games::game(player->vnum(),id).row_count()
+		    )
+		);
 		player->sendln(mods::mini_games::game(player->vnum(),id).get_body());
 	}
 };
 
-ACMD(do_hack){
+ACMD(do_hack) {
 	DO_HELP("hack");
 	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() == 0){
-		player->send("Which device would you like to hack?\r\n");
+	if(vec_args.size() == 0) {
+		player->sendln("Which device would you like to hack?");
 		mods::mini_games::list_devices(player);
 		return;
 	}
-	if (!mods::mini_games::device_exists(player->vnum(), mods::util::stoi(vec_args[0]).value_or(-1))){
+	if(!mods::mini_games::device_exists(player->vnum(), mods::util::stoi(vec_args[0]).value_or(-1))) {
 		player->sendln("That device doesn't exist in this room.");
 		return;
 	}

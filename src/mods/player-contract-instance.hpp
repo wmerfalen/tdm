@@ -43,6 +43,9 @@ namespace mods::contracts {
 			const target_t& target() const {
 				return m_target;
 			}
+			bool is_custom_event() const {
+				return m_goal & task_t::GOAL_CUSTOM_EVENT;
+			}
 			bool is_give_item() const {
 				return m_goal & task_t::GOAL_GIVE && m_target == target_t::TARGET_MOB;
 			}
@@ -88,6 +91,9 @@ namespace mods::contracts {
 			bool is_install_item() const {
 				return m_goal & task_t::GOAL_INSTALL;
 			}
+			bool is_uninstall_item() const {
+				return m_goal & task_t::GOAL_UNINSTALL;
+			}
 
 			void save_step_data();
 			void stop_contract();
@@ -100,6 +106,7 @@ namespace mods::contracts {
 			std::string_view dump_step();
 			std::string pretty_dump_step();
 
+			void custom_event(custom_events_t event,uuid_t id);
 			void find_item(obj_ptr_t& object);
 			void give_item(obj_ptr_t& object,player_ptr_t& mob);
 			void find_mob(player_ptr_t& mob);
@@ -115,6 +122,7 @@ namespace mods::contracts {
 			void gain_entry(const room_rnum& room_id);
 			void talk_to(player_ptr_t& mob);
 			void install_item(const uuid_t& obj_uuid);
+			void uninstall_item(const uuid_t& obj_uuid);
 			std::string_view title() const {
 				return m_contract_copy->title;
 			}

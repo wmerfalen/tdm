@@ -56,6 +56,7 @@ using lambda_queue_t = std::multimap<uint64_t,std::function<void()>>;
 using event_queue_t = std::multimap<uint32_t,std::tuple<uuid_t,uint32_t>>;
 using lambda_queue_iterator = lambda_queue_t::iterator;
 using event_queue_iterator = event_queue_t::iterator;
+#include "combat.hpp"
 
 namespace mods::globals {
 	extern player_ptr_t player_nobody;
@@ -64,9 +65,19 @@ namespace mods::contracts {
 	struct player_contract_instance;
 };
 
+#include "ranged-combat-totals.hpp"
+#include "contract-steps.hpp"
 
 namespace mods {
 	struct player {
+			typedef void (*func_t)(player_ptr_t&,player_ptr_t&);
+			using equipment_hash_t = uint64_t;
+			enum weight_index_t : uint8_t {
+				WEIGHT_FAST = 3,
+				WEIGHT_NORMAL = 2,
+				WEIGHT_ENCUMBERED = 1,
+				WEIGHT_SLUGGISH = 0,
+			};
 			using contract_vnum_t = uint32_t;
 			using contract_list_t = std::forward_list<std::shared_ptr<mods::contracts::player_contract_instance>>;
 			using damage = damage_event_t;
@@ -257,6 +268,7 @@ namespace mods {
 			int&	carry_weight() {
 				return this->char_specials().carry_weight;
 			}
+			const weight_index_t effective_weight_index() const;
 			byte& carry_items() {
 				return this->char_specials().carry_items;
 			}
@@ -302,6 +314,9 @@ namespace mods {
 			}
 			auto& max_move() {
 				return cd()->points.max_move;
+			}
+			auto& luck() {
+				return m_luck;
 			}
 
 			/** base stats - start */
@@ -438,6 +453,8 @@ namespace mods {
 
 
 			void consume_from_carrying(obj_ptr_t& item);
+			void consume_object(obj_ptr_t& item);
+			void consumed_object_wears_off(const mods::yaml::consumable_description_t& c);
 
 			mods::string weapon_name();
 
@@ -449,7 +466,7 @@ namespace mods {
 			/* weapon cooldown functions */
 			void weapon_cooldown_clear();
 			void weapon_cooldown_start(const int& ticks);
-			const bool& can_attack_again() const;
+			const bool& can_attack_again();
 
 			/* communication functions */
 			void stc_room(const room_rnum&);
@@ -459,16 +476,19 @@ namespace mods {
 			void stc(const mods::string& m);
 			void stc(int m);
 			void stc(std::string_view);
+			void sendln();
 			void sendln(std::string_view str);
-			void send(const std::vector<std::string>&);
+			void sendln(const std::vector<std::string>&);
 			void sendln(mods::string& str);
+			void sendx(mods::string& str);
+			void sendx(std::string_view str);
 			/** 'plain' sendln (no color eval needed) */
 			void psendln(std::string_view str);
 			void psendln(mods::string& str);
 			void raw_send(const mods::string&);
 			void done();
-			size_t send(const char *messg, ...);
-			size_t godsend(const char *messg, ...);
+			//size_t send(const char *messg, ...);
+			//size_t godsend(const char *messg, ...);
 
 			/* pager functions */
 			player&             pager_start();
@@ -542,6 +562,8 @@ namespace mods {
 			void set_state(int);
 			int state();
 			void set_host(std::string host);
+			void set_ip(std::string ip);
+			std::string ip() const;
 			std::string host() const;
 
 			/* captured output */
@@ -642,6 +664,8 @@ namespace mods {
 			void unequip(const std::size_t& pos);
 			void unequip(const std::size_t& pos,bool flush);
 			void unequip_into_inventory(int pos);
+
+			const equipment_hash_t& equipment_hash() const;
 			obj_ptr_t equipment(int pos);
 			std::vector<affected_type>& get_affected_by() {
 				return m_affected_by;
@@ -718,6 +742,12 @@ namespace mods {
 			/** viewing modifiers */
 			bool has_night_vision() const;
 			bool has_thermal_vision() const;
+			auto& thermal_range() {
+				return m_thermal_range;
+			}
+			auto& night_vision_range() {
+				return m_night_vision_range;
+			}
 
 			/** visibility */
 			char_data::visibility_t& visibility();
@@ -775,7 +805,6 @@ namespace mods {
 			direction_t get_watching() {
 				return this->m_watching;
 			}
-			int screen_width();
 			room_vnum vnum();
 
 			/** for shift left/right defuse/hack games */
@@ -794,10 +823,10 @@ namespace mods {
 			std::map<std::string,std::string>& get_ada_data();
 
 			void error(std::string_view msg) {
-				send("{red}%s{/red}", msg.data());
+				sendx(CAT("{red}",msg.data(),"{/red}"));
 			}
 			void errorln(std::string_view msg) {
-				send("{red}%s{/red}\r\n", msg.data());
+				sendx(CAT("{red}",msg.data(),"{/red}"));
 			}
 
 			uuid_t& drone_uuid() {
@@ -873,13 +902,15 @@ namespace mods {
 			void contract_gain_entry(const room_rnum& room_id);
 			void contract_talk_to(player_ptr_t& mob);
 			void contract_install_item(const uuid_t& object_uuid);
+			void contract_uninstall_item(const uuid_t& object_uuid);
+			void contract_custom_event(mods::contracts::custom_events_t event,uuid_t id);
 			void queue_up(std::string_view);
 			bool& moving_to_room();
 			void update_contract_status();
 			contract_list_t& contracts();
 
-			void add_combat_order(std::string_view attack);
-			std::vector<std::string>& get_combat_order() {
+			void add_combat_order(std::pair<uint16_t,func_t> c);
+			std::vector<std::pair<uint16_t,func_t>>& get_combat_order() {
 				return m_combat_order;
 			}
 			void set_combat_order_index(uint8_t i) {
@@ -897,9 +928,7 @@ namespace mods {
 			}
 
 			/** TODO: power this by user preferences */
-			std::size_t screen_width() const {
-				return 80;
-			}
+			uint8_t screen_width() const;
 			uint16_t& practice_sessions();
 			std::tuple<bool,std::string> class_action(std::string_view func,std::string_view param);
 			void add_damage_nerf(const float& amount);
@@ -914,7 +943,28 @@ namespace mods {
 			auto& to_attack() {
 				return m_to_attack;
 			}
+
+			bool is_dead() {
+				return this->position() == POS_DEAD;
+			}
+			std::shared_ptr<mods::ranged_combat_totals> get_ranged_combat_totals();
+			std::shared_ptr<mods::ranged_combat_totals> calculate_ranged_combat_totals(obj_ptr_t& weapon);
+			std::shared_ptr<mods::ranged_combat_totals> calculate_ranged_combat_totals();
+			auto& rules_of_engagement() {
+				return m_rules_of_engagement;
+			}
+			void lockdown(bool b);
+			bool is_locked_down() const {
+				return m_locked_down;
+			}
+			auto& ensnared_amount() {
+				return m_ensnared_amount;
+			}
+			bool& can_move() {
+				return m_can_move;
+			}
 		protected:
+			bool m_can_move;
 			int16_t m_to_move;
 			int16_t m_to_attack;
 			std::map<std::string,std::string> m_ada_data;
@@ -930,8 +980,11 @@ namespace mods {
 			std::shared_ptr<char_data> m_shared_ptr;
 			std::vector<affected_type> m_affected_by;
 			bool m_moving_to_room;
+			int16_t m_ensnared_amount;
 
 		private:
+			equipment_hash_t m_equipment_hash;
+			bool m_locked_down;
 			std::string m_scripted_response;
 			void write_to_char(std::string_view msg, bool newline,bool plain);
 			uuid_t m_attacker_uuid;
@@ -1018,10 +1071,21 @@ namespace mods {
 			bool m_can_attack;
 			mods::util::stopwatch_t m_timer;
 			int m_cooldown_ticks;
+			uint64_t m_cooldown_start_tick;
 			uint16_t m_practice_sessions;
-			std::vector<std::string> m_combat_order;
+			std::vector<std::pair<uint16_t,func_t>> m_combat_order;
 			std::string m_stance;
 			std::size_t m_current_melee_index;
+			std::shared_ptr<mods::ranged_combat_totals> m_rct;
+			std::shared_ptr<mods::ranged_combat_totals> m_rct_calculated;
+			int32_t m_luck;
+			mods::combat::rules_of_engagement_t m_rules_of_engagement;
+			std::string m_host;
+			std::string m_ip;
+			int16_t m_thermal_range;
+			int16_t m_night_vision_range;
+			uint8_t m_screen_width;
+			weight_index_t m_weight_index;
 	};
 };
 

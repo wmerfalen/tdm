@@ -1,0 +1,79 @@
+ - balancer skeleton code is written, 
+ 	 - but it needs to be created and applied
+	 - they need to be loaded from postgres
+	 - orm object needs to be created 
+ - theory + idealism
+	 - this code is mostly just theory and idealism
+	 - !!!! its not actually called or tested(!!!) !!!
+
+ - next steps:
+	 - define the folowing balancers:
+		- general
+	 		- damage vs speed
+			- range + damage vs CBS
+		
+(ELEM_INCENDIARY) \
+(ELEM_EXPLOSIVE) \
+(ELEM_SHRAPNEL) \
+(ELEM_CORROSIVE) \
+(ELEM_CRYOGENIC) \
+(ELEM_RADIOACTIVE) \
+(ELEM_EMP) \
+(ELEM_SHOCK) \
+(ELEM_ANTI_MATTER) \
+
+		# Levels at which elemental damages get unlocked
+			tier 1:
+				- explosive
+			tier 2:
+				- all of above plus...
+				- incendiary
+			tier 3:
+				- all of above plus...
+				- shock
+			tier 4:
+				- all of above plus...
+				- shrapnel
+			tier 5:
+				- all of above plus...
+				- corrosive
+			tier 6:
+				- all of above plus...
+				- cryogenic
+			tier 7:
+				- all of above plus...
+				- radioactive
+			tier 8:
+				- all of above plus...
+				- emp
+			tier 9:
+				- all of above plus...
+				- anti matter
+
+
+   - shotguns:
+     - damage dice count versus damage dice sides
+   
+	 - sniper:
+	 	- (if high) EFR + ZMAG, then -> 
+				CBS (nerf raise) (op lower)
+
+		- (if has) ELEM_SHRAPNEL, then ->
+				ZMAG (nerf zero) (op higher)
+				MXRNG (nerf (clamp,3)) (op raise)
+
+		- (if high) CLIPSZ (and low) CBS, then ->
+				[*ALL-DMG-ATTRS*] (nerf lower) (op raise)
+
+		- (if low) CLIPSZ, then ->
+				[*ALL-DMG-ATTRS*] (nerf raise) (op (mult,2))
+				CLIPSZ (op (mult,2))
+
+	- assault-rifles:
+		- (if gt 1) [COUNT-ELEMENTALS] (and has) ELEM_INC, then -> (nerf: 
+
+	- sub-machine-guns:
+		- (if has) 
+	
+	- LMG:
+		- (if high) [*RANGE-ATTRS*], then -> CRIT-CHANCE (nerf) (op: buff)

@@ -1,8 +1,11 @@
 #include "corpse.hpp"
+#include "fire.hpp"
+#include "shrapnel.hpp"
 #include "affects.hpp"
 #include "skills.hpp"
 #include "armor.hpp"
 #include "levels.hpp"
+#include "calc-visibility.hpp"
 
 #include "rooms.hpp"
 #include "injure.hpp"
@@ -14,6 +17,8 @@
 #include "projectile.hpp"
 #include "weapons/damage-calculator.hpp"
 #include "weapons/elemental.hpp"
+
+extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 
 #define __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
@@ -36,10 +41,11 @@ namespace mods::corpse {
 		corpse_explosive_t(
 		    player_ptr_t& attacker_ptr,
 		    obj_ptr_t& corpse_ptr,
-		    const uint16_t& in_base_damage) :
+		    const uint16_t& in_base_damage,
+		    std::string_view yaml) :
 			base_damage(in_base_damage),
 			corpse(corpse_ptr),
-			charge(create_object(ITEM_EXPLOSIVE,"corpse-charge.yml")),
+			charge(create_object(ITEM_EXPLOSIVE,yaml.data())),
 			countdown(CORPSE_EXPLOSION_TICK_COUNTDOWN()),
 			room_id(attacker_ptr->room()),
 			attacker(attacker_ptr->uuid()) {
@@ -57,6 +63,64 @@ namespace mods::corpse {
 		room_rnum room_id;
 		uuid_t attacker;
 	};
+	std::tuple<bool,std::string,obj_ptr_t> pick_corpse_from_room_by_argument(player_ptr_t& player, std::string_view in_argument) {
+		const char* argument = in_argument.substr(1).data();
+		auto list = world[player->room()].contents;
+		for(auto i = list; i; i = i->next_content) {
+			if(!i) {
+				break;
+			}
+			if(CAN_SEE_OBJ(player->cd(), i)) {
+				auto item = optr(i);
+				auto s = mods::calc_visibility::can_see_object(player,item);
+				if(!std::get<0>(s)) {
+					continue;
+				} else {
+					/** TODO: test for this syntax: 3.corpse */
+					if(mods::util::fuzzy_match(argat(1),i->name.str()) && mods::object_utils::is_corpse(item)) {
+						return {1,"",item};
+					}
+				}
+			}
+		}
+		return {0,"Couldn't find a corpse",nullptr};
+	}
+	uint16_t get_corpse_weight(obj_ptr_t& corpse) {
+		/**
+		 * We really only want to catch instances of special corpses.
+		 * For the most part, we return zero unless it's a corpse
+		 * that belongs to a very high level NPC or boss mob.
+		 */
+		return 0;
+	}
+	std::tuple<int16_t,std::string> drag_corpse(player_ptr_t& dragger,obj_ptr_t& corpse,const direction_t& direction,const uint16_t& force) {
+		if(force < get_corpse_weight(corpse)) {
+			return {0,"You try to but the corpse just weighs too much!"};
+		}
+		/** 1) Pick up corpse */
+		/** 2) block dragger for N ticks */
+		/** 3) act("$n picks up $i and starts dragging it..."); */
+		/** 4) act("$n takes $i <direction>..."); */
+		/** 5) move direction */
+		/** 6) drop corpse. unblock event */
+		act(CAT("$n picks up a corpse and starts dragging it ",dirstr(direction),"...").c_str(),TRUE,dragger->cd(),0,0,TO_ROOM);
+		if(world[dragger->room()].dir_option == nullptr) {
+			return {0,"That direction does not exist in this room."};
+		}
+		if(!mods::doors::is_open(dragger->room(),direction)) {
+			return {0,"You cannot go that direction. Is it open?"};
+		}
+		auto room = world[dragger->room()].dir_option[direction]->to_room;
+		obj_from_room(corpse);
+		/** If returns zero, it failed miserably */
+		if(0 == do_simple_move(dragger->cd(),direction,0)) {
+			obj_to_room(corpse.get(),room);
+			return {0,"You failed to move."};
+		}
+		act(CAT("$n drags a corpse into the room from the ",dirstr(OPPOSITE_DIR(direction)),"...").c_str(),TRUE,dragger->cd(),0,0,TO_ROOM);
+		obj_to_room(corpse.get(),room);
+		return {1,CAT("You drag a corpse ",dirstr(direction))};
+	}
 	using corpse_explosions_t = std::forward_list<corpse_explosive_t>;
 	static corpse_explosions_t corpse_explosions;
 
@@ -99,6 +163,14 @@ namespace mods::corpse {
 		f.attacker = device->get_owner();
 		f.damage_event = HIT_BY_TEETH_AND_BONES;
 		victim->damage_event(f);
+
+		if(mods::object_utils::is_hellfire_corpse_charge(device)) {
+			mods::fire::deploy_fire_damage_to_victim_via_device(victim,device);
+			mods::fire::set_fire_to_room_via_device(victim->room(),device);
+		}
+		if(mods::object_utils::is_shrapnel_corpse_charge(device)) {
+			mods::shrapnel::deploy_shrapnel_damage_to(victim,device);
+		}
 		update_pos(victim->cd());
 		bool dead = victim->position() == POS_DEAD;
 		auto attacker = ptr_by_uuid(device->get_owner());
@@ -192,8 +264,14 @@ namespace mods::corpse {
 		//queue_corpse_explode(corpse,player,damage);
 		//player->sendln(CAT("After: ",std::distance(corpse_explosions.cbegin(),corpse_explosions.cend())));
 	}
+	void queue_hellfire_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage) {
+		corpse_explosions.push_front({attacker,corpse,damage,"hellfire-corpse-charge.yml"});
+	}
+	void queue_shrapnel_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage) {
+		corpse_explosions.push_front({attacker,corpse,damage,"shrapnel-corpse-charge.yml"});
+	}
 	void queue_corpse_explode(obj_ptr_t& corpse,player_ptr_t& attacker,const uint16_t& damage) {
-		corpse_explosions.push_front({attacker,corpse,damage});
+		corpse_explosions.push_front({attacker,corpse,damage,"corpse-charge.yml"});
 	}
 	void explode(const uint64_t& id) {
 		for(const auto& corpse : corpse_explosions) {

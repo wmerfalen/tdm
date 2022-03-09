@@ -11,14 +11,19 @@
 namespace mods::loot::events {
 
 	void player_killed_npc(player_ptr_t& player,player_ptr_t& npc) {
-		mods::loot_container::store(player,std::move(mods::loot::reward_player(player)));
-		player->sendln("{grn}A piece of loot was awarded to you.{/grn}");
+		mods::loot_container::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
+		player->sendln("{grn}#######################################{/grn}");
+		player->sendln("{grn}# A piece of loot was awarded to you! #{/grn}");
+		player->sendln("{grn}#######################################{/grn}");
 	}
 };
 
 namespace mods::loot {
-	obj_ptr_t reward_player(player_ptr_t& player) {
-		return std::move(mods::forge_engine::reward_player(player));
+	obj_ptr_t reward_player(player_ptr_t& player,mob_vnum victim) {
+		return std::move(mods::forge_engine::reward_player(player,victim));
+	}
+	obj_ptr_t reward_player_with(std::string_view type,player_ptr_t& player,mob_vnum victim) {
+		return std::move(mods::forge_engine::reward_player_with(type.data(),player,victim));
 	}
 
 	/**
@@ -55,7 +60,7 @@ namespace mods::loot {
 				}
 
 				player->level() = level;
-				player->carry(reward_player(player));
+				player->carry(reward_player(player,mob_proto[0].nr));
 			}
 		}
 		/** generate rifle */
@@ -77,6 +82,50 @@ namespace mods::loot {
 		}
 		player->level() = saved_level;
 	}
+
+	/**
+	 * manually generate a rifle of a specific type
+	 */
+	ADMINCMD(do_reward_with) {
+		ADMIN_REJECT();
+		DO_HELP_WITH_ZERO("admin:reward:with");
+		static constexpr const char* usage = "usage: admin:reward:with <type> <level>...<level N>\r\n"
+		                                     "SHOTGUN\r\n"
+		                                     "ASSAULT_RIFLE\r\n"
+		                                     "SUB_MACHINE_GUN\r\n"
+		                                     "SNIPER\r\n"
+		                                     "HANDGUN\r\n"
+		                                     "PISTOL\r\n"
+		                                     "MACHINE_PISTOL\r\n"
+		                                     "LIGHT_MACHINE_GUN\r\n"
+		                                     "example: admin:reward:with: SNIPER 5\r\n";
+
+		auto vec_args = PARSE_ARGS();
+		std::vector<std::string> screen;
+
+		if(vec_args.size() < 2) {
+			player->sendln(usage);
+			return;
+		}
+
+		using namespace mods::forge_engine;
+		auto saved_level = player->level();
+
+		/** generate rifle */
+		for(uint8_t i = 1; i < vec_args.size(); ++i) {
+			int level = mods::util::stoi(vec_args[i]).value_or(-1);
+
+			if(level <= 0) {
+				player->error(CAT("Invalid numeric value encountered at string: '", vec_args[i], "'\r\n"));
+				continue;
+			}
+
+			player->level() = level;
+			player->carry(reward_player_with(vec_args[0],player,mob_proto[0].nr));
+		}
+		player->level() = saved_level;
+	}
+
 
 	/**
 	 * add a rifle filename/type to the rifle_index table
@@ -159,6 +208,7 @@ namespace mods::loot {
 	/** game init */
 	void init() {
 		mods::interpreter::add_command("reward", POS_RESTING, do_reward, LVL_BUILDER, 0);
+		ADD_ADMIN_COMMAND("admin:reward:with", do_reward_with);
 		mods::interpreter::add_command("add_rifle_index", POS_RESTING, do_add_rifle_index, LVL_BUILDER, 0);
 		mods::interpreter::add_command("add_armor_index", POS_RESTING, do_add_armor_index, LVL_BUILDER, 0);
 	}

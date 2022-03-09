@@ -51,7 +51,7 @@ namespace mods::mobs {
 			bool has_tree();
 			uint16_t get_tree();
 			void populate_from_meqbuild_profile();
-			void bootstrap_equipment();
+			virtual void bootstrap_equipment();
 
 			/**================*/
 			/** debugging info */
@@ -139,7 +139,16 @@ namespace mods::mobs {
 				return player_ptr->char_specials().fighting != nullptr;
 			}
 
+			void refill_ammo() {
+				player_ptr->primary()->rifle_instance->ammo = 255;
+			}
+			int optimal_range() const;
+
+			void save_attack_direction(const direction_t& direction);
+			direction_t determine_chase_direction();
+
 		protected:
+			direction_t m_last_attack_direction;
 			std::map<uint16_t,uint16_t> m_should_do;
 			std::map<uint16_t,uint16_t> m_should_do_max;
 			std::array<std::string,NUM_WEARS> wear_list;

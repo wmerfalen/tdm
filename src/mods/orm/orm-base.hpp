@@ -59,11 +59,15 @@ namespace mods::orm {
 
 	template <typename TClassType,typename TPrimaryType>
 	struct orm_base {
+			void use_connection(pqxx::connection* pq_con) {
+				m_con = pq_con;
+			}
 			const char* table = "player-unknowns";
 			strmap_t exported_data;
 			std::vector<std::string> accumulators;
 			orm_base() {
 				save_error_logs = false;
+				m_con = mods::globals::pq_con.get();
 			}
 			virtual const std::vector<std::string>& accumulator_slot_list() const {
 				return accumulators;
@@ -215,8 +219,9 @@ namespace mods::orm {
 				}
 				return status;
 			}
-			std::tuple<int16_t,std::string> remove() {
-				auto status = mods::orm::util::delete_from<orm_base,sql_compositor>(this);
+			template <typename TClass>
+			std::tuple<int16_t,std::string> remove(TClass* c) {
+				auto status = mods::orm::util::delete_from<TClass,sql_compositor>(c);
 				m_result = status;
 				if(ORM_FAILURE(status)) {
 					m_register_error(status);
@@ -224,6 +229,21 @@ namespace mods::orm {
 				}
 				return status;
 			}
+			//std::tuple<int16_t,std::string> remove() {
+			//	std::cerr << "######+===========================================\n";
+			//	std::cerr << "######+===========================================\n";
+			//	std::cerr << "######+ DEPRECATED. DO NOT CALL orm_base::remove()!!!\n";
+			//	std::cerr << "######+===========================================\n";
+			//	std::cerr << "######+===========================================\n";
+			//	sleep(1);
+			//	auto status = mods::orm::util::delete_from<orm_base,sql_compositor>(this);
+			//	m_result = status;
+			//	if(ORM_FAILURE(status)) {
+			//		m_register_error(status);
+			//		mods::sql::error_log(CAT("[orm_base::remove] failed: '",std::get<1>(status),"'"));
+			//	}
+			//	return status;
+			//}
 			std::vector<std::string> get_error_log() const {
 				return m_error_log;
 			}
@@ -265,6 +285,7 @@ namespace mods::orm {
 			}
 
 			bool loaded;
+			pqxx::connection* m_con;
 			uint64_t id;
 			long created_at;
 			long updated_at;

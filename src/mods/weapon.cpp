@@ -317,7 +317,12 @@ namespace mods::weapon {
 	}
 
 	void list_rounds(player_ptr_t& player,obj_ptr_t& obj) {
-		player->send("%d rounds.\r\n",obj->obj_flags.ammo);
+		player->sendln(
+		    CAT(
+		        obj->obj_flags.ammo,
+		        " rounds."
+		    )
+		);
 	}
 
 	obj_ptr_t get_clip_by_name(player_ptr_t& player, std::string_view arg) {

@@ -6,6 +6,7 @@
 #include "scripted-sequence-events.hpp"
 #include "players/db-load.hpp"
 #include "levels.hpp"
+#include "contract-defiler.hpp"
 
 #ifdef  __MENTOC_SHOW_CONTRACT_OUTPUT__
 #define dbg_print(a) std::cerr << "[mods::contracts::player_contract_instance][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
@@ -307,6 +308,9 @@ namespace mods::contracts {
 	}
 	std::string player_contract_instance::get_type_string() const {
 		std::string type = "\t\t{yel}[type]:{/yel}{grn}";
+		if(is_custom_event()) {
+			type += "custom_event";
+		}
 		if(is_find_item()) {
 			type += "find_item";
 		}
@@ -447,6 +451,32 @@ namespace mods::contracts {
 
 
 	}
+
+	void player_contract_instance::custom_event(custom_events_t event,uuid_t id) {
+		if(!m_current_step) {
+			return;
+		}
+		if(m_current_step->goal & task_t::GOAL_CUSTOM_EVENT) {
+			auto player = ptr_by_db_id(m_player_id);
+			switch(event) {
+				case custom_events_t::CEV_HUMAN_REMAINS_FOUND:
+					if(mods::contract_defiler::human_remains_found(player,id)) {
+						this->advance();
+					}
+					break;
+				default:
+					log("SYSERR: unknown custom event. Using regular quota logic");
+					break;
+			}
+			++m_quota;
+			if(m_quota >= m_current_step->quota) {
+				this->advance();
+				return;
+			}
+		}
+	}
+
+
 	/**
 	 * @brief
 	 *
@@ -535,7 +565,7 @@ namespace mods::contracts {
 		if(m_current_step->goal & task_t::GOAL_QUOTA &&
 		        m_current_step->target == target_t::TARGET_ITEM) {
 			if(m_current_step->object_yaml.compare(object->feed_file().data()) == 0) {
-				++m_quota;/** TODO FIXME INITIALIZE THIS */
+				++m_quota;
 				if(m_quota >= m_current_step->quota) {
 					this->advance();
 				}
@@ -668,6 +698,25 @@ namespace mods::contracts {
 			}
 		}
 
+	}
+	void player_contract_instance::uninstall_item(const uuid_t& obj_uuid) {
+		if(!m_current_step) {
+			return;
+		}
+		if(m_current_step->goal & task_t::GOAL_UNINSTALL &&
+		        m_current_step->target == target_t::TARGET_ITEM) {
+			auto object = optr_by_uuid(obj_uuid);
+			if(!object) {
+				return;
+			}
+			if(m_current_step->object_yaml.compare(object->feed_file().data()) == 0) {
+				++m_quota;/** TODO FIXME INITIALIZE THIS */
+				if(m_quota >= m_current_step->quota) {
+					this->advance();
+				}
+				return;
+			}
+		}
 	}
 	/**
 	 * @brief

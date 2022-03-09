@@ -1,4 +1,3 @@
-#include "mods/db-report.hpp"
 #include "conf.h"
 #include "sysdep.h"
 
@@ -276,7 +275,7 @@ SUPERCMD(do_yaml_import) {
 		mods::object_utils::set_yaml_initiator(player->name(),vec_args[0],vec_args[1]);
 		auto obj = mods::object_utils::yaml_import(vec_args[0],vec_args[1]);
 		player->carry(obj);
-		player->send("Imported: %s of type %s\r\n", vec_args[1].c_str(),vec_args[0].c_str());
+		player->sendln(CAT("Imported: ",vec_args[1]," of type ", vec_args[0]));
 		return;
 	}
 	player->sendln("Unknown type/file combination. Nothing imported.");
@@ -410,7 +409,7 @@ SUPERCMD(do_yaml_log) {
 			return;
 		}
 		obj_to_char(obj.get(),player->cd());
-		player->send("{grn}Imported: %s of type %s\r\n{/grn}", vec_args[1].c_str(),vec_args[0].c_str());
+		player->sendln(CAT("{grn}Imported: ",vec_args[1]," of type ", vec_args[0], "{/grn}"));
 		return;
 	}
 	player->sendln("Unknown type/file combination. Nothing imported.");
@@ -422,7 +421,7 @@ SUPERCMD(do_yaml_log) {
  * @param do_yaml_log_save
  */
 SUPERCMD(do_yaml_log_save) {
-	player->send("Saving yaml log...");
+	player->sendln("Saving yaml log...");
 	auto status = mods::object_utils::save_yaml_exceptions_to_disk();
 	if(std::get<0>(status) < 0) {
 		player->sendln(CAT("{red}Issue writing log to file: '",std::get<1>(status),"'{/red}"));
@@ -436,7 +435,7 @@ SUPERCMD(do_yaml_log_save) {
  * @param do_yaml_log_clear
  */
 SUPERCMD(do_yaml_log_clear) {
-	player->send("Clearing yaml log...");
+	player->sendln("Clearing yaml log...");
 	mods::object_utils::clear_yaml_exceptions();
 	player->sendln("[done]");
 }

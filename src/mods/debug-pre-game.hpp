@@ -159,6 +159,7 @@ namespace mods::debug::pre_game {
 	}
 
 	bool run() {
+
 #ifdef __MENTOC_RUN_ARMOR_CALCULATOR__
 		do_armor_calculator();
 #endif

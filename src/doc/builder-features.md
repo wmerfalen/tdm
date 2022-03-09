@@ -99,7 +99,7 @@
 				 *  	which direction the shot came from
 				 *  -- SMG's are silenced
 				 *  	-- first attack with SMG's cause the target to not know who
-				 *  		the attack is
+				 *  		the attacker is
 				 *  -- SMG's have "initiative"
 				 *  	-- when an enemy would attack you, you attack first
 				 *  	-- when they attack, you immediately attack again

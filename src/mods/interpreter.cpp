@@ -69,5 +69,11 @@ namespace mods::interpreter {
 
 		mods::interpreter::custom_cmd_info_list().emplace_back(std::move(c));
 	}
+
+	namespace douchebags {
+		void locked_down_player_always(player_ptr_t& douche) {
+			douche->sendln("You are unable to do much of anything...");
+		}
+	};//end namespace douchebags
 };
 #undef mi_debug

@@ -18,7 +18,7 @@ melee combat commands that you will execute during combat.
 # Setting your first three commands
 Example:
 ```
-80H 145M 243V [7/7]> combat_order set jab cross uppercut
+80H 145M 243V [7/7]> set_combat_order jab cross uppercut
 Setting Technique: 'jab'...
 Setting Technique: 'cross'...
 Setting Technique: 'uppercut'...
@@ -29,5 +29,9 @@ Your combat order is now...
 
 80H 145M 243V [7/7]>
 
+```
+
+# Listing your combat orders
+Example:
 ```
 

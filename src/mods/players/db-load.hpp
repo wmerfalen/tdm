@@ -29,6 +29,7 @@ namespace mods::players::db_load {
 	int16_t save_new_char(player_ptr_t& player);
 	int16_t load_char_pkid(player_ptr_t& player);
 	int16_t delete_char(player_ptr_t&);
+	int16_t delete_char_by_name(std::string_view name);
 	void sync_player_with_class_skills(const uint64_t& player_id,const std::string& player_class);
 	void game_entry(player_ptr_t& player);
 };
