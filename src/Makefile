@@ -1,8 +1,9 @@
-CURDIR = $(WEBROOT)
+CURDIR = $(MUD_ROOT)
 src = .
 builddir = build
 #CC = /usr/bin/clang++-8
-CC = /usr/bin/g++-8
+#CC = /usr/bin/g++-8
+CC = /usr/bin/g++-10
 BINDIR = ../bin
 DATA_DIR = "$(CURDIR)/../lib/"
 JS_PROFILES_PATH = "$(DATA_DIR)js/profiles/"
@@ -30,11 +31,12 @@ warnings_list = -Wall -Wunused-result \
 	-Wno-format-zero-length -Wno-format-security \
 	-Wuninitialized \
 	-Wno-char-subscripts -Wcomment \
-	-Wno-sign-compare 
+	-Wno-sign-compare -Wno-narrowing \
+	-Wno-pessimizing-move
 
 FLAGS = $(gdbflags) $(optimization) \
 				$(warnings_list) \
-	-std=c++2a -fconcepts -fpermissive -MMD \
+	-std=c++20 -fconcepts -fpermissive -MMD \
 	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-Imods/catch2/Catch2/src -Lmods/catch2/Catch2/build/src \
 	-Ilibzmq/include -Icppzmq \

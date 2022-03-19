@@ -593,7 +593,7 @@ namespace mods::weapons::damage_types {
 		feedback_t feedback;
 		auto weapon = player->primary();
 
-		auto s = can_continue(player,weapon,-1,OPPOSITE_DIR(direction),ITEM_RIFLE);
+		auto s = can_continue(player,weapon,'\0',OPPOSITE_DIR(direction),ITEM_RIFLE);
 		if(std::get<0>(s) == false) {
 			return std::get<1>(s);
 		}
@@ -703,7 +703,7 @@ namespace mods::weapons::damage_types {
 		feedback_t feedback;
 		auto weapon = player->primary();
 
-		auto s = can_continue(player,weapon,-1,OPPOSITE_DIR(direction),ITEM_RIFLE);
+		auto s = can_continue(player,weapon,'\0',OPPOSITE_DIR(direction),ITEM_RIFLE);
 		if(std::get<0>(s) == false) {
 			return;
 		}
@@ -740,7 +740,7 @@ namespace mods::weapons::damage_types {
 		feedback_t feedback;
 		auto weapon = player->primary();
 
-		auto s = can_continue(player,weapon,-1,OPPOSITE_DIR(direction),ITEM_RIFLE);
+		auto s = can_continue(player,weapon,'\0',OPPOSITE_DIR(direction),ITEM_RIFLE);
 		if(std::get<0>(s) == false) {
 			return;
 		}

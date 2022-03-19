@@ -260,7 +260,7 @@ namespace mods::builder {
 			auto room_sql = comp.del()
 			                .from("zone_data")
 			                .where("zone_command","M")
-			                .op_and("zone_arg1","=",mob_vnum)
+			                .op_and("zone_arg1","=",mob_vnum.data())
 			                .sql();
 			auto row = mods::pq::exec(del_txn,room_sql.data());
 			mods::pq::commit(del_txn);

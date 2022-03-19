@@ -46,7 +46,7 @@ namespace mods::orm::util {
 			              .insert()
 			              .into(obj->table_name())
 			              .values(mapped)
-			              .returning(returning_field)
+			              .returning(returning_field.data())
 			              .sql();
 #ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "insert_returning: '" << up_sql << "'\n";

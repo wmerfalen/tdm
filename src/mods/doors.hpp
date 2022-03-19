@@ -380,7 +380,7 @@ namespace mods::doors  {
 		std::vector<exit_info_masks_t> masks;
 		for(int i=EIM_ISDOOR; i != exit_info_masks_t::__LAST; i <<= 1) {
 			if(exit_info & i) {
-				masks.emplace_back(i);
+				masks.emplace_back(static_cast<exit_info_masks_t>(i));
 			}
 		}
 		return masks;

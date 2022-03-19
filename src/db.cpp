@@ -2075,7 +2075,7 @@ bool login(std::string_view user_name,std::string_view password) {
 		sql_compositor comp("player",&select_transaction);
 		auto room_sql = comp.select("id")
 		                .from("player")
-		                .where_crypt("player_password",password)
+		                .where_crypt("player_password",password.data())
 		                .op_and("player_name","=",user_name.data())
 		                .sql();
 		auto row = mods::pq::exec(select_transaction,room_sql.data());

@@ -120,7 +120,7 @@ namespace mods::util {
 		return d;
 	}
 
-	std::string&& word_wrap(std::string_view paragraph,int width);
+	std::string word_wrap(std::string_view paragraph,int width);
 	using directory_list_t = std::vector<std::string>;
 	using obj_ptr_t = std::shared_ptr<obj_data>;
 	struct objdir_struct {

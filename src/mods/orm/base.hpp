@@ -28,7 +28,7 @@ namespace mods::orm {
 				              .insert()
 				              .into(obj.table_name())
 				              .values(obj.export_class())
-				              .returning(returning_field)
+				              .returning(returning_field.data())
 				              .sql();
 #ifdef __MENTOC_ORM_BASE_DEBUG_OUTPUT__
 				std::cerr << "insert_returning: '" << up_sql << "'\n";

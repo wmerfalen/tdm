@@ -82,7 +82,7 @@ std::tuple<bool,std::string,std::string> upsert_returning(
 	try {
 		auto check_txn = txn();
 		auto builder = sql_compositor(table_name,&check_txn)
-		               .select(primary_key)
+		               .select(primary_key.data())
 		               .from(table_name);
 		bool first = true;
 		for(const auto& pair : criteria) {
@@ -103,7 +103,7 @@ std::tuple<bool,std::string,std::string> upsert_returning(
 			auto sql = sql_compositor(table_name,&t)
 			           .update(table_name)
 			           .set(values)
-			           .where(primary_key,check_result[0][primary_key.data()].c_str())
+			           .where(primary_key.data(),check_result[0][primary_key.data()].c_str())
 			           .sql();
 			mods::pq::exec(t,sql);
 			mods::pq::commit(t);

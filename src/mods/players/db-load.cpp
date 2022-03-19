@@ -282,7 +282,7 @@ namespace mods::players::db_load {
 			auto del_sql = comp
 			               .del()
 			               .from("player")
-			               .where("player_name","=",user)
+			               .where("player_name","=",user.data())
 			               .sql();
 			mods::pq::exec(delete_txn,del_sql);
 			mods::pq::commit(delete_txn);

@@ -643,11 +643,11 @@ namespace mods::util {
 		}
 		return path;
 	}
-	std::string&& word_wrap(std::string_view paragraph,int width) {
+	std::string word_wrap(std::string_view paragraph,int width) {
 		std::string buffer;
 
 		if(width <= 0) {
-			return std::move(std::string(paragraph));
+			return paragraph.data();
 		}
 
 		int position = 1;
@@ -718,7 +718,7 @@ namespace mods::util {
 			}
 		}
 
-		return std::move(buffer);
+		return buffer;
 	}
 //uint64_t aff2legacy(mods::flags::aff f){
 //	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
