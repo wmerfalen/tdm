@@ -42,3 +42,4 @@ mods/*/*.orig
 mods/catch2/
 
 cppzmq/
+libzmq/
