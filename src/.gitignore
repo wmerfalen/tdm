@@ -38,8 +38,7 @@ boost
 *.orig
 mods/*.orig
 mods/*/*.orig
-
 mods/catch2/
-
+src/scripts/tintin-scripts/histories/
 cppzmq/
 libzmq/
