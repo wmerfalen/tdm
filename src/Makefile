@@ -25,7 +25,7 @@ gdbflags = -ggdb -g
 #post_build_args = strip-all
 optimization =
 # TODO: for prod builds, uncomment this
-optimization = -O2
+#optimization = -O2
 warnings_list = -Wall -Wunused-result \
 	-Wno-format-zero-length -Wno-format-security \
 	-Wuninitialized \
@@ -122,6 +122,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/room \
 					 mods/weapons/pistol-czp10 \
 					 mods/weapons/smg-mp5 mods/weapons/shotgun-sasg12 \
+					 mods/weapons/shotgun-dst7A \
 					 mods/orm/marine mods/classes/marine \
 					 mods/orm/breacher mods/classes/breacher \
 					 mods/orm/engineer mods/classes/engineer \

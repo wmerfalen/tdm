@@ -9,22 +9,7 @@
 {yel}mods/ban-system{/yel}:->{grn}admin:ban_ip{/grn}
 {yel}mods/ban-system{/yel}:->{grn}admin:ban_host{/grn}
 {yel}mods/ban-system{/yel}:->{grn}admin:pull{/grn}
-{yel}mods/loot{/yel}:->{grn}admin:reward_with{/grn}
-{yel}mods/ensnare{/yel}:->{grn}admin:ensnare_me{/grn}
 {yel}mods/admin-tools/stay{/yel}:->{grn}admin:stay{/grn}
 {yel}mods/admin-tools/stay{/yel}:->{grn}admin:unstay{/grn}
-{yel}tags:ADMINCMD	mods/admin-tools/stay.cpp	/^	->stay$/;"	kind:function	line:38	namespace:mods::admin_tools::stay	signature:(do_stay){/grn}
-{yel}tags:ADMINCMD	mods/admin-tools/stay.cpp	/^	->unstay$/;"	kind:function	line:60	namespace:mods::admin_tools::stay	signature:(do_unstay){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->ban$/;"	kind:function	line:331	namespace:mods::ban_system	signature:(do_ban){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->ban_host$/;"	kind:function	line:361	namespace:mods::ban_system	signature:(do_ban_host){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->ban_ip$/;"	kind:function	line:353	namespace:mods::ban_system	signature:(do_ban_ip){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->ban_user$/;"	kind:function	line:345	namespace:mods::ban_system	signature:(do_ban_user){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->banish$/;"	kind:function	line:274	namespace:mods::ban_system	signature:(do_banish){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->mute$/;"	kind:function	line:222	namespace:mods::ban_system	signature:(do_mute){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->pull$/;"	kind:function	line:369	namespace:mods::ban_system	signature:(do_pull){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->unban_host$/;"	kind:function	line:292	namespace:mods::ban_system	signature:(do_unban_host){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->unban_ip$/;"	kind:function	line:305	namespace:mods::ban_system	signature:(do_unban_ip){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->unban_user$/;"	kind:function	line:318	namespace:mods::ban_system	signature:(do_unban_user){/grn}
-{yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->unmute$/;"	kind:function	line:247	namespace:mods::ban_system	signature:(do_unmute){/grn}
-{yel}tags:ADMINCMD	mods/ensnare.cpp	/^	->ensnare_me$/;"	kind:function	line:124	namespace:mods::ensnare	signature:(do_ensnare_me){/grn}
-{yel}tags:ADMINCMD	mods/loot.cpp	/^	->reward_with$/;"	kind:function	line:89	namespace:mods::loot	signature:(do_reward_with){/grn}
+{yel}mods/loot{/yel}:->{grn}admin:reward_with{/grn}
+{yel}mods/ensnare{/yel}:->{grn}admin:ensnare_me{/grn}
