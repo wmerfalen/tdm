@@ -35,6 +35,7 @@
 #include "mods/js.hpp"
 #include "mods/corrosive.hpp"
 #include "mods/bleed.hpp"
+#include "mods/melt.hpp"
 #include "mods/ensnare.hpp"
 #include "mods/resting.hpp"
 #include "mods/mobs/behaviour-tree-list.hpp"
@@ -984,10 +985,17 @@ void heartbeat(int pulse) {
 
 	if(!(pulse % mods::corrosive::tick_resolution())) {
 		mods::corrosive::process_corrosion();
-		mods::bleed::process_bleed();
-		mods::ensnare::process_ensnare();
 	}
 
+	if(!(pulse % mods::bleed::tick_resolution())) {
+		mods::bleed::process_bleed();
+	}
+	if(!(pulse % mods::ensnare::tick_resolution())) {
+		mods::ensnare::process_ensnare();
+	}
+	if(!(pulse % mods::melt::tick_resolution())) {
+		mods::melt::process_melt();
+	}
 	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION())) {
 		mods::rooms::process_fire_damage();
 	}

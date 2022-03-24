@@ -189,6 +189,7 @@ namespace mods {
 		void register_object_list();
 		void register_room(const room_rnum&);
 		void register_object_db_id(uint64_t,uuid_t);
+		void register_unique(const obj_ptr_t&);
 		void shutdown();
 		void refresh_player_states();
 		void room_event(char_data*,mods::ai_state::event_type_t);

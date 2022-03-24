@@ -82,7 +82,20 @@ uint32_t dice(uint32_t num,uint32_t size) {
 	rand_debug("(dice) dice: num,size:" << num << "," << size << "| roll:" << roll);
 	return roll;
 }
+uint32_t dice(const uint16_t dice [2]) {
+	return mods::rand::roll(dice[0],dice[1]);
+}
+uint32_t dice(const std::array<uint16_t,2>& dice) {
+	return mods::rand::roll(dice[0],dice[1]);
+}
 
+uint32_t dice(const std::array<uint16_t,3>& dice) {
+	auto roll = mods::rand::roll(dice[0],dice[1]);
+	if(roll > dice[2]) {
+		return roll;
+	}
+	return 0;
+}
 
 namespace mods::rand::xoroshiro {
 	/*  Written in 2018 by David Blackman and Sebastiano Vigna (vigna@acm.org)

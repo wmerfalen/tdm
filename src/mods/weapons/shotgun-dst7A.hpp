@@ -2,11 +2,12 @@
 #define __MENTOC_MODS_WEAPONS_SHOTGUN_DST7A_HEADER__
 
 #include "../weapon.hpp"
+#include "../player.hpp"
 #include "../pqxx-types.hpp"
-#include <string_view>
+#include "unique-weapons.hpp"
 
 namespace mods::weapons::shotgun {
-	struct dst7A {
+	struct dst7A : public mods::weapons::unique_ranged_weapon {
 			static constexpr std::string_view description =
 			    "  ______________________________________________________________________\r\n"
 			    " /                                                                     /\r\n"
@@ -25,10 +26,9 @@ namespace mods::weapons::shotgun {
 			    "| intended targets. A proprietary mechanism within the barrell of the |\r\n"
 			    "| shotgun causes a chemical reaction which coats each shell as it     |\r\n"
 			    "| travels towards it's target. A cruel mixture of radioactive isotopes|\r\n"
-			    "| and chemicals used in pyrotechnics taint the shrapnel as it leaves  |\r\n"
+			    "| and components used in pyrotechnics coat the shrapnel as it leaves  |\r\n"
 			    "| the barrell. Upon hitting flesh, the mixture causes the flesh and   |\r\n"
 			    "| bone of the target to effectively melt away into uselessness.       |\r\n"
-			    "| occurs and the flesh of the target begins to melt away.             |\r\n"
 			    "|                                                                     |\r\n"
 			    "| Initial testing of the DST7A caused many QA engineers to fall ill to|\r\n"
 			    "| radiation sickness. As of yet, the DST7A is considered HIGHLY EXPER-|\r\n"
@@ -36,44 +36,61 @@ namespace mods::weapons::shotgun {
 			    "| since been copied and the shotgun has survived in the black market. |\r\n"
 			    "|                                                                     |\r\n"
 			    "+-[ Known stats ]-----------------------------------------------------|\r\n"
-			    "| 8d13  - Base damage                                                 |\r\n"
-			    "| +150% - Incendiary damage                                           |\r\n"
-			    "| +250% - Radioactive damage                                          |\r\n"
-			    "| 10d10 - Melt damage per 9 ticks per shot                            |\r\n"
-			    "| ????? - Bone marrow damage                                          |\r\n"
-			    "| ????? - Kevlar damage                                               |\r\n"
-			    "| 1d6   - Reload time                                                 |\r\n"
+			    "| 850 + 20d40 melting damage                                          |\r\n"
 			    "|                                                                     |\r\n"
 			    "+-[ R: 001 ]---------------------------------------[ Docu-gen v8.1.0 ]+\r\n";
-			static obj_data_ptr_t make();
-			static obj_data_ptr_t feed_by_file(std::string_view file);
-			dst7A();
+			/** TODO: 450 - Bone marrow damage every 3 ticks  */
+			/** TODO: 780 - Kevlar damage every 12 ticks */
+			struct stats {
+				static constexpr uint16_t base_damage = 850;
+				static constexpr uint16_t base_damage_dice_additional [2] = {20,40};
+				static constexpr uint16_t incendiary_damage_percent = 150;
+				static constexpr uint16_t radioactive_damage_percent = 250;
+				static constexpr uint16_t bone_marrow_damage = 450;
+				static constexpr uint16_t kevlar_damage = 780;
+				static constexpr std::array<uint16_t,3> move_points_per_outward_pump_buff = {2,4,6};
+				static constexpr std::array<uint16_t,3> mana_points_per_inward_pump_buff = {2,2,2};
+			};
+
+			dst7A() = delete;
+			dst7A(obj_ptr_t& obj);
 			~dst7A();
 
-			uint16_t bound_to;
-			uint16_t id;
-			void feed(const mods::pq::row_type&);
-			obj_data_ptr_t obj;
-			void increment_shot();
-			void set_target(const uuid_t& target_uuid) {
-				m_target_uuid = target_uuid;
+
+			const uuid_t& uuid() {
+				return m_object->uuid;
 			}
-			uuid_t& get_target_uuid() {
-				return m_target_uuid;
+
+			const event_list_t& get_subscriptions() override {
+				static event_list_t subs = {
+					damage_event_t::SHOTGUN_PUMP_INWARD,
+					damage_event_t::SHOTGUN_PUMP_OUTWARD,
+					damage_event_t::RELOAD_SINGLE_SHOT_INTO_SHOTGUN,
+					damage_event_t::YOU_HIT_ARMOR,
+					damage_event_t::YOU_HIT_FLESH,
+					damage_event_t::YOUR_CLIP_IS_DEPLETED,
+				};
+				return subs;
 			}
-			uint16_t base_damage();
-			uint16_t incendiary_damage();
-			uint16_t radioactive_damage();
-			uint16_t melt_damage();
-			uint16_t bone_marrow_damage();
-			uint16_t kevlar_damage();
-			uint8_t reload_time();
+			void dispatch_event(damage_event_t event, player_ptr_t victim) override;
+
+			std::vector<uuid_t>& damaged_enemy_list() override;
+			const room_rnum& player_room();
+
 		protected:
-			uint8_t m_knockback_charges;
-			uint32_t m_damage_accumulation;
-			uuid_t m_target_uuid;
+			player_ptr_t player_upkeep();
+			player_ptr_t m_player;
+			void reload_event();
+			void pump_inward_event();
+			void hits_flesh_event(player_ptr_t victim);
+			void pump_outward_event();
+			std::vector<uuid_t> m_damaged_enemy_list;
 	};
+	using dst7A_ptr_t = std::shared_ptr<mods::weapons::shotgun::dst7A>;
+	dst7A_ptr_t make_dst7a(player_ptr_t& wielder);
+	dst7A_ptr_t make_dst7a(obj_ptr_t& object);
+	dst7A_ptr_t find_dst7a(const uuid_t& uuid) ;
+	void erase_dst7a(const uuid_t& uuid);
 };
-using dst7A_ptr_t = std::shared_ptr<mods::weapons::shotgun::dst7A>;
 #endif
 

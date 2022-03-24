@@ -29,6 +29,7 @@
 #include "mods/movement.hpp"
 #include "mods/interpreter.hpp"
 #include "mods/boot-flags.hpp"
+#include "mods/weapons/unique-weapons.hpp"
 
 namespace mods::mob_equipment {
 	extern void decorate(const uuid_t& mob_uuid);
@@ -157,6 +158,7 @@ namespace mods {
 			obj_map[obj->uuid] = obj;
 			obj_odmap[obj.get()] = obj;
 			register_object_db_id(obj->db_id(),obj->uuid);
+			mods::weapons::unique_weapon_register_object(obj);
 		}
 		void register_object_db_id(uint64_t db_id,uuid_t uuid) {
 			db_id_to_uuid_map[db_id] = uuid;
@@ -1274,6 +1276,12 @@ namespace mods {
 			if(!obj) {
 				return;
 			}
+			/** Has to be called before we destruct_object.
+			 * The reason being, we need to test against the
+			 * actual object that is returned by finding
+			 * the object pointer by obj_uuid
+			 */
+			mods::weapons::dispose_unique_weapon(obj_uuid);
 			obj_from_room(obj);
 			destruct_object(obj_uuid);
 			recursive_obj_list_erase(obj.get());

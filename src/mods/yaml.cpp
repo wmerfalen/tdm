@@ -452,6 +452,7 @@ namespace mods::yaml {
 		return (mw_rifle)this->type == mw_rifle::SNIPER;
 	}
 	void rifle_description_t::fill_flags(obj_data* o) {
+		unique_weapon_id = 0;
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
 		o->obj_flags.ammo = this->ammo_max;

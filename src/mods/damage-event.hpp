@@ -85,6 +85,19 @@ enum damage_event_t : uint16_t {
 	GUNFIRE_WHIZZED_BY_FROM,
 	YOU_INFLICTED_SNIPE_DAMAGE,
 	YOU_INFLICTED_SAME_ROOM_DAMAGE,
+
+	/** Messages primarily used for the purpose of unique weapon listeners */
+	SHOTGUN_PUMP_INWARD,
+	SHOTGUN_PUMP_OUTWARD,
+	RELOAD_SINGLE_SHOT_INTO_SHOTGUN,
+	PULL_CLIP_OUT,
+	PUSH_CLIP_IN,
+	AIM_AT_TARGET,
+	YOU_HIT_ARMOR,
+	YOU_HIT_FLESH,
+	YOUR_CLIP_IS_DEPLETED,
+	PULL_TRIGGER,
+
 };
 #include <functional>
 using uuid_t = uint64_t;

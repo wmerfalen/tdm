@@ -1,0 +1,57 @@
+# accuracy map
+accuracy_map: [
+90.00,
+70.00,
+31.00,
+10.00
+]
+rounds_per_minute: 380
+muzzle_velocity: 88 # Feet per second
+effective_firing_range: 20 # feet
+ammo_max: 280 #integer
+ammo_type: 'SUB_MACHINE_GUN' #string, constant enum
+chance_to_injure: 24.3 #float, out of 100 
+clip_size: 88 #integer
+cooldown_between_shots: 2 #int, in ticks
+critical_chance: 21 #int, out of 100
+critical_range: 1 #integer, measured in rooms
+damage_map: [
+80.00,
+40.00,
+0.00,
+0.00
+]
+base_damage: 88 #float
+disorient_amount: 0.0 #float
+headshot_bonus: 43.0 #float
+max_range: 3 #integer,measured in rooms
+range_multiplier: 0 #float, multiplied by 
+reload_time: 6 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 1  # enum, object type
+manufacturer: 'MX-0 LLC' # string, anything 
+name: 'VC88' # string, anything name of object 
+str_type: 'SUB_MACHINE_GUN'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+description: 'A VC88 is lying here.'
+short_description: 'a VC88'
+action_description: 'VC88'
+damage_dice_count: 18 
+damage_dice_sides: 33 
+feed_file: 'vc88.yml'
+vnum: 207

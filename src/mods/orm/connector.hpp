@@ -13,8 +13,9 @@ namespace mods::orm::connector {
 #define debug_dump_list()
 #endif
 
-	static inline auto&& make() {
+	static inline auto make() {
 		m_debug("ENTRY");
-		return std::move(std::make_unique<pqxx::connection>(mods::conf::pq_connection().c_str()));
+		m_debug("pg_connection_string:'" << mods::conf::pq_connection().c_str() << "'\n");
+		return std::make_unique<pqxx::connection>(mods::conf::pq_connection().c_str());
 	}
 };//end namespace mods::orm::connector

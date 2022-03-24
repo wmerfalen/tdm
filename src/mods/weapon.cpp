@@ -136,7 +136,7 @@ namespace mods::weapon {
 		//obj->loaded = 0;
 		//obj->weapon_type = 0;
 		obj->type = 0;
-		obj->rifle(0);
+		obj->rifle();
 		obj->ex_description.emplace_back("rifle",obj->description.c_str());
 		return std::move(obj);
 	}

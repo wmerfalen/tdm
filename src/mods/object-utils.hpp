@@ -6,6 +6,13 @@
 extern obj_ptr_t optr_by_uuid(uuid_t);
 extern obj_ptr_t create_object(int type,std::string yaml_file);
 namespace mods::object_utils {
+	/**
+	 * Unique weapons
+	 */
+	bool is_dst7a(const obj_ptr_t&);
+	bool is_vc88(const obj_ptr_t&);
+	bool is_unique(const obj_ptr_t&);
+
 	bool is_corrosive_claymore(const obj_ptr_t&);
 	bool is_shrapnel_claymore(const obj_ptr_t&);
 	bool is_assault_rifle(const obj_ptr_t&);

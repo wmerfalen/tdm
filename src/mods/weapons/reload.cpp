@@ -90,7 +90,7 @@ namespace mods::weapons::reload {
 		player->sendln(
 		    CAT(
 		        "You reload your ", weapon->name.c_str(),
-		        "with ",clip_size," ammo."
+		        " with ",clip_size," ammo."
 		    )
 		);
 		if(player->marine() && mods::object_utils::is_assault_rifle(weapon)) {

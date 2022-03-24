@@ -125,6 +125,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/weapons/pistol-czp10 \
 					 mods/weapons/smg-mp5 mods/weapons/shotgun-sasg12 \
 					 mods/weapons/shotgun-dst7A \
+					 mods/weapons/smg-vc88 \
 					 mods/orm/marine mods/classes/marine \
 					 mods/orm/breacher mods/classes/breacher \
 					 mods/orm/engineer mods/classes/engineer \
@@ -225,7 +226,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/user-logins \
 					 mods/admin-tools/stay mods/orm/admin/stay mods/orm/admin/rifle-attribute-limits \
 					 mods/mobs/orthos-agent mods/mobs/orthos-agent-btree \
-					 mods/boot-flags
+					 mods/boot-flags mods/weapons/unique-weapons mods/melt
 
 					 #mods/orm/admin/muted \
 

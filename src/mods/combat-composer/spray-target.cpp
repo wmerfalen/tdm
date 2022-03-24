@@ -16,6 +16,7 @@
 #include "../mobs/damage-event.hpp"
 #include "../weapons/elemental.hpp"
 #include "../weapons/legacy-combat.hpp"
+#include "../weapons/unique-weapons.hpp"
 #include "../interpreter.hpp"
 #include "skill-increment.hpp"
 #include "shared.hpp"
@@ -443,6 +444,7 @@ namespace mods::combat_composer {
 				feedback.damage_event =de::ATTACKER_NARROWLY_MISSED_YOU_EVENT;
 				victim->damage_event(feedback);
 
+				mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOU_MISSED_YOUR_TARGET_EVENT, victim);
 			} else if(dam > 0) {
 				m_debug("damage greater than zero");
 				feedback.hits = 1;
@@ -456,6 +458,9 @@ namespace mods::combat_composer {
 
 				feedback.damage_event = de::YOU_INFLICTED_SNIPE_DAMAGE;
 				attacker->damage_event(feedback);
+
+				mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOU_HIT_ARMOR,victim);
+				mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOU_HIT_FLESH,victim);
 				if(victim->is_npc()) {
 					mods::mobs::damage_event::sniped(victim,feedback);
 				}
@@ -524,6 +529,7 @@ namespace mods::combat_composer {
 		}
 		if(weapon->rifle_instance->ammo == 0) {
 			attacker->damage_event(feedback_t(de::OUT_OF_AMMO_EVENT));
+			mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOUR_CLIP_IS_DEPLETED,nullptr);
 			m_debug("Out of ammo!");
 			return false;
 		}
@@ -551,6 +557,10 @@ namespace mods::combat_composer {
 			if(!victim) {
 				continue;
 			}
+			/**
+			 * FIXME: This may need to have some severe balancing
+			 */
+			mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::PULL_TRIGGER, victim);
 			/**
 			 * Phase 2: Apply damage to victim
 			 */

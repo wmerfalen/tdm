@@ -1,0 +1,79 @@
+# accuracy map
+accuracy_map: [
+190.00,
+10.00,
+0.00,
+0.00
+]
+rounds_per_minute: 30
+muzzle_velocity: 1918 # Feet per second
+effective_firing_range: 10 # feet
+ammo_max: 50 #integer
+ammo_type: 'SHOTGUN' #string, constant enum
+chance_to_injure: 45.0 #float, out of 100 
+clip_size: 7 #integer
+cooldown_between_shots: 3 #int, in ticks
+critical_chance: 52 #int, out of 100
+critical_range: 1 #integer, measured in rooms
+damage_map: [
+490.00,
+140.00,
+90.00,
+33.00
+]
+base_damage: 280 #float
+disorient_amount: 23.0 #float
+headshot_bonus: 153.0 #float
+max_range: 1 #integer,measured in rooms
+range_multiplier: 0 #float, multiplied by 
+reload_time: 6 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 0  # enum, object type
+manufacturer: 'HARM TECH' # string, anything 
+name: 'DST7A' # string, anything name of object 
+description: 'A heavily customized DST7A shotgun is lying here.'
+short_description: 'a DST7A shotgun'
+action_description: 'DST7A shotgun'
+str_type: 'SHOTGUN'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'LEGENDARY'
+damage_dice_count: 20 
+damage_dice_sides: 20
+feed_file: 'dst7a.yml'
+vnum: 206
+incendiary_damage: 412 #int16_t, damage
+explosive_damage: 0 #int16_t, damage
+shrapnel_damage: 80 #int16_t, damage
+corrosive_damage: 0 #int16_t, damage
+cryogenic_damage: 0 #int16_t, damage
+radioactive_damage: 230 #int16_t, damage
+emp_damage: 0 #int16_t, damage
+shock_damage: 0 #int16_t, damage
+anti_matter_damage: 0 #int16_t, damage
+stat_strength: 10 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 0 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 8 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 0 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 2 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 0 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 10 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 0 #int16_t, positive or negative amount to affect strategy stat

@@ -6,6 +6,8 @@
 /**
  * Community edition
  */
+INIT(mods::weapons::shotgun::dst7a_commands);
+INIT(mods::weapons::smg::vc88_commands);
 INIT(mods::json);
 INIT(mods::combat::commands);
 INIT(mods::players::friendly_reminders);
@@ -15,6 +17,7 @@ INIT(mods::players::banish);
 INIT(mods::rand);
 INIT(mods::mp);
 INIT(mods::bleed);
+INIT(mods::melt);
 INIT(mods::loot_container);
 INIT(builder);
 INIT(mods::date_time);
@@ -125,6 +128,7 @@ namespace mods::init {
 		mods::projectile::init();
 		mods::loot_container::init();
 		mods::bleed::init();
+		mods::melt::init();
 		mods::prefs::init();
 		mods::players::friendly_reminders::init();
 		mods::players::event_messages::init();
@@ -139,6 +143,8 @@ namespace mods::init {
 		mods::ban_system::commands::init();
 		mods::ensnare::init();
 		mods::admin_tools::stay::init();
+		mods::weapons::shotgun::dst7a_commands::init();
+		mods::weapons::smg::vc88_commands::init();
 
 #ifdef __MENTOC_PLUGIN_CONTENT__
 		mods::plugins::init::init();

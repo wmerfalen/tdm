@@ -1,8 +1,18 @@
 #include "object-utils.hpp"
 #include "weapon-types.hpp"
 #include "rifle-attachments.hpp"
+#include "weapons/unique-weapons.hpp"
 
 namespace mods::object_utils {
+	bool is_unique(const obj_ptr_t& item) {
+		return item->unique_weapon;
+	}
+	bool is_vc88(const obj_ptr_t& weapon) {
+		return weapon->rifle()->attributes->unique_weapon_id == mods::weapons::unique_weapon_id::VC88;
+	}
+	bool is_dst7a(const obj_ptr_t& weapon) {
+		return weapon->rifle()->attributes->unique_weapon_id == mods::weapons::unique_weapon_id::DST7A;
+	}
 	bool is_rifle(const obj_ptr_t& item) {
 		auto rifle_attachment = mods::rifle_attachments::by_uuid(item->uuid);
 		if(rifle_attachment) {

@@ -159,6 +159,8 @@ namespace mods::debug::pre_game {
 	}
 
 	bool run() {
+		auto p = new_player();
+		std::cerr << "sizeof(player object): " << sizeof(*p) << "\n";
 
 #ifdef __MENTOC_RUN_ARMOR_CALCULATOR__
 		do_armor_calculator();

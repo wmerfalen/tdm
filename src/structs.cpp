@@ -154,6 +154,7 @@ obj_data::obj_data(const obj_data& other) {
 	m_hp = other.m_hp;
 	m_armor_hp = other.m_armor_hp;
 	is_corpse = other.is_corpse;
+	unique_weapon = other.unique_weapon;
 }
 obj_data& obj_data::operator=(obj_data& other) {
 	is_corpse = other.is_corpse;

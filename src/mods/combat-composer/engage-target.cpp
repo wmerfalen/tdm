@@ -15,6 +15,7 @@
 #include "../mobs/damage-event.hpp"
 #include "../weapons/elemental.hpp"
 #include "../weapons/legacy-combat.hpp"
+#include "../weapons/unique-weapons.hpp"
 #include "../interpreter.hpp"
 #include "skill-increment.hpp"
 
@@ -627,6 +628,9 @@ namespace mods::combat_composer::engage {
 			feedback_t feedback;
 			mods::weapons::legacy::damage(attacker->cd(),victim->cd(),dam,mods::weapons::legacy::get_legacy_attack_type(weapon));
 			feedback.attacker = attacker->uuid();
+
+			mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::PULL_TRIGGER, victim);
+			mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::SHOTGUN_PUMP_INWARD,nullptr);
 			if(dam == 0) {
 				m_debug("damage is zero");
 				feedback.damage = dam;
@@ -637,6 +641,7 @@ namespace mods::combat_composer::engage {
 
 				feedback.damage_event =de::ATTACKER_NARROWLY_MISSED_YOU_EVENT;
 				victim->damage_event(feedback);
+				mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOU_MISSED_YOUR_TARGET_EVENT,victim);
 
 			} else if(dam > 0) {
 				m_debug("damage greater than zero");
@@ -650,6 +655,10 @@ namespace mods::combat_composer::engage {
 
 				feedback.damage_event = de::YOU_INFLICTED_SAME_ROOM_DAMAGE;
 				attacker->damage_event(feedback);
+
+				mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOU_HIT_ARMOR,victim);
+				mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOU_HIT_FLESH,victim);
+
 				if(victim->is_npc()) {
 					feedback.damage_event = de::HIT_BY_RIFLE_ATTACK;
 					mods::mobs::damage_event::sniped(victim,feedback);
@@ -704,6 +713,7 @@ namespace mods::combat_composer::engage {
 #ifdef report_rct_to_attacker
 			RCT->report(attacker);
 #endif
+			mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::SHOTGUN_PUMP_OUTWARD,nullptr);
 
 		}
 		bool can_engage(player_ptr_t& attacker,obj_ptr_t weapon) {
@@ -766,6 +776,7 @@ namespace mods::combat_composer {
 		/* Check ammo */
 		if(get_ammo(weapon) == 0) {
 			attacker->damage_event(feedback_t(de::OUT_OF_AMMO_EVENT));
+			mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOUR_CLIP_IS_DEPLETED,nullptr);
 			m_debug("out of ammo");
 			return true;
 		}
@@ -773,6 +784,7 @@ namespace mods::combat_composer {
 		/**
 		 * Phase 2: accuracy roll
 		 */
+		mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::AIM_AT_TARGET,victim);
 		if(!roll_accuracy(attacker,victim,weapon)) {
 			attacker->damage_event(feedback_t(de::YOU_MISSED_YOUR_TARGET_EVENT));
 			/**
