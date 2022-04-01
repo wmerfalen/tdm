@@ -4,6 +4,7 @@
 #include "../object-utils.hpp"
 #include "shotgun-dst7A.hpp"
 #include "smg-vc88.hpp"
+#include "../cached-map.hpp"
 
 #define STUB(A) STUB_PREFIX("unique_ranged_weapon::") << A << "\n"
 namespace mods::weapons {
@@ -81,13 +82,23 @@ namespace mods::weapons {
 		}
 
 	}
+	static mods::cached_map<std::string_view,std::string_view> descriptions;
 	void unique_weapon_register_object(obj_ptr_t& obj) {
 		if(obj->feed_file().compare("dst7a.yml") ==0) {
 			mods::weapons::shotgun::make_dst7a(obj);
+			descriptions.set_once(obj->feed_file(), mods::weapons::shotgun::dst7A::description);
 		}
 		if(obj->feed_file().compare("vc88.yml") ==0) {
 			mods::weapons::smg::make_vc88(obj);
+			descriptions.set_once(obj->feed_file(),mods::weapons::smg::vc88::description);
 		}
+	}
+	bool has_unique_description(const obj_ptr_t& weapon) {
+		return descriptions.has(weapon->feed_file());
+	}
+
+	std::string_view get_unique_weapon_description(const obj_ptr_t& weapon) {
+		return descriptions.get(weapon->feed_file());
 	}
 };
 #undef STUB

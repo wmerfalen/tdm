@@ -60,6 +60,8 @@ namespace mods::weapons {
 	void dispatch_unique_ranged_weapon_event(const uuid_t& attacker, damage_event_t event, player_ptr_t victim);
 	void dispose_unique_weapon(const uuid_t& obj_uuid);
 	void unique_weapon_register_object(obj_ptr_t& obj);
+	bool has_unique_description(const obj_ptr_t& weapon);
+	std::string_view get_unique_weapon_description(const obj_ptr_t& weapon);
 };
 #endif
 

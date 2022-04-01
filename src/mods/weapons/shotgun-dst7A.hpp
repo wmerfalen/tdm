@@ -76,6 +76,7 @@ namespace mods::weapons::shotgun {
 
 			std::vector<uuid_t>& damaged_enemy_list() override;
 			const room_rnum& player_room();
+			std::string_view examine();
 
 		protected:
 			player_ptr_t player_upkeep();
