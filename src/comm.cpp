@@ -35,6 +35,7 @@
 #include "mods/js.hpp"
 #include "mods/corrosive.hpp"
 #include "mods/bleed.hpp"
+#include "mods/blind.hpp"
 #include "mods/melt.hpp"
 #include "mods/ensnare.hpp"
 #include "mods/resting.hpp"
@@ -995,6 +996,9 @@ void heartbeat(int pulse) {
 	}
 	if(!(pulse % mods::melt::tick_resolution())) {
 		mods::melt::process_melt();
+	}
+	if(!(pulse % mods::blind::tick_resolution())) {
+		mods::blind::process_players();
 	}
 	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION())) {
 		mods::rooms::process_fire_damage();

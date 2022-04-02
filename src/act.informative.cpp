@@ -41,6 +41,7 @@
 #include "mods/js.hpp"
 #include "mods/contract-events.hpp"
 #include "mods/players/messages.hpp"
+#include "mods/weapons/unique-weapons.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -234,8 +235,15 @@ void show_obj_to_char(struct obj_data *obj, char_data *ch, int mode) {
 	show_obj_to_char(o,player,mode,1);
 }
 bool look_at_weapon(player_ptr_t& player,obj_ptr_t& obj) {
+	bool has_unique = mods::weapons::has_unique_description(obj);
+	if(has_unique) {
+		player->sendln(mods::weapons::get_unique_weapon_description(obj));
+	}
 	if(mods::rifle::is_rifle_attachment(obj.get())) {
 		player->sendln(mods::rifle_attachments::by_uuid(obj->uuid)->examine());
+		return true;
+	}
+	if(has_unique) {
 		return true;
 	}
 	if(obj->action_description.length()) {

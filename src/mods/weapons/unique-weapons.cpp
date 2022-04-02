@@ -51,6 +51,9 @@ namespace mods::weapons {
 			return;
 		}
 
+		/**
+		 * !UNIQUE_WEAPONS
+		 */
 		if(is_dst7a(weapon)) {
 			auto ptr = mods::weapons::shotgun::find_dst7a(weapon->uuid);
 			if(!ptr) {
@@ -72,6 +75,9 @@ namespace mods::weapons {
 	void dispose_unique_weapon(const uuid_t& obj_uuid) {
 		using namespace mods::object_utils;
 		auto weapon = optr_by_uuid(obj_uuid);
+		/**
+		 * !UNIQUE_WEAPONS
+		 */
 		if(is_dst7a(weapon)) {
 			mods::weapons::shotgun::erase_dst7a(obj_uuid);
 			return;
@@ -84,6 +90,9 @@ namespace mods::weapons {
 	}
 	static mods::cached_map<std::string_view,std::string_view> descriptions;
 	void unique_weapon_register_object(obj_ptr_t& obj) {
+		/**
+		 * !UNIQUE_WEAPONS
+		 */
 		if(obj->feed_file().compare("dst7a.yml") ==0) {
 			mods::weapons::shotgun::make_dst7a(obj);
 			descriptions.set_once(obj->feed_file(), mods::weapons::shotgun::dst7A::description);

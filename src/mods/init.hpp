@@ -17,6 +17,7 @@ INIT(mods::players::banish);
 INIT(mods::rand);
 INIT(mods::mp);
 INIT(mods::bleed);
+INIT(mods::blind);
 INIT(mods::melt);
 INIT(mods::loot_container);
 INIT(builder);
@@ -128,6 +129,7 @@ namespace mods::init {
 		mods::projectile::init();
 		mods::loot_container::init();
 		mods::bleed::init();
+		mods::blind::init();
 		mods::melt::init();
 		mods::prefs::init();
 		mods::players::friendly_reminders::init();

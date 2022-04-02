@@ -52,10 +52,10 @@
 {yel}tags:SUPERCMD	act.debug.cpp	/^->show_tics$/;"	kind:function	line:296	signature:(do_show_tics){/grn}
 {yel}tags:SUPERCMD	act.debug.cpp	/^->wait_ticks$/;"	kind:function	line:31	signature:(do_wait_ticks){/grn}
 {yel}tags:SUPERCMD	act.debug.cpp	/^->zero_socket$/;"	kind:function	line:289	signature:(do_zero_socket){/grn}
-{yel}tags:SUPERCMD	act.informative.cpp	/^->givemegold$/;"	kind:function	line:151	signature:(do_givemegold){/grn}
-{yel}tags:SUPERCMD	act.informative.cpp	/^->js$/;"	kind:function	line:182	signature:(do_js){/grn}
-{yel}tags:SUPERCMD	act.informative.cpp	/^->jstest$/;"	kind:function	line:193	signature:(do_jstest){/grn}
-{yel}tags:SUPERCMD	act.informative.cpp	/^->newjs$/;"	kind:function	line:188	signature:(do_newjs){/grn}
+{yel}tags:SUPERCMD	act.informative.cpp	/^->givemegold$/;"	kind:function	line:152	signature:(do_givemegold){/grn}
+{yel}tags:SUPERCMD	act.informative.cpp	/^->js$/;"	kind:function	line:183	signature:(do_js){/grn}
+{yel}tags:SUPERCMD	act.informative.cpp	/^->jstest$/;"	kind:function	line:194	signature:(do_jstest){/grn}
+{yel}tags:SUPERCMD	act.informative.cpp	/^->newjs$/;"	kind:function	line:189	signature:(do_newjs){/grn}
 {yel}tags:SUPERCMD	act.offensive.cpp	/^->affect_me$/;"	kind:function	line:95	signature:(do_affect_me){/grn}
 {yel}tags:SUPERCMD	act.wizard.cpp	/^->advance$/;"	kind:function	line:1270	signature:(do_advance){/grn}
 {yel}tags:SUPERCMD	act.wizard.cpp	/^->at$/;"	kind:function	line:225	signature:(do_at){/grn}

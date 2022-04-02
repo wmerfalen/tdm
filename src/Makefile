@@ -226,7 +226,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/user-logins \
 					 mods/admin-tools/stay mods/orm/admin/stay mods/orm/admin/rifle-attribute-limits \
 					 mods/mobs/orthos-agent mods/mobs/orthos-agent-btree \
-					 mods/boot-flags mods/weapons/unique-weapons mods/melt
+					 mods/boot-flags mods/weapons/unique-weapons mods/melt \
+					 mods/blind
 
 					 #mods/orm/admin/muted \
 

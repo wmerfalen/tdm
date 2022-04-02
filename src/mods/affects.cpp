@@ -91,6 +91,10 @@ namespace mods::affects {
 			p->get_affect_dissolver().affect(current_affect,ticks);
 		}
 	}
+	void blind_for(player_ptr_t& victim,uint16_t ticks) {
+		affect_player_for({affect_t::BLIND},victim,ticks);
+		victim->affect(AFF_BLIND);
+	}
 	/**
 	 * \brief same as affect_player but uses strings
 	 */

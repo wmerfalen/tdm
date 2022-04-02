@@ -72,6 +72,9 @@ namespace mods::affects {
 			using callback_t = std::function<void(TEntityId,TAffects,uint32_t)>;
 
 			TEntityId entity_id;
+			void on_zero(TAffects affect,callback_t cb) {
+				m_zero_callbacks[affect] = cb;
+			}
 
 			void on_affect_change(TAffects affect,callback_t cb) {
 				m_callbacks[affect] = cb;
@@ -200,9 +203,15 @@ namespace mods::affects {
 					++m_affects[affect];
 					++m_processed;
 				} else {
+					uint64_t i = m_affects[affect];
 					if(m_affects[affect] > 0) {
-						--m_affects[affect];
+						i = --m_affects[affect];
 						++m_processed;
+					}
+					if(i == 0 && m_zero_callbacks[affect]) {
+						maffects_debug("calling zero callback");
+						m_zero_callbacks[affect](entity_id,affect,m_affects[affect]);
+						m_zero_callbacks.erase(affect);
 					}
 				}
 				trigger_callback(affect);
@@ -299,6 +308,7 @@ namespace mods::affects {
 			std::set<TAffects> m_increment;
 			std::map<TAffects,uint32_t> m_max_amount;
 			std::map<TAffects,std::function<void(TEntityId,TAffects,uint32_t)>> m_callbacks;
+			std::map<TAffects,std::function<void(TEntityId,TAffects,uint32_t)>> m_zero_callbacks;
 			std::size_t m_processed;
 			std::vector<TAffects> m_destroy_queue;
 	};
@@ -312,6 +322,7 @@ namespace mods::affects {
 	void str_affect_player(std::vector<std::string> a,player_ptr_t p);
 	std::vector<std::string>& affect_string_list_impl();
 	void player_died(player_ptr_t p);
+	void blind_for(player_ptr_t& victim,uint16_t ticks);
 };
 std::vector<std::string>& affect_string_list();
 void str_affect_player(std::vector<std::string> a, player_ptr_t p);

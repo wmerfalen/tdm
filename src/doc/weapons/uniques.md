@@ -55,10 +55,7 @@ spawned is through it's constructor and via the admin command `admin:dst7a`.
 	- [x] junked
 
 ## Requirements for building new Functionally Unique Weapons
-1) Inside this function, you need to add code that detects if it's a unique weapon:
-	`mods::globals::register_object()`
-2) inside this function you must do whatever is necessary to deallocate the object:
+1) inside this function you must do whatever is necessary to deallocate the object:
 	`mods::weapons::dispose_unique_weapon(const uuid_t& obj_uuid)`
-3) for combat, you must add your custom logic to recognize a unique weapon inside this function:
+2) for combat, you must add your custom logic to recognize a unique weapon inside this function:
 	`mods::weapons::dispatch_unique_ranged_weapon_event(const uuid_t& attacker_uuid, damage_event_t event, player_ptr_t victim)`
-4) You must copy the same general flow as an existing unique weapon. Use mods/weapons/shotgun-dst7a.hpp for an example

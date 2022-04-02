@@ -1,6 +1,7 @@
 #include "db-load.hpp"
 #include "../classes/includes.hpp"
 #include "../replenish.hpp"
+#include "../affects.hpp"
 #include "../orm/inventory.hpp"
 #include "../db.hpp"
 #include "../orm/player-base-ability.hpp"
@@ -34,6 +35,7 @@ namespace mods::players::db_load {
 		 * leveling up
 		 */
 		mods::levels::gain_exp(player,0);
+		player->clear_all_affected();
 	}
 
 	void sync_player_with_class_skills(const uint64_t& player_id,const std::string& player_class) {

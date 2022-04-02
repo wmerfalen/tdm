@@ -26,6 +26,10 @@ namespace mods {
 				m_map[key] = value;
 				m_keys.insert(key);
 			}
+			void unset(const TKey& key) {
+				m_map.erase(key);
+				m_keys.erase(key);
+			}
 			const auto& get(const TKey& key) {
 				return m_map[key];
 			}

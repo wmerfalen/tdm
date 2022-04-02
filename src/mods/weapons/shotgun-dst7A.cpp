@@ -2,13 +2,20 @@
 /** db.h for read_object() */
 #include "../../db.h"
 #include "../weapon.hpp"
+#include "../blind.hpp"
 #include "../rand.hpp"
 #include "../player.hpp"
 #include "../interpreter.hpp"
 #include "../../comm.h"
 #include "../melt.hpp"
+#include "../projectile.hpp"
 
 #define __MENTOC_DST7A_DEBUG__ 1
+#ifdef __MENTOC_DST7A_DEBUG__
+#define dst_debug(A) std::cerr << "[DST7A::DEBUG]: " << A << "\n";
+#else
+#define dst_debug(A) ;;
+#endif
 extern void send_to_room(room_rnum room, const char *messg, ...);
 namespace mods::weapons::shotgun {
 	static std::map<uuid_t,dst7A_ptr_t> dst7a_list;
@@ -44,18 +51,14 @@ namespace mods::weapons::shotgun {
 			d.reset();
 			dst7a_list.erase(uuid);
 		}
-#ifdef __MENTOC_DST7A_DEBUG__
-		std::cerr << "dst7A_list size: " << dst7a_list.size() << "\n";
-#endif
+		dst_debug("dst7A_list size: " << dst7a_list.size());
 	}
 
 	dst7A::~dst7A() {
 		m_object.reset();
 		m_event_subscriptions.clear();
 		m_damaged_enemy_list.clear();
-#ifdef __MENTOC_DST7A_DEBUG__
-		std::cerr << "[dst7A::~dst7A]\n";
-#endif
+		dst_debug("[dst7A::~dst7A] --> destructor HIT");
 	}
 	dst7A::dst7A(obj_ptr_t& object) {
 		m_object = object;
@@ -92,11 +95,25 @@ namespace mods::weapons::shotgun {
 			m_player->sendln(CAT("{grn}[+",f," mana]{/grn}"));
 		}
 	}
+	void dst7A::blind_target(player_ptr_t& victim) {
+		m_player->sendln(CAT("{grn}You {red}BLIND{/red} {yel}",victim->name(),"{/yel} with an auxiliary function inside your {blu}DST7A{/blu}!!!"));
+		act(CAT("$n's {blu}DST7A{/blu} BLINDS ",victim->name(),"!!!").c_str(), 0, m_player->cd(), 0, 0, TO_ROOM);
+		mods::blind::blind_for(victim,dice(3,20));
+		/**
+		 * TODO: need disorient_for(victim, ticks);
+		 * mods::projectile::disorient_target(victim);
+		 */
+		act("\r\n\r\n{yel}---{red}[[[[ {yel}A BRILLIANT FLASH OF LIGHT AFFECTS YOUR VISION{/yel} {red}]]]]{yel}----{/yel}\r\n\r\n", 0, m_player->cd(), 0, 0, TO_ROOM);
+	}
 	void dst7A::hits_flesh_event(player_ptr_t victim) {
+		//static uint8_t call_count = 0;
 		if(!victim) {
 			return;
 		}
+		blind_target(victim);
 		mods::melt::melt_damage(mods::melt::melt_damage_t{m_player->uuid(),victim->uuid(),dst7A::stats::base_damage_dice_additional,dst7A::stats::base_damage});
+		//if(++call_count > 3) {
+		//	call_count = 0;
 	}
 	const room_rnum& dst7A::player_room() {
 		return m_player->room();
@@ -124,6 +141,7 @@ namespace mods::weapons::shotgun {
 		}
 	}
 	void dst7A::reload_event() {
-		std::cout << "[DST7A] a legend reloads...\n";
+
+		dst_debug("[DST7A] a legend reloads...");
 	}
 };

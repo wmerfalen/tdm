@@ -37,19 +37,19 @@ namespace mods::weapons::shotgun {
 			    "|                                                                     |\r\n"
 			    "+-[ Known stats ]-----------------------------------------------------|\r\n"
 			    "| 850 + 20d40 melting damage                                          |\r\n"
-			    "|                                                                     |\r\n"
+			    "| 2d4T6 move points on forestock movement                             |\r\n"
+			    "| 2d2T2 mana points on forestock movement                             |\r\n"
+			    "| 1d6T3 blind target when ammunition hits target                      |\r\n"
 			    "+-[ R: 001 ]---------------------------------------[ Docu-gen v8.1.0 ]+\r\n";
 			/** TODO: 450 - Bone marrow damage every 3 ticks  */
 			/** TODO: 780 - Kevlar damage every 12 ticks */
 			struct stats {
 				static constexpr uint16_t base_damage = 850;
 				static constexpr uint16_t base_damage_dice_additional [2] = {20,40};
-				static constexpr uint16_t incendiary_damage_percent = 150;
-				static constexpr uint16_t radioactive_damage_percent = 250;
-				static constexpr uint16_t bone_marrow_damage = 450;
 				static constexpr uint16_t kevlar_damage = 780;
 				static constexpr std::array<uint16_t,3> move_points_per_outward_pump_buff = {2,4,6};
 				static constexpr std::array<uint16_t,3> mana_points_per_inward_pump_buff = {2,2,2};
+				static constexpr std::array<uint16_t,3> blind_target_chance = {1,6,3};
 			};
 
 			dst7A() = delete;
@@ -68,7 +68,6 @@ namespace mods::weapons::shotgun {
 					damage_event_t::RELOAD_SINGLE_SHOT_INTO_SHOTGUN,
 					damage_event_t::YOU_HIT_ARMOR,
 					damage_event_t::YOU_HIT_FLESH,
-					damage_event_t::YOUR_CLIP_IS_DEPLETED,
 				};
 				return subs;
 			}
@@ -77,6 +76,7 @@ namespace mods::weapons::shotgun {
 			std::vector<uuid_t>& damaged_enemy_list() override;
 			const room_rnum& player_room();
 			std::string_view examine();
+			void blind_target(player_ptr_t& victim);
 
 		protected:
 			player_ptr_t player_upkeep();

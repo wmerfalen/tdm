@@ -129,6 +129,7 @@
 ./mods/classes/ghost.cpp:	->inject_adrenaline_shot
 ./mods/classes/contagion.cpp:	->invoke
 ./mods/classes/pyrexia.cpp:->fire_nade
+./mods/blind.cpp:	->blind_me_for
 ./mods/corpse.cpp:	->corpse_me
 ./mods/values.cpp:			->set_value
 ./mods/values.cpp:			->get_value
