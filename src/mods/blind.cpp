@@ -13,6 +13,7 @@
 #include "weapons/damage-calculator.hpp"
 #include "weapons/elemental.hpp"
 
+#define __MENTOC_SHOW_MODS_BLIND_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_BLIND_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::blind::debug]")  << MSG << "\n";
 #define m_error(MSG) mentoc_prefix_debug(red_str("[mods::blind::ERROR]"))  << MSG << "\n";
@@ -44,8 +45,9 @@ namespace mods::blind {
 		blind_damage_t() = delete;
 		blind_damage_t(player_ptr_t victim,
 		               uint64_t ticks) : id(++blind_id),
-			target(victim->uuid()),stop_tick(ticks + CURRENT_TICK()),cleanup(false) {
+			target(victim->uuid()),stop_tick((9 * ticks) + CURRENT_TICK()),cleanup(false) {
 			victim->affect(AFF_BLIND);
+			m_debug("[[[[ stop at: " << stop_tick << " which is " << stop_tick - CURRENT_TICK() << " in the future");
 		}
 		blind_damage_t(const blind_damage_t& other) {
 			m_debug("[blind_damage_t COPY OTHER:" << other.id << "]");
@@ -63,8 +65,11 @@ namespace mods::blind {
 
 	static blind_list_t blind_player_list;
 
-	void blind_for(player_ptr_t& victim, uint16_t ticks) {
+	void blind_for(player_ptr_t& victim, uint32_t ticks) {
 		m_debug("blind_for cast on: " << victim->name() << ", for " << ticks << " ticks");
+		blind_player_list.emplace_back(victim,ticks);
+		return;
+#if 0
 
 		auto goggles = victim->equipment(WEAR_GOGGLES);
 		float tick_reduce = 0.0;
@@ -92,6 +97,7 @@ namespace mods::blind {
 		if(blind_ticks > 0) {
 			blind_player_list.emplace_back(victim,blind_ticks);
 		}
+#endif
 	}
 	void process_players() {
 		m_debug("[BLIND][process_players]...");

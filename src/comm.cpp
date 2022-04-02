@@ -976,12 +976,18 @@ void run_behaviour_trees() {
 void heartbeat(int pulse) {
 	mods::date_time::heartbeat();
 	static int mins_since_crashsave = 0;
+	static uint16_t blind_ticks = 0;
 	mods::globals::current_tick++;
 	if(!(pulse % mods::deferred::TICK_RESOLUTION)) {
 		/** Process affect dissolver ticks */
 		mods::affects::process();
 		mods::rooms::affects::process();
 		mods::resting::process_players_resting();
+		++blind_ticks;
+		if(!(blind_ticks % mods::blind::tick_resolution())) {
+			mods::blind::process_players();
+			blind_ticks = 0;
+		}
 	}
 
 	if(!(pulse % mods::corrosive::tick_resolution())) {
@@ -996,9 +1002,6 @@ void heartbeat(int pulse) {
 	}
 	if(!(pulse % mods::melt::tick_resolution())) {
 		mods::melt::process_melt();
-	}
-	if(!(pulse % mods::blind::tick_resolution())) {
-		mods::blind::process_players();
 	}
 	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION())) {
 		mods::rooms::process_fire_damage();
