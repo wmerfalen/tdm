@@ -13,7 +13,6 @@
 #include "weapons/damage-calculator.hpp"
 #include "weapons/elemental.hpp"
 
-#define __MENTOC_SHOW_MODS_BLIND_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_BLIND_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::blind::debug]")  << MSG << "\n";
 #define m_error(MSG) mentoc_prefix_debug(red_str("[mods::blind::ERROR]"))  << MSG << "\n";

@@ -21,6 +21,7 @@
 #include "spells.h"
 
 
+#define m_debug(A) std::cerr << "[socials] " << A << "\n";
 /* local globals */
 static int list_top = -1;
 
@@ -244,11 +245,58 @@ void free_social_messages(void) {
 	free(soc_mess_list);
 }
 
+bool expect_space(FILE* fl) {
+	auto space = (char)fgetc(fl);
+	bool is_space = space == ' ';
+	ungetc(space,fl);
+	return is_space;
+}
+
+/**
+ * Just reads a char and discards it
+ */
+void fread_advance(FILE* fl) {
+	fgetc(fl);
+}
+
+void fread_preview(FILE* fl,std::size_t count) {
+	std::string str;
+	for(auto f = 0; f < count; f++) {
+		str += (char)fgetc(fl);
+	}
+	m_debug("preview(" << count << "): '" << str << "'");
+	for(auto f = 0; f < count; f++) {
+		ungetc(str[count-f-1],fl);
+	}
+}
+
+
+
+bool expect_digit(FILE* fl) {
+	auto ch = (char)fgetc(fl);
+	bool is_digit = isdigit(ch);
+	ungetc(ch,fl);
+	return is_digit;
+}
+
+std::optional<int> fread_digit(FILE* fl) {
+
+	auto hide_char = (char)fgetc(fl);
+	if(!isdigit(hide_char)) {
+		return std::nullopt;
+	}
+
+	std::array<char,2> temp_array;
+	temp_array[0] = hide_char;
+	temp_array[1] = '\0';
+
+	return atoi(&temp_array[0]);
+}
 
 void boot_social_messages(void) {
 	FILE *fl;
 	int nr, i, hide = -1, min_pos = -1, curr_soc = -1;
-	char next_soc[100];
+	char next_soc[1024];
 	struct social_messg temp;
 
 	/* open social file */
@@ -258,76 +306,96 @@ void boot_social_messages(void) {
 	}
 
 	/* count socials & allocate space */
-	for(nr = 0; *cmd_info[nr].command != '\n'; nr++)
+	for(nr = 0; *cmd_info[nr].command != '\n'; nr++) {
 		if(cmd_info[nr].command_pointer == do_action) {
 			list_top++;
 		}
+	}
+
+	m_debug("list_top is: " << list_top);
 
 	CREATE(soc_mess_list, struct social_messg, list_top + 1);
 
+	/**
+	 * Format of socials file
+	 * <command> <hide> <min_pos>
+	 *
+	 * i.e.:
+	 * accuse 0 5
+	 *
+	 */
 	/* now read 'em */
 	for(;;) {
 		std::string temp_buffer;
 		temp_buffer.clear();
+
+		/**
+		 * This parses the initial line
+		 * i.e.: "accuse 0 5"
+		 */
 		for(auto i=0; i < 64; i++) {
-			auto ch = fgetc(fl);
+			auto ch = (char)fgetc(fl);
+			m_debug("ch: '" << ch << "'");
 			if(isspace(ch)) {
-				break;
-			}
-			if(ch == '$') {
-				next_soc[0] = '$';
+				ungetc(ch,fl);
 				break;
 			}
 			temp_buffer += ch;
 		}
+		m_debug("temp_buffer: '" << temp_buffer << "'");
 		memset(next_soc,0,sizeof(next_soc));
 		bcopy(temp_buffer.c_str(),next_soc,std::min(sizeof(next_soc) - 3,temp_buffer.length()));
 
-		if(next_soc[0] == '$') {
+		if(next_soc[0] == '$' && temp_buffer.length() < 2) {
+			m_debug("breaking cuz next_soc[0] == '$'");
 			break;
 		}
 
-		bool hide_parsed = 0;
-		bool min_pos_parsed = 0;
-		bool eof = false;
-		for(auto i=0; i < 64; i++) {
-			char ch = (char)fgetc(fl);
-			if(ch == '\n') {
-				ch = fgetc(fl);
-				if(ch == EOF) {
-					eof = true;
-				} else {
-					ungetc(ch,fl);
-				}
-				break;
-			}
-			if(isspace(ch)) {
-				continue;
-			}
-			if(isdigit((int)ch)) {
-				if(hide_parsed == false) {
-					std::string s;
-					s += ch;
-					hide = atoi(s.c_str());
-					hide_parsed = true;
-					continue;
-				}
-				if(min_pos_parsed == false) {
-					std::string s;
-					s += ch;
-					min_pos = atoi(s.c_str());
-					min_pos_parsed = true;
-					continue;
-				}
-			}
+		//fread_preview(fl,5);
+		if(!expect_space(fl)) {
+			log("SYSERR: [SOCIALS:1] expected SPACE CHARACTER after SOCIALS NAME column: '%s' while parsing socials file... aborting",next_soc);
+			sleep(-1);
 		}
-		if(eof) {
-			break;
+		fread_advance(fl);
+
+		if(!expect_digit(fl)) {
+			log("SYSERR: [SOCIALS:2] expected DIGIT after SPACE separating SOCIALS NAME and HIDE columns: '%s' while parsing socials file... aborting",next_soc);
+			sleep(-1);
 		}
 
-		if(!hide_parsed || !min_pos_parsed) {
-			log("SYSERR: format error in social file near social '%s'", next_soc);
-			exit(1);
+		hide = fread_digit(fl).value_or(-1);
+
+		if(!expect_space(fl)) {
+			log("SYSERR: [SOCIALS:3] expected SPACE CHARACTER after HIDE column: '%s' while parsing socials file... aborting",next_soc);
+			sleep(-1);
+		}
+		fread_advance(fl);
+
+		if(!expect_digit(fl)) {
+			log("SYSERR: [SOCIALS:4] expected DIGIT after SPACE identifying the MIN_POS column: '%s' while parsing socials file... aborting",next_soc);
+			sleep(-1);
+		}
+
+		min_pos = fread_digit(fl).value_or(-1);
+
+		if(hide < 0) {
+			log("SYSERR: [SOCIALS:5] invalid HIDE value for command: '%s' while parsing socials file... aborting",next_soc);
+			sleep(-1);
+		}
+		if(min_pos < 0) {
+			log("SYSERR: [SOCIALS:6] invalid MIN_POS value for command: '%s' while parsing socials file... aborting",next_soc);
+			sleep(-1);
+		}
+
+		if(feof(fl)) {
+			m_debug("Breaking because feof");
+			break;
+		}
+		auto newline = (char)fgetc(fl);
+		if(newline != '\n') {
+			ungetc(newline,fl);
+			//m_debug("Breaking because newline != '\\n': " << (char)newline);
+			//break;
 		}
 
 		if(++curr_soc > list_top) {
@@ -335,32 +403,45 @@ void boot_social_messages(void) {
 			break;
 		}
 
+		m_debug("next_soc: '" << next_soc << "'");
 		/* read the stuff */
 		soc_mess_list[curr_soc].act_nr = nr = find_command(next_soc);
 		soc_mess_list[curr_soc].hide = hide;
 		soc_mess_list[curr_soc].min_victim_position = min_pos;
 
-#ifdef CIRCLE_ACORN
-
-		if(fgetc(fl) != '\n') {
-			log("SYSERR: Acorn bug workaround failed.");
-		}
-
-#endif
-
+		/**
+		 * char_no_arg - what is sent to the player who executes the command when you type no argument
+		 * i.e.: "Accuse who?"
+		 */
 		soc_mess_list[curr_soc].char_no_arg = fread_action(fl, nr);
+
+		/**
+		 * others_no_arg - what others see when player executes the command with no argument
+		 * i.e.: "$n bounces around!"
+		 */
 		soc_mess_list[curr_soc].others_no_arg = fread_action(fl, nr);
+		/**
+		 * char_found - if a victim was found
+		 * i.e.: "You desperately try to squeeze a few coins from $M."
+		 */
 		soc_mess_list[curr_soc].char_found = fread_action(fl, nr);
 
 		/* if no char_found, the rest is to be ignored */
 		if(!soc_mess_list[curr_soc].char_found) {
+			/** advance so we can consume the newline */
+			fread_advance(fl);
 			continue;
 		}
 
+		/** i.e.: "$n begs you for money.  You gratiously let $m peep at your fortune." */
 		soc_mess_list[curr_soc].others_found = fread_action(fl, nr);
+		/** i.e.: "$n begs $N for a dime or two -- or twenty!" */
 		soc_mess_list[curr_soc].vict_found = fread_action(fl, nr);
+		/** i.e.: "Your money-lender seems to be out for the moment." */
 		soc_mess_list[curr_soc].not_found = fread_action(fl, nr);
+		/** i.e.: "How? - begging yourself for money doesn't help." */
 		soc_mess_list[curr_soc].char_auto = fread_action(fl, nr);
+		/** i.e.: "$n tries to comb $s tangled hair." */
 		soc_mess_list[curr_soc].others_auto = fread_action(fl, nr);
 
 		/* If social not found, re-use this slot.  'curr_soc' will be reincremented. */
@@ -375,7 +456,12 @@ void boot_social_messages(void) {
 			log("SYSERR: Social '%s' already assigned to a command.", next_soc);
 			memset(&soc_mess_list[curr_soc--], 0, sizeof(struct social_messg));
 		}
+		auto last = (char)fgetc(fl);
+		if(last != '\n') {
+			ungetc(last,fl);
+		}
 	}
+	m_debug("outside");
 
 	/* close file & set top */
 	fclose(fl);
@@ -397,3 +483,4 @@ void boot_social_messages(void) {
 		}
 	}
 }
+#undef m_debug

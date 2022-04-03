@@ -10,7 +10,6 @@
 #include "builder/object-placement.hpp"
 #include "rifle-attachments.hpp"
 
-#define __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
 #define mo_debug(A) std::cerr << "[mods::integral_objects][debug]:" << A <<"\n";
 #else

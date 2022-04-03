@@ -231,8 +231,6 @@ buildobj = act.informative act.item act.medic \
 					 mods/boot-flags mods/weapons/unique-weapons mods/melt \
 					 mods/blind
 
-					 #mods/orm/admin/muted \
-
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
 all: $(builddir) $(builddir)/mods/classes \
