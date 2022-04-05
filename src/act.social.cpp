@@ -19,6 +19,7 @@
 #include "handler.h"
 #include "db.h"
 #include "spells.h"
+#include "mods/positions.hpp"
 
 
 #define m_debug(A) std::cerr << "[socials] " << A << "\n";
@@ -35,9 +36,10 @@ void free_social_messages(void);
 
 
 struct social_messg {
-	int act_nr;
-	int hide;
-	int min_victim_position;	/* Position of victim */
+	using act_number_t = uint16_t;
+	act_number_t act_nr;
+	bool hide;
+	position_t min_victim_position;	/* Position of victim */
 
 	/* No argument was supplied */
 	char *char_no_arg;
@@ -295,7 +297,8 @@ std::optional<int> fread_digit(FILE* fl) {
 
 void boot_social_messages(void) {
 	FILE *fl;
-	int nr, i, hide = -1, min_pos = -1, curr_soc = -1;
+	int nr, i, hide = -1, curr_soc = -1;
+	position_t min_pos = position_t::INVALID;
 	char next_soc[1024];
 	struct social_messg temp;
 
@@ -376,7 +379,7 @@ void boot_social_messages(void) {
 			sleep(-1);
 		}
 
-		min_pos = fread_digit(fl).value_or(-1);
+		min_pos = static_cast<position_t>(fread_digit(fl).value_or(position_t::INVALID));
 
 		if(hide < 0) {
 			log("SYSERR: [SOCIALS:5] invalid HIDE value for command: '%s' while parsing socials file... aborting",next_soc);
@@ -469,11 +472,11 @@ void boot_social_messages(void) {
 
 	/* now, sort 'em */
 	for(curr_soc = 0; curr_soc < list_top; curr_soc++) {
-		min_pos = curr_soc;
+		min_pos = static_cast<position_t>(curr_soc);
 
 		for(i = curr_soc + 1; i <= list_top; i++)
 			if(soc_mess_list[i].act_nr < soc_mess_list[min_pos].act_nr) {
-				min_pos = i;
+				min_pos = static_cast<position_t>(i);
 			}
 
 		if(curr_soc != min_pos) {
