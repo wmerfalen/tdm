@@ -33,6 +33,9 @@ namespace mods::integral_objects {
 		std::vector<std::string> values;
 		mods::db::get_section_vector("ammo-locker", std::to_string(room), values);
 		auto locker = mods::integral_objects_db::first_or_create(room,"ammo-locker", ITEM_CONTAINER, "ammo-locker.yml");
+		/**
+		 * SELECT lo_yaml_file from locker where lo_room_vnum = room AND lo_type = 'AMMO';
+		 */
 		for(auto yaml : values) {
 			if(!mods::object_utils::assert_sane_object(yaml)) {
 				mo_debug("[feed_ammo_locker]: not feeding invalid yaml type: '" << yaml << "'");
@@ -54,7 +57,10 @@ namespace mods::integral_objects {
 		std::vector<std::string> values;
 		mods::db::get_section_vector("weapon-locker", std::to_string(room), values);
 		auto locker = mods::integral_objects_db::first_or_create(room,"weapon-locker", ITEM_CONTAINER, "weapon-locker.yml");
-		for(auto yaml : values) {
+		/**
+		 * SELECT lo_yaml_file from locker where lo_room_vnum = room AND lo_type = 'WEAPON';
+		 */
+		for(auto yaml: values) {
 			if(!mods::object_utils::assert_sane_object(yaml)) {
 				mo_debug("[feed_weapon_locker]: not feeding invalid yaml type: '" << yaml << "'");
 				continue;
@@ -76,6 +82,9 @@ namespace mods::integral_objects {
 		std::vector<std::string> values;
 		mods::db::get_section_vector("armor-locker", std::to_string(room), values);
 		auto locker = mods::integral_objects_db::first_or_create(room,"armor-locker", ITEM_CONTAINER, "armor-locker.yml");
+		/**
+		 * SELECT lo_yaml_file from locker where lo_room_vnum = room AND lo_type = 'ARMOR';
+		 */
 		for(auto yaml : values) {
 			if(!mods::object_utils::assert_sane_object(yaml)) {
 				mo_debug("[feed_armor_locker]: not feeding invalid yaml type: '" << yaml << "'");

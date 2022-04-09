@@ -50,6 +50,9 @@ namespace mods::weapons {
 		if(!weapon) {
 			return;
 		}
+		if(!weapon->rifle()) {
+			return;
+		}
 
 		/**
 		 * !UNIQUE_WEAPONS
@@ -75,6 +78,9 @@ namespace mods::weapons {
 	void dispose_unique_weapon(const uuid_t& obj_uuid) {
 		using namespace mods::object_utils;
 		auto weapon = optr_by_uuid(obj_uuid);
+		if(!weapon || !weapon->rifle()) {
+			return;
+		}
 		/**
 		 * !UNIQUE_WEAPONS
 		 */

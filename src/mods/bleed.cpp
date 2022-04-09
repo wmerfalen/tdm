@@ -197,6 +197,10 @@ namespace mods::bleed {
 			//auto dam = mods::rand::roll(entry.dice_count,entry.dice_sides);
 			auto dam = entry.damage;
 			auto attacker = ptr_by_uuid(entry.attacker);
+			if(!attacker || attacker->position() == POS_DEAD) {
+				player_removals.emplace_back(entry);
+				continue;
+			}
 			if(attacker) {
 				attacker->sendln(CAT("{grn}[+",dam,"] bleed damage to ",victim->name(),"{/grn}"));
 			}

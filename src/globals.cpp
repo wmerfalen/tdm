@@ -30,6 +30,7 @@
 #include "mods/interpreter.hpp"
 #include "mods/boot-flags.hpp"
 #include "mods/weapons/unique-weapons.hpp"
+#include "mods/armor/unique-armor.hpp"
 
 namespace mods::mob_equipment {
 	extern void decorate(const uuid_t& mob_uuid);
@@ -159,6 +160,7 @@ namespace mods {
 			obj_odmap[obj.get()] = obj;
 			register_object_db_id(obj->db_id(),obj->uuid);
 			mods::weapons::unique_weapon_register_object(obj);
+			mods::armor::unique_armor_register_object(obj);
 		}
 		void register_object_db_id(uint64_t db_id,uuid_t uuid) {
 			db_id_to_uuid_map[db_id] = uuid;

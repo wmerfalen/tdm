@@ -229,7 +229,12 @@ buildobj = act.informative act.item act.medic \
 					 mods/admin-tools/stay mods/orm/admin/stay mods/orm/admin/rifle-attribute-limits \
 					 mods/mobs/orthos-agent mods/mobs/orthos-agent-btree \
 					 mods/boot-flags mods/weapons/unique-weapons mods/melt \
-					 mods/blind
+<<<<<<< HEAD
+					 mods/blind mods/armor/unique-armor mods/armor/vest-bc89 mods/armor/gauntlets-xtv89 \
+					 mods/weapons/shotgun-charge
+=======
+					 mods/blind mods/armor/unique-armor mods/armor/vest-bc89 mods/armor/gauntlets-xtv89
+>>>>>>> 63c98e4e (- use the bc89::YAML_FILE string instead of hardcoded yamls)
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
