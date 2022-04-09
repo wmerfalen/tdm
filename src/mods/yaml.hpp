@@ -320,6 +320,7 @@ namespace mods::yaml {
 
 		armor_classification_type_t classification_enum;
 		uint64_t flush_to_db();
+		uint16_t unique_armor_id;
 	};
 
 	struct consumable_description_t : public yaml_description_t {

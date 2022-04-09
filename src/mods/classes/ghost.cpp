@@ -82,6 +82,14 @@ namespace mods::classes {
 		m_preferences["mute-replenish"] = true;
 		m_gauze_count = 0;
 		m_medkit_count = 0;
+		m_claymore_count = 0;
+		m_corrosive_claymore_count = 0;
+		m_shrapnel_claymore_count = 0;
+		m_xray_shot_charges = 0;
+		m_tracking_shot_charges = 0;
+		m_gauze_count = 0;
+		m_adrenaline_shot_charges = 0;
+		m_dissipate_charges = 0;
 	}
 	int16_t ghost::save() {
 		return this->m_orm.save();

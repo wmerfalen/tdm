@@ -2,10 +2,17 @@
 #include "weapon-types.hpp"
 #include "rifle-attachments.hpp"
 #include "weapons/unique-weapons.hpp"
+#include "armor/unique-armor.hpp"
 
 namespace mods::object_utils {
 	bool is_unique(const obj_ptr_t& item) {
 		return item->unique_weapon;
+	}
+	bool is_xtv89(const obj_ptr_t& armor) {
+		return armor->armor()->attributes->unique_armor_id == mods::armor::unique_armor_id::XTV89;
+	}
+	bool is_bc89(const obj_ptr_t& armor) {
+		return armor->armor()->attributes->unique_armor_id == mods::armor::unique_armor_id::BC89;
 	}
 	bool is_vc88(const obj_ptr_t& weapon) {
 		return weapon->rifle()->attributes->unique_weapon_id == mods::weapons::unique_weapon_id::VC88;

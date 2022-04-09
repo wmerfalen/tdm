@@ -12,8 +12,7 @@
 #include "../mob-roam.hpp"
 #include "../query-objects.hpp"
 
-//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_defiler_BTREE_DEBUG_OUTPUT__
-#ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_defiler_BTREE_DEBUG_OUTPUT__
+#ifdef   __MENTOC_SHOW_BEHAVIOUR_TREE_defiler_BTREE_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[m.m.defiler.btree:" << __LINE__ << "]->" << a << "\n";
 #else
 #define m_debug(a)
@@ -64,9 +63,12 @@ namespace mods::mobs::defiler_behaviour_tree {
 
 	void run_trees() {
 		m_debug("run trees");
-		for(auto& defiler : defiler_list()) {
+		std::size_t i = 0;
+		for(auto& defiler : defiler_list) {
+			++i;
+			m_debug("defiler run_trees iteration: " << i);
 			if(defiler->alive() && defiler->capable()) {
-				//m_debug("has tree. dispatching..." << defiler->get_tree());
+				m_debug("has tree. dispatching...");
 				defiler->start_turn();
 				defiler->hostile_phase_1();
 				continue;

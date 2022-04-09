@@ -1170,6 +1170,9 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		// light          | integer                |           |          |
 		// room_flag      | integer                |           | not null |
 		//
+		/**
+		 * TODO: db_get_all() is a perfect candidate for coroutines (generators)
+		 */
 		auto room_records = db_get_all("room");
 		log("parse_sql_rooms[result.size()]->%d",room_records.size());
 		if(room_records.size() == 0) {
@@ -1182,6 +1185,12 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		for(auto&& room_records_row: room_records) {
 			try {
 				room_data room;
+				/**
+				 * TODO: someday, we can have indexed strings with no duplicates
+				 *
+				room.name.allow_duplicates(false);
+				*/
+				room.name.allow_duplicates(false);
 				room.name.assign(room_records_row["name"]);
 				room.description.assign(room_records_row["description"]);
 #ifdef __MENTOC_SHOW_PARSE_SQL_ROOMS_DEBUG__

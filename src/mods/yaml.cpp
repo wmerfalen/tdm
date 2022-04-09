@@ -558,6 +558,7 @@ namespace mods::yaml {
 
 	*/
 	void armor_description_t::fill_flags(obj_data* o) {
+		unique_armor_id = 0;
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_ARMOR;

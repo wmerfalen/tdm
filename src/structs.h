@@ -408,6 +408,7 @@ enum player_class_t {
 #define WEAR_NECK_1     3
 #define WEAR_NECK_2     4
 #define WEAR_BODY       5
+#define WEAR_VEST       5
 #define WEAR_HEAD       6
 #define WEAR_LEGS       7
 #define WEAR_FEET       8
@@ -813,6 +814,7 @@ struct obj_affected_type {
 /* ================== Memory Structure for Objects ================== */
 struct obj_data {
 		bool unique_weapon;
+		bool unique_armor;
 		bool contract;
 		bool is_corpse;
 		bool forged;
@@ -830,6 +832,7 @@ struct obj_data {
 		obj_data(std::string item_type,std::string_view feed_file);
 		obj_data(int item_type,std::string_view feed_file) :
 			unique_weapon(0),
+			unique_armor(0),
 			is_corpse(0),
 			item_number(0),in_room(-1),name(""),
 			description(""),short_description(""),

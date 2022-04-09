@@ -7,6 +7,8 @@
  * Community edition
  */
 INIT(mods::weapons::shotgun::dst7a_commands);
+INIT(mods::armor::bc89_commands);
+INIT(mods::armor::xtv89_commands);
 INIT(mods::weapons::smg::vc88_commands);
 INIT(mods::json);
 INIT(mods::combat::commands);
@@ -147,6 +149,8 @@ namespace mods::init {
 		mods::admin_tools::stay::init();
 		mods::weapons::shotgun::dst7a_commands::init();
 		mods::weapons::smg::vc88_commands::init();
+		mods::armor::bc89_commands::init();
+		mods::armor::xtv89_commands::init();
 
 #ifdef __MENTOC_PLUGIN_CONTENT__
 		mods::plugins::init::init();

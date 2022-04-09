@@ -1069,6 +1069,7 @@ namespace mods {
 		m_locked_down = false;
 		m_rules_of_engagement = mods::combat::rules_of_engagement_t::ROM_BALLISTIC;
 		m_cooldown_start_tick = 0;
+		m_cooldown_ticks = 0;
 		m_luck = 0;
 		m_triads = {0,0,0,0,0};
 		m_stance = "balanced";

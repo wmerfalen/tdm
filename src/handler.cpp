@@ -292,7 +292,7 @@ void affect_to_char(char_data *ch,affected_type *af) {
 	affected_alloc->next = ch->affected;
 	ch->affected = affected_alloc;
 
-	affect_modify(ch, af->location, af->modifier, af->bitvector, TRUE);
+	affect_modify(ch, affected_alloc->location, affected_alloc->modifier, affected_alloc->bitvector, TRUE);
 	affect_total(ch);
 }
 

@@ -150,13 +150,17 @@ namespace mods::melt {
 				continue;
 			}
 			m_debug("victim: " << entry.target);
+			auto attacker = ptr_by_uuid(entry.attacker);
+			if(!attacker || attacker->position() == POS_DEAD) {
+				player_removals.emplace_back(entry);
+				continue;
+			}
 			auto victim = ptr_by_uuid(entry.target);
 			if(!victim || victim->position() == POS_DEAD || !victim->get_affect_dissolver().has_affect(mods::affects::affect_t::MELT)) {
 				player_removals.emplace_back(entry);
 				continue;
 			}
 
-			auto attacker = ptr_by_uuid(entry.attacker);
 			/**
 			 * Melt damage consists of:
 			 * - radioactive damage
