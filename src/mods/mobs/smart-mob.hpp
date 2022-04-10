@@ -145,7 +145,7 @@ namespace mods::mobs {
 			int optimal_range() const;
 
 			void save_attack_direction(const direction_t& direction);
-			direction_t determine_chase_direction();
+			virtual direction_t determine_chase_direction();
 
 		protected:
 			direction_t m_last_attack_direction;

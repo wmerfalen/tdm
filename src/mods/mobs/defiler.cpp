@@ -20,8 +20,8 @@
 #undef m_debug
 #endif
 
-//#define  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
-#ifdef  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
+#define  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
+#ifdef   __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("defiler") << a << "\n";
 #define cmem(a) mentoc_prefix_debug("[defiler][memory_footprint]") << a << "\n";
 #else
@@ -37,19 +37,20 @@
 
 namespace mods::mobs {
 
+	std::deque<std::shared_ptr<defiler>> defiler_list;
 	/**
 	 * - TODO: as soon as we spawn the defiler, we need to place him in the
 	 *   room where he will meet the quest taker
 	 */
 	void defiler::create(const uuid_t& mob_uuid, std::string_view targets) {
+		std::cerr << "defiler::create\n";
 		m_debug("defiler create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
 			log("SYSERR: did not find player to populate defiler with: %d",mob_uuid);
 			return;
 		}
-		auto g = std::make_shared<defiler>(mob_uuid,targets.data());
-		mods::mobs::defiler_list().push_front(g);
+		mods::mobs::defiler_list.emplace_back(std::make_shared<defiler> (mob_uuid,targets.data()));
 		for(const auto& pat : {
 		            "Butcher"
 		        }) {
@@ -273,6 +274,7 @@ namespace mods::mobs {
 		cmem("m_random_acts:" << m_random_acts.size());
 		m_status = defiler::status_t::LOOKING_FOR_A_FIGHT;
 		m_debug_mode = DEFILER_DEBUG_MODE_ON();
+		m_last_attack_direction = NORTH;
 	};
 
 	/**
@@ -337,7 +339,8 @@ namespace mods::mobs {
 	}
 	bool defiler::find_same_room_targets() {
 		m_same_room_targets.clear();
-		for(auto& player : room_list(room())) {
+		auto room = this->room();
+		for(auto& player : room_list(room)) {
 			if(player->is_npc()) {
 				mention("player is an npc. skipping");
 				continue;
@@ -386,6 +389,7 @@ namespace mods::mobs {
 		}
 		m_targets.clear();
 		mention("Looking for someone to attack");
+		auto room = this->room();
 		if(find_someone_to_attack()) {
 			auto found = mods::rand::shuffle_container(m_targets)[0];
 			auto victim = ptr_by_uuid(found.uuid);
@@ -395,7 +399,7 @@ namespace mods::mobs {
 			rifle_attack(found);
 			/** it is imperative that this be called AFTER get ranged combat totals */
 			if(!m_watching_everywhere) {
-				mods::mobs::helpers::watch_multiple(world[room()].directions(),cd(),RCT->max_range);
+				mods::mobs::helpers::watch_multiple(world[room].directions(),cd(),RCT->max_range);
 				m_watching_everywhere = true;
 			}
 			return;
@@ -413,26 +417,43 @@ namespace mods::mobs {
 		save_attack_direction(target.direction);
 		return ;
 	}
+	direction_t defiler::determine_chase_direction() {
+		return m_last_attack_direction;
+	}
 	void defiler::roam(uint8_t times) {
 		if(times == 0) {
 			return;
 		}
 		auto chase = determine_chase_direction();
-		if(!world[room()].dir_option[chase]) {
-			chase = mods::rand::shuffle_container(world[room()].directions())[0];
+		auto room = this->room();
+		if(world.size() <= room) {
+			log("WARNING: defiler's room is %d which doesn't exist!",room);
+			return;
+		}
+		if(chase >= NUM_OF_DIRS) {
+			log("WARNING: defiler's chase is %d which doesn't exist!",chase);
+			return;
+		}
+
+		if(!world[room].dir_option[chase]) {
+			chase = mods::rand::shuffle_container(world[room].directions())[0];
 			set_heading(chase);
 			move_to(chase);
 			return;
 		}
-		if(world[room()].dir_option[chase] && mods::mobs::roam_pattern::can_roam_to(defiler::MOB_VNUM, world[room()].dir_option[chase]->to_room)) {
+		if(chase >= sizeof(world[room].dir_option)) {
+			log("WARNING: defiler chase is %d which doesn't exist!",chase);
+			return;
+		}
+		if(world[room].dir_option[chase] && mods::mobs::roam_pattern::can_roam_to(defiler::MOB_VNUM, world[room].dir_option[chase]->to_room)) {
 			auto s = move_to(chase);
 			if(!std::get<0>(s)) {
-				chase = mods::rand::shuffle_container(world[room()].directions())[0];
+				chase = mods::rand::shuffle_container(world[room].directions())[0];
 			} else {
 				return;
 			}
 		} else {
-			chase = mods::rand::shuffle_container(world[room()].directions())[0];
+			chase = mods::rand::shuffle_container(world[room].directions())[0];
 		}
 	}
 	void defiler::rct_upkeep() {
@@ -580,10 +601,6 @@ namespace mods::mobs {
 			}
 		}
 	}
-	std::forward_list<std::shared_ptr<defiler>>& defiler_list() {
-		static std::forward_list<std::shared_ptr<defiler>> s;
-		return s;
-	}
 	uint8_t defiler::scan_depth() const {
 		return 8;
 	}
@@ -604,7 +621,7 @@ namespace mods::mobs {
 	namespace defiler_callbacks {
 		bool dispatch_watcher(const uuid_t& defiler_uuid,player_ptr_t& player, const room_rnum& room_id) {
 			uint32_t ctr =0;
-			for(auto& defiler : defiler_list()) {
+			for(auto& defiler : defiler_list) {
 				if(defiler->uuid == defiler_uuid) {
 					defiler->door_entry_event(player,room_id);
 					++ctr;

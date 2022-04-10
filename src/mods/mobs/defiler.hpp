@@ -204,6 +204,8 @@ namespace mods::mobs {
 			/**====================================================*/
 			defiler(const uuid_t& mob_uuid,std::string_view variation);
 			defiler() = delete;
+			defiler(const defiler& other) = delete;
+			defiler& operator=(const defiler&) = delete;
 			virtual ~defiler() = default;
 
 			/**================*/
@@ -316,6 +318,7 @@ namespace mods::mobs {
 			void scan_for_targets();
 			void hunt(uuid_t target);
 			void door_entry_event(player_ptr_t& player,const room_rnum room_id);
+			direction_t determine_chase_direction();
 
 		private:
 			player_ptr_t get_next_attacking_priority();
@@ -340,7 +343,7 @@ namespace mods::mobs {
 			bool m_watching_everywhere;
 	};
 
-	std::forward_list<std::shared_ptr<defiler>>& defiler_list();
+	extern std::deque<std::shared_ptr<defiler>> defiler_list;
 	namespace defiler_callbacks {
 		bool dispatch_watcher(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id);
 	};
