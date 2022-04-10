@@ -26,9 +26,12 @@ if [[ -f $PWD/../dont-kill-gc ]]; then
 	echo -e '\e[32m[post-build.sh] not killing gc due to ' $PWD/../dont-kill-gc '\e[0m'
 	exit 0
 fi
-VPID=$(ps aux | grep /usr/bin/valgrind.bin | head -n 1 | awk '{print $2}')
-if [[ ! -z $VPID ]]; then
-	kill -9 $VPID
+VCOUNT=$(ps aux | grep /usr/bin/valgrind.bin | wc -l)
+if [[ $VCOUNT -gt 1 ]]; then
+	VPID=$(ps aux | grep /usr/bin/valgrind.bin | head -n 1 | awk '{print $2}')
+	if [[ ! -z $VPID ]]; then
+		kill -9 $VPID
+	fi
 fi
 
 GCOUNT=$(pgrep gdb | wc -l)

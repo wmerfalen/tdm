@@ -7,6 +7,10 @@ extern obj_ptr_t optr_by_uuid(uuid_t);
 extern obj_ptr_t create_object(int type,std::string yaml_file);
 namespace mods::object_utils {
 	/**
+	 * Unique armor
+	 */
+	bool is_bc89(const obj_ptr_t&);
+	/**
 	 * Unique weapons
 	 */
 	bool is_dst7a(const obj_ptr_t&);

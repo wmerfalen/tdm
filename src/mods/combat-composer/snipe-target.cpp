@@ -17,6 +17,7 @@
 #include "../weapons/elemental.hpp"
 #include "../weapons/legacy-combat.hpp"
 #include "../weapons/unique-weapons.hpp"
+#include "../armor/unique-armor.hpp"
 #include "../interpreter.hpp"
 #include "skill-increment.hpp"
 
@@ -754,6 +755,7 @@ namespace mods::combat_composer {
 				attacker->damage_event(feedback);
 
 				mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOU_HIT_ARMOR,victim);
+				mods::armor::dispatch_unique_armor_event(attacker->uuid(), damage_event_t::YOU_HIT_ARMOR, victim);
 				mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOU_HIT_FLESH,victim);
 
 				if(victim->is_npc()) {

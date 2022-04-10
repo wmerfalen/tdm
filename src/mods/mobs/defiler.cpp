@@ -20,7 +20,6 @@
 #undef m_debug
 #endif
 
-#define  __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
 #ifdef   __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("defiler") << a << "\n";
 #define cmem(a) mentoc_prefix_debug("[defiler][memory_footprint]") << a << "\n";
