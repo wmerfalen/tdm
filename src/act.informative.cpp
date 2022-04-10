@@ -1325,11 +1325,11 @@ ACMD(do_equipment) {
 	for(i = 0; i < NUM_WEARS; i++) {
 		if(GET_EQ(ch, i)) {
 			if(CAN_SEE_OBJ(ch, GET_EQ(ch, i))) {
-				player->sendln(wear_where[i]);
+				player->sendx(wear_where[i]);
 				show_obj_to_char(GET_EQ(ch, i), ch, SHOW_OBJ_SHORT);
 				found = TRUE;
 			} else {
-				player->sendln(wear_where[i]);
+				player->sendx(wear_where[i]);
 				player->sendln("Something.");
 				found = TRUE;
 			}

@@ -43,8 +43,7 @@ namespace mods::mobs {
 	 *   room where he will meet the quest taker
 	 */
 	void defiler::create(const uuid_t& mob_uuid, std::string_view targets) {
-		std::cerr << "defiler::create\n";
-		m_debug("defiler create on uuid:" << mob_uuid);
+		m_debug("defiler::create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
 			log("SYSERR: did not find player to populate defiler with: %d",mob_uuid);
