@@ -8,24 +8,24 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 		- not done
 			- [ ] when user is sleeping/resting regenerate hp at a slow pace
 
-# component: melee combat
-	- status: 
-		- not ready, needs testing and to honor object properties
-			- most of this is coded aready, it just needs to be verified
-			- [x] verify i can attack with melee weapons
-			- [ ] verify attacks honor elemental damage percents
-			- [x] melee weapons can be picked up/dropped/junk'd
-			- [ ] melee weapons can only be equipped in primary position
-			- [ ] melee weapons take precedence over secondary weapons
-			- [x] melee weapon elemental damage can be blocked/resisted by armor
-				- [x] melee elemental damage respects resistances of target's armor
-			- [x] melee weapon attacks don't need to be spammed like snipe command does
-
-# component: sniper class
-	- status:
-		- unfinished, may need testing as well
-		- [ ]
-
+### NIX # component: melee combat
+### NIX 	- status: 
+### NIX 		- not ready, needs testing and to honor object properties
+### NIX 			- most of this is coded aready, it just needs to be verified
+### NIX 			- [x] verify i can attack with melee weapons
+### NIX 			- [ ] verify attacks honor elemental damage percents
+### NIX 			- [x] melee weapons can be picked up/dropped/junk'd
+### NIX 			- [ ] melee weapons can only be equipped in primary position
+### NIX 			- [ ] melee weapons take precedence over secondary weapons
+### NIX 			- [x] melee weapon elemental damage can be blocked/resisted by armor
+### NIX 				- [x] melee elemental damage respects resistances of target's armor
+### NIX 			- [x] melee weapon attacks don't need to be spammed like snipe command does
+### NIX 
+### NIX # component: sniper class
+### NIX 	- status:
+### NIX 		- unfinished, may need testing as well
+### NIX 		- [ ]
+### NIX 
 # component: practice and leveling up
 	- status:
 		- needs work. stats affect the user in predictable ways
