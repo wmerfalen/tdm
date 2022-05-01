@@ -173,7 +173,7 @@ namespace mods::mobs {
 			bool m_found_item;
 	};
 
-	std::forward_list<std::shared_ptr<generic_thief>>& generic_thief_list();
+	std::vector<std::shared_ptr<generic_thief>>& generic_thief_list();
 };
 
 #if 0

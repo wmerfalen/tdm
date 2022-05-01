@@ -1185,15 +1185,11 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		for(auto&& room_records_row: room_records) {
 			try {
 				room_data room;
-<<<<<<< HEAD
 				/**
 				 * TODO: someday, we can have indexed strings with no duplicates
 				 *
 				room.name.allow_duplicates(false);
 				*/
-=======
-				room.name.allow_duplicates(false);
->>>>>>> 63c98e4e (- use the bc89::YAML_FILE string instead of hardcoded yamls)
 				room.name.assign(room_records_row["name"]);
 				room.description.assign(room_records_row["description"]);
 #ifdef __MENTOC_SHOW_PARSE_SQL_ROOMS_DEBUG__

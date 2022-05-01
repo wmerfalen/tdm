@@ -25,6 +25,7 @@
 #include "mods/acl/lambda.hpp"
 #include "mods/orm/fetcher.hpp"
 #include "mods/query-objects.hpp"
+#include "mods/pfind.hpp"
 
 
 /*   external vars  */
@@ -51,6 +52,7 @@ void reset_zone(zone_rnum zone);
 void roll_real_abils(char_data *ch);
 int parse_class(std::string arg);
 void run_autowiz(void);
+void look_at_room(player_ptr_t& player, int ignore_brief);
 
 /* local functions */
 int perform_set(char_data *ch, char_data *vict, int mode, char *val_arg);
@@ -341,32 +343,34 @@ SUPERCMD(do_trans) {
 
 
 SUPERCMD(do_teleport) {
-
-	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
-	char_data *victim;
-	room_rnum target;
-
-	two_arguments(argument, buf, buf2);
-
-	if(!*buf) {
-		player->sendln("Whom do you wish to teleport?");
-	} else if(!(victim = get_char_vis(ch, buf, NULL, FIND_CHAR_WORLD))) {
-		player->sendln(NOPERSON);
-	} else if(victim == ch) {
-		player->sendln("Use 'goto' to teleport yourself.");
-	} else if(GET_LEVEL(victim) >= GET_LEVEL(ch)) {
-		player->sendln("Maybe you shouldn't do that.");
-	} else if(!*buf2) {
-		player->sendln("Where do you wish to send this person?");
-	} else if((target = find_target_room(ch, buf2)) != NOWHERE) {
-		player->sendln(OK);
-		act("$n disappears in a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
-		char_from_room(victim);
-		char_to_room(victim, target);
-		act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
-		act("$n has teleported you!", FALSE, ch, 0, (char *) victim, TO_VICT);
-		look_at_room(victim, 0);
+	static constexpr std::string_view usage = "Usage: teleport <player> [room_vnum]\r\n"
+	                                          "--------------------------------------------------------------------------------\r\n"
+	                                          "If you omit room_vnum, it will teleport said player to the room you're currently in.\r\n"
+	                                          "\r\n";
+	if(argshave()->size_gt(0)->passed() == false) {
+		player->errorln(usage);
+		return;
 	}
+
+	room_rnum destination = player->room();
+
+	if(argshave()->size_gt(1)->int_at(1)->passed()) {
+		destination = real_room(args()->int_at(1));
+	}
+	auto optional_player = mods::pfind::optby_name(argat(0).c_str());
+	if(!optional_player.has_value()) {
+		player->errorln(CAT("Couldn't find a player by that name '",argat(0),"'"));
+		return;
+	}
+	auto victim = optional_player.value();
+
+	player->sendln(OK);
+	act("$n disappears in a puff of smoke.", FALSE, victim->cd(), 0, 0, TO_ROOM);
+	char_from_room(victim);
+	char_to_room(victim, destination);
+	act("$n arrives from a puff of smoke.", FALSE, victim->cd(), 0, 0, TO_ROOM);
+	victim->sendln(CAT(player->name()," teleported you!"));
+	look_at_room(victim, 0);
 }
 
 

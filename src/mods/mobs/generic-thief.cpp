@@ -16,7 +16,8 @@
 
 #define  __MENTOC_MODS_MOBS_generic_thief_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_generic_thief_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) if(this->is_fighting()){ mentoc_prefix_debug("m|m|mps") << a << "\n"; }
+//#define m_debug(a) if(this->is_fighting()){ mentoc_prefix_debug("m|m|mps") << a << "\n"; }
+#define m_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n"
 #else
 #define m_debug(a) ;;
 #endif
@@ -107,7 +108,7 @@ namespace mods::mobs {
 		}
 		auto g = std::make_shared<generic_thief>(mob_uuid,targets.data());
 		g->btree_roam();
-		mods::mobs::generic_thief_list().push_front(g);
+		mods::mobs::generic_thief_list().emplace_back(g);
 	}
 
 	/**
@@ -239,10 +240,14 @@ namespace mods::mobs {
 			if(!attacker) {
 				return;
 			}
-			auto weapon = player_ptr->primary();
 
 			this->attacked(feedback);
 
+			auto weapon = player_ptr->primary();
+			if(!weapon) {
+				btree_hostile();
+				return;
+			}
 			/**
 			 * If we have a melee weapon
 			 */
@@ -583,8 +588,8 @@ namespace mods::mobs {
 		clear_list_if_count(&m_scanned_items,10);
 		m_scanned_items.emplace_back(item);
 	}
-	std::forward_list<std::shared_ptr<generic_thief>>& generic_thief_list() {
-		static std::forward_list<std::shared_ptr<generic_thief>> s;
+	std::vector<std::shared_ptr<generic_thief>>& generic_thief_list() {
+		static std::vector<std::shared_ptr<generic_thief>> s;
 		return s;
 	}
 };

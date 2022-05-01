@@ -11,6 +11,16 @@
 namespace mods::loot::events {
 
 	void player_killed_npc(player_ptr_t& player,player_ptr_t& npc) {
+
+		/**
+		 * If player killed a low level NPC, only rarely reward them with a rifle
+		 */
+		if(npc->level() < LOOT_REWARD_RIFLE_LEVEL()) {
+			/**
+			 * TODO: generate a random consumable
+			 */
+			return;
+		}
 		mods::loot_container::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
 		player->sendln("{grn}#######################################{/grn}");
 		player->sendln("{grn}# A piece of loot was awarded to you! #{/grn}");

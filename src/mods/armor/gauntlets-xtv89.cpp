@@ -120,7 +120,6 @@ namespace mods::armor {
 				return;
 		}
 	}
-<<<<<<< HEAD
 	void xtv89::dispatch_bc89_synergy(damage_event_t event, player_ptr_t attacker, obj_ptr_t& vest) {
 		auto roll = dice(stats::create_shotgun_charge_chance);
 		if(roll) {
@@ -144,6 +143,4 @@ namespace mods::armor {
 		m_shotgun_charges.pop();
 		return {true,"A shotgun charge gets dispersed!"};
 	}
-=======
->>>>>>> 63c98e4e (- use the bc89::YAML_FILE string instead of hardcoded yamls)
 };

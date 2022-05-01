@@ -37,6 +37,10 @@ namespace mods::memory {
 	void save_counts(std::forward_list<T>& l,std::string_view type) {
 		usage_report[std::string(type.data()) + ".size()"] = {{"size",std::to_string(std::distance(l.cbegin(),l.cend()))}};
 	}
+	template <typename T>
+	void save_counts(std::vector<T>& l,std::string_view type) {
+		usage_report[std::string(type.data()) + ".size()"] = {{"size",std::to_string(l.size())}};
+	}
 	std::string get_saved_footprints() {
 		std::string s;
 		std::map<std::string,std::size_t> counts;

@@ -56,7 +56,6 @@ namespace mods::armor {
 			struct stats {
 				static constexpr std::array<uint16_t,3> deflect_chance = {2,8,6};
 				static constexpr std::array<uint16_t,2> deflect_dice = {15,18};
-				static constexpr std::array<uint16_t,2> deflect_dice = {15,18};
 				static constexpr std::array<uint16_t,3> blind_target_chance = {1,6,3};
 			};
 
