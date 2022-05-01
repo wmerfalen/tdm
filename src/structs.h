@@ -408,7 +408,6 @@ enum player_class_t {
 #define WEAR_NECK_1     3
 #define WEAR_NECK_2     4
 #define WEAR_BODY       5
-#define WEAR_VEST       5
 #define WEAR_HEAD       6
 #define WEAR_LEGS       7
 #define WEAR_FEET       8
@@ -420,9 +419,7 @@ enum player_class_t {
 #define WEAR_WRIST_R   14
 #define WEAR_WRIST_L   15
 #define WEAR_WIELD     16
-#define WEAR_PRIMARY   WEAR_WIELD
 #define WEAR_HOLD      17
-#define WEAR_SECONDARY_WEAPON 18
 #define WEAR_SECONDARY 18
 #define WEAR_WEAPON_ATTACHMENT      19
 #define WEAR_SHOULDERS_L 20
@@ -433,6 +430,9 @@ enum player_class_t {
 #define WEAR_ELBOW_L 25
 #define WEAR_ELBOW_R 26
 
+#define WEAR_VEST       WEAR_BODY
+#define WEAR_SECONDARY_WEAPON 18
+#define WEAR_PRIMARY   WEAR_WIELD
 #define NUM_WEARS 27
 
 /* object-related defines ********************************************/
@@ -502,6 +502,7 @@ enum player_class_t {
 #define ITEM_WEAR_BACKPACK (1 << 19)
 #define ITEM_WEAR_GOGGLES (1 << 20)
 #define ITEM_WEAR_WEAPON_ATTACHMENT (1 << 21)
+#define ITEM_WEAR_VEST (1 << 22)
 
 
 /* Extra object flags: used by obj_data.obj_flags.extra_flags */

@@ -1173,101 +1173,170 @@ ACMD(do_pour) {
 
 
 void wear_message(char_data *ch, struct obj_data *obj, int where) {
-	static const char *wear_messages[][2] = {
+	if(where >= NUM_WEARS) {
+		log("SYSERR: wear_message recv'd %d as where, but NUM_WEARS is %d",where,NUM_WEARS);
+		auto player = ptr(ch);
+		if(player) {
+			player->sendln("Unable to wear that armor!");
+			return;
+		}
+	}
+	static const char *wear_messages[NUM_WEARS][2] = {
 		{
+			/** WEAR_LIGHT (0) */
 			"$n lights $p and holds it.",
 			"You light $p and hold it."
 		},
 
 		{
+			/** WEAR_FINGER_R 1 */
 			"$n slides $p on to $s right ring finger.",
 			"You slide $p on to your right ring finger."
 		},
 
 		{
+			/** WEAR_FINGER_L 2 */
 			"$n slides $p on to $s left ring finger.",
 			"You slide $p on to your left ring finger."
 		},
 
 		{
+			/** WEAR_NECK_1 3 */
 			"$n wears $p around $s neck.",
 			"You wear $p around your neck."
 		},
 
 		{
+			/** WEAR_NECK_2 4 */
 			"$n wears $p around $s neck.",
 			"You wear $p around your neck."
 		},
 
 		{
+			/** WEAR_BODY 5 */
+			/** WEAR_VEST (ALIAS) 5 */
 			"$n wears $p on $s body.",
 			"You wear $p on your body."
 		},
 
 		{
+			/** WEAR_HEAD 6 */
 			"$n wears $p on $s head.",
 			"You wear $p on your head."
 		},
 
 		{
+			/** WEAR_LEGS 7 */
 			"$n puts $p on $s legs.",
 			"You put $p on your legs."
 		},
 
 		{
+			/** WEAR_FEET 8 */
 			"$n wears $p on $s feet.",
 			"You wear $p on your feet."
 		},
 
 		{
+			/** WEAR_HANDS 9 */
 			"$n puts $p on $s hands.",
 			"You put $p on your hands."
 		},
 
 		{
+			/** WEAR_ARMS 10 */
 			"$n wears $p on $s arms.",
 			"You wear $p on your arms."
 		},
 
 		{
+			/** WEAR_SHIELD 11 */
 			"$n straps $p around $s arm as a shield.",
 			"You start to use $p as a shield."
 		},
 
 		{
+			/** WEAR_ABOUT 12 */
 			"$n wears $p about $s body.",
 			"You wear $p around your body."
 		},
 
 		{
+			/** WEAR_WAIST 13 */
 			"$n wears $p around $s waist.",
 			"You wear $p around your waist."
 		},
 
 		{
+			/** WEAR_WRIST_R 14 */
 			"$n puts $p on around $s right wrist.",
 			"You put $p on around your right wrist."
 		},
 
 		{
+			/** WEAR_WRIST_L 15 */
 			"$n puts $p on around $s left wrist.",
 			"You put $p on around your left wrist."
 		},
 
 		{
+			/** WEAR_WIELD 16 */
+			/** WEAR_PRIMARY (ALIAS) 16 */
 			"$n wields $p as $s primary.",
 			"You wield $p as your primary."
 		},
 
 		{
+			/** WEAR_HOLD 17 */
 			"$n grabs $p.",
 			"You grab $p."
 		},
 		{
+			/** WEAR_SECONDARY 18 */
+			/** WEAR_SECONDARY_WEAPON (ALIAS) 18 */
 			"$n wields $p as $s secondary.",
 			"You wield $p as your secondary."
 		},
-
+		{
+			/** WEAR_WEAPON_ATTACHMENT 19 */
+			"$n attachs $p to $s primary weapon.",
+			"You attach $p to your primary weapon."
+		},
+		{
+			/** WEAR_SHOULDERS_L 20 */
+			"$n wears $p on $s left shoulder.",
+			"You wear $p on your left shoulder."
+		},
+		{
+			/** WEAR_SHOULDERS_R 21 */
+			"$n wears $p on $s right shoulder.",
+			"You wear $p on your right shoulder."
+		},
+		{
+			/** WEAR_BACKPACK 22 */
+			"$n wears $p as a backpack.",
+			"You wear $p as a backpack."
+		},
+		{
+			/** WEAR_GOGGLES 23 */
+			"$n wears $p over $s eyes.",
+			"You wear $p over your eyes."
+		},
+		{
+			/** WEAR_VEST_PACK 24 */
+			"$n wears $p as a vest pack.",
+			"You wear $p as a vest pack."
+		},
+		{
+			/** WEAR_ELBOW_L 25 */
+			"$n wears $p on $s left elbow.",
+			"You wear $p on your left elbow."
+		},
+		{
+			/** WEAR_ELBOW_R 26 */
+			"$n wears $p on $s right elbow.",
+			"You wear $p on your right elbow."
+		}
 	};
 
 	act(wear_messages[where][0], TRUE, ch, obj, 0, TO_ROOM);
@@ -1277,47 +1346,51 @@ void wear_message(char_data *ch, struct obj_data *obj, int where) {
 
 
 bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int where) {
+	if(where >= NUM_WEARS || where < 0) {
+		log("SYSERR: attempting to wear something out of index. NUM_WEARS is %d but I recieved %d",NUM_WEARS,where);
+		return false;
+	}
 	/*
 	 * ITEM_WEAR_TAKE is used for objects that do not require special bits
 	 * to be put into that position (e.g. you can hold any object, not just
 	 * an object with a HOLD bit.)
 	 */
 
-	static constexpr int wear_bitvectors[] = {
-		ITEM_WEAR_LIGHT,
-		ITEM_WEAR_FINGER,
-		ITEM_WEAR_FINGER,
-		ITEM_WEAR_NECK,
-		ITEM_WEAR_NECK,
-		ITEM_WEAR_BODY,
-		ITEM_WEAR_HEAD,
-		ITEM_WEAR_LEGS,
-		ITEM_WEAR_FEET,
-		ITEM_WEAR_HANDS,
-		ITEM_WEAR_ARMS,
-		ITEM_WEAR_SHIELD,
-		ITEM_WEAR_ABOUT,
-		ITEM_WEAR_WAIST,
-		ITEM_WEAR_WRIST,
-		ITEM_WEAR_WRIST,
-		ITEM_WEAR_WIELD,
-		ITEM_WEAR_HOLD,
-		ITEM_WEAR_SECONDARY,
-		ITEM_WEAR_WEAPON_ATTACHMENT,
-		ITEM_WEAR_SHOULDERS,
-		ITEM_WEAR_SHOULDERS,
-		ITEM_WEAR_BACKPACK,
-		ITEM_WEAR_GOGGLES,
-		ITEM_WEAR_VEST_PACK,
-		ITEM_WEAR_ELBOW,
-		ITEM_WEAR_ELBOW
+	static constexpr int wear_bitvectors[NUM_WEARS] = {
+		ITEM_WEAR_LIGHT,	// light
+		ITEM_WEAR_FINGER,	// finger R
+		ITEM_WEAR_FINGER,	// finger L
+		ITEM_WEAR_NECK,		// neck 1
+		ITEM_WEAR_NECK,		// neck 2
+		ITEM_WEAR_BODY,		// body
+		ITEM_WEAR_HEAD,		// head
+		ITEM_WEAR_LEGS,		// legs
+		ITEM_WEAR_FEET,		// feet
+		ITEM_WEAR_HANDS,	// hands
+		ITEM_WEAR_ARMS,		// arms
+		ITEM_WEAR_SHIELD,	// shield
+		ITEM_WEAR_ABOUT,	// about
+		ITEM_WEAR_WAIST,	// waist
+		ITEM_WEAR_WRIST,	// wrist r
+		ITEM_WEAR_WRIST,	// wrist l
+		ITEM_WEAR_WIELD,	// wield
+		ITEM_WEAR_HOLD,		// hold
+		ITEM_WEAR_SECONDARY,	// secondary
+		ITEM_WEAR_WEAPON_ATTACHMENT,	// weapon attachment
+		ITEM_WEAR_SHOULDERS,	// shoulders L
+		ITEM_WEAR_SHOULDERS,	// shoulders R
+		ITEM_WEAR_BACKPACK,		// backpack
+		ITEM_WEAR_GOGGLES,		// goggles
+		ITEM_WEAR_VEST_PACK,	// vest pack
+		ITEM_WEAR_ELBOW,			// elbow L
+		ITEM_WEAR_ELBOW				// elbow R
 	};
 
-	static const std::string already_wearing[] = {
+	static const std::string already_wearing[NUM_WEARS] = {
 		"You're already using a light.",
-		"YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.",
 		"You're already wearing something on both of your ring fingers.",
-		"YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.",
+		"You're already wearing something on both of your ring fingers.",
+		"You can't wear anything else around your neck.",
 		"You can't wear anything else around your neck.",
 		"You're already wearing something on your body.",
 		"You're already wearing something on your head.",
@@ -1328,31 +1401,35 @@ bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int
 		"You're already using a shield.",
 		"You're already wearing something about your body.",
 		"You already have something around your waist.",
-		"YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.",
+		"You're already wearing something around both of your wrists.",
 		"You're already wearing something around both of your wrists.",
 		"You're already wielding a weapon.",
 		"You're already holding something.",
 		"Your secondary weapon spot is already taken.",
+		"Your weapon attachment slot is already taken.",
 		"You're already wearing something on your shoulders.",
+		"You're already wearing something on your shoulders.",
+		"You're already wearing something as a backpack.",
+		"You're already wearing something over your eyes.",
 		"Your vest pack is already occupied.",
 		"You are already wearing something on your elbows.",
-		"You are already wearing something as a backpack.",
-		"You are already wearing something over your eyes."
+		"You are already wearing something on your elbows.",
 	};
 	char_data * ch = player->cd();
 	obj_data * obj = in_obj.get();
 
 	/* first, make sure that the wear position is valid. */
 	if(!CAN_WEAR(obj, wear_bitvectors[where])) {
-		act("You can't wear $p there.", FALSE, ch, obj, 0, TO_CHAR);
+		player->sendln("You can't wear that there.");
 		return 0;
 	}
 
 	/* for neck, finger, and wrist, try pos 2 if pos 1 is already full */
-	if((where == WEAR_FINGER_R) || (where == WEAR_NECK_1) || (where == WEAR_WRIST_R))
-		if(GET_EQ(ch, where)) {
-			where++;
+	if((where == WEAR_ELBOW_L) || (where == WEAR_SHOULDERS_L) || (where == WEAR_FINGER_R) || (where == WEAR_NECK_1) || (where == WEAR_WRIST_R)) {
+		if(player->equipment(where) != nullptr) {
+			++where;
 		}
+	}
 
 	if(mods::object_utils::can_wield_in_secondary(in_obj) && where == WEAR_PRIMARY && player->primary() != nullptr && player->secondary() == nullptr) {
 		wear_message(ch,obj,WEAR_SECONDARY);
@@ -1362,7 +1439,7 @@ bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int
 	}
 
 
-	if(GET_EQ(ch, where)) {
+	if(player->equipment(where)) {
 		player->sendln(already_wearing[where]);
 		return 0;
 	}
@@ -1370,17 +1447,17 @@ bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int
 		auto classification = obj->armor()->attributes->classification_enum;
 		if(classification == mods::yaml::armor_classification_type_t::BASIC &&
 		        !mods::skills::player_can(player,"basic-armor")) {
-			act("You can't wear $p until you master the {yel}BASIC_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
+			player->sendln("You can't wear that until you master the {yel}BASIC_ARMOR{/yel} skill first.");
 			return 0;
 		}
 		if(classification == mods::yaml::armor_classification_type_t::ADVANCED &&
 		        !mods::skills::player_can(player,"advanced-armor")) {
-			act("You can't wear $p until you master the {yel}ADVANCED_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
+			player->sendln("You can't wear that until you master the {yel}ADVANCE_ARMOR{/yel} skill first.");
 			return 0;
 		}
 		if(classification == mods::yaml::armor_classification_type_t::ELITE &&
 		        !mods::skills::player_can(player,"elite-armor")) {
-			act("You can't wear $p until you master the {yel}ELITE_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
+			player->sendln("You can't wear that until you master the {yel}ELITE_ARMOR{/yel} skill first.");
 			return 0;
 		}
 	}
@@ -1392,7 +1469,9 @@ bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int
 void perform_wear(char_data *ch, struct obj_data *obj, int where) {
 	MENTOC_PREAMBLE();
 	auto o = optr(obj);
-	perform_wear_with_confirmation(player,o,where);
+	if(!perform_wear_with_confirmation(player,o,where)) {
+		player->sendln("You are unable to use that equipment.");
+	}
 }
 
 
@@ -1400,7 +1479,7 @@ void perform_wear(char_data *ch, struct obj_data *obj, int where) {
 int find_eq_pos(char_data *ch, struct obj_data *obj, char *arg) {
 	int where = -1;
 
-	const char *keywords[] = {
+	const char *keywords[NUM_WEARS] = {
 		"light",
 		"finger",
 		"!RESERVED!",
@@ -1433,82 +1512,78 @@ int find_eq_pos(char_data *ch, struct obj_data *obj, char *arg) {
 
 	if(!arg || !*arg) {
 		if(CAN_WEAR(obj, ITEM_WEAR_FINGER)) {
-			where = WEAR_FINGER_R;
+			/** DUAL accounted for */
+			return WEAR_FINGER_R;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_NECK)) {
-			where = WEAR_NECK_1;
+			/** DUAL accounted for */
+			return WEAR_NECK_1;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_BODY)) {
-			where = WEAR_BODY;
+			return WEAR_BODY;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_HEAD)) {
-			where = WEAR_HEAD;
+			return WEAR_HEAD;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_LEGS)) {
-			where = WEAR_LEGS;
+			return WEAR_LEGS;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_FEET)) {
-			where = WEAR_FEET;
+			return WEAR_FEET;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_HANDS)) {
-			where = WEAR_HANDS;
+			return WEAR_HANDS;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_ARMS)) {
-			where = WEAR_ARMS;
+			return WEAR_ARMS;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_SHIELD)) {
-			where = WEAR_SHIELD;
+			return WEAR_SHIELD;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_ABOUT)) {
-			where = WEAR_ABOUT;
+			return WEAR_ABOUT;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_WAIST)) {
-			where = WEAR_WAIST;
+			return WEAR_WAIST;
 		}
 
 		if(CAN_WEAR(obj, ITEM_WEAR_WRIST)) {
-			where = WEAR_WRIST_R;
+			/** DUAL accounted for */
+			return WEAR_WRIST_R;
 		}
 		if(CAN_WEAR(obj, ITEM_WEAR_SECONDARY)) {
-			where = WEAR_SECONDARY_WEAPON;
+			return WEAR_SECONDARY_WEAPON;
 		}
 
-		if(CAN_WEAR(obj, ITEM_WEAR_SECONDARY)) {
-			where = WEAR_SECONDARY_WEAPON;
-		}
 		if(CAN_WEAR(obj, ITEM_WEAR_WEAPON_ATTACHMENT)) {
-			where = WEAR_WEAPON_ATTACHMENT;
+			return WEAR_WEAPON_ATTACHMENT;
 		}
 		if(CAN_WEAR(obj, ITEM_WEAR_SHOULDERS)) {
-			where = WEAR_SHOULDERS_L;
-		}
-		if(CAN_WEAR(obj, ITEM_WEAR_SHOULDERS)) {
-			where = WEAR_SHOULDERS_R;
+			/** DUAL accounted for */
+			return WEAR_SHOULDERS_R;
 		}
 		if(CAN_WEAR(obj, ITEM_WEAR_BACKPACK)) {
-			where = WEAR_BACKPACK;
+			return WEAR_BACKPACK;
 		}
 		if(CAN_WEAR(obj, ITEM_WEAR_GOGGLES)) {
-			where = WEAR_GOGGLES;
+			return WEAR_GOGGLES;
 		}
 		if(CAN_WEAR(obj, ITEM_WEAR_VEST_PACK)) {
-			where = WEAR_VEST_PACK;
+			return WEAR_VEST_PACK;
 		}
 		if(CAN_WEAR(obj, ITEM_WEAR_ELBOW)) {
-			where = WEAR_ELBOW_L;
-		}
-		if(CAN_WEAR(obj, ITEM_WEAR_ELBOW)) {
-			where = WEAR_ELBOW_R;
+			/** DUAL accounted for */
+			return WEAR_ELBOW_R;
 		}
 	} else if((where = search_block(arg, keywords, FALSE)) < 0) {
 		send_to_char(ch, "'%s'?  What part of your body is THAT?", arg);
@@ -1523,8 +1598,8 @@ ACMD(do_wear) {
 
 	char arg1[MAX_INPUT_LENGTH];
 	char arg2[MAX_INPUT_LENGTH];
-	struct obj_data *obj, *next_obj;
-	int where, dotmode, items_worn = 0;
+	//struct obj_data *obj, *next_obj;
+	//int where = -1, items_worn = 0;
 
 	two_arguments(argument, arg1, arg2);
 
@@ -1533,65 +1608,94 @@ ACMD(do_wear) {
 		return;
 	}
 
-	dotmode = find_all_dots(arg1);
+	//dotmode = find_all_dots(arg1);
 
-	if(*arg2 && (dotmode != FIND_INDIV)) {
-		send_to_char(ch, "You can't specify the same body location for more than one item!");
-		return;
-	}
+	//if(*arg2 && (dotmode != FIND_INDIV)) {
+	//	send_to_char(ch, "You can't specify the same body location for more than one item!");
+	//	return;
+	//}
 
-	if(dotmode == FIND_ALL) {
-		for(obj = ch->carrying; obj; obj = next_obj) {
-			next_obj = obj->next_content;
-
-			if(CAN_SEE_OBJ(ch, obj) && (where = find_eq_pos(ch, obj, 0)) >= 0) {
-				auto obj_ptr = optr(obj);
-				if(perform_wear_with_confirmation(player,obj_ptr,where)) {
-					items_worn++;
-				}
+//	if(dotmode == FIND_ALL) {
+	for(const auto& obj : player->vcarrying()) {
+		auto where = find_eq_pos(ch, obj, 0);
+		if(CAN_SEE_OBJ(ch, obj)) {
+			if(where == WEAR_FINGER_R && player->equipment(WEAR_FINGER_R) && player->equipment(WEAR_FINGER_L) == nullptr) {
+				where = WEAR_FINGER_L;
+			} else if(where == WEAR_FINGER_L && player->equipment(WEAR_FINGER_L) && player->equipment(WEAR_FINGER_R) == nullptr) {
+				where = WEAR_FINGER_R;
 			}
-		}
-
-		if(!items_worn) {
-			send_to_char(ch, "You don't seem to have anything wearable.");
-		}
-	} else if(dotmode == FIND_ALLDOT) {
-		if(!*arg1) {
-			send_to_char(ch, "Wear all of what?");
-			return;
-		}
-
-		if(!(obj = get_obj_in_list_vis(ch, arg1, NULL, ch->carrying))) {
-			send_to_char(ch, "You don't seem to have any %ss.", arg1);
-		} else
-			while(obj) {
-				next_obj = get_obj_in_list_vis(ch, arg1, NULL, obj->next_content);
-
-				if((where = find_eq_pos(ch, obj, 0)) >= 0) {
-					perform_wear(ch, obj, where);
-				} else {
-#ifdef __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__
-					act("dotmode == FIND_ALLDOT || You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
-#endif
-					act("You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
-				}
-
-				obj = next_obj;
+			if(where == WEAR_SHOULDERS_L && player->equipment(WEAR_SHOULDERS_L) && player->equipment(WEAR_SHOULDERS_R) == nullptr) {
+				where = WEAR_SHOULDERS_R;
+			} else if(where == WEAR_SHOULDERS_R && player->equipment(WEAR_SHOULDERS_R) && player->equipment(WEAR_SHOULDERS_L) == nullptr) {
+				where = WEAR_SHOULDERS_L;
 			}
-	} else {
-		if(!(obj = get_obj_in_list_vis(ch, arg1, NULL, ch->carrying))) {
-			send_to_char(ch, "You don't seem to have %s %s.", AN(arg1), arg1);
-		} else {
-			if((where = find_eq_pos(ch, obj, arg2)) >= 0) {
-				perform_wear(ch, obj, where);
-			} else if(!*arg2) {
-#ifdef __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__
-				act("Final ELSE || You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
-#endif
-				act("You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
+			if(where == WEAR_ELBOW_L && player->equipment(WEAR_ELBOW_L) && player->equipment(WEAR_ELBOW_R) == nullptr) {
+				where = WEAR_ELBOW_R;
+			} else if(where == WEAR_ELBOW_R && player->equipment(WEAR_ELBOW_R) && player->equipment(WEAR_ELBOW_L) == nullptr) {
+				where = WEAR_ELBOW_L;
+			}
+			if(where == WEAR_NECK_1 && player->equipment(WEAR_NECK_1) && player->equipment(WEAR_NECK_2) == nullptr) {
+				where = WEAR_NECK_2;
+			} else if(where == WEAR_NECK_2 && player->equipment(WEAR_NECK_2) && player->equipment(WEAR_NECK_1) == nullptr) {
+				where = WEAR_NECK_1;
+			}
+			if(where == WEAR_FINGER_R && player->equipment(WEAR_FINGER_R) && player->equipment(WEAR_FINGER_L) == nullptr) {
+				where = WEAR_FINGER_L;
+			} else if(where == WEAR_FINGER_L && player->equipment(WEAR_FINGER_L) && player->equipment(WEAR_FINGER_R) == nullptr) {
+				where = WEAR_FINGER_R;
+			}
+			if(where == WEAR_WRIST_R && player->equipment(WEAR_WRIST_R) && player->equipment(WEAR_WRIST_L) == nullptr) {
+				where = WEAR_WRIST_L;
+			} else if(where == WEAR_WRIST_L && player->equipment(WEAR_WRIST_L) && player->equipment(WEAR_WRIST_R) == nullptr) {
+				where = WEAR_WRIST_R;
+			}
+			auto obj_ptr = optr(obj);
+			if(perform_wear_with_confirmation(player,obj_ptr,where)) {
+				return;
 			}
 		}
 	}
+//
+//		if(!items_worn) {
+//			send_to_char(ch, "You don't seem to have anything wearable.");
+//		}
+//	} else if(dotmode == FIND_ALLDOT) {
+//		if(!*arg1) {
+//			send_to_char(ch, "Wear all of what?");
+//			return;
+//		}
+//
+//		if(!(obj = get_obj_in_list_vis(ch, arg1, NULL, ch->carrying))) {
+//			send_to_char(ch, "You don't seem to have any %ss.", arg1);
+//		} else
+//			while(obj) {
+//				next_obj = get_obj_in_list_vis(ch, arg1, NULL, obj->next_content);
+//
+//				if((where = find_eq_pos(ch, obj, 0)) >= 0) {
+//					perform_wear(ch, obj, where);
+//				} else {
+//#ifdef __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__
+//					act("dotmode == FIND_ALLDOT || You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
+//#endif
+//					act("You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
+//				}
+//
+//				obj = next_obj;
+//			}
+//	} else {
+//		if(!(obj = get_obj_in_list_vis(ch, arg1, NULL, ch->carrying))) {
+//			send_to_char(ch, "You don't seem to have %s %s.", AN(arg1), arg1);
+//		} else {
+//			if((where = find_eq_pos(ch, obj, arg2)) >= 0) {
+//				perform_wear(ch, obj, where);
+//			} else if(!*arg2) {
+//#ifdef __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__
+//				act("Final ELSE || You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
+//#endif
+//				act("You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
+//			}
+//		}
+//	}
 
 }
 

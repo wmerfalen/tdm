@@ -599,7 +599,7 @@ namespace mods::yaml {
 				break;
 
 			case mw_armor::SHOULDER_PADS:
-				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_TAKE;
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_SHOULDERS;
 				break;
 
 			case mw_armor::HELMET:
