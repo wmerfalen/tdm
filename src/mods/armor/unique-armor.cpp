@@ -4,6 +4,7 @@
 #include "../object-utils.hpp"
 #include "../cached-map.hpp"
 #include "vest-bc89.hpp"
+#include "gauntlets-xtv89.hpp"
 
 #define STUB(A) std::cerr << "[mods::armor::unique_armor]: " << A << "\n";
 namespace mods::armor {
@@ -42,19 +43,33 @@ namespace mods::armor {
 		if(!vest->armor()) {
 			return;
 		}
+		auto gauntlets = victim->equipment(WEAR_ARMS);
 
 		/**
 		 * !UNIQUE_ARMOR
 		 */
-		if(is_bc89(vest)) {
-			auto ptr = mods::armor::find_bc89(vest->uuid);
+		if(vest && vest->armor()) {
+			/**
+			 * !UNIQUE_ARMOR
+			 */
+			if(is_bc89(vest)) {
+				auto ptr = mods::armor::find_bc89(vest->uuid);
+				if(!ptr) {
+					return;
+				}
+				ptr->dispatch_event(event,attacker);
+			}
+		}
+		if(gauntlets && gauntlets->armor() && is_xtv89(gauntlets)) {
+			auto ptr = mods::armor::find_xtv89(gauntlets->uuid);
 			if(!ptr) {
 				return;
 			}
 			ptr->dispatch_event(event,attacker);
-			return;
+			if(vest && vest->armor() && is_bc89(vest)) {
+				ptr->dispatch_bc89_synergy(event,attacker,vest);
+			}
 		}
-
 	}
 	void dispose_unique_armor(const uuid_t& obj_uuid) {
 		using namespace mods::object_utils;
@@ -65,10 +80,8 @@ namespace mods::armor {
 		/**
 		 * !UNIQUE_ARMOR
 		 */
-		//TODO: if(is_dst7a(armor)) {
-		//TODO: 	mods::armor::shotgun::erase_dst7a(obj_uuid);
-		//TODO: 	return;
-		//TODO: }
+		mods::armor::erase_bc89(obj_uuid);
+		mods::armor::erase_xtv89(obj_uuid);
 
 	}
 	static mods::cached_map<std::string_view,std::string_view> descriptions;
@@ -76,9 +89,20 @@ namespace mods::armor {
 		/**
 		 * !UNIQUE_WEAPONS
 		 */
-		if(obj->feed_file().compare("bc89.yml") ==0) {
+		if(obj->feed_file().compare(bc89::YAML_FILE.data()) ==0) {
 			mods::armor::make_bc89(obj);
 			descriptions.set_once(obj->feed_file(), mods::armor::bc89::description);
+			/**
+			 * REQUIRED!!!
+			 */
+			obj->unique_armor = 1;
+		}
+		/**
+		 * TODO: xtv89
+		 */
+		if(obj->feed_file().compare(xtv89::YAML_FILE.data()) ==0) {
+			mods::armor::make_xtv89(obj);
+			descriptions.set_once(obj->feed_file(), mods::armor::xtv89::description);
 			/**
 			 * REQUIRED!!!
 			 */

@@ -1,4 +1,6 @@
 #include "vest-bc89.hpp"
+#include "gauntlets-xtv89.hpp"
+
 /** db.h for read_object() */
 #include "../../db.h"
 #include "../weapon.hpp"
@@ -25,6 +27,22 @@ namespace mods::armor {
 		return p;
 	}
 
+	const std::vector<std::string>& bc89::get_usage_screen() {
+		static std::vector<std::string> screen;
+		static std::size_t list_size = 0;
+		static bool set = false;
+		if(list_size != bc89_list.size() || set == false) {
+			screen.clear();
+			screen.emplace_back(CAT("{grn}-------------------------------------------------------|{/grn}"));
+			screen.emplace_back(CAT("{grn}Field                        | Value                   |{/grn}"));
+			screen.emplace_back(CAT("{grn}-----------------------------+-------------------------|{/grn}"));
+			screen.emplace_back(CAT("{grn}bc89_list.size():            | ",bc89_list.size(),"{/grn}"));
+			screen.emplace_back(CAT("{grn}-----------------------------+-------------------------|{/grn}"));
+			list_size = bc89_list.size();
+			set = true;
+		}
+		return screen;
+	}
 	bc89_ptr_t find_bc89(const uuid_t& uuid) {
 		auto it = bc89_list.find(uuid);
 		if(it == bc89_list.end()) {
@@ -40,7 +58,16 @@ namespace mods::armor {
 			player->equip(d,WEAR_VEST);
 			ADMIN_DONE();
 		}
+		ADMINCMD(do_bc89_usage) {
+			DO_HELP("admin:bc89:usage");
+			ADMIN_REJECT();
+			for(const auto& line : bc89::get_usage_screen()) {
+				player->sendln(line);
+			}
+			ADMIN_DONE();
+		}
 		void init() {
+			ADD_ADMIN_COMMAND("admin:bc89:usage",do_bc89_usage);
 			ADD_ADMIN_COMMAND("admin:bc89",do_bc89);
 		}
 	};
@@ -84,6 +111,19 @@ namespace mods::armor {
 		}
 		//if(++call_count > 3) {
 		//	call_count = 0;
+		if(m_player) {
+			m_player->sendln("{grn}Hits armor event{/grn}");
+		}
+		if(!attacker) {
+			return;
+		}
+		auto deflected =  dice(bc89::stats::deflect_chance);
+		if(deflected) {
+			auto base_damage = dice(bc89::stats::deflect_dice);
+			m_player->sendln(CAT("{grn}[bc89: ",base_damage," DEFLECTED DAMAGE]{/grn}"));
+			attacker->hp() -= base_damage;
+			attacker->sendln(CAT("{red}[-",base_damage,"] You were hit by DEFLECTED damage!{/red}"));
+		}
 	}
 	const room_rnum& bc89::player_room() {
 		return m_player->room();

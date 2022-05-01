@@ -8,6 +8,9 @@ namespace mods::object_utils {
 	bool is_unique(const obj_ptr_t& item) {
 		return item->unique_weapon;
 	}
+	bool is_xtv89(const obj_ptr_t& armor) {
+		return armor->armor()->attributes->unique_armor_id == mods::armor::unique_armor_id::XTV89;
+	}
 	bool is_bc89(const obj_ptr_t& armor) {
 		return armor->armor()->attributes->unique_armor_id == mods::armor::unique_armor_id::BC89;
 	}

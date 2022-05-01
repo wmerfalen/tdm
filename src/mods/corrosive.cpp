@@ -211,6 +211,11 @@ namespace mods::corrosive {
 			auto damage = mods::rand::roll(entry.dice_count,entry.dice_sides);
 			int dam = damage - ((percent * 0.01) * damage);
 			auto attacker = ptr_by_uuid(entry.attacker);
+			if(!attacker || attacker->position() == POS_DEAD) {
+				player_removals.emplace_back(entry);
+				continue;
+			}
+
 			if(attacker) {
 				attacker->sendln(CAT("{grn}[+",dam,"] corrosive damage to ",victim->name(),"{/grn}"));
 			}

@@ -197,9 +197,10 @@ void load_messages(void) {
 	FILE *fl;
 	int i, type;
 	struct message_type *messages;
-	char chk[129];
+	static constexpr std::size_t LOAD_MESSAGES_COUNT = 129;
+	char chk[LOAD_MESSAGES_COUNT];
 
-	chk[128] = '\0';
+	chk[LOAD_MESSAGES_COUNT - 1] = '\0';
 	if(!(fl = fopen(MESS_FILE, "r"))) {
 		log("SYSERR: Error reading combat message file %s: %s", MESS_FILE, strerror(errno));
 		exit(1);
@@ -211,14 +212,14 @@ void load_messages(void) {
 		fight_messages[i].msg = NULL;
 	}
 
-	fgets(chk, 128, fl);
+	fgets(chk, LOAD_MESSAGES_COUNT - 1, fl);
 
 	while(!feof(fl) && (*chk == '\n' || *chk == '*')) {
-		fgets(chk, 128, fl);
+		fgets(chk, LOAD_MESSAGES_COUNT - 1, fl);
 	}
 
 	while(*chk == 'M') {
-		fgets(chk, 128, fl);
+		fgets(chk, LOAD_MESSAGES_COUNT - 1, fl);
 		sscanf(chk, " %d\n", &type);
 
 		for(i = 0; (i < MAX_MESSAGES) && (fight_messages[i].a_type != type) &&
@@ -247,10 +248,10 @@ void load_messages(void) {
 		messages->god_msg.attacker_msg = fread_action(fl, i);
 		messages->god_msg.victim_msg = fread_action(fl, i);
 		messages->god_msg.room_msg = fread_action(fl, i);
-		fgets(chk, 128, fl);
+		fgets(chk, LOAD_MESSAGES_COUNT - 1, fl);
 
 		while(!feof(fl) && (*chk == '\n' || *chk == '*')) {
-			fgets(chk, 128, fl);
+			fgets(chk, LOAD_MESSAGES_COUNT - 1, fl);
 		}
 	}
 

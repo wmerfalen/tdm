@@ -408,6 +408,7 @@ enum player_class_t {
 #define WEAR_NECK_1     3
 #define WEAR_NECK_2     4
 #define WEAR_BODY       5
+#define WEAR_VEST       5
 #define WEAR_HEAD       6
 #define WEAR_LEGS       7
 #define WEAR_FEET       8

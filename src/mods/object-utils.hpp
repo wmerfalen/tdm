@@ -10,6 +10,7 @@ namespace mods::object_utils {
 	 * Unique armor
 	 */
 	bool is_bc89(const obj_ptr_t&);
+	bool is_xtv89(const obj_ptr_t&);
 	/**
 	 * Unique weapons
 	 */

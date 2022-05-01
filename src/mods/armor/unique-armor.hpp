@@ -8,6 +8,7 @@
 namespace mods::armor {
 	enum unique_armor_id : uint16_t {
 		BC89,
+		XTV89,
 	};
 	using event_list_t = std::vector<damage_event_t>;
 
