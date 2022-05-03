@@ -36,7 +36,6 @@ namespace mods::armor {
 			    "| 9d15 Corrosive damage per shotgun charge                            |\r\n"
 			    "| 2d8T6 deflect ammunition at attacker                                |\r\n"
 			    "| 3 max shotgun charges                                               |\r\n"
-			    "|                                                                     |\r\n"
 			    "+-----------------[ Known Configuration Synergies ]-------------------|\r\n"
 			    "|                                                                     |\r\n"
 			    "|+[ BC89 Ballistic Vest ]                                             |\r\n"

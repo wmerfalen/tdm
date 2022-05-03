@@ -1058,6 +1058,9 @@ namespace mods {
 	}
 	void player::init() {
 		m_weight_index = player::weight_index_t::WEIGHT_NORMAL;
+		for(auto i=0; i < m_equipment.size(); i++) {
+			m_equipment[i] = nullptr;
+		}
 		m_equipment_hash = 0;
 		m_screen_width = 80;
 		m_can_move = true;

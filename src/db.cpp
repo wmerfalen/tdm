@@ -1190,7 +1190,6 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				 *
 				room.name.allow_duplicates(false);
 				*/
-				room.name.allow_duplicates(false);
 				room.name.assign(room_records_row["name"]);
 				room.description.assign(room_records_row["description"]);
 #ifdef __MENTOC_SHOW_PARSE_SQL_ROOMS_DEBUG__

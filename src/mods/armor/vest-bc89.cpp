@@ -99,6 +99,18 @@ namespace mods::armor {
 		return ptr(m_object->worn_by);
 	}
 	void bc89::hits_armor_event(player_ptr_t attacker) {
+		if(!attacker) {
+			return;
+		}
+
+	}
+	void bc89::hits_flesh_event(player_ptr_t attacker) {
+		//static uint8_t call_count = 0;
+		if(!attacker) {
+			return;
+		}
+		//if(++call_count > 3) {
+		//	call_count = 0;
 		if(m_player) {
 			m_player->sendln("{grn}Hits armor event{/grn}");
 		}

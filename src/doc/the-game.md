@@ -11,37 +11,37 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 - light machine guns
 - machine pistols
 - shotguns
-- plastic explosives
 - grenades
 	- flash-bang
 	- smoke
 	- incendiary
 	- frag
-	- EMP
-	- Chaff
-- breach charges
-- chemical weapons
-- drones
-	- aerial drones
-	- land-based drones
 - claymore mines
-- remote view cameras
+### NIX - plastic explosives
+	#### NIX - EMP
+	#### NIX - Chaff
+### NIX - breach charges
+### NIX - chemical weapons
+### NIX - drones
+### NIX 	- aerial drones
+### NIX 	- land-based drones
+### NIX - remote view cameras
 
-# TODO
-- must implement drone assisted sniping
-- must implement attach+detonate for C4
-- implement install/uninstall minigame functions
-- implement actions on both wires/lineup mini games
-- crud operations for mini games
-- fix medic healing. currently, anyone can heal
-- implement buffs/nerfs for all courses [ huge ]
-- implement `install_computer_choice` and `add_computer_choice` commands
-- tactical gadgetry course help file
-- implement melee functions for the striking clinic course
-- implement save/recall of striking combos
-- crud operations for save/recall (maybe use the proficiency skills db?)
-- implement MCMAP Judo course
-- implement MCMAP Submission Grappling course
+### NIX # TODO
+### NIX - must implement drone assisted sniping
+### NIX - must implement attach+detonate for C4
+### NIX - implement install/uninstall minigame functions
+### NIX - implement actions on both wires/lineup mini games
+### NIX - crud operations for mini games
+### NIX - fix medic healing. currently, anyone can heal
+### NIX - implement buffs/nerfs for all courses [ huge ]
+### NIX - implement `install_computer_choice` and `add_computer_choice` commands
+### NIX - tactical gadgetry course help file
+### NIX - implement melee functions for the striking clinic course
+### NIX - implement save/recall of striking combos
+### NIX - crud operations for save/recall (maybe use the proficiency skills db?)
+### NIX - implement MCMAP Judo course
+### NIX - implement MCMAP Submission Grappling course
 
 # The Roguelike that turned into a full-blown mud
 The first goal of Tactical Denial is to a roguelike mud setup as soon as possible.
@@ -201,90 +201,78 @@ enough, we can compose those into skillsets that are divided by assets.
 		- attribute support
 			[x] chance to injure
 				[x] revive injured
-			[ ] cooldown between shots
+			[x] cooldown between shots
 			[x] critical chance
 			[x] critical range
 			[ ] disorient amount
-			[ ] headshot bonus
+			[x] headshot bonus
 			[x] max range
 			[ ] reload time
 			[ ] effective firing range
 			[x] damage dice count
 			[x] damage dice sides
-	- CONSUMBALE
-		- AMMUNITION 
-			[ ] done
-		- FOOD 
-			[ ] done
-		- PILLS 
-			[ ] done
-		- HERBS 
-			[ ] done
-		- HALLUCINOGENS 
-			[ ] done
-		- PEDS 
-			[ ] done
-		- GASOLINE
-			[ ] done
-		- attribute support
-			[ ] weight_in_lbs
-			[ ] consumed_by
-			[ ] adds_hp
-			[ ] adds_movement
-			[ ] adds_room_range
-			[ ] adds_strength
-			[ ] adds_intelligence
-			[ ] adds_charisma
-			[ ] adds_dexterity
-			[ ] adds_constitution
-			[ ] adds_wisdom
-			[ ] adds_weight
-			[ ] adds_experience
-			[ ] adds_armor_class
-			[ ] adds_hitroll
-			[ ] adds_damage_roll
-			[ ] ticks_until_zero
-			[ ] ammo_type
-			[ ] capacity
-			[ ] adds_fire_damage
-			[ ] adds_critical_chance
-			[ ] adds_ammo_max
-			[ ] adds_chance_to_injure
-			[ ] adds_clip_size
-			[ ] adds_cooldown_between_shots
-			[ ] adds_critical_range
-			[ ] adds_disorient_amount
-			[ ] adds_headshot_bonus
-			[ ] adds_max_range
-			[ ] adds_reload_time
-			[ ] adds_muzzle_velocity
-			[ ] adds_damage_dice_count
-			[ ] adds_damage_dice_sides
+### NIX 	- CONSUMBALE
+### NIX 		- AMMUNITION 
+### NIX 			[ ] done
+### NIX 		- FOOD 
+### NIX 			[ ] done
+### NIX 		- PILLS 
+### NIX 			[ ] done
+### NIX 		- HERBS 
+### NIX 			[ ] done
+### NIX 		- HALLUCINOGENS 
+### NIX 			[ ] done
+### NIX 		- PEDS 
+### NIX 			[ ] done
+### NIX 		- GASOLINE
+### NIX 			[ ] done
+### NIX 		- attribute support
+### NIX 			[ ] weight_in_lbs
+### NIX 			[ ] consumed_by
+### NIX 			[ ] adds_hp
+### NIX 			[ ] adds_movement
+### NIX 			[ ] adds_room_range
+### NIX 			[ ] adds_strength
+### NIX 			[ ] adds_intelligence
+### NIX 			[ ] adds_charisma
+### NIX 			[ ] adds_dexterity
+### NIX 			[ ] adds_constitution
+### NIX 			[ ] adds_wisdom
+### NIX 			[ ] adds_weight
+### NIX 			[ ] adds_experience
+### NIX 			[ ] adds_armor_class
+### NIX 			[ ] adds_hitroll
+### NIX 			[ ] adds_damage_roll
+### NIX 			[ ] ticks_until_zero
+### NIX 			[ ] ammo_type
+### NIX 			[ ] capacity
+### NIX 			[ ] adds_fire_damage
+### NIX 			[ ] adds_critical_chance
+### NIX 			[ ] adds_ammo_max
+### NIX 			[ ] adds_chance_to_injure
+### NIX 			[ ] adds_clip_size
+### NIX 			[ ] adds_cooldown_between_shots
+### NIX 			[ ] adds_critical_range
+### NIX 			[ ] adds_disorient_amount
+### NIX 			[ ] adds_headshot_bonus
+### NIX 			[ ] adds_max_range
+### NIX 			[ ] adds_reload_time
+### NIX 			[ ] adds_muzzle_velocity
+### NIX 			[ ] adds_damage_dice_count
+### NIX 			[ ] adds_damage_dice_sides
 	- EXPLOSIVE
 		- FRAG GRENADE 
 			[x] done
 		- INCENDIARY GRENADE 
 			[x] done
-		- REMOTE EXPLOSIVE 
-			[ ] done
-		- REMOTE CHEMICAL 
-			[ ] done
-		- EMP GRENADE 
-			[ ] done
-		- CLAYMORE MINE 
-			[ ] done
-		- SMOKE GRENADE 
-			[ ] done
-		- C4 
-			[ ] done
-		- BREACH CHARGE 
-			[ ] done
-		- THERMITE CHARGE 
-			[ ] done
 		- FLASHBANG GRENADE 
 			[x] done
 		- SENSOR GRENADE 
 			[x] done
+		- CLAYMORE MINE 
+			[ ] done
+		- SMOKE GRENADE 
+			[ ] done
 		- attributes
 			[ ] alternate_explosion_type
 			[x] chance_to_injure
@@ -296,54 +284,66 @@ enough, we can compose those into skillsets that are divided by assets.
 			[ ] range_modifier
 			[ ] loudness_type
 			
-	- GADGET
-		- GRAPPLING HOOK 
-			[ ] done
-		- BARBED WIRE 
-			[ ] done
-		- CAMERA 
-			[x] done
-		- THERMAL CAMERA 
-			[x] done
-		- NIGHT VISION CAMERA 
-			[x] done
-		- MOTION SENSOR 
-			[ ] done
-		- DEPLOYABLE SHIELD 
-			[ ] done
-		- TRIPWIRE 
-			[ ] done
-		- attributes
-			[ ] csv_capabilities
-			[ ] csv_attach_to
-			[ ] electronic
-			[ ] health_points
-			[ ] shield_points
-			[ ] durability_profile
-			[ ] move_points
-			[ ] damage_points
-	- ATTACHMENT
-		- SIGHT
-			[ ] done
-		- MUZZLE
-			[ ] done
-		- MAGAZINE 
-			[ ] done
-		- attributes
-			[ ] zoom_multiplier
-			[ ] ammunition_amount
-			[ ] silence_percent
-			[ ] durability_points
-			[ ] incendiary_damage
-			[ ] radiation_damage
-			[ ] poison_damage
-			[ ] electric_damage
-			[ ] armor_penetration_amount
-			[ ] disorient_amount
-			[ ] emp_amount
-			[ ] emp_radius
-			[ ] attach_to
-
+### NIX		- REMOTE EXPLOSIVE 
+### NIX			[ ] done
+### NIX		- REMOTE CHEMICAL 
+### NIX			[ ] done
+### NIX		- EMP GRENADE 
+### NIX			[ ] done
+### NIX		- C4 
+### NIX			[ ] done
+### NIX		- BREACH CHARGE 
+### NIX			[ ] done
+### NIX		- THERMITE CHARGE 
+### NIX			[ ] done
+### NIX - GADGET
+### NIX		- GRAPPLING HOOK 
+### NIX			[ ] done
+### NIX		- BARBED WIRE 
+### NIX			[ ] done
+### NIX		- CAMERA 
+### NIX			[x] done
+### NIX		- THERMAL CAMERA 
+### NIX			[x] done
+### NIX		- NIGHT VISION CAMERA 
+### NIX			[x] done
+### NIX		- MOTION SENSOR 
+### NIX			[ ] done
+### NIX		- DEPLOYABLE SHIELD 
+### NIX			[ ] done
+### NIX 		- TRIPWIRE 
+### NIX 			[ ] done
+### NIX		- attributes
+### NIX			[ ] csv_capabilities
+### NIX			[ ] csv_attach_to
+### NIX			[ ] electronic
+### NIX			[ ] health_points
+### NIX			[ ] shield_points
+### NIX			[ ] durability_profile
+### NIX			[ ] move_points
+### NIX			[ ] damage_points
+### KEEP WHATEVER IS DONE SO FAR	- ATTACHMENT
+### KEEP WHATEVER IS DONE SO FAR		- SIGHT
+### KEEP WHATEVER IS DONE SO FAR			[ ] done
+### KEEP WHATEVER IS DONE SO FAR		- MUZZLE
+### KEEP WHATEVER IS DONE SO FAR			[ ] done
+### KEEP WHATEVER IS DONE SO FAR		- MAGAZINE 
+### KEEP WHATEVER IS DONE SO FAR			[ ] done
+### KEEP WHATEVER IS DONE SO FAR		- attributes
+### KEEP WHATEVER IS DONE SO FAR			[ ] zoom_multiplier
+### KEEP WHATEVER IS DONE SO FAR			[ ] ammunition_amount
+### KEEP WHATEVER IS DONE SO FAR			[ ] silence_percent
+### KEEP WHATEVER IS DONE SO FAR			[ ] durability_points
+### KEEP WHATEVER IS DONE SO FAR			[ ] incendiary_damage
+### KEEP WHATEVER IS DONE SO FAR			[ ] radiation_damage
+### KEEP WHATEVER IS DONE SO FAR			[ ] poison_damage
+### KEEP WHATEVER IS DONE SO FAR			[ ] electric_damage
+### KEEP WHATEVER IS DONE SO FAR			[ ] armor_penetration_amount
+### KEEP WHATEVER IS DONE SO FAR			[ ] disorient_amount
+### KEEP WHATEVER IS DONE SO FAR			[ ] emp_amount
+### KEEP WHATEVER IS DONE SO FAR			[ ] emp_radius
+### KEEP WHATEVER IS DONE SO FAR			[ ] attach_to
+### KEEP WHATEVER IS DONE SO FAR
 
 ++++++++++++++++++++++++
 | Dyanmic: destruction |
@@ -381,328 +381,328 @@ enough, we can compose those into skillsets that are divided by assets.
 	- blocking off a direction
 	- moving an npc to a separate room
 
-+++++++++++++++++++
-| Fields of study |
-+++++++++++++++++++
-		- [Electronics] [ ]
-			- Use of cameras
-			- Able to disable electronics
-			- Adept at electronics damage
-			- Can adapt electronics to be resistant to EMP
-			- Can adapt electronics to become EMP
-			- Can detect electronics
-			- Can disrupt cameras
-			- Can appear invisible to cameras (feed loop)
-			- Can hack servers
-			- Can disable electronics protection (electronic locks)
-		- [Armor] [ ]
-			- Can enhance armor
-			- Can penetrate armor with normal ammo
-			- Can take armor from NPCs
-			- Can mold collected armor
-			- Held armor has no weight bearance
-			- Heavy armor doesn't affect movement
-			- Explosions less likely to injure
-			- Chance to injure decreased
-		- [Marksmanship] [ ]
-			- Chance to hit during spray is increased
-			- Chance to headshot is increased
-			- Chance to target limb is increased
-			- Sniping accuracy increased
-		- [Sniping] [ ]
-			- Accuracy increased with sniper rifles
-			- Exclusive access to advanced sniper rifles
-			- Tracking bullets
-		- [Demolitions] [ ]
-			- Breach charge placement time decreased
-			- C4 remote detonation distance increased
-			- Grenade throw distance increased
-			- Claymore damage increased
-			- Thermite breach charge placement time decreased
-			- Incendiary grenade damage increased
-			- Can craft C4
-			- Chance to do 33% more damage with any explosive
-		- [Chemistry] [ ]
-			- Can create steroids
-			- Can create human growth hormone
-			- Can create noxious gas grenades
-			- Seal off room to make air-tight
-			- Can create incendiary ammo
-		- [Weapon Handling] [ ]
-			- Enhanced familiarity with weapons
-			- Increased accuracy with any weapon
-			- Decreased cooldown between shots
-			- Faster reloading
-+++++++++++++++++++++
-| WEAPON ATTRIBUTES |
-+++++++++++++++++++++
- 	- Description: 
-		- Attributes for weapons apply to a specific character.
-	- Familiarity
-		- Increases damage by 4% per level
-		- Decreases reload time by 4% per level
-		- Increases injure chance by 2% per level
-		- Increases critical chance by 2.5% per level
-		- Increases limb damage chance by 3% per level
-		- Increases headshot chance by 0.5% per level
-
-
-
-++++++++++++++++++++
-| TYPES OF POISONS |
-++++++++++++++++++++
-	- Friendly attacks
-		- Poisoned NPC's will attack their own side
-	- Acidic blood
-		- Poisoned NPC will bleed acid
-	- Explode
-		- Poisoned NPC will combust
-
-	- Triad Allocation
-			1) Each triad has 3 traits
-			2) It is not possible to fill up all 3 allocations with 3 points
-			3) There are only 6 points available to spread over all allocations
-			4) There can only be one allocation that has 3 points. 
-			5) It is not possible to have 2 allocations with 3 points.
-		- Military Triad
-			- [Melee]   [x] [ ] [ ]
-			- [Weapons] [x] [x] [x]
-			- [Intel]   [x] [x] [ ]
-		- Speed/Armor tradeoff MAX 4 points
-			- [Speed]   [ ] [ ] [ ]
-			- [Armor]   [ ] [ ] [ ]
-			- Examples: 
-				- 3 Speed, 1 Armor [HYPER - Agile, Stealthy, Quiet, Fast, Lots of Movement Points, Recovers MP fast]
-				- 3 Armor, 1 Speed [TANK - Slow, Sturdy, Natural Defender, Anchor]
-				- 2 Speed, 2 Armor [BALANCED - Well-rounded, Somewhat Agile, Average strength, Average Recovery times]
-	-  Melee Martial Arts
-			- Submission Grappling
-				- Skills
-					- Standing Attacks
-						- Hip throw [ slams enemy to the ground ]
-							* -1 HP
-							* Cause enemy to be grounded
-						- Pull guard [ pulls enemy to ground. riskier, but if successful can transition to grounded attacks immediately ]
-							* -0 HP
-							* On success: Cause enemy to be grounded, open to grounded attacks
-							* On error: enemy is standing and you are grounded and vulnerable
-								* Must standup to use Primary
-								* Can only use secondary (i.e.: pistol)
-								* You are now on your back
-					- Grounded Attacks [ enemy must be thrown to ground ]
-						- Arm bar [ breaks enemy arm ]
-							* prevents enemy from using two handed weapon (i.e.: LMG)
-							* two arm bars leaves enemy completely immobilized
-								- death stroke
-						- Knee bar [ breaks enemy knee ]
-							* -1 dexterity
-						- R.N.C. [ choke enemy unconscious ]
-							* Cannot be interrupted (i.e.: by other attacking NPCs)
-							* must roll 3+ 3 times for success 
-							* on success: Enemy is unconscious and can be finished off
-							* on error: enemy has chance of escaping your guard and standing up
-			- Muay Thai 
-				- Skills
-					- Stiff Jab [ stun ]
-						* -1 constitution
-					- Teep kick [ chance to knock opponent down ]
-						* downed enemies are 10% more likely to be fatally shot
-					- Leg kick [ deteriorates target mobility ]
-						* -1 dexterity [accumulative]
-					- Knee stomp [ harder attack on leg dexterity of target ]
-						* -1 dexterity
-					- Elbow [ chance to break nose of target not using headgear ]
-						* +1 bleed
-			- Eskrima (Stick fighting martial art, not limited to wooden batons, can use lethal bladed weapons)
-				- Skills
-					- 
-
-Proficiencies
-=============
-	- Description:
-		All proficiencies are available to all classes. A proficiency is a skill. It can be
-		trained, but only to a point. In order to develop past the point where training stops
-		taking effect, the player needs to make practical use of that skill. Using proficiencies 
-		are the only way to master it.
-
-	- Profieciency name: "The Natural"
-		- Description:
-			We've all seen them before: the individual that can pick up a new skill, talent, sport
-			and instantly excel past even the most devoted who have trained their entire lives.
-			The natural is frustratingly talented, able to pick up any weapon or device and
-			instantly maximize it's usage.
-		- The following stats are applied:
-			- +30% Damage
-			- +10% Reload Speed
-			- +10% Critical Chance
-			- +20% Pistol Whip/Rifle Slap damage
-
-	- Proficiency name: "Core Intimidation"
-		- Description:
-			Deep inside every human lives a core of panic when the body is under unusual amounts
-			of stress. The adrenal gland is triggered during "Core Intimidation" and the target
-			freezes in place-- a second lasting a lifetime. 
-			- 30% chance to cause target to panic/freeze in terror
-			- +20% Chance to get reliable intel from interrogation
-		
-	- Proficiency name: "Netwide Disassembly"
-		- 
-
-Focus:GRENADE LAUNCHER
-	- Demon
-
-Examples (source: Ghost Recon Future Soldier)
- Trigger 
-
--- Full Auto Trigger
--- 3-Round Burst Trigger
--- Semi-Auto Trigger
--- Match Trigger
--- 2-Stage Trigger
- Magazines 
-
--- Armor Piercing Ammo
--- Buckshot
--- Dragon's Breath
--- Drum Magazine
--- Dual Magazines
--- Exacto Ammo
--- Extended Magazine
--- Incendiary Ammo
--- Raufoss Ammo
--- Standard Magazine
--- Stun Rounds
-
-Optics
-
--- Backscatter Optic
--- Custom Sniper Optic
--- High Power Optic
--- Iron Sights
--- Magnified HWS
--- Red Dot
--- Tac Scope
--- Thermal Optic
-
-Muzzle
-
--- Compensator
--- Flash Hider
--- Standard Muzzle
--- Suppressor
-
-Underbarrel
-
--- 40MM HEDP Launcher
--- 40MM Smoke Launcher
--- 40MM EMP Launcher
--- Angled Foregrip
--- Bipod
--- Bipod Grip
--- Posted Slide
--- Rail Cover
--- UB Shotgun
--- UB Stun Gun (MP Only) 
--- Vertical Foregrip
-
-Stock
-
--- Collapsed
--- Extended
--- Fixed
--- Folded
-
-Side Rail
-
--- Aiming Laser (Campaign Only)
--- OTR Scanner
--- Rail Cover
-
-Gas System
-
--- Standard Gas System
--- Over-Gassed
--- Under-Gassed
-
-Barrel
-
--- Long Barrel
--- Short Barrel
--- Standard Barrel
-
-- MP5
-	- recommended stats (scraped)
-		- Damage
-		- 27 (0-18m)
-	- 18 (28+m)
-		-	Suppressed
-		- 22 (0-18m)
-	- 15 (28+m)
-		- Rate of Fire
-		- 800 RPM
-		- Mobility
-		- 50
-		- Magazine Size
-		- 30+1
-
-- FNP-P9
-	- recommended stats (scraped)
-		- Damage
-		- 45 DPS at (0-12m)
-	- 27 DPS at (22+m)
-		- Suppressed
-		- 38 DPS at (0-12m)
-	- 23 DPS at (22+m)
-		- Rate of Fire
-		- ~550 RPM
-		- Mobility
-		- 50
-		- Magazine Size
-		- 16+1
-
-#### HALF-BAKED IDEAS ####
-#### HALF-BAKED IDEAS ####
-#### HALF-BAKED IDEAS ####
-
-# Sniping from SUPER far away
-- the idea is that a user can snipe a target as long as they
-  have an autonomous drone in that same room. The target room must 
-	have specific textures in order for this to be possible.
-	For example, if the target room is a building, it must either
-	be on the roof or in a room with a window in it. If the target
-	is in a wide open space like a parking lot, then you simply need
-	your drone to be at or near the target room.
-
-	- The Process
-		- deploy drone
-		- n, n, n, n, e, n, e, e, n
-		- look
-			- displays room
-			- displays mobs in room
-				- "A pissed of Los Employee is standing here."
-		- target los via drone
-		* the game takes a number of ticks in order for the drone to lock on *
-		* drone finishes locking on target. can now engage *
-		- snipe target
-			- this will *always* be "snipe target" in order for this mechanic to work
-		- NPC reacts to getting shot
-			- NPC can snipe back. must roll to see if sees attacker
-
-	- [#########################################] -
-	- [ GUNSLINGER ARCHETYPES                   ] -
-	- [#########################################] -
-	- PISTOL SPECIALIST [specialist]
-		- can dual wield pistols. critical/headshot chance increased
-		- Dual Desert Eagle
-
-	- [#########################################] -
-	- [ PSYCHIC ARCHETYPES                      ] -
-	- [#########################################] -
-	- INTERCEPT [psychic]
-		- can remotely control NPCs for a limited amount of time
-		- Vector
-
-##########################
+### NIX +++++++++++++++++++
+### NIX | Fields of study |
+### NIX +++++++++++++++++++
+### NIX 		- [Electronics] [ ]
+### NIX 			- Use of cameras
+### NIX 			- Able to disable electronics
+### NIX 			- Adept at electronics damage
+### NIX 			- Can adapt electronics to be resistant to EMP
+### NIX 			- Can adapt electronics to become EMP
+### NIX 			- Can detect electronics
+### NIX 			- Can disrupt cameras
+### NIX 			- Can appear invisible to cameras (feed loop)
+### NIX 			- Can hack servers
+### NIX 			- Can disable electronics protection (electronic locks)
+### NIX 		- [Armor] [ ]
+### NIX 			- Can enhance armor
+### NIX 			- Can penetrate armor with normal ammo
+### NIX 			- Can take armor from NPCs
+### NIX 			- Can mold collected armor
+### NIX 			- Held armor has no weight bearance
+### NIX 			- Heavy armor doesn't affect movement
+### NIX 			- Explosions less likely to injure
+### NIX 			- Chance to injure decreased
+### NIX 		- [Marksmanship] [ ]
+### NIX 			- Chance to hit during spray is increased
+### NIX 			- Chance to headshot is increased
+### NIX 			- Chance to target limb is increased
+### NIX 			- Sniping accuracy increased
+### NIX 		- [Sniping] [ ]
+### NIX 			- Accuracy increased with sniper rifles
+### NIX 			- Exclusive access to advanced sniper rifles
+### NIX 			- Tracking bullets
+### NIX 		- [Demolitions] [ ]
+### NIX 			- Breach charge placement time decreased
+### NIX 			- C4 remote detonation distance increased
+### NIX 			- Grenade throw distance increased
+### NIX 			- Claymore damage increased
+### NIX 			- Thermite breach charge placement time decreased
+### NIX 			- Incendiary grenade damage increased
+### NIX 			- Can craft C4
+### NIX 			- Chance to do 33% more damage with any explosive
+### NIX 		- [Chemistry] [ ]
+### NIX 			- Can create steroids
+### NIX 			- Can create human growth hormone
+### NIX 			- Can create noxious gas grenades
+### NIX 			- Seal off room to make air-tight
+### NIX 			- Can create incendiary ammo
+### NIX 		- [Weapon Handling] [ ]
+### NIX 			- Enhanced familiarity with weapons
+### NIX 			- Increased accuracy with any weapon
+### NIX 			- Decreased cooldown between shots
+### NIX 			- Faster reloading
+### NIX +++++++++++++++++++++
+### NIX | WEAPON ATTRIBUTES |
+### NIX +++++++++++++++++++++
+### NIX  	- Description: 
+### NIX 		- Attributes for weapons apply to a specific character.
+### NIX 	- Familiarity
+### NIX 		- Increases damage by 4% per level
+### NIX 		- Decreases reload time by 4% per level
+### NIX 		- Increases injure chance by 2% per level
+### NIX 		- Increases critical chance by 2.5% per level
+### NIX 		- Increases limb damage chance by 3% per level
+### NIX 		- Increases headshot chance by 0.5% per level
+### NIX 
+### NIX 
+### NIX 
+### NIX ++++++++++++++++++++
+### NIX | TYPES OF POISONS |
+### NIX ++++++++++++++++++++
+### NIX 	- Friendly attacks
+### NIX 		- Poisoned NPC's will attack their own side
+### NIX 	- Acidic blood
+### NIX 		- Poisoned NPC will bleed acid
+### NIX 	- Explode
+### NIX 		- Poisoned NPC will combust
+### NIX 
+### NIX 	- Triad Allocation
+### NIX 			1) Each triad has 3 traits
+### NIX 			2) It is not possible to fill up all 3 allocations with 3 points
+### NIX 			3) There are only 6 points available to spread over all allocations
+### NIX 			4) There can only be one allocation that has 3 points. 
+### NIX 			5) It is not possible to have 2 allocations with 3 points.
+### NIX 		- Military Triad
+### NIX 			- [Melee]   [x] [ ] [ ]
+### NIX 			- [Weapons] [x] [x] [x]
+### NIX 			- [Intel]   [x] [x] [ ]
+### NIX 		- Speed/Armor tradeoff MAX 4 points
+### NIX 			- [Speed]   [ ] [ ] [ ]
+### NIX 			- [Armor]   [ ] [ ] [ ]
+### NIX 			- Examples: 
+### NIX 				- 3 Speed, 1 Armor [HYPER - Agile, Stealthy, Quiet, Fast, Lots of Movement Points, Recovers MP fast]
+### NIX 				- 3 Armor, 1 Speed [TANK - Slow, Sturdy, Natural Defender, Anchor]
+### NIX 				- 2 Speed, 2 Armor [BALANCED - Well-rounded, Somewhat Agile, Average strength, Average Recovery times]
+### NIX 	-  Melee Martial Arts
+### NIX 			- Submission Grappling
+### NIX 				- Skills
+### NIX 					- Standing Attacks
+### NIX 						- Hip throw [ slams enemy to the ground ]
+### NIX 							* -1 HP
+### NIX 							* Cause enemy to be grounded
+### NIX 						- Pull guard [ pulls enemy to ground. riskier, but if successful can transition to grounded attacks immediately ]
+### NIX 							* -0 HP
+### NIX 							* On success: Cause enemy to be grounded, open to grounded attacks
+### NIX 							* On error: enemy is standing and you are grounded and vulnerable
+### NIX 								* Must standup to use Primary
+### NIX 								* Can only use secondary (i.e.: pistol)
+### NIX 								* You are now on your back
+### NIX 					- Grounded Attacks [ enemy must be thrown to ground ]
+### NIX 						- Arm bar [ breaks enemy arm ]
+### NIX 							* prevents enemy from using two handed weapon (i.e.: LMG)
+### NIX 							* two arm bars leaves enemy completely immobilized
+### NIX 								- death stroke
+### NIX 						- Knee bar [ breaks enemy knee ]
+### NIX 							* -1 dexterity
+### NIX 						- R.N.C. [ choke enemy unconscious ]
+### NIX 							* Cannot be interrupted (i.e.: by other attacking NPCs)
+### NIX 							* must roll 3+ 3 times for success 
+### NIX 							* on success: Enemy is unconscious and can be finished off
+### NIX 							* on error: enemy has chance of escaping your guard and standing up
+### NIX 			- Muay Thai 
+### NIX 				- Skills
+### NIX 					- Stiff Jab [ stun ]
+### NIX 						* -1 constitution
+### NIX 					- Teep kick [ chance to knock opponent down ]
+### NIX 						* downed enemies are 10% more likely to be fatally shot
+### NIX 					- Leg kick [ deteriorates target mobility ]
+### NIX 						* -1 dexterity [accumulative]
+### NIX 					- Knee stomp [ harder attack on leg dexterity of target ]
+### NIX 						* -1 dexterity
+### NIX 					- Elbow [ chance to break nose of target not using headgear ]
+### NIX 						* +1 bleed
+### NIX 			- Eskrima (Stick fighting martial art, not limited to wooden batons, can use lethal bladed weapons)
+### NIX 				- Skills
+### NIX 					- 
+### NIX 
+### NIX Proficiencies
+### NIX =============
+### NIX 	- Description:
+### NIX 		All proficiencies are available to all classes. A proficiency is a skill. It can be
+### NIX 		trained, but only to a point. In order to develop past the point where training stops
+### NIX 		taking effect, the player needs to make practical use of that skill. Using proficiencies 
+### NIX 		are the only way to master it.
+### NIX 
+### NIX 	- Profieciency name: "The Natural"
+### NIX 		- Description:
+### NIX 			We've all seen them before: the individual that can pick up a new skill, talent, sport
+### NIX 			and instantly excel past even the most devoted who have trained their entire lives.
+### NIX 			The natural is frustratingly talented, able to pick up any weapon or device and
+### NIX 			instantly maximize it's usage.
+### NIX 		- The following stats are applied:
+### NIX 			- +30% Damage
+### NIX 			- +10% Reload Speed
+### NIX 			- +10% Critical Chance
+### NIX 			- +20% Pistol Whip/Rifle Slap damage
+### NIX 
+### NIX 	- Proficiency name: "Core Intimidation"
+### NIX 		- Description:
+### NIX 			Deep inside every human lives a core of panic when the body is under unusual amounts
+### NIX 			of stress. The adrenal gland is triggered during "Core Intimidation" and the target
+### NIX 			freezes in place-- a second lasting a lifetime. 
+### NIX 			- 30% chance to cause target to panic/freeze in terror
+### NIX 			- +20% Chance to get reliable intel from interrogation
+### NIX 		
+### NIX 	- Proficiency name: "Netwide Disassembly"
+### NIX 		- 
+### NIX 
+### NIX Focus:GRENADE LAUNCHER
+### NIX 	- Demon
+### NIX 
+### NIX Examples (source: Ghost Recon Future Soldier)
+### NIX  Trigger 
+### NIX 
+### NIX -- Full Auto Trigger
+### NIX -- 3-Round Burst Trigger
+### NIX -- Semi-Auto Trigger
+### NIX -- Match Trigger
+### NIX -- 2-Stage Trigger
+### NIX  Magazines 
+### NIX 
+### NIX -- Armor Piercing Ammo
+### NIX -- Buckshot
+### NIX -- Dragon's Breath
+### NIX -- Drum Magazine
+### NIX -- Dual Magazines
+### NIX -- Exacto Ammo
+### NIX -- Extended Magazine
+### NIX -- Incendiary Ammo
+### NIX -- Raufoss Ammo
+### NIX -- Standard Magazine
+### NIX -- Stun Rounds
+### NIX 
+### NIX Optics
+### NIX 
+### NIX -- Backscatter Optic
+### NIX -- Custom Sniper Optic
+### NIX -- High Power Optic
+### NIX -- Iron Sights
+### NIX -- Magnified HWS
+### NIX -- Red Dot
+### NIX -- Tac Scope
+### NIX -- Thermal Optic
+### NIX 
+### NIX Muzzle
+### NIX 
+### NIX -- Compensator
+### NIX -- Flash Hider
+### NIX -- Standard Muzzle
+### NIX -- Suppressor
+### NIX 
+### NIX Underbarrel
+### NIX 
+### NIX -- 40MM HEDP Launcher
+### NIX -- 40MM Smoke Launcher
+### NIX -- 40MM EMP Launcher
+### NIX -- Angled Foregrip
+### NIX -- Bipod
+### NIX -- Bipod Grip
+### NIX -- Posted Slide
+### NIX -- Rail Cover
+### NIX -- UB Shotgun
+### NIX -- UB Stun Gun (MP Only) 
+### NIX -- Vertical Foregrip
+### NIX 
+### NIX Stock
+### NIX 
+### NIX -- Collapsed
+### NIX -- Extended
+### NIX -- Fixed
+### NIX -- Folded
+### NIX 
+### NIX Side Rail
+### NIX 
+### NIX -- Aiming Laser (Campaign Only)
+### NIX -- OTR Scanner
+### NIX -- Rail Cover
+### NIX 
+### NIX Gas System
+### NIX 
+### NIX -- Standard Gas System
+### NIX -- Over-Gassed
+### NIX -- Under-Gassed
+### NIX 
+### NIX Barrel
+### NIX 
+### NIX -- Long Barrel
+### NIX -- Short Barrel
+### NIX -- Standard Barrel
+### NIX 
+### NIX - MP5
+### NIX 	- recommended stats (scraped)
+### NIX 		- Damage
+### NIX 		- 27 (0-18m)
+### NIX 	- 18 (28+m)
+### NIX 		-	Suppressed
+### NIX 		- 22 (0-18m)
+### NIX 	- 15 (28+m)
+### NIX 		- Rate of Fire
+### NIX 		- 800 RPM
+### NIX 		- Mobility
+### NIX 		- 50
+### NIX 		- Magazine Size
+### NIX 		- 30+1
+### NIX 
+### NIX - FNP-P9
+### NIX 	- recommended stats (scraped)
+### NIX 		- Damage
+### NIX 		- 45 DPS at (0-12m)
+### NIX 	- 27 DPS at (22+m)
+### NIX 		- Suppressed
+### NIX 		- 38 DPS at (0-12m)
+### NIX 	- 23 DPS at (22+m)
+### NIX 		- Rate of Fire
+### NIX 		- ~550 RPM
+### NIX 		- Mobility
+### NIX 		- 50
+### NIX 		- Magazine Size
+### NIX 		- 16+1
+### NIX 
+### NIX #### HALF-BAKED IDEAS ####
+### NIX #### HALF-BAKED IDEAS ####
+### NIX #### HALF-BAKED IDEAS ####
+### NIX 
+### NIX # Sniping from SUPER far away
+### NIX - the idea is that a user can snipe a target as long as they
+### NIX   have an autonomous drone in that same room. The target room must 
+### NIX 	have specific textures in order for this to be possible.
+### NIX 	For example, if the target room is a building, it must either
+### NIX 	be on the roof or in a room with a window in it. If the target
+### NIX 	is in a wide open space like a parking lot, then you simply need
+### NIX 	your drone to be at or near the target room.
+### NIX 
+### NIX 	- The Process
+### NIX 		- deploy drone
+### NIX 		- n, n, n, n, e, n, e, e, n
+### NIX 		- look
+### NIX 			- displays room
+### NIX 			- displays mobs in room
+### NIX 				- "A pissed of Los Employee is standing here."
+### NIX 		- target los via drone
+### NIX 		* the game takes a number of ticks in order for the drone to lock on *
+### NIX 		* drone finishes locking on target. can now engage *
+### NIX 		- snipe target
+### NIX 			- this will *always* be "snipe target" in order for this mechanic to work
+### NIX 		- NPC reacts to getting shot
+### NIX 			- NPC can snipe back. must roll to see if sees attacker
+### NIX 
+### NIX 	- [#########################################] -
+### NIX 	- [ GUNSLINGER ARCHETYPES                   ] -
+### NIX 	- [#########################################] -
+### NIX 	- PISTOL SPECIALIST [specialist]
+### NIX 		- can dual wield pistols. critical/headshot chance increased
+### NIX 		- Dual Desert Eagle
+### NIX 
+### NIX 	- [#########################################] -
+### NIX 	- [ PSYCHIC ARCHETYPES                      ] -
+### NIX 	- [#########################################] -
+### NIX 	- INTERCEPT [psychic]
+### NIX 		- can remotely control NPCs for a limited amount of time
+### NIX 		- Vector
+### NIX 
+### NIX ##########################
 ## HALF BAKED IDEAS END ##
 ## HALF BAKED IDEAS END ##
 ## HALF BAKED IDEAS END ##

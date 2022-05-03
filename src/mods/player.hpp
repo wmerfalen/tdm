@@ -557,6 +557,9 @@ namespace mods {
 			void increment_bad_password_count();
 			int get_bad_password_count();
 			void set_bad_password_count(int);
+			bool has_desc() const {
+				return m_char_data && m_char_data->has_desc;
+			}
 
 			descriptor_data& desc();
 			void set_state(int);

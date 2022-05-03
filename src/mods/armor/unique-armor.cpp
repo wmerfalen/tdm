@@ -38,6 +38,17 @@ namespace mods::armor {
 		}
 		auto vest = victim->equipment(WEAR_VEST);
 		auto gauntlets = victim->equipment(WEAR_ARMS);
+		if(!vest) {
+			return;
+		}
+		if(!vest->armor()) {
+			return;
+		}
+		auto gauntlets = victim->equipment(WEAR_ARMS);
+
+		/**
+		 * !UNIQUE_ARMOR
+		 */
 		if(vest && vest->armor()) {
 			/**
 			 * !UNIQUE_ARMOR

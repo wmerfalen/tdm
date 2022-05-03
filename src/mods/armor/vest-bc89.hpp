@@ -83,6 +83,7 @@ namespace mods::armor {
 		protected:
 			player_ptr_t player_upkeep();
 			player_ptr_t m_player;
+			void hits_flesh_event(player_ptr_t victim);
 			void hits_armor_event(player_ptr_t victim);
 			std::vector<uuid_t> m_damaged_enemy_list;
 	};

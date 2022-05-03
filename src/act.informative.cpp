@@ -884,6 +884,19 @@ ACMD(do_exits) {
 }
 
 
+void look_at_room(player_ptr_t& player, int ignore_brief) {
+	/**
+	 * Conceptually, this should be something like...
+	 * player->stream_attached()
+	 */
+	if(!player->has_desc()) {
+		return;
+	}
+
+	int room = player->viewing_room();
+	look_at_room_specific(player,ignore_brief,room);
+}
+
 
 void look_at_room(char_data *ch, int ignore_brief) {
 	MENTOC_PREAMBLE();
