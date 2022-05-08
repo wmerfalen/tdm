@@ -28,6 +28,7 @@
 #include "player-contract-instance.hpp"
 #include "contract-events.hpp"
 #include "orm/inventory.hpp"
+#include "super-users.hpp"
 
 #ifdef __MENTOC_PLAYER_CLASS_DEBUG__
 #define dbg(A) std::cerr << red_str("[mods::player]debug:") << A << "\n";
@@ -1812,6 +1813,7 @@ namespace mods {
 
 	void player::damage_event(feedback_t feedback) {
 		this->dispatch_event(feedback);
+		bool hit = false;
 		switch(feedback.damage_event) {
 			default:
 				break;
@@ -1869,35 +1871,45 @@ namespace mods {
 				break;
 
 			case damage_event_t::HIT_BY_INCENDIARY_DAMAGE:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_INCENDIARY_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_RADIOACTIVE_DAMAGE:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_RADIOACTIVE_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_ANTI_MATTER_DAMAGE:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_ANTI_MATTER_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_CORROSIVE_DAMAGE:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_CORROSIVE_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_EMP_DAMAGE:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_EMP_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_EXPLOSIVE_DAMAGE:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_EXPLOSIVE_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_SHRAPNEL_DAMAGE:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_SHRAPNEL_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_CRYOGENIC_DAMAGE:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_CRYOGENIC_DAMAGE(),"[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_SHOCK_DAMAGE:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_SHOCK_DAMAGE(), "[",std::to_string(feedback.damage),"]"));
 				break;
 
 
 			case damage_event_t::YOU_GOT_HIT_BY_INCENDIARY_AMMO:
+				hit = 1;
 				this->queue_up(CAT(mods::values::MSG_YOU_GOT_HIT_BY_INCENDIARY_AMMO(),"[from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::YOU_INFLICTED_INCENDIARY_AMMO:
@@ -1907,12 +1919,14 @@ namespace mods {
 				this->queue_up(CAT(MSG_NARROWLY_MISSED_ME(),"[from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::YOU_ARE_DISORIENTED_EVENT:
+				hit = 1;
 				this->queue_up(mods::values::MSG_YOU_ARE_DISORIENTED());
 				break;
 			case damage_event_t::YOU_DISORIENTED_SOMEONE_EVENT:
 				this->queue_up(mods::values::MSG_YOU_DISORIENT_SOMEONE());
 				break;
 			case damage_event_t::YOU_ARE_INJURED_EVENT:
+				hit = 1;
 				this->queue_up(MSG_YOU_ARE_INJURED());
 				break;
 			case damage_event_t::TARGET_DEAD_EVENT:
@@ -1925,24 +1939,31 @@ namespace mods {
 				this->queue_up(MSG_MISSED_TARGET());
 				break;
 			case damage_event_t::HIT_BY_MELEE_ATTACK:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_MELEE_ATTACK(),"[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_BLADED_MELEE_ATTACK:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_BLADED_MELEE_ATTACK(),"[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_BLUNT_MELEE_ATTACK:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_BLUNT_MELEE_ATTACK(),"[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_BONUS_INNATE_SNIPER_RIFLE_ATTACK:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_BONUS_INNATE_SNIPER_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::HIT_BY_SHOTGUN_BLAST:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_SHOTGUN_BLAST(),"[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_RIFLE_ATTACK:
+				hit = 1;
 				this->queue_up(CAT(MSG_HIT_BY_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::HIT_BY_SPRAY_ATTACK:
+				hit = 1;
 				/** FIXME: damage is overall, not the specific user's damage! */
 				this->queue_up(CAT(MSG_HIT_BY_SPRAY_ATTACK(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
 				break;
@@ -1962,6 +1983,7 @@ namespace mods {
 				this->queue_up(MSG_TARGET_IN_PEACEFUL_ROOM());
 				break;
 			case damage_event_t::YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK:
+				hit = 1;
 				break;
 			case damage_event_t::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK:
 				this->queue_up(CAT(MSG_HIT_BY_HEADSHOT(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
@@ -1985,6 +2007,7 @@ namespace mods {
 				sendln(CAT(MSG_YOU_GOT_HIT_BY_AR_SHRAPNEL(),"[",feedback.damage,"][from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::HIT_BY_TEETH_AND_BONES:
+				hit = 1;
 				sendln(CAT(MSG_HIT_BY_TEETH_AND_BONES(),"[",feedback.damage,"][from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::YOU_INFLICTED_CORPSE_EXPLOSION_DAMAGE:
@@ -1993,6 +2016,13 @@ namespace mods {
 			case damage_event_t::YOU_WERE_INFLICTED_WITH_BAD_LUCK:
 				sendln(MSG_YOU_WERE_INFLICTED_BY_BAD_LUCK());
 				break;
+		}
+		if(hit && mods::super_users::is(this->uuid())) {
+			auto attacker = ptr_by_uuid(feedback.attacker);
+			if(!attacker) {
+				return;
+			}
+			this->sendln(CAT("Your attacker: ",attacker->name()));
 		}
 	}
 	/*

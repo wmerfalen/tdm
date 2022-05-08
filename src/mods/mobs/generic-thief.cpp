@@ -132,9 +132,9 @@ namespace mods::mobs {
 	 * @param player
 	 */
 	void generic_thief::enemy_spotted(room_rnum room,uuid_t player) {
-		m_debug("##################################################################################" <<
-		        "[generic_thief] enemy spotted:" << room << "\n" <<
-		        "##################################################################################");
+		//m_debug("##################################################################################" <<
+		//        "[generic_thief] enemy spotted:" << room << "\n" <<
+		//        "##################################################################################");
 		//this->spray(player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}
@@ -187,7 +187,7 @@ namespace mods::mobs {
 	 * =====================================================================================
 	 */
 	void generic_thief::set_behavior_tree_directly(const generic_thief::btree_t& t) {
-		m_debug("setting tree id directly to: " << t);
+		//m_debug("setting tree id directly to: " << t);
 		cd()->mob_specials.behaviour_tree = (uint16_t)t;
 	}
 	bool generic_thief::has_tree() {
@@ -235,7 +235,7 @@ namespace mods::mobs {
 				m_error(type().data() << ":" << red_str("USE AFTER FREE"));
 				return;
 			}
-			m_debug("pacify events");
+			//m_debug("pacify events");
 			btree_roam();
 		});
 
@@ -268,11 +268,11 @@ namespace mods::mobs {
 			 */
 			if(mods::object_utils::is_melee(weapon)) {
 				if(player_ptr->room() != m_last_attacker->room()) {
-					m_debug("Moving toward sniiper..." << dirstr(feedback.from_direction));
+					//m_debug("Moving toward sniiper..." << dirstr(feedback.from_direction));
 					move_to(feedback.from_direction);
 				}
 				if(player_ptr->room() == attacker->room()) {
-					m_debug("attacking...");
+					//m_debug("attacking...");
 					mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,attacker);
 					hit(player_ptr->cd(),attacker->cd(),0);
 				}
@@ -308,7 +308,7 @@ namespace mods::mobs {
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
 			switch(feedback.damage_event) {
 				case de::OUT_OF_AMMO_EVENT:
-					m_debug("DAMN! OUT OF AMMO!");
+					//m_debug("DAMN! OUT OF AMMO!");
 					player_ptr->primary()->rifle_instance->ammo = 255;
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
@@ -316,10 +316,10 @@ namespace mods::mobs {
 					m_error("No primary wielded..." << player_ptr->name().c_str() << "[uuid:" << player_ptr->uuid() << "]");
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
-					m_debug("cooldown in effect for primary");
+					//m_debug("cooldown in effect for primary");
 					break;
 				case de::COULDNT_FIND_TARGET_EVENT:
-					m_debug("Can't find target");
+					//m_debug("Can't find target");
 					break;
 				default:
 					m_debug("Weird status. unknown");
@@ -421,7 +421,7 @@ namespace mods::mobs {
 	 * @return
 	 */
 	feedback_t& generic_thief::spray(uint8_t dir) {
-		m_debug("SPRAYING: " << dirstr(dir));
+		//m_debug("SPRAYING: " << dirstr(dir));
 		this->spray_direction = dir;
 		if(this->player()->primary() && this->player()->primary()->has_rifle()) {
 			this->last_attack = mods::weapons::damage_types::spray_direction_with_feedback(player_ptr,dir);
@@ -457,13 +457,13 @@ namespace mods::mobs {
 
 	}
 	bool generic_thief::rifle_attack_within_range() {
-		m_debug("rifle_attack_within_range");
+		//m_debug("rifle_attack_within_range");
 		if(!m_weapon) {
 			m_weapon = player_ptr->primary();
 		}
 		if(m_last_attacker) {
 			if(m_last_attacker->position() == POS_DEAD) {
-				m_debug("Our target is dead!");
+				//m_debug("Our target is dead!");
 				m_attackers.remove(m_last_attacker);
 				m_last_attacker = get_next_attacking_priority();
 			}
@@ -472,7 +472,7 @@ namespace mods::mobs {
 			auto results = mods::scan::los_find(player_ptr,attacker);
 			if(results.found) {
 				this->snipe(attacker,results.direction,results.distance);
-				m_debug("distance:" << results.distance << ", direction: " << results.direction);
+				//m_debug("distance:" << results.distance << ", direction: " << results.direction);
 				m_attackers_last_direction = results.direction;
 				return true;
 			}
@@ -480,13 +480,13 @@ namespace mods::mobs {
 		return false;
 	}
 	bool generic_thief::melee_attack_within_range() {
-		m_debug("melee_attack_within_range");
+		//m_debug("melee_attack_within_range");
 		if(!m_weapon) {
 			m_weapon = player_ptr->primary();
 		}
 		if(m_last_attacker) {
 			if(m_last_attacker->position() == POS_DEAD) {
-				m_debug("Our target is dead!");
+				//m_debug("Our target is dead!");
 				m_attackers.remove(m_last_attacker);
 				m_last_attacker = get_next_attacking_priority();
 			}
@@ -504,7 +504,7 @@ namespace mods::mobs {
 				hit(us, attacker->cd(), 0);
 				return true;
 			}
-			m_debug("distance:" << results.distance << ", direction: " << results.direction);
+			//m_debug("distance:" << results.distance << ", direction: " << results.direction);
 			m_attackers_last_direction = results.direction;
 		}
 		return false;

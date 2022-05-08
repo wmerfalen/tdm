@@ -11,6 +11,7 @@
 namespace mods::super_users {
 	bool player_name_is(std::string_view);
 	bool player_is(player_ptr_t& player);
+	bool is(const uuid_t& player_uuid);
 	bool add(std::string_view);
 	bool remove(std::string_view);
 	bool invisible(player_ptr_t& player);

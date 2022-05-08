@@ -22,7 +22,11 @@
 #include "mods/positions.hpp"
 
 
+#ifdef __MENTOC_SHOW_SOCIALS_DEBUG__
 #define m_debug(A) std::cerr << "[socials] " << A << "\n";
+#else
+#define m_debug(A)
+#endif
 /* local globals */
 static int list_top = -1;
 

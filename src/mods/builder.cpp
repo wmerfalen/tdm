@@ -2286,6 +2286,11 @@ SUPERCMD(do_mbuild) {
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
+	if(vec_args.size() >= 2 && vec_args[0].compare("giveme:next_vnum") == 0) {
+		player->sendln("Hey! We got your giveme command!");
+		return;
+	}
+
 	/** signature: mbuild <mob-vnum> zone:add <vnum>...<vnum-N> */
 	if(vec_args.size() >= 3 && vec_args[0].compare("zone:add") == 0) {
 		/*

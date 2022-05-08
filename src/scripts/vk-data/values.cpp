@@ -3121,7 +3121,7 @@ CGET_DEF(std::string,MSG_YOU_FAIL_FEIGN_DEATH,"You fail at feigning death...\r\n
 CGET_DEF(std::string,ADVANCE_LEVEL_CONGRATS,"{grn}Congratulations on advancing,soldier! You are proving to be a well-rounded member of the {blu}Counter Terrorist Unit{/blu}.");
 CGET_DEF(std::string,ADVANCE_LEVEL_MESSAGE,"{grn}CONGRATS! You rise a level!{/grn}");
 CGET_DEF(std::string,ADVANCE_MULTIPLE_LEVELS_MESSAGE,"{grn}CONGRATS! You leveled up!{/grn}");
-CGET_DEF(uint8_t,LOOT_REWARD_RIFLE_LEVEL,20);
+CGET_DEF(uint8_t,LOOT_REWARD_RIFLE_LEVEL,10);
 CGET_DEF(uint8_t,MARINE_AR_SPRAY_INCENDIARY_CHANCE,3);
 CGET_DEF(uint8_t,MARINE_AR_SPRAY_INC_TIER_DICE_COUNT_MULTIPLIER,3);
 CGET_DEF(uint8_t,MARINE_AR_SPRAY_INC_TIER_DICE_SIDES_MULTIPLIER,3);

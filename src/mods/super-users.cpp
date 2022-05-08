@@ -109,6 +109,13 @@ namespace mods::super_users {
 		}
 		return std::find(super_users.begin(),super_users.end(),name) != super_users.end();
 	}
+	bool is(const uuid_t& player_uuid) {
+		auto p = ptr_by_uuid(player_uuid);
+		if(!p) {
+			return false;
+		}
+		return player_is(p);
+	}
 	bool player_is(player_ptr_t& player) {
 		return player_name_is(player->name());
 	}
