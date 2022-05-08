@@ -98,14 +98,14 @@ ACMD(do_quit) {
 		 *  situation.
 		 */
 
-		if(free_rent) {
-			Crash_rentsave(ch, 0);
-		}
+		//if(free_rent) {
+		//	Crash_rentsave(ch, 0);
+		//}
 
-		/* If someone is quitting in their house, let them load back here. */
-		if(!PLR_FLAGGED(ch, PLR_LOADROOM) && ROOM_FLAGGED(IN_ROOM(ch), ROOM_HOUSE)) {
-			GET_LOADROOM(ch) = GET_ROOM_VNUM(IN_ROOM(ch));
-		}
+		///* If someone is quitting in their house, let them load back here. */
+		//if(!PLR_FLAGGED(ch, PLR_LOADROOM) && ROOM_FLAGGED(IN_ROOM(ch), ROOM_HOUSE)) {
+		//	GET_LOADROOM(ch) = GET_ROOM_VNUM(IN_ROOM(ch));
+		//}
 
 		extract_char(ch);		/* Char is saved before extracting. */
 	}

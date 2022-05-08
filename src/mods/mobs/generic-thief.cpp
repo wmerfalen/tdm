@@ -14,13 +14,27 @@
 #undef m_debug
 #endif
 
-#define  __MENTOC_MODS_MOBS_generic_thief_SHOW_DEBUG_OUTPUT__
+#define  __MENTOC_MODS_MOBS_generic_thief_SHOW_TODO_OUTPUT__
+#ifdef  __MENTOC_MODS_MOBS_generic_thief_SHOW_TODO_OUTPUT__
+#define m_todo(a) mentoc_prefix_debug("m|m|generic-thief") << yellow_str("TODO:") << a << "\n"
+#else
+#define m_todo(a) ;;
+#endif
+
+//#define  __MENTOC_MODS_MOBS_generic_thief_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_generic_thief_SHOW_DEBUG_OUTPUT__
 //#define m_debug(a) if(this->is_fighting()){ mentoc_prefix_debug("m|m|mps") << a << "\n"; }
-#define m_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n"
+#define m_debug(a) mentoc_prefix_debug("m|m|generic-thief") << a << "\n"
 #else
 #define m_debug(a) ;;
 #endif
+
+#ifdef __MENTOC_MODS_MOBS_generic_thief_MUTE_ERROR_OUTPUT__
+#define m_error(a) ;;
+#else
+#define m_error(a) mentoc_prefix_debug("m|m|generic-thief") << red_str("ERROR:") << a << "\n";
+#endif
+
 namespace mods::mobs {
 	/**! @NEW_BEHAVIOUR_TREE@ !**/
 #if 0
@@ -126,7 +140,8 @@ namespace mods::mobs {
 	}
 	void generic_thief::set_variation(const std::string& v) {
 		for(const auto& type : EXPLODE(v,' ')) {
-			std::cerr << green_str("generic_thief::variation:") << type << "\n";
+			m_todo("Need to set variation for generic_thief [not implemented]: '" << type.c_str() << "'");
+			m_debug(green_str("generic_thief::variation:") << type);
 		}
 	}
 
@@ -217,7 +232,7 @@ namespace mods::mobs {
 		};
 		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const uuid_t& player) {
 			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				m_error(type().data() << ":" << red_str("USE AFTER FREE"));
 				return;
 			}
 			m_debug("pacify events");
@@ -233,7 +248,7 @@ namespace mods::mobs {
 		};
 		player_ptr->register_damage_event_callback(enrage_if,[&](const feedback_t& feedback,const uuid_t& player) {
 			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
+				m_error(type().data() << ":" << red_str("USE AFTER FREE"));
 				return;
 			}
 			auto attacker = ptr_by_uuid(feedback.attacker);
@@ -297,7 +312,8 @@ namespace mods::mobs {
 					player_ptr->primary()->rifle_instance->ammo = 255;
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
-					m_debug("No primary wieldded... wtf? (" << player_ptr->name().c_str() << ")");// << this->summarize(true));
+					m_debug("No primary wieldded... wtf? (" << player_ptr->name().c_str() << ")");
+					m_error("No primary wielded..." << player_ptr->name().c_str() << "[uuid:" << player_ptr->uuid() << "]");
 					break;
 				case de::COOLDOWN_IN_EFFECT_EVENT:
 					m_debug("cooldown in effect for primary");
@@ -307,12 +323,14 @@ namespace mods::mobs {
 					break;
 				default:
 					m_debug("Weird status. unknown");
+					m_error("Weird status. unknown" << player_ptr->name().c_str() << "[uuid:" << player_ptr->uuid() << "]");
 					break;
 			}
 		});
 
 		player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
 			if(player_ptr->room() >= world.size()) {
+				m_error("Room out of bounds" << player_ptr->name().c_str() << "[uuid:" << player_ptr->uuid() << "]");
 				return;
 			}
 			auto& room = world[player_ptr->room()];

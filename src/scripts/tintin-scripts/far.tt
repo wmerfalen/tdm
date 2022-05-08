@@ -12,6 +12,10 @@
 	#delay 0.2 foo;
 	#delay 0.3 #cr;
 	#delay 0.4 1;
+}
+
+#alias do_corpse_me
+{
 	#delay 0.9 csv_export_levels
 	#delay 1.0 n;
 	#delay 1.2 n;

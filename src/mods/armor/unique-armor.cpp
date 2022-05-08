@@ -44,7 +44,6 @@ namespace mods::armor {
 		if(!vest->armor()) {
 			return;
 		}
-		auto gauntlets = victim->equipment(WEAR_ARMS);
 
 		/**
 		 * !UNIQUE_ARMOR

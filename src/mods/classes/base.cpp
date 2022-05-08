@@ -345,13 +345,13 @@ namespace mods::classes {
 	base::ability_list_t& base::weapon_abilities() {
 		using skillset_t = ability_data_t::skillset_t;
 		m_weapon_abilities = {
-			{ASSAULT_RIFLES,"wpn-assault-rifles","Assault Rifles",skillset_t::WEAPON_HANDLING,&m_wpn_assault_rifles},
-			{SNIPER_RIFLES,"wpn-sniper-rifles","Sniper Rifles",skillset_t::WEAPON_HANDLING,&m_wpn_sniper_rifles},
-			{SUB_MACHINE_GUNS,"wpn-sub-machine-guns","Sub Machine Guns",skillset_t::WEAPON_HANDLING,&m_wpn_sub_machine_guns},
+			{ASSAULT_RIFLES,"wpn-ar","Assault Rifles",skillset_t::WEAPON_HANDLING,&m_wpn_assault_rifles},
+			{SNIPER_RIFLES,"wpn-sniper","Sniper Rifles",skillset_t::WEAPON_HANDLING,&m_wpn_sniper_rifles},
+			{SUB_MACHINE_GUNS,"wpn-smg","Sub Machine Guns",skillset_t::WEAPON_HANDLING,&m_wpn_sub_machine_guns},
 			{SHOTGUNS,"wpn-shotguns","Shotguns",skillset_t::WEAPON_HANDLING,&m_wpn_shotguns},
 			{PISTOLS,"wpn-pistols","Pistols",skillset_t::WEAPON_HANDLING,&m_wpn_pistols},
-			{MACHINE_PISTOLS,"wpn-machine-pistols","Machine Pistols",skillset_t::WEAPON_HANDLING,&m_wpn_machine_pistols},
-			{LIGHT_MACHINE_GUNS,"wpn-light-machine-guns","Light Machine Guns",skillset_t::WEAPON_HANDLING,&m_wpn_light_machine_guns},
+			{MACHINE_PISTOLS,"wpn-mp","Machine Pistols",skillset_t::WEAPON_HANDLING,&m_wpn_machine_pistols},
+			{LIGHT_MACHINE_GUNS,"wpn-lmg","Light Machine Guns",skillset_t::WEAPON_HANDLING,&m_wpn_light_machine_guns},
 		};
 		return m_weapon_abilities;
 	}
