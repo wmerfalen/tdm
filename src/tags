@@ -1941,7 +1941,7 @@ MENTOC_ACT	mods/rate-limiting.cpp	33;"	kind:macro	line:33	file:
 MENTOC_ACT	mods/rate-limiting.cpp	39;"	kind:macro	line:39	file:
 MENTOC_ACT	mods/rate-limiting.cpp	42;"	kind:macro	line:42	file:
 MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	55;"	kind:macro	line:55	file:
-MENTOC_BITVECTOR	mods/builder.cpp	4224;"	kind:macro	line:4224	file:
+MENTOC_BITVECTOR	mods/builder.cpp	4234;"	kind:macro	line:4234	file:
 MENTOC_CF	mods/yaml.hpp	102;"	kind:macro	line:102	file:
 MENTOC_CF	mods/yaml.hpp	84;"	kind:macro	line:84	file:
 MENTOC_CF	mods/yaml.hpp	89;"	kind:macro	line:89	file:
@@ -1992,8 +1992,8 @@ MENTOC_LAZY_COMP	mods/doors.hpp	352;"	kind:macro	line:352	file:
 MENTOC_LAZY_COMP	mods/doors.hpp	365;"	kind:macro	line:365	file:
 MENTOC_LAZY_INT	mods/builder.cpp	1932;"	kind:macro	line:1932	file:
 MENTOC_LAZY_INT	mods/builder.cpp	1951;"	kind:macro	line:1951	file:
-MENTOC_LAZY_ME	mods/builder.cpp	3631;"	kind:macro	line:3631	file:
-MENTOC_LAZY_ME	mods/builder.cpp	3640;"	kind:macro	line:3640	file:
+MENTOC_LAZY_ME	mods/builder.cpp	3641;"	kind:macro	line:3641	file:
+MENTOC_LAZY_ME	mods/builder.cpp	3650;"	kind:macro	line:3650	file:
 MENTOC_LAZY_ME	mods/util.cpp	1218;"	kind:macro	line:1218	file:
 MENTOC_LAZY_ME	mods/util.cpp	1230;"	kind:macro	line:1230	file:
 MENTOC_LAZY_ME	mods/util.cpp	1237;"	kind:macro	line:1237	file:
@@ -2056,10 +2056,10 @@ MENTOC_S	mods/orm/room.cpp	135;"	kind:macro	line:135	file:
 MENTOC_S	mods/orm/room.cpp	148;"	kind:macro	line:148	file:
 MENTOC_S	mods/orm/room.cpp	169;"	kind:macro	line:169	file:
 MENTOC_SEND_BUF_FAILED	comm.cpp	/^static int constexpr MENTOC_SEND_BUF_FAILED = -3;$/;"	kind:variable	line:219	file:
-MENTOC_SHOW_FLAG	mods/builder.cpp	4265;"	kind:macro	line:4265	file:
-MENTOC_SHOW_OBJ	mods/builder.cpp	2969;"	kind:macro	line:2969	file:
-MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2961;"	kind:macro	line:2961	file:
-MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2953;"	kind:macro	line:2953	file:
+MENTOC_SHOW_FLAG	mods/builder.cpp	4275;"	kind:macro	line:4275	file:
+MENTOC_SHOW_OBJ	mods/builder.cpp	2979;"	kind:macro	line:2979	file:
+MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2971;"	kind:macro	line:2971	file:
+MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2963;"	kind:macro	line:2963	file:
 MENTOC_STR_TO_ENUM_IMPL	mods/melee/combat-order.hpp	110;"	kind:macro	line:110	file:
 MENTOC_STR_TO_ENUM_IMPL	mods/melee/combat-order.hpp	63;"	kind:macro	line:63	file:
 MENTOC_T	mods/aoe.hpp	32;"	kind:macro	line:32	file:
@@ -2092,12 +2092,12 @@ MENTOC_TO_STR	mods/weapon.hpp	368;"	kind:macro	line:368	file:
 MENTOC_TO_STR	mods/weapon.hpp	380;"	kind:macro	line:380	file:
 MENTOC_TO_STR	mods/weapon.hpp	384;"	kind:macro	line:384	file:
 MENTOC_TO_STR	mods/weapon.hpp	391;"	kind:macro	line:391	file:
-MENTOC_TYPE	mods/builder.cpp	4198;"	kind:macro	line:4198	file:
+MENTOC_TYPE	mods/builder.cpp	4208;"	kind:macro	line:4208	file:
 MENTOC_UPTR	structs.h	1062;"	kind:macro	line:1062	file:
 MENTOC_UPTR	structs.h	1064;"	kind:macro	line:1064	file:
 MENTOC_WEAPON	mods/builder.cpp	352;"	kind:macro	line:352	file:
 MENTOC_WEAPON	mods/builder.cpp	369;"	kind:macro	line:369	file:
-MENTOC_WEAR	mods/builder.cpp	4181;"	kind:macro	line:4181	file:
+MENTOC_WEAR	mods/builder.cpp	4191;"	kind:macro	line:4191	file:
 MENU	config.cpp	/^const char *MENU =$/;"	kind:variable	line:269
 MESS_FILE	db.h	91;"	kind:macro	line:91	file:
 METAL_FLOORS	structs.h	/^			METAL_FLOORS,$/;"	kind:member	line:1189	struct:obj_data::room_data	typeref:enum:obj_data::room_data::	file:	access:public
@@ -3610,17 +3610,17 @@ SUPERCMD	interpreter.cpp	/^SUPERCMD(do_room_list) {$/;"	kind:function	line:116	s
 SUPERCMD	interpreter.h	15;"	kind:macro	line:15	file:
 SUPERCMD	mobact.cpp	/^	SUPERCMD(do_mobact) {$/;"	kind:function	line:310	namespace:mods::mobact	signature:(do_mobact)
 SUPERCMD	mods/boosters/adrenaline-shot.cpp	/^		SUPERCMD(do_adshot_test) {$/;"	kind:function	line:68	namespace:mods::boosters::adrenaline_shot_init	signature:(do_adshot_test)
-SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_ndelete) {$/;"	kind:function	line:6343	namespace:mods::builder	signature:(do_ndelete)
-SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nfind) {$/;"	kind:function	line:6376	namespace:mods::builder	signature:(do_nfind)
-SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_ngoto) {$/;"	kind:function	line:6398	namespace:mods::builder	signature:(do_ngoto)
-SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nhelp) {$/;"	kind:function	line:6349	namespace:mods::builder	signature:(do_nhelp)
-SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nset) {$/;"	kind:function	line:6331	namespace:mods::builder	signature:(do_nset)
+SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_ndelete) {$/;"	kind:function	line:6370	namespace:mods::builder	signature:(do_ndelete)
+SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nfind) {$/;"	kind:function	line:6403	namespace:mods::builder	signature:(do_nfind)
+SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_ngoto) {$/;"	kind:function	line:6425	namespace:mods::builder	signature:(do_ngoto)
+SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nhelp) {$/;"	kind:function	line:6376	namespace:mods::builder	signature:(do_nhelp)
+SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nset) {$/;"	kind:function	line:6358	namespace:mods::builder	signature:(do_nset)
 SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_mbuild) {$/;"	kind:function	line:2269	signature:(do_mbuild)
-SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_obuild) {$/;"	kind:function	line:3154	signature:(do_obuild)
-SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_rbuild) {$/;"	kind:function	line:5180	signature:(do_rbuild)
+SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_obuild) {$/;"	kind:function	line:3164	signature:(do_obuild)
+SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_rbuild) {$/;"	kind:function	line:5190	signature:(do_rbuild)
 SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_rbuild_sandbox) {$/;"	kind:function	line:1434	signature:(do_rbuild_sandbox)
 SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_sbuild) {$/;"	kind:function	line:1594	signature:(do_sbuild)
-SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_zbuild) {$/;"	kind:function	line:4461	signature:(do_zbuild)
+SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_zbuild) {$/;"	kind:function	line:4471	signature:(do_zbuild)
 SUPERCMD	mods/builder/bookmarks.cpp	/^	SUPERCMD(do_bookmark) {$/;"	kind:function	line:12	namespace:mods::builder::bookmarks	signature:(do_bookmark)
 SUPERCMD	mods/builder/bookmarks.cpp	/^	SUPERCMD(do_goto) {$/;"	kind:function	line:36	namespace:mods::builder::bookmarks	signature:(do_goto)
 SUPERCMD	mods/builder/bookmarks.cpp	/^	SUPERCMD(do_print_vnum) {$/;"	kind:function	line:70	namespace:mods::builder::bookmarks	signature:(do_print_vnum)
@@ -5383,7 +5383,7 @@ build_weapon_locker	mods/intimidate.cpp	/^void build_weapon_locker(room_vnum roo
 build_weapon_locker	mods/zone.cpp	/^	void build_weapon_locker(room_vnum room) {$/;"	kind:function	line:35	namespace:mods::zone	signature:(room_vnum room)
 builder	act.builder.cpp	/^namespace builder {$/;"	kind:namespace	line:713	file:
 builder	mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:182	class:mods	file:
-builder	mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:6330	class:mods	file:
+builder	mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:6357	class:mods	file:
 builder	mods/builder.hpp	/^namespace mods::builder {$/;"	kind:namespace	line:31	class:mods	file:
 builder	mods/builder/conbuild.hpp	/^namespace mods::builder {$/;"	kind:namespace	line:12	class:mods	file:
 builder	mods/builder/encode.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:4	class:mods	file:
@@ -9099,7 +9099,7 @@ init	mods/ban-system.cpp	/^		void init() {$/;"	kind:function	line:393	namespace:
 init	mods/bleed.cpp	/^	void init() {$/;"	kind:function	line:241	namespace:mods::bleed	signature:()
 init	mods/blind.cpp	/^	void init() {$/;"	kind:function	line:151	namespace:mods::blind	signature:()
 init	mods/boosters/adrenaline-shot.cpp	/^		void init() {$/;"	kind:function	line:78	namespace:mods::boosters::adrenaline_shot_init	signature:()
-init	mods/builder.cpp	/^	void init() {$/;"	kind:function	line:6417	namespace:mods::builder	signature:()
+init	mods/builder.cpp	/^	void init() {$/;"	kind:function	line:6444	namespace:mods::builder	signature:()
 init	mods/builder/bookmarks.cpp	/^	void init() {$/;"	kind:function	line:103	namespace:mods::builder::bookmarks	signature:()
 init	mods/builder/conbuild.cpp	/^	void init() {$/;"	kind:function	line:630	namespace:mods::builder::conbuild	signature:()
 init	mods/builder/hqbuild.cpp	/^	void init() {$/;"	kind:function	line:343	namespace:mods::builder::hqbuild	signature:()

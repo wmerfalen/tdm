@@ -2284,13 +2284,8 @@ SUPERCMD(do_mbuild) {
 	 */
 
 	mods::builder::initialize_builder(player);
+
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
-
-	if(vec_args.size() >= 2 && vec_args[0].compare("giveme:next_vnum") == 0) {
-		player->sendln("Hey! We got your giveme command!");
-		return;
-	}
-
 	/** signature: mbuild <mob-vnum> zone:add <vnum>...<vnum-N> */
 	if(vec_args.size() >= 3 && vec_args[0].compare("zone:add") == 0) {
 		/*
@@ -2445,6 +2440,8 @@ SUPERCMD(do_mbuild) {
 		        "  by the mud itself.\r\n" <<
 		        "  {grn}|____[example]{/grn}\r\n" <<
 		        "  |:: {wht}mbuild{/wht} {gld}targets 5 CARS ROOM_DARK HOUSEHOLDS DRUGS{/gld}\r\n" <<
+		        " {grn}mbuild{/grn} {red}giveme:next_vnum{/red}\r\n" <<
+		        "  |--> [supports encoded response]\r\n" <<
 		        " {grn}mbuild{/grn} {red} save <mob_id> {/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}instantiate <mob_vnum>{/red}\r\n" <<
@@ -2465,6 +2462,19 @@ SUPERCMD(do_mbuild) {
 		player->page(0);
 		return;
 	}
+	{
+		if(vec_args.size() >= 1 && vec_args[0].compare("giveme:next_vnum") == 0) {
+			auto vnum = next_mob_number();
+			player->sendln(CAT(vnum));
+			player->set_scripted_response(
+			mods::builder::encode_map({
+				{"next_vnum",std::to_string(vnum)}
+			}));
+			return;
+		}
+	}
+
+
 	{
 		/**
 		 * handles:
@@ -5188,11 +5198,16 @@ SUPERCMD(do_rbuild) {
 		                      "  {grn}|____[example]{/grn}\r\n" <<
 		                      "  |:: {wht}rbuild{/wht} {gld}help{/gld}\r\n" <<
 		                      "  |:: (this help menu will show up)\r\n" <<
+
+		                      " {grn}rbuild{/grn} {red}giveme:next_vnum{/red}\r\n" <<
+		                      "  |--> find an unused room vnum\r\n" <<
+
 		                      " {grn}rbuild{/grn} {red}vnum <vnum>{/red}\r\n" <<
 		                      "  |--> set the current room's vnum\r\n" <<
 		                      "  {grn}|____[example]{/grn}\r\n" <<
 		                      "  |:: {wht}rbuild{/wht} {gld}vnum 410{/gld}\r\n" <<
 		                      "  |:: (set vnum of the current room to 410)\r\n" <<
+
 		                      " {grn}rbuild{/grn} {red}set-recall{/red} {red}<mortal|immortal>{/red}\r\n" <<
 		                      "  |--> set the current room as recall\r\n" <<
 		                      "  {grn}|____[example]{/grn}\r\n" <<
@@ -5463,6 +5478,18 @@ SUPERCMD(do_rbuild) {
 		return;
 	}
 
+	{
+		auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+		if(vec_args.size() >= 1 && vec_args[0].compare("giveme:next_vnum") == 0) {
+			auto vnum = next_room_vnum();
+			player->sendln(CAT(vnum));
+			player->set_scripted_response(
+			mods::builder::encode_map({
+				{"next_vnum",std::to_string(vnum)}
+			}));
+			return;
+		}
+	}
 	auto args = mods::util::subcmd_args<9,args_t>(argument,"nickname");
 	if(args.has_value()) {
 		/**
