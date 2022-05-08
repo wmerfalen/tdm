@@ -1,7 +1,7 @@
 #ifndef  __MENTOC_MODS_MOBS_orthos_agent_BEHAVIOUR_TREE_HEADER__
 #define  __MENTOC_MODS_MOBS_orthos_agent_BEHAVIOUR_TREE_HEADER__
 
-#include "orthos_agent.hpp"
+#include "orthos-agent.hpp"
 #include "../radio.hpp"
 
 namespace mods::mobs::orthos_agent_behaviour_tree {

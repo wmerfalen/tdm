@@ -10,6 +10,7 @@
 #include "melee-combatant.hpp"
 #include "defiler.hpp"
 #include "orthos-agent.hpp"
+#include "orthos-spawn-sentinel.hpp"
 #include "../behaviour_tree_impl.hpp"
 
 #ifdef  __MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__
@@ -88,6 +89,11 @@ namespace mods::mobs {
 			case extended_types_t::ORTHOS_AGENT:
 				m_debug("[ found orthos agent ]");
 				orthos_agent::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum));
+				register_mob_with_btree = false;
+				break;
+			case extended_types_t::ORTHOS_SPAWN_SENTINEL:
+				m_debug("[ found orthos spawn sentinel ]");
+				orthos_spawn_sentinel::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum).data());
 				register_mob_with_btree = false;
 				break;
 		}

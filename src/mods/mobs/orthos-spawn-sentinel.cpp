@@ -1,4 +1,4 @@
-#include "mp-shotgunner.hpp"
+#include "orthos-spawn-sentinel.hpp"
 #include "../weapons/damage-types.hpp"
 #include "../combat-composer/snipe-target.hpp"
 #include "../scan.hpp"
@@ -7,21 +7,27 @@
 #include "extended-types.hpp"
 #include "../scan.hpp"
 
-#define  __MENTOC_MODS_MOBS_MP_SHOTGUNNER_SHOW_DEBUG_OUTPUT__
-#ifdef  __MENTOC_MODS_MOBS_MP_SHOTGUNNER_SHOW_DEBUG_OUTPUT__
-#define mps_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n";
-#define m_error(a) mentoc_prefix_debug("m|m|mps[ERROR]:") << a << "\n";
+#ifdef m_debug
+#undef m_debug
+#endif
+
+#define  __MENTOC_MODS_MOBS_ORTHOS_SPAWN_SENTINEL_SHOW_DEBUG_OUTPUT__
+#ifdef  __MENTOC_MODS_MOBS_ORTHOS_SPAWN_SENTINEL_SHOW_DEBUG_OUTPUT__
+#define m_debug(a) mentoc_prefix_debug("m|m|oss") << a << "\n";
+#define mps_debug(a) mentoc_prefix_debug("m|m|oss") << a << "\n";
+#define m_error(a) mentoc_prefix_debug("m|m|oss[ERROR]:") << a << "\n";
 #else
-#define mps_debug(a) ;;
-#define m_error(a) ;;
+#define m_debug(a)
+#define mps_debug(a)
+#define m_error(a)
 #endif
 namespace mods::mobs {
 	/**! @NEW_BEHAVIOUR_TREE@ !**/
-	mpshotgunner_map_t& mpshotgunner_map() {
-		static mpshotgunner_map_t m;
+	orthos_spawn_sentinel_map_t& orthos_spawn_sentinel_map() {
+		static orthos_spawn_sentinel_map_t m;
 		return m;
 	}
-	namespace mp_shotgunner_btree {
+	namespace orthos_spawn_sentinel_btree {
 		/**
 		 * @brief find the room with the most enemies, and go towards that direction
 		 *
@@ -58,15 +64,55 @@ namespace mods::mobs {
 			}
 			return should_fire;
 		}
-	};// end namespace mp_shotgunner_btree
-	void mp_shotgunner::create(uuid_t mob_uuid, std::string variation) {
-		mps_debug("mp_shotgunner create on uuid:" << mob_uuid);
+	};// end namespace orthos_spawn_sentinel_btree
+	void orthos_spawn_sentinel::watch_everywhere() {
+		mods::mobs::helpers::watch_multiple(world[this->room()].directions(),this->cd(),10);
+	}
+	void orthos_spawn_sentinel::attack_mode() {
+		m_weapon = player_ptr->primary();
+		m_debug(green_str("-----------------------------"));
+		m_debug(green_str("Orthos spawn sentinel simplified btree"));
+		m_debug(green_str("-----------------------------"));
+
+		if(!this->RCT) {
+			this->RCT = player()->get_ranged_combat_totals();
+		}
+		/** it is imperative that this be called AFTER get ranged combat totals */
+		if(!m_watching_everywhere) {
+			this->watch_everywhere();
+			m_watching_everywhere = true;
+		}
+		/** Scan for players */
+		int depth = RCT->max_range;
+		mods::scan::vec_player_data vpd;
+		mods::scan::los_scan_for_players(this->cd(),depth,&vpd);
+		std::map<uint8_t,int> scores;
+		for(auto&& v : vpd) {
+			auto victim = ptr_by_uuid(v.uuid);
+			if(!victim) {
+				m_debug("victim isn't good");
+				continue;
+			}
+			if(mods::rooms::is_peaceful(v.room_rnum)) {
+				m_debug("victim is in peaceful room");
+				continue;
+			}
+			if(IS_NPC(victim->cd())) {
+				m_debug("victim is an NPC");
+				continue;
+			}
+			snipe_target(victim,v.direction,v.distance);
+		}
+	}
+
+	void orthos_spawn_sentinel::create(uuid_t mob_uuid, std::string variation) {
+		mps_debug("orthos_spawn_sentinel create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
-			log("SYSERR: did not find player to populate mp_shotgunner with: %d",mob_uuid);
+			log("SYSERR: did not find player to populate orthos_spawn_sentinel with: %d",mob_uuid);
 			return;
 		}
-		mods::mobs::mpshotgunner_map().insert({mob_uuid,std::make_shared<mp_shotgunner>(mob_uuid,variation)});
+		mods::mobs::orthos_spawn_sentinel_map().insert({mob_uuid,std::make_shared<orthos_spawn_sentinel>(mob_uuid,variation)});
 	}
 
 	/**
@@ -75,20 +121,20 @@ namespace mods::mobs {
 	 * @param room
 	 * @param player
 	 */
-	void mp_shotgunner::enemy_spotted(room_rnum room,uuid_t player) {
+	void orthos_spawn_sentinel::enemy_spotted(room_rnum room,uuid_t player) {
 		mps_debug("##################################################################################" <<
-		          "[mp_shotgunner] enemy spotted:" << room << "\n" <<
+		          "[orthos_spawn_sentinel] enemy spotted:" << room << "\n" <<
 		          "##################################################################################");
 		this->spray(player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}
-	void mp_shotgunner::set_variation(std::string v) {
+	void orthos_spawn_sentinel::set_variation(std::string v) {
 		mps_debug("setting variation: '" << v << "'");
 		this->variation = v;
 		if(v.compare("sentinel") == 0) {
-			auto row = db_get_by_meta("mp_shotgunner_sentinel","mgs_mob_vnum",std::to_string(this->cd()->mob_specials.vnum));
+			auto row = db_get_by_meta("orthos_spawn_sentinel_sentinel","mgs_mob_vnum",std::to_string(this->cd()->mob_specials.vnum));
 			if(row.size() == 0) {
-				mps_debug("[mp_shotgunner][set_variation]-> cannot load data from postgres...");
+				mps_debug("[orthos_spawn_sentinel][set_variation]-> cannot load data from postgres...");
 				return;
 			}
 #define MG_REPORT(A)\
@@ -96,7 +142,7 @@ namespace mods::mobs {
 	#A << ": '" << row[0][#A].c_str() << "'" << \
 	"[[[[ -- MINI GUNNER SENTINEL DUMP -- ]]]]");
 
-			mps_debug("[status][mp_shotgunner][setting variation data]->");
+			mps_debug("[status][orthos_spawn_sentinel][setting variation data]->");
 			MG_REPORT(mgs_face_direction);
 			MG_REPORT(mgs_room_vnum);
 			MG_REPORT(mgs_mob_vnum);
@@ -106,10 +152,10 @@ namespace mods::mobs {
 			char_to_room(this->cd(),real_room(row[0]["mgs_room_vnum"].as<int>()));
 		}
 	}
-	str_map_t mp_shotgunner::report() {
+	str_map_t orthos_spawn_sentinel::report() {
 		return usages();
 	}
-	str_map_t mp_shotgunner::usages() {
+	str_map_t orthos_spawn_sentinel::usages() {
 		str_map_t m;
 		m = base_usages();
 		std::size_t attackers = std::distance(m_attackers.cbegin(),m_attackers.cend());
@@ -123,9 +169,9 @@ namespace mods::mobs {
 	/**
 	 * @brief damage_events registered here
 	 */
-	void mp_shotgunner::setup_damage_callbacks() {
-#ifdef __MENTOC_SHOW_MP_SHOTGUNNER_DAMAGE_CALLBACKS__
-#define m(A) std::cerr << green_str("[mp_shotgunner::setup_damage_callbacks]") << A << "\n";
+	void orthos_spawn_sentinel::setup_damage_callbacks() {
+#ifdef __MENTOC_SHOW_ORTHOS_SPAWN_SENTINEL_DAMAGE_CALLBACKS__
+#define m(A) std::cerr << green_str("[orthos_spawn_sentinel::setup_damage_callbacks]") << A << "\n";
 #else
 #define m(A)
 #endif
@@ -141,7 +187,7 @@ namespace mods::mobs {
 				return;
 			}
 			m("pacify events");
-			set_behaviour_tree("mp_shotgunner");
+			set_behaviour_tree("orthos_spawn_sentinel");
 		});
 
 		static const std::vector<de> move_closer = {
@@ -171,7 +217,7 @@ namespace mods::mobs {
 				return;
 			}
 			m("scan for attacker");
-			set_behaviour_tree("mp_shotgunner");
+			set_behaviour_tree("orthos_spawn_sentinel");
 		});
 
 		static const std::vector<de> breakaway_if = {
@@ -200,7 +246,7 @@ namespace mods::mobs {
 				return;
 			}
 
-			int decision = mp_shotgunner_btree::weighted_direction_decider(player_ptr);
+			int decision = orthos_spawn_sentinel_btree::weighted_direction_decider(player_ptr);
 			if(decision == -1) {
 				for(auto dir : room.directions()) {
 					if(mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false) {
@@ -336,7 +382,7 @@ namespace mods::mobs {
 				return;
 			}
 			auto& room = world[player_ptr->room()];
-			int decision = mp_shotgunner_btree::weighted_direction_decider(player_ptr);
+			int decision = orthos_spawn_sentinel_btree::weighted_direction_decider(player_ptr);
 			if(decision == -1) {
 				for(auto dir : room.directions()) {
 					if(room.dir_option[dir] && mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false) {
@@ -353,10 +399,12 @@ namespace mods::mobs {
 		});
 #undef m
 	}
-	void mp_shotgunner::init() {
+	void orthos_spawn_sentinel::init() {
 		smart_mob::init();
 		m_should_do_max[SHOULD_DO_ROAM] = LOWLY_SECURITY_ROAM_TICK();
 		m_should_do_max[SHOULD_DO_RANDOM_TRIVIAL] = LOWLY_SECURITY_RANDOM_TRIVIAL_TICK();
+		this->RCT = nullptr;
+		m_watching_everywhere = false;
 	}
 
 	/**
@@ -365,20 +413,20 @@ namespace mods::mobs {
 	 * @param mob_uuid
 	 * @param variation
 	 */
-	mp_shotgunner::mp_shotgunner(uuid_t mob_uuid, std::string variation) {
+	orthos_spawn_sentinel::orthos_spawn_sentinel(uuid_t mob_uuid, std::string variation) {
 		this->init();
 		this->uuid = mob_uuid;
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
-			log("SYSERR: did not find player to populate mp_shotgunner with: %d",mob_uuid);
+			log("SYSERR: did not find player to populate orthos_spawn_sentinel with: %d",mob_uuid);
 			this->loaded = false;
 			this->error = true;
 			return;
 		}
 		player_ptr = p;
 		auto ch = p->cd();
-		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::MP_SHOTGUNNER;
-		this->set_behaviour_tree("mp_shotgunner");
+		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::ORTHOS_SPAWN_SENTINEL;
+		this->set_behaviour_tree("orthos_spawn_sentinel");
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
@@ -392,15 +440,15 @@ namespace mods::mobs {
 	 *
 	 * @return
 	 */
-	feedback_t& mp_shotgunner::spray(uint8_t dir) {
+	feedback_t& orthos_spawn_sentinel::spray(uint8_t dir) {
 		mps_debug("SPRAYING: " << dirstr(dir));
 		this->spray_direction = dir;
 		this->last_attack = mods::weapons::damage_types::spray_direction_with_feedback(player_ptr,dir);
 		this->weapon_heat += 20; /** TODO: */
 		return this->last_attack;
 	}
-	void mp_shotgunner::attacked(const feedback_t& feedback) {
-		clear_list_if_count(&m_attackers,10);
+	void orthos_spawn_sentinel::attacked(const feedback_t& feedback) {
+		clear_list_if_count(&m_attackers,30);
 		auto p = ptr_by_uuid(feedback.attacker);
 		if(p) {
 			m_last_attacker = p;
@@ -408,13 +456,13 @@ namespace mods::mobs {
 			mps_debug("Saved attacker to memory");
 		}
 	}
-	player_ptr_t mp_shotgunner::get_next_attacking_priority() {
+	player_ptr_t orthos_spawn_sentinel::get_next_attacking_priority() {
 		if(m_attackers.empty()) {
 			return nullptr;
 		}
 		return m_attackers.front();
 	}
-	std::pair<bool,std::string> mp_shotgunner::move_to(const direction_t& dir) {
+	std::pair<bool,std::string> orthos_spawn_sentinel::move_to(const direction_t& dir) {
 		auto room_id = player_ptr->room();
 		auto opt = world[room_id].dir_option[dir];
 		if(opt && opt->to_room <= world.size()) {
@@ -424,7 +472,7 @@ namespace mods::mobs {
 		}
 		return {false,"stayed"};
 	}
-	void mp_shotgunner::shotgun_attack_within_range() {
+	void orthos_spawn_sentinel::shotgun_attack_within_range() {
 		mps_debug("shotgun_attack_within_range");
 		if(!m_weapon) {
 			m_weapon = player_ptr->primary();
@@ -462,7 +510,7 @@ namespace mods::mobs {
 		}
 	}
 
-	void mp_shotgunner::move_closer_to_target() {
+	void orthos_spawn_sentinel::move_closer_to_target() {
 		uint8_t loops = 1;
 		if(mods::rand::chance(10)) {
 			++loops;

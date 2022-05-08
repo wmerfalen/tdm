@@ -12,6 +12,7 @@ namespace mods::memory {
 namespace mods::mobs {
 	using tick_t = uint64_t;
 	struct smart_mob {
+			using scanned_t = mods::scan::vec_player_data_element;
 			/**====================================================*/
 			/** factory and destruct */
 			/**====================================================*/
@@ -146,6 +147,8 @@ namespace mods::mobs {
 
 			void save_attack_direction(const direction_t& direction);
 			virtual direction_t determine_chase_direction();
+			void snipe_target(player_ptr_t& victim, const direction_t& direction, uint8_t distance);
+			void snipe_target(const scanned_t& target);
 
 		protected:
 			direction_t m_last_attack_direction;

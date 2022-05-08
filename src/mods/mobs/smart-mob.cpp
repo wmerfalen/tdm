@@ -2,8 +2,9 @@
 #include "../rooms.hpp"
 #include "helpers.hpp"
 #include "../mob-equipment.hpp"
+#include "../combat-composer/snipe-target.hpp"
 
-//#define  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__ 
+//#define  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
 #define sm_debug(a) mentoc_prefix_debug("mods::mobs::smart_mob") << green_str("smart_mob") << a  << "\n";
 #else
@@ -32,6 +33,32 @@ namespace mods::mobs {
 		//return current->effective_range.first;
 		return weapon->rifle()->attributes->effective_firing_range;
 	}
+	void smart_mob::snipe_target(
+	    player_ptr_t& victim,
+	    const direction_t& direction,
+	    uint8_t distance) {
+		auto weapon = this->primary();
+		mods::combat_composer::snipe_target(
+		    player_ptr,
+		    victim,
+		    direction,
+		    distance,
+		    weapon
+		);
+	}
+	void smart_mob::snipe_target(const smart_mob::scanned_t& scanned) {
+		auto weapon = this->primary();
+		auto victim = ptr_by_uuid(scanned.uuid);
+		mods::combat_composer::snipe_target(
+		    player_ptr,
+		    victim,
+		    scanned.direction,
+		    scanned.distance,
+		    weapon
+		);
+	}
+
+
 	smart_mob::smart_mob() {
 		this->init();
 	}
