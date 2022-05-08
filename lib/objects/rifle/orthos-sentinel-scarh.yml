@@ -1,0 +1,49 @@
+# accuracy map
+accuracy_map: [
+100.00,
+100.00,
+100.00,
+100.00
+]
+ammo_max: 920 #integer
+ammo_type: 'ASSAULT_RIFLE' #string, constant enum
+chance_to_injure: 84.23 #float, out of 100
+clip_size: 92 #integer
+cooldown_between_shots: 2 #int, in ticks
+critical_chance: 84 #int, out of 100
+critical_range: 2 #integer, measured in rooms
+damage_map: [
+510.00,
+510.00,
+510.00,
+510.00
+]
+base_damage: 32845 #float
+disorient_amount: 473.14 #float
+headshot_bonus: 983.0 #float
+max_range: 12 #integer,measured in rooms
+range_multiplier: 2 #float, multiplied by 
+reload_time: 2 #int, measured in ticks
+rounds_per_minute: 80
+muzzle_velocity: 824
+effective_firing_range: 1
+manufacturer: 'CEREBUS ENG'
+type: 'ASSAULT_RIFLE' #string, type of weapon
+str_type: 'ASSAULT_RIFLE' #string, type of weapon
+name: 'heavily modified X11 SCAR-H Assault Rifle' #string
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'LEGENDARY'
+description: 'A heavily modified X11 SCAR-H Assault Rifle is lying here.'
+short_description: 'a heavily modified X11 SCAR-H Assault Rifle'
+action_description: 'heavily modified X11 SCAR-H Assault Rifle'
+damage_dice_count: 96
+damage_dice_sides: 93
+object_type: rifle
+feed_file: 'orthos-sentinel-scarh.yml'
+vnum: 213
