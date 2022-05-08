@@ -42,3 +42,4 @@ mods/catch2/
 src/scripts/tintin-scripts/histories/
 cppzmq/
 libzmq/
+valgrind.*
