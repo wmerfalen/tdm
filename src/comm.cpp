@@ -41,10 +41,12 @@
 #include "mods/resting.hpp"
 #include "mods/mobs/behaviour-tree-list.hpp"
 #include "mods/mobs/defiler-behaviour-tree.hpp"
+#include "mods/mobs/orthos-spawn-sentinel-btree.hpp"
 #include "mods/players/event-messages.hpp"
 #include "mods/message-server.hpp"
 #include "mods/ban-system.hpp"
 #include "mods/message-server.hpp"
+#include "mods/mobs/orthos-spawn-sentinel-btree.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -970,6 +972,7 @@ void run_behaviour_trees() {
 		}
 	}
 	mods::mobs::defiler_behaviour_tree::run_trees();
+	mods::mobs::orthos_spawn_sentinel_btree::run_trees();
 	rb_bht_debug("run_behaviour_trees [RETURN]");
 }
 

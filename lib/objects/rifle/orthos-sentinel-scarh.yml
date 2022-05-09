@@ -1,9 +1,9 @@
 # accuracy map
 accuracy_map: [
-100.00,
-100.00,
-100.00,
-100.00
+80.00,
+80.00,
+80.00,
+80.00
 ]
 ammo_max: 920 #integer
 ammo_type: 'ASSAULT_RIFLE' #string, constant enum

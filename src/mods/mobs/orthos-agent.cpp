@@ -394,11 +394,11 @@ namespace mods::mobs {
 				m_last_attacker = get_next_attacking_priority();
 			}
 		}
-		for(const auto& attacker : m_attackers) {
+		for(auto& attacker : m_attackers) {
 			auto results = mods::scan::los_find(player_ptr,attacker);
 			if(results.found == false) {
 				if(results.distance == best_distance()) {
-					auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,primary(),attacker,results.distance,results.direction);
+					this->snipe_target(attacker,results.direction,results.distance);
 					return;
 				}
 
@@ -494,16 +494,17 @@ namespace mods::mobs {
 	bool orthos_agent::attack_anyone_near_room() {
 		struct res {
 			direction_t direction;
+			uint8_t distance;
 			char_data* player;
 			res() = delete;
-			res(direction_t d, char_data* p) : direction(d), player(p) {}
+			res(direction_t d, uint8_t dist,char_data* p) : direction(d), distance(dist),player(p) {}
 		};
 		std::vector<res> finds;
 		for(const auto& direction : world[room()].directions()) {
 			for(const auto& scan : this->scan_attackable(direction)) {
 				if(scan.distance == best_distance() && !IS_NPC(scan.ch)) {
 					m_debug("best distance found: " << ptr(scan.ch)->name());
-					finds.emplace_back(res(direction,scan.ch));
+					finds.emplace_back(res(direction,scan.distance,scan.ch));
 				}
 			}
 		}
@@ -512,14 +513,13 @@ namespace mods::mobs {
 		}
 		std::size_t index = rand_number(0,finds.size()-1);
 		this->set_hunting({finds[index].player->uuid});
-		auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
-		                    player_ptr,
-		                    primary(),
-		                    ptr(finds[index].player),
-		                    best_distance(),
-		                    finds[index].direction
-		                );
-		return feedback.hits || feedback.damage;
+		auto target = ptr(finds[index].player);
+		this->snipe_target(
+		    target,
+		    finds[index].direction,
+		    finds[index].distance
+		);
+		return true;// TODO FIXME figure this out
 	}
 	void orthos_agent::clear_state() {
 		m_scanned_items.clear();
@@ -530,13 +530,11 @@ namespace mods::mobs {
 	void orthos_agent::door_entry_event(player_ptr_t& victim,const room_rnum room_id) {
 		std::tuple<bool,direction_t,int> r = mods::scan::los_find_player_with_depth(player_ptr,victim,RCT->max_range);
 		if(std::get<0>(r)) {
-			auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
-			                    player_ptr,
-			                    this->primary(),
-			                    victim,
-			                    std::get<2>(r),
-			                    std::get<1>(r)
-			                );
+			this->snipe_target(
+			    victim,
+			    std::get<1>(r),
+			    std::get<2>(r)
+			);
 		}
 	}
 
@@ -569,7 +567,7 @@ namespace mods::mobs {
 			if(IS_NPC(victim->cd())) {
 				continue;
 			}
-			auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(this->player(),this->primary(),victim,v.distance,v.direction);
+			this->snipe_target(v);
 		}
 
 	}

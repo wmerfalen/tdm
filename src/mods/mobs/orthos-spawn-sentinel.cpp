@@ -69,39 +69,22 @@ namespace mods::mobs {
 		mods::mobs::helpers::watch_multiple(world[this->room()].directions(),this->cd(),10);
 	}
 	void orthos_spawn_sentinel::attack_mode() {
-		m_weapon = player_ptr->primary();
-		m_debug(green_str("-----------------------------"));
-		m_debug(green_str("Orthos spawn sentinel simplified btree"));
-		m_debug(green_str("-----------------------------"));
+		for(auto& victim : m_attackers) {
+			m_weapon = player_ptr->primary();
+			m_debug(green_str("-----------------------------"));
+			m_debug(green_str("Orthos spawn sentinel simplified btree"));
+			m_debug(green_str("-----------------------------"));
 
-		if(!this->RCT) {
-			this->RCT = player()->get_ranged_combat_totals();
-		}
-		/** it is imperative that this be called AFTER get ranged combat totals */
-		if(!m_watching_everywhere) {
-			this->watch_everywhere();
-			m_watching_everywhere = true;
-		}
-		/** Scan for players */
-		int depth = RCT->max_range;
-		mods::scan::vec_player_data vpd;
-		mods::scan::los_scan_for_players(this->cd(),depth,&vpd);
-		std::map<uint8_t,int> scores;
-		for(auto&& v : vpd) {
-			auto victim = ptr_by_uuid(v.uuid);
-			if(!victim) {
-				m_debug("victim isn't good");
+			if(!this->RCT) {
+				this->RCT = player()->get_ranged_combat_totals();
+			}
+			auto depth = this->RCT->max_range;
+			int direction = mods::scan::los_find_player(player_ptr,victim,depth);
+			if(direction == -1) {
+				m_debug("Can't find attacker " << victim->name().c_str());
 				continue;
 			}
-			if(mods::rooms::is_peaceful(v.room_rnum)) {
-				m_debug("victim is in peaceful room");
-				continue;
-			}
-			if(IS_NPC(victim->cd())) {
-				m_debug("victim is an NPC");
-				continue;
-			}
-			snipe_target(victim,v.direction,v.distance);
+			snipe_target(victim,direction,depth);
 		}
 	}
 
@@ -166,6 +149,13 @@ namespace mods::mobs {
 		return m;
 
 	}
+	void dispatch_attacked(const uuid_t& mob, feedback_t feedback) {
+		if(has_orthos_spawn_sentinel_ptr(mob)) {
+			auto ptr = orthos_spawn_sentinel_ptr(mob);
+			ptr->attacked(feedback);
+		}
+	}
+
 	/**
 	 * @brief damage_events registered here
 	 */
@@ -220,78 +210,6 @@ namespace mods::mobs {
 			set_behaviour_tree("orthos_spawn_sentinel");
 		});
 
-		static const std::vector<de> breakaway_if = {
-			de::HIT_BY_MELEE_ATTACK,
-			de::HIT_BY_BLADED_MELEE_ATTACK,
-			de::HIT_BY_BLUNT_MELEE_ATTACK,
-		};
-		/** motivation of mp shotgunner is to get at optimal range to use shotgun primary weapon.
-		 * Do note, that the shotgun can be used in same room situations and is probably preferred in
-		 * some cases.
-		 */
-		player_ptr->register_damage_event_callback(breakaway_if,[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
-			auto& room = world[player_ptr->room()];
-			auto victim = ptr_by_uuid(feedback.attacker);
-			if(!victim) {
-				return;
-			}
-			auto weapon = player_ptr->primary();
-			auto secondary = player_ptr->secondary();
-			if(!weapon) {
-				m_error("mp-shotgunner doesnt have primary!");
-				return;
-			}
-
-			int decision = orthos_spawn_sentinel_btree::weighted_direction_decider(player_ptr);
-			if(decision == -1) {
-				for(auto dir : room.directions()) {
-					if(mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false) {
-						decision = dir;
-						break;
-					}
-				}
-			}
-			bool can_go = false;
-			switch(player_ptr->position()) {
-				case POS_DEAD:
-				case POS_MORTALLYW:
-				case POS_INCAP:
-				case POS_SLEEPING:
-					break;
-				case POS_STUNNED:
-				case POS_RESTING:
-				case POS_SITTING:
-					break;
-				case POS_FIGHTING:
-				case POS_STANDING:
-					if(player_ptr->fighting() && player_ptr->fighting()->room() == player_ptr->room()) {
-						can_go = mods::rand::chance(10);
-					}
-					break;
-				default:
-					break;
-			}
-			if(can_go && decision < sizeof(room.dir_option)) {
-				cd()->mob_specials.previous_room = player_ptr->room();
-				char_from_room(cd());
-				char_to_room(cd(),room.dir_option[decision]->to_room);
-				set_heading(decision);
-				mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,player_ptr->primary(),victim,0,OPPOSITE_DIR(decision));
-			} else {
-				if(mods::object_utils::can_attack_same_room(weapon)) {
-					mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,weapon,victim,0,NORTH);
-				} else if(secondary && mods::object_utils::can_attack_same_room(secondary)) {
-					mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,secondary,victim,0,NORTH);
-				} else {
-					/** Attempt to fight back with melee attacker */
-					mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,victim);
-				}
-			}
-		});
 
 		static const std::vector<de> desperation_move = {
 			de::YOU_ARE_INJURED_EVENT,
@@ -339,6 +257,23 @@ namespace mods::mobs {
 			de::HIT_BY_SHRAPNEL_DAMAGE,
 			de::HIT_BY_CRYOGENIC_DAMAGE,
 			de::HIT_BY_SHOCK_DAMAGE,
+			de::HIT_BY_RIFLE_ATTACK,
+			de::HIT_BY_MELEE_ATTACK,
+			de::HIT_BY_BLADED_MELEE_ATTACK,
+			de::HIT_BY_BLUNT_MELEE_ATTACK,
+
+			de::HIT_BY_INCENDIARY_DAMAGE,
+			de::HIT_BY_RADIOACTIVE_DAMAGE,
+			de::HIT_BY_ANTI_MATTER_DAMAGE,
+			de::HIT_BY_CORROSIVE_DAMAGE,
+			de::HIT_BY_EMP_DAMAGE,
+			de::HIT_BY_EXPLOSIVE_DAMAGE,
+			de::HIT_BY_SHRAPNEL_DAMAGE,
+			de::HIT_BY_CRYOGENIC_DAMAGE,
+			de::HIT_BY_SHOCK_DAMAGE,
+			de::HIT_BY_BONUS_INNATE_SNIPER_RIFLE_ATTACK,
+			de::HIT_BY_SHOTGUN_BLAST,
+
 		};
 
 		static const std::vector<de> upkeep_if = {
@@ -347,6 +282,9 @@ namespace mods::mobs {
 			de::COOLDOWN_IN_EFFECT_EVENT,
 			de::COULDNT_FIND_TARGET_EVENT,
 		};
+		player_ptr->register_damage_event_callback(whine_if,[&](const feedback_t& feedback,const uuid_t& player) {
+			dispatch_attacked(player,feedback);
+		});
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
 			if(!ptr_by_uuid(player)) {
 				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
@@ -448,6 +386,7 @@ namespace mods::mobs {
 		return this->last_attack;
 	}
 	void orthos_spawn_sentinel::attacked(const feedback_t& feedback) {
+		mps_debug("i've been attacked");
 		clear_list_if_count(&m_attackers,30);
 		auto p = ptr_by_uuid(feedback.attacker);
 		if(p) {

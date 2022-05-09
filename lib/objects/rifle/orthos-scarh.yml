@@ -6,7 +6,7 @@ accuracy_map: [
 80.00
 ]
 ammo_max: 220 #integer
-ammo_type: '' #string, constant enum
+ammo_type: 'ASSAULT_RIFLE' #string, constant enum
 chance_to_injure: 24.23 #float, out of 100
 clip_size: 32 #integer
 cooldown_between_shots: 3 #int, in ticks
@@ -46,3 +46,4 @@ damage_dice_count: 26
 damage_dice_sides: 33
 feed_file: 'orthos-scarh.yml'
 vnum: 203
+object_type: rifle

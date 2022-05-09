@@ -48,7 +48,7 @@ namespace mods::scan {
 			vec_room_list.clear();
 			los_scan_direction(player->cd(),depth,&vec_room_list,i_d,find_type_t::ANY);
 			for(auto info : vec_room_list) {
-				if(info.ch->uuid == victim->uuid()) {
+				if(info.ch && info.ch->uuid == victim->uuid()) {
 					return i_d;
 				}
 			}

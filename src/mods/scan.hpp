@@ -52,6 +52,15 @@ namespace mods {
 		void los_scan_for_players(char_data* ch,int depth,vec_player_data* vec_room_list);
 		void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction,find_type_t f);
 		void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction);
+		/**
+		 * @brief returns the direction of the player you're trying to find, or -1 if it can't find it. This uses find_type_t::ANY
+		 *
+		 * @param player
+		 * @param victim
+		 * @param depth
+		 *
+		 * @return direction or -1 if it can't be found
+		 */
 		int los_find_player(player_ptr_t& player,player_ptr_t& victim,int depth);
 		std::tuple<bool,direction_t,int> los_find_player_with_depth(player_ptr_t& player,player_ptr_t& victim,int depth);
 		std::tuple<bool,direction_t,int> los_find_player_with_depth(player_ptr_t& player,const uuid_t& victim,int depth);
