@@ -11,7 +11,7 @@
 #undef m_debug
 #endif
 
-#define  __MENTOC_MODS_MOBS_ORTHOS_SPAWN_SENTINEL_SHOW_DEBUG_OUTPUT__
+//#define  __MENTOC_MODS_MOBS_ORTHOS_SPAWN_SENTINEL_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_ORTHOS_SPAWN_SENTINEL_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|m|oss") << a << "\n";
 #define mps_debug(a) mentoc_prefix_debug("m|m|oss") << a << "\n";

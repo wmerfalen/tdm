@@ -4400,7 +4400,6 @@ __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG_OUTPUT__	mods/mobs/mini-gunner.cpp	10;
 __MENTOC_MODS_MOBS_MP_SHOTGUNNER_BEHAVIOUR_TREE_HEADER__	mods/mobs/mp-shotgunner-behaviour-tree.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_MP_SHOTGUNNER_SHOW_DEBUG_OUTPUT__	mods/mobs/mp-shotgunner.cpp	10;"	kind:macro	line:10	file:
 __MENTOC_MODS_MOBS_ORTHOS_SPAWN_SENTINEL_BEHAVIOUR_TREE_HEADER__	mods/mobs/orthos-spawn-sentinel-btree.hpp	2;"	kind:macro	line:2	file:
-__MENTOC_MODS_MOBS_ORTHOS_SPAWN_SENTINEL_SHOW_DEBUG_OUTPUT__	mods/mobs/orthos-spawn-sentinel.cpp	14;"	kind:macro	line:14	file:
 __MENTOC_MODS_MOBS_ROAM_PATTERN_HEADER__	mods/mobs/roam-pattern.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_ROOM_WATCHING_HEADER__	mods/mobs/room-watching.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_SMART_MOB_HEADER__	mods/mobs/smart-mob.hpp	2;"	kind:macro	line:2	file:
@@ -4606,7 +4605,6 @@ __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	8;"	
 __MENTOC_SHOW_ATTACHMENT_UNDERBARREL_DEBUG_OUTPUT__	mods/weapons/attachment-underbarrel.cpp	6;"	kind:macro	line:6	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	kind:macro	line:18	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mp-shotgunner-behaviour-tree.cpp	12;"	kind:macro	line:12	file:
-__MENTOC_SHOW_BEHAVIOUR_TREE_ORTHOS_SPAWN_SENTINEL_BTREE_DEBUG_OUTPUT__	mods/mobs/orthos-spawn-sentinel-btree.cpp	12;"	kind:macro	line:12	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_ERROR_OUTPUT__	mods/mobs/generic-thief-behaviour-tree.cpp	29;"	kind:macro	line:29	file:
 __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__	mods/calc-visibility.cpp	9;"	kind:macro	line:9	file:
 __MENTOC_SHOW_CORROSIVE_CLAYMORE_DEBUG_OUTPUT__	mods/weapons/corrosive-claymore.cpp	14;"	kind:macro	line:14	file:
