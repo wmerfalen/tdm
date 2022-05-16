@@ -1,127 +1,3 @@
-s
-e
-s
-e
-s
-e
-s
-d
-e
-s
-e
-js fixup();
-l
-n
-s
-w
-e
-d
-s
-w
-n
-w
-e
-s
-e
-n
-u
-w
-e
-n
-s
-n
-w
-e
-w
-e
-d
-u
-l
-d
-u
-s
-n
-s
-n
-s
-n
-recall
-js fixup();
-l
-recall
-s
-w
-e
-d
-s
-n
-s
-w
-e
-w
-n
-s
-n
-w
-n
-s
-n
-w
-n
-w
-recall
-s
-w
-d
-s
-w
-we
-e
-w
-n
-w
-e
-s
-e
-w
-e
-n
-u
-d
-js fixup();
-l
-recall
-n
-s
-w
-d
-u
-s
-n
-d
-u
-js fixup();
-recall
-l
-s
-w
-d
-l
-s
-u
-s
-w
-n
-w
-e
-s
-e
-n
-u
-e
-n
-e
-n
 e
 d
 e
@@ -298,3 +174,127 @@ js cmm();
 l
 n
 sdm
+help
+help pl
+help player
+help foot
+builder_help
+help builder
+help usage
+help mem
+builder
+builder_help
+n
+s
+n
+s
+n
+s
+n
+s
+l orthos
+mbuild list
+js cmm();
+sdm
+js cmm();
+mbuild list
+mbuild show 29
+mbuild show 28
+mbuild show 27
+mbuild show 26
+mbuild show 25
+mbuild show 24
+mbuild show 23
+mbuild show 22
+mbuild show 21
+mbuild show 1
+mbuild show 2
+mbuild show 3
+mbuild show 4
+mbuild show 5
+js cmm();
+mbuild list
+mbuild show 29
+mbuild action:add ISNPC,NODROP
+mbuild action:add 29 ISNPC,NODROP
+mbuild show 29
+mbuild action:add 29 NODROP
+mbuild action:add 29 ISNPC
+mbuild show 29
+js cmm();
+mbuild show 29
+js cmm();
+mbuild show 29
+1
+js cmm();
+mbuild show 29
+js cmm();
+mbuild show 29
+1
+js cmm();
+mbuild show 29
+l
+s
+n
+s
+l
+s
+n
+s
+l
+n
+s
+n
+l
+scan
+l
+n
+l
+s
+n
+s
+n
+s
+scan
+n
+nn
+MPORT
+nn
+l
+nn
+i
+eq
+giveme_dst7a
+help dst7
+admin:dst7a
+i
+eq
+nn
+l
+n
+MPORT
+k Orth
+reload
+n
+get Shotgun Ammo
+reload
+s
+k Orthos
+l
+l in Corpse
+mbuild show 29
+s
+n
+s
+n
+nn
+n
+s
+n
+s
+report
+repot
+help report
+npc_report
+s
+npc_report

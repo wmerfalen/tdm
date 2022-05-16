@@ -232,7 +232,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/blind mods/armor/unique-armor mods/armor/vest-bc89 mods/armor/gauntlets-xtv89 \
 					 mods/weapons/shotgun-charge \
 					 mods/mobs/orthos-spawn-sentinel \
-					 mods/mobs/orthos-spawn-sentinel-btree 
+					 mods/mobs/orthos-spawn-sentinel-btree mods/no-drop
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

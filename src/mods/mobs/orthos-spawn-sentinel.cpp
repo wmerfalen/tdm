@@ -177,7 +177,7 @@ namespace mods::mobs {
 				return;
 			}
 			m("pacify events");
-			set_behaviour_tree("orthos_spawn_sentinel");
+			set_behaviour_tree("orthos_sentinel_roam");
 		});
 
 		static const std::vector<de> move_closer = {
@@ -207,7 +207,7 @@ namespace mods::mobs {
 				return;
 			}
 			m("scan for attacker");
-			set_behaviour_tree("orthos_spawn_sentinel");
+			set_behaviour_tree("orthos_sentinel_roam");
 		});
 
 
@@ -364,7 +364,7 @@ namespace mods::mobs {
 		player_ptr = p;
 		auto ch = p->cd();
 		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::ORTHOS_SPAWN_SENTINEL;
-		this->set_behaviour_tree("orthos_spawn_sentinel");
+		this->set_behaviour_tree("orthos_sentinel_roam");
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;

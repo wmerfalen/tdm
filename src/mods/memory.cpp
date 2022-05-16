@@ -6,6 +6,7 @@
 #include "mobs/mini-gunner.hpp"
 #include "mobs/chaotic-meth-addict.hpp"
 #include "mobs/generic-thief.hpp"
+#include "interpreter.hpp"
 
 using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
 using shop_ptr_t = std::shared_ptr<shop_data_t>;
@@ -58,11 +59,7 @@ namespace mods::memory {
 		}
 		return s;
 	}
-	void print_footprints() {
-#ifdef __MENTOC_NO_FOOTPRINTS__
-		return;
-#endif
-
+	const std::string& build_footprints() {
 		for(const auto& g : mods::mobs::generic_thief_list()) {
 			save_footprint(g);
 		}
@@ -94,29 +91,29 @@ namespace mods::memory {
 		for(const auto& room : world) {
 			watchers += room.watchers.size();
 		}
-		std::cerr << "[memory footprint]\n" <<
-		          "------------------------------------------------------------------\n" <<
-		          "world.watchers:" << watchers << "\n" <<
-		          "obj_list: " << obj_list.size() << "\n" <<
-		          "obj_map: " << mods::globals::obj_map.size() << "\n" <<
-		          "socket_map: " << mods::globals::socket_map.size() << "\n" <<
-		          "obj_odmap: " << mods::globals::obj_odmap.size() << "\n" <<
-		          "player_chmap: " << mods::globals::player_chmap.size() << "\n" <<
-		          "player_name_map: " << mods::globals::player_name_map.size() << "\n" <<
-		          "room_list: " << mods::globals::room_list.size() << "\n" <<
-		          "player_list: " << mods::globals::player_list.size() << "\n" <<
-		          "mob_list: " << mob_list.size() << "\n" <<
-		          "ram_db: " << mods::globals::ram_db.size() << "\n" <<
-		          "obj_stat_pages: " << mods::globals::obj_stat_pages.size() << "\n" <<
-		          "current_tick: " << mods::globals::current_tick << "\n" <<
-		          "player_map: " << mods::globals::player_map.size() << "\n" <<
-		          "obj_proto: " << obj_proto.size() << "\n" <<
-		          "zone_table: " << zone_table.size() << "\n" <<
-		          "mods::behaviour_tree_impl: " << mods::behaviour_tree_impl::mob_list().size() << "\n" <<
-		          get_saved_footprints() <<
-		          "corrosive_claymore: " << cor << "\n" <<
-		          "shrapnel_claymore: " << shrapnel << "\n" <<
-		          "------------------------------------------------------------------\n";
+		static std::string f = CAT("[memory footprint]\n",
+		                           "------------------------------------------------------------------\n",
+		                           "world.watchers:", watchers, "\n",
+		                           "obj_list: ", obj_list.size(), "\n",
+		                           "obj_map: ", mods::globals::obj_map.size(), "\n",
+		                           "socket_map: ", mods::globals::socket_map.size(), "\n",
+		                           "obj_odmap: ", mods::globals::obj_odmap.size(), "\n",
+		                           "player_chmap: ", mods::globals::player_chmap.size(), "\n",
+		                           "player_name_map: ", mods::globals::player_name_map.size(), "\n",
+		                           "room_list: ", mods::globals::room_list.size(), "\n",
+		                           "player_list: ", mods::globals::player_list.size(), "\n",
+		                           "mob_list: ", mob_list.size(), "\n",
+		                           "ram_db: ", mods::globals::ram_db.size(), "\n",
+		                           "obj_stat_pages: ", mods::globals::obj_stat_pages.size(), "\n",
+		                           "current_tick: ", mods::globals::current_tick, "\n",
+		                           "player_map: ", mods::globals::player_map.size(), "\n",
+		                           "obj_proto: ", obj_proto.size(), "\n",
+		                           "zone_table: ", zone_table.size(), "\n",
+		                           "mods::behaviour_tree_impl: ", mods::behaviour_tree_impl::mob_list().size(), "\n",
+		                           get_saved_footprints(),
+		                           "corrosive_claymore: ", cor, "\n",
+		                           "shrapnel_claymore: ", shrapnel, "\n",
+		                           "------------------------------------------------------------------\n");
 
 #ifdef __MENTOC_SHOW_OBJ_LIST_MEMORY_OUTPUT__
 		std::cerr << "[obj_list]:\n" <<
@@ -126,11 +123,27 @@ namespace mods::memory {
 			++counts[obj->name.str()];
 		}
 		for(const auto& pair : counts) {
-			std::cerr << green_str("[") << pair.second << green_str("]:") << " " << yellow_str(pair.first) << "\n";
+			f += CAT(green_str("["), pair.second, green_str("]:"), " ", yellow_str(pair.first), "\n");
 		}
-		std::cerr << "\n" <<
-		          "------------------------------------------------------------------\n";
+		f += CAT("\n------------------------------------------------------------------\n");
 #endif
+		return f;
+	}
+	void print_footprints() {
+#ifdef __MENTOC_NO_FOOTPRINTS__
+		return;
+#endif
+		const auto& f = build_footprints();
+		std::cerr << f << "\n";
+
+	}
+
+	SUPERCMD(do_footprints) {
+		static const auto& f = build_footprints();
+		player->sendln(f);
+	}
+	void init() {
+		ADD_BUILDER_COMMAND("admin:footprints",do_footprints);
 	}
 };
 

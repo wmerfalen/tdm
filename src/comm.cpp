@@ -972,7 +972,6 @@ void run_behaviour_trees() {
 		}
 	}
 	mods::mobs::defiler_behaviour_tree::run_trees();
-	mods::mobs::orthos_spawn_sentinel_btree::run_trees();
 	rb_bht_debug("run_behaviour_trees [RETURN]");
 }
 

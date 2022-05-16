@@ -10,11 +10,18 @@
 #include "../radio.hpp"
 
 //#define  __MENTOC_SHOW_BEHAVIOUR_TREE_ORTHOS_SPAWN_SENTINEL_BTREE_DEBUG_OUTPUT__
+#include "../behaviour_tree_impl.hpp"
+#include "../mob-roam.hpp"
+#include "../query-objects.hpp"
+
+#define  __MENTOC_SHOW_BEHAVIOUR_TREE_ORTHOS_SPAWN_SENTINEL_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_ORTHOS_SPAWN_SENTINEL_BTREE_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[m.m.oss.btree:" << __LINE__ << "]->" << a << "\n";
 #else
 #define m_debug(a)
 #endif
+
+#define m_report(a) std::cerr << "[m.m.oss.btree:" << __LINE__ << "{REPORT}]->" << a << "\n";
 
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 
@@ -28,45 +35,31 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 	using vec_player_data = mods::scan::vec_player_data;
 	using TChildNode = mods::behaviour_tree_node<TArgumentType>::child_node_t;
 
+	using node = mods::behaviour_tree_impl::node;
+	using node_type = mods::behaviour_tree_impl::node::node_type_t;
+
 	TChildNode shotgun_attack() {
 		return TNode::create_leaf([](mods::npc& mob) -> TStatus {
 			orthos_spawn_sentinel_ptr(mob.uuid())->shotgun_attack_within_range();
 			return TStatus::SUCCESS;
 		});
 	}
-	/**
-	 * MP Shotgunner behaviour tree
-	 * ----------------------------
-	    [1] When attacked
-				[1] radio nearby units for help at coordinates
-				[2] immediately pursue until in same room
-				[3] fire shotgun
-				[4] repeat until dead or target dead
 
-			[2] When radio'd for help
-				[1] change behaviour tree to mps_backup_pursuit
-				[2] add reported player uuid to remember event
 
-			[mps_backup_pursuit behaviour tree]
-				[1] scan for specific target
-				[2] if found, head to that direction
-				[3] engage target if found
-				[4] repeat until dead or target dead
-				[5] forget target
-				[6] teleport back to zone cmd room
 
-	 */
 
-	TChildNode debug_echo_tree_name(str_t name) {
+	TChildNode debug_echo_tree_name(std::string n) {
+		static std::string name;
+		name = n;
 		return TNode::create_leaf([&](mods::npc& mob) -> TStatus {
 			auto g = orthos_spawn_sentinel_ptr(mob.uuid());
-#ifdef __MENTOC_SHOW_TREE_NAME__
-			std::cerr << "[debug_echo_tree_name][mob_uuid:" << mob.uuid() << "]" <<
-			          green_str(CAT("[tree:'",name,"']\n"));
-#endif
+			m_report("running tree name: " << name.c_str());
 			return TStatus::SUCCESS;
 		});
 	}
+
+
+
 	TChildNode shout_random() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = orthos_spawn_sentinel_ptr(mob.uuid());
@@ -74,10 +67,14 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 			return TStatus::SUCCESS;
 		});
 	}
+
+
+
 	TChildNode random_trivial_action() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto lsec = orthos_spawn_sentinel_ptr(mob.uuid());
 			if(!lsec->should_do(orthos_spawn_sentinel::SHOULD_DO_RANDOM_TRIVIAL)) {
+				m_debug("should_do returns false");
 				return TStatus::SUCCESS;
 			}
 			static constexpr uint8_t RANDOM_THINGS = 4;
@@ -86,25 +83,18 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 				default:
 					act("$n shifts $s weight and slowly goes back to standing still.",FALSE,mob.cd(),0,0,TO_ROOM);
 					break;
-				case 0:
+				case 2:
 					act("$n tilts $s sunglasses to see you with $s eyes.",FALSE,mob.cd(),0,0,TO_ROOM);
 					break;
-				case 1:
+				case 3:
 					act("$n scans the room slowly.",0,mob.cd(),0,0,TO_ROOM);
 					break;
 			}
 			return TStatus::SUCCESS;
 		});
 	}
-	/**
-	 * @brief set behaviour tree
-	 *
-	 * @tparam TNode
-	 * @tparam TArgumentType
-	 * @tparam TStatus
-	 *
-	 * @return
-	 */
+
+
 	TChildNode set_behaviour_tree_to_engage() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = orthos_spawn_sentinel_ptr(mob.uuid());
@@ -112,6 +102,12 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 			return TStatus::SUCCESS;
 		});
 	}
+
+
+
+
+
+
 	TChildNode set_behaviour_tree_to_pursuit() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = orthos_spawn_sentinel_ptr(mob.uuid());
@@ -119,31 +115,20 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 			return TStatus::SUCCESS;
 		});
 	}
-	/**
-	 * @brief spray dir
-	 *
-	 * @tparam TNode
-	 * @tparam TArgumentType
-	 * @tparam TStatus
-	 *
-	 * @return
-	 */
-	TChildNode spray_direction() {
+
+
+
+
+
+	TChildNode trigger_guard_neutralize() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = orthos_spawn_sentinel_ptr(mob.uuid());
-			mg->spray(mg->get_heading());
+			mg->act_to_room(CAT("$n places $s index finger on the trigger guard of his ",mg->primary()->name.c_str(),"."));
 			return TStatus::SUCCESS;
 		});
 	}
-	/**
-	 * @brief returns success if mg can still see a target
-	 *
-	 * @tparam TNode
-	 * @tparam TArgumentType
-	 * @tparam TStatus
-	 *
-	 * @return
-	 */
+
+
 	TChildNode can_still_see_target() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = orthos_spawn_sentinel_ptr(mob.uuid());
@@ -151,15 +136,8 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 		});
 	}
 
-	/**
-	 * @brief find targets, set heading and watching
-	 *
-	 * @tparam TNode
-	 * @tparam TArgumentType
-	 * @tparam TStatus
-	 *
-	 * @return
-	 */
+
+
 	TChildNode find_targets() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = orthos_spawn_sentinel_ptr(mob.uuid());
@@ -202,6 +180,8 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 			return TStatus::SUCCESS;
 		});
 	}
+
+
 	TChildNode find_attackers() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = orthos_spawn_sentinel_ptr(mob.uuid());
@@ -244,6 +224,8 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 			return TStatus::SUCCESS;
 		});
 	}
+
+
 	TChildNode move_toward_target() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = orthos_spawn_sentinel_ptr(mob.uuid());
@@ -334,48 +316,15 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 	mods::behaviour_tree_node<mods::npc&>::child_node_t shotgun_attack();
 
 
-	void make_mp_shotgunner_engage(TNode& tree) {
-		/**
-		 * SEQUENCE TREE
-		 * --------------
-		 * [ engage ]
-		 * [A-1] roll for chance of knowing attacker
-		 * 	[found person]
-		 * 		[1] set heading toward direction
-		 * 		[2] if not in same room, scan room
-		 * 			[-] repeat until 1 room away
-		 * 		[3] fire shotgun at target
-		 * 	[not found]
-		 * 		[1] head towards reported room
-		 * 		[2] loop A-1
-		 *
-		 */
-		tree.append_child(
-		TNode::create_sequence({
-			debug_echo_tree_name("mp_shotgunner_engage"),
-			shotgun_attack()
-		})
-		);
-	}
 
-	void make_mp_shotgunner_backup(TNode& tree) {
+	void make_sentinel_discipline(TNode& tree) {
 		/**
-		 * [ backup ]
-		 * [A-1] scan for reported person
-		 * 	[found person]
-		 * 		[1] set heading toward direction
-		 * 		[2] if not in same room, head to that room
-		 * 			[-] repeat until inside same room
-		 * 		[3] fire shotgun at target
-		 * 	[not found]
-		 * 		[1] head towards reported room
-		 * 		[2] loop A-1
-		 *
+		 * Orthos Sentinel places his index finger on the trigger guard of his [primary].
 		 */
 		tree.append_child(
 		TNode::create_sequence({
-			debug_echo_tree_name("mp_shotgunner_backup"),
-			spray_direction(),
+			debug_echo_tree_name("orthos_sentinel_discipline"),
+			trigger_guard_neutralize(),
 			find_targets(),
 			TNode::create_sequence({
 				can_still_see_target(),
@@ -384,12 +333,23 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 		})
 		);
 	}
+
+
+
+
+
+
+
 	TChildNode perform_random_non_hostile_action() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto g = orthos_spawn_sentinel_ptr(mob.uuid());
 			return TStatus::SUCCESS;
 		});
 	}
+
+
+
+
 	TChildNode scan_to_find_hostile_activity() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto g = orthos_spawn_sentinel_ptr(mob.uuid());
@@ -429,6 +389,12 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 			return TStatus::SUCCESS;
 		});
 	}
+
+
+
+
+
+
 	TChildNode move_toward_heading() {
 		return TNode::create_selector({
 			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
@@ -470,26 +436,40 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 		});
 
 	}
+
+
+
+
+
 	TChildNode report_hostile_activity() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			const auto& g = orthos_spawn_sentinel_ptr(mob.uuid());
-			m_debug("mps reporting hostile activity");
+			m_debug("reporting hostile activity");
 			mods::response_team::radio::report_violence(mob.uuid(),"Disciple 1, 810 charlie at {exact_location}");
 			return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
 		});
 	}
+
+
+
+
+
 	TChildNode engage_hostile() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			const auto& g = orthos_spawn_sentinel_ptr(mob.uuid());
-			m_debug("mps engaging with hostile");
+			m_debug("engaging with hostile");
 			g->hunt_hostile_targets();
 			return TStatus::SUCCESS;
 		});
 	}
-	void make_mp_shotgunner_pursuit(TNode& tree) {
+
+
+
+
+	void make_sentinel_hostile(TNode& tree) {
 		tree.append_child(
 		TNode::create_sequence({
-			debug_echo_tree_name("losec_pursuit"),
+			debug_echo_tree_name("orthos_sentinel_hostile"),
 			move_toward_heading(),
 			report_hostile_activity(),
 			engage_hostile(),
@@ -498,27 +478,46 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 		);
 	}
 
-	void make_mp_shotgunner(TNode& tree) {
+
+
+
+	void make_sentinel_roam(TNode& tree) {
 		tree.append_child(
 		TNode::create_sequence({
-			debug_echo_tree_name("orthos_spawn_sentinel_t"),
+			debug_echo_tree_name("orthos_sentinel_roam"),
 			random_trivial_action(),
 			scan_to_find_hostile_activity(),
 			set_behaviour_tree_to_pursuit()
 		})
 		);
 	}
-	void run_trees() {
-		m_debug("run trees");
-		for(auto& pair: orthos_spawn_sentinel_map()) {
-			auto& sentinel = pair.second;
-			m_debug("checking orthos_spawn_sentinel ptr");
-			if(!sentinel->alive()) {
-				continue;
-			}
-			sentinel->attack_mode();
-		}
+
+
+
+	std::map<std::string,node&> get_trees() {
+		m_debug("get_trees()");
+
+		static node sentinel_roam(node_type::SELECTOR);
+		static node sentinel_hostile(node_type::SELECTOR);
+		static node sentinel_witness_hunting(node_type::SELECTOR);
+		static node sentinel_wimpy(node_type::SELECTOR);
+		static node sentinel_discipline(node_type::SELECTOR);
+
+		make_sentinel_roam(sentinel_roam);
+		make_sentinel_hostile(sentinel_hostile);
+		make_sentinel_discipline(sentinel_discipline);
+
+
+		return {
+			{"orthos_sentinel_roam",sentinel_roam},
+			{"orthos_sentinel_hostile",sentinel_hostile},
+			{"orthos_sentinel_discipline",sentinel_discipline},
+		};
+
 	}
+
+
 };
 
 #undef m_debug
+#undef m_report

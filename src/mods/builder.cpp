@@ -375,7 +375,7 @@ namespace mods::builder {
 		}
 	};
 
-	std::array<std::pair<int,std::string>,19> mob_act_flags = { {
+	std::array<std::pair<int,std::string>,20> mob_act_flags = { {
 			{MOB_SPEC,"SPEC"},
 			{MOB_SENTINEL,"SENTINEL"},
 			{MOB_SCAVENGER,"SCAVENGER"},
@@ -394,7 +394,8 @@ namespace mods::builder {
 			{MOB_NOSLEEP,"NOSLEEP"},
 			{MOB_NOBASH,"NOBASH"},
 			{MOB_NOBLIND,"NOBLIND"},
-			{MOB_NOTDEADYET,"NOTDEADYET"}
+			{MOB_NOTDEADYET,"NOTDEADYET"},
+			{MOB_NODROP,"NODROP"},
 		}
 	};
 
@@ -2447,8 +2448,12 @@ SUPERCMD(do_mbuild) {
 		        " {grn}mbuild{/grn} {red}instantiate <mob_vnum>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}place <mob_vnum> <room_vnum> <tag>...<tag-N>{/red}\r\n" <<
 		        "  |--> will instantiate a mob of mob_vnum and place it in room_vnum with the specific tags.\r\n" <<
+
+
+		        /** Mob actions */
 		        " {grn}mbuild{/grn} {red}action:add <mob_id> <flag>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}action:remove <mob_id> <flag>{/red}\r\n" <<
+		        " {grn}mbuild{/grn} {red}action:clear <mob_id>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}action:list <mob_id>{/red}\r\n"
 		        ;
 		for(auto& cmd : mob_commands) {
@@ -2624,6 +2629,31 @@ SUPERCMD(do_mbuild) {
 			r_error(player,std::string("Unrecognized flag: ") + *flag);
 		}
 	}
+	args = mods::util::subcmd_args<14,args_t>(argument,"action:remove");
+	if(args.has_value()) {
+		//[ -  ] [ 0           ] [ 1    ]
+		//mbuild <action:clear> <mob_id>
+		auto arg_vec = args.value();
+		auto i_value = mods::util::stoi(arg_vec[1]);
+
+		if(!i_value.has_value()) {
+			r_error(player,"Please use a valid numeric value.");
+			return;
+		}
+
+		bool found = false;
+		auto index = i_value.value();
+		auto obj = grab_mobile(index,found);
+		if(!found) {
+			r_error(player,"Invalid mob number");
+			return;
+		}
+
+		obj->char_specials.saved.act = 0;
+		r_success(player,"Removed flag");
+		return;
+	}
+
 	args = mods::util::subcmd_args<14,args_t>(argument,"action:remove");
 	if(args.has_value()) {
 		//[ -  ] [ 0           ] [ 1    ] [ 2  ]

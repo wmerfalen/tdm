@@ -6,6 +6,7 @@
 #include "armor.hpp"
 #include "levels.hpp"
 #include "calc-visibility.hpp"
+#include "no-drop.hpp"
 
 #include "rooms.hpp"
 #include "injure.hpp"
@@ -20,8 +21,8 @@
 
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 
-#define __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
-#ifdef __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
+#define __MENTOC_SHOW_MODS_CORPSE_DEBUG_OUTPUT__
+#ifdef __MENTOC_SHOW_MODS_CORPSE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::corpse::debug]")  << MSG << "\n";
 #define m_error(MSG) mentoc_prefix_debug(red_str("[mods::corpse::ERROR]"))  << MSG << "\n";
 #else
@@ -228,7 +229,7 @@ namespace mods::corpse {
 		object_list_new_owner(corpse.get(), NULL);/** FIXME mods::weapons::damage_types::legacy */
 
 		/* transfer character's equipment to the corpse */
-		if(victim->is_npc()) {
+		if(victim->is_npc() && mods::no_drop::should_drop(victim)) {
 			for(i = 0; i < NUM_WEARS; i++) {
 				auto obj = victim->equipment(i);
 				if(obj) {

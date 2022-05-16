@@ -1789,6 +1789,10 @@ namespace mods {
 		send_to_room(room(),CAT("m_emp_resistance_percent :",m_emp_resistance_percent,"\r\n").c_str());
 		send_to_room(room(),CAT("m_shock_resistance_percent:",m_shock_resistance_percent,"\r\n").c_str());
 		send_to_room(room(),CAT("m_anti_matter_resistance_percent:",m_anti_matter_resistance_percent,"\r\n").c_str());
+		if(is_npc()) {
+			this->cd()->mob_specials.report(room());
+		}
+
 		send_to_room(room(), "{yel}[report-end]{/yel}\r\n\r\n");
 #undef MR
 #undef MRC

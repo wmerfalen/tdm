@@ -12,6 +12,7 @@
 #include "mobs/lowly-security-behaviour-tree.hpp"
 #include "mobs/mp-shotgunner-behaviour-tree.hpp"
 #include "mobs/car-thief-behaviour-tree.hpp"
+#include "mobs/orthos-spawn-sentinel-btree.hpp"
 
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
@@ -22,6 +23,9 @@ extern void hit(char_data *ch, char_data *victim, int type);
 #define bti_debug(a)
 #endif
 namespace mods::mobs::car_thief_behaviour_tree {
+	extern std::map<std::string,mods::behaviour_tree_impl::node&> get_trees();
+};
+namespace mods::mobs::orthos_spawn_sentinel_btree {
 	extern std::map<std::string,mods::behaviour_tree_impl::node&> get_trees();
 };
 namespace mods::mobs::generic_thief_behaviour_tree {
@@ -296,6 +300,7 @@ namespace mods::behaviour_tree_impl {
 
 		for(const auto& collection : {
 		            mods::mobs::car_thief_behaviour_tree::get_trees(),
+		            mods::mobs::orthos_spawn_sentinel_btree::get_trees(),
 		            //mods::mobs::generic_thief_behaviour_tree::get_trees(),
 		        }) {
 			for(const auto& pair : collection) {

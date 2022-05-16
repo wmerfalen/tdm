@@ -311,6 +311,7 @@ enum player_class_t {
 #define MOB_NOBASH	 (1 << 16) /* Mob can't be bashed (e.g. trees)	*/
 #define MOB_NOBLIND	 (1 << 17) /* Mob can't be blinded		*/
 #define MOB_NOTDEADYET   (1 << 18) /* (R) Mob being extracted.		*/
+#define MOB_NODROP (1 << 19) /* (R) Mob being extracted.		*/
 
 
 /* Preference flags: used by char_data.player_specials.pref */

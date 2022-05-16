@@ -713,10 +713,10 @@ void mob_special_data::import(const mob_special_data& other) {
 }
 void mob_special_data::report(room_rnum room) {
 	for(auto& uuid : this->memory) {
-		send_to_room(room, "Report: %s\r\n", CAT("memory:",(uuid)).c_str());
+		send_to_room(room, CAT("memory:",uuid,"\r\n").c_str());
 	}
 	std::vector<std::string> msg;
-#define MR(MSG,VALUE) msg.push_back(std::string(MSG) + std::string(":") + std::to_string(VALUE));
+#define MR(MSG,VALUE) msg.push_back(std::string("mob_special_data::") + std::string(MSG) + std::string(":") + std::to_string(VALUE));
 	MR("attack_type",this->attack_type);
 	MR("default_pos",this->default_pos);
 	MR("damnodice",this->damnodice);
@@ -731,7 +731,7 @@ void mob_special_data::report(room_rnum room) {
 	MR("mp",this->mp);
 #undef MR
 	for(auto m : msg) {
-		send_to_room(room, "Report: %s\r\n", m.c_str());
+		send_to_room(room, CAT("Report: ", m,"\r\n").c_str());
 	}
 }
 void mob_special_data::clear_behaviour_tree() {

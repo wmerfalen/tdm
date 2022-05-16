@@ -612,6 +612,7 @@ namespace mods {
 			if(mob_index.size() > i) {
 				mob_index[i].number++;
 			}
+			mob->char_specials().saved.act = mob_proto[i].char_specials.saved.act;
 			SET_BIT(mob->char_specials().saved.act, MOB_ISNPC);
 			GET_POS(mob->cd()) = POS_STANDING;
 			mob->uuid() = player_uuid();

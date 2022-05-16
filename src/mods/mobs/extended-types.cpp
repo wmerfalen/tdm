@@ -94,7 +94,7 @@ namespace mods::mobs {
 			case extended_types_t::ORTHOS_SPAWN_SENTINEL:
 				m_debug("[ found orthos spawn sentinel ]");
 				orthos_spawn_sentinel::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum).data());
-				register_mob_with_btree = false;
+				register_mob_with_btree = true;
 				break;
 		}
 		if(register_mob_with_btree) {
