@@ -1512,8 +1512,8 @@ struct mob_special_data {
 	memory_rec_t memory;
 	byte	attack_type;        /* The Attack Type Bitvector for NPC's     */
 	byte default_pos;        /* Default position for NPC                */
-	byte damnodice;          /* The number of damage dice's	       */
-	byte damsizedice;        /* The size of the damage dice's           */
+	uint16_t damnodice;          /* The number of damage dice's	       */
+	uint16_t damsizedice;        /* The size of the damage dice's           */
 	uuid_t snipe_tracking;
 	uint16_t behaviour_tree;
 	uint64_t behaviour_tree_flags;

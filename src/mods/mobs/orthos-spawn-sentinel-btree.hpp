@@ -5,6 +5,14 @@
 #include "../radio.hpp"
 
 namespace mods::mobs::orthos_spawn_sentinel_btree {
+	template <typename T>
+	concept NotPointer = !std::is_pointer_v<T>;
+
+	template <typename T>
+	requires(NotPointer<T>)
+	struct btree {
+		T value;
+	};
 	/**
 	 * MP Shotgunner behaviour tree
 	 * ----------------------------

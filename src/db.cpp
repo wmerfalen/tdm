@@ -130,7 +130,7 @@ room_rnum r_idle_room;
 
 char *credits = NULL;		/* game credits			 */
 char *news = NULL;		/* mud news			 */
-std::string motd = "Welcome to siege mud.";		/* message of the day - mortals */
+std::string motd = "Welcome to Tactical Denial.";		/* message of the day - mortals */
 char *imotd = NULL;		/* message of the day - immorts */
 std::string GREETINGS = "";		/* opening credits screen	*/
 char *help = NULL;		/* help screen			 */

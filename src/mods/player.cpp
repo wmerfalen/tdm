@@ -1790,7 +1790,9 @@ namespace mods {
 		send_to_room(room(),CAT("m_shock_resistance_percent:",m_shock_resistance_percent,"\r\n").c_str());
 		send_to_room(room(),CAT("m_anti_matter_resistance_percent:",m_anti_matter_resistance_percent,"\r\n").c_str());
 		if(is_npc()) {
+			send_to_room(room(),"--- mob specials report ---\r\n");
 			this->cd()->mob_specials.report(room());
+			send_to_room(room(),"--- END: mob specials report ---\r\n");
 		}
 
 		send_to_room(room(), "{yel}[report-end]{/yel}\r\n\r\n");

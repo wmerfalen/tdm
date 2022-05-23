@@ -516,7 +516,6 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 
 	}
 
-
 };
 
 #undef m_debug

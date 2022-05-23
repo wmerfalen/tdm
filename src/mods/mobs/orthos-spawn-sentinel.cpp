@@ -283,6 +283,7 @@ namespace mods::mobs {
 			de::COULDNT_FIND_TARGET_EVENT,
 		};
 		player_ptr->register_damage_event_callback(whine_if,[&](const feedback_t& feedback,const uuid_t& player) {
+			player_ptr->hp() = player_ptr->max_hp();
 			dispatch_attacked(player,feedback);
 		});
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
@@ -370,6 +371,7 @@ namespace mods::mobs {
 		this->error = false;
 		this->set_variation(variation);
 		bootstrap_equipment();
+		this->player_ptr->add_damage_nerf(100);
 	}
 	/**
 	 * @brief spray direction

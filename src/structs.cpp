@@ -758,7 +758,9 @@ mob_special_data::~mob_special_data() {
 	this->mp = 0;
 }
 char_point_data::char_point_data(const char_point_data& other) {
+#ifdef __MENTOC_SHOW_CHAR_POINT_DATA_DEBUG_OUTPUT__
 	std::cerr << "[char_point_data]::copy constructor\n";
+#endif
 	this->mana = other.mana;
 	this->max_mana = other.max_mana;
 	this->hit = other.hit;

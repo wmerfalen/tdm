@@ -47,6 +47,10 @@
 #include "mods/ban-system.hpp"
 #include "mods/message-server.hpp"
 #include "mods/mobs/orthos-spawn-sentinel-btree.hpp"
+namespace mods::mobs::room_watching {
+	extern void destroy_player(uuid_t);
+	extern void heartbeat();
+};
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -768,6 +772,7 @@ void game_loop(socket_t mother_desc) {
 				mods::globals::current_player = nullptr;
 				player->set_socket(operating_socket);
 				/** TODO: destroy_player needs to properly remove from all the player refs in mods::globals */
+				mods::mobs::room_watching::destroy_player(player->uuid());
 				destroy_player(std::move(player));
 				++i;
 				continue;
@@ -1068,6 +1073,10 @@ void heartbeat(int pulse) {
 
 	if(!(pulse % PULSE_CLEANUP_SCRIPTED_STEPS)) {
 		mods::scripted_sequence_runner::cleanup_scripted_steps();
+	}
+
+	if(!(pulse % 3)) {
+		mods::mobs::room_watching::heartbeat();
 	}
 }
 

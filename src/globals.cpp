@@ -35,6 +35,9 @@
 namespace mods::mob_equipment {
 	extern void decorate(const uuid_t& mob_uuid);
 };
+namespace mods::mobs::room_watching {
+	extern void destroy_player(uuid_t);
+};
 
 extern int errno;
 #define MODS_BREACH_DISORIENT 50
@@ -1303,6 +1306,7 @@ namespace mods {
 #else
 #define mgdp_debug(a) /**/
 #endif
+			mods::mobs::room_watching::destroy_player(pl_uuid);
 			auto player = ptr_by_uuid(pl_uuid);
 			if(!player) {
 				mgdp_debug("ptr_by_uuid returned an invalid player ptr... not removing from any structures!");
