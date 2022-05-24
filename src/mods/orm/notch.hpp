@@ -1,49 +1,49 @@
-#ifndef __MENTOC_MODS_ORM_player_achievements_HEADER__
-#define __MENTOC_MODS_ORM_player_achievements_HEADER__
+#ifndef __MENTOC_MODS_ORM_notch_HEADER__
+#define __MENTOC_MODS_ORM_notch_HEADER__
 
 #include "orm-base.hpp"
 
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-	static constexpr std::string_view player_achievements_table_name = "player_achievements";
-	struct player_achievements_record_t {
+	static constexpr std::string_view notch_table_name = "notch";
+	struct notch_record_t {
 		uint64_t id;
 		std::string name;
 		uint16_t points;
 		uint64_t player_id;
 		strmap_t export_class() {
 			strmap_t v;
-			v["pa_name"] = name;
-			v["pa_points"] = std::to_string(this->points);
-			v["ps_player_id"] = std::to_string(this->player_id);
+			v["n_name"] = name;
+			v["n_points"] = std::to_string(this->points);
+			v["n_player_id"] = std::to_string(this->player_id);
 			return std::move(v);
 		}
 		std::string table_name() const {
-			return player_achievements_table_name.data();
+			return notch_table_name.data();
 		}
 		std::string primary_key_name() {
 			return "id";
 		}
 	};
 
-	struct player_achievements : public mods::orm::orm_base<player_achievements,std::string> {
+	struct notch : public mods::orm::orm_base<notch,std::string> {
 		using primary_choice_t = std::string;
 		std::string table_name() const {
-			return player_achievements_table_name.data();
+			return notch_table_name.data();
 		}
 		std::string column_prefix() const {
-			return "pa_";
+			return "n_";
 		}
 		std::string id_column() const {
 			return "id";
 		}
-		player_achievements() {
+		notch() {
 			this->init();
 			loaded = 0;
 			id = 0;
 		}
-		~player_achievements() = default;
+		~notch() = default;
 
 		std::string primary_key_name() {
 			return id_column();
@@ -63,7 +63,7 @@ namespace mods::orm {
 		std::tuple<int16_t,std::string> delete_by_player(const uint64_t& player_id);
 		std::tuple<int16_t,std::string> load_by_player(const uint64_t& player_id);
 
-		std::vector<player_achievements_record_t> rows;
+		std::vector<notch_record_t> rows;
 		bool loaded;
 
 		uint64_t primary_key_id;
@@ -71,8 +71,9 @@ namespace mods::orm {
 		uint16_t points;
 		uint64_t player_id;
 	};
-	std::tuple<int16_t,std::string> load_player_skill_data(player_ptr_t& player, std::map<std::string,uint16_t>* data);
-	std::tuple<int16_t,std::string> sync_player_with_class_skills(const uint64_t& player_id, std::string_view player_class);
+	std::tuple<int16_t,std::string> increment_player_notch(player_ptr_t& player,std::string_view notch);
+	std::tuple<int16_t,std::string> load_player_notch_data(player_ptr_t& player, std::map<std::string,uint16_t>* data);
+	std::tuple<int16_t,std::string> sync_player_with_notch(const uint64_t& player_id, std::string_view player_class);
 };
 
 #endif

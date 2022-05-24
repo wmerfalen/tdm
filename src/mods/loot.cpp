@@ -126,7 +126,7 @@ namespace mods::loot::events {
 				mods::notch::advanced_level_achievement(player,"Who wants some?");
 				return;
 			} else if(same_level) {
-				award_by_rolling_between_tiers(player,npc,1,2);
+				award_by_rolling_between_tiers(player,npc,2,3);
 				mods::notch::medium_level_achievement(player,"Physically fit");
 				return;
 			} else {
