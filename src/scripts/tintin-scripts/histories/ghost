@@ -145,3 +145,111 @@ s
 l
 s
 n
+i
+eq
+get PSG Weapons
+wield PSG
+l
+l in Weapons
+get Glock Weapons
+wield PSG
+wield Glock
+get Pistol Ammo
+get Sniper Ammo
+l in Armor
+get vest Armor
+get Boots Armor
+get Shin Armor
+get Gauntlets Armor
+wear all
+i
+wear all
+i
+eq
+help
+help ball
+help mode
+help engagement_mode
+engagement_mode
+engagement_mode 1
+engagement_mode BALLISTIC
+help engage
+help rules
+rules_of_engagement
+help roe
+engage
+engagement
+engagement_mode
+engagement_mode Secondary
+l
+skills
+score
+set_rules_of_engagement secondary
+l
+score
+l
+n
+w
+MPS
+e
+w
+ee
+w
+ee
+1
+n
+e
+n
+e
+d
+e
+d
+e
+d
+e
+s
+w
+s
+w
+s
+w
+MPD
+nn
+n
+nn
+n
+s
+n
+l
+scan
+w
+e
+s
+w
+s
+scan
+w
+e
+w
+s
+w
+s
+w
+e
+n
+e
+n
+e
+n
+n 
+n
+nn
+n
+s
+d
+s
+w
+l
+e
+s
+n

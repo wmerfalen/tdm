@@ -13,6 +13,7 @@ namespace mods::help::pages {
 	HELP_STR h_combat=
 	    " Rules of engagement\r\n"
 	    "{hr}"
+	    "{grn}TL;DR: set_rules_of_engagement <ballistic|cqc|auxiliary|secondary>{/grn}\r\n"
 	    " There are different ranges of combat in TD.\r\n"
 	    " 1) Ranged combat\r\n"
 	    " 2) Close quarters combat\r\n"
@@ -76,7 +77,13 @@ namespace mods::help::pages {
 	    " distance and appears in your room, you will use the weapon in your secondary \r\n"
 	    " position.\r\n"
 	    "\r\n"
+	    " To set your Rules of Engagement, use the {grn}set_rules_of_engagement{/grn}  \r\n"
+	    " command. Here is an example:\r\n"
+	    " $ set_rules_of_engagement secondary\r\n"
+	    "\r\n"
+	    "\r\n"
 	    ;
+	HELP_STR h_set_rules_of_engagement = h_combat;
 	HELP_STR h_practice=
 	    "usage: practice <help>\r\n"
 	    "usage: practice <skill-shorthand>\r\n"

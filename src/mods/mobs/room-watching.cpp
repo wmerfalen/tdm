@@ -8,7 +8,13 @@
 #include <map>
 #include <set>
 
+#ifdef __MENTOC_SHOW_WATCH_ROOMS_HEARTBEAT__
 #define m_report(a) mentoc_prefix_debug("mods::mobs::room_watching::REPORT:") << a << "\n";
+#else
+#define m_report(a)
+#endif
+
+
 //#define __MENTOC_MODS_MOBS_ROOM_WATCHING_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_MOBS_ROOM_WATCHING_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("mods::mobs::room_watching") << a << "\n";
@@ -65,6 +71,7 @@ namespace mods::mobs::room_watching {
 	}
 
 	void heartbeat() {
+#ifdef __MENTOC_SHOW_WATCH_ROOMS_HEARTBEAT__
 		static std::set<std::string> names;
 		for(const auto& pair : player_to_room_map) {
 			auto p = ptr_by_uuid(pair.first);
@@ -75,6 +82,7 @@ namespace mods::mobs::room_watching {
 		for(const auto& name : names) {
 			m_report(name.c_str() << " is watching some rooms");
 		}
+#endif
 	}
 
 

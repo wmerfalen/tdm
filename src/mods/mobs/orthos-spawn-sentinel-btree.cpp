@@ -98,7 +98,7 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 	TChildNode set_behaviour_tree_to_engage() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = orthos_spawn_sentinel_ptr(mob.uuid());
-			mg->set_behaviour_tree("mp_shotgunner_engage");
+			mg->set_behaviour_tree("orthos_sentinel_engage");
 			return TStatus::SUCCESS;
 		});
 	}
@@ -111,7 +111,7 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 	TChildNode set_behaviour_tree_to_pursuit() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = orthos_spawn_sentinel_ptr(mob.uuid());
-			mg->set_behaviour_tree("mp_shotgunner_pursuit");
+			mg->set_behaviour_tree("orthos_sentinel_pursuit");
 			return TStatus::SUCCESS;
 		});
 	}
@@ -471,7 +471,6 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 		TNode::create_sequence({
 			debug_echo_tree_name("orthos_sentinel_hostile"),
 			move_toward_heading(),
-			report_hostile_activity(),
 			engage_hostile(),
 			set_behaviour_tree_to_engage()
 		})

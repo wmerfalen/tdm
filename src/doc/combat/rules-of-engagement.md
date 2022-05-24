@@ -22,7 +22,7 @@ your secondary weapon.
 You start out in Ballistic mode.
 
 # Setting your rules of engagement
-Synytax:
+Syntax:
 ```
 set_rules_of_engagement <ballistic|cqc|auxiliary|secondary>
 ```
