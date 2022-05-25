@@ -9,14 +9,14 @@ namespace mods::orm {
 	static constexpr std::string_view notch_table_name = "notch";
 	struct notch_record_t {
 		uint64_t id;
-		std::string name;
-		uint16_t points;
-		uint64_t player_id;
+		std::string n_name;
+		uint16_t n_points;
+		uint64_t n_player_id;
 		strmap_t export_class() {
 			strmap_t v;
-			v["n_name"] = name;
-			v["n_points"] = std::to_string(this->points);
-			v["n_player_id"] = std::to_string(this->player_id);
+			v["n_name"] = n_name;
+			v["n_points"] = std::to_string(this->n_points);
+			v["n_player_id"] = std::to_string(this->n_player_id);
 			return std::move(v);
 		}
 		std::string table_name() const {
@@ -52,7 +52,7 @@ namespace mods::orm {
 
 		void load_multi(const pqxx::result::reference&);
 		void populate(const uint64_t& player_id, const std::map<std::string,uint16_t>& data);
-		std::map<std::string,uint16_t> get_player_levels(const uint64_t& player_id, std::string_view player_class);
+		std::map<std::string,uint16_t> get_player_levels(const uint64_t& player_id, std::string_view notch);
 		void init();
 
 		void feed_multi(pqxx::result&);
@@ -62,18 +62,18 @@ namespace mods::orm {
 
 		std::tuple<int16_t,std::string> delete_by_player(const uint64_t& player_id);
 		std::tuple<int16_t,std::string> load_by_player(const uint64_t& player_id);
+		std::tuple<int16_t,std::string> load_by_player_and_notch(const uint64_t& player_id,std::string_view notch);
 
 		std::vector<notch_record_t> rows;
 		bool loaded;
 
 		uint64_t primary_key_id;
-		std::string name;
-		uint16_t points;
-		uint64_t player_id;
+		std::string n_name;
+		uint16_t n_points;
+		uint64_t n_player_id;
+		uint64_t id;
 	};
 	std::tuple<int16_t,std::string> increment_player_notch(player_ptr_t& player,std::string_view notch);
-	std::tuple<int16_t,std::string> load_player_notch_data(player_ptr_t& player, std::map<std::string,uint16_t>* data);
-	std::tuple<int16_t,std::string> sync_player_with_notch(const uint64_t& player_id, std::string_view player_class);
 };
 
 #endif

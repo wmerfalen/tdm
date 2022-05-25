@@ -746,8 +746,8 @@ DB_BOOT_SHP	db.h	19;"	kind:macro	line:19	file:
 DB_BOOT_WLD	db.h	15;"	kind:macro	line:15	file:
 DB_BOOT_ZON	db.h	18;"	kind:macro	line:18	file:
 DB_SAVE_CHAR	mods/players/db-load.hpp	/^		DB_SAVE_CHAR,$/;"	kind:enumerator	line:20	enum:mods::players::db_load::save_from_t	file:
-DD	mods/debug-pre-game.hpp	293;"	kind:macro	line:293	file:
-DD	mods/debug-pre-game.hpp	43;"	kind:macro	line:43	file:
+DD	mods/debug-pre-game.hpp	297;"	kind:macro	line:297	file:
+DD	mods/debug-pre-game.hpp	44;"	kind:macro	line:44	file:
 DEAD	mods/positions.hpp	/^	DEAD = mods::pos::DEAD,$/;"	kind:enumerator	line:19	enum:int8_t	file:
 DEAD	mods/positions.hpp	/^	constexpr static uint8_t DEAD       = 0;	\/* dead			*\/$/;"	kind:member	line:6	namespace:mods::pos	file:
 DEALER	structs.h	/^	DEALER = 17,$/;"	kind:enumerator	line:234	enum:player_class_t	file:
@@ -4602,6 +4602,8 @@ __MENTOC_MODS_scripted_stepS_HEADER__	mods/scripted-step.hpp	2;"	kind:macro	line
 __MENTOC_MODS_shock_HEADER__	mods/shock.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_shrapnel_HEADER__	mods/shrapnel.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_sneak_HEADER__	mods/sneak.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_ORM_UTIL_DEBUG_OUTPUT__	mods/orm/notch.cpp	139;"	kind:macro	line:139	file:
+__MENTOC_ORM_UTIL_DEBUG_OUTPUT__	mods/orm/notch.cpp	2;"	kind:macro	line:2	file:
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/search.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/util.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_PLR	db.cpp	2146;"	kind:macro	line:2146	file:
@@ -4642,6 +4644,8 @@ __MENTOC_SHOW_MODS_RIFLE_DEBUG_OUTPUT__	mods/rifle.cpp	19;"	kind:macro	line:19	f
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	kind:macro	line:8	file:
 __MENTOC_SHOW_SQL_DEBUG_OUTPUT__	mods/orm/inventory.cpp	1;"	kind:macro	line:1	file:
 __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__	mods/help.cpp	7;"	kind:macro	line:7	file:
+__MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__	mods/orm/notch.cpp	138;"	kind:macro	line:138	file:
+__MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__	mods/orm/notch.cpp	1;"	kind:macro	line:1	file:
 __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__	act.item.cpp	30;"	kind:macro	line:30	file:
 __MENTOC_SHOW_armor_calculator_DEBUG_OUTPUT__	mods/melee/muay-thai-teep.cpp	14;"	kind:macro	line:14	file:
 __MENTOC_SHOW_armor_calculator_DEBUG_OUTPUT__	mods/weapons/armor-calculator.cpp	14;"	kind:macro	line:14	file:
@@ -6542,7 +6546,7 @@ decrease_spray_shot_ammo	mods/weapons/damage-types.cpp	/^	void decrease_spray_sh
 decrypt	mods/crypto.cpp	/^int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,$/;"	kind:function	line:49	namespace:mods::crypto	signature:(unsigned char *ciphertext, int ciphertext_len, unsigned char *key, unsigned char *iv, unsigned char *plaintext)
 decrypt_buffer	mods/crypto.cpp	/^	std::string decrypt_buffer(std::string_view in_ciphertext,std::string_view in_key,std::string in_iv,std::string buffer){$/;"	kind:function	line:111	namespace:mods::crypto	signature:(std::string_view in_ciphertext,std::string_view in_key,std::string in_iv,std::string buffer)
 deep_object_parser_t	mods/deep-object-parser.hpp	/^	struct deep_object_parser_t {$/;"	kind:struct	line:15	namespace:mods	file:
-deep_object_parser_test	mods/debug-pre-game.hpp	/^	void deep_object_parser_test() {$/;"	kind:function	line:69	namespace:mods::debug::pre_game	signature:()
+deep_object_parser_test	mods/debug-pre-game.hpp	/^	void deep_object_parser_test() {$/;"	kind:function	line:70	namespace:mods::debug::pre_game	signature:()
 default_colors	globals.cpp	/^		static const std::map<std::string_view,std::string_view> default_colors = {$/;"	kind:member	line:748	namespace:mods::globals	file:
 default_colors	mods/util.cpp	/^	static std::map<std::string_view,std::string_view> default_colors = {$/;"	kind:member	line:23	namespace:mods::util	file:
 default_pos	structs.h	/^	byte default_pos;        \/* Default position for NPC                *\/$/;"	kind:member	line:1514	struct:mob_special_data	file:	access:public
@@ -6580,7 +6584,7 @@ delete_by_id	mods/orm/player-contract-state.cpp	/^	std::tuple<int16_t,std::strin
 delete_by_level	mods/orm/skill-points.cpp	/^	std::tuple<int16_t,std::string> skill_points::delete_by_level(uint16_t level) {$/;"	kind:function	line:5	class:mods::orm::skill_points	signature:(uint16_t level)
 delete_by_mob_vnum	mods/builder.cpp	/^	std::tuple<bool,std::string> delete_by_mob_vnum(std::string_view mob_vnum) {$/;"	kind:function	line:255	namespace:mods::builder	signature:(std::string_view mob_vnum)
 delete_by_mob_vnum	mods/orm/mob-roam.cpp	/^	std::tuple<int16_t,std::string> mob_roam::delete_by_mob_vnum(mob_vnum mob) {$/;"	kind:function	line:33	class:mods::orm::mob_roam	signature:(mob_vnum mob)
-delete_by_player	mods/orm/notch.cpp	/^	std::tuple<int16_t,std::string> notch::delete_by_player(const uint64_t& player_id) {$/;"	kind:function	line:6	class:mods::orm::notch	signature:(const uint64_t& player_id)
+delete_by_player	mods/orm/notch.cpp	/^	std::tuple<int16_t,std::string> notch::delete_by_player(const uint64_t& player_id) {$/;"	kind:function	line:18	class:mods::orm::notch	signature:(const uint64_t& player_id)
 delete_by_player	mods/orm/player-skill-points.cpp	/^	std::tuple<int16_t,std::string> player_skill_points::delete_by_player(const uint64_t& player_id) {$/;"	kind:function	line:6	class:mods::orm::player_skill_points	signature:(const uint64_t& player_id)
 delete_by_player	mods/orm/player-skill-usage.cpp	/^	std::tuple<int16_t,std::string> player_skill_usage::delete_by_player(const uint64_t& player_id) {$/;"	kind:function	line:8	class:mods::orm::player_skill_usage	signature:(const uint64_t& player_id)
 delete_by_player_class	mods/orm/skill-trees.cpp	/^	std::tuple<int16_t,std::string> skill_trees::delete_by_player_class(std::string_view player_class) {$/;"	kind:function	line:5	class:mods::orm::skill_trees	signature:(std::string_view player_class)
@@ -6852,7 +6856,7 @@ do_advance	act.wizard.cpp	/^SUPERCMD(do_advance);$/;"	kind:variable	line:81
 do_advance	interpreter.cpp	/^ACMD(do_advance);$/;"	kind:variable	line:182
 do_affect_me	interpreter.cpp	/^ACMD(do_affect_me);$/;"	kind:variable	line:274
 do_alias	interpreter.cpp	/^ACMD(do_alias);$/;"	kind:variable	line:183
-do_armor_calculator	mods/debug-pre-game.hpp	/^	void do_armor_calculator() {$/;"	kind:function	line:141	namespace:mods::debug::pre_game	signature:()
+do_armor_calculator	mods/debug-pre-game.hpp	/^	void do_armor_calculator() {$/;"	kind:function	line:142	namespace:mods::debug::pre_game	signature:()
 do_assist	interpreter.cpp	/^ACMD(do_assist);$/;"	kind:variable	line:184
 do_at	act.wizard.cpp	/^SUPERCMD(do_at);$/;"	kind:variable	line:63
 do_at	interpreter.cpp	/^ACMD(do_at);$/;"	kind:variable	line:185
@@ -7212,7 +7216,7 @@ do_wiznet	act.wizard.cpp	/^SUPERCMD(do_wiznet);$/;"	kind:variable	line:92
 do_wiznet	interpreter.cpp	/^ACMD(do_wiznet);$/;"	kind:variable	line:392
 do_wizutil	act.wizard.cpp	/^SUPERCMD(do_wizutil);$/;"	kind:variable	line:94
 do_wizutil	interpreter.cpp	/^ACMD(do_wizutil);$/;"	kind:variable	line:393
-do_wrapper	mods/debug-pre-game.hpp	/^	void do_wrapper() {$/;"	kind:function	line:103	namespace:mods::debug::pre_game	signature:()
+do_wrapper	mods/debug-pre-game.hpp	/^	void do_wrapper() {$/;"	kind:function	line:104	namespace:mods::debug::pre_game	signature:()
 do_write	act.comm.cpp	/^ACMD(do_write);$/;"	kind:variable	line:39
 do_write	interpreter.cpp	/^ACMD(do_write);$/;"	kind:variable	line:394
 do_xray_shot	mods/classes/class-commands.hpp	/^ACMD(do_xray_shot);$/;"	kind:variable	line:8
@@ -7325,7 +7329,7 @@ dump	mods/orm/contract-steps.hpp	/^		std::string& dump() {$/;"	kind:function	lin
 dump	mods/orm/orm-base.hpp	/^			std::string dump() {$/;"	kind:function	line:79	struct:mods::orm::orm_base	access:public	signature:()
 dump	mods/orm/player-base-ability.cpp	/^	void player_base_ability::dump() {$/;"	kind:function	line:151	class:mods::orm::player_base_ability	signature:()
 dump	mods/scripted-step.hpp	/^		std::string dump() const {$/;"	kind:function	line:45	struct:mods::scripted_step	access:public	signature:() const
-dump	mods/util-map.hpp	/^			static inline void dump(std::map<TKey,TVal> m){$/;"	kind:function	line:22	namespace:mods::util::maps	signature:(std::map<TKey,TVal> m)
+dump	mods/util-map.hpp	/^			static inline void dump(std::map<TKey,TVal> m) {$/;"	kind:function	line:22	namespace:mods::util::maps	signature:(std::map<TKey,TVal> m)
 dump	spec_assign.cpp	/^SPECIAL(dump);$/;"	kind:variable	line:25
 dump	spec_procs.cpp	/^SPECIAL(dump);$/;"	kind:variable	line:40
 dump_cols	mods/orm/room.cpp	/^	std::string room::dump_cols() {$/;"	kind:function	line:109	class:mods::orm::room	signature:()
@@ -7677,7 +7681,7 @@ export_class	mods/orm/mob-equipment-map.cpp	/^	strmap_t mob_equipment_map::expor
 export_class	mods/orm/mob-equipment.cpp	/^	strmap_t mob_equipment::export_class() {$/;"	kind:function	line:131	class:mods::orm::mob_equipment	signature:()
 export_class	mods/orm/mob-roam.cpp	/^	strmap_t mob_roam::export_class() {$/;"	kind:function	line:67	class:mods::orm::mob_roam	signature:()
 export_class	mods/orm/mob-roam.hpp	/^		strmap_t export_class() {$/;"	kind:function	line:13	struct:mods::orm::mob_roam_record_t	access:public	signature:()
-export_class	mods/orm/notch.cpp	/^	strmap_t notch::export_class() {$/;"	kind:function	line:40	class:mods::orm::notch	signature:()
+export_class	mods/orm/notch.cpp	/^	strmap_t notch::export_class() {$/;"	kind:function	line:52	class:mods::orm::notch	signature:()
 export_class	mods/orm/notch.hpp	/^		strmap_t export_class() {$/;"	kind:function	line:15	struct:mods::orm::notch_record_t	access:public	signature:()
 export_class	mods/orm/orm-base.hpp	/^			virtual strmap_t export_class() {$/;"	kind:function	line:281	struct:mods::orm::orm_base	access:public	signature:()
 export_class	mods/orm/player-base-ability.cpp	/^	strmap_t player_base_ability::export_class() {$/;"	kind:function	line:17	class:mods::orm::player_base_ability	signature:()
@@ -7850,7 +7854,7 @@ feed_multi	mods/json/export.cpp	/^		void feed_multi(pqxx::result& r) {$/;"	kind:
 feed_multi	mods/orm/armor-index.cpp	/^	void armor_index::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:45	class:mods::orm::armor_index	signature:(pqxx::result& in_rows)
 feed_multi	mods/orm/mini-game.hpp	/^		int16_t feed_multi(TResultSet rows){$/;"	kind:function	line:34	struct:mods::orm::mini_game	access:public	signature:(TResultSet rows)
 feed_multi	mods/orm/mob-roam.cpp	/^	void mob_roam::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:77	class:mods::orm::mob_roam	signature:(pqxx::result& in_rows)
-feed_multi	mods/orm/notch.cpp	/^	void notch::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:54	class:mods::orm::notch	signature:(pqxx::result& in_rows)
+feed_multi	mods/orm/notch.cpp	/^	void notch::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:67	class:mods::orm::notch	signature:(pqxx::result& in_rows)
 feed_multi	mods/orm/player-skill-points.cpp	/^	void player_skill_points::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:54	class:mods::orm::player_skill_points	signature:(pqxx::result& in_rows)
 feed_multi	mods/orm/player-skill-usage.cpp	/^	void player_skill_usage::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:59	class:mods::orm::player_skill_usage	signature:(pqxx::result& in_rows)
 feed_multi	mods/orm/rifle-index.cpp	/^	void rifle_index::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:45	class:mods::orm::rifle_index	signature:(pqxx::result& in_rows)
@@ -8101,7 +8105,7 @@ foreach_all	mods/loops.hpp	/^		static inline void foreach_all(function_t func) {
 foreach_all	mods/loops.hpp	/^	static inline void foreach_all(all_function_t func) {$/;"	kind:function	line:98	namespace:mods::loops	signature:(all_function_t func)
 foreach_all_chars	mods/loops.cpp	/^	void foreach_all_chars(all_function_t func){$/;"	kind:function	line:38	namespace:mods::loops	signature:(all_function_t func)
 foreach_in_room	mods/loops.cpp	/^	void foreach_in_room(std::size_t room,player_function_t func){$/;"	kind:function	line:8	namespace:mods::loops	signature:(std::size_t room,player_function_t func)
-foreach_load_by_column_order_by	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> foreach_load_by_column_order_by($/;"	kind:function	line:333	namespace:mods::orm::util	signature:( std::string_view table, std::string_view column, std::string_view value, std::string_view order_by, std::string_view direction, std::function<void(pqxx::row)> callback)
+foreach_load_by_column_order_by	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> foreach_load_by_column_order_by($/;"	kind:function	line:352	namespace:mods::orm::util	signature:( std::string_view table, std::string_view column, std::string_view value, std::string_view order_by, std::string_view direction, std::function<void(pqxx::row)> callback)
 foreach_mob	mods/loops.cpp	/^	void foreach_mob(mob_function_t func){$/;"	kind:function	line:24	namespace:mods::loops	signature:(mob_function_t func)
 foreach_mob	mods/loops.cpp	/^	void foreach_mob(mods_npc_function_t func){$/;"	kind:function	line:18	namespace:mods::loops	signature:(mods_npc_function_t func)
 foreach_mob	mods/loops.hpp	/^		static inline PointerType* foreach_mob(function_with_return_t<PointerType> func,PointerType* param) {$/;"	kind:function	line:53	namespace:mods::loops::shptr	signature:(function_with_return_t<PointerType> func,PointerType* param)
@@ -8514,7 +8518,7 @@ get_overhead_map_height	mods/player.hpp	/^			uint8_t get_overhead_map_height() c
 get_overhead_map_width	mods/player.hpp	/^			uint8_t get_overhead_map_width() const {$/;"	kind:function	line:652	namespace:mods	access:public	signature:() const
 get_password	mods/auto-login.cpp	/^	const std::string& get_password() { return mods::auto_login::password; }$/;"	kind:function	line:10	namespace:mods::auto_login	signature:()
 get_password	mods/player.cpp	/^	std::string player::get_password() {$/;"	kind:function	line:1337	class:mods::player	signature:()
-get_player_levels	mods/orm/notch.cpp	/^	std::map<std::string,uint16_t> notch::get_player_levels(const uint64_t& player_id, std::string_view player_class) {$/;"	kind:function	line:72	class:mods::orm::notch	signature:(const uint64_t& player_id, std::string_view player_class)
+get_player_levels	mods/orm/notch.cpp	/^	std::map<std::string,uint16_t> notch::get_player_levels(const uint64_t& player_id, std::string_view player_class) {$/;"	kind:function	line:118	class:mods::orm::notch	signature:(const uint64_t& player_id, std::string_view player_class)
 get_player_levels	mods/orm/player-skill-points.cpp	/^	std::map<uint32_t,uint16_t> player_skill_points::get_player_levels(const uint64_t& player_id, std::string_view player_class) {$/;"	kind:function	line:72	class:mods::orm::player_skill_points	signature:(const uint64_t& player_id, std::string_view player_class)
 get_player_levels	mods/orm/player-skill-usage.cpp	/^	std::map<uint64_t,uint16_t> player_skill_usage::get_player_levels(const uint64_t& player_id, std::string_view player_class) {$/;"	kind:function	line:77	class:mods::orm::player_skill_usage	signature:(const uint64_t& player_id, std::string_view player_class)
 get_player_map	mods/db.cpp	/^int get_player_map(std::string_view player_name,std::string prefix, std::map<std::string,std::string>& values) {$/;"	kind:function	line:591	signature:(std::string_view player_name,std::string prefix, std::map<std::string,std::string>& values)
@@ -9000,6 +9004,7 @@ id	mods/orm/mob-equipment-map.hpp	/^		uint64_t id;$/;"	kind:member	line:53	struc
 id	mods/orm/mob-equipment.hpp	/^		uint64_t id;$/;"	kind:member	line:83	struct:mods::orm::mob_equipment	file:	access:public
 id	mods/orm/mob-roam.hpp	/^		id_type_t id;$/;"	kind:member	line:71	struct:mods::orm::mob_roam	file:	access:public
 id	mods/orm/notch.hpp	/^		uint64_t id;$/;"	kind:member	line:11	struct:mods::orm::notch_record_t	file:	access:public
+id	mods/orm/notch.hpp	/^		uint64_t id;$/;"	kind:member	line:74	struct:mods::orm::notch	file:	access:public
 id	mods/orm/orm-base.hpp	/^			uint64_t id;$/;"	kind:member	line:289	struct:mods::orm::orm_base	file:	access:public
 id	mods/orm/player-contract-state.hpp	/^		uint64_t id;$/;"	kind:member	line:53	struct:mods::orm::player_contract_state	file:	access:public
 id	mods/orm/player-skill-points.hpp	/^		uint64_t id;$/;"	kind:member	line:11	struct:mods::orm::player_skill_points_record_t	file:	access:public
@@ -9121,6 +9126,7 @@ increment_last_attack_significance	mods/mobs/generic-thief.cpp	/^	void generic_t
 increment_player_combat_usage	mods/skills.cpp	/^	void increment_player_combat_usage(player_ptr_t& player,std::string_view skill_name) {$/;"	kind:function	line:214	namespace:mods::skills	signature:(player_ptr_t& player,std::string_view skill_name)
 increment_player_cqc_usage	mods/skills.cpp	/^	void increment_player_cqc_usage(player_ptr_t& player,std::string_view skill_name) {$/;"	kind:function	line:217	namespace:mods::skills	signature:(player_ptr_t& player,std::string_view skill_name)
 increment_player_defense_usage	mods/skills.cpp	/^	void increment_player_defense_usage(player_ptr_t& player,std::string_view skill_name) {$/;"	kind:function	line:220	namespace:mods::skills	signature:(player_ptr_t& player,std::string_view skill_name)
+increment_player_notch	mods/orm/notch.cpp	/^	std::tuple<int16_t,std::string> increment_player_notch(player_ptr_t& player,std::string_view notch) {$/;"	kind:function	line:128	namespace:mods::orm	signature:(player_ptr_t& player,std::string_view notch)
 increment_skill_usage	mods/orm/sniper.cpp	/^	void sniper::increment_skill_usage(const uint64_t& skill_id) {$/;"	kind:function	line:9	class:mods::orm::sniper	signature:(const uint64_t& skill_id)
 increment_technique	mods/classes/includes.hpp	/^	static inline void increment_technique(player_ptr_t& attacker,std::string technique) {$/;"	kind:function	line:128	namespace:mods::classes	signature:(player_ptr_t& attacker,std::string technique)
 increment_yaml_transaction_id	mods/object-utils.hpp	/^	static inline void increment_yaml_transaction_id() {$/;"	kind:function	line:112	namespace:mods::object_utils	signature:()
@@ -9246,7 +9252,7 @@ init	mods/orm/medic.cpp	/^	void medic::init() {$/;"	kind:function	line:48	class:
 init	mods/orm/mob-equipment-map.cpp	/^	void mob_equipment_map::init() {$/;"	kind:function	line:44	class:mods::orm::mob_equipment_map	signature:()
 init	mods/orm/mob-equipment.cpp	/^	void mob_equipment::init() {$/;"	kind:function	line:239	class:mods::orm::mob_equipment	signature:()
 init	mods/orm/mob-roam.cpp	/^	void mob_roam::init() {$/;"	kind:function	line:72	class:mods::orm::mob_roam	signature:()
-init	mods/orm/notch.cpp	/^	void notch::init() {$/;"	kind:function	line:48	class:mods::orm::notch	signature:()
+init	mods/orm/notch.cpp	/^	void notch::init() {$/;"	kind:function	line:61	class:mods::orm::notch	signature:()
 init	mods/orm/player-base-ability.cpp	/^		void init() {$/;"	kind:function	line:200	namespace:mods::orm::pba	signature:()
 init	mods/orm/player-base-ability.cpp	/^	void player_base_ability::init() {$/;"	kind:function	line:129	class:mods::orm::player_base_ability	signature:()
 init	mods/orm/player-contract-state.cpp	/^	void player_contract_state::init() {$/;"	kind:function	line:51	class:mods::orm::player_contract_state	signature:()
@@ -9631,7 +9637,7 @@ kevlar_damage	mods/weapons/shotgun-dst7A.hpp	/^				static constexpr uint16_t kev
 kevlar_damage	mods/weapons/smg-vc88.hpp	/^				static constexpr uint16_t kevlar_damage = 780;$/;"	kind:member	line:48	struct:mods::weapons::smg::vc88::stats	file:	access:public
 key	structs.h	/^	obj_vnum key;		\/* Key's number (-1 for no key)		*\/$/;"	kind:member	line:1124	struct:obj_data::room_direction_data	file:	access:public
 key_exists	mods/db.cpp	/^bool key_exists(std::string key) {$/;"	kind:function	line:638	signature:(std::string key)
-keyval_first	mods/util-map.hpp	/^			Tkey keyval_first(std::map<Tkey,Tval>& m,const Tval value,Tkey default_value) {$/;"	kind:function	line:30	namespace:mods::util::maps	signature:(std::map<Tkey,Tval>& m,const Tval value,Tkey default_value)
+keyval_first	mods/util-map.hpp	/^			Tkey keyval_first(std::map<Tkey,Tval>& m,const Tval value,Tkey default_value) {$/;"	kind:function	line:28	namespace:mods::util::maps	signature:(std::map<Tkey,Tval>& m,const Tval value,Tkey default_value)
 keyword	db.h	/^	char	*keyword;$/;"	kind:member	line:281	struct:help_index_element	file:	access:public
 keyword	mods/extra_desc_data.hpp	/^		mods::string keyword;$/;"	kind:member	line:14	struct:mods::extra_desc_data	file:	access:public
 keyword	structs.h	/^	mods::string keyword;		\/* for open\/close			*\/$/;"	kind:member	line:1121	struct:obj_data::room_direction_data	file:	access:public
@@ -9791,7 +9797,7 @@ load_banned	mods/hell.hpp	/^	constexpr inline bool load_banned = false;$/;"	kind
 load_base_abilities	mods/players/db-load.cpp	/^	void load_base_abilities(player_ptr_t& player) {$/;"	kind:function	line:211	namespace:mods::players::db_load	signature:(player_ptr_t& player)
 load_base_functions	mods/js.cpp	/^		void load_base_functions() {$/;"	kind:function	line:969	namespace:mods::js	signature:()
 load_by_class	mods/orm/skill-trees.cpp	/^	std::tuple<int16_t,std::string> skill_trees::load_by_class(std::string_view player_class) {$/;"	kind:function	line:74	class:mods::orm::skill_trees	signature:(std::string_view player_class)
-load_by_column	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_by_column(TObject* s,std::string_view column,std::string_view value) {$/;"	kind:function	line:269	namespace:mods::orm::util	signature:(TObject* s,std::string_view column,std::string_view value)
+load_by_column	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_by_column(TObject* s,std::string_view column,std::string_view value) {$/;"	kind:function	line:288	namespace:mods::orm::util	signature:(TObject* s,std::string_view column,std::string_view value)
 load_by_column	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_by_column(TObject& s,std::string_view column,std::string_view value) {$/;"	kind:function	line:431	file:	signature:(TObject& s,std::string_view column,std::string_view value)
 load_by_contract_vnum	mods/orm/contract-steps.cpp	/^	std::tuple<int16_t,std::string> contract_steps::load_by_contract_vnum(const contract_vnum_t& contract_vnum) {$/;"	kind:function	line:165	class:mods::orm::contract_steps	signature:(const contract_vnum_t& contract_vnum)
 load_by_id	mods/orm/quotes.hpp	/^			bool load_by_id(const TIDType & id){$/;"	kind:function	line:19	struct:mods::orm::base_quotes	access:public	signature:(const TIDType & id)
@@ -9799,7 +9805,7 @@ load_by_id	mods/orm/rifle-instance.cpp	/^	int16_t rifle_instance::load_by_id(uin
 load_by_ip	mods/orm/user-logins.cpp	/^	int16_t user_logins::load_by_ip(std::string ip) {$/;"	kind:function	line:31	class:mods::orm::user_logins	signature:(std::string ip)
 load_by_mob_vnum	mods/orm/mob-equipment-map.cpp	/^	int16_t mob_equipment_map::load_by_mob_vnum(const uint64_t& mob_vnum) {$/;"	kind:function	line:27	class:mods::orm::mob_equipment_map	signature:(const uint64_t& mob_vnum)
 load_by_pkid	mods/orm/base.hpp	/^		static inline std::tuple<int16_t,std::string> load_by_pkid(TObject& s,std::string pkid) {$/;"	kind:function	line:168	struct:mods::orm::base	access:public	signature:(TObject& s,std::string pkid)
-load_by_pkid	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_by_pkid(TObject* s) {$/;"	kind:function	line:362	namespace:mods::orm::util	signature:(TObject* s)
+load_by_pkid	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_by_pkid(TObject* s) {$/;"	kind:function	line:381	namespace:mods::orm::util	signature:(TObject* s)
 load_by_pkid	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_by_pkid(TObject& s) {$/;"	kind:function	line:471	file:	signature:(TObject& s)
 load_by_pkid	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_by_pkid(TObject& s,std::string pkid) {$/;"	kind:function	line:578	file:	signature:(TObject& s,std::string pkid)
 load_by_player	mods/classes/breacher.cpp	/^	int16_t breacher::load_by_player(player_ptr_t& player) {$/;"	kind:function	line:39	class:mods::classes::breacher	signature:(player_ptr_t& player)
@@ -9821,7 +9827,7 @@ load_by_player	mods/orm/forge.cpp	/^	int16_t forge::load_by_player(uint64_t play
 load_by_player	mods/orm/ghost.cpp	/^	int16_t ghost::load_by_player(uint64_t player_id) {$/;"	kind:function	line:29	class:mods::orm::ghost	signature:(uint64_t player_id)
 load_by_player	mods/orm/marine.cpp	/^	int16_t marine::load_by_player(uint64_t player_id) {$/;"	kind:function	line:29	class:mods::orm::marine	signature:(uint64_t player_id)
 load_by_player	mods/orm/medic.cpp	/^	int16_t medic::load_by_player(uint64_t player_id) {$/;"	kind:function	line:29	class:mods::orm::medic	signature:(uint64_t player_id)
-load_by_player	mods/orm/notch.cpp	/^	std::tuple<int16_t,std::string> notch::load_by_player(const uint64_t& player_id) {$/;"	kind:function	line:64	class:mods::orm::notch	signature:(const uint64_t& player_id)
+load_by_player	mods/orm/notch.cpp	/^	std::tuple<int16_t,std::string> notch::load_by_player(const uint64_t& player_id) {$/;"	kind:function	line:77	class:mods::orm::notch	signature:(const uint64_t& player_id)
 load_by_player	mods/orm/player-base-ability.cpp	/^	int16_t player_base_ability::load_by_player(uint64_t player_id) {$/;"	kind:function	line:41	class:mods::orm::player_base_ability	signature:(uint64_t player_id)
 load_by_player	mods/orm/player-skill-points.cpp	/^	std::tuple<int16_t,std::string> player_skill_points::load_by_player(const uint64_t& player_id) {$/;"	kind:function	line:64	class:mods::orm::player_skill_points	signature:(const uint64_t& player_id)
 load_by_player	mods/orm/player-skill-usage.cpp	/^	std::tuple<int16_t,std::string> player_skill_usage::load_by_player(const uint64_t& player_id) {$/;"	kind:function	line:69	class:mods::orm::player_skill_usage	signature:(const uint64_t& player_id)
@@ -9830,6 +9836,7 @@ load_by_player	mods/orm/sniper.cpp	/^	int16_t sniper::load_by_player(uint64_t pl
 load_by_player	mods/orm/striker.cpp	/^	int16_t striker::load_by_player(uint64_t player_id){$/;"	kind:function	line:28	class:mods::orm::striker	signature:(uint64_t player_id)
 load_by_player	mods/orm/support.cpp	/^	int16_t support::load_by_player(uint64_t player_id) {$/;"	kind:function	line:29	class:mods::orm::support	signature:(uint64_t player_id)
 load_by_player	mods/orm/syndrome.cpp	/^	int16_t syndrome::load_by_player(uint64_t player_id){$/;"	kind:function	line:28	class:mods::orm::syndrome	signature:(uint64_t player_id)
+load_by_player_and_notch	mods/orm/notch.cpp	/^	std::tuple<int16_t,std::string> notch::load_by_player_and_notch(const uint64_t& player_id,std::string_view notch) {$/;"	kind:function	line:84	class:mods::orm::notch	signature:(const uint64_t& player_id,std::string_view notch)
 load_by_profile	mods/orm/hq.cpp	/^	int16_t hq::load_by_profile(std::string_view affiliation) {$/;"	kind:function	line:38	class:mods::orm::hq	signature:(std::string_view affiliation)
 load_by_profile	mods/orm/mob-equipment.cpp	/^	int16_t mob_equipment::load_by_profile(std::string_view profile_name) {$/;"	kind:function	line:193	class:mods::orm::mob_equipment	signature:(std::string_view profile_name)
 load_by_room_vnum	mods/orm/mini-game.cpp	/^	void mini_game::load_by_room_vnum(room_vnum game_room_vnum){$/;"	kind:function	line:9	class:mods::orm::mini_game	signature:(room_vnum game_room_vnum)
@@ -9855,13 +9862,12 @@ load_library	mods/js.cpp	/^		int load_library(std::string_view file) {$/;"	kind:
 load_messages	fight.cpp	/^void load_messages(void) {$/;"	kind:function	line:195	signature:(void)
 load_messages	mods/hell.hpp	/^	constexpr inline bool load_messages = false;$/;"	kind:member	line:8	namespace:mods::hell	file:
 load_mods_player_functions	mods/js.cpp	/^		void load_mods_player_functions(duk_context *ctx) {$/;"	kind:function	line:1188	namespace:mods::js	signature:(duk_context *ctx)
-load_multi_by_column	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_multi_by_column(TObject* s,std::string_view column,std::string_view value) {$/;"	kind:function	line:292	namespace:mods::orm::util	signature:(TObject* s,std::string_view column,std::string_view value)
+load_multi_by_column	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_multi_by_column(TObject* s,std::string_view column,std::string_view value) {$/;"	kind:function	line:311	namespace:mods::orm::util	signature:(TObject* s,std::string_view column,std::string_view value)
 load_multi_by_column	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_multi_by_column(TObject& s,std::string_view column,std::string_view value) {$/;"	kind:function	line:451	file:	signature:(TObject& s,std::string_view column,std::string_view value)
-load_multi_by_column_order_by	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_multi_by_column_order_by(TObject* s,std::string_view column,std::string_view value,std::string order_by,std::string direction) {$/;"	kind:function	line:312	namespace:mods::orm::util	signature:(TObject* s,std::string_view column,std::string_view value,std::string order_by,std::string direction)
+load_multi_by_column_order_by	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_multi_by_column_order_by(TObject* s,std::string_view column,std::string_view value,std::string order_by,std::string direction) {$/;"	kind:function	line:331	namespace:mods::orm::util	signature:(TObject* s,std::string_view column,std::string_view value,std::string order_by,std::string direction)
 load_player_class_skill_trees	mods/orm/skill-trees.cpp	/^	std::tuple<int16_t,std::string> load_player_class_skill_trees(std::string_view player_class,std::vector<skill_trees_record_t>* storage_ptr) {$/;"	kind:function	line:77	namespace:mods::orm	signature:(std::string_view player_class,std::vector<skill_trees_record_t>* storage_ptr)
 load_player_contract_state	mods/orm/player-contract-state.cpp	/^	std::tuple<int16_t,std::string> load_player_contract_state(player_ptr_t& player,contract_vnum_t c_vnum,std::string& in_buffer) {$/;"	kind:function	line:78	namespace:mods::orm	signature:(player_ptr_t& player,contract_vnum_t c_vnum,std::string& in_buffer)
 load_player_contract_state	mods/orm/player-contract-state.cpp	/^	std::tuple<int16_t,std::string> load_player_contract_state(uint64_t in_player_id,contract_vnum_t in_c_vnum,std::string& in_buffer) {$/;"	kind:function	line:90	namespace:mods::orm	signature:(uint64_t in_player_id,contract_vnum_t in_c_vnum,std::string& in_buffer)
-load_player_notch_data	mods/orm/notch.cpp	/^	std::tuple<int16_t,std::string> load_player_notch_data(player_ptr_t& player, std::map<std::string,uint16_t>* storage) {$/;"	kind:function	line:82	namespace:mods::orm	signature:(player_ptr_t& player, std::map<std::string,uint16_t>* storage)
 load_player_rifle_attachments	mods/orm/rifle-attachment.cpp	/^	std::tuple<int16_t,std::string> load_player_rifle_attachments(player_ptr_t player) {$/;"	kind:function	line:101	namespace:mods::orm	signature:(player_ptr_t player)
 load_player_skill_data	mods/orm/player-skill-points.cpp	/^	std::tuple<int16_t,std::string> load_player_skill_data(player_ptr_t& player, std::map<uint32_t,uint16_t>* storage) {$/;"	kind:function	line:82	namespace:mods::orm	signature:(player_ptr_t& player, std::map<uint32_t,uint16_t>* storage)
 load_player_skill_usage_data	mods/orm/player-skill-usage.cpp	/^	std::tuple<int16_t,std::string> load_player_skill_usage_data(player_ptr_t& player, std::map<uint64_t,uint16_t>* storage) {$/;"	kind:function	line:90	namespace:mods::orm	signature:(player_ptr_t& player, std::map<uint64_t,uint16_t>* storage)
@@ -9874,7 +9880,7 @@ load_skill_points	mods/players/db-load.cpp	/^	void load_skill_points(player_ptr_
 load_skill_usages	mods/orm/sniper.cpp	/^	void sniper::load_skill_usages() {$/;"	kind:function	line:6	class:mods::orm::sniper	signature:()
 load_trees	mods/behaviour_tree_impl.cpp	/^	void load_trees() {$/;"	kind:function	line:113	namespace:mods::behaviour_tree_impl	signature:()
 load_where	mods/orm/base.hpp	/^		static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,$/;"	kind:function	line:111	struct:mods::orm::base	access:public	signature:(TContainerObject& s, std::string_view where, std::string_view sql_operator, std::string_view value)
-load_where	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s, std::string_view table_name,TCompoundStatement& compound_statement_list) {$/;"	kind:function	line:223	namespace:mods::orm::util	signature:(TContainerObject& s, std::string_view table_name,TCompoundStatement& compound_statement_list)
+load_where	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s, std::string_view table_name,TCompoundStatement& compound_statement_list) {$/;"	kind:function	line:242	namespace:mods::orm::util	signature:(TContainerObject& s, std::string_view table_name,TCompoundStatement& compound_statement_list)
 load_where	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,$/;"	kind:function	line:197	namespace:mods::orm::util	signature:(TContainerObject& s, std::string_view where, std::string_view sql_operator, std::string_view value)
 load_where	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,$/;"	kind:function	line:408	file:	signature:(TContainerObject& s, std::string_view where, std::string_view sql_operator, std::string_view value)
 load_where	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,$/;"	kind:function	line:554	file:	signature:(TContainerObject& s, std::string_view where, std::string_view sql_operator, std::string_view value)
@@ -9903,7 +9909,7 @@ loaded	mods/orm/mini-game.hpp	/^		bool loaded;$/;"	kind:member	line:70	struct:mo
 loaded	mods/orm/mob-equipment-map.hpp	/^		bool loaded;$/;"	kind:member	line:58	struct:mods::orm::mob_equipment_map	file:	access:public
 loaded	mods/orm/mob-equipment.hpp	/^		bool loaded;$/;"	kind:member	line:115	struct:mods::orm::mob_equipment	file:	access:public
 loaded	mods/orm/mob-roam.hpp	/^		bool loaded;$/;"	kind:member	line:76	struct:mods::orm::mob_roam	file:	access:public
-loaded	mods/orm/notch.hpp	/^		bool loaded;$/;"	kind:member	line:67	struct:mods::orm::notch	file:	access:public
+loaded	mods/orm/notch.hpp	/^		bool loaded;$/;"	kind:member	line:68	struct:mods::orm::notch	file:	access:public
 loaded	mods/orm/orm-base.hpp	/^			bool loaded;$/;"	kind:member	line:287	struct:mods::orm::orm_base	file:	access:public
 loaded	mods/orm/player-base-ability.hpp	/^		bool loaded;$/;"	kind:member	line:56	struct:mods::orm::player_base_ability	file:	access:public
 loaded	mods/orm/player-contract-state.hpp	/^		bool loaded;$/;"	kind:member	line:51	struct:mods::orm::player_contract_state	file:	access:public
@@ -10459,6 +10465,7 @@ m_debug	mods/orm/contract-steps.cpp	7;"	kind:macro	line:7	file:
 m_debug	mods/orm/inventory.cpp	14;"	kind:macro	line:14	file:
 m_debug	mods/orm/inventory.cpp	17;"	kind:macro	line:17	file:
 m_debug	mods/orm/inventory.cpp	314;"	kind:macro	line:314	file:
+m_debug	mods/orm/notch.cpp	9;"	kind:macro	line:9	file:
 m_debug	mods/orm/user-logins.cpp	71;"	kind:macro	line:71	file:
 m_debug	mods/orm/user-logins.cpp	7;"	kind:macro	line:7	file:
 m_debug	mods/players/banish.cpp	11;"	kind:macro	line:11	file:
@@ -10624,6 +10631,7 @@ m_error	mods/notch.cpp	39;"	kind:macro	line:39	file:
 m_error	mods/orm/inventory.cpp	15;"	kind:macro	line:15	file:
 m_error	mods/orm/inventory.cpp	18;"	kind:macro	line:18	file:
 m_error	mods/orm/inventory.cpp	315;"	kind:macro	line:315	file:
+m_error	mods/orm/notch.cpp	10;"	kind:macro	line:10	file:
 m_error	mods/projectile.cpp	43;"	kind:macro	line:43	file:
 m_error	mods/projectile.cpp	934;"	kind:macro	line:934	file:
 m_error	mods/radioactive.cpp	19;"	kind:macro	line:19	file:
@@ -11237,7 +11245,7 @@ match_any_of	globals.hpp	/^	static inline bool match_any_of(std::vector<TString>
 match_any_of_lower	globals.hpp	/^	static inline bool match_any_of_lower(std::vector<TString> items,TString target) {$/;"	kind:function	line:237	namespace:txt	signature:(std::vector<TString> items,TString target)
 matches_many	mods/help.cpp	/^	bool matches_many(const std::string& items,std::string_view from) {$/;"	kind:function	line:919	namespace:mods::help	signature:(const std::string& items,std::string_view from)
 matches_query	structs.cpp	/^bool obj_data::matches_query(std::string_view query) {$/;"	kind:function	line:563	class:obj_data	signature:(std::string_view query)
-max	mods/util-map.hpp	/^			Tval max(std::map<Tkey,Tval>& m) {$/;"	kind:function	line:40	namespace:mods::util::maps	signature:(std::map<Tkey,Tval>& m)
+max	mods/util-map.hpp	/^			Tval max(std::map<Tkey,Tval>& m) {$/;"	kind:function	line:38	namespace:mods::util::maps	signature:(std::map<Tkey,Tval>& m)
 max_amount_reached	mods/affects.hpp	/^			bool max_amount_reached(TAffects affect) {$/;"	kind:function	line:222	struct:mods::affects::dissolver	access:public	signature:(TAffects affect)
 max_bad_pws	config.cpp	/^int max_bad_pws = 3;$/;"	kind:variable	line:235
 max_exp_gain	config.cpp	/^int max_exp_gain = 100000;	\/* max gainable per kill *\/$/;"	kind:variable	line:71
@@ -11424,7 +11432,7 @@ mi_debug	mods/interpreter.cpp	76;"	kind:macro	line:76	file:
 mi_debug	mods/interpreter.cpp	7;"	kind:macro	line:7	file:
 migrations	mods/migrations.cpp	/^namespace mods::migrations {$/;"	kind:namespace	line:4	class:mods	file:
 migrations	mods/migrations.hpp	/^namespace mods::migrations {$/;"	kind:namespace	line:8	class:mods	file:
-migrations_test	mods/debug-pre-game.hpp	/^	void migrations_test() {$/;"	kind:function	line:74	namespace:mods::debug::pre_game	signature:()
+migrations_test	mods/debug-pre-game.hpp	/^	void migrations_test() {$/;"	kind:function	line:75	namespace:mods::debug::pre_game	signature:()
 min_level	spells.h	/^	int min_level[NUM_CLASSES];$/;"	kind:member	line:219	struct:spell_info_type	file:	access:public
 min_position	spells.h	/^	byte min_position;	\/* Position for caster	 *\/$/;"	kind:member	line:214	struct:spell_info_type	file:	access:public
 min_rent_cost	config.cpp	/^int min_rent_cost = 100;$/;"	kind:variable	line:138
@@ -11434,9 +11442,9 @@ mini_debug	mods/mobs/mini-gunner.cpp	12;"	kind:macro	line:12	file:
 mini_debug	mods/mobs/mini-gunner.cpp	14;"	kind:macro	line:14	file:
 mini_game	mods/orm/mini-game.hpp	/^		mini_game() : game_id(0) {}$/;"	kind:function	line:27	struct:mods::orm::mini_game	access:public	signature:()
 mini_game	mods/orm/mini-game.hpp	/^	struct mini_game : public mods::orm::orm_base<mini_game,std::string> {$/;"	kind:struct	line:20	namespace:mods::orm	file:	inherits:mods::orm::orm_base
-mini_game_orm_test	mods/debug-pre-game.hpp	/^	void mini_game_orm_test() {$/;"	kind:function	line:57	namespace:mods::debug::pre_game	signature:()
+mini_game_orm_test	mods/debug-pre-game.hpp	/^	void mini_game_orm_test() {$/;"	kind:function	line:58	namespace:mods::debug::pre_game	signature:()
 mini_game_payload_t	mods/mini-games.hpp	/^	struct mini_game_payload_t {$/;"	kind:struct	line:9	namespace:mods::mini_games	file:
-mini_game_test	mods/debug-pre-game.hpp	/^	void mini_game_test() {$/;"	kind:function	line:49	namespace:mods::debug::pre_game	signature:()
+mini_game_test	mods/debug-pre-game.hpp	/^	void mini_game_test() {$/;"	kind:function	line:50	namespace:mods::debug::pre_game	signature:()
 mini_games	mods/mini-games.cpp	/^namespace mods::mini_games {$/;"	kind:namespace	line:7	class:mods	file:
 mini_games	mods/mini-games.hpp	/^namespace mods::mini_games {$/;"	kind:namespace	line:8	class:mods	file:
 mini_games	mods/mini-games/line-up.cpp	/^namespace mods::mini_games {$/;"	kind:namespace	line:8	class:mods	file:
@@ -11753,6 +11761,12 @@ mzone_debug	mods/intimidate.hpp	10;"	kind:macro	line:10	file:
 mzone_debug	mods/intimidate.hpp	8;"	kind:macro	line:8	file:
 mzone_debug	mods/zone.hpp	10;"	kind:macro	line:10	file:
 mzone_debug	mods/zone.hpp	8;"	kind:macro	line:8	file:
+n_name	mods/orm/notch.hpp	/^		std::string n_name;$/;"	kind:member	line:12	struct:mods::orm::notch_record_t	file:	access:public
+n_name	mods/orm/notch.hpp	/^		std::string n_name;$/;"	kind:member	line:71	struct:mods::orm::notch	file:	access:public
+n_player_id	mods/orm/notch.hpp	/^		uint64_t n_player_id;$/;"	kind:member	line:14	struct:mods::orm::notch_record_t	file:	access:public
+n_player_id	mods/orm/notch.hpp	/^		uint64_t n_player_id;$/;"	kind:member	line:73	struct:mods::orm::notch	file:	access:public
+n_points	mods/orm/notch.hpp	/^		uint16_t n_points;$/;"	kind:member	line:13	struct:mods::orm::notch_record_t	file:	access:public
+n_points	mods/orm/notch.hpp	/^		uint16_t n_points;$/;"	kind:member	line:72	struct:mods::orm::notch	file:	access:public
 name	db.h	/^		std::string name;   \/* name of this zone                  *\/$/;"	kind:member	line:209	struct:zone_data	file:	access:public
 name	db.h	/^	char	name[MAX_NAME_LENGTH+1];$/;"	kind:member	line:298	struct:ban_list_element	file:	access:public
 name	db.h	/^	mods::string name;$/;"	kind:member	line:275	struct:player_index_element	file:	access:public
@@ -11765,8 +11779,6 @@ name	mods/fluxkraft/arcon-bar.hpp	/^			std::string name;$/;"	kind:member	line:32
 name	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::string name;$/;"	kind:member	line:29	struct:mods::fluxkraft::arcon::metro	file:	access:public
 name	mods/fluxkraft/shape-dictionary.cpp	/^		std::string name;$/;"	kind:member	line:64	struct:mods::fluxkraft::shape_description	file:	access:public
 name	mods/mini-games.hpp	/^		std::string name;$/;"	kind:member	line:13	struct:mods::mini_games::mini_game_payload_t	file:	access:public
-name	mods/orm/notch.hpp	/^		std::string name;$/;"	kind:member	line:12	struct:mods::orm::notch_record_t	file:	access:public
-name	mods/orm/notch.hpp	/^		std::string name;$/;"	kind:member	line:70	struct:mods::orm::notch	file:	access:public
 name	mods/orm/room.hpp	/^		std::string name;$/;"	kind:member	line:45	struct:mods::orm::room	file:	access:public
 name	mods/player.cpp	/^	std::string& player::name() {$/;"	kind:function	line:844	class:mods::player	signature:()
 name	mods/yaml.hpp	/^		std::string name;$/;"	kind:member	line:165	struct:mods::yaml::yaml_description_t	file:	access:public
@@ -11811,7 +11823,7 @@ new_player	mods/classes/pyrexia.cpp	/^		int16_t pyrexia::new_player(player_ptr_t
 new_player	mods/classes/sentinel.cpp	/^		int16_t sentinel::new_player(player_ptr_t &player, primary_choice_t primary_choice){$/;"	kind:function	line:22	class:mods::classes::sentinel	signature:(player_ptr_t &player, primary_choice_t primary_choice)
 new_player	mods/classes/support.cpp	/^	int16_t support::new_player(player_ptr_t& player, primary_choice_t primary_choice) {$/;"	kind:function	line:18	class:mods::classes::support	signature:(player_ptr_t& player, primary_choice_t primary_choice)
 new_player	mods/classes/syndrome.cpp	/^		int16_t syndrome::new_player(player_ptr_t &player){$/;"	kind:function	line:25	class:mods::classes::syndrome	signature:(player_ptr_t &player)
-new_player	mods/debug-pre-game.hpp	/^	player_ptr_t new_player() {$/;"	kind:function	line:138	namespace:mods::debug::pre_game	signature:()
+new_player	mods/debug-pre-game.hpp	/^	player_ptr_t new_player() {$/;"	kind:function	line:139	namespace:mods::debug::pre_game	signature:()
 new_record	mods/db.cpp	/^	tuple_status_t new_record(const std::string& table,mutable_map_t* values) {$/;"	kind:function	line:178	namespace:mods::db	signature:(const std::string& table,mutable_map_t* values)
 new_room	mods/builder.cpp	/^	room_data new_room(player_ptr_t player,int direction) {$/;"	kind:function	line:1048	namespace:mods::builder	signature:(player_ptr_t player,int direction)
 new_room	mods/intimidate.cpp	/^	void new_room(room_data* room_ptr){$/;"	kind:function	line:73	namespace:mods::zone	signature:(room_data* room_ptr)
@@ -12139,7 +12151,7 @@ orm	mods/orm/mob-equipment.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:3
 orm	mods/orm/mob-equipment.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:7	class:mods	file:
 orm	mods/orm/mob-roam.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:4	class:mods	file:
 orm	mods/orm/mob-roam.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	class:mods	file:
-orm	mods/orm/notch.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:5	class:mods	file:
+orm	mods/orm/notch.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:17	class:mods	file:
 orm	mods/orm/notch.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	class:mods	file:
 orm	mods/orm/orm-base.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:19	class:mods	file:
 orm	mods/orm/player-base-ability.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:5	class:mods	file:
@@ -12475,8 +12487,6 @@ player_finished_step	mods/scripted-sequence-events.cpp	/^	void player_finished_s
 player_generated_data	mods/orm/chargen.hpp	/^		player_generated_data()  : base(), id(0) {}$/;"	kind:function	line:81	struct:mods::orm::player_generated_data	access:public	signature:()
 player_generated_data	mods/orm/chargen.hpp	/^	struct player_generated_data : public base {$/;"	kind:struct	line:78	namespace:mods::orm	file:	inherits:base
 player_human_remains_found	mods/contract-defiler.cpp	/^	std::map<uint64_t,uint8_t> player_human_remains_found;$/;"	kind:member	line:13	namespace:mods::contract_defiler	file:
-player_id	mods/orm/notch.hpp	/^		uint64_t player_id;$/;"	kind:member	line:14	struct:mods::orm::notch_record_t	file:	access:public
-player_id	mods/orm/notch.hpp	/^		uint64_t player_id;$/;"	kind:member	line:72	struct:mods::orm::notch	file:	access:public
 player_id	mods/orm/player-skill-points.hpp	/^		uint64_t player_id;$/;"	kind:member	line:14	struct:mods::orm::player_skill_points_record_t	file:	access:public
 player_id	mods/orm/player-skill-points.hpp	/^		uint64_t player_id;$/;"	kind:member	line:72	struct:mods::orm::player_skill_points	file:	access:public
 player_id	mods/orm/player-skill-usage.hpp	/^		uint64_t player_id;$/;"	kind:member	line:14	struct:mods::orm::player_skill_usage_record_t	file:	access:public
@@ -12555,8 +12565,6 @@ plug_into	mods/mini-games/wires.cpp	/^	std::string wires::plug_into(char port) {
 plugged_in	mods/mini-games/wires.hpp	/^		std::vector<bool> plugged_in;$/;"	kind:member	line:71	struct:mods::mini_games::wires	file:	access:private
 plural	spells.h	/^	const char	*plural;$/;"	kind:member	line:253	struct:attack_hit_type	file:	access:public
 point_update	limits.cpp	/^void point_update(void) {$/;"	kind:function	line:524	signature:(void)
-points	mods/orm/notch.hpp	/^		uint16_t points;$/;"	kind:member	line:13	struct:mods::orm::notch_record_t	file:	access:public
-points	mods/orm/notch.hpp	/^		uint16_t points;$/;"	kind:member	line:71	struct:mods::orm::notch	file:	access:public
 points	structs.h	/^	char_point_data points;        \/* Points                        *\/$/;"	kind:member	line:1758	struct:char_data	file:	access:public
 points	structs.h	/^	struct char_point_data points;$/;"	kind:member	line:1825	struct:char_file_u	typeref:struct:char_file_u::char_point_data	file:	access:public
 policies	db.cpp	/^char *policies = NULL;		\/* policies page		 *\/$/;"	kind:variable	line:142
@@ -12566,7 +12574,7 @@ pop	shop.cpp	/^int pop(struct stack_data *stack) {$/;"	kind:function	line:212	si
 pop_free_list	mail.cpp	/^long pop_free_list(void) {$/;"	kind:function	line:89	signature:(void)
 populate	mods/orm/armor-index.cpp	/^	void armor_index::populate(std::string_view in_armor_type, const std::vector<std::string>& in_armor_filenames) {$/;"	kind:function	line:27	class:mods::orm::armor_index	signature:(std::string_view in_armor_type, const std::vector<std::string>& in_armor_filenames)
 populate	mods/orm/mob-roam.cpp	/^	void mob_roam::populate(uint32_t mob_vnum, const std::vector<room_vnum>& rooms, std::string_view profile_name) {$/;"	kind:function	line:58	class:mods::orm::mob_roam	signature:(uint32_t mob_vnum, const std::vector<room_vnum>& rooms, std::string_view profile_name)
-populate	mods/orm/notch.cpp	/^	void notch::populate(const uint64_t& player_id,const std::map<std::string,uint16_t>& data) {$/;"	kind:function	line:30	class:mods::orm::notch	signature:(const uint64_t& player_id,const std::map<std::string,uint16_t>& data)
+populate	mods/orm/notch.cpp	/^	void notch::populate(const uint64_t& player_id,const std::map<std::string,uint16_t>& data) {$/;"	kind:function	line:42	class:mods::orm::notch	signature:(const uint64_t& player_id,const std::map<std::string,uint16_t>& data)
 populate	mods/orm/player-skill-points.cpp	/^	void player_skill_points::populate(const uint64_t& player_id,const std::map<uint32_t,uint16_t>& data) {$/;"	kind:function	line:30	class:mods::orm::player_skill_points	signature:(const uint64_t& player_id,const std::map<uint32_t,uint16_t>& data)
 populate	mods/orm/player-skill-usage.cpp	/^	void player_skill_usage::populate(const uint64_t& player_id,const std::map<uint64_t,uint16_t>& data) {$/;"	kind:function	line:34	class:mods::orm::player_skill_usage	signature:(const uint64_t& player_id,const std::map<uint64_t,uint16_t>& data)
 populate	mods/orm/rifle-index.cpp	/^	void rifle_index::populate(std::string_view in_rifle_type, const std::vector<std::string>& in_rifle_filenames) {$/;"	kind:function	line:27	class:mods::orm::rifle_index	signature:(std::string_view in_rifle_type, const std::vector<std::string>& in_rifle_filenames)
@@ -12613,7 +12621,7 @@ practice	mods/classes/base.cpp	/^	std::tuple<bool,std::string> base::practice(st
 practice	mods/classes/base.cpp	/^	std::tuple<bool,std::string> skill_t::practice(player_ptr_t& player) {$/;"	kind:function	line:39	class:mods::classes::skill_t	signature:(player_ptr_t& player)
 practice_sessions	mods/player.cpp	/^	uint16_t& player::practice_sessions() {$/;"	kind:function	line:2397	class:mods::player	signature:()
 practice_skill	mods/skills.cpp	/^	std::string practice_skill(player_ptr_t& player,std::string_view skill) {$/;"	kind:function	line:201	namespace:mods::skills	signature:(player_ptr_t& player,std::string_view skill)
-pre_game	mods/debug-pre-game.hpp	/^namespace mods::debug::pre_game {$/;"	kind:namespace	line:41	class:mods::debug	file:
+pre_game	mods/debug-pre-game.hpp	/^namespace mods::debug::pre_game {$/;"	kind:namespace	line:42	class:mods::debug	file:
 pre_game_loop	globals.cpp	/^		void pre_game_loop() {$/;"	kind:function	line:560	namespace:mods::globals	signature:()
 pref	structs.h	/^	uint64_t 	pref;	\/* preference flags for PC's.		*\/$/;"	kind:member	line:1472	struct:player_special_data_saved	file:	access:public
 preference_bits	constants.cpp	/^const char *preference_bits[] = {$/;"	kind:variable	line:162
@@ -12636,7 +12644,7 @@ primary	mods/mobs/smart-mob.cpp	/^	obj_ptr_t smart_mob::primary() {$/;"	kind:fun
 primary	mods/player.cpp	/^	obj_data_ptr_t player::primary() {$/;"	kind:function	line:1670	class:mods::player	signature:()
 primary_key	mods/mini-games.hpp	/^		int primary_key;$/;"	kind:member	line:10	struct:mods::mini_games::mini_game_payload_t	file:	access:public
 primary_key	mods/orm/room.hpp	/^		constexpr static const char* primary_key = "id";$/;"	kind:member	line:14	struct:mods::orm::room	file:	access:public
-primary_key_id	mods/orm/notch.hpp	/^		uint64_t primary_key_id;$/;"	kind:member	line:69	struct:mods::orm::notch	file:	access:public
+primary_key_id	mods/orm/notch.hpp	/^		uint64_t primary_key_id;$/;"	kind:member	line:70	struct:mods::orm::notch	file:	access:public
 primary_key_id	mods/orm/player-skill-points.hpp	/^		uint64_t primary_key_id;$/;"	kind:member	line:69	struct:mods::orm::player_skill_points	file:	access:public
 primary_key_id	mods/orm/player-skill-usage.hpp	/^		uint64_t primary_key_id;$/;"	kind:member	line:69	struct:mods::orm::player_skill_usage	file:	access:public
 primary_key_name	mods/orm/armor-index.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:21	struct:mods::orm::armor_index_record_t	access:public	signature:()
@@ -12706,7 +12714,7 @@ primary_key_value	mods/orm/mini-game.hpp	/^		std::string primary_key_value(){ re
 primary_key_value	mods/orm/mob-equipment-map.hpp	/^		std::string primary_key_value() {$/;"	kind:function	line:23	struct:mods::orm::mob_equipment_map	access:public	signature:()
 primary_key_value	mods/orm/mob-equipment.hpp	/^		std::string primary_key_value() {$/;"	kind:function	line:59	struct:mods::orm::mob_equipment	access:public	signature:()
 primary_key_value	mods/orm/mob-roam.hpp	/^		std::string primary_key_value() {$/;"	kind:function	line:49	struct:mods::orm::mob_roam	access:public	signature:()
-primary_key_value	mods/orm/notch.cpp	/^	std::string notch::primary_key_value() {$/;"	kind:function	line:26	class:mods::orm::notch	signature:()
+primary_key_value	mods/orm/notch.cpp	/^	std::string notch::primary_key_value() {$/;"	kind:function	line:38	class:mods::orm::notch	signature:()
 primary_key_value	mods/orm/orm-base.hpp	/^			virtual std::string primary_key_value() {$/;"	kind:function	line:272	struct:mods::orm::orm_base	access:public	signature:()
 primary_key_value	mods/orm/player-base-ability.hpp	/^		std::string primary_key_value() { return std::to_string(this->pba_id); }$/;"	kind:function	line:14	struct:mods::orm::player_base_ability	access:public	signature:()
 primary_key_value	mods/orm/player-contract-state.hpp	/^		std::string primary_key_value() {$/;"	kind:function	line:28	struct:mods::orm::player_contract_state	access:public	signature:()
@@ -13192,7 +13200,7 @@ remove_dummy	mods/target-practice-db.cpp	/^	void remove_dummy(player_ptr_t& play
 remove_flag	mods/player.hpp	/^			aligned_int_t remove_flag(chunk_type_t chunk,aligned_int_t bit) {$/;"	kind:function	line:638	namespace:mods	access:public	signature:(chunk_type_t chunk,aligned_int_t bit)
 remove_flag	mods/rooms.hpp	/^	static inline void remove_flag(room_rnum room, int flag) {$/;"	kind:function	line:142	namespace:mods::rooms	signature:(room_rnum room, int flag)
 remove_from_step_list_by_contract_vnum	mods/builder/conbuild.cpp	/^		void remove_from_step_list_by_contract_vnum(const contract_vnum_t vnum) {$/;"	kind:function	line:31	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:(const contract_vnum_t vnum)
-remove_if_exists	mods/util-map.hpp	/^			static inline void remove_if_exists(TMapType* in_map,TKeyType key){$/;"	kind:function	line:14	namespace:mods::util::maps	signature:(TMapType* in_map,TKeyType key)
+remove_if_exists	mods/util-map.hpp	/^			static inline void remove_if_exists(TMapType* in_map,TKeyType key) {$/;"	kind:function	line:14	namespace:mods::util::maps	signature:(TMapType* in_map,TKeyType key)
 remove_lvl	boards.h	/^	int	remove_lvl;	\/* min level to remove messages from this board *\/$/;"	kind:member	line:31	struct:board_info_type	file:	access:public
 remove_nickname	mods/rooms.cpp	/^	void remove_nickname(const room_rnum& room) {$/;"	kind:function	line:125	namespace:mods::rooms	signature:(const room_rnum& room)
 remove_player_resting	mods/resting.cpp	/^	void remove_player_resting(player_ptr_t player) {$/;"	kind:function	line:20	namespace:mods::resting	signature:(player_ptr_t player)
@@ -13632,7 +13640,7 @@ rows	mods/mini-games/line-up.hpp	/^		std::vector<std::vector<uint8_t>> rows;$/;"
 rows	mods/orm/armor-index.hpp	/^		std::vector<armor_index_record_t> rows;$/;"	kind:member	line:67	struct:mods::orm::armor_index	file:	access:public
 rows	mods/orm/contract-steps.hpp	/^		std::vector<contract_steps_record_t> rows;$/;"	kind:member	line:162	struct:mods::orm::contract_steps	file:	access:public
 rows	mods/orm/mob-roam.hpp	/^		std::vector<mob_roam_record_t> rows;$/;"	kind:member	line:75	struct:mods::orm::mob_roam	file:	access:public
-rows	mods/orm/notch.hpp	/^		std::vector<notch_record_t> rows;$/;"	kind:member	line:66	struct:mods::orm::notch	file:	access:public
+rows	mods/orm/notch.hpp	/^		std::vector<notch_record_t> rows;$/;"	kind:member	line:67	struct:mods::orm::notch	file:	access:public
 rows	mods/orm/player-skill-points.hpp	/^		std::vector<player_skill_points_record_t> rows;$/;"	kind:member	line:66	struct:mods::orm::player_skill_points	file:	access:public
 rows	mods/orm/player-skill-usage.hpp	/^		std::vector<player_skill_usage_record_t> rows;$/;"	kind:member	line:66	struct:mods::orm::player_skill_usage	file:	access:public
 rows	mods/orm/rifle-attachment.hpp	/^		std::deque<rifle_attachment_record_t> rows;$/;"	kind:member	line:83	struct:mods::orm::rifle_attachment	file:	access:public
@@ -13653,7 +13661,7 @@ rules_of_engagement	mods/combat.cpp	/^	namespace rules_of_engagement {$/;"	kind:
 rules_of_engagement	mods/player.hpp	/^			auto& rules_of_engagement() {$/;"	kind:function	line:956	namespace:mods	access:public	signature:()
 run	mods/behaviour_tree.hpp	/^		run_status run(LambdaArgument arg) {$/;"	kind:function	line:45	struct:mods::behaviour_tree	access:public	signature:(LambdaArgument arg)
 run	mods/behaviour_tree_node.hpp	/^			run_status_t run(LambdaArgument& arg) {$/;"	kind:function	line:65	struct:mods::behaviour_tree_node	access:public	signature:(LambdaArgument& arg)
-run	mods/debug-pre-game.hpp	/^	bool run() {$/;"	kind:function	line:161	namespace:mods::debug::pre_game	signature:()
+run	mods/debug-pre-game.hpp	/^	bool run() {$/;"	kind:function	line:162	namespace:mods::debug::pre_game	signature:()
 run	mods/forge-engine/generated-rifle.hpp	/^			void run(generated_rifle_t* r) {$/;"	kind:function	line:1751	struct:mods::forge_engine::balance_ruleset_t	access:public	signature:(generated_rifle_t* r)
 run	mods/mobs/behaviour-tree-list.cpp	/^	void run() {$/;"	kind:function	line:21	namespace:mods::mobs::behaviour_tree_list	signature:()
 run	mods/replenish.cpp	/^	void run() {$/;"	kind:function	line:67	namespace:mods::replenish	signature:()
@@ -13764,7 +13772,7 @@ save	mods/orm/medic.hpp	/^		int16_t save(){$/;"	kind:function	line:35	struct:mod
 save	mods/orm/mob-equipment-map.hpp	/^		int16_t save() {$/;"	kind:function	line:47	struct:mods::orm::mob_equipment_map	access:public	signature:()
 save	mods/orm/mob-equipment.hpp	/^		int16_t save() {$/;"	kind:function	line:77	struct:mods::orm::mob_equipment	access:public	signature:()
 save	mods/orm/mob-roam.cpp	/^	int16_t mob_roam::save() {$/;"	kind:function	line:49	class:mods::orm::mob_roam	signature:()
-save	mods/orm/notch.cpp	/^	int16_t notch::save() {$/;"	kind:function	line:14	class:mods::orm::notch	signature:()
+save	mods/orm/notch.cpp	/^	int16_t notch::save() {$/;"	kind:function	line:26	class:mods::orm::notch	signature:()
 save	mods/orm/player-base-ability.hpp	/^		int16_t save(){$/;"	kind:function	line:24	struct:mods::orm::player_base_ability	access:public	signature:()
 save	mods/orm/player-contract-state.cpp	/^	int16_t player_contract_state::save() {$/;"	kind:function	line:33	class:mods::orm::player_contract_state	signature:()
 save	mods/orm/player-skill-points.cpp	/^	int16_t player_skill_points::save() {$/;"	kind:function	line:14	class:mods::orm::player_skill_points	signature:()
@@ -15652,7 +15660,7 @@ width	mods/builder/rectangle-layouts.hpp	/^		uint8_t width;$/;"	kind:member	line
 width	mods/overhead_map.hpp	/^	constexpr static uint8_t width = 48;$/;"	kind:member	line:11	namespace:mods::overhead_map	file:
 wield_w	structs.h	/^	sh_int wield_w;  \/* Maximum weight that can be wielded  *\/$/;"	kind:member	line:1887	struct:str_app_type	file:	access:public
 wimp_level	structs.h	/^	int	wimp_level;		\/* Below this # of hit points, flee!	*\/$/;"	kind:member	line:1468	struct:player_special_data_saved	file:	access:public
-wire_mini_game_test	mods/debug-pre-game.hpp	/^	void wire_mini_game_test() {$/;"	kind:function	line:63	namespace:mods::debug::pre_game	signature:()
+wire_mini_game_test	mods/debug-pre-game.hpp	/^	void wire_mini_game_test() {$/;"	kind:function	line:64	namespace:mods::debug::pre_game	signature:()
 wires	mods/mini-games/wires.cpp	/^	wires::wires() {$/;"	kind:function	line:16	class:mods::mini_games::wires	signature:()
 wires	mods/mini-games/wires.hpp	/^	struct wires {$/;"	kind:struct	line:34	namespace:mods::mini_games	file:
 wis	structs.h	/^	skill_measurement_t wis;$/;"	kind:member	line:1356	struct:char_ability_data	file:	access:public

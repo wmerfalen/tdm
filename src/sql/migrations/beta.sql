@@ -10625,3 +10625,16 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 -- PostgreSQL database dump complete
 --
 
+
+CREATE TABLE public.notch(
+    id SERIAL,
+    n_points integer NOT NULL DEFAULT 1,
+    n_name varchar NOT NULL,
+    n_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+ALTER TABLE ONLY public.notch
+    ADD CONSTRAINT notch_primary_key PRIMARY KEY (id);
+ALTER TABLE ONLY public.notch
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (n_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;

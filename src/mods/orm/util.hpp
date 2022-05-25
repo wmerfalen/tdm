@@ -219,6 +219,25 @@ namespace mods::orm::util {
 		}
 		return {UNKNOWN_ERROR,"unknown"};
 	}
+	/** HOW TO USE MULTIPLE WHERE STATEMENTS:
+	 *
+		using statement = std::vector<mods::orm::util::statement_t>;
+		using c = std::vector<pqxx::result::reference>;
+		c container;
+		statement statements;
+		statements.emplace_back("pc_contract_vnum","=",std::to_string(c_vnum),true,false);
+		statements.emplace_back("pc_player_id","=",std::to_string(player_id),false,false);
+		mods::orm::util::load_where<c,sql_compositor,statement>(
+		    container,
+		    player_contract_state_table_name.data(),
+		    statements
+		);
+		if(container.size() == 0) {
+			return {1,"no results"};
+		}
+		return this->delete_by_id(container[0]["id"].as<uint64_t>());
+
+		*/
 	template <typename TContainerObject,typename sql_compositor,typename TCompoundStatement>
 	static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s, std::string_view table_name,TCompoundStatement& compound_statement_list) {
 		try {
