@@ -158,14 +158,20 @@ namespace mods::debug::pre_game {
 		sleep(60);
 
 	}
+	void do_notch_test(auto p) {
+		p->set_db_id(1);
+		mods::orm::increment_player_notch(p,"Sheesh");
+		sleep(100);
+	}
+
 
 	bool run() {
 		auto p = new_player();
 		std::cerr << "sizeof(player object): " << sizeof(*p) << "\n";
 
-		p->set_db_id(1);
-		mods::orm::increment_player_notch(p,"Sheesh");
-		sleep(100);
+#ifdef __MENTOC_RUN_NOTCH_TEST__
+		do_notch_test(p);
+#endif
 
 #ifdef __MENTOC_RUN_ARMOR_CALCULATOR__
 		do_armor_calculator();

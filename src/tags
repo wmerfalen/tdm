@@ -746,7 +746,7 @@ DB_BOOT_SHP	db.h	19;"	kind:macro	line:19	file:
 DB_BOOT_WLD	db.h	15;"	kind:macro	line:15	file:
 DB_BOOT_ZON	db.h	18;"	kind:macro	line:18	file:
 DB_SAVE_CHAR	mods/players/db-load.hpp	/^		DB_SAVE_CHAR,$/;"	kind:enumerator	line:20	enum:mods::players::db_load::save_from_t	file:
-DD	mods/debug-pre-game.hpp	298;"	kind:macro	line:298	file:
+DD	mods/debug-pre-game.hpp	304;"	kind:macro	line:304	file:
 DD	mods/debug-pre-game.hpp	44;"	kind:macro	line:44	file:
 DEAD	mods/positions.hpp	/^	DEAD = mods::pos::DEAD,$/;"	kind:enumerator	line:19	enum:int8_t	file:
 DEAD	mods/positions.hpp	/^	constexpr static uint8_t DEAD       = 0;	\/* dead			*\/$/;"	kind:member	line:6	namespace:mods::pos	file:
@@ -7033,6 +7033,7 @@ do_next_row	mods/mini-games.hpp	/^ACMD(do_next_row);$/;"	kind:variable	line:34
 do_not_buy	shop.h	/^	mods::string do_not_buy;		\/* If keeper dosn't buy such things	*\/$/;"	kind:member	line:43	struct:shop_data	file:	access:public
 do_not_here	act.other.cpp	/^ACMD(do_not_here);$/;"	kind:variable	line:56
 do_not_here	interpreter.cpp	/^ACMD(do_not_here);$/;"	kind:variable	line:244
+do_notch_test	mods/debug-pre-game.hpp	/^	void do_notch_test(auto p) {$/;"	kind:function	line:161	namespace:mods::debug::pre_game	signature:(auto p)
 do_npc_rescue	castle.cpp	/^int do_npc_rescue( char_data *ch,  char_data *ch_victim) {$/;"	kind:function	line:337	signature:( char_data *ch, char_data *ch_victim)
 do_obuild	interpreter.cpp	/^ACMD(do_obuild);$/;"	kind:variable	line:325
 do_olc	interpreter.cpp	/^ACMD(do_olc);$/;"	kind:variable	line:245
@@ -13659,7 +13660,7 @@ rules_of_engagement	mods/combat.cpp	/^	namespace rules_of_engagement {$/;"	kind:
 rules_of_engagement	mods/player.hpp	/^			auto& rules_of_engagement() {$/;"	kind:function	line:956	namespace:mods	access:public	signature:()
 run	mods/behaviour_tree.hpp	/^		run_status run(LambdaArgument arg) {$/;"	kind:function	line:45	struct:mods::behaviour_tree	access:public	signature:(LambdaArgument arg)
 run	mods/behaviour_tree_node.hpp	/^			run_status_t run(LambdaArgument& arg) {$/;"	kind:function	line:65	struct:mods::behaviour_tree_node	access:public	signature:(LambdaArgument& arg)
-run	mods/debug-pre-game.hpp	/^	bool run() {$/;"	kind:function	line:162	namespace:mods::debug::pre_game	signature:()
+run	mods/debug-pre-game.hpp	/^	bool run() {$/;"	kind:function	line:168	namespace:mods::debug::pre_game	signature:()
 run	mods/forge-engine/generated-rifle.hpp	/^			void run(generated_rifle_t* r) {$/;"	kind:function	line:1751	struct:mods::forge_engine::balance_ruleset_t	access:public	signature:(generated_rifle_t* r)
 run	mods/mobs/behaviour-tree-list.cpp	/^	void run() {$/;"	kind:function	line:21	namespace:mods::mobs::behaviour_tree_list	signature:()
 run	mods/replenish.cpp	/^	void run() {$/;"	kind:function	line:67	namespace:mods::replenish	signature:()
