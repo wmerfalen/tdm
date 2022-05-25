@@ -1,16 +1,16 @@
-#define __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__
+//#define __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__
 #include "notch.hpp"
 #include "util.hpp"
 #include "../player.hpp"
 #include "../util-map.hpp"
 
-//#ifdef __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
+#ifdef __MENTOC_SHOW_MODS_ORM_NOTCH_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::orm::notch::debug]")  << MSG << "\n";
 #define m_error(MSG) mentoc_prefix_debug(red_str("[mods::orm::notch::ERROR]"))  << MSG << "\n";
-//#else
-//#define m_debug(MSG) ;;
-//#define m_error(MSG) ;;
-//#endif
+#else
+#define m_debug(MSG)
+#define m_error(MSG)
+#endif
 
 
 namespace mods::orm {
@@ -21,18 +21,6 @@ namespace mods::orm {
 		           "=",
 		           std::to_string(player_id)
 		       );
-	}
-	int16_t notch::save() {
-		for(auto& record : this->rows) {
-			this->n_name = record.n_name;
-			this->n_points = record.n_points;
-			this->n_player_id = record.n_player_id;
-			std::tuple<int16_t,std::string,uint64_t> insert_result = mods::orm::util::insert_returning<notch_record_t,sql_compositor>(&record, "id");
-			if(!ORM_SUCCESS(insert_result)) {
-				std::cerr << red_str("Issue saving notch:'") << std::get<1>(insert_result) << "'\n";
-			}
-		}
-		return 0;
 	}
 	std::string notch::primary_key_value() {
 		return std::to_string(id);
@@ -46,20 +34,6 @@ namespace mods::orm {
 			record.n_player_id = player_id;
 			rows.emplace_back(record);
 		}
-	}
-
-	strmap_t notch::export_class() {
-		strmap_t values;
-		values["n_name"] = n_name;
-		values["n_points"] = std::to_string(n_points);
-		values["n_player_id"] = std::to_string(n_player_id);
-		return std::move(values);
-	}
-
-	void notch::init() {
-		id = 0;
-		loaded = 0;
-		primary_key_id = 0;
 	}
 
 	void notch::feed_multi(pqxx::result& in_rows) {
@@ -92,7 +66,6 @@ namespace mods::orm {
 		    statements
 		);
 		if(container.size() == 0) {
-			std::cerr << "couldn't find anything. inserting...\n";
 			id = 0;
 			n_player_id = player_id;
 			n_name = notch;
@@ -104,7 +77,6 @@ namespace mods::orm {
 			}
 			return {std::get<0>(status),std::get<1>(status)};
 		}
-		std::cerr << "found a record. loading\n";
 		id = container[0]["id"].as<uint64_t>();
 		n_player_id = container[0]["n_player_id"].as<uint64_t>();
 		n_name = container[0]["n_name"].c_str();
