@@ -362,7 +362,7 @@ namespace mods::orm {
 #define MENTOC_ORM_FEED_IMPL(SEQUENCE) \
 	int16_t feed(const pqxx::result::reference& row) {\
 		init();\
-		id = row["id"].as<uint64_t>();\
+		this->id = row["id"].as<uint64_t>();\
 		MENTOC_ORM_FEED_CLASS(SEQUENCE);\
 		loaded = 1;\
 		return 0;\
@@ -432,6 +432,27 @@ namespace mods::orm {
 			return list;\
 		}
 
+#define MENTOC_ORM_DELETE_BY_PLAYER(M_MENTOC_CLASS_NAME) \
+		auto delete_by_player(const uint64_t& player_id) { \
+			return mods::orm::util::delete_by_player<M_MENTOC_CLASS_NAME,sql_compositor>(this,player_id); \
+		}
+
+#define MENTOC_ORM_LOAD_BY_PLAYER(M_MENTOC_CLASS_NAME) \
+		auto load_by_player(const uint64_t& player_id) { \
+			return mods::orm::util::load_multi_by_player<M_MENTOC_CLASS_NAME,sql_compositor,uint64_t>(\
+			           this,\
+			           player_id\
+			       );\
+		}
+
+#define MENTOC_ORM_PRIMARY_KEY_FUNCTIONS() \
+	std::string primary_key_value() const { \
+		return std::to_string(id); \
+	}\
+	std::string primary_key_name() const { \
+		return "id"; \
+	}
+
 
 #define MENTOC_ORM_CLASS(SEQUENCE,TABLE_NAME) \
 		static constexpr const char* table = TABLE_NAME;\
@@ -446,6 +467,6 @@ namespace mods::orm {
 		MENTOC_ORM_SLOT_TYPES_FOR(SEQUENCE);
 
 
-};
+};//end namespace mods::orm
 
 #endif

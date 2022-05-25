@@ -110,6 +110,15 @@ namespace mods::orm::util {
 		}
 		return {UNKNOWN_ERROR,"unknown"};
 	}
+	template <typename TObject,typename sql_compositor,typename TClassPtr>
+	static inline auto delete_by_player(TClassPtr* object,const uint64_t& player_id) {
+		return mods::orm::util::delete_where<TObject,sql_compositor>(
+		           object->table_name(),
+		           object->player_id_column(),
+		           "=",
+		           std::to_string(player_id)
+		       );
+	}
 	template <typename TObject,typename sql_compositor,typename TCompoundStatement>
 	static inline std::tuple<int16_t,std::string> delete_where(
 	    std::string_view table_name,
@@ -327,6 +336,50 @@ namespace mods::orm::util {
 		}
 		return {UNKNOWN_ERROR,"unknown"};
 	}
+	template <typename TObject,typename sql_compositor,typename TPlayerID>
+	static inline std::tuple<int16_t,std::string> load_multi_by_player(TObject* s,const TPlayerID& player_id) {
+		return mods::orm::util::load_multi_by_column<TObject,sql_compositor>(s,s->player_id_column(),std::to_string(player_id));
+	}
+
+	template <typename TObject,typename sql_compositor,typename TPlayerID>
+	static inline std::tuple<int16_t,std::string> load_by_player(TObject* s,const TPlayerID& player_id) {
+		return mods::orm::util::load_by_column<TObject,sql_compositor>(s,s->player_id_column(),std::to_string(player_id));
+	}
+
+
+	/**
+	 * Pass in a std::map<std::string,std::string> as
+	 * second parameter
+	 */
+	using pqxx_result_t = std::vector<pqxx::result::reference>;
+
+	template <typename TObject,typename sql_compositor>
+	static inline std::tuple<int16_t,std::string,pqxx_result_t> load_by_player_and(
+	    TObject* s,
+	    std::map<std::string,std::string> statements) {
+
+		using statement = std::vector<mods::orm::util::statement_t>;
+		using c = std::vector<pqxx::result::reference>;
+
+		statement clauses;
+		c container;
+		unsigned i = 0;
+		for(const auto& pair : statements) {
+			bool is_and = i + i < statements.size();
+			clauses.emplace_back(pair.first,"=",pair.second,is_and,false);
+		}
+		auto status = mods::orm::util::load_where<c,sql_compositor,statement>(
+		                  container,
+		                  s->table_name(),
+		                  clauses
+		              );
+		return {std::get<0>(status),std::get<1>(status),container};
+	}
+
+
+
+
+
 	template <typename TObject,typename sql_compositor>
 	static inline std::tuple<int16_t,std::string> load_multi_by_column_order_by(TObject* s,std::string_view column,std::string_view value,std::string order_by,std::string direction) {
 		try {

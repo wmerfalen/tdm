@@ -14,27 +14,6 @@
 
 
 namespace mods::orm {
-	std::tuple<int16_t,std::string> notch::delete_by_player(const uint64_t& player_id) {
-		return mods::orm::util::delete_where<notch,sql_compositor>(
-		           table_name(),
-		           "n_player_id",
-		           "=",
-		           std::to_string(player_id)
-		       );
-	}
-	std::string notch::primary_key_value() {
-		return std::to_string(id);
-	}
-
-	void notch::populate(const uint64_t& player_id,const std::map<std::string,uint16_t>& data) {
-		for(const auto& pair : data) {
-			notch_record_t record;
-			record.n_name = pair.first;
-			record.n_points = pair.second;
-			record.n_player_id = player_id;
-			rows.emplace_back(record);
-		}
-	}
 
 	void notch::feed_multi(pqxx::result& in_rows) {
 		notch_record_t r;
@@ -46,60 +25,20 @@ namespace mods::orm {
 			rows.emplace_back(r);
 		}
 	}
-	std::tuple<int16_t,std::string> notch::load_by_player(const uint64_t& player_id) {
-		return mods::orm::util::load_multi_by_column<notch,sql_compositor>(
-		           this,
-		           "n_player_id",
-		           std::to_string(player_id)
-		       );
-	}
-	std::tuple<int16_t,std::string> notch::load_by_player_and_notch(const uint64_t& player_id,std::string_view notch) {
-		using statement = std::vector<mods::orm::util::statement_t>;
-		using c = std::vector<pqxx::result::reference>;
-		c container;
-		statement statements;
-		statements.emplace_back("n_player_id","=",std::to_string(player_id),true,false);
-		statements.emplace_back("n_name","=",notch.data(),false,false);
-		mods::orm::util::load_where<c,sql_compositor,statement>(
-		    container,
-		    table_name(),
-		    statements
-		);
-		if(container.size() == 0) {
-			id = 0;
-			n_player_id = player_id;
-			n_name = notch;
-			n_points = 0;
-			auto status = this->create(this);
-			if(ORM_SUCCESS(status)) {
-				loaded = 1;
-				id = std::get<2>(status);
-			}
-			return {std::get<0>(status),std::get<1>(status)};
-		}
-		id = container[0]["id"].as<uint64_t>();
-		n_player_id = container[0]["n_player_id"].as<uint64_t>();
-		n_name = container[0]["n_name"].c_str();
-		n_points = container[0]["n_points"].as<uint16_t>();
-		mods::util::maps::dump(export_class());
-		return {0,"loaded"};
-	}
-
-
-	std::map<std::string,uint16_t> notch::get_player_levels(const uint64_t& player_id, std::string_view player_class) {
-		std::map<std::string,uint16_t> mapped;
-		if(ORM_SUCCESS(load_by_player(player_id))) {
-			for(const auto& row : rows) {
-				mapped[row.n_name] = row.n_points;
-			}
-		}
-		return mapped;
-	}
 
 	std::tuple<int16_t,std::string> increment_player_notch(player_ptr_t& player,std::string_view notch) {
 		mods::orm::notch n;
 		m_debug("start");
 		auto status = n.load_by_player_and_notch(player->db_id(),notch);
+		auto results = std::get<2>(status);
+		if(results.size() == 0) {
+			n.n_name = notch;
+			n.n_player_id = player->db_id();
+			n.n_points = 1;
+			n.create(&n);
+		} else {
+			n.feed(results[0]);
+		}
 		++n.n_points;
 		m_debug("n_points: " << n.n_points << "\n");
 		mods::util::maps::dump(n.export_class());

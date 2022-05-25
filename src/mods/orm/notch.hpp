@@ -30,6 +30,7 @@ namespace mods::orm {
 	};
 
 	struct notch : public mods::orm::orm_base<notch,std::string> {
+
 		/**
 		 * member tuple csv columns:
 		 * Member Var Type, Member Var Name, initailized value, pqxx conversion type, native object field, slot list
@@ -49,15 +50,11 @@ namespace mods::orm {
 )
 		MENTOC_ORM_CLASS(NOTCH_ORM_TUPLE,"notch");
 
-		using primary_choice_t = std::string;
 		std::string table_name() const {
 			return notch_table_name.data();
 		}
-		std::string column_prefix() const {
-			return "n_";
-		}
-		std::string id_column() const {
-			return "id";
+		std::string player_id_column() const {
+			return "n_player_id";
 		}
 		notch() {
 			this->init();
@@ -66,21 +63,16 @@ namespace mods::orm {
 		}
 		~notch() = default;
 
-		std::string primary_key_name() {
-			return id_column();
-		}
-		std::string primary_key_value();
-
-		void load_multi(const pqxx::result::reference&);
-		void populate(const uint64_t& player_id, const std::map<std::string,uint16_t>& data);
-		std::map<std::string,uint16_t> get_player_levels(const uint64_t& player_id, std::string_view notch);
-
 		void feed_multi(pqxx::result&);
 
+		MENTOC_ORM_DELETE_BY_PLAYER(notch);
+		MENTOC_ORM_LOAD_BY_PLAYER(notch);
+		MENTOC_ORM_PRIMARY_KEY_FUNCTIONS();
 
-		std::tuple<int16_t,std::string> delete_by_player(const uint64_t& player_id);
-		std::tuple<int16_t,std::string> load_by_player(const uint64_t& player_id);
-		std::tuple<int16_t,std::string> load_by_player_and_notch(const uint64_t& player_id,std::string_view notch);
+		auto load_by_player_and_notch(const uint64_t& player_id,std::string_view notch_name) {
+			auto s = mods::orm::util::load_by_player_and<notch,sql_compositor>(this, {{"n_name",notch_name.data()}});
+			return s;
+		}
 
 		std::vector<notch_record_t> rows;
 	};
