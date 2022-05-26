@@ -506,6 +506,7 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 		make_sentinel_hostile(sentinel_hostile);
 		make_sentinel_discipline(sentinel_discipline);
 
+		m_debug("returning trees");
 
 		return {
 			{"orthos_sentinel_roam",sentinel_roam},

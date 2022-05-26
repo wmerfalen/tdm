@@ -1,5 +1,4 @@
 #define __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__
-#define __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 #include "notch.hpp"
 #include "util.hpp"
 #include "../player.hpp"
@@ -54,7 +53,6 @@ namespace mods::orm {
 		values["n_name"] = n_name;
 		values["n_points"] = std::to_string(n_points);
 		values["n_player_id"] = std::to_string(n_player_id);
-		values["id"] = std::to_string(id);
 		return std::move(values);
 	}
 
@@ -95,13 +93,14 @@ namespace mods::orm {
 		);
 		if(container.size() == 0) {
 			std::cerr << "couldn't find anything. inserting...\n";
+			id = 0;
+			n_player_id = player_id;
+			n_name = notch;
+			n_points = 0;
 			auto status = this->create(this);
 			if(ORM_SUCCESS(status)) {
 				loaded = 1;
 				id = std::get<2>(status);
-				n_player_id = container[0]["id"].as<uint64_t>();
-				n_name = container[0]["n_name"].c_str();
-				n_points = container[0]["n_points"].as<uint16_t>();
 			}
 			return {std::get<0>(status),std::get<1>(status)};
 		}
