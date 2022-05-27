@@ -1,0 +1,15 @@
+- [ ] upsert orm function
+- [ ] sql create table from ORM TUPLE
+	- [ ] using notch orm class as guinea pig
+- [ ] orthos spawn sentinel btree
+	- [ ] knockdown player
+	- [ ] enforce last fight timestamp
+- [ ] different types of shards
+	- [ ] Marrow
+		- [ ] HP/Medicinal/Boosters
+	- [ ] Metallic
+		- [ ] Ammunition/Grip
+	- [ ] Razor
+		- [ ] Intelligence related (FIXME)
+	- [ ] Ionic
+		- [ ] Elemental Resist/Damage
