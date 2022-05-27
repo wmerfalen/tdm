@@ -368,6 +368,11 @@ namespace mods::orm {
 		return 0;\
 	}
 
+#define MENTOC_ORM_LINK_TO_PLAYER_USING(M_FIELD_NAME) \
+		static std::string player_id_column() { \
+			return M_FIELD_NAME;\
+		}
+
 #define MENTOC_ORM_SLOT_LIST_IMPL(r,data,MEMBER_TUPLE)\
 	BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(6,1,MEMBER_TUPLE)) ,
 
@@ -449,7 +454,7 @@ namespace mods::orm {
 	std::string primary_key_value() const { \
 		return std::to_string(id); \
 	}\
-	std::string primary_key_name() const { \
+	std::string primary_key_name() { \
 		return "id"; \
 	}
 
@@ -466,6 +471,11 @@ namespace mods::orm {
 		MENTOC_ORM_SET_FUNCTION(SEQUENCE); \
 		MENTOC_ORM_SLOT_TYPES_FOR(SEQUENCE);
 
+	static constexpr uint16_t LIST_IN_SLOT = 1;
+	static constexpr uint16_t DONT_LIST_IN_SLOT = 0;
+	static constexpr uint16_t USE_DOT_AS = 1;
+	static constexpr uint16_t USE_VECTORIZE = 2;
+	static constexpr uint16_t USE_DOT_C_STR = 3;
 
 };//end namespace mods::orm
 

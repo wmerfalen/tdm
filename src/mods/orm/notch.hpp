@@ -3,7 +3,7 @@
 
 //#define __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 #include "orm-base.hpp"
-#include "generic-orm.hpp"
+//#include "generic-orm.hpp"
 
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
@@ -30,7 +30,6 @@ namespace mods::orm {
 	};
 
 	struct notch : public mods::orm::orm_base<notch,std::string> {
-
 		/**
 		 * member tuple csv columns:
 		 * Member Var Type, Member Var Name, initailized value, pqxx conversion type, native object field, slot list
@@ -43,19 +42,15 @@ namespace mods::orm {
 		 * slot list: 1 = list this var in slot_list(), 0 = don't list in slot_list
 		 */
 #define NOTCH_ORM_TUPLE ( \
-(uint64_t,id,0,1,null,0), \
-(uint64_t,n_points,0,1,null,0), \
+(uint64_t,id,0,1,null,1), \
+(uint64_t,n_points,0,1,null,1), \
 (uint64_t,n_player_id,0,1,null,1), \
-(std::string,n_name,"",3,name,1) \
+(std::string,n_name,"",3,null,1) \
 )
-		MENTOC_ORM_CLASS(NOTCH_ORM_TUPLE,"notch");
 
-		std::string table_name() const {
-			return notch_table_name.data();
-		}
-		std::string player_id_column() const {
-			return "n_player_id";
-		}
+		MENTOC_ORM_CLASS(NOTCH_ORM_TUPLE,"notch");
+		MENTOC_ORM_LINK_TO_PLAYER_USING("n_player_id");
+
 		notch() {
 			this->init();
 			loaded = 0;

@@ -839,6 +839,7 @@ DIVISOR	mods/mobs/resistance.hpp	/^		DIVISOR = (1 << 2),$/;"	kind:enumerator	lin
 DMG_DUMP	mods/weapons/damage-types.cpp	/^#define DMG_DUMP(/;"	kind:macro	line:614	file:	signature:()
 DMG_DUMP	mods/weapons/damage-types.cpp	/^#define DMG_DUMP(/;"	kind:macro	line:629	file:	signature:()
 DONTSET	mods/flags.hpp	/^		DONTSET,$/;"	kind:enumerator	line:58	enum:mods::flags::plr	file:	access:public
+DONT_LIST_IN_SLOT	mods/orm/orm-base.hpp	/^	static constexpr uint16_t DONT_LIST_IN_SLOT = 0;$/;"	kind:variable	line:475	namespace:mods::orm	typeref:typename:uint16_t	file:
 DOOR_IS_BREACHED	act.movement.cpp	/^#define DOOR_IS_BREACHED(/;"	kind:macro	line:525	file:	signature:(ch,obj,door)
 DOOR_IS_CLOSED	act.movement.cpp	/^#define DOOR_IS_CLOSED(/;"	kind:macro	line:529	file:	signature:(ch,obj,door)
 DOOR_IS_CLOSED	mods/doors.hpp	/^	static constexpr int8_t DOOR_IS_CLOSED = -3;$/;"	kind:variable	line:296	namespace:mods::doors	typeref:typename:int8_t	file:
@@ -1744,6 +1745,7 @@ LIQ_TEA	structs.h	/^#define LIQ_TEA /;"	kind:macro	line:596	file:
 LIQ_WATER	structs.h	/^#define LIQ_WATER /;"	kind:macro	line:585	file:
 LIQ_WHISKY	structs.h	/^#define LIQ_WHISKY /;"	kind:macro	line:590	file:
 LIQ_WINE	structs.h	/^#define LIQ_WINE /;"	kind:macro	line:587	file:
+LIST_IN_SLOT	mods/orm/orm-base.hpp	/^	static constexpr uint16_t LIST_IN_SLOT = 1;$/;"	kind:variable	line:474	namespace:mods::orm	typeref:typename:uint16_t	file:
 LIST_PRODUCE	shop.h	/^#define LIST_PRODUCE	/;"	kind:macro	line:101	file:
 LIST_ROOM	shop.h	/^#define LIST_ROOM	/;"	kind:macro	line:103	file:
 LIST_TRADE	shop.h	/^#define LIST_TRADE	/;"	kind:macro	line:102	file:
@@ -1909,8 +1911,8 @@ MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	/^#define MENTOC_BASE_MEMBERS_SET(/;"	kind
 MENTOC_BITVECTOR	mods/builder.cpp	/^#define MENTOC_BITVECTOR(/;"	kind:macro	line:4264	file:	signature:(a)
 MENTOC_CF	mods/yaml.hpp	/^#define MENTOC_CF(/;"	kind:macro	line:84	file:	signature:(_XDP_)
 MENTOC_CF	mods/yaml.hpp	/^#define MENTOC_CF(/;"	kind:macro	line:93	file:	signature:(a)
-MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	/^#define MENTOC_CHECK_SLOT_LIST(/;"	kind:macro	line:374	file:	signature:(s,data,elem)
-MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	/^#define MENTOC_CHECK_SLOT_LIST(/;"	kind:macro	line:389	file:	signature:(s,data,elem)
+MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	/^#define MENTOC_CHECK_SLOT_LIST(/;"	kind:macro	line:379	file:	signature:(s,data,elem)
+MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	/^#define MENTOC_CHECK_SLOT_LIST(/;"	kind:macro	line:394	file:	signature:(s,data,elem)
 MENTOC_CHECK_TYPE	mods/orm/orm-base.hpp	/^#define MENTOC_CHECK_TYPE(/;"	kind:macro	line:337	file:	signature:(s,data,elem)
 MENTOC_COLUMN_LIST_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_COLUMN_LIST_IMPL(/;"	kind:macro	line:351	file:	signature:(r,data,MEMBER_TUPLE)
 MENTOC_COMMAND_MACROS	mods/interpreter.hpp	/^#define MENTOC_COMMAND_MACROS$/;"	kind:macro	line:23	file:
@@ -1960,9 +1962,9 @@ MENTOC_OBJ_DATA_STAT_GEN	structs.cpp	/^#define MENTOC_OBJ_DATA_STAT_GEN(/;"	kind
 MENTOC_OBJ_INITIALIZE_CONSTRUCTOR	structs.cpp	/^#define MENTOC_OBJ_INITIALIZE_CONSTRUCTOR(/;"	kind:macro	line:113	file:	signature:(r,data,CLASS_TYPE)
 MENTOC_OBS	mods/builder.cpp	/^#define MENTOC_OBS(/;"	kind:macro	line:43	file:	signature:(i)
 MENTOC_OBS2	mods/builder.cpp	/^#define MENTOC_OBS2(/;"	kind:macro	line:44	file:	signature:(i,a)
-MENTOC_ORM_CLASS	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_CLASS(/;"	kind:macro	line:457	file:	signature:(SEQUENCE,TABLE_NAME)
+MENTOC_ORM_CLASS	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_CLASS(/;"	kind:macro	line:462	file:	signature:(SEQUENCE,TABLE_NAME)
 MENTOC_ORM_COLUMN_LIST_FOR	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_COLUMN_LIST_FOR(/;"	kind:macro	line:354	file:	signature:(SEQUENCE)
-MENTOC_ORM_DELETE_BY_PLAYER	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_DELETE_BY_PLAYER(/;"	kind:macro	line:435	file:	signature:(M_MENTOC_CLASS_NAME)
+MENTOC_ORM_DELETE_BY_PLAYER	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_DELETE_BY_PLAYER(/;"	kind:macro	line:440	file:	signature:(M_MENTOC_CLASS_NAME)
 MENTOC_ORM_EXPORT_CLASS	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_EXPORT_CLASS(/;"	kind:macro	line:314	file:	signature:(SEQUENCE)
 MENTOC_ORM_FEED_CLASS	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_FEED_CLASS(/;"	kind:macro	line:339	file:	signature:(SEQUENCE)
 MENTOC_ORM_FEED_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_FEED_IMPL(/;"	kind:macro	line:362	file:	signature:(SEQUENCE)
@@ -1972,16 +1974,17 @@ MENTOC_ORM_FEED_ROW_STRING_VECTOR_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_OR
 MENTOC_ORM_GENERATE_MAP_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_GENERATE_MAP_IMPL(/;"	kind:macro	line:309	file:	signature:(r,F,MEMBER_TUPLE)
 MENTOC_ORM_INIT	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_INIT(/;"	kind:macro	line:323	file:	signature:(SEQUENCE)
 MENTOC_ORM_INIT_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_INIT_IMPL(/;"	kind:macro	line:320	file:	signature:(r,F,MEMBER_TUPLE)
-MENTOC_ORM_LOAD_BY_PLAYER	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_LOAD_BY_PLAYER(/;"	kind:macro	line:440	file:	signature:(M_MENTOC_CLASS_NAME)
+MENTOC_ORM_LINK_TO_PLAYER_USING	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_LINK_TO_PLAYER_USING(/;"	kind:macro	line:371	file:	signature:(M_FIELD_NAME)
+MENTOC_ORM_LOAD_BY_PLAYER	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_LOAD_BY_PLAYER(/;"	kind:macro	line:445	file:	signature:(M_MENTOC_CLASS_NAME)
 MENTOC_ORM_MEMBER_VARS_FOR	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_MEMBER_VARS_FOR(/;"	kind:macro	line:347	file:	signature:(SEQUENCE)
 MENTOC_ORM_MEMBER_VARS_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_MEMBER_VARS_IMPL(/;"	kind:macro	line:344	file:	signature:(r,data,MEMBER_TUPLE)
-MENTOC_ORM_PRIMARY_KEY_FUNCTIONS	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_PRIMARY_KEY_FUNCTIONS(/;"	kind:macro	line:448	file:	signature:()
-MENTOC_ORM_SET_FUNCTION	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SET_FUNCTION(/;"	kind:macro	line:391	file:	signature:(SEQUENCE)
-MENTOC_ORM_SET_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SET_IMPL(/;"	kind:macro	line:383	file:	signature:(r,data,MEMBER_TUPLE)
-MENTOC_ORM_SLOT_LIST_FOR	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SLOT_LIST_FOR(/;"	kind:macro	line:376	file:	signature:(SEQUENCE)
-MENTOC_ORM_SLOT_LIST_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SLOT_LIST_IMPL(/;"	kind:macro	line:371	file:	signature:(r,data,MEMBER_TUPLE)
-MENTOC_ORM_SLOT_TYPES_FOR	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SLOT_TYPES_FOR(/;"	kind:macro	line:400	file:	signature:(SEQUENCE)
-MENTOC_ORM_SLOT_TYPE_STRING_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SLOT_TYPE_STRING_IMPL(/;"	kind:macro	line:397	file:	signature:(r,data,MEMBER_TUPLE)
+MENTOC_ORM_PRIMARY_KEY_FUNCTIONS	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_PRIMARY_KEY_FUNCTIONS(/;"	kind:macro	line:453	file:	signature:()
+MENTOC_ORM_SET_FUNCTION	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SET_FUNCTION(/;"	kind:macro	line:396	file:	signature:(SEQUENCE)
+MENTOC_ORM_SET_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SET_IMPL(/;"	kind:macro	line:388	file:	signature:(r,data,MEMBER_TUPLE)
+MENTOC_ORM_SLOT_LIST_FOR	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SLOT_LIST_FOR(/;"	kind:macro	line:381	file:	signature:(SEQUENCE)
+MENTOC_ORM_SLOT_LIST_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SLOT_LIST_IMPL(/;"	kind:macro	line:376	file:	signature:(r,data,MEMBER_TUPLE)
+MENTOC_ORM_SLOT_TYPES_FOR	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SLOT_TYPES_FOR(/;"	kind:macro	line:405	file:	signature:(SEQUENCE)
+MENTOC_ORM_SLOT_TYPE_STRING_IMPL	mods/orm/orm-base.hpp	/^#define MENTOC_ORM_SLOT_TYPE_STRING_IMPL(/;"	kind:macro	line:402	file:	signature:(r,data,MEMBER_TUPLE)
 MENTOC_PAGINATED_LIST	mods/builder.hpp	/^#define MENTOC_PAGINATED_LIST(/;"	kind:macro	line:201	file:	signature:(MENTOC_PARAM_CONTAINER)
 MENTOC_PLAYER_IS_BANNED	comm.cpp	/^static int constexpr MENTOC_PLAYER_IS_BANNED = -1;$/;"	kind:variable	line:223	typeref:typename:int 	file:
 MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	/^#define MENTOC_PLAYER_NULL_CHECK(/;"	kind:macro	line:1290	file:	signature:(item)
@@ -2200,8 +2203,7 @@ NORMAL_SIGHT	mods/flags.hpp	/^		NORMAL_SIGHT,$/;"	kind:enumerator	line:99	enum:m
 NORMAL_SIGHT	structs.h	/^	NORMAL_SIGHT,$/;"	kind:enumerator	line:85	enum:lense_type_t	file:	access:public
 NORTH	structs.h	/^#define NORTH /;"	kind:macro	line:133	file:
 NOSHOUT	mods/flags.hpp	/^		NOSHOUT,$/;"	kind:enumerator	line:64	enum:mods::flags::plr	file:	access:public
-NOTCH_ORM_TUPLE	mods/orm/generic-orm.hpp	/^#define NOTCH_ORM_TUPLE /;"	kind:macro	line:24	file:
-NOTCH_ORM_TUPLE	mods/orm/notch.hpp	/^#define NOTCH_ORM_TUPLE /;"	kind:macro	line:45	file:
+NOTCH_ORM_TUPLE	mods/orm/notch.hpp	/^#define NOTCH_ORM_TUPLE /;"	kind:macro	line:44	file:
 NOTDEADYET	mods/flags.hpp	/^		NOTDEADYET,$/;"	kind:enumerator	line:63	enum:mods::flags::plr	file:	access:public
 NOTHING	mods/index-type.hpp	/^# define NOTHING	/;"	kind:macro	line:13	file:
 NOTHING	mods/index-type.hpp	/^# define NOTHING	/;"	kind:macro	line:18	file:
@@ -3689,6 +3691,9 @@ UPDATED_STR	mods/unit-tests/contracts.cpp	/^			static constexpr std::string_view
 UPPER	utils.h	/^#define UPPER(/;"	kind:macro	line:157	file:	signature:(c)
 USERS_FORMAT	act.informative.cpp	/^#define USERS_FORMAT /;"	kind:macro	line:1492	file:
 USE_AUTOEQ	structs.h	/^#define USE_AUTOEQ	/;"	kind:macro	line:119	file:
+USE_DOT_AS	mods/orm/orm-base.hpp	/^	static constexpr uint16_t USE_DOT_AS = 1;$/;"	kind:variable	line:476	namespace:mods::orm	typeref:typename:uint16_t	file:
+USE_DOT_C_STR	mods/orm/orm-base.hpp	/^	static constexpr uint16_t USE_DOT_C_STR = 3;$/;"	kind:variable	line:478	namespace:mods::orm	typeref:typename:uint16_t	file:
+USE_VECTORIZE	mods/orm/orm-base.hpp	/^	static constexpr uint16_t USE_VECTORIZE = 2;$/;"	kind:variable	line:477	namespace:mods::orm	typeref:typename:uint16_t	file:
 USURP	interpreter.cpp	/^#define USURP	/;"	kind:macro	line:1431	file:
 UTILITY_STORES	mods/mobs/generic-thief.hpp	/^				UTILITY_STORES,$/;"	kind:enumerator	line:32	enum:mods::mobs::generic_thief::target_t	file:	access:public
 VALID_EDGE	graph.cpp	/^int VALID_EDGE(room_rnum x, int y) {$/;"	kind:function	line:59	typeref:typename:int	signature:(room_rnum x,int y)
@@ -9672,7 +9677,7 @@ load_by_player	mods/orm/support.cpp	/^	int16_t support::load_by_player(uint64_t 
 load_by_player	mods/orm/syndrome.cpp	/^	int16_t syndrome::load_by_player(uint64_t player_id){$/;"	kind:function	line:28	class:mods::orm::syndrome	typeref:typename:int16_t	signature:(uint64_t player_id)
 load_by_player	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_by_player(TObject* s,const TPlayerID& player/;"	kind:function	line:345	namespace:mods::orm::util	typeref:typename:std::tuple<int16_t,std::string>	file:	signature:(TObject * s,const TPlayerID & player_id)
 load_by_player_and	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string,pqxx_result_t> load_by_player_and($/;"	kind:function	line:357	namespace:mods::orm::util	typeref:typename:std::tuple<int16_t,std::string,pqxx_result_t>	file:	signature:(TObject * s,std::map<std::string,std::string> statements)
-load_by_player_and_notch	mods/orm/notch.hpp	/^		auto load_by_player_and_notch(const uint64_t& player_id,std::string_view notch_name) {$/;"	kind:function	line:72	struct:mods::orm::notch	typeref:typename:auto	file:	access:public	signature:(const uint64_t & player_id,std::string_view notch_name)
+load_by_player_and_notch	mods/orm/notch.hpp	/^		auto load_by_player_and_notch(const uint64_t& player_id,std::string_view notch_name) {$/;"	kind:function	line:67	struct:mods::orm::notch	typeref:typename:auto	file:	access:public	signature:(const uint64_t & player_id,std::string_view notch_name)
 load_by_profile	mods/orm/hq.cpp	/^	int16_t hq::load_by_profile(std::string_view affiliation) {$/;"	kind:function	line:38	class:mods::orm::hq	typeref:typename:int16_t	signature:(std::string_view affiliation)
 load_by_profile	mods/orm/mob-equipment.cpp	/^	int16_t mob_equipment::load_by_profile(std::string_view profile_name) {$/;"	kind:function	line:193	class:mods::orm::mob_equipment	typeref:typename:int16_t	signature:(std::string_view profile_name)
 load_by_room_vnum	mods/orm/mini-game.cpp	/^	void mini_game::load_by_room_vnum(room_vnum game_room_vnum){$/;"	kind:function	line:9	class:mods::orm::mini_game	typeref:typename:void	signature:(room_vnum game_room_vnum)
@@ -12456,11 +12461,10 @@ not_found	act.social.cpp	/^	char *not_found;$/;"	kind:member	line:58	struct:soci
 not_learned	mods/classes/base.cpp	/^	bool skill_t::not_learned() const {$/;"	kind:function	line:56	class:mods::classes::skill_t	typeref:typename:bool	signature:() const
 notch	mods/notch.cpp	/^namespace mods::notch {$/;"	kind:namespace	line:19	namespace:mods	file:
 notch	mods/notch.hpp	/^namespace mods::notch {$/;"	kind:namespace	line:5	namespace:mods	file:
-notch	mods/orm/notch.hpp	/^		notch() {$/;"	kind:function	line:59	struct:mods::orm::notch	file:	access:public	signature:()
+notch	mods/orm/notch.hpp	/^		notch() {$/;"	kind:function	line:54	struct:mods::orm::notch	file:	access:public	signature:()
 notch	mods/orm/notch.hpp	/^	struct notch : public mods::orm::orm_base<notch,std::string> {$/;"	kind:struct	line:32	namespace:mods::orm	file:	inherits:mods::orm::orm_base<notch,std::string>
 notch_it	mods/notch.cpp	/^	void notch_it(auto player, auto type) {$/;"	kind:function	line:21	namespace:mods::notch	typeref:typename:void	signature:(auto player,auto type)
 notch_record_t	mods/orm/notch.hpp	/^	struct notch_record_t {$/;"	kind:struct	line:12	namespace:mods::orm	file:
-notch_t	mods/orm/generic-orm.hpp	/^	struct notch_t : public mods::orm::orm_base<notch_t,std::string> {$/;"	kind:struct	line:12	namespace:mods::orm	file:	inherits:mods::orm::orm_base<notch_t,std::string>
 notch_table_name	mods/orm/notch.hpp	/^	static constexpr std::string_view notch_table_name = "notch";$/;"	kind:variable	line:11	namespace:mods::orm	typeref:typename:std::string_view	file:
 now	mods/date-time.cpp	/^	std::string now() {$/;"	kind:function	line:53	namespace:mods::date_time::irl	typeref:typename:std::string	signature:()
 nowhere	mods/builder.cpp	/^#define nowhere /;"	kind:macro	line:60	file:
@@ -13106,7 +13110,6 @@ player_id	mods/orm/player-skill-points.hpp	/^		uint64_t player_id;$/;"	kind:memb
 player_id	mods/orm/player-skill-points.hpp	/^		uint64_t player_id;$/;"	kind:member	line:72	struct:mods::orm::player_skill_points	typeref:typename:uint64_t	file:	access:public
 player_id	mods/orm/player-skill-usage.hpp	/^		uint64_t player_id;$/;"	kind:member	line:14	struct:mods::orm::player_skill_usage_record_t	typeref:typename:uint64_t	file:	access:public
 player_id	mods/orm/player-skill-usage.hpp	/^		uint64_t player_id;$/;"	kind:member	line:72	struct:mods::orm::player_skill_usage	typeref:typename:uint64_t	file:	access:public
-player_id_column	mods/orm/notch.hpp	/^		std::string player_id_column() const {$/;"	kind:function	line:56	struct:mods::orm::notch	typeref:typename:std::string	file:	access:public	signature:() const
 player_index_element	db.h	/^struct player_index_element {$/;"	kind:struct	line:274	file:
 player_is	mods/super-users.cpp	/^	bool player_is(player_ptr_t& player) {$/;"	kind:function	line:119	namespace:mods::super_users	typeref:typename:bool	signature:(player_ptr_t & player)
 player_key	mods/db.cpp	/^std::string player_key(std::string player_name,std::string prefix, std::string type) {$/;"	kind:function	line:566	typeref:typename:std::string	signature:(std::string player_name,std::string prefix,std::string type)
@@ -14370,7 +14373,7 @@ rows	mods/mini-games/line-up.hpp	/^		std::vector<std::vector<uint8_t>> rows;$/;"
 rows	mods/orm/armor-index.hpp	/^		std::vector<armor_index_record_t> rows;$/;"	kind:member	line:67	struct:mods::orm::armor_index	typeref:typename:std::vector<armor_index_record_t>	file:	access:public
 rows	mods/orm/contract-steps.hpp	/^		std::vector<contract_steps_record_t> rows;$/;"	kind:member	line:162	struct:mods::orm::contract_steps	typeref:typename:std::vector<contract_steps_record_t>	file:	access:public
 rows	mods/orm/mob-roam.hpp	/^		std::vector<mob_roam_record_t> rows;$/;"	kind:member	line:75	struct:mods::orm::mob_roam	typeref:typename:std::vector<mob_roam_record_t>	file:	access:public
-rows	mods/orm/notch.hpp	/^		std::vector<notch_record_t> rows;$/;"	kind:member	line:77	struct:mods::orm::notch	typeref:typename:std::vector<notch_record_t>	file:	access:public
+rows	mods/orm/notch.hpp	/^		std::vector<notch_record_t> rows;$/;"	kind:member	line:72	struct:mods::orm::notch	typeref:typename:std::vector<notch_record_t>	file:	access:public
 rows	mods/orm/player-skill-points.hpp	/^		std::vector<player_skill_points_record_t> rows;$/;"	kind:member	line:66	struct:mods::orm::player_skill_points	typeref:typename:std::vector<player_skill_points_record_t>	file:	access:public
 rows	mods/orm/player-skill-usage.hpp	/^		std::vector<player_skill_usage_record_t> rows;$/;"	kind:member	line:66	struct:mods::orm::player_skill_usage	typeref:typename:std::vector<player_skill_usage_record_t>	file:	access:public
 rows	mods/orm/rifle-attachment.hpp	/^		std::deque<rifle_attachment_record_t> rows;$/;"	kind:member	line:83	struct:mods::orm::rifle_attachment	typeref:typename:std::deque<rifle_attachment_record_t>	file:	access:public
@@ -15814,7 +15817,6 @@ table_name	mods/orm/mob-equipment.hpp	/^		std::string table_name() const {$/;"	k
 table_name	mods/orm/mob-roam.hpp	/^		std::string table_name() const {$/;"	kind:function	line:20	struct:mods::orm::mob_roam_record_t	typeref:typename:std::string	file:	access:public	signature:() const
 table_name	mods/orm/mob-roam.hpp	/^		std::string table_name() const {$/;"	kind:function	line:31	struct:mods::orm::mob_roam	typeref:typename:std::string	file:	access:public	signature:() const
 table_name	mods/orm/notch.hpp	/^		std::string table_name() const {$/;"	kind:function	line:24	struct:mods::orm::notch_record_t	typeref:typename:std::string	file:	access:public	signature:() const
-table_name	mods/orm/notch.hpp	/^		std::string table_name() const {$/;"	kind:function	line:53	struct:mods::orm::notch	typeref:typename:std::string	file:	access:public	signature:() const
 table_name	mods/orm/orm-base.hpp	/^			virtual std::string table_name() {$/;"	kind:function	line:258	struct:mods::orm::orm_base	typeref:typename:std::string	file:	access:public	signature:()
 table_name	mods/orm/player-base-ability.hpp	/^		std::string table_name(){ return "player_base_ability"; }$/;"	kind:function	line:10	struct:mods::orm::player_base_ability	typeref:typename:std::string	file:	access:public	signature:()
 table_name	mods/orm/player-contract-state.hpp	/^		std::string table_name() const {$/;"	kind:function	line:15	struct:mods::orm::player_contract_state	typeref:typename:std::string	file:	access:public	signature:() const
