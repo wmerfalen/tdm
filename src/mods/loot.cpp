@@ -376,10 +376,12 @@ namespace mods::loot::events {
 		if(janitor) {
 			/** No loot for players who kill mobs less than half their level */
 			mods::notch::easy_level_achievement(player,"Janitorial services");
+			award_tier_three_loot_to_player(player,npc);
 			return;
 		}
 		if(bully) {
 			mods::notch::easy_level_achievement(player,"Bully");
+			award_tier_three_loot_to_player(player,npc);
 			return;
 		}
 
