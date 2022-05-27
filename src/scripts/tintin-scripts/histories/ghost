@@ -1,145 +1,3 @@
-l
-score
-eq
-score
-l
-score
-ls
-l
-practice
-skills
-ghost:adrenaline_shot
-skills
-l
-n
-s
-skills
-l
-i
-eq
-l
-l in Weapons
-n
-e
-n
-s
-e
-n
-e
-w
-n
-s
-n
-list
-buy
-e
-w
-e
-n
-s
-n
-l scientist
-w
-n
-l
-s
-e
-w
-e
-l scientist
-l
-s
-n
-w
-e
-w
-n
-s
-l
-w
-e
-n
-l
-s
-n
-e
-w
-e
-d
-e
-d
-e
-d
-e
-s
-w
-ww
-w
-n
-s
-e
-w
-s
-e
-n
-nn
-n
-w
-u
-w
-u
-w
-u
-w
-e
-y
-yes
-foo
-m
-next
-choose GHOST
-yes
-1
-l
-autoexit
-automap
-l
-s
-n
-s
-n
-l
-s
-n
-w
-e
-d
-s
-w
-e
-w
-n
-s
-n
-e
-n
-u
-e
-n
-w
-n
-s
-open door south
-s
-n
-s
-l
-ll
-l
-s
-n
-l
-s
 n
 s
 l
@@ -253,3 +111,190 @@ l
 e
 s
 n
+e
+n
+e
+d
+e
+d
+e
+d
+e
+s
+sw
+w
+s
+w
+s
+w
+MPD
+nn
+s
+nn
+s
+nn
+s
+nn
+s
+nn
+n
+ns
+s
+nn
+list_loot
+show_loot 1
+n
+e
+n
+e
+d
+e
+d
+e
+ee
+ed
+e
+ee
+d
+e
+s
+ss
+w
+l
+s
+w
+s
+w
+s
+w
+nn
+s
+nn
+n
+l in corpse
+nn
+s
+nn
+s
+nn
+s
+list_loot
+junk_loot 1
+help loot
+take_loot
+take_loot 1
+i
+junk CZP
+junk Desert
+l
+n
+s
+n
+nn
+s
+nn
+s
+nn
+reload
+n
+l in corpse
+n
+l in corpse
+n
+s
+nn
+s
+nn
+s
+nn
+s
+nn
+flee
+s
+n
+e
+list_loot
+junk_loot 1
+take_loot 1
+junk Uzi
+junk PPK
+l
+n
+nn
+s
+nn
+s
+nn
+list_loot
+remove PSG
+wield Mini
+wield TN
+wield TN-33Y
+wield Belt
+wield TN-33Y
+wield TN
+wield Minigun
+i
+eq
+list_loot
+take_loot 1
+wield TN
+i
+n
+nn
+n
+nn
+spray n
+spray north
+n
+s
+spray north
+i
+n
+s
+spray north
+n
+l drone
+s
+remove minigun
+junk minigun
+i
+wield PSG
+l
+nn
+s
+nn
+s
+reload
+nn
+n
+list_loot
+remove glock
+junk glock
+take_loot 1
+stats glock
+remove psg1
+wield glock
+l
+n
+nn
+n
+k drone
+s
+flee
+1
+stats glock
+remove glock
+stats glock
+junk glock
+i
+list_loot
+wield PSG
+SDRONE
+l
+n
+s
+nn
+s
+nn
+list_loot

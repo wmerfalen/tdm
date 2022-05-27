@@ -9,158 +9,43 @@
 #else
 #define m_debug(a)
 #endif
-namespace mods::loot::events {
-	void award_tier_one_loot_to_player(player_ptr_t& player, player_ptr_t& npc) {
-		mods::loot_container::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
-
-	}
-	void award_tier_two_loot_to_player(player_ptr_t& player, player_ptr_t& npc) {
-		mods::loot_container::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
-
-	}
-	void award_tier_three_loot_to_player(player_ptr_t& player, player_ptr_t& npc) {
-		mods::loot_container::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
-
-	}
-	void award_by_rolling_between_tiers(player_ptr_t& player,player_ptr_t& npc,int tier_1,int tier_2) {
-		/** TODO: roll and decide if user gets tier 1 or tier 2 */
-		mods::loot_container::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
-	}
-
-	/**
-	 * Tiered loot
-	 * ------------
-	 *  Each piece of loot exists within a block of levels.
-	 *  For example, when you are level 5, you fall in the block of levels between
-	 *  1 and 10.
-	 *
-	 * Each tier is less powerful than the one before it. So, Tier 1 loot is
-	 * more powerful than Tier 2 and Tier 3 loot.
-	 *
-	 * Tier 1 loot
-	 * -----------
-	 * A piece of loot in the block of levels between player levels 1 and 10
-	 * would be powerful enough to not only be useful between levels 1 and 10,
-	 * but might actually carry you to levels 15 and above.
-	 *
-	 * The characteristics
-	 * -------------------
-	 * - powerful enough to carry you until (block[1] + (block[1] / 2))
-	 * - does (at most) 2.5 times as much damage as a Tier 2 weapon can
-	 * - have atleast one elemental damage slot filled.
-	 *
-	 * Tier 2 loot
-	 * -----------
-	 *  Tier 2 loot is less powerful than tier 1 loot, and by design, does not have
-	 *  very powerful elemental abilities.
-	 *
-	 * The characteristics
-	 * -------------------
-	 * - will carry you to block[1] but becomes obsolete by tier 2 loot at block[1] + 1
-	 * - does not contain any elemental slots
-	 * - damage output is (at best) average for the block
-	 *
-	 */
-
-	void player_killed_npc(player_ptr_t& player,player_ptr_t& npc) {
-		bool janitor = npc->level() * 2 <= player->level();
-		bool bully = npc->level() * 3 <= player->level();
-
-		if(!janitor && !bully && player->level() < 20) {
-			award_tier_three_loot_to_player(player,npc);
-			return;
-		}
-		if(janitor) {
-			/** No loot for players who kill mobs less than half their level */
-			mods::notch::easy_level_achievement(player,"Janitorial services");
-			return;
-		}
-		if(bully) {
-			mods::notch::easy_level_achievement(player,"Bully");
-			return;
-		}
-
-		/** Lower rewards */
-		bool npc_between_8_and_6 = (npc->level() < player->level() && player->level() - 8 <= npc->level() && player->level() - 6 >= npc->level());
-		bool npc_between_6_and_3 = (npc->level() < player->level() && player->level() - 6 <= npc->level() && player->level() - 3 >= npc->level());
-		bool npc_between_3_and_1 = (npc->level() < player->level() && player->level() - 3 <= npc->level() && player->level() - 1 >= npc->level());
-
-
-		/** Decent rewards */
-		bool same_level = npc->level() == player->level();
-
-
-		/** higher rewards */
-		bool npc_is_1_higher = (npc->level() > player->level() && player->level() + 1 == npc->level());
-		bool npc_is_2_higher = (npc->level() > player->level() && player->level() + 2 == npc->level());
-		bool npc_is_3_higher = (npc->level() > player->level() && player->level() + 3 == npc->level());
-		bool npc_is_4_higher = (npc->level() > player->level() && player->level() + 4 == npc->level());
-
-		/**
-		 * If npc level is greater than or equal to player level
-		 */
-		if(npc->level() >= player->level()) {
-			if(npc->level() / 2 >= player->level()) {
-				/** WOW. This player just slayed an npc twice it's level?  */
-				award_tier_one_loot_to_player(player,npc);
-				mods::notch::elite_level_achievement(player,"I ain't afraid of no ghosts");
-				return;
-			} else if(npc->level() / 1.5 >= player->level()) {
-				award_tier_one_loot_to_player(player,npc);
-				mods::notch::advanced_level_achievement(player,"Sheesh");
-				return;
-			} else if(npc_is_1_higher) {
-				award_tier_one_loot_to_player(player,npc);
-				mods::notch::medium_level_achievement(player,"Punching up");
-				return;
-			} else if(npc_is_2_higher) {
-				award_tier_one_loot_to_player(player,npc);
-				mods::notch::medium_level_achievement(player,"Looking for a fight");
-				return;
-			} else if(npc_is_3_higher) {
-				award_tier_one_loot_to_player(player,npc);
-				mods::notch::medium_level_achievement(player,"Looking for a fight");
-				return;
-			} else if(npc_is_4_higher) {
-				award_tier_one_loot_to_player(player,npc);
-				mods::notch::advanced_level_achievement(player,"Who wants some?");
-				return;
-			} else if(same_level) {
-				award_by_rolling_between_tiers(player,npc,2,3);
-				mods::notch::medium_level_achievement(player,"Physically fit");
-				return;
-			} else {
-				/** User falls between npc->level() / 1.5 and same level of player.
-				 * So, even though we don't have a specific name/test for this range,
-				 * it's still an advanced range.
-				 */
-				award_tier_one_loot_to_player(player,npc);
-				mods::notch::advanced_level_achievement(player,"Natural born killer.");
-				return;
-			}
-		}
-		if(npc_between_8_and_6 || npc_between_6_and_3 || npc_between_3_and_1) {
-			award_tier_three_loot_to_player(player,npc);
-			mods::notch::easy_level_achievement(player,"Getting my feet wet.");
-			return;
-		}
-		///**
-		// * If player killed a low level NPC, only rarely reward them with a rifle
-		// */
-		//if(npc->level() < LOOT_REWARD_RIFLE_LEVEL()) {
-		//	/**
-		//	 * TODO: generate a random consumable
-		//	 */
-		//	return;
-		//}
-		mods::loot_container::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
-		player->sendln("{grn}#######################################{/grn}");
-		player->sendln("{grn}# A piece of loot was awarded to you! #{/grn}");
-		player->sendln("{grn}#######################################{/grn}");
-	}
-};
 
 namespace mods::loot {
+	struct loot_t {
+		uint32_t id;
+		std::string player;
+		obj_ptr_t loot;
+	};
+
+	static std::vector<loot_t> loot_list;
+	void store(player_ptr_t& player, obj_ptr_t&& obj) {
+		static uint32_t id = 0;
+		loot_t l;
+		l.id = ++id;
+		l.player = player->name();
+		l.loot = std::move(obj);
+		loot_list.emplace_back(std::move(l));
+	}
+	void delete_loot(loot_t loot) {
+		auto id = loot.id;
+		loot_list.erase(
+		    std::remove_if(loot_list.begin(), loot_list.end(),
+		[&](const auto & o) {
+			return o.id == id;
+		}),
+		loot_list.end());
+	}
+
+	std::vector<loot_t> get_loot(player_ptr_t& player) {
+		std::vector<loot_t> list;
+		for(const auto& row : loot_list) {
+			if(row.player.compare(player->name().c_str()) == 0) {
+				list.emplace_back(row);
+			}
+		}
+		return list;
+	}
+
 	obj_ptr_t reward_player(player_ptr_t& player,mob_vnum victim) {
 		return std::move(mods::forge_engine::reward_player(player,victim));
 	}
@@ -346,13 +231,236 @@ namespace mods::loot {
 		r.save();
 	}
 
+	ACMD(do_show_loot) {
+		DO_HELP_WITH_ZERO("show_loot");
+		static const char* usage = "usage: show_loot <index>\r\n";
+		if(argshave()->int_at(0)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		auto index = intat(0);
+
+		int ctr = 1;
+		for(const auto& loot : get_loot(player)) {
+			if(ctr == index) {
+				player->sendln("[+] Listing...");
+				player->sendln(loot.loot->generate_stat_page());
+				player->sendln("[+] End of list.");
+				return;
+			}
+			++ctr;
+		}
+	}
+	ACMD(do_take_loot) {
+		DO_HELP_WITH_ZERO("take_loot");
+		static const char* usage = "usage: take_loot <index>\r\n";
+		if(argshave()->int_at(0)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		auto index = intat(0);
+
+		int ctr = 1;
+		for(const auto& loot : get_loot(player)) {
+			if(ctr == index) {
+				player->sendln(CAT("You carry a ",loot.loot->name.c_str()));
+				player->carry(std::move(loot.loot));
+				delete_loot(loot);
+				return;
+			}
+			++ctr;
+		}
+	}
+	ACMD(do_list_loot) {
+		DO_HELP_WITH_ZERO("list_loot");
+		/*
+		static constexpr const char* usage = "usage: reward <type> <level>...<level N>\r\n"
+		                                     "valid types:\r\n"
+		                                     "\t- rifle\r\n"
+		                                     "\t- armor\r\n"
+		                                     "example: reward rifle 1 10 30\r\n"
+		                                     "\t this example will spin the forge engine for 3 rifles at levels 1, 10, and 30.\r\n";
+																				 */
+		auto vec_args = PARSE_ARGS();
+		std::vector<std::string> screen;
+
+		player->sendln("[+] Listing...");
+		int ctr = 1;
+		for(const auto& loot : get_loot(player)) {
+			player->sendln(CAT("[",ctr,"]-> ",loot.loot->name.c_str()));
+			++ctr;
+		}
+		player->sendln("[+] End of list.");
+
+#if 0
+		if(vec_args.size() < 2) {
+			player->sendln(usage);
+			return;
+		}
+
+#endif
+	}
 
 	/** game init */
 	void init() {
+		mods::interpreter::add_command("list_loot", POS_RESTING, do_list_loot, 0, 0);
+		mods::interpreter::add_command("show_loot", POS_RESTING, do_show_loot, 0, 0);
+		mods::interpreter::add_command("take_loot", POS_RESTING, do_take_loot, 0, 0);
 		mods::interpreter::add_command("reward", POS_RESTING, do_reward, LVL_BUILDER, 0);
 		ADD_ADMIN_COMMAND("admin:reward:with", do_reward_with);
 		mods::interpreter::add_command("add_rifle_index", POS_RESTING, do_add_rifle_index, LVL_BUILDER, 0);
 		mods::interpreter::add_command("add_armor_index", POS_RESTING, do_add_armor_index, LVL_BUILDER, 0);
 	}
 };
+namespace mods::loot::events {
+	void award_tier_one_loot_to_player(player_ptr_t& player, player_ptr_t& npc) {
+		mods::loot::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
+
+	}
+	void award_tier_two_loot_to_player(player_ptr_t& player, player_ptr_t& npc) {
+		mods::loot::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
+
+	}
+	void award_tier_three_loot_to_player(player_ptr_t& player, player_ptr_t& npc) {
+		mods::loot::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
+
+	}
+	void award_by_rolling_between_tiers(player_ptr_t& player,player_ptr_t& npc,int tier_1,int tier_2) {
+		/** TODO: roll and decide if user gets tier 1 or tier 2 */
+		mods::loot::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
+	}
+
+	/**
+	 * Tiered loot
+	 * ------------
+	 *  Each piece of loot exists within a block of levels.
+	 *  For example, when you are level 5, you fall in the block of levels between
+	 *  1 and 10.
+	 *
+	 * Each tier is less powerful than the one before it. So, Tier 1 loot is
+	 * more powerful than Tier 2 and Tier 3 loot.
+	 *
+	 * Tier 1 loot
+	 * -----------
+	 * A piece of loot in the block of levels between player levels 1 and 10
+	 * would be powerful enough to not only be useful between levels 1 and 10,
+	 * but might actually carry you to levels 15 and above.
+	 *
+	 * The characteristics
+	 * -------------------
+	 * - powerful enough to carry you until (block[1] + (block[1] / 2))
+	 * - does (at most) 2.5 times as much damage as a Tier 2 weapon can
+	 * - have atleast one elemental damage slot filled.
+	 *
+	 * Tier 2 loot
+	 * -----------
+	 *  Tier 2 loot is less powerful than tier 1 loot, and by design, does not have
+	 *  very powerful elemental abilities.
+	 *
+	 * The characteristics
+	 * -------------------
+	 * - will carry you to block[1] but becomes obsolete by tier 2 loot at block[1] + 1
+	 * - does not contain any elemental slots
+	 * - damage output is (at best) average for the block
+	 *
+	 */
+
+	void player_killed_npc(player_ptr_t& player,player_ptr_t& npc) {
+		bool janitor = npc->level() * 2 <= player->level();
+		bool bully = npc->level() * 3 <= player->level();
+
+		if(!janitor && !bully && player->level() < 20) {
+			award_tier_three_loot_to_player(player,npc);
+			return;
+		}
+		if(janitor) {
+			/** No loot for players who kill mobs less than half their level */
+			mods::notch::easy_level_achievement(player,"Janitorial services");
+			return;
+		}
+		if(bully) {
+			mods::notch::easy_level_achievement(player,"Bully");
+			return;
+		}
+
+		/** Lower rewards */
+		bool npc_between_8_and_6 = (npc->level() < player->level() && player->level() - 8 <= npc->level() && player->level() - 6 >= npc->level());
+		bool npc_between_6_and_3 = (npc->level() < player->level() && player->level() - 6 <= npc->level() && player->level() - 3 >= npc->level());
+		bool npc_between_3_and_1 = (npc->level() < player->level() && player->level() - 3 <= npc->level() && player->level() - 1 >= npc->level());
+
+
+		/** Decent rewards */
+		bool same_level = npc->level() == player->level();
+
+
+		/** higher rewards */
+		bool npc_is_1_higher = (npc->level() > player->level() && player->level() + 1 == npc->level());
+		bool npc_is_2_higher = (npc->level() > player->level() && player->level() + 2 == npc->level());
+		bool npc_is_3_higher = (npc->level() > player->level() && player->level() + 3 == npc->level());
+		bool npc_is_4_higher = (npc->level() > player->level() && player->level() + 4 == npc->level());
+
+		/**
+		 * If npc level is greater than or equal to player level
+		 */
+		if(npc->level() >= player->level()) {
+			if(npc->level() / 2 >= player->level()) {
+				/** WOW. This player just slayed an npc twice it's level?  */
+				award_tier_one_loot_to_player(player,npc);
+				mods::notch::elite_level_achievement(player,"I ain't afraid of no ghosts");
+				return;
+			} else if(npc->level() / 1.5 >= player->level()) {
+				award_tier_one_loot_to_player(player,npc);
+				mods::notch::advanced_level_achievement(player,"Sheesh");
+				return;
+			} else if(npc_is_1_higher) {
+				award_tier_one_loot_to_player(player,npc);
+				mods::notch::medium_level_achievement(player,"Punching up");
+				return;
+			} else if(npc_is_2_higher) {
+				award_tier_one_loot_to_player(player,npc);
+				mods::notch::medium_level_achievement(player,"Looking for a fight");
+				return;
+			} else if(npc_is_3_higher) {
+				award_tier_one_loot_to_player(player,npc);
+				mods::notch::medium_level_achievement(player,"Looking for a fight");
+				return;
+			} else if(npc_is_4_higher) {
+				award_tier_one_loot_to_player(player,npc);
+				mods::notch::advanced_level_achievement(player,"Who wants some?");
+				return;
+			} else if(same_level) {
+				award_by_rolling_between_tiers(player,npc,2,3);
+				mods::notch::medium_level_achievement(player,"Physically fit");
+				return;
+			} else {
+				/** User falls between npc->level() / 1.5 and same level of player.
+				 * So, even though we don't have a specific name/test for this range,
+				 * it's still an advanced range.
+				 */
+				award_tier_one_loot_to_player(player,npc);
+				mods::notch::advanced_level_achievement(player,"Natural born killer.");
+				return;
+			}
+		}
+		if(npc_between_8_and_6 || npc_between_6_and_3 || npc_between_3_and_1) {
+			award_tier_three_loot_to_player(player,npc);
+			mods::notch::easy_level_achievement(player,"Getting my feet wet.");
+			return;
+		}
+		///**
+		// * If player killed a low level NPC, only rarely reward them with a rifle
+		// */
+		//if(npc->level() < LOOT_REWARD_RIFLE_LEVEL()) {
+		//	/**
+		//	 * TODO: generate a random consumable
+		//	 */
+		//	return;
+		//}
+		mods::loot::store(player,std::move(mods::loot::reward_player(player,npc->cd()->nr)));
+		player->sendln("{grn}#######################################{/grn}");
+		player->sendln("{grn}# A piece of loot was awarded to you! #{/grn}");
+		player->sendln("{grn}#######################################{/grn}");
+	}
+};
+
 

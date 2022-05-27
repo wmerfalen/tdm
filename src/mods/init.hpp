@@ -22,7 +22,6 @@ INIT(mods::mp);
 INIT(mods::bleed);
 INIT(mods::blind);
 INIT(mods::melt);
-INIT(mods::loot_container);
 INIT(builder);
 INIT(mods::date_time);
 INIT(mods::integral_objects);
@@ -130,7 +129,7 @@ namespace mods::init {
 		src::act::debug::init();
 		mods::players::banish::init();
 		mods::projectile::init();
-		mods::loot_container::init();
+		mods::loot::init();
 		mods::bleed::init();
 		mods::blind::init();
 		mods::melt::init();

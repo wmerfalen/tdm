@@ -72,6 +72,8 @@
 		- CQC attacks:
 			- throw, wrestle, grab, clinch
 			- cause HP damage to attacker
+	- Second Instinct
+		- When your health drops below 20% you trigger a blast that disorients CQC attackers for a brief period of time
 		
 
 ## Abilities that deal with control of the target ##
