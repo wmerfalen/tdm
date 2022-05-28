@@ -470,13 +470,6 @@ namespace mods::orm {
 		MENTOC_ORM_SLOT_LIST_FOR(SEQUENCE); \
 		MENTOC_ORM_SET_FUNCTION(SEQUENCE); \
 		MENTOC_ORM_SLOT_TYPES_FOR(SEQUENCE);
-
-	static constexpr uint16_t LIST_IN_SLOT = 1;
-	static constexpr uint16_t DONT_LIST_IN_SLOT = 0;
-	static constexpr uint16_t USE_DOT_AS = 1;
-	static constexpr uint16_t USE_VECTORIZE = 2;
-	static constexpr uint16_t USE_DOT_C_STR = 3;
-
 };//end namespace mods::orm
 
 #endif

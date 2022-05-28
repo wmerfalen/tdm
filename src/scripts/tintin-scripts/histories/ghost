@@ -1,99 +1,3 @@
-d
-e
-d
-e
-d
-e
-s
-sw
-w
-s
-w
-s
-w
-MPD
-nn
-s
-nn
-s
-nn
-s
-nn
-s
-nn
-n
-ns
-s
-nn
-list_loot
-show_loot 1
-n
-e
-n
-e
-d
-e
-d
-e
-ee
-ed
-e
-ee
-d
-e
-s
-ss
-w
-l
-s
-w
-s
-w
-s
-w
-nn
-s
-nn
-n
-l in corpse
-nn
-s
-nn
-s
-nn
-s
-list_loot
-junk_loot 1
-help loot
-take_loot
-take_loot 1
-i
-junk CZP
-junk Desert
-l
-n
-s
-n
-nn
-s
-nn
-s
-nn
-reload
-n
-l in corpse
-n
-l in corpse
-n
-s
-nn
-s
-nn
-s
-nn
-s
-nn
-flee
 s
 n
 e
@@ -298,3 +202,99 @@ wake
 stand
 l
 score
+1
+SDRONE
+l
+scan
+nn
+s
+nn
+s
+nn
+s
+nn
+s
+nn
+list_loot
+take_loot 1
+stats Uzi
+l
+n
+nn
+s
+nn
+reload
+l
+n
+nn
+s
+nn
+s
+nn
+i
+eq
+remove psg
+wield uzi
+l
+n
+nn
+n
+nn
+n
+nn
+s
+nn
+n
+s
+nn
+1
+i
+eq
+remove uzi
+junk uzi
+i
+junk sasg
+i
+eq
+junk pistol
+i
+eq
+wield psg
+i
+l
+n
+e
+n
+e
+d
+e
+d
+e
+d
+e
+s
+w
+s
+w
+s
+sw
+w
+nn
+s
+nn
+s
+nn
+s
+nn
+reload
+list_loot
+take_loot 2
+stats L
+l
+i
+stats L
+remove psg
+stats P
+stats PSG
+1
+stats PSG

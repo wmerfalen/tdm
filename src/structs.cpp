@@ -168,13 +168,19 @@ obj_data& obj_data::operator=(obj_data& other) {
 	return *this;
 }
 
+namespace mods::stats {
+	std::string format_stats_page(std::map<std::string,std::string>&& stats_page);
+};
+
 std::string obj_data::generate_stat_page() {
+	using namespace mods::stats;
+
 #define MENTOC_OBJ_DATA_STAT_GEN(r,data,CLASS_TYPE) \
 			if(BOOST_PP_CAT(m_, CLASS_TYPE)){\
 				BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->generate_map();\
-				return mods::util::map2str(\
+				return format_stats_page(std::move(\
 				BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->exported\
-				);\
+				));\
 			}
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_STAT_GEN, ~, MENTOC_ITEM_TYPES_SEQ)
 	return "<no stat page>";
