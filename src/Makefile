@@ -233,7 +233,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/weapons/shotgun-charge \
 					 mods/mobs/orthos-spawn-sentinel \
 					 mods/mobs/orthos-spawn-sentinel-btree mods/no-drop mods/orm/notch \
-					 mods/notch mods/stats mods/stats-rifle
+					 mods/notch mods/stats mods/rifle-stats
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
@@ -268,12 +268,16 @@ clean:
 		rm -f $(builddir)/mods/response-team/*.d \
 		rm -f $(builddir)/mods/builder/*.o \
 		rm -f $(builddir)/mods/builder/*.d \
+		rm -f $(builddir)/mods/builder/runners/*.o \
+		rm -f $(builddir)/mods/builder/runners/*.d \
 		rm -f $(builddir)/mods/unit-tests/*.o \
 		rm -f $(builddir)/mods/unit-tests/*.d \
 		rm -f $(builddir)/mods/combat-composer/*.o \
 		rm -f $(builddir)/mods/combat-composer/*.d \
 		rm -f $(builddir)/mods/weapons/*.o \
 		rm -f $(builddir)/mods/weapons/*.d \
+		rm -f $(builddir)/mods/boosters/*.o \
+		rm -f $(builddir)/mods/boosters/*.d \
 		rm -f $(builddir)/mods/admin-tools/*.o \
 		rm -f $(builddir)/mods/admin-tools/*.d \
 		rm -f $(builddir)/mods/json/*.o \

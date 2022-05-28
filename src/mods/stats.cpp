@@ -13,7 +13,7 @@
 #include "weapons/damage-calculator.hpp"
 #include "weapons/elemental.hpp"
 
-#include "stats-rifle.hpp"
+#include "rifle-stats.hpp"
 
 #define __MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__
@@ -28,7 +28,7 @@
 namespace mods::stats {
 	std::string format_stats_page(std::string_view type,std::map<std::string,std::string>&& page) {
 		if(type.compare("rifle") == 0) {
-			return mods::stats_rifle::format_rifle_stats_page(page);
+			return mods::rifle_stats::format_rifle_stats_page(page);
 		}
 		return mods::util::map2str(page);
 	}

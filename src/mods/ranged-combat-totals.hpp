@@ -2,7 +2,7 @@
 #define __MENTOC_RANGED_COMBAT_TOTALS__
 #include "elemental.hpp"
 #include <vector>
-#include "stats-rifle.hpp"
+#include "rifle-stats.hpp"
 
 namespace mods {
 	/**
@@ -589,7 +589,7 @@ namespace mods {
 			if(stat_medical > 0) {
 				m["rifle_stat_medical"] = std::to_string(stat_medical);
 			}
-			p->sendln(mods::stats_rifle::format_rifle_stats_page(m));
+			p->sendln(mods::rifle_stats::format_rifle_stats_page(m));
 			p->sendln("Viable targets: ");
 			if(viable_targets & CAN_HIT_SAME_ROOM) {
 				p->sendln("Same room");

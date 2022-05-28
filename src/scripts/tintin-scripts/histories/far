@@ -1,133 +1,3 @@
-w
-n
-s
-n
-w
-n
-s
-n
-w
-n
-w
-e
-s
-e
-n
-u
-n
-w
-e
-n
-w
-e
-nn
-n
-e
-n
-e
-s
-w
-ww
-w
-s
-e
-s
-w
-ww
-w
-s
-e
-s
-n
-e
-ew
-w
-scan
-w
-scan
-w
-scab
-e
-scan
-e
-scab
-scan
-n
-s
-e
-w
-e
-s
-k def
-k DEFILER
-recall
-l
-n
-s
-n
-s
-n
-js cmm();
-l
-s
-n
-sdm
-s
-l
-n
-s
-k sent
-k Orthos
-l Orthos
-s
-n
-js cmm();
-l
-n
-sdm
-help
-help pl
-help player
-help foot
-builder_help
-help builder
-help usage
-help mem
-builder
-builder_help
-n
-s
-n
-s
-n
-s
-n
-s
-l orthos
-mbuild list
-js cmm();
-sdm
-js cmm();
-mbuild list
-mbuild show 29
-mbuild show 28
-mbuild show 27
-mbuild show 26
-mbuild show 25
-mbuild show 24
-mbuild show 23
-mbuild show 22
-mbuild show 21
-mbuild show 1
-mbuild show 2
-mbuild show 3
-mbuild show 4
-mbuild show 5
-js cmm();
-mbuild list
-mbuild show 29
-mbuild action:add ISNPC,NODROP
-mbuild action:add 29 ISNPC,NODROP
 mbuild show 29
 mbuild action:add 29 NODROP
 mbuild action:add 29 ISNPC
@@ -298,3 +168,133 @@ e
 ee
 e
 n
+s
+w
+d
+s
+w
+n
+s
+n
+w
+s
+n
+s
+e
+s
+n
+s
+w
+d
+s
+w
+e
+n
+s
+n
+w
+n
+w
+e
+s
+e
+n
+recall
+s
+w
+d
+s
+js hydro_proc_extremists();
+sdm
+s
+w
+d
+s
+n
+s
+w
+e
+en
+n
+l extremist
+js hydro_proc_extremists();
+sdm
+s
+w
+d
+s
+n
+l extr
+l extremist
+js send(exec('mbuild exists 99999'));
+l
+n
+w
+e
+n
+nn
+n
+e
+n
+e
+n
+e
+n
+nn
+e
+n
+e
+n
+ne
+e
+w
+s
+w
+s
+w
+ww
+w
+s
+sw
+w
+n
+nn
+n
+w
+n
+e
+s
+e
+w
+n
+w
+n
+s
+w
+n
+s
+e
+s
+e
+w
+e
+s
+w
+s
+w
+e
+n
+open door south
+s
+n
+s
+w
+n
+w
+d
+w
+u
+e
+s
+e
+s
