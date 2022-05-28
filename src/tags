@@ -535,9 +535,9 @@ CAN_SEE_OBJ_CARRIER	utils.h	/^#define CAN_SEE_OBJ_CARRIER(/;"	kind:macro	line:46
 CAN_WEAR	utils.h	/^#define CAN_WEAR(/;"	kind:macro	line:420	file:	signature:(obj,part)
 CAP	utils.cpp	/^char *CAP(char *txt) {$/;"	kind:function	line:139	typeref:typename:char *	signature:(char * txt)
 CAPABILITY_LIST_LENGTH	structs.h	/^		static constexpr std::size_t CAPABILITY_LIST_LENGTH = mods::weapon::capabilities::cap_t::__LAS/;"	kind:member	line:989	struct:obj_data	typeref:typename:std::size_t	file:	access:public
-CAP_ALL	mods/util.hpp	/^	static constexpr uint8_t CAP_ALL = 0;$/;"	kind:variable	line:354	namespace:mods::util	typeref:typename:uint8_t	file:
-CAP_ANY	mods/util.hpp	/^	static constexpr uint8_t CAP_ANY = 0;$/;"	kind:variable	line:353	namespace:mods::util	typeref:typename:uint8_t	file:
-CAP_SINGLE	mods/util.hpp	/^	static constexpr uint8_t CAP_SINGLE = 0;$/;"	kind:variable	line:352	namespace:mods::util	typeref:typename:uint8_t	file:
+CAP_ALL	mods/util.hpp	/^	static constexpr uint8_t CAP_ALL = 0;$/;"	kind:variable	line:417	namespace:mods::util	typeref:typename:uint8_t	file:
+CAP_ANY	mods/util.hpp	/^	static constexpr uint8_t CAP_ANY = 0;$/;"	kind:variable	line:416	namespace:mods::util	typeref:typename:uint8_t	file:
+CAP_SINGLE	mods/util.hpp	/^	static constexpr uint8_t CAP_SINGLE = 0;$/;"	kind:variable	line:415	namespace:mods::util	typeref:typename:uint8_t	file:
 CARPET	structs.h	/^			CARPET,$/;"	kind:enumerator	line:1138	enum:room_data::texture_type_t	file:	access:public
 CARS	mods/mobs/generic-thief.hpp	/^				CARS,$/;"	kind:enumerator	line:27	enum:mods::mobs::generic_thief::target_t	file:	access:public
 CAR_THIEF	mods/mobs/extended-types.hpp	/^		CAR_THIEF,$/;"	kind:enumerator	line:27	enum:mods::mobs::extended_types_t	file:	access:public
@@ -550,7 +550,7 @@ CAST_STAFF	spells.h	/^#define CAST_STAFF	/;"	kind:macro	line:20	file:
 CAST_UNDEFINED	spells.h	/^#define CAST_UNDEFINED	/;"	kind:macro	line:16	file:
 CAST_WAND	spells.h	/^#define CAST_WAND	/;"	kind:macro	line:19	file:
 CAT	globals.hpp	/^static inline std::string CAT(Args const& ... args) {$/;"	kind:function	line:291	typeref:typename:std::string	file:	signature:(Args const &...args)
-CATCHY_YAML_FILE	mods/util.hpp	/^		CATCHY_YAML_FILE = 1,$/;"	kind:enumerator	line:85	enum:mods::util::yaml_type_t	file:	access:public
+CATCHY_YAML_FILE	mods/util.hpp	/^		CATCHY_YAML_FILE = 1,$/;"	kind:enumerator	line:148	enum:mods::util::yaml_type_t	file:	access:public
 CCBLU	screen.h	/^#define CCBLU(/;"	kind:macro	line:33	file:	signature:(ch,lvl)
 CCCYN	screen.h	/^#define CCCYN(/;"	kind:macro	line:35	file:	signature:(ch,lvl)
 CCGRN	screen.h	/^#define CCGRN(/;"	kind:macro	line:31	file:	signature:(ch,lvl)
@@ -788,7 +788,7 @@ DEAD	mods/positions.hpp	/^	constexpr static uint8_t DEAD       = 0;	\/* dead			*
 DEAD	mods/scan.hpp	/^			DEAD = (1 << 3),$/;"	kind:enumerator	line:44	enum:mods::scan::find_type_t	file:	access:public
 DEALER	structs.h	/^	DEALER = 17,$/;"	kind:enumerator	line:234	enum:player_class_t	file:	access:public
 DECENT	mods/yaml.hpp	/^		DECENT,$/;"	kind:enumerator	line:69	enum:mods::yaml::durability_profile_type_t	file:	access:public
-DEEP_OBJECT	mods/util.hpp	/^		DEEP_OBJECT = 3$/;"	kind:enumerator	line:87	enum:mods::util::yaml_type_t	file:	access:public
+DEEP_OBJECT	mods/util.hpp	/^		DEEP_OBJECT = 3$/;"	kind:enumerator	line:150	enum:mods::util::yaml_type_t	file:	access:public
 DEFAULT	mods/rarity.hpp	/^		constexpr static float DEFAULT = mods::rarity::COMMON;$/;"	kind:variable	line:12	namespace:mods::rarity	typeref:typename:float	file:
 DEFAULT	mods/yaml.hpp	/^		DEFAULT = armor_classification_type_t::BASIC,$/;"	kind:enumerator	line:81	enum:mods::yaml::armor_classification_type_t	file:	access:public
 DEFAULT_AMOUNT	mods/affects.hpp	/^	constexpr static amount_t DEFAULT_AMOUNT = 3;$/;"	kind:variable	line:25	namespace:mods::affects	typeref:typename:amount_t	file:
@@ -2160,7 +2160,7 @@ NEW_MSG_INDEX	boards.h	/^#define NEW_MSG_INDEX(/;"	kind:macro	line:43	file:	sign
 NIGHT_VISION	mods/flags.hpp	/^		NIGHT_VISION,$/;"	kind:enumerator	line:98	enum:mods::flags::aff	file:	access:public
 NIGHT_VISION	mods/weapon-types.hpp	/^		NIGHT_VISION,$/;"	kind:enumerator	line:36	enum:mods::weapon::capabilities::cap_t	file:	access:public
 NIGHT_VISION_GOGGLES	structs.h	/^	NIGHT_VISION_GOGGLES,$/;"	kind:enumerator	line:87	enum:lense_type_t	file:	access:public
-NL	mods/stats.cpp	/^	static constexpr const char* NL = "\\r\\n";$/;"	kind:variable	line:81	namespace:mods::stats	typeref:typename:const char *	file:
+NL	mods/stats-rifle.cpp	/^	static constexpr const char* NL = "\\r\\n";$/;"	kind:variable	line:62	namespace:mods::stats_rifle	typeref:typename:const char *	file:
 NO	config.cpp	/^#define NO	/;"	kind:macro	line:21	file:
 NOBODY	mods/index-type.hpp	/^# define NOBODY	/;"	kind:macro	line:14	file:
 NOBODY	mods/index-type.hpp	/^# define NOBODY	/;"	kind:macro	line:19	file:
@@ -3677,10 +3677,10 @@ UNKNOWN_ACTION	mods/rate-limiting.hpp	/^		UNKNOWN_ACTION = -1,$/;"	kind:enumerat
 UNKNOWN_ERROR	mods/orm/util.hpp	/^	static constexpr int8_t UNKNOWN_ERROR = -2;$/;"	kind:variable	line:37	namespace:mods::orm::util	typeref:typename:int8_t	file:
 UNKNOWN_ERROR	mods/pq.hpp	/^static constexpr int8_t UNKNOWN_ERROR = -2;$/;"	kind:variable	line:261	typeref:typename:int8_t	file:
 UNKNOWN_STATUS	mods/behaviour_tree_status.hpp	/^		UNKNOWN_STATUS,$/;"	kind:enumerator	line:10	enum:mods::behaviour_tree_status	file:	access:public
-UNKNOWN_YAML_FILE	mods/util.hpp	/^	constexpr static const char* UNKNOWN_YAML_FILE = "unknown-yits";$/;"	kind:variable	line:112	namespace:mods::util	typeref:typename:const char *	file:
+UNKNOWN_YAML_FILE	mods/util.hpp	/^	constexpr static const char* UNKNOWN_YAML_FILE = "unknown-yits";$/;"	kind:variable	line:175	namespace:mods::util	typeref:typename:const char *	file:
 UNLOCK_DOOR	act.movement.cpp	/^#define UNLOCK_DOOR(/;"	kind:macro	line:396	file:	signature:(room,obj,door)
 UNMARK	graph.cpp	/^#define UNMARK(/;"	kind:macro	line:54	file:	signature:(room)
-UNRECOGNIZED	mods/util.hpp	/^		UNRECOGNIZED = 0,$/;"	kind:enumerator	line:84	enum:mods::util::yaml_type_t	file:	access:public
+UNRECOGNIZED	mods/util.hpp	/^		UNRECOGNIZED = 0,$/;"	kind:enumerator	line:147	enum:mods::util::yaml_type_t	file:	access:public
 UNSWITCH	interpreter.cpp	/^#define UNSWITCH	/;"	kind:macro	line:1432	file:
 UNUSED16	mods/flags.hpp	/^		UNUSED16,				\/\/ useless$/;"	kind:enumerator	line:92	enum:mods::flags::aff	file:	access:public
 UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	kind:enumerator	line:94	enum:mods::flags::aff	file:	access:public
@@ -3695,7 +3695,7 @@ UTILITY_STORES	mods/mobs/generic-thief.hpp	/^				UTILITY_STORES,$/;"	kind:enumer
 VALID_EDGE	graph.cpp	/^int VALID_EDGE(room_rnum x, int y) {$/;"	kind:function	line:59	typeref:typename:int	signature:(room_rnum x,int y)
 VALID_OBJ_RNUM	utils.h	/^#define VALID_OBJ_RNUM(/;"	kind:macro	line:397	file:	signature:(obj)
 VALID_ROOM_RNUM	utils.h	/^#define VALID_ROOM_RNUM(/;"	kind:macro	line:264	file:	signature:(rnum)
-VALID_TYPES	mods/util.hpp	/^	static std::vector<std::string> VALID_TYPES = {$/;"	kind:variable	line:57	namespace:mods::util	typeref:typename:std::vector<std::string>	file:
+VALID_TYPES	mods/util.hpp	/^	static std::vector<std::string> VALID_TYPES = {$/;"	kind:variable	line:120	namespace:mods::util	typeref:typename:std::vector<std::string>	file:
 VAN	mods/weapon.hpp	/^		VAN,$/;"	kind:enumerator	line:58	enum:mods::weapon::vehicle_t	file:	access:public
 VANISH	act.item.cpp	/^#define VANISH(/;"	kind:macro	line:447	file:	signature:(mode)
 VC88	mods/weapons/unique-weapons.hpp	/^		VC88,$/;"	kind:enumerator	line:12	enum:mods::weapons::unique_weapon_id	file:	access:public
@@ -3783,7 +3783,7 @@ XTV89	mods/armor/unique-armor.hpp	/^		XTV89,$/;"	kind:enumerator	line:11	enum:mo
 YAML	mods/orm/inventory.cpp	/^	static constexpr const char* YAML = "2";$/;"	kind:variable	line:29	namespace:mods::orm::inventory	typeref:typename:const char *	file:
 YAML_FILE	mods/armor/gauntlets-xtv89.hpp	/^			static constexpr std::string_view YAML_FILE = "xtv89-gauntlets.yml";$/;"	kind:member	line:17	struct:mods::armor::xtv89	typeref:typename:std::string_view	file:	access:public
 YAML_FILE	mods/armor/vest-bc89.hpp	/^			static constexpr std::string_view YAML_FILE = "bc89-vest.yml";$/;"	kind:member	line:12	struct:mods::armor::bc89	typeref:typename:std::string_view	file:	access:public
-YAML_FILE_WITH_PREFIX	mods/util.hpp	/^		YAML_FILE_WITH_PREFIX = 2,$/;"	kind:enumerator	line:86	enum:mods::util::yaml_type_t	file:	access:public
+YAML_FILE_WITH_PREFIX	mods/util.hpp	/^		YAML_FILE_WITH_PREFIX = 2,$/;"	kind:enumerator	line:149	enum:mods::util::yaml_type_t	file:	access:public
 YES	config.cpp	/^#define YES	/;"	kind:macro	line:20	file:
 YESNO	utils.h	/^#define YESNO(/;"	kind:macro	line:153	file:	signature:(a)
 YOURE_IN_PEACEFUL_ROOM	mods/damage-event.hpp	/^	YOURE_IN_PEACEFUL_ROOM,$/;"	kind:enumerator	line:73	enum:damage_event_t	file:	access:public
@@ -4254,6 +4254,7 @@ __MENTOC_MODS_shock_HEADER__	mods/shock.hpp	/^#define __MENTOC_MODS_shock_HEADER
 __MENTOC_MODS_shrapnel_HEADER__	mods/shrapnel.hpp	/^#define __MENTOC_MODS_shrapnel_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_sneak_HEADER__	mods/sneak.hpp	/^#define __MENTOC_MODS_sneak_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_stats_HEADER__	mods/stats.hpp	/^#define __MENTOC_MODS_stats_HEADER__$/;"	kind:macro	line:2	file:
+__MENTOC_MODS_stats_rifle_HEADER__	mods/stats-rifle.hpp	/^#define __MENTOC_MODS_stats_rifle_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_ORM_UTIL_DEBUG_OUTPUT__	mods/orm/generic-orm.hpp	/^#define __MENTOC_ORM_UTIL_DEBUG_OUTPUT__$/;"	kind:macro	line:4	file:
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/search.hpp	/^#define  __MENTOC_PLAYER_UTILS_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/util.hpp	/^#define  __MENTOC_PLAYER_UTILS_HEADER__$/;"	kind:macro	line:2	file:
@@ -4294,7 +4295,8 @@ __MENTOC_SHOW_MODS_PLAYERS_event_messages_DEBUG_OUTPUT__	mods/players/event-mess
 __MENTOC_SHOW_MODS_PLAYERS_friendly_reminders_DEBUG_OUTPUT__	mods/players/friendly-reminders.cpp	/^#define __MENTOC_SHOW_MODS_PLAYERS_friendly_reminders_DEBUG_OUTPUT__$/;"	kind:macro	line:8	file:
 __MENTOC_SHOW_MODS_RIFLE_DEBUG_OUTPUT__	mods/rifle.cpp	/^#define __MENTOC_SHOW_MODS_RIFLE_DEBUG_OUTPUT__$/;"	kind:macro	line:19	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	/^#define __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__$/;"	kind:macro	line:8	file:
-__MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__	mods/stats.cpp	/^#define __MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__$/;"	kind:macro	line:16	file:
+__MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__	mods/stats.cpp	/^#define __MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__$/;"	kind:macro	line:18	file:
+__MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__	mods/stats-rifle.cpp	/^#define __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__$/;"	kind:macro	line:3	file:
 __MENTOC_SHOW_SQL_DEBUG_OUTPUT__	mods/orm/inventory.cpp	/^#define __MENTOC_SHOW_SQL_DEBUG_OUTPUT__$/;"	kind:macro	line:1	file:
 __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__	mods/help.cpp	/^#define __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__$/;"	kind:macro	line:7	file:
 __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__	act.item.cpp	/^#define __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__$/;"	kind:macro	line:30	file:
@@ -4445,7 +4447,7 @@ __anon95eb5cb60102	mods/util.cpp	/^		auto it = std::find_if(room_list(r).cbegin(
 __anon95eb5cb60202	mods/util.cpp	/^	std::function<void(const std::string&,std::string&)> sanitize = [](const std::string& command,s/;"	kind:function	line:847	namespace:mods::util	file:	signature:(const std::string& command,std::string& sanitized) 
 __anon95eb5cb60302	mods/util.cpp	/^	auto t = [&](std::string_view element) {$/;"	kind:function	line:1405	function:to_int_range	file:	signature:(std::string_view element) 
 __anon95eb5cb60402	mods/util.cpp	/^	auto t = [&](std::string_view element) {$/;"	kind:function	line:1417	function:to_int_range	file:	signature:(std::string_view element) 
-__anon95eb71fb0102	mods/util.hpp	/^		return std::any_of(list_string.cbegin(),list_string.cend(),[&](const auto & token) -> bool {$/;"	kind:function	line:72	function:mods::util::nth_is_any	typeref:typename:bool	file:	signature:(const auto & token) 
+__anon95eb71fb0102	mods/util.hpp	/^		return std::any_of(list_string.cbegin(),list_string.cend(),[&](const auto & token) -> bool {$/;"	kind:function	line:135	function:mods::util::nth_is_any	typeref:typename:bool	file:	signature:(const auto & token) 
 __anon96bfac930102	mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^		return TNode::create_leaf([](TArgumentType ct) -> TStatus {$/;"	kind:function	line:48	function:mods::mobs::chaotic_meth_addict_behaviour_tree::find_targets	typeref:typename:TStatus	file:	signature:(TArgumentType ct) 
 __anon96bfac930202	mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^		return TNode::create_leaf([](TArgumentType mg) -> TStatus {$/;"	kind:function	line:90	function:mods::mobs::chaotic_meth_addict_behaviour_tree::find_attackers	typeref:typename:TStatus	file:	signature:(TArgumentType mg) 
 __anon96bfac930302	mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^			TNode::create_leaf([](TArgumentType g) -> TStatus {$/;"	kind:function	line:155	function:mods::mobs::chaotic_meth_addict_behaviour_tree::watch_room	typeref:typename:TStatus	file:	signature:(TArgumentType g) 
@@ -4647,7 +4649,7 @@ accumulator_slot_list	mods/orm/orm-base.hpp	/^			virtual const std::vector<std::
 accumulators	mods/orm/orm-base.hpp	/^			std::vector<std::string> accumulators;$/;"	kind:member	line:67	struct:mods::orm::orm_base	typeref:typename:std::vector<std::string>	file:	access:public
 accuracy	mods/ranged-combat-totals.hpp	/^		int accuracy;$/;"	kind:member	line:43	struct:mods::ranged_combat_totals	typeref:typename:int	file:	access:public
 accuracy	mods/weapon-types.hpp	/^		weapon_accuracy_t accuracy;$/;"	kind:member	line:11	struct:mods::weapon::weapon_type_statistics_t	typeref:typename:weapon_accuracy_t	file:	access:public
-accuracy_map	mods/stats.cpp	/^	static constexpr std::string_view accuracy_map = "{grn}accuracy{\/grn}: ";$/;"	kind:variable	line:59	namespace:mods::stats	typeref:typename:std::string_view	file:
+accuracy_map	mods/stats-rifle.cpp	/^	static constexpr std::string_view accuracy_map = "{grn}accuracy{\/grn}: ";$/;"	kind:variable	line:14	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
 accuracy_map	mods/yaml.hpp	/^		std::array<float,MAX_ROOM_DISTANCE> accuracy_map;$/;"	kind:member	line:196	struct:mods::yaml::rifle_description_t	typeref:typename:std::array<float,MAX_ROOM_DISTANCE>	file:	access:public
 accuracy_map	mods/yaml.hpp	/^		std::array<float,MAX_ROOM_DISTANCE> accuracy_map;$/;"	kind:member	line:413	struct:mods::yaml::melee_description_t	typeref:typename:std::array<float,MAX_ROOM_DISTANCE>	file:	access:public
 accuracy_points	mods/rifle-attachments.hpp	/^			int16_t accuracy_points;$/;"	kind:member	line:106	struct:mods::rifle_attachments_t	typeref:typename:int16_t	file:	access:public
@@ -4855,7 +4857,7 @@ allows_duplicates	mods/string.cpp	/^	bool string::allows_duplicates() const {$/;
 alt_value_map	mods/values.cpp	/^		std::map<value_key_t,variants_t> alt_value_map;$/;"	kind:variable	line:24	namespace:mods::values	typeref:typename:std::map<value_key_t,variants_t>
 ammo	mods/player.cpp	/^	uint16_t player::ammo() {$/;"	kind:function	line:829	class:mods::player	typeref:typename:uint16_t	signature:()
 ammo	mods/rifle-instance-data.hpp	/^		uint16_t ammo;$/;"	kind:member	line:67	struct:rifle_instance_data	typeref:typename:uint16_t	file:	access:public
-ammo	mods/stats.cpp	/^	static constexpr std::string_view ammo = "{grn}ammo{\/grn}: ";$/;"	kind:variable	line:60	namespace:mods::stats	typeref:typename:std::string_view	file:
+ammo	mods/stats-rifle.cpp	/^	static constexpr std::string_view ammo = "{grn}ammo{\/grn}: ";$/;"	kind:variable	line:15	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
 ammo	mods/weapons/attachment-pathogen-ammunition.cpp	/^	uint16_t attachment_pathogen_ammunition::ammo() {$/;"	kind:function	line:85	class:mods::weapons::attachment_pathogen_ammunition	typeref:typename:uint16_t	signature:()
 ammo	mods/weapons/attachment-underbarrel.cpp	/^	uint16_t attachment_underbarrel::ammo() {$/;"	kind:function	line:34	class:mods::weapons::attachment_underbarrel	typeref:typename:uint16_t	signature:()
 ammo	structs.h	/^	uint16_t ammo;$/;"	kind:member	line:799	struct:obj_flag_data	typeref:typename:uint16_t	file:	access:public
@@ -4930,13 +4932,13 @@ arcon_bar	mods/fluxkraft/arcon-bar.hpp	/^	namespace arcon_bar {$/;"	kind:namespa
 arg1	db.h	/^	int	arg1;		\/*                                      *\/$/;"	kind:member	line:166	struct:reset_com	typeref:typename:int	file:	access:public
 arg2	db.h	/^	int	arg2;		\/* Arguments to the command             *\/$/;"	kind:member	line:167	struct:reset_com	typeref:typename:int	file:	access:public
 arg3	db.h	/^	int	arg3;		\/*                                      *\/$/;"	kind:member	line:168	struct:reset_com	typeref:typename:int	file:	access:public
-argat	mods/util.hpp	/^#define argat(/;"	kind:macro	line:488	file:	signature:(A)
-arglist	mods/util.hpp	/^	T arglist(std::string in_arglist_argument) {$/;"	kind:function	line:158	namespace:mods::util	typeref:typename:T	signature:(std::string in_arglist_argument)
-arglist_parser	mods/util.hpp	/^	struct arglist_parser {$/;"	kind:struct	line:464	namespace:mods::util::args	file:
+argat	mods/util.hpp	/^#define argat(/;"	kind:macro	line:551	file:	signature:(A)
+arglist	mods/util.hpp	/^	T arglist(std::string in_arglist_argument) {$/;"	kind:function	line:221	namespace:mods::util	typeref:typename:T	signature:(std::string in_arglist_argument)
+arglist_parser	mods/util.hpp	/^	struct arglist_parser {$/;"	kind:struct	line:527	namespace:mods::util::args	file:
 args	mods/util.cpp	/^namespace mods::util::args {$/;"	kind:namespace	line:1384	namespace:mods::util	file:
 args	mods/util.cpp	/^namespace mods::util::args {$/;"	kind:namespace	line:1423	namespace:mods::util	file:
-args	mods/util.hpp	/^#define args(/;"	kind:macro	line:487	file:	signature:()
-args	mods/util.hpp	/^namespace mods::util::args {$/;"	kind:namespace	line:400	namespace:mods::util	file:
+args	mods/util.hpp	/^#define args(/;"	kind:macro	line:550	file:	signature:()
+args	mods/util.hpp	/^namespace mods::util::args {$/;"	kind:namespace	line:463	namespace:mods::util	file:
 args_t	mods/builder.cpp	/^using args_t = std::vector<std::string>;$/;"	kind:typedef	line:1429	typeref:typename:std::vector<std::string>	file:
 args_t	mods/builder/conbuild.cpp	/^	using args_t = std::vector<std::string>;$/;"	kind:typedef	line:612	namespace:mods::builder::conbuild	typeref:typename:std::vector<std::string>	file:
 args_t	mods/builder/hqbuild.cpp	/^	using args_t = std::vector<std::string>;$/;"	kind:typedef	line:81	namespace:mods::builder::hqbuild	typeref:typename:std::vector<std::string>	file:
@@ -4944,8 +4946,8 @@ args_t	mods/builder/meqbuild.cpp	/^	using args_t = std::vector<std::string>;$/;"
 args_t	mods/builder/seqbuild.cpp	/^	using args_t = std::vector<std::string>;$/;"	kind:typedef	line:665	namespace:mods::builder::seqbuild	typeref:typename:std::vector<std::string>	file:
 args_t	mods/builder/slotted-builder.cpp	/^	using args_t = std::vector<std::string>;$/;"	kind:typedef	line:4	namespace:mods::builder	typeref:typename:std::vector<std::string>	file:
 args_t	mods/builder_util.hpp	/^using args_t = std::vector<std::string>;$/;"	kind:typedef	line:16	typeref:typename:std::vector<std::string>	file:
-argsat	mods/util.hpp	/^#define argsat(/;"	kind:macro	line:491	file:	signature:(A)
-argshave	mods/util.hpp	/^#define argshave(/;"	kind:macro	line:492	file:	signature:()
+argsat	mods/util.hpp	/^#define argsat(/;"	kind:macro	line:554	file:	signature:(A)
+argshave	mods/util.hpp	/^#define argshave(/;"	kind:macro	line:555	file:	signature:()
 argument_interpreter	interpreter.h	/^#define argument_interpreter(/;"	kind:macro	line:44	file:	signature:(a,b,c)
 argument_type	mods/behaviour_tree_impl.hpp	/^	using argument_type = T;$/;"	kind:typedef	line:19	namespace:mods::behaviour_tree_impl	typeref:typename:T	file:
 arguments	mods/builder.cpp	/^	size_t arguments;$/;"	kind:member	line:2136	struct:command_t	typeref:typename:size_t	file:	access:public
@@ -5203,7 +5205,7 @@ base_damage	mods/corpse.cpp	/^		uint16_t base_damage;$/;"	kind:member	line:60	st
 base_damage	mods/forge-engine/generated-rifle.hpp	/^			auto base_damage() {$/;"	kind:function	line:770	struct:mods::forge_engine::generated_rifle_t	typeref:typename:auto	file:	access:private	signature:()
 base_damage	mods/ranged-combat-totals.hpp	/^		uint16_t base_damage;$/;"	kind:member	line:79	struct:mods::ranged_combat_totals	typeref:typename:uint16_t	file:	access:public
 base_damage	mods/rifle-attachments.hpp	/^			int16_t base_damage;$/;"	kind:member	line:59	struct:mods::rifle_attachments_t	typeref:typename:int16_t	file:	access:public
-base_damage	mods/stats.cpp	/^	static constexpr std::string_view base_damage = "{grn}base{\/grn}: ";$/;"	kind:variable	line:61	namespace:mods::stats	typeref:typename:std::string_view	file:
+base_damage	mods/stats-rifle.cpp	/^	static constexpr std::string_view base_damage = "{grn}base{\/grn}: ";$/;"	kind:variable	line:16	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
 base_damage	mods/unit-tests/class-sniper.cpp	/^		auto base_damage = mods::weapons::damage_calculator::calculate(attacker,weapon,victim);$/;"	kind:variable	line:42	typeref:typename:auto
 base_damage	mods/unit-tests/damage-types.cpp	/^		auto base_damage = mods::weapons::damage_calculator::calculate(attacker,weapon,victim);$/;"	kind:variable	line:351	typeref:typename:auto
 base_damage	mods/weapon.hpp	/^			int base_damage;$/;"	kind:member	line:167	struct:mods::weapon::yaml::rifle_description_t	typeref:typename:int	file:	access:public
@@ -5229,7 +5231,7 @@ bc89_commands	mods/armor/vest-bc89.cpp	/^	namespace bc89_commands {$/;"	kind:nam
 bc89_list	mods/armor/vest-bc89.cpp	/^	static std::map<uuid_t,bc89_ptr_t> bc89_list;$/;"	kind:variable	line:23	namespace:mods::armor	typeref:typename:std::map<uuid_t,bc89_ptr_t>	file:
 bc89_ptr_t	mods/armor/vest-bc89.hpp	/^	using bc89_ptr_t = std::shared_ptr<mods::armor::bc89>;$/;"	kind:typedef	line:90	namespace:mods::armor	typeref:typename:std::shared_ptr<mods::armor::bc89>	file:
 beeps	mods/mini-games/wires.hpp	/^		std::vector<uint8_t> beeps;$/;"	kind:member	line:77	struct:mods::mini_games::wires	typeref:typename:std::vector<uint8_t>	file:	access:private
-beg_	mods/util.hpp	/^			std::chrono::time_point<clock_> beg_;$/;"	kind:member	line:45	class:mods::util::stopwatch_t	typeref:typename:std::chrono::time_point<clock_>	file:	access:private
+beg_	mods/util.hpp	/^			std::chrono::time_point<clock_> beg_;$/;"	kind:member	line:108	class:mods::util::stopwatch_t	typeref:typename:std::chrono::time_point<clock_>	file:	access:private
 behaviour_tree	db.cpp	/^using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;$/;"	kind:typedef	line:67	typeref:typename:mods::behaviour_tree_impl::node_wrapper	file:
 behaviour_tree	mods/behaviour_tree.hpp	/^		behaviour_tree() : m_tree_name("default") {}$/;"	kind:function	line:29	struct:mods::behaviour_tree	file:	access:public	signature:()
 behaviour_tree	mods/behaviour_tree.hpp	/^		behaviour_tree(const std::string_view & name) : m_tree_name(name) {}$/;"	kind:function	line:30	struct:mods::behaviour_tree	file:	access:public	signature:(const std::string_view & name)
@@ -5699,7 +5701,7 @@ chclass	structs.h	/^	uint16_t chclass;       \/* PC \/ NPC's class		       *\/$/
 chdata	mods/player.hpp	/^			using   chdata = char_data;$/;"	kind:typedef	line:98	struct:mods::player	typeref:typename:char_data	file:	access:public
 chdata_ptr	mods/player.hpp	/^			using   chdata_ptr = char_data *;$/;"	kind:typedef	line:99	struct:mods::player	typeref:typename:char_data *	file:	access:public
 chdir	sysdep.h	/^#  define chdir /;"	kind:macro	line:355	file:
-check	mods/util.hpp	/^		check_parsed_args check;$/;"	kind:member	line:476	struct:mods::util::args::arglist_parser	typeref:typename:check_parsed_args	file:	access:public
+check	mods/util.hpp	/^		check_parsed_args check;$/;"	kind:member	line:539	struct:mods::util::args::arglist_parser	typeref:typename:check_parsed_args	file:	access:public
 check_bitvector_names	db.cpp	/^int check_bitvector_names(bitvector_t bits, size_t namecount, const char *whatami, const char *w/;"	kind:function	line:2661	typeref:typename:int	signature:(bitvector_t bits,size_t namecount,const char * whatami,const char * whatbits)
 check_idle_passwords	comm.cpp	/^void check_idle_passwords(void) {$/;"	kind:function	line:2174	typeref:typename:void	signature:(void)
 check_idling	limits.cpp	/^void check_idling(player_ptr_t player) {$/;"	kind:function	line:409	typeref:typename:void	signature:(player_ptr_t player)
@@ -5707,7 +5709,7 @@ check_killer	fight.cpp	/^void check_killer(char_data *ch, char_data *vict) {$/;"
 check_object	db.cpp	/^int check_object(struct obj_data *obj) {$/;"	kind:function	line:2533	typeref:typename:int	signature:(struct obj_data * obj)
 check_object_level	db.cpp	/^int check_object_level(struct obj_data *obj, int val) {$/;"	kind:function	line:2651	typeref:typename:int	signature:(struct obj_data * obj,int val)
 check_object_spell_number	db.cpp	/^int check_object_spell_number(struct obj_data *obj, int val) {$/;"	kind:function	line:2594	typeref:typename:int	signature:(struct obj_data * obj,int val)
-check_parsed_args	mods/util.hpp	/^	struct check_parsed_args {$/;"	kind:struct	line:435	namespace:mods::util::args	file:
+check_parsed_args	mods/util.hpp	/^	struct check_parsed_args {$/;"	kind:struct	line:498	namespace:mods::util::args	file:
 check_rifle_type	mods/object-utils.cpp	/^	bool check_rifle_type(const auto& item, const mw_rifle& type) {$/;"	kind:function	line:53	namespace:mods::object_utils	typeref:typename:bool	signature:(const auto & item,const mw_rifle & type)
 check_start_rooms	db.cpp	/^void check_start_rooms(void) {$/;"	kind:function	line:1308	typeref:typename:void	signature:(void)
 checkpointing	comm.cpp	/^RETSIGTYPE checkpointing(int sig) {$/;"	kind:function	line:2279	typeref:typename:RETSIGTYPE	signature:(int sig)
@@ -5717,6 +5719,7 @@ chemistry	mods/player.hpp	/^			auto& chemistry() {$/;"	kind:function	line:341	st
 chemistry	structs.h	/^	skill_measurement_t chemistry;$/;"	kind:member	line:1365	struct:char_ability_data	typeref:typename:skill_measurement_t	file:	access:public
 child_node_t	mods/behaviour_tree_node.hpp	/^			using child_node_t = std::shared_ptr<behaviour_tree_node<LambdaArgument>>;$/;"	kind:typedef	line:24	struct:mods::behaviour_tree_node	typeref:typename:std::shared_ptr<behaviour_tree_node<LambdaArgument>>	file:	access:public
 children_t	mods/behaviour_tree_node.hpp	/^			using children_t = std::vector<child_node_t>;$/;"	kind:typedef	line:25	struct:mods::behaviour_tree_node	typeref:typename:std::vector<child_node_t>	file:	access:public
+chop_after_2nd_place	mods/util.hpp	/^		static inline std::string chop_after_2nd_place(std::string_view s) {$/;"	kind:function	line:73	namespace:mods::util::str	typeref:typename:std::string	file:	signature:(std::string_view s)
 chptr	mods/scan.hpp	/^		using chptr = player_ptr_t;$/;"	kind:typedef	line:28	namespace:mods::scan	typeref:typename:player_ptr_t	file:
 chunk	mods/deferred.hpp	/^		std::size_t chunk;$/;"	kind:member	line:26	struct:mods::chunk_affect_t	typeref:typename:std::size_t	file:	access:public
 chunk_affect_t	mods/deferred.hpp	/^	struct chunk_affect_t {$/;"	kind:struct	line:24	namespace:mods	file:
@@ -5828,7 +5831,7 @@ clear	mods/builder/meqbuild.cpp	/^		void clear() {$/;"	kind:function	line:104	st
 clear	mods/builder/seqbuild.cpp	/^		void clear() {$/;"	kind:function	line:624	struct:mods::builder::seqbuild::seqbuild_interface	typeref:typename:void	file:	access:public	signature:()
 clear	mods/sql.hpp	/^			compositor<T>& clear() {$/;"	kind:function	line:540	struct:mods::sql::compositor	typeref:typename:compositor<T> &	file:	access:public	signature:()
 clear	mods/string.cpp	/^	void string::clear() {$/;"	kind:function	line:79	class:mods::string	typeref:typename:void	signature:()
-clear	mods/util.hpp	/^			void clear() {$/;"	kind:function	line:442	struct:mods::util::args::check_parsed_args	typeref:typename:void	file:	access:public	signature:()
+clear	mods/util.hpp	/^			void clear() {$/;"	kind:function	line:505	struct:mods::util::args::check_parsed_args	typeref:typename:void	file:	access:public	signature:()
 clear	structs.h	/^			void clear() {$/;"	kind:function	line:1647	struct:mods::descriptor_data	typeref:typename:void	file:	access:public	signature:()
 clearMemory	mobact.cpp	/^void clearMemory(char_data *ch) {$/;"	kind:function	line:263	typeref:typename:void	signature:(char_data * ch)
 clear_all	mods/affects.hpp	/^			void clear_all() {$/;"	kind:function	line:188	struct:mods::affects::dissolver	typeref:typename:void	file:	access:public	signature:()
@@ -5879,7 +5882,7 @@ clip_size	mods/forge-engine/generated-rifle.hpp	/^			auto clip_size() {$/;"	kind
 clip_size	mods/ranged-combat-totals.hpp	/^		uint8_t clip_size;$/;"	kind:member	line:77	struct:mods::ranged_combat_totals	typeref:typename:uint8_t	file:	access:public
 clip_size	mods/weapon.hpp	/^			int clip_size;$/;"	kind:member	line:161	struct:mods::weapon::yaml::rifle_description_t	typeref:typename:int	file:	access:public
 clip_size	structs.h	/^	uint16_t clip_size;$/;"	kind:member	line:800	struct:obj_flag_data	typeref:typename:uint16_t	file:	access:public
-clock_	mods/util.hpp	/^			typedef std::chrono::high_resolution_clock clock_;$/;"	kind:typedef	line:43	class:mods::util::stopwatch_t	typeref:typename:std::chrono::high_resolution_clock	file:	access:private
+clock_	mods/util.hpp	/^			typedef std::chrono::high_resolution_clock clock_;$/;"	kind:typedef	line:106	class:mods::util::stopwatch_t	typeref:typename:std::chrono::high_resolution_clock	file:	access:private
 close	mods/bugs-fixtures.cpp	/^	void close(){$/;"	kind:function	line:20	namespace:mods::bugs	typeref:typename:void	signature:()
 close	mods/doors.cpp	/^	void close(room_rnum room_id,direction_t dir) {$/;"	kind:function	line:26	namespace:mods::doors	typeref:typename:void	signature:(room_rnum room_id,direction_t dir)
 close	mods/lmdb.cpp	/^	void _db_handle::close() {$/;"	kind:function	line:776	class:mods::lmdb::_db_handle	typeref:typename:void	signature:()
@@ -6161,7 +6164,7 @@ control	mods/message-server.cpp	/^		uint16_t control;$/;"	kind:member	line:27	st
 convert_to_array	mods/orm/mob-equipment.cpp	/^	std::array<std::string,NUM_WEARS> mob_equipment::convert_to_array() const {$/;"	kind:function	line:163	class:mods::orm::mob_equipment	typeref:typename:std::array<std::string,NUM_WEARS>	signature:() const
 convert_to_fire_nade	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::convert_to_fire_nade(obj_ptr_t& object){$/;"	kind:function	line:129	class:mods::classes::pyrexia	typeref:typename:std::pair<bool,std::string>	signature:(obj_ptr_t & object)
 convert_to_fire_nade	mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::convert_to_fire_nade(obj_ptr_t& object){$/;"	kind:function	line:74	class:mods::orm::pyrexia	typeref:typename:std::pair<bool,std::string>	signature:(obj_ptr_t & object)
-cooldown	mods/stats.cpp	/^	static constexpr std::string_view cooldown = "{grn}cooldown{\/grn}: ";$/;"	kind:variable	line:64	namespace:mods::stats	typeref:typename:std::string_view	file:
+cooldown	mods/stats-rifle.cpp	/^	static constexpr std::string_view cooldown = "{grn}cooldown{\/grn}: ";$/;"	kind:variable	line:19	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
 cooldown	mods/unit-tests/damage-types.cpp	/^		int cooldown = mods::weapons::damage_types::calculate_weapon_cooldown(attacker,victim,weapon, /;"	kind:variable	line:312	typeref:typename:int
 cooldown_between_shots	mods/forge-engine/generated-rifle.hpp	/^			auto cooldown_between_shots() {$/;"	kind:function	line:928	struct:mods::forge_engine::generated_rifle_t	typeref:typename:auto	file:	access:private	signature:()
 cooldown_between_shots	mods/ranged-combat-totals.hpp	/^		uint8_t cooldown_between_shots;$/;"	kind:member	line:75	struct:mods::ranged_combat_totals	typeref:typename:uint8_t	file:	access:public
@@ -6367,7 +6370,7 @@ created_at	mods/pq.hpp	/^	long created_at;$/;"	kind:member	line:712	struct:orm_b
 credentials	mods/conf.cpp	/^	static std::map<std::string,std::string> credentials;$/;"	kind:variable	line:4	namespace:mods::conf	typeref:typename:std::map<std::string,std::string>	file:
 credits	db.cpp	/^char *credits = NULL;		\/* game credits			 *\/$/;"	kind:variable	line:131	typeref:typename:char *
 crit	mods/values.hpp	/^			static inline void crit(T& p){$/;"	kind:function	line:1620	namespace:mods::values::msg	typeref:typename:void	file:	signature:(T & p)
-critical	mods/stats.cpp	/^	static constexpr std::string_view critical= "{grn}critical{\/grn}: ";$/;"	kind:variable	line:62	namespace:mods::stats	typeref:typename:std::string_view	file:
+critical	mods/stats-rifle.cpp	/^	static constexpr std::string_view critical= "{grn}critical{\/grn}: ";$/;"	kind:variable	line:17	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
 critical	mods/weapons/damage-calculator.hpp	/^		uint32_t critical;$/;"	kind:member	line:88	struct:mods::weapons::damage_calculator::explosive_damage_t	typeref:typename:uint32_t	file:	access:public
 critical_chance	mods/forge-engine/generated-rifle.hpp	/^			auto critical_chance() {$/;"	kind:function	line:246	struct:mods::forge_engine::generated_rifle_t	typeref:typename:auto	file:	access:private	signature:()
 critical_chance	mods/ranged-combat-totals.hpp	/^		uint16_t critical_chance;$/;"	kind:member	line:39	struct:mods::ranged_combat_totals	typeref:typename:uint16_t	file:	access:public
@@ -6445,7 +6448,7 @@ damage	mods/damage-event.hpp	/^	int damage;$/;"	kind:member	line:121	struct:feed
 damage	mods/ensnare.cpp	/^		int16_t damage;$/;"	kind:member	line:31	struct:mods::ensnare::ensnare_damage_t	typeref:typename:int16_t	file:	access:public
 damage	mods/melt.hpp	/^		int16_t damage;$/;"	kind:member	line:11	struct:mods::melt::melt_damage_t	typeref:typename:int16_t	file:	access:public
 damage	mods/player.hpp	/^			using damage = damage_event_t;$/;"	kind:typedef	line:83	struct:mods::player	typeref:typename:damage_event_t	file:	access:public
-damage	mods/stats.cpp	/^	static constexpr std::string_view damage = "{grn}damage{\/grn}: ";$/;"	kind:variable	line:65	namespace:mods::stats	typeref:typename:std::string_view	file:
+damage	mods/stats-rifle.cpp	/^	static constexpr std::string_view damage = "{grn}damage{\/grn}: ";$/;"	kind:variable	line:20	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
 damage	mods/weapon-types.hpp	/^		weapon_damage_t damage;$/;"	kind:member	line:12	struct:mods::weapon::weapon_type_statistics_t	typeref:typename:weapon_damage_t	file:	access:public
 damage	mods/weapons/damage-calculator.hpp	/^		uint32_t damage;$/;"	kind:member	line:87	struct:mods::weapons::damage_calculator::explosive_damage_t	typeref:typename:uint32_t	file:	access:public
 damage	mods/weapons/damage-types.cpp	/^		int damage(char_data *attacker, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:369	namespace:mods::weapons::damage_types::legacy	typeref:typename:int	signature:(char_data * attacker,char_data * victim,int dam,int attacktype)
@@ -6822,7 +6825,7 @@ detach	mods/weapons/attachment-pathogen-ammunition.cpp	/^	std::tuple<bool,std::s
 detach	mods/weapons/attachment-shotgun-underbarrel.cpp	/^	std::tuple<bool,std::string> attachment_shotgun_underbarrel::detach() {$/;"	kind:function	line:25	class:mods::weapons::attachment_shotgun_underbarrel	typeref:typename:std::tuple<bool,std::string>	signature:()
 detach_frag_underbarrel	mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::detach_frag_underbarrel() {$/;"	kind:function	line:624	class:mods::classes::ghost	typeref:typename:std::tuple<bool,std::string>	signature:()
 detach_shotgun_underbarrel	mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::detach_shotgun_underbarrel() {$/;"	kind:function	line:396	class:mods::classes::ghost	typeref:typename:std::tuple<bool,std::string>	signature:()
-detail	mods/util.hpp	/^	namespace detail {$/;"	kind:namespace	line:136	namespace:mods::util	file:
+detail	mods/util.hpp	/^	namespace detail {$/;"	kind:namespace	line:199	namespace:mods::util	file:
 detect_size	mods/lmdb/shm.hpp	/^        inline size_t detect_size(){$/;"	kind:function	line:47	class:gdns::shm	typeref:typename:size_t	file:	access:public	signature:()
 detect_size	mods/lmdb/shm.hpp	/^size_t shm::detect_size(const char* memory_id,int project_id){$/;"	kind:function	line:71	class:gdns::shm	typeref:typename:size_t	signature:(const char * memory_id,int project_id)
 determine_chase_direction	mods/mobs/defiler.cpp	/^	direction_t defiler::determine_chase_direction() {$/;"	kind:function	line:418	class:mods::mobs::defiler	typeref:typename:direction_t	signature:()
@@ -6869,13 +6872,13 @@ die_follower	utils.cpp	/^void die_follower(char_data *ch) {$/;"	kind:function	li
 die_msg	structs.h	/^	struct msg_type die_msg;	\/* messages when death			*\/$/;"	kind:member	line:1852	struct:message_type	typeref:struct:msg_type	file:	access:public
 dimensions_t	mods/builder/rectangle-layouts.hpp	/^	struct dimensions_t {$/;"	kind:struct	line:6	namespace:mods::builder::rectangle_layouts	file:
 dir	graph.cpp	/^	char dir;$/;"	kind:member	line:46	struct:bfs_queue_struct	typeref:typename:char	file:	access:public
-dir	mods/util.hpp	/^		int dir;$/;"	kind:member	line:128	struct:mods::util::objdir_struct	typeref:typename:int	file:	access:public
+dir	mods/util.hpp	/^		int dir;$/;"	kind:member	line:191	struct:mods::util::objdir_struct	typeref:typename:int	file:	access:public
 dir_exists	mods/util.cpp	/^	bool dir_exists(const char* dir) {$/;"	kind:function	line:856	namespace:mods::util	typeref:typename:bool	signature:(const char * dir)
 dir_int	globals.cpp	/^		int dir_int(char dir) {$/;"	kind:function	line:1075	namespace:mods::globals	typeref:typename:int	signature:(char dir)
 dir_option	mods/builder.cpp	/^	std::optional<std::string> dir_option(room_rnum room_id,int direction,std::optional<std::string/;"	kind:function	line:1079	namespace:mods::builder	typeref:typename:std::optional<std::string>	signature:(room_rnum room_id,int direction,std::optional<std::string_view> description,std::optional<std::string_view> keywords,std::optional<int> exit_info,std::optional<int> key,std::optional<room_rnum> to_room)
 dir_option	structs.h	/^		room_direction_data *dir_option[NUM_OF_DIRS]; \/* Directions *\/$/;"	kind:member	line:1226	struct:room_data	typeref:typename:room_direction_data * []	file:	access:public
 dir_to_str	globals.cpp	/^		std::string dir_to_str(int dir, bool adjective) {$/;"	kind:function	line:1207	namespace:mods::globals	typeref:typename:std::string	signature:(int dir,bool adjective)
-dirat	mods/util.hpp	/^#define dirat(/;"	kind:macro	line:490	file:	signature:(A)
+dirat	mods/util.hpp	/^#define dirat(/;"	kind:macro	line:553	file:	signature:(A)
 direction	mods/combat-composer/shared.hpp	/^			direction_t direction;$/;"	kind:member	line:59	struct:mods::combat_composer::phases::target_t	typeref:typename:direction_t	file:	access:public
 direction	mods/combat-composer/shared.hpp	/^			direction_t direction;$/;"	kind:member	line:88	struct:mods::combat_composer::phases::acquired_target_t	typeref:typename:direction_t	file:	access:public
 direction	mods/intent.hpp	/^		uint8_t 						direction;$/;"	kind:member	line:15	struct:mods::intent::intent_t	typeref:typename:uint8_t	file:	access:public
@@ -6893,7 +6896,7 @@ directional_dirstr	mods/doors.hpp	/^	static inline std::string directional_dirst
 directions	globals.hpp	/^static inline std::vector<direction_t>& directions() {$/;"	kind:function	line:329	typeref:typename:std::vector<direction_t> &	file:	signature:()
 directions	mods/scan.cpp	/^	int directions[] = { NORTH,EAST,SOUTH,WEST,UP,DOWN };$/;"	kind:variable	line:12	namespace:mods::scan	typeref:typename:int[]
 directions	structs.cpp	/^const std::vector<uint8_t>& room_data::directions() const {$/;"	kind:function	line:621	class:room_data	typeref:typename:const std::vector<uint8_t> &	signature:() const
-directory_list_t	mods/util.hpp	/^	using directory_list_t = std::vector<std::string>;$/;"	kind:typedef	line:124	namespace:mods::util	typeref:typename:std::vector<std::string>	file:
+directory_list_t	mods/util.hpp	/^	using directory_list_t = std::vector<std::string>;$/;"	kind:typedef	line:187	namespace:mods::util	typeref:typename:std::vector<std::string>	file:
 dirs	constants.cpp	/^const char *dirs[] = {$/;"	kind:variable	line:27	typeref:typename:const char * []
 dirs	constants.hpp	/^const char *dirs[] =$/;"	kind:variable	line:29	typeref:typename:const char * []
 dirstr	globals.cpp	/^std::string dirstr(int dir) {$/;"	kind:function	line:1430	typeref:typename:std::string	signature:(int dir)
@@ -7131,7 +7134,7 @@ eif_debug	mods/shock.cpp	/^#define eif_debug(/;"	kind:macro	line:12	file:	signat
 eif_debug	mods/shock.cpp	/^#define eif_debug(/;"	kind:macro	line:14	file:	signature:(MSG)
 eif_debug	mods/shrapnel.cpp	/^#define eif_debug(/;"	kind:macro	line:13	file:	signature:(MSG)
 eif_debug	mods/shrapnel.cpp	/^#define eif_debug(/;"	kind:macro	line:15	file:	signature:(MSG)
-elapsed	mods/util.hpp	/^			double elapsed() const {$/;"	kind:function	line:37	class:mods::util::stopwatch_t	typeref:typename:double	file:	access:public	signature:() const
+elapsed	mods/util.hpp	/^			double elapsed() const {$/;"	kind:function	line:100	class:mods::util::stopwatch_t	typeref:typename:double	file:	access:public	signature:() const
 ele	mods/mobs/defiler.cpp	/^		using ele = mods::elemental_types_t;$/;"	kind:typedef	line:669	function:mods::mobs::defiler_init::init	typeref:typename:mods::elemental_types_t	file:
 electric	mods/weapons/damage-calculator.hpp	/^		uint32_t electric;$/;"	kind:member	line:84	struct:mods::weapons::damage_calculator::explosive_damage_t	typeref:typename:uint32_t	file:	access:public
 electronics	mods/player.hpp	/^			auto& electronics() {$/;"	kind:function	line:338	struct:mods::player	typeref:typename:auto &	file:	access:public	signature:()
@@ -7181,7 +7184,7 @@ encoding_t	mods/rifle-attachments.hpp	/^			using encoding_t = std::string;$/;"	k
 encrypt	mods/crypto.cpp	/^int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,$/;"	kind:function	line:11	namespace:mods::crypto	typeref:typename:int	signature:(unsigned char * plaintext,int plaintext_len,unsigned char * key,unsigned char * iv,unsigned char * ciphertext)
 encrypt_buffer	mods/crypto.cpp	/^	std::string encrypt_buffer(std::string_view in_key,std::string_view in_iv,std::string_view buff/;"	kind:function	line:88	namespace:mods::crypto	typeref:typename:std::string	signature:(std::string_view in_key,std::string_view in_iv,std::string_view buffer)
 end_read_list	shop.cpp	/^int end_read_list(struct shop_buy_data *list, int len, int error) {$/;"	kind:function	line:1203	typeref:typename:int	signature:(struct shop_buy_data * list,int len,int error)
-ends_with	mods/stats.cpp	/^	bool ends_with(std::string_view s, const std::string& hay) {$/;"	kind:function	line:27	namespace:mods::stats	typeref:typename:bool	signature:(std::string_view s,const std::string & hay)
+ends_with	mods/util.hpp	/^		static inline bool ends_with(std::string_view s, const std::string& hay) {$/;"	kind:function	line:28	namespace:mods::util::str	typeref:typename:bool	file:	signature:(std::string_view s,const std::string & hay)
 enemy_spotted	mods/mobs/armed-guard.cpp	/^	void armed_guard::enemy_spotted(room_rnum room,uuid_t player) {$/;"	kind:function	line:82	class:mods::mobs::armed_guard	typeref:typename:void	signature:(room_rnum room,uuid_t player)
 enemy_spotted	mods/mobs/car-thief.cpp	/^	void car_thief::enemy_spotted(room_rnum room,uuid_t player) {$/;"	kind:function	line:79	class:mods::mobs::car_thief	typeref:typename:void	signature:(room_rnum room,uuid_t player)
 enemy_spotted	mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::enemy_spotted(room_rnum room,uuid_t player) {$/;"	kind:function	line:82	class:mods::mobs::chaotic_meth_addict	typeref:typename:void	signature:(room_rnum room,uuid_t player)
@@ -7258,7 +7261,7 @@ erase_queued_items	mods/affects.hpp	/^			void erase_queued_items() {$/;"	kind:fu
 erase_vc88	mods/weapons/smg-vc88.cpp	/^	void erase_vc88(const uuid_t& uuid) {$/;"	kind:function	line:40	namespace:mods::weapons::smg	typeref:typename:void	signature:(const uuid_t & uuid)
 erase_xtv89	mods/armor/gauntlets-xtv89.cpp	/^	void erase_xtv89(const uuid_t& uuid) {$/;"	kind:function	line:72	namespace:mods::armor	typeref:typename:void	signature:(const uuid_t & uuid)
 err	mods/util.cpp	/^namespace mods::util::err {$/;"	kind:namespace	line:1376	namespace:mods::util	file:
-err	mods/util.hpp	/^namespace mods::util::err {$/;"	kind:namespace	line:396	namespace:mods::util	file:
+err	mods/util.hpp	/^namespace mods::util::err {$/;"	kind:namespace	line:459	namespace:mods::util	file:
 error	mods/db.hpp	/^namespace mods::lmdb::error { $/;"	kind:namespace	line:13	namespace:mods::lmdb	file:
 error	mods/mobs/mini-gunner.hpp	/^			bool error;$/;"	kind:member	line:106	struct:mods::mobs::mini_gunner	typeref:typename:bool	file:	access:private
 error	mods/mobs/smart-mob.hpp	/^			bool error;$/;"	kind:member	line:168	struct:mods::mobs::smart_mob	typeref:typename:bool	file:	access:protected
@@ -7316,7 +7319,7 @@ exists	mods/filesystem.hpp	/^	static inline bool exists(const std::string& path)
 exists	mods/lmdb.cpp	/^	bool _db_handle::exists(std::string key) {$/;"	kind:function	line:455	class:mods::lmdb::_db_handle	typeref:typename:bool	signature:(std::string key)
 exists	mods/lmdb/conf.cpp	/^bool conf::exists(void){$/;"	kind:function	line:13	class:gdns::conf	typeref:typename:bool	signature:(void)
 exists	mods/lmdb/conf.hpp	/^bool exists(void){$/;"	kind:function	line:31	struct:gdns::conf	typeref:typename:bool	file:	access:public	signature:(void)
-exists	mods/util.hpp	/^	bool exists(const ContainerType * container_ptr,$/;"	kind:function	line:304	namespace:mods::util	typeref:typename:bool	signature:(const ContainerType * container_ptr,const FindType & find_me,typename ContainerType::const_iterator & found_at)
+exists	mods/util.hpp	/^	bool exists(const ContainerType * container_ptr,$/;"	kind:function	line:367	namespace:mods::util	typeref:typename:bool	signature:(const ContainerType * container_ptr,const FindType & find_me,typename ContainerType::const_iterator & found_at)
 exit_bits	constants.cpp	/^const char *exit_bits[] = {$/;"	kind:variable	line:61	typeref:typename:const char * []
 exit_bits	constants.hpp	/^const char *exit_bits[] = {$/;"	kind:variable	line:64	typeref:typename:const char * []
 exit_info	structs.h	/^	uint32_t exit_info;	\/* Exit info			*\/$/;"	kind:member	line:1123	struct:room_direction_data	typeref:typename:uint32_t	file:	access:public
@@ -7593,7 +7596,7 @@ feed	mods/orm/support.cpp	/^	int16_t support::feed(const pqxx::result::reference
 feed	mods/orm/syndrome.cpp	/^	int16_t syndrome::feed(const pqxx::result::reference & row){$/;"	kind:function	line:35	class:mods::orm::syndrome	typeref:typename:int16_t	signature:(const pqxx::result::reference & row)
 feed	mods/orm/user-logins.cpp	/^	int16_t user_logins::feed(const pqxx::result::reference& row) {$/;"	kind:function	line:50	class:mods::orm::user_logins	typeref:typename:int16_t	signature:(const pqxx::result::reference & row)
 feed	mods/pq.hpp	/^	virtual int16_t feed(const pqxx::result::reference&) {$/;"	kind:function	line:701	struct:orm_base	typeref:typename:int16_t	file:	access:public	signature:(const pqxx::result::reference &)
-feed	mods/util.hpp	/^			void feed(parsed_args* _p) {$/;"	kind:function	line:437	struct:mods::util::args::check_parsed_args	typeref:typename:void	file:	access:public	signature:(parsed_args * _p)
+feed	mods/util.hpp	/^			void feed(parsed_args* _p) {$/;"	kind:function	line:500	struct:mods::util::args::check_parsed_args	typeref:typename:void	file:	access:public	signature:(parsed_args * _p)
 feed	mods/weapon-types.hpp	/^	std::tuple<std::unique_ptr<AttributesType>,uint64_t> feed(std::string_view file) {$/;"	kind:function	line:74	namespace:mods::weapon_types	typeref:typename:std::tuple<std::unique_ptr<AttributesType>,uint64_t>	signature:(std::string_view file)
 feed	mods/weapons/pistol-czp10.cpp	/^	void czp10::feed(const mods::pq::row_type & row){$/;"	kind:function	line:16	class:mods::weapons::pistol::czp10	typeref:typename:void	signature:(const mods::pq::row_type & row)
 feed	mods/weapons/shotgun-sasg12.cpp	/^	void sasg12::feed(const mods::pq::row_type & row){$/;"	kind:function	line:14	class:mods::weapons::shotgun::sasg12	typeref:typename:void	signature:(const mods::pq::row_type & row)
@@ -7702,7 +7705,7 @@ fighting	structs.h	/^	char_data *fighting;	\/* Opponent				*\/$/;"	kind:member	l
 file_append	mods/filesystem.hpp	/^	static inline void file_append(std::string_view path,const std::string& guts) {$/;"	kind:function	line:67	namespace:mods::filesystem	typeref:typename:void	file:	signature:(std::string_view path,const std::string & guts)
 file_end_pos	mail.cpp	/^long file_end_pos = 0;			\/* length of file *\/$/;"	kind:variable	line:37	typeref:typename:long
 file_exists	mods/filesystem.hpp	/^	static inline bool file_exists(const std::string& path) {$/;"	kind:function	line:24	namespace:mods::filesystem	typeref:typename:bool	file:	signature:(const std::string & path)
-file_fetch_integer	mods/util.hpp	/^	static inline std::optional<T> file_fetch_integer(FILE* fp) {$/;"	kind:function	line:213	namespace:mods::util	typeref:typename:std::optional<T>	file:	signature:(FILE * fp)
+file_fetch_integer	mods/util.hpp	/^	static inline std::optional<T> file_fetch_integer(FILE* fp) {$/;"	kind:function	line:276	namespace:mods::util	typeref:typename:std::optional<T>	file:	signature:(FILE * fp)
 file_get_contents	mods/filesystem.hpp	/^	static inline int file_get_contents(std::string_view path, std::string& guts,std::string& error/;"	kind:function	line:27	namespace:mods::filesystem	typeref:typename:int	file:	signature:(std::string_view path,std::string & guts,std::string & error)
 file_to_lmdb	globals.cpp	/^		int file_to_lmdb(const std::string& file, const std::string& key) {$/;"	kind:function	line:815	namespace:mods::globals	typeref:typename:int	signature:(const std::string & file,const std::string & key)
 filename	boards.h	/^	char	filename[50];	\/* file to save this board to *\/$/;"	kind:member	line:32	struct:board_info_type	typeref:typename:char[50]	file:	access:public
@@ -7956,7 +7959,8 @@ forget	mobact.cpp	/^void forget(char_data *ch,char_data *victim) {$/;"	kind:func
 forget	mods/mobs/mini-gunner.cpp	/^	void mini_gunner::forget(uuid_t player) {$/;"	kind:function	line:312	class:mods::mobs::mini_gunner	typeref:typename:void	signature:(uuid_t player)
 forget	mods/mobs/smart-mob.cpp	/^	void smart_mob::forget(uuid_t player) {$/;"	kind:function	line:285	class:mods::mobs::smart_mob	typeref:typename:void	signature:(uuid_t player)
 format	mods/builder.cpp	/^	str_t format;$/;"	kind:member	line:2135	struct:command_t	typeref:typename:str_t	file:	access:public
-format_stats_page	mods/stats.cpp	/^	std::string format_stats_page(std::map<std::string,std::string>&& page) {$/;"	kind:function	line:83	namespace:mods::stats	typeref:typename:std::string	signature:(std::map<std::string,std::string> && page)
+format_rifle_stats_page	mods/stats-rifle.cpp	/^	std::string format_rifle_stats_page(std::map<std::string,std::string>& page) {$/;"	kind:function	line:64	namespace:mods::stats_rifle	typeref:typename:std::string	signature:(std::map<std::string,std::string> & page)
+format_stats_page	mods/stats.cpp	/^	std::string format_stats_page(std::string_view type,std::map<std::string,std::string>&& page) {$/;"	kind:function	line:29	namespace:mods::stats	typeref:typename:std::string	signature:(std::string_view type,std::map<std::string,std::string> && page)
 found	mods/js.cpp	/^				bool found;$/;"	kind:member	line:43	struct:mods::js::utils::find_player_payload_t	typeref:typename:bool	file:	access:public
 found	mods/scan.hpp	/^			bool found;$/;"	kind:member	line:33	struct:mods::scan::find_results_t	typeref:typename:bool	file:	access:public
 found_item	mods/mobs/armed-guard.cpp	/^	void armed_guard::found_item(mods::scan::vec_player_data_element const& item) {$/;"	kind:function	line:448	class:mods::mobs::armed_guard	typeref:typename:void	signature:(mods::scan::vec_player_data_element const & item)
@@ -8650,7 +8654,7 @@ has_unique_description	mods/armor/unique-armor.cpp	/^	bool has_unique_descriptio
 has_unique_description	mods/weapons/unique-weapons.cpp	/^	bool has_unique_description(const obj_ptr_t& weapon) {$/;"	kind:function	line:111	namespace:mods::weapons	typeref:typename:bool	signature:(const obj_ptr_t & weapon)
 has_weapon_capability	mods/player.cpp	/^	bool player::has_weapon_capability(uint8_t type) {$/;"	kind:function	line:679	class:mods::player	typeref:typename:bool	signature:(uint8_t type)
 hash_step	mods/scripted-sequence-runner.cpp	/^	std::size_t hash_step(step_ptr_t s) {$/;"	kind:function	line:18	namespace:mods::scripted_sequence_runner	typeref:typename:std::size_t	signature:(step_ptr_t s)
-have	mods/util.hpp	/^		check_parsed_args* have(const std::string& argument) {$/;"	kind:function	line:477	struct:mods::util::args::arglist_parser	typeref:typename:check_parsed_args *	file:	access:public	signature:(const std::string & argument)
+have	mods/util.hpp	/^		check_parsed_args* have(const std::string& argument) {$/;"	kind:function	line:540	struct:mods::util::args::arglist_parser	typeref:typename:check_parsed_args *	file:	access:public	signature:(const std::string & argument)
 hcontrol_build_house	house.cpp	/^void hcontrol_build_house(char_data *ch, char *arg) {$/;"	kind:function	line:391	typeref:typename:void	signature:(char_data * ch,char * arg)
 hcontrol_destroy_house	house.cpp	/^void hcontrol_destroy_house(char_data *ch, char *arg) {$/;"	kind:function	line:484	typeref:typename:void	signature:(char_data * ch,char * arg)
 hcontrol_list_houses	house.cpp	/^void hcontrol_list_houses(char_data *ch) {$/;"	kind:function	line:343	typeref:typename:void	signature:(char_data * ch)
@@ -8785,20 +8789,46 @@ hunting	mods/mobs/smart-mob.hpp	/^			uuidvec_t hunting;$/;"	kind:member	line:161
 hunting	mods/player.hpp	/^			char_data* hunting() {$/;"	kind:function	line:260	struct:mods::player	typeref:typename:char_data *	file:	access:public	signature:()
 hunting	structs.h	/^	char_data *hunting;	\/* Char hunted by this char		*\/$/;"	kind:member	line:1444	struct:char_special_data	typeref:typename:char_data *	file:	access:public
 hupsig	comm.cpp	/^RETSIGTYPE hupsig(int sig) {$/;"	kind:function	line:2290	typeref:typename:RETSIGTYPE	signature:(int sig)
-i_a_map	mods/stats.cpp	/^	static constexpr uint16_t i_a_map = i_accuracy + 1;$/;"	kind:variable	line:77	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_accuracy	mods/stats.cpp	/^	static constexpr uint16_t i_accuracy = i_ammo + 1;$/;"	kind:variable	line:76	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_ammo	mods/stats.cpp	/^	static constexpr uint16_t i_ammo = i_base_damage + 1;$/;"	kind:variable	line:74	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_base_damage	mods/stats.cpp	/^	static constexpr uint16_t i_base_damage = i_hr + 1;$/;"	kind:variable	line:70	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_cooldown	mods/stats.cpp	/^	static constexpr uint16_t i_cooldown = i_ammo + 1;$/;"	kind:variable	line:75	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_critical	mods/stats.cpp	/^	static constexpr uint16_t i_critical = i_base_damage + 1;$/;"	kind:variable	line:72	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_damage	mods/stats.cpp	/^	static constexpr uint16_t i_damage = i_base_damage + 1;$/;"	kind:variable	line:71	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_etc	mods/stats.cpp	/^	static constexpr uint16_t i_etc = i_stats + 1;$/;"	kind:variable	line:79	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_hr	mods/stats.cpp	/^	static constexpr uint16_t i_hr = 2;$/;"	kind:variable	line:69	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_injure	mods/stats.cpp	/^	static constexpr uint16_t i_injure = i_critical + 1;$/;"	kind:variable	line:73	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_manufacturer	mods/stats.cpp	/^	static constexpr uint16_t i_manufacturer = 0;$/;"	kind:variable	line:67	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_stats	mods/stats.cpp	/^	static constexpr uint16_t i_stats = i_a_map + 1;$/;"	kind:variable	line:78	namespace:mods::stats	typeref:typename:uint16_t	file:
-i_storage	mods/util.hpp	/^		std::vector<int> i_storage;$/;"	kind:member	line:406	struct:mods::util::args::parsed_args	typeref:typename:std::vector<int>	file:	access:public
-i_title	mods/stats.cpp	/^	static constexpr uint16_t i_title = 1;$/;"	kind:variable	line:68	namespace:mods::stats	typeref:typename:uint16_t	file:
+i_a_map	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_a_map = i_hs_bonus + 1;$/;"	kind:variable	line:36	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_accuracy	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_accuracy = i_ammo + 1;$/;"	kind:variable	line:31	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_ammo	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ammo = i_base_damage + 1;$/;"	kind:variable	line:29	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_base_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_base_damage = i_hr + 1;$/;"	kind:variable	line:25	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_cooldown	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_cooldown = i_ammo + 1;$/;"	kind:variable	line:30	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_critical	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_critical = i_base_damage + 1;$/;"	kind:variable	line:27	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_damage = i_base_damage + 1;$/;"	kind:variable	line:26	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_effective_range	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_effective_range = i_accuracy + 1;$/;"	kind:variable	line:32	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_ele_anti_matter_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_anti_matter_damage = i_a_map + 9;$/;"	kind:variable	line:45	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_ele_corrosive_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_corrosive_damage = i_a_map + 4;$/;"	kind:variable	line:40	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_ele_cryogenic_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_cryogenic_damage = i_a_map + 5;$/;"	kind:variable	line:41	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_ele_emp_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_emp_damage = i_a_map + 7;$/;"	kind:variable	line:43	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_ele_explosive_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_explosive_damage = i_a_map + 2;$/;"	kind:variable	line:38	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_ele_incendiary_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_incendiary_damage = i_a_map + 1;$/;"	kind:variable	line:37	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_ele_radioactive_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_radioactive_damage = i_a_map + 6;$/;"	kind:variable	line:42	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_ele_shock_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_shock_damage = i_a_map + 8;$/;"	kind:variable	line:44	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_ele_shrapnel_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_shrapnel_damage = i_a_map + 3;$/;"	kind:variable	line:39	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_etc	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_etc = i_stat_wisdom + 1;$/;"	kind:variable	line:60	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_hr	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_hr = 2;$/;"	kind:variable	line:24	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_hs_bonus	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_hs_bonus = i_range_mult + 1;$/;"	kind:variable	line:35	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_injure	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_injure = i_critical + 1;$/;"	kind:variable	line:28	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_manufacturer	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_manufacturer = 0;$/;"	kind:variable	line:22	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_max_range	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_max_range = i_effective_range + 1;$/;"	kind:variable	line:33	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_range_mult	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_range_mult = i_max_range + 1;$/;"	kind:variable	line:34	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_armor	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_armor = i_ele_anti_matter_damage + 1;$/;"	kind:variable	line:46	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_chemistry	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_chemistry = i_stat_armor + 1;$/;"	kind:variable	line:47	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_constitution	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_constitution = i_stat_chemistry + 1;$/;"	kind:variable	line:48	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_demolitions	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_demolitions = i_stat_constitution + 1;$/;"	kind:variable	line:49	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_dexterity	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_dexterity = i_stat_demolitions + 1;$/;"	kind:variable	line:50	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_electronics	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_electronics = i_stat_dexterity + 1;$/;"	kind:variable	line:51	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_intelligence	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_intelligence = i_stat_electronics + 1;$/;"	kind:variable	line:52	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_marksmanship	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_marksmanship = i_stat_intelligence + 1;$/;"	kind:variable	line:53	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_medical	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_medical = i_stat_marksmanship + 1;$/;"	kind:variable	line:54	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_sniping	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_sniping = i_stat_medical + 1;$/;"	kind:variable	line:55	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_strategy	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_strategy = i_stat_sniping + 1;$/;"	kind:variable	line:56	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_strength	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_strength = i_stat_strategy + 1;$/;"	kind:variable	line:57	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_wh	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_wh = i_stat_strength + 1;$/;"	kind:variable	line:58	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_stat_wisdom	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_wisdom  = i_stat_wh + 1;$/;"	kind:variable	line:59	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_storage	mods/util.hpp	/^		std::vector<int> i_storage;$/;"	kind:member	line:469	struct:mods::util::args::parsed_args	typeref:typename:std::vector<int>	file:	access:public
+i_title	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_title = 1;$/;"	kind:variable	line:23	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
 id	db.h	/^	long id;$/;"	kind:member	line:276	struct:player_index_element	typeref:typename:long	file:	access:public
 id	mods/behaviour_tree_node.hpp	/^				uint64_t id;$/;"	kind:member	line:30	struct:mods::behaviour_tree_node::__anon8e904b360108	typeref:typename:uint64_t	file:	access:public
 id	mods/bleed.cpp	/^		uint32_t id;$/;"	kind:member	line:28	struct:mods::bleed::bleed_damage_t	typeref:typename:uint32_t	file:	access:public
@@ -8935,7 +8965,7 @@ import_object	mods/orm/rifle-instance.cpp	/^	void rifle_instance::import_object(
 import_objects	mods/rifle-attachments.cpp	/^	void rifle_attachments_t::import_objects(const encoding_t& line) {$/;"	kind:function	line:114	class:mods::rifle_attachments_t	typeref:typename:void	signature:(const encoding_t & line)
 import_room	mods/builder.cpp	/^	int import_room(struct room_data* room) {$/;"	kind:function	line:1024	namespace:mods::builder	typeref:typename:int	signature:(struct room_data * room)
 in_addr	sysdep.h	/^struct in_addr {$/;"	kind:struct	line:250	file:
-in_array	mods/util.hpp	/^	bool in_array(std::string f,std::vector<T> strings) {$/;"	kind:function	line:387	namespace:mods::util	typeref:typename:bool	signature:(std::string f,std::vector<T> strings)
+in_array	mods/util.hpp	/^	bool in_array(std::string f,std::vector<T> strings) {$/;"	kind:function	line:450	namespace:mods::util	typeref:typename:bool	signature:(std::string f,std::vector<T> strings)
 in_buffer	mods/unit-tests/contracts.cpp	/^				std::string in_buffer;$/;"	kind:variable	line:242	typeref:typename:std::string
 in_obj	structs.h	/^		obj_data *in_obj;       \/* In what object NULL when none    *\/$/;"	kind:member	line:916	struct:obj_data	typeref:typename:obj_data *	file:	access:public
 in_room	mods/builder.cpp	/^#define in_room(/;"	kind:macro	line:59	file:	signature:(a)
@@ -9199,7 +9229,7 @@ inject_adrenaline_shot	mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> gh
 injure	mods/injure.cpp	/^namespace mods::injure {$/;"	kind:namespace	line:11	namespace:mods	file:
 injure	mods/injure.hpp	/^namespace mods::injure {$/;"	kind:namespace	line:5	namespace:mods	file:
 injure	mods/projectile.cpp	/^namespace mods::injure {$/;"	kind:namespace	line:59	namespace:mods	file:
-injure	mods/stats.cpp	/^	static constexpr std::string_view injure= "{grn}injure{\/grn}: ";$/;"	kind:variable	line:63	namespace:mods::stats	typeref:typename:std::string_view	file:
+injure	mods/stats-rifle.cpp	/^	static constexpr std::string_view injure= "{grn}injure{\/grn}: ";$/;"	kind:variable	line:18	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
 injure_player	mods/injure.cpp	/^	void injure_player(player_ptr_t& person) {$/;"	kind:function	line:12	namespace:mods::injure	typeref:typename:void	signature:(player_ptr_t & person)
 injure_roll	mods/weapons/damage-event-broadcaster.hpp	/^	void injure_roll(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t& feed/;"	kind:function	line:18	namespace:mods::weapons::damage_types	typeref:typename:void	signature:(player_ptr_t & attacker,player_ptr_t & victim,obj_ptr_t & weapon,feedback_t & feedback)
 injured	mods/damage-event.hpp	/^	std::vector<uuid_t> injured;$/;"	kind:member	line:123	struct:feedback_t	typeref:typename:std::vector<uuid_t>	file:	access:public
@@ -9239,7 +9269,7 @@ int_map	mods/util.cpp	/^	std::map<std::size_t,int> parsed_args::int_map(std::vec
 int_status_t	mods/db.hpp	/^	using int_status_t = int64_t;$/;"	kind:typedef	line:14	namespace:mods::lmdb::error	typeref:typename:int64_t	file:
 int_status_t	mods/db.hpp	/^using int_status_t = mods::lmdb::error::int_status_t;$/;"	kind:typedef	line:22	typeref:typename:mods::lmdb::error::int_status_t	file:
 int_types	mods/values.cpp	/^static const std::vector<value_key_t> int_types = {$/;"	kind:variable	line:1621	namespace:mods::values	typeref:typename:const std::vector<value_key_t>	file:
-intat	mods/util.hpp	/^#define intat(/;"	kind:macro	line:489	file:	signature:(A)
+intat	mods/util.hpp	/^#define intat(/;"	kind:macro	line:552	file:	signature:(A)
 integral_list	mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& integral_list() const {$/;"	kind:function	line:89	struct:mods::builder::seqbuild::seqbuild_interface	typeref:typename:const std::vector<std::string> &	file:	access:public	signature:() const
 integral_object	mods/orm/integral-object.hpp	/^		integral_object() : id(0) {$/;"	kind:function	line:14	struct:mods::orm::integral_object	file:	access:public	signature:()
 integral_object	mods/orm/integral-object.hpp	/^	struct integral_object : public mods::orm::orm_base<integral_object,std::string> {$/;"	kind:struct	line:9	namespace:mods::orm	file:	inherits:mods::orm::orm_base<integral_object,std::string>
@@ -9362,6 +9392,7 @@ is_find_item	mods/player-contract-instance.hpp	/^			bool is_find_item() const {$
 is_find_mob	mods/player-contract-instance.hpp	/^			bool is_find_mob() const {$/;"	kind:function	line:55	struct:mods::contracts::player_contract_instance	typeref:typename:bool	file:	access:public	signature:() const
 is_find_room	mods/player-contract-instance.hpp	/^			bool is_find_room() const {$/;"	kind:function	line:58	struct:mods::contracts::player_contract_instance	typeref:typename:bool	file:	access:public	signature:() const
 is_float	mods/values.cpp	/^		bool is_float(value_key_t key){$/;"	kind:function	line:2435	namespace:mods::values	typeref:typename:bool	signature:(value_key_t key)
+is_floatval	mods/util.hpp	/^		static inline bool is_floatval(std::string_view s) {$/;"	kind:function	line:60	namespace:mods::util::str	typeref:typename:bool	file:	signature:(std::string_view s)
 is_gain_entry	mods/player-contract-instance.hpp	/^			bool is_gain_entry() const {$/;"	kind:function	line:85	struct:mods::contracts::player_contract_instance	typeref:typename:bool	file:	access:public	signature:() const
 is_give_item	mods/player-contract-instance.hpp	/^			bool is_give_item() const {$/;"	kind:function	line:49	struct:mods::contracts::player_contract_instance	typeref:typename:bool	file:	access:public	signature:() const
 is_hellfire_corpse_charge	mods/object-utils.cpp	/^	bool is_hellfire_corpse_charge(const obj_ptr_t& device) {$/;"	kind:function	line:76	namespace:mods::object_utils	typeref:typename:bool	signature:(const obj_ptr_t & device)
@@ -9570,7 +9601,7 @@ limits	mods/rate-limiting.cpp	/^	static std::map<action_t,std::pair<int,int>> li
 line	db.h	/^	int line;		\/* line number this command appears on  *\/$/;"	kind:member	line:169	struct:reset_com	typeref:typename:int	file:	access:public
 line_up	mods/mini-games/line-up.cpp	/^	line_up::line_up() {$/;"	kind:function	line:19	class:mods::mini_games::line_up	signature:()
 line_up	mods/mini-games/line-up.hpp	/^	struct line_up {$/;"	kind:struct	line:8	namespace:mods::mini_games	file:
-linked_list_remove	mods/util.hpp	/^	inline void linked_list_remove(T item, T head) {$/;"	kind:function	line:287	namespace:mods::util	typeref:typename:void	signature:(T item,T head)
+linked_list_remove	mods/util.hpp	/^	inline void linked_list_remove(T item, T head) {$/;"	kind:function	line:350	namespace:mods::util	typeref:typename:void	signature:(T item,T head)
 list	mods/lmdb/conf.cpp	/^static struct translation *list = NULL;$/;"	kind:variable	line:8	namespace:gdns	typeref:struct:translation *	file:
 list	mods/mobs/resistance.cpp	/^		static resistance_map_t list;$/;"	kind:variable	line:13	namespace:mods::mobs::resistance::data	typeref:typename:resistance_map_t	file:
 list	mods/unit-tests/contracts.cpp	/^			std::deque<std::shared_ptr<mods::contracts::contract>> list;$/;"	kind:variable	line:133	typeref:typename:std::deque<std::shared_ptr<mods::contracts::contract>>
@@ -10292,8 +10323,10 @@ m_debug	mods/skills.cpp	/^#define m_debug(/;"	kind:macro	line:12	file:	signature
 m_debug	mods/skills.cpp	/^#define m_debug(/;"	kind:macro	line:14	file:	signature:(A)
 m_debug	mods/stat-bonuses.cpp	/^#define m_debug(/;"	kind:macro	line:12	file:	signature:(a)
 m_debug	mods/stat-bonuses.cpp	/^#define m_debug(/;"	kind:macro	line:14	file:	signature:(a)
-m_debug	mods/stats.cpp	/^#define m_debug(/;"	kind:macro	line:18	file:	signature:(MSG)
-m_debug	mods/stats.cpp	/^#define m_debug(/;"	kind:macro	line:21	file:	signature:(MSG)
+m_debug	mods/stats-rifle.cpp	/^#define m_debug(/;"	kind:macro	line:5	file:	signature:(MSG)
+m_debug	mods/stats-rifle.cpp	/^#define m_debug(/;"	kind:macro	line:8	file:	signature:(MSG)
+m_debug	mods/stats.cpp	/^#define m_debug(/;"	kind:macro	line:20	file:	signature:(MSG)
+m_debug	mods/stats.cpp	/^#define m_debug(/;"	kind:macro	line:23	file:	signature:(MSG)
 m_debug	mods/string.cpp	/^#define m_debug(/;"	kind:macro	line:4	file:	signature:(a)
 m_debug	mods/values.cpp	/^#define m_debug(/;"	kind:macro	line:13	file:	signature:(a)
 m_debug	mods/values.cpp	/^#define m_debug(/;"	kind:macro	line:15	file:	signature:(a)
@@ -10410,8 +10443,10 @@ m_error	mods/rifle.cpp	/^#define m_error(/;"	kind:macro	line:22	file:	signature:
 m_error	mods/rifle.cpp	/^#define m_error(/;"	kind:macro	line:25	file:	signature:(MSG)
 m_error	mods/shock.cpp	/^#define m_error(/;"	kind:macro	line:19	file:	signature:(MSG)
 m_error	mods/shrapnel.cpp	/^#define m_error(/;"	kind:macro	line:20	file:	signature:(MSG)
-m_error	mods/stats.cpp	/^#define m_error(/;"	kind:macro	line:19	file:	signature:(MSG)
-m_error	mods/stats.cpp	/^#define m_error(/;"	kind:macro	line:22	file:	signature:(MSG)
+m_error	mods/stats-rifle.cpp	/^#define m_error(/;"	kind:macro	line:6	file:	signature:(MSG)
+m_error	mods/stats-rifle.cpp	/^#define m_error(/;"	kind:macro	line:9	file:	signature:(MSG)
+m_error	mods/stats.cpp	/^#define m_error(/;"	kind:macro	line:21	file:	signature:(MSG)
+m_error	mods/stats.cpp	/^#define m_error(/;"	kind:macro	line:24	file:	signature:(MSG)
 m_error	mods/weapons/reload.cpp	/^#define m_error(/;"	kind:macro	line:9	file:	signature:(a)
 m_error_log	mods/orm/orm-base.hpp	/^			std::vector<std::string> m_error_log;$/;"	kind:member	line:306	struct:mods::orm::orm_base	typeref:typename:std::vector<std::string>	file:	access:private
 m_errors	mods/player-scaffolding.hpp	/^			std::vector<std::string> m_errors;$/;"	kind:member	line:72	struct:mods::player_scaffolding	typeref:typename:std::vector<std::string>	file:	access:protected
@@ -10969,7 +11004,7 @@ mana_points_per_inward_pump_buff	mods/weapons/shotgun-dst7A.hpp	/^				static con
 manufacturer	mods/yaml.hpp	/^		std::string manufacturer;$/;"	kind:member	line:164	struct:mods::yaml::yaml_description_t	typeref:typename:std::string	file:	access:public
 map	mods/builder/meqbuild.cpp	/^	namespace map {$/;"	kind:namespace	line:119	namespace:mods::builder::meqbuild	file:
 map	mods/builder/seqbuild.cpp	/^	namespace map {$/;"	kind:namespace	line:639	namespace:mods::builder::seqbuild	file:
-map2str	mods/util.hpp	/^	std::string map2str(std::map<TKey,TVal> in_map) {$/;"	kind:function	line:114	namespace:mods::util	typeref:typename:std::string	signature:(std::map<TKey,TVal> in_map)
+map2str	mods/util.hpp	/^	std::string map2str(std::map<TKey,TVal> in_map) {$/;"	kind:function	line:177	namespace:mods::util	typeref:typename:std::string	signature:(std::map<TKey,TVal> in_map)
 map_generator	mods/fluxkraft/generator.cpp	/^	mods::fluxkraft::generator map_generator;$/;"	kind:variable	line:12	namespace:mods::fluxkraft	typeref:typename:mods::fluxkraft::generator
 map_keys	globals.cpp	/^std::vector<str_t> map_keys(str_map_t& m) {$/;"	kind:function	line:1485	typeref:typename:std::vector<str_t>	signature:(str_map_t & m)
 map_object_list	structs.h	/^using map_object_list = std::map<uuid_t,std::shared_ptr<obj_data>>;$/;"	kind:typedef	line:1932	typeref:typename:std::map<uuid_t,std::shared_ptr<obj_data>>	file:
@@ -12100,7 +12135,9 @@ mods	mods/sql.hpp	/^namespace mods::sql {$/;"	kind:namespace	line:28	file:
 mods	mods/sql.hpp	/^namespace mods::values {$/;"	kind:namespace	line:23	file:
 mods	mods/stat-bonuses.cpp	/^namespace mods::stat_bonuses {$/;"	kind:namespace	line:17	file:
 mods	mods/stat-bonuses.hpp	/^namespace mods::stat_bonuses {$/;"	kind:namespace	line:8	file:
-mods	mods/stats.cpp	/^namespace mods::stats {$/;"	kind:namespace	line:26	file:
+mods	mods/stats-rifle.cpp	/^namespace mods::stats_rifle {$/;"	kind:namespace	line:13	file:
+mods	mods/stats-rifle.hpp	/^namespace mods::stats_rifle {$/;"	kind:namespace	line:5	file:
+mods	mods/stats.cpp	/^namespace mods::stats {$/;"	kind:namespace	line:28	file:
 mods	mods/stats.hpp	/^namespace mods::stats {$/;"	kind:namespace	line:5	file:
 mods	mods/string.cpp	/^namespace mods {$/;"	kind:namespace	line:5	file:
 mods	mods/string.hpp	/^namespace mods {$/;"	kind:namespace	line:17	file:
@@ -12123,8 +12160,8 @@ mods	mods/util.cpp	/^namespace mods::util::args {$/;"	kind:namespace	line:1384	f
 mods	mods/util.cpp	/^namespace mods::util::args {$/;"	kind:namespace	line:1423	file:
 mods	mods/util.cpp	/^namespace mods::util::err {$/;"	kind:namespace	line:1376	file:
 mods	mods/util.hpp	/^namespace mods::util {$/;"	kind:namespace	line:26	file:
-mods	mods/util.hpp	/^namespace mods::util::args {$/;"	kind:namespace	line:400	file:
-mods	mods/util.hpp	/^namespace mods::util::err {$/;"	kind:namespace	line:396	file:
+mods	mods/util.hpp	/^namespace mods::util::args {$/;"	kind:namespace	line:463	file:
+mods	mods/util.hpp	/^namespace mods::util::err {$/;"	kind:namespace	line:459	file:
 mods	mods/values.cpp	/^namespace mods::values {$/;"	kind:namespace	line:19	file:
 mods	mods/values.hpp	/^namespace mods::values {$/;"	kind:namespace	line:13	file:
 mods	mods/weapon-types.hpp	/^namespace mods::weapon {$/;"	kind:namespace	line:4	file:
@@ -12511,10 +12548,10 @@ nth_has_integer	mods/util.cpp	/^	bool parsed_args::nth_has_integer(std::vector<s
 nth_has_integer	mods/util.cpp	/^	check_parsed_args* check_parsed_args::nth_has_integer(std::size_t index) {$/;"	kind:function	line:1638	class:mods::util::args::check_parsed_args	typeref:typename:check_parsed_args *	signature:(std::size_t index)
 nth_has_integer	mods/util.cpp	/^	check_parsed_args* check_parsed_args::nth_has_integer(std::vector<std::size_t> index) {$/;"	kind:function	line:1642	class:mods::util::args::check_parsed_args	typeref:typename:check_parsed_args *	signature:(std::vector<std::size_t> index)
 nth_is	mods/util.cpp	/^	bool parsed_args::nth_is(std::size_t index,std::string_view str) {$/;"	kind:function	line:1450	class:mods::util::args::parsed_args	typeref:typename:bool	signature:(std::size_t index,std::string_view str)
-nth_is	mods/util.hpp	/^	static inline bool nth_is(std::size_t n,const std::vector<T> vec_args,std::string_view search) /;"	kind:function	line:77	namespace:mods::util	typeref:typename:bool	file:	signature:(std::size_t n,const std::vector<T> vec_args,std::string_view search)
+nth_is	mods/util.hpp	/^	static inline bool nth_is(std::size_t n,const std::vector<T> vec_args,std::string_view search) /;"	kind:function	line:140	namespace:mods::util	typeref:typename:bool	file:	signature:(std::size_t n,const std::vector<T> vec_args,std::string_view search)
 nth_is_any	mods/util.cpp	/^	bool parsed_args::nth_is_any(std::size_t index,std::vector<std::string> list_string) {$/;"	kind:function	line:1447	class:mods::util::args::parsed_args	typeref:typename:bool	signature:(std::size_t index,std::vector<std::string> list_string)
 nth_is_any	mods/util.cpp	/^	check_parsed_args* check_parsed_args::nth_is_any(std::size_t index,std::vector<std::string> lis/;"	kind:function	line:1630	class:mods::util::args::check_parsed_args	typeref:typename:check_parsed_args *	signature:(std::size_t index,std::vector<std::string> list_string)
-nth_is_any	mods/util.hpp	/^	static inline bool nth_is_any(std::size_t n,const std::vector<T> vec_args,const std::vector<T>&/;"	kind:function	line:68	namespace:mods::util	typeref:typename:bool	file:	signature:(std::size_t n,const std::vector<T> vec_args,const std::vector<T> & list_string)
+nth_is_any	mods/util.hpp	/^	static inline bool nth_is_any(std::size_t n,const std::vector<T> vec_args,const std::vector<T>&/;"	kind:function	line:131	namespace:mods::util	typeref:typename:bool	file:	signature:(std::size_t n,const std::vector<T> vec_args,const std::vector<T> & list_string)
 nth_matches	mods/util.cpp	/^	bool parsed_args::nth_matches(std::size_t index,std::string_view regex) {$/;"	kind:function	line:1454	class:mods::util::args::parsed_args	typeref:typename:bool	signature:(std::size_t index,std::string_view regex)
 nth_matches_any	mods/util.cpp	/^	bool parsed_args::nth_matches_any(std::size_t index,std::vector<std::string_view> regexes) {$/;"	kind:function	line:1467	class:mods::util::args::parsed_args	typeref:typename:bool	signature:(std::size_t index,std::vector<std::string_view> regexes)
 null_time	comm.cpp	/^struct timeval null_time;	\/* zero-valued time structure *\/$/;"	kind:variable	line:158	typeref:struct:timeval
@@ -12539,7 +12576,7 @@ obj	mods/scripted-step.hpp	/^		obj_vnum obj;$/;"	kind:member	line:19	struct:mods
 obj	mods/unit-tests/rifle-instance.cpp	/^		auto obj = create_object(ITEM_RIFLE,CAT("rifle|pkid:",id));$/;"	kind:variable	line:36	typeref:typename:auto
 obj	mods/unit-tests/rifle-instance.cpp	/^		auto obj = create_object(ITEM_RIFLE,CAT("rifle|pkid:",id));$/;"	kind:variable	line:46	typeref:typename:auto
 obj	mods/unit-tests/rifle-instance.cpp	/^		auto obj = create_object(ITEM_RIFLE,CAT("rifle|pkid:",rifle->db_id()));$/;"	kind:variable	line:56	typeref:typename:auto
-obj	mods/util.hpp	/^		obj_ptr_t obj;$/;"	kind:member	line:127	struct:mods::util::objdir_struct	typeref:typename:obj_ptr_t	file:	access:public
+obj	mods/util.hpp	/^		obj_ptr_t obj;$/;"	kind:member	line:190	struct:mods::util::objdir_struct	typeref:typename:obj_ptr_t	file:	access:public
 obj	mods/weapons/attachment-pathogen-ammunition.cpp	/^	obj_ptr_t attachment_pathogen_ammunition::obj() {$/;"	kind:function	line:126	class:mods::weapons::attachment_pathogen_ammunition	typeref:typename:obj_ptr_t	signature:()
 obj	mods/weapons/attachment-underbarrel.cpp	/^	obj_ptr_t attachment_underbarrel::obj() {$/;"	kind:function	line:54	class:mods::weapons::attachment_underbarrel	typeref:typename:obj_ptr_t	signature:()
 obj	mods/weapons/corrosive-claymore.cpp	/^	obj_ptr_t corrosive_claymore::obj() {$/;"	kind:function	line:106	class:mods::weapons::corrosive_claymore	typeref:typename:obj_ptr_t	signature:()
@@ -12577,7 +12614,7 @@ obj_ptr_t	db.h	/^using obj_ptr_t = std::shared_ptr<obj_data>;$/;"	kind:typedef	l
 obj_ptr_t	globals.hpp	/^using obj_ptr_t = std::shared_ptr<obj_data>;$/;"	kind:typedef	line:111	typeref:typename:std::shared_ptr<obj_data>	file:
 obj_ptr_t	mods/player.hpp	/^			using obj_ptr_t = std::shared_ptr<obj_data>;$/;"	kind:typedef	line:84	struct:mods::player	typeref:typename:std::shared_ptr<obj_data>	file:	access:public
 obj_ptr_t	mods/projectile.hpp	/^		using obj_ptr_t = std::shared_ptr<obj_data>;$/;"	kind:typedef	line:24	namespace:mods::projectile	typeref:typename:std::shared_ptr<obj_data>	file:
-obj_ptr_t	mods/util.hpp	/^	using obj_ptr_t = std::shared_ptr<obj_data>;$/;"	kind:typedef	line:125	namespace:mods::util	typeref:typename:std::shared_ptr<obj_data>	file:
+obj_ptr_t	mods/util.hpp	/^	using obj_ptr_t = std::shared_ptr<obj_data>;$/;"	kind:typedef	line:188	namespace:mods::util	typeref:typename:std::shared_ptr<obj_data>	file:
 obj_ptr_t	mods/weapon.hpp	/^using obj_ptr_t = std::shared_ptr<obj_data>;$/;"	kind:typedef	line:19	typeref:typename:std::shared_ptr<obj_data>	file:
 obj_ptr_t	mods/yaml.hpp	/^	using obj_ptr_t = std::shared_ptr<obj_data>;$/;"	kind:typedef	line:45	namespace:mods::weapon	typeref:typename:std::shared_ptr<obj_data>	file:
 obj_ptr_to_char	handler.cpp	/^void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player) {$/;"	kind:function	line:483	typeref:typename:void	signature:(obj_ptr_t object,player_ptr_t player)
@@ -12590,8 +12627,8 @@ obj_to_room	handler.cpp	/^void obj_to_room(obj_ptr_t in_object, room_rnum room) 
 obj_to_room	handler.cpp	/^void obj_to_room(struct obj_data *object, room_rnum room) {$/;"	kind:function	line:948	typeref:typename:void	signature:(struct obj_data * object,room_rnum room)
 obj_uuid	globals.cpp	/^		uuid_t obj_uuid() {$/;"	kind:function	line:628	namespace:mods::globals	typeref:typename:uuid_t	signature:()
 obj_vnum	mods/index-type.hpp	/^typedef IDXTYPE obj_vnum;$/;"	kind:typedef	line:24	typeref:typename:IDXTYPE	file:
-objdir_struct	mods/util.hpp	/^	struct objdir_struct {$/;"	kind:struct	line:126	namespace:mods::util	file:
-objdir_t	mods/util.hpp	/^	using objdir_t = objdir_struct;$/;"	kind:typedef	line:130	namespace:mods::util	typeref:typename:objdir_struct	file:
+objdir_struct	mods/util.hpp	/^	struct objdir_struct {$/;"	kind:struct	line:189	namespace:mods::util	file:
+objdir_t	mods/util.hpp	/^	using objdir_t = objdir_struct;$/;"	kind:typedef	line:193	namespace:mods::util	typeref:typename:objdir_struct	file:
 object	mods/lmdb.hpp	/^		player,mobile,object,affected_type,$/;"	kind:enumerator	line:28	enum:mods::lmdb::table_type_t	file:	access:public
 object	mods/object.cpp	/^	object::object(){$/;"	kind:function	line:10	class:mods::object	signature:()
 object	mods/object.cpp	/^	object::object(mods::object* ptr) {$/;"	kind:function	line:39	class:mods::object	signature:(mods::object * ptr)
@@ -12873,7 +12910,7 @@ owner	house.h	/^	long owner;			\/* idnum of house's owner	*\/$/;"	kind:member	li
 owner	mods/rifle-attachments.hpp	/^			uuid_t owner() const {$/;"	kind:function	line:47	struct:mods::rifle_attachments_t	typeref:typename:uuid_t	file:	access:public	signature:() const
 owner_drone	mods/drone.cpp	/^		std::pair<player_ptr_t,player_ptr_t> owner_drone(uuid_t owner_uuid) {$/;"	kind:function	line:85	namespace:mods::drone	typeref:typename:std::pair<player_ptr_t,player_ptr_t>	signature:(uuid_t owner_uuid)
 owner_uuid	mods/camera.hpp	/^			uuid_t owner_uuid() const { return m_player; }$/;"	kind:function	line:14	class:mods::camera	typeref:typename:uuid_t	file:	access:public	signature:() const
-p	mods/util.hpp	/^			parsed_args* p;$/;"	kind:member	line:436	struct:mods::util::args::check_parsed_args	typeref:typename:parsed_args *	file:	access:public
+p	mods/util.hpp	/^			parsed_args* p;$/;"	kind:member	line:499	struct:mods::util::args::check_parsed_args	typeref:typename:parsed_args *	file:	access:public
 p_locks	structs.h	/^	sh_int p_locks;$/;"	kind:member	line:1869	struct:dex_skill_type	typeref:typename:sh_int	file:	access:public
 p_pocket	structs.h	/^	sh_int p_pocket;$/;"	kind:member	line:1868	struct:dex_skill_type	typeref:typename:sh_int	file:	access:public
 pad_room	globals.cpp	/^		void pad_room(int room,char_data* ch,int door) {$/;"	kind:function	line:1072	namespace:mods::globals	typeref:typename:void	signature:(int room,char_data * ch,int door)
@@ -12927,11 +12964,11 @@ parse_sql_shops	db.cpp	/^int parse_sql_shops() {$/;"	kind:function	line:1287	typ
 parse_sql_zones	db.cpp	/^std::tuple<int16_t,std::string> parse_sql_zones() {$/;"	kind:function	line:976	typeref:typename:std::tuple<int16_t,std::string>	signature:()
 parse_target_string	mods/contract-steps.cpp	/^	target_t parse_target_string(std::string_view t) {$/;"	kind:function	line:106	namespace:mods::contracts	typeref:typename:target_t	signature:(std::string_view t)
 parse_targets	mods/mobs/generic-thief.cpp	/^	std::forward_list<generic_thief::target_t>& generic_thief::parse_targets(std::string_view targe/;"	kind:function	line:94	class:mods::mobs::generic_thief	typeref:typename:std::forward_list<generic_thief::target_t> &	signature:(std::string_view targets)
-parsed	mods/util.hpp	/^		parsed_args parsed;$/;"	kind:member	line:465	struct:mods::util::args::arglist_parser	typeref:typename:parsed_args	file:	access:public
-parsed_args	mods/util.hpp	/^	struct parsed_args {$/;"	kind:struct	line:403	namespace:mods::util::args	file:
+parsed	mods/util.hpp	/^		parsed_args parsed;$/;"	kind:member	line:528	struct:mods::util::args::arglist_parser	typeref:typename:parsed_args	file:	access:public
+parsed_args	mods/util.hpp	/^	struct parsed_args {$/;"	kind:struct	line:466	namespace:mods::util::args	file:
 particle_deceleration	mods/help.cpp	/^	HELP_STR particle_deceleration= "usage: invoke particle_deceleration\\r\\n"$/;"	kind:variable	line:618	namespace:mods::help::pages	typeref:typename:HELP_STR
 passed	mods/util.cpp	/^	bool check_parsed_args::passed() {$/;"	kind:function	line:1654	class:mods::util::args::check_parsed_args	typeref:typename:bool	signature:()
-passed_map	mods/util.hpp	/^			std::map<std::string,bool> passed_map;$/;"	kind:member	line:440	struct:mods::util::args::check_parsed_args	typeref:typename:std::map<std::string,bool>	file:	access:public
+passed_map	mods/util.hpp	/^			std::map<std::string,bool> passed_map;$/;"	kind:member	line:503	struct:mods::util::args::check_parsed_args	typeref:typename:std::map<std::string,bool>	file:	access:public
 passed_tests	mods/forge-engine/generated-rifle.hpp	/^			test_list_t passed_tests;$/;"	kind:member	line:1795	struct:mods::forge_engine::balance_ruleset_t	typeref:typename:test_list_t	file:	access:private
 password	mods/auto-login.hpp	/^	static std::string password;$/;"	kind:variable	line:9	namespace:mods::auto_login	typeref:typename:std::string	file:
 password	mods/player.hpp	/^			std::string password() {$/;"	kind:function	line:140	struct:mods::player	typeref:typename:std::string	file:	access:public	signature:()
@@ -13152,7 +13189,7 @@ player_name	mods/js.cpp	/^				std::string player_name;$/;"	kind:member	line:42	s
 player_name_is	mods/super-users.cpp	/^	bool player_name_is(std::string_view name) {$/;"	kind:function	line:103	namespace:mods::super_users	typeref:typename:bool	signature:(std::string_view name)
 player_name_map	globals.cpp	/^		std::map<std::string,player_ptr_t> player_name_map;$/;"	kind:variable	line:94	namespace:mods::globals	typeref:typename:std::map<std::string,player_ptr_t>
 player_nobody	globals.cpp	/^		player_ptr_t player_nobody;$/;"	kind:variable	line:90	namespace:mods::globals	typeref:typename:player_ptr_t
-player_parsers	mods/util.hpp	/^	static std::map<uuid_t,arglist_parser> player_parsers;$/;"	kind:variable	line:484	namespace:mods::util::args	typeref:typename:std::map<uuid_t,arglist_parser>	file:
+player_parsers	mods/util.hpp	/^	static std::map<uuid_t,arglist_parser> player_parsers;$/;"	kind:variable	line:547	namespace:mods::util::args	typeref:typename:std::map<uuid_t,arglist_parser>	file:
 player_primary_key_t	mods/karma.hpp	/^		using player_primary_key_t = uint64_t;$/;"	kind:typedef	line:10	struct:mods::karma	typeref:typename:uint64_t	file:	access:public
 player_ptr	mods/mobs/mini-gunner.hpp	/^			player_ptr_t player_ptr;$/;"	kind:member	line:104	struct:mods::mobs::mini_gunner	typeref:typename:player_ptr_t	file:	access:private
 player_ptr	mods/mobs/smart-mob.hpp	/^			player_ptr_t player_ptr;$/;"	kind:member	line:166	struct:mods::mobs::smart_mob	typeref:typename:player_ptr_t	file:	access:protected
@@ -13604,7 +13641,7 @@ pyrexia_seal_off_room_with_wall_of_fire_level	mods/orm/pyrexia.hpp	/^		skill_fam
 pyrexia_solar_assistance_level	mods/orm/pyrexia.hpp	/^		skill_familiarity_t pyrexia_solar_assistance_level;$/;"	kind:member	line:55	struct:mods::orm::pyrexia	typeref:typename:skill_familiarity_t	file:	access:public
 pyrexia_summon_napalm_strike_level	mods/orm/pyrexia.hpp	/^		skill_familiarity_t pyrexia_summon_napalm_strike_level;$/;"	kind:member	line:54	struct:mods::orm::pyrexia	typeref:typename:skill_familiarity_t	file:	access:public
 q	random.cpp	/^#define	q /;"	kind:macro	line:46	file:
-qmob	mods/util.hpp	/^#define qmob(/;"	kind:macro	line:493	file:	signature:(ROOM,MOB)
+qmob	mods/util.hpp	/^#define qmob(/;"	kind:macro	line:556	file:	signature:(ROOM,MOB)
 quantity	mods/scripted-step.hpp	/^		uint16_t quantity;$/;"	kind:member	line:24	struct:mods::scripted_step	typeref:typename:uint16_t	file:	access:public
 query_contents_by_yaml	mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {$/;"	kind:function	line:86	namespace:mods::query_objects	typeref:typename:std::vector<uuid_t>	signature:(obj_ptr_t & found_object,std::string_view file)
 query_contents_by_yaml_multi	mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml_multi(obj_ptr_t& found_object,const std::vector<std:/;"	kind:function	line:95	namespace:mods::query_objects	typeref:typename:std::vector<uuid_t>	signature:(obj_ptr_t & found_object,const std::vector<std::string> & files)
@@ -14007,7 +14044,7 @@ reserved_word	interpreter.cpp	/^int reserved_word(char *argument) {$/;"	kind:fun
 reserved_zones	act.builder.cpp	/^	static std::vector<int> reserved_zones;$/;"	kind:variable	line:30	namespace:mods::adhoc	typeref:typename:std::vector<int>	file:
 reset	mods/mini-games/line-up.cpp	/^	void line_up::reset() {$/;"	kind:function	line:139	class:mods::mini_games::line_up	typeref:typename:void	signature:()
 reset	mods/mini-games/wires.cpp	/^	void wires::reset() {$/;"	kind:function	line:93	class:mods::mini_games::wires	typeref:typename:void	signature:()
-reset	mods/util.hpp	/^			void reset() {$/;"	kind:function	line:34	class:mods::util::stopwatch_t	typeref:typename:void	file:	access:public	signature:()
+reset	mods/util.hpp	/^			void reset() {$/;"	kind:function	line:97	class:mods::util::stopwatch_t	typeref:typename:void	file:	access:public	signature:()
 reset_char	db.cpp	/^void reset_char(char_data *ch) {$/;"	kind:function	line:2323	typeref:typename:void	signature:(char_data * ch)
 reset_com	db.h	/^	reset_com() : command('X'),$/;"	kind:function	line:157	struct:reset_com	file:	access:public	signature:()
 reset_com	db.h	/^struct reset_com {$/;"	kind:struct	line:156	file:
@@ -14681,7 +14718,7 @@ search	mods/players/search.hpp	/^					search(const scan_results& s) : m_scan_res
 search	mods/players/search.hpp	/^			class search {$/;"	kind:class	line:12	namespace:mods::player::util	file:
 search_block	interpreter.cpp	/^int search_block(char *arg, const char **list, int exact) { \/** FIXME: arg 2  *\/$/;"	kind:function	line:1136	typeref:typename:int	signature:(char * arg,const char ** list,int exact)
 search_screen	mods/screen-searcher.hpp	/^	void search_screen(TPlayerPtr& player, const std::vector<std::string>& screen, const std::vecto/;"	kind:function	line:12	namespace:mods	typeref:typename:void	signature:(TPlayerPtr & player,const std::vector<std::string> & screen,const std::vector<std::string> & vec_args,std::size_t limit)
-second_	mods/util.hpp	/^			typedef std::chrono::duration<double, std::ratio<1> > second_;$/;"	kind:typedef	line:44	class:mods::util::stopwatch_t	typeref:typename:std::chrono::duration<double,std::ratio<1>>	file:	access:private
+second_	mods/util.hpp	/^			typedef std::chrono::duration<double, std::ratio<1> > second_;$/;"	kind:typedef	line:107	class:mods::util::stopwatch_t	typeref:typename:std::chrono::duration<double,std::ratio<1>>	file:	access:private
 secondary	mods/player.cpp	/^	obj_data_ptr_t player::secondary() {$/;"	kind:function	line:1673	class:mods::player	typeref:typename:obj_data_ptr_t	signature:()
 secondary_choice_t	mods/classes/medic.hpp	/^			using secondary_choice_t = mods::weapon::medic::secondary_choice_t;$/;"	kind:typedef	line:15	struct:mods::classes::medic	typeref:typename:mods::weapon::medic::secondary_choice_t	file:	access:public
 seconds	mods/deferred.hpp	/^			using seconds = uint16_t;$/;"	kind:typedef	line:57	class:mods::deferred	typeref:typename:uint16_t	file:	access:public
@@ -15211,7 +15248,7 @@ shrapnel_damage_percent	mods/rifle-attachments.hpp	/^			int16_t shrapnel_damage_
 shrapnel_percent	mods/ranged-combat-totals.hpp	/^		uint16_t shrapnel_percent;$/;"	kind:member	line:93	struct:mods::ranged_combat_totals	typeref:typename:uint16_t	file:	access:public
 shrapnel_resistance_percent	mods/player.cpp	/^	int16_t& player::shrapnel_resistance_percent() {$/;"	kind:function	line:2156	class:mods::player	typeref:typename:int16_t &	signature:()
 shredded_cantrip	mods/help.cpp	/^	HELP_STR shredded_cantrip= "usage:     \\r\\n"$/;"	kind:variable	line:601	namespace:mods::help::pages	typeref:typename:HELP_STR
-shuffle	mods/util.hpp	/^	static inline void shuffle(T& vec) {$/;"	kind:function	line:106	namespace:mods::util	typeref:typename:void	file:	signature:(T & vec)
+shuffle	mods/util.hpp	/^	static inline void shuffle(T& vec) {$/;"	kind:function	line:169	namespace:mods::util	typeref:typename:void	file:	signature:(T & vec)
 shuffle_container	mods/rand.hpp	/^	static inline T shuffle_container(const T& v) {$/;"	kind:function	line:37	namespace:mods::rand	typeref:typename:T	file:	signature:(const T & v)
 shuffle_directions	mods/mobs/smart-mob.cpp	/^	std::vector<direction_t> smart_mob::shuffle_directions() {$/;"	kind:function	line:349	class:mods::mobs::smart_mob	typeref:typename:std::vector<direction_t>	signature:()
 shutdown	globals.cpp	/^		void shutdown(void) {$/;"	kind:function	line:184	namespace:mods::globals	typeref:typename:void	signature:(void)
@@ -15228,7 +15265,7 @@ singular	spells.h	/^	const char	*singular;$/;"	kind:member	line:252	struct:attac
 site	db.h	/^	char	site[BANNED_SITE_LENGTH+1];$/;"	kind:member	line:295	struct:ban_list_element	typeref:typename:char[]	file:	access:public
 siteok_everyone	config.cpp	/^int siteok_everyone = TRUE;$/;"	kind:variable	line:248	typeref:typename:int
 size	mods/message-server.cpp	/^		std::size_t size;$/;"	kind:member	line:29	struct:mods::message_server::channel_message_t	typeref:typename:std::size_t	file:	access:public
-size	mods/util.hpp	/^		std::size_t size;$/;"	kind:member	line:404	struct:mods::util::args::parsed_args	typeref:typename:std::size_t	file:	access:public
+size	mods/util.hpp	/^		std::size_t size;$/;"	kind:member	line:467	struct:mods::util::args::parsed_args	typeref:typename:std::size_t	file:	access:public
 size_eq	mods/util.cpp	/^	check_parsed_args* check_parsed_args::size_eq(std::size_t size) {$/;"	kind:function	line:1650	class:mods::util::args::check_parsed_args	typeref:typename:check_parsed_args *	signature:(std::size_t size)
 size_gt	mods/util.cpp	/^	check_parsed_args* check_parsed_args::size_gt(std::size_t size) {$/;"	kind:function	line:1646	class:mods::util::args::check_parsed_args	typeref:typename:check_parsed_args *	signature:(std::size_t size)
 size_t	globals.hpp	/^using size_t = std::size_t;$/;"	kind:typedef	line:117	typeref:typename:std::size_t	file:
@@ -15508,8 +15545,8 @@ starting_hp	mods/unit-tests/elemental-armor-resistances.cpp	/^		int starting_hp 
 starting_hp	mods/unit-tests/elemental.cpp	/^		int starting_hp = 100;$/;"	kind:variable	line:44	typeref:typename:int
 starting_hp	mods/unit-tests/elemental.cpp	/^		int starting_hp = 100;$/;"	kind:variable	line:55	typeref:typename:int
 starting_point	structs.h	/^		bool starting_point;$/;"	kind:member	line:1267	struct:room_data	typeref:typename:bool	file:	access:public
-starts_with	mods/stats.cpp	/^	bool starts_with(std::string_view s, const std::string& hay) {$/;"	kind:function	line:38	namespace:mods::stats	typeref:typename:bool	signature:(std::string_view s,const std::string & hay)
-starts_with_any	mods/stats.cpp	/^	bool starts_with_any(std::vector<std::string>&& m,const std::string& hay) {$/;"	kind:function	line:51	namespace:mods::stats	typeref:typename:bool	signature:(std::vector<std::string> && m,const std::string & hay)
+starts_with	mods/util.hpp	/^		static inline bool starts_with(std::string_view s, const std::string& hay) {$/;"	kind:function	line:39	namespace:mods::util::str	typeref:typename:bool	file:	signature:(std::string_view s,const std::string & hay)
+starts_with_any	mods/util.hpp	/^		static inline bool starts_with_any(std::vector<std::string>&& m,const std::string& hay) {$/;"	kind:function	line:52	namespace:mods::util::str	typeref:typename:bool	file:	signature:(std::vector<std::string> && m,const std::string & hay)
 stat_armor	mods/ranged-combat-totals.hpp	/^		uint16_t stat_armor;$/;"	kind:member	line:119	struct:mods::ranged_combat_totals	typeref:typename:uint16_t	file:	access:public
 stat_bonuses	mods/player.cpp	/^namespace mods::stat_bonuses {$/;"	kind:namespace	line:55	namespace:mods	file:
 stat_bonuses	mods/stat-bonuses.cpp	/^namespace mods::stat_bonuses {$/;"	kind:namespace	line:17	namespace:mods	file:
@@ -15550,11 +15587,13 @@ static_roll_weapon_amount	mods/weapons/damage-calculator.cpp	/^	static int16_t s
 stats	mods/armor/gauntlets-xtv89.hpp	/^			struct stats {$/;"	kind:struct	line:44	struct:mods::armor::xtv89	file:	access:public
 stats	mods/armor/vest-bc89.hpp	/^			struct stats {$/;"	kind:struct	line:56	struct:mods::armor::bc89	file:	access:public
 stats	mods/forge-engine/requirements.hpp	/^		std::vector<std::pair<stat_types_t,uint32_t>> stats;$/;"	kind:member	line:34	struct:mods::forge_engine::requirements_t	typeref:typename:std::vector<std::pair<stat_types_t,uint32_t>>	file:	access:public
-stats	mods/stats.cpp	/^namespace mods::stats {$/;"	kind:namespace	line:26	namespace:mods	file:
+stats	mods/stats.cpp	/^namespace mods::stats {$/;"	kind:namespace	line:28	namespace:mods	file:
 stats	mods/stats.hpp	/^namespace mods::stats {$/;"	kind:namespace	line:5	namespace:mods	file:
 stats	mods/weapons/shotgun-dst7A.hpp	/^			struct stats {$/;"	kind:struct	line:46	struct:mods::weapons::shotgun::dst7A	file:	access:public
 stats	mods/weapons/smg-vc88.hpp	/^			struct stats {$/;"	kind:struct	line:44	struct:mods::weapons::smg::vc88	file:	access:public
 stats	structs.cpp	/^namespace mods::stats {$/;"	kind:namespace	line:171	namespace:mods	file:
+stats_rifle	mods/stats-rifle.cpp	/^namespace mods::stats_rifle {$/;"	kind:namespace	line:13	namespace:mods	file:
+stats_rifle	mods/stats-rifle.hpp	/^namespace mods::stats_rifle {$/;"	kind:namespace	line:5	namespace:mods	file:
 status	mods/behaviour_tree_impl.hpp	/^	using status = mods::behaviour_tree_status;$/;"	kind:typedef	line:29	namespace:mods::behaviour_tree_impl	typeref:typename:mods::behaviour_tree_status	file:
 status	mods/behaviour_tree_node.hpp	/^				behaviour_tree_status status;$/;"	kind:member	line:28	struct:mods::behaviour_tree_node::__anon8e904b360108	typeref:typename:behaviour_tree_status	file:	access:public
 status	mods/user-feedback.hpp	/^		TStatus status;$/;"	kind:member	line:10	struct:mods::user::feedback	typeref:typename:TStatus	file:	access:public
@@ -15618,9 +15657,9 @@ stock	mods/rifle-attachments.hpp	/^			obj_ptr_t stock;$/;"	kind:member	line:23	s
 stoi	mods/orm/util.hpp	/^	T stoi(const std::string& i) {$/;"	kind:function	line:27	namespace:mods::orm::util	typeref:typename:T	signature:(const std::string & i)
 stoi	mods/pq.hpp	/^T stoi(const std::string& i) {$/;"	kind:function	line:251	typeref:typename:T	signature:(const std::string & i)
 stoi	mods/util.cpp	/^	std::optional<int> stoi(std::string_view str) {$/;"	kind:function	line:812	namespace:mods::util	typeref:typename:std::optional<int>	signature:(std::string_view str)
-stoi	mods/util.hpp	/^	T stoi(const pqxx::result::reference& i) {$/;"	kind:function	line:247	namespace:mods::util	typeref:typename:T	signature:(const pqxx::result::reference & i)
-stoi	mods/util.hpp	/^	T stoi(const std::string& i) {$/;"	kind:function	line:205	namespace:mods::util	typeref:typename:T	signature:(const std::string & i)
-stoi_optional	mods/util.hpp	/^	std::optional<T> stoi_optional(std::string_view str) {$/;"	kind:function	line:258	namespace:mods::util	typeref:typename:std::optional<T>	signature:(std::string_view str)
+stoi	mods/util.hpp	/^	T stoi(const pqxx::result::reference& i) {$/;"	kind:function	line:310	namespace:mods::util	typeref:typename:T	signature:(const pqxx::result::reference & i)
+stoi	mods/util.hpp	/^	T stoi(const std::string& i) {$/;"	kind:function	line:268	namespace:mods::util	typeref:typename:T	signature:(const std::string & i)
+stoi_optional	mods/util.hpp	/^	std::optional<T> stoi_optional(std::string_view str) {$/;"	kind:function	line:321	namespace:mods::util	typeref:typename:std::optional<T>	signature:(std::string_view str)
 stop	mods/drone.cpp	/^		void stop(uuid_t  owner_uuid) {$/;"	kind:function	line:58	namespace:mods::drone	typeref:typename:void	signature:(uuid_t owner_uuid)
 stop	mods/mob-roam.cpp	/^	std::tuple<int16_t,std::string> roam_recorder::stop() {$/;"	kind:function	line:73	class:mods::mob_roam::roam_recorder	typeref:typename:std::tuple<int16_t,std::string>	signature:()
 stop	mods/mob-roam.cpp	/^	std::tuple<int16_t,std::string> stop(player_ptr_t& player, std::string_view profile_name) {$/;"	kind:function	line:120	namespace:mods::mob_roam	typeref:typename:std::tuple<int16_t,std::string>	signature:(player_ptr_t & player,std::string_view profile_name)
@@ -15635,13 +15674,14 @@ stop_recording	mods/builder-data.cpp	/^void room_recorder_t::stop_recording() {$
 stop_snooping	act.wizard.cpp	/^void stop_snooping(char_data *ch) {$/;"	kind:function	line:929	typeref:typename:void	signature:(char_data * ch)
 stop_tick	mods/blind.cpp	/^		uint64_t stop_tick;$/;"	kind:member	line:33	struct:mods::blind::blind_damage_t	typeref:typename:uint64_t	file:	access:public
 stop_watching	mods/mobs/room-watching.cpp	/^	void stop_watching(uuid_t mob) {$/;"	kind:function	line:61	namespace:mods::mobs::room_watching	typeref:typename:void	signature:(uuid_t mob)
-stopwatch_t	mods/util.hpp	/^			stopwatch_t() : beg_(clock_::now()) {}$/;"	kind:function	line:33	class:mods::util::stopwatch_t	file:	access:public	signature:()
-stopwatch_t	mods/util.hpp	/^	class stopwatch_t {$/;"	kind:class	line:31	namespace:mods::util	file:
+stopwatch_t	mods/util.hpp	/^			stopwatch_t() : beg_(clock_::now()) {}$/;"	kind:function	line:96	class:mods::util::stopwatch_t	file:	access:public	signature:()
+stopwatch_t	mods/util.hpp	/^	class stopwatch_t {$/;"	kind:class	line:94	namespace:mods::util	file:
 store	mods/loot.cpp	/^	void store(player_ptr_t& player, obj_ptr_t&& obj) {$/;"	kind:function	line:21	namespace:mods::loot	typeref:typename:void	signature:(player_ptr_t & player,obj_ptr_t && obj)
 store_mail	mail.cpp	/^void store_mail(long to, long from, char *message_pointer) {$/;"	kind:function	line:297	typeref:typename:void	signature:(long to,long from,char * message_pointer)
 stoul	mods/util.cpp	/^	std::optional<unsigned> stoul(std::string_view str) {$/;"	kind:function	line:805	namespace:mods::util	typeref:typename:std::optional<unsigned>	signature:(std::string_view str)
 str	mods/message-server.cpp	/^		std::string str;$/;"	kind:member	line:211	struct:mods::message_server::message_t_string_adaptor_t	typeref:typename:std::string	file:	access:public
 str	mods/string.cpp	/^	std::string string::str() const {$/;"	kind:function	line:181	class:mods::string	typeref:typename:std::string	signature:() const
+str	mods/util.hpp	/^	namespace str {$/;"	kind:namespace	line:27	namespace:mods::util	file:
 str	structs.h	/^			char	**str;			\/* for the modify-str system		*\/$/;"	kind:member	line:1706	struct:mods::descriptor_data	typeref:typename:char **	file:	access:public
 str	structs.h	/^	skill_measurement_t str;$/;"	kind:member	line:1353	struct:char_ability_data	typeref:typename:skill_measurement_t	file:	access:public
 str_add	structs.h	/^	skill_measurement_t str_add;      \/* 000 - 100 if strength 18             *\/$/;"	kind:member	line:1354	struct:char_ability_data	typeref:typename:skill_measurement_t	file:	access:public
@@ -15702,7 +15742,7 @@ string_types	mods/values.cpp	/^static const std::vector<value_key_t> string_type
 string_write	modify.cpp	/^void string_write(mods::descriptor_data d, char **writeto, size_t len, long mailto, void *data) /;"	kind:function	line:93	typeref:typename:void	signature:(mods::descriptor_data d,char ** writeto,size_t len,long mailto,void * data)
 strings	mods/mobs/extended-types.cpp	/^	std::vector<std::string> strings() {$/;"	kind:function	line:115	namespace:mods::mobs::extended_types	typeref:typename:std::vector<std::string>	signature:()
 strip_color	mods/colors.hpp	/^	static inline TStr strip_color(TStr str) {$/;"	kind:function	line:36	namespace:mods::colors	typeref:typename:TStr	file:	signature:(TStr str)
-strip_color	mods/util.hpp	/^	static inline TStr strip_color(TStr s) {$/;"	kind:function	line:28	namespace:mods::util	typeref:typename:TStr	file:	signature:(TStr s)
+strip_color	mods/util.hpp	/^	static inline TStr strip_color(TStr s) {$/;"	kind:function	line:91	namespace:mods::util	typeref:typename:TStr	file:	signature:(TStr s)
 strip_colors	globals.cpp	/^		std::string strip_colors(std::string_view buffer) {$/;"	kind:function	line:796	namespace:mods::globals	typeref:typename:std::string	signature:(std::string_view buffer)
 strip_identifier	mods/migrations.cpp	/^	std::tuple<int,std::string> strip_identifier(std::string identifier){$/;"	kind:function	line:7	namespace:mods::migrations	typeref:typename:std::tuple<int,std::string>	signature:(std::string identifier)
 strlcpy	utils.cpp	/^size_t strlcpy(char *dest, const char *source, size_t totalsize) {$/;"	kind:function	line:157	typeref:typename:size_t	signature:(char * dest,const char * source,size_t totalsize)
@@ -15746,7 +15786,7 @@ strmap_t	mods/orm/striker.hpp	/^	using strmap_t = std::map<std::string,std::stri
 strmap_t	mods/orm/support.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:7	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/syndrome.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:9	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/pq.hpp	/^using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:598	typeref:typename:std::map<std::string,std::string>	file:
-strmap_t	mods/util.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:91	namespace:mods::util	typeref:typename:std::map<std::string,std::string>	file:
+strmap_t	mods/util.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:154	namespace:mods::util	typeref:typename:std::map<std::string,std::string>	file:
 strn_cmp	sysdep.h	/^# define strn_cmp /;"	kind:macro	line:333	file:
 strn_cmp	sysdep.h	/^# define strn_cmp /;"	kind:macro	line:335	file:
 strn_cmp	utils.cpp	/^int strn_cmp(const char *arg1, const char *arg2, int n) {$/;"	kind:function	line:220	typeref:typename:int	signature:(const char * arg1,const char * arg2,int n)
@@ -15758,7 +15798,7 @@ stun_player_id_ptr	mods/orm/chargen.hpp	/^		player_ptr_t stun_player_id_ptr;\/\/
 sub_clamp	globals.hpp	/^static inline void sub_clamp(T& orig, F sub) {$/;"	kind:function	line:22	typeref:typename:void	file:	signature:(T & orig,F sub)
 sub_machine_guns	mods/forge-engine/generated-rifle.cpp	/^	static std::vector<std::string> sub_machine_guns;$/;"	kind:variable	line:21	namespace:mods::forge_engine	typeref:typename:std::vector<std::string>	file:
 subcmd	interpreter.h	/^	int	subcmd;$/;"	kind:member	line:53	struct:command_info	typeref:typename:int	file:	access:public
-subcmd_args	mods/util.hpp	/^	inline std::optional<Container> subcmd_args(std::string argument,const char* subcmd) {$/;"	kind:function	line:272	namespace:mods::util	typeref:typename:std::optional<Container>	signature:(std::string argument,const char * subcmd)
+subcmd_args	mods/util.hpp	/^	inline std::optional<Container> subcmd_args(std::string argument,const char* subcmd) {$/;"	kind:function	line:335	namespace:mods::util	typeref:typename:std::optional<Container>	signature:(std::string argument,const char * subcmd)
 subscribe_to	mods/message-encoder.cpp	/^	void subscribe_to(zmq::socket_t* subscriber,std::vector<channel_t> list) {$/;"	kind:function	line:7	namespace:mods::message_server	typeref:typename:void	signature:(zmq::socket_t * subscriber,std::vector<channel_t> list)
 subscribe_to	mods/message-server.cpp	/^	void subscribe_to(zmq::socket_t* subscriber,std::vector<channel_t> list) {$/;"	kind:function	line:36	namespace:mods::message_server	typeref:typename:void	signature:(zmq::socket_t * subscriber,std::vector<channel_t> list)
 success	mods/db.hpp	/^	constexpr static int_status_t success = 0;$/;"	kind:variable	line:15	namespace:mods::lmdb::error	typeref:typename:int_status_t	file:
@@ -16051,7 +16091,7 @@ to_classification	mods/yaml.hpp	/^	static inline armor_classification_type_t to_
 to_db_string	mods/sex.hpp	/^	static inline std::string to_db_string(int s) {$/;"	kind:function	line:7	namespace:mods::sex	typeref:typename:std::string	file:	signature:(int s)
 to_direction	globals.cpp	/^std::pair<bool,direction_t> to_direction(std::string_view str) {$/;"	kind:function	line:1529	typeref:typename:std::pair<bool,direction_t>	signature:(std::string_view str)
 to_direction	mods/projectile.cpp	/^		int to_direction(const std::string& str) {$/;"	kind:function	line:571	namespace:mods::projectile	typeref:typename:int	signature:(const std::string & str)
-to_direction	mods/util.hpp	/^	int to_direction(TStringObject str) {$/;"	kind:function	line:320	namespace:mods::util	typeref:typename:int	signature:(TStringObject str)
+to_direction	mods/util.hpp	/^	int to_direction(TStringObject str) {$/;"	kind:function	line:383	namespace:mods::util	typeref:typename:int	signature:(TStringObject str)
 to_dirstr	mods/doors.hpp	/^	static inline std::string to_dirstr(const int& direction) {$/;"	kind:function	line:68	namespace:mods::doors	typeref:typename:std::string	file:	signature:(const int & direction)
 to_durability_profile	mods/yaml.hpp	/^	static inline durability_profile_type_t to_durability_profile(std::string_view dp) {$/;"	kind:function	line:122	namespace:mods::yaml	typeref:typename:durability_profile_type_t	file:	signature:(std::string_view dp)
 to_hex_digit	mods/util-conf.hpp	/^			char to_hex_digit(unsigned int target) {$/;"	kind:function	line:55	namespace:mods::util::conf	typeref:typename:char	signature:(unsigned int target)
@@ -16302,7 +16342,7 @@ unsafe_code	mods/js.cpp	/^		static duk_ret_t unsafe_code(duk_context *ctx,void* 
 unset	mods/cached-map.hpp	/^			void unset(const TKey& key) {$/;"	kind:function	line:29	struct:mods::cached_map	typeref:typename:void	file:	access:public	signature:(const TKey & key)
 unset	mods/indexed-string.hpp	/^			void unset(const std::string& key) {$/;"	kind:function	line:29	struct:mods::indexed_string	typeref:typename:void	file:	access:public	signature:(const std::string & key)
 unstay_player	mods/admin-tools/stay.cpp	/^	void unstay_player(player_ptr_t& douche) {$/;"	kind:function	line:32	namespace:mods::admin_tools::stay	typeref:typename:void	signature:(player_ptr_t & douche)
-until	mods/stats.cpp	/^	std::string until(char c,const std::string& hay) {$/;"	kind:function	line:41	namespace:mods::stats	typeref:typename:std::string	signature:(char c,const std::string & hay)
+until	mods/util.hpp	/^		static inline std::string until(char c,const std::string& hay) {$/;"	kind:function	line:42	namespace:mods::util::str	typeref:typename:std::string	file:	signature:(char c,const std::string & hay)
 until_zero	mods/deferred.hpp	/^		bool until_zero;$/;"	kind:member	line:30	struct:mods::chunk_affect_t	typeref:typename:bool	file:	access:public
 unused_spell	spell_parser.cpp	/^void unused_spell(int spl) {$/;"	kind:function	line:814	typeref:typename:void	signature:(int spl)
 unused_spellname	spell_parser.cpp	/^const char *unused_spellname = "!UNUSED!"; \/* So we can get &unused_spellname *\/$/;"	kind:variable	line:87	typeref:typename:const char *
@@ -16383,7 +16423,7 @@ usages	mods/mobs/orthos-agent.cpp	/^	str_map_t orthos_agent::usages() {$/;"	kind
 usages	mods/mobs/orthos-spawn-sentinel.cpp	/^	str_map_t orthos_spawn_sentinel::usages() {$/;"	kind:function	line:141	class:mods::mobs::orthos_spawn_sentinel	typeref:typename:str_map_t	signature:()
 usages	mods/mobs/shoplifter.cpp	/^	str_map_t shoplifter::usages() {$/;"	kind:function	line:101	class:mods::mobs::shoplifter	typeref:typename:str_map_t	signature:()
 usages	mods/mobs/smart-mob.hpp	/^			virtual str_map_t usages() {$/;"	kind:function	line:61	struct:mods::mobs::smart_mob	typeref:typename:str_map_t	file:	access:public	signature:()
-use	mods/util.hpp	/^		parsed_args* use(const std::string& argument) {$/;"	kind:function	line:466	struct:mods::util::args::arglist_parser	typeref:typename:parsed_args *	file:	access:public	signature:(const std::string & argument)
+use	mods/util.hpp	/^		parsed_args* use(const std::string& argument) {$/;"	kind:function	line:529	struct:mods::util::args::arglist_parser	typeref:typename:parsed_args *	file:	access:public	signature:(const std::string & argument)
 use_autowiz	config.cpp	/^int use_autowiz = YES;$/;"	kind:variable	line:304	typeref:typename:int
 use_claymore	mods/classes/ghost.cpp	/^	void ghost::use_claymore(uuid_t object_uuid) {$/;"	kind:function	line:262	class:mods::classes::ghost	typeref:typename:void	signature:(uuid_t object_uuid)
 use_connection	mods/orm/orm-base.hpp	/^			void use_connection(pqxx::connection* pq_con) {$/;"	kind:function	line:62	struct:mods::orm::orm_base	typeref:typename:void	file:	access:public	signature:(pqxx::connection * pq_con)
@@ -16430,8 +16470,8 @@ util	mods/util.cpp	/^namespace mods::util::args {$/;"	kind:namespace	line:1384	n
 util	mods/util.cpp	/^namespace mods::util::args {$/;"	kind:namespace	line:1423	namespace:mods	file:
 util	mods/util.cpp	/^namespace mods::util::err {$/;"	kind:namespace	line:1376	namespace:mods	file:
 util	mods/util.hpp	/^namespace mods::util {$/;"	kind:namespace	line:26	namespace:mods	file:
-util	mods/util.hpp	/^namespace mods::util::args {$/;"	kind:namespace	line:400	namespace:mods	file:
-util	mods/util.hpp	/^namespace mods::util::err {$/;"	kind:namespace	line:396	namespace:mods	file:
+util	mods/util.hpp	/^namespace mods::util::args {$/;"	kind:namespace	line:463	namespace:mods	file:
+util	mods/util.hpp	/^namespace mods::util::err {$/;"	kind:namespace	line:459	namespace:mods	file:
 utils	mods/js.cpp	/^		namespace utils {$/;"	kind:namespace	line:37	namespace:mods::js	file:
 uuid	mods/armor/gauntlets-xtv89.hpp	/^			const uuid_t& uuid() {$/;"	kind:function	line:55	struct:mods::armor::xtv89	typeref:typename:const uuid_t &	file:	access:public	signature:()
 uuid	mods/armor/vest-bc89.hpp	/^			const uuid_t& uuid() {$/;"	kind:function	line:67	struct:mods::armor::bc89	typeref:typename:const uuid_t &	file:	access:public	signature:()
@@ -16510,7 +16550,7 @@ vc88_commands	mods/weapons/smg-vc88.cpp	/^	namespace vc88_commands {$/;"	kind:na
 vc88_list	mods/weapons/smg-vc88.cpp	/^	static std::map<uuid_t,vc88_ptr_t> vc88_list;$/;"	kind:variable	line:14	namespace:mods::weapons::smg	typeref:typename:std::map<uuid_t,vc88_ptr_t>	file:
 vc88_ptr_t	mods/weapons/smg-vc88.hpp	/^	using vc88_ptr_t = std::shared_ptr<mods::weapons::smg::vc88>;$/;"	kind:typedef	line:85	namespace:mods::weapons::smg	typeref:typename:std::shared_ptr<mods::weapons::smg::vc88>	file:
 vcarrying	mods/player.cpp	/^	std::vector<obj_data*> player::vcarrying() {$/;"	kind:function	line:793	class:mods::player	typeref:typename:std::vector<obj_data * >	signature:()
-vec_args	mods/util.hpp	/^		std::vector<std::string> vec_args;$/;"	kind:member	line:405	struct:mods::util::args::parsed_args	typeref:typename:std::vector<std::string>	file:	access:public
+vec_args	mods/util.hpp	/^		std::vector<std::string> vec_args;$/;"	kind:member	line:468	struct:mods::util::args::parsed_args	typeref:typename:std::vector<std::string>	file:	access:public
 vec_player_data	mods/behaviour_tree_impl.cpp	/^	using vec_player_data = mods::scan::vec_player_data;$/;"	kind:typedef	line:35	namespace:mods::behaviour_tree_impl	typeref:typename:mods::scan::vec_player_data	file:
 vec_player_data	mods/mobs/armed-guard-behaviour-tree.cpp	/^	using vec_player_data = mods::scan::vec_player_data;$/;"	kind:typedef	line:30	namespace:mods::mobs::armed_guard_behaviour_tree	typeref:typename:mods::scan::vec_player_data	file:
 vec_player_data	mods/mobs/armed-guard-behaviour-tree.cpp	/^	using vec_player_data = mods::scan::vec_player_data;$/;"	kind:typedef	line:34	namespace:mods::mobs::armed_guard_behaviour_tree	typeref:typename:mods::scan::vec_player_data	file:
@@ -16557,8 +16597,8 @@ vec_player_data	mods/mobs/shoplifter-behaviour-tree.hpp	/^	using vec_player_data
 vec_player_data	mods/scan.hpp	/^		using vec_player_data = std::vector<vec_player_data_element>;$/;"	kind:typedef	line:29	namespace:mods::scan	typeref:typename:std::vector<vec_player_data_element>	file:
 vec_player_data_element	mods/scan.hpp	/^		struct vec_player_data_element {$/;"	kind:struct	line:20	namespace:mods::scan	file:
 vec_t	globals.hpp	/^using vec_t = std::vector<T>;$/;"	kind:typedef	line:132	typeref:typename:std::vector<T>	file:
-vector_add_if_not_exists	mods/util.hpp	/^	void vector_add_if_not_exists(std::vector<T>& vec,T element) {$/;"	kind:function	line:379	namespace:mods::util	typeref:typename:void	signature:(std::vector<T> & vec,T element)
-vector_erase	mods/util.hpp	/^	void vector_erase(std::vector<T>& vec,T element) {$/;"	kind:function	line:375	namespace:mods::util	typeref:typename:void	signature:(std::vector<T> & vec,T element)
+vector_add_if_not_exists	mods/util.hpp	/^	void vector_add_if_not_exists(std::vector<T>& vec,T element) {$/;"	kind:function	line:442	namespace:mods::util	typeref:typename:void	signature:(std::vector<T> & vec,T element)
+vector_erase	mods/util.hpp	/^	void vector_erase(std::vector<T>& vec,T element) {$/;"	kind:function	line:438	namespace:mods::util	typeref:typename:void	signature:(std::vector<T> & vec,T element)
 vector_exists	mods/db.cpp	/^	bool vector_exists(std::string section_name,std::string prefix) {$/;"	kind:function	line:19	namespace:mods::db	typeref:typename:bool	signature:(std::string section_name,std::string prefix)
 vector_string_list	mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& vector_string_list() const {$/;"	kind:function	line:95	struct:mods::builder::seqbuild::seqbuild_interface	typeref:typename:const std::vector<std::string> &	file:	access:public	signature:() const
 vectorize	mods/orm/orm-base.hpp	/^	std::vector<std::string> vectorize(const TStringType& str) {$/;"	kind:function	line:35	namespace:mods::orm	typeref:typename:std::vector<std::string>	signature:(const TStringType & str)
@@ -17621,7 +17661,7 @@ where	mods/sql.hpp	/^			compositor<T>& where(str_object lhs,$/;"	kind:function	l
 where	mods/sql.hpp	/^			compositor<T>& where(str_object lhs,$/;"	kind:function	line:365	struct:mods::sql::compositor	typeref:typename:compositor<T> &	file:	access:public	signature:(str_object lhs,const uint8_t & rhs)
 where	mods/sql.hpp	/^			compositor<T>& where(str_object lhs,$/;"	kind:function	line:376	struct:mods::sql::compositor	typeref:typename:compositor<T> &	file:	access:public	signature:(str_object lhs,const int8_t & rhs)
 where_crypt	mods/sql.hpp	/^			compositor<T>& where_crypt(str_object lhs,$/;"	kind:function	line:386	struct:mods::sql::compositor	typeref:typename:compositor<T> &	file:	access:public	signature:(str_object lhs,str_object rhs)
-where_failed	mods/util.hpp	/^			std::vector<std::string> where_failed;$/;"	kind:member	line:441	struct:mods::util::args::check_parsed_args	typeref:typename:std::vector<std::string>	file:	access:public
+where_failed	mods/util.hpp	/^			std::vector<std::string> where_failed;$/;"	kind:member	line:504	struct:mods::util::args::check_parsed_args	typeref:typename:std::vector<std::string>	file:	access:public
 where_in	mods/sql.hpp	/^			compositor<T>& where_in(str_object lhs,$/;"	kind:function	line:400	struct:mods::sql::compositor	typeref:typename:compositor<T> &	file:	access:public	signature:(str_object lhs,TIterable id_list)
 white_str	mods/colors.hpp	/^	static inline std::string white_str(TStr str) {$/;"	kind:function	line:27	namespace:mods::colors	typeref:typename:std::string	file:	signature:(TStr str)
 who_line	mods/super-users.cpp	/^	std::string who_line(player_ptr_t& player) {$/;"	kind:function	line:83	namespace:mods::super_users	typeref:typename:std::string	signature:(player_ptr_t & player)

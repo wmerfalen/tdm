@@ -169,7 +169,7 @@ obj_data& obj_data::operator=(obj_data& other) {
 }
 
 namespace mods::stats {
-	std::string format_stats_page(std::map<std::string,std::string>&& stats_page);
+	std::string format_stats_page(std::string_view type,std::map<std::string,std::string>&& stats_page);
 };
 
 std::string obj_data::generate_stat_page() {
@@ -178,7 +178,7 @@ std::string obj_data::generate_stat_page() {
 #define MENTOC_OBJ_DATA_STAT_GEN(r,data,CLASS_TYPE) \
 			if(BOOST_PP_CAT(m_, CLASS_TYPE)){\
 				BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->generate_map();\
-				return format_stats_page(std::move(\
+				return format_stats_page(BOOST_PP_STRINGIZE(CLASS_TYPE),std::move(\
 				BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->exported\
 				));\
 			}
