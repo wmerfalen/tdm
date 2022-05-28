@@ -2441,8 +2441,17 @@ SUPERCMD(do_mbuild) {
 		        "  by the mud itself.\r\n" <<
 		        "  {grn}|____[example]{/grn}\r\n" <<
 		        "  |:: {wht}mbuild{/wht} {gld}targets 5 CARS ROOM_DARK HOUSEHOLDS DRUGS{/gld}\r\n" <<
+
+		        " {grn}mbuild{/grn} {red}giveme:free_vnum{/red}\r\n" <<
+		        "  |--> will give you an unused vnum that is preferably less than the value you would \r\n" <<
+		        "  |--> get from giveme:next_vnum. If that range is exhausted, this is the equivalent of\r\n" <<
+		        "  |--> running giveme:next_vnum\r\n" <<
+		        "  |--> [supports encoded response]\r\n" <<
+
+
 		        " {grn}mbuild{/grn} {red}giveme:next_vnum{/red}\r\n" <<
 		        "  |--> [supports encoded response]\r\n" <<
+
 		        " {grn}mbuild{/grn} {red} save <mob_id> {/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}instantiate <mob_vnum>{/red}\r\n" <<
@@ -2467,6 +2476,34 @@ SUPERCMD(do_mbuild) {
 		player->page(0);
 		return;
 	}
+	{
+		if(vec_args.size() >= 1 && vec_args[0].compare("giveme:free_vnum") == 0) {
+			auto next_vnum = next_mob_number();
+			std::vector<mob_vnum> taken;
+			for(const auto& mob : mob_proto) {
+				taken.emplace_back(mob.mob_specials.vnum);
+			}
+			for(auto i=1; i < next_vnum; ++i) {
+				if(std::find(taken.cbegin(),taken.cend(),i) == taken.cend()) {
+					player->sendln(CAT(i));
+					player->set_scripted_response(
+					mods::builder::encode_map({
+						{"free_vnum",std::to_string(i)}
+					}));
+					return;
+				}
+			}
+
+			player->sendln(CAT(next_vnum));
+			player->set_scripted_response(
+			mods::builder::encode_map({
+				{"free_vnum",std::to_string(next_vnum)}
+			}));
+			return;
+		}
+	}
+
+
 	{
 		if(vec_args.size() >= 1 && vec_args[0].compare("giveme:next_vnum") == 0) {
 			auto vnum = next_mob_number();
@@ -2924,8 +2961,9 @@ SUPERCMD(do_mbuild) {
 
 		for(auto& mob_reference : mob_proto) {
 			auto mob = &mob_reference;
-			*player << "{gld}[" << mob_id++ << "]{/gld} :->{red} [" <<
-			        mob->player.short_descr.c_str() << "]{/red}\r\n";
+			*player << "{gld}[" << mob_id++ << "]{/gld}" <<
+			        "{grn}[vnum: " << mob->mob_specials.vnum << "]{/grn} :->" <<
+			        "{red} [" << mob->player.short_descr.c_str() << "]{/red}\r\n";
 		}
 
 		player->pager_end();
@@ -5481,6 +5519,8 @@ SUPERCMD(do_rbuild) {
 		        "  |--> start paving in the current room and zone that you are currently standing in.\r\n" <<
 		        "  |    This allows you to continue where you left off without having to create a \r\n" <<
 		        "  |    brand new zone and set of rooms.\r\n" <<
+
+
 		        " {grn}rbuild{/grn} {red}pave <on|off> <room_number_start> <zone_id>{/red}\r\n" <<
 		        "  |--> starts the pave mode where any direction you go to will automatically \r\n" <<
 		        "  |    create and bind rooms. Helpful for when you want to carve out a ton of\r\n" <<
@@ -5500,17 +5540,22 @@ SUPERCMD(do_rbuild) {
 		        "  |   that you currently have)\r\n" <<
 		        "  |:: {wht}rbuild{/wht} {gld}pave off{/gld}\r\n" <<
 		        "  |--> (stops the pave mode)\r\n" <<
+
 		        " {grn}rbuild{/grn} {red}save-paved <transaction_id_number>{/red}\r\n" <<
 		        "  |--> saves all of the paved rooms that were created for the transaction id number specified.\r\n" <<
+
 		        " {grn}rbuild{/grn} {red}clear-paved <transaction_id_number>{/red}\r\n" <<
 		        "  |--> clears all of the paved rooms that were created\r\n" <<
+
 		        " {grn}rbuild{/grn} {red}list-paved{/red}\r\n" <<
 		        "  |--> lists all the currently paved transaction id numbers\r\n" <<
 
 		        " {grn}rbuild{/grn} {red}pave-transaction-id{/red}\r\n" <<
 		        "  |--> get current pave transaction id (if one exists).\r\n" <<
+
 		        " {grn}rbuild{/grn} {red}nickname <nickname>{/red}\r\n" <<
 		        "  |--> sets a permanent nickname on the room you currently reside in.\r\n"
+
 		        "[documentation written on 2021-04-06]\r\n" <<
 		        "\r\n";
 		player->pager_end();
@@ -5549,8 +5594,11 @@ SUPERCMD(do_rbuild) {
 
 	args = mods::util::subcmd_args<4,args_t>(argument,"vnum");
 	if(args.has_value()) {
+		auto room = player->room();
 		if(vec_args.size() < 2) {
-			r_error(player,"Not enough arguments to dopt. Expecting 4.");
+			ENCODE_INIT();
+			ENCODE_STR(world[room].number);
+			r_success(player,CAT("This room vnum: ",world[room].number));
 			return;
 		}
 		auto str_vnum = vec_args[1];
@@ -5559,7 +5607,6 @@ SUPERCMD(do_rbuild) {
 			r_error(player,"Invalid vnum. Must be positive number and not zero.");
 			return;
 		}
-		auto room = player->room();
 		if(world.size() <= room) {
 			r_error(player,"You are not in a room that I can reference. Perhaps you haven't saved your room.");
 			return;
@@ -5607,7 +5654,7 @@ SUPERCMD(do_rbuild) {
 	}
 
 	/**
-	 * rbuild list <page>
+	 * rbuild list <page> [number-per-page]
 	 */
 	if(std::string(&command[0]).compare("list") == 0) {
 		auto set = std::string(argument);

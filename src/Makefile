@@ -270,6 +270,8 @@ clean:
 		rm -f $(builddir)/mods/builder/*.d \
 		rm -f $(builddir)/mods/builder/runners/*.o \
 		rm -f $(builddir)/mods/builder/runners/*.d \
+		rm -f $(builddir)/mods/runners/*.o \
+		rm -f $(builddir)/mods/runners/*.d \
 		rm -f $(builddir)/mods/unit-tests/*.o \
 		rm -f $(builddir)/mods/unit-tests/*.d \
 		rm -f $(builddir)/mods/combat-composer/*.o \
