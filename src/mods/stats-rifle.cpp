@@ -19,46 +19,49 @@ namespace mods::stats_rifle {
 	static constexpr std::string_view cooldown = "{grn}cooldown{/grn}: ";
 	static constexpr std::string_view damage = "{grn}damage{/grn}: ";
 
-	static constexpr uint16_t i_manufacturer = 0;
-	static constexpr uint16_t i_title = 1;
-	static constexpr uint16_t i_hr = 2;
-	static constexpr uint16_t i_base_damage = i_hr + 1;
-	static constexpr uint16_t i_damage = i_base_damage + 1;
-	static constexpr uint16_t i_critical = i_base_damage + 1;
-	static constexpr uint16_t i_injure = i_critical + 1;
-	static constexpr uint16_t i_ammo = i_base_damage + 1;
-	static constexpr uint16_t i_cooldown = i_ammo + 1;
-	static constexpr uint16_t i_accuracy = i_ammo + 1;
-	static constexpr uint16_t i_effective_range = i_accuracy + 1;
-	static constexpr uint16_t i_max_range = i_effective_range + 1;
-	static constexpr uint16_t i_range_mult = i_max_range + 1;
-	static constexpr uint16_t i_hs_bonus = i_range_mult + 1;
-	static constexpr uint16_t i_a_map = i_hs_bonus + 1;
-	static constexpr uint16_t i_ele_incendiary_damage = i_a_map + 1;
-	static constexpr uint16_t i_ele_explosive_damage = i_ele_incendiary_damage + 1;
-	static constexpr uint16_t i_ele_shrapnel_damage = i_ele_explosive_damage + 1;
-	static constexpr uint16_t i_ele_corrosive_damage = i_ele_shrapnel_damage + 1;
-	static constexpr uint16_t i_ele_cryogenic_damage = i_ele_corrosive_damage + 1;
-	static constexpr uint16_t i_ele_radioactive_damage = i_ele_cryogenic_damage + 1;
-	static constexpr uint16_t i_ele_emp_damage = i_ele_radioactive_damage + 1;
-	static constexpr uint16_t i_ele_shock_damage = i_ele_emp_damage + 1;
-	static constexpr uint16_t i_ele_anti_matter_damage = i_ele_shock_damage + 1;
-	static constexpr uint16_t i_stat_armor = i_ele_anti_matter_damage + 1;
-	static constexpr uint16_t i_stat_chemistry = i_stat_armor + 1;
-	static constexpr uint16_t i_stat_constitution = i_stat_chemistry + 1;
-	static constexpr uint16_t i_stat_demolitions = i_stat_constitution + 1;
-	static constexpr uint16_t i_stat_dexterity = i_stat_demolitions + 1;
-	static constexpr uint16_t i_stat_electronics = i_stat_dexterity + 1;
-	static constexpr uint16_t i_stat_intelligence = i_stat_electronics + 1;
-	static constexpr uint16_t i_stat_marksmanship = i_stat_intelligence + 1;
-	static constexpr uint16_t i_stat_medical = i_stat_marksmanship + 1;
-	static constexpr uint16_t i_stat_sniping = i_stat_medical + 1;
-	static constexpr uint16_t i_stat_strategy = i_stat_sniping + 1;
-	static constexpr uint16_t i_stat_strength = i_stat_strategy + 1;
-	static constexpr uint16_t i_stat_wh = i_stat_strength + 1;
-	static constexpr uint16_t i_stat_wisdom  = i_stat_wh + 1;
-	static constexpr uint16_t i_etc = i_stat_wisdom + 1;
-	static constexpr std::size_t i_max_count = i_etc + 1;
+	enum e : uint16_t {
+		i_manufacturer,
+		i_title,
+		i_hr,
+		i_base_damage,
+		i_damage,
+		i_critical,
+		i_injure,
+		i_ammo,
+		i_cooldown,
+		i_accuracy,
+		i_effective_range,
+		i_max_range,
+		i_range_mult,
+		i_hs_bonus,
+		i_a_map,
+		i_ele_incendiary_damage,
+		i_ele_explosive_damage,
+		i_ele_shrapnel_damage,
+		i_ele_corrosive_damage,
+		i_ele_cryogenic_damage,
+		i_ele_radioactive_damage,
+		i_ele_emp_damage,
+		i_ele_shock_damage,
+		i_ele_anti_matter_damage,
+		i_stat_armor,
+		i_stat_chemistry,
+		i_stat_constitution,
+		i_stat_demolitions,
+		i_stat_dexterity,
+		i_stat_electronics,
+		i_stat_intelligence,
+		i_stat_marksmanship,
+		i_stat_medical,
+		i_stat_sniping,
+		i_stat_strategy,
+		i_stat_strength,
+		i_stat_wh,
+		i_stat_wisdom,
+		i_etc,
+		__i_END,
+	};
+	static constexpr std::size_t i_max_count = __i_END;
 
 	static constexpr const char* NL = "\r\n";
 
@@ -71,16 +74,16 @@ namespace mods::stats_rifle {
 		    crit_chance,crit_range,
 		    dice_count,dice_sides;
 		rifle_page.resize(std::max((std::size_t)i_max_count,page.size()));
-		rifle_page[i_a_map] = accuracy_map.data();
+		//rifle_page[i_a_map] = accuracy_map.data();
 
 		for(const auto& pair : page) {
 			const auto& f = pair.first;
 			if(starts_with("rifle_name",f)) {
-				rifle_page[i_title] += pair.second;
+				rifle_page[i_title] = pair.second;
 				continue;
 			}
 			if(starts_with("rifle_manufacturer",f)) {
-				rifle_page[i_manufacturer] += pair.second;
+				rifle_page[i_manufacturer] = pair.second;
 				continue;
 			}
 			if(starts_with_any({
@@ -98,10 +101,6 @@ namespace mods::stats_rifle {
 				continue;
 			}
 			std::string s = pair.second;
-
-			if(ends_with("_damage",f) && s.compare("0") == 0) {
-				continue;
-			}
 
 			if(ends_with(".000000",s)) {
 				s = chop_after_2nd_place(s);
@@ -190,7 +189,7 @@ namespace mods::stats_rifle {
 			}
 
 			if(starts_with("rifle_disorient_amount",f)) {
-				rifle_page[i_etc] += CAT("{grn}disorient{/grn}: ",s,NL);
+				rifle_page[i_etc] += CAT("{grn}disorient{/grn}: ",s);
 				continue;
 			}
 			if(starts_with("rifle_effective_firing_range",f)) {
@@ -274,6 +273,9 @@ namespace mods::stats_rifle {
 			}
 
 			if(starts_with("rifle_accuracy_map_",f)) {
+				if(rifle_page[i_a_map].length() == 0) {
+					rifle_page[i_a_map] = accuracy_map.data();
+				}
 				rifle_page[i_a_map] += CAT(until('.',s)," ");
 				continue;
 			}
@@ -285,13 +287,17 @@ namespace mods::stats_rifle {
 				rifle_page[i_etc] += CAT("{grn}",f,"{/grn}: ",s,NL);
 			}
 		}
-		rifle_page[i_hr] = "{grn}";
-		for(auto i=0; i < 4 + rifle_page[i_title].length() + rifle_page[i_manufacturer].length(); ++i) {
-			rifle_page[i_hr] += "-";
+		if(rifle_page[i_title].length()) {
+			rifle_page[i_hr] = "{grn}";
+			for(auto i=0; i < 4 + rifle_page[i_title].length() + rifle_page[i_manufacturer].length(); ++i) {
+				rifle_page[i_hr] += "-";
+			}
+			rifle_page[i_hr] += "{/grn}\r\n";
 		}
-		rifle_page[i_hr] += "{/grn}\r\n";
 
-		rifle_page[i_critical] = CAT(critical.data(),crit_chance,crit_range);
+		if(rifle_page[i_critical].length()) {
+			rifle_page[i_critical] = CAT(critical.data(),crit_chance,crit_range);
+		}
 		rifle_page[i_damage] = CAT(damage.data(),dice_count,"{grn}d{/grn}",dice_sides);
 		std::string final_page;
 		std::size_t i = 0;
@@ -301,11 +307,19 @@ namespace mods::stats_rifle {
 			}
 			switch(i) {
 				case i_manufacturer:
-					final_page += CAT("{grn}",line,"{/grn} :: ");
+					if(rifle_page[i_title].length()) {
+						final_page += CAT("{grn}",line,"{/grn} :: ");
+					}
 					break;
 				case i_etc:
+					if(rifle_page[i_etc].length()) {
+						final_page += line;
+					}
+					break;
 				case i_hr:
-					final_page += line;
+					if(rifle_page[i_hr].length()) {
+						final_page += line;
+					}
 					break;
 				default:
 					final_page += CAT(line,NL);
