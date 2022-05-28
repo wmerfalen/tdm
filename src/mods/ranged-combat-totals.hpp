@@ -2,6 +2,7 @@
 #define __MENTOC_RANGED_COMBAT_TOTALS__
 #include "elemental.hpp"
 #include <vector>
+#include "stats-rifle.hpp"
 
 namespace mods {
 	/**
@@ -410,183 +411,185 @@ namespace mods {
 		~ranged_combat_totals() = default;
 		template <typename T>
 		void report(T p) {
+			std::map<std::string,std::string> m;
 			if(zoom_magnification > 0) {
-				p->sendln(CAT("zoom_magnification:",zoom_magnification));
+				m["rifle_zoom_magnification"] = std::to_string(zoom_magnification);
 			}
 			if(max_range > 0) {
-				p->sendln(CAT("max_range:",max_range));
+				m["rifle_max_range"] = std::to_string(max_range);
 			}
 			if(critical_chance > 0) {
-				p->sendln(CAT("critical_chance:",critical_chance));
+				m["rifle_critical_chance"] = std::to_string(critical_chance);
 			}
 			if(chance_to_injure > 0) {
-				p->sendln(CAT("chance_to_injure:",chance_to_injure));
+				m["rifle_chance_to_injure"] = std::to_string(chance_to_injure);
 			}
 			if(zoom_multiplier > 0) {
-				p->sendln(CAT("zoom_multiplier:",zoom_multiplier));
+				m["rifle_zoom_multiplier"] = std::to_string(zoom_multiplier);
 			}
 			if(aimed_limb_accuracy_percent > 0) {
-				p->sendln(CAT("aimed_limb_accuracy_percent:",aimed_limb_accuracy_percent));
+				m["rifle_aimed_limb_accuracy_percent"] = std::to_string(aimed_limb_accuracy_percent);
 			}
 			if(accuracy > 0) {
-				p->sendln(CAT("accuracy:",accuracy));
+				m["rifle_accuracy"] = std::to_string(accuracy);
 			}
 			if(critical_range.second > 0) {
-				p->sendln(CAT("critical_range:",critical_range.first,"->",critical_range.second));
+				m["rifle_critical_range"] = CAT(critical_range.first,"->",critical_range.second);
 			}
 			if(effective_range.second > 0) {
-				p->sendln(CAT("effective_range:",effective_range.first,"->",effective_range.second));
+				m["rifle_effective_range"] = CAT(effective_range.first,"->",effective_range.second);
 			}
 			if(viable_targets > 0) {
-				p->sendln(CAT("viable_targets:",viable_targets));
+				m["rifle_viable_targets"] = std::to_string(viable_targets);
 			}
 			if(vision > 0) {
-				p->sendln(CAT("vision:",vision));
+				m["rifle_vision"] = std::to_string(vision);
 			}
 			if(recoil_reduction > 0) {
-				p->sendln(CAT("recoil_reduction:",recoil_reduction));
+				m["rifle_recoil_reduction"] = std::to_string(recoil_reduction);
 			}
 			if(muzzle_velocity > 0) {
-				p->sendln(CAT("muzzle_velocity:",muzzle_velocity));
+				m["rifle_muzzle_velocity"] = std::to_string(muzzle_velocity);
 			}
 			if(reload_time > 0) {
-				p->sendln(CAT("reload_time:",reload_time));
+				m["rifle_reload_time"] = std::to_string(reload_time);
 			}
 			if(cooldown_between_shots > 0) {
-				p->sendln(CAT("cooldown_between_shots:",cooldown_between_shots));
+				m["rifle_cooldown_between_shots"] = std::to_string(cooldown_between_shots);
 			}
 			if(ammo_max > 0) {
-				p->sendln(CAT("ammo_max:",ammo_max));
+				m["rifle_ammo_max"] = std::to_string(ammo_max);
 			}
 			if(clip_size > 0) {
-				p->sendln(CAT("clip_size:",clip_size));
+				m["rifle_clip_size"] = std::to_string(clip_size);
 			}
 			if(base_damage > 0) {
-				p->sendln(CAT("base_damage:",base_damage));
+				m["rifle_base_damage"] = std::to_string(base_damage);
 			}
 			if(base_percent > 0) {
-				p->sendln(CAT("base_percent:",base_percent));
+				m["rifle_base_percent"] = std::to_string(base_percent);
 			}
 			if(damage_dice_count > 0) {
-				p->sendln(CAT("damage_dice_count:",damage_dice_count));
+				m["rifle_damage_dice_count"] = std::to_string(damage_dice_count);
 			}
 			if(damage_dice_sides > 0) {
-				p->sendln(CAT("damage_dice_sides:",damage_dice_sides));
+				m["rifle_damage_dice_sides"] = std::to_string(damage_dice_sides);
 			}
 			if(armor_penetration > 0) {
-				p->sendln(CAT("armor_penetration:",armor_penetration));
+				m["rifle_armor_penetration"] = std::to_string(armor_penetration);
 			}
 			if(damage_percent_bonus > 0) {
-				p->sendln(CAT("damage_percent_bonus:",damage_percent_bonus));
+				m["rifle_damage_percent_bonus"] = std::to_string(damage_percent_bonus);
 			}
 			if(headshot_bonus > 0) {
-				p->sendln(CAT("headshot_bonus:",headshot_bonus));
+				m["rifle_headshot_bonus"] = std::to_string(headshot_bonus);
 			}
 			if(hitroll > 0) {
-				p->sendln(CAT("hitroll:",hitroll));
+				m["rifle_hitroll"] = std::to_string(hitroll);
 			}
 			if(damage_roll > 0) {
-				p->sendln(CAT("damage_roll:",damage_roll));
+				m["rifle_damage_roll"] = std::to_string(damage_roll);
 			}
 			if(incendiary_percent > 0) {
-				p->sendln(CAT("incendiary_percent:",incendiary_percent));
+				m["rifle_incendiary_percent"] = std::to_string(incendiary_percent);
 			}
 			if(explosive_percent > 0) {
-				p->sendln(CAT("explosive_percent:",explosive_percent));
+				m["rifle_explosive_percent"] = std::to_string(explosive_percent);
 			}
 			if(shrapnel_percent > 0) {
-				p->sendln(CAT("shrapnel_percent:",shrapnel_percent));
+				m["rifle_shrapnel_percent"] = std::to_string(shrapnel_percent);
 			}
 			if(corrosive_percent > 0) {
-				p->sendln(CAT("corrosive_percent:",corrosive_percent));
+				m["rifle_corrosive_percent"] = std::to_string(corrosive_percent);
 			}
 			if(cryogenic_percent > 0) {
-				p->sendln(CAT("cryogenic_percent:",cryogenic_percent));
+				m["rifle_cryogenic_percent"] = std::to_string(cryogenic_percent);
 			}
 			if(radioactive_percent > 0) {
-				p->sendln(CAT("radioactive_percent:",radioactive_percent));
+				m["rifle_radioactive_percent"] = std::to_string(radioactive_percent);
 			}
 			if(emp_percent > 0) {
-				p->sendln(CAT("emp_percent:",emp_percent));
+				m["rifle_emp_percent"] = std::to_string(emp_percent);
 			}
 			if(shock_percent > 0) {
-				p->sendln(CAT("shock_percent:",shock_percent));
+				m["rifle_shock_percent"] = std::to_string(shock_percent);
 			}
 			if(anti_matter_percent > 0) {
-				p->sendln(CAT("anti_matter_percent:",anti_matter_percent));
+				m["rifle_anti_matter_percent"] = std::to_string(anti_matter_percent);
 			}
 			if(incendiary_damage > 0) {
-				p->sendln(CAT("incendiary_damage:",incendiary_damage));
+				m["rifle_incendiary_damage"] = std::to_string(incendiary_damage);
 			}
 			if(explosive_damage > 0) {
-				p->sendln(CAT("explosive_damage:",explosive_damage));
+				m["rifle_explosive_damage"] = std::to_string(explosive_damage);
 			}
 			if(shrapnel_damage > 0) {
-				p->sendln(CAT("shrapnel_damage:",shrapnel_damage));
+				m["rifle_shrapnel_damage"] = std::to_string(shrapnel_damage);
 			}
 			if(corrosive_damage > 0) {
-				p->sendln(CAT("corrosive_damage:",corrosive_damage));
+				m["rifle_corrosive_damage"] = std::to_string(corrosive_damage);
 			}
 			if(cryogenic_damage > 0) {
-				p->sendln(CAT("cryogenic_damage:",cryogenic_damage));
+				m["rifle_cryogenic_damage"] = std::to_string(cryogenic_damage);
 			}
 			if(radioactive_damage > 0) {
-				p->sendln(CAT("radioactive_damage:",radioactive_damage));
+				m["rifle_radioactive_damage"] = std::to_string(radioactive_damage);
 			}
 			if(emp_damage > 0) {
-				p->sendln(CAT("emp_damage:",emp_damage));
+				m["rifle_emp_damage"] = std::to_string(emp_damage);
 			}
 			if(shock_damage > 0) {
-				p->sendln(CAT("shock_damage:",shock_damage));
+				m["rifle_shock_damage"] = std::to_string(shock_damage);
 			}
 			if(anti_matter_damage > 0) {
-				p->sendln(CAT("anti_matter_damage:",anti_matter_damage));
+				m["rifle_anti_matter_damage"] = std::to_string(anti_matter_damage);
 			}
 			if(disorient_amount > 0) {
-				p->sendln(CAT("disorient_amount:",disorient_amount));
+				m["rifle_disorient_amount"] = std::to_string(disorient_amount);
 			}
 			if(stat_strength > 0) {
-				p->sendln(CAT("stat_strength:",stat_strength));
+				m["rifle_stat_strength"] = std::to_string(stat_strength);
 			}
 			if(stat_intelligence > 0) {
-				p->sendln(CAT("stat_intelligence:",stat_intelligence));
+				m["rifle_stat_intelligence"] = std::to_string(stat_intelligence);
 			}
 			if(stat_wisdom > 0) {
-				p->sendln(CAT("stat_wisdom:",stat_wisdom));
+				m["rifle_stat_wisdom"] = std::to_string(stat_wisdom);
 			}
 			if(stat_dexterity > 0) {
-				p->sendln(CAT("stat_dexterity:",stat_dexterity));
+				m["rifle_stat_dexterity"] = std::to_string(stat_dexterity);
 			}
 			if(stat_constitution > 0) {
-				p->sendln(CAT("stat_constitution:",stat_constitution));
+				m["rifle_stat_constitution"] = std::to_string(stat_constitution);
 			}
 			if(stat_electronics > 0) {
-				p->sendln(CAT("stat_electronics:",stat_electronics));
+				m["rifle_stat_electronics"] = std::to_string(stat_electronics);
 			}
 			if(stat_armor > 0) {
-				p->sendln(CAT("stat_armor:",stat_armor));
+				m["rifle_stat_armor"] = std::to_string(stat_armor);
 			}
 			if(stat_marksmanship > 0) {
-				p->sendln(CAT("stat_marksmanship:",stat_marksmanship));
+				m["rifle_stat_marksmanship"] = std::to_string(stat_marksmanship);
 			}
 			if(stat_sniping > 0) {
-				p->sendln(CAT("stat_sniping:",stat_sniping));
+				m["rifle_stat_sniping"] = std::to_string(stat_sniping);
 			}
 			if(stat_demolitions > 0) {
-				p->sendln(CAT("stat_demolitions:",stat_demolitions));
+				m["rifle_stat_demolitions"] = std::to_string(stat_demolitions);
 			}
 			if(stat_chemistry > 0) {
-				p->sendln(CAT("stat_chemistry:",stat_chemistry));
+				m["rifle_stat_chemistry"] = std::to_string(stat_chemistry);
 			}
 			if(stat_weapon_handling > 0) {
-				p->sendln(CAT("stat_weapon_handling:",stat_weapon_handling));
+				m["rifle_stat_weapon_handling"] = std::to_string(stat_weapon_handling);
 			}
 			if(stat_strategy > 0) {
-				p->sendln(CAT("stat_strategy:",stat_strategy));
+				m["rifle_stat_strategy"] = std::to_string(stat_strategy);
 			}
 			if(stat_medical > 0) {
-				p->sendln(CAT("stat_medical:",stat_medical));
+				m["rifle_stat_medical"] = std::to_string(stat_medical);
 			}
+			p->sendln(mods::stats_rifle::format_rifle_stats_page(m));
 			p->sendln("Viable targets: ");
 			if(viable_targets & CAN_HIT_SAME_ROOM) {
 				p->sendln("Same room");
