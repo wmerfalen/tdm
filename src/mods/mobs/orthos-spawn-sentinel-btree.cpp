@@ -14,14 +14,18 @@
 #include "../mob-roam.hpp"
 #include "../query-objects.hpp"
 
-#define  __MENTOC_SHOW_BEHAVIOUR_TREE_ORTHOS_SPAWN_SENTINEL_BTREE_DEBUG_OUTPUT__
+//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_ORTHOS_SPAWN_SENTINEL_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_ORTHOS_SPAWN_SENTINEL_BTREE_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[m.m.oss.btree:" << __LINE__ << "]->" << a << "\n";
 #else
 #define m_debug(a)
 #endif
 
+#ifdef __MENTOC_SHOW_BTREE_ORTHOS_REPORTS__
 #define m_report(a) std::cerr << "[m.m.oss.btree:" << __LINE__ << "{REPORT}]->" << a << "\n";
+#else
+#define m_report(a)
+#endif
 
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 

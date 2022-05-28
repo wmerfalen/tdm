@@ -6,7 +6,9 @@
 #include "interpreter.hpp"
 #include "screen-searcher.hpp"
 #include "npc.hpp"
+#include "mob-roam.hpp"
 
+//#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
 #define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
 #define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
@@ -15,6 +17,13 @@
 #define rr_debug(A)
 #endif
 extern std::deque<zone_data> zone_table;
+extern std::tuple<int16_t,std::string> parse_sql_rooms();
+extern std::tuple<int16_t,std::string> parse_sql_zones();
+extern int parse_sql_objects();
+extern void parse_sql_mobiles();
+extern void renum_world(void);
+extern void renum_zone_table(void);
+
 namespace mods::zone {
 	static std::deque<replenish_command> replenish;
 	static std::vector<int> zone_id_blacklist;
@@ -25,6 +34,19 @@ namespace mods::zone {
 	std::vector<room_vnum> camera_feed_list;
 	std::vector<room_vnum> dummy_list;
 	std::vector<room_vnum> sign_list;
+
+	namespace queue_state {
+		static bool queue_refresh = false;
+	};
+	void queue_refresh() {
+		queue_state::queue_refresh = true;
+	}
+	bool should_refresh() {
+		return queue_state::queue_refresh;
+	}
+	void done_refreshing() {
+		queue_state::queue_refresh = false;
+	}
 
 	void build_ammo_locker(room_vnum room) {
 		z_debug("building ammo locker");
@@ -363,13 +385,47 @@ namespace mods::zone {
 	SUPERCMD(do_list_zone_table) {
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
+		std::string filter_arg1 = "";
+		if(vec_args.size() > 0) {
+			filter_arg1 = vec_args[0];
+		}
 		player->sendln("Listing...");
+		player->pager_start();
 		for(const auto& zone : zone_table) {
 			player->sendln(CAT("[vnum:",zone.number,"] -> '",zone.name,"'").c_str());
 			for(const auto& cmd : zone.cmd) {
-				player->sendln(CAT("[zone_cmd if_flag]:",cmd.if_flag));
+				std::string check_filter = std::to_string(cmd.arg1);
+				if(filter_arg1.length() && filter_arg1.compare(check_filter.c_str()) != 0) {
+					continue;
+				}
+				std::string command;
+				switch(cmd.command) {
+					case 'R':
+						command = "R";
+						break;
+					case 'M':
+						command = "M";
+						break;
+					case 'Y':
+						command = "Y";
+						break;
+				}
+				player->sendln(
+				    CAT(
+				        "[zone.cmd.if_flag]:",cmd.if_flag,"\r\n",
+				        "[zone.cmd.command]:",command,"\r\n",
+				        "[zone.cmd.arg1]:",cmd.arg1,"\r\n",
+				        "[zone.cmd.arg2]:",cmd.arg2,"\r\n",
+				        "[zone.cmd.arg3]:",cmd.arg3,"\r\n",
+				        "[zone.cmd.line]:",cmd.line,"\r\n",
+				        "[zone.cmd.count]:",cmd.count,"\r\n",
+				        "[zone.cmd.yaml]:",cmd.yaml,"\r\n"
+				    )
+				);
 			}
 		}
+		player->pager_end();
+		player->page(0);
 		player->sendln("Done listing...");
 		ADMIN_DONE();
 	}
@@ -414,10 +470,39 @@ namespace mods::zone {
 		}
 		ADMIN_DONE();
 	}
+	SUPERCMD(do_queue_refresh) {
+		ADMIN_REJECT();
+		player->sendln("Queuing refresh. Please give it a second or two to complete.");
+		mods::zone::queue_refresh();
+		ADMIN_DONE();
+	}
 	void init() {
-		mods::interpreter::add_command("reset_zone", POS_RESTING, do_reset_zone, LVL_BUILDER,0);
-		mods::interpreter::add_command("uuids", POS_RESTING, do_uuids, LVL_BUILDER,0);
-		mods::interpreter::add_command("list_zone_table", POS_RESTING, do_list_zone_table, LVL_BUILDER,0);
+		ADD_BUILDER_COMMAND("admin:reset:zone", do_reset_zone);
+		ADD_BUILDER_COMMAND("admin:uuids", do_uuids);
+		ADD_BUILDER_COMMAND("admin:list:zone-table", do_list_zone_table);
+		ADD_BUILDER_COMMAND("admin:queue:refresh", do_queue_refresh);
+	}
+	void refresh_mobs_and_zones() {
+		mob_proto.clear();
+		mob_index.clear();
+		log("Loading sql mobs and generating index.");
+		parse_sql_mobiles();
+		log("Loading mob roaming data");
+		mods::mob_roam::boot();
+
+		log("Loading sql objs and generating index.");
+		parse_sql_objects();
+
+		parse_sql_zones();
+		log("Renumbering zone table.");
+		renum_zone_table();
+
+		for(auto i = 0; i < zone_table.size(); i++) {
+			log("Resetting #%d: %s (rooms %d-%d).", zone_table[i].number,
+			    zone_table[i].name, zone_table[i].bot, zone_table[i].top);
+			reset_zone(i);
+		}
+
 	}
 };
 #undef rr_debug

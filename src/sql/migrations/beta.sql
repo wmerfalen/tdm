@@ -1510,8 +1510,8 @@ CREATE TABLE public.mobile (
     mob_short_description character varying(64) NOT NULL,
     mob_long_description character varying(512) NOT NULL,
     mob_description text,
-    mob_action_bitvector character varying(2) NOT NULL,
-    mob_affection_bitvector character varying(2) NOT NULL,
+    mob_action_bitvector character varying(8) NOT NULL,
+    mob_affection_bitvector character varying(8) NOT NULL,
     mob_ability_strength integer NOT NULL,
     mob_ability_strength_add integer NOT NULL,
     mob_ability_intelligence integer NOT NULL,
@@ -10638,3 +10638,5 @@ ALTER TABLE ONLY public.notch
     ADD CONSTRAINT notch_primary_key PRIMARY KEY (id);
 ALTER TABLE ONLY public.notch
     ADD CONSTRAINT fk_player_id FOREIGN KEY (n_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+alter table mobile alter column mob_action_bitvector type character varying(8);
+alter table mobile alter column mob_affection_bitvector type character varying(8);

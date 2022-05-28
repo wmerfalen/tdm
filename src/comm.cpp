@@ -985,6 +985,14 @@ void heartbeat(int pulse) {
 	static int mins_since_crashsave = 0;
 	static uint16_t blind_ticks = 0;
 	mods::globals::current_tick++;
+	if(!(pulse % mods::zone::refresh_tick_resolution())) {
+		if(mods::zone::should_refresh()) {
+			mods::zone::refresh_mobs_and_zones();
+			mods::zone::done_refreshing();
+			log("refresh_mobs_and_zones completed");
+		}
+	}
+
 	if(!(pulse % mods::deferred::TICK_RESOLUTION)) {
 		/** Process affect dissolver ticks */
 		mods::affects::process();

@@ -781,6 +781,7 @@ bitvector_t asciiflag_conv(char *flag) {
 	return (flags);
 }
 
+
 void parse_sql_mobiles() {
 	/** Function status
 	 * This function will load a mobile prototype from
@@ -913,7 +914,7 @@ void parse_sql_mobiles() {
 		m_index.vnum = mods::util::stoi<int>(row["mob_virtual_number"]);
 		m_index.number = 0;
 		m_index.func = nullptr;
-		assert(real_mobile(m_index.vnum) == mob_proto.size() -1);
+		//assert(real_mobile(m_index.vnum) == mob_proto.size() -1);
 		mob_index.push_back(m_index);
 	}
 	psm_debug("db_get_all mobiles... -> parse_sql_mobiles [end]");

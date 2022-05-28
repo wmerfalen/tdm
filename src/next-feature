@@ -1,9 +1,41 @@
-- [ ] upsert orm function
-- [ ] sql create table from ORM TUPLE
-	- [ ] using notch orm class as guinea pig
+
+see doc/building/2022-quarter-1-features.md
+
+[ ] Randomized objectives that target currently playing players
+	[ ] Loop over the currently playing player list
+		[ ] create a randomized objective for that player's level
+		[ ] send notice of randomized objective over MUD RADIO (<-- create this)
+		[ ] create 'raid:join <N>' command, and when they type it in:
+			[ ] Create scaled mobs and content
+				[ ] stretch goal, use a cut scene where the player boards a helicopter
+					[ ] have it put them in helicopter limbo
+					[ ] helicopter ride is over when the `admin:queue:refresh` call is done
+						[ ] have the `admin:queue:refresh` functionality be tied to specific run ID's
+							[ ] these ID's will allow the system to track when a refresh for specific content is done
+			[ ] Disperse mobs and content to area
+			[ ] Teleport player to raid location
+			[ ] Mark player with specific contract and scripted steps
+[ ] Set a designated spawn room where the player will teleport to
+	[ ] create `raid:build:set-spawn <raid-id-N> <room_vnum|here|this>`
+		[ ] Only needs to persist during runtime
+
+# Needed content
+A new inventory room has been created
+	[ ] Plans are to make this a shop where MP can be spent to upgrade gear
+[ ] Need to populate Hydro Plant with dynamic mobs
+	[ ] Need NPC's to spawn there
+	[ ] Need to drop one of the various types of Shards ( see below )
+
+[ ] Need to spawn level 10 NPC's for the euclid avenue areas south of Henley Fountain
+
+
+# Behaviour trees
 - [ ] orthos spawn sentinel btree
 	- [ ] knockdown player
 	- [ ] enforce last fight timestamp
+
+
+# Larger features
 - [ ] different types of shards
 	- [ ] Marrow
 		- [ ] HP/Medicinal/Boosters
@@ -13,3 +45,8 @@
 		- [ ] Intelligence related (FIXME)
 	- [ ] Ionic
 		- [ ] Elemental Resist/Damage
+
+# ON HOLD
+- [ ] upsert orm function
+- [ ] sql create table from ORM TUPLE
+	- [ ] using notch orm class as guinea pig

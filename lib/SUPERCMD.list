@@ -24,6 +24,7 @@
 {yel}mods/zone{/yel}:->{grn}list_zone_table{/grn}
 {yel}mods/zone{/yel}:->{grn}uuids{/grn}
 {yel}mods/zone{/yel}:->{grn}reset_zone{/grn}
+{yel}mods/zone{/yel}:->{grn}queue_refresh{/grn}
 {yel}mods/players/messages{/yel}:->{grn}queue_message{/grn}
 {yel}mods/players/friendly-reminders{/yel}:->{grn}delete_reminder{/grn}
 {yel}mods/players/friendly-reminders{/yel}:->{grn}add_reminder{/grn}
@@ -100,6 +101,7 @@
 {yel}mods/builder{/yel}:->{grn}nhelp{/grn}
 {yel}mods/builder{/yel}:->{grn}nfind{/grn}
 {yel}mods/builder{/yel}:->{grn}ngoto{/grn}
+{yel}mods/builder{/yel}:->{grn}refresh_all{/grn}
 {yel}act.informative{/yel}:->{grn}givemegold{/grn}
 {yel}act.informative{/yel}:->{grn}js{/grn}
 {yel}act.informative{/yel}:->{grn}newjs{/grn}

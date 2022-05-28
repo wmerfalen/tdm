@@ -21,7 +21,7 @@
 [ ] Players opt-in by typing 'join RAID N'
 
 ## Step 3: Player types join RAID N
-[ ] Generate a randomized scaled version of a mob
-[ ] Place a random number of the randomized mobs in said area
+[x] Generate a randomized scaled version of a mob
+[x] Place a random number of the randomized mobs in said area
 	[ ] Area MUST be away from spawn
 [ ] Teleport player to starting point of area

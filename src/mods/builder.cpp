@@ -47,6 +47,8 @@ using player_ptr_t = std::shared_ptr<mods::player>;
 using jxcomp = mods::jx::compositor;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
+extern void refresh_mobs_and_zones();
+
 extern int next_mob_number();
 extern int next_room_number();
 extern int next_zone_number();
@@ -2486,19 +2488,13 @@ SUPERCMD(do_mbuild) {
 			for(auto i=1; i < next_vnum; ++i) {
 				if(std::find(taken.cbegin(),taken.cend(),i) == taken.cend()) {
 					player->sendln(CAT(i));
-					player->set_scripted_response(
-					mods::builder::encode_map({
-						{"free_vnum",std::to_string(i)}
-					}));
+					ENCODE_STR(i);
 					return;
 				}
 			}
 
 			player->sendln(CAT(next_vnum));
-			player->set_scripted_response(
-			mods::builder::encode_map({
-				{"free_vnum",std::to_string(next_vnum)}
-			}));
+			ENCODE_STR(next_vnum);
 			return;
 		}
 	}
@@ -3172,12 +3168,8 @@ SUPERCMD(do_mbuild) {
 					r_error(player,"Please supply a virtual number");
 					return;
 				}
-				if(arg_vec[3].compare("raid") == 0) {
-					obj->mob_specials.vnum = next_mob_number();
-				} else {
-					auto opt_vr_number = mods::util::stoi(arg_vec[3]);
-					obj->mob_specials.vnum = opt_vr_number.value();
-				}
+				auto opt_vr_number = mods::util::stoi(arg_vec[3]);
+				obj->mob_specials.vnum = opt_vr_number.value();
 				r_success(player,"Saved");
 				return;
 			}
@@ -6528,11 +6520,16 @@ namespace mods::builder {
 		char_to_room(player->cd(),opt_room.value());
 		ADMIN_DONE();
 	}
+
+	SUPERCMD(do_refresh_all) {
+		mods::zone::refresh_mobs_and_zones();
+	}
 	void init() {
 		mods::interpreter::add_command("ngoto", POS_RESTING, do_ngoto, LVL_BUILDER,0);
 		mods::interpreter::add_command("nfind", POS_RESTING, do_nfind, LVL_BUILDER,0);
 		mods::interpreter::add_command("nset", POS_RESTING, do_nset, LVL_BUILDER,0);
 		mods::interpreter::add_command("ndelete", POS_RESTING, do_ndelete, LVL_BUILDER,0);
 		mods::interpreter::add_command("nhelp", POS_RESTING, do_nhelp, LVL_BUILDER,0);
+		ADD_BUILDER_COMMAND("admin:refresh-all",do_refresh_all);
 	}
 };
