@@ -97,6 +97,11 @@ namespace mods::zone {
 			}
 		}
 	}
+
+	/**
+	 * Removes a zone id from the zone blacklist. The zone blacklist
+	 * is a list of zone ID's that should *NOT* be processed.
+	 */
 	void release_zone(int zone) {
 		auto copy = zone_id_blacklist;
 		copy.clear();
@@ -113,6 +118,11 @@ namespace mods::zone {
 		);
 
 	}
+
+	/**
+	 * Add the zone ID to the zone blacklist list structure. To undo
+	 * this, call release_zone
+	 */
 	void blacklist_zone(int zone) {
 		auto it = std::find(zone_id_blacklist.begin(),
 		                    zone_id_blacklist.end(),
@@ -122,9 +132,19 @@ namespace mods::zone {
 		}
 	}
 
+
+	/**
+	 * Completely disables zone resets. For the sake of clarity, zone
+	 * resets are enabled by default at program startup.
+	 */
 	void disable_zone_resets(bool b) {
 		disable_all_zone_resets = b;
 	}
+
+
+	/**
+	 * Simple logging function.
+	 */
 	void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {
 #ifdef __MENTOC_SHOW_ZONE_ERRORS__
 		mudlog(NRM, LVL_GOD, TRUE, "SYSERR: zone file: %s", message);
@@ -133,7 +153,16 @@ namespace mods::zone {
 #endif
 	}
 
-	bool zone_command_upkeep(reset_com& command) {
+
+	/**
+	 * Will return true if the reset command passed in needs to be processed.
+	 * Will return false if the reset command has met it's quota. This is mostly
+	 * used for things like mob placements where the zone needs to be replenished
+	 * with living mobs. If a mob is dead while should_run_zone_command is running and
+	 * the passed reset command is a mob commend, then that mob does not count toward
+	 * the quota (which is usually stored in arg3).
+	 */
+	bool should_run_zone_command(reset_com& command) {
 		switch(command.command) {
 			case 'M': {
 					std::vector<uuid_t> alive;
@@ -162,7 +191,11 @@ namespace mods::zone {
 #define ZONE_ERROR(message) \
 { log_zone_error(zone, cmd_no, message); }
 
-	/* execute the reset command table of a given zone */
+	/**
+	 * Loops through the zone_table and conditionally processes a zone reset command.
+	 * This function relies on the return value of should_run_zone_command() in most
+	 * instances.
+	 */
 	void reset_zone(zone_rnum zone) {
 		z_debug(green_str("reset zone entry..."));
 		auto is_blacklisted = std::find(zone_id_blacklist.begin(),zone_id_blacklist.end(),zone);
@@ -192,7 +225,7 @@ namespace mods::zone {
 						 * arg3 = yaml csv
 						 */
 						z_debug(green_str("random item spawn: ") << ZCMD.arg1 << ", arg2:" << ZCMD.arg2 << ", arg3:" << ZCMD.arg3);
-						if(zone_command_upkeep(ZCMD)) {
+						if(should_run_zone_command(ZCMD)) {
 							/* TODO:
 							auto obj = mods::globals::read_mobile_ptr(ZCMD.arg1,VIRTUAL);
 							if(!obj) {
@@ -216,7 +249,7 @@ namespace mods::zone {
 						 * arg3 = max
 						 */
 						z_debug(green_str("read mobile: ") << ZCMD.arg1 << ", arg2:" << ZCMD.arg2 << ", arg3:" << ZCMD.arg3);
-						if(zone_command_upkeep(ZCMD)) {
+						if(should_run_zone_command(ZCMD)) {
 							auto obj = mods::globals::read_mobile_ptr(ZCMD.arg1,VIRTUAL);
 							if(!obj) {
 								log(CAT("Warning: zone update failed to read this mob:",ZCMD.arg1).c_str());
@@ -238,7 +271,7 @@ namespace mods::zone {
 						 * yaml = file to load
 						 */
 						z_debug(green_str("read yaml: ") << ZCMD.yaml << ", arg2:" << ZCMD.arg2 << ", arg3:" << ZCMD.arg3);
-						if(zone_command_upkeep(ZCMD)) {
+						if(should_run_zone_command(ZCMD)) {
 							auto s = mods::util::extract_yaml_reward(ZCMD.yaml);
 							auto obj = create_object(std::get<1>(s),std::get<2>(s));
 							if(!obj) {
@@ -300,6 +333,15 @@ namespace mods::zone {
 	//   *  'E': Obj to char equip *
 	//   *  'D': Set state of door *
 	//  */
+
+
+	/**
+	 * This function is the main entry point for zone resets. This function
+	 * is usually called from comm.cpp when the following if condition is met:
+	 * if(!(pulse % PULSE_ZONE))
+	 *
+	 *
+	 */
 	void zone_update() {
 		static int timer = 0;
 		static constexpr int ZO_DEAD = 999;
@@ -352,6 +394,10 @@ namespace mods::zone {
 		}
 	}
 
+
+	/**
+	 * This function is called from db.cpp when a new room is created/parsed from sql.
+	 */
 	void new_room(room_data* room_ptr) {
 		if(mods::db::vector_exists("ammo-locker",std::to_string(room_ptr->number))) {
 			z_debug("Found ammo locker in room_ptr->number: " << room_ptr->number);
@@ -382,6 +428,14 @@ namespace mods::zone {
 			build_sign(room_ptr->number);
 		}
 	}
+
+
+
+
+	/**
+	 * Allows an admin user to display paged output of the entire zone_table.
+	 * The only acceptable argument to this function is for an arg1 filter.
+	 */
 	SUPERCMD(do_list_zone_table) {
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
@@ -429,6 +483,12 @@ namespace mods::zone {
 		player->sendln("Done listing...");
 		ADMIN_DONE();
 	}
+
+	/**
+	 * This really shouldn't be in this namespace, but it lists
+	 * the uuids of all the players and npcs currently in the same
+	 * room as the admin running this command.
+	 */
 	SUPERCMD(do_uuids) {
 		ADMIN_REJECT();
 		for(const auto& person : mods::globals::get_room_list(player->room())) {
@@ -445,6 +505,11 @@ namespace mods::zone {
 		}
 	}
 
+
+	/**
+	 * Trigger a manual call to reset_zone(id). This accepts either a zone id or the
+	 * phrase "this".
+	 */
 	SUPERCMD(do_reset_zone) {
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
@@ -470,6 +535,12 @@ namespace mods::zone {
 		}
 		ADMIN_DONE();
 	}
+
+
+	/**
+	 * Queues a call to refresh_mobs_and_zones(). This is used within javascripts
+	 * or as a manually entered command.
+	 */
 	SUPERCMD(do_queue_refresh) {
 		ADMIN_REJECT();
 		player->sendln("Queuing refresh. Please give it a second or two to complete.");
@@ -502,7 +573,7 @@ namespace mods::zone {
 			    zone_table[i].name, zone_table[i].bot, zone_table[i].top);
 			reset_zone(i);
 		}
-
+		log("refresh_mobs_and_zones() finished.");
 	}
 };
 #undef rr_debug

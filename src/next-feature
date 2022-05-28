@@ -19,6 +19,9 @@ see doc/building/2022-quarter-1-features.md
 	[ ] create `raid:build:set-spawn <raid-id-N> <room_vnum|here|this>`
 		[ ] Only needs to persist during runtime
 
+
+
+
 # Needed content
 A new inventory room has been created
 	[ ] Plans are to make this a shop where MP can be spent to upgrade gear
@@ -29,10 +32,17 @@ A new inventory room has been created
 [ ] Need to spawn level 10 NPC's for the euclid avenue areas south of Henley Fountain
 
 
+
+
+
 # Behaviour trees
 - [ ] orthos spawn sentinel btree
 	- [ ] knockdown player
 	- [ ] enforce last fight timestamp
+
+
+
+
 
 
 # Larger features
@@ -45,6 +55,9 @@ A new inventory room has been created
 		- [ ] Intelligence related (FIXME)
 	- [ ] Ionic
 		- [ ] Elemental Resist/Damage
+
+
+
 
 # ON HOLD
 - [ ] upsert orm function
