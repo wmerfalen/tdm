@@ -12,6 +12,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <type_traits>
 #if defined(__cpp_lib_string_view) && __cpp_lib_string_view==201603
 #include <string_view>
 typedef std::string_view str_object;
@@ -22,6 +23,11 @@ typedef std::string str_object;
 
 namespace mods::values {
 	extern bool ECHO_ALL_SQL_COMMANDS();
+};
+
+template <typename T>
+concept NeedsToString = requires(T i) {
+	std::to_string(i);
 };
 
 //#define __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
@@ -302,79 +308,9 @@ namespace mods::sql {
 				m_query[4] = sql;
 				return *this;
 			}
+			template <NeedsToString TRhs>
 			compositor<T>& where(str_object lhs,
-			                     const int64_t& rhs) {
-				std::string sql = " WHERE ";
-				sql += lhs.data();
-				sql += " = ";
-				sql += m_txn_ptr->quote(std::to_string(rhs));
-				m_query[4] = sql;
-				return *this;
-			}
-
-			compositor<T>& where(str_object lhs,
-			                     const uint64_t& rhs) {
-				std::string sql = " WHERE ";
-				sql += lhs.data();
-				sql += " = ";
-				sql += m_txn_ptr->quote(std::to_string(rhs));
-				m_query[4] = sql;
-				return *this;
-			}
-
-			compositor<T>& where(str_object lhs,
-			                     const uint32_t& rhs) {
-				std::string sql = " WHERE ";
-				sql += lhs.data();
-				sql += " = ";
-				sql += m_txn_ptr->quote(std::to_string(rhs));
-				m_query[4] = sql;
-				return *this;
-			}
-
-			compositor<T>& where(str_object lhs,
-			                     const int32_t& rhs) {
-				std::string sql = " WHERE ";
-				sql += lhs.data();
-				sql += " = ";
-				sql += m_txn_ptr->quote(std::to_string(rhs));
-				m_query[4] = sql;
-				return *this;
-			}
-
-			compositor<T>& where(str_object lhs,
-			                     const uint16_t& rhs) {
-				std::string sql = " WHERE ";
-				sql += lhs.data();
-				sql += " = ";
-				sql += m_txn_ptr->quote(std::to_string(rhs));
-				m_query[4] = sql;
-				return *this;
-			}
-
-			compositor<T>& where(str_object lhs,
-			                     const int16_t& rhs) {
-				std::string sql = " WHERE ";
-				sql += lhs.data();
-				sql += " = ";
-				sql += m_txn_ptr->quote(std::to_string(rhs));
-				m_query[4] = sql;
-				return *this;
-			}
-
-			compositor<T>& where(str_object lhs,
-			                     const uint8_t& rhs) {
-				std::string sql = " WHERE ";
-				sql += lhs.data();
-				sql += " = ";
-				sql += m_txn_ptr->quote(std::to_string(rhs));
-				m_query[4] = sql;
-				return *this;
-			}
-
-
-			compositor<T>& where(str_object lhs,
-			                     const int8_t& rhs) {
+			                     const TRhs& rhs) {
 				std::string sql = " WHERE ";
 				sql += lhs.data();
 				sql += " = ";

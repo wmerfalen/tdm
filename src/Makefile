@@ -36,7 +36,7 @@ warnings_list = -Wall -Wunused-result \
 
 FLAGS = $(gdbflags) $(optimization) \
 				$(warnings_list) \
-	-std=c++20 -fconcepts -fpermissive -MMD \
+	-std=c++20 -fpermissive -MMD \
 	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-Imods/catch2/Catch2/src -Lmods/catch2/Catch2/build/src \
 	-Ilibzmq/include -Icppzmq \
