@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+=======
+{yel}mods/admin-tools/stay{/yel}:->{grn}admin:stay{/grn}
+{yel}mods/admin-tools/stay{/yel}:->{grn}admin:unstay{/grn}
+{yel}mods/weapons/shotgun-dst7A{/yel}:->{grn}admin:dst7a{/grn}
+{yel}mods/weapons/smg-vc88{/yel}:->{grn}admin:vc88{/grn}
+{yel}mods/armor/gauntlets-xtv89{/yel}:->{grn}admin:xtv89{/grn}
+{yel}mods/armor/gauntlets-xtv89{/yel}:->{grn}admin:xtv89_usage{/grn}
+{yel}mods/armor/vest-bc89{/yel}:->{grn}admin:bc89{/grn}
+{yel}mods/armor/vest-bc89{/yel}:->{grn}admin:bc89_usage{/grn}
+>>>>>>> 6f28975d (refactor: use c++20 concepts to remove unnecessary and redundant overloaded functions in sql::where(...))
 {yel}mods/ban-system{/yel}:->{grn}admin:mute{/grn}
 {yel}mods/ban-system{/yel}:->{grn}admin:unmute{/grn}
 {yel}mods/ban-system{/yel}:->{grn}admin:banish{/grn}
@@ -9,13 +20,5 @@
 {yel}mods/ban-system{/yel}:->{grn}admin:ban_ip{/grn}
 {yel}mods/ban-system{/yel}:->{grn}admin:ban_host{/grn}
 {yel}mods/ban-system{/yel}:->{grn}admin:pull{/grn}
-{yel}mods/ensnare{/yel}:->{grn}admin:ensnare_me{/grn}
-{yel}mods/admin-tools/stay{/yel}:->{grn}admin:stay{/grn}
-{yel}mods/admin-tools/stay{/yel}:->{grn}admin:unstay{/grn}
 {yel}mods/loot{/yel}:->{grn}admin:reward_with{/grn}
-{yel}mods/armor/gauntlets-xtv89{/yel}:->{grn}admin:xtv89{/grn}
-{yel}mods/armor/gauntlets-xtv89{/yel}:->{grn}admin:xtv89_usage{/grn}
-{yel}mods/armor/vest-bc89{/yel}:->{grn}admin:bc89{/grn}
-{yel}mods/armor/vest-bc89{/yel}:->{grn}admin:bc89_usage{/grn}
-{yel}mods/weapons/smg-vc88{/yel}:->{grn}admin:vc88{/grn}
-{yel}mods/weapons/shotgun-dst7A{/yel}:->{grn}admin:dst7a{/grn}
+{yel}mods/ensnare{/yel}:->{grn}admin:ensnare_me{/grn}
