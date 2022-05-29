@@ -10640,3 +10640,15 @@ ALTER TABLE ONLY public.notch
     ADD CONSTRAINT fk_player_id FOREIGN KEY (n_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
 alter table mobile alter column mob_action_bitvector type character varying(8);
 alter table mobile alter column mob_affection_bitvector type character varying(8);
+create table raid(
+	id SERIAL,
+	r_name VARCHAR(256) NOT NULL,
+	r_level VARCHAR(16) NOT NULL,
+	r_type VARCHAR(32) NOT NULL,
+	r_status VARCHAR(16) NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	PRIMARY KEY(id)
+);
+alter table mobile add column mob_raid_id INTEGER;
+ALTER TABLE mobile ADD CONSTRAINT fk_mob_raid_id FOREIGN KEY (mob_raid_id) REFERENCES public.raid(id) ON UPDATE CASCADE ON DELETE CASCADE;
+alter table zone_data add column zone_raid_id INTEGER; alter table zone_data ADD CONSTRAINT fk_zone_raid_id FOREIGN KEY(zone_raid_id) REFERENCES public.raid(id) ON UPDATE CASCADE ON DELETE CASCADE;

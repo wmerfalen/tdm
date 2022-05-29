@@ -1347,6 +1347,7 @@ namespace mods::builder {
 			p_map["mob_class"] = "0"; //TODO: find this
 			p_map["mob_special_extended_type"] = std::to_string(obj->mob_specials.extended_mob_type);
 			p_map["mob_exp"] = std::to_string(obj->mob_specials.experience);
+			p_map["mob_raid"] = std::to_string(obj->mob_specials.raid_id);
 			auto txn_02 = txn();
 			std::string sql = "";
 
@@ -2367,6 +2368,7 @@ SUPERCMD(do_mbuild) {
 		        " {grn}mbuild{/grn} {red}list{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}attr <mob_id> <attr> <value>{/red}\r\n" <<
 		        "  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
+		        "  {gld}|:: raid{/gld}\r\n" <<
 		        "  {gld}|:: virt{/gld}\r\n" <<
 		        "  {gld}|:: vnum{/gld} {grn}this is an alias of {/grn}{gld}virt{/gld}\r\n" <<
 		        "  {gld}|:: exp{/gld}\r\n" <<
@@ -3049,6 +3051,7 @@ SUPERCMD(do_mbuild) {
 #define MENTOC_SHOW_OBJ(display_name,struct_member) \
 		*player << "{red}" << #display_name << "{/red}: " << obj->struct_member << "\r\n";
 		MENTOC_SHOW_OBJ(name,player.name.c_str());
+		MENTOC_SHOW_OBJ(raid_id,mob_specials.raid_id);
 		MENTOC_SHOW_OBJ(virtual_number,mob_specials.vnum);
 		MENTOC_SHOW_OBJ(experience,mob_specials.experience);
 		MENTOC_SHOW_OBJ(short_description,player.short_descr.c_str());
@@ -3181,6 +3184,12 @@ SUPERCMD(do_mbuild) {
 				return;
 			}
 
+			if(arg_vec[2].compare("raid") == 0) {
+				auto opt_raid_id = mods::util::stoi(arg_vec[3]);
+				obj->mob_specials.raid_id = opt_raid_id.value();
+				r_success(player,"Saved");
+				return;
+			}
 
 			if(arg_vec[2].compare("sex") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {

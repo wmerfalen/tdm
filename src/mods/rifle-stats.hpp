@@ -3,6 +3,7 @@
 #include "../globals.hpp"
 
 namespace mods::rifle_stats {
-	std::string format_rifle_stats_page(std::map<std::string,std::string>& page);
+	std::string format_rifle_stats_page(std::map<std::string,std::string>* page);
+	std::string format_rifle_stats_page(std::string_view feed_file,std::map<std::string,std::string>* page);
 };
 #endif

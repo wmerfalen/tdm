@@ -44,6 +44,7 @@ namespace mods::rifle_stats {
 		i_ele_emp_damage,
 		i_ele_shock_damage,
 		i_ele_anti_matter_damage,
+		i_disorient,
 		i_stat_armor,
 		i_stat_chemistry,
 		i_stat_constitution,
@@ -65,7 +66,8 @@ namespace mods::rifle_stats {
 
 	static constexpr const char* NL = "\r\n";
 
-	std::string format_rifle_stats_page(std::map<std::string,std::string>& page) {
+	static std::map<std::string,std::string> cache;
+	std::string format_rifle_stats_page(std::map<std::string,std::string>* page) {
 		using namespace mods::util::str;
 		std::vector<std::string> rifle_page;
 
@@ -73,10 +75,10 @@ namespace mods::rifle_stats {
 		    clip_size,ammo_max,
 		    crit_chance,crit_range,
 		    dice_count,dice_sides;
-		rifle_page.resize(std::max((std::size_t)i_max_count,page.size()));
+		rifle_page.resize(std::max((std::size_t)i_max_count,page->size()));
 		//rifle_page[i_a_map] = accuracy_map.data();
 
-		for(const auto& pair : page) {
+		for(const auto& pair : *page) {
 			const auto& f = pair.first;
 			if(starts_with("rifle_name",f)) {
 				rifle_page[i_title] = pair.second;
@@ -109,7 +111,7 @@ namespace mods::rifle_stats {
 			if(is_floatval(s)) {
 				s = chop_after_2nd_place(s);
 			}
-			if(s.compare("0.00") == 0) {
+			if(s.compare("0.00") == 0 || s.compare("0") == 0) {
 				continue;
 			}
 			if(starts_with("rifle_incendiary_damage",f)) {
@@ -189,7 +191,7 @@ namespace mods::rifle_stats {
 			}
 
 			if(starts_with("rifle_disorient_amount",f)) {
-				rifle_page[i_etc] += CAT("{grn}disorient{/grn}: ",s);
+				rifle_page[i_disorient] += CAT("{grn}disorient{/grn}: ",s);
 				continue;
 			}
 			if(starts_with("rifle_effective_firing_range",f)) {
@@ -328,6 +330,13 @@ namespace mods::rifle_stats {
 			++i;
 		}
 		return final_page;
+	}
+	std::string format_rifle_stats_page(std::string_view feed_file,std::map<std::string,std::string>* page) {
+		if(cache[feed_file.data()].length()) {
+			return cache[feed_file.data()];
+		}
+		cache[feed_file.data()] = format_rifle_stats_page(page);
+		return cache[feed_file.data()];
 	}
 #undef m_error
 #undef m_debug

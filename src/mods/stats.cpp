@@ -26,11 +26,11 @@
 
 
 namespace mods::stats {
-	std::string format_stats_page(std::string_view type,std::map<std::string,std::string>&& page) {
+	std::string format_stats_page(std::string_view feed_file,std::string_view type,std::map<std::string,std::string>* stats_page) {
 		if(type.compare("rifle") == 0) {
-			return mods::rifle_stats::format_rifle_stats_page(page);
+			return mods::rifle_stats::format_rifle_stats_page(feed_file,stats_page);
 		}
-		return mods::util::map2str(page);
+		return mods::util::map2str(*stats_page);
 	}
 
 };
