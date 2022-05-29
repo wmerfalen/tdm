@@ -1906,7 +1906,7 @@ MENTOC_ABIL_SET	db.cpp	/^#define MENTOC_ABIL_SET(/;"	kind:macro	line:831	file:	s
 MENTOC_ACT	mods/rate-limiting.cpp	/^#define MENTOC_ACT(/;"	kind:macro	line:33	file:	signature:(A)
 MENTOC_ACT	mods/rate-limiting.cpp	/^#define MENTOC_ACT(/;"	kind:macro	line:42	file:	signature:(A)
 MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	/^#define MENTOC_BASE_MEMBERS_SET(/;"	kind:macro	line:55	file:	signature:(NAME)
-MENTOC_BITVECTOR	mods/builder.cpp	/^#define MENTOC_BITVECTOR(/;"	kind:macro	line:4264	file:	signature:(a)
+MENTOC_BITVECTOR	mods/builder.cpp	/^#define MENTOC_BITVECTOR(/;"	kind:macro	line:4274	file:	signature:(a)
 MENTOC_CF	mods/yaml.hpp	/^#define MENTOC_CF(/;"	kind:macro	line:84	file:	signature:(_XDP_)
 MENTOC_CF	mods/yaml.hpp	/^#define MENTOC_CF(/;"	kind:macro	line:93	file:	signature:(a)
 MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	/^#define MENTOC_CHECK_SLOT_LIST(/;"	kind:macro	line:379	file:	signature:(s,data,elem)
@@ -1938,7 +1938,7 @@ MENTOC_LAZY	mods/orm/room.cpp	/^#define MENTOC_LAZY(/;"	kind:macro	line:141	file
 MENTOC_LAZY	mods/rooms.hpp	/^#define MENTOC_LAZY(/;"	kind:macro	line:117	file:	signature:(A)
 MENTOC_LAZY_COMP	mods/doors.hpp	/^#define MENTOC_LAZY_COMP(/;"	kind:macro	line:352	file:	signature:(a)
 MENTOC_LAZY_INT	mods/builder.cpp	/^#define MENTOC_LAZY_INT(/;"	kind:macro	line:1933	file:	signature:(a)
-MENTOC_LAZY_ME	mods/builder.cpp	/^#define MENTOC_LAZY_ME(/;"	kind:macro	line:3671	file:	signature:(a,mtype)
+MENTOC_LAZY_ME	mods/builder.cpp	/^#define MENTOC_LAZY_ME(/;"	kind:macro	line:3681	file:	signature:(a,mtype)
 MENTOC_LAZY_ME	mods/util.cpp	/^#define MENTOC_LAZY_ME(/;"	kind:macro	line:1218	file:	signature:(mtype,B)
 MENTOC_LAZY_ME	mods/util.cpp	/^#define MENTOC_LAZY_ME(/;"	kind:macro	line:1237	file:	signature:(mtype,B)
 MENTOC_LAZY_ME	mods/util.cpp	/^#define MENTOC_LAZY_ME(/;"	kind:macro	line:1250	file:	signature:(mtype)
@@ -1991,10 +1991,10 @@ MENTOC_RELEASER	structs.cpp	/^#define MENTOC_RELEASER(/;"	kind:macro	line:33	fil
 MENTOC_S	mods/orm/room.cpp	/^#define MENTOC_S(/;"	kind:macro	line:117	file:	signature:(A)
 MENTOC_S	mods/orm/room.cpp	/^#define MENTOC_S(/;"	kind:macro	line:148	file:	signature:(A)
 MENTOC_SEND_BUF_FAILED	comm.cpp	/^static int constexpr MENTOC_SEND_BUF_FAILED = -3;$/;"	kind:variable	line:225	typeref:typename:int 	file:
-MENTOC_SHOW_FLAG	mods/builder.cpp	/^#define MENTOC_SHOW_FLAG(/;"	kind:macro	line:4305	file:	signature:(member,display)
-MENTOC_SHOW_OBJ	mods/builder.cpp	/^#define MENTOC_SHOW_OBJ(/;"	kind:macro	line:3009	file:	signature:(display_name,struct_member)
-MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	/^#define MENTOC_SHOW_OBJ_BITVECTOR(/;"	kind:macro	line:3001	file:	signature:(display_name,struct_member,flag_structure)
-MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	/^#define MENTOC_SHOW_OBJ_FLAGS(/;"	kind:macro	line:2993	file:	signature:(display_name,struct_member,flag_structure)
+MENTOC_SHOW_FLAG	mods/builder.cpp	/^#define MENTOC_SHOW_FLAG(/;"	kind:macro	line:4315	file:	signature:(member,display)
+MENTOC_SHOW_OBJ	mods/builder.cpp	/^#define MENTOC_SHOW_OBJ(/;"	kind:macro	line:3015	file:	signature:(display_name,struct_member)
+MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	/^#define MENTOC_SHOW_OBJ_BITVECTOR(/;"	kind:macro	line:3007	file:	signature:(display_name,struct_member,flag_structure)
+MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	/^#define MENTOC_SHOW_OBJ_FLAGS(/;"	kind:macro	line:2999	file:	signature:(display_name,struct_member,flag_structure)
 MENTOC_STR_TO_ENUM_IMPL	mods/melee/combat-order.hpp	/^#define MENTOC_STR_TO_ENUM_IMPL(/;"	kind:macro	line:63	file:	signature:(r,data,ENUM_TYPE)
 MENTOC_T	mods/aoe.hpp	/^#define MENTOC_T(/;"	kind:macro	line:32	file:	signature:(a)
 MENTOC_T	mods/lmdb.hpp	/^#define MENTOC_T(/;"	kind:macro	line:68	file:	signature:(_e)
@@ -2012,10 +2012,10 @@ MENTOC_TO_STR	mods/weapon.hpp	/^#define MENTOC_TO_STR(/;"	kind:macro	line:331	fi
 MENTOC_TO_STR	mods/weapon.hpp	/^#define MENTOC_TO_STR(/;"	kind:macro	line:348	file:	signature:(a)
 MENTOC_TO_STR	mods/weapon.hpp	/^#define MENTOC_TO_STR(/;"	kind:macro	line:368	file:	signature:(a)
 MENTOC_TO_STR	mods/weapon.hpp	/^#define MENTOC_TO_STR(/;"	kind:macro	line:384	file:	signature:(a)
-MENTOC_TYPE	mods/builder.cpp	/^#define MENTOC_TYPE(/;"	kind:macro	line:4238	file:	signature:(a)
+MENTOC_TYPE	mods/builder.cpp	/^#define MENTOC_TYPE(/;"	kind:macro	line:4248	file:	signature:(a)
 MENTOC_UPTR	structs.h	/^#define MENTOC_UPTR(/;"	kind:macro	line:1063	file:	signature:(r,data,CLASS_TYPE)
 MENTOC_WEAPON	mods/builder.cpp	/^#define MENTOC_WEAPON(/;"	kind:macro	line:352	file:	signature:(name)
-MENTOC_WEAR	mods/builder.cpp	/^#define MENTOC_WEAR(/;"	kind:macro	line:4221	file:	signature:(a)
+MENTOC_WEAR	mods/builder.cpp	/^#define MENTOC_WEAR(/;"	kind:macro	line:4231	file:	signature:(a)
 MENU	config.cpp	/^const char *MENU =$/;"	kind:variable	line:269	typeref:typename:const char *
 MESS_FILE	db.h	/^#define MESS_FILE	/;"	kind:macro	line:91	file:
 METAL_FLOORS	structs.h	/^			METAL_FLOORS,$/;"	kind:enumerator	line:1190	enum:room_data::texture_type_t	file:	access:public
@@ -2160,7 +2160,7 @@ NEW_MSG_INDEX	boards.h	/^#define NEW_MSG_INDEX(/;"	kind:macro	line:43	file:	sign
 NIGHT_VISION	mods/flags.hpp	/^		NIGHT_VISION,$/;"	kind:enumerator	line:98	enum:mods::flags::aff	file:	access:public
 NIGHT_VISION	mods/weapon-types.hpp	/^		NIGHT_VISION,$/;"	kind:enumerator	line:36	enum:mods::weapon::capabilities::cap_t	file:	access:public
 NIGHT_VISION_GOGGLES	structs.h	/^	NIGHT_VISION_GOGGLES,$/;"	kind:enumerator	line:87	enum:lense_type_t	file:	access:public
-NL	mods/stats-rifle.cpp	/^	static constexpr const char* NL = "\\r\\n";$/;"	kind:variable	line:63	namespace:mods::stats_rifle	typeref:typename:const char *	file:
+NL	mods/rifle-stats.cpp	/^	static constexpr const char* NL = "\\r\\n";$/;"	kind:variable	line:63	namespace:mods::rifle_stats	typeref:typename:const char *	file:
 NO	config.cpp	/^#define NO	/;"	kind:macro	line:21	file:
 NOBODY	mods/index-type.hpp	/^# define NOBODY	/;"	kind:macro	line:14	file:
 NOBODY	mods/index-type.hpp	/^# define NOBODY	/;"	kind:macro	line:19	file:
@@ -2202,6 +2202,7 @@ NORMAL_SIGHT	mods/flags.hpp	/^		NORMAL_SIGHT,$/;"	kind:enumerator	line:99	enum:m
 NORMAL_SIGHT	structs.h	/^	NORMAL_SIGHT,$/;"	kind:enumerator	line:85	enum:lense_type_t	file:	access:public
 NORTH	structs.h	/^#define NORTH /;"	kind:macro	line:133	file:
 NOSHOUT	mods/flags.hpp	/^		NOSHOUT,$/;"	kind:enumerator	line:64	enum:mods::flags::plr	file:	access:public
+NOTCH_ORM_TUPLE	mods/orm/builder-transaction.hpp	/^#define NOTCH_ORM_TUPLE /;"	kind:macro	line:44	file:
 NOTCH_ORM_TUPLE	mods/orm/notch.hpp	/^#define NOTCH_ORM_TUPLE /;"	kind:macro	line:44	file:
 NOTDEADYET	mods/flags.hpp	/^		NOTDEADYET,$/;"	kind:enumerator	line:63	enum:mods::flags::plr	file:	access:public
 NOTHING	mods/index-type.hpp	/^# define NOTHING	/;"	kind:macro	line:13	file:
@@ -3287,17 +3288,17 @@ SUPERCMD	interpreter.cpp	/^SUPERCMD(do_room_list) {$/;"	kind:function	line:116	s
 SUPERCMD	interpreter.h	/^#define SUPERCMD(/;"	kind:macro	line:15	file:	signature:(mentoc_function_name)
 SUPERCMD	mobact.cpp	/^	SUPERCMD(do_mobact) {$/;"	kind:function	line:310	namespace:mods::mobact	signature:(do_mobact)
 SUPERCMD	mods/boosters/adrenaline-shot.cpp	/^		SUPERCMD(do_adshot_test) {$/;"	kind:function	line:68	namespace:mods::boosters::adrenaline_shot_init	signature:(do_adshot_test)
-SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_ndelete) {$/;"	kind:function	line:6400	namespace:mods::builder	signature:(do_ndelete)
-SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nfind) {$/;"	kind:function	line:6433	namespace:mods::builder	signature:(do_nfind)
-SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_ngoto) {$/;"	kind:function	line:6455	namespace:mods::builder	signature:(do_ngoto)
-SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nhelp) {$/;"	kind:function	line:6406	namespace:mods::builder	signature:(do_nhelp)
-SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nset) {$/;"	kind:function	line:6388	namespace:mods::builder	signature:(do_nset)
+SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_ndelete) {$/;"	kind:function	line:6410	namespace:mods::builder	signature:(do_ndelete)
+SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nfind) {$/;"	kind:function	line:6443	namespace:mods::builder	signature:(do_nfind)
+SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_ngoto) {$/;"	kind:function	line:6465	namespace:mods::builder	signature:(do_ngoto)
+SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nhelp) {$/;"	kind:function	line:6416	namespace:mods::builder	signature:(do_nhelp)
+SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nset) {$/;"	kind:function	line:6398	namespace:mods::builder	signature:(do_nset)
 SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_mbuild) {$/;"	kind:function	line:2270	signature:(do_mbuild)
-SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_obuild) {$/;"	kind:function	line:3194	signature:(do_obuild)
-SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_rbuild) {$/;"	kind:function	line:5220	signature:(do_rbuild)
+SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_obuild) {$/;"	kind:function	line:3204	signature:(do_obuild)
+SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_rbuild) {$/;"	kind:function	line:5230	signature:(do_rbuild)
 SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_rbuild_sandbox) {$/;"	kind:function	line:1435	signature:(do_rbuild_sandbox)
 SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_sbuild) {$/;"	kind:function	line:1595	signature:(do_sbuild)
-SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_zbuild) {$/;"	kind:function	line:4501	signature:(do_zbuild)
+SUPERCMD	mods/builder.cpp	/^SUPERCMD(do_zbuild) {$/;"	kind:function	line:4511	signature:(do_zbuild)
 SUPERCMD	mods/builder/bookmarks.cpp	/^	SUPERCMD(do_bookmark) {$/;"	kind:function	line:12	namespace:mods::builder::bookmarks	signature:(do_bookmark)
 SUPERCMD	mods/builder/bookmarks.cpp	/^	SUPERCMD(do_goto) {$/;"	kind:function	line:36	namespace:mods::builder::bookmarks	signature:(do_goto)
 SUPERCMD	mods/builder/bookmarks.cpp	/^	SUPERCMD(do_print_vnum) {$/;"	kind:function	line:70	namespace:mods::builder::bookmarks	signature:(do_print_vnum)
@@ -4123,6 +4124,7 @@ __MENTOC_MODS_ORM_UTIL_HEADER__	mods/orm/util.hpp	/^#define __MENTOC_MODS_ORM_UT
 __MENTOC_MODS_ORM_contract_steps_HEADER__	mods/orm/contract-steps.hpp	/^#define __MENTOC_MODS_ORM_contract_steps_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_ORM_contracts_HEADER__	mods/orm/contracts.hpp	/^#define __MENTOC_MODS_ORM_contracts_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_ORM_generic_orm_HEADER__	mods/orm/generic-orm.hpp	/^#define __MENTOC_MODS_ORM_generic_orm_HEADER__$/;"	kind:macro	line:2	file:
+__MENTOC_MODS_ORM_notch_HEADER__	mods/orm/builder-transaction.hpp	/^#define __MENTOC_MODS_ORM_notch_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_ORM_notch_HEADER__	mods/orm/notch.hpp	/^#define __MENTOC_MODS_ORM_notch_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_ORM_player_contract_state_HEADER__	mods/orm/player-contract-state.hpp	/^#define __MENTOC_MODS_ORM_player_contract_state_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_ORM_player_skill_points_HEADER__	mods/orm/player-skill-points.hpp	/^#define __MENTOC_MODS_ORM_player_skill_points_HEADER__$/;"	kind:macro	line:2	file:
@@ -4254,7 +4256,7 @@ __MENTOC_MODS_shock_HEADER__	mods/shock.hpp	/^#define __MENTOC_MODS_shock_HEADER
 __MENTOC_MODS_shrapnel_HEADER__	mods/shrapnel.hpp	/^#define __MENTOC_MODS_shrapnel_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_sneak_HEADER__	mods/sneak.hpp	/^#define __MENTOC_MODS_sneak_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_stats_HEADER__	mods/stats.hpp	/^#define __MENTOC_MODS_stats_HEADER__$/;"	kind:macro	line:2	file:
-__MENTOC_MODS_stats_rifle_HEADER__	mods/stats-rifle.hpp	/^#define __MENTOC_MODS_stats_rifle_HEADER__$/;"	kind:macro	line:2	file:
+__MENTOC_MODS_stats_rifle_HEADER__	mods/rifle-stats.hpp	/^#define __MENTOC_MODS_stats_rifle_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_ORM_UTIL_DEBUG_OUTPUT__	mods/orm/generic-orm.hpp	/^#define __MENTOC_ORM_UTIL_DEBUG_OUTPUT__$/;"	kind:macro	line:4	file:
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/search.hpp	/^#define  __MENTOC_PLAYER_UTILS_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/util.hpp	/^#define  __MENTOC_PLAYER_UTILS_HEADER__$/;"	kind:macro	line:2	file:
@@ -4296,7 +4298,7 @@ __MENTOC_SHOW_MODS_PLAYERS_friendly_reminders_DEBUG_OUTPUT__	mods/players/friend
 __MENTOC_SHOW_MODS_RIFLE_DEBUG_OUTPUT__	mods/rifle.cpp	/^#define __MENTOC_SHOW_MODS_RIFLE_DEBUG_OUTPUT__$/;"	kind:macro	line:19	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	/^#define __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__$/;"	kind:macro	line:8	file:
 __MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__	mods/stats.cpp	/^#define __MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__$/;"	kind:macro	line:18	file:
-__MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__	mods/stats-rifle.cpp	/^#define __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__$/;"	kind:macro	line:3	file:
+__MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__	mods/rifle-stats.cpp	/^#define __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__$/;"	kind:macro	line:3	file:
 __MENTOC_SHOW_SQL_DEBUG_OUTPUT__	mods/orm/inventory.cpp	/^#define __MENTOC_SHOW_SQL_DEBUG_OUTPUT__$/;"	kind:macro	line:1	file:
 __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__	mods/help.cpp	/^#define __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__$/;"	kind:macro	line:7	file:
 __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__	act.item.cpp	/^#define __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__$/;"	kind:macro	line:30	file:
@@ -4576,14 +4578,14 @@ __anone47f9c3f0502	mods/builder.cpp	/^		mods::builder_util::post_modify_callback
 __anone47f9c3f0602	mods/builder.cpp	/^		mods::builder_util::value_callback value_setter = [&](sql_compositor::value_map & s_map) {$/;"	kind:function	line:1978	function:SUPERCMD::__anone47f9c3f0402	file:	signature:(sql_compositor::value_map & s_map) 
 __anone47f9c3f0702	mods/builder.cpp	/^	[&player](shop_data_t& shop) -> void {$/;"	kind:function	line:2022	function:SUPERCMD	typeref:typename:void	file:	signature:(shop_data_t& shop) 
 __anone47f9c3f0802	mods/builder.cpp	/^	[](std::shared_ptr<command_t> cmd) {$/;"	kind:function	line:2259	function:initialize_mob_commands	file:	signature:(std::shared_ptr<command_t> cmd) 
-__anone47f9c3f0902	mods/builder.cpp	/^		auto get_intval = [&](std::string_view str) -> std::optional<int> {$/;"	kind:function	line:3060	function:SUPERCMD	typeref:typename:std::optional<int>	file:	signature:(std::string_view str) 
-__anone47f9c3f0a02	mods/builder.cpp	/^		auto get_strval = [&](std::string_view str) -> std::optional<const char*> {$/;"	kind:function	line:3074	function:SUPERCMD	typeref:typename:std::optional<const char * >	file:	signature:(std::string_view str) 
-__anone47f9c3f0b02	mods/builder.cpp	/^		auto get_intval = [&](std::string_view str) -> std::optional<int> {$/;"	kind:function	line:3942	function:SUPERCMD	typeref:typename:std::optional<int>	file:	signature:(std::string_view str) 
-__anone47f9c3f0c02	mods/builder.cpp	/^		auto get_intval = [&](std::string_view str) -> std::optional<int> {$/;"	kind:function	line:4325	function:SUPERCMD	typeref:typename:std::optional<int>	file:	signature:(std::string_view str) 
-__anone47f9c3f0d02	mods/builder.cpp	/^		auto get_strval = [&](std::string_view str) -> std::optional<char*> {$/;"	kind:function	line:4340	function:SUPERCMD	typeref:typename:std::optional<char * >	file:	signature:(std::string_view str) 
-__anone47f9c3f0e02	mods/builder.cpp	/^	auto display_zone_commands = [&](const std::size_t& i) {$/;"	kind:function	line:4732	function:SUPERCMD	file:	signature:(const std::size_t& i) 
-__anone47f9c3f0f02	mods/builder.cpp	/^		mods::builder_util::value_callback value_callback = [&](sql_compositor::value_map & values) {$/;"	kind:function	line:4870	function:SUPERCMD	file:	signature:(sql_compositor::value_map & values) 
-__anone47f9c3f1002	mods/builder.cpp	/^		mods::builder_util::post_modify_callback post_modify_callback = []() -> std::pair<bool,std::st/;"	kind:function	line:4878	function:SUPERCMD	typeref:typename:std::pair<bool,std::string>	file:	signature:() 
+__anone47f9c3f0902	mods/builder.cpp	/^		auto get_intval = [&](std::string_view str) -> std::optional<int> {$/;"	kind:function	line:3066	function:SUPERCMD	typeref:typename:std::optional<int>	file:	signature:(std::string_view str) 
+__anone47f9c3f0a02	mods/builder.cpp	/^		auto get_strval = [&](std::string_view str) -> std::optional<const char*> {$/;"	kind:function	line:3080	function:SUPERCMD	typeref:typename:std::optional<const char * >	file:	signature:(std::string_view str) 
+__anone47f9c3f0b02	mods/builder.cpp	/^		auto get_intval = [&](std::string_view str) -> std::optional<int> {$/;"	kind:function	line:3952	function:SUPERCMD	typeref:typename:std::optional<int>	file:	signature:(std::string_view str) 
+__anone47f9c3f0c02	mods/builder.cpp	/^		auto get_intval = [&](std::string_view str) -> std::optional<int> {$/;"	kind:function	line:4335	function:SUPERCMD	typeref:typename:std::optional<int>	file:	signature:(std::string_view str) 
+__anone47f9c3f0d02	mods/builder.cpp	/^		auto get_strval = [&](std::string_view str) -> std::optional<char*> {$/;"	kind:function	line:4350	function:SUPERCMD	typeref:typename:std::optional<char * >	file:	signature:(std::string_view str) 
+__anone47f9c3f0e02	mods/builder.cpp	/^	auto display_zone_commands = [&](const std::size_t& i) {$/;"	kind:function	line:4742	function:SUPERCMD	file:	signature:(const std::size_t& i) 
+__anone47f9c3f0f02	mods/builder.cpp	/^		mods::builder_util::value_callback value_callback = [&](sql_compositor::value_map & values) {$/;"	kind:function	line:4880	function:SUPERCMD	file:	signature:(sql_compositor::value_map & values) 
+__anone47f9c3f1002	mods/builder.cpp	/^		mods::builder_util::post_modify_callback post_modify_callback = []() -> std::pair<bool,std::st/;"	kind:function	line:4888	function:SUPERCMD	typeref:typename:std::pair<bool,std::string>	file:	signature:() 
 __anone55c04c80102	mods/mobs/lowly-security-behaviour-tree.hpp	/^		return TNode::create_leaf([name](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:50	function:mods::mobs::lowly_security_behaviour_tree::debug_echo_tree_name	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
 __anone55c04c80202	mods/mobs/lowly-security-behaviour-tree.hpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:60	function:mods::mobs::lowly_security_behaviour_tree::shout_random	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
 __anone55c04c80302	mods/mobs/lowly-security-behaviour-tree.hpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:68	function:mods::mobs::lowly_security_behaviour_tree::random_trivial_action	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
@@ -4649,7 +4651,7 @@ accumulator_slot_list	mods/orm/orm-base.hpp	/^			virtual const std::vector<std::
 accumulators	mods/orm/orm-base.hpp	/^			std::vector<std::string> accumulators;$/;"	kind:member	line:67	struct:mods::orm::orm_base	typeref:typename:std::vector<std::string>	file:	access:public
 accuracy	mods/ranged-combat-totals.hpp	/^		int accuracy;$/;"	kind:member	line:44	struct:mods::ranged_combat_totals	typeref:typename:int	file:	access:public
 accuracy	mods/weapon-types.hpp	/^		weapon_accuracy_t accuracy;$/;"	kind:member	line:11	struct:mods::weapon::weapon_type_statistics_t	typeref:typename:weapon_accuracy_t	file:	access:public
-accuracy_map	mods/stats-rifle.cpp	/^	static constexpr std::string_view accuracy_map = "{grn}accuracy{\/grn}: ";$/;"	kind:variable	line:14	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
+accuracy_map	mods/rifle-stats.cpp	/^	static constexpr std::string_view accuracy_map = "{grn}accuracy{\/grn}: ";$/;"	kind:variable	line:14	namespace:mods::rifle_stats	typeref:typename:std::string_view	file:
 accuracy_map	mods/yaml.hpp	/^		std::array<float,MAX_ROOM_DISTANCE> accuracy_map;$/;"	kind:member	line:196	struct:mods::yaml::rifle_description_t	typeref:typename:std::array<float,MAX_ROOM_DISTANCE>	file:	access:public
 accuracy_map	mods/yaml.hpp	/^		std::array<float,MAX_ROOM_DISTANCE> accuracy_map;$/;"	kind:member	line:413	struct:mods::yaml::melee_description_t	typeref:typename:std::array<float,MAX_ROOM_DISTANCE>	file:	access:public
 accuracy_points	mods/rifle-attachments.hpp	/^			int16_t accuracy_points;$/;"	kind:member	line:106	struct:mods::rifle_attachments_t	typeref:typename:int16_t	file:	access:public
@@ -4857,7 +4859,7 @@ allows_duplicates	mods/string.cpp	/^	bool string::allows_duplicates() const {$/;
 alt_value_map	mods/values.cpp	/^		std::map<value_key_t,variants_t> alt_value_map;$/;"	kind:variable	line:24	namespace:mods::values	typeref:typename:std::map<value_key_t,variants_t>
 ammo	mods/player.cpp	/^	uint16_t player::ammo() {$/;"	kind:function	line:829	class:mods::player	typeref:typename:uint16_t	signature:()
 ammo	mods/rifle-instance-data.hpp	/^		uint16_t ammo;$/;"	kind:member	line:67	struct:rifle_instance_data	typeref:typename:uint16_t	file:	access:public
-ammo	mods/stats-rifle.cpp	/^	static constexpr std::string_view ammo = "{grn}ammo{\/grn}: ";$/;"	kind:variable	line:15	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
+ammo	mods/rifle-stats.cpp	/^	static constexpr std::string_view ammo = "{grn}ammo{\/grn}: ";$/;"	kind:variable	line:15	namespace:mods::rifle_stats	typeref:typename:std::string_view	file:
 ammo	mods/weapons/attachment-pathogen-ammunition.cpp	/^	uint16_t attachment_pathogen_ammunition::ammo() {$/;"	kind:function	line:85	class:mods::weapons::attachment_pathogen_ammunition	typeref:typename:uint16_t	signature:()
 ammo	mods/weapons/attachment-underbarrel.cpp	/^	uint16_t attachment_underbarrel::ammo() {$/;"	kind:function	line:34	class:mods::weapons::attachment_underbarrel	typeref:typename:uint16_t	signature:()
 ammo	structs.h	/^	uint16_t ammo;$/;"	kind:member	line:799	struct:obj_flag_data	typeref:typename:uint16_t	file:	access:public
@@ -5205,7 +5207,7 @@ base_damage	mods/corpse.cpp	/^		uint16_t base_damage;$/;"	kind:member	line:60	st
 base_damage	mods/forge-engine/generated-rifle.hpp	/^			auto base_damage() {$/;"	kind:function	line:770	struct:mods::forge_engine::generated_rifle_t	typeref:typename:auto	file:	access:private	signature:()
 base_damage	mods/ranged-combat-totals.hpp	/^		uint16_t base_damage;$/;"	kind:member	line:80	struct:mods::ranged_combat_totals	typeref:typename:uint16_t	file:	access:public
 base_damage	mods/rifle-attachments.hpp	/^			int16_t base_damage;$/;"	kind:member	line:59	struct:mods::rifle_attachments_t	typeref:typename:int16_t	file:	access:public
-base_damage	mods/stats-rifle.cpp	/^	static constexpr std::string_view base_damage = "{grn}base{\/grn}: ";$/;"	kind:variable	line:16	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
+base_damage	mods/rifle-stats.cpp	/^	static constexpr std::string_view base_damage = "{grn}base{\/grn}: ";$/;"	kind:variable	line:16	namespace:mods::rifle_stats	typeref:typename:std::string_view	file:
 base_damage	mods/unit-tests/class-sniper.cpp	/^		auto base_damage = mods::weapons::damage_calculator::calculate(attacker,weapon,victim);$/;"	kind:variable	line:42	typeref:typename:auto
 base_damage	mods/unit-tests/damage-types.cpp	/^		auto base_damage = mods::weapons::damage_calculator::calculate(attacker,weapon,victim);$/;"	kind:variable	line:351	typeref:typename:auto
 base_damage	mods/weapon.hpp	/^			int base_damage;$/;"	kind:member	line:167	struct:mods::weapon::yaml::rifle_description_t	typeref:typename:int	file:	access:public
@@ -5419,7 +5421,7 @@ build_weapon_locker	mods/intimidate.cpp	/^void build_weapon_locker(room_vnum roo
 build_weapon_locker	mods/zone.cpp	/^	void build_weapon_locker(room_vnum room) {$/;"	kind:function	line:35	namespace:mods::zone	typeref:typename:void	signature:(room_vnum room)
 builder	act.builder.cpp	/^namespace builder {$/;"	kind:namespace	line:713	file:
 builder	mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:182	namespace:mods	file:
-builder	mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:6387	namespace:mods	file:
+builder	mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:6397	namespace:mods	file:
 builder	mods/builder.hpp	/^namespace mods::builder {$/;"	kind:namespace	line:31	namespace:mods	file:
 builder	mods/builder/bookmarks.cpp	/^namespace mods::builder::bookmarks {$/;"	kind:namespace	line:7	namespace:mods	file:
 builder	mods/builder/bookmarks.hpp	/^namespace mods::builder::bookmarks {$/;"	kind:namespace	line:9	namespace:mods	file:
@@ -6164,7 +6166,7 @@ control	mods/message-server.cpp	/^		uint16_t control;$/;"	kind:member	line:27	st
 convert_to_array	mods/orm/mob-equipment.cpp	/^	std::array<std::string,NUM_WEARS> mob_equipment::convert_to_array() const {$/;"	kind:function	line:163	class:mods::orm::mob_equipment	typeref:typename:std::array<std::string,NUM_WEARS>	signature:() const
 convert_to_fire_nade	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::convert_to_fire_nade(obj_ptr_t& object){$/;"	kind:function	line:129	class:mods::classes::pyrexia	typeref:typename:std::pair<bool,std::string>	signature:(obj_ptr_t & object)
 convert_to_fire_nade	mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::convert_to_fire_nade(obj_ptr_t& object){$/;"	kind:function	line:74	class:mods::orm::pyrexia	typeref:typename:std::pair<bool,std::string>	signature:(obj_ptr_t & object)
-cooldown	mods/stats-rifle.cpp	/^	static constexpr std::string_view cooldown = "{grn}cooldown{\/grn}: ";$/;"	kind:variable	line:19	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
+cooldown	mods/rifle-stats.cpp	/^	static constexpr std::string_view cooldown = "{grn}cooldown{\/grn}: ";$/;"	kind:variable	line:19	namespace:mods::rifle_stats	typeref:typename:std::string_view	file:
 cooldown	mods/unit-tests/damage-types.cpp	/^		int cooldown = mods::weapons::damage_types::calculate_weapon_cooldown(attacker,victim,weapon, /;"	kind:variable	line:312	typeref:typename:int
 cooldown_between_shots	mods/forge-engine/generated-rifle.hpp	/^			auto cooldown_between_shots() {$/;"	kind:function	line:928	struct:mods::forge_engine::generated_rifle_t	typeref:typename:auto	file:	access:private	signature:()
 cooldown_between_shots	mods/ranged-combat-totals.hpp	/^		uint8_t cooldown_between_shots;$/;"	kind:member	line:76	struct:mods::ranged_combat_totals	typeref:typename:uint8_t	file:	access:public
@@ -6370,7 +6372,7 @@ created_at	mods/pq.hpp	/^	long created_at;$/;"	kind:member	line:712	struct:orm_b
 credentials	mods/conf.cpp	/^	static std::map<std::string,std::string> credentials;$/;"	kind:variable	line:4	namespace:mods::conf	typeref:typename:std::map<std::string,std::string>	file:
 credits	db.cpp	/^char *credits = NULL;		\/* game credits			 *\/$/;"	kind:variable	line:131	typeref:typename:char *
 crit	mods/values.hpp	/^			static inline void crit(T& p){$/;"	kind:function	line:1620	namespace:mods::values::msg	typeref:typename:void	file:	signature:(T & p)
-critical	mods/stats-rifle.cpp	/^	static constexpr std::string_view critical= "{grn}critical{\/grn}: ";$/;"	kind:variable	line:17	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
+critical	mods/rifle-stats.cpp	/^	static constexpr std::string_view critical= "{grn}critical{\/grn}: ";$/;"	kind:variable	line:17	namespace:mods::rifle_stats	typeref:typename:std::string_view	file:
 critical	mods/weapons/damage-calculator.hpp	/^		uint32_t critical;$/;"	kind:member	line:88	struct:mods::weapons::damage_calculator::explosive_damage_t	typeref:typename:uint32_t	file:	access:public
 critical_chance	mods/forge-engine/generated-rifle.hpp	/^			auto critical_chance() {$/;"	kind:function	line:246	struct:mods::forge_engine::generated_rifle_t	typeref:typename:auto	file:	access:private	signature:()
 critical_chance	mods/ranged-combat-totals.hpp	/^		uint16_t critical_chance;$/;"	kind:member	line:40	struct:mods::ranged_combat_totals	typeref:typename:uint16_t	file:	access:public
@@ -6448,7 +6450,7 @@ damage	mods/damage-event.hpp	/^	int damage;$/;"	kind:member	line:121	struct:feed
 damage	mods/ensnare.cpp	/^		int16_t damage;$/;"	kind:member	line:31	struct:mods::ensnare::ensnare_damage_t	typeref:typename:int16_t	file:	access:public
 damage	mods/melt.hpp	/^		int16_t damage;$/;"	kind:member	line:11	struct:mods::melt::melt_damage_t	typeref:typename:int16_t	file:	access:public
 damage	mods/player.hpp	/^			using damage = damage_event_t;$/;"	kind:typedef	line:83	struct:mods::player	typeref:typename:damage_event_t	file:	access:public
-damage	mods/stats-rifle.cpp	/^	static constexpr std::string_view damage = "{grn}damage{\/grn}: ";$/;"	kind:variable	line:20	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
+damage	mods/rifle-stats.cpp	/^	static constexpr std::string_view damage = "{grn}damage{\/grn}: ";$/;"	kind:variable	line:20	namespace:mods::rifle_stats	typeref:typename:std::string_view	file:
 damage	mods/weapon-types.hpp	/^		weapon_damage_t damage;$/;"	kind:member	line:12	struct:mods::weapon::weapon_type_statistics_t	typeref:typename:weapon_damage_t	file:	access:public
 damage	mods/weapons/damage-calculator.hpp	/^		uint32_t damage;$/;"	kind:member	line:87	struct:mods::weapons::damage_calculator::explosive_damage_t	typeref:typename:uint32_t	file:	access:public
 damage	mods/weapons/damage-types.cpp	/^		int damage(char_data *attacker, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:369	namespace:mods::weapons::damage_types::legacy	typeref:typename:int	signature:(char_data * attacker,char_data * victim,int dam,int attacktype)
@@ -7443,6 +7445,7 @@ export_class	mods/classes/base.cpp	/^	std::map<std::string,std::string>& skill_t
 export_class	mods/orm/armor-index.cpp	/^	strmap_t armor_index::export_class() {$/;"	kind:function	line:35	class:mods::orm::armor_index	typeref:typename:strmap_t	signature:()
 export_class	mods/orm/armor-index.hpp	/^		strmap_t export_class() {$/;"	kind:function	line:12	struct:mods::orm::armor_index_record_t	typeref:typename:strmap_t	file:	access:public	signature:()
 export_class	mods/orm/breacher.cpp	/^	strmap_t breacher::export_class() {$/;"	kind:function	line:24	class:mods::orm::breacher	typeref:typename:strmap_t	signature:()
+export_class	mods/orm/builder-transaction.hpp	/^		strmap_t export_class() {$/;"	kind:function	line:17	struct:mods::orm::notch_record_t	typeref:typename:strmap_t	file:	access:public	signature:()
 export_class	mods/orm/camera-feed.cpp	/^	strmap_t camera_feed::export_class() {$/;"	kind:function	line:14	class:mods::orm::camera_feed	typeref:typename:strmap_t	signature:()
 export_class	mods/orm/contagion.cpp	/^	strmap_t contagion::export_class() {$/;"	kind:function	line:24	class:mods::orm::contagion	typeref:typename:strmap_t	signature:()
 export_class	mods/orm/contract-steps.cpp	/^	strmap_t contract_steps::export_class() {$/;"	kind:function	line:130	class:mods::orm::contract_steps	typeref:typename:strmap_t	signature:()
@@ -7636,6 +7639,7 @@ feed_id	mods/orm/camera-feed.hpp	/^		id_type_t feed_id;$/;"	kind:member	line:38	
 feed_id	mods/orm/elevator.hpp	/^		id_type_t feed_id;$/;"	kind:member	line:38	struct:mods::orm::elevator	typeref:typename:id_type_t	file:	access:public
 feed_multi	mods/json/export.cpp	/^		void feed_multi(pqxx::result& r) {$/;"	kind:function	line:14	struct:mods::json::json_reader	typeref:typename:void	file:	access:public	signature:(pqxx::result & r)
 feed_multi	mods/orm/armor-index.cpp	/^	void armor_index::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:45	class:mods::orm::armor_index	typeref:typename:void	signature:(pqxx::result & in_rows)
+feed_multi	mods/orm/builder-transaction.cpp	/^	void notch::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:18	class:mods::orm::notch	typeref:typename:void	signature:(pqxx::result & in_rows)
 feed_multi	mods/orm/mini-game.hpp	/^		int16_t feed_multi(TResultSet rows){$/;"	kind:function	line:34	struct:mods::orm::mini_game	typeref:typename:int16_t	file:	access:public	signature:(TResultSet rows)
 feed_multi	mods/orm/mob-roam.cpp	/^	void mob_roam::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:77	class:mods::orm::mob_roam	typeref:typename:void	signature:(pqxx::result & in_rows)
 feed_multi	mods/orm/notch.cpp	/^	void notch::feed_multi(pqxx::result& in_rows) {$/;"	kind:function	line:18	class:mods::orm::notch	typeref:typename:void	signature:(pqxx::result & in_rows)
@@ -7959,7 +7963,7 @@ forget	mobact.cpp	/^void forget(char_data *ch,char_data *victim) {$/;"	kind:func
 forget	mods/mobs/mini-gunner.cpp	/^	void mini_gunner::forget(uuid_t player) {$/;"	kind:function	line:312	class:mods::mobs::mini_gunner	typeref:typename:void	signature:(uuid_t player)
 forget	mods/mobs/smart-mob.cpp	/^	void smart_mob::forget(uuid_t player) {$/;"	kind:function	line:285	class:mods::mobs::smart_mob	typeref:typename:void	signature:(uuid_t player)
 format	mods/builder.cpp	/^	str_t format;$/;"	kind:member	line:2135	struct:command_t	typeref:typename:str_t	file:	access:public
-format_rifle_stats_page	mods/stats-rifle.cpp	/^	std::string format_rifle_stats_page(std::map<std::string,std::string>& page) {$/;"	kind:function	line:65	namespace:mods::stats_rifle	typeref:typename:std::string	signature:(std::map<std::string,std::string> & page)
+format_rifle_stats_page	mods/rifle-stats.cpp	/^	std::string format_rifle_stats_page(std::map<std::string,std::string>& page) {$/;"	kind:function	line:65	namespace:mods::rifle_stats	typeref:typename:std::string	signature:(std::map<std::string,std::string> & page)
 format_stats_page	mods/stats.cpp	/^	std::string format_stats_page(std::string_view type,std::map<std::string,std::string>&& page) {$/;"	kind:function	line:29	namespace:mods::stats	typeref:typename:std::string	signature:(std::string_view type,std::map<std::string,std::string> && page)
 found	mods/js.cpp	/^				bool found;$/;"	kind:member	line:43	struct:mods::js::utils::find_player_payload_t	typeref:typename:bool	file:	access:public
 found	mods/scan.hpp	/^			bool found;$/;"	kind:member	line:33	struct:mods::scan::find_results_t	typeref:typename:bool	file:	access:public
@@ -8789,47 +8793,47 @@ hunting	mods/mobs/smart-mob.hpp	/^			uuidvec_t hunting;$/;"	kind:member	line:161
 hunting	mods/player.hpp	/^			char_data* hunting() {$/;"	kind:function	line:260	struct:mods::player	typeref:typename:char_data *	file:	access:public	signature:()
 hunting	structs.h	/^	char_data *hunting;	\/* Char hunted by this char		*\/$/;"	kind:member	line:1444	struct:char_special_data	typeref:typename:char_data *	file:	access:public
 hupsig	comm.cpp	/^RETSIGTYPE hupsig(int sig) {$/;"	kind:function	line:2290	typeref:typename:RETSIGTYPE	signature:(int sig)
-i_a_map	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_a_map = i_hs_bonus + 1;$/;"	kind:variable	line:36	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_accuracy	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_accuracy = i_ammo + 1;$/;"	kind:variable	line:31	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_ammo	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ammo = i_base_damage + 1;$/;"	kind:variable	line:29	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_base_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_base_damage = i_hr + 1;$/;"	kind:variable	line:25	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_cooldown	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_cooldown = i_ammo + 1;$/;"	kind:variable	line:30	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_critical	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_critical = i_base_damage + 1;$/;"	kind:variable	line:27	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_damage = i_base_damage + 1;$/;"	kind:variable	line:26	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_effective_range	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_effective_range = i_accuracy + 1;$/;"	kind:variable	line:32	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_ele_anti_matter_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_anti_matter_damage = i_ele_shock_damage + 1;$/;"	kind:variable	line:45	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_ele_corrosive_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_corrosive_damage = i_ele_shrapnel_damage + 1;$/;"	kind:variable	line:40	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_ele_cryogenic_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_cryogenic_damage = i_ele_corrosive_damage + 1;$/;"	kind:variable	line:41	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_ele_emp_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_emp_damage = i_ele_radioactive_damage + 1;$/;"	kind:variable	line:43	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_ele_explosive_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_explosive_damage = i_ele_incendiary_damage + 1;$/;"	kind:variable	line:38	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_ele_incendiary_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_incendiary_damage = i_a_map + 1;$/;"	kind:variable	line:37	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_ele_radioactive_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_radioactive_damage = i_ele_cryogenic_damage + 1;$/;"	kind:variable	line:42	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_ele_shock_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_shock_damage = i_ele_emp_damage + 1;$/;"	kind:variable	line:44	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_ele_shrapnel_damage	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_ele_shrapnel_damage = i_ele_explosive_damage + 1;$/;"	kind:variable	line:39	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_etc	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_etc = i_stat_wisdom + 1;$/;"	kind:variable	line:60	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_hr	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_hr = 2;$/;"	kind:variable	line:24	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_hs_bonus	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_hs_bonus = i_range_mult + 1;$/;"	kind:variable	line:35	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_injure	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_injure = i_critical + 1;$/;"	kind:variable	line:28	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_manufacturer	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_manufacturer = 0;$/;"	kind:variable	line:22	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_max_count	mods/stats-rifle.cpp	/^	static constexpr std::size_t i_max_count = i_etc + 1;$/;"	kind:variable	line:61	namespace:mods::stats_rifle	typeref:typename:std::size_t	file:
-i_max_range	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_max_range = i_effective_range + 1;$/;"	kind:variable	line:33	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_range_mult	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_range_mult = i_max_range + 1;$/;"	kind:variable	line:34	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_armor	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_armor = i_ele_anti_matter_damage + 1;$/;"	kind:variable	line:46	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_chemistry	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_chemistry = i_stat_armor + 1;$/;"	kind:variable	line:47	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_constitution	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_constitution = i_stat_chemistry + 1;$/;"	kind:variable	line:48	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_demolitions	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_demolitions = i_stat_constitution + 1;$/;"	kind:variable	line:49	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_dexterity	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_dexterity = i_stat_demolitions + 1;$/;"	kind:variable	line:50	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_electronics	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_electronics = i_stat_dexterity + 1;$/;"	kind:variable	line:51	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_intelligence	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_intelligence = i_stat_electronics + 1;$/;"	kind:variable	line:52	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_marksmanship	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_marksmanship = i_stat_intelligence + 1;$/;"	kind:variable	line:53	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_medical	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_medical = i_stat_marksmanship + 1;$/;"	kind:variable	line:54	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_sniping	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_sniping = i_stat_medical + 1;$/;"	kind:variable	line:55	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_strategy	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_strategy = i_stat_sniping + 1;$/;"	kind:variable	line:56	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_strength	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_strength = i_stat_strategy + 1;$/;"	kind:variable	line:57	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_wh	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_wh = i_stat_strength + 1;$/;"	kind:variable	line:58	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
-i_stat_wisdom	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_stat_wisdom  = i_stat_wh + 1;$/;"	kind:variable	line:59	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_a_map	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_a_map = i_hs_bonus + 1;$/;"	kind:variable	line:36	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_accuracy	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_accuracy = i_ammo + 1;$/;"	kind:variable	line:31	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_ammo	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_ammo = i_base_damage + 1;$/;"	kind:variable	line:29	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_base_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_base_damage = i_hr + 1;$/;"	kind:variable	line:25	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_cooldown	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_cooldown = i_ammo + 1;$/;"	kind:variable	line:30	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_critical	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_critical = i_base_damage + 1;$/;"	kind:variable	line:27	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_damage = i_base_damage + 1;$/;"	kind:variable	line:26	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_effective_range	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_effective_range = i_accuracy + 1;$/;"	kind:variable	line:32	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_ele_anti_matter_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_ele_anti_matter_damage = i_ele_shock_damage + 1;$/;"	kind:variable	line:45	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_ele_corrosive_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_ele_corrosive_damage = i_ele_shrapnel_damage + 1;$/;"	kind:variable	line:40	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_ele_cryogenic_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_ele_cryogenic_damage = i_ele_corrosive_damage + 1;$/;"	kind:variable	line:41	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_ele_emp_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_ele_emp_damage = i_ele_radioactive_damage + 1;$/;"	kind:variable	line:43	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_ele_explosive_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_ele_explosive_damage = i_ele_incendiary_damage + 1;$/;"	kind:variable	line:38	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_ele_incendiary_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_ele_incendiary_damage = i_a_map + 1;$/;"	kind:variable	line:37	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_ele_radioactive_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_ele_radioactive_damage = i_ele_cryogenic_damage + 1;$/;"	kind:variable	line:42	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_ele_shock_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_ele_shock_damage = i_ele_emp_damage + 1;$/;"	kind:variable	line:44	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_ele_shrapnel_damage	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_ele_shrapnel_damage = i_ele_explosive_damage + 1;$/;"	kind:variable	line:39	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_etc	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_etc = i_stat_wisdom + 1;$/;"	kind:variable	line:60	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_hr	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_hr = 2;$/;"	kind:variable	line:24	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_hs_bonus	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_hs_bonus = i_range_mult + 1;$/;"	kind:variable	line:35	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_injure	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_injure = i_critical + 1;$/;"	kind:variable	line:28	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_manufacturer	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_manufacturer = 0;$/;"	kind:variable	line:22	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_max_count	mods/rifle-stats.cpp	/^	static constexpr std::size_t i_max_count = i_etc + 1;$/;"	kind:variable	line:61	namespace:mods::rifle_stats	typeref:typename:std::size_t	file:
+i_max_range	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_max_range = i_effective_range + 1;$/;"	kind:variable	line:33	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_range_mult	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_range_mult = i_max_range + 1;$/;"	kind:variable	line:34	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_armor	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_armor = i_ele_anti_matter_damage + 1;$/;"	kind:variable	line:46	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_chemistry	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_chemistry = i_stat_armor + 1;$/;"	kind:variable	line:47	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_constitution	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_constitution = i_stat_chemistry + 1;$/;"	kind:variable	line:48	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_demolitions	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_demolitions = i_stat_constitution + 1;$/;"	kind:variable	line:49	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_dexterity	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_dexterity = i_stat_demolitions + 1;$/;"	kind:variable	line:50	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_electronics	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_electronics = i_stat_dexterity + 1;$/;"	kind:variable	line:51	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_intelligence	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_intelligence = i_stat_electronics + 1;$/;"	kind:variable	line:52	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_marksmanship	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_marksmanship = i_stat_intelligence + 1;$/;"	kind:variable	line:53	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_medical	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_medical = i_stat_marksmanship + 1;$/;"	kind:variable	line:54	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_sniping	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_sniping = i_stat_medical + 1;$/;"	kind:variable	line:55	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_strategy	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_strategy = i_stat_sniping + 1;$/;"	kind:variable	line:56	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_strength	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_strength = i_stat_strategy + 1;$/;"	kind:variable	line:57	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_wh	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_wh = i_stat_strength + 1;$/;"	kind:variable	line:58	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
+i_stat_wisdom	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_stat_wisdom  = i_stat_wh + 1;$/;"	kind:variable	line:59	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
 i_storage	mods/util.hpp	/^		std::vector<int> i_storage;$/;"	kind:member	line:469	struct:mods::util::args::parsed_args	typeref:typename:std::vector<int>	file:	access:public
-i_title	mods/stats-rifle.cpp	/^	static constexpr uint16_t i_title = 1;$/;"	kind:variable	line:23	namespace:mods::stats_rifle	typeref:typename:uint16_t	file:
+i_title	mods/rifle-stats.cpp	/^	static constexpr uint16_t i_title = 1;$/;"	kind:variable	line:23	namespace:mods::rifle_stats	typeref:typename:uint16_t	file:
 id	db.h	/^	long id;$/;"	kind:member	line:276	struct:player_index_element	typeref:typename:long	file:	access:public
 id	mods/behaviour_tree_node.hpp	/^				uint64_t id;$/;"	kind:member	line:30	struct:mods::behaviour_tree_node::__anon8e904b360108	typeref:typename:uint64_t	file:	access:public
 id	mods/bleed.cpp	/^		uint32_t id;$/;"	kind:member	line:28	struct:mods::bleed::bleed_damage_t	typeref:typename:uint32_t	file:	access:public
@@ -8842,6 +8846,7 @@ id	mods/loot.cpp	/^		uint32_t id;$/;"	kind:member	line:15	struct:mods::loot::loo
 id	mods/melt.hpp	/^		uint32_t id;$/;"	kind:member	line:8	struct:mods::melt::melt_damage_t	typeref:typename:uint32_t	file:	access:public
 id	mods/orm/armor-index.hpp	/^		id_type_t id;$/;"	kind:member	line:64	struct:mods::orm::armor_index	typeref:typename:id_type_t	file:	access:public
 id	mods/orm/breacher.hpp	/^		uint64_t id;$/;"	kind:member	line:38	struct:mods::orm::breacher	typeref:typename:uint64_t	file:	access:public
+id	mods/orm/builder-transaction.hpp	/^		uint64_t id;$/;"	kind:member	line:13	struct:mods::orm::notch_record_t	typeref:typename:uint64_t	file:	access:public
 id	mods/orm/camera-feed.hpp	/^		id_type_t id;$/;"	kind:member	line:37	struct:mods::orm::camera_feed	typeref:typename:id_type_t	file:	access:public
 id	mods/orm/chargen.hpp	/^		uint64_t id;$/;"	kind:member	line:26	struct:mods::orm::player_classes	typeref:typename:uint64_t	file:	access:public
 id	mods/orm/chargen.hpp	/^		uint64_t id;$/;"	kind:member	line:36	struct:mods::orm::player_races	typeref:typename:uint64_t	file:	access:public
@@ -9001,6 +9006,7 @@ increment_last_attack_significance	mods/mobs/generic-thief.cpp	/^	void generic_t
 increment_player_combat_usage	mods/skills.cpp	/^	void increment_player_combat_usage(player_ptr_t& player,std::string_view skill_name) {$/;"	kind:function	line:214	namespace:mods::skills	typeref:typename:void	signature:(player_ptr_t & player,std::string_view skill_name)
 increment_player_cqc_usage	mods/skills.cpp	/^	void increment_player_cqc_usage(player_ptr_t& player,std::string_view skill_name) {$/;"	kind:function	line:217	namespace:mods::skills	typeref:typename:void	signature:(player_ptr_t & player,std::string_view skill_name)
 increment_player_defense_usage	mods/skills.cpp	/^	void increment_player_defense_usage(player_ptr_t& player,std::string_view skill_name) {$/;"	kind:function	line:220	namespace:mods::skills	typeref:typename:void	signature:(player_ptr_t & player,std::string_view skill_name)
+increment_player_notch	mods/orm/builder-transaction.cpp	/^	std::tuple<int16_t,std::string> increment_player_notch(player_ptr_t& player,std::string_view no/;"	kind:function	line:29	namespace:mods::orm	typeref:typename:std::tuple<int16_t,std::string>	signature:(player_ptr_t & player,std::string_view notch)
 increment_player_notch	mods/orm/notch.cpp	/^	std::tuple<int16_t,std::string> increment_player_notch(player_ptr_t& player,std::string_view no/;"	kind:function	line:29	namespace:mods::orm	typeref:typename:std::tuple<int16_t,std::string>	signature:(player_ptr_t & player,std::string_view notch)
 increment_technique	mods/classes/includes.hpp	/^	static inline void increment_technique(player_ptr_t& attacker,std::string technique) {$/;"	kind:function	line:128	namespace:mods::classes	typeref:typename:void	file:	signature:(player_ptr_t & attacker,std::string technique)
 increment_yaml_transaction_id	mods/object-utils.hpp	/^	static inline void increment_yaml_transaction_id() {$/;"	kind:function	line:112	namespace:mods::object_utils	typeref:typename:void	file:	signature:()
@@ -9030,7 +9036,7 @@ init	mods/ban-system.cpp	/^		void init() {$/;"	kind:function	line:393	namespace:
 init	mods/bleed.cpp	/^	void init() {$/;"	kind:function	line:241	namespace:mods::bleed	typeref:typename:void	signature:()
 init	mods/blind.cpp	/^	void init() {$/;"	kind:function	line:151	namespace:mods::blind	typeref:typename:void	signature:()
 init	mods/boosters/adrenaline-shot.cpp	/^		void init() {$/;"	kind:function	line:78	namespace:mods::boosters::adrenaline_shot_init	typeref:typename:void	signature:()
-init	mods/builder.cpp	/^	void init() {$/;"	kind:function	line:6474	namespace:mods::builder	typeref:typename:void	signature:()
+init	mods/builder.cpp	/^	void init() {$/;"	kind:function	line:6484	namespace:mods::builder	typeref:typename:void	signature:()
 init	mods/builder/bookmarks.cpp	/^	void init() {$/;"	kind:function	line:103	namespace:mods::builder::bookmarks	typeref:typename:void	signature:()
 init	mods/builder/conbuild.cpp	/^	void init() {$/;"	kind:function	line:630	namespace:mods::builder::conbuild	typeref:typename:void	signature:()
 init	mods/builder/hqbuild.cpp	/^	void init() {$/;"	kind:function	line:343	namespace:mods::builder::hqbuild	typeref:typename:void	signature:()
@@ -9230,7 +9236,7 @@ inject_adrenaline_shot	mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> gh
 injure	mods/injure.cpp	/^namespace mods::injure {$/;"	kind:namespace	line:11	namespace:mods	file:
 injure	mods/injure.hpp	/^namespace mods::injure {$/;"	kind:namespace	line:5	namespace:mods	file:
 injure	mods/projectile.cpp	/^namespace mods::injure {$/;"	kind:namespace	line:59	namespace:mods	file:
-injure	mods/stats-rifle.cpp	/^	static constexpr std::string_view injure= "{grn}injure{\/grn}: ";$/;"	kind:variable	line:18	namespace:mods::stats_rifle	typeref:typename:std::string_view	file:
+injure	mods/rifle-stats.cpp	/^	static constexpr std::string_view injure= "{grn}injure{\/grn}: ";$/;"	kind:variable	line:18	namespace:mods::rifle_stats	typeref:typename:std::string_view	file:
 injure_player	mods/injure.cpp	/^	void injure_player(player_ptr_t& person) {$/;"	kind:function	line:12	namespace:mods::injure	typeref:typename:void	signature:(player_ptr_t & person)
 injure_roll	mods/weapons/damage-event-broadcaster.hpp	/^	void injure_roll(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t& feed/;"	kind:function	line:18	namespace:mods::weapons::damage_types	typeref:typename:void	signature:(player_ptr_t & attacker,player_ptr_t & victim,obj_ptr_t & weapon,feedback_t & feedback)
 injured	mods/damage-event.hpp	/^	std::vector<uuid_t> injured;$/;"	kind:member	line:123	struct:feedback_t	typeref:typename:std::vector<uuid_t>	file:	access:public
@@ -9729,6 +9735,7 @@ load_by_player	mods/orm/support.cpp	/^	int16_t support::load_by_player(uint64_t 
 load_by_player	mods/orm/syndrome.cpp	/^	int16_t syndrome::load_by_player(uint64_t player_id){$/;"	kind:function	line:28	class:mods::orm::syndrome	typeref:typename:int16_t	signature:(uint64_t player_id)
 load_by_player	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_by_player(TObject* s,const TPlayerID& player/;"	kind:function	line:345	namespace:mods::orm::util	typeref:typename:std::tuple<int16_t,std::string>	file:	signature:(TObject * s,const TPlayerID & player_id)
 load_by_player_and	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string,pqxx_result_t> load_by_player_and($/;"	kind:function	line:357	namespace:mods::orm::util	typeref:typename:std::tuple<int16_t,std::string,pqxx_result_t>	file:	signature:(TObject * s,std::map<std::string,std::string> statements)
+load_by_player_and_notch	mods/orm/builder-transaction.hpp	/^		auto load_by_player_and_notch(const uint64_t& player_id,std::string_view notch_name) {$/;"	kind:function	line:67	struct:mods::orm::notch	typeref:typename:auto	file:	access:public	signature:(const uint64_t & player_id,std::string_view notch_name)
 load_by_player_and_notch	mods/orm/notch.hpp	/^		auto load_by_player_and_notch(const uint64_t& player_id,std::string_view notch_name) {$/;"	kind:function	line:67	struct:mods::orm::notch	typeref:typename:auto	file:	access:public	signature:(const uint64_t & player_id,std::string_view notch_name)
 load_by_profile	mods/orm/hq.cpp	/^	int16_t hq::load_by_profile(std::string_view affiliation) {$/;"	kind:function	line:38	class:mods::orm::hq	typeref:typename:int16_t	signature:(std::string_view affiliation)
 load_by_profile	mods/orm/mob-equipment.cpp	/^	int16_t mob_equipment::load_by_profile(std::string_view profile_name) {$/;"	kind:function	line:193	class:mods::orm::mob_equipment	typeref:typename:int16_t	signature:(std::string_view profile_name)
@@ -10292,6 +10299,8 @@ m_debug	mods/no-drop.cpp	/^#define m_debug(/;"	kind:macro	line:10	file:	signatur
 m_debug	mods/no-drop.cpp	/^#define m_debug(/;"	kind:macro	line:7	file:	signature:(MSG)
 m_debug	mods/notch.cpp	/^#define m_debug(/;"	kind:macro	line:11	file:	signature:(MSG)
 m_debug	mods/notch.cpp	/^#define m_debug(/;"	kind:macro	line:14	file:	signature:(MSG)
+m_debug	mods/orm/builder-transaction.cpp	/^#define m_debug(/;"	kind:macro	line:11	file:	signature:(MSG)
+m_debug	mods/orm/builder-transaction.cpp	/^#define m_debug(/;"	kind:macro	line:8	file:	signature:(MSG)
 m_debug	mods/orm/connector.hpp	/^#define m_debug(/;"	kind:macro	line:5	file:	signature:(A)
 m_debug	mods/orm/contract-steps.cpp	/^#define m_debug(/;"	kind:macro	line:5	file:	signature:(a)
 m_debug	mods/orm/contract-steps.cpp	/^#define m_debug(/;"	kind:macro	line:7	file:	signature:(a)
@@ -10316,6 +10325,8 @@ m_debug	mods/radio.cpp	/^#define m_debug(/;"	kind:macro	line:5	file:	signature:(
 m_debug	mods/radio.cpp	/^#define m_debug(/;"	kind:macro	line:7	file:	signature:(a)
 m_debug	mods/resting.cpp	/^#define m_debug(/;"	kind:macro	line:10	file:	signature:(A)
 m_debug	mods/resting.cpp	/^#define m_debug(/;"	kind:macro	line:7	file:	signature:(A)
+m_debug	mods/rifle-stats.cpp	/^#define m_debug(/;"	kind:macro	line:5	file:	signature:(MSG)
+m_debug	mods/rifle-stats.cpp	/^#define m_debug(/;"	kind:macro	line:8	file:	signature:(MSG)
 m_debug	mods/rifle.cpp	/^#define m_debug(/;"	kind:macro	line:21	file:	signature:(MSG)
 m_debug	mods/rifle.cpp	/^#define m_debug(/;"	kind:macro	line:24	file:	signature:(MSG)
 m_debug	mods/skill-orm-adaptor.cpp	/^#define m_debug(/;"	kind:macro	line:7	file:	signature:(A)
@@ -10324,8 +10335,6 @@ m_debug	mods/skills.cpp	/^#define m_debug(/;"	kind:macro	line:12	file:	signature
 m_debug	mods/skills.cpp	/^#define m_debug(/;"	kind:macro	line:14	file:	signature:(A)
 m_debug	mods/stat-bonuses.cpp	/^#define m_debug(/;"	kind:macro	line:12	file:	signature:(a)
 m_debug	mods/stat-bonuses.cpp	/^#define m_debug(/;"	kind:macro	line:14	file:	signature:(a)
-m_debug	mods/stats-rifle.cpp	/^#define m_debug(/;"	kind:macro	line:5	file:	signature:(MSG)
-m_debug	mods/stats-rifle.cpp	/^#define m_debug(/;"	kind:macro	line:8	file:	signature:(MSG)
 m_debug	mods/stats.cpp	/^#define m_debug(/;"	kind:macro	line:20	file:	signature:(MSG)
 m_debug	mods/stats.cpp	/^#define m_debug(/;"	kind:macro	line:23	file:	signature:(MSG)
 m_debug	mods/string.cpp	/^#define m_debug(/;"	kind:macro	line:4	file:	signature:(a)
@@ -10432,6 +10441,8 @@ m_error	mods/no-drop.cpp	/^#define m_error(/;"	kind:macro	line:11	file:	signatur
 m_error	mods/no-drop.cpp	/^#define m_error(/;"	kind:macro	line:8	file:	signature:(MSG)
 m_error	mods/notch.cpp	/^#define m_error(/;"	kind:macro	line:12	file:	signature:(MSG)
 m_error	mods/notch.cpp	/^#define m_error(/;"	kind:macro	line:15	file:	signature:(MSG)
+m_error	mods/orm/builder-transaction.cpp	/^#define m_error(/;"	kind:macro	line:12	file:	signature:(MSG)
+m_error	mods/orm/builder-transaction.cpp	/^#define m_error(/;"	kind:macro	line:9	file:	signature:(MSG)
 m_error	mods/orm/inventory.cpp	/^#define m_error(/;"	kind:macro	line:15	file:	signature:(a)
 m_error	mods/orm/inventory.cpp	/^#define m_error(/;"	kind:macro	line:18	file:	signature:(a)
 m_error	mods/orm/notch.cpp	/^#define m_error(/;"	kind:macro	line:12	file:	signature:(MSG)
@@ -10440,12 +10451,12 @@ m_error	mods/projectile.cpp	/^#define m_error(/;"	kind:macro	line:43	file:	signa
 m_error	mods/radioactive.cpp	/^#define m_error(/;"	kind:macro	line:19	file:	signature:(MSG)
 m_error	mods/resting.cpp	/^#define m_error(/;"	kind:macro	line:11	file:	signature:(A)
 m_error	mods/resting.cpp	/^#define m_error(/;"	kind:macro	line:8	file:	signature:(A)
+m_error	mods/rifle-stats.cpp	/^#define m_error(/;"	kind:macro	line:6	file:	signature:(MSG)
+m_error	mods/rifle-stats.cpp	/^#define m_error(/;"	kind:macro	line:9	file:	signature:(MSG)
 m_error	mods/rifle.cpp	/^#define m_error(/;"	kind:macro	line:22	file:	signature:(MSG)
 m_error	mods/rifle.cpp	/^#define m_error(/;"	kind:macro	line:25	file:	signature:(MSG)
 m_error	mods/shock.cpp	/^#define m_error(/;"	kind:macro	line:19	file:	signature:(MSG)
 m_error	mods/shrapnel.cpp	/^#define m_error(/;"	kind:macro	line:20	file:	signature:(MSG)
-m_error	mods/stats-rifle.cpp	/^#define m_error(/;"	kind:macro	line:6	file:	signature:(MSG)
-m_error	mods/stats-rifle.cpp	/^#define m_error(/;"	kind:macro	line:9	file:	signature:(MSG)
 m_error	mods/stats.cpp	/^#define m_error(/;"	kind:macro	line:21	file:	signature:(MSG)
 m_error	mods/stats.cpp	/^#define m_error(/;"	kind:macro	line:24	file:	signature:(MSG)
 m_error	mods/weapons/reload.cpp	/^#define m_error(/;"	kind:macro	line:9	file:	signature:(a)
@@ -11520,7 +11531,7 @@ mods	mods/bugs-fixtures.hpp	/^namespace mods::bugs {$/;"	kind:namespace	line:7	f
 mods	mods/builder.cpp	/^namespace mods {$/;"	kind:namespace	line:35	file:
 mods	mods/builder.cpp	/^namespace mods {$/;"	kind:namespace	line:38	file:
 mods	mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:182	file:
-mods	mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:6387	file:
+mods	mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:6397	file:
 mods	mods/builder.hpp	/^namespace mods::builder {$/;"	kind:namespace	line:31	file:
 mods	mods/builder/bookmarks.cpp	/^namespace mods::builder::bookmarks {$/;"	kind:namespace	line:7	file:
 mods	mods/builder/bookmarks.hpp	/^namespace mods::builder::bookmarks {$/;"	kind:namespace	line:9	file:
@@ -11918,6 +11929,8 @@ mods	mods/orm/base.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:2	file:
 mods	mods/orm/base.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:13	file:
 mods	mods/orm/breacher.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:4	file:
 mods	mods/orm/breacher.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	file:
+mods	mods/orm/builder-transaction.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:16	file:
+mods	mods/orm/builder-transaction.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:8	file:
 mods	mods/orm/camera-feed.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:3	file:
 mods	mods/orm/camera-feed.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	file:
 mods	mods/orm/chargen.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:9	file:
@@ -12087,6 +12100,8 @@ mods	mods/resting.cpp	/^namespace mods::resting {$/;"	kind:namespace	line:14	fil
 mods	mods/resting.hpp	/^namespace mods::resting {$/;"	kind:namespace	line:6	file:
 mods	mods/rifle-attachments.cpp	/^namespace mods {$/;"	kind:namespace	line:7	file:
 mods	mods/rifle-attachments.hpp	/^namespace mods {$/;"	kind:namespace	line:12	file:
+mods	mods/rifle-stats.cpp	/^namespace mods::rifle_stats {$/;"	kind:namespace	line:13	file:
+mods	mods/rifle-stats.hpp	/^namespace mods::rifle_stats {$/;"	kind:namespace	line:5	file:
 mods	mods/rifle.cpp	/^namespace mods::rifle {$/;"	kind:namespace	line:28	file:
 mods	mods/rifle.hpp	/^namespace mods::rifle {$/;"	kind:namespace	line:5	file:
 mods	mods/rooms.cpp	/^namespace mods::globals {$/;"	kind:namespace	line:12	file:
@@ -12136,8 +12151,6 @@ mods	mods/sql.hpp	/^namespace mods::sql {$/;"	kind:namespace	line:28	file:
 mods	mods/sql.hpp	/^namespace mods::values {$/;"	kind:namespace	line:23	file:
 mods	mods/stat-bonuses.cpp	/^namespace mods::stat_bonuses {$/;"	kind:namespace	line:17	file:
 mods	mods/stat-bonuses.hpp	/^namespace mods::stat_bonuses {$/;"	kind:namespace	line:8	file:
-mods	mods/stats-rifle.cpp	/^namespace mods::stats_rifle {$/;"	kind:namespace	line:13	file:
-mods	mods/stats-rifle.hpp	/^namespace mods::stats_rifle {$/;"	kind:namespace	line:5	file:
 mods	mods/stats.cpp	/^namespace mods::stats {$/;"	kind:namespace	line:28	file:
 mods	mods/stats.hpp	/^namespace mods::stats {$/;"	kind:namespace	line:5	file:
 mods	mods/string.cpp	/^namespace mods {$/;"	kind:namespace	line:5	file:
@@ -12386,8 +12399,11 @@ mzone_debug	mods/intimidate.hpp	/^#define mzone_debug(/;"	kind:macro	line:10	fil
 mzone_debug	mods/intimidate.hpp	/^#define mzone_debug(/;"	kind:macro	line:8	file:	signature:(a)
 mzone_debug	mods/zone.hpp	/^#define mzone_debug(/;"	kind:macro	line:10	file:	signature:(a)
 mzone_debug	mods/zone.hpp	/^#define mzone_debug(/;"	kind:macro	line:8	file:	signature:(a)
+n_name	mods/orm/builder-transaction.hpp	/^		std::string n_name;$/;"	kind:member	line:14	struct:mods::orm::notch_record_t	typeref:typename:std::string	file:	access:public
 n_name	mods/orm/notch.hpp	/^		std::string n_name;$/;"	kind:member	line:14	struct:mods::orm::notch_record_t	typeref:typename:std::string	file:	access:public
+n_player_id	mods/orm/builder-transaction.hpp	/^		uint64_t n_player_id;$/;"	kind:member	line:16	struct:mods::orm::notch_record_t	typeref:typename:uint64_t	file:	access:public
 n_player_id	mods/orm/notch.hpp	/^		uint64_t n_player_id;$/;"	kind:member	line:16	struct:mods::orm::notch_record_t	typeref:typename:uint64_t	file:	access:public
+n_points	mods/orm/builder-transaction.hpp	/^		uint16_t n_points;$/;"	kind:member	line:15	struct:mods::orm::notch_record_t	typeref:typename:uint16_t	file:	access:public
 n_points	mods/orm/notch.hpp	/^		uint16_t n_points;$/;"	kind:member	line:15	struct:mods::orm::notch_record_t	typeref:typename:uint16_t	file:	access:public
 name	db.h	/^		std::string name;   \/* name of this zone                  *\/$/;"	kind:member	line:209	struct:zone_data	typeref:typename:std::string	file:	access:public
 name	db.h	/^	char	name[MAX_NAME_LENGTH+1];$/;"	kind:member	line:298	struct:ban_list_element	typeref:typename:char[]	file:	access:public
@@ -12526,10 +12542,14 @@ not_found	act.social.cpp	/^	char *not_found;$/;"	kind:member	line:58	struct:soci
 not_learned	mods/classes/base.cpp	/^	bool skill_t::not_learned() const {$/;"	kind:function	line:56	class:mods::classes::skill_t	typeref:typename:bool	signature:() const
 notch	mods/notch.cpp	/^namespace mods::notch {$/;"	kind:namespace	line:19	namespace:mods	file:
 notch	mods/notch.hpp	/^namespace mods::notch {$/;"	kind:namespace	line:5	namespace:mods	file:
+notch	mods/orm/builder-transaction.hpp	/^		notch() {$/;"	kind:function	line:54	struct:mods::orm::notch	file:	access:public	signature:()
+notch	mods/orm/builder-transaction.hpp	/^	struct notch : public mods::orm::orm_base<notch,std::string> {$/;"	kind:struct	line:32	namespace:mods::orm	file:	inherits:mods::orm::orm_base<notch,std::string>
 notch	mods/orm/notch.hpp	/^		notch() {$/;"	kind:function	line:54	struct:mods::orm::notch	file:	access:public	signature:()
 notch	mods/orm/notch.hpp	/^	struct notch : public mods::orm::orm_base<notch,std::string> {$/;"	kind:struct	line:32	namespace:mods::orm	file:	inherits:mods::orm::orm_base<notch,std::string>
 notch_it	mods/notch.cpp	/^	void notch_it(auto player, auto type) {$/;"	kind:function	line:21	namespace:mods::notch	typeref:typename:void	signature:(auto player,auto type)
+notch_record_t	mods/orm/builder-transaction.hpp	/^	struct notch_record_t {$/;"	kind:struct	line:12	namespace:mods::orm	file:
 notch_record_t	mods/orm/notch.hpp	/^	struct notch_record_t {$/;"	kind:struct	line:12	namespace:mods::orm	file:
+notch_table_name	mods/orm/builder-transaction.hpp	/^	static constexpr std::string_view notch_table_name = "notch";$/;"	kind:variable	line:11	namespace:mods::orm	typeref:typename:std::string_view	file:
 notch_table_name	mods/orm/notch.hpp	/^	static constexpr std::string_view notch_table_name = "notch";$/;"	kind:variable	line:11	namespace:mods::orm	typeref:typename:std::string_view	file:
 now	mods/date-time.cpp	/^	std::string now() {$/;"	kind:function	line:53	namespace:mods::date_time::irl	typeref:typename:std::string	signature:()
 nowhere	mods/builder.cpp	/^#define nowhere /;"	kind:macro	line:60	file:
@@ -12783,6 +12803,8 @@ orm	mods/orm/base.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:2	namespac
 orm	mods/orm/base.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:13	namespace:mods	file:
 orm	mods/orm/breacher.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:4	namespace:mods	file:
 orm	mods/orm/breacher.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	namespace:mods	file:
+orm	mods/orm/builder-transaction.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:16	namespace:mods	file:
+orm	mods/orm/builder-transaction.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:8	namespace:mods	file:
 orm	mods/orm/camera-feed.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:3	namespace:mods	file:
 orm	mods/orm/camera-feed.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	namespace:mods	file:
 orm	mods/orm/chargen.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:9	namespace:mods	file:
@@ -13387,6 +13409,7 @@ primary_key_id	mods/orm/player-skill-usage.hpp	/^		uint64_t primary_key_id;$/;"	
 primary_key_name	mods/orm/armor-index.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:21	struct:mods::orm::armor_index_record_t	typeref:typename:std::string	file:	access:public	signature:()
 primary_key_name	mods/orm/armor-index.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:43	struct:mods::orm::armor_index	typeref:typename:std::string	file:	access:public	signature:()
 primary_key_name	mods/orm/breacher.hpp	/^		std::string primary_key_name() { return id_column(); }$/;"	kind:function	line:21	struct:mods::orm::breacher	typeref:typename:std::string	file:	access:public	signature:()
+primary_key_name	mods/orm/builder-transaction.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:27	struct:mods::orm::notch_record_t	typeref:typename:std::string	file:	access:public	signature:()
 primary_key_name	mods/orm/camera-feed.hpp	/^		std::string primary_key_name() { return id_column(); }$/;"	kind:function	line:20	struct:mods::orm::camera_feed	typeref:typename:std::string	file:	access:public	signature:()
 primary_key_name	mods/orm/contagion.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:20	struct:mods::orm::contagion	typeref:typename:std::string	file:	access:public	signature:()
 primary_key_name	mods/orm/contract-steps.hpp	/^		std::string primary_key_name() {$/;"	kind:function	line:130	struct:mods::orm::contract_steps	typeref:typename:std::string	file:	access:public	signature:()
@@ -14226,6 +14249,8 @@ rifle_stat_strategy	mods/orm/rifle-instance.hpp	/^		int16_t rifle_stat_strategy;
 rifle_stat_strength	mods/orm/rifle-instance.hpp	/^		int16_t rifle_stat_strength;$/;"	kind:member	line:89	struct:mods::orm::rifle_instance	typeref:typename:int16_t	file:	access:public
 rifle_stat_weapon_handling	mods/orm/rifle-instance.hpp	/^		int16_t rifle_stat_weapon_handling;$/;"	kind:member	line:100	struct:mods::orm::rifle_instance	typeref:typename:int16_t	file:	access:public
 rifle_stat_wisdom	mods/orm/rifle-instance.hpp	/^		int16_t rifle_stat_wisdom;$/;"	kind:member	line:91	struct:mods::orm::rifle_instance	typeref:typename:int16_t	file:	access:public
+rifle_stats	mods/rifle-stats.cpp	/^namespace mods::rifle_stats {$/;"	kind:namespace	line:13	namespace:mods	file:
+rifle_stats	mods/rifle-stats.hpp	/^namespace mods::rifle_stats {$/;"	kind:namespace	line:5	namespace:mods	file:
 rifle_str_type	mods/orm/rifle-instance.hpp	/^		std::string rifle_str_type;$/;"	kind:member	line:57	struct:mods::orm::rifle_instance	typeref:typename:std::string	file:	access:public
 rifle_type	mods/orm/rifle-index.hpp	/^		std::string rifle_type;$/;"	kind:member	line:11	struct:mods::orm::rifle_index_record_t	typeref:typename:std::string	file:	access:public
 rifle_type	mods/orm/rifle-index.hpp	/^		std::string rifle_type;$/;"	kind:member	line:67	struct:mods::orm::rifle_index	typeref:typename:std::string	file:	access:public
@@ -14436,6 +14461,7 @@ row_id_list_t	mods/lmdb.hpp	/^	using row_id_list_t = std::vector<uint64_t>;$/;"	
 row_type	mods/pqxx-types.hpp	/^		using row_type = pqxx::result::reference&;$/;"	kind:typedef	line:8	namespace:mods::pq	typeref:typename:pqxx::result::reference &	file:
 rows	mods/mini-games/line-up.hpp	/^		std::vector<std::vector<uint8_t>> rows;$/;"	kind:member	line:34	struct:mods::mini_games::line_up	typeref:typename:std::vector<std::vector<uint8_t>>	file:	access:private
 rows	mods/orm/armor-index.hpp	/^		std::vector<armor_index_record_t> rows;$/;"	kind:member	line:67	struct:mods::orm::armor_index	typeref:typename:std::vector<armor_index_record_t>	file:	access:public
+rows	mods/orm/builder-transaction.hpp	/^		std::vector<notch_record_t> rows;$/;"	kind:member	line:72	struct:mods::orm::notch	typeref:typename:std::vector<notch_record_t>	file:	access:public
 rows	mods/orm/contract-steps.hpp	/^		std::vector<contract_steps_record_t> rows;$/;"	kind:member	line:162	struct:mods::orm::contract_steps	typeref:typename:std::vector<contract_steps_record_t>	file:	access:public
 rows	mods/orm/mob-roam.hpp	/^		std::vector<mob_roam_record_t> rows;$/;"	kind:member	line:75	struct:mods::orm::mob_roam	typeref:typename:std::vector<mob_roam_record_t>	file:	access:public
 rows	mods/orm/notch.hpp	/^		std::vector<notch_record_t> rows;$/;"	kind:member	line:72	struct:mods::orm::notch	typeref:typename:std::vector<notch_record_t>	file:	access:public
@@ -15485,6 +15511,7 @@ sql_compositor	mods/migrations.hpp	/^	using sql_compositor = mods::sql::composit
 sql_compositor	mods/orm/armor-index.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:8	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
 sql_compositor	mods/orm/base.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:14	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
 sql_compositor	mods/orm/breacher.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:8	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
+sql_compositor	mods/orm/builder-transaction.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:10	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
 sql_compositor	mods/orm/camera-feed.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:8	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
 sql_compositor	mods/orm/chargen.cpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:10	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
 sql_compositor	mods/orm/chargen.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:13	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
@@ -15593,8 +15620,6 @@ stats	mods/stats.hpp	/^namespace mods::stats {$/;"	kind:namespace	line:5	namespa
 stats	mods/weapons/shotgun-dst7A.hpp	/^			struct stats {$/;"	kind:struct	line:46	struct:mods::weapons::shotgun::dst7A	file:	access:public
 stats	mods/weapons/smg-vc88.hpp	/^			struct stats {$/;"	kind:struct	line:44	struct:mods::weapons::smg::vc88	file:	access:public
 stats	structs.cpp	/^namespace mods::stats {$/;"	kind:namespace	line:171	namespace:mods	file:
-stats_rifle	mods/stats-rifle.cpp	/^namespace mods::stats_rifle {$/;"	kind:namespace	line:13	namespace:mods	file:
-stats_rifle	mods/stats-rifle.hpp	/^namespace mods::stats_rifle {$/;"	kind:namespace	line:5	namespace:mods	file:
 status	mods/behaviour_tree_impl.hpp	/^	using status = mods::behaviour_tree_status;$/;"	kind:typedef	line:29	namespace:mods::behaviour_tree_impl	typeref:typename:mods::behaviour_tree_status	file:
 status	mods/behaviour_tree_node.hpp	/^				behaviour_tree_status status;$/;"	kind:member	line:28	struct:mods::behaviour_tree_node::__anon8e904b360108	typeref:typename:behaviour_tree_status	file:	access:public
 status	mods/user-feedback.hpp	/^		TStatus status;$/;"	kind:member	line:10	struct:mods::user::feedback	typeref:typename:TStatus	file:	access:public
@@ -15752,6 +15777,7 @@ strmap_t	mods/builder/encode.hpp	/^	using strmap_t = std::map<std::string,std::s
 strmap_t	mods/db.hpp	/^using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:116	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/armor-index.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:7	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/breacher.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:7	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
+strmap_t	mods/orm/builder-transaction.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:9	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/camera-feed.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:7	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/contagion.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:9	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/contract-steps.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:13	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
@@ -15864,6 +15890,7 @@ table_name	mods/classes/base.hpp	/^			static constexpr const char* table_name = 
 table_name	mods/orm/armor-index.hpp	/^		std::string table_name() const {$/;"	kind:function	line:18	struct:mods::orm::armor_index_record_t	typeref:typename:std::string	file:	access:public	signature:() const
 table_name	mods/orm/armor-index.hpp	/^		std::string table_name() const {$/;"	kind:function	line:28	struct:mods::orm::armor_index	typeref:typename:std::string	file:	access:public	signature:() const
 table_name	mods/orm/breacher.hpp	/^		std::string table_name() const { return "class_breacher"; }$/;"	kind:function	line:13	struct:mods::orm::breacher	typeref:typename:std::string	file:	access:public	signature:() const
+table_name	mods/orm/builder-transaction.hpp	/^		std::string table_name() const {$/;"	kind:function	line:24	struct:mods::orm::notch_record_t	typeref:typename:std::string	file:	access:public	signature:() const
 table_name	mods/orm/camera-feed.hpp	/^		std::string table_name() const { return "camera_feed"; }$/;"	kind:function	line:12	struct:mods::orm::camera_feed	typeref:typename:std::string	file:	access:public	signature:() const
 table_name	mods/orm/chargen.hpp	/^		static constexpr const char* table_name = "player_classes";$/;"	kind:member	line:21	struct:mods::orm::player_classes	typeref:typename:const char *	file:	access:public
 table_name	mods/orm/chargen.hpp	/^		static constexpr const char* table_name = "player_generated_data";$/;"	kind:member	line:79	struct:mods::orm::player_generated_data	typeref:typename:const char *	file:	access:public

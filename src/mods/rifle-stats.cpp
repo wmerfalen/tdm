@@ -1,4 +1,4 @@
-#include "stats-rifle.hpp"
+#include "rifle-stats.hpp"
 
 #define __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__
@@ -10,7 +10,7 @@
 #endif
 
 
-namespace mods::stats_rifle {
+namespace mods::rifle_stats {
 	static constexpr std::string_view accuracy_map = "{grn}accuracy{/grn}: ";
 	static constexpr std::string_view ammo = "{grn}ammo{/grn}: ";
 	static constexpr std::string_view base_damage = "{grn}base{/grn}: ";

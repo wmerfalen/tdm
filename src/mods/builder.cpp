@@ -2734,9 +2734,15 @@ SUPERCMD(do_mbuild) {
 	args = mods::util::subcmd_args<7,args_t>(argument,"exists");
 
 	if(args.has_value()) {
-
 		//[ - ] [0 - exists] [1 - vnum]
 		auto arg_vec = args.value();
+		if(arg_vec[1].compare("raid") == 0) {
+			ENCODE_INIT();
+			r_error(player,"No mob with that vnum");
+			return;
+		}
+
+
 		auto i_value = mods::util::stoi(arg_vec[1]);
 		ENCODE_INIT();
 
@@ -3128,8 +3134,12 @@ SUPERCMD(do_mbuild) {
 					r_error(player,"Please supply a virtual number");
 					return;
 				}
-				auto opt_vr_number = mods::util::stoi(arg_vec[3]);
-				obj->mob_specials.vnum = opt_vr_number.value();
+				if(arg_vec[3].compare("raid") == 0) {
+					obj->mob_specials.vnum = next_mob_number();
+				} else {
+					auto opt_vr_number = mods::util::stoi(arg_vec[3]);
+					obj->mob_specials.vnum = opt_vr_number.value();
+				}
 				r_success(player,"Saved");
 				return;
 			}
