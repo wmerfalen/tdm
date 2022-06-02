@@ -29,6 +29,9 @@ namespace mods::builder::raid {
 			if(argshave()->first_is("save")->passed()) {
 
 			}
+			if(argshave()->first_is("delete")->size_gt(1)->passed()) {
+				player->sendln(argat(1));
+			}
 			return true;
 		}
 
