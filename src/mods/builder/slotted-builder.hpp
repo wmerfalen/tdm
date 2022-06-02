@@ -702,7 +702,7 @@ namespace mods::builder {
 			 * example:
 			 * 	Nbuild save <vnum>...<vnum_N>
 			 */
-			bool dispatch_multi_vnum_action(std::string argument) {
+			virtual bool dispatch_multi_vnum_action(std::string argument) {
 				return true;
 			}
 

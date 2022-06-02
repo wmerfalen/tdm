@@ -115,7 +115,7 @@
 {yel}tags:SUPERCMD	mods/builder/conbuild.cpp	/^	->conbuild$/;"	kind:function	line:620	namespace:mods::builder::conbuild	signature:(do_conbuild){/grn}
 {yel}tags:SUPERCMD	mods/builder/hqbuild.cpp	/^	->hqbuild$/;"	kind:function	line:83	namespace:mods::builder::hqbuild	signature:(do_hqbuild){/grn}
 {yel}tags:SUPERCMD	mods/builder/meqbuild.cpp	/^	->meqbuild$/;"	kind:function	line:202	namespace:mods::builder::meqbuild	signature:(do_meqbuild){/grn}
-{yel}tags:SUPERCMD	mods/builder/raid.cpp	/^	->raid$/;"	kind:function	line:316	namespace:mods::builder::raid	signature:(do_raid){/grn}
+{yel}tags:SUPERCMD	mods/builder/raid.cpp	/^	->raid$/;"	kind:function	line:293	namespace:mods::builder::raid	signature:(do_raid){/grn}
 {yel}tags:SUPERCMD	mods/builder/seqbuild.cpp	/^	->seqbuild$/;"	kind:function	line:673	namespace:mods::builder::seqbuild	signature:(do_seqbuild){/grn}
 {yel}tags:SUPERCMD	mods/chat.cpp	/^->chanmgr$/;"	kind:function	line:129	signature:(do_chanmgr){/grn}
 {yel}tags:SUPERCMD	mods/classes/super-user-fiddler.cpp	/^	->mock_level$/;"	kind:function	line:23	namespace:mods::classes	signature:(do_mock_level){/grn}

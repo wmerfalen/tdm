@@ -1,67 +1,3 @@
-mbuild show 29
-js cmm();
-mbuild show 29
-js cmm();
-mbuild show 29
-1
-js cmm();
-mbuild show 29
-js cmm();
-mbuild show 29
-1
-js cmm();
-mbuild show 29
-l
-s
-n
-s
-l
-s
-n
-s
-l
-n
-s
-n
-l
-scan
-l
-n
-l
-s
-n
-s
-n
-s
-scan
-n
-nn
-MPORT
-nn
-l
-nn
-i
-eq
-giveme_dst7a
-help dst7
-admin:dst7a
-i
-eq
-nn
-l
-n
-MPORT
-k Orth
-reload
-n
-get Shotgun Ammo
-reload
-s
-k Orthos
-l
-l in Corpse
-mbuild show 29
-s
 n
 s
 n
@@ -298,3 +234,67 @@ s
 score
 admin:raid
 admin:raid new a b c
+admin:raid
+admin:raid list
+admin:raid show
+1
+admin:raid list
+admin:raid list 1
+admin:raid
+admin:raid list
+admin:raid list a b c
+admin:raid list
+admin:raid list-extract
+admin:raid reload-orm
+admin:raid list-extract
+admin:raid list
+admin:raid create foo bar no
+admin:raid list
+admin:raid new foo bar no
+admin:raid list
+admin:raid paginate 
+admin:raid paginate
+admin:raid show 1
+admin:raid show 2
+admin:raid list
+admin:raid reload-orm
+admin:raid list
+admin:raid help
+admin:raid list
+admin:raid level
+admin:raid list
+admin:raid reload-orm
+admin:raid list
+admin:raid name
+admin:raid
+admin:raid save
+admin:raid show
+admin:raid list-extract 0 1
+admin:raid delete 2
+admin:raid help
+admin:raid list
+admin:raid show
+admin:raid help
+admin:raid new
+admin:raid help
+admin:raid list
+admin:raid list a b 1
+admin:raid list 1 1
+admin:raid list
+admin:raid help
+admin:raid listr
+admin:raid list
+raid
+admin:raid
+admin:raid set
+admin:raid show
+admin:raid new
+admin:raid list
+admin:raid listr
+admin:raid 
+admin:raid
+admin:raid save
+admin:raid show
+admin:raid new
+admin:raid name
+admin:raid list

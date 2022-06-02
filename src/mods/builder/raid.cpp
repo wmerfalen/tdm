@@ -9,7 +9,6 @@
 #include "../../db.h"
 
 namespace mods::builder::raid {
-	std::vector<raid_t> raid_list;
 
 
 	/** ===================================================================================== */
@@ -18,6 +17,21 @@ namespace mods::builder::raid {
 	using raid_vnum_t = uint64_t;
 	using raid_orm_type = mods::orm::raid;
 	struct raid_interface : public slotted_builder<raid_vnum_t,raid_orm_type> {
+		bool dispatch_multi_vnum_action(std::string argument) override {
+			std::string msg;
+			if(argshave()->first_is("list")->passed()) {
+				for(auto& r : mods::orm::raid_list()) {
+					msg += r->dump();
+				}
+				push_encoded_ok(msg);
+				return true;
+			}
+			if(argshave()->first_is("save")->passed()) {
+
+			}
+			return true;
+		}
+
 		/** ======== */
 		/** required */
 		/** ======== */
@@ -107,11 +121,13 @@ namespace mods::builder::raid {
 			set_base_command("admin:raid");
 			clear();
 			load_all();
-			remove_command_signatures({"name","level","reload-all","destroy","set"});
-			get_signatures()["new"] = "{grn}raid{/grn} {red}new <virtual-number>{/red}\r\n";
+			remove_command_signatures({"name","list-extract","level","reload-all","destroy","set"});
+			get_signatures()["new"] = "{grn}admin:raid{/grn} {red}new <virtual-number>{/red}\r\n";
 
 			register_manual_command("reload-orm","",[&](const std::string& argument) -> std::tuple<bool,std::string> {
-				mods::orm::load_all_raid_list();
+				std::cerr << "reload-orm\n";
+				mods::orm::raid_list() = std::move(mods::orm::load_all_raid_list());
+				set_orm_list(&mods::orm::raid_list());
 				return {1,"Loaded"};
 			});
 
@@ -181,48 +197,6 @@ namespace mods::builder::raid {
 				return {1,"Name successfully set"};
 			});
 
-			/**
-			 * ==========================================
-			 * name <vnum> <index> <text>...
-			 * ==========================================
-			 * [name]
-			 *  -----------------------------------------
-			 * 	sets the name on the given step
-			 *  -----------------------------------------
-			 */
-			register_indexed_accumulator_command("name","<virtual_number> <index> <text>",[&](std::string&& value, std::shared_ptr<raid_orm_type> profile, int index) -> std::tuple<bool,std::string> {
-				if(!profile) {
-					return {0,"Invalid or missing profile vnum"};
-				}
-				if(index < 0) {
-					return {0,"Invalid index"};
-				}
-				if(index >= this->step_list.size()) {
-					return {0,"Index out of bounds"};
-				}
-				this->step_list[index]->r_name.assign(value);
-				return {1,"Name successfully set"};
-			});
-
-			/**
-			 * ==========================================
-			 * create
-			 * ==========================================
-			 * [description]
-			 *  -----------------------------------------
-			 * 	creates a new step for the given contract vnum
-			 *  -----------------------------------------
-			 */
-			register_custom_command("create","",[&,this](
-			                            const std::vector<std::string>& args,
-			                            std::string argument,
-			                            std::shared_ptr<raid_orm_type> profile
-			) -> std::tuple<bool,std::string> {
-				step_list.emplace_back(std::make_shared<mods::orm::raid>());
-				auto& step = step_list.back();
-				return {1,CAT("Created step (pkid:",step->id,") for sequence vnum: ",profile->vnum(),". Step count is now: ",step_list.size())};
-			});
-
 
 			/**
 			 * =============
@@ -237,6 +211,9 @@ namespace mods::builder::raid {
 			                            const std::vector<std::string>& args,
 			                            std::string argument,
 			std::shared_ptr<raid_orm_type> profile) -> std::tuple<bool,std::string> {
+				/**
+				 * FIXME Handle this in dispatch_multi_vnum_action
+				 */
 				if(!profile) {
 					return {0,"Invalid or missing profile vnum"};
 				}
