@@ -37,6 +37,21 @@ namespace mods::orm {
 		r.orm_status = {std::get<0>(status),std::get<1>(status)};
 		return r;
 	}
+
+	raid_list_t& raid_list() {
+		static raid_list_t list;
+		return list;
+	}
+
+	raid_list_t load_all_raid_list() {
+		raid_list_t list;
+		raid r;
+		r.read_all(&r);
+		for(const auto& r : r.rows) {
+			list.emplace_back(std::make_shared<raid>(r));
+		}
+		return list;
+	}
 #undef __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__
 #undef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 };

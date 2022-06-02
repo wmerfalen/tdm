@@ -1,5 +1,3 @@
-mbuild action:add 29 NODROP
-mbuild action:add 29 ISNPC
 mbuild show 29
 js cmm();
 mbuild show 29
@@ -298,3 +296,5 @@ s
 e
 s
 score
+admin:raid
+admin:raid new a b c

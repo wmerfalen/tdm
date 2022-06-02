@@ -6,6 +6,7 @@
 /**
  * Community edition
  */
+INIT(mods::builder::raid);
 INIT(mods::memory);
 INIT(mods::weapons::shotgun::dst7a_commands);
 INIT(mods::armor::bc89_commands);
@@ -152,6 +153,7 @@ namespace mods::init {
 		mods::armor::bc89_commands::init();
 		mods::armor::xtv89_commands::init();
 		mods::memory::init();
+		mods::builder::raid::init();
 
 #ifdef __MENTOC_PLUGIN_CONTENT__
 		mods::plugins::init::init();

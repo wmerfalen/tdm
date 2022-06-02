@@ -1,113 +1,3 @@
-<<<<<<< HEAD
-{yel}mods/integral-objects{/yel}:->{grn}install_camera_feed{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}uninstall_camera_feed{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}install_computer_choice{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}install_armor_locker{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}install_weapon_locker{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}uninstall_armor_locker{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}uninstall_weapon_locker{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}install_ammo_locker{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}uninstall_ammo_locker{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}list_wear_flags{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}armor_locker_quota{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}weapon_locker_quota{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}create_catchy_name{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}instantiate_catchy_name{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}install_sign{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}uninstall_sign{/grn}
-{yel}mods/builder/seqbuild{/yel}:->{grn}seqbuild{/grn}
-{yel}mods/builder/hqbuild{/yel}:->{grn}hqbuild{/grn}
-{yel}mods/builder/meqbuild{/yel}:->{grn}meqbuild{/grn}
-{yel}mods/builder/bookmarks{/yel}:->{grn}bookmark{/grn}
-{yel}mods/builder/bookmarks{/yel}:->{grn}goto{/grn}
-{yel}mods/builder/bookmarks{/yel}:->{grn}print_vnum{/grn}
-{yel}mods/builder/conbuild{/yel}:->{grn}conbuild{/grn}
-{yel}mods/zone{/yel}:->{grn}list_zone_table{/grn}
-{yel}mods/zone{/yel}:->{grn}uuids{/grn}
-{yel}mods/zone{/yel}:->{grn}reset_zone{/grn}
-{yel}mods/zone{/yel}:->{grn}queue_refresh{/grn}
-{yel}mods/players/messages{/yel}:->{grn}queue_message{/grn}
-{yel}mods/players/friendly-reminders{/yel}:->{grn}delete_reminder{/grn}
-{yel}mods/players/friendly-reminders{/yel}:->{grn}add_reminder{/grn}
-{yel}mods/players/friendly-reminders{/yel}:->{grn}list_reminder{/grn}
-{yel}mods/players/event-messages{/yel}:->{grn}delete_event_message{/grn}
-{yel}mods/players/event-messages{/yel}:->{grn}add_event_message{/grn}
-{yel}mods/players/event-messages{/yel}:->{grn}list_event_message{/grn}
-{yel}mods/players/banish{/yel}:->{grn}force_out{/grn}
-{yel}mods/players/banish{/yel}:->{grn}set_banish_room{/grn}
-{yel}mods/players/banish{/yel}:->{grn}banish{/grn}
-{yel}mods/json/export{/yel}:->{grn}json_export{/grn}
-{yel}mods/fluxkraft/arcon-bar.hpp:		->generate_bar{/grn}
-{yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}procgen_random_amount{/grn}
-{yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}generate_zone{/grn}
-{yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}repeat{/grn}
-{yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}generate_horizontal_line{/grn}
-{yel}mods/rifle-attachments{/yel}:->{grn}instantiate_rifle_attachment{/grn}
-{yel}mods/rifle-attachments{/yel}:->{grn}load_my_rifle_attachments{/grn}
-{yel}mods/rifle-attachments{/yel}:->{grn}list_rifle_attachments{/grn}
-{yel}mods/mini-games{/yel}:->{grn}install_minigame{/grn}
-{yel}mods/mini-games{/yel}:->{grn}uninstall_minigame{/grn}
-{yel}mods/mini-games{/yel}:->{grn}list_minigame{/grn}
-{yel}mods/classes/super-user-fiddler{/yel}:->{grn}mock_level{/grn}
-{yel}mods/boosters/adrenaline-shot{/yel}:->{grn}adshot_test{/grn}
-{yel}mods/memory{/yel}:->{grn}footprints{/grn}
-{yel}mods/super-users{/yel}:->{grn}vnumtele{/grn}
-{yel}mods/super-users{/yel}:->{grn}rnumlist{/grn}
-{yel}mods/super-users{/yel}:->{grn}add_super_user{/grn}
-{yel}mods/super-users{/yel}:->{grn}get_super_user_list{/grn}
-{yel}mods/super-users{/yel}:->{grn}remove_super_user{/grn}
-{yel}mods/super-users{/yel}:->{grn}go_invisible{/grn}
-{yel}mods/super-users{/yel}:->{grn}go_visible{/grn}
-{yel}mods/super-users{/yel}:->{grn}set_who_line{/grn}
-{yel}mods/super-users{/yel}:->{grn}clear_who_line{/grn}
-{yel}mods/super-users{/yel}:->{grn}shutdown_mud{/grn}
-{yel}mods/loot{/yel}:->{grn}reward{/grn}
-{yel}mods/loot{/yel}:->{grn}add_rifle_index{/grn}
-{yel}mods/loot{/yel}:->{grn}add_armor_index{/grn}
-{yel}mods/levels{/yel}:->{grn}award_exp_by_name{/grn}
-{yel}mods/levels{/yel}:->{grn}csv_export_levels{/grn}
-{yel}mods/date-time{/yel}:->{grn}serialize_date{/grn}
-{yel}mods/forge-engine/value-scaler{/yel}:->{grn}value_scaler{/grn}
-{yel}mods/mob-equipment{/yel}:->{grn}npc_report{/grn}
-{yel}mods/player-registration{/yel}:->{grn}enable_registration{/grn}
-{yel}mods/player-registration{/yel}:->{grn}disable_registration{/grn}
-{yel}mods/player-registration{/yel}:->{grn}registration_status{/grn}
-{yel}mods/target-practice{/yel}:->{grn}install_dummy{/grn}
-{yel}mods/target-practice{/yel}:->{grn}uninstall_dummy{/grn}
-{yel}mods/target-practice{/yel}:->{grn}instantiate_dummy{/grn}
-{yel}mods/rate-limiting{/yel}:->{grn}get_rate_limit_types{/grn}
-{yel}mods/rate-limiting{/yel}:->{grn}set_rate_limit{/grn}
-{yel}mods/rate-limiting{/yel}:->{grn}list_rate_limits{/grn}
-{yel}mods/weapons/elemental{/yel}:->{grn}inc_damage{/grn}
-{yel}mods/weapons/damage-types{/yel}:->{grn}inc_damage{/grn}
-{yel}mods/query-objects{/yel}:->{grn}query_container{/grn}
-{yel}mods/query-objects{/yel}:->{grn}query_room{/grn}
-{yel}mods/query-objects{/yel}:->{grn}query_inventory{/grn}
-{yel}mods/query-objects{/yel}:->{grn}query_inventory_container{/grn}
-{yel}mods/query-objects{/yel}:->{grn}query_zone{/grn}
-{yel}mods/contract-step-callback{/yel}:->{grn}contract_step_callback{/grn}
-{yel}mods/scripted-sequence-runner{/yel}:->{grn}run_sequence{/grn}
-{yel}mods/rand{/yel}:->{grn}roll_dice{/grn}
-{yel}mods/rand{/yel}:->{grn}roll_dice_average{/grn}
-{yel}mods/chat{/yel}:->{grn}chanmgr{/grn}
-{yel}mods/elevator{/yel}:->{grn}instantiate_elevator_here{/grn}
-{yel}mods/builder{/yel}:->{grn}rbuild_sandbox{/grn}
-{yel}mods/builder{/yel}:->{grn}sbuild{/grn}
-{yel}mods/builder{/yel}:->{grn}mbuild{/grn}
-{yel}mods/builder{/yel}:->{grn}obuild{/grn}
-{yel}mods/builder{/yel}:->{grn}zbuild{/grn}
-{yel}mods/builder{/yel}:->{grn}rbuild{/grn}
-{yel}mods/builder{/yel}:->{grn}nset{/grn}
-{yel}mods/builder{/yel}:->{grn}ndelete{/grn}
-{yel}mods/builder{/yel}:->{grn}nhelp{/grn}
-{yel}mods/builder{/yel}:->{grn}nfind{/grn}
-{yel}mods/builder{/yel}:->{grn}ngoto{/grn}
-{yel}mods/builder{/yel}:->{grn}refresh_all{/grn}
-{yel}act.informative{/yel}:->{grn}givemegold{/grn}
-{yel}act.informative{/yel}:->{grn}js{/grn}
-{yel}act.informative{/yel}:->{grn}newjs{/grn}
-{yel}act.informative{/yel}:->{grn}jstest{/grn}
-=======
 {yel}olc{/yel}:->{grn}olc{/grn}
 {yel}db{/yel}:->{grn}reboot{/grn}
 {yel}act.offensive{/yel}:->{grn}affect_me{/grn}
@@ -207,23 +97,25 @@
 {yel}tags:SUPERCMD	interpreter.cpp	/^->room_list$/;"	kind:function	line:116	signature:(do_room_list){/grn}
 {yel}tags:SUPERCMD	mobact.cpp	/^	->mobact$/;"	kind:function	line:310	namespace:mods::mobact	signature:(do_mobact){/grn}
 {yel}tags:SUPERCMD	mods/boosters/adrenaline-shot.cpp	/^		->adshot_test$/;"	kind:function	line:68	namespace:mods::boosters::adrenaline_shot_init	signature:(do_adshot_test){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^	->ndelete$/;"	kind:function	line:6410	namespace:mods::builder	signature:(do_ndelete){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^	->nfind$/;"	kind:function	line:6443	namespace:mods::builder	signature:(do_nfind){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^	->ngoto$/;"	kind:function	line:6465	namespace:mods::builder	signature:(do_ngoto){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^	->nhelp$/;"	kind:function	line:6416	namespace:mods::builder	signature:(do_nhelp){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^	->nset$/;"	kind:function	line:6398	namespace:mods::builder	signature:(do_nset){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^->mbuild$/;"	kind:function	line:2270	signature:(do_mbuild){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^->obuild$/;"	kind:function	line:3204	signature:(do_obuild){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^->rbuild$/;"	kind:function	line:5230	signature:(do_rbuild){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^->rbuild_sandbox$/;"	kind:function	line:1435	signature:(do_rbuild_sandbox){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^->sbuild$/;"	kind:function	line:1595	signature:(do_sbuild){/grn}
-{yel}tags:SUPERCMD	mods/builder.cpp	/^->zbuild$/;"	kind:function	line:4511	signature:(do_zbuild){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->ndelete$/;"	kind:function	line:6458	namespace:mods::builder	signature:(do_ndelete){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->nfind$/;"	kind:function	line:6491	namespace:mods::builder	signature:(do_nfind){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->ngoto$/;"	kind:function	line:6513	namespace:mods::builder	signature:(do_ngoto){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->nhelp$/;"	kind:function	line:6464	namespace:mods::builder	signature:(do_nhelp){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->nset$/;"	kind:function	line:6446	namespace:mods::builder	signature:(do_nset){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^	->refresh_all$/;"	kind:function	line:6533	namespace:mods::builder	signature:(do_refresh_all){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->mbuild$/;"	kind:function	line:2273	signature:(do_mbuild){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->obuild$/;"	kind:function	line:3243	signature:(do_obuild){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->rbuild$/;"	kind:function	line:5269	signature:(do_rbuild){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->rbuild_sandbox$/;"	kind:function	line:1438	signature:(do_rbuild_sandbox){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->sbuild$/;"	kind:function	line:1598	signature:(do_sbuild){/grn}
+{yel}tags:SUPERCMD	mods/builder.cpp	/^->zbuild$/;"	kind:function	line:4550	signature:(do_zbuild){/grn}
 {yel}tags:SUPERCMD	mods/builder/bookmarks.cpp	/^	->bookmark$/;"	kind:function	line:12	namespace:mods::builder::bookmarks	signature:(do_bookmark){/grn}
 {yel}tags:SUPERCMD	mods/builder/bookmarks.cpp	/^	->goto$/;"	kind:function	line:36	namespace:mods::builder::bookmarks	signature:(do_goto){/grn}
 {yel}tags:SUPERCMD	mods/builder/bookmarks.cpp	/^	->print_vnum$/;"	kind:function	line:70	namespace:mods::builder::bookmarks	signature:(do_print_vnum){/grn}
 {yel}tags:SUPERCMD	mods/builder/conbuild.cpp	/^	->conbuild$/;"	kind:function	line:620	namespace:mods::builder::conbuild	signature:(do_conbuild){/grn}
 {yel}tags:SUPERCMD	mods/builder/hqbuild.cpp	/^	->hqbuild$/;"	kind:function	line:83	namespace:mods::builder::hqbuild	signature:(do_hqbuild){/grn}
 {yel}tags:SUPERCMD	mods/builder/meqbuild.cpp	/^	->meqbuild$/;"	kind:function	line:202	namespace:mods::builder::meqbuild	signature:(do_meqbuild){/grn}
+{yel}tags:SUPERCMD	mods/builder/raid.cpp	/^	->raid$/;"	kind:function	line:316	namespace:mods::builder::raid	signature:(do_raid){/grn}
 {yel}tags:SUPERCMD	mods/builder/seqbuild.cpp	/^	->seqbuild$/;"	kind:function	line:673	namespace:mods::builder::seqbuild	signature:(do_seqbuild){/grn}
 {yel}tags:SUPERCMD	mods/chat.cpp	/^->chanmgr$/;"	kind:function	line:129	signature:(do_chanmgr){/grn}
 {yel}tags:SUPERCMD	mods/classes/super-user-fiddler.cpp	/^	->mock_level$/;"	kind:function	line:23	namespace:mods::classes	signature:(do_mock_level){/grn}
@@ -305,13 +197,13 @@
 {yel}tags:SUPERCMD	mods/target-practice.cpp	/^->uninstall_dummy$/;"	kind:function	line:33	signature:(do_uninstall_dummy){/grn}
 {yel}tags:SUPERCMD	mods/weapons/damage-types.cpp	/^	->inc_damage$/;"	kind:function	line:1283	namespace:mods::weapons::damage_types	signature:(do_inc_damage){/grn}
 {yel}tags:SUPERCMD	mods/weapons/elemental.cpp	/^	->inc_damage$/;"	kind:function	line:239	namespace:mods::weapons::elemental	signature:(do_inc_damage){/grn}
-{yel}tags:SUPERCMD	mods/zone.cpp	/^	->list_zone_table$/;"	kind:function	line:363	namespace:mods::zone	signature:(do_list_zone_table){/grn}
-{yel}tags:SUPERCMD	mods/zone.cpp	/^	->reset_zone$/;"	kind:function	line:392	namespace:mods::zone	signature:(do_reset_zone){/grn}
-{yel}tags:SUPERCMD	mods/zone.cpp	/^	->uuids$/;"	kind:function	line:376	namespace:mods::zone	signature:(do_uuids){/grn}
+{yel}tags:SUPERCMD	mods/zone.cpp	/^	->list_zone_table$/;"	kind:function	line:439	namespace:mods::zone	signature:(do_list_zone_table){/grn}
+{yel}tags:SUPERCMD	mods/zone.cpp	/^	->queue_refresh$/;"	kind:function	line:544	namespace:mods::zone	signature:(do_queue_refresh){/grn}
+{yel}tags:SUPERCMD	mods/zone.cpp	/^	->reset_zone$/;"	kind:function	line:513	namespace:mods::zone	signature:(do_reset_zone){/grn}
+{yel}tags:SUPERCMD	mods/zone.cpp	/^	->uuids$/;"	kind:function	line:492	namespace:mods::zone	signature:(do_uuids){/grn}
 {yel}tags:SUPERCMD	olc.cpp	/^->olc$/;"	kind:function	line:68	signature:(do_olc){/grn}
 {yel}tags:SUPERCMD	spell_parser.cpp	/^->cast$/;"	kind:function	line:604	signature:(do_cast){/grn}
 {yel}spell_parser{/yel}:->{grn}cast{/grn}
->>>>>>> 6f28975d (refactor: use c++20 concepts to remove unnecessary and redundant overloaded functions in sql::where(...))
 {yel}act.builder{/yel}:->{grn}next_object_number{/grn}
 {yel}act.builder{/yel}:->{grn}next_zone_number{/grn}
 {yel}act.builder{/yel}:->{grn}next_room_number{/grn}
@@ -407,6 +299,7 @@
 {yel}ban{/yel}:->{grn}unban{/grn}
 {yel}mods/classes/super-user-fiddler{/yel}:->{grn}mock_level{/grn}
 {yel}mods/builder/meqbuild{/yel}:->{grn}meqbuild{/grn}
+{yel}mods/builder/raid{/yel}:->{grn}raid{/grn}
 {yel}mods/builder/seqbuild{/yel}:->{grn}seqbuild{/grn}
 {yel}mods/builder/hqbuild{/yel}:->{grn}hqbuild{/grn}
 {yel}mods/builder/bookmarks{/yel}:->{grn}bookmark{/grn}
@@ -420,6 +313,7 @@
 {yel}mods/zone{/yel}:->{grn}list_zone_table{/grn}
 {yel}mods/zone{/yel}:->{grn}uuids{/grn}
 {yel}mods/zone{/yel}:->{grn}reset_zone{/grn}
+{yel}mods/zone{/yel}:->{grn}queue_refresh{/grn}
 {yel}mods/fluxkraft/arcon-bar.hpp:		->generate_bar{/grn}
 {yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}procgen_random_amount{/grn}
 {yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}generate_zone{/grn}
@@ -470,6 +364,7 @@
 {yel}mods/builder{/yel}:->{grn}nhelp{/grn}
 {yel}mods/builder{/yel}:->{grn}nfind{/grn}
 {yel}mods/builder{/yel}:->{grn}ngoto{/grn}
+{yel}mods/builder{/yel}:->{grn}refresh_all{/grn}
 {yel}mods/player-registration{/yel}:->{grn}enable_registration{/grn}
 {yel}mods/player-registration{/yel}:->{grn}disable_registration{/grn}
 {yel}mods/player-registration{/yel}:->{grn}registration_status{/grn}

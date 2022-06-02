@@ -703,58 +703,6 @@ namespace mods::builder {
 			 * 	Nbuild save <vnum>...<vnum_N>
 			 */
 			bool dispatch_multi_vnum_action(std::string argument) {
-				std::optional<std::vector<std::string>> args;
-				for(auto& phrase : {
-				            "list","delete","save"
-				        }) {
-					args = mods::util::subcmd_args<10,args_t>(argument.data(),phrase);
-					if(args.has_value()) {
-						break;
-					}
-				}
-				if(!args.has_value()) {
-					return false;
-				}
-				auto cmd_args = args.value();
-				/**
-				 * cmd_args will be: [0] => list, [1] => vnum ... [N] => vnumN
-				 */
-				for(unsigned i = 1; i < cmd_args.size(); i++) {
-					auto opt_profile = extract_profile(cmd_args[0],argument.data(),i);
-					if(!opt_profile.has_value()) {
-						push_encoded_message(
-						    CAT("couldn't find profile for argument ",i,". ignoring..."),
-						    CAT("noprof:",i),MSG_ERROR
-						);
-						continue;
-					}
-					if(has_custom_command_for(cmd_args[0])) {
-						m_custom_command_map[cmd_args[0]](cmd_args,argument,opt_profile.value());
-						continue;
-					}
-					if(cmd_args[0].compare("delete") == 0) {
-						if(this->delete_by_vnum(opt_profile.value()->vnum())) {
-							push_encoded_message(
-							    CAT("successfully deleted vnum:",opt_profile.value()->vnum(),"."),
-							    CAT("deleted:",i),MSG_SUCCESS
-							);
-							continue;
-						}
-						push_encoded_message(
-						    CAT("couldn't delete vnum:",opt_profile.value()->vnum(),"."),
-						    CAT("failed:",i),MSG_ERROR
-						);
-						continue;
-					}
-					if(cmd_args[0].compare("list") == 0) {
-						push_profile(opt_profile.value());
-						continue;
-					}
-					if(cmd_args[0].compare("save") == 0) {
-						report_profile_save(opt_profile.value(),opt_profile.value()->vnum());
-						continue;
-					}
-				}//end for
 				return true;
 			}
 

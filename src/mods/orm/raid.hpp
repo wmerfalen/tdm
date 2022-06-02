@@ -29,6 +29,9 @@ namespace mods::orm {
 		 * slot list: 1 = list this var in slot_list(), 0 = don't list in slot_list
 		 */
 		MENTOC_ORM_CLASS(RAID_ORM_MEMBERS,"raid");
+		auto vnum() {
+			return id;
+		}
 
 		raid() {
 			this->init();
@@ -41,7 +44,22 @@ namespace mods::orm {
 
 		MENTOC_ORM_PRIMARY_KEY_FUNCTIONS();
 
-		std::vector<raid> rows;
+		std::deque<raid> rows;
+		auto destroy() {
+			return  remove(this);
+		}
+		int initialize_row(std::string_view name,
+		                   std::string_view level,
+		                   std::string_view type) {
+			r_name = name;
+			r_level = level;
+			r_type = type;
+			auto s = create(this);
+			if(ORM_FAILURE(s)) {
+				return -1;
+			}
+			return std::get<2>(s);
+		}
 	};
 	struct raid_status_t {
 		std::tuple<int16_t,std::string> orm_status;
@@ -50,10 +68,17 @@ namespace mods::orm {
 		raid_status_t(raid_status_t&& other) : orm_status(other.orm_status),
 			record(std::move(other.record)) {}
 	};
+
+	using raid_list_t = std::deque<std::shared_ptr<raid>>;
+
 	raid_status_t create_raid(
 	    std::string_view name,
 	    std::string_view level,
 	    std::string_view type);
+
+	raid_list_t& raid_list();
+
+	raid_list_t load_all_raid_list();
 };
 
 #endif

@@ -10642,6 +10642,7 @@ alter table mobile alter column mob_action_bitvector type character varying(8);
 alter table mobile alter column mob_affection_bitvector type character varying(8);
 create table raid(
 	id SERIAL,
+	r_vnum SERIAL NOT NULL,
 	r_name VARCHAR(256) NOT NULL,
 	r_level VARCHAR(16) NOT NULL,
 	r_type VARCHAR(32) NOT NULL,
