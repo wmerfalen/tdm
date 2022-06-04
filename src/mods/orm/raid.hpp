@@ -16,7 +16,15 @@ namespace mods::orm {
 (std::string,r_status,"incomplete",3,null,1) \
 )
 
+#define RAID_ORM_STRING_LIMITS ( \
+(r_name,256),\
+(r_level,16), \
+(r_type,32), \
+(r_stats,16) \
+)
+
 	struct raid : public mods::orm::orm_base<raid,std::string> {
+		MENTOC_ORM_STRING_LIMITS(RAID_ORM_STRING_LIMITS);
 		/**
 		 * member tuple csv columns:
 		 * Member Var Type, Member Var Name, initailized value, pqxx conversion type, native object field, slot list

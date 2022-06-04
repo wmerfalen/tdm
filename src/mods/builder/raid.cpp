@@ -13,10 +13,31 @@ namespace mods::builder::raid {
 
 	/** ===================================================================================== */
 	/** ===================================================================================== */
+	/**
+	 * Checklist
+	 * ---------
+	 * [x] List
+	 * 	[ ] Must support encoded responses
+	 * [x] Reload ORM
+	 * [x] save <vnum> ... [N-vnum]
+	 * 	[ ] Must support encoded responses
+	 * [x] create <name> <level> <type>
+	 * 	[ ] Must support encoded responses
+	 * [ ] set <vnum> <field> <value>
+	 * [x] Delete
+	 *
+	 * stretch-goals:
+	 * [ ] filter <field> <regex>
+	 */
 	/** ===================================================================================== */
 	using raid_vnum_t = uint64_t;
 	using raid_orm_type = mods::orm::raid;
 	struct raid_interface : public slotted_builder<raid_vnum_t,raid_orm_type> {
+		void reload_orm() {
+			mods::orm::raid_list() = std::move(mods::orm::load_all_raid_list());
+			set_orm_list(&mods::orm::raid_list());
+		}
+
 		bool dispatch_multi_vnum_action(std::string argument) override {
 			std::string msg;
 			if(argshave()->first_is("list")->passed()) {
@@ -30,9 +51,34 @@ namespace mods::builder::raid {
 
 			}
 			if(argshave()->first_is("delete")->size_gt(1)->passed()) {
-				player->sendln(argat(1));
+				for(auto i=1; i < args()->size; i++) {
+					auto vnum = intat(i);
+					if(vnum == -1) {
+						player->sendln(CAT("Invalid integer value: ",argat(i), ". Ignoring..."));
+						continue;
+					}
+					player->sendln(CAT("Deleting by vnum/id:",vnum));
+					auto s = this->by_vnum(vnum);
+					if(s.has_value() == false) {
+						msg += CAT("no profile for vnum/id:",vnum,"\r\n");
+					}
+					auto rs = s.value()->destroy();
+					if(ORM_FAILURE(rs)) {
+						msg += CAT("failed to delete ",vnum,":",std::get<1>(rs));
+					} else {
+						msg += CAT("deleted ",vnum,"\r\n");
+					}
+				}
+				this->reload_orm();
+				push_encoded_ok(msg);
+				return true;
 			}
-			return true;
+			/**
+			 * MUST ALWAYS RETURN FALSE. Otherwise all other commands won't be processed.
+			 * Returning true means we handled the command.
+			 * Returning false means we pass it on to the custom/manual commands.
+			 */
+			return false;
 		}
 
 		/** ======== */
@@ -81,6 +127,8 @@ namespace mods::builder::raid {
 		const std::vector<std::string>& vector_string_list() const {
 			return temp_step().vector_string_slots();
 		}
+
+
 		const std::vector<std::string>& accumulator_list() const {
 			return temp_step().accumulator_slot_list();
 		}
@@ -124,103 +172,56 @@ namespace mods::builder::raid {
 			set_base_command("admin:raid");
 			clear();
 			load_all();
-			remove_command_signatures({"name","list-extract","level","reload-all","destroy","set"});
+			remove_command_signatures({"name","list-extract","destroy","set"});
 			get_signatures()["new"] = "{grn}admin:raid{/grn} {red}new <virtual-number>{/red}\r\n";
 
-			register_manual_command("reload-orm","",[&](const std::string& argument) -> std::tuple<bool,std::string> {
-				std::cerr << "reload-orm\n";
-				mods::orm::raid_list() = std::move(mods::orm::load_all_raid_list());
-				set_orm_list(&mods::orm::raid_list());
+			register_manual_command("reload-orm","",[this](std::string argument) -> std::tuple<bool,std::string> {
+				player->sendx("Reloading..");
+				this->reload_orm();
+				player->sendln("done");
 				return {1,"Loaded"};
 			});
 
 			register_custom_command("help","",[this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<raid_orm_type> profile) -> std::tuple<bool,std::string> {
 				display_signatures();
-				auto msg = CAT("\r\n",
-				               "Example: How to set multiple types on a step's task_type_t column:\r\n",
-				               "{grn}raid set-step-data 400 0 s_task_type GOAL_QUOTA,GOAL_KILL{/grn}\r\n",
-				               "Example: How to set step target:\r\n",
-				               "{grn}raid set-step-data 400 0 s_task_target TARGET_MOB{/grn}\r\n",
-				               "\r\n"
-				              );
-
-				push_encoded_ok(msg);
 				return {1,""};
 			});
 
-			/**
-			 * ==========================================
-			 * level <vnum> <index> <text>...
-			 * ==========================================
-			 * [level]
-			 *  -----------------------------------------
-			 * 	sets the level on the given step
-			 *  -----------------------------------------
-			 */
-			register_indexed_accumulator_command("level","<virtual_number> <index> <text>",[&](
-			                                         std::string&& value,
-			                                         std::shared_ptr<raid_orm_type> profile,
-			int index) -> std::tuple<bool,std::string> {
-				if(!profile) {
-					return {0,"Invalid or missing profile vnum"};
-				}
-				if(index < 0) {
-					return {0,"Invalid index"};
-				}
-				if(index >= this->step_list.size()) {
-					return {0,"Index out of bounds"};
-				}
-				this->step_list[index]->r_level.assign(value);
-				return {1,"Level successfully set"};
-			});
-
-			/**
-			 * ==========================================
-			 * name <vnum> <index> <text>...
-			 * ==========================================
-			 * [name]
-			 *  -----------------------------------------
-			 * 	sets the name on the given step
-			 *  -----------------------------------------
-			 */
-			register_indexed_accumulator_command("name","<virtual_number> <index> <text>",[&](
-			                                         std::string&& value,
-			                                         std::shared_ptr<raid_orm_type> profile,
-			int index) -> std::tuple<bool,std::string> {
-				if(!profile) {
-					return {0,"Invalid or missing profile vnum"};
-				}
-				if(index < 0) {
-					return {0,"Invalid index"};
-				}
-				if(index >= this->step_list.size()) {
-					return {0,"Index out of bounds"};
-				}
-				this->step_list[index]->r_name.assign(value);
-				return {1,"Name successfully set"};
-			});
-
-
-			/**
-			 * =============
-			 * delete <vnum>
-			 * =============
-			 * [description]
-			 *  --------------------------------------
-			 * 	deletes the raid specified by the vnum
-			 *  --------------------------------------
-			 */
-			register_custom_command("delete","<virtual_number>",[&,this](
+			register_custom_command("set","<vnum> <name|level|type> <value>",
+			                        [this](
 			                            const std::vector<std::string>& args,
 			                            std::string argument,
 			std::shared_ptr<raid_orm_type> profile) -> std::tuple<bool,std::string> {
-				/**
-				 * FIXME Handle this in dispatch_multi_vnum_action
-				 */
+				std::string msg;
 				if(!profile) {
-					return {0,"Invalid or missing profile vnum"};
+					push_encoded_error("no profile");
+					return {0,"No profile"};
 				}
-				return profile->destroy();
+				if(argshave()->size_gt(2)->failed()) {
+					push_encoded_error("Expected 3 arguments");
+					return {0,"Expected 3 arguments: <vnum> <name|level|type> <value>"};
+				}
+				msg = CAT("Okay, processing...");
+				auto field = argat(2);
+				if(field.compare("name") == 0) {
+					msg += ("Setting name..");
+					profile->set("r_name",argat(3));
+					msg += "Done";
+				} else if(field.compare("level") == 0) {
+					msg += "Setting level...";
+					profile->set("r_level",argat(3));
+					msg += "Done";
+				} else if(field.compare("type") == 0) {
+					msg += "Setting level...";
+					profile->set("r_type",argat(3));
+					msg += "Done";
+				} else {
+					push_encoded_error("Did not recognize field name. Expected one of: name,level,type");
+					return {0,"Did not recognize field name. Expected one of: name,level,type"};
+				}
+
+				push_encoded_ok(msg);
+				return {1,""};
 			});
 
 		}//end raid_interface
@@ -234,7 +235,7 @@ namespace mods::builder::raid {
 			 * cmd_args: [0] => "new" [1] => "name" [2] => level [3] => type
 			 */
 			if(argshave()->size_gt(3)->failed()) {
-				return {0,"Not enough arguments. Need 4"};
+				return {0,"Not enough arguments. Signature: new <name> <level> <type>"};
 			}
 			auto c = std::make_shared<mods::orm::raid>();
 			auto id = c->initialize_row(argat(1),argat(2),argat(3));

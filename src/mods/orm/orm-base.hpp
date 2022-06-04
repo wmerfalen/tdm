@@ -59,6 +59,13 @@ namespace mods::orm {
 
 	template <typename TClassType,typename TPrimaryType>
 	struct orm_base {
+			bool dirty;
+			virtual bool is_dirty() const {
+				return dirty;
+			}
+			virtual void set_dirty(bool b) {
+				dirty = b;
+			}
 			void use_connection(pqxx::connection* pq_con) {
 				m_con = pq_con;
 			}
@@ -68,6 +75,7 @@ namespace mods::orm {
 			orm_base() {
 				save_error_logs = false;
 				m_con = mods::globals::pq_con.get();
+				dirty = false;
 			}
 			virtual const std::vector<std::string>& accumulator_slot_list() const {
 				return accumulators;
@@ -78,9 +86,12 @@ namespace mods::orm {
 			}
 			std::string dump() {
 				std::string dump;
-				dump = CAT("[",primary_key_name().data(),"]:->",primary_key_value().data(),"\r\n");
+				//dump = CAT("[",primary_key_name().data(),"]:->",primary_key_value().data(),"\r\n");
 				for(const auto& pair : export_class()) {
 					dump += CAT("[",pair.first,"]:->",pair.second,"\r\n");
+				}
+				if(this->is_dirty()) {
+					dump += CAT("{grn}dirty{/grn}");
 				}
 				return dump;
 			}
@@ -396,6 +407,7 @@ namespace mods::orm {
 #define MENTOC_ORM_SET_FUNCTION(SEQUENCE) \
 		std::tuple<bool,std::string> set(std::string field,std::string value) {\
 				BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SET_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE));\
+			this->set_dirty(true);\
 				return {0,"unrecognized field"};\
 		}
 
@@ -458,6 +470,10 @@ namespace mods::orm {
 		return "id"; \
 	}
 
+#define MENTOC_ORM_DIRTY_FOR(SEQUENCE) \
+	void set_dirty(bool b) override { dirty = b; } \
+	bool is_dirty() const override { return dirty; }
+
 
 #define MENTOC_ORM_CLASS(SEQUENCE,TABLE_NAME) \
 		static constexpr const char* table = TABLE_NAME;\
@@ -469,7 +485,15 @@ namespace mods::orm {
 		MENTOC_ORM_FEED_IMPL(SEQUENCE);\
 		MENTOC_ORM_SLOT_LIST_FOR(SEQUENCE); \
 		MENTOC_ORM_SET_FUNCTION(SEQUENCE); \
-		MENTOC_ORM_SLOT_TYPES_FOR(SEQUENCE);
+		MENTOC_ORM_SLOT_TYPES_FOR(SEQUENCE); \
+		MENTOC_ORM_DIRTY_FOR(SEQUENCE);
+
+#define MENTOC_ORM_STRING_LIMITS_IMPL(r,data,MEMBER_TUPLE) \
+	static constexpr std::size_t BOOST_PP_CAT(max_len_,BOOST_PP_TUPLE_ELEM(2,0,MEMBER_TUPLE)) = BOOST_PP_TUPLE_ELEM(2,1,MEMBER_TUPLE);
+
+#define MENTOC_ORM_STRING_LIMITS(SEQUENCE) \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_STRING_LIMITS_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE));
+
 };//end namespace mods::orm
 
 #endif
