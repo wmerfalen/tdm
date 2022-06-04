@@ -48,7 +48,28 @@ namespace mods::builder::raid {
 				return true;
 			}
 			if(argshave()->first_is("save")->passed()) {
-
+				for(auto i = 1; i < args()->size; i++) {
+					auto vnum = intat(i);
+					if(vnum == -1) {
+						msg += CAT("Invalid integer value: ",argat(i),". Ignoring...\r\n");
+						continue;
+					}
+					msg += CAT("Saving by vnum/id:",vnum,"\r\n");
+					auto s = this->by_vnum(vnum);
+					if(s.has_value() == false) {
+						msg += CAT("No vnum/id matches:",vnum,". Ignoring...\r\n");
+						continue;
+					}
+					auto rs = s.value()->update(s.value().get());
+					if(ORM_FAILURE(rs)) {
+						msg += CAT("failed to save ",vnum,":",std::get<1>(rs),"\r\n");
+					} else {
+						msg += CAT("saved: ",vnum," successfully.\r\n");
+					}
+				}
+				this->reload_orm();
+				push_encoded_ok(msg);
+				return true;
 			}
 			if(argshave()->first_is("delete")->size_gt(1)->passed()) {
 				for(auto i=1; i < args()->size; i++) {
@@ -187,7 +208,7 @@ namespace mods::builder::raid {
 				return {1,""};
 			});
 
-			register_custom_command("set","<vnum> <name|level|type> <value>",
+			register_custom_command("set","<vnum> <field> <value>",
 			                        [this](
 			                            const std::vector<std::string>& args,
 			                            std::string argument,
@@ -199,29 +220,10 @@ namespace mods::builder::raid {
 				}
 				if(argshave()->size_gt(2)->failed()) {
 					push_encoded_error("Expected 3 arguments");
-					return {0,"Expected 3 arguments: <vnum> <name|level|type> <value>"};
+					return {0,"Expected 3 arguments: <vnum> <field> <value>"};
 				}
 				msg = CAT("Okay, processing...");
-				auto field = argat(2);
-				if(field.compare("name") == 0) {
-					msg += ("Setting name..");
-					profile->set("r_name",argat(3));
-					msg += "Done";
-				} else if(field.compare("level") == 0) {
-					msg += "Setting level...";
-					profile->set("r_level",argat(3));
-					msg += "Done";
-				} else if(field.compare("type") == 0) {
-					msg += "Setting level...";
-					profile->set("r_type",argat(3));
-					msg += "Done";
-				} else {
-					push_encoded_error("Did not recognize field name. Expected one of: name,level,type");
-					return {0,"Did not recognize field name. Expected one of: name,level,type"};
-				}
-
-				push_encoded_ok(msg);
-				return {1,""};
+				return profile->set(argat(2),argat(3));
 			});
 
 		}//end raid_interface
@@ -242,10 +244,10 @@ namespace mods::builder::raid {
 			if(id <= 0) {
 				return {0,"Couldn't initialize row"};
 			}
-			mods::orm::raid_list().emplace_back(std::move(c));
-			this->step_list.clear();
+			this->reload_orm();
 			return {1,"Created row."};
 		}
+
 		/** ======== */
 		/** required */
 		/** ======== */
