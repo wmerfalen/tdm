@@ -2,6 +2,7 @@
 {yel}db{/yel}:->{grn}reboot{/grn}
 {yel}act.offensive{/yel}:->{grn}affect_me{/grn}
 {yel}spell_parser{/yel}:->{grn}cast{/grn}
+{yel}scripts/builder-generator/builder-raid{/yel}:->{grn}raid{/grn}
 {yel}act.builder{/yel}:->{grn}next_object_number{/grn}
 {yel}act.builder{/yel}:->{grn}next_zone_number{/grn}
 {yel}act.builder{/yel}:->{grn}next_room_number{/grn}

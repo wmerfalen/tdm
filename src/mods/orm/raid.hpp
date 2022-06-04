@@ -23,6 +23,11 @@ namespace mods::orm {
 (r_stats,16) \
 )
 
+#define RAID_ORM_INIT_MEMBERS ( \
+(std::string_view,r_name), \
+(std::string_view,r_level), \
+(std::string_view,r_type) \
+)
 	struct raid : public mods::orm::orm_base<raid,std::string> {
 		MENTOC_ORM_STRING_LIMITS(RAID_ORM_STRING_LIMITS);
 		/**
@@ -56,18 +61,10 @@ namespace mods::orm {
 		auto destroy() {
 			return  remove(this);
 		}
-		int initialize_row(std::string_view name,
-		                   std::string_view level,
-		                   std::string_view type) {
-			r_name = name;
-			r_level = level;
-			r_type = type;
-			auto s = create(this);
-			if(ORM_FAILURE(s)) {
-				return -1;
-			}
-			return std::get<2>(s);
-		}
+
+		MENTOC_ORM_INITIALIZE_ROW_USING(RAID_ORM_INIT_MEMBERS);
+
+
 	};
 	struct raid_status_t {
 		std::tuple<int16_t,std::string> orm_status;

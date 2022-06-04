@@ -1,5 +1,5 @@
-#ifndef __MENTOC_MODS_ORM_raid_HEADER__
-#define __MENTOC_MODS_ORM_raid_HEADER__
+#ifndef __MENTOC_MODS_ORM____[[[TABLE]]]____HEADER__
+#define __MENTOC_MODS_ORM____[[[TABLE]]]____HEADER__
 
 #include "orm-base.hpp"
 
@@ -8,23 +8,17 @@ namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	static constexpr std::string_view raid_table_name = "raid";
 
-#define RAID_ORM_MEMBERS ( \
+#define ___[[[TABLE]]]____ORM_MEMBERS ( \
 (uint64_t,id,0,1,null,1), \
-(std::string,r_name,"",3,null,1), \
-(std::string,r_level,"",3,null,1), \
-(std::string,r_type,"",3,null,1), \
-(std::string,r_status,"incomplete",3,null,1) \
-)
+___[[[MEMBERS_TUPLE]]]___
+	)
 
-#define RAID_ORM_STRING_LIMITS ( \
-(r_name,256),\
-(r_level,16), \
-(r_type,32), \
-(r_stats,16) \
-)
+#define ___[[[TABLE]]]____ORM_STRING_LIMITS ( \
+___[[[STRING_LIMITS]]]___
+	)
 
-	struct raid : public mods::orm::orm_base<raid,std::string> {
-		MENTOC_ORM_STRING_LIMITS(RAID_ORM_STRING_LIMITS);
+	struct ___[[[TABLE]]]___ : public mods::orm::orm_base<___[[[TABLE]]]___,std::string> {
+		MENTOC_ORM_STRING_LIMITS(___[[[TABLE]]]____ORM_STRING_LIMITS);
 		/**
 		 * member tuple csv columns:
 		 * Member Var Type, Member Var Name, initailized value, pqxx conversion type, native object field, slot list
@@ -36,57 +30,46 @@ namespace mods::orm {
 		 * native object field: the member variable name of mods::scripted_step
 		 * slot list: 1 = list this var in slot_list(), 0 = don't list in slot_list
 		 */
-		MENTOC_ORM_CLASS(RAID_ORM_MEMBERS,"raid");
+		MENTOC_ORM_CLASS(___[[[TABLE]]]____ORM_MEMBERS,"___[[[TABLE]]]___");
 		auto vnum() {
 			return id;
 		}
 
-		raid() {
+		___[[[TABLE]]]___() {
 			this->init();
 			loaded = 0;
 			id = 0;
 		}
-		~raid() = default;
+		~___[[[TABLE]]]___() = default;
 
 		void feed_multi(pqxx::result&);
 
 		MENTOC_ORM_PRIMARY_KEY_FUNCTIONS();
 
-		std::deque<raid> rows;
+		std::deque<___[[[TABLE]]]___> rows;
 		auto destroy() {
 			return  remove(this);
 		}
-		int initialize_row(std::string_view name,
-		                   std::string_view level,
-		                   std::string_view type) {
-			r_name = name;
-			r_level = level;
-			r_type = type;
-			auto s = create(this);
-			if(ORM_FAILURE(s)) {
-				return -1;
-			}
-			return std::get<2>(s);
-		}
+		___[[[INITIALIZE_ROW]]]___
 	};
-	struct raid_status_t {
+	struct ___[[[TABLE]]]____status_t {
 		std::tuple<int16_t,std::string> orm_status;
-		std::unique_ptr<raid> record;
-		raid_status_t() = default;
-		raid_status_t(raid_status_t&& other) : orm_status(other.orm_status),
+		std::unique_ptr<___[[[TABLE]]]___> record;
+		___[[[TABLE]]]____status_t() = default;
+		___[[[TABLE]]]____status_t(___[[[TABLE]]]____status_t&& other) : orm_status(other.orm_status),
 			record(std::move(other.record)) {}
 	};
 
-	using raid_list_t = std::deque<std::shared_ptr<raid>>;
+	using ___[[[TABLE]]]____list_t = std::deque<std::shared_ptr<___[[[TABLE]]]___>>;
 
-	raid_status_t create_raid(
+	___[[[TABLE]]]____status_t create____[[[TABLE]]]___(
 	    std::string_view name,
 	    std::string_view level,
 	    std::string_view type);
 
-	raid_list_t& raid_list();
+	___[[[TABLE]]]____list_t& ___[[[TABLE]]]____list();
 
-	raid_list_t load_all_raid_list();
+	___[[[TABLE]]]____list_t load_all____[[[TABLE]]]____list();
 };
 
 #endif
