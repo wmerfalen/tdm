@@ -1,4 +1,5 @@
 #include "legacy-combat.hpp"
+#include "../flee.hpp"
 
 namespace mods::weapons::legacy {
 
@@ -257,14 +258,14 @@ namespace mods::weapons::legacy {
 					send_to_char(victim, "{red}You wish that your wounds would stop BLEEDING so much!{/red}\r\n");
 
 					if(ch != victim && MOB_FLAGGED(victim, MOB_WIMPY)) {
-						do_flee(victim, NULL, 0, 0,player);
+						mods::flee::do_flee(victim, NULL, 0, 0,player);
 					}
 				}
 
 				if(!IS_NPC(victim) && GET_WIMP_LEV(victim) && (victim != ch) &&
 				        GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
 					send_to_char(victim, "You wimp out, and attempt to flee!\r\n");
-					do_flee(victim, NULL, 0, 0,player);
+					mods::flee::do_flee(victim, NULL, 0, 0,player);
 				}
 
 				break;
@@ -274,7 +275,7 @@ namespace mods::weapons::legacy {
 		MENTOC_PREAMBLE();
 		/* Help out poor linkless people who are attacked */
 		if(!IS_NPC(victim) && !(victim->has_desc) && GET_POS(victim) > POS_STUNNED) {
-			do_flee(victim, NULL, 0, 0,player);
+			mods::flee::do_flee(victim, NULL, 0, 0,player);
 
 			if(!FIGHTING(victim)) {
 				act("$n is rescued by divine forces.", FALSE, victim, 0, 0, TO_ROOM);

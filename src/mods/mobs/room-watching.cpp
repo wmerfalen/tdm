@@ -8,6 +8,7 @@
 #include <map>
 #include <set>
 
+//#define __MENTOC_SHOW_WATCH_ROOMS_HEARTBEAT__
 #ifdef __MENTOC_SHOW_WATCH_ROOMS_HEARTBEAT__
 #define m_report(a) mentoc_prefix_debug("mods::mobs::room_watching::REPORT:") << a << "\n";
 #else

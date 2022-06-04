@@ -286,7 +286,8 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 			 */
 			generic_thief_roam.append_child(
 			TNode::create_selector({
-				find_target_near_me(),
+				find_attackers(),
+				//find_target_near_me(),
 				//watch_room(),
 			})
 			);
@@ -304,7 +305,7 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 			generic_thief_attempt_thievery.append_child(
 			TNode::create_sequence({
 				find_target_near_me(),
-				watch_room(),
+				//watch_room(),
 				//get_hostile_toward_witnesses()
 			})
 			);

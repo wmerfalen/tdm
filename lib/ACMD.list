@@ -1,226 +1,68 @@
-./act.movement.cpp:->move
-./act.movement.cpp:->gen_door
-./act.movement.cpp:->enter
-./act.movement.cpp:->leave
-./act.movement.cpp:->stand
-./act.movement.cpp:->sit
-./act.movement.cpp:->rest
-./act.movement.cpp:->sleep
-./act.movement.cpp:->wake
-./act.movement.cpp:->follow
-./house.cpp:->hcontrol
-./house.cpp:->house
-./act.demolitions.cpp:->cancel
-./act.demolitions.cpp:->install
-./act.demolitions.cpp:->uninstall
-./act.demolitions.cpp:->breach
-./act.demolitions.cpp:->thermite
-./graph.cpp:->track
-./limits.cpp:->idle
-./act.offensive.cpp:->throw
-./act.offensive.cpp:->snipe_object
-./act.offensive.cpp:->snipe
-./act.offensive.cpp:->spray
-./act.offensive.cpp:->silencers_on
-./act.offensive.cpp:->silencers_off
-./act.offensive.cpp:->go_loud
-./act.offensive.cpp:->engagement_mode
-./act.offensive.cpp:->regroup
-./act.offensive.cpp:->command_sequence
-./act.offensive.cpp:->scan /* !mods */
-./act.offensive.cpp:->assist
-./act.offensive.cpp:->hit
-./act.offensive.cpp:->kill
-./act.offensive.cpp:->backstab
-./act.offensive.cpp:->order
-./act.offensive.cpp:->flee
-./act.offensive.cpp:->bash
-./act.offensive.cpp:->rescue
-./act.offensive.cpp:->kick
-./tags:ACMD	act.builder.cpp	/^->flush_holding$/;"	kind:function	line:224	signature:(do_flush_holding)
-./tags:ACMD	act.builder.cpp	/^->hold_anything$/;"	kind:function	line:448	signature:(do_hold_anything)
-./tags:ACMD	act.builder.cpp	/^->uuid$/;"	kind:function	line:536	signature:(do_uuid)
-./tags:ACMD	act.comm.cpp	/^->gen_comm$/;"	kind:function	line:342	signature:(do_gen_comm)
-./tags:ACMD	act.comm.cpp	/^->gsay$/;"	kind:function	line:66	signature:(do_gsay)
-./tags:ACMD	act.comm.cpp	/^->qcomm$/;"	kind:function	line:347	signature:(do_qcomm)
-./tags:ACMD	act.comm.cpp	/^->reply$/;"	kind:function	line:172	signature:(do_reply)
-./tags:ACMD	act.comm.cpp	/^->say$/;"	kind:function	line:45	signature:(do_say)
-./tags:ACMD	act.comm.cpp	/^->spec_comm$/;"	kind:function	line:211	signature:(do_spec_comm)
-./tags:ACMD	act.comm.cpp	/^->tell$/;"	kind:function	line:154	signature:(do_tell)
-./tags:ACMD	act.comm.cpp	/^->write$/;"	kind:function	line:265	signature:(do_write)
-./tags:ACMD	act.demolitions.cpp	/^->breach$/;"	kind:function	line:183	signature:(do_breach)
-./tags:ACMD	act.demolitions.cpp	/^->cancel$/;"	kind:function	line:41	signature:(do_cancel)
-./tags:ACMD	act.demolitions.cpp	/^->install$/;"	kind:function	line:82	signature:(do_install)
-./tags:ACMD	act.demolitions.cpp	/^->thermite$/;"	kind:function	line:217	signature:(do_thermite)
-./tags:ACMD	act.demolitions.cpp	/^->uninstall$/;"	kind:function	line:124	signature:(do_uninstall)
-./tags:ACMD	act.informative.cpp	/^->color$/;"	kind:function	line:2047	signature:(do_color)
-./tags:ACMD	act.informative.cpp	/^->commands$/;"	kind:function	line:2180	signature:(do_commands)
-./tags:ACMD	act.informative.cpp	/^->consider$/;"	kind:function	line:1970	signature:(do_consider)
-./tags:ACMD	act.informative.cpp	/^->diagnose$/;"	kind:function	line:2021	signature:(do_diagnose)
-./tags:ACMD	act.informative.cpp	/^->drone$/;"	kind:function	line:126	signature:(do_drone)
-./tags:ACMD	act.informative.cpp	/^->equipment$/;"	kind:function	line:1333	signature:(do_equipment)
-./tags:ACMD	act.informative.cpp	/^->examine$/;"	kind:function	line:1289	signature:(do_examine)
-./tags:ACMD	act.informative.cpp	/^->exits$/;"	kind:function	line:843	signature:(do_exits)
-./tags:ACMD	act.informative.cpp	/^->gen_ps$/;"	kind:function	line:1675	signature:(do_gen_ps)
-./tags:ACMD	act.informative.cpp	/^->inventory$/;"	kind:function	line:1327	signature:(do_inventory)
-./tags:ACMD	act.informative.cpp	/^->levels$/;"	kind:function	line:1923	signature:(do_levels)
-./tags:ACMD	act.informative.cpp	/^->look$/;"	kind:function	line:1248	signature:(do_look)
-./tags:ACMD	act.informative.cpp	/^->preferences$/;"	kind:function	line:179	signature:(do_preferences)
-./tags:ACMD	act.informative.cpp	/^->recall$/;"	kind:function	line:156	signature:(do_recall)
-./tags:ACMD	act.informative.cpp	/^->time$/;"	kind:function	line:1358	signature:(do_time)
-./tags:ACMD	act.informative.cpp	/^->toggle$/;"	kind:function	line:2082	signature:(do_toggle)
-./tags:ACMD	act.informative.cpp	/^->users$/;"	kind:function	line:1496	signature:(do_users)
-./tags:ACMD	act.informative.cpp	/^->view$/;"	kind:function	line:2243	signature:(do_view)
-./tags:ACMD	act.informative.cpp	/^->weather$/;"	kind:function	line:1414	signature:(do_weather)
-./tags:ACMD	act.informative.cpp	/^->where$/;"	kind:function	line:1909	signature:(do_where)
-./tags:ACMD	act.informative.cpp	/^->who$/;"	kind:function	line:1454	signature:(do_who)
-./tags:ACMD	act.item.cpp	/^->drink$/;"	kind:function	line:821	signature:(do_drink)
-./tags:ACMD	act.item.cpp	/^->drop$/;"	kind:function	line:500	signature:(do_drop)
-./tags:ACMD	act.item.cpp	/^->eat$/;"	kind:function	line:945	signature:(do_eat)
-./tags:ACMD	act.item.cpp	/^->get$/;"	kind:function	line:363	signature:(do_get)
-./tags:ACMD	act.item.cpp	/^->give$/;"	kind:function	line:671	signature:(do_give)
-./tags:ACMD	act.item.cpp	/^->grab$/;"	kind:function	line:1728	signature:(do_grab)
-./tags:ACMD	act.item.cpp	/^->pour$/;"	kind:function	line:1023	signature:(do_pour)
-./tags:ACMD	act.item.cpp	/^->put$/;"	kind:function	line:105	signature:(do_put)
-./tags:ACMD	act.item.cpp	/^->remove$/;"	kind:function	line:1783	signature:(do_remove)
-./tags:ACMD	act.item.cpp	/^->wear$/;"	kind:function	line:1597	signature:(do_wear)
-./tags:ACMD	act.item.cpp	/^->wield$/;"	kind:function	line:1704	signature:(do_wield)
-./tags:ACMD	act.medic.cpp	/^->heal$/;"	kind:function	line:23	signature:(do_heal)
-./tags:ACMD	act.medic.cpp	/^->revive$/;"	kind:function	line:50	signature:(do_revive)
-./tags:ACMD	act.movement.cpp	/^->enter$/;"	kind:function	line:593	signature:(do_enter)
-./tags:ACMD	act.movement.cpp	/^->follow$/;"	kind:function	line:830	signature:(do_follow)
-./tags:ACMD	act.movement.cpp	/^->gen_door$/;"	kind:function	line:535	signature:(do_gen_door)
-./tags:ACMD	act.movement.cpp	/^->leave$/;"	kind:function	line:629	signature:(do_leave)
-./tags:ACMD	act.movement.cpp	/^->move$/;"	kind:function	line:292	signature:(do_move)
-./tags:ACMD	act.movement.cpp	/^->rest$/;"	kind:function	line:721	signature:(do_rest)
-./tags:ACMD	act.movement.cpp	/^->sit$/;"	kind:function	line:686	signature:(do_sit)
-./tags:ACMD	act.movement.cpp	/^->sleep$/;"	kind:function	line:756	signature:(do_sleep)
-./tags:ACMD	act.movement.cpp	/^->stand$/;"	kind:function	line:649	signature:(do_stand)
-./tags:ACMD	act.movement.cpp	/^->wake$/;"	kind:function	line:785	signature:(do_wake)
-./tags:ACMD	act.offensive.cpp	/^->assist$/;"	kind:function	line:290	signature:(do_assist)
-./tags:ACMD	act.offensive.cpp	/^->command_sequence$/;"	kind:function	line:199	signature:(do_command_sequence)
-./tags:ACMD	act.offensive.cpp	/^->engagement_mode$/;"	kind:function	line:188	signature:(do_engagement_mode)
-./tags:ACMD	act.offensive.cpp	/^->go_loud$/;"	kind:function	line:184	signature:(do_go_loud)
-./tags:ACMD	act.offensive.cpp	/^->regroup$/;"	kind:function	line:192	signature:(do_regroup)
-./tags:ACMD	act.offensive.cpp	/^->scan \/* !mods *\/$/;"	kind:function	line:214	signature:(do_scan)
-./tags:ACMD	act.offensive.cpp	/^->silencers_off$/;"	kind:function	line:179	signature:(do_silencers_off)
-./tags:ACMD	act.offensive.cpp	/^->silencers_on$/;"	kind:function	line:175	signature:(do_silencers_on)
-./tags:ACMD	act.offensive.cpp	/^->snipe$/;"	kind:function	line:139	signature:(do_snipe)
-./tags:ACMD	act.offensive.cpp	/^->snipe_object$/;"	kind:function	line:124	signature:(do_snipe_object)
-./tags:ACMD	act.offensive.cpp	/^->spray$/;"	kind:function	line:159	signature:(do_spray)
-./tags:ACMD	act.offensive.cpp	/^->throw$/;"	kind:function	line:61	signature:(do_throw)
-./tags:ACMD	act.other.cpp	/^->display$/;"	kind:function	line:778	signature:(do_display)
-./tags:ACMD	act.other.cpp	/^->gen_tog$/;"	kind:function	line:903	signature:(do_gen_tog)
-./tags:ACMD	act.other.cpp	/^->gen_write$/;"	kind:function	line:832	signature:(do_gen_write)
-./tags:ACMD	act.other.cpp	/^->group$/;"	kind:function	line:430	signature:(do_group)
-./tags:ACMD	act.other.cpp	/^->hide$/;"	kind:function	line:189	signature:(do_hide)
-./tags:ACMD	act.other.cpp	/^->not_here$/;"	kind:function	line:152	signature:(do_not_here)
-./tags:ACMD	act.other.cpp	/^->quit$/;"	kind:function	line:75	signature:(do_quit)
-./tags:ACMD	act.other.cpp	/^->report$/;"	kind:function	line:544	signature:(do_report)
-./tags:ACMD	act.other.cpp	/^->save$/;"	kind:function	line:116	signature:(do_save)
-./tags:ACMD	act.other.cpp	/^->sneak$/;"	kind:function	line:158	signature:(do_sneak)
-./tags:ACMD	act.other.cpp	/^->split$/;"	kind:function	line:575	signature:(do_split)
-./tags:ACMD	act.other.cpp	/^->steal$/;"	kind:function	line:215	signature:(do_steal)
-./tags:ACMD	act.other.cpp	/^->title$/;"	kind:function	line:358	signature:(do_title)
-./tags:ACMD	act.other.cpp	/^->ungroup$/;"	kind:function	line:484	signature:(do_ungroup)
-./tags:ACMD	act.other.cpp	/^->use$/;"	kind:function	line:669	signature:(do_use)
-./tags:ACMD	act.other.cpp	/^->visible$/;"	kind:function	line:342	signature:(do_visible)
-./tags:ACMD	act.other.cpp	/^->wimpy$/;"	kind:function	line:735	signature:(do_wimpy)
-./tags:ACMD	act.social.cpp	/^->action$/;"	kind:function	line:96	signature:(do_action)
-./tags:ACMD	act.social.cpp	/^->insult$/;"	kind:function	line:139	signature:(do_insult)
-./tags:ACMD	act.wizard.cpp	/^->stat$/;"	kind:function	line:838	signature:(do_stat)
-./tags:ACMD	graph.cpp	/^->track$/;"	kind:function	line:171	signature:(do_track)
-./tags:ACMD	house.cpp	/^->hcontrol$/;"	kind:function	line:551	signature:(do_hcontrol)
-./tags:ACMD	house.cpp	/^->house$/;"	kind:function	line:571	signature:(do_house)
-./tags:ACMD	interpreter.cpp	/^->alias$/;"	kind:function	line:1098	signature:(do_alias)
-./tags:ACMD	interpreter.cpp	/^->room_vnum$/;"	kind:function	line:122	signature:(do_room_vnum)
-./tags:ACMD	interpreter.cpp	/^->unimplemented$/;"	kind:function	line:56	signature:(do_unimplemented)
-./tags:ACMD	limits.cpp	/^->idle$/;"	kind:function	line:462	signature:(do_idle)
-./tags:ACMD	modify.cpp	/^->skillset$/;"	kind:function	line:182	signature:(do_skillset)
-./tags:ACMD	mods/bleed.cpp	/^	->bleed_me$/;"	kind:function	line:235	namespace:mods::bleed	signature:(do_bleed_me)
-./tags:ACMD	mods/blind.cpp	/^	->blind_me_for$/;"	kind:function	line:145	namespace:mods::blind	signature:(do_blind_me_for)
-./tags:ACMD	mods/classes/breacher.cpp	/^->teep$/;"	kind:function	line:94	signature:(do_teep)
-./tags:ACMD	mods/classes/contagion.cpp	/^	->invoke$/;"	kind:function	line:308	namespace:mods::class_abilities::contagion	signature:(do_invoke)
-./tags:ACMD	mods/classes/engineer.cpp	/^	->drone_bomb$/;"	kind:function	line:100	namespace:mods::class_abilities::engineer	signature:(do_drone_bomb)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->attach_frag_underbarrel$/;"	kind:function	line:737	namespace:mods::class_abilities::ghost	signature:(do_attach_frag_underbarrel)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->attach_shotgun_underbarrel$/;"	kind:function	line:709	namespace:mods::class_abilities::ghost	signature:(do_attach_shotgun_underbarrel)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->build_claymore$/;"	kind:function	line:657	namespace:mods::class_abilities::ghost	signature:(do_build_claymore)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->build_corrosive_claymore$/;"	kind:function	line:639	namespace:mods::class_abilities::ghost	signature:(do_build_corrosive_claymore)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->build_shrapnel_claymore$/;"	kind:function	line:648	namespace:mods::class_abilities::ghost	signature:(do_build_shrapnel_claymore)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->detach_frag_underbarrel$/;"	kind:function	line:747	namespace:mods::class_abilities::ghost	signature:(do_detach_frag_underbarrel)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->detach_shotgun_underbarrel$/;"	kind:function	line:727	namespace:mods::class_abilities::ghost	signature:(do_detach_shotgun_underbarrel)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->disengage$/;"	kind:function	line:703	namespace:mods::class_abilities::ghost	signature:(do_disengage)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->dissipate$/;"	kind:function	line:782	namespace:mods::class_abilities::ghost	signature:(do_dissipate)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->engage$/;"	kind:function	line:697	namespace:mods::class_abilities::ghost	signature:(do_engage)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->fire$/;"	kind:function	line:757	namespace:mods::class_abilities::ghost	signature:(do_fire)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->inject_adrenaline_shot$/;"	kind:function	line:792	namespace:mods::class_abilities::ghost	signature:(do_inject_adrenaline_shot)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->light_bandage$/;"	kind:function	line:633	namespace:mods::class_abilities::ghost	signature:(do_light_bandage)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->mark_target$/;"	kind:function	line:672	namespace:mods::class_abilities::ghost	signature:(do_mark_target)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->tracking_shot$/;"	kind:function	line:684	namespace:mods::class_abilities::ghost	signature:(do_tracking_shot)
-./tags:ACMD	mods/classes/ghost.cpp	/^	->xray_shot$/;"	kind:function	line:666	namespace:mods::class_abilities::ghost	signature:(do_xray_shot)
-./tags:ACMD	mods/classes/pyrexia.cpp	/^->fire_nade$/;"	kind:function	line:217	signature:(do_fire_nade)
-./tags:ACMD	mods/combat-composer/snipe-target.cpp	/^	->print_rct$/;"	kind:function	line:35	namespace:mods::combat_composer	signature:(do_print_rct)
-./tags:ACMD	mods/combat.cpp	/^		->set_rules_of_engagement$/;"	kind:function	line:35	namespace:mods::combat::commands	signature:(do_set_rules_of_engagement)
-./tags:ACMD	mods/contracts.cpp	/^	->contract$/;"	kind:function	line:87	namespace:mods::contracts	signature:(do_contract)
-./tags:ACMD	mods/corpse.cpp	/^	->corpse_me$/;"	kind:function	line:259	namespace:mods::corpse	signature:(do_corpse_me)
-./tags:ACMD	mods/date-time.cpp	/^	->moon_phase$/;"	kind:function	line:233	namespace:mods::date_time	signature:(do_moon_phase)
-./tags:ACMD	mods/help.cpp	/^	->help$/;"	kind:function	line:1209	namespace:mods::help	signature:(do_help)
-./tags:ACMD	mods/levels.cpp	/^	->exp$/;"	kind:function	line:875	namespace:mods::levels	signature:(do_exp)
-./tags:ACMD	mods/loot.cpp	/^	->list_loot$/;"	kind:function	line:274	namespace:mods::loot	signature:(do_list_loot)
-./tags:ACMD	mods/loot.cpp	/^	->show_loot$/;"	kind:function	line:234	namespace:mods::loot	signature:(do_show_loot)
-./tags:ACMD	mods/loot.cpp	/^	->take_loot$/;"	kind:function	line:254	namespace:mods::loot	signature:(do_take_loot)
-./tags:ACMD	mods/melee/main.cpp	/^	->clear_combat_order$/;"	kind:function	line:407	namespace:mods::melee::main	signature:(do_clear_combat_order)
-./tags:ACMD	mods/melee/main.cpp	/^	->dispatch$/;"	kind:function	line:413	namespace:mods::melee::main	signature:(do_dispatch)
-./tags:ACMD	mods/melee/main.cpp	/^	->list_combat_order$/;"	kind:function	line:397	namespace:mods::melee::main	signature:(do_list_combat_order)
-./tags:ACMD	mods/melee/main.cpp	/^	->set_combat_order$/;"	kind:function	line:369	namespace:mods::melee::main	signature:(do_set_combat_order)
-./tags:ACMD	mods/melee/stance.cpp	/^	->stance$/;"	kind:function	line:23	namespace:mods::melee::stance	signature:(do_stance)
-./tags:ACMD	mods/melt.cpp	/^	->melt_me$/;"	kind:function	line:210	namespace:mods::melt	signature:(do_melt_me)
-./tags:ACMD	mods/mini-games/line-up.cpp	/^->hack$/;"	kind:function	line:228	signature:(do_hack)
-./tags:ACMD	mods/mini-games/line-up.cpp	/^->next_row$/;"	kind:function	line:250	signature:(do_next_row)
-./tags:ACMD	mods/mini-games/line-up.cpp	/^->reset_hack$/;"	kind:function	line:254	signature:(do_reset_hack)
-./tags:ACMD	mods/mini-games/line-up.cpp	/^->rotate_left$/;"	kind:function	line:246	signature:(do_rotate_left)
-./tags:ACMD	mods/mini-games/line-up.cpp	/^->rotate_right$/;"	kind:function	line:242	signature:(do_rotate_right)
-./tags:ACMD	mods/mini-games/wires.cpp	/^->plug_cable$/;"	kind:function	line:117	signature:(do_plug_cable)
-./tags:ACMD	mods/mobs/defiler.cpp	/^	->bioscan$/;"	kind:function	line:638	namespace:mods::mobs::defiler_init	signature:(do_bioscan)
-./tags:ACMD	mods/mp.cpp	/^	->mp$/;"	kind:function	line:18	namespace:mods::mp	signature:(do_mp)
-./tags:ACMD	mods/orm/player-base-ability.cpp	/^		->save_my_pba$/;"	kind:function	line:177	namespace:mods::orm::pba	signature:(do_save_my_pba)
-./tags:ACMD	mods/prefs.cpp	/^	->pref$/;"	kind:function	line:80	namespace:mods::prefs	signature:(do_pref)
-./tags:ACMD	mods/projectile.cpp	/^		->fragtest_east$/;"	kind:function	line:900	namespace:mods::projectile	signature:(do_fragtest_east)
-./tags:ACMD	mods/rifle-attachments.cpp	/^		->vcarrying$/;"	kind:function	line:88	namespace:mods::rifle_attachments	signature:(do_vcarrying)
-./tags:ACMD	mods/rifle.cpp	/^	->rifle_me$/;"	kind:function	line:54	namespace:mods::rifle	signature:(do_rifle_me)
-./tags:ACMD	mods/scripted-step.cpp	/^	->scripted_step$/;"	kind:function	line:53	namespace:mods	signature:(do_scripted_step)
-./tags:ACMD	mods/skills.cpp	/^	->buy_practice$/;"	kind:function	line:224	namespace:mods::skills	signature:(do_buy_practice)
-./tags:ACMD	mods/skills.cpp	/^	->practice$/;"	kind:function	line:250	namespace:mods::skills	signature:(do_practice)
-./tags:ACMD	mods/skills.cpp	/^	->score$/;"	kind:function	line:84	namespace:mods::skills	signature:(do_score)
-./tags:ACMD	mods/skills.cpp	/^	->skills$/;"	kind:function	line:241	namespace:mods::skills	signature:(do_skills)
-./tags:ACMD	mods/values.cpp	/^			->get_value$/;"	kind:function	line:3371	namespace:mods::values	signature:(do_get_value)
-./tags:ACMD	mods/values.cpp	/^			->list_values$/;"	kind:function	line:3432	namespace:mods::values	signature:(do_list_values)
-./tags:ACMD	mods/values.cpp	/^			->revert_value_to_default$/;"	kind:function	line:3414	namespace:mods::values	signature:(do_revert_value_to_default)
-./tags:ACMD	mods/values.cpp	/^			->set_value$/;"	kind:function	line:3321	namespace:mods::values	signature:(do_set_value)
-./tags:ACMD	mods/weapons/reload.cpp	/^	->reload$/;"	kind:function	line:145	namespace:mods::weapons::reload	signature:(do_reload)
-./tags:ACMD	shop.cpp	/^->buy$/;"	kind:function	line:1058	signature:(do_buy)
-./tags:ACMD	shop.cpp	/^->list$/;"	kind:function	line:1052	signature:(do_list)
-./act.comm.cpp:->say
-./act.comm.cpp:->gsay
-./act.comm.cpp:->tell
-./act.comm.cpp:->reply
-./act.comm.cpp:->spec_comm
-./act.comm.cpp:->write
-./act.comm.cpp:->gen_comm
-./act.comm.cpp:->qcomm
-./act.builder.cpp:->flush_holding
-./act.builder.cpp:->hold_anything
-./act.builder.cpp:->uuid
 ./shop.cpp:->list
 ./shop.cpp:->buy
-./act.medic.cpp:->heal
-./act.medic.cpp:->revive
-./act.social.cpp:->action
-./act.social.cpp:->insult
-./interpreter.cpp:->unimplemented
-./interpreter.cpp:->room_vnum
-./interpreter.cpp:->alias
-./modify.cpp:->skillset
+./mods/melt.cpp:	->melt_me
+./mods/flee.cpp:	->flee
+./mods/rifle-attachments.cpp:		->vcarrying
+./mods/prefs.cpp:	->pref
+./mods/classes/contagion.cpp:	->invoke
+./mods/classes/pyrexia.cpp:->fire_nade
+./mods/classes/ghost.cpp:	->light_bandage
+./mods/classes/ghost.cpp:	->build_corrosive_claymore
+./mods/classes/ghost.cpp:	->build_shrapnel_claymore
+./mods/classes/ghost.cpp:	->build_claymore
+./mods/classes/ghost.cpp:	->xray_shot
+./mods/classes/ghost.cpp:	->mark_target
+./mods/classes/ghost.cpp:	->tracking_shot
+./mods/classes/ghost.cpp:	->engage
+./mods/classes/ghost.cpp:	->disengage
+./mods/classes/ghost.cpp:	->attach_shotgun_underbarrel
+./mods/classes/ghost.cpp:	->detach_shotgun_underbarrel
+./mods/classes/ghost.cpp:	->attach_frag_underbarrel
+./mods/classes/ghost.cpp:	->detach_frag_underbarrel
+./mods/classes/ghost.cpp:	->fire
+./mods/classes/ghost.cpp:	->dissipate
+./mods/classes/ghost.cpp:	->inject_adrenaline_shot
+./mods/classes/engineer.cpp:	->drone_bomb
+./mods/classes/breacher.cpp:->teep
+./mods/rifle.cpp:	->rifle_me
+./mods/bleed.cpp:	->bleed_me
+./mods/help.cpp:	->help
+./mods/loot.cpp:	->show_loot
+./mods/loot.cpp:	->take_loot
+./mods/loot.cpp:	->list_loot
+./mods/levels.cpp:	->exp
+./mods/date-time.cpp:	->moon_phase
+./mods/scripted-step.cpp:	->scripted_step
+./mods/projectile.cpp:		->fragtest_east
+./mods/suicide.cpp:	->suicide
+./mods/mini-games/line-up.cpp:->hack
+./mods/mini-games/line-up.cpp:->rotate_right
+./mods/mini-games/line-up.cpp:->rotate_left
+./mods/mini-games/line-up.cpp:->next_row
+./mods/mini-games/line-up.cpp:->reset_hack
+./mods/mini-games/wires.cpp:->plug_cable
+./mods/contracts.cpp:	->contract
+./mods/weapons/reload.cpp:	->reload
+./mods/corpse.cpp:	->corpse_me
+./mods/combat-composer/snipe-target.cpp:	->print_rct
+./mods/skills.cpp:	->score
+./mods/skills.cpp:	->buy_practice
+./mods/skills.cpp:	->skills
+./mods/skills.cpp:	->practice
+./mods/combat.cpp:		->set_rules_of_engagement
+./mods/blind.cpp:	->blind_me_for
+./mods/mobs/defiler.cpp:	->bioscan
+./mods/melee/main.cpp:	->set_combat_order
+./mods/melee/main.cpp:	->list_combat_order
+./mods/melee/main.cpp:	->clear_combat_order
+./mods/melee/main.cpp:	->dispatch
+./mods/melee/stance.cpp:	->stance
+./mods/mp.cpp:	->mp
+./mods/values.cpp:			->set_value
+./mods/values.cpp:			->get_value
+./mods/values.cpp:			->revert_value_to_default
+./mods/values.cpp:			->list_values
+./mods/orm/player-base-ability.cpp:		->save_my_pba
 ./act.item.cpp:->put
 ./act.item.cpp:->get
 ./act.item.cpp:->drop
@@ -232,6 +74,9 @@
 ./act.item.cpp:->wield
 ./act.item.cpp:->grab
 ./act.item.cpp:->remove
+./house.cpp:->hcontrol
+./house.cpp:->house
+./limits.cpp:->idle
 ./act.informative.cpp:->drone
 ./act.informative.cpp:->recall
 ./act.informative.cpp:->preferences
@@ -253,7 +98,6 @@
 ./act.informative.cpp:->toggle
 ./act.informative.cpp:->commands
 ./act.informative.cpp:->view
-./act.wizard.cpp:->stat
 ./act.other.cpp:->quit
 ./act.other.cpp:->save
 ./act.other.cpp:->not_here
@@ -271,64 +115,58 @@
 ./act.other.cpp:->display
 ./act.other.cpp:->gen_write
 ./act.other.cpp:->gen_tog
-./mods/orm/player-base-ability.cpp:		->save_my_pba
-./mods/classes/engineer.cpp:	->drone_bomb
-./mods/classes/breacher.cpp:->teep
-./mods/classes/ghost.cpp:	->light_bandage
-./mods/classes/ghost.cpp:	->build_corrosive_claymore
-./mods/classes/ghost.cpp:	->build_shrapnel_claymore
-./mods/classes/ghost.cpp:	->build_claymore
-./mods/classes/ghost.cpp:	->xray_shot
-./mods/classes/ghost.cpp:	->mark_target
-./mods/classes/ghost.cpp:	->tracking_shot
-./mods/classes/ghost.cpp:	->engage
-./mods/classes/ghost.cpp:	->disengage
-./mods/classes/ghost.cpp:	->attach_shotgun_underbarrel
-./mods/classes/ghost.cpp:	->detach_shotgun_underbarrel
-./mods/classes/ghost.cpp:	->attach_frag_underbarrel
-./mods/classes/ghost.cpp:	->detach_frag_underbarrel
-./mods/classes/ghost.cpp:	->fire
-./mods/classes/ghost.cpp:	->dissipate
-./mods/classes/ghost.cpp:	->inject_adrenaline_shot
-./mods/classes/contagion.cpp:	->invoke
-./mods/classes/pyrexia.cpp:->fire_nade
-./mods/blind.cpp:	->blind_me_for
-./mods/corpse.cpp:	->corpse_me
-./mods/values.cpp:			->set_value
-./mods/values.cpp:			->get_value
-./mods/values.cpp:			->revert_value_to_default
-./mods/values.cpp:			->list_values
-./mods/weapons/reload.cpp:	->reload
-./mods/mobs/defiler.cpp:	->bioscan
-./mods/rifle.cpp:	->rifle_me
-./mods/prefs.cpp:	->pref
-./mods/rifle-attachments.cpp:		->vcarrying
-./mods/contracts.cpp:	->contract
-./mods/melt.cpp:	->melt_me
-./mods/date-time.cpp:	->moon_phase
-./mods/mini-games/line-up.cpp:->hack
-./mods/mini-games/line-up.cpp:->rotate_right
-./mods/mini-games/line-up.cpp:->rotate_left
-./mods/mini-games/line-up.cpp:->next_row
-./mods/mini-games/line-up.cpp:->reset_hack
-./mods/mini-games/wires.cpp:->plug_cable
-./mods/skills.cpp:	->score
-./mods/skills.cpp:	->buy_practice
-./mods/skills.cpp:	->skills
-./mods/skills.cpp:	->practice
-./mods/bleed.cpp:	->bleed_me
-./mods/help.cpp:	->help
-./mods/combat-composer/snipe-target.cpp:	->print_rct
-./mods/combat.cpp:		->set_rules_of_engagement
-./mods/melee/stance.cpp:	->stance
-./mods/melee/main.cpp:	->set_combat_order
-./mods/melee/main.cpp:	->list_combat_order
-./mods/melee/main.cpp:	->clear_combat_order
-./mods/melee/main.cpp:	->dispatch
-./mods/mp.cpp:	->mp
-./mods/scripted-step.cpp:	->scripted_step
-./mods/loot.cpp:	->show_loot
-./mods/loot.cpp:	->take_loot
-./mods/loot.cpp:	->list_loot
-./mods/levels.cpp:	->exp
-./mods/projectile.cpp:		->fragtest_east
+./act.builder.cpp:->flush_holding
+./act.builder.cpp:->hold_anything
+./act.builder.cpp:->uuid
+./modify.cpp:->skillset
+./act.offensive.cpp:->throw
+./act.offensive.cpp:->snipe_object
+./act.offensive.cpp:->snipe
+./act.offensive.cpp:->spray
+./act.offensive.cpp:->silencers_on
+./act.offensive.cpp:->silencers_off
+./act.offensive.cpp:->go_loud
+./act.offensive.cpp:->engagement_mode
+./act.offensive.cpp:->regroup
+./act.offensive.cpp:->command_sequence
+./act.offensive.cpp:->scan /* !mods */
+./act.offensive.cpp:->assist
+./act.offensive.cpp:->hit
+./act.offensive.cpp:->kill
+./act.offensive.cpp:->backstab
+./act.offensive.cpp:->order
+./act.offensive.cpp:->bash
+./act.offensive.cpp:->rescue
+./act.offensive.cpp:->kick
+./act.medic.cpp:->heal
+./act.medic.cpp:->revive
+./act.movement.cpp:->move
+./act.movement.cpp:->gen_door
+./act.movement.cpp:->enter
+./act.movement.cpp:->leave
+./act.movement.cpp:->stand
+./act.movement.cpp:->sit
+./act.movement.cpp:->rest
+./act.movement.cpp:->sleep
+./act.movement.cpp:->wake
+./act.movement.cpp:->follow
+./act.wizard.cpp:->stat
+./act.demolitions.cpp:->cancel
+./act.demolitions.cpp:->install
+./act.demolitions.cpp:->uninstall
+./act.demolitions.cpp:->breach
+./act.demolitions.cpp:->thermite
+./interpreter.cpp:->unimplemented
+./interpreter.cpp:->room_vnum
+./interpreter.cpp:->alias
+./graph.cpp:->track
+./act.comm.cpp:->say
+./act.comm.cpp:->gsay
+./act.comm.cpp:->tell
+./act.comm.cpp:->reply
+./act.comm.cpp:->spec_comm
+./act.comm.cpp:->write
+./act.comm.cpp:->gen_comm
+./act.comm.cpp:->qcomm
+./act.social.cpp:->action
+./act.social.cpp:->insult

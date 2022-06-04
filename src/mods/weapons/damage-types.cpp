@@ -51,7 +51,9 @@ extern void check_killer(char_data *ch, char_data *vict);
 extern int skill_message(int dam, char_data *ch, char_data *vict, int attacktype);
 extern void dam_message(int dam, char_data *ch, char_data *victim, int w_type);
 extern void send_to_room(room_rnum room, const char *messg, ...);
-extern ACMD(do_flee);
+namespace mods::flee {
+	extern ACMD(do_flee);
+};
 #if __MENTOC_USE_GROUP_GAIN__
 extern void group_gain(char_data *ch, char_data *victim);
 #endif
@@ -324,14 +326,14 @@ namespace mods::weapons::damage_types {
 						send_to_char(victim, "{red}You wish that your wounds would stop BLEEDING so much!{/red}\r\n");
 
 						if(ch != victim && MOB_FLAGGED(victim, MOB_WIMPY)) {
-							do_flee(victim, NULL, 0, 0,player);
+							mods::flee::do_flee(victim, NULL, 0, 0,player);
 						}
 					}
 
 					if(!IS_NPC(victim) && GET_WIMP_LEV(victim) && (victim != ch) &&
 					        GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
 						send_to_char(victim, "You wimp out, and attempt to flee!\r\n");
-						do_flee(victim, NULL, 0, 0,player);
+						mods::flee::do_flee(victim, NULL, 0, 0,player);
 					}
 
 					break;
@@ -341,7 +343,7 @@ namespace mods::weapons::damage_types {
 			MENTOC_PREAMBLE();
 			/* Help out poor linkless people who are attacked */
 			if(!IS_NPC(victim) && !(victim->has_desc) && GET_POS(victim) > POS_STUNNED) {
-				do_flee(victim, NULL, 0, 0,player);
+				mods::flee::do_flee(victim, NULL, 0, 0,player);
 
 				if(!FIGHTING(victim)) {
 					act("$n is rescued by divine forces.", FALSE, victim, 0, 0, TO_ROOM);

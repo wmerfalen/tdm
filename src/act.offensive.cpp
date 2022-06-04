@@ -534,36 +534,6 @@ ACMD(do_order) {
 }
 
 
-
-ACMD(do_flee) {
-	int i, attempt;
-
-	if(GET_POS(ch) < POS_FIGHTING) {
-		send_to_char(ch, "You are in pretty bad shape, unable to flee!");
-		return;
-	}
-
-	for(i = 0; i < 6; i++) {
-		attempt = rand_number(0, NUM_OF_DIRS - 1);	/* Select a random direction */
-
-		if(CAN_GO(ch, attempt) &&
-		        !ROOM_FLAGGED(EXIT(ch, attempt)->to_room, ROOM_DEATH)) {
-			act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
-
-			if(do_simple_move(ch, attempt, TRUE)) {
-				send_to_char(ch, "You flee head over heels.");
-			} else {
-				act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
-			}
-
-			return;
-		}
-	}
-
-	send_to_char(ch, "PANIC!  You couldn't escape!");
-}
-
-
 ACMD(do_bash) {
 	char arg[MAX_INPUT_LENGTH];
 	char_data *vict;
@@ -783,7 +753,6 @@ namespace offensive {
 		mods::interpreter::add_command("c4_brain",POS_RESTING,c4_brain,0,0);
 		mods::interpreter::add_command("command_sequence",POS_RESTING,do_command_sequence,0,0);
 		mods::interpreter::add_command("engagement_mode",POS_RESTING,do_engagement_mode,0,0);
-		mods::interpreter::add_command("flee",POS_RESTING,do_flee,0,0);
 		mods::interpreter::add_command("go_loud",POS_RESTING,do_go_loud,0,0);
 		mods::interpreter::add_command("hit",POS_RESTING,do_hit,0,0);
 		mods::interpreter::add_command("kick",POS_RESTING,do_kick,0,0);

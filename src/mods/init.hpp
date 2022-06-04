@@ -6,6 +6,8 @@
 /**
  * Community edition
  */
+INIT(mods::flee);
+INIT(mods::suicide);
 INIT(mods::builder::raid);
 INIT(mods::memory);
 INIT(mods::weapons::shotgun::dst7a_commands);
@@ -154,6 +156,8 @@ namespace mods::init {
 		mods::armor::xtv89_commands::init();
 		mods::memory::init();
 		mods::builder::raid::init();
+		mods::flee::init();
+		mods::suicide::init();
 
 #ifdef __MENTOC_PLUGIN_CONTENT__
 		mods::plugins::init::init();

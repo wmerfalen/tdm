@@ -34,6 +34,7 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 				- [ ] increases likelihood of double attacks of same-room weapon and automatic melee attacks
 				- [ ] increases chance of penetration damage with melee weapons
 				- [ ] decreases mobility penalty that come from carry/wield weights
+					- [ ] mobility penalty not a thing yet
 			- constitution (toughness)
 				- [ ] affects movement points
 				- [ ] affects resistance to elemental damage
@@ -42,6 +43,7 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 			- dexterity (felxibility/fastness)
 				- [ ] affects possibility of doubling up melee weapon attacks
 				- [ ] affects successful chance of fleeing melee combat
+					- NEXT FEATURE (2022-06-10)
 				- [ ] affects possibility of dodging the following:
 					- [ ] melee attacks
 					- [ ] claymore damage
