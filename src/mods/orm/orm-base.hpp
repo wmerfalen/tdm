@@ -57,8 +57,34 @@ namespace mods::orm {
 		(*exported_data)[field_name.data()] = IMPLODE(field,"\r\n");
 	}
 
+	//template <typename T>
+	//concept NeedsIntegralExtract = std::is_integral<T>;
+
+	//template <typename T>
+	//concept NeedsStringExtract = std::is_same<T,std::string> or std::is_same<T,std::string_view>;
+
+
 	template <typename TClassType,typename TPrimaryType>
 	struct orm_base {
+
+			//template <typename T>
+			//requires(NeedsIntegralExtract<T>)
+			//static inline T extract(pqxx::row& row,std::string_view element) {
+			//	return row[element.data()].as<T>();
+			//}
+
+			template <typename T>
+			requires(std::is_same<T,std::string>::value || std::is_same<T,std::string_view>::value)
+			static inline std::string extract(pqxx::row& row,std::string_view element) {
+				return row[element.data()].c_str();
+			}
+			template <typename T>
+			requires(std::is_integral<T>::value)
+			static inline T extract(pqxx::row& row,std::string_view element) {
+				return row[element.data()].as<T>();
+			}
+
+
 			bool dirty;
 			virtual bool is_dirty() const {
 				return dirty;
@@ -476,21 +502,21 @@ namespace mods::orm {
 	void set_dirty(bool b) override { dirty = b; } \
 	bool is_dirty() const override { return dirty; }
 
-#define MENTOC_ORM_INITIALIZE_ROW_IMPL(r,TUPLE_SIZE,CURRENT_INDEX,MEMBER_TUPLE) \
-	BOOST_PP_TUPLE_ELEM(2,0,MEMBER_TUPLE) BOOST_PP_CAT(param_,BOOST_PP_TUPLE_ELEM(2,1,MEMBER_TUPLE)) BOOST_PP_COMMA_IF(BOOST_PP_LESS(CURRENT_INDEX,BOOST_PP_SUB(TUPLE_SIZE,1)))
+#define MENTOC_ORM_INITIALIZE_ROW_IMPL(r,TUPLE_SIZE,CURRENT_INDEX,ELEMENT) \
+	auto BOOST_PP_CAT(param_,ELEMENT) BOOST_PP_COMMA_IF(BOOST_PP_LESS(CURRENT_INDEX,BOOST_PP_SUB(TUPLE_SIZE,1)))
 
 #define MENTOC_ORM_INITIALIZE_ROW_BODY(r,data,MEMBER_TUPLE) \
-	this->BOOST_PP_TUPLE_ELEM(2,1,MEMBER_TUPLE) = BOOST_PP_CAT(param_,BOOST_PP_TUPLE_ELEM(2,1,MEMBER_TUPLE));
+	this->MEMBER_TUPLE = BOOST_PP_CAT(param_,MEMBER_TUPLE);
 
 #define MENTOC_ORM_INITIALIZE_ROW_USING(SEQUENCE) \
 	int initialize_row(\
 			BOOST_PP_SEQ_FOR_EACH_I(\
 				MENTOC_ORM_INITIALIZE_ROW_IMPL,\
-				BOOST_PP_TUPLE_SIZE(SEQUENCE),\
-				BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)\
+				BOOST_PP_SEQ_SIZE(SEQUENCE),\
+				SEQUENCE\
 				)\
 		) { \
-		BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_INITIALIZE_ROW_BODY,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)); \
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_INITIALIZE_ROW_BODY,~,SEQUENCE); \
 			auto s = create(this); \
 			if(ORM_FAILURE(s)) { \
 				return -1; \
@@ -498,7 +524,17 @@ namespace mods::orm {
 			return std::get<2>(s); \
 		}
 
+#define MENTOC_ORM_FEED_MULTI_IMPL(M_R,data,MEMBER_TUPLE) \
+	r.BOOST_PP_TUPLE_ELEM(6,1,MEMBER_TUPLE) = extract<BOOST_PP_TUPLE_ELEM(6,0,MEMBER_TUPLE)>(row,BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(6,1,MEMBER_TUPLE)));
 
+#define MENTOC_ORM_FEED_MULTI(SEQUENCE,CLASS_NAME) \
+	inline void feed_multi(pqxx::result& in_rows) { \
+		CLASS_NAME  r; \
+		for(auto row : in_rows) { \
+			BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_FEED_MULTI_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE));\
+			rows.emplace_back(r);\
+		}\
+	}
 
 
 #define MENTOC_ORM_CLASS(SEQUENCE,TABLE_NAME) \

@@ -1,4 +1,7 @@
 f
+.tmp-gen-tuple.hpp
+.tmp-general
+.tmp
 gen-orm-raid.hpp
 gen-tuple.hpp
 input

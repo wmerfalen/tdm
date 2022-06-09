@@ -1,10 +1,15 @@
 #!/bin/bash
 
-TABLE=raid
-ORM_HPP=$PWD/gen-orm-${TABLE}.hpp
-ORM_CPP=$PWD/gen-orm-${TABLE}.cpp
-TUPLE_FILE=$PWD/gen-tuple.hpp
+CURDIR=$(dirname "$0")
+TABLE=$1
+CAPS_TABLE=${TABLE^^}
+ORM_HPP=$CURDIR/../../mods/orm/${TABLE}.hpp
+ORM_CPP=$CURDIR/../../mods/orm/${TABLE}.cpp
+TUPLE_FILE=$CURDIR/.tmp-gen-tuple.hpp
+TMP_FILE=$CURDIR/.tmp-general
+TMP=$CURDIR/.tmp
 
+echo '' > $TMP
 
 function str_fields(){
 	cat input | 
@@ -53,6 +58,24 @@ function all_fields(){
 		grep -E '[a-z0-9_]+'
 }
 
+function all_fields_count(){
+	INIT=$(initialize_row_fields | wc -l)
+	INIT=$(( INIT ))
+	ALL=$(all_fields | wc -l)
+	ALL=$(( ALL - INIT))
+	ALL=$(( ALL + 1 ))
+	echo $ALL
+}
+
+function initialize_row_fields(){
+	cat input | 
+		grep '\[initialize_row\]' -A 50 |
+		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
+		grep -v '\[initialize_row\]' |
+		grep -E '[a-z0-9_]+'
+}
+
+
 #		 *
 #		 * Member var type: int, std::string, etc
 #		 * Member Var Name: id, s_sequence_vnum, etc
@@ -64,10 +87,10 @@ function all_fields(){
 
 echo -n '' > $TUPLE_FILE
 
-LC=$(all_fields | wc -l)
+LC=$(all_fields_count)
 CTR=1
-str_fields > f
-for field in $(cat f | cut -d',' -f 1); do
+str_fields > $TMP_FILE
+for field in $(cat $TMP_FILE | cut -d',' -f 1); do
 	echo -n "(std::string,$field,\"\",3,null,1)" >> $TUPLE_FILE
 	CTR=$(( CTR + 1 ))
 	if [[ $CTR -lt $LC ]]; then
@@ -75,8 +98,8 @@ for field in $(cat f | cut -d',' -f 1); do
 	fi
 done
 
-mob_vnum_fields > f
-for field in $(cat f); do
+mob_vnum_fields > $TMP_FILE 
+for field in $(cat $TMP_FILE); do
 	echo -n "(mob_vnum,$field,0,1,null,1)" >> $TUPLE_FILE
 	CTR=$(( CTR + 1 ))
 	if [[ $CTR -lt $LC ]]; then
@@ -84,8 +107,8 @@ for field in $(cat f); do
 	fi
 done
 
-room_vnum_fields > f
-for field in $(cat f); do
+room_vnum_fields > $TMP_FILE
+for field in $(cat $TMP_FILE); do
 	echo -n "(room_vnum,$field,0,1,null,1)" >> $TUPLE_FILE
 	CTR=$(( CTR + 1 ))
 	if [[ $CTR -lt $LC ]]; then
@@ -93,8 +116,8 @@ for field in $(cat f); do
 	fi
 done
 
-zone_vnum_fields > f
-for field in $(cat f); do
+zone_vnum_fields > $TMP_FILE
+for field in $(cat $TMP_FILE); do
 	echo -n "(zone_vnum,$field,0,1,null,1)" >> $TUPLE_FILE
 	CTR=$(( CTR + 1 ))
 	if [[ $CTR -lt $LC ]]; then
@@ -102,25 +125,36 @@ for field in $(cat f); do
 	fi
 done
 
+echo ')' >> $TUPLE_FILE
+
 
 cat ./orm-part-1.hpp | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" > $ORM_HPP
+cat $ORM_HPP | sed -e "s|___\[\[\[CAPS_TABLE\]\]\]___|${CAPS_TABLE}|g" > $TMP; cat $TMP > $ORM_HPP
 
-##
-## Generate the string limits tuple
-#str_fields > f
-#if [[ $(cat f | wc -l) -gt 0 ]]; then
-#CTR=1
-#STRING_FIELD_COUNT=$(str_fields | wc -l)
-#for field in $(cat f); do
-#	echo -n "($field)" >> $TUPLE_FILE
-#	CTR=$(( CTR + 1 ))
-#	if [[ $CTR -lt $STRING_FIELD_COUNT ]]; then
-#		echo -ne ', \\\n' >> $TUPLE_FILE
-#	fi
-#done
-#echo -ne '\\\n)\n' >> $TUPLE_FILE
-
+cat ./orm.cpp | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" > $ORM_CPP
+cat $ORM_CPP | sed -e "s|___\[\[\[CAPS_TABLE\]\]\]___|${CAPS_TABLE}|g" > $TMP; cat $TMP > $ORM_CPP
 
 
 cat $TUPLE_FILE >> $ORM_HPP
+if [[ $(cat input | grep '\\[initialize_row\\]' ) -eq 0 ]]; then
+	echo -e "\n#define ${CAPS_TABLE}_INITIALIZE_ROW_MEMBERS \\" >> $ORM_HPP
+	initialize_row_fields > $TMP_FILE
+	LC=$(cat $TMP_FILE | wc -l)
+	CTR=0
+	for field in $(cat $TMP_FILE); do
+		echo -n "($field)" >> $ORM_HPP
+		echo -ne ' \\\n' >> $ORM_HPP
+	done
+	echo -ne ' \n' >> $ORM_HPP
+fi
+
+
 cat ./orm-part-2.hpp | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" >> $ORM_HPP
+cat $ORM_HPP | sed -e "s|___\[\[\[CAPS_TABLE\]\]\]___|${CAPS_TABLE}|g" > $TMP; cat $TMP > $ORM_HPP
+echo '' > $TMP
+
+echo File generated at $ORM_HPP
+echo File generated at $ORM_CPP
+
+
+

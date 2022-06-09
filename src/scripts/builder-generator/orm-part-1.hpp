@@ -8,5 +8,5 @@ namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	static constexpr std::string_view raid_table_name = "raid";
 
-#define ___[[[TABLE]]]____ORM_MEMBERS ( \
+#define ___[[[CAPS_TABLE]]]____ORM_MEMBERS ( \
 (uint64_t,id,0,1,null,1), \
