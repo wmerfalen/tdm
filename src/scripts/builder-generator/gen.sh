@@ -6,8 +6,8 @@ if [[ $# -lt 2 ]]; then
 fi
 
 CURDIR=${MUD_ROOT}/scripts/builder-generator/
-GEN_ORM_ONE=$CURDIR/orm-part-1.hpp
-GEN_ORM_TWO=$CURDIR/orm-part-2.hpp
+GEN_ORM_ONE=$CURDIR/orm-part-1
+GEN_ORM_TWO=$CURDIR/orm-part-2
 GEN_ORM_CPP=$CURDIR/orm.cpp
 TABLE=$1
 INPUT_FILE=$2

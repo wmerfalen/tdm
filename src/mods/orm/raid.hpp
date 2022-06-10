@@ -20,7 +20,7 @@ namespace mods::orm {
 (r_level) \
 (r_type) \
 (r_status) \
-
+ 
 
 
 	struct raid : public mods::orm::orm_base<raid,std::string> {
@@ -28,24 +28,24 @@ namespace mods::orm {
 		auto vnum() {
 			return id;
 		}
-
+	
 		raid() {
 			this->init();
 			loaded = 0;
 			id = 0;
 		}
 		~raid() = default;
-
+	
 		MENTOC_ORM_PRIMARY_KEY_FUNCTIONS();
 		MENTOC_ORM_FEED_MULTI(RAID_ORM_MEMBERS,raid);
-
+	
 		std::deque<raid> rows;
 		auto destroy() {
 			return  remove(this);
 		}
-#ifdef RAID_INITIALIZE_ROW_MEMBERS
+	#ifdef RAID_INITIALIZE_ROW_MEMBERS
 		MENTOC_ORM_INITIALIZE_ROW_USING(RAID_INITIALIZE_ROW_MEMBERS);
-#endif
+	#endif
 	};
 	struct raid_status_t {
 		std::tuple<int16_t,std::string> orm_status;
@@ -54,11 +54,11 @@ namespace mods::orm {
 		raid_status_t(raid_status_t&& other) : orm_status(other.orm_status),
 			record(std::move(other.record)) {}
 	};
-
+	
 	using raid_list_t = std::deque<std::shared_ptr<raid>>;
-
+	
 	raid_list_t& raid_list();
-
+	
 	raid_list_t load_all_raid_list();
 };
 
