@@ -1,7 +1,9 @@
 # ORM Generator Script
 
 ## Location: 
-`src/scripts/builder-generator/gen.sh`
+`src/ormgen`
+If you don't have a symbolic link in your src folder, run `make ormgen`.
+
 
 # Step 1: define your inputs
 Copy the input.example file at `src/scripts/builder-generator/input.example`
@@ -25,7 +27,7 @@ m_class
 [end]
 ```
 
-# Step 2: Call gen.sh
+# Step 2: Call the script
 
 If your table name is 'scores', and your input file is `my-input-file` run this:
 
