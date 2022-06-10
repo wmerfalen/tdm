@@ -240,7 +240,7 @@ namespace mods::builder::raid {
 				return {0,"Not enough arguments. Signature: new <name> <level> <type>"};
 			}
 			auto c = std::make_shared<mods::orm::raid>();
-			auto id = c->initialize_row(argat(1),argat(2),argat(3));
+			auto id = c->initialize_row(argat(1),argat(2),argat(3),"INCOMPLETE");
 			if(id <= 0) {
 				return {0,"Couldn't initialize row"};
 			}

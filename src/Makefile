@@ -246,7 +246,7 @@ all: $(builddir) $(builddir)/mods/classes \
 	$(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) \
 	$(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team \
 	$(builddir)/mods/boosters $(builddir)/mods/melee $(builddir)/mods/combat-composer $(builddir)/mods/json \
-	$(builddir)/mods/admin-tools
+	$(builddir)/mods/admin-tools ormgen
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT) $(post_build_args)
 
 clean:
@@ -287,6 +287,9 @@ clean:
 		rm -f $(builddir)/mods/json/*.d \
 		rm -f $(builddir)/mods/melee/*.o \
 		rm -f $(builddir)/mods/melee/*.d 
+
+ormgen: scripts/builder-generator/gen.sh
+	ln -s $(MUD_ROOT)/scripts/builder-generator/gen.sh $(MUD_ROOT)/ormgen
 
 $(builddir)/mods/orm/admin:
 	mkdir -p $(builddir)/mods/orm/admin

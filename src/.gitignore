@@ -44,3 +44,9 @@ cppzmq/
 libzmq/
 valgrind.*
 scripts/tintin-scripts/histories/
+.tmp
+.tmp-gen-tuple.hpp
+.tmp-general
+input
+ormgen
+

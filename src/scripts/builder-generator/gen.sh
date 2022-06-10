@@ -1,18 +1,31 @@
 #!/bin/bash
 
-CURDIR=$(dirname "$0")
+if [[ $# -lt 2 ]]; then
+	echo 'usage: ormgen <table> <input-file>'
+	exit 1
+fi
+
+CURDIR=${MUD_ROOT}/scripts/builder-generator/
+GEN_ORM_ONE=$CURDIR/orm-part-1.hpp
+GEN_ORM_TWO=$CURDIR/orm-part-2.hpp
+GEN_ORM_CPP=$CURDIR/orm.cpp
 TABLE=$1
+INPUT_FILE=$2
 CAPS_TABLE=${TABLE^^}
-ORM_HPP=$CURDIR/../../mods/orm/${TABLE}.hpp
-ORM_CPP=$CURDIR/../../mods/orm/${TABLE}.cpp
+ORM_HPP=${MUD_ROOT}/mods/orm/${TABLE}.hpp
+ORM_CPP=${MUD_ROOT}/mods/orm/${TABLE}.cpp
 TUPLE_FILE=$CURDIR/.tmp-gen-tuple.hpp
 TMP_FILE=$CURDIR/.tmp-general
 TMP=$CURDIR/.tmp
 
+for tmp in $TUPLE_FILE $TMP_FILE $TMP; do
+	touch $tmp
+done
+
 echo '' > $TMP
 
 function str_fields(){
-	cat input | 
+	cat $INPUT_FILE | 
 		grep '\[std::string\]' -A 50 |
 		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
 		grep -v '\[std::string\]' |
@@ -20,7 +33,7 @@ function str_fields(){
 }
 
 function mob_vnum_fields(){
-	cat input | 
+	cat $INPUT_FILE | 
 		grep '\[mob_vnum\]' -A 50 |
 		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
 		grep -v '\[mob_vnum\]' |
@@ -29,7 +42,7 @@ function mob_vnum_fields(){
 
 
 function player_id_fields(){
-	cat input | 
+	cat $INPUT_FILE | 
 		grep '\[player_id\]' -A 50 |
 		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
 		grep -v '\[player_id\]' |
@@ -37,7 +50,7 @@ function player_id_fields(){
 }
 
 function room_vnum_fields(){
-	cat input | 
+	cat $INPUT_FILE | 
 		grep '\[room_vnum\]' -A 50 |
 		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
 		grep -v '\[room_vnum\]' |
@@ -45,7 +58,7 @@ function room_vnum_fields(){
 }
 
 function zone_vnum_fields(){
-	cat input | 
+	cat $INPUT_FILE | 
 		grep '\[zone_vnum\]' -A 50 |
 		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
 		grep -v '\[zone_vnum\]' |
@@ -53,7 +66,7 @@ function zone_vnum_fields(){
 }
 
 function all_fields(){
-	cat input |
+	cat $INPUT_FILE |
 		grep -v -E '^\[.*\]$' |
 		grep -E '[a-z0-9_]+'
 }
@@ -68,7 +81,7 @@ function all_fields_count(){
 }
 
 function initialize_row_fields(){
-	cat input | 
+	cat $INPUT_FILE | 
 		grep '\[initialize_row\]' -A 50 |
 		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
 		grep -v '\[initialize_row\]' |
@@ -128,15 +141,15 @@ done
 echo ')' >> $TUPLE_FILE
 
 
-cat ./orm-part-1.hpp | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" > $ORM_HPP
+cat $GEN_ORM_ONE | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" > $ORM_HPP
 cat $ORM_HPP | sed -e "s|___\[\[\[CAPS_TABLE\]\]\]___|${CAPS_TABLE}|g" > $TMP; cat $TMP > $ORM_HPP
 
-cat ./orm.cpp | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" > $ORM_CPP
+cat $GEN_ORM_CPP | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" > $ORM_CPP
 cat $ORM_CPP | sed -e "s|___\[\[\[CAPS_TABLE\]\]\]___|${CAPS_TABLE}|g" > $TMP; cat $TMP > $ORM_CPP
 
 
 cat $TUPLE_FILE >> $ORM_HPP
-if [[ $(cat input | grep '\\[initialize_row\\]' ) -eq 0 ]]; then
+if [[ $(cat $INPUT_FILE | grep '\\[initialize_row\\]' ) -eq 0 ]]; then
 	echo -e "\n#define ${CAPS_TABLE}_INITIALIZE_ROW_MEMBERS \\" >> $ORM_HPP
 	initialize_row_fields > $TMP_FILE
 	LC=$(cat $TMP_FILE | wc -l)
@@ -149,9 +162,13 @@ if [[ $(cat input | grep '\\[initialize_row\\]' ) -eq 0 ]]; then
 fi
 
 
-cat ./orm-part-2.hpp | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" >> $ORM_HPP
+cat $GEN_ORM_TWO | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" >> $ORM_HPP
 cat $ORM_HPP | sed -e "s|___\[\[\[CAPS_TABLE\]\]\]___|${CAPS_TABLE}|g" > $TMP; cat $TMP > $ORM_HPP
 echo '' > $TMP
+
+for tmp in $TUPLE_FILE $TMP_FILE $TMP; do
+	rm $tmp
+done
 
 echo File generated at $ORM_HPP
 echo File generated at $ORM_CPP

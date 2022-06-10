@@ -19,6 +19,7 @@ namespace mods::orm {
 (r_name) \
 (r_level) \
 (r_type) \
+(r_status) \
 
 
 

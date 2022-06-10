@@ -2523,10 +2523,7 @@ RAID_DIFFUSE_BOMB	mods/builder/raid.hpp	/^		RAID_DIFFUSE_BOMB,$/;"	kind:enumerat
 RAID_ELIMINATE	mods/builder/raid.hpp	/^		RAID_ELIMINATE = 1,$/;"	kind:enumerator	line:16	enum:mods::builder::raid_type_t	file:	access:public
 RAID_INITIALIZE_ROW_MEMBERS	mods/orm/raid.hpp	/^#define RAID_INITIALIZE_ROW_MEMBERS /;"	kind:macro	line:18	file:
 RAID_NONE	mods/builder/raid.hpp	/^		RAID_NONE = 0,$/;"	kind:enumerator	line:15	enum:mods::builder::raid_type_t	file:	access:public
-RAID_ORM_INIT_MEMBERS	mods/orm/raid-orig.hpp	/^#define RAID_ORM_INIT_MEMBERS /;"	kind:macro	line:26	file:
-RAID_ORM_MEMBERS	mods/orm/raid-orig.hpp	/^#define RAID_ORM_MEMBERS /;"	kind:macro	line:11	file:
 RAID_ORM_MEMBERS	mods/orm/raid.hpp	/^#define RAID_ORM_MEMBERS /;"	kind:macro	line:11	file:
-RAID_ORM_STRING_LIMITS	mods/orm/raid-orig.hpp	/^#define RAID_ORM_STRING_LIMITS /;"	kind:macro	line:19	file:
 RAID_PLANT_BOMB	mods/builder/raid.hpp	/^		RAID_PLANT_BOMB,$/;"	kind:enumerator	line:18	enum:mods::builder::raid_type_t	file:	access:public
 RANGE	act.wizard.cpp	/^#define RANGE(/;"	kind:macro	line:2392	file:	signature:(low,high)
 RANGE	db.cpp	/^#define RANGE(/;"	kind:macro	line:1548	file:	signature:(low,high)
@@ -4152,7 +4149,6 @@ __MENTOC_MODS_ORM_notch_HEADER__	mods/orm/notch.hpp	/^#define __MENTOC_MODS_ORM_
 __MENTOC_MODS_ORM_player_contract_state_HEADER__	mods/orm/player-contract-state.hpp	/^#define __MENTOC_MODS_ORM_player_contract_state_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_ORM_player_skill_points_HEADER__	mods/orm/player-skill-points.hpp	/^#define __MENTOC_MODS_ORM_player_skill_points_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_ORM_player_skill_usage_HEADER__	mods/orm/player-skill-usage.hpp	/^#define __MENTOC_MODS_ORM_player_skill_usage_HEADER__$/;"	kind:macro	line:2	file:
-__MENTOC_MODS_ORM_raid_HEADER__	mods/orm/raid-orig.hpp	/^#define __MENTOC_MODS_ORM_raid_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_ORM_raid_HEADER__	mods/orm/raid.hpp	/^#define __MENTOC_MODS_ORM_raid_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_ORM_rifle_attachment_HEADER__	mods/orm/rifle-attachment.hpp	/^#define __MENTOC_MODS_ORM_rifle_attachment_HEADER__$/;"	kind:macro	line:2	file:
 __MENTOC_MODS_ORM_rifle_instance_HEADER__	mods/orm/rifle-instance.hpp	/^#define __MENTOC_MODS_ORM_rifle_instance_HEADER__$/;"	kind:macro	line:2	file:
@@ -6835,8 +6831,7 @@ destroy	mods/orm/contracts.cpp	/^	void contracts::destroy() {$/;"	kind:function	
 destroy	mods/orm/hq.cpp	/^	bool hq::destroy() {$/;"	kind:function	line:4	class:mods::orm::hq	typeref:typename:bool	signature:()
 destroy	mods/orm/mob-equipment-map.cpp	/^	bool mob_equipment_map::destroy() {$/;"	kind:function	line:4	class:mods::orm::mob_equipment_map	typeref:typename:bool	signature:()
 destroy	mods/orm/mob-equipment.cpp	/^	bool mob_equipment::destroy() {$/;"	kind:function	line:4	class:mods::orm::mob_equipment	typeref:typename:bool	signature:()
-destroy	mods/orm/raid-orig.hpp	/^		auto destroy() {$/;"	kind:function	line:61	struct:mods::orm::raid	typeref:typename:auto	file:	access:public	signature:()
-destroy	mods/orm/raid.hpp	/^		auto destroy() {$/;"	kind:function	line:42	struct:mods::orm::raid	typeref:typename:auto	file:	access:public	signature:()
+destroy	mods/orm/raid.hpp	/^		auto destroy() {$/;"	kind:function	line:43	struct:mods::orm::raid	typeref:typename:auto	file:	access:public	signature:()
 destroy	mods/orm/scripted-step.cpp	/^	void scripted_sequences::destroy() {$/;"	kind:function	line:88	class:mods::orm::scripted_sequences	typeref:typename:void	signature:()
 destroy	mods/orm/scripted-step.cpp	/^	void scripted_step::destroy() {$/;"	kind:function	line:25	class:mods::orm::scripted_step	typeref:typename:void	signature:()
 destroy_direction	mods/builder.cpp	/^	bool destroy_direction(room_rnum room_id,int direction) {$/;"	kind:function	line:1142	namespace:mods::builder	typeref:typename:bool	signature:(room_rnum room_id,int direction)
@@ -12054,7 +12049,6 @@ mods	mods/orm/player-skill-usage.hpp	/^namespace mods::orm {$/;"	kind:namespace	
 mods	mods/orm/pyrexia.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:3	file:
 mods	mods/orm/pyrexia.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:8	file:
 mods	mods/orm/quotes.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:10	file:
-mods	mods/orm/raid-orig.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	file:
 mods	mods/orm/raid.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:16	file:
 mods	mods/orm/raid.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	file:
 mods	mods/orm/rifle-attachment.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	file:
@@ -12933,7 +12927,6 @@ orm	mods/orm/player-skill-usage.hpp	/^namespace mods::orm {$/;"	kind:namespace	l
 orm	mods/orm/pyrexia.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:3	namespace:mods	file:
 orm	mods/orm/pyrexia.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:8	namespace:mods	file:
 orm	mods/orm/quotes.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:10	namespace:mods	file:
-orm	mods/orm/raid-orig.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	namespace:mods	file:
 orm	mods/orm/raid.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:16	namespace:mods	file:
 orm	mods/orm/raid.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	namespace:mods	file:
 orm	mods/orm/rifle-attachment.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	namespace:mods	file:
@@ -12973,8 +12966,7 @@ orm_base	mods/pq.hpp	/^struct orm_base {$/;"	kind:struct	line:600	file:
 orm_container_t	mods/builder/slotted-builder.hpp	/^			using orm_container_t = std::deque<std::shared_ptr<TOrmType>>;$/;"	kind:typedef	line:25	struct:mods::builder::slotted_builder	typeref:typename:std::deque<std::shared_ptr<TOrmType>>	file:	access:public
 orm_contract_list	mods/orm/contracts.cpp	/^	std::deque<std::shared_ptr<mods::orm::contracts>>& orm_contract_list() {$/;"	kind:function	line:124	namespace:mods::orm	typeref:typename:std::deque<std::shared_ptr<mods::orm::contracts>> &	signature:()
 orm_result_t	mods/orm/orm-base.hpp	/^using orm_result_t = std::tuple<int16_t,std::string>;$/;"	kind:typedef	line:18	typeref:typename:std::tuple<int16_t,std::string>	file:
-orm_status	mods/orm/raid-orig.hpp	/^		std::tuple<int16_t,std::string> orm_status;$/;"	kind:member	line:70	struct:mods::orm::raid_status_t	typeref:typename:std::tuple<int16_t,std::string>	file:	access:public
-orm_status	mods/orm/raid.hpp	/^		std::tuple<int16_t,std::string> orm_status;$/;"	kind:member	line:50	struct:mods::orm::raid_status_t	typeref:typename:std::tuple<int16_t,std::string>	file:	access:public
+orm_status	mods/orm/raid.hpp	/^		std::tuple<int16_t,std::string> orm_status;$/;"	kind:member	line:51	struct:mods::orm::raid_status_t	typeref:typename:std::tuple<int16_t,std::string>	file:	access:public
 orthos_agent	mods/mobs/orthos-agent.cpp	/^	orthos_agent::orthos_agent(const uuid_t& mob_uuid, std::string_view variation) {$/;"	kind:function	line:336	class:mods::mobs::orthos_agent	signature:(const uuid_t & mob_uuid,std::string_view variation)
 orthos_agent	mods/mobs/orthos-agent.hpp	/^	struct orthos_agent : public smart_mob {$/;"	kind:struct	line:15	namespace:mods::mobs	file:	inherits:smart_mob
 orthos_agent_behaviour_tree	mods/mobs/behaviour-tree-list.cpp	/^namespace mods::mobs::orthos_agent_behaviour_tree {$/;"	kind:namespace	line:17	namespace:mods::mobs	file:
@@ -13827,24 +13819,18 @@ radioactive_damage	mods/rifle-attachments.hpp	/^			int16_t radioactive_damage;$/
 radioactive_damage	mods/weapons/elemental.cpp	/^	void radioactive_damage(player_ptr_t& attacker,player_ptr_t& victim,int requested_damage) {$/;"	kind:function	line:133	namespace:mods::weapons::elemental	typeref:typename:void	signature:(player_ptr_t & attacker,player_ptr_t & victim,int requested_damage)
 radioactive_percent	mods/ranged-combat-totals.hpp	/^		uint16_t radioactive_percent;$/;"	kind:member	line:97	struct:mods::ranged_combat_totals	typeref:typename:uint16_t	file:	access:public
 raid	mods/builder/raid.cpp	/^namespace mods::builder::raid {$/;"	kind:namespace	line:11	namespace:mods::builder	file:
-raid	mods/orm/raid-orig.hpp	/^		raid() {$/;"	kind:function	line:49	struct:mods::orm::raid	file:	access:public	signature:()
-raid	mods/orm/raid-orig.hpp	/^	struct raid : public mods::orm::orm_base<raid,std::string> {$/;"	kind:struct	line:31	namespace:mods::orm	file:	inherits:mods::orm::orm_base<raid,std::string>
-raid	mods/orm/raid.hpp	/^		raid() {$/;"	kind:function	line:31	struct:mods::orm::raid	file:	access:public	signature:()
-raid	mods/orm/raid.hpp	/^	struct raid : public mods::orm::orm_base<raid,std::string> {$/;"	kind:struct	line:25	namespace:mods::orm	file:	inherits:mods::orm::orm_base<raid,std::string>
+raid	mods/orm/raid.hpp	/^		raid() {$/;"	kind:function	line:32	struct:mods::orm::raid	file:	access:public	signature:()
+raid	mods/orm/raid.hpp	/^	struct raid : public mods::orm::orm_base<raid,std::string> {$/;"	kind:struct	line:26	namespace:mods::orm	file:	inherits:mods::orm::orm_base<raid,std::string>
 raid_id	structs.h	/^	uint64_t raid_id;$/;"	kind:member	line:1527	struct:mob_special_data	typeref:typename:uint64_t	file:	access:public
 raid_interface	mods/builder/raid.cpp	/^		raid_interface() {$/;"	kind:function	line:184	struct:mods::builder::raid::raid_interface	file:	access:public	signature:()
 raid_interface	mods/builder/raid.cpp	/^	struct raid_interface : public slotted_builder<raid_vnum_t,raid_orm_type> {$/;"	kind:struct	line:35	namespace:mods::builder::raid	file:	inherits:slotted_builder<raid_vnum_t,raid_orm_type>
 raid_list	mods/orm/raid.cpp	/^	raid_list_t& raid_list() {$/;"	kind:function	line:18	namespace:mods::orm	typeref:typename:raid_list_t &	signature:()
-raid_list_t	mods/orm/raid-orig.hpp	/^	using raid_list_t = std::deque<std::shared_ptr<raid>>;$/;"	kind:typedef	line:77	namespace:mods::orm	typeref:typename:std::deque<std::shared_ptr<raid>>	file:
-raid_list_t	mods/orm/raid.hpp	/^	using raid_list_t = std::deque<std::shared_ptr<raid>>;$/;"	kind:typedef	line:57	namespace:mods::orm	typeref:typename:std::deque<std::shared_ptr<raid>>	file:
+raid_list_t	mods/orm/raid.hpp	/^	using raid_list_t = std::deque<std::shared_ptr<raid>>;$/;"	kind:typedef	line:58	namespace:mods::orm	typeref:typename:std::deque<std::shared_ptr<raid>>	file:
 raid_orm_type	mods/builder/raid.cpp	/^	using raid_orm_type = mods::orm::raid;$/;"	kind:typedef	line:34	namespace:mods::builder::raid	typeref:typename:mods::orm::raid	file:
-raid_status_t	mods/orm/raid-orig.hpp	/^		raid_status_t(raid_status_t&& other) : orm_status(other.orm_status),$/;"	kind:function	line:73	struct:mods::orm::raid_status_t	file:	access:public	signature:(raid_status_t && other)
-raid_status_t	mods/orm/raid-orig.hpp	/^	struct raid_status_t {$/;"	kind:struct	line:69	namespace:mods::orm	file:
-raid_status_t	mods/orm/raid.hpp	/^		raid_status_t(raid_status_t&& other) : orm_status(other.orm_status),$/;"	kind:function	line:53	struct:mods::orm::raid_status_t	file:	access:public	signature:(raid_status_t && other)
-raid_status_t	mods/orm/raid.hpp	/^	struct raid_status_t {$/;"	kind:struct	line:49	namespace:mods::orm	file:
+raid_status_t	mods/orm/raid.hpp	/^		raid_status_t(raid_status_t&& other) : orm_status(other.orm_status),$/;"	kind:function	line:54	struct:mods::orm::raid_status_t	file:	access:public	signature:(raid_status_t && other)
+raid_status_t	mods/orm/raid.hpp	/^	struct raid_status_t {$/;"	kind:struct	line:50	namespace:mods::orm	file:
 raid_t	mods/builder/raid.hpp	/^		raid_t(std::string_view n,$/;"	kind:function	line:65	struct:mods::builder::raid_t	file:	access:public	signature:(std::string_view n,std::string_view l,std::string_view t)
 raid_t	mods/builder/raid.hpp	/^	struct raid_t {$/;"	kind:struct	line:52	namespace:mods::builder	file:
-raid_table_name	mods/orm/raid-orig.hpp	/^	static constexpr std::string_view raid_table_name = "raid";$/;"	kind:variable	line:9	namespace:mods::orm	typeref:typename:std::string_view	file:
 raid_table_name	mods/orm/raid.hpp	/^	static constexpr std::string_view raid_table_name = "raid";$/;"	kind:variable	line:9	namespace:mods::orm	typeref:typename:std::string_view	file:
 raid_vnum_t	mods/builder/raid.cpp	/^	using raid_vnum_t = uint64_t;$/;"	kind:typedef	line:33	namespace:mods::builder::raid	typeref:typename:uint64_t	file:
 raidbuild	mods/builder/raid.cpp	/^	static raid_interface& raidbuild(player_ptr_t player) {$/;"	kind:function	line:293	namespace:mods::builder::raid	typeref:typename:raid_interface &	file:	signature:(player_ptr_t player)
@@ -13958,8 +13944,7 @@ recipient	mail.h	/^	long recipient;			\/* who is this mail for?	*\/$/;"	kind:mem
 recoil_reduction	mods/ranged-combat-totals.hpp	/^		int recoil_reduction;$/;"	kind:member	line:72	struct:mods::ranged_combat_totals	typeref:typename:int	file:	access:public
 recoil_reduction	mods/rifle-attachments.hpp	/^			int16_t recoil_reduction;$/;"	kind:member	line:107	struct:mods::rifle_attachments_t	typeref:typename:int16_t	file:	access:public
 record	mods/builder-data.hpp	/^		bool record;$/;"	kind:member	line:50	struct:room_recorder_t	typeref:typename:bool	file:	access:private
-record	mods/orm/raid-orig.hpp	/^		std::unique_ptr<raid> record;$/;"	kind:member	line:71	struct:mods::orm::raid_status_t	typeref:typename:std::unique_ptr<raid>	file:	access:public
-record	mods/orm/raid.hpp	/^		std::unique_ptr<raid> record;$/;"	kind:member	line:51	struct:mods::orm::raid_status_t	typeref:typename:std::unique_ptr<raid>	file:	access:public
+record	mods/orm/raid.hpp	/^		std::unique_ptr<raid> record;$/;"	kind:member	line:52	struct:mods::orm::raid_status_t	typeref:typename:std::unique_ptr<raid>	file:	access:public
 record_t	mods/notch.hpp	/^	struct record_t {$/;"	kind:struct	line:6	namespace:mods::notch	file:
 record_usage	comm.cpp	/^void record_usage(void) {$/;"	kind:function	line:1144	typeref:typename:void	signature:(void)
 recruit	mods/help.cpp	/^	HELP_STR recruit= "usage: invoke recruit <target> \\r\\n"$/;"	kind:variable	line:701	namespace:mods::help::pages	typeref:typename:HELP_STR
@@ -14574,8 +14559,7 @@ rows	mods/orm/mob-roam.hpp	/^		std::vector<mob_roam_record_t> rows;$/;"	kind:mem
 rows	mods/orm/notch.hpp	/^		std::vector<notch_record_t> rows;$/;"	kind:member	line:72	struct:mods::orm::notch	typeref:typename:std::vector<notch_record_t>	file:	access:public
 rows	mods/orm/player-skill-points.hpp	/^		std::vector<player_skill_points_record_t> rows;$/;"	kind:member	line:66	struct:mods::orm::player_skill_points	typeref:typename:std::vector<player_skill_points_record_t>	file:	access:public
 rows	mods/orm/player-skill-usage.hpp	/^		std::vector<player_skill_usage_record_t> rows;$/;"	kind:member	line:66	struct:mods::orm::player_skill_usage	typeref:typename:std::vector<player_skill_usage_record_t>	file:	access:public
-rows	mods/orm/raid-orig.hpp	/^		std::deque<raid> rows;$/;"	kind:member	line:60	struct:mods::orm::raid	typeref:typename:std::deque<raid>	file:	access:public
-rows	mods/orm/raid.hpp	/^		std::deque<raid> rows;$/;"	kind:member	line:41	struct:mods::orm::raid	typeref:typename:std::deque<raid>	file:	access:public
+rows	mods/orm/raid.hpp	/^		std::deque<raid> rows;$/;"	kind:member	line:42	struct:mods::orm::raid	typeref:typename:std::deque<raid>	file:	access:public
 rows	mods/orm/rifle-attachment.hpp	/^		std::deque<rifle_attachment_record_t> rows;$/;"	kind:member	line:83	struct:mods::orm::rifle_attachment	typeref:typename:std::deque<rifle_attachment_record_t>	file:	access:public
 rows	mods/orm/rifle-index.hpp	/^		std::vector<rifle_index_record_t> rows;$/;"	kind:member	line:69	struct:mods::orm::rifle_index	typeref:typename:std::vector<rifle_index_record_t>	file:	access:public
 rows	mods/orm/scripted-step.hpp	/^		std::vector<scripted_step> rows;$/;"	kind:member	line:165	struct:mods::orm::scripted_sequences	typeref:typename:std::vector<scripted_step>	file:	access:public
@@ -15647,7 +15631,6 @@ sql_compositor	mods/orm/player-contract-state.hpp	/^	using sql_compositor = mods
 sql_compositor	mods/orm/player-skill-points.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:8	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
 sql_compositor	mods/orm/player-skill-usage.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:8	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
 sql_compositor	mods/orm/quotes.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:11	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
-sql_compositor	mods/orm/raid-orig.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:8	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
 sql_compositor	mods/orm/raid.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:8	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
 sql_compositor	mods/orm/rifle-index.hpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:8	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
 sql_compositor	mods/orm/room.cpp	/^	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;$/;"	kind:typedef	line:6	namespace:mods::orm	typeref:typename:mods::sql::compositor<mods::pq::transaction>	file:
@@ -15922,7 +15905,6 @@ strmap_t	mods/orm/player-contract-state.hpp	/^	using strmap_t = std::map<std::st
 strmap_t	mods/orm/player-skill-points.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:7	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/player-skill-usage.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:7	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/pyrexia.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:9	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
-strmap_t	mods/orm/raid-orig.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:7	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/raid.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:7	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/rifle-attachment.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:9	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
 strmap_t	mods/orm/rifle-index.hpp	/^	using strmap_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:7	namespace:mods::orm	typeref:typename:std::map<std::string,std::string>	file:
@@ -17584,8 +17566,7 @@ vnum	mods/npc.cpp	/^	const mob_vnum& npc::vnum() const {$/;"	kind:function	line:
 vnum	mods/orm/contracts.hpp	/^		auto vnum() {$/;"	kind:function	line:68	struct:mods::orm::contracts	typeref:typename:auto	file:	access:public	signature:()
 vnum	mods/orm/hq.hpp	/^		auto vnum() {$/;"	kind:function	line:40	struct:mods::orm::hq	typeref:typename:auto	file:	access:public	signature:()
 vnum	mods/orm/mob-equipment.hpp	/^		auto vnum() {$/;"	kind:function	line:47	struct:mods::orm::mob_equipment	typeref:typename:auto	file:	access:public	signature:()
-vnum	mods/orm/raid-orig.hpp	/^		auto vnum() {$/;"	kind:function	line:45	struct:mods::orm::raid	typeref:typename:auto	file:	access:public	signature:()
-vnum	mods/orm/raid.hpp	/^		auto vnum() {$/;"	kind:function	line:27	struct:mods::orm::raid	typeref:typename:auto	file:	access:public	signature:()
+vnum	mods/orm/raid.hpp	/^		auto vnum() {$/;"	kind:function	line:28	struct:mods::orm::raid	typeref:typename:auto	file:	access:public	signature:()
 vnum	mods/orm/scripted-step.hpp	/^		auto vnum() const {$/;"	kind:function	line:161	struct:mods::orm::scripted_sequences	typeref:typename:auto	file:	access:public	signature:() const
 vnum	mods/player-contract-instance.hpp	/^			const auto& vnum() const {$/;"	kind:function	line:34	struct:mods::contracts::player_contract_instance	typeref:typename:const auto &	file:	access:public	signature:() const
 vnum	mods/player.cpp	/^	room_vnum player::vnum() {$/;"	kind:function	line:2177	class:mods::player	typeref:typename:room_vnum	signature:()

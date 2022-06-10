@@ -43,7 +43,7 @@ admin:raid:done
 
 
 [x] Create raid table
-	[ ] Create mods/raid.cpp
+	[x] Create mods/raid.cpp
 	[ ] Add support for `mbuild attr raid <id>`
 	[ ] `admin:raid:pave on`
 		[ ] `admin:raid:set:spawn <raid-id> <room-vnum|this>`

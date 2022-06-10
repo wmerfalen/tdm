@@ -4,7 +4,8 @@
 `src/scripts/builder-generator/gen.sh`
 
 # Step 1: define your inputs
-Edit the file `src/scripts/builder-generator/input`
+Copy the input.example file at `src/scripts/builder-generator/input.example`
+and edit it to accomodate your needs. 
 
 Example:
 ```
@@ -24,13 +25,12 @@ m_class
 [end]
 ```
 
-For an example, see `src/scripts/builder-generator/input.example`
-
 # Step 2: Call gen.sh
 
-If your table name is 'scores', run this:
+If your table name is 'scores', and your input file is `my-input-file` run this:
+
 ```sh
-./scripts/builder-generator/gen.sh scores
+./ormgen scores my-input-file
 ```
 
 That's it! You'll have to make sure the sql is generated for the table, but that's
