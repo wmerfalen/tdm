@@ -701,6 +701,8 @@ void mob_special_data::init() {
 	this->previous_room = 0;
 	this->experience = 0;
 	this->mp = 0;
+	this->raid_id = 0;
+	this->scalable = 0;
 }
 void mob_special_data::import(const mob_special_data& other) {
 	this->watching_room = other.watching_room;
@@ -718,6 +720,8 @@ void mob_special_data::import(const mob_special_data& other) {
 	this->vnum = other.vnum;
 	this->experience = other.experience;
 	this->mp = other.mp;
+	this->raid_id = other.raid_id;
+	this->scalable = other.scalable;
 }
 void mob_special_data::report(room_rnum room) {
 	for(auto& uuid : this->memory) {
@@ -737,6 +741,8 @@ void mob_special_data::report(room_rnum room) {
 	MR("previous_room",this->previous_room);
 	MR("experience",this->experience);
 	MR("mp",this->mp);
+	MR("raid_id",this->raid_id);
+	MR("scalable",this->scalable);
 #undef MR
 	for(auto m : msg) {
 		send_to_room(room, CAT("Report: ", m,"\r\n").c_str());
@@ -764,6 +770,8 @@ mob_special_data::~mob_special_data() {
 	this->extended_mob_type = mods::mobs::extended_types_t::NONE;
 	this->experience = 0;
 	this->mp = 0;
+	this->raid_id = 0;
+	this->scalable = 0;
 }
 char_point_data::char_point_data(const char_point_data& other) {
 #ifdef __MENTOC_SHOW_CHAR_POINT_DATA_DEBUG_OUTPUT__

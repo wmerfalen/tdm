@@ -203,6 +203,22 @@ namespace mods::builder::raid {
 				return {1,"Loaded"};
 			});
 
+			register_manual_command("scale-mob","<mob-vnum>",[this](std::string argument) -> std::tuple<bool,std::string> {
+				player->sendx("Reloading..");
+				this->reload_orm();
+				player->sendln("done");
+				return {1,"Loaded"};
+			});
+
+			register_manual_command("random-mob","",[this](std::string argument) -> std::tuple<bool,std::string> {
+				player->sendx("Reloading..");
+				this->reload_orm();
+				player->sendln("done");
+				return {1,"Loaded"};
+			});
+
+
+
 			register_custom_command("help","",[this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<raid_orm_type> profile) -> std::tuple<bool,std::string> {
 				display_signatures();
 				return {1,""};

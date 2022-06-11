@@ -1347,7 +1347,11 @@ namespace mods::builder {
 			p_map["mob_class"] = "0"; //TODO: find this
 			p_map["mob_special_extended_type"] = std::to_string(obj->mob_specials.extended_mob_type);
 			p_map["mob_exp"] = std::to_string(obj->mob_specials.experience);
-			p_map["mob_raid"] = std::to_string(obj->mob_specials.raid_id);
+			if(obj->mob_specials.raid_id) {
+				p_map["mob_raid_id"] = std::to_string(obj->mob_specials.raid_id);
+			}
+			p_map["mob_scalable"] = obj->mob_specials.scalable ? "1" : "0";
+
 			auto txn_02 = txn();
 			std::string sql = "";
 
@@ -2358,17 +2362,19 @@ SUPERCMD(do_mbuild) {
 		*player << "usage: \r\n" <<
 		        " {grn}mbuild{/grn} {red}help{/red}\r\n" <<
 		        "  |--> this help menu\r\n" <<
-		        "  {grn}|____[example]{/grn}\r\n" <<
-		        "  |:: {wht}mbuild{/wht} {gld}help{/gld}\r\n" <<
-		        "  |:: (this help menu will show up)\r\n" <<
+
 		        " {grn}mbuild{/grn} {red}exists <mob_vnum>{/red}\r\n" <<
 		        "  |--> [supports encoded response]\r\n" <<
+
 		        " {grn}mbuild{/grn} {red}new{/red}\r\n" <<
 		        "  |--> [supports encoded response]\r\n" <<
+
 		        " {grn}mbuild{/grn} {red}list{/red}\r\n" <<
+
 		        " {grn}mbuild{/grn} {red}attr <mob_id> <attr> <value>{/red}\r\n" <<
 		        "  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
 		        "  {gld}|:: raid{/gld}\r\n" <<
+		        "  {gld}|:: scalable{/gld}\r\n" <<
 		        "  {gld}|:: virt{/gld}\r\n" <<
 		        "  {gld}|:: vnum{/gld} {grn}this is an alias of {/grn}{gld}virt{/gld}\r\n" <<
 		        "  {gld}|:: exp{/gld}\r\n" <<
@@ -2396,7 +2402,6 @@ SUPERCMD(do_mbuild) {
 		        "  {gld}|:: wisdom{/gld}\r\n" <<
 		        "  {gld}|:: dexterity{/gld}\r\n" <<
 		        "  {gld}|:: constitution{/gld}\r\n" <<
-
 		        "  {gld}|:: electronics{/gld}\r\n" <<
 		        "  {gld}|:: chemistry{/gld}\r\n" <<
 		        "  {gld}|:: strategy{/gld}\r\n" <<
@@ -2424,6 +2429,7 @@ SUPERCMD(do_mbuild) {
 		        " {grn}mbuild{/grn} {red}extended-type <mob_id> <type>{/red}\r\n" <<
 		        "  |--> will set the mob's extended type to <type>. The list of\r\n" <<
 		        "  available mob types follow.\r\n" <<
+
 		        "  {grn}|____[example]{/grn}\r\n" <<
 		        "  |:: {wht}mbuild{/wht} {gld}extended-type 5 INNOCENT{/gld}\r\n" <<
 		        "  |:: (will mark the mob (using the rnum) as INNOCENT)\r\n" <<
@@ -2456,9 +2462,12 @@ SUPERCMD(do_mbuild) {
 		        " {grn}mbuild{/grn} {red}giveme:next_vnum{/red}\r\n" <<
 		        "  |--> [supports encoded response]\r\n" <<
 
-		        " {grn}mbuild{/grn} {red} save <mob_id> {/red}\r\n" <<
+		        " {grn}mbuild{/grn} {red}save <mob_id> {/red}\r\n" <<
+
 		        " {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
+
 		        " {grn}mbuild{/grn} {red}instantiate <mob_vnum>{/red}\r\n" <<
+
 		        " {grn}mbuild{/grn} {red}place <mob_vnum> <room_vnum> <tag>...<tag-N>{/red}\r\n" <<
 		        "  |--> will instantiate a mob of mob_vnum and place it in room_vnum with the specific tags.\r\n" <<
 
@@ -3052,6 +3061,7 @@ SUPERCMD(do_mbuild) {
 		*player << "{red}" << #display_name << "{/red}: " << obj->struct_member << "\r\n";
 		MENTOC_SHOW_OBJ(name,player.name.c_str());
 		MENTOC_SHOW_OBJ(raid_id,mob_specials.raid_id);
+		MENTOC_SHOW_OBJ(scalable,mob_specials.scalable);
 		MENTOC_SHOW_OBJ(virtual_number,mob_specials.vnum);
 		MENTOC_SHOW_OBJ(experience,mob_specials.experience);
 		MENTOC_SHOW_OBJ(short_description,player.short_descr.c_str());
@@ -3164,6 +3174,8 @@ SUPERCMD(do_mbuild) {
 			MENTOC_OBI2(mob_specials.attack_type,attack_type);
 			MENTOC_OBI2(mob_specials.damsizedice,damsizedice);
 			MENTOC_OBI2(mob_specials.experience,exp);
+			MENTOC_OBI2(mob_specials.raid_id,raid_id);
+			MENTOC_OBI2(mob_specials.scalable,scalable);
 
 
 			if(arg_vec[2].compare("virt") == 0 || arg_vec[2].compare("vnum") == 0) {

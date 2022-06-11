@@ -10653,3 +10653,4 @@ create table raid(
 alter table mobile add column mob_raid_id INTEGER;
 ALTER TABLE mobile ADD CONSTRAINT fk_mob_raid_id FOREIGN KEY (mob_raid_id) REFERENCES public.raid(id) ON UPDATE CASCADE ON DELETE CASCADE;
 alter table zone_data add column zone_raid_id INTEGER; alter table zone_data ADD CONSTRAINT fk_zone_raid_id FOREIGN KEY(zone_raid_id) REFERENCES public.raid(id) ON UPDATE CASCADE ON DELETE CASCADE;
+alter table mobile add column mob_scalable VARCHAR(1) NOT NULL DEFAULT '0';
