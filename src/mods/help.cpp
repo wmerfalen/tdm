@@ -1211,6 +1211,7 @@ namespace mods::help {
 			return;
 		}
 		std::vector<std::string> screen;
+		static constexpr std::string_view search_help_msg = "\r\n{grn}help:search{/grn} can be use to search every command in the mud. Try it out!\r\n";
 
 		mods::help::fetch_mortal_help(screen);
 		auto vec_args = PARSE_ARGS();
@@ -1265,6 +1266,7 @@ namespace mods::help {
 		if(player->implementor_mode() || player->builder_mode()) {
 			mods::help::fetch_builder_help(screen);
 		}
+		player->sendln(search_help_msg.data());
 
 		if(argshave()->size_gt(0)->passed()) {
 			if(send_help(argat(0), player)) {
@@ -1277,6 +1279,37 @@ namespace mods::help {
 			}
 		}
 
+	}
+	ACMD(do_search_help) {
+		auto vec_args = PARSE_ARGS();
+		if(!argshave()->size_gt(0)->passed()) {
+			player->sendln("Usage: help:search <phrase>");
+			return;
+		}
+		bool is_builder = false;
+		static bool mortal_initialized = false;
+		static bool builder_initialized = false;
+		static std::vector<std::string> mortal_screen, builder_screen;
+		if(!mortal_initialized) {
+			mods::help::fetch_mortal_help(mortal_screen);
+			mortal_initialized = true;
+		}
+		if(player->implementor_mode() || player->builder_mode()) {
+			is_builder = true;
+			if(!builder_initialized) {
+				mods::help::fetch_builder_help(builder_screen);
+				builder_initialized = true;
+			}
+		}
+		player->pager_start();
+		player->sendln("Searching every command...");
+		mods::search_screen<player_ptr_t>(player,mortal_screen,vec_args,64);
+		if(is_builder) {
+			mods::search_screen<player_ptr_t>(player,builder_screen,vec_args,64);
+		}
+		player->pager_end();
+		player->page(0);
+		return;
 	}
 
 	void place_in_sql() {
@@ -1405,5 +1438,6 @@ namespace mods::help {
 		place_in_sql();
 		mods::interpreter::add_command("builder_help", POS_RESTING, do_help, LVL_BUILDER,0);
 		mods::interpreter::add_command("help", POS_RESTING, do_help, 0,0);
+		mods::interpreter::add_command("help:search", POS_RESTING, do_search_help, 0,0);
 	}
 };

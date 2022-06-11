@@ -155,6 +155,7 @@
 ./mods/skills.cpp:	->practice
 ./mods/bleed.cpp:	->bleed_me
 ./mods/help.cpp:	->help
+./mods/help.cpp:	->search_help
 ./mods/flee.cpp:	->flee
 ./mods/combat-composer/snipe-target.cpp:	->print_rct
 ./mods/combat.cpp:		->set_rules_of_engagement

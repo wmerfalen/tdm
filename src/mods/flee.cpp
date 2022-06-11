@@ -29,8 +29,8 @@ namespace mods::flee {
 	 * ALPHA GOALS:
 	 *	- [ ] (DEXTERITY) affects successful chance of fleeing melee combat
 	 */
-	int get_flee_buff(player_ptr_t& player) {
-		return player->dexterity() / 10;
+	float get_flee_buff(player_ptr_t& player) {
+		return player->dexterity() / FLEE_DEXTERITY_DIVIDER();
 	}
 
 	ACMD(do_flee) {
@@ -40,17 +40,27 @@ namespace mods::flee {
 			return;
 		}
 
-		int flee_buff = get_flee_buff(player);
+		auto flee_buff = get_flee_buff(player);
+		uint8_t max_retries = player->speed_triad();
+		uint8_t tries = 0;
 
 		for(i = 0; i < 6; i++) {
 			attempt = rand_number(0, NUM_OF_DIRS - 1);	/* Select a random direction */
 
 			if(CAN_GO(ch, attempt) &&
 			        !ROOM_FLAGGED(EXIT(ch, attempt)->to_room, ROOM_DEATH)) {
-				if(rand_number(0,flee_buff) > flee_buff / 2) {
-					act("$n's quick movement helps him find another way out!",1,ch,0,0,TO_ROOM);
-					player->sendln("{grn}You get lucky!{/grn}");
-					continue;
+				if((int)flee_buff > 1) {
+					if(tries == max_retries) {
+						act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
+						return;
+					}
+
+					if(rand_number(1,flee_buff) > flee_buff / 2) {
+						act("$n's quick movement helps $m find another way out!",1,ch,0,0,TO_ROOM);
+						player->sendln("{grn}Your quick movement helps you find another way out!{/grn}");
+						++tries;
+						continue;
+					}
 				}
 				act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
 
