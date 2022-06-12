@@ -25,7 +25,7 @@ durability_profile: 'INDUSTRIAL_STRENGTH' #string, ENUM FLIMSY,DECENT,DURABLE,HA
 repair_cost_profile: 3 #int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE
 hp: 33320 #int, hit points
 classification: 'ELITE' #string, 'BASIC', 'ADVANCED', 'ELITE'
-worth: 478150 #int, how much the item is worth.
+worth: 4150 #int, how much the item is worth.
 incendiary_resistance_percent: 30 #int, static amount of incendiary resistance_percent, no limit
 explosive_resistance_percent: 15 #int, static amount of explosive resistance_percent, no limit
 shrapnel_resistance_percent: 23 #int, static amount of shrapnel resistance_percent, no limit

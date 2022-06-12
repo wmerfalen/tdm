@@ -13,6 +13,7 @@ uint32_t dice(uint32_t num, uint32_t size);
 uint32_t dice(const uint16_t dice[2]);
 uint32_t dice(const std::array<uint16_t,2>& dice);
 uint32_t dice(const std::array<uint16_t,3>& dice);
+uint32_t dice(const std::tuple<uint16_t,uint16_t>& dice);
 template <typename T>
 static inline uint32_t roll(const T& yaml) {
 	return dice(yaml->attributes->damage_dice_count,yaml->attributes->damage_dice_sides);

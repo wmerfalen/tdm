@@ -145,6 +145,8 @@ void	free_obj(struct obj_data *obj);
 obj_data *read_object(obj_vnum nr, int type);
 obj_ptr_t blank_object();
 obj_ptr_t create_object(int type,std::string file);
+obj_ptr_t create_object(std::string_view file);
+obj_ptr_t create_object_into(std::string_view file,obj_ptr_t& obj);
 int	vnum_object(char *searchname, char_data *ch);
 
 typedef enum { \

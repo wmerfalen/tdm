@@ -47,7 +47,7 @@ str_type: 'SNIPER'
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: 'COMMON'
+rarity: 'GOD_TIER'
 damage_dice_count: 32
 damage_dice_sides: 22
 description: 'A heavily modified L96 Arctic Warfare Sniper Rifle'

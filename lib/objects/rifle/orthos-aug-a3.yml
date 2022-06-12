@@ -38,7 +38,7 @@ name: 'Heavily modified AUG A3'  #string
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: COMMON
+rarity: 'GOD_TIER'
 description: 'A heavily modified AUG A3 is lying here.'
 short_description: 'a heavily modified AUG A3'
 action_description: 'heavily modified AUG A3'

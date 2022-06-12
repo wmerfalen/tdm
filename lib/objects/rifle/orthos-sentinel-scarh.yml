@@ -38,7 +38,7 @@ name: 'heavily modified X11 SCAR-H Assault Rifle' #string
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: 'LEGENDARY'
+rarity: 'GOD_TIER'
 description: 'A heavily modified X11 SCAR-H Assault Rifle is lying here.'
 short_description: 'a heavily modified X11 SCAR-H Assault Rifle'
 action_description: 'heavily modified X11 SCAR-H Assault Rifle'

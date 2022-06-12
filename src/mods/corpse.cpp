@@ -9,6 +9,7 @@
 #include "no-drop.hpp"
 
 #include "rooms.hpp"
+#include "drops.hpp"
 #include "injure.hpp"
 #include "doors.hpp"
 #include "super-users.hpp"
@@ -237,6 +238,7 @@ namespace mods::corpse {
 					obj_to_obj(obj, corpse);
 				}
 			}
+			mods::drops::random_drop_to(victim,corpse);
 
 			victim->carry(nullptr);
 			victim->carry_items() = 0;

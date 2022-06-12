@@ -38,7 +38,7 @@ name: 'heavily modified Cerberus SCAR-H Assault Rifle' #string
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: COMMON
+rarity: 'GOD_TIER'
 description: 'A heavily modified Cerberus SCAR-H Assault Rifle is lying here.'
 short_description: 'a heavily modified Cerberus SCAR-H Assault Rifle'
 action_description: 'heavily modified Cerberus SCAR-H Assault Rifle'

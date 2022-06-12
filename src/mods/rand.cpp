@@ -88,6 +88,9 @@ uint32_t dice(const uint16_t dice [2]) {
 uint32_t dice(const std::array<uint16_t,2>& dice) {
 	return mods::rand::roll(dice[0],dice[1]);
 }
+uint32_t dice(const std::tuple<uint16_t,uint16_t>& dice) {
+	return mods::rand::roll(std::get<0>(dice),std::get<1>(dice));
+}
 
 uint32_t dice(const std::array<uint16_t,3>& dice) {
 	auto roll = mods::rand::roll(dice[0],dice[1]);

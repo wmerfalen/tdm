@@ -1864,6 +1864,57 @@ obj_ptr_t blank_object() {
 	mods::globals::register_object(obj_list.back());
 	return obj_list.back();
 }
+obj_ptr_t create_object(std::string_view yaml) {
+	int type = -1;
+	std::string yaml_file = yaml.data();
+	if(mods::util::str::starts_with("rifle/",yaml_file)) {
+		type = ITEM_RIFLE;
+	}
+	if(mods::util::str::starts_with("explosive/",yaml_file)) {
+		type = ITEM_EXPLOSIVE;
+	}
+	if(mods::util::str::starts_with("armor/",yaml_file)) {
+		type = ITEM_ARMOR;
+	}
+	if(mods::util::str::starts_with("attachment/",yaml_file)) {
+		type = ITEM_ATTACHMENT;
+	}
+	if(mods::util::str::starts_with("consumable/",yaml_file)) {
+		type = ITEM_CONSUMABLE;
+	}
+	if(mods::util::str::starts_with("container/",yaml_file)) {
+		type = ITEM_CONTAINER;
+	}
+	if(mods::util::str::starts_with("drone/",yaml_file)) {
+		type = ITEM_DRONE;
+	}
+	if(mods::util::str::starts_with("gadget/",yaml_file)) {
+		type = ITEM_GADGET;
+	}
+	if(mods::util::str::starts_with("melee/",yaml_file)) {
+		type = ITEM_MELEE;
+	}
+	if(mods::util::str::starts_with("vehicle/",yaml_file)) {
+		type = ITEM_VEHICLE;
+	}
+	if(type == -1) {
+		log("Unable to figure out yaml type enum from file: '%s'",yaml_file.c_str());
+		return nullptr;
+	}
+	std::vector<std::string> parts = mods::util::explode('/',yaml_file);
+	if(parts.size() < 2) {
+		log("Unrecognized format for yaml file (in create_object(str)): '%s'",yaml_file.c_str());
+		return nullptr;
+	}
+	return create_object(type,parts[1]);
+}
+obj_ptr_t create_object_into(std::string_view file,obj_ptr_t& target_object) {
+	auto created_object = create_object(file);
+	if(created_object) {
+		obj_to_obj(created_object,target_object);
+	}
+	return created_object;
+}
 /** check for rifle|pkid:N match */
 obj_ptr_t create_object(int type,std::string yaml_file) {
 #ifdef __MENTOC_SHOW_CREATE_OBJECT_OUTPUT__

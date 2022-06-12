@@ -51,7 +51,7 @@ str_type: 'SHOTGUN'
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: 'COMMON'
+rarity: 'LEGENDARY'
 feed_file: 'bf-39-shotgun.yml'
 damage_dice_count: 14
 damage_dice_sides: 10

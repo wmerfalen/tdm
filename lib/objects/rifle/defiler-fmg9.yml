@@ -79,7 +79,7 @@ str_type: 'SUB_MACHINE_GUN'
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: 'RARE'
+rarity: 'LEGENDARY'
 description: 'A Defiler FMG-9 is lying here.'
 short_description: 'a Defiler FMG-9'
 action_description: 'Defiler FMG-9'

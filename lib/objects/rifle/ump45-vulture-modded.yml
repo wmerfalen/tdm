@@ -48,7 +48,7 @@ str_type: 'SUB_MACHINE_GUN'
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: 'COMMON'
+rarity: 'RARE'
 feed_file: 'ump45-vulture-modded.yml'
 description: 'A {yel}Vulture Modded{/yel} UMP-45 is lying here.'
 short_description: 'a {yel}Vulture Modded{/yel} UMP-45'

@@ -234,7 +234,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/orthos-spawn-sentinel \
 					 mods/mobs/orthos-spawn-sentinel-btree mods/no-drop mods/orm/notch \
 					 mods/notch mods/stats mods/rifle-stats mods/orm/raid \
-					 mods/builder/raid mods/flee mods/suicide
+					 mods/builder/raid mods/flee mods/suicide mods/drops
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
@@ -246,7 +246,7 @@ all: $(builddir) $(builddir)/mods/classes \
 	$(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) \
 	$(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team \
 	$(builddir)/mods/boosters $(builddir)/mods/melee $(builddir)/mods/combat-composer $(builddir)/mods/json \
-	$(builddir)/mods/admin-tools ormgen
+	$(builddir)/mods/admin-tools ormgen armor-by rifle-by explosive-by
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT) $(post_build_args)
 
 clean:
@@ -290,6 +290,13 @@ clean:
 
 ormgen: scripts/builder-generator/gen.sh
 	ln -s $(MUD_ROOT)/scripts/builder-generator/gen.sh $(MUD_ROOT)/ormgen
+armor-by: scripts/armor-by-level.sh
+	ln -s $(MUD_ROOT)/scripts/armor-by-level.sh $(MUD_ROOT)/armor-by
+rifle-by: scripts/rifle-by-level.sh
+	ln -s $(MUD_ROOT)/scripts/rifle-by-level.sh $(MUD_ROOT)/rifle-by
+explosive-by: scripts/explosive-by-level.sh
+	ln -s $(MUD_ROOT)/scripts/explosive-by-level.sh $(MUD_ROOT)/explosive-by
+
 
 $(builddir)/mods/orm/admin:
 	mkdir -p $(builddir)/mods/orm/admin

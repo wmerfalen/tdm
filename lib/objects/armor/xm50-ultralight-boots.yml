@@ -38,8 +38,8 @@ anti_matter_resistance_percent: 1 #int, static amount of anti_matter resistance_
 stat_strength: 1 #int16_t, positive or negative amount to affect strength stat
 stat_intelligence: 1 #int16_t, positive or negative amount to affect intelligence stat
 stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
-stat_dexterity: 19 #int16_t, positive or negative amount to affect dexterity stat
-stat_constitution: 19 #int16_t, positive or negative amount to affect constitution stat
+stat_dexterity: 6 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 6 #int16_t, positive or negative amount to affect constitution stat
 stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
 stat_armor: 1 #int16_t, positive or negative amount to affect armor stat
 stat_marksmanship: 0 #int16_t, positive or negative amount to affect marksmanship stat
@@ -65,4 +65,4 @@ feed_file: 'xm50-ultralight-boots.yml'
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: 'COMMON'
+rarity: 'UNCOMMON'
