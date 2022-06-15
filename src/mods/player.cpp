@@ -2350,6 +2350,7 @@ namespace mods {
 		}
 	}
 	void player::queue_up(std::string_view msg) {
+#ifdef __MENTOC_USE_QUEUE_UP__
 		if(this->position() == POS_DEAD || moving_to_room() == false) {
 			sendln(msg);
 			return;
@@ -2357,6 +2358,9 @@ namespace mods {
 		if(moving_to_room()) {
 			mods::players::messages::queue(this->uuid(),CAT("\r\n",msg.data(),"\r\n"));
 		}
+		return;
+#endif
+		sendln(msg);
 	}
 	void player::update_contract_status() {
 		m_contract = m_char_data->contract = m_contract_size;

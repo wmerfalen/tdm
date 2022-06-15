@@ -17,6 +17,7 @@
 #include "mods/util.hpp"
 #include "mods/help.hpp"
 #include "mods/find.hpp"
+#include "mods/vec.hpp"
 
 template <typename T,typename F>
 static inline void sub_clamp(T& orig, F sub) {

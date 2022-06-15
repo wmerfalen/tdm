@@ -29,32 +29,26 @@ namespace mods::drops {
 	 :r ! cat % | grep 'static constexpr mob_vnum' |  sed -E 's|\{/?[A-Z]+\}||gi' | sed -E 's| _|_|gi' | sed -E 's|_ |_|gi' | sed -e 's|  | |gi' | sed -E 's| AN_| |gi' | sed -E 's| A_| |gi' | uniq | sort
 	 */
 
+
+	/** Hostile NPCS */
 	static constexpr mob_vnum ADAPTED_DRONE = 115;
 	static constexpr mob_vnum INFECTED_DRONE = 114;
-
 	static constexpr mob_vnum MILITARY_POLICE_ENFORCER = 500;
 	static constexpr mob_vnum MILITARY_POLICE_SHOTGUNNER = 501;
-
 	static constexpr mob_vnum SHOPLIFTER = 104;
 	static constexpr mob_vnum SHOPLIFTER_2 = 110;
-
 	static constexpr mob_vnum ORTHOS_GUARD = 503;
 	static constexpr mob_vnum ORTHOS_MENACE = 505;
 	static constexpr mob_vnum ORTHOS_SENTINEL = 669;
 	static constexpr mob_vnum ORTHOS_SNIPER = 504;
-
 	static constexpr mob_vnum ARMED_SECURITY_GUARD = 106;
-
 	static constexpr mob_vnum BALLISTICS_EXPERT = 603;
 	static constexpr mob_vnum BANK_TELLER = 107;
 	static constexpr mob_vnum CHAOTIC_METH_ADDICT = 103;
 	static constexpr mob_vnum CHEF_EMPLOYEE = 1;
-	static constexpr mob_vnum CORPORAL_JAMES_TAGGART = 410;
 	static constexpr mob_vnum CRACKHEAD = 105;
 	static constexpr mob_vnum DEFILER = 666;
 	static constexpr mob_vnum EXTREMIST = 670;
-	static constexpr mob_vnum INVENTORY_GRUNT = 113;
-	static constexpr mob_vnum INVENTORY_SPECIALIST = 112;
 	static constexpr mob_vnum KIDNAPPER = 102;
 	static constexpr mob_vnum MAINTENANCE_GRUNT = 668;
 	static constexpr mob_vnum MAINTENANCE_GUARD = 667;
@@ -63,6 +57,11 @@ namespace mods::drops {
 	static constexpr mob_vnum RETAIL_ASSOCIATE = 109;
 	static constexpr mob_vnum ROGUE_MILITARY_POLICE_SHOTGUNNER = 407;
 	static constexpr mob_vnum SUSPICIOUS_LOOKING_CAR_THIEF = 406;
+
+	/** Non-hostile */
+	static constexpr mob_vnum CORPORAL_JAMES_TAGGART = 410;
+	static constexpr mob_vnum INVENTORY_GRUNT = 113;
+	static constexpr mob_vnum INVENTORY_SPECIALIST = 112;
 	static constexpr mob_vnum TRITON_LABS_FIELD_SURGEON = 602;
 	static constexpr mob_vnum TRITON_LABS_SCIENTIST = 600;
 	static constexpr mob_vnum VOLUNTEER_PATIENT = 601;
@@ -302,13 +301,26 @@ namespace mods::drops {
 		"rifle/orthos-scarh.yml",
 		"rifle/orthos-sentinel-scarh.yml",
 	};
+	static std::vector<std::string> all_commons;
 	void create_common_object_into(obj_ptr_t& container) {
-		auto yaml = common_armor.at(rand_number(0,common_armor.size()) % common_armor.size());
+		auto yaml = all_commons.at(rand_number(0,all_commons.size()) % all_commons.size());
 		m_debug("create_common_object_into placing '" << yaml << "'");
 		create_object_into(yaml,container);
 	}
+	bool attacker_was_player(player_ptr_t& victim) {
+		auto uuid = victim->get_attacker();
+		auto p = ptr_by_uuid(uuid);
+		if(!p) {
+			return false;
+		}
+		return p->is_npc() == false;
+	}
 	static std::vector<randomized_drop_t> drops;
 	void random_drop_to(player_ptr_t& victim,obj_ptr_t& corpse) {
+		if(!attacker_was_player(victim)) {
+			return;
+		}
+		m_debug("Attacker was player for:" << victim->name().c_str());
 		for(const auto& drop : drops) {
 			if(drop.mob == victim->cd()->mob_specials.vnum) {
 				if(roll(drop)) {
@@ -343,6 +355,7 @@ namespace mods::drops {
 	void init() {
 		drops.clear();
 		common_drop_item_for_mob(frag,INFECTED_DRONE);
+		common_drop_item_for_mob(claymore,INFECTED_DRONE);
 		common_drop_item_for_mob(sensor,ADAPTED_DRONE);
 
 		less_common_drop_item_for_mob(smoke,SHOPLIFTER);
@@ -351,9 +364,6 @@ namespace mods::drops {
 		less_common_drop_item_for_mob(incendiary,SHOPLIFTER_2);
 
 		rare_drop_item_for_mob(tshin,DEFILER);
-		drops.emplace_back(ORTHOS_GUARD, nvgoggles, 10,20,190);
-
-		drops.emplace_back(ORTHOS_GUARD, nvgoggles, 10,20,190);
 
 		for(const auto item : {
 		            // GOD TIER items
@@ -375,11 +385,10 @@ namespace mods::drops {
 			easy_drop_item_for_mob(item,ORTHOS_MENACE);
 			easy_drop_item_for_mob(item,ORTHOS_SENTINEL);
 			easy_drop_item_for_mob(item,ORTHOS_SNIPER);
-			easy_drop_item_for_mob(item,ORTHOS_AGENT);
 		}
 
-		easy_drop_item_for_mob(nvgoggles,ORTHOS_GUARD);
-		easy_drop_item_for_mob(nvgoggles,ORTHOS_GUARD);
+		all_commons.clear();
+		all_commons = vec::append(all_commons,common_rifles,common_armor);
 
 	}
 

@@ -10,6 +10,10 @@
 #include "forge-engine/generated-rifle.hpp"
 #include "forge-engine/generated-armor.hpp"
 
+/**
+ * Loot is also controlled by make_corpse and mods::drops.cpp
+ */
+
 namespace mods::forge_engine {
 	extern mods::forge_engine::generator item_generator;
 };

@@ -16,7 +16,7 @@
 {yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->unban_user$/;"	kind:function	line:318	namespace:mods::ban_system	signature:(do_unban_user){/grn}
 {yel}tags:ADMINCMD	mods/ban-system.cpp	/^	->unmute$/;"	kind:function	line:247	namespace:mods::ban_system	signature:(do_unmute){/grn}
 {yel}tags:ADMINCMD	mods/ensnare.cpp	/^	->ensnare_me$/;"	kind:function	line:129	namespace:mods::ensnare	signature:(do_ensnare_me){/grn}
-{yel}tags:ADMINCMD	mods/loot.cpp	/^	->reward_with$/;"	kind:function	line:116	namespace:mods::loot	signature:(do_reward_with){/grn}
+{yel}tags:ADMINCMD	mods/loot.cpp	/^	->reward_with$/;"	kind:function	line:119	namespace:mods::loot	signature:(do_reward_with){/grn}
 {yel}tags:ADMINCMD	mods/weapons/shotgun-dst7A.cpp	/^		->dst7a$/;"	kind:function	line:36	namespace:mods::weapons::shotgun::dst7a_commands	signature:(do_dst7a){/grn}
 {yel}tags:ADMINCMD	mods/weapons/smg-vc88.cpp	/^		->vc88$/;"	kind:function	line:29	namespace:mods::weapons::smg::vc88_commands	signature:(do_vc88){/grn}
 {yel}mods/admin-tools/stay{/yel}:->{grn}admin:stay{/grn}

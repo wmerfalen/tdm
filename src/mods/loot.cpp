@@ -11,6 +11,9 @@
 #endif
 
 namespace mods::loot {
+	/**
+	 * Loot is also controlled by make_corpse and mods::drops.cpp
+	 */
 	struct loot_t {
 		uint32_t id;
 		std::string player;
