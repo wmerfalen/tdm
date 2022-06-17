@@ -2,31 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.11 (Debian 10.11-1.pgdg90+1)
--- Dumped by pg_dump version 10.11 (Debian 10.11-1.pgdg90+1)
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
-DROP DATABASE IF EXISTS mud;
---
--- Name: mud; Type: DATABASE; Schema: -; Owner: postgres
---
-
-CREATE DATABASE mud WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'C.UTF-8' LC_CTYPE = 'C.UTF-8';
-
-
-ALTER DATABASE mud OWNER TO postgres;
-
-\connect mud
+-- Dumped from database version 13.5 (Debian 13.5-0+deb11u1)
+-- Dumped by pg_dump version 13.5 (Debian 13.5-0+deb11u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -40,21 +17,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
---
--- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: 
+-- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
 --
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
@@ -260,7 +223,7 @@ ALTER TYPE public.speed_profile_type_t OWNER TO postgres;
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: affected_type; Type: TABLE; Schema: public; Owner: postgres
@@ -1552,7 +1515,9 @@ CREATE TABLE public.mobile (
     mob_ability_chemistry integer DEFAULT 1 NOT NULL,
     mob_ability_weapon_handling integer DEFAULT 1 NOT NULL,
     mob_ability_strategy integer DEFAULT 1 NOT NULL,
-    mob_ability_medical integer DEFAULT 1 NOT NULL
+    mob_ability_medical integer DEFAULT 1 NOT NULL,
+    mob_raid_id integer,
+    mob_scalable character varying(1) DEFAULT '0'::character varying NOT NULL
 );
 
 
@@ -1616,6 +1581,44 @@ ALTER TABLE public.muted_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.muted_id_seq OWNED BY public.muted.id;
+
+
+--
+-- Name: notch; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.notch (
+    id integer NOT NULL,
+    n_points integer DEFAULT 1 NOT NULL,
+    n_name character varying NOT NULL,
+    n_player_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.notch OWNER TO postgres;
+
+--
+-- Name: notch_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.notch_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.notch_id_seq OWNER TO postgres;
+
+--
+-- Name: notch_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.notch_id_seq OWNED BY public.notch.id;
 
 
 --
@@ -2509,6 +2512,44 @@ ALTER TABLE public.player_skill_usage_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.player_skill_usage_id_seq OWNED BY public.player_skill_usage.id;
+
+
+--
+-- Name: raid; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.raid (
+    id integer NOT NULL,
+    r_name character varying(256) NOT NULL,
+    r_level character varying(16) NOT NULL,
+    r_type character varying(32) NOT NULL,
+    r_status character varying(16) NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.raid OWNER TO postgres;
+
+--
+-- Name: raid_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.raid_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.raid_id_seq OWNER TO postgres;
+
+--
+-- Name: raid_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.raid_id_seq OWNED BY public.raid.id;
 
 
 --
@@ -3737,6 +3778,13 @@ ALTER TABLE ONLY public.muted ALTER COLUMN id SET DEFAULT nextval('public.muted_
 
 
 --
+-- Name: notch id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notch ALTER COLUMN id SET DEFAULT nextval('public.notch_id_seq'::regclass);
+
+
+--
 -- Name: npc_dialogue id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3860,6 +3908,13 @@ ALTER TABLE ONLY public.player_skill_points ALTER COLUMN id SET DEFAULT nextval(
 --
 
 ALTER TABLE ONLY public.player_skill_usage ALTER COLUMN id SET DEFAULT nextval('public.player_skill_usage_id_seq'::regclass);
+
+
+--
+-- Name: raid id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.raid ALTER COLUMN id SET DEFAULT nextval('public.raid_id_seq'::regclass);
 
 
 --
@@ -4118,6 +4173,7 @@ COPY public.class_engineer (engineer_id, engineer_player_id, created_at, updated
 
 COPY public.class_ghost (ghost_id, ghost_player_id, created_at, updated_at) FROM stdin;
 12	110	2021-09-18 01:42:45.198142	2021-09-18 01:42:45.198142
+13	111	2022-05-17 13:17:37.45463	2022-05-17 13:17:37.45463
 \.
 
 
@@ -4530,12 +4586,33 @@ COPY public.mob_equipment (id, meq_profile_name, meq_vnum, meq_light, meq_finger
 120	crackhead	105	\N	\N	\N	\N	\N	\N	\N	armor/blue-jeans.yml	armor/plat-basketball-shoes.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:27.942669	2022-02-01 01:43:27.942669
 121	armed-guard	106	\N	\N	\N	\N	\N	armor/falcon-ballistic-vest.yml	armor/baklava.yml	armor/mp-enforcer-pants.yml	armor/xm607-vulture-boots.yml	armor/forge-xm3-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/mp5.yml	\N	\N	armor/titan-shoulder-pads.yml	armor/titan-shoulder-pads.yml	\N	\N	\N	armor/titan-elbow-guards.yml	armor/titan-elbow-guards.yml	2022-02-01 01:43:29.858195	2022-02-01 01:43:29.858195
 122	teller	107	\N	\N	\N	\N	\N	\N	\N	armor/leggings.yml	armor/dress-shoes.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:29.95304	2022-02-01 01:43:29.95304
-123	infected-drone-lvl-2	112	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/flimsy-knife.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:34.105307	2022-02-01 01:43:34.105307
-124	hustler-lvl-3	113	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	melee/weak-brass-knuckles.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 01:43:34.347014	2022-02-01 01:43:34.347014
+293	dynamic-waypoint-ave-car-thief-level-10	700	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.351925	2022-06-10 23:45:11.351925
+294	chaotic-meth-addict	701	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.371125	2022-06-10 23:45:11.371125
 132	orthos-guard	503	\N	\N	\N	\N	\N	armor/vulture-ballistic-vest.yml	\N	armor/titan-shin-guards.yml	armor/xm50-ultralight-boots.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/orthos-aug-a3.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 16:49:10.066679	2022-02-01 16:49:10.066679
 133	orthos-sniper	504	\N	\N	\N	\N	\N	armor/vulture-ballistic-vest.yml	\N	armor/titan-shin-guards.yml	armor/xm50-ultralight-boots.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/orthos-l96aw.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 16:49:10.216828	2022-02-01 16:49:10.216828
 131	defiler	666	\N	\N	\N	\N	\N	armor/falcon-ballistic-vest.yml	\N	armor/mp-enforcer-pants.yml	armor/xm50-ultralight-boots.yml	armor/xm-scorpio-tactical-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/defiler-scarh.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:06:24.886311	2022-02-01 03:06:24.886311
 134	orthos-menace	505	\N	\N	\N	\N	\N	armor/raven-ballistic-vest.yml	\N	armor/viper-leg-guards.yml	armor/xm50-ultralight-boots.yml	armor/mp-enforcer-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/orthos-scarh.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 16:49:10.325195	2022-02-01 16:49:10.325195
+135	cofob-inventory-specialist	112	\N	\N	\N	\N	\N	armor/basic-ballistic-vest.yml	\N	armor/mp-enforcer-pants.yml	armor/xm50-ultralight-boots.yml	armor/brown-leather-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/defiler-scarh.yml	\N	\N	armor/titan-shoulder-pads.yml	armor/titan-shoulder-pads.yml	\N	\N	\N	armor/titan-elbow-guards.yml	armor/titan-elbow-guards.yml	2022-05-12 23:13:18.320147	2022-05-12 23:13:18.320147
+136	cofob-inventory-grunt	113	\N	\N	\N	\N	\N	armor/basic-ballistic-vest.yml	\N	armor/mp-enforcer-pants.yml	armor/xm50-ultralight-boots.yml	armor/brown-leather-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/defiler-scarh.yml	\N	\N	armor/titan-shoulder-pads.yml	armor/titan-shoulder-pads.yml	\N	\N	\N	armor/titan-elbow-guards.yml	armor/titan-elbow-guards.yml	2022-05-12 23:13:18.33433	2022-05-12 23:13:18.33433
+137	maintenance-guard	667	\N	\N	\N	\N	\N	armor/p5-vest.yml	\N	armor/p5-pants.yml	armor/p5-boots.yml	\N	\N	\N	\N	\N	\N	\N	rifle/glock.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-05-12 23:13:19.009975	2022-05-12 23:13:19.009975
+138	maintenance-guard	668	\N	\N	\N	\N	\N	armor/p5-vest.yml	\N	armor/p5-pants.yml	armor/p5-boots.yml	\N	\N	\N	\N	\N	\N	\N	rifle/glock.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-05-12 23:13:19.068135	2022-05-12 23:13:19.068135
+158	orthos-sentinel-spawn	669	\N	\N	\N	\N	\N	\N	\N	armor/mp-enforcer-pants.yml	armor/xm50-ultralight-boots.yml	armor/forge-xm3-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/orthos-sentinel-scarh.yml	\N	\N	armor/titan-shoulder-pads.yml	armor/titan-shoulder-pads.yml	\N	\N	\N	armor/titan-elbow-guards.yml	armor/titan-elbow-guards.yml	2022-05-25 15:53:44.498592	2022-05-25 15:53:44.498592
+159	infected-drone-lvl-2	114	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	rifle/czp10.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-05-25 15:53:44.573311	2022-05-25 15:53:44.573311
+160	hustler-lvl-3	115	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/black-jeans.yml	armor/atom-fade-shoes.yml	\N	\N	\N	\N	\N	\N	\N	rifle/czp10.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-05-25 15:53:44.622028	2022-05-25 15:53:44.622028
+295	crackhead	702	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.388911	2022-06-10 23:45:11.388911
+162	hydro-proc-extremists-dynamic-level	670	\N	\N	\N	\N	\N	armor/leather-trenchcoat.yml	\N	armor/pale-brown-pants.yml	armor/plain-black-shoes.yml	\N	\N	\N	\N	\N	\N	\N	rifle/tar21.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-05-28 19:47:34.979999	2022-05-28 19:47:34.979999
+296	dynamic-defiler-level-10	703	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.405677	2022-06-10 23:45:11.405677
+297	hydro-proc-extremists-dynamic-level	704	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.423145	2022-06-10 23:45:11.423145
+298	dynamic-car-thief-level-10	705	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.43965	2022-06-10 23:45:11.43965
+299	dynamic-mp-enforcer-level-10	706	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.457514	2022-06-10 23:45:11.457514
+300	dynamic-mp-shotgunner-level-10	707	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.474898	2022-06-10 23:45:11.474898
+301	dynamic-ops-shield-shotgunner-level-10	708	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.500835	2022-06-10 23:45:11.500835
+302	petty-thief	709	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.527072	2022-06-10 23:45:11.527072
+303	dynamic-rogue-mp-shotgunner-level-10	710	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.5404	2022-06-10 23:45:11.5404
+171	dynamic-ops-shield-shotgunner-level-10	502	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 22:55:30.642144	2022-06-10 22:55:30.642144
+304	shoplifter	711	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.555533	2022-06-10 23:45:11.555533
+173	dynamic-rogue-mp-shotgunner-level-10	407	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 22:55:30.712947	2022-06-10 22:55:30.712947
+305	kidnapper	712	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.571797	2022-06-10 23:45:11.571797
 \.
 
 
@@ -4555,7 +4632,6 @@ COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, creat
 26	502	15	2021-09-04 04:23:27.079717	2021-09-04 04:23:27.079717
 30	109	109	2021-09-04 04:23:27.352124	2021-09-04 04:23:27.352124
 31	110	110	2021-09-04 04:23:27.364886	2021-09-04 04:23:27.364886
-10	100	100	2021-09-04 04:12:22.385266	2021-09-04 04:12:22.385266
 11	101	101	2021-09-04 04:12:22.396441	2021-09-04 04:12:22.396441
 27	102	102	2021-09-04 04:23:27.155622	2021-09-04 04:23:27.155622
 13	103	103	2021-09-04 04:12:22.417965	2021-09-04 04:12:22.417965
@@ -4566,6 +4642,12 @@ COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, creat
 46	503	503	2022-02-01 16:49:10.091732	2022-02-01 16:49:10.091732
 47	504	504	2022-02-01 16:49:10.233468	2022-02-01 16:49:10.233468
 48	505	505	2022-02-01 16:49:10.341863	2022-02-01 16:49:10.341863
+49	112	112	2022-05-12 23:13:18.323055	2022-05-12 23:13:18.323055
+50	113	113	2022-05-12 23:13:18.338291	2022-05-12 23:13:18.338291
+64	669	669	2022-05-25 15:53:44.504757	2022-05-25 15:53:44.504757
+65	114	114	2022-05-25 15:53:44.579648	2022-05-25 15:53:44.579648
+66	115	115	2022-05-25 15:53:44.627772	2022-05-25 15:53:44.627772
+68	670	670	2022-05-28 19:47:34.981819	2022-05-28 19:47:34.981819
 \.
 
 
@@ -4692,34 +4774,52 @@ COPY public.mob_zone (id, zone_virtual_number, mob_virtual_number, room_virtual_
 -- Data for Name: mobile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description, mob_long_description, mob_description, mob_action_bitvector, mob_affection_bitvector, mob_ability_strength, mob_ability_strength_add, mob_ability_intelligence, mob_ability_wisdom, mob_ability_dexterity, mob_ability_constitution, mob_ability_charisma, mob_alignment, mob_attack_type, mob_level, mob_hitroll, mob_armor, mob_max_hitpoints, mob_max_mana, mob_max_move, mob_gold, mob_exp, mob_load_position, mob_default_position, mob_sex, mob_hitpoints, mob_mana, mob_move, mob_damnodice, mob_damsizedice, mob_damroll, mob_weight, mob_height, mob_class, mob_special_extended_type, mob_targets, mob_roam_pattern, mob_ability_electronics, mob_ability_armor, mob_ability_marksmanship, mob_ability_sniping, mob_ability_demolitions, mob_ability_chemistry, mob_ability_weapon_handling, mob_ability_strategy, mob_ability_medical) FROM stdin;
-11	410	Corporal James Taggart	Corporal James Tagger short description	Corporal James Tagger long description	Corporal James Tagger description	0	0	10	10	10	10	10	10	10	0	0	150	150	150	-1	-1	-1	0	50	0	0	0	-1	-1	-1	50	50	50	80	9	0	0	\N	\N	1	1	1	1	1	1	1	1	1
-1	1	chef  employee	A pissed looking Los  employee	A pissed looking Los  employee	This particular employee looks like he just got out of a federal penitentiary. He's most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.	8	0	25	0	25	0	25	0	25	0	0	0	0	0	250	250	250	5000	50	8	8	0	250	250	250	25	0	0	50	15	0	14	\N	\N	1	1	1	1	1	1	1	1	1
-12	600	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	30500	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
-13	601	A volunteer patient	A volunteer patient	A volunteer patient	A volunteer patient stands here with dazed thousand mile stare.	8	0	185	183	10	0	184	0	1	0	0	15	0	0	880	25	240	0	3500	0	0	1	880	25	240	8	90	115	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
-14	602	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	8	0	185	183	182	0	184	0	85	0	0	80	0	0	8580	815	240	85000	8500	0	0	2	8580	815	240	-72	-70	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
-15	603	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	30500	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10
-16	406	A suspicious looking car thief	A suspicious looking car thief	A suspicious looking car thief	A car thief equipped with brass knuckles and a crowbar. He is obviously armed.	8	0	25	23	22	0	24	0	10	0	0	15	0	0	150	45	510	950	150	0	0	1	150	45	510	20	16	20	5	5	0	0	\N	\N	0	0	0	0	0	0	0	0	0
-17	407	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	25	0	0	5550	565	510	150	250	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	0	0	0	0	0	0	0	0	0
-18	500	A Military Police enforcer	A Military Police enforcer	A Military Police enforcer	A fit military police enforcer. He looks armed.	8	0	25	23	22	0	24	0	10	0	0	10	0	0	250	45	110	50	7050	0	0	1	250	45	110	10	6	20	10	5	0	10	\N	\N	10	10	10	10	10	10	10	10	10
-19	501	A Military Police shotgunner	A Military Police shotgunner	A Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	40	0	0	5550	565	510	150	7050	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10
-20	502	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	8	0	355	333	132	0	334	0	10	0	0	40	0	0	109550	1565	810	109150	20050	0	0	1	109550	1565	810	115	48	340	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10
-24	109	A retail associate	A retail associate	A retail associate	A retail associate tirelessly stocks shelves...	8	0	15	1	2	0	4	0	4	0	0	3	0	0	120	50	60	85	580	0	0	1	120	50	60	2	5	2	10	5	0	19	\N	\N	2	1	1	1	1	0	1	2	1
-25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	580	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2
-2	100	A rugged car thief	A rugged car thief	A rugged car thief	A car thief stalking the area. He is armed.	8	0	18	13	2	0	34	0	0	0	0	10	0	0	350	45	610	750	250	0	0	1	350	45	610	30	6	20	10	5	0	14	\N	\N	15	5	15	8	0	0	18	0	0
-3	101	A petty thief	A petty thief	A petty thief	A petty thief is stalking the area.	8	0	4	4	2	0	4	0	0	0	0	5	0	0	100	15	110	750	250	0	0	1	100	15	110	2	6	10	4	5	0	14	\N	\N	5	4	5	2	0	0	4	0	0
-21	102	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	8	0	9	6	2	0	7	0	0	0	0	8	0	0	1450	25	510	1123	250	0	0	1	1450	25	510	10	25	20	4	5	0	15	\N	\N	0	10	8	3	0	0	5	0	0
-4	103	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict is manically patrolling the area.	8	0	13	6	2	0	13	0	0	0	0	13	0	0	650	25	310	4123	250	0	0	1	650	25	310	8	25	30	4	5	0	16	\N	\N	0	4	1	1	2	0	8	0	9
-22	104	A shoplifter	A shoplifter	A shoplifter	A shoplifter is stalking the area.	8	0	1	1	1	0	1	0	0	0	0	1	0	0	10	15	60	10	250	0	0	1	10	15	60	1	3	1	4	5	0	15	\N	\N	1	0	1	0	0	0	1	0	0
-23	105	A crackhead	A crackhead	A crackhead	A crackhead is stalking the area.	8	0	1	1	1	0	3	0	0	0	0	2	0	0	35	15	60	10	250	0	0	1	35	15	60	2	6	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0
-26	106	An armed security guard	An armed security guard	An armed security guard	An armed security guard watches you closely.	8	0	28	23	25	0	54	0	0	0	0	20	0	0	950	245	610	2150	20044	0	0	1	950	245	610	90	18	60	10	5	0	18	\N	\N	25	30	35	20	30	10	38	25	20
-27	107	A bank teller	A bank teller	A bank teller	A bank teller is obediently serving you	8	0	1	1	1	0	3	0	30	0	0	2	0	0	15	15	20	450	580	0	0	2	15	15	20	1	3	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0
-28	112	An infected drone	An infected drone	An infected drone	An infected drone lumbers hugrily towards you...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	493	100	82	95	100	0	0	1	493	100	82	1	8	10	10	5	0	15	\N	Market Street	2	3	3	2	3	1	3	2	2
-29	113	An adapted drone	An adapted drone 	An adapted drone 	An adapted drone looks for something to infect...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	350	100	82	88	100	0	0	1	350	100	82	2	12	18	10	5	0	15	\N	Market Street	4	5	5	4	7	0	8	3	4
-30	666	{red}DEFILER{/red}	{red}DEFILER{/red}	{red}DEFILER{/red}	{red}DEFILER{/red}	8	0	22	13	12	0	14	0	1	0	0	20	0	0	3820	830	160	42080	8050	0	0	1	3820	830	160	16	16	12	10	5	0	20	\N	Butcher	12	20	13	12	11	10	11	18	1
-31	503	An Orthos guard	An Orthos guard	An Orthos guard	An Orthos guard regards you indifferently.	8	0	55	23	52	0	54	0	20	0	0	20	0	0	5850	245	110	250	8950	0	0	1	5850	245	110	20	16	30	10	5	0	21	\N	Psi-Tech	20	20	20	20	20	20	20	20	20
-32	504	An Orthos sniper	An Orthos sniper	An Orthos sniper	An Orthos sniper lies here... waiting..	8	0	35	33	32	0	34	0	10	0	0	20	0	0	6550	865	510	950	9050	0	0	1	6550	865	510	25	28	30	10	6	0	21	\N	Psi-Tech	80	10	110	90	10	10	90	10	10
-33	505	An Orthos menace	An Orthos menace	An Orthos menace	An Orthos menace	8	0	55	33	32	0	34	0	0	0	0	20	0	0	8550	1565	910	2150	5050	0	0	1	8050	1565	910	115	48	340	10	6	0	21	\N	Psi-Tech	80	50	40	30	80	0	40	20	0
+COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description, mob_long_description, mob_description, mob_action_bitvector, mob_affection_bitvector, mob_ability_strength, mob_ability_strength_add, mob_ability_intelligence, mob_ability_wisdom, mob_ability_dexterity, mob_ability_constitution, mob_ability_charisma, mob_alignment, mob_attack_type, mob_level, mob_hitroll, mob_armor, mob_max_hitpoints, mob_max_mana, mob_max_move, mob_gold, mob_exp, mob_load_position, mob_default_position, mob_sex, mob_hitpoints, mob_mana, mob_move, mob_damnodice, mob_damsizedice, mob_damroll, mob_weight, mob_height, mob_class, mob_special_extended_type, mob_targets, mob_roam_pattern, mob_ability_electronics, mob_ability_armor, mob_ability_marksmanship, mob_ability_sniping, mob_ability_demolitions, mob_ability_chemistry, mob_ability_weapon_handling, mob_ability_strategy, mob_ability_medical, mob_raid_id, mob_scalable) FROM stdin;
+11	410	Corporal James Taggart	Corporal James Tagger short description	Corporal James Tagger long description	Corporal James Tagger description	0	0	10	10	10	10	10	10	10	0	0	150	150	150	-1	-1	-1	0	50	0	0	0	-1	-1	-1	50	50	50	80	9	0	0	\N	\N	1	1	1	1	1	1	1	1	1	\N	0
+1	1	chef  employee	A pissed looking Los  employee	A pissed looking Los  employee	This particular employee looks like he just got out of a federal penitentiary. He's most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.	8	0	25	0	25	0	25	0	25	0	0	0	0	0	250	250	250	5000	50	8	8	0	250	250	250	25	0	0	50	15	0	14	\N	\N	1	1	1	1	1	1	1	1	1	\N	0
+12	600	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	30500	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	\N	0
+13	601	A volunteer patient	A volunteer patient	A volunteer patient	A volunteer patient stands here with dazed thousand mile stare.	8	0	185	183	10	0	184	0	1	0	0	15	0	0	880	25	240	0	3500	0	0	1	880	25	240	8	90	115	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	\N	0
+14	602	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon	8	0	185	183	182	0	184	0	85	0	0	80	0	0	8580	815	240	85000	8500	0	0	2	8580	815	240	-72	-70	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	\N	0
+15	603	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	A Ballistics Expert	8	0	85	83	82	0	84	0	1	0	0	40	0	0	58580	15	240	505000	30500	0	0	1	58580	15	140	84	86	215	10	4	0	0	\N	\N	10	10	10	10	10	10	10	10	10	\N	0
+16	406	A suspicious looking car thief	A suspicious looking car thief	A suspicious looking car thief	A car thief equipped with brass knuckles and a crowbar. He is obviously armed.	8	0	25	23	22	0	24	0	10	0	0	15	0	0	150	45	510	950	150	0	0	1	150	45	510	20	16	20	5	5	0	0	\N	\N	0	0	0	0	0	0	0	0	0	\N	0
+17	407	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	25	0	0	5550	565	510	150	250	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	0	0	0	0	0	0	0	0	0	\N	0
+18	500	A Military Police enforcer	A Military Police enforcer	A Military Police enforcer	A fit military police enforcer. He looks armed.	8	0	25	23	22	0	24	0	10	0	0	10	0	0	250	45	110	50	7050	0	0	1	250	45	110	10	6	20	10	5	0	10	\N	\N	10	10	10	10	10	10	10	10	10	\N	0
+19	501	A Military Police shotgunner	A Military Police shotgunner	A Military Police shotgunner	A fit military police shotgunner. He looks armed.	8	0	35	33	32	0	34	0	10	0	0	40	0	0	5550	565	510	150	7050	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10	\N	0
+20	502	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	8	0	355	333	132	0	334	0	10	0	0	40	0	0	109550	1565	810	109150	20050	0	0	1	109550	1565	810	115	48	340	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10	\N	0
+24	109	A retail associate	A retail associate	A retail associate	A retail associate tirelessly stocks shelves...	8	0	15	1	2	0	4	0	4	0	0	3	0	0	120	50	60	85	580	0	0	1	120	50	60	2	5	2	10	5	0	19	\N	\N	2	1	1	1	1	0	1	2	1	\N	0
+25	110	A shoplifter	A shoplifter	A shoplifter	A shoplifter looks around nervously...	8	0	30	1	5	0	8	0	8	0	0	6	0	0	240	100	128	150	580	0	0	1	240	100	128	5	10	5	10	5	0	17	\N	\N	5	3	2	2	3	0	3	5	2	\N	0
+104	700	A suspicious looking car thief	A suspicious looking car thief	A suspicious looking car thief	A car thief equipped with brass knuckles and a crowbar.	4360	0	16	15	14	0	16	0	6	0	0	10	0	0	100	30	340	633	100	0	0	1	100	30	340	13	10	13	3	3	0	0	\N	\N	0	0	0	0	0	0	0	0	0	\N	1
+3	101	A petty thief	A petty thief	A petty thief	A petty thief is stalking the area.	8	0	4	4	2	0	4	0	0	0	0	5	0	0	100	15	110	750	250	0	0	1	100	15	110	2	6	10	4	5	0	14	\N	\N	5	4	5	2	0	0	4	0	0	\N	0
+21	102	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	8	0	9	6	2	0	7	0	0	0	0	8	0	0	1450	25	510	1123	250	0	0	1	1450	25	510	10	25	20	4	5	0	15	\N	\N	0	10	8	3	0	0	5	0	0	\N	0
+4	103	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict is manically patrolling the area.	8	0	13	6	2	0	13	0	0	0	0	13	0	0	650	25	310	4123	250	0	0	1	650	25	310	8	25	30	4	5	0	16	\N	\N	0	4	1	1	2	0	8	0	9	\N	0
+22	104	A shoplifter	A shoplifter	A shoplifter	A shoplifter is stalking the area.	8	0	1	1	1	0	1	0	0	0	0	1	0	0	10	15	60	10	250	0	0	1	10	15	60	1	3	1	4	5	0	15	\N	\N	1	0	1	0	0	0	1	0	0	\N	0
+23	105	A crackhead	A crackhead	A crackhead	A crackhead is stalking the area.	8	0	1	1	1	0	3	0	0	0	0	2	0	0	35	15	60	10	250	0	0	1	35	15	60	2	6	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0	\N	0
+26	106	An armed security guard	An armed security guard	An armed security guard	An armed security guard watches you closely.	8	0	28	23	25	0	54	0	0	0	0	20	0	0	950	245	610	2150	20044	0	0	1	950	245	610	90	18	60	10	5	0	18	\N	\N	25	30	35	20	30	10	38	25	20	\N	0
+27	107	A bank teller	A bank teller	A bank teller	A bank teller is obediently serving you	8	0	1	1	1	0	3	0	30	0	0	2	0	0	15	15	20	450	580	0	0	2	15	15	20	1	3	1	4	5	0	0	\N	\N	0	0	0	0	0	0	1	0	0	\N	0
+105	701	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict	a chaotic meth addict is manically patrolling the area.	4360	0	8	4	1	0	8	0	0	0	0	10	0	0	433	16	206	2748	166	0	0	1	433	16	206	5	16	20	2	3	0	16	\N	\N	0	2	0	0	1	0	5	0	6	\N	1
+30	666	{red}DEFILER{/red}	{red}DEFILER{/red}	{red}DEFILER{/red}	{red}DEFILER{/red}	8	0	22	13	12	0	14	0	1	0	0	20	0	0	3820	830	160	42080	8050	0	0	1	3820	830	160	16	16	12	10	5	0	20	\N	Butcher	12	20	13	12	11	10	11	18	1	\N	0
+29	113	An inventory grunt	An inventory grunt	An inventory grunt	An inventory grunt is here breaking a sweat. He hardly notices you.	8	0	99	500	500	0	500	0	500	0	0	200	0	0	98493	98100	9882	0	1	0	0	1	98493	98100	9882	-74	-74	950	10	5	0	15	\N	Inventory	500	500	500	500	500	500	500	500	500	\N	0
+31	503	An Orthos guard	An Orthos guard	An Orthos guard	An Orthos guard regards you indifferently.	8	0	55	23	52	0	54	0	20	0	0	20	0	0	5850	245	110	250	8950	0	0	1	5850	245	110	20	16	30	10	5	0	21	\N	Psi-Tech	20	20	20	20	20	20	20	20	20	\N	0
+32	504	An Orthos sniper	An Orthos sniper	An Orthos sniper	An Orthos sniper lies here... waiting..	8	0	35	33	32	0	34	0	10	0	0	20	0	0	6550	865	510	950	9050	0	0	1	6550	865	510	25	28	30	10	6	0	21	\N	Psi-Tech	80	10	110	90	10	10	90	10	10	\N	0
+33	505	An Orthos menace	An Orthos menace	An Orthos menace	An Orthos menace	8	0	55	33	32	0	34	0	0	0	0	20	0	0	8550	1565	910	2150	5050	0	0	1	8050	1565	910	115	48	340	10	6	0	21	\N	Psi-Tech	80	50	40	30	80	0	40	20	0	\N	0
+28	112	An inventory specialist	An inventory specialist	An inventory specialist	An inventory specialist takes a calculating look at the list of items on today's list.	8	0	99	500	500	0	500	0	500	0	0	200	0	0	98493	98100	9882	0	1	0	0	2	98493	98100	9882	-74	-74	950	10	5	0	15	\N	Inventory	500	500	500	500	500	500	500	500	500	\N	0
+34	667	Maintenance guard	Maintenance guard	Maintenance guard	Maintenance guard	8	0	10	1	2	0	4	0	4	0	0	5	0	0	220	10	30	50	150	0	0	1	220	10	30	2	6	4	10	5	0	10	\N	\N	2	0	3	0	0	0	3	2	0	\N	0
+35	668	Maintenance grunt	Maintenance grunt	Maintenance grunt	Maintenance grunt	8	0	8	1	1	0	7	0	5	0	0	5	0	0	180	20	40	25	100	0	0	1	180	20	40	4	4	3	10	5	0	15	\N	\N	0	2	6	0	0	0	4	1	0	\N	0
+39	670	An extremist	An extremist	An extremist	An extremist spitefully makes eye contact with you.	8	0	5	0	5	0	10	0	10	0	0	5	0	0	1225	250	210	0	250	0	0	1	1225	250	210	5	20	25	10	5	0	15	\N	Hydro-Processing	5	5	10	5	5	5	5	5	5	\N	0
+106	702	A crackhead	A crackhead	A crackhead	A crackhead is stalking the area.	4360	0	0	0	0	0	2	0	0	0	0	10	0	0	23	10	40	6	166	0	0	1	23	10	40	1	4	0	2	3	0	0	\N	\N	0	0	0	0	0	0	0	0	0	\N	1
+107	703	{red}DEFILER{/red}	{red}DEFILER{/red}	{red}DEFILER{/red}	{red}DEFILER{/red}	8	0	11	6	6	0	7	0	0	0	0	10	0	0	1910	415	80	21040	4025	0	0	1	1910	415	80	8	8	6	10	5	0	20	\N	\N	6	10	6	6	5	5	5	9	0	\N	1
+108	704	An extremist	An extremist	An extremist	An extremist spitefully makes eye contact with you.	8	0	10	10	10	0	20	0	20	0	0	10	0	0	2450	500	420	450	500	0	0	1	2450	500	420	10	40	50	10	5	0	15	\N	\N	10	10	20	10	10	10	10	10	10	\N	1
+109	705	A rugged car thief	A rugged car thief	A rugged car thief	A car thief stalking the area. He is armed.	4616	0	18	13	2	0	34	0	2	0	0	10	0	0	350	45	610	750	250	0	0	1	350	45	610	30	6	20	10	5	0	14	\N	\N	15	5	15	8	2	2	18	2	2	\N	1
+36	669	Orthos sentinel	Orthos sentinel	Orthos sentinel	Orthos sentinel	8	0	900	91	902	0	944	0	0	0	0	85	0	0	85000	9080	1500	0	2350	0	0	1	85000	9080	1500	-74	32	230	10	5	0	22	\N	\N	942	1000	944	944	1000	944	1000	944	1000	\N	0
+37	114	An infected drone	An infected drone	An infected drone	An infected drone lumbers hugrily towards you...	8	0	2	2	2	0	4	0	5	0	0	2	0	0	493	100	82	95	100	0	0	1	493	100	82	1	8	10	10	5	0	15	\N	\N	2	3	3	2	3	1	3	2	2	\N	0
+38	115	An adapted drone	An adapted drone 	An adapted drone 	An adapted drone looks for something to infect...	8	0	4	5	4	0	4	0	5	0	0	3	0	0	350	100	82	88	100	0	0	1	350	100	82	2	12	18	10	5	0	15	\N	\N	4	5	5	4	7	0	8	3	4	\N	0
+110	706	A Military Police enforcer	A Military Police enforcer	A Military Police enforcer	A fit military police enforcer. He looks armed.	4616	0	25	23	22	0	24	0	10	0	0	10	0	0	25	45	110	50	7050	0	0	1	25	45	110	10	10	20	10	5	0	10	\N	\N	10	10	10	10	10	10	10	10	10	\N	1
+111	707	A Military Police shotgunner	A Military Police shotgunner	A Military Police shotgunner	A fit military police shotgunner. He looks armed.	4616	0	35	33	32	0	34	0	10	0	0	10	0	0	5550	565	510	150	7050	0	0	1	5550	565	510	15	18	30	10	6	0	11	\N	\N	10	10	10	10	10	10	10	10	10	\N	1
+112	708	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	An Ops Shield shotgunner	4616	0	88	83	33	0	83	0	2	0	0	10	0	0	27387	391	202	27287	5012	0	0	1	27387	391	202	28	12	85	10	6	0	11	\N	\N	2	2	2	2	2	2	2	2	2	\N	1
+113	709	A petty thief	A petty thief	A petty thief	A petty thief is stalking the area.	4360	0	2	2	1	0	2	0	0	0	0	10	0	0	66	10	73	500	166	0	0	1	66	10	73	1	4	6	2	3	0	14	\N	\N	3	2	3	1	0	0	2	0	0	\N	1
+114	710	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A fit military police shotgunner. He looks armed.	4360	0	14	13	12	0	13	0	4	0	0	10	0	0	2220	226	204	60	100	0	0	1	2220	226	204	6	7	12	10	6	0	11	\N	\N	0	0	0	0	0	0	0	0	0	\N	1
+115	711	A shoplifter	A shoplifter	A shoplifter	A shoplifter is stalking the area.	4360	0	0	0	0	0	0	0	0	0	0	10	0	0	6	10	40	6	166	0	0	1	6	10	40	0	2	0	4	5	0	15	\N	\N	0	0	0	0	0	0	0	0	0	\N	1
+116	712	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	4360	0	6	4	1	0	4	0	0	0	0	10	0	0	966	16	340	748	166	0	0	1	966	16	340	6	16	13	4	5	0	15	\N	\N	0	6	5	2	0	0	3	0	0	\N	1
 \.
 
 
@@ -4728,6 +4828,16 @@ COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description,
 --
 
 COPY public.muted (id, m_ip_address, m_username, m_hostname, m_enforce, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: notch; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.notch (id, n_points, n_name, n_player_id, created_at, updated_at) FROM stdin;
+4	1	Sheesh	1	2022-05-25 18:52:55.314286	2022-05-25 18:52:55.314286
+5	6	Janitorial services	1	2022-06-11 19:06:11.020393	2022-06-11 19:06:11.020393
 \.
 
 
@@ -4825,7 +4935,8 @@ COPY public.object_weapon (id, obj_fk_id, obj_ammo_max, obj_ammo_type, obj_coold
 
 COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences, player_practice_sessions) FROM stdin;
 110	$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.	0	0	sniper	1	1	0	3	0	9	9	12	15	9	0	0	241	436	729	48	561	M	241	436	729	52	52	52	9	1	52	0	0	PC	0	3	52	0	2021-09-18 01:42:45.163952	0	2021-09-18 01:42:45.163952	8388736	7
-1	foKntnEF3KSXA	0	0	far	1	1	0	231	0	693	519	924	1155	866	4710	0	65000	1212	65000	6753	8740	M	65000	1212	65000	53	53	53	9	1	53	0	0	PC	4710	7	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	13
+111	$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC	0	0	ghost	1	1	0	3	0	6	6	12	15	6	0	0	241	339	729	1108	2600	M	241	339	729	53	53	53	9	1	53	0	0	PC	0	3	53	0	2022-05-17 13:17:37.271391	0	2022-05-17 13:17:37.271391	8388736	5
+1	foKntnEF3KSXA	0	0	far	1	1	0	20	0	41	41	82	102	41	3200	0	65000	2277	65000	7283	92840	M	65000	2277	65000	53	53	53	9	1	53	0	0	PC	3200	19	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	37
 \.
 
 
@@ -4849,7 +4960,8 @@ COPY public.player_base_ability (pba_id, pba_player_id, pba_str, pba_str_add, pb
 13	107	3	0	9	9	12	15	9	9	6	8	8	15	10	6	9	15	2021-09-17 19:58:07.021327	2021-09-17 19:58:07.021327
 7	101	44	0	44	44	88	132	44	44	44	60	44	9	44	60	44	60	2021-09-17 00:53:22.86459	2021-09-17 00:53:22.86459
 16	110	3	0	9	9	12	15	9	9	6	8	8	15	10	6	9	9	2021-09-18 01:42:45.197498	2021-09-18 01:42:45.197498
-1	1	231	0	693	519	924	1155	866	693	404	635	462	115	693	635	693	1039	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
+17	111	3	0	6	6	12	15	6	6	6	11	11	15	7	9	6	9	2022-05-17 13:17:37.452746	2022-05-17 13:17:37.452746
+1	1	20	0	41	41	82	102	41	41	40	64	64	103	42	62	41	57	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
 \.
 
 
@@ -4882,6 +4994,22 @@ COPY public.player_flags (id, player_id, chunk_index, flag_value) FROM stdin;
 --
 
 COPY public.player_object (id, po_player_id, po_type, po_type_id, po_yaml, po_load_type, po_wear_position, po_in_inventory, po_quantity, po_ammunition) FROM stdin;
+471	111	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	8
+472	111	1	197	\N	1	\N	1	1	13
+476	1	1	200	\N	1	\N	1	1	6
+477	1	1	201	\N	1	\N	1	1	13
+478	1	1	202	\N	1	\N	1	1	999
+479	1	1	203	\N	1	\N	1	1	8
+480	111	1	\N	psg1.yml	2	16	0	1	7
+426	1	8	\N	sg3-shotgun-ammunition.yml	2	\N	1	1	17
+437	111	7	\N	basic-ballistic-vest.yml	2	5	0	1	\N
+438	111	7	\N	basic-boots.yml	2	8	0	1	\N
+439	111	7	\N	titan-shin-guards.yml	2	7	0	1	\N
+440	111	7	\N	titan-gauntlets.yml	2	10	0	1	\N
+489	1	8	\N	sg3-sniper-ammunition.yml	2	\N	1	1	22
+490	1	1	\N	psg1.yml	2	\N	1	1	3
+492	1	8	\N	sg3-shotgun-ammunition.yml	2	\N	1	1	17
+491	1	1	\N	dst7a.yml	2	16	0	1	7
 \.
 
 
@@ -4914,6 +5042,16 @@ COPY public.player_skill_points (id, ps_skill_id, ps_points, ps_player_id, creat
 --
 
 COPY public.player_skill_usage (id, ps_player_id, ps_skill_id, ps_usage_count, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: raid; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.raid (id, r_name, r_level, r_type, r_status, created_at) FROM stdin;
+14	defend the MP's	1-20	defend	INCOMPLETE	2022-06-09 22:43:12.819973
+9	dire dire snare fest	everyone	CTF	completed	2022-06-03 22:55:42.954011
 \.
 
 
@@ -4975,180 +5113,221 @@ COPY public.rifle_index (id, rifle_filename, rifle_type, created_at, updated_at)
 --
 
 COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1, rifle_accuracy_map_2, rifle_accuracy_map_3, rifle_damage_map_0, rifle_damage_map_1, rifle_damage_map_2, rifle_damage_map_3, rifle_rarity, rifle_file, rifle_str_type, rifle_type, rifle_manufacturer, rifle_name, rifle_vnum, rifle_ammo_max, rifle_ammo_type, rifle_chance_to_injure, rifle_clip_size, rifle_cooldown_between_shots, rifle_critical_chance, rifle_critical_range, rifle_base_damage, rifle_disorient_amount, rifle_headshot_bonus, rifle_max_range, rifle_range_multiplier, rifle_reload_time, rifle_rounds_per_minute, rifle_muzzle_velocity, rifle_effective_firing_range, rifle_damage_dice_count, rifle_damage_dice_sides, rifle_incendiary_damage, rifle_explosive_damage, rifle_shrapnel_damage, rifle_corrosive_damage, rifle_cryogenic_damage, rifle_radioactive_damage, rifle_emp_damage, rifle_shock_damage, rifle_anti_matter_damage, rifle_stat_strength, rifle_stat_intelligence, rifle_stat_wisdom, rifle_stat_dexterity, rifle_stat_constitution, rifle_stat_electronics, rifle_stat_armor, rifle_stat_marksmanship, rifle_stat_sniping, rifle_stat_demolitions, rifle_stat_chemistry, rifle_stat_weapon_handling, rifle_stat_strategy, rifle_stat_medical, created_at, updated_at) FROM stdin;
-1	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	77	8	2	34	1	80	0	53	1	4.29999999999999982	2	10	1	10	1	1	0	1	1	1	0	1	1	1	1	0	0	1	1	0	0	0	0	1	1	1	1	0	0	2021-09-06 01:28:51.675323	2021-09-06 01:28:51.675323
+1	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	77	8	2	34	1	80	0	53	1	4.3	2	10	1	10	1	1	0	1	1	1	0	1	1	1	1	0	0	1	1	0	0	0	0	1	1	1	1	0	0	2021-09-06 01:28:51.675323	2021-09-06 01:28:51.675323
 2	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	1	SHOTGUN	1	6	2	34	1	154	1	53	2	1	2	14	918	15	3	31	0	1	1	1	1	0	1	1	1	1	0	1	1	1	1	0	0	0	1	0	1	0	0	2021-09-06 01:57:11.43389	2021-09-06 01:57:11.43389
 3	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	20.5	6	1	6	1	25	1	55	1	0	4	1	1	2	3	24	1	1	1	0	1	1	1	1	0	1	1	0	0	1	1	0	1	1	1	0	0	0	0	2021-09-06 01:57:28.204973	2021-09-06 01:57:28.204973
 4	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	1	1	1	5	1	39	0	33	1	0	3	80	1	2	3	1	1	0	1	1	1	0	0	0	0	1	1	0	0	0	1	0	0	0	1	1	1	1	0	2021-09-06 01:59:56.640283	2021-09-06 01:59:56.640283
-5	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.8099999999999987	31	1	1	1	30	1	29	3	4.29999999999999982	5	1	1357	20	10	6	1	1	1	1	1	1	1	1	1	0	1	0	0	1	1	0	1	0	1	1	1	1	0	2021-09-06 02:00:02.293957	2021-09-06 02:00:02.293957
-6	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	6	2	34	1	80	1	53	1	4.29999999999999982	1	19	918	10	3	1	1	1	0	1	0	1	1	1	1	1	1	1	1	0	1	0	1	1	0	0	1	0	0	2021-09-06 02:08:25.716967	2021-09-06 02:08:25.716967
+5	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.81	31	1	1	1	30	1	29	3	4.3	5	1	1357	20	10	6	1	1	1	1	1	1	1	1	1	0	1	0	0	1	1	0	1	0	1	1	1	1	0	2021-09-06 02:00:02.293957	2021-09-06 02:00:02.293957
+6	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	6	2	34	1	80	1	53	1	4.3	1	19	918	10	3	1	1	1	0	1	0	1	1	1	1	1	1	1	1	0	1	0	1	1	0	0	1	0	0	2021-09-06 02:08:25.716967	2021-09-06 02:08:25.716967
 7	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	75	PISTOL	1	9	1	5	1	21	1	1	1	1	3	80	40	3	4	16	1	1	0	1	1	1	0	1	1	1	1	1	0	0	0	0	1	1	1	1	1	1	0	2021-09-06 02:08:49.453172	2021-09-06 02:08:49.453172
 8	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	1	7	16	19	3	1	0	23	4	1	12	13	1818	512	2	53	1	1	0	1	1	1	0	0	1	0	1	1	0	0	1	0	1	1	0	0	1	1	0	2021-09-06 02:09:56.904971	2021-09-06 02:09:56.904971
 9	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	888	SUB_MACHINE_GUN	33	1	1	14	1	30	1	13	1	1	5	180	1	33	6	6	1	0	1	0	1	1	1	0	1	1	1	0	0	1	1	0	1	0	1	1	1	1	0	2021-09-06 02:11:28.277761	2021-09-06 02:11:28.277761
 10	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1	9	2	34	1	1	1	73	2	7	2	1	918	12	3	20	1	0	1	1	0	0	0	1	1	0	0	0	1	1	1	0	0	1	1	1	0	1	0	2021-09-06 02:48:16.222825	2021-09-06 02:48:16.222825
 11	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	20.5	6	1	5	1	36	1	33	1	0	1	1	40	3	1	26	1	1	1	1	0	0	0	1	1	0	1	1	1	1	0	0	1	0	0	1	1	0	0	2021-09-06 02:48:40.192837	2021-09-06 02:48:40.192837
-12	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	1	1	129	0	66	2	4.29999999999999982	2	1	920	10	1	20	0	0	1	1	1	1	1	1	1	1	1	1	0	0	0	0	1	0	1	1	0	0	0	2021-09-06 02:53:24.30776	2021-09-06 02:53:24.30776
-13	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	8	2	34	1	80	0	1	1	4.29999999999999982	3	10	918	1	3	20	1	1	0	1	1	1	0	1	1	1	0	0	0	1	0	0	1	1	1	0	1	0	0	2021-09-06 03:02:35.527086	2021-09-06 03:02:35.527086
+12	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	1	1	129	0	66	2	4.3	2	1	920	10	1	20	0	0	1	1	1	1	1	1	1	1	1	1	0	0	0	0	1	0	1	1	0	0	0	2021-09-06 02:53:24.30776	2021-09-06 02:53:24.30776
+13	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	8	2	34	1	80	0	1	1	4.3	3	10	918	1	3	20	1	1	0	1	1	1	0	1	1	1	0	0	0	1	0	0	1	1	1	0	1	0	0	2021-09-06 03:02:35.527086	2021-09-06 03:02:35.527086
 14	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	1	PISTOL	20.5	1	1	9	1	20	1	33	1	0	5	80	1	1	1	16	1	0	1	0	1	1	1	1	1	1	1	1	0	0	0	0	1	1	0	1	1	0	0	2021-09-06 03:04:47.023351	2021-09-06 03:04:47.023351
 15	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	73	6	2	1	1	80	0	1	4	1	2	10	918	10	3	20	1	1	1	1	1	1	1	0	1	1	0	1	1	1	1	0	1	1	0	1	1	0	0	2021-09-06 03:05:55.639243	2021-09-06 03:05:55.639243
-16	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	34	1	80	1	53	1	4.29999999999999982	2	1	918	1	5	1	1	0	1	1	0	1	1	1	1	0	1	1	1	0	1	0	0	1	1	0	1	1	0	2021-09-06 03:06:30.49336	2021-09-06 03:06:30.49336
-17	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	1	1	35	1	61	1	0	5	8	1	2	5	20	1	0	1	1	1	0	1	1	1	1	1	0	1	1	1	0	0	1	0	0	0	1	0	2021-09-06 03:06:37.447102	2021-09-06 03:06:37.447102
+16	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	34	1	80	1	53	1	4.3	2	1	918	1	5	1	1	0	1	1	0	1	1	1	1	0	1	1	1	0	1	0	0	1	1	0	1	1	0	2021-09-06 03:06:30.49336	2021-09-06 03:06:30.49336
+17	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	1	1	35	1	61	1	0	5	8	1	2	5	20	1	0	1	1	1	0	1	1	1	1	1	0	1	1	1	0	0	1	0	0	0	1	0	2021-09-06 03:06:37.447102	2021-09-06 03:06:37.447102
 18	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	1	PISTOL	1	1	1	5	1	20	1	42	1	1	3	1	1	2	3	16	1	0	0	1	1	0	1	1	0	0	1	0	1	1	1	0	0	0	0	1	0	1	0	2021-09-06 03:08:25.046276	2021-09-06 03:08:25.046276
-19	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	1	7	2	1	5	1	0	20	4	4.29999999999999982	11	10	1818	775	5	54	0	1	1	0	0	1	1	1	1	1	0	0	1	1	1	0	0	1	1	1	0	0	0	2021-09-06 03:08:36.809308	2021-09-06 03:08:36.809308
-20	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	14	2	14	4	5	3.14000000000000012	3	3	4.29999999999999982	1	80	1	2	6	1	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	1	1	1	1	1	0	2021-09-06 03:13:23.838239	2021-09-06 03:13:23.838239
+19	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	1	7	2	1	5	1	0	20	4	4.3	11	10	1818	775	5	54	0	1	1	0	0	1	1	1	1	1	0	0	1	1	1	0	0	1	1	1	0	0	0	2021-09-06 03:08:36.809308	2021-09-06 03:08:36.809308
+20	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	14	2	14	4	5	3.14	3	3	4.3	1	80	1	2	6	1	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	1	1	1	1	1	0	2021-09-06 03:13:23.838239	2021-09-06 03:13:23.838239
 21	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	1	1	5	1	1	1	33	1	0	3	80	40	3	3	16	0	1	0	1	0	1	1	1	1	1	1	1	0	1	1	0	1	1	0	0	1	1	0	2021-09-06 03:14:24.90574	2021-09-06 03:14:24.90574
-22	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.810000000000000053	11	16	19	1	450	0	1	4	1	1	1	1	500	3	49	1	1	0	1	1	1	0	1	1	1	0	0	1	1	1	0	0	1	0	1	0	0	0	2021-09-06 03:17:24.397361	2021-09-06 03:17:24.397361
-23	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	115	11	2	34	1	91	0	1	2	4.29999999999999982	3	1	918	1	1	20	1	1	0	1	1	0	0	0	1	0	0	0	1	0	1	0	1	0	1	1	1	1	0	2021-09-06 03:40:23.665692	2021-09-06 03:40:23.665692
+22	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.81	11	16	19	1	450	0	1	4	1	1	1	1	500	3	49	1	1	0	1	1	1	0	1	1	1	0	0	1	1	1	0	0	1	0	1	0	0	0	2021-09-06 03:17:24.397361	2021-09-06 03:17:24.397361
+23	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	115	11	2	34	1	91	0	1	2	4.3	3	1	918	1	1	20	1	1	0	1	1	0	0	0	1	0	0	0	1	0	1	0	1	0	1	1	1	1	0	2021-09-06 03:40:23.665692	2021-09-06 03:40:23.665692
 24	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	1	2	34	1	1	0	1	3	7	2	10	918	10	3	1	1	0	0	1	1	1	0	0	0	1	0	1	1	0	1	0	1	1	1	0	0	1	0	2021-09-06 03:42:49.10483	2021-09-06 03:42:49.10483
 25	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	8	2	34	1	117	1	53	2	1	3	10	918	13	1	20	0	1	1	1	1	0	1	1	1	0	1	0	0	1	1	0	0	1	1	0	0	1	0	2021-09-06 03:51:37.101185	2021-09-06 03:51:37.101185
-26	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81000000000000005	999	20	23	1	30	1	1	11	4.29999999999999982	33	180	1	26	1	140	1	1	0	1	0	1	1	0	1	0	0	1	1	1	0	0	1	1	1	0	1	1	0	2021-09-06 03:53:40.659097	2021-09-06 03:53:40.659097
+26	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81	999	20	23	1	30	1	1	11	4.3	33	180	1	26	1	140	1	1	0	1	0	1	1	0	1	0	0	1	1	1	0	0	1	1	1	0	1	1	0	2021-09-06 03:53:40.659097	2021-09-06 03:53:40.659097
 27	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1	MACHINE_PISTOL	32	37	1	14	1	30	1	21	3	1	5	1	1	20	1	6	1	1	1	0	1	1	0	1	1	1	0	1	1	0	1	0	0	1	0	0	1	1	0	2021-09-06 03:54:00.480819	2021-09-06 03:54:00.480819
-28	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	8	2	1	4	5	3.14000000000000012	3	1	4	8	80	24	1	1	1	1	1	0	1	1	0	1	1	1	1	0	1	1	1	1	0	1	0	0	1	1	1	0	2021-09-06 03:54:39.313207	2021-09-06 03:54:39.313207
+28	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	8	2	1	4	5	3.14	3	1	4	8	80	24	1	1	1	1	1	0	1	1	0	1	1	1	1	0	1	1	1	1	0	1	0	0	1	1	1	0	2021-09-06 03:54:39.313207	2021-09-06 03:54:39.313207
 29	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	33	1	1	7	1	1	0	33	1	1	3	80	1	2	1	16	1	1	1	1	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	1	0	1	0	2021-09-06 03:54:48.391041	2021-09-06 03:54:48.391041
-30	10	10	10	10	10	10	10	10	COMMON	aug-a3.yml	ASSAULT_RIFLE	4	VI-AUG-IX	AUG A3	44	220	ASSAULT_RIFLE	4.23000000000000043	8	2	19	4	7	1	3	3	1	1	99	24	2	11	1	1	1	0	1	1	0	1	1	1	1	0	0	1	0	1	0	0	0	1	1	1	1	0	2021-09-06 03:58:07.458034	2021-09-06 03:58:07.458034
-31	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81000000000000005	999	20	1	1	30	0	23	7	4.29999999999999982	1	1	1	36	40	1	1	0	1	0	1	1	1	1	0	1	0	1	1	1	0	0	1	1	0	1	1	1	0	2021-09-06 04:00:21.032214	2021-09-06 04:00:21.032214
-32	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	0.810000000000000053	7	2	19	5	450	1	21	1	1	8	59	2	500	1	1	2	1	1	1	5	1	0	1	0	0	2	1	1	1	1	0	0	1	2	1	0	1	0	2021-09-06 04:00:25.350172	2021-09-06 04:00:25.350172
-33	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	30.8099999999999987	2	1	14	1	1	0	16	3	4.29999999999999982	5	1	1	44	29	1	0	1	0	1	1	1	2	1	2	1	1	1	0	1	0	0	1	1	1	0	0	1	0	2021-09-06 04:00:53.142172	2021-09-06 04:00:53.142172
+30	10	10	10	10	10	10	10	10	COMMON	aug-a3.yml	ASSAULT_RIFLE	4	VI-AUG-IX	AUG A3	44	220	ASSAULT_RIFLE	4.23	8	2	19	4	7	1	3	3	1	1	99	24	2	11	1	1	1	0	1	1	0	1	1	1	1	0	0	1	0	1	0	0	0	1	1	1	1	0	2021-09-06 03:58:07.458034	2021-09-06 03:58:07.458034
+31	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81	999	20	1	1	30	0	23	7	4.3	1	1	1	36	40	1	1	0	1	0	1	1	1	1	0	1	0	1	1	1	0	0	1	1	0	1	1	1	0	2021-09-06 04:00:21.032214	2021-09-06 04:00:21.032214
+32	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	0.81	7	2	19	5	450	1	21	1	1	8	59	2	500	1	1	2	1	1	1	5	1	0	1	0	0	2	1	1	1	1	0	0	1	2	1	0	1	0	2021-09-06 04:00:25.350172	2021-09-06 04:00:25.350172
+33	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	30.81	2	1	14	1	1	0	16	3	4.3	5	1	1	44	29	1	0	1	0	1	1	1	2	1	2	1	1	1	0	1	0	0	1	1	1	0	0	1	0	2021-09-06 04:00:53.142172	2021-09-06 04:00:53.142172
 34	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	1	PISTOL	20	10	1	1	1	1	0	33	1	0	1	80	40	2	5	16	1	1	5	0	1	1	1	1	0	2	1	0	2	1	0	0	1	0	9	2	1	0	0	2021-09-06 04:01:03.958174	2021-09-06 04:01:03.958174
-35	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	1162	SUB_MACHINE_GUN	1	82	1	14	2	30	0	66	4	4.29999999999999982	10	1	1	1	6	6	1	1	1	1	1	1	2	1	1	0	2	0	1	0	2	0	1	0	1	2	2	0	0	2021-09-06 04:01:19.683189	2021-09-06 04:01:19.683189
+35	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	1162	SUB_MACHINE_GUN	1	82	1	14	2	30	0	66	4	4.3	10	1	1	1	6	6	1	1	1	1	1	1	2	1	1	0	2	0	1	0	2	0	1	0	1	2	2	0	0	2021-09-06 04:01:19.683189	2021-09-06 04:01:19.683189
 36	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	75	PISTOL	1	1	1	5	1	20	2	1	1	2	3	1	1	2	3	16	1	2	1	0	2	1	1	1	2	1	1	1	4	0	1	0	1	2	0	1	0	1	0	2021-09-06 04:01:46.176273	2021-09-06 04:01:46.176273
 37	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	13	1	1	1	23	0	1	2	0	1	1	40	3	3	1	1	0	2	5	2	0	1	1	1	1	0	1	1	1	2	0	1	0	0	0	0	1	0	2021-09-06 04:01:51.777233	2021-09-06 04:01:51.777233
 38	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	20.5	12	1	5	2	3	0	33	1	1	1	80	1	1	3	1	0	1	0	4	1	0	1	1	3	2	0	2	3	1	2	0	0	0	0	1	1	0	0	2021-09-06 04:03:22.246198	2021-09-06 04:03:22.246198
-39	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	1	ASSAULT_RIFLE	4	8	2	14	2	5	1	1	1	4.29999999999999982	5	80	24	2	6	19	1	1	1	2	2	0	1	0	2	1	2	1	1	2	2	0	0	1	2	1	0	0	0	2021-09-06 04:03:32.066198	2021-09-06 04:03:32.066198
+39	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	1	ASSAULT_RIFLE	4	8	2	14	2	5	1	1	1	4.3	5	80	24	2	6	19	1	1	1	2	2	0	1	0	2	1	2	1	1	2	2	0	0	1	2	1	0	0	0	2021-09-06 04:03:32.066198	2021-09-06 04:03:32.066198
 40	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	100	SHOTGUN	169	1	2	34	1	80	0	1	4	12	1	10	918	10	8	26	1	1	1	0	1	2	1	2	4	1	1	1	0	0	0	0	1	4	2	0	0	2	0	2021-09-06 04:11:31.980285	2021-09-06 04:11:31.980285
-41	10	10	10	10	10	10	10	10	COMMON	m16a4.yml	ASSAULT_RIFLE	4	Standard Issue	M16A4 Assault Rifle	25	220	ASSAULT_RIFLE	4.23000000000000043	1	2	14	1	5	3.14000000000000012	1	3	7	7	1	1	4	6	1	1	1	1	1	1	0	2	2	2	1	2	1	1	1	2	0	1	1	0	1	1	5	0	2021-09-06 04:12:25.294101	2021-09-06 04:12:25.294101
-42	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	189	PISTOL	0	14	6	2	1	2	2	57	1	8	5	9	1	2	1	36	2	1	7	1	2	1	3	7	2	2	2	0	1	3	1	0	9	1	0	3	1	0	0	2021-09-06 04:13:09.227471	2021-09-06 04:13:09.227471
-43	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81000000000000005	2	20	14	1	30	2	13	2	9	72	180	1	1	47	2	2	2	2	1	0	4	2	1	2	1	1	0	1	0	1	0	1	0	1	2	2	2	0	2021-09-06 04:13:23.551378	2021-09-06 04:13:23.551378
+41	10	10	10	10	10	10	10	10	COMMON	m16a4.yml	ASSAULT_RIFLE	4	Standard Issue	M16A4 Assault Rifle	25	220	ASSAULT_RIFLE	4.23	1	2	14	1	5	3.14	1	3	7	7	1	1	4	6	1	1	1	1	1	1	0	2	2	2	1	2	1	1	1	2	0	1	1	0	1	1	5	0	2021-09-06 04:12:25.294101	2021-09-06 04:12:25.294101
+42	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	189	PISTOL	0	14	6	2	1	2	2	57	1	8	5	9	1	2	1	36	2	1	7	1	2	1	3	7	2	2	2	0	1	3	1	0	9	1	0	3	1	0	0	2021-09-06 04:13:09.227471	2021-09-06 04:13:09.227471
+43	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81	2	20	14	1	30	2	13	2	9	72	180	1	1	47	2	2	2	2	1	0	4	2	1	2	1	1	0	1	0	1	0	1	0	1	2	2	2	0	2021-09-06 04:13:23.551378	2021-09-06 04:13:23.551378
 44	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	20.5	26	1	5	1	2	1	33	1	1	1	6	40	2	1	16	4	1	9	0	2	3	1	0	0	1	0	1	0	2	1	0	2	3	0	1	3	1	0	2021-09-06 04:13:44.591935	2021-09-06 04:13:44.591935
 45	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	586	6	2	1	2	1	2	2	2	3	2	29	918	10	4	20	1	2	1	3	2	0	0	2	7	1	0	1	2	2	2	0	0	6	0	1	0	4	0	2021-09-06 04:21:24.352496	2021-09-06 04:21:24.352496
-46	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	2	ASSAULT_RIFLE	16	2	2	2	4	5	3.14000000000000012	6	2	4.29999999999999982	1	80	24	6	54	31	2	2	2	3	0	2	5	0	0	2	1	0	1	2	1	0	0	0	0	1	2	2	0	2021-09-06 04:21:40.381543	2021-09-06 04:21:40.381543
-47	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	11	3	35	1	125	1	1	2	10	2	2	2	1	0	0	0	0	0	0	0	0	0	0	2	0	2	2	1	0	6	3	2	0	0	0	0	2021-09-06 04:22:42.764595	2021-09-06 04:22:42.764595
+46	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	2	ASSAULT_RIFLE	16	2	2	2	4	5	3.14	6	2	4.3	1	80	24	6	54	31	2	2	2	3	0	2	5	0	0	2	1	0	1	2	1	0	0	0	0	1	2	2	0	2021-09-06 04:21:40.381543	2021-09-06 04:21:40.381543
+47	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	11	3	35	1	125	1	1	2	10	2	2	2	1	0	0	0	0	0	0	0	0	0	0	2	0	2	2	1	0	6	3	2	0	0	0	0	2021-09-06 04:22:42.764595	2021-09-06 04:22:42.764595
 48	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	2	2	16	1	3	1620	2	13	4	1	9	10	1818	1	2	49	1	0	1	27	1	1	3	4	0	0	0	3	2	2	0	0	2	2	3	1	2	3	0	2021-09-06 04:22:46.863401	2021-09-06 04:22:46.863401
 49	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	30	13	1	5	1	62	0	3	2	0	1	80	1	7	2	1	1	5	2	1	2	2	0	2	3	0	1	1	0	19	1	0	0	1	4	0	2	0	0	2021-09-06 04:23:01.641628	2021-09-06 04:23:01.641628
-50	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	90	SNIPER	0.810000000000000053	21	16	8	3	450	0	2	7	15	1	12	1818	500	2	49	5	2	1	2	0	1	1	1	1	0	0	2	6	2	2	0	0	2	2	1	2	1	0	2021-09-06 04:23:35.951147	2021-09-06 04:23:35.951147
+50	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	90	SNIPER	0.81	21	16	8	3	450	0	2	7	15	1	12	1818	500	2	49	5	2	1	2	0	1	1	1	1	0	0	2	6	2	2	0	0	2	2	1	2	1	0	2021-09-06 04:23:35.951147	2021-09-06 04:23:35.951147
 51	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	115	17	2	34	1	80	1	53	4	10	3	20	918	10	4	2	2	1	0	0	2	10	2	1	1	0	1	0	2	1	1	0	0	3	2	0	2	7	0	2021-09-06 04:27:50.496627	2021-09-06 04:27:50.496627
-52	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	461	31	1	1	1	30	2	13	10	4.29999999999999982	1	2	818	2	21	19	2	4	2	2	1	1	1	2	2	0	2	3	0	2	3	0	0	0	1	1	3	3	0	2021-09-06 04:28:20.129768	2021-09-06 04:28:20.129768
-53	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	147	SHOTGUN	70	62	2	2	2	80	1	53	2	4.29999999999999982	2	10	918	21	3	2	0	1	2	3	2	0	3	2	0	1	2	1	3	2	2	0	0	0	0	1	0	0	0	2021-09-07 10:38:58.671814	2021-09-07 10:38:58.671814
+52	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	461	31	1	1	1	30	2	13	10	4.3	1	2	818	2	21	19	2	4	2	2	1	1	1	2	2	0	2	3	0	2	3	0	0	0	1	1	3	3	0	2021-09-06 04:28:20.129768	2021-09-06 04:28:20.129768
+53	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	147	SHOTGUN	70	62	2	2	2	80	1	53	2	4.3	2	10	918	21	3	2	0	1	2	3	2	0	3	2	0	1	2	1	3	2	2	0	0	0	0	1	0	0	0	2021-09-07 10:38:58.671814	2021-09-07 10:38:58.671814
 54	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	1	PISTOL	20.5	2	1	13	8	20	0	33	2	2	6	1	40	1	3	2	0	0	2	2	2	1	34	2	0	0	1	2	0	0	0	0	1	9	3	0	2	2	0	2021-09-07 10:39:50.158031	2021-09-07 10:39:50.158031
 55	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	3	MACHINE_PISTOL	20	13	1	2	5	20	0	42	1	0	9	290	40	1	3	3	2	1	1	2	0	11	1	0	1	0	2	2	0	1	1	0	7	2	0	1	2	2	0	2021-09-07 10:40:02.18301	2021-09-07 10:40:02.18301
-56	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	47	SHOTGUN	2	6	2	34	3	1	0	309	4	4.29999999999999982	2	1	918	82	1	59	1	1	1	1	0	2	0	1	1	2	2	0	2	0	0	0	2	2	1	1	3	1	0	2021-09-07 10:48:10.468071	2021-09-07 10:48:10.468071
+56	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	47	SHOTGUN	2	6	2	34	3	1	0	309	4	4.3	2	1	918	82	1	59	1	1	1	1	0	2	0	1	1	2	2	0	2	0	0	0	2	2	1	1	3	1	0	2021-09-07 10:48:10.468071	2021-09-07 10:48:10.468071
 57	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	112	2	2	34	1	147	0	1	2	17	2	26	12	10	3	62	2	0	7	2	2	11	7	0	0	2	0	1	2	3	0	0	1	3	1	0	1	2	0	2021-09-07 10:54:48.821086	2021-09-07 10:54:48.821086
-58	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1	MACHINE_PISTOL	30.8099999999999987	1	1	2	3	108	2	1	8	4.29999999999999982	2	180	818	20	6	14	17	0	2	2	5	2	2	11	1	0	0	0	7	2	1	0	4	2	0	1	2	4	0	2021-09-07 10:55:09.614216	2021-09-07 10:55:09.614216
-59	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	220	ASSAULT_RIFLE	16	1	2	14	16	1	3.14000000000000012	1	2	4.29999999999999982	2	1	77	4	6	2	3	0	1	1	22	2	0	14	0	2	5	7	1	2	2	0	0	2	0	0	3	0	0	2021-09-07 10:55:32.641118	2021-09-07 10:55:32.641118
-60	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	458	ASSAULT_RIFLE	1	8	2	14	2	2	3.14000000000000012	1	2	4.29999999999999982	18	2	75	3	6	1	1	1	1	3	1	2	0	1	2	0	0	0	0	0	0	0	0	2	0	2	0	0	0	2021-09-07 10:56:19.699137	2021-09-07 10:56:19.699137
+58	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1	MACHINE_PISTOL	30.81	1	1	2	3	108	2	1	8	4.3	2	180	818	20	6	14	17	0	2	2	5	2	2	11	1	0	0	0	7	2	1	0	4	2	0	1	2	4	0	2021-09-07 10:55:09.614216	2021-09-07 10:55:09.614216
+59	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	220	ASSAULT_RIFLE	16	1	2	14	16	1	3.14	1	2	4.3	2	1	77	4	6	2	3	0	1	1	22	2	0	14	0	2	5	7	1	2	2	0	0	2	0	0	3	0	0	2021-09-07 10:55:32.641118	2021-09-07 10:55:32.641118
+60	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	458	ASSAULT_RIFLE	1	8	2	14	2	2	3.14	1	2	4.3	18	2	75	3	6	1	1	1	1	3	1	2	0	1	2	0	0	0	0	0	0	0	0	2	0	2	0	0	0	2021-09-07 10:56:19.699137	2021-09-07 10:56:19.699137
 61	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	2	ASSAULT_RIFLE	17	8	2	3	2	5	1	2	1	15	5	376	2	2	52	38	0	0	3	1	2	1	0	2	4	0	1	0	1	0	0	0	0	2	2	40	2	1	0	2021-09-07 10:57:40.930179	2021-09-07 10:57:40.930179
 62	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	1	SNIPER	2	7	2	19	3	2	2	3	4	1	8	16	1	500	8	54	2	0	2	1	0	3	4	1	19	0	1	3	1	1	0	0	0	19	4	1	2	0	0	2021-09-07 10:57:55.801265	2021-09-07 10:57:55.801265
-63	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	3717	LIGHT_MACHINE_GUN	3.81000000000000005	3278	20	21	3	30	0	2	2	3	33	2	818	149	186	1	2	9	2	8	7	0	2	3	49	2	1	2	0	0	2	0	9	0	2	0	0	1	0	2021-09-07 10:58:07.221686	2021-09-07 10:58:07.221686
-64	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	1	PISTOL	0	7	6	11	1	35	1	2	1	0	2	23	2	2	18	20	0	2	1	2	4	0	1	17	1	1	7	0	1	2	1	0	6	1	0	13	2	0	0	2021-09-07 10:58:18.857191	2021-09-07 10:58:18.857191
-65	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	6	2	34	1	1	0	1	7	4.29999999999999982	1	1	1390	1	1	20	0	1	1	0	1	1	1	1	0	1	1	0	1	1	0	0	1	0	1	0	0	1	0	2021-09-07 11:35:16.81688	2021-09-07 11:35:16.81688
-66	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	92	SNIPER	0.810000000000000053	12	16	19	3	1	0	13	1	1	9	18	1818	500	3	49	1	1	1	1	0	1	1	1	0	1	0	0	1	1	1	0	1	0	1	1	1	0	0	2021-09-07 11:37:13.543964	2021-09-07 11:37:13.543964
-67	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	1	SHOTGUN	70	1	2	34	1	1	1	53	2	4.29999999999999982	3	10	918	10	1	34	0	0	1	1	0	1	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-07 11:38:57.601084	2021-09-07 11:38:57.601084
+63	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	3717	LIGHT_MACHINE_GUN	3.81	3278	20	21	3	30	0	2	2	3	33	2	818	149	186	1	2	9	2	8	7	0	2	3	49	2	1	2	0	0	2	0	9	0	2	0	0	1	0	2021-09-07 10:58:07.221686	2021-09-07 10:58:07.221686
+64	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	1	PISTOL	0	7	6	11	1	35	1	2	1	0	2	23	2	2	18	20	0	2	1	2	4	0	1	17	1	1	7	0	1	2	1	0	6	1	0	13	2	0	0	2021-09-07 10:58:18.857191	2021-09-07 10:58:18.857191
+65	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	6	2	34	1	1	0	1	7	4.3	1	1	1390	1	1	20	0	1	1	0	1	1	1	1	0	1	1	0	1	1	0	0	1	0	1	0	0	1	0	2021-09-07 11:35:16.81688	2021-09-07 11:35:16.81688
+66	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	92	SNIPER	0.81	12	16	19	3	1	0	13	1	1	9	18	1818	500	3	49	1	1	1	1	0	1	1	1	0	1	0	0	1	1	1	0	1	0	1	1	1	0	0	2021-09-07 11:37:13.543964	2021-09-07 11:37:13.543964
+67	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	1	SHOTGUN	70	1	2	34	1	1	1	53	2	4.3	3	10	918	10	1	34	0	0	1	1	0	1	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-07 11:38:57.601084	2021-09-07 11:38:57.601084
 68	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	124	PISTOL	20.5	9	1	1	1	20	0	43	1	0	1	1	40	2	3	16	1	0	1	1	1	1	1	1	1	0	0	0	1	1	1	0	1	0	0	1	1	1	0	2021-09-07 11:40:06.99814	2021-09-07 11:40:06.99814
 69	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	14	13	1	8	1	20	1	35	1	0	3	1	40	1	3	16	0	1	1	1	1	0	1	1	1	1	1	0	0	1	1	0	1	1	1	1	0	0	0	2021-09-07 11:41:52.537095	2021-09-07 11:41:52.537095
 70	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	66	SHOTGUN	1	7	2	1	1	80	0	53	2	5	2	10	918	10	1	20	1	1	0	1	1	0	0	1	0	1	1	0	0	0	1	0	1	1	1	1	1	0	0	2021-09-07 13:53:42.597594	2021-09-07 13:53:42.597594
-71	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81000000000000005	2564	20	1	1	30	0	24	13	4.29999999999999982	44	180	818	53	40	1	1	0	1	1	1	0	1	0	1	0	1	1	1	1	0	0	1	1	0	0	1	1	0	2021-09-07 13:54:19.914426	2021-09-07 13:54:19.914426
-72	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	136	6	2	34	1	80	1	53	1	4.29999999999999982	2	1	1	10	1	1	1	0	1	1	1	1	0	1	1	0	1	1	1	0	0	0	0	1	1	0	1	1	0	2021-09-07 14:06:46.882602	2021-09-07 14:06:46.882602
-73	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81000000000000005	999	20	22	1	30	0	13	7	4.29999999999999982	33	180	818	20	40	140	1	1	1	1	0	1	1	1	0	0	1	1	1	0	1	0	0	0	1	0	1	1	0	2021-09-07 14:07:05.080684	2021-09-07 14:07:05.080684
+71	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81	2564	20	1	1	30	0	24	13	4.3	44	180	818	53	40	1	1	0	1	1	1	0	1	0	1	0	1	1	1	1	0	0	1	1	0	0	1	1	0	2021-09-07 13:54:19.914426	2021-09-07 13:54:19.914426
+72	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	136	6	2	34	1	80	1	53	1	4.3	2	1	1	10	1	1	1	0	1	1	1	1	0	1	1	0	1	1	1	0	0	0	0	1	1	0	1	1	0	2021-09-07 14:06:46.882602	2021-09-07 14:06:46.882602
+73	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81	999	20	22	1	30	0	13	7	4.3	33	180	818	20	40	140	1	1	1	1	0	1	1	1	0	0	1	1	1	0	1	0	0	0	1	0	1	1	0	2021-09-07 14:07:05.080684	2021-09-07 14:07:05.080684
 74	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	75	PISTOL	20.5	9	1	1	1	1	0	33	1	0	1	80	40	4	7	19	2	0	1	1	0	2	1	2	1	0	1	1	0	0	0	0	1	2	1	2	1	0	0	2021-09-07 14:07:13.03584	2021-09-07 14:07:13.03584
-75	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	220	ASSAULT_RIFLE	4.23000000000000043	8	2	14	1	5	3.14000000000000012	1	3	4.29999999999999982	11	80	2	2	1	1	0	1	1	1	1	1	4	0	1	1	1	1	0	1	0	0	1	1	1	0	2	2	0	2021-09-07 14:08:06.897732	2021-09-07 14:08:06.897732
+75	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	220	ASSAULT_RIFLE	4.23	8	2	14	1	5	3.14	1	3	4.3	11	80	2	2	1	1	0	1	1	1	1	1	4	0	1	1	1	1	0	1	0	0	1	1	1	0	2	2	0	2021-09-07 14:08:06.897732	2021-09-07 14:08:06.897732
 76	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	1	MACHINE_PISTOL	10.5	13	1	5	1	20	1	33	1	1	1	80	2	2	1	1	1	1	2	1	1	1	1	1	1	2	2	0	1	2	1	0	0	2	1	0	1	1	0	2021-09-07 14:08:08.725752	2021-09-07 14:08:08.725752
-77	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81000000000000005	1	20	14	1	30	1	1	8	4.29999999999999982	33	353	818	45	100	140	1	1	1	1	0	1	1	2	1	0	1	0	1	1	1	0	0	1	0	0	2	2	0	2021-09-07 14:09:34.865872	2021-09-07 14:09:34.865872
-78	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	1	SUB_MACHINE_GUN	1	1	1	14	1	84	0	30	3	4.29999999999999982	1	1	818	20	10	6	1	1	1	2	1	1	1	1	1	1	1	1	0	1	1	0	4	0	1	1	1	0	0	2021-09-07 14:09:53.320895	2021-09-07 14:09:53.320895
+77	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81	1	20	14	1	30	1	1	8	4.3	33	353	818	45	100	140	1	1	1	1	0	1	1	2	1	0	1	0	1	1	1	0	0	1	0	0	2	2	0	2021-09-07 14:09:34.865872	2021-09-07 14:09:34.865872
+78	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	1	SUB_MACHINE_GUN	1	1	1	14	1	84	0	30	3	4.3	1	1	818	20	10	6	1	1	1	2	1	1	1	1	1	1	1	1	0	1	1	0	4	0	1	1	1	0	0	2021-09-07 14:09:53.320895	2021-09-07 14:09:53.320895
 79	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	2	PISTOL	20.5	21	1	5	3	20	1	33	1	0	8	276	40	2	4	16	2	1	1	1	0	0	1	1	2	1	1	1	2	1	1	0	0	0	1	0	1	0	0	2021-09-07 14:10:19.630963	2021-09-07 14:10:19.630963
-80	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	154	SHOTGUN	70	6	2	8	1	2	0	2	5	4.29999999999999982	8	2	918	10	2	20	2	2	87	1	1	9	0	8	9	4	0	0	3	1	0	0	2	0	1	6	1	1	0	2021-09-07 15:34:49.372159	2021-09-07 15:34:49.372159
-81	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1082	1	2	34	2	329	0	53	2	4.29999999999999982	2	81	918	2	3	2	8	2	1	2	1	1	1	1	1	3	1	1	0	4	2	0	4	4	1	4	2	1	0	2021-09-07 15:44:26.523537	2021-09-07 15:44:26.523537
+80	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	154	SHOTGUN	70	6	2	8	1	2	0	2	5	4.3	8	2	918	10	2	20	2	2	87	1	1	9	0	8	9	4	0	0	3	1	0	0	2	0	1	6	1	1	0	2021-09-07 15:34:49.372159	2021-09-07 15:34:49.372159
+81	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1082	1	2	34	2	329	0	53	2	4.3	2	81	918	2	3	2	8	2	1	2	1	1	1	1	1	3	1	1	0	4	2	0	4	4	1	4	2	1	0	2021-09-07 15:44:26.523537	2021-09-07 15:44:26.523537
 82	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	131	120	1	14	1	2	2	13	2	1	5	180	2	1	6	58	1	2	1	3	0	0	2	1	3	1	1	0	1	3	4	0	0	1	0	3	5	2	0	2021-09-07 15:47:20.881538	2021-09-07 15:47:20.881538
 83	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	1	2	1	1	80	1	1	5	2	2	2	918	7	11	20	2	3	7	0	6	1	2	0	18	0	2	3	2	1	0	0	2	2	4	0	0	2	0	2021-09-11 02:31:04.075813	2021-09-11 02:31:04.075813
 84	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	1	MACHINE_PISTOL	2	50	1	16	2	20	0	1	2	2	5	250	2	5	2	16	1	2	2	1	2	71	0	2	2	0	5	1	0	0	3	0	4	0	30	1	3	2	0	2021-09-11 02:31:11.598437	2021-09-11 02:31:11.598437
 85	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	400	SUB_MACHINE_GUN	2	31	1	14	2	2	0	18	1	1	2	180	818	76	10	2	3	0	7	0	22	3	1	21	1	2	0	1	3	6	0	0	4	11	0	2	0	17	0	2021-09-11 22:08:15.984399	2021-09-11 22:08:15.984399
 86	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	166	SHOTGUN	2	26	2	2	2	80	3	53	2	2	2	15	2778	10	7	37	1	1	2	0	4	3	10	1	0	1	2	0	4	2	9	0	0	1	0	0	2	1	0	2021-09-11 22:34:57.993684	2021-09-11 22:34:57.993684
-87	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	101	6	2	1	1	80	0	53	2	4.29999999999999982	2	10	918	1	1	1	1	1	0	1	1	0	1	1	1	1	1	0	1	1	0	0	1	0	1	0	1	1	0	2021-09-11 22:43:30.863845	2021-09-11 22:43:30.863845
+87	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	101	6	2	1	1	80	0	53	2	4.3	2	10	918	1	1	1	1	1	0	1	1	0	1	1	1	1	1	0	1	1	0	0	1	0	1	0	1	1	0	2021-09-11 22:43:30.863845	2021-09-11 22:43:30.863845
 88	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	140	2	2	0	53	7	31	3	10	1	17	5	20	1	2	2	1	2	2	0	1	3	2	2	2	0	0	3	0	3	8	3	2	0	0	0	2021-09-14 23:05:31.476199	2021-09-14 23:05:31.476199
-89	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	1	16	16	19	3	82	8	60	1	4.29999999999999982	17	10	1818	2	2	29	2	12	0	0	2	4	4	3	1	1	2	4	2	9	2	0	0	10	2	0	2	0	0	2021-09-14 23:08:43.094794	2021-09-14 23:08:43.094794
-90	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	2	SHOTGUN	7	46	2	34	1	80	0	53	6	4.29999999999999982	5	10	2	10	7	811	0	0	0	0	0	0	0	0	0	4	4	9	2	4	0	0	2	0	0	2	2	1	0	2021-09-14 23:18:08.304107	2021-09-14 23:18:08.304107
+89	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	1	16	16	19	3	82	8	60	1	4.3	17	10	1818	2	2	29	2	12	0	0	2	4	4	3	1	1	2	4	2	9	2	0	0	10	2	0	2	0	0	2021-09-14 23:08:43.094794	2021-09-14 23:08:43.094794
+90	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	2	SHOTGUN	7	46	2	34	1	80	0	53	6	4.3	5	10	2	10	7	811	0	0	0	0	0	0	0	0	0	4	4	9	2	4	0	0	2	0	0	2	2	1	0	2021-09-14 23:18:08.304107	2021-09-14 23:18:08.304107
 114	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	100	SHOTGUN	70	2	2	34	1	80	2	1	2	2	1	10	1	10	8	20	2	1	2	2	1	2	1	2	0	0	0	1	0	0	2	0	1	1	1	1	1	1	0	2021-09-16 23:36:13.402217	2021-09-16 23:36:13.402217
-91	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	2	6	2	1	146	2	2	1	4	4	2	8	2	5	20	1	2	2	8	6	2	1	12	0	1	3	0	1	0	1	0	2	0	1	1	1	15	0	2021-09-14 23:18:30.652122	2021-09-14 23:18:30.652122
+91	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	2	6	2	1	146	2	2	1	4	4	2	8	2	5	20	1	2	2	8	6	2	1	12	0	1	3	0	1	0	1	0	2	0	1	1	1	15	0	2021-09-14 23:18:30.652122	2021-09-14 23:18:30.652122
 92	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	1	6	2	34	1	118	0	53	2	1	2	10	1	12	3	20	1	0	1	1	1	1	1	1	1	1	0	0	0	1	0	0	0	0	1	0	1	0	0	2021-09-14 23:35:49.479445	2021-09-14 23:35:49.479445
 93	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	75	PISTOL	38	1	1	5	1	1	0	1	1	0	3	93	40	3	3	23	1	0	1	1	1	1	0	0	1	1	1	1	0	1	1	0	0	0	1	1	1	1	0	2021-09-14 23:35:59.910515	2021-09-14 23:35:59.910515
 94	90	10	0	0	90	40	9	0	COMMON	m3.yml	SHOTGUN	3	GBNT-3	M3	28	40	SHOTGUN	125	6	2	34	1	144	0	53	2	1	1	1	918	10	1	1	1	1	1	1	0	0	1	0	1	0	0	0	0	0	0	0	0	1	0	0	1	0	0	2021-09-14 23:39:15.773517	2021-09-14 23:39:15.773517
 95	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	6	2	1	1	1	2	1	2	6	2	10	1719	1	3	84	1	2	1	2	1	1	0	1	0	2	1	0	1	2	1	0	1	1	0	0	1	0	0	2021-09-14 23:42:41.011863	2021-09-14 23:42:41.011863
-96	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.8099999999999987	46	1	14	1	30	1	13	3	4.29999999999999982	2	8	2	20	1	19	2	8	0	2	1	1	2	2	2	1	0	2	43	3	1	0	2	0	0	1	3	0	0	2021-09-14 23:42:59.549552	2021-09-14 23:42:59.549552
+96	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.81	46	1	14	1	30	1	13	3	4.3	2	8	2	20	1	19	2	8	0	2	1	1	2	2	2	1	0	2	43	3	1	0	2	0	0	1	3	0	0	2021-09-14 23:42:59.549552	2021-09-14 23:42:59.549552
 97	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	1	2	34	3	80	0	53	2	10	4	198	2563	10	7	4	1	2	2	1	2	0	2	3	1	2	1	1	2	2	0	0	1	5	0	2	0	0	0	2021-09-14 23:43:28.098499	2021-09-14 23:43:28.098499
-98	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	2	1	2	19	3	450	0	13	12	4.29999999999999982	22	2	1818	6001	3	159	3	1	7	3	2	0	1	2	2	8	0	1	2	1	3	0	1	2	1	1	2	0	0	2021-09-14 23:43:44.450572	2021-09-14 23:43:44.450572
+98	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	2	1	2	19	3	450	0	13	12	4.3	22	2	1818	6001	3	159	3	1	7	3	2	0	1	2	2	8	0	1	2	1	3	0	1	2	1	1	2	0	0	2021-09-14 23:43:44.450572	2021-09-14 23:43:44.450572
 99	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	75	PISTOL	20.5	2	1	5	1	20	0	33	2	2	2	80	329	6	1	33	3	1	1	1	2	0	0	1	2	0	2	0	3	1	2	0	2	2	2	2	0	1	0	2021-09-14 23:44:17.215558	2021-09-14 23:44:17.215558
 100	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	127	SHOTGUN	70	12	2	34	18	80	2	7	2	7	2	10	918	10	3	5	1	2	2	1	0	1	1	1	0	4	1	1	2	2	4	0	0	1	0	4	2	6	0	2021-09-14 23:44:37.180693	2021-09-14 23:44:37.180693
 101	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	51	13	1	5	1	2	1	33	8	1	3	80	144	1	3	72	4	2	4	2	2	1	3	0	0	2	3	2	1	2	1	0	0	1	1	2	1	2	0	2021-09-14 23:44:50.870736	2021-09-14 23:44:50.870736
-102	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1373	MACHINE_PISTOL	30.8099999999999987	31	1	1	2	30	2	13	2	4	12	1	2774	72	1	2	13	2	0	2	0	1	1	2	6	3	0	2	4	1	0	0	1	2	0	1	1	2	0	2021-09-14 23:44:58.487728	2021-09-14 23:44:58.487728
+102	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1373	MACHINE_PISTOL	30.81	31	1	1	2	30	2	13	2	4	12	1	2774	72	1	2	13	2	0	2	0	1	1	2	6	3	0	2	4	1	0	0	1	2	0	1	1	2	0	2021-09-14 23:44:58.487728	2021-09-14 23:44:58.487728
 103	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	400	SUB_MACHINE_GUN	2	89	1	62	1	30	0	13	3	33	2	180	1	67	10	2	1	3	15	2	2	2	1	9	2	2	0	3	0	2	4	0	2	0	2	2	2	2	0	2021-09-14 23:45:13.896704	2021-09-14 23:45:13.896704
 104	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	195	MACHINE_PISTOL	10.5	2	1	2	2	1	2	48	1	2	12	1	144	2	2	2	2	6	0	0	3	1	1	8	1	0	1	0	2	2	1	0	1	2	1	1	0	1	0	2021-09-14 23:45:23.846735	2021-09-14 23:45:23.846735
-105	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	1	115	2	1	3	1540	1	23	4	4.29999999999999982	9	10	1818	3138	3	7	0	1	1	0	0	4	1	2	1	0	1	2	7	1	0	0	5	2	0	4	10	1	0	2021-09-14 23:45:34.064608	2021-09-14 23:45:34.064608
+105	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	1	115	2	1	3	1540	1	23	4	4.3	9	10	1818	3138	3	7	0	1	1	0	0	4	1	2	1	0	1	2	7	1	0	0	5	2	0	4	10	1	0	2021-09-14 23:45:34.064608	2021-09-14 23:45:34.064608
 106	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	2	SHOTGUN	70	6	2	93	24	24	5	53	2	2	3	40	918	8	2	3	3	9	12	3	35	2	3	0	6	80	4	0	2	0	12	0	3	2	3	2	2	18	0	2021-09-16 02:07:36.873686	2021-09-16 02:07:36.873686
 107	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	3	ASSAULT_RIFLE	4	24	2	249	17	123	4	2	3	3	2	80	24	4	6	10	4	6	19	2	0	8	5	2	7	0	0	4	63	10	9	0	0	4	4	2	59	13	0	2021-09-16 02:07:57.898864	2021-09-16 02:07:57.898864
-108	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	2230	SUB_MACHINE_GUN	75	3	1	14	4	7	0	8	2	4.29999999999999982	5	180	3825	54	15	199	2	4	89	3	17	4	4	6	6	4	2	0	4	3	25	0	3	5	2	175	3	0	0	2021-09-16 02:08:02.030809	2021-09-16 02:08:02.030809
-109	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	141	SHOTGUN	4	2	2	34	1	3	4	53	2	4.29999999999999982	81	2	4	31	9	123	3	4	0	3	2	3	17	3	0	3	0	5	3	33	18	0	3	3	4	0	161	4	0	2021-09-16 02:08:15.453854	2021-09-16 02:08:15.453854
-110	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	47	SNIPER	0.810000000000000053	7	21	549	7	61	6	65	19	4.29999999999999982	4	10	1818	3218	21	11	3	3	3	4	2	3	0	3	19	0	5	3	4	4	0	0	3	3	2	2	2	0	0	2021-09-16 02:08:20.239637	2021-09-16 02:08:20.239637
+108	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	2230	SUB_MACHINE_GUN	75	3	1	14	4	7	0	8	2	4.3	5	180	3825	54	15	199	2	4	89	3	17	4	4	6	6	4	2	0	4	3	25	0	3	5	2	175	3	0	0	2021-09-16 02:08:02.030809	2021-09-16 02:08:02.030809
+109	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	141	SHOTGUN	4	2	2	34	1	3	4	53	2	4.3	81	2	4	31	9	123	3	4	0	3	2	3	17	3	0	3	0	5	3	33	18	0	3	3	4	0	161	4	0	2021-09-16 02:08:15.453854	2021-09-16 02:08:15.453854
+110	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	47	SNIPER	0.81	7	21	549	7	61	6	65	19	4.3	4	10	1818	3218	21	11	3	3	3	4	2	3	0	3	19	0	5	3	4	4	0	0	3	3	2	2	2	0	0	2021-09-16 02:08:20.239637	2021-09-16 02:08:20.239637
 111	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	1	2	43	1	80	0	1	2	1	2	10	1323	12	5	38	0	0	1	1	1	1	1	1	1	0	0	1	1	1	1	0	1	1	0	1	1	1	0	2021-09-16 23:27:45.188054	2021-09-16 23:27:45.188054
 112	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	20.5	15	1	5	1	1	0	1	1	0	3	80	40	2	3	28	1	1	1	1	1	0	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-16 23:35:43.931376	2021-09-16 23:35:43.931376
 113	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	206	PISTOL	29	2	1	5	1	20	0	33	2	1	1	1	40	2	3	1	0	0	1	1	2	1	1	1	1	1	0	0	1	4	2	0	1	0	1	1	1	1	0	2021-09-16 23:35:57.520318	2021-09-16 23:35:57.520318
 116	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	1	ASSAULT_RIFLE	2	2	2	1	4	45	2	4	3	14	5	4	2	2	1	10	3	1	0	1	10	4	3	0	2	2	0	7	0	1	0	0	0	2	4	1	0	3	0	2021-09-16 23:36:44.521348	2021-09-16 23:36:44.521348
-118	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	3	6	2	34	1	1	2	1	1	4.29999999999999982	2	10	1	10	3	127	2	3	3	2	0	1	2	8	0	1	1	1	0	0	6	0	2	1	1	0	2	3	0	2021-09-16 23:37:05.772357	2021-09-16 23:37:05.772357
-119	90	10	0	0	90	40	9	0	COMMON	m3.yml	SHOTGUN	3	GBNT-3	M3	28	2	SHOTGUN	70	6	2	1	1	155	1	3	3	4.29999999999999982	2	34	918	74	13	67	4	4	0	15	0	2	0	5	6	0	1	1	1	1	1	0	2	2	1	4	4	2	0	2021-09-16 23:37:18.426344	2021-09-16 23:37:18.426344
-120	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	4	1	6	11	1	34	2	33	1	0	21	8	1	1	2	20	0	4	2	2	0	2	13	2	1	0	2	2	2	0	4	0	13	3	2	0	4	2	0	2021-09-16 23:37:20.712351	2021-09-16 23:37:20.712351
-121	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	3.81000000000000005	1	20	2	1	1	0	2	2	4.29999999999999982	33	324	1344	20	80	1	0	1	6	0	1	5	2	1	1	2	1	1	1	0	2	0	2	1	0	2	4	0	0	2021-09-16 23:41:05.302512	2021-09-16 23:41:05.302512
-122	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	1	LIGHT_MACHINE_GUN	3.81000000000000005	19206	20	14	9	30	0	13	27	4.29999999999999982	1	438	818	1	40	558	1	2	0	1	9	2	1	5	1	14	0	2	4	0	1	0	0	1	2	4	4	2	0	2021-09-16 23:41:13.858541	2021-09-16 23:41:13.858541
-123	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.810000000000000053	2	21	2	3	252	4	13	4	4.29999999999999982	8	23	1818	1	21	9	14	1	3	1	2	0	1	2	0	2	0	2	0	4	1	0	4	2	1	1	2	1	0	2021-09-16 23:41:23.490425	2021-09-16 23:41:23.490425
+118	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	3	6	2	34	1	1	2	1	1	4.3	2	10	1	10	3	127	2	3	3	2	0	1	2	8	0	1	1	1	0	0	6	0	2	1	1	0	2	3	0	2021-09-16 23:37:05.772357	2021-09-16 23:37:05.772357
+119	90	10	0	0	90	40	9	0	COMMON	m3.yml	SHOTGUN	3	GBNT-3	M3	28	2	SHOTGUN	70	6	2	1	1	155	1	3	3	4.3	2	34	918	74	13	67	4	4	0	15	0	2	0	5	6	0	1	1	1	1	1	0	2	2	1	4	4	2	0	2021-09-16 23:37:18.426344	2021-09-16 23:37:18.426344
+120	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	4	1	6	11	1	34	2	33	1	0	21	8	1	1	2	20	0	4	2	2	0	2	13	2	1	0	2	2	2	0	4	0	13	3	2	0	4	2	0	2021-09-16 23:37:20.712351	2021-09-16 23:37:20.712351
+121	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	3.81	1	20	2	1	1	0	2	2	4.3	33	324	1344	20	80	1	0	1	6	0	1	5	2	1	1	2	1	1	1	0	2	0	2	1	0	2	4	0	0	2021-09-16 23:41:05.302512	2021-09-16 23:41:05.302512
+122	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	1	LIGHT_MACHINE_GUN	3.81	19206	20	14	9	30	0	13	27	4.3	1	438	818	1	40	558	1	2	0	1	9	2	1	5	1	14	0	2	4	0	1	0	0	1	2	4	4	2	0	2021-09-16 23:41:13.858541	2021-09-16 23:41:13.858541
+123	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.81	2	21	2	3	252	4	13	4	4.3	8	23	1818	1	21	9	14	1	3	1	2	0	1	2	0	2	0	2	0	4	1	0	4	2	1	1	2	1	0	2021-09-16 23:41:23.490425	2021-09-16 23:41:23.490425
 124	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	220	ASSAULT_RIFLE	13	2	2	14	2	45	1	3	3	14	5	80	1	2	1	2	2	4	8	1	0	1	0	3	1	1	2	1	0	0	0	0	2	1	0	2	0	0	0	2021-09-16 23:41:37.665403	2021-09-16 23:41:37.665403
 125	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	13	1	5	1	1	3	1	5	3	5	308	1	3	12	1	1	2	2	5	0	2	21	13	1	2	4	2	2	9	2	0	0	1	4	0	2	6	0	2021-09-16 23:41:43.832588	2021-09-16 23:41:43.832588
 126	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	20.5	6	1	2	2	3	3	2	1	2	60	80	40	7	2	187	8	3	14	3	3	2	11	0	15	0	3	4	2	12	5	0	0	3	24	0	3	0	0	2021-09-16 23:41:47.188541	2021-09-16 23:41:47.188541
-127	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	220	ASSAULT_RIFLE	518	91	2	2	4	223	2	3	3	4.29999999999999982	5	340	79	2	3	10	16	6	0	0	5	3	3	0	4	2	5	0	5	2	3	0	0	3	3	8	0	0	0	2021-09-16 23:41:49.369475	2021-09-16 23:41:49.369475
+127	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	220	ASSAULT_RIFLE	518	91	2	2	4	223	2	3	3	4.3	5	340	79	2	3	10	16	6	0	0	5	3	3	0	4	2	5	0	5	2	3	0	0	3	3	8	0	0	0	2021-09-16 23:41:49.369475	2021-09-16 23:41:49.369475
 128	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	19	999	20	14	2	2	2	2	39	11	33	3	2	8	3	3	9	3	2	8	2	8	0	5	3	0	7	0	4	2	0	0	3	0	14	0	0	0	0	2021-09-16 23:41:54.99946	2021-09-16 23:41:54.99946
 129	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	779	PISTOL	2	6	1	5	5	20	2	140	3	3	3	80	3	5	15	3	12	0	3	2	3	10	2	4	2	2	1	0	4	42	3	0	3	3	3	0	3	2	0	2021-09-16 23:41:58.892622	2021-09-16 23:41:58.892622
 130	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	9	ASSAULT_RIFLE	3	8	2	80	4	3	17	3	2	12	5	408	49	3	2	57	2	3	0	3	5	0	2	21	0	3	3	44	2	3	2	0	4	3	0	2	2	14	0	2021-09-16 23:42:00.832379	2021-09-16 23:42:00.832379
-131	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	2	31	1	63	3	2	2	3	2	4.29999999999999982	5	613	2	20	17	6	2	5	0	54	2	2	3	0	10	3	3	19	7	0	12	0	2	2	3	0	2	2	0	2021-09-16 23:42:04.939434	2021-09-16 23:42:04.939434
+131	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	2	31	1	63	3	2	2	3	2	4.3	5	613	2	20	17	6	2	5	0	54	2	2	3	0	10	3	3	19	7	0	12	0	2	2	3	0	2	2	0	2021-09-16 23:42:04.939434	2021-09-16 23:42:04.939434
 132	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	2	PISTOL	2	9	1	3	2	20	3	33	1	12	3	3	179	164	3	16	2	0	3	3	17	3	3	3	3	3	2	0	2	2	4	0	2	2	0	23	3	3	0	2021-09-16 23:42:07.309542	2021-09-16 23:42:07.309542
 133	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	3	PISTOL	4	4	1	92	4	20	0	33	2	6	3	337	3	3	13	16	84	7	22	4	3	4	2	2	0	3	0	2	0	4	4	0	41	6	0	60	3	3	0	2021-09-16 23:42:08.832497	2021-09-16 23:42:08.832497
-134	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	208	4	2	34	1	2	0	53	3	4.29999999999999982	2	8	918	58	3	4	6	3	3	6	0	0	2	10	6	7	3	4	5	4	0	0	0	0	0	4	2	2	0	2021-09-16 23:42:10.128434	2021-09-16 23:42:10.128434
+134	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	208	4	2	34	1	2	0	53	3	4.3	2	8	918	58	3	4	6	3	3	6	0	0	2	10	6	7	3	4	5	4	0	0	0	0	0	4	2	2	0	2021-09-16 23:42:10.128434	2021-09-16 23:42:10.128434
 135	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	2	999	20	69	3	64	0	4	7	3	33	180	818	126	9	4	0	0	2	17	21	5	112	24	3	0	4	6	4	4	0	0	5	116	2	0	3	2	0	2021-09-16 23:42:13.915874	2021-09-16 23:42:13.915874
 136	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	4	MACHINE_PISTOL	10.5	13	1	14	4	3	6	4	1	3	3	4	2	2	10	16	3	4	91	0	4	32	0	4	3	13	13	4	19	0	3	0	6	6	2	0	0	2	0	2021-09-16 23:42:15.757476	2021-09-16 23:42:15.757476
 137	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	11531	SUB_MACHINE_GUN	170	31	1	3	1	30	4	14	4	9	34	180	818	6	6	3	2	2	4	5	11	2	4	2	13	0	3	24	0	3	2	0	6	0	3	2	3	0	0	2021-09-16 23:42:17.37751	2021-09-16 23:42:17.37751
 138	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	13	1	5	1	4	0	33	1	0	3	80	40	11	13	16	5	2	1367	4	4	0	21	0	3	0	3	2	0	0	76	0	2	2	4	0	57	3	0	2021-09-16 23:42:20.082517	2021-09-16 23:42:20.082517
 139	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	11	3	20	47	3	30	0	13	3	3	4	2	818	66	40	140	514	4	0	10	3	3	4	0	49	5	26	2	2	19	8	0	4	2	3	0	4	0	0	2021-09-16 23:42:21.261413	2021-09-16 23:42:21.261413
-142	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	20	2	4	4	38	0	53	5	4.29999999999999982	19	10	18	2	3	20	215	3	2	0	2	26	4	2	2	0	3	3	5	3	23	0	12	12	2	4	5	3	0	2021-09-17 00:06:22.501847	2021-09-17 00:06:22.501847
-143	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	400	SUB_MACHINE_GUN	30.8099999999999987	3	1	14	1	206	4	3	3	80	66	2	818	20	18	6	2	3	2	3	4	12	2	0	2	22	0	6	17	21	6	0	0	2	4	26	2	0	0	2021-09-17 00:06:28.107491	2021-09-17 00:06:28.107491
+142	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	20	2	4	4	38	0	53	5	4.3	19	10	18	2	3	20	215	3	2	0	2	26	4	2	2	0	3	3	5	3	23	0	12	12	2	4	5	3	0	2021-09-17 00:06:22.501847	2021-09-17 00:06:22.501847
+143	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	400	SUB_MACHINE_GUN	30.81	3	1	14	1	206	4	3	3	80	66	2	818	20	18	6	2	3	2	3	4	12	2	0	2	22	0	6	17	21	6	0	0	2	4	26	2	0	0	2021-09-17 00:06:28.107491	2021-09-17 00:06:28.107491
 144	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	999	LIGHT_MACHINE_GUN	2	13	20	271	1	5	4	4	7	3	3	5	2	4	5	140	2	0	0	2	3	4	4	5	14	0	16	16	0	6	7	0	4	2	9	3	4	0	0	2021-09-17 00:06:53.128907	2021-09-17 00:06:53.128907
-145	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	1746	SUB_MACHINE_GUN	10	190	1	3	1	30	0	13	47	4.29999999999999982	6	4	818	20	57	2	4	10	4	13	6	72	5	2	0	4	0	2	3	4	4	0	29	3	5	4	4	6	0	2021-09-17 00:07:08.100927	2021-09-17 00:07:08.100927
-146	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	311	SHOTGUN	5	32	2	34	2	4	0	3	4	4.29999999999999982	2	4	19	10	2	12	0	74	4	0	2	17	3	32	20	2	16	546	4	3	5	0	2	6	2	2	4	2	0	2021-09-17 00:19:32.432101	2021-09-17 00:19:32.432101
+145	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	1746	SUB_MACHINE_GUN	10	190	1	3	1	30	0	13	47	4.3	6	4	818	20	57	2	4	10	4	13	6	72	5	2	0	4	0	2	3	4	4	0	29	3	5	4	4	6	0	2021-09-17 00:07:08.100927	2021-09-17 00:07:08.100927
+146	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	311	SHOTGUN	5	32	2	34	2	4	0	3	4	4.3	2	4	19	10	2	12	0	74	4	0	2	17	3	32	20	2	16	546	4	3	5	0	2	6	2	2	4	2	0	2021-09-17 00:19:32.432101	2021-09-17 00:19:32.432101
 147	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	4	SHOTGUN	489	44	2	4	3	2	0	53	6	19	8	3	3	5	3	4	3	4	5	20	0	21	3	19	4	4	0	5	3	281	5	0	3	5	3	0	2	7	0	2021-09-17 00:19:36.334133	2021-09-17 00:19:36.334133
-148	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.8099999999999987	20	1	2	1	68	4	13	3	21	36	180	6479	20	2	208	3	11	56	15	0	0	2	2	3	0	0	4	45	22	0	0	5	5	0	4	5	3	0	2021-09-17 00:19:37.303205	2021-09-17 00:19:37.303205
+148	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.81	20	1	2	1	68	4	13	3	21	36	180	6479	20	2	208	3	11	56	15	0	0	2	2	3	0	0	4	45	22	0	0	5	5	0	4	5	3	0	2021-09-17 00:19:37.303205	2021-09-17 00:19:37.303205
 149	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	3	SHOTGUN	3	3	2	34	3	80	4	178	26	3	2	181	918	3	4	20	4	6	3	4	3	51	4	25	3	4	3	2	3	0	2	0	4	3	0	0	0	3	0	2021-09-17 00:46:53.68857	2021-09-17 00:46:53.68857
 150	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	146	SHOTGUN	387	6	2	34	1	80	4	53	3	4	2	10	918	21	11	3	0	0	4	2	12	0	14	3	6	2	3	3	2	2	4	0	4	4	0	0	2	24	0	2021-09-17 00:52:59.358813	2021-09-17 00:52:59.358813
 151	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	2	SHOTGUN	70	47	2	34	1	628	3	53	2	5	2	5	7	65	3	4	15	6	6	2	3	0	9	0	0	0	197	4	0	0	2	0	38	2	21	2	5	2	0	2021-09-17 01:33:01.729627	2021-09-17 01:33:01.729627
-152	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	5	ASSAULT_RIFLE	24	8	2	4	5	5	3.14000000000000012	3	4	2	21	80	91	4	23	5	125	4	4	21	5	5	0	4	249	5	24	5	2	0	4	0	4	0	0	0	5	2	0	2021-09-17 01:33:04.75737	2021-09-17 01:33:04.75737
-153	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	73	SNIPER	0.810000000000000053	53	2	19	3	15	0	13	5	30	2	55	2	1843	15	40	16	3	3	2	3	12	0	21	2	3	145	4	0	2	2	0	4	4	15	21	2	3	0	2021-09-17 01:33:05.290392	2021-09-17 01:33:05.290392
+152	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	5	ASSAULT_RIFLE	24	8	2	4	5	5	3.14	3	4	2	21	80	91	4	23	5	125	4	4	21	5	5	0	4	249	5	24	5	2	0	4	0	4	0	0	0	5	2	0	2021-09-17 01:33:04.75737	2021-09-17 01:33:04.75737
+153	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	73	SNIPER	0.81	53	2	19	3	15	0	13	5	30	2	55	2	1843	15	40	16	3	3	2	3	12	0	21	2	3	145	4	0	2	2	0	4	4	15	21	2	3	0	2021-09-17 01:33:05.290392	2021-09-17 01:33:05.290392
 140	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	15	2	39	19	4	450	0	80	4	2	246	4	1818	500	4	271	6	4	4	4	5	2	3	4	0	0	0	2	128	4	3	0	0	5	0	25	3	2	0	2021-09-16 23:42:22.548445	2021-09-16 23:42:22.548445
-115	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	155	SNIPER	0.810000000000000053	7	39	1	3	450	0	2	1	4.29999999999999982	8	10	2590	6	4	209	2	1	1	2	1	1	0	7	0	2	7	2	0	3	1	0	1	5	0	2	0	2	0	2021-09-16 23:36:33.761333	2021-09-16 23:36:33.761333
+115	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	155	SNIPER	0.81	7	39	1	3	450	0	2	1	4.3	8	10	2590	6	4	209	2	1	1	2	1	1	0	7	0	2	7	2	0	3	1	0	1	5	0	2	0	2	0	2021-09-16 23:36:33.761333	2021-09-16 23:36:33.761333
 117	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	1	8	39	19	3	1332	1	2	4	16	2	10	2	975	1	324	3	5	3	2	2	1	2	0	2	1	1	0	2	1	3	0	7	3	0	3	2	2	0	2021-09-16 23:36:54.692448	2021-09-16 23:36:54.692448
 141	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	2	14	39	4	3	2	0	3	4	26	54	10	6340	7	8	40	19	5	3	10	88	3	21	4	4	2	2	2	4	6	4	0	5	0	4	4	0	3	0	2021-09-16 23:42:23.841449	2021-09-16 23:42:23.841449
-154	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	381	6	2	34	2	80	5	53	7	4.29999999999999982	2	10	2	2	13	20	4	4	4	3	3	4	0	4	3	5	7	0	3	15	18	0	2	3	18	8	4	13	0	2021-09-17 01:46:31.106286	2021-09-17 01:46:31.106286
+154	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	381	6	2	34	2	80	5	53	7	4.3	2	10	2	2	13	20	4	4	4	3	3	4	0	4	3	5	7	0	3	15	18	0	2	3	18	8	4	13	0	2021-09-17 01:46:31.106286	2021-09-17 01:46:31.106286
 155	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	254	SHOTGUN	5	25	2	34	7	2	0	25	6	19	2	18	918	10	4	20	5	3	41	4	0	5	5	5	0	0	4	2	4	5	7	0	3	6	2	34	10	5	0	2021-09-17 01:46:41.943902	2021-09-17 01:46:41.943902
 156	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	4	3	21	3	129	61	6	5	34	5	18	4	1818	3159	939	33	22	0	0	38	40	120	0	30	12	2	703	0	19	0	17	0	12	0	0	14	2	2	0	2021-09-17 01:46:52.492051	2021-09-17 01:46:52.492051
 157	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	220	ASSAULT_RIFLE	2	3	2	14	4	103	46	4	4	5	4	5	24	3	6	10	4	37	0	3	3	2	5	27	133	0	2	5	5	6	6	0	3	4	0	0	3	7	0	2021-09-17 01:47:03.78067	2021-09-17 01:47:03.78067
-158	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	1	6	2	34	1	1	1	53	2	4.29999999999999982	2	10	1453	10	1	34	1	1	1	1	0	1	0	1	1	1	0	1	0	1	1	0	1	1	0	1	0	1	0	2021-09-18 01:27:39.936028	2021-09-18 01:27:39.936028
-159	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	0.810000000000000053	7	2	35	3	450	1	17	4	1	1	10	1818	500	1	1	1	0	1	1	1	0	0	0	1	1	1	1	0	1	1	0	1	1	1	0	1	1	0	2021-09-18 01:28:53.380809	2021-09-18 01:28:53.380809
+158	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	1	6	2	34	1	1	1	53	2	4.3	2	10	1453	10	1	34	1	1	1	1	0	1	0	1	1	1	0	1	0	1	1	0	1	1	0	1	0	1	0	2021-09-18 01:27:39.936028	2021-09-18 01:27:39.936028
+159	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	0.81	7	2	35	3	450	1	17	4	1	1	10	1818	500	1	1	1	0	1	1	1	0	0	0	1	1	1	1	0	1	1	0	1	1	1	0	1	1	0	2021-09-18 01:28:53.380809	2021-09-18 01:28:53.380809
 160	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	4	999	20	14	1	2	0	13	1	2	33	180	1	1	40	173	1	1	1	0	1	0	0	1	1	1	1	1	1	0	0	0	1	1	1	1	0	0	0	2021-09-18 01:30:06.037856	2021-09-18 01:30:06.037856
-161	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	220	ASSAULT_RIFLE	4.23000000000000043	8	2	35	1	45	3.14000000000000012	3	1	4.29999999999999982	1	1	1	1	6	1	0	1	2	0	1	2	2	1	2	0	2	2	2	1	0	0	2	1	0	0	1	0	0	2021-09-18 01:30:12.186423	2021-09-18 01:30:12.186423
-162	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	30.8099999999999987	31	1	2	1	30	0	2	1	1	1	471	818	51	2	6	2	1	2	1	0	2	0	2	4	0	6	0	0	2	6	0	2	1	3	0	0	1	0	2021-09-18 01:30:18.64502	2021-09-18 01:30:18.64502
+161	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	220	ASSAULT_RIFLE	4.23	8	2	35	1	45	3.14	3	1	4.3	1	1	1	1	6	1	0	1	2	0	1	2	2	1	2	0	2	2	2	1	0	0	2	1	0	0	1	0	0	2021-09-18 01:30:12.186423	2021-09-18 01:30:12.186423
+162	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	30.81	31	1	2	1	30	0	2	1	1	1	471	818	51	2	6	2	1	2	1	0	2	0	2	4	0	6	0	0	2	6	0	2	1	3	0	0	1	0	2021-09-18 01:30:18.64502	2021-09-18 01:30:18.64502
 163	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	4	LIGHT_MACHINE_GUN	5	999	20	2	1	70	0	1	1	1	248	1438	818	20	40	1	1	1	1	2	4	2	3	0	3	0	0	0	2	1	0	0	0	1	0	0	0	2	0	2021-09-18 01:30:39.448915	2021-09-18 01:30:39.448915
 164	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	1091	SUB_MACHINE_GUN	2	31	1	144	1	1	2	13	3	14	5	2	4239	48	6	6	3	2	2	1	2	0	1	0	2	1	1	3	3	0	2	0	3	0	2	2	0	1	0	2021-09-18 01:30:45.796981	2021-09-18 01:30:45.796981
-165	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	0.810000000000000053	7	6	43	1	61	0	53	5	4.29999999999999982	1	2	2	934	1	2	3	0	1	2	2	0	1	3	0	1	0	2	0	1	1	0	2	3	1	2	0	2	0	2021-09-18 01:31:39.066818	2021-09-18 01:31:39.066818
+165	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	0.81	7	6	43	1	61	0	53	5	4.3	1	2	2	934	1	2	3	0	1	2	2	0	1	3	0	1	0	2	0	1	1	0	2	3	1	2	0	2	0	2021-09-18 01:31:39.066818	2021-09-18 01:31:39.066818
 166	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1	6	2	90	4	80	1	53	2	1	2	2	3169	2	1	2	1	8	0	1	6	2	4	1	1	1	0	0	0	4	1	0	2	2	1	1	4	0	0	2021-09-18 01:31:41.977839	2021-09-18 01:31:41.977839
 167	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	2	281	2	97	1	80	2	53	2	1	2	2	918	2	48	20	4	2	2	1	1	2	2	0	14	2	6	0	6	1	0	0	2	1	1	1	0	4	0	2021-09-18 01:32:18.631009	2021-09-18 01:32:18.631009
 168	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	69	121	1	5	1	2	2	5	2	2	1	2	40	2	2	79	1	0	3	9	3	2	2	0	3	5	4	2	2	0	2	0	2	18	0	20	0	3	0	2021-09-18 01:32:25.682925	2021-09-18 01:32:25.682925
-169	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.810000000000000053	10	6	19	10	1	1	1	5	4.29999999999999982	2	10	1818	500	4	43	2	0	2	0	1	7	37	3	2	2	6	4	5	4	0	0	0	4	1	0	2	3	0	2021-09-18 01:32:40.296917	2021-09-18 01:32:40.296917
-170	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	6	2	1	2	155	15	2	2	4.29999999999999982	2	10	918	1	1	20	8	1	2	0	2	2	1	2	0	4	1	0	2	16	0	0	4	1	2	0	2	4	0	2021-09-18 01:34:54.528826	2021-09-18 01:34:54.528826
+169	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.81	10	6	19	10	1	1	1	5	4.3	2	10	1818	500	4	43	2	0	2	0	1	7	37	3	2	2	6	4	5	4	0	0	0	4	1	0	2	3	0	2021-09-18 01:32:40.296917	2021-09-18 01:32:40.296917
+170	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	6	2	1	2	155	15	2	2	4.3	2	10	918	1	1	20	8	1	2	0	2	2	1	2	0	4	1	0	2	16	0	0	4	1	2	0	2	4	0	2021-09-18 01:34:54.528826	2021-09-18 01:34:54.528826
 171	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	1	PISTOL	20.5	1	1	8	1	20	0	2	1	2	3	1	40	2	3	16	3	2	2	1	1	4	15	2	0	2	4	5	0	2	1	0	2	5	2	1	1	1	0	2021-09-18 01:35:00.363254	2021-09-18 01:35:00.363254
-172	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	475	ASSAULT_RIFLE	2	1	2	2	5	194	1	1	20	4.29999999999999982	5	80	5	9	6	10	0	6	2	3	1	2	1	4	1	1	3	2	2	4	3	0	1	0	2	0	4	0	0	2021-09-18 01:35:25.11697	2021-09-18 01:35:25.11697
-173	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	47	SHOTGUN	70	6	2	34	1	1	1	1	1	4.29999999999999982	2	1	1577	10	5	1	0	1	0	1	1	1	0	1	1	1	1	0	1	1	0	0	1	1	0	1	0	1	0	2021-09-18 01:43:24.324088	2021-09-18 01:43:24.324088
+172	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	475	ASSAULT_RIFLE	2	1	2	2	5	194	1	1	20	4.3	5	80	5	9	6	10	0	6	2	3	1	2	1	4	1	1	3	2	2	4	3	0	1	0	2	0	4	0	0	2021-09-18 01:35:25.11697	2021-09-18 01:35:25.11697
+173	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	47	SHOTGUN	70	6	2	34	1	1	1	1	1	4.3	2	1	1577	10	5	1	0	1	0	1	1	1	0	1	1	1	1	0	1	1	0	0	1	1	0	1	0	1	0	2021-09-18 01:43:24.324088	2021-09-18 01:43:24.324088
 174	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	1	2	1	1	80	0	53	1	1	2	1	918	10	5	1	1	0	0	1	1	0	1	1	1	1	1	0	1	0	1	0	0	1	0	1	1	1	0	2021-09-18 01:46:20.098382	2021-09-18 01:46:20.098382
+175	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	3	PISTOL	8	2	1	3	0	43	0	3	1	0	3	60	4	2	3	2	3	0	11	0	0	0	2	0	0	0	6	2	4	7	4	0	8	0	4	3	13	6	0	2022-05-19 01:26:48.903852	2022-05-19 01:26:48.903852
+176	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	303	PISTOL	3	4	1	1	0	11	2	4	1	0	3	34	40	1	3	8	3	0	4	0	0	0	13	0	0	5	2	3	12	2	0	0	2	3	15	3	13	0	0	2022-05-19 01:38:42.487015	2022-05-19 01:38:42.487015
+177	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	3	PISTOL	3	4	1	1	0	26	2	3	1	0	4	1	40	1	4	8	2	0	2	0	0	0	4	0	0	0	45	2	2	257	5	0	2	0	0	0	12	16	0	2022-05-19 04:16:57.683916	2022-05-19 04:16:57.683916
+178	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	3	SHOTGUN	10	2	2	4	0	7	5	2	1	0	3	4	71	2	3	10	4	0	2	0	0	0	4	0	0	12	0	0	3	2	5	0	0	5	0	5	2	4	0	2022-05-19 14:34:23.500623	2022-05-19 14:34:23.500623
+179	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	11	MACHINE_PISTOL	6	1	1	4	1	30	6	5	11	0	17	5	57	2	22	2	5	0	3	0	0	0	5	0	0	0	0	0	0	0	0	0	25	3	405	0	0	4	0	2022-05-19 14:36:05.610468	2022-05-19 14:36:05.610468
+180	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	7	MACHINE_PISTOL	10	2	1	1	0	3	0	4	1	0	3	9	4	2	2	4	13	0	22	0	0	0	4	0	0	0	0	4	3	3	4	0	0	3	18	5	5	396	0	2022-05-19 14:37:20.330694	2022-05-19 14:37:20.330694
+181	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	3	LIGHT_MACHINE_GUN	3	3	20	34	2	99	6	13	719	0	33	23	63	1	1	4	3	0	21	0	0	0	3	0	0	4	22	5	3	0	681	0	4	28	41	0	6	5	0	2022-05-20 13:31:58.231794	2022-05-20 13:31:58.231794
+182	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	2	4	2	14	0	84	6	3	2	17	20	10	4	1	26	2	75	0	3	0	0	0	0	0	0	6	6	3	4	512	6	0	4	7	45	18	50	3	0	2022-05-20 13:34:16.536765	2022-05-20 13:34:16.536765
+183	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	2	PISTOL	0	2	3	1	0	1	0	1	1	0	5	8	1	2	5	1	1	0	1	0	0	0	1	0	0	0	1	1	1	1	1	0	1	0	0	0	0	0	0	2022-05-27 13:18:08.172337	2022-05-27 13:18:08.172337
+184	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	3	PISTOL	1	4	1	1	0	20	0	1	1	0	1	1	41	1	3	8	1	0	1	0	0	0	1	0	0	1	0	0	1	1	1	0	0	0	0	0	1	1	0	2022-05-27 13:19:03.762106	2022-05-27 13:19:03.762106
+185	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	1	MACHINE_PISTOL	2	1	1	5	0	24	0	1	1	0	3	20	40	1	1	2	1	0	1	0	0	0	0	0	0	1	0	0	0	1	1	0	0	1	1	1	1	1	0	2022-05-27 13:19:43.924731	2022-05-27 13:19:43.924731
+186	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	3	PISTOL	1	1	1	5	0	20	1	1	1	0	3	20	40	2	3	1	1	0	0	0	0	0	1	0	0	1	1	0	1	1	1	0	0	1	1	1	0	1	0	2022-05-27 13:20:03.239651	2022-05-27 13:20:03.239651
+187	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	1	LIGHT_MACHINE_GUN	1	1	20	1	1	54	1	13	1	0	33	3	48	1	1	1	1	0	1	0	0	0	0	0	0	1	0	1	1	1	1	0	1	1	0	1	0	0	0	2022-05-27 13:20:34.200975	2022-05-27 13:20:34.200975
+188	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	1	PISTOL	1	4	1	3	0	20	0	3	1	0	1	20	1	2	3	8	1	0	1	0	0	0	1	0	0	0	0	1	1	1	1	0	1	0	2	0	0	2	0	2022-05-27 13:22:48.092889	2022-05-27 13:22:48.092889
+189	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	1	PISTOL	1	2	3	1	0	7	0	1	1	0	5	1	1	2	1	1	1	0	1	0	0	0	1	0	0	1	1	0	2	1	1	0	2	1	1	0	0	1	0	2022-05-27 13:24:34.260664	2022-05-27 13:24:34.260664
+190	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	4	SHOTGUN	6	1	2	5	0	32	1	4	2	0	2	1	1	1	4	1	0	0	0	0	0	0	0	0	0	1	1	2	1	1	1	0	0	1	0	1	0	1	0	2022-05-27 13:29:40.764863	2022-05-27 13:29:40.764863
+191	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	69	LIGHT_MACHINE_GUN	3	2	20	4	1	1	0	5	10	0	1	10	48	2	49	1	1	0	0	0	0	0	1	0	0	0	0	2	0	1	2	0	1	0	1	1	1	0	0	2022-05-27 13:30:41.341445	2022-05-27 13:30:41.341445
+192	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	3	PISTOL	2	4	1	1	0	1	1	1	1	0	8	20	1	1	3	8	1	0	0	0	0	0	1	0	0	0	1	2	2	0	2	0	1	2	2	0	1	1	0	2022-05-27 13:31:00.281053	2022-05-27 13:31:00.281053
+193	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	2	PISTOL	1	1	1	5	0	1	0	1	1	0	3	20	40	2	2	1	0	0	0	0	0	0	2	0	0	1	1	0	0	0	2	0	0	0	1	1	2	1	0	2022-05-27 13:31:38.185849	2022-05-27 13:31:38.185849
+194	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	2	PISTOL	0	2	3	1	0	1	1	1	1	0	5	43	1	2	5	10	2	0	1	0	0	0	0	0	0	0	1	1	1	0	1	0	0	1	1	1	1	2	0	2022-05-27 13:32:20.781361	2022-05-27 13:32:20.781361
+195	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	1	MACHINE_PISTOL	1	3	1	1	0	26	1	2	2	0	3	32	40	2	3	1	1	0	1	0	0	0	1	0	0	0	0	1	1	1	1	0	0	1	1	1	1	0	0	2022-05-27 19:49:47.149139	2022-05-27 19:49:47.149139
+196	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	10	MACHINE_PISTOL	1	3	1	5	0	1	1	1	1	0	3	1	1	2	3	1	0	0	1	0	0	0	1	0	0	1	0	1	1	1	1	0	0	3	1	0	1	0	0	2022-05-27 19:50:40.916734	2022-05-27 19:50:40.916734
+197	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	1	SNIPER	1	3	9	8	3	24	1	1	11	0	1	10	1	2	3	2	0	0	0	0	0	0	8	0	0	0	0	1	2	0	1	0	0	0	1	1	2	1	0	2022-05-27 19:50:54.566603	2022-05-27 19:50:54.566603
+198	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	10	MACHINE_PISTOL	2	3	1	1	0	1	1	1	1	0	3	1	40	2	1	1	2	0	1	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2022-05-27 19:52:17.03676	2022-05-27 19:52:17.03676
+199	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	5	PISTOL	7	1	1	5	0	3	3	3	1	0	6	4	26	10	4	8	35	0	27	0	0	0	99	0	0	6	4	13	30	0	5	0	6	3	0	3	6	6	0	2022-05-27 23:51:17.037355	2022-05-27 23:51:17.037355
+200	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	3	PISTOL	8	1	1	5	0	6	3	4	1	0	3	41	4	1	4	50	19	0	4	0	0	0	18	0	0	360	5	0	3	5	8	0	5	3	5	63	0	3	0	2022-05-28 00:01:15.525107	2022-05-28 00:01:15.525107
+201	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	6	MACHINE_PISTOL	3	3	1	4	0	62	0	5	1	0	3	1	18	1	1	3	4	0	11	0	0	0	5	0	0	16	3	0	6	6	4	0	4	7	6	9	4	3	0	2022-05-28 00:01:16.257918	2022-05-28 00:01:16.257918
+202	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	5	LIGHT_MACHINE_GUN	3	4	20	3	2	16	0	13	17	0	33	15	6	1	8	4	69	0	69	0	0	0	0	0	0	0	0	0	0	0	0	0	0	4	0	6	0	0	0	2022-05-28 00:01:16.674515	2022-05-28 00:01:16.674515
+203	10	10	10	10	10	10	10	10	COMMON	augpara.yml	ASSAULT_RIFLE	4	SK-10	AUG-PARA Assault Rifle	29	6	ASSAULT_RIFLE	10	3	2	6	4	46	3	6	1	0	5	5	24	1	1	2	161	0	4	0	0	0	4	0	0	8	11	303	3	0	4	0	72	4	4	0	0	174	0	2022-05-28 00:01:17.090572	2022-05-28 00:01:17.090572
+204	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	4	PISTOL	8	2	1	9	0	36	4	1	3	2	4	99	84	1	2	14	8	0	83	0	0	0	113	0	0	4	46	5	7	31	5	0	4	0	85	5	6	11	0	2022-06-11 17:39:00.066237	2022-06-11 17:39:00.066237
+205	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	8	PISTOL	13	2	1	6	0	20	0	2	1	0	2	76	111	4	1	1	5	0	65	0	0	0	7	0	0	96	7	199	1198	54	42	0	955	9	7	5	4	9	0	2022-06-11 19:06:11.034459	2022-06-11 19:06:11.034459
+206	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	8	PISTOL	5	6	1	9	0	30	0	1	1	1	7	10	10	2	1	34	14	0	33	0	0	0	0	0	0	9	5	6	5	0	73	0	7	8	8	6	5	10	0	2022-06-11 19:07:17.162553	2022-06-11 19:07:17.162553
+207	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	3	PISTOL	3	1	1	11	0	44	6	1	2	1	4	28	40	4	1	1	217	0	7	0	0	0	0	0	0	0	37	8	43	45	14	0	952	6	8	42	9	0	0	2022-06-11 19:12:23.61176	2022-06-11 19:12:23.61176
+208	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	6	SUB_MACHINE_GUN	2	3	2	10	7	5	6	7	1	187	5	49	10	5	2	1	7	0	10	0	0	0	10	0	0	5	73	10	7	55	0	0	36	5	6	0	12020	54	0	2022-06-11 19:13:39.932315	2022-06-11 19:13:39.932315
+209	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	3	PISTOL	10	2	1	1	0	51	0	1	1	4	3	10	40	60	1	2	55	0	11	0	0	0	7	0	0	8	0	7	7	976	58	0	5	10	7	12	87	7	0	2022-06-11 19:14:01.81407	2022-06-11 19:14:01.81407
+210	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	7	LIGHT_MACHINE_GUN	11	5	20	2	3	6	22	9	1	5	5	70	136	1	6	1	8	0	7	0	0	0	69	0	0	0	0	6	0	7	104	0	11	595	83	10	13	451	0	2022-06-11 19:16:19.65204	2022-06-11 19:16:19.65204
+211	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	2	SHOTGUN	1	2	2	14	0	80	0	3	1	5	10	6	6	4	1	1	0	0	0	0	0	0	0	0	0	7	0	0	4	8	10	0	0	14	11	7	1647	0	0	2022-06-11 19:27:43.034582	2022-06-11 19:27:43.034582
+212	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	1	SHOTGUN	10	2	2	14	0	112	0	1	2	5	13	10	10	1	2	2	89	0	118	0	0	0	0	0	0	9	7	40	6	5	9	0	10	102	6	7	11	0	0	2022-06-11 20:10:24.192818	2022-06-11 20:10:24.192818
+213	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	10	MACHINE_PISTOL	11	1	1	2	0	8	11	3	3	6	3	11	8	1	1	2	133	0	10	0	0	0	6	0	0	5	172	7	6	5	9	0	11	828	79	2655	11	0	0	2022-06-11 20:12:55.725468	2022-06-11 20:12:55.725468
+214	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	3	PISTOL	1	2	1	4	0	20	0	3	1	1	1	80	50	5	3	1	156	0	6	0	0	0	91	0	0	7	7	11	295	10	8	0	9	9	11	0	6	12	0	2022-06-12 00:36:37.892652	2022-06-12 00:36:37.892652
+215	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	11	SUB_MACHINE_GUN	13	1	2	14	13	6	12	3	1	2	6	83	11	3374	3	5	245	0	11	0	0	0	6	0	0	9	222	172	52	8	7	0	170	11	94	9	8	21199	0	2022-06-13 12:06:43.324058	2022-06-13 12:06:43.324058
 \.
 
 
@@ -5165,23 +5344,12 @@ COPY public.rifle_placements (id, ip_room_vnum, ip_container_selector, ip_rifle_
 --
 
 COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyword, ex_description, light, room_flag, nickname, textures) FROM stdin;
-2	131	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	cofobcenter	\N
 3	132	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
 4	133	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
 5	134	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
 6	135	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
 7	136	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
 8	137	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
-9	138	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
-10	139	1	21	{blu}C.O.F.O.B:{/blu} - Southern Hallway	The cement floor is a perfect complement to the reflection of the incandescent lights that are installed into the the ceiling. {gld}To the East{/gld}, you will find the Armory. {gld}To the West{/gld}, you will find the training grounds. Just around the corner to the East and North a ways is the Weapons Locker. Feel free to get acquainted with the layout, recruit.\r\n	\N	\N	1	0	\N	\N
-11	140	1	21	{blu}C.O.F.O.B:{/blu} - Southeast Corner	The hallway reaches north and south from here. A reduced temperature is like the result of the industrial grade internal air cooling system. It isn't much, but it beats the outside desert climate. The promise of coffee entices you, but you can't tell which direction it's coming from. \r\n	\N	\N	1	0	\N	\N
-12	141	1	21	{blu}C.O.F.O.B:{/blu} - Armory Entrance	A cool draft moves through the bottom crack of the door to the Armory Entrance to the East.It seems the quality of air drastically differs depending on the people in charge of each department. The Sign above the door says in bold letters "Armory".\r\n	\N	\N	1	0	cofob-armory-entrance	\N
-13	142	1	21	{blu}C.O.F.O.B:{/blu} - Armory	As you push through to the East, you notice a few recruits putting on standard issue gear. They ignore you as you take a look around. To the East is the buy station where you can make your purchases.\r\n	\N	\N	1	0	\N	\N
-14	143	1	21	{blu}C.O.F.O.B:{/blu} - Armory Buy Station	You see an armor locker with standard issue equipment. Behind the counter is a {gld}list{/gld} of all the various items for sell. You can spend {grn}MP{/grn} (Mission Points) here to upgrade your loadout. To buy something, simply type {grn}"Buy ID"{/grn} where ID is the number next to the item you want in the output of the list command.\r\n	\N	\N	1	0	\N	\N
-15	144	1	21	{blu}C.O.F.O.B:{/blu} - Armory Storage Room North	Standard issue armor and defensive utilities line the walls; none of which you can take as they are behind metal cages. There is, however, an Armor locker here with standard issue gear for anyone to take. \r\n	\N	\N	1	0	\N	\N
-16	145	1	21	{blu}C.O.F.O.B:{/blu} - Armory Storage Room South	You enter the storage room and immediately notice the strong scent of sand, grime, and gasoline. A few bits of ammunition are strewn across the floor haphazardly. The Armory personnell either recently dug through the piles of ammo crates, or nobody bothered to clean this mess up. There seems to be a computer terminal on the East wall.\r\n	\N	\N	1	0	\N	\N
-17	146	1	21	{blu}C.O.F.O.B:{/blu} - Armory - Secluded Room	A musty room with several freshly smoked cigars laying inside a deep ash tray the size of your fist. Someone was loading a Mossberg shotgun and haphazardly left it laying upon the couch as if it were a visitor. The T.V. appears to still be warm. Whoever was here is likely coming back soon. You have a feeling whoever was here will be back shortly.\r\n	\N	\N	1	0	\N	\N
-18	147	1	21	{blu}C.O.F.O.B:{/blu} - Armory - Secluded Room - Weapons Cache	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 19	148	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 21	150	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 22	151	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
@@ -5189,6 +5357,13 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 25	154	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 26	155	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 27	156	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-basement-2	\N
+9	138	1	21	{blu}C.O.F.O.B{/blu} - Southern Hallway	The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+11	140	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+12	141	1	21	{blu}C.O.F.O.B{/blu} - East Hallway - TRITON Entrance	A sign above the door to the East says "{yel}TRITON LABS{/yel}" in big bold lettering. The placement of the laboratory is an odd one, as it is one of the only ways to reach the civilian portion of the FOB via the East.\r\n	\N	\N	1	0	cofob-armory-entrance	,CEMENT,INSIDE
+13	142	1	21	{blu}C.O.F.O.B{/blu} - TRITON - Decontamination	In order for the lab to maintain a clean and sterile atmosphere, a decontamination area was installed. That is the room you find yourself in. A station not unlike the body scanners you find at an airport sprays you up and down with a cool mist of chemicals. A vacuum below your feet sucks wind and your ears pop as various hidden but audible devices clamor to eliminate any hazardous bacteria.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+14	143	1	21	{blu}C.O.F.O.B{/blu} - TRITON - Research	An array of server racks blocks the center of the room from where you are standing.TRITON Labs is a sub-contractor of the incredibly murky organization known as {blu}ORTHOS CORP{/blu}. The lab specializes in HIGHLY experimental ammunition which blurs the line between ethical and immoral conduct. TRITON Labs is believed to have developed an extreme pathogen with the power to wipe out an entire city block with just a few drops of a highly secretive chemical agent.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+18	147	1	21	{blu}C.O.F.O.B{/blu} - TRITON - Human Experiments	There used to be a time when clients would pay for highly specialized medical products.During the apex of that booming underground market, scientists were paid top dollar to secure the targetted product under any means necessary. The TRTION labs human experimentation sector is located somewhere beneath the FOB, though some say it was forever closed off forever. The leftover and forgotten human experiments reside in this room indefinitely. To have survived those experiments is a greater hell than to have perished.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+15	144	1	21	{blu}C.O.F.O.B{/blu} - TRITON - Experimental Ammunition	TRITON labs has been home to the most advanced bleeding edge experimental ammunition on the planet. Racks of hermetically sealed boxes with TRITON's menacing logo reach almost to the full height of the extended ceiling. There is a single computer terminal here asking for biometric credentials. A camera adjusts it's focus and magnification as you move.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
 28	157	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 29	158	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 30	159	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
@@ -5223,31 +5398,14 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 60	189	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage - 2B	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 61	190	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 62	191	1	0	{blu}C.O.F.O.B:{/blu} - Basement 2 - Car Garage	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-64	193	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-65	194	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-66	195	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-67	196	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-68	197	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-69	198	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-71	200	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-72	201	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-73	202	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	cofob-mess-hall-upstairs	\N
-74	203	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-75	204	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-76	205	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-77	206	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-78	207	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	cofob-stairs-A	\N
-79	208	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-80	209	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-81	210	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-82	211	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-83	212	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 85	214	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
 86	215	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
 87	216	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
-125	254	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-126	255	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-127	256	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+67	196	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+72	201	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+76	205	1	21	{blu}C.O.F.O.B{/blu} - North Hallway	The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+127	256	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Infrastructure Hallway	It's almost comical how clean the engineering level of the FOB is compared to the lower levels. The carpet and walls are in a prestine -- no, IMMACULATE state. You almost feel like you should take off your shoes. The climate is controlled by a different air-conditioning system than the rest of the base. The room is cool and devoid of any outside noise.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+80	209	1	21	{blu}C.O.F.O.B{/blu} - North Hallway	The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
 88	217	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
 185	314	1	0	Market Apartments - Building 3 - Unit 303 - Master Bedroom	undefined\r\n	\N	\N	1	0	\N	\N
 89	218	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
@@ -5258,22 +5416,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 94	223	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
 95	224	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Atop the stairs	The floor deviates from the other rooms in that it is made up of a reinforced steel grating. The choice for such a floor remains a mystery. The door to the west leads to the stairs that will take you to the underground portion of the base.\r\n	\N	\N	1	0	cofob-west-atop-stairs	\N
 96	225	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Atop the stairs	The floor deviates from the other rooms in that it is made up of a reinforced steel grating. The choice for such a floor remains a mystery. The door to the west leads to the stairs that will take you to the underground portion of the base.\r\n	\N	\N	1	0	\N	\N
-97	226	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
-98	227	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
-100	229	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
-101	230	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
-102	231	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	cofob-bind-to-center	\N
-103	232	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-104	233	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-105	234	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-106	235	1	21	{blu}C.O.F.O.B:{/blu} - North Hallway Stairs	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-107	236	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-108	237	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	cofob-secondfloor-center	\N
-109	238	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-110	239	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-111	240	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-112	241	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-113	242	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 114	243	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 115	244	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 116	245	1	0	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
@@ -5284,7 +5426,13 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 121	250	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 122	251	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 123	252	1	21	{blu}C.O.F.O.B:{/blu} - Second floor Foremast	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-124	253	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+98	227	1	0	{blu}C.O.F.O.B{/blu} - Southern Hallway	The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".\r\n	\N	\N	1	0	\N	\N
+97	226	1	0	{blu}C.O.F.O.B{/blu} - Southern Hallway	The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".\r\n	\N	\N	1	0	\N	\N
+103	232	1	21	{blu}C.O.F.O.B{/blu} - Up the Staircase	The walls are a drab shade of grey and the stairs are an odd combination of carpet and metal. \r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+104	233	1	21	{blu}C.O.F.O.B{/blu} - Up the Staircase	The walls are a drab shade of grey and the stairs are an odd combination of carpet and metal. \r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+105	234	1	21	{blu}C.O.F.O.B{/blu} - Up the Staircase	The walls are a drab shade of grey and the stairs are an odd combination of carpet and metal. \r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+108	237	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Atop the stairs	The computing industry has progressed to the point where every individual has their own computer in the palm of their hand. But those advances dont't come without a cost. The engineering level of the FOB focusses on the invisible threat of state actors and the growing need for tighter security. \r\n	\N	\N	1	0	cofob-secondfloor-center	,CEMENT,INSIDE
+113	242	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Threat Surveillance	There are a couple high profile incidents where law enforcement were locked out of the personal devices of a deceased criminal. A hard lesson in cryptography was learned that day. As a result, funding instead went into massive amounts of global surveillance and threat tracking. The advent of Artificial Intelligence gave another possible avenue: automated tracking. The {red}Threat Surveillance{/red} sector of the FOB is the most advanced and funded aspect of every FOB to date.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
 130	259	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N	\N
 131	260	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N	\N
 132	261	1	0	{blu}C.O.F.O.B:{/blu} - Engineering hallway	The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. \r\n	\N	\N	1	0	\N	\N
@@ -5334,6 +5482,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 179	308	1	0	Market Apartments - Building 3 - Unit 301 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N	\N
 180	309	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
 181	310	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
+210	339	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Descending the stairs	fill me\r\n	\N	\N	1	0	\N	\N
 182	311	1	0	Market Apartments - Building 3 Second floor hallway	A thin layer of dust and dirt cover the cement walkway here. You hear the crackle of dirt and millions of pieces of broken glass under your feet as you make your way about. Oddly enough, there are footprints here.\r\n	\N	\N	1	0	\N	\N
 184	313	1	0	Market Apartments - Building 3 - Unit 303	A mostly empty apartment. You notice what looks like sleeping bags in the corner but that could just be trash. The air smells like cigarette smoke and dry desert air. The light from outside illuminates trillions of dust particles floating in the in perpetual motion.\r\n	\N	\N	1	0	\N	\N
 186	315	1	0	Market Apartments - Building 3 - Unit 303 - Bathroom	The sink seems to still be intact and usable. How any water made its way up here would be nothing short of miraculous. It does appear that the sink has been used recently, which only affirms your suspicion that there are still inhabitants who dwell here.\r\n	\N	\N	1	0	\N	\N
@@ -5357,7 +5506,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 206	335	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N	\N
 208	337	1	0	Abandoned Two way street - Abott Market	A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.\r\n	\N	\N	1	0	\N	\N
 209	338	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Descending the stairs	fill me\r\n	\N	\N	1	0	\N	\N
-210	339	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Descending the stairs	fill me\r\n	\N	\N	1	0	\N	\N
 211	340	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
 212	341	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
 213	342	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
@@ -5367,15 +5515,11 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 217	346	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
 218	347	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
 219	348	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
-20	128	1	18	MP5 repo	Feeling over burdened by money?	\N	\N	0	16	\N	\N
-1	130	1	21	{blu}COBALT:{/blu} {grn}Forward Operating Base{/grn} - Main Hallway	COBALT Air Force base. Ground zero for basic training. All initiates must follow rules and guidelines in your New Recruit handbook. Proceed {grn}North{/grn} recruit!\r\n	\N	\N	1	0	\N	\N
 232	149	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 23	152	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 48	177	1	21	{blu}C.O.F.O.B:{/blu} - Basement 2 - Waypoint Avenue North Exit	@FILL_ME@\r\n	\N	\N	1	0	cofob-armory-waypoint-avenue-exit	\N
 70	199	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Exit	Before you is a sturdy metal door that prevents the outside elements from making their way inside. The door simply says {yel}Eastern Exit{/yel}. The air is less cool as the corridor leading to the east lacks the sufficient air flow. There are no ventilation shafts leading to the east, but you can see through the tempered glass window on the door that a few military police are gaurding the exit to the city outside. \r\n	\N	\N	1	0	eastexit	\N
 84	213	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
-99	228	1	0	{blu}C.O.F.O.B [OUTER]:{/blu} - South Hallway	The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. \r\n	\N	\N	1	0	\N	\N
-128	257	1	21	{blu}C.O.F.O.B:{/blu} - Second floor hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 221	350	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
 222	351	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
 223	352	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
@@ -5384,6 +5528,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 226	355	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
 227	356	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
 228	357	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+128	257	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Infrastructure Hallway	It's almost comical how clean the engineering level of the FOB is compared to the lower levels. The carpet and walls are in a prestine -- no, IMMACULATE state. You almost feel like you should take off your shoes. The climate is controlled by a different air-conditioning system than the rest of the base. The room is cool and devoid of any outside noise.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
 333	461	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 334	462	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 229	358	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
@@ -5441,6 +5586,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 271	399	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 272	400	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	crenshaw-northern-shipping-entrance	\N
 273	401	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N	\N
+422	550	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
 274	402	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N	\N
 275	403	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	shipyard-row-a	\N
 276	404	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
@@ -5477,6 +5623,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 304	432	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 305	433	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 424	552	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
+434	562	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
 306	434	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 307	435	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 308	436	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
@@ -5600,8 +5747,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 419	547	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
 420	548	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
 421	549	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
-422	550	1	0	{blu}Saint Vale Church{/blu} Inside - Center Isle	An elaborate purple and yellow pattern decorates the isle which leads to the altar. The corners of each isle have divine sigils engraved into the dark stain of the wood.\r\n	\N	\N	1	0	\N	\N
-434	562	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
 435	563	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
 436	564	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
 437	565	1	0	{blu}Saint Vale Church{/blu} Inside - Isle	A dark colored wooden bench is here. There is a retractable padded kneeling device below the hanging bookshelf of psalms and prayers. \r\n	\N	\N	1	0	\N	\N
@@ -5633,6 +5778,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 468	596	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
 469	597	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
 470	598	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+758	890	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-2	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
 471	599	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
 472	600	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	allied-foods-alcohol-end	\N
 473	601	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
@@ -5672,6 +5818,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 507	635	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	\N	\N
 508	636	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end4	\N
 509	637	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+586	715	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
 510	638	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
 511	639	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
 512	640	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Slaughter Isle	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
@@ -5709,6 +5856,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 543	671	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-3	\N
 544	672	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
 545	673	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
+757	889	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-1	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
 546	674	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
 547	675	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-west-1	\N
 548	676	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
@@ -5748,7 +5896,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 583	712	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
 584	713	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
 585	714	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
-586	715	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
 587	716	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	hartford-atrium-west	\N
 588	717	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	\N	\N
 589	718	1	0	{blu}Hartford Bank{/blu} - Atrium	Hartford bank, like most of the businesses in downtown metro, is owned and operated by the Hexos Cartel. The lavishly decorated atrium is a testament to the massive amounts of income that is pumped through thousands of fake accounts in a sophisticated money laundering mechanism.\r\n	\N	\N	1	0	hartford-atrium-center	\N
@@ -5923,8 +6070,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 754	886	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - East courtyard	This side of the {blu}Psi-Tech{/blu} building has a peculiar lack of windows and entrances. A soft humming sound gives you the impression that a power generator is nearby, though you cannot possibly imagine where.\r\n	\N	\N	1	0	\N	,DRY,OUTSIDE,NARROW_NORTH_SOUTH,SIDEWALK
 755	887	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - East courtyard	This side of the {blu}Psi-Tech{/blu} building has a peculiar lack of windows and entrances. A soft humming sound gives you the impression that a power generator is nearby, though you cannot possibly imagine where.\r\n	\N	\N	1	0	\N	,DRY,OUTSIDE,NARROW_NORTH_SOUTH,SIDEWALK
 756	888	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - East courtyard	This side of the {blu}Psi-Tech{/blu} building has a peculiar lack of windows and entrances. A soft humming sound gives you the impression that a power generator is nearby, though you cannot possibly imagine where.\r\n	\N	\N	1	0	\N	,DRY,OUTSIDE,NARROW_NORTH_SOUTH,SIDEWALK
-757	889	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-1	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
-758	890	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-2	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
 759	891	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-3	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
 760	892	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-4	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
 761	893	1	0	{blu}Psi-Tech H.Q.{/blu} - Outside - VIP Drop Off	This area contains many high end vehicles fit for the high value targets that use them.This place is heavily guarded and monitored at all times.\r\n	\N	\N	1	0	psi-tech-car-5	,DRY,OUTSIDE,STREET,PARKING_LOT,PARKING_STALL
@@ -5939,6 +6084,94 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 772	904	1	0	name	description	\N	\N	1	0	psi-tech-hatch	,INSIDE,METAL_HATCH,TILE
 773	905	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
 774	906	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
+1	130	1	21	C.O.F.O.B - Hallway entrance	There is a single door here leading to the inner hallway of the FOB. From there, you can make your way to the different areas like the TRITON Laboratory, the kitchen, the engineering level, and the exit to the outlying city surrounding the FOB.\r\n	\N	\N	1	0	\N	,CEMENT,DAMP,INSIDE,ROOFTOP
+2	131	1	21	{blu}C.O.F.O.B{/blu} - Southern Hallway	The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".\r\n	\N	\N	1	0	cofobcenter	,CEMENT,INSIDE
+102	231	1	0	{blu}C.O.F.O.B{/blu} - Southern Hallway	The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".\r\n	\N	\N	1	0	cofob-bind-to-center	\N
+100	229	1	0	{blu}C.O.F.O.B{/blu} - Southern Hallway	The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".\r\n	\N	\N	1	0	\N	\N
+99	228	1	0	{blu}C.O.F.O.B{/blu} - Southern Hallway	The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".\r\n	\N	\N	1	0	\N	\N
+10	139	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+815	949	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+17	146	1	21	{blu}C.O.F.O.B{/blu} - TRITON - Research	An array of server racks blocks the center of the room from where you are standing.TRITON Labs is a sub-contractor of the incredibly murky organization known as {blu}ORTHOS CORP{/blu}. The lab specializes in HIGHLY experimental ammunition which blurs the line between ethical and immoral conduct. TRITON Labs is believed to have developed an extreme pathogen with the power to wipe out an entire city block with just a few drops of a highly secretive chemical agent.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+16	145	1	21	{blu}C.O.F.O.B{/blu} - TRITON - Experimental Ammunition	TRITON labs has been home to the most advanced bleeding edge experimental ammunition on the planet. Racks of hermetically sealed boxes with TRITON's menacing logo reach almost to the full height of the extended ceiling. There is a single computer terminal here asking for biometric credentials. A camera adjusts it's focus and magnification as you move.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+64	193	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+65	194	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+66	195	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+68	197	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+69	198	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+71	200	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+73	202	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	cofob-mess-hall-upstairs	,CEMENT,INSIDE
+74	203	1	21	{blu}C.O.F.O.B{/blu} - East Hallway	Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+77	206	1	21	{blu}C.O.F.O.B{/blu} - North Hallway	The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+78	207	1	21	{blu}C.O.F.O.B{/blu} - Staircase	A remarkably plain staircase is here. The second floor of the FOB is home to the {yel}Engineering{/yel} team. Already you can tell that the air quality is much better upstairs.\r\n	\N	\N	1	0	cofob-stairs-A	,CEMENT,INSIDE
+106	235	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Atop the stairs	The computing industry has progressed to the point where every individual has their own computer in the palm of their hand. But those advances dont't come without a cost. The engineering level of the FOB focusses on the invisible threat of state actors and the growing need for tighter security. \r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+107	236	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Atop the stairs	The computing industry has progressed to the point where every individual has their own computer in the palm of their hand. But those advances dont't come without a cost. The engineering level of the FOB focusses on the invisible threat of state actors and the growing need for tighter security. \r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+124	253	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Infrastructure Hallway	It's almost comical how clean the engineering level of the FOB is compared to the lower levels. The carpet and walls are in a prestine -- no, IMMACULATE state. You almost feel like you should take off your shoes. The climate is controlled by a different air-conditioning system than the rest of the base. The room is cool and devoid of any outside noise.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+125	254	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Infrastructure Hallway	It's almost comical how clean the engineering level of the FOB is compared to the lower levels. The carpet and walls are in a prestine -- no, IMMACULATE state. You almost feel like you should take off your shoes. The climate is controlled by a different air-conditioning system than the rest of the base. The room is cool and devoid of any outside noise.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+126	255	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Infrastructure Hallway	It's almost comical how clean the engineering level of the FOB is compared to the lower levels. The carpet and walls are in a prestine -- no, IMMACULATE state. You almost feel like you should take off your shoes. The climate is controlled by a different air-conditioning system than the rest of the base. The room is cool and devoid of any outside noise.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+109	238	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Threat Surveillance	There are a couple high profile incidents where law enforcement were locked out of the personal devices of a deceased criminal. A hard lesson in cryptography was learned that day. As a result, funding instead went into massive amounts of global surveillance and threat tracking. The advent of Artificial Intelligence gave another possible avenue: automated tracking. The {red}Threat Surveillance{/red} sector of the FOB is the most advanced and funded aspect of every FOB to date.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+110	239	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Threat Surveillance	There are a couple high profile incidents where law enforcement were locked out of the personal devices of a deceased criminal. A hard lesson in cryptography was learned that day. As a result, funding instead went into massive amounts of global surveillance and threat tracking. The advent of Artificial Intelligence gave another possible avenue: automated tracking. The {red}Threat Surveillance{/red} sector of the FOB is the most advanced and funded aspect of every FOB to date.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+111	240	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Threat Surveillance	There are a couple high profile incidents where law enforcement were locked out of the personal devices of a deceased criminal. A hard lesson in cryptography was learned that day. As a result, funding instead went into massive amounts of global surveillance and threat tracking. The advent of Artificial Intelligence gave another possible avenue: automated tracking. The {red}Threat Surveillance{/red} sector of the FOB is the most advanced and funded aspect of every FOB to date.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+112	241	1	21	{blu}C.O.F.O.B{/blu} - Engineering - Threat Surveillance	There are a couple high profile incidents where law enforcement were locked out of the personal devices of a deceased criminal. A hard lesson in cryptography was learned that day. As a result, funding instead went into massive amounts of global surveillance and threat tracking. The advent of Artificial Intelligence gave another possible avenue: automated tracking. The {red}Threat Surveillance{/red} sector of the FOB is the most advanced and funded aspect of every FOB to date.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+75	204	1	21	{blu}C.O.F.O.B{/blu} - North Hallway	The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.\r\n	\N	\N	1	0	cofob-northeast-corner	,CEMENT,INSIDE
+79	208	1	21	{blu}C.O.F.O.B{/blu} - North Hallway	The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+81	210	1	21	{blu}C.O.F.O.B{/blu} - North Hallway	The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+82	211	1	21	{blu}C.O.F.O.B{/blu} - North Hallway	The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+83	212	1	21	{blu}C.O.F.O.B{/blu} - North Hallway	The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.\r\n	\N	\N	1	0	\N	,CEMENT,INSIDE
+778	912	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+779	913	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	maintenance_guard-roaming-0	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+780	914	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	maintenance_guard-roaming-1	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+781	915	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	maintenance_guard-roaming-2	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+782	916	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	maintenance_guard-roaming-3	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+777	911	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+788	922	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	maintenance-grunt-roaming-2	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+789	923	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	maintenance-grunt-roaming-3	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+791	925	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	maintenance-grunt-roaming-5	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+775	909	1	0	{blu}C.O.F.O.B{/blu} - Equipment Inventory	Three huge lockers are attached to the wall, each with their own category of equipment. The most appalling detail is the haphazard array of bloodied medical equipment sitting on a nearby desk.\r\n	\N	\N	1	88	cofob-equipment-inventory	,INSIDE,METAL_WALL,ROOFTOP,TILE
+790	924	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	maintenance-grunt-roaming-4	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+787	921	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	maintenance-grunt-roaming-1	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+792	926	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	maintenance-grunt-roaming-6	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+793	927	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	maintenance-grunt-roaming-7	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+794	928	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	maintenance-grunt-roaming-8	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+795	929	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	maintenance-grunt-roaming-9	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+783	917	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	maintenance_guard-roaming-4	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+784	918	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	maintenance_guard-roaming-5	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+776	910	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	orthos-spawn-sentinel-1	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+786	920	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	maintenance-grunt-roaming-0	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+796	930	1	0	{blu}On Base{/blu} - Hydro-Processing	The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should wiped down due to the massive amount of grease, oil, and somehow blood. \r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+808	942	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+798	932	1	0	{blu}On Base{/blu} - Hydro-Processing	The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should wiped down due to the massive amount of grease, oil, and somehow blood. \r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+799	933	1	0	{blu}On Base{/blu} - Hydro-Processing	The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should wiped down due to the massive amount of grease, oil, and somehow blood. \r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+800	934	1	0	{blu}On Base{/blu} - Hydro-Processing	The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should wiped down due to the massive amount of grease, oil, and somehow blood. \r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+803	937	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	hydro-proc-extremists-roaming-2	,INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS
+804	938	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	hydro-proc-extremists-roaming-3	,INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS
+801	935	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	hydro-proc-extremists-roaming-0	,INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS
+802	936	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	hydro-proc-extremists-roaming-1	,INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS
+806	940	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+807	941	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	hydro-proc-start-point	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+809	943	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+810	944	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+811	945	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+812	946	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+813	947	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+814	948	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+101	230	1	0	{blu}C.O.F.O.B{/blu} - Southern Hallway	The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".\r\n	\N	\N	1	0	\N	\N
+20	128	1	18	{blu}C.O.F.O.B{/blu} - Equipment	Three huge lockers are attached to the wall, each with their own category of equipment. The most appalling detail is the haphazard array of bloodied medical equipment sitting on a nearby desk.\r\n	\N	\N	0	16	cofob-spawn-point-a	,CEMENT,DAMP,INSIDE,OUTSIDE,ROOFTOP,SHALLOW_WATER
+797	931	1	0	{blu}On Base{/blu} - Hydro-Processing	The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should wiped down due to the massive amount of grease, oil, and somehow blood. \r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+817	951	1	0	{blu}On Base{/blu} - Hydro-Processing - Terminal	A large proportion of the room consists of a locked down computer terminal with old hardware. But it doesn't seem to be just old hardware: everything about it is built to withstand several attempts at trying to access the hardware inside. Things like the hard drives or the device in charge of the biometric interface. It's been said that this terminal can survive several grenade blasts. As of yet, nobody has tried to compromise the  machine, but never say never.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS
+818	952	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+819	953	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+820	954	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+821	955	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS
+822	956	1	0	{blu}On Base{/blu} - Hydro-Processing - Terminal	A large proportion of the room consists of a locked down computer terminal with old hardware. But it doesn't seem to be just old hardware: everything about it is built to withstand several attempts at trying to access the hardware inside. Things like the hard drives or the device in charge of the biometric interface. It's been said that this terminal can survive several grenade blasts. As of yet, nobody has tried to compromise the  machine, but never say never.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS
+823	957	1	0	{blu}On Base{/blu} - Hydro-Processing - Terminal	A large proportion of the room consists of a locked down computer terminal with old hardware. But it doesn't seem to be just old hardware: everything about it is built to withstand several attempts at trying to access the hardware inside. Things like the hard drives or the device in charge of the biometric interface. It's been said that this terminal can survive several grenade blasts. As of yet, nobody has tried to compromise the  machine, but never say never.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS
+824	958	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS
+825	959	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS
+826	960	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS
+827	961	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS
+828	962	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS
+816	950	1	0	{blu}On Base{/blu} - Hydro-Processing - Terminal	A large proportion of the room consists of a locked down computer terminal with old hardware. But it doesn't seem to be just old hardware: everything about it is built to withstand several attempts at trying to access the hardware inside. Things like the hard drives or the device in charge of the biometric interface. It's been said that this terminal can survive several grenade blasts. As of yet, nobody has tried to compromise the  machine, but never say never.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS
+785	919	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	maintenance_guard-roaming-6	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+805	939	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	hydro-proc-extremists-roaming-4	,INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS
 \.
 
 
@@ -8605,6 +8838,998 @@ COPY public.room_direction_data (id, room_number, exit_direction, general_descri
 3231	905	1	general_description	keyword	1	0	906
 3232	905	3	general description	keyword	1	0	904
 3233	906	3	general description	keyword	1	0	905
+3234	128	0	general_description	keyword	1	0	130
+3235	130	0	general_description	keyword	1	0	131
+3236	130	2	general description	keyword	1	0	128
+3237	131	1	general_description	keyword	1	0	138
+3238	131	2	general description	keyword	1	0	130
+3239	131	3	general description	keyword	1	0	231
+3240	138	1	general_description	keyword	1	0	139
+3241	138	3	general description	keyword	1	0	131
+3242	139	0	general_description	keyword	1	0	140
+3243	139	3	general description	keyword	1	0	138
+3244	231	1	general description	keyword	1	0	131
+3245	231	3	general description	keyword	1	0	230
+3246	230	1	general_description	keyword	1	0	231
+3247	230	3	general description	keyword	1	0	229
+3248	229	1	general_description	keyword	1	0	230
+3249	229	3	general description	keyword	1	0	228
+3250	228	1	general_description	keyword	1	0	229
+3251	228	3	general description	keyword	1	0	227
+3252	227	1	general_description	keyword	1	0	228
+3253	227	3	general description	keyword	1	0	226
+3254	226	0	general description	keyword	1	0	225
+3255	226	1	general_description	keyword	1	0	227
+3256	139	0	general_description	keyword	1	0	140
+3257	139	3	general description	keyword	1	0	138
+3258	140	0	general_description	keyword	1	0	141
+3259	140	2	general description	keyword	1	0	139
+3260	141	0	general_description	keyword	1	0	193
+3261	141	1	general_description	keyword	1	0	142
+3262	141	2	general description	keyword	1	0	140
+3263	142	1	general_description	keyword	1	0	143
+3264	142	3	general description	keyword	1	0	141
+3265	143	0	general_description	keyword	1	0	144
+3266	143	1	general_description	keyword	1	0	146
+3267	143	2	general_description	keyword	1	0	145
+3268	143	3	general description	keyword	1	0	142
+3269	146	1	general_description	keyword	1	0	147
+3270	146	3	general description	keyword	1	0	143
+3271	147	3	general description	keyword	1	0	146
+3272	147	5	general_description	keyword	1	0	148
+3273	144	2	general description	keyword	1	0	143
+3274	145	0	general description	keyword	1	0	143
+3275	128	0	general_description	keyword	1	0	130
+3276	909	2	general description	door	3	0	230
+3277	193	0	general_description	keyword	1	0	194
+3278	193	2	general description	keyword	1	0	141
+3279	194	0	general_description	keyword	1	0	195
+3280	194	2	general description	keyword	1	0	193
+3281	195	0	general_description	keyword	1	0	196
+3282	195	2	general description	keyword	1	0	194
+3283	196	0	general_description	keyword	1	0	197
+3284	196	2	general description	keyword	1	0	195
+3285	197	0	general_description	keyword	1	0	198
+3286	197	2	general description	keyword	1	0	196
+3287	198	0	general_description	keyword	1	0	199
+3288	198	2	general description	keyword	1	0	197
+3289	200	0	general_description	keyword	1	0	201
+3290	200	2	general description	keyword	1	0	199
+3291	201	0	general_description	keyword	1	0	202
+3292	201	2	general description	keyword	1	0	200
+3293	202	0	general_description	keyword	1	0	203
+3294	202	2	general description	keyword	1	0	201
+3295	202	3	general_description	keyword	1	0	340
+3296	203	0	general_description	keyword	1	0	204
+3297	203	1	general_description	keyword	1	0	265
+3298	203	2	general description	keyword	1	0	202
+3299	205	1	general description	keyword	1	0	204
+3300	205	3	general_description	keyword	1	0	206
+3301	206	1	general description	keyword	1	0	205
+3302	206	3	general_description	keyword	1	0	207
+3303	207	0	general_description	keyword	1	0	232
+3304	207	1	general description	keyword	1	0	206
+3305	207	3	general_description	keyword	1	0	208
+3306	232	2	general description	keyword	1	0	207
+3307	232	4	general_description	keyword	1	0	233
+3308	233	0	general_description	keyword	1	0	234
+3309	233	5	general description	keyword	1	0	232
+3310	234	2	general description	keyword	1	0	233
+3311	234	4	general_description	keyword	1	0	235
+3312	235	0	general_description	keyword	1	0	236
+3313	235	5	general description	keyword	1	0	234
+3314	236	0	general_description	keyword	1	0	237
+3315	236	2	general description	keyword	1	0	235
+3316	237	0	general_description	keyword	1	0	243
+3317	237	1	general_description	keyword	1	0	253
+3318	237	2	general description	keyword	1	0	236
+3319	237	3	general_description	keyword	1	0	238
+3320	253	1	general_description	keyword	1	0	254
+3321	253	3	general description	keyword	1	0	237
+3322	254	1	general_description	keyword	1	0	255
+3323	254	3	general description	keyword	1	0	253
+3324	255	1	general_description	keyword	1	0	256
+3325	255	3	general description	keyword	1	0	254
+3326	256	0	general_description	keyword	1	0	258
+3327	256	1	general_description	keyword	1	0	257
+3328	256	3	general description	keyword	1	0	255
+3329	257	3	general description	keyword	1	0	256
+3330	238	1	general description	keyword	1	0	237
+3331	238	3	general_description	keyword	1	0	239
+3332	239	1	general description	keyword	1	0	238
+3333	239	3	general_description	keyword	1	0	240
+3334	240	1	general description	keyword	1	0	239
+3335	240	3	general_description	keyword	1	0	241
+3336	241	1	general description	keyword	1	0	240
+3337	241	3	general_description	keyword	1	0	242
+3338	242	1	general description	keyword	1	0	241
+3339	204	2	general description	keyword	1	0	203
+3340	204	3	general_description	keyword	1	0	205
+3341	208	1	general description	keyword	1	0	207
+3342	208	3	general_description	keyword	1	0	209
+3343	209	1	general description	keyword	1	0	208
+3344	209	3	general_description	keyword	1	0	210
+3345	210	1	general description	keyword	1	0	209
+3346	210	3	general_description	keyword	1	0	211
+3347	211	1	general description	keyword	1	0	210
+3348	211	3	general_description	keyword	1	0	212
+3349	212	1	general description	keyword	1	0	211
+3350	212	2	general_description	keyword	1	0	213
+3351	910	0	general description	keyword	1	0	128
+3352	911	0	general description	keyword	1	0	910
+3353	912	0	general description	keyword	1	0	911
+3354	913	0	general description	keyword	1	0	912
+3355	914	0	general description	keyword	1	0	913
+3356	915	0	general description	keyword	1	0	914
+3357	916	0	general description	keyword	1	0	915
+3358	917	0	general description	keyword	1	0	916
+3359	918	0	general description	keyword	1	0	917
+3360	919	0	general description	keyword	1	0	918
+3361	230	0	general_description	keyword	1	0	909
+3362	230	1	general_description	keyword	1	0	231
+3363	230	3	general description	keyword	1	0	229
+3364	909	2	general description	door	3	0	230
+3365	128	0	general_description	keyword	1	0	130
+3366	128	2	general_description	keyword	1	0	910
+3367	910	0	general description	keyword	1	0	128
+3368	910	2	general_description	keyword	1	0	911
+3369	911	0	general description	keyword	1	0	910
+3370	911	2	general_description	keyword	1	0	912
+3371	912	0	general description	keyword	1	0	911
+3372	912	2	general_description	keyword	1	0	913
+3373	913	0	general description	keyword	1	0	912
+3374	913	2	general_description	keyword	1	0	914
+3375	914	0	general description	keyword	1	0	913
+3376	914	2	general_description	keyword	1	0	915
+3377	915	0	general description	keyword	1	0	914
+3378	915	2	general_description	keyword	1	0	916
+3379	916	0	general description	keyword	1	0	915
+3380	916	2	general_description	keyword	1	0	917
+3381	917	0	general description	keyword	1	0	916
+3382	917	2	general_description	keyword	1	0	918
+3383	918	0	general description	keyword	1	0	917
+3384	918	2	general_description	keyword	1	0	919
+3385	919	0	general description	keyword	1	0	918
+3386	920	1	general description	keyword	1	0	912
+3387	921	1	general description	keyword	1	0	920
+3388	922	1	general description	keyword	1	0	921
+3389	923	1	general description	keyword	1	0	922
+3390	924	1	general description	keyword	1	0	923
+3391	925	1	general description	keyword	1	0	924
+3392	926	1	general description	keyword	1	0	925
+3393	927	1	general description	keyword	1	0	926
+3394	928	1	general description	keyword	1	0	927
+3395	929	1	general description	keyword	1	0	928
+3396	930	4	general description	keyword	1	0	921
+3397	931	4	general description	keyword	1	0	930
+3398	932	4	general description	keyword	1	0	931
+3399	933	4	general description	keyword	1	0	932
+3400	934	4	general description	keyword	1	0	933
+3401	935	0	general description	keyword	1	0	934
+3402	936	0	general description	keyword	1	0	935
+3403	937	0	general description	keyword	1	0	936
+3404	938	0	general description	keyword	1	0	937
+3405	939	0	general description	keyword	1	0	938
+3406	940	1	general description	keyword	1	0	939
+3407	941	1	general description	keyword	1	0	940
+3408	941	1	general description	keyword	1	0	940
+3409	942	1	general description	keyword	1	0	941
+3410	943	1	general description	keyword	1	0	942
+3411	944	1	general description	keyword	1	0	943
+3412	945	1	general description	keyword	1	0	944
+3413	946	1	general description	keyword	1	0	945
+3414	947	1	general description	keyword	1	0	946
+3415	948	1	general description	keyword	1	0	947
+3416	949	1	general description	keyword	1	0	948
+3417	950	2	general description	keyword	1	0	949
+3418	951	0	general description	keyword	1	0	949
+3419	952	1	general description	keyword	1	0	949
+3420	953	1	general description	keyword	1	0	952
+3421	954	1	general description	keyword	1	0	953
+3422	955	1	general description	keyword	1	0	954
+3423	956	2	general description	keyword	1	0	953
+3424	957	0	general description	keyword	1	0	953
+3425	958	2	general description	keyword	1	0	955
+3426	959	2	general description	keyword	1	0	958
+3427	960	1	general description	keyword	1	0	959
+3428	961	1	general description	keyword	1	0	960
+3429	962	1	general description	keyword	1	0	961
+3430	230	0	general_description	keyword	1	0	909
+3431	230	1	general_description	keyword	1	0	231
+3432	230	3	general description	keyword	1	0	229
+3433	909	2	general description	door	3	0	230
+3434	128	0	general_description	keyword	1	0	130
+3435	128	2	general_description	keyword	1	0	910
+3436	910	0	general description	keyword	1	0	128
+3437	910	2	general_description	keyword	1	0	911
+3438	911	0	general description	keyword	1	0	910
+3439	911	2	general_description	keyword	1	0	912
+3440	912	0	general description	keyword	1	0	911
+3441	912	2	general_description	keyword	1	0	913
+3442	912	3	general_description	keyword	1	0	920
+3443	913	0	general description	keyword	1	0	912
+3444	913	2	general_description	keyword	1	0	914
+3445	914	0	general description	keyword	1	0	913
+3446	914	2	general_description	keyword	1	0	915
+3447	915	0	general description	keyword	1	0	914
+3448	915	2	general_description	keyword	1	0	916
+3449	916	0	general description	keyword	1	0	915
+3450	916	2	general_description	keyword	1	0	917
+3451	917	0	general description	keyword	1	0	916
+3452	917	2	general_description	keyword	1	0	918
+3453	918	0	general description	keyword	1	0	917
+3454	918	2	general_description	keyword	1	0	919
+3455	919	0	general description	keyword	1	0	918
+3456	920	1	general description	keyword	1	0	912
+3457	920	3	general_description	keyword	1	0	921
+3458	921	1	general description	keyword	1	0	920
+3459	921	3	general_description	keyword	1	0	922
+3460	921	5	general_description	keyword	1	0	930
+3461	922	1	general description	keyword	1	0	921
+3462	922	3	general_description	keyword	1	0	923
+3463	923	1	general description	keyword	1	0	922
+3464	923	3	general_description	keyword	1	0	924
+3465	924	1	general description	keyword	1	0	923
+3466	924	3	general_description	keyword	1	0	925
+3467	925	1	general description	keyword	1	0	924
+3468	925	3	general_description	keyword	1	0	926
+3469	926	1	general description	keyword	1	0	925
+3470	926	3	general_description	keyword	1	0	927
+3471	927	1	general description	keyword	1	0	926
+3472	927	3	general_description	keyword	1	0	928
+3473	928	1	general description	keyword	1	0	927
+3474	928	3	general_description	keyword	1	0	929
+3475	929	1	general description	keyword	1	0	928
+3476	930	4	general description	keyword	1	0	921
+3477	930	5	general_description	keyword	1	0	931
+3478	931	4	general description	keyword	1	0	930
+3479	931	5	general_description	keyword	1	0	932
+3480	932	4	general description	keyword	1	0	931
+3481	932	5	general_description	keyword	1	0	933
+3482	933	4	general description	keyword	1	0	932
+3483	933	5	general_description	keyword	1	0	934
+3484	934	2	general_description	keyword	1	0	935
+3485	934	4	general description	keyword	1	0	933
+3486	935	0	general description	keyword	1	0	934
+3487	935	2	general_description	keyword	1	0	936
+3488	936	0	general description	keyword	1	0	935
+3489	936	2	general_description	keyword	1	0	937
+3490	937	0	general description	keyword	1	0	936
+3491	937	2	general_description	keyword	1	0	938
+3492	938	0	general description	keyword	1	0	937
+3493	938	2	general_description	keyword	1	0	939
+3494	939	0	general description	keyword	1	0	938
+3495	939	3	general_description	keyword	1	0	940
+3496	940	1	general description	keyword	1	0	939
+3497	940	3	general_description	keyword	1	0	941
+3498	941	1	general description	keyword	1	0	940
+3499	941	3	general_description	keyword	1	0	942
+3500	942	1	general description	keyword	1	0	941
+3501	942	3	general_description	keyword	1	0	943
+3502	943	1	general description	keyword	1	0	942
+3503	943	3	general_description	keyword	1	0	944
+3504	944	1	general description	keyword	1	0	943
+3505	944	3	general_description	keyword	1	0	945
+3506	945	1	general description	keyword	1	0	944
+3507	945	3	general_description	keyword	1	0	946
+3508	946	1	general description	keyword	1	0	945
+3509	946	3	general_description	keyword	1	0	947
+3510	947	1	general description	keyword	1	0	946
+3511	947	3	general_description	keyword	1	0	948
+3512	948	1	general description	keyword	1	0	947
+3513	948	3	general_description	keyword	1	0	949
+3514	949	0	general_description	keyword	1	0	950
+3515	949	1	general description	keyword	1	0	948
+3516	949	2	general_description	keyword	1	0	951
+3517	949	3	general_description	keyword	1	0	952
+3518	950	2	general description	keyword	1	0	949
+3519	951	0	general description	keyword	1	0	949
+3520	952	1	general description	keyword	1	0	949
+3521	952	3	general_description	keyword	1	0	953
+3522	953	0	general_description	keyword	1	0	956
+3523	953	1	general description	keyword	1	0	952
+3524	953	2	general_description	keyword	1	0	957
+3525	953	3	general_description	keyword	1	0	954
+3526	954	1	general description	keyword	1	0	953
+3527	954	3	general_description	keyword	1	0	955
+3528	955	0	general_description	keyword	1	0	958
+3529	955	1	general description	keyword	1	0	954
+3530	956	2	general description	keyword	1	0	953
+3531	957	0	general description	keyword	1	0	953
+3532	958	0	general_description	keyword	1	0	959
+3533	958	2	general description	keyword	1	0	955
+3534	959	2	general description	keyword	1	0	958
+3535	959	3	general_description	keyword	1	0	960
+3536	960	1	general description	keyword	1	0	959
+3537	960	3	general_description	keyword	1	0	961
+3538	961	1	general description	keyword	1	0	960
+3539	961	3	general_description	keyword	1	0	962
+3540	962	1	general description	keyword	1	0	961
+3541	920	1	general description	keyword	1	0	912
+3542	920	3	general_description	keyword	1	0	921
+3543	921	1	general description	keyword	1	0	920
+3544	921	3	general_description	keyword	1	0	922
+3545	921	5	general_description	keyword	1	0	930
+3546	922	1	general description	keyword	1	0	921
+3547	922	3	general_description	keyword	1	0	923
+3548	923	1	general description	keyword	1	0	922
+3549	923	3	general_description	keyword	1	0	924
+3550	924	1	general description	keyword	1	0	923
+3551	924	3	general_description	keyword	1	0	925
+3552	925	1	general description	keyword	1	0	924
+3553	925	3	general_description	keyword	1	0	926
+3554	926	1	general description	keyword	1	0	925
+3555	926	3	general_description	keyword	1	0	927
+3556	927	1	general description	keyword	1	0	926
+3557	927	3	general_description	keyword	1	0	928
+3558	928	1	general description	keyword	1	0	927
+3559	928	3	general_description	keyword	1	0	929
+3560	929	1	general description	keyword	1	0	928
+3561	913	0	general description	keyword	1	0	912
+3562	913	2	general_description	keyword	1	0	914
+3563	914	0	general description	keyword	1	0	913
+3564	914	2	general_description	keyword	1	0	915
+3565	915	0	general description	keyword	1	0	914
+3566	915	2	general_description	keyword	1	0	916
+3567	916	0	general description	keyword	1	0	915
+3568	916	2	general_description	keyword	1	0	917
+3569	917	0	general description	keyword	1	0	916
+3570	917	2	general_description	keyword	1	0	918
+3571	918	0	general description	keyword	1	0	917
+3572	918	2	general_description	keyword	1	0	919
+3573	919	0	general description	keyword	1	0	918
+3574	910	0	general description	keyword	1	0	128
+3575	910	2	general_description	keyword	1	0	911
+3576	920	1	general description	keyword	1	0	912
+3577	920	3	general_description	keyword	1	0	921
+3578	921	1	general description	keyword	1	0	920
+3579	921	3	general_description	keyword	1	0	922
+3580	921	5	general_description	keyword	1	0	930
+3581	922	1	general description	keyword	1	0	921
+3582	922	3	general_description	keyword	1	0	923
+3583	923	1	general description	keyword	1	0	922
+3584	923	3	general_description	keyword	1	0	924
+3585	924	1	general description	keyword	1	0	923
+3586	924	3	general_description	keyword	1	0	925
+3587	925	1	general description	keyword	1	0	924
+3588	925	3	general_description	keyword	1	0	926
+3589	926	1	general description	keyword	1	0	925
+3590	926	3	general_description	keyword	1	0	927
+3591	927	1	general description	keyword	1	0	926
+3592	927	3	general_description	keyword	1	0	928
+3593	928	1	general description	keyword	1	0	927
+3594	928	3	general_description	keyword	1	0	929
+3595	929	1	general description	keyword	1	0	928
+3596	913	0	general description	keyword	1	0	912
+3597	913	2	general_description	keyword	1	0	914
+3598	914	0	general description	keyword	1	0	913
+3599	914	2	general_description	keyword	1	0	915
+3600	915	0	general description	keyword	1	0	914
+3601	915	2	general_description	keyword	1	0	916
+3602	916	0	general description	keyword	1	0	915
+3603	916	2	general_description	keyword	1	0	917
+3604	917	0	general description	keyword	1	0	916
+3605	917	2	general_description	keyword	1	0	918
+3606	918	0	general description	keyword	1	0	917
+3607	918	2	general_description	keyword	1	0	919
+3608	919	0	general description	keyword	1	0	918
+3609	910	0	general description	keyword	1	0	128
+3610	910	2	general_description	keyword	1	0	911
+3611	920	1	general description	keyword	1	0	912
+3612	920	3	general_description	keyword	1	0	921
+3613	921	1	general description	keyword	1	0	920
+3614	921	3	general_description	keyword	1	0	922
+3615	921	5	general_description	keyword	1	0	930
+3616	922	1	general description	keyword	1	0	921
+3617	922	3	general_description	keyword	1	0	923
+3618	923	1	general description	keyword	1	0	922
+3619	923	3	general_description	keyword	1	0	924
+3620	924	1	general description	keyword	1	0	923
+3621	924	3	general_description	keyword	1	0	925
+3622	925	1	general description	keyword	1	0	924
+3623	925	3	general_description	keyword	1	0	926
+3624	926	1	general description	keyword	1	0	925
+3625	926	3	general_description	keyword	1	0	927
+3626	927	1	general description	keyword	1	0	926
+3627	927	3	general_description	keyword	1	0	928
+3628	928	1	general description	keyword	1	0	927
+3629	928	3	general_description	keyword	1	0	929
+3630	929	1	general description	keyword	1	0	928
+3631	913	0	general description	keyword	1	0	912
+3632	913	2	general_description	keyword	1	0	914
+3633	914	0	general description	keyword	1	0	913
+3634	914	2	general_description	keyword	1	0	915
+3635	915	0	general description	keyword	1	0	914
+3636	915	2	general_description	keyword	1	0	916
+3637	916	0	general description	keyword	1	0	915
+3638	916	2	general_description	keyword	1	0	917
+3639	917	0	general description	keyword	1	0	916
+3640	917	2	general_description	keyword	1	0	918
+3641	918	0	general description	keyword	1	0	917
+3642	918	2	general_description	keyword	1	0	919
+3643	919	0	general description	keyword	1	0	918
+3644	910	0	general description	keyword	1	0	128
+3645	910	2	general_description	keyword	1	0	911
+3646	920	1	general description	keyword	1	0	912
+3647	920	3	general_description	keyword	1	0	921
+3648	921	1	general description	keyword	1	0	920
+3649	921	3	general_description	keyword	1	0	922
+3650	921	5	general_description	keyword	1	0	930
+3651	922	1	general description	keyword	1	0	921
+3652	922	3	general_description	keyword	1	0	923
+3653	923	1	general description	keyword	1	0	922
+3654	923	3	general_description	keyword	1	0	924
+3655	924	1	general description	keyword	1	0	923
+3656	924	3	general_description	keyword	1	0	925
+3657	925	1	general description	keyword	1	0	924
+3658	925	3	general_description	keyword	1	0	926
+3659	926	1	general description	keyword	1	0	925
+3660	926	3	general_description	keyword	1	0	927
+3661	927	1	general description	keyword	1	0	926
+3662	927	3	general_description	keyword	1	0	928
+3663	928	1	general description	keyword	1	0	927
+3664	928	3	general_description	keyword	1	0	929
+3665	929	1	general description	keyword	1	0	928
+3666	913	0	general description	keyword	1	0	912
+3667	913	2	general_description	keyword	1	0	914
+3668	914	0	general description	keyword	1	0	913
+3669	914	2	general_description	keyword	1	0	915
+3670	915	0	general description	keyword	1	0	914
+3671	915	2	general_description	keyword	1	0	916
+3672	916	0	general description	keyword	1	0	915
+3673	916	2	general_description	keyword	1	0	917
+3674	917	0	general description	keyword	1	0	916
+3675	917	2	general_description	keyword	1	0	918
+3676	918	0	general description	keyword	1	0	917
+3677	918	2	general_description	keyword	1	0	919
+3678	919	0	general description	keyword	1	0	918
+3679	910	0	general description	keyword	1	0	128
+3680	910	2	general_description	keyword	1	0	911
+3681	920	1	general description	keyword	1	0	912
+3682	920	3	general_description	keyword	1	0	921
+3683	921	1	general description	keyword	1	0	920
+3684	921	3	general_description	keyword	1	0	922
+3685	921	5	general_description	keyword	1	0	930
+3686	922	1	general description	keyword	1	0	921
+3687	922	3	general_description	keyword	1	0	923
+3688	923	1	general description	keyword	1	0	922
+3689	923	3	general_description	keyword	1	0	924
+3690	924	1	general description	keyword	1	0	923
+3691	924	3	general_description	keyword	1	0	925
+3692	925	1	general description	keyword	1	0	924
+3693	925	3	general_description	keyword	1	0	926
+3694	926	1	general description	keyword	1	0	925
+3695	926	3	general_description	keyword	1	0	927
+3696	927	1	general description	keyword	1	0	926
+3697	927	3	general_description	keyword	1	0	928
+3698	928	1	general description	keyword	1	0	927
+3699	928	3	general_description	keyword	1	0	929
+3700	929	1	general description	keyword	1	0	928
+3701	913	0	general description	keyword	1	0	912
+3702	913	2	general_description	keyword	1	0	914
+3703	914	0	general description	keyword	1	0	913
+3704	914	2	general_description	keyword	1	0	915
+3705	915	0	general description	keyword	1	0	914
+3706	915	2	general_description	keyword	1	0	916
+3707	916	0	general description	keyword	1	0	915
+3708	916	2	general_description	keyword	1	0	917
+3709	917	0	general description	keyword	1	0	916
+3710	917	2	general_description	keyword	1	0	918
+3711	918	0	general description	keyword	1	0	917
+3712	918	2	general_description	keyword	1	0	919
+3713	919	0	general description	keyword	1	0	918
+3714	910	0	general description	keyword	1	0	128
+3715	910	2	general_description	keyword	1	0	911
+3716	920	1	general description	keyword	1	0	912
+3717	920	3	general_description	keyword	1	0	921
+3718	921	1	general description	keyword	1	0	920
+3719	921	3	general_description	keyword	1	0	922
+3720	921	5	general_description	keyword	1	0	930
+3721	922	1	general description	keyword	1	0	921
+3722	922	3	general_description	keyword	1	0	923
+3723	923	1	general description	keyword	1	0	922
+3724	923	3	general_description	keyword	1	0	924
+3725	924	1	general description	keyword	1	0	923
+3726	924	3	general_description	keyword	1	0	925
+3727	925	1	general description	keyword	1	0	924
+3728	925	3	general_description	keyword	1	0	926
+3729	926	1	general description	keyword	1	0	925
+3730	926	3	general_description	keyword	1	0	927
+3731	927	1	general description	keyword	1	0	926
+3732	927	3	general_description	keyword	1	0	928
+3733	928	1	general description	keyword	1	0	927
+3734	928	3	general_description	keyword	1	0	929
+3735	929	1	general description	keyword	1	0	928
+3736	913	0	general description	keyword	1	0	912
+3737	913	2	general_description	keyword	1	0	914
+3738	914	0	general description	keyword	1	0	913
+3739	914	2	general_description	keyword	1	0	915
+3740	915	0	general description	keyword	1	0	914
+3741	915	2	general_description	keyword	1	0	916
+3742	916	0	general description	keyword	1	0	915
+3743	916	2	general_description	keyword	1	0	917
+3744	917	0	general description	keyword	1	0	916
+3745	917	2	general_description	keyword	1	0	918
+3746	918	0	general description	keyword	1	0	917
+3747	918	2	general_description	keyword	1	0	919
+3748	919	0	general description	keyword	1	0	918
+3749	910	0	general description	keyword	1	0	128
+3750	910	2	general_description	keyword	1	0	911
+3751	920	1	general description	keyword	1	0	912
+3752	920	3	general_description	keyword	1	0	921
+3753	921	1	general description	keyword	1	0	920
+3754	921	3	general_description	keyword	1	0	922
+3755	921	5	general_description	keyword	1	0	930
+3756	922	1	general description	keyword	1	0	921
+3757	922	3	general_description	keyword	1	0	923
+3758	923	1	general description	keyword	1	0	922
+3759	923	3	general_description	keyword	1	0	924
+3760	924	1	general description	keyword	1	0	923
+3761	924	3	general_description	keyword	1	0	925
+3762	925	1	general description	keyword	1	0	924
+3763	925	3	general_description	keyword	1	0	926
+3764	926	1	general description	keyword	1	0	925
+3765	926	3	general_description	keyword	1	0	927
+3766	927	1	general description	keyword	1	0	926
+3767	927	3	general_description	keyword	1	0	928
+3768	928	1	general description	keyword	1	0	927
+3769	928	3	general_description	keyword	1	0	929
+3770	929	1	general description	keyword	1	0	928
+3771	913	0	general description	keyword	1	0	912
+3772	913	2	general_description	keyword	1	0	914
+3773	914	0	general description	keyword	1	0	913
+3774	914	2	general_description	keyword	1	0	915
+3775	915	0	general description	keyword	1	0	914
+3776	915	2	general_description	keyword	1	0	916
+3777	916	0	general description	keyword	1	0	915
+3778	916	2	general_description	keyword	1	0	917
+3779	917	0	general description	keyword	1	0	916
+3780	917	2	general_description	keyword	1	0	918
+3781	918	0	general description	keyword	1	0	917
+3782	918	2	general_description	keyword	1	0	919
+3783	919	0	general description	keyword	1	0	918
+3784	910	0	general description	keyword	1	0	128
+3785	910	2	general_description	keyword	1	0	911
+3786	920	1	general description	keyword	1	0	912
+3787	920	3	general_description	keyword	1	0	921
+3788	921	1	general description	keyword	1	0	920
+3789	921	3	general_description	keyword	1	0	922
+3790	921	5	general_description	keyword	1	0	930
+3791	922	1	general description	keyword	1	0	921
+3792	922	3	general_description	keyword	1	0	923
+3793	923	1	general description	keyword	1	0	922
+3794	923	3	general_description	keyword	1	0	924
+3795	924	1	general description	keyword	1	0	923
+3796	924	3	general_description	keyword	1	0	925
+3797	925	1	general description	keyword	1	0	924
+3798	925	3	general_description	keyword	1	0	926
+3799	926	1	general description	keyword	1	0	925
+3800	926	3	general_description	keyword	1	0	927
+3801	927	1	general description	keyword	1	0	926
+3802	927	3	general_description	keyword	1	0	928
+3803	928	1	general description	keyword	1	0	927
+3804	928	3	general_description	keyword	1	0	929
+3805	929	1	general description	keyword	1	0	928
+3806	913	0	general description	keyword	1	0	912
+3807	913	2	general_description	keyword	1	0	914
+3808	914	0	general description	keyword	1	0	913
+3809	914	2	general_description	keyword	1	0	915
+3810	915	0	general description	keyword	1	0	914
+3811	915	2	general_description	keyword	1	0	916
+3812	916	0	general description	keyword	1	0	915
+3813	916	2	general_description	keyword	1	0	917
+3814	917	0	general description	keyword	1	0	916
+3815	917	2	general_description	keyword	1	0	918
+3816	918	0	general description	keyword	1	0	917
+3817	918	2	general_description	keyword	1	0	919
+3818	919	0	general description	keyword	1	0	918
+3819	910	0	general description	keyword	1	0	128
+3820	910	2	general_description	keyword	1	0	911
+3821	920	1	general description	keyword	1	0	912
+3822	920	3	general_description	keyword	1	0	921
+3823	921	1	general description	keyword	1	0	920
+3824	921	3	general_description	keyword	1	0	922
+3825	921	5	general_description	keyword	1	0	930
+3826	922	1	general description	keyword	1	0	921
+3827	922	3	general_description	keyword	1	0	923
+3828	923	1	general description	keyword	1	0	922
+3829	923	3	general_description	keyword	1	0	924
+3830	924	1	general description	keyword	1	0	923
+3831	924	3	general_description	keyword	1	0	925
+3832	925	1	general description	keyword	1	0	924
+3833	925	3	general_description	keyword	1	0	926
+3834	926	1	general description	keyword	1	0	925
+3835	926	3	general_description	keyword	1	0	927
+3836	927	1	general description	keyword	1	0	926
+3837	927	3	general_description	keyword	1	0	928
+3838	928	1	general description	keyword	1	0	927
+3839	928	3	general_description	keyword	1	0	929
+3840	929	1	general description	keyword	1	0	928
+3841	913	0	general description	keyword	1	0	912
+3842	913	2	general_description	keyword	1	0	914
+3843	914	0	general description	keyword	1	0	913
+3844	914	2	general_description	keyword	1	0	915
+3845	915	0	general description	keyword	1	0	914
+3846	915	2	general_description	keyword	1	0	916
+3847	916	0	general description	keyword	1	0	915
+3848	916	2	general_description	keyword	1	0	917
+3849	917	0	general description	keyword	1	0	916
+3850	917	2	general_description	keyword	1	0	918
+3851	918	0	general description	keyword	1	0	917
+3852	918	2	general_description	keyword	1	0	919
+3853	919	0	general description	keyword	1	0	918
+3854	910	0	general description	keyword	1	0	128
+3855	910	2	general_description	keyword	1	0	911
+3856	920	1	general description	keyword	1	0	912
+3857	920	3	general_description	keyword	1	0	921
+3858	921	1	general description	keyword	1	0	920
+3859	921	3	general_description	keyword	1	0	922
+3860	921	5	general_description	keyword	1	0	930
+3861	922	1	general description	keyword	1	0	921
+3862	922	3	general_description	keyword	1	0	923
+3863	923	1	general description	keyword	1	0	922
+3864	923	3	general_description	keyword	1	0	924
+3865	924	1	general description	keyword	1	0	923
+3866	924	3	general_description	keyword	1	0	925
+3867	925	1	general description	keyword	1	0	924
+3868	925	3	general_description	keyword	1	0	926
+3869	926	1	general description	keyword	1	0	925
+3870	926	3	general_description	keyword	1	0	927
+3871	927	1	general description	keyword	1	0	926
+3872	927	3	general_description	keyword	1	0	928
+3873	928	1	general description	keyword	1	0	927
+3874	928	3	general_description	keyword	1	0	929
+3875	929	1	general description	keyword	1	0	928
+3876	913	0	general description	keyword	1	0	912
+3877	913	2	general_description	keyword	1	0	914
+3878	914	0	general description	keyword	1	0	913
+3879	914	2	general_description	keyword	1	0	915
+3880	915	0	general description	keyword	1	0	914
+3881	915	2	general_description	keyword	1	0	916
+3882	916	0	general description	keyword	1	0	915
+3883	916	2	general_description	keyword	1	0	917
+3884	917	0	general description	keyword	1	0	916
+3885	917	2	general_description	keyword	1	0	918
+3886	918	0	general description	keyword	1	0	917
+3887	918	2	general_description	keyword	1	0	919
+3888	919	0	general description	keyword	1	0	918
+3889	910	0	general description	keyword	1	0	128
+3890	910	2	general_description	keyword	1	0	911
+3891	920	1	general description	keyword	1	0	912
+3892	920	3	general_description	keyword	1	0	921
+3893	921	1	general description	keyword	1	0	920
+3894	921	3	general_description	keyword	1	0	922
+3895	921	5	general_description	keyword	1	0	930
+3896	922	1	general description	keyword	1	0	921
+3897	922	3	general_description	keyword	1	0	923
+3898	923	1	general description	keyword	1	0	922
+3899	923	3	general_description	keyword	1	0	924
+3900	924	1	general description	keyword	1	0	923
+3901	924	3	general_description	keyword	1	0	925
+3902	925	1	general description	keyword	1	0	924
+3903	925	3	general_description	keyword	1	0	926
+3904	926	1	general description	keyword	1	0	925
+3905	926	3	general_description	keyword	1	0	927
+3906	927	1	general description	keyword	1	0	926
+3907	927	3	general_description	keyword	1	0	928
+3908	928	1	general description	keyword	1	0	927
+3909	928	3	general_description	keyword	1	0	929
+3910	929	1	general description	keyword	1	0	928
+3911	913	0	general description	keyword	1	0	912
+3912	913	2	general_description	keyword	1	0	914
+3913	914	0	general description	keyword	1	0	913
+3914	914	2	general_description	keyword	1	0	915
+3915	915	0	general description	keyword	1	0	914
+3916	915	2	general_description	keyword	1	0	916
+3917	916	0	general description	keyword	1	0	915
+3918	916	2	general_description	keyword	1	0	917
+3919	917	0	general description	keyword	1	0	916
+3920	917	2	general_description	keyword	1	0	918
+3921	918	0	general description	keyword	1	0	917
+3922	918	2	general_description	keyword	1	0	919
+3923	919	0	general description	keyword	1	0	918
+3924	910	0	general description	keyword	1	0	128
+3925	910	2	general_description	keyword	1	0	911
+3926	920	1	general description	keyword	1	0	912
+3927	920	3	general_description	keyword	1	0	921
+3928	921	1	general description	keyword	1	0	920
+3929	921	3	general_description	keyword	1	0	922
+3930	921	5	general_description	keyword	1	0	930
+3931	922	1	general description	keyword	1	0	921
+3932	922	3	general_description	keyword	1	0	923
+3933	923	1	general description	keyword	1	0	922
+3934	923	3	general_description	keyword	1	0	924
+3935	924	1	general description	keyword	1	0	923
+3936	924	3	general_description	keyword	1	0	925
+3937	925	1	general description	keyword	1	0	924
+3938	925	3	general_description	keyword	1	0	926
+3939	926	1	general description	keyword	1	0	925
+3940	926	3	general_description	keyword	1	0	927
+3941	927	1	general description	keyword	1	0	926
+3942	927	3	general_description	keyword	1	0	928
+3943	928	1	general description	keyword	1	0	927
+3944	928	3	general_description	keyword	1	0	929
+3945	929	1	general description	keyword	1	0	928
+3946	913	0	general description	keyword	1	0	912
+3947	913	2	general_description	keyword	1	0	914
+3948	914	0	general description	keyword	1	0	913
+3949	914	2	general_description	keyword	1	0	915
+3950	915	0	general description	keyword	1	0	914
+3951	915	2	general_description	keyword	1	0	916
+3952	916	0	general description	keyword	1	0	915
+3953	916	2	general_description	keyword	1	0	917
+3954	917	0	general description	keyword	1	0	916
+3955	917	2	general_description	keyword	1	0	918
+3956	918	0	general description	keyword	1	0	917
+3957	918	2	general_description	keyword	1	0	919
+3958	919	0	general description	keyword	1	0	918
+3959	910	0	general description	keyword	1	0	128
+3960	910	2	general_description	keyword	1	0	911
+3961	920	1	general description	keyword	1	0	912
+3962	920	3	general_description	keyword	1	0	921
+3963	921	1	general description	keyword	1	0	920
+3964	921	3	general_description	keyword	1	0	922
+3965	921	5	general_description	keyword	1	0	930
+3966	922	1	general description	keyword	1	0	921
+3967	922	3	general_description	keyword	1	0	923
+3968	923	1	general description	keyword	1	0	922
+3969	923	3	general_description	keyword	1	0	924
+3970	924	1	general description	keyword	1	0	923
+3971	924	3	general_description	keyword	1	0	925
+3972	925	1	general description	keyword	1	0	924
+3973	925	3	general_description	keyword	1	0	926
+3974	926	1	general description	keyword	1	0	925
+3975	926	3	general_description	keyword	1	0	927
+3976	927	1	general description	keyword	1	0	926
+3977	927	3	general_description	keyword	1	0	928
+3978	928	1	general description	keyword	1	0	927
+3979	928	3	general_description	keyword	1	0	929
+3980	929	1	general description	keyword	1	0	928
+3981	913	0	general description	keyword	1	0	912
+3982	913	2	general_description	keyword	1	0	914
+3983	914	0	general description	keyword	1	0	913
+3984	914	2	general_description	keyword	1	0	915
+3985	915	0	general description	keyword	1	0	914
+3986	915	2	general_description	keyword	1	0	916
+3987	916	0	general description	keyword	1	0	915
+3988	916	2	general_description	keyword	1	0	917
+3989	917	0	general description	keyword	1	0	916
+3990	917	2	general_description	keyword	1	0	918
+3991	918	0	general description	keyword	1	0	917
+3992	918	2	general_description	keyword	1	0	919
+3993	919	0	general description	keyword	1	0	918
+3994	910	0	general description	keyword	1	0	128
+3995	910	2	general_description	keyword	1	0	911
+3996	920	1	general description	keyword	1	0	912
+3997	920	3	general_description	keyword	1	0	921
+3998	921	1	general description	keyword	1	0	920
+3999	921	3	general_description	keyword	1	0	922
+4000	921	5	general_description	keyword	1	0	930
+4001	922	1	general description	keyword	1	0	921
+4002	922	3	general_description	keyword	1	0	923
+4003	923	1	general description	keyword	1	0	922
+4004	923	3	general_description	keyword	1	0	924
+4005	924	1	general description	keyword	1	0	923
+4006	924	3	general_description	keyword	1	0	925
+4007	925	1	general description	keyword	1	0	924
+4008	925	3	general_description	keyword	1	0	926
+4009	926	1	general description	keyword	1	0	925
+4010	926	3	general_description	keyword	1	0	927
+4011	927	1	general description	keyword	1	0	926
+4012	927	3	general_description	keyword	1	0	928
+4013	928	1	general description	keyword	1	0	927
+4014	928	3	general_description	keyword	1	0	929
+4015	929	1	general description	keyword	1	0	928
+4016	913	0	general description	keyword	1	0	912
+4017	913	2	general_description	keyword	1	0	914
+4018	914	0	general description	keyword	1	0	913
+4019	914	2	general_description	keyword	1	0	915
+4020	915	0	general description	keyword	1	0	914
+4021	915	2	general_description	keyword	1	0	916
+4022	916	0	general description	keyword	1	0	915
+4023	916	2	general_description	keyword	1	0	917
+4024	917	0	general description	keyword	1	0	916
+4025	917	2	general_description	keyword	1	0	918
+4026	918	0	general description	keyword	1	0	917
+4027	918	2	general_description	keyword	1	0	919
+4028	919	0	general description	keyword	1	0	918
+4029	910	0	general description	keyword	1	0	128
+4030	910	2	general_description	keyword	1	0	911
+4031	920	1	general description	keyword	1	0	912
+4032	920	3	general_description	keyword	1	0	921
+4033	921	1	general description	keyword	1	0	920
+4034	921	3	general_description	keyword	1	0	922
+4035	921	5	general_description	keyword	1	0	930
+4036	922	1	general description	keyword	1	0	921
+4037	922	3	general_description	keyword	1	0	923
+4038	923	1	general description	keyword	1	0	922
+4039	923	3	general_description	keyword	1	0	924
+4040	924	1	general description	keyword	1	0	923
+4041	924	3	general_description	keyword	1	0	925
+4042	925	1	general description	keyword	1	0	924
+4043	925	3	general_description	keyword	1	0	926
+4044	926	1	general description	keyword	1	0	925
+4045	926	3	general_description	keyword	1	0	927
+4046	927	1	general description	keyword	1	0	926
+4047	927	3	general_description	keyword	1	0	928
+4048	928	1	general description	keyword	1	0	927
+4049	928	3	general_description	keyword	1	0	929
+4050	929	1	general description	keyword	1	0	928
+4051	913	0	general description	keyword	1	0	912
+4052	913	2	general_description	keyword	1	0	914
+4053	914	0	general description	keyword	1	0	913
+4054	914	2	general_description	keyword	1	0	915
+4055	915	0	general description	keyword	1	0	914
+4056	915	2	general_description	keyword	1	0	916
+4057	916	0	general description	keyword	1	0	915
+4058	916	2	general_description	keyword	1	0	917
+4059	917	0	general description	keyword	1	0	916
+4060	917	2	general_description	keyword	1	0	918
+4061	918	0	general description	keyword	1	0	917
+4062	918	2	general_description	keyword	1	0	919
+4063	919	0	general description	keyword	1	0	918
+4064	910	0	general description	keyword	1	0	128
+4065	910	2	general_description	keyword	1	0	911
+4066	920	1	general description	keyword	1	0	912
+4067	920	3	general_description	keyword	1	0	921
+4068	921	1	general description	keyword	1	0	920
+4069	921	3	general_description	keyword	1	0	922
+4070	921	5	general_description	keyword	1	0	930
+4071	922	1	general description	keyword	1	0	921
+4072	922	3	general_description	keyword	1	0	923
+4073	923	1	general description	keyword	1	0	922
+4074	923	3	general_description	keyword	1	0	924
+4075	924	1	general description	keyword	1	0	923
+4076	924	3	general_description	keyword	1	0	925
+4077	925	1	general description	keyword	1	0	924
+4078	925	3	general_description	keyword	1	0	926
+4079	926	1	general description	keyword	1	0	925
+4080	926	3	general_description	keyword	1	0	927
+4081	927	1	general description	keyword	1	0	926
+4082	927	3	general_description	keyword	1	0	928
+4083	928	1	general description	keyword	1	0	927
+4084	928	3	general_description	keyword	1	0	929
+4085	929	1	general description	keyword	1	0	928
+4086	913	0	general description	keyword	1	0	912
+4087	913	2	general_description	keyword	1	0	914
+4088	914	0	general description	keyword	1	0	913
+4089	914	2	general_description	keyword	1	0	915
+4090	915	0	general description	keyword	1	0	914
+4091	915	2	general_description	keyword	1	0	916
+4092	916	0	general description	keyword	1	0	915
+4093	916	2	general_description	keyword	1	0	917
+4094	917	0	general description	keyword	1	0	916
+4095	917	2	general_description	keyword	1	0	918
+4096	918	0	general description	keyword	1	0	917
+4097	918	2	general_description	keyword	1	0	919
+4098	919	0	general description	keyword	1	0	918
+4099	910	0	general description	keyword	1	0	128
+4100	910	2	general_description	keyword	1	0	911
+4101	920	1	general description	keyword	1	0	912
+4102	920	3	general_description	keyword	1	0	921
+4103	921	1	general description	keyword	1	0	920
+4104	921	3	general_description	keyword	1	0	922
+4105	921	5	general_description	keyword	1	0	930
+4106	922	1	general description	keyword	1	0	921
+4107	922	3	general_description	keyword	1	0	923
+4108	923	1	general description	keyword	1	0	922
+4109	923	3	general_description	keyword	1	0	924
+4110	924	1	general description	keyword	1	0	923
+4111	924	3	general_description	keyword	1	0	925
+4112	925	1	general description	keyword	1	0	924
+4113	925	3	general_description	keyword	1	0	926
+4114	926	1	general description	keyword	1	0	925
+4115	926	3	general_description	keyword	1	0	927
+4116	927	1	general description	keyword	1	0	926
+4117	927	3	general_description	keyword	1	0	928
+4118	928	1	general description	keyword	1	0	927
+4119	928	3	general_description	keyword	1	0	929
+4120	929	1	general description	keyword	1	0	928
+4121	913	0	general description	keyword	1	0	912
+4122	913	2	general_description	keyword	1	0	914
+4123	914	0	general description	keyword	1	0	913
+4124	914	2	general_description	keyword	1	0	915
+4125	915	0	general description	keyword	1	0	914
+4126	915	2	general_description	keyword	1	0	916
+4127	916	0	general description	keyword	1	0	915
+4128	916	2	general_description	keyword	1	0	917
+4129	917	0	general description	keyword	1	0	916
+4130	917	2	general_description	keyword	1	0	918
+4131	918	0	general description	keyword	1	0	917
+4132	918	2	general_description	keyword	1	0	919
+4133	919	0	general description	keyword	1	0	918
+4134	910	0	general description	keyword	1	0	128
+4135	910	2	general_description	keyword	1	0	911
+4136	920	1	general description	keyword	1	0	912
+4137	920	3	general_description	keyword	1	0	921
+4138	921	1	general description	keyword	1	0	920
+4139	921	3	general_description	keyword	1	0	922
+4140	921	5	general_description	keyword	1	0	930
+4141	922	1	general description	keyword	1	0	921
+4142	922	3	general_description	keyword	1	0	923
+4143	923	1	general description	keyword	1	0	922
+4144	923	3	general_description	keyword	1	0	924
+4145	924	1	general description	keyword	1	0	923
+4146	924	3	general_description	keyword	1	0	925
+4147	925	1	general description	keyword	1	0	924
+4148	925	3	general_description	keyword	1	0	926
+4149	926	1	general description	keyword	1	0	925
+4150	926	3	general_description	keyword	1	0	927
+4151	927	1	general description	keyword	1	0	926
+4152	927	3	general_description	keyword	1	0	928
+4153	928	1	general description	keyword	1	0	927
+4154	928	3	general_description	keyword	1	0	929
+4155	929	1	general description	keyword	1	0	928
+4156	913	0	general description	keyword	1	0	912
+4157	913	2	general_description	keyword	1	0	914
+4158	914	0	general description	keyword	1	0	913
+4159	914	2	general_description	keyword	1	0	915
+4160	915	0	general description	keyword	1	0	914
+4161	915	2	general_description	keyword	1	0	916
+4162	916	0	general description	keyword	1	0	915
+4163	916	2	general_description	keyword	1	0	917
+4164	917	0	general description	keyword	1	0	916
+4165	917	2	general_description	keyword	1	0	918
+4166	918	0	general description	keyword	1	0	917
+4167	918	2	general_description	keyword	1	0	919
+4168	919	0	general description	keyword	1	0	918
+4169	910	0	general description	keyword	1	0	128
+4170	910	2	general_description	keyword	1	0	911
+4171	920	1	general description	keyword	1	0	912
+4172	920	3	general_description	keyword	1	0	921
+4173	921	1	general description	keyword	1	0	920
+4174	921	3	general_description	keyword	1	0	922
+4175	921	5	general_description	keyword	1	0	930
+4176	922	1	general description	keyword	1	0	921
+4177	922	3	general_description	keyword	1	0	923
+4178	923	1	general description	keyword	1	0	922
+4179	923	3	general_description	keyword	1	0	924
+4180	924	1	general description	keyword	1	0	923
+4181	924	3	general_description	keyword	1	0	925
+4182	925	1	general description	keyword	1	0	924
+4183	925	3	general_description	keyword	1	0	926
+4184	926	1	general description	keyword	1	0	925
+4185	926	3	general_description	keyword	1	0	927
+4186	927	1	general description	keyword	1	0	926
+4187	927	3	general_description	keyword	1	0	928
+4188	928	1	general description	keyword	1	0	927
+4189	928	3	general_description	keyword	1	0	929
+4190	929	1	general description	keyword	1	0	928
+4191	913	0	general description	keyword	1	0	912
+4192	913	2	general_description	keyword	1	0	914
+4193	914	0	general description	keyword	1	0	913
+4194	914	2	general_description	keyword	1	0	915
+4195	915	0	general description	keyword	1	0	914
+4196	915	2	general_description	keyword	1	0	916
+4197	916	0	general description	keyword	1	0	915
+4198	916	2	general_description	keyword	1	0	917
+4199	917	0	general description	keyword	1	0	916
+4200	917	2	general_description	keyword	1	0	918
+4201	918	0	general description	keyword	1	0	917
+4202	918	2	general_description	keyword	1	0	919
+4203	919	0	general description	keyword	1	0	918
+4204	910	0	general description	keyword	1	0	128
+4205	910	2	general_description	keyword	1	0	911
+4206	935	0	general description	keyword	1	0	934
+4207	935	2	general_description	keyword	1	0	936
+4208	936	0	general description	keyword	1	0	935
+4209	936	2	general_description	keyword	1	0	937
+4210	937	0	general description	keyword	1	0	936
+4211	937	2	general_description	keyword	1	0	938
+4212	938	0	general description	keyword	1	0	937
+4213	938	2	general_description	keyword	1	0	939
+4214	939	0	general description	keyword	1	0	938
+4215	939	3	general_description	keyword	1	0	940
+4216	935	0	general description	keyword	1	0	934
+4217	935	2	general_description	keyword	1	0	936
+4218	936	0	general description	keyword	1	0	935
+4219	936	2	general_description	keyword	1	0	937
+4220	937	0	general description	keyword	1	0	936
+4221	937	2	general_description	keyword	1	0	938
+4222	938	0	general description	keyword	1	0	937
+4223	938	2	general_description	keyword	1	0	939
+4224	939	0	general description	keyword	1	0	938
+4225	939	3	general_description	keyword	1	0	940
 \.
 
 
@@ -8793,7 +10018,6 @@ COPY public.skill_usage (id, player_id, skill_name, skill_level) FROM stdin;
 332	1	wpn-assault-rifles	0
 333	1	wpn-sniper-rifles	0
 334	1	wpn-sub-machine-guns	0
-335	1	wpn-shotguns	0
 336	1	wpn-pistols	0
 337	1	wpn-machine-pistols	0
 338	1	wpn-light-machine-guns	0
@@ -8829,6 +10053,72 @@ COPY public.skill_usage (id, player_id, skill_name, skill_level) FROM stdin;
 368	1	cqc-left-kick-to-head	0
 369	1	cqc-right-stomp-to-head	0
 370	1	cqc-left-stomp-to-head	0
+371	1	wpn-ar	0
+373	1	wpn-smg	0
+374	1	wpn-mp	0
+375	1	wpn-lmg	0
+376	111	ads	0
+377	111	stealth	0
+378	111	summon	0
+379	111	xray	0
+380	111	feign	0
+381	111	claymore	0
+382	111	intimidation	0
+383	111	cryo	0
+384	111	flash	0
+385	111	ts	0
+386	111	lb	0
+387	111	suture	0
+388	111	as	0
+389	111	sensor	0
+390	111	ubs	0
+391	111	ubf	0
+392	111	gm	0
+393	111	limb	0
+394	111	smine	0
+395	111	cmine	0
+396	111	recon	0
+397	111	wpn-ar	0
+401	111	wpn-pistols	8
+399	111	wpn-smg	0
+402	111	wpn-mp	0
+404	111	cqc-jab-to-head	0
+405	111	cqc-jab-to-body	0
+406	111	cqc-cross-to-head	0
+407	111	cqc-cross-to-body	0
+408	111	cqc-left-hook-to-head	0
+409	111	cqc-right-hook-to-head	0
+410	111	cqc-left-hook-to-body	0
+411	111	cqc-right-hook-to-body	0
+412	111	cqc-left-uppercut	0
+413	111	cqc-right-uppercut	0
+414	111	cqc-left-elbow	0
+415	111	cqc-right-elbow	0
+416	111	cqc-right-upward-elbow	0
+417	111	cqc-left-upward-elbow	0
+418	111	cqc-right-oblique	0
+419	111	cqc-left-oblique	0
+420	111	cqc-left-teep	0
+421	111	cqc-right-teep	0
+422	111	cqc-left-front-kick	0
+423	111	cqc-right-front-kick	0
+424	111	cqc-left-knee-to-head	0
+403	111	wpn-lmg	19
+372	1	wpn-sniper	44
+400	111	wpn-shotguns	2
+425	111	cqc-right-knee-to-head	0
+426	111	cqc-left-knee-to-body	0
+427	111	cqc-right-knee-to-body	0
+428	111	cqc-knife-disarm	0
+429	111	cqc-pistol-disarm	0
+430	111	cqc-right-leg-kick	0
+431	111	cqc-left-leg-kick	0
+432	111	cqc-right-kick-to-head	0
+433	111	cqc-left-kick-to-head	0
+434	111	cqc-right-stomp-to-head	0
+435	111	cqc-left-stomp-to-head	0
+398	111	wpn-sniper	52
+335	1	wpn-shotguns	73
 \.
 
 
@@ -8882,6 +10172,7 @@ COPY public.terminal_choices (id, choice_terminal_id, choice_id, choice_title, c
 
 COPY public.user_logins (id, u_ip_address, u_username) FROM stdin;
 1	127.0.0.1	far
+2	127.0.0.1	ghost
 \.
 
 
@@ -9021,51 +10312,6 @@ COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_
 974	1	Y	0	0	395	1	#yaml|vehicle/lxr-sunrise.yml
 975	1	Y	0	0	393	1	#yaml|vehicle/lxr-sport.yml
 976	1	Y	0	0	394	1	#yaml|vehicle/lxr-sport.yml
-977	1	M	0	100	393	2	\N
-978	1	M	0	100	394	2	\N
-979	1	M	0	100	395	2	\N
-980	1	M	0	100	396	2	\N
-981	1	M	0	100	398	2	\N
-982	1	M	0	100	400	2	\N
-983	1	M	0	100	399	2	\N
-984	1	M	0	100	401	2	\N
-985	1	M	0	100	402	2	\N
-986	1	M	0	101	316	5	\N
-987	1	M	0	101	317	5	\N
-988	1	M	0	101	322	5	\N
-989	1	M	0	101	323	5	\N
-990	1	M	0	101	324	5	\N
-991	1	M	0	101	325	5	\N
-992	1	M	0	101	306	5	\N
-993	1	M	0	101	308	5	\N
-994	1	M	0	102	290	2	\N
-995	1	M	0	102	291	2	\N
-996	1	M	0	102	292	2	\N
-997	1	M	0	102	294	2	\N
-998	1	M	0	102	295	2	\N
-999	1	M	0	102	331	2	\N
-1000	1	M	0	102	298	2	\N
-1001	1	M	0	102	303	2	\N
-1002	1	M	0	102	310	2	\N
-1003	1	M	0	102	317	2	\N
-1004	1	M	0	102	324	2	\N
-1005	1	M	0	103	407	1	\N
-1006	1	M	0	103	409	1	\N
-1007	1	M	0	103	413	1	\N
-1008	1	M	0	103	282	1	\N
-1009	1	M	0	103	284	1	\N
-1010	1	M	0	103	286	1	\N
-1011	1	M	0	103	292	1	\N
-1012	1	M	0	103	293	1	\N
-1013	1	M	0	104	589	5	\N
-1014	1	M	0	104	592	5	\N
-1015	1	M	0	104	600	5	\N
-1016	1	M	0	104	603	5	\N
-1017	1	M	0	104	611	5	\N
-1018	1	M	0	104	614	5	\N
-1019	1	M	0	104	622	5	\N
-1020	1	M	0	104	625	5	\N
-1021	1	M	0	104	633	5	\N
 1022	1	M	0	106	729	1	\N
 1023	1	M	0	106	730	1	\N
 1024	1	M	0	106	731	1	\N
@@ -9074,46 +10320,22 @@ COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_
 1027	1	M	0	107	730	1	\N
 1028	1	M	0	107	731	1	\N
 1029	1	M	0	107	732	1	\N
-1030	1	M	0	112	750	5	\N
-1031	1	M	0	112	754	5	\N
-1032	1	M	0	112	757	5	\N
-1033	1	M	0	112	761	5	\N
-1034	1	M	0	112	764	5	\N
-1035	1	M	0	112	769	5	\N
-1036	1	M	0	112	774	5	\N
-1037	1	M	0	112	779	5	\N
-1038	1	M	0	112	784	5	\N
-1039	1	M	0	112	785	5	\N
-1040	1	M	0	112	788	5	\N
-1041	1	M	0	112	791	5	\N
-1042	1	M	0	112	794	5	\N
-1043	1	M	0	112	797	5	\N
-1044	1	M	0	112	800	5	\N
-1045	1	M	0	112	803	5	\N
-1046	1	M	0	112	806	5	\N
-1047	1	M	0	112	809	5	\N
-1048	1	M	0	112	812	5	\N
-1049	1	M	0	112	815	5	\N
-1050	1	M	0	113	750	5	\N
-1051	1	M	0	113	754	5	\N
-1052	1	M	0	113	757	5	\N
-1053	1	M	0	113	761	5	\N
-1054	1	M	0	113	764	5	\N
-1055	1	M	0	113	769	5	\N
-1056	1	M	0	113	774	5	\N
-1057	1	M	0	113	779	5	\N
-1058	1	M	0	113	784	5	\N
-1059	1	M	0	113	785	5	\N
-1060	1	M	0	113	788	5	\N
-1061	1	M	0	113	791	5	\N
-1062	1	M	0	113	794	5	\N
-1063	1	M	0	113	797	5	\N
-1064	1	M	0	113	800	5	\N
-1065	1	M	0	113	803	5	\N
-1066	1	M	0	113	806	5	\N
-1067	1	M	0	113	809	5	\N
-1068	1	M	0	113	812	5	\N
-1069	1	M	0	113	815	5	\N
+1151	1	M	0	669	910	6	\N
+1152	1	M	0	114	697	10	\N
+1153	1	M	0	114	698	10	\N
+1154	1	M	0	114	689	10	\N
+1155	1	M	0	114	696	10	\N
+1156	1	M	0	114	151	10	\N
+1157	1	M	0	115	697	10	\N
+1158	1	M	0	115	698	10	\N
+1159	1	M	0	115	689	10	\N
+1160	1	M	0	115	696	10	\N
+1161	1	M	0	115	151	10	\N
+1167	1	M	0	670	935	10	\N
+1168	1	M	0	670	936	10	\N
+1169	1	M	0	670	937	10	\N
+1170	1	M	0	670	938	10	\N
+1171	1	M	0	670	939	10	\N
 1079	1	Y	0	0	889	1	#yaml|vehicle/p3-hunchbak.yml
 1080	1	Y	0	0	890	1	#yaml|vehicle/p3-offroad-mx3.yml
 1081	1	Y	0	0	891	1	#yaml|vehicle/prime-town-suv.yml
@@ -9128,6 +10350,56 @@ COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_
 1092	1	M	0	505	896	1	\N
 1093	1	M	0	505	0	1	\N
 1094	1	M	0	505	0	1	\N
+1095	1	M	0	112	909	1	\N
+1096	1	M	0	113	909	3	\N
+1514	1	M	0	103	407	1	\N
+1515	1	M	0	103	409	1	\N
+1516	1	M	0	103	413	1	\N
+1517	1	M	0	103	282	1	\N
+1518	1	M	0	103	284	1	\N
+1519	1	M	0	103	286	1	\N
+1520	1	M	0	103	292	1	\N
+1607	1	M	0	707	348	1	\N
+1608	1	M	0	707	349	1	\N
+1609	1	M	0	707	350	1	\N
+1610	1	M	0	707	353	1	\N
+1611	1	M	0	707	354	1	\N
+1612	1	M	0	707	357	1	\N
+1613	1	M	0	708	348	1	\N
+1614	1	M	0	708	349	1	\N
+1615	1	M	0	708	350	1	\N
+1616	1	M	0	708	353	1	\N
+1617	1	M	0	708	354	1	\N
+1618	1	M	0	708	357	1	\N
+1521	1	M	0	103	293	1	\N
+1543	1	M	0	101	316	5	\N
+1544	1	M	0	101	317	5	\N
+1545	1	M	0	101	322	5	\N
+1546	1	M	0	101	323	5	\N
+1547	1	M	0	101	324	5	\N
+1548	1	M	0	101	325	5	\N
+1549	1	M	0	101	306	5	\N
+1550	1	M	0	101	308	5	\N
+1551	1	M	0	104	589	5	\N
+1552	1	M	0	104	592	5	\N
+1553	1	M	0	104	600	5	\N
+1554	1	M	0	104	603	5	\N
+1555	1	M	0	104	611	5	\N
+1556	1	M	0	104	614	5	\N
+1557	1	M	0	104	622	5	\N
+1558	1	M	0	104	625	5	\N
+1559	1	M	0	104	633	5	\N
+1560	1	M	0	102	290	2	\N
+1561	1	M	0	102	291	2	\N
+1562	1	M	0	102	292	2	\N
+1563	1	M	0	102	294	2	\N
+1564	1	M	0	102	295	2	\N
+1565	1	M	0	102	331	2	\N
+1566	1	M	0	102	298	2	\N
+1567	1	M	0	102	303	2	\N
+1568	1	M	0	102	310	2	\N
+1569	1	M	0	102	317	2	\N
+1570	1	M	0	102	324	2	\N
 \.
 
 
@@ -9191,7 +10463,7 @@ SELECT pg_catalog.setval('public.class_engineer_engineer_id_seq', 1, false);
 -- Name: class_ghost_ghost_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.class_ghost_ghost_id_seq', 12, true);
+SELECT pg_catalog.setval('public.class_ghost_ghost_id_seq', 13, true);
 
 
 --
@@ -9331,14 +10603,14 @@ SELECT pg_catalog.setval('public.mini_gunner_sentinel_id_seq', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_id_seq', 134, true);
+SELECT pg_catalog.setval('public.mob_equipment_id_seq', 305, true);
 
 
 --
 -- Name: mob_equipment_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 48, true);
+SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 68, true);
 
 
 --
@@ -9359,7 +10631,7 @@ SELECT pg_catalog.setval('public.mob_zone_id_seq', 1, false);
 -- Name: mobile_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mobile_mob_id_seq', 33, true);
+SELECT pg_catalog.setval('public.mobile_mob_id_seq', 116, true);
 
 
 --
@@ -9367,6 +10639,13 @@ SELECT pg_catalog.setval('public.mobile_mob_id_seq', 33, true);
 --
 
 SELECT pg_catalog.setval('public.muted_id_seq', 1, false);
+
+
+--
+-- Name: notch_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.notch_id_seq', 5, true);
 
 
 --
@@ -9429,7 +10708,7 @@ SELECT pg_catalog.setval('public.object_weapon_id_seq', 5, true);
 -- Name: player_base_ability_pba_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_base_ability_pba_id_seq', 16, true);
+SELECT pg_catalog.setval('public.player_base_ability_pba_id_seq', 17, true);
 
 
 --
@@ -9457,14 +10736,14 @@ SELECT pg_catalog.setval('public.player_flags_id_seq', 1, false);
 -- Name: player_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_id_seq', 110, true);
+SELECT pg_catalog.setval('public.player_id_seq', 111, true);
 
 
 --
 -- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_object_id_seq', 406, true);
+SELECT pg_catalog.setval('public.player_object_id_seq', 492, true);
 
 
 --
@@ -9503,6 +10782,13 @@ SELECT pg_catalog.setval('public.player_skill_usage_id_seq', 1, false);
 
 
 --
+-- Name: raid_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.raid_id_seq', 14, true);
+
+
+--
 -- Name: rifle_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -9527,7 +10813,7 @@ SELECT pg_catalog.setval('public.rifle_index_id_seq', 29, true);
 -- Name: rifle_instance_rifle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rifle_instance_rifle_id_seq', 174, true);
+SELECT pg_catalog.setval('public.rifle_instance_rifle_id_seq', 215, true);
 
 
 --
@@ -9541,7 +10827,7 @@ SELECT pg_catalog.setval('public.rifle_placements_id_seq', 1, false);
 -- Name: room_direction_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.room_direction_data_id_seq', 3233, true);
+SELECT pg_catalog.setval('public.room_direction_data_id_seq', 4225, true);
 
 
 --
@@ -9555,7 +10841,7 @@ SELECT pg_catalog.setval('public.room_extra_descriptions_id_seq', 1, false);
 -- Name: room_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.room_id_seq', 774, true);
+SELECT pg_catalog.setval('public.room_id_seq', 828, true);
 
 
 --
@@ -9618,7 +10904,7 @@ SELECT pg_catalog.setval('public.skill_trees_id_seq', 16, true);
 -- Name: skill_usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.skill_usage_id_seq', 370, true);
+SELECT pg_catalog.setval('public.skill_usage_id_seq', 435, true);
 
 
 --
@@ -9639,7 +10925,7 @@ SELECT pg_catalog.setval('public.terminal_choices_id_seq', 6, true);
 -- Name: user_logins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_logins_id_seq', 1, true);
+SELECT pg_catalog.setval('public.user_logins_id_seq', 2, true);
 
 
 --
@@ -9660,7 +10946,7 @@ SELECT pg_catalog.setval('public.world_configuration_start_rooms_id_seq', 5, tru
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_data_id_seq', 1094, true);
+SELECT pg_catalog.setval('public.zone_data_id_seq', 1618, true);
 
 
 --
@@ -9975,6 +11261,14 @@ ALTER TABLE ONLY public.muted
 
 
 --
+-- Name: notch notch_primary_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notch
+    ADD CONSTRAINT notch_primary_key PRIMARY KEY (id);
+
+
+--
 -- Name: npc_dialogue npc_dialogue_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -10052,6 +11346,14 @@ ALTER TABLE ONLY public.player_skill_points
 
 ALTER TABLE ONLY public.player_skill_usage
     ADD CONSTRAINT player_skill_usage_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: raid raid_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.raid
+    ADD CONSTRAINT raid_pkey PRIMARY KEY (id);
 
 
 --
@@ -10287,6 +11589,14 @@ ALTER TABLE ONLY public.mob_equipment_map
 
 
 --
+-- Name: mobile fk_mob_raid_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mobile
+    ADD CONSTRAINT fk_mob_raid_id FOREIGN KEY (mob_raid_id) REFERENCES public.raid(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: mob_zone fk_mob_virtual_number; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -10444,6 +11754,14 @@ ALTER TABLE ONLY public.skill_usage
 
 ALTER TABLE ONLY public.class_contagion
     ADD CONSTRAINT fk_player_id FOREIGN KEY (contagion_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: notch fk_player_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notch
+    ADD CONSTRAINT fk_player_id FOREIGN KEY (n_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -10615,42 +11933,6 @@ ALTER TABLE ONLY public.player_race_perks
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
---
-
-GRANT ALL ON SCHEMA public TO PUBLIC;
-
-
---
 -- PostgreSQL database dump complete
 --
 
-
-CREATE TABLE public.notch(
-    id SERIAL,
-    n_points integer NOT NULL DEFAULT 1,
-    n_name varchar NOT NULL,
-    n_player_id integer NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-ALTER TABLE ONLY public.notch
-    ADD CONSTRAINT notch_primary_key PRIMARY KEY (id);
-ALTER TABLE ONLY public.notch
-    ADD CONSTRAINT fk_player_id FOREIGN KEY (n_player_id) REFERENCES public.player(id) ON UPDATE CASCADE ON DELETE CASCADE;
-alter table mobile alter column mob_action_bitvector type character varying(8);
-alter table mobile alter column mob_affection_bitvector type character varying(8);
-create table raid(
-	id SERIAL,
-	r_vnum SERIAL NOT NULL,
-	r_name VARCHAR(256) NOT NULL,
-	r_level VARCHAR(16) NOT NULL,
-	r_type VARCHAR(32) NOT NULL,
-	r_status VARCHAR(16) NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-	PRIMARY KEY(id)
-);
-alter table mobile add column mob_raid_id INTEGER;
-ALTER TABLE mobile ADD CONSTRAINT fk_mob_raid_id FOREIGN KEY (mob_raid_id) REFERENCES public.raid(id) ON UPDATE CASCADE ON DELETE CASCADE;
-alter table zone_data add column zone_raid_id INTEGER; alter table zone_data ADD CONSTRAINT fk_zone_raid_id FOREIGN KEY(zone_raid_id) REFERENCES public.raid(id) ON UPDATE CASCADE ON DELETE CASCADE;
-alter table mobile add column mob_scalable VARCHAR(1) NOT NULL DEFAULT '0';
