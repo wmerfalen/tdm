@@ -1,3 +1,8 @@
+\c postgres;
+DROP DATABASE mud;
+CREATE DATABASE mud;
+\c mud;
+
 --
 -- PostgreSQL database dump
 --
