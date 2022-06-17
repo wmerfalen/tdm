@@ -4358,7 +4358,6 @@ __MENTOC_SHOW_MODS_RIFLE_DEBUG_OUTPUT__	mods/rifle.cpp	/^#define __MENTOC_SHOW_M
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	/^#define __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__$/;"	kind:macro	line:8	file:
 __MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__	mods/stats.cpp	/^#define __MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__$/;"	kind:macro	line:18	file:
 __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__	mods/rifle-stats.cpp	/^#define __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__$/;"	kind:macro	line:3	file:
-__MENTOC_SHOW_MODS_drops_DEBUG_OUTPUT__	mods/drops.cpp	/^#define __MENTOC_SHOW_MODS_drops_DEBUG_OUTPUT__$/;"	kind:macro	line:6	file:
 __MENTOC_SHOW_MODS_flee_DEBUG_OUTPUT__	mods/flee.cpp	/^#define __MENTOC_SHOW_MODS_flee_DEBUG_OUTPUT__$/;"	kind:macro	line:16	file:
 __MENTOC_SHOW_MODS_suicide_DEBUG_OUTPUT__	mods/suicide.cpp	/^#define __MENTOC_SHOW_MODS_suicide_DEBUG_OUTPUT__$/;"	kind:macro	line:16	file:
 __MENTOC_SHOW_SQL_DEBUG_OUTPUT__	mods/orm/inventory.cpp	/^#define __MENTOC_SHOW_SQL_DEBUG_OUTPUT__$/;"	kind:macro	line:1	file:
@@ -4915,7 +4914,7 @@ aligned_int_t	mods/lmdb.hpp	/^using aligned_int_t = uint64_t;$/;"	kind:typedef	l
 aligned_int_t	structs.h	/^using aligned_int_t = uint64_t;$/;"	kind:typedef	line:72	typeref:typename:uint64_t	file:
 alignment	structs.h	/^	int	alignment;		\/* +-1000 for alignments                *\/$/;"	kind:member	line:1431	struct:char_special_data_saved	typeref:typename:int	file:	access:public
 alive	mods/mobs/smart-mob.cpp	/^	bool smart_mob::alive() {$/;"	kind:function	line:354	class:mods::mobs::smart_mob	typeref:typename:bool	signature:()
-all_commons	mods/drops.cpp	/^	static std::vector<std::string> all_commons;$/;"	kind:variable	line:304	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
+all_commons	mods/drops.cpp	/^	static std::vector<std::string> all_commons;$/;"	kind:variable	line:290	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
 all_function_t	mods/loops.hpp	/^	using all_function_t = std::function<bool(player_ptr_t)>;$/;"	kind:typedef	line:18	namespace:mods::loops	file:
 all_integral_flags	mods/doors.hpp	/^	static inline std::vector<exit_info_masks_t> all_integral_flags(int exit_info) {$/;"	kind:function	line:379	namespace:mods::doors	typeref:typename:std::vector<exit_info_masks_t>	file:	signature:(int exit_info)
 all_string_flags	mods/doors.hpp	/^	static inline std::vector<std::string> all_string_flags(int exit_info) {$/;"	kind:function	line:369	namespace:mods::doors	typeref:typename:std::vector<std::string>	file:	signature:(int exit_info)
@@ -5201,7 +5200,7 @@ attacker	mods/unit-tests/damage-types.cpp	/^		auto attacker = new_player();$/;"	
 attacker	mods/unit-tests/damage-types.cpp	/^		auto attacker = new_player();$/;"	kind:variable	line:83	typeref:typename:auto
 attacker	mods/unit-tests/elemental-armor-resistances.cpp	/^		auto attacker = new_player();$/;"	kind:variable	line:15	typeref:typename:auto
 attacker_msg	structs.h	/^	char	*attacker_msg;  \/* message to attacker *\/$/;"	kind:member	line:1847	struct:msg_type	typeref:typename:char *	file:	access:public
-attacker_was_player	mods/drops.cpp	/^	bool attacker_was_player(player_ptr_t& victim) {$/;"	kind:function	line:310	namespace:mods::drops	typeref:typename:bool	signature:(player_ptr_t & victim)
+attacker_was_player	mods/drops.cpp	/^	bool attacker_was_player(player_ptr_t& victim) {$/;"	kind:function	line:296	namespace:mods::drops	typeref:typename:bool	signature:(player_ptr_t & victim)
 attackers_optimal_distance_away	mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode attackers_optimal_distance_away() {$/;"	kind:function	line:292	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
 attackers_optimal_distance_away	mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode attackers_optimal_distance_away() {$/;"	kind:function	line:278	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 attacking_with	mods/player.hpp	/^			obj_data_ptr_t attacking_with() {$/;"	kind:function	line:783	struct:mods::player	typeref:typename:obj_data_ptr_t	file:	access:public	signature:()
@@ -6076,10 +6075,10 @@ commands	mods/ban-system.cpp	/^	namespace commands {$/;"	kind:namespace	line:392
 commands	mods/combat.cpp	/^	namespace commands {$/;"	kind:namespace	line:34	namespace:mods::combat	file:
 commit	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::commit() {$/;"	kind:function	line:744	class:mods::lmdb::_db_handle	typeref:typename:_db_handle::tuple_return_type_t	signature:()
 commit	mods/pq.cpp	/^	void commit(transaction& txn) {$/;"	kind:function	line:11	namespace:mods::pq	typeref:typename:void	signature:(transaction & txn)
-common_armor	mods/drops.cpp	/^	static std::vector<std::string> common_armor = {$/;"	kind:variable	line:189	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
-common_drop_item_for_mob	mods/drops.cpp	/^	void common_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:337	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
-common_explosive	mods/drops.cpp	/^	static std::vector<std::string> common_explosive = {$/;"	kind:variable	line:153	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
-common_rifles	mods/drops.cpp	/^	static std::vector<std::string> common_rifles = {$/;"	kind:variable	line:254	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
+common_armor	mods/drops.cpp	/^	static std::vector<std::string> common_armor = {$/;"	kind:variable	line:194	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
+common_drop_item_for_mob	mods/drops.cpp	/^	void common_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:323	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
+common_explosive	mods/drops.cpp	/^	static std::vector<std::string> common_explosive = {$/;"	kind:variable	line:154	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
+common_rifles	mods/drops.cpp	/^	static std::vector<std::string> common_rifles = {$/;"	kind:variable	line:241	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
 common_weaponry_skillset	class.cpp	/^std::string common_weaponry_skillset() {$/;"	kind:function	line:80	typeref:typename:std::string	signature:()
 communicate	mods/chat.hpp	/^	void communicate(TPlayer obj,TActionString type,TActionString message) {}$/;"	kind:function	line:10	namespace:mods::chat	typeref:typename:void	signature:(TPlayer obj,TActionString type,TActionString message)
 communication	mods/runners/communication.cpp	/^namespace mods::runners::communication {$/;"	kind:namespace	line:11	namespace:mods::runners	file:
@@ -6398,7 +6397,7 @@ create_abilities	mods/classes/base.cpp	/^	base::ability_list_t base::create_abil
 create_breacher	mods/classes/breacher.cpp	/^	std::shared_ptr<breacher> create_breacher(player_ptr_t& in_player) {$/;"	kind:function	line:90	namespace:mods::classes	typeref:typename:std::shared_ptr<breacher>	signature:(player_ptr_t & in_player)
 create_builder	mods/unit-tests/mob-roam.cpp	/^player_ptr_t create_builder() {$/;"	kind:function	line:10	typeref:typename:player_ptr_t	signature:()
 create_char_from_registration	mods/chargen.cpp	/^	int create_char_from_registration(player_ptr_t& p,std::string argument) {$/;"	kind:function	line:102	namespace:mods::chargen	typeref:typename:int	signature:(player_ptr_t & p,std::string argument)
-create_common_object_into	mods/drops.cpp	/^	void create_common_object_into(obj_ptr_t& container) {$/;"	kind:function	line:305	namespace:mods::drops	typeref:typename:void	signature:(obj_ptr_t & container)
+create_common_object_into	mods/drops.cpp	/^	void create_common_object_into(obj_ptr_t& container) {$/;"	kind:function	line:291	namespace:mods::drops	typeref:typename:void	signature:(obj_ptr_t & container)
 create_contagion	mods/classes/contagion.cpp	/^	std::shared_ptr<contagion> create_contagion(player_ptr_t& in_player) {$/;"	kind:function	line:116	namespace:mods::classes	typeref:typename:std::shared_ptr<contagion>	signature:(player_ptr_t & in_player)
 create_direction	mods/builder.cpp	/^	bool create_direction(room_rnum room_id,byte direction,room_rnum to_room) {$/;"	kind:function	line:1126	namespace:mods::builder	typeref:typename:bool	signature:(room_rnum room_id,byte direction,room_rnum to_room)
 create_engineer	mods/classes/engineer.cpp	/^	std::shared_ptr<engineer> create_engineer(player_ptr_t& in_player) {$/;"	kind:function	line:93	namespace:mods::classes	typeref:typename:std::shared_ptr<engineer>	signature:(player_ptr_t & in_player)
@@ -7147,7 +7146,7 @@ drone_simulate	mods/player.hpp	/^			bool& drone_simulate() {$/;"	kind:function	l
 drone_simulate	structs.h	/^	bool drone_simulate;$/;"	kind:member	line:1755	struct:char_data	typeref:typename:bool	file:	access:public
 drone_uuid	mods/player.hpp	/^			uuid_t& drone_uuid() {$/;"	kind:function	line:835	struct:mods::player	typeref:typename:uuid_t &	file:	access:public	signature:()
 drone_uuid	structs.h	/^	uuid_t drone_uuid;$/;"	kind:member	line:1756	struct:char_data	typeref:typename:uuid_t	file:	access:public
-drops	mods/drops.cpp	/^	static std::vector<randomized_drop_t> drops;$/;"	kind:variable	line:318	namespace:mods::drops	typeref:typename:std::vector<randomized_drop_t>	file:
+drops	mods/drops.cpp	/^	static std::vector<randomized_drop_t> drops;$/;"	kind:variable	line:304	namespace:mods::drops	typeref:typename:std::vector<randomized_drop_t>	file:
 drops	mods/drops.cpp	/^namespace mods::drops {$/;"	kind:namespace	line:19	namespace:mods	file:
 drops	mods/drops.hpp	/^namespace mods::drops {$/;"	kind:namespace	line:5	namespace:mods	file:
 dsd	mods/player.cpp	/^#define dsd(/;"	kind:macro	line:36	file:	signature:(A)
@@ -7221,7 +7220,7 @@ dynamic_set	mods/prefs.cpp	/^	void dynamic_set(const std::string& key,const std:
 e_commit	mods/db.hpp	/^	constexpr static int_status_t e_commit = -2;$/;"	kind:variable	line:17	namespace:mods::lmdb::error	typeref:typename:int_status_t	file:
 e_get	mods/db.hpp	/^	constexpr static int_status_t e_get = -3;$/;"	kind:variable	line:18	namespace:mods::lmdb::error	typeref:typename:int_status_t	file:
 e_put	mods/db.hpp	/^	constexpr static int_status_t e_put = -1;$/;"	kind:variable	line:16	namespace:mods::lmdb::error	typeref:typename:int_status_t	file:
-easy_drop_item_for_mob	mods/drops.cpp	/^	void easy_drop_item_for_mob(std::string_view item,mob_vnum mob) {$/;"	kind:function	line:352	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
+easy_drop_item_for_mob	mods/drops.cpp	/^	void easy_drop_item_for_mob(std::string_view item,mob_vnum mob) {$/;"	kind:function	line:338	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
 easy_level_achievement	mods/notch.cpp	/^	void easy_level_achievement(player_ptr_t& player,std::string_view type) {$/;"	kind:function	line:38	namespace:mods::notch	typeref:typename:void	signature:(player_ptr_t & player,std::string_view type)
 echo_off	comm.cpp	/^void echo_off(mods::descriptor_data& d) {$/;"	kind:function	line:1175	typeref:typename:void	signature:(mods::descriptor_data & d)
 echo_on	comm.cpp	/^void echo_on(mods::descriptor_data& d) {$/;"	kind:function	line:1189	typeref:typename:void	signature:(mods::descriptor_data & d)
@@ -8635,9 +8634,9 @@ gods	mods/acl_list.cpp	/^		static player_acl_list_t gods;$/;"	kind:variable	line
 gods	mods/object-utils.hpp	/^	namespace gods {$/;"	kind:namespace	line:464	namespace:mods::object_utils	file:
 gods	mods/rooms.cpp	/^namespace mods::rooms::gods {$/;"	kind:namespace	line:820	namespace:mods::rooms	file:
 gods	mods/rooms.hpp	/^	namespace gods {$/;"	kind:namespace	line:478	namespace:mods::rooms	file:
-godtier_drop_item_for_mob	mods/drops.cpp	/^	void godtier_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:349	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
-godtier_explosive	mods/drops.cpp	/^	static std::vector<std::string> godtier_explosive = {$/;"	kind:variable	line:179	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
-godtier_rifles	mods/drops.cpp	/^	static std::vector<std::string> godtier_rifles = {$/;"	kind:variable	line:298	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
+godtier_drop_item_for_mob	mods/drops.cpp	/^	void godtier_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:335	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
+godtier_explosive	mods/drops.cpp	/^	static std::vector<std::string> godtier_explosive = {$/;"	kind:variable	line:183	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
+godtier_rifles	mods/drops.cpp	/^	static std::vector<std::string> godtier_rifles = {$/;"	kind:variable	line:284	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
 gold	mods/player.hpp	/^			auto& gold() {$/;"	kind:function	line:373	struct:mods::player	typeref:typename:auto &	file:	access:public	signature:()
 gold	structs.h	/^	int	gold;$/;"	kind:member	line:1100	struct:rent_info	typeref:typename:int	file:	access:public
 gold	structs.h	/^	points_t gold;           \/* Money carried                           *\/$/;"	kind:member	line:1401	struct:char_point_data	typeref:typename:points_t	file:	access:public
@@ -9195,7 +9194,7 @@ init	mods/contracts.cpp	/^	void init() {$/;"	kind:function	line:169	namespace:mo
 init	mods/corpse.cpp	/^	void init() {$/;"	kind:function	line:289	namespace:mods::corpse	typeref:typename:void	signature:()
 init	mods/date-time.cpp	/^	void init() {$/;"	kind:function	line:236	namespace:mods::date_time	typeref:typename:void	signature:()
 init	mods/debug.hpp	/^	static inline void init(bool tics){ debug_state = std::make_unique<state>(tics); }$/;"	kind:function	line:16	namespace:mods::debug	typeref:typename:void	file:	signature:(bool tics)
-init	mods/drops.cpp	/^	void init() {$/;"	kind:function	line:355	namespace:mods::drops	typeref:typename:void	signature:()
+init	mods/drops.cpp	/^	void init() {$/;"	kind:function	line:341	namespace:mods::drops	typeref:typename:void	signature:()
 init	mods/elevator.cpp	/^	void init() {$/;"	kind:function	line:34	namespace:mods::elevator	typeref:typename:void	signature:()
 init	mods/ensnare.cpp	/^	void init() {$/;"	kind:function	line:135	namespace:mods::ensnare	typeref:typename:void	signature:()
 init	mods/fire.cpp	/^	void init() {$/;"	kind:function	line:58	namespace:mods::fire	typeref:typename:void	signature:()
@@ -9716,13 +9715,13 @@ legacy	mods/weapons/damage-types.cpp	/^	namespace legacy {$/;"	kind:namespace	li
 legacy	mods/weapons/damage-types.hpp	/^	namespace legacy {$/;"	kind:namespace	line:52	namespace:mods::weapons::damage_types	file:
 legacy	mods/weapons/legacy-combat.cpp	/^namespace mods::weapons::legacy {$/;"	kind:namespace	line:4	namespace:mods::weapons	file:
 legacy	mods/weapons/legacy-combat.hpp	/^namespace mods::weapons::legacy {$/;"	kind:namespace	line:20	namespace:mods::weapons	file:
-legendary_drop_item_for_mob	mods/drops.cpp	/^	void legendary_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:346	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
-legendary_explosive	mods/drops.cpp	/^	static std::vector<std::string> legendary_explosive = {$/;"	kind:variable	line:175	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
-legendary_rifles	mods/drops.cpp	/^	static std::vector<std::string> legendary_rifles = {$/;"	kind:variable	line:288	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
+legendary_drop_item_for_mob	mods/drops.cpp	/^	void legendary_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:332	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
+legendary_explosive	mods/drops.cpp	/^	static std::vector<std::string> legendary_explosive = {$/;"	kind:variable	line:178	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
+legendary_rifles	mods/drops.cpp	/^	static std::vector<std::string> legendary_rifles = {$/;"	kind:variable	line:273	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
 len	shop.h	/^	int len;$/;"	kind:member	line:118	struct:stack_data	typeref:typename:int	file:	access:public
 length	modify.cpp	/^int length[] = {$/;"	kind:variable	line:50	typeref:typename:int[]
 length	mods/string.cpp	/^	unsigned int string::length() const {$/;"	kind:function	line:73	class:mods::string	typeref:typename:unsigned int	signature:() const
-less_common_drop_item_for_mob	mods/drops.cpp	/^	void less_common_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:340	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
+less_common_drop_item_for_mob	mods/drops.cpp	/^	void less_common_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:326	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
 level	act.wizard.cpp	/^		const player_level_t level;$/;"	kind:member	line:2119	struct:SUPERCMD::show_struct	typeref:typename:const player_level_t	file:	access:public
 level	act.wizard.cpp	/^	const player_level_t level;$/;"	kind:member	line:2398	struct:set_struct	typeref:typename:const player_level_t	file:	access:public
 level	boards.h	/^	int	level;        \/* level of poster *\/$/;"	kind:member	line:22	struct:board_msginfo	typeref:typename:int	file:	access:public
@@ -13969,7 +13968,7 @@ random_action	mods/mobs/shoplifter-behaviour-tree.cpp	/^	TChildNode random_actio
 random_armor_type	mods/forge-engine/generator.hpp	/^			armor_types_t random_armor_type() {$/;"	kind:function	line:463	struct:mods::forge_engine::generator	typeref:typename:armor_types_t	file:	access:public	signature:()
 random_attachment_type	mods/forge-engine/generator.hpp	/^			attachment_types_t random_attachment_type() {$/;"	kind:function	line:475	struct:mods::forge_engine::generator	typeref:typename:attachment_types_t	file:	access:public	signature:()
 random_direction	mods/util.cpp	/^	direction_t random_direction() {$/;"	kind:function	line:337	namespace:mods::util	typeref:typename:direction_t	signature:()
-random_drop_to	mods/drops.cpp	/^	void random_drop_to(player_ptr_t& victim,obj_ptr_t& corpse) {$/;"	kind:function	line:319	namespace:mods::drops	typeref:typename:void	signature:(player_ptr_t & victim,obj_ptr_t & corpse)
+random_drop_to	mods/drops.cpp	/^	void random_drop_to(player_ptr_t& victim,obj_ptr_t& corpse) {$/;"	kind:function	line:305	namespace:mods::drops	typeref:typename:void	signature:(player_ptr_t & victim,obj_ptr_t & corpse)
 random_element	globals.cpp	/^		I random_element(I begin, I end) {$/;"	kind:function	line:117	namespace:mods::globals	typeref:typename:I	signature:(I begin,I end)
 random_elemental_resistance	mods/forge-engine/generator.hpp	/^			elemental_types_t random_elemental_resistance(armor_types_t type) {$/;"	kind:function	line:469	struct:mods::forge_engine::generator	typeref:typename:elemental_types_t	file:	access:public	signature:(armor_types_t type)
 random_elemental_type	mods/forge-engine/generator.hpp	/^			elemental_types_t random_elemental_type() {$/;"	kind:function	line:466	struct:mods::forge_engine::generator	typeref:typename:elemental_types_t	file:	access:public	signature:()
@@ -14004,9 +14003,9 @@ ranged	mods/combat.hpp	/^	namespace ranged {$/;"	kind:namespace	line:23	namespac
 ranged_combat_totals	mods/ranged-combat-totals.hpp	/^		ranged_combat_totals() :$/;"	kind:function	line:132	struct:mods::ranged_combat_totals	file:	access:public	signature:()
 ranged_combat_totals	mods/ranged-combat-totals.hpp	/^		ranged_combat_totals(const ranged_combat_totals& other) :$/;"	kind:function	line:201	struct:mods::ranged_combat_totals	file:	access:public	signature:(const ranged_combat_totals & other)
 ranged_combat_totals	mods/ranged-combat-totals.hpp	/^	struct ranged_combat_totals {$/;"	kind:struct	line:37	namespace:mods	file:
-rare_drop_item_for_mob	mods/drops.cpp	/^	void rare_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:343	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
-rare_explosive	mods/drops.cpp	/^	static std::vector<std::string> rare_explosive = {$/;"	kind:variable	line:171	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
-rare_rifles	mods/drops.cpp	/^	static std::vector<std::string> rare_rifles = {$/;"	kind:variable	line:236	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
+rare_drop_item_for_mob	mods/drops.cpp	/^	void rare_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:329	namespace:mods::drops	typeref:typename:void	signature:(std::string_view item,mob_vnum mob)
+rare_explosive	mods/drops.cpp	/^	static std::vector<std::string> rare_explosive = {$/;"	kind:variable	line:173	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
+rare_rifles	mods/drops.cpp	/^	static std::vector<std::string> rare_rifles = {$/;"	kind:variable	line:224	namespace:mods::drops	typeref:typename:std::vector<std::string>	file:
 rarity	mods/rarity.hpp	/^namespace mods::rarity {$/;"	kind:namespace	line:6	namespace:mods	file:
 rarity	mods/yaml.hpp	/^		float rarity;$/;"	kind:member	line:169	struct:mods::yaml::yaml_description_t	typeref:typename:float	file:	access:public
 rarity_segment	mods/yaml.cpp	/^	std::string rarity_segment() {$/;"	kind:function	line:95	namespace:mods::yaml	typeref:typename:std::string	signature:()

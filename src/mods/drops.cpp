@@ -3,7 +3,7 @@
 #include "interpreter.hpp"
 #include "rand.hpp"
 
-#define __MENTOC_SHOW_MODS_drops_DEBUG_OUTPUT__
+//#define __MENTOC_SHOW_MODS_drops_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_drops_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::drops::debug]")  << MSG << "\n";
 #define m_error(MSG) mentoc_prefix_debug(red_str("[mods::drops::ERROR]"))  << MSG << "\n";
@@ -150,6 +150,7 @@ namespace mods::drops {
 	static constexpr std::string_view vbvest = "armor/vulture-ballistic-vest.yml";
 	static constexpr std::string_view xmsbelt = "armor/xm-scorpio-belt.yml";
 
+	/** TODO: fill these at runtime and allow admins to trigger a re-read */
 	static std::vector<std::string> common_explosive = {
 		"explosive/breach-charge.yml",
 		"explosive/claymore-mine.yml",
@@ -168,14 +169,17 @@ namespace mods::drops {
 		"explosive/thermite-charge.yml",
 	};
 
+	/** TODO: fill these at runtime and allow admins to trigger a re-read */
 	static std::vector<std::string> rare_explosive = {
 		"explosive/hellfire-claymore-mine.yml",
 	};
 
+	/** TODO: fill these at runtime and allow admins to trigger a re-read */
 	static std::vector<std::string> legendary_explosive = {
 
 	};
 
+	/** TODO: fill these at runtime and allow admins to trigger a re-read */
 	static std::vector<std::string> godtier_explosive = {
 
 
@@ -186,42 +190,25 @@ namespace mods::drops {
 	 * $MUD_ROOT/armor-by COMMON > loot-armor.common
 	 * then read it :)
 	 */
+	/** TODO: fill these at runtime and allow admins to trigger a re-read */
 	static std::vector<std::string> common_armor = {
-		"armor/allied-foods-shirt.yml",
-		"armor/atom-fade-shoes.yml",
 		"armor/baklava.yml",
 		"armor/basic-ballistic-vest.yml",
 		"armor/basic-boots.yml",
-		"armor/black-jeans.yml",
-		"armor/blue-hoodie.yml",
-		"armor/blue-jeans.yml",
 		"armor/brown-leather-gloves.yml",
 		"armor/dark-throne-necklace.yml",
-		"armor/dress-shoes.yml",
-		"armor/dusty-jeans.yml",
 		"armor/falcon-ballistic-vest.yml",
-		"armor/hospital-gown.yml",
-		"armor/hospital-shoes.yml",
 		"armor/leather-trenchcoat.yml",
-		"armor/leggings.yml",
 		"armor/mp-enforcer-gloves.yml",
 		"armor/mp-enforcer-pants.yml",
 		"armor/night-vision-goggles.yml",
 		"armor/p5-boots.yml",
 		"armor/p5-pants.yml",
 		"armor/p5-vest.yml",
-		"armor/pale-brown-pants.yml",
-		"armor/plain-black-shoes.yml",
-		"armor/plain-white-lab-coat.yml",
-		"armor/plat-basketball-shoes.yml",
 		"armor/raven-ultralight-backpack.yml",
 		"armor/razor-gps-wrist-watch.yml",
-		"armor/rubber-gloves.yml",
-		"armor/sloth-martins.yml",
-		"armor/static-free-shoes.yml",
 		"armor/tactical-gas-mask.yml",
 		"armor/thermal-goggles.yml",
-		"armor/thick-glasses.yml",
 		"armor/titan-gauntlets.yml",
 		"armor/titan-shin-guards.yml",
 		"armor/viper-leg-guards.yml",
@@ -233,9 +220,8 @@ namespace mods::drops {
 	 * To generate, run:
 	 * :r ! ./rifle-by RARE
 	 */
+	/** TODO: fill these at runtime and allow admins to trigger a re-read */
 	static std::vector<std::string> rare_rifles = {
-
-		"rifle/base_pistol.yml",
 		"rifle/belt-fed-minigun.yml",
 		"rifle/czp10.yml",
 		"rifle/defiler-scarh.yml",
@@ -251,12 +237,11 @@ namespace mods::drops {
 	 * To generate, run:
 	 * :r ! ./rifle-by COMMON
 	 */
+	/** TODO: fill these at runtime and allow admins to trigger a re-read */
 	static std::vector<std::string> common_rifles = {
 		"rifle/552-commando.yml",
 		"rifle/aug-a3.yml",
 		"rifle/augpara.yml",
-		"rifle/base_smg.yml",
-		"rifle/base_sniper.yml",
 		"rifle/famas.yml",
 		"rifle/fmg9.yml",
 		"rifle/g36c.yml",
@@ -271,7 +256,6 @@ namespace mods::drops {
 		"rifle/mp9.yml",
 		"rifle/p90.yml",
 		"rifle/psg1.yml",
-		"rifle/rifle.yml",
 		"rifle/saiga12.yml",
 		"rifle/sasg12.yml",
 		"rifle/scarh.yml",
@@ -285,6 +269,7 @@ namespace mods::drops {
 	 * To generate, run:
 	 * :r ! ./rifle-by LEGENDARY
 	 */
+	/** TODO: fill these at runtime and allow admins to trigger a re-read */
 	static std::vector<std::string> legendary_rifles = {
 		"rifle/bf-39-shotgun.yml",
 		"rifle/defiler-fmg9.yml",
@@ -295,6 +280,7 @@ namespace mods::drops {
 	 * To generate, run:
 	 * :r ! ./rifle-by GOD_TIER
 	 */
+	/** TODO: fill these at runtime and allow admins to trigger a re-read */
 	static std::vector<std::string> godtier_rifles = {
 		"rifle/orthos-aug-a3.yml",
 		"rifle/orthos-l96aw.yml",
