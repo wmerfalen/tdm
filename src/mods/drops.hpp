@@ -3,6 +3,9 @@
 #include "../globals.hpp"
 
 namespace mods::drops {
+	/**
+	 * API:
+	 */
 	void random_drop_to(player_ptr_t& victim,obj_ptr_t& corpse);
 
 };

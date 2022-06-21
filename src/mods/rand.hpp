@@ -18,6 +18,10 @@ template <typename T>
 static inline uint32_t roll(const T& yaml) {
 	return dice(yaml->attributes->damage_dice_count,yaml->attributes->damage_dice_sides);
 }
+template <typename Container>
+static inline auto& rand_item(const Container& item) {
+	return item.at(rand_number(0,item.size()) % item.size());
+}
 template <typename Twidth>
 struct dice_passer_t {
 		dice_passer_t() = delete;

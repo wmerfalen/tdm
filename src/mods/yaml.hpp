@@ -64,6 +64,7 @@ enum alternate_explosion_t {
 };
 
 namespace mods::yaml {
+	std::string directory(std::string_view type);
 	enum durability_profile_type_t {
 		FLIMSY,
 		DECENT,

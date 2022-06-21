@@ -13,6 +13,7 @@
 #include "deep-object-parser.hpp"
 #include <algorithm>
 #include <regex>
+#include "str.hpp"
 
 #ifdef __MENTOC_MODS_UTIL_DEBUG__
 #define mu_debug(A) std::cerr << "[mods::util][debug]:'" << A << "'\n";

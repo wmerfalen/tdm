@@ -2,8 +2,10 @@
 #include "super-users.hpp"
 #include "interpreter.hpp"
 #include "rand.hpp"
+#include "str.hpp"
+#include "filesystem.hpp"
 
-//#define __MENTOC_SHOW_MODS_drops_DEBUG_OUTPUT__
+#define __MENTOC_SHOW_MODS_drops_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_drops_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::drops::debug]")  << MSG << "\n";
 #define m_error(MSG) mentoc_prefix_debug(red_str("[mods::drops::ERROR]"))  << MSG << "\n";
@@ -17,6 +19,7 @@ extern void	obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 extern void obj_from_room(obj_ptr_t in_object);
 
 namespace mods::drops {
+
 	/**
 	 * SQL black magic:
 
@@ -150,149 +153,42 @@ namespace mods::drops {
 	static constexpr std::string_view vbvest = "armor/vulture-ballistic-vest.yml";
 	static constexpr std::string_view xmsbelt = "armor/xm-scorpio-belt.yml";
 
-	/** TODO: fill these at runtime and allow admins to trigger a re-read */
-	static std::vector<std::string> common_explosive = {
-		"explosive/breach-charge.yml",
-		"explosive/claymore-mine.yml",
-		"explosive/corpse-charge.yml",
-		"explosive/corrosive-claymore-mine.yml",
-		"explosive/emp-grenade.yml",
-		"explosive/engineer-drone-bomb.yml",
-		"explosive/flashbang-grenade.yml",
-		"explosive/frag-grenade.yml",
-		"explosive/hellfire-corpse-charge.yml",
-		"explosive/incendiary-grenade.yml",
-		"explosive/sensor-grenade.yml",
-		"explosive/shrapnel-claymore-mine.yml",
-		"explosive/shrapnel-corpse-charge.yml",
-		"explosive/smoke-grenade.yml",
-		"explosive/thermite-charge.yml",
-	};
+	static std::vector<std::string> common_armors;
+	static std::vector<std::string> uncommon_armors;
+	static std::vector<std::string> rare_armors;
+	static std::vector<std::string> legendary_armors;
+	static std::vector<std::string> god_tier_armors;
 
-	/** TODO: fill these at runtime and allow admins to trigger a re-read */
-	static std::vector<std::string> rare_explosive = {
-		"explosive/hellfire-claymore-mine.yml",
-	};
+	static std::vector<std::string> common_rifles;
+	static std::vector<std::string> uncommon_rifles;
+	static std::vector<std::string> rare_rifles;
+	static std::vector<std::string> legendary_rifles;
+	static std::vector<std::string> god_tier_rifles;
 
-	/** TODO: fill these at runtime and allow admins to trigger a re-read */
-	static std::vector<std::string> legendary_explosive = {
+	static std::vector<std::string> common_explosives;
+	static std::vector<std::string> uncommon_explosives;
+	static std::vector<std::string> rare_explosives;
+	static std::vector<std::string> legendary_explosives;
+	static std::vector<std::string> god_tier_explosives;
 
-	};
-
-	/** TODO: fill these at runtime and allow admins to trigger a re-read */
-	static std::vector<std::string> godtier_explosive = {
-
-
-	};
-
-	/**
-	 * To generate this list, run:
-	 * $MUD_ROOT/armor-by COMMON > loot-armor.common
-	 * then read it :)
-	 */
-	/** TODO: fill these at runtime and allow admins to trigger a re-read */
-	static std::vector<std::string> common_armor = {
-		"armor/baklava.yml",
-		"armor/basic-ballistic-vest.yml",
-		"armor/basic-boots.yml",
-		"armor/brown-leather-gloves.yml",
-		"armor/dark-throne-necklace.yml",
-		"armor/falcon-ballistic-vest.yml",
-		"armor/leather-trenchcoat.yml",
-		"armor/mp-enforcer-gloves.yml",
-		"armor/mp-enforcer-pants.yml",
-		"armor/night-vision-goggles.yml",
-		"armor/p5-boots.yml",
-		"armor/p5-pants.yml",
-		"armor/p5-vest.yml",
-		"armor/raven-ultralight-backpack.yml",
-		"armor/razor-gps-wrist-watch.yml",
-		"armor/tactical-gas-mask.yml",
-		"armor/thermal-goggles.yml",
-		"armor/titan-gauntlets.yml",
-		"armor/titan-shin-guards.yml",
-		"armor/viper-leg-guards.yml",
-		"armor/xm50-ultralight-boots.yml",
-		"armor/xm8-panama-combat-boots.yml",
-	};
-
-	/**
-	 * To generate, run:
-	 * :r ! ./rifle-by RARE
-	 */
-	/** TODO: fill these at runtime and allow admins to trigger a re-read */
-	static std::vector<std::string> rare_rifles = {
-		"rifle/belt-fed-minigun.yml",
-		"rifle/czp10.yml",
-		"rifle/defiler-scarh.yml",
-		"rifle/desert-eagle.yml",
-		"rifle/glock.yml",
-		"rifle/magnum-revolver.yml",
-		"rifle/ppk.yml",
-		"rifle/ump45-vulture-modded.yml",
-		"rifle/uzi.yml",
-	};
-
-	/**
-	 * To generate, run:
-	 * :r ! ./rifle-by COMMON
-	 */
-	/** TODO: fill these at runtime and allow admins to trigger a re-read */
-	static std::vector<std::string> common_rifles = {
-		"rifle/552-commando.yml",
-		"rifle/aug-a3.yml",
-		"rifle/augpara.yml",
-		"rifle/famas.yml",
-		"rifle/fmg9.yml",
-		"rifle/g36c.yml",
-		"rifle/hk21.yml",
-		"rifle/hk45.yml",
-		"rifle/l96aw.yml",
-		"rifle/m16a4.yml",
-		"rifle/m3.yml",
-		"rifle/m4.yml",
-		"rifle/mk46.yml",
-		"rifle/mp5.yml",
-		"rifle/mp9.yml",
-		"rifle/p90.yml",
-		"rifle/psg1.yml",
-		"rifle/saiga12.yml",
-		"rifle/sasg12.yml",
-		"rifle/scarh.yml",
-		"rifle/tar21.yml",
-		"rifle/ump45.yml",
-		"rifle/vc88.yml",
-		"rifle/xm109.yml",
-	};
-
-	/**
-	 * To generate, run:
-	 * :r ! ./rifle-by LEGENDARY
-	 */
-	/** TODO: fill these at runtime and allow admins to trigger a re-read */
-	static std::vector<std::string> legendary_rifles = {
-		"rifle/bf-39-shotgun.yml",
-		"rifle/defiler-fmg9.yml",
-		"rifle/dst7a.yml",
-	};
-
-	/**
-	 * To generate, run:
-	 * :r ! ./rifle-by GOD_TIER
-	 */
-	/** TODO: fill these at runtime and allow admins to trigger a re-read */
-	static std::vector<std::string> godtier_rifles = {
-		"rifle/orthos-aug-a3.yml",
-		"rifle/orthos-l96aw.yml",
-		"rifle/orthos-scarh.yml",
-		"rifle/orthos-sentinel-scarh.yml",
-	};
-	static std::vector<std::string> all_commons;
 	void create_common_object_into(obj_ptr_t& container) {
-		auto yaml = all_commons.at(rand_number(0,all_commons.size()) % all_commons.size());
+		static std::vector<std::string> types = {"R","A","E"};
+		auto c = str(rand_item(types));
+		std::string yaml;
+		if(c.is("R")) {
+			yaml = rand_item(common_rifles);
+		} else if(c.is("A")) {
+			yaml = rand_item(common_armors);
+		} else if(c.is("E")) {
+			yaml = rand_item(common_explosives);
+		} else {
+			log("Warning: this should never happen. Resorted to common_rifle");
+			yaml = rand_item(common_rifles);
+		}
 		m_debug("create_common_object_into placing '" << yaml << "'");
 		create_object_into(yaml,container);
 	}
+
 	bool attacker_was_player(player_ptr_t& victim) {
 		auto uuid = victim->get_attacker();
 		auto p = ptr_by_uuid(uuid);
@@ -301,7 +197,9 @@ namespace mods::drops {
 		}
 		return p->is_npc() == false;
 	}
+
 	static std::vector<randomized_drop_t> drops;
+
 	void random_drop_to(player_ptr_t& victim,obj_ptr_t& corpse) {
 		if(!attacker_was_player(victim)) {
 			return;
@@ -320,24 +218,44 @@ namespace mods::drops {
 			create_common_object_into(corpse);
 		}
 	}
+
 	void common_drop_item_for_mob(std::string_view item, mob_vnum mob) {
-		drops.emplace_back(mob,item,2,6,10);
+		drops.emplace_back(mob,item,COMMON_DROP_DICE_COUNT(),COMMON_DROP_DICE_SIDES(),COMMON_DROP_DICE_THRESHOLD());
 	}
 	void less_common_drop_item_for_mob(std::string_view item, mob_vnum mob) {
-		drops.emplace_back(mob,item,2,7,11);
+		drops.emplace_back(mob,item,UNCOMMON_DROP_DICE_COUNT(),UNCOMMON_DROP_DICE_SIDES(),UNCOMMON_DROP_DICE_THRESHOLD());
 	}
 	void rare_drop_item_for_mob(std::string_view item, mob_vnum mob) {
-		drops.emplace_back(mob,item,10,20,120);
+		drops.emplace_back(mob,item,RARE_DROP_DICE_COUNT(),RARE_DROP_DICE_SIDES(),RARE_DROP_DICE_THRESHOLD());
 	}
 	void legendary_drop_item_for_mob(std::string_view item, mob_vnum mob) {
-		drops.emplace_back(mob,item,10,20,140);
+		drops.emplace_back(mob,item,LEGENDARY_DROP_DICE_COUNT(),LEGENDARY_DROP_DICE_SIDES(),LEGENDARY_DROP_DICE_THRESHOLD());
 	}
 	void godtier_drop_item_for_mob(std::string_view item, mob_vnum mob) {
-		drops.emplace_back(mob,item,10,20,150);
+		drops.emplace_back(mob,item,GOD_TIER_DROP_DICE_COUNT(),GOD_TIER_DROP_DICE_SIDES(),GOD_TIER_DROP_DICE_THRESHOLD());
 	}
 	void easy_drop_item_for_mob(std::string_view item,mob_vnum mob) {
-		drops.emplace_back(mob, item, 10,20,80);
+		drops.emplace_back(mob, item, EASY_DROP_DICE_COUNT(),EASY_DROP_DICE_SIDES(),EASY_DROP_DICE_THRESHOLD());
 	}
+	/**
+	 * Reads all yaml files and extracts rarities of items.
+	 */
+	std::vector<obj_ptr_t> parse_yamls_in_directory(std::string_view type) {
+		auto directory = mods::yaml::directory(type);
+		m_debug("directory: " << directory);
+		std::vector<obj_ptr_t> objects;
+		for(const auto& f : mods::util::glob(directory)) {
+			if(mods::filesystem::is_directory(f)) {
+				continue;
+			}
+			std::string file = str::alpha_only(type) + "/" + f;
+			m_debug("file: " << file);
+			auto obj = create_object(file);
+			objects.emplace_back(obj);
+		}
+		return objects;
+	}
+
 	void init() {
 		drops.clear();
 		common_drop_item_for_mob(frag,INFECTED_DRONE);
@@ -373,11 +291,30 @@ namespace mods::drops {
 			easy_drop_item_for_mob(item,ORTHOS_SNIPER);
 		}
 
-		all_commons.clear();
-		all_commons = vec::append(all_commons,common_rifles,common_armor);
+#define CRAWL_FOR(type) \
+		for(auto& type : parse_yamls_in_directory(#type)) {\
+			if(mods::rarity::is_common(type->type()->attributes->rarity)) {\
+				BOOST_PP_CAT(BOOST_PP_CAT(common_,type),s).emplace_back(type->feed_file());\
+			}\
+			if(mods::rarity::is_uncommon(type->type()->attributes->rarity)) {\
+				BOOST_PP_CAT(BOOST_PP_CAT(uncommon_,type),s).emplace_back(type->feed_file());\
+			}\
+			if(mods::rarity::is_rare(type->type()->attributes->rarity)) {\
+				BOOST_PP_CAT(BOOST_PP_CAT(rare_,type),s).emplace_back(type->feed_file());\
+			}\
+			if(mods::rarity::is_legendary(type->type()->attributes->rarity)) {\
+				BOOST_PP_CAT(BOOST_PP_CAT(legendary_,type),s).emplace_back(type->feed_file());\
+			}\
+			if(mods::rarity::is_god_tier(type->type()->attributes->rarity)) {\
+				BOOST_PP_CAT(BOOST_PP_CAT(god_tier_,type),s).emplace_back(type->feed_file());\
+			}\
+		}
 
+		CRAWL_FOR(rifle);
+		CRAWL_FOR(armor);
+		CRAWL_FOR(explosive);
+
+#undef CRAWL_FOR
 	}
 
-#undef m_error
-#undef m_debug
 };

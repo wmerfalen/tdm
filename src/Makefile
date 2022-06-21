@@ -38,6 +38,7 @@ FLAGS = $(gdbflags) $(optimization) \
 				$(warnings_list) \
 	-std=c++20 -fpermissive -MMD \
 	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
+	-DMENTOC_DATA_DIR=\"$(DATA_DIR)\" \
 	-Imods/catch2/Catch2/src -Lmods/catch2/Catch2/build/src \
 	-Ilibzmq/include -Icppzmq \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
@@ -234,7 +235,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/orthos-spawn-sentinel \
 					 mods/mobs/orthos-spawn-sentinel-btree mods/no-drop mods/orm/notch \
 					 mods/notch mods/stats mods/rifle-stats mods/orm/raid \
-					 mods/builder/raid mods/flee mods/suicide mods/drops
+					 mods/builder/raid mods/flee mods/suicide mods/drops mods/rarity
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

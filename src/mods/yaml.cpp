@@ -1330,4 +1330,25 @@ namespace mods::yaml {
 	}
 
 
+	std::string directory(std::string_view type) {
+		static bool set = false;
+		static std::string base = MENTOC_DATA_DIR;
+		if(set == false) {
+			base += "objects/";
+			std::vector<char> buf;
+			buf.resize(1024 * 1024);
+			std::fill(buf.begin(),buf.end(),0);
+			realpath(base.c_str(),&buf[0]);
+			base = (char*)&buf[0];
+			set = true;
+		}
+
+		std::string sanitized_type;
+		for(const auto& ch : type) {
+			if(isalpha(ch)) {
+				sanitized_type += ch;
+			}
+		}
+		return CAT(base,"/",sanitized_type);
+	}
 };
