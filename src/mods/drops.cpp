@@ -69,10 +69,6 @@ namespace mods::drops {
 	static constexpr mob_vnum TRITON_LABS_SCIENTIST = 600;
 	static constexpr mob_vnum VOLUNTEER_PATIENT = 601;
 
-	///
-
-//
-
 	struct randomized_drop_t {
 		mob_vnum mob;
 		std::string yaml;
@@ -185,6 +181,7 @@ namespace mods::drops {
 			log("Warning: this should never happen. Resorted to common_rifle");
 			yaml = rand_item(common_rifles);
 		}
+		log("Dropping common object: %s",yaml.c_str());
 		m_debug("create_common_object_into placing '" << yaml << "'");
 		create_object_into(yaml,container);
 	}
@@ -208,6 +205,7 @@ namespace mods::drops {
 		for(const auto& drop : drops) {
 			if(drop.mob == victim->cd()->mob_specials.vnum) {
 				if(roll(drop)) {
+					std::cerr << green_str("Dropping item for player: ") << drop.yaml << "\n";
 					create_object_into(drop.yaml,corpse);
 				}
 			}
@@ -256,7 +254,7 @@ namespace mods::drops {
 		return objects;
 	}
 
-	void init() {
+	void index_yaml_files() {
 		drops.clear();
 		common_drop_item_for_mob(frag,INFECTED_DRONE);
 		common_drop_item_for_mob(claymore,INFECTED_DRONE);
@@ -315,6 +313,20 @@ namespace mods::drops {
 		CRAWL_FOR(explosive);
 
 #undef CRAWL_FOR
+
+	}
+
+	SUPERCMD(do_reindex_yaml) {
+		ADMIN_REJECT();
+		player->sendln("[+] Starting re-index of yaml files...");
+		index_yaml_files();
+		player->sendln("[+] DONE");
+	}
+
+
+	void init() {
+		index_yaml_files();
+		ADD_BUILDER_COMMAND("admin:yaml:re-index",do_reindex_yaml);
 	}
 
 };
