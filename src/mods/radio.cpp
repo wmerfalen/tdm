@@ -21,11 +21,24 @@ namespace mods::radio {
 			power(_orm->rs_power),
 			id(_orm->id),
 			orm(_orm) {
+			room = real_room(room_v);
+			if(room == NOWHERE) {
+				x = y = z = 0;
+				log("WARNING: real_room for radio station %d is NOWHERE", _orm->id);
+			} else {
+				x = world[room].x;
+				y = world[room].y;
+				z = world[room].z;
+			}
 			std::cout << "[station_t]: initialized from db: " << _orm->dump() << "\n";
 		}
 		auto destroy() {
 			return orm->destroy();
 		}
+		int x;
+		int y;
+		int z;
+		room_rnum room;
 		room_vnum room_v;
 		std::string name;
 		uint16_t power;
@@ -39,6 +52,7 @@ namespace mods::radio {
 
 	std::size_t load_all() {
 		std::size_t count = 0;
+		stations.clear();
 		mods::orm::radio_station_list() = mods::orm::load_all_radio_station_list();
 		for(const auto& station : mods::orm::radio_station_list()) {
 			stations.emplace_back(std::make_shared<station_t>(station));
@@ -56,13 +70,66 @@ namespace mods::radio {
 		return std::nullopt;
 	}
 
+	bool within_reach_of_station(player_ptr_t player,station_ptr_t station) {
+		auto room = player->room();
+		if(room >= world.size()) {
+			std::cerr << "[station_t]: player in an odd room id: " << room << "\n";
+			return false;
+		}
+		const auto& player_room = world[room];
+		if(station->room == NOWHERE) {
+			log("Player not within reach due to station being NOWHERE: %s",station->name.c_str());
+			return false;
+		}
+		if(station->room >= world.size()) {
+			log("Player not within reach because station is outside world.size(): %s",station->name.c_str());
+			return false;
+		}
+		const auto& station_room = world[station->room];
+		bool x_passes = false, y_passes = false, z_passes = false;
+		if(player_room.x == station_room.x) {
+			m_debug("x passes [0]");
+			x_passes = true;
+		} else if(player_room.x < station_room.x) {
+			m_debug("x passes [1]");
+			x_passes = player_room.x >= station_room.x - station->power;
+		} else if(player_room.x > station_room.x) {
+			m_debug("x passes [2]");
+			x_passes = player_room.x <= station_room.x + station->power;
+		}
+		if(player_room.y == station_room.y) {
+			m_debug("y passes [0]");
+			y_passes = true;
+		} else if(player_room.y < station_room.y) {
+			m_debug("y passes [1]");
+			y_passes = player_room.y >= station_room.y - station->power;
+		} else if(player_room.y > station_room.y) {
+			m_debug("y passes [2]");
+			y_passes = player_room.y <= station_room.y + station->power;
+		}
+		if(player_room.z == station_room.z) {
+			m_debug("z passes [0]");
+			z_passes = true;
+		} else if(player_room.z < station_room.z) {
+			m_debug("z passes [1]");
+			z_passes = player_room.z >= station_room.z - station->power;
+		} else if(player_room.z > station_room.z) {
+			m_debug("z passes [2]");
+			z_passes = player_room.z <= station_room.z + station->power;
+		}
+		return x_passes && y_passes && z_passes;
+	}
+
 	list_t gather_players(station_ptr_t station) {
 		list_t list;
 		mods::loops::foreach_player<list_t>([&](player_ptr_t player, list_t* _list) -> bool {
 			if(player->is_dead()) {
 				return true;
 			}
-			_list->emplace_back(player);
+
+			if(within_reach_of_station(player,station)) {
+				list.emplace_back(player);
+			}
 			return true;
 		},&list);
 
@@ -99,11 +166,12 @@ namespace mods::radio {
 			player->sendln("Unable to find a station by that name.");
 			return;
 		}
+		auto msg = argat(1);
 
-		player->sendln(CAT("Sending message: \"",argat(1),"\""));
+		player->sendln(CAT("Sending message: \"",msg,"\""));
 
 		for(const auto& player : gather_players(station_opt.value())) {
-			player->sendln(CAT("{blu}[RADIO]{/blu}: ",argat(1)));
+			player->sendln(CAT("{grn}[",station_opt.value()->name,"]: {/grn}",msg));
 		}
 		player->sendln("Done");
 
@@ -162,12 +230,23 @@ namespace mods::radio {
 
 		ADMIN_DONE();
 	}
+	SUPERCMD(do_admin_radio_station_list) {
+		ADMIN_REJECT();
+
+		player->sendln("Listing currently loaded stations (not from the db)...");
+		for(const auto& s : stations) {
+			player->sendln(CAT("{grn}[",s->id,"]{/grn}:",s->name,"power:",s->power,",room_vnum:",s->room_v));
+		}
+		player->sendln("End of list");
+		ADMIN_DONE();
+	}
 	SUPERCMD(do_admin_radio_help) {
 		ADMIN_REJECT();
 		player->sendln(
 		    CAT(
 		        "{grn}admin:radio commands\r\n"
 		        "{grn}admin:radio:create <station-name> <power>\r\n"
+		        "{grn}admin:radio:list\r\n"
 		        "{grn}admin:radio:delete <station-name>\r\n"
 		        "{grn}admin:radio:reload\r\n"
 		        "{grn}admin:radio:transmit <station-name> <message>\r\n"
@@ -180,6 +259,7 @@ namespace mods::radio {
 		ADD_BUILDER_COMMAND("admin:radio",do_admin_radio_help);
 		ADD_BUILDER_COMMAND("admin:radio:transmit",do_admin_radio_transmit);
 		ADD_BUILDER_COMMAND("admin:radio:create",do_admin_radio_station_create);
+		ADD_BUILDER_COMMAND("admin:radio:list",do_admin_radio_station_list);
 		ADD_BUILDER_COMMAND("admin:radio:delete",do_admin_radio_station_delete);
 		ADD_BUILDER_COMMAND("admin:radio:reload",do_admin_radio_station_reload);
 

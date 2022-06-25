@@ -2,7 +2,9 @@
 see doc/building/2022-quarter-1-features.md
 
 [ ] MUD RADIO
-	[ ] Broadcast messages to all players
+	[x] Broadcast messages to all players
+	[ ] `radio_station.power` calculates how strong the signal is
+		[ ] x,y,z position of player is used
 	[ ] Can only be accessible when you have an in-game radio
 
 

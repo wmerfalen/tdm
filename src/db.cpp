@@ -56,6 +56,7 @@
 #include "mods/util-map.hpp"
 #include "mods/rooms.hpp"
 #include "mods/prefs.hpp"
+#include "mods/radio.hpp"
 
 namespace mods::zone {
 	extern void reset_zone(zone_rnum);
@@ -415,6 +416,8 @@ void boot_world(void) {
 
 	log("Loading event messages...");
 	mods::players::event_messages::load_from_db();
+
+	mods::radio::init();
 }
 
 

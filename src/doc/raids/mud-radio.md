@@ -13,6 +13,10 @@
 	- `power` is the number of rooms from the center of the station
 		- dictates how far out the signal goes
 
+## List
+- `admin:radio:list`
+	- lists all stations currently loaded into memory
+
 ## Delete
 - `admin:radio:delete <station-name>`
 	- `station-name` is the first matched station name based on what characters it starts with.
