@@ -42,6 +42,16 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 	using node = mods::behaviour_tree_impl::node;
 	using node_type = mods::behaviour_tree_impl::node::node_type_t;
 
+
+	TChildNode report_hostile_activity() {
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			const auto& g = orthos_spawn_sentinel_ptr(mob.uuid());
+			m_debug("reporting hostile activity");
+			mods::response_team::radio::report_violence(mob.uuid(),"Disciple 1, 810 charlie at {exact_location}");
+			return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
+		});
+	}
+
 	TChildNode shotgun_attack() {
 		return TNode::create_leaf([](mods::npc& mob) -> TStatus {
 			orthos_spawn_sentinel_ptr(mob.uuid())->shotgun_attack_within_range();
@@ -106,7 +116,6 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 			return TStatus::SUCCESS;
 		});
 	}
-
 
 
 
@@ -445,14 +454,6 @@ namespace mods::mobs::orthos_spawn_sentinel_btree {
 
 
 
-	TChildNode report_hostile_activity() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			const auto& g = orthos_spawn_sentinel_ptr(mob.uuid());
-			m_debug("reporting hostile activity");
-			mods::response_team::radio::report_violence(mob.uuid(),"Disciple 1, 810 charlie at {exact_location}");
-			return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
-		});
-	}
 
 
 

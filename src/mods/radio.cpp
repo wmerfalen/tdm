@@ -10,24 +10,42 @@
 #include "interpreter.hpp"
 #include "loops.hpp"
 #include "str.hpp"
+#include "orm/radio-station.hpp"
 
 namespace mods::radio {
 	struct station_t {
 		station_t() = delete;
-		station_t(std::shared_ptr<mods::orm::radio_station> orm) :
-			room_v(orm->rs_room_vnum),
-			name(orm->rs_name),
-			power(orm->rs_power) {
-			std::cout << "[station_t]: initialized from db: " << orm->dump() << "\n";
+		station_t(std::shared_ptr<mods::orm::radio_station> _orm) :
+			room_v(_orm->rs_room_vnum),
+			name(_orm->rs_name),
+			power(_orm->rs_power),
+			id(_orm->id),
+			orm(_orm) {
+			std::cout << "[station_t]: initialized from db: " << _orm->dump() << "\n";
+		}
+		auto destroy() {
+			return orm->destroy();
 		}
 		room_vnum room_v;
 		std::string name;
 		uint16_t power;
+		uint64_t id;
+		std::shared_ptr<mods::orm::radio_station> orm;
 	};
 	using list_t = std::vector<player_ptr_t>;
 
 	using station_ptr_t = std::shared_ptr<station_t>;
 	static std::deque<station_ptr_t> stations;
+
+	std::size_t load_all() {
+		std::size_t count = 0;
+		mods::orm::radio_station_list() = mods::orm::load_all_radio_station_list();
+		for(const auto& station : mods::orm::radio_station_list()) {
+			stations.emplace_back(std::make_shared<station_t>(station));
+			++count;
+		}
+		return count;
+	}
 
 	std::optional<station_ptr_t> get_station_by_name(std::string_view name) {
 		for(const auto& station : stations) {
@@ -49,6 +67,18 @@ namespace mods::radio {
 		},&list);
 
 		return list;
+	}
+
+	void transmit_globally(std::string_view msg) {
+		list_t list;
+		mods::loops::foreach_player<list_t>([&](player_ptr_t player, list_t* _list) -> bool {
+			if(player->is_dead()) {
+				return true;
+			}
+			player->sendln(CAT("{red}[HOSTILE RADIO{/red}: ",msg.data()));
+			return true;
+		},&list);
+
 	}
 
 	void add_station_to_list(auto& orm) {
@@ -107,14 +137,53 @@ namespace mods::radio {
 
 		ADMIN_DONE();
 	}
-	void init() {
-		ADD_BUILDER_COMMAND("admin:radio:transmit",do_admin_radio_transmit);
-		ADD_BUILDER_COMMAND("admin:radio:station:create",do_admin_radio_station_create);
-
-		mods::orm::radio_station_list() = mods::orm::load_all_radio_station_list();
-		for(const auto& station : mods::orm::radio_station_list()) {
-			stations.emplace_back(std::make_shared<station_t>(station));
+	SUPERCMD(do_admin_radio_station_delete) {
+		ADMIN_REJECT();
+		if(!argshave()->size_gt(0)->passed()) {
+			player->sendln("Usage: admin:radio:station:delete <station-name>");
+			return;
 		}
+		auto station_opt = get_station_by_name(argat(0));
+		if(!station_opt.has_value()) {
+			player->sendln("Could not find a station by that name");
+			return;
+		}
+		auto station = station_opt.value();
+		auto status = station->destroy();
+		player->sendln(CAT("delete status: ",std::get<1>(status)));
+
+		ADMIN_DONE();
+	}
+	SUPERCMD(do_admin_radio_station_reload) {
+		ADMIN_REJECT();
+
+		auto count = load_all();
+		player->sendln(CAT("Loaded ",count, " stations from the database."));
+
+		ADMIN_DONE();
+	}
+	SUPERCMD(do_admin_radio_help) {
+		ADMIN_REJECT();
+		player->sendln(
+		    CAT(
+		        "{grn}admin:radio commands\r\n"
+		        "{grn}admin:radio:create <station-name> <power>\r\n"
+		        "{grn}admin:radio:delete <station-name>\r\n"
+		        "{grn}admin:radio:reload\r\n"
+		        "{grn}admin:radio:transmit <station-name> <message>\r\n"
+		    )
+		);
+
+		ADMIN_DONE();
+	}
+	void init() {
+		ADD_BUILDER_COMMAND("admin:radio",do_admin_radio_help);
+		ADD_BUILDER_COMMAND("admin:radio:transmit",do_admin_radio_transmit);
+		ADD_BUILDER_COMMAND("admin:radio:create",do_admin_radio_station_create);
+		ADD_BUILDER_COMMAND("admin:radio:delete",do_admin_radio_station_delete);
+		ADD_BUILDER_COMMAND("admin:radio:reload",do_admin_radio_station_reload);
+
+		load_all();
 	}
 };
 

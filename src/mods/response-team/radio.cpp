@@ -7,6 +7,10 @@
 #include "../../comm.h"
 #include "../query-objects.hpp"
 
+namespace mods::radio {
+	extern void transmit_globally(std::string_view);
+};
+
 namespace mods::response_team::radio {
 	const std::vector<std::string_view>& security_force_matches() {
 		static std::vector<std::string_view> list;
@@ -43,14 +47,11 @@ namespace mods::response_team::radio {
 		return std::move(result);
 	}
 	void dispatch_help_message(uuid_t mob_uuid,std::string_view message, severity_t severity) {
-		/** FIXME: this segfaults currently. */
-		std::cerr << green_str("response team dispatch_help stub. returning early") << "\n";
-		return;
 #if 0
 		auto npc = ptr_by_uuid(mob_uuid);
-		mods::response_team::radio::incidents[npc->room()] += (uint8_t)severity;
+		//mods::response_team::radio::incidents[npc->room()] += (uint8_t)severity;
 
-		message = interpolate_location(npc,message);
+		//message = interpolate_location(npc,message);
 		act(CAT("$n speaks into $s radio: '",message.data(),"'!").c_str(),FALSE,npc->cd(),0,0,TO_ROOM);
 		/**
 		 * Radio code meanings
@@ -73,19 +74,20 @@ namespace mods::response_team::radio {
 		if(response.length() == 0) {
 			response = CAT(npc->name().c_str(),", say again");
 		}
-		auto room = npc->room();
-		mods::globals::defer_queue->push(RADIO_INITIAL_RESPONSE_TICKS(), [room,mob_uuid,response,severity]() {
-			auto npc = ptr_by_uuid(mob_uuid);
-			if(npc) {
-				auto ids = mods::query_objects::query_equipment_by_yaml(npc, "gadget/cbradio.yml");
-				if(ids.size()) {
-					auto radio = optr_by_uuid(ids[0]);
-					if(radio) {
-						act(CAT(radio->name.c_str()," announces '",response.c_str(),"'").c_str(),FALSE,nullptr,0,0,TO_ROOM);
-					}
-				}
-			}
-		});
+		mods::radio::transmit_globally(message);
+		//auto room = npc->room();
+		//mods::globals::defer_queue->push(RADIO_INITIAL_RESPONSE_TICKS(), [room,mob_uuid,response,severity]() {
+		//	auto npc = ptr_by_uuid(mob_uuid);
+		//	if(npc) {
+		//		auto ids = mods::query_objects::query_equipment_by_yaml(npc, "gadget/cbradio.yml");
+		//		if(ids.size()) {
+		//			auto radio = optr_by_uuid(ids[0]);
+		//			if(radio) {
+		//				act(CAT(radio->name.c_str()," announces '",response.c_str(),"'").c_str(),FALSE,nullptr,0,0,TO_ROOM);
+		//			}
+		//		}
+		//	}
+		//});
 #endif
 	}
 

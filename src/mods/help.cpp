@@ -883,6 +883,7 @@ namespace mods::help {
 			"{gld}admin:disable_registration{/gld} -- {grn}disable new player registration[builder-utils]{/grn}",
 			"{gld}admin:banish{/gld} -- {grn}force a player out of your room(not permanent)[debugging-players][bad-players]{/grn}",
 			"{gld}admin:pull{/gld} -- {grn}transfer a player to your room (not permanent)[debugging-players]{/grn}",
+			"{gld}admin:radio{/gld} -- {grn}manages mud radio [admin-utils] [builder-utils]{/grn}",
 
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Punishing Players ]:-                     {/yel}",

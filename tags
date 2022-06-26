@@ -145,8 +145,8 @@ ACMD	src/mods/contracts.cpp	/^	ACMD(do_contract) {$/;"	kind:function	line:87	nam
 ACMD	src/mods/corpse.cpp	/^	ACMD(do_corpse_me) {$/;"	kind:function	line:261	namespace:mods::corpse	signature:(do_corpse_me)
 ACMD	src/mods/date-time.cpp	/^	ACMD(do_moon_phase) {$/;"	kind:function	line:233	namespace:mods::date_time	signature:(do_moon_phase)
 ACMD	src/mods/flee.cpp	/^	ACMD(do_flee) {$/;"	kind:function	line:36	namespace:mods::flee	signature:(do_flee)
-ACMD	src/mods/help.cpp	/^	ACMD(do_help) {$/;"	kind:function	line:1209	namespace:mods::help	signature:(do_help)
-ACMD	src/mods/help.cpp	/^	ACMD(do_search_help) {$/;"	kind:function	line:1283	namespace:mods::help	signature:(do_search_help)
+ACMD	src/mods/help.cpp	/^	ACMD(do_help) {$/;"	kind:function	line:1210	namespace:mods::help	signature:(do_help)
+ACMD	src/mods/help.cpp	/^	ACMD(do_search_help) {$/;"	kind:function	line:1284	namespace:mods::help	signature:(do_search_help)
 ACMD	src/mods/levels.cpp	/^	ACMD(do_exp) {$/;"	kind:function	line:875	namespace:mods::levels	signature:(do_exp)
 ACMD	src/mods/loot.cpp	/^	ACMD(do_list_loot) {$/;"	kind:function	line:277	namespace:mods::loot	signature:(do_list_loot)
 ACMD	src/mods/loot.cpp	/^	ACMD(do_show_loot) {$/;"	kind:function	line:237	namespace:mods::loot	signature:(do_show_loot)
@@ -3416,8 +3416,11 @@ SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_inventory) {$/;"	kind:fu
 SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_inventory_container) {$/;"	kind:function	line:236	signature:(do_query_inventory_container)
 SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_room) {$/;"	kind:function	line:197	signature:(do_query_room)
 SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_zone) {$/;"	kind:function	line:258	signature:(do_query_zone)
-SUPERCMD	src/mods/radio.cpp	/^	SUPERCMD(do_admin_radio_station_create) {$/;"	kind:function	line:83	namespace:mods::radio	signature:(do_admin_radio_station_create)
-SUPERCMD	src/mods/radio.cpp	/^	SUPERCMD(do_admin_radio_transmit) {$/;"	kind:function	line:60	namespace:mods::radio	signature:(do_admin_radio_transmit)
+SUPERCMD	src/mods/radio.cpp	/^	SUPERCMD(do_admin_radio_help) {$/;"	kind:function	line:165	namespace:mods::radio	signature:(do_admin_radio_help)
+SUPERCMD	src/mods/radio.cpp	/^	SUPERCMD(do_admin_radio_station_create) {$/;"	kind:function	line:113	namespace:mods::radio	signature:(do_admin_radio_station_create)
+SUPERCMD	src/mods/radio.cpp	/^	SUPERCMD(do_admin_radio_station_delete) {$/;"	kind:function	line:140	namespace:mods::radio	signature:(do_admin_radio_station_delete)
+SUPERCMD	src/mods/radio.cpp	/^	SUPERCMD(do_admin_radio_station_reload) {$/;"	kind:function	line:157	namespace:mods::radio	signature:(do_admin_radio_station_reload)
+SUPERCMD	src/mods/radio.cpp	/^	SUPERCMD(do_admin_radio_transmit) {$/;"	kind:function	line:90	namespace:mods::radio	signature:(do_admin_radio_transmit)
 SUPERCMD	src/mods/rand.cpp	/^	SUPERCMD(do_roll_dice) {$/;"	kind:function	line:15	namespace:mods::rand	signature:(do_roll_dice)
 SUPERCMD	src/mods/rand.cpp	/^	SUPERCMD(do_roll_dice_average) {$/;"	kind:function	line:23	namespace:mods::rand	signature:(do_roll_dice_average)
 SUPERCMD	src/mods/rate-limiting.cpp	/^	SUPERCMD(do_get_rate_limit_types) {$/;"	kind:function	line:90	namespace:mods::rate_limiting	signature:(do_get_rate_limit_types)
@@ -4442,7 +4445,7 @@ __anon0eba6eba0202	src/mods/mobs/car-thief-behaviour-tree.cpp	/^		return TNode::
 __anon0eba6eba0302	src/mods/mobs/car-thief-behaviour-tree.cpp	/^			TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:158	function:mods::mobs::car_thief_behaviour_tree::watch_room	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
 __anon0eba6eba0402	src/mods/mobs/car-thief-behaviour-tree.cpp	/^			TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:178	function:mods::mobs::car_thief_behaviour_tree::find_vehicle_near_me	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
 __anon0eba6eba0502	src/mods/mobs/car-thief-behaviour-tree.cpp	/^			TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:212	function:mods::mobs::car_thief_behaviour_tree::find_vehicle_near_me	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anon1b31d9e10102	src/mods/help.cpp	/^		auto place = [&](auto section, auto cmd, auto content) {$/;"	kind:function	line:1410	function:mods::help::place_in_sql	file:	signature:(auto section, auto cmd, auto content) 
+__anon1b31d9e10102	src/mods/help.cpp	/^		auto place = [&](auto section, auto cmd, auto content) {$/;"	kind:function	line:1411	function:mods::help::place_in_sql	file:	signature:(auto section, auto cmd, auto content) 
 __anon203ba13c0102	src/mods/orm/scripted-step.cpp	/^		[&](pqxx::row row) -> void {$/;"	kind:function	line:209	function:mods::orm::gather_scripted_steps_by_sequence_vnum	typeref:typename:void	file:	signature:(pqxx::row row) 
 __anon234543430102	src/mods/scripted-sequence-runner.cpp	/^		deferred_list.remove_if([&](const auto& step_info) -> bool {$/;"	kind:function	line:50	function:mods::scripted_sequence_runner::cleanup_scripted_steps	typeref:typename:bool	file:	signature:(const auto& step_info) 
 __anon261d4a530102	src/mods/mobs/defiler.cpp	/^		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const /;"	kind:function	line:118	function:mods::mobs::defiler::setup_damage_callbacks	file:	signature:(const feedback_t& feedback,const uuid_t& player) 
@@ -4550,25 +4553,25 @@ __anona2636cee0102	src/mods/players/event-messages.cpp	/^		mods::loops::foreach_
 __anonaab58d9f0102	src/mods/players/messages.cpp	/^		[player_uuid](std::pair<uuid_t,std::string>& pair) {$/;"	kind:function	line:27	function:mods::players::messages::remove_by_player	file:	signature:(std::pair<uuid_t,std::string>& pair) 
 __anonaab58d9f0202	src/mods/players/messages.cpp	/^		[player_uuid](const uuid_t& u) {$/;"	kind:function	line:33	function:mods::players::messages::remove_by_player	file:	signature:(const uuid_t& u) 
 __anonaf6bf4b70102	src/mods/classes/pyrexia.cpp	/^				mods::globals::defer_queue->push(replenish_ticks, [player_uuid]() {$/;"	kind:function	line:88	function:mods::classes::pyrexia::throw_fire_nade	file:	signature:() 
-__anonb44d975b0102	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](mods::npc& mob) -> TStatus {$/;"	kind:function	line:46	function:mods::mobs::orthos_spawn_sentinel_btree::shotgun_attack	typeref:typename:TStatus	file:	signature:(mods::npc& mob) 
-__anonb44d975b0202	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([&](mods::npc& mob) -> TStatus {$/;"	kind:function	line:58	function:mods::mobs::orthos_spawn_sentinel_btree::debug_echo_tree_name	typeref:typename:TStatus	file:	signature:(mods::npc& mob) 
-__anonb44d975b0302	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:68	function:mods::mobs::orthos_spawn_sentinel_btree::shout_random	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0402	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:78	function:mods::mobs::orthos_spawn_sentinel_btree::random_trivial_action	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0502	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:103	function:mods::mobs::orthos_spawn_sentinel_btree::set_behaviour_tree_to_engage	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0602	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:116	function:mods::mobs::orthos_spawn_sentinel_btree::set_behaviour_tree_to_pursuit	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0702	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:128	function:mods::mobs::orthos_spawn_sentinel_btree::trigger_guard_neutralize	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0802	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:137	function:mods::mobs::orthos_spawn_sentinel_btree::can_still_see_target	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0902	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:146	function:mods::mobs::orthos_spawn_sentinel_btree::find_targets	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0a02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:190	function:mods::mobs::orthos_spawn_sentinel_btree::find_attackers	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0b02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:234	function:mods::mobs::orthos_spawn_sentinel_btree::move_toward_target	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0c02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:279	function:mods::mobs::orthos_spawn_sentinel_btree::attackers_optimal_distance_away	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0d02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:348	function:mods::mobs::orthos_spawn_sentinel_btree::perform_random_non_hostile_action	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0e02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:358	function:mods::mobs::orthos_spawn_sentinel_btree::scan_to_find_hostile_activity	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b0f02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^			TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:404	function:mods::mobs::orthos_spawn_sentinel_btree::move_toward_heading	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b1002	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^			TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:409	function:mods::mobs::orthos_spawn_sentinel_btree::move_toward_heading	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b1102	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^			TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:429	function:mods::mobs::orthos_spawn_sentinel_btree::move_toward_heading	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b1202	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:449	function:mods::mobs::orthos_spawn_sentinel_btree::report_hostile_activity	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anonb44d975b1302	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:462	function:mods::mobs::orthos_spawn_sentinel_btree::engage_hostile	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0102	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:47	function:mods::mobs::orthos_spawn_sentinel_btree::report_hostile_activity	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0202	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](mods::npc& mob) -> TStatus {$/;"	kind:function	line:56	function:mods::mobs::orthos_spawn_sentinel_btree::shotgun_attack	typeref:typename:TStatus	file:	signature:(mods::npc& mob) 
+__anonb44d975b0302	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([&](mods::npc& mob) -> TStatus {$/;"	kind:function	line:68	function:mods::mobs::orthos_spawn_sentinel_btree::debug_echo_tree_name	typeref:typename:TStatus	file:	signature:(mods::npc& mob) 
+__anonb44d975b0402	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:78	function:mods::mobs::orthos_spawn_sentinel_btree::shout_random	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0502	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:88	function:mods::mobs::orthos_spawn_sentinel_btree::random_trivial_action	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0602	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:113	function:mods::mobs::orthos_spawn_sentinel_btree::set_behaviour_tree_to_engage	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0702	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:125	function:mods::mobs::orthos_spawn_sentinel_btree::set_behaviour_tree_to_pursuit	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0802	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:137	function:mods::mobs::orthos_spawn_sentinel_btree::trigger_guard_neutralize	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0902	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:146	function:mods::mobs::orthos_spawn_sentinel_btree::can_still_see_target	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0a02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:155	function:mods::mobs::orthos_spawn_sentinel_btree::find_targets	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0b02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:199	function:mods::mobs::orthos_spawn_sentinel_btree::find_attackers	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0c02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:243	function:mods::mobs::orthos_spawn_sentinel_btree::move_toward_target	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0d02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:288	function:mods::mobs::orthos_spawn_sentinel_btree::attackers_optimal_distance_away	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0e02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:357	function:mods::mobs::orthos_spawn_sentinel_btree::perform_random_non_hostile_action	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b0f02	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:367	function:mods::mobs::orthos_spawn_sentinel_btree::scan_to_find_hostile_activity	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b1002	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^			TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:413	function:mods::mobs::orthos_spawn_sentinel_btree::move_toward_heading	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b1102	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^			TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:418	function:mods::mobs::orthos_spawn_sentinel_btree::move_toward_heading	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b1202	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^			TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:438	function:mods::mobs::orthos_spawn_sentinel_btree::move_toward_heading	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
+__anonb44d975b1302	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:463	function:mods::mobs::orthos_spawn_sentinel_btree::engage_hostile	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
 __anonb62c11d20102	src/mods/mobs/generic-thief.cpp	/^		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const /;"	kind:function	line:233	function:mods::mobs::generic_thief::setup_damage_callbacks	file:	signature:(const feedback_t& feedback,const uuid_t& player) 
 __anonb62c11d20202	src/mods/mobs/generic-thief.cpp	/^		player_ptr->register_damage_event_callback(enrage_if,[&](const feedback_t& feedback,const uuid/;"	kind:function	line:249	function:mods::mobs::generic_thief::setup_damage_callbacks	file:	signature:(const feedback_t& feedback,const uuid_t& player) 
 __anonb62c11d20302	src/mods/mobs/generic-thief.cpp	/^		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid/;"	kind:function	line:308	function:mods::mobs::generic_thief::setup_damage_callbacks	file:	signature:(const feedback_t& feedback,const uuid_t& player) 
@@ -4677,7 +4680,8 @@ __anone55c04c80c02	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^			TNode::c
 __anone55c04c80d02	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^			TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:329	function:mods::mobs::lowly_security_behaviour_tree::move_toward_heading	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
 __anone55c04c80e02	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:345	function:mods::mobs::lowly_security_behaviour_tree::report_hostile_activity	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
 __anone55c04c80f02	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {$/;"	kind:function	line:354	function:mods::mobs::lowly_security_behaviour_tree::engage_hostile	typeref:typename:TStatus	file:	signature:(TArgumentType& mob) 
-__anone9971be70102	src/mods/radio.cpp	/^		mods::loops::foreach_player<list_t>([&](player_ptr_t player, list_t* _list) -> bool {$/;"	kind:function	line:43	function:mods::radio::gather_players	typeref:typename:bool	file:	signature:(player_ptr_t player, list_t* _list) 
+__anone9971be70102	src/mods/radio.cpp	/^		mods::loops::foreach_player<list_t>([&](player_ptr_t player, list_t* _list) -> bool {$/;"	kind:function	line:61	function:mods::radio::gather_players	typeref:typename:bool	file:	signature:(player_ptr_t player, list_t* _list) 
+__anone9971be70202	src/mods/radio.cpp	/^		mods::loops::foreach_player<list_t>([&](player_ptr_t player, list_t* _list) -> bool {$/;"	kind:function	line:74	function:mods::radio::transmit_globally	typeref:typename:bool	file:	signature:(player_ptr_t player, list_t* _list) 
 __anoned9843860102	src/mods/mobs/melee-combatant.cpp	/^		player_ptr->register_damage_event_callback(pacify_events,[&](const feedback_t& feedback,const /;"	kind:function	line:149	function:mods::mobs::melee_combatant::setup_damage_callbacks	file:	signature:(const feedback_t& feedback,const uuid_t& player) 
 __anoned9843860202	src/mods/mobs/melee-combatant.cpp	/^		player_ptr->register_damage_event_callback(enrage_if,[&](const feedback_t& feedback,const uuid/;"	kind:function	line:165	function:mods::mobs::melee_combatant::setup_damage_callbacks	file:	signature:(const feedback_t& feedback,const uuid_t& player) 
 __anoned9843860302	src/mods/mobs/melee-combatant.cpp	/^		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid/;"	kind:function	line:242	function:mods::mobs::melee_combatant::setup_damage_callbacks	file:	signature:(const feedback_t& feedback,const uuid_t& player) 
@@ -4785,7 +4789,7 @@ add_room_dissolve_affect	src/mods/rooms.cpp	/^	void add_room_dissolve_affect(roo
 add_room_dissolve_affect_every_n_tick	src/mods/rooms.cpp	/^	void add_room_dissolve_affect_every_n_tick(room_rnum room, affect_t affect, affect_amount_t amt/;"	kind:function	line:99	namespace:mods::rooms::affects	typeref:typename:void	signature:(room_rnum room,affect_t affect,affect_amount_t amt,uint32_t n_ticks)
 add_room_to_pavements	src/mods/builder.cpp	/^	void add_room_to_pavements(player_ptr_t& player, int room_id) {$/;"	kind:function	line:659	namespace:mods::builder	typeref:typename:void	signature:(player_ptr_t & player,int room_id)
 add_shotgun_charge	src/mods/armor/gauntlets-xtv89.cpp	/^	user_feedback xtv89::add_shotgun_charge() {$/;"	kind:function	line:132	class:mods::armor::xtv89	typeref:typename:user_feedback	signature:()
-add_station_to_list	src/mods/radio.cpp	/^	void add_station_to_list(auto& orm) {$/;"	kind:function	line:54	namespace:mods::radio	typeref:typename:void	signature:(auto & orm)
+add_station_to_list	src/mods/radio.cpp	/^	void add_station_to_list(auto& orm) {$/;"	kind:function	line:84	namespace:mods::radio	typeref:typename:void	signature:(auto & orm)
 add_subscriber	src/mods/chat.cpp	/^	void channel::add_subscriber(const socket_t& sock) {$/;"	kind:function	line:56	class:mods::chat::channel	typeref:typename:void	signature:(const socket_t & sock)
 add_super_user	src/mods/js.cpp	/^		static duk_ret_t add_super_user(duk_context *ctx) {$/;"	kind:function	line:78	namespace:mods::js	typeref:typename:duk_ret_t	file:	signature:(duk_context * ctx)
 add_target	src/mods/weapons/unique-weapons.cpp	/^	void unique_ranged_weapon::add_target(const uuid_t& target_uuid) {$/;"	kind:function	line:27	class:mods::weapons::unique_ranged_weapon	typeref:typename:void	signature:(const uuid_t & target_uuid)
@@ -5215,7 +5219,7 @@ attacker	src/mods/unit-tests/elemental-armor-resistances.cpp	/^		auto attacker =
 attacker_msg	src/structs.h	/^	char	*attacker_msg;  \/* message to attacker *\/$/;"	kind:member	line:1847	struct:msg_type	typeref:typename:char *	file:	access:public
 attacker_was_player	src/mods/drops.cpp	/^	bool attacker_was_player(player_ptr_t& victim) {$/;"	kind:function	line:189	namespace:mods::drops	typeref:typename:bool	signature:(player_ptr_t & victim)
 attackers_optimal_distance_away	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode attackers_optimal_distance_away() {$/;"	kind:function	line:292	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-attackers_optimal_distance_away	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode attackers_optimal_distance_away() {$/;"	kind:function	line:278	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+attackers_optimal_distance_away	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode attackers_optimal_distance_away() {$/;"	kind:function	line:287	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 attacking_with	src/mods/player.hpp	/^			obj_data_ptr_t attacking_with() {$/;"	kind:function	line:783	struct:mods::player	typeref:typename:obj_data_ptr_t	file:	access:public	signature:()
 attacking_with_type	src/mods/player.cpp	/^	int player::attacking_with_type() {$/;"	kind:function	line:2392	class:mods::player	typeref:typename:int	signature:()
 attempt_direction	src/mods/classes/breacher.cpp	/^	void breacher::attempt_direction(direction_t dir) {$/;"	kind:function	line:66	class:mods::classes::breacher	typeref:typename:void	signature:(direction_t dir)
@@ -5666,7 +5670,7 @@ can_spray	src/mods/combat-composer/spray-target.cpp	/^	bool can_spray(player_ptr
 can_still_see_target	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto can_still_see_target() {$/;"	kind:function	line:141	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:()
 can_still_see_target	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto can_still_see_target() {$/;"	kind:function	line:138	namespace:mods::mobs::mini_gunner_behaviour_tree	typeref:typename:auto	signature:()
 can_still_see_target	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode can_still_see_target() {$/;"	kind:function	line:147	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-can_still_see_target	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode can_still_see_target() {$/;"	kind:function	line:136	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+can_still_see_target	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode can_still_see_target() {$/;"	kind:function	line:145	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 can_take_obj	src/act.item.cpp	/^int can_take_obj(char_data *ch, struct obj_data *obj) {$/;"	kind:function	line:186	typeref:typename:int	signature:(char_data * ch,struct obj_data * obj)
 can_wield_in_secondary	src/mods/object-utils.cpp	/^	bool can_wield_in_secondary(const obj_ptr_t& item) {$/;"	kind:function	line:33	namespace:mods::object_utils	typeref:typename:bool	signature:(const obj_ptr_t & item)
 cancel_block	src/mods/player.cpp	/^	void player::cancel_block() {$/;"	kind:function	line:1539	class:mods::player	typeref:typename:void	signature:()
@@ -6753,7 +6757,7 @@ debug_echo	src/mods/yaml.cpp	/^#define debug_echo(/;"	kind:macro	line:32	file:	s
 debug_echo_tree_name	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto debug_echo_tree_name(str_t name) {$/;"	kind:function	line:49	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:(str_t name)
 debug_echo_tree_name	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto debug_echo_tree_name(str_t name) {$/;"	kind:function	line:34	namespace:mods::mobs::mini_gunner_behaviour_tree	typeref:typename:auto	signature:(str_t name)
 debug_echo_tree_name	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode debug_echo_tree_name(str_t name) {$/;"	kind:function	line:60	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:(str_t name)
-debug_echo_tree_name	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode debug_echo_tree_name(std::string n) {$/;"	kind:function	line:55	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:(std::string n)
+debug_echo_tree_name	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode debug_echo_tree_name(std::string n) {$/;"	kind:function	line:65	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:(std::string n)
 debug_mode_on	src/mods/mobs/defiler.cpp	/^	bool defiler::debug_mode_on() {$/;"	kind:function	line:60	class:mods::mobs::defiler	typeref:typename:bool	signature:()
 debug_state	src/mods/debug.cpp	/^	std::unique_ptr<state> debug_state;$/;"	kind:variable	line:10	namespace:mods::debug	typeref:typename:std::unique_ptr<state>
 decorate	src/mods/mob-equipment.cpp	/^	void decorate(const uuid_t& mob_uuid) {$/;"	kind:function	line:37	namespace:mods::mob_equipment	typeref:typename:void	signature:(const uuid_t & mob_uuid)
@@ -6910,6 +6914,7 @@ destroy	src/mods/orm/radio-station.hpp	/^		auto destroy() {$/;"	kind:function	li
 destroy	src/mods/orm/raid.hpp	/^		auto destroy() {$/;"	kind:function	line:43	struct:mods::orm::raid	typeref:typename:auto	file:	access:public	signature:()
 destroy	src/mods/orm/scripted-step.cpp	/^	void scripted_sequences::destroy() {$/;"	kind:function	line:88	class:mods::orm::scripted_sequences	typeref:typename:void	signature:()
 destroy	src/mods/orm/scripted-step.cpp	/^	void scripted_step::destroy() {$/;"	kind:function	line:25	class:mods::orm::scripted_step	typeref:typename:void	signature:()
+destroy	src/mods/radio.cpp	/^		auto destroy() {$/;"	kind:function	line:26	struct:mods::radio::station_t	typeref:typename:auto	file:	access:public	signature:()
 destroy_direction	src/mods/builder.cpp	/^	bool destroy_direction(room_rnum room_id,int direction) {$/;"	kind:function	line:1142	namespace:mods::builder	typeref:typename:bool	signature:(room_rnum room_id,int direction)
 destroy_door	src/mods/player-contract-instance.cpp	/^	void player_contract_instance::destroy_door(const room_rnum& room_id,const int8_t& direction) {$/;"	kind:function	line:524	class:mods::contracts::player_contract_instance	typeref:typename:void	signature:(const room_rnum & room_id,const int8_t & direction)
 destroy_item	src/mods/player-contract-instance.cpp	/^	void player_contract_instance::destroy_item(obj_ptr_t& object) {$/;"	kind:function	line:505	class:mods::contracts::player_contract_instance	typeref:typename:void	signature:(obj_ptr_t & object)
@@ -7050,7 +7055,7 @@ dispatch_event	src/mods/weapons/shotgun-dst7A.cpp	/^	void dst7A::dispatch_event(
 dispatch_event	src/mods/weapons/smg-vc88.cpp	/^	void vc88::dispatch_event(damage_event_t event,player_ptr_t victim) {$/;"	kind:function	line:85	class:mods::weapons::smg::vc88	typeref:typename:void	signature:(damage_event_t event,player_ptr_t victim)
 dispatch_event	src/mods/weapons/unique-weapons.cpp	/^	void unique_ranged_weapon::dispatch_event(damage_event_t event, player_ptr_t victim) {$/;"	kind:function	line:34	class:mods::weapons::unique_ranged_weapon	typeref:typename:void	signature:(damage_event_t event,player_ptr_t victim)
 dispatch_help	src/mods/builder/slotted-builder.hpp	/^			bool dispatch_help(std::string argument) {$/;"	kind:function	line:850	struct:mods::builder::slotted_builder	typeref:typename:bool	file:	access:private	signature:(std::string argument)
-dispatch_help_message	src/mods/response-team/radio.cpp	/^	void dispatch_help_message(uuid_t mob_uuid,std::string_view message, severity_t severity) {$/;"	kind:function	line:45	namespace:mods::response_team::radio	typeref:typename:void	signature:(uuid_t mob_uuid,std::string_view message,severity_t severity)
+dispatch_help_message	src/mods/response-team/radio.cpp	/^	void dispatch_help_message(uuid_t mob_uuid,std::string_view message, severity_t severity) {$/;"	kind:function	line:49	namespace:mods::response_team::radio	typeref:typename:void	signature:(uuid_t mob_uuid,std::string_view message,severity_t severity)
 dispatch_list_extract_action	src/mods/builder/slotted-builder.hpp	/^			bool dispatch_list_extract_action(std::string argument) {$/;"	kind:function	line:786	struct:mods::builder::slotted_builder	typeref:typename:bool	file:	access:private	signature:(std::string argument)
 dispatch_multi_vnum_action	src/mods/builder/raid.cpp	/^		bool dispatch_multi_vnum_action(std::string argument) override {$/;"	kind:function	line:41	struct:mods::builder::raid::raid_interface	typeref:typename:bool	file:	access:public	signature:(std::string argument)
 dispatch_multi_vnum_action	src/mods/builder/slotted-builder.hpp	/^			virtual bool dispatch_multi_vnum_action(std::string argument) {$/;"	kind:function	line:705	struct:mods::builder::slotted_builder	typeref:typename:bool	file:	access:private	signature:(std::string argument)
@@ -7328,7 +7333,7 @@ engage	src/mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::engage(
 engage	src/mods/combat-composer/engage-target.cpp	/^namespace mods::combat_composer::engage {$/;"	kind:namespace	line:25	namespace:mods::combat_composer	file:
 engage_hostile	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto engage_hostile() {$/;"	kind:function	line:353	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:()
 engage_hostile	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode engage_hostile() {$/;"	kind:function	line:481	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-engage_hostile	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode engage_hostile() {$/;"	kind:function	line:461	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+engage_hostile	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode engage_hostile() {$/;"	kind:function	line:462	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 engage_state	src/mods/combat-composer/engage-target.cpp	/^	namespace engage_state {$/;"	kind:namespace	line:26	namespace:mods::combat_composer::engage	file:
 engage_target	src/mods/combat-composer/engage-target.cpp	/^	bool engage_target(player_ptr_t& attacker,player_ptr_t& victim, obj_ptr_t& weapon) {$/;"	kind:function	line:744	namespace:mods::combat_composer	typeref:typename:bool	signature:(player_ptr_t & attacker,player_ptr_t & victim,obj_ptr_t & weapon)
 engage_target	src/mods/combat-composer/engage-target.cpp	/^	bool engage_target(player_ptr_t& attacker,std::string_view target_name, obj_ptr_t& weapon) {$/;"	kind:function	line:826	namespace:mods::combat_composer	typeref:typename:bool	signature:(player_ptr_t & attacker,std::string_view target_name,obj_ptr_t & weapon)
@@ -7883,7 +7888,7 @@ find_attackers	src/mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^	TChildNod
 find_attackers	src/mods/mobs/generic-thief-behaviour-tree.cpp	/^	TChildNode find_attackers() {$/;"	kind:function	line:102	namespace:mods::mobs::generic_thief_behaviour_tree	typeref:typename:TChildNode	signature:()
 find_attackers	src/mods/mobs/melee-combatant-behaviour-tree.cpp	/^	TChildNode find_attackers() {$/;"	kind:function	line:89	namespace:mods::mobs::melee_combatant_behaviour_tree	typeref:typename:TChildNode	signature:()
 find_attackers	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode find_attackers() {$/;"	kind:function	line:205	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-find_attackers	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode find_attackers() {$/;"	kind:function	line:189	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+find_attackers	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode find_attackers() {$/;"	kind:function	line:198	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 find_attackers	src/mods/mobs/shoplifter-behaviour-tree.cpp	/^	TChildNode find_attackers() {$/;"	kind:function	line:89	namespace:mods::mobs::shoplifter_behaviour_tree	typeref:typename:TChildNode	signature:()
 find_bc89	src/mods/armor/vest-bc89.cpp	/^	bc89_ptr_t find_bc89(const uuid_t& uuid) {$/;"	kind:function	line:46	namespace:mods::armor	typeref:typename:bc89_ptr_t	signature:(const uuid_t & uuid)
 find_board	src/boards.cpp	/^int find_board(char_data *ch) {$/;"	kind:function	line:100	typeref:typename:int	signature:(char_data * ch)
@@ -7918,7 +7923,7 @@ find_multi_by_column	src/mods/orm/fetcher.hpp	/^	uint64_t find_multi_by_column($
 find_nickname	src/mods/rooms.cpp	/^	std::optional<room_rnum> find_nickname(std::string_view nick) {$/;"	kind:function	line:136	namespace:mods::rooms	typeref:typename:std::optional<room_rnum>	signature:(std::string_view nick)
 find_npc_by_name	src/castle.cpp	/^char_data *find_npc_by_name(char_data *ch,$/;"	kind:function	line:229	typeref:typename:char_data *	signature:(char_data * ch,const char * pszName,int iLen)
 find_oper_num	src/shop.cpp	/^int find_oper_num(char token) {$/;"	kind:function	line:241	typeref:typename:int	signature:(char token)
-find_page_for	src/mods/help.cpp	/^	auto find_page_for(auto topic) {$/;"	kind:function	line:930	namespace:mods::help	typeref:typename:auto	signature:(auto topic)
+find_page_for	src/mods/help.cpp	/^	auto find_page_for(auto topic) {$/;"	kind:function	line:931	namespace:mods::help	typeref:typename:auto	signature:(auto topic)
 find_player_by_name	src/mods/examine.cpp	/^	uuid_t find_player_by_name(player_ptr_t& player, std::string_view arg) {$/;"	kind:function	line:38	namespace:mods::examine	typeref:typename:uuid_t	signature:(player_ptr_t & player,std::string_view arg)
 find_player_by_name	src/mods/js.cpp	/^			player_ptr_t find_player_by_name(std::string_view name,bool& found) {$/;"	kind:function	line:59	namespace:mods::js::utils	typeref:typename:player_ptr_t	signature:(std::string_view name,bool & found)
 find_player_by_name	src/mods/players/search.hpp	/^			std::optional<uuid_t> find_player_by_name(std::string_view name){$/;"	kind:function	line:34	namespace:mods::player::util	typeref:typename:std::optional<uuid_t>	signature:(std::string_view name)
@@ -7949,7 +7954,7 @@ find_targets	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto find_target
 find_targets	src/mods/mobs/melee-combatant-behaviour-tree.cpp	/^	TChildNode find_targets() {$/;"	kind:function	line:47	namespace:mods::mobs::melee_combatant_behaviour_tree	typeref:typename:TChildNode	signature:()
 find_targets	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto find_targets() {$/;"	kind:function	line:165	namespace:mods::mobs::mini_gunner_behaviour_tree	typeref:typename:auto	signature:()
 find_targets	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode find_targets() {$/;"	kind:function	line:163	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-find_targets	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode find_targets() {$/;"	kind:function	line:145	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+find_targets	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode find_targets() {$/;"	kind:function	line:154	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 find_targets	src/mods/mobs/shoplifter-behaviour-tree.cpp	/^	TChildNode find_targets() {$/;"	kind:function	line:47	namespace:mods::mobs::shoplifter_behaviour_tree	typeref:typename:TChildNode	signature:()
 find_targets_with_compromised_line_of_sight	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto find_targets_with_compromised_line_of_sight() {$/;"	kind:function	line:146	namespace:mods::mobs::mini_gunner_behaviour_tree	typeref:typename:auto	signature:()
 find_vc88	src/mods/weapons/smg-vc88.cpp	/^	vc88_ptr_t find_vc88(const uuid_t& uuid) {$/;"	kind:function	line:21	namespace:mods::weapons::smg	typeref:typename:vc88_ptr_t	signature:(const uuid_t & uuid)
@@ -8202,7 +8207,7 @@ game_vnum	src/mods/orm/mini-game.hpp	/^		game_vnum_t game_vnum;$/;"	kind:member	
 game_vnum_t	src/mods/orm/mini-game.hpp	/^		using game_vnum_t = uint32_t;$/;"	kind:typedef	line:23	struct:mods::orm::mini_game	typeref:typename:uint32_t	file:	access:public
 gather_integers_starting_at	src/mods/util.cpp	/^	std::vector<int> parsed_args::gather_integers_starting_at(std::size_t index) {$/;"	kind:function	line:1537	class:mods::util::args::parsed_args	typeref:typename:std::vector<int>	signature:(std::size_t index)
 gather_max_tokens_starting_at	src/mods/util.cpp	/^	std::vector<std::string> parsed_args::gather_max_tokens_starting_at(std::size_t index,std::size/;"	kind:function	line:1556	class:mods::util::args::parsed_args	typeref:typename:std::vector<std::string>	signature:(std::size_t index,std::size_t max_elements)
-gather_players	src/mods/radio.cpp	/^	list_t gather_players(station_ptr_t station) {$/;"	kind:function	line:41	namespace:mods::radio	typeref:typename:list_t	signature:(station_ptr_t station)
+gather_players	src/mods/radio.cpp	/^	list_t gather_players(station_ptr_t station) {$/;"	kind:function	line:59	namespace:mods::radio	typeref:typename:list_t	signature:(station_ptr_t station)
 gather_room	src/mods/sensor-grenade.cpp	/^	void gather_room(uuid_t nade_uuid,room_rnum& room,uint8_t from_direction) {$/;"	kind:function	line:112	namespace:mods::sensor_grenade	typeref:typename:void	signature:(uuid_t nade_uuid,room_rnum & room,uint8_t from_direction)
 gather_scripted_steps_by_sequence_vnum	src/mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> gather_scripted_steps_by_sequence_vnum($/;"	kind:function	line:198	namespace:mods::orm	typeref:typename:std::tuple<int16_t,std::string>	signature:(const sequence_vnum_t & sequence_vnum,std::deque<std::shared_ptr<mods::orm::scripted_step>> * in_list_ptr)
 gather_strings_starting_at	src/mods/util.cpp	/^	std::string parsed_args::gather_strings_starting_at(std::size_t index) {$/;"	kind:function	line:1543	class:mods::util::args::parsed_args	typeref:typename:std::string	signature:(std::size_t index)
@@ -8533,7 +8538,7 @@ get_slot_list	src/mods/orm/contracts.hpp	/^		static inline std::vector<std::stri
 get_slot_list	src/mods/orm/hq.hpp	/^		static std::vector<std::string> get_slot_list() {$/;"	kind:function	line:11	struct:mods::orm::hq	typeref:typename:std::vector<std::string>	file:	access:public	signature:()
 get_slot_list	src/mods/orm/mob-equipment.hpp	/^		static std::vector<std::string> get_slot_list() {$/;"	kind:function	line:14	struct:mods::orm::mob_equipment	typeref:typename:std::vector<std::string>	file:	access:public	signature:()
 get_stance	src/mods/player.hpp	/^			std::string& get_stance() {$/;"	kind:function	line:929	struct:mods::player	typeref:typename:std::string &	file:	access:public	signature:()
-get_station_by_name	src/mods/radio.cpp	/^	std::optional<station_ptr_t> get_station_by_name(std::string_view name) {$/;"	kind:function	line:32	namespace:mods::radio	typeref:typename:std::optional<station_ptr_t>	signature:(std::string_view name)
+get_station_by_name	src/mods/radio.cpp	/^	std::optional<station_ptr_t> get_station_by_name(std::string_view name) {$/;"	kind:function	line:50	namespace:mods::radio	typeref:typename:std::optional<station_ptr_t>	signature:(std::string_view name)
 get_string	src/mods/util.cpp	/^	std::string get_string(int _errno) {$/;"	kind:function	line:1378	namespace:mods::util::err	typeref:typename:std::string	signature:(int _errno)
 get_string_from_target	src/mods/contract-steps.cpp	/^	std::string get_string_from_target(target_t target) {$/;"	kind:function	line:98	namespace:mods::contracts	typeref:typename:std::string	signature:(target_t target)
 get_string_list_from_task_flags	src/mods/contract-steps.cpp	/^	std::vector<std::string> get_string_list_from_task_flags(task_t task) {$/;"	kind:function	line:89	namespace:mods::contracts	typeref:typename:std::vector<std::string>	signature:(task_t task)
@@ -8563,7 +8568,7 @@ get_tree	src/mods/mobs/shoplifter.cpp	/^	shoplifter::btree_t shoplifter::get_tre
 get_tree	src/mods/mobs/smart-mob.cpp	/^	uint16_t smart_mob::get_tree() {$/;"	kind:function	line:227	class:mods::mobs::smart_mob	typeref:typename:uint16_t	signature:()
 get_trees	src/mods/mobs/car-thief-behaviour-tree.cpp	/^	std::map<std::string,node&> get_trees() {$/;"	kind:function	line:263	namespace:mods::mobs::car_thief_behaviour_tree	typeref:typename:std::map<std::string,node &>	signature:()
 get_trees	src/mods/mobs/generic-thief-behaviour-tree.cpp	/^	std::deque<TNode>& get_trees() {$/;"	kind:function	line:270	namespace:mods::mobs::generic_thief_behaviour_tree	typeref:typename:std::deque<TNode> &	signature:()
-get_trees	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	std::map<std::string,node&> get_trees() {$/;"	kind:function	line:500	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:std::map<std::string,node &>	signature:()
+get_trees	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	std::map<std::string,node&> get_trees() {$/;"	kind:function	line:501	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:std::map<std::string,node &>	signature:()
 get_triads_by_class	src/mods/levels.cpp	/^	std::array<uint8_t,5> get_triads_by_class(player_class_t c) {$/;"	kind:function	line:218	namespace:mods::levels	typeref:typename:std::array<uint8_t,5>	signature:(player_class_t c)
 get_type	src/mods/weapon.cpp	/^	std::variant<mw_rifle,mw_explosive,mw_drone> get_type(obj_data_ptr_t& o) {$/;"	kind:function	line:99	namespace:mods::weapon	typeref:typename:std::variant<mw_rifle,mw_explosive,mw_drone>	signature:(obj_data_ptr_t & o)
 get_type_string	src/mods/player-contract-instance.cpp	/^	std::string player_contract_instance::get_type_string() const {$/;"	kind:function	line:309	class:mods::contracts::player_contract_instance	typeref:typename:std::string	signature:() const
@@ -8851,8 +8856,8 @@ help	src/db.cpp	/^char *help = NULL;		\/* help screen			 *\/$/;"	kind:variable	l
 help	src/mods/help.cpp	/^namespace mods::help {$/;"	kind:namespace	line:765	namespace:mods	file:
 help	src/mods/help.cpp	/^namespace mods::help::pages {$/;"	kind:namespace	line:11	namespace:mods	file:
 help	src/mods/help.hpp	/^namespace mods::help {$/;"	kind:namespace	line:14	namespace:mods	file:
-help	src/mods/response-team/radio.cpp	/^	void help(uuid_t mob_uuid, std::string_view message) {$/;"	kind:function	line:93	namespace:mods::response_team::radio	typeref:typename:void	signature:(uuid_t mob_uuid,std::string_view message)
-help_dazed	src/mods/response-team/radio.cpp	/^	void help_dazed(uuid_t mob_uuid, std::string_view message) {$/;"	kind:function	line:99	namespace:mods::response_team::radio	typeref:typename:void	signature:(uuid_t mob_uuid,std::string_view message)
+help	src/mods/response-team/radio.cpp	/^	void help(uuid_t mob_uuid, std::string_view message) {$/;"	kind:function	line:95	namespace:mods::response_team::radio	typeref:typename:void	signature:(uuid_t mob_uuid,std::string_view message)
+help_dazed	src/mods/response-team/radio.cpp	/^	void help_dazed(uuid_t mob_uuid, std::string_view message) {$/;"	kind:function	line:101	namespace:mods::response_team::radio	typeref:typename:void	signature:(uuid_t mob_uuid,std::string_view message)
 help_index_element	src/db.h	/^struct help_index_element {$/;"	kind:struct	line:282	file:
 help_linkless	src/mods/weapons/damage-types.cpp	/^		void help_linkless(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:342	namespace:mods::weapons::damage_types::legacy	typeref:typename:void	signature:(char_data * ch,char_data * victim,int dam,int attacktype)
 help_linkless	src/mods/weapons/legacy-combat.cpp	/^	void help_linkless(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:274	namespace:mods::weapons::legacy	typeref:typename:void	signature:(char_data * ch,char_data * victim,int dam,int attacktype)
@@ -9037,6 +9042,7 @@ id	src/mods/orm/support.hpp	/^		uint64_t id;$/;"	kind:member	line:39	struct:mods
 id	src/mods/orm/syndrome.hpp	/^		uint64_t id;$/;"	kind:member	line:32	struct:mods::orm::syndrome	typeref:typename:uint64_t	file:	access:public
 id	src/mods/orm/user-logins.hpp	/^		id_type_t id;$/;"	kind:member	line:60	struct:mods::orm::user_logins	typeref:typename:id_type_t	file:	access:public
 id	src/mods/pq.hpp	/^	uint64_t id;$/;"	kind:member	line:711	struct:orm_base	typeref:typename:uint64_t	file:	access:public
+id	src/mods/radio.cpp	/^		uint64_t id;$/;"	kind:member	line:32	struct:mods::radio::station_t	typeref:typename:uint64_t	file:	access:public
 id	src/mods/scripted-sequence-runner.cpp	/^		std::size_t id;$/;"	kind:member	line:26	struct:mods::scripted_sequence_runner::step_info_t	typeref:typename:std::size_t	file:	access:public
 id	src/mods/unit-tests/rifle-instance.cpp	/^		auto id = inst.initialize_row(ar);$/;"	kind:variable	line:19	typeref:typename:auto
 id	src/mods/unit-tests/rifle-instance.cpp	/^		auto id = inst.initialize_row(ar);$/;"	kind:variable	line:35	typeref:typename:auto
@@ -9228,7 +9234,7 @@ init	src/mods/fluxkraft/shape-dictionary.cpp	/^	void shape_dictionary::init() {$
 init	src/mods/forge-engine/generated-rifle.cpp	/^	void generated_rifle_t::init() {$/;"	kind:function	line:112	class:mods::forge_engine::generated_rifle_t	typeref:typename:void	signature:()
 init	src/mods/forge-engine/generator.cpp	/^	void generator::init() {$/;"	kind:function	line:31	class:mods::forge_engine::generator	typeref:typename:void	signature:()
 init	src/mods/forge-engine/value-scaler.cpp	/^		void init() {$/;"	kind:function	line:91	namespace:mods::forge_engine::value_scaler_static	typeref:typename:void	signature:()
-init	src/mods/help.cpp	/^	void init() {$/;"	kind:function	line:1437	namespace:mods::help	typeref:typename:void	signature:()
+init	src/mods/help.cpp	/^	void init() {$/;"	kind:function	line:1438	namespace:mods::help	typeref:typename:void	signature:()
 init	src/mods/init.hpp	/^	static inline void init() {$/;"	kind:function	line:93	namespace:mods::init	typeref:typename:void	file:	signature:()
 init	src/mods/init.hpp	/^namespace mods::init {$/;"	kind:namespace	line:92	namespace:mods	file:
 init	src/mods/integral-objects.cpp	/^	void init() {$/;"	kind:function	line:331	namespace:mods::integral_objects	typeref:typename:void	signature:()
@@ -9311,7 +9317,7 @@ init	src/mods/plugins/init.hpp	/^namespace mods::plugins::init {$/;"	kind:namesp
 init	src/mods/prefs.cpp	/^	void init() {$/;"	kind:function	line:144	namespace:mods::prefs	typeref:typename:void	signature:()
 init	src/mods/projectile.cpp	/^		void init() {$/;"	kind:function	line:928	namespace:mods::projectile	typeref:typename:void	signature:()
 init	src/mods/query-objects.cpp	/^	void init() {$/;"	kind:function	line:271	namespace:mods::query_objects	typeref:typename:void	signature:()
-init	src/mods/radio.cpp	/^	void init() {$/;"	kind:function	line:110	namespace:mods::radio	typeref:typename:void	signature:()
+init	src/mods/radio.cpp	/^	void init() {$/;"	kind:function	line:179	namespace:mods::radio	typeref:typename:void	signature:()
 init	src/mods/rand.cpp	/^	void init() {$/;"	kind:function	line:215	namespace:mods::rand	typeref:typename:void	signature:()
 init	src/mods/rate-limiting.cpp	/^	void init() {$/;"	kind:function	line:162	namespace:mods::rate_limiting	typeref:typename:void	signature:()
 init	src/mods/rifle-attachments.cpp	/^		void init() {$/;"	kind:function	line:106	namespace:mods::rifle_attachments	typeref:typename:void	signature:()
@@ -9449,7 +9455,7 @@ intent	src/mods/intent.hpp	/^namespace mods::intent {$/;"	kind:namespace	line:6	
 intent_debug	src/mods/intent.cpp	/^#define intent_debug(/;"	kind:macro	line:3	file:	signature:(a)
 intent_t	src/mods/intent.hpp	/^	struct intent_t {$/;"	kind:struct	line:11	namespace:mods::intent	file:
 intents	src/mods/intent.cpp	/^	static std::vector<mods::intent::intent_t> intents;$/;"	kind:variable	line:5	namespace:mods::intent	typeref:typename:std::vector<mods::intent::intent_t>	file:
-interpolate_location	src/mods/response-team/radio.cpp	/^	std::string interpolate_location(player_ptr_t& mob,std::string_view message) {$/;"	kind:function	line:21	namespace:mods::response_team::radio	typeref:typename:std::string	signature:(player_ptr_t & mob,std::string_view message)
+interpolate_location	src/mods/response-team/radio.cpp	/^	std::string interpolate_location(player_ptr_t& mob,std::string_view message) {$/;"	kind:function	line:25	namespace:mods::response_team::radio	typeref:typename:std::string	signature:(player_ptr_t & mob,std::string_view message)
 interpret	src/mods/drone.cpp	/^		bool interpret(uuid_t owner_uuid,const std::string& argument) {$/;"	kind:function	line:91	namespace:mods::drone	typeref:typename:bool	signature:(uuid_t owner_uuid,const std::string & argument)
 interpret	src/mods/scripted-step.hpp	/^		std::vector<std::string> interpret;$/;"	kind:member	line:23	struct:mods::scripted_step	typeref:typename:std::vector<std::string>	file:	access:public
 interpret_espec	src/db.cpp	/^void interpret_espec(const char *keyword, const char *value, int i, int nr) {$/;"	kind:function	line:1553	typeref:typename:void	signature:(const char * keyword,const char * value,int i,int nr)
@@ -9805,7 +9811,7 @@ list_start	src/mail.h	/^	position_list_type *list_start;	\/* list of mail positi
 list_t	src/mods/json/export.cpp	/^	using list_t = std::forward_list<std::string>;$/;"	kind:typedef	line:8	namespace:mods::json	typeref:typename:std::forward_list<std::string>	file:
 list_t	src/mods/json/export.hpp	/^	using list_t = std::forward_list<std::string>;$/;"	kind:typedef	line:8	namespace:mods::json	typeref:typename:std::forward_list<std::string>	file:
 list_t	src/mods/orm/room.cpp	/^		using list_t = std::vector<mods::orm::room>;$/;"	kind:typedef	line:101	function:mods::orm::foobar	typeref:typename:std::vector<mods::orm::room>	file:
-list_t	src/mods/radio.cpp	/^	using list_t = std::vector<player_ptr_t>;$/;"	kind:typedef	line:27	namespace:mods::radio	typeref:typename:std::vector<player_ptr_t>	file:
+list_t	src/mods/radio.cpp	/^	using list_t = std::vector<player_ptr_t>;$/;"	kind:typedef	line:35	namespace:mods::radio	typeref:typename:std::vector<player_ptr_t>	file:
 list_to_char	src/shop.cpp	/^void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::list_to_char(play/;"	kind:function	line:1676	class:shop_data::orm::shop::orm::shop_rooms::orm::shop_objects	typeref:typename:void	signature:(player_ptr_t & player)
 list_top	src/act.social.cpp	/^static int list_top = -1;$/;"	kind:variable	line:31	typeref:typename:int	file:
 listener_collection_t	src/mods/events.hpp	/^	using listener_collection_t = std::unordered_map<mods::events::event_t,std::deque<callback_t>>;$/;"	kind:typedef	line:37	namespace:mods::events	typeref:typename:std::unordered_map<mods::events::event_t,std::deque<callback_t>>	file:
@@ -9850,6 +9856,7 @@ load_all	src/mods/orm/skill-points.cpp	/^	std::tuple<int16_t,std::string> skill_
 load_all	src/mods/orm/skill-trees.cpp	/^	std::tuple<int16_t,std::string> skill_trees::load_all() {$/;"	kind:function	line:70	class:mods::orm::skill_trees	typeref:typename:std::tuple<int16_t,std::string>	signature:()
 load_all	src/mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_all(TObject* s) {$/;"	kind:function	line:183	namespace:mods::orm::util	typeref:typename:std::tuple<int16_t,std::string>	file:	signature:(TObject * s)
 load_all	src/mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_all(TObject& s) {$/;"	kind:function	line:347	typeref:typename:std::tuple<int16_t,std::string>	file:	signature:(TObject & s)
+load_all	src/mods/radio.cpp	/^	std::size_t load_all() {$/;"	kind:function	line:40	namespace:mods::radio	typeref:typename:std::size_t	signature:()
 load_all	src/mods/world-configuration.cpp	/^	rooms_t load_all() {$/;"	kind:function	line:34	namespace:mods::world_conf	typeref:typename:rooms_t	signature:()
 load_all_armor_index_data	src/mods/orm/armor-index.cpp	/^	std::tuple<int16_t,std::string> load_all_armor_index_data(std::map<std::string,std::vector<std:/;"	kind:function	line:58	namespace:mods::orm	typeref:typename:std::tuple<int16_t,std::string>	signature:(std::map<std::string,std::vector<std::string>> * storage_ptr)
 load_all_by_table	src/mods/orm/orm-base.hpp	/^	static inline std::deque<std::shared_ptr<TObject>> load_all_by_table() {$/;"	kind:function	line:24	namespace:mods::orm	typeref:typename:std::deque<std::shared_ptr<TObject>>	file:	signature:()
@@ -11197,9 +11204,9 @@ make_mp_shotgunner	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	void make_m
 make_mp_shotgunner_backup	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	void make_mp_shotgunner_backup(TNode& tree) {$/;"	kind:function	line:361	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:void	signature:(TNode & tree)
 make_mp_shotgunner_engage	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	void make_mp_shotgunner_engage(TNode& tree) {$/;"	kind:function	line:337	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:void	signature:(TNode & tree)
 make_mp_shotgunner_pursuit	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	void make_mp_shotgunner_pursuit(TNode& tree) {$/;"	kind:function	line:489	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:void	signature:(TNode & tree)
-make_sentinel_discipline	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	void make_sentinel_discipline(TNode& tree) {$/;"	kind:function	line:324	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:void	signature:(TNode & tree)
-make_sentinel_hostile	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	void make_sentinel_hostile(TNode& tree) {$/;"	kind:function	line:473	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:void	signature:(TNode & tree)
-make_sentinel_roam	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	void make_sentinel_roam(TNode& tree) {$/;"	kind:function	line:487	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:void	signature:(TNode & tree)
+make_sentinel_discipline	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	void make_sentinel_discipline(TNode& tree) {$/;"	kind:function	line:333	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:void	signature:(TNode & tree)
+make_sentinel_hostile	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	void make_sentinel_hostile(TNode& tree) {$/;"	kind:function	line:474	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:void	signature:(TNode & tree)
+make_sentinel_roam	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	void make_sentinel_roam(TNode& tree) {$/;"	kind:function	line:488	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:void	signature:(TNode & tree)
 make_shoplifter_engage	src/mods/mobs/shoplifter-behaviour-tree.cpp	/^	void make_shoplifter_engage(TNode& tree) {$/;"	kind:function	line:131	namespace:mods::mobs::shoplifter_behaviour_tree	typeref:typename:void	signature:(TNode & tree)
 make_vc88	src/mods/weapons/smg-vc88.cpp	/^	vc88_ptr_t make_vc88(obj_ptr_t& object) {$/;"	kind:function	line:15	namespace:mods::weapons::smg	typeref:typename:vc88_ptr_t	signature:(obj_ptr_t & object)
 make_xtv89	src/mods/armor/gauntlets-xtv89.cpp	/^	xtv89_ptr_t make_xtv89(obj_ptr_t& object) {$/;"	kind:function	line:22	namespace:mods::armor	typeref:typename:xtv89_ptr_t	signature:(obj_ptr_t & object)
@@ -11250,7 +11257,7 @@ match_any	src/mods/util.cpp	/^	bool match_any(std::string_view src,std::vector<s
 match_any_lower	src/mods/util.cpp	/^	bool match_any_lower(std::string_view src,std::vector<std::string> any_of_these,std::size_t max/;"	kind:function	line:372	namespace:mods::util	typeref:typename:bool	signature:(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch)
 match_any_of	src/globals.hpp	/^	static inline bool match_any_of(std::vector<TString> items,TString target) {$/;"	kind:function	line:256	namespace:txt	typeref:typename:bool	file:	signature:(std::vector<TString> items,TString target)
 match_any_of_lower	src/globals.hpp	/^	static inline bool match_any_of_lower(std::vector<TString> items,TString target) {$/;"	kind:function	line:238	namespace:txt	typeref:typename:bool	file:	signature:(std::vector<TString> items,TString target)
-matches_many	src/mods/help.cpp	/^	bool matches_many(const std::string& items,std::string_view from) {$/;"	kind:function	line:919	namespace:mods::help	typeref:typename:bool	signature:(const std::string & items,std::string_view from)
+matches_many	src/mods/help.cpp	/^	bool matches_many(const std::string& items,std::string_view from) {$/;"	kind:function	line:920	namespace:mods::help	typeref:typename:bool	signature:(const std::string & items,std::string_view from)
 matches_query	src/structs.cpp	/^bool obj_data::matches_query(std::string_view query) {$/;"	kind:function	line:571	class:obj_data	typeref:typename:bool	signature:(std::string_view query)
 max	src/mods/util-map.hpp	/^			Tval max(std::map<Tkey,Tval>& m) {$/;"	kind:function	line:38	namespace:mods::util::maps	typeref:typename:Tval	signature:(std::map<Tkey,Tval> & m)
 max_amount_reached	src/mods/affects.hpp	/^			bool max_amount_reached(TAffects affect) {$/;"	kind:function	line:222	struct:mods::affects::dissolver	typeref:typename:bool	file:	access:public	signature:(TAffects affect)
@@ -12286,7 +12293,7 @@ mods	src/mods/projectile.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line
 mods	src/mods/query-objects.cpp	/^namespace mods::query_objects {$/;"	kind:namespace	line:270	file:
 mods	src/mods/query-objects.cpp	/^namespace mods::query_objects {$/;"	kind:namespace	line:37	file:
 mods	src/mods/query-objects.hpp	/^namespace mods::query_objects {$/;"	kind:namespace	line:6	file:
-mods	src/mods/radio.cpp	/^namespace mods::radio {$/;"	kind:namespace	line:14	file:
+mods	src/mods/radio.cpp	/^namespace mods::radio {$/;"	kind:namespace	line:15	file:
 mods	src/mods/radio.hpp	/^namespace mods::radio {$/;"	kind:namespace	line:6	file:
 mods	src/mods/radioactive.cpp	/^namespace mods::radioactive {$/;"	kind:namespace	line:18	file:
 mods	src/mods/radioactive.hpp	/^namespace mods::radioactive {$/;"	kind:namespace	line:5	file:
@@ -12305,7 +12312,8 @@ mods	src/mods/replenish.cpp	/^namespace mods::replenish {$/;"	kind:namespace	lin
 mods	src/mods/replenish.hpp	/^namespace mods::replenish {$/;"	kind:namespace	line:12	file:
 mods	src/mods/response-team/hq-locations.cpp	/^namespace mods::response_team::hq_locations {$/;"	kind:namespace	line:5	file:
 mods	src/mods/response-team/hq-locations.hpp	/^namespace mods::response_team::hq_locations {$/;"	kind:namespace	line:4	file:
-mods	src/mods/response-team/radio.cpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:10	file:
+mods	src/mods/response-team/radio.cpp	/^namespace mods::radio {$/;"	kind:namespace	line:10	file:
+mods	src/mods/response-team/radio.cpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:14	file:
 mods	src/mods/response-team/radio.hpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:7	file:
 mods	src/mods/resting.cpp	/^namespace mods::resting {$/;"	kind:namespace	line:14	file:
 mods	src/mods/resting.hpp	/^namespace mods::resting {$/;"	kind:namespace	line:6	file:
@@ -12501,9 +12509,9 @@ move_to	src/mods/mobs/smart-mob.cpp	/^	std::pair<bool,std::string> smart_mob::mo
 move_to_on_tick	src/mods/mobs/smart-mob.cpp	/^	std::pair<bool,std::string> smart_mob::move_to_on_tick(const direction_t& dir,const uint16_t ti/;"	kind:function	line:342	class:mods::mobs::smart_mob	typeref:typename:std::pair<bool,std::string>	signature:(const direction_t & dir,const uint16_t tick_mod)
 move_toward_heading	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto move_toward_heading() {$/;"	kind:function	line:302	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:()
 move_toward_heading	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode move_toward_heading() {$/;"	kind:function	line:432	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-move_toward_heading	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode move_toward_heading() {$/;"	kind:function	line:402	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+move_toward_heading	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode move_toward_heading() {$/;"	kind:function	line:411	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 move_toward_target	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode move_toward_target() {$/;"	kind:function	line:247	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-move_toward_target	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode move_toward_target() {$/;"	kind:function	line:233	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+move_toward_target	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode move_toward_target() {$/;"	kind:function	line:242	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 movement	src/mods/movement.cpp	/^namespace mods::movement {$/;"	kind:namespace	line:8	namespace:mods	file:
 movement	src/mods/movement.hpp	/^namespace mods::movement {$/;"	kind:namespace	line:5	namespace:mods	file:
 movement	src/mods/runners/includes.hpp	/^	namespace movement {$/;"	kind:namespace	line:23	namespace:mods::runners	file:
@@ -12638,7 +12646,7 @@ name	src/mods/lmdb.hpp	/^		id,name,short_description,long_description,descriptio
 name	src/mods/mini-games.hpp	/^		std::string name;$/;"	kind:member	line:13	struct:mods::mini_games::mini_game_payload_t	typeref:typename:std::string	file:	access:public
 name	src/mods/orm/room.hpp	/^		std::string name;$/;"	kind:member	line:45	struct:mods::orm::room	typeref:typename:std::string	file:	access:public
 name	src/mods/player.cpp	/^	std::string& player::name() {$/;"	kind:function	line:844	class:mods::player	typeref:typename:std::string &	signature:()
-name	src/mods/radio.cpp	/^		std::string name;$/;"	kind:member	line:24	struct:mods::radio::station_t	typeref:typename:std::string	file:	access:public
+name	src/mods/radio.cpp	/^		std::string name;$/;"	kind:member	line:30	struct:mods::radio::station_t	typeref:typename:std::string	file:	access:public
 name	src/mods/yaml.hpp	/^		std::string name;$/;"	kind:member	line:166	struct:mods::yaml::yaml_description_t	typeref:typename:std::string	file:	access:public
 name	src/spells.h	/^	const char *name;	\/* Input size not limited. Originates from string constants. *\/$/;"	kind:member	line:223	struct:spell_info_type	typeref:typename:const char *	file:	access:public
 name	src/structs.h	/^		mods::string	name;                  \/* Rooms name 'You are ...'           *\/$/;"	kind:member	line:1224	struct:room_data	typeref:typename:mods::string	file:	access:public
@@ -13112,6 +13120,7 @@ orm	src/mods/orm/syndrome.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:8	
 orm	src/mods/orm/user-logins.cpp	/^namespace mods::orm {$/;"	kind:namespace	line:4	namespace:mods	file:
 orm	src/mods/orm/user-logins.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:7	namespace:mods	file:
 orm	src/mods/orm/util.hpp	/^namespace mods::orm::util {$/;"	kind:namespace	line:7	namespace:mods	file:
+orm	src/mods/radio.cpp	/^		std::shared_ptr<mods::orm::radio_station> orm;$/;"	kind:member	line:33	struct:mods::radio::station_t	typeref:typename:std::shared_ptr<mods::orm::radio_station>	file:	access:public
 orm	src/mods/scripted-step.hpp	/^namespace mods::orm {$/;"	kind:namespace	line:6	namespace:mods	file:
 orm	src/mods/unit-tests/contracts.cpp	/^		mods::orm::contracts orm;$/;"	kind:variable	line:156	typeref:typename:mods::orm::contracts
 orm	src/mods/unit-tests/contracts.cpp	/^		mods::orm::contracts orm;$/;"	kind:variable	line:58	typeref:typename:mods::orm::contracts
@@ -13306,7 +13315,7 @@ perform_random_act	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::perform_
 perform_random_act	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::perform_random_act() {$/;"	kind:function	line:76	class:mods::mobs::shoplifter	typeref:typename:void	signature:()
 perform_random_non_hostile_action	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto perform_random_non_hostile_action() {$/;"	kind:function	line:255	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:()
 perform_random_non_hostile_action	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode perform_random_non_hostile_action() {$/;"	kind:function	line:387	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-perform_random_non_hostile_action	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode perform_random_non_hostile_action() {$/;"	kind:function	line:347	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+perform_random_non_hostile_action	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode perform_random_non_hostile_action() {$/;"	kind:function	line:356	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 perform_remove	src/act.item.cpp	/^void perform_remove(player_ptr_t player, int pos) {$/;"	kind:function	line:1764	typeref:typename:void	signature:(player_ptr_t player,int pos)
 perform_set	src/act.wizard.cpp	/^int perform_set(char_data *ch, char_data *vict, int mode,$/;"	kind:function	line:2457	typeref:typename:int	signature:(char_data * ch,char_data * vict,int mode,char * val_arg)
 perform_socket_read	src/comm.cpp	/^ssize_t perform_socket_read(socket_t desc, char *read_point, size_t space_left) {$/;"	kind:function	line:1776	typeref:typename:ssize_t	signature:(socket_t desc,char * read_point,size_t space_left)
@@ -13347,7 +13356,7 @@ pk3vest	src/mods/drops.cpp	/^	static constexpr std::string_view pk3vest = "armor
 pk_allowed	src/config.cpp	/^int pk_allowed = YES;$/;"	kind:variable	line:54	typeref:typename:int
 pk_id	src/mods/player.hpp	/^			aligned_int_t pk_id() const {$/;"	kind:function	line:135	struct:mods::player	typeref:typename:aligned_int_t	file:	access:public	signature:() const
 pkid_example_grammar	src/mods/deep-object-parser.cpp	/^	const std::string pkid_example_grammar = "rifle|pkid:7{sight:attachment|pkid:4,muzzle:compensat/;"	kind:variable	line:19	namespace:mods	typeref:typename:const std::string
-place_in_sql	src/mods/help.cpp	/^	void place_in_sql() {$/;"	kind:function	line:1315	namespace:mods::help	typeref:typename:void	signature:()
+place_in_sql	src/mods/help.cpp	/^	void place_in_sql() {$/;"	kind:function	line:1316	namespace:mods::help	typeref:typename:void	signature:()
 place_keepers_in_rooms	src/mods/orm/shop.cpp	/^	int16_t shop_rooms::place_keepers_in_rooms(mob_vnum mob_vnum_id){$/;"	kind:function	line:206	class:mods::orm::shop_rooms	typeref:typename:int16_t	signature:(mob_vnum mob_vnum_id)
 plant_claymore	src/mods/demolitions.cpp	/^	void plant_claymore(player_ptr_t& player, int direction, obj_ptr_t& obj) {$/;"	kind:function	line:18	namespace:mods::demolitions	typeref:typename:void	signature:(player_ptr_t & player,int direction,obj_ptr_t & obj)
 played	src/structs.h	/^	int	played;     \/* This is the total accumulated time played in secs *\/$/;"	kind:member	line:1306	struct:time_data	typeref:typename:int	file:	access:public
@@ -13566,7 +13575,7 @@ postmaster_check_mail	src/mail.cpp	/^void postmaster_check_mail(char_data *ch, c
 postmaster_receive_mail	src/mail.cpp	/^void postmaster_receive_mail(char_data *ch, char_data *mailman,$/;"	kind:function	line:592	typeref:typename:void	signature:(char_data * ch,char_data * mailman,int cmd,char * arg)
 postmaster_send_mail	src/mail.cpp	/^void postmaster_send_mail(char_data *ch, char_data *mailman,$/;"	kind:function	line:534	typeref:typename:void	signature:(char_data * ch,char_data * mailman,int cmd,char * arg)
 pow10	src/bsd-snprintf.cpp	/^pow10(int exp) {$/;"	kind:function	line:616	typeref:typename:long double	file:	signature:(int exp)
-power	src/mods/radio.cpp	/^		uint16_t power;$/;"	kind:member	line:25	struct:mods::radio::station_t	typeref:typename:uint16_t	file:	access:public
+power	src/mods/radio.cpp	/^		uint16_t power;$/;"	kind:member	line:31	struct:mods::radio::station_t	typeref:typename:uint16_t	file:	access:public
 pq	src/mods/lmdb.hpp	/^namespace mods::pq {$/;"	kind:namespace	line:248	namespace:mods	file:
 pq	src/mods/pq.cpp	/^namespace mods::pq {$/;"	kind:namespace	line:3	namespace:mods	file:
 pq	src/mods/pq.hpp	/^namespace mods::pq {$/;"	kind:namespace	line:55	namespace:mods	file:
@@ -13971,9 +13980,10 @@ radiation_clears_up	src/mods/radioactive.cpp	/^	void radiation_clears_up(room_rn
 radiation_damage	src/mods/radioactive.cpp	/^	int radiation_damage(player_ptr_t attacker,player_ptr_t victim, obj_ptr_t item) {$/;"	kind:function	line:24	namespace:mods::radioactive	typeref:typename:int	signature:(player_ptr_t attacker,player_ptr_t victim,obj_ptr_t item)
 radiation_damage_percent	src/mods/rifle-attachments.hpp	/^			int16_t radiation_damage_percent;$/;"	kind:member	line:65	struct:mods::rifle_attachments_t	typeref:typename:int16_t	file:	access:public
 radiation_resistance_percent	src/mods/player.cpp	/^	int16_t& player::radiation_resistance_percent() {$/;"	kind:function	line:2165	class:mods::player	typeref:typename:int16_t &	signature:()
-radio	src/mods/radio.cpp	/^namespace mods::radio {$/;"	kind:namespace	line:14	namespace:mods	file:
+radio	src/mods/radio.cpp	/^namespace mods::radio {$/;"	kind:namespace	line:15	namespace:mods	file:
 radio	src/mods/radio.hpp	/^namespace mods::radio {$/;"	kind:namespace	line:6	namespace:mods	file:
-radio	src/mods/response-team/radio.cpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:10	namespace:mods::response_team	file:
+radio	src/mods/response-team/radio.cpp	/^namespace mods::radio {$/;"	kind:namespace	line:10	namespace:mods	file:
+radio	src/mods/response-team/radio.cpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:14	namespace:mods::response_team	file:
 radio	src/mods/response-team/radio.hpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:7	namespace:mods::response_team	file:
 radio_station	src/mods/orm/radio-station.hpp	/^		radio_station() {$/;"	kind:function	line:30	struct:mods::orm::radio_station	file:	access:public	signature:()
 radio_station	src/mods/orm/radio-station.hpp	/^	struct radio_station : public mods::orm::orm_base<radio_station,std::string> {$/;"	kind:struct	line:24	namespace:mods::orm	file:	inherits:mods::orm::orm_base<radio_station,std::string>
@@ -14045,7 +14055,7 @@ random_room_direction	src/mods/mobs/defiler.cpp	/^	direction_t random_room_direc
 random_trivial_action	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto random_trivial_action() {$/;"	kind:function	line:67	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:()
 random_trivial_action	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto random_trivial_action() {$/;"	kind:function	line:71	namespace:mods::mobs::mini_gunner_behaviour_tree	typeref:typename:auto	signature:()
 random_trivial_action	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode random_trivial_action() {$/;"	kind:function	line:77	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-random_trivial_action	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode random_trivial_action() {$/;"	kind:function	line:77	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+random_trivial_action	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode random_trivial_action() {$/;"	kind:function	line:87	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 random_yaml	src/mods/forge-engine/util.cpp	/^	std::string random_yaml(const std::vector<std::string>& files) {$/;"	kind:function	line:5	namespace:mods::forge_engine	typeref:typename:std::string	signature:(const std::vector<std::string> & files)
 randomized_drop_t	src/mods/drops.cpp	/^		randomized_drop_t(auto m, auto y, auto dc, auto ds, auto gt) :$/;"	kind:function	line:78	struct:mods::drops::randomized_drop_t	file:	access:public	signature:(auto m,auto y,auto dc,auto ds,auto gt)
 randomized_drop_t	src/mods/drops.cpp	/^		randomized_drop_t(const randomized_drop_t& other) {$/;"	kind:function	line:83	struct:mods::drops::randomized_drop_t	file:	access:public	signature:(const randomized_drop_t & other)
@@ -14165,7 +14175,7 @@ register_custom_command	src/mods/builder/slotted-builder.hpp	/^			status_respons
 register_custom_non_profile_command	src/mods/builder/slotted-builder.hpp	/^			status_response_t register_custom_non_profile_command(std::string verb, auto lambda) {$/;"	kind:function	line:119	struct:mods::builder::slotted_builder	typeref:typename:status_response_t	file:	access:public	signature:(std::string verb,auto lambda)
 register_damage_event_callback	src/mods/player.cpp	/^	void player::register_damage_event_callback(const std::vector<damage_event_t>& events,damage_ev/;"	kind:function	line:1809	class:mods::player	typeref:typename:void	signature:(const std::vector<damage_event_t> & events,damage_event_callback_t cb)
 register_ghost	src/mods/replenish.cpp	/^	void register_ghost(uuid_t ghost) {$/;"	kind:function	line:43	namespace:mods::replenish	typeref:typename:void	signature:(uuid_t ghost)
-register_help_command_with_permission	src/mods/help.cpp	/^	void register_help_command_with_permission(const std::string& command, const std::string& conte/;"	kind:function	line:976	namespace:mods::help	typeref:typename:void	signature:(const std::string & command,const std::string & contents,player_level_t level)
+register_help_command_with_permission	src/mods/help.cpp	/^	void register_help_command_with_permission(const std::string& command, const std::string& conte/;"	kind:function	line:977	namespace:mods::help	typeref:typename:void	signature:(const std::string & command,const std::string & contents,player_level_t level)
 register_indexed_accumulator_command	src/mods/builder/slotted-builder.hpp	/^			status_response_t register_indexed_accumulator_command(std::string verb, std::string_view sig/;"	kind:function	line:129	struct:mods::builder::slotted_builder	typeref:typename:status_response_t	file:	access:public	signature:(std::string verb,std::string_view signature,auto lambda)
 register_integral_accumulator_command	src/mods/builder/slotted-builder.hpp	/^			status_response_t register_integral_accumulator_command(std::string verb, std::string_view si/;"	kind:function	line:135	struct:mods::builder::slotted_builder	typeref:typename:status_response_t	file:	access:public	signature:(std::string verb,std::string_view signature,auto lambda)
 register_intent_to_attack	src/mods/intent.cpp	/^	void register_intent_to_attack($/;"	kind:function	line:6	namespace:mods::intent	typeref:typename:void	signature:(uuid_t player,std::vector<uuid_t> targets,uint8_t direction)
@@ -14189,8 +14199,8 @@ register_room_at_coordinates	src/mods/rooms.cpp	/^	void register_room_at_coordin
 register_shop	src/globals.hpp	/^		void register_shop(TShopPtr shop) {$/;"	kind:function	line:186	namespace:mods::globals	typeref:typename:void	signature:(TShopPtr shop)
 register_signature	src/mods/builder/slotted-builder.hpp	/^			void register_signature(std::string_view verb,std::string_view sig) {$/;"	kind:function	line:86	struct:mods::builder::slotted_builder	typeref:typename:void	file:	access:public	signature:(std::string_view verb,std::string_view sig)
 register_targets	src/mods/mobs/extended-types.cpp	/^	void register_targets(const mob_rnum& vnum, std::string_view items) {$/;"	kind:function	line:109	namespace:mods::mobs::extended_types	typeref:typename:void	signature:(const mob_rnum & vnum,std::string_view items)
-registered_admin_help_commands	src/mods/help.cpp	/^	static std::map<std::string,std::string> registered_admin_help_commands;$/;"	kind:variable	line:917	namespace:mods::help	typeref:typename:std::map<std::string,std::string>	file:
-registered_help_commands	src/mods/help.cpp	/^	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;$/;"	kind:variable	line:916	namespace:mods::help	typeref:typename:std::map<std::string,std::pair<player_level_t,std::string>>	file:
+registered_admin_help_commands	src/mods/help.cpp	/^	static std::map<std::string,std::string> registered_admin_help_commands;$/;"	kind:variable	line:918	namespace:mods::help	typeref:typename:std::map<std::string,std::string>	file:
+registered_help_commands	src/mods/help.cpp	/^	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;$/;"	kind:variable	line:917	namespace:mods::help	typeref:typename:std::map<std::string,std::pair<player_level_t,std::string>>	file:
 registration_allowed	src/mods/player-registration.cpp	/^	static bool registration_allowed = 1;$/;"	kind:variable	line:6	namespace:mods::player_registration	typeref:typename:bool	file:
 release_zone	src/mods/builder.cpp	/^void release_zone(int zone) {$/;"	kind:function	line:172	typeref:typename:void	signature:(int zone)
 release_zone	src/mods/zone.cpp	/^	void release_zone(int zone) {$/;"	kind:function	line:105	namespace:mods::zone	typeref:typename:void	signature:(int zone)
@@ -14308,13 +14318,13 @@ report_function	src/mods/players/db-load.cpp	/^	static reporter_t report_functio
 report_headshot	src/mods/combat-composer/shared.cpp	/^		void report_headshot(player_ptr_t& attacker, player_ptr_t& victim, int dam, direction_t& direc/;"	kind:function	line:252	namespace:mods::combat_composer::phases	typeref:typename:void	signature:(player_ptr_t & attacker,player_ptr_t & victim,int dam,direction_t & direction)
 report_hostile_activity	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto report_hostile_activity() {$/;"	kind:function	line:344	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:()
 report_hostile_activity	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode report_hostile_activity() {$/;"	kind:function	line:473	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-report_hostile_activity	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode report_hostile_activity() {$/;"	kind:function	line:448	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+report_hostile_activity	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode report_hostile_activity() {$/;"	kind:function	line:46	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 report_lookup	src/mods/lmdb/gethostbyname.cpp	/^void report_lookup(const char *lookup,const char* function){$/;"	kind:function	line:116	typeref:typename:void	signature:(const char * lookup,const char * function)
 report_migration_status	src/mods/migrations.cpp	/^	void report_migration_status(std::string message,std::string type){$/;"	kind:function	line:16	namespace:mods::migrations	typeref:typename:void	signature:(std::string message,std::string type)
 report_profile_save	src/mods/builder/slotted-builder.hpp	/^			void report_profile_save(std::shared_ptr<TOrmType> profile,TVnumType vnum) {$/;"	kind:function	line:540	struct:mods::builder::slotted_builder	typeref:typename:void	file:	access:private	signature:(std::shared_ptr<TOrmType> profile,TVnumType vnum)
 report_status	src/mods/builder.hpp	/^	void report_status(T player,std::string_view message) {$/;"	kind:function	line:126	namespace:mods::builder	typeref:typename:void	signature:(T player,std::string_view message)
 report_success	src/mods/builder.hpp	/^	void report_success(T player,std::string_view message) {$/;"	kind:function	line:130	namespace:mods::builder	typeref:typename:void	signature:(T player,std::string_view message)
-report_violence	src/mods/response-team/radio.cpp	/^	void report_violence(uuid_t mob_uuid, std::string_view message) {$/;"	kind:function	line:96	namespace:mods::response_team::radio	typeref:typename:void	signature:(uuid_t mob_uuid,std::string_view message)
+report_violence	src/mods/response-team/radio.cpp	/^	void report_violence(uuid_t mob_uuid, std::string_view message) {$/;"	kind:function	line:98	namespace:mods::response_team::radio	typeref:typename:void	signature:(uuid_t mob_uuid,std::string_view message)
 report_yaml_exception	src/mods/object-utils.hpp	/^	static inline void report_yaml_exception(TException& e,std::vector<std::string>& items_fed) {$/;"	kind:function	line:124	namespace:mods::object_utils	typeref:typename:void	file:	signature:(TException & e,std::vector<std::string> & items_fed)
 report_yaml_message	src/mods/object-utils.cpp	/^	void report_yaml_message(std::string_view msg) {$/;"	kind:function	line:149	namespace:mods::object_utils	typeref:typename:void	signature:(std::string_view msg)
 reporter_function_set	src/mods/players/db-load.cpp	/^	static bool reporter_function_set = false;$/;"	kind:variable	line:29	namespace:mods::players::db_load	typeref:typename:bool	file:
@@ -14379,7 +14389,7 @@ resolver	src/mods/lmdb/db.hpp	/^		resolver(){$/;"	kind:function	line:261	struct:
 resolver	src/mods/lmdb/db.hpp	/^	struct resolver {$/;"	kind:struct	line:260	namespace:gdns::lmdb	file:
 response_team	src/mods/response-team/hq-locations.cpp	/^namespace mods::response_team::hq_locations {$/;"	kind:namespace	line:5	namespace:mods	file:
 response_team	src/mods/response-team/hq-locations.hpp	/^namespace mods::response_team::hq_locations {$/;"	kind:namespace	line:4	namespace:mods	file:
-response_team	src/mods/response-team/radio.cpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:10	namespace:mods	file:
+response_team	src/mods/response-team/radio.cpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:14	namespace:mods	file:
 response_team	src/mods/response-team/radio.hpp	/^namespace mods::response_team::radio {$/;"	kind:namespace	line:7	namespace:mods	file:
 resting	src/mods/resting.cpp	/^namespace mods::resting {$/;"	kind:namespace	line:14	namespace:mods	file:
 resting	src/mods/resting.hpp	/^namespace mods::resting {$/;"	kind:namespace	line:6	namespace:mods	file:
@@ -14683,7 +14693,7 @@ room_rnum	src/mods/scan.hpp	/^			uint32_t room_rnum;$/;"	kind:member	line:36	str
 room_shopmap	src/shop.cpp	/^	std::map<room_rnum,std::shared_ptr<shop_data_t>> room_shopmap;$/;"	kind:variable	line:46	namespace:mods::globals	typeref:typename:std::map<room_rnum,std::shared_ptr<shop_data_t>>
 room_smoke_damage	src/mods/weapons/elemental.cpp	/^	void room_smoke_damage(player_ptr_t& player, uint16_t damage) {$/;"	kind:function	line:234	namespace:mods::weapons::elemental	typeref:typename:void	signature:(player_ptr_t & player,uint16_t damage)
 room_transaction_id	src/mods/builder-data.hpp	/^	int room_transaction_id;$/;"	kind:member	line:67	struct:builder_data_t	typeref:typename:int	file:	access:public
-room_v	src/mods/radio.cpp	/^		room_vnum room_v;$/;"	kind:member	line:23	struct:mods::radio::station_t	typeref:typename:room_vnum	file:	access:public
+room_v	src/mods/radio.cpp	/^		room_vnum room_v;$/;"	kind:member	line:29	struct:mods::radio::station_t	typeref:typename:room_vnum	file:	access:public
 room_virtual_number	src/mods/orm/mob-roam.hpp	/^		uint32_t room_virtual_number;$/;"	kind:member	line:11	struct:mods::orm::mob_roam_record_t	typeref:typename:uint32_t	file:	access:public
 room_vnum	src/mods/index-type.hpp	/^typedef IDXTYPE room_vnum;$/;"	kind:typedef	line:23	typeref:typename:IDXTYPE	file:
 room_vnum_list_t	src/mods/builder-data.hpp	/^		using room_vnum_list_t = std::vector<room_rnum>;$/;"	kind:typedef	line:40	struct:room_recorder_t	typeref:typename:std::vector<room_rnum>	file:	access:public
@@ -14986,7 +14996,7 @@ scan_from_room	src/mods/sensor-grenade.cpp	/^	std::vector<int> scan_from_room(in
 scan_results	src/mods/players/search.hpp	/^			typedef std::array<std::vector<std::string>,6> scan_results;$/;"	kind:typedef	line:10	namespace:mods::player::util	typeref:typename:std::array<std::vector<std::string>,6>	file:
 scan_to_find_hostile_activity	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto scan_to_find_hostile_activity() {$/;"	kind:function	line:262	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:()
 scan_to_find_hostile_activity	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode scan_to_find_hostile_activity() {$/;"	kind:function	line:393	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-scan_to_find_hostile_activity	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode scan_to_find_hostile_activity() {$/;"	kind:function	line:357	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+scan_to_find_hostile_activity	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode scan_to_find_hostile_activity() {$/;"	kind:function	line:366	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 scan_to_find_targets	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto scan_to_find_targets() {$/;"	kind:function	line:250	namespace:mods::mobs::mini_gunner_behaviour_tree	typeref:typename:auto	signature:()
 scanned_t	src/mods/mobs/smart-mob.hpp	/^			using scanned_t = mods::scan::vec_player_data_element;$/;"	kind:typedef	line:15	struct:mods::mobs::smart_mob	typeref:typename:mods::scan::vec_player_data_element	file:	access:public
 scatter_room	src/mods/glass.cpp	/^	void scatter_room(const room_rnum& room_id) {$/;"	kind:function	line:22	namespace:mods::glass	typeref:typename:void	signature:(const room_rnum & room_id)
@@ -15041,7 +15051,7 @@ sector_type	src/mods/orm/room.hpp	/^		uint32_t sector_type;$/;"	kind:member	line
 sector_type	src/structs.h	/^		uint16_t	sector_type;            \/* sector type (move\/hide)            *\/$/;"	kind:member	line:1223	struct:room_data	typeref:typename:uint16_t	file:	access:public
 sector_types	src/constants.cpp	/^const char *sector_types[] = {$/;"	kind:variable	line:71	typeref:typename:const char * []
 sector_types	src/constants.hpp	/^const char *sector_types[] = {$/;"	kind:variable	line:74	typeref:typename:const char * []
-security_force_matches	src/mods/response-team/radio.cpp	/^	const std::vector<std::string_view>& security_force_matches() {$/;"	kind:function	line:11	namespace:mods::response_team::radio	typeref:typename:const std::vector<std::string_view> &	signature:()
+security_force_matches	src/mods/response-team/radio.cpp	/^	const std::vector<std::string_view>& security_force_matches() {$/;"	kind:function	line:15	namespace:mods::response_team::radio	typeref:typename:const std::vector<std::string_view> &	signature:()
 seed	src/mods/ai_state.cpp	/^	void seed() {$/;"	kind:function	line:27	namespace:mods	typeref:typename:void	signature:()
 seed	src/mods/mini-games/line-up.cpp	/^	void line_up::seed() {$/;"	kind:function	line:24	class:mods::mini_games::line_up	typeref:typename:void	signature:()
 seed	src/mods/mini-games/wires.cpp	/^	void wires::seed() {$/;"	kind:function	line:29	class:mods::mini_games::wires	typeref:typename:void	signature:()
@@ -15062,28 +15072,28 @@ send	src/mods/lmdb/gethostbyname.cpp	/^ssize_t send(int sockfd,const void* buf,s
 send	src/mods/players/event-messages.cpp	/^	void send() {$/;"	kind:function	line:21	namespace:mods::players::event_messages	typeref:typename:void	signature:()
 send	src/mods/players/friendly-reminders.cpp	/^	void send() {$/;"	kind:function	line:21	namespace:mods::players::friendly_reminders	typeref:typename:void	signature:()
 send_attacker_accuracy_stats	src/mods/combat-composer/snipe-target.cpp	/^#define send_attacker_accuracy_stats$/;"	kind:macro	line:279	file:
-send_bandit_help_menu	src/mods/help.cpp	/^	void send_bandit_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1117	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
-send_breacher_help_menu	src/mods/help.cpp	/^	void send_breacher_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1019	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
-send_butcher_help_menu	src/mods/help.cpp	/^	void send_butcher_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1126	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
-send_class_footer	src/mods/help.cpp	/^	void send_class_footer(player_ptr_t& player,std::string_view class_name) {$/;"	kind:function	line:1009	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player,std::string_view class_name)
-send_class_header	src/mods/help.cpp	/^	void send_class_header(player_ptr_t& player,std::string_view class_name) {$/;"	kind:function	line:994	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player,std::string_view class_name)
+send_bandit_help_menu	src/mods/help.cpp	/^	void send_bandit_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1118	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_breacher_help_menu	src/mods/help.cpp	/^	void send_breacher_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1020	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_butcher_help_menu	src/mods/help.cpp	/^	void send_butcher_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1127	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_class_footer	src/mods/help.cpp	/^	void send_class_footer(player_ptr_t& player,std::string_view class_name) {$/;"	kind:function	line:1010	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player,std::string_view class_name)
+send_class_header	src/mods/help.cpp	/^	void send_class_header(player_ptr_t& player,std::string_view class_name) {$/;"	kind:function	line:995	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player,std::string_view class_name)
 send_combat_messages	src/mods/weapons/damage-types.cpp	/^		void send_combat_messages(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:266	namespace:mods::weapons::damage_types::legacy	typeref:typename:void	signature:(char_data * ch,char_data * victim,int dam,int attacktype)
 send_combat_messages	src/mods/weapons/legacy-combat.cpp	/^	void send_combat_messages(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:198	namespace:mods::weapons::legacy	typeref:typename:void	signature:(char_data * ch,char_data * victim,int dam,int attacktype)
-send_contagion_help_menu	src/mods/help.cpp	/^	void send_contagion_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1032	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_contagion_help_menu	src/mods/help.cpp	/^	void send_contagion_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1033	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
 send_cqc_damage	src/mods/melee/damage-types.cpp	/^	std::tuple<feedback_t,feedback_t> send_cqc_damage(const int& hits, const int& dam, player_ptr_t/;"	kind:function	line:102	namespace:mods::melee::damage_types	typeref:typename:std::tuple<feedback_t,feedback_t>	signature:(const int & hits,const int & dam,player_ptr_t & attacker,player_ptr_t & victim)
-send_dealer_help_menu	src/mods/help.cpp	/^	void send_dealer_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1171	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
-send_forge_help_menu	src/mods/help.cpp	/^	void send_forge_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1180	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
-send_ghost_help_menu	src/mods/help.cpp	/^	void send_ghost_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1074	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
-send_help	src/mods/help.cpp	/^	bool send_help(std::string_view topic, std::shared_ptr<mods::player>& player) {$/;"	kind:function	line:948	namespace:mods::help	typeref:typename:bool	signature:(std::string_view topic,std::shared_ptr<mods::player> & player)
+send_dealer_help_menu	src/mods/help.cpp	/^	void send_dealer_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1172	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_forge_help_menu	src/mods/help.cpp	/^	void send_forge_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1181	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_ghost_help_menu	src/mods/help.cpp	/^	void send_ghost_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1075	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_help	src/mods/help.cpp	/^	bool send_help(std::string_view topic, std::shared_ptr<mods::player>& player) {$/;"	kind:function	line:949	namespace:mods::help	typeref:typename:bool	signature:(std::string_view topic,std::shared_ptr<mods::player> & player)
 send_innate_bonus	src/mods/weapons/damage-event-broadcaster.hpp	/^		void send_innate_bonus(const int& dam,const direction_t& direction,player_ptr_t& attacker,play/;"	kind:function	line:37	namespace:mods::weapons::damage_types::classes::sniper	typeref:typename:void	signature:(const int & dam,const direction_t & direction,player_ptr_t & attacker,player_ptr_t & victim,obj_ptr_t & weapon)
-send_machinist_help_menu	src/mods/help.cpp	/^	void send_machinist_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1198	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
-send_malady_help_menu	src/mods/help.cpp	/^	void send_malady_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1153	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
-send_marksman_help_menu	src/mods/help.cpp	/^	void send_marksman_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1108	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_machinist_help_menu	src/mods/help.cpp	/^	void send_machinist_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1199	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_malady_help_menu	src/mods/help.cpp	/^	void send_malady_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1154	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_marksman_help_menu	src/mods/help.cpp	/^	void send_marksman_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1109	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
 send_melee_damage	src/mods/weapons/damage-event-broadcaster.hpp	/^	std::tuple<feedback_t,feedback_t> send_melee_damage(const int& hits, const int& dam, player_ptr/;"	kind:function	line:88	namespace:mods::weapons::damage_types	typeref:typename:std::tuple<feedback_t,feedback_t>	signature:(const int & hits,const int & dam,player_ptr_t & attacker,player_ptr_t & victim,obj_ptr_t & weapon)
-send_obstructor_help_menu	src/mods/help.cpp	/^	void send_obstructor_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1144	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_obstructor_help_menu	src/mods/help.cpp	/^	void send_obstructor_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1145	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
 send_player_techniques	src/mods/melee/combat-order.hpp	/^	static inline void send_player_techniques(player_ptr_t& player) {$/;"	kind:function	line:96	namespace:mods::melee::main	typeref:typename:void	file:	signature:(player_ptr_t & player)
 send_prompt	src/comm.cpp	/^void send_prompt(player_ptr_t& player) {$/;"	kind:function	line:1200	typeref:typename:void	signature:(player_ptr_t & player)
-send_pyrexia_help_menu	src/mods/help.cpp	/^	void send_pyrexia_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1162	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_pyrexia_help_menu	src/mods/help.cpp	/^	void send_pyrexia_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1163	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
 send_rbuild_help	src/mods/builder/coordinates.cpp	/^	void send_rbuild_help(player_ptr_t& player) {$/;"	kind:function	line:83	namespace:mods::builder::rectangle_layouts	typeref:typename:void	signature:(player_ptr_t & player)
 send_rbuild_help	src/mods/builder/rectangle-layouts.cpp	/^	void send_rbuild_help(player_ptr_t& player) {$/;"	kind:function	line:83	namespace:mods::builder::rectangle_layouts	typeref:typename:void	signature:(player_ptr_t & player)
 send_requirements	src/mods/forge-engine/util.cpp	/^	void send_requirements(requirements_t& requirements, player_ptr_t& player) {$/;"	kind:function	line:325	namespace:mods::forge_engine	typeref:typename:void	signature:(requirements_t & requirements,player_ptr_t & player)
@@ -15093,8 +15103,8 @@ send_rifle_damage	src/mods/weapons/damage-event-broadcaster.hpp	/^	void send_rif
 send_rules_of_engagement_to_player	src/mods/skills.cpp	/^	void send_rules_of_engagement_to_player(player_ptr_t& player,bool color) {$/;"	kind:function	line:57	namespace:mods::skills	typeref:typename:void	signature:(player_ptr_t & player,bool color)
 send_stats_to_player	src/mods/forge-engine/generated-armor.cpp	/^	void generated_armor_t::send_stats_to_player(player_ptr_t& player) {$/;"	kind:function	line:205	class:mods::forge_engine::generated_armor_t	typeref:typename:void	signature:(player_ptr_t & player)
 send_stats_to_player	src/mods/forge-engine/generated-rifle.cpp	/^	void generated_rifle_t::send_stats_to_player(player_ptr_t& player) {$/;"	kind:function	line:881	class:mods::forge_engine::generated_rifle_t	typeref:typename:void	signature:(player_ptr_t & player)
-send_striker_help_menu	src/mods/help.cpp	/^	void send_striker_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1135	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
-send_syndrome_help_menu	src/mods/help.cpp	/^	void send_syndrome_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1189	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_striker_help_menu	src/mods/help.cpp	/^	void send_striker_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1136	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_syndrome_help_menu	src/mods/help.cpp	/^	void send_syndrome_help_menu(player_ptr_t& player) {$/;"	kind:function	line:1190	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
 send_target_dead	src/mods/weapons/damage-event-broadcaster.hpp	/^	feedback_t send_target_dead(player_ptr_t& attacker,player_ptr_t& victim,feedback_t& feedback) {$/;"	kind:function	line:10	namespace:mods::weapons::damage_types	typeref:typename:feedback_t	signature:(player_ptr_t & attacker,player_ptr_t & victim,feedback_t & feedback)
 send_to_all	src/comm.cpp	/^void send_to_all(const char *messg, ...) {$/;"	kind:function	line:2399	typeref:typename:void	signature:(const char * messg,...)
 send_to_char	src/comm.cpp	/^size_t send_to_char(char_data *ch, const char *messg, ...) {$/;"	kind:function	line:2383	typeref:typename:size_t	signature:(char_data * ch,const char * messg,...)
@@ -15107,7 +15117,7 @@ send_to_room_except	src/comm.cpp	/^void send_to_room_except(room_rnum room, play
 send_to_room_except	src/comm.cpp	/^void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...) {$/;"	kind:function	line:2478	typeref:typename:void	signature:(room_rnum room,std::vector<uuid_t> except,const char * messg,...)
 send_to_uuid	src/mods/js.cpp	/^		static duk_ret_t send_to_uuid(duk_context *ctx) {$/;"	kind:function	line:859	namespace:mods::js	typeref:typename:duk_ret_t	file:	signature:(duk_context * ctx)
 send_topic	src/mods/help.cpp	/^	std::string send_topic(std::string_view topic) {$/;"	kind:function	line:766	namespace:mods::help	typeref:typename:std::string	signature:(std::string_view topic)
-send_topics_help_menu	src/mods/help.cpp	/^	void send_topics_help_menu(player_ptr_t& player) {$/;"	kind:function	line:971	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
+send_topics_help_menu	src/mods/help.cpp	/^	void send_topics_help_menu(player_ptr_t& player) {$/;"	kind:function	line:972	namespace:mods::help	typeref:typename:void	signature:(player_ptr_t & player)
 send_yaml_exceptions_to	src/mods/object-utils.hpp	/^	static inline void send_yaml_exceptions_to(TPlayerPointer& player) {$/;"	kind:function	line:135	namespace:mods::object_utils	typeref:typename:void	file:	signature:(TPlayerPointer & player)
 sendln	src/mods/classes/sentinel.cpp	/^		void sentinel::sendln(std::string_view msg){ m_player->sendln(msg); }$/;"	kind:function	line:53	class:mods::classes::sentinel	typeref:typename:void	signature:(std::string_view msg)
 sendln	src/mods/player.cpp	/^	void player::sendln() {$/;"	kind:function	line:2546	class:mods::player	typeref:typename:void	signature:()
@@ -15177,10 +15187,10 @@ set_behaviour_tree_directly	src/mods/mobs/smart-mob.cpp	/^	void smart_mob::set_b
 set_behaviour_tree_to_engage	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto set_behaviour_tree_to_engage() {$/;"	kind:function	line:99	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:()
 set_behaviour_tree_to_engage	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto set_behaviour_tree_to_engage() {$/;"	kind:function	line:104	namespace:mods::mobs::mini_gunner_behaviour_tree	typeref:typename:auto	signature:()
 set_behaviour_tree_to_engage	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode set_behaviour_tree_to_engage() {$/;"	kind:function	line:108	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-set_behaviour_tree_to_engage	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode set_behaviour_tree_to_engage() {$/;"	kind:function	line:102	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+set_behaviour_tree_to_engage	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode set_behaviour_tree_to_engage() {$/;"	kind:function	line:112	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 set_behaviour_tree_to_pursuit	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto set_behaviour_tree_to_pursuit() {$/;"	kind:function	line:107	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:()
 set_behaviour_tree_to_pursuit	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode set_behaviour_tree_to_pursuit() {$/;"	kind:function	line:115	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-set_behaviour_tree_to_pursuit	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode set_behaviour_tree_to_pursuit() {$/;"	kind:function	line:115	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+set_behaviour_tree_to_pursuit	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode set_behaviour_tree_to_pursuit() {$/;"	kind:function	line:124	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 set_breacher	src/mods/player.cpp	/^	void player::set_breacher(std::shared_ptr<mods::classes::breacher> g) {$/;"	kind:function	line:2146	class:mods::player	typeref:typename:void	signature:(std::shared_ptr<mods::classes::breacher> g)
 set_bui_mode	src/mods/player.cpp	/^	void player::set_bui_mode(bool b) {$/;"	kind:function	line:1298	class:mods::player	typeref:typename:void	signature:(bool b)
 set_builder	src/mods/builder/slotted-builder.hpp	/^			void set_builder(player_ptr_t p) {$/;"	kind:function	line:67	struct:mods::builder::slotted_builder	typeref:typename:void	file:	access:public	signature:(player_ptr_t p)
@@ -15489,7 +15499,7 @@ shotgun	src/mods/weapons/shotgun-dst7A.hpp	/^namespace mods::weapons::shotgun {$
 shotgun	src/mods/weapons/shotgun-sasg12.cpp	/^namespace mods::weapons::shotgun {$/;"	kind:namespace	line:6	namespace:mods::weapons	file:
 shotgun	src/mods/weapons/shotgun-sasg12.hpp	/^namespace mods::weapons::shotgun {$/;"	kind:namespace	line:8	namespace:mods::weapons	file:
 shotgun_attack	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode shotgun_attack() {$/;"	kind:function	line:31	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-shotgun_attack	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode shotgun_attack() {$/;"	kind:function	line:45	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+shotgun_attack	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode shotgun_attack() {$/;"	kind:function	line:55	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 shotgun_attack_within_range	src/mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::shotgun_attack_within_range() {$/;"	kind:function	line:427	class:mods::mobs::mp_shotgunner	typeref:typename:void	signature:()
 shotgun_attack_within_range	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	void orthos_spawn_sentinel::shotgun_attack_within_range() {$/;"	kind:function	line:416	class:mods::mobs::orthos_spawn_sentinel	typeref:typename:void	signature:()
 shotgun_charge	src/mods/weapons/shotgun-charge.cpp	/^	shotgun_charge::shotgun_charge() {$/;"	kind:function	line:45	class:mods::weapons::shotgun_charge	signature:()
@@ -15501,7 +15511,7 @@ shotgun_charge_t	src/mods/armor/gauntlets-xtv89.hpp	/^			using shotgun_charge_t 
 shotgun_limits	src/mods/forge-engine/generated-rifle.cpp	/^	static std::vector<attribute_limits_t> shotgun_limits;$/;"	kind:variable	line:300	namespace:mods::forge_engine	typeref:typename:std::vector<attribute_limits_t>	file:
 shotgun_ub_t	src/mods/classes/ghost.hpp	/^			using shotgun_ub_t = mods::weapons::attachment_shotgun_underbarrel;$/;"	kind:typedef	line:18	struct:mods::classes::ghost	typeref:typename:mods::weapons::attachment_shotgun_underbarrel	file:	access:public
 shotguns	src/mods/forge-engine/generated-rifle.cpp	/^	static std::vector<std::string> shotguns;$/;"	kind:variable	line:26	namespace:mods::forge_engine	typeref:typename:std::vector<std::string>	file:
-should_continue	src/mods/help.cpp	/^	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::pla/;"	kind:function	line:981	namespace:mods::help	typeref:typename:bool	signature:(std::string_view from,std::string_view argument,std::shared_ptr<mods::player> & player,bool zero_is_help)
+should_continue	src/mods/help.cpp	/^	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::pla/;"	kind:function	line:982	namespace:mods::help	typeref:typename:bool	signature:(std::string_view from,std::string_view argument,std::shared_ptr<mods::player> & player,bool zero_is_help)
 should_do	src/mods/mobs/smart-mob.hpp	/^			bool should_do(uint16_t action) {$/;"	kind:function	line:106	struct:mods::mobs::smart_mob	typeref:typename:bool	file:	access:public	signature:(uint16_t action)
 should_drop	src/mods/no-drop.cpp	/^	bool should_drop(const player_ptr_t& npc) {$/;"	kind:function	line:18	namespace:mods::no_drop	typeref:typename:bool	signature:(const player_ptr_t & npc)
 should_highlight	src/mods/mini-games/line-up.cpp	/^	bool line_up::should_highlight(int row, uint8_t value) {$/;"	kind:function	line:64	class:mods::mini_games::line_up	typeref:typename:bool	signature:(int row,uint8_t value)
@@ -15516,7 +15526,7 @@ shout	src/mods/mobs/smart-mob.cpp	/^	void smart_mob::shout(std::string_view msg)
 shout_random	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto shout_random() {$/;"	kind:function	line:59	namespace:mods::mobs::lowly_security_behaviour_tree	typeref:typename:auto	signature:()
 shout_random	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto shout_random() {$/;"	kind:function	line:63	namespace:mods::mobs::mini_gunner_behaviour_tree	typeref:typename:auto	signature:()
 shout_random	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode shout_random() {$/;"	kind:function	line:70	namespace:mods::mobs::mp_shotgunner_behaviour_tree	typeref:typename:TChildNode	signature:()
-shout_random	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode shout_random() {$/;"	kind:function	line:67	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+shout_random	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode shout_random() {$/;"	kind:function	line:77	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 shout_where_are_you_random_string	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto shout_where_are_you_random_string() {$/;"	kind:function	line:45	namespace:mods::mobs::mini_gunner_behaviour_tree	typeref:typename:auto	signature:()
 show_blind_friendly_chargen_prompt	src/mods/chargen.cpp	/^	void show_blind_friendly_chargen_prompt(player_ptr_t& player) {$/;"	kind:function	line:200	namespace:mods::chargen	typeref:typename:void	signature:(player_ptr_t & player)
 show_blind_friendly_class_menu	src/mods/chargen.cpp	/^	void show_blind_friendly_class_menu(player_ptr_t& player) {$/;"	kind:function	line:121	namespace:mods::chargen	typeref:typename:void	signature:(player_ptr_t & player)
@@ -15908,10 +15918,10 @@ statement_t	src/mods/orm/util.hpp	/^	struct statement_t {$/;"	kind:struct	line:8
 states	src/globals.cpp	/^		ai_state_map states;$/;"	kind:variable	line:93	namespace:mods::globals	typeref:typename:ai_state_map
 static_amount_t	src/mods/yaml.hpp	/^	using static_amount_t = int16_t;$/;"	kind:typedef	line:137	namespace:mods::yaml	typeref:typename:int16_t	file:
 static_roll_weapon_amount	src/mods/weapons/damage-calculator.cpp	/^	static int16_t static_roll_weapon_amount = 0;$/;"	kind:variable	line:28	namespace:mods::weapons::damage_calculator	typeref:typename:int16_t	file:
-station_ptr_t	src/mods/radio.cpp	/^	using station_ptr_t = std::shared_ptr<station_t>;$/;"	kind:typedef	line:29	namespace:mods::radio	typeref:typename:std::shared_ptr<station_t>	file:
-station_t	src/mods/radio.cpp	/^		station_t(std::shared_ptr<mods::orm::radio_station> orm) :$/;"	kind:function	line:17	struct:mods::radio::station_t	file:	access:public	signature:(std::shared_ptr<mods::orm::radio_station> orm)
-station_t	src/mods/radio.cpp	/^	struct station_t {$/;"	kind:struct	line:15	namespace:mods::radio	file:
-stations	src/mods/radio.cpp	/^	static std::deque<station_ptr_t> stations;$/;"	kind:variable	line:30	namespace:mods::radio	typeref:typename:std::deque<station_ptr_t>	file:
+station_ptr_t	src/mods/radio.cpp	/^	using station_ptr_t = std::shared_ptr<station_t>;$/;"	kind:typedef	line:37	namespace:mods::radio	typeref:typename:std::shared_ptr<station_t>	file:
+station_t	src/mods/radio.cpp	/^		station_t(std::shared_ptr<mods::orm::radio_station> _orm) :$/;"	kind:function	line:18	struct:mods::radio::station_t	file:	access:public	signature:(std::shared_ptr<mods::orm::radio_station> _orm)
+station_t	src/mods/radio.cpp	/^	struct station_t {$/;"	kind:struct	line:16	namespace:mods::radio	file:
+stations	src/mods/radio.cpp	/^	static std::deque<station_ptr_t> stations;$/;"	kind:variable	line:38	namespace:mods::radio	typeref:typename:std::deque<station_ptr_t>	file:
 stats	src/mods/armor/gauntlets-xtv89.hpp	/^			struct stats {$/;"	kind:struct	line:44	struct:mods::armor::xtv89	file:	access:public
 stats	src/mods/armor/vest-bc89.hpp	/^			struct stats {$/;"	kind:struct	line:56	struct:mods::armor::bc89	file:	access:public
 stats	src/mods/forge-engine/requirements.hpp	/^		std::vector<std::pair<stat_types_t,uint32_t>> stats;$/;"	kind:member	line:34	struct:mods::forge_engine::requirements_t	typeref:typename:std::vector<std::pair<stat_types_t,uint32_t>>	file:	access:public
@@ -16542,6 +16552,7 @@ transaction_t	src/mods/lmdb.hpp	/^	struct transaction_t {$/;"	kind:struct	line:6
 translations	src/mods/lmdb/conf.hpp	/^	conf_map& translations() { return m_translations; }$/;"	kind:function	line:18	struct:gdns::conf	typeref:typename:conf_map &	file:	access:public	signature:()
 transmit	src/mods/chat.cpp	/^	void channel::transmit(std::string_view user,std::string_view message) {$/;"	kind:function	line:79	class:mods::chat::channel	typeref:typename:void	signature:(std::string_view user,std::string_view message)
 transmit	src/mods/chat.cpp	/^	void transmit(std::string verb,std::string_view player_name,std::string_view message) {$/;"	kind:function	line:113	namespace:mods::chat	typeref:typename:void	signature:(std::string verb,std::string_view player_name,std::string_view message)
+transmit_globally	src/mods/radio.cpp	/^	void transmit_globally(std::string_view msg) {$/;"	kind:function	line:72	namespace:mods::radio	typeref:typename:void	signature:(std::string_view msg)
 trap_description_t	src/mods/yaml.hpp	/^		trap_description_t() {$/;"	kind:function	line:362	struct:mods::yaml::trap_description_t	file:	access:public	signature:()
 trap_description_t	src/mods/yaml.hpp	/^	struct trap_description_t : public yaml_description_t {$/;"	kind:struct	line:350	namespace:mods::yaml	file:	inherits:yaml_description_t
 traps	src/structs.h	/^	sh_int traps;$/;"	kind:member	line:1872	struct:dex_skill_type	typeref:typename:sh_int	file:	access:public
@@ -16556,7 +16567,7 @@ trees	src/mods/mobs/shoplifter-behaviour-tree.cpp	/^	std::deque<TNode>& trees() 
 triads	src/mods/player.cpp	/^	std::array<uint8_t,5> player::triads() {$/;"	kind:function	line:2126	class:mods::player	typeref:typename:std::array<uint8_t,5>	signature:()
 trigger_callback	src/mods/affects.hpp	/^			void trigger_callback(TAffects affect) {$/;"	kind:function	line:153	struct:mods::affects::dissolver	typeref:typename:void	file:	access:public	signature:(TAffects affect)
 trigger_callback_for_affect	src/mods/rooms.cpp	/^	void trigger_callback_for_affect(room_rnum room,affect_t affect) {$/;"	kind:function	line:54	namespace:mods::rooms::affects	typeref:typename:void	signature:(room_rnum room,affect_t affect)
-trigger_guard_neutralize	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode trigger_guard_neutralize() {$/;"	kind:function	line:127	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
+trigger_guard_neutralize	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode trigger_guard_neutralize() {$/;"	kind:function	line:136	namespace:mods::mobs::orthos_spawn_sentinel_btree	typeref:typename:TChildNode	signature:()
 trigger_mud_shutdown	src/mods/message-encoder.cpp	/^	void trigger_mud_shutdown() {$/;"	kind:function	line:85	namespace:mods::message_server	typeref:typename:void	signature:()
 trigger_mud_shutdown	src/mods/message-server.cpp	/^	void trigger_mud_shutdown() {$/;"	kind:function	line:268	namespace:mods::message_server	typeref:typename:void	signature:()
 trim	src/mods/lmdb/db.hpp	/^		static inline void trim(std::string &s) {$/;"	kind:function	line:54	struct:gdns::util	typeref:typename:void	file:	access:public	signature:(std::string & s)
