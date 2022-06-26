@@ -134,10 +134,6 @@
 ./mods/values.cpp:			->get_value
 ./mods/values.cpp:			->revert_value_to_default
 ./mods/values.cpp:			->list_values
-./mods/values.cpp:			->set_value
-./mods/values.cpp:			->get_value
-./mods/values.cpp:			->revert_value_to_default
-./mods/values.cpp:			->list_values
 ./mods/weapons/reload.cpp:	->reload
 ./mods/mobs/defiler.cpp:	->bioscan
 ./mods/rifle.cpp:	->rifle_me

@@ -289,6 +289,9 @@ namespace mods::drops {
 			easy_drop_item_for_mob(item,ORTHOS_SNIPER);
 		}
 
+
+		auto before_size = obj_list.size();
+
 #define CRAWL_FOR(type) \
 		for(auto& type : parse_yamls_in_directory(#type)) {\
 			if(mods::rarity::is_common(type->type()->attributes->rarity)) {\
@@ -306,6 +309,7 @@ namespace mods::drops {
 			if(mods::rarity::is_god_tier(type->type()->attributes->rarity)) {\
 				BOOST_PP_CAT(BOOST_PP_CAT(god_tier_,type),s).emplace_back(type->feed_file());\
 			}\
+			mods::globals::dispose_object(type->uuid);\
 		}
 
 		CRAWL_FOR(rifle);
@@ -314,6 +318,9 @@ namespace mods::drops {
 
 #undef CRAWL_FOR
 
+		auto after_size = obj_list.size();
+
+		assert(before_size == after_size);
 	}
 
 	SUPERCMD(do_reindex_yaml) {

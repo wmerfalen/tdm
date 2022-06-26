@@ -8,6 +8,9 @@
 `mbuild giveme:next_vnum`
 `mbuild giveme:free_vnum`
 `rbuild giveme:next_vnum`
+`admin:yaml:re-index`
+	- reads rifle, armor, explosive yaml directories and categorized them
+		- created objects are destructed once used
 
 
 
@@ -21,6 +24,13 @@
 # LOOT MECHANICS
 
 ## Preliminary loot logic [UNFINISHED]
+
+### New features for drops
+	- see `mods/drops.cpp`
+	- Common rifles, armor, explosives are rolled on each npc death
+	- some hard-coded drops for specific NPC's that relate to contracts that they're a part of
+		- i.e.: drones carry claymores and frags
+
 Plans to change the rarity/OP-ness of loot are underway. Currently, there are a few functions which are just
 calling the same ordinary loot function. We need to fill these functions in and adjust the tier of loot that
 is rewarded.

@@ -11936,6 +11936,15 @@ ALTER TABLE ONLY public.mini_gunner_sentinel
 ALTER TABLE ONLY public.player_race_perks
     ADD CONSTRAINT player_race_perks_prperk_id_fkey FOREIGN KEY (prperk_id) REFERENCES public.player_races(id);
 
+CREATE TABLE public.radio_station (
+    id SERIAL PRIMARY KEY,
+    rs_room_vnum integer NOT NULL,
+		rs_power integer NOT NULL,
+		rs_name varchar(256) NOT NULL
+);
+
+ALTER TABLE ONLY public.radio_station
+    ADD CONSTRAINT radio_station_room_vnum_fkey FOREIGN KEY (rs_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
 --
 -- PostgreSQL database dump complete

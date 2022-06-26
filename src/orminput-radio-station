@@ -1,0 +1,17 @@
+[start]
+
+[uint16_t]
+rs_power
+
+[room_vnum]
+rs_room_vnum
+
+[std::string]
+rs_name,256
+
+[initialize_row]
+rs_power
+rs_room_vnum
+rs_name
+
+[end]

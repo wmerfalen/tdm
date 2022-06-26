@@ -25,6 +25,15 @@ struct str {
 		return m;
 	}
 
+	static inline std::string tolower(std::string_view _s) {
+		std::string s = _s.data();
+		std::transform(s.begin(), s.end(), s.begin(),
+		[](unsigned char c) {
+			return std::tolower(c);
+		});
+		return s;
+	}
+
 	static inline bool ends_with(std::string_view s, const std::string& hay) {
 		auto f = hay.find(s);
 		if(f == std::string::npos) {
@@ -35,6 +44,11 @@ struct str {
 			return true;
 		}
 		return false;
+	}
+	static inline bool starts_with_lower(std::string_view s, const std::string& hay) {
+		auto slower = tolower(s);
+		auto hlower = tolower(hay);
+		return hlower.find(slower) != std::string::npos;
 	}
 	static inline bool starts_with(std::string_view s, const std::string& hay) {
 		return hay.find(s) != std::string::npos;

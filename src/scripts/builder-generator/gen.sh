@@ -24,6 +24,46 @@ done
 
 echo '' > $TMP
 
+function int_fields(){
+	cat $INPUT_FILE | 
+		grep '\[int\]' -A 50 |
+		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
+		grep -v '\[int\]' |
+		grep -E '[a-z0-9_]+' 
+}
+
+function int16_fields(){
+	cat $INPUT_FILE | 
+		grep '\[int16_t\]' -A 50 |
+		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
+		grep -v '\[int16_t\]' |
+		grep -E '[a-z0-9_]+' 
+}
+
+function uint16_fields(){
+	cat $INPUT_FILE | 
+		grep '\[uint16_t\]' -A 50 |
+		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
+		grep -v '\[uint16_t\]' |
+		grep -E '[a-z0-9_]+' 
+}
+
+function uint32_fields(){
+	cat $INPUT_FILE | 
+		grep '\[uint32_t\]' -A 50 |
+		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
+		grep -v '\[uint32_t\]' |
+		grep -E '[a-z0-9_]+' 
+}
+
+function uint64_fields(){
+	cat $INPUT_FILE | 
+		grep '\[uint64_t\]' -A 50 |
+		grep -E '^[[:blank:]]*$' -B 20 --max-count=1 |
+		grep -v '\[uint64_t\]' |
+		grep -E '[a-z0-9_]+' 
+}
+
 function str_fields(){
 	cat $INPUT_FILE | 
 		grep '\[std::string\]' -A 50 |
@@ -123,6 +163,51 @@ done
 room_vnum_fields > $TMP_FILE
 for field in $(cat $TMP_FILE); do
 	echo -n "(room_vnum,$field,0,1,null,1)" >> $TUPLE_FILE
+	CTR=$(( CTR + 1 ))
+	if [[ $CTR -lt $LC ]]; then
+		echo -ne ', \\\n' >> $TUPLE_FILE
+	fi
+done
+
+int_fields > $TMP_FILE
+for field in $(cat $TMP_FILE); do
+	echo -n "(int,$field,0,1,null,1)" >> $TUPLE_FILE
+	CTR=$(( CTR + 1 ))
+	if [[ $CTR -lt $LC ]]; then
+		echo -ne ', \\\n' >> $TUPLE_FILE
+	fi
+done
+
+int16_fields > $TMP_FILE
+for field in $(cat $TMP_FILE); do
+	echo -n "(int16_t,$field,0,1,null,1)" >> $TUPLE_FILE
+	CTR=$(( CTR + 1 ))
+	if [[ $CTR -lt $LC ]]; then
+		echo -ne ', \\\n' >> $TUPLE_FILE
+	fi
+done
+
+uint16_fields > $TMP_FILE
+for field in $(cat $TMP_FILE); do
+	echo -n "(uint16_t,$field,0,1,null,1)" >> $TUPLE_FILE
+	CTR=$(( CTR + 1 ))
+	if [[ $CTR -lt $LC ]]; then
+		echo -ne ', \\\n' >> $TUPLE_FILE
+	fi
+done
+
+uint32_fields > $TMP_FILE
+for field in $(cat $TMP_FILE); do
+	echo -n "(uint32_t,$field,0,1,null,1)" >> $TUPLE_FILE
+	CTR=$(( CTR + 1 ))
+	if [[ $CTR -lt $LC ]]; then
+		echo -ne ', \\\n' >> $TUPLE_FILE
+	fi
+done
+
+uint64_fields > $TMP_FILE
+for field in $(cat $TMP_FILE); do
+	echo -n "(uint64_t,$field,0,1,null,1)" >> $TUPLE_FILE
 	CTR=$(( CTR + 1 ))
 	if [[ $CTR -lt $LC ]]; then
 		echo -ne ', \\\n' >> $TUPLE_FILE

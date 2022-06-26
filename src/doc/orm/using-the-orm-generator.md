@@ -9,6 +9,18 @@ If you don't have a symbolic link in your src folder, run `make ormgen`.
 Copy the input.example file at `src/scripts/builder-generator/input.example`
 and edit it to accomodate your needs. 
 
+List of inputs:
+- `std::string`
+- `mob_vnum`
+- `player_id`
+- `room_vnum`
+- `zone_vnum`
+- `int`
+- `uint32_t`
+- `uint64_t`
+- `int16_t`
+- `uint16_t`
+
 Example:
 ```
 [start]
