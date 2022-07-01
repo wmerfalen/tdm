@@ -323,8 +323,46 @@ namespace mods::builder::raid {
 
 	}	//end raid
 
+	SUPERCMD(do_raid_pave) {
+		ADMIN_REJECT();
+		static constexpr std::string_view usage = "Usage: admin:raid:pave on <name> <level> <type>";
+		mods::builder::initialize_builder(player);
+		if(!argshave()->size_gt(0)->passed()) {
+			player->sendln(usage);
+			return;
+		}
+		if(argshave()->size_gt(0)->first_is("off")->passed()) {
+			auto s = player->builder_data->raid_pave_off();
+			if(std::get<0>(s)) {
+				player->sendln(CAT("Success: ",std::get<1>(s)));
+				return;
+			}
+			player->sendln(CAT("Error: ",std::get<1>(s)));
+			return;
+		}
+		/**
+		 * [0] on
+		 * [1] name
+		 * [2] level
+		 * [3] type
+		 */
+		if(!argshave()->size_gt(2)->passed()) {
+			player->sendln(usage);
+			return;
+		}
+		auto s = player->builder_data->raid_pave_on(argat(1),argat(2),argat(3));
+		if(!std::get<0>(s)) {
+			player->sendln(CAT("Error:",std::get<1>(s)));
+			return;
+		}
+		player->sendln(CAT("{grn}Pave on for raid ID:",std::get<2>(s),"{/grn}"));
+		ADMIN_DONE();
+
+	}	//end raid
+
 	void init() {
 		ADD_BUILDER_COMMAND("admin:raid",do_raid);
+		ADD_BUILDER_COMMAND("admin:raid:pave",do_raid_pave);
 		raidbuild(nullptr);
 	}
 };

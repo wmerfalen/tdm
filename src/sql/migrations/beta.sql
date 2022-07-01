@@ -11950,3 +11950,41 @@ ALTER TABLE ONLY public.radio_station
 -- PostgreSQL database dump complete
 --
 
+
+CREATE TABLE public.zone_mob (
+    id SERIAL PRIMARY KEY,
+    zm_room_vnum integer NOT NULL,
+    zm_mob_vnum integer NOT NULL,
+		zm_max integer NOT NULL DEFAULT 5
+);
+ALTER TABLE ONLY public.zone_mob
+    ADD CONSTRAINT zone_mob_room_vnum_fkey FOREIGN KEY (zm_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.zone_mob
+    ADD CONSTRAINT zone_mob_mob_vnum_fkey FOREIGN KEY (zm_mob_vnum) REFERENCES public.mobile(mob_virtual_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+CREATE TABLE public.zone_yaml (
+    id SERIAL PRIMARY KEY,
+    zy_room_vnum integer NOT NULL,
+		zy_yaml TEXT NOT NULL,
+		zy_max integer NOT NULL DEFAULT 1
+);
+ALTER TABLE ONLY public.zone_yaml
+    ADD CONSTRAINT zone_yaml_room_vnum_fkey FOREIGN KEY (zy_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+CREATE TABLE public.zone_random_item (
+    id SERIAL PRIMARY KEY,
+    zri_room_vnum integer NOT NULL,
+		zri_yaml VARCHAR(256) NOT NULL,
+		zri_max integer NOT NULL DEFAULT 1
+);
+
+ALTER TABLE ONLY public.zone_random_item
+    ADD CONSTRAINT zone_random_item_room_vnum_fkey FOREIGN KEY (zri_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+INSERT INTO public.zone_yaml (zy_room_vnum, zy_max, zy_yaml) ( select zone_arg2, zone_arg3, zone_yaml from zone_data where zone_command='Y');
+insert into public.zone_mob (zm_mob_vnum, zm_room_vnum, zm_max)  (SELECT zone_arg1, zone_arg2, zone_arg3 FROM public.zone_data where zone_command='M' AND zone_arg2 != 0);

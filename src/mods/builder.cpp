@@ -61,6 +61,13 @@ using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::s
 #define in_room(a) IN_ROOM(a)
 #define nowhere NOWHERE
 #define is_direction(A) IS_DIRECTION(A)
+int get_raid_id(player_ptr_t player) {
+	if(player->builder_data) {
+		return player->builder_data->raid_id();
+	}
+	return 0;
+}
+
 void show_shop_by_index(std::size_t i,player_ptr_t& player) {
 	mods::builder_util::show_object_vector<std::deque<shop_data_t>>(
 	                                                                 player,
@@ -2948,6 +2955,7 @@ SUPERCMD(do_mbuild) {
 			return;
 		}
 		mob_proto.push_back(mob_proto[i_value.value()]);
+		mob_proto[i_value.value()].mob_specials.raid_id = get_raid_id(player);
 		auto return_pair = mods::builder::save_player(&mob_proto[i_value.value()]);
 
 		if(!return_pair.first) {

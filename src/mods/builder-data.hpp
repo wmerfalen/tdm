@@ -10,6 +10,10 @@
 #include <array>
 #include "index-type.hpp"
 
+namespace mods::builder {
+	struct raid_t;
+};
+
 /* Pave mode structure for builders */
 struct room_pavement_t {
 	int start_room;
@@ -52,22 +56,30 @@ struct room_recorder_t {
 };
 
 struct builder_data_t {
-	bool room_pave_mode;
-	bool zone_pave_mode;
-	builder_data_t(int type,int start_room,int start_zone);
+		bool room_pave_mode;
+		bool zone_pave_mode;
+		builder_data_t(int type,int start_room,int start_zone);
 
-	room_pavement_t room_pavements;
-	zone_pavement_t zone_pavements;
-	std::vector<room_pavement_t> room_pavement_list;
-	std::vector<zone_pavement_t> zone_pavement_list;
-	builder_data_t() : room_pave_mode(false),zone_pave_mode(false),
-		room_transaction_id(0),
-		zone_transaction_id(0) { }
-	~builder_data_t() = default;
-	int room_transaction_id;
-	int zone_transaction_id;
-	std::map<std::string,room_rnum> bookmarks;
-	room_recorder_t room_recorder;
+		room_pavement_t room_pavements;
+		zone_pavement_t zone_pavements;
+		std::vector<room_pavement_t> room_pavement_list;
+		std::vector<zone_pavement_t> zone_pavement_list;
+		builder_data_t() : room_pave_mode(false),zone_pave_mode(false),
+			room_transaction_id(0),
+			zone_transaction_id(0), raid_pave(false),
+			raid(nullptr)
+		{ }
+		~builder_data_t() = default;
+		int room_transaction_id;
+		int zone_transaction_id;
+		std::map<std::string,room_rnum> bookmarks;
+		room_recorder_t room_recorder;
+		std::tuple<bool,std::string,uint64_t> raid_pave_on(std::string_view name, std::string_view level, std::string_view type);
+		std::tuple<bool,std::string,uint64_t> raid_pave_off();
+		int raid_id();
+	private:
+		bool raid_pave;
+		std::shared_ptr<mods::builder::raid_t> raid;
 };
 
 #endif
