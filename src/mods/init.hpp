@@ -6,7 +6,6 @@
 /**
  * Community edition
  */
-INIT(mods::builder::mob_scaler_init);
 INIT(mods::drops);
 INIT(mods::flee);
 INIT(mods::suicide);
@@ -161,7 +160,6 @@ namespace mods::init {
 		mods::flee::init();
 		mods::suicide::init();
 		mods::drops::init();
-		mods::builder::mob_scaler_init::init();
 
 #ifdef __MENTOC_PLUGIN_CONTENT__
 		mods::plugins::init::init();

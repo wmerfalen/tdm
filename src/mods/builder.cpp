@@ -652,14 +652,10 @@ namespace mods::builder {
 
 	void initialize_builder(player_ptr_t& player) {
 		if(!player->has_builder_data()) {
-#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 			std::cerr << "initialize_builder: creating shared_ptr\n";
-#endif
 			player->builder_data = std::make_shared<builder_data_t>();
 		} else {
-#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 			std::cerr << "initialize_builder: shared_ptr already built\n";
-#endif
 		}
 		player->set_bui_mode(true);
 	}

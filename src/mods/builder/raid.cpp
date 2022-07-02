@@ -6,6 +6,7 @@
 
 #include "../orm/raid.hpp"
 #include "slotted-builder.hpp"
+#include "mob-scaler.hpp"
 #include "../../db.h"
 
 namespace mods::builder::raid {
@@ -203,11 +204,6 @@ namespace mods::builder::raid {
 				return {1,"Loaded"};
 			});
 
-			register_manual_command("scale-mob","<mob-vnum> <level>",[this](std::string argument) -> std::tuple<bool,std::string> {
-
-				return {1,"Loaded"};
-			});
-
 			register_manual_command("random-mob","",[this](std::string argument) -> std::tuple<bool,std::string> {
 				player->sendx("Reloading..");
 				this->reload_orm();
@@ -368,7 +364,57 @@ namespace mods::builder::raid {
 
 	}	//end raid
 
+	/**
+	 * command: admin:raid:pave <on|off> <name> <level> <type>
+	 * ----------------------------------------------------------
+	 * When you call pave on, each mob you build will have the
+	 * raid_id of the raid created by pave on.
+	 *
+	 * To stop paving, use admin:raid:pave off
+	 *
+	 *
+	 */
+	SUPERCMD(do_scale_mob) {
+		mods::builder::initialize_builder(player);
+		ADMIN_REJECT();
+		static constexpr std::string_view usage = "Usage: admin:raid:scale:mob <vnum> <level>";
+		if(!argshave()->size_gt(1)->passed()) {
+			player->sendln(usage);
+			return;
+		}
+		/**
+		 * [0] <vnum>
+		 * [1] <level>
+		 */
+		if(argshave()->size_gt(1)->int_at(0)->int_at(1)->passed()) {
+			auto mob = real_mobile(intat(0));
+			if(mob == NOBODY) {
+				player->sendln("No mob with that vnum could be found");
+				return;
+			}
+			int level = intat(1);
+			if(level <= 0 || level > 255) {
+				player->sendln("Mob level must be a positive integer between 1 and 256");
+				return;
+			}
+			player->sendln(CAT("Current raid id for you:",player->builder_data->raid_id()));
+
+			auto s = scale_mob(mob,level,player->builder_data->raid_id());
+			if(std::get<0>(s)) {
+				player->sendln(CAT("Successfully Scaled mob: ",std::get<1>(s)));
+			} else {
+				player->sendln(CAT("Failed to scale mob: ",std::get<1>(s)));
+			}
+			return;
+		} else {
+			player->sendln(usage);
+		}
+		ADMIN_DONE();
+
+	}	//end raid
+
 	void init() {
+		ADD_BUILDER_COMMAND("admin:raid:scale:mob",do_scale_mob);
 		ADD_BUILDER_COMMAND("admin:raid",do_raid);
 		ADD_BUILDER_COMMAND("admin:raid:pave",do_raid_pave);
 		raidbuild(nullptr);

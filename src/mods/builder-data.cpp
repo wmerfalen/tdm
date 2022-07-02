@@ -10,8 +10,10 @@ extern int next_room_pavement_transaction_id();
 extern std::deque<room_data> world;
 int builder_data_t::raid_id() {
 	if(raid) {
+		std::cout << "raid orm id: " << raid->orm.id << "\n";
 		return raid->orm.id;
 	}
+	std::cout << "raid just returning zero\n";
 	return 0;
 }
 
@@ -28,9 +30,11 @@ std::tuple<bool,std::string,uint64_t> builder_data_t::raid_pave_on(std::string_v
 	}
 	raid = std::make_shared<mods::builder::raid_t>(name,level,type);
 	auto id = raid->orm.initialize_row(name,level,type,"INCOMPLETE");
+	raid->orm.id = 0;
 	if(id <= 0) {
 		return {false,"Failed to init row",id};
 	}
+	raid->orm.id = id;
 	raid_pave = true;
 	return {true,"okay",id};
 }

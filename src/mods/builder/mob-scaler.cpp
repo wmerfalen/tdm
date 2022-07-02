@@ -126,10 +126,8 @@ namespace mods::builder {
 		obj->mob_specials.experience = experience * level;
 
 		obj->mob_specials.raid_id = raid_id;
-		//obj->mob_specials.scalable = orig.mob_specials.scalable;
 		obj->mob_specials.vnum = next_mob_number();
 
-		//mob_proto[id].mob_specials.raid_id = get_raid_id(player);
 		auto s = mods::builder::save_player(obj);
 		if(!std::get<0>(s)) {
 			return {0,std::get<1>(s),0};
@@ -137,58 +135,4 @@ namespace mods::builder {
 		return {1,"okay",std::get<2>(s)};
 	}
 
-
-	/**
-	 * command: admin:raid:pave <on|off> <name> <level> <type>
-	 * ----------------------------------------------------------
-	 * When you call pave on, each mob you build will have the
-	 * raid_id of the raid created by pave on.
-	 *
-	 * To stop paving, use admin:raid:pave off
-	 *
-	 *
-	 */
-	SUPERCMD(do_scale_mob) {
-		mods::builder::initialize_builder(player);
-		ADMIN_REJECT();
-		static constexpr std::string_view usage = "Usage: admin:scale:mob <vnum> <level>";
-		if(!argshave()->size_gt(1)->passed()) {
-			player->sendln(usage);
-			return;
-		}
-		/**
-		 * [0] <vnum>
-		 * [1] <level>
-		 */
-		if(argshave()->size_gt(1)->int_at(0)->int_at(1)->passed()) {
-			auto mob = real_mobile(intat(0));
-			if(mob == NOBODY) {
-				player->sendln("No mob with that vnum could be found");
-				return;
-			}
-			int level = intat(1);
-			if(level <= 0 || level > 255) {
-				player->sendln("Mob level must be a positive integer between 1 and 256");
-				return;
-			}
-
-			auto s = scale_mob(mob,level,player->builder_data->raid_id());
-			if(std::get<0>(s)) {
-				player->sendln(CAT("Successfully Scaled mob: ",std::get<1>(s)));
-			} else {
-				player->sendln(CAT("Failed to scale mob: ",std::get<1>(s)));
-			}
-			return;
-		} else {
-			player->sendln(usage);
-		}
-		ADMIN_DONE();
-
-	}	//end raid
-
-	namespace mob_scaler_init {
-		void init() {
-			ADD_BUILDER_COMMAND("admin:scale:mob",do_scale_mob);
-		}
-	};
 };

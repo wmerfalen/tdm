@@ -64,11 +64,19 @@ struct builder_data_t {
 		zone_pavement_t zone_pavements;
 		std::vector<room_pavement_t> room_pavement_list;
 		std::vector<zone_pavement_t> zone_pavement_list;
-		builder_data_t() : room_pave_mode(false),zone_pave_mode(false),
+		builder_data_t() :
+			room_pave_mode(false),zone_pave_mode(false),
 			room_transaction_id(0),
 			zone_transaction_id(0), raid_pave(false),
 			raid(nullptr)
 		{ }
+		builder_data_t(const builder_data_t& other) :
+			room_pave_mode(other.room_pave_mode),zone_pave_mode(other.zone_pave_mode),
+			room_transaction_id(other.room_transaction_id),
+			zone_transaction_id(other.zone_transaction_id), raid_pave(other.raid_pave),
+			raid(other.raid) {
+			std::cout << "[builder_data_t::copy constructor]\n";
+		}
 		~builder_data_t() = default;
 		int room_transaction_id;
 		int zone_transaction_id;

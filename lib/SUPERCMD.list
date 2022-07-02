@@ -100,12 +100,12 @@
 {yel}mods/builder/meqbuild{/yel}:->{grn}meqbuild{/grn}
 {yel}mods/builder/raid{/yel}:->{grn}raid{/grn}
 {yel}mods/builder/raid{/yel}:->{grn}raid_pave{/grn}
+{yel}mods/builder/raid{/yel}:->{grn}scale_mob{/grn}
 {yel}mods/builder/seqbuild{/yel}:->{grn}seqbuild{/grn}
 {yel}mods/builder/hqbuild{/yel}:->{grn}hqbuild{/grn}
 {yel}mods/builder/bookmarks{/yel}:->{grn}bookmark{/grn}
 {yel}mods/builder/bookmarks{/yel}:->{grn}goto{/grn}
 {yel}mods/builder/bookmarks{/yel}:->{grn}print_vnum{/grn}
-{yel}mods/builder/mob-scaler{/yel}:->{grn}scale_mob{/grn}
 {yel}mods/builder/conbuild{/yel}:->{grn}conbuild{/grn}
 {yel}mods/drops{/yel}:->{grn}reindex_yaml{/grn}
 {yel}mods/boosters/adrenaline-shot{/yel}:->{grn}adshot_test{/grn}
