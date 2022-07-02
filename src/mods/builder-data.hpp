@@ -75,15 +75,16 @@ struct builder_data_t {
 			room_transaction_id(other.room_transaction_id),
 			zone_transaction_id(other.zone_transaction_id), raid_pave(other.raid_pave),
 			raid(other.raid) {
-			std::cout << "[builder_data_t::copy constructor]\n";
+			//std::cout << "[builder_data_t::copy constructor]\n";
 		}
 		~builder_data_t() = default;
 		int room_transaction_id;
 		int zone_transaction_id;
 		std::map<std::string,room_rnum> bookmarks;
 		room_recorder_t room_recorder;
-		std::tuple<bool,std::string,uint64_t> raid_pave_on(std::string_view name, std::string_view level, std::string_view type);
+		std::tuple<bool,std::string,uint64_t> raid_pave_on(std::string_view name, std::string_view level, std::string_view type,room_vnum r);
 		std::tuple<bool,std::string,uint64_t> raid_pave_off();
+		std::tuple<bool,std::string,uint64_t> raid_set_spawn(room_vnum);
 		int raid_id();
 	private:
 		bool raid_pave;

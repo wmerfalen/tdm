@@ -8,6 +8,8 @@
 #include "slotted-builder.hpp"
 #include "mob-scaler.hpp"
 #include "../../db.h"
+#include "../str.hpp"
+#include "../builder-data.hpp"
 
 namespace mods::builder::raid {
 
@@ -250,7 +252,7 @@ namespace mods::builder::raid {
 				return {0,"Not enough arguments. Signature: new <name> <level> <type>"};
 			}
 			auto c = std::make_shared<mods::orm::raid>();
-			auto id = c->initialize_row(argat(1),argat(2),argat(3),"INCOMPLETE");
+			auto id = c->initialize_row(argat(1),argat(2),argat(3),"INCOMPLETE",player->vnum());
 			if(id <= 0) {
 				return {0,"Couldn't initialize row"};
 			}
@@ -354,7 +356,7 @@ namespace mods::builder::raid {
 			player->sendln(usage);
 			return;
 		}
-		auto s = player->builder_data->raid_pave_on(argat(1),argat(2),argat(3));
+		auto s = player->builder_data->raid_pave_on(argat(1),argat(2),argat(3),player->vnum());
 		if(!std::get<0>(s)) {
 			player->sendln(CAT("Error:",std::get<1>(s)));
 			return;
@@ -413,10 +415,48 @@ namespace mods::builder::raid {
 
 	}	//end raid
 
+	SUPERCMD(do_raid_set_spawn) {
+		mods::builder::initialize_builder(player);
+		ADMIN_REJECT();
+		static constexpr std::string_view usage = "Usage: admin:raid:set:spawn <room-vnum|this>";
+		if(!argshave()->size_gt(1)->passed()) {
+			player->sendln(usage);
+			return;
+		}
+		room_vnum room = NOWHERE;
+		/**
+		 * [0] <room-vnum|this>
+		 */
+		if(argshave()->size_gt(0)->int_at(0)->passed()) {
+			room = intat(0);
+		} else if(argshave()->size_gt(0)->passed() && str(argat(0)).is("this")) {
+			room = player->vnum();
+		} else {
+			player->sendln(CAT("Expecting either a room vnum or 'this'"));
+			player->sendln(usage);
+			return;
+		}
+
+		player->sendln("Checking if you are paving...");
+		if(player->builder_data->raid_id() <= 0) {
+			player->sendln("You must be raid paving. (admin:raid:pave on...)");
+			return;
+		}
+
+		auto s = player->builder_data->raid_set_spawn(room);
+		if(std::get<0>(s)) {
+			player->sendln(CAT("Successfully set spawn: ",std::get<1>(s)));
+		} else {
+			player->sendln(CAT("Failed to set spawn: ",std::get<1>(s)));
+		}
+		ADMIN_DONE();
+
+	}	//end raid
 	void init() {
 		ADD_BUILDER_COMMAND("admin:raid:scale:mob",do_scale_mob);
 		ADD_BUILDER_COMMAND("admin:raid",do_raid);
 		ADD_BUILDER_COMMAND("admin:raid:pave",do_raid_pave);
+		ADD_BUILDER_COMMAND("admin:raid:set:spawn",do_raid_set_spawn);
 		raidbuild(nullptr);
 	}
 };

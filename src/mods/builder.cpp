@@ -31,6 +31,7 @@
 #include "interpreter.hpp"
 #include "zone.hpp"
 #include "sex.hpp"
+#include "builder-data.hpp"
 
 namespace mods {
 	struct player;

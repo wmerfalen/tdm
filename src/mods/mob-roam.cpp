@@ -2,6 +2,7 @@
 #include <memory>
 #include "orm/mob-roam.hpp"
 #include "mobs/roam-pattern.hpp"
+#include "builder-data.hpp"
 
 namespace mods::mob_roam {
 	using roaming_data_t = std::vector<room_vnum>;

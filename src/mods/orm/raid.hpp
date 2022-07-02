@@ -10,16 +10,18 @@ namespace mods::orm {
 
 #define RAID_ORM_MEMBERS ( \
 (uint64_t,id,0,1,null,1), \
-(std::string,r_level,"",3,null,1), \
 (std::string,r_name,"",3,null,1), \
+(std::string,r_level,"",3,null,1), \
 (std::string,r_type,"",3,null,1), \
-(std::string,r_status,"",3,null,1))
+(std::string,r_status,"",3,null,1), \
+(room_vnum,r_spawn,0,1,null,1))
 
 #define RAID_INITIALIZE_ROW_MEMBERS \
 (r_name) \
 (r_level) \
 (r_type) \
 (r_status) \
+(r_spawn) \
  
 
 

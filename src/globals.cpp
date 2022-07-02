@@ -31,6 +31,7 @@
 #include "mods/boot-flags.hpp"
 #include "mods/weapons/unique-weapons.hpp"
 #include "mods/armor/unique-armor.hpp"
+#include "mods/builder-data.hpp"
 
 namespace mods::mob_equipment {
 	extern void decorate(const uuid_t& mob_uuid);

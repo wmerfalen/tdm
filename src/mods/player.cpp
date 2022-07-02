@@ -29,6 +29,7 @@
 #include "contract-events.hpp"
 #include "orm/inventory.hpp"
 #include "super-users.hpp"
+#include "builder-data.hpp"
 
 #ifdef __MENTOC_PLAYER_CLASS_DEBUG__
 #define dbg(A) std::cerr << red_str("[mods::player]debug:") << A << "\n";

@@ -29,8 +29,9 @@
 #include "mods/item-types.hpp"
 #include "mods/mobs/extended-types.hpp"
 #include "mods/rifle-instance-data.hpp"
-#include "mods/builder-data.hpp"
+//#include "mods/builder-data.hpp"
 
+struct builder_data_t;
 extern void log(const char* format,...);
 
 namespace mods::object_utils {

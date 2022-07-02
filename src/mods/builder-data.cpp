@@ -24,12 +24,19 @@ builder_data_t::builder_data_t(int type,int start_room,int start_zone) {
 	raid = nullptr;
 	raid_pave = false;
 }
-std::tuple<bool,std::string,uint64_t> builder_data_t::raid_pave_on(std::string_view name, std::string_view level, std::string_view type) {
+std::tuple<bool,std::string,uint64_t> builder_data_t::raid_set_spawn(room_vnum r) {
+	if(!raid) {
+		return {false,"A raid has already been started. Close that out first",0};
+	}
+	raid->orm.set("r_spawn",std::to_string(r));
+	return {true,"set spawn. dont forget to save",0};
+}
+std::tuple<bool,std::string,uint64_t> builder_data_t::raid_pave_on(std::string_view name, std::string_view level, std::string_view type, room_vnum r) {
 	if(raid) {
 		return {false,"A raid has already been started. Close that out first",0};
 	}
 	raid = std::make_shared<mods::builder::raid_t>(name,level,type);
-	auto id = raid->orm.initialize_row(name,level,type,"INCOMPLETE");
+	auto id = raid->orm.initialize_row(name,level,type,"INCOMPLETE", r);
 	raid->orm.id = 0;
 	if(id <= 0) {
 		return {false,"Failed to init row",id};

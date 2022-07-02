@@ -3,6 +3,7 @@
 #include "../util.hpp"
 #include "../builder_util.hpp"
 #include <map>
+#include "../builder-data.hpp"
 
 namespace mods::builder::bookmarks {
 	void add_room(player_ptr_t& player,const room_rnum& room_id);

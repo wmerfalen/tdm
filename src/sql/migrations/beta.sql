@@ -2524,13 +2524,16 @@ ALTER SEQUENCE public.player_skill_usage_id_seq OWNED BY public.player_skill_usa
 --
 
 CREATE TABLE public.raid (
-    id integer NOT NULL,
+    id SERIAL PRIMARY KEY,
     r_name character varying(256) NOT NULL,
     r_level character varying(16) NOT NULL,
     r_type character varying(32) NOT NULL,
     r_status character varying(16) NOT NULL,
+		r_spawn integer,
     created_at timestamp without time zone DEFAULT now() NOT NULL
 );
+ALTER TABLE ONLY public.raid
+    ADD CONSTRAINT raid_spawn_room_vnum_fkey FOREIGN KEY (r_spawn) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 ALTER TABLE public.raid OWNER TO postgres;
