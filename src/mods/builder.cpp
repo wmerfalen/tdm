@@ -1286,7 +1286,7 @@ namespace mods::builder {
 		proto.aff_abils = proto.real_abils;
 		return proto;
 	}
-	std::pair<bool,std::string> save_player(char_data* obj) {
+	std::tuple<bool,std::string,uint64_t> save_player(char_data* obj) {
 		try {
 			auto txn_01 = txn();
 			auto result_01 = mods::pq::exec(txn_01,sql_compositor("mobile",&txn_01)
@@ -1298,7 +1298,7 @@ namespace mods::builder {
 			mods::pq::commit(txn_01);
 #define MENTOC_PLAYER_NULL_CHECK(item)\
 			if(!obj->item){\
-				return {false,std::string(#item) + " is null!"};\
+				return {false,std::string(#item) + " is null!",0};\
 			}
 			MENTOC_PLAYER_NULL_CHECK(player.name);
 			MENTOC_PLAYER_NULL_CHECK(player.short_descr);
@@ -1382,10 +1382,27 @@ namespace mods::builder {
 			mods::pq::commit(txn_02);
 		} catch(const std::exception& e) {
 			REPORT_DB_ISSUE("error",e.what());
-			return {false,e.what()};
+			return {false,e.what(),0};
 		}
 
-		return {true,"Successfully saved player."};
+		/** Grab the id of the row we just upserted */
+		try {
+			auto txn_01 = txn();
+			auto result_01 = mods::pq::exec(txn_01,sql_compositor("mobile",&txn_01)
+			                                .select("mob_id")
+			                                .from("mobile")
+			                                .where("mob_virtual_number","=",std::to_string(obj->mob_specials.vnum))
+			                                .sql()
+			                               );
+			auto id = result_01[0]["mob_id"].as<uint64_t>();
+			mods::pq::commit(txn_01);
+			return {true,"Successfully saved player.", id};
+		} catch(const std::exception& e) {
+			REPORT_DB_ISSUE("error",e.what());
+			return {false,e.what(),0};
+		}
+
+
 	}
 	std::pair<bool,std::string> save_object(int item_number,int obj_type,std::string feed_file) {
 		try {
@@ -2958,8 +2975,8 @@ SUPERCMD(do_mbuild) {
 		mob_proto[i_value.value()].mob_specials.raid_id = get_raid_id(player);
 		auto return_pair = mods::builder::save_player(&mob_proto[i_value.value()]);
 
-		if(!return_pair.first) {
-			r_error(player,return_pair.second);
+		if(!std::get<0>(return_pair)) {
+			r_error(player,std::get<1>(return_pair));
 			return;
 		}
 
@@ -3013,11 +3030,11 @@ SUPERCMD(do_mbuild) {
 		auto obj = &mob_proto[index.value()];
 		auto return_pair = mods::builder::save_player(obj);
 
-		if(!return_pair.first) {
-			r_error(player,return_pair.second);
+
+		if(!std::get<0>(return_pair)) {
+			r_error(player,std::get<1>(return_pair));
 			return;
 		}
-
 		r_success(player,"Object saved.");
 		return;
 	}

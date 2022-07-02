@@ -3,8 +3,8 @@ see doc/building/2022-quarter-1-features.md
 
 [ ] MUD RADIO
 	[x] Broadcast messages to all players
-	[ ] `radio_station.power` calculates how strong the signal is
-		[ ] x,y,z position of player is used
+	[x] `radio_station.power` calculates how strong the signal is
+		[x] x,y,z position of player is used
 	[ ] Can only be accessible when you have an in-game radio
 
 
@@ -50,13 +50,24 @@ admin:raid:done
 [x] Create raid table
 	[x] Create mods/raid.cpp
 	[x] Add support for `mbuild attr raid <id>`
-	[ ] `admin:raid:pave on`
-		[ ] `admin:raid:set:spawn <raid-id> <room-vnum|this>`
-		[ ] `admin:raid:create <name> <level> <type>`
-		[ ] `zbuild raid <mob-vnum>`
-		[ ] `mbuild <vnum> attr raid <raid-id>`
+	[x] `admin:raid:pave on`
+		[ ] `admin:raid:set:spawn <room-vnum|this>`
+		[x] `mbuild <vnum> attr raid <raid-id>`
 		[ ] ... create mobs and zone data ...
-		[ ] `mbuild mode <none|default>`
+		[ ] `admin:raid:set:spawn <room-vnum|this>`
+		[x] `admin:raid:pave off`
+	[ ] `admin:raid:broadcast <ID>`
+	[x] `admin:raid list`
+	[x] `admin:raid remove <id>...[id-N]`
+	[ ] `admin:raid:close <id>...[id-N]`
+		- will stop broadcasting a raid
+	[ ] `admin:raid:finalize <id>...[id-N]`
+		- stops a raid, sets it's status to "COMPLETED"
+	[ ] `admin:raid:reload`
+		- reloads all raids from the db
+		- cannot be ran if currently in raid pave mode
+		
+
 [ ] Randomized objectives that target currently playing players
 	[ ] Loop over the currently playing player list
 		[ ] create a randomized objective for that player's level

@@ -203,10 +203,8 @@ namespace mods::builder::raid {
 				return {1,"Loaded"};
 			});
 
-			register_manual_command("scale-mob","<mob-vnum>",[this](std::string argument) -> std::tuple<bool,std::string> {
-				player->sendx("Reloading..");
-				this->reload_orm();
-				player->sendln("done");
+			register_manual_command("scale-mob","<mob-vnum> <level>",[this](std::string argument) -> std::tuple<bool,std::string> {
+
 				return {1,"Loaded"};
 			});
 
@@ -323,6 +321,16 @@ namespace mods::builder::raid {
 
 	}	//end raid
 
+	/**
+	 * command: admin:raid:pave <on|off> <name> <level> <type>
+	 * ----------------------------------------------------------
+	 * When you call pave on, each mob you build will have the
+	 * raid_id of the raid created by pave on.
+	 *
+	 * To stop paving, use admin:raid:pave off
+	 *
+	 *
+	 */
 	SUPERCMD(do_raid_pave) {
 		ADMIN_REJECT();
 		static constexpr std::string_view usage = "Usage: admin:raid:pave on <name> <level> <type>";
