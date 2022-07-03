@@ -2543,6 +2543,15 @@ SUPERCMD(do_mbuild) {
 			return;
 		}
 	}
+	{
+		if(vec_args.size() >= 1 && vec_args[0].compare("giveme:int:next_vnum") == 0) {
+			auto vnum = next_mob_number();
+			player->sendln(CAT(vnum));
+			ENCODE_STR(vnum);
+			return;
+		}
+	}
+
 
 
 	{
@@ -2561,7 +2570,7 @@ SUPERCMD(do_mbuild) {
 			//mbuild <describe>    <type>
 			auto arg_vec = args.value();
 			if(arg_vec.size() < 2) {
-				r_error(player,"Please specify a type");
+				r_error(player,"{mbuild describe} Please specify a type");
 				return;
 			}
 			auto desc = mods::mobs::extended_types::description(arg_vec[1]);
@@ -2574,14 +2583,14 @@ SUPERCMD(do_mbuild) {
 	if(argshave()->int_at(1)->first_is("roam-pattern")->passed()) {
 		auto mob_index = intat(1);
 		if(mob_proto.size() <= mob_index) {
-			r_error(player, "Mob-id is out of bounds.");
+			r_error(player, "{mbuild roam-pattern} Mob-id is out of bounds.");
 			return;
 		}
 		auto r = mods::builder::save_mob_roam_pattern(mob_index, args()->gather_strings_starting_at(2));
 		if(std::get<0>(r)) {
-			r_success(player,"Set roam pattern");
+			r_success(player,"{mbuild roam-pattern} Set roam pattern");
 		} else {
-			r_error(player,CAT("Failed to save roam pattern: '",std::get<1>(r),"'"));
+			r_error(player,CAT("{mbuild roam-pattern} Failed to save roam pattern: '",std::get<1>(r),"'"));
 		}
 		return;
 	}
@@ -2593,50 +2602,50 @@ SUPERCMD(do_mbuild) {
 			//mbuild <extended-type> <mob-id>  <type>
 			auto arg_vec = args.value();
 			if(arg_vec.size() < 3) {
-				r_error(player,"Please specify a mob-id and extended-type");
+				r_error(player,"{mbuild extended-type} Please specify a mob-id and extended-type");
 				return;
 			}
 			auto i_value = mods::util::stoi(arg_vec[1]);
 			if(!i_value.has_value()) {
-				r_error(player,"Please specify a valid mob-id");
+				r_error(player,"{mbuild extended-type} Please specify a valid mob-id");
 				return;
 			}
 			auto mob_id = i_value.value();
 			std::string str_type = arg_vec[2];
 			auto et_opt = mods::mobs::extended_types::from_string(str_type);
 			if(et_opt.has_value() == false) {
-				r_error(player, "Unrecognized extended type");
+				r_error(player, "{mbuild extended-type} Unrecognized extended type");
 				return;
 			}
 			auto opt = et_opt.value();
 			if(mob_proto.size() <= mob_id) {
-				r_error(player, "Mob-id is out of bounds.");
+				r_error(player, "{mbuild extended-type} Mob-id is out of bounds.");
 				return;
 			}
 			mob_proto[mob_id].mob_specials.extended_mob_type = opt;
-			r_success(player,"Set mob type.");
+			r_success(player,"{mbuild extended-type} Set mob type.");
 			return;
 		}
 	}
 	{
 		if(argshave()->first_is("targets")->passed()) {
 			if(argshave()->size_gt(2)->passed() == false) {
-				r_error(player,"Not enough arguments. Expected atleast 3");
+				r_error(player,"{mbuild targets} Not enough arguments. Expected atleast 3");
 				return;
 			}
 			if(argshave()->int_at(1)->passed() == false) {
-				r_error(player,"Please specify a correct mob id");
+				r_error(player,"{mbuild targets} Please specify a correct mob id");
 				return;
 			}
 			auto mob_id = intat(1);
 			if(mob_id >= mob_proto.size()) {
-				r_error(player,"Mob id out of bounds");
+				r_error(player,"{mbuild targets} Mob id out of bounds");
 				return;
 			}
 
 			auto s = mods::builder::save_mob_target(mob_id,args()->gather_strings_starting_at(2));
 			if(!std::get<0>(s)) {
-				r_error(player, std::get<1>(s));
+				r_error(player, CAT("{mbuild targets} ",std::get<1>(s)));
 				return;
 			}
 			r_success(player,std::get<1>(s));
@@ -2664,11 +2673,11 @@ SUPERCMD(do_mbuild) {
 		auto i_value = mods::util::stoi(arg_vec[1]);
 
 		if(!i_value.has_value()) {
-			r_error(player,"Please use a valid numeric value.");
+			r_error(player,"{mbuild action:add} Please use a valid numeric value.");
 			return;
 		}
 		if(arg_vec.end() <= arg_vec.begin() + 2) {
-			r_error(player,"Please supply action flags");
+			r_error(player,"{mbuild action:add} Please supply action flags");
 			return;
 		}
 
@@ -2677,7 +2686,7 @@ SUPERCMD(do_mbuild) {
 		auto index = i_value.value();
 		auto obj = grab_mobile(index,found);
 		if(!found) {
-			r_error(player,"Invalid mob number");
+			r_error(player,"{mbuild action:add} Invalid mob number");
 			return;
 		}
 
@@ -2685,13 +2694,13 @@ SUPERCMD(do_mbuild) {
 			if(ex_flag.second.compare(*flag) == 0) {
 				obj->char_specials.saved.act |= ex_flag.first;
 				found = true;
-				r_success(player,"Added flag");
+				r_success(player,"{mbuild action:add} Added flag");
 				break;
 			}
 		}
 
 		if(!found) {
-			r_error(player,std::string("Unrecognized flag: ") + *flag);
+			r_error(player,std::string("{mbuild action:add} Unrecognized flag: ") + *flag);
 		}
 	}
 	args = mods::util::subcmd_args<14,args_t>(argument,"action:remove");
@@ -2702,7 +2711,7 @@ SUPERCMD(do_mbuild) {
 		auto i_value = mods::util::stoi(arg_vec[1]);
 
 		if(!i_value.has_value()) {
-			r_error(player,"Please use a valid numeric value.");
+			r_error(player,"{mbuild action:remove} Please use a valid numeric value.");
 			return;
 		}
 
@@ -2710,12 +2719,12 @@ SUPERCMD(do_mbuild) {
 		auto index = i_value.value();
 		auto obj = grab_mobile(index,found);
 		if(!found) {
-			r_error(player,"Invalid mob number");
+			r_error(player,"{mbuild action:remove} Invalid mob number");
 			return;
 		}
 
 		obj->char_specials.saved.act = 0;
-		r_success(player,"Removed flag");
+		r_success(player,"{mbuild action:remove} Removed flag");
 		return;
 	}
 
@@ -2727,11 +2736,11 @@ SUPERCMD(do_mbuild) {
 		auto i_value = mods::util::stoi(arg_vec[1]);
 
 		if(!i_value.has_value()) {
-			r_error(player,"Please use a valid numeric value.");
+			r_error(player,"{mbuild action:remove} Please use a valid numeric value.");
 			return;
 		}
 		if(arg_vec.end() <= arg_vec.begin() + 2) {
-			r_error(player,"Please supply action flags");
+			r_error(player,"{mbuild action:remove} Please supply action flags");
 			return;
 		}
 
@@ -2740,7 +2749,7 @@ SUPERCMD(do_mbuild) {
 		auto index = i_value.value();
 		auto obj = grab_mobile(index,found);
 		if(!found) {
-			r_error(player,"Invalid mob number");
+			r_error(player,"{mbuild action:remove} Invalid mob number");
 			return;
 		}
 
@@ -2748,13 +2757,13 @@ SUPERCMD(do_mbuild) {
 			if(ex_flag.second.compare(*flag) == 0) {
 				obj->char_specials.saved.act &= ~ex_flag.first;
 				found = true;
-				r_success(player,"Removed flag");
+				r_success(player,"{mbuild action:remove} Removed flag");
 				break;
 			}
 		}
 
 		if(!found) {
-			r_error(player,std::string("Unrecognized flag: ") + *flag);
+			r_error(player,std::string("{mbuild action:remove} Unrecognized flag: ") + *flag);
 		}
 	}
 
@@ -2766,7 +2775,7 @@ SUPERCMD(do_mbuild) {
 		auto i_value = mods::util::stoi(arg_vec[1]);
 
 		if(!i_value.has_value()) {
-			r_error(player,"Please use a valid numeric value.");
+			r_error(player,"{mbuild action:list} Please use a valid numeric value.");
 			return;
 		}
 		std::string flag_values;
@@ -2774,7 +2783,7 @@ SUPERCMD(do_mbuild) {
 		bool found = false;
 		auto obj = grab_mobile(index,found);
 		if(!found) {
-			r_error(player,"Invalid mob number");
+			r_error(player,"{mbuild action:list} Invalid mob number");
 			return;
 		}
 		for(auto& ex_flag : mods::builder::mob_act_flags) {
@@ -2792,7 +2801,7 @@ SUPERCMD(do_mbuild) {
 	if(args.has_value()) {
 		mob_proto.push_back(mods::builder::new_npc());
 		ENCODE_STR(mob_proto.size()-1);
-		r_success(player,"Mobile created");
+		r_success(player,"{mbuild new} Mobile created");
 		return;
 	}
 
@@ -2803,7 +2812,7 @@ SUPERCMD(do_mbuild) {
 		auto arg_vec = args.value();
 		if(arg_vec[1].compare("raid") == 0) {
 			ENCODE_INIT();
-			r_error(player,"No mob with that vnum");
+			r_error(player,"{mbuild exists} No mob with that vnum");
 			return;
 		}
 
@@ -2812,7 +2821,7 @@ SUPERCMD(do_mbuild) {
 		ENCODE_INIT();
 
 		if(!i_value.has_value()) {
-			r_error(player,"Please use a valid numeric value.");
+			r_error(player,"{mbuild exists} Please use a valid numeric value.");
 			return;
 		} else {
 			auto arg_vec = args.value();
@@ -2821,12 +2830,12 @@ SUPERCMD(do_mbuild) {
 			for(const auto& mob : mob_proto) {
 				if(mob.mob_specials.vnum == i_value.value()) {
 					ENCODE_STR(ctr);
-					r_success(player,CAT("Index: ",ctr));
+					r_success(player,CAT("{mbuild exists} Index: ",ctr));
 					return;
 				}
 				++ctr;
 			}
-			r_error(player,"No mob with that vnum");
+			r_error(player,"{mbuild exists} No mob with that vnum");
 			return;
 		}
 	}
@@ -2839,14 +2848,14 @@ SUPERCMD(do_mbuild) {
 			auto i_value = mods::util::stoi(arg_vec[1]);
 
 			if(!i_value.has_value()) {
-				r_error(player,"Please use a valid numeric value.");
+				r_error(player,"{mbuild clone} Please use a valid numeric value.");
 				return;
 			} else {
 				auto index = i_value.value();
 				std::size_t i = index;
 
 				if(i >= mob_proto.size()) {
-					r_error(player,"Out of bounds");
+					r_error(player,"{mbuild clone} Out of bounds");
 					return;
 				}
 
@@ -2854,7 +2863,7 @@ SUPERCMD(do_mbuild) {
 				mob_proto.emplace_back();
 				mob_proto.back() = mob_proto[i];
 				mob_proto.back().mob_specials.vnum = v;
-				r_success(player,"Object cloned");
+				r_success(player,"{mbuild clone} Object cloned");
 			}
 			return;
 		}
@@ -2868,7 +2877,7 @@ SUPERCMD(do_mbuild) {
 		auto i_value = mods::util::stoi(arg_vec[1]);
 
 		if(!i_value.has_value()) {
-			r_error(player,"Please use a valid numeric value.");
+			r_error(player,"{mbuild instantiate} Please use a valid numeric value.");
 			return;
 		} else {
 			/**
@@ -2893,19 +2902,19 @@ SUPERCMD(do_mbuild) {
 			 */
 			auto v = i_value.value_or(-1);
 			if(v < 0) {
-				r_error(player,"Vnum must be a positive number");
-				ENCODE_R("invalid vnum value");
+				r_error(player,"{mbuild instantiate} Vnum must be a positive number");
+				ENCODE_R("{mbuild instantiate} invalid vnum value");
 				return;
 			}
 
 			auto obj = mods::globals::read_mobile_ptr(v,VIRTUAL);
 			if(!obj) {
-				r_error(player,"Cannot find mob by that vnum");
-				ENCODE_R("couldnt find mob with vnum");
+				r_error(player,"{mbuild instantiate} Cannot find mob by that vnum");
+				ENCODE_R("{mbuild instantiate} couldnt find mob with vnum");
 				return;
 			}
 			mods::globals::rooms::char_to_room(player->room(),obj->cd());
-			r_success(player,"Object created, look on the floor");
+			r_success(player,"{mbuild instantiate} Object created, look on the floor");
 			ENCODE_OK();
 		}
 
@@ -2918,37 +2927,37 @@ SUPERCMD(do_mbuild) {
 		ENCODE_INIT();
 		auto arg_vec = args.value();
 		if(arg_vec.size() < 3) {
-			r_error(player,"Invalid number of arguments");
+			r_error(player,"{mbuild place} Invalid number of arguments");
 			return;
 		}
 		auto mobvnum = mods::util::stoi(arg_vec[1]).value_or(-1);
 		if(mobvnum < 0) {
-			r_error(player,"Mob Vnum must be a positive number");
+			r_error(player,"{mbuild place} Mob Vnum must be a positive number");
 			ENCODE_R("invalid vnum value");
 			return;
 		}
 		auto roomvnum = mods::util::stoi(arg_vec[1]).value_or(-1);
 		if(roomvnum < 0) {
-			r_error(player,"Room Vnum must be a positive number");
+			r_error(player,"{mbuild place} Room Vnum must be a positive number");
 			ENCODE_R("invalid vnum value");
 			return;
 		}
 
 		auto obj = mods::globals::read_mobile_ptr(mobvnum,VIRTUAL);
 		if(!obj) {
-			r_error(player,"Cannot find mob by that vnum");
+			r_error(player,"{mbuild place} Cannot find mob by that vnum");
 			ENCODE_R("couldnt find mob with vnum");
 			return;
 		}
 		auto realroom = real_room(roomvnum);
 		if(realroom == NOWHERE) {
-			r_error(player,"Room doesn't exist");
+			r_error(player,"{mbuild place} Room doesn't exist");
 			ENCODE_R("!room-exists");
 			return;
 		}
 		mods::globals::rooms::char_to_room(realroom,obj->cd());
 		ENCODE_MAP(str_map_t({{"uuid",std::to_string(obj->uuid())}}));
-		r_success(player,"Object created, look on the floor");
+		r_success(player,"{mbuild place} Object created, look on the floor");
 
 		return;
 	}
@@ -2961,11 +2970,11 @@ SUPERCMD(do_mbuild) {
 		auto i_value = mods::util::stoul(arg_vec[1]);
 
 		if(!i_value.has_value()) {
-			r_error(player,"Please use a valid numeric value.");
+			r_error(player,"{mbuild copy} Please use a valid numeric value.");
 			return;
 		}
 		if(i_value.value() >= mob_proto.size()) {
-			r_error(player,"Out of bounds");
+			r_error(player,"{mbuild copy} Out of bounds");
 			return;
 		}
 		mob_proto.push_back(mob_proto[i_value.value()]);
@@ -2977,7 +2986,7 @@ SUPERCMD(do_mbuild) {
 			return;
 		}
 
-		r_success(player,"Mobile created and saved");
+		r_success(player,"{mbuild copy} Mobile created and saved");
 		return;
 	}
 
@@ -3006,21 +3015,21 @@ SUPERCMD(do_mbuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() < 2) {
-			r_error(player,"Invalid number of arguments");
+			r_error(player,"{mbuild list} Invalid number of arguments");
 			return;
 		}
 
 		auto index = mods::util::stoi(arg_vec[1]);
 
 		if(!index.has_value()) {
-			r_error(player,"Invalid index");
+			r_error(player,"{mbuild list} Invalid index");
 			return;
 		}
 
 		std::size_t i = index.value();
 
 		if(i  >= mob_proto.size()) {
-			r_error(player,"Invalid index");
+			r_error(player,"{mbuild list} Invalid index");
 			return;
 		}
 
@@ -3032,7 +3041,7 @@ SUPERCMD(do_mbuild) {
 			r_error(player,std::get<1>(return_pair));
 			return;
 		}
-		r_success(player,"Object saved.");
+		r_success(player,"{mbuild list} Object saved.");
 		return;
 	}
 
@@ -3042,21 +3051,21 @@ SUPERCMD(do_mbuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() < 2) {
-			r_error(player,"Invalid number of arguments");
+			r_error(player,"{mbuild show} Invalid number of arguments");
 			return;
 		}
 
 		auto index = mods::util::stoi(arg_vec[1]);
 
 		if(!index.has_value()) {
-			r_error(player,"Invalid index");
+			r_error(player,"{mbuild show} Invalid index");
 			return;
 		}
 
 		std::size_t i = index.value();
 
 		if(i >= mob_proto.size()) {
-			r_error(player,"Invalid index");
+			r_error(player,"{mbuild show} Invalid index");
 			return;
 		}
 
@@ -3128,7 +3137,7 @@ SUPERCMD(do_mbuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() < 4) {
-			r_error(player,"Invalid number of arguments");
+			r_error(player,"{mbuild attr} Invalid number of arguments");
 			return;
 		}
 
@@ -3137,7 +3146,7 @@ SUPERCMD(do_mbuild) {
 				auto i_value = mods::util::stoi(arg_vec[3]);
 
 				if(!i_value.has_value()) {
-					r_error(player,"Please use a valid numeric value.");
+					r_error(player,"{mbuild attr} Please use a valid numeric value.");
 					return std::nullopt;
 				}
 
@@ -3202,32 +3211,32 @@ SUPERCMD(do_mbuild) {
 
 			if(arg_vec[2].compare("virt") == 0 || arg_vec[2].compare("vnum") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {
-					r_error(player,"Please supply a virtual number");
+					r_error(player,"{mbuild virt/vnum} Please supply a virtual number");
 					return;
 				}
 				auto opt_vr_number = mods::util::stoi(arg_vec[3]);
 				obj->mob_specials.vnum = opt_vr_number.value();
-				r_success(player,"Saved");
+				r_success(player,"{mbuild attr virt/vnum} Saved");
 				return;
 			}
 
 			if(arg_vec[2].compare("exp") == 0) {
 				auto opt_vr_number = mods::util::stoi(arg_vec[3]);
 				obj->mob_specials.experience = opt_vr_number.value();
-				r_success(player,"Saved");
+				r_success(player,"{mbuild atter exp} Saved");
 				return;
 			}
 
 			if(arg_vec[2].compare("raid") == 0) {
 				auto opt_raid_id = mods::util::stoi(arg_vec[3]);
 				obj->mob_specials.raid_id = opt_raid_id.value();
-				r_success(player,"Saved");
+				r_success(player,"{mbuild attr raid} Saved");
 				return;
 			}
 
 			if(arg_vec[2].compare("sex") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {
-					r_error(player,"Please supply a flag");
+					r_error(player,"{mbuild attr sex} Please supply a flag");
 					return;
 				}
 
@@ -3243,13 +3252,13 @@ SUPERCMD(do_mbuild) {
 				}
 
 				if(!found) {
-					r_error(player,std::string("Unrecognized flag: ") + *flag);
+					r_error(player,std::string("{mbuild attr sex} Unrecognized flag: ") + *flag);
 				}
 			}
 
 			if(arg_vec[2].compare("default_position") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {
-					r_error(player,"Please supply a flag");
+					r_error(player,"{mbuild attr default_position} Please supply a flag");
 					return;
 				}
 
@@ -3265,7 +3274,7 @@ SUPERCMD(do_mbuild) {
 				}
 
 				if(!found) {
-					r_error(player,std::string("Unrecognized flag: ") + *flag);
+					r_error(player,std::string("{mbuild attr default_position} Unrecognized flag: ") + *flag);
 				}
 			}
 		}
@@ -4531,7 +4540,7 @@ SUPERCMD(do_obuild) {
 
 		if(arg_vec[2].compare("affected") == 0) {
 			if(arg_vec.size() < 6) {
-				r_error(player,"Not enough arguments");
+				r_error(player,"{obuild affected} Not enough arguments");
 				return;
 			}
 
@@ -4814,7 +4823,7 @@ SUPERCMD(do_zbuild) {
 	}
 	auto display_zone_commands = [&](const std::size_t& i) {
 		if(i >= zone_table.size()) {
-			r_error(player,"Out of bounds");
+			r_error(player,"{zbuild} Out of bounds");
 			return;
 		}
 
@@ -4862,15 +4871,15 @@ SUPERCMD(do_zbuild) {
 		return;
 	};
 	if(argshave()->first_is("remove-all-zone-data-from-db")->passed()) {
-		player->sendln("DELETING ZONE_DATA COMMANNDS FROM DB...");
+		player->sendln("{zbuild remove-all-zone-data-from-db} DELETING ZONE_DATA COMMANNDS FROM DB...");
 		auto s = mods::builder::delete_all_zone_data();
-		player->sendln(CAT("Delete zone data status: ",s,". Zero means success. Negative means error"));
-		player->sendln("DONE");
+		player->sendln(CAT("{zbuild remove-all-zone-data-from-db} Delete zone data status: ",s,". Zero means success. Negative means error"));
+		player->sendln("{zbuild remove-all-zone-data-from-db} DONE");
 		return;
 	}
 	if(argshave()->first_is("delete-by-mob-vnum")->passed()) {
 		if(argshave()->size_gt(1)->passed() == false) {
-			r_error(player,"Specify a mob vnum");
+			r_error(player,"{zbuild delete-by-vnum} Specify a mob vnum");
 			return;
 		}
 		auto s = mods::builder::delete_by_mob_vnum(argat(1));
@@ -4899,9 +4908,9 @@ SUPERCMD(do_zbuild) {
 					 */
 		auto result = mods::builder::zone_place(player->zone(),"R","0",std::to_string(player->vnum()),argat(1),csv);
 		if(!std::get<0>(result)) {
-			r_error(player,std::get<1>(result));
+			r_error(player,CAT("{zbuild random-item-spawn} ",std::get<1>(result)));
 		} else {
-			r_success(player,std::get<1>(result));
+			r_success(player,CAT("{zbuild random-item-spawn} ",std::get<1>(result)));
 		}
 		return;
 	}
@@ -4928,7 +4937,7 @@ SUPERCMD(do_zbuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() < 2) {
-			r_error(player,"Please provide a zone id");
+			r_error(player,"{zbuild save} Please provide a zone id");
 			return;
 		}
 		int zone = 0;
@@ -4939,14 +4948,14 @@ SUPERCMD(do_zbuild) {
 			auto zone_id = mods::util::stoi(arg_vec[1]);
 
 			if(!zone_id.has_value()) {
-				r_error(player,"Invalid zone id");
+				r_error(player,"{zbuild save} Invalid zone id");
 				return;
 			}
 			zone = zone_id.value();
 		}
 
 		if(zone >= zone_table.size()) {
-			r_error(player,"Out of bounds");
+			r_error(player,"{zbuild save} Out of bounds");
 			return;
 		}
 
@@ -4970,17 +4979,17 @@ SUPERCMD(do_zbuild) {
 		              );
 
 		if(status.first) {
-			r_success(player,"Saved zone");
+			r_success(player,"{zbuild save} Saved zone");
 		} else {
-			r_error(player,status.second);
+			r_error(player,CAT("{zbuild save} ",status.second));
 		}
 
 		auto status2 = mods::builder::update_zone_commands(zone);
 
 		if(status2.first) {
-			r_success(player,"Saved zone commands");
+			r_success(player,"{zbuild save} Saved zone commands");
 		} else {
-			r_error(player,status2.second);
+			r_error(player,CAT("{zbuild save} ",status2.second));
 		}
 
 		return;
@@ -4991,18 +5000,18 @@ SUPERCMD(do_zbuild) {
 		int zone = 0;
 		if(vargs[1].compare("this") == 0) {
 			zone = world[player->room()].zone;
-			player->sendln(CAT("Using current zone id:", zone));
+			player->sendln(CAT("{zbuild mob} Using current zone id:", zone));
 		} else {
 			auto zone_id = mods::util::stoi(vargs[1]);
 
 			if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
-				r_error(player," Invalid zone id");
+				r_error(player,"{zbuild mob} Invalid zone id");
 				return;
 			}
 			zone = zone_id.value();
 		}
 		if(vargs.size() < 6) {
-			r_error(player,"Not enough arguments");
+			r_error(player,"{zbuild mob} Not enough arguments");
 			return;
 		}
 
@@ -5038,9 +5047,9 @@ SUPERCMD(do_zbuild) {
 		 */
 		auto result = mods::builder::zone_place(zone,zone_command,if_flag,arg1,arg2,arg3);
 		if(!result.first) {
-			r_error(player,result.second);
+			r_error(player,CAT("{zbuild mob} ",result.second));
 		} else {
-			r_success(player,"Placed mob in zone successfully");
+			r_success(player,"{zbuild mob} Placed mob in zone successfully");
 		}
 		return;
 	}
@@ -5048,18 +5057,18 @@ SUPERCMD(do_zbuild) {
 		int zone = 0;
 		if(vargs[1].compare("this") == 0) {
 			zone = world[player->room()].zone;
-			player->sendln(CAT("Using current zone id:", zone));
+			player->sendln(CAT("{zbuild yaml} Using current zone id:", zone));
 		} else {
 			auto zone_id = mods::util::stoi(vargs[1]);
 
 			if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
-				r_error(player," Invalid zone id");
+				r_error(player,"{zbuild yaml} Invalid zone id");
 				return;
 			}
 			zone = zone_id.value();
 		}
 		if(vargs.size() < 6) {
-			r_error(player,"Not enough arguments");
+			r_error(player,"{zbuild yaml} Not enough arguments");
 			return;
 		}
 
@@ -5095,9 +5104,9 @@ SUPERCMD(do_zbuild) {
 		 */
 		auto result = mods::builder::zone_place(zone,zone_command,if_flag,arg1,arg2,arg3);
 		if(!result.first) {
-			r_error(player,result.second);
+			r_error(player,CAT("{zbuild yaml} ",result.second));
 		} else {
-			r_success(player,"Placed mob in zone successfully");
+			r_success(player,"{zbuild yaml} Placed yaml in zone successfully");
 		}
 		return;
 	}
@@ -5114,14 +5123,14 @@ SUPERCMD(do_zbuild) {
 			auto zone_id = mods::util::stoi(args[0]);
 
 			if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
-				r_error(player," Invalid zone id");
+				r_error(player,"{zbuild place} Invalid zone id");
 				return;
 			}
 			zone = zone_id.value();
 		}
 
 		if(args.size() < 6) {
-			r_error(player,"Not enough arguments");
+			r_error(player,"{zbuild place} Not enough arguments");
 			return;
 		}
 
@@ -5131,7 +5140,7 @@ SUPERCMD(do_zbuild) {
 		auto arg2 = args[4];
 		auto arg3 = args[5];
 		mods::builder::zone_place(zone,zone_command,if_flag,arg1,arg2,arg3);
-		r_success(player,"Placed object in zone");
+		r_success(player,"{zbuild place} Placed object in zone");
 		return;
 	}
 
@@ -5143,12 +5152,12 @@ SUPERCMD(do_zbuild) {
 			auto zone = mods::util::stoi(id);
 
 			if(zone.value_or(-1) == -1) {
-				r_error(player,"Unable to delete id");
+				r_error(player,"{zbuild delete} Unable to delete id");
 				return;
 			}
 
 			mods::builder::delete_zone(zone.value());
-			r_success(player,"Deleted zone");
+			r_success(player,"{zbuild delete} Deleted zone");
 		}
 
 		return;
@@ -5161,7 +5170,7 @@ SUPERCMD(do_zbuild) {
 		auto arglist = mods::util::arglist<std::vector<std::string>>(past);
 
 		if(arglist.size() != 6) {
-			r_error(player,"Argument list is invalid, please use the correct number of arguments");
+			r_error(player,"{zbuild new} Argument list is invalid, please use the correct number of arguments");
 
 			for(auto vstr: arglist) {
 				*player << vstr << "\r\n";
@@ -5177,10 +5186,10 @@ SUPERCMD(do_zbuild) {
 			                    mods::util::stoi<int>(arglist[4]),
 			                    mods::util::stoi<int>(arglist[5]))
 			               )) {
-				r_error(player,"Unable to save new zone");
+				r_error(player,"{zbuild new} Unable to save new zone");
 			} else {
 				parse_sql_zones();
-				r_success(player,"New zone created");
+				r_success(player,"{zbuild new} New zone created");
 			}
 		}
 
@@ -5257,7 +5266,7 @@ SUPERCMD(do_zbuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() < 3) {
-			r_error(player,"Not enough arguments");
+			r_error(player,"{zbuild place-remove} Not enough arguments");
 			return;
 		}
 
@@ -5266,21 +5275,21 @@ SUPERCMD(do_zbuild) {
 		auto index = mods::util::stoi(arg_vec[1]);
 
 		if(!index.has_value()) {
-			r_error(player,"Invalid index");
+			r_error(player,"{zbuild place-remove} Invalid index");
 			return;
 		}
 
 		std::size_t i = index.value();
 
 		if(i >= zone_table.size()) {
-			r_error(player,"Out of bounds");
+			r_error(player,"{zbuild place-remove} Out of bounds");
 			return;
 		}
 
 		auto command_index = mods::util::stoi(arg_vec[2]);
 
 		if(!command_index.has_value()) {
-			r_error(player,"Invalid command index");
+			r_error(player,"{zbuild place-remove} Invalid command index");
 			return;
 		}
 
@@ -5288,14 +5297,14 @@ SUPERCMD(do_zbuild) {
 		std::size_t c = command_index.value();
 
 		if(c >= command_vec.size()) {
-			r_error(player,"Command index out of bounds");
+			r_error(player,"{zbuild place-remove} Command index out of bounds");
 			return;
 		}
 
 		zone_table[index.value()].cmd.erase(
 		    zone_table[index.value()].cmd.begin() + command_index.value()
 		);
-		r_status(player,"Index removed");
+		r_status(player,"{zbuild place-remove} Index removed");
 		return;
 	}
 };

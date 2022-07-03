@@ -8,6 +8,11 @@
 #include "../../globals.hpp"
 #include "../orm/scripted-step.hpp"
 
+#undef m_debug
+#undef m_error
+#define m_debug(MSG) mentoc_prefix_debug("[mods::slotted_builder::debug]")  << MSG << "\n";
+#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::slotted_builder::ERROR]"))  << MSG << "\n";
+
 namespace mods::builder {
 	static constexpr uint8_t MSG_SUCCESS = 0;
 	static constexpr uint8_t MSG_ERROR = 1;
@@ -65,6 +70,7 @@ namespace mods::builder {
 
 			/** [ 1 ] -> set this to the player calling your ACMD function */
 			void set_builder(player_ptr_t p) {
+				m_debug("set_builder");
 				m_builder_ptr = p;
 				player = p;
 			}
@@ -146,63 +152,74 @@ namespace mods::builder {
 			/** ### The only other function you'll need to call 99% of the time is here       ### */
 			/** ###---------------------------------------------------------------------------### */
 			bool handle_input(std::string argument) {
+				m_debug("handle_input");
 				auto& player = this->m_builder_ptr;
 				if(m_automatically_clear) {
 					clear_response();
 				}
 				if(argument.length() == 0) {
+					m_debug("arglength zero, displaying help");
 					dispatch_help("help");
 					return true;
 				}
 				if(dispatch_help(argument)) {
+					m_debug("matched displaying help, returning");
 					return true;
 				}
 				/**
 				 * new <vnum> ... (handled exclusively by child class
 				 */
 				if(base_dispatch_new_command(argument)) {
+					m_debug("base dispatched new command");
 					return true;
 				}
 				/**
 				 * remove <vnum> <slot>...<slot-N>
 				 */
 				if(dispatch_remove_slot(argument)) {
+					m_debug("dispatched remove slot");
 					return true;
 				}
 				/**
 				 * set <vnum> <slot> <value>
 				 */
 				if(dispatch_slot(argument)) {
+					m_debug("dispatched slot");
 					return true;
 				}
 				/**
 				 * list|delete|save <vnum>...<vnum-N>
 				 */
 				if(dispatch_multi_vnum_action(argument)) {
+					m_debug("dispatched multi vnum action");
 					return true;
 				}
 				/**
 				 * paginate [page] [pageSize]
 				 */
 				if(dispatch_paginate_action(argument)) {
+					m_debug("dispatched paginate action");
 					return true;
 				}
 				/**
 				 * list-extract <vnum> <field>...<field-N>
 				 */
 				if(dispatch_list_extract_action(argument)) {
+					m_debug("dispatched list extract action");
 					return true;
 				}
 				/**
 				 * show <vnum> [field]...[field-N]
 				 */
 				if(dispatch_show_action(argument)) {
+					m_debug("dispatched show action");
 					return true;
 				}
 				/**
 				 * reload-all
 				 */
 				if(dispatch_reload_all_action(argument)) {
+					m_debug("dispatched reload all ction");
 					return true;
 				}
 				/**
@@ -406,8 +423,10 @@ namespace mods::builder {
 				m_encoded_response.clear();
 			}
 			void flush() {
+				m_debug("flushing..");
 				std::string m;
 				for(const auto& s : m_encoded_response) {
+					m_debug("encoded response being flushed: '" << s << "'");
 					m += s;
 				}
 				m_builder_ptr->set_scripted_response(m);
@@ -633,8 +652,10 @@ namespace mods::builder {
 			 */
 			bool dispatch_slot(std::string argument) {
 
+				m_debug("dispatch_slot argument: '" << argument << "'");
 				auto args = mods::util::subcmd_args<64,args_t>(argument.data(),"set");
 				if(!args.has_value()) {
+					m_debug("not enough arguments to dispatch_slot");
 					return false;
 				}
 				auto cmd_args = args.value();
@@ -643,10 +664,12 @@ namespace mods::builder {
 				 */
 				if(cmd_args.size() < 4) {
 					push_encoded_message("not enough arguments","argcount",MSG_ERROR);
+					m_debug("[2] not enough arguments to dispatch_slot");
 					return true;
 				}
 				auto opt_profile = extract_profile("set",argument);
 				if(!opt_profile.has_value()) {
+					m_debug("couldnt find profile for argument");
 					push_encoded_message(
 					    CAT("couldn't find profile for argument"),
 					    CAT("noprof"),MSG_ERROR
@@ -655,17 +678,23 @@ namespace mods::builder {
 				}
 				/** custom command override */
 				if(has_custom_command_for("set")) {
+					m_debug("dispatching set command since has_custom_command_for is true");
 					return tuple_wrap(m_custom_command_map["set"](cmd_args,argument,opt_profile.value()));
 				}
 				auto& profile = opt_profile.value();
 				auto status = profile->set_slot(cmd_args[2],cmd_args[3]);
 				if(!std::get<0>(status)) {
+					m_debug("error with profile->set_slot(): " << std::get<1>(status));
 					push_encoded_message(std::get<1>(status),
 					                     std::get<1>(status),MSG_ERROR
 					                    );
 					return true;
 				}
 
+				push_encoded_message(std::get<1>(status),
+				                     std::get<1>(status),MSG_SUCCESS
+				                    );
+				m_debug("dispatch_slot succeeded: '" << std::get<1>(status) << "'");
 				return true;
 			}
 			bool tuple_wrap(status_response_t s) {
@@ -703,6 +732,7 @@ namespace mods::builder {
 			 * 	Nbuild save <vnum>...<vnum_N>
 			 */
 			virtual bool dispatch_multi_vnum_action(std::string argument) {
+				m_debug("base class dispatch_multi_vnum_action");
 				return true;
 			}
 
@@ -862,4 +892,6 @@ namespace mods::builder {
 			}
 	};//end struct
 };//end namespace
+#undef m_debug
+#undef m_error
 #endif

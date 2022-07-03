@@ -10,6 +10,17 @@
 
 #include "slotted-builder.hpp"
 
+#undef m_debug
+#undef m_error
+//#ifdef __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
+#define m_debug(MSG) mentoc_prefix_debug("[mods::meqbuild::debug]")  << MSG << "\n";
+#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::meqbuild::ERROR]"))  << MSG << "\n";
+//#else
+//#define m_debug(MSG) ;;
+//#define m_error(MSG) ;;
+//#endif
+
+
 namespace mods::builder::meqbuild {
 
 
@@ -23,6 +34,7 @@ namespace mods::builder::meqbuild {
 		/** required */
 		/** ======== */
 		bool delete_by_vnum(meqbuild_vnum_t vnum) {
+			m_debug("delete by vnum");
 			std::deque<std::shared_ptr<mods::orm::mob_equipment>> list;
 			bool deleted = false;
 			for(auto& m : mods::orm::mob_equipment_list()) {
@@ -42,6 +54,7 @@ namespace mods::builder::meqbuild {
 		/** ======== */
 		/** will optionally return the orm entity that has the given vnum */
 		std::optional<std::shared_ptr<meqbuild_orm_type>> by_vnum(meqbuild_vnum_t vnum) {
+			m_debug("by_vnum");
 			for(const auto& m : mods::orm::mob_equipment_list()) {
 				if(m->meq_vnum == vnum) {
 					return m;
@@ -51,6 +64,7 @@ namespace mods::builder::meqbuild {
 		}
 
 		meqbuild_interface() {
+			m_debug("meqbuild_interface");
 			/** ======== */
 			/** required */
 			/** ======== */
@@ -80,28 +94,30 @@ namespace mods::builder::meqbuild {
 		/** ======== */
 		/** in order for the "new" command to work, we must implement this */
 		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {
+			m_debug("dispatch_new_command");
 			/**
 			 * cmd_args: [0] => "new" [1] => profile-name [2] => vnum
 			 */
 			if(cmd_args.size() < 3) {
-				return {0,"Error: not enough arguments"};
+				return {0,"{meqbuild new} Error: not enough arguments"};
 			}
 			auto vnum = extract_int<int>("new",argument.c_str(),2).value_or(-1);
 			if(vnum < 0) {
-				return {0,"vnum must be a positive number"};
+				return {0,"{meqbuild new} vnum must be a positive number"};
 			}
 			auto meq = std::make_shared<mods::orm::mob_equipment>();
 			auto id = meq->initialize_row(cmd_args[1],vnum);
 			if(id <= 0) {
-				return {0,"Couldn't initialize row"};
+				return {0,"{meqbuild new} Couldn't initialize row"};
 			}
 			mods::orm::mob_equipment_list().emplace_back(std::move(meq));
-			return {1,"Created row."};
+			return {1,"{meqbuild new} Created row."};
 		}
 		/** ======== */
 		/** required */
 		/** ======== */
 		void clear() {
+			m_debug("clear");
 			mods::orm::mob_equipment_list().clear();
 			mods::orm::mob_equipment_map_list().clear();
 			mods::mob_equipment::refresh_mappings();
@@ -110,15 +126,45 @@ namespace mods::builder::meqbuild {
 		/** required */
 		/** ======== */
 		void load_all() {
+			m_debug("load-all");
 			mods::orm::mob_equipment_list() = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment>());
 			mods::orm::mob_equipment_map_list() = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment_map>());
 			mods::mob_equipment::refresh_mappings();
 		}
+		bool dispatch_multi_vnum_action(std::string argument) override {
+			m_debug("meqbuild class dispatch_multi_vnum_action");
+
+			m_debug("dispatch_multi_vnum_action: '" << argument << "'");
+			if(argshave()->first_is("save")->passed()) {
+				std::size_t ok = 0, error = 0;
+				for(const auto& vnum : args()->gather_uuids_starting_at(1)) {
+					m_debug("dispatch_multi_vnum_action vnum:" << vnum);
+					auto opt = by_vnum(vnum);
+					if(opt.has_value()) {
+						auto m = opt.value();
+						auto s = m->save();
+						if(s <= 0) {
+							push_encoded_ok(CAT("Success saved ",vnum));
+							++ok;
+						} else {
+							push_encoded_error(CAT("FAILED to save ",vnum));
+							++error;
+						}
+					}
+				}
+				player->sendln(CAT("successfully saved (",ok,") items. Failed to save (",error,") items"));
+
+				return true;
+			}
+			return false;
+		}
+
 	};
 
 	namespace map {
 
 		bool delete_by_vnum(const uint64_t& vnum) {
+			m_debug("delete_by_vnum");
 			std::deque<std::shared_ptr<mods::orm::mob_equipment_map>> list;
 			bool deleted = false;
 			for(auto& m : mods::orm::mob_equipment_map_list()) {
@@ -133,6 +179,7 @@ namespace mods::builder::meqbuild {
 			return deleted;
 		}
 		std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> by_mob_vnum(const uint64_t& vnum) {
+			m_debug("by_mob_vnum");
 			std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> list;
 			for(const auto& m : mods::orm::mob_equipment_map_list()) {
 				if(m->mmap_mob_vnum == vnum) {
@@ -142,6 +189,7 @@ namespace mods::builder::meqbuild {
 			return list;
 		}
 		std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> by_profile_vnum(const uint64_t& vnum) {
+			m_debug("by_profile_vnum");
 			std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> list;
 			for(const auto& m : mods::orm::mob_equipment_map_list()) {
 				if(m->mmap_mob_equipment_vnum == vnum) {
@@ -200,9 +248,18 @@ namespace mods::builder::meqbuild {
 	}
 
 	SUPERCMD(do_meqbuild) {
+		static int txn_id = 0;
+
+		m_debug("txn_id: " << txn_id);
 		mods::builder::initialize_builder(player);
-		if(meqbuilder(player).handle_input(argument)) {
-			return;
+		ADMIN_REJECT();
+		m_debug("meqbuild passing to handle_input ");
+		m_debug("handle_input args:" << argument);
+		auto handled = meqbuilder(player).handle_input(argument);
+		meqbuilder(player).flush();
+		if(handled) {
+			m_debug("handled by meqbuilder");
+			//return;
 		}
 
 		auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
@@ -211,6 +268,7 @@ namespace mods::builder::meqbuild {
 			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-list");
 
 			if(args.has_value()) {
+				m_debug("processing map-list");
 				ENCODE_INIT();
 				/**
 				 * cmd_args will be: [0] => map-list
@@ -229,10 +287,12 @@ namespace mods::builder::meqbuild {
 			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-assign");
 
 			if(args.has_value()) {
+				m_debug("processing map-assign");
 				ENCODE_INIT();
 				auto cmd_args = args.value();
 				if(cmd_args.size() < 3) {
-					r_error(player,"Not enough arguments");
+					m_debug("not enough args to map-assign");
+					r_error(player,"{meqbuild map-assign} Not enough arguments");
 					return;
 				}
 				/**
@@ -241,11 +301,13 @@ namespace mods::builder::meqbuild {
 				auto mvn = mods::util::stoi(cmd_args[1]).value_or(-1);
 				auto eq_vnum = mods::util::stoi(cmd_args[2]).value_or(-1);
 				if(mvn <= 0) {
-					r_error(player,"mob vnum must be a positive number");
+					m_debug("map-assign mob vnum invalid");
+					r_error(player,"{meqbuild map-assign} mob vnum must be a positive number");
 					return;
 				}
 				if(eq_vnum <= 0) {
-					r_error(player,"eq vnum must be a positive number");
+					m_debug("map-assign eq vnum invalid");
+					r_error(player,"{meqbuild map-assign} eq vnum must be a positive number");
 					return;
 				}
 				for(auto& m : mods::orm::mob_equipment_map_list()) {
@@ -253,39 +315,46 @@ namespace mods::builder::meqbuild {
 						auto backup = m->mmap_mob_equipment_vnum;
 						m->mmap_mob_equipment_vnum = eq_vnum;
 						if(m->save() < 0) {
-							r_error(player,"Unable to save existing.");
+							r_error(player,"{meqbuild map-assign} Unable to save existing.");
 							m->mmap_mob_equipment_vnum = backup;
+							m_debug("map-assign cant save existing");
 							return;
 						}
-						r_success(player,"Saved existing.");
+						m_debug("map-assign saved existing");
+						r_success(player,"{meqbuild map-assign} Saved existing.");
 						ENCODE_R("ok");
 						return;
 					}
 				}
 				/** we've reached here which means no existing map exists. create one */
+				m_debug("map-assign creating");
 				auto ref = std::make_shared<mods::orm::mob_equipment_map>();
 				ref->initialize_row(mvn,eq_vnum);
 				ref->mmap_mob_vnum = mvn;
 				ref->mmap_mob_equipment_vnum = eq_vnum;
 				if(ref->save() < 0) {
-					r_error(player,"Unable to save.");
+					m_debug("map-assign unable to create");
+					r_error(player,"{meqbuild map-assign} Unable to save.");
 					return;
 				}
 				mods::orm::mob_equipment_map_list().emplace_back(std::move(ref));
-				r_success(player,"Created new mapping and saved");
+				r_success(player,"{meqbuild map-assign} Created new mapping and saved");
 				ENCODE_R("ok");
+				m_debug("ok processing map-assign");
 				return;
 			}//end pave on
 		}
 		/** map-delete */
 		{
+			m_debug("checking map-delete");
 			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-delete");
 
 			if(args.has_value()) {
+				m_debug("map-delete processing");
 				ENCODE_INIT();
 				auto cmd_args = args.value();
 				if(cmd_args.size() < 2) {
-					r_error(player,"Not enough arguments");
+					r_error(player,"{meqbuild map-delete} Not enough arguments");
 					return;
 				}
 				/**
@@ -296,7 +365,8 @@ namespace mods::builder::meqbuild {
 				for(unsigned i=1; i < cmd_args.size(); ++i) {
 					auto mvn = mods::util::stoi(cmd_args[i]).value_or(-1);
 					if(mvn < 0) {
-						r_error(player,"mob vnum must be a positive number");
+						m_debug("map-delete mob vnum invalid");
+						r_error(player,"{meqbuild map-delete} mob vnum must be a positive number");
 						continue;
 					}
 					for(auto& m : mods::orm::mob_equipment_map_list()) {
@@ -315,14 +385,19 @@ namespace mods::builder::meqbuild {
 					after.emplace_back(std::move(m));
 				}
 				mods::orm::mob_equipment_map_list() = std::move(after);
-				r_success(player,CAT("Deleted: ",list));
+				r_success(player,CAT("{meqbuild map-delete} Deleted: ",list));
+				m_debug("map-delete okay");
 				ENCODE_R(list);
 				return;
 			}//end pave on
 		}
+		m_debug("::END:: txn_id: " << txn_id);
+		++txn_id;
 	}	//end meqbuild
 	void init() {
-		mods::interpreter::add_command("meqbuild", POS_RESTING, do_meqbuild, LVL_BUILDER,0);
+		ADD_BUILDER_COMMAND("meqbuild",do_meqbuild);
 		meqbuilder(nullptr);
 	}
 };
+#undef m_debug
+#undef m_error

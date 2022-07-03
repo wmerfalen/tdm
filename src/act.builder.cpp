@@ -175,25 +175,24 @@ int next_room_number() {
  * @return -1 on error, pkid
  */
 int next_mob_number() {
-	if(mods::adhoc::max_mob == -1) {
-		try {
-			auto select_transaction = txn();
-			sql_compositor comp("mobile",&select_transaction);
-			auto mob_sql = comp.select("max(mob_virtual_number) + 1 as mob_number")
-			               .from("mobile")
-			               .sql();
-			auto mob_record = mods::pq::exec(select_transaction,mob_sql);
-			if(mob_record.size() == 0) {
-				mods::adhoc::max_mob = 0;
-			} else {
-				mods::adhoc::max_mob = mods::util::stoi<int>(mob_record[0]["mob_number"]);
-			}
-		} catch(std::exception& e) {
-			REPORT_DB_ISSUE(": error in next_mob_number(): '",e.what());
-			return -1;
+	try {
+		auto select_transaction = txn();
+		sql_compositor comp("mobile",&select_transaction);
+		auto mob_sql = comp.select("max(mob_virtual_number) + 1 as mob_number")
+		               .from("mobile")
+		               .sql();
+		auto mob_record = mods::pq::exec(select_transaction,mob_sql);
+		if(mob_record.size() == 0) {
+			mods::adhoc::max_mob = 0;
+		} else {
+			mods::adhoc::max_mob = mods::util::stoi<int>(mob_record[0]["mob_number"]);
 		}
+		std::cerr << "max mob: " << mods::adhoc::max_mob << "\n";
+		return mods::adhoc::max_mob;
+	} catch(std::exception& e) {
+		REPORT_DB_ISSUE(": error in next_mob_number(): '",e.what());
+		return -1;
 	}
-	return mods::adhoc::next_mob();
 }
 
 SUPERCMD(do_next_zone_number) {

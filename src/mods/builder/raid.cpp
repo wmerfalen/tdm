@@ -453,6 +453,7 @@ namespace mods::builder::raid {
 
 	}	//end raid
 	void init() {
+		//TODO: ADD_BUILDER_COMMAND("admin:raid:set:mob:equipment",do_set_mob_equipment);
 		ADD_BUILDER_COMMAND("admin:raid:scale:mob",do_scale_mob);
 		ADD_BUILDER_COMMAND("admin:raid",do_raid);
 		ADD_BUILDER_COMMAND("admin:raid:pave",do_raid_pave);

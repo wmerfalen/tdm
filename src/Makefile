@@ -236,7 +236,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/orthos-spawn-sentinel-btree mods/no-drop mods/orm/notch \
 					 mods/notch mods/stats mods/rifle-stats mods/orm/raid \
 					 mods/builder/raid mods/flee mods/suicide mods/drops mods/rarity \
-					 mods/orm/radio-station mods/builder/mob-scaler
+					 mods/orm/radio-station mods/builder/mob-scaler mods/builder/mob-copier
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
