@@ -100,7 +100,7 @@
 {yel}mods/builder/meqbuild{/yel}:->{grn}meqbuild{/grn}
 {yel}mods/builder/raid{/yel}:->{grn}raid{/grn}
 {yel}mods/builder/raid{/yel}:->{grn}raid_pave{/grn}
-{yel}mods/builder/raid{/yel}:->{grn}scale_mob{/grn}
+{yel}mods/builder/raid{/yel}:->{grn}copy_mob{/grn}
 {yel}mods/builder/raid{/yel}:->{grn}raid_set_spawn{/grn}
 {yel}mods/builder/seqbuild{/yel}:->{grn}seqbuild{/grn}
 {yel}mods/builder/hqbuild{/yel}:->{grn}hqbuild{/grn}

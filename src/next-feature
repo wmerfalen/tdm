@@ -1,9 +1,19 @@
 see doc/building/2022-quarter-1-features.md
 
+
+[ ] mods/rifle-stats.cpp
+	[ ] cache invalidation for 
+	```
+		std::string format_rifle_stats_page(std::string_view feed_file,std::map<std::string,std::string>* page);
+	```
+	[ ] store mod/access times of yaml files
+		[ ] invalidate cache if time is newer
+		[ ] regenerate page
+
 [ ] Dynamic mob scaling
 	[x] scale a mob's attributes according to a level
-	[ ] copy extended type from source to scaled mob
-	[ ] copy the mob equipment profile to scaled mob
+	[x] copy extended type from source to scaled mob
+	[x] copy the mob equipment profile to scaled mob
 		[ ] use the rifle loot rifle randomization code to create randomized weapons
 		[ ] equip scaled mob with randomized weapon
 		[?] should this be deep rifle objects? might be easier to do that

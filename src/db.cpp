@@ -57,6 +57,7 @@
 #include "mods/rooms.hpp"
 #include "mods/prefs.hpp"
 #include "mods/radio.hpp"
+#include "mods/str.hpp"
 
 namespace mods::zone {
 	extern void reset_zone(zone_rnum);
@@ -1381,67 +1382,11 @@ void renum_world(void) {
  * NOTE 1: Assumes NOWHERE == NOBODY == NOTHING.
  * NOTE 2: Assumes sizeof(room_rnum) >= (sizeof(mob_rnum) and sizeof(obj_rnum))
  */
-void renum_zone_table(void) {
-	room_rnum a, b, c, olda, oldb, oldc;
-	char buf[128];
-
-	//for (zone = 0; zone < top_of_zone_table; zone++)
-	for(unsigned zone = 0; zone < zone_table.size(); zone++) {
-		for(auto ZCMD : zone_table[zone].cmd) {
-			a = b = c = 0;
-			olda = ZCMD.arg1;
-			oldb = ZCMD.arg2;
-			oldc = ZCMD.arg3;
-
-			switch(ZCMD.command) {
-				case 'M':
-					a = ZCMD.arg1 = real_mobile(ZCMD.arg1);
-					c = ZCMD.arg3 = real_room(ZCMD.arg3);
-					break;
-
-				case 'O':
-					a = ZCMD.arg1 = real_object(ZCMD.arg1);
-
-					if(ZCMD.arg3 != static_cast<int>(NOWHERE)) {
-						c = ZCMD.arg3 = real_room(ZCMD.arg3);
-					}
-
-					break;
-
-				case 'G':
-					a = ZCMD.arg1 = real_object(ZCMD.arg1);
-					break;
-
-				case 'E':
-					a = ZCMD.arg1 = real_object(ZCMD.arg1);
-					break;
-
-				case 'P':
-					a = ZCMD.arg1 = real_object(ZCMD.arg1);
-					c = ZCMD.arg3 = real_object(ZCMD.arg3);
-					break;
-
-				case 'D':
-					a = ZCMD.arg1 = real_room(ZCMD.arg1);
-					break;
-
-				case 'R': /* rem obj from room */
-					a = ZCMD.arg1 = real_room(ZCMD.arg1);
-					b = ZCMD.arg2 = real_object(ZCMD.arg2);
-					break;
-			}
-
-			if(a == NOWHERE || b == NOWHERE || c == NOWHERE) {
-				if(!mini_mud) {
-					snprintf(buf, sizeof(buf), "Invalid vnum %d, cmd disabled",
-					         a == NOWHERE ? olda : b == NOWHERE ? oldb : oldc);
-					mods::zone::log_zone_error(zone, 0, buf);
-				}
-
-				ZCMD.command = '*';
-			}
-		}
-	}
+namespace mods::zone {
+	extern void renum_zone_table();
+};
+void renum_zone_table() {
+	mods::zone::renum_zone_table();
 }
 
 

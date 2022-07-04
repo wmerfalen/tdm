@@ -6,6 +6,7 @@
 #include "interpreter.hpp"
 #include "screen-searcher.hpp"
 #include "npc.hpp"
+#include "str.hpp"
 #include "mob-roam.hpp"
 
 //#define __MENTOC_MODS_ZONE_DEBUG__
@@ -226,7 +227,6 @@ namespace mods::zone {
 						 */
 						z_debug(green_str("random item spawn: ") << ZCMD.arg1 << ", arg2:" << ZCMD.arg2 << ", arg3:" << ZCMD.arg3);
 						if(should_run_zone_command(ZCMD)) {
-							/* TODO:
 							auto obj = mods::globals::read_mobile_ptr(ZCMD.arg1,VIRTUAL);
 							if(!obj) {
 								log(CAT("Warning: zone update failed to read this mob:",ZCMD.arg1).c_str());
@@ -237,7 +237,6 @@ namespace mods::zone {
 							char_to_room(obj->cd(),real_room(ZCMD.arg2));
 							ZCMD.object_data.emplace_back(obj->uuid());
 							ZCMD.count = ZCMD.object_data.size();
-							*/
 						}
 					}
 					break;
@@ -334,6 +333,60 @@ namespace mods::zone {
 	//   *  'D': Set state of door *
 	//  */
 
+	void renum_zone_table(void) {
+		using zone_table_t = decltype(zone_table);
+		zone_table_t filtered;
+
+		std::size_t zone_table_size = 0,
+		            zone_table_saved = 0,
+		            zone_table_ignored = 0;
+		filtered.resize(zone_table.size());
+		//for (zone = 0; zone < top_of_zone_table; zone++)
+		for(unsigned zone = 0; zone < zone_table.size(); zone++) {
+			zone_table_size += zone_table[zone].cmd.size();
+			for(auto ZCMD : zone_table[zone].cmd) {
+				bool skip_me = false;
+				mob_rnum mob = 0;
+				room_rnum room = 0;
+
+				switch(ZCMD.command) {
+					case 'M':
+						mob = real_mobile(ZCMD.arg1);
+						room = real_room(ZCMD.arg2);
+						skip_me = false;
+						if(mob == NOBODY || room == NOWHERE) {
+							skip_me = true;
+						}
+						break;
+					case 'R': /* rem obj from room */
+						room = real_room(ZCMD.arg1);
+						skip_me = false;
+						if(room == NOWHERE) {
+							skip_me = true;
+						}
+						break;
+					case 'Y':
+						skip_me = false;
+						break;
+					default:
+						log("WARNING: renum_zone_table found an unrecognized zone_command: '%s'. Ignoring...",(str(ZCMD.command).c_str()));
+						skip_me = true;
+						break;
+
+				}
+
+				if(skip_me) {
+					log("skipping command: %s",(str(ZCMD.command).c_str()));
+					++zone_table_ignored;
+				} else {
+					++zone_table_saved;
+					filtered[zone].cmd.emplace_back(ZCMD);
+				}
+			}
+		}
+		log("[renum_zone_table] saved(%d). invalid(%d). original size(%d).",zone_table_saved,zone_table_ignored, zone_table_size);
+		zone_table = std::move(filtered);
+	}
 
 	/**
 	 * This function is the main entry point for zone resets. This function

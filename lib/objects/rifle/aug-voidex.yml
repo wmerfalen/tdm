@@ -1,0 +1,78 @@
+# accuracy map
+accuracy_map: [
+90.00,
+80.00,
+10.00,
+4.00
+]
+rounds_per_minute: 90
+muzzle_velocity: 418 # Feet per second
+effective_firing_range: 2 # feet
+ammo_max: 288  #integer
+ammo_type: 'ASSAULT_RIFLE' #string, constant enum
+chance_to_injure: 32.0 #float, out of 100 
+clip_size: 32 #integer
+cooldown_between_shots: 3 #int, in ticks
+critical_chance: 30 #int, out of 100
+critical_range: 1 #integer, measured in rooms
+damage_map: [
+210.00,
+110.00,
+40.00,
+10.00
+]
+base_damage: 174 #float
+disorient_amount: 23.0 #float
+headshot_bonus: 93.0 #float
+max_range: 2 #integer,measured in rooms
+range_multiplier: 0 #float, multiplied by 
+reload_time: 6 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+manufacturer: 'VI-AUG-IX' # string, anything 
+name: 'AUG Voidex' # string, anything name of object 
+description: 'An AUG Voidex Assault Rifle is lying here.'
+short_description: 'an AUG Voidex Assault Rifle'
+action_description: 'AUG Voidex Assault Rifle'
+str_type: 'ASSAULT_RIFLE'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'UNCOMMON'
+damage_dice_count: 14 
+damage_dice_sides: 14
+incendiary_damage: 0 #int16_t, damage
+explosive_damage: 120 #int16_t, damage
+shrapnel_damage: 0 #int16_t, damage
+corrosive_damage: 0 #int16_t, damage
+cryogenic_damage: 0 #int16_t, damage
+radioactive_damage: 0 #int16_t, damage
+emp_damage: 0 #int16_t, damage
+shock_damage: 0 #int16_t, damage
+anti_matter_damage: 230 #int16_t, damage
+stat_strength: 4 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 2 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 0 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 9 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 0 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 3 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 0 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 4 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 4 #int16_t, positive or negative amount to affect strategy stat
+feed_file: 'aug-voidex.yml'
+vnum: 216

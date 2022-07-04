@@ -10,7 +10,7 @@ extern void r_error(const player_ptr_t& player,std::string_view msg);
 extern void r_success(const player_ptr_t& player,std::string_view msg);
 extern void r_status(const player_ptr_t& player,std::string_view msg);
 namespace mods::builder {
-	std::tuple<bool,std::string,int> scale_mob(mob_rnum id,int level, uint64_t raid_id);
+	std::tuple<bool,std::string,int> scale_mob(mob_rnum id,int level, uint64_t raid_id,mob_vnum* vnum);
 	struct mob_equipment_randomizer {
 
 		std::string light;

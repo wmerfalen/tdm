@@ -39,11 +39,11 @@ name: 'AUG A3'  #string
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: COMMON
+rarity: 'COMMON'
 vnum: 44 #virtual number
-object_type: rifle
-description: 'A AUG A3 is lying here.'
-short_description: 'a AUG A3'
+object_type: 'rifle'
+description: 'An AUG A3 is lying here.'
+short_description: 'an AUG A3'
 action_description: 'AUG A3'
 damage_dice_count: 6
 damage_dice_sides: 10

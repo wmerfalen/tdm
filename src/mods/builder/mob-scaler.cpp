@@ -13,7 +13,7 @@ namespace mods::builder {
 	using args_t = std::vector<std::string>;
 	extern std::tuple<bool,std::string,uint64_t> save_player(char_data* obj);
 
-	std::tuple<bool,std::string,int> scale_mob(mob_rnum id,int level, uint64_t raid_id) {
+	std::tuple<bool,std::string,int> scale_mob(mob_rnum id,int level, uint64_t raid_id,mob_vnum* vnum) {
 		if(id <= 0 || id == NOBODY || id >= mob_proto.size()) {
 			return {false,"mob id is invalid",-1};
 		}
@@ -127,6 +127,10 @@ namespace mods::builder {
 
 		obj->mob_specials.raid_id = raid_id;
 		obj->mob_specials.vnum = next_mob_number();
+		if(vnum) {
+			*vnum = obj->mob_specials.vnum;
+		}
+		obj->mob_specials.extended_mob_type = orig.mob_specials.extended_mob_type;
 
 		auto s = mods::builder::save_player(obj);
 		if(!std::get<0>(s)) {

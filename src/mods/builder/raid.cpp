@@ -366,20 +366,10 @@ namespace mods::builder::raid {
 
 	}	//end raid
 
-	/**
-	 * command: admin:raid:pave <on|off> <name> <level> <type>
-	 * ----------------------------------------------------------
-	 * When you call pave on, each mob you build will have the
-	 * raid_id of the raid created by pave on.
-	 *
-	 * To stop paving, use admin:raid:pave off
-	 *
-	 *
-	 */
-	SUPERCMD(do_scale_mob) {
+	SUPERCMD(do_copy_mob) {
 		mods::builder::initialize_builder(player);
 		ADMIN_REJECT();
-		static constexpr std::string_view usage = "Usage: admin:raid:scale:mob <vnum> <level>";
+		static constexpr std::string_view usage = "Usage: admin:raid:copy:mob <vnum> <level>";
 		if(!argshave()->size_gt(1)->passed()) {
 			player->sendln(usage);
 			return;
@@ -401,19 +391,19 @@ namespace mods::builder::raid {
 			}
 			player->sendln(CAT("Current raid id for you:",player->builder_data->raid_id()));
 
-			auto s = scale_mob(mob,level,player->builder_data->raid_id());
+			mob_vnum vnum = 0;
+			auto s = scale_mob(mob,level,player->builder_data->raid_id(),&vnum);
 			if(std::get<0>(s)) {
-				player->sendln(CAT("Successfully Scaled mob: ",std::get<1>(s)));
+				player->sendln(CAT("Successfully Scaled mob: ",std::get<1>(s), ". mob's vnum:(",vnum,")"));
 			} else {
 				player->sendln(CAT("Failed to scale mob: ",std::get<1>(s)));
+				return;
 			}
-			return;
 		} else {
 			player->sendln(usage);
 		}
 		ADMIN_DONE();
-
-	}	//end raid
+	}
 
 	SUPERCMD(do_raid_set_spawn) {
 		mods::builder::initialize_builder(player);
@@ -454,7 +444,7 @@ namespace mods::builder::raid {
 	}	//end raid
 	void init() {
 		//TODO: ADD_BUILDER_COMMAND("admin:raid:set:mob:equipment",do_set_mob_equipment);
-		ADD_BUILDER_COMMAND("admin:raid:scale:mob",do_scale_mob);
+		ADD_BUILDER_COMMAND("admin:raid:copy:mob",do_copy_mob);
 		ADD_BUILDER_COMMAND("admin:raid",do_raid);
 		ADD_BUILDER_COMMAND("admin:raid:pave",do_raid_pave);
 		ADD_BUILDER_COMMAND("admin:raid:set:spawn",do_raid_set_spawn);

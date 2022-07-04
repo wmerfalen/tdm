@@ -1,5 +1,5 @@
 //#define __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__
-#include "___[[[TABLE]]]___.hpp"
+#include "___[[[TABLE_DASHED]]]___.hpp"
 #include "util.hpp"
 #include "../player.hpp"
 #include "../util-map.hpp"

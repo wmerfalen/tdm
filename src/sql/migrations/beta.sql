@@ -2530,6 +2530,7 @@ CREATE TABLE public.raid (
     r_type character varying(32) NOT NULL,
     r_status character varying(16) NOT NULL,
 		r_spawn integer,
+		r_raid_area_id integer,
     created_at timestamp without time zone DEFAULT now() NOT NULL
 );
 ALTER TABLE ONLY public.raid
@@ -11989,5 +11990,17 @@ ALTER TABLE ONLY public.zone_random_item
     ADD CONSTRAINT zone_random_item_room_vnum_fkey FOREIGN KEY (zri_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
-INSERT INTO public.zone_yaml (zy_room_vnum, zy_max, zy_yaml) ( select zone_arg2, zone_arg3, zone_yaml from zone_data where zone_command='Y');
+INSERT INTO public.zone_yaml (zy_room_vnum, zy_max, zy_yaml) ( select zone_arg2, zone_arg3, zone_yaml from public.zone_data where zone_command='Y');
 insert into public.zone_mob (zm_mob_vnum, zm_room_vnum, zm_max)  (SELECT zone_arg1, zone_arg2, zone_arg3 FROM public.zone_data where zone_command='M' AND zone_arg2 != 0);
+
+CREATE TABLE public.raid_areas(
+    id SERIAL PRIMARY KEY,
+    r_spawn integer NOT NULL,
+		r_name VARCHAR(256) NOT NULL,
+		r_roam_pattern VARCHAR(256) NOT NULL
+);
+ALTER TABLE ONLY public.raid_areas
+    ADD CONSTRAINT raid_areas_spawn_fkey FOREIGN KEY (r_spawn) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.raid
+    ADD CONSTRAINT raid_area_id_fkey FOREIGN KEY (r_raid_area_id) REFERENCES public.raid_areas(id) ON UPDATE CASCADE ON DELETE CASCADE;

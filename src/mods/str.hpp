@@ -10,6 +10,9 @@ struct str {
 	bool is(std::string_view d) {
 		return m_str.compare(d.data()) == 0;
 	}
+	auto c_str() const {
+		return m_str.c_str();
+	}
 	std::string m_str;
 
 	static inline bool is(std::string_view s,std::string_view d) {

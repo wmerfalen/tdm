@@ -9,6 +9,7 @@
 
 namespace mods::mobs {
 	using uuid_t = uint64_t;
+	using mob_vnum = uint32_t;
 	enum extended_types_t : uint16_t {
 		NONE =0,
 		MINI_GUNNER,
@@ -116,5 +117,7 @@ namespace mods::mobs {
 	};
 	void default_wear_strategy(int where, std::string_view path);
 	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path);
+
+	//std::tuple<bool,std::string> copy_extended_type(mob_vnum src,mob_vnum dst);
 };
 #endif

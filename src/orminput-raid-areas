@@ -1,0 +1,15 @@
+[start]
+
+[room_vnum]
+r_spawn
+
+[std::string]
+r_name,256
+r_roam_pattern,256
+
+[initialize_row]
+r_spawn
+r_name
+r_roam_pattern
+
+[end]

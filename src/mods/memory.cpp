@@ -91,6 +91,10 @@ namespace mods::memory {
 		for(const auto& room : world) {
 			watchers += room.watchers.size();
 		}
+		std::size_t zones = 0;
+		for(const auto& z : zone_table) {
+			zones += z.cmd.size();
+		}
 		static std::string f = CAT("[memory footprint]\n",
 		                           "------------------------------------------------------------------\n",
 		                           "world.watchers:", watchers, "\n",
@@ -108,7 +112,7 @@ namespace mods::memory {
 		                           "current_tick: ", mods::globals::current_tick, "\n",
 		                           "player_map: ", mods::globals::player_map.size(), "\n",
 		                           "obj_proto: ", obj_proto.size(), "\n",
-		                           "zone_table: ", zone_table.size(), "\n",
+		                           "zone_table: ", zones, "\n",
 		                           "mods::behaviour_tree_impl: ", mods::behaviour_tree_impl::mob_list().size(), "\n",
 		                           get_saved_footprints(),
 		                           "corrosive_claymore: ", cor, "\n",

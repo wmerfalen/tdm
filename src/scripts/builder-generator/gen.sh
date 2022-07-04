@@ -10,10 +10,12 @@ GEN_ORM_ONE=$CURDIR/orm-part-1
 GEN_ORM_TWO=$CURDIR/orm-part-2
 GEN_ORM_CPP=$CURDIR/orm.cpp
 TABLE=$1
+
+TABLE_DASHED=$(echo $TABLE | tr '_' '-')
 INPUT_FILE=$2
 CAPS_TABLE=${TABLE^^}
-ORM_HPP=${MUD_ROOT}/mods/orm/${TABLE}.hpp
-ORM_CPP=${MUD_ROOT}/mods/orm/${TABLE}.cpp
+ORM_HPP=${MUD_ROOT}/mods/orm/${TABLE_DASHED}.hpp
+ORM_CPP=${MUD_ROOT}/mods/orm/${TABLE_DASHED}.cpp
 TUPLE_FILE=$CURDIR/.tmp-gen-tuple.hpp
 TMP_FILE=$CURDIR/.tmp-general
 TMP=$CURDIR/.tmp
@@ -229,7 +231,7 @@ echo ')' >> $TUPLE_FILE
 cat $GEN_ORM_ONE | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" > $ORM_HPP
 cat $ORM_HPP | sed -e "s|___\[\[\[CAPS_TABLE\]\]\]___|${CAPS_TABLE}|g" > $TMP; cat $TMP > $ORM_HPP
 
-cat $GEN_ORM_CPP | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" > $ORM_CPP
+cat $GEN_ORM_CPP | sed -e "s|___\[\[\[TABLE\]\]\]___|${TABLE}|g" | sed -e "s|___\[\[\[TABLE_DASHED\]\]\]___|${TABLE_DASHED}|g" > $ORM_CPP
 cat $ORM_CPP | sed -e "s|___\[\[\[CAPS_TABLE\]\]\]___|${CAPS_TABLE}|g" > $TMP; cat $TMP > $ORM_CPP
 
 
