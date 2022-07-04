@@ -5,6 +5,8 @@ sudo apt-get -y install cmake libssl-dev libpqxx-dev libtool libfcgi-dev spawn-f
 mkdir build
 rm -rf yaml-cpp
 git clone 'https://github.com/jbeder/yaml-cpp'
+rm -rf dmon
+git clone 'ssh://git@github.com/septag/dmon'
 chmod +x boost-fetcher.sh
 ./boost-fetcher.sh
 cd $DIR

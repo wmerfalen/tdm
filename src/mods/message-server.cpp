@@ -7,6 +7,10 @@
 #include "message-parser.hpp"
 #include "filesystem.hpp"
 #include "memory.hpp"
+#include "rifle-stats.hpp"
+#include <mutex>
+#define DMON_IMPL
+#include "../dmon/dmon.h"
 
 extern void record_usage();
 namespace mods::message_server {
@@ -171,6 +175,7 @@ namespace mods::message_server {
 			}
 		}
 	}
+
 
 	void admin_subscriber() {
 		m_debug("ENTRY");
@@ -358,12 +363,73 @@ namespace mods::message_server {
 		publisher.send(zmq::const_buffer((void*)buffer.data(),buffer.size()));
 	}
 
+
+
+#define SLEEP_FOR(A) std::this_thread::sleep_for(std::chrono::milliseconds(A));
+#define mprint(A) std::cerr << "[watch_callback]: " << A << "\n";
+	static std::mutex backlog_mutex;
+	static std::vector<std::string> backlog;
+
+	void watch_callback(dmon_watch_id watch_id, dmon_action action, const char* rootdir,
+	                    const char* filepath, const char* oldfilepath, void* user) {
+		using att = dmon_action;
+		mprint("modify: " << rootdir <<"|" << filepath);
+		/**
+		 * rootdir is: $WEBROOT/../lib/objects/<type>/
+		 * filepath is: "aug-cryo-mod.yml"
+		 */
+		std::vector<std::string> list;
+		switch(action) {
+			case att::DMON_ACTION_MOVE:
+			case att::DMON_ACTION_CREATE:
+			case att::DMON_ACTION_MODIFY:
+				mprint("modify: " << rootdir <<"|" << filepath);
+				while(!backlog_mutex.try_lock()) {
+					SLEEP_FOR(80);
+					mprint("sleep[80] _._");
+				}
+				mprint("emplace_back(" << filepath << ")");
+				backlog.emplace_back(filepath);
+				backlog_mutex.unlock();
+				break;
+			case att::DMON_ACTION_DELETE:
+			default:
+				break;
+		}
+
+	}
+
+	void monitor_yaml_files() {
+		dmon_init();
+		for(const auto& path : {
+		            "rifle"//,"explosive","armor"
+		        }) {
+			dmon_watch(mods::yaml::directory(path).c_str(), watch_callback, DMON_WATCHFLAGS_RECURSIVE, nullptr);
+		}
+		while(!shutdown_now) {
+			// Receive all parts of the message
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			//mprint("((_.o))");
+			while(!backlog_mutex.try_lock()) {
+				SLEEP_FOR(40);
+				mprint("sleep _._");
+			}
+			if(backlog.size()) {
+				mods::rifle_stats::clear_files(backlog);
+			}
+			backlog_mutex.unlock();
+		}
+		dmon_deinit();
+	}
+
+
 	void spawn() {
 		thread_list().push_front(std::thread(admin_subscriber));
 		thread_list().push_front(std::thread(user_connection_subscriber));
 		thread_list().push_front(std::thread(shutdown_subscriber));
 		thread_list().push_front(std::thread(user_connection_logger));
 		thread_list().push_front(std::thread(minute_tasks));
+		//thread_list().push_front(std::thread(monitor_yaml_files));
 		for(auto& thread : thread_list()) {
 			thread.detach();
 		}
@@ -371,3 +437,4 @@ namespace mods::message_server {
 	}
 
 }; //end namespace mods::message_server
+#undef mprint

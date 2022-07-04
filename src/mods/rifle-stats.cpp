@@ -1,6 +1,8 @@
 #include "rifle-stats.hpp"
 #include "stats.hpp"
 #include "str.hpp"
+
+#include <mutex>
 #define __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::rifle-stats::debug]")  << MSG << "\n";
@@ -19,6 +21,39 @@ namespace mods::rifle_stats {
 	static constexpr std::string_view injure= "{grn}injure{/grn}: ";
 	static constexpr std::string_view cooldown = "{grn}cooldown{/grn}: ";
 	static constexpr std::string_view damage = "{grn}damage{/grn}: ";
+
+	static std::mutex cache_mutex;
+	static std::map<std::string,std::string> cache;
+
+	std::vector<std::string> files_modified;
+	std::vector<std::string> files_processed;
+
+	std::vector<std::string> get_processed_files() {
+		return files_processed;
+	}
+
+	bool add_modified_file(std::string_view file) {
+		m_debug("trying to lock...");
+		if(cache_mutex.try_lock()) {
+			cache.erase(file.data());
+			cache_mutex.unlock();
+			return true;
+		}
+		return false;
+	}
+
+	bool clear_cache_of_files() {
+		//if(cache_mutex.try_lock()) {
+		//	for(auto& file : files_modified) {
+		//		cache.erase(file);
+		//		files_processed.emplace_back(file);
+		//	}
+		//	cache_mutex.unlock();
+		//	return true;
+		//}
+		return false;
+	}
+
 
 	enum e : uint16_t {
 		i_manufacturer,
@@ -67,7 +102,6 @@ namespace mods::rifle_stats {
 
 	static constexpr const char* NL = "\r\n";
 
-	static std::map<std::string,std::string> cache;
 	std::string format_rifle_stats_page(std::map<std::string,std::string>* page) {
 		//using namespace mods::util::str;
 		std::vector<std::string> rifle_page;
@@ -333,14 +367,17 @@ namespace mods::rifle_stats {
 		return final_page;
 	}
 	std::string format_rifle_stats_page(std::string_view feed_file,std::map<std::string,std::string>* page) {
-		/**
-		 * TODO: need cache invalidation
-		 */
 		if(cache[feed_file.data()].length()) {
 			return cache[feed_file.data()];
 		}
 		cache[feed_file.data()] = format_rifle_stats_page(page);
 		return cache[feed_file.data()];
+	}
+	void clear_files(std::vector<std::string>& files) {
+		for(const auto& f : files) {
+			cache.erase(f);
+		}
+		files.clear();
 	}
 #undef m_error
 #undef m_debug

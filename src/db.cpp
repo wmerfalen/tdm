@@ -29,6 +29,7 @@
 #include <deque>
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/db.hpp"
+#include "mods/filesystem.hpp"
 #include "mods/lmdb.hpp"
 #include "mods/hell.hpp"
 #include "mods/meta_utils.hpp"
@@ -1815,34 +1816,34 @@ obj_ptr_t blank_object() {
 obj_ptr_t create_object(std::string_view yaml) {
 	int type = -1;
 	std::string yaml_file = yaml.data();
-	if(mods::util::str::starts_with("rifle/",yaml_file)) {
+	if(str::starts_with("rifle/",yaml_file)) {
 		type = ITEM_RIFLE;
 	}
-	if(mods::util::str::starts_with("explosive/",yaml_file)) {
+	if(str::starts_with("explosive/",yaml_file)) {
 		type = ITEM_EXPLOSIVE;
 	}
-	if(mods::util::str::starts_with("armor/",yaml_file)) {
+	if(str::starts_with("armor/",yaml_file)) {
 		type = ITEM_ARMOR;
 	}
-	if(mods::util::str::starts_with("attachment/",yaml_file)) {
+	if(str::starts_with("attachment/",yaml_file)) {
 		type = ITEM_ATTACHMENT;
 	}
-	if(mods::util::str::starts_with("consumable/",yaml_file)) {
+	if(str::starts_with("consumable/",yaml_file)) {
 		type = ITEM_CONSUMABLE;
 	}
-	if(mods::util::str::starts_with("container/",yaml_file)) {
+	if(str::starts_with("container/",yaml_file)) {
 		type = ITEM_CONTAINER;
 	}
-	if(mods::util::str::starts_with("drone/",yaml_file)) {
+	if(str::starts_with("drone/",yaml_file)) {
 		type = ITEM_DRONE;
 	}
-	if(mods::util::str::starts_with("gadget/",yaml_file)) {
+	if(str::starts_with("gadget/",yaml_file)) {
 		type = ITEM_GADGET;
 	}
-	if(mods::util::str::starts_with("melee/",yaml_file)) {
+	if(str::starts_with("melee/",yaml_file)) {
 		type = ITEM_MELEE;
 	}
-	if(mods::util::str::starts_with("vehicle/",yaml_file)) {
+	if(str::starts_with("vehicle/",yaml_file)) {
 		type = ITEM_VEHICLE;
 	}
 	if(type == -1) {

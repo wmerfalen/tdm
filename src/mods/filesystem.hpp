@@ -8,9 +8,19 @@
 #include <sys/types.h>
 #include <fcntl.h>           /* Definition of AT_* constants */
 
-
+#undef m_debug
+#undef m_error
+#define __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__
+#ifdef __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__
+#define m_debug(MSG) mentoc_prefix_debug("[mods::dmon-monitoring::debug]")  << MSG << "\n";
+#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::dmon-monitoring::ERROR]"))  << MSG << "\n";
+#else
+#define m_debug(MSG) ;;
+#define m_error(MSG) ;;
+#endif
 
 namespace mods::filesystem {
+	static constexpr std::string_view OBJECTS_DIR = MENTOC_LIB_OBJECTS_DIR;
 	static inline bool exists(const std::string& path) {
 		return access(path.c_str(),F_OK) != -1;
 	}
@@ -156,6 +166,9 @@ namespace mods::filesystem {
 		base_dir += CAT("/debug.log");
 		file_append(base_dir,CAT(mob_name.data(),",",msg.data(),",",mods::util::time_string()));
 	}
+
 };//end namespace
 
+#undef m_debug
+#undef m_error
 #endif

@@ -39,6 +39,7 @@ FLAGS = $(gdbflags) $(optimization) \
 	-std=c++20 -fpermissive -MMD \
 	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-DMENTOC_DATA_DIR=\"$(DATA_DIR)\" \
+	-DMENTOC_LIB_OBJECTS_DIR=\"$(DATA_DIR)/objects\" \
 	-Imods/catch2/Catch2/src -Lmods/catch2/Catch2/build/src \
 	-Ilibzmq/include -Icppzmq \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \

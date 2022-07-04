@@ -50,6 +50,7 @@ namespace mods::message_server {
 			CHAN_BAN_USERNAME,
 			CHAN_USER_CONNECTION_REJECTED,
 			CHAN_USER_DESTROYED,
+			CHAN_YAML_MONITOR,
 		});
 
 		while(!shutdown_now) {

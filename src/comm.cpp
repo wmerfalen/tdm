@@ -263,7 +263,6 @@ void Board_clear_all(void);
 void free_social_messages(void);
 void Free_Invalid_List(void);
 
-
 void deregister_player(player_ptr_t player_obj) {
 	std::set<mods::globals::player_list_t::iterator> players_to_destroy;
 	for(auto it = mods::globals::player_list.begin(); it != mods::globals::player_list.end(); ++it) {

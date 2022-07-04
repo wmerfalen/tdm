@@ -29,9 +29,12 @@ namespace mods::message_server {
 		CHAN_USER_CONNECTION_REJECTED,
 		CHAN_USER_DESTROYED,
 		CHAN_UNBAN,
+		CHAN_YAML_MONITOR,
 	};
 	static inline std::string to_string(const channel_t& c) {
 		switch(c) {
+			case CHAN_YAML_MONITOR:
+				return "YAML_MONITOR";
 			case CHAN_UNBAN:
 				return "UNBAN";
 			case CHAN_NEW_CONNECTION:
