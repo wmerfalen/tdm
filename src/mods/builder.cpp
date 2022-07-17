@@ -133,13 +133,13 @@ int next_zone_vnum() {
 			auto up_txn = txn();
 			auto record = mods::pq::exec(up_txn,"SELECT max(zone_virtual_number) + 1 as z from zone;");
 			if(record.size()) {
-				std::cerr << ("Max room number: " + std::string(record[0]["z"].c_str()));
+				std::cerr << ("Max zone number: " + std::string(record[0]["z"].c_str()));
 				next_zone_vnum = mods::util::stoi<int>(record[0]["z"].c_str());
 			} else {
 				next_zone_vnum = 1;
 			}
 		} catch(std::exception& e) {
-			REPORT_DB_ISSUE("error grabbing next max room number '",e.what());
+			REPORT_DB_ISSUE("error grabbing next max zone number '",e.what());
 			next_zone_vnum = 1;
 		}
 	}
@@ -302,12 +302,14 @@ namespace mods::builder {
 	}
 	std::tuple<int8_t,std::string> pave_continue(player_ptr_t& player) {
 		if(player->builder_data && player->builder_data->room_pave_mode) {
+			std::cerr << "[room_pavements] already paving...\n";
 			return {-1,"It looks like you're already paving. Save your existing pavement to begin."};
 		}
 		mods::builder::initialize_builder(player);
 		player->builder_data->room_pave_mode = true;
 		player->builder_data->room_pavements.start_room = player->room();
-		player->builder_data->room_pavements.zone_id = world[player->room()].zone;
+		player->builder_data->room_pavements.zone_id = zone_table[world[player->room()].zone].get_id();
+		std::cerr << "[room_pavements] zone_id: " << player->builder_data->room_pavements.zone_id << "\n";
 		return {0,"Continuing pavement."};
 	}
 	bool currently_paving(player_ptr_t& player) {
@@ -322,6 +324,7 @@ namespace mods::builder {
 		 * cmd_args will be: [0] => pave, [1] => <on|off> [2] => <name>
 		 */
 		mods::builder::sandbox_data_t sandbox;
+
 		auto zone_vnum = next_zone_vnum();
 #ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 		std::cerr << ("zone_vnum:" + std::to_string(zone_vnum));
@@ -828,6 +831,10 @@ namespace mods::builder {
 			world[in_room].description = "<default description>";
 			//return mods::builder::ROOM_DESC_EMPTY;
 		}
+		std::cerr << "[world[in_room].zone]: " << world[in_room].zone << "\n";
+		std::cerr << "zone_table[world[in_room].zone]: ";
+		zone_table[world[in_room].zone].dump();
+		std::cerr << "zone_table.size(): " << zone_table.size() << "\n";
 
 		std::map<std::string,std::string> values;
 		values["zone"] = std::to_string(zone_table[world[in_room].zone].get_id());

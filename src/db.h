@@ -233,6 +233,7 @@ struct zone_data {
 			std::cerr << "zone_data[reset_mode]:'"<< reset_mode << "'\n";
 		}
 		zone_data(const zone_data& other) {
+			std::cerr << "[zone_data]: other.get_id(): " << other.get_id() << "\n";
 			yaml.assign(other.yaml);
 			name.assign(other.name);
 			lifespan = other.lifespan;

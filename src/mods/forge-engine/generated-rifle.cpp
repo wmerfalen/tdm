@@ -390,18 +390,31 @@ namespace mods::forge_engine {
 			return m_attributes;
 		}
 		while(i-- > 0) {
+			/**
+			 * Step 1: grab a random rifle attribute
+			 */
 			const auto& attr = valid_rifle_attributes.at((uint16_t)rand_xoroshiro() % valid_rifle_attributes.size());
 			auto limit = this->fetch_limits(attr);
 			auto low = limit.low;
 			auto high = limit.high;
 			auto op = limit.overpowered;
 
+			/**
+			 * Step 2: decide if we're using integer or float-based attributes
+			 */
 			if(roll_bool()) {
 				auto float_roll = roll_float(scale.stat_low,scale.stat_high);
+				/**
+				 * Sometimes the random rifle attribute we picked is a null-like value
+				 * that represents no attribute. Check for that, then continue looping
+				 */
 				if(is_no_attribute(limit)) {
 					m_attributes.emplace_back(attr,float_roll);
 					continue;
 				}
+				/**
+				 * Roll dice: is this item going to be overpowered?
+				 */
 				bool is_overpowered = roll_bool();
 				if(is_overpowered) {
 					m_attributes.emplace_back(attr,roll_float(scale.stat_low,roll_float(scale.stat_high,op)));
