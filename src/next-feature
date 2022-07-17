@@ -1,5 +1,11 @@
 see doc/building/2022-quarter-1-features.md
 
+[ ] Orthos agent behaviour tree refactor
+	[ ] The tree uses room watching and the mobs
+		 will snipe you as soon as you enter a room.
+		 Change this so that the mob is aggressive but
+		 not on room watching events
+
 [ ] Payload commands
  [ ] admin:loot:payload:create rarity levels count
  [ ] admin:loot:payload:delete <index>

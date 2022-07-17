@@ -528,14 +528,10 @@ namespace mods::mobs {
 		m_remembered_items.clear();
 	}
 	void orthos_agent::door_entry_event(player_ptr_t& victim,const room_rnum room_id) {
-		std::tuple<bool,direction_t,int> r = mods::scan::los_find_player_with_depth(player_ptr,victim,RCT->max_range);
-		if(std::get<0>(r)) {
-			this->snipe_target(
-			    victim,
-			    std::get<1>(r),
-			    std::get<2>(r)
-			);
-		}
+		//std::tuple<bool,direction_t,int> r = mods::scan::los_find_player_with_depth(player_ptr,victim,RCT->max_range);
+		//if(std::get<0>(r)) {
+		//	this->set_hunting(victim->uuid());
+		//}
 	}
 
 	void orthos_agent::attack_mode() {
