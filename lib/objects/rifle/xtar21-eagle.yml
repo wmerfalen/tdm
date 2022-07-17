@@ -1,0 +1,72 @@
+# accuracy map
+accuracy_map: [
+89.00,
+8.00,
+0.00,
+0.00
+]
+ammo_max: 81 #integer
+ammo_type: '' #string, constant enum
+chance_to_injure: 14.23 #float, out of 100
+clip_size: 9 #integer
+cooldown_between_shots: 2 #int, in ticks
+critical_chance: 33 #int, out of 100
+critical_range: 1 #integer, measured in rooms
+damage_map: [
+64.00,
+22.00,
+8.00,
+2.00
+]
+base_damage: 90 #float
+disorient_amount: 0.0 #float
+headshot_bonus: 83.0 #float
+max_range: 4 #integer,measured in rooms
+range_multiplier: 0 #float, multiplied by 
+reload_time: 2 #int, measured in ticks
+rounds_per_minute: 75
+muzzle_velocity: 89
+effective_firing_range: 1
+manufacturer: 'X-TAR'
+type: 'PISTOL' #string, type of weapon
+str_type: 'PISTOL' #string, type of weapon
+name: 'X-TAR-21 Eagle Pistol'  #string
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'LEGENDARY'
+object_type: 'rifle'
+description: 'An X-TAR-21 Eagle Pistol is lying here.'
+short_description: 'an X-TAR-21 Eagle Pistol '
+action_description: 'X-TAR-21 Eagle Pistol'
+damage_dice_count: 12
+damage_dice_sides: 10
+incendiary_damage: 0
+explosive_damage: 20 
+shrapnel_damage: 0
+corrosive_damage: 0 
+cryogenic_damage: 0 
+radioactive_damage: 0 
+emp_damage: 0 
+shock_damage: 0 
+anti_matter_damage: 12
+stat_strength: 10 
+stat_intelligence: -5
+stat_wisdom: 0 
+stat_dexterity: 8 
+stat_constitution: 10 
+stat_electronics: 14
+stat_armor: 0 
+stat_marksmanship: 12 
+stat_sniping: 0 
+stat_demolitions: 0 
+stat_chemistry: 10
+stat_weapon_handling: 12
+stat_strategy: 15 
+stat_medical: 5
+feed_file: 'xtar21-eagle.yml'
+vnum: 233

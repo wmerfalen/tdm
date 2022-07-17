@@ -60,7 +60,6 @@ stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
 stat_weapon_handling: 0 #int16_t, positive or negative amount to affect weapon_handling stat
 stat_strategy: 0 #int16_t, positive or negative amount to affect strategy stat
 stat_medical: 0 #int16_t, positive or negative amount to affect medical stat
-str_type: '1' # enum, object type
 manufacturer: 'ACME Industries' # string, anything 
 name: 'A PSG-1 Sniper Rifle' # string, anything name of object 
 vnum: 1000 # integer, unique identifier
@@ -76,3 +75,5 @@ feed_file: '1.yml'
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
+type: 'SNIPER' #string, type of weapon
+str_type: 'SNIPER' #string, type of weapon

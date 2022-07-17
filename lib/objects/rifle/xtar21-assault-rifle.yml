@@ -1,0 +1,72 @@
+# accuracy map
+accuracy_map: [
+89.00,
+78.00,
+32.00,
+22.00
+]
+ammo_max: 360 #integer
+ammo_type: '' #string, constant enum
+chance_to_injure: 14.23 #float, out of 100
+clip_size: 36 #integer
+cooldown_between_shots: 2 #int, in ticks
+critical_chance: 23 #int, out of 100
+critical_range: 2 #integer, measured in rooms
+damage_map: [
+90.00,
+40.00,
+20.00,
+10.00
+]
+base_damage: 85 #float
+disorient_amount: 30.0 #float
+headshot_bonus: 83.0 #float
+max_range: 4 #integer,measured in rooms
+range_multiplier: 0 #float, multiplied by 
+reload_time: 6 #int, measured in ticks
+rounds_per_minute: 280
+muzzle_velocity: 38
+effective_firing_range: 2
+manufacturer: 'X-TAR'
+type: 'ASSAULT_RIFLE' #string, type of weapon
+str_type: 'ASSAULT_RIFLE' #string, type of weapon
+name: 'X-TAR-21 Assault Rifle'  #string
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'LEGENDARY'
+object_type: 'rifle'
+description: 'An X-TAR-21 Assault Rifle is lying here.'
+short_description: 'an X-TAR-21 Assault Rifle '
+action_description: 'X-TAR-21 Assault Rifle'
+damage_dice_count: 20
+damage_dice_sides: 40
+feed_file: 'xtar21-assault-rifle.yml'
+vnum: 230
+incendiary_damage: 0
+explosive_damage: 0 
+shrapnel_damage: 36
+corrosive_damage: 35 
+cryogenic_damage: 0 
+radioactive_damage: 10
+emp_damage: 0 
+shock_damage: 0 
+anti_matter_damage: 80
+stat_strength: 2 
+stat_intelligence: 0 
+stat_wisdom: 0 
+stat_dexterity: -5
+stat_constitution: -5 
+stat_electronics: 0
+stat_armor: 0 
+stat_marksmanship: 12 
+stat_sniping: 0 
+stat_demolitions: 5
+stat_chemistry: 2 
+stat_weapon_handling: 12
+stat_strategy: 0 
+stat_medical: 0

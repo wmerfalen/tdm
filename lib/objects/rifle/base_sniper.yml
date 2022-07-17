@@ -1,45 +1,36 @@
 # accuracy map
 accuracy_map: [
-10.00,
-10.00,
-10.00,
-10.00
+9.00,
+50.00,
+90.00,
+90.00
 ]
-rounds_per_minute: 10
-muzzle_velocity: 4018 # Feet per second
-effective_firing_range: 1500 # feet
 ammo_max: 80 #integer
-ammo_type: 'SNIPER' #string, constant enum
-chance_to_injure: 0.00113 #float, out of 100 
-clip_size: 7 #integer
-cooldown_between_shots: 4 #int, in ticks
-critical_chance: 30 #int, out of 100
-critical_range: 4 #integer, measured in rooms
+ammo_type: '' #string, constant enum
+chance_to_injure: 11.0 #float, out of 100
+clip_size: 8 #integer
+cooldown_between_shots: 3 #int, in ticks
+critical_chance: 23 #int, out of 100
+critical_range: 3 #integer, measured in rooms
 damage_map: [
-10.00,
-10.00,
-10.00,
-10.00
+24.00,
+52.00,
+80.00,
+94.00
 ]
-base_damage: 100 #float
-disorient_amount: 0.001 #float
-headshot_bonus: 43.0 #float
-max_range: 5 #integer,measured in rooms
-range_multiplier: 4.3 #float, multiplied by 
-reload_time: 8 #int, measured in ticks
-# types
-#######
-# type: SNIPER
-# type: ASSAULT_RIFLE
-# type: SHOTGUN
-# type: SUB_MACHINE_GUN
-# type: HANDGUN
-# type: MACHINE_PISTOL
-# type: LIGHT_MACHINE_GUN
-type: 'SNIPER' # enum, object type
-manufacturer: 'ZDX-Node' # string, anything 
-name: 'A Sniper Rifle' # string, anything name of object 
-vnum: 2 # integer, unique identifier
+base_damage: 50 #float
+disorient_amount: 0.0 #float
+headshot_bonus: 313.0 #float
+max_range: 8 #integer,measured in rooms
+range_multiplier: 2 #float, multiplied by 
+reload_time: 6 #int, measured in ticks
+rounds_per_minute: 30
+muzzle_velocity: 38
+effective_firing_range: 3
+manufacturer: 'BASE'
+type: 'SNIPER' #string, type of weapon
+str_type: 'SNIPER' #string, type of weapon
+name: 'basic Sniper Rifle'  #string
 #rarity types
 # COMMON
 # UNCOMMON
@@ -48,8 +39,34 @@ vnum: 2 # integer, unique identifier
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
-description: 'A ZDX-Node Sniper Rifle is lying here'
-short_description: 'a ZDX-Node Sniper Rifle'
-action_description: 'ZDX-Node Sniper Rifle'
-damage_dice_count: 2
-damage_dice_sides: 32
+object_type: 'rifle'
+description: 'A basic Sniper Rifle is lying here.'
+short_description: 'an basic Sniper Rifle '
+action_description: 'basic Sniper Rifle'
+damage_dice_count: 0 
+damage_dice_sides: 0
+incendiary_damage: 0
+explosive_damage: 0 
+shrapnel_damage: 0
+corrosive_damage: 0 
+cryogenic_damage: 0 
+radioactive_damage: 0 
+emp_damage: 0 
+shock_damage: 0 
+anti_matter_damage: 0 
+stat_strength: 0 
+stat_intelligence: 0 
+stat_wisdom: 0 
+stat_dexterity: 0 
+stat_constitution: 0 
+stat_electronics: 0
+stat_armor: 0 
+stat_marksmanship: 0 
+stat_sniping: 0 
+stat_demolitions: 0 
+stat_chemistry: 0 
+stat_weapon_handling: 0
+stat_strategy: 0 
+stat_medical: 0
+feed_file: 'base_sniper.yml'
+vnum: 232
