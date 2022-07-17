@@ -69,6 +69,11 @@ namespace mods::drops {
 	static constexpr mob_vnum TRITON_LABS_SCIENTIST = 600;
 	static constexpr mob_vnum VOLUNTEER_PATIENT = 601;
 
+	static constexpr mob_vnum TENGU_SCOUT = 713;
+	static constexpr mob_vnum TENGU_LANCER = 714;
+	static constexpr mob_vnum TENGU_TROOPER = 715;
+	static constexpr mob_vnum TENGU_EVISCERATOR = 716;
+
 	struct randomized_drop_t {
 		mob_vnum mob;
 		std::string yaml;
@@ -105,6 +110,32 @@ namespace mods::drops {
 	static constexpr std::string_view hellfirecc = "explosive/hellfire-corpse-charge.yml";
 	static constexpr std::string_view shrapmine = "explosive/shrapnel-claymore-mine.yml";
 	static constexpr std::string_view shrapcorc = "explosive/shrapnel-corpse-charge.yml";
+
+	static constexpr std::string_view hn3clay  =  "explosive/hn3-claymore-mine.yml";
+	static constexpr std::string_view hn3shgren = "explosive/hn3-shock-grenade.yml";
+	static constexpr std::string_view neumine =   "explosive/neutron-claymore-mine.yml";
+	static constexpr std::string_view prflash =   "explosive/prador-flashbang-grenade.yml";
+
+	static constexpr std::string_view acryo = "rifle/aug-cryo-mod.yml";
+	static constexpr std::string_view amenace = "rifle/aug-menace.yml";
+	static constexpr std::string_view avoidex = "rifle/aug-voidex.yml";
+	static constexpr std::string_view bf39 = "rifle/bf-39-shotgun.yml";
+	static constexpr std::string_view deffmg9 = "rifle/defiler-fmg9.yml";
+	static constexpr std::string_view defscar = "rifle/defiler-scarh.yml";
+	static constexpr std::string_view dst7a = "rifle/dst7a.yml";
+	static constexpr std::string_view l96aw = "rifle/l96aw.yml";
+	static constexpr std::string_view orthaug = "rifle/orthos-aug-a3.yml";
+	static constexpr std::string_view orthl96 = "rifle/orthos-l96aw.yml";
+	static constexpr std::string_view orthscar = "rifle/orthos-scarh.yml";
+	static constexpr std::string_view orthsentscar = "rifle/orthos-sentinel-scarh.yml";
+	static constexpr std::string_view tensaiga = "rifle/tengu-radon-saiga.yml";
+	static constexpr std::string_view tenax13 = "rifle/tengu-vulkan-ax13.yml";
+	static constexpr std::string_view umpvulture = "rifle/ump45-vulture-modded.yml";
+	static constexpr std::string_view vc88 = "rifle/vc88.yml";
+	static constexpr std::string_view xm109 = "rifle/xm109.yml";
+	static constexpr std::string_view xtarar = "rifle/xtar21-assault-rifle.yml";
+	static constexpr std::string_view xtareagle = "rifle/xtar21-eagle.yml";
+	static constexpr std::string_view xtarsmg = "rifle/xtar21-vector-smg.yml";
 
 	//
 	// GOD_TIER
@@ -253,6 +284,26 @@ namespace mods::drops {
 		}
 		return objects;
 	}
+	static constexpr std::array<std::string_view,18> overpowered_rifles = {
+		acryo,
+		amenace,
+		avoidex,
+		bf39,
+		deffmg9,
+		defscar,
+		dst7a,
+		orthaug,
+		orthl96,
+		orthscar,
+		orthsentscar,
+		tensaiga,
+		tenax13,
+		umpvulture,
+		vc88,
+		xtarar,
+		xtareagle,
+		xtarsmg,
+	};
 
 	void index_yaml_files() {
 		drops.clear();
@@ -266,6 +317,33 @@ namespace mods::drops {
 		less_common_drop_item_for_mob(incendiary,SHOPLIFTER_2);
 
 		rare_drop_item_for_mob(tshin,DEFILER);
+		for(const auto& item : overpowered_rifles) {
+			godtier_drop_item_for_mob(item,DEFILER);
+			godtier_drop_item_for_mob(item,ORTHOS_GUARD);
+			godtier_drop_item_for_mob(item,ORTHOS_MENACE);
+			godtier_drop_item_for_mob(item,ORTHOS_SENTINEL);
+			godtier_drop_item_for_mob(item,ORTHOS_SNIPER);
+			godtier_drop_item_for_mob(item,TENGU_SCOUT);
+			godtier_drop_item_for_mob(item,TENGU_LANCER);
+			godtier_drop_item_for_mob(item,TENGU_TROOPER);
+			godtier_drop_item_for_mob(item,TENGU_EVISCERATOR);
+		}
+		for(const auto& item : {
+		            hn3clay,
+		            hn3shgren,
+		            neumine,
+		            prflash,
+		        }) {
+			legendary_drop_item_for_mob(item,DEFILER);
+			legendary_drop_item_for_mob(item,ORTHOS_GUARD);
+			legendary_drop_item_for_mob(item,ORTHOS_MENACE);
+			legendary_drop_item_for_mob(item,ORTHOS_SENTINEL);
+			legendary_drop_item_for_mob(item,ORTHOS_SNIPER);
+			godtier_drop_item_for_mob(item,TENGU_SCOUT);
+			less_common_drop_item_for_mob(item,TENGU_LANCER);
+			common_drop_item_for_mob(item,TENGU_TROOPER);
+			easy_drop_item_for_mob(item,TENGU_EVISCERATOR);
+		}
 
 		for(const auto item : {
 		            // GOD TIER items
@@ -287,6 +365,10 @@ namespace mods::drops {
 			easy_drop_item_for_mob(item,ORTHOS_MENACE);
 			easy_drop_item_for_mob(item,ORTHOS_SENTINEL);
 			easy_drop_item_for_mob(item,ORTHOS_SNIPER);
+			godtier_drop_item_for_mob(item,TENGU_SCOUT);
+			less_common_drop_item_for_mob(item,TENGU_LANCER);
+			common_drop_item_for_mob(item,TENGU_TROOPER);
+			easy_drop_item_for_mob(item,TENGU_EVISCERATOR);
 		}
 
 

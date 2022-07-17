@@ -3,12 +3,14 @@ DROP DATABASE mud;
 CREATE DATABASE mud;
 \c mud;
 
+
+
 --
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.5 (Debian 13.5-0+deb11u1)
--- Dumped by pg_dump version 13.5 (Debian 13.5-0+deb11u1)
+-- Dumped from database version 11.14 (Debian 11.14-0+deb10u1)
+-- Dumped by pg_dump version 11.14 (Debian 11.14-0+deb10u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -22,7 +24,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
+-- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
@@ -228,7 +230,7 @@ ALTER TYPE public.speed_profile_type_t OWNER TO postgres;
 
 SET default_tablespace = '';
 
-SET default_table_access_method = heap;
+SET default_with_oids = false;
 
 --
 -- Name: affected_type; Type: TABLE; Schema: public; Owner: postgres
@@ -2520,24 +2522,94 @@ ALTER SEQUENCE public.player_skill_usage_id_seq OWNED BY public.player_skill_usa
 
 
 --
+-- Name: radio_station; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.radio_station (
+    id integer NOT NULL,
+    rs_room_vnum integer NOT NULL,
+    rs_power integer NOT NULL,
+    rs_name character varying(256) NOT NULL
+);
+
+
+ALTER TABLE public.radio_station OWNER TO postgres;
+
+--
+-- Name: radio_station_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.radio_station_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.radio_station_id_seq OWNER TO postgres;
+
+--
+-- Name: radio_station_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.radio_station_id_seq OWNED BY public.radio_station.id;
+
+
+--
 -- Name: raid; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.raid (
-    id SERIAL PRIMARY KEY,
+    id integer NOT NULL,
     r_name character varying(256) NOT NULL,
     r_level character varying(16) NOT NULL,
     r_type character varying(32) NOT NULL,
     r_status character varying(16) NOT NULL,
-		r_spawn integer,
-		r_raid_area_id integer,
+    r_spawn integer,
+    r_raid_area_id integer,
     created_at timestamp without time zone DEFAULT now() NOT NULL
 );
-ALTER TABLE ONLY public.raid
-    ADD CONSTRAINT raid_spawn_room_vnum_fkey FOREIGN KEY (r_spawn) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 ALTER TABLE public.raid OWNER TO postgres;
+
+--
+-- Name: raid_areas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.raid_areas (
+    id integer NOT NULL,
+    r_spawn integer NOT NULL,
+    r_name character varying(256) NOT NULL,
+    r_roam_pattern character varying(256) NOT NULL
+);
+
+
+ALTER TABLE public.raid_areas OWNER TO postgres;
+
+--
+-- Name: raid_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.raid_areas_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.raid_areas_id_seq OWNER TO postgres;
+
+--
+-- Name: raid_areas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.raid_areas_id_seq OWNED BY public.raid_areas.id;
+
 
 --
 -- Name: raid_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -3549,6 +3621,114 @@ ALTER SEQUENCE public.zone_id_seq OWNED BY public.zone.id;
 
 
 --
+-- Name: zone_mob; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.zone_mob (
+    id integer NOT NULL,
+    zm_room_vnum integer NOT NULL,
+    zm_mob_vnum integer NOT NULL,
+    zm_max integer DEFAULT 5 NOT NULL
+);
+
+
+ALTER TABLE public.zone_mob OWNER TO postgres;
+
+--
+-- Name: zone_mob_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.zone_mob_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.zone_mob_id_seq OWNER TO postgres;
+
+--
+-- Name: zone_mob_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.zone_mob_id_seq OWNED BY public.zone_mob.id;
+
+
+--
+-- Name: zone_random_item; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.zone_random_item (
+    id integer NOT NULL,
+    zri_room_vnum integer NOT NULL,
+    zri_yaml character varying(256) NOT NULL,
+    zri_max integer DEFAULT 1 NOT NULL
+);
+
+
+ALTER TABLE public.zone_random_item OWNER TO postgres;
+
+--
+-- Name: zone_random_item_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.zone_random_item_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.zone_random_item_id_seq OWNER TO postgres;
+
+--
+-- Name: zone_random_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.zone_random_item_id_seq OWNED BY public.zone_random_item.id;
+
+
+--
+-- Name: zone_yaml; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.zone_yaml (
+    id integer NOT NULL,
+    zy_room_vnum integer NOT NULL,
+    zy_yaml text NOT NULL,
+    zy_max integer DEFAULT 1 NOT NULL
+);
+
+
+ALTER TABLE public.zone_yaml OWNER TO postgres;
+
+--
+-- Name: zone_yaml_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.zone_yaml_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.zone_yaml_id_seq OWNER TO postgres;
+
+--
+-- Name: zone_yaml_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.zone_yaml_id_seq OWNED BY public.zone_yaml.id;
+
+
+--
 -- Name: affected_type id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3920,10 +4100,24 @@ ALTER TABLE ONLY public.player_skill_usage ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
+-- Name: radio_station id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.radio_station ALTER COLUMN id SET DEFAULT nextval('public.radio_station_id_seq'::regclass);
+
+
+--
 -- Name: raid id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.raid ALTER COLUMN id SET DEFAULT nextval('public.raid_id_seq'::regclass);
+
+
+--
+-- Name: raid_areas id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.raid_areas ALTER COLUMN id SET DEFAULT nextval('public.raid_areas_id_seq'::regclass);
 
 
 --
@@ -4085,6 +4279,27 @@ ALTER TABLE ONLY public.zone ALTER COLUMN id SET DEFAULT nextval('public.zone_id
 --
 
 ALTER TABLE ONLY public.zone_data ALTER COLUMN id SET DEFAULT nextval('public.zone_data_id_seq'::regclass);
+
+
+--
+-- Name: zone_mob id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.zone_mob ALTER COLUMN id SET DEFAULT nextval('public.zone_mob_id_seq'::regclass);
+
+
+--
+-- Name: zone_random_item id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.zone_random_item ALTER COLUMN id SET DEFAULT nextval('public.zone_random_item_id_seq'::regclass);
+
+
+--
+-- Name: zone_yaml id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.zone_yaml ALTER COLUMN id SET DEFAULT nextval('public.zone_yaml_id_seq'::regclass);
 
 
 --
@@ -4622,6 +4837,10 @@ COPY public.mob_equipment (id, meq_profile_name, meq_vnum, meq_light, meq_finger
 304	shoplifter	711	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.555533	2022-06-10 23:45:11.555533
 173	dynamic-rogue-mp-shotgunner-level-10	407	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 22:55:30.712947	2022-06-10 22:55:30.712947
 305	kidnapper	712	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-06-10 23:45:11.571797	2022-06-10 23:45:11.571797
+306	tengu-lancer	715	\N	\N	\N	\N	\N	armor/tengu-lightweight-ballistic-vest.yml	\N	armor/mp-enforcer-pants.yml	armor/xm50-ultralight-boots.yml	armor/xm-scorpio-tactical-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/tengu-radon-saiga.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-07-17 05:30:19.130482	2022-07-17 05:30:19.130482
+307	tengu-lancer	714	\N	\N	\N	\N	\N	armor/falcon-ballistic-vest.yml	\N	armor/tengu-shin-guards.yml	armor/tengu-stealth-footwear.yml	armor/xm-scorpio-tactical-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/tengu-vulkan-ax13.yml	\N	\N	armor/titan-shoulder-pads.yml	armor/titan-shoulder-pads.yml	\N	\N	\N	\N	\N	2022-07-17 05:30:19.149583	2022-07-17 05:30:19.149583
+308	tengu-lancer	713	\N	\N	\N	\N	\N	armor/tengu-lightweight-ballistic-vest.yml	\N	armor/mp-enforcer-pants.yml	armor/xm50-ultralight-boots.yml	armor/xm-scorpio-tactical-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/tengu-radon-saiga.yml	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-07-17 05:30:19.178936	2022-07-17 05:30:19.178936
+309	tengu-eviscerator	716	\N	\N	\N	\N	\N	armor/falcon-ballistic-vest.yml	\N	armor/tengu-shin-guards.yml	armor/xm50-ultralight-boots.yml	armor/xm-scorpio-tactical-gloves.yml	\N	\N	\N	\N	\N	\N	rifle/tengu-vulkan-ax13.yml	\N	\N	armor/titan-shoulder-pads.yml	armor/titan-shoulder-pads.yml	\N	\N	\N	\N	\N	2022-07-17 05:30:19.202848	2022-07-17 05:30:19.202848
 \.
 
 
@@ -4657,6 +4876,10 @@ COPY public.mob_equipment_map (id, mmap_mob_vnum, mmap_mob_equipment_vnum, creat
 65	114	114	2022-05-25 15:53:44.579648	2022-05-25 15:53:44.579648
 66	115	115	2022-05-25 15:53:44.627772	2022-05-25 15:53:44.627772
 68	670	670	2022-05-28 19:47:34.981819	2022-05-28 19:47:34.981819
+69	715	715	2022-07-17 05:30:19.13382	2022-07-17 05:30:19.13382
+70	714	714	2022-07-17 05:30:19.153466	2022-07-17 05:30:19.153466
+71	713	713	2022-07-17 05:30:19.182005	2022-07-17 05:30:19.182005
+72	716	716	2022-07-17 05:30:19.206623	2022-07-17 05:30:19.206623
 \.
 
 
@@ -4829,6 +5052,10 @@ COPY public.mobile (mob_id, mob_virtual_number, mob_name, mob_short_description,
 114	710	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A {red}Rogue{/red} Military Police shotgunner	A fit military police shotgunner. He looks armed.	4360	0	14	13	12	0	13	0	4	0	0	10	0	0	2220	226	204	60	100	0	0	1	2220	226	204	6	7	12	10	6	0	11	\N	\N	0	0	0	0	0	0	0	0	0	\N	1
 115	711	A shoplifter	A shoplifter	A shoplifter	A shoplifter is stalking the area.	4360	0	0	0	0	0	0	0	0	0	0	10	0	0	6	10	40	6	166	0	0	1	6	10	40	0	2	0	4	5	0	15	\N	\N	0	0	0	0	0	0	0	0	0	\N	1
 116	712	a kidnapper	a kidnapper	a kidnapper	a kidnapper is stalking the area.	4360	0	6	4	1	0	4	0	0	0	0	10	0	0	966	16	340	748	166	0	0	1	966	16	340	6	16	13	4	5	0	15	\N	\N	0	6	5	2	0	0	3	0	0	\N	1
+117	715	Tengu Trooper	A Tengu Trooper	Optimized for assault, the Tengu Trooper is the epitome of brute force. While not being the most strategic unit, the Trooper makes up for this with fast attack speed and resilience. The Trooper's lightweight ballistic protection sacrifices damage absorption for speed.	Optimized for assault, the Tengu Trooper is the epitome of brute force. While not being the most strategic unit, the Trooper makes up for this with fast attack speed and resilience. The Trooper's lightweight ballistic protection sacrifices damage absorption for speed.	8	0	11	0	9	0	34	0	0	0	0	20	0	0	3820	830	160	42080	8050	0	0	1	3820	830	160	16	16	12	10	5	0	21	\N	Kojima	8	9	23	22	0	0	21	0	0	\N	0
+118	714	Tengu Lancer	A Tengu Lancer	The large shoulder armor and upper body shielding give the Lancer an appearance not unlike the heavily padded athletes of most high contact sports. The legs of the Lancer are not armored except for some black shin guards and stealth-optimized footwear. The lancer is 6 feet tall and extremely agile. 	The large shoulder armor and upper body shielding give the Lancer an appearance not unlike the heavily padded athletes of most high contact sports. The legs of the Lancer are not armored except for some black shin guards and stealth-optimized footwear. The lancer is 6 feet tall and extremely agile. 	8	0	11	0	29	0	34	0	0	0	0	28	0	0	4820	930	160	42080	8050	0	0	1	4820	930	160	36	20	12	10	5	0	21	\N	Kojima	8	9	33	32	0	0	31	0	0	\N	0
+119	713	Tengu Scout	A Tengu Scout	Kojima Corp is a well-funded military force with very high profile clients supplying it's income. The most important part of maintaining a strategic edge against outside threats is to have a comprehensive plan for deep intelligence gathering. The Tengu Scout is part of the fast moving ellusive recon team. 	Kojima Corp is a well-funded military force with very high profile clients supplying it's income. The most important part of maintaining a strategic edge against outside threats is to have a comprehensive plan for deep intelligence gathering. The Tengu Scout is part of the fast moving ellusive recon team. 	8	0	8	0	49	0	54	0	0	0	0	25	0	0	1720	230	560	4080	8050	0	0	1	1720	230	560	26	13	12	5	5	0	21	\N	Kojima	28	8	20	15	0	0	20	30	0	\N	0
+120	716	Tengu Eviscerator	A Tengu Eviscerator	Few of the militaristic units deployed by Kojima Corp actually fit the classical idea of a 'soldier'. The Tengu Eviscerator hardly qualifies as a living breathing human. The technology fused into the very biology of the Eviscerator borders of extreme cybermancy and archaic magic. As such, the Eviscerator is usually only used where a high amount of security is needed. 	Few of the militaristic units deployed by Kojima Corp actually fit the classical idea of a 'soldier'. The Tengu Eviscerator hardly qualifies as a living breathing human. The technology fused into the very biology of the Eviscerator borders of extreme cybermancy and archaic magic. As such, the Eviscerator is usually only used where a high amount of security is needed. 	8	0	11	9	29	0	34	0	0	0	0	25	0	0	5820	930	360	42080	9050	0	0	1	5820	930	360	20	30	32	10	5	0	21	\N	Kojima	0	29	23	22	30	0	21	23	0	\N	0
 \.
 
 
@@ -4944,8 +5171,8 @@ COPY public.object_weapon (id, obj_fk_id, obj_ammo_max, obj_ammo_type, obj_coold
 
 COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences, player_practice_sessions) FROM stdin;
 110	$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.	0	0	sniper	1	1	0	3	0	9	9	12	15	9	0	0	241	436	729	48	561	M	241	436	729	52	52	52	9	1	52	0	0	PC	0	3	52	0	2021-09-18 01:42:45.163952	0	2021-09-18 01:42:45.163952	8388736	7
-111	$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC	0	0	ghost	1	1	0	3	0	6	6	12	15	6	0	0	241	339	729	1108	2600	M	241	339	729	53	53	53	9	1	53	0	0	PC	0	3	53	0	2022-05-17 13:17:37.271391	0	2022-05-17 13:17:37.271391	8388736	5
 1	foKntnEF3KSXA	0	0	far	1	1	0	20	0	41	41	82	102	41	3200	0	65000	2277	65000	7283	92840	M	65000	2277	65000	53	53	53	9	1	53	0	0	PC	3200	19	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	37
+111	$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC	0	0	ghost	1	1	0	3	0	6	6	12	15	6	0	0	241	339	729	1108	2600	M	241	339	635	53	53	53	9	1	53	0	0	PC	0	3	53	0	2022-05-17 13:17:37.271391	0	2022-05-17 13:17:37.271391	8388736	5
 \.
 
 
@@ -4969,8 +5196,8 @@ COPY public.player_base_ability (pba_id, pba_player_id, pba_str, pba_str_add, pb
 13	107	3	0	9	9	12	15	9	9	6	8	8	15	10	6	9	15	2021-09-17 19:58:07.021327	2021-09-17 19:58:07.021327
 7	101	44	0	44	44	88	132	44	44	44	60	44	9	44	60	44	60	2021-09-17 00:53:22.86459	2021-09-17 00:53:22.86459
 16	110	3	0	9	9	12	15	9	9	6	8	8	15	10	6	9	9	2021-09-18 01:42:45.197498	2021-09-18 01:42:45.197498
-17	111	3	0	6	6	12	15	6	6	6	11	11	15	7	9	6	9	2022-05-17 13:17:37.452746	2022-05-17 13:17:37.452746
 1	1	20	0	41	41	82	102	41	41	40	64	64	103	42	62	41	57	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
+17	111	3	0	6	6	12	15	6	6	6	11	11	15	7	9	6	9	2022-05-17 13:17:37.452746	2022-05-17 13:17:37.452746
 \.
 
 
@@ -5009,7 +5236,6 @@ COPY public.player_object (id, po_player_id, po_type, po_type_id, po_yaml, po_lo
 477	1	1	201	\N	1	\N	1	1	13
 478	1	1	202	\N	1	\N	1	1	999
 479	1	1	203	\N	1	\N	1	1	8
-480	111	1	\N	psg1.yml	2	16	0	1	7
 426	1	8	\N	sg3-shotgun-ammunition.yml	2	\N	1	1	17
 437	111	7	\N	basic-ballistic-vest.yml	2	5	0	1	\N
 438	111	7	\N	basic-boots.yml	2	8	0	1	\N
@@ -5019,6 +5245,7 @@ COPY public.player_object (id, po_player_id, po_type, po_type_id, po_yaml, po_lo
 490	1	1	\N	psg1.yml	2	\N	1	1	3
 492	1	8	\N	sg3-shotgun-ammunition.yml	2	\N	1	1	17
 491	1	1	\N	dst7a.yml	2	16	0	1	7
+494	111	1	\N	psg1.yml	2	16	0	1	7
 \.
 
 
@@ -5055,12 +5282,28 @@ COPY public.player_skill_usage (id, ps_player_id, ps_skill_id, ps_usage_count, c
 
 
 --
+-- Data for Name: radio_station; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.radio_station (id, rs_room_vnum, rs_power, rs_name) FROM stdin;
+\.
+
+
+--
 -- Data for Name: raid; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.raid (id, r_name, r_level, r_type, r_status, created_at) FROM stdin;
-14	defend the MP's	1-20	defend	INCOMPLETE	2022-06-09 22:43:12.819973
-9	dire dire snare fest	everyone	CTF	completed	2022-06-03 22:55:42.954011
+COPY public.raid (id, r_name, r_level, r_type, r_status, r_spawn, r_raid_area_id, created_at) FROM stdin;
+14	defend the MP's	1-20	defend	INCOMPLETE	\N	\N	2022-06-09 22:43:12.819973
+9	dire dire snare fest	everyone	CTF	completed	\N	\N	2022-06-03 22:55:42.954011
+\.
+
+
+--
+-- Data for Name: raid_areas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.raid_areas (id, r_spawn, r_name, r_roam_pattern) FROM stdin;
 \.
 
 
@@ -5122,179 +5365,179 @@ COPY public.rifle_index (id, rifle_filename, rifle_type, created_at, updated_at)
 --
 
 COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1, rifle_accuracy_map_2, rifle_accuracy_map_3, rifle_damage_map_0, rifle_damage_map_1, rifle_damage_map_2, rifle_damage_map_3, rifle_rarity, rifle_file, rifle_str_type, rifle_type, rifle_manufacturer, rifle_name, rifle_vnum, rifle_ammo_max, rifle_ammo_type, rifle_chance_to_injure, rifle_clip_size, rifle_cooldown_between_shots, rifle_critical_chance, rifle_critical_range, rifle_base_damage, rifle_disorient_amount, rifle_headshot_bonus, rifle_max_range, rifle_range_multiplier, rifle_reload_time, rifle_rounds_per_minute, rifle_muzzle_velocity, rifle_effective_firing_range, rifle_damage_dice_count, rifle_damage_dice_sides, rifle_incendiary_damage, rifle_explosive_damage, rifle_shrapnel_damage, rifle_corrosive_damage, rifle_cryogenic_damage, rifle_radioactive_damage, rifle_emp_damage, rifle_shock_damage, rifle_anti_matter_damage, rifle_stat_strength, rifle_stat_intelligence, rifle_stat_wisdom, rifle_stat_dexterity, rifle_stat_constitution, rifle_stat_electronics, rifle_stat_armor, rifle_stat_marksmanship, rifle_stat_sniping, rifle_stat_demolitions, rifle_stat_chemistry, rifle_stat_weapon_handling, rifle_stat_strategy, rifle_stat_medical, created_at, updated_at) FROM stdin;
-1	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	77	8	2	34	1	80	0	53	1	4.3	2	10	1	10	1	1	0	1	1	1	0	1	1	1	1	0	0	1	1	0	0	0	0	1	1	1	1	0	0	2021-09-06 01:28:51.675323	2021-09-06 01:28:51.675323
+1	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	77	8	2	34	1	80	0	53	1	4.29999999999999982	2	10	1	10	1	1	0	1	1	1	0	1	1	1	1	0	0	1	1	0	0	0	0	1	1	1	1	0	0	2021-09-06 01:28:51.675323	2021-09-06 01:28:51.675323
 2	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	1	SHOTGUN	1	6	2	34	1	154	1	53	2	1	2	14	918	15	3	31	0	1	1	1	1	0	1	1	1	1	0	1	1	1	1	0	0	0	1	0	1	0	0	2021-09-06 01:57:11.43389	2021-09-06 01:57:11.43389
 3	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	20.5	6	1	6	1	25	1	55	1	0	4	1	1	2	3	24	1	1	1	0	1	1	1	1	0	1	1	0	0	1	1	0	1	1	1	0	0	0	0	2021-09-06 01:57:28.204973	2021-09-06 01:57:28.204973
 4	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	1	1	1	5	1	39	0	33	1	0	3	80	1	2	3	1	1	0	1	1	1	0	0	0	0	1	1	0	0	0	1	0	0	0	1	1	1	1	0	2021-09-06 01:59:56.640283	2021-09-06 01:59:56.640283
-5	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.81	31	1	1	1	30	1	29	3	4.3	5	1	1357	20	10	6	1	1	1	1	1	1	1	1	1	0	1	0	0	1	1	0	1	0	1	1	1	1	0	2021-09-06 02:00:02.293957	2021-09-06 02:00:02.293957
-6	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	6	2	34	1	80	1	53	1	4.3	1	19	918	10	3	1	1	1	0	1	0	1	1	1	1	1	1	1	1	0	1	0	1	1	0	0	1	0	0	2021-09-06 02:08:25.716967	2021-09-06 02:08:25.716967
+5	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.8099999999999987	31	1	1	1	30	1	29	3	4.29999999999999982	5	1	1357	20	10	6	1	1	1	1	1	1	1	1	1	0	1	0	0	1	1	0	1	0	1	1	1	1	0	2021-09-06 02:00:02.293957	2021-09-06 02:00:02.293957
+6	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	6	2	34	1	80	1	53	1	4.29999999999999982	1	19	918	10	3	1	1	1	0	1	0	1	1	1	1	1	1	1	1	0	1	0	1	1	0	0	1	0	0	2021-09-06 02:08:25.716967	2021-09-06 02:08:25.716967
 7	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	75	PISTOL	1	9	1	5	1	21	1	1	1	1	3	80	40	3	4	16	1	1	0	1	1	1	0	1	1	1	1	1	0	0	0	0	1	1	1	1	1	1	0	2021-09-06 02:08:49.453172	2021-09-06 02:08:49.453172
 8	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	1	7	16	19	3	1	0	23	4	1	12	13	1818	512	2	53	1	1	0	1	1	1	0	0	1	0	1	1	0	0	1	0	1	1	0	0	1	1	0	2021-09-06 02:09:56.904971	2021-09-06 02:09:56.904971
 9	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	888	SUB_MACHINE_GUN	33	1	1	14	1	30	1	13	1	1	5	180	1	33	6	6	1	0	1	0	1	1	1	0	1	1	1	0	0	1	1	0	1	0	1	1	1	1	0	2021-09-06 02:11:28.277761	2021-09-06 02:11:28.277761
 10	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1	9	2	34	1	1	1	73	2	7	2	1	918	12	3	20	1	0	1	1	0	0	0	1	1	0	0	0	1	1	1	0	0	1	1	1	0	1	0	2021-09-06 02:48:16.222825	2021-09-06 02:48:16.222825
 11	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	20.5	6	1	5	1	36	1	33	1	0	1	1	40	3	1	26	1	1	1	1	0	0	0	1	1	0	1	1	1	1	0	0	1	0	0	1	1	0	0	2021-09-06 02:48:40.192837	2021-09-06 02:48:40.192837
-12	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	1	1	129	0	66	2	4.3	2	1	920	10	1	20	0	0	1	1	1	1	1	1	1	1	1	1	0	0	0	0	1	0	1	1	0	0	0	2021-09-06 02:53:24.30776	2021-09-06 02:53:24.30776
-13	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	8	2	34	1	80	0	1	1	4.3	3	10	918	1	3	20	1	1	0	1	1	1	0	1	1	1	0	0	0	1	0	0	1	1	1	0	1	0	0	2021-09-06 03:02:35.527086	2021-09-06 03:02:35.527086
+12	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	1	1	129	0	66	2	4.29999999999999982	2	1	920	10	1	20	0	0	1	1	1	1	1	1	1	1	1	1	0	0	0	0	1	0	1	1	0	0	0	2021-09-06 02:53:24.30776	2021-09-06 02:53:24.30776
+13	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	8	2	34	1	80	0	1	1	4.29999999999999982	3	10	918	1	3	20	1	1	0	1	1	1	0	1	1	1	0	0	0	1	0	0	1	1	1	0	1	0	0	2021-09-06 03:02:35.527086	2021-09-06 03:02:35.527086
 14	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	1	PISTOL	20.5	1	1	9	1	20	1	33	1	0	5	80	1	1	1	16	1	0	1	0	1	1	1	1	1	1	1	1	0	0	0	0	1	1	0	1	1	0	0	2021-09-06 03:04:47.023351	2021-09-06 03:04:47.023351
 15	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	73	6	2	1	1	80	0	1	4	1	2	10	918	10	3	20	1	1	1	1	1	1	1	0	1	1	0	1	1	1	1	0	1	1	0	1	1	0	0	2021-09-06 03:05:55.639243	2021-09-06 03:05:55.639243
-16	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	34	1	80	1	53	1	4.3	2	1	918	1	5	1	1	0	1	1	0	1	1	1	1	0	1	1	1	0	1	0	0	1	1	0	1	1	0	2021-09-06 03:06:30.49336	2021-09-06 03:06:30.49336
-17	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	1	1	35	1	61	1	0	5	8	1	2	5	20	1	0	1	1	1	0	1	1	1	1	1	0	1	1	1	0	0	1	0	0	0	1	0	2021-09-06 03:06:37.447102	2021-09-06 03:06:37.447102
+16	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	34	1	80	1	53	1	4.29999999999999982	2	1	918	1	5	1	1	0	1	1	0	1	1	1	1	0	1	1	1	0	1	0	0	1	1	0	1	1	0	2021-09-06 03:06:30.49336	2021-09-06 03:06:30.49336
+17	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	1	1	35	1	61	1	0	5	8	1	2	5	20	1	0	1	1	1	0	1	1	1	1	1	0	1	1	1	0	0	1	0	0	0	1	0	2021-09-06 03:06:37.447102	2021-09-06 03:06:37.447102
 18	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	1	PISTOL	1	1	1	5	1	20	1	42	1	1	3	1	1	2	3	16	1	0	0	1	1	0	1	1	0	0	1	0	1	1	1	0	0	0	0	1	0	1	0	2021-09-06 03:08:25.046276	2021-09-06 03:08:25.046276
-19	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	1	7	2	1	5	1	0	20	4	4.3	11	10	1818	775	5	54	0	1	1	0	0	1	1	1	1	1	0	0	1	1	1	0	0	1	1	1	0	0	0	2021-09-06 03:08:36.809308	2021-09-06 03:08:36.809308
-20	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	14	2	14	4	5	3.14	3	3	4.3	1	80	1	2	6	1	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	1	1	1	1	1	0	2021-09-06 03:13:23.838239	2021-09-06 03:13:23.838239
+19	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	1	7	2	1	5	1	0	20	4	4.29999999999999982	11	10	1818	775	5	54	0	1	1	0	0	1	1	1	1	1	0	0	1	1	1	0	0	1	1	1	0	0	0	2021-09-06 03:08:36.809308	2021-09-06 03:08:36.809308
+20	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	14	2	14	4	5	3.14000000000000012	3	3	4.29999999999999982	1	80	1	2	6	1	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	1	1	1	1	1	0	2021-09-06 03:13:23.838239	2021-09-06 03:13:23.838239
 21	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	1	1	5	1	1	1	33	1	0	3	80	40	3	3	16	0	1	0	1	0	1	1	1	1	1	1	1	0	1	1	0	1	1	0	0	1	1	0	2021-09-06 03:14:24.90574	2021-09-06 03:14:24.90574
-22	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.81	11	16	19	1	450	0	1	4	1	1	1	1	500	3	49	1	1	0	1	1	1	0	1	1	1	0	0	1	1	1	0	0	1	0	1	0	0	0	2021-09-06 03:17:24.397361	2021-09-06 03:17:24.397361
-23	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	115	11	2	34	1	91	0	1	2	4.3	3	1	918	1	1	20	1	1	0	1	1	0	0	0	1	0	0	0	1	0	1	0	1	0	1	1	1	1	0	2021-09-06 03:40:23.665692	2021-09-06 03:40:23.665692
+22	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.810000000000000053	11	16	19	1	450	0	1	4	1	1	1	1	500	3	49	1	1	0	1	1	1	0	1	1	1	0	0	1	1	1	0	0	1	0	1	0	0	0	2021-09-06 03:17:24.397361	2021-09-06 03:17:24.397361
+23	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	115	11	2	34	1	91	0	1	2	4.29999999999999982	3	1	918	1	1	20	1	1	0	1	1	0	0	0	1	0	0	0	1	0	1	0	1	0	1	1	1	1	0	2021-09-06 03:40:23.665692	2021-09-06 03:40:23.665692
 24	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	1	2	34	1	1	0	1	3	7	2	10	918	10	3	1	1	0	0	1	1	1	0	0	0	1	0	1	1	0	1	0	1	1	1	0	0	1	0	2021-09-06 03:42:49.10483	2021-09-06 03:42:49.10483
 25	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	8	2	34	1	117	1	53	2	1	3	10	918	13	1	20	0	1	1	1	1	0	1	1	1	0	1	0	0	1	1	0	0	1	1	0	0	1	0	2021-09-06 03:51:37.101185	2021-09-06 03:51:37.101185
-26	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81	999	20	23	1	30	1	1	11	4.3	33	180	1	26	1	140	1	1	0	1	0	1	1	0	1	0	0	1	1	1	0	0	1	1	1	0	1	1	0	2021-09-06 03:53:40.659097	2021-09-06 03:53:40.659097
+26	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81000000000000005	999	20	23	1	30	1	1	11	4.29999999999999982	33	180	1	26	1	140	1	1	0	1	0	1	1	0	1	0	0	1	1	1	0	0	1	1	1	0	1	1	0	2021-09-06 03:53:40.659097	2021-09-06 03:53:40.659097
 27	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1	MACHINE_PISTOL	32	37	1	14	1	30	1	21	3	1	5	1	1	20	1	6	1	1	1	0	1	1	0	1	1	1	0	1	1	0	1	0	0	1	0	0	1	1	0	2021-09-06 03:54:00.480819	2021-09-06 03:54:00.480819
-28	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	8	2	1	4	5	3.14	3	1	4	8	80	24	1	1	1	1	1	0	1	1	0	1	1	1	1	0	1	1	1	1	0	1	0	0	1	1	1	0	2021-09-06 03:54:39.313207	2021-09-06 03:54:39.313207
+28	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	220	ASSAULT_RIFLE	1	8	2	1	4	5	3.14000000000000012	3	1	4	8	80	24	1	1	1	1	1	0	1	1	0	1	1	1	1	0	1	1	1	1	0	1	0	0	1	1	1	0	2021-09-06 03:54:39.313207	2021-09-06 03:54:39.313207
 29	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	33	1	1	7	1	1	0	33	1	1	3	80	1	2	1	16	1	1	1	1	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	1	0	1	0	2021-09-06 03:54:48.391041	2021-09-06 03:54:48.391041
-30	10	10	10	10	10	10	10	10	COMMON	aug-a3.yml	ASSAULT_RIFLE	4	VI-AUG-IX	AUG A3	44	220	ASSAULT_RIFLE	4.23	8	2	19	4	7	1	3	3	1	1	99	24	2	11	1	1	1	0	1	1	0	1	1	1	1	0	0	1	0	1	0	0	0	1	1	1	1	0	2021-09-06 03:58:07.458034	2021-09-06 03:58:07.458034
-31	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81	999	20	1	1	30	0	23	7	4.3	1	1	1	36	40	1	1	0	1	0	1	1	1	1	0	1	0	1	1	1	0	0	1	1	0	1	1	1	0	2021-09-06 04:00:21.032214	2021-09-06 04:00:21.032214
-32	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	0.81	7	2	19	5	450	1	21	1	1	8	59	2	500	1	1	2	1	1	1	5	1	0	1	0	0	2	1	1	1	1	0	0	1	2	1	0	1	0	2021-09-06 04:00:25.350172	2021-09-06 04:00:25.350172
-33	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	30.81	2	1	14	1	1	0	16	3	4.3	5	1	1	44	29	1	0	1	0	1	1	1	2	1	2	1	1	1	0	1	0	0	1	1	1	0	0	1	0	2021-09-06 04:00:53.142172	2021-09-06 04:00:53.142172
+30	10	10	10	10	10	10	10	10	COMMON	aug-a3.yml	ASSAULT_RIFLE	4	VI-AUG-IX	AUG A3	44	220	ASSAULT_RIFLE	4.23000000000000043	8	2	19	4	7	1	3	3	1	1	99	24	2	11	1	1	1	0	1	1	0	1	1	1	1	0	0	1	0	1	0	0	0	1	1	1	1	0	2021-09-06 03:58:07.458034	2021-09-06 03:58:07.458034
+31	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81000000000000005	999	20	1	1	30	0	23	7	4.29999999999999982	1	1	1	36	40	1	1	0	1	0	1	1	1	1	0	1	0	1	1	1	0	0	1	1	0	1	1	1	0	2021-09-06 04:00:21.032214	2021-09-06 04:00:21.032214
+32	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	0.810000000000000053	7	2	19	5	450	1	21	1	1	8	59	2	500	1	1	2	1	1	1	5	1	0	1	0	0	2	1	1	1	1	0	0	1	2	1	0	1	0	2021-09-06 04:00:25.350172	2021-09-06 04:00:25.350172
+33	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	30.8099999999999987	2	1	14	1	1	0	16	3	4.29999999999999982	5	1	1	44	29	1	0	1	0	1	1	1	2	1	2	1	1	1	0	1	0	0	1	1	1	0	0	1	0	2021-09-06 04:00:53.142172	2021-09-06 04:00:53.142172
 34	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	1	PISTOL	20	10	1	1	1	1	0	33	1	0	1	80	40	2	5	16	1	1	5	0	1	1	1	1	0	2	1	0	2	1	0	0	1	0	9	2	1	0	0	2021-09-06 04:01:03.958174	2021-09-06 04:01:03.958174
-35	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	1162	SUB_MACHINE_GUN	1	82	1	14	2	30	0	66	4	4.3	10	1	1	1	6	6	1	1	1	1	1	1	2	1	1	0	2	0	1	0	2	0	1	0	1	2	2	0	0	2021-09-06 04:01:19.683189	2021-09-06 04:01:19.683189
+35	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	1162	SUB_MACHINE_GUN	1	82	1	14	2	30	0	66	4	4.29999999999999982	10	1	1	1	6	6	1	1	1	1	1	1	2	1	1	0	2	0	1	0	2	0	1	0	1	2	2	0	0	2021-09-06 04:01:19.683189	2021-09-06 04:01:19.683189
 36	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	75	PISTOL	1	1	1	5	1	20	2	1	1	2	3	1	1	2	3	16	1	2	1	0	2	1	1	1	2	1	1	1	4	0	1	0	1	2	0	1	0	1	0	2021-09-06 04:01:46.176273	2021-09-06 04:01:46.176273
 37	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	13	1	1	1	23	0	1	2	0	1	1	40	3	3	1	1	0	2	5	2	0	1	1	1	1	0	1	1	1	2	0	1	0	0	0	0	1	0	2021-09-06 04:01:51.777233	2021-09-06 04:01:51.777233
 38	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	20.5	12	1	5	2	3	0	33	1	1	1	80	1	1	3	1	0	1	0	4	1	0	1	1	3	2	0	2	3	1	2	0	0	0	0	1	1	0	0	2021-09-06 04:03:22.246198	2021-09-06 04:03:22.246198
-39	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	1	ASSAULT_RIFLE	4	8	2	14	2	5	1	1	1	4.3	5	80	24	2	6	19	1	1	1	2	2	0	1	0	2	1	2	1	1	2	2	0	0	1	2	1	0	0	0	2021-09-06 04:03:32.066198	2021-09-06 04:03:32.066198
+39	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	1	ASSAULT_RIFLE	4	8	2	14	2	5	1	1	1	4.29999999999999982	5	80	24	2	6	19	1	1	1	2	2	0	1	0	2	1	2	1	1	2	2	0	0	1	2	1	0	0	0	2021-09-06 04:03:32.066198	2021-09-06 04:03:32.066198
 40	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	100	SHOTGUN	169	1	2	34	1	80	0	1	4	12	1	10	918	10	8	26	1	1	1	0	1	2	1	2	4	1	1	1	0	0	0	0	1	4	2	0	0	2	0	2021-09-06 04:11:31.980285	2021-09-06 04:11:31.980285
-41	10	10	10	10	10	10	10	10	COMMON	m16a4.yml	ASSAULT_RIFLE	4	Standard Issue	M16A4 Assault Rifle	25	220	ASSAULT_RIFLE	4.23	1	2	14	1	5	3.14	1	3	7	7	1	1	4	6	1	1	1	1	1	1	0	2	2	2	1	2	1	1	1	2	0	1	1	0	1	1	5	0	2021-09-06 04:12:25.294101	2021-09-06 04:12:25.294101
-42	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	189	PISTOL	0	14	6	2	1	2	2	57	1	8	5	9	1	2	1	36	2	1	7	1	2	1	3	7	2	2	2	0	1	3	1	0	9	1	0	3	1	0	0	2021-09-06 04:13:09.227471	2021-09-06 04:13:09.227471
-43	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81	2	20	14	1	30	2	13	2	9	72	180	1	1	47	2	2	2	2	1	0	4	2	1	2	1	1	0	1	0	1	0	1	0	1	2	2	2	0	2021-09-06 04:13:23.551378	2021-09-06 04:13:23.551378
+41	10	10	10	10	10	10	10	10	COMMON	m16a4.yml	ASSAULT_RIFLE	4	Standard Issue	M16A4 Assault Rifle	25	220	ASSAULT_RIFLE	4.23000000000000043	1	2	14	1	5	3.14000000000000012	1	3	7	7	1	1	4	6	1	1	1	1	1	1	0	2	2	2	1	2	1	1	1	2	0	1	1	0	1	1	5	0	2021-09-06 04:12:25.294101	2021-09-06 04:12:25.294101
+42	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	189	PISTOL	0	14	6	2	1	2	2	57	1	8	5	9	1	2	1	36	2	1	7	1	2	1	3	7	2	2	2	0	1	3	1	0	9	1	0	3	1	0	0	2021-09-06 04:13:09.227471	2021-09-06 04:13:09.227471
+43	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	3.81000000000000005	2	20	14	1	30	2	13	2	9	72	180	1	1	47	2	2	2	2	1	0	4	2	1	2	1	1	0	1	0	1	0	1	0	1	2	2	2	0	2021-09-06 04:13:23.551378	2021-09-06 04:13:23.551378
 44	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	20.5	26	1	5	1	2	1	33	1	1	1	6	40	2	1	16	4	1	9	0	2	3	1	0	0	1	0	1	0	2	1	0	2	3	0	1	3	1	0	2021-09-06 04:13:44.591935	2021-09-06 04:13:44.591935
 45	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	586	6	2	1	2	1	2	2	2	3	2	29	918	10	4	20	1	2	1	3	2	0	0	2	7	1	0	1	2	2	2	0	0	6	0	1	0	4	0	2021-09-06 04:21:24.352496	2021-09-06 04:21:24.352496
-46	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	2	ASSAULT_RIFLE	16	2	2	2	4	5	3.14	6	2	4.3	1	80	24	6	54	31	2	2	2	3	0	2	5	0	0	2	1	0	1	2	1	0	0	0	0	1	2	2	0	2021-09-06 04:21:40.381543	2021-09-06 04:21:40.381543
-47	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	11	3	35	1	125	1	1	2	10	2	2	2	1	0	0	0	0	0	0	0	0	0	0	2	0	2	2	1	0	6	3	2	0	0	0	0	2021-09-06 04:22:42.764595	2021-09-06 04:22:42.764595
+46	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	2	ASSAULT_RIFLE	16	2	2	2	4	5	3.14000000000000012	6	2	4.29999999999999982	1	80	24	6	54	31	2	2	2	3	0	2	5	0	0	2	1	0	1	2	1	0	0	0	0	1	2	2	0	2021-09-06 04:21:40.381543	2021-09-06 04:21:40.381543
+47	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	7	6	11	3	35	1	125	1	1	2	10	2	2	2	1	0	0	0	0	0	0	0	0	0	0	2	0	2	2	1	0	6	3	2	0	0	0	0	2021-09-06 04:22:42.764595	2021-09-06 04:22:42.764595
 48	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	2	2	16	1	3	1620	2	13	4	1	9	10	1818	1	2	49	1	0	1	27	1	1	3	4	0	0	0	3	2	2	0	0	2	2	3	1	2	3	0	2021-09-06 04:22:46.863401	2021-09-06 04:22:46.863401
 49	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	30	13	1	5	1	62	0	3	2	0	1	80	1	7	2	1	1	5	2	1	2	2	0	2	3	0	1	1	0	19	1	0	0	1	4	0	2	0	0	2021-09-06 04:23:01.641628	2021-09-06 04:23:01.641628
-50	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	90	SNIPER	0.81	21	16	8	3	450	0	2	7	15	1	12	1818	500	2	49	5	2	1	2	0	1	1	1	1	0	0	2	6	2	2	0	0	2	2	1	2	1	0	2021-09-06 04:23:35.951147	2021-09-06 04:23:35.951147
+50	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	90	SNIPER	0.810000000000000053	21	16	8	3	450	0	2	7	15	1	12	1818	500	2	49	5	2	1	2	0	1	1	1	1	0	0	2	6	2	2	0	0	2	2	1	2	1	0	2021-09-06 04:23:35.951147	2021-09-06 04:23:35.951147
 51	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	115	17	2	34	1	80	1	53	4	10	3	20	918	10	4	2	2	1	0	0	2	10	2	1	1	0	1	0	2	1	1	0	0	3	2	0	2	7	0	2021-09-06 04:27:50.496627	2021-09-06 04:27:50.496627
-52	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	461	31	1	1	1	30	2	13	10	4.3	1	2	818	2	21	19	2	4	2	2	1	1	1	2	2	0	2	3	0	2	3	0	0	0	1	1	3	3	0	2021-09-06 04:28:20.129768	2021-09-06 04:28:20.129768
-53	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	147	SHOTGUN	70	62	2	2	2	80	1	53	2	4.3	2	10	918	21	3	2	0	1	2	3	2	0	3	2	0	1	2	1	3	2	2	0	0	0	0	1	0	0	0	2021-09-07 10:38:58.671814	2021-09-07 10:38:58.671814
+52	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	461	31	1	1	1	30	2	13	10	4.29999999999999982	1	2	818	2	21	19	2	4	2	2	1	1	1	2	2	0	2	3	0	2	3	0	0	0	1	1	3	3	0	2021-09-06 04:28:20.129768	2021-09-06 04:28:20.129768
+53	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	147	SHOTGUN	70	62	2	2	2	80	1	53	2	4.29999999999999982	2	10	918	21	3	2	0	1	2	3	2	0	3	2	0	1	2	1	3	2	2	0	0	0	0	1	0	0	0	2021-09-07 10:38:58.671814	2021-09-07 10:38:58.671814
 54	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	1	PISTOL	20.5	2	1	13	8	20	0	33	2	2	6	1	40	1	3	2	0	0	2	2	2	1	34	2	0	0	1	2	0	0	0	0	1	9	3	0	2	2	0	2021-09-07 10:39:50.158031	2021-09-07 10:39:50.158031
 55	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	3	MACHINE_PISTOL	20	13	1	2	5	20	0	42	1	0	9	290	40	1	3	3	2	1	1	2	0	11	1	0	1	0	2	2	0	1	1	0	7	2	0	1	2	2	0	2021-09-07 10:40:02.18301	2021-09-07 10:40:02.18301
-56	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	47	SHOTGUN	2	6	2	34	3	1	0	309	4	4.3	2	1	918	82	1	59	1	1	1	1	0	2	0	1	1	2	2	0	2	0	0	0	2	2	1	1	3	1	0	2021-09-07 10:48:10.468071	2021-09-07 10:48:10.468071
+56	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	47	SHOTGUN	2	6	2	34	3	1	0	309	4	4.29999999999999982	2	1	918	82	1	59	1	1	1	1	0	2	0	1	1	2	2	0	2	0	0	0	2	2	1	1	3	1	0	2021-09-07 10:48:10.468071	2021-09-07 10:48:10.468071
 57	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	112	2	2	34	1	147	0	1	2	17	2	26	12	10	3	62	2	0	7	2	2	11	7	0	0	2	0	1	2	3	0	0	1	3	1	0	1	2	0	2021-09-07 10:54:48.821086	2021-09-07 10:54:48.821086
-58	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1	MACHINE_PISTOL	30.81	1	1	2	3	108	2	1	8	4.3	2	180	818	20	6	14	17	0	2	2	5	2	2	11	1	0	0	0	7	2	1	0	4	2	0	1	2	4	0	2021-09-07 10:55:09.614216	2021-09-07 10:55:09.614216
-59	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	220	ASSAULT_RIFLE	16	1	2	14	16	1	3.14	1	2	4.3	2	1	77	4	6	2	3	0	1	1	22	2	0	14	0	2	5	7	1	2	2	0	0	2	0	0	3	0	0	2021-09-07 10:55:32.641118	2021-09-07 10:55:32.641118
-60	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	458	ASSAULT_RIFLE	1	8	2	14	2	2	3.14	1	2	4.3	18	2	75	3	6	1	1	1	1	3	1	2	0	1	2	0	0	0	0	0	0	0	0	2	0	2	0	0	0	2021-09-07 10:56:19.699137	2021-09-07 10:56:19.699137
+58	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1	MACHINE_PISTOL	30.8099999999999987	1	1	2	3	108	2	1	8	4.29999999999999982	2	180	818	20	6	14	17	0	2	2	5	2	2	11	1	0	0	0	7	2	1	0	4	2	0	1	2	4	0	2021-09-07 10:55:09.614216	2021-09-07 10:55:09.614216
+59	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	220	ASSAULT_RIFLE	16	1	2	14	16	1	3.14000000000000012	1	2	4.29999999999999982	2	1	77	4	6	2	3	0	1	1	22	2	0	14	0	2	5	7	1	2	2	0	0	2	0	0	3	0	0	2021-09-07 10:55:32.641118	2021-09-07 10:55:32.641118
+60	10	10	10	10	10	10	10	10	COMMON	552-commando.yml	ASSAULT_RIFLE	4	S1 Industries	552 Commando	69	458	ASSAULT_RIFLE	1	8	2	14	2	2	3.14000000000000012	1	2	4.29999999999999982	18	2	75	3	6	1	1	1	1	3	1	2	0	1	2	0	0	0	0	0	0	0	0	2	0	2	0	0	0	2021-09-07 10:56:19.699137	2021-09-07 10:56:19.699137
 61	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	2	ASSAULT_RIFLE	17	8	2	3	2	5	1	2	1	15	5	376	2	2	52	38	0	0	3	1	2	1	0	2	4	0	1	0	1	0	0	0	0	2	2	40	2	1	0	2021-09-07 10:57:40.930179	2021-09-07 10:57:40.930179
 62	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	1	SNIPER	2	7	2	19	3	2	2	3	4	1	8	16	1	500	8	54	2	0	2	1	0	3	4	1	19	0	1	3	1	1	0	0	0	19	4	1	2	0	0	2021-09-07 10:57:55.801265	2021-09-07 10:57:55.801265
-63	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	3717	LIGHT_MACHINE_GUN	3.81	3278	20	21	3	30	0	2	2	3	33	2	818	149	186	1	2	9	2	8	7	0	2	3	49	2	1	2	0	0	2	0	9	0	2	0	0	1	0	2021-09-07 10:58:07.221686	2021-09-07 10:58:07.221686
-64	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	1	PISTOL	0	7	6	11	1	35	1	2	1	0	2	23	2	2	18	20	0	2	1	2	4	0	1	17	1	1	7	0	1	2	1	0	6	1	0	13	2	0	0	2021-09-07 10:58:18.857191	2021-09-07 10:58:18.857191
-65	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	6	2	34	1	1	0	1	7	4.3	1	1	1390	1	1	20	0	1	1	0	1	1	1	1	0	1	1	0	1	1	0	0	1	0	1	0	0	1	0	2021-09-07 11:35:16.81688	2021-09-07 11:35:16.81688
-66	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	92	SNIPER	0.81	12	16	19	3	1	0	13	1	1	9	18	1818	500	3	49	1	1	1	1	0	1	1	1	0	1	0	0	1	1	1	0	1	0	1	1	1	0	0	2021-09-07 11:37:13.543964	2021-09-07 11:37:13.543964
-67	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	1	SHOTGUN	70	1	2	34	1	1	1	53	2	4.3	3	10	918	10	1	34	0	0	1	1	0	1	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-07 11:38:57.601084	2021-09-07 11:38:57.601084
+63	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	3717	LIGHT_MACHINE_GUN	3.81000000000000005	3278	20	21	3	30	0	2	2	3	33	2	818	149	186	1	2	9	2	8	7	0	2	3	49	2	1	2	0	0	2	0	9	0	2	0	0	1	0	2021-09-07 10:58:07.221686	2021-09-07 10:58:07.221686
+64	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	1	PISTOL	0	7	6	11	1	35	1	2	1	0	2	23	2	2	18	20	0	2	1	2	4	0	1	17	1	1	7	0	1	2	1	0	6	1	0	13	2	0	0	2021-09-07 10:58:18.857191	2021-09-07 10:58:18.857191
+65	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	6	2	34	1	1	0	1	7	4.29999999999999982	1	1	1390	1	1	20	0	1	1	0	1	1	1	1	0	1	1	0	1	1	0	0	1	0	1	0	0	1	0	2021-09-07 11:35:16.81688	2021-09-07 11:35:16.81688
+66	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	92	SNIPER	0.810000000000000053	12	16	19	3	1	0	13	1	1	9	18	1818	500	3	49	1	1	1	1	0	1	1	1	0	1	0	0	1	1	1	0	1	0	1	1	1	0	0	2021-09-07 11:37:13.543964	2021-09-07 11:37:13.543964
+67	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	1	SHOTGUN	70	1	2	34	1	1	1	53	2	4.29999999999999982	3	10	918	10	1	34	0	0	1	1	0	1	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-07 11:38:57.601084	2021-09-07 11:38:57.601084
 68	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	124	PISTOL	20.5	9	1	1	1	20	0	43	1	0	1	1	40	2	3	16	1	0	1	1	1	1	1	1	1	0	0	0	1	1	1	0	1	0	0	1	1	1	0	2021-09-07 11:40:06.99814	2021-09-07 11:40:06.99814
 69	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	14	13	1	8	1	20	1	35	1	0	3	1	40	1	3	16	0	1	1	1	1	0	1	1	1	1	1	0	0	1	1	0	1	1	1	1	0	0	0	2021-09-07 11:41:52.537095	2021-09-07 11:41:52.537095
 70	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	66	SHOTGUN	1	7	2	1	1	80	0	53	2	5	2	10	918	10	1	20	1	1	0	1	1	0	0	1	0	1	1	0	0	0	1	0	1	1	1	1	1	0	0	2021-09-07 13:53:42.597594	2021-09-07 13:53:42.597594
-71	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81	2564	20	1	1	30	0	24	13	4.3	44	180	818	53	40	1	1	0	1	1	1	0	1	0	1	0	1	1	1	1	0	0	1	1	0	0	1	1	0	2021-09-07 13:54:19.914426	2021-09-07 13:54:19.914426
-72	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	136	6	2	34	1	80	1	53	1	4.3	2	1	1	10	1	1	1	0	1	1	1	1	0	1	1	0	1	1	1	0	0	0	0	1	1	0	1	1	0	2021-09-07 14:06:46.882602	2021-09-07 14:06:46.882602
-73	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81	999	20	22	1	30	0	13	7	4.3	33	180	818	20	40	140	1	1	1	1	0	1	1	1	0	0	1	1	1	0	1	0	0	0	1	0	1	1	0	2021-09-07 14:07:05.080684	2021-09-07 14:07:05.080684
+71	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81000000000000005	2564	20	1	1	30	0	24	13	4.29999999999999982	44	180	818	53	40	1	1	0	1	1	1	0	1	0	1	0	1	1	1	1	0	0	1	1	0	0	1	1	0	2021-09-07 13:54:19.914426	2021-09-07 13:54:19.914426
+72	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	136	6	2	34	1	80	1	53	1	4.29999999999999982	2	1	1	10	1	1	1	0	1	1	1	1	0	1	1	0	1	1	1	0	0	0	0	1	1	0	1	1	0	2021-09-07 14:06:46.882602	2021-09-07 14:06:46.882602
+73	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81000000000000005	999	20	22	1	30	0	13	7	4.29999999999999982	33	180	818	20	40	140	1	1	1	1	0	1	1	1	0	0	1	1	1	0	1	0	0	0	1	0	1	1	0	2021-09-07 14:07:05.080684	2021-09-07 14:07:05.080684
 74	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	75	PISTOL	20.5	9	1	1	1	1	0	33	1	0	1	80	40	4	7	19	2	0	1	1	0	2	1	2	1	0	1	1	0	0	0	0	1	2	1	2	1	0	0	2021-09-07 14:07:13.03584	2021-09-07 14:07:13.03584
-75	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	220	ASSAULT_RIFLE	4.23	8	2	14	1	5	3.14	1	3	4.3	11	80	2	2	1	1	0	1	1	1	1	1	4	0	1	1	1	1	0	1	0	0	1	1	1	0	2	2	0	2021-09-07 14:08:06.897732	2021-09-07 14:08:06.897732
+75	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	220	ASSAULT_RIFLE	4.23000000000000043	8	2	14	1	5	3.14000000000000012	1	3	4.29999999999999982	11	80	2	2	1	1	0	1	1	1	1	1	4	0	1	1	1	1	0	1	0	0	1	1	1	0	2	2	0	2021-09-07 14:08:06.897732	2021-09-07 14:08:06.897732
 76	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	1	MACHINE_PISTOL	10.5	13	1	5	1	20	1	33	1	1	1	80	2	2	1	1	1	1	2	1	1	1	1	1	1	2	2	0	1	2	1	0	0	2	1	0	1	1	0	2021-09-07 14:08:08.725752	2021-09-07 14:08:08.725752
-77	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81	1	20	14	1	30	1	1	8	4.3	33	353	818	45	100	140	1	1	1	1	0	1	1	2	1	0	1	0	1	1	1	0	0	1	0	0	2	2	0	2021-09-07 14:09:34.865872	2021-09-07 14:09:34.865872
-78	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	1	SUB_MACHINE_GUN	1	1	1	14	1	84	0	30	3	4.3	1	1	818	20	10	6	1	1	1	2	1	1	1	1	1	1	1	1	0	1	1	0	4	0	1	1	1	0	0	2021-09-07 14:09:53.320895	2021-09-07 14:09:53.320895
+77	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	3.81000000000000005	1	20	14	1	30	1	1	8	4.29999999999999982	33	353	818	45	100	140	1	1	1	1	0	1	1	2	1	0	1	0	1	1	1	0	0	1	0	0	2	2	0	2021-09-07 14:09:34.865872	2021-09-07 14:09:34.865872
+78	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	1	SUB_MACHINE_GUN	1	1	1	14	1	84	0	30	3	4.29999999999999982	1	1	818	20	10	6	1	1	1	2	1	1	1	1	1	1	1	1	0	1	1	0	4	0	1	1	1	0	0	2021-09-07 14:09:53.320895	2021-09-07 14:09:53.320895
 79	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	2	PISTOL	20.5	21	1	5	3	20	1	33	1	0	8	276	40	2	4	16	2	1	1	1	0	0	1	1	2	1	1	1	2	1	1	0	0	0	1	0	1	0	0	2021-09-07 14:10:19.630963	2021-09-07 14:10:19.630963
-80	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	154	SHOTGUN	70	6	2	8	1	2	0	2	5	4.3	8	2	918	10	2	20	2	2	87	1	1	9	0	8	9	4	0	0	3	1	0	0	2	0	1	6	1	1	0	2021-09-07 15:34:49.372159	2021-09-07 15:34:49.372159
-81	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1082	1	2	34	2	329	0	53	2	4.3	2	81	918	2	3	2	8	2	1	2	1	1	1	1	1	3	1	1	0	4	2	0	4	4	1	4	2	1	0	2021-09-07 15:44:26.523537	2021-09-07 15:44:26.523537
+80	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	154	SHOTGUN	70	6	2	8	1	2	0	2	5	4.29999999999999982	8	2	918	10	2	20	2	2	87	1	1	9	0	8	9	4	0	0	3	1	0	0	2	0	1	6	1	1	0	2021-09-07 15:34:49.372159	2021-09-07 15:34:49.372159
+81	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1082	1	2	34	2	329	0	53	2	4.29999999999999982	2	81	918	2	3	2	8	2	1	2	1	1	1	1	1	3	1	1	0	4	2	0	4	4	1	4	2	1	0	2021-09-07 15:44:26.523537	2021-09-07 15:44:26.523537
 82	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	131	120	1	14	1	2	2	13	2	1	5	180	2	1	6	58	1	2	1	3	0	0	2	1	3	1	1	0	1	3	4	0	0	1	0	3	5	2	0	2021-09-07 15:47:20.881538	2021-09-07 15:47:20.881538
 83	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	1	2	1	1	80	1	1	5	2	2	2	918	7	11	20	2	3	7	0	6	1	2	0	18	0	2	3	2	1	0	0	2	2	4	0	0	2	0	2021-09-11 02:31:04.075813	2021-09-11 02:31:04.075813
 84	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	1	MACHINE_PISTOL	2	50	1	16	2	20	0	1	2	2	5	250	2	5	2	16	1	2	2	1	2	71	0	2	2	0	5	1	0	0	3	0	4	0	30	1	3	2	0	2021-09-11 02:31:11.598437	2021-09-11 02:31:11.598437
 85	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	400	SUB_MACHINE_GUN	2	31	1	14	2	2	0	18	1	1	2	180	818	76	10	2	3	0	7	0	22	3	1	21	1	2	0	1	3	6	0	0	4	11	0	2	0	17	0	2021-09-11 22:08:15.984399	2021-09-11 22:08:15.984399
 86	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	166	SHOTGUN	2	26	2	2	2	80	3	53	2	2	2	15	2778	10	7	37	1	1	2	0	4	3	10	1	0	1	2	0	4	2	9	0	0	1	0	0	2	1	0	2021-09-11 22:34:57.993684	2021-09-11 22:34:57.993684
-87	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	101	6	2	1	1	80	0	53	2	4.3	2	10	918	1	1	1	1	1	0	1	1	0	1	1	1	1	1	0	1	1	0	0	1	0	1	0	1	1	0	2021-09-11 22:43:30.863845	2021-09-11 22:43:30.863845
+87	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	101	6	2	1	1	80	0	53	2	4.29999999999999982	2	10	918	1	1	1	1	1	0	1	1	0	1	1	1	1	1	0	1	1	0	0	1	0	1	0	1	1	0	2021-09-11 22:43:30.863845	2021-09-11 22:43:30.863845
 88	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	6	2	140	2	2	0	53	7	31	3	10	1	17	5	20	1	2	2	1	2	2	0	1	3	2	2	2	0	0	3	0	3	8	3	2	0	0	0	2021-09-14 23:05:31.476199	2021-09-14 23:05:31.476199
-89	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	1	16	16	19	3	82	8	60	1	4.3	17	10	1818	2	2	29	2	12	0	0	2	4	4	3	1	1	2	4	2	9	2	0	0	10	2	0	2	0	0	2021-09-14 23:08:43.094794	2021-09-14 23:08:43.094794
-90	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	2	SHOTGUN	7	46	2	34	1	80	0	53	6	4.3	5	10	2	10	7	811	0	0	0	0	0	0	0	0	0	4	4	9	2	4	0	0	2	0	0	2	2	1	0	2021-09-14 23:18:08.304107	2021-09-14 23:18:08.304107
+89	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	1	16	16	19	3	82	8	60	1	4.29999999999999982	17	10	1818	2	2	29	2	12	0	0	2	4	4	3	1	1	2	4	2	9	2	0	0	10	2	0	2	0	0	2021-09-14 23:08:43.094794	2021-09-14 23:08:43.094794
+90	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	2	SHOTGUN	7	46	2	34	1	80	0	53	6	4.29999999999999982	5	10	2	10	7	811	0	0	0	0	0	0	0	0	0	4	4	9	2	4	0	0	2	0	0	2	2	1	0	2021-09-14 23:18:08.304107	2021-09-14 23:18:08.304107
 114	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	100	SHOTGUN	70	2	2	34	1	80	2	1	2	2	1	10	1	10	8	20	2	1	2	2	1	2	1	2	0	0	0	1	0	0	2	0	1	1	1	1	1	1	0	2021-09-16 23:36:13.402217	2021-09-16 23:36:13.402217
-91	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	2	6	2	1	146	2	2	1	4	4	2	8	2	5	20	1	2	2	8	6	2	1	12	0	1	3	0	1	0	1	0	2	0	1	1	1	15	0	2021-09-14 23:18:30.652122	2021-09-14 23:18:30.652122
+91	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	0	2	6	2	1	146	2	2	1	4	4	2	8	2	5	20	1	2	2	8	6	2	1	12	0	1	3	0	1	0	1	0	2	0	1	1	1	15	0	2021-09-14 23:18:30.652122	2021-09-14 23:18:30.652122
 92	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	1	6	2	34	1	118	0	53	2	1	2	10	1	12	3	20	1	0	1	1	1	1	1	1	1	1	0	0	0	1	0	0	0	0	1	0	1	0	0	2021-09-14 23:35:49.479445	2021-09-14 23:35:49.479445
 93	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	75	PISTOL	38	1	1	5	1	1	0	1	1	0	3	93	40	3	3	23	1	0	1	1	1	1	0	0	1	1	1	1	0	1	1	0	0	0	1	1	1	1	0	2021-09-14 23:35:59.910515	2021-09-14 23:35:59.910515
 94	90	10	0	0	90	40	9	0	COMMON	m3.yml	SHOTGUN	3	GBNT-3	M3	28	40	SHOTGUN	125	6	2	34	1	144	0	53	2	1	1	1	918	10	1	1	1	1	1	1	0	0	1	0	1	0	0	0	0	0	0	0	0	1	0	0	1	0	0	2021-09-14 23:39:15.773517	2021-09-14 23:39:15.773517
 95	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	6	2	1	1	1	2	1	2	6	2	10	1719	1	3	84	1	2	1	2	1	1	0	1	0	2	1	0	1	2	1	0	1	1	0	0	1	0	0	2021-09-14 23:42:41.011863	2021-09-14 23:42:41.011863
-96	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.81	46	1	14	1	30	1	13	3	4.3	2	8	2	20	1	19	2	8	0	2	1	1	2	2	2	1	0	2	43	3	1	0	2	0	0	1	3	0	0	2021-09-14 23:42:59.549552	2021-09-14 23:42:59.549552
+96	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.8099999999999987	46	1	14	1	30	1	13	3	4.29999999999999982	2	8	2	20	1	19	2	8	0	2	1	1	2	2	2	1	0	2	43	3	1	0	2	0	0	1	3	0	0	2021-09-14 23:42:59.549552	2021-09-14 23:42:59.549552
 97	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	70	1	2	34	3	80	0	53	2	10	4	198	2563	10	7	4	1	2	2	1	2	0	2	3	1	2	1	1	2	2	0	0	1	5	0	2	0	0	0	2021-09-14 23:43:28.098499	2021-09-14 23:43:28.098499
-98	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	2	1	2	19	3	450	0	13	12	4.3	22	2	1818	6001	3	159	3	1	7	3	2	0	1	2	2	8	0	1	2	1	3	0	1	2	1	1	2	0	0	2021-09-14 23:43:44.450572	2021-09-14 23:43:44.450572
+98	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	2	1	2	19	3	450	0	13	12	4.29999999999999982	22	2	1818	6001	3	159	3	1	7	3	2	0	1	2	2	8	0	1	2	1	3	0	1	2	1	1	2	0	0	2021-09-14 23:43:44.450572	2021-09-14 23:43:44.450572
 99	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	75	PISTOL	20.5	2	1	5	1	20	0	33	2	2	2	80	329	6	1	33	3	1	1	1	2	0	0	1	2	0	2	0	3	1	2	0	2	2	2	2	0	1	0	2021-09-14 23:44:17.215558	2021-09-14 23:44:17.215558
 100	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	127	SHOTGUN	70	12	2	34	18	80	2	7	2	7	2	10	918	10	3	5	1	2	2	1	0	1	1	1	0	4	1	1	2	2	4	0	0	1	0	4	2	6	0	2021-09-14 23:44:37.180693	2021-09-14 23:44:37.180693
 101	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	51	13	1	5	1	2	1	33	8	1	3	80	144	1	3	72	4	2	4	2	2	1	3	0	0	2	3	2	1	2	1	0	0	1	1	2	1	2	0	2021-09-14 23:44:50.870736	2021-09-14 23:44:50.870736
-102	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1373	MACHINE_PISTOL	30.81	31	1	1	2	30	2	13	2	4	12	1	2774	72	1	2	13	2	0	2	0	1	1	2	6	3	0	2	4	1	0	0	1	2	0	1	1	2	0	2021-09-14 23:44:58.487728	2021-09-14 23:44:58.487728
+102	90	10	0	0	80	40	0	0	COMMON	mp9.yml	MACHINE_PISTOL	9	Heckler and Koch	MP9	38	1373	MACHINE_PISTOL	30.8099999999999987	31	1	1	2	30	2	13	2	4	12	1	2774	72	1	2	13	2	0	2	0	1	1	2	6	3	0	2	4	1	0	0	1	2	0	1	1	2	0	2021-09-14 23:44:58.487728	2021-09-14 23:44:58.487728
 103	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	400	SUB_MACHINE_GUN	2	89	1	62	1	30	0	13	3	33	2	180	1	67	10	2	1	3	15	2	2	2	1	9	2	2	0	3	0	2	4	0	2	0	2	2	2	2	0	2021-09-14 23:45:13.896704	2021-09-14 23:45:13.896704
 104	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	195	MACHINE_PISTOL	10.5	2	1	2	2	1	2	48	1	2	12	1	144	2	2	2	2	6	0	0	3	1	1	8	1	0	1	0	2	2	1	0	1	2	1	1	0	1	0	2021-09-14 23:45:23.846735	2021-09-14 23:45:23.846735
-105	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	1	115	2	1	3	1540	1	23	4	4.3	9	10	1818	3138	3	7	0	1	1	0	0	4	1	2	1	0	1	2	7	1	0	0	5	2	0	4	10	1	0	2021-09-14 23:45:34.064608	2021-09-14 23:45:34.064608
+105	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	1	115	2	1	3	1540	1	23	4	4.29999999999999982	9	10	1818	3138	3	7	0	1	1	0	0	4	1	2	1	0	1	2	7	1	0	0	5	2	0	4	10	1	0	2021-09-14 23:45:34.064608	2021-09-14 23:45:34.064608
 106	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	2	SHOTGUN	70	6	2	93	24	24	5	53	2	2	3	40	918	8	2	3	3	9	12	3	35	2	3	0	6	80	4	0	2	0	12	0	3	2	3	2	2	18	0	2021-09-16 02:07:36.873686	2021-09-16 02:07:36.873686
 107	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	3	ASSAULT_RIFLE	4	24	2	249	17	123	4	2	3	3	2	80	24	4	6	10	4	6	19	2	0	8	5	2	7	0	0	4	63	10	9	0	0	4	4	2	59	13	0	2021-09-16 02:07:57.898864	2021-09-16 02:07:57.898864
-108	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	2230	SUB_MACHINE_GUN	75	3	1	14	4	7	0	8	2	4.3	5	180	3825	54	15	199	2	4	89	3	17	4	4	6	6	4	2	0	4	3	25	0	3	5	2	175	3	0	0	2021-09-16 02:08:02.030809	2021-09-16 02:08:02.030809
-109	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	141	SHOTGUN	4	2	2	34	1	3	4	53	2	4.3	81	2	4	31	9	123	3	4	0	3	2	3	17	3	0	3	0	5	3	33	18	0	3	3	4	0	161	4	0	2021-09-16 02:08:15.453854	2021-09-16 02:08:15.453854
-110	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	47	SNIPER	0.81	7	21	549	7	61	6	65	19	4.3	4	10	1818	3218	21	11	3	3	3	4	2	3	0	3	19	0	5	3	4	4	0	0	3	3	2	2	2	0	0	2021-09-16 02:08:20.239637	2021-09-16 02:08:20.239637
+108	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	2230	SUB_MACHINE_GUN	75	3	1	14	4	7	0	8	2	4.29999999999999982	5	180	3825	54	15	199	2	4	89	3	17	4	4	6	6	4	2	0	4	3	25	0	3	5	2	175	3	0	0	2021-09-16 02:08:02.030809	2021-09-16 02:08:02.030809
+109	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	141	SHOTGUN	4	2	2	34	1	3	4	53	2	4.29999999999999982	81	2	4	31	9	123	3	4	0	3	2	3	17	3	0	3	0	5	3	33	18	0	3	3	4	0	161	4	0	2021-09-16 02:08:15.453854	2021-09-16 02:08:15.453854
+110	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	47	SNIPER	0.810000000000000053	7	21	549	7	61	6	65	19	4.29999999999999982	4	10	1818	3218	21	11	3	3	3	4	2	3	0	3	19	0	5	3	4	4	0	0	3	3	2	2	2	0	0	2021-09-16 02:08:20.239637	2021-09-16 02:08:20.239637
 111	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	1	2	43	1	80	0	1	2	1	2	10	1323	12	5	38	0	0	1	1	1	1	1	1	1	0	0	1	1	1	1	0	1	1	0	1	1	1	0	2021-09-16 23:27:45.188054	2021-09-16 23:27:45.188054
 112	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	75	PISTOL	20.5	15	1	5	1	1	0	1	1	0	3	80	40	2	3	28	1	1	1	1	1	0	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2021-09-16 23:35:43.931376	2021-09-16 23:35:43.931376
 113	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	206	PISTOL	29	2	1	5	1	20	0	33	2	1	1	1	40	2	3	1	0	0	1	1	2	1	1	1	1	1	0	0	1	4	2	0	1	0	1	1	1	1	0	2021-09-16 23:35:57.520318	2021-09-16 23:35:57.520318
 116	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	1	ASSAULT_RIFLE	2	2	2	1	4	45	2	4	3	14	5	4	2	2	1	10	3	1	0	1	10	4	3	0	2	2	0	7	0	1	0	0	0	2	4	1	0	3	0	2021-09-16 23:36:44.521348	2021-09-16 23:36:44.521348
-118	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	3	6	2	34	1	1	2	1	1	4.3	2	10	1	10	3	127	2	3	3	2	0	1	2	8	0	1	1	1	0	0	6	0	2	1	1	0	2	3	0	2021-09-16 23:37:05.772357	2021-09-16 23:37:05.772357
-119	90	10	0	0	90	40	9	0	COMMON	m3.yml	SHOTGUN	3	GBNT-3	M3	28	2	SHOTGUN	70	6	2	1	1	155	1	3	3	4.3	2	34	918	74	13	67	4	4	0	15	0	2	0	5	6	0	1	1	1	1	1	0	2	2	1	4	4	2	0	2021-09-16 23:37:18.426344	2021-09-16 23:37:18.426344
-120	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	4	1	6	11	1	34	2	33	1	0	21	8	1	1	2	20	0	4	2	2	0	2	13	2	1	0	2	2	2	0	4	0	13	3	2	0	4	2	0	2021-09-16 23:37:20.712351	2021-09-16 23:37:20.712351
-121	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	3.81	1	20	2	1	1	0	2	2	4.3	33	324	1344	20	80	1	0	1	6	0	1	5	2	1	1	2	1	1	1	0	2	0	2	1	0	2	4	0	0	2021-09-16 23:41:05.302512	2021-09-16 23:41:05.302512
-122	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	1	LIGHT_MACHINE_GUN	3.81	19206	20	14	9	30	0	13	27	4.3	1	438	818	1	40	558	1	2	0	1	9	2	1	5	1	14	0	2	4	0	1	0	0	1	2	4	4	2	0	2021-09-16 23:41:13.858541	2021-09-16 23:41:13.858541
-123	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.81	2	21	2	3	252	4	13	4	4.3	8	23	1818	1	21	9	14	1	3	1	2	0	1	2	0	2	0	2	0	4	1	0	4	2	1	1	2	1	0	2021-09-16 23:41:23.490425	2021-09-16 23:41:23.490425
+118	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	3	6	2	34	1	1	2	1	1	4.29999999999999982	2	10	1	10	3	127	2	3	3	2	0	1	2	8	0	1	1	1	0	0	6	0	2	1	1	0	2	3	0	2021-09-16 23:37:05.772357	2021-09-16 23:37:05.772357
+119	90	10	0	0	90	40	9	0	COMMON	m3.yml	SHOTGUN	3	GBNT-3	M3	28	2	SHOTGUN	70	6	2	1	1	155	1	3	3	4.29999999999999982	2	34	918	74	13	67	4	4	0	15	0	2	0	5	6	0	1	1	1	1	1	0	2	2	1	4	4	2	0	2021-09-16 23:37:18.426344	2021-09-16 23:37:18.426344
+120	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	50	PISTOL	4	1	6	11	1	34	2	33	1	0	21	8	1	1	2	20	0	4	2	2	0	2	13	2	1	0	2	2	2	0	4	0	13	3	2	0	4	2	0	2021-09-16 23:37:20.712351	2021-09-16 23:37:20.712351
+121	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	3.81000000000000005	1	20	2	1	1	0	2	2	4.29999999999999982	33	324	1344	20	80	1	0	1	6	0	1	5	2	1	1	2	1	1	1	0	2	0	2	1	0	2	4	0	0	2021-09-16 23:41:05.302512	2021-09-16 23:41:05.302512
+122	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	1	LIGHT_MACHINE_GUN	3.81000000000000005	19206	20	14	9	30	0	13	27	4.29999999999999982	1	438	818	1	40	558	1	2	0	1	9	2	1	5	1	14	0	2	4	0	1	0	0	1	2	4	4	2	0	2021-09-16 23:41:13.858541	2021-09-16 23:41:13.858541
+123	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.810000000000000053	2	21	2	3	252	4	13	4	4.29999999999999982	8	23	1818	1	21	9	14	1	3	1	2	0	1	2	0	2	0	2	0	4	1	0	4	2	1	1	2	1	0	2021-09-16 23:41:23.490425	2021-09-16 23:41:23.490425
 124	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	220	ASSAULT_RIFLE	13	2	2	14	2	45	1	3	3	14	5	80	1	2	1	2	2	4	8	1	0	1	0	3	1	1	2	1	0	0	0	0	2	1	0	2	0	0	0	2021-09-16 23:41:37.665403	2021-09-16 23:41:37.665403
 125	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	13	1	5	1	1	3	1	5	3	5	308	1	3	12	1	1	2	2	5	0	2	21	13	1	2	4	2	2	9	2	0	0	1	4	0	2	6	0	2021-09-16 23:41:43.832588	2021-09-16 23:41:43.832588
 126	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	75	PISTOL	20.5	6	1	2	2	3	3	2	1	2	60	80	40	7	2	187	8	3	14	3	3	2	11	0	15	0	3	4	2	12	5	0	0	3	24	0	3	0	0	2021-09-16 23:41:47.188541	2021-09-16 23:41:47.188541
-127	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	220	ASSAULT_RIFLE	518	91	2	2	4	223	2	3	3	4.3	5	340	79	2	3	10	16	6	0	0	5	3	3	0	4	2	5	0	5	2	3	0	0	3	3	8	0	0	0	2021-09-16 23:41:49.369475	2021-09-16 23:41:49.369475
+127	10	10	10	10	10	10	10	10	COMMON	g36c.yml	ASSAULT_RIFLE	4	Heckler & Koch	G36C Assault Rifle	46	220	ASSAULT_RIFLE	518	91	2	2	4	223	2	3	3	4.29999999999999982	5	340	79	2	3	10	16	6	0	0	5	3	3	0	4	2	5	0	5	2	3	0	0	3	3	8	0	0	0	2021-09-16 23:41:49.369475	2021-09-16 23:41:49.369475
 128	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	999	LIGHT_MACHINE_GUN	19	999	20	14	2	2	2	2	39	11	33	3	2	8	3	3	9	3	2	8	2	8	0	5	3	0	7	0	4	2	0	0	3	0	14	0	0	0	0	2021-09-16 23:41:54.99946	2021-09-16 23:41:54.99946
 129	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	779	PISTOL	2	6	1	5	5	20	2	140	3	3	3	80	3	5	15	3	12	0	3	2	3	10	2	4	2	2	1	0	4	42	3	0	3	3	3	0	3	2	0	2021-09-16 23:41:58.892622	2021-09-16 23:41:58.892622
 130	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	9	ASSAULT_RIFLE	3	8	2	80	4	3	17	3	2	12	5	408	49	3	2	57	2	3	0	3	5	0	2	21	0	3	3	44	2	3	2	0	4	3	0	2	2	14	0	2021-09-16 23:42:00.832379	2021-09-16 23:42:00.832379
-131	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	2	31	1	63	3	2	2	3	2	4.3	5	613	2	20	17	6	2	5	0	54	2	2	3	0	10	3	3	19	7	0	12	0	2	2	3	0	2	2	0	2021-09-16 23:42:04.939434	2021-09-16 23:42:04.939434
+131	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	2	31	1	63	3	2	2	3	2	4.29999999999999982	5	613	2	20	17	6	2	5	0	54	2	2	3	0	10	3	3	19	7	0	12	0	2	2	3	0	2	2	0	2021-09-16 23:42:04.939434	2021-09-16 23:42:04.939434
 132	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	2	PISTOL	2	9	1	3	2	20	3	33	1	12	3	3	179	164	3	16	2	0	3	3	17	3	3	3	3	3	2	0	2	2	4	0	2	2	0	23	3	3	0	2021-09-16 23:42:07.309542	2021-09-16 23:42:07.309542
 133	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	3	PISTOL	4	4	1	92	4	20	0	33	2	6	3	337	3	3	13	16	84	7	22	4	3	4	2	2	0	3	0	2	0	4	4	0	41	6	0	60	3	3	0	2021-09-16 23:42:08.832497	2021-09-16 23:42:08.832497
-134	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	208	4	2	34	1	2	0	53	3	4.3	2	8	918	58	3	4	6	3	3	6	0	0	2	10	6	7	3	4	5	4	0	0	0	0	0	4	2	2	0	2021-09-16 23:42:10.128434	2021-09-16 23:42:10.128434
+134	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	208	4	2	34	1	2	0	53	3	4.29999999999999982	2	8	918	58	3	4	6	3	3	6	0	0	2	10	6	7	3	4	5	4	0	0	0	0	0	4	2	2	0	2021-09-16 23:42:10.128434	2021-09-16 23:42:10.128434
 135	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	2	999	20	69	3	64	0	4	7	3	33	180	818	126	9	4	0	0	2	17	21	5	112	24	3	0	4	6	4	4	0	0	5	116	2	0	3	2	0	2021-09-16 23:42:13.915874	2021-09-16 23:42:13.915874
 136	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	4	MACHINE_PISTOL	10.5	13	1	14	4	3	6	4	1	3	3	4	2	2	10	16	3	4	91	0	4	32	0	4	3	13	13	4	19	0	3	0	6	6	2	0	0	2	0	2021-09-16 23:42:15.757476	2021-09-16 23:42:15.757476
 137	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	11531	SUB_MACHINE_GUN	170	31	1	3	1	30	4	14	4	9	34	180	818	6	6	3	2	2	4	5	11	2	4	2	13	0	3	24	0	3	2	0	6	0	3	2	3	0	0	2021-09-16 23:42:17.37751	2021-09-16 23:42:17.37751
 138	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	10.5	13	1	5	1	4	0	33	1	0	3	80	40	11	13	16	5	2	1367	4	4	0	21	0	3	0	3	2	0	0	76	0	2	2	4	0	57	3	0	2021-09-16 23:42:20.082517	2021-09-16 23:42:20.082517
 139	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	2	LIGHT_MACHINE_GUN	11	3	20	47	3	30	0	13	3	3	4	2	818	66	40	140	514	4	0	10	3	3	4	0	49	5	26	2	2	19	8	0	4	2	3	0	4	0	0	2021-09-16 23:42:21.261413	2021-09-16 23:42:21.261413
-142	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	20	2	4	4	38	0	53	5	4.3	19	10	18	2	3	20	215	3	2	0	2	26	4	2	2	0	3	3	5	3	23	0	12	12	2	4	5	3	0	2021-09-17 00:06:22.501847	2021-09-17 00:06:22.501847
-143	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	400	SUB_MACHINE_GUN	30.81	3	1	14	1	206	4	3	3	80	66	2	818	20	18	6	2	3	2	3	4	12	2	0	2	22	0	6	17	21	6	0	0	2	4	26	2	0	0	2021-09-17 00:06:28.107491	2021-09-17 00:06:28.107491
+142	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	70	20	2	4	4	38	0	53	5	4.29999999999999982	19	10	18	2	3	20	215	3	2	0	2	26	4	2	2	0	3	3	5	3	23	0	12	12	2	4	5	3	0	2021-09-17 00:06:22.501847	2021-09-17 00:06:22.501847
+143	90	10	0	0	80	40	0	0	COMMON	fmg9.yml	SUB_MACHINE_GUN	5	DXGR-1	FMG-9	5	400	SUB_MACHINE_GUN	30.8099999999999987	3	1	14	1	206	4	3	3	80	66	2	818	20	18	6	2	3	2	3	4	12	2	0	2	22	0	6	17	21	6	0	0	2	4	26	2	0	0	2021-09-17 00:06:28.107491	2021-09-17 00:06:28.107491
 144	90	10	0	0	80	40	0	0	COMMON	hk21.yml	LIGHT_MACHINE_GUN	10	TN-33Y	HK-21 Light Machine Gun	33	999	LIGHT_MACHINE_GUN	2	13	20	271	1	5	4	4	7	3	3	5	2	4	5	140	2	0	0	2	3	4	4	5	14	0	16	16	0	6	7	0	4	2	9	3	4	0	0	2021-09-17 00:06:53.128907	2021-09-17 00:06:53.128907
-145	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	1746	SUB_MACHINE_GUN	10	190	1	3	1	30	0	13	47	4.3	6	4	818	20	57	2	4	10	4	13	6	72	5	2	0	4	0	2	3	4	4	0	29	3	5	4	4	6	0	2021-09-17 00:07:08.100927	2021-09-17 00:07:08.100927
-146	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	311	SHOTGUN	5	32	2	34	2	4	0	3	4	4.3	2	4	19	10	2	12	0	74	4	0	2	17	3	32	20	2	16	546	4	3	5	0	2	6	2	2	4	2	0	2021-09-17 00:19:32.432101	2021-09-17 00:19:32.432101
+145	90	10	0	0	80	40	0	0	COMMON	p90.yml	SUB_MACHINE_GUN	5	Heckler and Koch	Heckler and Koch P90	21	1746	SUB_MACHINE_GUN	10	190	1	3	1	30	0	13	47	4.29999999999999982	6	4	818	20	57	2	4	10	4	13	6	72	5	2	0	4	0	2	3	4	4	0	29	3	5	4	4	6	0	2021-09-17 00:07:08.100927	2021-09-17 00:07:08.100927
+146	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	311	SHOTGUN	5	32	2	34	2	4	0	3	4	4.29999999999999982	2	4	19	10	2	12	0	74	4	0	2	17	3	32	20	2	16	546	4	3	5	0	2	6	2	2	4	2	0	2021-09-17 00:19:32.432101	2021-09-17 00:19:32.432101
 147	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	4	SHOTGUN	489	44	2	4	3	2	0	53	6	19	8	3	3	5	3	4	3	4	5	20	0	21	3	19	4	4	0	5	3	281	5	0	3	5	3	0	2	7	0	2021-09-17 00:19:36.334133	2021-09-17 00:19:36.334133
-148	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.81	20	1	2	1	68	4	13	3	21	36	180	6479	20	2	208	3	11	56	15	0	0	2	2	3	0	0	4	45	22	0	0	5	5	0	4	5	3	0	2021-09-17 00:19:37.303205	2021-09-17 00:19:37.303205
+148	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	400	SUB_MACHINE_GUN	30.8099999999999987	20	1	2	1	68	4	13	3	21	36	180	6479	20	2	208	3	11	56	15	0	0	2	2	3	0	0	4	45	22	0	0	5	5	0	4	5	3	0	2021-09-17 00:19:37.303205	2021-09-17 00:19:37.303205
 149	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	3	SHOTGUN	3	3	2	34	3	80	4	178	26	3	2	181	918	3	4	20	4	6	3	4	3	51	4	25	3	4	3	2	3	0	2	0	4	3	0	0	0	3	0	2021-09-17 00:46:53.68857	2021-09-17 00:46:53.68857
 150	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	146	SHOTGUN	387	6	2	34	1	80	4	53	3	4	2	10	918	21	11	3	0	0	4	2	12	0	14	3	6	2	3	3	2	2	4	0	4	4	0	0	2	24	0	2021-09-17 00:52:59.358813	2021-09-17 00:52:59.358813
 151	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	2	SHOTGUN	70	47	2	34	1	628	3	53	2	5	2	5	7	65	3	4	15	6	6	2	3	0	9	0	0	0	197	4	0	0	2	0	38	2	21	2	5	2	0	2021-09-17 01:33:01.729627	2021-09-17 01:33:01.729627
-152	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	5	ASSAULT_RIFLE	24	8	2	4	5	5	3.14	3	4	2	21	80	91	4	23	5	125	4	4	21	5	5	0	4	249	5	24	5	2	0	4	0	4	0	0	0	5	2	0	2021-09-17 01:33:04.75737	2021-09-17 01:33:04.75737
-153	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	73	SNIPER	0.81	53	2	19	3	15	0	13	5	30	2	55	2	1843	15	40	16	3	3	2	3	12	0	21	2	3	145	4	0	2	2	0	4	4	15	21	2	3	0	2021-09-17 01:33:05.290392	2021-09-17 01:33:05.290392
+152	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	5	ASSAULT_RIFLE	24	8	2	4	5	5	3.14000000000000012	3	4	2	21	80	91	4	23	5	125	4	4	21	5	5	0	4	249	5	24	5	2	0	4	0	4	0	0	0	5	2	0	2021-09-17 01:33:04.75737	2021-09-17 01:33:04.75737
+153	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	73	SNIPER	0.810000000000000053	53	2	19	3	15	0	13	5	30	2	55	2	1843	15	40	16	3	3	2	3	12	0	21	2	3	145	4	0	2	2	0	4	4	15	21	2	3	0	2021-09-17 01:33:05.290392	2021-09-17 01:33:05.290392
 140	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	15	2	39	19	4	450	0	80	4	2	246	4	1818	500	4	271	6	4	4	4	5	2	3	4	0	0	0	2	128	4	3	0	0	5	0	25	3	2	0	2021-09-16 23:42:22.548445	2021-09-16 23:42:22.548445
-115	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	155	SNIPER	0.81	7	39	1	3	450	0	2	1	4.3	8	10	2590	6	4	209	2	1	1	2	1	1	0	7	0	2	7	2	0	3	1	0	1	5	0	2	0	2	0	2021-09-16 23:36:33.761333	2021-09-16 23:36:33.761333
+115	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	155	SNIPER	0.810000000000000053	7	39	1	3	450	0	2	1	4.29999999999999982	8	10	2590	6	4	209	2	1	1	2	1	1	0	7	0	2	7	2	0	3	1	0	1	5	0	2	0	2	0	2021-09-16 23:36:33.761333	2021-09-16 23:36:33.761333
 117	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	70	SNIPER	1	8	39	19	3	1332	1	2	4	16	2	10	2	975	1	324	3	5	3	2	2	1	2	0	2	1	1	0	2	1	3	0	7	3	0	3	2	2	0	2021-09-16 23:36:54.692448	2021-09-16 23:36:54.692448
 141	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	2	14	39	4	3	2	0	3	4	26	54	10	6340	7	8	40	19	5	3	10	88	3	21	4	4	2	2	2	4	6	4	0	5	0	4	4	0	3	0	2021-09-16 23:42:23.841449	2021-09-16 23:42:23.841449
-154	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	381	6	2	34	2	80	5	53	7	4.3	2	10	2	2	13	20	4	4	4	3	3	4	0	4	3	5	7	0	3	15	18	0	2	3	18	8	4	13	0	2021-09-17 01:46:31.106286	2021-09-17 01:46:31.106286
+154	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	381	6	2	34	2	80	5	53	7	4.29999999999999982	2	10	2	2	13	20	4	4	4	3	3	4	0	4	3	5	7	0	3	15	18	0	2	3	18	8	4	13	0	2021-09-17 01:46:31.106286	2021-09-17 01:46:31.106286
 155	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	254	SHOTGUN	5	25	2	34	7	2	0	25	6	19	2	18	918	10	4	20	5	3	41	4	0	5	5	5	0	0	4	2	4	5	7	0	3	6	2	34	10	5	0	2021-09-17 01:46:41.943902	2021-09-17 01:46:41.943902
 156	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	4	3	21	3	129	61	6	5	34	5	18	4	1818	3159	939	33	22	0	0	38	40	120	0	30	12	2	703	0	19	0	17	0	12	0	0	14	2	2	0	2021-09-17 01:46:52.492051	2021-09-17 01:46:52.492051
 157	10	10	10	10	10	10	10	10	COMMON	scarh.yml	ASSAULT_RIFLE	4	SK-10	SCAR-H Assault Rifle	31	220	ASSAULT_RIFLE	2	3	2	14	4	103	46	4	4	5	4	5	24	3	6	10	4	37	0	3	3	2	5	27	133	0	2	5	5	6	6	0	3	4	0	0	3	7	0	2021-09-17 01:47:03.78067	2021-09-17 01:47:03.78067
-158	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	1	6	2	34	1	1	1	53	2	4.3	2	10	1453	10	1	34	1	1	1	1	0	1	0	1	1	1	0	1	0	1	1	0	1	1	0	1	0	1	0	2021-09-18 01:27:39.936028	2021-09-18 01:27:39.936028
-159	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	0.81	7	2	35	3	450	1	17	4	1	1	10	1818	500	1	1	1	0	1	1	1	0	0	0	1	1	1	1	0	1	1	0	1	1	1	0	1	1	0	2021-09-18 01:28:53.380809	2021-09-18 01:28:53.380809
+158	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	1	6	2	34	1	1	1	53	2	4.29999999999999982	2	10	1453	10	1	34	1	1	1	1	0	1	0	1	1	1	0	1	0	1	1	0	1	1	0	1	0	1	0	2021-09-18 01:27:39.936028	2021-09-18 01:27:39.936028
+159	0	20	90	90	10	20	90	90	COMMON	xm109.yml	SNIPER	6	Heckler and Koch	XM109 Sniper Rifle	13	70	SNIPER	0.810000000000000053	7	2	35	3	450	1	17	4	1	1	10	1818	500	1	1	1	0	1	1	1	0	0	0	1	1	1	1	0	1	1	0	1	1	1	0	1	1	0	2021-09-18 01:28:53.380809	2021-09-18 01:28:53.380809
 160	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	999	LIGHT_MACHINE_GUN	4	999	20	14	1	2	0	13	1	2	33	180	1	1	40	173	1	1	1	0	1	0	0	1	1	1	1	1	1	0	0	0	1	1	1	1	0	0	0	2021-09-18 01:30:06.037856	2021-09-18 01:30:06.037856
-161	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	220	ASSAULT_RIFLE	4.23	8	2	35	1	45	3.14	3	1	4.3	1	1	1	1	6	1	0	1	2	0	1	2	2	1	2	0	2	2	2	1	0	0	2	1	0	0	1	0	0	2021-09-18 01:30:12.186423	2021-09-18 01:30:12.186423
-162	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	30.81	31	1	2	1	30	0	2	1	1	1	471	818	51	2	6	2	1	2	1	0	2	0	2	4	0	6	0	0	2	6	0	2	1	3	0	0	1	0	2021-09-18 01:30:18.64502	2021-09-18 01:30:18.64502
+161	10	10	10	10	10	10	10	10	COMMON	tar21.yml	ASSAULT_RIFLE	4	SK-10	TAR-21 Assault Rifle	30	220	ASSAULT_RIFLE	4.23000000000000043	8	2	35	1	45	3.14000000000000012	3	1	4.29999999999999982	1	1	1	1	6	1	0	1	2	0	1	2	2	1	2	0	2	2	2	1	0	0	2	1	0	0	1	0	0	2021-09-18 01:30:12.186423	2021-09-18 01:30:12.186423
+162	90	10	0	0	80	40	0	0	COMMON	mp5.yml	SUB_MACHINE_GUN	5	Heckler and Koch	MP5	5	400	SUB_MACHINE_GUN	30.8099999999999987	31	1	2	1	30	0	2	1	1	1	471	818	51	2	6	2	1	2	1	0	2	0	2	4	0	6	0	0	2	6	0	2	1	3	0	0	1	0	2021-09-18 01:30:18.64502	2021-09-18 01:30:18.64502
 163	90	10	0	0	80	40	0	0	COMMON	mk46.yml	LIGHT_MACHINE_GUN	10	TN-33Y	MK-46 Light Machine Gun	78	4	LIGHT_MACHINE_GUN	5	999	20	2	1	70	0	1	1	1	248	1438	818	20	40	1	1	1	1	2	4	2	3	0	3	0	0	0	2	1	0	0	0	1	0	0	0	2	0	2021-09-18 01:30:39.448915	2021-09-18 01:30:39.448915
 164	90	10	0	0	80	40	0	0	COMMON	ump45.yml	SUB_MACHINE_GUN	5	PN/P	UMP-45	32	1091	SUB_MACHINE_GUN	2	31	1	144	1	1	2	13	3	14	5	2	4239	48	6	6	3	2	2	1	2	0	1	0	2	1	1	3	3	0	2	0	3	0	2	2	0	1	0	2021-09-18 01:30:45.796981	2021-09-18 01:30:45.796981
-165	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	0.81	7	6	43	1	61	0	53	5	4.3	1	2	2	934	1	2	3	0	1	2	2	0	1	3	0	1	0	2	0	1	1	0	2	3	1	2	0	2	0	2021-09-18 01:31:39.066818	2021-09-18 01:31:39.066818
+165	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	70	SNIPER	0.810000000000000053	7	6	43	1	61	0	53	5	4.29999999999999982	1	2	2	934	1	2	3	0	1	2	2	0	1	3	0	1	0	2	0	1	1	0	2	3	1	2	0	2	0	2021-09-18 01:31:39.066818	2021-09-18 01:31:39.066818
 166	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	40	SHOTGUN	1	6	2	90	4	80	1	53	2	1	2	2	3169	2	1	2	1	8	0	1	6	2	4	1	1	1	0	0	0	4	1	0	2	2	1	1	4	0	0	2021-09-18 01:31:41.977839	2021-09-18 01:31:41.977839
 167	90	10	0	0	90	40	9	0	COMMON	saiga12.yml	SHOTGUN	3	R.S.S.	SAIGA-12	39	40	SHOTGUN	2	281	2	97	1	80	2	53	2	1	2	2	918	2	48	20	4	2	2	1	1	2	2	0	14	2	6	0	6	1	0	0	2	1	1	1	0	4	0	2021-09-18 01:32:18.631009	2021-09-18 01:32:18.631009
 168	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	75	MACHINE_PISTOL	69	121	1	5	1	2	2	5	2	2	1	2	40	2	2	79	1	0	3	9	3	2	2	0	3	5	4	2	2	0	2	0	2	18	0	20	0	3	0	2021-09-18 01:32:25.682925	2021-09-18 01:32:25.682925
-169	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.81	10	6	19	10	1	1	1	5	4.3	2	10	1818	500	4	43	2	0	2	0	1	7	37	3	2	2	6	4	5	4	0	0	0	4	1	0	2	3	0	2021-09-18 01:32:40.296917	2021-09-18 01:32:40.296917
-170	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	6	2	1	2	155	15	2	2	4.3	2	10	918	1	1	20	8	1	2	0	2	2	1	2	0	4	1	0	2	16	0	0	4	1	2	0	2	4	0	2021-09-18 01:34:54.528826	2021-09-18 01:34:54.528826
+169	0	20	90	90	10	20	90	90	COMMON	psg1.yml	SNIPER	6	PF-TDN	PSG1	8	1	SNIPER	0.810000000000000053	10	6	19	10	1	1	1	5	4.29999999999999982	2	10	1818	500	4	43	2	0	2	0	1	7	37	3	2	2	6	4	5	4	0	0	0	4	1	0	2	3	0	2021-09-18 01:32:40.296917	2021-09-18 01:32:40.296917
+170	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	6	2	1	2	155	15	2	2	4.29999999999999982	2	10	918	1	1	20	8	1	2	0	2	2	1	2	0	4	1	0	2	16	0	0	4	1	2	0	2	4	0	2021-09-18 01:34:54.528826	2021-09-18 01:34:54.528826
 171	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	1	PISTOL	20.5	1	1	8	1	20	0	2	1	2	3	1	40	2	3	16	3	2	2	1	1	4	15	2	0	2	4	5	0	2	1	0	2	5	2	1	1	1	0	2021-09-18 01:35:00.363254	2021-09-18 01:35:00.363254
-172	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	475	ASSAULT_RIFLE	2	1	2	2	5	194	1	1	20	4.3	5	80	5	9	6	10	0	6	2	3	1	2	1	4	1	1	3	2	2	4	3	0	1	0	2	0	4	0	0	2021-09-18 01:35:25.11697	2021-09-18 01:35:25.11697
-173	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	47	SHOTGUN	70	6	2	34	1	1	1	1	1	4.3	2	1	1577	10	5	1	0	1	0	1	1	1	0	1	1	1	1	0	1	1	0	0	1	1	0	1	0	1	0	2021-09-18 01:43:24.324088	2021-09-18 01:43:24.324088
+172	10	10	10	10	10	10	10	10	COMMON	m4.yml	ASSAULT_RIFLE	4	Standard Issue	M4 Assault Rifle	26	475	ASSAULT_RIFLE	2	1	2	2	5	194	1	1	20	4.29999999999999982	5	80	5	9	6	10	0	6	2	3	1	2	1	4	1	1	3	2	2	4	3	0	1	0	2	0	4	0	0	2021-09-18 01:35:25.11697	2021-09-18 01:35:25.11697
+173	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	47	SHOTGUN	70	6	2	34	1	1	1	1	1	4.29999999999999982	2	1	1577	10	5	1	0	1	0	1	1	1	0	1	1	1	1	0	1	1	0	0	1	1	0	1	0	1	0	2021-09-18 01:43:24.324088	2021-09-18 01:43:24.324088
 174	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	70	1	2	1	1	80	0	53	1	1	2	1	918	10	5	1	1	0	0	1	1	0	1	1	1	1	1	0	1	0	1	0	0	1	0	1	1	1	0	2021-09-18 01:46:20.098382	2021-09-18 01:46:20.098382
 175	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	3	PISTOL	8	2	1	3	0	43	0	3	1	0	3	60	4	2	3	2	3	0	11	0	0	0	2	0	0	0	6	2	4	7	4	0	8	0	4	3	13	6	0	2022-05-19 01:26:48.903852	2022-05-19 01:26:48.903852
 176	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	303	PISTOL	3	4	1	1	0	11	2	4	1	0	3	34	40	1	3	8	3	0	4	0	0	0	13	0	0	5	2	3	12	2	0	0	2	3	15	3	13	0	0	2022-05-19 01:38:42.487015	2022-05-19 01:38:42.487015
@@ -5304,18 +5547,18 @@ COPY public.rifle_instance (rifle_id, rifle_accuracy_map_0, rifle_accuracy_map_1
 180	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	7	MACHINE_PISTOL	10	2	1	1	0	3	0	4	1	0	3	9	4	2	2	4	13	0	22	0	0	0	4	0	0	0	0	4	3	3	4	0	0	3	18	5	5	396	0	2022-05-19 14:37:20.330694	2022-05-19 14:37:20.330694
 181	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	3	LIGHT_MACHINE_GUN	3	3	20	34	2	99	6	13	719	0	33	23	63	1	1	4	3	0	21	0	0	0	3	0	0	4	22	5	3	0	681	0	4	28	41	0	6	5	0	2022-05-20 13:31:58.231794	2022-05-20 13:31:58.231794
 182	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	1	SHOTGUN	2	4	2	14	0	84	6	3	2	17	20	10	4	1	26	2	75	0	3	0	0	0	0	0	0	6	6	3	4	512	6	0	4	7	45	18	50	3	0	2022-05-20 13:34:16.536765	2022-05-20 13:34:16.536765
-183	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	2	PISTOL	0	2	3	1	0	1	0	1	1	0	5	8	1	2	5	1	1	0	1	0	0	0	1	0	0	0	1	1	1	1	1	0	1	0	0	0	0	0	0	2022-05-27 13:18:08.172337	2022-05-27 13:18:08.172337
+183	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	2	PISTOL	0	2	3	1	0	1	0	1	1	0	5	8	1	2	5	1	1	0	1	0	0	0	1	0	0	0	1	1	1	1	1	0	1	0	0	0	0	0	0	2022-05-27 13:18:08.172337	2022-05-27 13:18:08.172337
 184	80	40	13	5	50	25	10	1	COMMON	czp10.yml	PISTOL	8	TN3 SMITH-x Industrial	CZP10 pistol	7	3	PISTOL	1	4	1	1	0	20	0	1	1	0	1	1	41	1	3	8	1	0	1	0	0	0	1	0	0	1	0	0	1	1	1	0	0	0	0	0	1	1	0	2022-05-27 13:19:03.762106	2022-05-27 13:19:03.762106
 185	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	1	MACHINE_PISTOL	2	1	1	5	0	24	0	1	1	0	3	20	40	1	1	2	1	0	1	0	0	0	0	0	0	1	0	0	0	1	1	0	0	1	1	1	1	1	0	2022-05-27 13:19:43.924731	2022-05-27 13:19:43.924731
 186	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	3	PISTOL	1	1	1	5	0	20	1	1	1	0	3	20	40	2	3	1	1	0	0	0	0	0	1	0	0	1	1	0	1	1	1	0	0	1	1	1	0	1	0	2022-05-27 13:20:03.239651	2022-05-27 13:20:03.239651
 187	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	1	LIGHT_MACHINE_GUN	1	1	20	1	1	54	1	13	1	0	33	3	48	1	1	1	1	0	1	0	0	0	0	0	0	1	0	1	1	1	1	0	1	1	0	1	0	0	0	2022-05-27 13:20:34.200975	2022-05-27 13:20:34.200975
 188	80	40	13	5	50	25	10	1	COMMON	glock.yml	PISTOL	8	TN3 SMITH-x Industrial	Glock	41	1	PISTOL	1	4	1	3	0	20	0	3	1	0	1	20	1	2	3	8	1	0	1	0	0	0	1	0	0	0	0	1	1	1	1	0	1	0	2	0	0	2	0	2022-05-27 13:22:48.092889	2022-05-27 13:22:48.092889
-189	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	1	PISTOL	1	2	3	1	0	7	0	1	1	0	5	1	1	2	1	1	1	0	1	0	0	0	1	0	0	1	1	0	2	1	1	0	2	1	1	0	0	1	0	2022-05-27 13:24:34.260664	2022-05-27 13:24:34.260664
+189	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	1	PISTOL	1	2	3	1	0	7	0	1	1	0	5	1	1	2	1	1	1	0	1	0	0	0	1	0	0	1	1	0	2	1	1	0	2	1	1	0	0	1	0	2022-05-27 13:24:34.260664	2022-05-27 13:24:34.260664
 190	90	10	0	0	90	40	9	0	COMMON	sasg12.yml	SHOTGUN	3	R.S.S.	SASG-12	6	4	SHOTGUN	6	1	2	5	0	32	1	4	2	0	2	1	1	1	4	1	0	0	0	0	0	0	0	0	0	1	1	2	1	1	1	0	0	1	0	1	0	1	0	2022-05-27 13:29:40.764863	2022-05-27 13:29:40.764863
 191	90	10	0	0	80	40	0	0	COMMON	belt-fed-minigun.yml	LIGHT_MACHINE_GUN	10	TN-33Y	A TN-33Y Belt-Fed Minigun	23	69	LIGHT_MACHINE_GUN	3	2	20	4	1	1	0	5	10	0	1	10	48	2	49	1	1	0	0	0	0	0	1	0	0	0	0	2	0	1	2	0	1	0	1	1	1	0	0	2022-05-27 13:30:41.341445	2022-05-27 13:30:41.341445
 192	80	40	13	5	50	25	10	1	COMMON	ppk.yml	PISTOL	8	TN3 SMITH-x Industrial	Silenced PPK	42	3	PISTOL	2	4	1	1	0	1	1	1	1	0	8	20	1	1	3	8	1	0	0	0	0	0	1	0	0	0	1	2	2	0	2	0	1	2	2	0	1	1	0	2022-05-27 13:31:00.281053	2022-05-27 13:31:00.281053
 193	80	40	13	5	50	25	10	1	COMMON	magnum-revolver.yml	PISTOL	8	TN3 SMITH-x Industrial	Magnum Revolver	40	2	PISTOL	1	1	1	5	0	1	0	1	1	0	3	20	40	2	2	1	0	0	0	0	0	0	2	0	0	1	1	0	0	0	2	0	0	0	1	1	2	1	0	2022-05-27 13:31:38.185849	2022-05-27 13:31:38.185849
-194	23.010099	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	2	PISTOL	0	2	3	1	0	1	1	1	1	0	5	43	1	2	5	10	2	0	1	0	0	0	0	0	0	0	1	1	1	0	1	0	0	1	1	1	1	2	0	2022-05-27 13:32:20.781361	2022-05-27 13:32:20.781361
+194	23.0100990000000003	0	0	0	50	0	0	0	COMMON	desert-eagle.yml	PISTOL	8	LX Industries	Desert Eagle	47	2	PISTOL	0	2	3	1	0	1	1	1	1	0	5	43	1	2	5	10	2	0	1	0	0	0	0	0	0	0	1	1	1	0	1	0	0	1	1	1	1	2	0	2022-05-27 13:32:20.781361	2022-05-27 13:32:20.781361
 195	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	1	MACHINE_PISTOL	1	3	1	1	0	26	1	2	2	0	3	32	40	2	3	1	1	0	1	0	0	0	1	0	0	0	0	1	1	1	1	0	0	1	1	1	1	0	0	2022-05-27 19:49:47.149139	2022-05-27 19:49:47.149139
 196	80	40	13	5	50	25	10	1	COMMON	uzi.yml	PISTOL	8	TN3 SMITH-x Industrial	A Uzi	43	10	MACHINE_PISTOL	1	3	1	5	0	1	1	1	1	0	3	1	1	2	3	1	0	0	1	0	0	0	1	0	0	1	0	1	1	1	1	0	0	3	1	0	1	0	0	2022-05-27 19:50:40.916734	2022-05-27 19:50:40.916734
 197	0	20	90	90	10	20	90	90	COMMON	l96aw.yml	SNIPER	6	Heckler and Koch	L96 Arctic Warfare	24	1	SNIPER	1	3	9	8	3	24	1	1	11	0	1	10	1	2	3	2	0	0	0	0	0	0	8	0	0	0	0	1	2	0	1	0	0	0	1	1	2	1	0	2022-05-27 19:50:54.566603	2022-05-27 19:50:54.566603
@@ -5448,6 +5691,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 134	263	1	0	{blu}C.O.F.O.B:{/blu} - Server Room 1A	It's noisy and loud in here. The rack mounted servers are fervently whirring under the immense workloads. The ceiling is a grate with a large fan behind it. A complex looking locking mechanism protects rack mounted servers here. \r\n	\N	\N	1	0	\N	\N
 135	264	1	0	{blu}C.O.F.O.B:{/blu} - Server Room 1B	Wall to wall rack mounted servers take up the entirety of this room. There is almost nowhere to stand. A haphazard array of ethernet cables snake chaotically to and from each server. Maintaining this must be a headache. \r\n	\N	\N	1	0	\N	\N
 136	265	1	21	{blu}C.O.F.O.B:{/blu} - Eastern Hallway	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
+332	460	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 137	266	1	0	{blu}C.O.F.O.B:{/blu} - Gear room	A huge weapons rack is attached to the wall here. The rack contains rifles, pistols, ammunition, explosives, and breach charges.\r\n	\N	\N	1	0	cofob-gear-room	\N
 138	267	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 139	268	1	0	{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
@@ -5473,6 +5717,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 160	289	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	abbot-market-east-divergence	\N
 161	290	1	0	Destroyed overpass - Abott Market South	Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.\r\n	\N	\N	1	0	\N	\N
 162	291	1	0	Market Apartments - East entrance	An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You'd be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.\r\n	\N	\N	1	0	\N	\N
+448	576	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
 163	292	1	0	Market Apartments - East entrance	An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You'd be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.\r\n	\N	\N	1	0	\N	\N
 164	293	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N	\N
 165	294	1	0	Market Apartments - Building Way	Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. \r\n	\N	\N	1	0	\N	\N
@@ -5523,6 +5768,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 216	345	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
 217	346	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall stairs	Metal railings accompany the stairs leading down to the mess hall.\r\n	\N	\N	1	0	\N	\N
 218	347	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
+449	577	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
 219	348	1	0	{blu}C.O.F.O.B:{/blu} - Mess Hall serving area	The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.\r\n	\N	\N	1	0	\N	\N
 232	149	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 23	152	1	21	{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 1	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
@@ -5564,6 +5810,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 243	371	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 244	372	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 340	468	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	campo-conrad-drive-intersection	\N
+337	465	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N	\N
 245	373	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 246	374	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 247	375	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
@@ -5582,6 +5829,8 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 335	463	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 259	387	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 260	388	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+450	578	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	allied-foods-pharmacy-bend	\N
+451	579	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
 261	389	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 262	390	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 263	391	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
@@ -5599,6 +5848,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 274	402	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	\N	\N
 275	403	1	0	{blu}Shipyard{/blu} Entrance	Shipping containers stacked 30 to 40 stories high blot out the sun's rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. \r\n	\N	\N	1	0	shipyard-row-a	\N
 276	404	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
+452	580	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
 277	405	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
 278	406	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
 279	407	1	0	{blu}Shipyard{/blu} Shipment Row A	All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. \r\n	\N	\N	1	0	\N	\N
@@ -5636,6 +5886,8 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 306	434	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 307	435	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 308	436	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
+453	581	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
+454	582	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
 309	437	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 310	438	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
 311	439	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	\N
@@ -5659,8 +5911,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 329	457	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 330	458	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
 331	459	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-332	460	1	0	{blu}La Mesa{/blu} Kenwood Drive North	@FILL_ME@\r\n	\N	\N	1	0	\N	\N
-337	465	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N	\N
 338	466	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N	\N
 339	467	1	0	{blu}La Mesa{/blu} Campo Road 9600	Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.\r\n	\N	\N	1	0	\N	\N
 341	469	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
@@ -5676,6 +5926,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 350	478	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
 351	479	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
 352	480	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
+367	495	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	\N	\N
 353	481	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
 354	482	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
 355	483	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
@@ -5691,7 +5942,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 364	492	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	\N	\N
 365	493	1	0	{blu}La Mesa{/blu} Conrad Road	Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.\r\n	\N	\N	1	0	campo-back-alley-church-entrance	\N
 366	494	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	\N	\N
-367	495	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	\N	\N
 368	496	1	0	{blu}La Mesa{/blu} Vale church back alley entrance	An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. \r\n	\N	\N	1	0	saint-vale-nw-parking-lot	\N
 369	497	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
 370	498	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
@@ -5708,6 +5958,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 379	507	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
 444	572	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
 597	726	1	0	{blu}Hartford Bank{/blu} - Tellers	To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.\r\n	\N	\N	1	0	\N	\N
+447	575	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Carts	Four rows of black shopping carts are off to the left. The automatic door in front of you gives you a nice gust of cool air-conditioned air.\r\n	\N	\N	1	0	\N	\N
 380	508	1	0	{blu}Saint Vale Church{/blu} Parking Lot	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	saint-vale-west-entrance	\N
 381	509	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
 382	510	1	0	{blu}Saint Vale Church{/blu} Parking Lot - Row A	A huge parking lot for a giant congregation. There are administration and community buildings to the north where people often hold weddings and other communal gatherings. To the south you spot a building where the staff go when services are over. It seems to be heavily fortified, which seems odd, given that this is a place of worship. The Church itself is to the East and it's main bell tower casts a looming shadow over the rest of the building and parking lot.\r\n	\N	\N	1	0	\N	\N
@@ -5763,14 +6014,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 439	567	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
 440	568	1	0	{blu}Saint Vale Church{/blu} Inside - Altar	A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.\r\n	\N	\N	1	0	\N	\N
 446	574	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Entrance	A large green and white sign looms above your head. {grn}Allied Foods{/grn} is the main food source for the local community. It's central location is within walking distance for most of the residents.\r\n	\N	\N	1	0	\N	\N
-447	575	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Carts	Four rows of black shopping carts are off to the left. The automatic door in front of you gives you a nice gust of cool air-conditioned air.\r\n	\N	\N	1	0	\N	\N
-448	576	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
-449	577	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
-450	578	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	allied-foods-pharmacy-bend	\N
-451	579	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
-452	580	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
-453	581	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy	A Pharmacy\r\n	\N	\N	1	0	\N	\N
-454	582	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
 455	583	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
 456	584	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
 457	585	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle	A shower isle\r\n	\N	\N	1	0	\N	\N
@@ -5795,6 +6038,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 475	603	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Dairy	The isle is dimly lit but that doesn't affect your vision of the contents of this isle. Every product here is in a white container. Milks, butters, cream cheese.. all sorts of kinds of almond milks.. At the end of the isle you notice an end cap displaying a high grade vokda. How appropriate.\r\n	\N	\N	1	0	allied-foods-dairy-end	\N
 476	604	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
 477	605	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
+1274	1018	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
 478	606	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
 479	607	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
 480	608	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Alcohol Isle 2	Both sides of the isle contain huge amounts of name brand alcoholic beverages. You notice that there aren't any beers. The only types of alcohol are high strength variants like vodka, rum, and whiskey. An {red}explosion{/red} in this isle would be {grn}fatal{/grn}.\r\n	\N	\N	1	0	\N	\N
@@ -5853,6 +6097,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 531	659	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
 532	660	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
 533	661	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-east-1	\N
+1299	1043	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
 534	662	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
 535	663	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	\N	\N
 536	664	1	0	{grn}Abbot Market East{/grn} - Allied Foods - Butcher	The frigid air of a freezer section assaults you into a new state of wakefulness. The white tiled floor has turned to an uneven amount of pink and black due to a large amount of foot traffic here. Soot and tracked-in dirt color the floor in uneven patterns that get heavier the further south you go.\r\n	\N	\N	1	0	defiler-corner-2	\N
@@ -6036,6 +6281,7 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 702	834	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
 703	835	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
 704	836	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
+769	901	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
 721	853	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
 722	854	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
 723	855	1	0	{blu}Crenshaw{/blu} Highway 94 East	A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren't taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.\r\n	\N	\N	1	0	\N	,AIR,DESERT,DRY,OUTSIDE
@@ -6087,7 +6333,6 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 766	898	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
 767	899	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
 768	900	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
-769	901	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
 770	902	1	25	{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium	You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,TILE
 771	903	1	0	name	description	\N	\N	1	0	\N	\N
 772	904	1	0	name	description	\N	\N	1	0	psi-tech-hatch	,INSIDE,METAL_HATCH,TILE
@@ -6179,8 +6424,202 @@ COPY public.room (id, room_number, zone, sector_type, name, description, ex_keyw
 827	961	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS
 828	962	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS
 816	950	1	0	{blu}On Base{/blu} - Hydro-Processing - Terminal	A large proportion of the room consists of a locked down computer terminal with old hardware. But it doesn't seem to be just old hardware: everything about it is built to withstand several attempts at trying to access the hardware inside. Things like the hard drives or the device in charge of the biometric interface. It's been said that this terminal can survive several grenade blasts. As of yet, nobody has tried to compromise the  machine, but never say never.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS
-785	919	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	maintenance_guard-roaming-6	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
 805	939	1	0	{blu}On Base{/blu} - Hydro-Processing	For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.\r\n	\N	\N	1	0	hydro-proc-extremists-roaming-4	,INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS
+785	919	1	0	{blu}C.O.F.O.B{/blu} - Maintenance	You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. \r\n	\N	\N	1	0	maintenance_guard-roaming-6	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1221	965	1	0	{blu}Kojima{/blu} - Bridge - North	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1222	966	1	0	{blu}Kojima{/blu} - Bridge - North	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1223	967	1	0	{blu}Kojima{/blu} - Bridge - North	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1224	968	1	0	{blu}Kojima{/blu} - Bridge - North	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1225	969	1	0	{blu}Kojima{/blu} - Bridge - North	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1226	970	1	0	{blu}Kojima{/blu} - Bridge - North - Section A	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	kojima-spawn-scout-1	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1227	971	1	0	{blu}Kojima{/blu} - Bridge - North - Section A	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1228	972	1	0	{blu}Kojima{/blu} - Bridge - North - Section A	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1229	973	1	0	{blu}Kojima{/blu} - Bridge - North - Section A	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	kojima-spawn-lancer-1	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1230	974	1	0	{blu}Kojima{/blu} - Bridge - North - Near Checkpoint	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1231	975	1	0	{blu}Kojima{/blu} - Bridge - North - Near Checkpoint	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1232	976	1	0	{blu}Kojima{/blu} - Bridge - North - Near Checkpoint	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	kojima-north-1	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1233	977	1	0	{blu}Kojima{/blu} - Bridge - North - Checkpoint	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1234	978	1	0	{blu}Kojima{/blu} - Bridge - North - Checkpoint	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1235	979	1	0	{blu}Kojima{/blu} - Bridge - North - Checkpoint	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	kojima-bridge-northwest-1	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1236	980	1	0	{blu}Kojima{/blu} - Bridge - North - Checkpoint	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1237	981	1	0	{blu}Kojima{/blu} - Bridge - North - Checkpoint	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1238	982	1	0	{blu}Kojima{/blu} - Bridge - North - Checkpoint	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1239	983	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	kojima-spawn-lancer-2	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1240	984	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1241	985	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1242	986	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1243	987	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1244	988	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1245	989	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1246	990	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1247	991	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1248	992	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1249	993	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1250	994	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1251	995	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1252	996	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1273	1017	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-lancer-4	\N
+1253	997	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1254	998	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1255	999	1	0	{blu}Kojima{/blu} - Bridge - North - Outer Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1256	1000	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1257	1001	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1258	1002	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1259	1003	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1260	1004	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1261	1005	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	kojima-spawn-trooper-1	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1262	1006	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1263	1007	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1264	1008	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1265	1009	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1266	1010	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	\N	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1267	1011	1	0	{blu}Kojima{/blu} - Bridge - Northwest - Bridge	To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It's likely there are camoflauged drones scanning your every move.\r\n	\N	\N	1	0	kojima-spawn-trooper-2	,AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE
+1268	1012	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1269	1013	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-scout-2	\N
+1270	1014	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1271	1015	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-lancer-3	\N
+1272	1016	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-scout-3	\N
+1275	1019	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-lancer-5	\N
+1276	1020	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1277	1021	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1278	1022	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1279	1023	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-lancer-6	\N
+1280	1024	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1281	1025	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1282	1026	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1283	1027	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1284	1028	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-junction-A	\N
+1285	1029	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1286	1030	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1287	1031	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1288	1032	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1289	1033	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1290	1034	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-lancer-8	\N
+1291	1035	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1292	1036	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-eviscerator-2	\N
+1293	1037	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1294	1038	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1295	1039	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-eviscerator-3	\N
+1296	1040	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1297	1041	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1298	1042	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1300	1044	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1301	1045	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1302	1046	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-eviscerator-4	\N
+1303	1047	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1304	1048	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1305	1049	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-eviscerator-5	\N
+1306	1050	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-north-entrance-west	\N
+1307	1051	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-north-entrance-east	\N
+1308	1052	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1309	1053	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1310	1054	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-scout-4	\N
+1311	1055	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1312	1056	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-lancer-9	\N
+1313	1057	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1314	1058	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-scout-5	\N
+1315	1059	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1316	1060	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-eviscerator-6	\N
+1317	1061	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1318	1062	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1319	1063	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-lancer-10	\N
+1320	1064	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1321	1065	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-scout-6	\N
+1322	1066	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1323	1067	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1324	1068	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1325	1069	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-zone-to-x1	\N
+1326	1070	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1327	1071	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-scout-7	\N
+1328	1072	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-lancer-11	\N
+1329	1073	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1330	1074	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-zone-to-x2	\N
+1331	1075	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-drop-to-d3	\N
+1332	1076	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1333	1077	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1334	1078	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-lancer-12	\N
+1335	1079	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1336	1080	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-spawn-lancer-13	\N
+1337	1081	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1338	1082	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1339	1083	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1340	1084	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	\N	\N
+1341	1085	1	0	{blu}Kojima{/blu} - Bridge Outside	Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.\r\n	\N	\N	1	0	kojima-zone-to-x3	\N
+1342	1086	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	kojima-inside-west	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1343	1087	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1344	1088	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1345	1089	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	kojima-spawn-lancer-14	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1346	1090	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1347	1091	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	kojima-spawn-scout-8	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1348	1092	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1349	1093	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	kojima-spawn-scout-9	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1350	1094	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	kojima-junction-C-INSIDE	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1351	1095	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1352	1096	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1353	1097	1	0	{blu}Kojima{/blu} - Mysterious Payload	The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1354	1098	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1355	1099	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1356	1100	1	0	{blu}Kojima{/blu} - Mysterious Payload	The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1357	1101	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1358	1102	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1359	1103	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	kojima-spawn-scout-10	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1360	1104	1	0	{blu}Kojima{/blu} - Mysterious Payload	The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1361	1105	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1362	1106	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1363	1107	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1364	1108	1	0	{blu}Kojima{/blu} - An ammunition container	The room is empty except for a tall ammunition container that happens to be unlocked. The size of the container is massive and could potentiall hold very powerful items,\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1365	1109	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1366	1110	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1367	1111	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1368	1112	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1369	1113	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1370	1114	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1371	1115	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1372	1116	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1373	1117	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1374	1118	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1375	1119	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1376	1120	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1377	1121	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1378	1122	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1379	1123	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1380	1124	1	0	{blu}Kojima{/blu} - Mysterious Payload	The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1381	1125	1	0	{blu}Kojima{/blu} - Mysterious Payload	The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1382	1126	1	0	{blu}Kojima{/blu} - Mysterious Payload	The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1383	1127	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1384	1128	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1385	1129	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1386	1130	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1387	1131	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1388	1132	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1389	1133	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1390	1134	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1391	1135	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1392	1136	1	0	{blu}Kojima{/blu} - Mysterious Payload	The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1393	1137	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1394	1138	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1395	1139	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1396	1140	1	0	{blu}Kojima{/blu} - Mysterious Payload	The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1397	1141	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1398	1142	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1399	1143	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1400	1144	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1401	1145	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1402	1146	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1403	1147	1	0	{blu}Kojima{/blu} - An ammunition container	The room is empty except for a tall ammunition container that happens to be unlocked. The size of the container is massive and could potentiall hold very powerful items,\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1404	1148	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1405	1149	1	0	{blu}Kojima{/blu} - Mysterious Payload	The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1406	1150	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1407	1151	1	0	{blu}Kojima{/blu} - An ammunition container	The room is empty except for a tall ammunition container that happens to be unlocked. The size of the container is massive and could potentiall hold very powerful items,\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1408	1152	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1409	1153	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1410	1154	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1411	1155	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1412	1156	1	0	{blu}Kojima{/blu} - An ammunition container	The room is empty except for a tall ammunition container that happens to be unlocked. The size of the container is massive and could potentiall hold very powerful items,\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1413	1157	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1414	1158	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1415	1159	1	0	{blu}Kojima{/blu} - Inside Kojima Corp	The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you're being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.\r\n	\N	\N	1	0	\N	,GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
+1416	1160	1	0	{blu}Kojima{/blu} - An ammunition container	The room is empty except for a tall ammunition container that happens to be unlocked. The size of the container is massive and could potentiall hold very powerful items,\r\n	\N	\N	1	0	\N	,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS
 \.
 
 
@@ -9839,6 +10278,399 @@ COPY public.room_direction_data (id, room_number, exit_direction, general_descri
 4223	938	2	general_description	keyword	1	0	939
 4224	939	0	general description	keyword	1	0	938
 4225	939	3	general_description	keyword	1	0	940
+4226	919	0	general description	keyword	1	0	918
+4227	919	1	general_description	keyword	1	0	965
+4228	965	1	general_description	keyword	1	0	966
+4229	965	3	general description	keyword	1	0	919
+4230	966	1	general_description	keyword	1	0	967
+4231	966	3	general description	keyword	1	0	965
+4232	967	1	general_description	keyword	1	0	968
+4233	967	3	general description	keyword	1	0	966
+4234	968	1	general_description	keyword	1	0	969
+4235	968	3	general description	keyword	1	0	967
+4236	969	2	general_description	keyword	1	0	970
+4237	969	3	general description	keyword	1	0	968
+4238	970	0	general description	keyword	1	0	969
+4239	970	2	general_description	keyword	1	0	971
+4240	971	0	general description	keyword	1	0	970
+4241	971	2	general_description	keyword	1	0	972
+4242	972	0	general description	keyword	1	0	971
+4243	972	2	general_description	keyword	1	0	973
+4244	973	0	general description	keyword	1	0	972
+4245	973	3	general_description	keyword	1	0	974
+4246	974	1	general description	keyword	1	0	973
+4247	974	3	general_description	keyword	1	0	975
+4248	975	1	general description	keyword	1	0	974
+4249	975	3	general_description	keyword	1	0	976
+4250	976	1	general description	keyword	1	0	975
+4251	976	2	general_description	keyword	1	0	977
+4252	977	0	general description	keyword	1	0	976
+4253	977	2	general_description	keyword	1	0	978
+4254	978	0	general description	keyword	1	0	977
+4255	978	2	general_description	keyword	1	0	979
+4256	979	0	general description	keyword	1	0	978
+4257	979	2	general_description	keyword	1	0	980
+4258	979	3	general_description	keyword	1	0	1000
+4259	980	0	general description	keyword	1	0	979
+4260	980	2	general_description	keyword	1	0	981
+4261	981	0	general description	keyword	1	0	980
+4262	981	2	general_description	keyword	1	0	982
+4263	982	0	general description	keyword	1	0	981
+4264	982	2	general_description	keyword	1	0	983
+4265	983	0	general description	keyword	1	0	982
+4266	983	1	general_description	keyword	1	0	987
+4267	983	3	general_description	keyword	1	0	984
+4268	984	1	general description	keyword	1	0	983
+4269	984	3	general_description	keyword	1	0	985
+4270	985	1	general description	keyword	1	0	984
+4271	985	3	general_description	keyword	1	0	986
+4272	986	1	general description	keyword	1	0	985
+4273	987	1	general_description	keyword	1	0	988
+4274	987	3	general description	keyword	1	0	983
+4275	988	1	general_description	keyword	1	0	989
+4276	988	3	general description	keyword	1	0	987
+4277	989	1	general_description	keyword	1	0	990
+4278	989	3	general description	keyword	1	0	988
+4279	990	1	general_description	keyword	1	0	991
+4280	990	3	general description	keyword	1	0	989
+4281	991	1	general_description	keyword	1	0	992
+4282	991	3	general description	keyword	1	0	990
+4283	992	1	general_description	keyword	1	0	993
+4284	992	3	general description	keyword	1	0	991
+4285	993	1	general_description	keyword	1	0	994
+4286	993	3	general description	keyword	1	0	992
+4287	994	1	general_description	keyword	1	0	995
+4288	994	3	general description	keyword	1	0	993
+4289	995	1	general_description	keyword	1	0	996
+4290	995	3	general description	keyword	1	0	994
+4291	996	1	general_description	keyword	1	0	997
+4292	996	3	general description	keyword	1	0	995
+4293	997	1	general_description	keyword	1	0	998
+4294	997	3	general description	keyword	1	0	996
+4295	998	1	general_description	keyword	1	0	999
+4296	998	3	general description	keyword	1	0	997
+4297	999	3	general description	keyword	1	0	998
+4298	1000	1	general description	keyword	1	0	979
+4299	1000	3	general_description	keyword	1	0	1001
+4300	1001	1	general description	keyword	1	0	1000
+4301	1001	3	general_description	keyword	1	0	1002
+4302	1002	1	general description	keyword	1	0	1001
+4303	1002	2	general_description	keyword	1	0	1006
+4304	1002	3	general_description	keyword	1	0	1003
+4305	1003	1	general description	keyword	1	0	1002
+4306	1003	3	general_description	keyword	1	0	1004
+4307	1004	1	general description	keyword	1	0	1003
+4308	1004	3	general_description	keyword	1	0	1005
+4309	1005	1	general description	keyword	1	0	1004
+4310	1006	0	general description	keyword	1	0	1002
+4311	1006	2	general_description	keyword	1	0	1007
+4312	1007	0	general description	keyword	1	0	1006
+4313	1007	3	general_description	keyword	1	0	1008
+4314	1008	1	general description	keyword	1	0	1007
+4315	1008	3	general_description	keyword	1	0	1009
+4316	1009	1	general description	keyword	1	0	1008
+4317	1009	3	general_description	keyword	1	0	1010
+4318	1010	1	general description	keyword	1	0	1009
+4319	1010	3	general_description	keyword	1	0	1011
+4320	1011	1	general description	keyword	1	0	1010
+4321	1011	2	general_description	keyword	1	0	1012
+4322	1012	0	general description	keyword	1	0	1011
+4323	1012	2	general_description	keyword	1	0	1013
+4324	1013	0	general description	keyword	1	0	1012
+4325	1013	3	general_description	keyword	1	0	1014
+4326	1014	1	general description	keyword	1	0	1013
+4327	1014	3	general_description	keyword	1	0	1015
+4328	1015	1	general description	keyword	1	0	1014
+4329	1015	2	general_description	keyword	1	0	1016
+4330	1016	0	general description	keyword	1	0	1015
+4331	1016	2	general_description	keyword	1	0	1017
+4332	1017	0	general description	keyword	1	0	1016
+4333	1017	1	general_description	keyword	1	0	1018
+4334	1018	1	general_description	keyword	1	0	1019
+4335	1018	2	general_description	keyword	1	0	1021
+4336	1018	3	general description	keyword	1	0	1017
+4337	1019	1	general_description	keyword	1	0	1020
+4338	1019	3	general description	keyword	1	0	1018
+4339	1020	3	general description	keyword	1	0	1019
+4340	1021	0	general description	keyword	1	0	1018
+4341	1021	2	general_description	keyword	1	0	1022
+4342	1022	0	general description	keyword	1	0	1021
+4343	1022	2	general_description	keyword	1	0	1023
+4344	1023	0	general description	keyword	1	0	1022
+4345	1023	1	general_description	keyword	1	0	1024
+4346	1024	1	general_description	keyword	1	0	1025
+4347	1024	3	general description	keyword	1	0	1023
+4348	1025	1	general_description	keyword	1	0	1026
+4349	1025	3	general description	keyword	1	0	1024
+4350	1026	1	general_description	keyword	1	0	1027
+4351	1026	2	general_description	keyword	1	0	1052
+4352	1026	3	general description	keyword	1	0	1025
+4353	1027	1	general_description	keyword	1	0	1028
+4354	1027	3	general description	keyword	1	0	1026
+4355	1028	0	general_description	keyword	1	0	1032
+4356	1028	2	general_description	keyword	1	0	1029
+4357	1028	3	general description	keyword	1	0	1027
+4358	1029	0	general description	keyword	1	0	1028
+4359	1029	2	general_description	keyword	1	0	1030
+4360	1030	0	general description	keyword	1	0	1029
+4361	1030	2	general_description	keyword	1	0	1031
+4362	1031	0	general description	keyword	1	0	1030
+4363	1032	0	general_description	keyword	1	0	1033
+4364	1032	2	general description	keyword	1	0	1028
+4365	1033	0	general_description	keyword	1	0	1034
+4366	1033	2	general description	keyword	1	0	1032
+4367	1034	1	general_description	keyword	1	0	1035
+4368	1034	2	general description	keyword	1	0	1033
+4369	1035	1	general_description	keyword	1	0	1036
+4370	1035	3	general description	keyword	1	0	1034
+4371	1036	1	general_description	keyword	1	0	1037
+4372	1036	3	general description	keyword	1	0	1035
+4373	1037	1	general_description	keyword	1	0	1038
+4374	1037	3	general description	keyword	1	0	1036
+4375	1038	1	general_description	keyword	1	0	1039
+4376	1038	3	general description	keyword	1	0	1037
+4377	1039	1	general_description	keyword	1	0	1040
+4378	1039	2	general_description	keyword	1	0	1044
+4379	1039	3	general description	keyword	1	0	1038
+4380	1040	1	general_description	keyword	1	0	1041
+4381	1040	3	general description	keyword	1	0	1039
+4382	1041	1	general_description	keyword	1	0	1042
+4383	1041	3	general description	keyword	1	0	1040
+4384	1042	1	general_description	keyword	1	0	1043
+4385	1042	3	general description	keyword	1	0	1041
+4386	1043	3	general description	keyword	1	0	1042
+4387	1044	0	general description	keyword	1	0	1039
+4388	1044	2	general_description	keyword	1	0	1045
+4389	1045	0	general description	keyword	1	0	1044
+4390	1045	2	general_description	keyword	1	0	1046
+4391	1045	3	general_description	keyword	1	0	1047
+4392	1046	0	general description	keyword	1	0	1045
+4393	1046	2	general_description	keyword	1	0	1051
+4394	1047	1	general description	keyword	1	0	1045
+4395	1047	3	general_description	keyword	1	0	1048
+4396	1048	1	general description	keyword	1	0	1047
+4397	1048	2	general_description	keyword	1	0	1049
+4398	1049	0	general description	keyword	1	0	1048
+4399	1049	2	general_description	keyword	1	0	1050
+4400	1050	0	general description	keyword	1	0	1049
+4401	1051	0	general description	keyword	1	0	1046
+4402	1052	0	general description	keyword	1	0	1026
+4403	1052	2	general_description	keyword	1	0	1053
+4404	1053	0	general description	keyword	1	0	1052
+4405	1053	2	general_description	keyword	1	0	1054
+4406	1054	0	general description	keyword	1	0	1053
+4407	1054	3	general_description	keyword	1	0	1055
+4408	1055	1	general description	keyword	1	0	1054
+4409	1055	3	general_description	keyword	1	0	1056
+4410	1056	1	general description	keyword	1	0	1055
+4411	1056	2	general_description	keyword	1	0	1057
+4412	1057	0	general description	keyword	1	0	1056
+4413	1057	2	general_description	keyword	1	0	1058
+4414	1058	0	general description	keyword	1	0	1057
+4415	1058	2	general_description	keyword	1	0	1059
+4416	1059	0	general description	keyword	1	0	1058
+4417	1059	2	general_description	keyword	1	0	1060
+4418	1060	0	general description	keyword	1	0	1059
+4419	1060	1	general_description	keyword	1	0	1086
+4420	1060	3	general_description	keyword	1	0	1061
+4421	1061	1	general description	keyword	1	0	1060
+4422	1061	3	general_description	keyword	1	0	1062
+4423	1062	1	general description	keyword	1	0	1061
+4424	1062	3	general_description	keyword	1	0	1063
+4425	1063	0	general_description	keyword	1	0	1064
+4426	1063	1	general description	keyword	1	0	1062
+4427	1063	2	general_description	keyword	1	0	1070
+4428	1064	0	general_description	keyword	1	0	1065
+4429	1064	2	general description	keyword	1	0	1063
+4430	1065	0	general_description	keyword	1	0	1066
+4431	1065	2	general description	keyword	1	0	1064
+4432	1066	2	general description	keyword	1	0	1065
+4433	1066	3	general_description	keyword	1	0	1067
+4434	1067	1	general description	keyword	1	0	1066
+4435	1067	3	general_description	keyword	1	0	1068
+4436	1068	1	general description	keyword	1	0	1067
+4437	1068	3	general_description	keyword	1	0	1069
+4438	1069	1	general description	keyword	1	0	1068
+4439	1070	0	general description	keyword	1	0	1063
+4440	1070	2	general_description	keyword	1	0	1071
+4441	1071	0	general description	keyword	1	0	1070
+4442	1071	2	general_description	keyword	1	0	1075
+4443	1071	3	general_description	keyword	1	0	1072
+4444	1072	1	general description	keyword	1	0	1071
+4445	1072	3	general_description	keyword	1	0	1073
+4446	1073	1	general description	keyword	1	0	1072
+4447	1073	3	general_description	keyword	1	0	1074
+4448	1074	1	general description	keyword	1	0	1073
+4449	1075	0	general description	keyword	1	0	1071
+4450	1075	2	general_description	keyword	1	0	1076
+4451	1076	0	general description	keyword	1	0	1075
+4452	1076	2	general_description	keyword	1	0	1077
+4453	1077	0	general description	keyword	1	0	1076
+4454	1077	2	general_description	keyword	1	0	1078
+4455	1078	0	general description	keyword	1	0	1077
+4456	1078	1	general_description	keyword	1	0	1079
+4457	1079	1	general_description	keyword	1	0	1080
+4458	1079	3	general description	keyword	1	0	1078
+4459	1080	2	general_description	keyword	1	0	1081
+4460	1080	3	general description	keyword	1	0	1079
+4461	1081	0	general description	keyword	1	0	1080
+4462	1081	2	general_description	keyword	1	0	1082
+4463	1082	0	general description	keyword	1	0	1081
+4464	1082	2	general_description	keyword	1	0	1083
+4465	1083	0	general description	keyword	1	0	1082
+4466	1083	2	general_description	keyword	1	0	1084
+4467	1084	0	general description	keyword	1	0	1083
+4468	1084	2	general_description	keyword	1	0	1085
+4469	1085	0	general description	keyword	1	0	1084
+4470	1086	1	general_description	keyword	1	0	1087
+4471	1086	3	general description	keyword	1	0	1060
+4472	1087	0	general_description	keyword	1	0	1088
+4473	1087	3	general description	keyword	1	0	1086
+4474	1088	0	general_description	keyword	1	0	1089
+4475	1088	2	general description	keyword	1	0	1087
+4476	1089	1	general_description	keyword	1	0	1090
+4477	1089	2	general description	keyword	1	0	1088
+4478	1090	1	general_description	keyword	1	0	1091
+4479	1090	3	general description	keyword	1	0	1089
+4480	1091	1	general_description	keyword	1	0	1092
+4481	1091	2	general_description	keyword	1	0	1097
+4482	1091	3	general description	keyword	1	0	1090
+4483	1092	1	general_description	keyword	1	0	1093
+4484	1092	3	general description	keyword	1	0	1091
+4485	1093	1	general_description	keyword	1	0	1094
+4486	1093	3	general description	keyword	1	0	1092
+4487	1094	0	general_description	keyword	1	0	1098
+4488	1094	1	general_description	keyword	1	0	1095
+4489	1094	2	general_description	keyword	1	0	1101
+4490	1094	3	general description	keyword	1	0	1093
+4491	1095	1	general_description	keyword	1	0	1096
+4492	1095	3	general description	keyword	1	0	1094
+4493	1096	0	general_description	keyword	1	0	1141
+4494	1096	3	general description	keyword	1	0	1095
+4495	1097	0	general description	keyword	1	0	1091
+4496	1098	0	general_description	keyword	1	0	1099
+4497	1098	2	general description	keyword	1	0	1094
+4498	1099	2	general description	keyword	1	0	1098
+4499	1099	3	general_description	keyword	1	0	1100
+4500	1100	1	general description	keyword	1	0	1099
+4501	1101	0	general description	keyword	1	0	1094
+4502	1101	2	general_description	keyword	1	0	1102
+4503	1102	0	general description	keyword	1	0	1101
+4504	1102	2	general_description	keyword	1	0	1103
+4505	1103	0	general description	keyword	1	0	1102
+4506	1103	2	general_description	keyword	1	0	1105
+4507	1103	3	general_description	keyword	1	0	1104
+4508	1104	1	general description	keyword	1	0	1103
+4509	1105	0	general description	keyword	1	0	1103
+4510	1105	2	general_description	keyword	1	0	1106
+4511	1106	0	general description	keyword	1	0	1105
+4512	1106	2	general_description	keyword	1	0	1107
+4513	1107	0	general description	keyword	1	0	1106
+4514	1107	2	general_description	keyword	1	0	1109
+4515	1107	3	general_description	keyword	1	0	1108
+4516	1108	1	general description	keyword	1	0	1107
+4517	1109	0	general description	keyword	1	0	1107
+4518	1109	2	general_description	keyword	1	0	1110
+4519	1110	0	general description	keyword	1	0	1109
+4520	1110	2	general_description	keyword	1	0	1111
+4521	1111	0	general description	keyword	1	0	1110
+4522	1111	1	general_description	keyword	1	0	1112
+4523	1112	1	general_description	keyword	1	0	1113
+4524	1112	3	general description	keyword	1	0	1111
+4525	1113	1	general_description	keyword	1	0	1114
+4526	1113	3	general description	keyword	1	0	1112
+4527	1114	1	general_description	keyword	1	0	1115
+4528	1114	3	general description	keyword	1	0	1113
+4529	1115	0	general_description	keyword	1	0	1116
+4530	1115	3	general description	keyword	1	0	1114
+4531	1116	0	general_description	keyword	1	0	1117
+4532	1116	2	general description	keyword	1	0	1115
+4533	1117	0	general_description	keyword	1	0	1120
+4534	1117	2	general description	keyword	1	0	1116
+4535	1117	3	general_description	keyword	1	0	1118
+4536	1118	1	general description	keyword	1	0	1117
+4537	1118	3	general_description	keyword	1	0	1119
+4538	1119	1	general description	keyword	1	0	1118
+4539	1120	0	general_description	keyword	1	0	1121
+4540	1120	2	general description	keyword	1	0	1117
+4541	1121	0	general_description	keyword	1	0	1122
+4542	1121	2	general description	keyword	1	0	1120
+4543	1122	0	general_description	keyword	1	0	1127
+4544	1122	1	general_description	keyword	1	0	1123
+4545	1122	2	general description	keyword	1	0	1121
+4546	1123	1	general_description	keyword	1	0	1124
+4547	1123	3	general description	keyword	1	0	1122
+4548	1124	2	general_description	keyword	1	0	1125
+4549	1124	3	general description	keyword	1	0	1123
+4550	1125	0	general description	keyword	1	0	1124
+4551	1125	2	general_description	keyword	1	0	1126
+4552	1126	0	general description	keyword	1	0	1125
+4553	1127	0	general_description	keyword	1	0	1128
+4554	1127	2	general description	keyword	1	0	1122
+4555	1128	1	general_description	keyword	1	0	1129
+4556	1128	2	general description	keyword	1	0	1127
+4557	1129	1	general_description	keyword	1	0	1130
+4558	1129	3	general description	keyword	1	0	1128
+4559	1130	1	general_description	keyword	1	0	1131
+4560	1130	3	general description	keyword	1	0	1129
+4561	1131	1	general_description	keyword	1	0	1132
+4562	1131	3	general description	keyword	1	0	1130
+4563	1132	1	general_description	keyword	1	0	1133
+4564	1132	2	general_description	keyword	1	0	1134
+4565	1132	3	general description	keyword	1	0	1131
+4566	1133	3	general description	keyword	1	0	1132
+4567	1134	0	general description	keyword	1	0	1132
+4568	1134	2	general_description	keyword	1	0	1135
+4569	1135	0	general description	keyword	1	0	1134
+4570	1135	1	general_description	keyword	1	0	1136
+4571	1136	2	general_description	keyword	1	0	1137
+4572	1136	3	general description	keyword	1	0	1135
+4573	1137	0	general description	keyword	1	0	1136
+4574	1137	2	general_description	keyword	1	0	1138
+4575	1138	0	general description	keyword	1	0	1137
+4576	1138	2	general_description	keyword	1	0	1139
+4577	1139	0	general description	keyword	1	0	1138
+4578	1139	2	general_description	keyword	1	0	1140
+4579	1140	0	general description	keyword	1	0	1139
+4580	1141	0	general_description	keyword	1	0	1142
+4581	1141	2	general description	keyword	1	0	1096
+4582	1142	1	general_description	keyword	1	0	1143
+4583	1142	2	general description	keyword	1	0	1141
+4584	1143	1	general_description	keyword	1	0	1144
+4585	1143	3	general description	keyword	1	0	1142
+4586	1144	1	general_description	keyword	1	0	1145
+4587	1144	3	general description	keyword	1	0	1143
+4588	1145	2	general_description	keyword	1	0	1146
+4589	1145	3	general description	keyword	1	0	1144
+4590	1146	0	general description	keyword	1	0	1145
+4591	1146	2	general_description	keyword	1	0	1147
+4592	1147	0	general description	keyword	1	0	1146
+4593	1147	1	general_description	keyword	1	0	1148
+4594	1148	1	general_description	keyword	1	0	1149
+4595	1148	3	general description	keyword	1	0	1147
+4596	1149	1	general_description	keyword	1	0	1150
+4597	1149	3	general description	keyword	1	0	1148
+4598	1150	1	general_description	keyword	1	0	1151
+4599	1150	3	general description	keyword	1	0	1149
+4600	1151	0	general_description	keyword	1	0	1152
+4601	1151	3	general description	keyword	1	0	1150
+4602	1152	0	general_description	keyword	1	0	1153
+4603	1152	2	general description	keyword	1	0	1151
+4604	1153	0	general_description	keyword	1	0	1154
+4605	1153	2	general description	keyword	1	0	1152
+4606	1154	0	general_description	keyword	1	0	1155
+4607	1154	2	general description	keyword	1	0	1153
+4608	1155	0	general_description	keyword	1	0	1156
+4609	1155	2	general description	keyword	1	0	1154
+4610	1156	2	general description	keyword	1	0	1155
+4611	1156	3	general_description	keyword	1	0	1157
+4612	1157	1	general description	keyword	1	0	1156
+4613	1157	3	general_description	keyword	1	0	1158
+4614	1158	1	general description	keyword	1	0	1157
+4615	1158	3	general_description	keyword	1	0	1159
+4616	1159	1	general description	keyword	1	0	1158
+4617	1159	3	general_description	keyword	1	0	1160
+4618	1160	1	general description	keyword	1	0	1159
 \.
 
 
@@ -10409,6 +11241,192 @@ COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_
 1568	1	M	0	102	310	2	\N
 1569	1	M	0	102	317	2	\N
 1570	1	M	0	102	324	2	\N
+1685	1	M	0	715	1005	1	\N
+1686	1	M	0	715	1011	1	\N
+1687	1	M	0	714	973	1	\N
+1688	1	M	0	714	983	1	\N
+1689	1	M	0	714	1015	1	\N
+1690	1	M	0	714	1017	1	\N
+1691	1	M	0	714	1019	1	\N
+1692	1	M	0	714	1023	1	\N
+1693	1	M	0	714	1028	1	\N
+1694	1	M	0	714	1034	1	\N
+1695	1	M	0	714	1056	1	\N
+1696	1	M	0	714	1063	1	\N
+1697	1	M	0	714	1072	1	\N
+1698	1	M	0	714	1078	1	\N
+1699	1	M	0	714	1080	1	\N
+1700	1	M	0	714	1089	1	\N
+1701	1	M	0	714	1094	1	\N
+1702	1	M	0	713	970	1	\N
+1703	1	M	0	713	1013	1	\N
+1704	1	M	0	713	1016	1	\N
+1705	1	M	0	713	1054	1	\N
+1706	1	M	0	713	1058	1	\N
+1707	1	M	0	713	1065	1	\N
+1708	1	M	0	713	1071	1	\N
+1709	1	M	0	713	1091	1	\N
+1710	1	M	0	713	1093	1	\N
+1711	1	M	0	713	1103	1	\N
+1712	1	M	0	716	979	1	\N
+1713	1	M	0	716	1036	1	\N
+1714	1	M	0	716	1039	1	\N
+1715	1	M	0	716	1046	1	\N
+1716	1	M	0	716	1049	1	\N
+1717	1	M	0	716	1060	1	\N
+\.
+
+
+--
+-- Data for Name: zone_mob; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.zone_mob (id, zm_room_vnum, zm_mob_vnum, zm_max) FROM stdin;
+1	143	600	1
+2	147	601	8
+3	143	602	1
+4	266	603	1
+5	131	500	10
+6	131	501	10
+7	212	502	2
+8	207	502	2
+9	204	502	2
+10	340	502	2
+11	199	502	2
+12	279	502	2
+13	139	502	2
+14	578	109	16
+15	589	109	16
+16	600	109	16
+17	611	109	16
+18	622	109	16
+19	592	109	16
+20	614	109	16
+21	625	109	16
+22	636	109	16
+23	578	110	16
+24	589	110	16
+25	600	110	16
+26	611	110	16
+27	622	110	16
+28	592	110	16
+29	614	110	16
+30	625	110	16
+31	636	110	16
+32	729	106	1
+33	730	106	1
+34	731	106	1
+35	732	106	1
+36	729	107	1
+37	730	107	1
+38	731	107	1
+39	732	107	1
+40	910	669	6
+41	697	114	10
+42	698	114	10
+43	689	114	10
+44	696	114	10
+45	151	114	10
+46	697	115	10
+47	698	115	10
+48	689	115	10
+49	696	115	10
+50	151	115	10
+51	935	670	10
+52	936	670	10
+53	937	670	10
+54	938	670	10
+55	939	670	10
+56	682	666	1
+57	874	503	1
+58	876	503	1
+59	870	504	2
+60	882	504	2
+61	894	505	1
+62	896	505	1
+63	909	112	1
+64	909	113	3
+65	407	103	1
+66	409	103	1
+67	413	103	1
+68	282	103	1
+69	284	103	1
+70	286	103	1
+71	292	103	1
+72	348	707	1
+73	349	707	1
+74	350	707	1
+75	353	707	1
+76	354	707	1
+77	357	707	1
+78	348	708	1
+79	349	708	1
+80	350	708	1
+81	353	708	1
+82	354	708	1
+83	357	708	1
+84	293	103	1
+85	316	101	5
+86	317	101	5
+87	322	101	5
+88	323	101	5
+89	324	101	5
+90	325	101	5
+91	306	101	5
+92	308	101	5
+93	589	104	5
+94	592	104	5
+95	600	104	5
+96	603	104	5
+97	611	104	5
+98	614	104	5
+99	622	104	5
+100	625	104	5
+101	633	104	5
+102	290	102	2
+103	291	102	2
+104	292	102	2
+105	294	102	2
+106	295	102	2
+107	331	102	2
+108	298	102	2
+109	303	102	2
+110	310	102	2
+111	317	102	2
+112	324	102	2
+\.
+
+
+--
+-- Data for Name: zone_random_item; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.zone_random_item (id, zri_room_vnum, zri_yaml, zri_max) FROM stdin;
+\.
+
+
+--
+-- Data for Name: zone_yaml; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.zone_yaml (id, zy_room_vnum, zy_yaml, zy_max) FROM stdin;
+1	402	#yaml|vehicle/p3-hunchbak.yml	1
+2	400	#yaml|vehicle/p3-offroad-mx3.yml	1
+3	399	#yaml|vehicle/prime-town-suv.yml	1
+4	395	#yaml|vehicle/lxr-sunrise.yml	1
+5	393	#yaml|vehicle/lxr-sport.yml	1
+6	394	#yaml|vehicle/lxr-sport.yml	1
+7	402	#yaml|vehicle/p3-hunchbak.yml	1
+8	400	#yaml|vehicle/p3-offroad-mx3.yml	1
+9	399	#yaml|vehicle/prime-town-suv.yml	1
+10	395	#yaml|vehicle/lxr-sunrise.yml	1
+11	393	#yaml|vehicle/lxr-sport.yml	1
+12	394	#yaml|vehicle/lxr-sport.yml	1
+13	889	#yaml|vehicle/p3-hunchbak.yml	1
+14	890	#yaml|vehicle/p3-offroad-mx3.yml	1
+15	891	#yaml|vehicle/prime-town-suv.yml	1
+16	892	#yaml|vehicle/lxr-sunrise.yml	1
+17	893	#yaml|vehicle/lxr-sport.yml	1
 \.
 
 
@@ -10612,14 +11630,14 @@ SELECT pg_catalog.setval('public.mini_gunner_sentinel_id_seq', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_id_seq', 305, true);
+SELECT pg_catalog.setval('public.mob_equipment_id_seq', 317, true);
 
 
 --
 -- Name: mob_equipment_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 68, true);
+SELECT pg_catalog.setval('public.mob_equipment_map_id_seq', 72, true);
 
 
 --
@@ -10640,7 +11658,7 @@ SELECT pg_catalog.setval('public.mob_zone_id_seq', 1, false);
 -- Name: mobile_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mobile_mob_id_seq', 116, true);
+SELECT pg_catalog.setval('public.mobile_mob_id_seq', 120, true);
 
 
 --
@@ -10752,7 +11770,7 @@ SELECT pg_catalog.setval('public.player_id_seq', 111, true);
 -- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.player_object_id_seq', 492, true);
+SELECT pg_catalog.setval('public.player_object_id_seq', 494, true);
 
 
 --
@@ -10788,6 +11806,20 @@ SELECT pg_catalog.setval('public.player_skill_points_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.player_skill_usage_id_seq', 1, false);
+
+
+--
+-- Name: radio_station_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.radio_station_id_seq', 1, false);
+
+
+--
+-- Name: raid_areas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.raid_areas_id_seq', 1, false);
 
 
 --
@@ -10836,7 +11868,7 @@ SELECT pg_catalog.setval('public.rifle_placements_id_seq', 1, false);
 -- Name: room_direction_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.room_direction_data_id_seq', 4225, true);
+SELECT pg_catalog.setval('public.room_direction_data_id_seq', 4618, true);
 
 
 --
@@ -10850,7 +11882,7 @@ SELECT pg_catalog.setval('public.room_extra_descriptions_id_seq', 1, false);
 -- Name: room_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.room_id_seq', 828, true);
+SELECT pg_catalog.setval('public.room_id_seq', 1416, true);
 
 
 --
@@ -10955,7 +11987,7 @@ SELECT pg_catalog.setval('public.world_configuration_start_rooms_id_seq', 5, tru
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_data_id_seq', 1618, true);
+SELECT pg_catalog.setval('public.zone_data_id_seq', 1717, true);
 
 
 --
@@ -10963,6 +11995,27 @@ SELECT pg_catalog.setval('public.zone_data_id_seq', 1618, true);
 --
 
 SELECT pg_catalog.setval('public.zone_id_seq', 151, true);
+
+
+--
+-- Name: zone_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.zone_mob_id_seq', 112, true);
+
+
+--
+-- Name: zone_random_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.zone_random_item_id_seq', 1, false);
+
+
+--
+-- Name: zone_yaml_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.zone_yaml_id_seq', 17, true);
 
 
 --
@@ -11358,6 +12411,22 @@ ALTER TABLE ONLY public.player_skill_usage
 
 
 --
+-- Name: radio_station radio_station_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.radio_station
+    ADD CONSTRAINT radio_station_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: raid_areas raid_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.raid_areas
+    ADD CONSTRAINT raid_areas_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: raid raid_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -11555,6 +12624,30 @@ ALTER TABLE ONLY public.weapon_locker
 
 ALTER TABLE ONLY public.zone
     ADD CONSTRAINT zone_id_key UNIQUE (id);
+
+
+--
+-- Name: zone_mob zone_mob_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.zone_mob
+    ADD CONSTRAINT zone_mob_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: zone_random_item zone_random_item_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.zone_random_item
+    ADD CONSTRAINT zone_random_item_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: zone_yaml zone_yaml_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.zone_yaml
+    ADD CONSTRAINT zone_yaml_pkey PRIMARY KEY (id);
 
 
 --
@@ -11940,67 +13033,64 @@ ALTER TABLE ONLY public.mini_gunner_sentinel
 ALTER TABLE ONLY public.player_race_perks
     ADD CONSTRAINT player_race_perks_prperk_id_fkey FOREIGN KEY (prperk_id) REFERENCES public.player_races(id);
 
-CREATE TABLE public.radio_station (
-    id SERIAL PRIMARY KEY,
-    rs_room_vnum integer NOT NULL,
-		rs_power integer NOT NULL,
-		rs_name varchar(256) NOT NULL
-);
+
+--
+-- Name: radio_station radio_station_room_vnum_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
 
 ALTER TABLE ONLY public.radio_station
     ADD CONSTRAINT radio_station_room_vnum_fkey FOREIGN KEY (rs_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
+
 --
--- PostgreSQL database dump complete
+-- Name: raid raid_area_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
+ALTER TABLE ONLY public.raid
+    ADD CONSTRAINT raid_area_id_fkey FOREIGN KEY (r_raid_area_id) REFERENCES public.raid_areas(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
-CREATE TABLE public.zone_mob (
-    id SERIAL PRIMARY KEY,
-    zm_room_vnum integer NOT NULL,
-    zm_mob_vnum integer NOT NULL,
-		zm_max integer NOT NULL DEFAULT 5
-);
-ALTER TABLE ONLY public.zone_mob
-    ADD CONSTRAINT zone_mob_room_vnum_fkey FOREIGN KEY (zm_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+--
+-- Name: raid_areas raid_areas_spawn_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.raid_areas
+    ADD CONSTRAINT raid_areas_spawn_fkey FOREIGN KEY (r_spawn) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: zone_mob zone_mob_mob_vnum_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
 ALTER TABLE ONLY public.zone_mob
     ADD CONSTRAINT zone_mob_mob_vnum_fkey FOREIGN KEY (zm_mob_vnum) REFERENCES public.mobile(mob_virtual_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
+--
+-- Name: zone_mob zone_mob_room_vnum_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
 
-CREATE TABLE public.zone_yaml (
-    id SERIAL PRIMARY KEY,
-    zy_room_vnum integer NOT NULL,
-		zy_yaml TEXT NOT NULL,
-		zy_max integer NOT NULL DEFAULT 1
-);
-ALTER TABLE ONLY public.zone_yaml
-    ADD CONSTRAINT zone_yaml_room_vnum_fkey FOREIGN KEY (zy_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.zone_mob
+    ADD CONSTRAINT zone_mob_room_vnum_fkey FOREIGN KEY (zm_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
-
-CREATE TABLE public.zone_random_item (
-    id SERIAL PRIMARY KEY,
-    zri_room_vnum integer NOT NULL,
-		zri_yaml VARCHAR(256) NOT NULL,
-		zri_max integer NOT NULL DEFAULT 1
-);
+--
+-- Name: zone_random_item zone_random_item_room_vnum_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
 
 ALTER TABLE ONLY public.zone_random_item
     ADD CONSTRAINT zone_random_item_room_vnum_fkey FOREIGN KEY (zri_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
-INSERT INTO public.zone_yaml (zy_room_vnum, zy_max, zy_yaml) ( select zone_arg2, zone_arg3, zone_yaml from public.zone_data where zone_command='Y');
-insert into public.zone_mob (zm_mob_vnum, zm_room_vnum, zm_max)  (SELECT zone_arg1, zone_arg2, zone_arg3 FROM public.zone_data where zone_command='M' AND zone_arg2 != 0);
+--
+-- Name: zone_yaml zone_yaml_room_vnum_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
 
-CREATE TABLE public.raid_areas(
-    id SERIAL PRIMARY KEY,
-    r_spawn integer NOT NULL,
-		r_name VARCHAR(256) NOT NULL,
-		r_roam_pattern VARCHAR(256) NOT NULL
-);
-ALTER TABLE ONLY public.raid_areas
-    ADD CONSTRAINT raid_areas_spawn_fkey FOREIGN KEY (r_spawn) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.zone_yaml
+    ADD CONSTRAINT zone_yaml_room_vnum_fkey FOREIGN KEY (zy_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE ONLY public.raid
-    ADD CONSTRAINT raid_area_id_fkey FOREIGN KEY (r_raid_area_id) REFERENCES public.raid_areas(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+--
+-- PostgreSQL database dump complete
+--
+
