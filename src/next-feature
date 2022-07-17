@@ -1,15 +1,6 @@
 see doc/building/2022-quarter-1-features.md
 
 
-[ ] mods/rifle-stats.cpp
-	[ ] cache invalidation for 
-	```
-		std::string format_rifle_stats_page(std::string_view feed_file,std::map<std::string,std::string>* page);
-	```
-	[ ] store mod/access times of yaml files
-		[ ] invalidate cache if time is newer
-		[ ] regenerate page
-
 [ ] Dynamic mob scaling
 	[x] scale a mob's attributes according to a level
 	[x] copy extended type from source to scaled mob
