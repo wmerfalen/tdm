@@ -77,6 +77,7 @@ namespace mods::rooms {
 		{txt::FREEZING,"FREEZING"},
 		{txt::REINFORCED_WALLS,"REINFORCED_WALLS"},
 		{txt::METAL_FLOORS,"METAL_FLOORS"},
+		{txt::WOODEN_BRIDGE,"WOODEN_BRIDGE"},
 	};
 
 	static const std::map<int,std::string> room_flag_strings = {
