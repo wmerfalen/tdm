@@ -1,5 +1,12 @@
 see doc/building/2022-quarter-1-features.md
 
+[ ] Payload commands
+ [ ] admin:loot:payload:create rarity levels count
+ [ ] admin:loot:payload:delete <index>
+
+[ ] Killer ammo
+ [ ] create command: admin:loot:ammo:create levels count
+ [ ] create command: admin:loot:ammo:delete <index>
 
 [ ] mods/rifle-stats.cpp
 	[ ] cache invalidation for 
@@ -14,6 +21,7 @@ see doc/building/2022-quarter-1-features.md
 	[x] scale a mob's attributes according to a level
 	[x] copy extended type from source to scaled mob
 	[x] copy the mob equipment profile to scaled mob
+		**** ----- PRIORITY -------- ****
 		[ ] use the rifle loot rifle randomization code to create randomized weapons
 		[ ] equip scaled mob with randomized weapon
 		[?] should this be deep rifle objects? might be easier to do that
