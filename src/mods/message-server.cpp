@@ -9,8 +9,10 @@
 #include "memory.hpp"
 #include "rifle-stats.hpp"
 #include <mutex>
+#if 0
 #define DMON_IMPL
 #include "../dmon/dmon.h"
+#endif
 
 extern void record_usage();
 namespace mods::message_server {
@@ -366,6 +368,7 @@ namespace mods::message_server {
 
 
 #define SLEEP_FOR(A) std::this_thread::sleep_for(std::chrono::milliseconds(A));
+#if 0
 #define mprint(A) std::cerr << "[watch_callback]: " << A << "\n";
 	static std::mutex backlog_mutex;
 	static std::vector<std::string> backlog;
@@ -421,6 +424,7 @@ namespace mods::message_server {
 		}
 		dmon_deinit();
 	}
+#endif
 
 
 	void spawn() {
