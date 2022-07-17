@@ -1,0 +1,59 @@
+# type: FRAG_GRENADE
+# type: INCENDIARY_GRENADE
+# type: REMOTE_EXPLOSIVE
+# type: REMOTE_CHEMICAL
+# type: EMP_GRENADE
+# type: CLAYMORE_MINE
+# type: SMOKE_GRENADE
+# type: C4
+# type: BREACH_CHARGE
+# type: FLASHBANG_GRENADE
+# type: SENSOR_GRENADE
+str_type: 'FLASHBANG_GRENADE' # enum, object type
+type: 'FLASHBANG_GRENADE' # integer enum 
+manufacturer: 'Prador' # string, anything 
+name: 'Prador Flashbang grenade' # string, anything name of object 
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+description: 'A Prador Flashbang Grenade is lying here.'
+short_description: 'a Prador Flashbang Grenade'
+action_description: 'a Prador Flashbang Grenade'
+alternate_explosion_type: 'NONE' #std::string, ENUM NONE,SCAN
+loudness_type: 'LOUD' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
+chance_to_injure: 0.0 #float, percent
+critical_chance: 0.0 #float, percent
+critical_range: 1 #int, rooms
+blast_radius: 1 #int, rooms
+base_damage: 0 #int, static base damage done
+disorient_amount: 75.0 #float, percent
+range_modifier: 1 #int, rooms
+
+incendiary_damage_dice_count: 0 #int, dice count of incendiary damage, no limit
+incendiary_damage_dice_sides: 0 #int, dice sides of incendiary damage, no limit
+radiation_damage_dice_count: 0 #int, dice count of radiation damage, no limit
+radiation_damage_dice_sides: 0 #int, dice sides of radiation damage, no limit
+chemical_damage_dice_count: 0 #int, dice count of chemical damage, no limit
+chemical_damage_dice_sides: 0 #int, dice sides of chemical damage, no limit
+electric_damage_dice_count: 0 #int, dice count of electric damage, no limit
+electric_damage_dice_sides: 0 #int, dice sides of electric damage, no limit
+armor_penetration_damage_dice_count: 0 #int, dice count of armor penetration done, no limit
+armor_penetration_damage_dice_sides: 0 #int, dice sides of armor penetration done, no limit
+damage_dice_count: 0 #int, number of dice
+damage_dice_sides: 0 #int, dice sides
+incendiary_damage_percent: 0 #int, static amount of incendiary damage_percent, no limit
+explosive_damage_percent: 0 #int, static amount of explosive damage_percent, no limit
+shrapnel_damage_percent: 0 #int, static amount of shrapnel damage_percent, no limit
+corrosive_damage_percent: 0 #int, static amount of corrosive damage_percent, no limit
+cryogenic_damage_percent: 0 #int, static amount of cryogenic damage_percent, no limit
+radiation_damage_percent: 0 #int, static amount of radiation damage_percent, no limit
+emp_damage_percent: 0 #int, static amount of emp damage_percent, no limit
+shock_damage_percent: 0 #int, static amount of shock damage_percent, no limit
+anti_matter_damage_percent: 0 #int, static amount of anti_matter damage_percent, no limit
+feed_file: 'prador-flashbang-grenade.yml'
+vnum: 226
