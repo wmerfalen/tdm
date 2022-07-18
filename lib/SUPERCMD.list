@@ -17,6 +17,7 @@
 {yel}mods/builder/seqbuild{/yel}:->{grn}seqbuild{/grn}
 {yel}mods/builder/hqbuild{/yel}:->{grn}hqbuild{/grn}
 {yel}mods/builder/meqbuild{/yel}:->{grn}meqbuild{/grn}
+{yel}mods/builder/loot-payload{/yel}:->{grn}paybuild{/grn}
 {yel}mods/builder/raid{/yel}:->{grn}raid{/grn}
 {yel}mods/builder/raid{/yel}:->{grn}raid_pave{/grn}
 {yel}mods/builder/raid{/yel}:->{grn}copy_mob{/grn}
@@ -25,6 +26,7 @@
 {yel}mods/builder/bookmarks{/yel}:->{grn}goto{/grn}
 {yel}mods/builder/bookmarks{/yel}:->{grn}print_vnum{/grn}
 {yel}mods/builder/conbuild{/yel}:->{grn}conbuild{/grn}
+{yel}mods/builder/loot-ammo{/yel}:->{grn}ammobuild{/grn}
 {yel}mods/zone{/yel}:->{grn}list_zone_table{/grn}
 {yel}mods/zone{/yel}:->{grn}uuids{/grn}
 {yel}mods/zone{/yel}:->{grn}reset_zone{/grn}

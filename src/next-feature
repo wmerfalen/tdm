@@ -4,7 +4,7 @@ see doc/building/2022-quarter-1-features.md
  [ ] admin:loot:payload:create rarity levels count
  [ ] admin:loot:payload:delete
  	[ ] Deletes the payload crate in the room you're in
- [ ] admin:loot:ammo:create levels count
+ [ ] admin:loot:ammo:create types levels count
  [ ] admin:loot:ammo:delete
  	[ ] Deletes the ammo crate in the room you're in
 
