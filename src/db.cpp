@@ -1078,6 +1078,8 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 		}
 		zone_table.emplace_back(z);
 		top_of_zone_table = zone_table.size();
+		std::cerr << "zone_table.back().get_id: " << zone_table.back().get_id() << "\n";
+		std::cerr << "zone_table.size() " << zone_table.size() << "\n";
 
 		log("DEBUG: parse_sql_zones: '%s' loaded",z.name.c_str());
 	}

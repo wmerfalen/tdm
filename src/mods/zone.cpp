@@ -343,6 +343,7 @@ namespace mods::zone {
 		filtered.resize(zone_table.size());
 		//for (zone = 0; zone < top_of_zone_table; zone++)
 		for(unsigned zone = 0; zone < zone_table.size(); zone++) {
+			filtered[zone] = zone_table[zone];
 			zone_table_size += zone_table[zone].cmd.size();
 			for(auto ZCMD : zone_table[zone].cmd) {
 				bool skip_me = false;

@@ -21,12 +21,23 @@ struct room_pavement_t {
 	room_vnum current_room_number;
 	int zone_id;
 	std::vector<int> rooms;
+	room_pavement_t(const room_pavement_t& other) {
+		std::cerr << "room_pavement_t(copy constructor)\n";
+		start_room = other.start_room;
+		transact_id = other.transact_id;
+		current_room_number = other.current_room_number;
+		zone_id = other.zone_id;
+		rooms = other.rooms;
+	}
 	room_pavement_t() : start_room(0), transact_id(-1),
 		current_room_number(0), zone_id(-1) {}
+
 	room_pavement_t(int start,int z_id) :  start_room(start), transact_id(0),
 		current_room_number(0),zone_id(z_id) {}
+
 	room_pavement_t(int start,int z_id,int t_id) :  start_room(start), transact_id(t_id),
 		current_room_number(0),zone_id(z_id) {}
+
 	~room_pavement_t() = default;
 };
 
