@@ -3,8 +3,6 @@ DROP DATABASE mud;
 CREATE DATABASE mud;
 \c mud;
 
-
-
 --
 -- PostgreSQL database dump
 --
@@ -1217,6 +1215,80 @@ ALTER TABLE public.karma_karma_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.karma_karma_id_seq OWNED BY public.karma.karma_id;
+
+
+--
+-- Name: loot_ammo; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.loot_ammo (
+    id integer NOT NULL,
+    la_room integer NOT NULL,
+    la_types character varying(256) NOT NULL,
+    la_levels character varying(256) NOT NULL,
+    la_count integer NOT NULL
+);
+
+
+ALTER TABLE public.loot_ammo OWNER TO postgres;
+
+--
+-- Name: loot_ammo_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.loot_ammo_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.loot_ammo_id_seq OWNER TO postgres;
+
+--
+-- Name: loot_ammo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.loot_ammo_id_seq OWNED BY public.loot_ammo.id;
+
+
+--
+-- Name: loot_payload; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.loot_payload (
+    id integer NOT NULL,
+    lp_room integer NOT NULL,
+    lp_rarity character varying(256) NOT NULL,
+    lp_levels character varying(256) NOT NULL,
+    lp_count integer NOT NULL
+);
+
+
+ALTER TABLE public.loot_payload OWNER TO postgres;
+
+--
+-- Name: loot_payload_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.loot_payload_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.loot_payload_id_seq OWNER TO postgres;
+
+--
+-- Name: loot_payload_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.loot_payload_id_seq OWNED BY public.loot_payload.id;
 
 
 --
@@ -3911,6 +3983,20 @@ ALTER TABLE ONLY public.karma ALTER COLUMN karma_id SET DEFAULT nextval('public.
 
 
 --
+-- Name: loot_ammo id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.loot_ammo ALTER COLUMN id SET DEFAULT nextval('public.loot_ammo_id_seq'::regclass);
+
+
+--
+-- Name: loot_payload id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.loot_payload ALTER COLUMN id SET DEFAULT nextval('public.loot_payload_id_seq'::regclass);
+
+
+--
 -- Name: mini_game game_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -4766,6 +4852,36 @@ COPY public.karma (karma_id, karma_player_id, karma_alignment, karma_cold_bloode
 
 
 --
+-- Data for Name: loot_ammo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.loot_ammo (id, la_room, la_types, la_levels, la_count) FROM stdin;
+21	1108	UNCOMMON,RARE,LEGENDARY	20	1
+22	1147	UNCOMMON,RARE,LEGENDARY	20-35	1
+23	1151	UNCOMMON,RARE,LEGENDARY	20-35	1
+24	1156	UNCOMMON,RARE,LEGENDARY	20-35	1
+25	1160	UNCOMMON,RARE,LEGENDARY	20-35	1
+\.
+
+
+--
+-- Data for Name: loot_payload; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.loot_payload (id, lp_room, lp_rarity, lp_levels, lp_count) FROM stdin;
+15	1097	UNCOMMON	UNCOMMON	1
+16	1100	UNCOMMON,RARE	UNCOMMON,RARE	1
+17	1104	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+18	1124	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+19	1125	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+20	1126	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+21	1136	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+22	1140	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+23	1149	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+\.
+
+
+--
 -- Data for Name: mini_game; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -5171,8 +5287,8 @@ COPY public.object_weapon (id, obj_fk_id, obj_ammo_max, obj_ammo_type, obj_coold
 
 COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences, player_practice_sessions) FROM stdin;
 110	$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.	0	0	sniper	1	1	0	3	0	9	9	12	15	9	0	0	241	436	729	48	561	M	241	436	729	52	52	52	9	1	52	0	0	PC	0	3	52	0	2021-09-18 01:42:45.163952	0	2021-09-18 01:42:45.163952	8388736	7
-1	foKntnEF3KSXA	0	0	far	1	1	0	20	0	41	41	82	102	41	3200	0	65000	2277	65000	7283	92840	M	65000	2277	65000	53	53	53	9	1	53	0	0	PC	3200	19	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	37
 111	$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC	0	0	ghost	1	1	0	3	0	6	6	12	15	6	0	0	241	339	729	1108	2600	M	241	339	635	53	53	53	9	1	53	0	0	PC	0	3	53	0	2022-05-17 13:17:37.271391	0	2022-05-17 13:17:37.271391	8388736	5
+1	foKntnEF3KSXA	0	0	far	1	1	0	20	0	41	41	82	102	41	3200	0	65000	2277	65000	7283	92840	M	65000	2277	65000	53	53	53	9	1	53	0	0	PC	3200	19	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	37
 \.
 
 
@@ -11241,39 +11357,39 @@ COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_
 1568	1	M	0	102	310	2	\N
 1569	1	M	0	102	317	2	\N
 1570	1	M	0	102	324	2	\N
-1685	1	M	0	715	1005	1	\N
-1686	1	M	0	715	1011	1	\N
-1687	1	M	0	714	973	1	\N
-1688	1	M	0	714	983	1	\N
-1689	1	M	0	714	1015	1	\N
-1690	1	M	0	714	1017	1	\N
-1691	1	M	0	714	1019	1	\N
-1692	1	M	0	714	1023	1	\N
-1693	1	M	0	714	1028	1	\N
-1694	1	M	0	714	1034	1	\N
-1695	1	M	0	714	1056	1	\N
-1696	1	M	0	714	1063	1	\N
-1697	1	M	0	714	1072	1	\N
-1698	1	M	0	714	1078	1	\N
-1699	1	M	0	714	1080	1	\N
-1700	1	M	0	714	1089	1	\N
-1701	1	M	0	714	1094	1	\N
-1702	1	M	0	713	970	1	\N
-1703	1	M	0	713	1013	1	\N
-1704	1	M	0	713	1016	1	\N
-1705	1	M	0	713	1054	1	\N
-1706	1	M	0	713	1058	1	\N
-1707	1	M	0	713	1065	1	\N
-1708	1	M	0	713	1071	1	\N
-1709	1	M	0	713	1091	1	\N
-1710	1	M	0	713	1093	1	\N
-1711	1	M	0	713	1103	1	\N
-1712	1	M	0	716	979	1	\N
-1713	1	M	0	716	1036	1	\N
-1714	1	M	0	716	1039	1	\N
-1715	1	M	0	716	1046	1	\N
-1716	1	M	0	716	1049	1	\N
-1717	1	M	0	716	1060	1	\N
+1718	1	M	0	715	1005	1	\N
+1719	1	M	0	715	1011	1	\N
+1720	1	M	0	714	973	1	\N
+1721	1	M	0	714	983	1	\N
+1722	1	M	0	714	1015	1	\N
+1723	1	M	0	714	1017	1	\N
+1724	1	M	0	714	1019	1	\N
+1725	1	M	0	714	1023	1	\N
+1726	1	M	0	714	1028	1	\N
+1727	1	M	0	714	1034	1	\N
+1728	1	M	0	714	1056	1	\N
+1729	1	M	0	714	1063	1	\N
+1730	1	M	0	714	1072	1	\N
+1731	1	M	0	714	1078	1	\N
+1732	1	M	0	714	1080	1	\N
+1733	1	M	0	714	1089	1	\N
+1734	1	M	0	714	1094	1	\N
+1735	1	M	0	713	970	1	\N
+1736	1	M	0	713	1013	1	\N
+1737	1	M	0	713	1016	1	\N
+1738	1	M	0	713	1054	1	\N
+1739	1	M	0	713	1058	1	\N
+1740	1	M	0	713	1065	1	\N
+1741	1	M	0	713	1071	1	\N
+1742	1	M	0	713	1091	1	\N
+1743	1	M	0	713	1093	1	\N
+1744	1	M	0	713	1103	1	\N
+1745	1	M	0	716	979	1	\N
+1746	1	M	0	716	1036	1	\N
+1747	1	M	0	716	1039	1	\N
+1748	1	M	0	716	1046	1	\N
+1749	1	M	0	716	1049	1	\N
+1750	1	M	0	716	1060	1	\N
 \.
 
 
@@ -11613,6 +11729,20 @@ SELECT pg_catalog.setval('public.karma_karma_id_seq', 1, false);
 
 
 --
+-- Name: loot_ammo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.loot_ammo_id_seq', 25, true);
+
+
+--
+-- Name: loot_payload_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.loot_payload_id_seq', 23, true);
+
+
+--
 -- Name: mini_game_game_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -11630,7 +11760,7 @@ SELECT pg_catalog.setval('public.mini_gunner_sentinel_id_seq', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.mob_equipment_id_seq', 317, true);
+SELECT pg_catalog.setval('public.mob_equipment_id_seq', 321, true);
 
 
 --
@@ -11987,7 +12117,7 @@ SELECT pg_catalog.setval('public.world_configuration_start_rooms_id_seq', 5, tru
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_data_id_seq', 1717, true);
+SELECT pg_catalog.setval('public.zone_data_id_seq', 1750, true);
 
 
 --
@@ -13019,6 +13149,22 @@ ALTER TABLE ONLY public.mob_zone
 
 
 --
+-- Name: loot_ammo loot_ammo_la_room_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.loot_ammo
+    ADD CONSTRAINT loot_ammo_la_room_fkey FOREIGN KEY (la_room) REFERENCES public.room(room_number);
+
+
+--
+-- Name: loot_payload loot_payload_lp_room_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.loot_payload
+    ADD CONSTRAINT loot_payload_lp_room_fkey FOREIGN KEY (lp_room) REFERENCES public.room(room_number);
+
+
+--
 -- Name: mini_gunner_sentinel mini_gunner_sentinel_mgs_room_vnum_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -13093,23 +13239,4 @@ ALTER TABLE ONLY public.zone_yaml
 --
 -- PostgreSQL database dump complete
 --
-
-
-create table public.loot_ammo(
-	id SERIAL, 
-	la_room integer not null, 
-	la_types varchar(256) NOT NULL, 
-	la_levels VARCHAR(256) NOT NULL, 
-	la_count INTEGER NOT NULL, 
-	FOREIGN KEY(la_room) REFERENCES room(room_number)
-);
-
-create table public.loot_payload(
-	id SERIAL, 
-	lp_room integer not null, 
-	lp_rarity varchar(256) NOT NULL, 
-	lp_levels VARCHAR(256) NOT NULL, 
-	lp_count INTEGER NOT NULL, 
-	FOREIGN KEY(lp_room) REFERENCES room(room_number)
-);
 
