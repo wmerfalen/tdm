@@ -59,6 +59,9 @@
 #include "mods/prefs.hpp"
 #include "mods/radio.hpp"
 #include "mods/str.hpp"
+#include "mods/orm/loot-payload.hpp"
+#include "mods/orm/loot-ammo.hpp"
+#include "mods/loot.hpp"
 
 namespace mods::zone {
 	extern void reset_zone(zone_rnum);
@@ -375,6 +378,9 @@ void boot_world(void) {
 	if(std::get<0>(zone_status) < 0) {
 		log("SYSERR: parse_sql_zones: '%s'",std::get<1>(zone_status).c_str());
 	}
+
+	mods::orm::loot_payload_list() = mods::orm::load_all_loot_payload_list();
+	mods::orm::loot_ammo_list() = mods::orm::load_all_loot_ammo_list();
 
 	log("Parsing sql rooms.");
 	auto tuple_status_rooms = parse_sql_rooms();
@@ -1226,6 +1232,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 					world[top_of_world-1].nickname.assign(room_records_row["nickname"].c_str());
 				}
 				mods::zone::new_room(&room);
+				mods::loot::new_room(&room);
 			} catch(std::exception& e) {
 				REPORT_DB_ISSUE("SYSERR: exception select from rooms db: ",e.what());
 			}

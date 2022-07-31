@@ -19,6 +19,7 @@ namespace mods::forge_engine {
 };
 namespace mods::loot {
 	obj_ptr_t reward_player(player_ptr_t& player,mob_vnum victim);
+	void new_room(room_data* room);
 };
 
 namespace mods::loot::events {

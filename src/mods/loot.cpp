@@ -3,6 +3,9 @@
 #include "loot-container.hpp"
 #include "orm/rifle-index.hpp"
 
+#include "orm/loot-payload.hpp"
+#include "orm/loot-ammo.hpp"
+
 #define __MENTOC_MODS_LOOT_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_LOOT_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[mods::loot]: '" << a << "'\n";
@@ -11,6 +14,24 @@
 #endif
 
 namespace mods::loot {
+	static constexpr std::string_view PAYLOAD_YAML_FILE = "container/loot-payload.yml";
+	static constexpr std::string_view AMMO_YAML_FILE = "container/loot-ammo.yml";
+	void new_room(room_data* room) {
+		for(const auto& p : mods::orm::loot_payload_list()) {
+			if(p->lp_room == room->number) {
+				m_debug("Loot PAYLOAD: found room to place payload in... ");
+				auto obj = create_object(PAYLOAD_YAML_FILE);
+				obj_to_room(obj.get(),real_room(room->number));
+			}
+		}
+		for(const auto& p : mods::orm::loot_ammo_list()) {
+			if(p->la_room == room->number) {
+				m_debug("Loot AMMO: found room to place ammo in... ");
+				auto obj = create_object(AMMO_YAML_FILE);
+				obj_to_room(obj.get(),real_room(room->number));
+			}
+		}
+	}
 	/**
 	 * Loot is also controlled by make_corpse and mods::drops.cpp
 	 */
@@ -466,6 +487,7 @@ namespace mods::loot::events {
 		player->sendln("{grn}# A piece of loot was awarded to you! #{/grn}");
 		player->sendln("{grn}#######################################{/grn}");
 	}
+
 };
 
 

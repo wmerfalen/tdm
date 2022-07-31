@@ -14,11 +14,10 @@
 
 
 namespace mods::orm {
-
-	//loot_payload_list_t& loot_payload_list() {
-	//	static loot_payload_list_t list;
-	//	return list;
-	//}
+	loot_payload_list_t& loot_payload_list() {
+		static loot_payload_list_t list;
+		return list;
+	}
 
 	loot_payload_list_t load_all_loot_payload_list() {
 		loot_payload_list_t list;

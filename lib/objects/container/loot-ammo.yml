@@ -1,0 +1,25 @@
+# type: ARMOR_LOCKER
+# type: WEAPON_LOCKER
+# type: LOCKER
+# type: EXPLOSIVE_BARREL
+# type: BILE_BARREL
+# type: WATER_BARREL
+# type: GASOLINE_BARREL
+# type: GAS_STATION_PUMP
+detailed_description: 'A {grn}SUPPLY CRATE{/grn} of Ammunition' #string, description
+str_type: 'WEAPON_LOCKER' # enum, object type
+manufacturer: 'Kojima Corp' # string, anything 
+name: 'A {grn}SUPPLY CRATE{/grn} of Ammunition.' # string, anything name of object 
+description: 'A {grn}SUPPLY CRATE{/grn} of Ammunition'
+short_description: 'A {grn}SUPPLY CRATE{/grn} of Ammunition'
+action_description: 'A {grn}SUPPLY CRATE{/grn} of Ammunition'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+feed_file: 'loot-ammo.yml'
+vnum: 234

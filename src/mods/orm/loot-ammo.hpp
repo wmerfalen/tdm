@@ -6,7 +6,6 @@
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-	static constexpr std::string_view raid_table_name = "raid";
 
 #define LOOT_AMMO_ORM_MEMBERS ( \
 (uint64_t,id,0,1,null,1), \
@@ -20,7 +19,7 @@ namespace mods::orm {
 (la_types) \
 (la_levels) \
 (la_count) \
- 
+
 
 
 	struct loot_ammo : public mods::orm::orm_base<loot_ammo,std::string> {
@@ -28,17 +27,17 @@ namespace mods::orm {
 		auto vnum() {
 			return id;
 		}
-	
+
 		loot_ammo() {
 			this->init();
 			loaded = 0;
 			id = 0;
 		}
 		~loot_ammo() = default;
-	
+
 		MENTOC_ORM_PRIMARY_KEY_FUNCTIONS();
 		MENTOC_ORM_FEED_MULTI(LOOT_AMMO_ORM_MEMBERS,loot_ammo);
-	
+
 		std::deque<loot_ammo> rows;
 		auto destroy() {
 			return  remove(this);
@@ -46,9 +45,9 @@ namespace mods::orm {
 		auto save() {
 			return std::get<0>(this->update<loot_ammo>(this));
 		}
-	#ifdef LOOT_AMMO_INITIALIZE_ROW_MEMBERS
+#ifdef LOOT_AMMO_INITIALIZE_ROW_MEMBERS
 		MENTOC_ORM_INITIALIZE_ROW_USING(LOOT_AMMO_INITIALIZE_ROW_MEMBERS);
-	#endif
+#endif
 	};
 	struct loot_ammo_status_t {
 		std::tuple<int16_t,std::string> orm_status;
@@ -57,11 +56,11 @@ namespace mods::orm {
 		loot_ammo_status_t(loot_ammo_status_t&& other) : orm_status(other.orm_status),
 			record(std::move(other.record)) {}
 	};
-	
+
 	using loot_ammo_list_t = std::deque<std::shared_ptr<loot_ammo>>;
-	
+
 	loot_ammo_list_t& loot_ammo_list();
-	
+
 	loot_ammo_list_t load_all_loot_ammo_list();
 };
 

@@ -60,10 +60,7 @@ namespace mods::orm {
 
 	using loot_payload_list_t = std::deque<std::shared_ptr<loot_payload>>;
 
-	static inline loot_payload_list_t& loot_payload_list() {
-		static loot_payload_list_t list;
-		return list;
-	}
+	loot_payload_list_t& loot_payload_list();
 
 	loot_payload_list_t load_all_loot_payload_list();
 };

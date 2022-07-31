@@ -981,7 +981,16 @@ void obj_from_room(obj_ptr_t in_object) {
 		    object, IN_ROOM(object));
 		return;
 	}
+	auto room = IN_ROOM(object);
+	if(room < 0 || room >= world.size()) {
+		log("SYSERR: object in funky room: %d",room);
+		return;
+	}
 
+	if(!world[IN_ROOM(object)].contents) {
+		log("SYSERR: world contents is funky!");
+		return;
+	}
 	REMOVE_FROM_LIST(object, world[IN_ROOM(object)].contents, next_content);
 
 #ifdef __MENTOC_USE_ROOM_HOUSE_CRASH__
