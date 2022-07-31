@@ -22,6 +22,11 @@ template <typename Container>
 static inline auto& rand_item(const Container& item) {
 	return item.at(rand_number(0,item.size()) % item.size());
 }
+template <typename Container>
+static inline auto create_rand(const Container& item) {
+	const auto& choice = rand_item(item);
+	return create_object(choice);
+}
 template <typename Twidth>
 struct dice_passer_t {
 		dice_passer_t() = delete;

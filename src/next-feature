@@ -1,5 +1,17 @@
 see doc/building/2022-quarter-1-features.md
 
+
+[ ] Every N+X ticks
+	[ ] The contents of each crate are mixed up
+	[ ] When looking into a crate it will tell you when
+		the contents will be randomized next
+
+[ ] Unlocking crates of ammo/weapons
+	[ ] Depending on where the crate is, an item is chosen
+		[ ] If room contains Kojima
+			[ ] Require the sacrifice of 'N tengu masks'
+	[ ] When killing any tengu mob, they will drop a tengu mask
+
 [ ] Dynamic mob scaling
 	[x] scale a mob's attributes according to a level
 	[x] copy extended type from source to scaled mob

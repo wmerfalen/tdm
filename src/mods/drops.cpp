@@ -198,6 +198,55 @@ namespace mods::drops {
 	static std::vector<std::string> legendary_explosives;
 	static std::vector<std::string> god_tier_explosives;
 
+	const std::vector<std::string>& get_common_armors() {
+		return common_armors;
+	}
+	const std::vector<std::string>& get_uncommon_armors() {
+		return uncommon_armors;
+	}
+	const std::vector<std::string>& get_rare_armors() {
+		return rare_armors;
+	}
+	const std::vector<std::string>& get_legendary_armors() {
+		return legendary_armors;
+	}
+	const std::vector<std::string>& get_god_tier_armors() {
+		return god_tier_armors;
+	}
+
+	const std::vector<std::string>& get_common_rifles() {
+		return common_rifles;
+	}
+	const std::vector<std::string>& get_uncommon_rifles() {
+		return uncommon_rifles;
+	}
+	const std::vector<std::string>& get_rare_rifles() {
+		return rare_rifles;
+	}
+	const std::vector<std::string>& get_legendary_rifles() {
+		return legendary_rifles;
+	}
+	const std::vector<std::string>& get_god_tier_rifles() {
+		return god_tier_rifles;
+	}
+
+	const std::vector<std::string>& get_common_explosives() {
+		return common_explosives;
+	}
+	const std::vector<std::string>& get_uncommon_explosives() {
+		return uncommon_explosives;
+	}
+	const std::vector<std::string>& get_rare_explosives() {
+		return rare_explosives;
+	}
+	const std::vector<std::string>& get_legendary_explosives() {
+		return legendary_explosives;
+	}
+	const std::vector<std::string>& get_god_tier_explosives() {
+		return god_tier_explosives;
+	}
+
+
 	void create_common_object_into(obj_ptr_t& container) {
 		static std::vector<std::string> types = {"R","A","E"};
 		auto c = str(rand_item(types));

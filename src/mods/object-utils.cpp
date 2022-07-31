@@ -3,8 +3,15 @@
 #include "rifle-attachments.hpp"
 #include "weapons/unique-weapons.hpp"
 #include "armor/unique-armor.hpp"
+#include "loot.hpp"
 
 namespace mods::object_utils {
+	bool is_payload_crate(const obj_ptr_t& item) {
+		return item->feed_file().compare(mods::loot::PAYLOAD_YAML_FILE.data()) == 0;
+	}
+	bool is_ammo_crate(const obj_ptr_t& item) {
+		return item->feed_file().compare(mods::loot::AMMO_YAML_FILE.data()) == 0;
+	}
 	bool is_unique(const obj_ptr_t& item) {
 		return item->unique_weapon;
 	}

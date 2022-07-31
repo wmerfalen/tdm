@@ -1,4 +1,5 @@
 #include "loot.hpp"
+#include "drops.hpp"
 #include "notch.hpp"
 #include "loot-container.hpp"
 #include "orm/rifle-index.hpp"
@@ -14,8 +15,216 @@
 #endif
 
 namespace mods::loot {
-	static constexpr std::string_view PAYLOAD_YAML_FILE = "container/loot-payload.yml";
-	static constexpr std::string_view AMMO_YAML_FILE = "container/loot-ammo.yml";
+	static crate_index_t& crate_index() {
+		static crate_index_t list;
+		return list;
+	}
+	enum rarity_t : uint32_t {
+		COMMON = (1 << 1),
+		UNCOMMON = (1 << 2),
+		RARE = (1 << 3),
+		LEGENDARY = (1 << 4),
+		GOD_TIER = (1 << 5)
+	};
+
+	uint32_t parse_rarities(std::string_view r) {
+		std::vector<std::string> list;
+		std::string current;
+		for(const auto ch : r) {
+			if(ch == ',') {
+				list.emplace_back(current);
+				current = "";
+				continue;
+			}
+			current += ch;
+		}
+		if(current.length()) {
+			list.emplace_back(current);
+		}
+		uint32_t mask = 0;
+		for(auto&& rarity : list) {
+			if(rarity.compare("COMMON") == 0) {
+				mask |= rarity_t::COMMON;
+			}
+			if(rarity.compare("UNCOMMON") == 0) {
+				mask |= rarity_t::UNCOMMON;
+			}
+			if(rarity.compare("RARE") == 0) {
+				mask |= rarity_t::RARE;
+			}
+			if(rarity.compare("LEGENDARY") == 0) {
+				mask |= rarity_t::LEGENDARY;
+			}
+			if(rarity.compare("GOD_TIER") == 0) {
+				mask |= rarity_t::GOD_TIER;
+			}
+		}
+		return mask;
+	}
+	enum type_t : uint8_t {
+		ARMOR,
+		RIFLE,
+		EXPLOSIVE,
+		NUMBER_OF_ITEMS = 3,
+	};
+
+	type_t random_type() {
+		return static_cast<type_t>(mods::rand::roll(type_t::NUMBER_OF_ITEMS,6) % type_t::NUMBER_OF_ITEMS);
+	}
+
+	auto random_common() {
+		using namespace mods::rand;
+		using namespace mods::drops;
+		switch(random_type()) {
+			case type_t::ARMOR:
+				return rand_item(get_common_armors());
+			case type_t::RIFLE:
+				return rand_item(get_common_rifles());
+			case type_t::EXPLOSIVE:
+				return rand_item(get_common_explosives());
+			default:
+				return rand_item(get_common_explosives());
+		}
+	}
+	auto random_uncommon() {
+		using namespace mods::rand;
+		using namespace mods::drops;
+		switch(random_type()) {
+			case type_t::ARMOR:
+				return rand_item(get_common_armors());
+			case type_t::RIFLE:
+				return rand_item(get_common_rifles());
+			case type_t::EXPLOSIVE:
+				return rand_item(get_common_explosives());
+			default:
+				return rand_item(get_common_explosives());
+		}
+	}
+
+	auto random_rare() {
+		using namespace mods::rand;
+		using namespace mods::drops;
+		switch(random_type()) {
+			case type_t::ARMOR:
+				return rand_item(get_rare_armors());
+			case type_t::RIFLE:
+				return rand_item(get_rare_rifles());
+			case type_t::EXPLOSIVE:
+				return rand_item(get_rare_explosives());
+			default:
+				return rand_item(get_rare_explosives());
+		}
+	}
+
+	auto random_legendary() {
+		using namespace mods::rand;
+		using namespace mods::drops;
+		switch(random_type()) {
+			case type_t::ARMOR:
+				return rand_item(get_legendary_armors());
+			case type_t::RIFLE:
+				return rand_item(get_legendary_rifles());
+			case type_t::EXPLOSIVE:
+				return rand_item(get_legendary_explosives());
+			default:
+				return rand_item(get_legendary_explosives());
+		}
+	}
+	auto random_godtier() {
+		using namespace mods::rand;
+		using namespace mods::drops;
+		switch(random_type()) {
+			case type_t::ARMOR:
+				return rand_item(get_god_tier_armors());
+			case type_t::RIFLE:
+				return rand_item(get_god_tier_rifles());
+			case type_t::EXPLOSIVE:
+				return rand_item(get_god_tier_explosives());
+			default:
+				return rand_item(get_god_tier_explosives());
+		}
+	}
+
+	void randomize_payload_crate(auto& in_crate,const auto& orm) {
+		using R = rarity_t;
+		auto rarities = parse_rarities(orm->lp_rarity);
+		std::vector<std::string> c;
+		for(unsigned i=0; i < orm->lp_count; i++) {
+			if(rarities & R::COMMON) {
+				c.emplace_back(random_common());
+			}
+			if(rarities & R::UNCOMMON) {
+				c.emplace_back(random_uncommon());
+			}
+			if(rarities & R::RARE) {
+				c.emplace_back(random_rare());
+			}
+			if(rarities & R::LEGENDARY) {
+				c.emplace_back(random_legendary());
+			}
+			if(rarities & R::GOD_TIER) {
+				c.emplace_back(random_godtier());
+			}
+		}
+		for(unsigned i=0; i < orm->lp_count; i++) {
+			in_crate.contents.emplace_back(create_rand(c));
+		}
+		/**
+		 * TODO: sacrifice count
+		 * TODO: sacrifice obj_ptr_t
+		 */
+		c.sacrifice_count = 0;
+		c.sacrifice = nullptr;
+	}
+
+	void randomize_ammo_crate(auto& in_crate,const auto& orm) {
+		using R = rarity_t;
+		auto rarities = parse_rarities(orm->lp_rarity);
+		std::vector<std::string> c;
+		for(unsigned i=0; i < orm->lp_count; i++) {
+			if(rarities & R::COMMON) {
+				c.emplace_back(random_common_ammo());
+			}
+			if(rarities & R::UNCOMMON) {
+				c.emplace_back(random_uncommon_ammo());
+			}
+			if(rarities & R::RARE) {
+				c.emplace_back(random_rare_ammo());
+			}
+			if(rarities & R::LEGENDARY) {
+				c.emplace_back(random_legendary_ammo());
+			}
+			if(rarities & R::GOD_TIER) {
+				c.emplace_back(random_godtier_ammo());
+			}
+		}
+		for(unsigned i=0; i < orm->lp_count; i++) {
+			in_crate.contents.emplace_back(create_rand(c));
+		}
+		/**
+		 * TODO: sacrifice count
+		 * TODO: sacrifice obj_ptr_t
+		 */
+		c.sacrifice_count = 0;
+		c.sacrifice = nullptr;
+	}
+	void load_crates() {
+		crate_index().clear();
+		for(const auto& p : mods::orm::loot_payload_list()) {
+			crate_index().emplace_back();
+			auto& c = crate_index().back();
+			randomize_payload_crate(c,p);
+		}
+		for(const auto& a : mods::orm::loot_ammo_list()) {
+			crate_index().emplace_back();
+			auto& c = crate_index().back();
+			randomize_ammo_crate(c,a);
+		}
+	}
+
+	const std::vector<obj_ptr_t>& payload_items(const obj_ptr_t& obj);
+	const std::vector<obj_ptr_t>& ammo_items(const obj_ptr_t& obj);
+
 	void new_room(room_data* room) {
 		for(const auto& p : mods::orm::loot_payload_list()) {
 			if(p->lp_room == room->number) {

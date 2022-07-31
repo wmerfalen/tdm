@@ -18,8 +18,21 @@ namespace mods::forge_engine {
 	extern mods::forge_engine::generator item_generator;
 };
 namespace mods::loot {
+	static constexpr std::string_view PAYLOAD_YAML_FILE = "container/loot-payload.yml";
+	static constexpr std::string_view AMMO_YAML_FILE = "container/loot-ammo.yml";
 	obj_ptr_t reward_player(player_ptr_t& player,mob_vnum victim);
 	void new_room(room_data* room);
+	struct crate_t {
+		room_vnum room;
+		std::vector<obj_ptr_t> contents;
+		uint16_t sacrifice_count;
+		obj_ptr_t sacrifice;
+	};
+	using crate_index_t = std::vector<crate_t>;
+	void load_crates();
+
+	const std::vector<obj_ptr_t>& payload_items(const obj_ptr_t& obj);
+	const std::vector<obj_ptr_t>& ammo_items(const obj_ptr_t& obj);
 };
 
 namespace mods::loot::events {

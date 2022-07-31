@@ -38,6 +38,9 @@ namespace mods::object_utils {
 	std::vector<std::string> object_types();
 	bool can_wield_in_secondary(const obj_ptr_t& item);
 
+	bool is_payload_crate(const obj_ptr_t& item);
+	bool is_ammo_crate(const obj_ptr_t& item);
+
 	/** I understand that this may seem like it should be in the yaml.hpp file
 	 * instead of here in object_utils, but the only time we're catching
 	 * exceptions from the yaml-cpp library is when we're importing
