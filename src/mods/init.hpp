@@ -10,6 +10,8 @@ INIT(mods::drops);
 INIT(mods::flee);
 INIT(mods::suicide);
 INIT(mods::builder::raid);
+INIT(mods::builder::paybuild);
+INIT(mods::builder::ammobuild);
 INIT(mods::memory);
 INIT(mods::weapons::shotgun::dst7a_commands);
 INIT(mods::armor::bc89_commands);
@@ -127,6 +129,8 @@ namespace mods::init {
 		mods::scripted_step_init::init();
 		mods::scripted_sequences_init::init();
 		mods::builder::seqbuild::init();
+		mods::builder::paybuild::init();
+		mods::builder::ammobuild::init();
 		mods::contract_step_callback_init::init();
 		mods::scripted_sequence_events::init();
 		mods::scripted_sequence_runner::init();

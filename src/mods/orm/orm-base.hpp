@@ -360,7 +360,8 @@ namespace mods::orm {
 #define MENTOC_ORM_INIT(SEQUENCE) \
 	void init(){\
 		BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_INIT_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)); \
-	}
+	}\
+
 
 #define MENTOC_ORM_FEED_ROW_STRING_IMPL(r,F,MEMBER_TUPLE) \
 	BOOST_PP_TUPLE_ELEM(3,1,MEMBER_TUPLE) = row[BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(3,1,MEMBER_TUPLE))].c_str();
@@ -488,6 +489,11 @@ namespace mods::orm {
 			           this,\
 			           player_id\
 			       );\
+		}
+
+#define MENTOC_ORM_SAVE(M_MENTOC_CLASS_NAME) \
+		auto save() { \
+			return std::get<0>(this->update<M_MENTOC_CLASS_NAME>(this));\
 		}
 
 #define MENTOC_ORM_PRIMARY_KEY_FUNCTIONS() \

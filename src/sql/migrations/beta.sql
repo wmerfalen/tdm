@@ -13094,3 +13094,22 @@ ALTER TABLE ONLY public.zone_yaml
 -- PostgreSQL database dump complete
 --
 
+
+create table public.loot_ammo(
+	id SERIAL, 
+	la_room integer not null, 
+	la_types varchar(256) NOT NULL, 
+	la_levels VARCHAR(256) NOT NULL, 
+	la_count INTEGER NOT NULL, 
+	FOREIGN KEY(la_room) REFERENCES room(room_number)
+);
+
+create table public.loot_payload(
+	id SERIAL, 
+	lp_room integer not null, 
+	lp_rarity varchar(256) NOT NULL, 
+	lp_levels VARCHAR(256) NOT NULL, 
+	lp_count INTEGER NOT NULL, 
+	FOREIGN KEY(lp_room) REFERENCES room(room_number)
+);
+

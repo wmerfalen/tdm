@@ -1,12 +1,12 @@
 see doc/building/2022-quarter-1-features.md
 
 [ ] Payload commands
- [ ] admin:loot:payload:create rarity levels count
- [ ] admin:loot:payload:delete
- 	[ ] Deletes the payload crate in the room you're in
- [ ] admin:loot:ammo:create types levels count
- [ ] admin:loot:ammo:delete
- 	[ ] Deletes the ammo crate in the room you're in
+ [x] admin:loot:payload new rarity levels count
+ [x] admin:loot:payload clear
+ 	[x] Deletes all crates in room
+ [x] admin:loot:ammo new types levels count
+ [x] admin:loot:ammo clear
+ 	[x] Deletes all ammo crates in room
 
 [ ] Dynamic mob scaling
 	[x] scale a mob's attributes according to a level

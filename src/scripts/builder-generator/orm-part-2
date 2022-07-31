@@ -20,6 +20,9 @@
 		auto destroy() {
 			return  remove(this);
 		}
+		auto save() {
+			return std::get<0>(this->update<___[[[TABLE]]]___>(this));
+		}
 	#ifdef ___[[[CAPS_TABLE]]]____INITIALIZE_ROW_MEMBERS
 		MENTOC_ORM_INITIALIZE_ROW_USING(___[[[CAPS_TABLE]]]____INITIALIZE_ROW_MEMBERS);
 	#endif

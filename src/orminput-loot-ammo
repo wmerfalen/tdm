@@ -11,6 +11,7 @@ la_levels,256
 la_count
 
 [initialize_row]
+la_room
 la_types
 la_levels
 la_count

@@ -11,6 +11,7 @@ lp_levels,256
 lp_count
 
 [initialize_row]
+lp_room
 lp_rarity
 lp_levels
 lp_count

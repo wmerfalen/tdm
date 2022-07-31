@@ -16,6 +16,7 @@ namespace mods::orm {
 (uint16_t,la_count,0,1,null,1))
 
 #define LOOT_AMMO_INITIALIZE_ROW_MEMBERS \
+(la_room) \
 (la_types) \
 (la_levels) \
 (la_count) \
@@ -41,6 +42,9 @@ namespace mods::orm {
 		std::deque<loot_ammo> rows;
 		auto destroy() {
 			return  remove(this);
+		}
+		auto save() {
+			return std::get<0>(this->update<loot_ammo>(this));
 		}
 	#ifdef LOOT_AMMO_INITIALIZE_ROW_MEMBERS
 		MENTOC_ORM_INITIALIZE_ROW_USING(LOOT_AMMO_INITIALIZE_ROW_MEMBERS);

@@ -16,10 +16,11 @@ namespace mods::orm {
 (uint16_t,lp_count,0,1,null,1))
 
 #define LOOT_PAYLOAD_INITIALIZE_ROW_MEMBERS \
+(lp_room) \
 (lp_rarity) \
 (lp_levels) \
 (lp_count) \
- 
+
 
 
 	struct loot_payload : public mods::orm::orm_base<loot_payload,std::string> {
@@ -27,24 +28,27 @@ namespace mods::orm {
 		auto vnum() {
 			return id;
 		}
-	
+
 		loot_payload() {
 			this->init();
 			loaded = 0;
 			id = 0;
 		}
 		~loot_payload() = default;
-	
+
 		MENTOC_ORM_PRIMARY_KEY_FUNCTIONS();
 		MENTOC_ORM_FEED_MULTI(LOOT_PAYLOAD_ORM_MEMBERS,loot_payload);
-	
+
 		std::deque<loot_payload> rows;
 		auto destroy() {
 			return  remove(this);
 		}
-	#ifdef LOOT_PAYLOAD_INITIALIZE_ROW_MEMBERS
+		auto save() {
+			return std::get<0>(this->update<loot_payload>(this));
+		}
+#ifdef LOOT_PAYLOAD_INITIALIZE_ROW_MEMBERS
 		MENTOC_ORM_INITIALIZE_ROW_USING(LOOT_PAYLOAD_INITIALIZE_ROW_MEMBERS);
-	#endif
+#endif
 	};
 	struct loot_payload_status_t {
 		std::tuple<int16_t,std::string> orm_status;
@@ -53,11 +57,14 @@ namespace mods::orm {
 		loot_payload_status_t(loot_payload_status_t&& other) : orm_status(other.orm_status),
 			record(std::move(other.record)) {}
 	};
-	
+
 	using loot_payload_list_t = std::deque<std::shared_ptr<loot_payload>>;
-	
-	loot_payload_list_t& loot_payload_list();
-	
+
+	static inline loot_payload_list_t& loot_payload_list() {
+		static loot_payload_list_t list;
+		return list;
+	}
+
 	loot_payload_list_t load_all_loot_payload_list();
 };
 
