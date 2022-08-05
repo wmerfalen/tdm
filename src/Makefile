@@ -107,7 +107,7 @@ FLAGS = $(gdbflags) $(optimization) \
 LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2 -L/usr/local/lib -lzmq -lpthread
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
-					 act.wizard act.demolitions alias ban boards bsd-snprintf castle \
+					 act.wizard act.demolitions alias boards bsd-snprintf castle \
 					 class comm config constants db fight globals graph\
 					 handler house interpreter limits magic mail mobact\
 					 modify objsave olc random spec_assign spec_procs\
