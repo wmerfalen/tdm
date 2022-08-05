@@ -272,13 +272,17 @@ namespace mods::loot {
 		static std::map<room_vnum,obj_ptr_t> map;
 		return map;
 	}
+	mods::util::stopwatch_t static_loot_timer;
+
+	bool should_run_replenish_static_loot() {
+		return static_loot_timer.elapsed() >= 60 * mods::loot::STATIC_LOOT_MINUTES;
+	}
 
 	/**
 	 * Called by comm.cpp depending on what STATIC_LOOT_RESOLUTION is
 	 * and what the current tick value is.
 	 */
 	void replenish_static_loot() {
-		log("replenish_static_loot called");
 		auto& r = mods::orm::static_loot_list();
 		std::for_each(r.cbegin(),r.cend(),[](auto& orm) {
 			auto& room = orm->sl_room;
@@ -289,6 +293,8 @@ namespace mods::loot {
 			}
 			create_object_into_with_quota(orm->sl_yaml,static_loot_rooms()[room],orm->sl_count);
 		});
+		static_loot_timer.reset();
+
 	}
 	void refill_static_loot_crate(room_vnum room) {
 		for(const auto& p : mods::orm::static_loot_list()) {

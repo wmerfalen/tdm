@@ -977,7 +977,7 @@ void obj_from_room(obj_ptr_t in_object) {
 	auto object = in_object.get();
 
 	if(!object || IN_ROOM(object) == NOWHERE) {
-		log("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room",
+		log("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room(obj_ptr_t)",
 		    object, IN_ROOM(object));
 		return;
 	}
@@ -1008,7 +1008,7 @@ void obj_from_room(struct obj_data *object) {
 	struct obj_data *temp;
 
 	if(!object || IN_ROOM(object) == NOWHERE) {
-		log("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room",
+		log("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room(obj_data*)",
 		    object, IN_ROOM(object));
 		return;
 	}

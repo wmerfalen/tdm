@@ -987,9 +987,11 @@ void heartbeat(int pulse) {
 		}
 	}
 
-	if(!(pulse % mods::loot::STATIC_LOOT_RESOLUTION)) {
-		log("replenish_static_loot");
-		mods::loot::replenish_static_loot();
+	if(!(pulse % 160)) {
+		if(mods::loot::should_run_replenish_static_loot()) {
+			log("replenish_static_loot");
+			mods::loot::replenish_static_loot();
+		}
 	}
 
 	if(!(pulse % mods::deferred::TICK_RESOLUTION)) {
