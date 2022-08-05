@@ -49,9 +49,6 @@ namespace mods::builder::seqbuild {
 	using seqbuild_vnum_t = uint64_t;
 	using seqbuild_orm_type = mods::orm::scripted_sequences;
 	struct seqbuild_interface : public slotted_builder<seqbuild_vnum_t,seqbuild_orm_type> {
-		bool dispatch_multi_vnum_action(std::string argument) override {
-			return false;
-		}
 		/** ======== */
 		/** required */
 		/** ======== */

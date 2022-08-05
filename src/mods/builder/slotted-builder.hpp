@@ -733,7 +733,7 @@ namespace mods::builder {
 			 */
 			virtual bool dispatch_multi_vnum_action(std::string argument) {
 				m_debug("base class dispatch_multi_vnum_action");
-				return true;
+				return false;
 			}
 
 			/**

@@ -569,9 +569,6 @@ namespace mods::builder::conbuild {
 				return {0,"nothing set"};
 			});
 		}
-		bool dispatch_multi_vnum_action(std::string argument) override {
-			return false;
-		}
 
 		/** ======== */
 		/** required */

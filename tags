@@ -3716,7 +3716,7 @@ SUPERCMD	src/mods/builder.cpp	/^SUPERCMD(do_zbuild) {$/;"	kind:function	line:460
 SUPERCMD	src/mods/builder/bookmarks.cpp	/^	SUPERCMD(do_bookmark) {$/;"	kind:function	line:13	namespace:mods::builder::bookmarks	signature:(do_bookmark)
 SUPERCMD	src/mods/builder/bookmarks.cpp	/^	SUPERCMD(do_goto) {$/;"	kind:function	line:37	namespace:mods::builder::bookmarks	signature:(do_goto)
 SUPERCMD	src/mods/builder/bookmarks.cpp	/^	SUPERCMD(do_print_vnum) {$/;"	kind:function	line:71	namespace:mods::builder::bookmarks	signature:(do_print_vnum)
-SUPERCMD	src/mods/builder/conbuild.cpp	/^	SUPERCMD(do_conbuild) {$/;"	kind:function	line:623	namespace:mods::builder::conbuild	signature:(do_conbuild)
+SUPERCMD	src/mods/builder/conbuild.cpp	/^	SUPERCMD(do_conbuild) {$/;"	kind:function	line:620	namespace:mods::builder::conbuild	signature:(do_conbuild)
 SUPERCMD	src/mods/builder/hqbuild.cpp	/^	SUPERCMD(do_hqbuild) {$/;"	kind:function	line:83	namespace:mods::builder::hqbuild	signature:(do_hqbuild)
 SUPERCMD	src/mods/builder/loot-ammo.cpp	/^	SUPERCMD(do_ammobuild) {$/;"	kind:function	line:186	namespace:mods::builder::ammobuild	signature:(do_ammobuild)
 SUPERCMD	src/mods/builder/loot-payload.cpp	/^	SUPERCMD(do_paybuild) {$/;"	kind:function	line:187	namespace:mods::builder::paybuild	signature:(do_paybuild)
@@ -3725,7 +3725,7 @@ SUPERCMD	src/mods/builder/raid.cpp	/^	SUPERCMD(do_copy_mob) {$/;"	kind:function	
 SUPERCMD	src/mods/builder/raid.cpp	/^	SUPERCMD(do_raid) {$/;"	kind:function	line:311	namespace:mods::builder::raid	signature:(do_raid)
 SUPERCMD	src/mods/builder/raid.cpp	/^	SUPERCMD(do_raid_pave) {$/;"	kind:function	line:332	namespace:mods::builder::raid	signature:(do_raid_pave)
 SUPERCMD	src/mods/builder/raid.cpp	/^	SUPERCMD(do_raid_set_spawn) {$/;"	kind:function	line:408	namespace:mods::builder::raid	signature:(do_raid_set_spawn)
-SUPERCMD	src/mods/builder/seqbuild.cpp	/^	SUPERCMD(do_seqbuild) {$/;"	kind:function	line:676	namespace:mods::builder::seqbuild	signature:(do_seqbuild)
+SUPERCMD	src/mods/builder/seqbuild.cpp	/^	SUPERCMD(do_seqbuild) {$/;"	kind:function	line:673	namespace:mods::builder::seqbuild	signature:(do_seqbuild)
 SUPERCMD	src/mods/builder/static-loot.cpp	/^	SUPERCMD(do_staticlootbuild) {$/;"	kind:function	line:187	namespace:mods::builder::staticlootbuild	signature:(do_staticlootbuild)
 SUPERCMD	src/mods/chat.cpp	/^SUPERCMD(do_chanmgr) {$/;"	kind:function	line:129	signature:(do_chanmgr)
 SUPERCMD	src/mods/classes/super-user-fiddler.cpp	/^	SUPERCMD(do_mock_level) {$/;"	kind:function	line:23	namespace:mods::classes	signature:(do_mock_level)
@@ -4877,7 +4877,7 @@ access_level	src/mods/player.cpp	/^	player::access_level_t player::access_level(
 account	src/structs.h	/^	int	account;$/;"	kind:member	line:1102	struct:obj_data::rent_info	file:	access:public
 accumulate_from	src/mods/builder/slotted-builder.hpp	/^			std::string accumulate_from(const std::vector<std::string>& args,std::size_t index) {$/;"	kind:function	line:474	struct:mods::builder::slotted_builder	access:protected	signature:(const std::vector<std::string>& args,std::size_t index)
 accumulator_list	src/mods/builder/raid.cpp	/^		const std::vector<std::string>& accumulator_list() const {$/;"	kind:function	line:156	struct:mods::builder::raid::raid_interface	access:public	signature:() const
-accumulator_list	src/mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& accumulator_list() const {$/;"	kind:function	line:101	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
+accumulator_list	src/mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& accumulator_list() const {$/;"	kind:function	line:98	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
 accumulator_slot_list	src/mods/orm/orm-base.hpp	/^			virtual const std::vector<std::string>& accumulator_slot_list() const {$/;"	kind:function	line:106	struct:mods::orm::orm_base	access:public	signature:() const
 accumulators	src/mods/orm/orm-base.hpp	/^			std::vector<std::string> accumulators;$/;"	kind:member	line:100	struct:mods::orm::orm_base	file:	access:public
 accuracy	src/mods/ranged-combat-totals.hpp	/^		int accuracy;$/;"	kind:member	line:44	struct:mods::ranged_combat_totals	file:	access:public
@@ -5638,7 +5638,7 @@ by_name	src/mods/pfind.cpp	/^	player_ptr_t by_name(const char* player_name) {$/;
 by_player	src/mods/rifle-attachments.cpp	/^		std::vector<std::shared_ptr<mods::rifle_attachments_t>> by_player(player_ptr_t& player) {$/;"	kind:function	line:11	namespace:mods::rifle_attachments	signature:(player_ptr_t& player)
 by_profile_vnum	src/mods/builder/meqbuild.cpp	/^		std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> by_profile_vnum(const uint64_t& vnum) {$/;"	kind:function	line:191	namespace:mods::builder::meqbuild::map	signature:(const uint64_t& vnum)
 by_profile_vnum	src/mods/builder/raid.cpp	/^		std::deque<std::shared_ptr<mods::orm::raid>> by_profile_vnum(const uint64_t& vnum) {$/;"	kind:function	line:293	namespace:mods::builder::raid::map	signature:(const uint64_t& vnum)
-by_profile_vnum	src/mods/builder/seqbuild.cpp	/^		std::deque<std::shared_ptr<mods::orm::scripted_step>> by_profile_vnum(const uint64_t& vnum) {$/;"	kind:function	line:658	namespace:mods::builder::seqbuild::map	signature:(const uint64_t& vnum)
+by_profile_vnum	src/mods/builder/seqbuild.cpp	/^		std::deque<std::shared_ptr<mods::orm::scripted_step>> by_profile_vnum(const uint64_t& vnum) {$/;"	kind:function	line:655	namespace:mods::builder::seqbuild::map	signature:(const uint64_t& vnum)
 by_uuid	src/mods/pfind.cpp	/^	player_ptr_t by_uuid(uuid_t player_uuid) {$/;"	kind:function	line:25	namespace:mods::pfind	signature:(uuid_t player_uuid)
 by_uuid	src/mods/rifle-attachments.cpp	/^		std::shared_ptr<mods::rifle_attachments_t> by_uuid(const uuid_t& uuid) {$/;"	kind:function	line:47	namespace:mods::rifle_attachments	signature:(const uuid_t& uuid)
 by_vnum	src/mods/builder/conbuild.cpp	/^		std::optional<std::shared_ptr<conbuild_orm_type>> by_vnum(conbuild_vnum_t vnum) {$/;"	kind:function	line:66	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:(conbuild_vnum_t vnum)
@@ -5647,7 +5647,7 @@ by_vnum	src/mods/builder/loot-ammo.cpp	/^		std::optional<std::shared_ptr<ammobui
 by_vnum	src/mods/builder/loot-payload.cpp	/^		std::optional<std::shared_ptr<paybuild_orm_type>> by_vnum(paybuild_vnum_t vnum) {$/;"	kind:function	line:60	struct:mods::builder::paybuild::paybuild_interface	access:public	signature:(paybuild_vnum_t vnum)
 by_vnum	src/mods/builder/meqbuild.cpp	/^		std::optional<std::shared_ptr<meqbuild_orm_type>> by_vnum(meqbuild_vnum_t vnum) {$/;"	kind:function	line:56	struct:mods::builder::meqbuild::meqbuild_interface	access:public	signature:(meqbuild_vnum_t vnum)
 by_vnum	src/mods/builder/raid.cpp	/^		std::optional<std::shared_ptr<raid_orm_type>> by_vnum(raid_vnum_t vnum) {$/;"	kind:function	line:130	struct:mods::builder::raid::raid_interface	access:public	signature:(raid_vnum_t vnum)
-by_vnum	src/mods/builder/seqbuild.cpp	/^		std::optional<std::shared_ptr<seqbuild_orm_type>> by_vnum(seqbuild_vnum_t vnum) {$/;"	kind:function	line:77	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(seqbuild_vnum_t vnum)
+by_vnum	src/mods/builder/seqbuild.cpp	/^		std::optional<std::shared_ptr<seqbuild_orm_type>> by_vnum(seqbuild_vnum_t vnum) {$/;"	kind:function	line:74	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(seqbuild_vnum_t vnum)
 by_vnum	src/mods/builder/static-loot.cpp	/^		std::optional<std::shared_ptr<staticlootbuild_orm_type>> by_vnum(staticlootbuild_vnum_t vnum) {$/;"	kind:function	line:60	struct:mods::builder::staticlootbuild::staticlootbuild_interface	access:public	signature:(staticlootbuild_vnum_t vnum)
 byte	src/structs.h	/^typedef signed char			byte;$/;"	kind:typedef	line:751	file:
 c_description	src/mods/orm/contracts.hpp	/^		std::string c_description;$/;"	kind:member	line:74	struct:mods::orm::contracts	file:	access:public
@@ -5979,13 +5979,13 @@ cleanup	src/mods/melt.hpp	/^		bool cleanup;$/;"	kind:member	line:12	struct:mods:
 cleanup_scripted_steps	src/mods/scripted-sequence-runner.cpp	/^	void cleanup_scripted_steps() {$/;"	kind:function	line:45	namespace:mods::scripted_sequence_runner	signature:()
 clear	src/mods/affects.hpp	/^			void clear(TAffectsContainer affects) {$/;"	kind:function	line:194	struct:mods::affects::dissolver	access:public	signature:(TAffectsContainer affects)
 clear	src/mods/builder-data.cpp	/^void room_recorder_t::clear() {$/;"	kind:function	line:85	class:room_recorder_t	signature:()
-clear	src/mods/builder/conbuild.cpp	/^		void clear() {$/;"	kind:function	line:602	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:()
+clear	src/mods/builder/conbuild.cpp	/^		void clear() {$/;"	kind:function	line:599	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:()
 clear	src/mods/builder/hqbuild.cpp	/^	void clear() {$/;"	kind:function	line:8	namespace:mods::builder::hqbuild	signature:()
 clear	src/mods/builder/loot-ammo.cpp	/^		void clear() {$/;"	kind:function	line:122	struct:mods::builder::ammobuild::ammobuild_interface	access:public	signature:()
 clear	src/mods/builder/loot-payload.cpp	/^		void clear() {$/;"	kind:function	line:123	struct:mods::builder::paybuild::paybuild_interface	access:public	signature:()
 clear	src/mods/builder/meqbuild.cpp	/^		void clear() {$/;"	kind:function	line:119	struct:mods::builder::meqbuild::meqbuild_interface	access:public	signature:()
 clear	src/mods/builder/raid.cpp	/^		void clear() {$/;"	kind:function	line:266	struct:mods::builder::raid::raid_interface	access:public	signature:()
-clear	src/mods/builder/seqbuild.cpp	/^		void clear() {$/;"	kind:function	line:627	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:()
+clear	src/mods/builder/seqbuild.cpp	/^		void clear() {$/;"	kind:function	line:624	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:()
 clear	src/mods/builder/static-loot.cpp	/^		void clear() {$/;"	kind:function	line:123	struct:mods::builder::staticlootbuild::staticlootbuild_interface	access:public	signature:()
 clear	src/mods/sql.hpp	/^			compositor<T>& clear() {$/;"	kind:function	line:476	struct:mods::sql::compositor	access:public	signature:()
 clear	src/mods/string.cpp	/^	void string::clear() {$/;"	kind:function	line:79	class:mods::string	signature:()
@@ -6184,7 +6184,7 @@ conbuild	src/mods/builder/conbuild.cpp	/^namespace mods::builder::conbuild {$/;"
 conbuild	src/mods/init.hpp	/^INIT(mods::builder::conbuild);$/;"	kind:variable	line:56
 conbuild_interface	src/mods/builder/conbuild.cpp	/^		conbuild_interface() {$/;"	kind:function	line:122	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:()
 conbuild_interface	src/mods/builder/conbuild.cpp	/^	struct conbuild_interface : public slotted_builder<conbuild_vnum_t,conbuild_orm_type> {$/;"	kind:struct	line:23	namespace:mods::builder::conbuild	file:	inherits:slotted_builder
-conbuilder	src/mods/builder/conbuild.cpp	/^	static conbuild_interface& conbuilder(player_ptr_t player) {$/;"	kind:function	line:617	namespace:mods::builder::conbuild	signature:(player_ptr_t player)
+conbuilder	src/mods/builder/conbuild.cpp	/^	static conbuild_interface& conbuilder(player_ptr_t player) {$/;"	kind:function	line:614	namespace:mods::builder::conbuild	signature:(player_ptr_t player)
 concat	src/mods/string.cpp	/^	void string::concat(const std::string& str) {$/;"	kind:function	line:197	class:mods::string	signature:(const std::string& str)
 concat	src/mods/string.cpp	/^	void string::concat(int ch) {$/;"	kind:function	line:206	class:mods::string	signature:(int ch)
 conditions	src/structs.h	/^	std::array<sbyte,conditions_max> conditions;         \/* Drunk, full, thirsty			*\/$/;"	kind:member	line:1476	struct:player_special_data_saved	file:	access:public
@@ -6820,8 +6820,8 @@ delete_by_vnum	src/mods/builder/meqbuild.cpp	/^		bool delete_by_vnum(const uint6
 delete_by_vnum	src/mods/builder/meqbuild.cpp	/^		bool delete_by_vnum(meqbuild_vnum_t vnum) {$/;"	kind:function	line:36	struct:mods::builder::meqbuild::meqbuild_interface	access:public	signature:(meqbuild_vnum_t vnum)
 delete_by_vnum	src/mods/builder/raid.cpp	/^		bool delete_by_vnum(const uint64_t& vnum) {$/;"	kind:function	line:279	namespace:mods::builder::raid::map	signature:(const uint64_t& vnum)
 delete_by_vnum	src/mods/builder/raid.cpp	/^		bool delete_by_vnum(raid_vnum_t vnum) {$/;"	kind:function	line:111	struct:mods::builder::raid::raid_interface	access:public	signature:(raid_vnum_t vnum)
-delete_by_vnum	src/mods/builder/seqbuild.cpp	/^		bool delete_by_vnum(const uint64_t& vnum) {$/;"	kind:function	line:644	namespace:mods::builder::seqbuild::map	signature:(const uint64_t& vnum)
-delete_by_vnum	src/mods/builder/seqbuild.cpp	/^		bool delete_by_vnum(seqbuild_vnum_t vnum) {$/;"	kind:function	line:58	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(seqbuild_vnum_t vnum)
+delete_by_vnum	src/mods/builder/seqbuild.cpp	/^		bool delete_by_vnum(const uint64_t& vnum) {$/;"	kind:function	line:641	namespace:mods::builder::seqbuild::map	signature:(const uint64_t& vnum)
+delete_by_vnum	src/mods/builder/seqbuild.cpp	/^		bool delete_by_vnum(seqbuild_vnum_t vnum) {$/;"	kind:function	line:55	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(seqbuild_vnum_t vnum)
 delete_by_vnum	src/mods/builder/static-loot.cpp	/^		bool delete_by_vnum(staticlootbuild_vnum_t vnum) {$/;"	kind:function	line:36	struct:mods::builder::staticlootbuild::staticlootbuild_interface	access:public	signature:(staticlootbuild_vnum_t vnum)
 delete_char	src/mods/players/db-load.cpp	/^	int16_t delete_char(player_ptr_t& player) {$/;"	kind:function	line:297	namespace:mods::players::db_load	signature:(player_ptr_t& player)
 delete_char_by_name	src/mods/players/db-load.cpp	/^	int16_t delete_char_by_name(std::string_view user) {$/;"	kind:function	line:279	namespace:mods::players::db_load	signature:(std::string_view user)
@@ -7044,12 +7044,12 @@ dispatch_help	src/mods/builder/slotted-builder.hpp	/^			bool dispatch_help(std::
 dispatch_help_message	src/mods/response-team/radio.cpp	/^	void dispatch_help_message(uuid_t mob_uuid,std::string_view message, severity_t severity) {$/;"	kind:function	line:49	namespace:mods::response_team::radio	signature:(uuid_t mob_uuid,std::string_view message, severity_t severity)
 dispatch_list_extract_action	src/mods/builder/slotted-builder.hpp	/^			bool dispatch_list_extract_action(std::string argument) {$/;"	kind:function	line:816	struct:mods::builder::slotted_builder	file:	access:private	signature:(std::string argument)
 dispatch_multi_vnum_action	src/mods/builder/slotted-builder.hpp	/^			virtual bool dispatch_multi_vnum_action(std::string argument) {$/;"	kind:function	line:734	struct:mods::builder::slotted_builder	file:	access:private	signature:(std::string argument)
-dispatch_new_command	src/mods/builder/conbuild.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	kind:function	line:580	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:(const std::vector<std::string>& cmd_args,std::string argument)
+dispatch_new_command	src/mods/builder/conbuild.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	kind:function	line:577	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:(const std::vector<std::string>& cmd_args,std::string argument)
 dispatch_new_command	src/mods/builder/loot-ammo.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	kind:function	line:98	struct:mods::builder::ammobuild::ammobuild_interface	access:public	signature:(const std::vector<std::string>& cmd_args,std::string argument)
 dispatch_new_command	src/mods/builder/loot-payload.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	kind:function	line:97	struct:mods::builder::paybuild::paybuild_interface	access:public	signature:(const std::vector<std::string>& cmd_args,std::string argument)
 dispatch_new_command	src/mods/builder/meqbuild.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	kind:function	line:96	struct:mods::builder::meqbuild::meqbuild_interface	access:public	signature:(const std::vector<std::string>& cmd_args,std::string argument)
 dispatch_new_command	src/mods/builder/raid.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	kind:function	line:247	struct:mods::builder::raid::raid_interface	access:public	signature:(const std::vector<std::string>& cmd_args,std::string argument)
-dispatch_new_command	src/mods/builder/seqbuild.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	kind:function	line:605	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(const std::vector<std::string>& cmd_args,std::string argument)
+dispatch_new_command	src/mods/builder/seqbuild.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	kind:function	line:602	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(const std::vector<std::string>& cmd_args,std::string argument)
 dispatch_new_command	src/mods/builder/static-loot.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	kind:function	line:97	struct:mods::builder::staticlootbuild::staticlootbuild_interface	access:public	signature:(const std::vector<std::string>& cmd_args,std::string argument)
 dispatch_paginate_action	src/mods/builder/slotted-builder.hpp	/^			bool dispatch_paginate_action(std::string argument) {$/;"	kind:function	line:744	struct:mods::builder::slotted_builder	file:	access:private	signature:(std::string argument)
 dispatch_player	src/mods/melee/main.cpp	/^	void dispatch_player(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:337	namespace:mods::melee::main	signature:(player_ptr_t& attacker,player_ptr_t& victim)
@@ -7585,7 +7585,7 @@ dump_list	src/mods/lmdb/conf.hpp	/^void dump_list(void){ }$/;"	kind:function	lin
 dump_status	src/mods/lmdb.cpp	/^	void _db_handle::dump_status() const {$/;"	kind:function	line:806	class:mods::lmdb::_db_handle	signature:() const
 dump_step	src/mods/builder/conbuild.cpp	/^		void dump_step(step_orm_ptr_t s) {$/;"	kind:function	line:115	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:(step_orm_ptr_t s)
 dump_step	src/mods/builder/raid.cpp	/^		void dump_step(std::shared_ptr<mods::orm::raid> s) {$/;"	kind:function	line:180	struct:mods::builder::raid::raid_interface	access:public	signature:(std::shared_ptr<mods::orm::raid> s)
-dump_step	src/mods/builder/seqbuild.cpp	/^		void dump_step(std::shared_ptr<mods::orm::scripted_step> s) {$/;"	kind:function	line:176	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(std::shared_ptr<mods::orm::scripted_step> s)
+dump_step	src/mods/builder/seqbuild.cpp	/^		void dump_step(std::shared_ptr<mods::orm::scripted_step> s) {$/;"	kind:function	line:173	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(std::shared_ptr<mods::orm::scripted_step> s)
 dump_step	src/mods/player-contract-instance.cpp	/^	std::string_view player_contract_instance::dump_step() {$/;"	kind:function	line:431	class:mods::contracts::player_contract_instance	signature:()
 duplicate	src/db.h	/^	int duplicate;$/;"	kind:member	line:286	struct:help_index_element	file:	access:public
 durability_profile	src/mods/rifle-attachments.hpp	/^			int16_t durability_profile;$/;"	kind:member	line:93	struct:mods::rifle_attachments_t	file:	access:public
@@ -8248,7 +8248,7 @@ find_house	src/house.cpp	/^int find_house(room_vnum vnum) {$/;"	kind:function	li
 find_item	src/mods/contract-events.cpp	/^	void find_item(player_ptr_t& player,obj_ptr_t& object) {$/;"	kind:function	line:31	namespace:mods::contract_events	signature:(player_ptr_t& player,obj_ptr_t& object)
 find_item	src/mods/player-contract-instance.cpp	/^	void player_contract_instance::find_item(obj_ptr_t& object) {$/;"	kind:function	line:279	class:mods::contracts::player_contract_instance	signature:(obj_ptr_t& object)
 find_local_step_by_id	src/mods/builder/raid.cpp	/^		std::optional<std::shared_ptr<mods::orm::raid>> find_local_step_by_id(const uint64_t& step_id) {$/;"	kind:function	line:172	struct:mods::builder::raid::raid_interface	access:public	signature:(const uint64_t& step_id)
-find_local_step_by_id	src/mods/builder/seqbuild.cpp	/^		std::optional<std::shared_ptr<mods::orm::scripted_step>> find_local_step_by_id(const uint64_t& step_id) {$/;"	kind:function	line:117	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(const uint64_t& step_id)
+find_local_step_by_id	src/mods/builder/seqbuild.cpp	/^		std::optional<std::shared_ptr<mods::orm::scripted_step>> find_local_step_by_id(const uint64_t& step_id) {$/;"	kind:function	line:114	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(const uint64_t& step_id)
 find_mob	src/mods/contract-events.cpp	/^	void find_mob(player_ptr_t& player,player_ptr_t& mob) {$/;"	kind:function	line:24	namespace:mods::contract_events	signature:(player_ptr_t& player,player_ptr_t& mob)
 find_mob	src/mods/forge-engine/kill.cpp	/^	void kill_t::find_mob() {$/;"	kind:function	line:25	class:mods::forge_engine::kill_t	signature:()
 find_mob	src/mods/player-contract-instance.cpp	/^	void player_contract_instance::find_mob(player_ptr_t& mob) {$/;"	kind:function	line:296	class:mods::contracts::player_contract_instance	signature:(player_ptr_t& mob)
@@ -8385,8 +8385,8 @@ foreach_player	src/mods/loops.hpp	/^		static inline PointerType* foreach_player(
 foreach_player	src/mods/loops.hpp	/^		static inline void foreach_player(function_t func) {$/;"	kind:function	line:42	namespace:mods::loops::shptr	signature:(function_t func)
 foreach_player	src/mods/loops.hpp	/^	static inline PointerType* foreach_player(mods_player_function_t<PointerType> func,PointerType* param) {$/;"	kind:function	line:87	namespace:mods::loops	signature:(mods_player_function_t<PointerType> func,PointerType* param)
 foreach_step_do	src/mods/builder/conbuild.cpp	/^		std::pair<unsigned,unsigned> foreach_step_do(std::vector<int> list,std::string mode) {$/;"	kind:function	line:80	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:(std::vector<int> list,std::string mode)
-foreach_step_do	src/mods/builder/seqbuild.cpp	/^		std::pair<unsigned,unsigned> foreach_step_do(const std::vector<int>& list,std::string_view mode) {$/;"	kind:function	line:142	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(const std::vector<int>& list,std::string_view mode)
-foreach_step_do	src/mods/builder/seqbuild.cpp	/^		std::pair<unsigned,unsigned> foreach_step_do(std::string_view mode) {$/;"	kind:function	line:125	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(std::string_view mode)
+foreach_step_do	src/mods/builder/seqbuild.cpp	/^		std::pair<unsigned,unsigned> foreach_step_do(const std::vector<int>& list,std::string_view mode) {$/;"	kind:function	line:139	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(const std::vector<int>& list,std::string_view mode)
+foreach_step_do	src/mods/builder/seqbuild.cpp	/^		std::pair<unsigned,unsigned> foreach_step_do(std::string_view mode) {$/;"	kind:function	line:122	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(std::string_view mode)
 forge	src/mods/classes/forge.cpp	/^	forge::forge(){$/;"	kind:function	line:57	class:mods::classes::forge	signature:()
 forge	src/mods/classes/forge.cpp	/^	forge::forge(player_ptr_t p){$/;"	kind:function	line:29	class:mods::classes::forge	signature:(player_ptr_t p)
 forge	src/mods/classes/forge.cpp	/^namespace mods::class_abilities::forge {$/;"	kind:namespace	line:106	class:mods::class_abilities	file:
@@ -9474,13 +9474,13 @@ init	src/mods/blind.cpp	/^	void init() {$/;"	kind:function	line:151	namespace:mo
 init	src/mods/boosters/adrenaline-shot.cpp	/^		void init() {$/;"	kind:function	line:78	namespace:mods::boosters::adrenaline_shot_init	signature:()
 init	src/mods/builder.cpp	/^	void init() {$/;"	kind:function	line:6586	namespace:mods::builder	signature:()
 init	src/mods/builder/bookmarks.cpp	/^	void init() {$/;"	kind:function	line:104	namespace:mods::builder::bookmarks	signature:()
-init	src/mods/builder/conbuild.cpp	/^	void init() {$/;"	kind:function	line:633	namespace:mods::builder::conbuild	signature:()
+init	src/mods/builder/conbuild.cpp	/^	void init() {$/;"	kind:function	line:630	namespace:mods::builder::conbuild	signature:()
 init	src/mods/builder/hqbuild.cpp	/^	void init() {$/;"	kind:function	line:343	namespace:mods::builder::hqbuild	signature:()
 init	src/mods/builder/loot-ammo.cpp	/^	void init() {$/;"	kind:function	line:202	namespace:mods::builder::ammobuild	signature:()
 init	src/mods/builder/loot-payload.cpp	/^	void init() {$/;"	kind:function	line:204	namespace:mods::builder::paybuild	signature:()
 init	src/mods/builder/meqbuild.cpp	/^	void init() {$/;"	kind:function	line:397	namespace:mods::builder::meqbuild	signature:()
 init	src/mods/builder/raid.cpp	/^	void init() {$/;"	kind:function	line:445	namespace:mods::builder::raid	signature:()
-init	src/mods/builder/seqbuild.cpp	/^	void init() {$/;"	kind:function	line:687	namespace:mods::builder::seqbuild	signature:()
+init	src/mods/builder/seqbuild.cpp	/^	void init() {$/;"	kind:function	line:684	namespace:mods::builder::seqbuild	signature:()
 init	src/mods/builder/static-loot.cpp	/^	void init() {$/;"	kind:function	line:204	namespace:mods::builder::staticlootbuild	signature:()
 init	src/mods/chargen.cpp	/^	void init() {$/;"	kind:function	line:22	namespace:mods::chargen	signature:()
 init	src/mods/class-abilities.cpp	/^	void init(){$/;"	kind:function	line:17	namespace:mods::class_abilities	signature:()
@@ -9719,7 +9719,7 @@ int_map	src/mods/util.cpp	/^	std::map<std::size_t,int> parsed_args::int_map(std:
 int_types	src/mods/values.cpp	/^static const std::vector<value_key_t> int_types = {$/;"	kind:member	line:1659	namespace:mods::values	file:
 intat	src/mods/util.hpp	552;"	kind:macro	line:552	file:
 integral_list	src/mods/builder/raid.cpp	/^		const std::vector<std::string>& integral_list() const {$/;"	kind:function	line:145	struct:mods::builder::raid::raid_interface	access:public	signature:() const
-integral_list	src/mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& integral_list() const {$/;"	kind:function	line:92	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
+integral_list	src/mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& integral_list() const {$/;"	kind:function	line:89	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
 integral_object	src/mods/orm/integral-object.hpp	/^		integral_object() : id(0) {$/;"	kind:function	line:14	struct:mods::orm::integral_object	access:public	signature:()
 integral_object	src/mods/orm/integral-object.hpp	/^	struct integral_object : public mods::orm::orm_base<integral_object,std::string> {$/;"	kind:struct	line:9	namespace:mods::orm	file:	inherits:mods::orm::orm_base
 integral_objects	src/mods/init.hpp	/^INIT(mods::integral_objects);$/;"	kind:variable	line:34
@@ -10112,13 +10112,13 @@ load	src/mods/classes/base.cpp	/^	std::tuple<bool,std::string> skill_t::load(pla
 load	src/mods/karma.cpp	/^	void load(player_ptr_t& player){$/;"	kind:function	line:12	namespace:mods	signature:(player_ptr_t& player)
 load	src/mods/mini-games.cpp	/^	void load(mini_game_payload_t g) {$/;"	kind:function	line:16	namespace:mods::mini_games	signature:(mini_game_payload_t g)
 load_aliases	src/mods/players/db-load.cpp	/^	void load_aliases(player_ptr_t& player) {$/;"	kind:function	line:316	namespace:mods::players::db_load	signature:(player_ptr_t& player)
-load_all	src/mods/builder/conbuild.cpp	/^		void load_all() {$/;"	kind:function	line:609	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:()
+load_all	src/mods/builder/conbuild.cpp	/^		void load_all() {$/;"	kind:function	line:606	struct:mods::builder::conbuild::conbuild_interface	access:public	signature:()
 load_all	src/mods/builder/hqbuild.cpp	/^	void load_all() {$/;"	kind:function	line:11	namespace:mods::builder::hqbuild	signature:()
 load_all	src/mods/builder/loot-ammo.cpp	/^		void load_all() {$/;"	kind:function	line:129	struct:mods::builder::ammobuild::ammobuild_interface	access:public	signature:()
 load_all	src/mods/builder/loot-payload.cpp	/^		void load_all() {$/;"	kind:function	line:130	struct:mods::builder::paybuild::paybuild_interface	access:public	signature:()
 load_all	src/mods/builder/meqbuild.cpp	/^		void load_all() {$/;"	kind:function	line:128	struct:mods::builder::meqbuild::meqbuild_interface	access:public	signature:()
 load_all	src/mods/builder/raid.cpp	/^		void load_all() {$/;"	kind:function	line:272	struct:mods::builder::raid::raid_interface	access:public	signature:()
-load_all	src/mods/builder/seqbuild.cpp	/^		void load_all() {$/;"	kind:function	line:635	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:()
+load_all	src/mods/builder/seqbuild.cpp	/^		void load_all() {$/;"	kind:function	line:632	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:()
 load_all	src/mods/builder/static-loot.cpp	/^		void load_all() {$/;"	kind:function	line:130	struct:mods::builder::staticlootbuild::staticlootbuild_interface	access:public	signature:()
 load_all	src/mods/orm/armor-index.cpp	/^	std::tuple<int16_t,std::string> armor_index::load_all() {$/;"	kind:function	line:53	class:mods::orm::armor_index	signature:()
 load_all	src/mods/orm/mini-game.cpp	/^	void mini_game::load_all(){$/;"	kind:function	line:5	class:mods::orm::mini_game	signature:()
@@ -11678,7 +11678,7 @@ mana_points_per_inward_pump_buff	src/mods/weapons/shotgun-dst7A.hpp	/^				static
 manufacturer	src/mods/yaml.hpp	/^		std::string manufacturer;$/;"	kind:member	line:165	struct:mods::yaml::yaml_description_t	file:	access:public
 map	src/mods/builder/meqbuild.cpp	/^	namespace map {$/;"	kind:namespace	line:164	namespace:mods::builder::meqbuild	file:
 map	src/mods/builder/raid.cpp	/^	namespace map {$/;"	kind:namespace	line:277	namespace:mods::builder::raid	file:
-map	src/mods/builder/seqbuild.cpp	/^	namespace map {$/;"	kind:namespace	line:642	namespace:mods::builder::seqbuild	file:
+map	src/mods/builder/seqbuild.cpp	/^	namespace map {$/;"	kind:namespace	line:639	namespace:mods::builder::seqbuild	file:
 map2str	src/mods/util.hpp	/^	std::string map2str(std::map<TKey,TVal> in_map) {$/;"	kind:function	line:177	namespace:mods::util	signature:(std::map<TKey,TVal> in_map)
 map_generator	src/mods/fluxkraft/generator.cpp	/^	mods::fluxkraft::generator map_generator;$/;"	kind:member	line:12	namespace:mods::fluxkraft	file:
 map_keys	src/globals.cpp	/^std::vector<str_t> map_keys(str_map_t& m) {$/;"	kind:function	line:1486	signature:(str_map_t& m)
@@ -14631,9 +14631,9 @@ sentinel	src/mods/weapon.hpp	/^	namespace sentinel {$/;"	kind:namespace	line:634
 sentinel_skillset	src/class.cpp	/^std::string sentinel_skillset() {$/;"	kind:function	line:220	signature:()
 seqbuild	src/mods/builder/seqbuild.cpp	/^namespace mods::builder::seqbuild {$/;"	kind:namespace	line:15	class:mods::builder	file:
 seqbuild	src/mods/init.hpp	/^INIT(mods::builder::seqbuild);$/;"	kind:variable	line:68
-seqbuild_interface	src/mods/builder/seqbuild.cpp	/^		seqbuild_interface() {$/;"	kind:function	line:183	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:()
+seqbuild_interface	src/mods/builder/seqbuild.cpp	/^		seqbuild_interface() {$/;"	kind:function	line:180	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:()
 seqbuild_interface	src/mods/builder/seqbuild.cpp	/^	struct seqbuild_interface : public slotted_builder<seqbuild_vnum_t,seqbuild_orm_type> {$/;"	kind:struct	line:51	namespace:mods::builder::seqbuild	file:	inherits:slotted_builder
-seqbuilder	src/mods/builder/seqbuild.cpp	/^	static seqbuild_interface& seqbuilder(player_ptr_t player) {$/;"	kind:function	line:670	namespace:mods::builder::seqbuild	signature:(player_ptr_t player)
+seqbuilder	src/mods/builder/seqbuild.cpp	/^	static seqbuild_interface& seqbuilder(player_ptr_t player) {$/;"	kind:function	line:667	namespace:mods::builder::seqbuild	signature:(player_ptr_t player)
 sequence_criteria	src/mods/scripted-sequence-events.cpp	/^	std::map<sequence_vnum_t,std::vector<std::tuple<task_type_t,task_target_t,uint32_t>>> sequence_criteria;$/;"	kind:member	line:14	namespace:mods::scripted_sequence_events	file:
 sequence_exists	src/mods/builder/seqbuild.cpp	/^	bool sequence_exists(int vnum) {$/;"	kind:function	line:25	namespace:mods::builder::seqbuild	signature:(int vnum)
 sequence_vnum	src/mods/contract-step-callback.hpp	/^		sequence_vnum_t sequence_vnum;$/;"	kind:member	line:15	struct:mods::contract_step_callback	file:	access:public
@@ -15373,15 +15373,15 @@ stc	src/mods/player.cpp	/^	void player::stc(std::string_view sview) {$/;"	kind:f
 stc_room	src/mods/player.cpp	/^	void player::stc_room(const room_rnum& rnum) {$/;"	kind:function	line:982	class:mods::player	signature:(const room_rnum& rnum)
 step	src/mods/scripted-sequence-runner.cpp	/^		step_ptr_t step;$/;"	kind:member	line:27	struct:mods::scripted_sequence_runner::step_info_t	file:	access:public
 step_by_vnum	src/mods/builder/raid.cpp	/^		std::optional<std::shared_ptr<mods::orm::raid>> step_by_vnum(raid_vnum_t vnum) {$/;"	kind:function	line:162	struct:mods::builder::raid::raid_interface	access:public	signature:(raid_vnum_t vnum)
-step_by_vnum	src/mods/builder/seqbuild.cpp	/^		std::optional<std::shared_ptr<mods::orm::scripted_step>> step_by_vnum(seqbuild_vnum_t vnum) {$/;"	kind:function	line:107	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(seqbuild_vnum_t vnum)
+step_by_vnum	src/mods/builder/seqbuild.cpp	/^		std::optional<std::shared_ptr<mods::orm::scripted_step>> step_by_vnum(seqbuild_vnum_t vnum) {$/;"	kind:function	line:104	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:(seqbuild_vnum_t vnum)
 step_column_list	src/mods/builder/raid.cpp	/^		std::vector<std::string> step_column_list() const {$/;"	kind:function	line:142	struct:mods::builder::raid::raid_interface	access:public	signature:() const
-step_column_list	src/mods/builder/seqbuild.cpp	/^		std::vector<std::string> step_column_list() const {$/;"	kind:function	line:89	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
+step_column_list	src/mods/builder/seqbuild.cpp	/^		std::vector<std::string> step_column_list() const {$/;"	kind:function	line:86	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
 step_counter	src/mods/player-contract-instance.hpp	/^			const auto& step_counter() const {$/;"	kind:function	line:103	struct:mods::contracts::player_contract_instance	access:public	signature:() const
 step_id_generator	src/mods/scripted-sequence-runner.cpp	/^	std::size_t step_id_generator() {$/;"	kind:function	line:21	namespace:mods::scripted_sequence_runner	signature:()
 step_info_t	src/mods/scripted-sequence-runner.cpp	/^		step_info_t(step_ptr_t& s) : id(step_id_generator()), step(s) {$/;"	kind:function	line:28	struct:mods::scripted_sequence_runner::step_info_t	access:public	signature:(step_ptr_t& s)
 step_info_t	src/mods/scripted-sequence-runner.cpp	/^	struct step_info_t {$/;"	kind:struct	line:25	namespace:mods::scripted_sequence_runner	file:
 step_list	src/mods/builder/raid.cpp	/^		mods::orm::raid_list_t step_list;$/;"	kind:member	line:171	struct:mods::builder::raid::raid_interface	file:	access:public
-step_list	src/mods/builder/seqbuild.cpp	/^		std::deque<std::shared_ptr<mods::orm::scripted_step>> step_list;$/;"	kind:member	line:116	struct:mods::builder::seqbuild::seqbuild_interface	file:	access:public
+step_list	src/mods/builder/seqbuild.cpp	/^		std::deque<std::shared_ptr<mods::orm::scripted_step>> step_list;$/;"	kind:member	line:113	struct:mods::builder::seqbuild::seqbuild_interface	file:	access:public
 step_one	src/mods/weapons/damage-types.cpp	/^		int step_one(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:160	namespace:mods::weapons::damage_types::legacy	signature:(char_data *ch, char_data *victim, int dam, int attacktype)
 step_one	src/mods/weapons/legacy-combat.cpp	/^	int step_one(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	kind:function	line:75	namespace:mods::weapons::legacy	signature:(char_data *ch, char_data *victim, int dam, int attacktype)
 step_runner	src/mods/scripted-sequence-runner.cpp	/^	void step_runner(std::size_t id,const uuid_t& player_uuid) {$/;"	kind:function	line:65	namespace:mods::scripted_sequence_runner	signature:(std::size_t id,const uuid_t& player_uuid)
@@ -15466,7 +15466,7 @@ string	src/mods/string.hpp	/^	struct string {$/;"	kind:struct	line:18	namespace:
 string_add	src/modify.cpp	/^void string_add(mods::descriptor_data d, char *str) {$/;"	kind:function	line:108	signature:(mods::descriptor_data d, char *str)
 string_fields	src/modify.cpp	/^const char *string_fields[] = {$/;"	kind:variable	line:38
 string_list	src/mods/builder/raid.cpp	/^		const std::vector<std::string>& string_list() const {$/;"	kind:function	line:148	struct:mods::builder::raid::raid_interface	access:public	signature:() const
-string_list	src/mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& string_list() const {$/;"	kind:function	line:95	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
+string_list	src/mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& string_list() const {$/;"	kind:function	line:92	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
 string_map	src/mods/affects.hpp	/^	const static std::map<std::string,affect_t> string_map = {$/;"	kind:member	line:51	namespace:mods::affects	file:
 string_to_action	src/mods/rate-limiting.cpp	/^	action_t string_to_action(std::string_view action) {$/;"	kind:function	line:41	namespace:mods::rate_limiting	signature:(std::string_view action)
 string_types	src/mods/values.cpp	/^static const std::vector<value_key_t> string_types = {$/;"	kind:member	line:2074	namespace:mods::values	file:
@@ -15643,7 +15643,7 @@ teguards	src/mods/drops.cpp	/^	static constexpr std::string_view teguards = "arm
 telegraph	src/mods/mobs/defiler.cpp	/^	void defiler::telegraph(player_ptr_t& victim,std::string_view saying) {$/;"	kind:function	line:528	class:mods::mobs::defiler	signature:(player_ptr_t& victim,std::string_view saying)
 temp_id	src/mods/scripted-step.hpp	/^		std::size_t temp_id;$/;"	kind:member	line:27	struct:mods::scripted_step	file:	access:public
 temp_step	src/mods/builder/raid.cpp	/^		static mods::orm::raid& temp_step() {$/;"	kind:function	line:138	struct:mods::builder::raid::raid_interface	access:public	signature:()
-temp_step	src/mods/builder/seqbuild.cpp	/^		static mods::orm::scripted_step& temp_step() {$/;"	kind:function	line:85	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:()
+temp_step	src/mods/builder/seqbuild.cpp	/^		static mods::orm::scripted_step& temp_step() {$/;"	kind:function	line:82	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:()
 temper1	src/shop.h	/^	int	 temper1;		\/* How does keeper react if no money	*\/$/;"	kind:member	line:46	struct:shop_data	file:	access:public
 tenax13	src/mods/drops.cpp	/^	static constexpr std::string_view tenax13 = "rifle\/tengu-vulkan-ax13.yml";$/;"	kind:member	line:132	namespace:mods::drops	file:
 tensaiga	src/mods/drops.cpp	/^	static constexpr std::string_view tensaiga = "rifle\/tengu-radon-saiga.yml";$/;"	kind:member	line:131	namespace:mods::drops	file:
@@ -16170,7 +16170,7 @@ vector_add_if_not_exists	src/mods/util.hpp	/^	void vector_add_if_not_exists(std:
 vector_erase	src/mods/util.hpp	/^	void vector_erase(std::vector<T>& vec,T element) {$/;"	kind:function	line:438	namespace:mods::util	signature:(std::vector<T>& vec,T element)
 vector_exists	src/mods/db.cpp	/^	bool vector_exists(std::string section_name,std::string prefix) {$/;"	kind:function	line:19	namespace:mods::db	signature:(std::string section_name,std::string prefix)
 vector_string_list	src/mods/builder/raid.cpp	/^		const std::vector<std::string>& vector_string_list() const {$/;"	kind:function	line:151	struct:mods::builder::raid::raid_interface	access:public	signature:() const
-vector_string_list	src/mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& vector_string_list() const {$/;"	kind:function	line:98	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
+vector_string_list	src/mods/builder/seqbuild.cpp	/^		const std::vector<std::string>& vector_string_list() const {$/;"	kind:function	line:95	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:() const
 vectorize	src/mods/orm/orm-base.hpp	/^	std::vector<std::string> vectorize(const TStringType& str) {$/;"	kind:function	line:35	namespace:mods::orm	signature:(const TStringType& str)
 vehicle_description_t	src/mods/yaml.hpp	/^		vehicle_description_t()  {$/;"	kind:function	line:433	struct:mods::yaml::vehicle_description_t	access:public	signature:()
 vehicle_description_t	src/mods/yaml.hpp	/^	struct vehicle_description_t : public yaml_description_t {$/;"	kind:struct	line:424	namespace:mods::yaml	file:	inherits:yaml_description_t
