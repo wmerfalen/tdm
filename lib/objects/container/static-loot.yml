@@ -1,0 +1,26 @@
+
+# type: ARMOR_LOCKER
+# type: WEAPON_LOCKER
+# type: LOCKER
+# type: EXPLOSIVE_BARREL
+# type: BILE_BARREL
+# type: WATER_BARREL
+# type: GASOLINE_BARREL
+# type: GAS_STATION_PUMP
+detailed_description: 'A {grn}CRATE{/grn} full of items.' #string, description
+str_type: 'WEAPON_LOCKER' # enum, object type
+manufacturer: 'Kojima Corp' # string, anything 
+name: 'A {grn}CRATE{/grn} full of items.' # string, anything name of object 
+description: 'A {grn}CRATE{/grn} full of items'
+short_description: 'A {grn}CRATE{/grn} full of items'
+action_description: 'A {grn}CRATE{/grn} full of items'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+feed_file: 'static-loot.yml'
+vnum: 238

@@ -6,6 +6,7 @@
 
 #include "orm/loot-payload.hpp"
 #include "orm/loot-ammo.hpp"
+#include "orm/static-loot.hpp"
 
 #define __MENTOC_MODS_LOOT_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_LOOT_SHOW_DEBUG_OUTPUT__
@@ -239,6 +240,12 @@ namespace mods::loot {
 		in_crate.sacrifice = nullptr;
 #endif
 	}
+	void fill_static_crate(auto& crate,const auto& entry) {
+		crate.room = entry->sl_room;
+		crate.contents.emplace_back(create_object(entry->sl_yaml));
+		crate.sacrifice_count = 0;
+		crate.sacrifice = nullptr;
+	};
 	void load_crates() {
 		crate_index().clear();
 		for(const auto& p : mods::orm::loot_payload_list()) {
@@ -251,11 +258,32 @@ namespace mods::loot {
 			auto& c = crate_index().back();
 			randomize_ammo_crate(c,a);
 		}
+		for(const auto& s : mods::orm::static_loot_list()) {
+			crate_index().emplace_back();
+			auto& c = crate_index().back();
+			fill_static_crate(c,s);
+		}
 	}
 
 	const std::vector<obj_ptr_t>& payload_items(const obj_ptr_t& obj);
 	const std::vector<obj_ptr_t>& ammo_items(const obj_ptr_t& obj);
 
+	static std::map<room_vnum,obj_ptr_t> static_loot_rooms;
+	void refill_static_loot_crate(room_vnum room) {
+		for(const auto& p : mods::orm::static_loot_list()) {
+			if(p->sl_room == room) {
+				m_debug("Static LOOT Crate: found room to place STATIC LOOT in... ");
+				if(static_loot_rooms.find(room) == static_loot_rooms.end()) {
+					auto obj = create_object(STATIC_LOOT_YAML_FILE);
+					obj_to_room(obj.get(),real_room(room));
+					static_loot_rooms[room] = obj;
+				}
+				for(uint16_t i = 0; i < p->sl_count; i++) {
+					create_object_into(p->sl_yaml,static_loot_rooms[room]);
+				}
+			}
+		}
+	}
 	void new_room(room_data* room) {
 		for(const auto& p : mods::orm::loot_payload_list()) {
 			if(p->lp_room == room->number) {
@@ -271,6 +299,7 @@ namespace mods::loot {
 				obj_to_room(obj.get(),real_room(room->number));
 			}
 		}
+		refill_static_loot_crate(room->number);
 	}
 	/**
 	 * Loot is also controlled by make_corpse and mods::drops.cpp
