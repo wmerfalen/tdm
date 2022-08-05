@@ -62,6 +62,7 @@
 #include "mods/orm/loot-payload.hpp"
 #include "mods/orm/loot-ammo.hpp"
 #include "mods/loot.hpp"
+#include "mods/query-objects.hpp"
 
 namespace mods::zone {
 	extern void reset_zone(zone_rnum);
@@ -1808,7 +1809,26 @@ obj_ptr_t blank_object() {
 	mods::globals::register_object(obj_list.back());
 	return obj_list.back();
 }
+void create_object_into_with_quota(std::string_view yaml,obj_ptr_t& obj,const uint16_t& quota) {
+	std::size_t count = 0;
+	auto y = mods::util::remove_yaml_type_prefix(yaml);
+	count = mods::query_objects::query_count_contents_by_yaml(obj,y);
+	if(count >= quota) {
+		return;
+	}
+	for(auto i = count; i < quota; i++) {
+		create_object_into(yaml,obj);
+	}
+}
 obj_ptr_t create_object(std::string_view yaml) {
+	if(mods::util::is_deep_yaml(yaml)) {
+		auto schema = mods::util::strip_deep_yaml_prefix(yaml);
+		auto rifle_attachment = mods::rifle_attachments::make(schema);
+		auto& base = rifle_attachment->base_object;
+		obj_list.push_back(base);
+		mods::globals::register_object(base);
+		return base;
+	}
 	int type = -1;
 	std::string yaml_file = yaml.data();
 	if(str::starts_with("rifle/",yaml_file)) {

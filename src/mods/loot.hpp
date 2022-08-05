@@ -21,7 +21,10 @@ namespace mods::loot {
 	static constexpr std::string_view PAYLOAD_YAML_FILE = "container/loot-payload.yml";
 	static constexpr std::string_view AMMO_YAML_FILE = "container/loot-ammo.yml";
 	static constexpr std::string_view STATIC_LOOT_YAML_FILE = "container/static-loot.yml";
+	static constexpr std::size_t AVERAGE_TICKS_PER_MINUTE = 160;
+	static constexpr std::size_t STATIC_LOOT_RESOLUTION = AVERAGE_TICKS_PER_MINUTE * 5;
 	obj_ptr_t reward_player(player_ptr_t& player,mob_vnum victim);
+	void replenish_static_loot();
 	void new_room(room_data* room);
 	struct crate_t {
 		room_vnum room;

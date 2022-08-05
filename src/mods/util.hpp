@@ -151,9 +151,12 @@ namespace mods::util {
 	};
 	std::string admin_section(std::string_view name);
 	std::string overview();
+	std::string remove_yaml_type_prefix(std::string_view yaml);
 	using strmap_t = std::map<std::string,std::string>;
 	std::tuple<bool,int,std::string> extract_yaml_reward(std::string reward);
 	std::tuple<bool,int,std::string,strmap_t> extract_deep_reward(std::string reward);
+	bool is_deep_yaml(std::string_view yaml);
+	std::string strip_deep_yaml_prefix(std::string_view yaml);
 	void wipe();
 	void breakline();
 	std::vector<std::string> slot_names_for_type(std::string_view type);

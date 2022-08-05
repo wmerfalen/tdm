@@ -21,6 +21,7 @@
 #define mu_debug(A) /**-*/
 #endif
 namespace mods::util {
+	static constexpr std::string_view DEEP_YAML_PREFIX = "#deep|";
 	static std::map<std::string_view,std::string_view> default_colors = {
 		{"blu","\033[34m"},
 		{"gld","\033[33m"},
@@ -377,6 +378,18 @@ namespace mods::util {
 		}
 		return false;
 	}
+	std::string remove_yaml_type_prefix(std::string_view yaml) {
+		std::string y = yaml.data();
+		auto found = y.find('/');
+		if(found == std::string::npos) {
+			return y;
+		}
+		std::string tmp = y.substr(found);
+		if(tmp.length() > 2) {
+			return y.substr(found+1);
+		}
+		return y;
+	}
 	/**
 	 * @brief parses strings of the form: "#yaml|type/path-to.yml"
 	 *
@@ -412,7 +425,7 @@ namespace mods::util {
 	 */
 	std::tuple<bool,int,std::string,strmap_t> extract_deep_reward(std::string reward) {
 		strmap_t extracted;
-		std::string pref = "#deep|";
+		std::string pref = DEEP_YAML_PREFIX.data();
 		if(reward.length() < pref.length()) {
 			return {0,-1,"invalid prefix",extracted};
 		}
@@ -431,6 +444,41 @@ namespace mods::util {
 		mods::deep_object_parser_t parser;
 		extracted = parser.extract_line_items(past,mods::util::slot_names_for_type(type));
 		return {1,i_type,past,extracted};
+	}
+
+	bool is_deep_yaml(std::string_view yaml) {
+		strmap_t extracted;
+		std::string pref = DEEP_YAML_PREFIX.data();
+		if(yaml.length() < pref.length()) {
+			return false;
+		}
+		auto prefix = yaml.substr(0,pref.length());
+		if(prefix.compare(pref.c_str()) != 0) {
+			return false;
+		}
+		auto past = yaml.substr(pref.length());
+		auto type = mods::util::extract_until(past,'/');
+
+		int i_type = util::yaml_string_to_int(type);
+		if(i_type < 0) {
+			return false;
+		}
+
+		mods::deep_object_parser_t parser;
+		extracted = parser.extract_line_items(past.data(),mods::util::slot_names_for_type(type));
+		return extracted.size();
+	}
+
+	std::string strip_deep_yaml_prefix(std::string_view yaml) {
+		std::string pref = DEEP_YAML_PREFIX.data();
+		if(yaml.length() < pref.length()) {
+			return yaml.data();
+		}
+		auto prefix = yaml.substr(0,pref.length());
+		if(prefix.compare(pref.c_str()) != 0) {
+			return yaml.data();
+		}
+		return yaml.substr(pref.length()).data();
 	}
 
 	void breakline() {

@@ -205,8 +205,6 @@
 {yel}act.wizard{/yel}:->{grn}show{/grn}
 {yel}act.wizard{/yel}:->{grn}set{/grn}
 {yel}db{/yel}:->{grn}reboot{/grn}
-{yel}ban{/yel}:->{grn}ban{/grn}
-{yel}ban{/yel}:->{grn}unban{/grn}
 {yel}spell_parser{/yel}:->{grn}cast{/grn}
 {yel}olc{/yel}:->{grn}olc{/grn}
 {yel}interpreter{/yel}:->{grn}debug_sleep{/grn}

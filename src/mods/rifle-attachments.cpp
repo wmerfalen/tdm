@@ -114,7 +114,7 @@ namespace mods {
 	void rifle_attachments_t::import_objects(const encoding_t& line) {
 		auto map = m_parser.extract_line_items(line,mods::util::slot_names_for_type("rifle"));
 		m_rifle_yaml_file = map["base"];
-		base_object = create_object(ITEM_RIFLE,map["base"]);
+		base_object = create_object(map["base"]);
 		base_object->rifle()->attributes->is_rifle_attachment = true;
 		base_damage = base_object->rifle()->attributes->base_damage;
 		damage_dice_count = base_object->rifle()->attributes->damage_dice_count;

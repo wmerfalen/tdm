@@ -24,6 +24,12 @@
 extern int destroy_player(player_ptr_t&& player);
 //static reporter_t report_function;
 
+//#define __MENTOC_MODS_BAN_SYSTEM_SHOW_DEBUG_OUTPUT__
+#ifdef  __MENTOC_MODS_BAN_SYSTEM_SHOW_DEBUG_OUTPUT__
+#define m_debug(a) mentoc_prefix_debug("mods::ban_system") << a << "\n";
+#else
+#define m_debug(a) ;;
+#endif
 namespace mods::ban_system {
 	std::tuple<bool,std::string> ban_player(player_ptr_t& player) {
 		mods::orm::admin::banned orm;
@@ -99,10 +105,10 @@ namespace mods::ban_system {
 	}
 	namespace hostname {
 		bool is_banned(std::string hostname) {
-			std::cerr << "is_banned(hostname): " << hostname << "\n";
+			m_debug("is_banned(hostname): " << hostname.data());
 			mods::orm::admin::banned orm;
 			auto banned = orm.is_hostname_banned(hostname);
-			std::cerr << "is_banned(hostname) check from sql got: '" << banned << "'\n";
+			m_debug("is_banned(hostname) check from sql got: '" << banned << "'");
 			return banned;
 		}
 		bool is_banned(const sockaddr_in& peer) {
@@ -115,10 +121,10 @@ namespace mods::ban_system {
 	};
 	namespace ip {
 		bool is_banned(std::string ip_address) {
-			std::cerr << "is_banned(ip): " << ip_address << "\n";
+			m_debug("is_banned(ip): " << ip_address);
 			mods::orm::admin::banned orm;
 			auto banned = orm.is_ip_banned(ip_address);
-			std::cerr << "is_banned(ip) check from sql got: '" << banned << "'\n";
+			m_debug("is_banned(ip) check from sql got: '" << banned << "'");
 			return banned;
 		}
 		bool is_banned(const sockaddr_in& peer) {
@@ -132,7 +138,7 @@ namespace mods::ban_system {
 		bool is_banned(std::string user_name) {
 			mods::orm::admin::banned orm;
 			auto banned = orm.is_username_banned(user_name);
-			std::cerr << "is_banned(user_name) check from sql got: '" << banned << "'\n";
+			m_debug("is_banned(user_name) check from sql got: '" << banned << "'");
 			return banned;
 		}
 	};

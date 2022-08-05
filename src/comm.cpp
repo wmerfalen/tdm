@@ -47,6 +47,7 @@
 #include "mods/ban-system.hpp"
 #include "mods/message-server.hpp"
 #include "mods/mobs/orthos-spawn-sentinel-btree.hpp"
+#include "mods/loot.hpp"
 namespace mods::mobs::room_watching {
 	extern void destroy_player(uuid_t);
 	extern void heartbeat();
@@ -984,6 +985,11 @@ void heartbeat(int pulse) {
 			mods::zone::done_refreshing();
 			log("refresh_mobs_and_zones completed");
 		}
+	}
+
+	if(!(pulse % mods::loot::STATIC_LOOT_RESOLUTION)) {
+		log("replenish_static_loot");
+		mods::loot::replenish_static_loot();
 	}
 
 	if(!(pulse % mods::deferred::TICK_RESOLUTION)) {

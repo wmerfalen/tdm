@@ -147,6 +147,7 @@ obj_ptr_t blank_object();
 obj_ptr_t create_object(int type,std::string file);
 obj_ptr_t create_object(std::string_view file);
 obj_ptr_t create_object_into(std::string_view file,obj_ptr_t& obj);
+void create_object_into_with_quota(std::string_view file,obj_ptr_t& obj,const uint16_t& quota);
 int	vnum_object(char *searchname, char_data *ch);
 
 typedef enum { \

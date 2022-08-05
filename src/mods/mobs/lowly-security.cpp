@@ -4,7 +4,7 @@
 #include "../rooms.hpp"
 #include "helpers.hpp"
 
-#define __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
+//#define __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
 #define lsg_debug(a) mentoc_prefix_debug("mods::mobs::lowly_security") << a << "\n";
 #else

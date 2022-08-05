@@ -8,7 +8,7 @@
 #include <forward_list>
 #include <memory>
 
-#define __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
+//#define __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
 #define maffects_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
 #else

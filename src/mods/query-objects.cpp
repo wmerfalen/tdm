@@ -83,6 +83,16 @@ namespace mods::query_objects {
 		return objects;
 	}
 
+	std::size_t query_count_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {
+		auto i = 0;
+		for(auto obj = found_object->contains; obj != nullptr; obj = obj->next_content) {
+			log("checking '%s' for file: '%s'",obj->feed_file().data(),file.data());
+			if(obj->feed_file().compare(file.data()) == 0) {
+				++i;
+			}
+		}
+		return i;
+	}
 	std::vector<uuid_t> query_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {
 		std::vector<uuid_t> objects;
 		for(auto obj = found_object->contains; obj != nullptr; obj = obj->next_content) {
@@ -170,6 +180,13 @@ namespace mods::query_objects {
 			return true;
 		});
 		return has_vehicle;
+	}
+	std::size_t in_container_by_yaml(uuid_t container,std::string_view yaml) {
+		auto found_object = optr_by_uuid(container);
+		if(!found_object) {
+			return 0;
+		}
+		return query_count_contents_by_yaml(found_object,yaml);
 	}
 };
 
