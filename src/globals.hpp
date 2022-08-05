@@ -54,6 +54,8 @@ static inline void equip_clamp(T& orig,bool equip,X offset) {
 		}
 	}
 }
+#define PAGER_START(P) P->pager_start()
+#define PAGER_END(P) P->pager_end(); P->page(0);
 #define MENTOC_PREAMBLE() auto player = ptr(ch)
 
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \

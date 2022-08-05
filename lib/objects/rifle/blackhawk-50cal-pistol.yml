@@ -1,0 +1,72 @@
+# accuracy map
+accuracy_map: [
+89.00,
+88.00,
+50.00,
+50.00
+]
+ammo_max: 90 #integer
+ammo_type: 'PISTOL' #string, constant enum
+chance_to_injure: 44.23 #float, out of 100
+clip_size: 9 #integer
+cooldown_between_shots: 2 #int, in ticks
+critical_chance: 33 #int, out of 100
+critical_range: 1 #integer, measured in rooms
+damage_map: [
+264.00,
+222.00,
+118.00,
+112.00
+]
+base_damage: 110 #float
+disorient_amount: 40.0 #float
+headshot_bonus: 383.0 #float
+max_range: 4 #integer,measured in rooms
+range_multiplier: 0 #float, multiplied by 
+reload_time: 2 #int, measured in ticks
+rounds_per_minute: 75
+muzzle_velocity: 489
+effective_firing_range: 1
+manufacturer: 'X-TAR'
+type: 'PISTOL' #string, type of weapon
+str_type: 'PISTOL' #string, type of weapon
+name: 'X-TAR-21 Blackhawk 50 caliber Pistol'  #string
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'LEGENDARY'
+object_type: 'rifle'
+description: 'An X-TAR-21 Blackhawk 50 caliber Pistol is lying here.'
+short_description: 'an X-TAR-21 Blackhawk 50 caliber Pistol '
+action_description: 'X-TAR-21 Blackhawk 50 caliber Pistol'
+damage_dice_count: 22
+damage_dice_sides: 20
+incendiary_damage: 0
+explosive_damage: 0 
+shrapnel_damage: 0
+corrosive_damage: 0 
+cryogenic_damage: 0 
+radioactive_damage: 0 
+emp_damage: 0 
+shock_damage: 0 
+anti_matter_damage: 282
+stat_strength: 10 
+stat_intelligence: 10
+stat_wisdom: 10 
+stat_dexterity: 18 
+stat_constitution: 10 
+stat_electronics: 14
+stat_armor: 10 
+stat_marksmanship: 12 
+stat_sniping: 10 
+stat_demolitions: 10 
+stat_chemistry: 10
+stat_weapon_handling: 12
+stat_strategy: 15 
+stat_medical: 15
+feed_file: 'blackhawk-50cal-pistol.yml'
+vnum: 240

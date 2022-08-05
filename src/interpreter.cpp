@@ -373,7 +373,6 @@ ACMD(do_track);
 ACMD(do_trans);
 ACMD(do_help_throw);
 ACMD(do_throw);
-ACMD(do_unban);
 ACMD(do_ungroup);
 ACMD(do_use);
 ACMD(do_users);
@@ -437,7 +436,6 @@ cpp_extern const struct command_info cmd_info[] = {
 
 	{ "bounce", POS_STANDING, do_action, 0, 0 },
 	{ "backstab", POS_STANDING, do_unimplemented, 1, 0 },
-	{ "ban", POS_DEAD, do_ban, LVL_GRGOD, 0 },
 	{ "balance", POS_STANDING, do_not_here, 1, 0 },
 	{ "breach", POS_STANDING, do_breach, 1, 0 },
 	{ "thermite", POS_STANDING, do_thermite, 1, 0 },
@@ -847,7 +845,6 @@ cpp_extern const struct command_info cmd_info[] = {
 
 	{ "unlock", POS_SITTING, do_gen_door, 0, SCMD_UNLOCK },
 	{ "ungroup", POS_DEAD, do_ungroup, 0, 0 },
-	{ "unban", POS_DEAD, do_unban, LVL_GRGOD, 0 },
 	{ "unaffect", POS_DEAD, do_wizutil, LVL_GOD, SCMD_UNAFFECT },
 	{ "uptime", POS_DEAD, do_date, LVL_IMMORT, SCMD_UPTIME },
 	{ "use", POS_SITTING, do_use, 1, SCMD_USE },
@@ -1448,6 +1445,24 @@ int64_t perform_dupe_check(player_ptr_t p) {
 		}
 	}
 	return kicked;
+}
+
+int Valid_Name(const char *newname) {
+	/*
+	 * Make sure someone isn't trying to create this same name.  We want to
+	 * do a 'str_cmp' so people can't do 'Bob' and 'BoB'.  The creating login
+	 * will not have a character name yet and other people sitting at the
+	 * prompt won't have characters yet.
+	 */
+	for(auto& p : mods::globals::player_list) {
+		if(mods::util::is_lower_match(p->name().c_str(), newname)) {
+			if((p->state() == CON_PLAYING || p->state() == CON_IDLE) && p->authenticated()) {
+				return 0;
+			}
+		}
+	}
+
+	return (1);
 }
 
 /* deal with newcomers and other non-playing sockets */

@@ -345,7 +345,9 @@ namespace mods::mobs {
 		}
 		player_ptr = p;
 		auto ch = p->cd();
+#ifdef __MENTOC_SHOW_ORTHOS_AGENT_VNUM__
 		log("Orthos agent vnum: %d",ch->mob_specials.vnum);
+#endif
 		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::ORTHOS_AGENT;
 		this->cd()->mob_specials.vnum = p->cd()->mob_specials.vnum;
 		this->setup_damage_callbacks();

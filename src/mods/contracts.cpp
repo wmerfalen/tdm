@@ -93,6 +93,7 @@ namespace mods::contracts {
 				return;
 			}
 			player->sendln("Listing...");
+			PAGER_START(player);
 			for(const auto& c : player->contracts()) {
 				if(c->finished()) {
 					player->sendln(CAT("{grn}Finished{/grn}:\t{yel}[",c->vnum(),"]{/yel}::{grn}",c->title().data(),"{/grn}").c_str());
@@ -104,10 +105,12 @@ namespace mods::contracts {
 				}
 			}
 			player->sendln("Done listing...");
+			PAGER_END(player);
 			return;
 		}
 		if(argshave()->first_is_any({"show","describe"})->nth_has_integer(1)->size_gt(1)->passed()) {
 			auto v = intat(1);
+			PAGER_START(player);
 			player->sendln("\r\nYou pull up a list of contracts in your iDroid...");
 			player->sendln("\r\nYou run a search for a detailed list of contracts matching your inquiry...");
 			for(const auto& c : contract_master_list()) {
@@ -121,16 +124,19 @@ namespace mods::contracts {
 				}
 			}
 			player->sendln("Your iDroid blurts a negative audio tone: {red}Zero results returned{/red}");
+			PAGER_END(player);
 			return;
 		}
 
 
 		if(argshave()->first_is("list")->passed()) {
+			PAGER_START(player);
 			player->sendln("Listing...");
 			for(const auto& con : contract_master_list()) {
 				player->sendln(CAT("{yel}[{/yel}",con->vnum,"{yel}]:{/yel} {grn}'",con->title,"'{/grn}"));
 			}
 			player->sendln("Done listing.");
+			PAGER_END(player);
 			return;
 		}
 		int contract_num = 0;

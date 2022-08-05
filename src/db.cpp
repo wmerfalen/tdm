@@ -203,8 +203,6 @@ void boot_social_messages(void);
 void update_obj_file(void);	/* In objsave.c */
 void sort_commands(void);
 void sort_spells(void);
-void load_banned(void);
-void Read_Invalid_List(void);
 void boot_the_shops(void);
 int hsort(const void *a, const void *b);
 void prune_crlf(char *txt);
@@ -319,14 +317,6 @@ void boot_hell(void) {
 			no_mail = 1;
 		}
 	}
-
-	log("Reading banned site and invalid-name list.");
-	if(mods::hell::load_banned) {
-		load_banned();
-	};
-	if(mods::hell::Read_Invalid_List) {
-		Read_Invalid_List();
-	};
 
 	if(!no_rent_check) {
 		log("Deleting timed-out crash and rent files:");
@@ -498,10 +488,6 @@ void boot_db(void) {
 		log("    Mail boot failed -- Mail system disabled");
 		no_mail = 1;
 	}
-
-	log("Reading banned site and invalid-name list.");
-	load_banned();
-	Read_Invalid_List();
 
 	if(!no_rent_check) {
 		log("Deleting timed-out crash and rent files:");

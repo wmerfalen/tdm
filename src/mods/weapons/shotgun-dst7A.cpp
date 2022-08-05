@@ -10,7 +10,7 @@
 #include "../melt.hpp"
 #include "../projectile.hpp"
 
-#define __MENTOC_DST7A_DEBUG__ 1
+//#define __MENTOC_DST7A_DEBUG__ 1
 #ifdef __MENTOC_DST7A_DEBUG__
 #define dst_debug(A) std::cerr << "[DST7A::DEBUG]: " << A << "\n";
 #else

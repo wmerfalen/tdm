@@ -1,0 +1,80 @@
+# accuracy map
+accuracy_map: [
+90.00,
+75.00,
+30.00,
+20.00
+]
+rounds_per_minute: 320
+muzzle_velocity: 218 # Feet per second
+effective_firing_range: 1 # rooms
+ammo_max: 210 #integer
+ammo_type: 'SUB_MACHINE_GUN' #string, constant enum
+chance_to_injure: 32 #float, out of 100 
+clip_size: 21 #integer
+cooldown_between_shots: 3 #int, in ticks
+critical_chance: 23 #int, out of 100
+critical_range: 1 #integer, measured in rooms
+damage_map: [
+110.00,
+90.00,
+60.00,
+40.00
+]
+base_damage: 113 #float
+disorient_amount: 30.0 #float
+headshot_bonus: 293.0 #float
+max_range: 4 #integer,measured in rooms
+range_multiplier: 0.0 #float, multiplied by 
+reload_time: 3 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 'SUB_MACHINE_GUN'  # enum, object type
+manufacturer: 'NX-9 LLC' # string, anything 
+name: '{grn}Atrocity MP5{/grn}' # string, anything name of object 
+str_type: 'SUB_MACHINE_GUN'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'RARE'
+damage_dice_count: 10
+damage_dice_sides: 10
+description: 'An {grn}Atrocity MP5{/grn}'
+short_description: 'An {grn}Atrocity MP5{/grn}'
+action_description: '{grn}Atrocity MP5{/grn}'
+incendiary_damage: 110 #int16_t, damage
+explosive_damage: 110 #int16_t, damage
+shrapnel_damage: 0 #int16_t, damage
+corrosive_damage: 0 #int16_t, damage
+cryogenic_damage: 0 #int16_t, damage
+radioactive_damage: 80 #int16_t, damage
+emp_damage: 0 #int16_t, damage
+shock_damage: 0 #int16_t, damage
+anti_matter_damage: 0 #int16_t, damage
+stat_strength: 3 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 8 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 8 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 0 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 3 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 3 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 0 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 10 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 10 #int16_t, positive or negative amount to affect strategy stat
+stat_medical: 8 #int16_t, positive or negative amount to affect medical stat
+feed_file: 'atrocity-mp5.yml'
+vnum: 239

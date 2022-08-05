@@ -114,8 +114,6 @@ namespace mods::mobs::room_watching {
 #include "globals.hpp"
 
 /* externs */
-extern struct ban_list_element *ban_list;
-extern int num_invalid;
 extern std::string GREETINGS;
 extern const char *circlemud_version;
 extern int circle_restrict;
@@ -261,7 +259,6 @@ void clear_free_list(void);
 void free_messages(void);
 void Board_clear_all(void);
 void free_social_messages(void);
-void Free_Invalid_List(void);
 
 void deregister_player(player_ptr_t player_obj) {
 	std::set<mods::globals::player_list_t::iterator> players_to_destroy;
@@ -334,7 +331,6 @@ void run_game() {
 		free(cmd_sort_info);	/* act.informative.c */
 		free_social_messages();	/* act.social.c */
 		free_help();		/* db.c */
-		Free_Invalid_List();	/* ban.c */
 	}
 
 	log("Done.");
@@ -908,9 +904,7 @@ void game_loop(socket_t mother_desc) {
 		if(emergency_unban) {
 			emergency_unban = FALSE;
 			mudlog(BRF, LVL_IMMORT, TRUE, "Received SIGUSR2 - completely unrestricting game (emergent)");
-			ban_list = NULL;
 			circle_restrict = 0;
-			num_invalid = 0;
 		}
 		if(tics + 1 == std::numeric_limits<decltype(tics)>::max()) {
 			tics = 1;
