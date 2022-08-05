@@ -3777,11 +3777,11 @@ SUPERCMD	src/mods/players/friendly-reminders.cpp	/^	SUPERCMD(do_add_reminder) {$
 SUPERCMD	src/mods/players/friendly-reminders.cpp	/^	SUPERCMD(do_delete_reminder) {$/;"	kind:function	line:87	namespace:mods::players::friendly_reminders	signature:(do_delete_reminder)
 SUPERCMD	src/mods/players/friendly-reminders.cpp	/^	SUPERCMD(do_list_reminder) {$/;"	kind:function	line:93	namespace:mods::players::friendly_reminders	signature:(do_list_reminder)
 SUPERCMD	src/mods/players/messages.cpp	/^	SUPERCMD(do_queue_message) {$/;"	kind:function	line:66	namespace:mods::players::messages	signature:(do_queue_message)
-SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_container) {$/;"	kind:function	line:193	signature:(do_query_container)
-SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_inventory) {$/;"	kind:function	line:230	signature:(do_query_inventory)
-SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_inventory_container) {$/;"	kind:function	line:253	signature:(do_query_inventory_container)
-SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_room) {$/;"	kind:function	line:214	signature:(do_query_room)
-SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_zone) {$/;"	kind:function	line:275	signature:(do_query_zone)
+SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_container) {$/;"	kind:function	line:192	signature:(do_query_container)
+SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_inventory) {$/;"	kind:function	line:229	signature:(do_query_inventory)
+SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_inventory_container) {$/;"	kind:function	line:252	signature:(do_query_inventory_container)
+SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_room) {$/;"	kind:function	line:213	signature:(do_query_room)
+SUPERCMD	src/mods/query-objects.cpp	/^SUPERCMD(do_query_zone) {$/;"	kind:function	line:274	signature:(do_query_zone)
 SUPERCMD	src/mods/radio.cpp	/^	SUPERCMD(do_admin_radio_help) {$/;"	kind:function	line:243	namespace:mods::radio	signature:(do_admin_radio_help)
 SUPERCMD	src/mods/radio.cpp	/^	SUPERCMD(do_admin_radio_station_create) {$/;"	kind:function	line:181	namespace:mods::radio	signature:(do_admin_radio_station_create)
 SUPERCMD	src/mods/radio.cpp	/^	SUPERCMD(do_admin_radio_station_delete) {$/;"	kind:function	line:208	namespace:mods::radio	signature:(do_admin_radio_station_delete)
@@ -9397,7 +9397,7 @@ import_objects	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::impor
 import_room	src/mods/builder.cpp	/^	int import_room(struct room_data* room) {$/;"	kind:function	line:1037	namespace:mods::builder	signature:(struct room_data* room)
 in_addr	src/sysdep.h	/^struct in_addr {$/;"	kind:struct	line:250	file:
 in_array	src/mods/util.hpp	/^	bool in_array(std::string f,std::vector<T> strings) {$/;"	kind:function	line:453	namespace:mods::util	signature:(std::string f,std::vector<T> strings)
-in_container_by_yaml	src/mods/query-objects.cpp	/^	std::size_t in_container_by_yaml(uuid_t container,std::string_view yaml) {$/;"	kind:function	line:184	namespace:mods::query_objects	signature:(uuid_t container,std::string_view yaml)
+in_container_by_yaml	src/mods/query-objects.cpp	/^	std::size_t in_container_by_yaml(uuid_t container,std::string_view yaml) {$/;"	kind:function	line:183	namespace:mods::query_objects	signature:(uuid_t container,std::string_view yaml)
 in_room	src/mods/builder.cpp	62;"	kind:macro	line:62	file:
 in_room	src/mods/js.cpp	/^		static duk_ret_t in_room(duk_context *ctx) {$/;"	kind:function	line:845	namespace:mods::js	signature:(duk_context *ctx)
 in_room	src/shop.h	/^	room_vnum *in_room;		\/* Where is the shop?			*\/$/;"	kind:member	line:50	struct:shop_data	file:	access:public
@@ -9590,7 +9590,7 @@ init	src/mods/plugins/init.hpp	/^	static inline void init() {$/;"	kind:function	
 init	src/mods/plugins/init.hpp	/^namespace mods::plugins::init {$/;"	kind:namespace	line:19	class:mods::plugins	file:
 init	src/mods/prefs.cpp	/^	void init() {$/;"	kind:function	line:144	namespace:mods::prefs	signature:()
 init	src/mods/projectile.cpp	/^		void init() {$/;"	kind:function	line:928	namespace:mods::projectile	signature:()
-init	src/mods/query-objects.cpp	/^	void init() {$/;"	kind:function	line:288	namespace:mods::query_objects	signature:()
+init	src/mods/query-objects.cpp	/^	void init() {$/;"	kind:function	line:287	namespace:mods::query_objects	signature:()
 init	src/mods/radio.cpp	/^	void init() {$/;"	kind:function	line:258	namespace:mods::radio	signature:()
 init	src/mods/rand.cpp	/^	void init() {$/;"	kind:function	line:215	namespace:mods::rand	signature:()
 init	src/mods/rate-limiting.cpp	/^	void init() {$/;"	kind:function	line:162	namespace:mods::rate_limiting	signature:()
@@ -11746,7 +11746,7 @@ mbop_debug	src/mods/builder/object-placement.hpp	14;"	kind:macro	line:14	file:
 mbop_debug	src/mods/builder/object-placement.hpp	5;"	kind:macro	line:5	file:
 mc_debug	src/mods/query-objects.cpp	12;"	kind:macro	line:12	file:
 mc_debug	src/mods/query-objects.cpp	14;"	kind:macro	line:14	file:
-mc_debug	src/mods/query-objects.cpp	296;"	kind:macro	line:296	file:
+mc_debug	src/mods/query-objects.cpp	295;"	kind:macro	line:295	file:
 mcv_debug	src/mods/calc-visibility.cpp	12;"	kind:macro	line:12	file:
 mcv_debug	src/mods/calc-visibility.cpp	15;"	kind:macro	line:15	file:
 mcv_debug	src/mods/calc-visibility.cpp	245;"	kind:macro	line:245	file:
@@ -13428,17 +13428,17 @@ pyrexia_summon_napalm_strike_level	src/mods/orm/pyrexia.hpp	/^		skill_familiarit
 q	src/random.cpp	46;"	kind:macro	line:46	file:
 qmob	src/mods/util.hpp	559;"	kind:macro	line:559	file:
 quantity	src/mods/scripted-step.hpp	/^		uint16_t quantity;$/;"	kind:member	line:24	struct:mods::scripted_step	file:	access:public
-query_contents_by_yaml	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {$/;"	kind:function	line:96	namespace:mods::query_objects	signature:(obj_ptr_t& found_object,std::string_view file)
-query_contents_by_yaml_multi	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml_multi(obj_ptr_t& found_object,const std::vector<std::string>& files) {$/;"	kind:function	line:105	namespace:mods::query_objects	signature:(obj_ptr_t& found_object,const std::vector<std::string>& files)
-query_contents_by_yaml_multi	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml_multi(room_rnum room,std::string_view container,const std::vector<std::string>& files) {$/;"	kind:function	line:116	namespace:mods::query_objects	signature:(room_rnum room,std::string_view container,const std::vector<std::string>& files)
+query_contents_by_yaml	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {$/;"	kind:function	line:95	namespace:mods::query_objects	signature:(obj_ptr_t& found_object,std::string_view file)
+query_contents_by_yaml_multi	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml_multi(obj_ptr_t& found_object,const std::vector<std::string>& files) {$/;"	kind:function	line:104	namespace:mods::query_objects	signature:(obj_ptr_t& found_object,const std::vector<std::string>& files)
+query_contents_by_yaml_multi	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml_multi(room_rnum room,std::string_view container,const std::vector<std::string>& files) {$/;"	kind:function	line:115	namespace:mods::query_objects	signature:(room_rnum room,std::string_view container,const std::vector<std::string>& files)
 query_count_contents_by_yaml	src/mods/query-objects.cpp	/^	std::size_t query_count_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {$/;"	kind:function	line:86	namespace:mods::query_objects	signature:(obj_ptr_t& found_object,std::string_view file)
-query_equipment_by_yaml	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_equipment_by_yaml(player_ptr_t& player, std::string_view name) {$/;"	kind:function	line:163	namespace:mods::query_objects	signature:(player_ptr_t& player, std::string_view name)
-query_inventory_by_yaml	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_inventory_by_yaml(player_ptr_t& player, std::string_view yaml_file) {$/;"	kind:function	line:132	namespace:mods::query_objects	signature:(player_ptr_t& player, std::string_view yaml_file)
-query_inventory_container_by_yaml	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_inventory_container_by_yaml(player_ptr_t& player, std::string_view container, std::string_view yaml_file) {$/;"	kind:function	line:152	namespace:mods::query_objects	signature:(player_ptr_t& player, std::string_view container, std::string_view yaml_file)
-query_inventory_for_object	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_inventory_for_object(player_ptr_t& player, std::string_view name) {$/;"	kind:function	line:141	namespace:mods::query_objects	signature:(player_ptr_t& player, std::string_view name)
+query_equipment_by_yaml	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_equipment_by_yaml(player_ptr_t& player, std::string_view name) {$/;"	kind:function	line:162	namespace:mods::query_objects	signature:(player_ptr_t& player, std::string_view name)
+query_inventory_by_yaml	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_inventory_by_yaml(player_ptr_t& player, std::string_view yaml_file) {$/;"	kind:function	line:131	namespace:mods::query_objects	signature:(player_ptr_t& player, std::string_view yaml_file)
+query_inventory_container_by_yaml	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_inventory_container_by_yaml(player_ptr_t& player, std::string_view container, std::string_view yaml_file) {$/;"	kind:function	line:151	namespace:mods::query_objects	signature:(player_ptr_t& player, std::string_view container, std::string_view yaml_file)
+query_inventory_for_object	src/mods/query-objects.cpp	/^	std::vector<uuid_t> query_inventory_for_object(player_ptr_t& player, std::string_view name) {$/;"	kind:function	line:140	namespace:mods::query_objects	signature:(player_ptr_t& player, std::string_view name)
 query_mob_in_room	src/mods/util.cpp	/^	player_ptr_t query_mob_in_room(room_vnum r_vnum,mob_vnum mob) {$/;"	kind:function	line:322	namespace:mods::util	signature:(room_vnum r_vnum,mob_vnum mob)
 query_objects	src/mods/init.hpp	/^INIT(mods::query_objects);$/;"	kind:variable	line:38
-query_objects	src/mods/query-objects.cpp	/^namespace mods::query_objects {$/;"	kind:namespace	line:287	class:mods	file:
+query_objects	src/mods/query-objects.cpp	/^namespace mods::query_objects {$/;"	kind:namespace	line:286	class:mods	file:
 query_objects	src/mods/query-objects.cpp	/^namespace mods::query_objects {$/;"	kind:namespace	line:37	class:mods	file:
 query_objects	src/mods/query-objects.hpp	/^namespace mods::query_objects {$/;"	kind:namespace	line:6	class:mods	file:
 query_parts	src/mods/sql.hpp	/^			constexpr static int query_parts = 5;$/;"	kind:member	line:46	struct:mods::sql::compositor	file:	access:public
@@ -14166,7 +14166,7 @@ room_flag_from_string	src/mods/rooms.hpp	/^	static inline std::optional<int> roo
 room_flag_strings	src/mods/rooms.hpp	/^	static const std::map<int,std::string> room_flag_strings = {$/;"	kind:member	line:83	namespace:mods::rooms	file:
 room_flags	src/structs.h	/^		int room_flags;		\/* DEATH,DARK ... etc *\/$/;"	kind:member	line:1229	struct:obj_data	file:	access:public
 room_has_object_uuid	src/mods/query-objects.cpp	/^	bool room_has_object_uuid(const room_rnum& room_id, const uuid_t& obj_uuid) {$/;"	kind:function	line:45	namespace:mods::query_objects	signature:(const room_rnum& room_id, const uuid_t& obj_uuid)
-room_has_vehicle	src/mods/query-objects.cpp	/^	bool room_has_vehicle(const room_rnum& room_id) {$/;"	kind:function	line:173	namespace:mods::query_objects	signature:(const room_rnum& room_id)
+room_has_vehicle	src/mods/query-objects.cpp	/^	bool room_has_vehicle(const room_rnum& room_id) {$/;"	kind:function	line:172	namespace:mods::query_objects	signature:(const room_rnum& room_id)
 room_id	src/mods/corpse.cpp	/^		room_rnum room_id;$/;"	kind:member	line:65	struct:mods::corpse::corpse_explosive_t	file:	access:public
 room_info	src/mods/orm/shop.hpp	/^		shop_rooms room_info;$/;"	kind:member	line:72	struct:mods::orm::shop	file:	access:public
 room_info	src/shop.h	/^	TRoomInfo room_info;$/;"	kind:member	line:70	struct:shop_data	file:	access:public

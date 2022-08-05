@@ -86,7 +86,6 @@ namespace mods::query_objects {
 	std::size_t query_count_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {
 		auto i = 0;
 		for(auto obj = found_object->contains; obj != nullptr; obj = obj->next_content) {
-			log("checking '%s' for file: '%s'",obj->feed_file().data(),file.data());
 			if(obj->feed_file().compare(file.data()) == 0) {
 				++i;
 			}
