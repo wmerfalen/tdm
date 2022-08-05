@@ -13235,6 +13235,13 @@ ALTER TABLE ONLY public.zone_random_item
 ALTER TABLE ONLY public.zone_yaml
     ADD CONSTRAINT zone_yaml_room_vnum_fkey FOREIGN KEY (zy_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
+CREATE TABLE static_loot (
+	id SERIAL PRIMARY KEY,
+	sl_room integer not null,
+	sl_yaml varchar(2048) NOT NULL,
+	sl_count integer NOT NULL DEFAULT 1,
+	FOREIGN KEY(sl_room) REFERENCES room(room_number) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 --
 -- PostgreSQL database dump complete

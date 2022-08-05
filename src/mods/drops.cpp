@@ -198,6 +198,31 @@ namespace mods::drops {
 	static std::vector<std::string> legendary_explosives;
 	static std::vector<std::string> god_tier_explosives;
 
+	static std::vector<std::string> common_ammos;
+	static std::vector<std::string> uncommon_ammos;
+	static std::vector<std::string> rare_ammos;
+	static std::vector<std::string> legendary_ammos;
+	static std::vector<std::string> god_tier_ammos;
+
+	const std::vector<std::string>& get_common_ammos() {
+		return common_ammos;
+	}
+	const std::vector<std::string>& get_uncommon_ammos() {
+		return uncommon_ammos;
+	}
+	const std::vector<std::string>& get_rare_ammos() {
+		return rare_ammos;
+	}
+	const std::vector<std::string>& get_legendary_ammos() {
+		return legendary_ammos;
+	}
+	const std::vector<std::string>& get_god_tier_ammos() {
+		return god_tier_ammos;
+	}
+
+
+
+
 	const std::vector<std::string>& get_common_armors() {
 		return common_armors;
 	}
@@ -441,6 +466,30 @@ namespace mods::drops {
 				BOOST_PP_CAT(BOOST_PP_CAT(god_tier_,type),s).emplace_back(type->feed_file());\
 			}\
 			mods::globals::dispose_object(type->uuid);\
+		}
+
+		for(auto& c: parse_yamls_in_directory("consumable")) {
+			if(c->consumable()->attributes->str_type.compare("AMMUNITION") != 0) {
+				// not ammo
+				mods::globals::dispose_object(c->uuid);
+				continue;
+			}
+			if(mods::rarity::is_common(c->consumable()->attributes->rarity)) {
+				common_ammos.emplace_back(c->feed_file());
+			}
+			if(mods::rarity::is_uncommon(c->consumable()->attributes->rarity)) {
+				uncommon_ammos.emplace_back(c->feed_file());
+			}
+			if(mods::rarity::is_rare(c->consumable()->attributes->rarity)) {
+				rare_ammos.emplace_back(c->feed_file());
+			}
+			if(mods::rarity::is_legendary(c->consumable()->attributes->rarity)) {
+				legendary_ammos.emplace_back(c->feed_file());
+			}
+			if(mods::rarity::is_god_tier(c->consumable()->attributes->rarity)) {
+				god_tier_ammos.emplace_back(c->feed_file());
+			}
+			mods::globals::dispose_object(c->uuid);
 		}
 
 		CRAWL_FOR(rifle);

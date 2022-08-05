@@ -1,5 +1,7 @@
 #include "examine.hpp"
 #include "player.hpp"
+#include "object-utils.hpp"
+#include "loot.hpp"
 
 #ifdef __MENTOC_MODS_EXAMINE_DEBUG__
 #define mex_debug(A) std::cerr << "[mods::examine][debug]:" << A <<"\n";
@@ -10,12 +12,14 @@
 extern int generic_find(char *arg, bitvector_t bitvector, char_data *ch, char_data **tar_ch, struct obj_data **tar_obj);
 namespace mods::examine {
 	void list_obj_contents_to_char(obj_ptr_t& object,player_ptr_t& player,int mode,int show) {
+#if 0
 		if(mods::object_utils::is_payload_crate(object)) {
-			for(const auto& item : mods::loot::payload_items(object)) {
-
+			for(auto item : mods::loot::payload_items(object)) {
+				show_obj_to_char(item, player, mode,1);
 			}
 			return;
 		}
+#endif
 		struct obj_data *i;
 		bool found = FALSE;
 		std::map<std::string,int> occurrences;

@@ -15,6 +15,7 @@
 {yel}mods/integral-objects{/yel}:->{grn}install_sign{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}uninstall_sign{/grn}
 {yel}mods/builder/seqbuild{/yel}:->{grn}seqbuild{/grn}
+{yel}mods/builder/static-loot{/yel}:->{grn}staticlootbuild{/grn}
 {yel}mods/builder/hqbuild{/yel}:->{grn}hqbuild{/grn}
 {yel}mods/builder/meqbuild{/yel}:->{grn}meqbuild{/grn}
 {yel}mods/builder/loot-payload{/yel}:->{grn}paybuild{/grn}

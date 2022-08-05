@@ -1,0 +1,17 @@
+[start]
+
+[room_vnum]
+sl_room
+
+[std::string]
+sl_yaml,2048
+
+[uint16_t]
+sl_count
+
+[initialize_row]
+sl_room
+sl_yaml
+sl_count
+
+[end]

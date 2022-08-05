@@ -240,7 +240,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/radio-station mods/builder/mob-scaler \
 					 mods/orm/raid-areas \
 					 mods/builder/loot-payload mods/builder/loot-ammo \
-					 mods/orm/loot-payload mods/orm/loot-ammo
+					 mods/orm/loot-payload mods/orm/loot-ammo \
+					 mods/orm/static-loot mods/builder/static-loot
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

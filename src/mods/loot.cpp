@@ -173,11 +173,41 @@ namespace mods::loot {
 		 * TODO: sacrifice count
 		 * TODO: sacrifice obj_ptr_t
 		 */
-		c.sacrifice_count = 0;
-		c.sacrifice = nullptr;
+		in_crate.sacrifice_count = 0;
+		in_crate.sacrifice = nullptr;
+	}
+
+	auto random_common_ammo() {
+		using namespace mods::rand;
+		using namespace mods::drops;
+		return rand_item(get_common_ammos());
+	}
+	auto random_uncommon_ammo() {
+		using namespace mods::rand;
+		using namespace mods::drops;
+		return rand_item(get_uncommon_ammos());
+	}
+	auto random_rare_ammo() {
+		using namespace mods::rand;
+		using namespace mods::drops;
+		return rand_item(get_rare_ammos());
+	}
+	auto random_legendary_ammo() {
+		using namespace mods::rand;
+		using namespace mods::drops;
+		return rand_item(get_legendary_ammos());
+	}
+	auto random_god_tier_ammo() {
+		using namespace mods::rand;
+		using namespace mods::drops;
+		return rand_item(get_god_tier_ammos());
 	}
 
 	void randomize_ammo_crate(auto& in_crate,const auto& orm) {
+		m_debug("random_common_ammo stub");
+		// TODO: finish this
+		return;
+#if 0
 		using R = rarity_t;
 		auto rarities = parse_rarities(orm->lp_rarity);
 		std::vector<std::string> c;
@@ -195,7 +225,7 @@ namespace mods::loot {
 				c.emplace_back(random_legendary_ammo());
 			}
 			if(rarities & R::GOD_TIER) {
-				c.emplace_back(random_godtier_ammo());
+				c.emplace_back(random_god_tier_ammo());
 			}
 		}
 		for(unsigned i=0; i < orm->lp_count; i++) {
@@ -205,8 +235,9 @@ namespace mods::loot {
 		 * TODO: sacrifice count
 		 * TODO: sacrifice obj_ptr_t
 		 */
-		c.sacrifice_count = 0;
-		c.sacrifice = nullptr;
+		in_crate.sacrifice_count = 0;
+		in_crate.sacrifice = nullptr;
+#endif
 	}
 	void load_crates() {
 		crate_index().clear();

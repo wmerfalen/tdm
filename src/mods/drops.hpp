@@ -7,6 +7,11 @@ namespace mods::drops {
 	 * API:
 	 */
 	void random_drop_to(player_ptr_t& victim,obj_ptr_t& corpse);
+	const std::vector<std::string>& get_common_ammos();
+	const std::vector<std::string>& get_uncommon_ammos();
+	const std::vector<std::string>& get_rare_ammos();
+	const std::vector<std::string>& get_legendary_ammos();
+	const std::vector<std::string>& get_god_tier_ammos();
 
 	const std::vector<std::string>& get_common_armors();
 	const std::vector<std::string>& get_uncommon_armors();
