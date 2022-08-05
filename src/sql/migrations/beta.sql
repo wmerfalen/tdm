@@ -1,8 +1,3 @@
-\c postgres;
-DROP DATABASE mud;
-CREATE DATABASE mud;
-\c mud;
-
 --
 -- PostgreSQL database dump
 --
@@ -3406,6 +3401,42 @@ ALTER SEQUENCE public.skill_usage_id_seq OWNED BY public.skill_usage.id;
 
 
 --
+-- Name: static_loot; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.static_loot (
+    id integer NOT NULL,
+    sl_room integer NOT NULL,
+    sl_yaml character varying(2048) NOT NULL,
+    sl_count integer DEFAULT 1 NOT NULL
+);
+
+
+ALTER TABLE public.static_loot OWNER TO postgres;
+
+--
+-- Name: static_loot_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.static_loot_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.static_loot_id_seq OWNER TO postgres;
+
+--
+-- Name: static_loot_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.static_loot_id_seq OWNED BY public.static_loot.id;
+
+
+--
 -- Name: stay; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -4319,6 +4350,13 @@ ALTER TABLE ONLY public.skill_usage ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: static_loot id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.static_loot ALTER COLUMN id SET DEFAULT nextval('public.static_loot_id_seq'::regclass);
+
+
+--
 -- Name: stay id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -4536,6 +4574,18 @@ COPY public.contract_step_callback (id, s_contract_vnum, s_task_type, s_task_tar
 11	1	GOAL_FIND	TARGET_ROOM	143	1
 12	1	GOAL_FIND	TARGET_ROOM	144	2
 15	24	GOAL_GIVE	TARGET_MOB	143	26
+16	27	GOAL_GIVE	TARGET_MOB	143	4
+17	27	GOAL_FIND	TARGET_ROOM	143	5
+18	27	GOAL_GIVE	TARGET_MOB	143	4
+19	27	GOAL_FIND	TARGET_ROOM	143	5
+20	27	GOAL_GIVE	TARGET_MOB	143	4
+21	27	GOAL_FIND	TARGET_ROOM	143	5
+22	27	GOAL_GIVE	TARGET_MOB	143	4
+23	27	GOAL_FIND	TARGET_ROOM	143	5
+24	27	GOAL_GIVE	TARGET_MOB	143	4
+25	27	GOAL_FIND	TARGET_ROOM	143	5
+26	27	GOAL_GIVE	TARGET_MOB	143	4
+27	27	GOAL_FIND	TARGET_ROOM	143	5
 \.
 
 
@@ -4544,16 +4594,30 @@ COPY public.contract_step_callback (id, s_contract_vnum, s_task_type, s_task_tar
 --
 
 COPY public.contract_steps (id, s_contract_vnum, s_task_type, s_task_target, s_description, s_object_yaml, s_mob_vnum, s_room_vnum, s_quota, s_is_optional, s_order, s_reward_xp, s_reward_money, s_reward_1, s_reward_2, s_reward_3, s_reward_4, s_reward_5, s_reward_6, s_reward_7, s_reward_8, s_reward_9, s_reward_10, created_at, updated_at) FROM stdin;
-41	24	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.277468	2022-02-01 03:04:51.277468
-26	1	1	2	You've got the scanner? Great! Now head to Allied Foods marketplace. It is northeast from here.\r\nYou will want to look for the {yel}Slaughter Isle{/yel}. Use your BIOMETRIC scanner to \r\ncheck the meat products for the presence of {red}HUMAN REMAINS{/red}\r\n\r\n\r\nOnce you've found positive results we will radio you with your next objective.	\N	0	266	0	f	0	120	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.849428	2021-09-18 01:54:46.849428
-42	24	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.293908	2022-02-01 03:04:51.293908
-27	1	1024	1	Locate the slaughter isle to begin testing the foods using your biometric scanner.We need atleast 4 positive bioscan results.{blu}Hint: type {yel}bioscan <target>{/yel}	\N	0	653	0	f	1	1100	560	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.851098	2021-09-18 01:54:46.851098
-43	24	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.310587	2022-02-01 03:04:51.310587
-28	1	1	2	Take the biometric scanner back to Doctor Magnus Ortem. We will need to decide next steps.	\N	0	143	0	f	2	850	500	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.85257	2021-09-18 01:54:46.85257
-44	24	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.327242	2022-02-01 03:04:51.327242
-29	1	1	0	Go back to Doctor Land with the biometric scanner.	\N	603	0	0	f	3	50	50	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.854077	2021-09-18 01:54:46.854077
-45	24	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.343902	2022-02-01 03:04:51.343902
-30	1	512	0	Give the biometric scanner to Doctor Land.	\N	603	0	4	f	4	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.855485	2021-09-18 01:54:46.855485
+48	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 03:56:37.023984	2022-08-05 03:56:37.023984
+42	24	512	0	Give 10 MP5's to the TRITON Labs Scientist\r\n	\N	600	0	10	f	0	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.293908	2022-02-01 03:04:51.293908
+49	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 03:56:37.027384	2022-08-05 03:56:37.027384
+27	1	512	0	Give 10 G36C's to the TRITON Labs Scientist\r\n	\N	600	653	10	f	1	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.851098	2021-09-18 01:54:46.851098
+50	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 04:00:14.170689	2022-08-05 04:00:14.170689
+43	24	512	0	Give 10 MP5's to the TRITON Labs Scientist\r\n	\N	600	0	10	f	0	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.310587	2022-02-01 03:04:51.310587
+51	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 04:00:14.174182	2022-08-05 04:00:14.174182
+28	1	512	0	Give 10 G36C's to the TRITON Labs Scientist\r\n	\N	600	143	10	f	1	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.85257	2021-09-18 01:54:46.85257
+52	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 04:01:37.998892	2022-08-05 04:01:37.998892
+44	24	512	0	Give 10 MP5's to the TRITON Labs Scientist\r\n	\N	600	0	10	f	0	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.327242	2022-02-01 03:04:51.327242
+53	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 04:01:38.00239	2022-08-05 04:01:38.00239
+29	1	512	0	Give 10 G36C's to the TRITON Labs Scientist\r\n	\N	600	0	10	f	1	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.854077	2021-09-18 01:54:46.854077
+54	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 04:02:39.091353	2022-08-05 04:02:39.091353
+45	24	512	0	Give 10 MP5's to the TRITON Labs Scientist\r\n	\N	600	0	10	f	0	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.343902	2022-02-01 03:04:51.343902
+55	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 04:02:39.094581	2022-08-05 04:02:39.094581
+30	1	512	0	Give 10 G36C's to the TRITON Labs Scientist\r\n	\N	600	0	10	f	1	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.855485	2021-09-18 01:54:46.855485
+56	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 04:21:56.798345	2022-08-05 04:21:56.798345
+46	27	512	0	Give 10 MP5's to the TRITON Labs Scientist\r\n	\N	600	0	10	f	0	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 03:52:34.443176	2022-08-05 03:52:34.443176
+57	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 04:21:56.807191	2022-08-05 04:21:56.807191
+41	24	512	0	Give 10 G36C's to the TRITON Labs Scientist\r\n	\N	600	0	10	f	1	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-02-01 03:04:51.277468	2022-02-01 03:04:51.277468
+58	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 04:22:47.263041	2022-08-05 04:22:47.263041
+47	27	512	0	Give 10 MP5's to the TRITON Labs Scientist\r\n	\N	600	0	10	f	0	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 03:52:34.462315	2022-08-05 03:52:34.462315
+59	27	0	0	description	\N	0	0	0	f	0	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-08-05 04:22:47.266816	2022-08-05 04:22:47.266816
+26	1	512	0	Give 10 G36C's to the TRITON Labs Scientist\r\n	\N	600	266	10	f	1	1150	1150	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2021-09-18 01:54:46.849428	2021-09-18 01:54:46.849428
 \.
 
 
@@ -4564,6 +4628,7 @@ COPY public.contract_steps (id, s_contract_vnum, s_task_type, s_task_target, s_d
 COPY public.contracts (id, c_vnum, c_description, c_title, created_at, updated_at) FROM stdin;
 11	1	Good evening, soldier. According to recent advances in our {yel}TRITON{/yel} sponsored laboratory a new kind of ammunition is being built.\r\n\r\nThe blueprint for this ammunition contains heavy amounts of radioactive isotopes from recently spent Uranium. Find the scientist in the armory to east of {blu}COBALT{/blu} Main hallway. He will give you the magazines he has made so far. Once you've acquired the magazines, I will give you further instructions over radio.\r\n{yel}Here are the contract instructions:{/yel}\r\n{yel}1) {grn}Find {blu}Doctor Land{/blu} {grn}in the Gear Room near the shooting range.{/grn}\r\n{yel}2) {grn}Find the TRITON Labs scientist. He will give you the magazines you need.\r\n{yel}3) {grn}Take the magazines to {blu}Doctor Land{/blu}.\r\n{yel}4) {grn}Talk to {blu}Doctor Land{/blu} on next steps...\r\n	Experimental {yel}High Velocity{/yel} magazines.	2021-09-18 01:54:46.847285	2021-09-18 01:54:46.847285
 17	24	We need you to go to the TRITON Lab and ask Doctor Land for the \r\nBIOMETRIC scanner. He should be expecting you.\r\n{yel}Here are the contract instructions:{/yel}\r\n{yel}1) {grn}Find {blu}Doctor Land{/blu} {grn}in the TRITON Lab{/grn}\r\n{yel}2) {grn}{yel}ask{/yel} {blu}Doctor Land{/blu}{grn} for the BIOMETRIC scanner{/grn}	Get the BIOMETRIC scanner from Doctor Land	2022-02-01 03:04:51.255491	2022-02-01 03:04:51.255491
+22	27	Good evening, soldier.\r\n\r\nThe recon team that is closely working with our R&D branch of the {yel}TRITON{/yel} laboratory\r\nhas recently uncovered the location of a high powered {grn}MP5 sub machine gun{/grn}.\r\nYou will need to find several pieces of machinery used to construct the MP5.\r\n\r\nFirst, you will need find {grn}TEN{/grn} unmodified {grn}MP5's{/grn}.\r\nIt is our understanding that the {grn}Kidnappers{/grn} will be armed with\r\nan MP5.\r\n\r\nOne of the components of the Atrocity MP5 is taken from a {grn}G36C Assault Rifle{/grn}.\r\nYou will need to bring back {grn}TEN{/grn} {grn}G36C Assault Rifles{/grn}.\r\n\r\n{yel}Here are the contract instructions:{/yel}\r\n{yel}1) {grn}Acquire {yel}TEN{/yel}{grn} MP5's.{/grn}\r\n{yel}2) {grn}Acquire {yel}TEN{/yel}{grn} G36C's.{/grn}\r\n{yel}3) {grn}Bring back all items to the {yel}TRITON{/yel} Labs scientist.{/grn}\r\n	Atrocity MP5 Contract.	2022-08-05 03:31:05.746535	2022-08-05 03:31:05.746535
 \.
 
 
@@ -4856,11 +4921,11 @@ COPY public.karma (karma_id, karma_player_id, karma_alignment, karma_cold_bloode
 --
 
 COPY public.loot_ammo (id, la_room, la_types, la_levels, la_count) FROM stdin;
-21	1108	UNCOMMON,RARE,LEGENDARY	20	1
-22	1147	UNCOMMON,RARE,LEGENDARY	20-35	1
-23	1151	UNCOMMON,RARE,LEGENDARY	20-35	1
-24	1156	UNCOMMON,RARE,LEGENDARY	20-35	1
-25	1160	UNCOMMON,RARE,LEGENDARY	20-35	1
+26	1108	UNCOMMON,RARE,LEGENDARY	20	1
+27	1147	UNCOMMON,RARE,LEGENDARY	20-35	1
+28	1151	UNCOMMON,RARE,LEGENDARY	20-35	1
+29	1156	UNCOMMON,RARE,LEGENDARY	20-35	1
+30	1160	UNCOMMON,RARE,LEGENDARY	20-35	1
 \.
 
 
@@ -4869,15 +4934,15 @@ COPY public.loot_ammo (id, la_room, la_types, la_levels, la_count) FROM stdin;
 --
 
 COPY public.loot_payload (id, lp_room, lp_rarity, lp_levels, lp_count) FROM stdin;
-15	1097	UNCOMMON	UNCOMMON	1
-16	1100	UNCOMMON,RARE	UNCOMMON,RARE	1
-17	1104	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
-18	1124	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
-19	1125	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
-20	1126	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
-21	1136	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
-22	1140	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
-23	1149	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+24	1097	UNCOMMON	UNCOMMON	1
+25	1100	UNCOMMON,RARE	UNCOMMON,RARE	1
+26	1104	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+27	1124	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+28	1125	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+29	1126	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+30	1136	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+31	1140	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
+32	1149	UNCOMMON,RARE,LEGENDARY	UNCOMMON,RARE,LEGENDARY	1
 \.
 
 
@@ -5287,8 +5352,8 @@ COPY public.object_weapon (id, obj_fk_id, obj_ammo_max, obj_ammo_type, obj_coold
 
 COPY public.player (id, player_password, player_affection_plr_bitvector, player_affection_bitvector, player_name, player_short_description, player_long_description, player_action_bitvector, player_ability_strength, player_ability_strength_add, player_ability_intelligence, player_ability_wisdom, player_ability_dexterity, player_ability_constitution, player_ability_charisma, player_ability_alignment, player_attack_type, player_max_hitpoints, player_max_mana, player_max_move, player_gold, player_exp, player_sex, player_hitpoints, player_mana, player_move, player_damroll, player_weight, player_height, player_class, player_title, player_hometown, player_damnodice, player_damsizedice, player_type, player_alignment, player_level, player_hitroll, player_armor, player_birth, player_time_played, player_logon, player_preferences, player_practice_sessions) FROM stdin;
 110	$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.	0	0	sniper	1	1	0	3	0	9	9	12	15	9	0	0	241	436	729	48	561	M	241	436	729	52	52	52	9	1	52	0	0	PC	0	3	52	0	2021-09-18 01:42:45.163952	0	2021-09-18 01:42:45.163952	8388736	7
-111	$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC	0	0	ghost	1	1	0	3	0	6	6	12	15	6	0	0	241	339	729	1108	2600	M	241	339	635	53	53	53	9	1	53	0	0	PC	0	3	53	0	2022-05-17 13:17:37.271391	0	2022-05-17 13:17:37.271391	8388736	5
 1	foKntnEF3KSXA	0	0	far	1	1	0	20	0	41	41	82	102	41	3200	0	65000	2277	65000	7283	92840	M	65000	2277	65000	53	53	53	9	1	53	0	0	PC	3200	19	53	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304	37
+111	$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC	0	0	ghost	1	1	0	3	0	6	6	12	15	6	0	0	241	339	729	1108	2600	M	241	339	635	53	53	53	9	1	53	0	0	PC	0	3	53	0	2022-05-17 13:17:37.271391	0	2022-05-17 13:17:37.271391	8388736	5
 \.
 
 
@@ -5312,8 +5377,8 @@ COPY public.player_base_ability (pba_id, pba_player_id, pba_str, pba_str_add, pb
 13	107	3	0	9	9	12	15	9	9	6	8	8	15	10	6	9	15	2021-09-17 19:58:07.021327	2021-09-17 19:58:07.021327
 7	101	44	0	44	44	88	132	44	44	44	60	44	9	44	60	44	60	2021-09-17 00:53:22.86459	2021-09-17 00:53:22.86459
 16	110	3	0	9	9	12	15	9	9	6	8	8	15	10	6	9	9	2021-09-18 01:42:45.197498	2021-09-18 01:42:45.197498
-1	1	20	0	41	41	82	102	41	41	40	64	64	103	42	62	41	57	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
 17	111	3	0	6	6	12	15	6	6	6	11	11	15	7	9	6	9	2022-05-17 13:17:37.452746	2022-05-17 13:17:37.452746
+1	1	20	0	41	41	82	102	41	41	40	64	64	103	42	62	41	57	2021-09-04 04:17:39.714689	2021-09-04 04:17:39.714689
 \.
 
 
@@ -10806,6 +10871,8 @@ COPY public.scripted_sequences (id, s_sequence_vnum) FROM stdin;
 21	1
 23	2
 27	26
+28	4
+29	5
 \.
 
 
@@ -10821,6 +10888,48 @@ COPY public.scripted_steps (id, s_sequence_vnum, s_wait_ticks, s_mob, s_obj, s_r
 103	26	3	600	0	143	0	4	\N	\N	act	$n types a few commands into a computer terminal.
 104	26	3	600	0	143	0	5	\N	\N	dialogue	I will get these results to my international colleagues for further study. I will give Corporal Crawford the results of my studies. That is all for now...
 105	26	3	600	0	143	0	6	\N	\N	act	$n rubs his temples in an effort to quell a severe migraine...
+135	5	3	600	0	143	0	5	\N	\N	say	I must get back to my work unfortunately.
+136	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+107	5	3	600	0	143	1	1	\N	rifle/atrocity-mp5.yml	mob_gives_yaml	\N
+108	5	3	600	0	143	0	2	\N	\N	say	Do let me know how this works out for you.
+109	5	10	600	0	143	0	3	\N	\N	act	$n rubs $s temples and forces a smile...
+110	5	3	600	0	143	0	4	\N	\N	act	$n cleans $s glasses and sighs in exhaustion.
+111	5	3	600	0	143	0	5	\N	\N	say	I must get back to my work unfortunately.
+112	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+137	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+138	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+128	5	3	600	0	143	0	4	\N	\N	act	$n cleans $s glasses and sighs in exhaustion.
+114	5	3	600	0	143	0	2	\N	\N	say	Do let me know how this works out for you.
+115	5	10	600	0	143	0	3	\N	\N	act	$n rubs $s temples and forces a smile...
+116	5	3	600	0	143	0	4	\N	\N	act	$n cleans $s glasses and sighs in exhaustion.
+117	5	3	600	0	143	0	5	\N	\N	say	I must get back to my work unfortunately.
+118	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+119	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+129	5	3	600	0	143	0	5	\N	\N	say	I must get back to my work unfortunately.
+139	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+140	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+121	5	10	600	0	143	0	3	\N	\N	act	$n rubs $s temples and forces a smile...
+122	5	3	600	0	143	0	4	\N	\N	act	$n cleans $s glasses and sighs in exhaustion.
+123	5	3	600	0	143	0	5	\N	\N	say	I must get back to my work unfortunately.
+124	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+125	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+126	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+113	4	3	600	0	143	1	5	\N	rifle/atrocity-mp5.yml	say	I must get back to my work unfortunately.
+130	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+131	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+132	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+133	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+142	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+143	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+144	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+145	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+141	4	3	600	0	143	0	0	\N	\N	say	That's quite a lot of items, I must admit. Though, I think you'll be satisfied with the result. We have put many, MANY man hours into the production of such a weapon...
+106	4	3	600	0	143	1	1	\N	rifle/atrocity-mp5.yml	mob_gives_yaml	That's quite a lot of items, I must admit. Though, I think you'll be satisfied with the result. We have put many, MANY man hours into the production of such a weapon...
+134	4	3	600	0	143	1	2	\N	rifle/atrocity-mp5.yml	say	Do let me know how this works out for you.
+127	4	10	600	0	143	1	3	\N	rifle/atrocity-mp5.yml	act	$n rubs $s temples and forces a smile...
+120	4	3	600	0	143	1	4	\N	rifle/atrocity-mp5.yml	act	$n cleans $s glasses and sighs in exhaustion.
+146	5	0	0	0	0	0	0	\N	\N	placeholder	\N
+147	5	0	0	0	0	0	0	\N	\N	placeholder	\N
 \.
 
 
@@ -11080,6 +11189,14 @@ COPY public.skill_usage (id, player_id, skill_name, skill_level) FROM stdin;
 
 
 --
+-- Data for Name: static_loot; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.static_loot (id, sl_room, sl_yaml, sl_count) FROM stdin;
+\.
+
+
+--
 -- Data for Name: stay; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -11298,7 +11415,6 @@ COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_
 1081	1	Y	0	0	891	1	#yaml|vehicle/prime-town-suv.yml
 1082	1	Y	0	0	892	1	#yaml|vehicle/lxr-sunrise.yml
 1083	1	Y	0	0	893	1	#yaml|vehicle/lxr-sport.yml
-1086	1	M	0	666	682	1	\N
 1087	1	M	0	503	874	1	\N
 1088	1	M	0	503	876	1	\N
 1089	1	M	0	504	870	2	\N
@@ -11648,21 +11764,21 @@ SELECT pg_catalog.setval('public.computer_terminal_id_seq', 1, true);
 -- Name: contract_step_callback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contract_step_callback_id_seq', 15, true);
+SELECT pg_catalog.setval('public.contract_step_callback_id_seq', 27, true);
 
 
 --
 -- Name: contract_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contract_steps_id_seq', 45, true);
+SELECT pg_catalog.setval('public.contract_steps_id_seq', 59, true);
 
 
 --
 -- Name: contracts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contracts_id_seq', 18, true);
+SELECT pg_catalog.setval('public.contracts_id_seq', 36, true);
 
 
 --
@@ -11732,14 +11848,14 @@ SELECT pg_catalog.setval('public.karma_karma_id_seq', 1, false);
 -- Name: loot_ammo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.loot_ammo_id_seq', 25, true);
+SELECT pg_catalog.setval('public.loot_ammo_id_seq', 30, true);
 
 
 --
 -- Name: loot_payload_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.loot_payload_id_seq', 23, true);
+SELECT pg_catalog.setval('public.loot_payload_id_seq', 32, true);
 
 
 --
@@ -12026,14 +12142,14 @@ SELECT pg_catalog.setval('public.room_virtual_number_seq', 1, false);
 -- Name: scripted_sequences_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.scripted_sequences_id_seq', 27, true);
+SELECT pg_catalog.setval('public.scripted_sequences_id_seq', 58, true);
 
 
 --
 -- Name: scripted_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.scripted_steps_id_seq', 105, true);
+SELECT pg_catalog.setval('public.scripted_steps_id_seq', 147, true);
 
 
 --
@@ -12076,6 +12192,13 @@ SELECT pg_catalog.setval('public.skill_trees_id_seq', 16, true);
 --
 
 SELECT pg_catalog.setval('public.skill_usage_id_seq', 435, true);
+
+
+--
+-- Name: static_loot_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.static_loot_id_seq', 1, true);
 
 
 --
@@ -12701,6 +12824,14 @@ ALTER TABLE ONLY public.skill_usage
 
 
 --
+-- Name: static_loot static_loot_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.static_loot
+    ADD CONSTRAINT static_loot_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: stay stay_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -13205,6 +13336,14 @@ ALTER TABLE ONLY public.raid_areas
 
 
 --
+-- Name: static_loot static_loot_sl_room_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.static_loot
+    ADD CONSTRAINT static_loot_sl_room_fkey FOREIGN KEY (sl_room) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: zone_mob zone_mob_mob_vnum_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -13235,13 +13374,6 @@ ALTER TABLE ONLY public.zone_random_item
 ALTER TABLE ONLY public.zone_yaml
     ADD CONSTRAINT zone_yaml_room_vnum_fkey FOREIGN KEY (zy_room_vnum) REFERENCES public.room(room_number) ON UPDATE CASCADE ON DELETE CASCADE;
 
-CREATE TABLE static_loot (
-	id SERIAL PRIMARY KEY,
-	sl_room integer not null,
-	sl_yaml varchar(2048) NOT NULL,
-	sl_count integer NOT NULL DEFAULT 1,
-	FOREIGN KEY(sl_room) REFERENCES room(room_number) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 --
 -- PostgreSQL database dump complete
