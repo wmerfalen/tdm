@@ -35,17 +35,16 @@ namespace mods::builder::meqbuild {
 		/** ======== */
 		bool delete_by_vnum(meqbuild_vnum_t vnum) {
 			m_debug("delete by vnum");
-			std::deque<std::shared_ptr<mods::orm::mob_equipment>> list;
 			bool deleted = false;
-			for(auto& m : mods::orm::mob_equipment_list()) {
-				if(m->meq_vnum == vnum) {
-					m->destroy();
+			auto& ref = mods::orm::mob_equipment_list();
+			ref.erase(std::remove_if(ref.begin(),ref.end(),[&deleted,&vnum](auto & m) -> bool {
+				bool remove = m->meq_vnum == vnum;
+				if(remove) {
 					deleted = true;
-					continue;
+					m->destroy();
 				}
-				list.emplace_back(std::move(m));
-			}
-			mods::orm::mob_equipment_list() = std::move(list);
+				return remove;
+			}),ref.end());
 			return deleted;
 		}
 
@@ -165,17 +164,17 @@ namespace mods::builder::meqbuild {
 
 		bool delete_by_vnum(const uint64_t& vnum) {
 			m_debug("delete_by_vnum");
-			std::deque<std::shared_ptr<mods::orm::mob_equipment_map>> list;
 			bool deleted = false;
-			for(auto& m : mods::orm::mob_equipment_map_list()) {
-				if(m->mmap_mob_vnum == vnum) {
-					m->destroy();
+			auto& r =  mods::orm::mob_equipment_map_list();
+			r.erase(
+			std::remove_if(r.begin(),r.end(),[&vnum,&deleted](auto& r) -> bool {
+				if(r->mmap_mob_vnum == vnum) {
+					r->destroy();
 					deleted = true;
-					continue;
+					return true;
 				}
-				list.emplace_back(std::move(m));
-			}
-			mods::orm::mob_equipment_map_list() = std::move(list);
+				return false;
+			}),r.end());
 			return deleted;
 		}
 		std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> by_mob_vnum(const uint64_t& vnum) {

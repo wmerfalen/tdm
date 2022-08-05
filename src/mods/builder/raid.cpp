@@ -109,17 +109,17 @@ namespace mods::builder::raid {
 		/** required */
 		/** ======== */
 		bool delete_by_vnum(raid_vnum_t vnum) {
-			mods::orm::raid_list_t list;
 			bool deleted = false;
-			for(auto& r : mods::orm::raid_list()) {
+			auto& r  = mods::orm::raid_list();
+			r.erase(
+			std::remove_if(r.begin(),r.end(),[&vnum,&deleted](auto& r) -> bool {
 				if(r->id == vnum) {
 					r->destroy();
 					deleted = true;
-					continue;
+					return true;
 				}
-				list.emplace_back(std::move(r));
-			}
-			mods::orm::raid_list() = std::move(list);
+				return false;
+			}),r.end());
 			return deleted;
 		}
 

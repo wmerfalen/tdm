@@ -36,20 +36,16 @@ namespace mods::builder::paybuild {
 		bool delete_by_vnum(paybuild_vnum_t vnum) {
 			m_debug("delete by vnum");
 			bool deleted = false;
-			std::vector<loot_payload_list_iterator_t> it_list;
-			auto end = mods::orm::loot_payload_list().end();
-			for(auto it = mods::orm::loot_payload_list().begin(); it != end; ++it) {
-				if((*it)->lp_room == vnum) {
-					m_debug("deleting payload vnum: " << vnum);
-					(*it)->destroy();
+			auto& r = mods::orm::loot_payload_list();
+			r.erase(
+			std::remove_if(r.begin(),r.end(),[&vnum,&deleted](auto& r) -> bool {
+				if(r->lp_room == vnum) {
+					r->destroy();
 					deleted = true;
-					it_list.emplace_back(it);
-					continue;
+					return true;
 				}
-			}
-			for(auto it : it_list) {
-				mods::orm::loot_payload_list().erase(it);
-			}
+				return false;
+			}),r.end());
 			return deleted;
 		}
 

@@ -36,20 +36,16 @@ namespace mods::builder::staticlootbuild {
 		bool delete_by_vnum(staticlootbuild_vnum_t vnum) {
 			m_debug("delete by vnum");
 			bool deleted = false;
-			std::vector<static_loot_list_iterator_t> it_list;
-			auto end = mods::orm::static_loot_list().end();
-			for(auto it = mods::orm::static_loot_list().begin(); it != end; ++it) {
-				if((*it)->sl_room == vnum) {
-					m_debug("deleting payload vnum: " << vnum);
-					(*it)->destroy();
+			auto& r = mods::orm::static_loot_list();
+			r.erase(
+			std::remove_if(r.begin(),r.end(),[&vnum,&deleted](auto& r) -> bool {
+				if(r->sl_room == vnum) {
+					r->destroy();
 					deleted = true;
-					it_list.emplace_back(it);
-					continue;
+					return true;
 				}
-			}
-			for(auto it : it_list) {
-				mods::orm::static_loot_list().erase(it);
-			}
+				return false;
+			}),r.end());
 			return deleted;
 		}
 

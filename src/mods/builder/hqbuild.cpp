@@ -13,17 +13,17 @@ namespace mods::builder::hqbuild {
 	}
 
 	bool delete_by_room_vnum(const room_vnum vnum) {
-		std::deque<std::shared_ptr<mods::orm::hq>> list;
 		bool deleted = false;
-		for(auto& m : mods::orm::hq_list()) {
-			if(m->hq_room_vnum == vnum) {
-				m->destroy();
+		auto& r = mods::orm::hq_list();
+		r.erase(
+		std::remove_if(r.begin(),r.end(),[&vnum,&deleted](auto& r) -> bool {
+			if(r->hq_room_vnum == vnum) {
+				r->destroy();
 				deleted = true;
-				continue;
+				return true;
 			}
-			list.emplace_back(std::move(m));
-		}
-		mods::orm::hq_list() = std::move(list);
+			return false;
+		}),r.end());
 		return deleted;
 	}
 	std::optional<std::shared_ptr<mods::orm::hq>> by_vnum(const uint32_t& vnum) {

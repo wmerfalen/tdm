@@ -53,17 +53,21 @@ namespace mods::builder::seqbuild {
 		/** required */
 		/** ======== */
 		bool delete_by_vnum(seqbuild_vnum_t vnum) {
-			std::deque<std::shared_ptr<mods::orm::scripted_sequences>> list;
 			bool deleted = false;
-			for(auto& m : mods::orm::scripted_sequences_list()) {
-				if(m->vnum() == vnum) {
-					m->destroy();
+			auto& r =
+			    mods::orm::scripted_sequences_list();
+			r.erase(
+			    std::remove_if(
+			        r.begin(),
+			        r.end(),
+			[&](auto& r) -> bool {
+				if(r->vnum() == vnum) {
+					r->destroy();
 					deleted = true;
-					continue;
+					return true;
 				}
-				list.emplace_back(std::move(m));
-			}
-			mods::orm::scripted_sequences_list() = std::move(list);
+				return false;
+			}),r.end());
 			return deleted;
 		}
 

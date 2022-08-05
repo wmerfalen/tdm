@@ -166,14 +166,13 @@ namespace mods::zone {
 	bool should_run_zone_command(reset_com& command) {
 		switch(command.command) {
 			case 'M': {
-					std::vector<uuid_t> alive;
-					for(const auto& mob_uuid : command.object_data) {
+					//std::vector<uuid_t> alive;
+					auto& r = command.object_data;
+					r.erase(
+					std::remove_if(r.begin(),r.end(),[](auto& mob_uuid) -> bool {
 						auto npc = npc_by_uuid(mob_uuid);
-						if(npc) {
-							alive.emplace_back(mob_uuid);
-						}
-					}
-					command.object_data = std::move(alive);
+						return !npc;
+					}),r.end());
 					command.count = command.object_data.size();
 					return command.count < command.arg3;
 				}
@@ -334,6 +333,7 @@ namespace mods::zone {
 	//  */
 
 	void renum_zone_table(void) {
+		log("renum_zone_table");
 		using zone_table_t = decltype(zone_table);
 		zone_table_t filtered;
 
