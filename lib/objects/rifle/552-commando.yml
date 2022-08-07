@@ -1,37 +1,36 @@
 # accuracy map
 accuracy_map: [
-10.00,
-10.00,
-10.00,
-10.00
+34.00,
+45.00,
+60.00,
+30.00
 ]
-ammo_max: 220 #integer
-ammo_type: '' #string, constant enum
+ammo_max: 364 #integer
+ammo_type: 'ASSAULT_RIFLE' #string, constant enum
 chance_to_injure: 4.23 #float, out of 100
-clip_size: 8 #integer
+clip_size: 52 #integer
 cooldown_between_shots: 2 #int, in ticks
 critical_chance: 14 #int, out of 100
 critical_range: 4 #integer, measured in rooms
 damage_map: [
-10.00,
-10.00,
-10.00,
-10.00
+28.00,
+32.00,
+28.00,
+20.00
 ]
 base_damage: 45 #float
-disorient_amount: 3.14 #float
-headshot_bonus: 3.0 #float
-max_range: 3 #integer,measured in rooms
-range_multiplier: 4.3 #float, multiplied by 
+disorient_amount: 2.0 #float
+headshot_bonus: 63.0 #float
+max_range: 4 #integer,measured in rooms
+range_multiplier: 0 #float, multiplied by 
 reload_time: 5 #int, measured in ticks
 rounds_per_minute: 80
-muzzle_velocity: 24
+muzzle_velocity: 74
 effective_firing_range: 2
 manufacturer: 'S1 Industries'
-feed_file: '552-commando.yml'
 type: 'ASSAULT_RIFLE' #string, type of weapon
 str_type: 'ASSAULT_RIFLE' #string, type of weapon
-name: '552 Commando'  #string
+name: 'Commando 552'  #string
 #rarity types
 # COMMON
 # UNCOMMON
@@ -40,10 +39,34 @@ name: '552 Commando'  #string
 # GOD_TIER
 # DEFAULT
 rarity: COMMON
-vnum: 69 #virtual number
 object_type: rifle
-description: 'A 552 Commando is lying here.'
-short_description: 'a 552 Commando'
-action_description: '552 Commando'
-damage_dice_count: 6
-damage_dice_sides: 10
+description: 'A Commando 552 is lying here.'
+short_description: 'a Commando 552'
+action_description: 'Commando 552'
+damage_dice_count: 8
+damage_dice_sides: 12
+incendiary_damage: 0 #int16_t, damage
+explosive_damage: 0 #int16_t, damage
+shrapnel_damage: 0 #int16_t, damage
+corrosive_damage: 0 #int16_t, damage
+cryogenic_damage: 0 #int16_t, damage
+radioactive_damage: 0 #int16_t, damage
+emp_damage: 0 #int16_t, damage
+shock_damage: 0 #int16_t, damage
+anti_matter_damage: 0 #int16_t, damage
+stat_strength: 0 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 0 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 0 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 0 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 0 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 0 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 0 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 0 #int16_t, positive or negative amount to affect strategy stat
+stat_medical: 0 #int16_t, positive or negative amount to affect medical stat
+feed_file: '552-commando.yml'
+vnum: 244

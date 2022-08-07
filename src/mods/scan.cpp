@@ -155,7 +155,7 @@ namespace mods::scan {
 						pushed_item.ch = nullptr;
 						pushed_item.obj =object.get();
 						pushed_item.uuid = object->uuid;
-						pushed_item.distance = ++ctr;
+						pushed_item.distance = ctr;
 						pushed_item.direction = i_d;
 						pushed_item.room_rnum = room_id;
 						LOS_SCAN_DIRECTION_DEBUG("moved item to list");
@@ -184,7 +184,7 @@ namespace mods::scan {
 							pushed_item.obj = nullptr;
 							pushed_item.ch = character->cd();
 							pushed_item.uuid = character->uuid();
-							pushed_item.distance = ++ctr;
+							pushed_item.distance = ctr;
 							pushed_item.direction = i_d;
 							pushed_item.room_rnum = room_id;
 							LOS_SCAN_DIRECTION_DEBUG("moved item to list");

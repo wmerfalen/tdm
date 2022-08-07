@@ -277,7 +277,7 @@ namespace mods::combat_composer {
 		 */
 		bool roll_accuracy(player_ptr_t& attacker,acquired_target_t& target,obj_ptr_t& weapon) {
 #define send_attacker_accuracy_stats
-#define FOR_WHOM "sniper"
+#define FOR_WHOM "ghost"
 #ifdef send_attacker_accuracy_stats
 #define md(A) if(attacker->name().compare(FOR_WHOM) == 0){ attacker->sendln(CAT("Debug: ",A)); }
 #else
@@ -497,6 +497,7 @@ namespace mods::combat_composer {
 				}
 				if(mods::util::fuzzy_match(target.target_name,victim->name())) {
 					if(scanned_target.distance > RCT->max_range) {
+						attacker->sendln(CAT("scanned_target.distance:",scanned_target.distance," max_range: ",RCT->max_range));
 						attacker->sendln("That target is out of range!");
 						return std::nullopt;
 					}
