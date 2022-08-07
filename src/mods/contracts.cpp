@@ -92,8 +92,8 @@ namespace mods::contracts {
 				player->sendln("You have no current contracts.");
 				return;
 			}
-			player->sendln("Listing...");
 			PAGER_START(player);
+			player->sendln("Listing...");
 			for(const auto& c : player->contracts()) {
 				if(c->finished()) {
 					player->sendln(CAT("{grn}Finished{/grn}:\t{yel}[",c->vnum(),"]{/yel}::{grn}",c->title().data(),"{/grn}").c_str());
@@ -109,17 +109,18 @@ namespace mods::contracts {
 			return;
 		}
 		if(argshave()->first_is_any({"show","describe"})->nth_has_integer(1)->size_gt(1)->passed()) {
-			auto v = intat(1);
 			PAGER_START(player);
-			player->sendln("\r\nYou pull up a list of contracts in your iDroid...");
-			player->sendln("\r\nYou run a search for a detailed list of contracts matching your inquiry...");
+			auto v = intat(1);
+			player->sendln("You pull up a list of contracts in your iDroid...");
+			player->sendln("You run a search for a detailed list of contracts matching your inquiry...");
 			for(const auto& c : contract_master_list()) {
 				if(c->vnum == v) {
 					player->sendln("{grn}Your iDroid beeps a confirmation...{/grn}");
-					player->sendln(CAT("{grn}Contract ID:{yel}",v,"{/yel}\r\n\r\n",
-					                   "{grn}----[ BEGIN TRANSCRIPT ]----{/grn}\r\n\r\n",
+					player->sendln(CAT("{grn}Contract ID:{yel}",v,"{/yel}\r\n",
+					                   "{grn}----[ BEGIN TRANSCRIPT ]----{/grn}\r\n",
 					                   c->description.data(),"\r\n",
 					                   "{/grn}----[ END TRANSCRIPT ]----{/grn}"));
+					PAGER_END(player);
 					return;
 				}
 			}

@@ -220,7 +220,7 @@ namespace mods {
 		}
 
 		if(acc.length()) {
-			stc(acc);
+			write_to_char(acc,0,0);
 			m_current_page = pg;
 		}
 	}
@@ -949,6 +949,14 @@ namespace mods {
 	}
 	void player::psendln(std::string_view str) {
 		MENTOC_NPC_CHECK(str.data());
+		if(m_do_paging) {
+			if(desc().has_prompt) {
+				queue_page_fragment("\r\n");
+			}
+			queue_page_fragment(str);
+			desc().has_prompt = 0;
+			return;
+		}
 		if(desc().has_prompt) {
 			write_to_char("\r\n",0,0);
 		}
@@ -957,6 +965,14 @@ namespace mods {
 	}
 	void player::psendln(mods::string& str) {
 		MENTOC_NPC_CHECK(str.c_str());
+		if(m_do_paging) {
+			if(desc().has_prompt) {
+				queue_page_fragment("\r\n");
+			}
+			queue_page_fragment(CAT(str.c_str(),"\r\n"));
+			desc().has_prompt = 0;
+			return;
+		}
 		if(desc().has_prompt) {
 			write_to_char("\r\n",0,0);
 		}
@@ -965,6 +981,14 @@ namespace mods {
 	}
 	void player::sendln(mods::string& str) {
 		MENTOC_NPC_CHECK(str.str());
+		if(m_do_paging) {
+			if(desc().has_prompt) {
+				queue_page_fragment("\r\n");
+			}
+			queue_page_fragment(CAT(str.c_str(),"\r\n"));
+			desc().has_prompt = 0;
+			return;
+		}
 		if(desc().has_prompt) {
 			write_to_char("\r\n",0,0);
 		}
@@ -973,6 +997,14 @@ namespace mods {
 	}
 	void player::sendln(std::string_view str) {
 		MENTOC_NPC_CHECK(str.data());
+		if(m_do_paging) {
+			if(desc().has_prompt) {
+				queue_page_fragment("\r\n");
+			}
+			queue_page_fragment(CAT(str.data(),"\r\n"));
+			desc().has_prompt = 0;
+			return;
+		}
 		if(desc().has_prompt) {
 			write_to_char("\r\n",0,0);
 		}
@@ -996,6 +1028,11 @@ namespace mods {
 	}
 	void player::stc(const char* m) {
 		MENTOC_NPC_CHECK(std::string(m));
+		if(m_do_paging) {
+			queue_page_fragment(m);
+			desc().has_prompt = 0;
+			return;
+		}
 		/* FIXME: this does not scale */
 		if(m_capture_output) {
 			m_captured_output += m;
@@ -1005,16 +1042,31 @@ namespace mods {
 	}
 	void player::stc(const mods::string& m) {
 		MENTOC_NPC_CHECK(m.str());
+		if(m_do_paging) {
+			queue_page_fragment(m.c_str());
+			desc().has_prompt = 0;
+			return;
+		}
 		write_to_char(m.view(),0,0);
 		desc().has_prompt = 0;
 	}
 	void player::stc(std::string_view sview) {
 		MENTOC_NPC_CHECK(sview.data());
+		if(m_do_paging) {
+			queue_page_fragment(sview);
+			desc().has_prompt = 0;
+			return;
+		}
 		write_to_char(sview,0,0);
 		desc().has_prompt = 0;
 	}
 	void player::stc(const std::string m) {
 		MENTOC_NPC_CHECK(m);
+		if(m_do_paging) {
+			queue_page_fragment(m);
+			desc().has_prompt = 0;
+			return;
+		}
 		/* FIXME: this does not scale */
 		if(m_capture_output) {
 			m_captured_output += m;
@@ -1024,6 +1076,11 @@ namespace mods {
 	}
 	void player::stc(int m) {
 		MENTOC_NPC_CHECK(m);
+		if(m_do_paging) {
+			queue_page_fragment(CAT(m));
+			desc().has_prompt = 0;
+			return;
+		}
 		if(m_capture_output) {
 			m_captured_output += std::to_string(m);
 		}
@@ -2103,14 +2160,7 @@ namespace mods {
 		return m_char_data->visibility;
 	}
 	void player::write_to_char(std::string_view msg, bool newline,bool plain) {
-		if(m_do_paging) {
-			queue_page_fragment(msg.data());
-			if(newline) {
-				queue_page_fragment("\r\n");
-			}
-		} else {
-			m_char_data->desc->queue_output(msg,newline,plain);
-		}
+		m_char_data->desc->queue_output(msg,newline,plain);
 	}
 	mods::string player::get_class_string() const {
 		return mods::util::player_class_to_string(m_class).c_str();
@@ -2546,6 +2596,10 @@ namespace mods {
 	}
 	void player::sendln() {
 		MENTOC_NPC_CHECK(str.str());
+		if(m_do_paging) {
+			queue_page_fragment("\r\n");
+			return;
+		}
 		write_to_char("", 1,0);
 		desc().has_prompt = 0;
 	}
@@ -2556,11 +2610,19 @@ namespace mods {
 	}
 	void player::sendx(mods::string& str) {
 		MENTOC_NPC_CHECK(str.str());
+		if(m_do_paging) {
+			queue_page_fragment(str.view());
+			return;
+		}
 		write_to_char(str.view(), 0,0);
 		desc().has_prompt = 0;
 	}
 	void player::sendx(std::string_view str) {
 		MENTOC_NPC_CHECK(str.str());
+		if(m_do_paging) {
+			queue_page_fragment(str.data());
+			return;
+		}
 		write_to_char(str.data(), 0,0);
 		desc().has_prompt = 0;
 	}
