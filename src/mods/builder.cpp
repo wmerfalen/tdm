@@ -68,6 +68,38 @@ int get_raid_id(player_ptr_t player) {
 	}
 	return 0;
 }
+#undef m_debug
+#undef m_error
+#define __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
+#ifdef __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
+#define m_debug(MSG) mentoc_prefix_debug("[mods::builder::debug]")  << MSG << "\n";
+#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::builder::ERROR]"))  << MSG << "\n";
+#else
+#define m_debug(MSG) ;;
+#define m_error(MSG) ;;
+#endif
+
+std::tuple<bool,std::string> zone_place_remove(auto zone_table_index, auto command_index) {
+	m_debug("delete zone mob placement " << zone_table_index << " command: " << command_index);
+	try {
+		auto del_txn = txn();
+		sql_compositor comp("zone_data",&del_txn);
+		auto entry = zone_table[zone_table_index].cmd.begin() + command_index;
+		auto vnum = std::to_string(entry->arg1);
+		auto room_sql = comp.del()
+		                .from("zone_data")
+		                .where("zone_command","M")
+		                .op_and("zone_arg1","=",vnum)
+		                .op_and("zone_id","=",std::to_string(zone_table[zone_table_index].get_id()))
+		                .sql();
+		auto row = mods::pq::exec(del_txn,room_sql.data());
+		mods::pq::commit(del_txn);
+		return {1,"deleted"};
+	} catch(std::exception& e) {
+		REPORT_DB_ISSUE("login exception",e.what());
+		return {false,CAT("failed: '",e.what(),"'")};
+	}
+}
 
 void show_shop_by_index(std::size_t i,player_ptr_t& player) {
 	mods::builder_util::show_object_vector<std::deque<shop_data_t>>(
@@ -4759,6 +4791,8 @@ SUPERCMD(do_zbuild) {
 		        " /-------------------------------------------------------------\\\r\n" <<
 		        " | P A V E M E N T S  S Y S T E M                   version 0.1|\r\n" <<
 		        " |_____________________________________________________________/\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}pave <mob|obj> <mob_vnum|obj_vnum>{/red}\r\n" <<
 		        "  {grn}|____[example]{/grn}\r\n" <<
 		        "  |:: {wht}zbuild{/wht} {gld}pave mob 1050{/gld}\r\n" <<
@@ -4770,16 +4804,24 @@ SUPERCMD(do_zbuild) {
 		        "  |:: to place the object in the specified object. If you don't specify <obj>\r\n" <<
 		        "  |:: then it will default to placing the object within the room you are currently\r\n" <<
 		        "  |:: standing in.)\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}here [obj]{/red}\r\n" <<
 		        "  |___[example]\r\n" <<
 		        "  |:: (places the object or mob in the current room (if no arguments are given).\r\n" <<
 		        "  |:: if [obj] is specified then this command will place the current object in [obj]\r\n" <<
 		        "  |:: Obviously, you can't place a mob in an object so [obj] is only honoured for objects)\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}pave list{/red}\r\n" <<
 		        "  |:: (lists all the pavements currently in your session)\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}switch <id>{/red}\r\n" <<
 		        "  |:: (switches to the pavement with and id of <id>. To see current\r\n" <<
 		        "  |:: pavements use 'zbuild pave list')\r\n" <<
+
+
 		        "\r\n" <<
 		        " /-------------------------------------------------------------\\\r\n" <<
 		        " | M A N U A L  P L A C E M E N T S                            |\r\n" <<
@@ -4807,19 +4849,36 @@ SUPERCMD(do_zbuild) {
 		        "  |:: 'D': Set state of door\r\n" <<
 		        "  |:: )\r\n" <<
 		        " {red}see: zbuild help place{/red}\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}place-list <zone_index>...[zone_index-N]{/red}\r\n" <<
 		        "  |--> lists all place commands for 'zone_id'. multiple indexes can be passed.\r\n" <<
+
+
+
 		        " {grn}zbuild{/grn} {red}place-list-vnum <zone_vnum>...[zone_vnum-N]{/red}\r\n" <<
 		        "  |--> lists all place commands for zone by vnum. multiple vnums can be passed.\r\n" <<
+
+
+
 		        " {grn}zbuild{/grn} {red}place-remove <zone_id> <place_id>{/red}\r\n" <<
 		        "  |--> removes the place command 'place_id' in zone 'zone_id'\r\n" <<
 		        "\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red}delete-by-mob-vnum <mob_vnum>{/red}\r\n" <<
-		        "  |--> removes all data within the zone_data table.\r\n" <<
+		        "  |--> removes all data within the zone_data table that are mob placements using mob_vnum.\r\n" <<
 		        "\r\n"
+
+
+
 		        "{red}---[ DANGEROUS COMMANDS ]---{/red}\r\n" <<
+
+
 		        " {grn}zbuild{/grn} {red} remove-all-zone-data-from-db{/red}\r\n" <<
 		        "  |--> removes all data within the zone_data table.\r\n" <<
+
+
 		        "{red}---[ END DANGEROUS COMMANDS ]---{/red}\r\n" <<
 		        "\r\n"
 		        ;
@@ -5308,6 +5367,7 @@ SUPERCMD(do_zbuild) {
 			return;
 		}
 
+		zone_place_remove(index.value(),command_index.value());
 		zone_table[index.value()].cmd.erase(
 		    zone_table[index.value()].cmd.begin() + command_index.value()
 		);
