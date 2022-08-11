@@ -3698,15 +3698,15 @@ SUPERCMD	src/interpreter.cpp	/^SUPERCMD(do_room_list) {$/;"	kind:function	line:1
 SUPERCMD	src/interpreter.h	15;"	kind:macro	line:15	file:
 SUPERCMD	src/mobact.cpp	/^	SUPERCMD(do_mobact) {$/;"	kind:function	line:310	namespace:mods::mobact	signature:(do_mobact)
 SUPERCMD	src/mods/boosters/adrenaline-shot.cpp	/^		SUPERCMD(do_adshot_test) {$/;"	kind:function	line:68	namespace:mods::boosters::adrenaline_shot_init	signature:(do_adshot_test)
-SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_ndelete) {$/;"	kind:function	line:6568	namespace:mods::builder	signature:(do_ndelete)
-SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_nfind) {$/;"	kind:function	line:6601	namespace:mods::builder	signature:(do_nfind)
-SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_ngoto) {$/;"	kind:function	line:6623	namespace:mods::builder	signature:(do_ngoto)
-SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_nhelp) {$/;"	kind:function	line:6574	namespace:mods::builder	signature:(do_nhelp)
-SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_nset) {$/;"	kind:function	line:6556	namespace:mods::builder	signature:(do_nset)
-SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_refresh_all) {$/;"	kind:function	line:6643	namespace:mods::builder	signature:(do_refresh_all)
+SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_ndelete) {$/;"	kind:function	line:6572	namespace:mods::builder	signature:(do_ndelete)
+SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_nfind) {$/;"	kind:function	line:6605	namespace:mods::builder	signature:(do_nfind)
+SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_ngoto) {$/;"	kind:function	line:6627	namespace:mods::builder	signature:(do_ngoto)
+SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_nhelp) {$/;"	kind:function	line:6578	namespace:mods::builder	signature:(do_nhelp)
+SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_nset) {$/;"	kind:function	line:6560	namespace:mods::builder	signature:(do_nset)
+SUPERCMD	src/mods/builder.cpp	/^	SUPERCMD(do_refresh_all) {$/;"	kind:function	line:6647	namespace:mods::builder	signature:(do_refresh_all)
 SUPERCMD	src/mods/builder.cpp	/^SUPERCMD(do_mbuild) {$/;"	kind:function	line:2337	signature:(do_mbuild)
 SUPERCMD	src/mods/builder.cpp	/^SUPERCMD(do_obuild) {$/;"	kind:function	line:3325	signature:(do_obuild)
-SUPERCMD	src/mods/builder.cpp	/^SUPERCMD(do_rbuild) {$/;"	kind:function	line:5379	signature:(do_rbuild)
+SUPERCMD	src/mods/builder.cpp	/^SUPERCMD(do_rbuild) {$/;"	kind:function	line:5383	signature:(do_rbuild)
 SUPERCMD	src/mods/builder.cpp	/^SUPERCMD(do_rbuild_sandbox) {$/;"	kind:function	line:1502	signature:(do_rbuild_sandbox)
 SUPERCMD	src/mods/builder.cpp	/^SUPERCMD(do_sbuild) {$/;"	kind:function	line:1662	signature:(do_sbuild)
 SUPERCMD	src/mods/builder.cpp	/^SUPERCMD(do_zbuild) {$/;"	kind:function	line:4632	signature:(do_zbuild)
@@ -5581,7 +5581,7 @@ build_weapon_locker	src/mods/zone.cpp	/^	void build_weapon_locker(room_vnum room
 builder	src/act.builder.cpp	/^namespace builder {$/;"	kind:namespace	line:712	file:
 builder	src/mods/builder-data.hpp	/^namespace mods::builder {$/;"	kind:namespace	line:13	class:mods	file:
 builder	src/mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:224	class:mods	file:
-builder	src/mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:6555	class:mods	file:
+builder	src/mods/builder.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:6559	class:mods	file:
 builder	src/mods/builder.hpp	/^namespace mods::builder {$/;"	kind:namespace	line:31	class:mods	file:
 builder	src/mods/builder/conbuild.hpp	/^namespace mods::builder {$/;"	kind:namespace	line:12	class:mods	file:
 builder	src/mods/builder/encode.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:4	class:mods	file:
@@ -9462,7 +9462,7 @@ init	src/mods/ban-system.cpp	/^		void init() {$/;"	kind:function	line:399	namesp
 init	src/mods/bleed.cpp	/^	void init() {$/;"	kind:function	line:241	namespace:mods::bleed	signature:()
 init	src/mods/blind.cpp	/^	void init() {$/;"	kind:function	line:151	namespace:mods::blind	signature:()
 init	src/mods/boosters/adrenaline-shot.cpp	/^		void init() {$/;"	kind:function	line:78	namespace:mods::boosters::adrenaline_shot_init	signature:()
-init	src/mods/builder.cpp	/^	void init() {$/;"	kind:function	line:6646	namespace:mods::builder	signature:()
+init	src/mods/builder.cpp	/^	void init() {$/;"	kind:function	line:6650	namespace:mods::builder	signature:()
 init	src/mods/builder/bookmarks.cpp	/^	void init() {$/;"	kind:function	line:104	namespace:mods::builder::bookmarks	signature:()
 init	src/mods/builder/conbuild.cpp	/^	void init() {$/;"	kind:function	line:630	namespace:mods::builder::conbuild	signature:()
 init	src/mods/builder/hqbuild.cpp	/^	void init() {$/;"	kind:function	line:343	namespace:mods::builder::hqbuild	signature:()

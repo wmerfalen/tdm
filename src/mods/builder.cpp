@@ -5367,11 +5367,15 @@ SUPERCMD(do_zbuild) {
 			return;
 		}
 
-		zone_place_remove(index.value(),command_index.value());
+		auto status = zone_place_remove(index.value(),command_index.value());
 		zone_table[index.value()].cmd.erase(
 		    zone_table[index.value()].cmd.begin() + command_index.value()
 		);
-		r_status(player,"{zbuild place-remove} Index removed");
+		if(std::get<0>(status) != true) {
+			r_status(player,"{zbuild place-remove} couldnt remove from db, but we did remove it from RAM.");
+		} else {
+			r_status(player,"{zbuild place-remove} Index removed from db and RAM.");
+		}
 		return;
 	}
 };

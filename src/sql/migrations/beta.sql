@@ -5589,14 +5589,16 @@ INSERT INTO "public"."mob_equipment" VALUES (300, 'dynamic-mp-shotgunner-level-1
 INSERT INTO "public"."mob_equipment" VALUES (301, 'dynamic-ops-shield-shotgunner-level-10', 708, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.500835', '2022-06-10 23:45:11.500835');
 INSERT INTO "public"."mob_equipment" VALUES (302, 'petty-thief', 709, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.527072', '2022-06-10 23:45:11.527072');
 INSERT INTO "public"."mob_equipment" VALUES (303, 'dynamic-rogue-mp-shotgunner-level-10', 710, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.5404', '2022-06-10 23:45:11.5404');
-INSERT INTO "public"."mob_equipment" VALUES (171, 'dynamic-ops-shield-shotgunner-level-10', 502, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 22:55:30.642144', '2022-06-10 22:55:30.642144');
 INSERT INTO "public"."mob_equipment" VALUES (304, 'shoplifter', 711, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.555533', '2022-06-10 23:45:11.555533');
 INSERT INTO "public"."mob_equipment" VALUES (173, 'dynamic-rogue-mp-shotgunner-level-10', 407, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 22:55:30.712947', '2022-06-10 22:55:30.712947');
 INSERT INTO "public"."mob_equipment" VALUES (305, 'kidnapper', 712, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.571797', '2022-06-10 23:45:11.571797');
+INSERT INTO "public"."mob_equipment" VALUES (171, 'dynamic-ops-shield-shotgunner-level-10', 502, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 22:55:30.642144', '2022-06-10 22:55:30.642144');
 INSERT INTO "public"."mob_equipment" VALUES (306, 'tengu-lancer', 715, NULL, NULL, NULL, NULL, NULL, 'armor/tengu-lightweight-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-radon-saiga.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.130482', '2022-07-17 05:30:19.130482');
 INSERT INTO "public"."mob_equipment" VALUES (307, 'tengu-lancer', 714, NULL, NULL, NULL, NULL, NULL, 'armor/falcon-ballistic-vest.yml', NULL, 'armor/tengu-shin-guards.yml', 'armor/tengu-stealth-footwear.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-vulkan-ax13.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.149583', '2022-07-17 05:30:19.149583');
 INSERT INTO "public"."mob_equipment" VALUES (308, 'tengu-lancer', 713, NULL, NULL, NULL, NULL, NULL, 'armor/tengu-lightweight-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-radon-saiga.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.178936', '2022-07-17 05:30:19.178936');
 INSERT INTO "public"."mob_equipment" VALUES (309, 'tengu-eviscerator', 716, NULL, NULL, NULL, NULL, NULL, 'armor/falcon-ballistic-vest.yml', NULL, 'armor/tengu-shin-guards.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-vulkan-ax13.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.202848', '2022-07-17 05:30:19.202848');
+INSERT INTO "public"."mob_equipment" VALUES (322, 'mp-enforcer', 500, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/hk45.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-11 16:01:49.735304', '2022-08-11 16:01:49.735304');
+INSERT INTO "public"."mob_equipment" VALUES (323, 'mp-shotgunner', 501, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-11 16:01:49.843009', '2022-08-11 16:01:49.843009');
 
 
 --
@@ -5609,9 +5611,6 @@ INSERT INTO "public"."mob_equipment_map" VALUES (20, 602, 9, '2021-09-04 04:23:2
 INSERT INTO "public"."mob_equipment_map" VALUES (21, 603, 6, '2021-09-04 04:23:27.008422', '2021-09-04 04:23:27.008422');
 INSERT INTO "public"."mob_equipment_map" VALUES (22, 406, 2, '2021-09-04 04:23:27.04276', '2021-09-04 04:23:27.04276');
 INSERT INTO "public"."mob_equipment_map" VALUES (23, 407, 3, '2021-09-04 04:23:27.047159', '2021-09-04 04:23:27.047159');
-INSERT INTO "public"."mob_equipment_map" VALUES (24, 500, 4, '2021-09-04 04:23:27.068704', '2021-09-04 04:23:27.068704');
-INSERT INTO "public"."mob_equipment_map" VALUES (25, 501, 5, '2021-09-04 04:23:27.074152', '2021-09-04 04:23:27.074152');
-INSERT INTO "public"."mob_equipment_map" VALUES (26, 502, 15, '2021-09-04 04:23:27.079717', '2021-09-04 04:23:27.079717');
 INSERT INTO "public"."mob_equipment_map" VALUES (30, 109, 109, '2021-09-04 04:23:27.352124', '2021-09-04 04:23:27.352124');
 INSERT INTO "public"."mob_equipment_map" VALUES (31, 110, 110, '2021-09-04 04:23:27.364886', '2021-09-04 04:23:27.364886');
 INSERT INTO "public"."mob_equipment_map" VALUES (11, 101, 101, '2021-09-04 04:12:22.396441', '2021-09-04 04:12:22.396441');
@@ -5634,6 +5633,9 @@ INSERT INTO "public"."mob_equipment_map" VALUES (69, 715, 715, '2022-07-17 05:30
 INSERT INTO "public"."mob_equipment_map" VALUES (70, 714, 714, '2022-07-17 05:30:19.153466', '2022-07-17 05:30:19.153466');
 INSERT INTO "public"."mob_equipment_map" VALUES (71, 713, 713, '2022-07-17 05:30:19.182005', '2022-07-17 05:30:19.182005');
 INSERT INTO "public"."mob_equipment_map" VALUES (72, 716, 716, '2022-07-17 05:30:19.206623', '2022-07-17 05:30:19.206623');
+INSERT INTO "public"."mob_equipment_map" VALUES (24, 500, 500, '2021-09-04 04:23:27.068704', '2021-09-04 04:23:27.068704');
+INSERT INTO "public"."mob_equipment_map" VALUES (25, 501, 501, '2021-09-04 04:23:27.074152', '2021-09-04 04:23:27.074152');
+INSERT INTO "public"."mob_equipment_map" VALUES (26, 502, 502, '2021-09-04 04:23:27.079717', '2021-09-04 04:23:27.079717');
 
 
 --
@@ -5674,57 +5676,6 @@ INSERT INTO "public"."mob_roam" VALUES (664, 407, 161, 'rogue-mp-shotgunner');
 INSERT INTO "public"."mob_roam" VALUES (665, 407, 162, 'rogue-mp-shotgunner');
 INSERT INTO "public"."mob_roam" VALUES (666, 407, 163, 'rogue-mp-shotgunner');
 INSERT INTO "public"."mob_roam" VALUES (667, 407, 164, 'rogue-mp-shotgunner');
-INSERT INTO "public"."mob_roam" VALUES (668, 501, 130, 'mp-shotgunner');
-INSERT INTO "public"."mob_roam" VALUES (669, 501, 131, 'mp-shotgunner');
-INSERT INTO "public"."mob_roam" VALUES (670, 501, 138, 'mp-shotgunner');
-INSERT INTO "public"."mob_roam" VALUES (671, 501, 131, 'mp-shotgunner');
-INSERT INTO "public"."mob_roam" VALUES (672, 501, 231, 'mp-shotgunner');
-INSERT INTO "public"."mob_roam" VALUES (673, 500, 130, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (674, 500, 131, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (675, 500, 138, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (676, 500, 131, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (677, 500, 231, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (678, 500, 230, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (679, 500, 229, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (680, 500, 228, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (681, 500, 227, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (682, 500, 226, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (683, 500, 225, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (684, 500, 224, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (685, 500, 223, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (686, 500, 222, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (687, 500, 221, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (688, 500, 220, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (689, 500, 219, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (690, 500, 218, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (691, 500, 217, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (692, 500, 216, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (693, 500, 215, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (694, 500, 214, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (695, 500, 213, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (696, 500, 212, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (697, 500, 211, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (698, 500, 210, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (699, 500, 209, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (700, 500, 208, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (701, 500, 207, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (702, 500, 206, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (703, 500, 205, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (704, 500, 204, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (705, 500, 203, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (706, 500, 202, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (707, 500, 201, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (708, 500, 200, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (709, 500, 199, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (710, 500, 198, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (711, 500, 197, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (712, 500, 196, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (713, 500, 195, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (714, 500, 194, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (715, 500, 193, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (716, 500, 141, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (717, 500, 140, 'mp-enforcer');
-INSERT INTO "public"."mob_roam" VALUES (718, 500, 139, 'mp-enforcer');
 INSERT INTO "public"."mob_roam" VALUES (764, 102, 130, 'kidnapper');
 INSERT INTO "public"."mob_roam" VALUES (765, 102, 131, 'kidnapper');
 INSERT INTO "public"."mob_roam" VALUES (766, 102, 231, 'kidnapper');
@@ -5743,6 +5694,57 @@ INSERT INTO "public"."mob_roam" VALUES (778, 102, 231, 'kidnapper');
 INSERT INTO "public"."mob_roam" VALUES (779, 102, 230, 'kidnapper');
 INSERT INTO "public"."mob_roam" VALUES (780, 102, 229, 'kidnapper');
 INSERT INTO "public"."mob_roam" VALUES (781, 102, 228, 'kidnapper');
+INSERT INTO "public"."mob_roam" VALUES (782, 501, 130, 'mp-shotgunner');
+INSERT INTO "public"."mob_roam" VALUES (783, 501, 131, 'mp-shotgunner');
+INSERT INTO "public"."mob_roam" VALUES (784, 501, 138, 'mp-shotgunner');
+INSERT INTO "public"."mob_roam" VALUES (785, 501, 131, 'mp-shotgunner');
+INSERT INTO "public"."mob_roam" VALUES (786, 501, 231, 'mp-shotgunner');
+INSERT INTO "public"."mob_roam" VALUES (787, 500, 130, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (788, 500, 131, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (789, 500, 138, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (790, 500, 131, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (791, 500, 231, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (792, 500, 230, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (793, 500, 229, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (794, 500, 228, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (795, 500, 227, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (796, 500, 226, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (797, 500, 225, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (798, 500, 224, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (799, 500, 223, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (800, 500, 222, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (801, 500, 221, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (802, 500, 220, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (803, 500, 219, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (804, 500, 218, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (805, 500, 217, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (806, 500, 216, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (807, 500, 215, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (808, 500, 214, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (809, 500, 213, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (810, 500, 212, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (811, 500, 211, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (812, 500, 210, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (813, 500, 209, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (814, 500, 208, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (815, 500, 207, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (816, 500, 206, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (817, 500, 205, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (818, 500, 204, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (819, 500, 203, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (820, 500, 202, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (821, 500, 201, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (822, 500, 200, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (823, 500, 199, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (824, 500, 198, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (825, 500, 197, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (826, 500, 196, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (827, 500, 195, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (828, 500, 194, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (829, 500, 193, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (830, 500, 141, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (831, 500, 140, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (832, 500, 139, 'mp-enforcer');
 
 
 --
@@ -5897,8 +5899,8 @@ INSERT INTO "public"."object_weapon" VALUES (5, 7, 0, 0, 0, false);
 --
 
 INSERT INTO "public"."player" VALUES (110, '$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.', '0', '0', 'sniper', '1', '1', 0, 3, 0, 9, 9, 12, 15, 9, 0, 0, 241, 436, 729, 48, 561, 'M', 241, 436, 729, 52, 52, 52, '9', '1', '52', 0, 0, 'PC', 0, 3, 52, 0, '2021-09-18 01:42:45.163952', 0, '2021-09-18 01:42:45.163952', '8388736', 7);
+INSERT INTO "public"."player" VALUES (111, '$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC', '0', '0', 'ghost', '1', '1', 0, 4, 0, 8, 8, 17, 21, 8, 0, 0, 322, 452, 1037, 6730, 3850, 'M', 322, 452, 1037, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 0, 4, 53, 0, '2022-05-17 13:17:37.271391', 0, '2022-05-17 13:17:37.271391', '8388736', 6);
 INSERT INTO "public"."player" VALUES (1, 'foKntnEF3KSXA', '0', '0', 'far', '1', '1', 0, 20, 0, 41, 41, 82, 102, 41, 3200, 0, 65000, 2277, 65000, 7283, 92840, 'M', 65000, 2277, 65000, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 3200, 19, 53, 0, '2019-03-20 22:38:47.454111', 0, '2019-03-20 22:38:47.454111', '14680304', 37);
-INSERT INTO "public"."player" VALUES (111, '$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC', '0', '0', 'ghost', '1', '1', 0, 3, 0, 6, 6, 12, 15, 6, 0, 0, 241, 339, 729, 1108, 2600, 'M', 241, 339, 635, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 0, 3, 53, 0, '2022-05-17 13:17:37.271391', 0, '2022-05-17 13:17:37.271391', '8388736', 5);
 
 
 --
@@ -5920,7 +5922,7 @@ INSERT INTO "public"."player_base_ability" VALUES (6, 100, 33, 0, 99, 74, 132, 1
 INSERT INTO "public"."player_base_ability" VALUES (13, 107, 3, 0, 9, 9, 12, 15, 9, 9, 6, 8, 8, 15, 10, 6, 9, 15, '2021-09-17 19:58:07.021327', '2021-09-17 19:58:07.021327');
 INSERT INTO "public"."player_base_ability" VALUES (7, 101, 44, 0, 44, 44, 88, 132, 44, 44, 44, 60, 44, 9, 44, 60, 44, 60, '2021-09-17 00:53:22.86459', '2021-09-17 00:53:22.86459');
 INSERT INTO "public"."player_base_ability" VALUES (16, 110, 3, 0, 9, 9, 12, 15, 9, 9, 6, 8, 8, 15, 10, 6, 9, 9, '2021-09-18 01:42:45.197498', '2021-09-18 01:42:45.197498');
-INSERT INTO "public"."player_base_ability" VALUES (17, 111, 3, 0, 6, 6, 12, 15, 6, 6, 6, 11, 11, 15, 7, 9, 6, 9, '2022-05-17 13:17:37.452746', '2022-05-17 13:17:37.452746');
+INSERT INTO "public"."player_base_ability" VALUES (17, 111, 4, 0, 8, 8, 17, 21, 8, 8, 8, 15, 15, 21, 9, 13, 8, 12, '2022-05-17 13:17:37.452746', '2022-05-17 13:17:37.452746');
 INSERT INTO "public"."player_base_ability" VALUES (1, 1, 20, 0, 41, 41, 82, 102, 41, 41, 40, 64, 64, 103, 42, 62, 41, 57, '2021-09-04 04:17:39.714689', '2021-09-04 04:17:39.714689');
 
 
@@ -5946,22 +5948,17 @@ INSERT INTO "public"."player_base_ability" VALUES (1, 1, 20, 0, 41, 41, 82, 102,
 -- Data for Name: player_object; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."player_object" VALUES (471, 111, 8, NULL, 'sg3-sniper-ammunition.yml', 2, NULL, 1, 1, 8);
-INSERT INTO "public"."player_object" VALUES (472, 111, 1, 197, NULL, 1, NULL, 1, 1, 13);
-INSERT INTO "public"."player_object" VALUES (476, 1, 1, 200, NULL, 1, NULL, 1, 1, 6);
-INSERT INTO "public"."player_object" VALUES (477, 1, 1, 201, NULL, 1, NULL, 1, 1, 13);
-INSERT INTO "public"."player_object" VALUES (478, 1, 1, 202, NULL, 1, NULL, 1, 1, 999);
-INSERT INTO "public"."player_object" VALUES (479, 1, 1, 203, NULL, 1, NULL, 1, 1, 8);
-INSERT INTO "public"."player_object" VALUES (426, 1, 8, NULL, 'sg3-shotgun-ammunition.yml', 2, NULL, 1, 1, 17);
 INSERT INTO "public"."player_object" VALUES (437, 111, 7, NULL, 'basic-ballistic-vest.yml', 2, 5, 0, 1, NULL);
 INSERT INTO "public"."player_object" VALUES (438, 111, 7, NULL, 'basic-boots.yml', 2, 8, 0, 1, NULL);
 INSERT INTO "public"."player_object" VALUES (439, 111, 7, NULL, 'titan-shin-guards.yml', 2, 7, 0, 1, NULL);
 INSERT INTO "public"."player_object" VALUES (440, 111, 7, NULL, 'titan-gauntlets.yml', 2, 10, 0, 1, NULL);
-INSERT INTO "public"."player_object" VALUES (489, 1, 8, NULL, 'sg3-sniper-ammunition.yml', 2, NULL, 1, 1, 22);
-INSERT INTO "public"."player_object" VALUES (490, 1, 1, NULL, 'psg1.yml', 2, NULL, 1, 1, 3);
-INSERT INTO "public"."player_object" VALUES (492, 1, 8, NULL, 'sg3-shotgun-ammunition.yml', 2, NULL, 1, 1, 17);
-INSERT INTO "public"."player_object" VALUES (491, 1, 1, NULL, 'dst7a.yml', 2, 16, 0, 1, 7);
-INSERT INTO "public"."player_object" VALUES (494, 111, 1, NULL, 'psg1.yml', 2, 16, 0, 1, 7);
+INSERT INTO "public"."player_object" VALUES (549, 1, 8, NULL, 'sg3-sniper-ammunition.yml', 2, NULL, 1, 1, 50);
+INSERT INTO "public"."player_object" VALUES (550, 1, 8, NULL, 'sg3-sniper-ammunition.yml', 2, NULL, 1, 1, 50);
+INSERT INTO "public"."player_object" VALUES (551, 1, 1, NULL, 'psg1.yml', 2, 16, 0, 1, 7);
+INSERT INTO "public"."player_object" VALUES (564, 111, 8, NULL, 'sg3-ar-ammunition.yml', 2, NULL, 1, 1, 68);
+INSERT INTO "public"."player_object" VALUES (565, 111, 8, NULL, 'sg3-ar-ammunition.yml', 2, NULL, 1, 1, 68);
+INSERT INTO "public"."player_object" VALUES (566, 111, 8, NULL, 'sg3-ar-ammunition.yml', 2, NULL, 1, 1, 68);
+INSERT INTO "public"."player_object" VALUES (554, 111, 1, NULL, '552-commando.yml', 2, 16, 0, 1, 52);
 
 
 --
@@ -6274,6 +6271,11 @@ INSERT INTO "public"."rifle_instance" VALUES (212, 90, 10, 0, 0, 90, 40, 9, 0, '
 INSERT INTO "public"."rifle_instance" VALUES (213, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 10, 'MACHINE_PISTOL', 11, 1, 1, 2, 0, 8, 11, 3, 3, 6, 3, 11, 8, 1, 1, 2, 133, 0, 10, 0, 0, 0, 6, 0, 0, 5, 172, 7, 6, 5, 9, 0, 11, 828, 79, 2655, 11, 0, 0, '2022-06-11 20:12:55.725468', '2022-06-11 20:12:55.725468');
 INSERT INTO "public"."rifle_instance" VALUES (214, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 3, 'PISTOL', 1, 2, 1, 4, 0, 20, 0, 3, 1, 1, 1, 80, 50, 5, 3, 1, 156, 0, 6, 0, 0, 0, 91, 0, 0, 7, 7, 11, 295, 10, 8, 0, 9, 9, 11, 0, 6, 12, 0, '2022-06-12 00:36:37.892652', '2022-06-12 00:36:37.892652');
 INSERT INTO "public"."rifle_instance" VALUES (215, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp5.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'MP5', 5, 11, 'SUB_MACHINE_GUN', 13, 1, 2, 14, 13, 6, 12, 3, 1, 2, 6, 83, 11, 3374, 3, 5, 245, 0, 11, 0, 0, 0, 6, 0, 0, 9, 222, 172, 52, 8, 7, 0, 170, 11, 94, 9, 8, 21199, 0, '2022-06-13 12:06:43.324058', '2022-06-13 12:06:43.324058');
+INSERT INTO "public"."rifle_instance" VALUES (216, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mk46.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'MK-46 Light Machine Gun', 78, 4, 'LIGHT_MACHINE_GUN', 4, 1, 20, 4, 1, 30, 2, 13, 1, 0, 1, 3, 48, 2, 1, 2, 1, 0, 1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 2, 1, 1, 0, 0, '2022-08-07 09:46:05.49232', '2022-08-07 09:46:05.49232');
+INSERT INTO "public"."rifle_instance" VALUES (217, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 3, 'PISTOL', 4, 1, 1, 1, 0, 20, 0, 42, 1, 0, 6, 1, 40, 1, 3, 8, 1, 0, 1, 0, 0, 0, 2, 0, 0, 1, 2, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 2, 0, '2022-08-08 19:04:28.405177', '2022-08-08 19:04:28.405177');
+INSERT INTO "public"."rifle_instance" VALUES (218, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'augpara.yml', 'ASSAULT_RIFLE', '4', 'SK-10', 'AUG-PARA Assault Rifle', 29, 11, 'ASSAULT_RIFLE', 4, 1, 2, 8, 0, 1, 3, 2, 3, 0, 1, 1, 2, 2, 3, 1, 3, 0, 2, 0, 0, 0, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, '2022-08-08 19:06:02.781339', '2022-08-08 19:06:02.781339');
+INSERT INTO "public"."rifle_instance" VALUES (219, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 5, 'PISTOL', 1, 4, 3, 1, 0, 7, 2, 3, 1, 0, 5, 1, 2, 2, 5, 27, 2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0, 3, 0, 1, 0, 1, 1, 2, 1, 0, '2022-08-08 19:07:12.164772', '2022-08-08 19:07:12.164772');
+INSERT INTO "public"."rifle_instance" VALUES (220, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 8, 'MACHINE_PISTOL', 2, 3, 1, 9, 0, 20, 0, 6, 1, 0, 1, 2, 40, 2, 1, 2, 0, 0, 2, 0, 0, 0, 2, 0, 0, 3, 2, 0, 2, 1, 3, 0, 0, 2, 2, 0, 0, 6, 0, '2022-08-08 19:08:00.36916', '2022-08-08 19:08:00.36916');
 
 
 --
@@ -12637,7 +12639,6 @@ INSERT INTO "public"."skill_usage" VALUES (382, 111, 'intimidation', 0);
 INSERT INTO "public"."skill_usage" VALUES (383, 111, 'cryo', 0);
 INSERT INTO "public"."skill_usage" VALUES (384, 111, 'flash', 0);
 INSERT INTO "public"."skill_usage" VALUES (385, 111, 'ts', 0);
-INSERT INTO "public"."skill_usage" VALUES (386, 111, 'lb', 0);
 INSERT INTO "public"."skill_usage" VALUES (387, 111, 'suture', 0);
 INSERT INTO "public"."skill_usage" VALUES (388, 111, 'as', 0);
 INSERT INTO "public"."skill_usage" VALUES (389, 111, 'sensor', 0);
@@ -12648,7 +12649,6 @@ INSERT INTO "public"."skill_usage" VALUES (393, 111, 'limb', 0);
 INSERT INTO "public"."skill_usage" VALUES (394, 111, 'smine', 0);
 INSERT INTO "public"."skill_usage" VALUES (395, 111, 'cmine', 0);
 INSERT INTO "public"."skill_usage" VALUES (396, 111, 'recon', 0);
-INSERT INTO "public"."skill_usage" VALUES (397, 111, 'wpn-ar', 0);
 INSERT INTO "public"."skill_usage" VALUES (401, 111, 'wpn-pistols', 8);
 INSERT INTO "public"."skill_usage" VALUES (399, 111, 'wpn-smg', 0);
 INSERT INTO "public"."skill_usage" VALUES (402, 111, 'wpn-mp', 0);
@@ -12674,9 +12674,11 @@ INSERT INTO "public"."skill_usage" VALUES (422, 111, 'cqc-left-front-kick', 0);
 INSERT INTO "public"."skill_usage" VALUES (423, 111, 'cqc-right-front-kick', 0);
 INSERT INTO "public"."skill_usage" VALUES (424, 111, 'cqc-left-knee-to-head', 0);
 INSERT INTO "public"."skill_usage" VALUES (403, 111, 'wpn-lmg', 19);
-INSERT INTO "public"."skill_usage" VALUES (372, 1, 'wpn-sniper', 44);
 INSERT INTO "public"."skill_usage" VALUES (400, 111, 'wpn-shotguns', 2);
 INSERT INTO "public"."skill_usage" VALUES (425, 111, 'cqc-right-knee-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (372, 1, 'wpn-sniper', 45);
+INSERT INTO "public"."skill_usage" VALUES (386, 111, 'lb', 0.5);
+INSERT INTO "public"."skill_usage" VALUES (397, 111, 'wpn-ar', 64);
 INSERT INTO "public"."skill_usage" VALUES (426, 111, 'cqc-left-knee-to-body', 0);
 INSERT INTO "public"."skill_usage" VALUES (427, 111, 'cqc-right-knee-to-body', 0);
 INSERT INTO "public"."skill_usage" VALUES (428, 111, 'cqc-knife-disarm', 0);
@@ -12687,14 +12689,17 @@ INSERT INTO "public"."skill_usage" VALUES (432, 111, 'cqc-right-kick-to-head', 0
 INSERT INTO "public"."skill_usage" VALUES (433, 111, 'cqc-left-kick-to-head', 0);
 INSERT INTO "public"."skill_usage" VALUES (434, 111, 'cqc-right-stomp-to-head', 0);
 INSERT INTO "public"."skill_usage" VALUES (435, 111, 'cqc-left-stomp-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (398, 111, 'wpn-sniper', 52);
 INSERT INTO "public"."skill_usage" VALUES (335, 1, 'wpn-shotguns', 73);
+INSERT INTO "public"."skill_usage" VALUES (398, 111, 'wpn-sniper', 63);
 
 
 --
 -- Data for Name: static_loot; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO "public"."static_loot" VALUES (2, 128, 'rifle/atrocity-mp5.yml', 3);
+INSERT INTO "public"."static_loot" VALUES (3, 128, 'rifle/p90.yml', 4);
+INSERT INTO "public"."static_loot" VALUES (4, 128, 'rifle/tengu-vulkan-ax13.yml', 1);
 
 
 --
@@ -12769,15 +12774,6 @@ INSERT INTO "public"."zone_data" VALUES (828, 1, 'M', '0', 600, 143, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (829, 1, 'M', '0', 601, 147, 8, NULL);
 INSERT INTO "public"."zone_data" VALUES (830, 1, 'M', '0', 602, 143, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (831, 1, 'M', '0', 603, 266, 1, NULL);
-INSERT INTO "public"."zone_data" VALUES (832, 1, 'M', '0', 500, 131, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (833, 1, 'M', '0', 501, 131, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (834, 1, 'M', '0', 502, 212, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (835, 1, 'M', '0', 502, 207, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (836, 1, 'M', '0', 502, 204, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (837, 1, 'M', '0', 502, 340, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (838, 1, 'M', '0', 502, 199, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (839, 1, 'M', '0', 502, 279, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (840, 1, 'M', '0', 502, 139, 2, NULL);
 INSERT INTO "public"."zone_data" VALUES (841, 1, 'Y', '0', 0, 402, 1, '#yaml|vehicle/p3-hunchbak.yml');
 INSERT INTO "public"."zone_data" VALUES (842, 1, 'Y', '0', 0, 400, 1, '#yaml|vehicle/p3-offroad-mx3.yml');
 INSERT INTO "public"."zone_data" VALUES (843, 1, 'Y', '0', 0, 399, 1, '#yaml|vehicle/prime-town-suv.yml');
@@ -12990,6 +12986,15 @@ INSERT INTO "public"."zone_data" VALUES (1747, 1, 'M', '0', 716, 1039, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (1748, 1, 'M', '0', 716, 1046, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (1749, 1, 'M', '0', 716, 1049, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (1750, 1, 'M', '0', 716, 1060, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1751, 1, 'M', '0', 500, 131, 3, NULL);
+INSERT INTO "public"."zone_data" VALUES (1752, 1, 'M', '0', 501, 131, 3, NULL);
+INSERT INTO "public"."zone_data" VALUES (1753, 1, 'M', '0', 502, 212, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1754, 1, 'M', '0', 502, 207, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1755, 1, 'M', '0', 502, 204, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1756, 1, 'M', '0', 502, 340, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1757, 1, 'M', '0', 502, 199, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1758, 1, 'M', '0', 502, 279, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1759, 1, 'M', '0', 502, 139, 2, NULL);
 
 
 --
@@ -13353,7 +13358,7 @@ SELECT pg_catalog.setval('"public"."mini_gunner_sentinel_id_seq"', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 321, true);
+SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 324, true);
 
 
 --
@@ -13367,7 +13372,7 @@ SELECT pg_catalog.setval('"public"."mob_equipment_map_id_seq"', 72, true);
 -- Name: mob_roam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_roam_id_seq"', 781, true);
+SELECT pg_catalog.setval('"public"."mob_roam_id_seq"', 832, true);
 
 
 --
@@ -13493,7 +13498,7 @@ SELECT pg_catalog.setval('"public"."player_id_seq"', 111, true);
 -- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."player_object_id_seq"', 494, true);
+SELECT pg_catalog.setval('"public"."player_object_id_seq"', 566, true);
 
 
 --
@@ -13577,7 +13582,7 @@ SELECT pg_catalog.setval('"public"."rifle_index_id_seq"', 29, true);
 -- Name: rifle_instance_rifle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."rifle_instance_rifle_id_seq"', 215, true);
+SELECT pg_catalog.setval('"public"."rifle_instance_rifle_id_seq"', 220, true);
 
 
 --
@@ -13675,7 +13680,7 @@ SELECT pg_catalog.setval('"public"."skill_usage_id_seq"', 435, true);
 -- Name: static_loot_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."static_loot_id_seq"', 1, true);
+SELECT pg_catalog.setval('"public"."static_loot_id_seq"', 5, true);
 
 
 --
@@ -13717,7 +13722,7 @@ SELECT pg_catalog.setval('"public"."world_configuration_start_rooms_id_seq"', 5,
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."zone_data_id_seq"', 1750, true);
+SELECT pg_catalog.setval('"public"."zone_data_id_seq"', 1759, true);
 
 
 --
