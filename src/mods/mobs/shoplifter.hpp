@@ -39,8 +39,6 @@ namespace mods::mobs {
 			void init();
 			void set_variation(const std::string&);
 			void set_behavior_tree_directly(const btree_t& t);
-			bool has_tree();
-			btree_t get_tree();
 
 			/**====================================================*/
 			/** preferred construct method */
@@ -52,7 +50,7 @@ namespace mods::mobs {
 			/**================*/
 			/** debugging info */
 			/**================*/
-			str_map_t report();
+			str_map_t report() override;
 			str_map_t usages();
 			std::string_view type() {
 				return "shoplifter";
@@ -65,12 +63,9 @@ namespace mods::mobs {
 			/** hunting helpers & state maintenance */
 			/**=====================================*/
 			/** hunting helpers */
-			feedback_t& spray(uint8_t dir);
 
 
 			/** behaviour tree helpers */
-			void btree_none();
-			void btree_roam();
 			void btree_hostile();
 			void perform_random_act();
 
@@ -106,11 +101,11 @@ namespace mods::mobs {
 
 			/** rival npc helpers */
 			bool is_rival(player_ptr_t& player);
-			uint8_t scan_depth() const;
+			//uint8_t scan_depth() const;
 			player_ptr_t spawn_near_someone();
 			bool attack_anyone_near_room();
 
-			int optimal_range() const override;
+			//int optimal_range() const override;
 		private:
 			player_ptr_t get_next_attacking_priority();
 			player_ptr_t m_last_attacker;
