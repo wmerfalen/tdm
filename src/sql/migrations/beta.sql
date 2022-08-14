@@ -5577,8 +5577,8 @@ INSERT INTO "public"."mob_equipment" VALUES (158, 'orthos-sentinel-spawn', 669, 
 INSERT INTO "public"."mob_equipment" VALUES (159, 'infected-drone-lvl-2', 114, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/czp10.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-25 15:53:44.573311', '2022-05-25 15:53:44.573311');
 INSERT INTO "public"."mob_equipment" VALUES (160, 'hustler-lvl-3', 115, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/czp10.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-25 15:53:44.622028', '2022-05-25 15:53:44.622028');
 INSERT INTO "public"."mob_equipment" VALUES (295, 'crackhead', 702, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.388911', '2022-06-10 23:45:11.388911');
-INSERT INTO "public"."mob_equipment" VALUES (7, 'mp-enforcer', 4, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tekdc9.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.320894', '2021-09-04 04:12:22.320894');
 INSERT INTO "public"."mob_equipment" VALUES (6, 'rogue-mp-shotgunner', 3, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.299795', '2021-09-04 04:12:22.299795');
+INSERT INTO "public"."mob_equipment" VALUES (7, 'mp-enforcer', 4, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tekdc9.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.320894', '2021-09-04 04:12:22.320894');
 INSERT INTO "public"."mob_equipment" VALUES (162, 'hydro-proc-extremists-dynamic-level', 670, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/pale-brown-pants.yml', 'armor/plain-black-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tar21.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-28 19:47:34.979999', '2022-05-28 19:47:34.979999');
 INSERT INTO "public"."mob_equipment" VALUES (296, 'dynamic-defiler-level-10', 703, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.405677', '2022-06-10 23:45:11.405677');
 INSERT INTO "public"."mob_equipment" VALUES (297, 'hydro-proc-extremists-dynamic-level', 704, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.423145', '2022-06-10 23:45:11.423145');
@@ -5809,9 +5809,9 @@ INSERT INTO "public"."mobile" VALUES (117, 715, 'Tengu Trooper', 'A Tengu Troope
 INSERT INTO "public"."mobile" VALUES (118, 714, 'Tengu Lancer', 'A Tengu Lancer', 'The large shoulder armor and upper body shielding give the Lancer an appearance not unlike the heavily padded athletes of most high contact sports. The legs of the Lancer are not armored except for some black shin guards and stealth-optimized footwear. The lancer is 6 feet tall and extremely agile. ', 'The large shoulder armor and upper body shielding give the Lancer an appearance not unlike the heavily padded athletes of most high contact sports. The legs of the Lancer are not armored except for some black shin guards and stealth-optimized footwear. The lancer is 6 feet tall and extremely agile. ', '8', '0', 11, 0, 29, 0, 34, 0, 0, 0, 0, 28, 0, 0, 4820, 930, 160, 42080, 8050, 0, 0, 1, 4820, 930, 160, 36, 20, 12, 10, 5, 0, 21, NULL, 'Kojima', 8, 9, 33, 32, 0, 0, 31, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (119, 713, 'Tengu Scout', 'A Tengu Scout', 'Kojima Corp is a well-funded military force with very high profile clients supplying it''s income. The most important part of maintaining a strategic edge against outside threats is to have a comprehensive plan for deep intelligence gathering. The Tengu Scout is part of the fast moving ellusive recon team. ', 'Kojima Corp is a well-funded military force with very high profile clients supplying it''s income. The most important part of maintaining a strategic edge against outside threats is to have a comprehensive plan for deep intelligence gathering. The Tengu Scout is part of the fast moving ellusive recon team. ', '8', '0', 8, 0, 49, 0, 54, 0, 0, 0, 0, 25, 0, 0, 1720, 230, 560, 4080, 8050, 0, 0, 1, 1720, 230, 560, 26, 13, 12, 5, 5, 0, 21, NULL, 'Kojima', 28, 8, 20, 15, 0, 0, 20, 30, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (120, 716, 'Tengu Eviscerator', 'A Tengu Eviscerator', 'Few of the militaristic units deployed by Kojima Corp actually fit the classical idea of a ''soldier''. The Tengu Eviscerator hardly qualifies as a living breathing human. The technology fused into the very biology of the Eviscerator borders of extreme cybermancy and archaic magic. As such, the Eviscerator is usually only used where a high amount of security is needed. ', 'Few of the militaristic units deployed by Kojima Corp actually fit the classical idea of a ''soldier''. The Tengu Eviscerator hardly qualifies as a living breathing human. The technology fused into the very biology of the Eviscerator borders of extreme cybermancy and archaic magic. As such, the Eviscerator is usually only used where a high amount of security is needed. ', '8', '0', 11, 9, 29, 0, 34, 0, 0, 0, 0, 25, 0, 0, 5820, 930, 360, 42080, 9050, 0, 0, 1, 5820, 930, 360, 20, 30, 32, 10, 5, 0, 21, NULL, 'Kojima', 0, 29, 23, 22, 30, 0, 21, 23, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (121, 2, 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer sizes you up. He looks confident he could take you.', '4616', '0', 8, 8, 0, 0, 8, 0, 25, 0, 0, 10, 0, 0, 450, 30, 10, 2950, 85, 0, 0, 1, 450, 30, 10, 10, 10, 4, 5, 5, 0, 0, NULL, NULL, 0, 5, 2, 2, 0, 0, 2, 1, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (122, 4, 'A thug', 'A thug', 'A thug', 'A thug sizes you up. He looks confident he could take you.', '4616', '0', 10, 10, 0, 0, 10, 0, 25, 0, 0, 11, 0, 0, 550, 30, 15, 2950, 85, 0, 0, 1, 550, 30, 11, 15, 10, 8, 5, 5, 0, 0, NULL, NULL, 0, 10, 10, 10, 0, 0, 10, 5, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (123, 3, 'A produce vendor', 'A produce vendor', 'A produce vendor', 'A produce vendor attempts to sell you food', '4616', '0', 8, 8, 0, 0, 8, 0, 25, 0, 0, 10, 0, 0, 150, 15, 10, 110, 15, 0, 0, 1, 150, 15, 10, 10, 10, 4, 5, 5, 0, 0, NULL, NULL, 0, 5, 2, 2, 0, 0, 2, 1, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (121, 2, 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer sizes you up. He looks confident he could take you.', '4616', '0', 8, 8, 0, 0, 8, 0, 25, 0, 0, 10, 0, 0, 450, 30, 10, 2950, 85, 0, 0, 1, 450, 30, 10, 10, 10, 4, 5, 5, 0, 17, NULL, 'Nu-Toxin', 0, 5, 2, 2, 0, 0, 2, 1, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (122, 4, 'A thug', 'A thug', 'A thug', 'A thug sizes you up. He looks confident he could take you.', '4616', '0', 10, 10, 0, 0, 10, 0, 25, 0, 0, 11, 0, 0, 550, 30, 15, 2950, 85, 0, 0, 1, 550, 30, 11, 15, 10, 8, 5, 5, 0, 17, NULL, NULL, 0, 10, 10, 10, 0, 0, 10, 5, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (123, 3, 'A produce vendor', 'A produce vendor', 'A produce vendor', 'A produce vendor attempts to sell you food', '4616', '0', 8, 8, 0, 0, 8, 0, 25, 0, 0, 10, 0, 0, 150, 15, 10, 110, 15, 0, 0, 1, 150, 15, 10, 10, 10, 4, 5, 5, 0, 3, NULL, NULL, 0, 5, 2, 2, 0, 0, 2, 1, 0, NULL, '0');
 
 
 --
@@ -13150,19 +13150,19 @@ INSERT INTO "public"."zone_data" VALUES (1756, 1, 'M', '0', 502, 340, 2, NULL);
 INSERT INTO "public"."zone_data" VALUES (1757, 1, 'M', '0', 502, 199, 2, NULL);
 INSERT INTO "public"."zone_data" VALUES (1758, 1, 'M', '0', 502, 279, 2, NULL);
 INSERT INTO "public"."zone_data" VALUES (1759, 1, 'M', '0', 502, 139, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1760, 1, 'M', '0', 2, 1199, 1, NULL);
-INSERT INTO "public"."zone_data" VALUES (1761, 1, 'M', '0', 4, 1193, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1762, 1, 'M', '0', 4, 1194, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1763, 1, 'M', '0', 4, 1195, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1764, 1, 'M', '0', 4, 1196, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1765, 1, 'M', '0', 4, 1197, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1766, 1, 'M', '0', 4, 1198, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1767, 1, 'M', '0', 3, 1193, 1, NULL);
-INSERT INTO "public"."zone_data" VALUES (1768, 1, 'M', '0', 3, 1194, 1, NULL);
-INSERT INTO "public"."zone_data" VALUES (1769, 1, 'M', '0', 3, 1195, 1, NULL);
-INSERT INTO "public"."zone_data" VALUES (1770, 1, 'M', '0', 3, 1196, 1, NULL);
-INSERT INTO "public"."zone_data" VALUES (1771, 1, 'M', '0', 3, 1197, 1, NULL);
-INSERT INTO "public"."zone_data" VALUES (1772, 1, 'M', '0', 3, 1198, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1773, 1, 'M', '0', 2, 1199, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1774, 1, 'M', '0', 4, 1193, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1775, 1, 'M', '0', 4, 1194, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1776, 1, 'M', '0', 4, 1195, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1777, 1, 'M', '0', 4, 1196, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1778, 1, 'M', '0', 4, 1197, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1779, 1, 'M', '0', 4, 1198, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1780, 1, 'M', '0', 3, 1193, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1781, 1, 'M', '0', 3, 1194, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1782, 1, 'M', '0', 3, 1195, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1783, 1, 'M', '0', 3, 1196, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1784, 1, 'M', '0', 3, 1197, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1785, 1, 'M', '0', 3, 1198, 1, NULL);
 
 
 --
@@ -13526,7 +13526,7 @@ SELECT pg_catalog.setval('"public"."mini_gunner_sentinel_id_seq"', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 327, true);
+SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 330, true);
 
 
 --
@@ -13890,7 +13890,7 @@ SELECT pg_catalog.setval('"public"."world_configuration_start_rooms_id_seq"', 5,
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."zone_data_id_seq"', 1772, true);
+SELECT pg_catalog.setval('"public"."zone_data_id_seq"', 1785, true);
 
 
 --

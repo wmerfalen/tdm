@@ -12,7 +12,7 @@
 #include "../mob-roam.hpp"
 #include "../query-objects.hpp"
 
-//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_shoplifter_BTREE_DEBUG_OUTPUT__
+#define  __MENTOC_SHOW_BEHAVIOUR_TREE_shoplifter_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_shoplifter_BTREE_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[m.m.shoplifter.btree:" << __LINE__ << "]->" << a << "\n";
 #else

@@ -4530,6 +4530,7 @@ __MENTOC_MODS_MINI_GAMES_WIRES_HEADER__	src/mods/mini-games/wires.hpp	2;"	kind:m
 __MENTOC_MODS_MOBS_DAMAGE_EVENT_HEADER__	src/mods/mobs/damage-event.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_EXTENDED_TYPES_HEADER__	src/mods/mobs/extended-types.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_HELPERS_HEADER__	src/mods/mobs/helpers.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_MOBS_INNOCENT_SHOW_DEBUG_OUTPUT__	src/mods/mobs/innocent.cpp	10;"	kind:macro	line:10	file:
 __MENTOC_MODS_MOBS_LOWLY_SECURITY_BEHAVIOUR_TREE_HEADER__	src/mods/mobs/lowly-security-behaviour-tree.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_LOWLY_SECURITY_HEADER__	src/mods/mobs/lowly-security.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_MINI_GUNNER_BEHAVIOUR_TREE_HEADER__	src/mods/mobs/mini-gunner-behaviour-tree.hpp	2;"	kind:macro	line:2	file:
@@ -4555,6 +4556,7 @@ __MENTOC_MODS_MOBS_generic_thief_HEADER__	src/mods/mobs/generic-thief.hpp	2;"	ki
 __MENTOC_MODS_MOBS_generic_thief_SHOW_TODO_OUTPUT__	src/mods/mobs/generic-thief.cpp	17;"	kind:macro	line:17	file:
 __MENTOC_MODS_MOBS_goat_HEADER__	src/mods/mobs/goat.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_goat_SHOW_DEBUG_OUTPUT__	src/mods/mobs/goat.cpp	23;"	kind:macro	line:23	file:
+__MENTOC_MODS_MOBS_innocent_HEADER__	src/mods/mobs/innocent.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_melee_combatant_BEHAVIOUR_TREE_HEADER__	src/mods/mobs/melee-combatant-behaviour-tree.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_melee_combatant_HEADER__	src/mods/mobs/melee-combatant.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_mp_shotgunner_HEADER__	src/mods/mobs/mp-shotgunner.hpp	2;"	kind:macro	line:2	file:
@@ -4771,6 +4773,7 @@ __MENTOC_SHOW_ATTACHMENT_UNDERBARREL_DEBUG_OUTPUT__	src/mods/weapons/attachment-
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	src/mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	kind:macro	line:18	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	12;"	kind:macro	line:12	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_ERROR_OUTPUT__	src/mods/mobs/generic-thief-behaviour-tree.cpp	29;"	kind:macro	line:29	file:
+__MENTOC_SHOW_BEHAVIOUR_TREE_shoplifter_BTREE_DEBUG_OUTPUT__	src/mods/mobs/shoplifter-behaviour-tree.cpp	15;"	kind:macro	line:15	file:
 __MENTOC_SHOW_CORROSIVE_CLAYMORE_DEBUG_OUTPUT__	src/mods/weapons/corrosive-claymore.cpp	14;"	kind:macro	line:14	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	src/globals.cpp	1304;"	kind:macro	line:1304	file:
 __MENTOC_SHOW_INVENTORY_DEBUG_OUTPUT__	src/mods/orm/inventory.cpp	12;"	kind:macro	line:12	file:
@@ -6457,6 +6460,7 @@ create	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::create
 create	src/mods/mobs/defiler.cpp	/^	void defiler::create(const uuid_t& mob_uuid, std::string_view targets) {$/;"	kind:function	line:44	class:mods::mobs::defiler	signature:(const uuid_t& mob_uuid, std::string_view targets)
 create	src/mods/mobs/generic-thief.cpp	/^	void generic_thief::create(const uuid_t& mob_uuid, std::string_view targets) {$/;"	kind:function	line:116	class:mods::mobs::generic_thief	signature:(const uuid_t& mob_uuid, std::string_view targets)
 create	src/mods/mobs/goat.cpp	/^	void goat::create(const uuid_t& mob_uuid, std::string_view targets) {$/;"	kind:function	line:45	class:mods::mobs::goat	signature:(const uuid_t& mob_uuid, std::string_view targets)
+create	src/mods/mobs/innocent.cpp	/^	void innocent::create(uuid_t mob_uuid, std::string variation) {$/;"	kind:function	line:29	class:mods::mobs::innocent	signature:(uuid_t mob_uuid, std::string variation)
 create	src/mods/mobs/lowly-security.cpp	/^	void lowly_security::create(uuid_t mob_uuid, std::string variation) {$/;"	kind:function	line:56	class:mods::mobs::lowly_security	signature:(uuid_t mob_uuid, std::string variation)
 create	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::create(const uuid_t& mob_uuid, std::string_view targets) {$/;"	kind:function	line:61	class:mods::mobs::melee_combatant	signature:(const uuid_t& mob_uuid, std::string_view targets)
 create	src/mods/mobs/mini-gunner.cpp	/^	void mini_gunner::create(uuid_t mob_uuid,std::string variation) {$/;"	kind:function	line:64	class:mods::mobs::mini_gunner	signature:(uuid_t mob_uuid,std::string variation)
@@ -6777,7 +6781,7 @@ debug_mode_on	src/mods/mobs/defiler.cpp	/^	bool defiler::debug_mode_on() {$/;"	k
 debug_mode_on	src/mods/mobs/goat.cpp	/^	bool goat::debug_mode_on() {$/;"	kind:function	line:61	class:mods::mobs::goat	signature:()
 debug_state	src/mods/debug.cpp	/^	std::unique_ptr<state> debug_state;$/;"	kind:member	line:10	namespace:mods::debug	file:
 decorate	src/mods/mob-equipment.cpp	/^	void decorate(const uuid_t& mob_uuid) {$/;"	kind:function	line:37	namespace:mods::mob_equipment	signature:(const uuid_t& mob_uuid)
-decorate	src/mods/mobs/extended-types.cpp	/^	void decorate(uuid_t mob_id) {$/;"	kind:function	line:24	namespace:mods::mobs	signature:(uuid_t mob_id)
+decorate	src/mods/mobs/extended-types.cpp	/^	void decorate(uuid_t mob_id) {$/;"	kind:function	line:25	namespace:mods::mobs	signature:(uuid_t mob_id)
 decorate_door_issues	src/mods/intent.cpp	/^	uint8_t decorate_door_issues(intent_t& i){$/;"	kind:function	line:46	namespace:mods::intent	signature:(intent_t& i)
 decrease_same_room_shot_ammo	src/mods/combat-composer/shared.cpp	/^		void decrease_same_room_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) {$/;"	kind:function	line:151	namespace:mods::combat_composer::phases	signature:(player_ptr_t& attacker,obj_ptr_t& weapon)
 decrease_single_shot_ammo	src/mods/combat-composer/shared.cpp	/^		void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) {$/;"	kind:function	line:106	namespace:mods::combat_composer::phases	signature:(player_ptr_t& attacker,obj_ptr_t& weapon)
@@ -6879,7 +6883,7 @@ deploy_shrapnel_at	src/mods/projectile.cpp	/^		int deploy_shrapnel_at(player_ptr
 deploy_shrapnel_damage_to	src/mods/shrapnel.cpp	/^	bool deploy_shrapnel_damage_to(player_ptr_t& victim,obj_ptr_t& device) {$/;"	kind:function	line:28	namespace:mods::shrapnel	signature:(player_ptr_t& victim,obj_ptr_t& device)
 deploy_volatile_explosion	src/mods/explosive.cpp	/^	void deploy_volatile_explosion(const room_rnum& room_id) {$/;"	kind:function	line:43	namespace:mods::explosive	signature:(const room_rnum& room_id)
 deregister_player	src/comm.cpp	/^void deregister_player(player_ptr_t player_obj) {$/;"	kind:function	line:265	signature:(player_ptr_t player_obj)
-desc	src/mods/mobs/extended-types.hpp	/^	namespace desc {$/;"	kind:namespace	line:71	namespace:mods::mobs	file:
+desc	src/mods/mobs/extended-types.hpp	/^	namespace desc {$/;"	kind:namespace	line:73	namespace:mods::mobs	file:
 desc	src/mods/player.cpp	/^	descriptor_data& player::desc() {$/;"	kind:function	line:1236	class:mods::player	signature:()
 desc	src/structs.h	/^	std::shared_ptr<mods::descriptor_data> desc;         \/* NULL for mobiles              *\/$/;"	kind:member	line:1782	struct:char_data	file:	access:public
 desc_num	src/structs.h	/^			int	desc_num;		\/* unique num assigned to desc		*\/$/;"	kind:member	line:1705	struct:mods::descriptor_data	file:	access:public
@@ -6891,8 +6895,8 @@ description	src/mods/classes/pyrexia.hpp	/^				std::string description;$/;"	kind
 description	src/mods/contract-steps.hpp	/^		std::string 		description;$/;"	kind:member	line:36	namespace:mods::contracts	file:
 description	src/mods/contract-types.hpp	/^		std::string description;$/;"	kind:member	line:26	struct:mods::contracts::contract	file:	access:public
 description	src/mods/extra_desc_data.hpp	/^		mods::string description;$/;"	kind:member	line:15	struct:mods::extra_desc_data	file:	access:public
-description	src/mods/mobs/extended-types.cpp	/^	std::string description(extended_types_t type) {$/;"	kind:function	line:144	namespace:mods::mobs::extended_types	signature:(extended_types_t type)
-description	src/mods/mobs/extended-types.cpp	/^	std::string description(std::string str) {$/;"	kind:function	line:137	namespace:mods::mobs::extended_types	signature:(std::string str)
+description	src/mods/mobs/extended-types.cpp	/^	std::string description(extended_types_t type) {$/;"	kind:function	line:151	namespace:mods::mobs::extended_types	signature:(extended_types_t type)
+description	src/mods/mobs/extended-types.cpp	/^	std::string description(std::string str) {$/;"	kind:function	line:144	namespace:mods::mobs::extended_types	signature:(std::string str)
 description	src/mods/orm/room.hpp	/^		std::string description;$/;"	kind:member	line:46	struct:mods::orm::room	file:	access:public
 description	src/mods/player-contract-instance.hpp	/^			std::string_view description() const {$/;"	kind:function	line:129	struct:mods::contracts::player_contract_instance	access:public	signature:() const
 description	src/mods/player.hpp	/^			mods::string& description() {$/;"	kind:function	line:412	namespace:mods	access:public	signature:()
@@ -6904,7 +6908,7 @@ description	src/structs.h	/^		mods::string	description;           \/* Shown when
 description	src/structs.h	/^	mods::string description;             \/* What to see                      *\/$/;"	kind:member	line:775	struct:extra_descr_data	file:	access:public
 description	src/structs.h	/^	mods::string description;  \/* Extra descriptions                   *\/$/;"	kind:member	line:1320	struct:char_player_data	file:	access:public
 description	src/structs.h	/^	mods::string description;$/;"	kind:member	line:1815	struct:char_file_u	file:	access:public
-description_strings	src/mods/mobs/extended-types.hpp	/^	static std::map<extended_types_t,std::string> description_strings = {$/;"	kind:member	line:86	namespace:mods::mobs	file:
+description_strings	src/mods/mobs/extended-types.hpp	/^	static std::map<extended_types_t,std::string> description_strings = {$/;"	kind:member	line:88	namespace:mods::mobs	file:
 descriptions	src/mods/armor/unique-armor.cpp	/^	static mods::cached_map<std::string_view,std::string_view> descriptions;$/;"	kind:member	line:99	namespace:mods::armor	file:
 descriptions	src/mods/weapons/unique-weapons.cpp	/^	static mods::cached_map<std::string_view,std::string_view> descriptions;$/;"	kind:member	line:97	namespace:mods::weapons	file:
 descriptor	src/structs.h	/^			socket_t	descriptor;	\/* file descriptor for socket		*\/$/;"	kind:member	line:1693	struct:mods::descriptor_data	file:	access:public
@@ -7996,11 +8000,11 @@ exported	src/mods/yaml.hpp	/^		std::map<std::string,std::string> exported;$/;"	k
 exported	src/mods/yaml.hpp	/^		std::map<std::string,std::string> exported;$/;"	kind:member	line:396	struct:mods::yaml::melee_description_t	file:	access:public
 exported	src/mods/yaml.hpp	/^		std::map<std::string,std::string> exported;$/;"	kind:member	line:425	struct:mods::yaml::vehicle_description_t	file:	access:public
 exported_data	src/mods/orm/orm-base.hpp	/^			strmap_t exported_data;$/;"	kind:member	line:99	struct:mods::orm::orm_base	file:	access:public
-ext_map	src/mods/mobs/extended-types.hpp	/^	static std::map<extended_types_t,std::string> ext_map = {$/;"	kind:member	line:41	namespace:mods::mobs	file:
+ext_map	src/mods/mobs/extended-types.hpp	/^	static std::map<extended_types_t,std::string> ext_map = {$/;"	kind:member	line:42	namespace:mods::mobs	file:
 extended_mob_type	src/structs.h	/^	extended_mob_type_t extended_mob_type;$/;"	kind:member	line:1523	struct:mob_special_data	file:	access:public
 extended_type	src/mods/mobs/smart-mob.hpp	/^			void* extended_type() {$/;"	kind:function	line:116	struct:mods::mobs::smart_mob	access:public	signature:()
-extended_types	src/mods/mobs/extended-types.cpp	/^namespace mods::mobs::extended_types {$/;"	kind:namespace	line:113	class:mods::mobs	file:
-extended_types	src/mods/mobs/extended-types.hpp	/^	namespace extended_types {$/;"	kind:namespace	line:114	namespace:mods::mobs	file:
+extended_types	src/mods/mobs/extended-types.cpp	/^namespace mods::mobs::extended_types {$/;"	kind:namespace	line:120	class:mods::mobs	file:
+extended_types	src/mods/mobs/extended-types.hpp	/^	namespace extended_types {$/;"	kind:namespace	line:117	namespace:mods::mobs	file:
 extra_attack	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::extra_attack() {$/;"	kind:function	line:359	class:mods::mobs::armed_guard	signature:()
 extra_attack	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::extra_attack() {$/;"	kind:function	line:360	class:mods::mobs::chaotic_meth_addict	signature:()
 extra_attack	src/mods/mobs/defiler.cpp	/^	void defiler::extra_attack() {$/;"	kind:function	line:565	class:mods::mobs::defiler	signature:()
@@ -8511,7 +8515,7 @@ from_string	src/mods/builder/raid.hpp	/^	static inline raid_type_t from_string(s
 from_string	src/mods/combat.cpp	/^		rules_of_engagement_t from_string(std::string_view rule) {$/;"	kind:function	line:21	namespace:mods::combat::rules_of_engagement	signature:(std::string_view rule)
 from_string	src/mods/doors.hpp	/^	static inline int from_string(std::string_view i) {$/;"	kind:function	line:351	namespace:mods::doors	signature:(std::string_view i)
 from_string	src/mods/forge-engine/generator.cpp	/^	rifle_attributes_t from_string(std::string t) {$/;"	kind:function	line:42	namespace:mods::forge_engine	signature:(std::string t)
-from_string	src/mods/mobs/extended-types.cpp	/^	std::optional<extended_types_t> from_string(std::string str) {$/;"	kind:function	line:129	namespace:mods::mobs::extended_types	signature:(std::string str)
+from_string	src/mods/mobs/extended-types.cpp	/^	std::optional<extended_types_t> from_string(std::string str) {$/;"	kind:function	line:136	namespace:mods::mobs::extended_types	signature:(std::string str)
 from_string	src/mods/orm/orm-base.hpp	/^	TObject from_string(std::string value) {$/;"	kind:function	line:40	namespace:mods::orm	signature:(std::string value)
 from_string	src/mods/orm/orm-base.hpp	/^	inline std::string from_string<std::string>(std::string value) {$/;"	kind:function	line:44	namespace:mods::orm	signature:(std::string value)
 from_string	src/mods/orm/orm-base.hpp	/^	inline std::vector<std::string> from_string<std::vector<std::string>>(std::string value) {$/;"	kind:function	line:48	namespace:mods::orm	signature:(std::string value)
@@ -8795,7 +8799,7 @@ get_loot	src/mods/loot.cpp	/^	std::vector<loot_t> get_loot(player_ptr_t& player)
 get_max_players	src/comm.cpp	/^int get_max_players(void) {$/;"	kind:function	line:487	signature:(void)
 get_max_range	src/mods/rifle.cpp	/^	int16_t get_max_range(obj_ptr_t& weapon) {$/;"	kind:function	line:41	namespace:mods::rifle	signature:(obj_ptr_t& weapon)
 get_misc_pref	src/mods/player.hpp	/^			bool get_misc_pref(misc_pref_enum_t bit) {$/;"	kind:function	line:741	namespace:mods	access:public	signature:(misc_pref_enum_t bit)
-get_mobs_targets	src/mods/mobs/extended-types.cpp	/^	std::string_view get_mobs_targets(const mob_rnum& vnum) {$/;"	kind:function	line:118	namespace:mods::mobs::extended_types	signature:(const mob_rnum& vnum)
+get_mobs_targets	src/mods/mobs/extended-types.cpp	/^	std::string_view get_mobs_targets(const mob_rnum& vnum) {$/;"	kind:function	line:125	namespace:mods::mobs::extended_types	signature:(const mob_rnum& vnum)
 get_mode	src/mods/mob-roam.hpp	/^			mode_t get_mode() const {$/;"	kind:function	line:43	struct:mods::mob_roam::roam_recorder	access:public	signature:() const
 get_month	src/mods/date-time.cpp	/^	std::string get_month() {$/;"	kind:function	line:137	namespace:mods::date_time	signature:()
 get_month	src/mods/js.cpp	/^		static duk_ret_t get_month(duk_context *ctx) {$/;"	kind:function	line:96	namespace:mods::js	signature:(duk_context *ctx)
@@ -9573,6 +9577,7 @@ init	src/mods/mobs/defiler.cpp	/^	void init() {$/;"	kind:function	line:664	names
 init	src/mods/mobs/generic-thief.cpp	/^	void generic_thief::init() {$/;"	kind:function	line:378	class:mods::mobs::generic_thief	signature:()
 init	src/mods/mobs/goat.cpp	/^	void goat::init() {$/;"	kind:function	line:258	class:mods::mobs::goat	signature:()
 init	src/mods/mobs/goat.cpp	/^	void init() {$/;"	kind:function	line:466	namespace:mods::mobs::goat_init	signature:()
+init	src/mods/mobs/innocent.cpp	/^	void innocent::init() {$/;"	kind:function	line:114	class:mods::mobs::innocent	signature:()
 init	src/mods/mobs/lowly-security.cpp	/^	void lowly_security::init() {$/;"	kind:function	line:136	class:mods::mobs::lowly_security	signature:()
 init	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::init() {$/;"	kind:function	line:302	class:mods::mobs::melee_combatant	signature:()
 init	src/mods/mobs/mini-gunner.cpp	/^	void mini_gunner::init() {$/;"	kind:function	line:209	class:mods::mobs::mini_gunner	signature:()
@@ -9719,7 +9724,11 @@ injured	src/mods/damage-event.hpp	/^	std::vector<uuid_t> injured;$/;"	kind:membe
 injured	src/mods/mobs/damage-event.cpp	/^	void injured(player_ptr_t& mob,const feedback_t& feedback) {$/;"	kind:function	line:62	namespace:mods::mobs::damage_event	signature:(player_ptr_t& mob,const feedback_t& feedback)
 injured	src/mods/weapons/damage-calculator.hpp	/^		bool injured;$/;"	kind:member	line:89	struct:mods::weapons::damage_calculator::explosive_damage_t	file:	access:public
 inner_join	src/mods/sql.hpp	/^			compositor<T>& inner_join(std::string_view table) {$/;"	kind:function	line:276	struct:mods::sql::compositor	access:public	signature:(std::string_view table)
-innocent	src/mods/mobs/extended-types.hpp	/^		static const std::string innocent = std::string("Innocent mobs that wouldn't harm a fly (even when provoked). These mobs fulfill the ") +$/;"	kind:member	line:81	namespace:mods::mobs::desc	file:
+innocent	src/mods/mobs/extended-types.hpp	/^		static const std::string innocent = std::string("Innocent mobs that wouldn't harm a fly (even when provoked). These mobs fulfill the ") +$/;"	kind:member	line:83	namespace:mods::mobs::desc	file:
+innocent	src/mods/mobs/innocent.cpp	/^	innocent::innocent(uuid_t mob_uuid, std::string variation) {$/;"	kind:function	line:124	class:mods::mobs::innocent	signature:(uuid_t mob_uuid, std::string variation)
+innocent	src/mods/mobs/innocent.hpp	/^	struct innocent : public smart_mob {$/;"	kind:struct	line:12	namespace:mods::mobs	file:	inherits:smart_mob
+innocent_list	src/mods/mobs/innocent.cpp	/^	static inline std::vector<std::shared_ptr<innocent>>& innocent_list() {$/;"	kind:function	line:25	namespace:mods::mobs	signature:()
+innocent_shout	src/mods/mobs/innocent.cpp	/^	void innocent_shout(player_ptr_t npc) {$/;"	kind:function	line:19	namespace:mods::mobs	signature:(player_ptr_t npc)
 input	src/structs.h	/^			std::list<txt_block> input;   \/* q of unprocessed input               *\/$/;"	kind:member	line:1701	struct:mods::descriptor_data	file:	access:public
 insert	src/mods/sql.hpp	/^			compositor<T>& insert() {$/;"	kind:function	line:170	struct:mods::sql::compositor	access:public	signature:()
 insert_or_update_existing	src/mods/pq.hpp	/^std::pair<bool,std::string> insert_or_update_existing($/;"	kind:function	line:137	signature:( const std::string& table_name, const std::string& primary_key, const PKValueType& pk_value, std::map<std::string,std::string>& values )
@@ -10396,7 +10405,7 @@ low_low	src/mods/forge-engine/value-scaler.hpp	/^		float low_low;$/;"	kind:membe
 low_low_clamp	src/mods/forge-engine/value-scaler.hpp	/^		uint32_t low_low_clamp;$/;"	kind:member	line:28	struct:mods::forge_engine::value_scaler	file:	access:public
 lower_is_better	src/mods/forge-engine/generated-rifle.cpp	/^	static const std::vector<rifle_attributes_t> lower_is_better = {$/;"	kind:member	line:280	namespace:mods::forge_engine	file:
 lowly_sec	src/mods/mobs/lowly-security.cpp	/^	namespace lowly_sec {$/;"	kind:namespace	line:18	namespace:mods::mobs	file:
-lowly_security	src/mods/mobs/extended-types.hpp	/^		static const std::string lowly_security = std::string("A simple security guard that calls for backup when things get dicey.");$/;"	kind:member	line:74	namespace:mods::mobs::desc	file:
+lowly_security	src/mods/mobs/extended-types.hpp	/^		static const std::string lowly_security = std::string("A simple security guard that calls for backup when things get dicey.");$/;"	kind:member	line:76	namespace:mods::mobs::desc	file:
 lowly_security	src/mods/mobs/lowly-security.cpp	/^	lowly_security::lowly_security(uuid_t mob_uuid, std::string variation) {$/;"	kind:function	line:148	class:mods::mobs::lowly_security	signature:(uuid_t mob_uuid, std::string variation)
 lowly_security	src/mods/mobs/lowly-security.hpp	/^	struct lowly_security : public smart_mob {$/;"	kind:struct	line:11	namespace:mods::mobs	file:	inherits:smart_mob
 lowly_security_behaviour_tree	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^namespace mods::mobs::lowly_security_behaviour_tree {$/;"	kind:namespace	line:16	class:mods::mobs	file:
@@ -10411,6 +10420,7 @@ ltrim_copy	src/mods/lmdb/db.hpp	/^		static inline std::string ltrim_copy(std::st
 luck	src/mods/player.hpp	/^			auto& luck() {$/;"	kind:function	line:318	namespace:mods	access:public	signature:()
 m	src/mods/mobs/car-thief.cpp	117;"	kind:macro	line:117	file:
 m	src/mods/mobs/car-thief.cpp	267;"	kind:macro	line:267	file:
+m	src/mods/mobs/innocent.cpp	60;"	kind:macro	line:60	file:
 m	src/mods/mobs/mp-shotgunner.cpp	128;"	kind:macro	line:128	file:
 m	src/mods/mobs/mp-shotgunner.cpp	354;"	kind:macro	line:354	file:
 m	src/mods/mobs/orthos-spawn-sentinel.cpp	164;"	kind:macro	line:164	file:
@@ -10829,9 +10839,9 @@ m_debug	src/mods/mobs/defiler.cpp	20;"	kind:macro	line:20	file:
 m_debug	src/mods/mobs/defiler.cpp	24;"	kind:macro	line:24	file:
 m_debug	src/mods/mobs/defiler.cpp	27;"	kind:macro	line:27	file:
 m_debug	src/mods/mobs/defiler.cpp	687;"	kind:macro	line:687	file:
-m_debug	src/mods/mobs/extended-types.cpp	152;"	kind:macro	line:152	file:
-m_debug	src/mods/mobs/extended-types.cpp	18;"	kind:macro	line:18	file:
-m_debug	src/mods/mobs/extended-types.cpp	20;"	kind:macro	line:20	file:
+m_debug	src/mods/mobs/extended-types.cpp	159;"	kind:macro	line:159	file:
+m_debug	src/mods/mobs/extended-types.cpp	19;"	kind:macro	line:19	file:
+m_debug	src/mods/mobs/extended-types.cpp	21;"	kind:macro	line:21	file:
 m_debug	src/mods/mobs/find.cpp	32;"	kind:macro	line:32	file:
 m_debug	src/mods/mobs/find.cpp	6;"	kind:macro	line:6	file:
 m_debug	src/mods/mobs/find.cpp	8;"	kind:macro	line:8	file:
@@ -11103,6 +11113,8 @@ m_error	src/mods/mobs/generic-thief-behaviour-tree.cpp	31;"	kind:macro	line:31	f
 m_error	src/mods/mobs/generic-thief-behaviour-tree.cpp	33;"	kind:macro	line:33	file:
 m_error	src/mods/mobs/generic-thief.cpp	33;"	kind:macro	line:33	file:
 m_error	src/mods/mobs/generic-thief.cpp	35;"	kind:macro	line:35	file:
+m_error	src/mods/mobs/innocent.cpp	13;"	kind:macro	line:13	file:
+m_error	src/mods/mobs/innocent.cpp	16;"	kind:macro	line:16	file:
 m_error	src/mods/mobs/mp-shotgunner.cpp	13;"	kind:macro	line:13	file:
 m_error	src/mods/mobs/mp-shotgunner.cpp	16;"	kind:macro	line:16	file:
 m_error	src/mods/mobs/orthos-spawn-sentinel.cpp	18;"	kind:macro	line:18	file:
@@ -11970,13 +11982,13 @@ mini_games	src/mods/mini-games/line-up.cpp	/^namespace mods::mini_games {$/;"	ki
 mini_games	src/mods/mini-games/line-up.hpp	/^namespace mods::mini_games {$/;"	kind:namespace	line:7	class:mods	file:
 mini_games	src/mods/mini-games/wires.cpp	/^namespace mods::mini_games {$/;"	kind:namespace	line:8	class:mods	file:
 mini_games	src/mods/mini-games/wires.hpp	/^namespace mods::mini_games {$/;"	kind:namespace	line:7	class:mods	file:
-mini_gunner	src/mods/mobs/extended-types.hpp	/^		static const std::string mini_gunner = std::string("The mob will have a backpack and minigun which he\/she will use as the main weapon.") +$/;"	kind:member	line:75	namespace:mods::mobs::desc	file:
+mini_gunner	src/mods/mobs/extended-types.hpp	/^		static const std::string mini_gunner = std::string("The mob will have a backpack and minigun which he\/she will use as the main weapon.") +$/;"	kind:member	line:77	namespace:mods::mobs::desc	file:
 mini_gunner	src/mods/mobs/mini-gunner.cpp	/^	mini_gunner::mini_gunner(uuid_t mob_uuid, std::string variation) {$/;"	kind:function	line:183	class:mods::mobs::mini_gunner	signature:(uuid_t mob_uuid, std::string variation)
 mini_gunner	src/mods/mobs/mini-gunner.hpp	/^	struct mini_gunner : public smart_mob {$/;"	kind:struct	line:11	namespace:mods::mobs	file:	inherits:smart_mob
 mini_gunner_behaviour_tree	src/mods/mobs/mini-gunner-behaviour-tree.cpp	/^namespace mods::mobs::mini_gunner_behaviour_tree {$/;"	kind:namespace	line:9	class:mods::mobs	file:
 mini_gunner_behaviour_tree	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^namespace mods::mobs::mini_gunner_behaviour_tree {$/;"	kind:namespace	line:27	class:mods::mobs	file:
 mini_gunner_ptr	src/mods/mobs/mini-gunner.hpp	/^static inline std::shared_ptr<mods::mobs::mini_gunner> mini_gunner_ptr(uuid_t u) {$/;"	kind:function	line:187	file:	signature:(uuid_t u)
-mini_gunner_sentinel	src/mods/mobs/extended-types.hpp	/^		static const std::string mini_gunner_sentinel = std::string("The mob will have a backpack and minigun which he\/she will use as the main weapon.","This mob stands guard in a single room and will generally face on direction (while watching each room in that direction for a number of rooms).");$/;"	kind:member	line:80	namespace:mods::mobs::desc	file:
+mini_gunner_sentinel	src/mods/mobs/extended-types.hpp	/^		static const std::string mini_gunner_sentinel = std::string("The mob will have a backpack and minigun which he\/she will use as the main weapon.","This mob stands guard in a single room and will generally face on direction (while watching each room in that direction for a number of rooms).");$/;"	kind:member	line:82	namespace:mods::mobs::desc	file:
 mini_mud	src/db.cpp	/^int mini_mud = 0;		\/* mini-mud mode?		 *\/$/;"	kind:variable	line:129
 minibt_debug	src/mods/mobs/mini-gunner-behaviour-tree.cpp	5;"	kind:macro	line:5	file:
 minibt_debug	src/mods/mobs/mini-gunner-behaviour-tree.cpp	7;"	kind:macro	line:7	file:
@@ -12055,7 +12067,7 @@ mob_special_data	src/structs.h	/^	mob_special_data(const mob_special_data& copy)
 mob_special_data	src/structs.h	/^struct mob_special_data {$/;"	kind:struct	line:1513	file:
 mob_specials	src/mods/npc.cpp	/^	mob_special_data& npc::mob_specials() {$/;"	kind:function	line:8	class:mods::npc	signature:()
 mob_specials	src/structs.h	/^	mob_special_data mob_specials;	\/* NPC specials		  *\/$/;"	kind:member	line:1766	struct:char_data	file:	access:public
-mob_target_map	src/mods/mobs/extended-types.cpp	/^	static std::map<mob_rnum,std::string> mob_target_map;$/;"	kind:member	line:114	namespace:mods::mobs::extended_types	file:
+mob_target_map	src/mods/mobs/extended-types.cpp	/^	static std::map<mob_rnum,std::string> mob_target_map;$/;"	kind:member	line:121	namespace:mods::mobs::extended_types	file:
 mob_uuid	src/globals.cpp	/^		uuid_t mob_uuid() {$/;"	kind:function	line:578	namespace:mods::globals	signature:()
 mob_uuid	src/mods/contract-steps.hpp	/^		uuid_t 					mob_uuid;$/;"	kind:member	line:38	namespace:mods::contracts	file:
 mob_virtual_number	src/mods/orm/mob-roam.hpp	/^		uint32_t mob_virtual_number;$/;"	kind:member	line:10	struct:mods::orm::mob_roam_record_t	file:	access:public
@@ -12079,7 +12091,7 @@ mobs	src/mods/mobs/chaotic-meth-addict.cpp	/^namespace mods::mobs {$/;"	kind:nam
 mobs	src/mods/mobs/chaotic-meth-addict.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:12	class:mods	file:
 mobs	src/mods/mobs/defiler.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:37	class:mods	file:
 mobs	src/mods/mobs/defiler.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:13	class:mods	file:
-mobs	src/mods/mobs/extended-types.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:23	class:mods	file:
+mobs	src/mods/mobs/extended-types.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:24	class:mods	file:
 mobs	src/mods/mobs/extended-types.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:10	class:mods	file:
 mobs	src/mods/mobs/find.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:14	class:mods	file:
 mobs	src/mods/mobs/find.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:8	class:mods	file:
@@ -12087,6 +12099,8 @@ mobs	src/mods/mobs/generic-thief.cpp	/^namespace mods::mobs {$/;"	kind:namespace
 mobs	src/mods/mobs/generic-thief.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:12	class:mods	file:
 mobs	src/mods/mobs/goat.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:38	class:mods	file:
 mobs	src/mods/mobs/goat.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:13	class:mods	file:
+mobs	src/mods/mobs/innocent.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:18	class:mods	file:
+mobs	src/mods/mobs/innocent.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:11	class:mods	file:
 mobs	src/mods/mobs/lowly-security.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:13	class:mods	file:
 mobs	src/mods/mobs/lowly-security.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:9	class:mods	file:
 mobs	src/mods/mobs/melee-combatant.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:18	class:mods	file:
@@ -12203,6 +12217,7 @@ move_gain	src/limits.cpp	/^int move_gain(char_data *ch) {$/;"	kind:function	line
 move_points_per_outward_pump_buff	src/mods/weapons/shotgun-dst7A.hpp	/^				static constexpr std::array<uint16_t,3> move_points_per_outward_pump_buff = {2,4,6};$/;"	kind:member	line:50	struct:mods::weapons::shotgun::dst7A::stats	file:	access:public
 move_to	src/mods/mobs/defiler.cpp	/^	std::pair<bool,std::string> defiler::move_to(const direction_t& dir) {$/;"	kind:function	line:573	class:mods::mobs::defiler	signature:(const direction_t& dir)
 move_to	src/mods/mobs/goat.cpp	/^	std::pair<bool,std::string> goat::move_to(const direction_t& dir) {$/;"	kind:function	line:420	class:mods::mobs::goat	signature:(const direction_t& dir)
+move_to	src/mods/mobs/innocent.cpp	/^	std::pair<bool,std::string> innocent::move_to(const direction_t& dir) {$/;"	kind:function	line:143	class:mods::mobs::innocent	signature:(const direction_t& dir)
 move_to	src/mods/mobs/mp-shotgunner.cpp	/^	std::pair<bool,std::string> mp_shotgunner::move_to(const direction_t& dir) {$/;"	kind:function	line:417	class:mods::mobs::mp_shotgunner	signature:(const direction_t& dir)
 move_to	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	std::pair<bool,std::string> orthos_spawn_sentinel::move_to(const direction_t& dir) {$/;"	kind:function	line:406	class:mods::mobs::orthos_spawn_sentinel	signature:(const direction_t& dir)
 move_to	src/mods/mobs/smart-mob.cpp	/^	std::pair<bool,std::string> smart_mob::move_to(const direction_t& dir) {$/;"	kind:function	line:135	class:mods::mobs::smart_mob	signature:(const direction_t& dir)
@@ -12228,7 +12243,7 @@ mp	src/mods/player.hpp	/^			auto& mp() {$/;"	kind:function	line:376	namespace:mo
 mp	src/structs.h	/^	uint16_t mp;$/;"	kind:member	line:1529	struct:mob_special_data	file:	access:public
 mp5	src/mods/weapons/smg-mp5.cpp	/^	mp5::mp5(){$/;"	kind:function	line:23	class:mods::weapons::smg::mp5	signature:()
 mp5	src/mods/weapons/smg-mp5.hpp	/^		struct mp5 {$/;"	kind:struct	line:9	namespace:mods::weapons::smg	file:
-mp_shotgunner	src/mods/mobs/extended-types.hpp	/^		static const std::string mp_shotgunner = std::string("A military police guard armed with a BF-9 Shotgun. Relentless in pursuit and can call in backup via radio.");$/;"	kind:member	line:73	namespace:mods::mobs::desc	file:
+mp_shotgunner	src/mods/mobs/extended-types.hpp	/^		static const std::string mp_shotgunner = std::string("A military police guard armed with a BF-9 Shotgun. Relentless in pursuit and can call in backup via radio.");$/;"	kind:member	line:75	namespace:mods::mobs::desc	file:
 mp_shotgunner	src/mods/mobs/mp-shotgunner.cpp	/^	mp_shotgunner::mp_shotgunner(uuid_t mob_uuid, std::string variation) {$/;"	kind:function	line:368	class:mods::mobs::mp_shotgunner	signature:(uuid_t mob_uuid, std::string variation)
 mp_shotgunner	src/mods/mobs/mp-shotgunner.hpp	/^	struct mp_shotgunner : public smart_mob {$/;"	kind:struct	line:18	namespace:mods::mobs	file:	inherits:smart_mob
 mp_shotgunner_behaviour_tree	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^namespace mods::mobs::mp_shotgunner_behaviour_tree {$/;"	kind:namespace	line:22	class:mods::mobs	file:
@@ -12238,6 +12253,9 @@ mp_shotgunner_ptr	src/mods/mobs/mp-shotgunner.hpp	/^static inline std::shared_pt
 mpegloves	src/mods/drops.cpp	/^	static constexpr std::string_view mpegloves = "armor\/mp-enforcer-gloves.yml";$/;"	kind:member	line:157	namespace:mods::drops	file:
 mpepants	src/mods/drops.cpp	/^	static constexpr std::string_view mpepants= "armor\/mp-enforcer-pants.yml";$/;"	kind:member	line:158	namespace:mods::drops	file:
 mprint	src/mods/message-server.cpp	444;"	kind:macro	line:444	file:
+mps_debug	src/mods/mobs/innocent.cpp	12;"	kind:macro	line:12	file:
+mps_debug	src/mods/mobs/innocent.cpp	154;"	kind:macro	line:154	file:
+mps_debug	src/mods/mobs/innocent.cpp	15;"	kind:macro	line:15	file:
 mps_debug	src/mods/mobs/mp-shotgunner.cpp	12;"	kind:macro	line:12	file:
 mps_debug	src/mods/mobs/mp-shotgunner.cpp	15;"	kind:macro	line:15	file:
 mps_debug	src/mods/mobs/mp-shotgunner.cpp	478;"	kind:macro	line:478	file:
@@ -13807,7 +13825,7 @@ register_room_at_coordinates	src/globals.cpp	/^		void register_room_at_coordinat
 register_room_at_coordinates	src/mods/rooms.cpp	/^	void register_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room) {$/;"	kind:function	line:589	namespace:mods::rooms	signature:(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room)
 register_shop	src/globals.hpp	/^		void register_shop(TShopPtr shop) {$/;"	kind:function	line:188	namespace:mods::globals	signature:(TShopPtr shop)
 register_signature	src/mods/builder/slotted-builder.hpp	/^			void register_signature(std::string_view verb,std::string_view sig) {$/;"	kind:function	line:92	struct:mods::builder::slotted_builder	access:public	signature:(std::string_view verb,std::string_view sig)
-register_targets	src/mods/mobs/extended-types.cpp	/^	void register_targets(const mob_rnum& vnum, std::string_view items) {$/;"	kind:function	line:115	namespace:mods::mobs::extended_types	signature:(const mob_rnum& vnum, std::string_view items)
+register_targets	src/mods/mobs/extended-types.cpp	/^	void register_targets(const mob_rnum& vnum, std::string_view items) {$/;"	kind:function	line:122	namespace:mods::mobs::extended_types	signature:(const mob_rnum& vnum, std::string_view items)
 registered_admin_help_commands	src/mods/help.cpp	/^	static std::map<std::string,std::string> registered_admin_help_commands;$/;"	kind:member	line:918	namespace:mods::help	file:
 registered_help_commands	src/mods/help.cpp	/^	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;$/;"	kind:member	line:917	namespace:mods::help	file:
 registration_allowed	src/mods/player-registration.cpp	/^	static bool registration_allowed = 1;$/;"	kind:member	line:6	namespace:mods::player_registration	file:
@@ -13913,6 +13931,7 @@ report	src/mods/mobs/chaotic-meth-addict.cpp	/^	str_map_t chaotic_meth_addict::r
 report	src/mods/mobs/defiler.cpp	/^	str_map_t defiler::report() {$/;"	kind:function	line:75	class:mods::mobs::defiler	signature:()
 report	src/mods/mobs/generic-thief.cpp	/^	str_map_t generic_thief::report() {$/;"	kind:function	line:157	class:mods::mobs::generic_thief	signature:()
 report	src/mods/mobs/goat.cpp	/^	str_map_t goat::report() {$/;"	kind:function	line:76	class:mods::mobs::goat	signature:()
+report	src/mods/mobs/innocent.cpp	/^	str_map_t innocent::report() {$/;"	kind:function	line:49	class:mods::mobs::innocent	signature:()
 report	src/mods/mobs/lowly-security.cpp	/^	str_map_t lowly_security::report() {$/;"	kind:function	line:102	class:mods::mobs::lowly_security	signature:()
 report	src/mods/mobs/melee-combatant.cpp	/^	str_map_t melee_combatant::report() {$/;"	kind:function	line:94	class:mods::mobs::melee_combatant	signature:()
 report	src/mods/mobs/mini-gunner.cpp	/^	str_map_t mini_gunner::report() {$/;"	kind:function	line:101	class:mods::mobs::mini_gunner	signature:()
@@ -14895,6 +14914,7 @@ set_variation	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::set_variation(c
 set_variation	src/mods/mobs/car-thief.cpp	/^	void car_thief::set_variation(std::string v) {$/;"	kind:function	line:86	class:mods::mobs::car_thief	signature:(std::string v)
 set_variation	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::set_variation(const std::string& v) {$/;"	kind:function	line:89	class:mods::mobs::chaotic_meth_addict	signature:(const std::string& v)
 set_variation	src/mods/mobs/generic-thief.cpp	/^	void generic_thief::set_variation(const std::string& v) {$/;"	kind:function	line:141	class:mods::mobs::generic_thief	signature:(const std::string& v)
+set_variation	src/mods/mobs/innocent.cpp	/^	void innocent::set_variation(std::string v) {$/;"	kind:function	line:45	class:mods::mobs::innocent	signature:(std::string v)
 set_variation	src/mods/mobs/lowly-security.cpp	/^	void lowly_security::set_variation(std::string v) {$/;"	kind:function	line:79	class:mods::mobs::lowly_security	signature:(std::string v)
 set_variation	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::set_variation(const std::string& v) {$/;"	kind:function	line:89	class:mods::mobs::melee_combatant	signature:(const std::string& v)
 set_variation	src/mods/mobs/mini-gunner.cpp	/^	void mini_gunner::set_variation(std::string v) {$/;"	kind:function	line:78	class:mods::mobs::mini_gunner	signature:(std::string v)
@@ -14920,6 +14940,7 @@ setup_damage_callbacks	src/mods/mobs/car-thief.cpp	/^	void car_thief::setup_dama
 setup_damage_callbacks	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::setup_damage_callbacks() {$/;"	kind:function	line:142	class:mods::mobs::chaotic_meth_addict	signature:()
 setup_damage_callbacks	src/mods/mobs/defiler.cpp	/^	void defiler::setup_damage_callbacks() {$/;"	kind:function	line:111	class:mods::mobs::defiler	signature:()
 setup_damage_callbacks	src/mods/mobs/generic-thief.cpp	/^	void generic_thief::setup_damage_callbacks() {$/;"	kind:function	line:228	class:mods::mobs::generic_thief	signature:()
+setup_damage_callbacks	src/mods/mobs/innocent.cpp	/^	void innocent::setup_damage_callbacks() {$/;"	kind:function	line:58	class:mods::mobs::innocent	signature:()
 setup_damage_callbacks	src/mods/mobs/lowly-security.cpp	/^	void lowly_security::setup_damage_callbacks() {$/;"	kind:function	line:112	class:mods::mobs::lowly_security	signature:()
 setup_damage_callbacks	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::setup_damage_callbacks() {$/;"	kind:function	line:142	class:mods::mobs::melee_combatant	signature:()
 setup_damage_callbacks	src/mods/mobs/mini-gunner.cpp	/^	void mini_gunner::setup_damage_callbacks() {$/;"	kind:function	line:149	class:mods::mobs::mini_gunner	signature:()
@@ -15537,7 +15558,7 @@ string_map	src/mods/affects.hpp	/^	const static std::map<std::string,affect_t> s
 string_to_action	src/mods/rate-limiting.cpp	/^	action_t string_to_action(std::string_view action) {$/;"	kind:function	line:41	namespace:mods::rate_limiting	signature:(std::string_view action)
 string_types	src/mods/values.cpp	/^static const std::vector<value_key_t> string_types = {$/;"	kind:member	line:2077	namespace:mods::values	file:
 string_write	src/modify.cpp	/^void string_write(mods::descriptor_data d, char **writeto, size_t len, long mailto, void *data) {$/;"	kind:function	line:93	signature:(mods::descriptor_data d, char **writeto, size_t len, long mailto, void *data)
-strings	src/mods/mobs/extended-types.cpp	/^	std::vector<std::string> strings() {$/;"	kind:function	line:121	namespace:mods::mobs::extended_types	signature:()
+strings	src/mods/mobs/extended-types.cpp	/^	std::vector<std::string> strings() {$/;"	kind:function	line:128	namespace:mods::mobs::extended_types	signature:()
 strip_color	src/mods/colors.hpp	/^	static inline TStr strip_color(TStr str) {$/;"	kind:function	line:36	namespace:mods::colors	signature:(TStr str)
 strip_color	src/mods/str.hpp	/^	static inline TStr strip_color(TStr s) {$/;"	kind:function	line:107	struct:str	access:public	signature:(TStr s)
 strip_color	src/mods/util.hpp	/^	static inline TStr strip_color(TStr s) {$/;"	kind:function	line:91	namespace:mods::util	signature:(TStr s)
@@ -15825,7 +15846,7 @@ to_string	src/mods/forge-engine/util.cpp	/^	std::string to_string(rifle_types_t 
 to_string	src/mods/forge-engine/util.cpp	/^	std::string to_string(stat_types_t t) {$/;"	kind:function	line:217	namespace:mods::forge_engine	signature:(stat_types_t t)
 to_string	src/mods/melee/combat-order.hpp	/^	static inline std::string to_string(technique_t technique) {$/;"	kind:function	line:57	namespace:mods::melee::main	signature:(technique_t technique)
 to_string	src/mods/message-server.hpp	/^	static inline std::string to_string(const channel_t& c) {$/;"	kind:function	line:34	namespace:mods::message_server	signature:(const channel_t& c)
-to_string	src/mods/mobs/extended-types.cpp	/^	std::string to_string(extended_types_t t) {$/;"	kind:function	line:148	namespace:mods::mobs::extended_types	signature:(extended_types_t t)
+to_string	src/mods/mobs/extended-types.cpp	/^	std::string to_string(extended_types_t t) {$/;"	kind:function	line:155	namespace:mods::mobs::extended_types	signature:(extended_types_t t)
 to_string	src/mods/object-utils.hpp	/^		std::string to_string() {$/;"	kind:function	line:53	struct:mods::object_utils::YamlFeedExceptionInfo	access:public	signature:()
 to_string	src/mods/rooms.hpp	/^	static inline std::string to_string(room_data::fire_status_t stat) {$/;"	kind:function	line:421	namespace:mods::rooms	signature:(room_data::fire_status_t stat)
 to_string	src/mods/values.cpp	/^		std::string to_string(value_key_t k){$/;"	kind:function	line:26	namespace:mods::values	signature:(value_key_t k)
@@ -15950,6 +15971,7 @@ type	src/mods/mobs/chaotic-meth-addict.hpp	/^			std::string_view type() {$/;"	ki
 type	src/mods/mobs/defiler.hpp	/^			std::string_view type() {$/;"	kind:function	line:219	namespace:mods::mobs	signature:()
 type	src/mods/mobs/generic-thief.hpp	/^			std::string_view type() {$/;"	kind:function	line:153	namespace:mods::mobs	signature:()
 type	src/mods/mobs/goat.hpp	/^			std::string_view type() {$/;"	kind:function	line:261	namespace:mods::mobs	signature:()
+type	src/mods/mobs/innocent.hpp	/^		std::string_view type() {$/;"	kind:function	line:45	struct:mods::mobs::innocent	access:public	signature:()
 type	src/mods/mobs/lowly-security.hpp	/^		std::string_view type() {$/;"	kind:function	line:39	struct:mods::mobs::lowly_security	access:public	signature:()
 type	src/mods/mobs/melee-combatant.hpp	/^			std::string_view type() {$/;"	kind:function	line:51	namespace:mods::mobs	signature:()
 type	src/mods/mobs/mini-gunner.hpp	/^			std::string_view type() {$/;"	kind:function	line:91	struct:mods::mobs::mini_gunner	access:public	signature:()
@@ -16118,6 +16140,7 @@ usages	src/mods/mobs/chaotic-meth-addict.cpp	/^	str_map_t chaotic_meth_addict::u
 usages	src/mods/mobs/defiler.cpp	/^	str_map_t defiler::usages() {$/;"	kind:function	line:80	class:mods::mobs::defiler	signature:()
 usages	src/mods/mobs/generic-thief.cpp	/^	str_map_t generic_thief::usages() {$/;"	kind:function	line:160	class:mods::mobs::generic_thief	signature:()
 usages	src/mods/mobs/goat.cpp	/^	str_map_t goat::usages() {$/;"	kind:function	line:81	class:mods::mobs::goat	signature:()
+usages	src/mods/mobs/innocent.cpp	/^	str_map_t innocent::usages() {$/;"	kind:function	line:52	class:mods::mobs::innocent	signature:()
 usages	src/mods/mobs/lowly-security.cpp	/^	str_map_t lowly_security::usages() {$/;"	kind:function	line:105	class:mods::mobs::lowly_security	signature:()
 usages	src/mods/mobs/melee-combatant.cpp	/^	str_map_t melee_combatant::usages() {$/;"	kind:function	line:97	class:mods::mobs::melee_combatant	signature:()
 usages	src/mods/mobs/mini-gunner.cpp	/^	str_map_t mini_gunner::usages() {$/;"	kind:function	line:105	class:mods::mobs::mini_gunner	signature:()

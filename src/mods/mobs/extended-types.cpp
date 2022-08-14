@@ -10,6 +10,7 @@
 #include "melee-combatant.hpp"
 #include "defiler.hpp"
 #include "goat.hpp"
+#include "innocent.hpp"
 #include "orthos-agent.hpp"
 #include "orthos-spawn-sentinel.hpp"
 #include "../behaviour_tree_impl.hpp"
@@ -71,6 +72,8 @@ namespace mods::mobs {
 				chaotic_meth_addict::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum));
 				register_mob_with_btree = false;
 				break;
+			case extended_types_t::THUG:
+				m_debug("[ found THUG ]");
 			case extended_types_t::SHOPLIFTER:
 				m_debug("[ found shoplifter ]");
 				m_debug("SHOPLIFTER VNUM: '" << vnum << "'");
@@ -101,6 +104,10 @@ namespace mods::mobs {
 				m_debug("[ found GOAT ]");
 				goat::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum).data());
 				register_mob_with_btree = false;
+				break;
+			case extended_types_t::INNOCENT:
+				m_debug("[ found innocent ]");
+				innocent::create(mob_id, "normal");
 				break;
 		}
 		if(register_mob_with_btree) {
