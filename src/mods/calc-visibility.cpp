@@ -6,7 +6,7 @@
 #include "player-utils.hpp"
 #include "object-utils.hpp"
 
-#define __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
+//#define __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
 #ifdef __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
 #define FOR_WHOM "far"
 #define mcv_debug(MSG) if(std::string(observer->name().c_str()).compare(FOR_WHOM) == 0){ mentoc_prefix_debug("[mods::calc_visibility]")  << info << "|" << MSG << "\n" \

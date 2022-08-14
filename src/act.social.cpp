@@ -20,10 +20,12 @@
 #include "db.h"
 #include "spells.h"
 #include "mods/positions.hpp"
+#include "mods/mobs/goat.hpp"
 
 
+#define  __MENTOC_SHOW_SOCIALS_DEBUG__
 #ifdef __MENTOC_SHOW_SOCIALS_DEBUG__
-#define m_debug(A) std::cerr << "[socials] " << A << "\n";
+#define m_debug(A) std::cerr << "[socials:LINE(" << __LINE__ << ")]: " << A << "\n";
 #else
 #define m_debug(A)
 #endif
@@ -38,6 +40,7 @@ ACMD(do_insult);
 void boot_social_messages(void);
 void free_social_messages(void);
 
+std::vector<std::tuple<std::string,int>> social_mappings;
 
 struct social_messg {
 	using act_number_t = uint16_t;
@@ -91,6 +94,18 @@ int find_action(int cmd) {
 		}
 	}
 }
+bool is_goat_slap(int act_nr,char_data* vict) {
+	auto victim_ptr = ptr(vict);
+	if(!victim_ptr) {
+		return false;
+	}
+	for(const auto& goat : mods::mobs::goat_list) {
+		if(goat->uuid == victim_ptr->uuid()) {
+			return true;
+		}
+	}
+	return false;
+}
 
 
 ACMD(do_action) {
@@ -130,6 +145,10 @@ ACMD(do_action) {
 			act(action->char_found, 0, ch, 0, vict, TO_CHAR | TO_SLEEP);
 			act(action->others_found, action->hide, ch, 0, vict, TO_NOTVICT);
 			act(action->vict_found, action->hide, ch, 0, vict, TO_VICT);
+			if(is_goat_slap(act_nr,vict)) {
+				auto victim_ptr = ptr(vict);
+				mods::mobs::process_goat_slap(player,victim_ptr);
+			}
 		}
 	}
 }
@@ -299,6 +318,7 @@ std::optional<int> fread_digit(FILE* fl) {
 	return atoi(&temp_array[0]);
 }
 
+
 void boot_social_messages(void) {
 	FILE *fl;
 	int nr, i, hide = -1, curr_soc = -1;
@@ -333,6 +353,8 @@ void boot_social_messages(void) {
 	 */
 	/* now read 'em */
 	for(;;) {
+		std::string current_social_name;
+
 		std::string temp_buffer;
 		temp_buffer.clear();
 
@@ -350,6 +372,7 @@ void boot_social_messages(void) {
 			temp_buffer += ch;
 		}
 		m_debug("temp_buffer: '" << temp_buffer << "'");
+		current_social_name = temp_buffer;
 		memset(next_soc,0,sizeof(next_soc));
 		bcopy(temp_buffer.c_str(),next_soc,std::min(sizeof(next_soc) - 3,temp_buffer.length()));
 
@@ -467,6 +490,7 @@ void boot_social_messages(void) {
 		if(last != '\n') {
 			ungetc(last,fl);
 		}
+		social_mappings.emplace_back(std::make_tuple(current_social_name,curr_soc));
 	}
 	m_debug("outside");
 

@@ -34,6 +34,8 @@ namespace mods::mobs {
 		DEFILER,
 		ORTHOS_AGENT,
 		ORTHOS_SPAWN_SENTINEL,
+		GOAT,
+		DEMONIC_CYCLOPS_GOAT,
 	};
 	//vim sorcery: s/\t\t\([A-Z_]\+\),/\t\t{\1,"\1"},/g
 	static std::map<extended_types_t,std::string> ext_map = {
@@ -61,6 +63,8 @@ namespace mods::mobs {
 		{DEFILER,"DEFILER"},
 		{ORTHOS_AGENT,"ORTHOS_AGENT"},
 		{ORTHOS_SPAWN_SENTINEL,"ORTHOS_SPAWN_SENTINEL"},
+		{GOAT,"GOAT"},
+		{DEMONIC_CYCLOPS_GOAT,"DEMONIC_CYCLOPS_GOAT"},
 	};
 	void decorate(uuid_t mob_id);
 
@@ -104,6 +108,8 @@ namespace mods::mobs {
 		{DEFILER,"DEFILER"},
 		{ORTHOS_AGENT,"ORTHOS_AGENT"},
 		{ORTHOS_SPAWN_SENTINEL,"ORTHOS_SPAWN_SENTINEL"},
+		{GOAT,"GOAT"},
+		{DEMONIC_CYCLOPS_GOAT,"DEMONIC_CYCLOPS_GOAT"},
 	};
 	namespace extended_types {
 		using mob_rnum = uint32_t;

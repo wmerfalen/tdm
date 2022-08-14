@@ -167,13 +167,14 @@ namespace mods::zone {
 		switch(command.command) {
 			case 'M': {
 					//std::vector<uuid_t> alive;
-					auto& r = command.object_data;
-					r.erase(
-					std::remove_if(r.begin(),r.end(),[](auto& mob_uuid) -> bool {
-						auto npc = npc_by_uuid(mob_uuid);
-						return !npc;
-					}),r.end());
-					command.count = command.object_data.size();
+					//auto& r = command.object_data;
+					//r.erase(
+					//std::remove_if(r.begin(),r.end(),[](auto& mob_uuid) -> bool {
+					//	auto npc = npc_by_uuid(mob_uuid);
+					//	return !npc;
+					//}),r.end());
+					//command.count = command.object_data.size();
+					return command.object_data.size() < command.arg3;
 					return command.count < command.arg3;
 				}
 				break;

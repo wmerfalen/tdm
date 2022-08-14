@@ -1392,6 +1392,8 @@ namespace mods::builder {
 			p_map["mob_exp"] = std::to_string(obj->mob_specials.experience);
 			if(obj->mob_specials.raid_id) {
 				p_map["mob_raid_id"] = std::to_string(obj->mob_specials.raid_id);
+			} else {
+				p_map.erase("mob_raid_id");
 			}
 			p_map["mob_scalable"] = obj->mob_specials.scalable ? "1" : "0";
 

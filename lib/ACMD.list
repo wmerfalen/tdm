@@ -53,6 +53,7 @@
 ./mods/combat.cpp:		->set_rules_of_engagement
 ./mods/blind.cpp:	->blind_me_for
 ./mods/mobs/defiler.cpp:	->bioscan
+./mods/mobs/goat.cpp:	->pray
 ./mods/melee/main.cpp:	->set_combat_order
 ./mods/melee/main.cpp:	->list_combat_order
 ./mods/melee/main.cpp:	->clear_combat_order

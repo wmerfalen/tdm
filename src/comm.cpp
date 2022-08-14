@@ -47,6 +47,7 @@
 #include "mods/ban-system.hpp"
 #include "mods/message-server.hpp"
 #include "mods/mobs/orthos-spawn-sentinel-btree.hpp"
+#include "mods/mobs/goat.hpp"
 #include "mods/loot.hpp"
 namespace mods::mobs::room_watching {
 	extern void destroy_player(uuid_t);
@@ -1042,6 +1043,9 @@ void heartbeat(int pulse) {
 		run_behaviour_trees();
 	}
 
+	if(!(pulse % mods::mobs::goat_pulse())) {
+		mods::mobs::run_goat_pulse();
+	}
 
 	if(!(pulse % PULSE_MOBILE)) {
 		mobile_activity();
@@ -1087,6 +1091,7 @@ void heartbeat(int pulse) {
 	if(!(pulse % 3)) {
 		mods::mobs::room_watching::heartbeat();
 	}
+
 }
 
 
