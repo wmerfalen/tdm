@@ -78,7 +78,7 @@ namespace mods::mobs {
 				m_debug("[ found shoplifter ]");
 				m_debug("SHOPLIFTER VNUM: '" << vnum << "'");
 				shoplifter::create(mob_id, mods::mobs::extended_types::get_mobs_targets(vnum));
-				register_mob_with_btree = false;
+				register_mob_with_btree = true;
 				break;
 			case extended_types_t::MELEE_COMBATANT:
 				m_debug("[ found melee_combatant ]");

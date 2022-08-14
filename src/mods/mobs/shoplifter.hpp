@@ -12,6 +12,12 @@
 namespace mods::mobs {
 	using tick_t = uint64_t;
 	struct shoplifter : public smart_mob {
+
+			void complain(std::string_view);
+			void progress(std::string_view);
+			void progress_once(std::string_view);
+			void logic_error(std::string_view);
+
 			enum btree_t : int16_t {
 				SHOPL_NONE = -1,
 				SHOPL_ROAM = 0,
@@ -51,6 +57,9 @@ namespace mods::mobs {
 			std::string_view type() {
 				return "shoplifter";
 			}
+
+			void attack(const feedback_t& feedback,player_ptr_t attacker);
+			void attack(player_ptr_t player);
 
 			/**=====================================*/
 			/** hunting helpers & state maintenance */
@@ -99,10 +108,9 @@ namespace mods::mobs {
 			bool is_rival(player_ptr_t& player);
 			uint8_t scan_depth() const;
 			player_ptr_t spawn_near_someone();
-			void attack(player_ptr_t& player);
 			bool attack_anyone_near_room();
 
-			int best_distance();
+			int optimal_range() const override;
 		private:
 			player_ptr_t get_next_attacking_priority();
 			player_ptr_t m_last_attacker;

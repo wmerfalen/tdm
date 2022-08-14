@@ -8,7 +8,7 @@
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
-//#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
+#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #define m_debug(a) mentoc_prefix_debug("m|m|shoplifter") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
 #define m_debug_plain(a) mentoc_prefix_debug("m|m|shoplifter") << a << "\n";
@@ -20,48 +20,14 @@
 #endif
 namespace mods::mobs {
 	static constexpr std::size_t BEST_DISTANCE = 1;
-	namespace shoplifter_btree {
-		/**
-		 * @brief find the room with the most enemies, and go towards that direction
-		 *
-		 * @param mob
-		 * @param victim
-		 *
-		 * @return
-		 */
-		uint8_t weighted_direction_decider(player_ptr_t& mob,player_ptr_t victim) {
-			int depth = CAR_THIEF_SCAN_DEPTH();
-			mods::scan::vec_player_data vpd;
-			mods::scan::los_scan_for_players(mob->cd(),depth,&vpd);
-			std::map<uint8_t,int> scores;
-			for(auto v : vpd) {
-				if(!ptr_by_uuid(v.uuid)) {
-					continue;
-				}
-				if(mods::rooms::is_peaceful(v.room_rnum)) {
-					continue;
-				}
-				if(victim && victim->uuid() == v.uuid) {
-					scores[v.direction] += 2;
-				}
-				++scores[v.direction];
-			}
-			int should_fire = -1;
-			int max = 0;
-			for(auto pair : scores) {
-				if(pair.second > max) {
-					max = pair.second;
-					should_fire = pair.first;
-				}
-			}
-			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
-			if(should_fire == -1) {
-				/** FIXME */
-				m_debug_plain("[stub] should_fire is -1, choose random direction");
-			}
-			return should_fire;
-		}
-	};// end namespace shoplifter_btree
+	static constexpr uint8_t SCAN_DEPTH = 3;
+#define COMPLAIN(A) this->complain(CAT(__FILE__,"|",__LINE__,"[",__FUNCTION__,"]: SHOPLIFTER COMPLAINT: ",A));
+#define PROGRESS(A) this->progress(CAT(__FILE__,"|",__LINE__,"[",__FUNCTION__,"]: SHOPLIFTER COMPLAINT: ",A));
+
+	bool shoplifter_can_move(room_rnum room) {
+		return room < world.size() && world[room].directions().size() > 0;
+	}
+
 	void shoplifter::create(const uuid_t& mob_uuid, std::string_view targets) {
 		m_debug_plain("shoplifter create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
@@ -70,26 +36,21 @@ namespace mods::mobs {
 			return;
 		}
 		auto g = std::make_shared<shoplifter>(mob_uuid,targets.data());
-		g->btree_roam();
+		g->btree_hostile();
 		mods::mobs::shoplifter_list().push_front(g);
 	}
-	void shoplifter::perform_random_act() {
-		act_to_room(m_random_acts[rand_number(0,m_random_acts.size()-1)]);
-	}
 
-	/**
-	 * @brief callback when someone spotted
-	 *
-	 * @param room
-	 * @param player
-	 */
 	void shoplifter::enemy_spotted(room_rnum room,uuid_t player) {
 		m_debug("##################################################################################" <<
 		        "[shoplifter] enemy spotted:" << room << "\n" <<
 		        "##################################################################################");
-		//this->spray(player_ptr->get_watching());
-		this->last_seen[player] = CURRENT_TICK();
+		auto target = ptr_by_uuid(player);
+		if(target) {
+			this->last_seen[player] = CURRENT_TICK();
+			this->attack(target);
+		}
 	}
+
 	void shoplifter::set_variation(const std::string& v) {
 		for(const auto& type : EXPLODE(v,' ')) {
 			std::cerr << green_str("shoplifter::variation:") << type << "\n";
@@ -99,25 +60,7 @@ namespace mods::mobs {
 		return usages();
 	}
 	str_map_t shoplifter::usages() {
-		str_map_t m;
-		m = base_usages();
-		std::size_t rem_size = 0, attackers = 0, hostiles = 0;
-		rem_size = std::distance(m_remembered_items.cbegin(),m_remembered_items.cend());
-		attackers = std::distance(m_attackers.cbegin(),m_attackers.cend());
-		hostiles = std::distance(m_hostiles.cbegin(),m_hostiles.cend());
-		if(rem_size) {
-			m["remembered_items"] = std::to_string(rem_size);
-		}
-		if(attackers) {
-			m["attackers"] = std::to_string(attackers);
-		}
-		if(hostiles) {
-			m["hostiles"] = std::to_string(hostiles);
-		}
-		if(m_scanned_items.size()) {
-			m["scanned_items"] = std::to_string(m_scanned_items.size());
-		}
-		return m;
+		return base_usages();
 	}
 	void shoplifter::set_behavior_tree_directly(const shoplifter::btree_t& t) {
 		m_debug("setting tree id directly to: " << t);
@@ -131,24 +74,12 @@ namespace mods::mobs {
 	}
 	void shoplifter::btree_none() {
 		set_behaviour_tree_directly(shoplifter::btree_t::SHOPL_NONE);
-	}
-	void shoplifter::btree_roam() {
-		set_behavior_tree_directly(shoplifter::btree_t::SHOPL_ROAM);
-
+		this->btree_hostile();
 	}
 	void shoplifter::btree_hostile() {
 		set_behavior_tree_directly(shoplifter::btree_t::SHOPL_HOSTILE);
-
+		this->attack_anyone_near_room();
 	}
-	/*
-	void shoplifter::bootstrap_equipment() {
-		m_weapon = create_object(ITEM_RIFLE,"defiler-scarh.yml");
-		player_ptr->equip(m_weapon,WEAR_PRIMARY);
-	}
-	*/
-	/**
-	 * @brief damage_events registered here
-	 */
 	void shoplifter::setup_damage_callbacks() {
 		using de = damage_event_t;
 		static const std::vector<de> pacify_events = {
@@ -162,7 +93,7 @@ namespace mods::mobs {
 				return;
 			}
 			m_debug("pacify events");
-			btree_roam();
+			btree_hostile();
 		});
 
 		static const std::vector<de> enrage_if = {
@@ -174,9 +105,9 @@ namespace mods::mobs {
 		};
 		player_ptr->register_damage_event_callback(enrage_if,[&](const feedback_t& feedback,const uuid_t& player) {
 			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
 				return;
 			}
+			PROGRESS("Okay, enrage_if processing...");
 			auto attacker = ptr_by_uuid(feedback.attacker);
 			auto weapon = player_ptr->primary();
 
@@ -184,136 +115,38 @@ namespace mods::mobs {
 				if(mods::calc_visibility::roll_victim_spots_attacker(player_ptr,attacker,feedback)) {
 					m_debug("shoplifter (as victim) spots attacker!");
 					auto decision = feedback.from_direction;
-					move_to(decision);
-					set_heading(decision);
-				} else {
-					m_debug("shoplifter (as victim) ***DOES NOT*** spot attacker!");
-				}
-			}
-			if(player_ptr->room() == attacker->room()) {
-				mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,attacker);
-			}
-		});
-
-		static const std::vector<de> desperation_move = {
-			de::YOU_ARE_INJURED_EVENT,
-			de::YOU_MISSED_YOUR_TARGET_EVENT,
-		};
-
-		static const std::vector<de> taunt_if = {
-			de::YOU_INFLICTED_INCENDIARY_DAMAGE,
-			de::YOU_INFLICTED_RADIOACTIVE_DAMAGE,
-			de::YOU_INFLICTED_ANTI_MATTER_DAMAGE,
-			de::YOU_INFLICTED_CORROSIVE_DAMAGE,
-			de::YOU_INFLICTED_EMP_DAMAGE,
-			de::YOU_INFLICTED_EXPLOSIVE_DAMAGE,
-			de::YOU_INFLICTED_SHRAPNEL_DAMAGE,
-			de::YOU_INFLICTED_CRYOGENIC_DAMAGE,
-			de::YOU_INFLICTED_SHOCK_DAMAGE,
-			de::YOU_DEALT_HEADSHOT_WITH_RIFLE_ATTACK,
-			de::YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK,
-			de::YOU_DEALT_CRITICAL_RIFLE_ATTACK,
-			de::YOU_INFLICTED_MELEE_ATTACK,
-			de::YOU_INFLICTED_BLADED_MELEE_ATTACK,
-			de::YOU_INFLICTED_BLUNT_MELEE_ATTACK,
-			de::YOU_REFLECTED_MUNITIONS_EVENT,
-			de::YOU_INJURED_SOMEONE_EVENT,
-			de::YOU_INFLICTED_AR_SHRAPNEL,
-			de::YOU_INFLICTED_INCENDIARY_AMMO,
-			de::YOU_DISORIENTED_SOMEONE_EVENT,
-		};
-
-		static const std::vector<de> whine_if = {
-			de::YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK,
-			de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK,
-			de::HIT_BY_CRITICAL_SPRAY_ATTACK,
-			de::HIT_BY_CRITICAL_RIFLE_ATTACK,
-			de::YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT,
-			de::YOU_GOT_HIT_BY_AR_SHRAPNEL,
-			de::YOU_GOT_HIT_BY_INCENDIARY_AMMO,
-			de::YOU_ARE_DISORIENTED_EVENT,
-			de::HIT_BY_INCENDIARY_DAMAGE,
-			de::HIT_BY_RADIOACTIVE_DAMAGE,
-			de::HIT_BY_ANTI_MATTER_DAMAGE,
-			de::HIT_BY_CORROSIVE_DAMAGE,
-			de::HIT_BY_EMP_DAMAGE,
-			de::HIT_BY_EXPLOSIVE_DAMAGE,
-			de::HIT_BY_SHRAPNEL_DAMAGE,
-			de::HIT_BY_CRYOGENIC_DAMAGE,
-			de::HIT_BY_SHOCK_DAMAGE,
-		};
-
-		static const std::vector<de> upkeep_if = {
-			de::OUT_OF_AMMO_EVENT,
-			de::NO_PRIMARY_WIELDED_EVENT,
-			de::COOLDOWN_IN_EFFECT_EVENT,
-			de::COULDNT_FIND_TARGET_EVENT,
-		};
-		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
-			switch(feedback.damage_event) {
-				case de::OUT_OF_AMMO_EVENT:
-					m_debug("DAMN! OUT OF AMMO!");
-					refill_ammo();
-					break;
-				case de::NO_PRIMARY_WIELDED_EVENT:
-					m_debug("No primary wielded... wtf? (" << player_ptr->name().c_str() << ")");
-					m_weapon = player_ptr->primary();
-					if(!m_weapon) {
-						player_ptr->equip(create_object(ITEM_RIFLE,"defiler-scarh.yml"),WEAR_PRIMARY);
-						/** TODO: FIXME URGENT: NEED WHATEVER MOB EQUIPMENT I HAVE */
-					}
-					break;
-				case de::COOLDOWN_IN_EFFECT_EVENT:
-					m_debug("cooldown in effect for primary");
-					break;
-				case de::COULDNT_FIND_TARGET_EVENT:
-					m_debug("Can't find target");
-					break;
-				default:
-					m_debug("Weird status. unknown");
-					break;
-			}
-		});
-
-		player_ptr->register_damage_event_callback({de::YOURE_IN_PEACEFUL_ROOM},[&](const feedback_t& feedback,const uuid_t& player) {
-			if(!ptr_by_uuid(player)) {
-				std::cerr << type().data() << ":" << red_str("USE AFTER FREE") << "\n";
-				return;
-			}
-			if(player_ptr->room() >= world.size()) {
-				return;
-			}
-			auto& room = world[player_ptr->room()];
-			int decision = shoplifter_btree::weighted_direction_decider(player_ptr,nullptr);
-			if(decision == -1) {
-				for(auto dir : room.directions()) {
-					if(room.dir_option[dir] && mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false) {
-						decision = dir;
-						break;
+					auto distance = distance_to(attacker);
+					if(distance.has_value()) {
+						if(distance.value() == BEST_DISTANCE) {
+							m_debug("DIE FUCKER!");
+							this->attack(feedback,attacker);
+							return;
+						}
+						move_to(decision);
+						set_heading(decision);
+					} else {
+						m_debug("shoplifter (as victim) ***DOES NOT*** spot attacker!");
 					}
 				}
+				if(player_ptr->room() == attacker->room()) {
+					mods::weapons::damage_types::melee_damage_with_feedback(player_ptr,weapon,attacker);
+				}
 			}
-			this->cd()->mob_specials.previous_room = player_ptr->room();
-			move_to(decision);
-			this->set_heading(decision);
 		});
+
 	}
-	bool shoplifter::is_rival(player_ptr_t& player) {
-		return false;
-	}
-	void shoplifter::door_entry_event(player_ptr_t& player) {
-		if(player->is_npc()) {
-			if(is_rival(player)) {
-				btree_roam();
-				//TODO: attack_with_melee(player);
-				//player->sendln(CAT("I am:",uuid," and I'm Watching you"));
-			}
-		}
-	}
+	//bool shoplifter::is_rival(player_ptr_t& player) {
+	//	return false;
+	//}
+	//void shoplifter::door_entry_event(player_ptr_t& player) {
+	//	if(player->is_npc()) {
+	//		if(is_rival(player)) {
+	//			btree_roam();
+	//			//TODO: attack_with_melee(player);
+	//			//player->sendln(CAT("I am:",uuid," and I'm Watching you"));
+	//		}
+	//	}
+	//}
 	void shoplifter::init() {
 		smart_mob::init();
 		m_should_do_max[SHOULD_DO_ROAM] = LOWLY_SECURITY_ROAM_TICK();
@@ -357,7 +190,7 @@ namespace mods::mobs {
 		this->set_variation(variation.data());
 		bootstrap_equipment();
 		m_weapon = player()->primary();
-		m_optimal_range = optimal_range();
+		m_optimal_range = BEST_DISTANCE;
 	}
 	void shoplifter::attacked(const feedback_t& feedback) {
 		auto p = ptr_by_uuid(feedback.attacker);
@@ -370,16 +203,11 @@ namespace mods::mobs {
 	player_ptr_t shoplifter::get_next_attacking_priority() {
 		return m_attackers.front();
 	}
-	int shoplifter::best_distance() {
-		m_optimal_range = optimal_range();
-		m_debug("optimal range return: '" << (int)m_optimal_range << "'");
-		if(m_optimal_range < 0) {
-			m_debug("best distance for me (" << player_ptr->name().c_str() << ") is:" << BEST_DISTANCE);
-			return BEST_DISTANCE;
-		}
-		m_debug("best distance for me (" << player_ptr->name().c_str() << ") is:" << m_optimal_range);
-		return m_optimal_range;
+
+	int shoplifter::optimal_range() const {
+		return BEST_DISTANCE;
 	}
+
 	void shoplifter::extra_attack() {
 		m_debug("extra attack roll success");
 		auto attacker = player()->fighting();
@@ -400,7 +228,7 @@ namespace mods::mobs {
 		for(const auto& attacker : m_attackers) {
 			auto results = mods::scan::los_find(player_ptr,attacker);
 			if(results.found == false) {
-				if(results.distance == best_distance()) {
+				if(results.distance == this->optimal_range()) {
 					auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(player_ptr,primary(),attacker,results.distance,results.direction);
 					return;
 				}
@@ -416,10 +244,6 @@ namespace mods::mobs {
 		}
 	}
 
-	void shoplifter::attack(player_ptr_t& player) {
-		m_last_attacker = player;
-		melee_attack_within_range();
-	}
 	void shoplifter::move_closer_to_target() {
 		uint8_t loops = 1;
 		if(mods::rand::chance(CAR_THIEF_EXTRA_LOOP_CHANCE())) {
@@ -478,7 +302,7 @@ namespace mods::mobs {
 		return s;
 	}
 	uint8_t shoplifter::scan_depth() const {
-		return CHAOTIC_METH_ADDICT_SCAN_DEPTH();
+		return SCAN_DEPTH;
 	}
 	player_ptr_t shoplifter::spawn_near_someone() {
 		player_ptr_t who = nullptr;
@@ -495,6 +319,10 @@ namespace mods::mobs {
 		return who;
 	}
 	bool shoplifter::attack_anyone_near_room() {
+		if(!shoplifter_can_move(this->room())) {
+			COMPLAIN("I CANNOT MOVE! Room has zero exits!");
+			return false;
+		}
 		struct res {
 			direction_t direction;
 			char_data* player;
@@ -502,24 +330,26 @@ namespace mods::mobs {
 			res(direction_t d, char_data* p) : direction(d), player(p) {}
 		};
 		std::vector<res> finds;
-		for(const auto& direction : world[room()].directions()) {
+		const auto& directions = world[room()].directions();
+		for(const auto& direction : directions) {
 			for(const auto& scan : this->scan_attackable(direction)) {
-				if(scan.distance == best_distance() && !IS_NPC(scan.ch)) {
+				if(scan.distance == this->optimal_range() && !IS_NPC(scan.ch)) {
 					m_debug("best distance found: " << ptr(scan.ch)->name());
 					finds.emplace_back(res(direction,scan.ch));
 				}
 			}
 		}
 		if(finds.size() == 0) {
+			move_to(rand_item(world[room()].directions()));
 			return false;
 		}
 		std::size_t index = rand_number(0,finds.size()-1);
 		this->set_hunting({finds[index].player->uuid});
 		auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
 		                    player_ptr,
-		                    primary(),
+		                    this->primary(),
 		                    ptr(finds[index].player),
-		                    best_distance(),
+		                    this->optimal_range(),
 		                    finds[index].direction
 		                );
 		return feedback.hits || feedback.damage;
@@ -529,6 +359,50 @@ namespace mods::mobs {
 		m_hostiles.clear();
 		m_attackers.clear();
 		m_remembered_items.clear();
+	}
+	void shoplifter::attack(player_ptr_t attacker) {
+		struct res {
+			direction_t direction;
+			char_data* player;
+			res() = delete;
+			res(direction_t d, char_data* p) : direction(d), player(p) {}
+		};
+		std::vector<res> finds;
+		for(const auto& direction : world[room()].directions()) {
+			for(const auto& scan : this->scan_attackable(direction)) {
+				if(scan.distance == BEST_DISTANCE && scan.ch->uuid == attacker->uuid()) {
+					m_debug("best distance found: " << ptr(scan.ch)->name());
+					auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
+					                    player_ptr,
+					                    this->primary(),
+					                    ptr(scan.ch),
+					                    scan.distance,
+					                    direction
+					                );
+					return;
+				}
+			}
+		}
+	}
+	void shoplifter::attack(const feedback_t& feedback,player_ptr_t attacker) {
+		auto result = mods::weapons::damage_types::rifle_attack_with_feedback(
+		                  player_ptr,
+		                  this->primary(),
+		                  attacker,
+		                  this->optimal_range(),
+		                  feedback.from_direction
+		              );
+		if(result.hits) {
+			m_debug("Apparently hit for " << result.hits);
+		}
+	}
+	void shoplifter::complain(std::string_view msg) {
+		std::cerr << "------------------------------------------------------\n";
+		std::cerr << "| SHOPLIFTER " << this->uuid << " complains: '" << msg.data() << "'\n";
+	}
+	void shoplifter::progress(std::string_view msg) {
+		std::cerr << "------------------------------------------------------\n";
+		std::cerr << "| SHOPLIFTER " << this->uuid << " progresses: '" << msg.data() << "'\n";
 	}
 };
 #undef m_debug

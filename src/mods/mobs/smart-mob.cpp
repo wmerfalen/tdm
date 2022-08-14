@@ -3,6 +3,7 @@
 #include "helpers.hpp"
 #include "../mob-equipment.hpp"
 #include "../combat-composer/snipe-target.hpp"
+#include "../scan.hpp"
 
 //#define  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
@@ -409,6 +410,13 @@ namespace mods::mobs {
 	}
 	direction_t smart_mob::determine_chase_direction() {
 		return m_last_attack_direction;
+	}
+	std::optional<uint8_t> smart_mob::distance_to(player_ptr_t hunted) {
+		auto s = mods::scan::distance_to(player_ptr,hunted);
+		if(std::get<0>(s)) {
+			return std::get<1>(s);
+		}
+		return std::nullopt;
 	}
 };
 #if 0

@@ -76,6 +76,7 @@ namespace mods {
 		std::tuple<bool,distance_t> room_distance(room_rnum& source,room_rnum& dest);
 		void los_list_by_room(room_rnum& in_room,room_list_t& room_list,unsigned depth);
 		std::vector<uuid_t> drone_scan_room(room_rnum);
+		std::tuple<bool,distance_t> distance_to(chptr player_hunter,chptr player_hunted);
 	};
 };
 #endif

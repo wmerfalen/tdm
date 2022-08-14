@@ -143,12 +143,13 @@ namespace mods::mobs {
 			void refill_ammo() {
 				player_ptr->primary()->rifle_instance->ammo = 255;
 			}
-			int optimal_range() const;
+			virtual int optimal_range() const;
 
 			void save_attack_direction(const direction_t& direction);
 			virtual direction_t determine_chase_direction();
 			void snipe_target(player_ptr_t& victim, const direction_t& direction, uint8_t distance);
 			void snipe_target(const scanned_t& target);
+			std::optional<uint8_t> distance_to(player_ptr_t hunted);
 
 		protected:
 			direction_t m_last_attack_direction;
