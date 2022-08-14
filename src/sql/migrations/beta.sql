@@ -5546,9 +5546,6 @@ INSERT INTO "public"."mob_equipment" VALUES (1, 'triton-scientist', 7, NULL, NUL
 INSERT INTO "public"."mob_equipment" VALUES (2, 'triton-volunteer-patient', 8, NULL, NULL, NULL, NULL, NULL, 'armor/hospital-gown.yml', NULL, NULL, 'armor/hospital-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'melee/improvised-shank.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.247385', '2021-09-04 04:12:22.247385');
 INSERT INTO "public"."mob_equipment" VALUES (3, 'triton-field-surgeon', 9, NULL, NULL, NULL, NULL, NULL, 'armor/plain-white-lab-coat.yml', NULL, 'armor/pale-brown-pants.yml', 'armor/static-free-shoes.yml', 'armor/rubber-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'melee/operating-scalpel.yml', NULL, NULL, NULL, NULL, NULL, 'armor/operating-goggles.yml', NULL, NULL, NULL, '2021-09-04 04:12:22.252503', '2021-09-04 04:12:22.252503');
 INSERT INTO "public"."mob_equipment" VALUES (4, 'doctor-land', 6, NULL, NULL, NULL, NULL, NULL, 'armor/vulture-pk3-ballistic-vest.yml', NULL, 'armor/heavy-armament-tactical-pants.yml', 'armor/vulture-pk3-ballistic-boots.yml', 'armor/forge-xm3-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/ump45-vulture-modded.yml', 'gadget/ballistics-lab-blue-key-fob.yml', 'rifle/blackhawk-50cal-pistol.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.26565', '2021-09-04 04:12:22.26565');
-INSERT INTO "public"."mob_equipment" VALUES (5, 'waypoint-ave-car-thief', 2, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', 'armor/baklava.yml', 'armor/dark-smithies-pants.yml', 'armor/red-brug-sneakers.yml', 'melee/brass-knuckles.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'melee/crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.295644', '2021-09-04 04:12:22.295644');
-INSERT INTO "public"."mob_equipment" VALUES (6, 'rogue-mp-shotgunner', 3, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.299795', '2021-09-04 04:12:22.299795');
-INSERT INTO "public"."mob_equipment" VALUES (7, 'mp-enforcer', 4, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/hk45.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.320894', '2021-09-04 04:12:22.320894');
 INSERT INTO "public"."mob_equipment" VALUES (8, 'mp-shotgunner', 5, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.326344', '2021-09-04 04:12:22.326344');
 INSERT INTO "public"."mob_equipment" VALUES (9, 'ops-shield-shotgunner', 15, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.331595', '2021-09-04 04:12:22.331595');
 INSERT INTO "public"."mob_equipment" VALUES (10, 'car-thief', 10, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', 'armor/baklava.yml', 'armor/blue-jeans.yml', 'armor/plat-basketball-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'melee/crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.383806', '2021-09-04 04:12:22.383806');
@@ -5580,6 +5577,8 @@ INSERT INTO "public"."mob_equipment" VALUES (158, 'orthos-sentinel-spawn', 669, 
 INSERT INTO "public"."mob_equipment" VALUES (159, 'infected-drone-lvl-2', 114, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/czp10.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-25 15:53:44.573311', '2022-05-25 15:53:44.573311');
 INSERT INTO "public"."mob_equipment" VALUES (160, 'hustler-lvl-3', 115, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/czp10.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-25 15:53:44.622028', '2022-05-25 15:53:44.622028');
 INSERT INTO "public"."mob_equipment" VALUES (295, 'crackhead', 702, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.388911', '2022-06-10 23:45:11.388911');
+INSERT INTO "public"."mob_equipment" VALUES (7, 'mp-enforcer', 4, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tekdc9.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.320894', '2021-09-04 04:12:22.320894');
+INSERT INTO "public"."mob_equipment" VALUES (6, 'rogue-mp-shotgunner', 3, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.299795', '2021-09-04 04:12:22.299795');
 INSERT INTO "public"."mob_equipment" VALUES (162, 'hydro-proc-extremists-dynamic-level', 670, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/pale-brown-pants.yml', 'armor/plain-black-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tar21.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-28 19:47:34.979999', '2022-05-28 19:47:34.979999');
 INSERT INTO "public"."mob_equipment" VALUES (296, 'dynamic-defiler-level-10', 703, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.405677', '2022-06-10 23:45:11.405677');
 INSERT INTO "public"."mob_equipment" VALUES (297, 'hydro-proc-extremists-dynamic-level', 704, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.423145', '2022-06-10 23:45:11.423145');
@@ -5599,6 +5598,7 @@ INSERT INTO "public"."mob_equipment" VALUES (308, 'tengu-lancer', 713, NULL, NUL
 INSERT INTO "public"."mob_equipment" VALUES (309, 'tengu-eviscerator', 716, NULL, NULL, NULL, NULL, NULL, 'armor/falcon-ballistic-vest.yml', NULL, 'armor/tengu-shin-guards.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-vulkan-ax13.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.202848', '2022-07-17 05:30:19.202848');
 INSERT INTO "public"."mob_equipment" VALUES (322, 'mp-enforcer', 500, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/hk45.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-11 16:01:49.735304', '2022-08-11 16:01:49.735304');
 INSERT INTO "public"."mob_equipment" VALUES (323, 'mp-shotgunner', 501, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-11 16:01:49.843009', '2022-08-11 16:01:49.843009');
+INSERT INTO "public"."mob_equipment" VALUES (5, 'waypoint-ave-car-thief', 2, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', 'armor/baklava.yml', 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tekdc9.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.295644', '2021-09-04 04:12:22.295644');
 
 
 --
@@ -5636,6 +5636,9 @@ INSERT INTO "public"."mob_equipment_map" VALUES (72, 716, 716, '2022-07-17 05:30
 INSERT INTO "public"."mob_equipment_map" VALUES (24, 500, 500, '2021-09-04 04:23:27.068704', '2021-09-04 04:23:27.068704');
 INSERT INTO "public"."mob_equipment_map" VALUES (25, 501, 501, '2021-09-04 04:23:27.074152', '2021-09-04 04:23:27.074152');
 INSERT INTO "public"."mob_equipment_map" VALUES (26, 502, 502, '2021-09-04 04:23:27.079717', '2021-09-04 04:23:27.079717');
+INSERT INTO "public"."mob_equipment_map" VALUES (73, 2, 2, '2022-08-14 09:05:43.641825', '2022-08-14 09:05:43.641825');
+INSERT INTO "public"."mob_equipment_map" VALUES (74, 4, 4, '2022-08-14 09:05:43.655726', '2022-08-14 09:05:43.655726');
+INSERT INTO "public"."mob_equipment_map" VALUES (75, 3, 3, '2022-08-14 09:05:43.675711', '2022-08-14 09:05:43.675711');
 
 
 --
@@ -5806,6 +5809,9 @@ INSERT INTO "public"."mobile" VALUES (117, 715, 'Tengu Trooper', 'A Tengu Troope
 INSERT INTO "public"."mobile" VALUES (118, 714, 'Tengu Lancer', 'A Tengu Lancer', 'The large shoulder armor and upper body shielding give the Lancer an appearance not unlike the heavily padded athletes of most high contact sports. The legs of the Lancer are not armored except for some black shin guards and stealth-optimized footwear. The lancer is 6 feet tall and extremely agile. ', 'The large shoulder armor and upper body shielding give the Lancer an appearance not unlike the heavily padded athletes of most high contact sports. The legs of the Lancer are not armored except for some black shin guards and stealth-optimized footwear. The lancer is 6 feet tall and extremely agile. ', '8', '0', 11, 0, 29, 0, 34, 0, 0, 0, 0, 28, 0, 0, 4820, 930, 160, 42080, 8050, 0, 0, 1, 4820, 930, 160, 36, 20, 12, 10, 5, 0, 21, NULL, 'Kojima', 8, 9, 33, 32, 0, 0, 31, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (119, 713, 'Tengu Scout', 'A Tengu Scout', 'Kojima Corp is a well-funded military force with very high profile clients supplying it''s income. The most important part of maintaining a strategic edge against outside threats is to have a comprehensive plan for deep intelligence gathering. The Tengu Scout is part of the fast moving ellusive recon team. ', 'Kojima Corp is a well-funded military force with very high profile clients supplying it''s income. The most important part of maintaining a strategic edge against outside threats is to have a comprehensive plan for deep intelligence gathering. The Tengu Scout is part of the fast moving ellusive recon team. ', '8', '0', 8, 0, 49, 0, 54, 0, 0, 0, 0, 25, 0, 0, 1720, 230, 560, 4080, 8050, 0, 0, 1, 1720, 230, 560, 26, 13, 12, 5, 5, 0, 21, NULL, 'Kojima', 28, 8, 20, 15, 0, 0, 20, 30, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (120, 716, 'Tengu Eviscerator', 'A Tengu Eviscerator', 'Few of the militaristic units deployed by Kojima Corp actually fit the classical idea of a ''soldier''. The Tengu Eviscerator hardly qualifies as a living breathing human. The technology fused into the very biology of the Eviscerator borders of extreme cybermancy and archaic magic. As such, the Eviscerator is usually only used where a high amount of security is needed. ', 'Few of the militaristic units deployed by Kojima Corp actually fit the classical idea of a ''soldier''. The Tengu Eviscerator hardly qualifies as a living breathing human. The technology fused into the very biology of the Eviscerator borders of extreme cybermancy and archaic magic. As such, the Eviscerator is usually only used where a high amount of security is needed. ', '8', '0', 11, 9, 29, 0, 34, 0, 0, 0, 0, 25, 0, 0, 5820, 930, 360, 42080, 9050, 0, 0, 1, 5820, 930, 360, 20, 30, 32, 10, 5, 0, 21, NULL, 'Kojima', 0, 29, 23, 22, 30, 0, 21, 23, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (121, 2, 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer sizes you up. He looks confident he could take you.', '4616', '0', 8, 8, 0, 0, 8, 0, 25, 0, 0, 10, 0, 0, 450, 30, 10, 2950, 85, 0, 0, 1, 450, 30, 10, 10, 10, 4, 5, 5, 0, 0, NULL, NULL, 0, 5, 2, 2, 0, 0, 2, 1, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (122, 4, 'A thug', 'A thug', 'A thug', 'A thug sizes you up. He looks confident he could take you.', '4616', '0', 10, 10, 0, 0, 10, 0, 25, 0, 0, 11, 0, 0, 550, 30, 15, 2950, 85, 0, 0, 1, 550, 30, 11, 15, 10, 8, 5, 5, 0, 0, NULL, NULL, 0, 10, 10, 10, 0, 0, 10, 5, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (123, 3, 'A produce vendor', 'A produce vendor', 'A produce vendor', 'A produce vendor attempts to sell you food', '4616', '0', 8, 8, 0, 0, 8, 0, 25, 0, 0, 10, 0, 0, 150, 15, 10, 110, 15, 0, 0, 1, 150, 15, 10, 10, 10, 4, 5, 5, 0, 0, NULL, NULL, 0, 5, 2, 2, 0, 0, 2, 1, 0, NULL, '0');
 
 
 --
@@ -6607,8 +6613,6 @@ INSERT INTO "public"."room" VALUES (204, 333, 1, 0, 'Abandoned Two way street - 
 INSERT INTO "public"."room" VALUES (205, 334, 1, 0, 'Abandoned Two way street - Abott Market', 'A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (206, 335, 1, 0, 'Abandoned Two way street - Abott Market', 'A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (208, 337, 1, 0, 'Abandoned Two way street - Abott Market', 'A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (209, 338, 1, 0, '{blu}C.O.F.O.B [OUTER]:{/blu} - Descending the stairs', 'fill me
 ', NULL, NULL, 1, 0, NULL, NULL);
@@ -8279,6 +8283,8 @@ INSERT INTO "public"."room" VALUES (1391, 1135, 1, 0, '{blu}Kojima{/blu} - Insid
 ', NULL, NULL, 1, 0, NULL, ',GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1392, 1136, 1, 0, '{blu}Kojima{/blu} - Mysterious Payload', 'The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (1418, 1164, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
+', NULL, NULL, 1, 0, 'north-abbott-outdoor-market-walkway-south', NULL);
 INSERT INTO "public"."room" VALUES (1393, 1137, 1, 0, '{blu}Kojima{/blu} - Inside Kojima Corp', 'The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you''re being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.
 ', NULL, NULL, 1, 0, NULL, ',GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1394, 1138, 1, 0, '{blu}Kojima{/blu} - Inside Kojima Corp', 'The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you''re being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.
@@ -8327,6 +8333,80 @@ INSERT INTO "public"."room" VALUES (1415, 1159, 1, 0, '{blu}Kojima{/blu} - Insid
 ', NULL, NULL, 1, 0, NULL, ',GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1416, 1160, 1, 0, '{blu}Kojima{/blu} - An ammunition container', 'The room is empty except for a tall ammunition container that happens to be unlocked. The size of the container is massive and could potentiall hold very powerful items,
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (208, 337, 1, 0, 'Abandoned Two way street - Abott Market', 'A trio of burning cars have become part of the debris scattered along the street. Way off to the north, you spot a working overpass. Deep long scars of blackened concrete tell a tale of destruction. To the west lies a small set of apartments once owned by the only property company to operate in this desolate portion of town. A giant construction crane is resting in the middle of the street to the north.
+', NULL, NULL, 1, 0, 'north-abbott-outdoor-market-start', NULL);
+INSERT INTO "public"."room" VALUES (1417, 1163, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1437, 1183, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1419, 1165, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1420, 1166, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1421, 1167, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1422, 1168, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
+', NULL, NULL, 1, 0, 'north-abbott-outdoor-market-walkway-north', NULL);
+INSERT INTO "public"."room" VALUES (1423, 1169, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1424, 1170, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1425, 1171, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1426, 1172, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1427, 1173, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1428, 1174, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1429, 1175, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1430, 1176, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1431, 1177, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1432, 1178, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1433, 1179, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1434, 1180, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1435, 1181, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1436, 1182, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1438, 1184, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1439, 1185, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1440, 1186, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1441, 1187, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1442, 1188, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1443, 1189, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1444, 1190, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1445, 1191, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1446, 1192, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1447, 1193, 1, 0, '{blu}North Abbott{/blu} - Produce Vendor', 'Fruits and vegetables are probably the only thing you can buy at the Outdoor Market that hasn''t been tainted by crime. A good helping of flies and insects roam the area. 
+', NULL, NULL, 1, 0, 'north-abbott-outdoor-produce-vendor-1', NULL);
+INSERT INTO "public"."room" VALUES (1448, 1194, 1, 0, '{blu}North Abbott{/blu} - Produce Vendor', 'Fruits and vegetables are probably the only thing you can buy at the Outdoor Market that hasn''t been tainted by crime. A good helping of flies and insects roam the area. 
+', NULL, NULL, 1, 0, 'north-abbott-outdoor-produce-vendor-2', NULL);
+INSERT INTO "public"."room" VALUES (1449, 1195, 1, 0, '{blu}North Abbott{/blu} - Produce Vendor', 'Fruits and vegetables are probably the only thing you can buy at the Outdoor Market that hasn''t been tainted by crime. A good helping of flies and insects roam the area. 
+', NULL, NULL, 1, 0, 'north-abbott-outdoor-produce-vendor-3', NULL);
+INSERT INTO "public"."room" VALUES (1450, 1196, 1, 0, '{blu}North Abbott{/blu} - Produce Vendor', 'Fruits and vegetables are probably the only thing you can buy at the Outdoor Market that hasn''t been tainted by crime. A good helping of flies and insects roam the area. 
+', NULL, NULL, 1, 0, 'north-abbott-outdoor-produce-vendor-4', NULL);
+INSERT INTO "public"."room" VALUES (1451, 1197, 1, 0, '{blu}North Abbott{/blu} - Produce Vendor', 'Fruits and vegetables are probably the only thing you can buy at the Outdoor Market that hasn''t been tainted by crime. A good helping of flies and insects roam the area. 
+', NULL, NULL, 1, 0, 'north-abbott-outdoor-produce-vendor-5', NULL);
+INSERT INTO "public"."room" VALUES (1452, 1198, 1, 0, '{blu}North Abbott{/blu} - Produce Vendor', 'Fruits and vegetables are probably the only thing you can buy at the Outdoor Market that hasn''t been tainted by crime. A good helping of flies and insects roam the area. 
+', NULL, NULL, 1, 0, 'north-abbott-outdoor-produce-vendor-6', NULL);
+INSERT INTO "public"."room" VALUES (1453, 1199, 1, 0, '{blu}North Abbott{/blu} - Nu Toxin Dealer', 'Nu-Toxin is a controversial substance that is always skirting the line between legality and banned substance. The effects of the drink are nothing short of miraculous if you look at it from a standard scientific point of view. Many athletes and partying teenagers have lost their lives to the controversial substance. Ironically enough, the substance can be used as a Performance Enhancing Drug. Currently, the molecular structure of Nu-Toxin makes it legal, but who knows when it will be deemed illegal and it''s creators release a new form with a slightly altered genetic makeup. Stock up!
+', NULL, NULL, 1, 0, 'north-abbott-outdoor-nu-toxin-dealer-1', NULL);
 
 
 --
@@ -12376,6 +12456,81 @@ INSERT INTO "public"."room_direction_data" VALUES (4615, 1158, 3, 'general_descr
 INSERT INTO "public"."room_direction_data" VALUES (4616, 1159, 1, 'general description', 'keyword', 1, 0, 1158);
 INSERT INTO "public"."room_direction_data" VALUES (4617, 1159, 3, 'general_description', 'keyword', 1, 0, 1160);
 INSERT INTO "public"."room_direction_data" VALUES (4618, 1160, 1, 'general description', 'keyword', 1, 0, 1159);
+INSERT INTO "public"."room_direction_data" VALUES (4619, 337, 0, 'general_description', 'keyword', 1, 0, 1163);
+INSERT INTO "public"."room_direction_data" VALUES (4620, 337, 2, 'general description', 'keyword', 1, 0, 336);
+INSERT INTO "public"."room_direction_data" VALUES (4621, 1163, 0, 'general_description', 'keyword', 1, 0, 1164);
+INSERT INTO "public"."room_direction_data" VALUES (4622, 1163, 2, 'general description', 'keyword', 1, 0, 337);
+INSERT INTO "public"."room_direction_data" VALUES (4623, 1164, 0, 'general_description', 'keyword', 1, 0, 1165);
+INSERT INTO "public"."room_direction_data" VALUES (4624, 1164, 2, 'general description', 'keyword', 1, 0, 1163);
+INSERT INTO "public"."room_direction_data" VALUES (4625, 1164, 3, 'general_description', 'keyword', 1, 0, 1173);
+INSERT INTO "public"."room_direction_data" VALUES (4626, 1165, 0, 'general_description', 'keyword', 1, 0, 1166);
+INSERT INTO "public"."room_direction_data" VALUES (4627, 1165, 2, 'general description', 'keyword', 1, 0, 1164);
+INSERT INTO "public"."room_direction_data" VALUES (4628, 1166, 0, 'general_description', 'keyword', 1, 0, 1167);
+INSERT INTO "public"."room_direction_data" VALUES (4629, 1166, 2, 'general description', 'keyword', 1, 0, 1165);
+INSERT INTO "public"."room_direction_data" VALUES (4630, 1167, 0, 'general_description', 'keyword', 1, 0, 1168);
+INSERT INTO "public"."room_direction_data" VALUES (4631, 1167, 2, 'general description', 'keyword', 1, 0, 1166);
+INSERT INTO "public"."room_direction_data" VALUES (4632, 1168, 0, 'general_description', 'keyword', 1, 0, 1169);
+INSERT INTO "public"."room_direction_data" VALUES (4633, 1168, 2, 'general description', 'keyword', 1, 0, 1167);
+INSERT INTO "public"."room_direction_data" VALUES (4634, 1168, 3, 'general_description', 'keyword', 1, 0, 1183);
+INSERT INTO "public"."room_direction_data" VALUES (4635, 1169, 0, 'general_description', 'keyword', 1, 0, 1170);
+INSERT INTO "public"."room_direction_data" VALUES (4636, 1169, 2, 'general description', 'keyword', 1, 0, 1168);
+INSERT INTO "public"."room_direction_data" VALUES (4637, 1170, 0, 'general_description', 'keyword', 1, 0, 1171);
+INSERT INTO "public"."room_direction_data" VALUES (4638, 1170, 2, 'general description', 'keyword', 1, 0, 1169);
+INSERT INTO "public"."room_direction_data" VALUES (4639, 1171, 0, 'general_description', 'keyword', 1, 0, 1172);
+INSERT INTO "public"."room_direction_data" VALUES (4640, 1171, 2, 'general description', 'keyword', 1, 0, 1170);
+INSERT INTO "public"."room_direction_data" VALUES (4641, 1172, 2, 'general description', 'keyword', 1, 0, 1171);
+INSERT INTO "public"."room_direction_data" VALUES (4642, 1173, 1, 'general description', 'keyword', 1, 0, 1164);
+INSERT INTO "public"."room_direction_data" VALUES (4643, 1173, 3, 'general_description', 'keyword', 1, 0, 1174);
+INSERT INTO "public"."room_direction_data" VALUES (4644, 1174, 1, 'general description', 'keyword', 1, 0, 1173);
+INSERT INTO "public"."room_direction_data" VALUES (4645, 1174, 3, 'general_description', 'keyword', 1, 0, 1175);
+INSERT INTO "public"."room_direction_data" VALUES (4646, 1175, 0, 'general_description', 'keyword', 1, 0, 1193);
+INSERT INTO "public"."room_direction_data" VALUES (4647, 1175, 1, 'general description', 'keyword', 1, 0, 1174);
+INSERT INTO "public"."room_direction_data" VALUES (4648, 1175, 3, 'general_description', 'keyword', 1, 0, 1176);
+INSERT INTO "public"."room_direction_data" VALUES (4649, 1176, 1, 'general description', 'keyword', 1, 0, 1175);
+INSERT INTO "public"."room_direction_data" VALUES (4650, 1176, 3, 'general_description', 'keyword', 1, 0, 1177);
+INSERT INTO "public"."room_direction_data" VALUES (4651, 1177, 1, 'general description', 'keyword', 1, 0, 1176);
+INSERT INTO "public"."room_direction_data" VALUES (4652, 1177, 3, 'general_description', 'keyword', 1, 0, 1178);
+INSERT INTO "public"."room_direction_data" VALUES (4653, 1178, 0, 'general_description', 'keyword', 1, 0, 1194);
+INSERT INTO "public"."room_direction_data" VALUES (4654, 1178, 1, 'general description', 'keyword', 1, 0, 1177);
+INSERT INTO "public"."room_direction_data" VALUES (4655, 1178, 3, 'general_description', 'keyword', 1, 0, 1179);
+INSERT INTO "public"."room_direction_data" VALUES (4656, 1179, 1, 'general description', 'keyword', 1, 0, 1178);
+INSERT INTO "public"."room_direction_data" VALUES (4657, 1179, 3, 'general_description', 'keyword', 1, 0, 1180);
+INSERT INTO "public"."room_direction_data" VALUES (4658, 1180, 1, 'general description', 'keyword', 1, 0, 1179);
+INSERT INTO "public"."room_direction_data" VALUES (4659, 1180, 3, 'general_description', 'keyword', 1, 0, 1181);
+INSERT INTO "public"."room_direction_data" VALUES (4660, 1181, 0, 'general_description', 'keyword', 1, 0, 1195);
+INSERT INTO "public"."room_direction_data" VALUES (4661, 1181, 1, 'general description', 'keyword', 1, 0, 1180);
+INSERT INTO "public"."room_direction_data" VALUES (4662, 1181, 3, 'general_description', 'keyword', 1, 0, 1182);
+INSERT INTO "public"."room_direction_data" VALUES (4663, 1182, 1, 'general description', 'keyword', 1, 0, 1181);
+INSERT INTO "public"."room_direction_data" VALUES (4664, 1183, 1, 'general description', 'keyword', 1, 0, 1168);
+INSERT INTO "public"."room_direction_data" VALUES (4665, 1183, 3, 'general_description', 'keyword', 1, 0, 1184);
+INSERT INTO "public"."room_direction_data" VALUES (4666, 1184, 1, 'general description', 'keyword', 1, 0, 1183);
+INSERT INTO "public"."room_direction_data" VALUES (4667, 1184, 2, 'general_description', 'keyword', 1, 0, 1196);
+INSERT INTO "public"."room_direction_data" VALUES (4668, 1184, 3, 'general_description', 'keyword', 1, 0, 1185);
+INSERT INTO "public"."room_direction_data" VALUES (4669, 1185, 1, 'general description', 'keyword', 1, 0, 1184);
+INSERT INTO "public"."room_direction_data" VALUES (4670, 1185, 3, 'general_description', 'keyword', 1, 0, 1186);
+INSERT INTO "public"."room_direction_data" VALUES (4671, 1186, 1, 'general description', 'keyword', 1, 0, 1185);
+INSERT INTO "public"."room_direction_data" VALUES (4672, 1186, 2, 'general_description', 'keyword', 1, 0, 1197);
+INSERT INTO "public"."room_direction_data" VALUES (4673, 1186, 3, 'general_description', 'keyword', 1, 0, 1187);
+INSERT INTO "public"."room_direction_data" VALUES (4674, 1187, 1, 'general description', 'keyword', 1, 0, 1186);
+INSERT INTO "public"."room_direction_data" VALUES (4675, 1187, 3, 'general_description', 'keyword', 1, 0, 1188);
+INSERT INTO "public"."room_direction_data" VALUES (4676, 1188, 1, 'general description', 'keyword', 1, 0, 1187);
+INSERT INTO "public"."room_direction_data" VALUES (4677, 1188, 2, 'general_description', 'keyword', 1, 0, 1198);
+INSERT INTO "public"."room_direction_data" VALUES (4678, 1188, 3, 'general_description', 'keyword', 1, 0, 1189);
+INSERT INTO "public"."room_direction_data" VALUES (4679, 1189, 1, 'general description', 'keyword', 1, 0, 1188);
+INSERT INTO "public"."room_direction_data" VALUES (4680, 1189, 3, 'general_description', 'keyword', 1, 0, 1190);
+INSERT INTO "public"."room_direction_data" VALUES (4681, 1190, 1, 'general description', 'keyword', 1, 0, 1189);
+INSERT INTO "public"."room_direction_data" VALUES (4682, 1190, 2, 'general_description', 'keyword', 1, 0, 1199);
+INSERT INTO "public"."room_direction_data" VALUES (4683, 1190, 3, 'general_description', 'keyword', 1, 0, 1191);
+INSERT INTO "public"."room_direction_data" VALUES (4684, 1191, 1, 'general description', 'keyword', 1, 0, 1190);
+INSERT INTO "public"."room_direction_data" VALUES (4685, 1191, 3, 'general_description', 'keyword', 1, 0, 1192);
+INSERT INTO "public"."room_direction_data" VALUES (4686, 1192, 1, 'general description', 'keyword', 1, 0, 1191);
+INSERT INTO "public"."room_direction_data" VALUES (4687, 1193, 2, 'general description', 'keyword', 1, 0, 1175);
+INSERT INTO "public"."room_direction_data" VALUES (4688, 1194, 2, 'general description', 'keyword', 1, 0, 1178);
+INSERT INTO "public"."room_direction_data" VALUES (4689, 1195, 2, 'general description', 'keyword', 1, 0, 1181);
+INSERT INTO "public"."room_direction_data" VALUES (4690, 1196, 0, 'general description', 'keyword', 1, 0, 1184);
+INSERT INTO "public"."room_direction_data" VALUES (4691, 1197, 0, 'general description', 'keyword', 1, 0, 1186);
+INSERT INTO "public"."room_direction_data" VALUES (4692, 1198, 0, 'general description', 'keyword', 1, 0, 1188);
+INSERT INTO "public"."room_direction_data" VALUES (4693, 1199, 0, 'general description', 'keyword', 1, 0, 1190);
 
 
 --
@@ -12995,6 +13150,19 @@ INSERT INTO "public"."zone_data" VALUES (1756, 1, 'M', '0', 502, 340, 2, NULL);
 INSERT INTO "public"."zone_data" VALUES (1757, 1, 'M', '0', 502, 199, 2, NULL);
 INSERT INTO "public"."zone_data" VALUES (1758, 1, 'M', '0', 502, 279, 2, NULL);
 INSERT INTO "public"."zone_data" VALUES (1759, 1, 'M', '0', 502, 139, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1760, 1, 'M', '0', 2, 1199, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1761, 1, 'M', '0', 4, 1193, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1762, 1, 'M', '0', 4, 1194, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1763, 1, 'M', '0', 4, 1195, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1764, 1, 'M', '0', 4, 1196, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1765, 1, 'M', '0', 4, 1197, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1766, 1, 'M', '0', 4, 1198, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1767, 1, 'M', '0', 3, 1193, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1768, 1, 'M', '0', 3, 1194, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1769, 1, 'M', '0', 3, 1195, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1770, 1, 'M', '0', 3, 1196, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1771, 1, 'M', '0', 3, 1197, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1772, 1, 'M', '0', 3, 1198, 1, NULL);
 
 
 --
@@ -13358,14 +13526,14 @@ SELECT pg_catalog.setval('"public"."mini_gunner_sentinel_id_seq"', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 324, true);
+SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 327, true);
 
 
 --
 -- Name: mob_equipment_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_equipment_map_id_seq"', 72, true);
+SELECT pg_catalog.setval('"public"."mob_equipment_map_id_seq"', 75, true);
 
 
 --
@@ -13386,7 +13554,7 @@ SELECT pg_catalog.setval('"public"."mob_zone_id_seq"', 1, false);
 -- Name: mobile_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mobile_mob_id_seq"', 120, true);
+SELECT pg_catalog.setval('"public"."mobile_mob_id_seq"', 123, true);
 
 
 --
@@ -13596,7 +13764,7 @@ SELECT pg_catalog.setval('"public"."rifle_placements_id_seq"', 1, false);
 -- Name: room_direction_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."room_direction_data_id_seq"', 4618, true);
+SELECT pg_catalog.setval('"public"."room_direction_data_id_seq"', 4693, true);
 
 
 --
@@ -13610,7 +13778,7 @@ SELECT pg_catalog.setval('"public"."room_extra_descriptions_id_seq"', 1, false);
 -- Name: room_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."room_id_seq"', 1416, true);
+SELECT pg_catalog.setval('"public"."room_id_seq"', 1453, true);
 
 
 --
@@ -13722,7 +13890,7 @@ SELECT pg_catalog.setval('"public"."world_configuration_start_rooms_id_seq"', 5,
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."zone_data_id_seq"', 1759, true);
+SELECT pg_catalog.setval('"public"."zone_data_id_seq"', 1772, true);
 
 
 --
