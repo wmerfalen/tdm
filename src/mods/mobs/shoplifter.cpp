@@ -27,8 +27,13 @@ namespace mods::mobs {
 		return s;
 	}
 
+#ifdef __MENTOC_SHOPLIFTER_VOCALIZE_DEBUG__
 #define COMPLAIN(A) this->complain(CAT(__FILE__,"|",__LINE__,"[",__FUNCTION__,"]: SHOPLIFTER COMPLAINT: ",A));
 #define PROGRESS(A) this->progress(CAT(__FILE__,"|",__LINE__,"[",__FUNCTION__,"]: SHOPLIFTER PROGRESS: ",A));
+#else
+#define COMPLAIN(A) /** */
+#define PROGRESS(A) /** */
+#endif
 
 	bool shoplifter_can_move(room_rnum room) {
 		return room < world.size() && world[room].directions().size() > 0;
@@ -272,6 +277,7 @@ namespace mods::mobs {
 		}
 	}
 
+#ifdef __MENTOC_SHOPLIFTER_VOCALIZE_DEBUG__
 	void shoplifter::complain(std::string_view msg) {
 		std::cerr << "------------------------------------------------------\n";
 		std::cerr << "| SHOPLIFTER " << this->uuid << " complains: '" << msg.data() << "'\n";
@@ -281,6 +287,7 @@ namespace mods::mobs {
 		std::cerr << "------------------------------------------------------\n";
 		std::cerr << "| SHOPLIFTER " << this->uuid << " progresses: '" << msg.data() << "'\n";
 	}
+#endif
 
 	str_map_t shoplifter::usages() {
 		return base_usages();

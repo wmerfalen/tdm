@@ -13,10 +13,12 @@ namespace mods::mobs {
 	using tick_t = uint64_t;
 	struct shoplifter : public smart_mob {
 
+#ifdef __MENTOC_SHOPLIFTER_VOCALIZE_DEBUG__
 			void complain(std::string_view);
 			void progress(std::string_view);
 			void progress_once(std::string_view);
 			void logic_error(std::string_view);
+#endif
 
 			enum btree_t : int16_t {
 				SHOPL_NONE = -1,

@@ -23,7 +23,7 @@
 #include "mods/mobs/goat.hpp"
 
 
-#define  __MENTOC_SHOW_SOCIALS_DEBUG__
+//#define  __MENTOC_SHOW_SOCIALS_DEBUG__
 #ifdef __MENTOC_SHOW_SOCIALS_DEBUG__
 #define m_debug(A) std::cerr << "[socials:LINE(" << __LINE__ << ")]: " << A << "\n";
 #else
