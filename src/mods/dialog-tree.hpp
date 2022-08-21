@@ -9,6 +9,10 @@
 namespace mods::dialog_tree {
 	using screen_id_t = uint16_t;
 	using id_type_t = uint32_t;
+
+	/** =============================================================== */
+	/** = STRUCT precondition_t                                         */
+	/** =============================================================== */
 	struct precondition_t {
 		enum type_t : uint8_t {
 			NONE = 0,
@@ -23,22 +27,13 @@ namespace mods::dialog_tree {
 			USE_ABILITY,
 			WALK_BY,
 		};
-		/**
-		 * Generic type and data
-		 */
 		precondition_t(type_t t, std::string_view d);
-
 		/**
 		 * Talk to an NPC
 		 */
 		precondition_t(std::string_view npc);
-
-		precondition_t() = default;
+		precondition_t()  = default;
 		~precondition_t() = default;
-
-		/**
-		 * Talk to an NPC
-		 */
 		void attack(std::string_view npc);
 		void defend(std::string_view npc);
 		void defeat(std::string_view npc);
@@ -50,29 +45,26 @@ namespace mods::dialog_tree {
 		void talk_to(std::string_view npc);
 		void use_ability(std::string_view ability,std::string_view npc);
 		void walk_by(std::string_view npc);
-
 		void assign(auto& s);
-
-		type_t type;
+		type_t            type;
 		std::vector<char> data;
 	};
 
-	using precondition_ptr = precondition_t*;
-	using state_logic_t = std::function<void(void*,void*)>;
-	using variable_data_t  = std::vector<char>;
-	enum operation_t : uint16_t {
-		OP_GOTO = 0,
-		OP_CLOSE,
-		OP_EFFECT,
-		OP_RETURN,
-		OP_AUTOPLAY,
-	};
+	/** =============================================================== */
+	/** = END struct precondition_t                                     */
+	/** =============================================================== */
 
+	using precondition_ptr = precondition_t*;
+	using state_logic_t    = std::function<void(void*,void*)>;
+	using variable_data_t  = std::vector<char>;
+
+	/** =============================================================== */
+	/** = STRUCT state_t                                                */
+	/** =============================================================== */
 	struct state_t {
 		id_type_t id;
 		state_t(state_logic_t l,variable_data_t&& d) :
 			logic(l), data(d) {
-
 		}
 		state_t() = default;
 		~state_t() = default;
@@ -82,65 +74,31 @@ namespace mods::dialog_tree {
 		std::vector<std::string> code;
 	};
 
-	using ruleset_t = std::forward_list<state_t*>;
-
 	struct conversation_t;
 
+	/** =============================================================== */
+	/** = STRUCT option_t                                               */
+	/** =============================================================== */
 	struct option_t {
-
-		id_type_t id;
-
+		enum operation_t : uint16_t {
+			OP_GOTO,
+			OP_EFFECT,
+			OP_IF,
+			OP_ADD_OPTION,
+			OP_CUSTOM,
+		};
 		enum direction_t : uint8_t {
-			/**
-			 * Means it's not a conversational
-			 * node. It just runs the logic right away.
-			 */
 			D_LOGIC = 0,
-
 			D_ASK_LOGIC,
-
 			D_ANSWER_LOGIC,
-
-
-			/**
-			 * Means it's something the player can ask.
-			 * It's the arrow in:
-			 * -> "Hello, are you the blacksmith here?"
-			 */
 			D_ASK,
-
-
-
-			/**
-			 * Means it's something the NPC says to the player.
-			 * It's the arrow in:
-			 * <- "Why yes! I am a loyal servant of Lord Marduk!"
-			 */
 			D_ANSWER,
-
-
-
-
-			/**
-			 * The player says goodbye to the NPC
-			 * -> "Goodbye"
-			 *  -[close]
-			 */
 			D_SAY_GOODBYE,
 		};
-
-		/**
-		 * A question that loads another conversation
-		 */
 		option_t(
 		    std::string_view question,
 		    conversation_t* load_this_conversation
 		);
-
-		/**
-		 * A string that loads another conversation
-		 * but the user gets to specify the direction
-		 */
 		option_t(
 		    std::string_view msg,
 		    conversation_t* load_this_conversation,
@@ -150,101 +108,36 @@ namespace mods::dialog_tree {
 		    std::string_view question,
 		    std::vector<std::string> code
 		);
-		/**
-		 * direction is the arrow in:
-		 * <- "...."
-		 *  or
-		 * -> "..."
-		 */
-		direction_t direction;
+		direction_t                 direction;
+		std::string                 message;
+		std::forward_list<state_t*> logic;
+		operation_t                 operation;
+		std::vector<char>           context_data;
+		conversation_t*             goto_conversation;
+		id_type_t                   id;
 
-		/**
-			* -> "Hello, are you the blacksmith here?"
-			*  or
-		  * <- "Why yes! I am a loyal servant of Lord Marduk!"
-			*/
-		std::string message;
-
-		/**
-		 * 	-[goto Marduk.servant]
-		 *  -[effect(+5 rage,-10 reputation(Marduk)]
-		 *  -[if(roll(player,intimidation) > 2d6)]
-		 *  	[add_option(Marduk.motivation)]
-		 *  	[add_option(Marduk.revenge_rumors)]
-		 *  -[if(roll(player,unlucky) < 2d6)]
-		 *  	-[alert_guards()]
-		 */
-		ruleset_t logic;
-
-		void assign_context_data(auto& c) {
-			context_data.resize(c.size());
-			std::copy(c.begin(),c.end(),context_data.begin());
-		}
-		enum operation_t : uint16_t {
-			OP_GOTO,
-			OP_EFFECT,
-			OP_IF,
-			OP_ADD_OPTION,
-			OP_CUSTOM,
-		};
-
-		operation_t operation;
-		std::vector<char> context_data;
-		conversation_t* goto_conversation;
-
-		void set_question_with_logic(
-		    std::string_view question,
-		    std::vector<std::string> code
-		);
-
-		/**
-		 * "Hello, can you tell me about Lord Marduk?"
-		 * -[goto Marduk.servant]
-		 */
-		void set_as_goto(std::string_view question,conversation_t* c) {
-			direction = direction_t::D_ASK;
-			message.assign(question.data());
-			goto_conversation = c;
-			operation = operation_t::OP_GOTO;
-		}
-		void set_as_answer_goto(std::string_view answer,conversation_t* c) {
-			direction = direction_t::D_ANSWER;
-			message.assign(answer.data());
-			goto_conversation = c;
-			operation = operation_t::OP_GOTO;
-		}
-		bool is_simple_goto() const {
-			return operation == operation_t::OP_GOTO;
-		}
-
+		void assign_context_data(auto& c);
+		void set_question_with_logic(std::string_view question, std::vector<std::string> code);
+		void set_as_goto(std::string_view question,conversation_t* c);
+		void set_as_answer_goto(std::string_view answer,conversation_t* c);
+		bool is_simple_goto() const;
 		void set_as_effect(std::string_view line);
 	};
 
+
+
+
+	/** =============================================================== */
+	/** = STRUCT conversation_t                                         */
+	/** =============================================================== */
 	struct conversation_t {
-		id_type_t id;
-		/**
-		 * Talk to NPC constructor
-		 */
 		conversation_t(std::string_view title,std::string_view npc);
-
 		/** [Blacksmith.intro] */
-		std::string title;
-
+		std::string                  title;
 		/** talk_to("A Red Cloak Blacksmith") */
-		precondition_t precondition;
-
-		/**
-			* contains all the questions
-			*
-			* -> "Hello, are you the blacksmith here?"
-			* 	-[goto Marduk.servant]
-			* -> "Can you tell me about the Elven Guard?"
-			* 	-[goto Elven.questions]
-			* -> "Goodbye."
-			* 	-[close]
-		  */
+		precondition_t               precondition;
 		std::forward_list<option_t*> options;
-
+		id_type_t                    id;
 		void add_answer_goto_conversation(
 		    std::string_view answer,
 		    conversation_t* load_this_conversation
@@ -272,16 +165,36 @@ namespace mods::dialog_tree {
 
 		[Marduk.questions]
 		 -> "Can you tell me more about Lord Marduk?"
-		 	-[goto Marduk.servant]
+		 	 <- "What is it you would like to know?"
+		     |-> -[add_option(Marduk.about)]
+		 	-[goto Marduk.about]
 		 -> "[Hard-ass]: He has some nerve invading that village in Mount Orthos..."
-		  -[effect(+5 rage,-10 reputation(Marduk)]
-			-[if(roll(player,intimidation) > 2d6)]
-				[add_option(Marduk.motivation)]
-				[add_option(Marduk.revenge_rumors)]
-			-[if(roll(player,unlucky) < 2d6)]
-				-[alert_guards()]
+		  |->[script]
+			  effect('+5 rage, -10 reputation(Marduk)');
+			  if(roll(player,intimidation) > roll("2d6")){
+			  	add_option(Marduk.motivation);
+			  	add_option(Marduk.revenge_rumors);
+				}
+			  if(roll(player,unlucky) < roll("2d6")){
+			  	alert_guards();
+				}
+			|->[/script]
 		 -> "I'd like to talk about something else"
 		  -[return]
+
+		[Marduk.about]
+		 -> -[mode(redisplay)]
+		 -> "How long has he been in power?"
+		   <- "Oh, quite a long time actually... way before my time even.. heh.. "
+			  |-> -[emote("The Blacksmith laughs at himself... embarrassed...")]
+		 -> "Why is he called the Lord of The Seven Seas?"
+		   <- "... long dialog part 1 ... "
+		 -> "Who is his second in command?"
+		   -> "... long dialog part 2 ... "
+			   |-> -[emote("The Blacksmith looks to have shed a tear.. he wipes it away in haste.. ")]
+		 -> "I'd like to talk about something else..."
+		   -[return(Marduk.questions)]
+
 
 		[Marduk.motivation]
 		 <- "... wha?.. I.. well.. okay.. look ... "

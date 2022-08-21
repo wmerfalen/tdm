@@ -1,2 +1,2 @@
 #!/bin/bash
-astyle -A2 -t -xn -xc -xl -xk -xV -C -xG -S -K -N -M80 -U -W1 -j --suffix=none $@
+astyle -A2 -xb -xf -xL -xW -U -xe -w -t -xn -xc -xl -xk -xV -C -xG -xU -S -K -N -M80 -U -W1 -j -xt1 -Y --suffix=none $@

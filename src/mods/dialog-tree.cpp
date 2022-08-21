@@ -5,11 +5,11 @@
 
 #define __MENTOC_SHOW_MODS_DIALOG_TREE_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_DIALOG_TREE_DEBUG_OUTPUT__
-#define m_debug(MSG) mentoc_prefix_debug("[mods::dialog_tree::debug]")  << MSG << "\n";
-#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::dialog_tree::ERROR]"))  << MSG << "\n";
+	#define m_debug(MSG) mentoc_prefix_debug("[mods::dialog_tree::debug]")  << MSG << "\n";
+	#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::dialog_tree::ERROR]"))  << MSG << "\n";
 #else
-#define m_debug(MSG) ;;
-#define m_error(MSG) ;;
+	#define m_debug(MSG) ;;
+	#define m_error(MSG) ;;
 #endif
 
 namespace mods::dialog_tree {
@@ -199,13 +199,32 @@ namespace mods::dialog_tree {
 		options.push_front(opt);
 		return opt;
 	}
+	void option_t::assign_context_data(auto& c) {
+		context_data.resize(c.size());
+		std::copy(c.begin(),c.end(),context_data.begin());
+	}
+	void option_t::set_as_goto(std::string_view question,conversation_t* c) {
+		direction = direction_t::D_ASK;
+		message.assign(question.data());
+		goto_conversation = c;
+		operation = operation_t::OP_GOTO;
+	}
+	void option_t::set_as_answer_goto(std::string_view answer,conversation_t* c) {
+		direction = direction_t::D_ANSWER;
+		message.assign(answer.data());
+		goto_conversation = c;
+		operation = operation_t::OP_GOTO;
+	}
+	bool option_t::is_simple_goto() const {
+		return operation == operation_t::OP_GOTO;
+	}
 
 	/** [Blacksmith.intro] */
 	void entry() {
 		std::string mob = "A Red Cloak Blacksmith";
-
 		auto servant = create_conversation(conversation_t("Marduk.servant",mob));
 		auto marduk_q = create_conversation(conversation_t("Marduk.questions",mob));
+		//marduk_q->add_question_goto_conversation("Can you tell me more about Lord Marduk?",
 		marduk_q->add_question_with_logic(
 		    "[Hard-ass]: He has some nerve invading that village in Mount Orthos...",
 		std::vector<std::string> {
@@ -216,18 +235,12 @@ namespace mods::dialog_tree {
 			"-[if(roll(player,unlucky) < 2d6)]",
 			"	 |->[alert_guards()]"
 		}
-
 		);
-
 		servant->add_answer_goto_conversation("Why yes! I am a loyal servant of Lord Marduk!",marduk_q);
-
 		auto b = create_conversation(conversation_t("Blacksmith.intro",mob));
-
 		b->add_question_goto_conversation("Hello, are you the blacksmith here?",servant);
-
-		//opt_who->add_question_goto_conversation("Can you tell me more about Lord Marduk?",servant);
 		//-> "Can you tell me more about Lord Marduk?"
-		//	-[goto Marduk.servant]
+		//	-[goto Marduk.about]
 		//-> "[Hard-ass]: He has some nerve invading that village in Mount Orthos..."
 		// -[effect(+5 rage,-10 reputation(Marduk)]
 		// -[if(roll(player,intimidation) > 2d6)]
@@ -237,8 +250,6 @@ namespace mods::dialog_tree {
 		// 	-[alert_guards()]
 		//-> "I'd like to talk about something else"
 		// -[return]
-
-
 		//
 		// [Marduk.servant]
 		//  <- "Why yes! I am a loyal servant of Lord Marduk!"
@@ -246,14 +257,12 @@ namespace mods::dialog_tree {
 		//
 		//auto mservant = create_conversation(conversation_t("Marduk.servant",mob));
 		//mservant->options
-
 		//-> "Can you tell me about the Elven Guard?"
 		//    -[goto Elven.questions]
 		//    -> "Goodbye."
 		//    -[close]
 		//    b->options
 		//  }
-
 	}
 	void init() {
 		entry();
