@@ -1,31 +1,268 @@
 #ifndef __MENTOC_MODS_DIALOG_TREE_HEADER__
 #define  __MENTOC_MODS_DIALOG_TREE_HEADER__
 
+#include <forward_list>
+#include <functional>
+#include <memory>
+#include <vector>
+
 namespace mods::dialog_tree {
 	using screen_id_t = uint16_t;
+	using id_type_t = uint32_t;
+	struct precondition_t {
+		enum type_t : uint8_t {
+			NONE = 0,
+			ATTACK,
+			DEFEND,
+			DEFEAT,
+			DEFEAT_WITH,
+			GIVE_TO,
+			SAVE,
+			STEAL_FROM,
+			TALK_TO,
+			USE_ABILITY,
+			WALK_BY,
+		};
+		/**
+		 * Generic type and data
+		 */
+		precondition_t(type_t t, std::string_view d);
 
-	struct node_t {
-			node_t(std::string_view msg,screen_id_t id) :
-				m_message(msg.data()), m_screen(id) {}
-			node_t() = delete;
-			node_t() = default;
-		private:
-			std::string m_message;
-			screen_id_t m_screen;
+		/**
+		 * Talk to an NPC
+		 */
+		precondition_t(std::string_view npc);
+
+		precondition_t() = default;
+		~precondition_t() = default;
+
+		/**
+		 * Talk to an NPC
+		 */
+		void attack(std::string_view npc);
+		void defend(std::string_view npc);
+		void defeat(std::string_view npc);
+		void defeat_with(std::string_view target,std::string_view npc);
+		void give_to(std::string_view item,std::string_view npc);
+		void save(std::string_view npc);
+		void steal_from(std::string_view npc);
+		void steal_specific_item_from(std::string_view item,std::string_view npc);
+		void talk_to(std::string_view npc);
+		void use_ability(std::string_view ability,std::string_view npc);
+		void walk_by(std::string_view npc);
+
+		void assign(auto& s);
+
+		type_t type;
+		std::vector<char> data;
+	};
+
+	using precondition_ptr = precondition_t*;
+	using state_logic_t = std::function<void(void*,void*)>;
+	using variable_data_t  = std::vector<char>;
+	enum operation_t : uint16_t {
+		OP_GOTO = 0,
+		OP_CLOSE,
+		OP_EFFECT,
+		OP_RETURN,
+		OP_AUTOPLAY,
+	};
+
+	struct state_t {
+		id_type_t id;
+		state_t(state_logic_t l,variable_data_t&& d) :
+			logic(l), data(d) {
+
+		}
+		state_t() = default;
+		~state_t() = default;
+		void run(void* c);
+		state_logic_t logic;
+		variable_data_t data;
+		std::vector<std::string> code;
+	};
+
+	using ruleset_t = std::forward_list<state_t*>;
+
+	struct conversation_t;
+
+	struct option_t {
+
+		id_type_t id;
+
+		enum direction_t : uint8_t {
+			/**
+			 * Means it's not a conversational
+			 * node. It just runs the logic right away.
+			 */
+			D_LOGIC = 0,
+
+			D_ASK_LOGIC,
+
+			D_ANSWER_LOGIC,
+
+
+			/**
+			 * Means it's something the player can ask.
+			 * It's the arrow in:
+			 * -> "Hello, are you the blacksmith here?"
+			 */
+			D_ASK,
+
+
+
+			/**
+			 * Means it's something the NPC says to the player.
+			 * It's the arrow in:
+			 * <- "Why yes! I am a loyal servant of Lord Marduk!"
+			 */
+			D_ANSWER,
+
+
+
+
+			/**
+			 * The player says goodbye to the NPC
+			 * -> "Goodbye"
+			 *  -[close]
+			 */
+			D_SAY_GOODBYE,
+		};
+
+		/**
+		 * A question that loads another conversation
+		 */
+		option_t(
+		    std::string_view question,
+		    conversation_t* load_this_conversation
+		);
+
+		/**
+		 * A string that loads another conversation
+		 * but the user gets to specify the direction
+		 */
+		option_t(
+		    std::string_view msg,
+		    conversation_t* load_this_conversation,
+		    direction_t d
+		);
+		option_t(
+		    std::string_view question,
+		    std::vector<std::string> code
+		);
+		/**
+		 * direction is the arrow in:
+		 * <- "...."
+		 *  or
+		 * -> "..."
+		 */
+		direction_t direction;
+
+		/**
+			* -> "Hello, are you the blacksmith here?"
+			*  or
+		  * <- "Why yes! I am a loyal servant of Lord Marduk!"
+			*/
+		std::string message;
+
+		/**
+		 * 	-[goto Marduk.servant]
+		 *  -[effect(+5 rage,-10 reputation(Marduk)]
+		 *  -[if(roll(player,intimidation) > 2d6)]
+		 *  	[add_option(Marduk.motivation)]
+		 *  	[add_option(Marduk.revenge_rumors)]
+		 *  -[if(roll(player,unlucky) < 2d6)]
+		 *  	-[alert_guards()]
+		 */
+		ruleset_t logic;
+
+		void assign_context_data(auto& c) {
+			context_data.resize(c.size());
+			std::copy(c.begin(),c.end(),context_data.begin());
+		}
+		enum operation_t : uint16_t {
+			OP_GOTO,
+			OP_EFFECT,
+			OP_IF,
+			OP_ADD_OPTION,
+			OP_CUSTOM,
+		};
+
+		operation_t operation;
+		std::vector<char> context_data;
+		conversation_t* goto_conversation;
+
+		void set_question_with_logic(
+		    std::string_view question,
+		    std::vector<std::string> code
+		);
+
+		/**
+		 * "Hello, can you tell me about Lord Marduk?"
+		 * -[goto Marduk.servant]
+		 */
+		void set_as_goto(std::string_view question,conversation_t* c) {
+			direction = direction_t::D_ASK;
+			message.assign(question.data());
+			goto_conversation = c;
+			operation = operation_t::OP_GOTO;
+		}
+		void set_as_answer_goto(std::string_view answer,conversation_t* c) {
+			direction = direction_t::D_ANSWER;
+			message.assign(answer.data());
+			goto_conversation = c;
+			operation = operation_t::OP_GOTO;
+		}
+		bool is_simple_goto() const {
+			return operation == operation_t::OP_GOTO;
+		}
+
+		void set_as_effect(std::string_view line);
 	};
 
 	struct conversation_t {
-		std::forward_list<node_t> options;
+		id_type_t id;
+		/**
+		 * Talk to NPC constructor
+		 */
+		conversation_t(std::string_view title,std::string_view npc);
+
+		/** [Blacksmith.intro] */
+		std::string title;
+
+		/** talk_to("A Red Cloak Blacksmith") */
+		precondition_t precondition;
+
+		/**
+			* contains all the questions
+			*
+			* -> "Hello, are you the blacksmith here?"
+			* 	-[goto Marduk.servant]
+			* -> "Can you tell me about the Elven Guard?"
+			* 	-[goto Elven.questions]
+			* -> "Goodbye."
+			* 	-[close]
+		  */
+		std::forward_list<option_t*> options;
+
+		void add_answer_goto_conversation(
+		    std::string_view answer,
+		    conversation_t* load_this_conversation
+		);
+		void add_question_goto_conversation(
+		    std::string_view question,
+		    conversation_t* load_this_conversation
+		);
+		option_t* add_question_with_logic(
+		    std::string_view question,
+		    std::vector<std::string> logic
+		);
+		void add_option(option_t* opt);
+		void remove_option(option_t* opt);
 	};
-	static inline void entry() {
-		conversation_t convo;
-		convo.options.push_front("Hello, are you the blacksmith here?",0);
-		convo.options.push_front("Can you tell me about the Elven Guard?",0);
-		convo.options.push_front("Goodbye",0);
-	}
 
 	/**
-	 [Blacksmith.intro] :: [initiate_with("A Red Cloak Blacksmith")]
+	 [Blacksmith.intro] :: [talk_to("A Red Cloak Blacksmith")]
 	  -> "Hello, are you the blacksmith here?"
 			-[goto Marduk.servant]
 		-> "Can you tell me about the Elven Guard?"
@@ -110,9 +347,10 @@ namespace mods::dialog_tree {
 			-[add_option(Elven.why_not)]
 
 	*/
-};
 
-#include "util.hpp"
+	void entry();
+
+};
 
 
 #endif
