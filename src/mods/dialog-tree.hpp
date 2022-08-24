@@ -9,256 +9,233 @@
 namespace mods::dialog_tree {
 	using screen_id_t = uint16_t;
 	using id_type_t = uint32_t;
+
+	/** =============================================================== */
+	/** = STRUCT precondition_t                                         */
+	/** =============================================================== */
 	struct precondition_t {
-		enum type_t : uint8_t {
-			NONE = 0,
-			ATTACK,
-			DEFEND,
-			DEFEAT,
-			DEFEAT_WITH,
-			GIVE_TO,
-			SAVE,
-			STEAL_FROM,
-			TALK_TO,
-			USE_ABILITY,
-			WALK_BY,
-		};
-		/**
-		 * Generic type and data
-		 */
-		precondition_t(type_t t, std::string_view d);
+			enum type_t : uint8_t {
+				NONE = 0,
+				ATTACK,
+				DEFEND,
+				DEFEAT,
+				DEFEAT_WITH,
+				GIVE_TO,
+				SAVE,
+				STEAL_FROM,
+				TALK_TO,
+				USE_ABILITY,
+				WALK_BY,
+			};
 
-		/**
-		 * Talk to an NPC
-		 */
-		precondition_t(std::string_view npc);
+			/** ============================================================= */
+			/** = Constructors                                                */
+			/** ============================================================= */
+			precondition_t(type_t t, std::string_view d);
+			/** Talk to an NPC */
+			precondition_t(std::string_view npc);
+			precondition_t()  = default;
 
-		precondition_t() = default;
-		~precondition_t() = default;
 
-		/**
-		 * Talk to an NPC
-		 */
-		void attack(std::string_view npc);
-		void defend(std::string_view npc);
-		void defeat(std::string_view npc);
-		void defeat_with(std::string_view target,std::string_view npc);
-		void give_to(std::string_view item,std::string_view npc);
-		void save(std::string_view npc);
-		void steal_from(std::string_view npc);
-		void steal_specific_item_from(std::string_view item,std::string_view npc);
-		void talk_to(std::string_view npc);
-		void use_ability(std::string_view ability,std::string_view npc);
-		void walk_by(std::string_view npc);
+			/** ============================================================= */
+			/** = Member variables                                            */
+			/** ============================================================= */
+			void assign(auto& s);
+			void attack(std::string_view npc);
+			void defeat(std::string_view npc);
+			void defeat_with(std::string_view target,std::string_view npc);
+			void defend(std::string_view npc);
+			void give_to(std::string_view item,std::string_view npc);
+			void save(std::string_view npc);
+			void set_none();
+			void steal_from(std::string_view npc);
+			void steal_specific_item_from(std::string_view item,std::string_view npc);
+			void talk_to(std::string_view npc);
+			void use_ability(std::string_view ability,std::string_view npc);
+			void walk_by(std::string_view npc);
 
-		void assign(auto& s);
+			/** ============================================================= */
+			/** = Member variables                                            */
+			/** ============================================================= */
+			std::vector<char> data;
+			type_t            type;
 
-		type_t type;
-		std::vector<char> data;
+		public:
+			/** ============================================================= */
+			/** = Destructor                                                  */
+			/** ============================================================= */
+			~precondition_t() = default;
 	};
+
+	/** =============================================================== */
+	/** = END struct precondition_t                                     */
+	/** =============================================================== */
 
 	using precondition_ptr = precondition_t*;
-	using state_logic_t = std::function<void(void*,void*)>;
+	using state_logic_t    = std::function<void(void*,void*)>;
 	using variable_data_t  = std::vector<char>;
-	enum operation_t : uint16_t {
-		OP_GOTO = 0,
-		OP_CLOSE,
-		OP_EFFECT,
-		OP_RETURN,
-		OP_AUTOPLAY,
-	};
 
+	/** =============================================================== */
+	/** = STRUCT state_t                                                */
+	/** =============================================================== */
 	struct state_t {
-		id_type_t id;
-		state_t(state_logic_t l,variable_data_t&& d) :
-			logic(l), data(d) {
+			/** ============================================================= */
+			/** = Constructors                                                */
+			/** ============================================================= */
+			state_t(state_logic_t l,variable_data_t&& d) :
+				data(d), logic(l) {
+			}
+			state_t() = default;
 
-		}
-		state_t() = default;
-		~state_t() = default;
-		void run(void* c);
-		state_logic_t logic;
-		variable_data_t data;
-		std::vector<std::string> code;
+			/** ============================================================= */
+			/** = Member functions                                            */
+			/** ============================================================= */
+			void run(void* c);
+
+			/** ============================================================= */
+			/** = Member variables                                            */
+			/** ============================================================= */
+			std::vector<std::string> code;
+			variable_data_t          data;
+			id_type_t                id;
+			state_logic_t            logic;
+
+			/** ============================================================= */
+			/** = Destructor                                                  */
+			/** ============================================================= */
+		public:
+			~state_t() = default;
 	};
-
-	using ruleset_t = std::forward_list<state_t*>;
 
 	struct conversation_t;
 
+	/** =============================================================== */
+	/** = STRUCT option_t                                               */
+	/** =============================================================== */
 	struct option_t {
+			enum operation_t : uint16_t {
+				OP_NONE,
+				OP_GOTO,
+				OP_EFFECT,
+				OP_IF,
+				OP_ADD_OPTION,
+				OP_CUSTOM,
+			};
+			enum direction_t : uint8_t {
+				D_LOGIC = 0,
+				D_ASK_LOGIC,
+				D_ANSWER_LOGIC,
+				D_ASK,
+				D_ANSWER,
+				D_SAY_GOODBYE,
+				D_ASK_WITH_IMMEDIATE_ANSWER_WITH_LOGIC,
+			};
 
-		id_type_t id;
+			/** ============================================================= */
+			/** = Constructors                                                */
+			/** ============================================================= */
+			option_t(
+			    std::string_view question,
+			    conversation_t* load_this_conversation
+			);
+			option_t(
+			    std::string_view msg,
+			    conversation_t* load_this_conversation,
+			    direction_t d
+			);
+			option_t(
+			    std::string_view question,
+			    std::vector<std::string> code
+			);
 
-		enum direction_t : uint8_t {
-			/**
-			 * Means it's not a conversational
-			 * node. It just runs the logic right away.
-			 */
-			D_LOGIC = 0,
+			/** ============================================================= */
+			/** = Member functions                                            */
+			/** ============================================================= */
+			void assign_context_data(auto& c);
+			bool is_simple_goto() const;
+			void set_as_answer_goto(std::string_view answer,conversation_t* c);
+			void set_as_effect(std::string_view line);
+			void set_as_goto(std::string_view question,conversation_t* c);
+			void set_as_question_with_immediate_answer_with_logic(std::string_view question,std::string_view answer,std::string_view logic);
+			void set_as_question_with_immediate_answer_with_logic(std::string_view question,std::string_view answer,const std::vector<std::string>& logic);
+			void set_question_with_logic(std::string_view question, std::vector<std::string> code);
 
-			D_ASK_LOGIC,
+			/** ============================================================= */
+			/** = Member variables                                            */
+			/** ============================================================= */
+			std::vector<char>           context_data;
+			direction_t                 direction;
+			conversation_t*             goto_conversation;
+			id_type_t                   id;
+			std::forward_list<state_t*> logic;
+			std::string                 message;
+			operation_t                 operation;
 
-			D_ANSWER_LOGIC,
-
-
-			/**
-			 * Means it's something the player can ask.
-			 * It's the arrow in:
-			 * -> "Hello, are you the blacksmith here?"
-			 */
-			D_ASK,
-
-
-
-			/**
-			 * Means it's something the NPC says to the player.
-			 * It's the arrow in:
-			 * <- "Why yes! I am a loyal servant of Lord Marduk!"
-			 */
-			D_ANSWER,
-
-
-
-
-			/**
-			 * The player says goodbye to the NPC
-			 * -> "Goodbye"
-			 *  -[close]
-			 */
-			D_SAY_GOODBYE,
-		};
-
-		/**
-		 * A question that loads another conversation
-		 */
-		option_t(
-		    std::string_view question,
-		    conversation_t* load_this_conversation
-		);
-
-		/**
-		 * A string that loads another conversation
-		 * but the user gets to specify the direction
-		 */
-		option_t(
-		    std::string_view msg,
-		    conversation_t* load_this_conversation,
-		    direction_t d
-		);
-		option_t(
-		    std::string_view question,
-		    std::vector<std::string> code
-		);
-		/**
-		 * direction is the arrow in:
-		 * <- "...."
-		 *  or
-		 * -> "..."
-		 */
-		direction_t direction;
-
-		/**
-			* -> "Hello, are you the blacksmith here?"
-			*  or
-		  * <- "Why yes! I am a loyal servant of Lord Marduk!"
-			*/
-		std::string message;
-
-		/**
-		 * 	-[goto Marduk.servant]
-		 *  -[effect(+5 rage,-10 reputation(Marduk)]
-		 *  -[if(roll(player,intimidation) > 2d6)]
-		 *  	[add_option(Marduk.motivation)]
-		 *  	[add_option(Marduk.revenge_rumors)]
-		 *  -[if(roll(player,unlucky) < 2d6)]
-		 *  	-[alert_guards()]
-		 */
-		ruleset_t logic;
-
-		void assign_context_data(auto& c) {
-			context_data.resize(c.size());
-			std::copy(c.begin(),c.end(),context_data.begin());
-		}
-		enum operation_t : uint16_t {
-			OP_GOTO,
-			OP_EFFECT,
-			OP_IF,
-			OP_ADD_OPTION,
-			OP_CUSTOM,
-		};
-
-		operation_t operation;
-		std::vector<char> context_data;
-		conversation_t* goto_conversation;
-
-		void set_question_with_logic(
-		    std::string_view question,
-		    std::vector<std::string> code
-		);
-
-		/**
-		 * "Hello, can you tell me about Lord Marduk?"
-		 * -[goto Marduk.servant]
-		 */
-		void set_as_goto(std::string_view question,conversation_t* c) {
-			direction = direction_t::D_ASK;
-			message.assign(question.data());
-			goto_conversation = c;
-			operation = operation_t::OP_GOTO;
-		}
-		void set_as_answer_goto(std::string_view answer,conversation_t* c) {
-			direction = direction_t::D_ANSWER;
-			message.assign(answer.data());
-			goto_conversation = c;
-			operation = operation_t::OP_GOTO;
-		}
-		bool is_simple_goto() const {
-			return operation == operation_t::OP_GOTO;
-		}
-
-		void set_as_effect(std::string_view line);
+		public:
 	};
 
+
+
+
+	/** =============================================================== */
+	/** = STRUCT conversation_t                                         */
+	/** =============================================================== */
 	struct conversation_t {
-		id_type_t id;
-		/**
-		 * Talk to NPC constructor
-		 */
-		conversation_t(std::string_view title,std::string_view npc);
+			/** ============================================================= */
+			/** = Constructors                                                */
+			/** ============================================================= */
+			conversation_t(std::string_view title,std::string_view npc);
 
-		/** [Blacksmith.intro] */
-		std::string title;
+			/** ============================================================= */
+			/** = Member functions                                            */
+			/** ============================================================= */
+			void add_answer_goto_conversation(
+			    std::string_view answer,
+			    conversation_t* load_this_conversation
+			);
+			void add_option(option_t* opt);
+			void add_question_goto_conversation(
+			    std::string_view question,
+			    conversation_t* load_this_conversation
+			);
+			void add_question_with_immediate_answer(
+			    std::string_view question,
+			    std::string_view answer
+			);
+			void add_question_with_immediate_answer_and_logic(
+			    std::string_view question,
+			    std::string_view answer,
+			    const std::vector<std::string>& logic
+			);
+			void add_question_with_immediate_answer_and_logic(
+			    std::string_view question,
+			    std::string_view answer,
+			    std::string_view logic
+			);
+			option_t* add_question_with_logic(
+			    std::string_view question,
+			    const std::vector<std::string>& logic
+			);
+			void remove_option(option_t* opt);
+			void set_mode(const std::vector<std::string>& logic);
+			void set_mode(std::string_view logic);
 
-		/** talk_to("A Red Cloak Blacksmith") */
-		precondition_t precondition;
 
-		/**
-			* contains all the questions
-			*
-			* -> "Hello, are you the blacksmith here?"
-			* 	-[goto Marduk.servant]
-			* -> "Can you tell me about the Elven Guard?"
-			* 	-[goto Elven.questions]
-			* -> "Goodbye."
-			* 	-[close]
-		  */
-		std::forward_list<option_t*> options;
+			/** ============================================================= */
+			/** = Member variables                                            */
+			/** ============================================================= */
+			id_type_t                    id;
+			std::forward_list<option_t*> options;
+			precondition_t               precondition;
+			/** [Blacksmith.intro] */
+			std::string                  title;
+			/** talk_to("A Red Cloak Blacksmith") */
 
-		void add_answer_goto_conversation(
-		    std::string_view answer,
-		    conversation_t* load_this_conversation
-		);
-		void add_question_goto_conversation(
-		    std::string_view question,
-		    conversation_t* load_this_conversation
-		);
-		option_t* add_question_with_logic(
-		    std::string_view question,
-		    std::vector<std::string> logic
-		);
-		void add_option(option_t* opt);
-		void remove_option(option_t* opt);
+			/** ============================================================= */
+			/** = Destructor                                                  */
+			/** ============================================================= */
+		public:
+			~conversation_t() = default;
 	};
 
 	/**
@@ -272,20 +249,36 @@ namespace mods::dialog_tree {
 
 		[Marduk.questions]
 		 -> "Can you tell me more about Lord Marduk?"
-		 	-[goto Marduk.servant]
+		 	 <- "What is it you would like to know?"
+		     |-> -[add_option(Marduk.about)]
+		 	-[goto Marduk.about]
 		 -> "[Hard-ass]: He has some nerve invading that village in Mount Orthos..."
-		  -[
-			 effect(+5 rage,-10 reputation(Marduk)
-			 if(roll(player,intimidation) > 2d6)
-				 add_option(Marduk.motivation)
-				 add_option(Marduk.revenge_rumors)
-			 endif
-			 if(roll(player,unlucky) < 2d6)
-			   alert_guards()
-			 endif
-		  ]-
+		  |->[script]
+			  effect('+5 rage, -10 reputation(Marduk)');
+			  if(roll(player,intimidation) > roll("2d6")){
+			  	add_option(Marduk.motivation);
+			  	add_option(Marduk.revenge_rumors);
+				}
+			  if(roll(player,unlucky) < roll("2d6")){
+			  	alert_guards();
+				}
+			|->[/script]
 		 -> "I'd like to talk about something else"
 		  -[return]
+
+		[Marduk.about]
+		 -> -[mode(redisplay)]
+		 -> "How long has he been in power?"
+		   <- "Oh, quite a long time actually... way before my time even.. heh.. "
+			  |-> -[emote("The Blacksmith laughs at himself... embarrassed...")]
+		 -> "Why is he called the Lord of The Seven Seas?"
+		   <- "... long dialog part 1 ... "
+		 -> "Who is his second in command?"
+		   -> "... long dialog part 2 ... "
+			   |-> -[emote("The Blacksmith looks to have shed a tear.. he wipes it away in haste.. ")]
+		 -> "I'd like to talk about something else..."
+		   -[return(Marduk.questions)]
+
 
 		[Marduk.motivation]
 		 <- "... wha?.. I.. well.. okay.. look ... "
