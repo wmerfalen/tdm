@@ -9582,7 +9582,7 @@ init	src/mods/contracts.cpp	/^	void init() {$/;"	kind:function	line:176	namespac
 init	src/mods/corpse.cpp	/^	void init() {$/;"	kind:function	line:289	namespace:mods::corpse	signature:()
 init	src/mods/date-time.cpp	/^	void init() {$/;"	kind:function	line:236	namespace:mods::date_time	signature:()
 init	src/mods/debug.hpp	/^	static inline void init(bool tics){ debug_state = std::make_unique<state>(tics); }$/;"	kind:function	line:16	namespace:mods::debug	signature:(bool tics)
-init	src/mods/dialog-tree.cpp	/^	void init() {$/;"	kind:function	line:258	namespace:mods::dialog_tree	signature:()
+init	src/mods/dialog-tree.cpp	/^	void init() {$/;"	kind:function	line:262	namespace:mods::dialog_tree	signature:()
 init	src/mods/drops.cpp	/^	void init() {$/;"	kind:function	line:514	namespace:mods::drops	signature:()
 init	src/mods/elevator.cpp	/^	void init() {$/;"	kind:function	line:34	namespace:mods::elevator	signature:()
 init	src/mods/ensnare.cpp	/^	void init() {$/;"	kind:function	line:135	namespace:mods::ensnare	signature:()

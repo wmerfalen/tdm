@@ -209,12 +209,16 @@ namespace mods::dialog_tree {
 		marduk_q->add_question_with_logic(
 		    "[Hard-ass]: He has some nerve invading that village in Mount Orthos...",
 		std::vector<std::string> {
-			"-[effect(+5 rage,-10 reputation(Marduk)]",
-			"-[if(roll(player,intimidation) > 2d6)]",
-			"	 |->[add_option(Marduk.motivation)]",
-			"	 |->[add_option(Marduk.revenge_rumors)]",
-			"-[if(roll(player,unlucky) < 2d6)]",
-			"	 |->[alert_guards()]"
+			"-[",
+			" effect(+5 rage,-10 reputation(Marduk)",
+			" if(roll(player,intimidation) > 2d6)",
+			"   add_option(Marduk.motivation)",
+			"   add_option(Marduk.revenge_rumors)",
+			" endif",
+			" if(roll(player,unlucky) < 2d6)",
+			"   alert_guards()",
+			" endif"
+			"]-",
 		}
 
 		);

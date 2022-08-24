@@ -274,12 +274,16 @@ namespace mods::dialog_tree {
 		 -> "Can you tell me more about Lord Marduk?"
 		 	-[goto Marduk.servant]
 		 -> "[Hard-ass]: He has some nerve invading that village in Mount Orthos..."
-		  -[effect(+5 rage,-10 reputation(Marduk)]
-			-[if(roll(player,intimidation) > 2d6)]
-				[add_option(Marduk.motivation)]
-				[add_option(Marduk.revenge_rumors)]
-			-[if(roll(player,unlucky) < 2d6)]
-				-[alert_guards()]
+		  -[
+			 effect(+5 rage,-10 reputation(Marduk)
+			 if(roll(player,intimidation) > 2d6)
+				 add_option(Marduk.motivation)
+				 add_option(Marduk.revenge_rumors)
+			 endif
+			 if(roll(player,unlucky) < 2d6)
+			   alert_guards()
+			 endif
+		  ]-
 		 -> "I'd like to talk about something else"
 		  -[return]
 
@@ -299,8 +303,17 @@ namespace mods::dialog_tree {
 				*the blacksmith goes back to hammering away...*
 
 		[Marduk.servant]
-		 <- "Why yes! I am a loyal servant of Lord Marduk!"
-			-[add_option(Marduk.questions)]
+		 <- [segway] t"Sure. What would you like to know?"
+		 -> "Is it true he was born to the Elven Guard?"
+		   <- "Yes, his mother and father were of nobility ...
+			    " ... - dialog - ... "
+				  -[up]-
+		 -> "What is the knife he carries with him?"
+		   <- "The knife of Aegis... "
+			    " ... - dialog - ... "
+					-[up]-
+		 -> "I'm done talking about Lord Marduk..."
+		    -[return]-
 
 		[Elven.questions]
 		 -> [if(roll(player,reputation(Marduk)) > 0)]
