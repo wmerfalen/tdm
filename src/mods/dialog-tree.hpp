@@ -14,40 +14,57 @@ namespace mods::dialog_tree {
 	/** = STRUCT precondition_t                                         */
 	/** =============================================================== */
 	struct precondition_t {
-		enum type_t : uint8_t {
-			NONE = 0,
-			ATTACK,
-			DEFEND,
-			DEFEAT,
-			DEFEAT_WITH,
-			GIVE_TO,
-			SAVE,
-			STEAL_FROM,
-			TALK_TO,
-			USE_ABILITY,
-			WALK_BY,
-		};
-		precondition_t(type_t t, std::string_view d);
-		/**
-		 * Talk to an NPC
-		 */
-		precondition_t(std::string_view npc);
-		precondition_t()  = default;
-		~precondition_t() = default;
-		void attack(std::string_view npc);
-		void defend(std::string_view npc);
-		void defeat(std::string_view npc);
-		void defeat_with(std::string_view target,std::string_view npc);
-		void give_to(std::string_view item,std::string_view npc);
-		void save(std::string_view npc);
-		void steal_from(std::string_view npc);
-		void steal_specific_item_from(std::string_view item,std::string_view npc);
-		void talk_to(std::string_view npc);
-		void use_ability(std::string_view ability,std::string_view npc);
-		void walk_by(std::string_view npc);
-		void assign(auto& s);
-		type_t            type;
-		std::vector<char> data;
+			enum type_t : uint8_t {
+				NONE = 0,
+				ATTACK,
+				DEFEND,
+				DEFEAT,
+				DEFEAT_WITH,
+				GIVE_TO,
+				SAVE,
+				STEAL_FROM,
+				TALK_TO,
+				USE_ABILITY,
+				WALK_BY,
+			};
+
+			/** ============================================================= */
+			/** = Constructors                                                */
+			/** ============================================================= */
+			precondition_t(type_t t, std::string_view d);
+			/** Talk to an NPC */
+			precondition_t(std::string_view npc);
+			precondition_t()  = default;
+
+
+			/** ============================================================= */
+			/** = Member variables                                            */
+			/** ============================================================= */
+			void assign(auto& s);
+			void attack(std::string_view npc);
+			void defeat(std::string_view npc);
+			void defeat_with(std::string_view target,std::string_view npc);
+			void defend(std::string_view npc);
+			void give_to(std::string_view item,std::string_view npc);
+			void save(std::string_view npc);
+			void set_none();
+			void steal_from(std::string_view npc);
+			void steal_specific_item_from(std::string_view item,std::string_view npc);
+			void talk_to(std::string_view npc);
+			void use_ability(std::string_view ability,std::string_view npc);
+			void walk_by(std::string_view npc);
+
+			/** ============================================================= */
+			/** = Member variables                                            */
+			/** ============================================================= */
+			std::vector<char> data;
+			type_t            type;
+
+		public:
+			/** ============================================================= */
+			/** = Destructor                                                  */
+			/** ============================================================= */
+			~precondition_t() = default;
 	};
 
 	/** =============================================================== */
@@ -62,16 +79,32 @@ namespace mods::dialog_tree {
 	/** = STRUCT state_t                                                */
 	/** =============================================================== */
 	struct state_t {
-		id_type_t id;
-		state_t(state_logic_t l,variable_data_t&& d) :
-			logic(l), data(d) {
-		}
-		state_t() = default;
-		~state_t() = default;
-		void run(void* c);
-		state_logic_t logic;
-		variable_data_t data;
-		std::vector<std::string> code;
+			/** ============================================================= */
+			/** = Constructors                                                */
+			/** ============================================================= */
+			state_t(state_logic_t l,variable_data_t&& d) :
+				data(d), logic(l) {
+			}
+			state_t() = default;
+
+			/** ============================================================= */
+			/** = Member functions                                            */
+			/** ============================================================= */
+			void run(void* c);
+
+			/** ============================================================= */
+			/** = Member variables                                            */
+			/** ============================================================= */
+			std::vector<std::string> code;
+			variable_data_t          data;
+			id_type_t                id;
+			state_logic_t            logic;
+
+			/** ============================================================= */
+			/** = Destructor                                                  */
+			/** ============================================================= */
+		public:
+			~state_t() = default;
 	};
 
 	struct conversation_t;
@@ -80,48 +113,65 @@ namespace mods::dialog_tree {
 	/** = STRUCT option_t                                               */
 	/** =============================================================== */
 	struct option_t {
-		enum operation_t : uint16_t {
-			OP_GOTO,
-			OP_EFFECT,
-			OP_IF,
-			OP_ADD_OPTION,
-			OP_CUSTOM,
-		};
-		enum direction_t : uint8_t {
-			D_LOGIC = 0,
-			D_ASK_LOGIC,
-			D_ANSWER_LOGIC,
-			D_ASK,
-			D_ANSWER,
-			D_SAY_GOODBYE,
-		};
-		option_t(
-		    std::string_view question,
-		    conversation_t* load_this_conversation
-		);
-		option_t(
-		    std::string_view msg,
-		    conversation_t* load_this_conversation,
-		    direction_t d
-		);
-		option_t(
-		    std::string_view question,
-		    std::vector<std::string> code
-		);
-		direction_t                 direction;
-		std::string                 message;
-		std::forward_list<state_t*> logic;
-		operation_t                 operation;
-		std::vector<char>           context_data;
-		conversation_t*             goto_conversation;
-		id_type_t                   id;
+			enum operation_t : uint16_t {
+				OP_NONE,
+				OP_GOTO,
+				OP_EFFECT,
+				OP_IF,
+				OP_ADD_OPTION,
+				OP_CUSTOM,
+			};
+			enum direction_t : uint8_t {
+				D_LOGIC = 0,
+				D_ASK_LOGIC,
+				D_ANSWER_LOGIC,
+				D_ASK,
+				D_ANSWER,
+				D_SAY_GOODBYE,
+				D_ASK_WITH_IMMEDIATE_ANSWER_WITH_LOGIC,
+			};
 
-		void assign_context_data(auto& c);
-		void set_question_with_logic(std::string_view question, std::vector<std::string> code);
-		void set_as_goto(std::string_view question,conversation_t* c);
-		void set_as_answer_goto(std::string_view answer,conversation_t* c);
-		bool is_simple_goto() const;
-		void set_as_effect(std::string_view line);
+			/** ============================================================= */
+			/** = Constructors                                                */
+			/** ============================================================= */
+			option_t(
+			    std::string_view question,
+			    conversation_t* load_this_conversation
+			);
+			option_t(
+			    std::string_view msg,
+			    conversation_t* load_this_conversation,
+			    direction_t d
+			);
+			option_t(
+			    std::string_view question,
+			    std::vector<std::string> code
+			);
+
+			/** ============================================================= */
+			/** = Member functions                                            */
+			/** ============================================================= */
+			void assign_context_data(auto& c);
+			bool is_simple_goto() const;
+			void set_as_answer_goto(std::string_view answer,conversation_t* c);
+			void set_as_effect(std::string_view line);
+			void set_as_goto(std::string_view question,conversation_t* c);
+			void set_as_question_with_immediate_answer_with_logic(std::string_view question,std::string_view answer,std::string_view logic);
+			void set_as_question_with_immediate_answer_with_logic(std::string_view question,std::string_view answer,const std::vector<std::string>& logic);
+			void set_question_with_logic(std::string_view question, std::vector<std::string> code);
+
+			/** ============================================================= */
+			/** = Member variables                                            */
+			/** ============================================================= */
+			std::vector<char>           context_data;
+			direction_t                 direction;
+			conversation_t*             goto_conversation;
+			id_type_t                   id;
+			std::forward_list<state_t*> logic;
+			std::string                 message;
+			operation_t                 operation;
+
+		public:
 	};
 
 
@@ -131,27 +181,61 @@ namespace mods::dialog_tree {
 	/** = STRUCT conversation_t                                         */
 	/** =============================================================== */
 	struct conversation_t {
-		conversation_t(std::string_view title,std::string_view npc);
-		/** [Blacksmith.intro] */
-		std::string                  title;
-		/** talk_to("A Red Cloak Blacksmith") */
-		precondition_t               precondition;
-		std::forward_list<option_t*> options;
-		id_type_t                    id;
-		void add_answer_goto_conversation(
-		    std::string_view answer,
-		    conversation_t* load_this_conversation
-		);
-		void add_question_goto_conversation(
-		    std::string_view question,
-		    conversation_t* load_this_conversation
-		);
-		option_t* add_question_with_logic(
-		    std::string_view question,
-		    std::vector<std::string> logic
-		);
-		void add_option(option_t* opt);
-		void remove_option(option_t* opt);
+			/** ============================================================= */
+			/** = Constructors                                                */
+			/** ============================================================= */
+			conversation_t(std::string_view title,std::string_view npc);
+
+			/** ============================================================= */
+			/** = Member functions                                            */
+			/** ============================================================= */
+			void add_answer_goto_conversation(
+			    std::string_view answer,
+			    conversation_t* load_this_conversation
+			);
+			void add_option(option_t* opt);
+			void add_question_goto_conversation(
+			    std::string_view question,
+			    conversation_t* load_this_conversation
+			);
+			void add_question_with_immediate_answer(
+			    std::string_view question,
+			    std::string_view answer
+			);
+			void add_question_with_immediate_answer_and_logic(
+			    std::string_view question,
+			    std::string_view answer,
+			    const std::vector<std::string>& logic
+			);
+			void add_question_with_immediate_answer_and_logic(
+			    std::string_view question,
+			    std::string_view answer,
+			    std::string_view logic
+			);
+			option_t* add_question_with_logic(
+			    std::string_view question,
+			    const std::vector<std::string>& logic
+			);
+			void remove_option(option_t* opt);
+			void set_mode(const std::vector<std::string>& logic);
+			void set_mode(std::string_view logic);
+
+
+			/** ============================================================= */
+			/** = Member variables                                            */
+			/** ============================================================= */
+			id_type_t                    id;
+			std::forward_list<option_t*> options;
+			precondition_t               precondition;
+			/** [Blacksmith.intro] */
+			std::string                  title;
+			/** talk_to("A Red Cloak Blacksmith") */
+
+			/** ============================================================= */
+			/** = Destructor                                                  */
+			/** ============================================================= */
+		public:
+			~conversation_t() = default;
 	};
 
 	/**

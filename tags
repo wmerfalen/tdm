@@ -417,7 +417,7 @@ ATTACHMENT_TYPE_STRAP	src/mods/forge-engine/generator.hpp	/^		ATTACHMENT_TYPE_ST
 ATTACHMENT_TYPE_UNDER_BARREL	src/mods/forge-engine/generator.hpp	/^		ATTACHMENT_TYPE_UNDER_BARREL,$/;"	kind:enumerator	line:166	enum:mods::forge_engine::attachment_types_t	file:	access:public
 ATTACH_LAUNCHER	src/mods/classes/pyrexia.hpp	/^				ATTACH_LAUNCHER,$/;"	kind:enumerator	line:21	enum:mods::classes::pyrexia::skillset_t	file:	access:public
 ATTACH_THROWER	src/mods/classes/pyrexia.hpp	/^				ATTACH_THROWER,$/;"	kind:enumerator	line:22	enum:mods::classes::pyrexia::skillset_t	file:	access:public
-ATTACK	src/mods/dialog-tree.hpp	/^			ATTACK,$/;"	kind:enumerator	line:19	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+ATTACK	src/mods/dialog-tree.hpp	/^				ATTACK,$/;"	kind:enumerator	line:19	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
 ATTACK	src/mods/intent.hpp	/^		ATTACK = 1,$/;"	kind:enumerator	line:8	enum:mods::intent::intent_to_t	file:	access:public
 ATTACKER_NARROWLY_MISSED_YOU_EVENT	src/mods/damage-event.hpp	/^	ATTACKER_NARROWLY_MISSED_YOU_EVENT,$/;"	kind:enumerator	line:13	enum:damage_event_t	file:	access:public
 ATTACK_DRONE	src/mods/weapon.hpp	/^	                 ATTACK_DRONE = (1 << 13)$/;"	kind:enumerator	line:38	enum:mods::weapon::mask_type	file:	access:public
@@ -818,9 +818,9 @@ DEFAULT_AMOUNT	src/mods/affects.hpp	/^	constexpr static amount_t DEFAULT_AMOUNT 
 DEFAULT_STAFF_LVL	src/spells.h	/^#define DEFAULT_STAFF_LVL	/;"	kind:macro	line:13	file:
 DEFAULT_STARTING_STIM_PISTOL_AMMO	src/mods/classes/medic.hpp	/^			constexpr static uint8_t DEFAULT_STARTING_STIM_PISTOL_AMMO = 4;$/;"	kind:member	line:16	struct:mods::classes::medic	typeref:typename:uint8_t	file:	access:public
 DEFAULT_WAND_LVL	src/spells.h	/^#define DEFAULT_WAND_LVL	/;"	kind:macro	line:14	file:
-DEFEAT	src/mods/dialog-tree.hpp	/^			DEFEAT,$/;"	kind:enumerator	line:21	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
-DEFEAT_WITH	src/mods/dialog-tree.hpp	/^			DEFEAT_WITH,$/;"	kind:enumerator	line:22	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
-DEFEND	src/mods/dialog-tree.hpp	/^			DEFEND,$/;"	kind:enumerator	line:20	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+DEFEAT	src/mods/dialog-tree.hpp	/^				DEFEAT,$/;"	kind:enumerator	line:21	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+DEFEAT_WITH	src/mods/dialog-tree.hpp	/^				DEFEAT_WITH,$/;"	kind:enumerator	line:22	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+DEFEND	src/mods/dialog-tree.hpp	/^				DEFEND,$/;"	kind:enumerator	line:20	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
 DEFER_STEP	src/mods/deferred.hpp	/^#define DEFER_STEP(/;"	kind:macro	line:121	file:	signature:(ticks,step,player_uuid)
 DEFER_TICKS	src/mods/deferred.hpp	/^#define DEFER_TICKS(/;"	kind:macro	line:120	file:	signature:(ticks,lambda)
 DEFILER	src/mods/drops.cpp	/^	static constexpr mob_vnum DEFILER = 666;$/;"	kind:variable	line:53	namespace:mods::drops	typeref:typename:mob_vnum	file:
@@ -925,12 +925,13 @@ DX	src/mods/scripted-sequences.cpp	/^#define DX(/;"	kind:macro	line:13	file:	sig
 DYNAMIC_FORMAT_STRING	src/mods/prefs.hpp	/^#define DYNAMIC_FORMAT_STRING /;"	kind:macro	line:16	file:
 DYN_DB_GET	src/mods/prefs.hpp	/^#define DYN_DB_GET(/;"	kind:macro	line:18	file:	signature:(key,section,ch)
 DYN_DB_SET	src/mods/prefs.hpp	/^#define DYN_DB_SET(/;"	kind:macro	line:17	file:	signature:(key,section,value,ch)
-D_ANSWER	src/mods/dialog-tree.hpp	/^			D_ANSWER,$/;"	kind:enumerator	line:95	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
-D_ANSWER_LOGIC	src/mods/dialog-tree.hpp	/^			D_ANSWER_LOGIC,$/;"	kind:enumerator	line:93	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
-D_ASK	src/mods/dialog-tree.hpp	/^			D_ASK,$/;"	kind:enumerator	line:94	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
-D_ASK_LOGIC	src/mods/dialog-tree.hpp	/^			D_ASK_LOGIC,$/;"	kind:enumerator	line:92	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
-D_LOGIC	src/mods/dialog-tree.hpp	/^			D_LOGIC = 0,$/;"	kind:enumerator	line:91	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
-D_SAY_GOODBYE	src/mods/dialog-tree.hpp	/^			D_SAY_GOODBYE,$/;"	kind:enumerator	line:96	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
+D_ANSWER	src/mods/dialog-tree.hpp	/^				D_ANSWER,$/;"	kind:enumerator	line:129	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
+D_ANSWER_LOGIC	src/mods/dialog-tree.hpp	/^				D_ANSWER_LOGIC,$/;"	kind:enumerator	line:127	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
+D_ASK	src/mods/dialog-tree.hpp	/^				D_ASK,$/;"	kind:enumerator	line:128	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
+D_ASK_LOGIC	src/mods/dialog-tree.hpp	/^				D_ASK_LOGIC,$/;"	kind:enumerator	line:126	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
+D_ASK_WITH_IMMEDIATE_ANSWER_WITH_LOGIC	src/mods/dialog-tree.hpp	/^				D_ASK_WITH_IMMEDIATE_ANSWER_WITH_LOGIC,$/;"	kind:enumerator	line:131	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
+D_LOGIC	src/mods/dialog-tree.hpp	/^				D_LOGIC = 0,$/;"	kind:enumerator	line:125	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
+D_SAY_GOODBYE	src/mods/dialog-tree.hpp	/^				D_SAY_GOODBYE,$/;"	kind:enumerator	line:130	enum:mods::dialog_tree::option_t::direction_t	file:	access:public
 EAST	src/structs.h	/^#define EAST /;"	kind:macro	line:135	file:
 EIM_AUTOMATIC	src/mods/doors.hpp	/^		EIM_AUTOMATIC = EX_AUTOMATIC,$/;"	kind:enumerator	line:27	enum:mods::doors::exit_info_masks_t	file:	access:public
 EIM_BREACHABLE	src/mods/doors.hpp	/^		EIM_BREACHABLE = EX_BREACHABLE,$/;"	kind:enumerator	line:22	enum:mods::doors::exit_info_masks_t	file:	access:public
@@ -1260,7 +1261,7 @@ GHOST_PRIMARY_PSG1	src/mods/weapon.hpp	/^			GHOST_PRIMARY_PSG1 = 1,$/;"	kind:enu
 GHOST_SECONARY_L96AW	src/mods/weapon.hpp	/^			GHOST_SECONARY_L96AW = 2,$/;"	kind:enumerator	line:452	enum:mods::weapon::ghost::secondary_choice_t	file:	access:public
 GHOST_SECONARY_PSG1	src/mods/weapon.hpp	/^			GHOST_SECONARY_PSG1 = 1,$/;"	kind:enumerator	line:451	enum:mods::weapon::ghost::secondary_choice_t	file:	access:public
 GHOST_SECONDARY_NONE	src/mods/weapon.hpp	/^			GHOST_SECONDARY_NONE = 0,$/;"	kind:enumerator	line:450	enum:mods::weapon::ghost::secondary_choice_t	file:	access:public
-GIVE_TO	src/mods/dialog-tree.hpp	/^			GIVE_TO,$/;"	kind:enumerator	line:23	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+GIVE_TO	src/mods/dialog-tree.hpp	/^				GIVE_TO,$/;"	kind:enumerator	line:23	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
 GLASS_CONTENTS	src/structs.h	/^			GLASS_CONTENTS,$/;"	kind:enumerator	line:1188	enum:room_data::texture_type_t	file:	access:public
 GLASS_WINDOWS	src/structs.h	/^			GLASS_WINDOWS,$/;"	kind:enumerator	line:1149	enum:room_data::texture_type_t	file:	access:public
 GOAL_CUSTOM_EVENT	src/mods/contract-steps.hpp	/^			GOAL_CUSTOM_EVENT = (1 << 10),$/;"	kind:enumerator	line:25	enum:mods::contracts::contract_step::task_type_t	file:	access:public
@@ -2260,7 +2261,7 @@ NONE	src/mods/classes/engineer.hpp	/^				NONE = 0,$/;"	kind:enumerator	line:15	e
 NONE	src/mods/classes/ghost.hpp	/^				NONE = 0,$/;"	kind:enumerator	line:23	enum:mods::classes::ghost::ability_t	file:	access:public
 NONE	src/mods/classes/marine.hpp	/^				NONE = 0,$/;"	kind:enumerator	line:13	enum:mods::classes::marine::ability_t	file:	access:public
 NONE	src/mods/classes/medic.hpp	/^				NONE = 0,$/;"	kind:enumerator	line:18	enum:mods::classes::medic::ability_t	file:	access:public
-NONE	src/mods/dialog-tree.hpp	/^			NONE = 0,$/;"	kind:enumerator	line:18	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+NONE	src/mods/dialog-tree.hpp	/^				NONE = 0,$/;"	kind:enumerator	line:18	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
 NONE	src/mods/events.hpp	/^		NONE = 0,$/;"	kind:enumerator	line:13	enum:mods::events::event_enum	file:	access:public
 NONE	src/mods/melee/combat-order.hpp	/^		NONE = 0,$/;"	kind:enumerator	line:46	enum:mods::melee::main::technique_t	file:	access:public
 NONE	src/mods/mobs/extended-types.hpp	/^		NONE =0,$/;"	kind:enumerator	line:14	enum:mods::mobs::extended_types_t	file:	access:public
@@ -2378,11 +2379,12 @@ OPER_OR	src/shop.h	/^#define OPER_OR	/;"	kind:macro	line:128	file:
 OPPOSITE_DIR	src/globals.hpp	/^#define OPPOSITE_DIR(/;"	kind:macro	line:63	file:	signature:(a)
 OPS_SHIELD_SHOTGUNNER	src/mods/drops.cpp	/^	static constexpr mob_vnum OPS_SHIELD_SHOTGUNNER = 502;$/;"	kind:variable	line:58	namespace:mods::drops	typeref:typename:mob_vnum	file:
 OPT_USEC	src/structs.h	/^#define OPT_USEC	/;"	kind:macro	line:678	file:
-OP_ADD_OPTION	src/mods/dialog-tree.hpp	/^			OP_ADD_OPTION,$/;"	kind:enumerator	line:87	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
-OP_CUSTOM	src/mods/dialog-tree.hpp	/^			OP_CUSTOM,$/;"	kind:enumerator	line:88	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
-OP_EFFECT	src/mods/dialog-tree.hpp	/^			OP_EFFECT,$/;"	kind:enumerator	line:85	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
-OP_GOTO	src/mods/dialog-tree.hpp	/^			OP_GOTO,$/;"	kind:enumerator	line:84	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
-OP_IF	src/mods/dialog-tree.hpp	/^			OP_IF,$/;"	kind:enumerator	line:86	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
+OP_ADD_OPTION	src/mods/dialog-tree.hpp	/^				OP_ADD_OPTION,$/;"	kind:enumerator	line:121	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
+OP_CUSTOM	src/mods/dialog-tree.hpp	/^				OP_CUSTOM,$/;"	kind:enumerator	line:122	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
+OP_EFFECT	src/mods/dialog-tree.hpp	/^				OP_EFFECT,$/;"	kind:enumerator	line:119	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
+OP_GOTO	src/mods/dialog-tree.hpp	/^				OP_GOTO,$/;"	kind:enumerator	line:118	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
+OP_IF	src/mods/dialog-tree.hpp	/^				OP_IF,$/;"	kind:enumerator	line:120	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
+OP_NONE	src/mods/dialog-tree.hpp	/^				OP_NONE,$/;"	kind:enumerator	line:117	enum:mods::dialog_tree::option_t::operation_t	file:	access:public
 ORM_FAILURE	src/mods/orm/orm-base.hpp	/^#define ORM_FAILURE(/;"	kind:macro	line:16	file:	signature:(a)
 ORM_FAILURE	src/mods/pq.hpp	/^#define ORM_FAILURE(/;"	kind:macro	line:84	file:	signature:(a)
 ORM_NO_RESULTS	src/mods/orm/orm-base.hpp	/^#define ORM_NO_RESULTS(/;"	kind:macro	line:15	file:	signature:(a)
@@ -2804,7 +2806,7 @@ SANCTUARY	src/mods/flags.hpp	/^		SANCTUARY,$/;"	kind:enumerator	line:83	enum:mod
 SASG12	src/mods/orm/breacher.hpp	/^		const std::string SASG12 = "SASG12";$/;"	kind:member	line:12	struct:mods::orm::breacher	typeref:typename:const std::string	file:	access:public
 SASG12	src/mods/weapon.hpp	/^			SASG12 = 2$/;"	kind:enumerator	line:641	enum:mods::weapon::sentinel::primary_choice_t	file:	access:public
 SAVE	src/globals.cpp	/^#define SAVE(/;"	kind:macro	line:228	file:	signature:(OPT)
-SAVE	src/mods/dialog-tree.hpp	/^			SAVE,$/;"	kind:enumerator	line:24	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+SAVE	src/mods/dialog-tree.hpp	/^				SAVE,$/;"	kind:enumerator	line:24	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
 SAVING_BREATH	src/spells.h	/^#define SAVING_BREATH /;"	kind:macro	line:197	file:
 SAVING_PARA	src/spells.h	/^#define SAVING_PARA /;"	kind:macro	line:194	file:
 SAVING_PETRI	src/spells.h	/^#define SAVING_PETRI /;"	kind:macro	line:196	file:
@@ -3275,7 +3277,7 @@ STDC_HEADERS	src/conf.h	/^#define STDC_HEADERS /;"	kind:macro	line:26	file:
 STDERR_FILENO	src/sysdep.h	/^#define STDERR_FILENO /;"	kind:macro	line:416	file:
 STDOUT_FILENO	src/sysdep.h	/^#define STDOUT_FILENO /;"	kind:macro	line:421	file:
 STEALTH	src/mods/classes/ghost.hpp	/^				STEALTH,$/;"	kind:enumerator	line:25	enum:mods::classes::ghost::ability_t	file:	access:public
-STEAL_FROM	src/mods/dialog-tree.hpp	/^			STEAL_FROM,$/;"	kind:enumerator	line:25	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+STEAL_FROM	src/mods/dialog-tree.hpp	/^				STEAL_FROM,$/;"	kind:enumerator	line:25	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
 STIM_SHOT	src/mods/classes/medic.hpp	/^				STIM_SHOT,$/;"	kind:enumerator	line:21	enum:mods::classes::medic::ability_t	file:	access:public
 STRATEGY	src/mods/classes/base.hpp	/^					STRATEGY,$/;"	kind:enumerator	line:72	enum:mods::classes::base::ability_data_t::skillset_t	file:	access:public
 STREET	src/structs.h	/^			STREET,$/;"	kind:enumerator	line:1176	enum:room_data::texture_type_t	file:	access:public
@@ -3557,7 +3559,7 @@ SYNDROME	src/mods/classes/types.hpp	/^		SYNDROME,$/;"	kind:enumerator	line:19	en
 SYNDROME	src/structs.h	/^	SYNDROME = 19,$/;"	kind:enumerator	line:237	enum:player_class_t	file:	access:public
 S_DATA	src/shop.h	/^#define S_DATA(/;"	kind:macro	line:121	file:	signature:(stack,index)
 S_LEN	src/shop.h	/^#define S_LEN(/;"	kind:macro	line:122	file:	signature:(stack)
-TALK_TO	src/mods/dialog-tree.hpp	/^			TALK_TO,$/;"	kind:enumerator	line:26	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+TALK_TO	src/mods/dialog-tree.hpp	/^				TALK_TO,$/;"	kind:enumerator	line:26	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
 TANK	src/mods/weapon.hpp	/^		TANK,$/;"	kind:enumerator	line:60	enum:mods::weapon::vehicle_t	file:	access:public
 TAR21	src/mods/orm/medic.hpp	/^		const std::string TAR21 = "TAR21";$/;"	kind:member	line:12	struct:mods::orm::medic	typeref:typename:const std::string	file:	access:public
 TAR21	src/mods/weapon.hpp	/^			TAR21 = 2$/;"	kind:enumerator	line:575	enum:mods::weapon::medic::primary_choice_t	file:	access:public
@@ -3848,7 +3850,7 @@ UPDATE	src/mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT$/;"	kind:enumerator	line:25	en
 UPDATED_STR	src/mods/unit-tests/contracts.cpp	/^			static constexpr std::string_view UPDATED_STR = "updated|foobar|state";$/;"	kind:variable	line:239	typeref:typename:std::string_view	file:
 UPPER	src/utils.h	/^#define UPPER(/;"	kind:macro	line:157	file:	signature:(c)
 USERS_FORMAT	src/act.informative.cpp	/^#define USERS_FORMAT /;"	kind:macro	line:1492	file:
-USE_ABILITY	src/mods/dialog-tree.hpp	/^			USE_ABILITY,$/;"	kind:enumerator	line:27	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+USE_ABILITY	src/mods/dialog-tree.hpp	/^				USE_ABILITY,$/;"	kind:enumerator	line:27	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
 USE_AUTOEQ	src/structs.h	/^#define USE_AUTOEQ	/;"	kind:macro	line:120	file:
 USURP	src/interpreter.cpp	/^#define USURP	/;"	kind:macro	line:1426	file:
 UTILITY_STORES	src/mods/mobs/generic-thief.hpp	/^				UTILITY_STORES,$/;"	kind:enumerator	line:32	enum:mods::mobs::generic_thief::target_t	file:	access:public
@@ -3873,7 +3875,7 @@ VOLUNTEER_PATIENT	src/mods/drops.cpp	/^	static constexpr mob_vnum VOLUNTEER_PATI
 VULTURE_COMBAT	src/mods/object.hpp	/^				VULTURE_COMBAT,$/;"	kind:enumerator	line:68	enum:mods::object::object_type_enum_t	file:	access:public
 Valid_Name	src/interpreter.cpp	/^int Valid_Name(const char *newname) {$/;"	kind:function	line:1450	typeref:typename:int	signature:(const char * newname)
 WAIT_STATE	src/utils.h	/^#define WAIT_STATE(/;"	kind:macro	line:377	file:	signature:(ch,cycle)
-WALK_BY	src/mods/dialog-tree.hpp	/^			WALK_BY,$/;"	kind:enumerator	line:28	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
+WALK_BY	src/mods/dialog-tree.hpp	/^				WALK_BY,$/;"	kind:enumerator	line:28	enum:mods::dialog_tree::precondition_t::type_t	file:	access:public
 WANDER	src/mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	kind:enumerator	line:25	enum:mods::ai_state::state	file:	access:public
 WANING_CRESCENT	src/mods/date-time.hpp	/^		WANING_CRESCENT,$/;"	kind:enumerator	line:17	enum:mods::date_time::moon_phase	file:	access:public
 WANING_GIBBOUS	src/mods/date-time.hpp	/^		WANING_GIBBOUS,$/;"	kind:enumerator	line:16	enum:mods::date_time::moon_phase	file:	access:public
@@ -4615,7 +4617,7 @@ __anon73cf271d0702	src/mods/behaviour_tree_impl.cpp	/^			node::create_leaf([](ar
 __anon73cf271d0802	src/mods/behaviour_tree_impl.cpp	/^		               mods::behaviour_tree_impl::mob_list().end(),[m_uuid](const auto & u) -> bool { /;"	kind:function	line:323	function:mods::behaviour_tree_impl::unregister_mob	typeref:typename:bool	file:	signature:(const auto & u) 
 __anon7bce65e10102	src/mods/builder/meqbuild.cpp	/^			ref.erase(std::remove_if(ref.begin(),ref.end(),[&deleted,&vnum](auto & m) -> bool {$/;"	kind:function	line:40	function:mods::builder::meqbuild::meqbuild_interface::delete_by_vnum	typeref:typename:bool	file:	signature:(auto & m) 
 __anon7bce65e10202	src/mods/builder/meqbuild.cpp	/^			std::remove_if(r.begin(),r.end(),[&vnum,&deleted](auto& r) -> bool {$/;"	kind:function	line:170	function:mods::builder::meqbuild::map::delete_by_vnum	typeref:typename:bool	file:	signature:(auto& r) 
-__anon7bd0dc450102	src/mods/dialog-tree.cpp	/^		options.remove_if([&opt](const auto* option) -> bool {$/;"	kind:function	line:174	function:mods::dialog_tree::conversation_t::remove_option	typeref:typename:bool	file:	signature:(const auto* option) 
+__anon7bd0dc450102	src/mods/dialog-tree.cpp	/^		options.remove_if([&opt](const auto* option) -> bool {$/;"	kind:function	line:176	function:mods::dialog_tree::conversation_t::remove_option	typeref:typename:bool	file:	signature:(const auto* option) 
 __anon7da77f340102	src/mods/resting.cpp	/^		[&](auto uuid) -> bool {$/;"	kind:function	line:25	function:mods::resting::remove_player_resting	typeref:typename:bool	file:	signature:(auto uuid) 
 __anon858472910102	src/mods/lmdb/db.hpp	/^			s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {$/;"	kind:function	line:41	function:gdns::util::ltrim	file:	signature:(int ch) 
 __anon858472910202	src/mods/lmdb/db.hpp	/^			s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {$/;"	kind:function	line:48	function:gdns::util::rtrim	file:	signature:(int ch) 
@@ -4886,7 +4888,7 @@ active_item_types	src/mods/forge-engine/generator.hpp	/^	static const  std::vect
 add	src/mods/deferred.hpp	/^		uint64_t add;$/;"	kind:member	line:32	struct:mods::chunk_affect_t	typeref:typename:uint64_t	file:	access:public
 add	src/mods/super-users.cpp	/^	bool add(std::string_view name) {$/;"	kind:function	line:122	namespace:mods::super_users	typeref:typename:bool	signature:(std::string_view name)
 add_affected_by	src/mods/player.hpp	/^			std::vector<affected_type>& add_affected_by(affected_type&& add_this) {$/;"	kind:function	line:676	struct:mods::player	typeref:typename:std::vector<affected_type> &	file:	access:public	signature:(affected_type && add_this)
-add_answer_goto_conversation	src/mods/dialog-tree.cpp	/^	void conversation_t::add_answer_goto_conversation($/;"	kind:function	line:133	class:mods::dialog_tree::conversation_t	typeref:typename:void	signature:(std::string_view answer,conversation_t * load_this_conversation)
+add_answer_goto_conversation	src/mods/dialog-tree.cpp	/^	void conversation_t::add_answer_goto_conversation($/;"	kind:function	line:134	class:mods::dialog_tree::conversation_t	typeref:typename:void	signature:(std::string_view answer,conversation_t * load_this_conversation)
 add_builder_command	src/mods/interpreter.cpp	/^	void add_builder_command(std::string command_string, acmd_function func) {$/;"	kind:function	line:45	namespace:mods::interpreter	typeref:typename:void	signature:(std::string command_string,acmd_function func)
 add_callback	src/mods/rooms.cpp	/^	void add_callback(room_rnum room, affect_t affect, callback_t f) {$/;"	kind:function	line:57	namespace:mods::rooms::affects	typeref:typename:void	signature:(room_rnum room,affect_t affect,callback_t f)
 add_combat_order	src/mods/player.cpp	/^	void player::add_combat_order(std::pair<uint16_t,func_t> technique) {$/;"	kind:function	line:2488	class:mods::player	typeref:typename:void	signature:(std::pair<uint16_t,func_t> technique)
@@ -4897,12 +4899,13 @@ add_follower	src/utils.cpp	/^void add_follower(char_data *ch, char_data *leader)
 add_message	src/mods/players/event-messages.cpp	/^	std::tuple<bool,std::string> add_message(std::string_view msg) {$/;"	kind:function	line:48	namespace:mods::players::event_messages	typeref:typename:std::tuple<bool,std::string>	signature:(std::string_view msg)
 add_message	src/mods/players/friendly-reminders.cpp	/^	std::tuple<bool,std::string> add_message(std::string_view msg) {$/;"	kind:function	line:47	namespace:mods::players::friendly_reminders	typeref:typename:std::tuple<bool,std::string>	signature:(std::string_view msg)
 add_modified_file	src/mods/rifle-stats.cpp	/^	bool add_modified_file(std::string_view file) {$/;"	kind:function	line:35	namespace:mods::rifle_stats	typeref:typename:bool	signature:(std::string_view file)
-add_option	src/mods/dialog-tree.cpp	/^	void conversation_t::add_option(option_t* opt) {$/;"	kind:function	line:169	class:mods::dialog_tree::conversation_t	typeref:typename:void	signature:(option_t * opt)
+add_option	src/mods/dialog-tree.cpp	/^	void conversation_t::add_option(option_t* opt) {$/;"	kind:function	line:171	class:mods::dialog_tree::conversation_t	typeref:typename:void	signature:(option_t * opt)
 add_player_resting	src/mods/resting.cpp	/^	void add_player_resting(player_ptr_t& player) {$/;"	kind:function	line:17	namespace:mods::resting	typeref:typename:void	signature:(player_ptr_t & player)
 add_private_publisher	src/mods/chat.cpp	/^	void channel::add_private_publisher(std::string_view user) {$/;"	kind:function	line:72	class:mods::chat::channel	typeref:typename:void	signature:(std::string_view user)
 add_public_channel	src/mods/chat.cpp	/^	void add_public_channel(str_t channel,str_t verb) {$/;"	kind:function	line:37	namespace:mods::chat	typeref:typename:void	signature:(str_t channel,str_t verb)
 add_question_goto_conversation	src/mods/dialog-tree.cpp	/^	void conversation_t::add_question_goto_conversation($/;"	kind:function	line:126	class:mods::dialog_tree::conversation_t	typeref:typename:void	signature:(std::string_view question,conversation_t * load_this_conversation)
-add_question_with_logic	src/mods/dialog-tree.cpp	/^	option_t* conversation_t::add_question_with_logic($/;"	kind:function	line:194	class:mods::dialog_tree::conversation_t	typeref:typename:option_t *	signature:(std::string_view question,std::vector<std::string> logic)
+add_question_with_immediate_answer_and_logic	src/mods/dialog-tree.cpp	/^	void conversation_t::add_question_with_immediate_answer_and_logic($/;"	kind:function	line:231	class:mods::dialog_tree::conversation_t	typeref:typename:void	signature:(std::string_view question,std::string_view answer,std::string_view logic)
+add_question_with_logic	src/mods/dialog-tree.cpp	/^	option_t* conversation_t::add_question_with_logic($/;"	kind:function	line:196	class:mods::dialog_tree::conversation_t	typeref:typename:option_t *	signature:(std::string_view question,const std::vector<std::string> & logic)
 add_reminder	src/mods/players/friendly-reminders.cpp	/^	void add_reminder(std::string_view msg) {$/;"	kind:function	line:84	namespace:mods::players::friendly_reminders	typeref:typename:void	signature:(std::string_view msg)
 add_resistance	src/mods/mobs/resistance.cpp	/^	void resistance_list_t::add_resistance(resistance_t r) {$/;"	kind:function	line:36	class:mods::mobs::resistance::resistance_list_t	typeref:typename:void	signature:(resistance_t r)
 add_room	src/mods/mob-roam.cpp	/^	void roam_recorder::add_room(room_vnum room) {$/;"	kind:function	line:35	class:mods::mob_roam::roam_recorder	typeref:typename:void	signature:(room_vnum room)
@@ -5256,7 +5259,7 @@ assign	src/mods/string.cpp	/^	void string::assign(mentoc_pqxx_result_t other) {$
 assign	src/mods/string.cpp	/^	void string::assign(mentoc_pqxx_result_t::reference str) {$/;"	kind:function	line:139	class:mods::string	typeref:typename:void	signature:(mentoc_pqxx_result_t::reference str)
 assign	src/mods/string.cpp	/^	void string::assign(nullptr_t a) {$/;"	kind:function	line:134	class:mods::string	typeref:typename:void	signature:(nullptr_t a)
 assign	src/mods/util.cpp	/^	void parsed_args::assign(const std::string& argument) {$/;"	kind:function	line:1486	class:mods::util::args::parsed_args	typeref:typename:void	signature:(const std::string & argument)
-assign_context_data	src/mods/dialog-tree.cpp	/^	void option_t::assign_context_data(auto& c) {$/;"	kind:function	line:202	class:mods::dialog_tree::option_t	typeref:typename:void	signature:(auto & c)
+assign_context_data	src/mods/dialog-tree.cpp	/^	void option_t::assign_context_data(auto& c) {$/;"	kind:function	line:204	class:mods::dialog_tree::option_t	typeref:typename:void	signature:(auto & c)
 assign_kings_castle	src/castle.cpp	/^void assign_kings_castle(void) {$/;"	kind:function	line:128	typeref:typename:void	signature:(void)
 assign_m	src/mods/string.cpp	/^	void string::assign_m(const mods::string& other) {$/;"	kind:function	line:144	class:mods::string	typeref:typename:void	signature:(const mods::string & other)
 assign_mobiles	src/mods/hell.hpp	/^	constexpr inline bool assign_mobiles = false;$/;"	kind:variable	line:9	namespace:mods::hell	typeref:typename:bool
@@ -6179,7 +6182,7 @@ cmem	src/mods/mobs/orthos-agent.cpp	/^#define cmem(/;"	kind:macro	line:15	file:	
 cmem	src/mods/mobs/orthos-agent.cpp	/^#define cmem(/;"	kind:macro	line:19	file:	signature:(a)
 cmem	src/mods/mobs/shoplifter.cpp	/^#define cmem(/;"	kind:macro	line:15	file:	signature:(a)
 cmem	src/mods/mobs/shoplifter.cpp	/^#define cmem(/;"	kind:macro	line:19	file:	signature:(a)
-code	src/mods/dialog-tree.hpp	/^		std::vector<std::string> code;$/;"	kind:member	line:74	struct:mods::dialog_tree::state_t	typeref:typename:std::vector<std::string>	file:	access:public
+code	src/mods/dialog-tree.hpp	/^			std::vector<std::string> code;$/;"	kind:member	line:98	struct:mods::dialog_tree::state_t	typeref:typename:std::vector<std::string>	file:	access:public
 cold_blooded_index	src/mods/karma.hpp	/^		float cold_blooded_index;$/;"	kind:member	line:13	struct:mods::karma	typeref:typename:float	file:	access:public
 collect_spray_targets	src/mods/combat-composer/spray-target.cpp	/^		std::forward_list<player_ptr_t> collect_spray_targets(player_ptr_t& attacker,direction_t direc/;"	kind:function	line:179	namespace:mods::combat_composer::phases	typeref:typename:std::forward_list<player_ptr_t>	signature:(player_ptr_t & attacker,direction_t direction,obj_ptr_t & weapon)
 color_eval	src/globals.cpp	/^		std::string color_eval(std::string_view buffer) {$/;"	kind:function	line:794	namespace:mods::globals	typeref:typename:std::string	signature:(std::string_view buffer)
@@ -6351,7 +6354,7 @@ content	src/mods/json/export.cpp	/^		list_t* content;$/;"	kind:member	line:24	st
 contents	src/mods/loot.hpp	/^		std::vector<obj_ptr_t> contents;$/;"	kind:member	line:31	struct:mods::loot::crate_t	typeref:typename:std::vector<obj_ptr_t>	file:	access:public
 contents	src/structs.h	/^		obj_data *contents;   \/* List of items in room              *\/$/;"	kind:member	line:1236	struct:room_data	typeref:typename:obj_data *	file:	access:public
 contents_container	src/structs.h	/^		std::deque<std::shared_ptr<obj_data>>& contents_container() {$/;"	kind:function	line:1237	struct:room_data	typeref:typename:std::deque<std::shared_ptr<obj_data>> &	file:	access:public	signature:()
-context_data	src/mods/dialog-tree.hpp	/^		std::vector<char>           context_data;$/;"	kind:member	line:115	struct:mods::dialog_tree::option_t	typeref:typename:std::vector<char>	file:	access:public
+context_data	src/mods/dialog-tree.hpp	/^			std::vector<char>           context_data;$/;"	kind:member	line:166	struct:mods::dialog_tree::option_t	typeref:typename:std::vector<char>	file:	access:public
 contextual_eval_string	src/mods/js.cpp	/^		void contextual_eval_string(char_data* player,duk_context* ctx,const std::string& str) {$/;"	kind:function	line:930	namespace:mods::js	typeref:typename:void	signature:(char_data * player,duk_context * ctx,const std::string & str)
 contextual_eval_string	src/mods/js.cpp	/^		void contextual_eval_string(mods::player* player,duk_context* ctx,const std::string& str) {$/;"	kind:function	line:941	namespace:mods::js	typeref:typename:void	signature:(mods::player * player,duk_context * ctx,const std::string & str)
 contract	src/mods/contract-types.hpp	/^		contract(contract_vnum_t c_vnum,std::string in_title,std::string desc) : vnum(c_vnum), title(i/;"	kind:function	line:19	struct:mods::contracts::contract	file:	access:public	signature:(contract_vnum_t c_vnum,std::string in_title,std::string desc)
@@ -6433,8 +6436,8 @@ contracts	src/mods/player.hpp	/^namespace mods::contracts {$/;"	kind:namespace	l
 contracts_with_callbacks	src/mods/scripted-sequence-events.cpp	/^	std::vector<contract_vnum_t> contracts_with_callbacks;$/;"	kind:variable	line:12	namespace:mods::scripted_sequence_events	typeref:typename:std::vector<contract_vnum_t>
 control	src/mods/message-server.cpp	/^		uint16_t control;$/;"	kind:member	line:33	struct:mods::message_server::channel_message_t	typeref:typename:uint16_t	file:	access:public
 conversation_id	src/mods/dialog-tree.cpp	/^		id_type_t conversation_id() {$/;"	kind:function	line:32	namespace:mods::dialog_tree::memory	typeref:typename:id_type_t	signature:()
-conversation_t	src/mods/dialog-tree.cpp	/^	conversation_t::conversation_t(std::string_view t,std::string_view npc) {$/;"	kind:function	line:151	class:mods::dialog_tree::conversation_t	signature:(std::string_view t,std::string_view npc)
-conversation_t	src/mods/dialog-tree.hpp	/^	struct conversation_t {$/;"	kind:struct	line:133	namespace:mods::dialog_tree	file:
+conversation_t	src/mods/dialog-tree.cpp	/^	conversation_t::conversation_t(std::string_view t,std::string_view npc) {$/;"	kind:function	line:153	class:mods::dialog_tree::conversation_t	signature:(std::string_view t,std::string_view npc)
+conversation_t	src/mods/dialog-tree.hpp	/^	struct conversation_t {$/;"	kind:struct	line:183	namespace:mods::dialog_tree	file:
 conversations	src/mods/dialog-tree.cpp	/^		boost::object_pool<conversation_t> conversations{64,0};$/;"	kind:variable	line:20	namespace:mods::dialog_tree::memory_pool	typeref:typename:boost::object_pool<conversation_t>
 convert_to_array	src/mods/orm/mob-equipment.cpp	/^	std::array<std::string,NUM_WEARS> mob_equipment::convert_to_array() const {$/;"	kind:function	line:163	class:mods::orm::mob_equipment	typeref:typename:std::array<std::string,NUM_WEARS>	signature:() const
 convert_to_fire_nade	src/mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::convert_to_fire_nade(obj_ptr_t& object){$/;"	kind:function	line:129	class:mods::classes::pyrexia	typeref:typename:std::pair<bool,std::string>	signature:(obj_ptr_t & object)
@@ -6787,8 +6790,8 @@ damnodice	src/structs.h	/^	uint16_t damnodice;          \/* The number of damage
 damroll	src/mods/player.hpp	/^			auto& damroll() {$/;"	kind:function	line:388	struct:mods::player	typeref:typename:auto &	file:	access:public	signature:()
 damroll	src/structs.h	/^	points_t damroll;       \/* Any bonus or penalty to the damage roll *\/$/;"	kind:member	line:1409	struct:char_point_data	typeref:typename:points_t	file:	access:public
 damsizedice	src/structs.h	/^	uint16_t damsizedice;        \/* The size of the damage dice's           *\/$/;"	kind:member	line:1519	struct:mob_special_data	typeref:typename:uint16_t	file:	access:public
-data	src/mods/dialog-tree.hpp	/^		std::vector<char> data;$/;"	kind:member	line:50	struct:mods::dialog_tree::precondition_t	typeref:typename:std::vector<char>	file:	access:public
-data	src/mods/dialog-tree.hpp	/^		variable_data_t data;$/;"	kind:member	line:73	struct:mods::dialog_tree::state_t	typeref:typename:variable_data_t	file:	access:public
+data	src/mods/dialog-tree.hpp	/^			std::vector<char> data;$/;"	kind:member	line:60	struct:mods::dialog_tree::precondition_t	typeref:typename:std::vector<char>	file:	access:public
+data	src/mods/dialog-tree.hpp	/^			variable_data_t          data;$/;"	kind:member	line:99	struct:mods::dialog_tree::state_t	typeref:typename:variable_data_t	file:	access:public
 data	src/mods/mobs/resistance.cpp	/^	namespace data {$/;"	kind:namespace	line:12	namespace:mods::mobs::resistance	file:
 data	src/shop.h	/^	int data[100];$/;"	kind:member	line:117	struct:stack_data	typeref:typename:int[100]	file:	access:public
 data_block_type	src/mail.h	/^typedef struct data_block_type_d data_block_type;$/;"	kind:typedef	line:93	typeref:struct:data_block_type_d	file:
@@ -7198,7 +7201,7 @@ dir_to_str	src/globals.cpp	/^		std::string dir_to_str(int dir, bool adjective) {
 dirat	src/mods/util.hpp	/^#define dirat(/;"	kind:macro	line:556	file:	signature:(A)
 direction	src/mods/combat-composer/shared.hpp	/^			direction_t direction;$/;"	kind:member	line:59	struct:mods::combat_composer::phases::target_t	typeref:typename:direction_t	file:	access:public
 direction	src/mods/combat-composer/shared.hpp	/^			direction_t direction;$/;"	kind:member	line:88	struct:mods::combat_composer::phases::acquired_target_t	typeref:typename:direction_t	file:	access:public
-direction	src/mods/dialog-tree.hpp	/^		direction_t                 direction;$/;"	kind:member	line:111	struct:mods::dialog_tree::option_t	typeref:typename:direction_t	file:	access:public
+direction	src/mods/dialog-tree.hpp	/^			direction_t                 direction;$/;"	kind:member	line:167	struct:mods::dialog_tree::option_t	typeref:typename:direction_t	file:	access:public
 direction	src/mods/intent.hpp	/^		uint8_t 						direction;$/;"	kind:member	line:15	struct:mods::intent::intent_t	typeref:typename:uint8_t	file:	access:public
 direction	src/mods/mobs/defiler.hpp	/^		direction_t direction;$/;"	kind:member	line:17	struct:mods::mobs::target_t	typeref:typename:direction_t	file:	access:public
 direction	src/mods/mobs/orthos-agent.cpp	/^			direction_t direction;$/;"	kind:member	line:498	struct:mods::mobs::orthos_agent::attack_anyone_near_room::res	typeref:typename:direction_t	file:	access:public
@@ -7573,7 +7576,7 @@ entity_id	src/mods/affects.hpp	/^			TEntityId entity_id;$/;"	kind:member	line:74
 entity_id	src/mods/player.hpp	/^			using entity_id = uuid_t;$/;"	kind:typedef	line:88	struct:mods::player	typeref:typename:uuid_t	file:	access:public
 entity_type_t	src/mods/rooms.hpp	/^		using entity_type_t = room_rnum;$/;"	kind:typedef	line:255	namespace:mods::rooms::affects	typeref:typename:room_rnum	file:
 entry	src/db.h	/^	char *entry;$/;"	kind:member	line:286	struct:help_index_element	typeref:typename:char *	file:	access:public
-entry	src/mods/dialog-tree.cpp	/^	void entry() {$/;"	kind:function	line:223	namespace:mods::dialog_tree	typeref:typename:void	signature:()
+entry	src/mods/dialog-tree.cpp	/^	void entry() {$/;"	kind:function	line:247	namespace:mods::dialog_tree	typeref:typename:void	signature:()
 env	src/mods/lmdb/db.hpp	/^			MDB_env* env;$/;"	kind:member	line:76	struct:gdns::lmdb::gdns_env	typeref:typename:MDB_env *	file:	access:public
 env	src/mods/lmdb/db.hpp	/^			std::unique_ptr<gdns_env> env;$/;"	kind:member	line:102	struct:gdns::lmdb::db	typeref:typename:std::unique_ptr<gdns_env>	file:	access:public
 epoch_string	src/mods/date-time.cpp	/^	std::string epoch_string() {$/;"	kind:function	line:11	namespace:mods::date_time::irl	typeref:typename:std::string	signature:()
@@ -8910,7 +8913,7 @@ good	src/mods/js.hpp	/^				inline bool good() {$/;"	kind:function	line:50	struct
 good	src/mods/lmdb/db.hpp	/^				bool good() const { return m_db->good(); }$/;"	kind:function	line:222	struct:gdns::lmdb::client	typeref:typename:bool	file:	access:public	signature:() const
 good	src/mods/lmdb/db.hpp	/^			inline bool good() const { return m_db->good(); }$/;"	kind:function	line:247	struct:gdns::lmdb::server	typeref:typename:bool	file:	access:public	signature:() const
 good	src/mods/lmdb/db.hpp	/^			inline bool good() const { return m_good; }$/;"	kind:function	line:151	struct:gdns::lmdb::db	typeref:typename:bool	file:	access:public	signature:() const
-goto_conversation	src/mods/dialog-tree.hpp	/^		conversation_t*             goto_conversation;$/;"	kind:member	line:116	struct:mods::dialog_tree::option_t	typeref:typename:conversation_t *	file:	access:public
+goto_conversation	src/mods/dialog-tree.hpp	/^			conversation_t*             goto_conversation;$/;"	kind:member	line:168	struct:mods::dialog_tree::option_t	typeref:typename:conversation_t *	file:	access:public
 grab_mobile	src/mods/builder.cpp	/^char_data* grab_mobile(std::size_t index,bool& fetched) {$/;"	kind:function	line:2043	typeref:typename:char_data *	signature:(std::size_t index,bool & fetched)
 grab_raw_histfile_seconds	src/mods/player.cpp	/^	std::string grab_raw_histfile_seconds() {$/;"	kind:function	line:1487	namespace:mods	typeref:typename:std::string	signature:()
 grab_tree_by_name	src/mods/behaviour_tree_impl.cpp	/^	uint8_t grab_tree_by_name(const std::string& sv_tree) {$/;"	kind:function	line:105	namespace:mods::behaviour_tree_impl	typeref:typename:uint8_t	signature:(const std::string & sv_tree)
@@ -9237,9 +9240,9 @@ id	src/mods/blind.cpp	/^		uint64_t id;$/;"	kind:member	line:31	struct:mods::blin
 id	src/mods/builder/raid.hpp	/^		uint64_t id;$/;"	kind:member	line:53	struct:mods::builder::raid_t	typeref:typename:uint64_t	file:	access:public
 id	src/mods/corpse.cpp	/^		uint32_t id;$/;"	kind:member	line:41	struct:mods::corpse::corpse_explosive_t	typeref:typename:uint32_t	file:	access:public
 id	src/mods/corrosive.cpp	/^		uint32_t id;$/;"	kind:member	line:29	struct:mods::corrosive::corrode_damage_t	typeref:typename:uint32_t	file:	access:public
-id	src/mods/dialog-tree.hpp	/^		id_type_t                    id;$/;"	kind:member	line:140	struct:mods::dialog_tree::conversation_t	typeref:typename:id_type_t	file:	access:public
-id	src/mods/dialog-tree.hpp	/^		id_type_t                   id;$/;"	kind:member	line:117	struct:mods::dialog_tree::option_t	typeref:typename:id_type_t	file:	access:public
-id	src/mods/dialog-tree.hpp	/^		id_type_t id;$/;"	kind:member	line:65	struct:mods::dialog_tree::state_t	typeref:typename:id_type_t	file:	access:public
+id	src/mods/dialog-tree.hpp	/^			id_type_t                    id;$/;"	kind:member	line:227	struct:mods::dialog_tree::conversation_t	typeref:typename:id_type_t	file:	access:public
+id	src/mods/dialog-tree.hpp	/^			id_type_t                   id;$/;"	kind:member	line:169	struct:mods::dialog_tree::option_t	typeref:typename:id_type_t	file:	access:public
+id	src/mods/dialog-tree.hpp	/^			id_type_t                id;$/;"	kind:member	line:100	struct:mods::dialog_tree::state_t	typeref:typename:id_type_t	file:	access:public
 id	src/mods/ensnare.cpp	/^		uint32_t id;$/;"	kind:member	line:28	struct:mods::ensnare::ensnare_damage_t	typeref:typename:uint32_t	file:	access:public
 id	src/mods/lmdb.hpp	/^		id,name,short_description,long_description,description,item_number,$/;"	kind:enumerator	line:33	enum:mods::lmdb::key_type_t	file:	access:public
 id	src/mods/loot.cpp	/^		uint32_t id;$/;"	kind:member	line:335	struct:mods::loot::loot_t	typeref:typename:uint32_t	file:	access:public
@@ -9474,7 +9477,7 @@ init	src/mods/contracts.cpp	/^	void init() {$/;"	kind:function	line:176	namespac
 init	src/mods/corpse.cpp	/^	void init() {$/;"	kind:function	line:289	namespace:mods::corpse	typeref:typename:void	signature:()
 init	src/mods/date-time.cpp	/^	void init() {$/;"	kind:function	line:236	namespace:mods::date_time	typeref:typename:void	signature:()
 init	src/mods/debug.hpp	/^	static inline void init(bool tics){ debug_state = std::make_unique<state>(tics); }$/;"	kind:function	line:16	namespace:mods::debug	typeref:typename:void	file:	signature:(bool tics)
-init	src/mods/dialog-tree.cpp	/^	void init() {$/;"	kind:function	line:267	namespace:mods::dialog_tree	typeref:typename:void	signature:()
+init	src/mods/dialog-tree.cpp	/^	void init() {$/;"	kind:function	line:315	namespace:mods::dialog_tree	typeref:typename:void	signature:()
 init	src/mods/drops.cpp	/^	void init() {$/;"	kind:function	line:514	namespace:mods::drops	typeref:typename:void	signature:()
 init	src/mods/elevator.cpp	/^	void init() {$/;"	kind:function	line:34	namespace:mods::elevator	typeref:typename:void	signature:()
 init	src/mods/ensnare.cpp	/^	void init() {$/;"	kind:function	line:135	namespace:mods::ensnare	typeref:typename:void	signature:()
@@ -9887,7 +9890,7 @@ is_shotgun	src/mods/object-utils.cpp	/^	bool is_shotgun(const obj_ptr_t& weapon)
 is_shotgun_underbarrel	src/mods/object-utils.cpp	/^	bool is_shotgun_underbarrel(const obj_ptr_t& item) {$/;"	kind:function	line:67	namespace:mods::object_utils	typeref:typename:bool	signature:(const obj_ptr_t & item)
 is_shrapnel_claymore	src/mods/object-utils.cpp	/^	bool is_shrapnel_claymore(const obj_ptr_t& item) {$/;"	kind:function	line:92	namespace:mods::object_utils	typeref:typename:bool	signature:(const obj_ptr_t & item)
 is_shrapnel_corpse_charge	src/mods/object-utils.cpp	/^	bool is_shrapnel_corpse_charge(const obj_ptr_t& device) {$/;"	kind:function	line:86	namespace:mods::object_utils	typeref:typename:bool	signature:(const obj_ptr_t & device)
-is_simple_goto	src/mods/dialog-tree.cpp	/^	bool option_t::is_simple_goto() const {$/;"	kind:function	line:218	class:mods::dialog_tree::option_t	typeref:typename:bool	signature:() const
+is_simple_goto	src/mods/dialog-tree.cpp	/^	bool option_t::is_simple_goto() const {$/;"	kind:function	line:220	class:mods::dialog_tree::option_t	typeref:typename:bool	signature:() const
 is_smg	src/mods/object-utils.cpp	/^	bool is_smg(const obj_ptr_t& item) {$/;"	kind:function	line:80	namespace:mods::object_utils	typeref:typename:bool	signature:(const obj_ptr_t & item)
 is_smoked	src/mods/rooms.hpp	/^	static inline bool is_smoked(TRoom room) {$/;"	kind:function	line:350	namespace:mods::rooms	typeref:typename:bool	file:	signature:(TRoom room)
 is_sniper	src/mods/yaml.cpp	/^	bool rifle_description_t::is_sniper() const {$/;"	kind:function	line:451	class:mods::yaml::rifle_description_t	typeref:typename:bool	signature:() const
@@ -10302,8 +10305,8 @@ log_js_error	src/mods/js.cpp	/^		void log_js_error(std::string_view error) {$/;"
 log_section	src/mods/forge-engine/generated-rifle.cpp	/^	void generated_rifle_t::log_section(std::string_view section) {$/;"	kind:function	line:441	class:mods::forge_engine::generated_rifle_t	typeref:typename:void	signature:(std::string_view section)
 log_zone_error	src/mods/zone.cpp	/^	void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {$/;"	kind:function	line:149	namespace:mods::zone	typeref:typename:void	signature:(zone_rnum zone,int cmd_no,const char * message)
 logfile	src/comm.cpp	/^FILE *logfile = NULL;		\/* Where to send the log messages. *\/$/;"	kind:variable	line:161	typeref:typename:FILE *
-logic	src/mods/dialog-tree.hpp	/^		state_logic_t logic;$/;"	kind:member	line:72	struct:mods::dialog_tree::state_t	typeref:typename:state_logic_t	file:	access:public
-logic	src/mods/dialog-tree.hpp	/^		std::forward_list<state_t*> logic;$/;"	kind:member	line:113	struct:mods::dialog_tree::option_t	typeref:typename:std::forward_list<state_t * >	file:	access:public
+logic	src/mods/dialog-tree.hpp	/^			state_logic_t            logic;$/;"	kind:member	line:101	struct:mods::dialog_tree::state_t	typeref:typename:state_logic_t	file:	access:public
+logic	src/mods/dialog-tree.hpp	/^			std::forward_list<state_t*> logic;$/;"	kind:member	line:170	struct:mods::dialog_tree::option_t	typeref:typename:std::forward_list<state_t * >	file:	access:public
 logic	src/mods/forge-engine/generated-rifle.hpp	/^			logic_list_t logic;$/;"	kind:member	line:1796	struct:mods::forge_engine::balance_ruleset_t	typeref:typename:logic_list_t	file:	access:private
 logic_list_t	src/mods/forge-engine/generated-rifle.hpp	/^			using logic_list_t = std::deque<fixer_function_t>;$/;"	kind:typedef	line:1737	struct:mods::forge_engine::balance_ruleset_t	typeref:typename:std::deque<fixer_function_t>	file:	access:public
 login	src/db.cpp	/^bool login(std::string_view user_name,std::string_view password) {$/;"	kind:function	line:2098	typeref:typename:bool	signature:(std::string_view user_name,std::string_view password)
@@ -11762,7 +11765,7 @@ meqbuild_interface	src/mods/builder/meqbuild.cpp	/^	struct meqbuild_interface : 
 meqbuild_orm_type	src/mods/builder/meqbuild.cpp	/^	using meqbuild_orm_type = mods::orm::mob_equipment;$/;"	kind:typedef	line:31	namespace:mods::builder::meqbuild	typeref:typename:mods::orm::mob_equipment	file:
 meqbuild_vnum_t	src/mods/builder/meqbuild.cpp	/^	using meqbuild_vnum_t = uint64_t;$/;"	kind:typedef	line:30	namespace:mods::builder::meqbuild	typeref:typename:uint64_t	file:
 meqbuilder	src/mods/builder/meqbuild.cpp	/^	meqbuild_interface& meqbuilder(player_ptr_t player) {$/;"	kind:function	line:243	namespace:mods::builder::meqbuild	typeref:typename:meqbuild_interface &	signature:(player_ptr_t player)
-message	src/mods/dialog-tree.hpp	/^		std::string                 message;$/;"	kind:member	line:112	struct:mods::dialog_tree::option_t	typeref:typename:std::string	file:	access:public
+message	src/mods/dialog-tree.hpp	/^			std::string                 message;$/;"	kind:member	line:171	struct:mods::dialog_tree::option_t	typeref:typename:std::string	file:	access:public
 message	src/mods/message-server.cpp	/^		void* message;$/;"	kind:member	line:36	struct:mods::message_server::channel_message_t	typeref:typename:void *	file:	access:public
 message	src/mods/user-feedback.hpp	/^		std::string message;$/;"	kind:member	line:11	struct:mods::user::feedback	typeref:typename:std::string	file:	access:public
 message_buy	src/shop.h	/^	mods::string message_buy;		\/* Message when player buys item	*\/$/;"	kind:member	line:44	struct:shop_data	typeref:typename:mods::string	file:	access:public
@@ -13346,7 +13349,7 @@ open2	src/shop.h	/^	int	 open1, open2;		\/* When does the shop open?		*\/$/;"	ki
 open_dbi	src/mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::open_dbi() {$/;"	kind:function	line:308	class:mods::lmdb::_db_handle	typeref:typename:_db_handle::tuple_return_type_t	signature:()
 open_logfile	src/comm.cpp	/^int open_logfile(const char *filename, FILE *stderr_fp) {$/;"	kind:function	line:2846	typeref:typename:int	signature:(const char * filename,FILE * stderr_fp)
 opened	src/mods/bugs-fixtures.cpp	/^	static bool opened = false;$/;"	kind:variable	line:5	namespace:mods::bugs	typeref:typename:bool	file:
-operation	src/mods/dialog-tree.hpp	/^		operation_t                 operation;$/;"	kind:member	line:114	struct:mods::dialog_tree::option_t	typeref:typename:operation_t	file:	access:public
+operation	src/mods/dialog-tree.hpp	/^			operation_t                 operation;$/;"	kind:member	line:172	struct:mods::dialog_tree::option_t	typeref:typename:operation_t	file:	access:public
 operator ""_s	src/mods/lmdb.hpp	/^	inline static std::string operator "" _s(const char* str,std::size_t size) {$/;"	kind:function	line:21	namespace:mods::lmdb	typeref:typename:std::string	file:	signature:(const char * str,std::size_t size)
 operator ""_s	src/mods/util.hpp	/^static inline std::string operator "" _s(const char* s,uint64_t i) {$/;"	kind:function	line:13	typeref:typename:std::string	file:	signature:(const char * s,uint64_t i)
 operator *	src/mods/string.hpp	/^			const char* operator*() {$/;"	kind:function	line:45	struct:mods::string	typeref:typename:const char *	file:	access:public	signature:()
@@ -13389,13 +13392,13 @@ optby_uuid	src/mods/pfind.cpp	/^	std::optional<player_ptr_t> optby_uuid(uuid_t p
 optcd_t	src/globals.hpp	/^using optcd_t = opt_t<char_data*>;$/;"	kind:typedef	line:132	typeref:typename:opt_t<char_data * >	file:
 optimal_range	src/mods/mobs/smart-mob.cpp	/^	int smart_mob::optimal_range() const {$/;"	kind:function	line:16	class:mods::mobs::smart_mob	typeref:typename:int	signature:() const
 option_id	src/mods/dialog-tree.cpp	/^		id_type_t option_id() {$/;"	kind:function	line:24	namespace:mods::dialog_tree::memory	typeref:typename:id_type_t	signature:()
-option_t	src/mods/dialog-tree.cpp	/^	option_t::option_t($/;"	kind:function	line:140	class:mods::dialog_tree::option_t	signature:(std::string_view msg,conversation_t * load_this_conversation,direction_t d)
-option_t	src/mods/dialog-tree.cpp	/^	option_t::option_t($/;"	kind:function	line:163	class:mods::dialog_tree::option_t	signature:(std::string_view question,conversation_t * load_this_conversation)
-option_t	src/mods/dialog-tree.cpp	/^	option_t::option_t($/;"	kind:function	line:189	class:mods::dialog_tree::option_t	signature:(std::string_view question,std::vector<std::string> logic)
-option_t	src/mods/dialog-tree.hpp	/^	struct option_t {$/;"	kind:struct	line:82	namespace:mods::dialog_tree	file:
+option_t	src/mods/dialog-tree.cpp	/^	option_t::option_t($/;"	kind:function	line:142	class:mods::dialog_tree::option_t	signature:(std::string_view msg,conversation_t * load_this_conversation,direction_t d)
+option_t	src/mods/dialog-tree.cpp	/^	option_t::option_t($/;"	kind:function	line:165	class:mods::dialog_tree::option_t	signature:(std::string_view question,conversation_t * load_this_conversation)
+option_t	src/mods/dialog-tree.cpp	/^	option_t::option_t($/;"	kind:function	line:191	class:mods::dialog_tree::option_t	signature:(std::string_view question,std::vector<std::string> logic)
+option_t	src/mods/dialog-tree.hpp	/^	struct option_t {$/;"	kind:struct	line:115	namespace:mods::dialog_tree	file:
 optional_orm_t	src/mods/builder/slotted-builder.hpp	/^			using optional_orm_t = std::optional<std::shared_ptr<TOrmType>>;$/;"	kind:typedef	line:23	struct:mods::builder::slotted_builder	typeref:typename:std::optional<std::shared_ptr<TOrmType>>	file:	access:public
 options	src/mods/dialog-tree.cpp	/^		boost::object_pool<option_t> options{64,0};$/;"	kind:variable	line:19	namespace:mods::dialog_tree::memory_pool	typeref:typename:boost::object_pool<option_t>
-options	src/mods/dialog-tree.hpp	/^		std::forward_list<option_t*> options;$/;"	kind:member	line:139	struct:mods::dialog_tree::conversation_t	typeref:typename:std::forward_list<option_t * >	file:	access:public
+options	src/mods/dialog-tree.hpp	/^			std::forward_list<option_t*> options;$/;"	kind:member	line:228	struct:mods::dialog_tree::conversation_t	typeref:typename:std::forward_list<option_t * >	file:	access:public
 optobj_t	src/globals.hpp	/^using optobj_t = opt_t<obj_data*>;$/;"	kind:typedef	line:133	typeref:typename:opt_t<obj_data * >	file:
 optr	src/globals.cpp	/^obj_ptr_t optr(obj_data* in_obj) {$/;"	kind:function	line:1379	typeref:typename:obj_ptr_t	signature:(obj_data * in_obj)
 optr_by_uuid	src/globals.cpp	/^obj_ptr_t optr_by_uuid(uuid_t id) {$/;"	kind:function	line:1419	typeref:typename:obj_ptr_t	signature:(uuid_t id)
@@ -14019,11 +14022,11 @@ practice_skill	src/mods/skills.cpp	/^	std::string practice_skill(player_ptr_t& p
 pre_game	src/mods/debug-pre-game.hpp	/^namespace mods::debug::pre_game {$/;"	kind:namespace	line:42	namespace:mods::debug	file:
 pre_game_loop	src/globals.cpp	/^		void pre_game_loop() {$/;"	kind:function	line:561	namespace:mods::globals	typeref:typename:void	signature:()
 precon_type_t	src/mods/dialog-tree.cpp	/^	using precon_type_t = precondition_t::type_t;$/;"	kind:typedef	line:78	namespace:mods::dialog_tree	typeref:typename:precondition_t::type_t	file:
-precondition	src/mods/dialog-tree.hpp	/^		precondition_t               precondition;$/;"	kind:member	line:138	struct:mods::dialog_tree::conversation_t	typeref:typename:precondition_t	file:	access:public
+precondition	src/mods/dialog-tree.hpp	/^			precondition_t               precondition;$/;"	kind:member	line:229	struct:mods::dialog_tree::conversation_t	typeref:typename:precondition_t	file:	access:public
 precondition_id	src/mods/dialog-tree.cpp	/^		id_type_t precondition_id() {$/;"	kind:function	line:36	namespace:mods::dialog_tree::memory	typeref:typename:id_type_t	signature:()
-precondition_ptr	src/mods/dialog-tree.hpp	/^	using precondition_ptr = precondition_t*;$/;"	kind:typedef	line:57	namespace:mods::dialog_tree	typeref:typename:precondition_t *	file:
+precondition_ptr	src/mods/dialog-tree.hpp	/^	using precondition_ptr = precondition_t*;$/;"	kind:typedef	line:74	namespace:mods::dialog_tree	typeref:typename:precondition_t *	file:
 precondition_t	src/mods/dialog-tree.cpp	/^	precondition_t::precondition_t(precon_type_t t, std::string_view d) {$/;"	kind:function	line:79	class:mods::dialog_tree::precondition_t	signature:(precon_type_t t,std::string_view d)
-precondition_t	src/mods/dialog-tree.cpp	/^	precondition_t::precondition_t(std::string_view npc) {$/;"	kind:function	line:159	class:mods::dialog_tree::precondition_t	signature:(std::string_view npc)
+precondition_t	src/mods/dialog-tree.cpp	/^	precondition_t::precondition_t(std::string_view npc) {$/;"	kind:function	line:161	class:mods::dialog_tree::precondition_t	signature:(std::string_view npc)
 precondition_t	src/mods/dialog-tree.hpp	/^	struct precondition_t {$/;"	kind:struct	line:16	namespace:mods::dialog_tree	file:
 preconditions	src/mods/dialog-tree.cpp	/^		boost::object_pool<precondition_t> preconditions{64,0};$/;"	kind:variable	line:17	namespace:mods::dialog_tree::memory_pool	typeref:typename:boost::object_pool<precondition_t>
 pref	src/structs.h	/^	uint64_t 	pref;	\/* preference flags for PC's.		*\/$/;"	kind:member	line:1475	struct:player_special_data_saved	typeref:typename:uint64_t	file:	access:public
@@ -14721,7 +14724,7 @@ remove_from_step_list_by_contract_vnum	src/mods/builder/conbuild.cpp	/^		void re
 remove_if_exists	src/mods/util-map.hpp	/^			static inline void remove_if_exists(TMapType* in_map,TKeyType key) {$/;"	kind:function	line:14	namespace:mods::util::maps	typeref:typename:void	file:	signature:(TMapType * in_map,TKeyType key)
 remove_lvl	src/boards.h	/^	int	remove_lvl;	\/* min level to remove messages from this board *\/$/;"	kind:member	line:31	struct:board_info_type	typeref:typename:int	file:	access:public
 remove_nickname	src/mods/rooms.cpp	/^	void remove_nickname(const room_rnum& room) {$/;"	kind:function	line:125	namespace:mods::rooms	typeref:typename:void	signature:(const room_rnum & room)
-remove_option	src/mods/dialog-tree.cpp	/^	void conversation_t::remove_option(option_t* opt) {$/;"	kind:function	line:172	class:mods::dialog_tree::conversation_t	typeref:typename:void	signature:(option_t * opt)
+remove_option	src/mods/dialog-tree.cpp	/^	void conversation_t::remove_option(option_t* opt) {$/;"	kind:function	line:174	class:mods::dialog_tree::conversation_t	typeref:typename:void	signature:(option_t * opt)
 remove_player_resting	src/mods/resting.cpp	/^	void remove_player_resting(player_ptr_t player) {$/;"	kind:function	line:20	namespace:mods::resting	typeref:typename:void	signature:(player_ptr_t player)
 remove_replenish	src/mods/intimidate.cpp	/^void remove_replenish(room_vnum room,std::string type){$/;"	kind:function	line:40	namespace:mods::zone	typeref:typename:void	signature:(room_vnum room,std::string type)
 remove_replenish	src/mods/zone.cpp	/^	void remove_replenish(room_vnum room,std::string type) {$/;"	kind:function	line:92	namespace:mods::zone	typeref:typename:void	signature:(room_vnum room,std::string type)
@@ -15666,8 +15669,10 @@ set_affect_to_increment	src/mods/rooms.cpp	/^	void set_affect_to_increment(room_
 set_ammo	src/mods/object-utils.hpp	/^		void set_ammo(obj_ptr_t& weapon,uint16_t ammo) {$/;"	kind:function	line:469	namespace:mods::object_utils::gods	typeref:typename:void	signature:(obj_ptr_t & weapon,uint16_t ammo)
 set_ammo	src/mods/player.cpp	/^	uint16_t player::set_ammo(uint16_t value) {$/;"	kind:function	line:822	class:mods::player	typeref:typename:uint16_t	signature:(uint16_t value)
 set_armor_hp	src/structs.cpp	/^void obj_data::set_armor_hp(int32_t amount) {$/;"	kind:function	line:76	class:obj_data	typeref:typename:void	signature:(int32_t amount)
-set_as_answer_goto	src/mods/dialog-tree.cpp	/^	void option_t::set_as_answer_goto(std::string_view answer,conversation_t* c) {$/;"	kind:function	line:212	class:mods::dialog_tree::option_t	typeref:typename:void	signature:(std::string_view answer,conversation_t * c)
-set_as_goto	src/mods/dialog-tree.cpp	/^	void option_t::set_as_goto(std::string_view question,conversation_t* c) {$/;"	kind:function	line:206	class:mods::dialog_tree::option_t	typeref:typename:void	signature:(std::string_view question,conversation_t * c)
+set_as_answer_goto	src/mods/dialog-tree.cpp	/^	void option_t::set_as_answer_goto(std::string_view answer,conversation_t* c) {$/;"	kind:function	line:214	class:mods::dialog_tree::option_t	typeref:typename:void	signature:(std::string_view answer,conversation_t * c)
+set_as_goto	src/mods/dialog-tree.cpp	/^	void option_t::set_as_goto(std::string_view question,conversation_t* c) {$/;"	kind:function	line:208	class:mods::dialog_tree::option_t	typeref:typename:void	signature:(std::string_view question,conversation_t * c)
+set_as_question_with_immediate_answer_with_logic	src/mods/dialog-tree.cpp	/^	void option_t::set_as_question_with_immediate_answer_with_logic(std::string_view question,std::/;"	kind:function	line:223	class:mods::dialog_tree::option_t	typeref:typename:void	signature:(std::string_view question,std::string_view answer,std::string_view logic)
+set_as_question_with_immediate_answer_with_logic	src/mods/dialog-tree.cpp	/^	void option_t::set_as_question_with_immediate_answer_with_logic(std::string_view question,std::/;"	kind:function	line:226	class:mods::dialog_tree::option_t	typeref:typename:void	signature:(std::string_view question,std::string_view answer,const std::vector<std::string> & logic)
 set_attacker	src/mods/js.cpp	/^		static duk_ret_t set_attacker(duk_context *ctx) {$/;"	kind:function	line:1094	namespace:mods::js	typeref:typename:duk_ret_t	file:	signature:(duk_context * ctx)
 set_attacker	src/mods/player.hpp	/^			void set_attacker(uuid_t a) {$/;"	kind:function	line:797	struct:mods::player	typeref:typename:void	file:	access:public	signature:(uuid_t a)
 set_attacking_with	src/mods/player.hpp	/^			void set_attacking_with(obj_ptr_t weapon) {$/;"	kind:function	line:777	struct:mods::player	typeref:typename:void	file:	access:public	signature:(obj_ptr_t weapon)
@@ -15782,6 +15787,7 @@ set_name	src/mods/chat.cpp	/^	void channel::set_name(std::string_view name) {$/;
 set_name	src/mods/player.cpp	/^	void player::set_name(std::string in_name) {$/;"	kind:function	line:851	class:mods::player	typeref:typename:void	signature:(std::string in_name)
 set_node	src/mods/behaviour_tree.hpp	/^		void set_node(const node & btree_node){$/;"	kind:function	line:38	struct:mods::behaviour_tree	typeref:typename:void	file:	access:public	signature:(const node & btree_node)
 set_node_type	src/mods/behaviour_tree_node.hpp	/^			void set_node_type(const node_type_t& n) {$/;"	kind:function	line:119	struct:mods::behaviour_tree_node	typeref:typename:void	file:	access:public	signature:(const node_type_t & n)
+set_none	src/mods/dialog-tree.cpp	/^	void option_t::set_none() {$/;"	kind:function	line:228	class:mods::dialog_tree::option_t	typeref:typename:void	signature:()
 set_obj_from_room	src/mods/world-configuration.cpp	/^		void set_obj_from_room(bool b) {$/;"	kind:function	line:214	namespace:mods::world_conf::toggle	typeref:typename:void	signature:(bool b)
 set_once	src/mods/cached-map.hpp	/^			void set_once(const TKey& key, const TValue& value) {$/;"	kind:function	line:22	struct:mods::cached_map	typeref:typename:void	file:	access:public	signature:(const TKey & key,const TValue & value)
 set_once	src/mods/indexed-string.hpp	/^			void set_once(const std::string& key, const std::string& value) {$/;"	kind:function	line:20	struct:mods::indexed_string	typeref:typename:void	file:	access:public	signature:(const std::string & key,const std::string & value)
@@ -15812,7 +15818,7 @@ set_points	src/mods/js.cpp	/^		static duk_ret_t set_points(duk_context *ctx) {$/
 set_position	src/mods/player.cpp	/^	void player::set_position(byte pos) {$/;"	kind:function	line:1607	class:mods::player	typeref:typename:void	signature:(byte pos)
 set_prefs	src/mods/player.hpp	/^			void set_prefs(long prefs) {$/;"	kind:function	line:593	struct:mods::player	typeref:typename:void	file:	access:public	signature:(long prefs)
 set_private	src/mods/chat.hpp	/^			void set_private(bool b_private) {$/;"	kind:function	line:19	struct:mods::chat::channel	typeref:typename:void	file:	access:public	signature:(bool b_private)
-set_question_with_logic	src/mods/dialog-tree.cpp	/^	void option_t::set_question_with_logic($/;"	kind:function	line:178	class:mods::dialog_tree::option_t	typeref:typename:void	signature:(std::string_view question,std::vector<std::string> code)
+set_question_with_logic	src/mods/dialog-tree.cpp	/^	void option_t::set_question_with_logic($/;"	kind:function	line:180	class:mods::dialog_tree::option_t	typeref:typename:void	signature:(std::string_view question,std::vector<std::string> code)
 set_queue_behaviour	src/structs.h	/^			void set_queue_behaviour(queue_behaviour_enum_t queue_behaviour) {$/;"	kind:function	line:1684	struct:mods::descriptor_data	typeref:typename:void	file:	access:public	signature:(queue_behaviour_enum_t queue_behaviour)
 set_rate_limit	src/mods/rate-limiting.cpp	/^	void set_rate_limit(action_t action,int times,int seconds) {$/;"	kind:function	line:51	namespace:mods::rate_limiting	typeref:typename:void	signature:(action_t action,int times,int seconds)
 set_rate_limit_help	src/mods/rate-limiting.cpp	/^	static const char* set_rate_limit_help = "usage: set_rate_limit <action> <times> <seconds>";$/;"	kind:variable	line:84	namespace:mods::rate_limiting	typeref:typename:const char *	file:
@@ -16422,10 +16428,10 @@ state	src/mods/player.cpp	/^	int player::state() {$/;"	kind:function	line:1421	c
 state	src/structs.h	/^	ai_state_t state;$/;"	kind:member	line:1799	struct:char_data	typeref:typename:ai_state_t	file:	access:public
 state_fetch	src/globals.cpp	/^		std::unique_ptr<ai_state>& state_fetch(char_data* ch) {$/;"	kind:function	line:633	namespace:mods::globals	typeref:typename:std::unique_ptr<ai_state> &	signature:(char_data * ch)
 state_id	src/mods/dialog-tree.cpp	/^		id_type_t state_id() {$/;"	kind:function	line:28	namespace:mods::dialog_tree::memory	typeref:typename:id_type_t	signature:()
-state_logic_t	src/mods/dialog-tree.hpp	/^	using state_logic_t    = std::function<void(void*,void*)>;$/;"	kind:typedef	line:58	namespace:mods::dialog_tree	file:
+state_logic_t	src/mods/dialog-tree.hpp	/^	using state_logic_t    = std::function<void(void*,void*)>;$/;"	kind:typedef	line:75	namespace:mods::dialog_tree	file:
 state_orm	src/mods/unit-tests/contracts.cpp	/^			mods::orm::player_contract_state state_orm;$/;"	kind:variable	line:234	typeref:typename:mods::orm::player_contract_state
-state_t	src/mods/dialog-tree.hpp	/^		state_t(state_logic_t l,variable_data_t&& d) :$/;"	kind:function	line:66	struct:mods::dialog_tree::state_t	file:	access:public	signature:(state_logic_t l,variable_data_t && d)
-state_t	src/mods/dialog-tree.hpp	/^	struct state_t {$/;"	kind:struct	line:64	namespace:mods::dialog_tree	file:
+state_t	src/mods/dialog-tree.hpp	/^			state_t(state_logic_t l,variable_data_t&& d) :$/;"	kind:function	line:85	struct:mods::dialog_tree::state_t	file:	access:public	signature:(state_logic_t l,variable_data_t && d)
+state_t	src/mods/dialog-tree.hpp	/^	struct state_t {$/;"	kind:struct	line:81	namespace:mods::dialog_tree	file:
 statement	src/mods/orm/mob-roam.cpp	/^		using statement = std::vector<mods::orm::util::statement_t>;$/;"	kind:typedef	line:22	function:mods::orm::mob_roam::delete_foobar_profile	typeref:typename:std::vector<mods::orm::util::statement_t>	file:
 statement	src/mods/orm/mob-roam.cpp	/^		using statement = std::vector<mods::orm::util::statement_t>;$/;"	kind:typedef	line:6	function:mods::orm::mob_roam::get_compound_list	typeref:typename:std::vector<mods::orm::util::statement_t>	file:
 statement	src/mods/orm/player-contract-state.cpp	/^		using statement = std::vector<mods::orm::util::statement_t>;$/;"	kind:typedef	line:17	function:mods::orm::player_contract_state::delete_by_player_id_contract_vnum	typeref:typename:std::vector<mods::orm::util::statement_t>	file:
@@ -16975,7 +16981,7 @@ timer	src/structs.h	/^	int	timer;$/;"	kind:member	line:1090	struct:obj_file_elem
 times_message	src/shop.cpp	/^char *times_message(struct obj_data *obj, char *name, int num) {$/;"	kind:function	line:415	typeref:typename:char *	signature:(struct obj_data * obj,char * name,int num)
 title	src/mods/builder.cpp	/^	bool title(room_rnum room_id,std::string_view str_title) {$/;"	kind:function	line:1071	namespace:mods::builder	typeref:typename:bool	signature:(room_rnum room_id,std::string_view str_title)
 title	src/mods/contract-types.hpp	/^		std::string title;$/;"	kind:member	line:25	struct:mods::contracts::contract	typeref:typename:std::string	file:	access:public
-title	src/mods/dialog-tree.hpp	/^		std::string                  title;$/;"	kind:member	line:136	struct:mods::dialog_tree::conversation_t	typeref:typename:std::string	file:	access:public
+title	src/mods/dialog-tree.hpp	/^			std::string                  title;$/;"	kind:member	line:231	struct:mods::dialog_tree::conversation_t	typeref:typename:std::string	file:	access:public
 title	src/mods/player-contract-instance.hpp	/^			std::string_view title() const {$/;"	kind:function	line:126	struct:mods::contracts::player_contract_instance	typeref:typename:std::string_view	file:	access:public	signature:() const
 title	src/mods/player.hpp	/^			mods::string& title() {$/;"	kind:function	line:403	struct:mods::player	typeref:typename:mods::string &	file:	access:public	signature:()
 title	src/shop.h	/^	mods::string title;$/;"	kind:member	line:33	struct:shop_data	typeref:typename:mods::string	file:	access:public
@@ -17147,7 +17153,7 @@ txt_block	src/structs.h	/^struct txt_block {$/;"	kind:struct	line:1611	file:
 type	src/act.wizard.cpp	/^	const char type;$/;"	kind:member	line:2400	struct:set_struct	typeref:typename:const char	file:	access:public
 type	src/db.h	/^	int	type;$/;"	kind:member	line:300	struct:ban_list_element	typeref:typename:int	file:	access:public
 type	src/mods/builder/raid.hpp	/^		raid_type_t type;$/;"	kind:member	line:56	struct:mods::builder::raid_t	typeref:typename:raid_type_t	file:	access:public
-type	src/mods/dialog-tree.hpp	/^		type_t            type;$/;"	kind:member	line:49	struct:mods::dialog_tree::precondition_t	typeref:typename:type_t	file:	access:public
+type	src/mods/dialog-tree.hpp	/^			type_t            type;$/;"	kind:member	line:61	struct:mods::dialog_tree::precondition_t	typeref:typename:type_t	file:	access:public
 type	src/mods/forge-engine/generator.cpp	/^		rifle_types_t type;$/;"	kind:member	line:109	struct:mods::forge_engine::type_chances_t	typeref:typename:rifle_types_t	file:	access:public
 type	src/mods/forge-engine/generator.hpp	/^		explosive_types_t type;$/;"	kind:member	line:438	struct:mods::forge_engine::generated_explosive_t	typeref:typename:explosive_types_t	file:	access:public
 type	src/mods/intimidate.hpp	/^		std::string type;$/;"	kind:member	line:17	struct:mods::zone::replenish_command	typeref:typename:std::string	file:	access:public
@@ -17461,7 +17467,7 @@ values	src/mods/values.cpp	/^namespace mods::values {$/;"	kind:namespace	line:19
 values	src/mods/values.hpp	/^namespace mods::values {$/;"	kind:namespace	line:13	namespace:mods	file:
 values_t	src/mods/builder.cpp	/^	using values_t = std::map<std::string,std::string>;$/;"	kind:typedef	line:746	namespace:mods::builder	typeref:typename:std::map<std::string,std::string>	file:
 values_with_password	src/mods/sql.hpp	/^			compositor<T>& values_with_password(const value_map& values, std::string_view password_field)/;"	kind:function	line:178	struct:mods::sql::compositor	typeref:typename:compositor<T> &	file:	access:public	signature:(const value_map & values,std::string_view password_field)
-variable_data_t	src/mods/dialog-tree.hpp	/^	using variable_data_t  = std::vector<char>;$/;"	kind:typedef	line:59	namespace:mods::dialog_tree	typeref:typename:std::vector<char>	file:
+variable_data_t	src/mods/dialog-tree.hpp	/^	using variable_data_t  = std::vector<char>;$/;"	kind:typedef	line:76	namespace:mods::dialog_tree	typeref:typename:std::vector<char>	file:
 variant_t	src/mods/forge-engine/generated-rifle.hpp	/^	using variant_t = std::variant<uint32_t,float>;$/;"	kind:typedef	line:24	namespace:mods::forge_engine	typeref:typename:std::variant<uint32_t,float>	file:
 variants_t	src/mods/values.hpp	/^		using variants_t = std::variant<bool,float,int,uint8_t,uint16_t,uint32_t,std::string>;$/;"	kind:typedef	line:14	namespace:mods::values	typeref:typename:std::variant<bool,float,int,uint8_t,uint16_t,uint32_t,std::string>	file:
 variation	src/mods/mobs/mini-gunner.hpp	/^			std::string variation;$/;"	kind:member	line:100	struct:mods::mobs::mini_gunner	typeref:typename:std::string	file:	access:private

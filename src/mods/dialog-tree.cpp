@@ -130,6 +130,7 @@ namespace mods::dialog_tree {
 		auto opt_who = create_option(option_t(question,load_this_conversation));
 		options.push_front(opt_who);
 	}
+
 	void conversation_t::add_answer_goto_conversation(
 	    std::string_view answer,
 	    conversation_t* load_this_conversation
@@ -137,6 +138,7 @@ namespace mods::dialog_tree {
 		auto opt = create_option(option_t(answer,load_this_conversation,dir::D_ANSWER));
 		options.push_front(opt);
 	}
+
 	option_t::option_t(
 	    std::string_view msg,
 	    conversation_t* load_this_conversation,
@@ -193,7 +195,7 @@ namespace mods::dialog_tree {
 	}
 	option_t* conversation_t::add_question_with_logic(
 	    std::string_view question,
-	    std::vector<std::string> logic
+	    const std::vector<std::string>& logic
 	) {
 		auto opt = create_option(option_t(question,logic));
 		options.push_front(opt);
@@ -218,22 +220,68 @@ namespace mods::dialog_tree {
 	bool option_t::is_simple_goto() const {
 		return operation == operation_t::OP_GOTO;
 	}
+	void option_t::set_as_question_with_immediate_answer_with_logic(std::string_view question,std::string_view answer,std::string_view logic) {
+		direction = direction_t::D_ASK_WITH_IMMEDIATE_ANSWER_WITH_LOGIC;
+	}
+	void option_t::set_as_question_with_immediate_answer_with_logic(std::string_view question,std::string_view answer,const std::vector<std::string>& logic) {
+	}
+	void option_t::set_none() {
+		type = option_t::type_t::NONE;
+	}
+	void conversation_t::add_question_with_immediate_answer_and_logic(
+	    std::string_view question,
+	    std::string_view answer,
+	    std::string_view logic
+	) {
+		direction = direction_t::D_ASK_WITH_IMMEDIATE_ANSWER_WITH_LOGIC;
+		auto opt = create_option(option_t(question));
+		opt->set_as_question_with_immediate_answer_with_logic(question,answer,logic);
+		options.push_front(opt);
+		operation = operation_t::OP_NONE;
+		std::forward_list<option_t*> options;
+		precondition.set_none();
+		title;
+	}
 
 	/** [Blacksmith.intro] */
 	void entry() {
 		std::string mob = "A Red Cloak Blacksmith";
 		auto servant = create_conversation(conversation_t("Marduk.servant",mob));
 		auto marduk_q = create_conversation(conversation_t("Marduk.questions",mob));
-		//marduk_q->add_question_goto_conversation("Can you tell me more about Lord Marduk?",
+		auto marduk_about = create_conversation(conversation_t("Marduk.about",mob));
+		auto marduk_about_mode_set{"mode(redisplay)"};
+		std::string_view marduk_about_emote{"emote(\"The Blacksmith laughs at himself... embarrassed...\")"};
+		marduk_about->set_mode(marduk_about_mode_set);
+		marduk_about->add_question_with_immediate_answer_and_logic(
+		    "How long has he been in power?",
+		    "Oh, quite a long time actually... way before my time even... heh... ",
+		    marduk_about_emote
+		);
+		/*
+		-> -[mode(redisplay)]
+		-> "How long has he been in power?"
+		<- "Oh, quite a long time actually... way before my time even.. heh.. "
+		|-> -[emote("The Blacksmith laughs at himself... embarrassed...")]
+		-> "Why is he called the Lord of The Seven Seas?"
+		<- "... long dialog part 1 ... "
+		-> "Who is his second in command?"
+		-> "... long dialog part 2 ... "
+		|-> -[emote("The Blacksmith looks to have shed a tear.. he wipes it away in haste.. ")]
+		-> "I'd like to talk about something else..."
+		-[return(Marduk.questions)]
+		*/
+		marduk_q->add_question_goto_conversation("Can you tell me more about Lord Marduk?",marduk_about);
 		marduk_q->add_question_with_logic(
 		    "[Hard-ass]: He has some nerve invading that village in Mount Orthos...",
 		std::vector<std::string> {
-			"-[effect(+5 rage,-10 reputation(Marduk)]",
-			"-[if(roll(player,intimidation) > 2d6)]",
-			"	 |->[add_option(Marduk.motivation)]",
-			"	 |->[add_option(Marduk.revenge_rumors)]",
-			"-[if(roll(player,unlucky) < 2d6)]",
-			"	 |->[alert_guards()]"
+			"effect('+5 rage,-10 reputation(Marduk)');",
+			"if(roll(player,intimidation) > roll('2d6')){",
+			"	 add_option(Marduk.motivation);",
+			"	 add_option(Marduk.revenge_rumors);",
+			"}",
+			"if(roll(player,unlucky) < roll('2d6')){",
+			"	 alert_guards();",
+			"}",
 		}
 		);
 		servant->add_answer_goto_conversation("Why yes! I am a loyal servant of Lord Marduk!",marduk_q);
@@ -266,6 +314,9 @@ namespace mods::dialog_tree {
 	}
 	void init() {
 		entry();
+		std::cerr << "sleeping....\n";
+		sleep(-1);
+		std::cerr << "*yawn*... \n";
 	}
 
 };
