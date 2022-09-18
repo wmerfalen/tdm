@@ -20,6 +20,14 @@
 	#define mo_debug(A)
 #endif
 
+
+#define __MENTOC_MODS_WEAPONS_INTEGRAL_OBJECTS_DEBUG__
+#ifdef __MENTOC_MODS_WEAPONS_INTEGRAL_OBJECTS_DEBUG__
+	#define mw_debug(A) std::cerr << red_str("[mods::integral_objects::weapons_locker]:") << A <<"\n";
+#else
+	#define mw_debug(A)
+#endif
+
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::integral_objects {
@@ -52,20 +60,19 @@ namespace mods::integral_objects {
 		}
 	}
 	void feed_weapon_locker(room_vnum room) {
-		std::vector<std::string> values;
-		/** TODO: pull from mods::orm::locker */
-		mods::db::get_section_vector("weapon-locker", std::to_string(room), values);
+		mw_debug("feed_weapon_locker entry. room: " << room);
 		auto locker = mods::integral_objects_db::first_or_create(room,"weapon-locker", ITEM_CONTAINER, "weapon-locker.yml");
-		/**
-		 * SELECT lo_yaml_file from locker where lo_room_vnum = room AND lo_type = 'WEAPON';
-		 */
-		for(auto yaml: values) {
+		std::vector<std::pair<uint16_t,std::string>> list = mods::orm::locker::contents("weapon",room);
+		for(auto& pair : list) {
+			auto yaml = pair.second;
 			if(!mods::object_utils::assert_sane_object(yaml)) {
+				log("Not a sane yaml file (feed_weapon_locker): '%s'",yaml.c_str());
 				continue;
 			}
 			auto yaml_file = mods::object_utils::get_yaml_file(yaml);
 			auto uuid_list = mods::query_objects::query_contents_by_yaml(locker,yaml_file);
-			if(uuid_list.size() < weapon_locker_quota(locker)) {
+			if(uuid_list.size() < pair.first) {
+				mw_debug("Filling with: " << yaml);
 				auto obj = create_object(mods::object_utils::get_yaml_type(yaml),yaml_file);
 				obj_to_obj(obj,locker);
 			}
@@ -205,8 +212,8 @@ SUPERCMD(do_install_weapon_locker) {
 		}
 	}
 
-	//mods::zone::register_replenish(world[player->room()].number,"weapon-locker");
-	//mods::zone::remove_replenish(world[player->room()].number,"weapon-locker");
+	mods::zone::register_replenish(world[player->room()].number,"weapon-locker");
+	mods::zone::remove_replenish(world[player->room()].number,"weapon-locker");
 	ADMIN_DONE();
 }
 SUPERCMD(do_list_weapon_locker) {
@@ -228,7 +235,7 @@ SUPERCMD(do_remove_weapon_locker_item) {
 		auto opt_id = mods::util::stoi_optional<uint64_t>(vec_args[i]);
 		if(opt_id.has_value() == false) {
 			player->errorln(CAT("Expecting integer but got: '",vec_args[i],"' for argument number:",i + 1,". Please look at the output of admin:weapon-locker:list for the list of ID's.. ", usage.data()).c_str());
-			return;
+			continue;
 		}
 		auto status = mods::orm::locker::remove_item_by_id(opt_id.value());
 		if(!std::get<0>(status)) {
@@ -237,9 +244,8 @@ SUPERCMD(do_remove_weapon_locker_item) {
 			player->admin_success(CAT("Removed: '",vec_args[i],"'"));
 		}
 	}
+	mods::orm::locker::perform_cleanup();
 
-	//mods::zone::register_replenish(world[player->room()].number,"weapon-locker");
-	//mods::zone::remove_replenish(world[player->room()].number,"weapon-locker");
 	ADMIN_DONE();
 }
 SUPERCMD(do_uninstall_armor_locker) {
@@ -368,6 +374,8 @@ SUPERCMD(do_uninstall_sign) {
 }
 static const std::vector<std::string> weapon_locker = {
 	"admin:weapon-locker:install",
+	"admin:weapon-locker:list",
+	"admin:weapon-locker:remove:item",
 	"admin:weapon-locker:uninstall",
 	"admin:weapon-locker:quota",
 };

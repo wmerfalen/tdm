@@ -34,16 +34,19 @@ namespace mods::orm {
 		};
 		static std::vector<std::string> list_locker_by_type(std::string_view type,const room_vnum& room);
 		static std::string_view to_type(std::string_view t) {
+			return TYPES[to_type_integral(t)];
+		}
+		static type_t to_type_integral(std::string_view t) {
 			if(t.compare("weapon") == 0) {
-				return TYPES[type_t::WEAPON];
+				return type_t::WEAPON;
 			}
 			if(t.compare("armor") == 0) {
-				return TYPES[type_t::ARMOR];
+				return type_t::ARMOR;
 			}
 			if(t.compare("ammo") == 0) {
-				return TYPES[type_t::AMMO];
+				return type_t::AMMO;
 			}
-			return TYPES[type_t::UNKNOWN];
+			return type_t::UNKNOWN;
 		}
 		static constexpr uint16_t default_weapon_count = 3;
 		static constexpr uint16_t default_ammo_count = 3;
@@ -54,6 +57,8 @@ namespace mods::orm {
 		static status_t set_quota(std::string_view type,const room_vnum& room,uint16_t count);
 		static status_t remove_locker(std::string_view type,const room_vnum& room);
 		static status_t remove_item_by_id(const uint64_t& id);
+		static const std::vector<std::pair<uint16_t,std::string>>& contents(std::string_view type,const room_vnum& room);
+		static void perform_cleanup();
 		MENTOC_ORM_CLASS(LOCKER_ORM_MEMBERS,"locker");
 		auto vnum() {
 			return id;

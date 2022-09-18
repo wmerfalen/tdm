@@ -11,11 +11,11 @@
 
 //#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
-#define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
-#define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
+	#define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
+	#define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
 #else
-#define z_debug(A)
-#define rr_debug(A)
+	#define z_debug(A)
+	#define rr_debug(A)
 #endif
 extern std::deque<zone_data> zone_table;
 extern std::tuple<int16_t,std::string> parse_sql_rooms();
@@ -126,8 +126,8 @@ namespace mods::zone {
 	 */
 	void blacklist_zone(int zone) {
 		auto it = std::find(zone_id_blacklist.begin(),
-		                    zone_id_blacklist.end(),
-		                    zone);
+		        zone_id_blacklist.end(),
+		        zone);
 		if(it == zone_id_blacklist.end()) {
 			zone_id_blacklist.emplace_back(zone);
 		}
@@ -150,7 +150,7 @@ namespace mods::zone {
 #ifdef __MENTOC_SHOW_ZONE_ERRORS__
 		mudlog(NRM, LVL_GOD, TRUE, "SYSERR: zone file: %s", message);
 		mudlog(NRM, LVL_GOD, TRUE, "SYSERR: ...offending cmd: '%c' cmd in zone #%d, line %d",
-		       '0', zone_table[zone].number, 0);
+		    '0', zone_table[zone].number, 0);
 #endif
 	}
 
@@ -190,7 +190,7 @@ namespace mods::zone {
 	}
 
 #define ZONE_ERROR(message) \
-{ log_zone_error(zone, cmd_no, message); }
+	{ log_zone_error(zone, cmd_no, message); }
 
 	/**
 	 * Loops through the zone_table and conditionally processes a zone reset command.
@@ -407,12 +407,14 @@ namespace mods::zone {
 
 
 		for(auto command : replenish) {
+			std::cerr << "running command:" << command.type << "\n";
 			rr_debug("running command:" << command.type);
 			if(command.type.compare("ammo-locker") == 0) {
 				rr_debug("ammo locker command type found. running feed");
 				mods::integral_objects::feed_ammo_locker(command.room);
 			}
 			if(command.type.compare("weapon-locker") == 0) {
+				std::cerr << "feeding weapon locker!\n";
 				rr_debug("weapon locker command type found. running feed");
 				mods::integral_objects::feed_weapon_locker(command.room);
 			}
