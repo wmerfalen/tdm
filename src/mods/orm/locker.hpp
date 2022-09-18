@@ -19,13 +19,16 @@ namespace mods::orm {
 
 
 	struct locker : public mods::orm::orm_base<locker,std::string> {
-		static constexpr std::array<std::string_view,3> TYPES = {
+		static constexpr std::string_view TABLE_NAME = "locker";
+		static constexpr std::array<std::string_view,4> TYPES = {
+			"UNK",
 			"WPN",
 			"ARM",
 			"AMU",
 		};
 		enum type_t : uint8_t {
-			WEAPON = 0,
+			UNKNOWN = 0,
+			WEAPON,
 			ARMOR,
 			AMMO,
 		};
@@ -40,7 +43,7 @@ namespace mods::orm {
 			if(t.compare("ammo") == 0) {
 				return TYPES[type_t::AMMO];
 			}
-			return TYPES[type_t::WEAPON];
+			return TYPES[type_t::UNKNOWN];
 		}
 		static constexpr uint16_t default_weapon_count = 3;
 		static constexpr uint16_t default_ammo_count = 3;
@@ -50,6 +53,7 @@ namespace mods::orm {
 		static status_t place_locker_item(std::string_view type,const room_vnum& room, std::string_view yaml,uint16_t count);
 		static status_t set_quota(std::string_view type,const room_vnum& room,uint16_t count);
 		static status_t remove_locker(std::string_view type,const room_vnum& room);
+		static status_t remove_item_by_id(const uint64_t& id);
 		MENTOC_ORM_CLASS(LOCKER_ORM_MEMBERS,"locker");
 		auto vnum() {
 			return id;

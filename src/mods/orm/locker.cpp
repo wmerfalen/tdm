@@ -14,6 +14,45 @@
 
 
 namespace mods::orm {
+	locker::status_t locker::remove_item_by_id(const uint64_t& id) {
+		auto s = mods::orm::util::delete_where<locker,sql_compositor>(
+		        locker::TABLE_NAME,
+		        "id",
+		        "=",
+		        std::to_string(id).c_str()
+		    );
+		if(ORM_FAILURE(s)) {
+			return {false,std::get<1>(s)};
+		}
+		return {true,""};
+	}
+	std::vector<std::string> locker::list_locker_by_type(std::string_view type,const room_vnum& room) {
+		std::vector<std::string> list;
+		using statement = std::vector<mods::orm::util::statement_t>;
+		using c = std::vector<pqxx::result::reference>;
+		c container;
+		statement statements;
+		auto t = to_type(type);
+		statements.emplace_back("l_type","=",t.data(),true,false);
+		statements.emplace_back("l_room_vnum","=",std::to_string(room),false,false);
+		mods::orm::util::load_where<c,sql_compositor,statement>(
+		    container,
+		    locker::TABLE_NAME.data(),
+		    statements
+		);
+		if(container.size() == 0) {
+			return list;
+		}
+		for(const auto& row : container) {
+			list.emplace_back(CAT("[id]:",row["id"].as<uint64_t>(),"\r\n",
+			        "[l_type]:'",row["l_type"].c_str(),"'\r\n",
+			        "[l_room_vnum]:",row["l_room_vnum"].as<uint64_t>(),"\r\n",
+			        "[l_yaml]:'",row["l_yaml"].c_str(),"\r\n",
+			        "[l_count]:'",row["l_count"].as<uint64_t>(),"\r\n"
+			    ));
+		}
+		return list;
+	}
 	locker::status_t locker::place_locker_item(std::string_view type,const room_vnum& room, std::string_view yaml,uint16_t count) {
 		locker l;
 		l.l_type = to_type(type);

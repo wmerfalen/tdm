@@ -211,11 +211,35 @@ SUPERCMD(do_install_weapon_locker) {
 }
 SUPERCMD(do_list_weapon_locker) {
 	ADMIN_REJECT();
-	static constexpr std::string_view usage = "Usage: admin:weapon-locker:list";
 	player->sendln("[Listing]...");
 	for(const auto& line : mods::orm::locker::list_locker_by_type("weapon",world[player->room()].number)) {
 		player->sendln(line);
 	}
+	player->sendln("Done listing.");
+	ADMIN_DONE();
+}
+SUPERCMD(do_remove_weapon_locker_item) {
+	ADMIN_REJECT();
+	static constexpr std::string_view usage = "Usage: admin:weapon-locker:remove:item <id>...[item-N]";
+	//DO_HELP_WITH_ZERO("admin:weapon-locker:install");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	for(unsigned i=0; i < vec_args.size(); i++) {
+		auto opt_id = mods::util::stoi_optional<uint64_t>(vec_args[i]);
+		if(opt_id.has_value() == false) {
+			player->errorln(CAT("Expecting integer but got: '",vec_args[i],"' for argument number:",i + 1,". Please look at the output of admin:weapon-locker:list for the list of ID's.. ", usage.data()).c_str());
+			return;
+		}
+		auto status = mods::orm::locker::remove_item_by_id(opt_id.value());
+		if(!std::get<0>(status)) {
+			player->errorln(CAT("Error: '",std::get<1>(status),"'").c_str());
+		} else {
+			player->admin_success(CAT("Removed: '",vec_args[i],"'"));
+		}
+	}
+
+	//mods::zone::register_replenish(world[player->room()].number,"weapon-locker");
+	//mods::zone::remove_replenish(world[player->room()].number,"weapon-locker");
 	ADMIN_DONE();
 }
 SUPERCMD(do_uninstall_armor_locker) {
@@ -424,6 +448,7 @@ namespace mods::integral_objects {
 
 		mods::interpreter::add_command("admin:weapon-locker:install", POS_RESTING, do_install_weapon_locker, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:weapon-locker:list", POS_RESTING, do_list_weapon_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:weapon-locker:remove:item", POS_RESTING, do_remove_weapon_locker_item, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:weapon-locker:uninstall", POS_RESTING, do_uninstall_weapon_locker, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:weapon-locker:quota", POS_RESTING, do_weapon_locker_quota, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:weapon-locker:help", POS_RESTING, do_weapon_locker_help, LVL_BUILDER,0);
