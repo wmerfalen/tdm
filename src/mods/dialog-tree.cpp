@@ -1,3 +1,4 @@
+#if 0
 #include "dialog-tree.hpp"
 //#include <boost/pool/simple_segregated_storage.hpp>
 #include <boost/pool/object_pool.hpp>
@@ -320,3 +321,4 @@ namespace mods::dialog_tree {
 	}
 
 };
+#endif

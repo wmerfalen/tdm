@@ -14,6 +14,12 @@
 {yel}mods/integral-objects{/yel}:->{grn}instantiate_catchy_name{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}install_sign{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}uninstall_sign{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}weapon_locker_help{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}ammo_locker_help{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}armor_locker_help{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}catchy_name_help{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}sign_help{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}camera_feed_help{/grn}
 {yel}mods/builder/seqbuild{/yel}:->{grn}seqbuild{/grn}
 {yel}mods/builder/static-loot{/yel}:->{grn}staticlootbuild{/grn}
 {yel}mods/builder/hqbuild{/yel}:->{grn}hqbuild{/grn}
@@ -67,6 +73,7 @@
 {yel}mods/super-users{/yel}:->{grn}set_who_line{/grn}
 {yel}mods/super-users{/yel}:->{grn}clear_who_line{/grn}
 {yel}mods/super-users{/yel}:->{grn}shutdown_mud{/grn}
+{yel}mods/loot{/yel}:->{grn}mixup_contents{/grn}
 {yel}mods/loot{/yel}:->{grn}reward{/grn}
 {yel}mods/loot{/yel}:->{grn}add_rifle_index{/grn}
 {yel}mods/loot{/yel}:->{grn}add_armor_index{/grn}

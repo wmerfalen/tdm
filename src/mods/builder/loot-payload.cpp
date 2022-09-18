@@ -82,8 +82,6 @@ namespace mods::builder::paybuild {
 			get_signatures()["clear"] =
 			    "{grn}admin:loot:payload{/grn} {red}clear{/red}\r\n"
 			    "  |--> deletes all payloads in current room\r\n";
-
-
 		}
 
 		/** ======== */
@@ -103,7 +101,7 @@ namespace mods::builder::paybuild {
 				return {0,"{paybuild new} count must be a positive number"};
 			}
 			auto payload = std::make_shared<mods::orm::loot_payload>();
-			auto id = payload->initialize_row(player->vnum(),cmd_args[1],cmd_args[1],count);
+			auto id = payload->initialize_row(player->vnum(),cmd_args[1],cmd_args[2],count);
 			if(id <= 0) {
 				return {0,"{paybuild new} Couldn't initialize row"};
 			}
@@ -129,7 +127,6 @@ namespace mods::builder::paybuild {
 		}
 		bool dispatch_multi_vnum_action(std::string argument) override {
 			m_debug("paybuild class dispatch_multi_vnum_action");
-
 			m_debug("dispatch_multi_vnum_action: '" << argument << "'");
 			if(argshave()->first_is("list")->passed()) {
 				player->sendln("Listing...");
@@ -164,7 +161,6 @@ namespace mods::builder::paybuild {
 					}
 				}
 				player->sendln(CAT("successfully saved (",ok,") items. Failed to save (",error,") items"));
-
 				return true;
 			}
 			return false;
@@ -182,7 +178,6 @@ namespace mods::builder::paybuild {
 
 	SUPERCMD(do_paybuild) {
 		static int txn_id = 0;
-
 		m_debug("txn_id: " << txn_id);
 		mods::builder::initialize_builder(player);
 		ADMIN_REJECT();
@@ -194,7 +189,6 @@ namespace mods::builder::paybuild {
 			m_debug("handled by paybuilder");
 			//return;
 		}
-
 		++txn_id;
 	}	//end paybuild
 	void init() {

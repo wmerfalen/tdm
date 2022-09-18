@@ -86,7 +86,7 @@ INIT(mods::admin_tools::stay);
 INIT(mods::combat_composer);
 
 #ifdef __MENTOC_PLUGIN_CONTENT__
-#include "plugins/init.hpp"
+	#include "plugins/init.hpp"
 #endif
 
 #undef INIT
@@ -167,8 +167,7 @@ namespace mods::init {
 		mods::flee::init();
 		mods::suicide::init();
 		mods::drops::init();
-		mods::dialog_tree::init();
-
+		//mods::dialog_tree::init();
 #ifdef __MENTOC_PLUGIN_CONTENT__
 		mods::plugins::init::init();
 #endif
