@@ -1179,8 +1179,8 @@ __set_points_cleanup:
 			}
 
 			eval_string(ctx,std::string("test_main(") +
-			            std::string(mods::util::itoa(player.cd()->uuid)) + ");"
-			           );
+			    std::string(mods::util::itoa(player.cd()->uuid)) + ");"
+			);
 			player << "{grn}[js]{/grn} Loaded and evaluated library: '" << path.c_str() << "'\r\n";
 			return true;
 		}
@@ -1275,7 +1275,7 @@ __set_points_cleanup:
 			} else {
 #ifdef __MENTOC_SHOW_JS_DEBUG__
 				std::cerr << "couldn't read entire file: " <<
-				          include_file.gcount() << "/" << length << "\n";
+				    include_file.gcount() << "/" << length << "\n";
 #endif
 			}
 			include_file.close();
