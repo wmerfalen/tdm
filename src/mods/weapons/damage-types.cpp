@@ -23,19 +23,19 @@
 #include "../corrosive.hpp"
 
 #ifdef __MENTOC_DAMAGE_TYPES_DEBUG_OUTPUT__
-#define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+	#define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else
-#define dty_debug(a)
+	#define dty_debug(a)
 #endif
 
 #ifdef __MENTOC_SHOW_DAMAGE_TYPES_DEBUG__
-#define md(A) std::cerr << green_str("damage_types_debug:") << A << "\n";
+	#define md(A) std::cerr << green_str("damage_types_debug:") << A << "\n";
 #else
-#define md(A)
+	#define md(A)
 #endif
 
 #ifndef TO_ROOM
-#define TO_ROOM		1
+	#define TO_ROOM		1
 #endif
 
 extern void extract_char_final(char_data *ch);
@@ -55,11 +55,11 @@ namespace mods::flee {
 	extern ACMD(do_flee);
 };
 #if __MENTOC_USE_GROUP_GAIN__
-extern void group_gain(char_data *ch, char_data *victim);
+	extern void group_gain(char_data *ch, char_data *victim);
 #endif
 extern void forget(char_data *ch,char_data *victim);
 #ifndef IS_WEAPON
-#define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
+	#define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #endif
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 
@@ -69,15 +69,15 @@ namespace mods::weapons::damage_types {
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
 #define MFEEDBACK(HITS,DAMAGE,EVENT)\
-		{\
-				feedback_t f;\
-				f.hits = HITS;\
-				f.damage = DAMAGE;\
-				f.from_direction = OPPOSITE_DIR(direction);\
-				f.attacker = player->uuid();\
-				f.damage_event = EVENT;\
-			victim->damage_event(f);\
-		}
+	{\
+		feedback_t f;\
+		f.hits = HITS;\
+		f.damage = DAMAGE;\
+		f.from_direction = OPPOSITE_DIR(direction);\
+		f.attacker = player->uuid();\
+		f.damage_event = EVENT;\
+		victim->damage_event(f);\
+	}
 
 	void reflect_munitions(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction);
 	bool can_be_injured(player_ptr_t& victim);
@@ -331,7 +331,7 @@ namespace mods::weapons::damage_types {
 					}
 
 					if(!IS_NPC(victim) && GET_WIMP_LEV(victim) && (victim != ch) &&
-					        GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
+					    GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
 						send_to_char(victim, "You wimp out, and attempt to flee!\r\n");
 						mods::flee::do_flee(victim, NULL, 0, 0,player);
 					}
@@ -614,19 +614,19 @@ namespace mods::weapons::damage_types {
 		int critical_bonus = 0;
 #ifdef __MENTOC_SHOW_DAMAGE_DUMP_DEBUG_OUTPUT__
 #define DMG_DUMP() \
-		std::cerr << "dam:" << dam << "\n";\
-		std::cerr << "damage_dice: ";\
-		std::cerr << damage_dice  <<"\n";\
-		std::cerr << "damage_sides";\
-		std::cerr << damage_sides << "\n";\
-		std::cerr << "crit_range ";\
-		std::cerr << crit_range << "\n";\
-		std::cerr << "crit_chance"; \
-		std::cerr << crit_chance << "\n";\
-		std::cerr << "critical_bonus";\
-		std::cerr << critical_bonus << "\n";\
-		std::cerr << "damage_sides:";\
-		std::cerr << damage_sides << "\n";
+	std::cerr << "dam:" << dam << "\n";\
+	std::cerr << "damage_dice: ";\
+	std::cerr << damage_dice  <<"\n";\
+	std::cerr << "damage_sides";\
+	std::cerr << damage_sides << "\n";\
+	std::cerr << "crit_range ";\
+	std::cerr << crit_range << "\n";\
+	std::cerr << "crit_chance"; \
+	std::cerr << crit_chance << "\n";\
+	std::cerr << "critical_bonus";\
+	std::cerr << critical_bonus << "\n";\
+	std::cerr << "damage_sides:";\
+	std::cerr << damage_sides << "\n";
 #else
 #define DMG_DUMP()
 #endif
@@ -669,9 +669,9 @@ namespace mods::weapons::damage_types {
 				if(dice(1,(100 * scanned_target.distance)) <= crit_chance) {
 					player->sendln(MSG_CRITICAL().c_str());
 					critical_bonus = dice(
-					                     damage_dice,
-					                     damage_sides
-					                 );
+					        damage_dice,
+					        damage_sides
+					    );
 					critical_bonus /= mods::values::SPRAY_CRITICAL_REDUCTION_DIVISOR();
 					dam += critical_bonus;
 					MFEEDBACK(1,dam,de::HIT_BY_CRITICAL_SPRAY_ATTACK);
@@ -954,9 +954,9 @@ namespace mods::weapons::damage_types {
 		if(distance == crit_range && dice(1,100) <= crit_chance) {
 			player->sendln(MSG_CRITICAL().c_str());
 			critical_bonus = dice(
-			                     damage_dice,
-			                     damage_sides
-			                 );
+			        damage_dice,
+			        damage_sides
+			    );
 			feedback.damage = dam;
 			feedback.hits = 1;
 
@@ -967,9 +967,9 @@ namespace mods::weapons::damage_types {
 		dam += critical_bonus;
 
 		auto dice_roll = dice(
-		                     damage_dice,
-		                     damage_sides
-		                 );
+		        damage_dice,
+		        damage_sides
+		    );
 		dam += dice_roll;
 		dam = calculate_tracked_damage(player,dam);
 		auto bonus_dam = mods::weapons::damage_calculator::calculate_bonus_damage(player,weapon,dam);
@@ -1192,7 +1192,7 @@ namespace mods::weapons::damage_types {
 		int critical_bonus = 0;
 		if(mods::rooms::is_peaceful(victim->room())) {
 			feedback.damage_event = de::TARGET_IN_PEACEFUL_ROOM_EVENT;
-			player->damage_event(feedback);
+			//player->damage_event(feedback);
 			md("is peaceful");
 			return feedback;
 		}
@@ -1225,9 +1225,9 @@ namespace mods::weapons::damage_types {
 			if(dice(1,100) <= crit_chance) {
 				player->sendln(MSG_CRITICAL().c_str());
 				critical_bonus = dice(
-				                     damage_dice,
-				                     damage_sides
-				                 );
+				        damage_dice,
+				        damage_sides
+				    );
 				feedback.damage = dam;
 				feedback.hits = 1;
 
@@ -1263,7 +1263,7 @@ namespace mods::weapons::damage_types {
 		);
 #endif
 		md("dice_roll: " << dice_roll << ", dam:" << dam << "critical_bonus: " << critical_bonus <<
-		   ", " << damage_dice << "d" << damage_sides);
+		    ", " << damage_dice << "d" << damage_sides);
 		dam = calculate_tracked_damage(player,dam);
 		md("tracked damage: " << dam);
 		auto bonus_dam = mods::weapons::damage_calculator::calculate_bonus_damage(player,weapon,dam);
@@ -1320,6 +1320,6 @@ namespace mods::weapons::damage_types {
 	}
 };
 #ifdef DMG_DEBUG
-#undef DMG_DEBUG
-#undef md
+	#undef DMG_DEBUG
+	#undef md
 #endif
