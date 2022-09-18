@@ -3,6 +3,7 @@
 {yel}mods/integral-objects{/yel}:->{grn}install_computer_choice{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}install_armor_locker{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}install_weapon_locker{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}list_weapon_locker{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}uninstall_armor_locker{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}uninstall_weapon_locker{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}install_ammo_locker{/grn}

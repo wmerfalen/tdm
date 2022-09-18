@@ -1,0 +1,13 @@
+[start]
+
+[room_vnum]
+l_room_vnum
+
+[std::string]
+l_type,3
+l_yaml,2048
+
+[uint16_t]
+l_count
+
+[end]

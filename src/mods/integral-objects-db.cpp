@@ -9,11 +9,12 @@
 #include "zone.hpp"
 #include "builder/object-placement.hpp"
 #include "rifle-attachments.hpp"
+#include "orm/locker.hpp"
 
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
-#define mo_debug(A) std::cerr << "[mods::integral_objects][debug]:" << A <<"\n";
+	#define mo_debug(A) std::cerr << "[mods::integral_objects][debug]:" << A <<"\n";
 #else
-#define mo_debug(A)
+	#define mo_debug(A)
 #endif
 
 extern std::string sanitize_key(std::string key);
@@ -21,25 +22,60 @@ extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::integral_objects_db {
 	void save_ammo_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving ammo locker");
-		save_item_to_db(player, "ammo-locker", args);
-		//mods::orm::weapon_locker::place_locker(world[player->room()].number, args);
+		mods::orm::locker::place_locker("ammo",world[player->room()].number, args);
 	}
 	void save_weapon_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving weapon locker");
-		save_item_to_db(player, "weapon-locker", args);
-		//mods::orm::weapon_locker::place_locker(world[player->room()].number, args);
+		mods::orm::locker::place_locker("weapon",world[player->room()].number, args);
+	}
+
+	bool save_locker_item_by_type(player_ptr_t& player,std::string_view type,std::string_view yaml, uint16_t count) {
+		auto s = mods::orm::locker::place_locker_item(type,world[player->room()].number,yaml,count);
+		if(!std::get<0>(s)) {
+			player->errorln(CAT("Encountered issue: '",std::get<1>(s),"'").c_str());
+			return false;
+		}
+		player->admin_success("saved");
+		return true;
 	}
 	void save_armor_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving armor locker");
-		save_item_to_db(player, "armor-locker", args);
+		mods::orm::locker::place_locker("armor",world[player->room()].number, args);
+	}
+	void set_quota(player_ptr_t& player, std::string_view type,std::vector<std::string>& args) {
+		mo_debug("saving weapon locker quota");
+		if(args.size() == 0) {
+			player->errorln("Must specify atleast one argument which is the size");
+			return;
+		}
+		auto opt_count = mods::util::stoi(args[0]);
+		if(opt_count.has_value() == false) {
+			player->errorln("Must specify a valid integer as count");
+			return;
+		}
+		mods::orm::locker::set_quota(type,world[player->room()].number,opt_count.value());
+	}
+	void set_quota_matching(player_ptr_t& player, std::string_view type,std::vector<std::string>& args) {
+		mo_debug("saving weapon locker quota");
+		if(args.size() == 0) {
+			player->errorln("Must specify atleast one argument which is the size");
+			return;
+		}
+		auto opt_count = mods::util::stoi(args[0]);
+		if(opt_count.has_value() == false) {
+			player->errorln("Must specify a valid integer as count");
+			return;
+		}
+		mods::orm::locker::set_quota(type,world[player->room()].number,opt_count.value());
 	}
 	void save_weapon_locker_quota(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving weapon locker quota");
-		save_item_to_db(player, "weapon-locker-quota", args);
+		set_quota(player,"weapon",args);
 	}
+
 	void save_armor_locker_quota(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving armor locker quota");
-		save_item_to_db(player, "armor-locker-quota", args);
+		set_quota(player,"armor",args);
 	}
 
 	void save_catchy_name(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description) {
@@ -85,6 +121,7 @@ namespace mods::integral_objects_db {
 		        "delete status: ",status
 		    )
 		);
+		mods::orm::locker::remove_locker("weapon",world[player->room()].number);
 	}
 	void remove_ammo_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
@@ -94,6 +131,7 @@ namespace mods::integral_objects_db {
 		        "delete status: ",status
 		    )
 		);
+		mods::orm::locker::remove_locker("ammo",world[player->room()].number);
 	}
 	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
@@ -103,6 +141,7 @@ namespace mods::integral_objects_db {
 		        "delete status: ",status
 		    )
 		);
+		mods::orm::locker::remove_locker("armor",world[player->room()].number);
 	}
 
 	obj_ptr_t first_or_create(room_vnum room,std::string query, int type, std::string yaml_file) {
