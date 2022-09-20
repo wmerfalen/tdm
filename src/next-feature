@@ -20,16 +20,17 @@ see doc/building/2022-quarter-1-features.md
 						mods::orm::locker_cache::*
 			- TODO's:
 				- no way to uninstall weapon locker
+					-[x] done
 				- no way to set quota of an id
 					- need to reflect this in the cache as well
 				- need to set a hard limit to how many entries can appear per room/type
 					- enforce this once contents of a locker are fetched from sql
 						- as well as cached contents
 					- display a log SYSERR message about truncated contents
-	[ ] Weapon locker uninstall command
-		[ ] mods::orm::locker needs `remove_locker` functionality
-	[ ] Adapt all weapons locker sub-commands to the armor lockers namespace
-	[ ] Adapt all weapons locker sub-commands to the ammo lockers namespace
+	[x] Weapon locker uninstall command
+		[x] mods::orm::locker needs `remove_locker` functionality
+	[x] Adapt all weapons locker sub-commands to the armor lockers namespace
+	[x] Adapt all weapons locker sub-commands to the ammo lockers namespace
 	[ ] Adapt all weapons locker sub-commands to the catchy name namespace
 	[ ] Adapt all weapons locker sub-commands to the camera feed  namespace
 	[ ] Adapt a small subset of the weapons locker sub-commands to the sign namespace
