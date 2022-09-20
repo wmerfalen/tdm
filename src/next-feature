@@ -2,41 +2,13 @@ see doc/building/2022-quarter-1-features.md
 
 [ ] Lockers
 	- Status:
-		- currently, the weapons locker namespace (`admin:weapon-locker:*`) utilizes the new
-		locker orm object. This is good because the way the integral objects code was implemented
-		uses lmdb. this makes it very difficult to maintain since rooms do not properly cascade
-		lmdb objects. 
-			- what's working:
-				- install:
-					`admin:weapon-locker:install <quota> rifle/psg1.yml rifle/g36c.yml ... [item-N]`
-				- listing (for removal):
-					`admin:weapon-locker:list`
-				- remove by id:
-					`admin:weapon-locker:remove:item <id>...[id-N]`
-						- to get a list of id's use `:list`
-			- important technical details:
-				- currently the locker contents of each weapons locker is CACHED.
-					- for a full run-down of how this works, checkout
-						mods::orm::locker_cache::*
 			- TODO's:
-				- no way to uninstall weapon locker
-					-[x] done
 				- no way to set quota of an id
 					- need to reflect this in the cache as well
 				- need to set a hard limit to how many entries can appear per room/type
 					- enforce this once contents of a locker are fetched from sql
 						- as well as cached contents
 					- display a log SYSERR message about truncated contents
-	[x] Weapon locker uninstall command
-		[x] mods::orm::locker needs `remove_locker` functionality
-	[x] Adapt all weapons locker sub-commands to the armor lockers namespace
-	[x] Adapt all weapons locker sub-commands to the ammo lockers namespace
-	[ ] Adapt all weapons locker sub-commands to the catchy name namespace
-	[ ] Adapt all weapons locker sub-commands to the camera feed  namespace
-	[ ] Adapt a small subset of the weapons locker sub-commands to the sign namespace
-	[ ] Adapt create_tier_1_armor_locker code to have the quota at the beginning
-		[ ] just look for the TODO comment in that code and uncomment it
-			- this relies on the armor lockers namespace being completed first
 
 [ ] Every N+X ticks
 	[ ] The contents of each crate are mixed up

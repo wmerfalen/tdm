@@ -55,6 +55,7 @@ namespace mods::orm {
 		static status_t place_locker(std::string_view type,const room_vnum& room, const std::vector<std::string>& args);
 		static status_t place_locker_item(std::string_view type,const room_vnum& room, std::string_view yaml,uint16_t count);
 		static status_t set_quota(std::string_view type,const room_vnum& room,uint16_t count);
+		static status_t set_quota_by_id(std::string_view type,const room_vnum& room,uint16_t count,const std::vector<uint64_t>& id_list);
 		static status_t remove_locker(std::string_view type,const room_vnum& room);
 		static status_t remove_item_by_id(const uint64_t& id);
 		static void queue_container_removal(std::string_view type,const room_vnum& room);
@@ -71,6 +72,13 @@ namespace mods::orm {
 			this->init();
 			loaded = 0;
 			id = 0;
+		}
+		locker(const locker& other) {
+			id = other.id;
+			l_type = other.l_type;
+			l_room_vnum = other.l_room_vnum;
+			l_yaml = other.l_yaml;
+			l_count = other.l_count;
 		}
 		~locker() = default;
 

@@ -53,18 +53,16 @@ namespace mods::integral_objects_db {
 			player->errorln("Must specify a valid integer as count");
 			return;
 		}
-		mods::orm::locker::set_quota(type,world[player->room()].number,opt_count.value());
-	}
-	void set_quota_matching(player_ptr_t& player, std::string_view type,std::vector<std::string>& args) {
-		mo_debug("saving weapon locker quota");
-		if(args.size() == 0) {
-			player->errorln("Must specify atleast one argument which is the size");
-			return;
-		}
-		auto opt_count = mods::util::stoi(args[0]);
-		if(opt_count.has_value() == false) {
-			player->errorln("Must specify a valid integer as count");
-			return;
+		std::vector<uint64_t> apply_to_ids;
+		if(args.size() > 1) {
+			player->sendln("greater than 1");
+			for(unsigned i=1; i < args.size(); i++) {
+				auto opt_id = mods::util::stoi(args[i]);
+				if(!opt_id.has_value()) {
+					player->errorln(CAT("Argument number (",i,"): Must specify a valid integer when specifying ID's.").c_str());
+					return;
+				}
+			}
 		}
 		mods::orm::locker::set_quota(type,world[player->room()].number,opt_count.value());
 	}

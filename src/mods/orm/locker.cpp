@@ -204,6 +204,10 @@ namespace mods::orm {
 		std::vector<locker> storage;
 		get_lockers_by_type(type,room,&storage);
 		for(const auto& row : storage) {
+			if(row.id == 0) {
+				lc_debug("Skipping row with zero ID!!");
+				continue;
+			}
 			list.emplace_back(CAT("[id]:",row.id,"\r\n",
 			        "[l_type]:'",row.l_type,"'\r\n",
 			        "[l_room_vnum]:",row.l_room_vnum,"\r\n",
