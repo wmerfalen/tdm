@@ -31,10 +31,14 @@ namespace mods::orm {
 			    const room_vnum& r,
 			    locker::type_t t,
 			    const std::vector<data>& d)  : room(r),type(t),rows(d) {
+				ids.resize(d.size());
+				contents.resize(d.size());
 				lc_debug("slim_locker constructor");
+				std::size_t i = 0;
 				for(const auto& entry : d) {
-					contents.emplace_back(std::make_pair<>(entry.count,entry.yaml));
-					ids.emplace_back(entry.id);
+					contents[i] = std::make_pair<>(entry.count,entry.yaml);
+					ids[i] = entry.id;
+					++i;
 				}
 			}
 
@@ -184,18 +188,12 @@ namespace mods::orm {
 		    locker::TABLE_NAME.data(),
 		    statements
 		);
-		storage->resize(container.size());
 		if(container.size() == 0) {
 			return 0;
 		}
+		storage->reserve(container.size());
 		for(const auto& row : container) {
-			storage->emplace_back();
-			auto& ref = storage->back();
-			ref.id = row["id"].as<uint64_t>();
-			ref.l_type = row["l_type"].c_str();
-			ref.l_room_vnum = row["l_room_vnum"].as<room_vnum>();
-			ref.l_yaml = row["l_yaml"].c_str();
-			ref.l_count = row["l_count"].as<uint16_t>();
+			storage->emplace_back(row);
 		}
 		return storage->size();
 	}
@@ -204,10 +202,6 @@ namespace mods::orm {
 		std::vector<locker> storage;
 		get_lockers_by_type(type,room,&storage);
 		for(const auto& row : storage) {
-			if(row.id == 0) {
-				lc_debug("Skipping row with zero ID!!");
-				continue;
-			}
 			list.emplace_back(CAT("[id]:",row.id,"\r\n",
 			        "[l_type]:'",row.l_type,"'\r\n",
 			        "[l_room_vnum]:",row.l_room_vnum,"\r\n",

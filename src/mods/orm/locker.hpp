@@ -73,12 +73,12 @@ namespace mods::orm {
 			loaded = 0;
 			id = 0;
 		}
-		locker(const locker& other) {
-			id = other.id;
-			l_type = other.l_type;
-			l_room_vnum = other.l_room_vnum;
-			l_yaml = other.l_yaml;
-			l_count = other.l_count;
+		locker(const pqxx::row& r) {
+			id = r["id"].as<uint64_t>();
+			l_type = r["l_type"].c_str();
+			l_room_vnum = r["l_room_vnum"].as<room_vnum>();
+			l_yaml = r["l_yaml"].c_str();
+			l_count = r["l_count"].as<uint16_t>();
 		}
 		~locker() = default;
 

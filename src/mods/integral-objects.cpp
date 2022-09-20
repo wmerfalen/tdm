@@ -403,27 +403,37 @@ SUPERCMD(do_list_wear_flags) {
 
 SUPERCMD(do_armor_locker_quota) {
 	ADMIN_REJECT();
+	player->unimplemented();
+#if 0
 	DO_HELP_WITH_ZERO("armor_locker_quota");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects_db::save_armor_locker_quota(player,vec_args);
 	ADMIN_DONE();
+#endif
 }
 SUPERCMD(do_weapon_locker_quota) {
 	ADMIN_REJECT();
+	player->unimplemented();
+#if 0
 	DO_HELP_WITH_ZERO("weapon_locker_quota");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects_db::save_weapon_locker_quota(player,vec_args);
 	ADMIN_DONE();
+#endif
 }
 SUPERCMD(do_ammo_locker_quota) {
+	ADMIN_REJECT();
+	player->unimplemented();
+#if 0
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("ammo_locker_quota");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects_db::save_ammo_locker_quota(player,vec_args);
 	ADMIN_DONE();
+#endif
 }
 
 

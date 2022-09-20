@@ -825,6 +825,9 @@ namespace mods {
 			void set_ada_data(std::string_view,std::string_view);
 			std::map<std::string,std::string>& get_ada_data();
 
+			void unimplemented() {
+				sendx(CAT("{red} This function is unimplemented and does NOTHING {/red}"));
+			}
 			void error(std::string_view msg) {
 				sendx(CAT("{red}",msg.data(),"{/red}"));
 			}
