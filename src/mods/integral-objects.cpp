@@ -32,42 +32,14 @@
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::integral_objects {
-	std::size_t weapon_locker_quota(const obj_ptr_t& object) {
-		/** TODO: pull from mods::orm::locker */
-		return 3;
-	}
-	std::size_t armor_locker_quota(const obj_ptr_t& object) {
-		/** TODO: pull from mods::orm::locker */
-		return 3;
-	}
-	void feed_ammo_locker(room_vnum room) {
-		std::vector<std::string> values;
-		mods::db::get_section_vector("ammo-locker", std::to_string(room), values);
-		/** TODO: pull from mods::orm::locker */
-		auto locker = mods::integral_objects_db::first_or_create(room,"ammo-locker", ITEM_CONTAINER, "ammo-locker.yml");
-		/**
-		 * SELECT lo_yaml_file from locker where lo_room_vnum = room AND lo_type = 'AMMO';
-		 */
-		for(auto yaml : values) {
-			if(!mods::object_utils::assert_sane_object(yaml)) {
-				continue;
-			}
-			auto yaml_file = mods::object_utils::get_yaml_file(yaml);
-			auto uuid_list = mods::query_objects::query_contents_by_yaml(locker,yaml_file);
-			if(uuid_list.size() < AMMO_LOCKER_QUOTA()) {
-				auto obj = create_object(mods::object_utils::get_yaml_type(yaml),yaml_file);
-				obj_to_obj(obj,locker);
-			}
-		}
-	}
-	void feed_weapon_locker(room_vnum room) {
-		mw_debug("feed_weapon_locker entry. room: " << room);
-		auto locker = mods::integral_objects_db::first_or_create(room,"weapon-locker", ITEM_CONTAINER, "weapon-locker.yml");
-		std::vector<std::pair<uint16_t,std::string>> list = mods::orm::locker::contents("weapon",room);
+	void generic_feed(std::string_view type,const room_vnum& room,std::string_view query,std::string_view container_yaml) {
+		mw_debug("generic_feed " << type << " entry. room: " << room);
+		auto locker = mods::integral_objects_db::first_or_create(room,query.data(), ITEM_CONTAINER, container_yaml.data());
+		std::vector<std::pair<uint16_t,std::string>> list = mods::orm::locker::contents(type,room);
 		for(auto& pair : list) {
 			auto yaml = pair.second;
 			if(!mods::object_utils::assert_sane_object(yaml)) {
-				log("Not a sane yaml file (feed_weapon_locker): '%s'",yaml.c_str());
+				log("Not a sane yaml file (generic_feed): '%s'",yaml.c_str());
 				continue;
 			}
 			auto yaml_file = mods::object_utils::get_yaml_file(yaml);
@@ -79,26 +51,16 @@ namespace mods::integral_objects {
 			}
 		}
 	}
+	void feed_ammo_locker(room_vnum room) {
+		generic_feed("ammo",room,"ammo-locker","ammo-locker.yml");
+	}
+	void feed_weapon_locker(room_vnum room) {
+		mw_debug("feed_weapon_locker entry. room: " << room);
+		generic_feed("weapon",room,"weapon-locker","weapon-locker.yml");
+	}
 
 	void feed_armor_locker(room_vnum room) {
-		std::vector<std::string> values;
-		/** TODO: pull from mods::orm::locker */
-		mods::db::get_section_vector("armor-locker", std::to_string(room), values);
-		auto locker = mods::integral_objects_db::first_or_create(room,"armor-locker", ITEM_CONTAINER, "armor-locker.yml");
-		/**
-		 * SELECT lo_yaml_file from locker where lo_room_vnum = room AND lo_type = 'ARMOR';
-		 */
-		for(auto yaml : values) {
-			if(!mods::object_utils::assert_sane_object(yaml)) {
-				continue;
-			}
-			auto yaml_file = mods::object_utils::get_yaml_file(yaml);
-			auto uuid_list = mods::query_objects::query_contents_by_yaml(locker,yaml_file);
-			if(uuid_list.size() < armor_locker_quota(locker)) {
-				auto obj = create_object(mods::object_utils::get_yaml_type(yaml),yaml_file);
-				obj_to_obj(obj,locker);
-			}
-		}
+		generic_feed("armor",room,"armor-locker","armor-locker.yml");
 	}
 
 	void feed_camera_feed(room_vnum room_v_num) {
@@ -180,12 +142,30 @@ SUPERCMD(do_install_computer_choice) {
 
 SUPERCMD(do_install_armor_locker) {
 	ADMIN_REJECT();
-	DO_HELP_WITH_ZERO("install_armor_locker");
+	static constexpr std::string_view usage = "Usage: admin:armor-locker:install <quota> <yaml>...[yaml-N]";
+	DO_HELP_WITH_ZERO("admin:armor-locker:install");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
-	mods::integral_objects_db::save_armor_locker(player,vec_args);
-	mods::zone::register_replenish(world[player->room()].number,"armor-locker");
+	if(!intat(0)) {
+		player->errorln(CAT("Expecting quota as first argument.", usage.data()).c_str());
+		return;
+	}
+	if(!argshave()->size_gt(1)->passed()) {
+		player->errorln(usage.data());
+		return;
+	}
+	auto count = intat(0);
+	for(unsigned i=1; i < vec_args.size(); i++) {
+		auto status = mods::orm::locker::place_locker_item("armor",world[player->room()].number, vec_args[i],count);
+		if(!std::get<0>(status)) {
+			player->errorln(CAT("Error: '",std::get<1>(status),"'").c_str());
+		} else {
+			player->admin_success(CAT("Saved: '",vec_args[i],"'"));
+		}
+	}
+
 	mods::zone::remove_replenish(world[player->room()].number,"armor-locker");
+	mods::zone::register_replenish(world[player->room()].number,"armor-locker");
 	ADMIN_DONE();
 }
 
@@ -217,10 +197,65 @@ SUPERCMD(do_install_weapon_locker) {
 	mods::zone::register_replenish(world[player->room()].number,"weapon-locker");
 	ADMIN_DONE();
 }
+SUPERCMD(do_install_weapon_locker_object) {
+	mods::zone::build_weapon_locker(world[player->room()].number);
+}
+SUPERCMD(do_install_ammo_locker_object) {
+	mods::zone::build_ammo_locker(world[player->room()].number);
+}
+SUPERCMD(do_install_armor_locker_object) {
+	mods::zone::build_armor_locker(world[player->room()].number);
+}
+SUPERCMD(do_install_ammo_locker) {
+	ADMIN_REJECT();
+	static constexpr std::string_view usage = "Usage: admin:ammo-locker:install <quota> <yaml>...[yaml-N]";
+	DO_HELP_WITH_ZERO("admin:ammo-locker:install");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	if(!intat(0)) {
+		player->errorln(CAT("Expecting quota as first argument.", usage.data()).c_str());
+		return;
+	}
+	if(!argshave()->size_gt(1)->passed()) {
+		player->errorln(usage.data());
+		return;
+	}
+	auto count = intat(0);
+	for(unsigned i=1; i < vec_args.size(); i++) {
+		auto status = mods::orm::locker::place_locker_item("ammo",world[player->room()].number, vec_args[i],count);
+		if(!std::get<0>(status)) {
+			player->errorln(CAT("Error: '",std::get<1>(status),"'").c_str());
+		} else {
+			player->admin_success(CAT("Saved: '",vec_args[i],"'"));
+		}
+	}
+
+	mods::zone::remove_replenish(world[player->room()].number,"ammo-locker");
+	mods::zone::register_replenish(world[player->room()].number,"ammo-locker");
+	ADMIN_DONE();
+}
 SUPERCMD(do_list_weapon_locker) {
 	ADMIN_REJECT();
 	player->sendln("[Listing]...");
 	for(const auto& line : mods::orm::locker::list_locker_by_type("weapon",world[player->room()].number)) {
+		player->sendln(line);
+	}
+	player->sendln("Done listing.");
+	ADMIN_DONE();
+}
+SUPERCMD(do_list_ammo_locker) {
+	ADMIN_REJECT();
+	player->sendln("[Listing]...");
+	for(const auto& line : mods::orm::locker::list_locker_by_type("ammo",world[player->room()].number)) {
+		player->sendln(line);
+	}
+	player->sendln("Done listing.");
+	ADMIN_DONE();
+}
+SUPERCMD(do_list_armor_locker) {
+	ADMIN_REJECT();
+	player->sendln("[Listing]...");
+	for(const auto& line : mods::orm::locker::list_locker_by_type("armor",world[player->room()].number)) {
 		player->sendln(line);
 	}
 	player->sendln("Done listing.");
@@ -249,12 +284,64 @@ SUPERCMD(do_remove_weapon_locker_item) {
 
 	ADMIN_DONE();
 }
+SUPERCMD(do_remove_ammo_locker_item) {
+	ADMIN_REJECT();
+	static constexpr std::string_view usage = "Usage: admin:ammo-locker:remove:item <id>...[item-N]";
+	//DO_HELP_WITH_ZERO("admin:ammo-locker:install");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	for(unsigned i=0; i < vec_args.size(); i++) {
+		auto opt_id = mods::util::stoi_optional<uint64_t>(vec_args[i]);
+		if(opt_id.has_value() == false) {
+			player->errorln(CAT("Expecting integer but got: '",vec_args[i],"' for argument number:",i + 1,". Please look at the output of admin:ammo-locker:list for the list of ID's.. ", usage.data()).c_str());
+			continue;
+		}
+		auto status = mods::orm::locker::remove_item_by_id(opt_id.value());
+		if(!std::get<0>(status)) {
+			player->errorln(CAT("Error: '",std::get<1>(status),"'").c_str());
+		} else {
+			player->admin_success(CAT("Removed: '",vec_args[i],"'"));
+		}
+	}
+	mods::orm::locker::perform_cleanup();
+
+	ADMIN_DONE();
+}
+SUPERCMD(do_remove_armor_locker_item) {
+	ADMIN_REJECT();
+	static constexpr std::string_view usage = "Usage: admin:armor-locker:remove:item <id>...[item-N]";
+	//DO_HELP_WITH_ZERO("admin:armor-locker:install");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	for(unsigned i=0; i < vec_args.size(); i++) {
+		auto opt_id = mods::util::stoi_optional<uint64_t>(vec_args[i]);
+		if(opt_id.has_value() == false) {
+			player->errorln(CAT("Expecting integer but got: '",vec_args[i],"' for argument number:",i + 1,". Please look at the output of admin:armor-locker:list for the list of ID's.. ", usage.data()).c_str());
+			continue;
+		}
+		auto status = mods::orm::locker::remove_item_by_id(opt_id.value());
+		if(!std::get<0>(status)) {
+			player->errorln(CAT("Error: '",std::get<1>(status),"'").c_str());
+		} else {
+			player->admin_success(CAT("Removed: '",vec_args[i],"'"));
+		}
+	}
+	mods::orm::locker::perform_cleanup();
+
+	ADMIN_DONE();
+}
 SUPERCMD(do_uninstall_armor_locker) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("uninstall_armor_locker");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
-	mods::integral_objects_db::remove_armor_locker(player,vec_args);
+	mods::orm::locker::remove_locker("armor",world[player->room()].number);
+	mods::zone::remove_replenish(world[player->room()].number,"armor-locker");
+	std::vector<uuid_t> list = mods::query_objects::query_room_for_object_by_yaml(player->room(),"armor-locker.yml");
+	for(const auto& uuid : list) {
+		mods::globals::dispose_object(uuid);
+		player->sendln(CAT("Removed ",uuid,"..."));
+	}
 	ADMIN_DONE();
 }
 
@@ -272,22 +359,18 @@ SUPERCMD(do_uninstall_weapon_locker) {
 	}
 	ADMIN_DONE();
 }
-SUPERCMD(do_install_ammo_locker) {
-	ADMIN_REJECT();
-	DO_HELP_WITH_ZERO("install_ammo_locker");
-	/** code here */
-	auto vec_args = PARSE_ARGS();
-	mods::integral_objects_db::save_ammo_locker(player,vec_args);
-	mods::zone::remove_replenish(world[player->room()].number,"ammo-locker");
-	mods::zone::register_replenish(world[player->room()].number,"ammo-locker");
-	ADMIN_DONE();
-}
 SUPERCMD(do_uninstall_ammo_locker) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("uninstall_ammo_locker");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
-	mods::integral_objects_db::remove_ammo_locker(player,vec_args);
+	mods::orm::locker::remove_locker("ammo",world[player->room()].number);
+	mods::zone::remove_replenish(world[player->room()].number,"ammo-locker");
+	std::vector<uuid_t> list = mods::query_objects::query_room_for_object_by_yaml(player->room(),"ammo-locker.yml");
+	for(const auto& uuid : list) {
+		mods::globals::dispose_object(uuid);
+		player->sendln(CAT("Removed ",uuid,"..."));
+	}
 	ADMIN_DONE();
 }
 
@@ -334,6 +417,15 @@ SUPERCMD(do_weapon_locker_quota) {
 	mods::integral_objects_db::save_weapon_locker_quota(player,vec_args);
 	ADMIN_DONE();
 }
+SUPERCMD(do_ammo_locker_quota) {
+	ADMIN_REJECT();
+	DO_HELP_WITH_ZERO("ammo_locker_quota");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	mods::integral_objects_db::save_ammo_locker_quota(player,vec_args);
+	ADMIN_DONE();
+}
+
 
 SUPERCMD(do_create_catchy_name) {
 	ADMIN_REJECT();
@@ -381,6 +473,7 @@ SUPERCMD(do_uninstall_sign) {
 }
 static const std::vector<std::string> weapon_locker = {
 	"admin:weapon-locker:install",
+	"admin:weapon-locker:install:container",
 	"admin:weapon-locker:list",
 	"admin:weapon-locker:remove:item",
 	"admin:weapon-locker:uninstall",
@@ -395,6 +488,9 @@ SUPERCMD(do_weapon_locker_help) {
 }
 static const std::vector<std::string> ammo_locker = {
 	"admin:ammo-locker:install",
+	"admin:ammo-locker:install:container",
+	"admin:ammo-locker:list",
+	"admin:ammo-locker:remove:item",
 	"admin:ammo-locker:uninstall",
 	"admin:ammo-locker:quota",
 };
@@ -407,6 +503,9 @@ SUPERCMD(do_ammo_locker_help) {
 }
 static const std::vector<std::string> armor_locker = {
 	"admin:armor-locker:install",
+	"admin:armor-locker:install:container",
+	"admin:armor-locker:list",
+	"admin:armor-locker:remove:item",
 	"admin:armor-locker:uninstall",
 	"admin:armor-locker:quota",
 };
@@ -462,6 +561,7 @@ namespace mods::integral_objects {
 		mods::interpreter::add_command("admin:wear-flags:list", POS_RESTING, do_list_wear_flags, LVL_BUILDER,0);
 
 		mods::interpreter::add_command("admin:weapon-locker:install", POS_RESTING, do_install_weapon_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:weapon-locker:install:container", POS_RESTING, do_install_weapon_locker_object, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:weapon-locker:list", POS_RESTING, do_list_weapon_locker, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:weapon-locker:remove:item", POS_RESTING, do_remove_weapon_locker_item, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:weapon-locker:uninstall", POS_RESTING, do_uninstall_weapon_locker, LVL_BUILDER,0);
@@ -469,17 +569,24 @@ namespace mods::integral_objects {
 		mods::interpreter::add_command("admin:weapon-locker:help", POS_RESTING, do_weapon_locker_help, LVL_BUILDER,0);
 
 		mods::interpreter::add_command("admin:ammo-locker:install", POS_RESTING, do_install_ammo_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:ammo-locker:install:container", POS_RESTING, do_install_ammo_locker_object, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:ammo-locker:list", POS_RESTING, do_list_ammo_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:ammo-locker:remove:item", POS_RESTING, do_remove_ammo_locker_item, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:ammo-locker:uninstall", POS_RESTING, do_uninstall_ammo_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:ammo-locker:quota", POS_RESTING, do_ammo_locker_quota, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:ammo-locker:help", POS_RESTING, do_ammo_locker_help, LVL_BUILDER,0);
+
+		mods::interpreter::add_command("admin:armor-locker:install", POS_RESTING, do_install_armor_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:armor-locker:install:container", POS_RESTING, do_install_armor_locker_object, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:armor-locker:list", POS_RESTING, do_list_armor_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:armor-locker:remove:item", POS_RESTING, do_remove_armor_locker_item, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:armor-locker:uninstall", POS_RESTING, do_uninstall_armor_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:armor-locker:quota", POS_RESTING, do_armor_locker_quota, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:armor-locker:help", POS_RESTING, do_armor_locker_help, LVL_BUILDER,0);
 
 		mods::interpreter::add_command("admin:camera-feed:install", POS_RESTING, do_install_camera_feed, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:camera-feed:uninstall", POS_RESTING, do_uninstall_camera_feed, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:camera-feed:help", POS_RESTING, do_camera_feed_help, LVL_BUILDER,0);
-
-		mods::interpreter::add_command("admin:armor-locker:install", POS_RESTING, do_install_armor_locker, LVL_BUILDER,0);
-		mods::interpreter::add_command("admin:armor-locker:uninstall", POS_RESTING, do_uninstall_armor_locker, LVL_BUILDER,0);
-		mods::interpreter::add_command("admin:armor-locker:quota", POS_RESTING, do_armor_locker_quota, LVL_BUILDER,0);
-		mods::interpreter::add_command("admin:armor-locker:help", POS_RESTING, do_armor_locker_help, LVL_BUILDER,0);
 
 		mods::interpreter::add_command("admin:catchy-name:create", POS_RESTING, do_create_catchy_name, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:catchy-name:instantiate", POS_RESTING, do_instantiate_catchy_name, LVL_BUILDER,0);

@@ -60,6 +60,7 @@ namespace mods::orm {
 		static void queue_container_removal(std::string_view type,const room_vnum& room);
 		static const std::vector<std::pair<uint16_t,std::string>>& contents(std::string_view type,const room_vnum& room);
 		static std::size_t get_lockers_by_type(std::string_view type,const room_vnum& room,std::vector<locker>* storage);
+		static bool room_has_locker_by_type(std::string_view type,const room_vnum& room);
 		static void perform_cleanup();
 		MENTOC_ORM_CLASS(LOCKER_ORM_MEMBERS,"locker");
 		auto vnum() {

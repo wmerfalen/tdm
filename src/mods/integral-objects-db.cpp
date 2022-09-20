@@ -72,10 +72,14 @@ namespace mods::integral_objects_db {
 		mo_debug("saving weapon locker quota");
 		set_quota(player,"weapon",args);
 	}
-
 	void save_armor_locker_quota(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving armor locker quota");
 		set_quota(player,"armor",args);
+	}
+
+	void save_ammo_locker_quota(player_ptr_t& player, std::vector<std::string>& args) {
+		mo_debug("saving ammo locker quota");
+		set_quota(player,"ammo",args);
 	}
 
 	void save_catchy_name(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description) {
@@ -114,33 +118,12 @@ namespace mods::integral_objects_db {
 		);
 	}
 	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args) {
-		using namespace mods::db;
-		auto status = delete_section_vector("weapon-locker",std::to_string(world[player->room()].number));
-		player->sendln(
-		    CAT(
-		        "delete status: ",status
-		    )
-		);
 		mods::orm::locker::remove_locker("weapon",world[player->room()].number);
 	}
 	void remove_ammo_locker(player_ptr_t& player, std::vector<std::string>& args) {
-		using namespace mods::db;
-		auto status = delete_section_vector("ammo-locker",std::to_string(world[player->room()].number));
-		player->sendln(
-		    CAT(
-		        "delete status: ",status
-		    )
-		);
 		mods::orm::locker::remove_locker("ammo",world[player->room()].number);
 	}
 	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args) {
-		using namespace mods::db;
-		auto status = delete_section_vector("armor-locker",std::to_string(world[player->room()].number));
-		player->sendln(
-		    CAT(
-		        "delete status: ",status
-		    )
-		);
 		mods::orm::locker::remove_locker("armor",world[player->room()].number);
 	}
 

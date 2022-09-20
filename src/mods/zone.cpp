@@ -8,6 +8,7 @@
 #include "npc.hpp"
 #include "str.hpp"
 #include "mob-roam.hpp"
+#include "orm/locker.hpp"
 
 //#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
@@ -451,22 +452,25 @@ namespace mods::zone {
 		}
 	}
 
+	static inline bool has_locker_of_type(std::string_view type,const room_vnum& room) {
+		return mods::orm::locker::room_has_locker_by_type(type,room);
+	}
 
 	/**
 	 * This function is called from db.cpp when a new room is created/parsed from sql.
 	 */
 	void new_room(room_data* room_ptr) {
-		if(mods::db::vector_exists("ammo-locker",std::to_string(room_ptr->number))) {
+		if(has_locker_of_type("ammo",room_ptr->number)) {
 			z_debug("Found ammo locker in room_ptr->number: " << room_ptr->number);
 			build_ammo_locker(room_ptr->number);
 			register_replenish(room_ptr->number,"ammo-locker");
 		}
-		if(mods::db::vector_exists("weapon-locker",std::to_string(room_ptr->number))) {
+		if(has_locker_of_type("weapon",room_ptr->number)) {
 			z_debug("Found weapon locker in room_ptr->number: " << room_ptr->number);
 			build_weapon_locker(room_ptr->number);
 			register_replenish(room_ptr->number,"weapon-locker");
 		}
-		if(mods::db::vector_exists("armor-locker",std::to_string(room_ptr->number))) {
+		if(has_locker_of_type("armor",room_ptr->number)) {
 			z_debug("Found armor locker in room_ptr->number: " << room_ptr->number);
 			build_armor_locker(room_ptr->number);
 			register_replenish(room_ptr->number,"armor-locker");

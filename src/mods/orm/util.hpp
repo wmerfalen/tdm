@@ -13,10 +13,10 @@ namespace mods::orm::util {
 		bool op_or;
 		statement_t() = delete;
 		statement_t(std::string c_where,
-		            std::string c_op,
-		            std::string c_value,
-		            bool c_op_and,
-		            bool c_op_or) : where(c_where), op(c_op),
+		    std::string c_op,
+		    std::string c_value,
+		    bool c_op_and,
+		    bool c_op_or) : where(c_where), op(c_op),
 			value(c_value), op_and(c_op_and), op_or(c_op_or) {
 
 		}
@@ -43,11 +43,11 @@ namespace mods::orm::util {
 			mapped.erase(obj->primary_key_name().data());
 			sql_compositor comp(obj->table_name(),&insert_transaction);
 			auto up_sql = comp
-			              .insert()
-			              .into(obj->table_name())
-			              .values(mapped)
-			              .returning(returning_field.data())
-			              .sql();
+			    .insert()
+			    .into(obj->table_name())
+			    .values(mapped)
+			    .returning(returning_field.data())
+			    .sql();
 #ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "insert_returning: '" << up_sql << "'\n";
 #endif
@@ -70,10 +70,10 @@ namespace mods::orm::util {
 			auto del_txn = txn();
 			sql_compositor comp(obj->table_name(),&del_txn);
 			auto up_sql = comp
-			              .del()
-			              .from(obj->table_name())
-			              .where(obj->primary_key_name(),"=",obj->primary_key_value())
-			              .sql();
+			    .del()
+			    .from(obj->table_name())
+			    .where(obj->primary_key_name(),"=",obj->primary_key_value())
+			    .sql();
 #ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "delete_from: '" << up_sql << "'\n";
 #endif
@@ -95,10 +95,10 @@ namespace mods::orm::util {
 			auto del_txn = txn();
 			sql_compositor comp(table_name.data(),&del_txn);
 			auto up_sql = comp
-			              .del()
-			              .from(table_name.data())
-			              .where(where.data(), sql_operator.data(),value.data())
-			              .sql();
+			    .del()
+			    .from(table_name.data())
+			    .where(where.data(), sql_operator.data(),value.data())
+			    .sql();
 #ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "delete_where: '" << up_sql << "'\n";
 #endif
@@ -113,11 +113,11 @@ namespace mods::orm::util {
 	template <typename TObject,typename sql_compositor,typename TClassPtr>
 	static inline auto delete_by_player(TClassPtr* object,const uint64_t& player_id) {
 		return mods::orm::util::delete_where<TObject,sql_compositor>(
-		           object->table_name(),
-		           object->player_id_column(),
-		           "=",
-		           std::to_string(player_id)
-		       );
+		        object->table_name(),
+		        object->player_id_column(),
+		        "=",
+		        std::to_string(player_id)
+		    );
 	}
 	template <typename TObject,typename sql_compositor,typename TCompoundStatement>
 	static inline std::tuple<int16_t,std::string> delete_where(
@@ -127,8 +127,8 @@ namespace mods::orm::util {
 			auto del_txn = txn();
 			sql_compositor comp(table_name.data(),&del_txn);
 			auto builder = comp
-			               .del()
-			               .from(table_name.data());
+			    .del()
+			    .from(table_name.data());
 			bool first = true;
 			bool op_and = false, op_or = false;
 			for(const auto& element : statements) {
@@ -164,10 +164,10 @@ namespace mods::orm::util {
 			auto up_txn = txn();
 			sql_compositor comp(s->table_name(),&up_txn);
 			auto up_sql = comp
-			              .update(s->table_name())
-			              .set(s->export_class())
-			              .where(s->primary_key_name(),"=",s->primary_key_value())
-			              .sql();
+			    .update(s->table_name())
+			    .set(s->export_class())
+			    .where(s->primary_key_name(),"=",s->primary_key_value())
+			    .sql();
 #ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "update: '" << up_sql << "'\n";
 #endif
@@ -185,8 +185,8 @@ namespace mods::orm::util {
 			auto select_transaction = txn();
 			sql_compositor comp(s->table_name(),&select_transaction);
 			auto player_sql = comp.select("*")
-			                  .from(s->table_name())
-			                  .sql();
+			    .from(s->table_name())
+			    .sql();
 #ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "load_all: '" << player_sql << "'\n";
 #endif
@@ -204,16 +204,16 @@ namespace mods::orm::util {
 	}
 	template <typename TContainerObject,typename sql_compositor>
 	static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,
-	                                                         std::string_view where,
-	                                                         std::string_view sql_operator,
-	                                                         std::string_view value) {
+	    std::string_view where,
+	    std::string_view sql_operator,
+	    std::string_view value) {
 		try {
 			auto select_transaction = txn();
 			sql_compositor comp(s[0].table_name(),&select_transaction);
 			auto player_sql = comp.select("*")
-			                  .from(s[0].table_name())
-			                  .where(where.data(), sql_operator.data(), value.data())
-			                  .sql();
+			    .from(s[0].table_name())
+			    .where(where.data(), sql_operator.data(), value.data())
+			    .sql();
 #ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "load_where: '" << player_sql << "'\n";
 #endif
@@ -253,14 +253,14 @@ namespace mods::orm::util {
 			auto select_transaction = txn();
 			sql_compositor comp(table_name.data(),&select_transaction);
 			auto builder = comp.select("*")
-			               .from(table_name.data());
+			    .from(table_name.data());
 			bool first = true;
 			bool op_and = false, op_or = false;
 			for(const auto& element : compound_statement_list) {
 #ifdef __MENTOC_SHOW_LOAD_WHERE_DEBUG_OUTPUT__
 				std::cerr << "[load_where] where:'" << element.where.data() << "', " <<
-				          "op:'" << element.op.data() << "', " <<
-				          "value:'" << element.value.data() << "'\n";
+				    "op:'" << element.op.data() << "', " <<
+				    "value:'" << element.value.data() << "'\n";
 #endif
 				if(first) {
 					first = false;
@@ -293,15 +293,65 @@ namespace mods::orm::util {
 		}
 		return {UNKNOWN_ERROR,"unknown"};
 	}
+	template <typename TContainerObject,typename sql_compositor,typename TCompoundStatement>
+	static inline std::tuple<int16_t,std::string,std::size_t> load_count_where(TContainerObject& s, std::string_view table_name,std::string_view as,TCompoundStatement& compound_statement_list) {
+		/**
+		 * Use this function the same way you would use load_where, but instead it will just return
+		 * the number of matched rows as result.
+		 */
+		try {
+			auto select_transaction = txn();
+			sql_compositor comp(table_name.data(),&select_transaction);
+			auto builder = comp.select_count(as)
+			    .from(table_name.data());
+			bool first = true;
+			bool op_and = false, op_or = false;
+			for(const auto& element : compound_statement_list) {
+#ifdef __MENTOC_SHOW_LOAD_WHERE_DEBUG_OUTPUT__
+				std::cerr << "[load_where] where:'" << element.where.data() << "', " <<
+				    "op:'" << element.op.data() << "', " <<
+				    "value:'" << element.value.data() << "'\n";
+#endif
+				if(first) {
+					first = false;
+					builder.where(element.where.data(),element.op.data(),element.value.data());
+					op_and = element.op_and;
+					op_or = element.op_or;
+					continue;
+				}
+				if(op_and) {
+					builder.op_and(element.where.data(),element.op.data(),element.value.data());
+				} else if(op_or) {
+					builder.op_or(element.where.data(),element.op.data(),element.value.data());
+				}
+				op_and = element.op_and;
+				op_or = element.op_or;
+			}
+
+			auto player_sql = builder.sql();
+#ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
+			std::cerr << "load_where(builder): '" << player_sql << "'\n";
+#endif
+			auto player_record = mods::pq::exec(select_transaction,player_sql);
+			mods::pq::commit(select_transaction);
+			for(auto row : player_record) {
+				s.emplace_back(row);
+			}
+			return {FETCHED_OKAY,"okay",0};//FIXME TODO: return the size here
+		} catch(std::exception& e) {
+			return {EXCEPTION_OCCURRED,e.what(),0};
+		}
+		return {UNKNOWN_ERROR,"unknown",0};
+	}
 	template <typename TObject,typename sql_compositor>
 	static inline std::tuple<int16_t,std::string> load_by_column(TObject* s,std::string_view column,std::string_view value) {
 		try {
 			auto select_transaction = txn();
 			sql_compositor comp(s->table_name(),&select_transaction);
 			auto player_sql = comp.select("*")
-			                  .from(s->table_name())
-			                  .where(column.data(),"=",value.data())
-			                  .sql();
+			    .from(s->table_name())
+			    .where(column.data(),"=",value.data())
+			    .sql();
 #ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "load_by_column: '" << player_sql << "'\n";
 #endif
@@ -322,9 +372,9 @@ namespace mods::orm::util {
 			auto select_transaction = txn();
 			sql_compositor comp(s->table_name(),&select_transaction);
 			auto player_sql = comp.select("*")
-			                  .from(s->table_name())
-			                  .where(column.data(),"=",value.data())
-			                  .sql();
+			    .from(s->table_name())
+			    .where(column.data(),"=",value.data())
+			    .sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 			if(player_record.size()) {
 				s->feed_multi(player_record);
@@ -369,10 +419,10 @@ namespace mods::orm::util {
 			clauses.emplace_back(pair.first,"=",pair.second,is_and,false);
 		}
 		auto status = mods::orm::util::load_where<c,sql_compositor,statement>(
-		                  container,
-		                  s->table_name(),
-		                  clauses
-		              );
+		        container,
+		        s->table_name(),
+		        clauses
+		    );
 		return {std::get<0>(status),std::get<1>(status),container};
 	}
 
@@ -386,10 +436,10 @@ namespace mods::orm::util {
 			auto select_transaction = txn();
 			sql_compositor comp(s->table_name(),&select_transaction);
 			auto player_sql = comp.select("*")
-			                  .from(s->table_name())
-			                  .where(column.data(),"=",value.data())
-			                  .order_by(order_by,direction)
-			                  .sql();
+			    .from(s->table_name())
+			    .where(column.data(),"=",value.data())
+			    .order_by(order_by,direction)
+			    .sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 			if(player_record.size()) {
 				s->feed_multi(player_record);
@@ -413,10 +463,10 @@ namespace mods::orm::util {
 			auto select_transaction = txn();
 			sql_compositor comp(table.data(),&select_transaction);
 			auto player_sql = comp.select("*")
-			                  .from(table.data())
-			                  .where(column.data(),"=",value.data())
-			                  .order_by(order_by.data(),direction.data())
-			                  .sql();
+			    .from(table.data())
+			    .where(column.data(),"=",value.data())
+			    .order_by(order_by.data(),direction.data())
+			    .sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 			if(player_record.size() == 0) {
 				return {NO_RESULTS,"no results"};
@@ -436,9 +486,9 @@ namespace mods::orm::util {
 			auto select_transaction = txn();
 			sql_compositor comp(s->table_name(),&select_transaction);
 			auto player_sql = comp.select("*")
-			                  .from(s->table_name())
-			                  .where(s->primary_key_name(),"=",s->primary_key_value())
-			                  .sql();
+			    .from(s->table_name())
+			    .where(s->primary_key_name(),"=",s->primary_key_value())
+			    .sql();
 #ifdef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 			std::cerr << "load_by_pkid: '" << player_sql << "'\n";
 #endif

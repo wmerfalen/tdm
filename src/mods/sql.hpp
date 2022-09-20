@@ -14,11 +14,11 @@
 #include <string>
 #include <type_traits>
 #if defined(__cpp_lib_string_view) && __cpp_lib_string_view==201603
-#include <string_view>
-typedef std::string_view str_object;
+	#include <string_view>
+	typedef std::string_view str_object;
 #else
-#include <string>
-typedef std::string str_object;
+	#include <string>
+	typedef std::string str_object;
 #endif
 
 namespace mods::values {
@@ -50,6 +50,12 @@ namespace mods::sql {
 				m_table(sanitize_table(table)), m_txn_ptr(txn_ptr) {
 			}
 			typedef std::map<std::string, std::string> value_map;
+			compositor<T>& select_count(std::string_view as) {
+				std::string sql = "SELECT COUNT(*) as ";
+				sql += as.data();
+				m_query[0] = sql;
+				return *this;
+			}
 			compositor<T>& select(str_object fields) {
 				std::string sql = "SELECT ";
 				sql += fields.data();
@@ -255,41 +261,41 @@ namespace mods::sql {
 			}
 			compositor<T>& left_join(std::string_view table) {
 				m_current_join = std::string("LEFT JOIN ")
-				                 + sanitize_table(table) + " ";
+				    + sanitize_table(table) + " ";
 				return *this;
 			}
 			compositor<T>& left_outer_join(std::string_view table) {
 				m_current_join = std::string("LEFT OUTER JOIN ")
-				                 + sanitize_table(table) + " ";
+				    + sanitize_table(table) + " ";
 				return *this;
 			}
 			compositor<T>& right_join(std::string_view table) {
 				m_current_join = std::string("RIGHT JOIN ")
-				                 + sanitize_table(table) + " ";
+				    + sanitize_table(table) + " ";
 				return *this;
 			}
 			compositor<T>& right_outer_join(std::string_view table) {
 				m_current_join = std::string("RIGHT OUTER JOIN ")
-				                 + sanitize_table(table) + " ";
+				    + sanitize_table(table) + " ";
 				return *this;
 			}
 			compositor<T>& inner_join(std::string_view table) {
 				m_current_join = std::string("INNER JOIN ")
-				                 + sanitize_table(table) + " ";
+				    + sanitize_table(table) + " ";
 				return *this;
 			}
 			compositor<T>& on(std::string_view lhs,
-			                  std::string_view op,
-			                  std::string_view rhs) {
+			    std::string_view op,
+			    std::string_view rhs) {
 				m_current_join += std::string(" ON ") + std::string(lhs) +
-				                  std::string(op) + std::string(rhs);
+				    std::string(op) + std::string(rhs);
 				m_joins.push_back(m_current_join);
 				m_current_join.clear();
 				return *this;
 			}
 			compositor<T>& where(str_object lhs,
-			                     str_object op,
-			                     str_object rhs) {
+			    str_object op,
+			    str_object rhs) {
 				std::string sql = " WHERE ";
 				sql += lhs.data();
 				sql += " ";
@@ -300,7 +306,7 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& where(str_object lhs,
-			                     str_object rhs) {
+			    str_object rhs) {
 				std::string sql = " WHERE ";
 				sql += lhs.data();
 				sql += " = ";
@@ -310,7 +316,7 @@ namespace mods::sql {
 			}
 			template <NeedsToString TRhs>
 			compositor<T>& where(str_object lhs,
-			                     const TRhs& rhs) {
+			    const TRhs& rhs) {
 				std::string sql = " WHERE ";
 				sql += lhs.data();
 				sql += " = ";
@@ -320,7 +326,7 @@ namespace mods::sql {
 			}
 
 			compositor<T>& where_crypt(str_object lhs,
-			                           str_object rhs) {
+			    str_object rhs) {
 				std::string sql = " WHERE ";
 				sql += lhs.data();
 				sql += " = crypt(";
@@ -334,7 +340,7 @@ namespace mods::sql {
 
 			template <typename TIterable>
 			compositor<T>& where_in(str_object lhs,
-			                        TIterable id_list) {
+			    TIterable id_list) {
 				std::string sql = " WHERE ";
 				sql += lhs.data();
 				sql += " IN(";
@@ -351,8 +357,8 @@ namespace mods::sql {
 
 
 			compositor<T>& op_or(str_object lhs,
-			                     str_object op,
-			                     str_object rhs) {
+			    str_object op,
+			    str_object rhs) {
 				std::string sql = " OR ";
 				sql += lhs.data();
 				sql += " ";
@@ -364,7 +370,7 @@ namespace mods::sql {
 			}
 
 			compositor<T>& op_or(str_object lhs,
-			                     str_object rhs) {
+			    str_object rhs) {
 				std::string sql = " OR ";
 				sql += lhs.data();
 				sql += " = ";
@@ -374,7 +380,7 @@ namespace mods::sql {
 			}
 
 			compositor<T>& op_and(str_object lhs,
-			                      const std::string_view& rhs) {
+			    const std::string_view& rhs) {
 				std::string sql = " AND ";
 				sql += lhs.data();
 				sql += " = ";
@@ -383,7 +389,7 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& op_and(str_object lhs,
-			                      const int16_t& rhs) {
+			    const int16_t& rhs) {
 				std::string sql = " AND ";
 				sql += lhs.data();
 				sql += " = ";
@@ -393,7 +399,7 @@ namespace mods::sql {
 			}
 
 			compositor<T>& op_and(str_object lhs,
-			                      const uint16_t& rhs) {
+			    const uint16_t& rhs) {
 				std::string sql = " AND ";
 				sql += lhs.data();
 				sql += " = ";
@@ -402,7 +408,7 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& op_and(str_object lhs,
-			                      const uint32_t& rhs) {
+			    const uint32_t& rhs) {
 				std::string sql = " AND ";
 				sql += lhs.data();
 				sql += " = ";
@@ -411,7 +417,7 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& op_and(str_object lhs,
-			                      const int32_t& rhs) {
+			    const int32_t& rhs) {
 				std::string sql = " AND ";
 				sql += lhs.data();
 				sql += " = ";
@@ -420,7 +426,7 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& op_and(str_object lhs,
-			                      const uint64_t& rhs) {
+			    const uint64_t& rhs) {
 				std::string sql = " AND ";
 				sql += lhs.data();
 				sql += " = ";
@@ -429,7 +435,7 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& op_and(str_object lhs,
-			                      const int64_t& rhs) {
+			    const int64_t& rhs) {
 				std::string sql = " AND ";
 				sql += lhs.data();
 				sql += " = ";
@@ -439,8 +445,8 @@ namespace mods::sql {
 			}
 
 			compositor<T>& op_and(str_object lhs,
-			                      str_object op,
-			                      str_object rhs) {
+			    str_object op,
+			    str_object rhs) {
 				std::string sql = " AND ";
 				sql += lhs.data();
 				sql += " ";

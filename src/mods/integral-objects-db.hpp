@@ -12,6 +12,7 @@ namespace mods::integral_objects_db {
 	void save_armor_locker(player_ptr_t& player, std::vector<std::string>& args);
 	void save_weapon_locker_quota(player_ptr_t& player, std::vector<std::string>& args);
 	void save_armor_locker_quota(player_ptr_t& player, std::vector<std::string>& args);
+	void save_ammo_locker_quota(player_ptr_t& player, std::vector<std::string>& args);
 	void save_catchy_name(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description);
 
 	void save_camera_feed(player_ptr_t& player, std::vector<std::string>& args);
