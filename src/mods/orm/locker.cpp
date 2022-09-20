@@ -6,8 +6,12 @@
 
 #define __MENTOC_SHOW_MODS_ORM_LOCKER_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_ORM_LOCKER_DEBUG_OUTPUT__
+	#define m_debug(MSG) mentoc_prefix_debug("[mods::orm::locker::debug]")  << MSG << "\n";
+	#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::orm::locker::ERROR]"))  << MSG << "\n";
 	#define lc_debug(MSG) mentoc_prefix_debug(red_str("[mods::orm::locker_cache::debug]"))  << MSG << "\n";
 #else
+	#define m_debug(MSG)
+	#define m_error(MSG)
 	#define lc_debug(MSG)
 #endif
 
@@ -46,6 +50,7 @@ namespace mods::orm {
 		static std::vector<uint64_t> removal_queue;
 		static std::vector<std::pair<room_vnum,locker::type_t>> old;
 		static std::vector<slim_locker> index;
+		static std::map<std::pair<room_vnum,locker::type_t>,std::vector<std::pair<uint16_t,std::string>>> content_cache;
 
 		bool is_old(const room_vnum& room,locker::type_t type) {
 			for(const auto& pair : old) {
@@ -133,6 +138,10 @@ namespace mods::orm {
 			        locker_cache::removal_queue.cend()) != sl_locker.ids.cend()) {
 				lc_debug("slim_locker perform_cleanup found some old entries");
 				locker_cache::old.emplace_back(std::make_pair<>(sl_locker.room,sl_locker.type));
+				auto it = locker_cache::content_cache.find(std::make_pair<>(sl_locker.room,sl_locker.type));
+				if(it != locker_cache::content_cache.end()) {
+					locker_cache::content_cache.erase(it);
+				}
 			}
 		}
 		locker_cache::removal_queue.clear();
@@ -140,21 +149,23 @@ namespace mods::orm {
 	}
 
 	const std::vector<std::pair<uint16_t,std::string>>& locker::contents(std::string_view type,const room_vnum& room) {
-		lc_debug("locker::contents entry");
+
 		auto i_type = to_type_integral(type);
+		std::pair<room_vnum,locker::type_t> p = std::make_pair<>(room,i_type);
+		lc_debug("locker::contents entry");
 		if(locker_cache::is_old(room,i_type)) {
 			lc_debug(room << "/" << type << " are old. Renewing cached entry");
 			auto& locker = locker_cache::get_slim_locker(room,i_type);
+			locker_cache::content_cache[p] = locker.contents;
 			return locker.contents;
 		}
-		for(const auto& entry : locker_cache::index) {
-			if(entry.room == room && entry.type == i_type) {
-				lc_debug("Returning CACHED contents for " << room << "/" << type);
-				return entry.contents;
-			}
+		if(locker_cache::content_cache.find(p) != locker_cache::content_cache.end()) {
+			lc_debug("Returning CACHED contents for " << room << "/" << type);
+			return locker_cache::content_cache[p];
 		}
 		lc_debug("generating slim_locker for the first time for entry " << room << "/" << type);
 		auto& locker = locker_cache::get_slim_locker(room,i_type);
+		locker_cache::content_cache[p] = locker.contents;
 		return locker.contents;
 	}
 	locker::status_t locker::remove_item_by_id(const uint64_t& id) {
