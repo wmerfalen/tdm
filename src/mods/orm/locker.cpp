@@ -144,8 +144,7 @@ namespace mods::orm {
 		locker_cache::queue_removal_by_id(id);
 		return {true,""};
 	}
-	std::vector<std::string> locker::list_locker_by_type(std::string_view type,const room_vnum& room) {
-		std::vector<std::string> list;
+	std::size_t locker::get_lockers_by_type(std::string_view type,const room_vnum& room,std::vector<locker>* storage) {
 		using statement = std::vector<mods::orm::util::statement_t>;
 		using c = std::vector<pqxx::result::reference>;
 		c container;
@@ -158,15 +157,31 @@ namespace mods::orm {
 		    locker::TABLE_NAME.data(),
 		    statements
 		);
+		storage->resize(container.size());
 		if(container.size() == 0) {
-			return list;
+			return 0;
 		}
 		for(const auto& row : container) {
-			list.emplace_back(CAT("[id]:",row["id"].as<uint64_t>(),"\r\n",
-			        "[l_type]:'",row["l_type"].c_str(),"'\r\n",
-			        "[l_room_vnum]:",row["l_room_vnum"].as<uint64_t>(),"\r\n",
-			        "[l_yaml]:'",row["l_yaml"].c_str(),"\r\n",
-			        "[l_count]:'",row["l_count"].as<uint64_t>(),"\r\n"
+			storage->emplace_back();
+			auto& ref = storage->back();
+			ref.id = row["id"].as<uint64_t>();
+			ref.l_type = row["l_type"].c_str();
+			ref.l_room_vnum = row["l_room_vnum"].as<room_vnum>();
+			ref.l_yaml = row["l_yaml"].c_str();
+			ref.l_count = row["l_count"].as<uint16_t>();
+		}
+		return storage->size();
+	}
+	std::vector<std::string> locker::list_locker_by_type(std::string_view type,const room_vnum& room) {
+		std::vector<std::string> list;
+		std::vector<locker> storage;
+		get_lockers_by_type(type,room,&storage);
+		for(const auto& row : storage) {
+			list.emplace_back(CAT("[id]:",row.id,"\r\n",
+			        "[l_type]:'",row.l_type,"'\r\n",
+			        "[l_room_vnum]:",row.l_room_vnum,"\r\n",
+			        "[l_yaml]:'",row.l_yaml,"\r\n",
+			        "[l_count]:'",row.l_count,"\r\n"
 			    ));
 		}
 		return list;
@@ -216,10 +231,23 @@ namespace mods::orm {
 		return {true,"stub"};
 	}
 	locker::status_t locker::remove_locker(std::string_view type,const room_vnum& room) {
-		// TODO
-		locker_cache::set_dirty(room,to_type_integral(type));
-		return {true,"stub"};
-
+		std::vector<locker> storage;
+		std::size_t ok = 0, error = 0;
+		if(get_lockers_by_type(type,room,&storage)) {
+			for(auto& row : storage) {
+				auto s = remove_item_by_id(row.id);
+				if(std::get<0>(s)) {
+					++ok;
+				} else {
+					++error;
+				}
+			}
+			if(error == 0) {
+				return {true,CAT(ok," items deleted with zero errors")};
+			}
+			return {false,CAT(ok," items deleted with ",error," errors")};
+		}
+		return {false,"nothing to delete"};
 	}
 	std::vector<std::tuple<int16_t,std::string>> locker::insert_many(const room_vnum& room,std::string_view type,const std::vector<std::string>& items,const uint16_t& count) {
 		this->l_type = to_type(type);
@@ -254,6 +282,8 @@ namespace mods::orm {
 		locker_cache::set_dirty(room,to_type_integral(type));
 		return statuses;
 	}
+
+
 
 	locker_list_t& locker_list() {
 		static locker_list_t list;

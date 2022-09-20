@@ -13,6 +13,7 @@
 #include "rifle-attachments.hpp"
 #include "query-objects.hpp"
 #include "orm/locker.hpp"
+#include "../handler.h"
 
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
 	#define mo_debug(A) std::cerr << "[mods::integral_objects]:" << A <<"\n";
@@ -212,8 +213,8 @@ SUPERCMD(do_install_weapon_locker) {
 		}
 	}
 
-	mods::zone::register_replenish(world[player->room()].number,"weapon-locker");
 	mods::zone::remove_replenish(world[player->room()].number,"weapon-locker");
+	mods::zone::register_replenish(world[player->room()].number,"weapon-locker");
 	ADMIN_DONE();
 }
 SUPERCMD(do_list_weapon_locker) {
@@ -262,7 +263,13 @@ SUPERCMD(do_uninstall_weapon_locker) {
 	DO_HELP_WITH_ZERO("uninstall_weapon_locker");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
-	mods::integral_objects_db::remove_weapon_locker(player,vec_args);
+	mods::orm::locker::remove_locker("weapon",world[player->room()].number);
+	mods::zone::remove_replenish(world[player->room()].number,"weapon-locker");
+	std::vector<uuid_t> list = mods::query_objects::query_room_for_object_by_yaml(player->room(),"weapon-locker.yml");
+	for(const auto& uuid : list) {
+		mods::globals::dispose_object(uuid);
+		player->sendln(CAT("Removed ",uuid,"..."));
+	}
 	ADMIN_DONE();
 }
 SUPERCMD(do_install_ammo_locker) {
@@ -271,8 +278,8 @@ SUPERCMD(do_install_ammo_locker) {
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects_db::save_ammo_locker(player,vec_args);
-	mods::zone::register_replenish(world[player->room()].number,"ammo-locker");
 	mods::zone::remove_replenish(world[player->room()].number,"ammo-locker");
+	mods::zone::register_replenish(world[player->room()].number,"ammo-locker");
 	ADMIN_DONE();
 }
 SUPERCMD(do_uninstall_ammo_locker) {

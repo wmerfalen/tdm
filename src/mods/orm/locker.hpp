@@ -57,7 +57,9 @@ namespace mods::orm {
 		static status_t set_quota(std::string_view type,const room_vnum& room,uint16_t count);
 		static status_t remove_locker(std::string_view type,const room_vnum& room);
 		static status_t remove_item_by_id(const uint64_t& id);
+		static void queue_container_removal(std::string_view type,const room_vnum& room);
 		static const std::vector<std::pair<uint16_t,std::string>>& contents(std::string_view type,const room_vnum& room);
+		static std::size_t get_lockers_by_type(std::string_view type,const room_vnum& room,std::vector<locker>* storage);
 		static void perform_cleanup();
 		MENTOC_ORM_CLASS(LOCKER_ORM_MEMBERS,"locker");
 		auto vnum() {
