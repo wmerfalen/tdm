@@ -10,7 +10,6 @@
 #include "mob-roam.hpp"
 #include "orm/locker.hpp"
 
-//#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
 	#define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
 	#define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
@@ -334,7 +333,7 @@ namespace mods::zone {
 	//   *  'D': Set state of door *
 	//  */
 
-	void renum_zone_table(void) {
+	void renum_zone_table() {
 		log("renum_zone_table");
 		using zone_table_t = decltype(zone_table);
 		zone_table_t filtered;
@@ -379,7 +378,7 @@ namespace mods::zone {
 				}
 
 				if(skip_me) {
-					log("skipping command: %s",(str(ZCMD.command).c_str()));
+					log("skipping command: zone_data.id:(%d)",ZCMD.id);
 					++zone_table_ignored;
 				} else {
 					++zone_table_saved;
@@ -408,14 +407,12 @@ namespace mods::zone {
 
 
 		for(auto command : replenish) {
-			std::cerr << "running command:" << command.type << "\n";
 			rr_debug("running command:" << command.type);
 			if(command.type.compare("ammo-locker") == 0) {
 				rr_debug("ammo locker command type found. running feed");
 				mods::integral_objects::feed_ammo_locker(command.room);
 			}
 			if(command.type.compare("weapon-locker") == 0) {
-				std::cerr << "feeding weapon locker!\n";
 				rr_debug("weapon locker command type found. running feed");
 				mods::integral_objects::feed_weapon_locker(command.room);
 			}

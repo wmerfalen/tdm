@@ -19,29 +19,29 @@
 #define DB_BOOT_SHP	4
 #define DB_BOOT_HLP	5
 #if defined(CIRCLE_MACINTOSH)
-#define LIB_WORLD	":world:"
-#define LIB_TEXT	":text:"
-#define LIB_TEXT_HELP	":text:help:"
-#define LIB_MISC	":misc:"
-#define LIB_ETC		":etc:"
-#define LIB_PLRTEXT	":plrtext:"
-#define LIB_PLROBJS	":plrobjs:"
-#define LIB_PLRALIAS	":plralias:"
-#define LIB_HOUSE	":house:"
-#define SLASH		":"
+	#define LIB_WORLD	":world:"
+	#define LIB_TEXT	":text:"
+	#define LIB_TEXT_HELP	":text:help:"
+	#define LIB_MISC	":misc:"
+	#define LIB_ETC		":etc:"
+	#define LIB_PLRTEXT	":plrtext:"
+	#define LIB_PLROBJS	":plrobjs:"
+	#define LIB_PLRALIAS	":plralias:"
+	#define LIB_HOUSE	":house:"
+	#define SLASH		":"
 #elif defined(CIRCLE_AMIGA) || defined(CIRCLE_UNIX) || defined(CIRCLE_WINDOWS) || defined(CIRCLE_ACORN) || defined(CIRCLE_VMS)
-#define LIB_WORLD	"world/"
-#define LIB_TEXT	"text/"
-#define LIB_TEXT_HELP	"text/help/"
-#define LIB_MISC	"misc/"
-#define LIB_ETC		"etc/"
-#define LIB_PLRTEXT	"plrtext/"
-#define LIB_PLROBJS	"plrobjs/"
-#define LIB_PLRALIAS	"plralias/"
-#define LIB_HOUSE	"house/"
-#define SLASH		"/"
+	#define LIB_WORLD	"world/"
+	#define LIB_TEXT	"text/"
+	#define LIB_TEXT_HELP	"text/help/"
+	#define LIB_MISC	"misc/"
+	#define LIB_ETC		"etc/"
+	#define LIB_PLRTEXT	"plrtext/"
+	#define LIB_PLROBJS	"plrobjs/"
+	#define LIB_PLRALIAS	"plralias/"
+	#define LIB_HOUSE	"house/"
+	#define SLASH		"/"
 #else
-#error "Unknown path components."
+	#error "Unknown path components."
 #endif
 
 #define SUF_OBJS	"objs"
@@ -49,17 +49,17 @@
 #define SUF_ALIAS	"alias"
 
 #if defined(CIRCLE_AMIGA)
-#define FASTBOOT_FILE   "/.fastboot"    /* autorun: boot without sleep  */
-#define KILLSCRIPT_FILE "/.killscript"  /* autorun: shut mud down       */
-#define PAUSE_FILE      "/pause"        /* autorun: don't restart mud   */
+	#define FASTBOOT_FILE   "/.fastboot"    /* autorun: boot without sleep  */
+	#define KILLSCRIPT_FILE "/.killscript"  /* autorun: shut mud down       */
+	#define PAUSE_FILE      "/pause"        /* autorun: don't restart mud   */
 #elif defined(CIRCLE_MACINTOSH)
-#define FASTBOOT_FILE	"::.fastboot"	/* autorun: boot without sleep	*/
-#define KILLSCRIPT_FILE	"::.killscript"	/* autorun: shut mud down	*/
-#define PAUSE_FILE	"::pause"	/* autorun: don't restart mud	*/
+	#define FASTBOOT_FILE	"::.fastboot"	/* autorun: boot without sleep	*/
+	#define KILLSCRIPT_FILE	"::.killscript"	/* autorun: shut mud down	*/
+	#define PAUSE_FILE	"::pause"	/* autorun: don't restart mud	*/
 #else
-#define FASTBOOT_FILE   "../.fastboot"  /* autorun: boot without sleep  */
-#define KILLSCRIPT_FILE "../.killscript"/* autorun: shut mud down       */
-#define PAUSE_FILE      "../pause"      /* autorun: don't restart mud   */
+	#define FASTBOOT_FILE   "../.fastboot"  /* autorun: boot without sleep  */
+	#define KILLSCRIPT_FILE "../.killscript"/* autorun: shut mud down       */
+	#define PAUSE_FILE      "../pause"      /* autorun: don't restart mud   */
 #endif
 
 /* names of various files and directories */
@@ -151,18 +151,19 @@ void create_object_into_with_quota(std::string_view file,obj_ptr_t& obj,const ui
 int	vnum_object(char *searchname, char_data *ch);
 
 typedef enum { \
-               REAL=0,\
-               VIRTUAL\
-             } num_type_t;
+    REAL=0,\
+    VIRTUAL\
+} num_type_t;
 
 /* structure for the reset commands */
 struct reset_com {
-	reset_com() : command('X'),
+	reset_com() : id(0), command('X'),
 		if_flag(0), arg1(0), arg2(0),
 		arg3(0),line(0), count(0), yaml("") {
 
 	}
 	~reset_com() = default;
+	uint64_t id;
 	char	command;   /* current command                      */
 
 	bool if_flag;	/* if TRUE: exe only if preceding exe'd */
@@ -307,26 +308,26 @@ struct ban_list_element {
 /* global buffering system */
 
 #ifndef __DB_C__
-extern room_rnum top_of_world;
+	extern room_rnum top_of_world;
 
-extern std::deque<zone_data> zone_table;
-extern zone_rnum top_of_zone_table;
+	extern std::deque<zone_data> zone_table;
+	extern zone_rnum top_of_zone_table;
 
-extern std::deque<mods::descriptor_data> descriptor_list;
-extern struct player_special_data dummy_mob;
+	extern std::deque<mods::descriptor_data> descriptor_list;
+	extern struct player_special_data dummy_mob;
 
-extern std::vector<index_data> mob_index;
-extern std::deque<std::shared_ptr<mods::npc>> mob_list;
-extern mob_rnum top_of_mobt;
+	extern std::vector<index_data> mob_index;
+	extern std::deque<std::shared_ptr<mods::npc>> mob_list;
+	extern mob_rnum top_of_mobt;
 
-extern struct index_data *obj_index;
-extern obj_rnum top_of_objt;
+	extern struct index_data *obj_index;
+	extern obj_rnum top_of_objt;
 #endif
 
 #ifndef __CONFIG_C__
-extern char	*OK;
-extern char	*NOPERSON;
-extern char	*NOEFFECT;
+	extern char	*OK;
+	extern char	*NOPERSON;
+	extern char	*NOEFFECT;
 #endif
 
 /**

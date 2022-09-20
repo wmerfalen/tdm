@@ -74,13 +74,18 @@ namespace mods::orm {
 			id = 0;
 		}
 		locker(const pqxx::row& r) {
+			std::cerr << "[locker] copy constructor\n";
 			id = r["id"].as<uint64_t>();
 			l_type = r["l_type"].c_str();
 			l_room_vnum = r["l_room_vnum"].as<room_vnum>();
 			l_yaml = r["l_yaml"].c_str();
 			l_count = r["l_count"].as<uint16_t>();
 		}
-		~locker() = default;
+		~locker() {
+			std::cerr << "[locker::~locker] destructor\n";
+			l_type.clear();
+			l_yaml.clear();
+		}
 
 		MENTOC_ORM_PRIMARY_KEY_FUNCTIONS();
 		MENTOC_ORM_FEED_MULTI(LOCKER_ORM_MEMBERS,locker);

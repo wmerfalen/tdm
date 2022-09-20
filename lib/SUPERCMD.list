@@ -17,9 +17,6 @@
 {yel}mods/integral-objects{/yel}:->{grn}uninstall_weapon_locker{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}uninstall_ammo_locker{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}list_wear_flags{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}armor_locker_quota{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}weapon_locker_quota{/grn}
-{yel}mods/integral-objects{/yel}:->{grn}ammo_locker_quota{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}create_catchy_name{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}instantiate_catchy_name{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}install_sign{/grn}

@@ -1059,6 +1059,7 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 			std::cerr << green_str("parsing zone_data from db") << "\n";
 #endif
 			reset_com res;
+			res.id = zone_data_row["id"].as<uint64_t>();
 			res.command = std::string(zone_data_row["zone_command"].c_str())[0];
 			res.if_flag =mods::util::stoi<int>(zone_data_row["zone_if_flag"]);
 			res.arg1 =mods::util::stoi<int>(zone_data_row["zone_arg1"]);
@@ -1406,7 +1407,7 @@ void parse_simple_mob(FILE *mob_f, int i, int nr) {
 	}
 
 	if(sscanf(line, " %d %d %d %dd%d+%d %dd%d+%d ",
-	          t, t + 1, t + 2, t + 3, t + 4, t + 5, t + 6, t + 7, t + 8) != 9) {
+	        t, t + 1, t + 2, t + 3, t + 4, t + 5, t + 6, t + 7, t + 8) != 9) {
 		log("SYSERR: Format error in mob #%d, first line after S flag\n"
 		    "...expecting line of form '# # # #d#+# #d#+#'", nr);
 		exit(1);
@@ -2036,7 +2037,7 @@ long get_ptable_by_name(const char *name) {
 
 	for(i = 0; i <= top_of_p_table; i++)
 		if(static_cast<std::string>(
-		            player_table[i].name).compare(name) == 0) {
+		        player_table[i].name).compare(name) == 0) {
 			return (i);
 		}
 
@@ -2100,10 +2101,10 @@ bool login(std::string_view user_name,std::string_view password) {
 		auto select_transaction = txn();
 		sql_compositor comp("player",&select_transaction);
 		auto room_sql = comp.select("id")
-		                .from("player")
-		                .where_crypt("player_password",password.data())
-		                .op_and("player_name","=",user_name.data())
-		                .sql();
+		    .from("player")
+		    .where_crypt("player_password",password.data())
+		    .op_and("player_name","=",user_name.data())
+		    .sql();
 		auto row = mods::pq::exec(select_transaction,room_sql.data());
 		return row.size();
 	} catch(std::exception& e) {
@@ -2643,7 +2644,7 @@ int check_object_spell_number(struct obj_data *obj, int val) {
 #if 0
 
 	if(GET_OBJ_TYPE(obj) == ITEM_STAFF &&
-	        HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS | MAG_MASSES))
+	    HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS | MAG_MASSES))
 		log("... '%s' (#%d) uses %s spell '%s'.",
 		    obj->short_description,	GET_OBJ_VNUM(obj),
 		    HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS) ? "area" : "mass",

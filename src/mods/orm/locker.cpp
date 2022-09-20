@@ -1,18 +1,14 @@
-//#define __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__
 #include "locker.hpp"
 #include "util.hpp"
 #include "../player.hpp"
 #include "../util-map.hpp"
 
-#define lc_debug(MSG) mentoc_prefix_debug(red_str("[mods::orm::locker_cache::debug]"))  << MSG << "\n";
 
-#ifdef __MENTOC_SHOW_MODS_ORM_NOTCH_DEBUG_OUTPUT__
-	#define m_debug(MSG) mentoc_prefix_debug("[mods::orm::locker::debug]")  << MSG << "\n";
-	#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::orm::locker::ERROR]"))  << MSG << "\n";
-
+#define __MENTOC_SHOW_MODS_ORM_LOCKER_DEBUG_OUTPUT__
+#ifdef __MENTOC_SHOW_MODS_ORM_LOCKER_DEBUG_OUTPUT__
+	#define lc_debug(MSG) mentoc_prefix_debug(red_str("[mods::orm::locker_cache::debug]"))  << MSG << "\n";
 #else
-	#define m_debug(MSG)
-	#define m_error(MSG)
+	#define lc_debug(MSG)
 #endif
 
 namespace mods::orm {
@@ -30,7 +26,7 @@ namespace mods::orm {
 			slim_locker(
 			    const room_vnum& r,
 			    locker::type_t t,
-			    const std::vector<data>& d)  : room(r),type(t),rows(d) {
+			    const std::vector<data>& d)  : room(r),type(t) {
 				ids.resize(d.size());
 				contents.resize(d.size());
 				lc_debug("slim_locker constructor");
@@ -45,7 +41,6 @@ namespace mods::orm {
 			room_vnum room;
 			locker::type_t type;
 			std::vector<uint64_t> ids;
-			std::vector<data> rows;
 			std::vector<std::pair<uint16_t,std::string>> contents;
 		};
 		static std::vector<uint64_t> removal_queue;
@@ -324,6 +319,8 @@ namespace mods::orm {
 		}
 		return list;
 	}
-#undef __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__
-#undef __MENTOC_ORM_UTIL_DEBUG_OUTPUT__
 };
+
+#undef m_debug
+#undef m_error
+#undef lc_debug
