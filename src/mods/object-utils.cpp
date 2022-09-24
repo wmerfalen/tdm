@@ -66,7 +66,7 @@ namespace mods::object_utils {
 	}
 	bool is_shotgun_underbarrel(const obj_ptr_t& item) {
 		return item->has_attachment() && item->attachment()->attributes->type == mw_attachment::UNDER_BARREL &&
-		       item->attachment()->attributes->underbarrel_launcher_type.compare("SHOTGUN") == 0;
+		    item->attachment()->attributes->underbarrel_launcher_type.compare("SHOTGUN") == 0;
 	}
 	bool is_corpse(const obj_ptr_t& item) {
 		return item->is_corpse;
@@ -119,8 +119,8 @@ namespace mods::object_utils {
 			"vehicle"
 		};
 	}
-	int get_yaml_type(std::string& yaml) {
-		auto exploded = EXPLODE(yaml.c_str(),'/');
+	int get_yaml_type(std::string_view yaml) {
+		auto exploded = EXPLODE(yaml.data(),'/');
 		return mods::util::yaml_string_to_int(exploded[0]);
 	}
 	bool assert_sane_object(std::string_view yaml) {
@@ -136,7 +136,7 @@ namespace mods::object_utils {
 		}
 		return false;
 	}
-	std::string get_yaml_file(std::string& yaml) {
+	std::string get_yaml_file(std::string_view yaml) {
 		std::string current = "";
 		bool save = false;
 		for(auto ch : yaml) {

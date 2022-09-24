@@ -102,7 +102,6 @@ namespace mods::orm {
 		}
 	};
 	bool locker::room_has_locker_by_type(std::string_view type,const room_vnum& room) {
-		lc_debug("room_has_locker_by_type entry");
 		static constexpr std::string_view row_alias = "cnt";
 		using statement = std::vector<mods::orm::util::statement_t>;
 		using c = std::vector<pqxx::result::reference>;
@@ -117,12 +116,12 @@ namespace mods::orm {
 		    row_alias,
 		    statements
 		);
-		lc_debug("room_has_locker_by_type");
 		for(const auto& c : container) {
 			if(c[row_alias.data()].is_null()) {
 				continue;
 			}
 			if(c[row_alias.data()].as<std::size_t>()) {
+				lc_debug("room_has_locker_by_type entry");
 				return true;
 			}
 		}

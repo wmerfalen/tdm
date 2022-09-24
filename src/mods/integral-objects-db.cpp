@@ -127,7 +127,12 @@ namespace mods::integral_objects_db {
 
 	obj_ptr_t first_or_create(room_vnum room,std::string query, int type, std::string yaml_file) {
 		mo_debug(green_str("[first_or_create]: room: ") << room << "| real:" << real_room(room));
-		for(auto obj = world[real_room(room)].contents; obj != nullptr; obj = obj->next_content) {
+		auto room_id = real_room(room);
+		if(room_id == NOWHERE) {
+			log("SYSERR: first_or_create tried to check for an item in a room that doesn't exist (room_vnum: '%d')",room);
+			return nullptr;
+		}
+		for(auto obj = world[room_id].contents; obj != nullptr; obj = obj->next_content) {
 			if(obj->feed_file().compare(yaml_file.c_str()) == 0) {
 				mo_debug(green_str("found object of feed_file:'") << obj->feed_file() << "' " << yaml_file << "' in room:" << real_room(room));
 				return optr_by_uuid(obj->uuid);

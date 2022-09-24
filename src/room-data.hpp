@@ -179,34 +179,7 @@ typedef unsigned char		ubyte;
 
 using bitvector_t = unsigned long int;
 
-namespace mods::orm {
-	struct locker;
-};
-
-namespace mods::globals {
-	void destruct_object(uuid_t);
-};
-
-namespace mods::integral_objects {
-	struct generic_locker_t {
-			using obj_ptr_t = std::shared_ptr<obj_data>;
-			generic_locker_t();
-			generic_locker_t(const generic_locker_t&) = delete;
-			generic_locker_t(std::string_view in_type,const room_vnum& room);
-			~generic_locker_t();
-			void init();
-			void load(std::string_view in_type,const room_vnum& room);
-		private:
-			std::vector<mods::orm::locker> orm;
-			obj_ptr_t container;
-			room_vnum room;
-			room_rnum room_id;
-			uint8_t type;
-			std::vector<std::string> db_errors;
-			bool good;
-			std::size_t items;
-	};
-};
+#include "mods/generic-locker.hpp"
 
 /* ================== Memory Structure for room ======================= */
 struct room_data {
@@ -343,7 +316,7 @@ struct room_data {
 		int y;
 		int z;
 		mods::string nickname;
-		std::forward_list<mods::integral_objects::generic_locker_t> containers;
+		std::forward_list<mods::generic_locker_t> containers;
 	protected:
 		std::map<texture_type_t,texture_level_t> m_texture_levels;
 		std::vector<uint8_t> m_directions;

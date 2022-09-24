@@ -32,7 +32,7 @@ namespace mods::object_utils {
 	bool is_shotgun_underbarrel(const obj_ptr_t&);
 	bool is_rifle(const obj_ptr_t&);
 	bool is_melee(const obj_ptr_t&);
-	int get_yaml_type(std::string& yaml);
+	int get_yaml_type(std::string_view yaml);
 	obj_ptr_t first_or_create(room_rnum room,std::string query, int type, std::string yaml_file);
 	bool assert_sane_object(std::string_view yaml);
 	std::vector<std::string> object_types();
@@ -107,9 +107,9 @@ namespace mods::object_utils {
 	static inline void yaml_file_doesnt_exist(std::string from_where) {
 		std::variant<YamlFeedExceptionInfo,std::string> item;
 		item.emplace<1>("[yaml-feed::initiator::" + yaml_initiator +
-		                "::transaction_id::" + std::to_string(yaml_transaction_id) + "]" +
-		                "[error]: File does not exist, when feeding '" + from_where + "'"
-		               );
+		    "::transaction_id::" + std::to_string(yaml_transaction_id) + "]" +
+		    "[error]: File does not exist, when feeding '" + from_where + "'"
+		);
 		yaml_feed_exceptions.emplace_back(item);
 	}
 	static inline void increment_yaml_transaction_id() {
@@ -435,9 +435,9 @@ namespace mods::object_utils {
 		}
 		obj_ptr_t obj;
 #define MENTOC_F_IMPORT(CLASS_TYPE,IT_TYPE)\
-		if(object_type.compare(#CLASS_TYPE) == 0){\
-			obj = create_object(BOOST_PP_CAT(ITEM_,IT_TYPE),in_yaml_file);\
-		}
+	if(object_type.compare(#CLASS_TYPE) == 0){\
+		obj = create_object(BOOST_PP_CAT(ITEM_,IT_TYPE),in_yaml_file);\
+	}
 		/** !!*****************!! */
 		/** !!UPDATE_ITEM_TYPES!! */
 		/** !!*****************!! */
@@ -474,7 +474,7 @@ namespace mods::object_utils {
 	void change_visibility(obj_ptr_t& object,int amount);
 	bool is_wield_position(int where);
 	bool is_hold_position(int where);
-	std::string get_yaml_file(std::string& yaml);
+	std::string get_yaml_file(std::string_view yaml);
 };//End namespace
 
 #endif

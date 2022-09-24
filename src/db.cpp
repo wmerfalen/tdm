@@ -1196,13 +1196,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				*/
 				room.name.assign(room_records_row["name"]);
 				room.description.assign(room_records_row["description"]);
-#ifdef __MENTOC_SHOW_PARSE_SQL_ROOMS_DEBUG__
-				log("DEBUG: room: %d name: (%s), description: (%s)",mods::util::stoi<int>(room_records_row["id"].c_str()),room.name.c_str(),room.description.c_str());
-#endif
-				room.number = room_records_row["room_number"].as<int>();
-#ifdef __MENTOC_SHOW_PARSE_SQL_ROOMS_DEBUG__
-				log("parse_sql_rooms: room.number (%d)",room.number);
-#endif
+				room.number = room_records_row["room_number"].as<room_vnum>();
 				room.zone = real_zone(room_records_row["zone"].as<int>());
 				room.sector_type = room_records_row["sector_type"].as<int>();
 				room.light = (room_records_row["light"]).as<int>();

@@ -10,6 +10,7 @@
 #include "mob-roam.hpp"
 #include "orm/locker.hpp"
 
+#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
 	#define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
 	#define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
@@ -29,9 +30,6 @@ namespace mods::zone {
 	static std::deque<replenish_command> replenish;
 	static std::vector<int> zone_id_blacklist;
 	static bool disable_all_zone_resets = false;
-	std::vector<room_vnum> ammo_locker_list;
-	std::vector<room_vnum> weapon_locker_list;
-	std::vector<room_vnum> armor_locker_list;
 	std::vector<room_vnum> camera_feed_list;
 	std::vector<room_vnum> dummy_list;
 	std::vector<room_vnum> sign_list;
@@ -48,24 +46,43 @@ namespace mods::zone {
 	void done_refreshing() {
 		queue_state::queue_refresh = false;
 	}
+	bool sanity_check_room_vnum(const room_vnum& room) {
+		auto room_id = real_room(room);
+		if(room_id == NOWHERE) {
+			return false;
+		}
+		return true;
+	}
 
 	void build_ammo_locker(room_vnum room) {
 		z_debug("building ammo locker");
-		auto obj = create_object(ITEM_CONTAINER, "ammo-locker.yml");
-		obj_to_room(obj.get(),real_room(room));
-		ammo_locker_list.emplace_back(room);
+		if(!sanity_check_room_vnum(room)) {
+			log("SYSERR: cannot build ammo locker if room vnum (%d) is NOWHERE",room);
+			return;
+		}
+		auto room_id = real_room(room);
+		world[room_id].containers.emplace_front("ammo",room);
+		log("Built ammo locker in room vnum '%d' (real:'%d')",room,room_id);
 	}
 	void build_weapon_locker(room_vnum room) {
 		z_debug("building weapon locker");
-		auto obj = create_object(ITEM_CONTAINER, "weapon-locker.yml");
-		obj_to_room(obj.get(),real_room(room));
-		weapon_locker_list.emplace_back(room);
+		if(!sanity_check_room_vnum(room)) {
+			log("SYSERR: cannot build weapon locker if room vnum (%d) is NOWHERE",room);
+			return;
+		}
+		auto room_id = real_room(room);
+		world[room_id].containers.emplace_front("weapon",room);
+		log("Built weapon locker in room vnum '%d' (real:'%d')",room,room_id);
 	}
 	void build_armor_locker(room_vnum room) {
 		z_debug("building armor locker");
-		auto obj = create_object(ITEM_CONTAINER, "armor-locker.yml");
-		obj_to_room(obj.get(),real_room(room));
-		armor_locker_list.emplace_back(room);
+		if(!sanity_check_room_vnum(room)) {
+			log("SYSERR: cannot build armor locker if room vnum (%d) is NOWHERE",room);
+			return;
+		}
+		auto room_id = real_room(room);
+		world[room_id].containers.emplace_front("armor",room);
+		log("Built armor locker in room vnum '%d' (real:'%d')",room,room_id);
 	}
 	void build_camera_feed(room_vnum room) {
 		z_debug("building camera feed");

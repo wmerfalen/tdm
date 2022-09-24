@@ -22,7 +22,8 @@
 #endif
 
 
-#ifdef __MENTOC_MODS_WEAPONS_INTEGRAL_OBJECTS_DEBUG__
+#define __MENTOC_MODS_WEAPONS_INTEGRAL_OBJECTS_DEBUG__
+#ifdef  __MENTOC_MODS_WEAPONS_INTEGRAL_OBJECTS_DEBUG__
 	#define mw_debug(A) std::cerr << red_str("[mods::integral_objects::weapons_locker]:") << A <<"\n";
 #else
 	#define mw_debug(A)
@@ -31,157 +32,28 @@
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::integral_objects {
-
-	/**
-	 * Clean slate.
-	 * How would we design a system to place lockers in rooms that allows
-	 * for the room (once it's destructed) to free all it's members automatically
-	 * using it's destructor?
-	 *
-	 * How would we interface that with commands that admins can perform CRUD operations on?
-	 *
-	 */
-	generic_locker_t::generic_locker_t() {
-		init();
-	}
-	void generic_locker_t::init() {
-		orm.clear();
-		container = nullptr;
-		room = NOWHERE;
-		room_id = NOWHERE;
-		type = 0;
-		db_errors.clear();
-		good = false;
-		items = 0;
-	}
-	generic_locker_t::generic_locker_t(std::string_view in_type,const room_vnum& in_room) {
-		load(in_type,room);
-	}
-	generic_locker_t::~generic_locker_t() {
-		orm.clear();
-	}
-	void generic_locker_t::load(std::string_view in_type,const room_vnum& in_room) {
-		init();
-		items = mods::orm::locker::get_lockers_by_type(in_type,room,&orm);
-		if(items) {
-			type = mods::orm::locker::to_type_integral(in_type);
-			room = in_room;
-			room_id = real_room(in_room);
-			good = true;
-		}
-	}
-
-
-	//	std::optional<locker> get_by_id(uint64_t id) {
-	//		//TODO
-	//	}
-	//	std::tuple<bool,std::size_t,std::string> fill_from_db(std::string_view type, const room_vnum& room) {
-	//
-	//	}
-	//
-	//	void clear_container(std::string_view type,const room_vnum& room) {
-	//
-	//	}
-	//
-	//	std::pair<bool,std::string> remove_container(std::string_view type,const room_vnum& room) {
-	//		auto room_id = real_room(room);
-	//		if(room_id == NOWHERE) {
-	//			return {false,"Invalid room"};
-	//		}
-	//		if(type.compare("ammo") == 0) {
-	//			world[room_id].
-	//
-	//			return {true,""};
-	//		}
-	//	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	void generic_feed(std::string_view type,const room_vnum& room,std::string_view query,std::string_view container_yaml) {
-		//std::forward_list<generic_locker_t>* ptr = nullptr;
+	static std::set<room_vnum> rooms_with_lockers;
+	void generic_feed(std::string_view type, const room_vnum& room) {
 		room_rnum room_id = real_room(room);
 		if(room_id == NOWHERE) {
-			log("SYSERR: attempted to feed locker of type '%s' with invalid room vnum: '%d'",type.data(),room);
+			log("SYSERR: tried to feed locker of type: '%s' but room vnum is invalid: '%d'",type.data(),room);
 			return;
 		}
-		//if(type.compare("ammo") == 0) {
-		//	ptr = &world[real_room].ammo_locker;
-		//} else if(type.compare("weapon") == 0) {
-		//	ptr = &world[real_room].weapon_locker;
-		//} else {
-		//	ptr = &world[real_room].armor_locker;
-		//}
-		mw_debug("generic_feed " << type << " entry. room: " << room);
-		auto locker = mods::integral_objects_db::first_or_create(room,query.data(), ITEM_CONTAINER, container_yaml.data());
-		const std::vector<std::pair<uint16_t,std::string>>& list = mods::orm::locker::contents(type,room);
-		for(const auto& pair : list) {
-			auto yaml = pair.second;
-			if(!mods::object_utils::assert_sane_object(yaml)) {
-				log("Not a sane yaml file (generic_feed): '%s'",yaml.c_str());
-				continue;
-			}
-			auto yaml_file = mods::object_utils::get_yaml_file(yaml);
-			auto uuid_list = mods::query_objects::query_contents_by_yaml(locker,yaml_file);
-			if(uuid_list.size() < pair.first) {
-				mw_debug("Filling with: " << yaml);
-				auto obj = create_object(mods::object_utils::get_yaml_type(yaml),yaml_file);
-				obj_to_obj(obj,locker);
+		mw_debug("generic_feed on type: " << type << " in room:" << room);
+		for(auto& c : world[room_id].containers) {
+			if(c.replenish_if(type)) {
+				return;
 			}
 		}
 	}
 	void feed_ammo_locker(room_vnum room) {
-		generic_feed("ammo",room,"ammo-locker","ammo-locker.yml");
+		generic_feed("ammo",room);
 	}
 	void feed_weapon_locker(room_vnum room) {
-		mw_debug("feed_weapon_locker entry. room: " << room);
-		generic_feed("weapon",room,"weapon-locker","weapon-locker.yml");
+		generic_feed("weapon",room);
 	}
-
 	void feed_armor_locker(room_vnum room) {
-		generic_feed("armor",room,"armor-locker","armor-locker.yml");
+		generic_feed("armor",room);
 	}
 
 	void feed_camera_feed(room_vnum room_v_num) {

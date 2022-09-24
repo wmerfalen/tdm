@@ -51,6 +51,9 @@ room_data::room_data(const room_data& r) {
 	m_ex_descriptions = r.m_ex_descriptions;
 	m_textures = r.m_textures;
 	m_contents = r.m_contents;
+	for(const auto& c : r.containers) {
+		containers.push_front(c);
+	}
 }
 room_data::~room_data() {
 	for(unsigned i = 0; i < NUM_OF_DIRS; i++) {
