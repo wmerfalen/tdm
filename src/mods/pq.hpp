@@ -43,12 +43,12 @@ static inline void report_db_issue(std::string file,std::size_t line,std::string
 		log_file = std::make_unique<std::fstream>("database-errors.log",std::ios::out | std::ios::app);
 		initialized = 1;
 	}
-	(*log_file) << "[date:" << ::mods::util::time_string() << "]: file:'" << file << 
-		"',line:'" << line << "', message: '" << message.data() << "'|exception:'" << exception_message.data() << "'\n";
+	(*log_file) << "[date:" << ::mods::util::time_string() << "]: file:'" << file <<
+	    "',line:'" << line << "', message: '" << message.data() << "'|exception:'" << exception_message.data() << "'\n";
 	log_file->flush();
-	std::cerr << mods::colors::red_str("[database issue]:") << " file:'" << file << 
-		"',line:'" << line << "',(message:'" << message.data() << "')" << 
-		"(exception:'" << mods::colors::red_str(exception_message.data()) << "')\n";
+	std::cerr << mods::colors::red_str("[database issue]:") << " file:'" << file <<
+	    "',line:'" << line << "',(message:'" << message.data() << "')" <<
+	    "(exception:'" << mods::colors::red_str(exception_message.data()) << "')\n";
 }
 
 using namespace mods::colors;
@@ -79,18 +79,20 @@ using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 //}
 
 using str_map_t = std::map<std::string,std::string>;
-#define ORM_SUCCESS(a) std::get<0>(a) == 0
-#define ORM_NO_RESULTS(a) std::get<0>(a) == NO_RESULTS
-#define ORM_FAILURE(a) std::get<0>(a) < 0
+#ifndef ORM_SUCCESS
+	#define ORM_SUCCESS(a) std::get<0>(a) == 0
+	#define ORM_NO_RESULTS(a) std::get<0>(a) == NO_RESULTS
+	#define ORM_FAILURE(a) std::get<0>(a) < 0
+#endif
 template <typename sql_compositor>
 static inline bool db_exists(std::string_view table, std::string_view primary_key,std::string_view field,std::string_view operator_type, std::string_view value) {
 	try {
 		auto up_txn = txn();
 		sql_compositor comp(table.data(),&up_txn);
 		auto up_sql = comp.select(primary_key)
-		              .from(table.data())
-		              .where(field.data(),operator_type.data(),value.data())
-		              .sql();
+		    .from(table.data())
+		    .where(field.data(),operator_type.data(),value.data())
+		    .sql();
 		auto rows = mods::pq::exec(up_txn,up_sql);
 		mods::pq::commit(up_txn);
 		return rows.size() > 0;
@@ -104,10 +106,10 @@ static inline int db_update(std::string_view table, str_map_t values,std::string
 		auto up_txn = txn();
 		sql_compositor comp(table.data(),&up_txn);
 		auto up_sql = comp
-		              .update(table.data())
-		              .set(values)
-		              .where(field.data(),operator_type.data(),value.data())
-		              .sql();
+		    .update(table.data())
+		    .set(values)
+		    .where(field.data(),operator_type.data(),value.data())
+		    .sql();
 		mods::pq::exec(up_txn,up_sql);
 		mods::pq::commit(up_txn);
 		return 0;
@@ -121,10 +123,10 @@ static inline int db_create(std::string_view table, str_map_t values) {
 		auto txn2 = txn();
 		sql_compositor comp(table.data(),&txn2);
 		auto sql = comp
-		           .insert()
-		           .into(table.data())
-		           .values(values)
-		           .sql();
+		    .insert()
+		    .into(table.data())
+		    .values(values)
+		    .sql();
 		auto row = mods::pq::exec(txn2,sql);
 		mods::pq::commit(txn2);
 		return 0;
@@ -143,10 +145,10 @@ std::pair<bool,std::string> insert_or_update_existing(
 	try {
 		auto check_txn = txn();
 		auto check_sql = sql_compositor(table_name,&check_txn)
-		                 .select("COUNT(*)")
-		                 .from(table_name)
-		                 .where(primary_key,"=",pk_value)
-		                 .sql();
+		    .select("COUNT(*)")
+		    .from(table_name)
+		    .where(primary_key,"=",pk_value)
+		    .sql();
 		auto check_result = mods::pq::exec(check_txn,check_sql);
 		mods::pq::commit(check_txn);
 
@@ -154,20 +156,20 @@ std::pair<bool,std::string> insert_or_update_existing(
 			/* update the record */
 			auto t = txn();
 			auto sql = sql_compositor(table_name,&t)
-			           .update(table_name)
-			           .set(values)
-			           .where(primary_key,"=",pk_value)
-			           .sql();
+			    .update(table_name)
+			    .set(values)
+			    .where(primary_key,"=",pk_value)
+			    .sql();
 			mods::pq::exec(t,sql);
 			mods::pq::commit(t);
 		} else {
 			/* insert the record */
 			auto t = txn();
 			auto sql = sql_compositor(table_name,&t)
-			           .insert()
-			           .into(table_name)
-			           .values(values)
-			           .sql();
+			    .insert()
+			    .into(table_name)
+			    .values(values)
+			    .sql();
 			mods::pq::exec(t,sql);
 			mods::pq::commit(t);
 		}
@@ -208,10 +210,10 @@ std::tuple<bool,std::string,std::string> insert_or_update_existing_returning(
 	try {
 		auto check_txn = txn();
 		auto check_sql = sql_compositor(table_name,&check_txn)
-		                 .select("COUNT(*)")
-		                 .from(table_name)
-		                 .where(primary_key,"=",pk_value)
-		                 .sql();
+		    .select("COUNT(*)")
+		    .from(table_name)
+		    .where(primary_key,"=",pk_value)
+		    .sql();
 		auto check_result = mods::pq::exec(check_txn,check_sql);
 		mods::pq::commit(check_txn);
 
@@ -219,21 +221,21 @@ std::tuple<bool,std::string,std::string> insert_or_update_existing_returning(
 			/* update the record */
 			auto t = txn();
 			auto sql = sql_compositor(table_name,&t)
-			           .update(table_name)
-			           .set(values)
-			           .where(primary_key,"=",pk_value)
-			           .sql();
+			    .update(table_name)
+			    .set(values)
+			    .where(primary_key,"=",pk_value)
+			    .sql();
 			mods::pq::exec(t,sql);
 			mods::pq::commit(t);
 		} else {
 			/* insert the record */
 			auto t = txn();
 			auto sql = sql_compositor(table_name,&t)
-			           .insert()
-			           .into(table_name)
-			           .values(values)
-			           .returning(returning_column)
-			           .sql();
+			    .insert()
+			    .into(table_name)
+			    .values(values)
+			    .returning(returning_column)
+			    .sql();
 			auto record = mods::pq::exec(t,sql);
 			mods::pq::commit(t);
 			if(record.size()) {
@@ -267,11 +269,11 @@ static inline std::tuple<int16_t,std::string,uint64_t> insert_returning(TObject&
 		mapped.erase(obj->primary_key_name().data());
 		sql_compositor comp(obj->table_name(),&insert_transaction);
 		auto up_sql = comp
-		              .insert()
-		              .into(obj->table_name())
-		              .values(mapped)
-		              .returning(returning_field)
-		              .sql();
+		    .insert()
+		    .into(obj->table_name())
+		    .values(mapped)
+		    .returning(returning_field)
+		    .sql();
 		auto record = mods::pq::exec(insert_transaction,up_sql);
 		mods::pq::commit(insert_transaction);
 		if(record.size()) {
@@ -291,10 +293,10 @@ static inline std::tuple<int16_t,std::string> delete_from(TObject& obj) {
 		auto del_txn = txn();
 		sql_compositor comp(obj->table_name(),&del_txn);
 		auto up_sql = comp
-		              .del()
-		              .from(obj->table_name())
-		              .where(obj->primary_key_name(),"=",obj->primary_key_value())
-		              .sql();
+		    .del()
+		    .from(obj->table_name())
+		    .where(obj->primary_key_name(),"=",obj->primary_key_value())
+		    .sql();
 		auto record = mods::pq::exec(del_txn,up_sql);
 		mods::pq::commit(del_txn);
 		return {FETCHED_OKAY,"okay"};
@@ -313,10 +315,10 @@ static inline std::tuple<int16_t,std::string> delete_where(
 		auto del_txn = txn();
 		sql_compositor comp(table_name.data(),&del_txn);
 		auto up_sql = comp
-		              .del()
-		              .from(table_name.data())
-		              .where(where.data(), sql_operator.data(),value.data())
-		              .sql();
+		    .del()
+		    .from(table_name.data())
+		    .where(where.data(), sql_operator.data(),value.data())
+		    .sql();
 		mods::pq::exec(del_txn,up_sql);
 		mods::pq::commit(del_txn);
 		return {FETCHED_OKAY,"okay"};
@@ -331,10 +333,10 @@ static inline std::tuple<int16_t,std::string> update(TObject& s) {
 		auto up_txn = txn();
 		sql_compositor comp(s->table_name(),&up_txn);
 		auto up_sql = comp
-		              .update(s->table_name())
-		              .set(s->export_class())
-		              .where(s->primary_key_name(),"=",s->primary_key_value())
-		              .sql();
+		    .update(s->table_name())
+		    .set(s->export_class())
+		    .where(s->primary_key_name(),"=",s->primary_key_value())
+		    .sql();
 		mods::pq::exec(up_txn,up_sql);
 		mods::pq::commit(up_txn);
 		return {FETCHED_OKAY,"okay"};
@@ -349,8 +351,8 @@ static inline std::tuple<int16_t,std::string> load_all(TObject& s) {
 		auto select_transaction = txn();
 		sql_compositor comp(s->table_name(),&select_transaction);
 		auto player_sql = comp.select("*")
-		                  .from(s->table_name())
-		                  .sql();
+		    .from(s->table_name())
+		    .sql();
 		auto player_record = mods::pq::exec(select_transaction,player_sql);
 		mods::pq::commit(select_transaction);
 		if(player_record.size()) {
@@ -369,8 +371,8 @@ static inline std::tuple<int16_t,std::string> select_row_to_json(std::string_vie
 		auto json_txn = txn();
 		sql_compositor comp(table.data(),&json_txn);
 		auto aggregate_sql = comp.select_row_to_json(table.data())
-		                     .from(table.data())
-		                     .sql();
+		    .from(table.data())
+		    .sql();
 		auto result_set = mods::pq::exec(json_txn,aggregate_sql);
 		mods::pq::commit(json_txn);
 		if(result_set.size()) {
@@ -389,8 +391,8 @@ static inline std::tuple<int16_t,std::string> json_agg(std::string_view table,TO
 		auto json_txn = txn();
 		sql_compositor comp(table.data(),&json_txn);
 		auto aggregate_sql = comp.select_json_agg(table.data())
-		                     .from(table.data())
-		                     .sql();
+		    .from(table.data())
+		    .sql();
 		auto result_set = mods::pq::exec(json_txn,aggregate_sql);
 		mods::pq::commit(json_txn);
 		if(result_set.size()) {
@@ -406,16 +408,16 @@ static inline std::tuple<int16_t,std::string> json_agg(std::string_view table,TO
 
 template <typename TContainerObject,typename sql_compositor>
 static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,
-                                                         std::string_view where,
-                                                         std::string_view sql_operator,
-                                                         std::string_view value) {
+    std::string_view where,
+    std::string_view sql_operator,
+    std::string_view value) {
 	try {
 		auto select_transaction = txn();
 		sql_compositor comp(s[0].table_name(),&select_transaction);
 		auto player_sql = comp.select("*")
-		                  .from(s[0].table_name())
-		                  .where(where.data(), sql_operator.data(), value.data())
-		                  .sql();
+		    .from(s[0].table_name())
+		    .where(where.data(), sql_operator.data(), value.data())
+		    .sql();
 		auto player_record = mods::pq::exec(select_transaction,player_sql);
 		mods::pq::commit(select_transaction);
 		for(auto row : player_record) {
@@ -433,9 +435,9 @@ static inline std::tuple<int16_t,std::string> load_by_column(TObject& s,std::str
 		auto select_transaction = txn();
 		sql_compositor comp(s->table_name(),&select_transaction);
 		auto player_sql = comp.select("*")
-		                  .from(s->table_name())
-		                  .where(column.data(),"=",value.data())
-		                  .sql();
+		    .from(s->table_name())
+		    .where(column.data(),"=",value.data())
+		    .sql();
 		auto player_record = mods::pq::exec(select_transaction,player_sql);
 		if(player_record.size()) {
 			s->feed(player_record[0]);
@@ -453,9 +455,9 @@ static inline std::tuple<int16_t,std::string> load_multi_by_column(TObject& s,st
 		auto select_transaction = txn();
 		sql_compositor comp(s->table_name(),&select_transaction);
 		auto player_sql = comp.select("*")
-		                  .from(s->table_name())
-		                  .where(column.data(),"=",value.data())
-		                  .sql();
+		    .from(s->table_name())
+		    .where(column.data(),"=",value.data())
+		    .sql();
 		auto player_record = mods::pq::exec(select_transaction,player_sql);
 		if(player_record.size()) {
 			s->feed_multi(player_record);
@@ -473,9 +475,9 @@ static inline std::tuple<int16_t,std::string> load_by_pkid(TObject& s) {
 		auto select_transaction = txn();
 		sql_compositor comp(s->table_name(),&select_transaction);
 		auto player_sql = comp.select("*")
-		                  .from(s->table_name())
-		                  .where(s->primary_key_name(),"=",s->primary_key_value())
-		                  .sql();
+		    .from(s->table_name())
+		    .where(s->primary_key_name(),"=",s->primary_key_value())
+		    .sql();
 		auto player_record = mods::pq::exec(select_transaction,player_sql);
 		if(player_record.size()) {
 			s->feed(player_record[0]);
@@ -496,11 +498,11 @@ static inline std::tuple<int16_t,std::string> insert_returing(TObject& obj, std:
 		auto mapped = obj.export_insert();
 		mapped.erase(obj.primary_key_name());
 		auto up_sql = comp
-		              .insert()
-		              .into(obj.table_name())
-		              .values(obj.export_class())
-		              .returning(returning_field)
-		              .sql();
+		    .insert()
+		    .into(obj.table_name())
+		    .values(obj.export_class())
+		    .returning(returning_field)
+		    .sql();
 		auto record = mods::pq::exec(insert_transaction,up_sql);
 		mods::pq::commit(insert_transaction);
 		if(record.size()) {
@@ -519,10 +521,10 @@ static inline std::tuple<int16_t,std::string> delete_from(TObject& obj) {
 		auto del_txn = txn();
 		sql_compositor comp(obj.table_name(),&del_txn);
 		auto up_sql = comp
-		              .del()
-		              .from(obj.table_name())
-		              .where(obj.primary_key_name(),"=",obj.primary_key_value())
-		              .sql();
+		    .del()
+		    .from(obj.table_name())
+		    .where(obj.primary_key_name(),"=",obj.primary_key_value())
+		    .sql();
 		auto record = mods::pq::exec(del_txn,up_sql);
 		mods::pq::commit(del_txn);
 		return {0,"okay"};
@@ -537,10 +539,10 @@ static inline std::tuple<int16_t,std::string> update(TObject& s, std::map<std::s
 		auto up_txn = txn();
 		sql_compositor comp(s.table_name(),&up_txn);
 		auto up_sql = comp
-		              .update(s.table_name())
-		              .set(values)
-		              .where(s.primary_key_name(),"=",s.primary_key_value())
-		              .sql();
+		    .update(s.table_name())
+		    .set(values)
+		    .where(s.primary_key_name(),"=",s.primary_key_value())
+		    .sql();
 		mods::pq::exec(up_txn,up_sql);
 		mods::pq::commit(up_txn);
 		return {0,"okay"};
@@ -552,16 +554,16 @@ static inline std::tuple<int16_t,std::string> update(TObject& s, std::map<std::s
 }
 template <typename sql_compositor,typename TContainerObject>
 static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,
-                                                         std::string_view where,
-                                                         std::string_view sql_operator,
-                                                         std::string_view value) {
+    std::string_view where,
+    std::string_view sql_operator,
+    std::string_view value) {
 	try {
 		auto select_transaction = txn();
 		sql_compositor comp(s[0].table_name(),&select_transaction);
 		auto player_sql = comp.select("*")
-		                  .from(s[0].table_name())
-		                  .where(where.data(), sql_operator.data(), value.data())
-		                  .sql();
+		    .from(s[0].table_name())
+		    .where(where.data(), sql_operator.data(), value.data())
+		    .sql();
 		auto player_record = mods::pq::exec(select_transaction,player_sql);
 		mods::pq::commit(select_transaction);
 		for(auto row : player_record) {
@@ -580,9 +582,9 @@ static inline std::tuple<int16_t,std::string> load_by_pkid(TObject& s,std::strin
 		auto select_transaction = txn();
 		sql_compositor comp(s.table_name(),&select_transaction);
 		auto player_sql = comp.select("*")
-		                  .from(s.table_name())
-		                  .where(s.primary_key_name(),"=",pkid)
-		                  .sql();
+		    .from(s.table_name())
+		    .where(s.primary_key_name(),"=",pkid)
+		    .sql();
 		auto player_record = mods::pq::exec(select_transaction,player_sql);
 		if(player_record.size()) {
 			s.feed(player_record[0]);

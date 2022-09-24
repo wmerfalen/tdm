@@ -111,7 +111,7 @@ void obj_data::init() {
 	m_db_id = 0;
 
 #define MENTOC_OBJ_INITIALIZE_CONSTRUCTOR(r,data,CLASS_TYPE) \
-			this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
+	this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 }
 obj_data::obj_data(std::string item_type,std::string_view feed_file) {
@@ -137,10 +137,10 @@ int16_t obj_data::feed(int16_t in_type,std::string_view feed_file) {
 		return std::tolower(c);
 	});
 #define MENTOC_OBJ_DATA_FEED_DUAL(r,data,CLASS_TYPE) \
-			if(s_type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\
-				this->CLASS_TYPE(feed_file); \
-				this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
-			}
+	if(s_type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\
+		this->CLASS_TYPE(feed_file); \
+		this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
+	}
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_DUAL, ~, MENTOC_ITEM_TYPES_SEQ)
 	return this->feed_status;
 }
@@ -176,14 +176,14 @@ std::string obj_data::generate_stat_page() {
 	using namespace mods::stats;
 
 #define MENTOC_OBJ_DATA_STAT_GEN(r,data,CLASS_TYPE) \
-			if(BOOST_PP_CAT(m_, CLASS_TYPE)){\
-				BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->generate_map();\
-				return format_stats_page(\
-						feed_file(),\
-						BOOST_PP_STRINGIZE(CLASS_TYPE),\
-						&(BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->exported)\
-				);\
-			}
+	if(BOOST_PP_CAT(m_, CLASS_TYPE)){\
+		BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->generate_map();\
+		return format_stats_page(\
+		        feed_file(),\
+		        BOOST_PP_STRINGIZE(CLASS_TYPE),\
+		        &(BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->exported)\
+		    );\
+	}
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_STAT_GEN, ~, MENTOC_ITEM_TYPES_SEQ)
 	return "<no stat page>";
 }
@@ -241,9 +241,6 @@ void obj_flag_data::feed(pqxx::row row) {
 	cost = mods::util::stoi<int>(row["cost"]);
 	cost_per_day =mods::util::stoi<int>(row["cost_per_day"]);
 	timer = mods::util::stoi<int>(row["timer"]);
-}
-std::vector<mods::extra_desc_data>& room_data::ex_descriptions() {
-	return m_ex_descriptions;
 }
 #ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
 char_player_data::~char_player_data() {
@@ -402,145 +399,7 @@ void char_data::init() {
 	player_specials = std::make_shared<player_special_data>();
 }
 
-std::string_view room_data::overhead(const lense_type_t& lense) {
-	switch(lense) {
-		case NORMAL_SIGHT:
-			if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::GRASS) != m_textures.end()) {
-				return "{grn}==={/grn}";
-			}
-			if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::CEMENT) != m_textures.end()) {
-				return "{grey}[ ]{/grey}";
-			}
-			if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::OUTSIDE) != m_textures.end()) {
-				return "{blu}[ ]{/blu}";
-			}
-			if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::INSIDE) != m_textures.end()) {
-				return "{wht}[ ]{/wht}";
-			}
-			return "[ ]";
-			break;
 
-		case THERMAL_GOGGLES:
-			if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::GRASS) != m_textures.end()) {
-				return "{blu}...{/blu}";
-			}
-			if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::CEMENT) != m_textures.end()) {
-				return "{blu}...{/blu}";
-			}
-			if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::OUTSIDE) != m_textures.end()) {
-				return "{red}...{/red}";
-			}
-			/** TODO: if we have mobs in this room, mark it with a red indicator to simulate heat signatures */
-			break;
-
-		case NIGHT_VISION_GOGGLES:
-			break;
-
-
-		case AERIAL_DRONE:
-			break;
-
-		case AERIAL_DRONE_THERMAL:
-			break;
-
-		case AERIAL_DRONE_NIGHT_VISION:
-			break;
-
-
-		case RC_DRONE:
-			break;
-
-		case RC_DRONE_THERMAL:
-			break;
-
-		case RC_DRONE_NIGHT_VISION:
-			break;
-
-		default:
-			return "[ ]";
-	}
-	return "[ ]";
-}
-std::set<room_data::texture_type_t>& room_data::textures() {
-	return m_textures;
-}
-
-void room_data::add_texture(texture_type_t t) {
-	m_textures.insert(t);
-}
-void room_data::remove_texture(texture_type_t t) {
-	decltype(m_textures) final_textures;
-	for(auto&& texture : m_textures) {
-		if(texture == t) {
-			continue;
-		}
-		final_textures.insert(texture);
-	}
-	m_textures = std::move(final_textures);
-}
-
-void room_data::init() {
-	starting_point = false;
-	x = 0;
-	y = 0;
-	z = 0;
-	this->shop_vnum = 0;
-	watching = 0;
-	number = 0;
-	zone = 0;
-	sector_type = 0;
-	contents = nullptr;
-	people = nullptr;
-	for(unsigned i = 0; i < NUM_OF_DIRS; i++) {
-		this->dir_option[i] = nullptr;
-	}
-	m_texture_levels[ON_FIRE] = 0;
-	name = "name";
-	description = "description";
-	room_flags = 0;
-	light = 1;                  /* Number of lightsources in room     */
-	REMOVE_BIT(room_flags, ROOM_DARK);
-	func = 0;
-}
-
-room_data::room_data() {
-	init();
-}
-room_data::room_data(const room_data& r) {
-	this->init();
-	number = r.number;
-	zone = r.zone;
-	sector_type = r.sector_type;
-	contents = r.contents;
-	people = r.people;
-	this->shop_vnum = r.shop_vnum;
-	description.assign(r.description.str());
-	name.assign(r.name.str());
-
-	this->shop_vnum = r.shop_vnum;
-	watching = r.watching;
-	for(unsigned i = 0; i < NUM_OF_DIRS; i++) {
-		this->dir_option[i] =r.dir_option[i];
-	}
-	room_flags = r.room_flags;
-	light = r.light;
-	func = r.func;
-	m_texture_levels = r.m_texture_levels;
-	m_directions = r.m_directions;
-	m_ex_descriptions = r.m_ex_descriptions;
-	m_textures = r.m_textures;
-	m_contents = r.m_contents;
-}
-room_data::~room_data() {
-	for(unsigned i = 0; i < NUM_OF_DIRS; i++) {
-		if(dir_option[i] != nullptr) {
-			dir_option[i]->general_description.clear();
-			dir_option[i]->keyword.clear();
-			free(dir_option[i]);
-			dir_option[i] = nullptr;
-		}
-	}
-}
 room_direction_data::room_direction_data(const room_direction_data& other) {
 	this->general_description.assign(other.general_description.c_str());
 	this->keyword.assign(other.keyword.c_str());
@@ -563,9 +422,9 @@ room_direction_data& room_direction_data::operator=(room_direction_data& other) 
  * !integral-objects !integral_objects
  */
 #ifdef __MENTOC_SHOW_MATCHES_QUERY_DEBUG_OUTPUT__
-#define mq_debug(A) std::cerr << "[matches_query]:'" << A << "'\n";
+	#define mq_debug(A) std::cerr << "[matches_query]:'" << A << "'\n";
 #else
-#define mq_debug(A) /** - */
+	#define mq_debug(A) /** - */
 #endif
 /** for the most part, this is crap. clean it up */
 bool obj_data::matches_query(std::string_view query) {
@@ -593,11 +452,11 @@ bool obj_data::matches_query(std::string_view query) {
 #undef mq_debug
 }
 void room_data::set_dir_option(byte i,
-                               const std::string& gen_desc,
-                               const std::string& keyword,
-                               const int& ex_info,
-                               const int& key,
-                               const room_rnum to_room) {
+    const std::string& gen_desc,
+    const std::string& keyword,
+    const int& ex_info,
+    const int& key,
+    const room_rnum to_room) {
 	if(i >= NUM_OF_DIRS) {
 		return;
 	}
@@ -619,9 +478,6 @@ void room_data::set_dir_option(byte i,
 	this->dir_option[i]->key = 0;
 	this->dir_option[i]->to_room = to_room;
 	m_directions.emplace_back(i);
-}
-const std::vector<uint8_t>& room_data::directions() const {
-	return m_directions;
 }
 namespace mods {
 	void descriptor_data::queue_output(std::string_view msg, bool newline, bool plain) {
@@ -681,12 +537,6 @@ namespace mods {
 	}
 
 };
-bool room_data::has_texture(texture_type_t t) {
-	if(m_textures.size() == 0) {
-		return false;
-	}
-	return std::find(m_textures.begin(),m_textures.end(),t) != m_textures.end();
-}
 void mob_special_data::init() {
 	this->memory.clear();
 	this->attack_type = 0;

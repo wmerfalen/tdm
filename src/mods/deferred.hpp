@@ -11,6 +11,7 @@
 #include "../structs.h"
 #include "../types.hpp"
 #include <tuple>
+#include "../room-data.hpp"
 
 namespace mods::util {
 	extern void texturize_room(room_rnum room_id, room_data::texture_type_t& texture_type);

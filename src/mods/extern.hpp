@@ -1,4 +1,5 @@
 #include "../shop.h"
+#include "../room-data.hpp"
 extern void do_auto_exits(char_data *ch);
 extern void char_from_room(char_data*);
 extern struct player_special_data dummy_mob;

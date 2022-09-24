@@ -2,6 +2,7 @@
 #define  __MENTOC_MODS_OVERHEAD_MAP_HEADER__
 
 #include "../structs.h"
+#include "../room-data.hpp"
 #include <vector>
 #include <set>
 #include <tuple>
@@ -29,7 +30,7 @@ namespace mods::overhead_map {
 	std::string generate(OutputDevice out,const room_rnum& room_number) {
 		std::string overhead_map = "";
 		std::string horizontal_border = std::string("{grn}+{/grn}{red}") +
-		                                std::string(mods::overhead_map::width,'=') + "{/red}{grn}+{/grn}";
+		    std::string(mods::overhead_map::width,'=') + "{/red}{grn}+{/grn}";
 		overhead_map = horizontal_border + "\r\n";
 		std::vector<std::vector<std::string>> map_coordinates;
 		map_coordinates.resize(mods::overhead_map::height);
@@ -43,8 +44,8 @@ namespace mods::overhead_map {
 		room_rnum room = out->room();
 		crawl_record_t crawled;
 		for(auto direction : {
-		            NORTH,EAST,SOUTH,WEST
-		        }) {
+		        NORTH,EAST,SOUTH,WEST
+		    }) {
 			if(world[room].dir_option[direction] == nullptr) {
 				continue;
 			}

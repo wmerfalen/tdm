@@ -38,17 +38,17 @@ namespace mods::object_utils {
 	extern void report_yaml_message(std::string_view);
 };
 #ifdef __MENTOC_USE_PQXX_RESULT__
-#define mentoc_pqxx_result_t const pqxx::result::reference&
+	#define mentoc_pqxx_result_t const pqxx::result::reference&
 #else
-#define mentoc_pqxx_result_t pqxx::row
+	#define mentoc_pqxx_result_t pqxx::row
 #endif
 
 #ifdef __MENTOC_DEBUG__
-#ifndef d
-#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
-#endif
+	#ifndef d
+		#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
+	#endif
 #else
-#define d(a) ;
+	#define d(a) ;
 #endif
 
 using direction_t = uint8_t;
@@ -80,24 +80,6 @@ namespace mods::globals {
 	extern uuid_t mob_uuid();
 	extern void register_object_db_id(uint64_t,uuid_t);
 };
-enum lense_type_t {
-	FIRST,
-
-	NORMAL_SIGHT,
-	THERMAL_GOGGLES,
-	NIGHT_VISION_GOGGLES,
-
-	AERIAL_DRONE,
-	AERIAL_DRONE_THERMAL,
-	AERIAL_DRONE_NIGHT_VISION,
-
-	RC_DRONE,
-	RC_DRONE_THERMAL,
-	RC_DRONE_NIGHT_VISION,
-
-	LAST
-};
-
 /*
  * Intended use of this macro is to allow external packages to work with
  * a variety of CircleMUD versions without modifications.  For instance,
@@ -728,8 +710,8 @@ enum player_level_t : uint8_t {
  * prepared to do so, simply erase these lines but heed the above warning.
  */
 #if defined(HAVE_UNSAFE_CRYPT) && MAX_PWD_LENGTH == 10
-#error You need to increase MAX_PWD_LENGTH to at least 20.
-#error See the comment near these errors for more explanation.
+	#error You need to increase MAX_PWD_LENGTH to at least 20.
+	#error See the comment near these errors for more explanation.
 #endif
 
 /**********************************************************************
@@ -744,11 +726,11 @@ typedef unsigned char		ubyte;
 //using sh_int = int32_t;
 //using ush_int = uint32_t;
 #if !defined(__cplusplus)	/* Anyone know a portable method? */
-typedef char			bool;
+	typedef char			bool;
 #endif
 
 #if !defined(CIRCLE_WINDOWS) || defined(LCC_WIN32)	/* Hm, sysdep.h? */
-typedef signed char			byte;
+	typedef signed char			byte;
 #endif
 
 /*
@@ -954,34 +936,34 @@ struct obj_data {
 		 *  |--> does: returns m_rifle;
 		 */
 #define MENTOC_DATA_OBJ(r,data,CLASS_TYPE)\
-		/* rifle_data_t* rifle(std::string_view feed_file) { */\
-		/** TODO: mods::weapon::feed_caps(this, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT }); */\
-		BOOST_PP_CAT(CLASS_TYPE,_data_t*) \
-		CLASS_TYPE(\
-				std::string_view feed_file\
-		){\
-	 		this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_shared<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file);\
-			this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
-			return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
-		}\
-		\
-		\
-		/* rifle_data_t rifle(void) { */\
-		BOOST_PP_CAT(CLASS_TYPE,_data_t*)\
-		CLASS_TYPE(\
-				void\
-		){\
-			return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
-		}\
-		\
-		\
-		/* bool has_rifle(void) { */\
-		bool BOOST_PP_CAT(has_,CLASS_TYPE)\
-				(\
-				 void\
-		){\
-			return this->BOOST_PP_CAT(m_,CLASS_TYPE) != nullptr;\
-		}
+	/* rifle_data_t* rifle(std::string_view feed_file) { */\
+	/** TODO: mods::weapon::feed_caps(this, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT }); */\
+	BOOST_PP_CAT(CLASS_TYPE,_data_t*) \
+	CLASS_TYPE(\
+	    std::string_view feed_file\
+	){\
+		this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_shared<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file);\
+		this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
+		return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
+	}\
+	\
+	\
+	/* rifle_data_t rifle(void) { */\
+	BOOST_PP_CAT(CLASS_TYPE,_data_t*)\
+	CLASS_TYPE(\
+	    void\
+	){\
+		return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
+	}\
+	\
+	\
+	/* bool has_rifle(void) { */\
+	bool BOOST_PP_CAT(has_,CLASS_TYPE)\
+	(\
+	    void\
+	){\
+		return this->BOOST_PP_CAT(m_,CLASS_TYPE) != nullptr;\
+	}
 
 		BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 #undef MENTOC_DATA_OBJ
@@ -1112,177 +1094,6 @@ struct rent_info {
 };
 /* ======================================================================= */
 
-
-/* room-related structures ************************************************/
-
-
-struct room_direction_data {
-	mods::string general_description;       /* When look DIR.			*/
-
-	mods::string keyword;		/* for open/close			*/
-
-	uint32_t exit_info;	/* Exit info			*/
-	obj_vnum key;		/* Key's number (-1 for no key)		*/
-	room_rnum to_room;		/* Where direction leads (NOWHERE)	*/
-	bool contract;
-	room_direction_data& operator=(room_direction_data& other);
-	room_direction_data(const room_direction_data& other); // copy constructor
-};
-
-
-/* ================== Memory Structure for room ======================= */
-struct room_data {
-		bool contract;
-		std::set<player_ptr_t> watchers;
-		enum texture_type_t : uint8_t {
-			AIR,
-			CARPET,
-			CEMENT,			/** asphault, nearly indestructible */
-			DAMP,
-			DESERT,
-			DIRT,				/** think about outside+cement but except no cement */
-			DRY,
-			ELEVATOR,
-			EMP, /** chaff or emp has been detonated */
-			FOREST,
-			FROZEN,
-			GLASS_WINDOWS,
-			GRASS,			/** typically grass that isn't flammable (i.e. not dried out) */
-			HAZARDOUS_SMOKE, /** think: gas attacks */
-			INSIDE,			/** Example: inside a home */
-			LADDER, /** a ladder leading up or down */
-			LOW_ATMOSPHERE,	/** atmosphere too thin for helicopter to fly */
-			METAL_HATCH,
-			METAL_WALL,
-			NON_HAZARDOUS_SMOKE, /** think: burning car */
-			ON_FIRE,		/** actively burning */
-			OUTSIDE,		/** Outside where anyone can see you */
-			RADIOACTIVE, /** actively emitting radioactivity */
-			ROOFTOP,
-			RUBBLE,			/** decimation of buildings resulting in lots of ruble */
-			SCANNED,
-			SERVER_ROOM,
-			SEWER,			/** Underground sewer tunnel */
-			SHATTERED_GLASS, /** results of breaking glass objects */
-			TREE,
-			TRASHY,
-			TUNNEL, /** a tunnel made of any material */
-			UNDERWATER,
-			VOLATILE,		/** Volatile means any slight spark will ignite an explosion */
-			WATER,
-			WOODEN_WALLS,
-			SHALLOW_WATER,	/** less than 5 inches of water */
-			FENCED, /** surrounded by fencing */
-			STREET,
-			GHETTO,
-			GANG_INFESTED,
-			ONRAMP,
-			NARROW_EAST_WEST,
-			NARROW_NORTH_SOUTH,
-			ALLEY,
-			PARKING_LOT,
-			PARKING_STALL,
-			SIDEWALK,
-			ATRIUM,
-			TILE,
-			GLASS_CONTENTS,
-			FREEZING,
-			REINFORCED_WALLS,
-			METAL_FLOORS,
-			WOODEN_BRIDGE,
-			TENT,
-		};
-		constexpr static std::array<texture_type_t,5> textures_that_have_levels = {
-			texture_type_t::RADIOACTIVE,
-			texture_type_t::LOW_ATMOSPHERE,
-			texture_type_t::ON_FIRE,
-			texture_type_t::NON_HAZARDOUS_SMOKE,
-			texture_type_t::HAZARDOUS_SMOKE
-		};
-		using texture_level_t = uint8_t;
-		enum fire_status_t : uint8_t {
-			NONE = 0,
-			KINDLING = 1,
-			COMPLETELY_ON_FIRE = 2,
-			SMOLDERING = 3,
-			SMOKING = 4,
-			OUT = 5
-		};
-
-		void init();
-
-		room_data();
-		room_data(const room_data& r);
-		~room_data();
-
-		void set_dir_option(byte i,
-		                    const std::string& gen_desc,
-		                    const std::string& keyword,
-		                    const int& ex_info,
-		                    const int& key,
-		                    const room_rnum to_room);
-		room_vnum number;		/* Rooms number	(vnum)		      */
-		zone_rnum zone;              /* Room zone (for resetting)          */
-		uint16_t	sector_type;            /* sector type (move/hide)            */
-		mods::string	name;                  /* Rooms name 'You are ...'           */
-		mods::string	description;           /* Shown when entered                 */
-		room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
-		int room_flags;		/* DEATH,DARK ... etc */
-
-		byte light;                  /* Number of lightsources in room     */
-		SPECIAL(*func);
-
-		std::vector<mods::extra_desc_data>& ex_descriptions();
-		obj_data *contents;   /* List of items in room              */
-		std::deque<std::shared_ptr<obj_data>>& contents_container() {
-			return this->m_contents;
-		}
-		char_data *people;    /* List of NPC / PC in room           */
-		std::string_view overhead(const lense_type_t&);
-		std::set<texture_type_t>& textures();
-		void add_texture(texture_type_t);
-		void add_textures(std::set<texture_type_t> m) {
-			for(auto t : m) {
-				add_texture(t);
-			}
-		}
-		void remove_texture(texture_type_t);
-		bool has_texture(texture_type_t);
-
-		const std::vector<uint8_t>& directions() const;
-
-
-		/** fire status */
-		/** fire status */
-		/** fire status */
-		fire_status_t& fire_status() {
-			return reinterpret_cast<fire_status_t&>(m_texture_levels[ON_FIRE]);
-		}
-		void fire_status_start() {
-			m_texture_levels[ON_FIRE] = (texture_level_t)fire_status_t::KINDLING;
-		}
-		/** END fire status */
-		texture_level_t& texture_level(texture_type_t type) {
-			return m_texture_levels[type];
-		}
-		bool watching;
-		room_vnum shop_vnum;
-		bool starting_point;
-		int x;
-		int y;
-		int z;
-		mods::string nickname;
-	protected:
-		std::map<texture_type_t,texture_level_t> m_texture_levels;
-		std::vector<uint8_t> m_directions;
-		std::vector<mods::extra_desc_data> m_ex_descriptions;
-		std::set<texture_type_t> m_textures;
-		std::deque<std::shared_ptr<obj_data>> m_contents;
-};
-/* ====================================================================== */
-
-
-/* char-related structures ************************************************/
 
 /* memory structure for characters */
 struct memory_rec_struct {

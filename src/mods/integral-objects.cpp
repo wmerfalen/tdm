@@ -31,7 +31,129 @@
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::integral_objects {
+
+	/**
+	 * Clean slate.
+	 * How would we design a system to place lockers in rooms that allows
+	 * for the room (once it's destructed) to free all it's members automatically
+	 * using it's destructor?
+	 *
+	 * How would we interface that with commands that admins can perform CRUD operations on?
+	 *
+	 */
+	generic_locker_t::generic_locker_t() {
+		init();
+	}
+	void generic_locker_t::init() {
+		orm.clear();
+		container = nullptr;
+		room = NOWHERE;
+		room_id = NOWHERE;
+		type = 0;
+		db_errors.clear();
+		good = false;
+		items = 0;
+	}
+	generic_locker_t::generic_locker_t(std::string_view in_type,const room_vnum& in_room) {
+		load(in_type,room);
+	}
+	generic_locker_t::~generic_locker_t() {
+		orm.clear();
+	}
+	void generic_locker_t::load(std::string_view in_type,const room_vnum& in_room) {
+		init();
+		items = mods::orm::locker::get_lockers_by_type(in_type,room,&orm);
+		if(items) {
+			type = mods::orm::locker::to_type_integral(in_type);
+			room = in_room;
+			room_id = real_room(in_room);
+			good = true;
+		}
+	}
+
+
+	//	std::optional<locker> get_by_id(uint64_t id) {
+	//		//TODO
+	//	}
+	//	std::tuple<bool,std::size_t,std::string> fill_from_db(std::string_view type, const room_vnum& room) {
+	//
+	//	}
+	//
+	//	void clear_container(std::string_view type,const room_vnum& room) {
+	//
+	//	}
+	//
+	//	std::pair<bool,std::string> remove_container(std::string_view type,const room_vnum& room) {
+	//		auto room_id = real_room(room);
+	//		if(room_id == NOWHERE) {
+	//			return {false,"Invalid room"};
+	//		}
+	//		if(type.compare("ammo") == 0) {
+	//			world[room_id].
+	//
+	//			return {true,""};
+	//		}
+	//	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	void generic_feed(std::string_view type,const room_vnum& room,std::string_view query,std::string_view container_yaml) {
+		//std::forward_list<generic_locker_t>* ptr = nullptr;
+		room_rnum room_id = real_room(room);
+		if(room_id == NOWHERE) {
+			log("SYSERR: attempted to feed locker of type '%s' with invalid room vnum: '%d'",type.data(),room);
+			return;
+		}
+		//if(type.compare("ammo") == 0) {
+		//	ptr = &world[real_room].ammo_locker;
+		//} else if(type.compare("weapon") == 0) {
+		//	ptr = &world[real_room].weapon_locker;
+		//} else {
+		//	ptr = &world[real_room].armor_locker;
+		//}
 		mw_debug("generic_feed " << type << " entry. room: " << room);
 		auto locker = mods::integral_objects_db::first_or_create(room,query.data(), ITEM_CONTAINER, container_yaml.data());
 		const std::vector<std::pair<uint16_t,std::string>>& list = mods::orm::locker::contents(type,room);

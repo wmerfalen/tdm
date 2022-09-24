@@ -197,7 +197,6 @@ namespace mods::orm {
 		if(container.size() == 0) {
 			return 0;
 		}
-		storage->reserve(container.size());
 		for(const auto& row : container) {
 			storage->emplace_back(row);
 		}

@@ -2,6 +2,7 @@
 #define  __MENTOC_MODS_ZONE_HEADER__
 
 #include <iostream>
+#include "../room-data.hpp"
 
 #define __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__

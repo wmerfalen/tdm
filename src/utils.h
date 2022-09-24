@@ -12,6 +12,7 @@
 #include <deque>
 #include <string>
 #include "structs.h"
+#include "room-data.hpp"
 #include "mods/macro_impl.hpp"
 /* external declarations and prototypes **********************************/
 namespace mods {
@@ -26,11 +27,11 @@ bool boot_type_hell();
 
 #define READ_SIZE	256
 #ifndef __STATE_GUARD__
-#define __STATE_GUARD__
-int& STATE(mods::descriptor_data& d);
-int& STATE(mods::descriptor_data *d);
-int& STATE(std::deque<mods::descriptor_data>::iterator d);
-int& STATE(std::shared_ptr<mods::descriptor_data> d);
+	#define __STATE_GUARD__
+	int& STATE(mods::descriptor_data& d);
+	int& STATE(mods::descriptor_data *d);
+	int& STATE(std::deque<mods::descriptor_data>::iterator d);
+	int& STATE(std::shared_ptr<mods::descriptor_data> d);
 #endif
 void	basic_mud_log(const char *format, ...) __attribute__((format(printf, 1, 2)));
 void	basic_mud_vlog(const char *format, va_list args);
@@ -60,10 +61,10 @@ void log(mods::string n,...);
  * will be defined by sysdep.h if a strcasecmp or stricmp exists.
  */
 #ifndef str_cmp
-int	str_cmp(const char *arg1, const char *arg2);
+	int	str_cmp(const char *arg1, const char *arg2);
 #endif
 #ifndef strn_cmp
-int	strn_cmp(const char *arg1, const char *arg2, int n);
+	int	strn_cmp(const char *arg1, const char *arg2, int n);
 #endif
 
 /* random functions in random.c */
@@ -72,11 +73,11 @@ unsigned long circle_random(void);
 
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX
-#undef MAX
+	#undef MAX
 #endif
 
 #ifdef MIN
-#undef MIN
+	#undef MIN
 #endif
 
 int MAX(int a, int b);
@@ -166,13 +167,13 @@ void	update_pos(player_ptr_t& victim);
 
 
 #define CREATE(result, type, number)  do {\
-	if ((number) * sizeof(type) <= 0)	\
-		std::cerr << "SYSERR: Zero bytes or less requested at " <<  __FILE__ << ":" << __LINE__ << "\n";	\
-	if (!((result) = (type *) calloc ((number), sizeof(type))))	\
+		if ((number) * sizeof(type) <= 0)	\
+			std::cerr << "SYSERR: Zero bytes or less requested at " <<  __FILE__ << ":" << __LINE__ << "\n";	\
+		if (!((result) = (type *) calloc ((number), sizeof(type))))	\
 		{ perror("SYSERR: malloc failure"); abort(); } } while(0)
 
 #define RECREATE(result,type,number) do {\
-  if (!((result) = (type *) realloc ((result), sizeof(type) * (number))))\
+		if (!((result) = (type *) realloc ((result), sizeof(type) * (number))))\
 		{ perror("SYSERR: realloc failure"); abort(); } } while(0)
 
 /*
@@ -185,15 +186,15 @@ void	update_pos(player_ptr_t& victim);
  * CircleMUD 4.0 will be...
  */
 #define REMOVE_FROM_LIST(item, head, next)	\
-   if ((item) == (head))		\
-      head = (item)->next;		\
-   else {				\
-      temp = head;			\
-      while (temp && (temp->next != (item))) \
-	 temp = temp->next;		\
-      if (temp)				\
-         temp->next = (item)->next;	\
-   }					\
+	if ((item) == (head))		\
+		head = (item)->next;		\
+	else {				\
+		temp = head;			\
+		while (temp && (temp->next != (item))) \
+			temp = temp->next;		\
+		if (temp)				\
+			temp->next = (item)->next;	\
+	}					\
 
 /* basic bitvector utils *************************************************/
 
@@ -231,7 +232,7 @@ void	update_pos(player_ptr_t& victim);
  */
 #define IS_NPC(ch)	(IS_SET(MOB_FLAGS(ch), MOB_ISNPC))
 #define IS_MOB(ch)	(IS_NPC(ch) && GET_MOB_RNUM(ch) <= top_of_mobt && \
-				GET_MOB_RNUM(ch) != NOBODY)
+    GET_MOB_RNUM(ch) != NOBODY)
 
 #define MOB_FLAGGED(ch, flag) (IS_NPC(ch) && IS_SET(MOB_FLAGS(ch), (flag)))
 #define PLR_FLAGGED(ch, flag) (!IS_NPC(ch) && IS_SET(PLR_FLAGS(ch), (flag)))
@@ -256,7 +257,7 @@ void	update_pos(player_ptr_t& victim);
 
 
 #define SECT(room)	(VALID_ROOM_RNUM(room) ? \
-				world[(room)].sector_type : SECT_INSIDE)
+    world[(room)].sector_type : SECT_INSIDE)
 
 #define IS_DARK(room)	room_is_dark((room))
 #define IS_LIGHT(room)  (!IS_DARK(room))
@@ -280,7 +281,7 @@ room_rnum& GET_WAS_IN(char_data* player);
 
 #define GET_PC_NAME(ch)	((ch)->player.name)
 #define GET_NAME(ch)    (IS_NPC(ch) ? \
-			 (ch)->player.short_descr : GET_PC_NAME(ch))
+    (ch)->player.short_descr : GET_PC_NAME(ch))
 #define GET_TITLE(ch)   ((ch)->player.title)
 #define GET_LEVEL(ch)   ((ch)->player.level)
 #define GET_PFILEPOS(ch)((ch)->pfilepos)
@@ -290,8 +291,8 @@ room_rnum& GET_WAS_IN(char_data* player);
  * of GET_LEVEL?  JE
  */
 #define GET_REAL_LEVEL(ch) \
-   (ch->has_desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : \
-    GET_LEVEL(ch))
+	(ch->has_desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : \
+	    GET_LEVEL(ch))
 
 #define GET_CLASS(ch)   ((ch)->player.chclass)
 #define GET_HOME(ch)	((ch)->player.hometown)
@@ -349,24 +350,24 @@ room_rnum& GET_WAS_IN(char_data* player);
 #define GET_MOB_SPEC(ch)	(IS_MOB(ch) ? mob_index[(ch)->mob_specials.vnum].func : NULL)
 #define GET_MOB_RNUM(mob)	((mob)->mob_specials.vnum)
 #define GET_MOB_VNUM(mob)	(IS_MOB(mob) ? \
-				 mob_index[GET_MOB_RNUM(mob)].vnum : NOBODY)
+    mob_index[GET_MOB_RNUM(mob)].vnum : NOBODY)
 
 #define GET_DEFAULT_POS(ch)	((ch)->mob_specials.default_pos)
 #define MEMORY(ch)		((ch)->mob_specials.memory)
 
 #define STRENGTH_APPLY_INDEX(ch) \
-        ( ((GET_ADD(ch)==0) || (GET_STR(ch) != 18)) ? GET_STR(ch) :\
-          (GET_ADD(ch) <= 50) ? 26 :( \
-          (GET_ADD(ch) <= 75) ? 27 :( \
-          (GET_ADD(ch) <= 90) ? 28 :( \
-          (GET_ADD(ch) <= 99) ? 29 :  30 ) ) )                   \
-        )
+	( ((GET_ADD(ch)==0) || (GET_STR(ch) != 18)) ? GET_STR(ch) :\
+	    (GET_ADD(ch) <= 50) ? 26 :( \
+	        (GET_ADD(ch) <= 75) ? 27 :( \
+	            (GET_ADD(ch) <= 90) ? 28 :( \
+	                (GET_ADD(ch) <= 99) ? 29 :  30 ) ) )                   \
+	)
 
 #define CAN_CARRY_W(ch) (str_app[STRENGTH_APPLY_INDEX(ch)].carry_w)
 #define CAN_CARRY_N(ch) (5 + (GET_DEX(ch) >> 1) + (GET_LEVEL(ch) >> 1))
 #define AWAKE(ch) (GET_POS(ch) > POS_SLEEPING)
 #define CAN_SEE_IN_DARK(ch) \
-   (AFF_FLAGGED(ch, AFF_INFRAVISION) || (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)))
+	(AFF_FLAGGED(ch, AFF_INFRAVISION) || (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)))
 
 #define IS_GOOD(ch)    (GET_ALIGNMENT(ch) >= 350)
 #define IS_EVIL(ch)    (GET_ALIGNMENT(ch) <= -350)
@@ -395,7 +396,7 @@ room_rnum& GET_WAS_IN(char_data* player);
  * If using signed types, NOTHING will catch the majority of bad accesses.
  */
 #define VALID_OBJ_RNUM(obj)	(GET_OBJ_RNUM(obj) <= top_of_objt && \
-				 GET_OBJ_RNUM(obj) != NOTHING)
+    GET_OBJ_RNUM(obj) != NOTHING)
 
 #define GET_OBJ_TYPE(obj)	((obj)->obj_flags.type_flag)
 #define GET_OBJ_COST(obj)	((obj)->obj_flags.cost)
@@ -408,13 +409,13 @@ room_rnum& GET_WAS_IN(char_data* player);
 #define GET_OBJ_TIMER(obj)	((obj)->obj_flags.timer)
 #define GET_OBJ_RNUM(obj)	((obj)->item_number)
 #define GET_OBJ_VNUM(obj)	(VALID_OBJ_RNUM(obj) ? \
-				obj_index[GET_OBJ_RNUM(obj)].vnum : NOTHING)
+    obj_index[GET_OBJ_RNUM(obj)].vnum : NOTHING)
 #define GET_OBJ_SPEC(obj)	(VALID_OBJ_RNUM(obj) ? \
-				obj_index[GET_OBJ_RNUM(obj)].func : NULL)
+    obj_index[GET_OBJ_RNUM(obj)].func : NULL)
 
 #if 0
 #define IS_CORPSE(obj)		(GET_OBJ_TYPE(obj) == ITEM_CONTAINER && \
-					GET_OBJ_VAL((obj), 3) == 1)
+    GET_OBJ_VAL((obj), 3) == 1)
 #endif
 
 #define CAN_WEAR(obj, part)	OBJWEAR_FLAGGED((obj), (part))
@@ -440,78 +441,78 @@ room_rnum& GET_WAS_IN(char_data* player);
 /* Various macros building up to CAN_SEE */
 
 #define LIGHT_OK(sub)	(!AFF_FLAGGED(sub, AFF_BLIND) && \
-   (IS_LIGHT(IN_ROOM(sub)) || AFF_FLAGGED((sub), AFF_INFRAVISION)))
+    (IS_LIGHT(IN_ROOM(sub)) || AFF_FLAGGED((sub), AFF_INFRAVISION)))
 
 #define INVIS_OK(sub, obj) \
- ((!AFF_FLAGGED((obj),AFF_INVISIBLE) || AFF_FLAGGED(sub,AFF_DETECT_INVIS)) && \
- (!AFF_FLAGGED((obj), AFF_HIDE) || AFF_FLAGGED(sub, AFF_SENSE_LIFE)))
+	((!AFF_FLAGGED((obj),AFF_INVISIBLE) || AFF_FLAGGED(sub,AFF_DETECT_INVIS)) && \
+	    (!AFF_FLAGGED((obj), AFF_HIDE) || AFF_FLAGGED(sub, AFF_SENSE_LIFE)))
 
 #define MORT_CAN_SEE(sub, obj) (LIGHT_OK(sub) && INVIS_OK(sub, obj))
 
 #define IMM_CAN_SEE(sub, obj) \
-   (MORT_CAN_SEE(sub, obj) || (!IS_NPC(sub) && PRF_FLAGGED(sub, PRF_HOLYLIGHT)))
+	(MORT_CAN_SEE(sub, obj) || (!IS_NPC(sub) && PRF_FLAGGED(sub, PRF_HOLYLIGHT)))
 
 #define SELF(sub, obj)  ((sub) == (obj))
 
 /* Can subject see character "obj"? */
 #define CAN_SEE(sub, obj) (SELF(sub, obj) || \
-   ((GET_REAL_LEVEL(sub) >= (IS_NPC(obj) ? 0 : GET_INVIS_LEV(obj))) && \
-   IMM_CAN_SEE(sub, obj)))
+    ((GET_REAL_LEVEL(sub) >= (IS_NPC(obj) ? 0 : GET_INVIS_LEV(obj))) && \
+        IMM_CAN_SEE(sub, obj)))
 
 /* End of CAN_SEE */
 
 
 #define INVIS_OK_OBJ(sub, obj) \
-  (!OBJ_FLAGGED((obj), ITEM_INVISIBLE) || AFF_FLAGGED((sub), AFF_DETECT_INVIS))
+	(!OBJ_FLAGGED((obj), ITEM_INVISIBLE) || AFF_FLAGGED((sub), AFF_DETECT_INVIS))
 
 /* Is anyone carrying this object and if so, are they visible? */
 #define CAN_SEE_OBJ_CARRIER(sub, obj) \
-  ((!obj->carried_by || CAN_SEE(sub, obj->carried_by)) &&	\
-   (!obj->worn_by || CAN_SEE(sub, obj->worn_by)))
+	((!obj->carried_by || CAN_SEE(sub, obj->carried_by)) &&	\
+	    (!obj->worn_by || CAN_SEE(sub, obj->worn_by)))
 
 #define MORT_CAN_SEE_OBJ(sub, obj) \
-  (LIGHT_OK(sub) && INVIS_OK_OBJ(sub, obj) && CAN_SEE_OBJ_CARRIER(sub, obj))
+	(LIGHT_OK(sub) && INVIS_OK_OBJ(sub, obj) && CAN_SEE_OBJ_CARRIER(sub, obj))
 
 #define CAN_SEE_OBJ(sub, obj) \
-   (MORT_CAN_SEE_OBJ(sub, obj) || (!IS_NPC(sub) && PRF_FLAGGED((sub), PRF_HOLYLIGHT)))
+	(MORT_CAN_SEE_OBJ(sub, obj) || (!IS_NPC(sub) && PRF_FLAGGED((sub), PRF_HOLYLIGHT)))
 
 #define CAN_CARRY_OBJ(ch,obj)  \
-   (((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) <= CAN_CARRY_W(ch)) &&   \
-    ((IS_CARRYING_N(ch) + 1) <= CAN_CARRY_N(ch)))
+	(((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) <= CAN_CARRY_W(ch)) &&   \
+	    ((IS_CARRYING_N(ch) + 1) <= CAN_CARRY_N(ch)))
 
 #define CAN_GET_OBJ(ch, obj)   \
-   (CAN_WEAR((obj), ITEM_WEAR_TAKE) && CAN_CARRY_OBJ((ch),(obj)) && \
-    CAN_SEE_OBJ((ch),(obj)))
+	(CAN_WEAR((obj), ITEM_WEAR_TAKE) && CAN_CARRY_OBJ((ch),(obj)) && \
+	    CAN_SEE_OBJ((ch),(obj)))
 
 #define PERS(ch, vict)   (CAN_SEE(vict, ch) ? GET_NAME(ch) : "someone")
 
 #define OBJS(obj, vict) (CAN_SEE_OBJ((vict), (obj)) ? \
-	(obj)->short_description  : "something")
+    (obj)->short_description  : "something")
 
 #define OBJN(obj, vict) (CAN_SEE_OBJ((vict), (obj)) ? \
-	fname((obj)->name) : "something")
+    fname((obj)->name) : "something")
 
 
 #define EXIT(ch, door)  (world[IN_ROOM(ch)].dir_option[door])
 
 #define CAN_GO(ch, door) (world.size() > IN_ROOM(ch) && EXIT(ch,door) && \
-			 (EXIT(ch,door)->to_room < world.size() && EXIT(ch,door)->to_room != NOWHERE) && \
-			 !IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
+    (EXIT(ch,door)->to_room < world.size() && EXIT(ch,door)->to_room != NOWHERE) && \
+    !IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
 
 
 #define CLASS_ABBR(ch) (IS_NPC(ch) ? "--" : class_abbrevs[(int)GET_CLASS(ch)])
 
 #define IS_MAGIC_USER(ch)	(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_PSYOP))
+    (GET_CLASS(ch) == CLASS_PSYOP))
 #define IS_CLERIC(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_MEDIC))
+    (GET_CLASS(ch) == CLASS_MEDIC))
 #define IS_THIEF(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_SNIPER))
+    (GET_CLASS(ch) == CLASS_SNIPER))
 #define IS_MARINE(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_SUPPORT))
+    (GET_CLASS(ch) == CLASS_SUPPORT))
 #define IS_WARRIOR(ch) IS_MARINE(ch)
 #define IS_SUPPORT(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_SUPPORT))
+    (GET_CLASS(ch) == CLASS_SUPPORT))
 
 #define OUTSIDE(ch) (!ROOM_FLAGGED(IN_ROOM(ch), ROOM_INDOORS))
 
@@ -521,22 +522,22 @@ room_rnum& GET_WAS_IN(char_data* player);
 
 /* there could be some strange OS which doesn't have NULL... */
 #ifndef NULL
-#define NULL (void *)0
+	#define NULL (void *)0
 #endif
 
 #if !defined(FALSE)
-#define FALSE 0
+	#define FALSE 0
 #endif
 
 #if !defined(TRUE)
-#define TRUE  (!FALSE)
+	#define TRUE  (!FALSE)
 #endif
 
 /* defines for fseek */
 #ifndef SEEK_SET
-#define SEEK_SET	0
-#define SEEK_CUR	1
-#define SEEK_END	2
+	#define SEEK_SET	0
+	#define SEEK_CUR	1
+	#define SEEK_END	2
 #endif
 
 /*
@@ -546,9 +547,9 @@ room_rnum& GET_WAS_IN(char_data* player);
  * capable of encrypting.
  */
 #if defined(NOCRYPT) || !defined(CIRCLE_CRYPT)
-#define CRYPT(a,b) (a)
+	#define CRYPT(a,b) (a)
 #else
-#define CRYPT(a,b) ((char*)(std::string(a) + std::string(b)).c_str())
+	#define CRYPT(a,b) ((char*)(std::string(a) + std::string(b)).c_str())
 #endif
 
 /** mods - my own little macros */
