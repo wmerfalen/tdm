@@ -273,7 +273,6 @@ SUPERCMD(do_remove_weapon_locker_item) {
 			player->admin_success(CAT("Removed: '",vec_args[i],"'"));
 		}
 	}
-	mods::orm::locker::perform_cleanup();
 
 	ADMIN_DONE();
 }
@@ -296,7 +295,6 @@ SUPERCMD(do_remove_ammo_locker_item) {
 			player->admin_success(CAT("Removed: '",vec_args[i],"'"));
 		}
 	}
-	mods::orm::locker::perform_cleanup();
 
 	ADMIN_DONE();
 }
@@ -319,7 +317,6 @@ SUPERCMD(do_remove_armor_locker_item) {
 			player->admin_success(CAT("Removed: '",vec_args[i],"'"));
 		}
 	}
-	mods::orm::locker::perform_cleanup();
 
 	ADMIN_DONE();
 }
