@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "VK Script ran at $(date -I)" > /tmp/vk.run.log
+echo "VK Script ran at $(date)" > /tmp/vk.run.log
 cd $WEBROOT
 pwd >> /tmp/vk.run.log
 

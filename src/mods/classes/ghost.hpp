@@ -213,6 +213,7 @@ namespace mods::classes {
 			skill_t m_stealth;
 			skill_t m_summon_extraction;
 			bool m_dissipated;
+			uint16_t m_call_count;
 	};
 	void ghost_advance_level(player_ptr_t& player);
 	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t& player);

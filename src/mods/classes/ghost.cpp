@@ -57,6 +57,7 @@ namespace mods::classes {
 		return false;
 	}
 	void ghost::init() {
+		m_call_count = 0;
 		m_scanned.clear();
 		m_player = nullptr;
 		m_dissipate_charges = 10;
@@ -281,10 +282,11 @@ namespace mods::classes {
 		mods::weapons::corrosive_claymore_installed(object_uuid);
 	}
 	void ghost::replenish() {
-		static uint16_t call_count = 0;
-		++call_count;
 		auto tier = tier(m_player);
-		if((call_count % GHOST_REPLENISH_PULSE()) == 0) {
+		if((m_call_count % GHOST_REPLENISH_PULSE()) == 0) {
+			if(m_cryogenic_grenade_count < GHOST_CRYOGENIC_GRENADE_COUNT() * tier) {
+				++m_cryogenic_grenade_count;
+			}
 			if(m_claymore_count < SNIPER_CLAYMORE_MAX_COUNT() * tier) {
 				++m_claymore_count;
 			}
@@ -380,7 +382,6 @@ namespace mods::classes {
 		} else {
 			--m_cryogenic_grenade_count;
 		}
-		//TODO: this might be a good way to balance this \/
 		return {true,""};
 	}
 	/** applies it to the entire room. every will get flashed */
