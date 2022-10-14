@@ -15,11 +15,14 @@
 #include "../classes/ghost.hpp"
 #include "../calc-visibility.hpp"
 
+#ifdef m_debug
+	#undef m_debug
+#endif
 #define __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << green_str("[mgbtree]") << "[" << __LINE__ << "]->" << a << "\n";
+	#define m_debug(a) std::cerr << green_str("[mgbtree]") << "[" << __LINE__ << "]->" << a << "\n";
 #else
-#define m_debug(a)
+	#define m_debug(a)
 #endif
 
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
@@ -35,7 +38,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 		return TNode::create_leaf([name](TArgumentType& mob) -> TStatus {
 #ifdef __MENTOC_SHOW_TREE_NAME__
 			std::cerr << "[debug_echo_tree_name][mob_uuid:" << mob.uuid() << "]" <<
-			          green_str(CAT("[tree:'",name,"']\n"));
+			    green_str(CAT("[tree:'",name,"']\n"));
 #endif
 			return TSUCCESS;
 		});

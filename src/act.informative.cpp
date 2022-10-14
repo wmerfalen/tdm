@@ -484,6 +484,9 @@ void look_at_char(char_data *i, char_data *ch) {
 
 	found = FALSE;
 
+	if(player->ghost()) {
+		player->sendln(CAT("uuid: ",i->uuid));
+	}
 	act("\r\n$n is using:\r\n", FALSE, i, 0, ch, TO_VICT);
 	for(j = 0; j < NUM_WEARS; j++) {
 		auto obj = iptr->equipment(j);
@@ -614,7 +617,7 @@ void list_one_char(char_data *i, char_data *ch) {
 
 
 void list_char_to_char(char_data *ch) {
-//#define __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
+	//#define __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
 #ifdef __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
 #define dd(A_MSG) std::cerr << "break: " << A_MSG << ", line:" << __LINE__ << "\n";
 #else
@@ -658,7 +661,7 @@ void list_char_to_char(char_data *ch) {
 		dd("check if is visible");
 		if(!mods::calc_visibility::is_visible(player,target,0)) {
 			if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) &&
-			        !mods::rooms::can_see_through_fire(fire_status)) {
+			    !mods::rooms::can_see_through_fire(fire_status)) {
 				player->sendln("{yel}[on fire]{/yel} You can't seem see anything but flames.");
 				break;
 			}
@@ -666,7 +669,7 @@ void list_char_to_char(char_data *ch) {
 		}
 		dd("view + thermal check");
 		if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) &&
-		        mods::rooms::can_see_through_fire(fire_status)) {
+		    mods::rooms::can_see_through_fire(fire_status)) {
 			player->sendln(
 			    CAT(
 			        "{yel}[thermal vision]{/yel} You see ",
@@ -689,7 +692,7 @@ void list_char_to_char(char_data *ch) {
 		}
 		dd("smoke or dark check");
 		if(((smoke || dark) && viewing_camera && camera_is_thermal) ||
-		        ((smoke || dark) && player_has_thermal)) {
+		    ((smoke || dark) && player_has_thermal)) {
 			dd("is smoked or dark");
 			/** TODO: needs testing */
 			if(viewing_camera) {
@@ -751,8 +754,8 @@ void list_char_to_char(char_data *ch) {
 	dd("viewing room number: " << player->viewing_room());
 	auto room_number = player->viewing_room();
 	for(auto direction : {
-	            NORTH,SOUTH,EAST,WEST,UP,DOWN
-	        }) {
+	        NORTH,SOUTH,EAST,WEST,UP,DOWN
+	    }) {
 		dd("checking dir option");
 		if(world[room_number].dir_option[direction]) {
 			auto dir_string = mods::globals::dir_to_str(direction,0).c_str();
@@ -786,7 +789,7 @@ void list_char_to_char(char_data *ch) {
 							);
 							list_one_char(i, ch);
 						} else if(dark  && !CAN_SEE_IN_DARK(ch) &&
-						          AFF_FLAGGED(i, AFF_INFRAVISION)) {
+						    AFF_FLAGGED(i, AFF_INFRAVISION)) {
 							player->sendln("You see a pair of glowing red eyes looking your way.");
 						}
 					}
@@ -818,8 +821,8 @@ void do_auto_exits(char_data *ch) {
 		}
 
 		if(EXIT_FLAGGED(EXIT(dummy, door), EX_CLOSED) &&
-		        /*! mods */!EXIT_FLAGGED(EXIT(dummy,door),EX_BREACHED) &&
-		        /*! mods */!IS_SET(world[EXIT(dummy,door)->to_room].dir_option[OPPOSITE_DIR(door)]->exit_info,EX_BREACHED)) {
+		    /*! mods */!EXIT_FLAGGED(EXIT(dummy,door),EX_BREACHED) &&
+		    /*! mods */!IS_SET(world[EXIT(dummy,door)->to_room].dir_option[OPPOSITE_DIR(door)]->exit_info,EX_BREACHED)) {
 			continue;
 		}
 
@@ -957,7 +960,7 @@ void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 
 	player->sendln(CCNRM(ch, C_NRM));
 	if((!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_BRIEF)) || ignore_brief ||
-	        ROOM_FLAGGED(room, ROOM_DEATH)) {
+	    ROOM_FLAGGED(room, ROOM_DEATH)) {
 		mods::rooms::word_wrap_description(player,room);
 	}
 	if(((player->get_prefs()) & PRF_OVERHEAD_MAP)) {
@@ -1034,16 +1037,16 @@ void look_in_obj(char_data *ch, char *arg) {
 	if(!*arg) {
 		player->sendln("Look in what?");
 	} else if(!(bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM |
-	                                FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
+	                FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
 		player->sendln(
 		    CAT(
 		        "There doesn't seem to be ", AN(arg), " ", arg, " here."
 		    )
 		);
 	} else if((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
-	          (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
-	          (GET_OBJ_TYPE(obj) != ITEM_CONTAINER)
-	         ) {
+	    (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
+	    (GET_OBJ_TYPE(obj) != ITEM_CONTAINER)
+	) {
 		player->sendln("There's nothing inside that!");
 	} else {
 		if(GET_OBJ_TYPE(obj) == ITEM_CONTAINER) {
@@ -1163,7 +1166,7 @@ void look_at_target(char_data *ch, char *arg) {
 	}
 
 	bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
-	                    FIND_CHAR_ROOM, ch, &found_char, &found_obj);
+	        FIND_CHAR_ROOM, ch, &found_char, &found_obj);
 
 	/* Is the target a character? */
 	if(found_char != NULL) {
@@ -1302,7 +1305,7 @@ ACMD(do_examine) {
 	look_at_target(ch, strcpy(tempsave, arg));	/* strcpy: OK */
 
 	generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_CHAR_ROOM |
-	             FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
+	    FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
 
 	if(tmp_object) {
 		if(is_camera_feed(tmp_object)) {
@@ -1314,8 +1317,8 @@ ACMD(do_examine) {
 			return;
 		}
 		if((GET_OBJ_TYPE(tmp_object) == ITEM_DRINKCON) ||
-		        (GET_OBJ_TYPE(tmp_object) == ITEM_FOUNTAIN) ||
-		        (GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER)) {
+		    (GET_OBJ_TYPE(tmp_object) == ITEM_FOUNTAIN) ||
+		    (GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER)) {
 			player->sendln(STOCK_LOOK_INSIDE_MESSAGE());
 			look_in_obj(ch, arg);
 		}
@@ -1600,7 +1603,7 @@ ACMD(do_users) {
 			}
 
 			if(outlaws && !PLR_FLAGGED(tch, PLR_KILLER) &&
-			        !PLR_FLAGGED(tch, PLR_THIEF)) {
+			    !PLR_FLAGGED(tch, PLR_THIEF)) {
 				continue;
 			}
 
@@ -1614,10 +1617,10 @@ ACMD(do_users) {
 
 			if(d.original)
 				sprintf(classname, "[%2d %s]", GET_LEVEL(d.original),
-				        CLASS_ABBR(d.original));
+				    CLASS_ABBR(d.original));
 			else
 				sprintf(classname, "[%2d %s]", GET_LEVEL(d.character),
-				        CLASS_ABBR(d.character));
+				    CLASS_ABBR(d.character));
 		} else {
 			strcpy(classname, "   -   ");
 		}
@@ -1634,16 +1637,16 @@ ACMD(do_users) {
 
 		if(d.character && STATE(d)== CON_PLAYING && GET_LEVEL(d.character) < LVL_GOD)
 			sprintf(idletime, "%3d", d.character->char_specials.timer *
-			        SECS_PER_MUD_HOUR / SECS_PER_REAL_MIN);
+			    SECS_PER_MUD_HOUR / SECS_PER_REAL_MIN);
 		else {
 			strcpy(idletime, "");
 		}
 
 		sprintf(line, "%3d %-7s %-12s %-14s %-3s %-8s ", d.desc_num, classname,
-		        d.original && d.original->player.name.c_str() ? d.original->player.name.c_str() :
-		        d.character && d.character->player.name.c_str() ? d.character->player.name.c_str() :
-		        "UNDEFINED",
-		        state, idletime, timeptr);
+		    d.original && d.original->player.name.c_str() ? d.original->player.name.c_str() :
+		    d.character && d.character->player.name.c_str() ? d.character->player.name.c_str() :
+		    "UNDEFINED",
+		    state, idletime, timeptr);
 
 		if(d.host.length()) {
 			sprintf(line + strlen(line), "[%s]\r\n", d.host.c_str());
@@ -1657,7 +1660,7 @@ ACMD(do_users) {
 		}
 
 		if(STATE(d) != CON_PLAYING ||
-		        (STATE(d) == CON_PLAYING && CAN_SEE(ch, d.character))) {
+		    (STATE(d) == CON_PLAYING && CAN_SEE(ch, d.character))) {
 			player->sendln(line);
 			num_can_see++;
 		}
@@ -1787,7 +1790,7 @@ void perform_mortal_where(char_data *ch, char *arg) {
 
 
 void print_object_location(int num, struct obj_data *obj, char_data *ch,
-                           int recur) {
+    int recur) {
 	MENTOC_PREAMBLE();
 	if(num > 0) {
 		//"O%3d. %-25s - ", num, obj->short_description);
@@ -1931,7 +1934,7 @@ ACMD(do_levels) {
 
 	for(i = 1; i < LVL_IMMORT; i++) {
 		nlen = snprintf(buf + len, sizeof(buf) - len, "[%2d] %8d-%-8d : ", i,
-		                mods::levels::level_exp(i), mods::levels::level_exp(i + 1) - 1);
+		        mods::levels::level_exp(i), mods::levels::level_exp(i + 1) - 1);
 
 		if(len + nlen >= sizeof(buf) || nlen < 0) {
 			break;
@@ -1960,7 +1963,7 @@ ACMD(do_levels) {
 
 	if(len < sizeof(buf))
 		snprintf(buf + len, sizeof(buf) - len, "[%2d] %8d          : Immortality\r\n",
-		         LVL_IMMORT, mods::levels::level_exp(LVL_IMMORT));
+		    LVL_IMMORT, mods::levels::level_exp(LVL_IMMORT));
 
 	page_string(*ch->desc, buf, TRUE);
 }
@@ -2212,7 +2215,7 @@ ACMD(do_commands) {
 	        " are available to '",
 	        vict == ch ? "you" : GET_NAME(vict),
 	        "':"
-	       )
+	    )
 	);
 
 	/* cmd_num starts at 1, not 0, to remove 'RESERVED' */

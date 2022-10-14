@@ -233,28 +233,28 @@ namespace mods {
 				}
 				if(strncmp(argv[pos],"--help",6) == 0 || strncmp(argv[pos],"-h",2) == 0) {
 					std::cerr << "usage: <circle> --postgres-pw-file=<file> [options]\n"
-					          << "--auto-login=user Automatically login as user on connection [use only for development]\n"
-					          << "--auto-password=password Automatically login and use password on connection [use only for development]\n"
-					          << "--testing=<suite>	Launch test suite\n"
-					          << "--import-rooms 	Run the import rooms routine\n"
-					          << "--import-help-pages Import help pages to sql\n"
-					          << "--hell 	Start the mud in HELL mode\n"
-					          << "--lmdb-name=<name> use name as lmdb db name\n"
-					          << "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
-					          << "--postgres-dbname=<db> use db as postgres db. default: mud\n"
-					          << "--postgres-user=<user> use user as postgres user. default: postgres\n"
-					          << "--postgres-host=<host> use host as postgres host. default: localhost\n"
-					          << "--postgres-port=<port> use port as postgres port. default: 5432\n"
-					          << "--postgres-pw-file=<file> read postgres password from file. no default. required.\n"
-					          << "--run-profile-scripts=<0|1> set to 1 to run profile scripts. default: 0\n"
-					          << "--show-tics show a dot for every game tic\n"
-					          << "--seed=<what> seed the database with one of the following:\n"
-					          << "--run-migration-up=<identifier> run the specified 'up' migration\n"
-					          << "--run-migration-down=<identifier> run the specified 'down' migration\n"
-					          << "--unit-tests Run unit tests and exit\n"
-					          << "     'player_classes': character generation\n"
-					          << "     '': ''\n"
-					          ;
+					    << "--auto-login=user Automatically login as user on connection [use only for development]\n"
+					    << "--auto-password=password Automatically login and use password on connection [use only for development]\n"
+					    << "--testing=<suite>	Launch test suite\n"
+					    << "--import-rooms 	Run the import rooms routine\n"
+					    << "--import-help-pages Import help pages to sql\n"
+					    << "--hell 	Start the mud in HELL mode\n"
+					    << "--lmdb-name=<name> use name as lmdb db name\n"
+					    << "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
+					    << "--postgres-dbname=<db> use db as postgres db. default: mud\n"
+					    << "--postgres-user=<user> use user as postgres user. default: postgres\n"
+					    << "--postgres-host=<host> use host as postgres host. default: localhost\n"
+					    << "--postgres-port=<port> use port as postgres port. default: 5432\n"
+					    << "--postgres-pw-file=<file> read postgres password from file. no default. required.\n"
+					    << "--run-profile-scripts=<0|1> set to 1 to run profile scripts. default: 0\n"
+					    << "--show-tics show a dot for every game tic\n"
+					    << "--seed=<what> seed the database with one of the following:\n"
+					    << "--run-migration-up=<identifier> run the specified 'up' migration\n"
+					    << "--run-migration-down=<identifier> run the specified 'down' migration\n"
+					    << "--unit-tests Run unit tests and exit\n"
+					    << "     'player_classes': character generation\n"
+					    << "     '': ''\n"
+					    ;
 					mods::globals::shutdown();
 					exit(0);
 				}
@@ -462,7 +462,7 @@ namespace mods {
 					{"password",postgres_password},
 					{"host",postgres_host},
 					{"dbname",postgres_dbname}}
-				                           );
+				);
 				std::string connection_string = mods::conf::pq_connection().c_str();
 				pq_con = std::make_unique<pqxx::connection>(connection_string.c_str());
 				connected_to_postgres = true;
@@ -553,7 +553,8 @@ namespace mods {
 					return true;
 				}
 				if(states.find(ptr) == states.end()) {
-					states[ptr] = std::make_unique<mods::ai_state>(ptr,0,0);
+					states[ptr]
+					= std::make_unique<mods::ai_state>(ptr,0,0);
 				}
 				return true;
 			});
@@ -766,13 +767,13 @@ namespace mods {
 				const auto current_char = buffer[i];
 				if(current_char == '{') {
 					if(len > i + 3 && buffer[i+3] == '}' &&
-					        buffer[i+1] == 'h' && buffer[i+2] == 'r') {
+					    buffer[i+1] == 'h' && buffer[i+2] == 'r') {
 						final_buffer += HORIZONTAL_RULE;
 						i += 3;
 						continue;
 					}
 					if(len > i + 5 && buffer[i+5] == '}' &&
-					        buffer[i+1] == '/') {
+					    buffer[i+1] == '/') {
 						i += 5;
 						final_buffer += "\033[0m";
 						continue;
@@ -1133,10 +1134,10 @@ namespace mods {
 				bool found = 0;
 				do {
 					auto place = std::find(
-					                 mods::globals::room_list[room_id].begin(),
-					                 mods::globals::room_list[room_id].end(),
-					                 player
-					             );
+					        mods::globals::room_list[room_id].begin(),
+					        mods::globals::room_list[room_id].end(),
+					        player
+					    );
 					if(place != mods::globals::room_list[room_id].end()) {
 						mods::globals::room_list[room_id].erase(place);
 						found = true;
@@ -1205,6 +1206,20 @@ namespace mods {
 		player_list_t& get_room_list(player_ptr_t& player) {
 			return mods::globals::get_room_list(player->room());
 		}
+		player_list_t get_room_list_from_position(player_ptr_t& viewer,const direction_t& look_towards) {
+			const auto in_room = viewer->room();
+			if(in_room == NOWHERE || in_room >= mods::globals::room_list.size()) {
+				return blank_room;
+			}
+			if(world[in_room].dir_option[look_towards] == nullptr) {
+				return blank_room;
+			}
+			auto to_room = world[in_room].dir_option[look_towards]->to_room;
+			if(to_room == NOWHERE || to_room >= mods::globals::room_list.size()) {
+				return blank_room;
+			}
+			return mods::globals::room_list[to_room];
+		}
 		std::string dir_to_str(int dir, bool adjective) {
 			if(adjective) {
 				switch(dir) {
@@ -1270,7 +1285,7 @@ namespace mods {
 		}
 		void recursive_obj_list_erase(obj_data* obj) {
 			for(auto it = obj_list.begin();
-			        it != obj_list.end(); ++it) {
+			    it != obj_list.end(); ++it) {
 				if(it->get() == obj) {
 					obj_list.erase(it);
 					return recursive_obj_list_erase(obj);

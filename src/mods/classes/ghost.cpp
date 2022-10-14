@@ -17,12 +17,14 @@
 #include "../examine.hpp"
 #include "../levels.hpp"
 #include "../medic.hpp"
+#include "../combat-composer/shared.hpp"
 
 /**
  * This enables us to have unlimited cryogenic grenades for testing
  * delete or comment out once go to prod
  */
-#define GHOST_DEBUG_CRYO
+//#define GHOST_DEBUG_CRYO
+#define GHOST_DEBUG_PENSHOT
 namespace mods::rand {
 	extern int roll(int num,int size);
 };
@@ -44,6 +46,9 @@ namespace mods::classes {
 		    )
 		);
 	}
+	bool ghost::is_penetrating_shot() {
+		return m_is_penetrating_shot;
+	}
 	bool ghost::can_toss_grenade_towards(const direction_t& direction) {
 		auto& room = m_player->room();
 		if(room >= world.size()) {
@@ -57,6 +62,7 @@ namespace mods::classes {
 		return false;
 	}
 	void ghost::init() {
+		m_is_penetrating_shot = false;
 		m_call_count = 0;
 		m_scanned.clear();
 		m_player = nullptr;
@@ -68,6 +74,7 @@ namespace mods::classes {
 			{STEALTH,"stealth","stealth",skillset_t::INTELLIGENCE,&m_stealth},
 			{SUMMON_EXTRACTION,"summon","Summon Extraction", skillset_t::STRATEGY,&m_summon_extraction},
 			{XRAY_SHOT,"xray","X-Ray Shot",skillset_t::SNIPING,&m_xray_shot},
+			{PENETRATING_SHOT,"penshot","Penetrating Shot",skillset_t::SNIPING,&m_penetrating_shot},
 			{FEIGN_DEATH,"feign","Feign Death",skillset_t::STRATEGY,&m_feign_death},
 			{PLANT_CLAYMORE,"claymore","Plant Claymore",skillset_t::DEMOLITIONS,&m_plant_claymore},
 			{INTIMIDATION,"intimidation","Intimidation",skillset_t::INTELLIGENCE,&m_intimidation},
@@ -109,6 +116,7 @@ namespace mods::classes {
 		m_gauze_count = 0;
 		m_adrenaline_shot_charges = 0;
 		m_dissipate_charges = 0;
+		m_penetrating_shot_count = 0;
 	}
 	int16_t ghost::save() {
 		return this->m_orm.save();
@@ -284,36 +292,41 @@ namespace mods::classes {
 	void ghost::replenish() {
 		auto tier = tier(m_player);
 		if((m_call_count % GHOST_REPLENISH_PULSE()) == 0) {
-			if(m_cryogenic_grenade_count < GHOST_CRYOGENIC_GRENADE_COUNT() * tier) {
-				++m_cryogenic_grenade_count;
+			if(m_penetrating_shot_count < GHOST_CRYOGENIC_GRENADE_COUNT() * tier) {
+				++m_penetrating_shot_count;
 			}
 			if(m_claymore_count < SNIPER_CLAYMORE_MAX_COUNT() * tier) {
-				++m_claymore_count;
-			}
-			if(m_corrosive_claymore_count < SNIPER_CLAYMORE_MAX_COUNT() * tier) {
-				++m_corrosive_claymore_count;
-			}
-			if(m_shrapnel_claymore_count < SNIPER_CLAYMORE_MAX_COUNT() * tier) {
-				++m_shrapnel_claymore_count;
-			}
-			if(m_xray_shot_charges < SNIPER_XRAY_SHOT_MAX_COUNT() * tier) {
-				++m_xray_shot_charges;
-			}
-			if(m_tracking_shot_charges < SNIPER_TRACKING_SHOT_MAX_COUNT() * tier) {
-				++m_tracking_shot_charges;
-			}
-			if(m_gauze_count < SNIPER_GAUZE_MAX_COUNT() * tier) {
-				++m_gauze_count;
-			}
-			if(m_adrenaline_shot_charges < SNIPER_ADRENALINE_SHOT_MAX_COUNT() * tier) {
-				++m_adrenaline_shot_charges;
-			}
-			if(m_dissipate_charges < GHOST_DISSIPATE_CHARGE_MAX_COUNT() * tier) {
-				++m_dissipate_charges;
-			}
+				if(m_cryogenic_grenade_count < GHOST_CRYOGENIC_GRENADE_COUNT() * tier) {
+					++m_cryogenic_grenade_count;
+				}
+				if(m_claymore_count < SNIPER_CLAYMORE_MAX_COUNT() * tier) {
+					++m_claymore_count;
+				}
+				if(m_corrosive_claymore_count < SNIPER_CLAYMORE_MAX_COUNT() * tier) {
+					++m_corrosive_claymore_count;
+				}
+				if(m_shrapnel_claymore_count < SNIPER_CLAYMORE_MAX_COUNT() * tier) {
+					++m_shrapnel_claymore_count;
+				}
+				if(m_xray_shot_charges < SNIPER_XRAY_SHOT_MAX_COUNT() * tier) {
+					++m_xray_shot_charges;
+				}
+				if(m_tracking_shot_charges < SNIPER_TRACKING_SHOT_MAX_COUNT() * tier) {
+					++m_tracking_shot_charges;
+				}
+				if(m_gauze_count < SNIPER_GAUZE_MAX_COUNT() * tier) {
+					++m_gauze_count;
+				}
+				if(m_adrenaline_shot_charges < SNIPER_ADRENALINE_SHOT_MAX_COUNT() * tier) {
+					++m_adrenaline_shot_charges;
+				}
+				if(m_dissipate_charges < GHOST_DISSIPATE_CHARGE_MAX_COUNT() * tier) {
+					++m_dissipate_charges;
+				}
 #ifdef __MENTOC_SEND_GHOST_PLAYER_REPLENISH_DEBUG_MESSAGE__
-			m_player->sendln("Replenish");
+				m_player->sendln("Replenish");
 #endif
+			}
 		}
 	}
 	uint8_t ghost::claymore_count() const {
@@ -333,10 +346,90 @@ namespace mods::classes {
 	void ghost::set_scanned(std::vector<uuid_t> s) {
 		m_scanned = s;
 	}
-	std::tuple<uint32_t,std::string> ghost::fire_penetrating_shot_at(uuid_t npc_uuid) {
-		uint32_t damage = 0;
-		std::string msg = "";
-		return {damage,msg};
+	void ghost::apply_penetrating_shot_mods(mods::combat_composer::phases::calculated_damage_t& damage) {
+		if(m_penetrating_shot.awful() || m_penetrating_shot.terrible() || m_penetrating_shot.okay()) {
+			damage.damage += 50;
+		}
+	}
+	std::tuple<bool,std::string> ghost::fire_penetrating_shot_at(const direction_t& direction) {
+		m_is_penetrating_shot = true;
+		auto s = roll_skill_success(PENETRATING_SHOT);
+		uint8_t extra_shots = 1;
+		if(!std::get<0>(s)) {
+			m_is_penetrating_shot = false;
+			return {0,std::get<1>(s)};
+		}
+#ifdef GHOST_DEBUG_PENSHOT
+		m_penetrating_shot_count = 10;
+#endif
+		if(m_penetrating_shot_count == 0) {
+			m_is_penetrating_shot = false;
+			return {false,"You don't have any shots left!"};
+		}
+		if(m_penetrating_shot.awful() || m_penetrating_shot.terrible() || m_penetrating_shot.okay()) {
+			extra_shots = 0;
+			if(dice(3,6) < 14) {
+				--m_penetrating_shot_count;
+				m_is_penetrating_shot = false;
+				return {0,"Your lack of experience causes you to misfire!"};
+			}
+		}
+		if(m_penetrating_shot.learned()) {
+			extra_shots = 1;
+			if(dice(3,6) < 11) {
+				--m_penetrating_shot_count;
+				m_is_penetrating_shot = false;
+				return {0,"Your lack of experience causes you to misfire!"};
+			}
+		}
+		//auto ammo = create_object(ghost::PENETRATING_SHOT_SLUG_YAML.data());
+		bool free_shot = false;
+		if(m_penetrating_shot.mastered()) {
+			extra_shots = 3;
+		}
+		if(m_penetrating_shot.elite()) {
+			extra_shots = 5;
+		}
+		if(m_penetrating_shot.mastered() || m_penetrating_shot.elite()) {
+			if(dice(3,6) > 16) {
+				free_shot = true;
+				m_player->sendln("Your experience causes you to gain one extra penetrating shot charge!");
+			}
+		}
+
+		if(free_shot) {
+			++m_penetrating_shot_count;
+		}
+		auto fantom = create_object(PENETRATING_SHOT_RIFLE_YAML.data());
+
+		auto primary = m_player->primary();
+		m_player->equip(fantom,WEAR_PRIMARY);
+
+		int i = 0;
+		auto occupants = mods::globals::get_room_list_from_position(m_player,direction);
+		for(auto& target : occupants) {
+			//player_ptr_t& attacker,player_ptr_t& victim,direction_t direction,uint8_t distance,obj_ptr_t& weapon);
+			auto weapon = m_player->primary();
+			mods::combat_composer::snipe_target(
+			    m_player,//attacker,
+			    target, // victim
+			    NORTH, // direction
+			    2, // distance
+			    weapon
+			);
+			++i;
+			if(i > extra_shots) {
+				break;
+			}
+		}
+		--m_penetrating_shot_count;
+		m_is_penetrating_shot = false;
+		m_player->unequip(WEAR_PRIMARY);
+		if(primary != nullptr) {
+			m_player->equip(primary,WEAR_PRIMARY);
+		}
+		mods::globals::dispose_object(fantom->uuid);
+		return {true,"You fire off a penetrating shot!"};
 	}
 	std::tuple<bool,std::string> ghost::intimidate_target(uuid_t npc_uuid) {
 		bool worked = false;
@@ -347,7 +440,6 @@ namespace mods::classes {
 		return m_cryogenic_grenade_count;
 	}
 	std::tuple<bool,std::string> ghost::toss_cryogenic_grenade_towards(const direction_t& direction, uint8_t rooms) {
-		skill_t m_cryogenic_grenade;
 		auto s = roll_skill_success(CRYOGENIC_GRENADE);
 		if(!std::get<0>(s)) {
 			return {0,std::get<1>(s)};
@@ -883,6 +975,28 @@ namespace mods::class_abilities::ghost {
 			return;
 		}
 	}
+	ACMD(do_fire_penetrating_shot) {
+		static constexpr std::string_view usage = "Usage: ghost:fire_penetrating_shot <direction>";
+		PLAYER_CAN("ghost.fire_penetrating_shot");
+		DO_HELP_WITH_ZERO("ghost.fire_penetrating_shot");
+		auto vec_args = PARSE_ARGS();
+		if(argshave()->size_gt(0)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		int direction = mods::util::to_direction(vec_args[0]);
+		if(direction < 0) {
+			player->errorln("Must use a valid direction");
+			player->sendln(usage);
+			return;
+		}
+		auto status = player->ghost()->fire_penetrating_shot_at(direction);
+		if(!std::get<0>(status)) {
+			player->errorln(std::get<1>(status));
+			return;
+		}
+		player->sendln(std::get<1>(status));
+	}
 	void init() {
 		mods::interpreter::add_command("ghost:adrenaline_shot", POS_RESTING, do_inject_adrenaline_shot, 0,0);
 		mods::interpreter::add_command("ghost:dissipate", POS_RESTING, do_dissipate, 0,0);
@@ -903,5 +1017,6 @@ namespace mods::class_abilities::ghost {
 		mods::interpreter::add_command("ghost:build_corrosive_claymore", POS_RESTING, do_build_corrosive_claymore, 0,0);
 		mods::interpreter::add_command("build_shrapnel_claymore", POS_RESTING, do_build_shrapnel_claymore, 0,0);
 		mods::interpreter::add_command("ghost:toss_cryogenic_grenade", POS_RESTING, do_toss_cryogenic_grenade, 0,0);
+		mods::interpreter::add_command("ghost:fire_penetrating_shot", POS_RESTING, do_fire_penetrating_shot, 0,0);
 	}
 };

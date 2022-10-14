@@ -9,11 +9,16 @@
 #include "../weapons/attachment-frag-underbarrel.hpp"
 #include "../boosters/adrenaline-shot.hpp"
 
+namespace mods::combat_composer::phases {
+	struct calculated_damage_t;
+};
+
 using ghost_orm_t = mods::orm::ghost;
 namespace mods::classes {
 	struct ghost : base {
 			friend class mods::classes::super_user_fiddler;
 			static constexpr std::string_view CRYOGENIC_GRENADE_YAML = "explosive/cryogenic-grenade.yml";
+			static constexpr std::string_view PENETRATING_SHOT_RIFLE_YAML = "rifle/ax799-fantom.yml";
 			using primary_choice_t = mods::weapon::ghost::primary_choice_t;
 
 			using shotgun_ub_t = mods::weapons::attachment_shotgun_underbarrel;
@@ -97,7 +102,7 @@ namespace mods::classes {
 
 			void replenish();
 
-			std::tuple<uint32_t,std::string> fire_penetrating_shot_at(uuid_t npc_uuid);
+			std::tuple<bool,std::string> fire_penetrating_shot_at(const direction_t& direction);
 			std::tuple<bool,std::string> intimidate_target(uuid_t npc_uuid);
 			uint8_t cryogenic_grenade_count() const;
 			std::tuple<bool,std::string> toss_cryogenic_grenade_towards(const direction_t& direction, uint8_t rooms);
@@ -151,6 +156,9 @@ namespace mods::classes {
 			void unblock_adrenaline_shot();
 
 			bool can_toss_grenade_towards(const direction_t& direction);
+
+			void apply_penetrating_shot_mods(mods::combat_composer::phases::calculated_damage_t& damage);
+			bool is_penetrating_shot();
 		private:
 			void replenish_notify(std::string_view);
 			uuid_t m_target;
@@ -201,6 +209,7 @@ namespace mods::classes {
 			uint8_t m_shrapnel_claymore_count;
 
 			uint8_t m_cryogenic_grenade_count;
+			uint8_t m_penetrating_shot_count;
 			uint8_t m_flash_underbarrel_charges;
 			ghost_orm_t	m_orm;
 
@@ -214,6 +223,7 @@ namespace mods::classes {
 			skill_t m_summon_extraction;
 			bool m_dissipated;
 			uint16_t m_call_count;
+			bool m_is_penetrating_shot;
 	};
 	void ghost_advance_level(player_ptr_t& player);
 	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t& player);

@@ -59,7 +59,7 @@ static inline void equip_clamp(T& orig,bool equip,X offset) {
 #define MENTOC_PREAMBLE() auto player = ptr(ch)
 
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
-		strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
+    strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
 #define OPPOSITE_DIR(a) mods::globals::opposite_dir(a)
 #define DBSET(key,value){ mods::globals::ram_db[key] = value; }
 #define DBGET(key,value) { value = mods::globals::ram_db[key]; }
@@ -78,21 +78,21 @@ static inline void equip_clamp(T& orig,bool equip,X offset) {
 #define MENTOC_DEPRECATED(mentoc_deprecated_argument_a) log("SYSERR:[%s] deprecated %s:%d",mentoc_deprecated_argument_a,__FILE__,__LINE__);
 //#define deprecated(mentoc_deprecated_argument_a) log("SYSERR:[%s] deprecated %s:%d",mentoc_deprecated_argument_a,__FILE__,__LINE__);
 #define MOBTOSTR(__mob) "\n[mob_dump]\nname: '" << __mob->player.name.c_str() << "'\n"\
-	"\n[mob_dump]\nuuid: '" << __mob->uuid() << "'\n"
+    "\n[mob_dump]\nuuid: '" << __mob->uuid() << "'\n"
 #define DO_HELP(from) if(!mods::help::should_continue(from,argument,player,0)){ return; }
 #define DO_HELP_WITH_ZERO(from) if(!mods::help::should_continue(from,argument,player,1)){ return; }
 
 /** vim-sorcery: :%s/std::cerr << \(.*\);/d(\1);/ */
 #ifndef __MENTOC_DEBUG__
-#define __MENTOC_DEBUG__
+	#define __MENTOC_DEBUG__
 #endif
 
 #ifdef __MENTOC_DEBUG__
-#ifndef d
-#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
-#endif
+	#ifndef d
+		#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
+	#endif
 #else
-#define d(a) ;
+	#define d(a) ;
 #endif
 #include <string>
 #define tostr(a) std::to_string(a)
@@ -101,13 +101,13 @@ extern void clear_char(char_data*);
 extern char_data* character_list;
 #define CREATE_CHAR(ch) \
 	CREATE(ch,char_data,1);\
-clear_char(ch);\
-ch->player_specials = std::make_unique<player_special_data>();\
-(ch)->player_specials->saved.pref = 0;\
-CREATE((ch)->affected, affected_type, 1);\
-memset(&((ch)->affected),0,sizeof((ch)->affected));\
-(ch)->next = character_list;\
-character_list = ch;
+	clear_char(ch);\
+	ch->player_specials = std::make_unique<player_special_data>();\
+	(ch)->player_specials->saved.pref = 0;\
+	CREATE((ch)->affected, affected_type, 1);\
+	memset(&((ch)->affected),0,sizeof((ch)->affected));\
+	(ch)->next = character_list;\
+	character_list = ch;
 #define mentoc_prefix_debug(a) std::cerr << "[" << a << "]" << __FILE__ << "|" << __LINE__ << "->"
 
 using player_ptr_t = std::shared_ptr<mods::player>;
@@ -215,6 +215,7 @@ namespace mods {
 		void pad_room(int room,char_data* ch,int door);
 		player_list_t& get_room_list(room_rnum);
 		player_list_t& get_room_list(player_ptr_t&);
+		player_list_t get_room_list_from_position(player_ptr_t& viewer,const direction_t& look_towards);
 		std::string dir_to_str(int dir, bool adjective);
 		void queue_object_destruct(uuid_t obj_uuid, uint16_t seconds);
 		void destruct_object(uuid_t obj);

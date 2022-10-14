@@ -28,8 +28,8 @@ namespace mods::combat_composer {
 #define RCT mods::combat_composer::snipe_state::current
 #define ATKR mods::combat_composer::snipe_state::attacker
 #define INIT_RCT() \
-			RCT = attacker->get_ranged_combat_totals();\
-			ATKR = attacker
+	RCT = attacker->get_ranged_combat_totals();\
+	ATKR = attacker
 	};
 
 	ACMD(do_print_rct) {
@@ -394,9 +394,9 @@ namespace mods::combat_composer {
 			auto crit_roll = dice(1,100);
 			if(distance <= RCT->critical_range.second && distance >= RCT->critical_range.first && crit_roll < (RCT->critical_chance % 100)) {
 				crit = dice(
-				           RCT->damage_dice_count,
-				           RCT->damage_dice_sides
-				       );
+				        RCT->damage_dice_count,
+				        RCT->damage_dice_sides
+				    );
 				report_crit(attacker,victim,crit,found_target.direction);
 			}
 			/** calculate headshot */
@@ -590,6 +590,9 @@ namespace mods::combat_composer {
 			if(attacker->ghost()) {
 				if(is_sniper_rifle(weapon)) {
 					d.damage += ((0.105 * tier(attacker)) * d.damage);//TODO: find the values equiv to this
+				}
+				if(attacker->ghost()->is_penetrating_shot()) {
+					attacker->ghost()->apply_penetrating_shot_mods(d);
 				}
 				/** TODO: if enemy is tracked, it takes more damaged */
 			}
