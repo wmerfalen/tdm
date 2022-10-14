@@ -10,13 +10,13 @@
 
 //#define  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_shoplifter_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) mentoc_prefix_debug("m|m|shoplifter") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
-#define m_debug_plain(a) mentoc_prefix_debug("m|m|shoplifter") << a << "\n";
-#define cmem(a) mentoc_prefix_debug("[shoplifter][memory_footprint]") << a << "\n";
+	#define m_debug(a) mentoc_prefix_debug("m|m|shoplifter") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
+	#define m_debug_plain(a) mentoc_prefix_debug("m|m|shoplifter") << a << "\n";
+	#define cmem(a) mentoc_prefix_debug("[shoplifter][memory_footprint]") << a << "\n";
 #else
-#define m_debug(a)
-#define m_debug_plain(a)
-#define cmem(a)
+	#define m_debug(a)
+	#define m_debug_plain(a)
+	#define cmem(a)
 #endif
 namespace mods::mobs {
 	static constexpr std::size_t BEST_DISTANCE = 1;
@@ -28,11 +28,11 @@ namespace mods::mobs {
 	}
 
 #ifdef __MENTOC_SHOPLIFTER_VOCALIZE_DEBUG__
-#define COMPLAIN(A) this->complain(CAT(__FILE__,"|",__LINE__,"[",__FUNCTION__,"]: SHOPLIFTER COMPLAINT: ",A));
-#define PROGRESS(A) this->progress(CAT(__FILE__,"|",__LINE__,"[",__FUNCTION__,"]: SHOPLIFTER PROGRESS: ",A));
+	#define COMPLAIN(A) this->complain(CAT(__FILE__,"|",__LINE__,"[",__FUNCTION__,"]: SHOPLIFTER COMPLAINT: ",A));
+	#define PROGRESS(A) this->progress(CAT(__FILE__,"|",__LINE__,"[",__FUNCTION__,"]: SHOPLIFTER PROGRESS: ",A));
 #else
-#define COMPLAIN(A) /** */
-#define PROGRESS(A) /** */
+	#define COMPLAIN(A) /** */
+	#define PROGRESS(A) /** */
 #endif
 
 	bool shoplifter_can_move(room_rnum room) {
@@ -63,7 +63,6 @@ namespace mods::mobs {
 
 	void shoplifter::btree_hostile() {
 		set_behavior_tree_directly(shoplifter::btree_t::SHOPL_HOSTILE);
-		this->attack_anyone_near_room();
 	}
 
 	void shoplifter::setup_damage_callbacks() {
@@ -222,12 +221,12 @@ namespace mods::mobs {
 		std::size_t index = rand_number(0,finds.size()-1);
 		this->set_hunting({finds[index].player->uuid});
 		auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
-		                    player_ptr,
-		                    this->primary(),
-		                    ptr(finds[index].player),
-		                    BEST_DISTANCE,
-		                    finds[index].direction
-		                );
+		        player_ptr,
+		        this->primary(),
+		        ptr(finds[index].player),
+		        BEST_DISTANCE,
+		        finds[index].direction
+		    );
 		return feedback.hits || feedback.damage;
 	}
 
@@ -252,12 +251,12 @@ namespace mods::mobs {
 				if(scan.distance == BEST_DISTANCE && scan.ch->uuid == attacker->uuid()) {
 					m_debug("best distance found: " << ptr(scan.ch)->name());
 					auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
-					                    player_ptr,
-					                    this->primary(),
-					                    ptr(scan.ch),
-					                    scan.distance,
-					                    direction
-					                );
+					        player_ptr,
+					        this->primary(),
+					        ptr(scan.ch),
+					        scan.distance,
+					        direction
+					    );
 					return;
 				}
 			}
@@ -266,12 +265,12 @@ namespace mods::mobs {
 
 	void shoplifter::attack(const feedback_t& feedback,player_ptr_t attacker) {
 		auto result = mods::weapons::damage_types::rifle_attack_with_feedback(
-		                  player_ptr,
-		                  this->primary(),
-		                  attacker,
-		                  BEST_DISTANCE,
-		                  feedback.from_direction
-		              );
+		        player_ptr,
+		        this->primary(),
+		        attacker,
+		        BEST_DISTANCE,
+		        feedback.from_direction
+		    );
 		if(result.hits) {
 			m_debug("Apparently hit for " << result.hits);
 		}

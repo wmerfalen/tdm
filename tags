@@ -635,7 +635,7 @@ COMMON_DROP_DICE_SIDES	src/mods/values-list.cpp	/^COMMON_DROP_DICE_SIDES,6$/;"	k
 COMMON_DROP_DICE_THRESHOLD	src/mods/values-list.cpp	/^COMMON_DROP_DICE_THRESHOLD,3$/;"	kind:variable	line:33
 COMMON_DROP_RATE	src/mods/randomized-items.hpp	/^		constexpr static float COMMON_DROP_RATE = 85.0;$/;"	kind:member	line:18	class:mods::randomized_items	file:	access:private
 COMPENSATOR	src/mods/weapon.hpp	/^		COMPENSATOR, MUZZLE_BRAKE,EXTENDED,$/;"	kind:enumerator	line:105	enum:mods::weapon::barrel_t	file:
-COMPLAIN	src/mods/mobs/shoplifter.cpp	303;"	kind:macro	line:303	file:
+COMPLAIN	src/mods/mobs/shoplifter.cpp	302;"	kind:macro	line:302	file:
 COMPLAIN	src/mods/mobs/shoplifter.cpp	31;"	kind:macro	line:31	file:
 COMPLAIN	src/mods/mobs/shoplifter.cpp	34;"	kind:macro	line:34	file:
 COMPLETELY_ON_FIRE	src/room-data.hpp	/^			COMPLETELY_ON_FIRE = 2,$/;"	kind:enumerator	line:258	enum:uint8_t	file:
@@ -2805,7 +2805,7 @@ PRF_TOG_CHK	src/act.other.cpp	901;"	kind:macro	line:901	file:
 PRF_TOG_CHK	src/utils.h	253;"	kind:macro	line:253	file:
 PRICE_PER_PRACTICE_SESSION	src/mods/values-list.cpp	/^PRICE_PER_PRACTICE_SESSION,1050$/;"	kind:variable	line:61
 PROCESS_INPUT_CONTROL_C	src/comm.cpp	618;"	kind:macro	line:618	file:
-PROGRESS	src/mods/mobs/shoplifter.cpp	304;"	kind:macro	line:304	file:
+PROGRESS	src/mods/mobs/shoplifter.cpp	303;"	kind:macro	line:303	file:
 PROGRESS	src/mods/mobs/shoplifter.cpp	32;"	kind:macro	line:32	file:
 PROGRESS	src/mods/mobs/shoplifter.cpp	35;"	kind:macro	line:35	file:
 PROTECT	src/mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	kind:enumerator	line:25	enum:mods::ai_state::state	file:
@@ -5423,13 +5423,13 @@ attack	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::attack(player_ptr_t& p
 attack	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::attack(player_ptr_t& player) {$/;"	kind:function	line:398	class:mods::mobs::chaotic_meth_addict	signature:(player_ptr_t& player)
 attack	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::attack(player_ptr_t& player) {$/;"	kind:function	line:396	class:mods::mobs::melee_combatant	signature:(player_ptr_t& player)
 attack	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::attack(player_ptr_t& player) {$/;"	kind:function	line:418	class:mods::mobs::orthos_agent	signature:(player_ptr_t& player)
-attack	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::attack(const feedback_t& feedback,player_ptr_t attacker) {$/;"	kind:function	line:267	class:mods::mobs::shoplifter	signature:(const feedback_t& feedback,player_ptr_t attacker)
-attack	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::attack(player_ptr_t attacker) {$/;"	kind:function	line:242	class:mods::mobs::shoplifter	signature:(player_ptr_t attacker)
+attack	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::attack(const feedback_t& feedback,player_ptr_t attacker) {$/;"	kind:function	line:266	class:mods::mobs::shoplifter	signature:(const feedback_t& feedback,player_ptr_t attacker)
+attack	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::attack(player_ptr_t attacker) {$/;"	kind:function	line:241	class:mods::mobs::shoplifter	signature:(player_ptr_t attacker)
 attack_anyone_in_same_room	src/mods/mobs/armed-guard.cpp	/^	bool armed_guard::attack_anyone_in_same_room() {$/;"	kind:function	line:474	class:mods::mobs::armed_guard	signature:()
 attack_anyone_in_same_room	src/mods/mobs/chaotic-meth-addict.cpp	/^	bool chaotic_meth_addict::attack_anyone_in_same_room() {$/;"	kind:function	line:476	class:mods::mobs::chaotic_meth_addict	signature:()
 attack_anyone_in_same_room	src/mods/mobs/melee-combatant.cpp	/^	bool melee_combatant::attack_anyone_in_same_room() {$/;"	kind:function	line:474	class:mods::mobs::melee_combatant	signature:()
 attack_anyone_near_room	src/mods/mobs/orthos-agent.cpp	/^	bool orthos_agent::attack_anyone_near_room() {$/;"	kind:function	line:496	class:mods::mobs::orthos_agent	signature:()
-attack_anyone_near_room	src/mods/mobs/shoplifter.cpp	/^	bool shoplifter::attack_anyone_near_room() {$/;"	kind:function	line:197	class:mods::mobs::shoplifter	signature:()
+attack_anyone_near_room	src/mods/mobs/shoplifter.cpp	/^	bool shoplifter::attack_anyone_near_room() {$/;"	kind:function	line:196	class:mods::mobs::shoplifter	signature:()
 attack_disorients	src/mods/combat-composer/shared.cpp	/^		bool attack_disorients($/;"	kind:function	line:191	namespace:mods::combat_composer::phases	signature:( player_ptr_t& attacker, obj_ptr_t& weapon, player_ptr_t& victim )
 attack_disorients	src/mods/weapons/damage-calculator.cpp	/^	bool attack_disorients($/;"	kind:function	line:296	namespace:mods::weapons::damage_calculator	signature:( player_ptr_t& attacker, obj_ptr_t& weapon, player_ptr_t& victim )
 attack_history_t	src/mods/mobs/mp-shotgunner.hpp	/^	struct attack_history_t {$/;"	kind:struct	line:13	namespace:mods::mobs	file:
@@ -6252,7 +6252,7 @@ cmem	src/mods/mobs/orthos-agent.cpp	19;"	kind:macro	line:19	file:
 cmem	src/mods/mobs/orthos-agent.cpp	586;"	kind:macro	line:586	file:
 cmem	src/mods/mobs/shoplifter.cpp	15;"	kind:macro	line:15	file:
 cmem	src/mods/mobs/shoplifter.cpp	19;"	kind:macro	line:19	file:
-cmem	src/mods/mobs/shoplifter.cpp	302;"	kind:macro	line:302	file:
+cmem	src/mods/mobs/shoplifter.cpp	301;"	kind:macro	line:301	file:
 code	src/mods/dialog-tree.hpp	/^			std::vector<std::string> code;$/;"	kind:member	line:98	struct:state_t	file:	access:public
 cold_blooded_index	src/mods/karma.hpp	/^		float cold_blooded_index;$/;"	kind:member	line:13	struct:mods::karma	file:	access:public
 collect_spray_targets	src/mods/combat-composer/spray-target.cpp	/^		std::forward_list<player_ptr_t> collect_spray_targets(player_ptr_t& attacker,direction_t direction,obj_ptr_t& weapon) {$/;"	kind:function	line:179	namespace:mods::combat_composer::phases	signature:(player_ptr_t& attacker,direction_t direction,obj_ptr_t& weapon)
@@ -6342,7 +6342,7 @@ compare	src/mods/message-server.cpp	/^		std::size_t compare(std::string_view oth
 compare_spells	src/spec_procs.cpp	/^int compare_spells(const void *x, const void *y) {$/;"	kind:function	line:61	signature:(const void *x, const void *y)
 compile_scripted_data	src/mods/scripted-sequences.cpp	/^	std::tuple<int32_t,std::string> compile_scripted_data() {$/;"	kind:function	line:41	namespace:mods	signature:()
 compile_yaml_path_from_type_and_file	src/mods/util.cpp	/^	std::string compile_yaml_path_from_type_and_file(int type, std::string_view file) {$/;"	kind:function	line:671	namespace:mods::util	signature:(int type, std::string_view file)
-complain	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::complain(std::string_view msg) {$/;"	kind:function	line:281	class:mods::mobs::shoplifter	signature:(std::string_view msg)
+complain	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::complain(std::string_view msg) {$/;"	kind:function	line:280	class:mods::mobs::shoplifter	signature:(std::string_view msg)
 compositor	src/mods/jx.hpp	/^			compositor() : m_current_level(0) {$/;"	kind:function	line:26	struct:mods::jx::compositor	access:public	signature:()
 compositor	src/mods/jx.hpp	/^	struct compositor {$/;"	kind:struct	line:25	namespace:mods::jx	file:
 compositor	src/mods/sql.hpp	/^			compositor(str_object table, T* txn_ptr) :$/;"	kind:function	line:49	struct:mods::sql::compositor	access:public	signature:(str_object table, T* txn_ptr)
@@ -7880,7 +7880,7 @@ enemy_spotted	src/mods/mobs/mini-gunner.cpp	/^	void mini_gunner::enemy_spotted(r
 enemy_spotted	src/mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::enemy_spotted(room_rnum room,uuid_t player) {$/;"	kind:function	line:78	class:mods::mobs::mp_shotgunner	signature:(room_rnum room,uuid_t player)
 enemy_spotted	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::enemy_spotted(room_rnum room,uuid_t player) {$/;"	kind:function	line:87	class:mods::mobs::orthos_agent	signature:(room_rnum room,uuid_t player)
 enemy_spotted	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	void orthos_spawn_sentinel::enemy_spotted(room_rnum room,uuid_t player) {$/;"	kind:function	line:107	class:mods::mobs::orthos_spawn_sentinel	signature:(room_rnum room,uuid_t player)
-enemy_spotted	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::enemy_spotted(room_rnum room,uuid_t player) {$/;"	kind:function	line:235	class:mods::mobs::shoplifter	signature:(room_rnum room,uuid_t player)
+enemy_spotted	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::enemy_spotted(room_rnum room,uuid_t player) {$/;"	kind:function	line:234	class:mods::mobs::shoplifter	signature:(room_rnum room,uuid_t player)
 enemy_spotted	src/mods/mobs/smart-mob.cpp	/^	void smart_mob::enemy_spotted(room_rnum room,uuid_t player) {$/;"	kind:function	line:237	class:mods::mobs::smart_mob	signature:(room_rnum room,uuid_t player)
 engage	src/mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::engage() {$/;"	kind:function	line:544	class:mods::classes::ghost	signature:()
 engage	src/mods/combat-composer/engage-target.cpp	/^namespace mods::combat_composer::engage {$/;"	kind:namespace	line:25	class:mods::combat_composer	file:
@@ -8183,7 +8183,7 @@ extra_attack	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::
 extra_attack	src/mods/mobs/defiler.cpp	/^	void defiler::extra_attack() {$/;"	kind:function	line:565	class:mods::mobs::defiler	signature:()
 extra_attack	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::extra_attack() {$/;"	kind:function	line:359	class:mods::mobs::melee_combatant	signature:()
 extra_attack	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::extra_attack() {$/;"	kind:function	line:382	class:mods::mobs::orthos_agent	signature:()
-extra_attack	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::extra_attack() {$/;"	kind:function	line:175	class:mods::mobs::shoplifter	signature:()
+extra_attack	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::extra_attack() {$/;"	kind:function	line:174	class:mods::mobs::shoplifter	signature:()
 extra_bits	src/constants.cpp	/^const char *extra_bits[] = {$/;"	kind:variable	line:369
 extra_bits	src/constants.hpp	/^const char *extra_bits[] = {$/;"	kind:variable	line:368
 extra_bits_count	src/constants.cpp	/^        extra_bits_count = sizeof(extra_bits) \/ sizeof(extra_bits[0]) - 1,$/;"	kind:variable	line:805
@@ -9768,7 +9768,7 @@ init	src/mods/mobs/mini-gunner.cpp	/^	void mini_gunner::init() {$/;"	kind:functi
 init	src/mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::init() {$/;"	kind:function	line:356	class:mods::mobs::mp_shotgunner	signature:()
 init	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::init() {$/;"	kind:function	line:308	class:mods::mobs::orthos_agent	signature:()
 init	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	void orthos_spawn_sentinel::init() {$/;"	kind:function	line:341	class:mods::mobs::orthos_spawn_sentinel	signature:()
-init	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::init() {$/;"	kind:function	line:123	class:mods::mobs::shoplifter	signature:()
+init	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::init() {$/;"	kind:function	line:122	class:mods::mobs::shoplifter	signature:()
 init	src/mods/mobs/smart-mob.cpp	/^	void smart_mob::init() {$/;"	kind:function	line:187	class:mods::mobs::smart_mob	signature:()
 init	src/mods/mp.cpp	/^	void init() {$/;"	kind:function	line:29	namespace:mods::mp	signature:()
 init	src/mods/no-drop.cpp	/^	void init() {$/;"	kind:function	line:23	namespace:mods::no_drop	signature:()
@@ -11094,10 +11094,10 @@ m_debug	src/mods/mobs/room-watching.cpp	21;"	kind:macro	line:21	file:
 m_debug	src/mods/mobs/room-watching.cpp	23;"	kind:macro	line:23	file:
 m_debug	src/mods/mobs/shoplifter-behaviour-tree.cpp	17;"	kind:macro	line:17	file:
 m_debug	src/mods/mobs/shoplifter-behaviour-tree.cpp	19;"	kind:macro	line:19	file:
-m_debug	src/mods/mobs/shoplifter-behaviour-tree.cpp	50;"	kind:macro	line:50	file:
+m_debug	src/mods/mobs/shoplifter-behaviour-tree.cpp	51;"	kind:macro	line:51	file:
 m_debug	src/mods/mobs/shoplifter.cpp	13;"	kind:macro	line:13	file:
 m_debug	src/mods/mobs/shoplifter.cpp	17;"	kind:macro	line:17	file:
-m_debug	src/mods/mobs/shoplifter.cpp	300;"	kind:macro	line:300	file:
+m_debug	src/mods/mobs/shoplifter.cpp	299;"	kind:macro	line:299	file:
 m_debug	src/mods/mp.cpp	5;"	kind:macro	line:5	file:
 m_debug	src/mods/mp.cpp	7;"	kind:macro	line:7	file:
 m_debug	src/mods/no-drop.cpp	10;"	kind:macro	line:10	file:
@@ -11209,7 +11209,7 @@ m_debug_plain	src/mods/mobs/orthos-agent.cpp	18;"	kind:macro	line:18	file:
 m_debug_plain	src/mods/mobs/orthos-agent.cpp	585;"	kind:macro	line:585	file:
 m_debug_plain	src/mods/mobs/shoplifter.cpp	14;"	kind:macro	line:14	file:
 m_debug_plain	src/mods/mobs/shoplifter.cpp	18;"	kind:macro	line:18	file:
-m_debug_plain	src/mods/mobs/shoplifter.cpp	301;"	kind:macro	line:301	file:
+m_debug_plain	src/mods/mobs/shoplifter.cpp	300;"	kind:macro	line:300	file:
 m_decoded_state_data	src/mods/player-contract-instance.hpp	/^			std::map<std::string,std::string> m_decoded_state_data;$/;"	kind:member	line:147	struct:mods::contracts::player_contract_instance	file:	access:protected
 m_deferred_event	src/mods/boosters/adrenaline-shot.hpp	/^			deferred_event_t m_deferred_event;$/;"	kind:member	line:51	namespace:mods::boosters	file:	access:protected
 m_demonic_incantation	src/mods/classes/contagion.hpp	/^			skill_t m_demonic_incantation;$/;"	kind:member	line:147	struct:mods::classes::contagion	file:	access:private
@@ -12432,7 +12432,7 @@ move_closer_to_target	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant:
 move_closer_to_target	src/mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::move_closer_to_target() {$/;"	kind:function	line:465	class:mods::mobs::mp_shotgunner	signature:()
 move_closer_to_target	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::move_closer_to_target() {$/;"	kind:function	line:422	class:mods::mobs::orthos_agent	signature:()
 move_closer_to_target	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	void orthos_spawn_sentinel::move_closer_to_target() {$/;"	kind:function	line:454	class:mods::mobs::orthos_spawn_sentinel	signature:()
-move_closer_to_target	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::move_closer_to_target() {$/;"	kind:function	line:184	class:mods::mobs::shoplifter	signature:()
+move_closer_to_target	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::move_closer_to_target() {$/;"	kind:function	line:183	class:mods::mobs::shoplifter	signature:()
 move_gain	src/limits.cpp	/^int move_gain(char_data *ch) {$/;"	kind:function	line:177	signature:(char_data *ch)
 move_points_per_outward_pump_buff	src/mods/weapons/shotgun-dst7A.hpp	/^				static constexpr std::array<uint16_t,3> move_points_per_outward_pump_buff = {2,4,6};$/;"	kind:member	line:50	struct:mods::weapons::shotgun::dst7A::stats	file:	access:public
 move_to	src/mods/mobs/defiler.cpp	/^	std::pair<bool,std::string> defiler::move_to(const direction_t& dir) {$/;"	kind:function	line:573	class:mods::mobs::defiler	signature:(const direction_t& dir)
@@ -13625,7 +13625,7 @@ profile_name	src/mods/orm/mob-roam.hpp	/^		std::string profile_name;$/;"	kind:me
 profile_name	src/mods/orm/mob-roam.hpp	/^		std::string profile_name;$/;"	kind:member	line:73	struct:mods::orm::mob_roam	file:	access:public
 profit_buy	src/shop.h	/^	float profit_buy;		\/* Factor to multiply cost with		*\/$/;"	kind:member	line:36	struct:shop_data	file:	access:public
 profit_sell	src/shop.h	/^	float profit_sell;		\/* Factor to multiply cost with		*\/$/;"	kind:member	line:37	struct:shop_data	file:	access:public
-progress	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::progress(std::string_view msg) {$/;"	kind:function	line:286	class:mods::mobs::shoplifter	signature:(std::string_view msg)
+progress	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::progress(std::string_view msg) {$/;"	kind:function	line:285	class:mods::mobs::shoplifter	signature:(std::string_view msg)
 project_id	src/mods/lmdb/shm-config.hpp	/^    int project_id = 0xf00ba12;$/;"	kind:member	line:6	namespace:shm	file:
 projectile	src/fight.cpp	/^namespace mods::projectile {$/;"	kind:namespace	line:45	class:mods	file:
 projectile	src/mods/classes/engineer.cpp	/^namespace mods::projectile {$/;"	kind:namespace	line:6	class:mods	file:
@@ -14185,7 +14185,7 @@ report	src/mods/mobs/mini-gunner.cpp	/^	str_map_t mini_gunner::report() {$/;"	ki
 report	src/mods/mobs/mp-shotgunner.cpp	/^	str_map_t mp_shotgunner::report() {$/;"	kind:function	line:109	class:mods::mobs::mp_shotgunner	signature:()
 report	src/mods/mobs/orthos-agent.cpp	/^	str_map_t orthos_agent::report() {$/;"	kind:function	line:102	class:mods::mobs::orthos_agent	signature:()
 report	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	str_map_t orthos_spawn_sentinel::report() {$/;"	kind:function	line:138	class:mods::mobs::orthos_spawn_sentinel	signature:()
-report	src/mods/mobs/shoplifter.cpp	/^	str_map_t shoplifter::report() {$/;"	kind:function	line:295	class:mods::mobs::shoplifter	signature:()
+report	src/mods/mobs/shoplifter.cpp	/^	str_map_t shoplifter::report() {$/;"	kind:function	line:294	class:mods::mobs::shoplifter	signature:()
 report	src/mods/player.cpp	/^	void player::report() {$/;"	kind:function	line:1780	class:mods::player	signature:()
 report	src/mods/players/db-load.cpp	/^	void report(int64_t code, std::string_view msg) {$/;"	kind:function	line:175	namespace:mods::players::db_load	signature:(int64_t code, std::string_view msg)
 report	src/mods/ranged-combat-totals.hpp	/^		void report(T p) {$/;"	kind:function	line:413	struct:mods::ranged_combat_totals	access:public	signature:(T p)
@@ -15207,7 +15207,7 @@ setup_damage_callbacks	src/mods/mobs/mini-gunner.cpp	/^	void mini_gunner::setup_
 setup_damage_callbacks	src/mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::setup_damage_callbacks() {$/;"	kind:function	line:126	class:mods::mobs::mp_shotgunner	signature:()
 setup_damage_callbacks	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::setup_damage_callbacks() {$/;"	kind:function	line:150	class:mods::mobs::orthos_agent	signature:()
 setup_damage_callbacks	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	void orthos_spawn_sentinel::setup_damage_callbacks() {$/;"	kind:function	line:162	class:mods::mobs::orthos_spawn_sentinel	signature:()
-setup_damage_callbacks	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::setup_damage_callbacks() {$/;"	kind:function	line:69	class:mods::mobs::shoplifter	signature:()
+setup_damage_callbacks	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::setup_damage_callbacks() {$/;"	kind:function	line:68	class:mods::mobs::shoplifter	signature:()
 setup_damage_callbacks	src/mods/mobs/smart-mob.cpp	/^	void smart_mob::setup_damage_callbacks() {$/;"	kind:function	line:340	class:mods::mobs::smart_mob	signature:()
 setup_log	src/comm.cpp	/^void setup_log(const char *filename, int fd) {$/;"	kind:function	line:2797	signature:(const char *filename, int fd)
 setup_public_channels	src/mods/chat.cpp	/^	void setup_public_channels() {$/;"	kind:function	line:121	namespace:mods::chat	signature:()
@@ -15292,7 +15292,7 @@ shop_vnum_id	src/mods/orm/shop.hpp	/^		shop_vnum shop_vnum_id;		\/* Virtual numb
 shop_vnum_id	src/mods/orm/shop.hpp	/^		shop_vnum shop_vnum_id;$/;"	kind:member	line:25	struct:mods::orm::shop_rooms	file:	access:public
 shop_vnum_id	src/mods/orm/shop.hpp	/^		shop_vnum shop_vnum_id;$/;"	kind:member	line:37	struct:mods::orm::shop_objects	file:	access:public
 shop_with_who	src/mods/orm/shop.hpp	/^		int shop_with_who;		\/* Who does the shop trade with?	*\/$/;"	kind:member	line:60	struct:mods::orm::shop	file:	access:public
-shoplifter	src/mods/mobs/shoplifter.cpp	/^	shoplifter::shoplifter(const uuid_t& mob_uuid, std::string_view variation) {$/;"	kind:function	line:149	class:mods::mobs::shoplifter	signature:(const uuid_t& mob_uuid, std::string_view variation)
+shoplifter	src/mods/mobs/shoplifter.cpp	/^	shoplifter::shoplifter(const uuid_t& mob_uuid, std::string_view variation) {$/;"	kind:function	line:148	class:mods::mobs::shoplifter	signature:(const uuid_t& mob_uuid, std::string_view variation)
 shoplifter	src/mods/mobs/shoplifter.hpp	/^	struct shoplifter : public smart_mob {$/;"	kind:struct	line:14	namespace:mods::mobs	file:	inherits:smart_mob
 shoplifter_behaviour_tree	src/mods/mobs/behaviour-tree-list.cpp	/^namespace mods::mobs::shoplifter_behaviour_tree {$/;"	kind:namespace	line:8	class:mods::mobs	file:
 shoplifter_behaviour_tree	src/mods/mobs/shoplifter-behaviour-tree.cpp	/^namespace mods::mobs::shoplifter_behaviour_tree {$/;"	kind:namespace	line:28	class:mods::mobs	file:
@@ -16419,7 +16419,7 @@ usages	src/mods/mobs/mini-gunner.cpp	/^	str_map_t mini_gunner::usages() {$/;"	ki
 usages	src/mods/mobs/mp-shotgunner.cpp	/^	str_map_t mp_shotgunner::usages() {$/;"	kind:function	line:112	class:mods::mobs::mp_shotgunner	signature:()
 usages	src/mods/mobs/orthos-agent.cpp	/^	str_map_t orthos_agent::usages() {$/;"	kind:function	line:105	class:mods::mobs::orthos_agent	signature:()
 usages	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	str_map_t orthos_spawn_sentinel::usages() {$/;"	kind:function	line:141	class:mods::mobs::orthos_spawn_sentinel	signature:()
-usages	src/mods/mobs/shoplifter.cpp	/^	str_map_t shoplifter::usages() {$/;"	kind:function	line:292	class:mods::mobs::shoplifter	signature:()
+usages	src/mods/mobs/shoplifter.cpp	/^	str_map_t shoplifter::usages() {$/;"	kind:function	line:291	class:mods::mobs::shoplifter	signature:()
 usages	src/mods/mobs/smart-mob.hpp	/^			virtual str_map_t usages() {$/;"	kind:function	line:61	struct:mods::mobs::smart_mob	access:public	signature:()
 use	src/mods/util.hpp	/^		parsed_args* use(const std::string& argument) {$/;"	kind:function	line:532	struct:mods::util::args::arglist_parser	access:public	signature:(const std::string& argument)
 use_autowiz	src/config.cpp	/^int use_autowiz = YES;$/;"	kind:variable	line:304

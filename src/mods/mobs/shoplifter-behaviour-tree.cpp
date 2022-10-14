@@ -14,9 +14,9 @@
 
 //#define  __MENTOC_SHOW_BEHAVIOUR_TREE_shoplifter_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_shoplifter_BTREE_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << "[m.m.shoplifter.btree:" << __LINE__ << "]->" << a << "\n";
+	#define m_debug(a) std::cerr << "[m.m.shoplifter.btree:" << __LINE__ << "]->" << a << "\n";
 #else
-#define m_debug(a)
+	#define m_debug(a)
 #endif
 
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
@@ -41,6 +41,7 @@ namespace mods::mobs::shoplifter_behaviour_tree {
 			if(shoplifter->alive() && shoplifter->capable()) {
 				m_debug("alive and capable. attacking...");
 				shoplifter->btree_hostile();
+				shoplifter->attack_anyone_near_room();
 			}
 		}
 	}
