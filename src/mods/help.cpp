@@ -1098,7 +1098,7 @@ namespace mods::help {
 			"plant_claymore",
 			"penetrating_shot",
 			"intimidate",
-			"toss_cryogenic_grenade",
+			"ghost:toss_cryogenic_grenade",
 			"use_flash_underbarrel",
 			"attach_frag",
 			"attach_shotgun",

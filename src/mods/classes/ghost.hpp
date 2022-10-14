@@ -13,6 +13,7 @@ using ghost_orm_t = mods::orm::ghost;
 namespace mods::classes {
 	struct ghost : base {
 			friend class mods::classes::super_user_fiddler;
+			static constexpr std::string_view CRYOGENIC_GRENADE_YAML = "explosive/cryogenic-grenade.yml";
 			using primary_choice_t = mods::weapon::ghost::primary_choice_t;
 
 			using shotgun_ub_t = mods::weapons::attachment_shotgun_underbarrel;
@@ -99,7 +100,7 @@ namespace mods::classes {
 			std::tuple<uint32_t,std::string> fire_penetrating_shot_at(uuid_t npc_uuid);
 			std::tuple<bool,std::string> intimidate_target(uuid_t npc_uuid);
 			uint8_t cryogenic_grenade_count() const;
-			std::tuple<bool,std::string> toss_cryogenic_grenade_towards(uint8_t direction, uint8_t rooms);
+			std::tuple<bool,std::string> toss_cryogenic_grenade_towards(const direction_t& direction, uint8_t rooms);
 
 			/** applies it to the entire room. every will get flashed */
 			std::tuple<bool,std::string> use_flash_underbarrel();
@@ -149,6 +150,7 @@ namespace mods::classes {
 				*/
 			void unblock_adrenaline_shot();
 
+			bool can_toss_grenade_towards(const direction_t& direction);
 		private:
 			void replenish_notify(std::string_view);
 			uuid_t m_target;

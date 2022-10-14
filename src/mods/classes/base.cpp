@@ -33,7 +33,7 @@ namespace mods::classes {
 		        "m_current_level:",m_current_level,"\r\n",
 		        "m_loaded_properly:",m_loaded_properly,"\r\n",
 		        "m_load_status:",std::get<1>(m_load_status),"\r\n"
-		       );
+		    );
 		return d;
 	}
 	std::tuple<bool,std::string> skill_t::practice(player_ptr_t& player) {
@@ -109,11 +109,11 @@ namespace mods::classes {
 		try {
 			auto check_txn = txn();
 			auto check_sql = sql_compositor(table_name,&check_txn)
-			                 .select("*")
-			                 .from(table_name)
-			                 .where("player_id",player->db_id())
-			                 .op_and("skill_name",skill_name)
-			                 .sql();
+			    .select("*")
+			    .from(table_name)
+			    .where("player_id",player->db_id())
+			    .op_and("skill_name",skill_name)
+			    .sql();
 			auto check_result = mods::pq::exec(check_txn,check_sql);
 			mods::pq::commit(check_txn);
 			if(check_result.size()) {
@@ -124,8 +124,8 @@ namespace mods::classes {
 				/* insert the record */
 				auto t = txn();
 				auto sql = sql_compositor(table_name,&t)
-				           .insert()
-				           .into(table_name)
+				    .insert()
+				    .into(table_name)
 				.values({
 					{"skill_name",skill_name.data()},
 					{"skill_level","0.0"},
@@ -153,18 +153,18 @@ namespace mods::classes {
 		try {
 			auto check_txn = txn();
 			auto check_sql = sql_compositor(table_name,&check_txn)
-			                 .select("id")
-			                 .from(table_name)
-			                 .where("player_id",player->db_id())
-			                 .op_and("skill_name",m_name)
-			                 .sql();
+			    .select("id")
+			    .from(table_name)
+			    .where("player_id",player->db_id())
+			    .op_and("skill_name",m_name)
+			    .sql();
 			auto check_result = mods::pq::exec(check_txn,check_sql);
 			mods::pq::commit(check_txn);
 			if(check_result.size()) {
 				/* update the record */
 				auto t = txn();
 				auto sql = sql_compositor(table_name,&t)
-				           .update(table_name)
+				    .update(table_name)
 				.set({{"skill_level",std::to_string(m_current_level)}})
 				.where("id",check_result[0]["id"].c_str())
 				.sql();
@@ -174,8 +174,8 @@ namespace mods::classes {
 				/* insert the record */
 				auto t = txn();
 				auto sql = sql_compositor(table_name,&t)
-				           .insert()
-				           .into(table_name)
+				    .insert()
+				    .into(table_name)
 				.values({
 					{"skill_name",m_name},
 					{"skill_level",std::to_string(m_current_level)},
@@ -193,10 +193,10 @@ namespace mods::classes {
 
 	std::string base::ability_data_t::dump() const {
 		return CAT("ability_value:",ability_value,"\r\n",
-		           "shortened:'",shortened,"'\r\n",
-		           "pretty:'",pretty,"'\r\n",
-		           "category:",category,"\r\n"
-		          );
+		        "shortened:'",shortened,"'\r\n",
+		        "pretty:'",pretty,"'\r\n",
+		        "category:",category,"\r\n"
+		    );
 	}
 
 	skill_t* base::skill_ptr(uint8_t skill) {
@@ -337,9 +337,9 @@ namespace mods::classes {
 			page += "\r\n{hr}";
 		}
 		page += CAT("{hr}\r\n",
-		            "The strings in parenthesis are what you would pass to the practice or train command. ",
-		            "{hr}\r\nFor example, to train ",get_abilities().begin()->pretty," you would type: practice ",get_abilities().begin()->shortened,"\r\n"
-		           );
+		        "The strings in parenthesis are what you would pass to the practice or train command. ",
+		        "{hr}\r\nFor example, to train ",get_abilities().begin()->pretty," you would type: practice ",get_abilities().begin()->shortened,"\r\n"
+		    );
 		return page;
 	}
 	base::ability_list_t& base::weapon_abilities() {

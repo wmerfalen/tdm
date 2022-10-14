@@ -83,7 +83,6 @@ namespace mods::classes {
 				std::string dump() const;
 			};
 
-
 			using ability_list_t = std::vector<ability_data_t>;
 			enum ability_t {
 				ASSAULT_RIFLES,

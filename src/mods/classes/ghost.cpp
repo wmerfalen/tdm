@@ -1,6 +1,7 @@
 #include "ghost.hpp"
 #include "../orm/inventory.hpp"
 #include "../affects.hpp"
+#include "../projectile.hpp"
 #include "../player-utils.hpp"
 #include "../object-utils.hpp"
 #include "../replenish.hpp"
@@ -17,6 +18,11 @@
 #include "../levels.hpp"
 #include "../medic.hpp"
 
+/**
+ * This enables us to have unlimited cryogenic grenades for testing
+ * delete or comment out once go to prod
+ */
+#define GHOST_DEBUG_CRYO
 namespace mods::rand {
 	extern int roll(int num,int size);
 };
@@ -37,6 +43,18 @@ namespace mods::classes {
 		        "line:",__LINE__
 		    )
 		);
+	}
+	bool ghost::can_toss_grenade_towards(const direction_t& direction) {
+		auto& room = m_player->room();
+		if(room >= world.size()) {
+			return false;
+		}
+		for(const auto& dir : world[room].directions()) {
+			if(dir == direction) {
+				return true;
+			}
+		}
+		return false;
 	}
 	void ghost::init() {
 		m_scanned.clear();
@@ -326,10 +344,44 @@ namespace mods::classes {
 	uint8_t ghost::cryogenic_grenade_count() const {
 		return m_cryogenic_grenade_count;
 	}
-	std::tuple<bool,std::string> ghost::toss_cryogenic_grenade_towards(uint8_t direction, uint8_t rooms) {
-		bool has_nades = !!m_cryogenic_grenade_count;
-		std::string msg = "";
-		return {has_nades,msg};
+	std::tuple<bool,std::string> ghost::toss_cryogenic_grenade_towards(const direction_t& direction, uint8_t rooms) {
+		skill_t m_cryogenic_grenade;
+		auto s = roll_skill_success(CRYOGENIC_GRENADE);
+		if(!std::get<0>(s)) {
+			return {0,std::get<1>(s)};
+		}
+		if(m_cryogenic_grenade.awful() || m_cryogenic_grenade.terrible() || m_cryogenic_grenade.okay()) {
+			if(dice(3,6) < 14) {
+				return {0,"Your lack of experience causes you to fumble the grenade"};
+			}
+		}
+		if(m_cryogenic_grenade.learned()) {
+			if(dice(3,6) < 11) {
+				return {0,"Your lack of experience causes you to fumble the grenade"};
+			}
+		}
+		//m_player->block_for(duration, mods::deferred::EVENT_PLAYER_FINISHES_FEIGN_DEATH, 0);
+#ifdef GHOST_DEBUG_CRYO
+		m_cryogenic_grenade_count = 10;
+#endif
+		if(m_cryogenic_grenade_count == 0) {
+			return {false,"You don't have any cryogenic grenades"};
+		}
+		if(!can_toss_grenade_towards(direction)) {
+			return {false,"You can't seem to throw anything in that direction!"};
+		}
+		auto grenade = create_object(ghost::CRYOGENIC_GRENADE_YAML.data());
+		mods::projectile::throw_object(m_player, direction, rooms, grenade, "toss");
+		if(m_cryogenic_grenade.mastered() || m_cryogenic_grenade.elite()) {
+			if(dice(3,6) > 16) {
+				++m_cryogenic_grenade_count;
+				m_player->sendln("Your experience causes you to gain one extra cryogenic grenade!");
+			}
+		} else {
+			--m_cryogenic_grenade_count;
+		}
+		//TODO: this might be a good way to balance this \/
+		return {true,""};
 	}
 	/** applies it to the entire room. every will get flashed */
 	std::tuple<bool,std::string> ghost::use_flash_underbarrel() {
@@ -514,12 +566,12 @@ namespace mods::classes {
 			return s;
 		}
 		auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
-		                    m_player,
-		                    weapon,
-		                    victim,
-		                    distance,
-		                    direction
-		                );
+		        m_player,
+		        weapon,
+		        victim,
+		        distance,
+		        direction
+		    );
 		m_xray_shot.use_skill(m_player);
 		return {1,"stub"};
 	}
@@ -576,12 +628,12 @@ namespace mods::classes {
 						return s;
 					}
 					feedback_t feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
-					                          m_player,
-					                          m_player->primary(),
-					                          victim,
-					                          result.distance,
-					                          direction
-					                      );
+					        m_player,
+					        m_player->primary(),
+					        victim,
+					        result.distance,
+					        direction
+					    );
 
 					if(feedback.hits == 0) {
 						return {false,"You missed your target!"};
@@ -800,6 +852,36 @@ namespace mods::class_abilities::ghost {
 		player->sendln(std::get<1>(status));
 	}
 
+	ACMD(do_toss_cryogenic_grenade) {
+		static constexpr std::string_view usage = "Usage: ghost:toss_cryogenic_grenade <direction> <depth>";
+		PLAYER_CAN("ghost.toss_cryogenic_grenade");
+		DO_HELP_WITH_ZERO("ghost.toss_cryogenic_grenade");
+		auto vec_args = PARSE_ARGS();
+		if(argshave()->size_gt(1)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		int opt_direction = mods::util::to_direction(vec_args[0]);
+		if(opt_direction < 0) {
+			player->errorln("Please provide a valid direction");
+			player->sendln(usage);
+			return;
+		}
+		auto opt_depth = mods::util::stoi_optional<uint8_t>(vec_args[1]);
+		if(opt_depth.has_value() == false) {
+			player->errorln("Please provide a valid integer for depth");
+			player->sendln(usage);
+			return;
+		}
+		direction_t direction = (direction_t)opt_direction;
+		uint8_t depth = opt_depth.value();
+
+		auto status = player->ghost()->toss_cryogenic_grenade_towards(direction,depth);
+		if(!std::get<0>(status)) {
+			player->errorln(std::get<1>(status));
+			return;
+		}
+	}
 	void init() {
 		mods::interpreter::add_command("ghost:adrenaline_shot", POS_RESTING, do_inject_adrenaline_shot, 0,0);
 		mods::interpreter::add_command("ghost:dissipate", POS_RESTING, do_dissipate, 0,0);
@@ -819,5 +901,6 @@ namespace mods::class_abilities::ghost {
 		mods::interpreter::add_command("ghost:build_claymore", POS_RESTING, do_build_claymore, 0,0);
 		mods::interpreter::add_command("ghost:build_corrosive_claymore", POS_RESTING, do_build_corrosive_claymore, 0,0);
 		mods::interpreter::add_command("build_shrapnel_claymore", POS_RESTING, do_build_shrapnel_claymore, 0,0);
+		mods::interpreter::add_command("ghost:toss_cryogenic_grenade", POS_RESTING, do_toss_cryogenic_grenade, 0,0);
 	}
 };
