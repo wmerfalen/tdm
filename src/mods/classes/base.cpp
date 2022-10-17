@@ -75,6 +75,30 @@ namespace mods::classes {
 	bool skill_t::elite() const {
 		return m_current_level >= ELITE;
 	}
+	skill_t::proficiency_t skill_t::get_proficiency_enum() const {
+		if(not_learned()) {
+			return PROF_NOT_LEARNED;
+		}
+		if(terrible()) {
+			return PROF_TERRIBLE;
+		}
+		if(awful()) {
+			return PROF_AWFUL;
+		}
+		if(okay()) {
+			return PROF_OKAY;
+		}
+		if(learned()) {
+			return PROF_LEARNED;
+		}
+		if(mastered()) {
+			return PROF_MASTERED;
+		}
+		if(elite()) {
+			return PROF_ELITE;
+		}
+		return PROF_NOT_LEARNED;
+	}
 
 	std::string skill_t::get_proficiency() const {
 		if(not_learned()) {
@@ -280,8 +304,35 @@ namespace mods::classes {
 
 	std::string base::skills_page() {
 		std::map<ability_data_t::skillset_t,std::vector<std::string>> org;
+		std::string proficiency_string;
 		for(const auto& s : get_abilities()) {
-			org[s.category].emplace_back(CAT(s.pretty,"{->}(",s.shortened,") [ ",s.skill_ptr->get_proficiency()," ]\r\n"));
+			proficiency_string.clear();
+			using PROF = skill_t::proficiency_t;
+			switch(s.skill_ptr->get_proficiency_enum()) {
+				default:
+				case PROF::PROF_NOT_LEARNED:
+					proficiency_string = "not-learned";
+					break;
+				case PROF::PROF_TERRIBLE:
+					proficiency_string = "terrible";
+					break;
+				case PROF::PROF_AWFUL:
+					proficiency_string = "awful";
+					break;
+				case PROF::PROF_OKAY:
+					proficiency_string = "okay";
+					break;
+				case PROF::PROF_LEARNED:
+					proficiency_string= "learned";
+					break;
+				case PROF::PROF_MASTERED:
+					proficiency_string = "mastered";
+					break;
+				case PROF::PROF_ELITE :
+					proficiency_string = "ELITE";
+					break;
+			}
+			org[s.category].emplace_back(CAT(s.pretty,"{->}(",s.shortened,") [ ",proficiency_string," ]\r\n"));
 		}
 		std::string page;
 

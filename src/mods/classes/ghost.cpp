@@ -145,6 +145,7 @@ namespace mods::classes {
 		return m_player;
 	}
 	void ghost::init() {
+		m_target = 0;
 		m_overhead_lense = 0;
 		m_has_aerial_drone_scan = false;
 		m_is_penetrating_shot = false;
@@ -176,6 +177,7 @@ namespace mods::classes {
 			{UB_FRAG,"ubf","Underbarrel Nade Launcher",skillset_t::DEMOLITIONS,&m_ub_frag},
 			{GUIDED_MISSILE,"gm","Guided Missile",skillset_t::DEMOLITIONS,&m_guided_missile},
 			{TARGET_LIMB,"limb","Target Limb",skillset_t::SNIPING,&m_target_limb},
+			{MARK_TARGET,"mark","Mark Target",skillset_t::SNIPING,&m_mark_target},
 			{PLANT_CLAYMORE,"claymore","Plant Claymore",skillset_t::DEMOLITIONS,&m_plant_claymore},
 			{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",skillset_t::DEMOLITIONS,&m_plant_shrapnel_claymore},
 			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",skillset_t::DEMOLITIONS,&m_plant_corrosive_claymore},
@@ -812,15 +814,14 @@ namespace mods::classes {
 		m_player->sendln("Your target died.");
 	}
 	std::tuple<bool,std::string> ghost::mark_target(std::string_view target) {
+		auto s = roll_skill_success(MARK_TARGET);
+		if(!std::get<0>(s)) {
+			return s;
+		}
 		m_target = mods::examine::find_player_by_name(m_player, target);
 		if(m_target == 0) {
 			return {0,"Couldn't find a target that matches that string."};
 		}
-		//auto s = roll_skill_success(MARK_TARGET);
-		//if(!std::get<0>(s)) {
-		//	return s;
-		//}
-		/** TODO: need to add mark target as a skill */
 		return {1,"Marked target"};
 	}
 
@@ -962,6 +963,10 @@ namespace mods::class_abilities::ghost {
 			return;
 		}
 		auto status = player->ghost()->mark_target(vec_args[0]);
+		if(!std::get<0>(status)) {
+			player->errorln(std::get<1>(status));
+			return;
+		}
 		player->sendln(std::get<1>(status));
 	};
 	ACMD(do_tracking_shot) {

@@ -39,6 +39,16 @@ namespace mods::classes {
 			bool elite() const;
 
 			std::string get_proficiency() const;
+			enum proficiency_t : uint8_t {
+				PROF_NOT_LEARNED,
+				PROF_TERRIBLE,
+				PROF_AWFUL,
+				PROF_OKAY,
+				PROF_LEARNED,
+				PROF_MASTERED,
+				PROF_ELITE,
+			};
+			proficiency_t get_proficiency_enum() const;
 			int16_t feed(const pqxx::result::reference& row);
 			std::tuple<bool,std::string> load(player_ptr_t& player,std::string_view skill_name);
 			std::tuple<bool,std::string> save(player_ptr_t& player);
