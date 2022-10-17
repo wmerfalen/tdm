@@ -243,7 +243,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/loot-payload mods/orm/loot-ammo \
 					 mods/orm/static-loot mods/builder/static-loot \
 					 mods/mobs/goat mods/mobs/innocent mods/dialog-tree \
-					 mods/orm/locker room-data mods/generic-locker
+					 mods/orm/locker room-data mods/generic-locker \
+					 mods/classes/ghost-overhead-map
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

@@ -54,6 +54,7 @@ namespace mods {
 			constexpr static uint32_t EVENT_CORPSE_EXPLODE = 12;
 			constexpr static uint32_t EVENT_CONTAGION_MINOR_SHIELDING_OVER = 13;
 			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_UNINSTALLATION = 14;
+			constexpr static uint32_t EVENT_PLAYER_AERIAL_DRONE_SCAN_OVER = 15;
 			constexpr static uint64_t TICK_RESOLUTION = 3;
 			using seconds = uint16_t;
 			using lambda_queue_t = std::multimap<uint64_t,std::function<void()>>;

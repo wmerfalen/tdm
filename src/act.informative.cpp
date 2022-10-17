@@ -38,10 +38,12 @@
 #include "mods/levels.hpp"
 #include "mods/calc-visibility.hpp"
 #include "mods/overhead_map.hpp"
+#include "mods/classes/ghost-overhead-map.hpp"
 #include "mods/js.hpp"
 #include "mods/contract-events.hpp"
 #include "mods/players/messages.hpp"
 #include "mods/weapons/unique-weapons.hpp"
+#include "mods/classes/ghost.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -964,7 +966,11 @@ void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 		mods::rooms::word_wrap_description(player,room);
 	}
 	if(((player->get_prefs()) & PRF_OVERHEAD_MAP)) {
-		player->stc(mods::overhead_map::generate<mods::player*>(player.get(),room));
+		if(player->ghost()) {
+			player->stc(mods::classes::ghost_overhead_map::generate<mods::player*>(player.get(),room,player->ghost()->overhead_lense()));
+		} else {
+			player->stc(mods::overhead_map::generate<mods::player*>(player.get(),room));
+		}
 	}
 
 	for(auto& t : world[room].textures()) {

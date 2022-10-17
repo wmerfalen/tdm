@@ -24,6 +24,7 @@
 ./mods/classes/ghost.cpp:	->inject_adrenaline_shot
 ./mods/classes/ghost.cpp:	->toss_cryogenic_grenade
 ./mods/classes/ghost.cpp:	->fire_penetrating_shot
+./mods/classes/ghost.cpp:	->aerial_drone_scan
 ./mods/classes/engineer.cpp:	->drone_bomb
 ./mods/classes/breacher.cpp:->teep
 ./mods/rifle.cpp:	->rifle_me

@@ -32,15 +32,15 @@
 #include "builder-data.hpp"
 
 #ifdef __MENTOC_PLAYER_CLASS_DEBUG__
-#define dbg(A) std::cerr << red_str("[mods::player]debug:") << A << "\n";
-#define eqd(A) std::cerr << green_str("[equipment]debug:") << A << "\n";
-#define dsd(A) std::cerr << green_str("[destructor]debug:") << A << "\n";
-#define NPC_SEND_DEBUG(a){ std::cerr << "[player-output--NPC_SEND_DEBUG--][NPC:" << this->name().c_str() << "][uuid:" << this->uuid() << "]->'" << a <<"'\n"; }
+	#define dbg(A) std::cerr << red_str("[mods::player]debug:") << A << "\n";
+	#define eqd(A) std::cerr << green_str("[equipment]debug:") << A << "\n";
+	#define dsd(A) std::cerr << green_str("[destructor]debug:") << A << "\n";
+	#define NPC_SEND_DEBUG(a){ std::cerr << "[player-output--NPC_SEND_DEBUG--][NPC:" << this->name().c_str() << "][uuid:" << this->uuid() << "]->'" << a <<"'\n"; }
 #else
-#define dbg(A)
-#define eqd(A)
-#define dsd(A)
-#define NPC_SEND_DEBUG(a)
+	#define dbg(A)
+	#define eqd(A)
+	#define dsd(A)
+	#define NPC_SEND_DEBUG(a)
 #endif
 
 /**
@@ -192,9 +192,9 @@ namespace mods {
 	};
 	bool player::can_snipe(player_ptr_t target) {
 		return mods::scan::los_find(
-		           std::make_shared<mods::player>(cd()),
-		           target
-		       ).found;
+		        std::make_shared<mods::player>(cd()),
+		        target
+		    ).found;
 	}
 	void player::page(int pg) {
 		assert(pg >= 0);
@@ -212,7 +212,7 @@ namespace mods {
 		if(i < m_pages.size()) {
 			acc += std::string("--[ page number ") + std::to_string(pg +1)  + "/";
 			acc += std::to_string((m_pages.size() / mods::player::PAGE_SIZE) + 1) + \
-			       ":: press (q) to quit or page number ]--";
+			    ":: press (q) to quit or page number ]--";
 		} else {
 			pager_clear();
 			pager_end();
@@ -711,7 +711,7 @@ namespace mods {
 	obj_ptr_t player::get_ammo(const mw_rifle& type) {
 		for(const auto& item : m_char_data->m_carrying) {
 			if(item->has_consumable() && item->consumable()->attributes->consumed_by.compare("RIFLE") == 0 &&
-			        mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type) == type) {
+			    mods::weapon::from_string_to_rifle(item->consumable()->attributes->ammo_type) == type) {
 				return item;
 			}
 		}
@@ -880,9 +880,9 @@ namespace mods {
 		/* TODO: find a better way to do this. this loops through all objects in the game and checks if the person carrying it is the current player */
 		for(auto item = m_char_data->carrying; item->next; item = item->next) {
 			if(std::string(item->name).find(std::string("[") + std::string(tag) + "]") != std::string::npos
-			        &&
-			        m_char_data == item->carried_by
-			  ) {
+			    &&
+			    m_char_data == item->carried_by
+			) {
 				return true;
 			}
 		}
@@ -1019,10 +1019,10 @@ namespace mods {
 		raw_send(world[rnum].name);
 		if(builder_mode()) {
 			write_to_char((std::string("[room_id:") + std::to_string(rnum) + "|number:" +
-			               std::to_string(world[rnum].number) + "|zone:" +
-			               std::to_string(world[rnum].zone)
-			              ),1,1
-			             );
+			        std::to_string(world[rnum].number) + "|zone:" +
+			        std::to_string(world[rnum].zone)
+			    ),1,1
+			);
 		}
 		desc().has_prompt = 0;
 	}
@@ -1257,18 +1257,18 @@ namespace mods {
 		SET_BIT(AFF_FLAGS(cd()), flag);
 		set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 	}
-//void player::affect(mods::flags::aff flag){
-//	SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
-//	set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
-//}
+	//void player::affect(mods::flags::aff flag){
+	//	SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+	//	set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
+	//}
 	void player::remove_affect(uint64_t flag) {
 		REMOVE_BIT(AFF_FLAGS(cd()), flag);
 		remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 	}
-//void player::remove_affect(mods::flags::aff flag){
-//	REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
-//	remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
-//}
+	//void player::remove_affect(mods::flags::aff flag){
+	//	REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+	//	remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
+	//}
 	void player::clear_all_affected() {
 		m_flags[mods::flags::chunk_type_t::LEGACY_AFF] = 0;
 		AFF_FLAGS(cd()) = 0;
@@ -1291,18 +1291,18 @@ namespace mods {
 		SET_BIT(PLR_FLAGS(cd()), flag);
 		set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 	}
-//void player::affect_plr(mods::flags::plr flag){
-//	SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
-//	set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
-//}
+	//void player::affect_plr(mods::flags::plr flag){
+	//	SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+	//	set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
+	//}
 	void player::remove_affect_plr(uint64_t flag) {
 		REMOVE_BIT(PLR_FLAGS(cd()), flag);
 		remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 	}
-//void player::remove_affect_plr(mods::flags::plr flag){
-//	REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
-//	remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
-//}
+	//void player::remove_affect_plr(mods::flags::plr flag){
+	//	REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+	//	remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
+	//}
 	void player::clear_all_affected_plr() {
 		PLR_FLAGS(cd()) = 0;
 	}
@@ -1618,6 +1618,7 @@ namespace mods {
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_LARGE:
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_HEALING:
 			case mods::deferred::EVENT_PLAYER_GOES_VISIBLE:
+			case mods::deferred::EVENT_PLAYER_AERIAL_DRONE_SCAN_OVER:
 			case mods::deferred::EVENT_PLAYER_FINISHES_FEIGN_DEATH: {
 					mods::classes::unblock_event(unblock,uuid());
 					break;
@@ -1694,8 +1695,8 @@ namespace mods {
 						revive_target->sendln("{grn}You dust yourself off and get to your feet!");
 					}
 					send_to_room_except(this->room(), {this->uuid(),revive_target->uuid()},
-					                    "%s is revived by %s!",this->name().c_str(),revive_target->name().c_str()
-					                   );
+					    "%s is revived by %s!",this->name().c_str(),revive_target->name().c_str()
+					);
 					break;
 				}
 			default:
@@ -1883,10 +1884,10 @@ namespace mods {
 				break;
 			case damage_event_t::GUNFIRE_WHIZZED_BY_FROM:
 				this->queue_up(CAT(MSG_GUNFIRE_WHIZZED_BY_FROM_THE_PREFIX(),
-				                   MSG_GUNFIRE_WHIZZED_BY_FROM_THE(),
-				                   dirstr(feedback.from_direction),
-				                   MSG_GUNFIRE_WHIZZED_BY_FROM_THE_SUFFIX()
-				                  ));
+				        MSG_GUNFIRE_WHIZZED_BY_FROM_THE(),
+				        dirstr(feedback.from_direction),
+				        MSG_GUNFIRE_WHIZZED_BY_FROM_THE_SUFFIX()
+				    ));
 				break;
 			case damage_event_t::YOU_INFLICTED_SAME_ROOM_DAMAGE:
 				this->queue_up(CAT("{grn}*** You hit your target *** [",std::to_string(feedback.damage),"]{/grn}"));

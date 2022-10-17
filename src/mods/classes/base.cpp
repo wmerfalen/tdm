@@ -411,6 +411,11 @@ namespace mods::classes {
 			return;
 		}
 		switch(unblock_event) {
+			case mods::deferred::EVENT_PLAYER_AERIAL_DRONE_SCAN_OVER:
+				if(player->ghost()) {
+					player->ghost()->set_aerial_drone_scan(false);
+				}
+				break;
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_SMALL:
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_MEDIUM:
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_ADRENALINE_SHOT_LARGE: {

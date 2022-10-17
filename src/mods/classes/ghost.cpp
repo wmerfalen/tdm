@@ -24,7 +24,8 @@
  * delete or comment out once go to prod
  */
 //#define GHOST_DEBUG_CRYO
-#define GHOST_DEBUG_PENSHOT
+//#define GHOST_DEBUG_PENSHOT
+//#define GHOST_DEBUG_ADS
 namespace mods::rand {
 	extern int roll(int num,int size);
 };
@@ -61,7 +62,91 @@ namespace mods::classes {
 		}
 		return false;
 	}
+	void ghost::set_aerial_drone_scan(bool on_off) {
+		m_has_aerial_drone_scan = on_off;
+		if(m_has_aerial_drone_scan) {
+			if(!(m_overhead_lense & LENSE_AERIAL_DRONE_SCAN)) {
+				m_overhead_lense = m_overhead_lense | LENSE_AERIAL_DRONE_SCAN;
+			}
+		} else {
+			if((m_overhead_lense & LENSE_AERIAL_DRONE_SCAN)) {
+				m_overhead_lense = m_overhead_lense ^ LENSE_AERIAL_DRONE_SCAN;
+			}
+		}
+	}
+	ghost::ghost(const ghost& copy) {
+		std::cerr << "[ghost::ghost copy constructor]\n";
+		m_overhead_lense = copy.m_overhead_lense;
+		m_has_aerial_drone_scan = copy.m_has_aerial_drone_scan;
+		m_target = copy.m_target;
+		m_engaged = copy.m_engaged;
+		m_xray_shot_charges = copy.m_xray_shot_charges;
+		m_gauze_count = copy.m_gauze_count;
+		m_medkit_count = copy.m_medkit_count;
+		m_adrenaline_shot_charges = copy.m_adrenaline_shot_charges;
+
+		m_heal_mode = copy.m_heal_mode;
+
+		m_player = copy.m_player;
+		m_scanned = copy.m_scanned;
+		m_tracking_shot_charges = copy.m_tracking_shot_charges;
+		m_preferences = copy.m_preferences;
+
+		m_mark_target = copy.m_mark_target;
+		m_tracking_shot = copy.m_tracking_shot;
+		m_light_bandage = copy.m_light_bandage;
+		m_suture = copy.m_suture;
+		m_adrenaline_shot = copy.m_adrenaline_shot;
+		m_emp_nade = copy.m_emp_nade;
+		m_chaff_nade = copy.m_chaff_nade;
+		m_sensor_nade = copy.m_sensor_nade;
+		m_ub_shotgun = copy.m_ub_shotgun;
+		m_ub_frag = copy.m_ub_frag;
+		m_guided_missile = copy.m_guided_missile;
+		m_target_limb = copy.m_target_limb;
+		m_plant_claymore = copy.m_plant_claymore;
+		m_plant_shrapnel_claymore = copy.m_plant_shrapnel_claymore;
+		m_plant_corrosive_claymore = copy.m_plant_corrosive_claymore;
+		m_xray_shot = copy.m_xray_shot;
+		m_request_recon = copy.m_request_recon;
+		m_abilities = copy.m_abilities;
+		m_shotgun_ub = copy.m_shotgun_ub;
+		m_frag_ub = copy.m_frag_ub;
+		m_ad_shot = copy.m_ad_shot;
+
+		m_dissipate_charges = copy.m_dissipate_charges;
+
+		m_claymore_count = copy.m_claymore_count;
+		m_corrosive_claymore_count = copy.m_corrosive_claymore_count;
+		m_shrapnel_claymore_count = copy.m_shrapnel_claymore_count;
+
+		m_cryogenic_grenade_count = copy.m_cryogenic_grenade_count;
+		m_penetrating_shot_count = copy.m_penetrating_shot_count;
+		m_flash_underbarrel_charges = copy.m_flash_underbarrel_charges;
+		m_orm = copy.m_orm;
+
+		m_cryogenic_grenade = copy.m_cryogenic_grenade;
+		m_aerial_drone_scan = copy.m_aerial_drone_scan;
+		m_feign_death = copy.m_feign_death;
+		m_flash_underbarrel = copy.m_flash_underbarrel;
+		m_intimidation = copy.m_intimidation;
+		m_penetrating_shot = copy.m_penetrating_shot;
+		m_stealth = copy.m_stealth;
+		m_summon_extraction = copy.m_summon_extraction;
+		m_dissipated = copy.m_dissipated;
+		m_call_count = copy.m_call_count;
+		m_is_penetrating_shot = copy.m_is_penetrating_shot;
+		m_fantom = copy.m_fantom;
+	}
+	std::vector<base::ability_data_t>& ghost::get_abilities() {
+		return m_abilities;
+	}
+	player_ptr_t ghost::get_player_ptr() {
+		return m_player;
+	}
 	void ghost::init() {
+		m_overhead_lense = 0;
+		m_has_aerial_drone_scan = false;
 		m_is_penetrating_shot = false;
 		m_call_count = 0;
 		m_scanned.clear();
@@ -70,7 +155,7 @@ namespace mods::classes {
 		m_dissipated = 0;
 		using skillset_t = ability_data_t::skillset_t;
 		m_abilities = create_abilities({
-			{AERIAL_DRONE_SCAN,"ads","Aerial Drone Scan",skillset_t::ELECTRONICS,&m_drone_scan},
+			{AERIAL_DRONE_SCAN,"ads","Aerial Drone Scan",skillset_t::ELECTRONICS,&m_aerial_drone_scan},
 			{STEALTH,"stealth","stealth",skillset_t::INTELLIGENCE,&m_stealth},
 			{SUMMON_EXTRACTION,"summon","Summon Extraction", skillset_t::STRATEGY,&m_summon_extraction},
 			{XRAY_SHOT,"xray","X-Ray Shot",skillset_t::SNIPING,&m_xray_shot},
@@ -117,9 +202,57 @@ namespace mods::classes {
 		m_adrenaline_shot_charges = 0;
 		m_dissipate_charges = 0;
 		m_penetrating_shot_count = 0;
+		m_fantom = nullptr;
 	}
 	int16_t ghost::save() {
 		return this->m_orm.save();
+	}
+	std::tuple<bool,std::string> ghost::aerial_drone_scan() {
+		uint16_t ticks = 0;
+#ifdef GHOST_DEBUG_ADS
+		ticks = GHOST_AERIAL_DRONE_SCAN_TIER_ONE_DURATION();
+#else
+		if(m_aerial_drone_scan.not_learned()) {
+			set_aerial_drone_scan(false);
+			return {0, "It looks like you still need to train that skill"};
+		}
+		auto s = roll_skill_success(AERIAL_DRONE_SCAN);
+		if(!std::get<0>(s)) {
+			set_aerial_drone_scan(false);
+			return {0,std::get<1>(s)};
+		}
+		switch(tier(m_player)) {
+			case 1:
+			default:
+				ticks = GHOST_AERIAL_DRONE_SCAN_TIER_ONE_DURATION();
+				break;
+			case 2:
+				ticks = GHOST_AERIAL_DRONE_SCAN_TIER_TWO_DURATION();
+				break;
+			case 3:
+				ticks = GHOST_AERIAL_DRONE_SCAN_TIER_THREE_DURATION();
+				break;
+		}
+		if(m_aerial_drone_scan.awful() || m_aerial_drone_scan.terrible() || m_aerial_drone_scan.okay()) {
+			ticks += dice(5,5);
+		}
+		if(m_aerial_drone_scan.learned()) {
+			ticks += dice(5,10);
+		}
+		if(m_aerial_drone_scan.mastered() || m_aerial_drone_scan.elite()) {
+			ticks += dice(10,10);
+		}
+#endif
+		set_aerial_drone_scan(true);
+		mods::globals::defer_queue->push_ticks_event(ticks, m_player->uuid(),mods::deferred::EVENT_PLAYER_AERIAL_DRONE_SCAN_OVER);
+		return {1, "Your drone launches into the air and begins scanning the area..."};
+	}
+
+	const uint8_t& ghost::overhead_lense() const {
+		return m_overhead_lense;
+	}
+	const bool& ghost::has_aerial_drone_scan() const {
+		return m_has_aerial_drone_scan;
 	}
 	void ghost::replenish_notify(std::string_view v) {
 		m_player->sendln(v.data());
@@ -400,22 +533,22 @@ namespace mods::classes {
 		if(free_shot) {
 			++m_penetrating_shot_count;
 		}
-		auto fantom = create_object(PENETRATING_SHOT_RIFLE_YAML.data());
+		if(!m_fantom) {
+			m_fantom = create_object(PENETRATING_SHOT_RIFLE_YAML.data());
+		}
 
 		auto primary = m_player->primary();
-		m_player->equip(fantom,WEAR_PRIMARY);
+		m_player->equip(m_fantom,WEAR_PRIMARY);
 
 		int i = 0;
 		auto occupants = mods::globals::get_room_list_from_position(m_player,direction);
 		for(auto& target : occupants) {
-			//player_ptr_t& attacker,player_ptr_t& victim,direction_t direction,uint8_t distance,obj_ptr_t& weapon);
-			auto weapon = m_player->primary();
 			mods::combat_composer::snipe_target(
 			    m_player,//attacker,
 			    target, // victim
 			    NORTH, // direction
 			    2, // distance
-			    weapon
+			    m_fantom
 			);
 			++i;
 			if(i > extra_shots) {
@@ -428,8 +561,13 @@ namespace mods::classes {
 		if(primary != nullptr) {
 			m_player->equip(primary,WEAR_PRIMARY);
 		}
-		mods::globals::dispose_object(fantom->uuid);
 		return {true,"You fire off a penetrating shot!"};
+	}
+	ghost::~ghost() {
+		if(m_fantom) {
+			mods::globals::dispose_object(m_fantom->uuid);
+			m_fantom = nullptr;
+		}
 	}
 	std::tuple<bool,std::string> ghost::intimidate_target(uuid_t npc_uuid) {
 		bool worked = false;
@@ -997,6 +1135,19 @@ namespace mods::class_abilities::ghost {
 		}
 		player->sendln(std::get<1>(status));
 	}
+	ACMD(do_aerial_drone_scan) {
+		PLAYER_CAN("ghost.aerial_drone_scan");
+		if(player->ghost()->has_aerial_drone_scan()) {
+			player->errorln("You already have a drone scan active");
+			return;
+		}
+		auto status = player->ghost()->aerial_drone_scan();
+		if(!std::get<0>(status)) {
+			player->errorln(std::get<1>(status));
+			return;
+		}
+		player->sendln(std::get<1>(status));
+	}
 	void init() {
 		mods::interpreter::add_command("ghost:adrenaline_shot", POS_RESTING, do_inject_adrenaline_shot, 0,0);
 		mods::interpreter::add_command("ghost:dissipate", POS_RESTING, do_dissipate, 0,0);
@@ -1018,5 +1169,6 @@ namespace mods::class_abilities::ghost {
 		mods::interpreter::add_command("build_shrapnel_claymore", POS_RESTING, do_build_shrapnel_claymore, 0,0);
 		mods::interpreter::add_command("ghost:toss_cryogenic_grenade", POS_RESTING, do_toss_cryogenic_grenade, 0,0);
 		mods::interpreter::add_command("ghost:fire_penetrating_shot", POS_RESTING, do_fire_penetrating_shot, 0,0);
+		mods::interpreter::add_command("ghost:aerial_drone_scan", POS_RESTING, do_aerial_drone_scan, 0,0);
 	}
 };

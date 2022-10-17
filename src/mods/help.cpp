@@ -1102,6 +1102,7 @@ namespace mods::help {
 			"use_flash_underbarrel",
 			"attach_frag",
 			"attach_shotgun",
+			"ghost:aerial_drone_scan",
 		};
 		send_class_header(player,"GHOST");
 		for(auto topic : topics) {

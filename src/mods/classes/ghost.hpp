@@ -15,6 +15,7 @@ namespace mods::combat_composer::phases {
 
 using ghost_orm_t = mods::orm::ghost;
 namespace mods::classes {
+	static constexpr uint8_t LENSE_AERIAL_DRONE_SCAN = 1;
 	struct ghost : base {
 			friend class mods::classes::super_user_fiddler;
 			static constexpr std::string_view CRYOGENIC_GRENADE_YAML = "explosive/cryogenic-grenade.yml";
@@ -53,13 +54,9 @@ namespace mods::classes {
 				REQUEST_RECON,
 				MARK_TARGET,
 			};
-			std::vector<ability_data_t>& get_abilities() {
-				return m_abilities;
-			}
+			std::vector<ability_data_t>& get_abilities();
 
-			player_ptr_t get_player_ptr() override {
-				return m_player;
-			}
+			player_ptr_t get_player_ptr() override;
 
 			long created_at;
 
@@ -71,7 +68,8 @@ namespace mods::classes {
 			/* constructors and destructors */
 			ghost();
 			ghost(player_ptr_t);
-			~ghost() = default;
+			ghost(const ghost& copy);
+			~ghost();
 			void init();
 
 			void set_player(player_ptr_t);
@@ -93,6 +91,12 @@ namespace mods::classes {
 			std::vector<uuid_t> get_targets_scanned_by_drone();
 			std::vector<uuid_t> get_scanned() const;
 			void set_scanned(std::vector<uuid_t>);
+
+			/** aerial drone scan ability */
+			std::tuple<bool,std::string> aerial_drone_scan();
+			void set_aerial_drone_scan(bool on_off);
+			const bool& has_aerial_drone_scan() const;
+			const uint8_t& overhead_lense() const;
 
 			/** database routines */
 			int16_t load_by_player(player_ptr_t&);
@@ -159,7 +163,10 @@ namespace mods::classes {
 
 			void apply_penetrating_shot_mods(mods::combat_composer::phases::calculated_damage_t& damage);
 			bool is_penetrating_shot();
+
 		private:
+			uint8_t m_overhead_lense;
+			bool m_has_aerial_drone_scan;
 			void replenish_notify(std::string_view);
 			uuid_t m_target;
 			bool m_engaged;
@@ -214,7 +221,7 @@ namespace mods::classes {
 			ghost_orm_t	m_orm;
 
 			skill_t m_cryogenic_grenade;
-			skill_t m_drone_scan;
+			skill_t m_aerial_drone_scan;
 			skill_t m_feign_death;
 			skill_t m_flash_underbarrel;
 			skill_t m_intimidation;
@@ -224,6 +231,7 @@ namespace mods::classes {
 			bool m_dissipated;
 			uint16_t m_call_count;
 			bool m_is_penetrating_shot;
+			obj_ptr_t m_fantom;
 	};
 	void ghost_advance_level(player_ptr_t& player);
 	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t& player);
