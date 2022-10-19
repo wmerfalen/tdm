@@ -156,6 +156,33 @@ namespace mods::classes {
 		return m_player;
 	}
 	bool ghost::has_mana_for_skill(uint16_t skill) {
+		switch((ability_t)skill) {
+			case AERIAL_DRONE_SCAN:
+			case DISSIPATE:
+			case FEIGN_DEATH:
+			case INTIMIDATION:
+			case LIGHT_BANDAGE:
+			case SUTURE:
+			case ADRENALINE_SHOT:
+			case SENSOR_NADE:
+			case GUIDED_MISSILE:
+			case TARGET_LIMB:
+			case REQUEST_RECON:
+				break;
+			default:
+			case PENETRATING_SHOT:
+			case CRYOGENIC_GRENADE:
+			case FLASH_UNDERBARREL:
+			case TRACKING_SHOT:
+			case MARK_TARGET:
+			case PLANT_CLAYMORE:
+			case SHRAPNEL_CLAYMORE:
+			case CORROSIVE_CLAYMORE:
+			case UB_SHOTGUN:
+			case UB_FRAG:
+			case XRAY_SHOT:
+				return true;
+		}
 		for(const auto& ability : m_abilities) {
 			if(ability.ability_value == skill) {
 				return m_player->mana() >= ability.mana_cost;
@@ -164,6 +191,33 @@ namespace mods::classes {
 		return false;
 	}
 	void ghost::use_mana_for_skill(uint16_t skill) {
+		switch((ability_t)skill) {
+			case AERIAL_DRONE_SCAN:
+			case DISSIPATE:
+			case FEIGN_DEATH:
+			case INTIMIDATION:
+			case LIGHT_BANDAGE:
+			case SUTURE:
+			case ADRENALINE_SHOT:
+			case SENSOR_NADE:
+			case GUIDED_MISSILE:
+			case TARGET_LIMB:
+			case REQUEST_RECON:
+				break;
+			default:
+			case PENETRATING_SHOT:
+			case CRYOGENIC_GRENADE:
+			case FLASH_UNDERBARREL:
+			case TRACKING_SHOT:
+			case MARK_TARGET:
+			case PLANT_CLAYMORE:
+			case SHRAPNEL_CLAYMORE:
+			case CORROSIVE_CLAYMORE:
+			case UB_SHOTGUN:
+			case UB_FRAG:
+			case XRAY_SHOT:
+				return;
+		}
 		for(const auto& ability : m_abilities) {
 			if(ability.ability_value == skill) {
 				m_player->mana() -= ability.mana_cost;
@@ -237,10 +291,15 @@ namespace mods::classes {
 #ifdef GHOST_DEBUG_ADS
 		ticks = GHOST_AERIAL_DRONE_SCAN_TIER_ONE_DURATION();
 #else
+		if(!has_mana_for_skill(AERIAL_DRONE_SCAN)) {
+			return {0,"You don't have enough mana!"};
+		}
+
 		if(m_aerial_drone_scan.not_learned()) {
 			set_aerial_drone_scan(false);
 			return {0, "It looks like you still need to train that skill"};
 		}
+		use_mana_for_skill(AERIAL_DRONE_SCAN);
 		auto s = roll_skill_success(AERIAL_DRONE_SCAN);
 		if(!std::get<0>(s)) {
 			set_aerial_drone_scan(false);
@@ -318,6 +377,11 @@ namespace mods::classes {
 			m_player->sendln("It looks like you still need to train that skill");
 			return;
 		}
+		if(!has_mana_for_skill(DISSIPATE)) {
+			m_player->sendln("You don't have enough mana!");
+			return;
+		}
+		use_mana_for_skill(DISSIPATE);
 		/**
 		 * TODO: if the weight of gear and equipment is low, then stealth will last longer
 		 */
@@ -339,6 +403,11 @@ namespace mods::classes {
 			m_player->sendln("It looks like you still need to train that skill");
 			return;
 		}
+		if(!has_mana_for_skill(DISSIPATE)) {
+			m_player->sendln("You don't have enough mana!");
+			return;
+		}
+		use_mana_for_skill(DISSIPATE);
 		uint8_t weight_index = (uint8_t)target->effective_weight_index();
 		if(m_dissipate.awful() || m_dissipate.terrible() || m_dissipate.okay()) {
 			stealth = dice(1, 8) + 1 + (m_player->level() / 4) + dice(1,weight_index);
@@ -374,6 +443,10 @@ namespace mods::classes {
 			m_player->sendln("It looks like you still need to train that skill");
 			return {0, "It looks like you still need to train that skill"};
 		}
+		if(!has_mana_for_skill(FEIGN_DEATH)) {
+			return {0,"You don't have enough mana!"};
+		}
+		use_mana_for_skill(FEIGN_DEATH);
 		auto s = roll_skill_success(FEIGN_DEATH);
 		if(!std::get<0>(s)) {
 			return {0,std::get<1>(s)};
@@ -414,6 +487,10 @@ namespace mods::classes {
 		if(m_dissipate_charges == 0) {
 			return {false,"{red}You don't have any dissipate charges{/red}"};
 		}
+		if(!has_mana_for_skill(DISSIPATE)) {
+			return {0,"You don't have enough mana!"};
+		}
+		use_mana_for_skill(DISSIPATE);
 		auto s = roll_skill_success(DISSIPATE);
 		if(!std::get<0>(s)) {
 			return s;
@@ -508,6 +585,10 @@ namespace mods::classes {
 	}
 	std::tuple<bool,std::string> ghost::fire_penetrating_shot_at(const direction_t& direction) {
 		m_is_penetrating_shot = true;
+		if(!has_mana_for_skill(PENETRATING_SHOT)) {
+			return {0,"You don't have enough mana!"};
+		}
+		use_mana_for_skill(PENETRATING_SHOT);
 		auto s = roll_skill_success(PENETRATING_SHOT);
 		uint8_t extra_shots = 1;
 		if(!std::get<0>(s)) {
@@ -677,6 +758,10 @@ namespace mods::classes {
 			return {0,"You cannot find your target anywhere!"};
 		}
 		uint16_t ticks = 0;
+		if(!has_mana_for_skill(FLASH_UNDERBARREL)) {
+			return {0,"You don't have enough mana!"};
+		}
+		use_mana_for_skill(FLASH_UNDERBARREL);
 		auto s = roll_skill_success(FLASH_UNDERBARREL);
 		if(!std::get<0>(s)) {
 			return {0,std::get<1>(s)};
@@ -738,6 +823,10 @@ namespace mods::classes {
 		if(m_ad_shot.active()) {
 			return {0,"You already have an adrenaline shot active!"};
 		}
+		if(!has_mana_for_skill(ADRENALINE_SHOT)) {
+			return {0,"You don't have enough mana!"};
+		}
+		use_mana_for_skill(ADRENALINE_SHOT);
 		auto s = roll_skill_success(ADRENALINE_SHOT);
 		if(std::get<0>(s)) {
 			m_adrenaline_shot.use_skill(m_player);
@@ -795,6 +884,10 @@ namespace mods::classes {
 		}
 	}
 	std::tuple<bool,std::string> ghost::suture() {
+		if(!has_mana_for_skill(SUTURE)) {
+			return {0,"You don't have enough mana!"};
+		}
+		use_mana_for_skill(SUTURE);
 		auto s = roll_skill_success(SUTURE);
 		if(!std::get<0>(s)) {
 			return s;
@@ -874,6 +967,9 @@ namespace mods::classes {
 		if(!victim || victim->visibility() == 0) {
 			return {0,"Cannot find your victim!"};
 		}
+		if(!has_mana_for_skill(XRAY_SHOT)) {
+			return {0,"You don't have enough mana!"};
+		}
 		auto s = roll_skill_success(XRAY_SHOT);
 		if(!std::get<0>(s)) {
 			return s;
@@ -894,6 +990,10 @@ namespace mods::classes {
 		m_player->sendln("Your target died.");
 	}
 	std::tuple<bool,std::string> ghost::mark_target(std::string_view target) {
+		if(!has_mana_for_skill(MARK_TARGET)) {
+			return {0,"You don't have enough mana!"};
+		}
+		use_mana_for_skill(MARK_TARGET);
 		auto s = roll_skill_success(MARK_TARGET);
 		if(!std::get<0>(s)) {
 			return s;
@@ -924,7 +1024,11 @@ namespace mods::classes {
 	}
 
 	std::tuple<bool,std::string> ghost::tracking_shot(std::string_view target, direction_t direction) {
+		if(!has_mana_for_skill(TRACKING_SHOT)) {
+			return {0,"You don't have enough mana!"};
+		}
 		if(m_tracking_shot_charges) {
+			use_mana_for_skill(TRACKING_SHOT);
 			int depth = 6;
 			mods::scan::vec_player_data data;
 			mods::scan::los_scan_direction(m_player->cd(),depth,&data,direction);
@@ -961,6 +1065,10 @@ namespace mods::classes {
 	}
 	std::tuple<bool,std::string> ghost::light_bandage() {
 		if(m_gauze_count) {
+			if(!has_mana_for_skill(LIGHT_BANDAGE)) {
+				return {0,"You don't have enough mana!"};
+			}
+			use_mana_for_skill(LIGHT_BANDAGE);
 			auto s = roll_skill_success(LIGHT_BANDAGE);
 			--m_gauze_count;
 			if(std::get<0>(s)) {
@@ -978,6 +1086,10 @@ namespace mods::classes {
 		if(m_frag_ub.is_attached() && m_frag_ub.ammo()) {
 			return {1,"Already attached. To detach, use 'detach_frag_underbarrel'."};
 		}
+		if(!has_mana_for_skill(UB_FRAG)) {
+			return {0,"You don't have enough mana!"};
+		}
+		use_mana_for_skill(UB_FRAG);
 		auto s = roll_skill_success(UB_FRAG);
 		if(std::get<0>(s)) {
 			m_ub_frag.use_skill(m_player);
