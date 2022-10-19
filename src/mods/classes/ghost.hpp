@@ -29,8 +29,7 @@ namespace mods::classes {
 			enum ability_t {
 				NONE = 0,
 				AERIAL_DRONE_SCAN,
-				STEALTH,
-				SUMMON_EXTRACTION,
+				DISSIPATE,
 				XRAY_SHOT,
 				FEIGN_DEATH,
 				PLANT_CLAYMORE,
@@ -78,9 +77,7 @@ namespace mods::classes {
 			void apply_stealth_to_player(player_ptr_t&);
 			std::pair<int16_t,std::string> feign_death();
 			void feign_death_done();
-			std::pair<int16_t,std::string> summon_extraction(room_rnum);
 
-			void intimidate(uuid_t);
 			std::pair<bool,std::string>  pass_through_door_attempt(int direction);
 
 			/** will return how many turns the attacker will be distracted until it re-engages the player */
@@ -110,9 +107,6 @@ namespace mods::classes {
 			std::tuple<bool,std::string> intimidate_target(uuid_t npc_uuid);
 			uint8_t cryogenic_grenade_count() const;
 			std::tuple<bool,std::string> toss_cryogenic_grenade_towards(const direction_t& direction, uint8_t rooms);
-
-			/** applies it to the entire room. every will get flashed */
-			std::tuple<bool,std::string> use_flash_underbarrel();
 
 			void use_claymore(uuid_t);
 			uint8_t claymore_count() const;
@@ -144,6 +138,7 @@ namespace mods::classes {
 			std::tuple<bool,std::string> engage();
 			std::tuple<bool,std::string> disengage();
 			void consume_shotgun_underbarrel_ammo();
+			std::tuple<bool,std::string> use_flash_underbarrel(const uuid_t& npc_uuid);
 
 
 			std::tuple<bool,std::string> tracking_shot(std::string_view target, direction_t direction);
@@ -226,8 +221,7 @@ namespace mods::classes {
 			skill_t m_flash_underbarrel;
 			skill_t m_intimidation;
 			skill_t m_penetrating_shot;
-			skill_t m_stealth;
-			skill_t m_summon_extraction;
+			skill_t m_dissipate;
 			bool m_dissipated;
 			uint16_t m_call_count;
 			bool m_is_penetrating_shot;

@@ -25,6 +25,8 @@
 ./mods/classes/ghost.cpp:	->toss_cryogenic_grenade
 ./mods/classes/ghost.cpp:	->fire_penetrating_shot
 ./mods/classes/ghost.cpp:	->aerial_drone_scan
+./mods/classes/ghost.cpp:	->intimidate
+./mods/classes/ghost.cpp:	->flash_underbarrel
 ./mods/classes/engineer.cpp:	->drone_bomb
 ./mods/classes/breacher.cpp:->teep
 ./mods/rifle.cpp:	->rifle_me
@@ -67,6 +69,7 @@
 ./mods/values.cpp:			->get_value
 ./mods/values.cpp:			->revert_value_to_default
 ./mods/values.cpp:			->list_values
+./mods/terrify.cpp:	->terrify_me_for
 ./mods/orm/player-base-ability.cpp:		->save_my_pba
 ./act.item.cpp:->put
 ./act.item.cpp:->get

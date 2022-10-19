@@ -18,7 +18,11 @@
 #include "../levels.hpp"
 #include "../medic.hpp"
 #include "../combat-composer/shared.hpp"
+#include "../npc.hpp"
+#include "../blind.hpp"
+#include "../terrify.hpp"
 
+extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 /**
  * This enables us to have unlimited cryogenic grenades for testing
  * delete or comment out once go to prod
@@ -131,8 +135,7 @@ namespace mods::classes {
 		m_flash_underbarrel = copy.m_flash_underbarrel;
 		m_intimidation = copy.m_intimidation;
 		m_penetrating_shot = copy.m_penetrating_shot;
-		m_stealth = copy.m_stealth;
-		m_summon_extraction = copy.m_summon_extraction;
+		m_dissipate = copy.m_dissipate;
 		m_dissipated = copy.m_dissipated;
 		m_call_count = copy.m_call_count;
 		m_is_penetrating_shot = copy.m_is_penetrating_shot;
@@ -157,12 +160,10 @@ namespace mods::classes {
 		using skillset_t = ability_data_t::skillset_t;
 		m_abilities = create_abilities({
 			{AERIAL_DRONE_SCAN,"ads","Aerial Drone Scan",skillset_t::ELECTRONICS,&m_aerial_drone_scan},
-			{STEALTH,"stealth","stealth",skillset_t::INTELLIGENCE,&m_stealth},
-			{SUMMON_EXTRACTION,"summon","Summon Extraction", skillset_t::STRATEGY,&m_summon_extraction},
+			{DISSIPATE,"dissipate","Dissipate",skillset_t::INTELLIGENCE,&m_dissipate},
 			{XRAY_SHOT,"xray","X-Ray Shot",skillset_t::SNIPING,&m_xray_shot},
 			{PENETRATING_SHOT,"penshot","Penetrating Shot",skillset_t::SNIPING,&m_penetrating_shot},
 			{FEIGN_DEATH,"feign","Feign Death",skillset_t::STRATEGY,&m_feign_death},
-			{PLANT_CLAYMORE,"claymore","Plant Claymore",skillset_t::DEMOLITIONS,&m_plant_claymore},
 			{INTIMIDATION,"intimidation","Intimidation",skillset_t::INTELLIGENCE,&m_intimidation},
 			{CRYOGENIC_GRENADE,"cryo","Cryogenic Grenade",skillset_t::DEMOLITIONS,&m_cryogenic_grenade},
 			{FLASH_UNDERBARREL,"flash","Flash Underbarrel",skillset_t::WEAPON_HANDLING,&m_flash_underbarrel},
@@ -170,8 +171,6 @@ namespace mods::classes {
 			{LIGHT_BANDAGE,shorthand::LIGHT_BANDAGE.data(),"Light Bandage",skillset_t::MEDICAL,&m_light_bandage},
 			{SUTURE,"suture","Suture",skillset_t::MEDICAL,&m_suture},
 			{ADRENALINE_SHOT,"as","Adrenaline Shot",skillset_t::MEDICAL,&m_adrenaline_shot},
-			//{EMP_NADE,"emp","EMP Grenade",skillset_t::DEMOLITIONS,&m_emp_nade},
-			//{CHAFF_NADE,"chaff","Chaff Grenade",skillset_t::DEMOLITIONS,&m_chaff_nade},
 			{SENSOR_NADE,"sensor","Sensor Grenade",skillset_t::INTELLIGENCE,&m_sensor_nade},
 			{UB_SHOTGUN,"ubs","Underbarrel Shotgun",skillset_t::DEMOLITIONS,&m_ub_shotgun},
 			{UB_FRAG,"ubf","Underbarrel Nade Launcher",skillset_t::DEMOLITIONS,&m_ub_frag},
@@ -291,48 +290,48 @@ namespace mods::classes {
 	}
 	void ghost::apply_stealth_to(obj_ptr_t& target) {
 		int stealth = 0;
-		if(m_stealth.not_learned()) {
+		if(m_dissipate.not_learned()) {
 			m_player->sendln("It looks like you still need to train that skill");
 			return;
 		}
 		/**
 		 * TODO: if the weight of gear and equipment is low, then stealth will last longer
 		 */
-		if(m_stealth.awful() || m_stealth.terrible() || m_stealth.okay()) {
+		if(m_dissipate.awful() || m_dissipate.terrible() || m_dissipate.okay()) {
 			stealth = dice(1, 8) + 1 + (m_player->level() / 4);
 		}
-		if(m_stealth.learned()) {
+		if(m_dissipate.learned()) {
 			stealth = dice(3, 8) + 3 + (m_player->level() / 4);
 		}
 
-		if(m_stealth.mastered() || m_stealth.elite()) {
+		if(m_dissipate.mastered() || m_dissipate.elite()) {
 			stealth = 100 + dice(3, 8);
 		}
 		mods::object_utils::change_visibility(target,- stealth);
 	}
 	void ghost::apply_stealth_to_player(player_ptr_t& target) {
 		int stealth = 0;
-		if(m_stealth.not_learned()) {
+		if(m_dissipate.not_learned()) {
 			m_player->sendln("It looks like you still need to train that skill");
 			return;
 		}
 		uint8_t weight_index = (uint8_t)target->effective_weight_index();
-		if(m_stealth.awful() || m_stealth.terrible() || m_stealth.okay()) {
+		if(m_dissipate.awful() || m_dissipate.terrible() || m_dissipate.okay()) {
 			stealth = dice(1, 8) + 1 + (m_player->level() / 4) + dice(1,weight_index);
 		}
 
-		if(m_stealth.learned()) {
+		if(m_dissipate.learned()) {
 			stealth = dice(3, 8) + 3 + (m_player->level() / 4) + dice(weight_index,10);
 		}
 
-		if(m_stealth.mastered()) {
+		if(m_dissipate.mastered()) {
 			/**
 			 * Maximum: 2.15 minutes
 			 * values: 50,3,40,10,8
 			 */
 			stealth = 50 + dice(3, 40) + dice(weight_index * 10, 8);
 		}
-		if(m_stealth.elite()) {
+		if(m_dissipate.elite()) {
 			/**
 			 * Maximum 3.66 minutes
 			 * values: 64, 5, 40, 12, 12
@@ -383,9 +382,6 @@ namespace mods::classes {
 		m_player->set_position(POS_DEAD);
 		return {1, MSG_YOU_FEIGN_DEATH()};
 	}
-	std::pair<int16_t,std::string> ghost::summon_extraction(room_rnum room) {
-		return {0,""};
-	}
 	/* constructors and destructors */
 	ghost::ghost() {
 		m_player = nullptr;
@@ -394,7 +390,7 @@ namespace mods::classes {
 		if(m_dissipate_charges == 0) {
 			return {false,"{red}You don't have any dissipate charges{/red}"};
 		}
-		auto s = roll_skill_success(STEALTH);
+		auto s = roll_skill_success(DISSIPATE);
 		if(!std::get<0>(s)) {
 			return s;
 		}
@@ -572,10 +568,38 @@ namespace mods::classes {
 		}
 	}
 	std::tuple<bool,std::string> ghost::intimidate_target(uuid_t npc_uuid) {
-		bool worked = false;
-		std::string msg = "";
-		return {worked,msg};
+		auto npc = npc_by_uuid(npc_uuid);
+		if(!npc) {
+			return {0,"You cannot find your target anywhere!"};
+		}
+		uint16_t ticks = 0;
+		auto s = roll_skill_success(INTIMIDATION);
+		if(!std::get<0>(s)) {
+			return {0,std::get<1>(s)};
+		}
+		std::string str;
+		if(m_intimidation.awful() || m_intimidation.terrible() || m_intimidation.okay()) {
+			ticks = GHOST_INTIMIDATION_TICKS_INITIATE();
+			str = "$n drains the confidence of $N";
+		}
+		if(m_intimidation.learned()) {
+			ticks = GHOST_INTIMIDATION_TICKS_LEARNED();
+			str = "$n effectively kills the morale of $N";
+		}
+		if(m_intimidation.mastered()) {
+			ticks = GHOST_INTIMIDATION_TICKS_MASTERED();
+			str = "$n's {red}bright red{/red} eyes read the soul of $N";
+		}
+		if(m_intimidation.elite()) {
+			ticks = GHOST_INTIMIDATION_TICKS_ELITE();
+			str = "$n {red}kills{/red} any semblance of sanity in $N";
+		}
+		act(str,true, m_player->cd(), nullptr, npc->cd(), TO_ROOM);
+		mods::terrify::terrify_for(npc, ticks);
+		mods::globals::defer_queue->push_ticks_event(ticks,npc_uuid,mods::deferred::EVENT_INTIMIDATION_WEARS_OFF);
+		return {true,""};
 	}
+
 	uint8_t ghost::cryogenic_grenade_count() const {
 		return m_cryogenic_grenade_count;
 	}
@@ -617,10 +641,39 @@ namespace mods::classes {
 		return {true,""};
 	}
 	/** applies it to the entire room. every will get flashed */
-	std::tuple<bool,std::string> ghost::use_flash_underbarrel() {
-		bool has_charge = !!m_flash_underbarrel_charges;
-		std::string msg = "";
-		return {has_charge,msg};
+	std::tuple<bool,std::string> ghost::use_flash_underbarrel(const uuid_t& npc_uuid) {
+		if(m_flash_underbarrel_charges == 0) {
+			return {0,"You don't have any flash underbarrel charges!"};
+		}
+		auto npc = ptr_by_uuid(npc_uuid);
+		if(!npc) {
+			return {0,"You cannot find your target anywhere!"};
+		}
+		uint16_t ticks = 0;
+		auto s = roll_skill_success(FLASH_UNDERBARREL);
+		if(!std::get<0>(s)) {
+			return {0,std::get<1>(s)};
+		}
+		std::string str;
+		if(m_flash_underbarrel.awful() || m_flash_underbarrel.terrible() || m_flash_underbarrel.okay()) {
+			ticks = GHOST_FLASH_UNDERBARREL_TICKS_INITIATE();
+			str = "A high-powered flash appears from $n's underbarrel attachment";
+		}
+		if(m_flash_underbarrel.learned()) {
+			ticks = GHOST_FLASH_UNDERBARREL_TICKS_LEARNED();
+			str = "A high-powered flash appears from $n's underbarrel attachment";
+		}
+		if(m_flash_underbarrel.mastered()) {
+			ticks = GHOST_FLASH_UNDERBARREL_TICKS_MASTERED();
+			str = "An unyielding amount of light pours from $n's underbarrel attachment blinding $N!";
+		}
+		if(m_flash_underbarrel.elite()) {
+			ticks = GHOST_FLASH_UNDERBARREL_TICKS_ELITE();
+			str = "$N's vision is utterly {red}DECIMATED{/red} from $n's underbarrel attachment";
+		}
+		act(str,true, m_player->cd(), nullptr, npc->cd(), TO_ROOM);
+		mods::blind::blind_for(npc,ticks);
+		return {true,""};
 	}
 	/*
 	std::string ghost::skills_page() {
@@ -1153,6 +1206,52 @@ namespace mods::class_abilities::ghost {
 		}
 		player->sendln(std::get<1>(status));
 	}
+	ACMD(do_intimidate) {
+		static constexpr std::string_view usage = "Usage: ghost:intimidate <npc>";
+		PLAYER_CAN("ghost.intimidate");
+		DO_HELP_WITH_ZERO("ghost.intimidate");
+		auto vec_args = PARSE_ARGS();
+		if(argshave()->size_gt(0)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		uuid_t npc =  mods::examine::find_player_by_name(player, vec_args[0]);
+		if(npc == 0) {
+			player->errorln("Couldn't find any npc in the same room that matches that name!");
+			player->sendln(usage);
+			return;
+		}
+
+		auto status = player->ghost()->intimidate_target(npc);
+		if(!std::get<0>(status)) {
+			player->errorln(std::get<1>(status));
+			return;
+		}
+		/** On success, the function doesn't send a string to send back to the user */
+	}
+	ACMD(do_flash_underbarrel) {
+		static constexpr std::string_view usage = "Usage: ghost:flash_underbarrel <npc>";
+		PLAYER_CAN("ghost.flash_underbarrel");
+		DO_HELP_WITH_ZERO("ghost.flash_underbarrel");
+		auto vec_args = PARSE_ARGS();
+		if(argshave()->size_gt(0)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		uuid_t npc =  mods::examine::find_player_by_name(player, vec_args[0]);
+		if(npc == 0) {
+			player->errorln("Couldn't find any npc in the same room that matches that name!");
+			player->sendln(usage);
+			return;
+		}
+
+		auto status = player->ghost()->use_flash_underbarrel(npc);
+		if(!std::get<0>(status)) {
+			player->errorln(std::get<1>(status));
+			return;
+		}
+		/** On success, the function doesn't send a string to send back to the user */
+	}
 	void init() {
 		mods::interpreter::add_command("ghost:adrenaline_shot", POS_RESTING, do_inject_adrenaline_shot, 0,0);
 		mods::interpreter::add_command("ghost:dissipate", POS_RESTING, do_dissipate, 0,0);
@@ -1175,5 +1274,7 @@ namespace mods::class_abilities::ghost {
 		mods::interpreter::add_command("ghost:toss_cryogenic_grenade", POS_RESTING, do_toss_cryogenic_grenade, 0,0);
 		mods::interpreter::add_command("ghost:fire_penetrating_shot", POS_RESTING, do_fire_penetrating_shot, 0,0);
 		mods::interpreter::add_command("ghost:aerial_drone_scan", POS_RESTING, do_aerial_drone_scan, 0,0);
+		mods::interpreter::add_command("ghost:intimidate", POS_RESTING, do_intimidate, 0,0);
+		mods::interpreter::add_command("ghost:flash_underbarrel", POS_RESTING, do_flash_underbarrel, 0,0);
 	}
 };

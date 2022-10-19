@@ -549,12 +549,6 @@ namespace mods::help::pages {
 	    "\r\n"
 	    "this documentation was written on 2020-11-16."
 	    ;
-	HELP_STR h_summon_extraction = "usage: summon_extraction\r\n"
-	    "description: \r\n"
-	    "example: \r\n"
-	    "\r\n"
-	    "this documentation was written on 2020-11-16."
-	    ;
 	HELP_STR h_xray_shot = "usage: xray_shot\r\n"
 	    "description: \r\n"
 	    "example: \r\n"
@@ -1077,6 +1071,7 @@ namespace mods::help {
 	}
 	void send_ghost_help_menu(player_ptr_t& player) {
 		static std::vector<std::string> topics = {
+			"ghost:intimidate",
 			"ghost:adrenaline_shot",
 			"ghost:dissipate",
 			"ghost:mark",
@@ -1376,7 +1371,6 @@ namespace mods::help {
 			{"go_dark",h_go_dark},
 			{"conceal",h_conceal},
 			{"feign_death",h_feign_death},
-			{"summon_extraction",h_summon_extraction},
 			{"xray_shot",h_xray_shot},
 			{"reload",h_reload},
 

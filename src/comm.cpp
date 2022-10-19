@@ -36,6 +36,7 @@
 #include "mods/corrosive.hpp"
 #include "mods/bleed.hpp"
 #include "mods/blind.hpp"
+#include "mods/terrify.hpp"
 #include "mods/melt.hpp"
 #include "mods/ensnare.hpp"
 #include "mods/resting.hpp"
@@ -55,37 +56,37 @@ namespace mods::mobs::room_watching {
 };
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
-# include <mcheck.h>
+	#include <mcheck.h>
 #endif
 
 #ifdef CIRCLE_MACINTOSH		/* Includes for the Macintosh */
-# define SIGPIPE 13
-# define SIGALRM 14
-/* GUSI headers */
-# include <sys/ioctl.h>
-/* Codewarrior dependant */
-# include <SIOUX.h>
-# include <console.h>
+	#define SIGPIPE 13
+	#define SIGALRM 14
+	/* GUSI headers */
+	#include <sys/ioctl.h>
+	/* Codewarrior dependant */
+	#include <SIOUX.h>
+	#include <console.h>
 #endif
 
 #ifdef CIRCLE_WINDOWS		/* Includes for Win32 */
-# ifdef __BORLANDC__
-#  include <dir.h>
-# else /* MSVC */
-#  include <direct.h>
-# endif
-# include <mmsystem.h>
+	#ifdef __BORLANDC__
+		#include <dir.h>
+	#else /* MSVC */
+		#include <direct.h>
+	#endif
+	#include <mmsystem.h>
 #endif /* CIRCLE_WINDOWS */
 
 #ifdef CIRCLE_AMIGA		/* Includes for the Amiga */
-# include <sys/ioctl.h>
-# include <clib/socket_protos.h>
+	#include <sys/ioctl.h>
+	#include <clib/socket_protos.h>
 #endif /* CIRCLE_AMIGA */
 
 #ifdef CIRCLE_ACORN		/* Includes for the Acorn (RiscOS) */
-# include <socklib.h>
-# include <inetlib.h>
-# include <sys/ioctl.h>
+	#include <socklib.h>
+	#include <inetlib.h>
+	#include <sys/ioctl.h>
 #endif
 /*
  * Note, most includes for all platforms are in sysdep.h.  The list of
@@ -102,13 +103,13 @@ namespace mods::mobs::room_watching {
 #include "house.h"
 
 #ifdef HAVE_ARPA_TELNET_H
-#include <arpa/telnet.h>
+	#include <arpa/telnet.h>
 #else
-#include "telnet.h"
+	#include "telnet.h"
 #endif
 
 #ifndef INVALID_SOCKET
-#define INVALID_SOCKET (-1)
+	#define INVALID_SOCKET (-1)
 #endif
 
 #include "mods/acl/config-parser.hpp" 		/** Access Control List */
@@ -179,7 +180,7 @@ std::size_t handle_disconnects() {
 	/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
 	std::vector<typename mods::globals::player_list_t::iterator> players_to_destroy;
 	for(auto it = mods::globals::player_list.begin();
-	        it != mods::globals::player_list.end(); ++it) {
+	    it != mods::globals::player_list.end(); ++it) {
 		auto desc = (*it)->desc();
 		if(STATE(desc) == CON_CLOSE || STATE(desc) == CON_DISCONNECT) {
 			players_to_destroy.push_back(it);
@@ -244,7 +245,7 @@ int set_sendbuf(socket_t s);
 void setup_log(const char *filename, int fd);
 int open_logfile(const char *filename, FILE *stderr_fp);
 #if defined(POSIX)
-sigfunc *my_signal(int signo, sigfunc *func);
+	sigfunc *my_signal(int signo, sigfunc *func);
 #endif
 
 /* extern fcnts */
@@ -924,9 +925,9 @@ void game_loop(socket_t mother_desc) {
 	on_shutdown();
 }
 #ifdef __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
-#define rb_bht_debug(a) /**/
+	#define rb_bht_debug(a) /**/
 #else
-#define rb_bht_debug(a){ std::cerr << "[run_behaviour_trees][behaviour_trees]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
+	#define rb_bht_debug(a){ std::cerr << "[run_behaviour_trees][behaviour_trees]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
 #endif
 void run_behaviour_trees() {
 	rb_bht_debug("run_behaviour_trees [ENTRY]");
@@ -979,6 +980,7 @@ void heartbeat(int pulse) {
 	mods::date_time::heartbeat();
 	static int mins_since_crashsave = 0;
 	static uint16_t blind_ticks = 0;
+	static uint16_t terrify_ticks = 0;
 	mods::globals::current_tick++;
 	if(!(pulse % mods::zone::refresh_tick_resolution())) {
 		if(mods::zone::should_refresh()) {
@@ -1001,9 +1003,14 @@ void heartbeat(int pulse) {
 		mods::rooms::affects::process();
 		mods::resting::process_players_resting();
 		++blind_ticks;
+		++terrify_ticks;
 		if(!(blind_ticks % mods::blind::tick_resolution())) {
 			mods::blind::process_players();
 			blind_ticks = 0;
+		}
+		if(!(blind_ticks % mods::terrify::tick_resolution())) {
+			mods::terrify::process_players();
+			terrify_ticks = 0;
 		}
 	}
 
@@ -1484,8 +1491,8 @@ void destroy_socket(socket_t sock_fd) {
 int destroy_player(player_ptr_t&& player) {
 	char_from_room(player);
 	auto pl_iterator = std::find(mods::globals::player_list.begin(),
-	                             mods::globals::player_list.end(),
-	                             player);
+	        mods::globals::player_list.end(),
+	        player);
 	destroy_socket(player->socket());
 	bool removed = false;
 	{
@@ -1504,7 +1511,7 @@ int destroy_player(player_ptr_t&& player) {
 	do {
 		removed = false;
 		for(auto it = mods::globals::socket_map.begin() ;
-		        it != mods::globals::socket_map.end(); ++it) {
+		    it != mods::globals::socket_map.end(); ++it) {
 			auto name = player->name();
 			if(it->first == 0) {
 				mods::globals::socket_map.erase(it->first);
@@ -1693,7 +1700,7 @@ int process_output(mods::descriptor_data& in_t) {
  */
 
 #if defined(CIRCLE_ACORN)
-#define write	socketwrite
+	#define write	socketwrite
 #endif
 
 /* perform_socket_write for all Non-Windows platforms */
@@ -2247,7 +2254,7 @@ void nonblock(socket_t s) {
 #elif defined(CIRCLE_UNIX) || defined(CIRCLE_OS2) || defined(CIRCLE_MACINTOSH)
 
 #ifndef O_NONBLOCK
-#define O_NONBLOCK O_NDELAY
+	#define O_NONBLOCK O_NDELAY
 #endif
 
 void nonblock(socket_t s) {
@@ -2575,7 +2582,7 @@ const char *ACTNULL = "<NULL>";
 
 /* higher-level communication: the act() function */
 void perform_act(const char *orig, char_data *ch, obj_data *obj,
-                 const void *vict_obj, char_data *to) {
+    const void *vict_obj, char_data *to) {
 	char lbuf[MAX_STRING_LENGTH], *buf, *j;
 	bool uppercasenext = FALSE;
 
@@ -2717,10 +2724,10 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 
 
 #define SENDOK(ch)	((ch)->has_desc && (to_sleeping || AWAKE(ch)) && \
-		(IS_NPC(ch) || !PLR_FLAGGED((ch), PLR_WRITING)))
+    (IS_NPC(ch) || !PLR_FLAGGED((ch), PLR_WRITING)))
 
 void act(const std::string& str, int hide_invisible, char_data *ch,
-         obj_data *obj, void *vict_obj, int type) {
+    obj_data *obj, void *vict_obj, int type) {
 	int to_sleeping;
 
 	if(str.length() == 0) {
@@ -2852,7 +2859,7 @@ int open_logfile(const char *filename, FILE *stderr_fp) {
 
 	if(logfile) {
 		printf("Using log file '%s'%s.\n",
-		       filename, stderr_fp ? " with redirection" : "");
+		    filename, stderr_fp ? " with redirection" : "");
 		return (TRUE);
 	}
 

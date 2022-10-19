@@ -9,9 +9,9 @@
 #include "players/db-load.hpp"
 
 #ifdef __MENTOC_MODS_LEVELS_DEBUG__
-#define m_debug(A) std::cerr << "[mods::levels][debug]:" << A <<"\n";
+	#define m_debug(A) std::cerr << "[mods::levels][debug]:" << A <<"\n";
 #else
-#define m_debug(A)
+	#define m_debug(A)
 #endif
 
 extern player_ptr_t new_player();
@@ -41,10 +41,10 @@ namespace mods::levels {
 			is_altered = TRUE;
 			if(is_altered) {
 				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(player->cd())), TRUE,
-				       CAT(player->name().c_str()," advanced ",num_levels," level", num_levels == 1 ? "" : "s",
-				           "to reach level ",
-				           player->level(),".").c_str()
-				      );
+				    CAT(player->name().c_str()," advanced ",num_levels," level", num_levels == 1 ? "" : "s",
+				        "to reach level ",
+				        player->level(),".").c_str()
+				);
 				if(num_levels == 1) {
 					player->sendln(ADVANCE_LEVEL_MESSAGE());
 				} else {
@@ -179,22 +179,22 @@ namespace mods::levels {
 
 	void report_advances(std::array<uint16_t,STAT_INDEXES_SIZE> stats) {
 		std::cerr <<
-		          "hp:" << stats[STAT_HP] << "\n"\
-		          << "strength:		" << stats[STAT_STRENGTH] << "\n"\
-		          << "constitution:		" << stats[STAT_CONSTITUTION] << "\n"\
-		          << "dexterity:		" << stats[STAT_DEXTERITY] << "\n"\
-		          << "intelligence:		" << stats[STAT_INTELLIGENCE]<< "\n"\
-		          << "wisdom:		" << stats[STAT_WISDOM] << "\n"\
-		          << "electronics:		" << stats[STAT_ELECTRONICS] << "\n"\
-		          << "chemistry:		" << stats[STAT_CHEMISTRY] << "\n"\
-		          << "strategy:		" << stats[STAT_STRATEGY]<< "\n"\
-		          << "marksmanship:		" << stats[STAT_MARKSMANSHIP] << "\n"\
-		          << "sniping:		" << stats[STAT_SNIPING] << "\n"\
-		          << "weapon_handling:		" << stats[STAT_WEAPON_HANDLING] << "\n"\
-		          << "demolitions:		" << stats[STAT_DEMOLITIONS] << "\n"\
-		          << "armor:		" << stats[STAT_ARMOR] << "\n"\
-		          << "medical:		" << stats[STAT_MEDICAL] << "\n"\
-		          << "charisma:		" << stats[STAT_CHARISMA] << "\n";
+		    "hp:" << stats[STAT_HP] << "\n"\
+		    << "strength:		" << stats[STAT_STRENGTH] << "\n"\
+		    << "constitution:		" << stats[STAT_CONSTITUTION] << "\n"\
+		    << "dexterity:		" << stats[STAT_DEXTERITY] << "\n"\
+		    << "intelligence:		" << stats[STAT_INTELLIGENCE]<< "\n"\
+		    << "wisdom:		" << stats[STAT_WISDOM] << "\n"\
+		    << "electronics:		" << stats[STAT_ELECTRONICS] << "\n"\
+		    << "chemistry:		" << stats[STAT_CHEMISTRY] << "\n"\
+		    << "strategy:		" << stats[STAT_STRATEGY]<< "\n"\
+		    << "marksmanship:		" << stats[STAT_MARKSMANSHIP] << "\n"\
+		    << "sniping:		" << stats[STAT_SNIPING] << "\n"\
+		    << "weapon_handling:		" << stats[STAT_WEAPON_HANDLING] << "\n"\
+		    << "demolitions:		" << stats[STAT_DEMOLITIONS] << "\n"\
+		    << "armor:		" << stats[STAT_ARMOR] << "\n"\
+		    << "medical:		" << stats[STAT_MEDICAL] << "\n"\
+		    << "charisma:		" << stats[STAT_CHARISMA] << "\n";
 	}
 
 	/*
@@ -519,7 +519,7 @@ namespace mods::levels {
 
 		/** unclassified */
 		charisma = 0
-		           ;
+		    ;
 		switch(triads[MELEE]) {
 			case 1:
 				hp += level * (LOW_TRIAD);
@@ -791,10 +791,10 @@ namespace mods::levels {
 		std::string header = "player_class,level,HP,Mana,Move,Strength,con,dex,intel,wis,electronics,chemistry,strategy,marksmanship,sniping,weapon_handling,demolitions,armor,medical,charisma\n";
 		fwrite(header.c_str(),sizeof(char),header.length(),fp);
 		for(const auto& player_class : {
-		            player_class_t::GHOST,
-		            player_class_t::MARINE,
-		            player_class_t::BREACHER
-		        }) {
+		        player_class_t::GHOST,
+		        player_class_t::MARINE,
+		        player_class_t::BREACHER
+		    }) {
 			for(unsigned player_level = 1; player_level <= LVL_IMMORT; ++player_level) {
 				std::string str_class = mods::util::player_class_to_string(player_class);
 				auto player = new_player();

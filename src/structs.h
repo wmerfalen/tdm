@@ -353,6 +353,7 @@ enum player_class_t {
 #define AFF_DISORIENT					(1 << 22)		/* User is disoriented */
 #define AFF_SCANNED						(1 << 23)
 #define AFF_TRACKED           (1 << 24)   /* User is being tracked */
+#define AFF_TERRIFY (1 << 25)   /* User is being tracked */
 
 
 
