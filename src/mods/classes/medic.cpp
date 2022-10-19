@@ -18,21 +18,21 @@ namespace mods::classes {
 		m_stim_pistol_ammo = medic::DEFAULT_STARTING_STIM_PISTOL_AMMO;
 		using s = base::ability_data_t::skillset_t;
 		m_abilities = {
-			{STIM_SHOT,"stim","Stim Shot",s::MEDICAL,&m_stim_shot},
-			{PARASITIC_AMMO,"ps","Parasitic Ammo",s::MEDICAL,&m_parasitic_ammo},
-			{ADRENALINE_SHOT,"adrenal","Adrenaline Shot",s::MEDICAL,&m_adrenaline_shot},
-			{DRONE_HEALER,"drone","Drone Healer",s::ELECTRONICS,&m_drone_healer},
-			{HEARTBEAT_SENSOR,"hbs","Heartbeat Sensor",s::ELECTRONICS,&m_heartbeat_sensor},
-			{EMERGENCY_EVAC,"evac","Emergency Evac",s::STRATEGY,&m_emergency_evac},
-			{DEUTERIUM_SHOTGUN_UNDERBARREL,"dts","Deuterium Underbarrel",s::DEMOLITIONS,&m_deuterium_shotgun_ub},
-			{CORROSIVE_AGENT,"agent","Corrosive Agent",s::DEMOLITIONS,&m_corrosive_agent},
-			{SEAL_ROOM,"seal","Seal Room",s::DEMOLITIONS,&m_seal_room},
-			{SHOTGUN_SNIPER,"ss","Shotgun Sniper",s::SNIPING,&m_shotgun_sniper},
-			{HAZARDOUS_WASTE_SHOT,"hazard","Hazardous Waste Shot",s::SNIPING,&m_hazardous_waste_shot},
-			{SEDATIVE_HYPNOTIC,"sed","Sedative Hypnotic",s::SNIPING,&m_sedative_hypnotic},
-			{ARMOR_BONUS,"armor","Armor Bonus",s::ARMOR,&m_armor_bonus},
-			{NO_FACTOR_ARMOR,"nof","No Factor Armor",s::ARMOR,&m_no_factor_armor},
-			{SURGICAL_PRECISION,"surg","Surgical Precision",s::WEAPON_HANDLING,&m_surgical_precision},
+			{STIM_SHOT,"stim","Stim Shot",s::MEDICAL,&m_stim_shot,0},
+			{PARASITIC_AMMO,"ps","Parasitic Ammo",s::MEDICAL,&m_parasitic_ammo,0},
+			{ADRENALINE_SHOT,"adrenal","Adrenaline Shot",s::MEDICAL,&m_adrenaline_shot,0},
+			{DRONE_HEALER,"drone","Drone Healer",s::ELECTRONICS,&m_drone_healer,0},
+			{HEARTBEAT_SENSOR,"hbs","Heartbeat Sensor",s::ELECTRONICS,&m_heartbeat_sensor,0},
+			{EMERGENCY_EVAC,"evac","Emergency Evac",s::STRATEGY,&m_emergency_evac,0},
+			{DEUTERIUM_SHOTGUN_UNDERBARREL,"dts","Deuterium Underbarrel",s::DEMOLITIONS,&m_deuterium_shotgun_ub,0},
+			{CORROSIVE_AGENT,"agent","Corrosive Agent",s::DEMOLITIONS,&m_corrosive_agent,0},
+			{SEAL_ROOM,"seal","Seal Room",s::DEMOLITIONS,&m_seal_room,0},
+			{SHOTGUN_SNIPER,"ss","Shotgun Sniper",s::SNIPING,&m_shotgun_sniper,0},
+			{HAZARDOUS_WASTE_SHOT,"hazard","Hazardous Waste Shot",s::SNIPING,&m_hazardous_waste_shot,0},
+			{SEDATIVE_HYPNOTIC,"sed","Sedative Hypnotic",s::SNIPING,&m_sedative_hypnotic,0},
+			{ARMOR_BONUS,"armor","Armor Bonus",s::ARMOR,&m_armor_bonus,0},
+			{NO_FACTOR_ARMOR,"nof","No Factor Armor",s::ARMOR,&m_no_factor_armor,0},
+			{SURGICAL_PRECISION,"surg","Surgical Precision",s::WEAPON_HANDLING,&m_surgical_precision,0},
 		};
 	}
 	void medic::heal_player(player_ptr_t& target) {
@@ -46,14 +46,14 @@ namespace mods::classes {
 			const char* short_self_name = (m_player->sex() == SEX_MALE ? "his" : "her");
 			m_player->psendln("You aim your stim pistol at yourself...");
 			send_to_room_except(m_player->room(),
-			                    m_player,
-			                    "%s aims a stim pistol at %s\r\n",
-			                    m_player->name().c_str(),self_name);
+			    m_player,
+			    "%s aims a stim pistol at %s\r\n",
+			    m_player->name().c_str(),self_name);
 			m_player->psendln("You fire your stim pistol.");
 			send_to_room_except(m_player->room(),
-			                    m_player,
-			                    "%s fires a stim pistol into %s arm\r\n",
-			                    m_player->name().c_str(),short_self_name);
+			    m_player,
+			    "%s fires a stim pistol into %s arm\r\n",
+			    m_player->name().c_str(),short_self_name);
 			auto amount = scaled_heal(m_player);
 			m_player->hp() += amount;
 			m_player->sendln(CAT("{grn}You gain {blu}", amount,"{/blu} {grn}hit points.{/grn}"));
@@ -61,16 +61,16 @@ namespace mods::classes {
 		}
 
 		*m_player << "You aim your stim pistol at " <<
-		          target->name() << " carefully...\r\n";
+		    target->name() << " carefully...\r\n";
 		const char* gender = (m_player->cd()->player.sex == SEX_MALE ? "his" : "her");
 		send_to_room_except(m_player->room(),
 		{m_player->cd(),target->cd()},
 		"%s aims a stim pistol at %s\r\n",
 		m_player->name().c_str(),
 		target->name().c_str()
-		                   );
+		);
 		*target << m_player->name() << " aims " << gender <<
-		        " stim pistol at you...\r\n";
+		    " stim pistol at you...\r\n";
 		*m_player << "You fire your stim pistol.\r\n";
 		*target << m_player->name() << " fires!\r\n";
 		send_to_room_except(m_player->room(),
@@ -78,7 +78,7 @@ namespace mods::classes {
 		"%s fires a stim pistol at %s\r\n",
 		m_player->name().c_str(),
 		target->name().c_str()
-		                   );
+		);
 		auto amount = scaled_heal(target);
 		target->hp() += amount;
 		*target << "You gain " << amount << " hit points.\r\n";

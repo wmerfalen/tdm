@@ -7,6 +7,12 @@
 using contagion_orm_t = mods::orm::contagion;
 namespace mods::classes {
 	struct contagion : base {
+			bool has_mana_for_skill(uint16_t skill) {
+				return true;
+			}
+			void use_mana_for_skill(uint16_t skill) {
+			}
+
 			static constexpr std::string_view PATHOGEN_AMMUNITION_YAML = "pox-ordinance-pathogen-ammunition.yml";
 			friend class mods::classes::super_user_fiddler;
 

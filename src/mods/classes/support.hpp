@@ -6,6 +6,12 @@
 using support_orm_t = mods::orm::support;
 namespace mods::classes {
 	struct support : base {
+			bool has_mana_for_skill(uint16_t skill) {
+				return true;
+			}
+			void use_mana_for_skill(uint16_t skill) {
+			}
+
 			types kind() {
 				return types::SUPPORT;
 			}

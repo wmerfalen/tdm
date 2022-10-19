@@ -8,6 +8,13 @@ using medic_orm_t = mods::orm::medic;
 
 namespace mods::classes {
 	struct medic : public base {
+			bool has_mana_for_skill(uint16_t skill) {
+				return true;
+			}
+			void use_mana_for_skill(uint16_t skill) {
+			}
+
+
 			types kind() {
 				return types::MEDIC;
 			}
@@ -145,6 +152,12 @@ namespace mods::classes {
 			};
 
 
+			bool has_mana_for_skill(ability_t skill) {
+				return true;
+			}
+			void use_mana_for_skill(ability_t skill) {
+				return;
+			}
 
 			ability_list_t& get_abilities() override {
 				return m_abilities;

@@ -17,6 +17,9 @@ using ghost_orm_t = mods::orm::ghost;
 namespace mods::classes {
 	static constexpr uint8_t LENSE_AERIAL_DRONE_SCAN = 1;
 	struct ghost : base {
+			bool has_mana_for_skill(uint16_t skill);
+			void use_mana_for_skill(uint16_t skill);
+
 			friend class mods::classes::super_user_fiddler;
 			static constexpr std::string_view CRYOGENIC_GRENADE_YAML = "explosive/cryogenic-grenade.yml";
 			static constexpr std::string_view PENETRATING_SHOT_RIFLE_YAML = "rifle/ax799-fantom.yml";

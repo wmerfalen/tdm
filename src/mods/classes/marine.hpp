@@ -49,6 +49,11 @@ namespace mods::classes {
 				return m_abilities;
 			}
 
+			bool has_mana_for_skill(uint16_t skill) {
+				return true;
+			}
+			void use_mana_for_skill(uint16_t skill) {
+			}
 
 
 		private:

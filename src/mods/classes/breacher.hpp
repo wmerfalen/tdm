@@ -7,6 +7,12 @@
 using breacher_orm_t = mods::orm::breacher;
 namespace mods::classes {
 	struct breacher : base {
+			bool has_mana_for_skill(uint16_t skill) {
+				return true;
+			}
+			void use_mana_for_skill(uint16_t skill) {
+			}
+
 			using primary_choice_t = mods::weapon::breacher::primary_choice_t;
 			static int16_t destroy(player_ptr_t& player);
 			types kind() {

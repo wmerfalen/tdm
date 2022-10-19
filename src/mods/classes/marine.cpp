@@ -7,23 +7,24 @@ namespace mods::classes {
 	}
 	void marine::init() {
 		using s = base::ability_data_t::skillset_t;
+		uint16_t M = 0;
 		m_abilities = create_abilities({
-			{TRACKING_SHOT,"ts","Tracking Shot",s::SNIPING,&m_tracking_shot},
-			{LIGHT_BANDAGE,"lb","Light Bandage",s::MEDICAL,&m_light_bandage},
-			{SUTURE,"suture","Suture",s::MEDICAL,&m_suture},
-			{ADRENALINE_SHOT,"as","Adrenaline Shot",s::MEDICAL,&m_adrenaline_shot},
-			{EMP_NADE,"emp","EMP Grenade",s::DEMOLITIONS,&m_emp_nade},
-			{CHAFF_NADE,"chaff","Chaff Grenade",s::DEMOLITIONS,&m_chaff_nade},
-			{SENSOR_NADE,"sensor","Sensor Grenade",s::INTELLIGENCE,&m_sensor_nade},
-			{UB_SHOTGUN,"ubs","Underbarrel Shotgun",s::DEMOLITIONS,&m_ub_shotgun},
-			{UB_FRAG,"ubf","Underbarrel Nade Launcher",s::DEMOLITIONS,&m_ub_frag},
-			{GUIDED_MISSILE,"gm","Guided Missile",s::DEMOLITIONS,&m_guided_missile},
-			{TARGET_LIMB,"limb","Target Limb",s::SNIPING,&m_target_limb},
-			{PLANT_CLAYMORE,"claymore","Plant Claymore",s::DEMOLITIONS,&m_plant_claymore},
-			{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",s::DEMOLITIONS,&m_plant_shrapnel_claymore},
-			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",s::DEMOLITIONS,&m_plant_corrosive_claymore},
-			{XRAY_SHOT,"xray","X-Ray Shot",s::SNIPING,&m_xray_shot},
-			{REQUEST_RECON,"recon","Request Recon",s::INTELLIGENCE,&m_request_recon},
+			{TRACKING_SHOT,"ts","Tracking Shot",s::SNIPING,&m_tracking_shot,M},
+			{LIGHT_BANDAGE,"lb","Light Bandage",s::MEDICAL,&m_light_bandage,M},
+			{SUTURE,"suture","Suture",s::MEDICAL,&m_suture,M},
+			{ADRENALINE_SHOT,"as","Adrenaline Shot",s::MEDICAL,&m_adrenaline_shot,M},
+			{EMP_NADE,"emp","EMP Grenade",s::DEMOLITIONS,&m_emp_nade,M},
+			{CHAFF_NADE,"chaff","Chaff Grenade",s::DEMOLITIONS,&m_chaff_nade,M},
+			{SENSOR_NADE,"sensor","Sensor Grenade",s::INTELLIGENCE,&m_sensor_nade,M},
+			{UB_SHOTGUN,"ubs","Underbarrel Shotgun",s::DEMOLITIONS,&m_ub_shotgun,M},
+			{UB_FRAG,"ubf","Underbarrel Nade Launcher",s::DEMOLITIONS,&m_ub_frag,M},
+			{GUIDED_MISSILE,"gm","Guided Missile",s::DEMOLITIONS,&m_guided_missile,M},
+			{TARGET_LIMB,"limb","Target Limb",s::SNIPING,&m_target_limb,M},
+			{PLANT_CLAYMORE,"claymore","Plant Claymore",s::DEMOLITIONS,&m_plant_claymore,M},
+			{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",s::DEMOLITIONS,&m_plant_shrapnel_claymore,M},
+			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",s::DEMOLITIONS,&m_plant_corrosive_claymore,M},
+			{XRAY_SHOT,"xray","X-Ray Shot",s::SNIPING,&m_xray_shot,M},
+			{REQUEST_RECON,"recon","Request Recon",s::INTELLIGENCE,&m_request_recon,M},
 		});
 	}
 

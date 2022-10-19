@@ -87,9 +87,10 @@ namespace mods::classes {
 				std::string pretty;
 				skillset_t category;
 				skill_t* skill_ptr;
+				uint16_t mana_cost;
 				ability_data_t() = default;
-				ability_data_t(uint8_t av,std::string sh,std::string p,skillset_t c,skill_t* ptr) :
-					ability_value(av), shortened(sh), pretty(p), category(c), skill_ptr(ptr) { }
+				ability_data_t(uint8_t av,std::string sh,std::string p,skillset_t c,skill_t* ptr,uint16_t cost) :
+					ability_value(av), shortened(sh), pretty(p), category(c), skill_ptr(ptr), mana_cost(cost) { }
 				std::string dump() const;
 			};
 
@@ -139,6 +140,8 @@ namespace mods::classes {
 			ability_list_t& cqc_abilities();
 			ability_list_t create_abilities(ability_list_t additional_list);
 			virtual ability_list_t& get_abilities() = 0;
+			virtual bool has_mana_for_skill(uint16_t skill) = 0;
+			virtual void use_mana_for_skill(uint16_t skill) = 0;
 
 			skill_t* skill_ptr(std::string_view skill);
 			skill_t* skill_ptr(uint8_t skill);
