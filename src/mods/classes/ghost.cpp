@@ -596,7 +596,6 @@ namespace mods::classes {
 		}
 		act(str,true, m_player->cd(), nullptr, npc->cd(), TO_ROOM);
 		mods::terrify::terrify_for(npc, ticks);
-		mods::globals::defer_queue->push_ticks_event(ticks,npc_uuid,mods::deferred::EVENT_INTIMIDATION_WEARS_OFF);
 		return {true,""};
 	}
 

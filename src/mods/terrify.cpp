@@ -21,6 +21,12 @@
 	#define m_error(MSG) ;;
 #endif
 
+/**
+ * Defining the TERRIFY affect.
+ * When the AFF_TERRIFY bit is set on a target, that target will flee combat and
+ * move 2d3 rooms. They will then stay in that target room unable to perform any
+ * ranged attacks. The target will also be marked.
+ */
 
 namespace mods::terrify {
 	using affect_vector_t = mods::affects::affect_vector_t;
@@ -28,6 +34,7 @@ namespace mods::terrify {
 	using texture_type_t = room_data::texture_type_t;
 	static uint64_t terrify_id = 0;
 	struct terrify_damage_t {
+		int8_t flee_towards;
 		uint64_t id;
 		uuid_t target;
 		uint64_t stop_tick;
@@ -39,11 +46,11 @@ namespace mods::terrify {
 			return false;
 		}
 		std::string report() {
-			return CAT("id:",id,"\ntarget:",target,"\nstop_tick:",stop_tick);
+			return CAT("id:",id,"\ntarget:",target,"\nstop_tick:",stop_tick, "towards: ",flee_towards);
 		}
 		terrify_damage_t() = delete;
 		terrify_damage_t(player_ptr_t victim,
-		    uint64_t ticks) : id(++terrify_id),
+		    uint64_t ticks) : flee_towards(-1), id(++terrify_id),
 			target(victim->uuid()),stop_tick((9 * ticks) + CURRENT_TICK()),cleanup(false) {
 			victim->affect(AFF_TERRIFY);
 			m_debug("[[[[ stop at: " << stop_tick << " which is " << stop_tick - CURRENT_TICK() << " in the future");
@@ -54,6 +61,7 @@ namespace mods::terrify {
 			target = other.target;
 			stop_tick = other.stop_tick;
 			cleanup = other.cleanup;
+			flee_towards =  other.flee_towards;
 		}
 		~terrify_damage_t() {
 			m_debug("[~terrify_damage_t]");
@@ -64,9 +72,41 @@ namespace mods::terrify {
 
 	static terrify_list_t terrify_player_list;
 
+	float get_flee_buff(player_ptr_t& player) {
+		return player->dexterity() / FLEE_DEXTERITY_DIVIDER();
+	}
+	void flee(player_ptr_t player, terrify_damage_t& td) {
+		uint8_t i, attempt;
+		if(player->position() < POS_FIGHTING) {
+			return;
+		}
+
+		auto ch = player->cd();
+
+		if(td.flee_towards == -1 || !CAN_GO(ch,td.flee_towards)) {
+
+			for(i = 0; i < 6; i++) {
+				attempt = rand_number(0, NUM_OF_DIRS - 1);	/* Select a random direction */
+
+				if(CAN_GO(ch, attempt)) {
+					td.flee_towards = attempt;
+					break;
+				}
+			}
+		}
+		act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
+
+		if(do_simple_move(ch, td.flee_towards, TRUE)) {
+			player->sendln("{red}*** TERRIFY ***{/red} You flee head over heels.");
+			return;
+		} else {
+			act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
+		}
+	}
 	void terrify_for(player_ptr_t victim, uint32_t ticks) {
 		m_debug("terrify_for cast on: " << victim->name() << ", for " << ticks << " ticks");
 		terrify_player_list.emplace_back(victim,ticks);
+		flee(victim,terrify_player_list.back());
 		return;
 	}
 	void process_players() {
@@ -75,7 +115,7 @@ namespace mods::terrify {
 			return;
 		}
 		std::vector<uint64_t> player_removals;
-		for(const auto& entry : terrify_player_list) {
+		for(auto& entry : terrify_player_list) {
 			m_debug("[TERRIFY](for loop)[1]");
 			auto victim = ptr_by_uuid(entry.target);
 			if(!victim || victim->position() == POS_DEAD) {
@@ -93,9 +133,13 @@ namespace mods::terrify {
 				continue;
 			}
 			m_debug("victim: " << entry.target);
-			/**TODO got lucky? undo terrifyness now!
-			 * uto damage = mods::rand::roll(entry.dice_count,entry.dice_sides);
-			 */
+			flee(victim,entry);
+			auto move_points = victim->move();
+			auto random_nerf = dice(2,6) * 10;
+			int sub = move_points - random_nerf;
+			if(sub >= 0) {
+				victim->move() -= random_nerf;
+			}
 		}
 		m_debug("[player_removals.size() check]");
 		if(player_removals.size()) {
