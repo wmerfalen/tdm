@@ -4757,6 +4757,7 @@ __MENTOC_MODS_MOBS_melee_combatant_HEADER__	src/mods/mobs/melee-combatant.hpp	2;
 __MENTOC_MODS_MOBS_mp_shotgunner_HEADER__	src/mods/mobs/mp-shotgunner.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_orthos_agent_BEHAVIOUR_TREE_HEADER__	src/mods/mobs/orthos-agent-btree.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_orthos_agent_HEADER__	src/mods/mobs/orthos-agent.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_MOBS_orthos_agent_SHOW_DEBUG_OUTPUT__	src/mods/mobs/orthos-agent.cpp	11;"	kind:macro	line:11	file:
 __MENTOC_MODS_MOBS_orthos_spawn_sentinel_HEADER__	src/mods/mobs/orthos-spawn-sentinel.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_resistance_HEADER__	src/mods/mobs/resistance.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_shoplifter_BEHAVIOUR_TREE_HEADER__	src/mods/mobs/shoplifter-behaviour-tree.hpp	2;"	kind:macro	line:2	file:
@@ -6307,7 +6308,7 @@ cmem	src/mods/mobs/melee-combatant.cpp	16;"	kind:macro	line:16	file:
 cmem	src/mods/mobs/melee-combatant.cpp	494;"	kind:macro	line:494	file:
 cmem	src/mods/mobs/orthos-agent.cpp	15;"	kind:macro	line:15	file:
 cmem	src/mods/mobs/orthos-agent.cpp	19;"	kind:macro	line:19	file:
-cmem	src/mods/mobs/orthos-agent.cpp	586;"	kind:macro	line:586	file:
+cmem	src/mods/mobs/orthos-agent.cpp	587;"	kind:macro	line:587	file:
 cmem	src/mods/mobs/shoplifter.cpp	15;"	kind:macro	line:15	file:
 cmem	src/mods/mobs/shoplifter.cpp	19;"	kind:macro	line:19	file:
 cmem	src/mods/mobs/shoplifter.cpp	301;"	kind:macro	line:301	file:
@@ -7319,7 +7320,7 @@ dispatch_slot	src/mods/builder/slotted-builder.hpp	/^			bool dispatch_slot(std::
 dispatch_unique_armor_event	src/mods/armor/unique-armor.cpp	/^	void dispatch_unique_armor_event(const uuid_t& attacker_uuid, damage_event_t event, player_ptr_t victim) {$/;"	kind:function	line:30	namespace:mods::armor	signature:(const uuid_t& attacker_uuid, damage_event_t event, player_ptr_t victim)
 dispatch_unique_ranged_weapon_event	src/mods/weapons/unique-weapons.cpp	/^	void dispatch_unique_ranged_weapon_event(const uuid_t& attacker_uuid, damage_event_t event, player_ptr_t victim) {$/;"	kind:function	line:43	namespace:mods::weapons	signature:(const uuid_t& attacker_uuid, damage_event_t event, player_ptr_t victim)
 dispatch_watcher	src/mods/mobs/defiler.cpp	/^		bool dispatch_watcher(const uuid_t& defiler_uuid,player_ptr_t& player, const room_rnum& room_id) {$/;"	kind:function	line:620	namespace:mods::mobs::defiler_callbacks	signature:(const uuid_t& defiler_uuid,player_ptr_t& player, const room_rnum& room_id)
-dispatch_watcher	src/mods/mobs/orthos-agent.cpp	/^		bool dispatch_watcher(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id) {$/;"	kind:function	line:573	namespace:mods::mobs::orthos_callbacks	signature:(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id)
+dispatch_watcher	src/mods/mobs/orthos-agent.cpp	/^		bool dispatch_watcher(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id) {$/;"	kind:function	line:574	namespace:mods::mobs::orthos_callbacks	signature:(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id)
 display_signatures	src/mods/builder/slotted-builder.hpp	/^			void display_signatures() {$/;"	kind:function	line:447	struct:mods::builder::slotted_builder	access:public	signature:()
 display_slot_list	src/mods/builder/slotted-builder.hpp	/^			void display_slot_list() {$/;"	kind:function	line:436	struct:mods::builder::slotted_builder	access:public	signature:()
 dispose_breach	src/mods/doors.hpp	/^	static inline void dispose_breach(uuid_t obj_uuid) {$/;"	kind:function	line:103	namespace:mods::doors	signature:(uuid_t obj_uuid)
@@ -11165,7 +11166,7 @@ m_debug	src/mods/mobs/orthos-agent-btree.cpp	19;"	kind:macro	line:19	file:
 m_debug	src/mods/mobs/orthos-agent-btree.cpp	271;"	kind:macro	line:271	file:
 m_debug	src/mods/mobs/orthos-agent.cpp	13;"	kind:macro	line:13	file:
 m_debug	src/mods/mobs/orthos-agent.cpp	17;"	kind:macro	line:17	file:
-m_debug	src/mods/mobs/orthos-agent.cpp	584;"	kind:macro	line:584	file:
+m_debug	src/mods/mobs/orthos-agent.cpp	585;"	kind:macro	line:585	file:
 m_debug	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	19;"	kind:macro	line:19	file:
 m_debug	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	21;"	kind:macro	line:21	file:
 m_debug	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	526;"	kind:macro	line:526	file:
@@ -11294,7 +11295,7 @@ m_debug_mode	src/mods/mobs/defiler.hpp	/^			bool m_debug_mode;$/;"	kind:member	l
 m_debug_mode	src/mods/mobs/goat.hpp	/^			bool m_debug_mode;$/;"	kind:member	line:257	namespace:mods::mobs	file:
 m_debug_plain	src/mods/mobs/orthos-agent.cpp	14;"	kind:macro	line:14	file:
 m_debug_plain	src/mods/mobs/orthos-agent.cpp	18;"	kind:macro	line:18	file:
-m_debug_plain	src/mods/mobs/orthos-agent.cpp	585;"	kind:macro	line:585	file:
+m_debug_plain	src/mods/mobs/orthos-agent.cpp	586;"	kind:macro	line:586	file:
 m_debug_plain	src/mods/mobs/shoplifter.cpp	14;"	kind:macro	line:14	file:
 m_debug_plain	src/mods/mobs/shoplifter.cpp	18;"	kind:macro	line:18	file:
 m_debug_plain	src/mods/mobs/shoplifter.cpp	300;"	kind:macro	line:300	file:
@@ -13123,7 +13124,7 @@ orthos_agent_behaviour_tree	src/mods/mobs/orthos-agent-btree.hpp	/^namespace mod
 orthos_agent_btree	src/mods/mobs/orthos-agent.cpp	/^	namespace orthos_agent_btree {$/;"	kind:namespace	line:23	namespace:mods::mobs	file:
 orthos_agent_list	src/mods/mobs/orthos-agent.cpp	/^	std::forward_list<std::shared_ptr<orthos_agent>>& orthos_agent_list() {$/;"	kind:function	line:475	namespace:mods::mobs	signature:()
 orthos_agent_uuid_list	src/mods/mobs/orthos-agent.hpp	/^	static std::vector<uuid_t> orthos_agent_uuid_list;$/;"	kind:member	line:14	namespace:mods::mobs	file:
-orthos_callbacks	src/mods/mobs/orthos-agent.cpp	/^	namespace orthos_callbacks {$/;"	kind:namespace	line:572	namespace:mods::mobs	file:
+orthos_callbacks	src/mods/mobs/orthos-agent.cpp	/^	namespace orthos_callbacks {$/;"	kind:namespace	line:573	namespace:mods::mobs	file:
 orthos_callbacks	src/mods/mobs/orthos-agent.hpp	/^	namespace orthos_callbacks {$/;"	kind:namespace	line:141	file:
 orthos_callbacks	src/mods/mobs/room-watching.cpp	/^namespace mods::mobs::orthos_callbacks {$/;"	kind:namespace	line:25	class:mods::mobs	file:
 orthos_spawn_sentinel	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	orthos_spawn_sentinel::orthos_spawn_sentinel(uuid_t mob_uuid, std::string variation) {$/;"	kind:function	line:355	class:mods::mobs::orthos_spawn_sentinel	signature:(uuid_t mob_uuid, std::string variation)

@@ -8,15 +8,15 @@
 #include "../loops.hpp"
 #include "../calc-visibility.hpp"
 
-//#define  __MENTOC_MODS_MOBS_orthos_agent_SHOW_DEBUG_OUTPUT__
+#define  __MENTOC_MODS_MOBS_orthos_agent_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_orthos_agent_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) mentoc_prefix_debug("m|m|orthos_agent") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
-#define m_debug_plain(a) mentoc_prefix_debug("m|m|orthos_agent") << a << "\n";
-#define cmem(a) mentoc_prefix_debug("[orthos_agent][memory_footprint]") << a << "\n";
+	#define m_debug(a) mentoc_prefix_debug("m|m|orthos_agent") << "(" << player_ptr->name().c_str() << ") " << a << "\n";
+	#define m_debug_plain(a) mentoc_prefix_debug("m|m|orthos_agent") << a << "\n";
+	#define cmem(a) mentoc_prefix_debug("[orthos_agent][memory_footprint]") << a << "\n";
 #else
-#define m_debug(a)
-#define m_debug_plain(a)
-#define cmem(a)
+	#define m_debug(a)
+	#define m_debug_plain(a)
+	#define cmem(a)
 #endif
 namespace mods::mobs {
 	static constexpr std::size_t BEST_DISTANCE = 1;
@@ -86,11 +86,11 @@ namespace mods::mobs {
 	 */
 	void orthos_agent::enemy_spotted(room_rnum room,uuid_t player) {
 		std::cerr << "##################################################################################" <<
-		          "[orthos_agent] enemy spotted:" << room << "\n" <<
-		          "##################################################################################\n";
+		    "[orthos_agent] enemy spotted:" << room << "\n" <<
+		    "##################################################################################\n";
 		m_debug("##################################################################################" <<
-		        "[orthos_agent] enemy spotted:" << room << "\n" <<
-		        "##################################################################################");
+		    "[orthos_agent] enemy spotted:" << room << "\n" <<
+		    "##################################################################################");
 		//this->spray(player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}
@@ -551,6 +551,7 @@ namespace mods::mobs {
 		}
 		/** Scan for players */
 		int depth = RCT->max_range;
+		m_debug(green_str(CAT("This is my depth: ",depth,"!!!")));
 		mods::scan::vec_player_data vpd;
 		mods::scan::los_scan_for_players(this->cd(),depth,&vpd);
 		std::map<uint8_t,int> scores;
