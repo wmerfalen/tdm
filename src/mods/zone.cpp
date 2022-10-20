@@ -10,7 +10,7 @@
 #include "mob-roam.hpp"
 #include "orm/locker.hpp"
 
-#define __MENTOC_MODS_ZONE_DEBUG__
+//#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
 	#define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
 	#define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";

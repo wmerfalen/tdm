@@ -4,7 +4,7 @@
 #include <iostream>
 #include "../room-data.hpp"
 
-#define __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
+//#define __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
 	#define mzone_debug(a) std::cerr << "[mods::zone]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
 #else

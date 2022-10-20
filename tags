@@ -4581,7 +4581,6 @@ __MENTOC_LOGIN_HEADER__	src/login.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_ACL_LIST_HEADER__	src/mods/acl_list.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_AFFECTS_HEADER__	src/mods/affects.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__	src/mods/intimidate.hpp	6;"	kind:macro	line:6	file:
-__MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__	src/mods/zone.hpp	7;"	kind:macro	line:7	file:
 __MENTOC_MODS_AFFILIATIONS_HEADER__	src/mods/affiliations.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_AOE_HEADER__	src/mods/aoe.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_ARMOR_ADVANCED_PROTECTION_HEADER__	src/mods/armor/advanced-protection.hpp	2;"	kind:macro	line:2	file:
@@ -4758,7 +4757,6 @@ __MENTOC_MODS_MOBS_melee_combatant_HEADER__	src/mods/mobs/melee-combatant.hpp	2;
 __MENTOC_MODS_MOBS_mp_shotgunner_HEADER__	src/mods/mobs/mp-shotgunner.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_orthos_agent_BEHAVIOUR_TREE_HEADER__	src/mods/mobs/orthos-agent-btree.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_orthos_agent_HEADER__	src/mods/mobs/orthos-agent.hpp	2;"	kind:macro	line:2	file:
-__MENTOC_MODS_MOBS_orthos_agent_SHOW_DEBUG_OUTPUT__	src/mods/mobs/orthos-agent.cpp	11;"	kind:macro	line:11	file:
 __MENTOC_MODS_MOBS_orthos_spawn_sentinel_HEADER__	src/mods/mobs/orthos-spawn-sentinel.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_resistance_HEADER__	src/mods/mobs/resistance.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_shoplifter_BEHAVIOUR_TREE_HEADER__	src/mods/mobs/shoplifter-behaviour-tree.hpp	2;"	kind:macro	line:2	file:
@@ -4909,7 +4907,6 @@ __MENTOC_MODS_WEAPON_STAT_LIST_HEADER__	src/mods/weapon-stat-list.hpp	2;"	kind:m
 __MENTOC_MODS_WEAPON_TYPES_HEADER__	src/mods/weapon-types.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_WORLD_CONFIGURATION_HEADER__	src/mods/world-configuration.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_YAML_HEADER__	src/mods/yaml.hpp	2;"	kind:macro	line:2	file:
-__MENTOC_MODS_ZONE_DEBUG__	src/mods/zone.cpp	13;"	kind:macro	line:13	file:
 __MENTOC_MODS_ZONE_HEADER__	src/mods/intimidate.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_ZONE_HEADER__	src/mods/zone.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_admin_tools_stay_HEADER__	src/mods/admin-tools/stay.hpp	2;"	kind:macro	line:2	file:
