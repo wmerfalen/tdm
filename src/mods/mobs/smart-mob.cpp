@@ -7,9 +7,9 @@
 
 //#define  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
-#define sm_debug(a) mentoc_prefix_debug("mods::mobs::smart_mob") << green_str("smart_mob") << a  << "\n";
+	#define sm_debug(a) mentoc_prefix_debug("mods::mobs::smart_mob") << green_str("smart_mob") << a  << "\n";
 #else
-#define sm_debug(a) ;;
+	#define sm_debug(a) ;;
 #endif
 namespace mods::mobs {
 	//static std::shared_ptr<mods::ranged_combat_totals> current;
@@ -92,8 +92,8 @@ namespace mods::mobs {
 			}
 #define MG_REPORT(A)\
 	sm_debug("[[[[ MINI GUNNER SENTINEL DUMP ]]]]" << \
-	#A << ": '" << row[0][#A].c_str() << "'" << \
-	"[[[[ -- MINI GUNNER SENTINEL DUMP -- ]]]]");
+	    #A << ": '" << row[0][#A].c_str() << "'" << \
+	    "[[[[ -- MINI GUNNER SENTINEL DUMP -- ]]]]");
 
 			sm_debug("[status][smart_mob][setting variation data]->");
 			MG_REPORT(mgs_face_direction);
@@ -236,8 +236,8 @@ namespace mods::mobs {
 	 */
 	void smart_mob::enemy_spotted(room_rnum room,uuid_t player) {
 		sm_debug("##################################################################################" <<
-		         "[smart_mob] enemy spotted:" << room << "\n" <<
-		         "##################################################################################");
+		    "[smart_mob] enemy spotted:" << room << "\n" <<
+		    "##################################################################################");
 		//this->spray(this->player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}

@@ -81,6 +81,11 @@ static inline void equip_clamp(T& orig,bool equip,X offset) {
     "\n[mob_dump]\nuuid: '" << __mob->uuid() << "'\n"
 #define DO_HELP(from) if(!mods::help::should_continue(from,argument,player,0)){ return; }
 #define DO_HELP_WITH_ZERO(from) if(!mods::help::should_continue(from,argument,player,1)){ return; }
+#define IS_JEFE(__is_jefe_check_PLAYER) \
+	__is_jefe_check_PLAYER->god_mode() || \
+	__is_jefe_check_PLAYER->implementor_mode() || \
+	__is_jefe_check_PLAYER->builder_mode() ||\
+	__is_jefe_check_PLAYER->get_imp_mode()
 
 /** vim-sorcery: :%s/std::cerr << \(.*\);/d(\1);/ */
 #ifndef __MENTOC_DEBUG__

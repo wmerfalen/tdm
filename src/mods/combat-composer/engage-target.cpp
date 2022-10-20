@@ -27,15 +27,15 @@ namespace mods::combat_composer::engage {
 		static player_ptr_t attacker;
 		static std::shared_ptr<mods::ranged_combat_totals> current;
 #ifdef RCT
-#undef RCT
-#undef ATKR
+	#undef RCT
+	#undef ATKR
 #endif
 
 #define RCT mods::combat_composer::engage::engage_state::current
 #define ATKR mods::combat_composer::engage::engage_state::attacker
 #define INIT_RCT(A) \
-		RCT = A->get_ranged_combat_totals();\
-		ATKR = A;
+	RCT = A->get_ranged_combat_totals();\
+	ATKR = A;
 	};
 
 
@@ -331,9 +331,9 @@ namespace mods::combat_composer::engage {
 			direction_t dir = NORTH;
 			if(rolled_a_critical) {
 				crit = dice(
-				           RCT->damage_dice_count,
-				           RCT->damage_dice_sides
-				       );
+				        RCT->damage_dice_count,
+				        RCT->damage_dice_sides
+				    );
 				mods::combat_composer::phases::report_crit(attacker,victim,crit,dir);
 			}
 			/** calculate headshot */
@@ -742,6 +742,11 @@ namespace mods::combat_composer::engage {
 };//end combat_composer
 namespace mods::combat_composer {
 	bool engage_target(player_ptr_t& attacker,player_ptr_t& victim, obj_ptr_t& weapon) {
+		if(victim) {
+			if(IS_JEFE(victim)) {
+				return false;
+			}
+		}
 		INIT_RCT(attacker);
 
 		attacker->sendln("{grn}[++] Engaging target... [++]{/grn}");
@@ -806,11 +811,11 @@ namespace mods::combat_composer {
 		 * Phase 4: Calculate damage
 		 */
 		auto damage = calculate_weapon_damage(
-		                  attacker,
-		                  victim,
-		                  weapon,
-		                  extra_damage
-		              );
+		        attacker,
+		        victim,
+		        weapon,
+		        extra_damage
+		    );
 
 		/**
 		 * Phase 5: Apply damage to victim
@@ -848,6 +853,11 @@ namespace mods::combat_composer {
 		}
 
 		auto victim = opt_target.value();
+		if(victim) {
+			if(IS_JEFE(victim)) {
+				return false;
+			}
+		}
 		return engage_target(attacker,victim,weapon);
 	}
 };//end namespace combat_composer

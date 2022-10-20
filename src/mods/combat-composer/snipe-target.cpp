@@ -876,6 +876,11 @@ namespace mods::combat_composer {
 	    uint8_t distance,
 	    obj_ptr_t& weapon
 	) {
+		if(victim) {
+			if(IS_JEFE(victim)) {
+				return;
+			}
+		}
 		INIT_RCT();
 		phases::acquired_target_t found_target;
 		found_target.target = victim;
@@ -945,6 +950,11 @@ namespace mods::combat_composer {
 			return;
 		}
 		auto victim = std::move(std::get<1>(status));
+		if(victim.target) {
+			if(IS_JEFE(victim.target)) {
+				return;
+			}
+		}
 		snipe_target(attacker,victim.target,victim.direction,victim.distance,weapon);
 	}
 

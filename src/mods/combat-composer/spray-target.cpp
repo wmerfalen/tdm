@@ -28,18 +28,18 @@ namespace mods::combat_composer {
 		static std::shared_ptr<::mods::ranged_combat_totals> current;
 		static direction_t from_direction;
 #ifdef RCT
-#undef RCT
-#undef ATKR
-#undef STATE_FROM_DIR
+	#undef RCT
+	#undef ATKR
+	#undef STATE_FROM_DIR
 #endif
 
 #define RCT spray_state::current
 #define ATKR spray_state::attacker
 #define STATE_FROM_DIR spray_state::from_direction
 #define INIT_RCT() \
-		RCT = attacker->calculate_ranged_combat_totals(weapon);\
-		ATKR = attacker;\
-		STATE_FROM_DIR = OPPOSITE_DIR(direction);
+	RCT = attacker->calculate_ranged_combat_totals(weapon);\
+	ATKR = attacker;\
+	STATE_FROM_DIR = OPPOSITE_DIR(direction);
 	};
 
 	namespace phases {
@@ -190,6 +190,9 @@ namespace mods::combat_composer {
 					victim = ptr_by_uuid(scanned_target.uuid);
 				}
 				if(!victim) {
+					continue;
+				}
+				if(IS_JEFE(victim)) {
 					continue;
 				}
 				collection.push_front(victim);
@@ -389,6 +392,9 @@ namespace mods::combat_composer {
 			return room_damages;
 		}
 		void apply_damage_to_victim(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,calculated_damage_t d) {
+			if(IS_JEFE(victim)) {
+				return;
+			}
 			/**
 			   5) Calculate damage applied to victim
 			   	THe following are buffs/nerfs in regard to
@@ -557,6 +563,9 @@ namespace mods::combat_composer {
 			victim = nullptr;
 			victim = ptr_by_uuid(pair.first);
 			if(!victim) {
+				continue;
+			}
+			if(IS_JEFE(victim)) {
 				continue;
 			}
 			/**
