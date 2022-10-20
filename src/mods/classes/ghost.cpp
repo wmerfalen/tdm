@@ -235,30 +235,30 @@ namespace mods::classes {
 		m_player = nullptr;
 		m_dissipate_charges = 10;
 		m_dissipated = 0;
-		using skillset_t = ability_data_t::skillset_t;
+		using SK = ability_data_t::skillset_t;
 		m_abilities = create_abilities({
-			{AERIAL_DRONE_SCAN,"ads","Aerial Drone Scan",skillset_t::ELECTRONICS,&m_aerial_drone_scan,GHOST_ADS_MANA_COST()},
-			{DISSIPATE,"dissipate","Dissipate",skillset_t::INTELLIGENCE,&m_dissipate,GHOST_DISSIPATE_MANA_COST()},
-			{XRAY_SHOT,"xray","X-Ray Shot",skillset_t::SNIPING,&m_xray_shot,GHOST_XRAY_SHOT_MANA_COST()},
-			{PENETRATING_SHOT,"penshot","Penetrating Shot",skillset_t::SNIPING,&m_penetrating_shot,GHOST_PENSHOT_MANA_COST()},
-			{FEIGN_DEATH,"feign","Feign Death",skillset_t::STRATEGY,&m_feign_death,GHOST_FEIGN_DEATH_MANA_COST()},
-			{INTIMIDATION,"intimidation","Intimidation",skillset_t::INTELLIGENCE,&m_intimidation,GHOST_INTIMIDATION_MANA_COST()},
-			{CRYOGENIC_GRENADE,"cryo","Cryogenic Grenade",skillset_t::DEMOLITIONS,&m_cryogenic_grenade,GHOST_CRYONADE_MANA_COST()},
-			{FLASH_UNDERBARREL,"flash","Flash Underbarrel",skillset_t::WEAPON_HANDLING,&m_flash_underbarrel,GHOST_FLASHUB_MANA_COST()},
-			{TRACKING_SHOT,"ts","Tracking Shot",skillset_t::SNIPING,&m_tracking_shot,GHOST_TRACKINGSHOT_MANA_COST()},
-			{LIGHT_BANDAGE,shorthand::LIGHT_BANDAGE.data(),"Light Bandage",skillset_t::MEDICAL,&m_light_bandage,GHOST_LIGHTBANDAGE_MANA_COST()},
-			{SUTURE,"suture","Suture",skillset_t::MEDICAL,&m_suture,GHOST_SUTURE_MANA_COST()},
-			{ADRENALINE_SHOT,"as","Adrenaline Shot",skillset_t::MEDICAL,&m_adrenaline_shot,GHOST_ADRENALSHOT_MANA_COST()},
-			{SENSOR_NADE,"sensor","Sensor Grenade",skillset_t::INTELLIGENCE,&m_sensor_nade,GHOST_SENSORNADE_MANA_COST()},
-			{UB_SHOTGUN,"ubs","Underbarrel Shotgun",skillset_t::DEMOLITIONS,&m_ub_shotgun,GHOST_SHOTUB_MANA_COST()},
-			{UB_FRAG,"ubf","Underbarrel Nade Launcher",skillset_t::DEMOLITIONS,&m_ub_frag,GHOST_UBFRAG_MANA_COST()},
-			{GUIDED_MISSILE,"gm","Guided Missile",skillset_t::DEMOLITIONS,&m_guided_missile,GHOST_GUIDEDMIS_MANA_COST()},
-			{TARGET_LIMB,"limb","Target Limb",skillset_t::SNIPING,&m_target_limb,GHOST_TARGETLIMB_MANA_COST()},
-			{MARK_TARGET,"mark","Mark Target",skillset_t::SNIPING,&m_mark_target,GHOST_MARKTARGET_MANA_COST()},
-			{PLANT_CLAYMORE,"claymore","Plant Claymore",skillset_t::DEMOLITIONS,&m_plant_claymore,GHOST_CLAYMORE_MANA_COST()},
-			{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",skillset_t::DEMOLITIONS,&m_plant_shrapnel_claymore,GHOST_SHRAPCLAY_MANA_COST()},
-			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",skillset_t::DEMOLITIONS,&m_plant_corrosive_claymore,GHOST_CORCLAY_MANA_COST()},
-			{REQUEST_RECON,"recon","Request Recon",skillset_t::INTELLIGENCE,&m_request_recon,GHOST_REQRECON_MANA_COST()},
+			{AERIAL_DRONE_SCAN,"ads","Aerial Drone Scan",SK::ELECTRONICS,&m_aerial_drone_scan,GHOST_ADS_MANA_COST()},
+			{DISSIPATE,"dissipate","Dissipate",SK::INTELLIGENCE,&m_dissipate,GHOST_DISSIPATE_MANA_COST()},
+			{XRAY_SHOT,"xray","X-Ray Shot",SK::SNIPING,&m_xray_shot,GHOST_XRAY_SHOT_MANA_COST()},
+			{PENETRATING_SHOT,"penshot","Penetrating Shot",SK::SNIPING,&m_penetrating_shot,GHOST_PENSHOT_MANA_COST()},
+			{FEIGN_DEATH,"feign","Feign Death",SK::STRATEGY,&m_feign_death,GHOST_FEIGN_DEATH_MANA_COST()},
+			{INTIMIDATION,"intimidation","Intimidation",SK::INTELLIGENCE,&m_intimidation,GHOST_INTIMIDATION_MANA_COST()},
+			{CRYOGENIC_GRENADE,"cryo","Cryogenic Grenade",SK::DEMOLITIONS,&m_cryogenic_grenade,GHOST_CRYONADE_MANA_COST()},
+			{FLASH_UNDERBARREL,"flash","Flash Underbarrel",SK::WEAPON_HANDLING,&m_flash_underbarrel,GHOST_FLASHUB_MANA_COST()},
+			{TRACKING_SHOT,"ts","Tracking Shot",SK::SNIPING,&m_tracking_shot,GHOST_TRACKINGSHOT_MANA_COST()},
+			{LIGHT_BANDAGE,shorthand::LIGHT_BANDAGE.data(),"Light Bandage",SK::MEDICAL,&m_light_bandage,GHOST_LIGHTBANDAGE_MANA_COST()},
+			{SUTURE,"suture","Suture",SK::MEDICAL,&m_suture,GHOST_SUTURE_MANA_COST()},
+			{ADRENALINE_SHOT,"as","Adrenaline Shot",SK::MEDICAL,&m_adrenaline_shot,GHOST_ADRENALSHOT_MANA_COST()},
+			{SENSOR_NADE,"sensor","Sensor Grenade",SK::INTELLIGENCE,&m_sensor_nade,GHOST_SENSORNADE_MANA_COST()},
+			{UB_SHOTGUN,"ubs","Underbarrel Shotgun",SK::DEMOLITIONS,&m_ub_shotgun,GHOST_SHOTUB_MANA_COST()},
+			{UB_FRAG,"ubf","Underbarrel Nade Launcher",SK::DEMOLITIONS,&m_ub_frag,GHOST_UBFRAG_MANA_COST()},
+			{GUIDED_MISSILE,"gm","Guided Missile",SK::DEMOLITIONS,&m_guided_missile,GHOST_GUIDEDMIS_MANA_COST()},
+			{TARGET_LIMB,"limb","Target Limb",SK::SNIPING,&m_target_limb,GHOST_TARGETLIMB_MANA_COST()},
+			{MARK_TARGET,"mark","Mark Target",SK::SNIPING,&m_mark_target,GHOST_MARKTARGET_MANA_COST()},
+			{PLANT_CLAYMORE,"claymore","Plant Claymore",SK::DEMOLITIONS,&m_plant_claymore,GHOST_CLAYMORE_MANA_COST()},
+			{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",SK::DEMOLITIONS,&m_plant_shrapnel_claymore,GHOST_SHRAPCLAY_MANA_COST()},
+			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",SK::DEMOLITIONS,&m_plant_corrosive_claymore,GHOST_CORCLAY_MANA_COST()},
+			{REQUEST_RECON,"recon","Request Recon",SK::INTELLIGENCE,&m_request_recon,GHOST_REQRECON_MANA_COST()},
 		});
 		/**
 		 * REQUIRED

@@ -747,16 +747,16 @@ int rev_dir[] = {
 
 
 int movement_loss[] = {
-	1,	/* Inside     */
-	1,	/* City       */
-	2,	/* Field      */
-	3,	/* Forest     */
-	4,	/* Hills      */
-	6,	/* Mountains  */
-	4,	/* Swimming   */
-	1,	/* Unswimable */
+	40,	/* Inside     */
+	44,	/* City       */
+	50,	/* Field      */
+	50,	/* Forest     */
+	60,	/* Hills      */
+	90,	/* Mountains  */
+	100,	/* Swimming   */
+	150,	/* Unswimable */
 	1,	/* Flying     */
-	5     /* Underwater */
+	100     /* Underwater */
 };
 
 /* Not used in sprinttype(). */
