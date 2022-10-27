@@ -14,23 +14,23 @@
 
 //#define  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_DEBUG_OUTPUT__
-#define m_debug(a)  std::cerr << "[m.m.generic-thief.btree:" << __LINE__ << "]->" << a << "\n";
+	#define m_debug(a)  std::cerr << "[m.m.generic-thief.btree:" << __LINE__ << "]->" << a << "\n";
 #else
-#define m_debug(a)
+	#define m_debug(a)
 #endif
 
 //#define  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_STATUS_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_STATUS_OUTPUT__
-#define m_status(a)  mentoc_prefix_debug("[m.m.generic-thief.btree]:") << "[STATUS]->" << a << "\n";
+	#define m_status(a)  mentoc_prefix_debug("[m.m.generic-thief.btree]:") << "[STATUS]->" << a << "\n";
 #else
-#define m_status(a)
+	#define m_status(a)
 #endif
 
-#define  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_ERROR_OUTPUT__
+//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_ERROR_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_generic_thief_BTREE_ERROR_OUTPUT__
-#define m_error(a)  mentoc_prefix_debug("[m.m.generic-thief.btree]:") << "[ERROR]->" << a << "\n";
+	#define m_error(a)  mentoc_prefix_debug("[m.m.generic-thief.btree]:") << "[ERROR]->" << a << "\n";
 #else
-#define m_error(a)
+	#define m_error(a)
 #endif
 
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
@@ -139,6 +139,9 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 			}
 			if(!attacking_with) {
 				m_error(" has no weapon!");
+				return TStatus::FAILURE;
+			}
+			if(mg->room() >= world.size()) {
 				return TStatus::FAILURE;
 			}
 			if(mods::object_utils::is_rifle(attacking_with)) {
@@ -337,12 +340,12 @@ namespace mods::mobs::generic_thief_behaviour_tree {
 			}
 		}
 		generic_thief_list().erase(std::remove_if(generic_thief_list().begin(),
-		                                          generic_thief_list().end(),
+		        generic_thief_list().end(),
 		[&removals](const auto& thief) -> bool {
 			return std::find(removals.cbegin(),removals.cend(),thief) != removals.cend();
 		}),
 		generic_thief_list().end()
-		                          );
+		);
 	}
 
 };

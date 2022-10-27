@@ -40,6 +40,10 @@ namespace mods::mobs::room_watching {
 	extern void destroy_player(uuid_t);
 };
 
+namespace mods::js {
+	extern void init();
+};
+
 extern int errno;
 #define MODS_BREACH_DISORIENT 50
 #define MODS_GRENADE_BASE_DAMAGE 66
@@ -223,6 +227,7 @@ namespace mods {
 			mods::world_conf::toggle::set_obj_from_room(1);
 			std::vector<std::tuple<std::string,std::string>> migrations;
 			bool run_unit_tests = false;
+			mods::js::init();
 
 			while(++pos < argc) {
 #define SAVE(OPT) mods::boot_flags::save_value(OPT)
@@ -894,31 +899,37 @@ namespace mods {
 				}
 				if(argument.substr(0,4).compare("+imp") == 0) {
 					mods::acl_list::set_access_rights(player,"implementors",true);
+					player->set_imp_mode(true);
 					player->done();
 					return false;
 				}
 				if(argument.substr(0,4).compare("-imp") == 0) {
 					mods::acl_list::set_access_rights(player,"implementors",false);
+					player->set_imp_mode(false);
 					player->done();
 					return false;
 				}
 				if(argument.substr(0,4).compare("+god") == 0) {
 					mods::acl_list::set_access_rights(player,"gods",true);
+					player->set_god_mode(true);
 					player->done();
 					return false;
 				}
 				if(argument.substr(0,4).compare("-god") == 0) {
 					mods::acl_list::set_access_rights(player,"gods",false);
+					player->set_god_mode(false);
 					player->done();
 					return false;
 				}
 				if(argument.substr(0,6).compare("+build") == 0) {
 					mods::acl_list::set_access_rights(player,"builders",true);
+					player->set_bui_mode(true);
 					player->done();
 					return false;
 				}
 				if(argument.substr(0,6).compare("-build") == 0) {
 					mods::acl_list::set_access_rights(player,"builders",false);
+					player->set_bui_mode(false);
 					player->done();
 					return false;
 				}

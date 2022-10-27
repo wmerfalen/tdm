@@ -5,7 +5,7 @@
 #include "object-utils.hpp"
 #include "query-objects.hpp"
 
-#define __MENTOC_MODS_GENERIC_LOCKER_DEBUG__
+//#define __MENTOC_MODS_GENERIC_LOCKER_DEBUG__
 #ifdef  __MENTOC_MODS_GENERIC_LOCKER_DEBUG__
 	#define mw_debug(A) std::cerr << red_str("[mods::generic_locker_t]:") << A <<"\n";
 #else

@@ -100,10 +100,23 @@ namespace mods::builder::bookmarks {
 		ADMIN_DONE();
 	}
 
+	SUPERCMD(do_bookmark_list) {
+		ADMIN_REJECT();
+		DO_HELP_WITH_ZERO("bookmark:list");
+		auto vec_args = PARSE_ARGS();
+		if(!player->builder_data) {
+			mods::builder::initialize_builder(player);
+		}
+		for(const auto& pair : player->builder_data->bookmarks) {
+			player->sendln(CAT("[",pair.first,"]:",pair.second));
+		}
+		ADMIN_DONE();
+	}
 
 	void init() {
 		mods::interpreter::add_command("bookmark", POS_RESTING, do_bookmark, LVL_BUILDER,0);
 		mods::interpreter::add_command("goto", POS_RESTING, do_goto, LVL_BUILDER,0);
 		mods::interpreter::add_command("print_vnum", POS_RESTING, do_print_vnum, LVL_BUILDER,0);
+		mods::interpreter::add_command("bookmark:list", POS_RESTING, do_bookmark_list, LVL_BUILDER,0);
 	}
 };

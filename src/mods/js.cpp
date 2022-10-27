@@ -10,6 +10,7 @@
 #include "values.hpp"
 #include "skills.hpp"
 #include "super-users.hpp"
+#include "date-time.hpp"
 
 #include <unistd.h>	//for getcwd()
 extern void command_interpreter(player_ptr_t& player, std::string_view in_argument);
@@ -19,6 +20,7 @@ extern void mobile_activity();
 namespace mods {
 	namespace js {
 		static duk_context* duktape_context = nullptr;
+		std::unique_ptr<std::fstream> js_errors;
 		void create_new_context() {
 			if(duktape_context) {
 				duk_destroy_heap(duktape_context);
@@ -33,6 +35,14 @@ namespace mods {
 		}
 		std::string current_working_dir() {
 			return MENTOC_CURRENT_WORKING_DIR;
+		}
+		void init() {
+			std::string js_errors_file = current_working_dir() + "/js-errors.log";
+			js_errors = std::make_unique<std::fstream>(js_errors_file.c_str(),std::ios::out | std::ios::trunc);
+			if(!js_errors->good() || !js_errors->is_open()) {
+				log("WARNING: unable to open js_errors file '%s'",js_errors_file.c_str());
+			}
+
 		}
 		namespace utils {
 			struct find_player_payload_t {
@@ -924,7 +934,10 @@ namespace mods {
 			return 0;
 		}
 		void log_js_error(std::string_view error) {
-			std::cerr << "js error: " << error.data() << "\n";
+			std::cerr << red_str("js error: ") << error.data() << "\n";
+			std::string msg = CAT("[",mods::date_time::irl::date_to_string(),"]: ",error.data(),"\n");
+			js_errors->write(msg.c_str(),msg.length());
+			js_errors->flush();
 		}
 
 		void contextual_eval_string(char_data* player,duk_context* ctx,const std::string& str) {

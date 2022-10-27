@@ -14,9 +14,9 @@
 
 //#define  __MENTOC_SHOW_BEHAVIOUR_TREE_car_thief_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_car_thief_BTREE_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << "[m.m.ct.btree:" << __LINE__ << "]->" << a << "\n";
+	#define m_debug(a) std::cerr << "[m.m.ct.btree:" << __LINE__ << "]->" << a << "\n";
 #else
-#define m_debug(a)
+	#define m_debug(a)
 #endif
 
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
@@ -185,6 +185,9 @@ namespace mods::mobs::car_thief_behaviour_tree {
 				auto ch = mob.cd();
 				m_debug("finding vehicle near me");
 				mods::scan::vec_player_data los_room_list;
+				if(mob.room() >= world.size()) {
+					return TStatus::FAILURE;
+				}
 				auto dirs =  world[mob.room()].directions();
 				mods::util::shuffle(dirs);
 				for(const auto& dir : dirs) {

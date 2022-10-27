@@ -1064,8 +1064,10 @@ namespace mods::builder {
 	}
 	room_data new_room(player_ptr_t player,int direction) {
 		world.emplace_back();
+		top_of_world = world.size();
 		mods::globals::register_room(world.size());
 		world.back().init();
+		world.back().number = next_room_vnum();
 		return world.back();
 	}
 	bool title(room_rnum room_id,std::string_view str_title) {
@@ -6005,15 +6007,15 @@ namespace mods::builder {
 		ADMIN_DONE();
 	}
 
-	SUPERCMD(do_refresh_all) {
+	SUPERCMD(do_admin_colon_refresh_dash_all) { // admin:refresh-all
 		mods::zone::refresh_mobs_and_zones();
 	}
 	void init() {
-		mods::interpreter::add_command("ngoto", POS_RESTING, do_ngoto, LVL_BUILDER,0);
-		mods::interpreter::add_command("nfind", POS_RESTING, do_nfind, LVL_BUILDER,0);
-		mods::interpreter::add_command("nset", POS_RESTING, do_nset, LVL_BUILDER,0);
-		mods::interpreter::add_command("ndelete", POS_RESTING, do_ndelete, LVL_BUILDER,0);
-		mods::interpreter::add_command("nhelp", POS_RESTING, do_nhelp, LVL_BUILDER,0);
-		ADD_BUILDER_COMMAND("admin:refresh-all",do_refresh_all);
+		ADD_BUILDER_COMMAND("ngoto",  do_ngoto);
+		ADD_BUILDER_COMMAND("nfind",  do_nfind);
+		ADD_BUILDER_COMMAND("nset",  do_nset);
+		ADD_BUILDER_COMMAND("ndelete",  do_ndelete);
+		ADD_BUILDER_COMMAND("nhelp",  do_nhelp);
+		ADD_BUILDER_COMMAND("admin:refresh-all",do_admin_colon_refresh_dash_all);
 	}
 };

@@ -782,7 +782,7 @@ namespace mods::help {
 			current += ch;
 		}
 	}
-	void fetch_builder_help(std::vector<std::string>& screen) {
+	void builder_page(std::vector<std::string>& screen) {
 		static const std::vector<std::string> builder_screen = {
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Cameras ]:-                               {/yel}",
@@ -826,7 +826,7 @@ namespace mods::help {
 			"{gld}zbuild{/gld} -- {grn}zone builder [builder-utils]{/grn}",
 			"",
 			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Ammunition ]:-                            {/yel}",
+			"{yel} --                    -:[ Ammunition ]:-                              {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{gld}ammo{/gld} -- {grn}give yourself ammo [feature-debug]{/grn}",
 			"{gld}empty_clip{/gld} -- {grn}empty the clip in your primary weapon [feature-debug]{/grn}",
@@ -842,7 +842,7 @@ namespace mods::help {
 			"{gld}set_position{/gld} -- {grn}set position to one of the POS_* constants [feature-debug]{/grn}",
 			"",
 			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Debugging ]:-                             {/yel}",
+			"{yel} --                    -:[ Debugging ]:-                               {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{gld}flush_player{/gld} -- {grn}calls the default flush_player method [feature-debug][staging-feature][builder-utils]{/grn}",
 			"{gld}feed_player{/gld} -- {grn}calls the default feed_player method [feature-debug][staging-feature][builder-utils]{/grn}",
@@ -858,13 +858,13 @@ namespace mods::help {
 			"{gld}room_list_uuid{/gld} -- {grn}list uuids and names of everyone in the same room [builder-utils]{/grn}",
 			"{gld}show_tics{/gld} -- {grn}toggle tics[builder-utils]{/grn}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Character Generation ]:-                  {/yel}",
+			"{yel} --                    -:[ Character Generation ]:-                    {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{gld}disable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
 			"{gld}enable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
 			"{gld}registration_status{/gld} -- {grn}prints allowed or not allowed.[builder-utils]{/grn}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Values System ]:-                         {/yel}",
+			"{yel} --                    -:[ Values System ]:-                           {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{gld}revert_value_to_default{/gld} -- {grn}revert a value back to factory default{/grn}",
 			"{gld}list_values{/gld} -- {grn}list all available values{/grn}",
@@ -872,7 +872,7 @@ namespace mods::help {
 			"{gld}set_value{/gld} -- {grn}set value to specific value{/grn}",
 			"{gld}get_value{/gld} -- {grn}display a specific value{/grn}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Admin Commands ]:-                        {/yel}",
+			"{yel} --                    -:[ Admin Commands ]:-                          {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{gld}admin:disable_registration{/gld} -- {grn}disable new player registration[builder-utils]{/grn}",
 			"{gld}admin:banish{/gld} -- {grn}force a player out of your room(not permanent)[debugging-players][bad-players]{/grn}",
@@ -883,7 +883,7 @@ namespace mods::help {
 			"{gld}admin:ammo-locker:help{/gld} -- {grn}{/grn}",
 
 			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Punishing Players ]:-                     {/yel}",
+			"{yel} --                    -:[ Punishing Players ]:-                       {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{gld}admin:ban{/gld} -- {grn}ban a player[bad-players]{/grn}",
 			"{gld}admin:mute{/gld} -- {grn}mute a player[bad-players]{/grn}",
@@ -893,6 +893,10 @@ namespace mods::help {
 		for(const auto& line : builder_screen) {
 			screen.emplace_back(line);
 		}
+	}
+	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;
+	void fetch_builder_help(std::vector<std::string>& screen) {
+		builder_page(screen);
 		std::string guts,error;
 		for(const auto& file : {
 		        "../lib/SUPERCMD.list","../lib/ADMINCMD.list"
@@ -911,7 +915,6 @@ namespace mods::help {
 			}
 		}
 	}
-	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;
 	static std::map<std::string,std::string> registered_admin_help_commands;
 
 	bool matches_many(const std::string& items,std::string_view from) {
@@ -1263,12 +1266,21 @@ namespace mods::help {
 
 		send_topics_help_menu(player);
 
+		std::vector<std::string> builder_help;
 		if(player->implementor_mode() || player->builder_mode()) {
-			mods::help::fetch_builder_help(screen);
+			if(argshave()->size_gt(0)->passed()) {
+				mods::help::fetch_builder_help(screen);
+			} else {
+				mods::help::builder_page(builder_help);
+				for(const auto& line : builder_help) {
+					player->sendln(line);
+				}
+			}
 		}
 		player->sendln(search_help_msg.data());
 
 		if(argshave()->size_gt(0)->passed()) {
+			player->sendln("doing part 2");
 			if(send_help(argat(0), player)) {
 				player->pager_start();
 				player->sendln("No specific help screen found for that. Searching every command...");
