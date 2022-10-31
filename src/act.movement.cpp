@@ -92,8 +92,16 @@ int has_boat(char_data *ch) {
  */
 int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	MENTOC_PREAMBLE();
+	room_rnum was_in = player->room();
+	if(player->room_pave_mode() && player->is_executing_js()) {
+		if(world[was_in].dir_option[dir]) {
+			auto to_room = world[was_in].dir_option[dir]->to_room;
+			mods::globals::rooms::char_from_room(ch);
+			mods::globals::rooms::char_to_room(to_room,ch);
+			return 1;
+		}
+	}
 	char throwaway[MAX_INPUT_LENGTH] = ""; /* Functions assume writable. */
-	room_rnum was_in;
 	int need_movement;
 	bool ghost_dissipated = player->ghost() && player->ghost()->is_dissipated();
 
@@ -114,7 +122,7 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 
 	/* if this room or the one we're going to needs a boat, check for one */
 	if((SECT(IN_ROOM(ch)) == SECT_WATER_NOSWIM) ||
-	        (SECT(EXIT(ch, dir)->to_room) == SECT_WATER_NOSWIM)) {
+	    (SECT(EXIT(ch, dir)->to_room) == SECT_WATER_NOSWIM)) {
 		if(!has_boat(ch)) {
 			send_to_char(ch, "You need a boat to go there.");
 			return (0);
@@ -123,7 +131,7 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 
 	/* move points needed is avg. move loss for src and destination sect type */
 	need_movement = (movement_loss[SECT(IN_ROOM(ch))] +
-	                 movement_loss[SECT(EXIT(ch, dir)->to_room)]) / 2;
+	        movement_loss[SECT(EXIT(ch, dir)->to_room)]) / 2;
 
 	if(!ghost_dissipated && GET_MOVE(ch) < need_movement && !IS_NPC(ch)) {
 		if(need_specials_check && ch->master) {
@@ -143,7 +151,7 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	}
 
 	if(ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) &&
-	        num_pc_in_room(&(world[EXIT(ch, dir)->to_room])) >= tunnel_size) {
+	    num_pc_in_room(&(world[EXIT(ch, dir)->to_room])) >= tunnel_size) {
 		if(tunnel_size > 1) {
 			send_to_char(ch, "There isn't enough room for you to go there!");
 		} else {
@@ -155,7 +163,7 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 
 	/* Mortals and low level gods cannot enter greater god rooms. */
 	if(ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_GODROOM) &&
-	        GET_LEVEL(ch) < LVL_GRGOD) {
+	    GET_LEVEL(ch) < LVL_GRGOD) {
 		send_to_char(ch, "You aren't godly enough to use that room!");
 		return (0);
 	}
@@ -219,6 +227,10 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 
 int perform_move(char_data *ch, int dir, int need_specials_check) {
 	MENTOC_PREAMBLE();
+	if(player->builder_data) {
+		do_simple_move(ch, dir, 0);
+		return 1;
+	}
 	room_rnum was_in;
 	follow_type *k, *next;
 	bool ghost_dissipated = player->ghost() && player->ghost()->is_dissipated();
@@ -234,8 +246,8 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 	}
 
 	bool exit_closed = is_exit && EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) /* !mods */
-	                   && !EXIT_FLAGGED(EXIT(ch,dir),EX_BREACHED) &&
-	                   !IS_SET(world[EXIT(ch,dir)->to_room].dir_option[OPPOSITE_DIR(dir)]->exit_info,EX_BREACHED);
+	    && !EXIT_FLAGGED(EXIT(ch,dir),EX_BREACHED) &&
+	    !IS_SET(world[EXIT(ch,dir)->to_room].dir_option[OPPOSITE_DIR(dir)]->exit_info,EX_BREACHED);
 	if(exit_closed && ghost_dissipated) {
 		was_in = IN_ROOM(ch);
 		do_simple_move(ch, dir, need_specials_check);
@@ -385,20 +397,20 @@ const int flags_door[] = {
 
 #define EXITN(room, door)		(world[room].dir_option[door])
 #define OPEN_DOOR(room, obj, door)	((obj) ?\
-		(REMOVE_BIT(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) :\
-		(REMOVE_BIT(EXITN(room, door)->exit_info, EX_CLOSED)))
+    (REMOVE_BIT(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) :\
+    (REMOVE_BIT(EXITN(room, door)->exit_info, EX_CLOSED)))
 #define CLOSE_DOOR(room, obj, door)	((obj) ?\
-		(SET_BIT(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) :\
-		(SET_BIT(EXITN(room, door)->exit_info, EX_CLOSED)))
+    (SET_BIT(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) :\
+    (SET_BIT(EXITN(room, door)->exit_info, EX_CLOSED)))
 #define LOCK_DOOR(room, obj, door)	((obj) ?\
-		(SET_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) :\
-		(SET_BIT(EXITN(room, door)->exit_info, EX_LOCKED)))
+    (SET_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) :\
+    (SET_BIT(EXITN(room, door)->exit_info, EX_LOCKED)))
 #define UNLOCK_DOOR(room, obj, door)	((obj) ?\
-		(REMOVE_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) :\
-		(REMOVE_BIT(EXITN(room, door)->exit_info, EX_LOCKED)))
+    (REMOVE_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) :\
+    (REMOVE_BIT(EXITN(room, door)->exit_info, EX_LOCKED)))
 #define TOGGLE_LOCK(room, obj, door)	((obj) ?\
-		(TOGGLE_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) :\
-		(TOGGLE_BIT(EXITN(room, door)->exit_info, EX_LOCKED)))
+    (TOGGLE_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) :\
+    (TOGGLE_BIT(EXITN(room, door)->exit_info, EX_LOCKED)))
 
 void do_doorcmd(char_data *ch, struct obj_data *obj, int door, int scmd) {
 	char buf[MAX_STRING_LENGTH];
@@ -470,7 +482,7 @@ void do_doorcmd(char_data *ch, struct obj_data *obj, int door, int scmd) {
 	/* Notify the room. */
 	if(len < sizeof(buf))
 		snprintf(buf + len, sizeof(buf) - len, "%s%s.",
-		         obj ? "" : "the ", obj ? "$p" : EXIT(ch, door)->keyword ? "$F" : "door");
+		    obj ? "" : "the ", obj ? "$p" : EXIT(ch, door)->keyword ? "$F" : "door");
 
 	/** This doesn't look right... -mentoc */
 	if(!obj || IN_ROOM(obj) != NOWHERE) {
@@ -480,8 +492,8 @@ void do_doorcmd(char_data *ch, struct obj_data *obj, int door, int scmd) {
 	/* Notify the other room */
 	if(back && (scmd == SCMD_OPEN || scmd == SCMD_CLOSE))
 		send_to_room(EXIT(ch, door)->to_room, "The %s is %s%s from the other side.",
-		             back->keyword ? fname(back->keyword) : "door", cmd_door[scmd],
-		             scmd == SCMD_CLOSE ? "d" : "ed");
+		    back->keyword ? fname(back->keyword) : "door", cmd_door[scmd],
+		    scmd == SCMD_CLOSE ? "d" : "ed");
 }
 
 
@@ -510,18 +522,18 @@ int ok_pick(char_data *ch, obj_vnum keynum, int pickproof, int scmd) {
 
 
 #define DOOR_IS_OPENABLE(ch, obj, door)	((obj) ? \
-		((GET_OBJ_TYPE(obj) == ITEM_CONTAINER) && \
-		 OBJVAL_FLAGGED(obj, CONT_CLOSEABLE)) :\
-		(EXIT_FLAGGED(EXIT(ch, door), EX_ISDOOR)))
+    ((GET_OBJ_TYPE(obj) == ITEM_CONTAINER) && \
+        OBJVAL_FLAGGED(obj, CONT_CLOSEABLE)) :\
+    (EXIT_FLAGGED(EXIT(ch, door), EX_ISDOOR)))
 #define DOOR_IS_OPEN(ch, obj, door)	((obj) ? \
-		(!OBJVAL_FLAGGED(obj, CONT_CLOSED)) :\
-		(!EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED)))
+    (!OBJVAL_FLAGGED(obj, CONT_CLOSED)) :\
+    (!EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED)))
 #define DOOR_IS_UNLOCKED(ch, obj, door)	((obj) ? \
-		(!OBJVAL_FLAGGED(obj, CONT_LOCKED)) :\
-		(!EXIT_FLAGGED(EXIT(ch, door), EX_LOCKED)))
+    (!OBJVAL_FLAGGED(obj, CONT_LOCKED)) :\
+    (!EXIT_FLAGGED(EXIT(ch, door), EX_LOCKED)))
 #define DOOR_IS_PICKPROOF(ch, obj, door) ((obj) ? \
-		(OBJVAL_FLAGGED(obj, CONT_PICKPROOF)) : \
-		(EXIT_FLAGGED(EXIT(ch, door), EX_PICKPROOF)))
+    (OBJVAL_FLAGGED(obj, CONT_PICKPROOF)) : \
+    (EXIT_FLAGGED(EXIT(ch, door), EX_PICKPROOF)))
 #define DOOR_IS_BREACHED(ch, obj, door) (EXIT_FLAGGED(EXIT(ch, door), EX_BREACHED))
 /* !mods */
 #define DOOR_IS_THERMITE(ch, obj, door) EXIT_FLAGGED(EXIT(ch, door), EX_REINFORCED)
@@ -529,7 +541,7 @@ int ok_pick(char_data *ch, obj_vnum keynum, int pickproof, int scmd) {
 #define DOOR_IS_CLOSED(ch, obj, door)	(!(DOOR_IS_OPEN(ch, obj, door)))
 #define DOOR_IS_LOCKED(ch, obj, door)	(!(DOOR_IS_UNLOCKED(ch, obj, door)))
 #define DOOR_KEY(ch, obj, door)		((obj) ? (GET_OBJ_VAL(obj, 2)) : \
-		(EXIT(ch, door)->key))
+    (EXIT(ch, door)->key))
 
 
 ACMD(do_gen_door) {
@@ -564,19 +576,19 @@ ACMD(do_gen_door) {
 			void* vict_obj = const_cast<char*>(cmd_door[subcmd]);
 			act("You can't $F that!", FALSE, ch, 0, vict_obj, TO_CHAR);
 		} else if(!DOOR_IS_OPEN(ch, obj, door) &&
-		          IS_SET(flags_door[subcmd], NEED_OPEN)) {
+		    IS_SET(flags_door[subcmd], NEED_OPEN)) {
 			send_to_char(ch, "But it's already closed!");
 		} else if(!DOOR_IS_CLOSED(ch, obj, door) &&
-		          IS_SET(flags_door[subcmd], NEED_CLOSED)) {
+		    IS_SET(flags_door[subcmd], NEED_CLOSED)) {
 			send_to_char(ch, "But it's currently open!");
 		} else if(!(DOOR_IS_LOCKED(ch, obj, door)) &&
-		          IS_SET(flags_door[subcmd], NEED_LOCKED)) {
+		    IS_SET(flags_door[subcmd], NEED_LOCKED)) {
 			send_to_char(ch, "Oh.. it wasn't locked, after all..");
 		} else if(!(DOOR_IS_UNLOCKED(ch, obj, door)) &&
-		          IS_SET(flags_door[subcmd], NEED_UNLOCKED)) {
+		    IS_SET(flags_door[subcmd], NEED_UNLOCKED)) {
 			send_to_char(ch, "It is boarded up. Use {grn}'breach'{/grn} to break it open");
 		} else if(!has_key(ch, keynum) && (GET_LEVEL(ch) < LVL_GOD) &&
-		          ((subcmd == SCMD_LOCK) || (subcmd == SCMD_UNLOCK))) {
+		    ((subcmd == SCMD_LOCK) || (subcmd == SCMD_UNLOCK))) {
 			send_to_char(ch, "You don't seem to have the proper key. Use {grn}'breach'{/grn} to {red}break{/red} it open");
 		}
 		/* TODO: Thermite door */
@@ -616,7 +628,7 @@ ACMD(do_enter) {
 			if(EXIT(ch, door))
 				if(EXIT(ch, door)->to_room != NOWHERE)
 					if(!EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED) &&
-					        ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_INDOORS)) {
+					    ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_INDOORS)) {
 						perform_move(ch, door, 1);
 						return;
 					}
@@ -636,7 +648,7 @@ ACMD(do_leave) {
 			if(EXIT(ch, door))
 				if(EXIT(ch, door)->to_room != NOWHERE)
 					if(!EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED) &&
-					        !ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_INDOORS)) {
+					    !ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_INDOORS)) {
 						perform_move(ch, door, 1);
 						return;
 					}

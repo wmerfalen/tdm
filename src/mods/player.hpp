@@ -431,18 +431,14 @@ namespace mods {
 			auto& sex() {
 				return cd()->player.sex;
 			}
-			void set_room(room_rnum r) {
-				cd()->in_room = r;
-			}
+			void set_room(room_rnum r);
 			auto zone() {
 				if(world.size() > cd()->in_room) {
 					return world[cd()->in_room].zone;
 				}
 				return world[0].zone;
 			}
-			room_rnum& room() {
-				return cd()->in_room;
-			}
+			room_rnum& room();
 			uuid_t& uuid() const {
 				return cd()->uuid;
 			}

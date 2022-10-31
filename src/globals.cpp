@@ -1005,8 +1005,9 @@ namespace mods {
 						default:
 							return true;
 					}
-
 					auto cached_room = player->room();
+					std::cerr << "STATUS: " << CAT("cached_room: ",cached_room) << "\n";
+
 					int target_x = world[cached_room].x + x;
 					int target_y = world[cached_room].y + y;
 					int target_z = world[cached_room].z + z;
@@ -1015,9 +1016,13 @@ namespace mods {
 					room_data* existing_room = nullptr;
 					int real_room_id = 0;
 					if(existing_room_vnum > -1) {
+						std::cerr << "STATUS: checking existing room\n";
 						real_room_id = real_room(existing_room_vnum);
 						if(real_room_id != NOWHERE) {
 							existing_room = &world[real_room_id];
+							if(player->is_executing_js()) {
+								player->set_room(real_room_id);
+							}
 						}
 					}
 					if(world[cached_room].dir_option[door] == nullptr) {
@@ -1041,9 +1046,19 @@ namespace mods {
 							mods::builder::add_room_to_pavements(player,cached_room);
 							mods::builder::add_room_to_pavements(player,real_room_id);
 							glue_room_at_coordinates(existing_room->x,existing_room->y,existing_room->z,existing_room->number);
+							if(player->is_executing_js()) {
+								std::cerr << green_str("STATUS: dumping: ") <<
+								    "player->room():" << player->room() <<
+								    "| real_room_id:" << real_room_id << "\n";
+								mods::globals::rooms::char_from_room(player->cd());
+								mods::globals::rooms::char_to_room(real_room_id,player->cd());
+								std::cerr << "STATUS: glued existing room. setting builder room\n";
+								return false;
+							}
 							return true;
 						}
 						player->sendln("Creating room in that direction");
+						std::cerr << "STATUS: Creating room in that direction\n";
 						int new_room_rnum = 0;
 						world.emplace_back();
 						register_room(0);
@@ -1076,6 +1091,31 @@ namespace mods {
 						glue_room_at_coordinates(w.x,w.y,w.z,w.number);
 						mods::builder::add_room_to_pavements(player,cached_room);
 						mods::builder::add_room_to_pavements(player,new_room_rnum);
+						if(player->is_executing_js()) {
+							player->sendln("Short-circuit because of js [1]");
+							std::cerr << green_str("STATUS: dumping: ") <<
+							    "player->room():" << player->room() <<
+							    "| new_room_rnum:" << new_room_rnum <<
+							    "(CHANGING TO): " << new_room_rnum << "\n";
+							mods::globals::rooms::char_to_room(new_room_rnum,player->cd());
+							player->sendln("Short-circuited [1]");
+							return false;
+						}
+					}
+					if(player->is_executing_js()) {
+						player->sendln("Short-circuit because of js [2]");
+						if(player->room() >= world.size()) {
+							log("SYSERR: room is %d which is out of bounds of world",player->room());
+							return true;
+						}
+						player->sendln("Checking [2]");
+						if(world[player->room()].dir_option[door]) {
+							player->sendln("Passed [2]");
+							auto new_room_rnum = world[player->room()].dir_option[door]->to_room;
+							player->set_room(new_room_rnum);
+							player->moving_to_room() = false;
+							return false;
+						}
 					}
 				}
 			}
@@ -1170,20 +1210,30 @@ namespace mods {
 			bool char_to_room(const room_rnum& room,char_data* ch) {
 				auto player = ptr(ch);
 				if(player->builder_data) {
-					player->builder_data->room_recorder.char_to_room(room);
+					if(player->is_executing_js()) {
+						std::cout << "STATUS: {0}[player doing char to room]: real:" << room
+						    << "|player->room():" << player->room()
+						    << "\n";
+						player->builder_data->room_recorder.char_to_room(room);
+						player->set_room(room);
+						mods::globals::room_list[room].push_back(player);
+						player->moving_to_room() = false;
+						std::cout << "STATUS: {1}[player doing char to room]: real:" << room
+						    << "|player->room():" << player->room()
+						    << "\n";
+						return true;
+					}
 				}
 				auto target_room = room;
 				if(boot_type == boot_type_t::BOOT_HELL) {
 					target_room = 0;
 				}
 				if(target_room >= room_list.size()) {
-					log("SYSERR: char_to_room failed for ch. Recontracted room is out of bounds: ",target_room);
+					log("SYSERR: char_to_room failed for ch. room is out of bounds: ",target_room);
 					return false;
 				}
 				if(!mods::movement::char_move_to(player,target_room)) {
-#ifdef __MENTOC_SHOW_CHAR_MOVE_TO_FAILURE_MESSAGE__
 					std::cerr << red_str("cannot move to target room") << "\n";
-#endif
 					player->set_room(ch->was_in_room);
 					mods::globals::room_list[ch->was_in_room].push_back(player);
 					player->moving_to_room() = false;

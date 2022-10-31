@@ -32,6 +32,8 @@ namespace mods {
 			if(duktape_context) {
 				duk_destroy_heap(duktape_context);
 			}
+			js_errors->close();
+			js_errors.release();
 		}
 		std::string current_working_dir() {
 			return MENTOC_CURRENT_WORKING_DIR;
@@ -825,7 +827,7 @@ namespace mods {
 		static duk_ret_t cmd_exec(duk_context *ctx) {
 			/* First parameter is character name */
 			std::string cmd =  duk_to_string(ctx,0);
-			auto player = mods::globals::current_player;
+			auto& player = mods::globals::current_player;
 			mods::globals::current_player->executing_js(true);
 			player->capture_output(true);
 			command_interpreter(player,cmd);
@@ -837,7 +839,7 @@ namespace mods {
 		}
 		static duk_ret_t exec(duk_context *ctx) {
 			std::string cmd =  duk_to_string(ctx,0);
-			auto player = mods::globals::current_player;
+			auto& player = mods::globals::current_player;
 			mods::globals::current_player->executing_js(true);
 			command_interpreter(player,cmd);
 			mods::globals::current_player->executing_js(false);

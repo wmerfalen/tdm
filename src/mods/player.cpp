@@ -189,6 +189,7 @@ namespace mods {
 		m_set_time();
 		m_quitting = 0;
 		visibility() = 1;
+		set_room(ch->in_room);
 	};
 	bool player::can_snipe(player_ptr_t target) {
 		return mods::scan::los_find(
@@ -2630,8 +2631,19 @@ namespace mods {
 	const player::weight_index_t player::effective_weight_index() const {
 		return m_weight_index;
 	}
+	void player::set_room(room_rnum r) {
+		if(is_executing_js()) {
+			std::cerr << red_str("STATUS: Setting player room to: ") << r << "\n";
+		}
+		cd()->in_room = r;
+	}
+	room_rnum& player::room() {
+		if(is_executing_js()) {
+			std::cerr << red_str("STATUS: player room is: ") << cd()->in_room << "\n";
+		}
+		return cd()->in_room;
+	}
 };
-
 #undef dbg
 #undef eqd
 #undef dsd

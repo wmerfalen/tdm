@@ -195,7 +195,7 @@ int next_room_vnum() {
 			next_room_number = 1;
 		}
 	}
-	std::cerr << "next_room_number: " << next_room_number + 1 << "\n";
+	std::cerr << "next_room_number(vnum): " << next_room_number + 1 << "\n";
 	return ++next_room_number;
 }
 
@@ -993,14 +993,19 @@ namespace mods::builder {
 		for(auto direction = 0; direction < NUM_OF_DIRS; direction++) {
 			if(world[in_room].dir_option[direction] &&
 			    world[in_room].dir_option[direction]->general_description) {
-				auto vnum = world[world[in_room].dir_option[direction]->to_room].number;
-				rb_debug("real room num:" + std::to_string(vnum));
+				std::cout << "direction: " << direction << "\n";
+				assert(world.size() > in_room);
+				assert(world[in_room].dir_option[direction] != nullptr);
+				assert(world.size() > world[in_room].dir_option[direction]->to_room);
+
+				auto to_room = world[world[in_room].dir_option[direction]->to_room].number;
+				rb_debug("to_room num:" + std::to_string(to_room));
 				std::map<std::string,std::string> values = {
 					{"general_description",static_cast<std::string>(world[in_room].dir_option[direction]->general_description)},
 					{"keyword",static_cast<std::string>(world[in_room].dir_option[direction]->keyword)},
 					{"exit_info",std::to_string(world[in_room].dir_option[direction]->exit_info)},
 					{"exit_key",std::to_string(world[in_room].dir_option[direction]->key)},
-					{"to_room",std::to_string(vnum)},
+					{"to_room",std::to_string(to_room)},
 					{"room_number",number},
 					{"exit_direction",std::to_string(direction)}
 				};
@@ -1176,13 +1181,13 @@ namespace mods::builder {
 		return true;
 	}
 	std::pair<bool,std::string> zone_place(int zone_id,std::string_view zone_command,std::string_view if_flag,std::string_view arg1,std::string_view arg2,std::string_view arg3) {
-		std::cerr << red_str("zone_place[zone_id]:'") << zone_id << "'\n";
-		std::cerr << red_str("zone_place[zone_command.data()]:'") << zone_command.data() << "'\n";
-		std::cerr << red_str("zone_place[if_flag.data()]:'") << if_flag.data() << "'\n";
-		std::cerr << red_str("zone_place[arg1.data()]:'") << arg1.data() << "'\n";
-		std::cerr << red_str("zone_place[arg2.data()]:'") << arg2.data() << "'\n";
-		std::cerr << red_str("zone_place[arg3.data()]:'") << arg3.data() << "'\n";
-		std::cerr << red_str("zone_table[") << zone_id << "].number:'" << std::to_string(zone_table[zone_id].number) << "'\n";
+		std::cerr << red_str("STATUS: zone_place[zone_id]:'") << zone_id << "'\n";
+		std::cerr << red_str("STATUS: zone_place[zone_command.data()]:'") << zone_command.data() << "'\n";
+		std::cerr << red_str("STATUS: zone_place[if_flag.data()]:'") << if_flag.data() << "'\n";
+		std::cerr << red_str("STATUS: zone_place[arg1.data()]:'") << arg1.data() << "'\n";
+		std::cerr << red_str("STATUS: zone_place[arg2.data()]:'") << arg2.data() << "'\n";
+		std::cerr << red_str("STATUS: zone_place[arg3.data()]:'") << arg3.data() << "'\n";
+		std::cerr << red_str("STATUS: zone_table[") << zone_id << "].number:'" << std::to_string(zone_table[zone_id].number) << "'\n";
 		std::string yaml_file;
 		if(zone_command.compare("R") == 0) {
 			yaml_file = arg3.data();
@@ -5177,6 +5182,7 @@ SUPERCMD(do_rbuild) {
 	args = mods::util::subcmd_args<4,args_t>(argument,"vnum");
 	if(args.has_value()) {
 		auto room = player->room();
+		std::cerr << green_str("STATUS: [rbuild_vnum]: ") << world[room].number <<"| real:" << room << "\n";
 		if(vec_args.size() < 2) {
 			ENCODE_INIT();
 			ENCODE_STR(world[room].number);
