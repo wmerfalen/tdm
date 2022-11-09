@@ -73,6 +73,7 @@ namespace mods::classes {
 			ghost(const ghost& copy);
 			~ghost();
 			void init();
+			void toggle_debug_for(std::string_view field);
 
 			void set_player(player_ptr_t);
 			void go_stealth();
@@ -229,6 +230,8 @@ namespace mods::classes {
 			uint16_t m_call_count;
 			bool m_is_penetrating_shot;
 			obj_ptr_t m_fantom;
+			bool m_debugging_aerial_drone_scan;
+			bool m_debugging_penetrating_shot;
 	};
 	void ghost_advance_level(player_ptr_t& player);
 	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t& player);

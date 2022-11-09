@@ -59,6 +59,27 @@ namespace mods::classes {
 		    )
 		);
 	}
+#ifdef __MENTOC_SEND_GHOST_PLAYER_REPLENISH_DEBUG_MESSAGE__
+	void report_replenish(player_ptr_t& m_player) {
+		m_player->sendln("Replenish");
+	}
+#else
+#define report_replenish(A) ;;
+#endif
+
+#ifdef __MENTOC_SHOW_GHOST_TIME_WHEN_DISSIPATE_WEARS_OFF__
+	void report_irl_ticks(player_ptr_t& m_player, const auto& ticks) {
+		m_player->sendln(
+		    CAT(
+		        mods::date_time::irl::now().c_str(),
+		        " tick count: (",ticks,")"
+		    )
+		);
+	}
+#else
+#define report_irl_ticks(A,B) ;;
+#endif
+
 	bool ghost::is_penetrating_shot() {
 		return m_is_penetrating_shot;
 	}
@@ -148,6 +169,8 @@ namespace mods::classes {
 		m_call_count = copy.m_call_count;
 		m_is_penetrating_shot = copy.m_is_penetrating_shot;
 		m_fantom = copy.m_fantom;
+		m_debugging_aerial_drone_scan = copy.m_debugging_aerial_drone_scan;
+		m_debugging_penetrating_shot = copy.m_debugging_penetrating_shot;
 	}
 	std::vector<base::ability_data_t>& ghost::get_abilities() {
 		return m_abilities;
@@ -282,51 +305,66 @@ namespace mods::classes {
 		m_dissipate_charges = 0;
 		m_penetrating_shot_count = 0;
 		m_fantom = nullptr;
+		m_debugging_aerial_drone_scan = 0;
+		m_debugging_penetrating_shot = 0;
+	}
+	void ghost::toggle_debug_for(std::string_view field) {
+		if(field.compare("ads") == 0) {
+			m_debugging_aerial_drone_scan = !m_debugging_aerial_drone_scan;
+			m_player->sendln("Toggled");
+			return;
+		}
+		if(field.compare("penshot") == 0) {
+			m_debugging_penetrating_shot = !m_debugging_penetrating_shot;
+			m_player->sendln("Toggled");
+			return;
+		}
+		m_player->sendln("unknown value. use either 'ads' or 'penshot'");
 	}
 	int16_t ghost::save() {
 		return this->m_orm.save();
 	}
 	std::tuple<bool,std::string> ghost::aerial_drone_scan() {
 		uint16_t ticks = 0;
-#ifdef GHOST_DEBUG_ADS
-		ticks = GHOST_AERIAL_DRONE_SCAN_TIER_ONE_DURATION();
-#else
-		if(!has_mana_for_skill(AERIAL_DRONE_SCAN)) {
-			return {0,"You don't have enough mana!"};
-		}
+		if(m_debugging_aerial_drone_scan) {
+			ticks = GHOST_AERIAL_DRONE_SCAN_TIER_ONE_DURATION();
+		} else {
+			if(!has_mana_for_skill(AERIAL_DRONE_SCAN)) {
+				return {0,"You don't have enough mana!"};
+			}
 
-		if(m_aerial_drone_scan.not_learned()) {
-			set_aerial_drone_scan(false);
-			return {0, "It looks like you still need to train that skill"};
+			if(m_aerial_drone_scan.not_learned()) {
+				set_aerial_drone_scan(false);
+				return {0, "It looks like you still need to train that skill"};
+			}
+			use_mana_for_skill(AERIAL_DRONE_SCAN);
+			auto s = roll_skill_success(AERIAL_DRONE_SCAN);
+			if(!std::get<0>(s)) {
+				set_aerial_drone_scan(false);
+				return {0,std::get<1>(s)};
+			}
+			switch(tier(m_player)) {
+				case 1:
+				default:
+					ticks = GHOST_AERIAL_DRONE_SCAN_TIER_ONE_DURATION();
+					break;
+				case 2:
+					ticks = GHOST_AERIAL_DRONE_SCAN_TIER_TWO_DURATION();
+					break;
+				case 3:
+					ticks = GHOST_AERIAL_DRONE_SCAN_TIER_THREE_DURATION();
+					break;
+			}
+			if(m_aerial_drone_scan.awful() || m_aerial_drone_scan.terrible() || m_aerial_drone_scan.okay()) {
+				ticks += dice(5,5);
+			}
+			if(m_aerial_drone_scan.learned()) {
+				ticks += dice(5,10);
+			}
+			if(m_aerial_drone_scan.mastered() || m_aerial_drone_scan.elite()) {
+				ticks += dice(10,10);
+			}
 		}
-		use_mana_for_skill(AERIAL_DRONE_SCAN);
-		auto s = roll_skill_success(AERIAL_DRONE_SCAN);
-		if(!std::get<0>(s)) {
-			set_aerial_drone_scan(false);
-			return {0,std::get<1>(s)};
-		}
-		switch(tier(m_player)) {
-			case 1:
-			default:
-				ticks = GHOST_AERIAL_DRONE_SCAN_TIER_ONE_DURATION();
-				break;
-			case 2:
-				ticks = GHOST_AERIAL_DRONE_SCAN_TIER_TWO_DURATION();
-				break;
-			case 3:
-				ticks = GHOST_AERIAL_DRONE_SCAN_TIER_THREE_DURATION();
-				break;
-		}
-		if(m_aerial_drone_scan.awful() || m_aerial_drone_scan.terrible() || m_aerial_drone_scan.okay()) {
-			ticks += dice(5,5);
-		}
-		if(m_aerial_drone_scan.learned()) {
-			ticks += dice(5,10);
-		}
-		if(m_aerial_drone_scan.mastered() || m_aerial_drone_scan.elite()) {
-			ticks += dice(10,10);
-		}
-#endif
 		set_aerial_drone_scan(true);
 		mods::globals::defer_queue->push_ticks_event(ticks, m_player->uuid(),mods::deferred::EVENT_PLAYER_AERIAL_DRONE_SCAN_OVER);
 		return {1, "Your drone launches into the air and begins scanning the area..."};
@@ -499,23 +537,14 @@ namespace mods::classes {
 		m_player->visibility() = 0;
 		uint32_t ticks = GHOST_DISSIPATE_TICKS_DURATION() * tier(m_player);
 		mods::globals::defer_queue->push_ticks_event(ticks,m_player->uuid(),mods::deferred::EVENT_PLAYER_GOES_VISIBLE);
-#ifdef __MENTOC_SHOW_GHOST_TIME_WHEN_DISSIPATE_WEARS_OFF__
-		m_player->sendln(
-		    CAT(
-		        mods::date_time::irl::now().c_str(),
-		        " tick count: (",ticks,")"
-		    )
-		);
-#endif
+		report_irl_ticks(m_player,ticks);
 		m_dissipated = true;
 		return {true,"{grn}You dissipate into nothing...{/grn}"};
 	}
 	void ghost::dissipate_wears_off() {
 		m_player->visibility() = char_data::STARTING_VISIBILITY;
 		m_player->sendln("Your dissipation invisibility wears off...");
-#ifdef __MENTOC_SHOW_GHOST_TIME_WHEN_DISSIPATE_WEARS_OFF__
-		m_player->sendln(mods::date_time::irl::now().c_str());
-#endif
+		report_irl_ticks(m_player,0);
 		m_dissipated = false;
 	}
 	void ghost::use_claymore(uuid_t object_uuid) {
@@ -555,9 +584,7 @@ namespace mods::classes {
 				if(m_dissipate_charges < GHOST_DISSIPATE_CHARGE_MAX_COUNT() * tier) {
 					++m_dissipate_charges;
 				}
-#ifdef __MENTOC_SEND_GHOST_PLAYER_REPLENISH_DEBUG_MESSAGE__
-				m_player->sendln("Replenish");
-#endif
+				report_replenish(m_player);
 			}
 		}
 	}
@@ -595,9 +622,9 @@ namespace mods::classes {
 			m_is_penetrating_shot = false;
 			return {0,std::get<1>(s)};
 		}
-#ifdef GHOST_DEBUG_PENSHOT
-		m_penetrating_shot_count = 10;
-#endif
+		if(m_debugging_penetrating_shot) {
+			m_penetrating_shot_count = 10;
+		}
 		if(m_penetrating_shot_count == 0) {
 			m_is_penetrating_shot = false;
 			return {false,"You don't have any shots left!"};
