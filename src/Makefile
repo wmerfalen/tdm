@@ -245,7 +245,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/goat mods/mobs/innocent mods/dialog-tree \
 					 mods/orm/locker room-data mods/generic-locker \
 					 mods/classes/ghost-overhead-map mods/terrify \
-					 mods/rbuild
+					 mods/rbuild mods/zbuild
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

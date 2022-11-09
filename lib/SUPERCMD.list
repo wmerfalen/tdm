@@ -90,6 +90,7 @@
 {yel}mods/date-time{/yel}:->{grn}serialize_date{/grn}
 {yel}mods/forge-engine/value-scaler{/yel}:->{grn}value_scaler{/grn}
 {yel}mods/mob-equipment{/yel}:->{grn}npc_report{/grn}
+{yel}mods/zbuild{/yel}:->{grn}zbuild{/grn}
 {yel}mods/player-registration{/yel}:->{grn}enable_registration{/grn}
 {yel}mods/player-registration{/yel}:->{grn}disable_registration{/grn}
 {yel}mods/player-registration{/yel}:->{grn}registration_status{/grn}
@@ -124,7 +125,6 @@
 {yel}mods/builder{/yel}:->{grn}sbuild{/grn}
 {yel}mods/builder{/yel}:->{grn}mbuild{/grn}
 {yel}mods/builder{/yel}:->{grn}obuild{/grn}
-{yel}mods/builder{/yel}:->{grn}zbuild{/grn}
 {yel}mods/builder{/yel}:->{grn}nset{/grn}
 {yel}mods/builder{/yel}:->{grn}ndelete{/grn}
 {yel}mods/builder{/yel}:->{grn}nhelp{/grn}

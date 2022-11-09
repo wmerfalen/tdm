@@ -30,6 +30,8 @@ extern int next_zone_number();
 extern int next_mob_number();
 
 namespace mods::builder {
+	int16_t delete_all_zone_data();
+	std::tuple<bool,std::string> delete_by_mob_vnum(std::string_view mob_vnum);
 	std::tuple<int8_t,std::string> pave_on(player_ptr_t& player,std::string_view sandbox_name);
 	std::tuple<int8_t,std::string> pave_continue(player_ptr_t& player);
 	std::tuple<int8_t,std::string> pave_off(player_ptr_t& player);
@@ -115,6 +117,8 @@ namespace mods::builder {
 	void report_success(mods::player* player,std::string_view message);
 	/** if executing js, encode it */
 	void encode_scripted_response(player_ptr_t& player, std::string_view encoded);
+	std::pair<bool,std::string> update_zone_commands(zone_rnum zone_id);
+	std::tuple<bool,zone_pkid_t,std::string> update_zone_with_placements(int virtual_number,player_ptr_t player);
 };
 
 void r_error(const player_ptr_t& player,std::string_view msg);
