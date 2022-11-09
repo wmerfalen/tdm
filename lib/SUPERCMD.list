@@ -96,6 +96,7 @@
 {yel}mods/player-registration{/yel}:->{grn}enable_registration{/grn}
 {yel}mods/player-registration{/yel}:->{grn}disable_registration{/grn}
 {yel}mods/player-registration{/yel}:->{grn}registration_status{/grn}
+{yel}mods/obuild{/yel}:->{grn}obuild{/grn}
 {yel}mods/target-practice{/yel}:->{grn}install_dummy{/grn}
 {yel}mods/target-practice{/yel}:->{grn}uninstall_dummy{/grn}
 {yel}mods/target-practice{/yel}:->{grn}instantiate_dummy{/grn}
@@ -124,7 +125,6 @@
 {yel}mods/radio{/yel}:->{grn}admin_radio_station_reload{/grn}
 {yel}mods/radio{/yel}:->{grn}admin_radio_station_list{/grn}
 {yel}mods/radio{/yel}:->{grn}admin_radio_help{/grn}
-{yel}mods/builder{/yel}:->{grn}obuild{/grn}
 {yel}mods/builder{/yel}:->{grn}nset{/grn}
 {yel}mods/builder{/yel}:->{grn}ndelete{/grn}
 {yel}mods/builder{/yel}:->{grn}nhelp{/grn}
