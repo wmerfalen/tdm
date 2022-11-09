@@ -1,3 +1,5 @@
+\connect "postgres"
+
 --
 -- PostgreSQL database dump
 --

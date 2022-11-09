@@ -1,4 +1,5 @@
 #include "rbuild.hpp"
+#include "rbuild-sandbox.hpp"
 #include "doors.hpp"
 #include "jx.hpp"
 #include "player.hpp"

@@ -61,32 +61,6 @@ namespace mods::builder {
 	extern std::array<std::pair<int,std::string>,24> type_flags;
 	extern std::array<std::pair<int,std::string>,3> type2_flags;
 
-	struct sandbox_data_t {
-			sandbox_data_t();
-			~sandbox_data_t() = default;
-			sandbox_data_t(
-			    player_ptr_t player,
-			    std::string_view name,
-			    int start,
-			    int zone_virtual_number);
-			int8_t new_sandbox(
-			    player_ptr_t player,
-			    std::string_view name,
-			    int start,
-			    int zone_virtual_number);
-			std::string_view name() const;
-			void set_name(std::string_view n);
-			std::shared_ptr<builder_data_t> builder_data() {
-				return m_builder_data;
-			}
-		protected:
-			std::shared_ptr<builder_data_t> m_builder_data;
-			std::string m_name;
-			player_ptr_t m_player;
-	};
-
-	using sandbox_list_t = std::unordered_map<std::string,std::deque<sandbox_data_t>> ;
-	extern sandbox_list_t sandboxes;
 	/* Factory method to generate a room for us */
 	room_data new_room(player_ptr_t player,int direction);
 	bool flush_to_db(char_data *ch,int room);

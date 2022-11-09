@@ -112,6 +112,7 @@
 {yel}mods/query-objects{/yel}:->{grn}query_zone{/grn}
 {yel}mods/contract-step-callback{/yel}:->{grn}contract_step_callback{/grn}
 {yel}mods/scripted-sequence-runner{/yel}:->{grn}run_sequence{/grn}
+{yel}mods/rbuild-sandbox{/yel}:->{grn}rbuild_sandbox{/grn}
 {yel}mods/rbuild{/yel}:->{grn}rbuild{/grn}
 {yel}mods/rand{/yel}:->{grn}roll_dice{/grn}
 {yel}mods/rand{/yel}:->{grn}roll_dice_average{/grn}
@@ -123,7 +124,6 @@
 {yel}mods/radio{/yel}:->{grn}admin_radio_station_reload{/grn}
 {yel}mods/radio{/yel}:->{grn}admin_radio_station_list{/grn}
 {yel}mods/radio{/yel}:->{grn}admin_radio_help{/grn}
-{yel}mods/builder{/yel}:->{grn}rbuild_sandbox{/grn}
 {yel}mods/builder{/yel}:->{grn}obuild{/grn}
 {yel}mods/builder{/yel}:->{grn}nset{/grn}
 {yel}mods/builder{/yel}:->{grn}ndelete{/grn}
