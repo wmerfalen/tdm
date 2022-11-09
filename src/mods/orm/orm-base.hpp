@@ -73,15 +73,19 @@ namespace mods::orm {
 			//	return row[element.data()].as<T>();
 			//}
 
-			template <typename T>
-			requires(std::is_same<T,std::string>::value || std::is_same<T,std::string_view>::value)
+			template <typename T> requires(std::is_same<T,std::string>::value || std::is_same<T,std::string_view>::value)
 			static inline std::string extract(pqxx::row& row,std::string_view element) {
-				return row[element.data()].c_str();
+				if(row[element.data()].is_null() == false) {
+					return row[element.data()].c_str();
+				}
+				return "";
 			}
-			template <typename T>
-			requires(std::is_integral<T>::value)
+			template <typename T> requires(std::is_integral<T>::value)
 			static inline T extract(pqxx::row& row,std::string_view element) {
-				return row[element.data()].as<T>();
+				if(row[element.data()].is_null() == false) {
+					return row[element.data()].as<T>();
+				}
+				return T{};
 			}
 
 
@@ -344,13 +348,13 @@ namespace mods::orm {
 	};
 
 #define MENTOC_ORM_GENERATE_MAP_IMPL(r,F,MEMBER_TUPLE) \
-{\
-	save_string_field<BOOST_PP_TUPLE_ELEM(2,0,MEMBER_TUPLE)>(BOOST_PP_TUPLE_ELEM(2,1,MEMBER_TUPLE),BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(2,1,MEMBER_TUPLE)),&exported_data);\
-}
+	{\
+		save_string_field<BOOST_PP_TUPLE_ELEM(2,0,MEMBER_TUPLE)>(BOOST_PP_TUPLE_ELEM(2,1,MEMBER_TUPLE),BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(2,1,MEMBER_TUPLE)),&exported_data);\
+	}
 
 #define MENTOC_ORM_EXPORT_CLASS(SEQUENCE) \
 	virtual strmap_t export_class(){ \
-			BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_GENERATE_MAP_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)) \
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_GENERATE_MAP_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)) \
 		return exported_data;\
 	}
 
@@ -377,7 +381,7 @@ namespace mods::orm {
 #define MENTOC_NOT_PKID(s,data,elem) BOOST_PP_EQUAL(BOOST_PP_TUPLE_ELEM(6,1,elem),data)
 
 #define MENTOC_ORM_FEED_CLASS(SEQUENCE) \
-			BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_FEED_ROW_INTEGRAL_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_TYPE,1,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)));\
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_FEED_ROW_INTEGRAL_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_TYPE,1,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)));\
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_FEED_ROW_STRING_VECTOR_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_TYPE,2,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)));\
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_FEED_ROW_STRING_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_TYPE,3,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)));
 
@@ -385,19 +389,19 @@ namespace mods::orm {
 	BOOST_PP_TUPLE_ELEM(4,0,MEMBER_TUPLE) BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE);
 
 #define MENTOC_ORM_MEMBER_VARS_FOR(SEQUENCE) \
-			BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_MEMBER_VARS_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE))
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_MEMBER_VARS_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE))
 
 
 #define MENTOC_COLUMN_LIST_IMPL(r,data,MEMBER_TUPLE) \
 	BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE)),
 
 #define MENTOC_ORM_COLUMN_LIST_FOR(SEQUENCE) \
-		static const std::vector<std::string>& column_list() {\
-			static const std::vector<std::string>& list = {\
-			BOOST_PP_SEQ_FOR_EACH(MENTOC_COLUMN_LIST_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE))\
-			};\
-			return list;\
-		}
+	static const std::vector<std::string>& column_list() {\
+		static const std::vector<std::string>& list = {\
+		        BOOST_PP_SEQ_FOR_EACH(MENTOC_COLUMN_LIST_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE))\
+		    };\
+		return list;\
+	}
 
 #define MENTOC_ORM_FEED_IMPL(SEQUENCE) \
 	int16_t feed(const pqxx::result::reference& row) {\
@@ -409,9 +413,9 @@ namespace mods::orm {
 	}
 
 #define MENTOC_ORM_LINK_TO_PLAYER_USING(M_FIELD_NAME) \
-		static std::string player_id_column() { \
-			return M_FIELD_NAME;\
-		}
+	static std::string player_id_column() { \
+		return M_FIELD_NAME;\
+	}
 
 #define MENTOC_ORM_SLOT_LIST_IMPL(r,data,MEMBER_TUPLE)\
 	BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(6,1,MEMBER_TUPLE)) ,
@@ -419,11 +423,11 @@ namespace mods::orm {
 #define MENTOC_CHECK_SLOT_LIST(s,data,elem) BOOST_PP_EQUAL(BOOST_PP_TUPLE_ELEM(6,5,elem),data)
 
 #define MENTOC_ORM_SLOT_LIST_FOR(SEQUENCE) \
-		static inline std::vector<std::string> get_slot_list() {\
-			return {\
-				BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SLOT_LIST_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_SLOT_LIST,1,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)))\
-			};\
-		}
+	static inline std::vector<std::string> get_slot_list() {\
+		return {\
+			BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SLOT_LIST_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_SLOT_LIST,1,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)))\
+		};\
+	}
 
 #define MENTOC_ORM_SET_IMPL(r,data,MEMBER_TUPLE)\
 	if(field.compare(BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(6,1,MEMBER_TUPLE))) == 0){\
@@ -434,67 +438,67 @@ namespace mods::orm {
 #define MENTOC_CHECK_SLOT_LIST(s,data,elem) BOOST_PP_EQUAL(BOOST_PP_TUPLE_ELEM(6,5,elem),data)
 
 #define MENTOC_ORM_SET_FUNCTION(SEQUENCE) \
-		std::tuple<bool,std::string> set(std::string field,std::string value) {\
-				BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SET_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE));\
-			this->set_dirty(true);\
-				return {0,"unrecognized field"};\
-		}
+	std::tuple<bool,std::string> set(std::string field,std::string value) {\
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SET_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE));\
+		this->set_dirty(true);\
+		return {0,"unrecognized field"};\
+	}
 
 #define MENTOC_ORM_SLOT_TYPE_STRING_IMPL(r,data,MEMBER_TUPLE) \
 	BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(3,1,MEMBER_TUPLE)),
 
 #define MENTOC_ORM_SLOT_TYPES_FOR(SEQUENCE) \
-		const std::vector<std::string>& integral_slots() const {\
-			static std::vector<std::string> list;\
-			static bool set = false;\
-			if(!set){\
-				set = 1;\
-				list = {\
-					BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SLOT_TYPE_STRING_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_TYPE,1,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)))\
-				};\
-			}\
-			return list;\
+	const std::vector<std::string>& integral_slots() const {\
+		static std::vector<std::string> list;\
+		static bool set = false;\
+		if(!set){\
+			set = 1;\
+			list = {\
+			        BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SLOT_TYPE_STRING_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_TYPE,1,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)))\
+			    };\
 		}\
-		const std::vector<std::string>& vector_string_slots() const {\
-			static std::vector<std::string> list;\
-			static bool set = false;\
-			if(!set){\
-				set = 1;\
-				list = {\
-				BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SLOT_TYPE_STRING_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_TYPE,2,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)))\
-				};\
-			}\
-			return list;\
+		return list;\
+	}\
+	const std::vector<std::string>& vector_string_slots() const {\
+		static std::vector<std::string> list;\
+		static bool set = false;\
+		if(!set){\
+			set = 1;\
+			list = {\
+			        BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SLOT_TYPE_STRING_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_TYPE,2,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)))\
+			    };\
 		}\
-		const std::vector<std::string>& string_slots() const {\
-			static std::vector<std::string> list;\
-			static bool set = false;\
-			if(!set){\
-				set = 1;\
-				list = {\
-				BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SLOT_TYPE_STRING_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_TYPE,3,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)))\
-				};\
-			}\
-			return list;\
-		}
+		return list;\
+	}\
+	const std::vector<std::string>& string_slots() const {\
+		static std::vector<std::string> list;\
+		static bool set = false;\
+		if(!set){\
+			set = 1;\
+			list = {\
+			        BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_SLOT_TYPE_STRING_IMPL,~,BOOST_PP_SEQ_FILTER(MENTOC_CHECK_TYPE,3,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE)))\
+			    };\
+		}\
+		return list;\
+	}
 
 #define MENTOC_ORM_DELETE_BY_PLAYER(M_MENTOC_CLASS_NAME) \
-		auto delete_by_player(const uint64_t& player_id) { \
-			return mods::orm::util::delete_by_player<M_MENTOC_CLASS_NAME,sql_compositor>(this,player_id); \
-		}
+	auto delete_by_player(const uint64_t& player_id) { \
+		return mods::orm::util::delete_by_player<M_MENTOC_CLASS_NAME,sql_compositor>(this,player_id); \
+	}
 
 #define MENTOC_ORM_LOAD_BY_PLAYER(M_MENTOC_CLASS_NAME) \
-		auto load_by_player(const uint64_t& player_id) { \
-			return mods::orm::util::load_multi_by_player<M_MENTOC_CLASS_NAME,sql_compositor,uint64_t>(\
-			           this,\
-			           player_id\
-			       );\
-		}
+	auto load_by_player(const uint64_t& player_id) { \
+		return mods::orm::util::load_multi_by_player<M_MENTOC_CLASS_NAME,sql_compositor,uint64_t>(\
+		        this,\
+		        player_id\
+		    );\
+	}
 
 #define MENTOC_ORM_SAVE(M_MENTOC_CLASS_NAME) \
-		auto save() { \
-			return std::get<0>(this->update<M_MENTOC_CLASS_NAME>(this));\
-		}
+	auto save() { \
+		return std::get<0>(this->update<M_MENTOC_CLASS_NAME>(this));\
+	}
 
 #define MENTOC_ORM_PRIMARY_KEY_FUNCTIONS() \
 	std::string primary_key_value() const { \
@@ -516,19 +520,19 @@ namespace mods::orm {
 
 #define MENTOC_ORM_INITIALIZE_ROW_USING(SEQUENCE) \
 	int initialize_row(\
-			BOOST_PP_SEQ_FOR_EACH_I(\
-				MENTOC_ORM_INITIALIZE_ROW_IMPL,\
-				BOOST_PP_SEQ_SIZE(SEQUENCE),\
-				SEQUENCE\
-				)\
-		) { \
+	    BOOST_PP_SEQ_FOR_EACH_I(\
+	        MENTOC_ORM_INITIALIZE_ROW_IMPL,\
+	        BOOST_PP_SEQ_SIZE(SEQUENCE),\
+	        SEQUENCE\
+	    )\
+	) { \
 		BOOST_PP_SEQ_FOR_EACH(MENTOC_ORM_INITIALIZE_ROW_BODY,~,SEQUENCE); \
-			auto s = create(this); \
-			if(ORM_FAILURE(s)) { \
-				return -1; \
-			} \
-			return std::get<2>(s); \
-		}
+		auto s = create(this); \
+		if(ORM_FAILURE(s)) { \
+			return -1; \
+		} \
+		return std::get<2>(s); \
+	}
 
 #define MENTOC_ORM_FEED_MULTI_IMPL(M_R,data,MEMBER_TUPLE) \
 	r.BOOST_PP_TUPLE_ELEM(6,1,MEMBER_TUPLE) = extract<BOOST_PP_TUPLE_ELEM(6,0,MEMBER_TUPLE)>(row,BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(6,1,MEMBER_TUPLE)));
@@ -544,17 +548,17 @@ namespace mods::orm {
 
 
 #define MENTOC_ORM_CLASS(SEQUENCE,TABLE_NAME) \
-		static constexpr const char* table = TABLE_NAME;\
-		std::string table_name() { return TABLE_NAME; }\
-		MENTOC_ORM_MEMBER_VARS_FOR(SEQUENCE);\
-		MENTOC_ORM_EXPORT_CLASS(SEQUENCE);\
-		MENTOC_ORM_INIT(SEQUENCE);\
-		MENTOC_ORM_COLUMN_LIST_FOR(SEQUENCE);\
-		MENTOC_ORM_FEED_IMPL(SEQUENCE);\
-		MENTOC_ORM_SLOT_LIST_FOR(SEQUENCE); \
-		MENTOC_ORM_SET_FUNCTION(SEQUENCE); \
-		MENTOC_ORM_SLOT_TYPES_FOR(SEQUENCE); \
-		MENTOC_ORM_DIRTY_FOR(SEQUENCE);
+	static constexpr const char* table = TABLE_NAME;\
+	std::string table_name() { return TABLE_NAME; }\
+	MENTOC_ORM_MEMBER_VARS_FOR(SEQUENCE);\
+	MENTOC_ORM_EXPORT_CLASS(SEQUENCE);\
+	MENTOC_ORM_INIT(SEQUENCE);\
+	MENTOC_ORM_COLUMN_LIST_FOR(SEQUENCE);\
+	MENTOC_ORM_FEED_IMPL(SEQUENCE);\
+	MENTOC_ORM_SLOT_LIST_FOR(SEQUENCE); \
+	MENTOC_ORM_SET_FUNCTION(SEQUENCE); \
+	MENTOC_ORM_SLOT_TYPES_FOR(SEQUENCE); \
+	MENTOC_ORM_DIRTY_FOR(SEQUENCE);
 
 #define MENTOC_ORM_STRING_LIMITS_IMPL(r,data,MEMBER_TUPLE) \
 	static constexpr std::size_t BOOST_PP_CAT(max_len_,BOOST_PP_TUPLE_ELEM(2,0,MEMBER_TUPLE)) = BOOST_PP_TUPLE_ELEM(2,1,MEMBER_TUPLE);

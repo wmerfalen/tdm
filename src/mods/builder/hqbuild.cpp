@@ -5,12 +5,18 @@
 #include "../orm/hq.hpp"
 #include "../affiliations.hpp"
 
+#undef m_debug
+#undef m_error
+#define m_debug(MSG) mentoc_prefix_debug("[mods::hqbuild::debug]")  << MSG << "\n";
+#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::hqbuild::ERROR]"))  << MSG << "\n";
 namespace mods::builder::hqbuild {
 	void clear() {
 		mods::orm::hq_list().clear();
 	}
 	void load_all() {
+		m_debug("load-all");
 		mods::orm::hq_list() = std::move(mods::orm::load_all_by_table<mods::orm::hq>());
+		m_debug("done load-all");
 	}
 
 	bool delete_by_room_vnum(const room_vnum vnum) {

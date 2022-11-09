@@ -11,6 +11,10 @@
 #include "../contract-types.hpp"
 
 #include "slotted-builder.hpp"
+#undef m_debug
+#undef m_error
+#define m_debug(MSG) mentoc_prefix_debug("[mods::conbuild::debug]")  << MSG << "\n";
+#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::conbuild::ERROR]"))  << MSG << "\n";
 
 namespace mods::builder::conbuild {
 
@@ -130,65 +134,67 @@ namespace mods::builder::conbuild {
 			/** set the base command */
 			set_base_command("conbuild");
 			clear();
+			m_debug("load_all being called");
 			load_all();
+			m_debug("done load_all");
 			remove_command_signatures({"list-extract","reload-all","remove","set"});
 			get_signatures()["new"] = "{grn}conbuild{/grn} {red}new <virtual-number>{/red}\r\n";
 			register_custom_non_profile_command("legend",[&](const std::vector<std::string>& args,std::string argument) -> std::tuple<bool,std::string> {
 				std::string legend = CAT("{yel}LEGEND:{/yel}\r\n",
-				                         "{yel}virtual-number{/yel}: {grn}The contract virtual number.{/grn}\r\n",
-				                         "{yel}Nth-step{/yel}: {grn}The zero-indexed position of the step.{/grn}\r\n",
-				                         "{yel}field{/yel}: {grn}A specific column on the contract_steps table. Use this to see a list of valid columns: 'conbuild columns'.{/grn}\r\n",
-				                         "{yel}text{/yel}: {grn}One or more words separated by spaces.{/grn}\r\n",
-				                         "{yel}---------------------------------------------------------------------------{/yel}\r\n",
-				                         "Important concepts:\r\n",
-				                         "When using the {yel}load-steps{/yel} command, a structure is loaded and is exclusive to you.\r\n",
-				                         "This exclusive structure has all the steps loaded for the given contract virtual number that you specify.\r\n",
-				                         "This does not mean that all other steps don't exist. They merely aren't included when you call various \r\n",
-				                         "commands that depend on that step structure.\r\n",
-				                         "Example workflow:\r\n",
-				                         "{grn}conbuild new 400{/grn} {yel}# this creates a new contract with the virtual number of 400{/yel}\r\n",
-				                         "{grn}conbuild new-step 400{/grn} {yel}# this creates a new step for the contract we just created.{/yel}\r\n",
-				                         "{grn}conbuild load-steps 400{/grn} {yel}# this loads the step we just created into our exclusive structure.{/yel}\r\n",
-				                         "{grn}conbuild show-steps 400{/grn} {yel}# this will now display the step we just created and loaded.{/yel}\r\n",
-				                         "\r\n",
-				                         "Below is an example output:\r\n",
-				                         "-----------------------------------------------\r\n",
-				                         " START EXAMPLE\r\n",
-				                         "-----------------------------------------------\r\n",
-				                         "[success]: [id]:->'218'\r\n",
-				                         "[s_contract_vnum]->'400'\r\n",
-				                         "[s_description]->'description'\r\n",
-				                         "[s_is_optional]->'0'\r\n",
-				                         "[s_mob_vnum]->'0'\r\n",
-				                         "[s_object_yaml]->''\r\n",
-				                         "[s_order]->'0'\r\n",
-				                         "[s_quota]->'0'\r\n",
-				                         "[s_room_vnum]->'0'\r\n",
-				                         "[s_task_target]->'0'\r\n",
-				                         "[s_task_type]->'0'\r\n",
-				                         "task_type_t: ''\r\n",
-				                         "task_target_t: 'TARGET_MOB'\r\n",
-				                         "\r\n",
-				                         "[success]: Done listing.\r\n",
-				                         "-----------------------------------------------\r\n",
-				                         " END EXAMPLE\r\n",
-				                         "-----------------------------------------------\r\n",
-				                         "\r\n",
-				                         "We know that there is only one step in our contract, so in order to modify the data on that step we address it as zero.\r\n"
-				                         "{grn}conbuild set-step-data 400 0 s_description this is my test description{/grn} {yel}# set the description {/yel}\r\n",
-				                         "{grn}conbuild set-step-data 400 0 s_task_type GOAL_FIND{/grn} {yel}# set the task type {/yel}\r\n",
-				                         "{grn}conbuild save-step 400 0{/grn} {yel}# save our step {/yel}\r\n",
-				                         "If we were to add another step we would use the index 1 instead of zero because now there will be two steps in the contract.\r\n",
-				                         "\r\n"
-				                        );
+				    "{yel}virtual-number{/yel}: {grn}The contract virtual number.{/grn}\r\n",
+				    "{yel}Nth-step{/yel}: {grn}The zero-indexed position of the step.{/grn}\r\n",
+				    "{yel}field{/yel}: {grn}A specific column on the contract_steps table. Use this to see a list of valid columns: 'conbuild columns'.{/grn}\r\n",
+				    "{yel}text{/yel}: {grn}One or more words separated by spaces.{/grn}\r\n",
+				    "{yel}---------------------------------------------------------------------------{/yel}\r\n",
+				    "Important concepts:\r\n",
+				    "When using the {yel}load-steps{/yel} command, a structure is loaded and is exclusive to you.\r\n",
+				    "This exclusive structure has all the steps loaded for the given contract virtual number that you specify.\r\n",
+				    "This does not mean that all other steps don't exist. They merely aren't included when you call various \r\n",
+				    "commands that depend on that step structure.\r\n",
+				    "Example workflow:\r\n",
+				    "{grn}conbuild new 400{/grn} {yel}# this creates a new contract with the virtual number of 400{/yel}\r\n",
+				    "{grn}conbuild new-step 400{/grn} {yel}# this creates a new step for the contract we just created.{/yel}\r\n",
+				    "{grn}conbuild load-steps 400{/grn} {yel}# this loads the step we just created into our exclusive structure.{/yel}\r\n",
+				    "{grn}conbuild show-steps 400{/grn} {yel}# this will now display the step we just created and loaded.{/yel}\r\n",
+				    "\r\n",
+				    "Below is an example output:\r\n",
+				    "-----------------------------------------------\r\n",
+				    " START EXAMPLE\r\n",
+				    "-----------------------------------------------\r\n",
+				    "[success]: [id]:->'218'\r\n",
+				    "[s_contract_vnum]->'400'\r\n",
+				    "[s_description]->'description'\r\n",
+				    "[s_is_optional]->'0'\r\n",
+				    "[s_mob_vnum]->'0'\r\n",
+				    "[s_object_yaml]->''\r\n",
+				    "[s_order]->'0'\r\n",
+				    "[s_quota]->'0'\r\n",
+				    "[s_room_vnum]->'0'\r\n",
+				    "[s_task_target]->'0'\r\n",
+				    "[s_task_type]->'0'\r\n",
+				    "task_type_t: ''\r\n",
+				    "task_target_t: 'TARGET_MOB'\r\n",
+				    "\r\n",
+				    "[success]: Done listing.\r\n",
+				    "-----------------------------------------------\r\n",
+				    " END EXAMPLE\r\n",
+				    "-----------------------------------------------\r\n",
+				    "\r\n",
+				    "We know that there is only one step in our contract, so in order to modify the data on that step we address it as zero.\r\n"
+				    "{grn}conbuild set-step-data 400 0 s_description this is my test description{/grn} {yel}# set the description {/yel}\r\n",
+				    "{grn}conbuild set-step-data 400 0 s_task_type GOAL_FIND{/grn} {yel}# set the task type {/yel}\r\n",
+				    "{grn}conbuild save-step 400 0{/grn} {yel}# save our step {/yel}\r\n",
+				    "If we were to add another step we would use the index 1 instead of zero because now there will be two steps in the contract.\r\n",
+				    "\r\n"
+				);
 				push_encoded_ok(legend);
 				return {1,""};
 			});
 			register_custom_command("help","",[this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				display_signatures();
 				std::string msg = CAT("\r\n",
-				                      "{grn}Step Goals:{/grn}\r\n"
-				                     );
+				    "{grn}Step Goals:{/grn}\r\n"
+				);
 				for(const auto& pair : mods::contracts::task_string_map()) {
 					msg += CAT("{yel}",pair.first,"{/yel}\r\n");
 				}
@@ -197,12 +203,12 @@ namespace mods::builder::conbuild {
 					msg += CAT("{yel}",pair.first,"{/yel}\r\n");
 				}
 				msg += CAT("\r\n",
-				           "Example: How to set multiple types on a step's task_type_t column:\r\n",
-				           "{grn}conbuild set-step-data 400 0 s_task_type GOAL_QUOTA,GOAL_KILL{/grn}\r\n",
-				           "Example: How to set step target:\r\n",
-				           "{grn}conbuild set-step-data 400 0 s_task_target TARGET_MOB{/grn}\r\n",
-				           "\r\n"
-				          );
+				    "Example: How to set multiple types on a step's task_type_t column:\r\n",
+				    "{grn}conbuild set-step-data 400 0 s_task_type GOAL_QUOTA,GOAL_KILL{/grn}\r\n",
+				    "Example: How to set step target:\r\n",
+				    "{grn}conbuild set-step-data 400 0 s_task_target TARGET_MOB{/grn}\r\n",
+				    "\r\n"
+				);
 
 				push_encoded_ok(msg);
 				return {1,""};
@@ -559,11 +565,13 @@ namespace mods::builder::conbuild {
 					return {1,"set"};
 				}
 				if(f.compare("s_reward_money") == 0) {
-					step->s_reward_money = mods::util::stoi(v).value_or(0);
+					step->s_reward_money = mods::util::stoi(v)
+					    .value_or(0);
 					return {1,"set"};
 				}
 				if(f.compare("s_reward_xp") == 0) {
-					step->s_reward_xp = mods::util::stoi(v).value_or(0);
+					step->s_reward_xp = mods::util::stoi(v)
+					    .value_or(0);
 					return {1,"set"};
 				}
 				return {0,"nothing set"};
@@ -604,8 +612,10 @@ namespace mods::builder::conbuild {
 		/** required */
 		/** ======== */
 		void load_all() {
+			m_debug("load_all");
 			contract_list = std::move(mods::orm::load_all_by_table<mods::orm::contracts>());
 			step_list = std::move(mods::orm::load_all_by_table<mods::orm::contract_steps>());
+			m_debug("done load all");
 		}
 	};
 

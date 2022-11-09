@@ -5,13 +5,12 @@
 #include "str.hpp"
 #include "filesystem.hpp"
 
-#define __MENTOC_SHOW_MODS_drops_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_drops_DEBUG_OUTPUT__
-#define m_debug(MSG) mentoc_prefix_debug("[mods::drops::debug]")  << MSG << "\n";
-#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::drops::ERROR]"))  << MSG << "\n";
+	#define m_debug(MSG) mentoc_prefix_debug("[mods::drops::debug]")  << MSG << "\n";
+	#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::drops::ERROR]"))  << MSG << "\n";
 #else
-#define m_debug(MSG) ;;
-#define m_error(MSG) ;;
+	#define m_debug(MSG) ;;
+	#define m_error(MSG) ;;
 #endif
 
 extern void object_list_new_owner(struct obj_data *list, char_data *ch);
@@ -317,7 +316,7 @@ namespace mods::drops {
 		}
 		if(dice(COMMON_DROP_DICE_COUNT(),
 		        COMMON_DROP_DICE_SIDES()) >
-		        COMMON_DROP_DICE_THRESHOLD()) {
+		    COMMON_DROP_DICE_THRESHOLD()) {
 			create_common_object_into(corpse);
 		}
 	}
@@ -403,11 +402,11 @@ namespace mods::drops {
 			godtier_drop_item_for_mob(item,TENGU_EVISCERATOR);
 		}
 		for(const auto& item : {
-		            hn3clay,
-		            hn3shgren,
-		            neumine,
-		            prflash,
-		        }) {
+		        hn3clay,
+		        hn3shgren,
+		        neumine,
+		        prflash,
+		    }) {
 			legendary_drop_item_for_mob(item,DEFILER);
 			legendary_drop_item_for_mob(item,ORTHOS_GUARD);
 			legendary_drop_item_for_mob(item,ORTHOS_MENACE);
@@ -420,17 +419,17 @@ namespace mods::drops {
 		}
 
 		for(const auto item : {
-		            // GOD TIER items
-		            tshould,
-		            vshould,
-		            pk3vest,
-		            xmshould,
-		            xscorpvest,
-		            xscorpgloves,
-		            xtgaunt,
+		        // GOD TIER items
+		        tshould,
+		        vshould,
+		        pk3vest,
+		        xmshould,
+		        xscorpvest,
+		        xscorpgloves,
+		        xtgaunt,
 
-		            cormine, xmshould, tshin, tshould, tgaunt,
-		        }) {
+		        cormine, xmshould, tshin, tshould, tgaunt,
+		    }) {
 			easy_drop_item_for_mob(item,DEFILER);
 			/**
 			 * TODO: figure out how hard it is to kill each ORTHOS type and adjust drop rate
@@ -449,24 +448,24 @@ namespace mods::drops {
 		auto before_size = obj_list.size();
 
 #define CRAWL_FOR(type) \
-		for(auto& type : parse_yamls_in_directory(#type)) {\
-			if(mods::rarity::is_common(type->type()->attributes->rarity)) {\
-				BOOST_PP_CAT(BOOST_PP_CAT(common_,type),s).emplace_back(type->feed_file());\
-			}\
-			if(mods::rarity::is_uncommon(type->type()->attributes->rarity)) {\
-				BOOST_PP_CAT(BOOST_PP_CAT(uncommon_,type),s).emplace_back(type->feed_file());\
-			}\
-			if(mods::rarity::is_rare(type->type()->attributes->rarity)) {\
-				BOOST_PP_CAT(BOOST_PP_CAT(rare_,type),s).emplace_back(type->feed_file());\
-			}\
-			if(mods::rarity::is_legendary(type->type()->attributes->rarity)) {\
-				BOOST_PP_CAT(BOOST_PP_CAT(legendary_,type),s).emplace_back(type->feed_file());\
-			}\
-			if(mods::rarity::is_god_tier(type->type()->attributes->rarity)) {\
-				BOOST_PP_CAT(BOOST_PP_CAT(god_tier_,type),s).emplace_back(type->feed_file());\
-			}\
-			mods::globals::dispose_object(type->uuid);\
-		}
+	for(auto& type : parse_yamls_in_directory(#type)) {\
+		if(mods::rarity::is_common(type->type()->attributes->rarity)) {\
+			BOOST_PP_CAT(BOOST_PP_CAT(common_,type),s).emplace_back(type->feed_file());\
+		}\
+		if(mods::rarity::is_uncommon(type->type()->attributes->rarity)) {\
+			BOOST_PP_CAT(BOOST_PP_CAT(uncommon_,type),s).emplace_back(type->feed_file());\
+		}\
+		if(mods::rarity::is_rare(type->type()->attributes->rarity)) {\
+			BOOST_PP_CAT(BOOST_PP_CAT(rare_,type),s).emplace_back(type->feed_file());\
+		}\
+		if(mods::rarity::is_legendary(type->type()->attributes->rarity)) {\
+			BOOST_PP_CAT(BOOST_PP_CAT(legendary_,type),s).emplace_back(type->feed_file());\
+		}\
+		if(mods::rarity::is_god_tier(type->type()->attributes->rarity)) {\
+			BOOST_PP_CAT(BOOST_PP_CAT(god_tier_,type),s).emplace_back(type->feed_file());\
+		}\
+		mods::globals::dispose_object(type->uuid);\
+	}
 
 		for(auto& c: parse_yamls_in_directory("consumable")) {
 			if(c->consumable()->attributes->str_type.compare("AMMUNITION") != 0) {

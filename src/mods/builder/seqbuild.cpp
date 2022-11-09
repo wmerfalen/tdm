@@ -12,6 +12,10 @@
 
 #include "slotted-builder.hpp"
 
+#undef m_debug
+#undef m_error
+#define m_debug(MSG) mentoc_prefix_debug("[mods::builder::seqbuild::debug]")  << MSG << "\n";
+#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::builder::seqbuild::ERROR]"))  << MSG << "\n";
 namespace mods::builder::seqbuild {
 
 	bool contract_exists(int vnum) {
@@ -197,55 +201,55 @@ namespace mods::builder::seqbuild {
 			get_signatures()["new"] = "{grn}seqbuild{/grn} {red}new <virtual-number>{/red}\r\n";
 			register_custom_non_profile_command("legend",[&,this](const std::vector<std::string>& args,std::string argument) -> std::tuple<bool,std::string> {
 				std::string legend = CAT("{yel}LEGEND:{/yel}\r\n",
-				                         "{yel}virtual-number{/yel}: {grn}The contract virtual number.{/grn}\r\n",
-				                         "{yel}Nth-step{/yel}: {grn}The zero-indexed position of the step.{/grn}\r\n",
-				                         "{yel}field{/yel}: {grn}A specific column on the scripted_steps table. Use this to see a list of valid columns: 'seqbuild columns'.{/grn}\r\n",
-				                         "{yel}text{/yel}: {grn}One or more words separated by spaces.{/grn}\r\n",
-				                         "{yel}---------------------------------------------------------------------------{/yel}\r\n",
-				                         "Important concepts:\r\n",
-				                         "When using the {yel}load-steps{/yel} command, a structure is loaded and is exclusive to you.\r\n",
-				                         "This exclusive structure has all the steps loaded for the given contract virtual number that you specify.\r\n",
-				                         "This does not mean that all other steps don't exist. They merely aren't included when you call various \r\n",
-				                         "commands that depend on that step structure.\r\n",
-				                         "Example workflow:\r\n",
-				                         "{grn}seqbuild new 400{/grn} {yel}# this creates a new contract with the virtual number of 400{/yel}\r\n",
-				                         "{grn}seqbuild new-step 400{/grn} {yel}# this creates a new step for the contract we just created.{/yel}\r\n",
-				                         "{grn}seqbuild load-steps 400{/grn} {yel}# this loads the step we just created into our exclusive structure.{/yel}\r\n",
-				                         "{grn}seqbuild show-steps 400{/grn} {yel}# this will now display the step we just created and loaded.{/yel}\r\n",
-				                         "\r\n",
-				                         "Below is an example output:\r\n",
-				                         "-----------------------------------------------\r\n",
-				                         " START EXAMPLE\r\n",
-				                         "-----------------------------------------------\r\n",
-				                         "[success]: [id]:->'218'\r\n",
-				                         "[s_sequence_vnum]->'400'\r\n",
-				                         "[s_description]->'description'\r\n",
-				                         "[s_is_optional]->'0'\r\n",
-				                         "[s_mob_vnum]->'0'\r\n",
-				                         "[s_object_yaml]->''\r\n",
-				                         "[s_order]->'0'\r\n",
-				                         "[s_quota]->'0'\r\n",
-				                         "[s_room_vnum]->'0'\r\n",
-				                         "[s_task_target]->'0'\r\n",
-				                         "[s_task_type]->'0'\r\n",
-				                         "task_type_t: ''\r\n",
-				                         "task_target_t: 'TARGET_MOB'\r\n",
-				                         "\r\n",
-				                         "[success]: Done listing.\r\n",
-				                         "-----------------------------------------------\r\n",
-				                         " END EXAMPLE\r\n",
-				                         "-----------------------------------------------\r\n",
-				                         "\r\n",
-				                         "We know that there is only one step in our contract, so in order to modify the data on that step we address it as zero.\r\n"
-				                         "{grn}seqbuild set-step-data 400 0 s_description this is my test description{/grn} {yel}# set the description {/yel}\r\n",
-				                         "{grn}seqbuild set-step-data 400 0 s_task_type GOAL_FIND{/grn} {yel}# set the task type {/yel}\r\n",
-				                         "{grn}seqbuild save-step 400 0{/grn} {yel}# save our step {/yel}\r\n",
-				                         "{grn}seqbuild save-all-steps 400{/grn} {yel}# save ALL steps {/yel}\r\n",
-				                         "If we were to add another step we would use the index 1 instead of zero because now there will be two steps in the contract.\r\n",
-				                         "{grn}seqbuild callback <contract-vnum> <task-type> <task-target> <task-vnum> <sequence-vnum>{/grn} {yel}# create a callback on the contract step that triggers a sequence{/yel}\r\n",
-				                         "{grn}seqbuild reload-orm{/grn} {yel}# reloads sequences, sequence steps, and callbacks into their respective orm objects{/yel}\r\n",
-				                         "\r\n"
-				                        );
+				    "{yel}virtual-number{/yel}: {grn}The contract virtual number.{/grn}\r\n",
+				    "{yel}Nth-step{/yel}: {grn}The zero-indexed position of the step.{/grn}\r\n",
+				    "{yel}field{/yel}: {grn}A specific column on the scripted_steps table. Use this to see a list of valid columns: 'seqbuild columns'.{/grn}\r\n",
+				    "{yel}text{/yel}: {grn}One or more words separated by spaces.{/grn}\r\n",
+				    "{yel}---------------------------------------------------------------------------{/yel}\r\n",
+				    "Important concepts:\r\n",
+				    "When using the {yel}load-steps{/yel} command, a structure is loaded and is exclusive to you.\r\n",
+				    "This exclusive structure has all the steps loaded for the given contract virtual number that you specify.\r\n",
+				    "This does not mean that all other steps don't exist. They merely aren't included when you call various \r\n",
+				    "commands that depend on that step structure.\r\n",
+				    "Example workflow:\r\n",
+				    "{grn}seqbuild new 400{/grn} {yel}# this creates a new contract with the virtual number of 400{/yel}\r\n",
+				    "{grn}seqbuild new-step 400{/grn} {yel}# this creates a new step for the contract we just created.{/yel}\r\n",
+				    "{grn}seqbuild load-steps 400{/grn} {yel}# this loads the step we just created into our exclusive structure.{/yel}\r\n",
+				    "{grn}seqbuild show-steps 400{/grn} {yel}# this will now display the step we just created and loaded.{/yel}\r\n",
+				    "\r\n",
+				    "Below is an example output:\r\n",
+				    "-----------------------------------------------\r\n",
+				    " START EXAMPLE\r\n",
+				    "-----------------------------------------------\r\n",
+				    "[success]: [id]:->'218'\r\n",
+				    "[s_sequence_vnum]->'400'\r\n",
+				    "[s_description]->'description'\r\n",
+				    "[s_is_optional]->'0'\r\n",
+				    "[s_mob_vnum]->'0'\r\n",
+				    "[s_object_yaml]->''\r\n",
+				    "[s_order]->'0'\r\n",
+				    "[s_quota]->'0'\r\n",
+				    "[s_room_vnum]->'0'\r\n",
+				    "[s_task_target]->'0'\r\n",
+				    "[s_task_type]->'0'\r\n",
+				    "task_type_t: ''\r\n",
+				    "task_target_t: 'TARGET_MOB'\r\n",
+				    "\r\n",
+				    "[success]: Done listing.\r\n",
+				    "-----------------------------------------------\r\n",
+				    " END EXAMPLE\r\n",
+				    "-----------------------------------------------\r\n",
+				    "\r\n",
+				    "We know that there is only one step in our contract, so in order to modify the data on that step we address it as zero.\r\n"
+				    "{grn}seqbuild set-step-data 400 0 s_description this is my test description{/grn} {yel}# set the description {/yel}\r\n",
+				    "{grn}seqbuild set-step-data 400 0 s_task_type GOAL_FIND{/grn} {yel}# set the task type {/yel}\r\n",
+				    "{grn}seqbuild save-step 400 0{/grn} {yel}# save our step {/yel}\r\n",
+				    "{grn}seqbuild save-all-steps 400{/grn} {yel}# save ALL steps {/yel}\r\n",
+				    "If we were to add another step we would use the index 1 instead of zero because now there will be two steps in the contract.\r\n",
+				    "{grn}seqbuild callback <contract-vnum> <task-type> <task-target> <task-vnum> <sequence-vnum>{/grn} {yel}# create a callback on the contract step that triggers a sequence{/yel}\r\n",
+				    "{grn}seqbuild reload-orm{/grn} {yel}# reloads sequences, sequence steps, and callbacks into their respective orm objects{/yel}\r\n",
+				    "\r\n"
+				);
 				push_encoded_ok(legend);
 				return {1,""};
 			});
@@ -278,8 +282,8 @@ namespace mods::builder::seqbuild {
 			register_custom_command("help","",[this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				display_signatures();
 				std::string msg = CAT("\r\n",
-				                      "{grn}Step Goals:{/grn}\r\n"
-				                     );
+				    "{grn}Step Goals:{/grn}\r\n"
+				);
 				for(const auto& pair : mods::contracts::task_string_map()) {
 					msg += CAT("{yel}",pair.first,"{/yel}\r\n");
 				}
@@ -288,12 +292,12 @@ namespace mods::builder::seqbuild {
 					msg += CAT("{yel}",pair.first,"{/yel}\r\n");
 				}
 				msg += CAT("\r\n",
-				           "Example: How to set multiple types on a step's task_type_t column:\r\n",
-				           "{grn}seqbuild set-step-data 400 0 s_task_type GOAL_QUOTA,GOAL_KILL{/grn}\r\n",
-				           "Example: How to set step target:\r\n",
-				           "{grn}seqbuild set-step-data 400 0 s_task_target TARGET_MOB{/grn}\r\n",
-				           "\r\n"
-				          );
+				    "Example: How to set multiple types on a step's task_type_t column:\r\n",
+				    "{grn}seqbuild set-step-data 400 0 s_task_type GOAL_QUOTA,GOAL_KILL{/grn}\r\n",
+				    "Example: How to set step target:\r\n",
+				    "{grn}seqbuild set-step-data 400 0 s_task_target TARGET_MOB{/grn}\r\n",
+				    "\r\n"
+				);
 
 				push_encoded_ok(msg);
 				return {1,""};
@@ -518,7 +522,8 @@ namespace mods::builder::seqbuild {
 					}
 				}
 				if(i) {
-					decltype(step_list) cleaned_steps;
+					decltype(step_list)
+					cleaned_steps;
 					for(unsigned k =0; k < step_list.size(); k++) {
 						if(std::find(step_ids.begin(),step_ids.end(),k) == step_ids.end()) {
 							cleaned_steps.emplace_back(step_list[k]);
@@ -586,14 +591,17 @@ namespace mods::builder::seqbuild {
 					return {0,CAT("step index out of bounds: ",index)};
 				}
 				if(argshave()->int_at({1,2,4})->nth_is_any(3,integral_list())->passed()) {
-					return this->step_list[index]->set(argat(3),argat(4));
+					return this->step_list[index]
+					    ->set(argat(3),argat(4));
 				}
 				if(argshave()->int_at({1,2})->nth_is_any(3,accumulator_list())->passed()) {
 					/** we need to accumulate. save everything after the field argument */
-					return this->step_list[index]->set(argat(3),args()->gather_strings_starting_at(4));
+					return this->step_list[index]
+					    ->set(argat(3),args()->gather_strings_starting_at(4));
 				}
 				if(argshave()->int_at({1,2})->nth_is_any(3,string_list())->passed()) {
-					return this->step_list[index]->set(argat(3),argat(4));
+					return this->step_list[index]
+					    ->set(argat(3),argat(4));
 				}
 				return {0,"nothing set"};
 			});
@@ -634,9 +642,11 @@ namespace mods::builder::seqbuild {
 		/** required */
 		/** ======== */
 		void load_all() {
+			m_debug("load-all");
 			mods::orm::scripted_sequences_list() = std::move(mods::orm::load_all_by_table<mods::orm::scripted_sequences>());
 			mods::orm::scripted_step_list() = std::move(mods::orm::load_all_by_table<mods::orm::scripted_step>());
 			mods::orm::contract_step_callback_list() = std::move(mods::orm::load_all_by_table<mods::orm::contract_step_callback>());
+			m_debug("done load-all");
 		}
 	};
 

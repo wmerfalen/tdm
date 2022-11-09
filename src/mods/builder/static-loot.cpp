@@ -126,6 +126,7 @@ namespace mods::builder::staticlootbuild {
 		void load_all() {
 			m_debug("load-all");
 			mods::orm::static_loot_list() = mods::orm::load_all_static_loot_list();
+			m_debug("done load-all");
 		}
 		bool dispatch_multi_vnum_action(std::string argument) override {
 			m_debug("staticlootbuild class dispatch_multi_vnum_action");

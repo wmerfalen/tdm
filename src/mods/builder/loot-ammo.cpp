@@ -9,13 +9,13 @@
 
 #undef m_debug
 #undef m_error
-//#ifdef __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
-#define m_debug(MSG) mentoc_prefix_debug("[mods::ammobuild::debug]")  << MSG << "\n";
-#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::ammobuild::ERROR]"))  << MSG << "\n";
-//#else
-//#define m_debug(MSG) ;;
-//#define m_error(MSG) ;;
-//#endif
+#ifdef __MENTOC_SHOW_MODS_AMMOBUILD_DEBUG_OUTPUT__
+	#define m_debug(MSG) mentoc_prefix_debug("[mods::ammobuild::debug]")  << MSG << "\n";
+	#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::ammobuild::ERROR]"))  << MSG << "\n";
+#else
+	#define m_debug(MSG) ;;
+	#define m_error(MSG) ;;
+#endif
 
 
 namespace mods::builder::ammobuild {

@@ -124,6 +124,7 @@ namespace mods::builder::paybuild {
 		void load_all() {
 			m_debug("load-all");
 			mods::orm::loot_payload_list() = mods::orm::load_all_loot_payload_list();
+			m_debug("done load-all");
 		}
 		bool dispatch_multi_vnum_action(std::string argument) override {
 			m_debug("paybuild class dispatch_multi_vnum_action");

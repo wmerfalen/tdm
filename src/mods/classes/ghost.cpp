@@ -59,15 +59,10 @@ namespace mods::classes {
 		    )
 		);
 	}
-#ifdef __MENTOC_SEND_GHOST_PLAYER_REPLENISH_DEBUG_MESSAGE__
 	void report_replenish(player_ptr_t& m_player) {
 		m_player->sendln("Replenish");
 	}
-#else
-#define report_replenish(A) ;;
-#endif
 
-#ifdef __MENTOC_SHOW_GHOST_TIME_WHEN_DISSIPATE_WEARS_OFF__
 	void report_irl_ticks(player_ptr_t& m_player, const auto& ticks) {
 		m_player->sendln(
 		    CAT(
@@ -76,9 +71,6 @@ namespace mods::classes {
 		    )
 		);
 	}
-#else
-#define report_irl_ticks(A,B) ;;
-#endif
 
 	bool ghost::is_penetrating_shot() {
 		return m_is_penetrating_shot;
@@ -171,6 +163,8 @@ namespace mods::classes {
 		m_fantom = copy.m_fantom;
 		m_debugging_aerial_drone_scan = copy.m_debugging_aerial_drone_scan;
 		m_debugging_penetrating_shot = copy.m_debugging_penetrating_shot;
+		m_debugging_report_replenish = copy.m_debugging_report_replenish;
+		m_debugging_cryo_grenade = copy.m_debugging_cryo_grenade;
 	}
 	std::vector<base::ability_data_t>& ghost::get_abilities() {
 		return m_abilities;
@@ -307,6 +301,8 @@ namespace mods::classes {
 		m_fantom = nullptr;
 		m_debugging_aerial_drone_scan = 0;
 		m_debugging_penetrating_shot = 0;
+		m_debugging_report_replenish = 0;
+		m_debugging_cryo_grenade = 0;
 	}
 	void ghost::toggle_debug_for(std::string_view field) {
 		if(field.compare("ads") == 0) {
@@ -319,7 +315,18 @@ namespace mods::classes {
 			m_player->sendln("Toggled");
 			return;
 		}
-		m_player->sendln("unknown value. use either 'ads' or 'penshot'");
+		if(field.compare("replenish") == 0) {
+			m_debugging_report_replenish = !m_debugging_report_replenish;
+			m_player->sendln("Toggled");
+			return;
+		}
+		if(field.compare("cryo-nade") == 0) {
+			m_debugging_cryo_grenade = !m_debugging_cryo_grenade;
+			m_player->sendln("Toggled");
+			return;
+		}
+		m_player->sendln("unknown value. use one of:");
+		m_player->sendln("'ads','penshot','replenish','cryo-nade'");
 	}
 	int16_t ghost::save() {
 		return this->m_orm.save();
@@ -584,7 +591,9 @@ namespace mods::classes {
 				if(m_dissipate_charges < GHOST_DISSIPATE_CHARGE_MAX_COUNT() * tier) {
 					++m_dissipate_charges;
 				}
-				report_replenish(m_player);
+				if(m_debugging_report_replenish) {
+					m_player->sendln("Replenished.");
+				}
 			}
 		}
 	}
@@ -754,9 +763,9 @@ namespace mods::classes {
 			}
 		}
 		//m_player->block_for(duration, mods::deferred::EVENT_PLAYER_FINISHES_FEIGN_DEATH, 0);
-#ifdef GHOST_DEBUG_CRYO
-		m_cryogenic_grenade_count = 10;
-#endif
+		if(m_debugging_cryo_grenade) {
+			m_cryogenic_grenade_count = 10;
+		}
 		if(m_cryogenic_grenade_count == 0) {
 			return {false,"You don't have any cryogenic grenades"};
 		}

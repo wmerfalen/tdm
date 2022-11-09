@@ -10,6 +10,10 @@
 #include "../../db.h"
 #include "../str.hpp"
 #include "../builder-data.hpp"
+#undef m_debug
+#undef m_error
+#define m_debug(MSG) mentoc_prefix_debug("[mods::builder::raid::debug]")  << MSG << "\n";
+#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::builder::raid::ERROR]"))  << MSG << "\n";
 
 namespace mods::builder::raid {
 
@@ -221,9 +225,9 @@ namespace mods::builder::raid {
 			});
 
 			register_custom_command("set","<vnum> <field> <value>",
-			                        [this](
-			                            const std::vector<std::string>& args,
-			                            std::string argument,
+			    [this](
+			        const std::vector<std::string>& args,
+			        std::string argument,
 			std::shared_ptr<raid_orm_type> profile) -> std::tuple<bool,std::string> {
 				std::string msg;
 				if(!profile) {
@@ -270,7 +274,9 @@ namespace mods::builder::raid {
 		/** required */
 		/** ======== */
 		void load_all() {
+			m_debug("load-all");
 			mods::orm::raid_list() = std::move(mods::orm::load_all_raid_list());
+			m_debug("done load-all");
 		}
 	};
 

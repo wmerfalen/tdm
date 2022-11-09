@@ -8,7 +8,6 @@
 #include "orm/loot-ammo.hpp"
 #include "orm/static-loot.hpp"
 
-#define __MENTOC_MODS_LOOT_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_LOOT_SHOW_DEBUG_OUTPUT__
 	#define m_debug(a) std::cerr << "[mods::loot]: '" << a << "'\n";
 #else

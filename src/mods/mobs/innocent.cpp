@@ -7,13 +7,12 @@
 #include "extended-types.hpp"
 #include "../scan.hpp"
 
-#define  __MENTOC_MODS_MOBS_INNOCENT_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_INNOCENT_SHOW_DEBUG_OUTPUT__
-#define mps_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n";
-#define m_error(a) mentoc_prefix_debug("m|m|mps[ERROR]:") << a << "\n";
+	#define mps_debug(a) mentoc_prefix_debug("m|m|mps") << a << "\n";
+	#define m_error(a) mentoc_prefix_debug("m|m|mps[ERROR]:") << a << "\n";
 #else
-#define mps_debug(a) ;;
-#define m_error(a) ;;
+	#define mps_debug(a) ;;
+	#define m_error(a) ;;
 #endif
 namespace mods::mobs {
 	void innocent_shout(player_ptr_t npc) {

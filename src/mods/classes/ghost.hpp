@@ -232,6 +232,8 @@ namespace mods::classes {
 			obj_ptr_t m_fantom;
 			bool m_debugging_aerial_drone_scan;
 			bool m_debugging_penetrating_shot;
+			bool m_debugging_report_replenish;
+			bool m_debugging_cryo_grenade;
 	};
 	void ghost_advance_level(player_ptr_t& player);
 	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t& player);

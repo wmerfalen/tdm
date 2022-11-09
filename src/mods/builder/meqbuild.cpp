@@ -129,6 +129,7 @@ namespace mods::builder::meqbuild {
 			mods::orm::mob_equipment_list() = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment>());
 			mods::orm::mob_equipment_map_list() = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment_map>());
 			mods::mob_equipment::refresh_mappings();
+			m_debug("done load-all");
 		}
 		bool dispatch_multi_vnum_action(std::string argument) override {
 			m_debug("meqbuild class dispatch_multi_vnum_action");
