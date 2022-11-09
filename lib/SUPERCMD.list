@@ -57,6 +57,7 @@
 {yel}mods/players/banish{/yel}:->{grn}set_banish_room{/grn}
 {yel}mods/players/banish{/yel}:->{grn}banish{/grn}
 {yel}mods/json/export{/yel}:->{grn}json_export{/grn}
+{yel}mods/sbuild{/yel}:->{grn}sbuild{/grn}
 {yel}mods/fluxkraft/arcon-bar.hpp:		->generate_bar{/grn}
 {yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}procgen_random_amount{/grn}
 {yel}mods/fluxkraft/shape-dictionary{/yel}:->{grn}generate_zone{/grn}
@@ -69,6 +70,7 @@
 {yel}mods/mini-games{/yel}:->{grn}uninstall_minigame{/grn}
 {yel}mods/mini-games{/yel}:->{grn}list_minigame{/grn}
 {yel}mods/classes/super-user-fiddler{/yel}:->{grn}mock_level{/grn}
+{yel}mods/mbuild{/yel}:->{grn}mbuild{/grn}
 {yel}mods/boosters/adrenaline-shot{/yel}:->{grn}adshot_test{/grn}
 {yel}mods/memory{/yel}:->{grn}footprints{/grn}
 {yel}mods/super-users{/yel}:->{grn}vnumtele{/grn}
@@ -122,8 +124,6 @@
 {yel}mods/radio{/yel}:->{grn}admin_radio_station_list{/grn}
 {yel}mods/radio{/yel}:->{grn}admin_radio_help{/grn}
 {yel}mods/builder{/yel}:->{grn}rbuild_sandbox{/grn}
-{yel}mods/builder{/yel}:->{grn}sbuild{/grn}
-{yel}mods/builder{/yel}:->{grn}mbuild{/grn}
 {yel}mods/builder{/yel}:->{grn}obuild{/grn}
 {yel}mods/builder{/yel}:->{grn}nset{/grn}
 {yel}mods/builder{/yel}:->{grn}ndelete{/grn}

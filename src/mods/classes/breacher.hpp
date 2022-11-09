@@ -7,6 +7,12 @@
 using breacher_orm_t = mods::orm::breacher;
 namespace mods::classes {
 	struct breacher : base {
+			static constexpr std::string_view description = "{grn}BREACHERS{/grn}\r\n"
+			    "Breachers are a melee and shotgun class. They can take and deal massive amounts "
+			    "of damage. Think of the average rogue/assassin, and you will see a partial resemblance "
+			    "in the playstyle.\r\n"
+			    "Their ability to wear heavy armor with small movement penalties makes them the perfect "
+			    "tank element to an group dynamic.";
 			bool has_mana_for_skill(uint16_t skill) {
 				return true;
 			}

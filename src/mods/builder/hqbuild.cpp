@@ -1,4 +1,5 @@
 #include "hqbuild.hpp"
+#include "../builder.hpp"
 #include "../interpreter.hpp"
 #include "../builder_util.hpp"
 #include "../orm/hq.hpp"
@@ -61,18 +62,18 @@ namespace mods::builder::hqbuild {
 			return list;
 		}
 		for(const auto& item : {
-		            "affiliation",
-		            "basic_mob_count",
-		            "advanced_mob_count",
-		            "elite_mob_count",
-		            "suv_count",
-		            "sedan_count",
-		            "armored_van_count",
-		            "replenish_ticks",
-		            "replenish_basic_count",
-		            "replenish_advanced_count",
-		            "replenish_elite_count",
-		        }) {
+		        "affiliation",
+		        "basic_mob_count",
+		        "advanced_mob_count",
+		        "elite_mob_count",
+		        "suv_count",
+		        "sedan_count",
+		        "armored_van_count",
+		        "replenish_ticks",
+		        "replenish_basic_count",
+		        "replenish_advanced_count",
+		        "replenish_elite_count",
+		    }) {
 			list += CAT("  {gld}|:: ",item,"{/gld}\r\n");
 		}
 		return list;
@@ -87,40 +88,40 @@ namespace mods::builder::hqbuild {
 		if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 			player->pager_start();
 			*player << "usage: \r\n" <<
-			        /** help */
-			        " {grn}hqbuild{/grn} {red}help{/red}\r\n" <<
-			        "  |--> this help menu\r\n" <<
+			    /** help */
+			    " {grn}hqbuild{/grn} {red}help{/red}\r\n" <<
+			    "  |--> this help menu\r\n" <<
 
-			        /** new */
-			        " {grn}hqbuild{/grn} {red}new <affiliation> <level>{/red}\r\n" <<
-			        "  |--> create a hq in the current room.\r\n" <<
-			        "  {gld}|:: -:[affiliations]:-{/gld}\r\n" <<
-			        affiliation_list() <<
+			    /** new */
+			    " {grn}hqbuild{/grn} {red}new <affiliation> <level>{/red}\r\n" <<
+			    "  |--> create a hq in the current room.\r\n" <<
+			    "  {gld}|:: -:[affiliations]:-{/gld}\r\n" <<
+			    affiliation_list() <<
 
-			        /** set */
-			        " {grn}hqbuild{/grn} {red}set <attribute> <value>{/red}\r\n" <<
-			        "  |--> set attribute to value.\r\n" <<
-			        "  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
-			        attribute_list() <<
+			    /** set */
+			    " {grn}hqbuild{/grn} {red}set <attribute> <value>{/red}\r\n" <<
+			    "  |--> set attribute to value.\r\n" <<
+			    "  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
+			    attribute_list() <<
 
-			        /** save */
-			        " {grn}hqbuild{/grn} {red}save <room_vnum>...<room_vnumN>{/red}\r\n" <<
-			        "  |--> save all hq's within the room_vnums listed.\r\n" <<
+			    /** save */
+			    " {grn}hqbuild{/grn} {red}save <room_vnum>...<room_vnumN>{/red}\r\n" <<
+			    "  |--> save all hq's within the room_vnums listed.\r\n" <<
 
 
-			        /** delete */
-			        " {grn}hqbuild{/grn} {red}delete <room_vnum>...<room_vnumN>{/red}\r\n" <<
-			        "  |--> remove all hq's within the room_vnums listed.\r\n" <<
+			    /** delete */
+			    " {grn}hqbuild{/grn} {red}delete <room_vnum>...<room_vnumN>{/red}\r\n" <<
+			    "  |--> remove all hq's within the room_vnums listed.\r\n" <<
 
-			        /** list */
-			        " {grn}hqbuild{/grn} {red}list [room_vnum]...[room_vnumN]{/red}\r\n" <<
-			        "  |--> lists all active hq's optionally with room vnums.\r\n" <<
+			    /** list */
+			    " {grn}hqbuild{/grn} {red}list [room_vnum]...[room_vnumN]{/red}\r\n" <<
+			    "  |--> lists all active hq's optionally with room vnums.\r\n" <<
 
-			        /** reload-all */
-			        " {grn}hqbuild{/grn} {red}reload-all{/red}\r\n" <<
-			        "  |--> clears all hqbuild data and reloads from sql. Does not save before loading\r\n"
+			    /** reload-all */
+			    " {grn}hqbuild{/grn} {red}reload-all{/red}\r\n" <<
+			    "  |--> clears all hqbuild data and reloads from sql. Does not save before loading\r\n"
 
-			        "\r\n";
+			    "\r\n";
 			player->pager_end();
 			player->page(0);
 			return;
