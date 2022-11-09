@@ -109,6 +109,7 @@
 {yel}mods/query-objects{/yel}:->{grn}query_zone{/grn}
 {yel}mods/contract-step-callback{/yel}:->{grn}contract_step_callback{/grn}
 {yel}mods/scripted-sequence-runner{/yel}:->{grn}run_sequence{/grn}
+{yel}mods/rbuild{/yel}:->{grn}rbuild{/grn}
 {yel}mods/rand{/yel}:->{grn}roll_dice{/grn}
 {yel}mods/rand{/yel}:->{grn}roll_dice_average{/grn}
 {yel}mods/chat{/yel}:->{grn}chanmgr{/grn}
@@ -124,7 +125,6 @@
 {yel}mods/builder{/yel}:->{grn}mbuild{/grn}
 {yel}mods/builder{/yel}:->{grn}obuild{/grn}
 {yel}mods/builder{/yel}:->{grn}zbuild{/grn}
-{yel}mods/builder{/yel}:->{grn}rbuild{/grn}
 {yel}mods/builder{/yel}:->{grn}nset{/grn}
 {yel}mods/builder{/yel}:->{grn}ndelete{/grn}
 {yel}mods/builder{/yel}:->{grn}nhelp{/grn}
