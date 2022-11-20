@@ -199,14 +199,13 @@ namespace mods::mobs {
 		};
 		player_ptr->register_damage_event_callback(upkeep_if,[&](const feedback_t& feedback,const uuid_t& player) {
 			switch(feedback.damage_event) {
-				case de::OUT_OF_AMMO_EVENT: //{
-					//		/** TODO: I *REALLY* need this to work! */
-					//		auto ammo = create_object(ITEM_CONSUMABLE,"opsix-incendiary-ar-clip.yml");
-					//		player_ptr->carry(ammo);
-					//	}
-					//	mods::weapons::reload::reload_weapon(player_ptr,player_ptr->primary());
-					m_debug("DAMN! OUT OF AMMO!");
-					refill_ammo();
+				case de::OUT_OF_AMMO_EVENT: {
+						auto ammo = create_object(ITEM_CONSUMABLE,"opsix-incendiary-ar-clip.yml");
+						player_ptr->carry(ammo);
+						mods::weapons::reload::reload_weapon(player_ptr,player_ptr->primary());
+						mention("DAMN! OUT OF AMMO!");
+						refill_ammo();
+					}
 					break;
 				case de::NO_PRIMARY_WIELDED_EVENT:
 					m_debug("No primary wieldded... wtf?");
@@ -353,11 +352,7 @@ namespace mods::mobs {
 		return m_same_room_targets.size();
 	}
 	void defiler::hostile_phase_1() {
-#ifdef DEFILER_SIMPLIFIED_BTREE_DEBUG
-		m_debug(green_str("-----------------------------"));
-		m_debug(green_str("defiler simplified btree"));
-		m_debug(green_str("-----------------------------"));
-#endif
+		mention(green_str("defiler simplified btree"));
 
 		/**
 		 * TODO: if MELEE fighting someone...
