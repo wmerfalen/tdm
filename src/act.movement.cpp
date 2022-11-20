@@ -227,15 +227,11 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 
 int perform_move(char_data *ch, int dir, int need_specials_check) {
 	MENTOC_PREAMBLE();
-	if(player->builder_data) {
-		do_simple_move(ch, dir, 0);
-		return 1;
-	}
+	bool is_exit = EXIT(ch, dir);
 	room_rnum was_in;
 	follow_type *k, *next;
 	bool ghost_dissipated = player->ghost() && player->ghost()->is_dissipated();
 	bool is_breacher = player->breacher() != nullptr;
-	bool is_exit = EXIT(ch, dir);
 
 	if(ch == NULL || dir < 0 || dir >= NUM_OF_DIRS) {
 		log("SYSERR: perform_move received invalid parameters");
