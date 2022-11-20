@@ -110,7 +110,8 @@ ACMD	src/limits.cpp	/^ACMD(do_idle) {$/;"	kind:function	line:462	signature:(do_i
 ACMD	src/modify.cpp	/^ACMD(do_skillset) {$/;"	kind:function	line:182	signature:(do_skillset)
 ACMD	src/mods/bleed.cpp	/^	ACMD(do_bleed_me) {$/;"	kind:function	line:235	namespace:mods::bleed	signature:(do_bleed_me)
 ACMD	src/mods/blind.cpp	/^	ACMD(do_blind_me_for) {$/;"	kind:function	line:145	namespace:mods::blind	signature:(do_blind_me_for)
-ACMD	src/mods/classes/breacher.cpp	/^ACMD(do_teep) {$/;"	kind:function	line:94	signature:(do_teep)
+ACMD	src/mods/classes/breacher.cpp	/^ACMD(do_inject_adrenaline_shot) {$/;"	kind:function	line:127	signature:(do_inject_adrenaline_shot)
+ACMD	src/mods/classes/breacher.cpp	/^ACMD(do_teep) {$/;"	kind:function	line:137	signature:(do_teep)
 ACMD	src/mods/classes/contagion.cpp	/^	ACMD(do_invoke) {$/;"	kind:function	line:308	namespace:mods::class_abilities::contagion	signature:(do_invoke)
 ACMD	src/mods/classes/engineer.cpp	/^	ACMD(do_drone_bomb) {$/;"	kind:function	line:100	namespace:mods::class_abilities::engineer	signature:(do_drone_bomb)
 ACMD	src/mods/classes/ghost.cpp	/^	ACMD(do_aerial_drone_scan) {$/;"	kind:function	line:1371	namespace:mods::class_abilities::ghost	signature:(do_aerial_drone_scan)
@@ -159,7 +160,7 @@ ACMD	src/mods/mini-games/line-up.cpp	/^ACMD(do_reset_hack) {$/;"	kind:function	l
 ACMD	src/mods/mini-games/line-up.cpp	/^ACMD(do_rotate_left) {$/;"	kind:function	line:246	signature:(do_rotate_left)
 ACMD	src/mods/mini-games/line-up.cpp	/^ACMD(do_rotate_right) {$/;"	kind:function	line:242	signature:(do_rotate_right)
 ACMD	src/mods/mini-games/wires.cpp	/^ACMD(do_plug_cable) {$/;"	kind:function	line:117	signature:(do_plug_cable)
-ACMD	src/mods/mobs/defiler.cpp	/^	ACMD(do_bioscan) {$/;"	kind:function	line:638	namespace:mods::mobs::defiler_init	signature:(do_bioscan)
+ACMD	src/mods/mobs/defiler.cpp	/^	ACMD(do_bioscan) {$/;"	kind:function	line:643	namespace:mods::mobs::defiler_init	signature:(do_bioscan)
 ACMD	src/mods/mobs/goat.cpp	/^	ACMD(do_pray) {$/;"	kind:function	line:455	namespace:mods::mobs::goat_init	signature:(do_pray)
 ACMD	src/mods/mp.cpp	/^	ACMD(do_mp) {$/;"	kind:function	line:18	namespace:mods::mp	signature:(do_mp)
 ACMD	src/mods/orm/player-base-ability.cpp	/^		ACMD(do_save_my_pba) {$/;"	kind:function	line:177	namespace:mods::orm::pba	signature:(do_save_my_pba)
@@ -219,6 +220,7 @@ ADMINCMD	src/mods/weapons/smg-vc88.cpp	/^		ADMINCMD(do_vc88) {$/;"	kind:function
 ADMIN_DONE	src/globals.hpp	328;"	kind:macro	line:328	file:
 ADMIN_FAIL	src/globals.hpp	329;"	kind:macro	line:329	file:
 ADMIN_REJECT	src/globals.hpp	330;"	kind:macro	line:330	file:
+ADRENALINE_SHOT	src/mods/classes/breacher.hpp	/^				ADRENALINE_SHOT,$/;"	kind:enumerator	line:42	enum:mods::classes::breacher::ability_t	file:
 ADRENALINE_SHOT	src/mods/classes/engineer.hpp	/^				ADRENALINE_SHOT,$/;"	kind:enumerator	line:25	enum:mods::classes::engineer::ability_t	file:
 ADRENALINE_SHOT	src/mods/classes/ghost.hpp	/^				ADRENALINE_SHOT,$/;"	kind:enumerator	line:46	enum:mods::classes::ghost::ability_t	file:
 ADRENALINE_SHOT	src/mods/classes/marine.hpp	/^				ADRENALINE_SHOT,$/;"	kind:member	line:18	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -230,6 +232,7 @@ ADVANCE_LEVEL_BONUS_HP_SIDES	src/mods/values-list.cpp	/^ADVANCE_LEVEL_BONUS_HP_S
 ADVANCE_LEVEL_BONUS_HP_THRESHOLD	src/mods/values-list.cpp	/^ADVANCE_LEVEL_BONUS_HP_THRESHOLD,12$/;"	kind:variable	line:28
 AERIAL_DRONE	src/lense-type.hpp	/^	AERIAL_DRONE,$/;"	kind:enumerator	line:21	enum:lense_type_t	file:
 AERIAL_DRONE_NIGHT_VISION	src/lense-type.hpp	/^	AERIAL_DRONE_NIGHT_VISION,$/;"	kind:enumerator	line:23	enum:lense_type_t	file:
+AERIAL_DRONE_SCAN	src/mods/classes/breacher.hpp	/^				AERIAL_DRONE_SCAN,$/;"	kind:enumerator	line:30	enum:mods::classes::breacher::ability_t	file:
 AERIAL_DRONE_SCAN	src/mods/classes/ghost.hpp	/^				AERIAL_DRONE_SCAN,$/;"	kind:enumerator	line:34	enum:mods::classes::ghost::ability_t	file:
 AERIAL_DRONE_THERMAL	src/lense-type.hpp	/^	AERIAL_DRONE_THERMAL,$/;"	kind:enumerator	line:22	enum:lense_type_t	file:
 AFF	src/mods/affects.hpp	333;"	kind:macro	line:333	file:
@@ -698,6 +701,7 @@ CORPSE_EXPLOSION	src/mods/mobs/defiler.hpp	/^				CORPSE_EXPLOSION,$/;"	kind:memb
 CORPSE_EXPLOSION_MANA_COST	src/mods/values-list.cpp	/^CORPSE_EXPLOSION_MANA_COST,120$/;"	kind:variable	line:89
 CORROSIVE	src/mods/aoe.hpp	/^		CORROSIVE,	\/** Corrodes devices, melting them into a useless state. Causes irreversible burns to exposed skin *\/$/;"	kind:enumerator	line:27	enum:mods::aoe::types_t	file:
 CORROSIVE_AGENT	src/mods/classes/medic.hpp	/^				CORROSIVE_AGENT,$/;"	kind:enumerator	line:77	enum:mods::classes::medic::ability_t	file:
+CORROSIVE_CLAYMORE	src/mods/classes/breacher.hpp	/^				CORROSIVE_CLAYMORE,$/;"	kind:enumerator	line:51	enum:mods::classes::breacher::ability_t	file:
 CORROSIVE_CLAYMORE	src/mods/classes/engineer.hpp	/^				CORROSIVE_CLAYMORE,$/;"	kind:enumerator	line:35	enum:mods::classes::engineer::ability_t	file:
 CORROSIVE_CLAYMORE	src/mods/classes/ghost.hpp	/^				CORROSIVE_CLAYMORE,$/;"	kind:enumerator	line:55	enum:mods::classes::ghost::ability_t	file:
 CORROSIVE_CLAYMORE	src/mods/classes/marine.hpp	/^				CORROSIVE_CLAYMORE,$/;"	kind:member	line:28	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -725,6 +729,7 @@ CROSS_TO_HEAD	src/mods/classes/base.hpp	/^				CROSS_TO_HEAD,$/;"	kind:enumerator
 CROSS_TO_HEAD	src/mods/melee/main.cpp	/^	void CROSS_TO_HEAD(player_ptr_t& attacker, player_ptr_t& victim) {$/;"	kind:function	line:56	namespace:mods::melee::main::moves	signature:(player_ptr_t& attacker, player_ptr_t& victim)
 CROWBAR	src/mods/weapon.hpp	/^		CROWBAR,$/;"	kind:enumerator	line:66	enum:mods::weapon::melee_t	file:
 CRYO	src/mods/flags.hpp	/^		CRYO,$/;"	kind:enumerator	line:70	enum:mods::flags::plr	file:
+CRYOGENIC_GRENADE	src/mods/classes/breacher.hpp	/^				CRYOGENIC_GRENADE,$/;"	kind:enumerator	line:37	enum:mods::classes::breacher::ability_t	file:
 CRYOGENIC_GRENADE	src/mods/classes/ghost.hpp	/^				CRYOGENIC_GRENADE,$/;"	kind:enumerator	line:41	enum:mods::classes::ghost::ability_t	file:
 CRYOGENIC_GRENADE_YAML	src/mods/classes/ghost.hpp	/^			static constexpr std::string_view CRYOGENIC_GRENADE_YAML = "explosive\/cryogenic-grenade.yml";$/;"	kind:member	line:24	struct:mods::classes::ghost	file:	access:public
 CRYO_FACTOR	src/objsave.cpp	26;"	kind:macro	line:26	file:
@@ -835,6 +840,7 @@ DISABLE_INJURE_ROLL	src/mods/values-list.cpp	/^DISABLE_INJURE_ROLL,false$/;"	kin
 DISORIENT	src/mods/weapon-types.hpp	/^		DISORIENT,$/;"	kind:enumerator	line:32	enum:mods::weapon::capabilities::cap_t	file:
 DISPLAY	src/mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY = "A small LED display on the panel says: ";$/;"	kind:member	line:42	struct:mods::mini_games::wires	file:	access:public
 DISPLAY_ACMD	src/mods/players/db-load.hpp	/^		DISPLAY_ACMD,$/;"	kind:enumerator	line:19	enum:mods::players::db_load::save_from_t	file:
+DISSIPATE	src/mods/classes/breacher.hpp	/^				DISSIPATE,$/;"	kind:enumerator	line:31	enum:mods::classes::breacher::ability_t	file:
 DISSIPATE	src/mods/classes/ghost.hpp	/^				DISSIPATE,$/;"	kind:enumerator	line:35	enum:mods::classes::ghost::ability_t	file:
 DMG_DEBUG	src/mods/weapons/damage-decisions.cpp	211;"	kind:macro	line:211	file:
 DMG_DEBUG	src/mods/weapons/damage-types.cpp	1323;"	kind:macro	line:1323	file:
@@ -1122,6 +1128,7 @@ FASTBOOT_FILE	src/db.h	52;"	kind:macro	line:52	file:
 FASTBOOT_FILE	src/db.h	56;"	kind:macro	line:56	file:
 FASTBOOT_FILE	src/db.h	60;"	kind:macro	line:60	file:
 FD_SETSIZE	src/sysdep.h	371;"	kind:macro	line:371	file:
+FEIGN_DEATH	src/mods/classes/breacher.hpp	/^				FEIGN_DEATH,$/;"	kind:enumerator	line:33	enum:mods::classes::breacher::ability_t	file:
 FEIGN_DEATH	src/mods/classes/ghost.hpp	/^				FEIGN_DEATH,$/;"	kind:enumerator	line:37	enum:mods::classes::ghost::ability_t	file:
 FENCED	src/room-data.hpp	/^			FENCED, \/** surrounded by fencing *\/$/;"	kind:member	line:227	struct:room_data	typeref:enum:room_data::	file:	access:public
 FETCHED_OKAY	src/mods/orm/util.hpp	/^	static constexpr int8_t FETCHED_OKAY = 0;$/;"	kind:member	line:35	namespace:mods::orm::util	file:
@@ -1180,6 +1187,7 @@ FLASHBANG_COOLDOWN_TICKS	src/mods/projectile.hpp	/^		constexpr static int FLASHB
 FLASHBANG_COOLDOWN_TICKS	src/mods/values-list.cpp	/^FLASHBANG_COOLDOWN_TICKS,3$/;"	kind:variable	line:11
 FLASHBANG_GRENADE_TICKS	src/mods/values-list.cpp	/^FLASHBANG_GRENADE_TICKS,6$/;"	kind:variable	line:19
 FLASH_HIDER	src/mods/weapon.hpp	/^		FLASH_HIDER, SUPPRESSOR$/;"	kind:enumerator	line:106	enum:mods::weapon::barrel_t	file:
+FLASH_UNDERBARREL	src/mods/classes/breacher.hpp	/^				FLASH_UNDERBARREL,$/;"	kind:enumerator	line:38	enum:mods::classes::breacher::ability_t	file:
 FLASH_UNDERBARREL	src/mods/classes/ghost.hpp	/^				FLASH_UNDERBARREL,$/;"	kind:enumerator	line:42	enum:mods::classes::ghost::ability_t	file:
 FLEE	src/mods/intent.hpp	/^		FLEE$/;"	kind:enumerator	line:9	enum:mods::intent::intent_to_t	file:
 FLEE_DEXTERITY_DIVIDER	src/mods/values-list.cpp	/^FLEE_DEXTERITY_DIVIDER,4.5$/;"	kind:variable	line:338
@@ -1394,6 +1402,7 @@ GT_HOSTILE	src/mods/mobs/generic-thief.hpp	/^				GT_HOSTILE,$/;"	kind:member	lin
 GT_ROAM	src/mods/mobs/generic-thief.hpp	/^				GT_ROAM = 0,$/;"	kind:member	line:17	struct:mods::mobs::generic_thief	typeref:enum:mods::mobs::generic_thief::	file:	access:public
 GT_WIMPY	src/mods/mobs/generic-thief.hpp	/^				GT_WIMPY,$/;"	kind:member	line:20	struct:mods::mobs::generic_thief	typeref:enum:mods::mobs::generic_thief::	file:	access:public
 GT_WITNESS_HUNTING	src/mods/mobs/generic-thief.hpp	/^				GT_WITNESS_HUNTING,$/;"	kind:member	line:19	struct:mods::mobs::generic_thief	typeref:enum:mods::mobs::generic_thief::	file:	access:public
+GUIDED_MISSILE	src/mods/classes/breacher.hpp	/^				GUIDED_MISSILE,$/;"	kind:enumerator	line:48	enum:mods::classes::breacher::ability_t	file:
 GUIDED_MISSILE	src/mods/classes/engineer.hpp	/^				GUIDED_MISSILE,$/;"	kind:enumerator	line:31	enum:mods::classes::engineer::ability_t	file:
 GUIDED_MISSILE	src/mods/classes/ghost.hpp	/^				GUIDED_MISSILE,$/;"	kind:enumerator	line:52	enum:mods::classes::ghost::ability_t	file:
 GUIDED_MISSILE	src/mods/classes/marine.hpp	/^				GUIDED_MISSILE,$/;"	kind:member	line:24	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -1601,6 +1610,7 @@ INTEGER_COLUMN	src/mods/rbuild-sandbox.cpp	/^	INTEGER_COLUMN,$/;"	kind:enumerato
 INTEL	src/mods/levels.hpp	/^	INTEL,$/;"	kind:enumerator	line:10	enum:uint8_t	file:
 INTELLIGENCE	src/mods/classes/base.hpp	/^					INTELLIGENCE,$/;"	kind:member	line:72	struct:base::ability_data_t	typeref:enum:base::ability_data_t::	file:	access:public
 INTIMIDATE	src/mods/classes/contagion.hpp	/^				INTIMIDATE,$/;"	kind:enumerator	line:47	enum:mods::classes::contagion::ability_t	file:
+INTIMIDATION	src/mods/classes/breacher.hpp	/^				INTIMIDATION,$/;"	kind:enumerator	line:36	enum:mods::classes::breacher::ability_t	file:
 INTIMIDATION	src/mods/classes/ghost.hpp	/^				INTIMIDATION,$/;"	kind:enumerator	line:40	enum:mods::classes::ghost::ability_t	file:
 INVALID	src/mods/positions.hpp	/^	INVALID = -1,$/;"	kind:enumerator	line:18	enum:int8_t	file:
 INVALID_DIR_OPTION	src/mods/doors.hpp	/^	static constexpr int8_t INVALID_DIR_OPTION = -1;$/;"	kind:member	line:294	namespace:mods::doors	file:
@@ -1884,6 +1894,7 @@ LIB_TEXT_HELP	src/db.h	35;"	kind:macro	line:35	file:
 LIB_WORLD	src/db.h	22;"	kind:macro	line:22	file:
 LIB_WORLD	src/db.h	33;"	kind:macro	line:33	file:
 LIFE_TAP	src/mods/classes/contagion.hpp	/^				LIFE_TAP,$/;"	kind:enumerator	line:56	enum:mods::classes::contagion::ability_t	file:
+LIGHT_BANDAGE	src/mods/classes/breacher.hpp	/^				LIGHT_BANDAGE,$/;"	kind:enumerator	line:40	enum:mods::classes::breacher::ability_t	file:
 LIGHT_BANDAGE	src/mods/classes/engineer.hpp	/^				LIGHT_BANDAGE,$/;"	kind:enumerator	line:23	enum:mods::classes::engineer::ability_t	file:
 LIGHT_BANDAGE	src/mods/classes/ghost.cpp	/^		static constexpr std::string_view LIGHT_BANDAGE = "lb";$/;"	kind:member	line:51	struct:mods::classes::shorthand	file:	access:public
 LIGHT_BANDAGE	src/mods/classes/ghost.hpp	/^				LIGHT_BANDAGE,$/;"	kind:enumerator	line:44	enum:mods::classes::ghost::ability_t	file:
@@ -2070,6 +2081,7 @@ MARINE_PRIMARY_M4	src/mods/weapon.hpp	/^			MARINE_PRIMARY_M4 = 2,$/;"	kind:enume
 MARK	src/graph.cpp	53;"	kind:macro	line:53	file:
 MARKSMAN	src/structs.h	/^	MARKSMAN = 10,$/;"	kind:enumerator	line:210	enum:player_class_t	file:
 MARKSMANSHIP	src/mods/classes/base.hpp	/^					MARKSMANSHIP,$/;"	kind:member	line:77	struct:base::ability_data_t	typeref:enum:base::ability_data_t::	file:	access:public
+MARK_TARGET	src/mods/classes/breacher.hpp	/^				MARK_TARGET,$/;"	kind:enumerator	line:53	enum:mods::classes::breacher::ability_t	file:
 MARK_TARGET	src/mods/classes/ghost.hpp	/^				MARK_TARGET,$/;"	kind:enumerator	line:57	enum:mods::classes::ghost::ability_t	file:
 MAR_STR	src/mods/weapon.hpp	515;"	kind:macro	line:515	file:
 MAR_STR	src/mods/weapon.hpp	525;"	kind:macro	line:525	file:
@@ -2633,6 +2645,7 @@ NODELETE	src/mods/flags.hpp	/^		NODELETE,$/;"	kind:enumerator	line:71	enum:mods:
 NOEFFECT	src/config.cpp	/^const char *NOEFFECT = "Nothing seems to happen.\\r\\n";$/;"	kind:variable	line:100
 NONE	src/mods/behaviour_tree.hpp	/^		static constexpr int NONE = 0;$/;"	kind:member	line:25	struct:mods::behaviour_tree	file:	access:public
 NONE	src/mods/behaviour_tree_impl.hpp	/^		NONE = 0,$/;"	kind:enumerator	line:37	enum:mods::behaviour_tree_impl::type	file:
+NONE	src/mods/classes/breacher.hpp	/^				NONE = 0,$/;"	kind:enumerator	line:29	enum:mods::classes::breacher::ability_t	file:
 NONE	src/mods/classes/contagion.hpp	/^				NONE = 0,$/;"	kind:enumerator	line:24	enum:mods::classes::contagion::ability_t	file:
 NONE	src/mods/classes/engineer.hpp	/^				NONE = 0,$/;"	kind:enumerator	line:21	enum:mods::classes::engineer::ability_t	file:
 NONE	src/mods/classes/ghost.hpp	/^				NONE = 0,$/;"	kind:enumerator	line:33	enum:mods::classes::ghost::ability_t	file:
@@ -2824,6 +2837,7 @@ PAUSE_FILE	src/db.h	62;"	kind:macro	line:62	file:
 PAYLOAD_CRATE	src/mods/loot.hpp	/^			PAYLOAD_CRATE,$/;"	kind:member	line:35	struct:mods::loot::crate_t	typeref:enum:mods::loot::crate_t::	file:	access:public
 PAYLOAD_YAML_FILE	src/mods/loot.hpp	/^	static constexpr std::string_view PAYLOAD_YAML_FILE = "container\/loot-payload.yml";$/;"	kind:member	line:24	namespace:mods::loot	file:
 PC	src/act.wizard.cpp	2380;"	kind:macro	line:2380	file:
+PENETRATING_SHOT	src/mods/classes/breacher.hpp	/^				PENETRATING_SHOT,$/;"	kind:enumerator	line:35	enum:mods::classes::breacher::ability_t	file:
 PENETRATING_SHOT	src/mods/classes/ghost.hpp	/^				PENETRATING_SHOT,$/;"	kind:enumerator	line:39	enum:mods::classes::ghost::ability_t	file:
 PENETRATING_SHOT_RIFLE_YAML	src/mods/classes/ghost.hpp	/^			static constexpr std::string_view PENETRATING_SHOT_RIFLE_YAML = "rifle\/ax799-fantom.yml";$/;"	kind:member	line:25	struct:mods::classes::ghost	file:	access:public
 PERS	src/utils.h	487;"	kind:macro	line:487	file:
@@ -2839,6 +2853,7 @@ PISTOL_DISARM	src/mods/classes/base.hpp	/^				PISTOL_DISARM,$/;"	kind:enumerator
 PISTOL_DISARM	src/mods/melee/main.cpp	/^	void PISTOL_DISARM(player_ptr_t& attacker,player_ptr_t& victim) {$/;"	kind:function	line:231	namespace:mods::melee::main::moves	signature:(player_ptr_t& attacker,player_ptr_t& victim)
 PLACEHOLDER	src/mods/orm/inventory.cpp	/^	static constexpr const char* PLACEHOLDER = "0";$/;"	kind:member	line:27	namespace:mods::orm::inventory	file:
 PLACE_HOLDER_VALUE	src/mods/schema.hpp	/^	constexpr static const char* PLACE_HOLDER_VALUE = "\\x01";$/;"	kind:member	line:10	namespace:mods::schema	file:
+PLANT_CLAYMORE	src/mods/classes/breacher.hpp	/^				PLANT_CLAYMORE,$/;"	kind:enumerator	line:34	enum:mods::classes::breacher::ability_t	file:
 PLANT_CLAYMORE	src/mods/classes/engineer.hpp	/^				PLANT_CLAYMORE,$/;"	kind:enumerator	line:33	enum:mods::classes::engineer::ability_t	file:
 PLANT_CLAYMORE	src/mods/classes/ghost.hpp	/^				PLANT_CLAYMORE,$/;"	kind:enumerator	line:38	enum:mods::classes::ghost::ability_t	file:
 PLANT_CLAYMORE	src/mods/classes/marine.hpp	/^				PLANT_CLAYMORE,$/;"	kind:member	line:26	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -3030,7 +3045,7 @@ RCT	src/mods/combat-composer/snipe-target.cpp	967;"	kind:macro	line:967	file:
 RCT	src/mods/combat-composer/spray-target.cpp	31;"	kind:macro	line:31	file:
 RCT	src/mods/combat-composer/spray-target.cpp	36;"	kind:macro	line:36	file:
 RCT	src/mods/combat-composer/spray-target.cpp	584;"	kind:macro	line:584	file:
-RCT	src/mods/mobs/defiler.hpp	/^			std::shared_ptr<mods::ranged_combat_totals> RCT;$/;"	kind:member	line:342	namespace:mods::mobs	file:	access:private
+RCT	src/mods/mobs/defiler.hpp	/^			std::shared_ptr<mods::ranged_combat_totals> RCT;$/;"	kind:member	line:343	namespace:mods::mobs	file:	access:private
 RCT	src/mods/mobs/orthos-agent.hpp	/^			std::shared_ptr<mods::ranged_combat_totals> RCT;$/;"	kind:member	line:137	namespace:mods::mobs	file:	access:private
 RCT	src/mods/mobs/orthos-spawn-sentinel.hpp	/^			std::shared_ptr<mods::ranged_combat_totals> RCT;$/;"	kind:member	line:71	struct:mods::mobs::orthos_spawn_sentinel	file:	access:private
 RC_DRONE	src/lense-type.hpp	/^	RC_DRONE,$/;"	kind:enumerator	line:25	enum:lense_type_t	file:
@@ -3066,6 +3081,7 @@ RENT_TIMEDOUT	src/structs.h	616;"	kind:macro	line:616	file:
 RENT_UNDEF	src/structs.h	611;"	kind:macro	line:611	file:
 REPORT_DB_ISSUE	src/mods/pq.hpp	24;"	kind:macro	line:24	file:
 REPORT_VIOLENCE	src/mods/response-team/radio.hpp	/^		REPORT_VIOLENCE,$/;"	kind:enumerator	line:10	enum:mods::response_team::radio::severity_t	file:
+REQUEST_RECON	src/mods/classes/breacher.hpp	/^				REQUEST_RECON,$/;"	kind:enumerator	line:52	enum:mods::classes::breacher::ability_t	file:
 REQUEST_RECON	src/mods/classes/engineer.hpp	/^				REQUEST_RECON$/;"	kind:enumerator	line:37	enum:mods::classes::engineer::ability_t	file:
 REQUEST_RECON	src/mods/classes/ghost.hpp	/^				REQUEST_RECON,$/;"	kind:enumerator	line:56	enum:mods::classes::ghost::ability_t	file:
 RESERVED	src/mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	kind:enumerator	line:26	enum:mods::ai_state::state	file:
@@ -3355,6 +3371,7 @@ SENSE_LIFE	src/mods/flags.hpp	/^		SENSE_LIFE,$/;"	kind:enumerator	line:81	enum:m
 SENSE_MOTION	src/mods/weapon-types.hpp	/^		SENSE_MOTION,$/;"	kind:enumerator	line:50	enum:mods::weapon::capabilities::cap_t	file:
 SENSOR	src/mods/aoe.hpp	/^		SENSOR, \/** senses objects or enemies within blast_radius *\/$/;"	kind:enumerator	line:25	enum:mods::aoe::types_t	file:
 SENSOR_GRENADE_TICKS	src/mods/values-list.cpp	/^SENSOR_GRENADE_TICKS,6$/;"	kind:variable	line:18
+SENSOR_NADE	src/mods/classes/breacher.hpp	/^				SENSOR_NADE,$/;"	kind:enumerator	line:45	enum:mods::classes::breacher::ability_t	file:
 SENSOR_NADE	src/mods/classes/engineer.hpp	/^				SENSOR_NADE,$/;"	kind:enumerator	line:28	enum:mods::classes::engineer::ability_t	file:
 SENSOR_NADE	src/mods/classes/ghost.hpp	/^				SENSOR_NADE,$/;"	kind:enumerator	line:49	enum:mods::classes::ghost::ability_t	file:
 SENSOR_NADE	src/mods/classes/marine.hpp	/^				SENSOR_NADE,$/;"	kind:member	line:21	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -3453,7 +3470,7 @@ SHOULDER	src/mods/object.hpp	/^				SHOULDER,$/;"	kind:enumerator	line:55	enum:mo
 SHOULD_DO_RANDOM_TRIVIAL	src/mods/mobs/armed-guard.hpp	/^			static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	kind:member	line:22	namespace:mods::mobs	file:
 SHOULD_DO_RANDOM_TRIVIAL	src/mods/mobs/car-thief.hpp	/^			static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	kind:member	line:17	struct:mods::mobs::car_thief	file:	access:public
 SHOULD_DO_RANDOM_TRIVIAL	src/mods/mobs/chaotic-meth-addict.hpp	/^			static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	kind:member	line:22	namespace:mods::mobs	file:
-SHOULD_DO_RANDOM_TRIVIAL	src/mods/mobs/defiler.hpp	/^			static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	kind:member	line:159	namespace:mods::mobs	file:
+SHOULD_DO_RANDOM_TRIVIAL	src/mods/mobs/defiler.hpp	/^			static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	kind:member	line:160	namespace:mods::mobs	file:
 SHOULD_DO_RANDOM_TRIVIAL	src/mods/mobs/generic-thief.hpp	/^			static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	kind:member	line:67	namespace:mods::mobs	file:
 SHOULD_DO_RANDOM_TRIVIAL	src/mods/mobs/goat.hpp	/^			static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	kind:member	line:189	namespace:mods::mobs	file:
 SHOULD_DO_RANDOM_TRIVIAL	src/mods/mobs/lowly-security.hpp	/^		static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	kind:member	line:13	struct:mods::mobs::lowly_security	file:	access:public
@@ -3465,7 +3482,7 @@ SHOULD_DO_RANDOM_TRIVIAL	src/mods/mobs/shoplifter.hpp	/^			static constexpr uint
 SHOULD_DO_ROAM	src/mods/mobs/armed-guard.hpp	/^			static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	kind:member	line:21	namespace:mods::mobs	file:
 SHOULD_DO_ROAM	src/mods/mobs/car-thief.hpp	/^			static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	kind:member	line:16	struct:mods::mobs::car_thief	file:	access:public
 SHOULD_DO_ROAM	src/mods/mobs/chaotic-meth-addict.hpp	/^			static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	kind:member	line:21	namespace:mods::mobs	file:
-SHOULD_DO_ROAM	src/mods/mobs/defiler.hpp	/^			static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	kind:member	line:158	namespace:mods::mobs	file:
+SHOULD_DO_ROAM	src/mods/mobs/defiler.hpp	/^			static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	kind:member	line:159	namespace:mods::mobs	file:
 SHOULD_DO_ROAM	src/mods/mobs/generic-thief.hpp	/^			static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	kind:member	line:66	namespace:mods::mobs	file:
 SHOULD_DO_ROAM	src/mods/mobs/goat.hpp	/^			static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	kind:member	line:188	namespace:mods::mobs	file:
 SHOULD_DO_ROAM	src/mods/mobs/lowly-security.hpp	/^		static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	kind:member	line:12	struct:mods::mobs::lowly_security	file:	access:public
@@ -3481,6 +3498,7 @@ SHOW_OBJ_LONG	src/act.informative.cpp	124;"	kind:macro	line:124	file:
 SHOW_OBJ_SHORT	src/act.informative.cpp	125;"	kind:macro	line:125	file:
 SHP_PREFIX	src/db.h	72;"	kind:macro	line:72	file:
 SHRAPNEL	src/mods/aoe.hpp	/^		SHRAPNEL,	\/** metal fragments flown in random directions *\/$/;"	kind:enumerator	line:16	enum:mods::aoe::types_t	file:
+SHRAPNEL_CLAYMORE	src/mods/classes/breacher.hpp	/^				SHRAPNEL_CLAYMORE,$/;"	kind:enumerator	line:50	enum:mods::classes::breacher::ability_t	file:
 SHRAPNEL_CLAYMORE	src/mods/classes/engineer.hpp	/^				SHRAPNEL_CLAYMORE,$/;"	kind:enumerator	line:34	enum:mods::classes::engineer::ability_t	file:
 SHRAPNEL_CLAYMORE	src/mods/classes/ghost.hpp	/^				SHRAPNEL_CLAYMORE,$/;"	kind:enumerator	line:54	enum:mods::classes::ghost::ability_t	file:
 SHRAPNEL_CLAYMORE	src/mods/classes/marine.hpp	/^				SHRAPNEL_CLAYMORE,$/;"	kind:member	line:27	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -4056,6 +4074,7 @@ SUPERCMD	src/mods/mini-games.cpp	/^SUPERCMD(do_install_minigame) {$/;"	kind:func
 SUPERCMD	src/mods/mini-games.cpp	/^SUPERCMD(do_list_minigame) {$/;"	kind:function	line:71	signature:(do_list_minigame)
 SUPERCMD	src/mods/mini-games.cpp	/^SUPERCMD(do_uninstall_minigame) {$/;"	kind:function	line:66	signature:(do_uninstall_minigame)
 SUPERCMD	src/mods/mob-equipment.cpp	/^	SUPERCMD(do_npc_report) {$/;"	kind:function	line:59	namespace:mods::mob_equipment	signature:(do_npc_report)
+SUPERCMD	src/mods/mobs/defiler.cpp	/^	SUPERCMD(do_set_debug) {$/;"	kind:function	line:669	namespace:mods::mobs::defiler_init	signature:(do_set_debug)
 SUPERCMD	src/mods/obuild.cpp	/^SUPERCMD(do_obuild) {$/;"	kind:function	line:329	signature:(do_obuild)
 SUPERCMD	src/mods/player-registration.cpp	/^SUPERCMD(do_disable_registration) {$/;"	kind:function	line:22	signature:(do_disable_registration)
 SUPERCMD	src/mods/player-registration.cpp	/^SUPERCMD(do_enable_registration) {$/;"	kind:function	line:16	signature:(do_enable_registration)
@@ -4109,10 +4128,10 @@ SUPERCMD	src/mods/target-practice.cpp	/^SUPERCMD(do_uninstall_dummy) {$/;"	kind:
 SUPERCMD	src/mods/weapons/damage-types.cpp	/^	SUPERCMD(do_inc_damage) {$/;"	kind:function	line:1285	namespace:mods::weapons::damage_types	signature:(do_inc_damage)
 SUPERCMD	src/mods/weapons/elemental.cpp	/^	SUPERCMD(do_inc_damage) {$/;"	kind:function	line:239	namespace:mods::weapons::elemental	signature:(do_inc_damage)
 SUPERCMD	src/mods/zbuild.cpp	/^SUPERCMD(do_zbuild) {$/;"	kind:function	line:414	signature:(do_zbuild)
-SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_list_zone_table) {$/;"	kind:function	line:514	namespace:mods::zone	signature:(do_list_zone_table)
-SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_queue_refresh) {$/;"	kind:function	line:619	namespace:mods::zone	signature:(do_queue_refresh)
-SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_reset_zone) {$/;"	kind:function	line:588	namespace:mods::zone	signature:(do_reset_zone)
-SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_uuids) {$/;"	kind:function	line:567	namespace:mods::zone	signature:(do_uuids)
+SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_list_zone_table) {$/;"	kind:function	line:517	namespace:mods::zone	signature:(do_list_zone_table)
+SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_queue_refresh) {$/;"	kind:function	line:622	namespace:mods::zone	signature:(do_queue_refresh)
+SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_reset_zone) {$/;"	kind:function	line:591	namespace:mods::zone	signature:(do_reset_zone)
+SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_uuids) {$/;"	kind:function	line:570	namespace:mods::zone	signature:(do_uuids)
 SUPERCMD	src/olc.cpp	/^SUPERCMD(do_olc) {$/;"	kind:function	line:68	signature:(do_olc)
 SUPERCMD	src/spell_parser.cpp	/^SUPERCMD(do_cast) {$/;"	kind:function	line:604	signature:(do_cast)
 SUPPORT	src/mods/classes/types.hpp	/^		SUPPORT,$/;"	kind:enumerator	line:11	enum:mods::classes::types	file:
@@ -4125,6 +4144,7 @@ SURGICAL_PRECISION	src/mods/classes/medic.hpp	/^				SURGICAL_PRECISION,$/;"	kind
 SUSPICIOUS	src/mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	kind:enumerator	line:25	enum:mods::ai_state::state	file:
 SUSPICIOUS2	src/mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	kind:enumerator	line:25	enum:mods::ai_state::state	file:
 SUSPICIOUS_LOOKING_CAR_THIEF	src/mods/drops.cpp	/^	static constexpr mob_vnum SUSPICIOUS_LOOKING_CAR_THIEF = 406;$/;"	kind:member	line:61	namespace:mods::drops	file:
+SUTURE	src/mods/classes/breacher.hpp	/^				SUTURE,$/;"	kind:enumerator	line:41	enum:mods::classes::breacher::ability_t	file:
 SUTURE	src/mods/classes/engineer.hpp	/^				SUTURE,$/;"	kind:enumerator	line:24	enum:mods::classes::engineer::ability_t	file:
 SUTURE	src/mods/classes/ghost.hpp	/^				SUTURE,$/;"	kind:enumerator	line:45	enum:mods::classes::ghost::ability_t	file:
 SUTURE	src/mods/classes/marine.hpp	/^				SUTURE,$/;"	kind:member	line:17	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -4142,6 +4162,7 @@ TAR21	src/mods/weapon.hpp	/^			TAR21 = 2$/;"	kind:enumerator	line:575	enum:mods:
 TARGET_DEAD_EVENT	src/mods/damage-event.hpp	/^	TARGET_DEAD_EVENT,$/;"	kind:enumerator	line:15	enum:uint16_t	file:
 TARGET_IN_PEACEFUL_ROOM_EVENT	src/mods/damage-event.hpp	/^	TARGET_IN_PEACEFUL_ROOM_EVENT,$/;"	kind:enumerator	line:72	enum:uint16_t	file:
 TARGET_IS_OUT_OF_RANGE	src/mods/damage-event.hpp	/^	TARGET_IS_OUT_OF_RANGE,$/;"	kind:enumerator	line:59	enum:uint16_t	file:
+TARGET_LIMB	src/mods/classes/breacher.hpp	/^				TARGET_LIMB,$/;"	kind:enumerator	line:49	enum:mods::classes::breacher::ability_t	file:
 TARGET_LIMB	src/mods/classes/engineer.hpp	/^				TARGET_LIMB,$/;"	kind:enumerator	line:32	enum:mods::classes::engineer::ability_t	file:
 TARGET_LIMB	src/mods/classes/ghost.hpp	/^				TARGET_LIMB,$/;"	kind:enumerator	line:53	enum:mods::classes::ghost::ability_t	file:
 TARGET_LIMB	src/mods/classes/marine.hpp	/^				TARGET_LIMB,$/;"	kind:member	line:25	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -4227,6 +4248,7 @@ TO_VICT	src/comm.h	64;"	kind:macro	line:64	file:
 TO_VICT	src/mods/item.cpp	/^	static constexpr uint8_t TO_VICT = 2;$/;"	kind:member	line:25	namespace:mods::item	file:
 TRACER_AMMUNITION	src/mods/weapon.hpp	/^		TRACER_AMMUNITION,$/;"	kind:enumerator	line:116	enum:mods::weapon::magazine_t	file:
 TRACKED_DAMAGE_BONUS_MULTIPLIER	src/mods/affects.hpp	/^	static constexpr float TRACKED_DAMAGE_BONUS_MULTIPLIER = 0.15;$/;"	kind:member	line:26	namespace:mods::affects	file:
+TRACKING_SHOT	src/mods/classes/breacher.hpp	/^				TRACKING_SHOT,$/;"	kind:enumerator	line:39	enum:mods::classes::breacher::ability_t	file:
 TRACKING_SHOT	src/mods/classes/engineer.hpp	/^				TRACKING_SHOT,$/;"	kind:enumerator	line:22	enum:mods::classes::engineer::ability_t	file:
 TRACKING_SHOT	src/mods/classes/ghost.hpp	/^				TRACKING_SHOT,$/;"	kind:enumerator	line:43	enum:mods::classes::ghost::ability_t	file:
 TRACKING_SHOT	src/mods/classes/marine.hpp	/^				TRACKING_SHOT,$/;"	kind:member	line:15	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -4318,9 +4340,11 @@ TYPE_UTTERLY_DECIMATE	src/spells.h	187;"	kind:macro	line:187	file:
 TYPE_WHIP	src/spells.h	/^	TYPE_WHIP,$/;"	kind:enumerator	line:133	enum:weapon_attack_types_t	file:
 TYPE_WHIP	src/spells.h	164;"	kind:macro	line:164	file:
 TYPO_FILE	src/db.h	89;"	kind:macro	line:89	file:
+UB_FRAG	src/mods/classes/breacher.hpp	/^				UB_FRAG,$/;"	kind:enumerator	line:47	enum:mods::classes::breacher::ability_t	file:
 UB_FRAG	src/mods/classes/engineer.hpp	/^				UB_FRAG,$/;"	kind:enumerator	line:30	enum:mods::classes::engineer::ability_t	file:
 UB_FRAG	src/mods/classes/ghost.hpp	/^				UB_FRAG,$/;"	kind:enumerator	line:51	enum:mods::classes::ghost::ability_t	file:
 UB_FRAG	src/mods/classes/marine.hpp	/^				UB_FRAG,$/;"	kind:member	line:23	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
+UB_SHOTGUN	src/mods/classes/breacher.hpp	/^				UB_SHOTGUN,$/;"	kind:enumerator	line:46	enum:mods::classes::breacher::ability_t	file:
 UB_SHOTGUN	src/mods/classes/engineer.hpp	/^				UB_SHOTGUN,$/;"	kind:enumerator	line:29	enum:mods::classes::engineer::ability_t	file:
 UB_SHOTGUN	src/mods/classes/ghost.hpp	/^				UB_SHOTGUN,$/;"	kind:enumerator	line:50	enum:mods::classes::ghost::ability_t	file:
 UB_SHOTGUN	src/mods/classes/marine.hpp	/^				UB_SHOTGUN,$/;"	kind:member	line:22	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -4543,6 +4567,7 @@ WSL_SNIPER_4_ACCURACY	src/mods/values-list.cpp	/^WSL_SNIPER_4_ACCURACY,75$/;"	ki
 WSL_SNIPER_4_ALLOWABLE	src/mods/values-list.cpp	/^WSL_SNIPER_4_ALLOWABLE,1$/;"	kind:variable	line:223
 WSL_SNIPER_4_DAMAGE	src/mods/values-list.cpp	/^WSL_SNIPER_4_DAMAGE,75$/;"	kind:variable	line:225
 XNAME_FILE	src/db.h	93;"	kind:macro	line:93	file:
+XRAY_SHOT	src/mods/classes/breacher.hpp	/^				XRAY_SHOT,$/;"	kind:enumerator	line:32	enum:mods::classes::breacher::ability_t	file:
 XRAY_SHOT	src/mods/classes/engineer.hpp	/^				XRAY_SHOT,$/;"	kind:enumerator	line:36	enum:mods::classes::engineer::ability_t	file:
 XRAY_SHOT	src/mods/classes/ghost.hpp	/^				XRAY_SHOT,$/;"	kind:enumerator	line:36	enum:mods::classes::ghost::ability_t	file:
 XRAY_SHOT	src/mods/classes/marine.hpp	/^				XRAY_SHOT,$/;"	kind:member	line:29	struct:mods::classes::marine	typeref:enum:mods::classes::marine::	file:	access:public
@@ -4596,7 +4621,7 @@ YamlFeedExceptionInfo	src/mods/object-utils.hpp	/^		YamlFeedExceptionInfo($/;"	k
 YamlFeedExceptionInfo	src/mods/object-utils.hpp	/^	struct YamlFeedExceptionInfo {$/;"	kind:struct	line:52	namespace:mods::object_utils	file:
 Z	src/db.cpp	1605;"	kind:macro	line:1605	file:
 Z	src/db.cpp	1613;"	kind:macro	line:1613	file:
-ZONE_ERROR	src/mods/zone.cpp	209;"	kind:macro	line:209	file:
+ZONE_ERROR	src/mods/zone.cpp	211;"	kind:macro	line:211	file:
 ZONE_PAVEMENT	src/structs.h	/^static constexpr int ZONE_PAVEMENT = 1;$/;"	kind:variable	line:1398	file:
 ZON_PREFIX	src/db.h	71;"	kind:macro	line:71	file:
 ZOOM	src/mods/weapon-types.hpp	/^		ZOOM,$/;"	kind:enumerator	line:26	enum:mods::weapon::capabilities::cap_t	file:
@@ -4835,6 +4860,7 @@ __MENTOC_MODS_MOBS_MP_SHOTGUNNER_BEHAVIOUR_TREE_HEADER__	src/mods/mobs/mp-shotgu
 __MENTOC_MODS_MOBS_ORTHOS_SPAWN_SENTINEL_BEHAVIOUR_TREE_HEADER__	src/mods/mobs/orthos-spawn-sentinel-btree.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_ROAM_PATTERN_HEADER__	src/mods/mobs/roam-pattern.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_ROOM_WATCHING_HEADER__	src/mods/mobs/room-watching.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_MOBS_SHOW_DEBUG_OUTPUT__	src/mods/mobs/extended-types.cpp	18;"	kind:macro	line:18	file:
 __MENTOC_MODS_MOBS_SMART_MOB_HEADER__	src/mods/mobs/smart-mob.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_armed_guard_BEHAVIOUR_TREE_HEADER__	src/mods/mobs/armed-guard-behaviour-tree.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_MOBS_armed_guard_HEADER__	src/mods/mobs/armed-guard.hpp	2;"	kind:macro	line:2	file:
@@ -5011,6 +5037,7 @@ __MENTOC_MODS_WEAPON_TYPES_HEADER__	src/mods/weapon-types.hpp	2;"	kind:macro	lin
 __MENTOC_MODS_WORLD_CONFIGURATION_HEADER__	src/mods/world-configuration.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_YAML_HEADER__	src/mods/yaml.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_ZBUILD_HEADER__	src/mods/zbuild.hpp	2;"	kind:macro	line:2	file:
+__MENTOC_MODS_ZONE_DEBUG__	src/mods/zone.cpp	13;"	kind:macro	line:13	file:
 __MENTOC_MODS_ZONE_HEADER__	src/mods/intimidate.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_ZONE_HEADER__	src/mods/zone.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_admin_tools_stay_HEADER__	src/mods/admin-tools/stay.hpp	2;"	kind:macro	line:2	file:
@@ -5076,6 +5103,7 @@ __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	src/mods/scripted-sequence-runner.cpp	
 __MENTOC_SHOW_ATTACHMENT_UNDERBARREL_DEBUG_OUTPUT__	src/mods/weapons/attachment-underbarrel.cpp	6;"	kind:macro	line:6	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	src/mods/mobs/mini-gunner-behaviour-tree.hpp	21;"	kind:macro	line:21	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	12;"	kind:macro	line:12	file:
+__MENTOC_SHOW_BEHAVIOUR_TREE_defiler_BTREE_DEBUG_OUTPUT__	src/mods/mobs/defiler-behaviour-tree.cpp	15;"	kind:macro	line:15	file:
 __MENTOC_SHOW_CORROSIVE_CLAYMORE_DEBUG_OUTPUT__	src/mods/weapons/corrosive-claymore.cpp	14;"	kind:macro	line:14	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	src/globals.cpp	1380;"	kind:macro	line:1380	file:
 __MENTOC_SHOW_INVENTORY_DEBUG_OUTPUT__	src/mods/orm/inventory.cpp	12;"	kind:macro	line:12	file:
@@ -5223,7 +5251,7 @@ acl_list	src/mods/player.hpp	/^namespace mods::acl_list {$/;"	kind:namespace	lin
 acmd_function	src/mods/interpreter.hpp	/^	typedef void (*acmd_function)(char_data*, char*, int, int, player_ptr_t&);$/;"	kind:typedef	line:12	namespace:mods::interpreter	file:
 acquire_immediate_target	src/mods/combat-composer/engage-target.cpp	/^		std::optional<player_ptr_t> acquire_immediate_target(player_ptr_t& attacker,std::string_view target,obj_ptr_t& weapon) {$/;"	kind:function	line:392	namespace:mods::combat_composer::engage::phases	signature:(player_ptr_t& attacker,std::string_view target,obj_ptr_t& weapon)
 acquire_ranged_target	src/mods/combat-composer/snipe-target.cpp	/^		std::optional<acquired_target_t> acquire_ranged_target(player_ptr_t& attacker,target_t target,obj_ptr_t& weapon) {$/;"	kind:function	line:459	namespace:mods::combat_composer::phases	signature:(player_ptr_t& attacker,target_t target,obj_ptr_t& weapon)
-acquire_target	src/mods/mobs/defiler.cpp	/^	std::optional<target_t> defiler::acquire_target() {$/;"	kind:function	line:462	class:mods::mobs::defiler	signature:()
+acquire_target	src/mods/mobs/defiler.cpp	/^	std::optional<target_t> defiler::acquire_target() {$/;"	kind:function	line:467	class:mods::mobs::defiler	signature:()
 acquired_target_t	src/mods/combat-composer/shared.hpp	/^		struct acquired_target_t {$/;"	kind:struct	line:86	namespace:mods::combat_composer::phases	file:
 acryo	src/mods/drops.cpp	/^	static constexpr std::string_view acryo = "rifle\/aug-cryo-mod.yml";$/;"	kind:member	line:118	namespace:mods::drops	file:
 act	src/comm.cpp	/^void act(const std::string& str, int hide_invisible, char_data *ch,$/;"	kind:function	line:2729	signature:(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type)
@@ -5610,7 +5638,7 @@ attack_type	src/structs.h	/^	byte	attack_type;        \/* The Attack Type Bitvec
 attacked	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::attacked(const feedback_t& feedback) {$/;"	kind:function	line:345	class:mods::mobs::armed_guard	signature:(const feedback_t& feedback)
 attacked	src/mods/mobs/car-thief.cpp	/^	void car_thief::attacked(const feedback_t& feedback) {$/;"	kind:function	line:334	class:mods::mobs::car_thief	signature:(const feedback_t& feedback)
 attacked	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::attacked(const feedback_t& feedback) {$/;"	kind:function	line:346	class:mods::mobs::chaotic_meth_addict	signature:(const feedback_t& feedback)
-attacked	src/mods/mobs/defiler.cpp	/^	void defiler::attacked(const feedback_t& feedback) {$/;"	kind:function	line:549	class:mods::mobs::defiler	signature:(const feedback_t& feedback)
+attacked	src/mods/mobs/defiler.cpp	/^	void defiler::attacked(const feedback_t& feedback) {$/;"	kind:function	line:554	class:mods::mobs::defiler	signature:(const feedback_t& feedback)
 attacked	src/mods/mobs/generic-thief.cpp	/^	void generic_thief::attacked(const feedback_t& feedback) {$/;"	kind:function	line:442	class:mods::mobs::generic_thief	signature:(const feedback_t& feedback)
 attacked	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::attacked(const feedback_t& feedback) {$/;"	kind:function	line:345	class:mods::mobs::melee_combatant	signature:(const feedback_t& feedback)
 attacked	src/mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::attacked(const feedback_t& feedback) {$/;"	kind:function	line:402	class:mods::mobs::mp_shotgunner	signature:(const feedback_t& feedback)
@@ -5632,7 +5660,7 @@ attackers_optimal_distance_away	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/
 attackers_optimal_distance_away	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode attackers_optimal_distance_away() {$/;"	kind:function	line:287	namespace:mods::mobs::orthos_spawn_sentinel_btree	signature:()
 attacking_with	src/mods/player.hpp	/^			obj_data_ptr_t attacking_with() {$/;"	kind:function	line:779	namespace:mods	access:public	signature:()
 attacking_with_type	src/mods/player.cpp	/^	int player::attacking_with_type() {$/;"	kind:function	line:2445	class:mods::player	signature:()
-attempt_direction	src/mods/classes/breacher.cpp	/^	void breacher::attempt_direction(direction_t dir) {$/;"	kind:function	line:66	class:mods::classes::breacher	signature:(direction_t dir)
+attempt_direction	src/mods/classes/breacher.cpp	/^	void breacher::attempt_direction(direction_t dir) {$/;"	kind:function	line:99	class:mods::classes::breacher	signature:(direction_t dir)
 attempt_open	src/mods/doors.hpp	/^	static inline int8_t attempt_open(const room_rnum room,int8_t direction) {$/;"	kind:function	line:299	namespace:mods::doors	signature:(const room_rnum room,int8_t direction)
 attract	src/mods/help.cpp	/^	HELP_STR attract= "usage: invoke attract <direction>\\r\\n"$/;"	kind:member	line:734	namespace:mods::help::pages	file:
 attribute	src/mods/forge-engine/generated-rifle.hpp	/^		rifle_attributes_t attribute;$/;"	kind:member	line:1716	struct:mods::forge_engine::balancer_t	file:	access:public
@@ -5747,7 +5775,7 @@ behaviour_tree_impl	src/mods/memory.cpp	/^namespace mods::behaviour_tree_impl {$
 behaviour_tree_impl	src/mods/mobs/armed-guard-behaviour-tree.cpp	/^namespace mods::behaviour_tree_impl {$/;"	kind:namespace	line:24	class:mods	file:
 behaviour_tree_impl	src/mods/mobs/car-thief-behaviour-tree.cpp	/^namespace mods::behaviour_tree_impl {$/;"	kind:namespace	line:24	class:mods	file:
 behaviour_tree_impl	src/mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^namespace mods::behaviour_tree_impl {$/;"	kind:namespace	line:24	class:mods	file:
-behaviour_tree_impl	src/mods/mobs/defiler-behaviour-tree.cpp	/^namespace mods::behaviour_tree_impl {$/;"	kind:namespace	line:23	class:mods	file:
+behaviour_tree_impl	src/mods/mobs/defiler-behaviour-tree.cpp	/^namespace mods::behaviour_tree_impl {$/;"	kind:namespace	line:24	class:mods	file:
 behaviour_tree_impl	src/mods/mobs/generic-thief-behaviour-tree.cpp	/^namespace mods::behaviour_tree_impl {$/;"	kind:namespace	line:38	class:mods	file:
 behaviour_tree_impl	src/mods/mobs/melee-combatant-behaviour-tree.cpp	/^namespace mods::behaviour_tree_impl {$/;"	kind:namespace	line:24	class:mods	file:
 behaviour_tree_impl	src/mods/mobs/orthos-agent-btree.cpp	/^namespace mods::behaviour_tree_impl {$/;"	kind:namespace	line:24	class:mods	file:
@@ -5854,10 +5882,9 @@ bound_to	src/mods/weapons/sniper-rifle-l96aw.hpp	/^			uint16_t bound_to;$/;"	kin
 bound_to	src/mods/weapons/sniper-rifle-psg1.hpp	/^			uint16_t bound_to;$/;"	kind:member	line:13	struct:mods::weapons::sniper_rifle::psg1	file:	access:public
 breach	src/mods/drops.cpp	/^	static constexpr std::string_view breach = "explosive\/breach-charge.yml";$/;"	kind:member	line:104	namespace:mods::drops	file:
 breached	src/mods/doors.hpp	/^	static inline void breached(const room_rnum room,int8_t direction) {$/;"	kind:function	line:111	namespace:mods::doors	signature:(const room_rnum room,int8_t direction)
-breacher	src/mods/classes/breacher.cpp	/^	breacher::breacher() {$/;"	kind:function	line:50	class:mods::classes::breacher	signature:()
-breacher	src/mods/classes/breacher.cpp	/^	breacher::breacher(player_ptr_t p) {$/;"	kind:function	line:11	class:mods::classes::breacher	signature:(player_ptr_t p)
-breacher	src/mods/classes/breacher.cpp	/^namespace mods::class_abilities::breacher {$/;"	kind:namespace	line:113	class:mods::class_abilities	file:
-breacher	src/mods/classes/breacher.hpp	/^	struct breacher : base {$/;"	kind:struct	line:9	namespace:mods::classes	file:	inherits:base
+breacher	src/mods/classes/breacher.cpp	/^	breacher::breacher(player_ptr_t p) {$/;"	kind:function	line:12	class:mods::classes::breacher	signature:(player_ptr_t p)
+breacher	src/mods/classes/breacher.cpp	/^namespace mods::class_abilities::breacher {$/;"	kind:namespace	line:156	class:mods::class_abilities	file:
+breacher	src/mods/classes/breacher.hpp	/^	struct breacher : base {$/;"	kind:struct	line:11	namespace:mods::classes	file:	inherits:base
 breacher	src/mods/orm/breacher.hpp	/^		breacher() : id(0) {$/;"	kind:function	line:16	struct:mods::orm::breacher	access:public	signature:()
 breacher	src/mods/orm/breacher.hpp	/^	struct breacher : public mods::orm::orm_base<breacher,mods::weapon::breacher::primary_choice_t> {$/;"	kind:struct	line:9	namespace:mods::orm	file:	inherits:mods::orm::orm_base
 breacher	src/mods/player.cpp	/^	std::shared_ptr<mods::classes::breacher>& player::breacher() {$/;"	kind:function	line:2196	class:mods::player	signature:()
@@ -6282,8 +6309,8 @@ classes	src/mods/chargen.cpp	/^	static std::vector<std::string> classes;$/;"	kin
 classes	src/mods/classes/advance-levels.hpp	/^namespace mods::classes {$/;"	kind:namespace	line:5	class:mods	file:
 classes	src/mods/classes/base.cpp	/^namespace mods::classes {$/;"	kind:namespace	line:7	class:mods	file:
 classes	src/mods/classes/base.hpp	/^namespace mods::classes {$/;"	kind:namespace	line:13	class:mods	file:
-classes	src/mods/classes/breacher.cpp	/^namespace mods::classes {$/;"	kind:namespace	line:10	class:mods	file:
-classes	src/mods/classes/breacher.hpp	/^namespace mods::classes {$/;"	kind:namespace	line:8	class:mods	file:
+classes	src/mods/classes/breacher.cpp	/^namespace mods::classes {$/;"	kind:namespace	line:11	class:mods	file:
+classes	src/mods/classes/breacher.hpp	/^namespace mods::classes {$/;"	kind:namespace	line:10	class:mods	file:
 classes	src/mods/classes/contagion.cpp	/^namespace mods::classes {$/;"	kind:namespace	line:8	class:mods	file:
 classes	src/mods/classes/contagion.hpp	/^namespace mods::classes {$/;"	kind:namespace	line:8	class:mods	file:
 classes	src/mods/classes/engineer.cpp	/^namespace mods::classes {$/;"	kind:namespace	line:10	class:mods	file:
@@ -6421,9 +6448,9 @@ cmem	src/mods/mobs/armed-guard.cpp	494;"	kind:macro	line:494	file:
 cmem	src/mods/mobs/chaotic-meth-addict.cpp	13;"	kind:macro	line:13	file:
 cmem	src/mods/mobs/chaotic-meth-addict.cpp	16;"	kind:macro	line:16	file:
 cmem	src/mods/mobs/chaotic-meth-addict.cpp	497;"	kind:macro	line:497	file:
-cmem	src/mods/mobs/defiler.cpp	25;"	kind:macro	line:25	file:
-cmem	src/mods/mobs/defiler.cpp	28;"	kind:macro	line:28	file:
-cmem	src/mods/mobs/defiler.cpp	688;"	kind:macro	line:688	file:
+cmem	src/mods/mobs/defiler.cpp	27;"	kind:macro	line:27	file:
+cmem	src/mods/mobs/defiler.cpp	30;"	kind:macro	line:30	file:
+cmem	src/mods/mobs/defiler.cpp	712;"	kind:macro	line:712	file:
 cmem	src/mods/mobs/goat.cpp	26;"	kind:macro	line:26	file:
 cmem	src/mods/mobs/goat.cpp	29;"	kind:macro	line:29	file:
 cmem	src/mods/mobs/goat.cpp	490;"	kind:macro	line:490	file:
@@ -6808,7 +6835,7 @@ create	src/mods/lmdb/db.hpp	/^			int create(gsl::not_null<const char*> file,gsl:
 create	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::create(const uuid_t& mob_uuid, std::string_view targets) {$/;"	kind:function	line:61	class:mods::mobs::armed_guard	signature:(const uuid_t& mob_uuid, std::string_view targets)
 create	src/mods/mobs/car-thief.cpp	/^	void car_thief::create(uuid_t mob_uuid, std::string variation) {$/;"	kind:function	line:63	class:mods::mobs::car_thief	signature:(uuid_t mob_uuid, std::string variation)
 create	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::create(const uuid_t& mob_uuid, std::string_view targets) {$/;"	kind:function	line:61	class:mods::mobs::chaotic_meth_addict	signature:(const uuid_t& mob_uuid, std::string_view targets)
-create	src/mods/mobs/defiler.cpp	/^	void defiler::create(const uuid_t& mob_uuid, std::string_view targets) {$/;"	kind:function	line:44	class:mods::mobs::defiler	signature:(const uuid_t& mob_uuid, std::string_view targets)
+create	src/mods/mobs/defiler.cpp	/^	void defiler::create(const uuid_t& mob_uuid, std::string_view targets) {$/;"	kind:function	line:46	class:mods::mobs::defiler	signature:(const uuid_t& mob_uuid, std::string_view targets)
 create	src/mods/mobs/generic-thief.cpp	/^	void generic_thief::create(const uuid_t& mob_uuid, std::string_view targets) {$/;"	kind:function	line:116	class:mods::mobs::generic_thief	signature:(const uuid_t& mob_uuid, std::string_view targets)
 create	src/mods/mobs/goat.cpp	/^	void goat::create(const uuid_t& mob_uuid, std::string_view targets) {$/;"	kind:function	line:45	class:mods::mobs::goat	signature:(const uuid_t& mob_uuid, std::string_view targets)
 create	src/mods/mobs/innocent.cpp	/^	void innocent::create(uuid_t mob_uuid, std::string variation) {$/;"	kind:function	line:28	class:mods::mobs::innocent	signature:(uuid_t mob_uuid, std::string variation)
@@ -6826,7 +6853,7 @@ create	src/mods/weapons/corrosive-claymore.cpp	/^	obj_ptr_t corrosive_claymore::
 create	src/mods/weapons/shotgun-charge.cpp	/^	obj_ptr_t shotgun_charge::create() {$/;"	kind:function	line:17	class:mods::weapons::shotgun_charge	signature:()
 create	src/mods/weapons/shrapnel-claymore.cpp	/^	obj_ptr_t shrapnel_claymore::create() {$/;"	kind:function	line:95	class:mods::weapons::shrapnel_claymore	signature:()
 create_abilities	src/mods/classes/base.cpp	/^	base::ability_list_t base::create_abilities(ability_list_t additional_list) {$/;"	kind:function	line:447	class:mods::classes::base	signature:(ability_list_t additional_list)
-create_breacher	src/mods/classes/breacher.cpp	/^	std::shared_ptr<breacher> create_breacher(player_ptr_t& in_player) {$/;"	kind:function	line:90	namespace:mods::classes	signature:(player_ptr_t& in_player)
+create_breacher	src/mods/classes/breacher.cpp	/^	std::shared_ptr<breacher> create_breacher(player_ptr_t& in_player) {$/;"	kind:function	line:123	namespace:mods::classes	signature:(player_ptr_t& in_player)
 create_builder	src/mods/unit-tests/mob-roam.cpp	/^player_ptr_t create_builder() {$/;"	kind:function	line:10	signature:()
 create_char_from_registration	src/mods/chargen.cpp	/^	int create_char_from_registration(player_ptr_t& p,std::string argument) {$/;"	kind:function	line:102	namespace:mods::chargen	signature:(player_ptr_t& p,std::string argument)
 create_common_object_into	src/mods/drops.cpp	/^	void create_common_object_into(obj_ptr_t& container) {$/;"	kind:function	line:274	namespace:mods::drops	signature:(obj_ptr_t& container)
@@ -7134,11 +7161,11 @@ debug_echo_tree_name	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto deb
 debug_echo_tree_name	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto debug_echo_tree_name(str_t name) {$/;"	kind:function	line:37	namespace:mods::mobs::mini_gunner_behaviour_tree	signature:(str_t name)
 debug_echo_tree_name	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode debug_echo_tree_name(str_t name) {$/;"	kind:function	line:60	namespace:mods::mobs::mp_shotgunner_behaviour_tree	signature:(str_t name)
 debug_echo_tree_name	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode debug_echo_tree_name(std::string n) {$/;"	kind:function	line:65	namespace:mods::mobs::orthos_spawn_sentinel_btree	signature:(std::string n)
-debug_mode_on	src/mods/mobs/defiler.cpp	/^	bool defiler::debug_mode_on() {$/;"	kind:function	line:60	class:mods::mobs::defiler	signature:()
+debug_mode_on	src/mods/mobs/defiler.cpp	/^	bool defiler::debug_mode_on() {$/;"	kind:function	line:62	class:mods::mobs::defiler	signature:()
 debug_mode_on	src/mods/mobs/goat.cpp	/^	bool goat::debug_mode_on() {$/;"	kind:function	line:61	class:mods::mobs::goat	signature:()
 debug_state	src/mods/debug.cpp	/^	std::unique_ptr<state> debug_state;$/;"	kind:member	line:10	namespace:mods::debug	file:
 decorate	src/mods/mob-equipment.cpp	/^	void decorate(const uuid_t& mob_uuid) {$/;"	kind:function	line:37	namespace:mods::mob_equipment	signature:(const uuid_t& mob_uuid)
-decorate	src/mods/mobs/extended-types.cpp	/^	void decorate(uuid_t mob_id) {$/;"	kind:function	line:25	namespace:mods::mobs	signature:(uuid_t mob_id)
+decorate	src/mods/mobs/extended-types.cpp	/^	void decorate(uuid_t mob_id) {$/;"	kind:function	line:26	namespace:mods::mobs	signature:(uuid_t mob_id)
 decorate_door_issues	src/mods/intent.cpp	/^	uint8_t decorate_door_issues(intent_t& i){$/;"	kind:function	line:46	namespace:mods::intent	signature:(intent_t& i)
 decrease_same_room_shot_ammo	src/mods/combat-composer/shared.cpp	/^		void decrease_same_room_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) {$/;"	kind:function	line:151	namespace:mods::combat_composer::phases	signature:(player_ptr_t& attacker,obj_ptr_t& weapon)
 decrease_single_shot_ammo	src/mods/combat-composer/shared.cpp	/^		void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) {$/;"	kind:function	line:106	namespace:mods::combat_composer::phases	signature:(player_ptr_t& attacker,obj_ptr_t& weapon)
@@ -7164,16 +7191,16 @@ deferred	src/mods/deferred.hpp	/^			deferred(uint64_t tick_resolution) :$/;"	kin
 deferred	src/mods/deferred.hpp	/^	class deferred {$/;"	kind:class	line:40	namespace:mods	file:
 deferred_list	src/mods/scripted-sequence-runner.cpp	/^	static std::list<step_info_t> deferred_list;$/;"	kind:member	line:33	namespace:mods::scripted_sequence_runner	file:
 deffmg9	src/mods/drops.cpp	/^	static constexpr std::string_view deffmg9 = "rifle\/defiler-fmg9.yml";$/;"	kind:member	line:122	namespace:mods::drops	file:
-defiler	src/mods/mobs/defiler.cpp	/^	defiler::defiler(const uuid_t& mob_uuid, std::string_view variation) {$/;"	kind:function	line:284	class:mods::mobs::defiler	signature:(const uuid_t& mob_uuid, std::string_view variation)
+defiler	src/mods/mobs/defiler.cpp	/^	defiler::defiler(const uuid_t& mob_uuid, std::string_view variation) {$/;"	kind:function	line:289	class:mods::mobs::defiler	signature:(const uuid_t& mob_uuid, std::string_view variation)
 defiler	src/mods/mobs/defiler.hpp	/^	struct defiler : public smart_mob {$/;"	kind:struct	line:20	namespace:mods::mobs	file:	inherits:smart_mob
 defiler_behaviour_tree	src/mods/mobs/behaviour-tree-list.cpp	/^namespace mods::mobs::defiler_behaviour_tree {$/;"	kind:namespace	line:14	class:mods::mobs	file:
-defiler_behaviour_tree	src/mods/mobs/defiler-behaviour-tree.cpp	/^namespace mods::mobs::defiler_behaviour_tree {$/;"	kind:namespace	line:27	class:mods::mobs	file:
+defiler_behaviour_tree	src/mods/mobs/defiler-behaviour-tree.cpp	/^namespace mods::mobs::defiler_behaviour_tree {$/;"	kind:namespace	line:28	class:mods::mobs	file:
 defiler_behaviour_tree	src/mods/mobs/defiler-behaviour-tree.hpp	/^namespace mods::mobs::defiler_behaviour_tree {$/;"	kind:namespace	line:9	class:mods::mobs	file:
-defiler_callbacks	src/mods/mobs/defiler.cpp	/^	namespace defiler_callbacks {$/;"	kind:namespace	line:619	namespace:mods::mobs	file:
-defiler_callbacks	src/mods/mobs/defiler.hpp	/^	namespace defiler_callbacks {$/;"	kind:namespace	line:347	file:
-defiler_init	src/mods/mobs/defiler.cpp	/^namespace mods::mobs::defiler_init {$/;"	kind:namespace	line:632	class:mods::mobs	file:
+defiler_callbacks	src/mods/mobs/defiler.cpp	/^	namespace defiler_callbacks {$/;"	kind:namespace	line:624	namespace:mods::mobs	file:
+defiler_callbacks	src/mods/mobs/defiler.hpp	/^	namespace defiler_callbacks {$/;"	kind:namespace	line:348	file:
+defiler_init	src/mods/mobs/defiler.cpp	/^namespace mods::mobs::defiler_init {$/;"	kind:namespace	line:637	class:mods::mobs	file:
 defiler_init	src/mods/plugins/init.hpp	/^INIT(mods::mobs::defiler_init);$/;"	kind:variable	line:17
-defiler_list	src/mods/mobs/defiler.cpp	/^	std::deque<std::shared_ptr<defiler>> defiler_list;$/;"	kind:member	line:39	namespace:mods::mobs	file:
+defiler_list	src/mods/mobs/defiler.cpp	/^	std::deque<std::shared_ptr<defiler>> defiler_list;$/;"	kind:member	line:41	namespace:mods::mobs	file:
 definition	src/mods/sql.hpp	/^			compositor<T>& definition(const std::vector<std::string>& members) {$/;"	kind:function	line:97	struct:mods::sql::compositor	access:public	signature:(const std::vector<std::string>& members)
 deflect_chance	src/mods/armor/gauntlets-xtv89.hpp	/^				static constexpr std::array<uint16_t,3> deflect_chance = {2,8,6};$/;"	kind:member	line:46	struct:mods::armor::xtv89::stats	file:	access:public
 deflect_chance	src/mods/armor/vest-bc89.hpp	/^				static constexpr std::array<uint16_t,3> deflect_chance = {2,8,6};$/;"	kind:member	line:57	struct:mods::armor::bc89::stats	file:	access:public
@@ -7250,13 +7277,13 @@ desc_num	src/structs.h	/^			int	desc_num;		\/* unique num assigned to desc		*\/$
 description	src/mods/aoe.hpp	/^	static inline std::string description(const types_t& type) {$/;"	kind:function	line:58	namespace:mods::aoe	signature:(const types_t& type)
 description	src/mods/armor/gauntlets-xtv89.hpp	/^			static constexpr std::string_view description =$/;"	kind:member	line:18	struct:mods::armor::xtv89	file:	access:public
 description	src/mods/armor/vest-bc89.hpp	/^			static constexpr std::string_view description =$/;"	kind:member	line:13	struct:mods::armor::bc89	file:	access:public
-description	src/mods/classes/breacher.hpp	/^			static constexpr std::string_view description = "{grn}BREACHERS{\/grn}\\r\\n"$/;"	kind:member	line:10	struct:mods::classes::breacher	file:	access:public
+description	src/mods/classes/breacher.hpp	/^			static constexpr std::string_view description = "{grn}BREACHERS{\/grn}\\r\\n"$/;"	kind:member	line:13	struct:mods::classes::breacher	file:	access:public
 description	src/mods/classes/pyrexia.hpp	/^				std::string description;$/;"	kind:member	line:31	struct:mods::classes::pyrexia::skillset_info_t	file:	access:public
 description	src/mods/contract-steps.hpp	/^		std::string 		description;$/;"	kind:member	line:36	namespace:mods::contracts	file:
 description	src/mods/contract-types.hpp	/^		std::string description;$/;"	kind:member	line:26	struct:mods::contracts::contract	file:	access:public
 description	src/mods/extra_desc_data.hpp	/^		mods::string description;$/;"	kind:member	line:15	struct:mods::extra_desc_data	file:	access:public
-description	src/mods/mobs/extended-types.cpp	/^	std::string description(extended_types_t type) {$/;"	kind:function	line:151	namespace:mods::mobs::extended_types	signature:(extended_types_t type)
-description	src/mods/mobs/extended-types.cpp	/^	std::string description(std::string str) {$/;"	kind:function	line:144	namespace:mods::mobs::extended_types	signature:(std::string str)
+description	src/mods/mobs/extended-types.cpp	/^	std::string description(extended_types_t type) {$/;"	kind:function	line:152	namespace:mods::mobs::extended_types	signature:(extended_types_t type)
+description	src/mods/mobs/extended-types.cpp	/^	std::string description(std::string str) {$/;"	kind:function	line:145	namespace:mods::mobs::extended_types	signature:(std::string str)
 description	src/mods/orm/room.hpp	/^		std::string description;$/;"	kind:member	line:46	struct:mods::orm::room	file:	access:public
 description	src/mods/player-contract-instance.hpp	/^			std::string_view description() const {$/;"	kind:function	line:129	struct:mods::contracts::player_contract_instance	access:public	signature:() const
 description	src/mods/player.hpp	/^			mods::string& description() {$/;"	kind:function	line:412	namespace:mods	access:public	signature:()
@@ -7328,7 +7355,7 @@ detach_shotgun_underbarrel	src/mods/classes/ghost.cpp	/^	std::tuple<bool,std::st
 detail	src/mods/util.hpp	/^	namespace detail {$/;"	kind:namespace	line:202	namespace:mods::util	file:
 detect_size	src/mods/lmdb/shm.hpp	/^        inline size_t detect_size(){$/;"	kind:function	line:47	class:gdns::shm	access:public	signature:()
 detect_size	src/mods/lmdb/shm.hpp	/^size_t shm::detect_size(const char* memory_id,int project_id){$/;"	kind:function	line:71	class:gdns::shm	signature:(const char* memory_id,int project_id)
-determine_chase_direction	src/mods/mobs/defiler.cpp	/^	direction_t defiler::determine_chase_direction() {$/;"	kind:function	line:418	class:mods::mobs::defiler	signature:()
+determine_chase_direction	src/mods/mobs/defiler.cpp	/^	direction_t defiler::determine_chase_direction() {$/;"	kind:function	line:423	class:mods::mobs::defiler	signature:()
 determine_chase_direction	src/mods/mobs/smart-mob.cpp	/^	direction_t smart_mob::determine_chase_direction() {$/;"	kind:function	line:411	class:mods::mobs::smart_mob	signature:()
 determine_heading_from_found_vehicles	src/mods/mobs/car-thief.cpp	/^	int8_t car_thief::determine_heading_from_found_vehicles() {$/;"	kind:function	line:399	class:mods::mobs::car_thief	signature:()
 determine_heading_from_found_vehicles	src/mods/mobs/generic-thief.cpp	/^	int8_t generic_thief::determine_heading_from_found_vehicles() {$/;"	kind:function	line:535	class:mods::mobs::generic_thief	signature:()
@@ -7453,7 +7480,7 @@ dispatch_show_action	src/mods/builder/slotted-builder.hpp	/^			bool dispatch_sho
 dispatch_slot	src/mods/builder/slotted-builder.hpp	/^			bool dispatch_slot(std::string argument) {$/;"	kind:function	line:653	struct:mods::builder::slotted_builder	file:	access:private	signature:(std::string argument)
 dispatch_unique_armor_event	src/mods/armor/unique-armor.cpp	/^	void dispatch_unique_armor_event(const uuid_t& attacker_uuid, damage_event_t event, player_ptr_t victim) {$/;"	kind:function	line:30	namespace:mods::armor	signature:(const uuid_t& attacker_uuid, damage_event_t event, player_ptr_t victim)
 dispatch_unique_ranged_weapon_event	src/mods/weapons/unique-weapons.cpp	/^	void dispatch_unique_ranged_weapon_event(const uuid_t& attacker_uuid, damage_event_t event, player_ptr_t victim) {$/;"	kind:function	line:43	namespace:mods::weapons	signature:(const uuid_t& attacker_uuid, damage_event_t event, player_ptr_t victim)
-dispatch_watcher	src/mods/mobs/defiler.cpp	/^		bool dispatch_watcher(const uuid_t& defiler_uuid,player_ptr_t& player, const room_rnum& room_id) {$/;"	kind:function	line:620	namespace:mods::mobs::defiler_callbacks	signature:(const uuid_t& defiler_uuid,player_ptr_t& player, const room_rnum& room_id)
+dispatch_watcher	src/mods/mobs/defiler.cpp	/^		bool dispatch_watcher(const uuid_t& defiler_uuid,player_ptr_t& player, const room_rnum& room_id) {$/;"	kind:function	line:625	namespace:mods::mobs::defiler_callbacks	signature:(const uuid_t& defiler_uuid,player_ptr_t& player, const room_rnum& room_id)
 dispatch_watcher	src/mods/mobs/orthos-agent.cpp	/^		bool dispatch_watcher(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id) {$/;"	kind:function	line:574	namespace:mods::mobs::orthos_callbacks	signature:(const uuid_t& orthos_agent_uuid,player_ptr_t& player, const room_rnum& room_id)
 display_signatures	src/mods/builder/slotted-builder.hpp	/^			void display_signatures() {$/;"	kind:function	line:447	struct:mods::builder::slotted_builder	access:public	signature:()
 display_slot_list	src/mods/builder/slotted-builder.hpp	/^			void display_slot_list() {$/;"	kind:function	line:436	struct:mods::builder::slotted_builder	access:public	signature:()
@@ -7868,7 +7895,7 @@ done_refreshing	src/mods/zone.cpp	/^	void done_refreshing() {$/;"	kind:function	
 door_entry_event	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::door_entry_event(player_ptr_t& player) {$/;"	kind:function	line:293	class:mods::mobs::armed_guard	signature:(player_ptr_t& player)
 door_entry_event	src/mods/mobs/car-thief.cpp	/^	void car_thief::door_entry_event(player_ptr_t& player) {$/;"	kind:function	line:272	class:mods::mobs::car_thief	signature:(player_ptr_t& player)
 door_entry_event	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::door_entry_event(player_ptr_t& player) {$/;"	kind:function	line:294	class:mods::mobs::chaotic_meth_addict	signature:(player_ptr_t& player)
-door_entry_event	src/mods/mobs/defiler.cpp	/^	void defiler::door_entry_event(player_ptr_t& victim,const room_rnum room_id) {$/;"	kind:function	line:606	class:mods::mobs::defiler	signature:(player_ptr_t& victim,const room_rnum room_id)
+door_entry_event	src/mods/mobs/defiler.cpp	/^	void defiler::door_entry_event(player_ptr_t& victim,const room_rnum room_id) {$/;"	kind:function	line:611	class:mods::mobs::defiler	signature:(player_ptr_t& victim,const room_rnum room_id)
 door_entry_event	src/mods/mobs/generic-thief.cpp	/^	void generic_thief::door_entry_event(player_ptr_t& player) {$/;"	kind:function	line:369	class:mods::mobs::generic_thief	signature:(player_ptr_t& player)
 door_entry_event	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::door_entry_event(player_ptr_t& player) {$/;"	kind:function	line:293	class:mods::mobs::melee_combatant	signature:(player_ptr_t& player)
 door_entry_event	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::door_entry_event(player_ptr_t& victim,const room_rnum room_id) {$/;"	kind:function	line:532	class:mods::mobs::orthos_agent	signature:(player_ptr_t& victim,const room_rnum room_id)
@@ -8097,7 +8124,7 @@ engineer_skillset	src/class.cpp	/^std::string engineer_skillset() {$/;"	kind:fun
 ensnare	src/mods/ensnare.cpp	/^namespace mods::ensnare {$/;"	kind:namespace	line:25	class:mods	file:
 ensnare	src/mods/ensnare.hpp	/^namespace mods::ensnare {$/;"	kind:namespace	line:5	class:mods	file:
 ensnare	src/mods/init.hpp	/^INIT(mods::ensnare);$/;"	kind:variable	line:80
-ensnare	src/mods/mobs/defiler.cpp	/^	void defiler::ensnare(player_ptr_t& victim) {$/;"	kind:function	line:536	class:mods::mobs::defiler	signature:(player_ptr_t& victim)
+ensnare	src/mods/mobs/defiler.cpp	/^	void defiler::ensnare(player_ptr_t& victim) {$/;"	kind:function	line:541	class:mods::mobs::defiler	signature:(player_ptr_t& victim)
 ensnare_clears_up	src/mods/ensnare.cpp	/^	void ensnare_clears_up(player_ptr_t victim) {$/;"	kind:function	line:112	namespace:mods::ensnare	signature:(player_ptr_t victim)
 ensnare_damage	src/mods/ensnare.cpp	/^	void ensnare_damage($/;"	kind:function	line:63	namespace:mods::ensnare	signature:( player_ptr_t attacker, player_ptr_t victim, obj_ptr_t item, int damage)
 ensnare_damage_t	src/mods/ensnare.cpp	/^		ensnare_damage_t(const uuid_t& atk,$/;"	kind:function	line:44	struct:mods::ensnare::ensnare_damage_t	access:public	signature:(const uuid_t& atk, const uuid_t& t, const int16_t& d, const uuid_t& barbs )
@@ -8232,7 +8259,7 @@ explosive_description_t	src/mods/yaml.hpp	/^		explosive_description_t() {$/;"	ki
 explosive_description_t	src/mods/yaml.hpp	/^	struct explosive_description_t : public yaml_description_t {$/;"	kind:struct	line:209	namespace:mods::yaml	file:	inherits:yaml_description_t
 explosive_percent	src/mods/ranged-combat-totals.hpp	/^		uint16_t explosive_percent;$/;"	kind:member	line:93	struct:mods::ranged_combat_totals	file:	access:public
 explosive_resistance_percent	src/mods/player.cpp	/^	int16_t& player::explosive_resistance_percent() {$/;"	kind:function	line:2206	class:mods::player	signature:()
-explosive_shot	src/mods/classes/breacher.cpp	/^	std::tuple<bool,std::string> breacher::explosive_shot(direction_t direction) {$/;"	kind:function	line:54	class:mods::classes::breacher	signature:(direction_t direction)
+explosive_shot	src/mods/classes/breacher.cpp	/^	std::tuple<bool,std::string> breacher::explosive_shot(direction_t direction) {$/;"	kind:function	line:87	class:mods::classes::breacher	signature:(direction_t direction)
 export_all_affected_type	src/mods/json/export.cpp	/^	list_t export_all_affected_type() {$/;"	kind:function	line:40	namespace:mods::json	signature:()
 export_all_armor_index	src/mods/json/export.cpp	/^	list_t export_all_armor_index() {$/;"	kind:function	line:43	namespace:mods::json	signature:()
 export_all_camera_feed	src/mods/json/export.cpp	/^	list_t export_all_camera_feed() {$/;"	kind:function	line:46	namespace:mods::json	signature:()
@@ -8370,11 +8397,11 @@ extended_item_vnum	src/structs.h	/^		uint64_t extended_item_vnum;$/;"	kind:membe
 extended_mob_type	src/structs.h	/^	extended_mob_type_t extended_mob_type;$/;"	kind:member	line:1335	struct:mob_special_data	file:	access:public
 extended_type	src/mods/mobs/smart-mob.hpp	/^			void* extended_type() {$/;"	kind:function	line:116	struct:mods::mobs::smart_mob	access:public	signature:()
 extended_type	src/structs.h	/^		int extended_type; \/** i.e. mw_rifle::SUB_MACHINE_GUN *\/$/;"	kind:member	line:972	struct:obj_data	file:	access:public
-extended_types	src/mods/mobs/extended-types.cpp	/^namespace mods::mobs::extended_types {$/;"	kind:namespace	line:120	class:mods::mobs	file:
+extended_types	src/mods/mobs/extended-types.cpp	/^namespace mods::mobs::extended_types {$/;"	kind:namespace	line:121	class:mods::mobs	file:
 extended_types	src/mods/mobs/extended-types.hpp	/^	namespace extended_types {$/;"	kind:namespace	line:117	namespace:mods::mobs	file:
 extra_attack	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::extra_attack() {$/;"	kind:function	line:359	class:mods::mobs::armed_guard	signature:()
 extra_attack	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::extra_attack() {$/;"	kind:function	line:360	class:mods::mobs::chaotic_meth_addict	signature:()
-extra_attack	src/mods/mobs/defiler.cpp	/^	void defiler::extra_attack() {$/;"	kind:function	line:565	class:mods::mobs::defiler	signature:()
+extra_attack	src/mods/mobs/defiler.cpp	/^	void defiler::extra_attack() {$/;"	kind:function	line:570	class:mods::mobs::defiler	signature:()
 extra_attack	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::extra_attack() {$/;"	kind:function	line:359	class:mods::mobs::melee_combatant	signature:()
 extra_attack	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::extra_attack() {$/;"	kind:function	line:382	class:mods::mobs::orthos_agent	signature:()
 extra_attack	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::extra_attack() {$/;"	kind:function	line:174	class:mods::mobs::shoplifter	signature:()
@@ -8662,14 +8689,14 @@ find_results_t	src/mods/scan.hpp	/^		struct find_results_t {$/;"	kind:struct	lin
 find_roam_profile	src/mods/mob-roam.cpp	/^	std::optional<std::shared_ptr<mods::mob_roam::roam_recorder>> find_roam_profile(std::string_view profile_name) {$/;"	kind:function	line:108	namespace:mods::mob_roam	signature:(std::string_view profile_name)
 find_room	src/mods/contract-events.cpp	/^	void find_room(player_ptr_t& player,const room_rnum& room_id) {$/;"	kind:function	line:27	namespace:mods::contract_events	signature:(player_ptr_t& player,const room_rnum& room_id)
 find_room	src/mods/player-contract-instance.cpp	/^	void player_contract_instance::find_room(const room_rnum& room_id) {$/;"	kind:function	line:439	class:mods::contracts::player_contract_instance	signature:(const room_rnum& room_id)
-find_same_room_targets	src/mods/mobs/defiler.cpp	/^	bool defiler::find_same_room_targets() {$/;"	kind:function	line:338	class:mods::mobs::defiler	signature:()
+find_same_room_targets	src/mods/mobs/defiler.cpp	/^	bool defiler::find_same_room_targets() {$/;"	kind:function	line:343	class:mods::mobs::defiler	signature:()
 find_scripted_sequences	src/mods/scripted-sequences.cpp	/^	std::optional<std::shared_ptr<scripted_sequences>> find_scripted_sequences(const scripted_sequences_vnum_t& scripted_sequences_vnum) {$/;"	kind:function	line:30	namespace:mods	signature:(const scripted_sequences_vnum_t& scripted_sequences_vnum)
 find_scripted_step	src/mods/scripted-step.cpp	/^	std::optional<std::shared_ptr<scripted_step>> find_scripted_step(const scripted_step_vnum_t& scripted_step_vnum) {$/;"	kind:function	line:36	namespace:mods	signature:(const scripted_step_vnum_t& scripted_step_vnum)
 find_skill_num	src/spell_parser.cpp	/^int find_skill_num(char *name) {$/;"	kind:function	line:175	signature:(char *name)
 find_slot	src/boards.cpp	/^int find_slot(void) {$/;"	kind:function	line:86	signature:(void)
 find_someone_to_attack	src/mods/mobs/armed-guard-behaviour-tree.cpp	/^	TChildNode find_someone_to_attack() {$/;"	kind:function	line:164	namespace:mods::mobs::armed_guard_behaviour_tree	signature:()
 find_someone_to_attack	src/mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^	TChildNode find_someone_to_attack() {$/;"	kind:function	line:164	namespace:mods::mobs::chaotic_meth_addict_behaviour_tree	signature:()
-find_someone_to_attack	src/mods/mobs/defiler.cpp	/^	bool defiler::find_someone_to_attack() {$/;"	kind:function	line:490	class:mods::mobs::defiler	signature:()
+find_someone_to_attack	src/mods/mobs/defiler.cpp	/^	bool defiler::find_someone_to_attack() {$/;"	kind:function	line:495	class:mods::mobs::defiler	signature:()
 find_someone_to_attack	src/mods/mobs/melee-combatant-behaviour-tree.cpp	/^	TChildNode find_someone_to_attack() {$/;"	kind:function	line:164	namespace:mods::mobs::melee_combatant_behaviour_tree	signature:()
 find_target_near_me	src/mods/mobs/generic-thief-behaviour-tree.cpp	/^	TChildNode find_target_near_me() {$/;"	kind:function	line:227	namespace:mods::mobs::generic_thief_behaviour_tree	signature:()
 find_target_room	src/act.wizard.cpp	/^room_rnum find_target_room(char_data *ch, char *rawroomstr) {$/;"	kind:function	line:156	signature:(char_data *ch, char *rawroomstr)
@@ -8884,7 +8911,7 @@ from_string	src/mods/builder/raid.hpp	/^	static inline raid_type_t from_string(s
 from_string	src/mods/combat.cpp	/^		rules_of_engagement_t from_string(std::string_view rule) {$/;"	kind:function	line:21	namespace:mods::combat::rules_of_engagement	signature:(std::string_view rule)
 from_string	src/mods/doors.hpp	/^	static inline int from_string(std::string_view i) {$/;"	kind:function	line:351	namespace:mods::doors	signature:(std::string_view i)
 from_string	src/mods/forge-engine/generator.cpp	/^	rifle_attributes_t from_string(std::string t) {$/;"	kind:function	line:42	namespace:mods::forge_engine	signature:(std::string t)
-from_string	src/mods/mobs/extended-types.cpp	/^	std::optional<extended_types_t> from_string(std::string str) {$/;"	kind:function	line:136	namespace:mods::mobs::extended_types	signature:(std::string str)
+from_string	src/mods/mobs/extended-types.cpp	/^	std::optional<extended_types_t> from_string(std::string str) {$/;"	kind:function	line:137	namespace:mods::mobs::extended_types	signature:(std::string str)
 from_string	src/mods/orm/orm-base.hpp	/^	TObject from_string(std::string value) {$/;"	kind:function	line:40	namespace:mods::orm	signature:(std::string value)
 from_string	src/mods/orm/orm-base.hpp	/^	inline std::string from_string<std::string>(std::string value) {$/;"	kind:function	line:44	namespace:mods::orm	signature:(std::string value)
 from_string	src/mods/orm/orm-base.hpp	/^	inline std::vector<std::string> from_string<std::vector<std::string>>(std::string value) {$/;"	kind:function	line:48	namespace:mods::orm	signature:(std::string value)
@@ -9178,7 +9205,7 @@ get_loot	src/mods/loot.cpp	/^	std::vector<loot_t> get_loot(player_ptr_t& player)
 get_max_players	src/comm.cpp	/^int get_max_players(void) {$/;"	kind:function	line:488	signature:(void)
 get_max_range	src/mods/rifle.cpp	/^	int16_t get_max_range(obj_ptr_t& weapon) {$/;"	kind:function	line:41	namespace:mods::rifle	signature:(obj_ptr_t& weapon)
 get_misc_pref	src/mods/player.hpp	/^			bool get_misc_pref(misc_pref_enum_t bit) {$/;"	kind:function	line:737	namespace:mods	access:public	signature:(misc_pref_enum_t bit)
-get_mobs_targets	src/mods/mobs/extended-types.cpp	/^	std::string_view get_mobs_targets(const mob_rnum& vnum) {$/;"	kind:function	line:125	namespace:mods::mobs::extended_types	signature:(const mob_rnum& vnum)
+get_mobs_targets	src/mods/mobs/extended-types.cpp	/^	std::string_view get_mobs_targets(const mob_rnum& vnum) {$/;"	kind:function	line:126	namespace:mods::mobs::extended_types	signature:(const mob_rnum& vnum)
 get_mode	src/mods/mob-roam.hpp	/^			mode_t get_mode() const {$/;"	kind:function	line:43	struct:mods::mob_roam::roam_recorder	access:public	signature:() const
 get_month	src/mods/date-time.cpp	/^	std::string get_month() {$/;"	kind:function	line:137	namespace:mods::date_time	signature:()
 get_month	src/mods/js.cpp	/^		static duk_ret_t get_month(duk_context *ctx) {$/;"	kind:function	line:108	namespace:mods::js	signature:(duk_context *ctx)
@@ -9527,13 +9554,13 @@ has_found_item	src/mods/mobs/chaotic-meth-addict.cpp	/^	bool chaotic_meth_addict
 has_found_item	src/mods/mobs/generic-thief.cpp	/^	bool generic_thief::has_found_item() {$/;"	kind:function	line:579	class:mods::mobs::generic_thief	signature:()
 has_found_item	src/mods/mobs/melee-combatant.cpp	/^	bool melee_combatant::has_found_item() {$/;"	kind:function	line:426	class:mods::mobs::melee_combatant	signature:()
 has_found_item	src/mods/mobs/orthos-agent.cpp	/^	bool orthos_agent::has_found_item() {$/;"	kind:function	line:448	class:mods::mobs::orthos_agent	signature:()
-has_human_remains	src/mods/mobs/defiler.cpp	/^	static constexpr std::array<obj_vnum,2> has_human_remains  = {$/;"	kind:member	line:633	namespace:mods::mobs::defiler_init	file:
+has_human_remains	src/mods/mobs/defiler.cpp	/^	static constexpr std::array<obj_vnum,2> has_human_remains  = {$/;"	kind:member	line:638	namespace:mods::mobs::defiler_init	file:
 has_inventory_capability	src/mods/player.cpp	/^	bool player::has_inventory_capability(int type) {$/;"	kind:function	line:689	class:mods::player	signature:(int type)
 has_key	src/act.movement.cpp	/^int has_key(char_data *ch, obj_vnum key) {$/;"	kind:function	line:358	signature:(char_data *ch, obj_vnum key)
-has_locker_of_type	src/mods/zone.cpp	/^	static inline bool has_locker_of_type(std::string_view type,const room_vnum& room) {$/;"	kind:function	line:469	namespace:mods::zone	signature:(std::string_view type,const room_vnum& room)
+has_locker_of_type	src/mods/zone.cpp	/^	static inline bool has_locker_of_type(std::string_view type,const room_vnum& room) {$/;"	kind:function	line:472	namespace:mods::zone	signature:(std::string_view type,const room_vnum& room)
 has_lowly_security_ptr	src/mods/mobs/lowly-security.hpp	/^static inline bool has_lowly_security_ptr(uuid_t u) {$/;"	kind:function	line:61	file:	signature:(uuid_t u)
 has_mail	src/mail.cpp	/^int has_mail(long recipient) {$/;"	kind:function	line:282	signature:(long recipient)
-has_mana_for_skill	src/mods/classes/breacher.hpp	/^			bool has_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:16	struct:mods::classes::breacher	access:public	signature:(uint16_t skill)
+has_mana_for_skill	src/mods/classes/breacher.hpp	/^			bool has_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:20	struct:mods::classes::breacher	access:public	signature:(uint16_t skill)
 has_mana_for_skill	src/mods/classes/contagion.hpp	/^			bool has_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:10	struct:mods::classes::contagion	access:public	signature:(uint16_t skill)
 has_mana_for_skill	src/mods/classes/engineer.hpp	/^			bool has_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:9	struct:mods::classes::engineer	access:public	signature:(uint16_t skill)
 has_mana_for_skill	src/mods/classes/ghost.cpp	/^	bool ghost::has_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:175	class:mods::classes::ghost	signature:(uint16_t skill)
@@ -9666,7 +9693,7 @@ host	src/mods/player.cpp	/^	std::string player::host() const {$/;"	kind:function
 host	src/structs.h	/^			mods::string host;		\/* hostname				*\/$/;"	kind:member	line:1506	struct:mods::descriptor_data	file:	access:public
 host	src/structs.h	/^	mods::string host;	\/* host of last logon *\/$/;"	kind:member	line:1646	struct:char_file_u	file:	access:public
 hostent	src/mods/lmdb/gethostbyname.cpp	/^} hostent;$/;"	kind:typedef	line:19	typeref:struct:_hostent	file:
-hostile_phase_1	src/mods/mobs/defiler.cpp	/^	void defiler::hostile_phase_1() {$/;"	kind:function	line:350	class:mods::mobs::defiler	signature:()
+hostile_phase_1	src/mods/mobs/defiler.cpp	/^	void defiler::hostile_phase_1() {$/;"	kind:function	line:355	class:mods::mobs::defiler	signature:()
 hostile_targets	src/mods/mobs/smart-mob.hpp	/^			vec_t<uuid_t> hostile_targets;$/;"	kind:member	line:159	struct:mods::mobs::smart_mob	file:	access:protected
 hostname	src/mods/ban-system.cpp	/^	namespace hostname {$/;"	kind:namespace	line:106	namespace:mods::ban_system	file:
 hostname	src/mods/ban-system.hpp	/^	namespace hostname {$/;"	kind:namespace	line:24	namespace:mods::ban_system	file:
@@ -9922,7 +9949,8 @@ init	src/mods/builder/seqbuild.cpp	/^	void init() {$/;"	kind:function	line:698	n
 init	src/mods/builder/static-loot.cpp	/^	void init() {$/;"	kind:function	line:201	namespace:mods::builder::staticlootbuild	signature:()
 init	src/mods/chargen.cpp	/^	void init() {$/;"	kind:function	line:22	namespace:mods::chargen	signature:()
 init	src/mods/class-abilities.cpp	/^	void init(){$/;"	kind:function	line:17	namespace:mods::class_abilities	signature:()
-init	src/mods/classes/breacher.cpp	/^	void init() {$/;"	kind:function	line:114	namespace:mods::class_abilities::breacher	signature:()
+init	src/mods/classes/breacher.cpp	/^	void breacher::init() {$/;"	kind:function	line:67	class:mods::classes::breacher	signature:()
+init	src/mods/classes/breacher.cpp	/^	void init() {$/;"	kind:function	line:157	namespace:mods::class_abilities::breacher	signature:()
 init	src/mods/classes/contagion.cpp	/^	void contagion::init() {$/;"	kind:function	line:48	class:mods::classes::contagion	signature:()
 init	src/mods/classes/contagion.cpp	/^	void init() {$/;"	kind:function	line:377	namespace:mods::class_abilities::contagion	signature:()
 init	src/mods/classes/engineer.cpp	/^	void engineer::init() {$/;"	kind:function	line:18	class:mods::classes::engineer	signature:()
@@ -9980,8 +10008,8 @@ init	src/mods/mob-roam.cpp	/^	void roam_recorder::init() {$/;"	kind:function	lin
 init	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::init() {$/;"	kind:function	line:302	class:mods::mobs::armed_guard	signature:()
 init	src/mods/mobs/car-thief.cpp	/^	void car_thief::init() {$/;"	kind:function	line:281	class:mods::mobs::car_thief	signature:()
 init	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::init() {$/;"	kind:function	line:303	class:mods::mobs::chaotic_meth_addict	signature:()
-init	src/mods/mobs/defiler.cpp	/^	void defiler::init() {$/;"	kind:function	line:255	class:mods::mobs::defiler	signature:()
-init	src/mods/mobs/defiler.cpp	/^	void init() {$/;"	kind:function	line:664	namespace:mods::mobs::defiler_init	signature:()
+init	src/mods/mobs/defiler.cpp	/^	void defiler::init() {$/;"	kind:function	line:260	class:mods::mobs::defiler	signature:()
+init	src/mods/mobs/defiler.cpp	/^	void init() {$/;"	kind:function	line:687	namespace:mods::mobs::defiler_init	signature:()
 init	src/mods/mobs/generic-thief.cpp	/^	void generic_thief::init() {$/;"	kind:function	line:378	class:mods::mobs::generic_thief	signature:()
 init	src/mods/mobs/goat.cpp	/^	void goat::init() {$/;"	kind:function	line:258	class:mods::mobs::goat	signature:()
 init	src/mods/mobs/goat.cpp	/^	void init() {$/;"	kind:function	line:466	namespace:mods::mobs::goat_init	signature:()
@@ -10068,7 +10096,7 @@ init	src/mods/weapons/elemental.cpp	/^	void init() {$/;"	kind:function	line:262	
 init	src/mods/weapons/reload.cpp	/^	void init() {$/;"	kind:function	line:180	namespace:mods::weapons::reload	signature:()
 init	src/mods/weapons/shotgun-dst7A.cpp	/^		void init() {$/;"	kind:function	line:43	namespace:mods::weapons::shotgun::dst7a_commands	signature:()
 init	src/mods/weapons/smg-vc88.cpp	/^		void init() {$/;"	kind:function	line:36	namespace:mods::weapons::smg::vc88_commands	signature:()
-init	src/mods/zone.cpp	/^	void init() {$/;"	kind:function	line:625	namespace:mods::zone	signature:()
+init	src/mods/zone.cpp	/^	void init() {$/;"	kind:function	line:628	namespace:mods::zone	signature:()
 init	src/room-data.cpp	/^void room_data::init() {$/;"	kind:function	line:3	class:room_data	signature:()
 init	src/shop.cpp	/^void shop_data<TOrmType,T,R>::init() {$/;"	kind:function	line:1749	class:shop_data	signature:()
 init	src/structs.cpp	/^void char_data::init() {$/;"	kind:function	line:361	class:char_data	signature:()
@@ -10122,6 +10150,7 @@ initialize_table_schema	src/mods/db.hpp	/^static inline int_status_t initialize_
 initialized	src/mods/pq.hpp	/^	static bool initialized = 0;$/;"	kind:member	line:31	namespace:mods::db_report	file:
 initiator	src/mods/object-utils.hpp	/^		std::string initiator;$/;"	kind:member	line:85	struct:mods::object_utils::YamlFeedExceptionInfo	file:	access:public
 inject	src/mods/boosters/adrenaline-shot.cpp	/^	std::tuple<bool,std::string> adrenaline_shot::inject(player_ptr_t& injector) {$/;"	kind:function	line:15	class:mods::boosters::adrenaline_shot	signature:(player_ptr_t& injector)
+inject_adrenaline_shot	src/mods/classes/breacher.cpp	/^	std::tuple<bool,std::string> breacher::inject_adrenaline_shot() {$/;"	kind:function	line:17	class:mods::classes::breacher	signature:()
 inject_adrenaline_shot	src/mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::inject_adrenaline_shot() {$/;"	kind:function	line:858	class:mods::classes::ghost	signature:()
 injure	src/mods/injure.cpp	/^namespace mods::injure {$/;"	kind:namespace	line:11	class:mods	file:
 injure	src/mods/injure.hpp	/^namespace mods::injure {$/;"	kind:namespace	line:5	class:mods	file:
@@ -10203,7 +10232,7 @@ invalid_class	src/class.cpp	/^int invalid_class(char_data *ch, struct obj_data *
 invalid_plug	src/mods/mini-games/wires.cpp	/^	std::string invalid_plug() {$/;"	kind:function	line:80	namespace:mods::mini_games	signature:()
 invalid_row	src/mods/mini-games/line-up.cpp	/^	std::string line_up::invalid_row() {$/;"	kind:function	line:110	class:mods::mini_games::line_up	signature:()
 invec	src/globals.hpp	315;"	kind:macro	line:315	file:
-inventory	src/mods/classes/breacher.cpp	/^namespace mods::orm::inventory {$/;"	kind:namespace	line:7	class:mods::orm	file:
+inventory	src/mods/classes/breacher.cpp	/^namespace mods::orm::inventory {$/;"	kind:namespace	line:8	class:mods::orm	file:
 inventory	src/mods/classes/forge.cpp	/^namespace mods::orm::inventory {$/;"	kind:namespace	line:13	class:mods::orm	file:
 inventory	src/mods/classes/ghost.cpp	/^namespace mods::orm::inventory {$/;"	kind:namespace	line:46	class:mods::orm	file:
 inventory	src/mods/classes/pyrexia.cpp	/^namespace mods::orm::inventory {$/;"	kind:namespace	line:7	class:mods::orm	file:
@@ -10227,7 +10256,7 @@ ip_value	src/mods/orm/user-logins.hpp	/^		std::string ip_value() {$/;"	kind:func
 irl	src/mods/date-time.cpp	/^namespace mods::date_time::irl {$/;"	kind:namespace	line:10	class:mods::date_time	file:
 irl	src/mods/date-time.hpp	/^	namespace irl {$/;"	kind:namespace	line:51	namespace:mods::date_time	file:
 irl_now	src/mods/date-time.cpp	/^std::string irl_now() {$/;"	kind:function	line:241	signature:()
-is	src/mods/mobs/defiler.cpp	/^	bool defiler::is(defiler::status_t status) {$/;"	kind:function	line:524	class:mods::mobs::defiler	signature:(defiler::status_t status)
+is	src/mods/mobs/defiler.cpp	/^	bool defiler::is(defiler::status_t status) {$/;"	kind:function	line:529	class:mods::mobs::defiler	signature:(defiler::status_t status)
 is	src/mods/mobs/goat.cpp	/^	bool goat::is(goat::status_t status) {$/;"	kind:function	line:390	class:mods::mobs::goat	signature:(goat::status_t status)
 is	src/mods/player.hpp	/^			bool is(char_data* ch) const {$/;"	kind:function	line:722	namespace:mods	access:public	signature:(char_data* ch) const
 is	src/mods/player.hpp	/^			bool is(player_ptr_t p) const {$/;"	kind:function	line:725	namespace:mods	access:public	signature:(player_ptr_t p) const
@@ -10356,7 +10385,7 @@ is_rifle_attachment	src/mods/yaml.hpp	/^		bool is_rifle_attachment;$/;"	kind:mem
 is_rival	src/mods/mobs/armed-guard.cpp	/^	bool armed_guard::is_rival(player_ptr_t& player) {$/;"	kind:function	line:290	class:mods::mobs::armed_guard	signature:(player_ptr_t& player)
 is_rival	src/mods/mobs/car-thief.cpp	/^	bool car_thief::is_rival(player_ptr_t& player) {$/;"	kind:function	line:269	class:mods::mobs::car_thief	signature:(player_ptr_t& player)
 is_rival	src/mods/mobs/chaotic-meth-addict.cpp	/^	bool chaotic_meth_addict::is_rival(player_ptr_t& player) {$/;"	kind:function	line:291	class:mods::mobs::chaotic_meth_addict	signature:(player_ptr_t& player)
-is_rival	src/mods/mobs/defiler.cpp	/^	bool defiler::is_rival(player_ptr_t& player) {$/;"	kind:function	line:229	class:mods::mobs::defiler	signature:(player_ptr_t& player)
+is_rival	src/mods/mobs/defiler.cpp	/^	bool defiler::is_rival(player_ptr_t& player) {$/;"	kind:function	line:234	class:mods::mobs::defiler	signature:(player_ptr_t& player)
 is_rival	src/mods/mobs/generic-thief.cpp	/^	bool generic_thief::is_rival(player_ptr_t& player) {$/;"	kind:function	line:153	class:mods::mobs::generic_thief	signature:(player_ptr_t& player)
 is_rival	src/mods/mobs/melee-combatant.cpp	/^	bool melee_combatant::is_rival(player_ptr_t& player) {$/;"	kind:function	line:290	class:mods::mobs::melee_combatant	signature:(player_ptr_t& player)
 is_rival	src/mods/mobs/orthos-agent.cpp	/^	bool orthos_agent::is_rival(player_ptr_t& player) {$/;"	kind:function	line:298	class:mods::mobs::orthos_agent	signature:(player_ptr_t& player)
@@ -10446,7 +10475,7 @@ kill_t	src/mods/forge-engine/kill.cpp	/^	kill_t::kill_t(const kill_t& copy) {$/;
 kill_t	src/mods/forge-engine/kill.hpp	/^			kill_t(player_ptr_t& p,mob_vnum v) : victim(v), killer(p), m_cost(0)  {$/;"	kind:function	line:28	struct:mods::forge_engine::kill_t	access:public	signature:(player_ptr_t& p,mob_vnum v)
 kill_t	src/mods/forge-engine/kill.hpp	/^	struct kill_t {$/;"	kind:struct	line:23	namespace:mods::forge_engine	file:
 killer	src/mods/forge-engine/kill.hpp	/^			player_ptr_t killer;$/;"	kind:member	line:26	struct:mods::forge_engine::kill_t	file:	access:public
-kind	src/mods/classes/breacher.hpp	/^			types kind() {$/;"	kind:function	line:24	struct:mods::classes::breacher	access:public	signature:()
+kind	src/mods/classes/breacher.hpp	/^			types kind() {$/;"	kind:function	line:57	struct:mods::classes::breacher	access:public	signature:()
 kind	src/mods/classes/contagion.hpp	/^			types kind() {$/;"	kind:function	line:80	struct:mods::classes::contagion	access:public	signature:()
 kind	src/mods/classes/engineer.hpp	/^			types kind() {$/;"	kind:function	line:15	struct:mods::classes::engineer	access:public	signature:()
 kind	src/mods/classes/forge.hpp	/^			types kind() {$/;"	kind:function	line:17	struct:mods::classes::forge	access:public	signature:()
@@ -10630,7 +10659,7 @@ load_by_pkid	src/mods/orm/base.hpp	/^		static inline std::tuple<int16_t,std::str
 load_by_pkid	src/mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_by_pkid(TObject* s) {$/;"	kind:function	line:484	namespace:mods::orm::util	signature:(TObject* s)
 load_by_pkid	src/mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_by_pkid(TObject& s) {$/;"	kind:function	line:473	file:	signature:(TObject& s)
 load_by_pkid	src/mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_by_pkid(TObject& s,std::string pkid) {$/;"	kind:function	line:580	file:	signature:(TObject& s,std::string pkid)
-load_by_player	src/mods/classes/breacher.cpp	/^	int16_t breacher::load_by_player(player_ptr_t& player) {$/;"	kind:function	line:39	class:mods::classes::breacher	signature:(player_ptr_t& player)
+load_by_player	src/mods/classes/breacher.cpp	/^	int16_t breacher::load_by_player(player_ptr_t& player) {$/;"	kind:function	line:56	class:mods::classes::breacher	signature:(player_ptr_t& player)
 load_by_player	src/mods/classes/contagion.cpp	/^	int16_t contagion::load_by_player(player_ptr_t& player) {$/;"	kind:function	line:99	class:mods::classes::contagion	signature:(player_ptr_t& player)
 load_by_player	src/mods/classes/engineer.cpp	/^	int16_t engineer::load_by_player(player_ptr_t& player) {$/;"	kind:function	line:75	class:mods::classes::engineer	signature:(player_ptr_t& player)
 load_by_player	src/mods/classes/forge.cpp	/^	int16_t forge::load_by_player(player_ptr_t & player){$/;"	kind:function	line:47	class:mods::classes::forge	signature:(player_ptr_t & player)
@@ -10862,7 +10891,7 @@ m	src/mods/mobs/orthos-spawn-sentinel.cpp	164;"	kind:macro	line:164	file:
 m	src/mods/mobs/orthos-spawn-sentinel.cpp	339;"	kind:macro	line:339	file:
 m	src/mods/rooms.cpp	/^	std::string m(std::map<std::string,std::string>& d,std::string_view key,std::string_view fallback) {$/;"	kind:function	line:770	namespace:mods::rooms	signature:(std::map<std::string,std::string>& d,std::string_view key,std::string_view fallback)
 m	src/random.cpp	45;"	kind:macro	line:45	file:
-m_abilities	src/mods/classes/breacher.hpp	/^			ability_list_t m_abilities;$/;"	kind:member	line:59	struct:mods::classes::breacher	file:	access:private
+m_abilities	src/mods/classes/breacher.hpp	/^			ability_list_t m_abilities;$/;"	kind:member	line:94	struct:mods::classes::breacher	file:	access:private
 m_abilities	src/mods/classes/contagion.hpp	/^			ability_list_t m_abilities;$/;"	kind:member	line:156	struct:mods::classes::contagion	file:	access:private
 m_abilities	src/mods/classes/engineer.hpp	/^			ability_list_t m_abilities;$/;"	kind:member	line:64	struct:mods::classes::engineer	file:	access:private
 m_abilities	src/mods/classes/forge.hpp	/^			ability_list_t m_abilities;$/;"	kind:member	line:72	struct:mods::classes::forge	file:	access:private
@@ -10872,12 +10901,15 @@ m_abilities	src/mods/classes/medic.hpp	/^			ability_list_t m_abilities;$/;"	kind
 m_abilities	src/mods/classes/support.hpp	/^			ability_list_t m_abilities;$/;"	kind:member	line:41	struct:mods::classes::support	file:	access:private
 m_abilities	src/mods/classes/syndrome.hpp	/^			ability_list_t m_abilities;$/;"	kind:member	line:45	struct:mods::classes::syndrome	file:	access:private
 m_active	src/mods/boosters/adrenaline-shot.hpp	/^			bool m_active;$/;"	kind:member	line:45	namespace:mods::boosters	file:	access:protected
+m_ad_shot	src/mods/classes/breacher.hpp	/^			adrenaline_shot_t m_ad_shot;$/;"	kind:member	line:87	struct:mods::classes::breacher	file:	access:private
 m_ad_shot	src/mods/classes/ghost.hpp	/^			adrenaline_shot_t m_ad_shot;$/;"	kind:member	line:208	struct:mods::classes::ghost	file:	access:private
 m_ada	src/mods/player.hpp	/^			bool m_ada;$/;"	kind:member	line:973	namespace:mods	file:	access:protected
 m_ada_data	src/mods/player.hpp	/^			std::map<std::string,std::string> m_ada_data;$/;"	kind:member	line:972	namespace:mods	file:	access:protected
+m_adrenaline_shot	src/mods/classes/breacher.hpp	/^			skill_t m_adrenaline_shot;$/;"	kind:member	line:96	struct:mods::classes::breacher	file:	access:private
 m_adrenaline_shot	src/mods/classes/ghost.hpp	/^			skill_t m_adrenaline_shot;$/;"	kind:member	line:192	struct:mods::classes::ghost	file:	access:private
 m_adrenaline_shot	src/mods/classes/marine.hpp	/^			skill_t m_adrenaline_shot;$/;"	kind:member	line:68	namespace:mods::classes	file:	access:private
 m_adrenaline_shot	src/mods/classes/medic.hpp	/^			skill_t m_adrenaline_shot;$/;"	kind:member	line:198	struct:mods::classes::medic	file:	access:private
+m_adrenaline_shot_charges	src/mods/classes/breacher.hpp	/^			uint8_t m_adrenaline_shot_charges;$/;"	kind:member	line:95	struct:mods::classes::breacher	file:	access:private
 m_adrenaline_shot_charges	src/mods/classes/ghost.hpp	/^			uint8_t m_adrenaline_shot_charges;$/;"	kind:member	line:175	struct:mods::classes::ghost	file:	access:private
 m_advanced_protection	src/mods/player.hpp	/^			std::shared_ptr<mods::armor::advanced_protection> m_advanced_protection;$/;"	kind:member	line:1044	namespace:mods	file:	access:private
 m_aerial_drone_scan	src/mods/classes/ghost.hpp	/^			skill_t m_aerial_drone_scan;$/;"	kind:member	line:223	struct:mods::classes::ghost	file:	access:private
@@ -10904,7 +10936,7 @@ m_attacker_uuid	src/mods/player.hpp	/^			uuid_t m_attacker_uuid;$/;"	kind:member
 m_attackers	src/mods/mobs/armed-guard.hpp	/^			std::forward_list<player_ptr_t> m_attackers;$/;"	kind:member	line:109	namespace:mods::mobs	file:	access:private
 m_attackers	src/mods/mobs/car-thief.hpp	/^			std::forward_list<player_ptr_t> m_attackers;$/;"	kind:member	line:89	struct:mods::mobs::car_thief	file:	access:private
 m_attackers	src/mods/mobs/chaotic-meth-addict.hpp	/^			std::forward_list<player_ptr_t> m_attackers;$/;"	kind:member	line:109	namespace:mods::mobs	file:	access:private
-m_attackers	src/mods/mobs/defiler.hpp	/^			std::forward_list<player_ptr_t> m_attackers;$/;"	kind:member	line:326	namespace:mods::mobs	file:	access:private
+m_attackers	src/mods/mobs/defiler.hpp	/^			std::forward_list<player_ptr_t> m_attackers;$/;"	kind:member	line:327	namespace:mods::mobs	file:	access:private
 m_attackers	src/mods/mobs/generic-thief.hpp	/^			std::forward_list<player_ptr_t> m_attackers;$/;"	kind:member	line:167	namespace:mods::mobs	file:	access:private
 m_attackers	src/mods/mobs/melee-combatant.hpp	/^			std::forward_list<player_ptr_t> m_attackers;$/;"	kind:member	line:109	namespace:mods::mobs	file:	access:private
 m_attackers	src/mods/mobs/mp-shotgunner.hpp	/^			std::forward_list<player_ptr_t> m_attackers;$/;"	kind:member	line:69	struct:mods::mobs::mp_shotgunner	file:	access:private
@@ -10914,7 +10946,7 @@ m_attackers	src/mods/mobs/shoplifter.hpp	/^			std::forward_list<player_ptr_t> m_
 m_attackers_last_direction	src/mods/mobs/armed-guard.hpp	/^			std::optional<direction_t> m_attackers_last_direction;$/;"	kind:member	line:111	namespace:mods::mobs	file:	access:private
 m_attackers_last_direction	src/mods/mobs/car-thief.hpp	/^			std::optional<direction_t> m_attackers_last_direction;$/;"	kind:member	line:91	struct:mods::mobs::car_thief	file:	access:private
 m_attackers_last_direction	src/mods/mobs/chaotic-meth-addict.hpp	/^			std::optional<direction_t> m_attackers_last_direction;$/;"	kind:member	line:111	namespace:mods::mobs	file:	access:private
-m_attackers_last_direction	src/mods/mobs/defiler.hpp	/^			std::optional<direction_t> m_attackers_last_direction;$/;"	kind:member	line:328	namespace:mods::mobs	file:	access:private
+m_attackers_last_direction	src/mods/mobs/defiler.hpp	/^			std::optional<direction_t> m_attackers_last_direction;$/;"	kind:member	line:329	namespace:mods::mobs	file:	access:private
 m_attackers_last_direction	src/mods/mobs/generic-thief.hpp	/^			std::optional<direction_t> m_attackers_last_direction;$/;"	kind:member	line:169	namespace:mods::mobs	file:	access:private
 m_attackers_last_direction	src/mods/mobs/melee-combatant.hpp	/^			std::optional<direction_t> m_attackers_last_direction;$/;"	kind:member	line:111	namespace:mods::mobs	file:	access:private
 m_attackers_last_direction	src/mods/mobs/mp-shotgunner.hpp	/^			std::optional<direction_t> m_attackers_last_direction;$/;"	kind:member	line:71	struct:mods::mobs::mp_shotgunner	file:	access:private
@@ -10928,7 +10960,7 @@ m_attributes	src/mods/forge-engine/generated-rifle.hpp	/^			std::vector<std::pai
 m_authenticated	src/mods/player.hpp	/^			bool m_authenticated;$/;"	kind:member	line:997	namespace:mods	file:	access:private
 m_auto_update_step	src/mods/player-contract-instance.cpp	/^	void player_contract_instance::m_auto_update_step() {$/;"	kind:function	line:32	class:mods::contracts::player_contract_instance	signature:()
 m_automatically_clear	src/mods/builder/slotted-builder.hpp	/^			bool m_automatically_clear;$/;"	kind:member	line:43	struct:mods::builder::slotted_builder	file:	access:protected
-m_backpack	src/mods/mobs/defiler.hpp	/^			std::forward_list<obj_ptr_t> m_backpack;$/;"	kind:member	line:334	namespace:mods::mobs	file:	access:private
+m_backpack	src/mods/mobs/defiler.hpp	/^			std::forward_list<obj_ptr_t> m_backpack;$/;"	kind:member	line:335	namespace:mods::mobs	file:	access:private
 m_backpack	src/mods/mobs/goat.hpp	/^			std::forward_list<obj_ptr_t> m_backpack;$/;"	kind:member	line:378	namespace:mods::mobs	file:	access:private
 m_base_command	src/mods/builder/slotted-builder.hpp	/^			std::string m_base_command;$/;"	kind:member	line:45	struct:mods::builder::slotted_builder	file:	access:protected
 m_basic_protection	src/mods/player.hpp	/^			std::shared_ptr<mods::armor::basic_protection> m_basic_protection;$/;"	kind:member	line:1043	namespace:mods	file:	access:private
@@ -10961,7 +10993,7 @@ m_can_move	src/mods/player.hpp	/^			bool m_can_move;$/;"	kind:member	line:969	na
 m_can_roam	src/mobact.cpp	320;"	kind:macro	line:320	file:
 m_can_roam	src/mobact.cpp	46;"	kind:macro	line:46	file:
 m_can_roam	src/mobact.cpp	48;"	kind:macro	line:48	file:
-m_cant_find	src/mods/mobs/defiler.hpp	/^			uint8_t m_cant_find;$/;"	kind:member	line:336	namespace:mods::mobs	file:	access:private
+m_cant_find	src/mods/mobs/defiler.hpp	/^			uint8_t m_cant_find;$/;"	kind:member	line:337	namespace:mods::mobs	file:	access:private
 m_capabilities	src/structs.h	/^		capability_list_t m_capabilities;$/;"	kind:member	line:1050	struct:obj_data	file:	access:protected
 m_capture	src/mods/mob-roam.hpp	/^			bool m_capture;$/;"	kind:member	line:52	struct:mods::mob_roam::roam_recorder	file:	access:protected
 m_capture_output	src/mods/player.hpp	/^			bool         m_capture_output;$/;"	kind:member	line:1014	namespace:mods	file:	access:private
@@ -11283,16 +11315,16 @@ m_debug	src/mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	284;"	kind:macro	li
 m_debug	src/mods/mobs/chaotic-meth-addict.cpp	12;"	kind:macro	line:12	file:
 m_debug	src/mods/mobs/chaotic-meth-addict.cpp	15;"	kind:macro	line:15	file:
 m_debug	src/mods/mobs/chaotic-meth-addict.cpp	496;"	kind:macro	line:496	file:
-m_debug	src/mods/mobs/defiler-behaviour-tree.cpp	16;"	kind:macro	line:16	file:
-m_debug	src/mods/mobs/defiler-behaviour-tree.cpp	18;"	kind:macro	line:18	file:
-m_debug	src/mods/mobs/defiler-behaviour-tree.cpp	89;"	kind:macro	line:89	file:
+m_debug	src/mods/mobs/defiler-behaviour-tree.cpp	100;"	kind:macro	line:100	file:
+m_debug	src/mods/mobs/defiler-behaviour-tree.cpp	17;"	kind:macro	line:17	file:
+m_debug	src/mods/mobs/defiler-behaviour-tree.cpp	19;"	kind:macro	line:19	file:
 m_debug	src/mods/mobs/defiler.cpp	20;"	kind:macro	line:20	file:
-m_debug	src/mods/mobs/defiler.cpp	24;"	kind:macro	line:24	file:
-m_debug	src/mods/mobs/defiler.cpp	27;"	kind:macro	line:27	file:
-m_debug	src/mods/mobs/defiler.cpp	687;"	kind:macro	line:687	file:
-m_debug	src/mods/mobs/extended-types.cpp	159;"	kind:macro	line:159	file:
-m_debug	src/mods/mobs/extended-types.cpp	19;"	kind:macro	line:19	file:
-m_debug	src/mods/mobs/extended-types.cpp	21;"	kind:macro	line:21	file:
+m_debug	src/mods/mobs/defiler.cpp	26;"	kind:macro	line:26	file:
+m_debug	src/mods/mobs/defiler.cpp	29;"	kind:macro	line:29	file:
+m_debug	src/mods/mobs/defiler.cpp	711;"	kind:macro	line:711	file:
+m_debug	src/mods/mobs/extended-types.cpp	160;"	kind:macro	line:160	file:
+m_debug	src/mods/mobs/extended-types.cpp	20;"	kind:macro	line:20	file:
+m_debug	src/mods/mobs/extended-types.cpp	22;"	kind:macro	line:22	file:
 m_debug	src/mods/mobs/find.cpp	32;"	kind:macro	line:32	file:
 m_debug	src/mods/mobs/find.cpp	6;"	kind:macro	line:6	file:
 m_debug	src/mods/mobs/find.cpp	8;"	kind:macro	line:8	file:
@@ -11466,7 +11498,7 @@ m_debug	src/mods/zbuild.cpp	66;"	kind:macro	line:66	file:
 m_debug	src/mods/zbuild.cpp	69;"	kind:macro	line:69	file:
 m_debug_line_info	src/mods/deep-object-parser.cpp	12;"	kind:macro	line:12	file:
 m_debug_line_info	src/mods/deep-object-parser.cpp	6;"	kind:macro	line:6	file:
-m_debug_mode	src/mods/mobs/defiler.hpp	/^			bool m_debug_mode;$/;"	kind:member	line:215	namespace:mods::mobs	file:
+m_debug_mode	src/mods/mobs/defiler.hpp	/^			bool m_debug_mode;$/;"	kind:member	line:216	namespace:mods::mobs	file:
 m_debug_mode	src/mods/mobs/goat.hpp	/^			bool m_debug_mode;$/;"	kind:member	line:257	namespace:mods::mobs	file:
 m_debug_plain	src/mods/mobs/orthos-agent.cpp	14;"	kind:macro	line:14	file:
 m_debug_plain	src/mods/mobs/orthos-agent.cpp	18;"	kind:macro	line:18	file:
@@ -11516,7 +11548,7 @@ m_emp_nade	src/mods/classes/marine.hpp	/^			skill_t m_emp_nade;$/;"	kind:member	
 m_emp_resistance_percent	src/mods/player.hpp	/^			int16_t m_emp_resistance_percent;$/;"	kind:member	line:1056	namespace:mods	file:	access:private
 m_encoded_response	src/mods/builder/slotted-builder.hpp	/^			std::vector<std::string> m_encoded_response;$/;"	kind:member	line:35	struct:mods::builder::slotted_builder	file:	access:protected
 m_engaged	src/mods/classes/ghost.hpp	/^			bool m_engaged;$/;"	kind:member	line:171	struct:mods::classes::ghost	file:	access:private
-m_engaged_target	src/mods/mobs/defiler.hpp	/^			player_ptr_t m_engaged_target;$/;"	kind:member	line:190	namespace:mods::mobs	file:
+m_engaged_target	src/mods/mobs/defiler.hpp	/^			player_ptr_t m_engaged_target;$/;"	kind:member	line:191	namespace:mods::mobs	file:
 m_ensnared_amount	src/mods/player.hpp	/^			int16_t m_ensnared_amount;$/;"	kind:member	line:985	namespace:mods	file:	access:protected
 m_env	src/mods/lmdb.hpp	/^			MDB_env*	m_env;$/;"	kind:member	line:219	struct:mods::lmdb::_db_handle	file:	access:private
 m_env	src/mods/lmdb.hpp	/^			MDB_env* m_env;$/;"	kind:member	line:116	struct:mods::lmdb::transaction_t	file:	access:private
@@ -11683,7 +11715,7 @@ m_ex_descriptions	src/room-data.hpp	/^		std::vector<mods::extra_desc_data> m_ex_
 m_executing_js	src/mods/player.hpp	/^			bool         m_executing_js;$/;"	kind:member	line:996	namespace:mods	file:	access:private
 m_explosive_damage_percent	src/mods/player.hpp	/^			int16_t m_explosive_damage_percent;$/;"	kind:member	line:1062	namespace:mods	file:	access:private
 m_explosive_resistance_percent	src/mods/player.hpp	/^			int16_t m_explosive_resistance_percent;$/;"	kind:member	line:1051	namespace:mods	file:	access:private
-m_explosive_shot_charges	src/mods/classes/breacher.hpp	/^			uint8_t m_explosive_shot_charges;$/;"	kind:member	line:56	struct:mods::classes::breacher	file:	access:private
+m_explosive_shot_charges	src/mods/classes/breacher.hpp	/^			uint8_t m_explosive_shot_charges;$/;"	kind:member	line:91	struct:mods::classes::breacher	file:	access:private
 m_extended_type	src/mods/mobs/smart-mob.hpp	/^			void* m_extended_type;$/;"	kind:member	line:172	struct:mods::mobs::smart_mob	file:	access:protected
 m_extra_data	src/mods/player-contract-instance.hpp	/^			std::string m_extra_data;$/;"	kind:member	line:149	struct:mods::contracts::player_contract_instance	file:	access:protected
 m_extract_organs	src/mods/classes/contagion.hpp	/^			skill_t m_extract_organs;$/;"	kind:member	line:151	struct:mods::classes::contagion	file:	access:private
@@ -11704,7 +11736,7 @@ m_force_type	src/mods/forge-engine/generated-rifle.hpp	/^			bool m_force_type;$/
 m_found_car	src/mods/mobs/car-thief.hpp	/^			bool m_found_car;$/;"	kind:member	line:95	struct:mods::mobs::car_thief	file:	access:private
 m_found_item	src/mods/mobs/armed-guard.hpp	/^			bool m_found_item;$/;"	kind:member	line:115	namespace:mods::mobs	file:	access:private
 m_found_item	src/mods/mobs/chaotic-meth-addict.hpp	/^			bool m_found_item;$/;"	kind:member	line:115	namespace:mods::mobs	file:	access:private
-m_found_item	src/mods/mobs/defiler.hpp	/^			bool m_found_item;$/;"	kind:member	line:332	namespace:mods::mobs	file:	access:private
+m_found_item	src/mods/mobs/defiler.hpp	/^			bool m_found_item;$/;"	kind:member	line:333	namespace:mods::mobs	file:	access:private
 m_found_item	src/mods/mobs/generic-thief.hpp	/^			bool m_found_item;$/;"	kind:member	line:173	namespace:mods::mobs	file:	access:private
 m_found_item	src/mods/mobs/melee-combatant.hpp	/^			bool m_found_item;$/;"	kind:member	line:115	namespace:mods::mobs	file:	access:private
 m_found_item	src/mods/mobs/orthos-agent.hpp	/^			bool m_found_item;$/;"	kind:member	line:131	namespace:mods::mobs	file:	access:private
@@ -11743,18 +11775,18 @@ m_histfile_fp	src/mods/player.hpp	/^			FILE* m_histfile_fp;$/;"	kind:member	line
 m_histfile_index	src/mods/player.hpp	/^			uint32_t m_histfile_index;$/;"	kind:member	line:1032	namespace:mods	file:	access:private
 m_histfile_on	src/mods/player.hpp	/^			bool m_histfile_on;$/;"	kind:member	line:1031	namespace:mods	file:	access:private
 m_host	src/mods/player.hpp	/^			std::string m_host;$/;"	kind:member	line:1085	namespace:mods	file:	access:private
-m_hostile_phase_1_attempts	src/mods/mobs/defiler.hpp	/^			std::size_t m_hostile_phase_1_attempts;$/;"	kind:member	line:192	namespace:mods::mobs	file:
+m_hostile_phase_1_attempts	src/mods/mobs/defiler.hpp	/^			std::size_t m_hostile_phase_1_attempts;$/;"	kind:member	line:193	namespace:mods::mobs	file:
 m_hostiles	src/mods/mobs/armed-guard.hpp	/^			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;$/;"	kind:member	line:114	namespace:mods::mobs	file:	access:private
 m_hostiles	src/mods/mobs/car-thief.hpp	/^			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;$/;"	kind:member	line:94	struct:mods::mobs::car_thief	file:	access:private
 m_hostiles	src/mods/mobs/chaotic-meth-addict.hpp	/^			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;$/;"	kind:member	line:114	namespace:mods::mobs	file:	access:private
-m_hostiles	src/mods/mobs/defiler.hpp	/^			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;$/;"	kind:member	line:331	namespace:mods::mobs	file:	access:private
+m_hostiles	src/mods/mobs/defiler.hpp	/^			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;$/;"	kind:member	line:332	namespace:mods::mobs	file:	access:private
 m_hostiles	src/mods/mobs/generic-thief.hpp	/^			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;$/;"	kind:member	line:172	namespace:mods::mobs	file:	access:private
 m_hostiles	src/mods/mobs/melee-combatant.hpp	/^			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;$/;"	kind:member	line:114	namespace:mods::mobs	file:	access:private
 m_hostiles	src/mods/mobs/orthos-agent.hpp	/^			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;$/;"	kind:member	line:130	namespace:mods::mobs	file:	access:private
 m_hostiles	src/mods/mobs/shoplifter.hpp	/^			std::forward_list<mods::scan::vec_player_data_element> m_hostiles;$/;"	kind:member	line:119	namespace:mods::mobs	file:	access:private
 m_hp	src/structs.h	/^		int32_t m_hp;$/;"	kind:member	line:1056	struct:obj_data	file:	access:protected
 m_human_shield_level	src/mods/classes/sentinel.hpp	/^			human_shield_levels_t m_human_shield_level;$/;"	kind:member	line:88	struct:mods::classes::sentinel	file:	access:private
-m_hunt	src/mods/mobs/defiler.hpp	/^			uuid_t m_hunt;$/;"	kind:member	line:341	namespace:mods::mobs	file:	access:private
+m_hunt	src/mods/mobs/defiler.hpp	/^			uuid_t m_hunt;$/;"	kind:member	line:342	namespace:mods::mobs	file:	access:private
 m_id	src/db.h	/^		int64_t m_id;$/;"	kind:member	line:251	struct:zone_data	file:	access:private
 m_id	src/mods/lmdb/shm.hpp	/^        int m_id;$/;"	kind:member	line:61	class:gdns::shm	file:	access:private
 m_imp_mode	src/mods/player.hpp	/^			bool m_imp_mode;$/;"	kind:member	line:1003	namespace:mods	file:	access:private
@@ -11785,7 +11817,7 @@ m_last_attack_direction	src/mods/mobs/smart-mob.hpp	/^			direction_t m_last_atta
 m_last_attacker	src/mods/mobs/armed-guard.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:108	namespace:mods::mobs	file:	access:private
 m_last_attacker	src/mods/mobs/car-thief.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:88	struct:mods::mobs::car_thief	file:	access:private
 m_last_attacker	src/mods/mobs/chaotic-meth-addict.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:108	namespace:mods::mobs	file:	access:private
-m_last_attacker	src/mods/mobs/defiler.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:325	namespace:mods::mobs	file:	access:private
+m_last_attacker	src/mods/mobs/defiler.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:326	namespace:mods::mobs	file:	access:private
 m_last_attacker	src/mods/mobs/generic-thief.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:166	namespace:mods::mobs	file:	access:private
 m_last_attacker	src/mods/mobs/melee-combatant.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:108	namespace:mods::mobs	file:	access:private
 m_last_attacker	src/mods/mobs/mp-shotgunner.hpp	/^			player_ptr_t m_last_attacker;$/;"	kind:member	line:68	struct:mods::mobs::mp_shotgunner	file:	access:private
@@ -11855,7 +11887,7 @@ m_oblique_kick_level	src/mods/classes/sentinel.hpp	/^			oblique_kick_levels_t m_
 m_optimal_range	src/mods/mobs/orthos-agent.hpp	/^			int m_optimal_range;$/;"	kind:member	line:133	namespace:mods::mobs	file:	access:private
 m_optimal_range	src/mods/mobs/shoplifter.hpp	/^			int m_optimal_range;$/;"	kind:member	line:122	namespace:mods::mobs	file:	access:private
 m_order_by	src/mods/sql.hpp	/^			std::string m_order_by;$/;"	kind:member	line:503	struct:mods::sql::compositor	file:	access:private
-m_orm	src/mods/classes/breacher.hpp	/^			breacher_orm_t	m_orm;$/;"	kind:member	line:54	struct:mods::classes::breacher	file:	access:private
+m_orm	src/mods/classes/breacher.hpp	/^			breacher_orm_t	m_orm;$/;"	kind:member	line:89	struct:mods::classes::breacher	file:	access:private
 m_orm	src/mods/classes/contagion.hpp	/^			contagion_orm_t	m_orm;$/;"	kind:member	line:157	struct:mods::classes::contagion	file:	access:private
 m_orm	src/mods/classes/engineer.hpp	/^			engineer_orm_t m_orm;$/;"	kind:member	line:63	struct:mods::classes::engineer	file:	access:private
 m_orm	src/mods/classes/forge.hpp	/^			forge_orm_t	m_orm;$/;"	kind:member	line:56	struct:mods::classes::forge	file:	access:private
@@ -11901,7 +11933,7 @@ m_plant_shrapnel_claymore	src/mods/classes/marine.hpp	/^			skill_t m_plant_shrap
 m_player	src/mods/armor/gauntlets-xtv89.hpp	/^			player_ptr_t m_player;$/;"	kind:member	line:76	struct:mods::armor::xtv89	file:	access:protected
 m_player	src/mods/armor/vest-bc89.hpp	/^			player_ptr_t m_player;$/;"	kind:member	line:85	struct:mods::armor::bc89	file:	access:protected
 m_player	src/mods/camera.hpp	/^			uuid_t m_player;$/;"	kind:member	line:21	class:mods::camera	file:	access:protected
-m_player	src/mods/classes/breacher.hpp	/^			player_ptr_t m_player;$/;"	kind:member	line:55	struct:mods::classes::breacher	file:	access:private
+m_player	src/mods/classes/breacher.hpp	/^			player_ptr_t m_player;$/;"	kind:member	line:90	struct:mods::classes::breacher	file:	access:private
 m_player	src/mods/classes/contagion.hpp	/^			player_ptr_t m_player;$/;"	kind:member	line:116	struct:mods::classes::contagion	file:	access:private
 m_player	src/mods/classes/engineer.hpp	/^			player_ptr_t m_player;$/;"	kind:member	line:62	struct:mods::classes::engineer	file:	access:private
 m_player	src/mods/classes/forge.hpp	/^			player_ptr_t m_player;$/;"	kind:member	line:57	struct:mods::classes::forge	file:	access:private
@@ -11931,7 +11963,7 @@ m_private	src/mods/chat.hpp	/^			bool m_private;$/;"	kind:member	line:39	struct:
 m_private_publishers	src/mods/chat.hpp	/^			std::vector<std::string> m_private_publishers;$/;"	kind:member	line:36	struct:mods::chat::channel	file:	access:private
 m_processed	src/mods/affects.hpp	/^			std::size_t m_processed;$/;"	kind:member	line:312	struct:mods::affects::dissolver	file:	access:protected
 m_proto	src/mods/forge-engine/kill.hpp	/^			std::optional<char_data> m_proto;$/;"	kind:member	line:43	struct:mods::forge_engine::kill_t	file:	access:private
-m_push_count	src/mods/classes/breacher.hpp	/^			std::map<std::pair<room_rnum,direction_t>,uint8_t> m_push_count;$/;"	kind:member	line:53	struct:mods::classes::breacher	file:	access:private
+m_push_count	src/mods/classes/breacher.hpp	/^			std::map<std::pair<room_rnum,direction_t>,uint8_t> m_push_count;$/;"	kind:member	line:88	struct:mods::classes::breacher	file:	access:private
 m_q	src/mods/cron.hpp	/^			std::queue<std::function<void()>> m_q;$/;"	kind:member	line:33	class:mods::cron	file:	access:protected
 m_q	src/mods/deferred.hpp	/^			lambda_queue_t m_q;$/;"	kind:member	line:108	class:mods::deferred	file:	access:protected
 m_query	src/mods/sql.hpp	/^			std::array<std::string, query_parts> m_query;$/;"	kind:member	line:500	struct:mods::sql::compositor	file:	access:private
@@ -11942,7 +11974,7 @@ m_radiation_damage_percent	src/mods/player.hpp	/^			int16_t m_radiation_damage_p
 m_radiation_resistance_percent	src/mods/player.hpp	/^			int16_t m_radiation_resistance_percent;$/;"	kind:member	line:1055	namespace:mods	file:	access:private
 m_random_acts	src/mods/mobs/armed-guard.hpp	/^			std::vector<std::string> m_random_acts;$/;"	kind:member	line:116	namespace:mods::mobs	file:	access:private
 m_random_acts	src/mods/mobs/chaotic-meth-addict.hpp	/^			std::vector<std::string> m_random_acts;$/;"	kind:member	line:116	namespace:mods::mobs	file:	access:private
-m_random_acts	src/mods/mobs/defiler.hpp	/^			std::vector<std::string> m_random_acts;$/;"	kind:member	line:333	namespace:mods::mobs	file:	access:private
+m_random_acts	src/mods/mobs/defiler.hpp	/^			std::vector<std::string> m_random_acts;$/;"	kind:member	line:334	namespace:mods::mobs	file:	access:private
 m_random_acts	src/mods/mobs/goat.hpp	/^			std::vector<std::string> m_random_acts;$/;"	kind:member	line:377	namespace:mods::mobs	file:	access:private
 m_random_acts	src/mods/mobs/melee-combatant.hpp	/^			std::vector<std::string> m_random_acts;$/;"	kind:member	line:116	namespace:mods::mobs	file:	access:private
 m_random_acts	src/mods/mobs/orthos-agent.hpp	/^			std::vector<std::string> m_random_acts;$/;"	kind:member	line:132	namespace:mods::mobs	file:	access:private
@@ -11957,7 +11989,7 @@ m_reinforce_weapon_level	src/mods/classes/forge.hpp	/^			skill_familiarity_t m_r
 m_remembered_cars	src/mods/mobs/car-thief.hpp	/^			uuidlist_t m_remembered_cars;$/;"	kind:member	line:93	struct:mods::mobs::car_thief	file:	access:private
 m_remembered_items	src/mods/mobs/armed-guard.hpp	/^			uuidlist_t m_remembered_items;$/;"	kind:member	line:113	namespace:mods::mobs	file:	access:private
 m_remembered_items	src/mods/mobs/chaotic-meth-addict.hpp	/^			uuidlist_t m_remembered_items;$/;"	kind:member	line:113	namespace:mods::mobs	file:	access:private
-m_remembered_items	src/mods/mobs/defiler.hpp	/^			uuidlist_t m_remembered_items;$/;"	kind:member	line:330	namespace:mods::mobs	file:	access:private
+m_remembered_items	src/mods/mobs/defiler.hpp	/^			uuidlist_t m_remembered_items;$/;"	kind:member	line:331	namespace:mods::mobs	file:	access:private
 m_remembered_items	src/mods/mobs/generic-thief.hpp	/^			uuidlist_t m_remembered_items;$/;"	kind:member	line:171	namespace:mods::mobs	file:	access:private
 m_remembered_items	src/mods/mobs/melee-combatant.hpp	/^			uuidlist_t m_remembered_items;$/;"	kind:member	line:113	namespace:mods::mobs	file:	access:private
 m_remembered_items	src/mods/mobs/orthos-agent.hpp	/^			uuidlist_t m_remembered_items;$/;"	kind:member	line:129	namespace:mods::mobs	file:	access:private
@@ -11984,7 +12016,7 @@ m_roaming_profile_name	src/mods/mob-roam.hpp	/^			std::string m_roaming_profile_
 m_rooms	src/mods/mob-roam.hpp	/^			std::vector<room_vnum> m_rooms;$/;"	kind:member	line:57	struct:mods::mob_roam::roam_recorder	file:	access:protected
 m_roots_of_mayhem	src/mods/classes/contagion.hpp	/^			skill_t m_roots_of_mayhem;$/;"	kind:member	line:145	struct:mods::classes::contagion	file:	access:private
 m_rules_of_engagement	src/mods/player.hpp	/^			mods::combat::rules_of_engagement_t m_rules_of_engagement;$/;"	kind:member	line:1084	namespace:mods	file:	access:private
-m_same_room_targets	src/mods/mobs/defiler.hpp	/^			std::vector<player_ptr_t> m_same_room_targets;$/;"	kind:member	line:189	namespace:mods::mobs	file:
+m_same_room_targets	src/mods/mobs/defiler.hpp	/^			std::vector<player_ptr_t> m_same_room_targets;$/;"	kind:member	line:190	namespace:mods::mobs	file:
 m_scan_results	src/mods/players/search.hpp	/^					scan_results m_scan_results;$/;"	kind:member	line:31	class:mods::player::util::search	file:	access:protected
 m_scanned	src/mods/classes/forge.hpp	/^			std::vector<uuid_t> m_scanned;$/;"	kind:member	line:52	struct:mods::classes::forge	file:	access:private
 m_scanned	src/mods/classes/ghost.hpp	/^			std::vector<uuid_t> m_scanned;$/;"	kind:member	line:184	struct:mods::classes::ghost	file:	access:private
@@ -11992,12 +12024,12 @@ m_scanned	src/mods/drone.hpp	/^			std::vector<uuid_t> m_scanned;$/;"	kind:member
 m_scanned_cars	src/mods/mobs/car-thief.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_cars;$/;"	kind:member	line:92	struct:mods::mobs::car_thief	file:	access:private
 m_scanned_items	src/mods/mobs/armed-guard.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:112	namespace:mods::mobs	file:	access:private
 m_scanned_items	src/mods/mobs/chaotic-meth-addict.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:112	namespace:mods::mobs	file:	access:private
-m_scanned_items	src/mods/mobs/defiler.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:329	namespace:mods::mobs	file:	access:private
+m_scanned_items	src/mods/mobs/defiler.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:330	namespace:mods::mobs	file:	access:private
 m_scanned_items	src/mods/mobs/generic-thief.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:170	namespace:mods::mobs	file:	access:private
 m_scanned_items	src/mods/mobs/melee-combatant.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:112	namespace:mods::mobs	file:	access:private
 m_scanned_items	src/mods/mobs/orthos-agent.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:128	namespace:mods::mobs	file:	access:private
 m_scanned_items	src/mods/mobs/shoplifter.hpp	/^			std::vector<mods::scan::vec_player_data_element> m_scanned_items;$/;"	kind:member	line:117	namespace:mods::mobs	file:	access:private
-m_scanned_targets	src/mods/mobs/defiler.hpp	/^			std::vector<std::tuple<uuid_t,direction_t,uint8_t>> m_scanned_targets;$/;"	kind:member	line:340	namespace:mods::mobs	file:	access:private
+m_scanned_targets	src/mods/mobs/defiler.hpp	/^			std::vector<std::tuple<uuid_t,direction_t,uint8_t>> m_scanned_targets;$/;"	kind:member	line:341	namespace:mods::mobs	file:	access:private
 m_screen_width	src/mods/player.hpp	/^			uint8_t m_screen_width;$/;"	kind:member	line:1089	namespace:mods	file:	access:private
 m_scripted_response	src/mods/player.hpp	/^			std::string m_scripted_response;$/;"	kind:member	line:990	namespace:mods	file:	access:private
 m_seal_off_room_with_wall_of_fire_level	src/mods/classes/pyrexia.hpp	/^			skill_familiarity_t m_seal_off_room_with_wall_of_fire_level;$/;"	kind:member	line:78	struct:mods::classes::pyrexia	file:	access:private
@@ -12041,7 +12073,7 @@ m_state	src/mods/ai_state.hpp	/^			uint8_t m_state;$/;"	kind:member	line:51	clas
 m_state_buffer	src/mods/player-contract-instance.hpp	/^			std::string m_state_buffer;$/;"	kind:member	line:148	struct:mods::contracts::player_contract_instance	file:	access:protected
 m_state_orm	src/mods/player-contract-instance.hpp	/^			std::shared_ptr<mods::orm::player_contract_state> m_state_orm;$/;"	kind:member	line:139	struct:mods::contracts::player_contract_instance	file:	access:protected
 m_status	src/mods/lmdb.hpp	/^			status_type_t m_status;$/;"	kind:member	line:216	struct:mods::lmdb::_db_handle	file:	access:private
-m_status	src/mods/mobs/defiler.hpp	/^			status_t m_status;$/;"	kind:member	line:337	namespace:mods::mobs	file:	access:private
+m_status	src/mods/mobs/defiler.hpp	/^			status_t m_status;$/;"	kind:member	line:338	namespace:mods::mobs	file:	access:private
 m_status	src/mods/mobs/generic-thief-behaviour-tree.cpp	24;"	kind:macro	line:24	file:
 m_status	src/mods/mobs/generic-thief-behaviour-tree.cpp	26;"	kind:macro	line:26	file:
 m_status	src/mods/mobs/goat.hpp	/^			status_t m_status;$/;"	kind:member	line:381	namespace:mods::mobs	file:	access:private
@@ -12068,9 +12100,9 @@ m_target	src/mods/classes/ghost.hpp	/^			uuid_t m_target;$/;"	kind:member	line:1
 m_target	src/mods/player-contract-instance.hpp	/^			target_t m_target;$/;"	kind:member	line:138	struct:mods::contracts::player_contract_instance	file:	access:protected
 m_target_limb	src/mods/classes/ghost.hpp	/^			skill_t m_target_limb;$/;"	kind:member	line:199	struct:mods::classes::ghost	file:	access:private
 m_target_limb	src/mods/classes/marine.hpp	/^			skill_t m_target_limb;$/;"	kind:member	line:75	namespace:mods::classes	file:	access:private
-m_targets	src/mods/mobs/defiler.hpp	/^			std::vector<target_t> m_targets;$/;"	kind:member	line:191	namespace:mods::mobs	file:
+m_targets	src/mods/mobs/defiler.hpp	/^			std::vector<target_t> m_targets;$/;"	kind:member	line:192	namespace:mods::mobs	file:
 m_targets	src/mods/mobs/generic-thief.hpp	/^			std::forward_list<target_t> m_targets;$/;"	kind:member	line:164	namespace:mods::mobs	file:	access:private
-m_teep_level	src/mods/classes/breacher.hpp	/^			int \/** todo replace iwth skill_familiarity_t *\/ m_teep_level;$/;"	kind:member	line:58	struct:mods::classes::breacher	file:	access:private
+m_teep_level	src/mods/classes/breacher.hpp	/^			int \/** todo replace iwth skill_familiarity_t *\/ m_teep_level;$/;"	kind:member	line:93	struct:mods::classes::breacher	file:	access:private
 m_temperature	src/mods/rifle-instance-data.hpp	/^			int16_t m_temperature;$/;"	kind:member	line:55	struct:heat	file:	access:private
 m_texture_levels	src/room-data.hpp	/^		std::map<texture_type_t,texture_level_t> m_texture_levels;$/;"	kind:variable	line:321
 m_textures	src/room-data.hpp	/^		std::set<texture_type_t> m_textures;$/;"	kind:variable	line:324
@@ -12120,8 +12152,8 @@ m_uuid	src/mods/weapons/shotgun-charge.hpp	/^			uuid_t m_uuid;$/;"	kind:member	l
 m_uuid	src/mods/weapons/shrapnel-claymore.hpp	/^			uuid_t m_uuid;$/;"	kind:member	line:28	struct:mods::weapons::shrapnel_claymore	file:	access:protected
 m_variant	src/mods/weapons/attachment-shotgun-underbarrel.hpp	/^			shotgun_variant_t m_variant;$/;"	kind:member	line:24	namespace:mods::weapons	file:	access:protected
 m_verb	src/mods/chat.hpp	/^			std::string m_verb;$/;"	kind:member	line:38	struct:mods::chat::channel	file:	access:private
-m_verbose	src/mods/mobs/defiler.cpp	32;"	kind:macro	line:32	file:
 m_verbose	src/mods/mobs/defiler.cpp	34;"	kind:macro	line:34	file:
+m_verbose	src/mods/mobs/defiler.cpp	36;"	kind:macro	line:36	file:
 m_verbose	src/mods/mobs/goat.cpp	33;"	kind:macro	line:33	file:
 m_verbose	src/mods/mobs/goat.cpp	35;"	kind:macro	line:35	file:
 m_vnum	src/mods/builder.cpp	/^	mob_vnum m_vnum;$/;"	kind:member	line:211	struct:command_t	file:	access:public
@@ -12129,13 +12161,13 @@ m_vnum	src/mods/mbuild.cpp	/^	mob_vnum m_vnum;$/;"	kind:member	line:386	struct:c
 m_vnum	src/mods/obuild.cpp	/^	mob_vnum m_vnum;$/;"	kind:member	line:227	struct:command_t	file:	access:public
 m_vnum	src/mods/rbuild-sandbox.cpp	/^	mob_vnum m_vnum;$/;"	kind:member	line:355	struct:command_t	file:	access:public
 m_watching	src/mods/player.hpp	/^			direction_t m_watching;$/;"	kind:member	line:1042	namespace:mods	file:	access:private
-m_watching_everywhere	src/mods/mobs/defiler.hpp	/^			bool m_watching_everywhere;$/;"	kind:member	line:343	namespace:mods::mobs	file:	access:private
+m_watching_everywhere	src/mods/mobs/defiler.hpp	/^			bool m_watching_everywhere;$/;"	kind:member	line:344	namespace:mods::mobs	file:	access:private
 m_watching_everywhere	src/mods/mobs/orthos-agent.hpp	/^			bool m_watching_everywhere;$/;"	kind:member	line:136	namespace:mods::mobs	file:	access:private
 m_watching_everywhere	src/mods/mobs/orthos-spawn-sentinel.hpp	/^			bool m_watching_everywhere;$/;"	kind:member	line:70	struct:mods::mobs::orthos_spawn_sentinel	file:	access:private
 m_weapon	src/mods/mobs/armed-guard.hpp	/^			obj_ptr_t m_weapon;$/;"	kind:member	line:110	namespace:mods::mobs	file:	access:private
 m_weapon	src/mods/mobs/car-thief.hpp	/^			obj_ptr_t m_weapon;$/;"	kind:member	line:90	struct:mods::mobs::car_thief	file:	access:private
 m_weapon	src/mods/mobs/chaotic-meth-addict.hpp	/^			obj_ptr_t m_weapon;$/;"	kind:member	line:110	namespace:mods::mobs	file:	access:private
-m_weapon	src/mods/mobs/defiler.hpp	/^			obj_ptr_t m_weapon;$/;"	kind:member	line:327	namespace:mods::mobs	file:	access:private
+m_weapon	src/mods/mobs/defiler.hpp	/^			obj_ptr_t m_weapon;$/;"	kind:member	line:328	namespace:mods::mobs	file:	access:private
 m_weapon	src/mods/mobs/generic-thief.hpp	/^			obj_ptr_t m_weapon;$/;"	kind:member	line:168	namespace:mods::mobs	file:	access:private
 m_weapon	src/mods/mobs/melee-combatant.hpp	/^			obj_ptr_t m_weapon;$/;"	kind:member	line:110	namespace:mods::mobs	file:	access:private
 m_weapon	src/mods/mobs/mp-shotgunner.hpp	/^			obj_ptr_t m_weapon;$/;"	kind:member	line:70	struct:mods::mobs::mp_shotgunner	file:	access:private
@@ -12149,7 +12181,7 @@ m_weapon_flags	src/mods/player.hpp	/^			weapon_type_t m_weapon_flags;$/;"	kind:m
 m_weapon_set	src/mods/player.hpp	/^			weapon_set   m_weapon_set;$/;"	kind:member	line:1012	namespace:mods	file:	access:private
 m_weapon_type	src/mods/player.hpp	/^			weapon_type_t m_weapon_type;$/;"	kind:member	line:1023	namespace:mods	file:	access:private
 m_weapon_uuid	src/mods/rifle-instance-data.hpp	/^			TUUID m_weapon_uuid;$/;"	kind:member	line:56	struct:heat	file:	access:private
-m_weapons	src/mods/mobs/defiler.hpp	/^			weapons_list_t m_weapons;$/;"	kind:member	line:335	namespace:mods::mobs	file:	access:private
+m_weapons	src/mods/mobs/defiler.hpp	/^			weapons_list_t m_weapons;$/;"	kind:member	line:336	namespace:mods::mobs	file:	access:private
 m_weapons	src/mods/mobs/goat.hpp	/^			weapons_list_t m_weapons;$/;"	kind:member	line:379	namespace:mods::mobs	file:	access:private
 m_weight_index	src/mods/player.hpp	/^			weight_index_t m_weight_index;$/;"	kind:member	line:1090	namespace:mods	file:	access:private
 m_wpn_assault_rifles	src/mods/classes/base.hpp	/^			skill_t m_wpn_assault_rifles;$/;"	kind:variable	line:276
@@ -12402,7 +12434,7 @@ memory	src/mods/mobs/smart-mob.hpp	/^namespace mods::memory {$/;"	kind:namespace
 memory_id	src/mods/lmdb/shm-config.hpp	/^    const char* memory_id = "\/etc\/ghost.conf"; $/;"	kind:member	line:5	namespace:shm	file:
 memory_rec	src/structs.h	/^typedef struct memory_rec_struct memory_rec;$/;"	kind:typedef	line:1106	typeref:struct:memory_rec_struct	file:
 memory_rec_struct	src/structs.h	/^struct memory_rec_struct {$/;"	kind:struct	line:1100	file:
-mention	src/mods/mobs/defiler.cpp	/^	void defiler::mention(std::string_view msg) {$/;"	kind:function	line:64	class:mods::mobs::defiler	signature:(std::string_view msg)
+mention	src/mods/mobs/defiler.cpp	/^	void defiler::mention(std::string_view msg) {$/;"	kind:function	line:69	class:mods::mobs::defiler	signature:(std::string_view msg)
 mention	src/mods/mobs/goat.cpp	/^	void goat::mention(std::string_view msg) {$/;"	kind:function	line:65	class:mods::mobs::goat	signature:(std::string_view msg)
 mentoc_flashbang_debug	src/mods/flashbang.hpp	28;"	kind:macro	line:28	file:
 mentoc_flashbang_debug	src/mods/flashbang.hpp	9;"	kind:macro	line:9	file:
@@ -12595,7 +12627,7 @@ mob_special_data	src/structs.h	/^	mob_special_data(const mob_special_data& copy)
 mob_special_data	src/structs.h	/^struct mob_special_data {$/;"	kind:struct	line:1325	file:
 mob_specials	src/mods/npc.cpp	/^	mob_special_data& npc::mob_specials() {$/;"	kind:function	line:8	class:mods::npc	signature:()
 mob_specials	src/structs.h	/^	mob_special_data mob_specials;	\/* NPC specials		  *\/$/;"	kind:member	line:1578	struct:char_data	file:	access:public
-mob_target_map	src/mods/mobs/extended-types.cpp	/^	static std::map<mob_rnum,std::string> mob_target_map;$/;"	kind:member	line:121	namespace:mods::mobs::extended_types	file:
+mob_target_map	src/mods/mobs/extended-types.cpp	/^	static std::map<mob_rnum,std::string> mob_target_map;$/;"	kind:member	line:122	namespace:mods::mobs::extended_types	file:
 mob_uuid	src/globals.cpp	/^		uuid_t mob_uuid() {$/;"	kind:function	line:584	namespace:mods::globals	signature:()
 mob_uuid	src/mods/contract-steps.hpp	/^		uuid_t 					mob_uuid;$/;"	kind:member	line:38	namespace:mods::contracts	file:
 mob_virtual_number	src/mods/orm/mob-roam.hpp	/^		uint32_t mob_virtual_number;$/;"	kind:member	line:10	struct:mods::orm::mob_roam_record_t	file:	access:public
@@ -12620,9 +12652,9 @@ mobs	src/mods/mobs/car-thief.cpp	/^namespace mods::mobs {$/;"	kind:namespace	lin
 mobs	src/mods/mobs/car-thief.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:12	class:mods	file:
 mobs	src/mods/mobs/chaotic-meth-addict.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:18	class:mods	file:
 mobs	src/mods/mobs/chaotic-meth-addict.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:12	class:mods	file:
-mobs	src/mods/mobs/defiler.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:37	class:mods	file:
+mobs	src/mods/mobs/defiler.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:39	class:mods	file:
 mobs	src/mods/mobs/defiler.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:13	class:mods	file:
-mobs	src/mods/mobs/extended-types.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:24	class:mods	file:
+mobs	src/mods/mobs/extended-types.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:25	class:mods	file:
 mobs	src/mods/mobs/extended-types.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:10	class:mods	file:
 mobs	src/mods/mobs/find.cpp	/^namespace mods::mobs {$/;"	kind:namespace	line:14	class:mods	file:
 mobs	src/mods/mobs/find.hpp	/^namespace mods::mobs {$/;"	kind:namespace	line:8	class:mods	file:
@@ -12753,7 +12785,7 @@ move	src/structs.h	/^	points_t move;$/;"	kind:member	line:1212	struct:char_point
 move_closer_to_target	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::move_closer_to_target() {$/;"	kind:function	line:400	class:mods::mobs::armed_guard	signature:()
 move_closer_to_target	src/mods/mobs/car-thief.cpp	/^	void car_thief::move_closer_to_target() {$/;"	kind:function	line:382	class:mods::mobs::car_thief	signature:()
 move_closer_to_target	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::move_closer_to_target() {$/;"	kind:function	line:402	class:mods::mobs::chaotic_meth_addict	signature:()
-move_closer_to_target	src/mods/mobs/defiler.cpp	/^	void defiler::move_closer_to_target() {$/;"	kind:function	line:590	class:mods::mobs::defiler	signature:()
+move_closer_to_target	src/mods/mobs/defiler.cpp	/^	void defiler::move_closer_to_target() {$/;"	kind:function	line:595	class:mods::mobs::defiler	signature:()
 move_closer_to_target	src/mods/mobs/generic-thief.cpp	/^	int8_t generic_thief::move_closer_to_target() {$/;"	kind:function	line:513	class:mods::mobs::generic_thief	signature:()
 move_closer_to_target	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::move_closer_to_target() {$/;"	kind:function	line:400	class:mods::mobs::melee_combatant	signature:()
 move_closer_to_target	src/mods/mobs/mp-shotgunner.cpp	/^	void mp_shotgunner::move_closer_to_target() {$/;"	kind:function	line:465	class:mods::mobs::mp_shotgunner	signature:()
@@ -12762,7 +12794,7 @@ move_closer_to_target	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	void orthos_spa
 move_closer_to_target	src/mods/mobs/shoplifter.cpp	/^	void shoplifter::move_closer_to_target() {$/;"	kind:function	line:183	class:mods::mobs::shoplifter	signature:()
 move_gain	src/limits.cpp	/^int move_gain(char_data *ch) {$/;"	kind:function	line:177	signature:(char_data *ch)
 move_points_per_outward_pump_buff	src/mods/weapons/shotgun-dst7A.hpp	/^				static constexpr std::array<uint16_t,3> move_points_per_outward_pump_buff = {2,4,6};$/;"	kind:member	line:50	struct:mods::weapons::shotgun::dst7A::stats	file:	access:public
-move_to	src/mods/mobs/defiler.cpp	/^	std::pair<bool,std::string> defiler::move_to(const direction_t& dir) {$/;"	kind:function	line:573	class:mods::mobs::defiler	signature:(const direction_t& dir)
+move_to	src/mods/mobs/defiler.cpp	/^	std::pair<bool,std::string> defiler::move_to(const direction_t& dir) {$/;"	kind:function	line:578	class:mods::mobs::defiler	signature:(const direction_t& dir)
 move_to	src/mods/mobs/goat.cpp	/^	std::pair<bool,std::string> goat::move_to(const direction_t& dir) {$/;"	kind:function	line:420	class:mods::mobs::goat	signature:(const direction_t& dir)
 move_to	src/mods/mobs/innocent.cpp	/^	std::pair<bool,std::string> innocent::move_to(const direction_t& dir) {$/;"	kind:function	line:142	class:mods::mobs::innocent	signature:(const direction_t& dir)
 move_to	src/mods/mobs/mp-shotgunner.cpp	/^	std::pair<bool,std::string> mp_shotgunner::move_to(const direction_t& dir) {$/;"	kind:function	line:417	class:mods::mobs::mp_shotgunner	signature:(const direction_t& dir)
@@ -12918,7 +12950,7 @@ new_incendiary_grenade_object	src/mods/weapon.cpp	/^	obj_data_ptr_t new_incendia
 new_npc	src/mods/mbuild.cpp	/^	char_data new_npc() {$/;"	kind:function	line:190	namespace:mods::builder	signature:()
 new_pistol_object	src/mods/weapon.cpp	/^	obj_data_ptr_t new_pistol_object() {$/;"	kind:function	line:276	namespace:mods::weapon	signature:()
 new_player	src/comm.cpp	/^player_ptr_t new_player() {$/;"	kind:function	line:142	signature:()
-new_player	src/mods/classes/breacher.cpp	/^	int16_t breacher::new_player(player_ptr_t& player) {$/;"	kind:function	line:31	class:mods::classes::breacher	signature:(player_ptr_t& player)
+new_player	src/mods/classes/breacher.cpp	/^	int16_t breacher::new_player(player_ptr_t& player) {$/;"	kind:function	line:48	class:mods::classes::breacher	signature:(player_ptr_t& player)
 new_player	src/mods/classes/contagion.cpp	/^	int16_t contagion::new_player(player_ptr_t& player) {$/;"	kind:function	line:91	class:mods::classes::contagion	signature:(player_ptr_t& player)
 new_player	src/mods/classes/engineer.cpp	/^	int16_t engineer::new_player(player_ptr_t& player, primary_choice_t primary_choice) {$/;"	kind:function	line:63	class:mods::classes::engineer	signature:(player_ptr_t& player, primary_choice_t primary_choice)
 new_player	src/mods/classes/forge.cpp	/^	int16_t forge::new_player(player_ptr_t &player){$/;"	kind:function	line:39	class:mods::classes::forge	signature:(player_ptr_t &player)
@@ -12935,7 +12967,7 @@ new_record	src/mods/db.cpp	/^	tuple_status_t new_record(const std::string& table
 new_room	src/mods/intimidate.cpp	/^	void new_room(room_data* room_ptr){$/;"	kind:function	line:73	namespace:mods::zone	signature:(room_data* room_ptr)
 new_room	src/mods/loot.cpp	/^	void new_room(room_data* room) {$/;"	kind:function	line:340	namespace:mods::loot	signature:(room_data* room)
 new_room	src/mods/rbuild.cpp	/^	room_data new_room(player_ptr_t player,int direction) {$/;"	kind:function	line:416	namespace:mods::builder	signature:(player_ptr_t player,int direction)
-new_room	src/mods/zone.cpp	/^	void new_room(room_data* room_ptr) {$/;"	kind:function	line:476	namespace:mods::zone	signature:(room_data* room_ptr)
+new_room	src/mods/zone.cpp	/^	void new_room(room_data* room_ptr) {$/;"	kind:function	line:479	namespace:mods::zone	signature:(room_data* room_ptr)
 new_sandbox	src/mods/rbuild-sandbox.cpp	/^	int8_t sandbox_data_t::new_sandbox($/;"	kind:function	line:128	class:mods::builder::sandbox_data_t	signature:( player_ptr_t player, std::string_view name, int starting_room_number, int zone_virtual_number)
 new_smoke_grenade_object	src/mods/weapon.cpp	/^	obj_data_ptr_t new_smoke_grenade_object() {$/;"	kind:function	line:243	namespace:mods::weapon	signature:()
 new_sniper_rifle_object	src/mods/weapon.cpp	/^	obj_data_ptr_t new_sniper_rifle_object() {$/;"	kind:function	line:253	namespace:mods::weapon	signature:()
@@ -13376,7 +13408,7 @@ orthos_spawn_sentinel_map	src/mods/mobs/orthos-spawn-sentinel.cpp	/^	orthos_spaw
 orthos_spawn_sentinel_ptr	src/mods/mobs/orthos-spawn-sentinel.hpp	/^static inline std::shared_ptr<mods::mobs::orthos_spawn_sentinel> orthos_spawn_sentinel_ptr(const uuid_t& u) {$/;"	kind:function	line:82	file:	signature:(const uuid_t& u)
 orthscar	src/mods/drops.cpp	/^	static constexpr std::string_view orthscar = "rifle\/orthos-scarh.yml";$/;"	kind:member	line:128	namespace:mods::drops	file:
 orthsentscar	src/mods/drops.cpp	/^	static constexpr std::string_view orthsentscar = "rifle\/orthos-sentinel-scarh.yml";$/;"	kind:member	line:129	namespace:mods::drops	file:
-other	src/mods/mobs/defiler.hpp	/^			defiler(const defiler& other) = delete;$/;"	kind:member	line:207	namespace:mods::mobs	file:
+other	src/mods/mobs/defiler.hpp	/^			defiler(const defiler& other) = delete;$/;"	kind:member	line:208	namespace:mods::mobs	file:
 other	src/mods/mobs/goat.hpp	/^			goat(const goat& other) = delete;$/;"	kind:member	line:249	namespace:mods::mobs	file:
 others_auto	src/act.social.cpp	/^	char *others_auto;$/;"	kind:member	line:65	struct:social_messg	file:	access:public
 others_found	src/act.social.cpp	/^	char *others_found;$/;"	kind:member	line:57	struct:social_messg	file:	access:public
@@ -13393,7 +13425,7 @@ overpowered_rifles	src/mods/drops.cpp	/^	static constexpr std::array<std::string
 override	src/mods/armor/gauntlets-xtv89.hpp	/^			void dispatch_event(damage_event_t event, player_ptr_t attacker) override;$/;"	kind:member	line:66	struct:mods::armor::xtv89	file:	access:public
 override	src/mods/armor/vest-bc89.hpp	/^			void dispatch_event(damage_event_t event, player_ptr_t attacker) override;$/;"	kind:member	line:78	struct:mods::armor::bc89	file:	access:public
 override	src/mods/classes/ghost.hpp	/^			player_ptr_t get_player_ptr() override;$/;"	kind:member	line:61	struct:mods::classes::ghost	file:	access:public
-override	src/mods/mobs/defiler.hpp	/^			std::pair<bool,std::string> move_to(const direction_t& dir) override;$/;"	kind:member	line:304	namespace:mods::mobs	file:
+override	src/mods/mobs/defiler.hpp	/^			std::pair<bool,std::string> move_to(const direction_t& dir) override;$/;"	kind:member	line:305	namespace:mods::mobs	file:
 override	src/mods/mobs/shoplifter.hpp	/^			str_map_t report() override;$/;"	kind:member	line:55	namespace:mods::mobs	file:
 override	src/mods/weapons/attachment-shotgun-underbarrel.hpp	/^			void consume_ammo() override;$/;"	kind:member	line:14	struct:mods::weapons::attachment_shotgun_underbarrel	file:	access:public
 override	src/mods/weapons/attachment-shotgun-underbarrel.hpp	/^			void init() override;$/;"	kind:member	line:13	struct:mods::weapons::attachment_shotgun_underbarrel	file:	access:public
@@ -13611,7 +13643,7 @@ plant_claymore	src/mods/demolitions.cpp	/^	void plant_claymore(player_ptr_t& pla
 played	src/structs.h	/^	int	played;     \/* This is the total accumulated time played in secs *\/$/;"	kind:member	line:1121	struct:time_data	file:	access:public
 played	src/structs.h	/^	int	played;    \/* Number of secs played in total *\/$/;"	kind:member	line:1633	struct:char_file_u	file:	access:public
 player	src/mods/builder/slotted-builder.hpp	/^			player_ptr_t player;$/;"	kind:member	line:34	struct:mods::builder::slotted_builder	file:	access:protected
-player	src/mods/classes/breacher.cpp	/^	player_ptr_t 	breacher::player() {$/;"	kind:function	line:25	class:mods::classes::breacher	signature:()
+player	src/mods/classes/breacher.cpp	/^	player_ptr_t 	breacher::player() {$/;"	kind:function	line:42	class:mods::classes::breacher	signature:()
 player	src/mods/classes/engineer.cpp	/^	player_ptr_t 	engineer::player() {$/;"	kind:function	line:59	class:mods::classes::engineer	signature:()
 player	src/mods/classes/forge.cpp	/^	player_ptr_t 	forge::player(){$/;"	kind:function	line:33	class:mods::classes::forge	signature:()
 player	src/mods/classes/medic.cpp	/^	player_ptr_t 	medic::player() {$/;"	kind:function	line:117	class:mods::classes::medic	signature:()
@@ -14037,6 +14069,7 @@ publish	src/mods/message-server.cpp	/^	void publish(const channel_t& channel, co
 publish_event	src/mods/events.cpp	/^	void publish_event(event_t event,const uuid_t& entity_uuid,void* data,int data2){$/;"	kind:function	line:43	namespace:mods::events	signature:(event_t event,const uuid_t& entity_uuid,void* data,int data2)
 puff	src/spec_assign.cpp	/^SPECIAL(puff);$/;"	kind:variable	line:33
 puff	src/spec_procs.cpp	/^SPECIAL(puff);$/;"	kind:variable	line:47
+pull_debug_mode	src/mods/mobs/defiler.cpp	/^	void defiler::pull_debug_mode() {$/;"	kind:function	line:66	class:mods::mobs::defiler	signature:()
 pump_inward_event	src/mods/weapons/shotgun-dst7A.cpp	/^	void dst7A::pump_inward_event() {$/;"	kind:function	line:88	class:mods::weapons::shotgun::dst7A	signature:()
 pump_outward_event	src/mods/weapons/shotgun-dst7A.cpp	/^	void dst7A::pump_outward_event() {$/;"	kind:function	line:77	class:mods::weapons::shotgun::dst7A	signature:()
 punish_for_leaving_contract	src/mods/contracts.cpp	/^	void punish_for_leaving_contract(std::shared_ptr<mods::player>& player,int contract_num) {$/;"	kind:function	line:79	namespace:mods::contracts	signature:(std::shared_ptr<mods::player>& player,int contract_num)
@@ -14254,7 +14287,7 @@ random_rare_ammo	src/mods/loot.cpp	/^	auto random_rare_ammo() {$/;"	kind:functio
 random_rifle_attribute	src/mods/forge-engine/generator.cpp	/^	rifle_attributes_t generator::random_rifle_attribute() {$/;"	kind:function	line:165	class:mods::forge_engine::generator	signature:()
 random_rifle_type	src/mods/forge-engine/generator.cpp	/^	rifle_types_t generator::random_rifle_type() {$/;"	kind:function	line:103	class:mods::forge_engine::generator	signature:()
 random_rifle_type	src/mods/forge-engine/generator.cpp	/^	rifle_types_t generator::random_rifle_type(player_ptr_t& player) {$/;"	kind:function	line:120	class:mods::forge_engine::generator	signature:(player_ptr_t& player)
-random_room_direction	src/mods/mobs/defiler.cpp	/^	direction_t random_room_direction(auto room_id) {$/;"	kind:function	line:320	namespace:mods::mobs	signature:(auto room_id)
+random_room_direction	src/mods/mobs/defiler.cpp	/^	direction_t random_room_direction(auto room_id) {$/;"	kind:function	line:325	namespace:mods::mobs	signature:(auto room_id)
 random_room_direction	src/mods/mobs/goat.cpp	/^	direction_t random_room_direction(auto room_id) {$/;"	kind:function	line:326	namespace:mods::mobs	signature:(auto room_id)
 random_trivial_action	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto random_trivial_action() {$/;"	kind:function	line:67	namespace:mods::mobs::lowly_security_behaviour_tree	signature:()
 random_trivial_action	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto random_trivial_action() {$/;"	kind:function	line:74	namespace:mods::mobs::mini_gunner_behaviour_tree	signature:()
@@ -14314,7 +14347,7 @@ rb_map_debug	src/mods/sbuild.cpp	/^	void rb_map_debug(T& t) {$/;"	kind:function	
 rb_map_debug	src/mods/zbuild.cpp	/^	void rb_map_debug(T& t) {$/;"	kind:function	line:140	namespace:mods::builder	signature:(T& t)
 rbuild_handle_giveme_next_vnum	src/mods/rbuild.cpp	/^bool rbuild_handle_giveme_next_vnum(player_ptr_t& player,const std::vector<std::string>& vec_args) {$/;"	kind:function	line:759	signature:(player_ptr_t& player,const std::vector<std::string>& vec_args)
 rbvest	src/mods/drops.cpp	/^	static constexpr std::string_view rbvest = "armor\/raven-ballistic-vest.yml";$/;"	kind:member	line:177	namespace:mods::drops	file:
-rct_upkeep	src/mods/mobs/defiler.cpp	/^	void defiler::rct_upkeep() {$/;"	kind:function	line:457	class:mods::mobs::defiler	signature:()
+rct_upkeep	src/mods/mobs/defiler.cpp	/^	void defiler::rct_upkeep() {$/;"	kind:function	line:462	class:mods::mobs::defiler	signature:()
 reaction	src/structs.h	/^	sh_int reaction;$/;"	kind:member	line:1694	struct:dex_app_type	file:	access:public
 read	src/mods/orm/orm-base.hpp	/^			std::tuple<int16_t,std::string> read(TClass* c) {$/;"	kind:function	line:194	struct:mods::orm::orm_base	access:public	signature:(TClass* c)
 read	src/mods/orm/orm-base.hpp	/^			std::tuple<int16_t,std::string> read(TClass* c,std::string_view column,std::string_view value) {$/;"	kind:function	line:239	struct:mods::orm::orm_base	access:public	signature:(TClass* c,std::string_view column,std::string_view value)
@@ -14393,7 +14426,7 @@ refresh_armor_index	src/mods/forge-engine/generated-armor.cpp	/^	static bool ref
 refresh_dump	src/mods/player-contract-instance.cpp	/^	void player_contract_instance::refresh_dump() {$/;"	kind:function	line:397	class:mods::contracts::player_contract_instance	signature:()
 refresh_mappings	src/mods/mob-equipment.cpp	/^	void refresh_mappings() {$/;"	kind:function	line:22	namespace:mods::mob_equipment	signature:()
 refresh_minimum_proficiencies	src/mods/js.cpp	/^		static duk_ret_t refresh_minimum_proficiencies(duk_context *ctx) {$/;"	kind:function	line:203	namespace:mods::js	signature:(duk_context *ctx)
-refresh_mobs_and_zones	src/mods/zone.cpp	/^	void refresh_mobs_and_zones() {$/;"	kind:function	line:631	namespace:mods::zone	signature:()
+refresh_mobs_and_zones	src/mods/zone.cpp	/^	void refresh_mobs_and_zones() {$/;"	kind:function	line:634	namespace:mods::zone	signature:()
 refresh_player_states	src/globals.cpp	/^		void refresh_player_states() {$/;"	kind:function	line:554	namespace:mods::globals	signature:()
 refresh_rifle_index	src/mods/forge-engine/generated-rifle.cpp	/^	static bool refresh_rifle_index = true;$/;"	kind:member	line:20	namespace:mods::forge_engine	file:
 refresh_tick_resolution	src/mods/zone.hpp	/^	static constexpr uint16_t refresh_tick_resolution() {$/;"	kind:function	line:54	namespace:mods::zone	signature:()
@@ -14432,7 +14465,7 @@ register_room_at_coordinates	src/globals.cpp	/^		void register_room_at_coordinat
 register_room_at_coordinates	src/mods/rooms.cpp	/^	void register_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room) {$/;"	kind:function	line:589	namespace:mods::rooms	signature:(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room)
 register_shop	src/globals.hpp	/^		void register_shop(TShopPtr shop) {$/;"	kind:function	line:193	namespace:mods::globals	signature:(TShopPtr shop)
 register_signature	src/mods/builder/slotted-builder.hpp	/^			void register_signature(std::string_view verb,std::string_view sig) {$/;"	kind:function	line:92	struct:mods::builder::slotted_builder	access:public	signature:(std::string_view verb,std::string_view sig)
-register_targets	src/mods/mobs/extended-types.cpp	/^	void register_targets(const mob_rnum& vnum, std::string_view items) {$/;"	kind:function	line:122	namespace:mods::mobs::extended_types	signature:(const mob_rnum& vnum, std::string_view items)
+register_targets	src/mods/mobs/extended-types.cpp	/^	void register_targets(const mob_rnum& vnum, std::string_view items) {$/;"	kind:function	line:123	namespace:mods::mobs::extended_types	signature:(const mob_rnum& vnum, std::string_view items)
 registered_admin_help_commands	src/mods/help.cpp	/^	static std::map<std::string,std::string> registered_admin_help_commands;$/;"	kind:member	line:918	namespace:mods::help	file:
 registered_help_commands	src/mods/help.cpp	/^	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;$/;"	kind:member	line:897	namespace:mods::help	file:
 registration_allowed	src/mods/player-registration.cpp	/^	static bool registration_allowed = 1;$/;"	kind:member	line:6	namespace:mods::player_registration	file:
@@ -14504,10 +14537,10 @@ rent_info	src/structs.h	/^struct rent_info {$/;"	kind:struct	line:1080	file:
 rentcode	src/structs.h	/^	int	rentcode;$/;"	kind:member	line:1082	struct:rent_info	file:	access:public
 renum_world	src/db.cpp	/^void renum_world(void) {$/;"	kind:function	line:1353	signature:(void)
 renum_zone_table	src/db.cpp	/^void renum_zone_table() {$/;"	kind:function	line:1380	signature:()
-renum_zone_table	src/mods/zone.cpp	/^	void renum_zone_table() {$/;"	kind:function	line:353	namespace:mods::zone	signature:()
+renum_zone_table	src/mods/zone.cpp	/^	void renum_zone_table() {$/;"	kind:function	line:355	namespace:mods::zone	signature:()
 replace_all	src/globals.cpp	/^		std::string replace_all(std::string str, const std::string& from, const std::string& to) {$/;"	kind:function	line:152	namespace:mods::globals	signature:(std::string str, const std::string& from, const std::string& to)
 replace_string	src/fight.cpp	/^char *replace_string(const char *str, const char *weapon_singular, const char *weapon_plural) {$/;"	kind:function	line:445	signature:(const char *str, const char *weapon_singular, const char *weapon_plural)
-replenish	src/mods/classes/breacher.cpp	/^	void breacher::replenish() {$/;"	kind:function	line:15	class:mods::classes::breacher	signature:()
+replenish	src/mods/classes/breacher.cpp	/^	void breacher::replenish() {$/;"	kind:function	line:32	class:mods::classes::breacher	signature:()
 replenish	src/mods/classes/engineer.cpp	/^	void engineer::replenish() {$/;"	kind:function	line:26	class:mods::classes::engineer	signature:()
 replenish	src/mods/classes/forge.cpp	/^	void forge::replenish(){$/;"	kind:function	line:60	class:mods::classes::forge	signature:()
 replenish	src/mods/classes/ghost.cpp	/^	void ghost::replenish() {$/;"	kind:function	line:560	class:mods::classes::ghost	signature:()
@@ -14538,7 +14571,7 @@ report	src/mods/melt.cpp	/^	std::string melt_damage_t::report() {$/;"	kind:funct
 report	src/mods/mobs/armed-guard.cpp	/^	str_map_t armed_guard::report() {$/;"	kind:function	line:94	class:mods::mobs::armed_guard	signature:()
 report	src/mods/mobs/car-thief.cpp	/^	str_map_t car_thief::report() {$/;"	kind:function	line:89	class:mods::mobs::car_thief	signature:()
 report	src/mods/mobs/chaotic-meth-addict.cpp	/^	str_map_t chaotic_meth_addict::report() {$/;"	kind:function	line:94	class:mods::mobs::chaotic_meth_addict	signature:()
-report	src/mods/mobs/defiler.cpp	/^	str_map_t defiler::report() {$/;"	kind:function	line:75	class:mods::mobs::defiler	signature:()
+report	src/mods/mobs/defiler.cpp	/^	str_map_t defiler::report() {$/;"	kind:function	line:80	class:mods::mobs::defiler	signature:()
 report	src/mods/mobs/generic-thief.cpp	/^	str_map_t generic_thief::report() {$/;"	kind:function	line:157	class:mods::mobs::generic_thief	signature:()
 report	src/mods/mobs/goat.cpp	/^	str_map_t goat::report() {$/;"	kind:function	line:76	class:mods::mobs::goat	signature:()
 report	src/mods/mobs/innocent.cpp	/^	str_map_t innocent::report() {$/;"	kind:function	line:48	class:mods::mobs::innocent	signature:()
@@ -14603,7 +14636,7 @@ reset_q_type	src/db.h	/^struct reset_q_type {$/;"	kind:struct	line:272	file:
 reset_str	src/mods/colors.hpp	/^	static inline std::string reset_str() {$/;"	kind:function	line:7	namespace:mods::colors	signature:()
 reset_time	src/db.cpp	/^void reset_time(void) {$/;"	kind:function	line:524	signature:(void)
 reset_zone	src/db.cpp	/^void reset_zone(zone_rnum zone) {$/;"	kind:function	line:1988	signature:(zone_rnum zone)
-reset_zone	src/mods/zone.cpp	/^	void reset_zone(zone_rnum zone) {$/;"	kind:function	line:217	namespace:mods::zone	signature:(zone_rnum zone)
+reset_zone	src/mods/zone.cpp	/^	void reset_zone(zone_rnum zone) {$/;"	kind:function	line:219	namespace:mods::zone	signature:(zone_rnum zone)
 resistance	src/mods/mobs/resistance.cpp	/^namespace mods::mobs::resistance {$/;"	kind:namespace	line:10	class:mods::mobs	file:
 resistance	src/mods/mobs/resistance.hpp	/^namespace mods::mobs::resistance {$/;"	kind:namespace	line:6	class:mods::mobs	file:
 resistance_list	src/mods/mobs/resistance.cpp	/^	static resistance_map_t& resistance_list() {$/;"	kind:function	line:16	namespace:mods::mobs::resistance	signature:()
@@ -14673,7 +14706,7 @@ rifle_attachments	src/mods/rifle-attachments.hpp	/^	namespace rifle_attachments 
 rifle_attachments_t	src/mods/rifle-attachments.hpp	/^			rifle_attachments_t(const encoding_t& line) {$/;"	kind:function	line:28	struct:mods::rifle_attachments_t	access:public	signature:(const encoding_t& line)
 rifle_attachments_t	src/mods/rifle-attachments.hpp	/^			rifle_attachments_t(encoding_t& line) {$/;"	kind:function	line:33	struct:mods::rifle_attachments_t	access:public	signature:(encoding_t& line)
 rifle_attachments_t	src/mods/rifle-attachments.hpp	/^	struct rifle_attachments_t {$/;"	kind:struct	line:15	namespace:mods	file:
-rifle_attack	src/mods/mobs/defiler.cpp	/^	void defiler::rifle_attack(const target_t& target) {$/;"	kind:function	line:408	class:mods::mobs::defiler	signature:(const target_t& target)
+rifle_attack	src/mods/mobs/defiler.cpp	/^	void defiler::rifle_attack(const target_t& target) {$/;"	kind:function	line:413	class:mods::mobs::defiler	signature:(const target_t& target)
 rifle_attack	src/mods/weapons/damage-types.cpp	/^	void rifle_attack($/;"	kind:function	line:890	namespace:mods::weapons::damage_types	signature:( player_ptr_t& player, obj_ptr_t weapon, player_ptr_t victim, uint16_t distance, uint8_t direction )
 rifle_attack_by_name	src/mods/weapons/damage-types.cpp	/^	void rifle_attack_by_name(player_ptr_t& player,std::string_view victim_name,int direction) {$/;"	kind:function	line:740	namespace:mods::weapons::damage_types	signature:(player_ptr_t& player,std::string_view victim_name,int direction)
 rifle_attack_object	src/mods/weapons/damage-types.cpp	/^	void rifle_attack_object($/;"	kind:function	line:907	namespace:mods::weapons::damage_types	signature:( player_ptr_t& player, obj_ptr_t weapon, obj_ptr_t victim, uint16_t distance, uint8_t direction )
@@ -14761,7 +14794,7 @@ rifle_vnum	src/mods/orm/rifle-instance.hpp	/^		int16_t rifle_vnum;$/;"	kind:memb
 right_join	src/mods/sql.hpp	/^			compositor<T>& right_join(std::string_view table) {$/;"	kind:function	line:272	struct:mods::sql::compositor	access:public	signature:(std::string_view table)
 right_outer_join	src/mods/sql.hpp	/^			compositor<T>& right_outer_join(std::string_view table) {$/;"	kind:function	line:277	struct:mods::sql::compositor	access:public	signature:(std::string_view table)
 rnum	src/boards.h	/^	obj_rnum rnum;	\/* rnum of this board *\/$/;"	kind:member	line:33	struct:board_info_type	file:	access:public
-roam	src/mods/mobs/defiler.cpp	/^	void defiler::roam(uint8_t times) {$/;"	kind:function	line:421	class:mods::mobs::defiler	signature:(uint8_t times)
+roam	src/mods/mobs/defiler.cpp	/^	void defiler::roam(uint8_t times) {$/;"	kind:function	line:426	class:mods::mobs::defiler	signature:(uint8_t times)
 roam	src/mods/mobs/goat.cpp	/^	void goat::roam() {$/;"	kind:function	line:356	class:mods::mobs::goat	signature:()
 roam_pattern	src/mods/mobs/roam-pattern.cpp	/^namespace mods::mobs::roam_pattern {$/;"	kind:namespace	line:10	class:mods::mobs	file:
 roam_pattern	src/mods/mobs/roam-pattern.hpp	/^namespace mods::mobs::roam_pattern {$/;"	kind:namespace	line:6	class:mods::mobs	file:
@@ -14972,7 +15005,7 @@ rr_debug	src/mods/intimidate.cpp	8;"	kind:macro	line:8	file:
 rr_debug	src/mods/intimidate.cpp	95;"	kind:macro	line:95	file:
 rr_debug	src/mods/zone.cpp	16;"	kind:macro	line:16	file:
 rr_debug	src/mods/zone.cpp	19;"	kind:macro	line:19	file:
-rr_debug	src/mods/zone.cpp	654;"	kind:macro	line:654	file:
+rr_debug	src/mods/zone.cpp	657;"	kind:macro	line:657	file:
 rtrim	src/mods/lmdb/db.hpp	/^		static inline void rtrim(std::string &s) {$/;"	kind:function	line:47	struct:gdns::util	access:public	signature:(std::string &s)
 rtrim_copy	src/mods/lmdb/db.hpp	/^		static inline std::string rtrim_copy(std::string s) {$/;"	kind:function	line:66	struct:gdns::util	access:public	signature:(std::string s)
 ruback	src/mods/drops.cpp	/^	static constexpr std::string_view ruback = "armor\/raven-ultralight-backpack.yml";$/;"	kind:member	line:161	namespace:mods::drops	file:
@@ -15000,7 +15033,7 @@ run_test_suite	src/mods/js.cpp	/^		bool run_test_suite(mods::player& player,std:
 run_trees	src/mods/behaviour_tree_impl.cpp	/^	void run_trees() {$/;"	kind:function	line:39	namespace:mods::behaviour_tree_impl	signature:()
 run_trees	src/mods/mobs/armed-guard-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:267	namespace:mods::mobs::armed_guard_behaviour_tree	signature:()
 run_trees	src/mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:267	namespace:mods::mobs::chaotic_meth_addict_behaviour_tree	signature:()
-run_trees	src/mods/mobs/defiler-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:64	namespace:mods::mobs::defiler_behaviour_tree	signature:()
+run_trees	src/mods/mobs/defiler-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:65	namespace:mods::mobs::defiler_behaviour_tree	signature:()
 run_trees	src/mods/mobs/generic-thief-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:327	namespace:mods::mobs::generic_thief_behaviour_tree	signature:()
 run_trees	src/mods/mobs/melee-combatant-behaviour-tree.cpp	/^	void run_trees() {$/;"	kind:function	line:267	namespace:mods::mobs::melee_combatant_behaviour_tree	signature:()
 run_trees	src/mods/mobs/orthos-agent-btree.cpp	/^	void run_trees() {$/;"	kind:function	line:254	namespace:mods::mobs::orthos_agent_behaviour_tree	signature:()
@@ -15193,7 +15226,7 @@ scan	src/mods/scan.hpp	/^	namespace scan {$/;"	kind:namespace	line:19	namespace:
 scan_attackable	src/mods/mobs/smart-mob.cpp	/^	mods::scan::vec_player_data smart_mob::scan_attackable(const direction_t& dir) {$/;"	kind:function	line:377	class:mods::mobs::smart_mob	signature:(const direction_t& dir)
 scan_depth	src/mods/mobs/armed-guard.cpp	/^	uint8_t armed_guard::scan_depth() const {$/;"	kind:function	line:457	class:mods::mobs::armed_guard	signature:() const
 scan_depth	src/mods/mobs/chaotic-meth-addict.cpp	/^	uint8_t chaotic_meth_addict::scan_depth() const {$/;"	kind:function	line:459	class:mods::mobs::chaotic_meth_addict	signature:() const
-scan_depth	src/mods/mobs/defiler.cpp	/^	uint8_t defiler::scan_depth() const {$/;"	kind:function	line:602	class:mods::mobs::defiler	signature:() const
+scan_depth	src/mods/mobs/defiler.cpp	/^	uint8_t defiler::scan_depth() const {$/;"	kind:function	line:607	class:mods::mobs::defiler	signature:() const
 scan_depth	src/mods/mobs/melee-combatant.cpp	/^	uint8_t melee_combatant::scan_depth() const {$/;"	kind:function	line:457	class:mods::mobs::melee_combatant	signature:() const
 scan_depth	src/mods/mobs/orthos-agent.cpp	/^	uint8_t orthos_agent::scan_depth() const {$/;"	kind:function	line:479	class:mods::mobs::orthos_agent	signature:() const
 scan_depth	src/mods/mobs/smart-mob.cpp	/^	uint8_t smart_mob::scan_depth() const {$/;"	kind:function	line:383	class:mods::mobs::smart_mob	signature:() const
@@ -15490,7 +15523,7 @@ set_owner_uuid	src/mods/rifle-attachments.hpp	/^			void set_owner_uuid(uuid_t u)
 set_password	src/mods/auto-login.cpp	/^	void set_password(std::string_view pass){$/;"	kind:function	line:7	namespace:mods::auto_login	signature:(std::string_view pass)
 set_password	src/mods/player.cpp	/^	void player::set_password(std::string pw) {$/;"	kind:function	line:1393	class:mods::player	signature:(std::string pw)
 set_planter	src/mods/weapons/corrosive-claymore.hpp	/^			void set_planter(player_ptr_t& player) {$/;"	kind:function	line:24	struct:mods::weapons::corrosive_claymore	access:public	signature:(player_ptr_t& player)
-set_player	src/mods/classes/breacher.cpp	/^	void breacher::set_player(player_ptr_t p) {$/;"	kind:function	line:28	class:mods::classes::breacher	signature:(player_ptr_t p)
+set_player	src/mods/classes/breacher.cpp	/^	void breacher::set_player(player_ptr_t p) {$/;"	kind:function	line:45	class:mods::classes::breacher	signature:(player_ptr_t p)
 set_player	src/mods/classes/contagion.cpp	/^	void contagion::set_player(player_ptr_t p) {$/;"	kind:function	line:87	class:mods::classes::contagion	signature:(player_ptr_t p)
 set_player	src/mods/classes/forge.cpp	/^	void forge::set_player(player_ptr_t p){$/;"	kind:function	line:36	class:mods::classes::forge	signature:(player_ptr_t p)
 set_player	src/mods/classes/ghost.cpp	/^	void ghost::set_player(player_ptr_t p) {$/;"	kind:function	line:398	class:mods::classes::ghost	signature:(player_ptr_t p)
@@ -15574,7 +15607,7 @@ settings_head	src/mods/lmdb/conf.cpp	/^static struct translation *settings_head 
 setup_damage_callbacks	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::setup_damage_callbacks() {$/;"	kind:function	line:142	class:mods::mobs::armed_guard	signature:()
 setup_damage_callbacks	src/mods/mobs/car-thief.cpp	/^	void car_thief::setup_damage_callbacks() {$/;"	kind:function	line:116	class:mods::mobs::car_thief	signature:()
 setup_damage_callbacks	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::setup_damage_callbacks() {$/;"	kind:function	line:142	class:mods::mobs::chaotic_meth_addict	signature:()
-setup_damage_callbacks	src/mods/mobs/defiler.cpp	/^	void defiler::setup_damage_callbacks() {$/;"	kind:function	line:111	class:mods::mobs::defiler	signature:()
+setup_damage_callbacks	src/mods/mobs/defiler.cpp	/^	void defiler::setup_damage_callbacks() {$/;"	kind:function	line:116	class:mods::mobs::defiler	signature:()
 setup_damage_callbacks	src/mods/mobs/generic-thief.cpp	/^	void generic_thief::setup_damage_callbacks() {$/;"	kind:function	line:228	class:mods::mobs::generic_thief	signature:()
 setup_damage_callbacks	src/mods/mobs/innocent.cpp	/^	void innocent::setup_damage_callbacks() {$/;"	kind:function	line:57	class:mods::mobs::innocent	signature:()
 setup_damage_callbacks	src/mods/mobs/lowly-security.cpp	/^	void lowly_security::setup_damage_callbacks() {$/;"	kind:function	line:112	class:mods::mobs::lowly_security	signature:()
@@ -15714,7 +15747,7 @@ should_steal_from	src/mods/mobs/generic-thief.cpp	/^	bool generic_thief::should_
 should_throttle	src/mods/rate-limiting.cpp	/^	bool should_throttle(action_t action, player_ptr_t& player) {$/;"	kind:function	line:73	namespace:mods::rate_limiting	signature:(action_t action, player_ptr_t& player)
 shoulders_l	src/mods/builder/mob-scaler.hpp	/^		std::string shoulders_l;$/;"	kind:member	line:35	struct:mods::builder::mob_equipment_randomizer	file:	access:public
 shoulders_r	src/mods/builder/mob-scaler.hpp	/^		std::string shoulders_r;$/;"	kind:member	line:36	struct:mods::builder::mob_equipment_randomizer	file:	access:public
-shout	src/mods/mobs/defiler.cpp	/^	void defiler::shout(std::string_view message) {$/;"	kind:function	line:532	class:mods::mobs::defiler	signature:(std::string_view message)
+shout	src/mods/mobs/defiler.cpp	/^	void defiler::shout(std::string_view message) {$/;"	kind:function	line:537	class:mods::mobs::defiler	signature:(std::string_view message)
 shout	src/mods/mobs/mini-gunner.cpp	/^	void mini_gunner::shout(std::string_view msg) {$/;"	kind:function	line:244	class:mods::mobs::mini_gunner	signature:(std::string_view msg)
 shout	src/mods/mobs/smart-mob.cpp	/^	void smart_mob::shout(std::string_view msg) {$/;"	kind:function	line:209	class:mods::mobs::smart_mob	signature:(std::string_view msg)
 shout_random	src/mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto shout_random() {$/;"	kind:function	line:59	namespace:mods::mobs::lowly_security_behaviour_tree	signature:()
@@ -16022,7 +16055,7 @@ start_or_resume_contract	src/mods/player-contract-instance.cpp	/^	std::tuple<boo
 start_recording	src/mods/builder-data.cpp	/^void room_recorder_t::start_recording() {$/;"	kind:function	line:65	class:room_recorder_t	signature:()
 start_room	src/mods/builder-data.hpp	/^	int start_room;$/;"	kind:member	line:19	struct:room_pavement_t	file:	access:public
 start_scripted_step	src/mods/scripted-step.cpp	/^	void start_scripted_step(player_ptr_t& player, scripted_step_vnum_t scripted_step_vnum) {$/;"	kind:function	line:50	namespace:mods	signature:(player_ptr_t& player, scripted_step_vnum_t scripted_step_vnum)
-start_turn	src/mods/mobs/defiler.cpp	/^	void defiler::start_turn() {$/;"	kind:function	line:332	class:mods::mobs::defiler	signature:()
+start_turn	src/mods/mobs/defiler.cpp	/^	void defiler::start_turn() {$/;"	kind:function	line:337	class:mods::mobs::defiler	signature:()
 started	src/mods/drone.cpp	/^		bool started(uuid_t  owner_uuid) {$/;"	kind:function	line:62	namespace:mods::drone	signature:(uuid_t owner_uuid)
 started_at	src/mods/builder/raid.hpp	/^		uint32_t started_at;$/;"	kind:member	line:60	struct:mods::builder::raid_t	file:	access:public
 starting_point	src/room-data.hpp	/^		bool starting_point;$/;"	kind:variable	line:314
@@ -16206,7 +16239,7 @@ string_map	src/mods/affects.hpp	/^	const static std::map<std::string,affect_t> s
 string_to_action	src/mods/rate-limiting.cpp	/^	action_t string_to_action(std::string_view action) {$/;"	kind:function	line:41	namespace:mods::rate_limiting	signature:(std::string_view action)
 string_types	src/mods/values.cpp	/^static const std::vector<value_key_t> string_types = {$/;"	kind:member	line:2179	namespace:mods::values	file:
 string_write	src/modify.cpp	/^void string_write(mods::descriptor_data d, char **writeto, size_t len, long mailto, void *data) {$/;"	kind:function	line:93	signature:(mods::descriptor_data d, char **writeto, size_t len, long mailto, void *data)
-strings	src/mods/mobs/extended-types.cpp	/^	std::vector<std::string> strings() {$/;"	kind:function	line:128	namespace:mods::mobs::extended_types	signature:()
+strings	src/mods/mobs/extended-types.cpp	/^	std::vector<std::string> strings() {$/;"	kind:function	line:129	namespace:mods::mobs::extended_types	signature:()
 strip_color	src/mods/colors.hpp	/^	static inline TStr strip_color(TStr str) {$/;"	kind:function	line:36	namespace:mods::colors	signature:(TStr str)
 strip_color	src/mods/str.hpp	/^	static inline TStr strip_color(TStr s) {$/;"	kind:function	line:107	struct:str	access:public	signature:(TStr s)
 strip_color	src/mods/util.hpp	/^	static inline TStr strip_color(TStr s) {$/;"	kind:function	line:91	namespace:mods::util	signature:(TStr s)
@@ -16380,7 +16413,7 @@ task_target	src/mods/contract-step-callback.hpp	/^		std::string task_target;$/;"
 task_type	src/mods/contract-step-callback.hpp	/^		std::string task_type;$/;"	kind:member	line:17	struct:mods::contract_step_callback	file:	access:public
 task_vnum	src/mods/contract-step-callback.hpp	/^		task_vnum_t task_vnum;$/;"	kind:member	line:16	struct:mods::contract_step_callback	file:	access:public
 teguards	src/mods/drops.cpp	/^	static constexpr std::string_view teguards = "armor\/titan-elbow-guards.yml";$/;"	kind:member	line:178	namespace:mods::drops	file:
-telegraph	src/mods/mobs/defiler.cpp	/^	void defiler::telegraph(player_ptr_t& victim,std::string_view saying) {$/;"	kind:function	line:528	class:mods::mobs::defiler	signature:(player_ptr_t& victim,std::string_view saying)
+telegraph	src/mods/mobs/defiler.cpp	/^	void defiler::telegraph(player_ptr_t& victim,std::string_view saying) {$/;"	kind:function	line:533	class:mods::mobs::defiler	signature:(player_ptr_t& victim,std::string_view saying)
 temp_id	src/mods/scripted-step.hpp	/^		std::size_t temp_id;$/;"	kind:member	line:27	struct:mods::scripted_step	file:	access:public
 temp_step	src/mods/builder/raid.cpp	/^		static mods::orm::raid& temp_step() {$/;"	kind:function	line:142	struct:mods::builder::raid::raid_interface	access:public	signature:()
 temp_step	src/mods/builder/seqbuild.cpp	/^		static mods::orm::scripted_step& temp_step() {$/;"	kind:function	line:90	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:()
@@ -16507,7 +16540,7 @@ to_string	src/mods/forge-engine/util.cpp	/^	std::string to_string(rifle_types_t 
 to_string	src/mods/forge-engine/util.cpp	/^	std::string to_string(stat_types_t t) {$/;"	kind:function	line:217	namespace:mods::forge_engine	signature:(stat_types_t t)
 to_string	src/mods/melee/combat-order.hpp	/^	static inline std::string to_string(technique_t technique) {$/;"	kind:function	line:57	namespace:mods::melee::main	signature:(technique_t technique)
 to_string	src/mods/message-server.hpp	/^	static inline std::string to_string(const channel_t& c) {$/;"	kind:function	line:34	namespace:mods::message_server	signature:(const channel_t& c)
-to_string	src/mods/mobs/extended-types.cpp	/^	std::string to_string(extended_types_t t) {$/;"	kind:function	line:155	namespace:mods::mobs::extended_types	signature:(extended_types_t t)
+to_string	src/mods/mobs/extended-types.cpp	/^	std::string to_string(extended_types_t t) {$/;"	kind:function	line:156	namespace:mods::mobs::extended_types	signature:(extended_types_t t)
 to_string	src/mods/object-utils.hpp	/^		std::string to_string() {$/;"	kind:function	line:53	struct:mods::object_utils::YamlFeedExceptionInfo	access:public	signature:()
 to_string	src/mods/rooms.hpp	/^	static inline std::string to_string(room_data::fire_status_t stat) {$/;"	kind:function	line:421	namespace:mods::rooms	signature:(room_data::fire_status_t stat)
 to_string	src/mods/values.cpp	/^		std::string to_string(value_key_t k){$/;"	kind:function	line:26	namespace:mods::values	signature:(value_key_t k)
@@ -16591,7 +16624,7 @@ travel_to	src/mods/projectile.cpp	/^		int travel_to(room_rnum from, int directio
 tree_mapping	src/mods/behaviour_tree_impl.cpp	/^	container_mapping_t tree_mapping;$/;"	kind:member	line:37	namespace:mods::behaviour_tree_impl	file:
 trees	src/mods/mobs/armed-guard-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/;"	kind:function	line:239	namespace:mods::mobs::armed_guard_behaviour_tree	signature:()
 trees	src/mods/mobs/chaotic-meth-addict-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/;"	kind:function	line:239	namespace:mods::mobs::chaotic_meth_addict_behaviour_tree	signature:()
-trees	src/mods/mobs/defiler-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/;"	kind:function	line:36	namespace:mods::mobs::defiler_behaviour_tree	signature:()
+trees	src/mods/mobs/defiler-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/;"	kind:function	line:37	namespace:mods::mobs::defiler_behaviour_tree	signature:()
 trees	src/mods/mobs/melee-combatant-behaviour-tree.cpp	/^	std::deque<TNode>& trees() {$/;"	kind:function	line:239	namespace:mods::mobs::melee_combatant_behaviour_tree	signature:()
 triads	src/mods/player.cpp	/^	std::array<uint8_t,5> player::triads() {$/;"	kind:function	line:2179	class:mods::player	signature:()
 trigger_callback	src/mods/affects.hpp	/^			void trigger_callback(TAffects affect) {$/;"	kind:function	line:153	struct:mods::affects::dissolver	access:public	signature:(TAffects affect)
@@ -16633,7 +16666,7 @@ type	src/mods/mini-games.hpp	/^		std::string type;$/;"	kind:member	line:11	struc
 type	src/mods/mobs/armed-guard.hpp	/^			std::string_view type() {$/;"	kind:function	line:51	namespace:mods::mobs	signature:()
 type	src/mods/mobs/car-thief.hpp	/^			std::string_view type() {$/;"	kind:function	line:83	struct:mods::mobs::car_thief	access:public	signature:()
 type	src/mods/mobs/chaotic-meth-addict.hpp	/^			std::string_view type() {$/;"	kind:function	line:51	namespace:mods::mobs	signature:()
-type	src/mods/mobs/defiler.hpp	/^			std::string_view type() {$/;"	kind:function	line:219	namespace:mods::mobs	signature:()
+type	src/mods/mobs/defiler.hpp	/^			std::string_view type() {$/;"	kind:function	line:220	namespace:mods::mobs	signature:()
 type	src/mods/mobs/generic-thief.hpp	/^			std::string_view type() {$/;"	kind:function	line:153	namespace:mods::mobs	signature:()
 type	src/mods/mobs/goat.hpp	/^			std::string_view type() {$/;"	kind:function	line:261	namespace:mods::mobs	signature:()
 type	src/mods/mobs/innocent.hpp	/^		std::string_view type() {$/;"	kind:function	line:45	struct:mods::mobs::innocent	access:public	signature:()
@@ -16805,7 +16838,7 @@ usage_report	src/mods/memory.cpp	/^	std::map<std::string,str_map_t> usage_report
 usages	src/mods/mobs/armed-guard.cpp	/^	str_map_t armed_guard::usages() {$/;"	kind:function	line:97	class:mods::mobs::armed_guard	signature:()
 usages	src/mods/mobs/car-thief.cpp	/^	str_map_t car_thief::usages() {$/;"	kind:function	line:92	class:mods::mobs::car_thief	signature:()
 usages	src/mods/mobs/chaotic-meth-addict.cpp	/^	str_map_t chaotic_meth_addict::usages() {$/;"	kind:function	line:97	class:mods::mobs::chaotic_meth_addict	signature:()
-usages	src/mods/mobs/defiler.cpp	/^	str_map_t defiler::usages() {$/;"	kind:function	line:80	class:mods::mobs::defiler	signature:()
+usages	src/mods/mobs/defiler.cpp	/^	str_map_t defiler::usages() {$/;"	kind:function	line:85	class:mods::mobs::defiler	signature:()
 usages	src/mods/mobs/generic-thief.cpp	/^	str_map_t generic_thief::usages() {$/;"	kind:function	line:160	class:mods::mobs::generic_thief	signature:()
 usages	src/mods/mobs/goat.cpp	/^	str_map_t goat::usages() {$/;"	kind:function	line:81	class:mods::mobs::goat	signature:()
 usages	src/mods/mobs/innocent.cpp	/^	str_map_t innocent::usages() {$/;"	kind:function	line:51	class:mods::mobs::innocent	signature:()
@@ -16822,7 +16855,7 @@ use_autowiz	src/config.cpp	/^int use_autowiz = YES;$/;"	kind:variable	line:304
 use_claymore	src/mods/classes/ghost.cpp	/^	void ghost::use_claymore(uuid_t object_uuid) {$/;"	kind:function	line:557	class:mods::classes::ghost	signature:(uuid_t object_uuid)
 use_connection	src/mods/orm/orm-base.hpp	/^			void use_connection(pqxx::connection* pq_con) {$/;"	kind:function	line:99	struct:mods::orm::orm_base	access:public	signature:(pqxx::connection* pq_con)
 use_flash_underbarrel	src/mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::use_flash_underbarrel(const uuid_t& npc_uuid) {$/;"	kind:function	line:788	class:mods::classes::ghost	signature:(const uuid_t& npc_uuid)
-use_mana_for_skill	src/mods/classes/breacher.hpp	/^			void use_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:19	struct:mods::classes::breacher	access:public	signature:(uint16_t skill)
+use_mana_for_skill	src/mods/classes/breacher.hpp	/^			void use_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:23	struct:mods::classes::breacher	access:public	signature:(uint16_t skill)
 use_mana_for_skill	src/mods/classes/contagion.hpp	/^			void use_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:13	struct:mods::classes::contagion	access:public	signature:(uint16_t skill)
 use_mana_for_skill	src/mods/classes/engineer.hpp	/^			void use_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:12	struct:mods::classes::engineer	access:public	signature:(uint16_t skill)
 use_mana_for_skill	src/mods/classes/ghost.cpp	/^	void ghost::use_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:210	class:mods::classes::ghost	signature:(uint16_t skill)
@@ -17051,7 +17084,7 @@ weapon_shaper_t	src/mods/forge-engine/generated-rifle.hpp	/^	struct weapon_shape
 weapon_stats	src/mods/weapon-stat-list.hpp	/^static inline weapon_stat_list_t* weapon_stats(int type) {$/;"	kind:function	line:5	file:	signature:(int type)
 weapon_type_statistics_t	src/mods/weapon-types.hpp	/^	struct weapon_type_statistics_t {$/;"	kind:struct	line:9	namespace:mods::weapon	file:
 weapon_types	src/mods/weapon-types.hpp	/^namespace mods::weapon_types {$/;"	kind:namespace	line:72	class:mods	file:
-weapons	src/mods/mobs/defiler.cpp	/^	defiler::weapons_list_t& defiler::weapons() {$/;"	kind:function	line:314	class:mods::mobs::defiler	signature:()
+weapons	src/mods/mobs/defiler.cpp	/^	defiler::weapons_list_t& defiler::weapons() {$/;"	kind:function	line:319	class:mods::mobs::defiler	signature:()
 weapons	src/mods/mobs/goat.cpp	/^	goat::weapons_list_t& goat::weapons() {$/;"	kind:function	line:320	class:mods::mobs::goat	signature:()
 weapons	src/mods/projectile.cpp	/^namespace mods::weapons {$/;"	kind:namespace	line:66	class:mods	file:
 weapons	src/mods/projectile.hpp	/^namespace mods::weapons {$/;"	kind:namespace	line:19	class:mods	file:
@@ -17251,7 +17284,7 @@ z_debug	src/mods/intimidate.cpp	7;"	kind:macro	line:7	file:
 z_debug	src/mods/intimidate.cpp	96;"	kind:macro	line:96	file:
 z_debug	src/mods/zone.cpp	15;"	kind:macro	line:15	file:
 z_debug	src/mods/zone.cpp	18;"	kind:macro	line:18	file:
-z_debug	src/mods/zone.cpp	655;"	kind:macro	line:655	file:
+z_debug	src/mods/zone.cpp	658;"	kind:macro	line:658	file:
 zone	src/db.cpp	/^namespace mods::zone {$/;"	kind:namespace	line:1377	class:mods	file:
 zone	src/db.cpp	/^namespace mods::zone {$/;"	kind:namespace	line:67	class:mods	file:
 zone	src/mods/init.hpp	/^INIT(mods::zone);$/;"	kind:variable	line:62
@@ -17281,7 +17314,7 @@ zone_to_reset	src/db.h	/^	zone_rnum zone_to_reset;            \/* ref to zone_da
 zone_transaction_id	src/mods/builder-data.hpp	/^		int zone_transaction_id;$/;"	kind:member	line:93	struct:builder_data_t	file:	access:public
 zone_update	src/db.cpp	/^void zone_update() {$/;"	kind:function	line:1981	signature:()
 zone_update	src/mods/intimidate.cpp	/^	void zone_update(){$/;"	kind:function	line:69	namespace:mods::zone	signature:()
-zone_update	src/mods/zone.cpp	/^	void zone_update() {$/;"	kind:function	line:417	namespace:mods::zone	signature:()
+zone_update	src/mods/zone.cpp	/^	void zone_update() {$/;"	kind:function	line:420	namespace:mods::zone	signature:()
 zone_vnum	src/mods/index-type.hpp	/^typedef IDXTYPE zone_vnum;$/;"	kind:typedef	line:26	file:
 zoom_magnification	src/mods/ranged-combat-totals.hpp	/^		float zoom_magnification;$/;"	kind:member	line:38	struct:mods::ranged_combat_totals	file:	access:public
 zoom_multiplier	src/mods/ranged-combat-totals.hpp	/^		float zoom_multiplier;$/;"	kind:member	line:42	struct:mods::ranged_combat_totals	file:	access:public

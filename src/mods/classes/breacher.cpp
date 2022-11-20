@@ -2,6 +2,7 @@
 #include "../orm/inventory.hpp"
 #include "../affects.hpp"
 #include "../rooms.hpp"
+#include "../interpreter.hpp"
 
 extern void stop_fighting(char_data *ch);
 namespace mods::orm::inventory {
@@ -10,7 +11,23 @@ namespace mods::orm::inventory {
 namespace mods::classes {
 	breacher::breacher(player_ptr_t p) {
 		m_explosive_shot_charges = 0;
+		init();
 		load_by_player(p);
+	}
+	std::tuple<bool,std::string> breacher::inject_adrenaline_shot() {
+		if(m_ad_shot.active()) {
+			return {0,"You already have an adrenaline shot active!"};
+		}
+		if(!has_mana_for_skill(ADRENALINE_SHOT)) {
+			return {0,"You don't have enough mana!"};
+		}
+		use_mana_for_skill(ADRENALINE_SHOT);
+		auto s = roll_skill_success(ADRENALINE_SHOT);
+		if(std::get<0>(s)) {
+			m_adrenaline_shot.use_skill(m_player);
+			return m_ad_shot.inject(m_player);
+		}
+		return s;
 	}
 	void breacher::replenish() {
 		static uint32_t call_count = 0;
@@ -47,10 +64,26 @@ namespace mods::classes {
 		return result;
 	}
 	/* constructors and destructors */
-	breacher::breacher() {
+	void breacher::init() {
 		m_explosive_shot_charges = 0;
+		m_push_count.clear();
+		m_orm.init();
 		m_player = nullptr;
+		m_explosive_shot_charges = 0;
+
+		m_teep_level = 0;
+
+		using SK = ability_data_t::skillset_t;
+		m_abilities = create_abilities({
+			{ADRENALINE_SHOT,"as","Adrenaline Shot",SK::MEDICAL,&m_adrenaline_shot,GHOST_ADRENALSHOT_MANA_COST()},
+			//{UB_SHOTGUN,"ubs","Underbarrel Shotgun",SK::DEMOLITIONS,&m_ub_shotgun,GHOST_SHOTUB_MANA_COST()},
+			//{UB_FRAG,"ubf","Underbarrel Nade Launcher",SK::DEMOLITIONS,&m_ub_frag,GHOST_UBFRAG_MANA_COST()},
+			//{PLANT_CLAYMORE,"claymore","Plant Claymore",SK::DEMOLITIONS,&m_plant_claymore,GHOST_CLAYMORE_MANA_COST()},
+			//{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",SK::DEMOLITIONS,&m_plant_shrapnel_claymore,GHOST_SHRAPCLAY_MANA_COST()},
+			//{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",SK::DEMOLITIONS,&m_plant_corrosive_claymore,GHOST_CORCLAY_MANA_COST()},
+		});
 	}
+
 	std::tuple<bool,std::string> breacher::explosive_shot(direction_t direction) {
 		if(0 == m_explosive_shot_charges) {
 			return {false,"You must wait until you can use your {grn}Explosive shot{/grn} again."};
@@ -91,6 +124,16 @@ namespace mods::classes {
 		return std::move(std::make_shared<breacher>(in_player));
 	}
 };
+ACMD(do_inject_adrenaline_shot) {
+	PLAYER_CAN("breacher.adrenaline_shot");
+	DO_HELP_WITH_ZERO("breacher.adrenaline_shot");
+	auto status = player->breacher()->inject_adrenaline_shot();
+	if(!std::get<0>(status)) {
+		player->errorln(std::get<1>(status));
+		return;
+	}
+	player->sendln(std::get<1>(status));
+}
 ACMD(do_teep) {
 	player->sendln("Command not implemented.");
 	return;
@@ -112,6 +155,7 @@ ACMD(do_teep) {
 }
 namespace mods::class_abilities::breacher {
 	void init() {
+		mods::interpreter::add_command("breacher:adrenaline_shot", POS_RESTING, do_inject_adrenaline_shot, 0,0);
 
 	}
 };

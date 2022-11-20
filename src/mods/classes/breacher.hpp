@@ -3,22 +3,55 @@
 #include <variant>
 #include "../orm/breacher.hpp"
 #include "base.hpp"
+#include "super-user-fiddler.hpp"
+#include "../boosters/adrenaline-shot.hpp"
 
 using breacher_orm_t = mods::orm::breacher;
 namespace mods::classes {
 	struct breacher : base {
+			friend class mods::classes::super_user_fiddler;
 			static constexpr std::string_view description = "{grn}BREACHERS{/grn}\r\n"
 			    "Breachers are a melee and shotgun class. They can take and deal massive amounts "
-			    "of damage. Think of the average rogue/assassin, and you will see a partial resemblance "
+			    "of damage. Think of the rogue/assassin, and you will see a partial resemblance "
 			    "in the playstyle.\r\n"
+			    "\r\n"
 			    "Their ability to wear heavy armor with small movement penalties makes them the perfect "
-			    "tank element to an group dynamic.";
+			    "tank element to any group dynamic.";
 			bool has_mana_for_skill(uint16_t skill) {
 				return true;
 			}
 			void use_mana_for_skill(uint16_t skill) {
 			}
+			using adrenaline_shot_t = mods::boosters::adrenaline_shot;
+			std::tuple<bool,std::string> inject_adrenaline_shot();
 
+			enum ability_t {
+				NONE = 0,
+				AERIAL_DRONE_SCAN,
+				DISSIPATE,
+				XRAY_SHOT,
+				FEIGN_DEATH,
+				PLANT_CLAYMORE,
+				PENETRATING_SHOT,
+				INTIMIDATION,
+				CRYOGENIC_GRENADE,
+				FLASH_UNDERBARREL,
+				TRACKING_SHOT,
+				LIGHT_BANDAGE,
+				SUTURE,
+				ADRENALINE_SHOT,
+				//EMP_NADE,
+				//CHAFF_NADE,
+				SENSOR_NADE,
+				UB_SHOTGUN,
+				UB_FRAG,
+				GUIDED_MISSILE,
+				TARGET_LIMB,
+				SHRAPNEL_CLAYMORE,
+				CORROSIVE_CLAYMORE,
+				REQUEST_RECON,
+				MARK_TARGET,
+			};
 			using primary_choice_t = mods::weapon::breacher::primary_choice_t;
 			static int16_t destroy(player_ptr_t& player);
 			types kind() {
@@ -26,7 +59,7 @@ namespace mods::classes {
 			}
 
 			/* constructors and destructors */
-			breacher();
+			breacher() = delete;
 			breacher(player_ptr_t);
 			~breacher() = default;
 
@@ -49,7 +82,9 @@ namespace mods::classes {
 			ability_list_t& get_abilities() override {
 				return m_abilities;
 			}
+			void init();
 		private:
+			adrenaline_shot_t m_ad_shot;
 			std::map<std::pair<room_rnum,direction_t>,uint8_t> m_push_count;
 			breacher_orm_t	m_orm;
 			player_ptr_t m_player;
@@ -57,6 +92,8 @@ namespace mods::classes {
 
 			int /** todo replace iwth skill_familiarity_t */ m_teep_level;
 			ability_list_t m_abilities;
+			uint8_t m_adrenaline_shot_charges;
+			skill_t m_adrenaline_shot;
 
 	};
 	std::shared_ptr<mods::classes::breacher> create_breacher(player_ptr_t& player);

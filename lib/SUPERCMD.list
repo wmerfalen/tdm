@@ -119,6 +119,7 @@
 {yel}mods/rand{/yel}:->{grn}roll_dice_average{/grn}
 {yel}mods/chat{/yel}:->{grn}chanmgr{/grn}
 {yel}mods/elevator{/yel}:->{grn}instantiate_elevator_here{/grn}
+{yel}mods/mobs/defiler{/yel}:->{grn}set_debug{/grn}
 {yel}mods/radio{/yel}:->{grn}admin_radio_transmit{/grn}
 {yel}mods/radio{/yel}:->{grn}admin_radio_station_create{/grn}
 {yel}mods/radio{/yel}:->{grn}admin_radio_station_delete{/grn}
