@@ -932,6 +932,7 @@ void game_loop(socket_t mother_desc) {
 void run_behaviour_trees() {
 	rb_bht_debug("run_behaviour_trees [ENTRY]");
 	mods::mobs::behaviour_tree_list::run();
+	mods::mobs::defiler_behaviour_tree::run_trees();
 	for(const auto& npc_uuid : mods::behaviour_tree_impl::mob_list()) {
 		auto npc = npc_by_uuid(npc_uuid);
 		if(!npc) {
@@ -972,7 +973,6 @@ void run_behaviour_trees() {
 			}
 		}
 	}
-	mods::mobs::defiler_behaviour_tree::run_trees();
 	rb_bht_debug("run_behaviour_trees [RETURN]");
 }
 

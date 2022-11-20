@@ -154,6 +154,7 @@ namespace mods::mobs {
 				DEFILER_DESPERATION_MOVE,
 				DEFILER_LAST_DITCH_EFFORT_MOVE,
 			};
+			void pull_debug_mode();
 			using uuidlist_t = std::forward_list<uuid_t>;
 			static constexpr uint16_t SHOULD_DO_ROAM = 0;
 			static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;

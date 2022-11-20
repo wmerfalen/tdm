@@ -17,21 +17,23 @@
 #include "../ensnare.hpp"
 
 #ifdef m_debug
-#undef m_debug
+	#undef m_debug
 #endif
 
+//#define __MENTOC_MODS_MOBS_DEFILER_VERBOSE__
+//#define   __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
 #ifdef   __MENTOC_MODS_MOBS_defiler_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) mentoc_prefix_debug("defiler") << a << "\n";
-#define cmem(a) mentoc_prefix_debug("[defiler][memory_footprint]") << a << "\n";
+	#define m_debug(a) mentoc_prefix_debug("defiler") << a << "\n";
+	#define cmem(a) mentoc_prefix_debug("[defiler][memory_footprint]") << a << "\n";
 #else
-#define m_debug(a)
-#define cmem(a)
+	#define m_debug(a)
+	#define cmem(a)
 #endif
 
 #ifdef __MENTOC_MODS_MOBS_DEFILER_VERBOSE__
-#define m_verbose(a) mentoc_prefix_debug("defiler") << a << "\n";
+	#define m_verbose(a) mentoc_prefix_debug("defiler") << a << "\n";
 #else
-#define m_verbose(a)
+	#define m_verbose(a)
 #endif
 
 namespace mods::mobs {
@@ -50,8 +52,8 @@ namespace mods::mobs {
 		}
 		mods::mobs::defiler_list.emplace_back(std::make_shared<defiler> (mob_uuid,targets.data()));
 		for(const auto& pat : {
-		            "Butcher"
-		        }) {
+		        "Butcher"
+		    }) {
 			mods::mobs::roam_pattern::register_roam_pattern(defiler::MOB_VNUM,pat);
 		}
 	}
@@ -61,6 +63,9 @@ namespace mods::mobs {
 		return m_debug_mode;
 	}
 
+	void defiler::pull_debug_mode() {
+		m_debug_mode = DEFILER_DEBUG_MODE_ON();
+	}
 	void defiler::mention(std::string_view msg) {
 		if(this->debug_mode_on()) {
 			std::cerr << green_str("DEFILER REPORT:") << "============================================\n";
@@ -504,12 +509,12 @@ namespace mods::mobs {
 				continue;
 			}
 			if(m_targets.cend() == std::find_if(
-			            m_targets.cbegin(),
-			            m_targets.cend(),
+			        m_targets.cbegin(),
+			        m_targets.cend(),
 			[&v](const auto& t) -> bool {
 			return t.uuid == v.uuid;
 		})
-		  ) {
+		) {
 				m_targets.emplace_back(target_t{v.uuid,v.direction,v.distance});
 			}
 		}
@@ -661,6 +666,24 @@ namespace mods::mobs::defiler_init {
 			}
 		}
 	}
+	SUPERCMD(do_set_debug) {
+		static constexpr std::string_view usage = "Usage: admin:defiler:set-debug <on|off>";
+		auto vec_args = PARSE_ARGS();
+		if(argshave()->size_gt(0)->passed() == false) {
+			player->sendln(usage);
+			return;
+		}
+		if(vec_args[0].compare("on") == 0) {
+			CONSTSET(vk_DEFILER_DEBUG_MODE_ON,true);
+			player->sendln("Enabled");
+		} else {
+			CONSTSET(vk_DEFILER_DEBUG_MODE_ON,false);
+			player->sendln("Disabled");
+		}
+		for(auto& defiler : defiler_list) {
+			defiler->pull_debug_mode();
+		}
+	}
 	void init() {
 		/**
 		 * Builds resistance to shrapnel and incendiary damage
@@ -682,6 +705,7 @@ namespace mods::mobs::defiler_init {
 		    rezzes
 		);
 		mods::interpreter::add_user_command("bioscan",do_bioscan);
+		mods::interpreter::add_builder_command("admin:defiler:set-debug",do_set_debug);
 	}
 };//end mods::mobs::defiler_init
 #undef m_debug
