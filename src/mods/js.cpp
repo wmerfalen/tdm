@@ -11,6 +11,7 @@
 #include "skills.hpp"
 #include "super-users.hpp"
 #include "date-time.hpp"
+#include "rand.hpp"
 
 #include <unistd.h>	//for getcwd()
 extern void command_interpreter(player_ptr_t& player, std::string_view in_argument);
@@ -846,6 +847,13 @@ namespace mods {
 			duk_push_string(ctx,player->consume_scripted_response().c_str());
 			return 1;
 		}
+		static duk_ret_t rng_between(duk_context *ctx) {
+			/* First parameter is character name */
+			uint32_t start =  duk_to_uint32(ctx,0);
+			uint32_t end =  duk_to_uint32(ctx,1);
+			duk_push_uint(ctx,rand_number(start,end));
+			return 1;
+		}
 		static duk_ret_t mob_death_trigger(duk_context *ctx) {
 			/* First parameter is character name */
 			std::string char_name = duk_to_string(ctx,0);
@@ -1050,6 +1058,8 @@ namespace mods {
 			duk_put_global_string(ctx,"value_sanity_check");
 			duk_push_c_function(ctx,mods::js::refresh_minimum_proficiencies,0);
 			duk_put_global_string(ctx,"refresh_minimum_proficiencies");
+			duk_push_c_function(ctx,mods::js::rng_between,2);
+			duk_put_global_string(ctx,"rng_between");
 		}
 
 		//enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };
