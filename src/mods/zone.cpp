@@ -10,7 +10,7 @@
 #include "mob-roam.hpp"
 #include "orm/locker.hpp"
 
-//#define __MENTOC_MODS_ZONE_DEBUG__
+#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
 	#define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
 	#define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
@@ -183,15 +183,17 @@ namespace mods::zone {
 	bool should_run_zone_command(reset_com& command) {
 		switch(command.command) {
 			case 'M': {
-					//std::vector<uuid_t> alive;
-					//auto& r = command.object_data;
-					//r.erase(
-					//std::remove_if(r.begin(),r.end(),[](auto& mob_uuid) -> bool {
-					//	auto npc = npc_by_uuid(mob_uuid);
-					//	return !npc;
-					//}),r.end());
-					//command.count = command.object_data.size();
-					return command.object_data.size() < command.arg3;
+					std::vector<uuid_t> alive;
+					auto& r = command.object_data;
+					r.erase(
+					std::remove_if(r.begin(),r.end(),[](const auto& mob_uuid) -> bool {
+						auto npc = npc_by_uuid(mob_uuid);
+						return !npc;
+					}),r.end());
+					command.count = command.object_data.size();
+					if(command.arg1 == 666) {
+						log("command.count: %d",command.count);
+					}
 					return command.count < command.arg3;
 				}
 				break;
@@ -363,6 +365,7 @@ namespace mods::zone {
 		for(unsigned zone = 0; zone < zone_table.size(); zone++) {
 			filtered[zone] = zone_table[zone];
 			zone_table_size += zone_table[zone].cmd.size();
+			filtered[zone].cmd.clear();
 			for(auto ZCMD : zone_table[zone].cmd) {
 				bool skip_me = false;
 				mob_rnum mob = 0;
