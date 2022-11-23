@@ -3,6 +3,7 @@
 #include "../affects.hpp"
 #include "../rooms.hpp"
 #include "../interpreter.hpp"
+#include "../query-objects.hpp"
 
 extern void stop_fighting(char_data *ch);
 namespace mods::orm::inventory {
@@ -14,18 +15,17 @@ namespace mods::classes {
 		init();
 		load_by_player(p);
 	}
-	std::tuple<bool,std::string> breacher::inject_adrenaline_shot() {
-		if(m_ad_shot.active()) {
-			return {0,"You already have an adrenaline shot active!"};
+	std::tuple<bool,std::string> breacher::deconstruct_weapon(obj_ptr_t& obj) {
+		if(m_deconstruct_weapon_charges == 0) {
+			return {0,"You can't do that yet!"};
 		}
-		if(!has_mana_for_skill(ADRENALINE_SHOT)) {
-			return {0,"You don't have enough mana!"};
+		if(obj->has_rifle() == false) {
+			return {0,"You can only deconstruct weapons!"};
 		}
-		use_mana_for_skill(ADRENALINE_SHOT);
-		auto s = roll_skill_success(ADRENALINE_SHOT);
+		auto s = roll_skill_success(DECONSTRUCT_WEAPON);
 		if(std::get<0>(s)) {
-			m_adrenaline_shot.use_skill(m_player);
-			return m_ad_shot.inject(m_player);
+			m_deconstruct_weapon.use_skill(m_player);
+			--m_deconstruct_weapon_charges;
 		}
 		return s;
 	}
@@ -36,6 +36,9 @@ namespace mods::classes {
 			call_count = 0;
 			if(m_explosive_shot_charges + 1 < BREACHER_EXPLOSIVE_SHOT_MAX_COUNT() * tier) {
 				++m_explosive_shot_charges;
+			}
+			if(m_deconstruct_weapon_charges + 1 < BREACHER_DECONSTRUCT_WEAPON_MAX_COUNT() * tier) {
+				++m_deconstruct_weapon_charges;
 			}
 		}
 	}
@@ -66,6 +69,7 @@ namespace mods::classes {
 	/* constructors and destructors */
 	void breacher::init() {
 		m_explosive_shot_charges = 0;
+		m_deconstruct_weapon_charges = 0;
 		m_push_count.clear();
 		m_orm.init();
 		m_player = nullptr;
@@ -75,7 +79,7 @@ namespace mods::classes {
 
 		using SK = ability_data_t::skillset_t;
 		m_abilities = create_abilities({
-			{ADRENALINE_SHOT,"as","Adrenaline Shot",SK::MEDICAL,&m_adrenaline_shot,GHOST_ADRENALSHOT_MANA_COST()},
+			{DECONSTRUCT_WEAPON,"dw","Deconstruct Weapon",SK::DEMOLITIONS,&m_deconstruct_weapon,0},
 			//{UB_SHOTGUN,"ubs","Underbarrel Shotgun",SK::DEMOLITIONS,&m_ub_shotgun,GHOST_SHOTUB_MANA_COST()},
 			//{UB_FRAG,"ubf","Underbarrel Nade Launcher",SK::DEMOLITIONS,&m_ub_frag,GHOST_UBFRAG_MANA_COST()},
 			//{PLANT_CLAYMORE,"claymore","Plant Claymore",SK::DEMOLITIONS,&m_plant_claymore,GHOST_CLAYMORE_MANA_COST()},
@@ -124,38 +128,37 @@ namespace mods::classes {
 		return std::move(std::make_shared<breacher>(in_player));
 	}
 };
-ACMD(do_inject_adrenaline_shot) {
-	PLAYER_CAN("breacher.adrenaline_shot");
-	DO_HELP_WITH_ZERO("breacher.adrenaline_shot");
-	auto status = player->breacher()->inject_adrenaline_shot();
+ACMD(do_deconstruct_weapon) {
+	PLAYER_CAN("breacher.deconstruct");
+	DO_HELP_WITH_ZERO("breacher.deconstruct");
+	static constexpr std::string_view usage = "Usage: breacher:deconstruct_weapon <item>\r\n"
+	    "Please note that the item in question must be in your inventory.\r\n";
+	const auto vec_args = PARSE_ARGS();
+	if(!argshave()->size_gt(0)->passed()) {
+		player->sendln(usage);
+		return;
+	}
+	std::vector<uuid_t> items = mods::query_objects::query_inventory_for_object(player,vec_args[0]);
+	if(items.size() == 0) {
+		player->sendln("Couldn't find anything in your inventory matching that.");
+		return;
+	}
+	auto obj = optr_by_uuid(items[0]);
+	if(!obj) {
+		player->sendln("Couldn't find anything in your inventory matching that.");
+		return;
+	}
+
+	auto status = player->breacher()->deconstruct_weapon(obj);
 	if(!std::get<0>(status)) {
 		player->errorln(std::get<1>(status));
 		return;
 	}
 	player->sendln(std::get<1>(status));
 }
-ACMD(do_teep) {
-	player->sendln("Command not implemented.");
-	return;
-#if 0
-	PLAYER_CAN("breacher.teep");
-	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() < 1) {
-		player->sendln("Which direction?!");
-		return;
-	}
-	auto s = to_direction(vec_args[0]);
-	if(!s.first) {
-		player->sendln("Which direction?!");
-		return;
-	}
-	auto msg = std::get<1>(player->breacher()->teep(s.second));
-	player->sendln(msg);
-#endif
-}
 namespace mods::class_abilities::breacher {
 	void init() {
-		mods::interpreter::add_command("breacher:adrenaline_shot", POS_RESTING, do_inject_adrenaline_shot, 0,0);
+		mods::interpreter::add_command("breacher:deconstruct", POS_RESTING, do_deconstruct_weapon, 0,0);
 
 	}
 };

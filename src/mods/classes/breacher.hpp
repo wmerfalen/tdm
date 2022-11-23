@@ -23,34 +23,12 @@ namespace mods::classes {
 			void use_mana_for_skill(uint16_t skill) {
 			}
 			using adrenaline_shot_t = mods::boosters::adrenaline_shot;
-			std::tuple<bool,std::string> inject_adrenaline_shot();
+			std::tuple<bool,std::string> deconstruct_weapon(obj_ptr_t& obj);
 
 			enum ability_t {
 				NONE = 0,
-				AERIAL_DRONE_SCAN,
-				DISSIPATE,
-				XRAY_SHOT,
-				FEIGN_DEATH,
-				PLANT_CLAYMORE,
-				PENETRATING_SHOT,
-				INTIMIDATION,
-				CRYOGENIC_GRENADE,
-				FLASH_UNDERBARREL,
-				TRACKING_SHOT,
-				LIGHT_BANDAGE,
-				SUTURE,
-				ADRENALINE_SHOT,
-				//EMP_NADE,
-				//CHAFF_NADE,
-				SENSOR_NADE,
-				UB_SHOTGUN,
-				UB_FRAG,
-				GUIDED_MISSILE,
-				TARGET_LIMB,
-				SHRAPNEL_CLAYMORE,
-				CORROSIVE_CLAYMORE,
-				REQUEST_RECON,
-				MARK_TARGET,
+				DECONSTRUCT_WEAPON,
+				PLANT_BARBED_WIRE,
 			};
 			using primary_choice_t = mods::weapon::breacher::primary_choice_t;
 			static int16_t destroy(player_ptr_t& player);
@@ -92,8 +70,8 @@ namespace mods::classes {
 
 			int /** todo replace iwth skill_familiarity_t */ m_teep_level;
 			ability_list_t m_abilities;
-			uint8_t m_adrenaline_shot_charges;
-			skill_t m_adrenaline_shot;
+			uint8_t m_deconstruct_weapon_charges;
+			skill_t m_deconstruct_weapon;
 
 	};
 	std::shared_ptr<mods::classes::breacher> create_breacher(player_ptr_t& player);

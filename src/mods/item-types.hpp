@@ -524,6 +524,8 @@
     (percent_t,critical_chance,"#float, percent",14.3), \
     (rooms_t,blast_radius,"#int, rooms",2), \
     (static_amount_t,base_damage,"#int, static base damage done",44), \
+    (uint16_t,damage_dice_count,"#uint16_t, number of dice",2), \
+    (uint16_t,damage_dice_sides,"#uint16_t, dice sides",6), \
     (static_amount_t,disorient_amount,"#int, percent",13.0), \
     (int,loudness_type,"#int, 0=SILENT,1=SUSPICIOUS,2=LOUD,3=DEAFENING,4=WORLD_ENDING",2) \
 )
