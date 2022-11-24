@@ -79,6 +79,7 @@ INIT(mods::corpse);
 INIT(mods::ban_system::commands);
 INIT(mods::ensnare);
 INIT(mods::admin_tools::stay);
+INIT(mods::rifle_attachments::forge_commands);
 
 /**
  * Grey area
@@ -167,6 +168,7 @@ namespace mods::init {
 		mods::flee::init();
 		mods::suicide::init();
 		mods::drops::init();
+		mods::rifle_attachments::forge_commands::init();
 		//mods::dialog_tree::init();
 #ifdef __MENTOC_PLUGIN_CONTENT__
 		mods::plugins::init::init();

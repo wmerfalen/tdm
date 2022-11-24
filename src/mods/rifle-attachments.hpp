@@ -170,6 +170,7 @@ namespace mods {
 		std::shared_ptr<mods::rifle_attachments_t> by_uuid(const uuid_t& uuid);
 		std::vector<std::shared_ptr<mods::rifle_attachments_t>> by_player(player_ptr_t& player);
 		void erase(const uuid_t& uuid);
+		void update_global_list(std::shared_ptr<mods::rifle_attachments_t>& ptr);
 	};
 };
 

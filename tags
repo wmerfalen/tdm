@@ -165,9 +165,9 @@ ACMD	src/mods/mp.cpp	/^	ACMD(do_mp) {$/;"	kind:function	line:18	namespace:mods::
 ACMD	src/mods/orm/player-base-ability.cpp	/^		ACMD(do_save_my_pba) {$/;"	kind:function	line:177	namespace:mods::orm::pba	signature:(do_save_my_pba)
 ACMD	src/mods/prefs.cpp	/^	ACMD(do_pref) {$/;"	kind:function	line:80	namespace:mods::prefs	signature:(do_pref)
 ACMD	src/mods/projectile.cpp	/^		ACMD(do_fragtest_east) {$/;"	kind:function	line:900	namespace:mods::projectile	signature:(do_fragtest_east)
-ACMD	src/mods/rifle-attachments.cpp	/^		ACMD(do_forge_colon_add) {$/;"	kind:function	line:116	namespace:mods::rifle_attachments	signature:(do_forge_colon_add)
-ACMD	src/mods/rifle-attachments.cpp	/^		ACMD(do_forge_colon_remove) {$/;"	kind:function	line:179	namespace:mods::rifle_attachments	signature:(do_forge_colon_remove)
-ACMD	src/mods/rifle-attachments.cpp	/^		ACMD(do_forge_colon_strip) {$/;"	kind:function	line:229	namespace:mods::rifle_attachments	signature:(do_forge_colon_strip)
+ACMD	src/mods/rifle-attachments-forge-commands.cpp	/^	ACMD(do_forge_colon_add) {$/;"	kind:function	line:14	namespace:mods::rifle_attachments::forge_commands	signature:(do_forge_colon_add)
+ACMD	src/mods/rifle-attachments-forge-commands.cpp	/^	ACMD(do_forge_colon_remove) {$/;"	kind:function	line:77	namespace:mods::rifle_attachments::forge_commands	signature:(do_forge_colon_remove)
+ACMD	src/mods/rifle-attachments-forge-commands.cpp	/^	ACMD(do_forge_colon_strip) {$/;"	kind:function	line:127	namespace:mods::rifle_attachments::forge_commands	signature:(do_forge_colon_strip)
 ACMD	src/mods/rifle-attachments.cpp	/^		ACMD(do_vcarrying) {$/;"	kind:function	line:98	namespace:mods::rifle_attachments	signature:(do_vcarrying)
 ACMD	src/mods/rifle.cpp	/^	ACMD(do_rifle_me) {$/;"	kind:function	line:54	namespace:mods::rifle	signature:(do_rifle_me)
 ACMD	src/mods/scripted-step.cpp	/^	ACMD(do_scripted_step) {$/;"	kind:function	line:53	namespace:mods	signature:(do_scripted_step)
@@ -1581,7 +1581,7 @@ INFECTED_DRONE	src/mods/drops.cpp	/^	static constexpr mob_vnum INFECTED_DRONE = 
 INFO_FILE	src/db.h	81;"	kind:macro	line:81	file:
 INFRAVISION	src/mods/flags.hpp	/^		INFRAVISION,$/;"	kind:enumerator	line:86	enum:mods::flags::aff	file:
 INIT	src/mods/init.hpp	4;"	kind:macro	line:4	file:
-INIT	src/mods/init.hpp	92;"	kind:macro	line:92	file:
+INIT	src/mods/init.hpp	93;"	kind:macro	line:93	file:
 INIT	src/mods/plugins/init.hpp	5;"	kind:macro	line:5	file:
 INITIAL_ENSNARED_AMOUNT	src/mods/values-list.cpp	/^INITIAL_ENSNARED_AMOUNT,30$/;"	kind:variable	line:85
 INITIATE	src/mods/skills.hpp	/^	INITIATE = 1,$/;"	kind:enumerator	line:17	enum:uint8_t	file:
@@ -5094,7 +5094,6 @@ __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	src/mods/mobs/mini
 __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	12;"	kind:macro	line:12	file:
 __MENTOC_SHOW_CORROSIVE_CLAYMORE_DEBUG_OUTPUT__	src/mods/weapons/corrosive-claymore.cpp	14;"	kind:macro	line:14	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	src/globals.cpp	1380;"	kind:macro	line:1380	file:
-__MENTOC_SHOW_INVENTORY_DEBUG_OUTPUT__	src/mods/orm/inventory.cpp	12;"	kind:macro	line:12	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	src/mods/armor/advanced-protection.cpp	4;"	kind:macro	line:4	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	src/mods/armor/basic-protection.cpp	4;"	kind:macro	line:4	file:
 __MENTOC_SHOW_MODS_ARMOR_ELITE_PROTECTION_DEBUG_OUTPUT__	src/mods/armor/elite-protection.cpp	4;"	kind:macro	line:4	file:
@@ -5125,6 +5124,7 @@ __MENTOC_SHOW_MODS_PLAYERS_banish_DEBUG_OUTPUT__	src/mods/players/banish.cpp	6;"
 __MENTOC_SHOW_MODS_PLAYERS_event_messages_DEBUG_OUTPUT__	src/mods/players/event-messages.cpp	8;"	kind:macro	line:8	file:
 __MENTOC_SHOW_MODS_PLAYERS_friendly_reminders_DEBUG_OUTPUT__	src/mods/players/friendly-reminders.cpp	8;"	kind:macro	line:8	file:
 __MENTOC_SHOW_MODS_RIFLE_ATTACHMENT_DEBUG_OUTPUT__	src/mods/rifle-attachments.cpp	6;"	kind:macro	line:6	file:
+__MENTOC_SHOW_MODS_RIFLE_ATTACHMENT_FORGE_COMMANDS_DEBUG_OUTPUT__	src/mods/rifle-attachments-forge-commands.cpp	6;"	kind:macro	line:6	file:
 __MENTOC_SHOW_MODS_RIFLE_DEBUG_OUTPUT__	src/mods/rifle.cpp	19;"	kind:macro	line:19	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	src/mods/rooms.hpp	8;"	kind:macro	line:8	file:
 __MENTOC_SHOW_MODS_STATS_DEBUG_OUTPUT__	src/mods/stats.cpp	18;"	kind:macro	line:18	file:
@@ -5282,7 +5282,7 @@ add_room_dissolve_affect_every_n_tick	src/mods/rooms.cpp	/^	void add_room_dissol
 add_room_to_pavements	src/mods/rbuild.cpp	/^	void add_room_to_pavements(player_ptr_t& player, int room_id) {$/;"	kind:function	line:168	namespace:mods::builder	signature:(player_ptr_t& player, int room_id)
 add_shotgun_charge	src/mods/armor/gauntlets-xtv89.cpp	/^	user_feedback xtv89::add_shotgun_charge() {$/;"	kind:function	line:132	class:mods::armor::xtv89	signature:()
 add_station_to_list	src/mods/radio.cpp	/^	void add_station_to_list(auto& orm) {$/;"	kind:function	line:151	namespace:mods::radio	signature:(auto& orm)
-add_stats	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::add_stats(const obj_ptr_t& object) {$/;"	kind:function	line:473	class:mods::rifle_attachments_t	signature:(const obj_ptr_t& object)
+add_stats	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::add_stats(const obj_ptr_t& object) {$/;"	kind:function	line:332	class:mods::rifle_attachments_t	signature:(const obj_ptr_t& object)
 add_subscriber	src/mods/chat.cpp	/^	void channel::add_subscriber(const socket_t& sock) {$/;"	kind:function	line:56	class:mods::chat::channel	signature:(const socket_t& sock)
 add_super_user	src/mods/js.cpp	/^		static duk_ret_t add_super_user(duk_context *ctx) {$/;"	kind:function	line:91	namespace:mods::js	signature:(duk_context *ctx)
 add_target	src/mods/weapons/unique-weapons.cpp	/^	void unique_ranged_weapon::add_target(const uuid_t& target_uuid) {$/;"	kind:function	line:27	class:mods::weapons::unique_ranged_weapon	signature:(const uuid_t& target_uuid)
@@ -5577,7 +5577,7 @@ atrium	src/house.h	/^	room_vnum atrium;		\/* vnum of atrium		*\/$/;"	kind:member
 attach_flamethrower	src/mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::attach_flamethrower(obj_ptr_t& weapon){$/;"	kind:function	line:157	class:mods::classes::pyrexia	signature:(obj_ptr_t& weapon)
 attach_flamethrower	src/mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::attach_flamethrower(obj_ptr_t& weapon){$/;"	kind:function	line:80	class:mods::orm::pyrexia	signature:(obj_ptr_t& weapon)
 attach_frag_underbarrel	src/mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::attach_frag_underbarrel() {$/;"	kind:function	line:1121	class:mods::classes::ghost	signature:()
-attach_from_inventory	src/mods/rifle-attachments.cpp	/^	int16_t rifle_attachments_t::attach_from_inventory(player_ptr_t& player,std::string_view str,obj_ptr_t& attachment) {$/;"	kind:function	line:379	class:mods::rifle_attachments_t	signature:(player_ptr_t& player,std::string_view str,obj_ptr_t& attachment)
+attach_from_inventory	src/mods/rifle-attachments.cpp	/^	int16_t rifle_attachments_t::attach_from_inventory(player_ptr_t& player,std::string_view str,obj_ptr_t& attachment) {$/;"	kind:function	line:238	class:mods::rifle_attachments_t	signature:(player_ptr_t& player,std::string_view str,obj_ptr_t& attachment)
 attach_incendiary_grenade_launcher	src/mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::attach_incendiary_grenade_launcher(obj_ptr_t& weapon){$/;"	kind:function	line:143	class:mods::classes::pyrexia	signature:(obj_ptr_t& weapon)
 attach_incendiary_grenade_launcher	src/mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::attach_incendiary_grenade_launcher(obj_ptr_t& weapon){$/;"	kind:function	line:77	class:mods::orm::pyrexia	signature:(obj_ptr_t& weapon)
 attach_point_t	src/mods/fluxkraft/arcon-bar.hpp	/^		struct attach_point_t {$/;"	kind:struct	line:17	namespace:mods::fluxkraft::arcon	file:
@@ -5741,7 +5741,7 @@ base_rifle_object	src/mods/weapon.cpp	/^	obj_data_ptr_t base_rifle_object() {$/;
 base_stat_list	src/mods/yaml.hpp	/^		mods::weapon::weapon_stat_list_t* base_stat_list;$/;"	kind:member	line:202	struct:mods::yaml::rifle_description_t	file:	access:public
 base_stat_list	src/mods/yaml.hpp	/^		mods::weapon::weapon_stat_list_t* base_stat_list;$/;"	kind:member	line:419	struct:mods::yaml::melee_description_t	file:	access:public
 base_usages	src/mods/mobs/smart-mob.cpp	/^	str_map_t smart_mob::base_usages() {$/;"	kind:function	line:386	class:mods::mobs::smart_mob	signature:()
-base_yaml_file	src/mods/rifle-attachments.cpp	/^	std::string& rifle_attachments_t::base_yaml_file() {$/;"	kind:function	line:656	class:mods::rifle_attachments_t	signature:()
+base_yaml_file	src/mods/rifle-attachments.cpp	/^	std::string& rifle_attachments_t::base_yaml_file() {$/;"	kind:function	line:515	class:mods::rifle_attachments_t	signature:()
 basic_mud_log	src/utils.cpp	/^void basic_mud_log(const char *format, ...) {$/;"	kind:function	line:274	signature:(const char *format, ...)
 basic_mud_vlog	src/utils.cpp	/^void basic_mud_vlog(const char *format, va_list args) {$/;"	kind:function	line:248	signature:(const char *format, va_list args)
 basic_protection	src/mods/armor/basic-protection.cpp	/^	basic_protection::basic_protection(uuid_t player_uuid) {$/;"	kind:function	line:23	class:mods::armor::basic_protection	signature:(uuid_t player_uuid)
@@ -6396,7 +6396,7 @@ clear_scanned_items	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_a
 clear_scanned_items	src/mods/mobs/generic-thief.cpp	/^	void generic_thief::clear_scanned_items() {$/;"	kind:function	line:594	class:mods::mobs::generic_thief	signature:()
 clear_scanned_items	src/mods/mobs/melee-combatant.cpp	/^	void melee_combatant::clear_scanned_items() {$/;"	kind:function	line:437	class:mods::mobs::melee_combatant	signature:()
 clear_scanned_items	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::clear_scanned_items() {$/;"	kind:function	line:459	class:mods::mobs::orthos_agent	signature:()
-clear_slot	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::clear_slot(const slot_t& slot) {$/;"	kind:function	line:299	class:mods::rifle_attachments_t	signature:(const slot_t& slot)
+clear_slot	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::clear_slot(const slot_t& slot) {$/;"	kind:function	line:158	class:mods::rifle_attachments_t	signature:(const slot_t& slot)
 clear_sneak	src/mods/sneak.cpp	/^	void clear_sneak(player_ptr_t& player) {$/;"	kind:function	line:17	namespace:mods::sneak	signature:(player_ptr_t& player)
 clear_state	src/mods/mobs/armed-guard.cpp	/^	void armed_guard::clear_state() {$/;"	kind:function	line:486	class:mods::mobs::armed_guard	signature:()
 clear_state	src/mods/mobs/chaotic-meth-addict.cpp	/^	void chaotic_meth_addict::clear_state() {$/;"	kind:function	line:489	class:mods::mobs::chaotic_meth_addict	signature:()
@@ -6515,7 +6515,7 @@ combat_composer	src/mods/combat-composer/snipe-target.cpp	/^namespace mods::comb
 combat_composer	src/mods/combat-composer/snipe-target.hpp	/^namespace mods::combat_composer {$/;"	kind:namespace	line:7	class:mods	file:
 combat_composer	src/mods/combat-composer/spray-target.cpp	/^namespace mods::combat_composer {$/;"	kind:namespace	line:25	class:mods	file:
 combat_composer	src/mods/combat-composer/spray-target.hpp	/^namespace mods::combat_composer {$/;"	kind:namespace	line:6	class:mods	file:
-combat_composer	src/mods/init.hpp	/^INIT(mods::combat_composer);$/;"	kind:variable	line:86
+combat_composer	src/mods/init.hpp	/^INIT(mods::combat_composer);$/;"	kind:variable	line:87
 combat_list	src/fight.cpp	/^char_data *combat_list = NULL;	\/* head of l-list of fighting chars *\/$/;"	kind:variable	line:41
 combat_order	src/mods/init.hpp	/^INIT(mods::melee::combat_order);$/;"	kind:variable	line:75
 combat_order	src/mods/melee/combat-order.cpp	/^namespace mods::melee::combat_order {$/;"	kind:namespace	line:25	class:mods::melee	file:
@@ -7344,8 +7344,8 @@ detach	src/mods/weapons/attachment-frag-underbarrel.cpp	/^	std::tuple<bool,std::
 detach	src/mods/weapons/attachment-pathogen-ammunition.cpp	/^	std::tuple<bool,std::string> attachment_pathogen_ammunition::detach() {$/;"	kind:function	line:89	class:mods::weapons::attachment_pathogen_ammunition	signature:()
 detach	src/mods/weapons/attachment-shotgun-underbarrel.cpp	/^	std::tuple<bool,std::string> attachment_shotgun_underbarrel::detach() {$/;"	kind:function	line:25	class:mods::weapons::attachment_shotgun_underbarrel	signature:()
 detach_frag_underbarrel	src/mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::detach_frag_underbarrel() {$/;"	kind:function	line:1136	class:mods::classes::ghost	signature:()
-detach_into_inventory	src/mods/rifle-attachments.cpp	/^	int16_t rifle_attachments_t::detach_into_inventory(player_ptr_t& player,const slot_t& slot) {$/;"	kind:function	line:366	class:mods::rifle_attachments_t	signature:(player_ptr_t& player,const slot_t& slot)
-detach_into_inventory	src/mods/rifle-attachments.cpp	/^	int16_t rifle_attachments_t::detach_into_inventory(player_ptr_t& player,std::string_view str) {$/;"	kind:function	line:434	class:mods::rifle_attachments_t	signature:(player_ptr_t& player,std::string_view str)
+detach_into_inventory	src/mods/rifle-attachments.cpp	/^	int16_t rifle_attachments_t::detach_into_inventory(player_ptr_t& player,const slot_t& slot) {$/;"	kind:function	line:225	class:mods::rifle_attachments_t	signature:(player_ptr_t& player,const slot_t& slot)
+detach_into_inventory	src/mods/rifle-attachments.cpp	/^	int16_t rifle_attachments_t::detach_into_inventory(player_ptr_t& player,std::string_view str) {$/;"	kind:function	line:293	class:mods::rifle_attachments_t	signature:(player_ptr_t& player,std::string_view str)
 detach_shotgun_underbarrel	src/mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::detach_shotgun_underbarrel() {$/;"	kind:function	line:886	class:mods::classes::ghost	signature:()
 detail	src/mods/util.hpp	/^	namespace detail {$/;"	kind:namespace	line:202	namespace:mods::util	file:
 detect_size	src/mods/lmdb/shm.hpp	/^        inline size_t detect_size(){$/;"	kind:function	line:47	class:gdns::shm	access:public	signature:()
@@ -8197,7 +8197,7 @@ ex_descriptions	src/room-data.cpp	/^std::vector<mods::extra_desc_data>& room_dat
 ex_keyword	src/mods/orm/room.hpp	/^		std::string ex_keyword;$/;"	kind:member	line:47	struct:mods::orm::room	file:	access:public
 examine	src/mods/examine.cpp	/^namespace mods::examine {$/;"	kind:namespace	line:13	class:mods	file:
 examine	src/mods/examine.hpp	/^namespace mods::examine {$/;"	kind:namespace	line:7	class:mods	file:
-examine	src/mods/rifle-attachments.cpp	/^	std::string rifle_attachments_t::examine() {$/;"	kind:function	line:780	class:mods::rifle_attachments_t	signature:()
+examine	src/mods/rifle-attachments.cpp	/^	std::string rifle_attachments_t::examine() {$/;"	kind:function	line:639	class:mods::rifle_attachments_t	signature:()
 example_grammar	src/mods/deep-object-parser.cpp	/^	const std::string example_grammar = "rifle\/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}#level:32";$/;"	kind:member	line:18	namespace:mods	file:
 example_grammar	src/mods/rifle-attachments.cpp	/^	const std::string example_grammar = "rifle\/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";$/;"	kind:member	line:16	namespace:mods	file:
 exec	src/mods/js.cpp	/^		static duk_ret_t exec(duk_context *ctx) {$/;"	kind:function	line:841	namespace:mods::js	signature:(duk_context *ctx)
@@ -8373,7 +8373,7 @@ export_class	src/mods/orm/user-logins.cpp	/^	strmap_t user_logins::export_class(
 export_class	src/mods/pq.hpp	/^	virtual strmap_t export_class() {$/;"	kind:function	line:706	struct:orm_base	access:public	signature:()
 export_insert	src/mods/orm/room.cpp	/^	sql_save_map_t room::export_insert() {$/;"	kind:function	line:15	class:mods::orm::room	signature:()
 export_object	src/mods/orm/inventory.cpp	/^	std::map<std::string,std::string> export_object(obj_ptr_t eq,const uint64_t& db_id,const std::size_t& wear_position,bool inventory) {$/;"	kind:function	line:41	namespace:mods::orm::inventory	signature:(obj_ptr_t eq,const uint64_t& db_id,const std::size_t& wear_position,bool inventory)
-export_objects	src/mods/rifle-attachments.cpp	/^	rifle_attachments_t::encoding_t rifle_attachments_t::export_objects() {$/;"	kind:function	line:757	class:mods::rifle_attachments_t	signature:()
+export_objects	src/mods/rifle-attachments.cpp	/^	rifle_attachments_t::encoding_t rifle_attachments_t::export_objects() {$/;"	kind:function	line:616	class:mods::rifle_attachments_t	signature:()
 export_shop	src/shop.cpp	/^std::map<std::string,std::string> shop_data<TOrmType,T,R>::export_shop() {$/;"	kind:function	line:1786	class:shop_data	signature:()
 exported	src/mods/yaml.hpp	/^		std::map<std::string,std::string> exported;$/;"	kind:member	line:178	struct:mods::yaml::rifle_description_t	file:	access:public
 exported	src/mods/yaml.hpp	/^		std::map<std::string,std::string> exported;$/;"	kind:member	line:211	struct:mods::yaml::explosive_description_t	file:	access:public
@@ -8418,7 +8418,7 @@ extra_flags	src/structs.h	/^	int \/*bitvector_t*\/	extra_flags;$/;"	kind:member	
 extract	src/mods/orm/orm-base.hpp	/^			static inline T extract(pqxx::row& row,std::string_view element) {$/;"	kind:function	line:84	struct:mods::orm::orm_base	access:public	signature:(pqxx::row& row,std::string_view element)
 extract	src/mods/orm/orm-base.hpp	/^			static inline std::string extract(pqxx::row& row,std::string_view element) {$/;"	kind:function	line:77	struct:mods::orm::orm_base	access:public	signature:(pqxx::row& row,std::string_view element)
 extract_after	src/mods/util.cpp	/^	std::string extract_after(std::string_view target, char this_char) {$/;"	kind:function	line:504	namespace:mods::util	signature:(std::string_view target, char this_char)
-extract_base_yaml_file	src/mods/rifle-attachments.cpp	/^	std::string rifle_attachments_t::extract_base_yaml_file(const encoding_t& line) {$/;"	kind:function	line:652	class:mods::rifle_attachments_t	signature:(const encoding_t& line)
+extract_base_yaml_file	src/mods/rifle-attachments.cpp	/^	std::string rifle_attachments_t::extract_base_yaml_file(const encoding_t& line) {$/;"	kind:function	line:511	class:mods::rifle_attachments_t	signature:(const encoding_t& line)
 extract_char	src/handler.cpp	/^void extract_char(char_data *ch) {$/;"	kind:function	line:1315	signature:(char_data *ch)
 extract_char_final	src/handler.cpp	/^void extract_char_final(char_data *ch) {$/;"	kind:function	line:1177	signature:(char_data *ch)
 extract_character	src/mods/players/db-load.cpp	/^	void extract_character(player_ptr_t& player_ptr) {$/;"	kind:function	line:77	namespace:mods::players::db_load	signature:(player_ptr_t& player_ptr)
@@ -8808,6 +8808,8 @@ forge	src/mods/classes/forge.hpp	/^	struct forge : base {$/;"	kind:struct	line:1
 forge	src/mods/orm/forge.hpp	/^		forge() : id(0) { this->init(); loaded = 0; }$/;"	kind:function	line:17	struct:mods::orm::forge	access:public	signature:()
 forge	src/mods/orm/forge.hpp	/^	struct forge : public mods::orm::orm_base<forge,mods::weapon::ghost::primary_choice_t> {$/;"	kind:struct	line:10	namespace:mods::orm	file:	inherits:mods::orm::orm_base
 forge_advance_level	src/mods/classes/forge.cpp	/^	void forge_advance_level(player_ptr_t& player){$/;"	kind:function	line:17	namespace:mods::classes	signature:(player_ptr_t& player)
+forge_commands	src/mods/init.hpp	/^INIT(mods::rifle_attachments::forge_commands);$/;"	kind:variable	line:82
+forge_commands	src/mods/rifle-attachments-forge-commands.cpp	/^namespace mods::rifle_attachments::forge_commands {$/;"	kind:namespace	line:13	class:mods::rifle_attachments	file:
 forge_craft_ammunition_level	src/mods/orm/forge.hpp	/^		skill_familiarity_t forge_craft_ammunition_level;$/;"	kind:member	line:39	struct:mods::orm::forge	file:	access:public
 forge_craft_armor_plating_level	src/mods/orm/forge.hpp	/^		skill_familiarity_t forge_craft_armor_plating_level;$/;"	kind:member	line:40	struct:mods::orm::forge	file:	access:public
 forge_craft_flash_underbarrel_level	src/mods/orm/forge.hpp	/^		skill_familiarity_t forge_craft_flash_underbarrel_level;$/;"	kind:member	line:37	struct:mods::orm::forge	file:	access:public
@@ -8889,7 +8891,7 @@ free_rent	src/config.cpp	/^int free_rent = YES;$/;"	kind:variable	line:132
 free_social_messages	src/act.social.cpp	/^void free_social_messages(void) {$/;"	kind:function	line:230	signature:(void)
 free_text_files	src/db.cpp	/^void free_text_files(void) {$/;"	kind:function	line:230	signature:(void)
 freeze_level	src/structs.h	/^	byte freeze_level;		\/* Level of god who froze char, if any	*\/$/;"	kind:member	line:1284	struct:player_special_data_saved	file:	access:public
-friendly_map	src/mods/rifle-attachments.cpp	/^	std::map<std::string,std::string> rifle_attachments_t::friendly_map() {$/;"	kind:function	line:728	class:mods::rifle_attachments_t	signature:()
+friendly_map	src/mods/rifle-attachments.cpp	/^	std::map<std::string,std::string> rifle_attachments_t::friendly_map() {$/;"	kind:function	line:587	class:mods::rifle_attachments_t	signature:()
 friendly_reminders	src/mods/init.hpp	/^INIT(mods::players::friendly_reminders);$/;"	kind:variable	line:24
 friendly_reminders	src/mods/players/friendly-reminders.cpp	/^namespace mods::players::friendly_reminders {$/;"	kind:namespace	line:18	class:mods::players	file:
 friendly_reminders	src/mods/players/friendly-reminders.hpp	/^namespace mods::players::friendly_reminders {$/;"	kind:namespace	line:6	class:mods::players	file:
@@ -8912,7 +8914,7 @@ from_string	src/mods/orm/orm-base.hpp	/^	inline std::string from_string<std::str
 from_string	src/mods/orm/orm-base.hpp	/^	inline std::vector<std::string> from_string<std::vector<std::string>>(std::string value) {$/;"	kind:function	line:48	namespace:mods::orm	signature:(std::string value)
 from_string_to_rifle	src/mods/weapon.hpp	/^	static inline weapon_rifle_t from_string_to_rifle(std::string_view rifle_type) {$/;"	kind:function	line:317	namespace:mods::weapon	signature:(std::string_view rifle_type)
 from_string_to_skill_id	src/mods/skills.cpp	/^	std::optional<uint32_t> from_string_to_skill_id($/;"	kind:function	line:183	namespace:mods::skills	signature:( const std::string& player_class, std::string_view skill_name)
-from_string_to_slot	src/mods/rifle-attachments.cpp	/^	std::optional<rifle_attachments_t::slot_t> rifle_attachments_t::from_string_to_slot(std::string_view str) {$/;"	kind:function	line:270	class:mods::rifle_attachments_t	signature:(std::string_view str)
+from_string_to_slot	src/mods/rifle-attachments.cpp	/^	std::optional<rifle_attachments_t::slot_t> rifle_attachments_t::from_string_to_slot(std::string_view str) {$/;"	kind:function	line:129	class:mods::rifle_attachments_t	signature:(std::string_view str)
 fromdirstr	src/mods/projectile.cpp	/^		std::string fromdirstr(int direction,bool prefix, bool suffix) {$/;"	kind:function	line:629	namespace:mods::projectile	signature:(int direction,bool prefix, bool suffix)
 frozen_start_room	src/config.cpp	/^room_vnum frozen_start_room = 0;$/;"	kind:variable	line:176
 fry_victim	src/castle.cpp	/^void fry_victim(char_data *ch) {$/;"	kind:function	line:425	signature:(char_data *ch)
@@ -9291,7 +9293,7 @@ get_shared_ptr	src/mods/object.cpp	/^	std::shared_ptr<obj_data> object::get_shar
 get_shotgun_underbarrel_wrapper	src/mods/classes/ghost.cpp	/^	ghost::shotgun_ub_t& ghost::get_shotgun_underbarrel_wrapper() {$/;"	kind:function	line:910	class:mods::classes::ghost	signature:()
 get_signatures	src/mods/builder/slotted-builder.hpp	/^			std::map<std::string,std::string>& get_signatures() {$/;"	kind:function	line:83	struct:mods::builder::slotted_builder	access:public	signature:()
 get_slide_obj_vis	src/shop.cpp	/^struct obj_data *get_slide_obj_vis(char_data *ch, char *name,$/;"	kind:function	line:440	signature:(char_data *ch, char *name, struct obj_data *list)
-get_slot	src/mods/rifle-attachments.cpp	/^	obj_ptr_t& rifle_attachments_t::get_slot(const slot_t& slot) {$/;"	kind:function	line:509	class:mods::rifle_attachments_t	signature:(const slot_t& slot)
+get_slot	src/mods/rifle-attachments.cpp	/^	obj_ptr_t& rifle_attachments_t::get_slot(const slot_t& slot) {$/;"	kind:function	line:368	class:mods::rifle_attachments_t	signature:(const slot_t& slot)
 get_slot_list	src/mods/orm/contracts.hpp	/^		static inline std::vector<std::string> get_slot_list() {$/;"	kind:function	line:78	struct:mods::orm::contracts	access:public	signature:()
 get_slot_list	src/mods/orm/hq.hpp	/^		static std::vector<std::string> get_slot_list() {$/;"	kind:function	line:11	struct:mods::orm::hq	access:public	signature:()
 get_slot_list	src/mods/orm/mob-equipment.hpp	/^		static std::vector<std::string> get_slot_list() {$/;"	kind:function	line:14	struct:mods::orm::mob_equipment	access:public	signature:()
@@ -9575,7 +9577,7 @@ has_output	src/structs.h	/^			bool has_output;$/;"	kind:member	line:1534	struct:
 has_prompt	src/structs.h	/^			int	has_prompt;		\/* is the user at a prompt?             *\/$/;"	kind:member	line:1526	struct:mods::descriptor_data	file:	access:public
 has_roam_pattern	src/mods/mobs/roam-pattern.cpp	/^	bool has_roam_pattern(const mob_vnum& vnum) {$/;"	kind:function	line:16	namespace:mods::mobs::roam_pattern	signature:(const mob_vnum& vnum)
 has_roam_pattern	src/mods/mobs/roam-pattern.cpp	/^	bool has_roam_pattern(const mob_vnum& vnum,std::string* store) {$/;"	kind:function	line:24	namespace:mods::mobs::roam_pattern	signature:(const mob_vnum& vnum,std::string* store)
-has_slot	src/mods/rifle-attachments.cpp	/^	bool rifle_attachments_t::has_slot(const slot_t& slot) {$/;"	kind:function	line:407	class:mods::rifle_attachments_t	signature:(const slot_t& slot)
+has_slot	src/mods/rifle-attachments.cpp	/^	bool rifle_attachments_t::has_slot(const slot_t& slot) {$/;"	kind:function	line:266	class:mods::rifle_attachments_t	signature:(const slot_t& slot)
 has_texture	src/room-data.cpp	/^bool room_data::has_texture(texture_type_t t) {$/;"	kind:function	line:152	class:room_data	signature:(texture_type_t t)
 has_textures	src/mods/rooms.cpp	/^	bool has_textures(room_rnum r, std::vector<txt> textures) {$/;"	kind:function	line:148	namespace:mods::rooms	signature:(room_rnum r, std::vector<txt> textures)
 has_thermal_vision	src/mods/player.cpp	/^	bool player::has_thermal_vision() const {$/;"	kind:function	line:1747	class:mods::player	signature:() const
@@ -9858,7 +9860,7 @@ implementors	src/mods/acl_list.cpp	/^		static player_acl_list_t implementors;$/;
 import	src/structs.cpp	/^void char_data::import(const char_data* o) {$/;"	kind:function	line:275	class:char_data	signature:(const char_data* o)
 import	src/structs.cpp	/^void mob_special_data::import(const mob_special_data& other) {$/;"	kind:function	line:557	class:mob_special_data	signature:(const mob_special_data& other)
 import_object	src/mods/orm/rifle-instance.cpp	/^	void rifle_instance::import_object(obj_ptr_t& obj) {$/;"	kind:function	line:20	class:mods::orm::rifle_instance	signature:(obj_ptr_t& obj)
-import_objects	src/mods/rifle-attachments.cpp	/^	int16_t rifle_attachments_t::import_objects(const encoding_t& line) {$/;"	kind:function	line:531	class:mods::rifle_attachments_t	signature:(const encoding_t& line)
+import_objects	src/mods/rifle-attachments.cpp	/^	int16_t rifle_attachments_t::import_objects(const encoding_t& line) {$/;"	kind:function	line:390	class:mods::rifle_attachments_t	signature:(const encoding_t& line)
 import_room	src/mods/rbuild.cpp	/^	int import_room(struct room_data* room) {$/;"	kind:function	line:394	namespace:mods::builder	signature:(struct room_data* room)
 in_addr	src/sysdep.h	/^struct in_addr {$/;"	kind:struct	line:250	file:
 in_array	src/mods/util.hpp	/^	bool in_array(std::string f,std::vector<T> strings) {$/;"	kind:function	line:453	namespace:mods::util	signature:(std::string f,std::vector<T> strings)
@@ -9983,8 +9985,8 @@ init	src/mods/forge-engine/generator.cpp	/^	void generator::init() {$/;"	kind:fu
 init	src/mods/forge-engine/value-scaler.cpp	/^		void init() {$/;"	kind:function	line:91	namespace:mods::forge_engine::value_scaler_static	signature:()
 init	src/mods/generic-locker.cpp	/^	void generic_locker_t::init() {$/;"	kind:function	line:45	class:mods::generic_locker_t	signature:()
 init	src/mods/help.cpp	/^	void init() {$/;"	kind:function	line:1448	namespace:mods::help	signature:()
-init	src/mods/init.hpp	/^	static inline void init() {$/;"	kind:function	line:96	namespace:mods::init	signature:()
-init	src/mods/init.hpp	/^namespace mods::init {$/;"	kind:namespace	line:95	class:mods	file:
+init	src/mods/init.hpp	/^	static inline void init() {$/;"	kind:function	line:97	namespace:mods::init	signature:()
+init	src/mods/init.hpp	/^namespace mods::init {$/;"	kind:namespace	line:96	class:mods	file:
 init	src/mods/integral-objects.cpp	/^	void init() {$/;"	kind:function	line:521	namespace:mods::integral_objects	signature:()
 init	src/mods/js.cpp	/^		void init() {$/;"	kind:function	line:42	namespace:mods::js	signature:()
 init	src/mods/json/export.cpp	/^	void init() {$/;"	kind:function	line:313	namespace:mods::json	signature:()
@@ -10073,7 +10075,8 @@ init	src/mods/query-objects.cpp	/^	void init() {$/;"	kind:function	line:297	name
 init	src/mods/radio.cpp	/^	void init() {$/;"	kind:function	line:258	namespace:mods::radio	signature:()
 init	src/mods/rand.cpp	/^	void init() {$/;"	kind:function	line:215	namespace:mods::rand	signature:()
 init	src/mods/rate-limiting.cpp	/^	void init() {$/;"	kind:function	line:162	namespace:mods::rate_limiting	signature:()
-init	src/mods/rifle-attachments.cpp	/^		void init() {$/;"	kind:function	line:253	namespace:mods::rifle_attachments	signature:()
+init	src/mods/rifle-attachments-forge-commands.cpp	/^	void init() {$/;"	kind:function	line:151	namespace:mods::rifle_attachments::forge_commands	signature:()
+init	src/mods/rifle-attachments.cpp	/^		void init() {$/;"	kind:function	line:116	namespace:mods::rifle_attachments	signature:()
 init	src/mods/rifle.cpp	/^	void init() {$/;"	kind:function	line:58	namespace:mods::rifle	signature:()
 init	src/mods/scripted-sequence-events.cpp	/^	void init() {$/;"	kind:function	line:73	namespace:mods::scripted_sequence_events	signature:()
 init	src/mods/scripted-sequence-runner.cpp	/^	void init() {$/;"	kind:function	line:223	namespace:mods::scripted_sequence_runner	signature:()
@@ -10815,7 +10818,7 @@ login_time	src/structs.h	/^			time_t login_time;		\/* when the person connected	
 logon	src/structs.h	/^	time_t logon;    \/* Time of the last logon (used to calculate played) *\/$/;"	kind:member	line:1120	struct:time_data	file:	access:public
 logstrerror	src/comm.cpp	/^void logstrerror(std::string_view prefix,int _errno) {$/;"	kind:function	line:174	signature:(std::string_view prefix,int _errno)
 logtypes	src/act.wizard.cpp	/^const char *logtypes[] = {$/;"	kind:variable	line:1241
-long_desc	src/mods/rifle-attachments.cpp	/^	std::string long_desc(auto& in_a) {$/;"	kind:function	line:696	namespace:mods	signature:(auto& in_a)
+long_desc	src/mods/rifle-attachments.cpp	/^	std::string long_desc(auto& in_a) {$/;"	kind:function	line:555	namespace:mods	signature:(auto& in_a)
 long_descr	src/mods/player.hpp	/^			mods::string& long_descr() {$/;"	kind:function	line:409	namespace:mods	access:public	signature:()
 long_descr	src/structs.h	/^	mods::string long_descr;   \/* for 'look'			       *\/$/;"	kind:member	line:1131	struct:char_player_data	file:	access:public
 long_jump	src/mods/rand.cpp	/^	void long_jump(void) {$/;"	kind:function	line:185	namespace:mods::rand::xoroshiro	signature:(void)
@@ -11435,6 +11438,8 @@ m_debug	src/mods/rbuild.cpp	41;"	kind:macro	line:41	file:
 m_debug	src/mods/resting.cpp	10;"	kind:macro	line:10	file:
 m_debug	src/mods/resting.cpp	124;"	kind:macro	line:124	file:
 m_debug	src/mods/resting.cpp	7;"	kind:macro	line:7	file:
+m_debug	src/mods/rifle-attachments-forge-commands.cpp	10;"	kind:macro	line:10	file:
+m_debug	src/mods/rifle-attachments-forge-commands.cpp	8;"	kind:macro	line:8	file:
 m_debug	src/mods/rifle-attachments.cpp	10;"	kind:macro	line:10	file:
 m_debug	src/mods/rifle-attachments.cpp	8;"	kind:macro	line:8	file:
 m_debug	src/mods/rifle-stats.cpp	11;"	kind:macro	line:11	file:
@@ -14524,7 +14529,7 @@ remove_replenish	src/mods/intimidate.cpp	/^void remove_replenish(room_vnum room,
 remove_replenish	src/mods/zone.cpp	/^	void remove_replenish(room_vnum room,std::string type) {$/;"	kind:function	line:109	namespace:mods::zone	signature:(room_vnum room,std::string type)
 remove_room	src/mods/orm/shop.cpp	/^	int16_t shop::remove_room(room_vnum room){$/;"	kind:function	line:56	class:mods::orm::shop	signature:(room_vnum room)
 remove_room_dissolve_affect	src/mods/rooms.cpp	/^	void remove_room_dissolve_affect(room_rnum room, affect_t item) {$/;"	kind:function	line:92	namespace:mods::rooms::affects	signature:(room_rnum room, affect_t item)
-remove_stats	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::remove_stats(const obj_ptr_t& object) {$/;"	kind:function	line:442	class:mods::rifle_attachments_t	signature:(const obj_ptr_t& object)
+remove_stats	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::remove_stats(const obj_ptr_t& object) {$/;"	kind:function	line:301	class:mods::rifle_attachments_t	signature:(const obj_ptr_t& object)
 remove_stay	src/mods/admin-tools/stay.cpp	/^	void remove_stay(std::string name) {$/;"	kind:function	line:18	namespace:mods::admin_tools::stay	signature:(std::string name)
 remove_subscriber	src/mods/chat.cpp	/^	void channel::remove_subscriber(const socket_t& sock) {$/;"	kind:function	line:65	class:mods::chat::channel	signature:(const socket_t& sock)
 remove_super_user	src/mods/js.cpp	/^		static duk_ret_t remove_super_user(duk_context *ctx) {$/;"	kind:function	line:100	namespace:mods::js	signature:(duk_context *ctx)
@@ -15566,7 +15571,7 @@ set_slot	src/mods/builder/slotted-builder.hpp	/^			void set_slot(const TVnumType
 set_slot	src/mods/orm/hq.cpp	/^	std::tuple<bool,std::string> hq::set_slot(std::string_view key,std::string_view value) {$/;"	kind:function	line:79	class:mods::orm::hq	signature:(std::string_view key,std::string_view value)
 set_slot	src/mods/orm/mob-equipment.cpp	/^	std::tuple<bool,std::string> mob_equipment::set_slot(std::string_view slot, std::string_view value) {$/;"	kind:function	line:20	class:mods::orm::mob_equipment	signature:(std::string_view slot, std::string_view value)
 set_slot	src/mods/orm/orm-base.hpp	/^			virtual std::tuple<bool,std::string> set_slot(std::string_view key,std::string_view value) {$/;"	kind:function	line:180	struct:mods::orm::orm_base	access:public	signature:(std::string_view key,std::string_view value)
-set_slot	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::set_slot(const slot_t& slot,obj_ptr_t& obj) {$/;"	kind:function	line:331	class:mods::rifle_attachments_t	signature:(const slot_t& slot,obj_ptr_t& obj)
+set_slot	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::set_slot(const slot_t& slot,obj_ptr_t& obj) {$/;"	kind:function	line:190	class:mods::rifle_attachments_t	signature:(const slot_t& slot,obj_ptr_t& obj)
 set_slot_list	src/mods/builder/slotted-builder.hpp	/^			void set_slot_list(std::vector<std::string> s) {$/;"	kind:function	line:106	struct:mods::builder::slotted_builder	access:public	signature:(std::vector<std::string> s)
 set_socket	src/mods/player.cpp	/^	void player::set_socket(socket_t d) {$/;"	kind:function	line:1480	class:mods::player	signature:(socket_t d)
 set_state	src/mods/player.cpp	/^	void player::set_state(int state) {$/;"	kind:function	line:1416	class:mods::player	signature:(int state)
@@ -15716,7 +15721,7 @@ shopping_buy	src/shop.cpp	/^void shopping_buy(char *arg, char_data *ch, char_dat
 shopping_list	src/shop.cpp	/^void shopping_list(char *arg, char_data *ch, char_data *keeper, int shop_nr) {$/;"	kind:function	line:989	signature:(char *arg, char_data *ch, char_data *keeper, int shop_nr)
 shopping_sell	src/shop.cpp	/^void shopping_sell(char *arg, char_data *ch, char_data *keeper, int shop_nr) {$/;"	kind:function	line:835	signature:(char *arg, char_data *ch, char_data *keeper, int shop_nr)
 shopping_value	src/shop.cpp	/^void shopping_value(char *arg, char_data *ch, char_data *keeper, int shop_nr) {$/;"	kind:function	line:922	signature:(char *arg, char_data *ch, char_data *keeper, int shop_nr)
-short_desc	src/mods/rifle-attachments.cpp	/^	std::string short_desc(auto& in_a) {$/;"	kind:function	line:688	namespace:mods	signature:(auto& in_a)
+short_desc	src/mods/rifle-attachments.cpp	/^	std::string short_desc(auto& in_a) {$/;"	kind:function	line:547	namespace:mods	signature:(auto& in_a)
 short_descr	src/mods/player.hpp	/^			mods::string& short_descr() {$/;"	kind:function	line:406	namespace:mods	access:public	signature:()
 short_descr	src/structs.h	/^	mods::string short_descr;  \/* for NPC 'actions'                    *\/$/;"	kind:member	line:1130	struct:char_player_data	file:	access:public
 short_description	src/mods/yaml.hpp	/^		std::string short_description;$/;"	kind:member	line:163	struct:mods::yaml::yaml_description_t	file:	access:public
@@ -16788,7 +16793,7 @@ update	src/mods/sql.hpp	/^			compositor<T>& update(str_object table) {$/;"	kind:
 update_and_process_death	src/mods/weapons/damage-types.cpp	/^	void update_and_process_death(player_ptr_t attacker,player_ptr_t victim) {$/;"	kind:function	line:1311	namespace:mods::weapons::damage_types	signature:(player_ptr_t attacker,player_ptr_t victim)
 update_char_objects	src/handler.cpp	/^void update_char_objects(char_data *ch) {$/;"	kind:function	line:1139	signature:(char_data *ch)
 update_contract_status	src/mods/player.cpp	/^	void player::update_contract_status() {$/;"	kind:function	line:2418	class:mods::player	signature:()
-update_description	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::update_description() {$/;"	kind:function	line:504	class:mods::rifle_attachments_t	signature:()
+update_description	src/mods/rifle-attachments.cpp	/^	void rifle_attachments_t::update_description() {$/;"	kind:function	line:363	class:mods::rifle_attachments_t	signature:()
 update_game	src/mods/orm/mini-game.hpp	/^		auto update_game(uint64_t pk_id,mods::mini_games::mini_game_payload_t game){$/;"	kind:function	line:54	struct:mods::orm::mini_game	access:public	signature:(uint64_t pk_id,mods::mini_games::mini_game_payload_t game)
 update_global_list	src/mods/rifle-attachments.cpp	/^		void update_global_list(std::shared_ptr<mods::rifle_attachments_t>& ptr) {$/;"	kind:function	line:73	namespace:mods::rifle_attachments	signature:(std::shared_ptr<mods::rifle_attachments_t>& ptr)
 update_obj_file	src/mods/hell.hpp	/^	constexpr inline bool update_obj_file = false;$/;"	kind:member	line:19	namespace:mods::hell	file:
@@ -17277,7 +17282,7 @@ yaml_initiator	src/mods/object-utils.hpp	/^	static std::string yaml_initiator = 
 yaml_int_to_string	src/mods/util.cpp	/^	std::string yaml_int_to_string(int type) {$/;"	kind:function	line:1263	namespace:mods::util	signature:(int type)
 yaml_list	src/mods/forge-engine/generated-armor.cpp	/^	const std::vector<std::string>& generated_armor_t::yaml_list(armor_types_t t) {$/;"	kind:function	line:112	class:mods::forge_engine::generated_armor_t	signature:(armor_types_t t)
 yaml_list	src/mods/forge-engine/generated-rifle.cpp	/^	const std::vector<std::string>& generated_rifle_t::yaml_list(rifle_types_t t) {$/;"	kind:function	line:85	class:mods::forge_engine::generated_rifle_t	signature:(rifle_types_t t)
-yaml_map	src/mods/rifle-attachments.cpp	/^	std::map<std::string,std::string> rifle_attachments_t::yaml_map() {$/;"	kind:function	line:659	class:mods::rifle_attachments_t	signature:()
+yaml_map	src/mods/rifle-attachments.cpp	/^	std::map<std::string,std::string> rifle_attachments_t::yaml_map() {$/;"	kind:function	line:518	class:mods::rifle_attachments_t	signature:()
 yaml_string_to_int	src/mods/util.cpp	/^	int yaml_string_to_int(std::string type) {$/;"	kind:function	line:1282	namespace:mods::util	signature:(std::string type)
 yaml_transaction_id	src/mods/object-utils.hpp	/^	static uint32_t yaml_transaction_id = 0;$/;"	kind:member	line:51	namespace:mods::object_utils	file:
 year	src/mods/date-time.cpp	/^	static uint8_t year;$/;"	kind:member	line:69	namespace:mods::date_time	file:

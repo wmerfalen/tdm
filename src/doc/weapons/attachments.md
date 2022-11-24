@@ -6,7 +6,7 @@ A tactical counter terrorist game is nothing without the ability to customize th
 ## The command
 We should have a command namespace that would give the user access to all the necessary operations that can be performed on a weapon:
 
-- [ ] `forge:add <attachment> <weapon>`
+- [x] `forge:add <attachment> <weapon>`
 	- Adds an attachment to a weapon
 	- Examples:
 	- `forge:add scope g36c`
@@ -20,11 +20,14 @@ We should have a command namespace that would give the user access to all the ne
 ## Refactoring list
 We will need to refactor the codebase to allow for a smooth transition into this feature set.
 - [ ] Rifle Attachments
-	- [ ] Use this class to perform all CRUD operations on a weapon when any of the `forge:*` commands are called
+	- [x] Use this class to perform all CRUD operations on a weapon when any of the `forge:*` commands are called
 	- [ ] Change the way rifle attachments are stored in the db so that *instances* of attachments and *instances* of rifles are saved/loaded to/from the DB respectively.
 - [ ] Ranged Combat Totals
-	- [ ] Anytime a weapon has it's attachments modified, the ranged combat totals need to be recalculated to account for the changes.
-	- [ ] Verify that RCT's accurately reflect modifications made to a weapon.
+	- [x] Anytime a weapon has it's attachments modified, the ranged combat totals need to be recalculated to account for the changes.
+		- This feature is test for in `src/mods/unit-tests/rifle-attachments.cpp`!
+	- [x] Verify that RCT's accurately reflect modifications made to a weapon.
+		- This feature is test for in `src/mods/unit-tests/rifle-attachments.cpp`!
 
 ## Code references
 - For `forge:*` commands look in `src/mods/rifle-attachments.cpp`
+- Unit tests are always a good example of how to properly call the code to use it effectively. Check out `src/mods/unit-tests/rifle-attachments.cpp` for unit tests that demonstrate the rifle attachments system!

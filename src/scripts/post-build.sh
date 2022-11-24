@@ -1,6 +1,6 @@
 #!/bin/bash
 BINARY=/home/xkold/cmpp/bin/circle
-if [[ "$1" == "strip-all" ]]; then
+if [[ "$1" == "strip-all" || -f /tmp/cm-strip ]]; then
 	B=$(du -sh $BINARY | awk '{print $1}')
 	strip --strip-all $BINARY 2>&1 > /dev/null
 	A=$(du -sh $BINARY | awk '{print $1}')

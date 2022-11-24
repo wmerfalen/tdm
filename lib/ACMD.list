@@ -3,9 +3,6 @@
 ./mods/melt.cpp:	->melt_me
 ./mods/flee.cpp:	->flee
 ./mods/rifle-attachments.cpp:		->vcarrying
-./mods/rifle-attachments.cpp:		->forge_colon_add
-./mods/rifle-attachments.cpp:		->forge_colon_remove
-./mods/rifle-attachments.cpp:		->forge_colon_strip
 ./mods/prefs.cpp:	->pref
 ./mods/classes/contagion.cpp:	->invoke
 ./mods/classes/pyrexia.cpp:->fire_nade
@@ -50,6 +47,9 @@
 ./mods/mini-games/line-up.cpp:->next_row
 ./mods/mini-games/line-up.cpp:->reset_hack
 ./mods/mini-games/wires.cpp:->plug_cable
+./mods/rifle-attachments-forge-commands.cpp:	->forge_colon_add
+./mods/rifle-attachments-forge-commands.cpp:	->forge_colon_remove
+./mods/rifle-attachments-forge-commands.cpp:	->forge_colon_strip
 ./mods/contracts.cpp:	->contract
 ./mods/weapons/reload.cpp:	->reload
 ./mods/corpse.cpp:	->corpse_me

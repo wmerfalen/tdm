@@ -9,13 +9,13 @@
 #include "../../globals.hpp"
 #include "rifle-attachment.hpp"
 
-#define __MENTOC_SHOW_INVENTORY_DEBUG_OUTPUT__
+//#define __MENTOC_SHOW_INVENTORY_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_INVENTORY_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << "[mods::orm::inventory[file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
-#define m_error(a) std::cerr << "[mods::orm::inventory[file:" << __FILE__ << "][line:" << __LINE__ << "][ERROR]->" << a << "\n";
+	#define m_debug(a) std::cerr << "[mods::orm::inventory[file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+	#define m_error(a) std::cerr << "[mods::orm::inventory[file:" << __FILE__ << "][line:" << __LINE__ << "][ERROR]->" << a << "\n";
 #else
-#define m_debug(a)
-#define m_error(a)
+	#define m_debug(a)
+	#define m_error(a)
 #endif
 
 extern obj_ptr_t read_object_ptr(obj_vnum nr, int type);
@@ -122,10 +122,10 @@ namespace mods::orm::inventory {
 			auto del_txn = txn();
 			sql_compositor comp("player_object",&del_txn);
 			auto builder = comp
-			               .del()
-			               .from("player_object")
-			               .where("po_player_id",player_db_id)
-			               .op_and("po_wear_position",position);
+			    .del()
+			    .from("player_object")
+			    .where("po_player_id",player_db_id)
+			    .op_and("po_wear_position",position);
 			mods::pq::exec(del_txn,builder.sql());
 			mods::pq::commit(del_txn);
 			return {true,""};
@@ -140,11 +140,11 @@ namespace mods::orm::inventory {
 			auto insert_transaction = txn();
 			sql_compositor comp("player_object",&insert_transaction);
 			auto up_sql = comp
-			              .insert()
-			              .into("player_object")
-			              .values(export_object(object,player_db_id,position,false))
-			              .returning("id")
-			              .sql();
+			    .insert()
+			    .into("player_object")
+			    .values(export_object(object,player_db_id,position,false))
+			    .returning("id")
+			    .sql();
 			auto record = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
 			return {true,""};
@@ -158,11 +158,11 @@ namespace mods::orm::inventory {
 			auto insert_transaction = txn();
 			sql_compositor comp("player_object",&insert_transaction);
 			auto up_sql = comp
-			              .insert()
-			              .into("player_object")
-			              .values(export_object(object,player_db_id,0,true))
-			              .returning("id")
-			              .sql();
+			    .insert()
+			    .into("player_object")
+			    .values(export_object(object,player_db_id,0,true))
+			    .returning("id")
+			    .sql();
 			auto record = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
 			return {true,""};
@@ -177,10 +177,10 @@ namespace mods::orm::inventory {
 			sql_compositor comp("player_object",&sel_txn);
 			std::string po_load_type = YAML;
 			auto builder = comp
-			               .select("id")
-			               .from("player_object")
-			               .where("po_player_id",std::to_string(player_db_id))
-			               .op_and("po_in_inventory","1");
+			    .select("id")
+			    .from("player_object")
+			    .where("po_player_id",std::to_string(player_db_id))
+			    .op_and("po_in_inventory","1");
 			if(object->forged) {
 				builder.op_and("po_load_type",FORGED)
 				.op_and("po_type_id",object->db_id());
@@ -204,9 +204,9 @@ namespace mods::orm::inventory {
 				sql_compositor comp("player_object",&del_txn);
 				std::string po_load_type = YAML;
 				auto builder = comp
-				               .del()
-				               .from("player_object")
-				               .where("id",record[0]["id"].c_str());
+				    .del()
+				    .from("player_object")
+				    .where("id",record[0]["id"].c_str());
 				mods::pq::exec(del_txn,builder.sql());
 				mods::pq::commit(del_txn);
 			}
@@ -231,9 +231,9 @@ namespace mods::orm::inventory {
 			auto select_transaction = txn();
 			sql_compositor comp("player_object",&select_transaction);
 			auto player_sql = comp.select("*")
-			                  .from("player_object")
-			                  .where("po_player_id","=",std::to_string(player->db_id()))
-			                  .sql();
+			    .from("player_object")
+			    .where("po_player_id","=",std::to_string(player->db_id()))
+			    .sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 			obj_ptr_t obj = nullptr;
 			mods::pq::commit(select_transaction);
