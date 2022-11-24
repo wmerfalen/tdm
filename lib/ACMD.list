@@ -3,6 +3,9 @@
 ./mods/melt.cpp:	->melt_me
 ./mods/flee.cpp:	->flee
 ./mods/rifle-attachments.cpp:		->vcarrying
+./mods/rifle-attachments.cpp:		->forge_colon_add
+./mods/rifle-attachments.cpp:		->forge_colon_remove
+./mods/rifle-attachments.cpp:		->forge_colon_strip
 ./mods/prefs.cpp:	->pref
 ./mods/classes/contagion.cpp:	->invoke
 ./mods/classes/pyrexia.cpp:->fire_nade

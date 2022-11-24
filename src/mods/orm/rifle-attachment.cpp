@@ -59,11 +59,11 @@ namespace mods::orm {
 	}
 	std::tuple<int16_t,std::string> rifle_attachment::delete_by_player_id(const uint64_t& player_id) {
 		return mods::orm::util::delete_where<rifle_attachment,sql_compositor>(
-		           table_name(),
-		           "rifle_player_id",
-		           "=",
-		           std::to_string(player_id)
-		       );
+		        table_name(),
+		        "rifle_player_id",
+		        "=",
+		        std::to_string(player_id)
+		    );
 	}
 
 	int16_t rifle_attachment::save() {
@@ -132,7 +132,7 @@ namespace mods::orm {
 		auto primary = player->primary();
 		auto secondary = player->secondary();
 		for(auto& row : mods::rifle_attachments::by_player(player)) {
-			std::cerr << green_str("rifle_attachment saving rifle:") << row->export_objects() << "\n";
+			//std::cerr << green_str("rifle_attachment saving rifle:") << row->export_objects() << "\n";
 			if(primary && primary->uuid == row->base_object->uuid) {
 				r.initialize_row(player->db_id(),row->export_objects(),mods::orm::rifle_attachment::POSITION_PRIMARY);
 			} else if(secondary && secondary->uuid == row->base_object->uuid) {

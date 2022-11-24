@@ -1,10 +1,11 @@
 #ifndef __MENTOC_MODS_RIFLE_ATTACHMENTS_HEADER__
 #define __MENTOC_MODS_RIFLE_ATTACHMENTS_HEADER__
 #include "deep-object-parser.hpp"
+#include "weapon-types.hpp"
 
 #ifdef __MENTOC_PARSER_DEBUG__
 #define mdo_debug(A)\
-			std::cerr << "[mods::deep_object_parser:" << A << "\n";
+	std::cerr << "[mods::deep_object_parser:" << A << "\n";
 #else
 #define mdo_debug(A) /**-*/
 #endif
@@ -14,6 +15,30 @@ namespace mods {
 
 	struct rifle_attachments_t {
 			using encoding_t = std::string;
+			enum import_error_t : int16_t {
+				IMPORT_OKAY = 0,
+				INVALID_SIGHT = -1,
+				INVALID_UNDER_BARREL = -2,
+				INVALID_GRIP = -3,
+				INVALID_BARREL = -4,
+				INVALID_MUZZLE = -5,
+				INVALID_MAGAZINE = -6,
+				INVALID_STOCK = - 7,
+				INVALID_STRAP = -8,
+				INVALID_BASE_OBJECT = -9,
+			};
+			enum slot_t : int16_t {
+				SLOT_UNKNOWN = -1,
+				SLOT_SIGHT = mw_attachment::SIGHT,
+				SLOT_UNDERBARREL = mw_attachment::UNDER_BARREL,
+				SLOT_GRIP = mw_attachment::GRIP,
+				SLOT_BARREL = mw_attachment::BARREL,
+				SLOT_MUZZLE = mw_attachment::MUZZLE,
+				SLOT_MAGAZINE = mw_attachment::MAGAZINE,
+				SLOT_STOCK = mw_attachment::STOCK,
+				SLOT_STRAP = mw_attachment::STRAP,
+			};
+
 			obj_ptr_t sight;
 			obj_ptr_t under_barrel;
 			obj_ptr_t grip;
@@ -23,26 +48,38 @@ namespace mods {
 			obj_ptr_t stock;
 			obj_ptr_t strap;
 			obj_ptr_t base_object;
+
+			obj_ptr_t set_slot(slot_t slot,obj_ptr_t& obj);
+			obj_ptr_t get_slot(slot_t slot);
 			std::string& base_yaml_file();
 			rifle_attachments_t() = delete;
 			rifle_attachments_t(const encoding_t& line) {
 				m_rifle_yaml_file = extract_base_yaml_file(line);
-				import_objects(line);
+				int16_t i = import_objects(line);
+				if(i != IMPORT_OKAY) {
+					log("WARNING: import_objects failed using line: '%s', error code: %d",line.c_str(),i);
+				}
 				mdo_debug("base yaml file:'" << base_yaml_file() << "'");
 			}
 			rifle_attachments_t(encoding_t& line) {
 				m_rifle_yaml_file = extract_base_yaml_file(line);
-				import_objects(line);
+				int16_t i = import_objects(line);
+				if(i != IMPORT_OKAY) {
+					log("WARNING: import_objects failed using line: '%s', error code: %d",line.c_str(),i);
+				}
 				mdo_debug("base yaml file:'" << base_yaml_file() << "'");
 			}
 			~rifle_attachments_t() = default;
+			void add_stats(const obj_ptr_t& object);
+			void remove_stats(const obj_ptr_t& object);
+			void update_description();
 
 			std::map<std::string,std::string> yaml_map();
 			std::map<std::string,std::string> friendly_map();
 			std::string examine();
 
 			std::string extract_base_yaml_file(const encoding_t& line);
-			void import_objects(const encoding_t&);
+			int16_t import_objects(const encoding_t&);
 			encoding_t export_objects();
 			uuid_t owner() const {
 				return m_owner_uuid;
@@ -56,6 +93,10 @@ namespace mods {
 			uint16_t get_level() const {
 				return m_rifle_level;
 			}
+
+			int16_t detach_into_inventory(player_ptr_t& player,slot_t slot);
+			int16_t attach_from_inventory(player_ptr_t& player,slot_t slot,obj_ptr_t& attachment);
+
 			int16_t base_damage;
 			int16_t incendiary_damage_percent;
 			int16_t explosive_damage_percent;
