@@ -122,18 +122,18 @@ namespace mods {
 				player->sendln(usage);
 				return;
 			}
-			std::vector<uuid_t> attachments =  mods::query_objects::query_inventory_for_object(player,vec_args[0]);
-			std::vector<uuid_t> weapons =  mods::query_objects::query_inventory_for_object(player,vec_args[1]);
-			if(attachments.size() == 0) {
+			auto aopt =  mods::query_objects::inv::query_for_single_object(player,vec_args[0]);
+			auto wopt =  mods::query_objects::inv::query_for_single_object(player,vec_args[1]);
+			if(!aopt.has_value()) {
 				player->sendln("Couldn't find attachment in your inventory!");
 				return;
 			}
-			if(weapons.size() == 0) {
+			if(!wopt.has_value()) {
 				player->sendln("Couldn't find weapon in your inventory!");
 				return;
 			}
-			auto a = optr_by_uuid(attachments[0]);
-			auto w = optr_by_uuid(weapons[0]);
+			auto a = optr_by_uuid(aopt.value());
+			auto w = optr_by_uuid(wopt.value());
 			if(!a) {
 				player->sendln("Attachment is invalid!");
 				return;
@@ -143,9 +143,6 @@ namespace mods {
 				return;
 			}
 			if(w->has_rifle() == false) {
-				/**
-				 * FIXME: we should allow for attachments to melee weapons
-				 */
 				player->sendln(CAT(w->name.c_str()," is not a rifle!"));
 				return;
 			}
@@ -172,7 +169,7 @@ namespace mods {
 							player->sendln(CAT("You successfully modify ",rifle->base_object->name.c_str()));
 							return;
 						default:
-							player->sendln(CAT("You cuoldn't attach anything to a ",rifle->base_object->name.c_str()));
+							player->sendln(CAT("You couldn't attach anything to a ",rifle->base_object->name.c_str()));
 							return;
 					}
 				}
@@ -188,18 +185,18 @@ namespace mods {
 				player->sendln(usage);
 				return;
 			}
-			std::vector<uuid_t> attachments =  mods::query_objects::query_inventory_for_object(player,vec_args[0]);
-			std::vector<uuid_t> weapons =  mods::query_objects::query_inventory_for_object(player,vec_args[1]);
-			if(attachments.size() == 0) {
+			auto aopt =  mods::query_objects::inv::query_for_single_object(player,vec_args[0]);
+			auto wopt =  mods::query_objects::inv::query_for_single_object(player,vec_args[1]);
+			if(!aopt.has_value()) {
 				player->sendln("Couldn't find attachment in your inventory!");
 				return;
 			}
-			if(weapons.size() == 0) {
+			if(!wopt.has_value()) {
 				player->sendln("Couldn't find weapon in your inventory!");
 				return;
 			}
-			auto a = optr_by_uuid(attachments[0]);
-			auto w = optr_by_uuid(weapons[0]);
+			auto a = optr_by_uuid(aopt.value());
+			auto w = optr_by_uuid(wopt.value());
 			if(!a) {
 				player->sendln("Attachment is invalid!");
 				return;
@@ -207,6 +204,25 @@ namespace mods {
 			if(!w) {
 				player->sendln("Weapon is invalid!");
 				return;
+			}
+			auto list = by_player(player);
+			if(list.size() == 0) {
+				player->sendln("You don't have any weapons in your inventory that can be modified");
+				return;
+			}
+			for(auto& rifle : list) {
+				if(rifle->base_object && rifle->base_object->uuid == w->uuid) {
+					m_debug(CAT("Found base_object match: '",rifle->base_object->name.c_str(),"' uuid:'",w->uuid,"'"));
+					m_debug(CAT("attachment->type:'", a->attachment()->type,"', attr-type:'",a->attachment()->attributes->type,"'"));
+					m_debug(CAT("attachment->str_type:'", a->attachment()->attributes->str_type,"'"));
+					auto status = rifle->detach_into_inventory(player,a->attachment()->attributes->str_type);
+					if(status) {
+						update_global_list(rifle);
+					} else {
+						player->sendln("It seems that slot is empty already.");
+					}
+					return;
+				}
 			}
 
 		}
@@ -344,11 +360,47 @@ namespace mods {
 				return;
 		}
 	}
-	int16_t rifle_attachments_t::attach_from_inventory(player_ptr_t& player,std::string_view slot,obj_ptr_t& attachment) {
-		auto opt = from_string_to_slot(slot);
+	/**
+	 * Returns number of items detached from the weapon.
+	 */
+	int16_t rifle_attachments_t::detach_into_inventory(player_ptr_t& player,const slot_t& slot) {
+		if(has_slot(slot)) {
+			obj_ptr_t obj = get_slot(slot);
+			clear_slot(slot);
+			player->sendln(CAT("You remove ",obj->name.c_str()," from ",base_object->name.c_str()));
+			player->sendln(CAT("You put ",obj->name.c_str()," into your inventory"));
+			player->carry(obj);
+			remove_stats(obj);
+			return 1;
+		}
+		return 0;
+
+	}
+	int16_t rifle_attachments_t::attach_from_inventory(player_ptr_t& player,std::string_view str,obj_ptr_t& attachment) {
+		auto opt = from_string_to_slot(str);
 		if(opt.has_value()) {
-			const slot_t& s = (slot_t)opt.value();
-			return attach_from_inventory(player,s,attachment);
+			const slot_t& slot = (slot_t)opt.value();
+
+			if(!attachment) {
+				return -1;
+			}
+			if(!attachment->has_attachment()) {
+				return -2;
+			}
+			obj_ptr_t existing = get_slot(slot);
+			if(existing) {
+				if(detach_into_inventory(player,slot)) {
+					player->sendln(CAT("You remove a ",existing->name.c_str()," from a ",base_object->name.c_str()));
+					player->sendln(CAT("You place a ",existing->name.c_str()," in your inventory."));
+				}
+			}
+			player->sendx(CAT("You grab a ",attachment->name.c_str()).c_str());
+			player->uncarry(attachment);
+			player->sendln(CAT(" and attach it to a ",base_object->name.c_str(),"..."));
+			set_slot(slot,attachment);
+			add_stats(attachment);
+			update_description();
+			return 0;
 		}
 		return -5;
 	}
@@ -357,10 +409,8 @@ namespace mods {
 			case SLOT_SIGHT:
 				return !!sight;
 			case SLOT_UNDERBARREL:
-				m_debug("checking under_barrel");
 				return !!under_barrel;
 			case SLOT_GRIP:
-				m_debug("checking grip");
 				return !!grip;
 			case SLOT_BARREL:
 				return !!barrel;
@@ -379,17 +429,13 @@ namespace mods {
 	}
 
 	/**
-	 * Returns zero if no item is in the slot. Returns 1 if item removed from slot and put in inventory
+	 * Wrapper function that ultimately calls the real detach_into_inventory
 	 */
-	int16_t rifle_attachments_t::detach_into_inventory(player_ptr_t& player,const slot_t& slot) {
-		if(has_slot(slot)) {
-			obj_ptr_t obj = get_slot(slot);
-			clear_slot(slot);
-			player->sendln(CAT("You remove ",obj->name.c_str()," from ",base_object->name.c_str()));
-			player->sendln(CAT("You put ",obj->name.c_str()," into your inventory"));
-			player->carry(obj);
-			remove_stats(obj);
-			return 1;
+	int16_t rifle_attachments_t::detach_into_inventory(player_ptr_t& player,std::string_view str) {
+		auto opt = from_string_to_slot(str);
+		if(opt.has_value()) {
+			const slot_t& slot = (slot_t)opt.value();
+			return detach_into_inventory(player,slot);
 		}
 		return 0;
 	}
@@ -479,32 +525,8 @@ namespace mods {
 			case SLOT_STRAP:
 				return strap;
 			default:
-				assert(false);
 				return base_object;
 		}
-	}
-	int16_t rifle_attachments_t::attach_from_inventory(player_ptr_t& player,const slot_t& slot,obj_ptr_t& attachment) {
-
-		if(!attachment) {
-			return -1;
-		}
-		if(!attachment->has_attachment()) {
-			return -2;
-		}
-		obj_ptr_t existing = get_slot(slot);
-		if(existing) {
-			if(detach_into_inventory(player,slot)) {
-				player->sendln(CAT("You remove a ",existing->name.c_str()," from a ",base_object->name.c_str()));
-				player->sendln(CAT("You place a ",existing->name.c_str()," in your inventory."));
-			}
-		}
-		player->sendx(CAT("You grab a ",attachment->name.c_str()).c_str());
-		player->uncarry(attachment);
-		player->sendln(CAT(" and attach it to a ",base_object->name.c_str(),"..."));
-		set_slot(slot,attachment);
-		add_stats(attachment);
-		update_description();
-		return 0;
 	}
 	int16_t rifle_attachments_t::import_objects(const encoding_t& line) {
 		auto map = m_parser.extract_line_items(line,mods::util::slot_names_for_type("rifle"));

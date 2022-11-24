@@ -98,7 +98,7 @@ namespace mods {
 			std::optional<slot_t> from_string_to_slot(std::string_view str);
 
 			int16_t detach_into_inventory(player_ptr_t& player,const slot_t& slot);
-			int16_t attach_from_inventory(player_ptr_t& player,const slot_t& slot,obj_ptr_t& attachment);
+			int16_t detach_into_inventory(player_ptr_t& player,std::string_view slot);
 			int16_t attach_from_inventory(player_ptr_t& player,std::string_view slot,obj_ptr_t& attachment);
 
 			int16_t base_damage;

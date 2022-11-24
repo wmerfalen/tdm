@@ -9,9 +9,9 @@
 #include "loops.hpp"
 
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
-#define mc_debug(A) std::cerr << "[mods::query_objects][debug]:" << A <<"\n";
+	#define mc_debug(A) std::cerr << "[mods::query_objects][debug]:" << A <<"\n";
 #else
-#define mc_debug(A)
+	#define mc_debug(A)
 #endif
 
 /* Generic Find, designed to find any object/character
@@ -147,6 +147,16 @@ namespace mods::query_objects {
 		return objects;
 	}
 
+	namespace inv {
+		std::optional<uuid_t> query_for_single_object(player_ptr_t& player, std::string_view name) {
+			for(const auto& obj : player->vcarrying()) {
+				if(isname(name.data(),obj->name)) {
+					return obj->uuid;
+				}
+			}
+			return std::nullopt;
+		}
+	};
 
 	std::vector<uuid_t> query_inventory_container_by_yaml(player_ptr_t& player, std::string_view container, std::string_view yaml_file) {
 		std::vector<uuid_t> objects;
