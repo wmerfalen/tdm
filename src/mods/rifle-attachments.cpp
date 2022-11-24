@@ -5,7 +5,7 @@
 
 #define __MENTOC_SHOW_MODS_RIFLE_ATTACHMENT_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_RIFLE_ATTACHMENT_DEBUG_OUTPUT__
-	#define m_debug(MSG) mentoc_prefix_debug("[mods::orm::admin::rifle_attribute_limits]")  << MSG << "\n";
+	#define m_debug(MSG) mentoc_prefix_debug("[mods::rifle_attachments]")  << MSG << "\n";
 #else
 	#define m_debug(MSG) ;;
 #endif
@@ -25,7 +25,7 @@ namespace mods {
 				}
 				auto ptr = by_uuid(item->uuid);
 				if(ptr) {
-					if(std::find(uuid_list.begin(),uuid_list.end(),item->uuid) == uuid_list.end()) {
+					if(std::find(uuid_list.cbegin(),uuid_list.cend(),item->uuid) == uuid_list.cend()) {
 						list.emplace_back(ptr);
 						uuid_list.emplace_back(item->uuid);
 					}
@@ -37,7 +37,7 @@ namespace mods {
 				}
 				auto ptr = by_uuid(item->uuid);
 				if(ptr) {
-					if(std::find(uuid_list.begin(),uuid_list.end(),item->uuid) == uuid_list.end()) {
+					if(std::find(uuid_list.cbegin(),uuid_list.cend(),item->uuid) == uuid_list.cend()) {
 						list.emplace_back(ptr);
 						uuid_list.emplace_back(item->uuid);
 					}
@@ -46,9 +46,7 @@ namespace mods {
 			return list;
 		}
 		void erase(const uuid_t& uuid) {
-#ifdef __MENTOC_SHOW_RIFLE_DEBUG__
 			std::cerr << green_str("erasing uuid from rifle attachments:") << uuid << "\n";
-#endif
 			uuid_schema_list().erase(uuid);
 			global_list().erase(uuid);
 		}
@@ -71,6 +69,10 @@ namespace mods {
 			global_list()[ptr->base_object->uuid] = ptr;
 			uuid_schema_list()[ptr->base_object->uuid] = str;
 			return ptr;
+		}
+		void update_global_list(std::shared_ptr<mods::rifle_attachments_t>& ptr) {
+			global_list()[ptr->base_object->uuid] = ptr;
+			uuid_schema_list()[ptr->base_object->uuid] = ptr->export_objects();
 		}
 
 		SUPERCMD(do_instantiate_rifle_attachment) {
@@ -140,10 +142,6 @@ namespace mods {
 				player->sendln("Weapon is invalid!");
 				return;
 			}
-			if(a->has_attachment() == false) {
-				player->sendln(CAT(a->name.c_str()," cannot be attached to a weapon!"));
-				return;
-			}
 			if(w->has_rifle() == false) {
 				/**
 				 * FIXME: we should allow for attachments to melee weapons
@@ -156,10 +154,27 @@ namespace mods {
 				player->sendln("You don't have any weapons in your inventory that can be modified");
 				return;
 			}
-			for(const auto& rifle : list) {
+			for(auto& rifle : list) {
 				if(rifle->base_object && rifle->base_object->uuid == w->uuid) {
-					player->sendln(CAT("Found base_object match: '",rifle->base_object->name.c_str(),"' uuid:'",w->uuid,"'"));
-					rifle->attach_from_inventory(player,a->attachment()->type,a);
+					m_debug(CAT("Found base_object match: '",rifle->base_object->name.c_str(),"' uuid:'",w->uuid,"'"));
+					m_debug(CAT("attachment->type:'", a->attachment()->type,"', attr-type:'",a->attachment()->attributes->type,"'"));
+					m_debug(CAT("attachment->str_type:'", a->attachment()->attributes->str_type,"'"));
+					auto status = rifle->attach_from_inventory(player,a->attachment()->attributes->str_type,a);
+					update_global_list(rifle);
+					switch(status) {
+						case -1:
+							player->sendln("Invalid attachment object");
+							return;
+						case -2:
+							player->sendln("Object is not an attachment");
+							return;
+						case 0:
+							player->sendln(CAT("You successfully modify ",rifle->base_object->name.c_str()));
+							return;
+						default:
+							player->sendln(CAT("weird result: ",status));
+							return;
+					}
 					return;
 				}
 			}
@@ -237,72 +252,142 @@ namespace mods {
 		}
 	};
 
-	/**
-	 * Returns zero if no item is in the slot. Returns 1 if item removed from slot and put in inventory
-	 */
-	int16_t rifle_attachments_t::detach_into_inventory(player_ptr_t& player,slot_t slot) {
-		obj_ptr_t obj = nullptr;
+	std::optional<rifle_attachments_t::slot_t> rifle_attachments_t::from_string_to_slot(std::string_view str) {
+		m_debug("from_string_to_slot comparing: '" << str << "'");
+		if(str.compare("SIGHT") == 0) {
+			return SLOT_SIGHT;
+		}
+		if(str.compare("UNDER_BARREL") == 0) {
+			m_debug("is UNDER_BARREL");
+			return SLOT_UNDERBARREL;
+		}
+		if(str.compare("GRIP") == 0) {
+			return SLOT_GRIP;
+		}
+		if(str.compare("BARREL") == 0) {
+			return SLOT_BARREL;
+		}
+		if(str.compare("MUZZLE") == 0) {
+			return SLOT_MUZZLE;
+		}
+		if(str.compare("MAGAZINE") == 0) {
+			return SLOT_MAGAZINE;
+		}
+		if(str.compare("STOCK") == 0) {
+			return SLOT_STOCK;
+		}
+		if(str.compare("STRAP") == 0) {
+			return SLOT_STRAP;
+		}
+		return std::nullopt;
+	}
+	void rifle_attachments_t::clear_slot(const slot_t& slot) {
 		switch(slot) {
 			case SLOT_SIGHT:
-				if(!sight) {
-					return 0;
-				}
-				obj = sight;
 				sight = nullptr;
 				break;
 			case SLOT_UNDERBARREL:
-				if(!under_barrel) {
-					return 0;
-				}
-				obj = under_barrel;
 				under_barrel = nullptr;
 				break;
 			case SLOT_GRIP:
-				if(!grip) {
-					return 0;
-				}
-				obj = grip;
 				grip = nullptr;
 				break;
 			case SLOT_BARREL:
-				if(!barrel) {
-					return 0;
-				}
-				obj = barrel;
 				barrel = nullptr;
 				break;
 			case SLOT_MUZZLE:
-				if(!muzzle) {
-					return 0;
-				}
-				obj = muzzle;
 				muzzle = nullptr;
 				break;
 			case SLOT_MAGAZINE:
-				if(!magazine) {
-					return 0;
-				}
-				obj = magazine;
 				magazine = nullptr;
 				break;
 			case SLOT_STOCK:
-				if(!stock) {
-					return 0;
-				}
-				obj = stock;
 				stock = nullptr;
 				break;
 			case SLOT_STRAP:
-				if(!strap) {
-					return 0;
-				}
-				obj = strap;
 				strap = nullptr;
-			default:
-				obj = nullptr;
 				break;
+			default:
+				std::cerr << "warning: didn't clear a slot\n";
+				return;
 		}
-		if(obj) {
+		m_debug("Slot cleared: " << slot);
+	}
+	void rifle_attachments_t::set_slot(const slot_t& slot,obj_ptr_t& obj) {
+		switch(slot) {
+			case SLOT_SIGHT:
+				sight = obj;
+				break;
+			case SLOT_UNDERBARREL:
+				under_barrel = obj;
+				break;
+			case SLOT_GRIP:
+				m_debug("grip set to: '" << obj->name.c_str() << "'");
+				grip = obj;
+				break;
+			case SLOT_BARREL:
+				barrel = obj;
+				break;
+			case SLOT_MUZZLE:
+				muzzle = obj;
+				break;
+			case SLOT_MAGAZINE:
+				magazine = obj;
+				break;
+			case SLOT_STOCK:
+				stock = obj;
+				break;
+			case SLOT_STRAP:
+				strap = obj;
+				break;
+			default:
+				m_debug("not setting because unrecognized slot: " << slot);
+				return;
+		}
+	}
+	int16_t rifle_attachments_t::attach_from_inventory(player_ptr_t& player,std::string_view slot,obj_ptr_t& attachment) {
+		auto opt = from_string_to_slot(slot);
+		if(opt.has_value()) {
+			const slot_t& s = (slot_t)opt.value();
+			return attach_from_inventory(player,s,attachment);
+		}
+		return -5;
+	}
+	bool rifle_attachments_t::has_slot(const slot_t& slot) {
+		switch(slot) {
+			case SLOT_SIGHT:
+				return !!sight;
+			case SLOT_UNDERBARREL:
+				m_debug("checking under_barrel");
+				return !!under_barrel;
+			case SLOT_GRIP:
+				m_debug("checking grip");
+				return !!grip;
+			case SLOT_BARREL:
+				return !!barrel;
+			case SLOT_MUZZLE:
+				return !!muzzle;
+			case SLOT_MAGAZINE:
+				return !!magazine;
+			case SLOT_STOCK:
+				return !!stock;
+			case SLOT_STRAP:
+				return !!strap;
+			default:
+				return false;
+		}
+
+	}
+
+	/**
+	 * Returns zero if no item is in the slot. Returns 1 if item removed from slot and put in inventory
+	 */
+	int16_t rifle_attachments_t::detach_into_inventory(player_ptr_t& player,const slot_t& slot) {
+		if(has_slot(slot)) {
+			obj_ptr_t obj = get_slot(slot);
+			clear_slot(slot);
+			player->sendln(CAT("You remove ",obj->name.c_str()," from ",base_object->name.c_str()));
+			player->sendln(CAT("You put ",obj->name.c_str()," into your inventory"));
 			player->carry(obj);
 			remove_stats(obj);
 			return 1;
@@ -372,9 +457,11 @@ namespace mods {
 		night_vision_range += object->attachment()->attributes->night_vision_range;
 	}
 	void rifle_attachments_t::update_description() {
-		base_object->action_description = this->examine();
+		yaml_map();
+		friendly_map();
+		base_object->action_description = examine();
 	}
-	obj_ptr_t rifle_attachments_t::get_slot(slot_t slot) {
+	obj_ptr_t& rifle_attachments_t::get_slot(const slot_t& slot) {
 		switch(slot) {
 			case SLOT_SIGHT:
 				return sight;
@@ -393,32 +480,11 @@ namespace mods {
 			case SLOT_STRAP:
 				return strap;
 			default:
-				return nullptr;
+				assert(false);
+				return base_object;
 		}
 	}
-	obj_ptr_t rifle_attachments_t::set_slot(slot_t slot,obj_ptr_t& obj) {
-		switch(slot) {
-			case SLOT_SIGHT:
-				return sight = obj;
-			case SLOT_UNDERBARREL:
-				return under_barrel = obj;
-			case SLOT_GRIP:
-				return grip = obj;
-			case SLOT_BARREL:
-				return barrel = obj;
-			case SLOT_MUZZLE:
-				return muzzle = obj;
-			case SLOT_MAGAZINE:
-				return magazine = obj;
-			case SLOT_STOCK:
-				return stock = obj;
-			case SLOT_STRAP:
-				return strap = obj;
-			default:
-				return nullptr;
-		}
-	}
-	int16_t rifle_attachments_t::attach_from_inventory(player_ptr_t& player,slot_t slot,obj_ptr_t& attachment) {
+	int16_t rifle_attachments_t::attach_from_inventory(player_ptr_t& player,const slot_t& slot,obj_ptr_t& attachment) {
 
 		if(!attachment) {
 			return -1;
@@ -433,10 +499,12 @@ namespace mods {
 				player->sendln(CAT("You carry {grn}",existing->name.c_str(),"{/grn}"));
 			}
 		}
-		player->sendx(CAT("You grab ",attachment->name.c_str()).c_str());
+		player->sendx(CAT("You grab your ",attachment->name.c_str()).c_str());
 		player->uncarry(attachment);
-		player->sendln(CAT(" and attach it to",base_object->name.c_str(),"..."));
+		player->sendln(CAT(" and attach it to a ",base_object->name.c_str(),"..."));
+		set_slot(slot,attachment);
 		add_stats(attachment);
+		update_description();
 		return 0;
 	}
 	int16_t rifle_attachments_t::import_objects(const encoding_t& line) {
@@ -576,6 +644,7 @@ namespace mods {
 			files["under_barrel"] = under_barrel->feed_file();
 		}
 		if(grip) {
+			m_debug("setting grip");
 			files["grip"] = grip->feed_file();
 		}
 		if(barrel) {
@@ -597,9 +666,7 @@ namespace mods {
 	}
 	std::string short_desc(auto& in_a) {
 		if(!in_a->has_attachment()) {
-#ifdef __MENTOC_ATTACHMENT_DEBUG__
 			std::cerr << red_str("item doesnt have attachment!") << "\n";
-#endif
 			return "";
 		}
 		auto& a = in_a->attachment()->attributes;

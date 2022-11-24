@@ -242,6 +242,9 @@ bool look_at_weapon(player_ptr_t& player,obj_ptr_t& obj) {
 		player->sendln(mods::weapons::get_unique_weapon_description(obj));
 	}
 	if(mods::rifle::is_rifle_attachment(obj.get())) {
+		// FIXME
+		player->sendln("it is a rifle attachment");
+		player->sendln(CAT("obj->uuid:'",obj->uuid,"'"));
 		player->sendln(mods::rifle_attachments::by_uuid(obj->uuid)->examine());
 		return true;
 	}
@@ -249,6 +252,8 @@ bool look_at_weapon(player_ptr_t& player,obj_ptr_t& obj) {
 		return true;
 	}
 	if(obj->action_description.length()) {
+		// FIXME
+		player->sendln("using action_description");
 		player->sendln(obj->action_description);
 		return true;
 	}

@@ -49,8 +49,10 @@ namespace mods {
 			obj_ptr_t strap;
 			obj_ptr_t base_object;
 
-			obj_ptr_t set_slot(slot_t slot,obj_ptr_t& obj);
-			obj_ptr_t get_slot(slot_t slot);
+			void clear_slot(const slot_t& slot);
+			void set_slot(const slot_t& slot,obj_ptr_t& obj);
+			obj_ptr_t& get_slot(const slot_t& slot);
+			bool has_slot(const slot_t& slot);
 			std::string& base_yaml_file();
 			rifle_attachments_t() = delete;
 			rifle_attachments_t(const encoding_t& line) {
@@ -93,9 +95,11 @@ namespace mods {
 			uint16_t get_level() const {
 				return m_rifle_level;
 			}
+			std::optional<slot_t> from_string_to_slot(std::string_view str);
 
-			int16_t detach_into_inventory(player_ptr_t& player,slot_t slot);
-			int16_t attach_from_inventory(player_ptr_t& player,slot_t slot,obj_ptr_t& attachment);
+			int16_t detach_into_inventory(player_ptr_t& player,const slot_t& slot);
+			int16_t attach_from_inventory(player_ptr_t& player,const slot_t& slot,obj_ptr_t& attachment);
+			int16_t attach_from_inventory(player_ptr_t& player,std::string_view slot,obj_ptr_t& attachment);
 
 			int16_t base_damage;
 			int16_t incendiary_damage_percent;
