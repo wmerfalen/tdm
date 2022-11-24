@@ -172,10 +172,9 @@ namespace mods {
 							player->sendln(CAT("You successfully modify ",rifle->base_object->name.c_str()));
 							return;
 						default:
-							player->sendln(CAT("weird result: ",status));
+							player->sendln(CAT("You cuoldn't attach anything to a ",rifle->base_object->name.c_str()));
 							return;
 					}
-					return;
 				}
 			}
 			player->sendln("You could not modify any weapon in your inventory.");
@@ -495,11 +494,11 @@ namespace mods {
 		obj_ptr_t existing = get_slot(slot);
 		if(existing) {
 			if(detach_into_inventory(player,slot)) {
-				player->sendln(CAT("You remove {grn}",existing->name.c_str(),"{/grn} from ",base_object->name.c_str()));
-				player->sendln(CAT("You carry {grn}",existing->name.c_str(),"{/grn}"));
+				player->sendln(CAT("You remove a ",existing->name.c_str()," from a ",base_object->name.c_str()));
+				player->sendln(CAT("You place a ",existing->name.c_str()," in your inventory."));
 			}
 		}
-		player->sendx(CAT("You grab your ",attachment->name.c_str()).c_str());
+		player->sendx(CAT("You grab a ",attachment->name.c_str()).c_str());
 		player->uncarry(attachment);
 		player->sendln(CAT(" and attach it to a ",base_object->name.c_str(),"..."));
 		set_slot(slot,attachment);
