@@ -13,6 +13,12 @@ durability_profile: 5 #int16_t, ENUM 0=FLIMSY,1=DECENT,2=DURABLE,3=HARDENED,4=IN
 accuracy_points: 70 #int16_t,the higher the value, the more control
 incendiary_damage: 0 #int16_t, amount of incendiary damage
 radiation_damage: 0 #int16_t, amount of radiation damage
+# @@@@@ ATTENTION @@@@@
+# @@@@@ 
+# @@@@@ This value is used in a unit test. If you update armor_penetration_amount, please also update
+# @@@@@ the unit test at mods/unit-tests/rifle-attachments.cpp
+# @@@@@ 
+# @@@@@ ATTENTION @@@@@
 armor_penetration_amount: 13 #int16_t, amount of armor penetration done
 disorient_amount: 0 #int16_t, amount of disorientation done
 incendiary_damage_percent: 0 #int16_t,incendiary damage percent
