@@ -25,9 +25,9 @@
 
 //#define  __MENTOC_SHOW_SOCIALS_DEBUG__
 #ifdef __MENTOC_SHOW_SOCIALS_DEBUG__
-#define m_debug(A) std::cerr << "[socials:LINE(" << __LINE__ << ")]: " << A << "\n";
+	#define m_debug(A) std::cerr << "[socials:LINE(" << __LINE__ << ")]: " << A << "\n";
 #else
-#define m_debug(A)
+	#define m_debug(A)
 #endif
 /* local globals */
 static int list_top = -1;
@@ -129,7 +129,16 @@ ACMD(do_action) {
 
 	if(!*buf) {
 		send_to_char(ch, "%s", action->char_no_arg);
-		act(action->others_no_arg, action->hide, ch, 0, 0, TO_ROOM);
+		/**
+		 * Adding this line fixed an issue when the user types in 'nu' and hits enter.
+		 * The social it was trying to use was either nudge or nuzzle. Adding this
+		 * line doesn't necessarily fix the bug, but i think optimization of the
+		 * resulting binary may have caused the code to be recompiled in such a way
+		 * that the resulting act.social.o file refreshed the logic.
+		 */
+		if(action && action->others_no_arg) {
+			act(action->others_no_arg, action->hide, ch, 0, 0, TO_ROOM);
+		}
 		return;
 	}
 

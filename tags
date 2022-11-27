@@ -97,7 +97,7 @@ ACMD	src/act.other.cpp	/^ACMD(do_use) {$/;"	kind:function	line:669	signature:(do
 ACMD	src/act.other.cpp	/^ACMD(do_visible) {$/;"	kind:function	line:342	signature:(do_visible)
 ACMD	src/act.other.cpp	/^ACMD(do_wimpy) {$/;"	kind:function	line:735	signature:(do_wimpy)
 ACMD	src/act.social.cpp	/^ACMD(do_action) {$/;"	kind:function	line:111	signature:(do_action)
-ACMD	src/act.social.cpp	/^ACMD(do_insult) {$/;"	kind:function	line:158	signature:(do_insult)
+ACMD	src/act.social.cpp	/^ACMD(do_insult) {$/;"	kind:function	line:167	signature:(do_insult)
 ACMD	src/act.wizard.cpp	/^ACMD(do_stat) {$/;"	kind:function	line:838	signature:(do_stat)
 ACMD	src/graph.cpp	/^ACMD(do_track) {$/;"	kind:function	line:171	signature:(do_track)
 ACMD	src/house.cpp	/^ACMD(do_hcontrol) {$/;"	kind:function	line:551	signature:(do_hcontrol)
@@ -5856,7 +5856,7 @@ boot_flag	src/mods/boot-flags.hpp	11;"	kind:macro	line:11	file:
 boot_flags	src/mods/boot-flags.cpp	/^namespace mods::boot_flags {$/;"	kind:namespace	line:5	class:mods	file:
 boot_flags	src/mods/boot-flags.hpp	/^namespace mods::boot_flags {$/;"	kind:namespace	line:6	class:mods	file:
 boot_hell	src/db.cpp	/^void boot_hell(void) {$/;"	kind:function	line:247	signature:(void)
-boot_social_messages	src/act.social.cpp	/^void boot_social_messages(void) {$/;"	kind:function	line:322	signature:(void)
+boot_social_messages	src/act.social.cpp	/^void boot_social_messages(void) {$/;"	kind:function	line:331	signature:(void)
 boot_social_messages	src/mods/hell.hpp	/^	constexpr inline bool boot_social_messages = false;$/;"	kind:member	line:7	namespace:mods::hell	file:
 boot_sql_shops	src/shop.cpp	/^void boot_sql_shops() {$/;"	kind:function	line:1261	signature:()
 boot_suite	src/mods/pregame.cpp	/^	void boot_suite(std::string_view suite){$/;"	kind:function	line:5	namespace:mods::pregame	signature:(std::string_view suite)
@@ -8219,11 +8219,11 @@ exit_with	src/comm.cpp	/^void exit_with(int code) {$/;"	kind:function	line:287	s
 exp	src/mods/player.hpp	/^			auto& exp() {$/;"	kind:function	line:382	namespace:mods	access:public	signature:()
 exp	src/structs.h	/^	upoints_t exp;            \/* The experience of the player            *\/$/;"	kind:member	line:1218	struct:char_point_data	file:	access:public
 expand_safe_escape_codes	src/mods/util.cpp	/^	std::string expand_safe_escape_codes(std::string_view str,std::size_t screen_width) {$/;"	kind:function	line:178	namespace:mods::util	signature:(std::string_view str,std::size_t screen_width)
-expect_digit	src/act.social.cpp	/^bool expect_digit(FILE* fl) {$/;"	kind:function	line:300	signature:(FILE* fl)
+expect_digit	src/act.social.cpp	/^bool expect_digit(FILE* fl) {$/;"	kind:function	line:309	signature:(FILE* fl)
 expect_integer	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> expect_integer(const std::string& line, counter_t in_counter) {$/;"	kind:function	line:115	namespace:mods	signature:(const std::string& line, counter_t in_counter)
 expect_item_declaration	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t,parsed_type_t> expect_item_declaration(const std::string& line, counter_t in_counter) {$/;"	kind:function	line:228	namespace:mods	signature:(const std::string& line, counter_t in_counter)
 expect_slot_name	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> expect_slot_name(const std::vector<std::string>& acceptable_slot_names,const std::string& line, counter_t in_counter) {$/;"	kind:function	line:147	namespace:mods	signature:(const std::vector<std::string>& acceptable_slot_names,const std::string& line, counter_t in_counter)
-expect_space	src/act.social.cpp	/^bool expect_space(FILE* fl) {$/;"	kind:function	line:273	signature:(FILE* fl)
+expect_space	src/act.social.cpp	/^bool expect_space(FILE* fl) {$/;"	kind:function	line:282	signature:(FILE* fl)
 experience	src/structs.h	/^	uint16_t experience;$/;"	kind:member	line:1340	struct:mob_special_data	file:	access:public
 expiration_tick	src/mods/deferred.hpp	/^		uint64_t expiration_tick;$/;"	kind:member	line:38	struct:mods::consumable_removal_description_t	file:	access:public
 explain_make	src/mods/builder/coordinates.cpp	/^	std::string_view explain_make() {$/;"	kind:function	line:8	namespace:mods::builder::rectangle_layouts	signature:()
@@ -8874,10 +8874,10 @@ found_witness	src/mods/mobs/orthos-agent.cpp	/^	void orthos_agent::found_witness
 fp	src/mods/lmdb/conf.cpp	/^static FILE* fp = NULL;$/;"	kind:member	line:7	namespace:gdns	file:
 frag	src/mods/drops.cpp	/^	static constexpr std::string_view frag = "explosive\/frag-grenade.yml";$/;"	kind:member	line:100	namespace:mods::drops	file:
 frag_underbarrel_explodes_here	src/mods/projectile.cpp	/^		std::tuple<bool,std::string> frag_underbarrel_explodes_here($/;"	kind:function	line:805	namespace:mods::projectile	signature:( player_ptr_t& attacker, obj_ptr_t& frag, const direction_t& direction, const room_rnum& room_id, const uint8_t& travel_distance )
-fread_action	src/act.social.cpp	/^char *fread_action(FILE *fl, int nr) {$/;"	kind:function	line:210	signature:(FILE *fl, int nr)
-fread_advance	src/act.social.cpp	/^void fread_advance(FILE* fl) {$/;"	kind:function	line:283	signature:(FILE* fl)
-fread_digit	src/act.social.cpp	/^std::optional<int> fread_digit(FILE* fl) {$/;"	kind:function	line:307	signature:(FILE* fl)
-fread_preview	src/act.social.cpp	/^void fread_preview(FILE* fl,std::size_t count) {$/;"	kind:function	line:287	signature:(FILE* fl,std::size_t count)
+fread_action	src/act.social.cpp	/^char *fread_action(FILE *fl, int nr) {$/;"	kind:function	line:219	signature:(FILE *fl, int nr)
+fread_advance	src/act.social.cpp	/^void fread_advance(FILE* fl) {$/;"	kind:function	line:292	signature:(FILE* fl)
+fread_digit	src/act.social.cpp	/^std::optional<int> fread_digit(FILE* fl) {$/;"	kind:function	line:316	signature:(FILE* fl)
+fread_preview	src/act.social.cpp	/^void fread_preview(FILE* fl,std::size_t count) {$/;"	kind:function	line:296	signature:(FILE* fl,std::size_t count)
 free_alias	src/interpreter.cpp	/^void free_alias(struct alias_data *a) {$/;"	kind:function	line:1077	signature:(struct alias_data *a)
 free_ammo_chance	src/mods/rifle-attachments.hpp	/^			int16_t free_ammo_chance; 				\/** honored [ 2021-04-13 ] *\/$/;"	kind:member	line:124	namespace:mods	file:
 free_char	src/db.cpp	/^void free_char(char_data *ch) {$/;"	kind:function	line:2270	signature:(char_data *ch)
@@ -8891,7 +8891,7 @@ free_next_content	src/structs.cpp	/^void obj_data::free_next_content() {$/;"	kin
 free_obj	src/db.cpp	/^void free_obj(struct obj_data *obj) {$/;"	kind:function	line:2284	signature:(struct obj_data *obj)
 free_player_index	src/db.cpp	/^void free_player_index(void) {$/;"	kind:function	line:585	signature:(void)
 free_rent	src/config.cpp	/^int free_rent = YES;$/;"	kind:variable	line:132
-free_social_messages	src/act.social.cpp	/^void free_social_messages(void) {$/;"	kind:function	line:230	signature:(void)
+free_social_messages	src/act.social.cpp	/^void free_social_messages(void) {$/;"	kind:function	line:239	signature:(void)
 free_text_files	src/db.cpp	/^void free_text_files(void) {$/;"	kind:function	line:230	signature:(void)
 freeze_level	src/structs.h	/^	byte freeze_level;		\/* Level of god who froze char, if any	*\/$/;"	kind:member	line:1284	struct:player_special_data_saved	file:	access:public
 friendly_map	src/mods/rifle-attachments.cpp	/^	std::map<std::string,std::string> rifle_attachments_t::friendly_map() {$/;"	kind:function	line:878	class:mods::rifle_attachments_t	signature:()
@@ -11152,7 +11152,7 @@ m_dbi_opened	src/mods/lmdb.hpp	/^			bool m_dbi_opened;$/;"	kind:member	line:208	
 m_deallocate	src/mods/string.cpp	/^	void string::m_deallocate() {$/;"	kind:function	line:210	class:mods::string	signature:()
 m_debug	src/act.social.cpp	28;"	kind:macro	line:28	file:
 m_debug	src/act.social.cpp	30;"	kind:macro	line:30	file:
-m_debug	src/act.social.cpp	517;"	kind:macro	line:517	file:
+m_debug	src/act.social.cpp	526;"	kind:macro	line:526	file:
 m_debug	src/fight.hpp	14;"	kind:macro	line:14	file:
 m_debug	src/fight.hpp	16;"	kind:macro	line:16	file:
 m_debug	src/mods/armor/advanced-protection.cpp	6;"	kind:macro	line:6	file:
