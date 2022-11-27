@@ -411,6 +411,8 @@ namespace mods::zone {
 					}
 					if(invalid_command_list.size() < MAX_INVALID_ZONE_DATA_COMMANDS()) {
 						invalid_command_list.emplace_back(ZCMD.id);
+					} else {
+						log("Warning: invalid_command_list size has exceeded the maximum of %d entries. Consider running admin:zone:get-invalid-commands followed by admin:zone:clear-invalid-commands",MAX_INVALID_ZONE_DATA_COMMANDS());
 					}
 					++zone_table_ignored;
 				} else {

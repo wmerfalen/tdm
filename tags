@@ -4131,12 +4131,12 @@ SUPERCMD	src/mods/target-practice.cpp	/^SUPERCMD(do_uninstall_dummy) {$/;"	kind:
 SUPERCMD	src/mods/weapons/damage-types.cpp	/^	SUPERCMD(do_inc_damage) {$/;"	kind:function	line:1285	namespace:mods::weapons::damage_types	signature:(do_inc_damage)
 SUPERCMD	src/mods/weapons/elemental.cpp	/^	SUPERCMD(do_inc_damage) {$/;"	kind:function	line:239	namespace:mods::weapons::elemental	signature:(do_inc_damage)
 SUPERCMD	src/mods/zbuild.cpp	/^SUPERCMD(do_zbuild) {$/;"	kind:function	line:414	signature:(do_zbuild)
-SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_admin_colon_zone_clear_invalid_commands) {$/;"	kind:function	line:744	namespace:mods::zone	signature:(do_admin_colon_zone_clear_invalid_commands)
-SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_admin_colon_zone_get_invalid_commands) {$/;"	kind:function	line:726	namespace:mods::zone	signature:(do_admin_colon_zone_get_invalid_commands)
-SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_list_zone_table) {$/;"	kind:function	line:569	namespace:mods::zone	signature:(do_list_zone_table)
-SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_queue_refresh) {$/;"	kind:function	line:674	namespace:mods::zone	signature:(do_queue_refresh)
-SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_reset_zone) {$/;"	kind:function	line:643	namespace:mods::zone	signature:(do_reset_zone)
-SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_uuids) {$/;"	kind:function	line:622	namespace:mods::zone	signature:(do_uuids)
+SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_admin_colon_zone_clear_invalid_commands) {$/;"	kind:function	line:746	namespace:mods::zone	signature:(do_admin_colon_zone_clear_invalid_commands)
+SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_admin_colon_zone_get_invalid_commands) {$/;"	kind:function	line:728	namespace:mods::zone	signature:(do_admin_colon_zone_get_invalid_commands)
+SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_list_zone_table) {$/;"	kind:function	line:571	namespace:mods::zone	signature:(do_list_zone_table)
+SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_queue_refresh) {$/;"	kind:function	line:676	namespace:mods::zone	signature:(do_queue_refresh)
+SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_reset_zone) {$/;"	kind:function	line:645	namespace:mods::zone	signature:(do_reset_zone)
+SUPERCMD	src/mods/zone.cpp	/^	SUPERCMD(do_uuids) {$/;"	kind:function	line:624	namespace:mods::zone	signature:(do_uuids)
 SUPERCMD	src/olc.cpp	/^SUPERCMD(do_olc) {$/;"	kind:function	line:68	signature:(do_olc)
 SUPERCMD	src/spell_parser.cpp	/^SUPERCMD(do_cast) {$/;"	kind:function	line:604	signature:(do_cast)
 SUPPORT	src/mods/classes/types.hpp	/^		SUPPORT,$/;"	kind:enumerator	line:11	enum:mods::classes::types	file:
@@ -6891,7 +6891,7 @@ create_support	src/mods/classes/support.cpp	/^	std::shared_ptr<support> create_s
 create_syndrome	src/mods/classes/syndrome.cpp	/^		std::shared_ptr<syndrome> create_syndrome(player_ptr_t &in_player){$/;"	kind:function	line:48	namespace:mods::classes	signature:(player_ptr_t &in_player)
 create_wall_of_fire	src/mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::create_wall_of_fire(uint8_t direction){$/;"	kind:function	line:171	class:mods::classes::pyrexia	signature:(uint8_t direction)
 create_wall_of_fire	src/mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::create_wall_of_fire(uint8_t direction){$/;"	kind:function	line:83	class:mods::orm::pyrexia	signature:(uint8_t direction)
-create_zone_data_erase_sql	src/mods/zone.cpp	/^	std::string create_zone_data_erase_sql(const std::vector<uint64_t>& container) {$/;"	kind:function	line:702	namespace:mods::zone	signature:(const std::vector<uint64_t>& container)
+create_zone_data_erase_sql	src/mods/zone.cpp	/^	std::string create_zone_data_erase_sql(const std::vector<uint64_t>& container) {$/;"	kind:function	line:704	namespace:mods::zone	signature:(const std::vector<uint64_t>& container)
 created_at	src/mods/classes/contagion.hpp	/^			long created_at;$/;"	kind:member	line:77	struct:mods::classes::contagion	file:	access:public
 created_at	src/mods/classes/forge.hpp	/^			long created_at;$/;"	kind:member	line:14	struct:mods::classes::forge	file:	access:public
 created_at	src/mods/classes/ghost.hpp	/^			long created_at;$/;"	kind:member	line:63	struct:mods::classes::ghost	file:	access:public
@@ -9064,7 +9064,7 @@ get_affected_by	src/mods/player.hpp	/^			std::vector<affected_type>& get_affecte
 get_affected_plr	src/mods/player.cpp	/^	aligned_int_t player::get_affected_plr() {$/;"	kind:function	line:1310	class:mods::player	signature:()
 get_affects	src/mods/affects.hpp	/^			TAffectsMap& get_affects() {$/;"	kind:function	line:295	struct:mods::affects::dissolver	access:public	signature:()
 get_all	src/mods/lmdb.cpp	/^	result_container_t transaction_t::get_all(T consumer) {$/;"	kind:function	line:61	class:mods::lmdb::transaction_t	signature:(T consumer)
-get_all_invalid_zone_data_commands	src/mods/zone.cpp	/^	std::vector<uint64_t> get_all_invalid_zone_data_commands() {$/;"	kind:function	line:426	namespace:mods::zone	signature:()
+get_all_invalid_zone_data_commands	src/mods/zone.cpp	/^	std::vector<uint64_t> get_all_invalid_zone_data_commands() {$/;"	kind:function	line:428	namespace:mods::zone	signature:()
 get_all_meta_values	src/mods/meta_utils.cpp	/^	std::vector<std::string> get_all_meta_values($/;"	kind:function	line:60	namespace:mods::meta_utils	signature:( const std::string& table,mutable_map_t* mapped_values_ptr)
 get_ammo	src/mods/object-utils.hpp	/^	uint16_t get_ammo(T& weapon) {$/;"	kind:function	line:410	namespace:mods::object_utils	signature:(T& weapon)
 get_ammo	src/mods/object-utils.hpp	/^	uint16_t get_ammo(obj_ptr_t& weapon) {$/;"	kind:function	line:464	namespace:mods::object_utils	signature:(obj_ptr_t& weapon)
@@ -9563,7 +9563,7 @@ has_found_item	src/mods/mobs/orthos-agent.cpp	/^	bool orthos_agent::has_found_it
 has_human_remains	src/mods/mobs/defiler.cpp	/^	static constexpr std::array<obj_vnum,2> has_human_remains  = {$/;"	kind:member	line:633	namespace:mods::mobs::defiler_init	file:
 has_inventory_capability	src/mods/player.cpp	/^	bool player::has_inventory_capability(int type) {$/;"	kind:function	line:689	class:mods::player	signature:(int type)
 has_key	src/act.movement.cpp	/^int has_key(char_data *ch, obj_vnum key) {$/;"	kind:function	line:354	signature:(char_data *ch, obj_vnum key)
-has_locker_of_type	src/mods/zone.cpp	/^	static inline bool has_locker_of_type(std::string_view type,const room_vnum& room) {$/;"	kind:function	line:524	namespace:mods::zone	signature:(std::string_view type,const room_vnum& room)
+has_locker_of_type	src/mods/zone.cpp	/^	static inline bool has_locker_of_type(std::string_view type,const room_vnum& room) {$/;"	kind:function	line:526	namespace:mods::zone	signature:(std::string_view type,const room_vnum& room)
 has_lowly_security_ptr	src/mods/mobs/lowly-security.hpp	/^static inline bool has_lowly_security_ptr(uuid_t u) {$/;"	kind:function	line:61	file:	signature:(uuid_t u)
 has_mail	src/mail.cpp	/^int has_mail(long recipient) {$/;"	kind:function	line:282	signature:(long recipient)
 has_mana_for_skill	src/mods/classes/breacher.hpp	/^			bool has_mana_for_skill(uint16_t skill) {$/;"	kind:function	line:20	struct:mods::classes::breacher	access:public	signature:(uint16_t skill)
@@ -10107,7 +10107,7 @@ init	src/mods/weapons/elemental.cpp	/^	void init() {$/;"	kind:function	line:262	
 init	src/mods/weapons/reload.cpp	/^	void init() {$/;"	kind:function	line:180	namespace:mods::weapons::reload	signature:()
 init	src/mods/weapons/shotgun-dst7A.cpp	/^		void init() {$/;"	kind:function	line:43	namespace:mods::weapons::shotgun::dst7a_commands	signature:()
 init	src/mods/weapons/smg-vc88.cpp	/^		void init() {$/;"	kind:function	line:36	namespace:mods::weapons::smg::vc88_commands	signature:()
-init	src/mods/zone.cpp	/^	void init() {$/;"	kind:function	line:751	namespace:mods::zone	signature:()
+init	src/mods/zone.cpp	/^	void init() {$/;"	kind:function	line:753	namespace:mods::zone	signature:()
 init	src/room-data.cpp	/^void room_data::init() {$/;"	kind:function	line:3	class:room_data	signature:()
 init	src/shop.cpp	/^void shop_data<TOrmType,T,R>::init() {$/;"	kind:function	line:1749	class:shop_data	signature:()
 init	src/structs.cpp	/^void char_data::init() {$/;"	kind:function	line:361	class:char_data	signature:()
@@ -12986,7 +12986,7 @@ new_record	src/mods/db.cpp	/^	tuple_status_t new_record(const std::string& table
 new_room	src/mods/intimidate.cpp	/^	void new_room(room_data* room_ptr){$/;"	kind:function	line:73	namespace:mods::zone	signature:(room_data* room_ptr)
 new_room	src/mods/loot.cpp	/^	void new_room(room_data* room) {$/;"	kind:function	line:340	namespace:mods::loot	signature:(room_data* room)
 new_room	src/mods/rbuild.cpp	/^	room_data new_room(player_ptr_t player,int direction) {$/;"	kind:function	line:416	namespace:mods::builder	signature:(player_ptr_t player,int direction)
-new_room	src/mods/zone.cpp	/^	void new_room(room_data* room_ptr) {$/;"	kind:function	line:531	namespace:mods::zone	signature:(room_data* room_ptr)
+new_room	src/mods/zone.cpp	/^	void new_room(room_data* room_ptr) {$/;"	kind:function	line:533	namespace:mods::zone	signature:(room_data* room_ptr)
 new_sandbox	src/mods/rbuild-sandbox.cpp	/^	int8_t sandbox_data_t::new_sandbox($/;"	kind:function	line:128	class:mods::builder::sandbox_data_t	signature:( player_ptr_t player, std::string_view name, int starting_room_number, int zone_virtual_number)
 new_smoke_grenade_object	src/mods/weapon.cpp	/^	obj_data_ptr_t new_smoke_grenade_object() {$/;"	kind:function	line:243	namespace:mods::weapon	signature:()
 new_sniper_rifle_object	src/mods/weapon.cpp	/^	obj_data_ptr_t new_sniper_rifle_object() {$/;"	kind:function	line:253	namespace:mods::weapon	signature:()
@@ -14446,7 +14446,7 @@ refresh_armor_index	src/mods/forge-engine/generated-armor.cpp	/^	static bool ref
 refresh_dump	src/mods/player-contract-instance.cpp	/^	void player_contract_instance::refresh_dump() {$/;"	kind:function	line:397	class:mods::contracts::player_contract_instance	signature:()
 refresh_mappings	src/mods/mob-equipment.cpp	/^	void refresh_mappings() {$/;"	kind:function	line:22	namespace:mods::mob_equipment	signature:()
 refresh_minimum_proficiencies	src/mods/js.cpp	/^		static duk_ret_t refresh_minimum_proficiencies(duk_context *ctx) {$/;"	kind:function	line:204	namespace:mods::js	signature:(duk_context *ctx)
-refresh_mobs_and_zones	src/mods/zone.cpp	/^	void refresh_mobs_and_zones() {$/;"	kind:function	line:680	namespace:mods::zone	signature:()
+refresh_mobs_and_zones	src/mods/zone.cpp	/^	void refresh_mobs_and_zones() {$/;"	kind:function	line:682	namespace:mods::zone	signature:()
 refresh_player_states	src/globals.cpp	/^		void refresh_player_states() {$/;"	kind:function	line:554	namespace:mods::globals	signature:()
 refresh_rifle_index	src/mods/forge-engine/generated-rifle.cpp	/^	static bool refresh_rifle_index = true;$/;"	kind:member	line:20	namespace:mods::forge_engine	file:
 refresh_tick_resolution	src/mods/zone.hpp	/^	static constexpr uint16_t refresh_tick_resolution() {$/;"	kind:function	line:54	namespace:mods::zone	signature:()
@@ -15028,7 +15028,7 @@ rr_debug	src/mods/intimidate.cpp	8;"	kind:macro	line:8	file:
 rr_debug	src/mods/intimidate.cpp	95;"	kind:macro	line:95	file:
 rr_debug	src/mods/zone.cpp	16;"	kind:macro	line:16	file:
 rr_debug	src/mods/zone.cpp	19;"	kind:macro	line:19	file:
-rr_debug	src/mods/zone.cpp	760;"	kind:macro	line:760	file:
+rr_debug	src/mods/zone.cpp	762;"	kind:macro	line:762	file:
 rtrim	src/mods/lmdb/db.hpp	/^		static inline void rtrim(std::string &s) {$/;"	kind:function	line:47	struct:gdns::util	access:public	signature:(std::string &s)
 rtrim_copy	src/mods/lmdb/db.hpp	/^		static inline std::string rtrim_copy(std::string s) {$/;"	kind:function	line:66	struct:gdns::util	access:public	signature:(std::string s)
 ruback	src/mods/drops.cpp	/^	static constexpr std::string_view ruback = "armor\/raven-ultralight-backpack.yml";$/;"	kind:member	line:161	namespace:mods::drops	file:
@@ -17310,7 +17310,7 @@ z_debug	src/mods/intimidate.cpp	7;"	kind:macro	line:7	file:
 z_debug	src/mods/intimidate.cpp	96;"	kind:macro	line:96	file:
 z_debug	src/mods/zone.cpp	15;"	kind:macro	line:15	file:
 z_debug	src/mods/zone.cpp	18;"	kind:macro	line:18	file:
-z_debug	src/mods/zone.cpp	761;"	kind:macro	line:761	file:
+z_debug	src/mods/zone.cpp	763;"	kind:macro	line:763	file:
 zone	src/db.cpp	/^namespace mods::zone {$/;"	kind:namespace	line:1377	class:mods	file:
 zone	src/db.cpp	/^namespace mods::zone {$/;"	kind:namespace	line:67	class:mods	file:
 zone	src/mods/init.hpp	/^INIT(mods::zone);$/;"	kind:variable	line:62
@@ -17340,7 +17340,7 @@ zone_to_reset	src/db.h	/^	zone_rnum zone_to_reset;            \/* ref to zone_da
 zone_transaction_id	src/mods/builder-data.hpp	/^		int zone_transaction_id;$/;"	kind:member	line:93	struct:builder_data_t	file:	access:public
 zone_update	src/db.cpp	/^void zone_update() {$/;"	kind:function	line:1981	signature:()
 zone_update	src/mods/intimidate.cpp	/^	void zone_update(){$/;"	kind:function	line:69	namespace:mods::zone	signature:()
-zone_update	src/mods/zone.cpp	/^	void zone_update() {$/;"	kind:function	line:472	namespace:mods::zone	signature:()
+zone_update	src/mods/zone.cpp	/^	void zone_update() {$/;"	kind:function	line:474	namespace:mods::zone	signature:()
 zone_vnum	src/mods/index-type.hpp	/^typedef IDXTYPE zone_vnum;$/;"	kind:typedef	line:26	file:
 zoom_magnification	src/mods/ranged-combat-totals.hpp	/^		float zoom_magnification;$/;"	kind:member	line:38	struct:mods::ranged_combat_totals	file:	access:public
 zoom_multiplier	src/mods/ranged-combat-totals.hpp	/^		float zoom_multiplier;$/;"	kind:member	line:42	struct:mods::ranged_combat_totals	file:	access:public
