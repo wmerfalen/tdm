@@ -4501,6 +4501,7 @@ INSERT INTO "public"."armor_index" VALUES (25, 'xm8-panama-combat-boots.yml', 'f
 -- Data for Name: class_breacher; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO "public"."class_breacher" VALUES (2, 112, '2022-11-09 08:07:37.194395', '2022-11-09 08:07:37.194395');
 
 
 --
@@ -4558,8 +4559,6 @@ INSERT INTO "public"."class_sniper" VALUES (1, 1, '2021-09-04 04:12:07.132625', 
 -- Data for Name: contract_step_callback; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."contract_step_callback" VALUES (11, 1, 'GOAL_FIND', 'TARGET_ROOM', 143, 1);
-INSERT INTO "public"."contract_step_callback" VALUES (12, 1, 'GOAL_FIND', 'TARGET_ROOM', 144, 2);
 INSERT INTO "public"."contract_step_callback" VALUES (15, 24, 'GOAL_GIVE', 'TARGET_MOB', 143, 26);
 INSERT INTO "public"."contract_step_callback" VALUES (16, 27, 'GOAL_GIVE', 'TARGET_MOB', 143, 4);
 INSERT INTO "public"."contract_step_callback" VALUES (17, 27, 'GOAL_FIND', 'TARGET_ROOM', 143, 5);
@@ -4583,26 +4582,18 @@ INSERT INTO "public"."contract_steps" VALUES (48, 27, 0, 0, 'description', NULL,
 INSERT INTO "public"."contract_steps" VALUES (42, 24, 512, 0, 'Give 10 MP5''s to the TRITON Labs Scientist
 ', NULL, 600, 0, 10, false, 0, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-02-01 03:04:51.293908', '2022-02-01 03:04:51.293908');
 INSERT INTO "public"."contract_steps" VALUES (49, 27, 0, 0, 'description', NULL, 0, 0, 0, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 03:56:37.027384', '2022-08-05 03:56:37.027384');
-INSERT INTO "public"."contract_steps" VALUES (27, 1, 512, 0, 'Give 10 G36C''s to the TRITON Labs Scientist
-', NULL, 600, 653, 10, false, 1, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-18 01:54:46.851098', '2021-09-18 01:54:46.851098');
 INSERT INTO "public"."contract_steps" VALUES (50, 27, 0, 0, 'description', NULL, 0, 0, 0, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 04:00:14.170689', '2022-08-05 04:00:14.170689');
 INSERT INTO "public"."contract_steps" VALUES (43, 24, 512, 0, 'Give 10 MP5''s to the TRITON Labs Scientist
 ', NULL, 600, 0, 10, false, 0, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-02-01 03:04:51.310587', '2022-02-01 03:04:51.310587');
 INSERT INTO "public"."contract_steps" VALUES (51, 27, 0, 0, 'description', NULL, 0, 0, 0, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 04:00:14.174182', '2022-08-05 04:00:14.174182');
-INSERT INTO "public"."contract_steps" VALUES (28, 1, 512, 0, 'Give 10 G36C''s to the TRITON Labs Scientist
-', NULL, 600, 143, 10, false, 1, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-18 01:54:46.85257', '2021-09-18 01:54:46.85257');
 INSERT INTO "public"."contract_steps" VALUES (52, 27, 0, 0, 'description', NULL, 0, 0, 0, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 04:01:37.998892', '2022-08-05 04:01:37.998892');
 INSERT INTO "public"."contract_steps" VALUES (44, 24, 512, 0, 'Give 10 MP5''s to the TRITON Labs Scientist
 ', NULL, 600, 0, 10, false, 0, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-02-01 03:04:51.327242', '2022-02-01 03:04:51.327242');
 INSERT INTO "public"."contract_steps" VALUES (53, 27, 0, 0, 'description', NULL, 0, 0, 0, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 04:01:38.00239', '2022-08-05 04:01:38.00239');
-INSERT INTO "public"."contract_steps" VALUES (29, 1, 512, 0, 'Give 10 G36C''s to the TRITON Labs Scientist
-', NULL, 600, 0, 10, false, 1, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-18 01:54:46.854077', '2021-09-18 01:54:46.854077');
 INSERT INTO "public"."contract_steps" VALUES (54, 27, 0, 0, 'description', NULL, 0, 0, 0, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 04:02:39.091353', '2022-08-05 04:02:39.091353');
 INSERT INTO "public"."contract_steps" VALUES (45, 24, 512, 0, 'Give 10 MP5''s to the TRITON Labs Scientist
 ', NULL, 600, 0, 10, false, 0, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-02-01 03:04:51.343902', '2022-02-01 03:04:51.343902');
 INSERT INTO "public"."contract_steps" VALUES (55, 27, 0, 0, 'description', NULL, 0, 0, 0, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 04:02:39.094581', '2022-08-05 04:02:39.094581');
-INSERT INTO "public"."contract_steps" VALUES (30, 1, 512, 0, 'Give 10 G36C''s to the TRITON Labs Scientist
-', NULL, 600, 0, 10, false, 1, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-18 01:54:46.855485', '2021-09-18 01:54:46.855485');
 INSERT INTO "public"."contract_steps" VALUES (56, 27, 0, 0, 'description', NULL, 0, 0, 0, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 04:21:56.798345', '2022-08-05 04:21:56.798345');
 INSERT INTO "public"."contract_steps" VALUES (46, 27, 512, 0, 'Give 10 MP5''s to the TRITON Labs Scientist
 ', NULL, 600, 0, 10, false, 0, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 03:52:34.443176', '2022-08-05 03:52:34.443176');
@@ -4613,23 +4604,14 @@ INSERT INTO "public"."contract_steps" VALUES (58, 27, 0, 0, 'description', NULL,
 INSERT INTO "public"."contract_steps" VALUES (47, 27, 512, 0, 'Give 10 MP5''s to the TRITON Labs Scientist
 ', NULL, 600, 0, 10, false, 0, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 03:52:34.462315', '2022-08-05 03:52:34.462315');
 INSERT INTO "public"."contract_steps" VALUES (59, 27, 0, 0, 'description', NULL, 0, 0, 0, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-05 04:22:47.266816', '2022-08-05 04:22:47.266816');
-INSERT INTO "public"."contract_steps" VALUES (26, 1, 512, 0, 'Give 10 G36C''s to the TRITON Labs Scientist
-', NULL, 600, 266, 10, false, 1, 1150, 1150, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-18 01:54:46.849428', '2021-09-18 01:54:46.849428');
+INSERT INTO "public"."contract_steps" VALUES (74, 1, 1, 1, 'Find the G36c rifle at the entrance of the border compound.', 'g36c.yml', 0, 0, 0, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-24 15:11:59.50878', '2022-11-24 15:11:59.50878');
+INSERT INTO "public"."contract_steps" VALUES (75, 1, 1, 1, 'Find the mp5 smg at the entrance of the border compound.', 'mp5.yml', 0, 0, 0, false, 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-24 15:11:59.509355', '2022-11-24 15:11:59.509355');
 
 
 --
 -- Data for Name: contracts; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."contracts" VALUES (11, 1, 'Good evening, soldier. According to recent advances in our {yel}TRITON{/yel} sponsored laboratory a new kind of ammunition is being built.
-
-The blueprint for this ammunition contains heavy amounts of radioactive isotopes from recently spent Uranium. Find the scientist in the armory to east of {blu}COBALT{/blu} Main hallway. He will give you the magazines he has made so far. Once you''ve acquired the magazines, I will give you further instructions over radio.
-{yel}Here are the contract instructions:{/yel}
-{yel}1) {grn}Find {blu}Doctor Land{/blu} {grn}in the Gear Room near the shooting range.{/grn}
-{yel}2) {grn}Find the TRITON Labs scientist. He will give you the magazines you need.
-{yel}3) {grn}Take the magazines to {blu}Doctor Land{/blu}.
-{yel}4) {grn}Talk to {blu}Doctor Land{/blu} on next steps...
-', 'Experimental {yel}High Velocity{/yel} magazines.', '2021-09-18 01:54:46.847285', '2021-09-18 01:54:46.847285');
 INSERT INTO "public"."contracts" VALUES (17, 24, 'We need you to go to the TRITON Lab and ask Doctor Land for the 
 BIOMETRIC scanner. He should be expecting you.
 {yel}Here are the contract instructions:{/yel}
@@ -4653,6 +4635,7 @@ You will need to bring back {grn}TEN{/grn} {grn}G36C Assault Rifles{/grn}.
 {yel}2) {grn}Acquire {yel}TEN{/yel}{grn} G36C''s.{/grn}
 {yel}3) {grn}Bring back all items to the {yel}TRITON{/yel} Labs scientist.{/grn}
 ', 'Atrocity MP5 Contract.', '2022-08-05 03:31:05.746535', '2022-08-05 03:31:05.746535');
+INSERT INTO "public"."contracts" VALUES (44, 1, 'Intelligence tells us that our HVT''s current location is somewhere near the Gasaraki border checkpoint. Find and eliminate doctor Friedman.', 'Find and eliminate HVT', '2022-11-24 15:11:59.508254', '2022-11-24 15:11:59.508254');
 
 
 --
@@ -5577,13 +5560,12 @@ INSERT INTO "public"."mob_equipment" VALUES (136, 'cofob-inventory-grunt', 113, 
 INSERT INTO "public"."mob_equipment" VALUES (137, 'maintenance-guard', 667, NULL, NULL, NULL, NULL, NULL, 'armor/p5-vest.yml', NULL, 'armor/p5-pants.yml', 'armor/p5-boots.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/glock.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-12 23:13:19.009975', '2022-05-12 23:13:19.009975');
 INSERT INTO "public"."mob_equipment" VALUES (138, 'maintenance-guard', 668, NULL, NULL, NULL, NULL, NULL, 'armor/p5-vest.yml', NULL, 'armor/p5-pants.yml', 'armor/p5-boots.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/glock.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-12 23:13:19.068135', '2022-05-12 23:13:19.068135');
 INSERT INTO "public"."mob_equipment" VALUES (158, 'orthos-sentinel-spawn', 669, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/forge-xm3-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/orthos-sentinel-scarh.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, 'armor/titan-elbow-guards.yml', 'armor/titan-elbow-guards.yml', '2022-05-25 15:53:44.498592', '2022-05-25 15:53:44.498592');
-INSERT INTO "public"."mob_equipment" VALUES (159, 'infected-drone-lvl-2', 114, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/czp10.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-25 15:53:44.573311', '2022-05-25 15:53:44.573311');
-INSERT INTO "public"."mob_equipment" VALUES (160, 'hustler-lvl-3', 115, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/czp10.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-25 15:53:44.622028', '2022-05-25 15:53:44.622028');
 INSERT INTO "public"."mob_equipment" VALUES (295, 'crackhead', 702, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.388911', '2022-06-10 23:45:11.388911');
 INSERT INTO "public"."mob_equipment" VALUES (6, 'rogue-mp-shotgunner', 3, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.299795', '2021-09-04 04:12:22.299795');
 INSERT INTO "public"."mob_equipment" VALUES (7, 'mp-enforcer', 4, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tekdc9.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.320894', '2021-09-04 04:12:22.320894');
 INSERT INTO "public"."mob_equipment" VALUES (162, 'hydro-proc-extremists-dynamic-level', 670, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/pale-brown-pants.yml', 'armor/plain-black-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tar21.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-28 19:47:34.979999', '2022-05-28 19:47:34.979999');
 INSERT INTO "public"."mob_equipment" VALUES (296, 'dynamic-defiler-level-10', 703, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.405677', '2022-06-10 23:45:11.405677');
+INSERT INTO "public"."mob_equipment" VALUES (160, 'hustler-lvl-3', 115, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/czp10.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-25 15:53:44.622028', '2022-05-25 15:53:44.622028');
 INSERT INTO "public"."mob_equipment" VALUES (297, 'hydro-proc-extremists-dynamic-level', 704, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.423145', '2022-06-10 23:45:11.423145');
 INSERT INTO "public"."mob_equipment" VALUES (298, 'dynamic-car-thief-level-10', 705, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.43965', '2022-06-10 23:45:11.43965');
 INSERT INTO "public"."mob_equipment" VALUES (299, 'dynamic-mp-enforcer-level-10', 706, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.457514', '2022-06-10 23:45:11.457514');
@@ -5602,6 +5584,19 @@ INSERT INTO "public"."mob_equipment" VALUES (309, 'tengu-eviscerator', 716, NULL
 INSERT INTO "public"."mob_equipment" VALUES (322, 'mp-enforcer', 500, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/hk45.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-11 16:01:49.735304', '2022-08-11 16:01:49.735304');
 INSERT INTO "public"."mob_equipment" VALUES (323, 'mp-shotgunner', 501, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-11 16:01:49.843009', '2022-08-11 16:01:49.843009');
 INSERT INTO "public"."mob_equipment" VALUES (5, 'waypoint-ave-car-thief', 2, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', 'armor/baklava.yml', 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tekdc9.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.295644', '2021-09-04 04:12:22.295644');
+INSERT INTO "public"."mob_equipment" VALUES (334, 'petty-thief-dynamic-level-10-717', 717, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'armor/blue-jeans.yml', 'armor/plat-basketball-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'melee/cheap-crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:18:12.407535', '2022-11-20 00:18:12.407535');
+INSERT INTO "public"."mob_equipment" VALUES (335, 'kidnapper-dynamic-10-718', 718, NULL, NULL, NULL, 'armor/dark-throne-necklace.yml', NULL, 'armor/leather-trenchcoat.yml', 'armor/baklava.yml', 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/mp5.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:18:12.479833', '2022-11-20 00:18:12.479833');
+INSERT INTO "public"."mob_equipment" VALUES (336, 'petty-thief-dynamic-level-10-719', 719, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'armor/blue-jeans.yml', 'armor/plat-basketball-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'melee/cheap-crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:18:12.493217', '2022-11-20 00:18:12.493217');
+INSERT INTO "public"."mob_equipment" VALUES (337, 'kidnapper-dynamic-10-720', 720, NULL, NULL, NULL, 'armor/dark-throne-necklace.yml', NULL, 'armor/leather-trenchcoat.yml', 'armor/baklava.yml', 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/mp5.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:18:12.50538', '2022-11-20 00:18:12.50538');
+INSERT INTO "public"."mob_equipment" VALUES (338, 'petty-thief-dynamic-level-10-721', 721, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'armor/blue-jeans.yml', 'armor/plat-basketball-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'melee/cheap-crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:19:29.36262', '2022-11-20 00:19:29.36262');
+INSERT INTO "public"."mob_equipment" VALUES (339, 'kidnapper-dynamic-10-722', 722, NULL, NULL, NULL, 'armor/dark-throne-necklace.yml', NULL, 'armor/leather-trenchcoat.yml', 'armor/baklava.yml', 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/mp5.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:19:29.377486', '2022-11-20 00:19:29.377486');
+INSERT INTO "public"."mob_equipment" VALUES (340, 'petty-thief-dynamic-level-10-723', 723, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'armor/blue-jeans.yml', 'armor/plat-basketball-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'melee/cheap-crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:19:29.39265', '2022-11-20 00:19:29.39265');
+INSERT INTO "public"."mob_equipment" VALUES (341, 'kidnapper-dynamic-10-724', 724, NULL, NULL, NULL, 'armor/dark-throne-necklace.yml', NULL, 'armor/leather-trenchcoat.yml', 'armor/baklava.yml', 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/mp5.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:19:29.406966', '2022-11-20 00:19:29.406966');
+INSERT INTO "public"."mob_equipment" VALUES (342, 'petty-thief-dynamic-level-10-725', 725, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'armor/blue-jeans.yml', 'armor/plat-basketball-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'melee/cheap-crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:25:27.932716', '2022-11-20 00:25:27.932716');
+INSERT INTO "public"."mob_equipment" VALUES (343, 'kidnapper-dynamic-10-726', 726, NULL, NULL, NULL, 'armor/dark-throne-necklace.yml', NULL, 'armor/leather-trenchcoat.yml', 'armor/baklava.yml', 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/mp5.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:25:27.944087', '2022-11-20 00:25:27.944087');
+INSERT INTO "public"."mob_equipment" VALUES (344, 'petty-thief-dynamic-level-10-727', 727, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'armor/blue-jeans.yml', 'armor/plat-basketball-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'melee/cheap-crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:25:27.957163', '2022-11-20 00:25:27.957163');
+INSERT INTO "public"."mob_equipment" VALUES (345, 'kidnapper-dynamic-10-728', 728, NULL, NULL, NULL, 'armor/dark-throne-necklace.yml', NULL, 'armor/leather-trenchcoat.yml', 'armor/baklava.yml', 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/mp5.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:25:27.967982', '2022-11-20 00:25:27.967982');
+INSERT INTO "public"."mob_equipment" VALUES (159, 'infected-drone-lvl-2', 114, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/czp10.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-25 15:53:44.573311', '2022-05-25 15:53:44.573311');
 
 
 --
@@ -5622,26 +5617,12 @@ INSERT INTO "public"."mob_equipment_map" VALUES (13, 103, 103, '2021-09-04 04:12
 INSERT INTO "public"."mob_equipment_map" VALUES (28, 104, 104, '2021-09-04 04:23:27.177327', '2021-09-04 04:23:27.177327');
 INSERT INTO "public"."mob_equipment_map" VALUES (29, 105, 105, '2021-09-04 04:23:27.182288', '2021-09-04 04:23:27.182288');
 INSERT INTO "public"."mob_equipment_map" VALUES (34, 106, 106, '2021-09-06 01:20:27.887755', '2021-09-06 01:20:27.887755');
-INSERT INTO "public"."mob_equipment_map" VALUES (45, 666, 666, '2022-02-01 03:06:24.986389', '2022-02-01 03:06:24.986389');
-INSERT INTO "public"."mob_equipment_map" VALUES (46, 503, 503, '2022-02-01 16:49:10.091732', '2022-02-01 16:49:10.091732');
-INSERT INTO "public"."mob_equipment_map" VALUES (47, 504, 504, '2022-02-01 16:49:10.233468', '2022-02-01 16:49:10.233468');
-INSERT INTO "public"."mob_equipment_map" VALUES (48, 505, 505, '2022-02-01 16:49:10.341863', '2022-02-01 16:49:10.341863');
 INSERT INTO "public"."mob_equipment_map" VALUES (49, 112, 112, '2022-05-12 23:13:18.323055', '2022-05-12 23:13:18.323055');
-INSERT INTO "public"."mob_equipment_map" VALUES (50, 113, 113, '2022-05-12 23:13:18.338291', '2022-05-12 23:13:18.338291');
-INSERT INTO "public"."mob_equipment_map" VALUES (64, 669, 669, '2022-05-25 15:53:44.504757', '2022-05-25 15:53:44.504757');
-INSERT INTO "public"."mob_equipment_map" VALUES (65, 114, 114, '2022-05-25 15:53:44.579648', '2022-05-25 15:53:44.579648');
-INSERT INTO "public"."mob_equipment_map" VALUES (66, 115, 115, '2022-05-25 15:53:44.627772', '2022-05-25 15:53:44.627772');
-INSERT INTO "public"."mob_equipment_map" VALUES (68, 670, 670, '2022-05-28 19:47:34.981819', '2022-05-28 19:47:34.981819');
-INSERT INTO "public"."mob_equipment_map" VALUES (69, 715, 715, '2022-07-17 05:30:19.13382', '2022-07-17 05:30:19.13382');
-INSERT INTO "public"."mob_equipment_map" VALUES (70, 714, 714, '2022-07-17 05:30:19.153466', '2022-07-17 05:30:19.153466');
-INSERT INTO "public"."mob_equipment_map" VALUES (71, 713, 713, '2022-07-17 05:30:19.182005', '2022-07-17 05:30:19.182005');
-INSERT INTO "public"."mob_equipment_map" VALUES (72, 716, 716, '2022-07-17 05:30:19.206623', '2022-07-17 05:30:19.206623');
 INSERT INTO "public"."mob_equipment_map" VALUES (24, 500, 500, '2021-09-04 04:23:27.068704', '2021-09-04 04:23:27.068704');
 INSERT INTO "public"."mob_equipment_map" VALUES (25, 501, 501, '2021-09-04 04:23:27.074152', '2021-09-04 04:23:27.074152');
 INSERT INTO "public"."mob_equipment_map" VALUES (26, 502, 502, '2021-09-04 04:23:27.079717', '2021-09-04 04:23:27.079717');
-INSERT INTO "public"."mob_equipment_map" VALUES (73, 2, 2, '2022-08-14 09:05:43.641825', '2022-08-14 09:05:43.641825');
-INSERT INTO "public"."mob_equipment_map" VALUES (74, 4, 4, '2022-08-14 09:05:43.655726', '2022-08-14 09:05:43.655726');
-INSERT INTO "public"."mob_equipment_map" VALUES (75, 3, 3, '2022-08-14 09:05:43.675711', '2022-08-14 09:05:43.675711');
+INSERT INTO "public"."mob_equipment_map" VALUES (90, 114, 114, '2022-11-26 18:22:19.479787', '2022-11-26 18:22:19.479787');
+INSERT INTO "public"."mob_equipment_map" VALUES (91, 115, 115, '2022-11-26 18:22:19.492092', '2022-11-26 18:22:19.492092');
 
 
 --
@@ -5765,20 +5746,17 @@ INSERT INTO "public"."mob_roam" VALUES (832, 500, 139, 'mp-enforcer');
 
 INSERT INTO "public"."mobile" VALUES (18, 500, 'A Military Police enforcer', 'A Military Police enforcer', 'A Military Police enforcer', 'A fit military police enforcer. He looks armed.', '8', '0', 25, 23, 22, 0, 24, 0, 10, 0, 0, 10, 0, 0, 250, 45, 110, 5, 7050, 0, 0, 1, 250, 45, 110, 10, 6, 20, 10, 5, 0, 10, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (19, 501, 'A Military Police shotgunner', 'A Military Police shotgunner', 'A Military Police shotgunner', 'A fit military police shotgunner. He looks armed.', '8', '0', 35, 33, 32, 0, 34, 0, 10, 0, 0, 40, 0, 0, 5550, 565, 510, 5, 7050, 0, 0, 1, 5550, 565, 510, 15, 18, 30, 10, 6, 0, 11, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (118, 714, 'Tengu Lancer', 'A Tengu Lancer', 'The large shoulder armor and upper body shielding give the Lancer an appearance not unlike the heavily padded athletes of most high contact sports. The legs of the Lancer are not armored except for some black shin guards and stealth-optimized footwear. The lancer is 6 feet tall and extremely agile. ', 'The large shoulder armor and upper body shielding give the Lancer an appearance not unlike the heavily padded athletes of most high contact sports. The legs of the Lancer are not armored except for some black shin guards and stealth-optimized footwear. The lancer is 6 feet tall and extremely agile. ', '8', '0', 11, 0, 29, 0, 34, 0, 0, 0, 0, 28, 0, 0, 4820, 930, 160, 5, 8050, 0, 0, 1, 4820, 930, 160, 36, 20, 12, 10, 5, 0, 21, NULL, 'Kojima', 8, 9, 33, 32, 0, 0, 31, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (12, 600, 'A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist', 'A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist', 'A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist', 'A {yel}TRITON{/yel} {blu}LABS{/blu} Scientist', '8', '0', 85, 83, 82, 0, 84, 0, 1, 0, 0, 40, 0, 0, 58580, 15, 240, 0, 30500, 0, 0, 1, 58580, 15, 140, 84, 86, 215, 10, 4, 0, 0, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (13, 601, 'A volunteer patient', 'A volunteer patient', 'A volunteer patient', 'A volunteer patient stands here with dazed thousand mile stare.', '8', '0', 185, 183, 10, 0, 184, 0, 1, 0, 0, 15, 0, 0, 880, 25, 240, 0, 3500, 0, 0, 1, 880, 25, 240, 8, 90, 115, 10, 4, 0, 0, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (14, 602, 'A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon', 'A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon', 'A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon', 'A {yel}TRITON{/yel} {blu}LABS{/blu} Field Surgeon', '8', '0', 185, 183, 182, 0, 184, 0, 85, 0, 0, 80, 0, 0, 8580, 815, 240, 0, 8500, 0, 0, 2, 8580, 815, 240, -72, -70, 215, 10, 4, 0, 0, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (16, 406, 'A suspicious looking car thief', 'A suspicious looking car thief', 'A suspicious looking car thief', 'A car thief equipped with brass knuckles and a crowbar. He is obviously armed.', '8', '0', 25, 23, 22, 0, 24, 0, 10, 0, 0, 15, 0, 0, 150, 45, 510, 5, 150, 0, 0, 1, 150, 45, 510, 20, 16, 20, 5, 5, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (17, 407, 'A {red}Rogue{/red} Military Police shotgunner', 'A {red}Rogue{/red} Military Police shotgunner', 'A {red}Rogue{/red} Military Police shotgunner', 'A fit military police shotgunner. He looks armed.', '8', '0', 35, 33, 32, 0, 34, 0, 10, 0, 0, 25, 0, 0, 5550, 565, 510, 5, 250, 0, 0, 1, 5550, 565, 510, 15, 18, 30, 10, 6, 0, 11, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (121, 2, 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer', 'A {yel}Nu-Toxin{/yel} dealer sizes you up. He looks confident he could take you.', '4616', '0', 8, 8, 0, 0, 8, 0, 25, 0, 0, 10, 0, 0, 450, 30, 10, 5, 85, 0, 0, 1, 450, 30, 10, 10, 10, 4, 5, 5, 0, 17, NULL, 'Nu-Toxin', 0, 5, 2, 2, 0, 0, 2, 1, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (11, 410, 'Corporal James Taggart', 'Corporal James Tagger short description', 'Corporal James Tagger long description', 'Corporal James Tagger description', '0', '0', 10, 10, 10, 10, 10, 10, 10, 0, 0, 150, 150, 150, -1, -1, -1, 0, 50, 0, 0, 0, -1, -1, -1, 50, 50, 50, 80, 9, 0, 0, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (1, 1, 'chef  employee', 'A pissed looking Los  employee', 'A pissed looking Los  employee', 'This particular employee looks like he just got out of a federal penitentiary. He''s most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.', '8', '0', 25, 0, 25, 0, 25, 0, 25, 0, 0, 0, 0, 0, 250, 250, 250, 0, 50, 8, 8, 0, 250, 250, 250, 25, 0, 0, 50, 15, 0, 14, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (15, 603, 'A Ballistics Expert', 'A Ballistics Expert', 'A Ballistics Expert', 'A Ballistics Expert', '8', '0', 85, 83, 82, 0, 84, 0, 1, 0, 0, 40, 0, 0, 58580, 15, 240, 0, 30500, 0, 0, 1, 58580, 15, 140, 84, 86, 215, 10, 4, 0, 0, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (20, 502, 'An Ops Shield shotgunner', 'An Ops Shield shotgunner', 'An Ops Shield shotgunner', 'An Ops Shield shotgunner', '8', '0', 355, 333, 132, 0, 334, 0, 10, 0, 0, 40, 0, 0, 109550, 1565, 810, 5, 20050, 0, 0, 1, 109550, 1565, 810, 115, 48, 340, 10, 6, 0, 11, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (24, 109, 'A retail associate', 'A retail associate', 'A retail associate', 'A retail associate tirelessly stocks shelves...', '8', '0', 15, 1, 2, 0, 4, 0, 4, 0, 0, 3, 0, 0, 120, 50, 60, 5, 580, 0, 0, 1, 120, 50, 60, 2, 5, 2, 10, 5, 0, 19, NULL, NULL, 2, 1, 1, 1, 1, 0, 1, 2, 1, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (25, 110, 'A shoplifter', 'A shoplifter', 'A shoplifter', 'A shoplifter looks around nervously...', '8', '0', 30, 1, 5, 0, 8, 0, 8, 0, 0, 6, 0, 0, 240, 100, 128, 5, 580, 0, 0, 1, 240, 100, 128, 5, 10, 5, 10, 5, 0, 17, NULL, NULL, 5, 3, 2, 2, 3, 0, 3, 5, 2, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (104, 700, 'A suspicious looking car thief', 'A suspicious looking car thief', 'A suspicious looking car thief', 'A car thief equipped with brass knuckles and a crowbar.', '4360', '0', 16, 15, 14, 0, 16, 0, 6, 0, 0, 10, 0, 0, 100, 30, 340, 5, 100, 0, 0, 1, 100, 30, 340, 13, 10, 13, 3, 3, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, '1');
 INSERT INTO "public"."mobile" VALUES (3, 101, 'A petty thief', 'A petty thief', 'A petty thief', 'A petty thief is stalking the area.', '8', '0', 4, 4, 2, 0, 4, 0, 0, 0, 0, 5, 0, 0, 100, 15, 110, 5, 250, 0, 0, 1, 100, 15, 110, 2, 6, 10, 4, 5, 0, 14, NULL, NULL, 5, 4, 5, 2, 0, 0, 4, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (21, 102, 'a kidnapper', 'a kidnapper', 'a kidnapper', 'a kidnapper is stalking the area.', '8', '0', 9, 6, 2, 0, 7, 0, 0, 0, 0, 8, 0, 0, 1450, 25, 510, 5, 250, 0, 0, 1, 1450, 25, 510, 10, 25, 20, 4, 5, 0, 15, NULL, NULL, 0, 10, 8, 3, 0, 0, 5, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (4, 103, 'a chaotic meth addict', 'a chaotic meth addict', 'a chaotic meth addict', 'a chaotic meth addict is manically patrolling the area.', '8', '0', 13, 6, 2, 0, 13, 0, 0, 0, 0, 13, 0, 0, 650, 25, 310, 5, 250, 0, 0, 1, 650, 25, 310, 8, 25, 30, 4, 5, 0, 16, NULL, NULL, 0, 4, 1, 1, 2, 0, 8, 0, 9, NULL, '0');
@@ -5786,35 +5764,9 @@ INSERT INTO "public"."mobile" VALUES (22, 104, 'A shoplifter', 'A shoplifter', '
 INSERT INTO "public"."mobile" VALUES (23, 105, 'A crackhead', 'A crackhead', 'A crackhead', 'A crackhead is stalking the area.', '8', '0', 1, 1, 1, 0, 3, 0, 0, 0, 0, 2, 0, 0, 35, 15, 60, 5, 250, 0, 0, 1, 35, 15, 60, 2, 6, 1, 4, 5, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 0, 1, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (26, 106, 'An armed security guard', 'An armed security guard', 'An armed security guard', 'An armed security guard watches you closely.', '8', '0', 28, 23, 25, 0, 54, 0, 0, 0, 0, 20, 0, 0, 950, 245, 610, 5, 20044, 0, 0, 1, 950, 245, 610, 90, 18, 60, 10, 5, 0, 18, NULL, NULL, 25, 30, 35, 20, 30, 10, 38, 25, 20, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (27, 107, 'A bank teller', 'A bank teller', 'A bank teller', 'A bank teller is obediently serving you', '8', '0', 1, 1, 1, 0, 3, 0, 30, 0, 0, 2, 0, 0, 15, 15, 20, 5, 580, 0, 0, 2, 15, 15, 20, 1, 3, 1, 4, 5, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 0, 1, 0, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (105, 701, 'a chaotic meth addict', 'a chaotic meth addict', 'a chaotic meth addict', 'a chaotic meth addict is manically patrolling the area.', '4360', '0', 8, 4, 1, 0, 8, 0, 0, 0, 0, 10, 0, 0, 433, 16, 206, 5, 166, 0, 0, 1, 433, 16, 206, 5, 16, 20, 2, 3, 0, 16, NULL, NULL, 0, 2, 0, 0, 1, 0, 5, 0, 6, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (30, 666, '{red}DEFILER{/red}', '{red}DEFILER{/red}', '{red}DEFILER{/red}', '{red}DEFILER{/red}', '8', '0', 22, 13, 12, 0, 14, 0, 1, 0, 0, 20, 0, 0, 3820, 830, 160, 5, 8050, 0, 0, 1, 3820, 830, 160, 16, 16, 12, 10, 5, 0, 20, NULL, 'Butcher', 12, 20, 13, 12, 11, 10, 11, 18, 1, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (31, 503, 'An Orthos guard', 'An Orthos guard', 'An Orthos guard', 'An Orthos guard regards you indifferently.', '8', '0', 55, 23, 52, 0, 54, 0, 20, 0, 0, 20, 0, 0, 5850, 245, 110, 5, 8950, 0, 0, 1, 5850, 245, 110, 20, 16, 30, 10, 5, 0, 21, NULL, 'Psi-Tech', 20, 20, 20, 20, 20, 20, 20, 20, 20, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (32, 504, 'An Orthos sniper', 'An Orthos sniper', 'An Orthos sniper', 'An Orthos sniper lies here... waiting..', '8', '0', 35, 33, 32, 0, 34, 0, 10, 0, 0, 20, 0, 0, 6550, 865, 510, 5, 9050, 0, 0, 1, 6550, 865, 510, 25, 28, 30, 10, 6, 0, 21, NULL, 'Psi-Tech', 80, 10, 110, 90, 10, 10, 90, 10, 10, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (33, 505, 'An Orthos menace', 'An Orthos menace', 'An Orthos menace', 'An Orthos menace', '8', '0', 55, 33, 32, 0, 34, 0, 0, 0, 0, 20, 0, 0, 8550, 1565, 910, 5, 5050, 0, 0, 1, 8050, 1565, 910, 115, 48, 340, 10, 6, 0, 21, NULL, 'Psi-Tech', 80, 50, 40, 30, 80, 0, 40, 20, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (34, 667, 'Maintenance guard', 'Maintenance guard', 'Maintenance guard', 'Maintenance guard', '8', '0', 10, 1, 2, 0, 4, 0, 4, 0, 0, 5, 0, 0, 220, 10, 30, 5, 150, 0, 0, 1, 220, 10, 30, 2, 6, 4, 10, 5, 0, 10, NULL, NULL, 2, 0, 3, 0, 0, 0, 3, 2, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (35, 668, 'Maintenance grunt', 'Maintenance grunt', 'Maintenance grunt', 'Maintenance grunt', '8', '0', 8, 1, 1, 0, 7, 0, 5, 0, 0, 5, 0, 0, 180, 20, 40, 5, 100, 0, 0, 1, 180, 20, 40, 4, 4, 3, 10, 5, 0, 15, NULL, NULL, 0, 2, 6, 0, 0, 0, 4, 1, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (39, 670, 'An extremist', 'An extremist', 'An extremist', 'An extremist spitefully makes eye contact with you.', '8', '0', 5, 0, 5, 0, 10, 0, 10, 0, 0, 5, 0, 0, 1225, 250, 210, 5, 250, 0, 0, 1, 1225, 250, 210, 5, 20, 25, 10, 5, 0, 15, NULL, 'Hydro-Processing', 5, 5, 10, 5, 5, 5, 5, 5, 5, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (106, 702, 'A crackhead', 'A crackhead', 'A crackhead', 'A crackhead is stalking the area.', '4360', '0', 0, 0, 0, 0, 2, 0, 0, 0, 0, 10, 0, 0, 23, 10, 40, 5, 166, 0, 0, 1, 23, 10, 40, 1, 4, 0, 2, 3, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (107, 703, '{red}DEFILER{/red}', '{red}DEFILER{/red}', '{red}DEFILER{/red}', '{red}DEFILER{/red}', '8', '0', 11, 6, 6, 0, 7, 0, 0, 0, 0, 10, 0, 0, 1910, 415, 80, 5, 4025, 0, 0, 1, 1910, 415, 80, 8, 8, 6, 10, 5, 0, 20, NULL, NULL, 6, 10, 6, 6, 5, 5, 5, 9, 0, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (108, 704, 'An extremist', 'An extremist', 'An extremist', 'An extremist spitefully makes eye contact with you.', '8', '0', 10, 10, 10, 0, 20, 0, 20, 0, 0, 10, 0, 0, 2450, 500, 420, 5, 500, 0, 0, 1, 2450, 500, 420, 10, 40, 50, 10, 5, 0, 15, NULL, NULL, 10, 10, 20, 10, 10, 10, 10, 10, 10, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (109, 705, 'A rugged car thief', 'A rugged car thief', 'A rugged car thief', 'A car thief stalking the area. He is armed.', '4616', '0', 18, 13, 2, 0, 34, 0, 2, 0, 0, 10, 0, 0, 350, 45, 610, 5, 250, 0, 0, 1, 350, 45, 610, 30, 6, 20, 10, 5, 0, 14, NULL, NULL, 15, 5, 15, 8, 2, 2, 18, 2, 2, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (36, 669, 'Orthos sentinel', 'Orthos sentinel', 'Orthos sentinel', 'Orthos sentinel', '8', '0', 900, 91, 902, 0, 944, 0, 0, 0, 0, 85, 0, 0, 85000, 9080, 1500, 5, 2350, 0, 0, 1, 85000, 9080, 1500, -74, 32, 230, 10, 5, 0, 22, NULL, NULL, 942, 1000, 944, 944, 1000, 944, 1000, 944, 1000, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (37, 114, 'An infected drone', 'An infected drone', 'An infected drone', 'An infected drone lumbers hugrily towards you...', '8', '0', 2, 2, 2, 0, 4, 0, 5, 0, 0, 2, 0, 0, 493, 100, 82, 5, 100, 0, 0, 1, 493, 100, 82, 1, 8, 10, 10, 5, 0, 15, NULL, NULL, 2, 3, 3, 2, 3, 1, 3, 2, 2, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (38, 115, 'An adapted drone', 'An adapted drone ', 'An adapted drone ', 'An adapted drone looks for something to infect...', '8', '0', 4, 5, 4, 0, 4, 0, 5, 0, 0, 3, 0, 0, 350, 100, 82, 5, 100, 0, 0, 1, 350, 100, 82, 2, 12, 18, 10, 5, 0, 15, NULL, NULL, 4, 5, 5, 4, 7, 0, 8, 3, 4, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (110, 706, 'A Military Police enforcer', 'A Military Police enforcer', 'A Military Police enforcer', 'A fit military police enforcer. He looks armed.', '4616', '0', 25, 23, 22, 0, 24, 0, 10, 0, 0, 10, 0, 0, 25, 45, 110, 5, 7050, 0, 0, 1, 25, 45, 110, 10, 10, 20, 10, 5, 0, 10, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (111, 707, 'A Military Police shotgunner', 'A Military Police shotgunner', 'A Military Police shotgunner', 'A fit military police shotgunner. He looks armed.', '4616', '0', 35, 33, 32, 0, 34, 0, 10, 0, 0, 10, 0, 0, 5550, 565, 510, 5, 7050, 0, 0, 1, 5550, 565, 510, 15, 18, 30, 10, 6, 0, 11, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (112, 708, 'An Ops Shield shotgunner', 'An Ops Shield shotgunner', 'An Ops Shield shotgunner', 'An Ops Shield shotgunner', '4616', '0', 88, 83, 33, 0, 83, 0, 2, 0, 0, 10, 0, 0, 27387, 391, 202, 5, 5012, 0, 0, 1, 27387, 391, 202, 28, 12, 85, 10, 6, 0, 11, NULL, NULL, 2, 2, 2, 2, 2, 2, 2, 2, 2, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (113, 709, 'A petty thief', 'A petty thief', 'A petty thief', 'A petty thief is stalking the area.', '4360', '0', 2, 2, 1, 0, 2, 0, 0, 0, 0, 10, 0, 0, 66, 10, 73, 5, 166, 0, 0, 1, 66, 10, 73, 1, 4, 6, 2, 3, 0, 14, NULL, NULL, 3, 2, 3, 1, 0, 0, 2, 0, 0, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (114, 710, 'A {red}Rogue{/red} Military Police shotgunner', 'A {red}Rogue{/red} Military Police shotgunner', 'A {red}Rogue{/red} Military Police shotgunner', 'A fit military police shotgunner. He looks armed.', '4360', '0', 14, 13, 12, 0, 13, 0, 4, 0, 0, 10, 0, 0, 2220, 226, 204, 5, 100, 0, 0, 1, 2220, 226, 204, 6, 7, 12, 10, 6, 0, 11, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (115, 711, 'A shoplifter', 'A shoplifter', 'A shoplifter', 'A shoplifter is stalking the area.', '4360', '0', 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 6, 10, 40, 5, 166, 0, 0, 1, 6, 10, 40, 0, 2, 0, 4, 5, 0, 15, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (116, 712, 'a kidnapper', 'a kidnapper', 'a kidnapper', 'a kidnapper is stalking the area.', '4360', '0', 6, 4, 1, 0, 4, 0, 0, 0, 0, 10, 0, 0, 966, 16, 340, 5, 166, 0, 0, 1, 966, 16, 340, 6, 16, 13, 4, 5, 0, 15, NULL, NULL, 0, 6, 5, 2, 0, 0, 3, 0, 0, NULL, '1');
-INSERT INTO "public"."mobile" VALUES (117, 715, 'Tengu Trooper', 'A Tengu Trooper', 'Optimized for assault, the Tengu Trooper is the epitome of brute force. While not being the most strategic unit, the Trooper makes up for this with fast attack speed and resilience. The Trooper''s lightweight ballistic protection sacrifices damage absorption for speed.', 'Optimized for assault, the Tengu Trooper is the epitome of brute force. While not being the most strategic unit, the Trooper makes up for this with fast attack speed and resilience. The Trooper''s lightweight ballistic protection sacrifices damage absorption for speed.', '8', '0', 11, 0, 9, 0, 34, 0, 0, 0, 0, 20, 0, 0, 3820, 830, 160, 5, 8050, 0, 0, 1, 3820, 830, 160, 16, 16, 12, 10, 5, 0, 21, NULL, 'Kojima', 8, 9, 23, 22, 0, 0, 21, 0, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (119, 713, 'Tengu Scout', 'A Tengu Scout', 'Kojima Corp is a well-funded military force with very high profile clients supplying it''s income. The most important part of maintaining a strategic edge against outside threats is to have a comprehensive plan for deep intelligence gathering. The Tengu Scout is part of the fast moving ellusive recon team. ', 'Kojima Corp is a well-funded military force with very high profile clients supplying it''s income. The most important part of maintaining a strategic edge against outside threats is to have a comprehensive plan for deep intelligence gathering. The Tengu Scout is part of the fast moving ellusive recon team. ', '8', '0', 8, 0, 49, 0, 54, 0, 0, 0, 0, 25, 0, 0, 1720, 230, 560, 5, 8050, 0, 0, 1, 1720, 230, 560, 26, 13, 12, 5, 5, 0, 21, NULL, 'Kojima', 28, 8, 20, 15, 0, 0, 20, 30, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (120, 716, 'Tengu Eviscerator', 'A Tengu Eviscerator', 'Few of the militaristic units deployed by Kojima Corp actually fit the classical idea of a ''soldier''. The Tengu Eviscerator hardly qualifies as a living breathing human. The technology fused into the very biology of the Eviscerator borders of extreme cybermancy and archaic magic. As such, the Eviscerator is usually only used where a high amount of security is needed. ', 'Few of the militaristic units deployed by Kojima Corp actually fit the classical idea of a ''soldier''. The Tengu Eviscerator hardly qualifies as a living breathing human. The technology fused into the very biology of the Eviscerator borders of extreme cybermancy and archaic magic. As such, the Eviscerator is usually only used where a high amount of security is needed. ', '8', '0', 11, 9, 29, 0, 34, 0, 0, 0, 0, 25, 0, 0, 5820, 930, 360, 5, 9050, 0, 0, 1, 5820, 930, 360, 20, 30, 32, 10, 5, 0, 21, NULL, 'Kojima', 0, 29, 23, 22, 30, 0, 21, 23, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (122, 4, 'A thug', 'A thug', 'A thug', 'A thug sizes you up. He looks confident he could take you.', '4616', '0', 10, 10, 0, 0, 10, 0, 25, 0, 0, 11, 0, 0, 550, 30, 15, 5, 85, 0, 0, 1, 550, 30, 11, 15, 10, 8, 5, 5, 0, 17, NULL, NULL, 0, 10, 10, 10, 0, 0, 10, 5, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (123, 3, 'A produce vendor', 'A produce vendor', 'A produce vendor', 'A produce vendor attempts to sell you food', '4616', '0', 8, 8, 0, 0, 8, 0, 25, 0, 0, 10, 0, 0, 150, 15, 10, 0, 15, 0, 0, 1, 150, 15, 10, 10, 10, 4, 5, 5, 0, 3, NULL, NULL, 0, 5, 2, 2, 0, 0, 2, 1, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (29, 113, 'An inventory grunt', 'An inventory grunt', 'An inventory grunt', 'An inventory grunt is here breaking a sweat. He hardly notices you.', '8', '0', 99, 500, 500, 0, 500, 0, 500, 0, 0, 200, 0, 0, 98493, 98100, 9882, 0, 1, 0, 0, 1, 98493, 98100, 9882, -74, -74, 950, 10, 5, 0, 15, NULL, 'Inventory', 500, 500, 500, 500, 500, 500, 500, 500, 500, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (28, 112, 'An inventory specialist', 'An inventory specialist', 'An inventory specialist', 'An inventory specialist takes a calculating look at the list of items on today''s list.', '8', '0', 99, 500, 500, 0, 500, 0, 500, 0, 0, 200, 0, 0, 98493, 98100, 9882, 0, 1, 0, 0, 2, 98493, 98100, 9882, -74, -74, 950, 10, 5, 0, 15, NULL, 'Inventory', 500, 500, 500, 500, 500, 500, 500, 500, 500, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (139, 114, 'An infected drone', 'An infected drone', 'An infected drone', 'An infected drone lumbers hugrily towards you...', '8', '0', 2, 2, 2, 0, 4, 0, 5, 0, 0, 2, 0, 0, 493, 100, 82, 5, 100, 0, 0, 1, 493, 100, 82, 1, 8, 10, 10, 5, 0, 15, NULL, NULL, 2, 3, 3, 2, 3, 1, 3, 2, 2, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (140, 115, 'An adapted drone', 'An adapted drone ', 'An adapted drone ', 'An adapted drone looks for something to infect...', '8', '0', 4, 5, 4, 0, 4, 0, 5, 0, 0, 3, 0, 0, 350, 100, 82, 5, 100, 0, 0, 1, 350, 100, 82, 2, 12, 18, 10, 5, 0, 15, NULL, NULL, 4, 5, 5, 4, 7, 0, 8, 3, 4, NULL, '0');
 
 
 --
@@ -5908,8 +5860,9 @@ INSERT INTO "public"."object_weapon" VALUES (5, 7, 0, 0, 0, false);
 --
 
 INSERT INTO "public"."player" VALUES (110, '$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.', '0', '0', 'sniper', '1', '1', 0, 3, 0, 9, 9, 12, 15, 9, 0, 0, 241, 436, 729, 48, 561, 'M', 241, 436, 729, 52, 52, 52, '9', '1', '52', 0, 0, 'PC', 0, 3, 52, 0, '2021-09-18 01:42:45.163952', 0, '2021-09-18 01:42:45.163952', '8388736', 7);
-INSERT INTO "public"."player" VALUES (111, '$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC', '0', '0', 'ghost', '1', '1', 0, 4, 0, 8, 8, 17, 21, 8, 0, 0, 322, 452, 1037, 6730, 3850, 'M', 322, 452, 940, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 0, 4, 53, 0, '2022-05-17 13:17:37.271391', 0, '2022-05-17 13:17:37.271391', '8388736', 6);
-INSERT INTO "public"."player" VALUES (1, 'foKntnEF3KSXA', '0', '0', 'far', '1', '1', 0, 20, 0, 41, 41, 82, 102, 41, 1479, 0, 65000, 2277, 65000, 42683, 94030, 'M', 65000, 2277, 65000, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 1479, 19, 53, 0, '2019-03-20 22:38:47.454111', 0, '2019-03-20 22:38:47.454111', '14680304', 37);
+INSERT INTO "public"."player" VALUES (112, '$2a$06$tZ.d26Ss0bmylxdAIcR.2.KJMQCrARqFa0oghvTkHet73f5EeOAPi', '0', '0', 'breacher', '1', '1', 0, 7, 0, 2, 2, 8, 14, 2, 0, 0, 421, 161, 356, 0, 1000, 'M', 421, 161, 356, 53, 53, 53, '22', '1', '53', 0, 0, 'PC', 0, 2, 53, 0, '2022-11-09 08:07:37.145886', 0, '2022-11-09 08:07:37.145886', '8388736', 3);
+INSERT INTO "public"."player" VALUES (111, '$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC', '0', '0', 'ghost', '1', '1', 0, 4, 0, 8, 8, 17, 21, 8, 0, 0, 322, 452, 1037, 6730, 3850, 'M', 322, 452, 946, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 0, 4, 53, 0, '2022-05-17 13:17:37.271391', 0, '2022-05-17 13:17:37.271391', '8388736', 6);
+INSERT INTO "public"."player" VALUES (1, 'foKntnEF3KSXA', '0', '0', 'far', '1', '1', 0, 20, 0, 41, 41, 82, 102, 41, 1479, 0, 65000, 2277, 65000, 42698, 94030, 'M', 65000, 2277, 65000, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 1479, 19, 53, 0, '2019-03-20 22:38:47.454111', 0, '2019-03-20 22:38:47.454111', '14680304', 37);
 
 
 --
@@ -5931,8 +5884,9 @@ INSERT INTO "public"."player_base_ability" VALUES (6, 100, 33, 0, 99, 74, 132, 1
 INSERT INTO "public"."player_base_ability" VALUES (13, 107, 3, 0, 9, 9, 12, 15, 9, 9, 6, 8, 8, 15, 10, 6, 9, 15, '2021-09-17 19:58:07.021327', '2021-09-17 19:58:07.021327');
 INSERT INTO "public"."player_base_ability" VALUES (7, 101, 44, 0, 44, 44, 88, 132, 44, 44, 44, 60, 44, 9, 44, 60, 44, 60, '2021-09-17 00:53:22.86459', '2021-09-17 00:53:22.86459');
 INSERT INTO "public"."player_base_ability" VALUES (16, 110, 3, 0, 9, 9, 12, 15, 9, 9, 6, 8, 8, 15, 10, 6, 9, 9, '2021-09-18 01:42:45.197498', '2021-09-18 01:42:45.197498');
-INSERT INTO "public"."player_base_ability" VALUES (1, 1, 20, 0, 41, 41, 82, 102, 41, 41, 40, 64, 64, 103, 42, 62, 41, 57, '2021-09-04 04:17:39.714689', '2021-09-04 04:17:39.714689');
+INSERT INTO "public"."player_base_ability" VALUES (18, 112, 7, 0, 2, 2, 8, 14, 2, 2, 14, 4, 4, 8, 2, 4, 2, 6, '2022-11-09 08:07:37.190702', '2022-11-09 08:07:37.190702');
 INSERT INTO "public"."player_base_ability" VALUES (17, 111, 4, 0, 8, 8, 17, 21, 8, 8, 8, 15, 15, 21, 9, 13, 8, 12, '2022-05-17 13:17:37.452746', '2022-05-17 13:17:37.452746');
+INSERT INTO "public"."player_base_ability" VALUES (1, 1, 20, 0, 41, 41, 82, 102, 41, 41, 40, 64, 64, 103, 42, 62, 41, 57, '2021-09-04 04:17:39.714689', '2021-09-04 04:17:39.714689');
 
 
 --
@@ -5965,10 +5919,6 @@ INSERT INTO "public"."player_object" VALUES (564, 111, 8, NULL, 'sg3-ar-ammuniti
 INSERT INTO "public"."player_object" VALUES (565, 111, 8, NULL, 'sg3-ar-ammunition.yml', 2, NULL, 1, 1, 68);
 INSERT INTO "public"."player_object" VALUES (566, 111, 8, NULL, 'sg3-ar-ammunition.yml', 2, NULL, 1, 1, 68);
 INSERT INTO "public"."player_object" VALUES (554, 111, 1, NULL, '552-commando.yml', 2, 16, 0, 1, 52);
-INSERT INTO "public"."player_object" VALUES (571, 1, 8, NULL, 'sg3-sniper-ammunition.yml', 2, NULL, 1, 1, 29);
-INSERT INTO "public"."player_object" VALUES (572, 1, 8, NULL, 'sg3-sniper-ammunition.yml', 2, NULL, 1, 1, 29);
-INSERT INTO "public"."player_object" VALUES (573, 1, 1, NULL, 'atrocity-mp5.yml', 2, NULL, 1, 1, 21);
-INSERT INTO "public"."player_object" VALUES (574, 1, 1, NULL, 'psg1.yml', 2, NULL, 1, 1, 7);
 
 
 --
@@ -6066,240 +6016,6 @@ INSERT INTO "public"."rifle_index" VALUES (29, 'uzi.yml', 'mp', '2021-09-04 04:1
 -- Data for Name: rifle_instance; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."rifle_instance" VALUES (1, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 77, 8, 2, 34, 1, 80, 0, 53, 1, 4.29999999999999982, 2, 10, 1, 10, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, '2021-09-06 01:28:51.675323', '2021-09-06 01:28:51.675323');
-INSERT INTO "public"."rifle_instance" VALUES (2, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 1, 'SHOTGUN', 1, 6, 2, 34, 1, 154, 1, 53, 2, 1, 2, 14, 918, 15, 3, 31, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, '2021-09-06 01:57:11.43389', '2021-09-06 01:57:11.43389');
-INSERT INTO "public"."rifle_instance" VALUES (3, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 75, 'PISTOL', 20.5, 6, 1, 6, 1, 25, 1, 55, 1, 0, 4, 1, 1, 2, 3, 24, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, '2021-09-06 01:57:28.204973', '2021-09-06 01:57:28.204973');
-INSERT INTO "public"."rifle_instance" VALUES (4, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 75, 'PISTOL', 1, 1, 1, 5, 1, 39, 0, 33, 1, 0, 3, 80, 1, 2, 3, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, '2021-09-06 01:59:56.640283', '2021-09-06 01:59:56.640283');
-INSERT INTO "public"."rifle_instance" VALUES (5, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'ump45.yml', 'SUB_MACHINE_GUN', '5', 'PN/P', 'UMP-45', 32, 400, 'SUB_MACHINE_GUN', 30.8099999999999987, 31, 1, 1, 1, 30, 1, 29, 3, 4.29999999999999982, 5, 1, 1357, 20, 10, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, '2021-09-06 02:00:02.293957', '2021-09-06 02:00:02.293957');
-INSERT INTO "public"."rifle_instance" VALUES (6, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 1, 'SHOTGUN', 70, 6, 2, 34, 1, 80, 1, 53, 1, 4.29999999999999982, 1, 19, 918, 10, 3, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, '2021-09-06 02:08:25.716967', '2021-09-06 02:08:25.716967');
-INSERT INTO "public"."rifle_instance" VALUES (7, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 75, 'PISTOL', 1, 9, 1, 5, 1, 21, 1, 1, 1, 1, 3, 80, 40, 3, 4, 16, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, '2021-09-06 02:08:49.453172', '2021-09-06 02:08:49.453172');
-INSERT INTO "public"."rifle_instance" VALUES (8, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 70, 'SNIPER', 1, 7, 16, 19, 3, 1, 0, 23, 4, 1, 12, 13, 1818, 512, 2, 53, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, '2021-09-06 02:09:56.904971', '2021-09-06 02:09:56.904971');
-INSERT INTO "public"."rifle_instance" VALUES (9, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'fmg9.yml', 'SUB_MACHINE_GUN', '5', 'DXGR-1', 'FMG-9', 5, 888, 'SUB_MACHINE_GUN', 33, 1, 1, 14, 1, 30, 1, 13, 1, 1, 5, 180, 1, 33, 6, 6, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, '2021-09-06 02:11:28.277761', '2021-09-06 02:11:28.277761');
-INSERT INTO "public"."rifle_instance" VALUES (10, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 1, 9, 2, 34, 1, 1, 1, 73, 2, 7, 2, 1, 918, 12, 3, 20, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, '2021-09-06 02:48:16.222825', '2021-09-06 02:48:16.222825');
-INSERT INTO "public"."rifle_instance" VALUES (11, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 75, 'PISTOL', 20.5, 6, 1, 5, 1, 36, 1, 33, 1, 0, 1, 1, 40, 3, 1, 26, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, '2021-09-06 02:48:40.192837', '2021-09-06 02:48:40.192837');
-INSERT INTO "public"."rifle_instance" VALUES (12, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 70, 6, 2, 1, 1, 129, 0, 66, 2, 4.29999999999999982, 2, 1, 920, 10, 1, 20, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, '2021-09-06 02:53:24.30776', '2021-09-06 02:53:24.30776');
-INSERT INTO "public"."rifle_instance" VALUES (13, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 70, 8, 2, 34, 1, 80, 0, 1, 1, 4.29999999999999982, 3, 10, 918, 1, 3, 20, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, '2021-09-06 03:02:35.527086', '2021-09-06 03:02:35.527086');
-INSERT INTO "public"."rifle_instance" VALUES (14, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 1, 'PISTOL', 20.5, 1, 1, 9, 1, 20, 1, 33, 1, 0, 5, 80, 1, 1, 1, 16, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, '2021-09-06 03:04:47.023351', '2021-09-06 03:04:47.023351');
-INSERT INTO "public"."rifle_instance" VALUES (15, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 1, 'SHOTGUN', 73, 6, 2, 1, 1, 80, 0, 1, 4, 1, 2, 10, 918, 10, 3, 20, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, '2021-09-06 03:05:55.639243', '2021-09-06 03:05:55.639243');
-INSERT INTO "public"."rifle_instance" VALUES (16, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 70, 6, 2, 34, 1, 80, 1, 53, 1, 4.29999999999999982, 2, 1, 918, 1, 5, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, '2021-09-06 03:06:30.49336', '2021-09-06 03:06:30.49336');
-INSERT INTO "public"."rifle_instance" VALUES (17, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 50, 'PISTOL', 0, 7, 6, 1, 1, 35, 1, 61, 1, 0, 5, 8, 1, 2, 5, 20, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, '2021-09-06 03:06:37.447102', '2021-09-06 03:06:37.447102');
-INSERT INTO "public"."rifle_instance" VALUES (18, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 1, 'PISTOL', 1, 1, 1, 5, 1, 20, 1, 42, 1, 1, 3, 1, 1, 2, 3, 16, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, '2021-09-06 03:08:25.046276', '2021-09-06 03:08:25.046276');
-INSERT INTO "public"."rifle_instance" VALUES (19, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'l96aw.yml', 'SNIPER', '6', 'Heckler and Koch', 'L96 Arctic Warfare', 24, 70, 'SNIPER', 1, 7, 2, 1, 5, 1, 0, 20, 4, 4.29999999999999982, 11, 10, 1818, 775, 5, 54, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, '2021-09-06 03:08:36.809308', '2021-09-06 03:08:36.809308');
-INSERT INTO "public"."rifle_instance" VALUES (20, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', '552-commando.yml', 'ASSAULT_RIFLE', '4', 'S1 Industries', '552 Commando', 69, 220, 'ASSAULT_RIFLE', 1, 14, 2, 14, 4, 5, 3.14000000000000012, 3, 3, 4.29999999999999982, 1, 80, 1, 2, 6, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, '2021-09-06 03:13:23.838239', '2021-09-06 03:13:23.838239');
-INSERT INTO "public"."rifle_instance" VALUES (21, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 75, 'MACHINE_PISTOL', 10.5, 1, 1, 5, 1, 1, 1, 33, 1, 0, 3, 80, 40, 3, 3, 16, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, '2021-09-06 03:14:24.90574', '2021-09-06 03:14:24.90574');
-INSERT INTO "public"."rifle_instance" VALUES (22, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 1, 'SNIPER', 0.810000000000000053, 11, 16, 19, 1, 450, 0, 1, 4, 1, 1, 1, 1, 500, 3, 49, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, '2021-09-06 03:17:24.397361', '2021-09-06 03:17:24.397361');
-INSERT INTO "public"."rifle_instance" VALUES (23, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 115, 11, 2, 34, 1, 91, 0, 1, 2, 4.29999999999999982, 3, 1, 918, 1, 1, 20, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, '2021-09-06 03:40:23.665692', '2021-09-06 03:40:23.665692');
-INSERT INTO "public"."rifle_instance" VALUES (24, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 70, 1, 2, 34, 1, 1, 0, 1, 3, 7, 2, 10, 918, 10, 3, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, '2021-09-06 03:42:49.10483', '2021-09-06 03:42:49.10483');
-INSERT INTO "public"."rifle_instance" VALUES (25, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 70, 8, 2, 34, 1, 117, 1, 53, 2, 1, 3, 10, 918, 13, 1, 20, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, '2021-09-06 03:51:37.101185', '2021-09-06 03:51:37.101185');
-INSERT INTO "public"."rifle_instance" VALUES (26, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'belt-fed-minigun.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'A TN-33Y Belt-Fed Minigun', 23, 999, 'LIGHT_MACHINE_GUN', 3.81000000000000005, 999, 20, 23, 1, 30, 1, 1, 11, 4.29999999999999982, 33, 180, 1, 26, 1, 140, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, '2021-09-06 03:53:40.659097', '2021-09-06 03:53:40.659097');
-INSERT INTO "public"."rifle_instance" VALUES (27, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp9.yml', 'MACHINE_PISTOL', '9', 'Heckler and Koch', 'MP9', 38, 1, 'MACHINE_PISTOL', 32, 37, 1, 14, 1, 30, 1, 21, 3, 1, 5, 1, 1, 20, 1, 6, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, '2021-09-06 03:54:00.480819', '2021-09-06 03:54:00.480819');
-INSERT INTO "public"."rifle_instance" VALUES (28, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', '552-commando.yml', 'ASSAULT_RIFLE', '4', 'S1 Industries', '552 Commando', 69, 220, 'ASSAULT_RIFLE', 1, 8, 2, 1, 4, 5, 3.14000000000000012, 3, 1, 4, 8, 80, 24, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, '2021-09-06 03:54:39.313207', '2021-09-06 03:54:39.313207');
-INSERT INTO "public"."rifle_instance" VALUES (29, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 75, 'PISTOL', 33, 1, 1, 7, 1, 1, 0, 33, 1, 1, 3, 80, 1, 2, 1, 16, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, '2021-09-06 03:54:48.391041', '2021-09-06 03:54:48.391041');
-INSERT INTO "public"."rifle_instance" VALUES (30, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'aug-a3.yml', 'ASSAULT_RIFLE', '4', 'VI-AUG-IX', 'AUG A3', 44, 220, 'ASSAULT_RIFLE', 4.23000000000000043, 8, 2, 19, 4, 7, 1, 3, 3, 1, 1, 99, 24, 2, 11, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, '2021-09-06 03:58:07.458034', '2021-09-06 03:58:07.458034');
-INSERT INTO "public"."rifle_instance" VALUES (31, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'belt-fed-minigun.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'A TN-33Y Belt-Fed Minigun', 23, 999, 'LIGHT_MACHINE_GUN', 3.81000000000000005, 999, 20, 1, 1, 30, 0, 23, 7, 4.29999999999999982, 1, 1, 1, 36, 40, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, '2021-09-06 04:00:21.032214', '2021-09-06 04:00:21.032214');
-INSERT INTO "public"."rifle_instance" VALUES (32, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'l96aw.yml', 'SNIPER', '6', 'Heckler and Koch', 'L96 Arctic Warfare', 24, 70, 'SNIPER', 0.810000000000000053, 7, 2, 19, 5, 450, 1, 21, 1, 1, 8, 59, 2, 500, 1, 1, 2, 1, 1, 1, 5, 1, 0, 1, 0, 0, 2, 1, 1, 1, 1, 0, 0, 1, 2, 1, 0, 1, 0, '2021-09-06 04:00:25.350172', '2021-09-06 04:00:25.350172');
-INSERT INTO "public"."rifle_instance" VALUES (33, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp5.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'MP5', 5, 400, 'SUB_MACHINE_GUN', 30.8099999999999987, 2, 1, 14, 1, 1, 0, 16, 3, 4.29999999999999982, 5, 1, 1, 44, 29, 1, 0, 1, 0, 1, 1, 1, 2, 1, 2, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, '2021-09-06 04:00:53.142172', '2021-09-06 04:00:53.142172');
-INSERT INTO "public"."rifle_instance" VALUES (34, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 1, 'PISTOL', 20, 10, 1, 1, 1, 1, 0, 33, 1, 0, 1, 80, 40, 2, 5, 16, 1, 1, 5, 0, 1, 1, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 1, 0, 9, 2, 1, 0, 0, '2021-09-06 04:01:03.958174', '2021-09-06 04:01:03.958174');
-INSERT INTO "public"."rifle_instance" VALUES (35, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp5.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'MP5', 5, 1162, 'SUB_MACHINE_GUN', 1, 82, 1, 14, 2, 30, 0, 66, 4, 4.29999999999999982, 10, 1, 1, 1, 6, 6, 1, 1, 1, 1, 1, 1, 2, 1, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 1, 2, 2, 0, 0, '2021-09-06 04:01:19.683189', '2021-09-06 04:01:19.683189');
-INSERT INTO "public"."rifle_instance" VALUES (36, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 75, 'PISTOL', 1, 1, 1, 5, 1, 20, 2, 1, 1, 2, 3, 1, 1, 2, 3, 16, 1, 2, 1, 0, 2, 1, 1, 1, 2, 1, 1, 1, 4, 0, 1, 0, 1, 2, 0, 1, 0, 1, 0, '2021-09-06 04:01:46.176273', '2021-09-06 04:01:46.176273');
-INSERT INTO "public"."rifle_instance" VALUES (37, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 75, 'MACHINE_PISTOL', 10.5, 13, 1, 1, 1, 23, 0, 1, 2, 0, 1, 1, 40, 3, 3, 1, 1, 0, 2, 5, 2, 0, 1, 1, 1, 1, 0, 1, 1, 1, 2, 0, 1, 0, 0, 0, 0, 1, 0, '2021-09-06 04:01:51.777233', '2021-09-06 04:01:51.777233');
-INSERT INTO "public"."rifle_instance" VALUES (38, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 75, 'PISTOL', 20.5, 12, 1, 5, 2, 3, 0, 33, 1, 1, 1, 80, 1, 1, 3, 1, 0, 1, 0, 4, 1, 0, 1, 1, 3, 2, 0, 2, 3, 1, 2, 0, 0, 0, 0, 1, 1, 0, 0, '2021-09-06 04:03:22.246198', '2021-09-06 04:03:22.246198');
-INSERT INTO "public"."rifle_instance" VALUES (39, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'g36c.yml', 'ASSAULT_RIFLE', '4', 'Heckler & Koch', 'G36C Assault Rifle', 46, 1, 'ASSAULT_RIFLE', 4, 8, 2, 14, 2, 5, 1, 1, 1, 4.29999999999999982, 5, 80, 24, 2, 6, 19, 1, 1, 1, 2, 2, 0, 1, 0, 2, 1, 2, 1, 1, 2, 2, 0, 0, 1, 2, 1, 0, 0, 0, '2021-09-06 04:03:32.066198', '2021-09-06 04:03:32.066198');
-INSERT INTO "public"."rifle_instance" VALUES (40, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 100, 'SHOTGUN', 169, 1, 2, 34, 1, 80, 0, 1, 4, 12, 1, 10, 918, 10, 8, 26, 1, 1, 1, 0, 1, 2, 1, 2, 4, 1, 1, 1, 0, 0, 0, 0, 1, 4, 2, 0, 0, 2, 0, '2021-09-06 04:11:31.980285', '2021-09-06 04:11:31.980285');
-INSERT INTO "public"."rifle_instance" VALUES (41, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'm16a4.yml', 'ASSAULT_RIFLE', '4', 'Standard Issue', 'M16A4 Assault Rifle', 25, 220, 'ASSAULT_RIFLE', 4.23000000000000043, 1, 2, 14, 1, 5, 3.14000000000000012, 1, 3, 7, 7, 1, 1, 4, 6, 1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 1, 2, 1, 1, 1, 2, 0, 1, 1, 0, 1, 1, 5, 0, '2021-09-06 04:12:25.294101', '2021-09-06 04:12:25.294101');
-INSERT INTO "public"."rifle_instance" VALUES (42, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 189, 'PISTOL', 0, 14, 6, 2, 1, 2, 2, 57, 1, 8, 5, 9, 1, 2, 1, 36, 2, 1, 7, 1, 2, 1, 3, 7, 2, 2, 2, 0, 1, 3, 1, 0, 9, 1, 0, 3, 1, 0, 0, '2021-09-06 04:13:09.227471', '2021-09-06 04:13:09.227471');
-INSERT INTO "public"."rifle_instance" VALUES (43, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'belt-fed-minigun.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'A TN-33Y Belt-Fed Minigun', 23, 999, 'LIGHT_MACHINE_GUN', 3.81000000000000005, 2, 20, 14, 1, 30, 2, 13, 2, 9, 72, 180, 1, 1, 47, 2, 2, 2, 2, 1, 0, 4, 2, 1, 2, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 2, 2, 0, '2021-09-06 04:13:23.551378', '2021-09-06 04:13:23.551378');
-INSERT INTO "public"."rifle_instance" VALUES (44, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 75, 'PISTOL', 20.5, 26, 1, 5, 1, 2, 1, 33, 1, 1, 1, 6, 40, 2, 1, 16, 4, 1, 9, 0, 2, 3, 1, 0, 0, 1, 0, 1, 0, 2, 1, 0, 2, 3, 0, 1, 3, 1, 0, '2021-09-06 04:13:44.591935', '2021-09-06 04:13:44.591935');
-INSERT INTO "public"."rifle_instance" VALUES (45, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 586, 6, 2, 1, 2, 1, 2, 2, 2, 3, 2, 29, 918, 10, 4, 20, 1, 2, 1, 3, 2, 0, 0, 2, 7, 1, 0, 1, 2, 2, 2, 0, 0, 6, 0, 1, 0, 4, 0, '2021-09-06 04:21:24.352496', '2021-09-06 04:21:24.352496');
-INSERT INTO "public"."rifle_instance" VALUES (46, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', '552-commando.yml', 'ASSAULT_RIFLE', '4', 'S1 Industries', '552 Commando', 69, 2, 'ASSAULT_RIFLE', 16, 2, 2, 2, 4, 5, 3.14000000000000012, 6, 2, 4.29999999999999982, 1, 80, 24, 6, 54, 31, 2, 2, 2, 3, 0, 2, 5, 0, 0, 2, 1, 0, 1, 2, 1, 0, 0, 0, 0, 1, 2, 2, 0, '2021-09-06 04:21:40.381543', '2021-09-06 04:21:40.381543');
-INSERT INTO "public"."rifle_instance" VALUES (47, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 50, 'PISTOL', 0, 7, 6, 11, 3, 35, 1, 125, 1, 1, 2, 10, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 1, 0, 6, 3, 2, 0, 0, 0, 0, '2021-09-06 04:22:42.764595', '2021-09-06 04:22:42.764595');
-INSERT INTO "public"."rifle_instance" VALUES (48, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 70, 'SNIPER', 2, 2, 16, 1, 3, 1620, 2, 13, 4, 1, 9, 10, 1818, 1, 2, 49, 1, 0, 1, 27, 1, 1, 3, 4, 0, 0, 0, 3, 2, 2, 0, 0, 2, 2, 3, 1, 2, 3, 0, '2021-09-06 04:22:46.863401', '2021-09-06 04:22:46.863401');
-INSERT INTO "public"."rifle_instance" VALUES (49, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 75, 'MACHINE_PISTOL', 30, 13, 1, 5, 1, 62, 0, 3, 2, 0, 1, 80, 1, 7, 2, 1, 1, 5, 2, 1, 2, 2, 0, 2, 3, 0, 1, 1, 0, 19, 1, 0, 0, 1, 4, 0, 2, 0, 0, '2021-09-06 04:23:01.641628', '2021-09-06 04:23:01.641628');
-INSERT INTO "public"."rifle_instance" VALUES (50, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 90, 'SNIPER', 0.810000000000000053, 21, 16, 8, 3, 450, 0, 2, 7, 15, 1, 12, 1818, 500, 2, 49, 5, 2, 1, 2, 0, 1, 1, 1, 1, 0, 0, 2, 6, 2, 2, 0, 0, 2, 2, 1, 2, 1, 0, '2021-09-06 04:23:35.951147', '2021-09-06 04:23:35.951147');
-INSERT INTO "public"."rifle_instance" VALUES (51, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 115, 17, 2, 34, 1, 80, 1, 53, 4, 10, 3, 20, 918, 10, 4, 2, 2, 1, 0, 0, 2, 10, 2, 1, 1, 0, 1, 0, 2, 1, 1, 0, 0, 3, 2, 0, 2, 7, 0, '2021-09-06 04:27:50.496627', '2021-09-06 04:27:50.496627');
-INSERT INTO "public"."rifle_instance" VALUES (52, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp5.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'MP5', 5, 400, 'SUB_MACHINE_GUN', 461, 31, 1, 1, 1, 30, 2, 13, 10, 4.29999999999999982, 1, 2, 818, 2, 21, 19, 2, 4, 2, 2, 1, 1, 1, 2, 2, 0, 2, 3, 0, 2, 3, 0, 0, 0, 1, 1, 3, 3, 0, '2021-09-06 04:28:20.129768', '2021-09-06 04:28:20.129768');
-INSERT INTO "public"."rifle_instance" VALUES (53, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 147, 'SHOTGUN', 70, 62, 2, 2, 2, 80, 1, 53, 2, 4.29999999999999982, 2, 10, 918, 21, 3, 2, 0, 1, 2, 3, 2, 0, 3, 2, 0, 1, 2, 1, 3, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, '2021-09-07 10:38:58.671814', '2021-09-07 10:38:58.671814');
-INSERT INTO "public"."rifle_instance" VALUES (54, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 1, 'PISTOL', 20.5, 2, 1, 13, 8, 20, 0, 33, 2, 2, 6, 1, 40, 1, 3, 2, 0, 0, 2, 2, 2, 1, 34, 2, 0, 0, 1, 2, 0, 0, 0, 0, 1, 9, 3, 0, 2, 2, 0, '2021-09-07 10:39:50.158031', '2021-09-07 10:39:50.158031');
-INSERT INTO "public"."rifle_instance" VALUES (55, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 3, 'MACHINE_PISTOL', 20, 13, 1, 2, 5, 20, 0, 42, 1, 0, 9, 290, 40, 1, 3, 3, 2, 1, 1, 2, 0, 11, 1, 0, 1, 0, 2, 2, 0, 1, 1, 0, 7, 2, 0, 1, 2, 2, 0, '2021-09-07 10:40:02.18301', '2021-09-07 10:40:02.18301');
-INSERT INTO "public"."rifle_instance" VALUES (56, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 47, 'SHOTGUN', 2, 6, 2, 34, 3, 1, 0, 309, 4, 4.29999999999999982, 2, 1, 918, 82, 1, 59, 1, 1, 1, 1, 0, 2, 0, 1, 1, 2, 2, 0, 2, 0, 0, 0, 2, 2, 1, 1, 3, 1, 0, '2021-09-07 10:48:10.468071', '2021-09-07 10:48:10.468071');
-INSERT INTO "public"."rifle_instance" VALUES (57, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 112, 2, 2, 34, 1, 147, 0, 1, 2, 17, 2, 26, 12, 10, 3, 62, 2, 0, 7, 2, 2, 11, 7, 0, 0, 2, 0, 1, 2, 3, 0, 0, 1, 3, 1, 0, 1, 2, 0, '2021-09-07 10:54:48.821086', '2021-09-07 10:54:48.821086');
-INSERT INTO "public"."rifle_instance" VALUES (58, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp9.yml', 'MACHINE_PISTOL', '9', 'Heckler and Koch', 'MP9', 38, 1, 'MACHINE_PISTOL', 30.8099999999999987, 1, 1, 2, 3, 108, 2, 1, 8, 4.29999999999999982, 2, 180, 818, 20, 6, 14, 17, 0, 2, 2, 5, 2, 2, 11, 1, 0, 0, 0, 7, 2, 1, 0, 4, 2, 0, 1, 2, 4, 0, '2021-09-07 10:55:09.614216', '2021-09-07 10:55:09.614216');
-INSERT INTO "public"."rifle_instance" VALUES (59, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'scarh.yml', 'ASSAULT_RIFLE', '4', 'SK-10', 'SCAR-H Assault Rifle', 31, 220, 'ASSAULT_RIFLE', 16, 1, 2, 14, 16, 1, 3.14000000000000012, 1, 2, 4.29999999999999982, 2, 1, 77, 4, 6, 2, 3, 0, 1, 1, 22, 2, 0, 14, 0, 2, 5, 7, 1, 2, 2, 0, 0, 2, 0, 0, 3, 0, 0, '2021-09-07 10:55:32.641118', '2021-09-07 10:55:32.641118');
-INSERT INTO "public"."rifle_instance" VALUES (60, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', '552-commando.yml', 'ASSAULT_RIFLE', '4', 'S1 Industries', '552 Commando', 69, 458, 'ASSAULT_RIFLE', 1, 8, 2, 14, 2, 2, 3.14000000000000012, 1, 2, 4.29999999999999982, 18, 2, 75, 3, 6, 1, 1, 1, 1, 3, 1, 2, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, '2021-09-07 10:56:19.699137', '2021-09-07 10:56:19.699137');
-INSERT INTO "public"."rifle_instance" VALUES (61, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'tar21.yml', 'ASSAULT_RIFLE', '4', 'SK-10', 'TAR-21 Assault Rifle', 30, 2, 'ASSAULT_RIFLE', 17, 8, 2, 3, 2, 5, 1, 2, 1, 15, 5, 376, 2, 2, 52, 38, 0, 0, 3, 1, 2, 1, 0, 2, 4, 0, 1, 0, 1, 0, 0, 0, 0, 2, 2, 40, 2, 1, 0, '2021-09-07 10:57:40.930179', '2021-09-07 10:57:40.930179');
-INSERT INTO "public"."rifle_instance" VALUES (62, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'l96aw.yml', 'SNIPER', '6', 'Heckler and Koch', 'L96 Arctic Warfare', 24, 1, 'SNIPER', 2, 7, 2, 19, 3, 2, 2, 3, 4, 1, 8, 16, 1, 500, 8, 54, 2, 0, 2, 1, 0, 3, 4, 1, 19, 0, 1, 3, 1, 1, 0, 0, 0, 19, 4, 1, 2, 0, 0, '2021-09-07 10:57:55.801265', '2021-09-07 10:57:55.801265');
-INSERT INTO "public"."rifle_instance" VALUES (63, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mk46.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'MK-46 Light Machine Gun', 78, 3717, 'LIGHT_MACHINE_GUN', 3.81000000000000005, 3278, 20, 21, 3, 30, 0, 2, 2, 3, 33, 2, 818, 149, 186, 1, 2, 9, 2, 8, 7, 0, 2, 3, 49, 2, 1, 2, 0, 0, 2, 0, 9, 0, 2, 0, 0, 1, 0, '2021-09-07 10:58:07.221686', '2021-09-07 10:58:07.221686');
-INSERT INTO "public"."rifle_instance" VALUES (64, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 1, 'PISTOL', 0, 7, 6, 11, 1, 35, 1, 2, 1, 0, 2, 23, 2, 2, 18, 20, 0, 2, 1, 2, 4, 0, 1, 17, 1, 1, 7, 0, 1, 2, 1, 0, 6, 1, 0, 13, 2, 0, 0, '2021-09-07 10:58:18.857191', '2021-09-07 10:58:18.857191');
-INSERT INTO "public"."rifle_instance" VALUES (65, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 70, 6, 2, 34, 1, 1, 0, 1, 7, 4.29999999999999982, 1, 1, 1390, 1, 1, 20, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, '2021-09-07 11:35:16.81688', '2021-09-07 11:35:16.81688');
-INSERT INTO "public"."rifle_instance" VALUES (66, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 92, 'SNIPER', 0.810000000000000053, 12, 16, 19, 3, 1, 0, 13, 1, 1, 9, 18, 1818, 500, 3, 49, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, '2021-09-07 11:37:13.543964', '2021-09-07 11:37:13.543964');
-INSERT INTO "public"."rifle_instance" VALUES (67, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 1, 'SHOTGUN', 70, 1, 2, 34, 1, 1, 1, 53, 2, 4.29999999999999982, 3, 10, 918, 10, 1, 34, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2021-09-07 11:38:57.601084', '2021-09-07 11:38:57.601084');
-INSERT INTO "public"."rifle_instance" VALUES (68, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 124, 'PISTOL', 20.5, 9, 1, 1, 1, 20, 0, 43, 1, 0, 1, 1, 40, 2, 3, 16, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, '2021-09-07 11:40:06.99814', '2021-09-07 11:40:06.99814');
-INSERT INTO "public"."rifle_instance" VALUES (69, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 75, 'MACHINE_PISTOL', 14, 13, 1, 8, 1, 20, 1, 35, 1, 0, 3, 1, 40, 1, 3, 16, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, '2021-09-07 11:41:52.537095', '2021-09-07 11:41:52.537095');
-INSERT INTO "public"."rifle_instance" VALUES (70, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 66, 'SHOTGUN', 1, 7, 2, 1, 1, 80, 0, 53, 2, 5, 2, 10, 918, 10, 1, 20, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, '2021-09-07 13:53:42.597594', '2021-09-07 13:53:42.597594');
-INSERT INTO "public"."rifle_instance" VALUES (71, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mk46.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'MK-46 Light Machine Gun', 78, 999, 'LIGHT_MACHINE_GUN', 3.81000000000000005, 2564, 20, 1, 1, 30, 0, 24, 13, 4.29999999999999982, 44, 180, 818, 53, 40, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, '2021-09-07 13:54:19.914426', '2021-09-07 13:54:19.914426');
-INSERT INTO "public"."rifle_instance" VALUES (72, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 1, 'SHOTGUN', 136, 6, 2, 34, 1, 80, 1, 53, 1, 4.29999999999999982, 2, 1, 1, 10, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, '2021-09-07 14:06:46.882602', '2021-09-07 14:06:46.882602');
-INSERT INTO "public"."rifle_instance" VALUES (73, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mk46.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'MK-46 Light Machine Gun', 78, 999, 'LIGHT_MACHINE_GUN', 3.81000000000000005, 999, 20, 22, 1, 30, 0, 13, 7, 4.29999999999999982, 33, 180, 818, 20, 40, 140, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, '2021-09-07 14:07:05.080684', '2021-09-07 14:07:05.080684');
-INSERT INTO "public"."rifle_instance" VALUES (74, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 75, 'PISTOL', 20.5, 9, 1, 1, 1, 1, 0, 33, 1, 0, 1, 80, 40, 4, 7, 19, 2, 0, 1, 1, 0, 2, 1, 2, 1, 0, 1, 1, 0, 0, 0, 0, 1, 2, 1, 2, 1, 0, 0, '2021-09-07 14:07:13.03584', '2021-09-07 14:07:13.03584');
-INSERT INTO "public"."rifle_instance" VALUES (75, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'tar21.yml', 'ASSAULT_RIFLE', '4', 'SK-10', 'TAR-21 Assault Rifle', 30, 220, 'ASSAULT_RIFLE', 4.23000000000000043, 8, 2, 14, 1, 5, 3.14000000000000012, 1, 3, 4.29999999999999982, 11, 80, 2, 2, 1, 1, 0, 1, 1, 1, 1, 1, 4, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 2, 2, 0, '2021-09-07 14:08:06.897732', '2021-09-07 14:08:06.897732');
-INSERT INTO "public"."rifle_instance" VALUES (76, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 1, 'MACHINE_PISTOL', 10.5, 13, 1, 5, 1, 20, 1, 33, 1, 1, 1, 80, 2, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 2, 0, 1, 2, 1, 0, 0, 2, 1, 0, 1, 1, 0, '2021-09-07 14:08:08.725752', '2021-09-07 14:08:08.725752');
-INSERT INTO "public"."rifle_instance" VALUES (77, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mk46.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'MK-46 Light Machine Gun', 78, 999, 'LIGHT_MACHINE_GUN', 3.81000000000000005, 1, 20, 14, 1, 30, 1, 1, 8, 4.29999999999999982, 33, 353, 818, 45, 100, 140, 1, 1, 1, 1, 0, 1, 1, 2, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 2, 2, 0, '2021-09-07 14:09:34.865872', '2021-09-07 14:09:34.865872');
-INSERT INTO "public"."rifle_instance" VALUES (78, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'p90.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'Heckler and Koch P90', 21, 1, 'SUB_MACHINE_GUN', 1, 1, 1, 14, 1, 84, 0, 30, 3, 4.29999999999999982, 1, 1, 818, 20, 10, 6, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 4, 0, 1, 1, 1, 0, 0, '2021-09-07 14:09:53.320895', '2021-09-07 14:09:53.320895');
-INSERT INTO "public"."rifle_instance" VALUES (79, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 2, 'PISTOL', 20.5, 21, 1, 5, 3, 20, 1, 33, 1, 0, 8, 276, 40, 2, 4, 16, 2, 1, 1, 1, 0, 0, 1, 1, 2, 1, 1, 1, 2, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, '2021-09-07 14:10:19.630963', '2021-09-07 14:10:19.630963');
-INSERT INTO "public"."rifle_instance" VALUES (80, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 154, 'SHOTGUN', 70, 6, 2, 8, 1, 2, 0, 2, 5, 4.29999999999999982, 8, 2, 918, 10, 2, 20, 2, 2, 87, 1, 1, 9, 0, 8, 9, 4, 0, 0, 3, 1, 0, 0, 2, 0, 1, 6, 1, 1, 0, '2021-09-07 15:34:49.372159', '2021-09-07 15:34:49.372159');
-INSERT INTO "public"."rifle_instance" VALUES (81, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 1082, 1, 2, 34, 2, 329, 0, 53, 2, 4.29999999999999982, 2, 81, 918, 2, 3, 2, 8, 2, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 0, 4, 2, 0, 4, 4, 1, 4, 2, 1, 0, '2021-09-07 15:44:26.523537', '2021-09-07 15:44:26.523537');
-INSERT INTO "public"."rifle_instance" VALUES (82, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'ump45.yml', 'SUB_MACHINE_GUN', '5', 'PN/P', 'UMP-45', 32, 400, 'SUB_MACHINE_GUN', 131, 120, 1, 14, 1, 2, 2, 13, 2, 1, 5, 180, 2, 1, 6, 58, 1, 2, 1, 3, 0, 0, 2, 1, 3, 1, 1, 0, 1, 3, 4, 0, 0, 1, 0, 3, 5, 2, 0, '2021-09-07 15:47:20.881538', '2021-09-07 15:47:20.881538');
-INSERT INTO "public"."rifle_instance" VALUES (83, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 70, 1, 2, 1, 1, 80, 1, 1, 5, 2, 2, 2, 918, 7, 11, 20, 2, 3, 7, 0, 6, 1, 2, 0, 18, 0, 2, 3, 2, 1, 0, 0, 2, 2, 4, 0, 0, 2, 0, '2021-09-11 02:31:04.075813', '2021-09-11 02:31:04.075813');
-INSERT INTO "public"."rifle_instance" VALUES (84, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 1, 'MACHINE_PISTOL', 2, 50, 1, 16, 2, 20, 0, 1, 2, 2, 5, 250, 2, 5, 2, 16, 1, 2, 2, 1, 2, 71, 0, 2, 2, 0, 5, 1, 0, 0, 3, 0, 4, 0, 30, 1, 3, 2, 0, '2021-09-11 02:31:11.598437', '2021-09-11 02:31:11.598437');
-INSERT INTO "public"."rifle_instance" VALUES (85, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'p90.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'Heckler and Koch P90', 21, 400, 'SUB_MACHINE_GUN', 2, 31, 1, 14, 2, 2, 0, 18, 1, 1, 2, 180, 818, 76, 10, 2, 3, 0, 7, 0, 22, 3, 1, 21, 1, 2, 0, 1, 3, 6, 0, 0, 4, 11, 0, 2, 0, 17, 0, '2021-09-11 22:08:15.984399', '2021-09-11 22:08:15.984399');
-INSERT INTO "public"."rifle_instance" VALUES (86, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 166, 'SHOTGUN', 2, 26, 2, 2, 2, 80, 3, 53, 2, 2, 2, 15, 2778, 10, 7, 37, 1, 1, 2, 0, 4, 3, 10, 1, 0, 1, 2, 0, 4, 2, 9, 0, 0, 1, 0, 0, 2, 1, 0, '2021-09-11 22:34:57.993684', '2021-09-11 22:34:57.993684');
-INSERT INTO "public"."rifle_instance" VALUES (87, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 101, 6, 2, 1, 1, 80, 0, 53, 2, 4.29999999999999982, 2, 10, 918, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, '2021-09-11 22:43:30.863845', '2021-09-11 22:43:30.863845');
-INSERT INTO "public"."rifle_instance" VALUES (88, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 70, 6, 2, 140, 2, 2, 0, 53, 7, 31, 3, 10, 1, 17, 5, 20, 1, 2, 2, 1, 2, 2, 0, 1, 3, 2, 2, 2, 0, 0, 3, 0, 3, 8, 3, 2, 0, 0, 0, '2021-09-14 23:05:31.476199', '2021-09-14 23:05:31.476199');
-INSERT INTO "public"."rifle_instance" VALUES (89, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 70, 'SNIPER', 1, 16, 16, 19, 3, 82, 8, 60, 1, 4.29999999999999982, 17, 10, 1818, 2, 2, 29, 2, 12, 0, 0, 2, 4, 4, 3, 1, 1, 2, 4, 2, 9, 2, 0, 0, 10, 2, 0, 2, 0, 0, '2021-09-14 23:08:43.094794', '2021-09-14 23:08:43.094794');
-INSERT INTO "public"."rifle_instance" VALUES (90, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 2, 'SHOTGUN', 7, 46, 2, 34, 1, 80, 0, 53, 6, 4.29999999999999982, 5, 10, 2, 10, 7, 811, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 9, 2, 4, 0, 0, 2, 0, 0, 2, 2, 1, 0, '2021-09-14 23:18:08.304107', '2021-09-14 23:18:08.304107');
-INSERT INTO "public"."rifle_instance" VALUES (114, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 100, 'SHOTGUN', 70, 2, 2, 34, 1, 80, 2, 1, 2, 2, 1, 10, 1, 10, 8, 20, 2, 1, 2, 2, 1, 2, 1, 2, 0, 0, 0, 1, 0, 0, 2, 0, 1, 1, 1, 1, 1, 1, 0, '2021-09-16 23:36:13.402217', '2021-09-16 23:36:13.402217');
-INSERT INTO "public"."rifle_instance" VALUES (91, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 50, 'PISTOL', 0, 2, 6, 2, 1, 146, 2, 2, 1, 4, 4, 2, 8, 2, 5, 20, 1, 2, 2, 8, 6, 2, 1, 12, 0, 1, 3, 0, 1, 0, 1, 0, 2, 0, 1, 1, 1, 15, 0, '2021-09-14 23:18:30.652122', '2021-09-14 23:18:30.652122');
-INSERT INTO "public"."rifle_instance" VALUES (92, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 1, 6, 2, 34, 1, 118, 0, 53, 2, 1, 2, 10, 1, 12, 3, 20, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, '2021-09-14 23:35:49.479445', '2021-09-14 23:35:49.479445');
-INSERT INTO "public"."rifle_instance" VALUES (93, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 75, 'PISTOL', 38, 1, 1, 5, 1, 1, 0, 1, 1, 0, 3, 93, 40, 3, 3, 23, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, '2021-09-14 23:35:59.910515', '2021-09-14 23:35:59.910515');
-INSERT INTO "public"."rifle_instance" VALUES (94, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'm3.yml', 'SHOTGUN', '3', 'GBNT-3', 'M3', 28, 40, 'SHOTGUN', 125, 6, 2, 34, 1, 144, 0, 53, 2, 1, 1, 1, 918, 10, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, '2021-09-14 23:39:15.773517', '2021-09-14 23:39:15.773517');
-INSERT INTO "public"."rifle_instance" VALUES (95, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 70, 6, 2, 1, 1, 1, 2, 1, 2, 6, 2, 10, 1719, 1, 3, 84, 1, 2, 1, 2, 1, 1, 0, 1, 0, 2, 1, 0, 1, 2, 1, 0, 1, 1, 0, 0, 1, 0, 0, '2021-09-14 23:42:41.011863', '2021-09-14 23:42:41.011863');
-INSERT INTO "public"."rifle_instance" VALUES (96, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'ump45.yml', 'SUB_MACHINE_GUN', '5', 'PN/P', 'UMP-45', 32, 400, 'SUB_MACHINE_GUN', 30.8099999999999987, 46, 1, 14, 1, 30, 1, 13, 3, 4.29999999999999982, 2, 8, 2, 20, 1, 19, 2, 8, 0, 2, 1, 1, 2, 2, 2, 1, 0, 2, 43, 3, 1, 0, 2, 0, 0, 1, 3, 0, 0, '2021-09-14 23:42:59.549552', '2021-09-14 23:42:59.549552');
-INSERT INTO "public"."rifle_instance" VALUES (97, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 70, 1, 2, 34, 3, 80, 0, 53, 2, 10, 4, 198, 2563, 10, 7, 4, 1, 2, 2, 1, 2, 0, 2, 3, 1, 2, 1, 1, 2, 2, 0, 0, 1, 5, 0, 2, 0, 0, 0, '2021-09-14 23:43:28.098499', '2021-09-14 23:43:28.098499');
-INSERT INTO "public"."rifle_instance" VALUES (98, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'xm109.yml', 'SNIPER', '6', 'Heckler and Koch', 'XM109 Sniper Rifle', 13, 70, 'SNIPER', 2, 1, 2, 19, 3, 450, 0, 13, 12, 4.29999999999999982, 22, 2, 1818, 6001, 3, 159, 3, 1, 7, 3, 2, 0, 1, 2, 2, 8, 0, 1, 2, 1, 3, 0, 1, 2, 1, 1, 2, 0, 0, '2021-09-14 23:43:44.450572', '2021-09-14 23:43:44.450572');
-INSERT INTO "public"."rifle_instance" VALUES (99, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 75, 'PISTOL', 20.5, 2, 1, 5, 1, 20, 0, 33, 2, 2, 2, 80, 329, 6, 1, 33, 3, 1, 1, 1, 2, 0, 0, 1, 2, 0, 2, 0, 3, 1, 2, 0, 2, 2, 2, 2, 0, 1, 0, '2021-09-14 23:44:17.215558', '2021-09-14 23:44:17.215558');
-INSERT INTO "public"."rifle_instance" VALUES (100, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 127, 'SHOTGUN', 70, 12, 2, 34, 18, 80, 2, 7, 2, 7, 2, 10, 918, 10, 3, 5, 1, 2, 2, 1, 0, 1, 1, 1, 0, 4, 1, 1, 2, 2, 4, 0, 0, 1, 0, 4, 2, 6, 0, '2021-09-14 23:44:37.180693', '2021-09-14 23:44:37.180693');
-INSERT INTO "public"."rifle_instance" VALUES (101, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 75, 'MACHINE_PISTOL', 51, 13, 1, 5, 1, 2, 1, 33, 8, 1, 3, 80, 144, 1, 3, 72, 4, 2, 4, 2, 2, 1, 3, 0, 0, 2, 3, 2, 1, 2, 1, 0, 0, 1, 1, 2, 1, 2, 0, '2021-09-14 23:44:50.870736', '2021-09-14 23:44:50.870736');
-INSERT INTO "public"."rifle_instance" VALUES (102, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp9.yml', 'MACHINE_PISTOL', '9', 'Heckler and Koch', 'MP9', 38, 1373, 'MACHINE_PISTOL', 30.8099999999999987, 31, 1, 1, 2, 30, 2, 13, 2, 4, 12, 1, 2774, 72, 1, 2, 13, 2, 0, 2, 0, 1, 1, 2, 6, 3, 0, 2, 4, 1, 0, 0, 1, 2, 0, 1, 1, 2, 0, '2021-09-14 23:44:58.487728', '2021-09-14 23:44:58.487728');
-INSERT INTO "public"."rifle_instance" VALUES (103, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'p90.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'Heckler and Koch P90', 21, 400, 'SUB_MACHINE_GUN', 2, 89, 1, 62, 1, 30, 0, 13, 3, 33, 2, 180, 1, 67, 10, 2, 1, 3, 15, 2, 2, 2, 1, 9, 2, 2, 0, 3, 0, 2, 4, 0, 2, 0, 2, 2, 2, 2, 0, '2021-09-14 23:45:13.896704', '2021-09-14 23:45:13.896704');
-INSERT INTO "public"."rifle_instance" VALUES (104, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 195, 'MACHINE_PISTOL', 10.5, 2, 1, 2, 2, 1, 2, 48, 1, 2, 12, 1, 144, 2, 2, 2, 2, 6, 0, 0, 3, 1, 1, 8, 1, 0, 1, 0, 2, 2, 1, 0, 1, 2, 1, 1, 0, 1, 0, '2021-09-14 23:45:23.846735', '2021-09-14 23:45:23.846735');
-INSERT INTO "public"."rifle_instance" VALUES (105, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'xm109.yml', 'SNIPER', '6', 'Heckler and Koch', 'XM109 Sniper Rifle', 13, 70, 'SNIPER', 1, 115, 2, 1, 3, 1540, 1, 23, 4, 4.29999999999999982, 9, 10, 1818, 3138, 3, 7, 0, 1, 1, 0, 0, 4, 1, 2, 1, 0, 1, 2, 7, 1, 0, 0, 5, 2, 0, 4, 10, 1, 0, '2021-09-14 23:45:34.064608', '2021-09-14 23:45:34.064608');
-INSERT INTO "public"."rifle_instance" VALUES (106, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 2, 'SHOTGUN', 70, 6, 2, 93, 24, 24, 5, 53, 2, 2, 3, 40, 918, 8, 2, 3, 3, 9, 12, 3, 35, 2, 3, 0, 6, 80, 4, 0, 2, 0, 12, 0, 3, 2, 3, 2, 2, 18, 0, '2021-09-16 02:07:36.873686', '2021-09-16 02:07:36.873686');
-INSERT INTO "public"."rifle_instance" VALUES (107, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'm4.yml', 'ASSAULT_RIFLE', '4', 'Standard Issue', 'M4 Assault Rifle', 26, 3, 'ASSAULT_RIFLE', 4, 24, 2, 249, 17, 123, 4, 2, 3, 3, 2, 80, 24, 4, 6, 10, 4, 6, 19, 2, 0, 8, 5, 2, 7, 0, 0, 4, 63, 10, 9, 0, 0, 4, 4, 2, 59, 13, 0, '2021-09-16 02:07:57.898864', '2021-09-16 02:07:57.898864');
-INSERT INTO "public"."rifle_instance" VALUES (108, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp5.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'MP5', 5, 2230, 'SUB_MACHINE_GUN', 75, 3, 1, 14, 4, 7, 0, 8, 2, 4.29999999999999982, 5, 180, 3825, 54, 15, 199, 2, 4, 89, 3, 17, 4, 4, 6, 6, 4, 2, 0, 4, 3, 25, 0, 3, 5, 2, 175, 3, 0, 0, '2021-09-16 02:08:02.030809', '2021-09-16 02:08:02.030809');
-INSERT INTO "public"."rifle_instance" VALUES (109, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 141, 'SHOTGUN', 4, 2, 2, 34, 1, 3, 4, 53, 2, 4.29999999999999982, 81, 2, 4, 31, 9, 123, 3, 4, 0, 3, 2, 3, 17, 3, 0, 3, 0, 5, 3, 33, 18, 0, 3, 3, 4, 0, 161, 4, 0, '2021-09-16 02:08:15.453854', '2021-09-16 02:08:15.453854');
-INSERT INTO "public"."rifle_instance" VALUES (110, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 47, 'SNIPER', 0.810000000000000053, 7, 21, 549, 7, 61, 6, 65, 19, 4.29999999999999982, 4, 10, 1818, 3218, 21, 11, 3, 3, 3, 4, 2, 3, 0, 3, 19, 0, 5, 3, 4, 4, 0, 0, 3, 3, 2, 2, 2, 0, 0, '2021-09-16 02:08:20.239637', '2021-09-16 02:08:20.239637');
-INSERT INTO "public"."rifle_instance" VALUES (111, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 70, 1, 2, 43, 1, 80, 0, 1, 2, 1, 2, 10, 1323, 12, 5, 38, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, '2021-09-16 23:27:45.188054', '2021-09-16 23:27:45.188054');
-INSERT INTO "public"."rifle_instance" VALUES (112, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 75, 'PISTOL', 20.5, 15, 1, 5, 1, 1, 0, 1, 1, 0, 3, 80, 40, 2, 3, 28, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2021-09-16 23:35:43.931376', '2021-09-16 23:35:43.931376');
-INSERT INTO "public"."rifle_instance" VALUES (113, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 206, 'PISTOL', 29, 2, 1, 5, 1, 20, 0, 33, 2, 1, 1, 1, 40, 2, 3, 1, 0, 0, 1, 1, 2, 1, 1, 1, 1, 1, 0, 0, 1, 4, 2, 0, 1, 0, 1, 1, 1, 1, 0, '2021-09-16 23:35:57.520318', '2021-09-16 23:35:57.520318');
-INSERT INTO "public"."rifle_instance" VALUES (116, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'tar21.yml', 'ASSAULT_RIFLE', '4', 'SK-10', 'TAR-21 Assault Rifle', 30, 1, 'ASSAULT_RIFLE', 2, 2, 2, 1, 4, 45, 2, 4, 3, 14, 5, 4, 2, 2, 1, 10, 3, 1, 0, 1, 10, 4, 3, 0, 2, 2, 0, 7, 0, 1, 0, 0, 0, 2, 4, 1, 0, 3, 0, '2021-09-16 23:36:44.521348', '2021-09-16 23:36:44.521348');
-INSERT INTO "public"."rifle_instance" VALUES (118, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 3, 6, 2, 34, 1, 1, 2, 1, 1, 4.29999999999999982, 2, 10, 1, 10, 3, 127, 2, 3, 3, 2, 0, 1, 2, 8, 0, 1, 1, 1, 0, 0, 6, 0, 2, 1, 1, 0, 2, 3, 0, '2021-09-16 23:37:05.772357', '2021-09-16 23:37:05.772357');
-INSERT INTO "public"."rifle_instance" VALUES (119, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'm3.yml', 'SHOTGUN', '3', 'GBNT-3', 'M3', 28, 2, 'SHOTGUN', 70, 6, 2, 1, 1, 155, 1, 3, 3, 4.29999999999999982, 2, 34, 918, 74, 13, 67, 4, 4, 0, 15, 0, 2, 0, 5, 6, 0, 1, 1, 1, 1, 1, 0, 2, 2, 1, 4, 4, 2, 0, '2021-09-16 23:37:18.426344', '2021-09-16 23:37:18.426344');
-INSERT INTO "public"."rifle_instance" VALUES (120, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 50, 'PISTOL', 4, 1, 6, 11, 1, 34, 2, 33, 1, 0, 21, 8, 1, 1, 2, 20, 0, 4, 2, 2, 0, 2, 13, 2, 1, 0, 2, 2, 2, 0, 4, 0, 13, 3, 2, 0, 4, 2, 0, '2021-09-16 23:37:20.712351', '2021-09-16 23:37:20.712351');
-INSERT INTO "public"."rifle_instance" VALUES (121, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'hk21.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'HK-21 Light Machine Gun', 33, 2, 'LIGHT_MACHINE_GUN', 3.81000000000000005, 1, 20, 2, 1, 1, 0, 2, 2, 4.29999999999999982, 33, 324, 1344, 20, 80, 1, 0, 1, 6, 0, 1, 5, 2, 1, 1, 2, 1, 1, 1, 0, 2, 0, 2, 1, 0, 2, 4, 0, 0, '2021-09-16 23:41:05.302512', '2021-09-16 23:41:05.302512');
-INSERT INTO "public"."rifle_instance" VALUES (122, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mk46.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'MK-46 Light Machine Gun', 78, 1, 'LIGHT_MACHINE_GUN', 3.81000000000000005, 19206, 20, 14, 9, 30, 0, 13, 27, 4.29999999999999982, 1, 438, 818, 1, 40, 558, 1, 2, 0, 1, 9, 2, 1, 5, 1, 14, 0, 2, 4, 0, 1, 0, 0, 1, 2, 4, 4, 2, 0, '2021-09-16 23:41:13.858541', '2021-09-16 23:41:13.858541');
-INSERT INTO "public"."rifle_instance" VALUES (123, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 1, 'SNIPER', 0.810000000000000053, 2, 21, 2, 3, 252, 4, 13, 4, 4.29999999999999982, 8, 23, 1818, 1, 21, 9, 14, 1, 3, 1, 2, 0, 1, 2, 0, 2, 0, 2, 0, 4, 1, 0, 4, 2, 1, 1, 2, 1, 0, '2021-09-16 23:41:23.490425', '2021-09-16 23:41:23.490425');
-INSERT INTO "public"."rifle_instance" VALUES (124, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'g36c.yml', 'ASSAULT_RIFLE', '4', 'Heckler & Koch', 'G36C Assault Rifle', 46, 220, 'ASSAULT_RIFLE', 13, 2, 2, 14, 2, 45, 1, 3, 3, 14, 5, 80, 1, 2, 1, 2, 2, 4, 8, 1, 0, 1, 0, 3, 1, 1, 2, 1, 0, 0, 0, 0, 2, 1, 0, 2, 0, 0, 0, '2021-09-16 23:41:37.665403', '2021-09-16 23:41:37.665403');
-INSERT INTO "public"."rifle_instance" VALUES (125, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 75, 'MACHINE_PISTOL', 10.5, 13, 1, 5, 1, 1, 3, 1, 5, 3, 5, 308, 1, 3, 12, 1, 1, 2, 2, 5, 0, 2, 21, 13, 1, 2, 4, 2, 2, 9, 2, 0, 0, 1, 4, 0, 2, 6, 0, '2021-09-16 23:41:43.832588', '2021-09-16 23:41:43.832588');
-INSERT INTO "public"."rifle_instance" VALUES (126, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 75, 'PISTOL', 20.5, 6, 1, 2, 2, 3, 3, 2, 1, 2, 60, 80, 40, 7, 2, 187, 8, 3, 14, 3, 3, 2, 11, 0, 15, 0, 3, 4, 2, 12, 5, 0, 0, 3, 24, 0, 3, 0, 0, '2021-09-16 23:41:47.188541', '2021-09-16 23:41:47.188541');
-INSERT INTO "public"."rifle_instance" VALUES (127, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'g36c.yml', 'ASSAULT_RIFLE', '4', 'Heckler & Koch', 'G36C Assault Rifle', 46, 220, 'ASSAULT_RIFLE', 518, 91, 2, 2, 4, 223, 2, 3, 3, 4.29999999999999982, 5, 340, 79, 2, 3, 10, 16, 6, 0, 0, 5, 3, 3, 0, 4, 2, 5, 0, 5, 2, 3, 0, 0, 3, 3, 8, 0, 0, 0, '2021-09-16 23:41:49.369475', '2021-09-16 23:41:49.369475');
-INSERT INTO "public"."rifle_instance" VALUES (128, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'belt-fed-minigun.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'A TN-33Y Belt-Fed Minigun', 23, 999, 'LIGHT_MACHINE_GUN', 19, 999, 20, 14, 2, 2, 2, 2, 39, 11, 33, 3, 2, 8, 3, 3, 9, 3, 2, 8, 2, 8, 0, 5, 3, 0, 7, 0, 4, 2, 0, 0, 3, 0, 14, 0, 0, 0, 0, '2021-09-16 23:41:54.99946', '2021-09-16 23:41:54.99946');
-INSERT INTO "public"."rifle_instance" VALUES (129, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 779, 'PISTOL', 2, 6, 1, 5, 5, 20, 2, 140, 3, 3, 3, 80, 3, 5, 15, 3, 12, 0, 3, 2, 3, 10, 2, 4, 2, 2, 1, 0, 4, 42, 3, 0, 3, 3, 3, 0, 3, 2, 0, '2021-09-16 23:41:58.892622', '2021-09-16 23:41:58.892622');
-INSERT INTO "public"."rifle_instance" VALUES (130, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'm4.yml', 'ASSAULT_RIFLE', '4', 'Standard Issue', 'M4 Assault Rifle', 26, 9, 'ASSAULT_RIFLE', 3, 8, 2, 80, 4, 3, 17, 3, 2, 12, 5, 408, 49, 3, 2, 57, 2, 3, 0, 3, 5, 0, 2, 21, 0, 3, 3, 44, 2, 3, 2, 0, 4, 3, 0, 2, 2, 14, 0, '2021-09-16 23:42:00.832379', '2021-09-16 23:42:00.832379');
-INSERT INTO "public"."rifle_instance" VALUES (131, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp5.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'MP5', 5, 400, 'SUB_MACHINE_GUN', 2, 31, 1, 63, 3, 2, 2, 3, 2, 4.29999999999999982, 5, 613, 2, 20, 17, 6, 2, 5, 0, 54, 2, 2, 3, 0, 10, 3, 3, 19, 7, 0, 12, 0, 2, 2, 3, 0, 2, 2, 0, '2021-09-16 23:42:04.939434', '2021-09-16 23:42:04.939434');
-INSERT INTO "public"."rifle_instance" VALUES (132, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 2, 'PISTOL', 2, 9, 1, 3, 2, 20, 3, 33, 1, 12, 3, 3, 179, 164, 3, 16, 2, 0, 3, 3, 17, 3, 3, 3, 3, 3, 2, 0, 2, 2, 4, 0, 2, 2, 0, 23, 3, 3, 0, '2021-09-16 23:42:07.309542', '2021-09-16 23:42:07.309542');
-INSERT INTO "public"."rifle_instance" VALUES (133, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 3, 'PISTOL', 4, 4, 1, 92, 4, 20, 0, 33, 2, 6, 3, 337, 3, 3, 13, 16, 84, 7, 22, 4, 3, 4, 2, 2, 0, 3, 0, 2, 0, 4, 4, 0, 41, 6, 0, 60, 3, 3, 0, '2021-09-16 23:42:08.832497', '2021-09-16 23:42:08.832497');
-INSERT INTO "public"."rifle_instance" VALUES (134, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 208, 4, 2, 34, 1, 2, 0, 53, 3, 4.29999999999999982, 2, 8, 918, 58, 3, 4, 6, 3, 3, 6, 0, 0, 2, 10, 6, 7, 3, 4, 5, 4, 0, 0, 0, 0, 0, 4, 2, 2, 0, '2021-09-16 23:42:10.128434', '2021-09-16 23:42:10.128434');
-INSERT INTO "public"."rifle_instance" VALUES (135, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'hk21.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'HK-21 Light Machine Gun', 33, 2, 'LIGHT_MACHINE_GUN', 2, 999, 20, 69, 3, 64, 0, 4, 7, 3, 33, 180, 818, 126, 9, 4, 0, 0, 2, 17, 21, 5, 112, 24, 3, 0, 4, 6, 4, 4, 0, 0, 5, 116, 2, 0, 3, 2, 0, '2021-09-16 23:42:13.915874', '2021-09-16 23:42:13.915874');
-INSERT INTO "public"."rifle_instance" VALUES (136, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 4, 'MACHINE_PISTOL', 10.5, 13, 1, 14, 4, 3, 6, 4, 1, 3, 3, 4, 2, 2, 10, 16, 3, 4, 91, 0, 4, 32, 0, 4, 3, 13, 13, 4, 19, 0, 3, 0, 6, 6, 2, 0, 0, 2, 0, '2021-09-16 23:42:15.757476', '2021-09-16 23:42:15.757476');
-INSERT INTO "public"."rifle_instance" VALUES (137, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'fmg9.yml', 'SUB_MACHINE_GUN', '5', 'DXGR-1', 'FMG-9', 5, 11531, 'SUB_MACHINE_GUN', 170, 31, 1, 3, 1, 30, 4, 14, 4, 9, 34, 180, 818, 6, 6, 3, 2, 2, 4, 5, 11, 2, 4, 2, 13, 0, 3, 24, 0, 3, 2, 0, 6, 0, 3, 2, 3, 0, 0, '2021-09-16 23:42:17.37751', '2021-09-16 23:42:17.37751');
-INSERT INTO "public"."rifle_instance" VALUES (138, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 75, 'MACHINE_PISTOL', 10.5, 13, 1, 5, 1, 4, 0, 33, 1, 0, 3, 80, 40, 11, 13, 16, 5, 2, 1367, 4, 4, 0, 21, 0, 3, 0, 3, 2, 0, 0, 76, 0, 2, 2, 4, 0, 57, 3, 0, '2021-09-16 23:42:20.082517', '2021-09-16 23:42:20.082517');
-INSERT INTO "public"."rifle_instance" VALUES (139, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'hk21.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'HK-21 Light Machine Gun', 33, 2, 'LIGHT_MACHINE_GUN', 11, 3, 20, 47, 3, 30, 0, 13, 3, 3, 4, 2, 818, 66, 40, 140, 514, 4, 0, 10, 3, 3, 4, 0, 49, 5, 26, 2, 2, 19, 8, 0, 4, 2, 3, 0, 4, 0, 0, '2021-09-16 23:42:21.261413', '2021-09-16 23:42:21.261413');
-INSERT INTO "public"."rifle_instance" VALUES (142, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 70, 20, 2, 4, 4, 38, 0, 53, 5, 4.29999999999999982, 19, 10, 18, 2, 3, 20, 215, 3, 2, 0, 2, 26, 4, 2, 2, 0, 3, 3, 5, 3, 23, 0, 12, 12, 2, 4, 5, 3, 0, '2021-09-17 00:06:22.501847', '2021-09-17 00:06:22.501847');
-INSERT INTO "public"."rifle_instance" VALUES (143, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'fmg9.yml', 'SUB_MACHINE_GUN', '5', 'DXGR-1', 'FMG-9', 5, 400, 'SUB_MACHINE_GUN', 30.8099999999999987, 3, 1, 14, 1, 206, 4, 3, 3, 80, 66, 2, 818, 20, 18, 6, 2, 3, 2, 3, 4, 12, 2, 0, 2, 22, 0, 6, 17, 21, 6, 0, 0, 2, 4, 26, 2, 0, 0, '2021-09-17 00:06:28.107491', '2021-09-17 00:06:28.107491');
-INSERT INTO "public"."rifle_instance" VALUES (144, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'hk21.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'HK-21 Light Machine Gun', 33, 999, 'LIGHT_MACHINE_GUN', 2, 13, 20, 271, 1, 5, 4, 4, 7, 3, 3, 5, 2, 4, 5, 140, 2, 0, 0, 2, 3, 4, 4, 5, 14, 0, 16, 16, 0, 6, 7, 0, 4, 2, 9, 3, 4, 0, 0, '2021-09-17 00:06:53.128907', '2021-09-17 00:06:53.128907');
-INSERT INTO "public"."rifle_instance" VALUES (145, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'p90.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'Heckler and Koch P90', 21, 1746, 'SUB_MACHINE_GUN', 10, 190, 1, 3, 1, 30, 0, 13, 47, 4.29999999999999982, 6, 4, 818, 20, 57, 2, 4, 10, 4, 13, 6, 72, 5, 2, 0, 4, 0, 2, 3, 4, 4, 0, 29, 3, 5, 4, 4, 6, 0, '2021-09-17 00:07:08.100927', '2021-09-17 00:07:08.100927');
-INSERT INTO "public"."rifle_instance" VALUES (146, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 311, 'SHOTGUN', 5, 32, 2, 34, 2, 4, 0, 3, 4, 4.29999999999999982, 2, 4, 19, 10, 2, 12, 0, 74, 4, 0, 2, 17, 3, 32, 20, 2, 16, 546, 4, 3, 5, 0, 2, 6, 2, 2, 4, 2, 0, '2021-09-17 00:19:32.432101', '2021-09-17 00:19:32.432101');
-INSERT INTO "public"."rifle_instance" VALUES (147, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 4, 'SHOTGUN', 489, 44, 2, 4, 3, 2, 0, 53, 6, 19, 8, 3, 3, 5, 3, 4, 3, 4, 5, 20, 0, 21, 3, 19, 4, 4, 0, 5, 3, 281, 5, 0, 3, 5, 3, 0, 2, 7, 0, '2021-09-17 00:19:36.334133', '2021-09-17 00:19:36.334133');
-INSERT INTO "public"."rifle_instance" VALUES (148, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'ump45.yml', 'SUB_MACHINE_GUN', '5', 'PN/P', 'UMP-45', 32, 400, 'SUB_MACHINE_GUN', 30.8099999999999987, 20, 1, 2, 1, 68, 4, 13, 3, 21, 36, 180, 6479, 20, 2, 208, 3, 11, 56, 15, 0, 0, 2, 2, 3, 0, 0, 4, 45, 22, 0, 0, 5, 5, 0, 4, 5, 3, 0, '2021-09-17 00:19:37.303205', '2021-09-17 00:19:37.303205');
-INSERT INTO "public"."rifle_instance" VALUES (149, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 3, 'SHOTGUN', 3, 3, 2, 34, 3, 80, 4, 178, 26, 3, 2, 181, 918, 3, 4, 20, 4, 6, 3, 4, 3, 51, 4, 25, 3, 4, 3, 2, 3, 0, 2, 0, 4, 3, 0, 0, 0, 3, 0, '2021-09-17 00:46:53.68857', '2021-09-17 00:46:53.68857');
-INSERT INTO "public"."rifle_instance" VALUES (150, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 146, 'SHOTGUN', 387, 6, 2, 34, 1, 80, 4, 53, 3, 4, 2, 10, 918, 21, 11, 3, 0, 0, 4, 2, 12, 0, 14, 3, 6, 2, 3, 3, 2, 2, 4, 0, 4, 4, 0, 0, 2, 24, 0, '2021-09-17 00:52:59.358813', '2021-09-17 00:52:59.358813');
-INSERT INTO "public"."rifle_instance" VALUES (151, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 2, 'SHOTGUN', 70, 47, 2, 34, 1, 628, 3, 53, 2, 5, 2, 5, 7, 65, 3, 4, 15, 6, 6, 2, 3, 0, 9, 0, 0, 0, 197, 4, 0, 0, 2, 0, 38, 2, 21, 2, 5, 2, 0, '2021-09-17 01:33:01.729627', '2021-09-17 01:33:01.729627');
-INSERT INTO "public"."rifle_instance" VALUES (152, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'scarh.yml', 'ASSAULT_RIFLE', '4', 'SK-10', 'SCAR-H Assault Rifle', 31, 5, 'ASSAULT_RIFLE', 24, 8, 2, 4, 5, 5, 3.14000000000000012, 3, 4, 2, 21, 80, 91, 4, 23, 5, 125, 4, 4, 21, 5, 5, 0, 4, 249, 5, 24, 5, 2, 0, 4, 0, 4, 0, 0, 0, 5, 2, 0, '2021-09-17 01:33:04.75737', '2021-09-17 01:33:04.75737');
-INSERT INTO "public"."rifle_instance" VALUES (153, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'xm109.yml', 'SNIPER', '6', 'Heckler and Koch', 'XM109 Sniper Rifle', 13, 73, 'SNIPER', 0.810000000000000053, 53, 2, 19, 3, 15, 0, 13, 5, 30, 2, 55, 2, 1843, 15, 40, 16, 3, 3, 2, 3, 12, 0, 21, 2, 3, 145, 4, 0, 2, 2, 0, 4, 4, 15, 21, 2, 3, 0, '2021-09-17 01:33:05.290392', '2021-09-17 01:33:05.290392');
-INSERT INTO "public"."rifle_instance" VALUES (140, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'xm109.yml', 'SNIPER', '6', 'Heckler and Koch', 'XM109 Sniper Rifle', 13, 70, 'SNIPER', 15, 2, 39, 19, 4, 450, 0, 80, 4, 2, 246, 4, 1818, 500, 4, 271, 6, 4, 4, 4, 5, 2, 3, 4, 0, 0, 0, 2, 128, 4, 3, 0, 0, 5, 0, 25, 3, 2, 0, '2021-09-16 23:42:22.548445', '2021-09-16 23:42:22.548445');
-INSERT INTO "public"."rifle_instance" VALUES (115, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'l96aw.yml', 'SNIPER', '6', 'Heckler and Koch', 'L96 Arctic Warfare', 24, 155, 'SNIPER', 0.810000000000000053, 7, 39, 1, 3, 450, 0, 2, 1, 4.29999999999999982, 8, 10, 2590, 6, 4, 209, 2, 1, 1, 2, 1, 1, 0, 7, 0, 2, 7, 2, 0, 3, 1, 0, 1, 5, 0, 2, 0, 2, 0, '2021-09-16 23:36:33.761333', '2021-09-16 23:36:33.761333');
-INSERT INTO "public"."rifle_instance" VALUES (117, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'l96aw.yml', 'SNIPER', '6', 'Heckler and Koch', 'L96 Arctic Warfare', 24, 70, 'SNIPER', 1, 8, 39, 19, 3, 1332, 1, 2, 4, 16, 2, 10, 2, 975, 1, 324, 3, 5, 3, 2, 2, 1, 2, 0, 2, 1, 1, 0, 2, 1, 3, 0, 7, 3, 0, 3, 2, 2, 0, '2021-09-16 23:36:54.692448', '2021-09-16 23:36:54.692448');
-INSERT INTO "public"."rifle_instance" VALUES (141, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'xm109.yml', 'SNIPER', '6', 'Heckler and Koch', 'XM109 Sniper Rifle', 13, 70, 'SNIPER', 2, 14, 39, 4, 3, 2, 0, 3, 4, 26, 54, 10, 6340, 7, 8, 40, 19, 5, 3, 10, 88, 3, 21, 4, 4, 2, 2, 2, 4, 6, 4, 0, 5, 0, 4, 4, 0, 3, 0, '2021-09-16 23:42:23.841449', '2021-09-16 23:42:23.841449');
-INSERT INTO "public"."rifle_instance" VALUES (154, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 381, 6, 2, 34, 2, 80, 5, 53, 7, 4.29999999999999982, 2, 10, 2, 2, 13, 20, 4, 4, 4, 3, 3, 4, 0, 4, 3, 5, 7, 0, 3, 15, 18, 0, 2, 3, 18, 8, 4, 13, 0, '2021-09-17 01:46:31.106286', '2021-09-17 01:46:31.106286');
-INSERT INTO "public"."rifle_instance" VALUES (155, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 254, 'SHOTGUN', 5, 25, 2, 34, 7, 2, 0, 25, 6, 19, 2, 18, 918, 10, 4, 20, 5, 3, 41, 4, 0, 5, 5, 5, 0, 0, 4, 2, 4, 5, 7, 0, 3, 6, 2, 34, 10, 5, 0, '2021-09-17 01:46:41.943902', '2021-09-17 01:46:41.943902');
-INSERT INTO "public"."rifle_instance" VALUES (156, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 70, 'SNIPER', 4, 3, 21, 3, 129, 61, 6, 5, 34, 5, 18, 4, 1818, 3159, 939, 33, 22, 0, 0, 38, 40, 120, 0, 30, 12, 2, 703, 0, 19, 0, 17, 0, 12, 0, 0, 14, 2, 2, 0, '2021-09-17 01:46:52.492051', '2021-09-17 01:46:52.492051');
-INSERT INTO "public"."rifle_instance" VALUES (157, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'scarh.yml', 'ASSAULT_RIFLE', '4', 'SK-10', 'SCAR-H Assault Rifle', 31, 220, 'ASSAULT_RIFLE', 2, 3, 2, 14, 4, 103, 46, 4, 4, 5, 4, 5, 24, 3, 6, 10, 4, 37, 0, 3, 3, 2, 5, 27, 133, 0, 2, 5, 5, 6, 6, 0, 3, 4, 0, 0, 3, 7, 0, '2021-09-17 01:47:03.78067', '2021-09-17 01:47:03.78067');
-INSERT INTO "public"."rifle_instance" VALUES (158, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 1, 'SHOTGUN', 1, 6, 2, 34, 1, 1, 1, 53, 2, 4.29999999999999982, 2, 10, 1453, 10, 1, 34, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, '2021-09-18 01:27:39.936028', '2021-09-18 01:27:39.936028');
-INSERT INTO "public"."rifle_instance" VALUES (159, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'xm109.yml', 'SNIPER', '6', 'Heckler and Koch', 'XM109 Sniper Rifle', 13, 70, 'SNIPER', 0.810000000000000053, 7, 2, 35, 3, 450, 1, 17, 4, 1, 1, 10, 1818, 500, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, '2021-09-18 01:28:53.380809', '2021-09-18 01:28:53.380809');
-INSERT INTO "public"."rifle_instance" VALUES (160, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mk46.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'MK-46 Light Machine Gun', 78, 999, 'LIGHT_MACHINE_GUN', 4, 999, 20, 14, 1, 2, 0, 13, 1, 2, 33, 180, 1, 1, 40, 173, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, '2021-09-18 01:30:06.037856', '2021-09-18 01:30:06.037856');
-INSERT INTO "public"."rifle_instance" VALUES (161, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'tar21.yml', 'ASSAULT_RIFLE', '4', 'SK-10', 'TAR-21 Assault Rifle', 30, 220, 'ASSAULT_RIFLE', 4.23000000000000043, 8, 2, 35, 1, 45, 3.14000000000000012, 3, 1, 4.29999999999999982, 1, 1, 1, 1, 6, 1, 0, 1, 2, 0, 1, 2, 2, 1, 2, 0, 2, 2, 2, 1, 0, 0, 2, 1, 0, 0, 1, 0, 0, '2021-09-18 01:30:12.186423', '2021-09-18 01:30:12.186423');
-INSERT INTO "public"."rifle_instance" VALUES (162, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp5.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'MP5', 5, 400, 'SUB_MACHINE_GUN', 30.8099999999999987, 31, 1, 2, 1, 30, 0, 2, 1, 1, 1, 471, 818, 51, 2, 6, 2, 1, 2, 1, 0, 2, 0, 2, 4, 0, 6, 0, 0, 2, 6, 0, 2, 1, 3, 0, 0, 1, 0, '2021-09-18 01:30:18.64502', '2021-09-18 01:30:18.64502');
-INSERT INTO "public"."rifle_instance" VALUES (163, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mk46.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'MK-46 Light Machine Gun', 78, 4, 'LIGHT_MACHINE_GUN', 5, 999, 20, 2, 1, 70, 0, 1, 1, 1, 248, 1438, 818, 20, 40, 1, 1, 1, 1, 2, 4, 2, 3, 0, 3, 0, 0, 0, 2, 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, '2021-09-18 01:30:39.448915', '2021-09-18 01:30:39.448915');
-INSERT INTO "public"."rifle_instance" VALUES (164, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'ump45.yml', 'SUB_MACHINE_GUN', '5', 'PN/P', 'UMP-45', 32, 1091, 'SUB_MACHINE_GUN', 2, 31, 1, 144, 1, 1, 2, 13, 3, 14, 5, 2, 4239, 48, 6, 6, 3, 2, 2, 1, 2, 0, 1, 0, 2, 1, 1, 3, 3, 0, 2, 0, 3, 0, 2, 2, 0, 1, 0, '2021-09-18 01:30:45.796981', '2021-09-18 01:30:45.796981');
-INSERT INTO "public"."rifle_instance" VALUES (165, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 70, 'SNIPER', 0.810000000000000053, 7, 6, 43, 1, 61, 0, 53, 5, 4.29999999999999982, 1, 2, 2, 934, 1, 2, 3, 0, 1, 2, 2, 0, 1, 3, 0, 1, 0, 2, 0, 1, 1, 0, 2, 3, 1, 2, 0, 2, 0, '2021-09-18 01:31:39.066818', '2021-09-18 01:31:39.066818');
-INSERT INTO "public"."rifle_instance" VALUES (166, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 40, 'SHOTGUN', 1, 6, 2, 90, 4, 80, 1, 53, 2, 1, 2, 2, 3169, 2, 1, 2, 1, 8, 0, 1, 6, 2, 4, 1, 1, 1, 0, 0, 0, 4, 1, 0, 2, 2, 1, 1, 4, 0, 0, '2021-09-18 01:31:41.977839', '2021-09-18 01:31:41.977839');
-INSERT INTO "public"."rifle_instance" VALUES (167, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 40, 'SHOTGUN', 2, 281, 2, 97, 1, 80, 2, 53, 2, 1, 2, 2, 918, 2, 48, 20, 4, 2, 2, 1, 1, 2, 2, 0, 14, 2, 6, 0, 6, 1, 0, 0, 2, 1, 1, 1, 0, 4, 0, '2021-09-18 01:32:18.631009', '2021-09-18 01:32:18.631009');
-INSERT INTO "public"."rifle_instance" VALUES (168, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 75, 'MACHINE_PISTOL', 69, 121, 1, 5, 1, 2, 2, 5, 2, 2, 1, 2, 40, 2, 2, 79, 1, 0, 3, 9, 3, 2, 2, 0, 3, 5, 4, 2, 2, 0, 2, 0, 2, 18, 0, 20, 0, 3, 0, '2021-09-18 01:32:25.682925', '2021-09-18 01:32:25.682925');
-INSERT INTO "public"."rifle_instance" VALUES (169, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'psg1.yml', 'SNIPER', '6', 'PF-TDN', 'PSG1', 8, 1, 'SNIPER', 0.810000000000000053, 10, 6, 19, 10, 1, 1, 1, 5, 4.29999999999999982, 2, 10, 1818, 500, 4, 43, 2, 0, 2, 0, 1, 7, 37, 3, 2, 2, 6, 4, 5, 4, 0, 0, 0, 4, 1, 0, 2, 3, 0, '2021-09-18 01:32:40.296917', '2021-09-18 01:32:40.296917');
-INSERT INTO "public"."rifle_instance" VALUES (170, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 1, 'SHOTGUN', 70, 6, 2, 1, 2, 155, 15, 2, 2, 4.29999999999999982, 2, 10, 918, 1, 1, 20, 8, 1, 2, 0, 2, 2, 1, 2, 0, 4, 1, 0, 2, 16, 0, 0, 4, 1, 2, 0, 2, 4, 0, '2021-09-18 01:34:54.528826', '2021-09-18 01:34:54.528826');
-INSERT INTO "public"."rifle_instance" VALUES (171, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 1, 'PISTOL', 20.5, 1, 1, 8, 1, 20, 0, 2, 1, 2, 3, 1, 40, 2, 3, 16, 3, 2, 2, 1, 1, 4, 15, 2, 0, 2, 4, 5, 0, 2, 1, 0, 2, 5, 2, 1, 1, 1, 0, '2021-09-18 01:35:00.363254', '2021-09-18 01:35:00.363254');
-INSERT INTO "public"."rifle_instance" VALUES (172, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'm4.yml', 'ASSAULT_RIFLE', '4', 'Standard Issue', 'M4 Assault Rifle', 26, 475, 'ASSAULT_RIFLE', 2, 1, 2, 2, 5, 194, 1, 1, 20, 4.29999999999999982, 5, 80, 5, 9, 6, 10, 0, 6, 2, 3, 1, 2, 1, 4, 1, 1, 3, 2, 2, 4, 3, 0, 1, 0, 2, 0, 4, 0, 0, '2021-09-18 01:35:25.11697', '2021-09-18 01:35:25.11697');
-INSERT INTO "public"."rifle_instance" VALUES (173, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 47, 'SHOTGUN', 70, 6, 2, 34, 1, 1, 1, 1, 1, 4.29999999999999982, 2, 1, 1577, 10, 5, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, '2021-09-18 01:43:24.324088', '2021-09-18 01:43:24.324088');
-INSERT INTO "public"."rifle_instance" VALUES (174, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 1, 'SHOTGUN', 70, 1, 2, 1, 1, 80, 0, 53, 1, 1, 2, 1, 918, 10, 5, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, '2021-09-18 01:46:20.098382', '2021-09-18 01:46:20.098382');
-INSERT INTO "public"."rifle_instance" VALUES (175, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 3, 'PISTOL', 8, 2, 1, 3, 0, 43, 0, 3, 1, 0, 3, 60, 4, 2, 3, 2, 3, 0, 11, 0, 0, 0, 2, 0, 0, 0, 6, 2, 4, 7, 4, 0, 8, 0, 4, 3, 13, 6, 0, '2022-05-19 01:26:48.903852', '2022-05-19 01:26:48.903852');
-INSERT INTO "public"."rifle_instance" VALUES (176, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 303, 'PISTOL', 3, 4, 1, 1, 0, 11, 2, 4, 1, 0, 3, 34, 40, 1, 3, 8, 3, 0, 4, 0, 0, 0, 13, 0, 0, 5, 2, 3, 12, 2, 0, 0, 2, 3, 15, 3, 13, 0, 0, '2022-05-19 01:38:42.487015', '2022-05-19 01:38:42.487015');
-INSERT INTO "public"."rifle_instance" VALUES (177, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 3, 'PISTOL', 3, 4, 1, 1, 0, 26, 2, 3, 1, 0, 4, 1, 40, 1, 4, 8, 2, 0, 2, 0, 0, 0, 4, 0, 0, 0, 45, 2, 2, 257, 5, 0, 2, 0, 0, 0, 12, 16, 0, '2022-05-19 04:16:57.683916', '2022-05-19 04:16:57.683916');
-INSERT INTO "public"."rifle_instance" VALUES (178, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 3, 'SHOTGUN', 10, 2, 2, 4, 0, 7, 5, 2, 1, 0, 3, 4, 71, 2, 3, 10, 4, 0, 2, 0, 0, 0, 4, 0, 0, 12, 0, 0, 3, 2, 5, 0, 0, 5, 0, 5, 2, 4, 0, '2022-05-19 14:34:23.500623', '2022-05-19 14:34:23.500623');
-INSERT INTO "public"."rifle_instance" VALUES (179, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp9.yml', 'MACHINE_PISTOL', '9', 'Heckler and Koch', 'MP9', 38, 11, 'MACHINE_PISTOL', 6, 1, 1, 4, 1, 30, 6, 5, 11, 0, 17, 5, 57, 2, 22, 2, 5, 0, 3, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 3, 405, 0, 0, 4, 0, '2022-05-19 14:36:05.610468', '2022-05-19 14:36:05.610468');
-INSERT INTO "public"."rifle_instance" VALUES (180, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 7, 'MACHINE_PISTOL', 10, 2, 1, 1, 0, 3, 0, 4, 1, 0, 3, 9, 4, 2, 2, 4, 13, 0, 22, 0, 0, 0, 4, 0, 0, 0, 0, 4, 3, 3, 4, 0, 0, 3, 18, 5, 5, 396, 0, '2022-05-19 14:37:20.330694', '2022-05-19 14:37:20.330694');
-INSERT INTO "public"."rifle_instance" VALUES (181, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'belt-fed-minigun.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'A TN-33Y Belt-Fed Minigun', 23, 3, 'LIGHT_MACHINE_GUN', 3, 3, 20, 34, 2, 99, 6, 13, 719, 0, 33, 23, 63, 1, 1, 4, 3, 0, 21, 0, 0, 0, 3, 0, 0, 4, 22, 5, 3, 0, 681, 0, 4, 28, 41, 0, 6, 5, 0, '2022-05-20 13:31:58.231794', '2022-05-20 13:31:58.231794');
-INSERT INTO "public"."rifle_instance" VALUES (182, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 1, 'SHOTGUN', 2, 4, 2, 14, 0, 84, 6, 3, 2, 17, 20, 10, 4, 1, 26, 2, 75, 0, 3, 0, 0, 0, 0, 0, 0, 6, 6, 3, 4, 512, 6, 0, 4, 7, 45, 18, 50, 3, 0, '2022-05-20 13:34:16.536765', '2022-05-20 13:34:16.536765');
-INSERT INTO "public"."rifle_instance" VALUES (183, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 2, 'PISTOL', 0, 2, 3, 1, 0, 1, 0, 1, 1, 0, 5, 8, 1, 2, 5, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, '2022-05-27 13:18:08.172337', '2022-05-27 13:18:08.172337');
-INSERT INTO "public"."rifle_instance" VALUES (184, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 3, 'PISTOL', 1, 4, 1, 1, 0, 20, 0, 1, 1, 0, 1, 1, 41, 1, 3, 8, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, '2022-05-27 13:19:03.762106', '2022-05-27 13:19:03.762106');
-INSERT INTO "public"."rifle_instance" VALUES (185, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 1, 'MACHINE_PISTOL', 2, 1, 1, 5, 0, 24, 0, 1, 1, 0, 3, 20, 40, 1, 1, 2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, '2022-05-27 13:19:43.924731', '2022-05-27 13:19:43.924731');
-INSERT INTO "public"."rifle_instance" VALUES (186, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 3, 'PISTOL', 1, 1, 1, 5, 0, 20, 1, 1, 1, 0, 3, 20, 40, 2, 3, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, '2022-05-27 13:20:03.239651', '2022-05-27 13:20:03.239651');
-INSERT INTO "public"."rifle_instance" VALUES (187, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'belt-fed-minigun.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'A TN-33Y Belt-Fed Minigun', 23, 1, 'LIGHT_MACHINE_GUN', 1, 1, 20, 1, 1, 54, 1, 13, 1, 0, 33, 3, 48, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, '2022-05-27 13:20:34.200975', '2022-05-27 13:20:34.200975');
-INSERT INTO "public"."rifle_instance" VALUES (188, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 1, 'PISTOL', 1, 4, 1, 3, 0, 20, 0, 3, 1, 0, 1, 20, 1, 2, 3, 8, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 2, 0, 0, 2, 0, '2022-05-27 13:22:48.092889', '2022-05-27 13:22:48.092889');
-INSERT INTO "public"."rifle_instance" VALUES (189, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 1, 'PISTOL', 1, 2, 3, 1, 0, 7, 0, 1, 1, 0, 5, 1, 1, 2, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 2, 1, 1, 0, 2, 1, 1, 0, 0, 1, 0, '2022-05-27 13:24:34.260664', '2022-05-27 13:24:34.260664');
-INSERT INTO "public"."rifle_instance" VALUES (190, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 4, 'SHOTGUN', 6, 1, 2, 5, 0, 32, 1, 4, 2, 0, 2, 1, 1, 1, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, '2022-05-27 13:29:40.764863', '2022-05-27 13:29:40.764863');
-INSERT INTO "public"."rifle_instance" VALUES (191, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'belt-fed-minigun.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'A TN-33Y Belt-Fed Minigun', 23, 69, 'LIGHT_MACHINE_GUN', 3, 2, 20, 4, 1, 1, 0, 5, 10, 0, 1, 10, 48, 2, 49, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 0, 1, 2, 0, 1, 0, 1, 1, 1, 0, 0, '2022-05-27 13:30:41.341445', '2022-05-27 13:30:41.341445');
-INSERT INTO "public"."rifle_instance" VALUES (192, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 3, 'PISTOL', 2, 4, 1, 1, 0, 1, 1, 1, 1, 0, 8, 20, 1, 1, 3, 8, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 0, 2, 0, 1, 2, 2, 0, 1, 1, 0, '2022-05-27 13:31:00.281053', '2022-05-27 13:31:00.281053');
-INSERT INTO "public"."rifle_instance" VALUES (193, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 2, 'PISTOL', 1, 1, 1, 5, 0, 1, 0, 1, 1, 0, 3, 20, 40, 2, 2, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1, 0, 0, 0, 2, 0, 0, 0, 1, 1, 2, 1, 0, '2022-05-27 13:31:38.185849', '2022-05-27 13:31:38.185849');
-INSERT INTO "public"."rifle_instance" VALUES (194, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 2, 'PISTOL', 0, 2, 3, 1, 0, 1, 1, 1, 1, 0, 5, 43, 1, 2, 5, 10, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 2, 0, '2022-05-27 13:32:20.781361', '2022-05-27 13:32:20.781361');
-INSERT INTO "public"."rifle_instance" VALUES (195, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 1, 'MACHINE_PISTOL', 1, 3, 1, 1, 0, 26, 1, 2, 2, 0, 3, 32, 40, 2, 3, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, '2022-05-27 19:49:47.149139', '2022-05-27 19:49:47.149139');
-INSERT INTO "public"."rifle_instance" VALUES (196, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 10, 'MACHINE_PISTOL', 1, 3, 1, 5, 0, 1, 1, 1, 1, 0, 3, 1, 1, 2, 3, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 3, 1, 0, 1, 0, 0, '2022-05-27 19:50:40.916734', '2022-05-27 19:50:40.916734');
-INSERT INTO "public"."rifle_instance" VALUES (197, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'l96aw.yml', 'SNIPER', '6', 'Heckler and Koch', 'L96 Arctic Warfare', 24, 1, 'SNIPER', 1, 3, 9, 8, 3, 24, 1, 1, 11, 0, 1, 10, 1, 2, 3, 2, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 1, 2, 0, 1, 0, 0, 0, 1, 1, 2, 1, 0, '2022-05-27 19:50:54.566603', '2022-05-27 19:50:54.566603');
-INSERT INTO "public"."rifle_instance" VALUES (198, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 10, 'MACHINE_PISTOL', 2, 3, 1, 1, 0, 1, 1, 1, 1, 0, 3, 1, 40, 2, 1, 1, 2, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2022-05-27 19:52:17.03676', '2022-05-27 19:52:17.03676');
-INSERT INTO "public"."rifle_instance" VALUES (199, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 5, 'PISTOL', 7, 1, 1, 5, 0, 3, 3, 3, 1, 0, 6, 4, 26, 10, 4, 8, 35, 0, 27, 0, 0, 0, 99, 0, 0, 6, 4, 13, 30, 0, 5, 0, 6, 3, 0, 3, 6, 6, 0, '2022-05-27 23:51:17.037355', '2022-05-27 23:51:17.037355');
-INSERT INTO "public"."rifle_instance" VALUES (200, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 3, 'PISTOL', 8, 1, 1, 5, 0, 6, 3, 4, 1, 0, 3, 41, 4, 1, 4, 50, 19, 0, 4, 0, 0, 0, 18, 0, 0, 360, 5, 0, 3, 5, 8, 0, 5, 3, 5, 63, 0, 3, 0, '2022-05-28 00:01:15.525107', '2022-05-28 00:01:15.525107');
-INSERT INTO "public"."rifle_instance" VALUES (201, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 6, 'MACHINE_PISTOL', 3, 3, 1, 4, 0, 62, 0, 5, 1, 0, 3, 1, 18, 1, 1, 3, 4, 0, 11, 0, 0, 0, 5, 0, 0, 16, 3, 0, 6, 6, 4, 0, 4, 7, 6, 9, 4, 3, 0, '2022-05-28 00:01:16.257918', '2022-05-28 00:01:16.257918');
-INSERT INTO "public"."rifle_instance" VALUES (202, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'belt-fed-minigun.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'A TN-33Y Belt-Fed Minigun', 23, 5, 'LIGHT_MACHINE_GUN', 3, 4, 20, 3, 2, 16, 0, 13, 17, 0, 33, 15, 6, 1, 8, 4, 69, 0, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 6, 0, 0, 0, '2022-05-28 00:01:16.674515', '2022-05-28 00:01:16.674515');
-INSERT INTO "public"."rifle_instance" VALUES (203, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'augpara.yml', 'ASSAULT_RIFLE', '4', 'SK-10', 'AUG-PARA Assault Rifle', 29, 6, 'ASSAULT_RIFLE', 10, 3, 2, 6, 4, 46, 3, 6, 1, 0, 5, 5, 24, 1, 1, 2, 161, 0, 4, 0, 0, 0, 4, 0, 0, 8, 11, 303, 3, 0, 4, 0, 72, 4, 4, 0, 0, 174, 0, '2022-05-28 00:01:17.090572', '2022-05-28 00:01:17.090572');
-INSERT INTO "public"."rifle_instance" VALUES (204, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 4, 'PISTOL', 8, 2, 1, 9, 0, 36, 4, 1, 3, 2, 4, 99, 84, 1, 2, 14, 8, 0, 83, 0, 0, 0, 113, 0, 0, 4, 46, 5, 7, 31, 5, 0, 4, 0, 85, 5, 6, 11, 0, '2022-06-11 17:39:00.066237', '2022-06-11 17:39:00.066237');
-INSERT INTO "public"."rifle_instance" VALUES (205, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 8, 'PISTOL', 13, 2, 1, 6, 0, 20, 0, 2, 1, 0, 2, 76, 111, 4, 1, 1, 5, 0, 65, 0, 0, 0, 7, 0, 0, 96, 7, 199, 1198, 54, 42, 0, 955, 9, 7, 5, 4, 9, 0, '2022-06-11 19:06:11.034459', '2022-06-11 19:06:11.034459');
-INSERT INTO "public"."rifle_instance" VALUES (206, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 8, 'PISTOL', 5, 6, 1, 9, 0, 30, 0, 1, 1, 1, 7, 10, 10, 2, 1, 34, 14, 0, 33, 0, 0, 0, 0, 0, 0, 9, 5, 6, 5, 0, 73, 0, 7, 8, 8, 6, 5, 10, 0, '2022-06-11 19:07:17.162553', '2022-06-11 19:07:17.162553');
-INSERT INTO "public"."rifle_instance" VALUES (207, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 3, 'PISTOL', 3, 1, 1, 11, 0, 44, 6, 1, 2, 1, 4, 28, 40, 4, 1, 1, 217, 0, 7, 0, 0, 0, 0, 0, 0, 0, 37, 8, 43, 45, 14, 0, 952, 6, 8, 42, 9, 0, 0, '2022-06-11 19:12:23.61176', '2022-06-11 19:12:23.61176');
-INSERT INTO "public"."rifle_instance" VALUES (208, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp5.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'MP5', 5, 6, 'SUB_MACHINE_GUN', 2, 3, 2, 10, 7, 5, 6, 7, 1, 187, 5, 49, 10, 5, 2, 1, 7, 0, 10, 0, 0, 0, 10, 0, 0, 5, 73, 10, 7, 55, 0, 0, 36, 5, 6, 0, 12020, 54, 0, '2022-06-11 19:13:39.932315', '2022-06-11 19:13:39.932315');
-INSERT INTO "public"."rifle_instance" VALUES (209, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 3, 'PISTOL', 10, 2, 1, 1, 0, 51, 0, 1, 1, 4, 3, 10, 40, 60, 1, 2, 55, 0, 11, 0, 0, 0, 7, 0, 0, 8, 0, 7, 7, 976, 58, 0, 5, 10, 7, 12, 87, 7, 0, '2022-06-11 19:14:01.81407', '2022-06-11 19:14:01.81407');
-INSERT INTO "public"."rifle_instance" VALUES (210, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mk46.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'MK-46 Light Machine Gun', 78, 7, 'LIGHT_MACHINE_GUN', 11, 5, 20, 2, 3, 6, 22, 9, 1, 5, 5, 70, 136, 1, 6, 1, 8, 0, 7, 0, 0, 0, 69, 0, 0, 0, 0, 6, 0, 7, 104, 0, 11, 595, 83, 10, 13, 451, 0, '2022-06-11 19:16:19.65204', '2022-06-11 19:16:19.65204');
-INSERT INTO "public"."rifle_instance" VALUES (211, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'sasg12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SASG-12', 6, 2, 'SHOTGUN', 1, 2, 2, 14, 0, 80, 0, 3, 1, 5, 10, 6, 6, 4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 4, 8, 10, 0, 0, 14, 11, 7, 1647, 0, 0, '2022-06-11 19:27:43.034582', '2022-06-11 19:27:43.034582');
-INSERT INTO "public"."rifle_instance" VALUES (212, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 1, 'SHOTGUN', 10, 2, 2, 14, 0, 112, 0, 1, 2, 5, 13, 10, 10, 1, 2, 2, 89, 0, 118, 0, 0, 0, 0, 0, 0, 9, 7, 40, 6, 5, 9, 0, 10, 102, 6, 7, 11, 0, 0, '2022-06-11 20:10:24.192818', '2022-06-11 20:10:24.192818');
-INSERT INTO "public"."rifle_instance" VALUES (213, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 10, 'MACHINE_PISTOL', 11, 1, 1, 2, 0, 8, 11, 3, 3, 6, 3, 11, 8, 1, 1, 2, 133, 0, 10, 0, 0, 0, 6, 0, 0, 5, 172, 7, 6, 5, 9, 0, 11, 828, 79, 2655, 11, 0, 0, '2022-06-11 20:12:55.725468', '2022-06-11 20:12:55.725468');
-INSERT INTO "public"."rifle_instance" VALUES (214, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 3, 'PISTOL', 1, 2, 1, 4, 0, 20, 0, 3, 1, 1, 1, 80, 50, 5, 3, 1, 156, 0, 6, 0, 0, 0, 91, 0, 0, 7, 7, 11, 295, 10, 8, 0, 9, 9, 11, 0, 6, 12, 0, '2022-06-12 00:36:37.892652', '2022-06-12 00:36:37.892652');
-INSERT INTO "public"."rifle_instance" VALUES (215, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mp5.yml', 'SUB_MACHINE_GUN', '5', 'Heckler and Koch', 'MP5', 5, 11, 'SUB_MACHINE_GUN', 13, 1, 2, 14, 13, 6, 12, 3, 1, 2, 6, 83, 11, 3374, 3, 5, 245, 0, 11, 0, 0, 0, 6, 0, 0, 9, 222, 172, 52, 8, 7, 0, 170, 11, 94, 9, 8, 21199, 0, '2022-06-13 12:06:43.324058', '2022-06-13 12:06:43.324058');
-INSERT INTO "public"."rifle_instance" VALUES (216, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'mk46.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'MK-46 Light Machine Gun', 78, 4, 'LIGHT_MACHINE_GUN', 4, 1, 20, 4, 1, 30, 2, 13, 1, 0, 1, 3, 48, 2, 1, 2, 1, 0, 1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 2, 1, 1, 0, 0, '2022-08-07 09:46:05.49232', '2022-08-07 09:46:05.49232');
-INSERT INTO "public"."rifle_instance" VALUES (217, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'glock.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Glock', 41, 3, 'PISTOL', 4, 1, 1, 1, 0, 20, 0, 42, 1, 0, 6, 1, 40, 1, 3, 8, 1, 0, 1, 0, 0, 0, 2, 0, 0, 1, 2, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 2, 0, '2022-08-08 19:04:28.405177', '2022-08-08 19:04:28.405177');
-INSERT INTO "public"."rifle_instance" VALUES (218, 10, 10, 10, 10, 10, 10, 10, 10, 'COMMON', 'augpara.yml', 'ASSAULT_RIFLE', '4', 'SK-10', 'AUG-PARA Assault Rifle', 29, 11, 'ASSAULT_RIFLE', 4, 1, 2, 8, 0, 1, 3, 2, 3, 0, 1, 1, 2, 2, 3, 1, 3, 0, 2, 0, 0, 0, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, '2022-08-08 19:06:02.781339', '2022-08-08 19:06:02.781339');
-INSERT INTO "public"."rifle_instance" VALUES (219, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 5, 'PISTOL', 1, 4, 3, 1, 0, 7, 2, 3, 1, 0, 5, 1, 2, 2, 5, 27, 2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0, 3, 0, 1, 0, 1, 1, 2, 1, 0, '2022-08-08 19:07:12.164772', '2022-08-08 19:07:12.164772');
-INSERT INTO "public"."rifle_instance" VALUES (220, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'uzi.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'A Uzi', 43, 8, 'MACHINE_PISTOL', 2, 3, 1, 9, 0, 20, 0, 6, 1, 0, 1, 2, 40, 2, 1, 2, 0, 0, 2, 0, 0, 0, 2, 0, 0, 3, 2, 0, 2, 1, 3, 0, 0, 2, 2, 0, 0, 6, 0, '2022-08-08 19:08:00.36916', '2022-08-08 19:08:00.36916');
-INSERT INTO "public"."rifle_instance" VALUES (221, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 5, 'PISTOL', 13, 2, 1, 9, 0, 23, 0, 35, 3, 6, 5, 6, 10, 5, 1, 3, 20, 0, 3, 0, 0, 0, 0, 0, 0, 128, 73, 9, 13, 9, 12, 0, 181, 9, 8, 63, 9, 0, 0, '2022-08-14 12:20:31.030015', '2022-08-14 12:20:31.030015');
-INSERT INTO "public"."rifle_instance" VALUES (222, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 3, 'PISTOL', 8, 1, 1, 12, 0, 20, 13, 1, 3, 0, 4, 80, 141, 1, 2, 1, 205, 0, 8, 0, 0, 0, 11, 0, 0, 167, 0, 13, 9, 90, 15, 0, 8, 7, 147, 75, 44, 11, 0, '2022-08-14 12:20:40.195406', '2022-08-14 12:20:40.195406');
-INSERT INTO "public"."rifle_instance" VALUES (223, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 6, 'PISTOL', 8, 6, 1, 10, 0, 13, 2, 1, 1, 6, 14, 95, 13, 5, 1, 2, 110, 0, 10, 0, 0, 0, 174, 0, 0, 18, 8, 11, 10, 2774, 9, 0, 6, 6, 6, 19471, 8, 10, 0, '2022-08-14 12:21:07.136823', '2022-08-14 12:21:07.136823');
-INSERT INTO "public"."rifle_instance" VALUES (224, 23.0100990000000003, 0, 0, 0, 50, 0, 0, 0, 'COMMON', 'desert-eagle.yml', 'PISTOL', '8', 'LX Industries', 'Desert Eagle', 47, 7, 'PISTOL', 0, 1, 6, 11, 0, 12, 8, 2, 337, 0, 7, 9, 127, 4, 2, 2, 86, 0, 126, 0, 0, 0, 8, 0, 0, 11, 2698, 27343, 7, 11, 13, 0, 0, 8, 9, 6, 20667, 0, 0, '2022-08-14 12:21:35.674654', '2022-08-14 12:21:35.674654');
-INSERT INTO "public"."rifle_instance" VALUES (225, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 8, 'PISTOL', 7, 2, 1, 5, 0, 20, 12, 1, 1, 57, 2, 112, 40, 5, 2, 3, 194, 0, 7, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2022-08-14 12:21:49.611972', '2022-08-14 12:21:49.611972');
-INSERT INTO "public"."rifle_instance" VALUES (226, 0, 20, 90, 90, 10, 20, 90, 90, 'COMMON', 'xm109.yml', 'SNIPER', '6', 'Heckler and Koch', 'XM109 Sniper Rifle', 13, 16, 'SNIPER', 7, 6, 2, 11, 2, 127, 0, 10, 1, 0, 1, 10, 215, 2, 5, 3, 13, 0, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, '2022-08-14 12:21:59.81199', '2022-08-14 12:21:59.81199');
-INSERT INTO "public"."rifle_instance" VALUES (227, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 1, 'PISTOL', 6, 4, 1, 7, 0, 8, 0, 3, 2, 1, 7, 155, 40, 2, 1, 2, 15, 0, 64, 0, 0, 0, 10, 0, 0, 726, 10, 13, 0, 16, 2112, 0, 12, 8, 13, 9, 1895, 7, 0, '2022-08-14 12:23:04.034422', '2022-08-14 12:23:04.034422');
-INSERT INTO "public"."rifle_instance" VALUES (228, 90, 10, 0, 0, 80, 40, 0, 0, 'COMMON', 'hk21.yml', 'LIGHT_MACHINE_GUN', '10', 'TN-33Y', 'HK-21 Light Machine Gun', 33, 55, 'LIGHT_MACHINE_GUN', 12, 6, 20, 6, 2, 12, 7, 12, 4, 135, 12, 6, 38, 2, 4, 1, 10, 0, 157, 0, 0, 0, 45, 0, 0, 5, 13, 8, 10, 6, 9, 0, 1955, 9, 7, 13, 54, 6, 0, '2022-08-14 12:23:13.755446', '2022-08-14 12:23:13.755446');
-INSERT INTO "public"."rifle_instance" VALUES (229, 90, 10, 0, 0, 90, 40, 9, 0, 'COMMON', 'saiga12.yml', 'SHOTGUN', '3', 'R.S.S.', 'SAIGA-12', 39, 4, 'SHOTGUN', 10, 2, 2, 11, 0, 80, 0, 2, 2, 2, 11, 158, 6, 5, 1, 2, 92, 0, 5, 0, 0, 0, 246, 0, 0, 7, 65, 0, 18, 13, 13, 0, 1445, 8, 12, 0, 119, 11, 0, '2022-08-14 12:23:30.049357', '2022-08-14 12:23:30.049357');
-INSERT INTO "public"."rifle_instance" VALUES (230, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 7, 'PISTOL', 13, 6, 1, 5, 0, 64, 10, 3, 1, 1, 3, 80, 117, 1, 2, 1, 57, 0, 12, 0, 0, 0, 10, 0, 0, 6, 9, 9, 68, 11, 4108, 0, 12, 15, 1523, 40, 0, 8, 0, '2022-08-14 12:23:43.924844', '2022-08-14 12:23:43.924844');
-INSERT INTO "public"."rifle_instance" VALUES (231, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 2, 'PISTOL', 10, 3, 1, 14, 0, 3, 11, 1, 4, 62, 3, 80, 221, 4, 56, 1, 7, 0, 141, 0, 0, 0, 49, 0, 0, 11, 8, 13, 110, 1182, 18, 0, 15, 6, 948, 8, 48, 9, 0, '2022-08-14 12:24:13.387665', '2022-08-14 12:24:13.387665');
-INSERT INTO "public"."rifle_instance" VALUES (232, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'czp10.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'CZP10 pistol', 7, 3, 'PISTOL', 6, 3, 1, 9, 0, 7, 17, 2, 2, 1, 3, 9, 81, 3, 1, 2, 25, 0, 0, 0, 0, 0, 6, 0, 0, 1039, 2128, 12, 10, 18, 2035, 0, 18, 9, 2114, 7, 87, 159, 0, '2022-08-14 12:25:40.82082', '2022-08-14 12:25:40.82082');
-INSERT INTO "public"."rifle_instance" VALUES (233, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'ppk.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Silenced PPK', 42, 3, 'PISTOL', 5, 5, 1, 11, 0, 53, 0, 2, 4, 0, 7, 10, 105, 2, 4, 1, 48, 0, 18, 0, 0, 0, 99, 0, 0, 9, 11, 0, 133, 0, 8, 0, 8, 0, 9, 131, 9, 212, 0, '2022-08-14 12:26:09.767453', '2022-08-14 12:26:09.767453');
-INSERT INTO "public"."rifle_instance" VALUES (234, 80, 40, 13, 5, 50, 25, 10, 1, 'COMMON', 'magnum-revolver.yml', 'PISTOL', '8', 'TN3 SMITH-x Industrial', 'Magnum Revolver', 40, 3, 'PISTOL', 15, 6, 1, 5, 0, 51, 0, 1, 1, 0, 3, 80, 51, 2, 1, 1, 61, 0, 9, 0, 0, 0, 66, 0, 0, 13, 6, 10, 10, 9, 64, 0, 14, 101, 13785, 154, 9, 8, 0, '2022-08-14 12:26:21.269082', '2022-08-14 12:26:21.269082');
 
 
 --
@@ -6738,6 +6454,7 @@ INSERT INTO "public"."room" VALUES (337, 465, 1, 0, '{blu}La Mesa{/blu} Campo Ro
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (245, 373, 1, 0, '{blu}Crenshaw{/blu} Highway 94 East', 'A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren''t taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.
 ', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (772, 904, 1, 0, 'name', 'description', NULL, NULL, 1, 0, 'psi-tech-hatch', ',INSIDE,METAL_HATCH,TILE');
 INSERT INTO "public"."room" VALUES (246, 374, 1, 0, '{blu}Crenshaw{/blu} Highway 94 East', 'A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren''t taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (247, 375, 1, 0, '{blu}Crenshaw{/blu} Highway 94 East', 'A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren''t taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.
@@ -6938,6 +6655,8 @@ INSERT INTO "public"."room" VALUES (331, 459, 1, 0, '{blu}La Mesa{/blu} Kenwood 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (338, 466, 1, 0, '{blu}La Mesa{/blu} Campo Road 9600', 'Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.
 ', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (455, 583, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle', 'A shower isle
+', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (339, 467, 1, 0, '{blu}La Mesa{/blu} Campo Road 9600', 'Campo Road is a bland introduction to the hot and boring town of Spruce Valley. The roads are decorated with a Mexican food restaurant every block or so. A few signs advertise the presence of the {red}Saint Vale Church{/red}.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (341, 469, 1, 0, '{blu}La Mesa{/blu} Conrad Road', 'Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.
@@ -6967,6 +6686,10 @@ INSERT INTO "public"."room" VALUES (351, 479, 1, 0, '{blu}La Mesa{/blu} Conrad R
 INSERT INTO "public"."room" VALUES (352, 480, 1, 0, '{blu}La Mesa{/blu} Conrad Road', 'Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (367, 495, 1, 0, '{blu}La Mesa{/blu} Vale church back alley entrance', 'An extremely narrow alleyway leads to the Vale Church parking lot. A wall made of concrete and topped with a high iron fence is to the North. Directly to the south are cars jam packed next to each other in a feeble attempt to add more parking spaces to the apartments directly south of here. 
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (456, 584, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle', 'A shower isle
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (457, 585, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle', 'A shower isle
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (353, 481, 1, 0, '{blu}La Mesa{/blu} Conrad Road', 'Nearly every building has the same Aztec style rooftops. The same construction company that worked on every building on Campo Road also worked on the apartment buildings here. That same company was shutdown due to activities related to money laundering. As low income as this neighborhood is, there are no signs of an obvious wealth inequality here. The residents here are like every other community of hard working parents trying to provide for their family.
 ', NULL, NULL, 1, 0, NULL, NULL);
@@ -7141,12 +6864,6 @@ INSERT INTO "public"."room" VALUES (439, 567, 1, 0, '{blu}Saint Vale Church{/blu
 INSERT INTO "public"."room" VALUES (440, 568, 1, 0, '{blu}Saint Vale Church{/blu} Inside - Altar', 'A table is here with a decorative cloth draped over it. On each side of the table are tall stands that hold long white candles. There is a stand with a microphone embedded into the wood.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (446, 574, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Entrance', 'A large green and white sign looms above your head. {grn}Allied Foods{/grn} is the main food source for the local community. It''s central location is within walking distance for most of the residents.
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (455, 583, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle', 'A shower isle
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (456, 584, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle', 'A shower isle
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (457, 585, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle', 'A shower isle
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (458, 586, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle', 'A shower isle
 ', NULL, NULL, 1, 0, NULL, NULL);
@@ -7364,8 +7081,6 @@ INSERT INTO "public"."room" VALUES (558, 687, 1, 0, '{blu}Metro{/blu} Henley Fou
 ', NULL, NULL, 1, 0, 'metrofountain-3x3', NULL);
 INSERT INTO "public"."room" VALUES (559, 688, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
 ', NULL, NULL, 1, 0, 'metrofountain-3x4', NULL);
-INSERT INTO "public"."room" VALUES (560, 689, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
-', NULL, NULL, 1, 0, 'metrofountain-2x4', NULL);
 INSERT INTO "public"."room" VALUES (561, 690, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
 ', NULL, NULL, 1, 0, 'metrofountain-1x4', NULL);
 INSERT INTO "public"."room" VALUES (563, 692, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
@@ -7374,12 +7089,6 @@ INSERT INTO "public"."room" VALUES (564, 693, 1, 0, '{blu}Metro{/blu} Henley Fou
 ', NULL, NULL, 1, 0, 'metrofountain-1x1', NULL);
 INSERT INTO "public"."room" VALUES (565, 694, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
 ', NULL, NULL, 1, 0, 'metrofountain-1x0', NULL);
-INSERT INTO "public"."room" VALUES (567, 696, 1, 0, '{blu}Metro{/blu} Inside the Henley Fountain', 'You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.
-', NULL, NULL, 1, 0, 'metrofountain-2x1', NULL);
-INSERT INTO "public"."room" VALUES (568, 697, 1, 0, '{blu}Metro{/blu} Inside the Henley Fountain', 'You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.
-', NULL, NULL, 1, 0, 'metrofountain-2x2', NULL);
-INSERT INTO "public"."room" VALUES (569, 698, 1, 0, '{blu}Metro{/blu} Inside the Henley Fountain', 'You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.
-', NULL, NULL, 1, 0, 'metrofountain-2x3', NULL);
 INSERT INTO "public"."room" VALUES (570, 699, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
 ', NULL, NULL, 1, 0, 'metrofountain-3x1', NULL);
 INSERT INTO "public"."room" VALUES (571, 700, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
@@ -7389,6 +7098,10 @@ INSERT INTO "public"."room" VALUES (573, 702, 1, 0, '{blu}Metro{/blu} Haven Stre
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (596, 725, 1, 0, '{blu}Hartford Bank{/blu} - Tellers', 'To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.
 ', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (569, 698, 1, 0, '{blu}Metro{/blu} Inside the Henley Fountain', 'You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.
+', NULL, NULL, 1, 0, 'fountain-2', NULL);
+INSERT INTO "public"."room" VALUES (567, 696, 1, 0, '{blu}Metro{/blu} Inside the Henley Fountain', 'You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.
+', NULL, NULL, 1, 0, 'fountain-4', NULL);
 INSERT INTO "public"."room" VALUES (574, 703, 1, 0, '{blu}Metro{/blu} Haven Street sidewalk', 'Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (575, 704, 1, 0, '{blu}Metro{/blu} Haven Street sidewalk', 'Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.
@@ -7503,6 +7216,8 @@ INSERT INTO "public"."room" VALUES (633, 763, 1, 0, '{blu}Market Street{/blu} - 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (634, 764, 1, 0, '{blu}Market Street{/blu} - Thompson Avenue', 'Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it''s problems, it''s by far a lot safer than it used to be. 
 ', NULL, NULL, 1, 0, 'thompson-north-5', NULL);
+INSERT INTO "public"."room" VALUES (1276, 1020, 1, 0, '{blu}Kojima{/blu} - Bridge Outside', 'Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.
+', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (635, 765, 1, 0, '{blu}Market Street{/blu} - Trolley Station', 'Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (636, 766, 1, 0, '{blu}Market Street{/blu} - Trolley Station', 'Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. 
@@ -7537,8 +7252,6 @@ INSERT INTO "public"."room" VALUES (652, 782, 1, 0, '{blu}Market Street{/blu} - 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (653, 783, 1, 0, '{blu}Market Street{/blu} - Trolley Station', 'Thanks to hundreds of thousands of dollars in federal and state funding, the Trolley station on Market Street is a reliable source of dependable transportation. The lower income areas tend to be the most reliant on this form of transportation. With that, you get all sorts of different individuals. 
 ', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (566, 695, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
-', NULL, NULL, 1, 0, 'metrofountain-2x0', NULL);
 INSERT INTO "public"."room" VALUES (622, 752, 1, 0, '{blu}Market Street{/blu} - Thompson Avenue', 'Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it''s problems, it''s by far a lot safer than it used to be. 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (627, 757, 1, 0, '{blu}Market Street{/blu} - Thompson Avenue', 'Thompson Avenue is home to a recent spurt in development that started with the redesign and rebranding of the Market Street area. With new leadership and a focus on invigorating and supporting the working class, Thompson Avenue transformed from small farm town, to a semi-thriving metropolis. While the area still has it''s problems, it''s by far a lot safer than it used to be. 
@@ -7675,6 +7388,8 @@ INSERT INTO "public"."room" VALUES (704, 836, 1, 0, '{blu}Crenshaw{/blu} Highway
 ', NULL, NULL, 1, 0, NULL, ',AIR,DESERT,DRY,OUTSIDE');
 INSERT INTO "public"."room" VALUES (769, 901, 1, 25, '{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium', 'You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
+INSERT INTO "public"."room" VALUES (770, 902, 1, 25, '{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium', 'You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
 INSERT INTO "public"."room" VALUES (721, 853, 1, 0, '{blu}Crenshaw{/blu} Highway 94 East', 'A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren''t taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.
 ', NULL, NULL, 1, 0, NULL, ',AIR,DESERT,DRY,OUTSIDE');
 INSERT INTO "public"."room" VALUES (722, 854, 1, 0, '{blu}Crenshaw{/blu} Highway 94 East', 'A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren''t taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.
@@ -7777,10 +7492,7 @@ INSERT INTO "public"."room" VALUES (767, 899, 1, 25, '{blu}Psi-Tech H.Q.{/blu} -
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
 INSERT INTO "public"."room" VALUES (768, 900, 1, 25, '{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium', 'You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
-INSERT INTO "public"."room" VALUES (770, 902, 1, 25, '{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium', 'You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
 INSERT INTO "public"."room" VALUES (771, 903, 1, 0, 'name', 'description', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (772, 904, 1, 0, 'name', 'description', NULL, NULL, 1, 0, 'psi-tech-hatch', ',INSIDE,METAL_HATCH,TILE');
 INSERT INTO "public"."room" VALUES (773, 905, 1, 25, '{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium', 'You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
 INSERT INTO "public"."room" VALUES (774, 906, 1, 25, '{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium', 'You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.
@@ -7883,6 +7595,8 @@ INSERT INTO "public"."room" VALUES (794, 928, 1, 0, '{blu}On Base{/blu} - Hydro-
 ', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-8', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (795, 929, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
 ', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-9', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (811, 945, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (783, 917, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
 ', NULL, NULL, 1, 0, 'maintenance_guard-roaming-4', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (784, 918, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
@@ -7916,8 +7630,6 @@ INSERT INTO "public"."room" VALUES (807, 941, 1, 0, '{blu}On Base{/blu} - Hydro-
 INSERT INTO "public"."room" VALUES (809, 943, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (810, 944, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (811, 945, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (812, 946, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
@@ -7989,6 +7701,8 @@ INSERT INTO "public"."room" VALUES (1233, 977, 1, 0, '{blu}Kojima{/blu} - Bridge
 ', NULL, NULL, 1, 0, NULL, ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
 INSERT INTO "public"."room" VALUES (1234, 978, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
 ', NULL, NULL, 1, 0, NULL, ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
+INSERT INTO "public"."room" VALUES (1275, 1019, 1, 0, '{blu}Kojima{/blu} - Bridge Outside', 'Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.
+', NULL, NULL, 1, 0, 'kojima-spawn-lancer-5', NULL);
 INSERT INTO "public"."room" VALUES (1235, 979, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
 ', NULL, NULL, 1, 0, 'kojima-bridge-northwest-1', ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
 INSERT INTO "public"."room" VALUES (1236, 980, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
@@ -8067,10 +7781,6 @@ INSERT INTO "public"."room" VALUES (1271, 1015, 1, 0, '{blu}Kojima{/blu} - Bridg
 ', NULL, NULL, 1, 0, 'kojima-spawn-lancer-3', NULL);
 INSERT INTO "public"."room" VALUES (1272, 1016, 1, 0, '{blu}Kojima{/blu} - Bridge Outside', 'Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.
 ', NULL, NULL, 1, 0, 'kojima-spawn-scout-3', NULL);
-INSERT INTO "public"."room" VALUES (1275, 1019, 1, 0, '{blu}Kojima{/blu} - Bridge Outside', 'Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.
-', NULL, NULL, 1, 0, 'kojima-spawn-lancer-5', NULL);
-INSERT INTO "public"."room" VALUES (1276, 1020, 1, 0, '{blu}Kojima{/blu} - Bridge Outside', 'Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.
-', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (1277, 1021, 1, 0, '{blu}Kojima{/blu} - Bridge Outside', 'Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (1278, 1022, 1, 0, '{blu}Kojima{/blu} - Bridge Outside', 'Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.
@@ -8205,6 +7915,8 @@ INSERT INTO "public"."room" VALUES (1343, 1087, 1, 0, '{blu}Kojima{/blu} - Insid
 ', NULL, NULL, 1, 0, NULL, ',GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1344, 1088, 1, 0, '{blu}Kojima{/blu} - Inside Kojima Corp', 'The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you''re being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.
 ', NULL, NULL, 1, 0, NULL, ',GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (1381, 1125, 1, 0, '{blu}Kojima{/blu} - Mysterious Payload', 'The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1345, 1089, 1, 0, '{blu}Kojima{/blu} - Inside Kojima Corp', 'The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you''re being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.
 ', NULL, NULL, 1, 0, 'kojima-spawn-lancer-14', ',GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1346, 1090, 1, 0, '{blu}Kojima{/blu} - Inside Kojima Corp', 'The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you''re being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.
@@ -8277,8 +7989,6 @@ INSERT INTO "public"."room" VALUES (1379, 1123, 1, 0, '{blu}Kojima{/blu} - Insid
 ', NULL, NULL, 1, 0, NULL, ',GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1380, 1124, 1, 0, '{blu}Kojima{/blu} - Mysterious Payload', 'The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (1381, 1125, 1, 0, '{blu}Kojima{/blu} - Mysterious Payload', 'The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1382, 1126, 1, 0, '{blu}Kojima{/blu} - Mysterious Payload', 'The room is empty except for a large unlocked metal chest in the middle of the room. It looks like a militaristic container used to transport ammunition or sensitive technology across long distances. You might be able to open it.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1383, 1127, 1, 0, '{blu}Kojima{/blu} - Inside Kojima Corp', 'The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you''re being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.
@@ -8303,6 +8013,8 @@ INSERT INTO "public"."room" VALUES (1392, 1136, 1, 0, '{blu}Kojima{/blu} - Myste
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1418, 1164, 1, 0, '{blu}North Abbott{/blu} - Southern Road', 'The asphalt turns from well-paved to almost non-existent. The North Abbott Outdoor Market is the result of funds being funneled into a legitimate source but siphoned out by intimidation tactics and the threat of violence. It is largely known that the Outdoor Market is run by criminals but due to it''s proximity to low income neighborhoods nobody has any incentive to clean it up. 
 ', NULL, NULL, 1, 0, 'north-abbott-outdoor-market-walkway-south', NULL);
+INSERT INTO "public"."room" VALUES (1438, 1184, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (1393, 1137, 1, 0, '{blu}Kojima{/blu} - Inside Kojima Corp', 'The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you''re being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.
 ', NULL, NULL, 1, 0, NULL, ',GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1394, 1138, 1, 0, '{blu}Kojima{/blu} - Inside Kojima Corp', 'The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you''re being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.
@@ -8393,8 +8105,6 @@ INSERT INTO "public"."room" VALUES (1435, 1181, 1, 0, '{blu}North Abbott Outdoor
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (1436, 1182, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
 ', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (1438, 1184, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
-', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (1439, 1185, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (1440, 1186, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
@@ -8425,6 +8135,12 @@ INSERT INTO "public"."room" VALUES (1452, 1198, 1, 0, '{blu}North Abbott{/blu} -
 ', NULL, NULL, 1, 0, 'north-abbott-outdoor-produce-vendor-6', NULL);
 INSERT INTO "public"."room" VALUES (1453, 1199, 1, 0, '{blu}North Abbott{/blu} - Nu Toxin Dealer', 'Nu-Toxin is a controversial substance that is always skirting the line between legality and banned substance. The effects of the drink are nothing short of miraculous if you look at it from a standard scientific point of view. Many athletes and partying teenagers have lost their lives to the controversial substance. Ironically enough, the substance can be used as a Performance Enhancing Drug. Currently, the molecular structure of Nu-Toxin makes it legal, but who knows when it will be deemed illegal and it''s creators release a new form with a slightly altered genetic makeup. Stock up!
 ', NULL, NULL, 1, 0, 'north-abbott-outdoor-nu-toxin-dealer-1', NULL);
+INSERT INTO "public"."room" VALUES (568, 697, 1, 0, '{blu}Metro{/blu} Inside the Henley Fountain', 'You are up to your knees in water. All of your equipment is starting to soak. That soggy feeling is creeping into your clothes and you feel less agile.
+', NULL, NULL, 1, 0, 'fountain-1', NULL);
+INSERT INTO "public"."room" VALUES (560, 689, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
+', NULL, NULL, 1, 0, 'fountain-3', NULL);
+INSERT INTO "public"."room" VALUES (566, 695, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
+', NULL, NULL, 1, 0, 'fountain-5', NULL);
 
 
 --
@@ -12549,6 +12265,26 @@ INSERT INTO "public"."room_direction_data" VALUES (4690, 1196, 0, 'general descr
 INSERT INTO "public"."room_direction_data" VALUES (4691, 1197, 0, 'general description', 'keyword', 1, 0, 1186);
 INSERT INTO "public"."room_direction_data" VALUES (4692, 1198, 0, 'general description', 'keyword', 1, 0, 1188);
 INSERT INTO "public"."room_direction_data" VALUES (4693, 1199, 0, 'general description', 'keyword', 1, 0, 1190);
+INSERT INTO "public"."room_direction_data" VALUES (4694, 697, 0, 'general_description', 'keyword', 1, 0, 698);
+INSERT INTO "public"."room_direction_data" VALUES (4695, 697, 1, 'general description', 'keyword', 1, 0, 686);
+INSERT INTO "public"."room_direction_data" VALUES (4696, 697, 2, 'general description', 'keyword', 1, 0, 696);
+INSERT INTO "public"."room_direction_data" VALUES (4697, 697, 3, 'general description', 'keyword', 1, 0, 692);
+INSERT INTO "public"."room_direction_data" VALUES (4698, 697, 5, 'A', 'metal', 0, 0, 128);
+INSERT INTO "public"."room_direction_data" VALUES (4699, 698, 0, 'general description', 'keyword', 1, 0, 689);
+INSERT INTO "public"."room_direction_data" VALUES (4700, 698, 1, 'general description', 'keyword', 1, 0, 687);
+INSERT INTO "public"."room_direction_data" VALUES (4701, 698, 2, 'general description', 'keyword', 1, 0, 697);
+INSERT INTO "public"."room_direction_data" VALUES (4702, 698, 3, 'general description', 'keyword', 1, 0, 691);
+INSERT INTO "public"."room_direction_data" VALUES (4703, 689, 1, 'general description', 'keyword', 1, 0, 688);
+INSERT INTO "public"."room_direction_data" VALUES (4704, 689, 2, 'general_description', 'keyword', 1, 0, 698);
+INSERT INTO "public"."room_direction_data" VALUES (4705, 689, 3, 'general_description', 'keyword', 1, 0, 690);
+INSERT INTO "public"."room_direction_data" VALUES (4706, 696, 0, 'general_description', 'keyword', 1, 0, 697);
+INSERT INTO "public"."room_direction_data" VALUES (4707, 696, 1, 'general_description', 'keyword', 1, 0, 699);
+INSERT INTO "public"."room_direction_data" VALUES (4708, 696, 2, 'general description', 'keyword', 1, 0, 695);
+INSERT INTO "public"."room_direction_data" VALUES (4709, 696, 3, 'general description', 'keyword', 1, 0, 693);
+INSERT INTO "public"."room_direction_data" VALUES (4710, 695, 0, 'general_description', 'keyword', 1, 0, 696);
+INSERT INTO "public"."room_direction_data" VALUES (4711, 695, 1, 'general_description', 'keyword', 1, 0, 700);
+INSERT INTO "public"."room_direction_data" VALUES (4712, 695, 2, 'general_description', 'keyword', 1, 0, 750);
+INSERT INTO "public"."room_direction_data" VALUES (4713, 695, 3, 'general description', 'keyword', 1, 0, 694);
 
 
 --
@@ -12864,6 +12600,12 @@ INSERT INTO "public"."skill_usage" VALUES (435, 111, 'cqc-left-stomp-to-head', 0
 INSERT INTO "public"."skill_usage" VALUES (335, 1, 'wpn-shotguns', 73);
 INSERT INTO "public"."skill_usage" VALUES (398, 111, 'wpn-sniper', 63);
 INSERT INTO "public"."skill_usage" VALUES (372, 1, 'wpn-sniper', 92);
+INSERT INTO "public"."skill_usage" VALUES (436, 111, 'dissipate', 0);
+INSERT INTO "public"."skill_usage" VALUES (437, 111, 'penshot', 0);
+INSERT INTO "public"."skill_usage" VALUES (438, 111, 'mark', 0);
+INSERT INTO "public"."skill_usage" VALUES (439, 1, 'dissipate', 0);
+INSERT INTO "public"."skill_usage" VALUES (440, 1, 'penshot', 0);
+INSERT INTO "public"."skill_usage" VALUES (441, 1, 'mark', 0);
 
 
 --
@@ -12917,6 +12659,7 @@ INSERT INTO "public"."terminal_choices" VALUES (6, 1, 6, 'Marine Corps Martial A
 
 INSERT INTO "public"."user_logins" VALUES (1, '127.0.0.1', 'far');
 INSERT INTO "public"."user_logins" VALUES (2, '127.0.0.1', 'ghost');
+INSERT INTO "public"."user_logins" VALUES (3, '127.0.0.1', 'breacher');
 
 
 --
@@ -13048,16 +12791,6 @@ INSERT INTO "public"."zone_data" VALUES (1027, 1, 'M', '0', 107, 730, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (1028, 1, 'M', '0', 107, 731, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (1029, 1, 'M', '0', 107, 732, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (1151, 1, 'M', '0', 669, 910, 6, NULL);
-INSERT INTO "public"."zone_data" VALUES (1152, 1, 'M', '0', 114, 697, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (1153, 1, 'M', '0', 114, 698, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (1154, 1, 'M', '0', 114, 689, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (1155, 1, 'M', '0', 114, 696, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (1156, 1, 'M', '0', 114, 151, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (1157, 1, 'M', '0', 115, 697, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (1158, 1, 'M', '0', 115, 698, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (1159, 1, 'M', '0', 115, 689, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (1160, 1, 'M', '0', 115, 696, 10, NULL);
-INSERT INTO "public"."zone_data" VALUES (1161, 1, 'M', '0', 115, 151, 10, NULL);
 INSERT INTO "public"."zone_data" VALUES (1167, 1, 'M', '0', 670, 935, 10, NULL);
 INSERT INTO "public"."zone_data" VALUES (1168, 1, 'M', '0', 670, 936, 10, NULL);
 INSERT INTO "public"."zone_data" VALUES (1169, 1, 'M', '0', 670, 937, 10, NULL);
@@ -13181,18 +12914,17 @@ INSERT INTO "public"."zone_data" VALUES (1782, 1, 'M', '0', 3, 1195, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (1783, 1, 'M', '0', 3, 1196, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (1784, 1, 'M', '0', 3, 1197, 1, NULL);
 INSERT INTO "public"."zone_data" VALUES (1785, 1, 'M', '0', 3, 1198, 1, NULL);
-INSERT INTO "public"."zone_data" VALUES (1792, 1, 'M', '0', 718, 348, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1793, 1, 'M', '0', 718, 349, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1794, 1, 'M', '0', 718, 350, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1795, 1, 'M', '0', 718, 353, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1796, 1, 'M', '0', 718, 354, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1797, 1, 'M', '0', 718, 357, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1798, 1, 'M', '0', 717, 348, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1799, 1, 'M', '0', 717, 349, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1800, 1, 'M', '0', 717, 350, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1801, 1, 'M', '0', 717, 353, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1802, 1, 'M', '0', 717, 354, 2, NULL);
-INSERT INTO "public"."zone_data" VALUES (1803, 1, 'M', '0', 717, 357, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1805, 1, 'M', '0', 666, 666, 1, NULL);
+INSERT INTO "public"."zone_data" VALUES (1818, 1, 'M', '0', 114, 697, 10, NULL);
+INSERT INTO "public"."zone_data" VALUES (1819, 1, 'M', '0', 114, 698, 10, NULL);
+INSERT INTO "public"."zone_data" VALUES (1820, 1, 'M', '0', 114, 689, 10, NULL);
+INSERT INTO "public"."zone_data" VALUES (1821, 1, 'M', '0', 114, 696, 10, NULL);
+INSERT INTO "public"."zone_data" VALUES (1822, 1, 'M', '0', 114, 695, 10, NULL);
+INSERT INTO "public"."zone_data" VALUES (1823, 1, 'M', '0', 115, 697, 10, NULL);
+INSERT INTO "public"."zone_data" VALUES (1824, 1, 'M', '0', 115, 698, 10, NULL);
+INSERT INTO "public"."zone_data" VALUES (1825, 1, 'M', '0', 115, 689, 10, NULL);
+INSERT INTO "public"."zone_data" VALUES (1826, 1, 'M', '0', 115, 696, 10, NULL);
+INSERT INTO "public"."zone_data" VALUES (1827, 1, 'M', '0', 115, 695, 10, NULL);
 
 
 --
@@ -13238,31 +12970,7 @@ INSERT INTO "public"."zone_mob" VALUES (36, 729, 107, 1);
 INSERT INTO "public"."zone_mob" VALUES (37, 730, 107, 1);
 INSERT INTO "public"."zone_mob" VALUES (38, 731, 107, 1);
 INSERT INTO "public"."zone_mob" VALUES (39, 732, 107, 1);
-INSERT INTO "public"."zone_mob" VALUES (40, 910, 669, 6);
-INSERT INTO "public"."zone_mob" VALUES (41, 697, 114, 10);
-INSERT INTO "public"."zone_mob" VALUES (42, 698, 114, 10);
-INSERT INTO "public"."zone_mob" VALUES (43, 689, 114, 10);
-INSERT INTO "public"."zone_mob" VALUES (44, 696, 114, 10);
-INSERT INTO "public"."zone_mob" VALUES (45, 151, 114, 10);
-INSERT INTO "public"."zone_mob" VALUES (46, 697, 115, 10);
-INSERT INTO "public"."zone_mob" VALUES (47, 698, 115, 10);
-INSERT INTO "public"."zone_mob" VALUES (48, 689, 115, 10);
-INSERT INTO "public"."zone_mob" VALUES (49, 696, 115, 10);
-INSERT INTO "public"."zone_mob" VALUES (50, 151, 115, 10);
-INSERT INTO "public"."zone_mob" VALUES (51, 935, 670, 10);
-INSERT INTO "public"."zone_mob" VALUES (52, 936, 670, 10);
-INSERT INTO "public"."zone_mob" VALUES (53, 937, 670, 10);
-INSERT INTO "public"."zone_mob" VALUES (54, 938, 670, 10);
-INSERT INTO "public"."zone_mob" VALUES (55, 939, 670, 10);
-INSERT INTO "public"."zone_mob" VALUES (56, 682, 666, 1);
-INSERT INTO "public"."zone_mob" VALUES (57, 874, 503, 1);
-INSERT INTO "public"."zone_mob" VALUES (58, 876, 503, 1);
-INSERT INTO "public"."zone_mob" VALUES (59, 870, 504, 2);
-INSERT INTO "public"."zone_mob" VALUES (60, 882, 504, 2);
-INSERT INTO "public"."zone_mob" VALUES (61, 894, 505, 1);
-INSERT INTO "public"."zone_mob" VALUES (62, 896, 505, 1);
 INSERT INTO "public"."zone_mob" VALUES (63, 909, 112, 1);
-INSERT INTO "public"."zone_mob" VALUES (64, 909, 113, 3);
 INSERT INTO "public"."zone_mob" VALUES (65, 407, 103, 1);
 INSERT INTO "public"."zone_mob" VALUES (66, 409, 103, 1);
 INSERT INTO "public"."zone_mob" VALUES (67, 413, 103, 1);
@@ -13270,18 +12978,6 @@ INSERT INTO "public"."zone_mob" VALUES (68, 282, 103, 1);
 INSERT INTO "public"."zone_mob" VALUES (69, 284, 103, 1);
 INSERT INTO "public"."zone_mob" VALUES (70, 286, 103, 1);
 INSERT INTO "public"."zone_mob" VALUES (71, 292, 103, 1);
-INSERT INTO "public"."zone_mob" VALUES (72, 348, 707, 1);
-INSERT INTO "public"."zone_mob" VALUES (73, 349, 707, 1);
-INSERT INTO "public"."zone_mob" VALUES (74, 350, 707, 1);
-INSERT INTO "public"."zone_mob" VALUES (75, 353, 707, 1);
-INSERT INTO "public"."zone_mob" VALUES (76, 354, 707, 1);
-INSERT INTO "public"."zone_mob" VALUES (77, 357, 707, 1);
-INSERT INTO "public"."zone_mob" VALUES (78, 348, 708, 1);
-INSERT INTO "public"."zone_mob" VALUES (79, 349, 708, 1);
-INSERT INTO "public"."zone_mob" VALUES (80, 350, 708, 1);
-INSERT INTO "public"."zone_mob" VALUES (81, 353, 708, 1);
-INSERT INTO "public"."zone_mob" VALUES (82, 354, 708, 1);
-INSERT INTO "public"."zone_mob" VALUES (83, 357, 708, 1);
 INSERT INTO "public"."zone_mob" VALUES (84, 293, 103, 1);
 INSERT INTO "public"."zone_mob" VALUES (85, 316, 101, 5);
 INSERT INTO "public"."zone_mob" VALUES (86, 317, 101, 5);
@@ -13381,7 +13077,7 @@ SELECT pg_catalog.setval('"public"."camera_feed_feed_id_seq"', 1, false);
 -- Name: class_breacher_breacher_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."class_breacher_breacher_id_seq"', 1, true);
+SELECT pg_catalog.setval('"public"."class_breacher_breacher_id_seq"', 2, true);
 
 
 --
@@ -13451,14 +13147,14 @@ SELECT pg_catalog.setval('"public"."contract_step_callback_id_seq"', 27, true);
 -- Name: contract_steps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."contract_steps_id_seq"', 59, true);
+SELECT pg_catalog.setval('"public"."contract_steps_id_seq"', 141, true);
 
 
 --
 -- Name: contracts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."contracts_id_seq"', 36, true);
+SELECT pg_catalog.setval('"public"."contracts_id_seq"', 77, true);
 
 
 --
@@ -13556,14 +13252,14 @@ SELECT pg_catalog.setval('"public"."mini_gunner_sentinel_id_seq"', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 333, true);
+SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 347, true);
 
 
 --
 -- Name: mob_equipment_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_equipment_map_id_seq"', 77, true);
+SELECT pg_catalog.setval('"public"."mob_equipment_map_id_seq"', 91, true);
 
 
 --
@@ -13584,7 +13280,7 @@ SELECT pg_catalog.setval('"public"."mob_zone_id_seq"', 1, false);
 -- Name: mobile_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mobile_mob_id_seq"', 126, true);
+SELECT pg_catalog.setval('"public"."mobile_mob_id_seq"', 140, true);
 
 
 --
@@ -13661,7 +13357,7 @@ SELECT pg_catalog.setval('"public"."object_weapon_id_seq"', 5, true);
 -- Name: player_base_ability_pba_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."player_base_ability_pba_id_seq"', 17, true);
+SELECT pg_catalog.setval('"public"."player_base_ability_pba_id_seq"', 18, true);
 
 
 --
@@ -13675,7 +13371,7 @@ SELECT pg_catalog.setval('"public"."player_classes_id_seq"', 1, false);
 -- Name: player_contract_state_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."player_contract_state_id_seq"', 1, false);
+SELECT pg_catalog.setval('"public"."player_contract_state_id_seq"', 26, true);
 
 
 --
@@ -13689,14 +13385,14 @@ SELECT pg_catalog.setval('"public"."player_flags_id_seq"', 1, false);
 -- Name: player_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."player_id_seq"', 111, true);
+SELECT pg_catalog.setval('"public"."player_id_seq"', 112, true);
 
 
 --
 -- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."player_object_id_seq"', 574, true);
+SELECT pg_catalog.setval('"public"."player_object_id_seq"', 3121, true);
 
 
 --
@@ -13759,7 +13455,7 @@ SELECT pg_catalog.setval('"public"."raid_id_seq"', 14, true);
 -- Name: rifle_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."rifle_attachment_id_seq"', 4980, true);
+SELECT pg_catalog.setval('"public"."rifle_attachment_id_seq"', 64672, true);
 
 
 --
@@ -13780,7 +13476,7 @@ SELECT pg_catalog.setval('"public"."rifle_index_id_seq"', 29, true);
 -- Name: rifle_instance_rifle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."rifle_instance_rifle_id_seq"', 234, true);
+SELECT pg_catalog.setval('"public"."rifle_instance_rifle_id_seq"', 279, true);
 
 
 --
@@ -13794,7 +13490,7 @@ SELECT pg_catalog.setval('"public"."rifle_placements_id_seq"', 1, false);
 -- Name: room_direction_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."room_direction_data_id_seq"', 4693, true);
+SELECT pg_catalog.setval('"public"."room_direction_data_id_seq"', 4713, true);
 
 
 --
@@ -13871,7 +13567,7 @@ SELECT pg_catalog.setval('"public"."skill_trees_id_seq"', 16, true);
 -- Name: skill_usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."skill_usage_id_seq"', 435, true);
+SELECT pg_catalog.setval('"public"."skill_usage_id_seq"', 441, true);
 
 
 --
@@ -13899,7 +13595,7 @@ SELECT pg_catalog.setval('"public"."terminal_choices_id_seq"', 6, true);
 -- Name: user_logins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."user_logins_id_seq"', 2, true);
+SELECT pg_catalog.setval('"public"."user_logins_id_seq"', 3, true);
 
 
 --
@@ -13920,7 +13616,7 @@ SELECT pg_catalog.setval('"public"."world_configuration_start_rooms_id_seq"', 5,
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."zone_data_id_seq"', 1803, true);
+SELECT pg_catalog.setval('"public"."zone_data_id_seq"', 1827, true);
 
 
 --
