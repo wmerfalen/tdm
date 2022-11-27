@@ -29,6 +29,7 @@ namespace mods::zone {
 	void log_zone_error(zone_rnum zone, int cmd_no, const char *message);
 	void blacklist_zone(int zone);
 	void release_zone(int zone);
+	void migrate_mob_command(mentoc_pqxx_result_t& row);
 
 	/**
 	 * What is a refresh?

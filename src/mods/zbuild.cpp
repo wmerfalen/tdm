@@ -61,27 +61,117 @@ using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::s
 int get_raid_id(player_ptr_t player);
 #undef m_debug
 #undef m_error
-#define __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
-#ifdef __MENTOC_SHOW_MODS_BLEED_DEBUG_OUTPUT__
-	#define m_debug(MSG) mentoc_prefix_debug("[mods::builder::debug]")  << MSG << "\n";
-	#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::builder::ERROR]"))  << MSG << "\n";
+#define __MENTOC_SHOW_MODS_ZBUILD_DEBUG_OUTPUT__ // FIXME: remove
+#ifdef __MENTOC_SHOW_MODS_ZBUILD_DEBUG_OUTPUT__
+	#define m_debug(MSG) mentoc_prefix_debug("[mods::zbuild::debug]")  << MSG << "\n";
+	#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::zbuild::ERROR]"))  << MSG << "\n";
 #else
 	#define m_debug(MSG) ;;
 	#define m_error(MSG) ;;
 #endif
+std::optional<pqxx::result> get_zone_mob_rows_matching(
+    std::string_view z_mob_vnum,
+    std::string_view z_room_vnum
+) {
+	try {
+		auto sel_txn = txn();
+		sql_compositor comp("zone_mob",&sel_txn);
+		auto room_sql = comp.select("*")
+		    .from("zone_mob")
+		    .where("zm_mob_vnum",z_mob_vnum.data())
+		    .op_and("zm_room_vnum","=",z_room_vnum.data())
+		    .sql();
+		auto row = mods::pq::exec(sel_txn,room_sql.data());
+		mods::pq::commit(sel_txn);
+		return row;
+	} catch(std::exception& e) {
+		REPORT_DB_ISSUE("get_zone_mob_rows_matching: exception",e.what());
+		return std::nullopt;
+	}
+}
+std::pair<bool,std::string> zone_mob_remove_first_matching(
+    std::string_view arg_mob_vnum,
+    std::string_view arg_room_vnum
+) {
+	m_debug("delete zone mob placement " << arg_mob_vnum << " room: " << arg_room_vnum);
+	auto opt = get_zone_mob_rows_matching(arg_mob_vnum,arg_room_vnum);
+	if(!opt.has_value()) {
+		return {false,"No rows matching that query"};
+	}
+	try {
+		const auto& rows = opt.value();
+		if(rows.size() == 0) {
+			return {false,"No rows matching that query"};
+		}
+		auto first_row = rows[0];
+		auto id = first_row["id"].c_str();
+		auto del_txn = txn();
+		sql_compositor comp("zone_mob",&del_txn);
+		auto room_sql = comp.del()
+		    .from("zone_mob")
+		    .where("id",id)
+		    .sql();
+		auto row = mods::pq::exec(del_txn,room_sql.data());
+		mods::pq::commit(del_txn);
+		return {1,"deleted"};
+	} catch(std::exception& e) {
+		REPORT_DB_ISSUE("zone_mob_remove_first_matching: exception",e.what());
+		return {false,CAT("failed: '",e.what(),"'")};
+	}
+}
+std::pair<uint32_t,uint32_t> zone_mob_remove_all_matching(
+    std::string_view arg_mob_vnum,
+    std::string_view arg_room_vnum
+) {
+	uint32_t remove_count = 0;
+	uint32_t error_count = 0;
+	m_debug("delete zone mob placement (all that match) " << arg_mob_vnum << " room: " << arg_room_vnum);
+	auto opt = get_zone_mob_rows_matching(arg_mob_vnum,arg_room_vnum);
+	if(!opt.has_value()) {
+		return {0,0};
+	}
+	const auto& rows = opt.value();
+	if(rows.size() == 0) {
+		return {0,0};
+	}
+	for(const auto& row : rows) {
+		try {
+			auto id = row["id"].c_str();
+			auto del_txn = txn();
+			sql_compositor comp("zone_mob",&del_txn);
+			auto room_sql = comp.del()
+			    .from("zone_mob")
+			    .where("id",id)
+			    .sql();
+			auto row = mods::pq::exec(del_txn,room_sql.data());
+			mods::pq::commit(del_txn);
+			++remove_count;
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("zone_mob_remove_all_matching: exception",e.what());
+			++error_count;
+		}
+	}
+	return {remove_count,error_count};
+}
 
 std::tuple<bool,std::string> zone_place_remove(auto zone_table_index, auto command_index) {
 	m_debug("delete zone mob placement " << zone_table_index << " command: " << command_index);
+	if(zone_table_index >= zone_table.size()) {
+		return {false,"zone_table_index is out of bounds!"};
+	}
 	try {
 		auto del_txn = txn();
-		sql_compositor comp("zone_data",&del_txn);
+		sql_compositor comp("zone_mob",&del_txn);
 		auto entry = zone_table[zone_table_index].cmd.begin() + command_index;
-		auto vnum = std::to_string(entry->arg1);
+		if(entry >= zone_table[zone_table_index].cmd.end()) {
+			return {false,"command_index is out of bounds!"};
+		}
+		auto z_mob_vnum = std::to_string(entry->arg1);
+		auto z_room_vnum = std::to_string(entry->arg2);
 		auto room_sql = comp.del()
-		    .from("zone_data")
-		    .where("zone_command","M")
-		    .op_and("zone_arg1","=",vnum)
-		    .op_and("zone_id","=",std::to_string(zone_table[zone_table_index].get_id()))
+		    .from("zone_mob")
+		    .where("zm_mob_vnum",z_mob_vnum)
+		    .op_and("zm_room_vnum","=",z_room_vnum)
 		    .sql();
 		auto row = mods::pq::exec(del_txn,room_sql.data());
 		mods::pq::commit(del_txn);
@@ -398,6 +488,42 @@ namespace mods::builder {
 		}
 		return {true,"Saved zone successfully."};
 	}
+	std::pair<bool,std::string> zone_place_mob(
+	    int zone_id,
+	    std::string_view arg_mob_vnum,
+	    std::string_view arg_room_vnum,
+	    std::string_view arg_max
+	) {
+		if(zone_id >= zone_table.size()) {
+			std::cerr << red_str("STATUS: INVALID ZONE ID: ") << zone_id << "\n";
+			return {false,"Invalid zone id!"};
+		}
+		std::cerr << red_str("STATUS: zone_place[zone_id]:'") << zone_id << "'\n";
+		std::cerr << red_str("STATUS: zone_place[arg_mob_vnum.data()]:'") << arg_mob_vnum.data() << "'\n";
+		std::cerr << red_str("STATUS: zone_place[arg_room_vnum.data()]:'") << arg_room_vnum.data() << "'\n";
+		std::cerr << red_str("STATUS: zone_place[arg_max.data()]:'") << arg_max.data() << "'\n";
+		std::cerr << red_str("STATUS: zone_table[") << zone_id << "].number:'" << std::to_string(zone_table[zone_id].number) << "'\n";
+		std::string yaml_file;
+		try {
+			auto t = txn();
+			sql_compositor comp("zone_mob",&t);
+			auto sql = comp
+			    .insert()
+			    .into("zone_mob")
+			.values({
+				{"zm_mob_vnum",arg_mob_vnum.data()},
+				{"zm_room_vnum",arg_room_vnum.data()},
+				{"zm_max",arg_max.data()},
+			})
+			.sql();
+			mods::pq::exec(t,sql);
+			mods::pq::commit(t);
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("error",e.what());
+			return {false,std::string("Exception occurred: ") + e.what()};
+		}
+		return {true,"Saved zone successfully."};
+	}
 };
 
 using args_t = std::vector<std::string>;
@@ -541,6 +667,12 @@ SUPERCMD(do_zbuild) {
 		    "  |:: {wht}zbuild{/wht} {gld}delete 1{/gld}\r\n" <<
 		    " {grn}zbuild{/grn} {red}mob <zone_id> <mob_vnum> <room_vnum> <max> <if_flag>{/red}\r\n" <<
 		    "  |--> places the mob identified by mob_vnum in the room room_vnum\r\n" <<
+		    " {grn}zbuild{/grn} {red}mob-remove <mob_vnum> <room_vnum>{/red}\r\n" <<
+		    "  |--> removes the first matching row where mob_vnum and room_vnum match.\r\n" <<
+		    "       To remove all matches where mob_vnum and room_vnum match, use the \r\n" <<
+		    "       {grn}zbuild{/grn} {red}mob-remove-all{/red} command.\r\n" <<
+		    " {grn}zbuild{/grn} {red}mob-remove-all <mob_vnum> <room_vnum>{/red}\r\n" <<
+		    "  |--> removes all matching rows where mob_vnum and room_vnum match.\r\n" <<
 		    " {grn}zbuild{/grn} {red}obj <zone_id> <obj_vnum> <room_vnum> <max> <if_flag>{/red}\r\n" <<
 		    "  |--> places object obj_vnum in room room_vnum\r\n" <<
 		    " {grn}zbuild{/grn} {red}obj2mob <zone_id> <obj_vnum> <mob_vnum> <max> <if_flag>{/red}\r\n" <<
@@ -789,7 +921,7 @@ SUPERCMD(do_zbuild) {
 			}
 			zone = zone_id.value();
 		}
-		if(vargs.size() < 6) {
+		if(vargs.size() < 5) {
 			r_error(player,"{zbuild mob} Not enough arguments");
 			return;
 		}
@@ -802,33 +934,68 @@ SUPERCMD(do_zbuild) {
 		 * [2] mob_vnum
 		 * [3] room_vnum
 		 * [4] max
-		 * [5] if_flag
 		 */
-		auto zone_command = "M";
-		auto arg1 = vargs[2]; /** mob_vnum */
-		auto arg2 = /** room_vnum */ vargs[3].compare("this") == 0 ? std::to_string(world[player->room()].number) : vargs[3];
-		auto arg3 = vargs[4]; /** max */
-		auto if_flag = vargs[5];
-		//zone_place(int zone_id,std::string_view zone_command,if_flag,arg1,arg2,arg3)
-		/**
-		 * ---------------------------------
-		 *  !!! THIS DIFFERS FROM LEGACY !!!
-		 * ---------------------------------
-		 * The order here matters. Check mods/zone.cpp for how this differs from legacy code
-		 * when reading a mobile ("M" command)
-		 * arg1 = mob_vnum
-		 * arg2 = room_vnum
-		 * arg3 = max
-		 * ---------------------------------
-		 *  !!! THIS DIFFERS FROM LEGACY !!!
-		 * ---------------------------------
-		 */
-		auto result = mods::builder::zone_place(zone,zone_command,if_flag,arg1,arg2,arg3);
+		auto arg_mob_vnum = vargs[2];
+		auto arg_room_vnum = vargs[3].compare("this") == 0 ? std::to_string(world[player->room()].number) : vargs[3];
+		auto arg_max = vargs[4];
+		auto result = mods::builder::zone_place_mob(zone,arg_mob_vnum,arg_room_vnum,arg_max);
 		if(!result.first) {
 			r_error(player,CAT("{zbuild mob} ",result.second));
 		} else {
 			r_success(player,"{zbuild mob} Placed mob in zone successfully");
 		}
+		return;
+	}
+	if(vargs.size() && vargs[0].compare("mob-remove") == 0) {
+		/**
+		 * [0] 'mob-remove'
+		 * [1] mob_vnum
+		 * [2] room_vnum
+		 */
+		if(vargs.size() < 3) {
+			r_error(player,"{zbuild mob-remove} Not enough arguments. Usage: zbuild mob-remove <mob_vnum> <this|room_vnum>");
+			return;
+		}
+		for(int i=0; i < vargs.size(); i++) {
+			player->sendln(CAT("i:",i,":'",vargs[i],"'"));
+		}
+		/**
+		 * [0] 'mob-remove'
+		 * [1] mob_vnum
+		 * [2] room_vnum
+		 */
+		auto arg_mob_vnum = vargs[1];
+		auto arg_room_vnum = vargs[2].compare("this") == 0 ? std::to_string(world[player->room()].number) : vargs[2];
+		auto result = zone_mob_remove_first_matching(arg_mob_vnum,arg_room_vnum);
+		if(!result.first) {
+			r_error(player,CAT("{zbuild mob-remove} ",result.second));
+		} else {
+			r_success(player,"{zbuild mob-remove} Removed 1 row successfully");
+		}
+		return;
+	}
+	if(vargs.size() && vargs[0].compare("mob-remove-all") == 0) {
+		/**
+		 * [0] 'mob-remove-all'
+		 * [1] mob_vnum
+		 * [2] room_vnum
+		 */
+		if(vargs.size() < 3) {
+			r_error(player,"{zbuild mob-remove-all} Not enough arguments. Usage: zbuild mob-remove-all <mob_vnum> <this|room_vnum>");
+			return;
+		}
+		for(int i=0; i < vargs.size(); i++) {
+			player->sendln(CAT("i:",i,":'",vargs[i],"'"));
+		}
+		/**
+		 * [0] 'mob-remove-all'
+		 * [1] mob_vnum
+		 * [2] room_vnum
+		 */
+		auto arg_mob_vnum = vargs[1];
+		auto arg_room_vnum = vargs[2].compare("this") == 0 ? std::to_string(world[player->room()].number) : vargs[2];
+		auto result = zone_mob_remove_all_matching(arg_mob_vnum,arg_room_vnum);
+		r_success(player,CAT("{zbuild mob-remove-all} Removed ",result.first," row(s) successfully with ",result.second, " error(s)."));
 		return;
 	}
 	if(vargs.size() && vargs[0].compare("yaml") == 0) {

@@ -48,6 +48,12 @@ namespace mods::zone {
 	void done_refreshing() {
 		queue_state::queue_refresh = false;
 	}
+	void migrate_mob_command(mentoc_pqxx_result_t& row) {
+		std::cout << "migrate_zone_mob: 'INSERT INTO zone_mob(zm_mob_vnum,zm_room_vnum,zm_max) " <<
+		    "VALUES('" << row["zone_arg1"].c_str() << "','" <<
+		    row["zone_arg2"].c_str() << "','" <<
+		    row["zone_arg3"].c_str() << "');\n";
+	}
 	bool sanity_check_room_vnum(const room_vnum& room) {
 		auto room_id = real_room(room);
 		if(room_id == NOWHERE) {

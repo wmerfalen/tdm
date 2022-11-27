@@ -1,0 +1,17 @@
+[start]
+
+[room_vnum]
+zm_room_vnum
+
+[mob_vnum]
+zm_mob_vnum
+
+[uint16_t]
+zm_max
+
+[initialize_row]
+zm_room_vnum
+zm_mob_vnum
+zm_max
+
+[end]

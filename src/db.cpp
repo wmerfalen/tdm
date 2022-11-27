@@ -1061,11 +1061,28 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 			reset_com res;
 			res.id = zone_data_row["id"].as<uint64_t>();
 			res.command = std::string(zone_data_row["zone_command"].c_str())[0];
+			if(res.command == 'M') {
+				mods::zone::migrate_mob_command(zone_data_row);
+				continue;
+			}
 			res.if_flag =mods::util::stoi<int>(zone_data_row["zone_if_flag"]);
 			res.arg1 =mods::util::stoi<int>(zone_data_row["zone_arg1"]);
 			res.arg2 =mods::util::stoi<int>(zone_data_row["zone_arg2"]);
 			res.arg3 =mods::util::stoi<int>(zone_data_row["zone_arg3"]);
 			res.yaml = zone_data_row["zone_yaml"].is_null() ? "" : zone_data_row["zone_yaml"].c_str();
+			res.line = 0; //TODO: mods::util::stoi<int>(zone_data_row["line"]);
+			res.count = 0;
+			z.cmd.push_back(res);
+		}
+		for(auto&& zone_data_row : db_get_all("zone_mob")) {
+			reset_com res;
+			res.id = zone_data_row["id"].as<uint64_t>();
+			res.command = 'M';
+			res.if_flag = 0;
+			res.arg1 =mods::util::stoi<int>(zone_data_row["zm_mob_vnum"]);
+			res.arg2 =mods::util::stoi<int>(zone_data_row["zm_room_vnum"]);
+			res.arg3 =mods::util::stoi<int>(zone_data_row["zm_max"]);
+			res.yaml = "";
 			res.line = 0; //TODO: mods::util::stoi<int>(zone_data_row["line"]);
 			res.count = 0;
 			z.cmd.push_back(res);
