@@ -398,7 +398,18 @@ namespace mods::zone {
 				}
 
 				if(skip_me) {
-					log("skipping command: zone_data.id:(%d)",ZCMD.id);
+					std::string reason = "";
+					if(mob == NOBODY) {
+						reason += "invalid mob vnum";
+					}
+					if(room == NOWHERE) {
+						reason += "invalid room";
+					}
+					if(reason.length()) {
+						log("skipping command: zone_data.id:(%d) reason:'%s'",ZCMD.id,reason.c_str());
+					} else {
+						log("skipping command: zone_data.id:(%d)",ZCMD.id);
+					}
 					++zone_table_ignored;
 				} else {
 					++zone_table_saved;
