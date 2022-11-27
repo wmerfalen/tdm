@@ -747,14 +747,14 @@ int rev_dir[] = {
 
 
 int movement_loss[] = {
-	40,	/* Inside     */
-	44,	/* City       */
-	50,	/* Field      */
-	50,	/* Forest     */
-	60,	/* Hills      */
-	90,	/* Mountains  */
-	100,	/* Swimming   */
-	150,	/* Unswimable */
+	10,	/* Inside     */
+	15,	/* City       */
+	15,	/* Field      */
+	20,	/* Forest     */
+	30,	/* Hills      */
+	50,	/* Mountains  */
+	80,	/* Swimming   */
+	90,	/* Unswimable */
 	1,	/* Flying     */
 	100     /* Underwater */
 };

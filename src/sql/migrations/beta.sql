@@ -5597,6 +5597,8 @@ INSERT INTO "public"."mob_equipment" VALUES (343, 'kidnapper-dynamic-10-726', 72
 INSERT INTO "public"."mob_equipment" VALUES (344, 'petty-thief-dynamic-level-10-727', 727, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'armor/blue-jeans.yml', 'armor/plat-basketball-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'melee/cheap-crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:25:27.957163', '2022-11-20 00:25:27.957163');
 INSERT INTO "public"."mob_equipment" VALUES (345, 'kidnapper-dynamic-10-728', 728, NULL, NULL, NULL, 'armor/dark-throne-necklace.yml', NULL, 'armor/leather-trenchcoat.yml', 'armor/baklava.yml', 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/mp5.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-20 00:25:27.967982', '2022-11-20 00:25:27.967982');
 INSERT INTO "public"."mob_equipment" VALUES (159, 'infected-drone-lvl-2', 114, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/czp10.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-25 15:53:44.573311', '2022-05-25 15:53:44.573311');
+INSERT INTO "public"."mob_equipment" VALUES (348, 'car-thief', 116, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', 'armor/baklava.yml', 'armor/blue-jeans.yml', 'armor/plat-basketball-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'melee/crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-26 18:42:23.91904', '2022-11-26 18:42:23.91904');
+INSERT INTO "public"."mob_equipment" VALUES (349, 'petty-thief', 117, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'armor/blue-jeans.yml', 'armor/plat-basketball-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'melee/cheap-crowbar.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-26 18:42:23.932552', '2022-11-26 18:42:23.932552');
 
 
 --
@@ -5623,6 +5625,8 @@ INSERT INTO "public"."mob_equipment_map" VALUES (25, 501, 501, '2021-09-04 04:23
 INSERT INTO "public"."mob_equipment_map" VALUES (26, 502, 502, '2021-09-04 04:23:27.079717', '2021-09-04 04:23:27.079717');
 INSERT INTO "public"."mob_equipment_map" VALUES (90, 114, 114, '2022-11-26 18:22:19.479787', '2022-11-26 18:22:19.479787');
 INSERT INTO "public"."mob_equipment_map" VALUES (91, 115, 115, '2022-11-26 18:22:19.492092', '2022-11-26 18:22:19.492092');
+INSERT INTO "public"."mob_equipment_map" VALUES (92, 116, 116, '2022-11-26 18:42:23.921768', '2022-11-26 18:42:23.921768');
+INSERT INTO "public"."mob_equipment_map" VALUES (93, 117, 117, '2022-11-26 18:42:23.934332', '2022-11-26 18:42:23.934332');
 
 
 --
@@ -5732,6 +5736,22 @@ INSERT INTO "public"."mob_roam" VALUES (829, 500, 193, 'mp-enforcer');
 INSERT INTO "public"."mob_roam" VALUES (830, 500, 141, 'mp-enforcer');
 INSERT INTO "public"."mob_roam" VALUES (831, 500, 140, 'mp-enforcer');
 INSERT INTO "public"."mob_roam" VALUES (832, 500, 139, 'mp-enforcer');
+INSERT INTO "public"."mob_roam" VALUES (833, 116, 180, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (834, 116, 181, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (835, 116, 180, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (836, 116, 179, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (837, 116, 182, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (838, 116, 183, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (839, 116, 182, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (840, 116, 179, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (841, 116, 184, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (842, 116, 185, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (843, 116, 186, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (844, 116, 187, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (845, 116, 186, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (846, 116, 185, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (847, 116, 188, 'car-thief-116');
+INSERT INTO "public"."mob_roam" VALUES (848, 116, 189, 'car-thief-116');
 
 
 --
@@ -5767,6 +5787,8 @@ INSERT INTO "public"."mobile" VALUES (27, 107, 'A bank teller', 'A bank teller',
 INSERT INTO "public"."mobile" VALUES (28, 112, 'An inventory specialist', 'An inventory specialist', 'An inventory specialist', 'An inventory specialist takes a calculating look at the list of items on today''s list.', '8', '0', 99, 500, 500, 0, 500, 0, 500, 0, 0, 200, 0, 0, 98493, 98100, 9882, 0, 1, 0, 0, 2, 98493, 98100, 9882, -74, -74, 950, 10, 5, 0, 15, NULL, 'Inventory', 500, 500, 500, 500, 500, 500, 500, 500, 500, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (139, 114, 'An infected drone', 'An infected drone', 'An infected drone', 'An infected drone lumbers hugrily towards you...', '8', '0', 2, 2, 2, 0, 4, 0, 5, 0, 0, 2, 0, 0, 493, 100, 82, 5, 100, 0, 0, 1, 493, 100, 82, 1, 8, 10, 10, 5, 0, 15, NULL, NULL, 2, 3, 3, 2, 3, 1, 3, 2, 2, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (140, 115, 'An adapted drone', 'An adapted drone ', 'An adapted drone ', 'An adapted drone looks for something to infect...', '8', '0', 4, 5, 4, 0, 4, 0, 5, 0, 0, 3, 0, 0, 350, 100, 82, 5, 100, 0, 0, 1, 350, 100, 82, 2, 12, 18, 10, 5, 0, 15, NULL, NULL, 4, 5, 5, 4, 7, 0, 8, 3, 4, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (141, 116, 'A rugged car thief', 'A rugged car thief', 'A rugged car thief', 'A car thief stalking the area. He is armed.', '4616', '0', 18, 13, 2, 0, 34, 0, 0, 0, 0, 10, 0, 0, 350, 45, 610, 5, 250, 0, 0, 1, 350, 45, 610, 30, 6, 20, 10, 5, 0, 14, NULL, NULL, 15, 5, 15, 8, 0, 0, 18, 0, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (142, 117, 'A petty thief', 'A petty thief', 'A petty thief', 'A petty thief is stalking the area.', '4360', '0', 4, 4, 2, 0, 4, 0, 0, 0, 0, 5, 0, 0, 100, 15, 110, 5, 250, 0, 0, 1, 100, 15, 110, 2, 6, 10, 4, 5, 0, 14, NULL, NULL, 5, 4, 5, 2, 0, 0, 4, 0, 0, NULL, '0');
 
 
 --
@@ -7104,6 +7126,8 @@ INSERT INTO "public"."room" VALUES (567, 696, 1, 0, '{blu}Metro{/blu} Inside the
 ', NULL, NULL, 1, 0, 'fountain-4', NULL);
 INSERT INTO "public"."room" VALUES (574, 703, 1, 0, '{blu}Metro{/blu} Haven Street sidewalk', 'Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.
 ', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (600, 729, 1, 0, '{blu}Hartford Bank{/blu} - Teller A', 'You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. 
+', NULL, NULL, 1, 0, 'hartford-teller-a', NULL);
 INSERT INTO "public"."room" VALUES (575, 704, 1, 0, '{blu}Metro{/blu} Haven Street sidewalk', 'Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (576, 705, 1, 0, '{blu}Metro{/blu} Haven Street sidewalk', 'Along the paved sidewalks of Haven street are all the hallmarks of a busy metropolis. Except from the fact that the homeless denizens outnumber the working class citizens. The sidewalk paints a grim picture of the grip that drugs have on those who are poverty-striken. A testament to their suffering in the form of man made tents and makeshift sleeping bags.
@@ -7146,8 +7170,6 @@ INSERT INTO "public"."room" VALUES (598, 727, 1, 0, '{blu}Hartford Bank{/blu} - 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (599, 728, 1, 0, '{blu}Hartford Bank{/blu} - Tellers', 'To the east and west are bank tellers at their respective kiosks. The marble floor has a prestine aura to it. The distant promise of coffee hangs in the air.
 ', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (600, 729, 1, 0, '{blu}Hartford Bank{/blu} - Teller A', 'You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. 
-', NULL, NULL, 1, 0, 'hartford-teller-a', NULL);
 INSERT INTO "public"."room" VALUES (601, 730, 1, 0, '{blu}Hartford Bank{/blu} - Teller B', 'You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. 
 ', NULL, NULL, 1, 0, 'hartford-teller-b', NULL);
 INSERT INTO "public"."room" VALUES (602, 731, 1, 0, '{blu}Hartford Bank{/blu} - Teller C', 'You stand at a teller kiosk. There is a atm card scanner on the desk in front of you On the opposite side of the desk is a large monitor that is angled away from you. 
@@ -7456,6 +7478,8 @@ INSERT INTO "public"."room" VALUES (745, 877, 1, 0, '{blu}Psi-Tech H.Q.{/blu} - 
 ', NULL, NULL, 1, 0, 'psi-tech-sentry-gun-b', ',GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK');
 INSERT INTO "public"."room" VALUES (746, 878, 1, 0, '{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard', 'The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.
 ', NULL, NULL, 1, 0, NULL, ',GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK');
+INSERT INTO "public"."room" VALUES (774, 906, 1, 25, '{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium', 'You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
 INSERT INTO "public"."room" VALUES (747, 879, 1, 0, '{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard', 'The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.
 ', NULL, NULL, 1, 0, NULL, ',GLASS_WINDOWS,OUTSIDE,NARROW_EAST_WEST,SIDEWALK');
 INSERT INTO "public"."room" VALUES (748, 880, 1, 0, '{blu}Psi-Tech H.Q.{/blu} - Outside - Main courtyard', 'The entrance to {blu}Psi-Tech{/blu} is a stark contrast to the poverty of the surrounding area. The outside of the building is a bland grey-blue mix. Each walkway has stairs and a futuristic looking angular railing. Each corner of the paved sidewalk looks like a sleek cutout from a futuristic jet.The walkway curves down towards the main entrance. You notice a few cameras watching your movement.
@@ -7494,8 +7518,6 @@ INSERT INTO "public"."room" VALUES (768, 900, 1, 25, '{blu}Psi-Tech H.Q.{/blu} -
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
 INSERT INTO "public"."room" VALUES (771, 903, 1, 0, 'name', 'description', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (773, 905, 1, 25, '{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium', 'You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
-INSERT INTO "public"."room" VALUES (774, 906, 1, 25, '{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium', 'You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
 INSERT INTO "public"."room" VALUES (1, 130, 1, 21, 'C.O.F.O.B - Hallway entrance', 'There is a single door here leading to the inner hallway of the FOB. From there, you can make your way to the different areas like the TRITON Laboratory, the kitchen, the engineering level, and the exit to the outlying city surrounding the FOB.
 ', NULL, NULL, 1, 0, NULL, ',CEMENT,DAMP,INSIDE,ROOFTOP');
@@ -7565,6 +7587,8 @@ INSERT INTO "public"."room" VALUES (83, 212, 1, 21, '{blu}C.O.F.O.B{/blu} - Nort
 ', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (778, 912, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (813, 947, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (779, 913, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
 ', NULL, NULL, 1, 0, 'maintenance_guard-roaming-0', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (780, 914, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
@@ -7633,8 +7657,6 @@ INSERT INTO "public"."room" VALUES (810, 944, 1, 0, '{blu}On Base{/blu} - Hydro-
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (812, 946, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (813, 947, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (814, 948, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (101, 230, 1, 0, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
@@ -7667,6 +7689,8 @@ INSERT INTO "public"."room" VALUES (827, 961, 1, 0, '{blu}On Base{/blu} - Hydro-
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (828, 962, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (1236, 980, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
+', NULL, NULL, 1, 0, NULL, ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
 INSERT INTO "public"."room" VALUES (816, 950, 1, 0, '{blu}On Base{/blu} - Hydro-Processing - Terminal', 'A large proportion of the room consists of a locked down computer terminal with old hardware. But it doesn''t seem to be just old hardware: everything about it is built to withstand several attempts at trying to access the hardware inside. Things like the hard drives or the device in charge of the biometric interface. It''s been said that this terminal can survive several grenade blasts. As of yet, nobody has tried to compromise the  machine, but never say never.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (805, 939, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
@@ -7705,8 +7729,6 @@ INSERT INTO "public"."room" VALUES (1275, 1019, 1, 0, '{blu}Kojima{/blu} - Bridg
 ', NULL, NULL, 1, 0, 'kojima-spawn-lancer-5', NULL);
 INSERT INTO "public"."room" VALUES (1235, 979, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
 ', NULL, NULL, 1, 0, 'kojima-bridge-northwest-1', ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
-INSERT INTO "public"."room" VALUES (1236, 980, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
-', NULL, NULL, 1, 0, NULL, ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
 INSERT INTO "public"."room" VALUES (1237, 981, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
 ', NULL, NULL, 1, 0, NULL, ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
 INSERT INTO "public"."room" VALUES (1238, 982, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
@@ -8015,6 +8037,8 @@ INSERT INTO "public"."room" VALUES (1418, 1164, 1, 0, '{blu}North Abbott{/blu} -
 ', NULL, NULL, 1, 0, 'north-abbott-outdoor-market-walkway-south', NULL);
 INSERT INTO "public"."room" VALUES (1438, 1184, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
 ', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (1439, 1185, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
+', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (1393, 1137, 1, 0, '{blu}Kojima{/blu} - Inside Kojima Corp', 'The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you''re being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.
 ', NULL, NULL, 1, 0, NULL, ',GLASS_WINDOWS,INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1394, 1138, 1, 0, '{blu}Kojima{/blu} - Inside Kojima Corp', 'The inside of {red}Kojima Corp{/red} looks and feels like an office turned into a permanent underground bunker. The reinforced walls have burn marks. There are footprints of heavy duty boots and spent shell casings lining the metal floors. Cameras built in to the walls sit behind thick reinforced glass. You feel like you''re being watched. Each step you take makes a clunking sound against the metal floor. You step over ruined concrete and tracked-in mud every couple of steps. Tall narrow glass windows are placed very high near the ceiling.
@@ -8104,8 +8128,6 @@ INSERT INTO "public"."room" VALUES (1434, 1180, 1, 0, '{blu}North Abbott Outdoor
 INSERT INTO "public"."room" VALUES (1435, 1181, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (1436, 1182, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (1439, 1185, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (1440, 1186, 1, 0, '{blu}North Abbott Outdoor Market{/blu} - Middle Walkway', 'You are now in the innermost part of the outdoor market. There is no clear way to leave the market other than going back exactly how you came. You notice there are some people here that look like they don''t belong. Somehow you get the feeling the hoodlums are running the show.
 ', NULL, NULL, 1, 0, NULL, NULL);
@@ -12925,6 +12947,20 @@ INSERT INTO "public"."zone_data" VALUES (1824, 1, 'M', '0', 115, 698, 10, NULL);
 INSERT INTO "public"."zone_data" VALUES (1825, 1, 'M', '0', 115, 689, 10, NULL);
 INSERT INTO "public"."zone_data" VALUES (1826, 1, 'M', '0', 115, 696, 10, NULL);
 INSERT INTO "public"."zone_data" VALUES (1827, 1, 'M', '0', 115, 695, 10, NULL);
+INSERT INTO "public"."zone_data" VALUES (1828, 1, 'M', '0', 116, 181, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1829, 1, 'M', '0', 116, 182, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1830, 1, 'M', '0', 116, 186, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1831, 1, 'M', '0', 116, 189, 2, NULL);
+INSERT INTO "public"."zone_data" VALUES (1832, 1, 'M', '0', 117, 188, 5, NULL);
+INSERT INTO "public"."zone_data" VALUES (1833, 1, 'M', '0', 117, 187, 5, NULL);
+INSERT INTO "public"."zone_data" VALUES (1834, 1, 'M', '0', 117, 183, 5, NULL);
+INSERT INTO "public"."zone_data" VALUES (1835, 1, 'M', '0', 117, 180, 5, NULL);
+INSERT INTO "public"."zone_data" VALUES (1836, 1, 'Y', '0', 0, 181, 1, '#yaml|vehicle/p3-hunchbak.yml');
+INSERT INTO "public"."zone_data" VALUES (1837, 1, 'Y', '0', 0, 180, 1, '#yaml|vehicle/p3-offroad-mx3.yml');
+INSERT INTO "public"."zone_data" VALUES (1838, 1, 'Y', '0', 0, 182, 1, '#yaml|vehicle/prime-town-suv.yml');
+INSERT INTO "public"."zone_data" VALUES (1839, 1, 'Y', '0', 0, 183, 1, '#yaml|vehicle/lxr-sunrise.yml');
+INSERT INTO "public"."zone_data" VALUES (1840, 1, 'Y', '0', 0, 187, 1, '#yaml|vehicle/lxr-sport.yml');
+INSERT INTO "public"."zone_data" VALUES (1841, 1, 'Y', '0', 0, 189, 1, '#yaml|vehicle/lxr-sport.yml');
 
 
 --
@@ -13252,21 +13288,21 @@ SELECT pg_catalog.setval('"public"."mini_gunner_sentinel_id_seq"', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 347, true);
+SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 349, true);
 
 
 --
 -- Name: mob_equipment_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_equipment_map_id_seq"', 91, true);
+SELECT pg_catalog.setval('"public"."mob_equipment_map_id_seq"', 93, true);
 
 
 --
 -- Name: mob_roam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_roam_id_seq"', 832, true);
+SELECT pg_catalog.setval('"public"."mob_roam_id_seq"', 848, true);
 
 
 --
@@ -13280,7 +13316,7 @@ SELECT pg_catalog.setval('"public"."mob_zone_id_seq"', 1, false);
 -- Name: mobile_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mobile_mob_id_seq"', 140, true);
+SELECT pg_catalog.setval('"public"."mobile_mob_id_seq"', 142, true);
 
 
 --
@@ -13616,7 +13652,7 @@ SELECT pg_catalog.setval('"public"."world_configuration_start_rooms_id_seq"', 5,
 -- Name: zone_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."zone_data_id_seq"', 1827, true);
+SELECT pg_catalog.setval('"public"."zone_data_id_seq"', 1841, true);
 
 
 --

@@ -15,7 +15,7 @@ namespace mods {
 
 	struct rifle_attachments_t {
 			using encoding_t = std::string;
-			enum import_error_t : int16_t {
+			enum import_status_t : int16_t {
 				IMPORT_OKAY = 0,
 				INVALID_SIGHT = -1,
 				INVALID_UNDER_BARREL = -2,
@@ -55,22 +55,9 @@ namespace mods {
 			bool has_slot(const slot_t& slot);
 			std::string& base_yaml_file();
 			rifle_attachments_t() = delete;
-			rifle_attachments_t(const encoding_t& line) {
-				m_rifle_yaml_file = extract_base_yaml_file(line);
-				int16_t i = import_objects(line);
-				if(i != IMPORT_OKAY) {
-					log("WARNING: import_objects failed using line: '%s', error code: %d",line.c_str(),i);
-				}
-				mdo_debug("base yaml file:'" << base_yaml_file() << "'");
-			}
-			rifle_attachments_t(encoding_t& line) {
-				m_rifle_yaml_file = extract_base_yaml_file(line);
-				int16_t i = import_objects(line);
-				if(i != IMPORT_OKAY) {
-					log("WARNING: import_objects failed using line: '%s', error code: %d",line.c_str(),i);
-				}
-				mdo_debug("base yaml file:'" << base_yaml_file() << "'");
-			}
+			rifle_attachments_t(const encoding_t& line);
+			rifle_attachments_t(encoding_t& line);
+			rifle_attachments_t(obj_ptr_t& weapon);
 			~rifle_attachments_t() = default;
 			void add_stats(const obj_ptr_t& object);
 			void remove_stats(const obj_ptr_t& object);
@@ -82,6 +69,8 @@ namespace mods {
 
 			std::string extract_base_yaml_file(const encoding_t& line);
 			int16_t import_objects(const encoding_t&);
+			int16_t import_from_object_pointer(const obj_ptr_t& weapon);
+			bool imported_okay() const;
 			encoding_t export_objects();
 			uuid_t owner() const {
 				return m_owner_uuid;
@@ -95,11 +84,14 @@ namespace mods {
 			uint16_t get_level() const {
 				return m_rifle_level;
 			}
-			std::optional<slot_t> from_string_to_slot(std::string_view str);
+			static std::optional<slot_t> from_string_to_slot(std::string_view str);
 
 			int16_t detach_into_inventory(player_ptr_t& player,const slot_t& slot);
 			int16_t detach_into_inventory(player_ptr_t& player,std::string_view slot);
 			int16_t attach_from_inventory(player_ptr_t& player,std::string_view slot,obj_ptr_t& attachment);
+
+			int16_t import_status;
+
 
 			int16_t base_damage;
 			int16_t incendiary_damage_percent;
@@ -166,11 +158,13 @@ namespace mods {
 	namespace rifle_attachments {
 		std::map<uuid_t,std::string>& uuid_schema_list();
 		std::map<uuid_t,std::shared_ptr<mods::rifle_attachments_t>>& global_list();
+		/**
+		 * This is the PREFERRED method to create your rifle attachment!
+		 */
 		std::shared_ptr<mods::rifle_attachments_t> make(std::string_view str);
 		std::shared_ptr<mods::rifle_attachments_t> by_uuid(const uuid_t& uuid);
 		std::vector<std::shared_ptr<mods::rifle_attachments_t>> by_player(player_ptr_t& player);
 		void erase(const uuid_t& uuid);
-		void update_global_list(std::shared_ptr<mods::rifle_attachments_t>& ptr);
 	};
 };
 

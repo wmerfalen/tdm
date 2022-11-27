@@ -49,6 +49,13 @@ namespace mods::mobs {
 				CHAINSAW_ATTACK,
 			};
 			static constexpr std::string_view BACKPACK_WEAPON = "rifle/defiler-scarh.yml";
+			static constexpr std::string_view EQ_EYES = "armor/night-vision-goggles.yml";
+			static constexpr std::string_view EQ_HEAD = "armor/titanium-mask.yml";
+			static constexpr std::string_view EQ_BODY = "armor/sleeveless-kevlar-vest.yml";
+			static constexpr std::string_view EQ_BELT = "armor/gas-canister-extended-belt.yml";
+			static constexpr std::string_view EQ_LEGS = "armor/titan-shielding-leg-armor.yml";
+			static constexpr std::string_view EQ_PRIMARY = "rifle/scarh.yml";
+			static constexpr std::string_view EQ_SECONDARY = "melee/shock-naginata.yml";
 			static constexpr std::string_view DESCRIPTION =
 			    "The DEFILER\r\n"
 			    "Loadout:\r\n"
