@@ -191,9 +191,6 @@ namespace mods::zone {
 						return !npc;
 					}),r.end());
 					command.count = command.object_data.size();
-					if(command.arg1 == 666) {
-						log("command.count: %d",command.count);
-					}
 					return command.count < command.arg3;
 				}
 				break;
@@ -352,6 +349,7 @@ namespace mods::zone {
 	//   *  'D': Set state of door *
 	//  */
 
+	std::vector<uint64_t> invalid_command_list;
 	void renum_zone_table() {
 		log("renum_zone_table");
 		using zone_table_t = decltype(zone_table);
@@ -410,6 +408,7 @@ namespace mods::zone {
 					} else {
 						log("skipping command: zone_data.id:(%d)",ZCMD.id);
 					}
+					invalid_command_list.emplace_back(ZCMD.id);
 					++zone_table_ignored;
 				} else {
 					++zone_table_saved;
@@ -421,6 +420,48 @@ namespace mods::zone {
 		zone_table = std::move(filtered);
 	}
 
+	std::vector<uint64_t> get_all_invalid_zone_data_commands() {
+		std::vector<uint64_t> id_list;
+		log("get_all_invalid_zone_data_commands() ENTRANCE");
+
+		for(unsigned zone = 0; zone < zone_table.size(); zone++) {
+			for(const auto& ZCMD : zone_table[zone].cmd) {
+				bool skip_me = false;
+				mob_rnum mob = 0;
+				room_rnum room = 0;
+
+				switch(ZCMD.command) {
+					case 'M':
+						mob = real_mobile(ZCMD.arg1);
+						room = real_room(ZCMD.arg2);
+						skip_me = false;
+						if(mob == NOBODY || room == NOWHERE) {
+							skip_me = true;
+						}
+						break;
+					case 'R': /* rem obj from room */
+						room = real_room(ZCMD.arg1);
+						skip_me = false;
+						if(room == NOWHERE) {
+							skip_me = true;
+						}
+						break;
+					case 'Y':
+					default:
+						skip_me = false;
+						break;
+				}
+
+				if(skip_me) {
+					id_list.emplace_back(ZCMD.id);
+				}
+			}
+		}
+		return id_list;
+	}
+	std::vector<uint64_t>& get_cached_invalid_zone_data_commands() {
+		return invalid_command_list;
+	}
 	/**
 	 * This function is the main entry point for zone resets. This function
 	 * is usually called from comm.cpp when the following if condition is met:
@@ -636,12 +677,6 @@ namespace mods::zone {
 		mods::zone::queue_refresh();
 		ADMIN_DONE();
 	}
-	void init() {
-		ADD_BUILDER_COMMAND("admin:reset:zone", do_reset_zone);
-		ADD_BUILDER_COMMAND("admin:uuids", do_uuids);
-		ADD_BUILDER_COMMAND("admin:list:zone-table", do_list_zone_table);
-		ADD_BUILDER_COMMAND("admin:queue:refresh", do_queue_refresh);
-	}
 	void refresh_mobs_and_zones() {
 		mob_proto.clear();
 		mob_index.clear();
@@ -663,6 +698,53 @@ namespace mods::zone {
 			reset_zone(i);
 		}
 		log("refresh_mobs_and_zones() finished.");
+	}
+	std::string create_zone_data_erase_sql(const std::vector<uint64_t>& container) {
+		size_t container_size = container.size();
+		if(container_size) {
+			std::string s = "delete from zone_data where id IN(";
+			if(container_size) {
+				size_t ctr = 0;
+				for(const auto& id : container) {
+					s += std::to_string(id);
+					++ctr;
+					if(ctr < container_size) {
+						s += ",";
+					}
+				}
+				s += ");";
+				return s;
+			}
+		}
+		return "";
+	}
+	SUPERCMD(do_admin_colon_zone_get_invalid_commands) {
+		ADMIN_REJECT();
+		size_t container_size = invalid_command_list.size();
+		if(container_size) {
+			auto s  =create_zone_data_erase_sql(invalid_command_list);
+			player->sendln(s);
+			ADMIN_DONE();
+			return;
+		}
+
+		player->sendln("No invalid commands stored");
+		ADMIN_DONE();
+	}
+	SUPERCMD(do_admin_colon_zone_clear_invalid_commands) {
+		ADMIN_REJECT();
+		size_t container_size = invalid_command_list.size();
+		player->sendln(CAT("Clearing ",container_size, " entries"));
+		invalid_command_list.clear();
+		ADMIN_DONE();
+	}
+	void init() {
+		ADD_BUILDER_COMMAND("admin:reset:zone", do_reset_zone);
+		ADD_BUILDER_COMMAND("admin:uuids", do_uuids);
+		ADD_BUILDER_COMMAND("admin:list:zone-table", do_list_zone_table);
+		ADD_BUILDER_COMMAND("admin:queue:refresh", do_queue_refresh);
+		ADD_BUILDER_COMMAND("admin:zone:get-invalid-commands", do_admin_colon_zone_get_invalid_commands);
+		ADD_BUILDER_COMMAND("admin:zone:clear-invalid-commands", do_admin_colon_zone_clear_invalid_commands);
 	}
 };
 #undef rr_debug

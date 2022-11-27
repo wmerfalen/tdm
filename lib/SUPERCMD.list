@@ -46,6 +46,8 @@
 {yel}mods/zone{/yel}:->{grn}uuids{/grn}
 {yel}mods/zone{/yel}:->{grn}reset_zone{/grn}
 {yel}mods/zone{/yel}:->{grn}queue_refresh{/grn}
+{yel}mods/zone{/yel}:->{grn}admin_colon_zone_get_invalid_commands{/grn}
+{yel}mods/zone{/yel}:->{grn}admin_colon_zone_clear_invalid_commands{/grn}
 {yel}mods/players/messages{/yel}:->{grn}queue_message{/grn}
 {yel}mods/players/friendly-reminders{/yel}:->{grn}delete_reminder{/grn}
 {yel}mods/players/friendly-reminders{/yel}:->{grn}add_reminder{/grn}
