@@ -871,6 +871,7 @@ case vk_AMMO_LOCKER_QUOTA: return "AMMO_LOCKER_QUOTA";
 case vk_BREACHER_REPLENISH_CALL_COUNT: return "BREACHER_REPLENISH_CALL_COUNT";
 case vk_GHOST_DISSIPATE_TICKS_DURATION: return "GHOST_DISSIPATE_TICKS_DURATION";
 case vk_SNIPER_XRAY_SHOT_MAX_COUNT: return "SNIPER_XRAY_SHOT_MAX_COUNT";
+case vk_MAX_INVALID_ZONE_DATA_COMMANDS: return "MAX_INVALID_ZONE_DATA_COMMANDS";
 			}//end giant switch
 			return std::to_string(k);
 		}
@@ -1720,6 +1721,7 @@ if(!s.compare("AMMO_LOCKER_QUOTA")){ return vk_AMMO_LOCKER_QUOTA;}
 if(!s.compare("BREACHER_REPLENISH_CALL_COUNT")){ return vk_BREACHER_REPLENISH_CALL_COUNT;}
 if(!s.compare("GHOST_DISSIPATE_TICKS_DURATION")){ return vk_GHOST_DISSIPATE_TICKS_DURATION;}
 if(!s.compare("SNIPER_XRAY_SHOT_MAX_COUNT")){ return vk_SNIPER_XRAY_SHOT_MAX_COUNT;}
+if(!s.compare("MAX_INVALID_ZONE_DATA_COMMANDS")){ return vk_MAX_INVALID_ZONE_DATA_COMMANDS;}
  return (value_key_t)0;}
 static const std::vector<value_key_t> bool_types = {
 vk_ALLOW_MOCK_LEVELS,
@@ -2578,6 +2580,7 @@ static const std::vector<value_key_t> uint32_types = {
 vk_BREACHER_REPLENISH_CALL_COUNT,
 vk_GHOST_DISSIPATE_TICKS_DURATION,
 vk_SNIPER_XRAY_SHOT_MAX_COUNT,
+vk_MAX_INVALID_ZONE_DATA_COMMANDS,
 			};
 		bool is_int(value_key_t key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -3533,6 +3536,7 @@ CGET_DEF(uint8_t,AMMO_LOCKER_QUOTA,15);
 CGET_DEF(uint32_t,BREACHER_REPLENISH_CALL_COUNT,1);
 CGET_DEF(uint32_t,GHOST_DISSIPATE_TICKS_DURATION,20);
 CGET_DEF(uint32_t,SNIPER_XRAY_SHOT_MAX_COUNT,10);
+CGET_DEF(uint32_t,MAX_INVALID_ZONE_DATA_COMMANDS,512);
 #undef CGET_DEF
 
 			/**************/

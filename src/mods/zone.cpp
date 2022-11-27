@@ -34,6 +34,8 @@ namespace mods::zone {
 	std::vector<room_vnum> dummy_list;
 	std::vector<room_vnum> sign_list;
 
+	static std::vector<uint64_t> invalid_command_list;
+
 	namespace queue_state {
 		static bool queue_refresh = false;
 	};
@@ -349,7 +351,6 @@ namespace mods::zone {
 	//   *  'D': Set state of door *
 	//  */
 
-	std::vector<uint64_t> invalid_command_list;
 	void renum_zone_table() {
 		log("renum_zone_table");
 		using zone_table_t = decltype(zone_table);
@@ -408,7 +409,9 @@ namespace mods::zone {
 					} else {
 						log("skipping command: zone_data.id:(%d)",ZCMD.id);
 					}
-					invalid_command_list.emplace_back(ZCMD.id);
+					if(invalid_command_list.size() < MAX_INVALID_ZONE_DATA_COMMANDS()) {
+						invalid_command_list.emplace_back(ZCMD.id);
+					}
 					++zone_table_ignored;
 				} else {
 					++zone_table_saved;
@@ -416,7 +419,7 @@ namespace mods::zone {
 				}
 			}
 		}
-		log("[renum_zone_table] saved(%d). invalid(%d). original size(%d).",zone_table_saved,zone_table_ignored, zone_table_size);
+		log("[renum_zone_table] saved(%d). invalid(%d). original size(%d). invalid_command_list size(%d)",zone_table_saved,zone_table_ignored, zone_table_size,invalid_command_list.size());
 		zone_table = std::move(filtered);
 	}
 
@@ -458,9 +461,6 @@ namespace mods::zone {
 			}
 		}
 		return id_list;
-	}
-	std::vector<uint64_t>& get_cached_invalid_zone_data_commands() {
-		return invalid_command_list;
 	}
 	/**
 	 * This function is the main entry point for zone resets. This function
@@ -718,6 +718,11 @@ namespace mods::zone {
 		}
 		return "";
 	}
+	/**
+	 * @brief This command will spit out an SQL statement that can be used to cleanup invalid `zone_data` commands. The reason we don't automate this is because if there were a bug in the handling of invalid zone_data rows, that would be potentially dangerous. Instead, we leave it up to the admin to delete invalid zone_data rows where atleast the admin can have some discretion as to what gets deleted, even if it's somewhat tedious to do.
+	 *
+	 * @param do_admin_colon_zone_get_invalid_commands
+	 */
 	SUPERCMD(do_admin_colon_zone_get_invalid_commands) {
 		ADMIN_REJECT();
 		size_t container_size = invalid_command_list.size();
@@ -731,6 +736,11 @@ namespace mods::zone {
 		player->sendln("No invalid commands stored");
 		ADMIN_DONE();
 	}
+	/**
+	 * @brief clears the invalid_command_list container. Please NOTE: this function does nothing to the database! Do not interpret this command to mean that you're cleaning up the `zone_data` table! The invalid_command_list will be populated every time renum_zone_table() is called and an invalid command is encountered.
+	 *
+	 * @param do_admin_colon_zone_clear_invalid_commands
+	 */
 	SUPERCMD(do_admin_colon_zone_clear_invalid_commands) {
 		ADMIN_REJECT();
 		size_t container_size = invalid_command_list.size();
