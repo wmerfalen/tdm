@@ -56,6 +56,11 @@ namespace mods::zone {
 		return true;
 	}
 
+	/**
+	 * @brief creates an ammo locker in the specified room
+	 *
+	 * @param room
+	 */
 	void build_ammo_locker(room_vnum room) {
 		z_debug("building ammo locker");
 		if(!sanity_check_room_vnum(room)) {
@@ -66,6 +71,11 @@ namespace mods::zone {
 		world[room_id].containers.emplace_front("ammo",room);
 		log("Built ammo locker in room vnum '%d' (real:'%d')",room,room_id);
 	}
+	/**
+	 * @brief creates weapon locker in room
+	 *
+	 * @param room
+	 */
 	void build_weapon_locker(room_vnum room) {
 		z_debug("building weapon locker");
 		if(!sanity_check_room_vnum(room)) {
@@ -76,6 +86,11 @@ namespace mods::zone {
 		world[room_id].containers.emplace_front("weapon",room);
 		log("Built weapon locker in room vnum '%d' (real:'%d')",room,room_id);
 	}
+	/**
+	 * @brief builds armor locker in room
+	 *
+	 * @param room
+	 */
 	void build_armor_locker(room_vnum room) {
 		z_debug("building armor locker");
 		if(!sanity_check_room_vnum(room)) {
@@ -86,28 +101,56 @@ namespace mods::zone {
 		world[room_id].containers.emplace_front("armor",room);
 		log("Built armor locker in room vnum '%d' (real:'%d')",room,room_id);
 	}
+	/**
+	 * @brief builds camera feed
+	 *
+	 * @param room
+	 */
 	void build_camera_feed(room_vnum room) {
 		z_debug("building camera feed");
 		auto obj = create_object(ITEM_GADGET, "camera.yml");
 		obj_to_room(obj.get(),real_room(room));
 		camera_feed_list.emplace_back(room);
 	}
+	/**
+	 * @brief builds a dummy (for practicing)
+	 *
+	 * @param room
+	 */
 	void build_dummy(room_vnum room) {
 		mods::target_practice_db::queue_dummy_on_room(room);
 		dummy_list.emplace_back(room);
 	}
+	/**
+	 * @brief builds a sign. mostly broken function, it seems.. :-/
+	 *
+	 * @param room
+	 */
 	void build_sign(room_vnum room) {
+		log("SYSERR: build_sign called, but signs generally aren't supported yet. room_vnum: %d",room);
 		z_debug("building sign");
 		auto obj = create_object(ITEM_GADGET, "camera.yml");
 		obj_to_room(obj.get(),real_room(room));
 		sign_list.emplace_back(room);
 	}
+	/**
+	 * @brief registers a replenish command
+	 *
+	 * @param room
+	 * @param type
+	 */
 	void register_replenish(room_vnum room,std::string type) {
 		replenish_command c;
 		c.room = room;
 		c.type = type;
 		mods::zone::replenish.emplace_back(c);
 	}
+	/**
+	 * @brief removes replenish command (if it can be found)
+	 *
+	 * @param room
+	 * @param type
+	 */
 	void remove_replenish(room_vnum room,std::string type) {
 		for(auto it = replenish.begin(); it != replenish.end(); ++it) {
 			if(it->room == room && it->type.compare(type) == 0) {
@@ -351,6 +394,9 @@ namespace mods::zone {
 	//   *  'D': Set state of door *
 	//  */
 
+	/**
+	 * @brief filters out invalid zone_data rows from the db and sets the zone_table container to the valid filtered commands.
+	 */
 	void renum_zone_table() {
 		log("renum_zone_table");
 		using zone_table_t = decltype(zone_table);
@@ -425,6 +471,11 @@ namespace mods::zone {
 		zone_table = std::move(filtered);
 	}
 
+	/**
+	 * @brief iterates through the zone_table and returns a vector of zone_data.id id's. This technically is a no-op since renum_zone_table() won't allow invalid zone commands to linger in zone_table.
+	 *
+	 * @return
+	 */
 	std::vector<uint64_t> get_all_invalid_zone_data_commands() {
 		std::vector<uint64_t> id_list;
 		log("get_all_invalid_zone_data_commands() ENTRANCE");
