@@ -157,7 +157,7 @@ namespace mods::globals {
 #define MAX_RAW_INPUT_LENGTH	5596	/* Max size of *raw* input */
 #define MAX_MESSAGES		60
 #define MAX_NAME_LENGTH		20  /* Used in char_file_u *DO*NOT*CHANGE* */
-#define MAX_PWD_LENGTH		10  /* Used in char_file_u *DO*NOT*CHANGE* */
+//#define MAX_PWD_LENGTH		10  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_TITLE_LENGTH	80  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define HOST_LENGTH		30  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define EXDSCR_LENGTH		240 /* Used in char_file_u *DO*NOT*CHANGE* */

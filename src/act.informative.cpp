@@ -1059,19 +1059,22 @@ void look_in_obj(char_data *ch, char *arg) {
 			if(OBJVAL_FLAGGED(obj, CONT_CLOSED)) {
 				player->sendln("It is closed.");
 			} else {
-				player->sendln(fname(obj->name));
+				player->sendx(obj->name);
 
 				switch(bits) {
 					case FIND_OBJ_INV:
-						player->sendln(" (carried): ");
+						player->sendln(" (carried):");
 						break;
 
 					case FIND_OBJ_ROOM:
-						player->sendln(" (here): ");
+						player->sendln(" (here):");
 						break;
 
 					case FIND_OBJ_EQUIP:
-						player->sendln(" (used): ");
+						player->sendln(" (used):");
+						break;
+					default:
+						player->sendln("");
 						break;
 				}
 				auto o = optr(obj);
