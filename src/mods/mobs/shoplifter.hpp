@@ -106,6 +106,7 @@ namespace mods::mobs {
 			//uint8_t scan_depth() const;
 			player_ptr_t spawn_near_someone();
 			bool attack_anyone_near_room();
+			bool can_move_to_room(const room_vnum& vnum);
 
 			//int optimal_range() const override;
 		private:

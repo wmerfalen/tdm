@@ -1,10 +1,11 @@
 #include "roam-pattern.hpp"
 #include "../util.hpp"
 
+#define  __MENTOC_MODS_MOBS_ROAM_PATTERN_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_ROAM_PATTERN_SHOW_DEBUG_OUTPUT__
-#define m_debug(a) mentoc_prefix_debug("m|m|roam_pattern") << a << "\n";
+	#define m_debug(a) mentoc_prefix_debug("m|m|roam_pattern") << a << "\n";
 #else
-#define m_debug(a) ;;
+	#define m_debug(a) ;;
 #endif
 
 namespace mods::mobs::roam_pattern {
@@ -31,11 +32,16 @@ namespace mods::mobs::roam_pattern {
 		return false;
 	}
 	bool can_roam_to(const mob_vnum& vnum,const room_rnum& room_id) {
+		//m_debug(vnum << " can roam to: " << room_id << "?");
 		std::string storage;
 		if(has_roam_pattern(vnum,&storage)) {
-			m_debug("mob has roam pattern: " << vnum << ", itis: '" << storage << "'");
+			if(vnum != 666) {
+				m_debug("mob has roam pattern: " << vnum << ", itis: '" << storage << "'");
+			}
 			if(world[room_id].name.str().find(storage.c_str()) != std::string::npos) {
-				m_debug("matched");
+				if(vnum != 666) {
+					m_debug("matched");
+				}
 				return true;
 			}
 		}

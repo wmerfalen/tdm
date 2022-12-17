@@ -3,9 +3,9 @@
 #cd $DIR/../
 TAGS=$WEBROOT/../tags
 rm $TAGS 2>/dev/null
-#echo "scripts/ctags creation $(date) webroot: $WEBROOT" >> ~/logs/ctags.log
+echo "scripts/ctags creation $(date) webroot: $WEBROOT" >> ~/logs/ctags.log
 cd $WEBROOT
-ls *.cpp *.h *.hpp mods/weapons/*.*p mods/orm/*.*p mods/*/*.*p mods/*.*p | grep -v ':' | grep -v 'mods/lmdb/' 2>/dev/null > cscope.files
+ls *.cpp *.h *.hpp mods/weapons/*.*p mods/orm/*.*p mods/classes/*.*p mods/*/*.*p mods/*.*p | grep -v ':' | grep -v 'mods/lmdb/' 2>/dev/null > $WEBROOT/cscope.files
 ctags -R -f $TAGS  --links=no --totals=yes \
 	--exclude='*.php' --exclude=boost_1_66_0 \
 	--exclude=/usr/include \
@@ -28,7 +28,7 @@ ctags -R -f $TAGS  --links=no --totals=yes \
 	--fields=+a+f+i+K+n+s+S+z+t \
 	--C++-kinds=+f+c+e-g-l+m-u+v \
 	-h *.c *.cpp *.h *.hpp mods/*.hpp mods/*.cpp mods/*/*.*p &
-cscope -R -b -i cscope.files &
+cscope -R -b -i $WEBROOT/cscope.files &
 
 
 #C++

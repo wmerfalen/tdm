@@ -284,6 +284,7 @@ std::optional<player_ptr_t> ptr_opt(char_data*);
 inline mods::globals::player_list_t& room_list(room_rnum r) {
 	return mods::globals::get_room_list(r);
 }
+#define CMDREPORT(A) mods::commands::report(player,A);
 #define PARSE_ARGS() mods::util::arglist<std::vector<std::string>>(std::string(argument))
 #define ICMP(a,b) mods::util::is_lower_match(a,b)
 namespace mods::skills {

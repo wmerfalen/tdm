@@ -150,6 +150,9 @@ namespace mods::mobs {
 			void snipe_target(player_ptr_t& victim, const direction_t& direction, uint8_t distance);
 			void snipe_target(const scanned_t& target);
 			std::optional<uint8_t> distance_to(player_ptr_t hunted);
+			bool can_roam_to(const direction_t& dir);
+			std::pair<bool,std::string> move_to_with_roam_check(const direction_t& dir);
+
 
 		protected:
 			direction_t m_last_attack_direction;

@@ -63,6 +63,7 @@ namespace mods::classes {
 			std::tuple<bool,std::string> m_load_status;
 	};
 	struct base {
+			using cmd_report_t = std::tuple<bool,std::string>;
 			virtual types kind() = 0;
 			virtual player_ptr_t get_player_ptr() = 0;
 			struct ability_data_t {

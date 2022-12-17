@@ -1,6 +1,7 @@
 #include "smart-mob.hpp"
 #include "../rooms.hpp"
 #include "helpers.hpp"
+#include "roam-pattern.hpp"
 #include "../mob-equipment.hpp"
 #include "../combat-composer/snipe-target.hpp"
 #include "../scan.hpp"
@@ -132,6 +133,21 @@ namespace mods::mobs {
 			items++;
 		}
 		return items;
+	}
+	bool smart_mob::can_roam_to(const direction_t& dir) {
+		auto& room = world[player_ptr->room()];
+		if(room.dir_option[dir] == nullptr) {
+			return false;
+		}
+		room_rnum id = room.dir_option[dir]->to_room;
+		return mods::mobs::roam_pattern::can_roam_to(player_ptr->vnum(),id);
+	}
+
+	std::pair<bool,std::string> smart_mob::move_to_with_roam_check(const direction_t& dir) {
+		if(!can_roam_to(dir)) {
+			return {false,"noroam"};
+		}
+		return move_to(dir);
 	}
 	std::pair<bool,std::string> smart_mob::move_to(const direction_t& dir) {
 		auto room_id = player_ptr->room();

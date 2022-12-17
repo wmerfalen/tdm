@@ -6,6 +6,7 @@
 /**
  * Community edition
  */
+INIT(mods::class_abilities::marine);
 INIT(mods::dialog_tree);
 INIT(mods::drops);
 INIT(mods::flee);
@@ -173,6 +174,7 @@ namespace mods::init {
 #ifdef __MENTOC_PLUGIN_CONTENT__
 		mods::plugins::init::init();
 #endif
+		mods::class_abilities::marine::init();
 	}
 };
 #endif

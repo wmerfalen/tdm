@@ -7,6 +7,7 @@
 #include "../globals.hpp"
 #include <functional>
 #include "super-users.hpp"
+#include "commands.hpp"
 
 namespace mods::interpreter {
 	typedef void (*acmd_function)(char_data*, char*, int, int, player_ptr_t&);
@@ -22,13 +23,13 @@ namespace mods::interpreter {
 #ifndef MENTOC_COMMAND_MACROS
 #define MENTOC_COMMAND_MACROS
 #define ADD_ADMIN_COMMAND(MENTOC_ADC_STRING,MENTOC_ADC_ACTUAL) \
-		mods::interpreter::add_command(MENTOC_ADC_STRING, POS_RESTING, MENTOC_ADC_ACTUAL, LVL_BUILDER,0)
+	mods::interpreter::add_command(MENTOC_ADC_STRING, POS_RESTING, MENTOC_ADC_ACTUAL, LVL_BUILDER,0)
 #define ADD_USER_COMMAND(MENTOC_ADC_STRING,MENTOC_ADC_ACTUAL) \
-		mods::interpreter::add_command(MENTOC_ADC_STRING, POS_RESTING, MENTOC_ADC_ACTUAL, 0,0)
+	mods::interpreter::add_command(MENTOC_ADC_STRING, POS_RESTING, MENTOC_ADC_ACTUAL, 0,0)
 #define ADD_COMMAND(MENTOC_ADC_STRING,MENTOC_ADC_ACTUAL) \
-		mods::interpreter::add_command(MENTOC_ADC_STRING, POS_RESTING, MENTOC_ADC_ACTUAL, 0,0)
+	mods::interpreter::add_command(MENTOC_ADC_STRING, POS_RESTING, MENTOC_ADC_ACTUAL, 0,0)
 #define ADD_BUILDER_COMMAND(MENTOC_ADC_STRING,MENTOC_ADC_ACTUAL) \
-		mods::interpreter::add_command(MENTOC_ADC_STRING, POS_RESTING, MENTOC_ADC_ACTUAL, LVL_BUILDER,0)
+	mods::interpreter::add_command(MENTOC_ADC_STRING, POS_RESTING, MENTOC_ADC_ACTUAL, LVL_BUILDER,0)
 #endif
 
 #endif /** header inclusion endif */

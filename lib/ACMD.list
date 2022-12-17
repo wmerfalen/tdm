@@ -4,6 +4,8 @@
 ./mods/flee.cpp:	->flee
 ./mods/rifle-attachments.cpp:		->vcarrying
 ./mods/prefs.cpp:	->pref
+./mods/classes/marine.cpp:	->load_tracer_rounds
+./mods/classes/marine.cpp:	->attach_m203
 ./mods/classes/contagion.cpp:	->invoke
 ./mods/classes/pyrexia.cpp:->fire_nade
 ./mods/classes/ghost.cpp:	->light_bandage

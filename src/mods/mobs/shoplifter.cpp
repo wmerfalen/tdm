@@ -3,6 +3,7 @@
 #include "../scan.hpp"
 #include "../rooms.hpp"
 #include "helpers.hpp"
+#include "roam-pattern.hpp"
 #include "extended-types.hpp"
 #include "../scan.hpp"
 #include "../loops.hpp"
@@ -57,7 +58,7 @@ namespace mods::mobs {
 	}
 
 	void shoplifter::set_behavior_tree_directly(const shoplifter::btree_t& t) {
-		m_debug("setting tree id directly to: " << t);
+		//m_debug("setting tree id directly to: " << t);
 		cd()->mob_specials.behaviour_tree = (uint16_t)t;
 	}
 
@@ -106,6 +107,9 @@ namespace mods::mobs {
 							this->attack(feedback,attacker);
 							return;
 						}
+						if(!can_roam_to(decision)) {
+							return;
+						}
 						move_to(decision);
 						set_heading(decision);
 					} else {
@@ -136,9 +140,6 @@ namespace mods::mobs {
 		cmem("m_random_acts:" << m_random_acts.size());
 	};
 
-
-
-
 	/**
 	 * @brief preferred constructor method
 	 *
@@ -148,22 +149,21 @@ namespace mods::mobs {
 	shoplifter::shoplifter(const uuid_t& mob_uuid, std::string_view variation) {
 		this->init();
 		this->uuid = mob_uuid;
-		auto p = ptr_by_uuid(mob_uuid);
-		if(!p) {
+		player_ptr = ptr_by_uuid(mob_uuid);
+		if(!player_ptr) {
 			log("SYSERR: did not find player to populate shoplifter with: %d",mob_uuid);
 			this->loaded = false;
 			this->error = true;
 			return;
 		}
-		player_ptr = p;
-		auto ch = p->cd();
-		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::SHOPLIFTER;
-		this->cd()->mob_specials.vnum = p->cd()->mob_specials.vnum;
+		player_ptr->cd();
+		player_ptr->cd()->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::SHOPLIFTER;
+		player_ptr->cd()->mob_specials.vnum = player_ptr->cd()->mob_specials.vnum;
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
 		this->set_variation(variation.data());
-		m_weapon = player()->primary();
+		m_weapon = player_ptr->primary();
 		m_optimal_range = BEST_DISTANCE;
 	}
 
@@ -188,7 +188,7 @@ namespace mods::mobs {
 		for(int i =0; i < loops; ++i) {
 			auto results = mods::scan::los_find(player_ptr,m_last_attacker);
 			if(results.found && results.distance > 0) {
-				move_to(m_attackers_last_direction.value());
+				move_to_with_roam_check(m_attackers_last_direction.value());
 			}
 		}
 	}
@@ -215,7 +215,7 @@ namespace mods::mobs {
 			}
 		}
 		if(finds.size() == 0) {
-			move_to(rand_item(world[room()].directions()));
+			move_to_with_roam_check(rand_item(world[room()].directions()));
 			return false;
 		}
 		std::size_t index = rand_number(0,finds.size()-1);
@@ -294,7 +294,6 @@ namespace mods::mobs {
 	str_map_t shoplifter::report() {
 		return base_usages();
 	}
-
 };
 #undef m_debug
 #undef m_debug_plain

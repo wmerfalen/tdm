@@ -15,6 +15,8 @@ namespace mods {
 
 	struct rifle_attachments_t {
 			using encoding_t = std::string;
+			static std::shared_ptr<rifle_attachments_t> first_or_create(obj_ptr_t& obj);
+			static bool is_attachment(obj_ptr_t&);
 			enum import_status_t : int16_t {
 				IMPORT_OKAY = 0,
 				INVALID_SIGHT = -1,
@@ -89,6 +91,7 @@ namespace mods {
 			int16_t detach_into_inventory(player_ptr_t& player,const slot_t& slot);
 			int16_t detach_into_inventory(player_ptr_t& player,std::string_view slot);
 			int16_t attach_from_inventory(player_ptr_t& player,std::string_view slot,obj_ptr_t& attachment);
+			int16_t attach_from_inventory(player_ptr_t& player,const slot_t& slot,obj_ptr_t& attachment);
 
 			int16_t import_status;
 
@@ -166,6 +169,7 @@ namespace mods {
 		std::vector<std::shared_ptr<mods::rifle_attachments_t>> by_player(player_ptr_t& player);
 		void erase(const uuid_t& uuid);
 	};
+	using slot_t = rifle_attachments_t::slot_t;
 };
 
 #undef mdo_debug

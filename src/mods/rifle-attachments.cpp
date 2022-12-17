@@ -374,30 +374,33 @@ namespace mods {
 	int16_t rifle_attachments_t::attach_from_inventory(player_ptr_t& player,std::string_view str,obj_ptr_t& attachment) {
 		auto opt = from_string_to_slot(str);
 		if(opt.has_value()) {
-			const slot_t& slot = (slot_t)opt.value();
-
-			if(!attachment) {
-				return -1;
-			}
-			if(!attachment->has_attachment()) {
-				return -2;
-			}
-			obj_ptr_t existing = get_slot(slot);
-			if(existing) {
-				if(detach_into_inventory(player,slot)) {
-					player->sendln(CAT("You remove a ",existing->name.c_str()," from a ",base_object->name.c_str()));
-					player->sendln(CAT("You place a ",existing->name.c_str()," in your inventory."));
-				}
-			}
-			player->sendx(CAT("You grab a ",attachment->name.c_str()).c_str());
-			player->uncarry(attachment);
-			player->sendln(CAT(" and attach it to a ",base_object->name.c_str(),"..."));
-			set_slot(slot,attachment);
-			add_stats(attachment);
-			update_description();
-			return 0;
+			return -1;
 		}
-		return -5;
+		const slot_t& slot = (slot_t)opt.value();
+		return attach_from_inventory(player,slot,attachment);
+	}
+	int16_t rifle_attachments_t::attach_from_inventory(player_ptr_t& player,const slot_t& slot,obj_ptr_t& attachment) {
+
+		if(!attachment) {
+			return -1;
+		}
+		if(!attachment->has_attachment()) {
+			return -2;
+		}
+		obj_ptr_t existing = get_slot(slot);
+		if(existing) {
+			if(detach_into_inventory(player,slot)) {
+				player->sendln(CAT("You remove a ",existing->name.c_str()," from a ",base_object->name.c_str()));
+				player->sendln(CAT("You place a ",existing->name.c_str()," in your inventory."));
+			}
+		}
+		player->sendx(CAT("You grab a ",attachment->name.c_str()).c_str());
+		player->uncarry(attachment);
+		player->sendln(CAT(" and attach it to a ",base_object->name.c_str(),"..."));
+		set_slot(slot,attachment);
+		add_stats(attachment);
+		update_description();
+		return 0;
 	}
 	/**
 	 * @brief checks if the rifle attachment has an object in the specified slot
@@ -931,6 +934,15 @@ namespace mods {
 			s += CAT("#level:",m_rifle_level);
 		}
 		return s;
+	}
+	bool rifle_attachments_t::is_attachment(obj_ptr_t& obj) {
+		return obj->rifle()->attributes->is_rifle_attachment;
+	}
+	std::shared_ptr<rifle_attachments_t> rifle_attachments_t::first_or_create(obj_ptr_t& obj) {
+		if(is_attachment(obj)) {
+			return rifle_attachments::by_uuid(obj->uuid);
+		}
+		return rifle_attachments::make_from(obj);
 	}
 	/**
 	 * @brief

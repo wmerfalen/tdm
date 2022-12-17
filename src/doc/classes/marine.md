@@ -3,13 +3,41 @@
 
 # Ability themes
 	- High damage output
-	- Tough as nails
-	- Tank character
-	- Low intelligence
+	- Flexible character
+	- Can do good melee damage
+	- Can take decent damage
+	- MASTER of the M16
+	- MASTER of all Assault Rifles
 
 # Abilities
 
+## Passive Weapon bonuses ##
+	- When using an M16 or any other Assault Rifle
+		- +15% damage boost per tier to base damage
+		- +10% added to critical chance for tier 1
+			- each player tier after 1:
+				- +5% added to critical chance
+
+## Passive Proximity bonuses ##
+	- 10% chance to avoid melee attacks when in rooms with these textures:
+		- DESERT, FOREST, DIRT, RUBBLE, STREET, ROOFTOP
+	
+	- 
+
+## Abilities that prevent being sniped ##
+	- Camo Spray
+		- Consumes a camo spray can
+			- spray lasts for 2 minutes
+			- when active, marine is 10% harder to hit
+
 ## Abilities that cause damage ##
+
+
+## Utility abilities that improve aspects of combat and intelligence ##
+	- Deploy satelite antenna
+		- 
+	- Deploy camera
+		- 
 
 ## Abilities that improve the M16 ##
 	- Tracer Rounds
@@ -151,97 +179,3 @@
 	- Night Vision -> Core Ability [ automatically learned at level 1 ]
 		- You can see at night
 
-## semi-passive abilities that cause damage ##
-	- Shredded cantrip
-		- Place a trap in the room that causes targets to bleed
-
-	- Muscle Memory
-		- Once you die
-			- You can order your corpse to explode
-
-	- Hellfire Incantation
-		- Adds incendiary and radioactive damage to all damage dealt
-		- Lasts 99 ticks
-
-## Abilities that prevent damage ##
-	- Hellfire Circle
-		- Reduces incendiary, explosive damage
-		- Reduces CQC, melee damage by 25%
-
-	- Particle Deceleration
-		- Create an aura around player that slows the velocity of attacks
-			- Reduces damage done by ranged weapons
-	
-	- Ghastly double
-		- Create an illusion that there are two of you
-		- Chance of taking damage is reduced by 30%
-	
-	- Minor shielding
-		- Create a ballistic resistant shielding around self
-	
-	- Cursed Ballistics
-		- Worn armor becomes more effective at the cost of movement points
-
-	- Neutron Shield
-		- Creates a shield that
-			- dampens radioactive, cryogenic, and anti-matter damage
-		- Each bullet absorbed while Neutron Shield is active becomes a radioactive charge
-		- Radioactive charges can be released as a ranged attack but only while NS is active
-
-	- Bladed Array
-		- Each piece of worn armor causes bladed knife damage to melee attackers
-		- CQC attacks:
-			- throw, wrestle, grab, clinch
-			- cause HP damage to attacker
-		
-
-## Abilities that deal with control of the target ##
-	- Roots of mayhem
-		- Cause the dead to reach up from beneath a target
-		- Target is stuck in place and can only use ranged attacks
-		- Target cannot move or flee until spell is over
-
-	- Morbid doubt
-		- Forces target to turn their weapon against themselves
-
-	- Intimidate
-		- Target becomes fearful/intimidated for 33 ticks
-			- A fearful target is afraid to attack or respond to attacks
-	
-	- Force out
-		- Force target to move in a specific direction
-
-	- Attract
-		- Get the attention of target, causing them to attack something else
-
-
-## Abilities that deal with corpse manipulation ##
-	- Corpse explosion
-		- Cause target corpse to detonate
-	
-
-
-## Abilities that steal health ##
-
-## Abilities that raise the dead ##
-	- Recruit
-		- Walk up to any corpse
-		- Place hex on corpse
-		- Add 1 demonic incantation charge for every 2 corpse this is done to
-		- Corpse dissipates once done
-
-	- Demonic incantation
-		- Must have 1 demonic incantation charge from 'Recruit' skill
-		- Raise target corpse.
-			- Corpse can be ordered to attack target
-	
-
-## Abilities that help with vision ##
-	- Shadow sight
-		- Player has night vision
-
-	- Morbid Insight
-		- Player can detect nearby enemies if corpses are nearby
-		- Player can detect HP/Mana/Move points of target if corpse is nearby
-	
-	- 

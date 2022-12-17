@@ -9,6 +9,13 @@
 
 # Abilities
 
+## Abilities that are symbiotic with the target ##
+	- Absorb Technique
+		- Look at target
+		- Notice techniques available by target
+		- Choose to absorb technique
+			- you know and can use technique for 60 ticks
+
 ## Abilities that cause damage ##
 	- Pathogen ammunition
 		- Any target hit by your ranged weapon will have POISON affect for 90 ticks
