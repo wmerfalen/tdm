@@ -4527,6 +4527,7 @@ INSERT INTO "public"."class_ghost" VALUES (13, 111, '2022-05-17 13:17:37.45463',
 -- Data for Name: class_marine; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO "public"."class_marine" VALUES (3, 113, '2022-12-09 23:11:15.118701', '2022-12-09 23:11:15.118701');
 
 
 --
@@ -5779,12 +5780,9 @@ INSERT INTO "public"."mobile" VALUES (11, 410, 'Corporal James Taggart', 'Corpor
 INSERT INTO "public"."mobile" VALUES (1, 1, 'chef  employee', 'A pissed looking Los  employee', 'A pissed looking Los  employee', 'This particular employee looks like he just got out of a federal penitentiary. He''s most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.', '8', '0', 25, 0, 25, 0, 25, 0, 25, 0, 0, 0, 0, 0, 250, 250, 250, 0, 50, 8, 8, 0, 250, 250, 250, 25, 0, 0, 50, 15, 0, 14, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (15, 603, 'A Ballistics Expert', 'A Ballistics Expert', 'A Ballistics Expert', 'A Ballistics Expert', '8', '0', 85, 83, 82, 0, 84, 0, 1, 0, 0, 40, 0, 0, 58580, 15, 240, 0, 30500, 0, 0, 1, 58580, 15, 140, 84, 86, 215, 10, 4, 0, 0, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (20, 502, 'An Ops Shield shotgunner', 'An Ops Shield shotgunner', 'An Ops Shield shotgunner', 'An Ops Shield shotgunner', '8', '0', 355, 333, 132, 0, 334, 0, 10, 0, 0, 40, 0, 0, 109550, 1565, 810, 5, 20050, 0, 0, 1, 109550, 1565, 810, 115, 48, 340, 10, 6, 0, 11, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (24, 109, 'A retail associate', 'A retail associate', 'A retail associate', 'A retail associate tirelessly stocks shelves...', '8', '0', 15, 1, 2, 0, 4, 0, 4, 0, 0, 3, 0, 0, 120, 50, 60, 5, 580, 0, 0, 1, 120, 50, 60, 2, 5, 2, 10, 5, 0, 19, NULL, NULL, 2, 1, 1, 1, 1, 0, 1, 2, 1, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (25, 110, 'A shoplifter', 'A shoplifter', 'A shoplifter', 'A shoplifter looks around nervously...', '8', '0', 30, 1, 5, 0, 8, 0, 8, 0, 0, 6, 0, 0, 240, 100, 128, 5, 580, 0, 0, 1, 240, 100, 128, 5, 10, 5, 10, 5, 0, 17, NULL, NULL, 5, 3, 2, 2, 3, 0, 3, 5, 2, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (3, 101, 'A petty thief', 'A petty thief', 'A petty thief', 'A petty thief is stalking the area.', '8', '0', 4, 4, 2, 0, 4, 0, 0, 0, 0, 5, 0, 0, 100, 15, 110, 5, 250, 0, 0, 1, 100, 15, 110, 2, 6, 10, 4, 5, 0, 14, NULL, NULL, 5, 4, 5, 2, 0, 0, 4, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (21, 102, 'a kidnapper', 'a kidnapper', 'a kidnapper', 'a kidnapper is stalking the area.', '8', '0', 9, 6, 2, 0, 7, 0, 0, 0, 0, 8, 0, 0, 1450, 25, 510, 5, 250, 0, 0, 1, 1450, 25, 510, 10, 25, 20, 4, 5, 0, 15, NULL, NULL, 0, 10, 8, 3, 0, 0, 5, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (4, 103, 'a chaotic meth addict', 'a chaotic meth addict', 'a chaotic meth addict', 'a chaotic meth addict is manically patrolling the area.', '8', '0', 13, 6, 2, 0, 13, 0, 0, 0, 0, 13, 0, 0, 650, 25, 310, 5, 250, 0, 0, 1, 650, 25, 310, 8, 25, 30, 4, 5, 0, 16, NULL, NULL, 0, 4, 1, 1, 2, 0, 8, 0, 9, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (22, 104, 'A shoplifter', 'A shoplifter', 'A shoplifter', 'A shoplifter is stalking the area.', '8', '0', 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 10, 15, 60, 5, 250, 0, 0, 1, 10, 15, 60, 1, 3, 1, 4, 5, 0, 15, NULL, NULL, 1, 0, 1, 0, 0, 0, 1, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (23, 105, 'A crackhead', 'A crackhead', 'A crackhead', 'A crackhead is stalking the area.', '8', '0', 1, 1, 1, 0, 3, 0, 0, 0, 0, 2, 0, 0, 35, 15, 60, 5, 250, 0, 0, 1, 35, 15, 60, 2, 6, 1, 4, 5, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 0, 1, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (26, 106, 'An armed security guard', 'An armed security guard', 'An armed security guard', 'An armed security guard watches you closely.', '8', '0', 28, 23, 25, 0, 54, 0, 0, 0, 0, 20, 0, 0, 950, 245, 610, 5, 20044, 0, 0, 1, 950, 245, 610, 90, 18, 60, 10, 5, 0, 18, NULL, NULL, 25, 30, 35, 20, 30, 10, 38, 25, 20, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (27, 107, 'A bank teller', 'A bank teller', 'A bank teller', 'A bank teller is obediently serving you', '8', '0', 1, 1, 1, 0, 3, 0, 30, 0, 0, 2, 0, 0, 15, 15, 20, 5, 580, 0, 0, 2, 15, 15, 20, 1, 3, 1, 4, 5, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 0, 1, 0, 0, NULL, '0');
@@ -5792,10 +5790,13 @@ INSERT INTO "public"."mobile" VALUES (28, 112, 'An inventory specialist', 'An in
 INSERT INTO "public"."mobile" VALUES (139, 114, 'An infected drone', 'An infected drone', 'An infected drone', 'An infected drone lumbers hugrily towards you...', '8', '0', 2, 2, 2, 0, 4, 0, 5, 0, 0, 2, 0, 0, 493, 100, 82, 5, 100, 0, 0, 1, 493, 100, 82, 1, 8, 10, 10, 5, 0, 15, NULL, NULL, 2, 3, 3, 2, 3, 1, 3, 2, 2, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (140, 115, 'An adapted drone', 'An adapted drone ', 'An adapted drone ', 'An adapted drone looks for something to infect...', '8', '0', 4, 5, 4, 0, 4, 0, 5, 0, 0, 3, 0, 0, 350, 100, 82, 5, 100, 0, 0, 1, 350, 100, 82, 2, 12, 18, 10, 5, 0, 15, NULL, NULL, 4, 5, 5, 4, 7, 0, 8, 3, 4, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (141, 116, 'A rugged car thief', 'A rugged car thief', 'A rugged car thief', 'A car thief stalking the area. He is armed.', '4616', '0', 18, 13, 2, 0, 34, 0, 0, 0, 0, 10, 0, 0, 350, 45, 610, 5, 250, 0, 0, 1, 350, 45, 610, 30, 6, 20, 10, 5, 0, 14, NULL, NULL, 15, 5, 15, 8, 0, 0, 18, 0, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (24, 109, 'A retail associate', 'A retail associate', 'A retail associate', 'A retail associate tirelessly stocks shelves...', '8', '0', 15, 1, 2, 0, 4, 0, 4, 0, 0, 3, 0, 0, 120, 50, 60, 5, 580, 0, 0, 1, 120, 50, 60, 2, 5, 2, 10, 5, 0, 19, NULL, 'Allied Foods', 2, 1, 1, 1, 1, 0, 1, 2, 1, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (142, 117, 'A petty thief', 'A petty thief', 'A petty thief', 'A petty thief is stalking the area.', '4360', '0', 4, 4, 2, 0, 4, 0, 0, 0, 0, 5, 0, 0, 100, 15, 110, 5, 250, 0, 0, 1, 100, 15, 110, 2, 6, 10, 4, 5, 0, 14, NULL, NULL, 5, 4, 5, 2, 0, 0, 4, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (143, 118, 'A Military Police enforcer', 'A Military Police enforcer', 'A Military Police enforcer', 'A fit military police enforcer. He looks armed.', '4616', '0', 25, 23, 22, 0, 24, 0, 10, 0, 0, 10, 0, 0, 25, 45, 110, 50, 7050, 0, 0, 1, 25, 45, 110, 10, 10, 20, 10, 5, 0, 10, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '1');
 INSERT INTO "public"."mobile" VALUES (144, 119, 'A Military Police shotgunner', 'A Military Police shotgunner', 'A Military Police shotgunner', 'A fit military police shotgunner. He looks armed.', '4616', '0', 35, 33, 32, 0, 34, 0, 10, 0, 0, 10, 0, 0, 5550, 565, 510, 50, 7050, 0, 0, 1, 5550, 565, 510, 15, 18, 30, 10, 6, 0, 11, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '1');
 INSERT INTO "public"."mobile" VALUES (145, 666, '{red}DEFILER{/red}', '{red}DEFILER{/red}', '{red}DEFILER{/red}', '{red}DEFILER{/red}', '8', '0', 22, 13, 12, 0, 14, 0, 1, 0, 0, 20, 0, 0, 3820, 830, 160, 50, 8050, 0, 0, 1, 3820, 830, 160, 16, 16, 12, 10, 5, 0, 20, NULL, NULL, 12, 20, 13, 12, 11, 10, 11, 18, 1, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (25, 110, 'A shoplifter', 'A shoplifter', 'A shoplifter', 'A shoplifter looks around nervously...', '8', '0', 30, 1, 5, 0, 8, 0, 8, 0, 0, 6, 0, 0, 240, 100, 128, 5, 580, 0, 0, 1, 240, 100, 128, 5, 10, 5, 10, 5, 0, 17, NULL, 'Allied Foods', 5, 3, 2, 2, 3, 0, 3, 5, 2, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (22, 104, 'A shoplifter', 'A shoplifter', 'A shoplifter', 'A shoplifter is stalking the area.', '8', '0', 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 10, 15, 60, 5, 250, 0, 0, 1, 10, 15, 60, 1, 3, 1, 4, 5, 0, 15, NULL, 'Allied Foods', 1, 0, 1, 0, 0, 0, 1, 0, 0, NULL, '0');
 
 
 --
@@ -5889,9 +5890,10 @@ INSERT INTO "public"."object_weapon" VALUES (5, 7, 0, 0, 0, false);
 --
 
 INSERT INTO "public"."player" VALUES (110, '$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.', '0', '0', 'sniper', '1', '1', 0, 3, 0, 9, 9, 12, 15, 9, 0, 0, 241, 436, 729, 48, 561, 'M', 241, 436, 729, 52, 52, 52, '9', '1', '52', 0, 0, 'PC', 0, 3, 52, 0, '2021-09-18 01:42:45.163952', 0, '2021-09-18 01:42:45.163952', '8388736', 7);
-INSERT INTO "public"."player" VALUES (112, '$2a$06$tZ.d26Ss0bmylxdAIcR.2.KJMQCrARqFa0oghvTkHet73f5EeOAPi', '0', '0', 'breacher', '1', '1', 0, 7, 0, 2, 2, 8, 14, 2, 0, 0, 421, 161, 356, 0, 1000, 'M', 421, 161, 356, 53, 53, 53, '22', '1', '53', 0, 0, 'PC', 0, 2, 53, 0, '2022-11-09 08:07:37.145886', 0, '2022-11-09 08:07:37.145886', '8388736', 3);
+INSERT INTO "public"."player" VALUES (113, '$2a$06$MiAvtBjkrIcUaQUu0A0DtubpnnuY5RGcuCzbO3rhEIzb9Q6RRHhWS', '0', '0', 'port0s', '1', '1', 0, 4, 0, 4, 4, 8, 14, 4, 0, 0, 291, 226, 421, 0, 1000, 'M', 291, 226, 411, 53, 53, 53, '2', '1', '53', 0, 0, 'PC', 0, 2, 53, 0, '2022-12-09 23:11:14.922272', 0, '2022-12-09 23:11:14.922272', '8388736', 3);
 INSERT INTO "public"."player" VALUES (1, 'foKntnEF3KSXA', '0', '0', 'far', '1', '1', 0, 20, 0, 41, 41, 82, 102, 41, 1479, 0, 65000, 2277, 65000, 42698, 94030, 'M', 65000, 2277, 65000, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 1479, 19, 53, 0, '2019-03-20 22:38:47.454111', 0, '2019-03-20 22:38:47.454111', '14680304', 37);
 INSERT INTO "public"."player" VALUES (111, '$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC', '0', '0', 'ghost', '1', '1', 0, 4, 0, 8, 8, 17, 21, 8, 0, 0, 322, 452, 1037, 6730, 3850, 'M', 322, 452, 936, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 0, 4, 53, 0, '2022-05-17 13:17:37.271391', 0, '2022-05-17 13:17:37.271391', '8388736', 6);
+INSERT INTO "public"."player" VALUES (112, '$2a$06$tZ.d26Ss0bmylxdAIcR.2.KJMQCrARqFa0oghvTkHet73f5EeOAPi', '0', '0', 'breacher', '1', '1', 0, 7, 0, 2, 2, 8, 14, 2, 0, 0, 421, 161, 356, 0, 1000, 'M', 421, 161, 356, 53, 53, 53, '22', '1', '53', 0, 0, 'PC', 0, 2, 53, 0, '2022-11-09 08:07:37.145886', 0, '2022-11-09 08:07:37.145886', '8388736', 3);
 
 
 --
@@ -5913,9 +5915,10 @@ INSERT INTO "public"."player_base_ability" VALUES (6, 100, 33, 0, 99, 74, 132, 1
 INSERT INTO "public"."player_base_ability" VALUES (13, 107, 3, 0, 9, 9, 12, 15, 9, 9, 6, 8, 8, 15, 10, 6, 9, 15, '2021-09-17 19:58:07.021327', '2021-09-17 19:58:07.021327');
 INSERT INTO "public"."player_base_ability" VALUES (7, 101, 44, 0, 44, 44, 88, 132, 44, 44, 44, 60, 44, 9, 44, 60, 44, 60, '2021-09-17 00:53:22.86459', '2021-09-17 00:53:22.86459');
 INSERT INTO "public"."player_base_ability" VALUES (16, 110, 3, 0, 9, 9, 12, 15, 9, 9, 6, 8, 8, 15, 10, 6, 9, 9, '2021-09-18 01:42:45.197498', '2021-09-18 01:42:45.197498');
-INSERT INTO "public"."player_base_ability" VALUES (18, 112, 7, 0, 2, 2, 8, 14, 2, 2, 14, 4, 4, 8, 2, 4, 2, 6, '2022-11-09 08:07:37.190702', '2022-11-09 08:07:37.190702');
-INSERT INTO "public"."player_base_ability" VALUES (17, 111, 4, 0, 8, 8, 17, 21, 8, 8, 8, 15, 15, 21, 9, 13, 8, 12, '2022-05-17 13:17:37.452746', '2022-05-17 13:17:37.452746');
+INSERT INTO "public"."player_base_ability" VALUES (19, 113, 4, 0, 4, 4, 8, 14, 4, 4, 8, 4, 4, 8, 4, 6, 4, 7, '2022-12-09 23:11:15.093093', '2022-12-09 23:11:15.093093');
 INSERT INTO "public"."player_base_ability" VALUES (1, 1, 20, 0, 41, 41, 82, 102, 41, 41, 40, 64, 64, 103, 42, 62, 41, 57, '2021-09-04 04:17:39.714689', '2021-09-04 04:17:39.714689');
+INSERT INTO "public"."player_base_ability" VALUES (17, 111, 4, 0, 8, 8, 17, 21, 8, 8, 8, 15, 15, 21, 9, 13, 8, 12, '2022-05-17 13:17:37.452746', '2022-05-17 13:17:37.452746');
+INSERT INTO "public"."player_base_ability" VALUES (18, 112, 7, 0, 2, 2, 8, 14, 2, 2, 14, 4, 4, 8, 2, 4, 2, 6, '2022-11-09 08:07:37.190702', '2022-11-09 08:07:37.190702');
 
 
 --
@@ -5948,6 +5951,7 @@ INSERT INTO "public"."player_object" VALUES (564, 111, 8, NULL, 'sg3-ar-ammuniti
 INSERT INTO "public"."player_object" VALUES (565, 111, 8, NULL, 'sg3-ar-ammunition.yml', 2, NULL, 1, 1, 68);
 INSERT INTO "public"."player_object" VALUES (566, 111, 8, NULL, 'sg3-ar-ammunition.yml', 2, NULL, 1, 1, 68);
 INSERT INTO "public"."player_object" VALUES (554, 111, 1, NULL, '552-commando.yml', 2, 16, 0, 1, 52);
+INSERT INTO "public"."player_object" VALUES (3122, 111, 1, NULL, 'tengu-vulkan-ax13.yml', 2, NULL, 1, 1, 7);
 
 
 --
@@ -12635,6 +12639,113 @@ INSERT INTO "public"."skill_usage" VALUES (438, 111, 'mark', 0);
 INSERT INTO "public"."skill_usage" VALUES (439, 1, 'dissipate', 0);
 INSERT INTO "public"."skill_usage" VALUES (440, 1, 'penshot', 0);
 INSERT INTO "public"."skill_usage" VALUES (441, 1, 'mark', 0);
+INSERT INTO "public"."skill_usage" VALUES (442, 113, 'ts', 0);
+INSERT INTO "public"."skill_usage" VALUES (443, 113, 'lb', 0);
+INSERT INTO "public"."skill_usage" VALUES (444, 113, 'suture', 0);
+INSERT INTO "public"."skill_usage" VALUES (445, 113, 'as', 0);
+INSERT INTO "public"."skill_usage" VALUES (446, 113, 'emp', 0);
+INSERT INTO "public"."skill_usage" VALUES (447, 113, 'chaff', 0);
+INSERT INTO "public"."skill_usage" VALUES (448, 113, 'sensor', 0);
+INSERT INTO "public"."skill_usage" VALUES (449, 113, 'ubs', 0);
+INSERT INTO "public"."skill_usage" VALUES (450, 113, 'ubf', 0);
+INSERT INTO "public"."skill_usage" VALUES (451, 113, 'gm', 0);
+INSERT INTO "public"."skill_usage" VALUES (452, 113, 'limb', 0);
+INSERT INTO "public"."skill_usage" VALUES (453, 113, 'claymore', 0);
+INSERT INTO "public"."skill_usage" VALUES (454, 113, 'smine', 0);
+INSERT INTO "public"."skill_usage" VALUES (455, 113, 'cmine', 0);
+INSERT INTO "public"."skill_usage" VALUES (456, 113, 'xray', 0);
+INSERT INTO "public"."skill_usage" VALUES (457, 113, 'recon', 0);
+INSERT INTO "public"."skill_usage" VALUES (458, 113, 'wpn-ar', 0);
+INSERT INTO "public"."skill_usage" VALUES (459, 113, 'wpn-sniper', 0);
+INSERT INTO "public"."skill_usage" VALUES (460, 113, 'wpn-smg', 0);
+INSERT INTO "public"."skill_usage" VALUES (461, 113, 'wpn-shotguns', 0);
+INSERT INTO "public"."skill_usage" VALUES (462, 113, 'wpn-pistols', 0);
+INSERT INTO "public"."skill_usage" VALUES (463, 113, 'wpn-mp', 0);
+INSERT INTO "public"."skill_usage" VALUES (464, 113, 'wpn-lmg', 0);
+INSERT INTO "public"."skill_usage" VALUES (465, 113, 'cqc-jab-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (466, 113, 'cqc-jab-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (467, 113, 'cqc-cross-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (468, 113, 'cqc-cross-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (469, 113, 'cqc-left-hook-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (470, 113, 'cqc-right-hook-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (471, 113, 'cqc-left-hook-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (472, 113, 'cqc-right-hook-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (473, 113, 'cqc-left-uppercut', 0);
+INSERT INTO "public"."skill_usage" VALUES (474, 113, 'cqc-right-uppercut', 0);
+INSERT INTO "public"."skill_usage" VALUES (475, 113, 'cqc-left-elbow', 0);
+INSERT INTO "public"."skill_usage" VALUES (476, 113, 'cqc-right-elbow', 0);
+INSERT INTO "public"."skill_usage" VALUES (477, 113, 'cqc-right-upward-elbow', 0);
+INSERT INTO "public"."skill_usage" VALUES (478, 113, 'cqc-left-upward-elbow', 0);
+INSERT INTO "public"."skill_usage" VALUES (479, 113, 'cqc-right-oblique', 0);
+INSERT INTO "public"."skill_usage" VALUES (480, 113, 'cqc-left-oblique', 0);
+INSERT INTO "public"."skill_usage" VALUES (481, 113, 'cqc-left-teep', 0);
+INSERT INTO "public"."skill_usage" VALUES (482, 113, 'cqc-right-teep', 0);
+INSERT INTO "public"."skill_usage" VALUES (483, 113, 'cqc-left-front-kick', 0);
+INSERT INTO "public"."skill_usage" VALUES (484, 113, 'cqc-right-front-kick', 0);
+INSERT INTO "public"."skill_usage" VALUES (485, 113, 'cqc-left-knee-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (486, 113, 'cqc-right-knee-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (487, 113, 'cqc-left-knee-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (488, 113, 'cqc-right-knee-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (489, 113, 'cqc-knife-disarm', 0);
+INSERT INTO "public"."skill_usage" VALUES (490, 113, 'cqc-pistol-disarm', 0);
+INSERT INTO "public"."skill_usage" VALUES (491, 113, 'cqc-right-leg-kick', 0);
+INSERT INTO "public"."skill_usage" VALUES (492, 113, 'cqc-left-leg-kick', 0);
+INSERT INTO "public"."skill_usage" VALUES (493, 113, 'cqc-right-kick-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (494, 113, 'cqc-left-kick-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (495, 113, 'cqc-right-stomp-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (496, 113, 'cqc-left-stomp-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (497, 113, 'load_tracer_rounds', 0);
+INSERT INTO "public"."skill_usage" VALUES (498, 113, 'field_strip_weapon', 0);
+INSERT INTO "public"."skill_usage" VALUES (499, 113, 'attach_m203', 0);
+INSERT INTO "public"."skill_usage" VALUES (500, 113, 'attach_m203_x12', 0);
+INSERT INTO "public"."skill_usage" VALUES (501, 113, 'attach_flash_surpressor', 0);
+INSERT INTO "public"."skill_usage" VALUES (502, 113, 'teep_kick', 0);
+INSERT INTO "public"."skill_usage" VALUES (503, 113, 'single_leg_takedown', 0);
+INSERT INTO "public"."skill_usage" VALUES (504, 113, 'double_leg_takedown', 0);
+INSERT INTO "public"."skill_usage" VALUES (505, 113, 'uchi_mata', 0);
+INSERT INTO "public"."skill_usage" VALUES (506, 113, 'morote_seoi_nage', 0);
+INSERT INTO "public"."skill_usage" VALUES (507, 113, 'tomoe_nage', 0);
+INSERT INTO "public"."skill_usage" VALUES (508, 113, 'thermal_vision', 0);
+INSERT INTO "public"."skill_usage" VALUES (509, 113, 'night_vision', 0);
+INSERT INTO "public"."skill_usage" VALUES (510, 113, 'deploy_smoke', 0);
+INSERT INTO "public"."skill_usage" VALUES (511, 113, 'specialize_in', 0);
+INSERT INTO "public"."skill_usage" VALUES (512, 113, 'benzo_stimuli_shot', 0);
+INSERT INTO "public"."skill_usage" VALUES (513, 113, 'light_bandage', 0);
+INSERT INTO "public"."skill_usage" VALUES (514, 113, 'adrenaline_shot', 0);
+INSERT INTO "public"."skill_usage" VALUES (515, 113, 'target_limb', 0);
+INSERT INTO "public"."skill_usage" VALUES (516, 113, 'plant_claymore', 0);
+INSERT INTO "public"."skill_usage" VALUES (517, 113, 'shrapnel_claymore', 0);
+INSERT INTO "public"."skill_usage" VALUES (518, 113, 'corrosive_claymore', 0);
+INSERT INTO "public"."skill_usage" VALUES (519, 113, 'request_recon', 0);
+INSERT INTO "public"."skill_usage" VALUES (520, 113, 'request_smoke_screen', 0);
+INSERT INTO "public"."skill_usage" VALUES (521, 113, 'request_drone_strike', 0);
+INSERT INTO "public"."skill_usage" VALUES (522, 113, 'request_drone_recon', 0);
+INSERT INTO "public"."skill_usage" VALUES (523, 113, 'ltr', 0);
+INSERT INTO "public"."skill_usage" VALUES (524, 113, 'fsw', 0);
+INSERT INTO "public"."skill_usage" VALUES (525, 113, 'm2', 0);
+INSERT INTO "public"."skill_usage" VALUES (526, 113, 'm2x', 0);
+INSERT INTO "public"."skill_usage" VALUES (527, 113, 'afs', 0);
+INSERT INTO "public"."skill_usage" VALUES (528, 113, 'teep', 0);
+INSERT INTO "public"."skill_usage" VALUES (529, 113, 'slt', 0);
+INSERT INTO "public"."skill_usage" VALUES (530, 113, 'tlt', 0);
+INSERT INTO "public"."skill_usage" VALUES (531, 113, 'uch', 0);
+INSERT INTO "public"."skill_usage" VALUES (532, 113, 'msn', 0);
+INSERT INTO "public"."skill_usage" VALUES (533, 113, 'tnage', 0);
+INSERT INTO "public"."skill_usage" VALUES (534, 113, 'therm', 0);
+INSERT INTO "public"."skill_usage" VALUES (535, 113, 'nvg', 0);
+INSERT INTO "public"."skill_usage" VALUES (536, 113, 'ds', 0);
+INSERT INTO "public"."skill_usage" VALUES (537, 113, 'spec', 0);
+INSERT INTO "public"."skill_usage" VALUES (538, 113, 'bss', 0);
+INSERT INTO "public"."skill_usage" VALUES (539, 113, 'ads', 0);
+INSERT INTO "public"."skill_usage" VALUES (540, 113, 'tlimb', 0);
+INSERT INTO "public"."skill_usage" VALUES (541, 113, 'clay', 0);
+INSERT INTO "public"."skill_usage" VALUES (542, 113, 'sclay', 0);
+INSERT INTO "public"."skill_usage" VALUES (543, 113, 'corclay', 0);
+INSERT INTO "public"."skill_usage" VALUES (544, 113, 'reqrecon', 0);
+INSERT INTO "public"."skill_usage" VALUES (545, 113, 'reqs', 0);
+INSERT INTO "public"."skill_usage" VALUES (546, 113, 'reqds', 0);
+INSERT INTO "public"."skill_usage" VALUES (547, 113, 'reqdr', 0);
+INSERT INTO "public"."skill_usage" VALUES (548, 113, 'str', 0);
 
 
 --
@@ -12689,6 +12800,7 @@ INSERT INTO "public"."terminal_choices" VALUES (6, 1, 6, 'Marine Corps Martial A
 INSERT INTO "public"."user_logins" VALUES (1, '127.0.0.1', 'far');
 INSERT INTO "public"."user_logins" VALUES (2, '127.0.0.1', 'ghost');
 INSERT INTO "public"."user_logins" VALUES (3, '127.0.0.1', 'breacher');
+INSERT INTO "public"."user_logins" VALUES (4, '127.0.0.1', 'port0s');
 
 
 --
@@ -13014,7 +13126,7 @@ SELECT pg_catalog.setval('"public"."class_ghost_ghost_id_seq"', 13, true);
 -- Name: class_marine_marine_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."class_marine_marine_id_seq"', 2, true);
+SELECT pg_catalog.setval('"public"."class_marine_marine_id_seq"', 3, true);
 
 
 --
@@ -13266,7 +13378,7 @@ SELECT pg_catalog.setval('"public"."object_weapon_id_seq"', 5, true);
 -- Name: player_base_ability_pba_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."player_base_ability_pba_id_seq"', 18, true);
+SELECT pg_catalog.setval('"public"."player_base_ability_pba_id_seq"', 19, true);
 
 
 --
@@ -13294,14 +13406,14 @@ SELECT pg_catalog.setval('"public"."player_flags_id_seq"', 1, false);
 -- Name: player_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."player_id_seq"', 112, true);
+SELECT pg_catalog.setval('"public"."player_id_seq"', 113, true);
 
 
 --
 -- Name: player_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."player_object_id_seq"', 3121, true);
+SELECT pg_catalog.setval('"public"."player_object_id_seq"', 3122, true);
 
 
 --
@@ -13476,7 +13588,7 @@ SELECT pg_catalog.setval('"public"."skill_trees_id_seq"', 16, true);
 -- Name: skill_usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."skill_usage_id_seq"', 441, true);
+SELECT pg_catalog.setval('"public"."skill_usage_id_seq"', 548, true);
 
 
 --
@@ -13504,7 +13616,7 @@ SELECT pg_catalog.setval('"public"."terminal_choices_id_seq"', 6, true);
 -- Name: user_logins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."user_logins_id_seq"', 3, true);
+SELECT pg_catalog.setval('"public"."user_logins_id_seq"', 4, true);
 
 
 --
