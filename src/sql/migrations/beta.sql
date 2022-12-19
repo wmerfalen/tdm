@@ -5489,27 +5489,27 @@ INSERT INTO "public"."help_topics" VALUES (149, 'social', 'insult', '2022-01-14 
 -- Data for Name: loot_ammo; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."loot_ammo" VALUES (26, 1108, 'UNCOMMON,RARE,LEGENDARY', '20', 1);
-INSERT INTO "public"."loot_ammo" VALUES (27, 1147, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
-INSERT INTO "public"."loot_ammo" VALUES (28, 1151, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
-INSERT INTO "public"."loot_ammo" VALUES (29, 1156, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
-INSERT INTO "public"."loot_ammo" VALUES (30, 1160, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
+INSERT INTO "public"."loot_ammo" VALUES (36, 1108, 'UNCOMMON,RARE,LEGENDARY', '20', 1);
+INSERT INTO "public"."loot_ammo" VALUES (37, 1147, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
+INSERT INTO "public"."loot_ammo" VALUES (38, 1151, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
+INSERT INTO "public"."loot_ammo" VALUES (39, 1156, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
+INSERT INTO "public"."loot_ammo" VALUES (40, 1160, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
 
 
 --
 -- Data for Name: loot_payload; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."loot_payload" VALUES (24, 1097, 'UNCOMMON', 'UNCOMMON', 1);
-INSERT INTO "public"."loot_payload" VALUES (25, 1100, 'UNCOMMON,RARE', 'UNCOMMON,RARE', 1);
-INSERT INTO "public"."loot_payload" VALUES (26, 1104, 'UNCOMMON,RARE,LEGENDARY', 'UNCOMMON,RARE,LEGENDARY', 1);
-INSERT INTO "public"."loot_payload" VALUES (27, 1124, 'UNCOMMON,RARE,LEGENDARY', 'UNCOMMON,RARE,LEGENDARY', 1);
-INSERT INTO "public"."loot_payload" VALUES (28, 1125, 'UNCOMMON,RARE,LEGENDARY', 'UNCOMMON,RARE,LEGENDARY', 1);
-INSERT INTO "public"."loot_payload" VALUES (29, 1126, 'UNCOMMON,RARE,LEGENDARY', 'UNCOMMON,RARE,LEGENDARY', 1);
-INSERT INTO "public"."loot_payload" VALUES (30, 1136, 'UNCOMMON,RARE,LEGENDARY', 'UNCOMMON,RARE,LEGENDARY', 1);
-INSERT INTO "public"."loot_payload" VALUES (31, 1140, 'UNCOMMON,RARE,LEGENDARY', 'UNCOMMON,RARE,LEGENDARY', 1);
-INSERT INTO "public"."loot_payload" VALUES (32, 1149, 'UNCOMMON,RARE,LEGENDARY', 'UNCOMMON,RARE,LEGENDARY', 1);
 INSERT INTO "public"."loot_payload" VALUES (33, 128, 'COMMON,UNCOMMON', 'COMMON,UNCOMMON', 3);
+INSERT INTO "public"."loot_payload" VALUES (43, 1097, 'UNCOMMON', '20-30', 1);
+INSERT INTO "public"."loot_payload" VALUES (44, 1100, 'UNCOMMON,RARE', '20-30', 1);
+INSERT INTO "public"."loot_payload" VALUES (45, 1104, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
+INSERT INTO "public"."loot_payload" VALUES (46, 1124, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
+INSERT INTO "public"."loot_payload" VALUES (47, 1125, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
+INSERT INTO "public"."loot_payload" VALUES (48, 1126, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
+INSERT INTO "public"."loot_payload" VALUES (49, 1136, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
+INSERT INTO "public"."loot_payload" VALUES (50, 1140, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
+INSERT INTO "public"."loot_payload" VALUES (51, 1149, 'UNCOMMON,RARE,LEGENDARY', '20-35', 1);
 
 
 --
@@ -5554,8 +5554,6 @@ INSERT INTO "public"."mob_equipment" VALUES (294, 'chaotic-meth-addict', 701, NU
 INSERT INTO "public"."mob_equipment" VALUES (132, 'orthos-guard', 503, NULL, NULL, NULL, NULL, NULL, 'armor/vulture-ballistic-vest.yml', NULL, 'armor/titan-shin-guards.yml', 'armor/xm50-ultralight-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/orthos-aug-a3.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-02-01 16:49:10.066679', '2022-02-01 16:49:10.066679');
 INSERT INTO "public"."mob_equipment" VALUES (133, 'orthos-sniper', 504, NULL, NULL, NULL, NULL, NULL, 'armor/vulture-ballistic-vest.yml', NULL, 'armor/titan-shin-guards.yml', 'armor/xm50-ultralight-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/orthos-l96aw.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-02-01 16:49:10.216828', '2022-02-01 16:49:10.216828');
 INSERT INTO "public"."mob_equipment" VALUES (134, 'orthos-menace', 505, NULL, NULL, NULL, NULL, NULL, 'armor/raven-ballistic-vest.yml', NULL, 'armor/viper-leg-guards.yml', 'armor/xm50-ultralight-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/orthos-scarh.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-02-01 16:49:10.325195', '2022-02-01 16:49:10.325195');
-INSERT INTO "public"."mob_equipment" VALUES (135, 'cofob-inventory-specialist', 112, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/defiler-scarh.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, 'armor/titan-elbow-guards.yml', 'armor/titan-elbow-guards.yml', '2022-05-12 23:13:18.320147', '2022-05-12 23:13:18.320147');
-INSERT INTO "public"."mob_equipment" VALUES (136, 'cofob-inventory-grunt', 113, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/defiler-scarh.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, 'armor/titan-elbow-guards.yml', 'armor/titan-elbow-guards.yml', '2022-05-12 23:13:18.33433', '2022-05-12 23:13:18.33433');
 INSERT INTO "public"."mob_equipment" VALUES (137, 'maintenance-guard', 667, NULL, NULL, NULL, NULL, NULL, 'armor/p5-vest.yml', NULL, 'armor/p5-pants.yml', 'armor/p5-boots.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/glock.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-12 23:13:19.009975', '2022-05-12 23:13:19.009975');
 INSERT INTO "public"."mob_equipment" VALUES (138, 'maintenance-guard', 668, NULL, NULL, NULL, NULL, NULL, 'armor/p5-vest.yml', NULL, 'armor/p5-pants.yml', 'armor/p5-boots.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/glock.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-12 23:13:19.068135', '2022-05-12 23:13:19.068135');
 INSERT INTO "public"."mob_equipment" VALUES (158, 'orthos-sentinel-spawn', 669, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/forge-xm3-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/orthos-sentinel-scarh.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, 'armor/titan-elbow-guards.yml', 'armor/titan-elbow-guards.yml', '2022-05-25 15:53:44.498592', '2022-05-25 15:53:44.498592');
@@ -5567,6 +5565,7 @@ INSERT INTO "public"."mob_equipment" VALUES (296, 'dynamic-defiler-level-10', 70
 INSERT INTO "public"."mob_equipment" VALUES (160, 'hustler-lvl-3', 115, NULL, NULL, NULL, NULL, NULL, 'armor/leather-trenchcoat.yml', NULL, 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/czp10.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-05-25 15:53:44.622028', '2022-05-25 15:53:44.622028');
 INSERT INTO "public"."mob_equipment" VALUES (297, 'hydro-proc-extremists-dynamic-level', 704, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.423145', '2022-06-10 23:45:11.423145');
 INSERT INTO "public"."mob_equipment" VALUES (298, 'dynamic-car-thief-level-10', 705, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.43965', '2022-06-10 23:45:11.43965');
+INSERT INTO "public"."mob_equipment" VALUES (136, 'cofob-inventory-grunt', 113, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/defiler-scarh.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, 'armor/titan-elbow-guards.yml', 'armor/titan-elbow-guards.yml', '2022-05-12 23:13:18.33433', '2022-05-12 23:13:18.33433');
 INSERT INTO "public"."mob_equipment" VALUES (299, 'dynamic-mp-enforcer-level-10', 706, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.457514', '2022-06-10 23:45:11.457514');
 INSERT INTO "public"."mob_equipment" VALUES (300, 'dynamic-mp-shotgunner-level-10', 707, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.474898', '2022-06-10 23:45:11.474898');
 INSERT INTO "public"."mob_equipment" VALUES (301, 'dynamic-ops-shield-shotgunner-level-10', 708, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.500835', '2022-06-10 23:45:11.500835');
@@ -5576,10 +5575,6 @@ INSERT INTO "public"."mob_equipment" VALUES (304, 'shoplifter', 711, NULL, NULL,
 INSERT INTO "public"."mob_equipment" VALUES (173, 'dynamic-rogue-mp-shotgunner-level-10', 407, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 22:55:30.712947', '2022-06-10 22:55:30.712947');
 INSERT INTO "public"."mob_equipment" VALUES (305, 'kidnapper', 712, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 23:45:11.571797', '2022-06-10 23:45:11.571797');
 INSERT INTO "public"."mob_equipment" VALUES (171, 'dynamic-ops-shield-shotgunner-level-10', 502, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-06-10 22:55:30.642144', '2022-06-10 22:55:30.642144');
-INSERT INTO "public"."mob_equipment" VALUES (306, 'tengu-lancer', 715, NULL, NULL, NULL, NULL, NULL, 'armor/tengu-lightweight-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-radon-saiga.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.130482', '2022-07-17 05:30:19.130482');
-INSERT INTO "public"."mob_equipment" VALUES (307, 'tengu-lancer', 714, NULL, NULL, NULL, NULL, NULL, 'armor/falcon-ballistic-vest.yml', NULL, 'armor/tengu-shin-guards.yml', 'armor/tengu-stealth-footwear.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-vulkan-ax13.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.149583', '2022-07-17 05:30:19.149583');
-INSERT INTO "public"."mob_equipment" VALUES (308, 'tengu-lancer', 713, NULL, NULL, NULL, NULL, NULL, 'armor/tengu-lightweight-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-radon-saiga.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.178936', '2022-07-17 05:30:19.178936');
-INSERT INTO "public"."mob_equipment" VALUES (309, 'tengu-eviscerator', 716, NULL, NULL, NULL, NULL, NULL, 'armor/falcon-ballistic-vest.yml', NULL, 'armor/tengu-shin-guards.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-vulkan-ax13.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.202848', '2022-07-17 05:30:19.202848');
 INSERT INTO "public"."mob_equipment" VALUES (322, 'mp-enforcer', 500, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/hk45.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-11 16:01:49.735304', '2022-08-11 16:01:49.735304');
 INSERT INTO "public"."mob_equipment" VALUES (323, 'mp-shotgunner', 501, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/bf-39-shotgun.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-11 16:01:49.843009', '2022-08-11 16:01:49.843009');
 INSERT INTO "public"."mob_equipment" VALUES (5, 'waypoint-ave-car-thief', 2, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', 'armor/baklava.yml', 'armor/black-jeans.yml', 'armor/atom-fade-shoes.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tekdc9.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-04 04:12:22.295644', '2021-09-04 04:12:22.295644');
@@ -5601,6 +5596,11 @@ INSERT INTO "public"."mob_equipment" VALUES (349, 'petty-thief', 117, NULL, NULL
 INSERT INTO "public"."mob_equipment" VALUES (350, 'mp-enforcer-dynamic-10-118', 118, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/hk45.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-26 19:50:32.40647', '2022-11-26 19:50:32.40647');
 INSERT INTO "public"."mob_equipment" VALUES (351, 'mp-shotgunner-dynamic-10-119', 119, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/basic-boots.yml', 'armor/mp-enforcer-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/sasg12.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-26 19:50:32.421346', '2022-11-26 19:50:32.421346');
 INSERT INTO "public"."mob_equipment" VALUES (131, 'defiler', 666, NULL, NULL, NULL, NULL, NULL, 'armor/falcon-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/defiler-scarh.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-02-01 03:06:24.886311', '2022-02-01 03:06:24.886311');
+INSERT INTO "public"."mob_equipment" VALUES (135, 'cofob-inventory-specialist', 112, NULL, NULL, NULL, NULL, NULL, 'armor/basic-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/brown-leather-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/defiler-scarh.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, 'armor/titan-elbow-guards.yml', 'armor/titan-elbow-guards.yml', '2022-05-12 23:13:18.320147', '2022-05-12 23:13:18.320147');
+INSERT INTO "public"."mob_equipment" VALUES (306, 'tengu-lancer', 715, NULL, NULL, NULL, NULL, NULL, 'armor/tengu-lightweight-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-radon-saiga.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.130482', '2022-07-17 05:30:19.130482');
+INSERT INTO "public"."mob_equipment" VALUES (307, 'tengu-lancer', 714, NULL, NULL, NULL, NULL, NULL, 'armor/falcon-ballistic-vest.yml', NULL, 'armor/tengu-shin-guards.yml', 'armor/tengu-stealth-footwear.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-vulkan-ax13.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.149583', '2022-07-17 05:30:19.149583');
+INSERT INTO "public"."mob_equipment" VALUES (308, 'tengu-lancer', 713, NULL, NULL, NULL, NULL, NULL, 'armor/tengu-lightweight-ballistic-vest.yml', NULL, 'armor/mp-enforcer-pants.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-radon-saiga.yml', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.178936', '2022-07-17 05:30:19.178936');
+INSERT INTO "public"."mob_equipment" VALUES (309, 'tengu-eviscerator', 716, NULL, NULL, NULL, NULL, NULL, 'armor/falcon-ballistic-vest.yml', NULL, 'armor/tengu-shin-guards.yml', 'armor/xm50-ultralight-boots.yml', 'armor/xm-scorpio-tactical-gloves.yml', NULL, NULL, NULL, NULL, NULL, NULL, 'rifle/tengu-vulkan-ax13.yml', NULL, NULL, 'armor/titan-shoulder-pads.yml', 'armor/titan-shoulder-pads.yml', NULL, NULL, NULL, NULL, NULL, '2022-07-17 05:30:19.202848', '2022-07-17 05:30:19.202848');
 
 
 --
@@ -5621,7 +5621,6 @@ INSERT INTO "public"."mob_equipment_map" VALUES (13, 103, 103, '2021-09-04 04:12
 INSERT INTO "public"."mob_equipment_map" VALUES (28, 104, 104, '2021-09-04 04:23:27.177327', '2021-09-04 04:23:27.177327');
 INSERT INTO "public"."mob_equipment_map" VALUES (29, 105, 105, '2021-09-04 04:23:27.182288', '2021-09-04 04:23:27.182288');
 INSERT INTO "public"."mob_equipment_map" VALUES (34, 106, 106, '2021-09-06 01:20:27.887755', '2021-09-06 01:20:27.887755');
-INSERT INTO "public"."mob_equipment_map" VALUES (49, 112, 112, '2022-05-12 23:13:18.323055', '2022-05-12 23:13:18.323055');
 INSERT INTO "public"."mob_equipment_map" VALUES (24, 500, 500, '2021-09-04 04:23:27.068704', '2021-09-04 04:23:27.068704');
 INSERT INTO "public"."mob_equipment_map" VALUES (25, 501, 501, '2021-09-04 04:23:27.074152', '2021-09-04 04:23:27.074152');
 INSERT INTO "public"."mob_equipment_map" VALUES (26, 502, 502, '2021-09-04 04:23:27.079717', '2021-09-04 04:23:27.079717');
@@ -5632,6 +5631,12 @@ INSERT INTO "public"."mob_equipment_map" VALUES (93, 117, 117, '2022-11-26 18:42
 INSERT INTO "public"."mob_equipment_map" VALUES (94, 118, 118, '2022-11-26 19:50:32.408746', '2022-11-26 19:50:32.408746');
 INSERT INTO "public"."mob_equipment_map" VALUES (95, 119, 119, '2022-11-26 19:50:32.423602', '2022-11-26 19:50:32.423602');
 INSERT INTO "public"."mob_equipment_map" VALUES (96, 666, 666, '2022-11-26 20:12:00.411788', '2022-11-26 20:12:00.411788');
+INSERT INTO "public"."mob_equipment_map" VALUES (49, 112, 112, '2022-05-12 23:13:18.323055', '2022-05-12 23:13:18.323055');
+INSERT INTO "public"."mob_equipment_map" VALUES (97, 113, 113, '2022-12-18 13:48:17.436619', '2022-12-18 13:48:17.436619');
+INSERT INTO "public"."mob_equipment_map" VALUES (98, 715, 715, '2022-12-19 15:40:21.328029', '2022-12-19 15:40:21.328029');
+INSERT INTO "public"."mob_equipment_map" VALUES (99, 714, 714, '2022-12-19 15:40:21.341699', '2022-12-19 15:40:21.341699');
+INSERT INTO "public"."mob_equipment_map" VALUES (100, 713, 713, '2022-12-19 15:40:21.362115', '2022-12-19 15:40:21.362115');
+INSERT INTO "public"."mob_equipment_map" VALUES (101, 716, 716, '2022-12-19 15:40:21.378969', '2022-12-19 15:40:21.378969');
 
 
 --
@@ -5786,17 +5791,22 @@ INSERT INTO "public"."mobile" VALUES (4, 103, 'a chaotic meth addict', 'a chaoti
 INSERT INTO "public"."mobile" VALUES (23, 105, 'A crackhead', 'A crackhead', 'A crackhead', 'A crackhead is stalking the area.', '8', '0', 1, 1, 1, 0, 3, 0, 0, 0, 0, 2, 0, 0, 35, 15, 60, 5, 250, 0, 0, 1, 35, 15, 60, 2, 6, 1, 4, 5, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 0, 1, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (26, 106, 'An armed security guard', 'An armed security guard', 'An armed security guard', 'An armed security guard watches you closely.', '8', '0', 28, 23, 25, 0, 54, 0, 0, 0, 0, 20, 0, 0, 950, 245, 610, 5, 20044, 0, 0, 1, 950, 245, 610, 90, 18, 60, 10, 5, 0, 18, NULL, NULL, 25, 30, 35, 20, 30, 10, 38, 25, 20, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (27, 107, 'A bank teller', 'A bank teller', 'A bank teller', 'A bank teller is obediently serving you', '8', '0', 1, 1, 1, 0, 3, 0, 30, 0, 0, 2, 0, 0, 15, 15, 20, 5, 580, 0, 0, 2, 15, 15, 20, 1, 3, 1, 4, 5, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 0, 1, 0, 0, NULL, '0');
-INSERT INTO "public"."mobile" VALUES (28, 112, 'An inventory specialist', 'An inventory specialist', 'An inventory specialist', 'An inventory specialist takes a calculating look at the list of items on today''s list.', '8', '0', 99, 500, 500, 0, 500, 0, 500, 0, 0, 200, 0, 0, 98493, 98100, 9882, 0, 1, 0, 0, 2, 98493, 98100, 9882, -74, -74, 950, 10, 5, 0, 15, NULL, 'Inventory', 500, 500, 500, 500, 500, 500, 500, 500, 500, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (139, 114, 'An infected drone', 'An infected drone', 'An infected drone', 'An infected drone lumbers hugrily towards you...', '8', '0', 2, 2, 2, 0, 4, 0, 5, 0, 0, 2, 0, 0, 493, 100, 82, 5, 100, 0, 0, 1, 493, 100, 82, 1, 8, 10, 10, 5, 0, 15, NULL, NULL, 2, 3, 3, 2, 3, 1, 3, 2, 2, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (140, 115, 'An adapted drone', 'An adapted drone ', 'An adapted drone ', 'An adapted drone looks for something to infect...', '8', '0', 4, 5, 4, 0, 4, 0, 5, 0, 0, 3, 0, 0, 350, 100, 82, 5, 100, 0, 0, 1, 350, 100, 82, 2, 12, 18, 10, 5, 0, 15, NULL, NULL, 4, 5, 5, 4, 7, 0, 8, 3, 4, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (141, 116, 'A rugged car thief', 'A rugged car thief', 'A rugged car thief', 'A car thief stalking the area. He is armed.', '4616', '0', 18, 13, 2, 0, 34, 0, 0, 0, 0, 10, 0, 0, 350, 45, 610, 5, 250, 0, 0, 1, 350, 45, 610, 30, 6, 20, 10, 5, 0, 14, NULL, NULL, 15, 5, 15, 8, 0, 0, 18, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (24, 109, 'A retail associate', 'A retail associate', 'A retail associate', 'A retail associate tirelessly stocks shelves...', '8', '0', 15, 1, 2, 0, 4, 0, 4, 0, 0, 3, 0, 0, 120, 50, 60, 5, 580, 0, 0, 1, 120, 50, 60, 2, 5, 2, 10, 5, 0, 19, NULL, 'Allied Foods', 2, 1, 1, 1, 1, 0, 1, 2, 1, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (28, 112, 'An inventory specialist', 'An inventory specialist', 'An inventory specialist', 'An inventory specialist takes a calculating look at the list of items on today''s list.', '8', '0', 99, 500, 500, 0, 500, 0, 500, 0, 0, 200, 0, 0, 98493, 98100, 9882, 0, 1, 0, 0, 2, 98493, 98100, 9882, -74, -74, 950, 10, 5, 0, 15, NULL, 'Inventory', 500, 500, 500, 500, 500, 500, 500, 500, 500, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (142, 117, 'A petty thief', 'A petty thief', 'A petty thief', 'A petty thief is stalking the area.', '4360', '0', 4, 4, 2, 0, 4, 0, 0, 0, 0, 5, 0, 0, 100, 15, 110, 5, 250, 0, 0, 1, 100, 15, 110, 2, 6, 10, 4, 5, 0, 14, NULL, NULL, 5, 4, 5, 2, 0, 0, 4, 0, 0, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (143, 118, 'A Military Police enforcer', 'A Military Police enforcer', 'A Military Police enforcer', 'A fit military police enforcer. He looks armed.', '4616', '0', 25, 23, 22, 0, 24, 0, 10, 0, 0, 10, 0, 0, 25, 45, 110, 50, 7050, 0, 0, 1, 25, 45, 110, 10, 10, 20, 10, 5, 0, 10, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '1');
 INSERT INTO "public"."mobile" VALUES (144, 119, 'A Military Police shotgunner', 'A Military Police shotgunner', 'A Military Police shotgunner', 'A fit military police shotgunner. He looks armed.', '4616', '0', 35, 33, 32, 0, 34, 0, 10, 0, 0, 10, 0, 0, 5550, 565, 510, 50, 7050, 0, 0, 1, 5550, 565, 510, 15, 18, 30, 10, 6, 0, 11, NULL, NULL, 10, 10, 10, 10, 10, 10, 10, 10, 10, NULL, '1');
 INSERT INTO "public"."mobile" VALUES (145, 666, '{red}DEFILER{/red}', '{red}DEFILER{/red}', '{red}DEFILER{/red}', '{red}DEFILER{/red}', '8', '0', 22, 13, 12, 0, 14, 0, 1, 0, 0, 20, 0, 0, 3820, 830, 160, 50, 8050, 0, 0, 1, 3820, 830, 160, 16, 16, 12, 10, 5, 0, 20, NULL, NULL, 12, 20, 13, 12, 11, 10, 11, 18, 1, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (25, 110, 'A shoplifter', 'A shoplifter', 'A shoplifter', 'A shoplifter looks around nervously...', '8', '0', 30, 1, 5, 0, 8, 0, 8, 0, 0, 6, 0, 0, 240, 100, 128, 5, 580, 0, 0, 1, 240, 100, 128, 5, 10, 5, 10, 5, 0, 17, NULL, 'Allied Foods', 5, 3, 2, 2, 3, 0, 3, 5, 2, NULL, '0');
 INSERT INTO "public"."mobile" VALUES (22, 104, 'A shoplifter', 'A shoplifter', 'A shoplifter', 'A shoplifter is stalking the area.', '8', '0', 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 10, 15, 60, 5, 250, 0, 0, 1, 10, 15, 60, 1, 3, 1, 4, 5, 0, 15, NULL, 'Allied Foods', 1, 0, 1, 0, 0, 0, 1, 0, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (146, 113, 'An inventory grunt', 'An inventory grunt', 'An inventory grunt', 'An inventory grunt is here breaking a sweat. He hardly notices you.', '524296', '0', 99, 500, 500, 0, 500, 0, 500, 0, 0, 200, 0, 0, 98493, 98100, 9882, 0, 0, 0, 0, 1, 98493, 98100, 9882, 950, 950, 950, 10, 5, 0, 15, NULL, NULL, 500, 500, 500, 500, 500, 500, 500, 500, 500, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (147, 715, 'Tengu Trooper', 'A Tengu Trooper', 'Optimized for assault, the Tengu Trooper is the epitome of brute force. While not being the most strategic unit, the Trooper makes up for this with fast attack speed and resilience. The Trooper''s lightweight ballistic protection sacrifices damage absorption for speed.', 'Optimized for assault, the Tengu Trooper is the epitome of brute force. While not being the most strategic unit, the Trooper makes up for this with fast attack speed and resilience. The Trooper''s lightweight ballistic protection sacrifices damage absorption for speed.', '8', '0', 11, 0, 9, 0, 34, 0, 0, 0, 0, 20, 0, 0, 3820, 830, 160, 50, 8050, 0, 0, 1, 3820, 830, 160, 16, 16, 12, 10, 5, 0, 21, NULL, NULL, 8, 9, 23, 22, 0, 0, 21, 0, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (148, 714, 'Tengu Lancer', 'A Tengu Lancer', 'The large shoulder armor and upper body shielding give the Lancer an appearance not unlike the heavily padded athletes of most high contact sports. The legs of the Lancer are not armored except for some black shin guards and stealth-optimized footwear. The lancer is 6 feet tall and extremely agile. ', 'The large shoulder armor and upper body shielding give the Lancer an appearance not unlike the heavily padded athletes of most high contact sports. The legs of the Lancer are not armored except for some black shin guards and stealth-optimized footwear. The lancer is 6 feet tall and extremely agile. ', '8', '0', 11, 0, 29, 0, 34, 0, 0, 0, 0, 28, 0, 0, 4820, 930, 160, 50, 8050, 0, 0, 1, 4820, 930, 160, 36, 20, 12, 10, 5, 0, 21, NULL, NULL, 8, 9, 33, 32, 0, 0, 31, 0, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (149, 713, 'Tengu Scout', 'A Tengu Scout', 'Kojima Corp is a well-funded military force with very high profile clients supplying it''s income. The most important part of maintaining a strategic edge against outside threats is to have a comprehensive plan for deep intelligence gathering. The Tengu Scout is part of the fast moving ellusive recon team. ', 'Kojima Corp is a well-funded military force with very high profile clients supplying it''s income. The most important part of maintaining a strategic edge against outside threats is to have a comprehensive plan for deep intelligence gathering. The Tengu Scout is part of the fast moving ellusive recon team. ', '8', '0', 8, 0, 49, 0, 54, 0, 0, 0, 0, 25, 0, 0, 1720, 230, 560, 50, 8050, 0, 0, 1, 1720, 230, 560, 26, 13, 12, 5, 5, 0, 21, NULL, NULL, 28, 8, 20, 15, 0, 0, 20, 30, 0, NULL, '0');
+INSERT INTO "public"."mobile" VALUES (150, 716, 'Tengu Eviscerator', 'A Tengu Eviscerator', 'Few of the militaristic units deployed by Kojima Corp actually fit the classical idea of a ''soldier''. The Tengu Eviscerator hardly qualifies as a living breathing human. The technology fused into the very biology of the Eviscerator borders of extreme cybermancy and archaic magic. As such, the Eviscerator is usually only used where a high amount of security is needed. ', 'Few of the militaristic units deployed by Kojima Corp actually fit the classical idea of a ''soldier''. The Tengu Eviscerator hardly qualifies as a living breathing human. The technology fused into the very biology of the Eviscerator borders of extreme cybermancy and archaic magic. As such, the Eviscerator is usually only used where a high amount of security is needed. ', '8', '0', 11, 9, 29, 0, 34, 0, 0, 0, 0, 25, 0, 0, 5820, 930, 360, 50, 9050, 0, 0, 1, 5820, 930, 360, 20, 30, 32, 10, 5, 0, 21, NULL, NULL, 0, 29, 23, 22, 30, 0, 21, 23, 0, NULL, '0');
 
 
 --
@@ -5890,10 +5900,10 @@ INSERT INTO "public"."object_weapon" VALUES (5, 7, 0, 0, 0, false);
 --
 
 INSERT INTO "public"."player" VALUES (110, '$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.', '0', '0', 'sniper', '1', '1', 0, 3, 0, 9, 9, 12, 15, 9, 0, 0, 241, 436, 729, 48, 561, 'M', 241, 436, 729, 52, 52, 52, '9', '1', '52', 0, 0, 'PC', 0, 3, 52, 0, '2021-09-18 01:42:45.163952', 0, '2021-09-18 01:42:45.163952', '8388736', 7);
-INSERT INTO "public"."player" VALUES (113, '$2a$06$MiAvtBjkrIcUaQUu0A0DtubpnnuY5RGcuCzbO3rhEIzb9Q6RRHhWS', '0', '0', 'port0s', '1', '1', 0, 4, 0, 4, 4, 8, 14, 4, 0, 0, 291, 226, 421, 0, 1000, 'M', 291, 226, 411, 53, 53, 53, '2', '1', '53', 0, 0, 'PC', 0, 2, 53, 0, '2022-12-09 23:11:14.922272', 0, '2022-12-09 23:11:14.922272', '8388736', 3);
-INSERT INTO "public"."player" VALUES (1, 'foKntnEF3KSXA', '0', '0', 'far', '1', '1', 0, 20, 0, 41, 41, 82, 102, 41, 1479, 0, 65000, 2277, 65000, 42698, 94030, 'M', 65000, 2277, 65000, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 1479, 19, 53, 0, '2019-03-20 22:38:47.454111', 0, '2019-03-20 22:38:47.454111', '14680304', 37);
+INSERT INTO "public"."player" VALUES (113, '$2a$06$MiAvtBjkrIcUaQUu0A0DtubpnnuY5RGcuCzbO3rhEIzb9Q6RRHhWS', '0', '0', 'port0s', '1', '1', 0, 4, 0, 4, 4, 8, 14, 4, 0, 0, 291, 226, 421, 0, 1000, 'M', 291, 226, 421, 53, 53, 53, '2', '1', '53', 0, 0, 'PC', 0, 2, 53, 0, '2022-12-09 23:11:14.922272', 0, '2022-12-09 23:11:14.922272', '8388736', 3);
 INSERT INTO "public"."player" VALUES (111, '$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC', '0', '0', 'ghost', '1', '1', 0, 4, 0, 8, 8, 17, 21, 8, 0, 0, 322, 452, 1037, 6730, 3850, 'M', 322, 452, 936, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 0, 4, 53, 0, '2022-05-17 13:17:37.271391', 0, '2022-05-17 13:17:37.271391', '8388736', 6);
 INSERT INTO "public"."player" VALUES (112, '$2a$06$tZ.d26Ss0bmylxdAIcR.2.KJMQCrARqFa0oghvTkHet73f5EeOAPi', '0', '0', 'breacher', '1', '1', 0, 7, 0, 2, 2, 8, 14, 2, 0, 0, 421, 161, 356, 0, 1000, 'M', 421, 161, 356, 53, 53, 53, '22', '1', '53', 0, 0, 'PC', 0, 2, 53, 0, '2022-11-09 08:07:37.145886', 0, '2022-11-09 08:07:37.145886', '8388736', 3);
+INSERT INTO "public"."player" VALUES (1, 'foKntnEF3KSXA', '0', '0', 'far', '1', '1', 0, 20, 0, 41, 41, 82, 102, 41, 1479, 0, 65000, 2277, 65000, 42698, 94030, 'M', 65000, 2277, 65000, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 1479, 19, 53, 0, '2019-03-20 22:38:47.454111', 0, '2019-03-20 22:38:47.454111', '14680304', 37);
 
 
 --
@@ -5916,8 +5926,8 @@ INSERT INTO "public"."player_base_ability" VALUES (13, 107, 3, 0, 9, 9, 12, 15, 
 INSERT INTO "public"."player_base_ability" VALUES (7, 101, 44, 0, 44, 44, 88, 132, 44, 44, 44, 60, 44, 9, 44, 60, 44, 60, '2021-09-17 00:53:22.86459', '2021-09-17 00:53:22.86459');
 INSERT INTO "public"."player_base_ability" VALUES (16, 110, 3, 0, 9, 9, 12, 15, 9, 9, 6, 8, 8, 15, 10, 6, 9, 9, '2021-09-18 01:42:45.197498', '2021-09-18 01:42:45.197498');
 INSERT INTO "public"."player_base_ability" VALUES (19, 113, 4, 0, 4, 4, 8, 14, 4, 4, 8, 4, 4, 8, 4, 6, 4, 7, '2022-12-09 23:11:15.093093', '2022-12-09 23:11:15.093093');
-INSERT INTO "public"."player_base_ability" VALUES (1, 1, 20, 0, 41, 41, 82, 102, 41, 41, 40, 64, 64, 103, 42, 62, 41, 57, '2021-09-04 04:17:39.714689', '2021-09-04 04:17:39.714689');
 INSERT INTO "public"."player_base_ability" VALUES (17, 111, 4, 0, 8, 8, 17, 21, 8, 8, 8, 15, 15, 21, 9, 13, 8, 12, '2022-05-17 13:17:37.452746', '2022-05-17 13:17:37.452746');
+INSERT INTO "public"."player_base_ability" VALUES (1, 1, 20, 0, 41, 41, 82, 102, 41, 41, 40, 64, 64, 103, 42, 62, 41, 57, '2021-09-04 04:17:39.714689', '2021-09-04 04:17:39.714689');
 INSERT INTO "public"."player_base_ability" VALUES (18, 112, 7, 0, 2, 2, 8, 14, 2, 2, 14, 4, 4, 8, 2, 4, 2, 6, '2022-11-09 08:07:37.190702', '2022-11-09 08:07:37.190702');
 
 
@@ -6087,20 +6097,6 @@ INSERT INTO "public"."room" VALUES (26, 155, 1, 21, '{blu}C.O.F.O.B:{/blu} - Wea
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (27, 156, 1, 21, '{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2', '@FILL_ME@
 ', NULL, NULL, 1, 0, 'cofob-armory-basement-2', NULL);
-INSERT INTO "public"."room" VALUES (9, 138, 1, 21, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (11, 140, 1, 21, '{blu}C.O.F.O.B{/blu} - East Hallway', 'Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (12, 141, 1, 21, '{blu}C.O.F.O.B{/blu} - East Hallway - TRITON Entrance', 'A sign above the door to the East says "{yel}TRITON LABS{/yel}" in big bold lettering. The placement of the laboratory is an odd one, as it is one of the only ways to reach the civilian portion of the FOB via the East.
-', NULL, NULL, 1, 0, 'cofob-armory-entrance', ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (13, 142, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Decontamination', 'In order for the lab to maintain a clean and sterile atmosphere, a decontamination area was installed. That is the room you find yourself in. A station not unlike the body scanners you find at an airport sprays you up and down with a cool mist of chemicals. A vacuum below your feet sucks wind and your ears pop as various hidden but audible devices clamor to eliminate any hazardous bacteria.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (14, 143, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Research', 'An array of server racks blocks the center of the room from where you are standing.TRITON Labs is a sub-contractor of the incredibly murky organization known as {blu}ORTHOS CORP{/blu}. The lab specializes in HIGHLY experimental ammunition which blurs the line between ethical and immoral conduct. TRITON Labs is believed to have developed an extreme pathogen with the power to wipe out an entire city block with just a few drops of a highly secretive chemical agent.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (18, 147, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Human Experiments', 'There used to be a time when clients would pay for highly specialized medical products.During the apex of that booming underground market, scientists were paid top dollar to secure the targetted product under any means necessary. The TRTION labs human experimentation sector is located somewhere beneath the FOB, though some say it was forever closed off forever. The leftover and forgotten human experiments reside in this room indefinitely. To have survived those experiments is a greater hell than to have perished.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (15, 144, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Experimental Ammunition', 'TRITON labs has been home to the most advanced bleeding edge experimental ammunition on the planet. Racks of hermetically sealed boxes with TRITON''s menacing logo reach almost to the full height of the extended ceiling. There is a single computer terminal here asking for biometric credentials. A camera adjusts it''s focus and magnification as you move.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (28, 157, 1, 21, '{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2', '@FILL_ME@
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (29, 158, 1, 21, '{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2', '@FILL_ME@
@@ -6113,6 +6109,16 @@ INSERT INTO "public"."room" VALUES (32, 161, 1, 21, '{blu}C.O.F.O.B:{/blu} - Wea
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (33, 162, 1, 21, '{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2', '@FILL_ME@
 ', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (11, 140, 1, 21, '{blu}C.O.F.O.B{/blu} - East Hallway', 'Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (12, 141, 1, 21, '{blu}C.O.F.O.B{/blu} - East Hallway - TRITON Entrance', 'A sign above the door to the East says "{yel}TRITON LABS{/yel}" in big bold lettering. The placement of the laboratory is an odd one, as it is one of the only ways to reach the civilian portion of the FOB via the East.
+', NULL, NULL, 1, 0, 'cofob-armory-entrance', ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (14, 143, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Research', 'An array of server racks blocks the center of the room from where you are standing.TRITON Labs is a sub-contractor of the incredibly murky organization known as {blu}ORTHOS CORP{/blu}. The lab specializes in HIGHLY experimental ammunition which blurs the line between ethical and immoral conduct. TRITON Labs is believed to have developed an extreme pathogen with the power to wipe out an entire city block with just a few drops of a highly secretive chemical agent.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (18, 147, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Human Experiments', 'There used to be a time when clients would pay for highly specialized medical products.During the apex of that booming underground market, scientists were paid top dollar to secure the targetted product under any means necessary. The TRTION labs human experimentation sector is located somewhere beneath the FOB, though some say it was forever closed off forever. The leftover and forgotten human experiments reside in this room indefinitely. To have survived those experiments is a greater hell than to have perished.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (15, 144, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Experimental Ammunition', 'TRITON labs has been home to the most advanced bleeding edge experimental ammunition on the planet. Racks of hermetically sealed boxes with TRITON''s menacing logo reach almost to the full height of the extended ceiling. There is a single computer terminal here asking for biometric credentials. A camera adjusts it''s focus and magnification as you move.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (34, 163, 1, 21, '{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2', '@FILL_ME@
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (35, 164, 1, 21, '{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - Basement 2', '@FILL_ME@
@@ -6172,16 +6178,6 @@ INSERT INTO "public"."room" VALUES (86, 215, 1, 0, '{blu}C.O.F.O.B [OUTER]:{/blu
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (87, 216, 1, 0, '{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway', 'The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. 
 ', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (67, 196, 1, 21, '{blu}C.O.F.O.B{/blu} - East Hallway', 'Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (72, 201, 1, 21, '{blu}C.O.F.O.B{/blu} - East Hallway', 'Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (76, 205, 1, 21, '{blu}C.O.F.O.B{/blu} - North Hallway', 'The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (127, 256, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Infrastructure Hallway', 'It''s almost comical how clean the engineering level of the FOB is compared to the lower levels. The carpet and walls are in a prestine -- no, IMMACULATE state. You almost feel like you should take off your shoes. The climate is controlled by a different air-conditioning system than the rest of the base. The room is cool and devoid of any outside noise.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (80, 209, 1, 21, '{blu}C.O.F.O.B{/blu} - North Hallway', 'The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (88, 217, 1, 0, '{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway', 'The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (185, 314, 1, 0, 'Market Apartments - Building 3 - Unit 303 - Master Bedroom', 'undefined
@@ -6190,6 +6186,14 @@ INSERT INTO "public"."room" VALUES (89, 218, 1, 0, '{blu}C.O.F.O.B [OUTER]:{/blu
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (90, 219, 1, 0, '{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway', 'The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. 
 ', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (72, 201, 1, 21, '{blu}C.O.F.O.B{/blu} - East Hallway', 'Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (76, 205, 1, 21, '{blu}C.O.F.O.B{/blu} - North Hallway', 'The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (127, 256, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Infrastructure Hallway', 'It''s almost comical how clean the engineering level of the FOB is compared to the lower levels. The carpet and walls are in a prestine -- no, IMMACULATE state. You almost feel like you should take off your shoes. The climate is controlled by a different air-conditioning system than the rest of the base. The room is cool and devoid of any outside noise.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (80, 209, 1, 21, '{blu}C.O.F.O.B{/blu} - North Hallway', 'The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (91, 220, 1, 0, '{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway', 'The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (92, 221, 1, 0, '{blu}C.O.F.O.B [OUTER]:{/blu} - Western Hallway', 'The reinforced metal walls are briefly interrupted by the occasional senior officer door. As you make your way north and south, you notice that the entirety of the western wall consists of metal walls with doors that lead to the underground portion of the base. 
@@ -6222,20 +6226,6 @@ INSERT INTO "public"."room" VALUES (122, 251, 1, 21, '{blu}C.O.F.O.B:{/blu} - Se
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (123, 252, 1, 21, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
 ', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (98, 227, 1, 0, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (97, 226, 1, 0, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (103, 232, 1, 21, '{blu}C.O.F.O.B{/blu} - Up the Staircase', 'The walls are a drab shade of grey and the stairs are an odd combination of carpet and metal. 
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (104, 233, 1, 21, '{blu}C.O.F.O.B{/blu} - Up the Staircase', 'The walls are a drab shade of grey and the stairs are an odd combination of carpet and metal. 
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (105, 234, 1, 21, '{blu}C.O.F.O.B{/blu} - Up the Staircase', 'The walls are a drab shade of grey and the stairs are an odd combination of carpet and metal. 
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (108, 237, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Atop the stairs', 'The computing industry has progressed to the point where every individual has their own computer in the palm of their hand. But those advances dont''t come without a cost. The engineering level of the FOB focusses on the invisible threat of state actors and the growing need for tighter security. 
-', NULL, NULL, 1, 0, 'cofob-secondfloor-center', ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (113, 242, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Threat Surveillance', 'There are a couple high profile incidents where law enforcement were locked out of the personal devices of a deceased criminal. A hard lesson in cryptography was learned that day. As a result, funding instead went into massive amounts of global surveillance and threat tracking. The advent of Artificial Intelligence gave another possible avenue: automated tracking. The {red}Threat Surveillance{/red} sector of the FOB is the most advanced and funded aspect of every FOB to date.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (130, 259, 1, 0, '{blu}C.O.F.O.B:{/blu} - Engineering hallway', 'The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (131, 260, 1, 0, '{blu}C.O.F.O.B:{/blu} - Engineering hallway', 'The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. 
@@ -6250,6 +6240,16 @@ INSERT INTO "public"."room" VALUES (136, 265, 1, 21, '{blu}C.O.F.O.B:{/blu} - Ea
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (332, 460, 1, 0, '{blu}La Mesa{/blu} Kenwood Drive North', '@FILL_ME@
 ', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (97, 226, 1, 0, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (103, 232, 1, 21, '{blu}C.O.F.O.B{/blu} - Up the Staircase', 'The walls are a drab shade of grey and the stairs are an odd combination of carpet and metal. 
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (104, 233, 1, 21, '{blu}C.O.F.O.B{/blu} - Up the Staircase', 'The walls are a drab shade of grey and the stairs are an odd combination of carpet and metal. 
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (105, 234, 1, 21, '{blu}C.O.F.O.B{/blu} - Up the Staircase', 'The walls are a drab shade of grey and the stairs are an odd combination of carpet and metal. 
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (108, 237, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Atop the stairs', 'The computing industry has progressed to the point where every individual has their own computer in the palm of their hand. But those advances dont''t come without a cost. The engineering level of the FOB focusses on the invisible threat of state actors and the growing need for tighter security. 
+', NULL, NULL, 1, 0, 'cofob-secondfloor-center', ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (137, 266, 1, 0, '{blu}C.O.F.O.B:{/blu} - Gear room', 'A huge weapons rack is attached to the wall here. The rack contains rifles, pistols, ammunition, explosives, and breach charges.
 ', NULL, NULL, 1, 0, 'cofob-gear-room', NULL);
 INSERT INTO "public"."room" VALUES (138, 267, 1, 0, '{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon', '@FILL_ME@
@@ -6299,8 +6299,6 @@ INSERT INTO "public"."room" VALUES (160, 289, 1, 0, 'Destroyed overpass - Abott 
 INSERT INTO "public"."room" VALUES (161, 290, 1, 0, 'Destroyed overpass - Abott Market South', 'Crushed and flattened by endless shells, the overpass that you just passed under creaks eternally. Now and then you hear the crumble of asphault and be bend of metal rods. The overpass connects the once thriving market place of Abott Market, but now all you see is rubble and a shell of what used to be a thriving market.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (162, 291, 1, 0, 'Market Apartments - East entrance', 'An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You''d be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (448, 576, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'A Pharmacy
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (163, 292, 1, 0, 'Market Apartments - East entrance', 'An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You''d be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.
 ', NULL, NULL, 1, 0, NULL, NULL);
@@ -6399,8 +6397,6 @@ INSERT INTO "public"."room" VALUES (217, 346, 1, 0, '{blu}C.O.F.O.B:{/blu} - Mes
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (218, 347, 1, 0, '{blu}C.O.F.O.B:{/blu} - Mess Hall serving area', 'The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.
 ', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (449, 577, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'A Pharmacy
-', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (219, 348, 1, 0, '{blu}C.O.F.O.B:{/blu} - Mess Hall serving area', 'The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (232, 149, 1, 21, '{blu}C.O.F.O.B:{/blu} - Weapons Cache stairs - TOP', '@FILL_ME@
@@ -6429,8 +6425,6 @@ INSERT INTO "public"."room" VALUES (227, 356, 1, 0, '{blu}C.O.F.O.B:{/blu} - Mes
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (228, 357, 1, 0, '{blu}C.O.F.O.B:{/blu} - Mess Hall serving area', 'The tile floor is immaculate in presentation. Plain grey metal chairs attend each table obediently in a neat formation of 2 chairs to each cardinal side.A few familiar dishes invite you to sit down and enjoy the hastily prepared meals. The chefs can be seen in the kitchen looking down as they prepare the food. The remote promise of coffee is enticing.
 ', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (128, 257, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Infrastructure Hallway', 'It''s almost comical how clean the engineering level of the FOB is compared to the lower levels. The carpet and walls are in a prestine -- no, IMMACULATE state. You almost feel like you should take off your shoes. The climate is controlled by a different air-conditioning system than the rest of the base. The room is cool and devoid of any outside noise.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (333, 461, 1, 0, '{blu}La Mesa{/blu} Kenwood Drive North', '@FILL_ME@
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (334, 462, 1, 0, '{blu}La Mesa{/blu} Kenwood Drive North', '@FILL_ME@
@@ -6522,10 +6516,6 @@ INSERT INTO "public"."room" VALUES (259, 387, 1, 0, '{blu}Crenshaw{/blu} Highway
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (260, 388, 1, 0, '{blu}Crenshaw{/blu} Highway 94 East', 'A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren''t taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.
 ', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (450, 578, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'A Pharmacy
-', NULL, NULL, 1, 0, 'allied-foods-pharmacy-bend', NULL);
-INSERT INTO "public"."room" VALUES (451, 579, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'A Pharmacy
-', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (261, 389, 1, 0, '{blu}Crenshaw{/blu} Highway 94 East', 'A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren''t taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (262, 390, 1, 0, '{blu}Crenshaw{/blu} Highway 94 East', 'A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren''t taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.
@@ -6559,8 +6549,6 @@ INSERT INTO "public"."room" VALUES (274, 402, 1, 0, '{blu}Shipyard{/blu} Entranc
 INSERT INTO "public"."room" VALUES (275, 403, 1, 0, '{blu}Shipyard{/blu} Entrance', 'Shipping containers stacked 30 to 40 stories high blot out the sun''s rays coming from the east and even overhead during lunch time. Despite the time of day, artificial lighting is needed everywhere. As you make your way deeper into the shipyard, you notice several highly armed individuals patrolling the area. These individuals are wearing masks and have extensive radio communication devices that are resistant to E.M.P.. 
 ', NULL, NULL, 1, 0, 'shipyard-row-a', NULL);
 INSERT INTO "public"."room" VALUES (276, 404, 1, 0, '{blu}Shipyard{/blu} Shipment Row A', 'All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. 
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (452, 580, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'A Pharmacy
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (277, 405, 1, 0, '{blu}Shipyard{/blu} Shipment Row A', 'All around you are red and blue shipping containers with varying amounts of rust and outer wear. A few have severe indentations from mishaps. Oddly enough, containers with giant abrasions are bent back into shape and reused. You notice what seems to be burn marks, bullet holes, and dark splattered brownish red stains on a few containers. 
 ', NULL, NULL, 1, 0, NULL, NULL);
@@ -6635,8 +6623,6 @@ INSERT INTO "public"."room" VALUES (306, 434, 1, 0, '{blu}Crenshaw{/blu} Highway
 INSERT INTO "public"."room" VALUES (307, 435, 1, 0, '{blu}Crenshaw{/blu} Highway 94 East', 'A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren''t taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (308, 436, 1, 0, '{blu}Crenshaw{/blu} Highway 94 East', 'A newly paved road stretching to the east and curving towards the north. Speed limit signs are present but they aren''t taken seriously by the civilians. Admittedly, the only residents that use the highways are the ones with disproportionate amounts of wealth. You notice a few carcasses of dead animals that made the dire decision to cross this hellish landscape.
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (453, 581, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'A Pharmacy
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (454, 582, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Shower Isle', 'A shower isle
 ', NULL, NULL, 1, 0, NULL, NULL);
@@ -7530,10 +7516,8 @@ INSERT INTO "public"."room" VALUES (768, 900, 1, 25, '{blu}Psi-Tech H.Q.{/blu} -
 INSERT INTO "public"."room" VALUES (771, 903, 1, 0, 'name', 'description', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (773, 905, 1, 25, '{blu}Psi-Tech H.Q.{/blu} - Inside - Atrium', 'You find yourself in a perfectly air conditioned atrium with very high ceilings.Classical music is being played through a pair of hidden speakers somewhere above you. The obsidian colored marble floor is smooth yet slip-resistant.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,TILE');
-INSERT INTO "public"."room" VALUES (1, 130, 1, 21, 'C.O.F.O.B - Hallway entrance', 'There is a single door here leading to the inner hallway of the FOB. From there, you can make your way to the different areas like the TRITON Laboratory, the kitchen, the engineering level, and the exit to the outlying city surrounding the FOB.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,DAMP,INSIDE,ROOFTOP');
-INSERT INTO "public"."room" VALUES (2, 131, 1, 21, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
-', NULL, NULL, 1, 0, 'cofobcenter', ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (17, 146, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Research', 'An array of server racks blocks the center of the room from where you are standing.TRITON Labs is a sub-contractor of the incredibly murky organization known as {blu}ORTHOS CORP{/blu}. The lab specializes in HIGHLY experimental ammunition which blurs the line between ethical and immoral conduct. TRITON Labs is believed to have developed an extreme pathogen with the power to wipe out an entire city block with just a few drops of a highly secretive chemical agent.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (102, 231, 1, 0, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
 ', NULL, NULL, 1, 0, 'cofob-bind-to-center', NULL);
 INSERT INTO "public"."room" VALUES (100, 229, 1, 0, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
@@ -7541,10 +7525,6 @@ INSERT INTO "public"."room" VALUES (100, 229, 1, 0, '{blu}C.O.F.O.B{/blu} - Sout
 INSERT INTO "public"."room" VALUES (99, 228, 1, 0, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (10, 139, 1, 21, '{blu}C.O.F.O.B{/blu} - East Hallway', 'Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (815, 949, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (17, 146, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Research', 'An array of server racks blocks the center of the room from where you are standing.TRITON Labs is a sub-contractor of the incredibly murky organization known as {blu}ORTHOS CORP{/blu}. The lab specializes in HIGHLY experimental ammunition which blurs the line between ethical and immoral conduct. TRITON Labs is believed to have developed an extreme pathogen with the power to wipe out an entire city block with just a few drops of a highly secretive chemical agent.
 ', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (16, 145, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Experimental Ammunition', 'TRITON labs has been home to the most advanced bleeding edge experimental ammunition on the planet. Racks of hermetically sealed boxes with TRITON''s menacing logo reach almost to the full height of the extended ceiling. There is a single computer terminal here asking for biometric credentials. A camera adjusts it''s focus and magnification as you move.
 ', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
@@ -7566,10 +7546,8 @@ INSERT INTO "public"."room" VALUES (74, 203, 1, 21, '{blu}C.O.F.O.B{/blu} - East
 ', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (77, 206, 1, 21, '{blu}C.O.F.O.B{/blu} - North Hallway', 'The north end of the FOB has always been a much nicer and cleaner place than the rest of the base. Primarily due to the frequency of senior officer suites. The north hallway will also bring you to the second floor where a large majority of the engineering work is done.
 ', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (78, 207, 1, 21, '{blu}C.O.F.O.B{/blu} - Staircase', 'A remarkably plain staircase is here. The second floor of the FOB is home to the {yel}Engineering{/yel} team. Already you can tell that the air quality is much better upstairs.
-', NULL, NULL, 1, 0, 'cofob-stairs-A', ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (106, 235, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Atop the stairs', 'The computing industry has progressed to the point where every individual has their own computer in the palm of their hand. But those advances dont''t come without a cost. The engineering level of the FOB focusses on the invisible threat of state actors and the growing need for tighter security. 
-', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (815, 949, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (107, 236, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Atop the stairs', 'The computing industry has progressed to the point where every individual has their own computer in the palm of their hand. But those advances dont''t come without a cost. The engineering level of the FOB focusses on the invisible threat of state actors and the growing need for tighter security. 
 ', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (124, 253, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Infrastructure Hallway', 'It''s almost comical how clean the engineering level of the FOB is compared to the lower levels. The carpet and walls are in a prestine -- no, IMMACULATE state. You almost feel like you should take off your shoes. The climate is controlled by a different air-conditioning system than the rest of the base. The room is cool and devoid of any outside noise.
@@ -7598,7 +7576,7 @@ INSERT INTO "public"."room" VALUES (83, 212, 1, 21, '{blu}C.O.F.O.B{/blu} - Nort
 ', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (778, 912, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (813, 947, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+INSERT INTO "public"."room" VALUES (813, 947, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (779, 913, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
 ', NULL, NULL, 1, 0, 'maintenance_guard-roaming-0', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
@@ -7608,106 +7586,88 @@ INSERT INTO "public"."room" VALUES (781, 915, 1, 0, '{blu}C.O.F.O.B{/blu} - Main
 ', NULL, NULL, 1, 0, 'maintenance_guard-roaming-2', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (782, 916, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
 ', NULL, NULL, 1, 0, 'maintenance_guard-roaming-3', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (777, 911, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (788, 922, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-2', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (789, 923, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-3', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (791, 925, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-5', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (775, 909, 1, 0, '{blu}C.O.F.O.B{/blu} - Equipment Inventory', 'Three huge lockers are attached to the wall, each with their own category of equipment. The most appalling detail is the haphazard array of bloodied medical equipment sitting on a nearby desk.
-', NULL, NULL, 1, 88, 'cofob-equipment-inventory', ',INSIDE,METAL_WALL,ROOFTOP,TILE');
-INSERT INTO "public"."room" VALUES (790, 924, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-4', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (787, 921, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-1', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (792, 926, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-6', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (793, 927, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-7', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (794, 928, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-8', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (795, 929, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-9', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (811, 945, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (783, 917, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
 ', NULL, NULL, 1, 0, 'maintenance_guard-roaming-4', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (787, 921, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-1', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (788, 922, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-2', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (789, 923, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-3', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (790, 924, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-4', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (791, 925, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-5', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (792, 926, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-6', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (793, 927, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-7', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (794, 928, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-8', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (795, 929, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-9', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (784, 918, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
 ', NULL, NULL, 1, 0, 'maintenance_guard-roaming-5', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (776, 910, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
-', NULL, NULL, 1, 0, 'orthos-spawn-sentinel-1', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (786, 920, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+INSERT INTO "public"."room" VALUES (786, 920, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
 ', NULL, NULL, 1, 0, 'maintenance-grunt-roaming-0', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (796, 930, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should wiped down due to the massive amount of grease, oil, and somehow blood. 
+INSERT INTO "public"."room" VALUES (796, 930, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should be wiped down because every part of your body that touches it becomes caked with filth.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (808, 942, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+INSERT INTO "public"."room" VALUES (798, 932, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should be wiped down because every part of your body that touches it becomes caked with filth.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (798, 932, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should wiped down due to the massive amount of grease, oil, and somehow blood. 
+INSERT INTO "public"."room" VALUES (799, 933, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should be wiped down because every part of your body that touches it becomes caked with filth.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (799, 933, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should wiped down due to the massive amount of grease, oil, and somehow blood. 
+INSERT INTO "public"."room" VALUES (800, 934, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should be wiped down because every part of your body that touches it becomes caked with filth.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (800, 934, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should wiped down due to the massive amount of grease, oil, and somehow blood. 
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (803, 937, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'hydro-proc-extremists-roaming-2', ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (804, 938, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'hydro-proc-extremists-roaming-3', ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (801, 935, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+INSERT INTO "public"."room" VALUES (801, 935, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
 ', NULL, NULL, 1, 0, 'hydro-proc-extremists-roaming-0', ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (802, 936, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+INSERT INTO "public"."room" VALUES (802, 936, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
 ', NULL, NULL, 1, 0, 'hydro-proc-extremists-roaming-1', ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (806, 940, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+INSERT INTO "public"."room" VALUES (803, 937, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'hydro-proc-extremists-roaming-2', ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (806, 940, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (807, 941, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+INSERT INTO "public"."room" VALUES (808, 942, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (807, 941, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
 ', NULL, NULL, 1, 0, 'hydro-proc-start-point', ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (809, 943, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+INSERT INTO "public"."room" VALUES (809, 943, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (810, 944, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+INSERT INTO "public"."room" VALUES (810, 944, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (812, 946, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
+INSERT INTO "public"."room" VALUES (812, 946, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
 ', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (814, 948, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (101, 230, 1, 0, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (20, 128, 1, 18, '{blu}C.O.F.O.B{/blu} - Equipment', 'Three huge lockers are attached to the wall, each with their own category of equipment. The most appalling detail is the haphazard array of bloodied medical equipment sitting on a nearby desk.
-', NULL, NULL, 0, 16, 'cofob-spawn-point-a', ',CEMENT,DAMP,INSIDE,OUTSIDE,ROOFTOP,SHALLOW_WATER');
-INSERT INTO "public"."room" VALUES (797, 931, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should wiped down due to the massive amount of grease, oil, and somehow blood. 
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (817, 951, 1, 0, '{blu}On Base{/blu} - Hydro-Processing - Terminal', 'A large proportion of the room consists of a locked down computer terminal with old hardware. But it doesn''t seem to be just old hardware: everything about it is built to withstand several attempts at trying to access the hardware inside. Things like the hard drives or the device in charge of the biometric interface. It''s been said that this terminal can survive several grenade blasts. As of yet, nobody has tried to compromise the  machine, but never say never.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (818, 952, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (819, 953, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (820, 954, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (821, 955, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (822, 956, 1, 0, '{blu}On Base{/blu} - Hydro-Processing - Terminal', 'A large proportion of the room consists of a locked down computer terminal with old hardware. But it doesn''t seem to be just old hardware: everything about it is built to withstand several attempts at trying to access the hardware inside. Things like the hard drives or the device in charge of the biometric interface. It''s been said that this terminal can survive several grenade blasts. As of yet, nobody has tried to compromise the  machine, but never say never.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (823, 957, 1, 0, '{blu}On Base{/blu} - Hydro-Processing - Terminal', 'A large proportion of the room consists of a locked down computer terminal with old hardware. But it doesn''t seem to be just old hardware: everything about it is built to withstand several attempts at trying to access the hardware inside. Things like the hard drives or the device in charge of the biometric interface. It''s been said that this terminal can survive several grenade blasts. As of yet, nobody has tried to compromise the  machine, but never say never.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (824, 958, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (825, 959, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (826, 960, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (827, 961, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (828, 962, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1236, 980, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
 ', NULL, NULL, 1, 0, NULL, ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
-INSERT INTO "public"."room" VALUES (816, 950, 1, 0, '{blu}On Base{/blu} - Hydro-Processing - Terminal', 'A large proportion of the room consists of a locked down computer terminal with old hardware. But it doesn''t seem to be just old hardware: everything about it is built to withstand several attempts at trying to access the hardware inside. Things like the hard drives or the device in charge of the biometric interface. It''s been said that this terminal can survive several grenade blasts. As of yet, nobody has tried to compromise the  machine, but never say never.
+INSERT INTO "public"."room" VALUES (101, 230, 1, 0, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (797, 931, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'The ladder is reinforced with large protroduing bolts on both sides. There are some points that need to be re-welded as the connections to the sturdiness of the wall seems to have been severed somehow. You notice that the ladder should be wiped down because every part of your body that touches it becomes caked with filth.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (814, 948, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (817, 951, 1, 0, '{blu}On Base{/blu} - Hydro-Processing - Terminal', 'The {grn}computer terminal{/grn} in front of you is the size of an arcade cabinet. There is a keyboard and a host of other controls. The computer is an old {grn}MXV-1200 Client Terminal{/grn} that connects to a remote RISC-V server. The screen background is black and in dull orange letters the phrase {red}LOCKED{/red} is displayed.
 ', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (805, 939, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'For as long as you can see (east and west), a blue, black, and green tubing the size of a small dog are pinned to the bottom north and south corners. It is noisey in here as whatever is inside that tubing is being fiercely pushed through.
-', NULL, NULL, 1, 0, 'hydro-proc-extremists-roaming-4', ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
-INSERT INTO "public"."room" VALUES (785, 919, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
-', NULL, NULL, 1, 0, 'maintenance_guard-roaming-6', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (818, 952, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (819, 953, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (820, 954, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (821, 955, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (822, 956, 1, 0, '{blu}On Base{/blu} - Hydro-Processing - Terminal', 'The {grn}computer terminal{/grn} in front of you is the size of an arcade cabinet. There is a keyboard and a host of other controls. The computer is an old {grn}MXV-1200 Client Terminal{/grn} that connects to a remote RISC-V server. The screen background is black and in dull orange letters the phrase {red}LOCKED{/red} is displayed.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (823, 957, 1, 0, '{blu}On Base{/blu} - Hydro-Processing - Terminal', 'The {grn}computer terminal{/grn} in front of you is the size of an arcade cabinet. There is a keyboard and a host of other controls. The computer is an old {grn}MXV-1200 Client Terminal{/grn} that connects to a remote RISC-V server. The screen background is black and in dull orange letters the phrase {red}LOCKED{/red} is displayed.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (824, 958, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (825, 959, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (826, 960, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (827, 961, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (828, 962, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,NARROW_EAST_WEST,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1221, 965, 1, 0, '{blu}Kojima{/blu} - Bridge - North', 'Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.
 ', NULL, NULL, 1, 0, NULL, ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
 INSERT INTO "public"."room" VALUES (1222, 966, 1, 0, '{blu}Kojima{/blu} - Bridge - North', 'Your body rocks side to side as you make your way over this bridge. The drop to the bottom of the canyon would be nothing short of fatal. The bridge seems to be reinforced with chain metal, and thick pieces of wood.
@@ -7740,6 +7700,8 @@ INSERT INTO "public"."room" VALUES (1275, 1019, 1, 0, '{blu}Kojima{/blu} - Bridg
 ', NULL, NULL, 1, 0, 'kojima-spawn-lancer-5', NULL);
 INSERT INTO "public"."room" VALUES (1235, 979, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
 ', NULL, NULL, 1, 0, 'kojima-bridge-northwest-1', ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
+INSERT INTO "public"."room" VALUES (805, 939, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'hydro-proc-extremists-roaming-4', ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
 INSERT INTO "public"."room" VALUES (1237, 981, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
 ', NULL, NULL, 1, 0, NULL, ',AIR,DAMP,FOREST,OUTSIDE,WOODEN_BRIDGE');
 INSERT INTO "public"."room" VALUES (1238, 982, 1, 0, '{blu}Kojima{/blu} - Bridge - North - Checkpoint', 'To the south, you can see a huge eccentric building of grey and red. You spot a few armed guards at what looks like a checkpoint. The bridge below your feet moves a little less than the one to the North. It''s likely there are camoflauged drones scanning your every move.
@@ -8174,6 +8136,54 @@ INSERT INTO "public"."room" VALUES (560, 689, 1, 0, '{blu}Metro{/blu} Henley Fou
 ', NULL, NULL, 1, 0, 'fountain-3', NULL);
 INSERT INTO "public"."room" VALUES (566, 695, 1, 0, '{blu}Metro{/blu} Henley Fountain', 'A tribute to the Henley Corporation, an elaborately crafted fountain was erected in the early stages of development of Downtwon Metro City. The water is cleaned several times before it''s recycled and spat back out. The fountain has a rectangular cement wall that keeps the water inside. There are elaborately chiseled patterns at the bottom of the pool and on the inner walls.
 ', NULL, NULL, 1, 0, 'fountain-5', NULL);
+INSERT INTO "public"."room" VALUES (1, 130, 1, 21, 'C.O.F.O.B - Hallway entrance', 'There is a single door here leading to the inner hallway of the FOB. From there, you can make your way to the different areas like the TRITON Laboratory, the kitchen, the engineering level, and the exit to the outlying city surrounding the FOB.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DAMP,INSIDE,ROOFTOP');
+INSERT INTO "public"."room" VALUES (2, 131, 1, 21, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
+', NULL, NULL, 1, 0, 'cofobcenter', ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (9, 138, 1, 21, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (98, 227, 1, 0, '{blu}C.O.F.O.B{/blu} - Southern Hallway', 'The southern hallway of the COFOB aligns exactly with a series of huge sewer pipes. Several years ago, a recruit went AWOL and hijacked a tank. He drove it through the southern hallway and other parts of the FOB. As a result, the sewage drains burst open and flooded the entire first level of the FOB. It is why the common nickname for the southern hallway is "el bano".
+', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (13, 142, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Decontamination', 'In order for the lab to maintain a clean and sterile atmosphere, a decontamination area was installed. That is the room you find yourself in. A station not unlike the body scanners you find at an airport sprays you up and down with a cool mist of chemicals. A vacuum below your feet sucks wind and your ears pop as various hidden but audible devices clamor to eliminate any hazardous bacteria.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (20, 128, 1, 18, '{blu}C.O.F.O.B{/blu} - Equipment', 'Three huge lockers are attached to the wall, each with their own category of equipment. The most appalling detail is the haphazard array of bloodied medical equipment sitting on a nearby desk.
+', NULL, NULL, 0, 16, 'cofob-spawn-point-a', ',CEMENT,DAMP,INSIDE,OUTSIDE,ROOFTOP,SHALLOW_WATER');
+INSERT INTO "public"."room" VALUES (775, 909, 1, 0, '{blu}C.O.F.O.B{/blu} - Equipment Inventory', 'Three huge lockers are attached to the wall, each with their own category of equipment. The most appalling detail is the haphazard array of bloodied medical equipment sitting on a nearby desk.
+', NULL, NULL, 1, 88, 'cofob-equipment-inventory', ',INSIDE,METAL_WALL,ROOFTOP,TILE');
+INSERT INTO "public"."room" VALUES (67, 196, 1, 21, '{blu}C.O.F.O.B{/blu} - East Hallway', 'Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (78, 207, 1, 21, '{blu}C.O.F.O.B{/blu} - Staircase', 'A remarkably plain staircase is here. The second floor of the FOB is home to the {yel}Engineering{/yel} team. Already you can tell that the air quality is much better upstairs.
+', NULL, NULL, 1, 0, 'cofob-stairs-A', ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (106, 235, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Atop the stairs', 'The computing industry has progressed to the point where every individual has their own computer in the palm of their hand. But those advances dont''t come without a cost. The engineering level of the FOB focusses on the invisible threat of state actors and the growing need for tighter security. 
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (128, 257, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Infrastructure Hallway', 'It''s almost comical how clean the engineering level of the FOB is compared to the lower levels. The carpet and walls are in a prestine -- no, IMMACULATE state. You almost feel like you should take off your shoes. The climate is controlled by a different air-conditioning system than the rest of the base. The room is cool and devoid of any outside noise.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (113, 242, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Threat Surveillance', 'There are a couple high profile incidents where law enforcement were locked out of the personal devices of a deceased criminal. A hard lesson in cryptography was learned that day. As a result, funding instead went into massive amounts of global surveillance and threat tracking. The advent of Artificial Intelligence gave another possible avenue: automated tracking. The {red}Threat Surveillance{/red} sector of the FOB is the most advanced and funded aspect of every FOB to date.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
+INSERT INTO "public"."room" VALUES (776, 910, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
+', NULL, NULL, 1, 0, 'orthos-spawn-sentinel-1', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (777, 911, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (785, 919, 1, 0, '{blu}C.O.F.O.B{/blu} - Maintenance', 'You make your way through the southern maintenance hallway. Your feet clank on the reinforced steel grating, except when you make contact with the solid metal portions which glue each segment together. There are heavily enforced windows about the size of a dinner plate every 10 feet. The red and orange stains of sand and soot stain the windows. 
+', NULL, NULL, 1, 0, 'maintenance_guard-roaming-6', ',INSIDE,METAL_WALL,ROOFTOP,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (804, 938, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, 'hydro-proc-extremists-roaming-3', ',INSIDE,METAL_WALL,NARROW_NORTH_SOUTH,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (811, 945, 1, 0, '{blu}On Base{/blu} - Hydro-Processing', 'Above you, halogen lights cast a dim blue light that makes things hard to see. You see the occasional hardcover book-sized control panel locked behind a circular key mechanism. For some reason, the walls seem to be covered with a thin layer of soot and damp layers of dust.
+', NULL, NULL, 1, 0, NULL, ',DAMP,INSIDE,METAL_HATCH,METAL_WALL,SEWER,TUNNEL,SHALLOW_WATER,NARROW_EAST_WEST,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (816, 950, 1, 0, '{blu}On Base{/blu} - Hydro-Processing - Terminal', 'The {grn}computer terminal{/grn} in front of you is the size of an arcade cabinet. There is a keyboard and a host of other controls. The computer is an old {grn}MXV-1200 Client Terminal{/grn} that connects to a remote RISC-V server. The screen background is black and in dull orange letters the phrase {red}LOCKED{/red} is displayed.
+', NULL, NULL, 1, 0, NULL, ',INSIDE,METAL_WALL,SERVER_ROOM,NARROW_NORTH_SOUTH,METAL_FLOORS');
+INSERT INTO "public"."room" VALUES (448, 576, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'Prior to the installation of the FOB, the residents of Abbot City had no source of cheap and subsidized pharmaceuticals. The FOB created jobs and opportunities that would never be possible prior to it''s existence. Ironically, the FOB also brought more danger and resentment from the extremist sect of the local religion. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,GLASS_WINDOWS,INSIDE,ROOFTOP');
+INSERT INTO "public"."room" VALUES (449, 577, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'Prior to the installation of the FOB, the residents of Abbot City had no source of cheap and subsidized pharmaceuticals. The FOB created jobs and opportunities that would never be possible prior to it''s existence. Ironically, the FOB also brought more danger and resentment from the extremist sect of the local religion. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,GLASS_WINDOWS,INSIDE,ROOFTOP');
+INSERT INTO "public"."room" VALUES (450, 578, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'Prior to the installation of the FOB, the residents of Abbot City had no source of cheap and subsidized pharmaceuticals. The FOB created jobs and opportunities that would never be possible prior to it''s existence. Ironically, the FOB also brought more danger and resentment from the extremist sect of the local religion. 
+', NULL, NULL, 1, 0, 'allied-foods-pharmacy-bend', ',CARPET,GLASS_WINDOWS,INSIDE,ROOFTOP');
+INSERT INTO "public"."room" VALUES (451, 579, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'Prior to the installation of the FOB, the residents of Abbot City had no source of cheap and subsidized pharmaceuticals. The FOB created jobs and opportunities that would never be possible prior to it''s existence. Ironically, the FOB also brought more danger and resentment from the extremist sect of the local religion. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,GLASS_WINDOWS,INSIDE,ROOFTOP');
+INSERT INTO "public"."room" VALUES (452, 580, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'Prior to the installation of the FOB, the residents of Abbot City had no source of cheap and subsidized pharmaceuticals. The FOB created jobs and opportunities that would never be possible prior to it''s existence. Ironically, the FOB also brought more danger and resentment from the extremist sect of the local religion. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,GLASS_WINDOWS,INSIDE,ROOFTOP');
+INSERT INTO "public"."room" VALUES (453, 581, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'Prior to the installation of the FOB, the residents of Abbot City had no source of cheap and subsidized pharmaceuticals. The FOB created jobs and opportunities that would never be possible prior to it''s existence. Ironically, the FOB also brought more danger and resentment from the extremist sect of the local religion. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,GLASS_WINDOWS,INSIDE,ROOFTOP');
 
 
 --
@@ -12318,6 +12328,246 @@ INSERT INTO "public"."room_direction_data" VALUES (4710, 695, 0, 'general_descri
 INSERT INTO "public"."room_direction_data" VALUES (4711, 695, 1, 'general_description', 'keyword', 1, 0, 700);
 INSERT INTO "public"."room_direction_data" VALUES (4712, 695, 2, 'general_description', 'keyword', 1, 0, 750);
 INSERT INTO "public"."room_direction_data" VALUES (4713, 695, 3, 'general description', 'keyword', 1, 0, 694);
+INSERT INTO "public"."room_direction_data" VALUES (4714, 128, 0, 'general_description', 'keyword', 1, 0, 130);
+INSERT INTO "public"."room_direction_data" VALUES (4715, 128, 2, 'general_description', 'keyword', 1, 0, 910);
+INSERT INTO "public"."room_direction_data" VALUES (4716, 130, 0, 'general_description', 'keyword', 1, 0, 131);
+INSERT INTO "public"."room_direction_data" VALUES (4717, 130, 2, 'general description', 'keyword', 1, 0, 128);
+INSERT INTO "public"."room_direction_data" VALUES (4718, 131, 1, 'general_description', 'keyword', 1, 0, 138);
+INSERT INTO "public"."room_direction_data" VALUES (4719, 131, 2, 'general description', 'keyword', 1, 0, 130);
+INSERT INTO "public"."room_direction_data" VALUES (4720, 131, 3, 'general description', 'keyword', 1, 0, 231);
+INSERT INTO "public"."room_direction_data" VALUES (4721, 138, 1, 'general_description', 'keyword', 1, 0, 139);
+INSERT INTO "public"."room_direction_data" VALUES (4722, 138, 3, 'general description', 'keyword', 1, 0, 131);
+INSERT INTO "public"."room_direction_data" VALUES (4723, 139, 0, 'general_description', 'keyword', 1, 0, 140);
+INSERT INTO "public"."room_direction_data" VALUES (4724, 139, 3, 'general description', 'keyword', 1, 0, 138);
+INSERT INTO "public"."room_direction_data" VALUES (4725, 231, 1, 'general description', 'keyword', 1, 0, 131);
+INSERT INTO "public"."room_direction_data" VALUES (4726, 231, 3, 'general description', 'keyword', 1, 0, 230);
+INSERT INTO "public"."room_direction_data" VALUES (4727, 230, 0, 'general_description', 'keyword', 1, 0, 909);
+INSERT INTO "public"."room_direction_data" VALUES (4728, 230, 1, 'general_description', 'keyword', 1, 0, 231);
+INSERT INTO "public"."room_direction_data" VALUES (4729, 230, 3, 'general description', 'keyword', 1, 0, 229);
+INSERT INTO "public"."room_direction_data" VALUES (4730, 229, 1, 'general_description', 'keyword', 1, 0, 230);
+INSERT INTO "public"."room_direction_data" VALUES (4731, 229, 3, 'general description', 'keyword', 1, 0, 228);
+INSERT INTO "public"."room_direction_data" VALUES (4732, 228, 1, 'general_description', 'keyword', 1, 0, 229);
+INSERT INTO "public"."room_direction_data" VALUES (4733, 228, 3, 'general description', 'keyword', 1, 0, 227);
+INSERT INTO "public"."room_direction_data" VALUES (4734, 227, 1, 'general_description', 'keyword', 1, 0, 228);
+INSERT INTO "public"."room_direction_data" VALUES (4735, 227, 3, 'general description', 'keyword', 1, 0, 226);
+INSERT INTO "public"."room_direction_data" VALUES (4736, 226, 0, 'general description', 'keyword', 1, 0, 225);
+INSERT INTO "public"."room_direction_data" VALUES (4737, 226, 1, 'general_description', 'keyword', 1, 0, 227);
+INSERT INTO "public"."room_direction_data" VALUES (4738, 139, 0, 'general_description', 'keyword', 1, 0, 140);
+INSERT INTO "public"."room_direction_data" VALUES (4739, 139, 3, 'general description', 'keyword', 1, 0, 138);
+INSERT INTO "public"."room_direction_data" VALUES (4740, 140, 0, 'general_description', 'keyword', 1, 0, 141);
+INSERT INTO "public"."room_direction_data" VALUES (4741, 140, 2, 'general description', 'keyword', 1, 0, 139);
+INSERT INTO "public"."room_direction_data" VALUES (4742, 141, 0, 'general_description', 'keyword', 1, 0, 193);
+INSERT INTO "public"."room_direction_data" VALUES (4743, 141, 1, 'general_description', 'keyword', 1, 0, 142);
+INSERT INTO "public"."room_direction_data" VALUES (4744, 141, 2, 'general description', 'keyword', 1, 0, 140);
+INSERT INTO "public"."room_direction_data" VALUES (4745, 142, 1, 'general_description', 'keyword', 1, 0, 143);
+INSERT INTO "public"."room_direction_data" VALUES (4746, 142, 3, 'general description', 'keyword', 1, 0, 141);
+INSERT INTO "public"."room_direction_data" VALUES (4747, 143, 0, 'general_description', 'keyword', 1, 0, 144);
+INSERT INTO "public"."room_direction_data" VALUES (4748, 143, 1, 'general_description', 'keyword', 1, 0, 146);
+INSERT INTO "public"."room_direction_data" VALUES (4749, 143, 2, 'general_description', 'keyword', 1, 0, 145);
+INSERT INTO "public"."room_direction_data" VALUES (4750, 143, 3, 'general description', 'keyword', 1, 0, 142);
+INSERT INTO "public"."room_direction_data" VALUES (4751, 146, 1, 'general_description', 'keyword', 1, 0, 147);
+INSERT INTO "public"."room_direction_data" VALUES (4752, 146, 3, 'general description', 'keyword', 1, 0, 143);
+INSERT INTO "public"."room_direction_data" VALUES (4753, 147, 3, 'general description', 'keyword', 1, 0, 146);
+INSERT INTO "public"."room_direction_data" VALUES (4754, 147, 5, 'general_description', 'keyword', 1, 0, 148);
+INSERT INTO "public"."room_direction_data" VALUES (4755, 144, 2, 'general description', 'keyword', 1, 0, 143);
+INSERT INTO "public"."room_direction_data" VALUES (4756, 145, 0, 'general description', 'keyword', 1, 0, 143);
+INSERT INTO "public"."room_direction_data" VALUES (4757, 128, 0, 'general_description', 'keyword', 1, 0, 130);
+INSERT INTO "public"."room_direction_data" VALUES (4758, 128, 2, 'general_description', 'keyword', 1, 0, 910);
+INSERT INTO "public"."room_direction_data" VALUES (4759, 909, 2, 'general description', 'door', 3, 0, 230);
+INSERT INTO "public"."room_direction_data" VALUES (4760, 193, 0, 'general_description', 'keyword', 1, 0, 194);
+INSERT INTO "public"."room_direction_data" VALUES (4761, 193, 2, 'general description', 'keyword', 1, 0, 141);
+INSERT INTO "public"."room_direction_data" VALUES (4762, 194, 0, 'general_description', 'keyword', 1, 0, 195);
+INSERT INTO "public"."room_direction_data" VALUES (4763, 194, 2, 'general description', 'keyword', 1, 0, 193);
+INSERT INTO "public"."room_direction_data" VALUES (4764, 195, 0, 'general_description', 'keyword', 1, 0, 196);
+INSERT INTO "public"."room_direction_data" VALUES (4765, 195, 2, 'general description', 'keyword', 1, 0, 194);
+INSERT INTO "public"."room_direction_data" VALUES (4766, 196, 0, 'general_description', 'keyword', 1, 0, 197);
+INSERT INTO "public"."room_direction_data" VALUES (4767, 196, 2, 'general description', 'keyword', 1, 0, 195);
+INSERT INTO "public"."room_direction_data" VALUES (4768, 197, 0, 'general_description', 'keyword', 1, 0, 198);
+INSERT INTO "public"."room_direction_data" VALUES (4769, 197, 2, 'general description', 'keyword', 1, 0, 196);
+INSERT INTO "public"."room_direction_data" VALUES (4770, 198, 0, 'general_description', 'keyword', 1, 0, 199);
+INSERT INTO "public"."room_direction_data" VALUES (4771, 198, 2, 'general description', 'keyword', 1, 0, 197);
+INSERT INTO "public"."room_direction_data" VALUES (4772, 200, 0, 'general_description', 'keyword', 1, 0, 201);
+INSERT INTO "public"."room_direction_data" VALUES (4773, 200, 2, 'general description', 'keyword', 1, 0, 199);
+INSERT INTO "public"."room_direction_data" VALUES (4774, 201, 0, 'general_description', 'keyword', 1, 0, 202);
+INSERT INTO "public"."room_direction_data" VALUES (4775, 201, 2, 'general description', 'keyword', 1, 0, 200);
+INSERT INTO "public"."room_direction_data" VALUES (4776, 202, 0, 'general_description', 'keyword', 1, 0, 203);
+INSERT INTO "public"."room_direction_data" VALUES (4777, 202, 2, 'general description', 'keyword', 1, 0, 201);
+INSERT INTO "public"."room_direction_data" VALUES (4778, 202, 3, 'general_description', 'keyword', 1, 0, 340);
+INSERT INTO "public"."room_direction_data" VALUES (4779, 203, 0, 'general_description', 'keyword', 1, 0, 204);
+INSERT INTO "public"."room_direction_data" VALUES (4780, 203, 1, 'general_description', 'keyword', 1, 0, 265);
+INSERT INTO "public"."room_direction_data" VALUES (4781, 203, 2, 'general description', 'keyword', 1, 0, 202);
+INSERT INTO "public"."room_direction_data" VALUES (4782, 205, 1, 'general description', 'keyword', 1, 0, 204);
+INSERT INTO "public"."room_direction_data" VALUES (4783, 205, 3, 'general_description', 'keyword', 1, 0, 206);
+INSERT INTO "public"."room_direction_data" VALUES (4784, 206, 1, 'general description', 'keyword', 1, 0, 205);
+INSERT INTO "public"."room_direction_data" VALUES (4785, 206, 3, 'general_description', 'keyword', 1, 0, 207);
+INSERT INTO "public"."room_direction_data" VALUES (4786, 207, 0, 'general_description', 'keyword', 1, 0, 232);
+INSERT INTO "public"."room_direction_data" VALUES (4787, 207, 1, 'general description', 'keyword', 1, 0, 206);
+INSERT INTO "public"."room_direction_data" VALUES (4788, 207, 3, 'general_description', 'keyword', 1, 0, 208);
+INSERT INTO "public"."room_direction_data" VALUES (4789, 232, 2, 'general description', 'keyword', 1, 0, 207);
+INSERT INTO "public"."room_direction_data" VALUES (4790, 232, 4, 'general_description', 'keyword', 1, 0, 233);
+INSERT INTO "public"."room_direction_data" VALUES (4791, 233, 0, 'general_description', 'keyword', 1, 0, 234);
+INSERT INTO "public"."room_direction_data" VALUES (4792, 233, 5, 'general description', 'keyword', 1, 0, 232);
+INSERT INTO "public"."room_direction_data" VALUES (4793, 234, 2, 'general description', 'keyword', 1, 0, 233);
+INSERT INTO "public"."room_direction_data" VALUES (4794, 234, 4, 'general_description', 'keyword', 1, 0, 235);
+INSERT INTO "public"."room_direction_data" VALUES (4795, 235, 0, 'general_description', 'keyword', 1, 0, 236);
+INSERT INTO "public"."room_direction_data" VALUES (4796, 235, 5, 'general description', 'keyword', 1, 0, 234);
+INSERT INTO "public"."room_direction_data" VALUES (4797, 236, 0, 'general_description', 'keyword', 1, 0, 237);
+INSERT INTO "public"."room_direction_data" VALUES (4798, 236, 2, 'general description', 'keyword', 1, 0, 235);
+INSERT INTO "public"."room_direction_data" VALUES (4799, 237, 0, 'general_description', 'keyword', 1, 0, 243);
+INSERT INTO "public"."room_direction_data" VALUES (4800, 237, 1, 'general_description', 'keyword', 1, 0, 253);
+INSERT INTO "public"."room_direction_data" VALUES (4801, 237, 2, 'general description', 'keyword', 1, 0, 236);
+INSERT INTO "public"."room_direction_data" VALUES (4802, 237, 3, 'general_description', 'keyword', 1, 0, 238);
+INSERT INTO "public"."room_direction_data" VALUES (4803, 253, 1, 'general_description', 'keyword', 1, 0, 254);
+INSERT INTO "public"."room_direction_data" VALUES (4804, 253, 3, 'general description', 'keyword', 1, 0, 237);
+INSERT INTO "public"."room_direction_data" VALUES (4805, 254, 1, 'general_description', 'keyword', 1, 0, 255);
+INSERT INTO "public"."room_direction_data" VALUES (4806, 254, 3, 'general description', 'keyword', 1, 0, 253);
+INSERT INTO "public"."room_direction_data" VALUES (4807, 255, 1, 'general_description', 'keyword', 1, 0, 256);
+INSERT INTO "public"."room_direction_data" VALUES (4808, 255, 3, 'general description', 'keyword', 1, 0, 254);
+INSERT INTO "public"."room_direction_data" VALUES (4809, 256, 0, 'general_description', 'keyword', 1, 0, 258);
+INSERT INTO "public"."room_direction_data" VALUES (4810, 256, 1, 'general_description', 'keyword', 1, 0, 257);
+INSERT INTO "public"."room_direction_data" VALUES (4811, 256, 3, 'general description', 'keyword', 1, 0, 255);
+INSERT INTO "public"."room_direction_data" VALUES (4812, 257, 3, 'general description', 'keyword', 1, 0, 256);
+INSERT INTO "public"."room_direction_data" VALUES (4813, 238, 1, 'general description', 'keyword', 1, 0, 237);
+INSERT INTO "public"."room_direction_data" VALUES (4814, 238, 3, 'general_description', 'keyword', 1, 0, 239);
+INSERT INTO "public"."room_direction_data" VALUES (4815, 239, 1, 'general description', 'keyword', 1, 0, 238);
+INSERT INTO "public"."room_direction_data" VALUES (4816, 239, 3, 'general_description', 'keyword', 1, 0, 240);
+INSERT INTO "public"."room_direction_data" VALUES (4817, 240, 1, 'general description', 'keyword', 1, 0, 239);
+INSERT INTO "public"."room_direction_data" VALUES (4818, 240, 3, 'general_description', 'keyword', 1, 0, 241);
+INSERT INTO "public"."room_direction_data" VALUES (4819, 241, 1, 'general description', 'keyword', 1, 0, 240);
+INSERT INTO "public"."room_direction_data" VALUES (4820, 241, 3, 'general_description', 'keyword', 1, 0, 242);
+INSERT INTO "public"."room_direction_data" VALUES (4821, 242, 1, 'general description', 'keyword', 1, 0, 241);
+INSERT INTO "public"."room_direction_data" VALUES (4822, 204, 2, 'general description', 'keyword', 1, 0, 203);
+INSERT INTO "public"."room_direction_data" VALUES (4823, 204, 3, 'general_description', 'keyword', 1, 0, 205);
+INSERT INTO "public"."room_direction_data" VALUES (4824, 208, 1, 'general description', 'keyword', 1, 0, 207);
+INSERT INTO "public"."room_direction_data" VALUES (4825, 208, 3, 'general_description', 'keyword', 1, 0, 209);
+INSERT INTO "public"."room_direction_data" VALUES (4826, 209, 1, 'general description', 'keyword', 1, 0, 208);
+INSERT INTO "public"."room_direction_data" VALUES (4827, 209, 3, 'general_description', 'keyword', 1, 0, 210);
+INSERT INTO "public"."room_direction_data" VALUES (4828, 210, 1, 'general description', 'keyword', 1, 0, 209);
+INSERT INTO "public"."room_direction_data" VALUES (4829, 210, 3, 'general_description', 'keyword', 1, 0, 211);
+INSERT INTO "public"."room_direction_data" VALUES (4830, 211, 1, 'general description', 'keyword', 1, 0, 210);
+INSERT INTO "public"."room_direction_data" VALUES (4831, 211, 3, 'general_description', 'keyword', 1, 0, 212);
+INSERT INTO "public"."room_direction_data" VALUES (4832, 212, 1, 'general description', 'keyword', 1, 0, 211);
+INSERT INTO "public"."room_direction_data" VALUES (4833, 212, 2, 'general_description', 'keyword', 1, 0, 213);
+INSERT INTO "public"."room_direction_data" VALUES (4834, 910, 0, 'general description', 'keyword', 1, 0, 128);
+INSERT INTO "public"."room_direction_data" VALUES (4835, 910, 2, 'general_description', 'keyword', 1, 0, 911);
+INSERT INTO "public"."room_direction_data" VALUES (4836, 911, 0, 'general description', 'keyword', 1, 0, 910);
+INSERT INTO "public"."room_direction_data" VALUES (4837, 911, 2, 'general_description', 'keyword', 1, 0, 912);
+INSERT INTO "public"."room_direction_data" VALUES (4838, 912, 0, 'general description', 'keyword', 1, 0, 911);
+INSERT INTO "public"."room_direction_data" VALUES (4839, 912, 2, 'general_description', 'keyword', 1, 0, 913);
+INSERT INTO "public"."room_direction_data" VALUES (4840, 912, 3, 'general_description', 'keyword', 1, 0, 920);
+INSERT INTO "public"."room_direction_data" VALUES (4841, 913, 0, 'general description', 'keyword', 1, 0, 912);
+INSERT INTO "public"."room_direction_data" VALUES (4842, 913, 2, 'general_description', 'keyword', 1, 0, 914);
+INSERT INTO "public"."room_direction_data" VALUES (4843, 914, 0, 'general description', 'keyword', 1, 0, 913);
+INSERT INTO "public"."room_direction_data" VALUES (4844, 914, 2, 'general_description', 'keyword', 1, 0, 915);
+INSERT INTO "public"."room_direction_data" VALUES (4845, 915, 0, 'general description', 'keyword', 1, 0, 914);
+INSERT INTO "public"."room_direction_data" VALUES (4846, 915, 2, 'general_description', 'keyword', 1, 0, 916);
+INSERT INTO "public"."room_direction_data" VALUES (4847, 916, 0, 'general description', 'keyword', 1, 0, 915);
+INSERT INTO "public"."room_direction_data" VALUES (4848, 916, 2, 'general_description', 'keyword', 1, 0, 917);
+INSERT INTO "public"."room_direction_data" VALUES (4849, 917, 0, 'general description', 'keyword', 1, 0, 916);
+INSERT INTO "public"."room_direction_data" VALUES (4850, 917, 2, 'general_description', 'keyword', 1, 0, 918);
+INSERT INTO "public"."room_direction_data" VALUES (4851, 918, 0, 'general description', 'keyword', 1, 0, 917);
+INSERT INTO "public"."room_direction_data" VALUES (4852, 918, 2, 'general_description', 'keyword', 1, 0, 919);
+INSERT INTO "public"."room_direction_data" VALUES (4853, 919, 0, 'general description', 'keyword', 1, 0, 918);
+INSERT INTO "public"."room_direction_data" VALUES (4854, 919, 1, 'general_description', 'keyword', 1, 0, 965);
+INSERT INTO "public"."room_direction_data" VALUES (4855, 920, 1, 'general description', 'keyword', 1, 0, 912);
+INSERT INTO "public"."room_direction_data" VALUES (4856, 920, 3, 'general_description', 'keyword', 1, 0, 921);
+INSERT INTO "public"."room_direction_data" VALUES (4857, 921, 1, 'general description', 'keyword', 1, 0, 920);
+INSERT INTO "public"."room_direction_data" VALUES (4858, 921, 3, 'general_description', 'keyword', 1, 0, 922);
+INSERT INTO "public"."room_direction_data" VALUES (4859, 921, 5, 'general_description', 'keyword', 1, 0, 930);
+INSERT INTO "public"."room_direction_data" VALUES (4860, 922, 1, 'general description', 'keyword', 1, 0, 921);
+INSERT INTO "public"."room_direction_data" VALUES (4861, 922, 3, 'general_description', 'keyword', 1, 0, 923);
+INSERT INTO "public"."room_direction_data" VALUES (4862, 923, 1, 'general description', 'keyword', 1, 0, 922);
+INSERT INTO "public"."room_direction_data" VALUES (4863, 923, 3, 'general_description', 'keyword', 1, 0, 924);
+INSERT INTO "public"."room_direction_data" VALUES (4864, 924, 1, 'general description', 'keyword', 1, 0, 923);
+INSERT INTO "public"."room_direction_data" VALUES (4865, 924, 3, 'general_description', 'keyword', 1, 0, 925);
+INSERT INTO "public"."room_direction_data" VALUES (4866, 925, 1, 'general description', 'keyword', 1, 0, 924);
+INSERT INTO "public"."room_direction_data" VALUES (4867, 925, 3, 'general_description', 'keyword', 1, 0, 926);
+INSERT INTO "public"."room_direction_data" VALUES (4868, 926, 1, 'general description', 'keyword', 1, 0, 925);
+INSERT INTO "public"."room_direction_data" VALUES (4869, 926, 3, 'general_description', 'keyword', 1, 0, 927);
+INSERT INTO "public"."room_direction_data" VALUES (4870, 927, 1, 'general description', 'keyword', 1, 0, 926);
+INSERT INTO "public"."room_direction_data" VALUES (4871, 927, 3, 'general_description', 'keyword', 1, 0, 928);
+INSERT INTO "public"."room_direction_data" VALUES (4872, 928, 1, 'general description', 'keyword', 1, 0, 927);
+INSERT INTO "public"."room_direction_data" VALUES (4873, 928, 3, 'general_description', 'keyword', 1, 0, 929);
+INSERT INTO "public"."room_direction_data" VALUES (4874, 929, 1, 'general description', 'keyword', 1, 0, 928);
+INSERT INTO "public"."room_direction_data" VALUES (4875, 930, 4, 'general description', 'keyword', 1, 0, 921);
+INSERT INTO "public"."room_direction_data" VALUES (4876, 930, 5, 'general_description', 'keyword', 1, 0, 931);
+INSERT INTO "public"."room_direction_data" VALUES (4877, 931, 4, 'general description', 'keyword', 1, 0, 930);
+INSERT INTO "public"."room_direction_data" VALUES (4878, 931, 5, 'general_description', 'keyword', 1, 0, 932);
+INSERT INTO "public"."room_direction_data" VALUES (4879, 932, 4, 'general description', 'keyword', 1, 0, 931);
+INSERT INTO "public"."room_direction_data" VALUES (4880, 932, 5, 'general_description', 'keyword', 1, 0, 933);
+INSERT INTO "public"."room_direction_data" VALUES (4881, 933, 4, 'general description', 'keyword', 1, 0, 932);
+INSERT INTO "public"."room_direction_data" VALUES (4882, 933, 5, 'general_description', 'keyword', 1, 0, 934);
+INSERT INTO "public"."room_direction_data" VALUES (4883, 934, 2, 'general_description', 'keyword', 1, 0, 935);
+INSERT INTO "public"."room_direction_data" VALUES (4884, 934, 4, 'general description', 'keyword', 1, 0, 933);
+INSERT INTO "public"."room_direction_data" VALUES (4885, 935, 0, 'general description', 'keyword', 1, 0, 934);
+INSERT INTO "public"."room_direction_data" VALUES (4886, 935, 2, 'general_description', 'keyword', 1, 0, 936);
+INSERT INTO "public"."room_direction_data" VALUES (4887, 936, 0, 'general description', 'keyword', 1, 0, 935);
+INSERT INTO "public"."room_direction_data" VALUES (4888, 936, 2, 'general_description', 'keyword', 1, 0, 937);
+INSERT INTO "public"."room_direction_data" VALUES (4889, 937, 0, 'general description', 'keyword', 1, 0, 936);
+INSERT INTO "public"."room_direction_data" VALUES (4890, 937, 2, 'general_description', 'keyword', 1, 0, 938);
+INSERT INTO "public"."room_direction_data" VALUES (4891, 938, 0, 'general description', 'keyword', 1, 0, 937);
+INSERT INTO "public"."room_direction_data" VALUES (4892, 938, 2, 'general_description', 'keyword', 1, 0, 939);
+INSERT INTO "public"."room_direction_data" VALUES (4893, 939, 0, 'general description', 'keyword', 1, 0, 938);
+INSERT INTO "public"."room_direction_data" VALUES (4894, 939, 3, 'general_description', 'keyword', 1, 0, 940);
+INSERT INTO "public"."room_direction_data" VALUES (4895, 940, 1, 'general description', 'keyword', 1, 0, 939);
+INSERT INTO "public"."room_direction_data" VALUES (4896, 940, 3, 'general_description', 'keyword', 1, 0, 941);
+INSERT INTO "public"."room_direction_data" VALUES (4897, 941, 1, 'general description', 'keyword', 1, 0, 940);
+INSERT INTO "public"."room_direction_data" VALUES (4898, 941, 3, 'general_description', 'keyword', 1, 0, 942);
+INSERT INTO "public"."room_direction_data" VALUES (4899, 941, 1, 'general description', 'keyword', 1, 0, 940);
+INSERT INTO "public"."room_direction_data" VALUES (4900, 941, 3, 'general_description', 'keyword', 1, 0, 942);
+INSERT INTO "public"."room_direction_data" VALUES (4901, 942, 1, 'general description', 'keyword', 1, 0, 941);
+INSERT INTO "public"."room_direction_data" VALUES (4902, 942, 3, 'general_description', 'keyword', 1, 0, 943);
+INSERT INTO "public"."room_direction_data" VALUES (4903, 943, 1, 'general description', 'keyword', 1, 0, 942);
+INSERT INTO "public"."room_direction_data" VALUES (4904, 943, 3, 'general_description', 'keyword', 1, 0, 944);
+INSERT INTO "public"."room_direction_data" VALUES (4905, 944, 1, 'general description', 'keyword', 1, 0, 943);
+INSERT INTO "public"."room_direction_data" VALUES (4906, 944, 3, 'general_description', 'keyword', 1, 0, 945);
+INSERT INTO "public"."room_direction_data" VALUES (4907, 945, 1, 'general description', 'keyword', 1, 0, 944);
+INSERT INTO "public"."room_direction_data" VALUES (4908, 945, 3, 'general_description', 'keyword', 1, 0, 946);
+INSERT INTO "public"."room_direction_data" VALUES (4909, 946, 1, 'general description', 'keyword', 1, 0, 945);
+INSERT INTO "public"."room_direction_data" VALUES (4910, 946, 3, 'general_description', 'keyword', 1, 0, 947);
+INSERT INTO "public"."room_direction_data" VALUES (4911, 947, 1, 'general description', 'keyword', 1, 0, 946);
+INSERT INTO "public"."room_direction_data" VALUES (4912, 947, 3, 'general_description', 'keyword', 1, 0, 948);
+INSERT INTO "public"."room_direction_data" VALUES (4913, 948, 1, 'general description', 'keyword', 1, 0, 947);
+INSERT INTO "public"."room_direction_data" VALUES (4914, 948, 3, 'general_description', 'keyword', 1, 0, 949);
+INSERT INTO "public"."room_direction_data" VALUES (4915, 949, 0, 'general_description', 'keyword', 1, 0, 950);
+INSERT INTO "public"."room_direction_data" VALUES (4916, 949, 1, 'general description', 'keyword', 1, 0, 948);
+INSERT INTO "public"."room_direction_data" VALUES (4917, 949, 2, 'general_description', 'keyword', 1, 0, 951);
+INSERT INTO "public"."room_direction_data" VALUES (4918, 949, 3, 'general_description', 'keyword', 1, 0, 952);
+INSERT INTO "public"."room_direction_data" VALUES (4919, 950, 2, 'general description', 'keyword', 1, 0, 949);
+INSERT INTO "public"."room_direction_data" VALUES (4920, 951, 0, 'general description', 'keyword', 1, 0, 949);
+INSERT INTO "public"."room_direction_data" VALUES (4921, 952, 1, 'general description', 'keyword', 1, 0, 949);
+INSERT INTO "public"."room_direction_data" VALUES (4922, 952, 3, 'general_description', 'keyword', 1, 0, 953);
+INSERT INTO "public"."room_direction_data" VALUES (4923, 953, 0, 'general_description', 'keyword', 1, 0, 956);
+INSERT INTO "public"."room_direction_data" VALUES (4924, 953, 1, 'general description', 'keyword', 1, 0, 952);
+INSERT INTO "public"."room_direction_data" VALUES (4925, 953, 2, 'general_description', 'keyword', 1, 0, 957);
+INSERT INTO "public"."room_direction_data" VALUES (4926, 953, 3, 'general_description', 'keyword', 1, 0, 954);
+INSERT INTO "public"."room_direction_data" VALUES (4927, 954, 1, 'general description', 'keyword', 1, 0, 953);
+INSERT INTO "public"."room_direction_data" VALUES (4928, 954, 3, 'general_description', 'keyword', 1, 0, 955);
+INSERT INTO "public"."room_direction_data" VALUES (4929, 955, 0, 'general_description', 'keyword', 1, 0, 958);
+INSERT INTO "public"."room_direction_data" VALUES (4930, 955, 1, 'general description', 'keyword', 1, 0, 954);
+INSERT INTO "public"."room_direction_data" VALUES (4931, 956, 2, 'general description', 'keyword', 1, 0, 953);
+INSERT INTO "public"."room_direction_data" VALUES (4932, 957, 0, 'general description', 'keyword', 1, 0, 953);
+INSERT INTO "public"."room_direction_data" VALUES (4933, 958, 0, 'general_description', 'keyword', 1, 0, 959);
+INSERT INTO "public"."room_direction_data" VALUES (4934, 958, 2, 'general description', 'keyword', 1, 0, 955);
+INSERT INTO "public"."room_direction_data" VALUES (4935, 959, 2, 'general description', 'keyword', 1, 0, 958);
+INSERT INTO "public"."room_direction_data" VALUES (4936, 959, 3, 'general_description', 'keyword', 1, 0, 960);
+INSERT INTO "public"."room_direction_data" VALUES (4937, 960, 1, 'general description', 'keyword', 1, 0, 959);
+INSERT INTO "public"."room_direction_data" VALUES (4938, 960, 3, 'general_description', 'keyword', 1, 0, 961);
+INSERT INTO "public"."room_direction_data" VALUES (4939, 961, 1, 'general description', 'keyword', 1, 0, 960);
+INSERT INTO "public"."room_direction_data" VALUES (4940, 961, 3, 'general_description', 'keyword', 1, 0, 962);
+INSERT INTO "public"."room_direction_data" VALUES (4941, 962, 1, 'general description', 'keyword', 1, 0, 961);
+INSERT INTO "public"."room_direction_data" VALUES (4942, 576, 1, 'general_description', 'keyword', 1, 0, 577);
+INSERT INTO "public"."room_direction_data" VALUES (4943, 576, 3, 'general description', 'keyword', 1, 0, 575);
+INSERT INTO "public"."room_direction_data" VALUES (4944, 577, 1, 'general_description', 'keyword', 1, 0, 578);
+INSERT INTO "public"."room_direction_data" VALUES (4945, 577, 3, 'general description', 'keyword', 1, 0, 576);
+INSERT INTO "public"."room_direction_data" VALUES (4946, 578, 0, 'general_description', 'keyword', 1, 0, 579);
+INSERT INTO "public"."room_direction_data" VALUES (4947, 578, 1, 'general_description', 'keyword', 1, 0, 582);
+INSERT INTO "public"."room_direction_data" VALUES (4948, 578, 3, 'general description', 'keyword', 1, 0, 577);
+INSERT INTO "public"."room_direction_data" VALUES (4949, 579, 0, 'general_description', 'keyword', 1, 0, 580);
+INSERT INTO "public"."room_direction_data" VALUES (4950, 579, 2, 'general description', 'keyword', 1, 0, 578);
+INSERT INTO "public"."room_direction_data" VALUES (4951, 580, 0, 'general_description', 'keyword', 1, 0, 581);
+INSERT INTO "public"."room_direction_data" VALUES (4952, 580, 2, 'general description', 'keyword', 1, 0, 579);
+INSERT INTO "public"."room_direction_data" VALUES (4953, 581, 2, 'general description', 'keyword', 1, 0, 580);
 
 
 --
@@ -13028,6 +13278,43 @@ INSERT INTO "public"."zone_mob" VALUES (220, 774, 119, 9);
 INSERT INTO "public"."zone_mob" VALUES (221, 779, 119, 9);
 INSERT INTO "public"."zone_mob" VALUES (222, 784, 119, 9);
 INSERT INTO "public"."zone_mob" VALUES (223, 666, 666, 1);
+INSERT INTO "public"."zone_mob" VALUES (229, 909, 112, 1);
+INSERT INTO "public"."zone_mob" VALUES (230, 909, 113, 3);
+INSERT INTO "public"."zone_mob" VALUES (231, 909, 112, 1);
+INSERT INTO "public"."zone_mob" VALUES (232, 909, 113, 3);
+INSERT INTO "public"."zone_mob" VALUES (233, 1005, 715, 1);
+INSERT INTO "public"."zone_mob" VALUES (234, 1011, 715, 1);
+INSERT INTO "public"."zone_mob" VALUES (235, 973, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (236, 983, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (237, 1015, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (238, 1017, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (239, 1019, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (240, 1023, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (241, 1028, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (242, 1034, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (243, 1056, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (244, 1063, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (245, 1072, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (246, 1078, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (247, 1080, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (248, 1089, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (249, 1094, 714, 1);
+INSERT INTO "public"."zone_mob" VALUES (250, 970, 713, 1);
+INSERT INTO "public"."zone_mob" VALUES (251, 1013, 713, 1);
+INSERT INTO "public"."zone_mob" VALUES (252, 1016, 713, 1);
+INSERT INTO "public"."zone_mob" VALUES (253, 1054, 713, 1);
+INSERT INTO "public"."zone_mob" VALUES (254, 1058, 713, 1);
+INSERT INTO "public"."zone_mob" VALUES (255, 1065, 713, 1);
+INSERT INTO "public"."zone_mob" VALUES (256, 1071, 713, 1);
+INSERT INTO "public"."zone_mob" VALUES (257, 1091, 713, 1);
+INSERT INTO "public"."zone_mob" VALUES (258, 1093, 713, 1);
+INSERT INTO "public"."zone_mob" VALUES (259, 1103, 713, 1);
+INSERT INTO "public"."zone_mob" VALUES (260, 979, 716, 1);
+INSERT INTO "public"."zone_mob" VALUES (261, 1036, 716, 1);
+INSERT INTO "public"."zone_mob" VALUES (262, 1039, 716, 1);
+INSERT INTO "public"."zone_mob" VALUES (263, 1046, 716, 1);
+INSERT INTO "public"."zone_mob" VALUES (264, 1049, 716, 1);
+INSERT INTO "public"."zone_mob" VALUES (265, 1060, 716, 1);
 
 
 --
@@ -13245,14 +13532,14 @@ SELECT pg_catalog.setval('"public"."karma_karma_id_seq"', 1, false);
 -- Name: loot_ammo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."loot_ammo_id_seq"', 30, true);
+SELECT pg_catalog.setval('"public"."loot_ammo_id_seq"', 40, true);
 
 
 --
 -- Name: loot_payload_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."loot_payload_id_seq"', 33, true);
+SELECT pg_catalog.setval('"public"."loot_payload_id_seq"', 51, true);
 
 
 --
@@ -13273,14 +13560,14 @@ SELECT pg_catalog.setval('"public"."mini_gunner_sentinel_id_seq"', 2, true);
 -- Name: mob_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 352, true);
+SELECT pg_catalog.setval('"public"."mob_equipment_id_seq"', 360, true);
 
 
 --
 -- Name: mob_equipment_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mob_equipment_map_id_seq"', 96, true);
+SELECT pg_catalog.setval('"public"."mob_equipment_map_id_seq"', 101, true);
 
 
 --
@@ -13301,7 +13588,7 @@ SELECT pg_catalog.setval('"public"."mob_zone_id_seq"', 1, false);
 -- Name: mobile_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."mobile_mob_id_seq"', 145, true);
+SELECT pg_catalog.setval('"public"."mobile_mob_id_seq"', 150, true);
 
 
 --
@@ -13511,7 +13798,7 @@ SELECT pg_catalog.setval('"public"."rifle_placements_id_seq"', 1, false);
 -- Name: room_direction_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."room_direction_data_id_seq"', 4713, true);
+SELECT pg_catalog.setval('"public"."room_direction_data_id_seq"', 4953, true);
 
 
 --
@@ -13651,7 +13938,7 @@ SELECT pg_catalog.setval('"public"."zone_id_seq"', 151, true);
 -- Name: zone_mob_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."zone_mob_id_seq"', 228, true);
+SELECT pg_catalog.setval('"public"."zone_mob_id_seq"', 265, true);
 
 
 --
