@@ -353,11 +353,11 @@ SUPERCMD(do_sbuild) {
 	args = mods::util::subcmd_args<10,args_t>(argument,"uninstall");
 	if(args.has_value()) {
 		auto arg_vec = args.value();
-		if(arg_vec.size() < 3) {
+		if(arg_vec.size() < 2) {
 			r_error(player,"Invalid number of arguments");
 			return;
 		}
-		auto index = mods::util::stoi(arg_vec[2]);
+		auto index = mods::util::stoi(arg_vec[1]);
 		if(index.has_value() && index.value() < shop_proto.size()) {
 			auto& shop = shop_proto[index.value()];
 			auto room = player->room();

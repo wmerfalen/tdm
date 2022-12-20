@@ -5,7 +5,10 @@
 ./mods/rifle-attachments.cpp:		->vcarrying
 ./mods/prefs.cpp:	->pref
 ./mods/classes/marine.cpp:	->load_tracer_rounds
+./mods/classes/marine.cpp:	->deploy_explosive_drone
 ./mods/classes/marine.cpp:	->attach_m203
+./mods/classes/marine.cpp:	->detach_m203
+./mods/classes/marine.cpp:	->marine_fire
 ./mods/classes/contagion.cpp:	->invoke
 ./mods/classes/pyrexia.cpp:->fire_nade
 ./mods/classes/ghost.cpp:	->light_bandage

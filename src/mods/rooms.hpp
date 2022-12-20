@@ -7,9 +7,9 @@ extern obj_ptr_t optr_by_uuid(uuid_t);
 
 #define __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__
-#define mra_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
+	#define mra_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
 #else
-#define mra_debug(a) /*-*/
+	#define mra_debug(a) /*-*/
 #endif
 namespace mods::rooms {
 	using txt = room_data::texture_type_t;
@@ -78,6 +78,7 @@ namespace mods::rooms {
 		{txt::REINFORCED_WALLS,"REINFORCED_WALLS"},
 		{txt::METAL_FLOORS,"METAL_FLOORS"},
 		{txt::WOODEN_BRIDGE,"WOODEN_BRIDGE"},
+		{txt::SOUND_PROOF,"SOUND_PROOF"},
 	};
 
 	static const std::map<int,std::string> room_flag_strings = {
@@ -336,7 +337,7 @@ namespace mods::rooms {
 	 *
 	 * @return
 	 */
-//bool is_dark(room_data& room);
+	//bool is_dark(room_data& room);
 
 	/**
 	 * @brief returns true if room is smoking

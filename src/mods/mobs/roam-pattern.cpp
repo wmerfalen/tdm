@@ -1,7 +1,7 @@
 #include "roam-pattern.hpp"
 #include "../util.hpp"
 
-#define  __MENTOC_MODS_MOBS_ROAM_PATTERN_SHOW_DEBUG_OUTPUT__
+//#define  __MENTOC_MODS_MOBS_ROAM_PATTERN_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_ROAM_PATTERN_SHOW_DEBUG_OUTPUT__
 	#define m_debug(a) mentoc_prefix_debug("m|m|roam_pattern") << a << "\n";
 #else

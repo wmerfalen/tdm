@@ -15,8 +15,13 @@ namespace mods::weapons {
 			std::tuple<bool,std::string> detach();
 			void consume_ammo();
 			std::tuple<bool,std::string> fire(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance);
+			void set_yaml(std::string_view file);
+			std::string_view get_yaml() const {
+				return m_yaml;
+			}
 		protected:
 			obj_ptr_t m_sniper_rifle;
+			std::string m_yaml;
 	};
 };
 #endif

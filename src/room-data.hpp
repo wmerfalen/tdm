@@ -216,6 +216,7 @@ struct room_data {
 			SERVER_ROOM,
 			SEWER,			/** Underground sewer tunnel */
 			SHATTERED_GLASS, /** results of breaking glass objects */
+			SOUND_PROOF,
 			TREE,
 			TRASHY,
 			TUNNEL, /** a tunnel made of any material */

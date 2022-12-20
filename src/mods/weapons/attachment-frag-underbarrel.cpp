@@ -5,9 +5,9 @@
 #include "../projectile.hpp"
 
 #ifdef __MENTOC_SHOW_SHOTGUN_ATTACHMENT_UNDERBARREL_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << green_str("[attachment-frag-underbarrel]:") << a << "\n";
+	#define m_debug(a) std::cerr << green_str("[attachment-frag-underbarrel]:") << a << "\n";
 #else
-#define m_debug(a)
+	#define m_debug(a)
 #endif
 namespace mods::weapons {
 	std::tuple<bool,std::string> attachment_frag_underbarrel::fire(player_ptr_t& attacker,const direction_t& direction, const uint8_t& distance) {
@@ -16,11 +16,11 @@ namespace mods::weapons {
 		}
 		if(ammo()) {
 			auto s =  mods::projectile::launch_underbarrel_grenade(
-			              attacker,
-			              m_obj,
-			              direction,
-			              distance
-			          );
+			        attacker,
+			        m_obj,
+			        direction,
+			        distance
+			    );
 
 			consume_ammo();
 			return s;
@@ -28,6 +28,9 @@ namespace mods::weapons {
 		m_attached = false;
 		detach();
 		return {0,"*** CLICK ***"};
+	}
+	void attachment_frag_underbarrel::set_yaml(std::string_view file) {
+		m_yaml = file;
 	}
 	void attachment_frag_underbarrel::init() {
 		attachment_underbarrel::init();
@@ -53,7 +56,11 @@ namespace mods::weapons {
 		if(m_attached) {
 			return {true,"Already attached."};
 		}
-		m_obj = create_object(ITEM_ATTACHMENT,"sniper-class-frag-ub.yml");
+		if(m_yaml.length()) {
+			m_obj = create_object(ITEM_ATTACHMENT,m_yaml);
+		} else {
+			m_obj = create_object(ITEM_ATTACHMENT,"sniper-class-frag-ub.yml");
+		}
 		if(!m_obj->attachment()) {
 			return {false,"Attachment issue!"};
 		}
