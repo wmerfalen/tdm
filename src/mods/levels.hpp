@@ -25,16 +25,16 @@ namespace mods::levels {
 	 * So it should be noted here that this one constant is the determining factor
 	 * of how balanced the game is in accordance with players leveling up.
 	 */
-	static constexpr float FIRST_TIER = 33.0;
+	static constexpr float FIRST_TIER = 10.0;
 	static constexpr float SECOND_TIER = FIRST_TIER * 0.75;
 	static constexpr float THIRD_TIER = FIRST_TIER * 0.50;
 	static constexpr float PASSIVE_TIER = FIRST_TIER * 0.25;
 	static constexpr float SPLIT_TIER = FIRST_TIER * 0.10;
 	static constexpr float SPLIT_TIER_HALF = SPLIT_TIER / 2;
 
-	static constexpr float LOW_TRIAD = (FIRST_TIER / 3) / 10;
-	static constexpr float MID_TRIAD = ((FIRST_TIER / 3) * 2) / 10;
-	static constexpr float HIGH_TRIAD = (FIRST_TIER / 10);
+	static constexpr float LOW_TRIAD = (FIRST_TIER / 3);
+	static constexpr float MID_TRIAD = ((FIRST_TIER / 3) * 2);
+	static constexpr float HIGH_TRIAD = (FIRST_TIER);
 
 	static constexpr uint8_t MAX_PLAYER_LEVEL = 255;
 	static constexpr std::array<player_class_t,2> implemented_classes = {

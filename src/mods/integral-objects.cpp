@@ -22,7 +22,7 @@
 #endif
 
 
-#define __MENTOC_MODS_WEAPONS_INTEGRAL_OBJECTS_DEBUG__
+//#define __MENTOC_MODS_WEAPONS_INTEGRAL_OBJECTS_DEBUG__
 #ifdef  __MENTOC_MODS_WEAPONS_INTEGRAL_OBJECTS_DEBUG__
 	#define mw_debug(A) std::cerr << red_str("[mods::integral_objects::weapons_locker]:") << A <<"\n";
 #else

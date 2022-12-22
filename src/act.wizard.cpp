@@ -344,9 +344,9 @@ SUPERCMD(do_trans) {
 
 SUPERCMD(do_teleport) {
 	static constexpr std::string_view usage = "Usage: teleport <player> [room_vnum]\r\n"
-	                                          "--------------------------------------------------------------------------------\r\n"
-	                                          "If you omit room_vnum, it will teleport said player to the room you're currently in.\r\n"
-	                                          "\r\n";
+	    "--------------------------------------------------------------------------------\r\n"
+	    "If you omit room_vnum, it will teleport said player to the room you're currently in.\r\n"
+	    "\r\n";
 	if(argshave()->size_gt(0)->passed() == false) {
 		player->errorln(usage);
 		return;
@@ -414,12 +414,12 @@ void do_stat_room(char_data *ch) {
 
 	sprinttype(rm.sector_type, sector_types, buf2, sizeof(buf2));
 	player->sendln(TOSTR("Zone: [") + //%3d], VNum: [%s%5d%s], RNum: [%5d], Type: %s",
-	               TOSTR(zone_table[rm.zone].number) + "], VNum: [" + CCGRN(ch, C_NRM) +
-	               TOSTR(rm.number) + CCNRM(ch, C_NRM) + TOSTR(IN_ROOM(ch)) + buf2 + "]");
+	    TOSTR(zone_table[rm.zone].number) + "], VNum: [" + CCGRN(ch, C_NRM) +
+	    TOSTR(rm.number) + CCNRM(ch, C_NRM) + TOSTR(IN_ROOM(ch)) + buf2 + "]");
 
 	sprintbit(rm.room_flags, room_bits, buf2, sizeof(buf2));
 	player->sendln(TOSTR("SpecProc: ") + //%s, Flags: %s", rm.func == NULL ? "None" : "Exists", buf2);
-	               (rm.func == nullptr ? TOSTR("None") : TOSTR("Exists")) + ", Flags: " + buf2);
+	    (rm.func == nullptr ? TOSTR("None") : TOSTR("Exists")) + ", Flags: " + buf2);
 
 	player->sendln(TOSTR("Description:" + rm.description.str_or(" None.")));
 
@@ -515,13 +515,13 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 
 	vnum = GET_OBJ_VNUM(j);
 	player->send("Name: '%s%s%s', Aliases: %s", CCYEL(ch, C_NRM),
-	             j->short_description.length() ? j->short_description.c_str() : "<None>",
-	             CCNRM(ch, C_NRM), j->name.c_str());
+	    j->short_description.length() ? j->short_description.c_str() : "<None>",
+	    CCNRM(ch, C_NRM), j->name.c_str());
 
 	sprinttype(GET_OBJ_TYPE(j), item_types, buf, sizeof(buf));
 	player->send("VNum: [%s%5d%s], RNum: [%5d], Type: %s, SpecProc: %s",
-	             CCGRN(ch, C_NRM), vnum, CCNRM(ch, C_NRM), GET_OBJ_RNUM(j), buf,
-	             GET_OBJ_SPEC(j) ? "Exists" : "None");
+	    CCGRN(ch, C_NRM), vnum, CCNRM(ch, C_NRM), GET_OBJ_RNUM(j), buf,
+	    GET_OBJ_SPEC(j) ? "Exists" : "None");
 
 	if(j->ex_description.size()) {
 		player->send("Extra descs:%s", CCCYN(ch, C_NRM));
@@ -543,10 +543,10 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 	player->send("Extra flags   : %s", buf);
 
 	player->send("Weight: %d, Value: %d, Cost/day: %d, Timer: %d",
-	             GET_OBJ_WEIGHT(j), GET_OBJ_COST(j), GET_OBJ_RENT(j), GET_OBJ_TIMER(j));
+	    GET_OBJ_WEIGHT(j), GET_OBJ_COST(j), GET_OBJ_RENT(j), GET_OBJ_TIMER(j));
 
 	player->send("In room: %d (%s), ", GET_ROOM_VNUM(IN_ROOM(j)),
-	             IN_ROOM(j) == NOWHERE ? "Nowhere" : world[IN_ROOM(j)].name.c_str());
+	    IN_ROOM(j) == NOWHERE ? "Nowhere" : world[IN_ROOM(j)].name.c_str());
 
 	/*
 	 * NOTE: In order to make it this far, we must already be able to see the
@@ -569,20 +569,20 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 		case ITEM_SCROLL:
 		case ITEM_POTION:
 			player->send("Spells: (Level %d) %s, %s, %s", GET_OBJ_VAL(j, 0),
-			             skill_name(GET_OBJ_VAL(j, 1)), skill_name(GET_OBJ_VAL(j, 2)),
-			             skill_name(GET_OBJ_VAL(j, 3)));
+			    skill_name(GET_OBJ_VAL(j, 1)), skill_name(GET_OBJ_VAL(j, 2)),
+			    skill_name(GET_OBJ_VAL(j, 3)));
 			break;
 
 		case ITEM_WAND:
 		case ITEM_STAFF:
 			player->send("Spell: %s at level %d, %d (of %d) charges remaining",
-			             skill_name(GET_OBJ_VAL(j, 3)), GET_OBJ_VAL(j, 0),
-			             GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 1));
+			    skill_name(GET_OBJ_VAL(j, 3)), GET_OBJ_VAL(j, 0),
+			    GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 1));
 			break;
 
 		case ITEM_WEAPON:
 			player->send("Todam: %dd%d, Message type: %d",
-			             GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3));
+			    GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3));
 			break;
 
 		case ITEM_ARMOR:
@@ -596,15 +596,15 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 		case ITEM_CONTAINER_LEGACY:
 			sprintbit(GET_OBJ_VAL(j, 1), container_bits, buf, sizeof(buf));
 			player->send("Weight capacity: %d, Lock Type: %s, Key Num: %d, Corpse: %s",
-			             GET_OBJ_VAL(j, 0), buf, GET_OBJ_VAL(j, 2),
-			             YESNO(GET_OBJ_VAL(j, 3)));
+			    GET_OBJ_VAL(j, 0), buf, GET_OBJ_VAL(j, 2),
+			    YESNO(GET_OBJ_VAL(j, 3)));
 			break;
 
 		case ITEM_DRINKCON:
 		case ITEM_FOUNTAIN:
 			sprinttype(GET_OBJ_VAL(j, 2), drinks, buf, sizeof(buf));
 			player->send("Capacity: %d, Contains: %d, Poisoned: %s, Liquid: %s",
-			             GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1), YESNO(GET_OBJ_VAL(j, 3)), buf);
+			    GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1), YESNO(GET_OBJ_VAL(j, 3)), buf);
 			break;
 
 		case ITEM_NOTE:
@@ -625,8 +625,8 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 
 		default:
 			player->send("Values 0-3: [%d] [%d] [%d] [%d]",
-			             GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1),
-			             GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3));
+			    GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1),
+			    GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3));
 			break;
 	}
 
@@ -683,8 +683,8 @@ void do_stat_character(char_data *ch, char_data *k) {
 
 	sprinttype(GET_SEX(k), genders, buf, sizeof(buf));
 	player->send("%s %s '%s'  IDNum: [%5ld], In room [%5d]",
-	             buf, (!IS_NPC(k) ? "PC" : (!IS_MOB(k) ? "NPC" : "MOB")),
-	             GET_NAME(k).c_str(), GET_IDNUM(k), GET_ROOM_VNUM(IN_ROOM(k)));
+	    buf, (!IS_NPC(k) ? "PC" : (!IS_MOB(k) ? "NPC" : "MOB")),
+	    GET_NAME(k).c_str(), GET_IDNUM(k), GET_ROOM_VNUM(IN_ROOM(k)));
 
 	if(IS_MOB(k)) {
 		player->send("Alias: %s, VNum: [%5d], RNum: [%5d]", k->player.name.c_str(), GET_MOB_VNUM(k), GET_MOB_RNUM(k));
@@ -696,8 +696,8 @@ void do_stat_character(char_data *ch, char_data *k) {
 
 	sprinttype(k->player.chclass, IS_NPC(k) ? npc_class_types : pc_class_types, buf, sizeof(buf));
 	player->send("%sClass: %s, Lev: [%s%2d%s], XP: [%s%7d%s], Align: [%4d]",
-	             IS_NPC(k) ? "Monster " : "", buf, CCYEL(ch, C_NRM), GET_LEVEL(k), CCNRM(ch, C_NRM),
-	             CCYEL(ch, C_NRM), GET_EXP(k), CCNRM(ch, C_NRM), GET_ALIGNMENT(k));
+	    IS_NPC(k) ? "Monster " : "", buf, CCYEL(ch, C_NRM), GET_LEVEL(k), CCNRM(ch, C_NRM),
+	    CCYEL(ch, C_NRM), GET_EXP(k), CCNRM(ch, C_NRM), GET_ALIGNMENT(k));
 
 	if(!IS_NPC(k)) {
 		char buf1[64], buf2[64];
@@ -707,36 +707,36 @@ void do_stat_character(char_data *ch, char_data *k) {
 		buf1[10] = buf2[10] = '\0';
 
 		player->send("Created: [%s], Last Logon: [%s], Played [%dh %dm], Age [%d]",
-		             buf1, buf2, k->player.time.played / 3600,
-		             ((k->player.time.played % 3600) / 60), age(k)->year);
+		    buf1, buf2, k->player.time.played / 3600,
+		    ((k->player.time.played % 3600) / 60), age(k)->year);
 
 		player->send("Hometown: [%d], Speaks: [%d/%d/%d], (STL[%d]/per[%d]/NSTL[%d])",
-		             k->player.hometown, GET_TALK(k, 0), GET_TALK(k, 1), GET_TALK(k, 2),
-		             0, int_app[GET_INT(k)].learn,
-		             wis_app[GET_WIS(k)].bonus);
+		    k->player.hometown, GET_TALK(k, 0), GET_TALK(k, 1), GET_TALK(k, 2),
+		    0, int_app[GET_INT(k)].learn,
+		    wis_app[GET_WIS(k)].bonus);
 	}
 
 	player->send("Str: [%s%d/%d%s]  Int: [%s%d%s]  Wis: [%s%d%s]  "
-	             "Dex: [%s%d%s]  Con: [%s%d%s]  Cha: [%s%d%s]",
-	             CCCYN(ch, C_NRM), GET_STR(k), GET_ADD(k), CCNRM(ch, C_NRM),
-	             CCCYN(ch, C_NRM), GET_INT(k), CCNRM(ch, C_NRM),
-	             CCCYN(ch, C_NRM), GET_WIS(k), CCNRM(ch, C_NRM),
-	             CCCYN(ch, C_NRM), GET_DEX(k), CCNRM(ch, C_NRM),
-	             CCCYN(ch, C_NRM), GET_CON(k), CCNRM(ch, C_NRM),
-	             CCCYN(ch, C_NRM), GET_CHA(k), CCNRM(ch, C_NRM));
+	    "Dex: [%s%d%s]  Con: [%s%d%s]  Cha: [%s%d%s]",
+	    CCCYN(ch, C_NRM), GET_STR(k), GET_ADD(k), CCNRM(ch, C_NRM),
+	    CCCYN(ch, C_NRM), GET_INT(k), CCNRM(ch, C_NRM),
+	    CCCYN(ch, C_NRM), GET_WIS(k), CCNRM(ch, C_NRM),
+	    CCCYN(ch, C_NRM), GET_DEX(k), CCNRM(ch, C_NRM),
+	    CCCYN(ch, C_NRM), GET_CON(k), CCNRM(ch, C_NRM),
+	    CCCYN(ch, C_NRM), GET_CHA(k), CCNRM(ch, C_NRM));
 
 	player->send("Hit p.:[%s%d/%d+%d%s]  Mana p.:[%s%d/%d+%d%s]  Move p.:[%s%d/%d+%d%s]",
-	             CCGRN(ch, C_NRM), GET_HIT(k), GET_MAX_HIT(k), hit_gain(k), CCNRM(ch, C_NRM),
-	             CCGRN(ch, C_NRM), GET_MANA(k), GET_MAX_MANA(k), mana_gain(k), CCNRM(ch, C_NRM),
-	             CCGRN(ch, C_NRM), GET_MOVE(k), GET_MAX_MOVE(k), move_gain(k), CCNRM(ch, C_NRM));
+	    CCGRN(ch, C_NRM), GET_HIT(k), GET_MAX_HIT(k), hit_gain(k), CCNRM(ch, C_NRM),
+	    CCGRN(ch, C_NRM), GET_MANA(k), GET_MAX_MANA(k), mana_gain(k), CCNRM(ch, C_NRM),
+	    CCGRN(ch, C_NRM), GET_MOVE(k), GET_MAX_MOVE(k), move_gain(k), CCNRM(ch, C_NRM));
 
 	player->send("Coins: [%9d], Bank: [%9d] (Total: %d)",
-	             GET_GOLD(k), GET_BANK_GOLD(k), GET_GOLD(k) + GET_BANK_GOLD(k));
+	    GET_GOLD(k), GET_BANK_GOLD(k), GET_GOLD(k) + GET_BANK_GOLD(k));
 
 	player->send("AC: [%d%+d/10], Hitroll: [%2d], Damroll: [%2d], Saving throws: [%d/%d/%d/%d/%d]",
-	             GET_AC(k), dex_app[GET_DEX(k)].defensive, k->points.hitroll,
-	             k->points.damroll, GET_SAVE(k, 0), GET_SAVE(k, 1), GET_SAVE(k, 2),
-	             GET_SAVE(k, 3), GET_SAVE(k, 4));
+	    GET_AC(k), dex_app[GET_DEX(k)].defensive, k->points.hitroll,
+	    k->points.damroll, GET_SAVE(k, 0), GET_SAVE(k, 1), GET_SAVE(k, 2),
+	    GET_SAVE(k, 3), GET_SAVE(k, 4));
 
 	sprinttype(GET_POS(k), position_types, buf, sizeof(buf));
 	player->send("Pos: %s, Fighting: %s", buf, FIGHTING(k) ? GET_NAME(FIGHTING(k)).c_str() : "Nobody");
@@ -767,8 +767,8 @@ void do_stat_character(char_data *ch, char_data *k) {
 
 	if(IS_MOB(k))
 		player->send("Mob Spec-Proc: %s, NPC Bare Hand Dam: %dd%d",
-		             (mob_index[GET_MOB_RNUM(k)].func ? "Exists" : "None"),
-		             k->mob_specials.damnodice, k->mob_specials.damsizedice);
+		    (mob_index[GET_MOB_RNUM(k)].func ? "Exists" : "None"),
+		    k->mob_specials.damnodice, k->mob_specials.damsizedice);
 
 	for(i = 0, j = k->carrying; j; j = j->next_content, i++);
 
@@ -914,13 +914,13 @@ void snoop_check(char_data *ch) {
 	}
 
 	if(ch->desc->snooping &&
-	        (GET_LEVEL(ch->desc->snooping->character) >= GET_LEVEL(ch))) {
+	    (GET_LEVEL(ch->desc->snooping->character) >= GET_LEVEL(ch))) {
 		ch->desc->snooping->snoop_by = NULL;
 		ch->desc->snooping = NULL;
 	}
 
 	if(ch->desc->snoop_by &&
-	        (GET_LEVEL(ch) >= GET_LEVEL(ch->desc->snoop_by->character))) {
+	    (GET_LEVEL(ch) >= GET_LEVEL(ch->desc->snoop_by->character))) {
 		ch->desc->snoop_by->snooping = NULL;
 		ch->desc->snoop_by = NULL;
 	}
@@ -1008,7 +1008,7 @@ SUPERCMD(do_switch) {
 	} else if(GET_LEVEL(ch) < LVL_GRGOD && ROOM_FLAGGED(IN_ROOM(victim), ROOM_GODROOM)) {
 		player->sendln("You are not godly enough to use that room!");
 	} else if(GET_LEVEL(ch) < LVL_GRGOD && ROOM_FLAGGED(IN_ROOM(victim), ROOM_HOUSE)
-	          && !House_can_enter(ch, GET_ROOM_VNUM(IN_ROOM(victim)))) {
+	    && !House_can_enter(ch, GET_ROOM_VNUM(IN_ROOM(victim)))) {
 		player->sendln("That's private property -- no trespassing!");
 	} else {
 		player->sendln(OK);
@@ -1253,7 +1253,7 @@ SUPERCMD(do_syslog) {
 
 	if(!*arg) {
 		player->send("Your syslog is currently %s.",
-		             logtypes[(PRF_FLAGGED(ch, PRF_LOG1) ? 1 : 0) + (PRF_FLAGGED(ch, PRF_LOG2) ? 2 : 0)]);
+		    logtypes[(PRF_FLAGGED(ch, PRF_LOG1) ? 1 : 0) + (PRF_FLAGGED(ch, PRF_LOG2) ? 2 : 0)]);
 		return;
 	}
 
@@ -1272,7 +1272,13 @@ SUPERCMD(do_syslog) {
 
 
 SUPERCMD(do_advance) {
+	player->sendln("This command has been disabled");
+	return;
 
+#if 0
+	// TODO FIXME this command will crash the server when you type:
+	// advance help
+	//===========================================================
 	char_data *victim;
 	char name[MAX_INPUT_LENGTH], level[MAX_INPUT_LENGTH];
 	int newlevel, oldlevel;
@@ -1367,6 +1373,7 @@ SUPERCMD(do_advance) {
 #endif
 	player->sendln("[stub]: need to implement gain_exp_regardless");
 	mods::db::save_char(std::make_shared<mods::player>(victim));
+#endif
 }
 
 SUPERCMD(do_restore) {
@@ -1747,7 +1754,7 @@ SUPERCMD(do_force) {
 	} else if(!str_cmp("room", arg)) {
 		player->sendln(OK);
 		mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s forced room %d to %s",
-		       GET_NAME(ch).c_str(), GET_ROOM_VNUM(IN_ROOM(ch)), to_force);
+		    GET_NAME(ch).c_str(), GET_ROOM_VNUM(IN_ROOM(ch)), to_force);
 
 		//for(vict = world[IN_ROOM(ch)].people; vict; vict = next_force) {
 		//		next_force = vict->next_in_room;
@@ -1870,9 +1877,9 @@ SUPERCMD(do_wiznet) {
 
 	for(auto& d : descriptor_list) {
 		if((STATE(d) == CON_PLAYING) && (GET_LEVEL(d.character) >= level) &&
-		        (!PRF_FLAGGED(d.character, PRF_NOWIZ)) &&
-		        (!PLR_FLAGGED(d.character, PLR_WRITING | PLR_MAILING))
-		        && (!(PRF_FLAGGED(d.character, PRF_NOREPEAT)))) {
+		    (!PRF_FLAGGED(d.character, PRF_NOWIZ)) &&
+		    (!PLR_FLAGGED(d.character, PLR_WRITING | PLR_MAILING))
+		    && (!(PRF_FLAGGED(d.character, PRF_NOREPEAT)))) {
 			send_to_char(d.character, "%s", CCCYN(d.character, C_NRM));
 
 			if(CAN_SEE(d.character, ch)) {
@@ -2003,7 +2010,7 @@ SUPERCMD(do_wizutil) {
 			case SCMD_NOTITLE:
 				result = PLR_TOG_CHK(vict, PLR_NOTITLE);
 				mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) Notitle %s for %s by %s.",
-				       ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
+				    ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
 				//"(GC) Notitle %s for %s by %s.", ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
 				player->sendln(
 				    CAT(
@@ -2014,7 +2021,7 @@ SUPERCMD(do_wizutil) {
 			case SCMD_SQUELCH:
 				result = PLR_TOG_CHK(vict, PLR_NOSHOUT);
 				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) Squelch %s for %s by %s.",
-				       ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
+				    ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
 				//"(GC) Squelch %s for %s by %s.", ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
 				player->sendln(
 				    CAT(
@@ -2214,10 +2221,10 @@ SUPERCMD(do_show) {
 			/** TODO uncomment this and fix */
 #if 0
 			player->send("Player: %-12s (%s) [%2d %s]", vbuf.name.c_str(),
-			             genders[(int) vbuf.sex], 0, class_abbrevs[(int) vbuf.chclass]);
+			    genders[(int) vbuf.sex], 0, class_abbrevs[(int) vbuf.chclass]);
 			player->send("Au: %-8d  Bal: %-8d  Exp: %-8d  Align: %-5d",
-			             vbuf.points.gold, vbuf.points.bank_gold, vbuf.points.exp,
-			             vbuf.char_specials_saved.alignment);
+			    vbuf.points.gold, vbuf.points.bank_gold, vbuf.points.exp,
+			    vbuf.char_specials_saved.alignment);
 			/* ctime() uses static buffer: do not combine. */
 			player->send("Started: %-20.16s  ", ctime(&vbuf.birth));
 			player->send("Last: %-20.16s  Played: %3dh %2dm", ctime(&vbuf.last_logon), vbuf.played / 3600, vbuf.played / 60 % 60);
@@ -2253,22 +2260,22 @@ SUPERCMD(do_show) {
 			}
 
 			send_to_char(ch,
-			             "Current stats:"
-			             "  %5d players in game  %5d connected"
-			             "  %5d registered"
-			             "  %5d mobiles          %5d prototypes"
-			             "  %5lu objects          %5d prototypes"
-			             "  %5d rooms            %5d zones"
-			             "  %5d large bufs"
-			             "  %5d buf switches     %5d overflows",
-			             i, con,
-			             top_of_p_table + 1,
-			             j, top_of_mobt + 1,
-			             obj_list.size(), top_of_objt + 1,
-			             top_of_world + 1, top_of_zone_table + 1,
-			             buf_largecount,
-			             buf_switches, buf_overflows
-			            );
+			    "Current stats:"
+			    "  %5d players in game  %5d connected"
+			    "  %5d registered"
+			    "  %5d mobiles          %5d prototypes"
+			    "  %5lu objects          %5d prototypes"
+			    "  %5d rooms            %5d zones"
+			    "  %5d large bufs"
+			    "  %5d buf switches     %5d overflows",
+			    i, con,
+			    top_of_p_table + 1,
+			    j, top_of_mobt + 1,
+			    obj_list.size(), top_of_objt + 1,
+			    top_of_world + 1, top_of_zone_table + 1,
+			    buf_largecount,
+			    buf_switches, buf_overflows
+			);
 			break;
 
 		/* show errors */
@@ -2386,8 +2393,8 @@ SUPERCMD(do_show) {
 #define NUMBER	2
 
 #define SET_OR_REMOVE(flagset, flags) { \
-	if (on) SET_BIT(flagset, flags); \
-	else if (off) REMOVE_BIT(flagset, flags); }
+		if (on) SET_BIT(flagset, flags); \
+		else if (off) REMOVE_BIT(flagset, flags); }
 
 #define RANGE(low, high) (value = MAX((low), MIN((high), (value))))
 
@@ -2455,7 +2462,7 @@ struct set_struct {
 
 
 int perform_set(char_data *ch, char_data *vict, int mode,
-                char *val_arg) {
+    char *val_arg) {
 	MENTOC_PREAMBLE();
 	int i, on = 0, off = 0, value = 0;
 	room_rnum rnum;

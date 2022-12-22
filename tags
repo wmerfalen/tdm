@@ -470,7 +470,7 @@ BEST_DISTANCE	src/mods/mobs/shoplifter.cpp	/^	static constexpr std::size_t BEST_
 BFS_ALREADY_THERE	src/utils.h	131;"	kind:macro	line:131	file:
 BFS_ERROR	src/utils.h	130;"	kind:macro	line:130	file:
 BFS_NO_PATH	src/utils.h	132;"	kind:macro	line:132	file:
-BINARY	src/act.wizard.cpp	2385;"	kind:macro	line:2385	file:
+BINARY	src/act.wizard.cpp	2392;"	kind:macro	line:2392	file:
 BLADED_ARRAY	src/mods/classes/contagion.hpp	/^				BLADED_ARRAY,$/;"	kind:enumerator	line:43	enum:mods::classes::contagion::ability_t	file:
 BLIND	src/mods/flags.hpp	/^		BLIND = 1,$/;"	kind:enumerator	line:76	enum:mods::flags::aff	file:
 BLIND	src/mods/weapon-types.hpp	/^		BLIND,$/;"	kind:enumerator	line:31	enum:mods::weapon::capabilities::cap_t	file:
@@ -501,7 +501,7 @@ BOOL_CASE	src/db.cpp	1504;"	kind:macro	line:1504	file:
 BOOL_CASE	src/db.cpp	1568;"	kind:macro	line:1568	file:
 BOOT_DB	src/globals.hpp	/^		enum boot_type_t { BOOT_DB,BOOT_HELL };$/;"	kind:enumerator	line:150	enum:mods::globals::boot_type_t	file:
 BOOT_HELL	src/globals.hpp	/^		enum boot_type_t { BOOT_DB,BOOT_HELL };$/;"	kind:enumerator	line:150	enum:mods::globals::boot_type_t	file:
-BOTH	src/act.wizard.cpp	2382;"	kind:macro	line:2382	file:
+BOTH	src/act.wizard.cpp	2389;"	kind:macro	line:2389	file:
 BRASS_KNUCKLES	src/mods/weapon.hpp	/^		BRASS_KNUCKLES$/;"	kind:enumerator	line:95	enum:mods::weapon::melee_t	file:
 BREACH	src/mods/item.hpp	/^		BREACH = (1 << 5),$/;"	kind:enumerator	line:15	enum:mods::item::capability_t	file:
 BREACHABLE_DOOR	src/mods/doors.hpp	/^	static constexpr int BREACHABLE_DOOR = exit_info_masks_t::EIM_ISDOOR + exit_info_masks_t::EIM_BREACHABLE;$/;"	kind:member	line:30	namespace:mods::doors	file:
@@ -1195,7 +1195,7 @@ FIRST	src/mods/flags.hpp	/^		FIRST = LEGACY_AFF,$/;"	kind:enumerator	line:11	enu
 FIRST	src/mods/object.hpp	/^				FIRST = OBJECT,$/;"	kind:enumerator	line:75	enum:mods::object::object_type_enum_t	file:
 FIRST	src/mods/randomized-items.hpp	/^	FIRST = COMMON,$/;"	kind:enumerator	line:14	enum:mods::rarity_enum_t	file:
 FIRST_QUARTER	src/mods/date-time.hpp	/^		FIRST_QUARTER,$/;"	kind:enumerator	line:12	enum:mods::date_time::moon_phase	file:
-FIRST_TIER	src/mods/levels.hpp	/^	static constexpr float FIRST_TIER = 33.0;$/;"	kind:member	line:28	namespace:mods::levels	file:
+FIRST_TIER	src/mods/levels.hpp	/^	static constexpr float FIRST_TIER = 10.0;$/;"	kind:member	line:28	namespace:mods::levels	file:
 FLAME	src/mods/aoe.hpp	/^		FLAME,	\/** Ignites material within blast_radius *\/$/;"	kind:enumerator	line:11	enum:mods::aoe::types_t	file:
 FLAME	src/mods/weapon.hpp	/^	                 FLAME = (1 << 10), CLAYMORE = (1 << 11), REMOTE_EXPLOSIVE = (1 << 12),$/;"	kind:enumerator	line:37	enum:mods::weapon::mask_type	file:
 FLAMETHROWER	src/mods/object.hpp	/^				FLAMETHROWER,$/;"	kind:enumerator	line:40	enum:mods::object::object_type_enum_t	file:
@@ -1497,7 +1497,7 @@ HFO_START	src/mods/player.cpp	/^		HFO_INDEX =1,HFO_START=2,HFO_STOP=3,HFO_LOG=4$
 HFO_STOP	src/mods/player.cpp	/^		HFO_INDEX =1,HFO_START=2,HFO_STOP=3,HFO_LOG=4$/;"	kind:enumerator	line:1500	enum:mods::histfile_opcode_t	file:
 HIDE	src/mods/flags.hpp	/^		HIDE,$/;"	kind:enumerator	line:96	enum:mods::flags::aff	file:
 HIGHLIGHT_ODD_NUMBER	src/mods/mini-games/line-up.hpp	/^			HIGHLIGHT_ODD_NUMBER,$/;"	kind:member	line:13	struct:mods::mini_games::line_up	typeref:enum:mods::mini_games::line_up::	file:	access:public
-HIGH_TRIAD	src/mods/levels.hpp	/^	static constexpr float HIGH_TRIAD = (FIRST_TIER \/ 10);$/;"	kind:member	line:37	namespace:mods::levels	file:
+HIGH_TRIAD	src/mods/levels.hpp	/^	static constexpr float HIGH_TRIAD = (FIRST_TIER);$/;"	kind:member	line:37	namespace:mods::levels	file:
 HIP_FIRE	src/mods/weapon-types.hpp	/^		HIP_FIRE,$/;"	kind:enumerator	line:29	enum:mods::weapon::capabilities::cap_t	file:
 HISTFILE_DUAL	src/mods/player.cpp	/^	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3$/;"	kind:enumerator	line:78	enum:histfile_type_t	file:
 HISTFILE_FILE	src/mods/player.cpp	/^	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3$/;"	kind:enumerator	line:78	enum:histfile_type_t	file:
@@ -2018,7 +2018,7 @@ LOWLY_SECURITY_GUARD_WEAR_WRIST_R	src/mods/values-list.cpp	/^LOWLY_SECURITY_GUAR
 LOWLY_SECURITY_RANDOM_TRIVIAL_TICK	src/mods/values-list.cpp	/^LOWLY_SECURITY_RANDOM_TRIVIAL_TICK,60$/;"	kind:variable	line:97
 LOWLY_SECURITY_ROAM_TICK	src/mods/values-list.cpp	/^LOWLY_SECURITY_ROAM_TICK,20$/;"	kind:variable	line:96
 LOW_ATMOSPHERE	src/room-data.hpp	/^			LOW_ATMOSPHERE,	\/** atmosphere too thin for helicopter to fly *\/$/;"	kind:member	line:206	struct:room_data	typeref:enum:room_data::	file:	access:public
-LOW_TRIAD	src/mods/levels.hpp	/^	static constexpr float LOW_TRIAD = (FIRST_TIER \/ 3) \/ 10;$/;"	kind:member	line:35	namespace:mods::levels	file:
+LOW_TRIAD	src/mods/levels.hpp	/^	static constexpr float LOW_TRIAD = (FIRST_TIER \/ 3);$/;"	kind:member	line:35	namespace:mods::levels	file:
 LUNATIC_WEAR_ABOUT	src/mods/values-list.cpp	/^LUNATIC_WEAR_ABOUT,""$/;"	kind:variable	line:541
 LUNATIC_WEAR_ARMS	src/mods/values-list.cpp	/^LUNATIC_WEAR_ARMS,""$/;"	kind:variable	line:539
 LUNATIC_WEAR_BACKPACK	src/mods/values-list.cpp	/^LUNATIC_WEAR_BACKPACK,""$/;"	kind:variable	line:553
@@ -2414,7 +2414,7 @@ MG_REPORT	src/mods/mobs/orthos-spawn-sentinel.cpp	123;"	kind:macro	line:123	file
 MG_REPORT	src/mods/mobs/orthos-spawn-sentinel.cpp	132;"	kind:macro	line:132	file:
 MG_REPORT	src/mods/mobs/smart-mob.cpp	103;"	kind:macro	line:103	file:
 MG_REPORT	src/mods/mobs/smart-mob.cpp	94;"	kind:macro	line:94	file:
-MID_TRIAD	src/mods/levels.hpp	/^	static constexpr float MID_TRIAD = ((FIRST_TIER \/ 3) * 2) \/ 10;$/;"	kind:member	line:36	namespace:mods::levels	file:
+MID_TRIAD	src/mods/levels.hpp	/^	static constexpr float MID_TRIAD = ((FIRST_TIER \/ 3) * 2);$/;"	kind:member	line:36	namespace:mods::levels	file:
 MILITARY_POLICE_ENFORCER	src/mods/drops.cpp	/^	static constexpr mob_vnum MILITARY_POLICE_ENFORCER = 500;$/;"	kind:member	line:38	namespace:mods::drops	file:
 MILITARY_POLICE_SHOTGUNNER	src/mods/drops.cpp	/^	static constexpr mob_vnum MILITARY_POLICE_SHOTGUNNER = 501;$/;"	kind:member	line:39	namespace:mods::drops	file:
 MIN	src/utils.cpp	/^int MIN(int a, int b) {$/;"	kind:function	line:129	signature:(int a, int b)
@@ -2456,7 +2456,7 @@ MINOR_SHIELDING	src/mods/classes/contagion.hpp	/^				MINOR_SHIELDING,$/;"	kind:e
 MIN_MAIL_LEVEL	src/mail.h	20;"	kind:macro	line:20	file:
 MIN_OUTSIDE_BANK	src/shop.h	170;"	kind:macro	line:170	file:
 MIN_PER_PRAC	src/spec_procs.cpp	126;"	kind:macro	line:126	file:
-MISC	src/act.wizard.cpp	2384;"	kind:macro	line:2384	file:
+MISC	src/act.wizard.cpp	2391;"	kind:macro	line:2391	file:
 MISSING_MESSAGES	src/mods/message-server.cpp	/^	static constexpr int16_t MISSING_MESSAGES = -3;$/;"	kind:member	line:52	namespace:mods::message_server	file:
 MK46	src/mods/orm/support.hpp	/^		const std::string MK46 = "MK46";$/;"	kind:member	line:11	struct:mods::orm::support	file:	access:public
 MK46	src/mods/weapon.hpp	/^			MK46 = 1,$/;"	kind:enumerator	line:619	enum:mods::weapon::support::primary_choice_t	file:
@@ -2727,14 +2727,14 @@ NO_LOGIC	src/mods/behaviour_tree_status.hpp	/^		NO_LOGIC,$/;"	kind:enumerator	li
 NO_PRIMARY_WIELDED_EVENT	src/mods/damage-event.hpp	/^	NO_PRIMARY_WIELDED_EVENT,$/;"	kind:enumerator	line:68	enum:uint16_t	file:
 NO_RESULTS	src/mods/orm/util.hpp	/^	static constexpr int8_t NO_RESULTS = 1;$/;"	kind:member	line:34	namespace:mods::orm::util	file:
 NO_RESULTS	src/mods/pq.hpp	/^static constexpr int8_t NO_RESULTS = 1;$/;"	kind:variable	line:260	file:
-NPC	src/act.wizard.cpp	2381;"	kind:macro	line:2381	file:
+NPC	src/act.wizard.cpp	2388;"	kind:macro	line:2388	file:
 NPC_SEND_DEBUG	src/mods/player.cpp	2650;"	kind:macro	line:2650	file:
 NPC_SEND_DEBUG	src/mods/player.cpp	38;"	kind:macro	line:38	file:
 NPC_SEND_DEBUG	src/mods/player.cpp	43;"	kind:macro	line:43	file:
 NRM	src/utils.h	121;"	kind:macro	line:121	file:
 NULL	src/utils.h	525;"	kind:macro	line:525	file:
 NULLABLE_U32	src/mods/orm/util.hpp	6;"	kind:macro	line:6	file:
-NUMBER	src/act.wizard.cpp	2386;"	kind:macro	line:2386	file:
+NUMBER	src/act.wizard.cpp	2393;"	kind:macro	line:2393	file:
 NUM_CLASSES	src/structs.h	228;"	kind:macro	line:228	file:
 NUM_OF_BOARDS	src/boards.h	11;"	kind:macro	line:11	file:
 NUM_OF_DIRS	src/room-data.hpp	152;"	kind:macro	line:152	file:
@@ -2860,7 +2860,7 @@ PAUSE_FILE	src/db.h	58;"	kind:macro	line:58	file:
 PAUSE_FILE	src/db.h	62;"	kind:macro	line:62	file:
 PAYLOAD_CRATE	src/mods/loot.hpp	/^			PAYLOAD_CRATE,$/;"	kind:member	line:35	struct:mods::loot::crate_t	typeref:enum:mods::loot::crate_t::	file:	access:public
 PAYLOAD_YAML_FILE	src/mods/loot.hpp	/^	static constexpr std::string_view PAYLOAD_YAML_FILE = "container\/loot-payload.yml";$/;"	kind:member	line:24	namespace:mods::loot	file:
-PC	src/act.wizard.cpp	2380;"	kind:macro	line:2380	file:
+PC	src/act.wizard.cpp	2387;"	kind:macro	line:2387	file:
 PENETRATING_SHOT	src/mods/classes/ghost.hpp	/^				PENETRATING_SHOT,$/;"	kind:enumerator	line:39	enum:mods::classes::ghost::ability_t	file:
 PENETRATING_SHOT_RIFLE_YAML	src/mods/classes/ghost.hpp	/^			static constexpr std::string_view PENETRATING_SHOT_RIFLE_YAML = "rifle\/ax799-fantom.yml";$/;"	kind:member	line:25	struct:mods::classes::ghost	file:	access:public
 PERS	src/utils.h	487;"	kind:macro	line:487	file:
@@ -3048,7 +3048,7 @@ RAID_AREAS_INITIALIZE_ROW_MEMBERS	src/mods/orm/raid-areas.hpp	17;"	kind:macro	li
 RAID_AREAS_ORM_MEMBERS	src/mods/orm/raid-areas.hpp	11;"	kind:macro	line:11	file:
 RAID_INITIALIZE_ROW_MEMBERS	src/mods/orm/raid.hpp	19;"	kind:macro	line:19	file:
 RAID_ORM_MEMBERS	src/mods/orm/raid.hpp	11;"	kind:macro	line:11	file:
-RANGE	src/act.wizard.cpp	2392;"	kind:macro	line:2392	file:
+RANGE	src/act.wizard.cpp	2399;"	kind:macro	line:2399	file:
 RANGE	src/db.cpp	1507;"	kind:macro	line:1507	file:
 RANGE	src/db.cpp	1569;"	kind:macro	line:1569	file:
 RANGED	src/mods/combat-composer/shared.hpp	/^		RANGED,$/;"	kind:enumerator	line:29	enum:mods::combat_composer::attack_type_t	file:
@@ -3444,7 +3444,7 @@ SEN_STR	src/mods/weapon.hpp	654;"	kind:macro	line:654	file:
 SEQUENCE	src/mods/behaviour_tree_node.hpp	/^			enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	kind:enumerator	line:22	enum:mods::behaviour_tree_node::node_type_t	file:
 SERVER_ROOM	src/room-data.hpp	/^			SERVER_ROOM,$/;"	kind:member	line:216	struct:room_data	typeref:enum:room_data::	file:	access:public
 SET_BIT	src/utils.h	203;"	kind:macro	line:203	file:
-SET_OR_REMOVE	src/act.wizard.cpp	2388;"	kind:macro	line:2388	file:
+SET_OR_REMOVE	src/act.wizard.cpp	2395;"	kind:macro	line:2395	file:
 SET_SKILL	src/utils.h	346;"	kind:macro	line:346	file:
 SEWER	src/room-data.hpp	/^			SEWER,			\/** Underground sewer tunnel *\/$/;"	kind:member	line:217	struct:room_data	typeref:enum:room_data::	file:	access:public
 SEX_FEMALE	src/structs.h	242;"	kind:macro	line:242	file:
@@ -3939,16 +3939,16 @@ SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_drone_import) {$/;"	kind:function	lin
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_explosive_import) {$/;"	kind:function	line:332	signature:(do_explosive_import)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_gadget_import) {$/;"	kind:function	line:356	signature:(do_gadget_import)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_histfile) {$/;"	kind:function	line:509	signature:(do_histfile)
-SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_js_help) {$/;"	kind:function	line:618	signature:(do_js_help)
+SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_js_help) {$/;"	kind:function	line:621	signature:(do_js_help)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_melee_import) {$/;"	kind:function	line:317	signature:(do_melee_import)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_next_mob_number) {$/;"	kind:function	line:208	signature:(do_next_mob_number)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_next_obj_number) {$/;"	kind:function	line:212	signature:(do_next_obj_number)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_next_object_number) {$/;"	kind:function	line:110	signature:(do_next_object_number)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_next_room_number) {$/;"	kind:function	line:203	signature:(do_next_room_number)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_next_zone_number) {$/;"	kind:function	line:198	signature:(do_next_zone_number)
-SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_pmw_obj_from_room) {$/;"	kind:function	line:554	signature:(do_pmw_obj_from_room)
+SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_pmw_obj_from_room) {$/;"	kind:function	line:557	signature:(do_pmw_obj_from_room)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_rifle_import) {$/;"	kind:function	line:300	signature:(do_rifle_import)
-SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_toggle_obj_from_room) {$/;"	kind:function	line:586	signature:(do_toggle_obj_from_room)
+SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_toggle_obj_from_room) {$/;"	kind:function	line:589	signature:(do_toggle_obj_from_room)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_trap_import) {$/;"	kind:function	line:364	signature:(do_trap_import)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_vehicle_import) {$/;"	kind:function	line:308	signature:(do_vehicle_import)
 SUPERCMD	src/act.builder.cpp	/^SUPERCMD(do_yaml_example) {$/;"	kind:function	line:476	signature:(do_yaml_example)
@@ -3989,22 +3989,22 @@ SUPERCMD	src/act.informative.cpp	/^SUPERCMD(do_newjs) {$/;"	kind:function	line:1
 SUPERCMD	src/act.offensive.cpp	/^SUPERCMD(do_affect_me) {$/;"	kind:function	line:95	signature:(do_affect_me)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_advance) {$/;"	kind:function	line:1274	signature:(do_advance)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_at) {$/;"	kind:function	line:227	signature:(do_at)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_date) {$/;"	kind:function	line:1665	signature:(do_date)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_dc) {$/;"	kind:function	line:1535	signature:(do_dc)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_date) {$/;"	kind:function	line:1672	signature:(do_date)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_dc) {$/;"	kind:function	line:1542	signature:(do_dc)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_echo) {$/;"	kind:function	line:101	signature:(do_echo)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_force) {$/;"	kind:function	line:1724	signature:(do_force)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_gecho) {$/;"	kind:function	line:1490	signature:(do_gecho)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_force) {$/;"	kind:function	line:1731	signature:(do_force)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_gecho) {$/;"	kind:function	line:1497	signature:(do_gecho)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_goto) {$/;"	kind:function	line:261	signature:(do_goto)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_invis) {$/;"	kind:function	line:1458	signature:(do_invis)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_last) {$/;"	kind:function	line:1704	signature:(do_last)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_invis) {$/;"	kind:function	line:1465	signature:(do_invis)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_last) {$/;"	kind:function	line:1711	signature:(do_last)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_load) {$/;"	kind:function	line:1057	signature:(do_load)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_poofset) {$/;"	kind:function	line:1513	signature:(do_poofset)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_poofset) {$/;"	kind:function	line:1520	signature:(do_poofset)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_purge) {$/;"	kind:function	line:1166	signature:(do_purge)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_restore) {$/;"	kind:function	line:1372	signature:(do_restore)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_restore) {$/;"	kind:function	line:1379	signature:(do_restore)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_return) {$/;"	kind:function	line:1026	signature:(do_return)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_send) {$/;"	kind:function	line:127	signature:(do_send)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_set) {$/;"	kind:function	line:2882	signature:(do_set)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_show) {$/;"	kind:function	line:2105	signature:(do_show)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_set) {$/;"	kind:function	line:2889	signature:(do_set)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_show) {$/;"	kind:function	line:2112	signature:(do_show)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_shutdown) {$/;"	kind:function	line:870	signature:(do_shutdown)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_snoop) {$/;"	kind:function	line:941	signature:(do_snoop)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_switch) {$/;"	kind:function	line:989	signature:(do_switch)
@@ -4013,11 +4013,11 @@ SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_teleport) {$/;"	kind:function	line:345
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_trans) {$/;"	kind:function	line:291	signature:(do_trans)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_vnum) {$/;"	kind:function	line:378	signature:(do_vnum)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_vstat) {$/;"	kind:function	line:1116	signature:(do_vstat)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_wiz_quote) {$/;"	kind:function	line:1949	signature:(do_wiz_quote)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_wizlock) {$/;"	kind:function	line:1615	signature:(do_wizlock)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_wiznet) {$/;"	kind:function	line:1781	signature:(do_wiznet)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_wizutil) {$/;"	kind:function	line:1955	signature:(do_wizutil)
-SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_zreset) {$/;"	kind:function	line:1895	signature:(do_zreset)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_wiz_quote) {$/;"	kind:function	line:1956	signature:(do_wiz_quote)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_wizlock) {$/;"	kind:function	line:1622	signature:(do_wizlock)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_wiznet) {$/;"	kind:function	line:1788	signature:(do_wiznet)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_wizutil) {$/;"	kind:function	line:1962	signature:(do_wizutil)
+SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_zreset) {$/;"	kind:function	line:1902	signature:(do_zreset)
 SUPERCMD	src/db.cpp	/^SUPERCMD(do_reboot) {$/;"	kind:function	line:240	signature:(do_reboot)
 SUPERCMD	src/interpreter.cpp	/^SUPERCMD(do_builder) {$/;"	kind:function	line:144	signature:(do_builder)
 SUPERCMD	src/interpreter.cpp	/^SUPERCMD(do_debug_sleep) {$/;"	kind:function	line:59	signature:(do_debug_sleep)
@@ -5037,7 +5037,6 @@ __MENTOC_MODS_WEAPONS_DAMAGE_CALCULATOR_HEADER__	src/mods/weapons/damage-calcula
 __MENTOC_MODS_WEAPONS_DAMAGE_TYPES_HEADER__	src/mods/weapons/damage-types.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_WEAPONS_ELEMENTAL_HEADER__	src/mods/weapons/elemental.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_WEAPONS_HEAT_HEADER__	src/mods/weapons/heat.hpp	2;"	kind:macro	line:2	file:
-__MENTOC_MODS_WEAPONS_INTEGRAL_OBJECTS_DEBUG__	src/mods/integral-objects.cpp	25;"	kind:macro	line:25	file:
 __MENTOC_MODS_WEAPONS_INTENT_HEADER__	src/mods/intent.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_WEAPONS_LEGACY_COMBAT_HEADER__	src/mods/weapons/legacy-combat.hpp	2;"	kind:macro	line:2	file:
 __MENTOC_MODS_WEAPONS_PISTOL_CZP10_HEADER__	src/mods/weapons/pistol-czp10.hpp	2;"	kind:macro	line:2	file:
@@ -5977,7 +5976,7 @@ build_shrapnel_claymore	src/mods/classes/ghost.cpp	/^	std::tuple<bool,std::strin
 build_sign	src/mods/zone.cpp	/^	void build_sign(room_vnum room) {$/;"	kind:function	line:135	namespace:mods::zone	signature:(room_vnum room)
 build_weapon_locker	src/mods/intimidate.cpp	/^void build_weapon_locker(room_vnum room){$/;"	kind:function	line:16	namespace:mods::zone	signature:(room_vnum room)
 build_weapon_locker	src/mods/zone.cpp	/^	void build_weapon_locker(room_vnum room) {$/;"	kind:function	line:85	namespace:mods::zone	signature:(room_vnum room)
-builder	src/act.builder.cpp	/^namespace builder {$/;"	kind:namespace	line:712	file:
+builder	src/act.builder.cpp	/^namespace builder {$/;"	kind:namespace	line:715	file:
 builder	src/mods/builder-data.hpp	/^namespace mods::builder {$/;"	kind:namespace	line:13	class:mods	file:
 builder	src/mods/builder-flags.cpp	/^namespace mods::builder {$/;"	kind:namespace	line:3	class:mods	file:
 builder	src/mods/builder-flags.hpp	/^namespace mods::builder {$/;"	kind:namespace	line:11	class:mods	file:
@@ -6463,7 +6462,7 @@ close2	src/shop.h	/^	int	 close1, close2;	\/* When does the shop close?		*\/$/;"
 close_socket	src/comm.cpp	/^void close_socket(mods::descriptor_data& d) {$/;"	kind:function	line:2129	signature:(mods::descriptor_data& d)
 clr	src/screen.h	28;"	kind:macro	line:28	file:
 clr_affected_by	src/mods/player.hpp	/^			void clr_affected_by() {$/;"	kind:function	line:678	namespace:mods	access:public	signature:()
-cmd	src/act.wizard.cpp	/^	const char *cmd;$/;"	kind:member	line:2397	struct:set_struct	file:	access:public
+cmd	src/act.wizard.cpp	/^	const char *cmd;$/;"	kind:member	line:2404	struct:set_struct	file:	access:public
 cmd	src/db.h	/^		std::deque<reset_com> cmd;   \/* command table for reset	          *\/$/;"	kind:member	line:221	struct:zone_data	file:	access:public
 cmd	src/mods/js.cpp	/^		static duk_ret_t cmd(duk_context *ctx) {$/;"	kind:function	line:820	namespace:mods::js	signature:(duk_context *ctx)
 cmd_door	src/act.movement.cpp	/^const char *cmd_door[] = {$/;"	kind:variable	line:377
@@ -9977,7 +9976,7 @@ info	src/db.cpp	/^char *info = NULL;		\/* info page			 *\/$/;"	kind:variable	lin
 info	src/mods/lmdb/shm.hpp	/^int shm::info(struct shmid_ds* buf){$/;"	kind:function	line:86	class:gdns::shm	signature:(struct shmid_ds* buf)
 informative	src/act.informative.cpp	/^namespace informative {$/;"	kind:namespace	line:2284	file:
 informative	src/mods/init.hpp	/^INIT(informative);$/;"	kind:variable	line:39
-init	src/act.builder.cpp	/^	void init() {$/;"	kind:function	line:713	namespace:builder	signature:()
+init	src/act.builder.cpp	/^	void init() {$/;"	kind:function	line:716	namespace:builder	signature:()
 init	src/act.debug.cpp	/^	void init() {$/;"	kind:function	line:303	namespace:src::act::debug	signature:()
 init	src/act.demolitions.cpp	/^	void init() {$/;"	kind:function	line:251	namespace:demolitions	signature:()
 init	src/act.informative.cpp	/^	void init() {$/;"	kind:function	line:2285	namespace:informative	signature:()
@@ -10591,7 +10590,7 @@ len	src/shop.h	/^	int len;$/;"	kind:member	line:118	struct:stack_data	file:	acce
 length	src/modify.cpp	/^int length[] = {$/;"	kind:variable	line:50
 length	src/mods/string.cpp	/^	unsigned int string::length() const {$/;"	kind:function	line:73	class:mods::string	signature:() const
 less_common_drop_item_for_mob	src/mods/drops.cpp	/^	void less_common_drop_item_for_mob(std::string_view item, mob_vnum mob) {$/;"	kind:function	line:327	namespace:mods::drops	signature:(std::string_view item, mob_vnum mob)
-level	src/act.wizard.cpp	/^	const player_level_t level;$/;"	kind:member	line:2398	struct:set_struct	file:	access:public
+level	src/act.wizard.cpp	/^	const player_level_t level;$/;"	kind:member	line:2405	struct:set_struct	file:	access:public
 level	src/boards.h	/^	int	level;        \/* level of poster *\/$/;"	kind:member	line:22	struct:board_msginfo	file:	access:public
 level	src/mods/builder/raid.hpp	/^		std::string level;$/;"	kind:member	line:55	struct:mods::builder::raid_t	file:	access:public
 level	src/mods/forge-engine/value-scaler.hpp	/^		float level;$/;"	kind:member	line:20	struct:mods::forge_engine::value_scaler	file:	access:public
@@ -13650,7 +13649,7 @@ pc_state_data	src/mods/orm/player-contract-state.hpp	/^		std::string pc_state_da
 pclass_description	src/mods/orm/chargen.hpp	/^		std::string pclass_description;$/;"	kind:member	line:28	struct:mods::orm::player_classes	file:	access:public
 pclass_name	src/mods/orm/chargen.hpp	/^		std::string pclass_name;$/;"	kind:member	line:27	struct:mods::orm::player_classes	file:	access:public
 pclass_to_real_pclass	src/mods/forge-engine/generator.hpp	/^			player_class_t pclass_to_real_pclass(player_class_types_t type) {$/;"	kind:function	line:502	struct:mods::forge_engine::generator	access:public	signature:(player_class_types_t type)
-pcnpc	src/act.wizard.cpp	/^	const char pcnpc;$/;"	kind:member	line:2399	struct:set_struct	file:	access:public
+pcnpc	src/act.wizard.cpp	/^	const char pcnpc;$/;"	kind:member	line:2406	struct:set_struct	file:	access:public
 people	src/room-data.hpp	/^		char_data *people;    \/* List of NPC \/ PC in room           *\/$/;"	kind:variable	line:295
 perform_act	src/comm.cpp	/^void perform_act(const char *orig, char_data *ch, obj_data *obj,$/;"	kind:function	line:2584	signature:(const char *orig, char_data *ch, obj_data *obj, const void *vict_obj, char_data *to)
 perform_alias	src/interpreter.cpp	/^int perform_alias(mods::descriptor_data& d, char *orig, size_t maxlen) {$/;"	kind:function	line:1115	signature:(mods::descriptor_data& d, char *orig, size_t maxlen)
@@ -13678,8 +13677,8 @@ perform_give	src/mods/contract-events.cpp	/^	void perform_give(player_ptr_t& giv
 perform_give	src/mods/item.cpp	/^	std::tuple<int16_t,std::string> perform_give(player_ptr_t& player,player_ptr_t& vict,obj_ptr_t& obj) {$/;"	kind:function	line:29	namespace:mods::item	signature:(player_ptr_t& player,player_ptr_t& vict,obj_ptr_t& obj)
 perform_group	src/act.other.cpp	/^int perform_group(char_data *ch, char_data *vict) {$/;"	kind:function	line:379	signature:(char_data *ch, char_data *vict)
 perform_group_gain	src/fight.cpp	/^void perform_group_gain(char_data *ch, int base,$/;"	kind:function	line:381	signature:(char_data *ch, int base, char_data *victim)
-perform_immort_invis	src/act.wizard.cpp	/^void perform_immort_invis(char_data *ch, int level) {$/;"	kind:function	line:1429	signature:(char_data *ch, int level)
-perform_immort_vis	src/act.wizard.cpp	/^void perform_immort_vis(char_data *ch) {$/;"	kind:function	line:1416	signature:(char_data *ch)
+perform_immort_invis	src/act.wizard.cpp	/^void perform_immort_invis(char_data *ch, int level) {$/;"	kind:function	line:1436	signature:(char_data *ch, int level)
+perform_immort_vis	src/act.wizard.cpp	/^void perform_immort_vis(char_data *ch) {$/;"	kind:function	line:1423	signature:(char_data *ch)
 perform_immort_where	src/act.informative.cpp	/^void perform_immort_where(char_data *ch, char *arg) {$/;"	kind:function	line:1856	signature:(char_data *ch, char *arg)
 perform_mag_groups	src/magic.cpp	/^void perform_mag_groups(int level, char_data *ch,$/;"	kind:function	line:582	signature:(int level, char_data *ch, char_data *tch, int spellnum, int savetype)
 perform_mortal_where	src/act.informative.cpp	/^void perform_mortal_where(char_data *ch, char *arg) {$/;"	kind:function	line:1747	signature:(char_data *ch, char *arg)
@@ -13693,7 +13692,7 @@ perform_random_non_hostile_action	src/mods/mobs/lowly-security-behaviour-tree.hp
 perform_random_non_hostile_action	src/mods/mobs/mp-shotgunner-behaviour-tree.cpp	/^	TChildNode perform_random_non_hostile_action() {$/;"	kind:function	line:387	namespace:mods::mobs::mp_shotgunner_behaviour_tree	signature:()
 perform_random_non_hostile_action	src/mods/mobs/orthos-spawn-sentinel-btree.cpp	/^	TChildNode perform_random_non_hostile_action() {$/;"	kind:function	line:356	namespace:mods::mobs::orthos_spawn_sentinel_btree	signature:()
 perform_remove	src/act.item.cpp	/^void perform_remove(player_ptr_t player, int pos) {$/;"	kind:function	line:1764	signature:(player_ptr_t player, int pos)
-perform_set	src/act.wizard.cpp	/^int perform_set(char_data *ch, char_data *vict, int mode,$/;"	kind:function	line:2457	signature:(char_data *ch, char_data *vict, int mode, char *val_arg)
+perform_set	src/act.wizard.cpp	/^int perform_set(char_data *ch, char_data *vict, int mode,$/;"	kind:function	line:2464	signature:(char_data *ch, char_data *vict, int mode, char *val_arg)
 perform_socket_read	src/comm.cpp	/^ssize_t perform_socket_read(socket_t desc, char *read_point, size_t space_left) {$/;"	kind:function	line:1789	signature:(socket_t desc, char *read_point, size_t space_left)
 perform_socket_write	src/comm.cpp	/^ssize_t perform_socket_write(socket_t desc, const char *txt, size_t length) {$/;"	kind:function	line:1707	signature:(socket_t desc, const char *txt, size_t length)
 perform_subst	src/comm.cpp	/^int perform_subst(mods::descriptor_data& t, char *orig, char *subst) {$/;"	kind:function	line:2078	signature:(mods::descriptor_data& t, char *orig, char *subst)
@@ -14075,7 +14074,7 @@ print_command	src/mods/rbuild-sandbox.cpp	/^	void print_command(player_ptr_t& pl
 print_footprints	src/mods/memory.cpp	/^	void print_footprints() {$/;"	kind:function	line:136	namespace:mods::memory	signature:()
 print_group	src/act.other.cpp	/^void print_group(char_data *ch) {$/;"	kind:function	line:396	signature:(char_data *ch)
 print_object_location	src/act.informative.cpp	/^void print_object_location(int num, struct obj_data *obj, char_data *ch,$/;"	kind:function	line:1804	signature:(int num, struct obj_data *obj, char_data *ch, int recur)
-print_zone_to_buf	src/act.wizard.cpp	/^size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone) {$/;"	kind:function	line:2100	signature:(char *bufptr, size_t left, zone_rnum zone)
+print_zone_to_buf	src/act.wizard.cpp	/^size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone) {$/;"	kind:function	line:2107	signature:(char *bufptr, size_t left, zone_rnum zone)
 process	src/mods/affects.cpp	/^	void process() {$/;"	kind:function	line:53	namespace:mods::affects	signature:()
 process	src/mods/rooms.cpp	/^	void process() {$/;"	kind:function	line:41	namespace:mods::rooms::affects	signature:()
 process_affect	src/mods/affects.hpp	/^			void process_affect(TAffects affect) {$/;"	kind:function	line:201	struct:mods::affects::dissolver	access:public	signature:(TAffects affect)
@@ -15574,7 +15573,7 @@ set_done_uninstalling	src/mods/demolitions.cpp	/^	void set_done_uninstalling(uui
 set_done_uninstalling	src/mods/object-utils.hpp	/^	void set_done_uninstalling(T& obj) {$/;"	kind:function	line:308	namespace:mods::object_utils	signature:(T& obj)
 set_extended_type	src/mods/mobs/smart-mob.hpp	/^			void set_extended_type(void* type) {$/;"	kind:function	line:119	struct:mods::mobs::smart_mob	access:public	signature:(void* type)
 set_feed_file	src/structs.h	/^		void set_feed_file(std::string f) {$/;"	kind:function	line:1033	struct:obj_data	access:public	signature:(std::string f)
-set_fields	src/act.wizard.cpp	/^} set_fields[] = {$/;"	kind:variable	line:2401	typeref:struct:set_struct
+set_fields	src/act.wizard.cpp	/^} set_fields[] = {$/;"	kind:variable	line:2408	typeref:struct:set_struct
 set_fight_timestamp	src/mods/player.cpp	/^	void player::set_fight_timestamp() {$/;"	kind:function	line:2233	class:mods::player	signature:()
 set_fighting	src/fight.cpp	/^void set_fighting(char_data *ch, char_data *vict) {$/;"	kind:function	line:300	signature:(char_data *ch, char_data *vict)
 set_file	src/mods/js.hpp	/^				inline void set_file(const std::string& m) {$/;"	kind:function	line:53	struct:mods::js::include	access:public	signature:(const std::string& m)
@@ -15681,7 +15680,7 @@ set_state	src/mods/player.cpp	/^	void player::set_state(int state) {$/;"	kind:fu
 set_state	src/structs.h	/^			void set_state(int c) {$/;"	kind:function	line:1502	struct:mods::descriptor_data	access:public	signature:(int c)
 set_static_roll_weapon_amount	src/mods/weapons/damage-calculator.cpp	/^	void set_static_roll_weapon_amount(int16_t amount) {$/;"	kind:function	line:29	namespace:mods::weapons::damage_calculator	signature:(int16_t amount)
 set_str_table	src/mods/lmdb.hpp	/^			void set_str_table(table_type_t e_table) {$/;"	kind:function	line:67	struct:mods::lmdb::transaction_t	access:public	signature:(table_type_t e_table)
-set_struct	src/act.wizard.cpp	/^struct set_struct {$/;"	kind:struct	line:2396	file:
+set_struct	src/act.wizard.cpp	/^struct set_struct {$/;"	kind:struct	line:2403	file:
 set_time_birth	src/mods/player.cpp	/^	void player::set_time_birth(time_t b) {$/;"	kind:function	line:1459	class:mods::player	signature:(time_t b)
 set_time_logon	src/mods/player.cpp	/^	void player::set_time_logon(time_t t) {$/;"	kind:function	line:1466	class:mods::player	signature:(time_t t)
 set_time_played	src/mods/player.cpp	/^	void player::set_time_played(int t) {$/;"	kind:function	line:1472	class:mods::player	signature:(int t)
@@ -16767,7 +16766,7 @@ txt	src/mail.h	/^	char	txt[DATA_BLOCK_DATASIZE+1]; \/* actual text plus 1 for nu
 txt	src/mail.h	/^	char	txt[HEADER_BLOCK_DATASIZE+1]; \/* actual text plus 1 for null	*\/$/;"	kind:member	line:83	struct:header_block_type_d	file:	access:public
 txt_block	src/structs.h	/^	txt_block(std::string_view t,int a) :$/;"	kind:function	line:1426	struct:txt_block	access:public	signature:(std::string_view t,int a)
 txt_block	src/structs.h	/^struct txt_block {$/;"	kind:struct	line:1423	file:
-type	src/act.wizard.cpp	/^	const char type;$/;"	kind:member	line:2400	struct:set_struct	file:	access:public
+type	src/act.wizard.cpp	/^	const char type;$/;"	kind:member	line:2407	struct:set_struct	file:	access:public
 type	src/db.h	/^	int	type;$/;"	kind:member	line:301	struct:ban_list_element	file:	access:public
 type	src/mods/builder/raid.hpp	/^		raid_type_t type;$/;"	kind:member	line:56	struct:mods::builder::raid_t	file:	access:public
 type	src/mods/dialog-tree.hpp	/^			type_t            type;$/;"	kind:member	line:61	namespace:mods::dialog_tree	file:

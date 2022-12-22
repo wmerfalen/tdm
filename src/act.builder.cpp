@@ -86,8 +86,8 @@ int next_obj_number() {
 		auto select_transaction = txn();
 		sql_compositor comp("object",&select_transaction);
 		auto mob_sql = comp.select("max(obj_item_number) + 1 as obj_number")
-		               .from("mobile")
-		               .sql();
+		    .from("mobile")
+		    .sql();
 		auto rec = mods::pq::exec(select_transaction,mob_sql);
 		if(rec.size() == 0) {
 			return 1;
@@ -122,8 +122,8 @@ int next_zone_number() {
 			auto select_transaction = txn();
 			sql_compositor comp("zone",&select_transaction);
 			auto zone_sql = comp.select("currval(zone_virtual_number) + 1 as zone_number")
-			                .from("zone")
-			                .sql();
+			    .from("zone")
+			    .sql();
 			auto zone_record = mods::pq::exec(select_transaction,zone_sql);
 			if(zone_record.size() == 0) {
 				mods::adhoc::max_zone = 0;
@@ -150,8 +150,8 @@ int next_room_number() {
 			auto select_transaction = txn();
 			sql_compositor comp("room",&select_transaction);
 			auto room_sql = comp.select("max(room_number) + 1 as room_number")
-			                .from("room")
-			                .sql();
+			    .from("room")
+			    .sql();
 			auto room_record = mods::pq::exec(select_transaction,room_sql);
 			if(room_record.size() == 0) {
 				mods::adhoc::max_room = 0;
@@ -179,8 +179,8 @@ int next_mob_number() {
 		auto select_transaction = txn();
 		sql_compositor comp("mobile",&select_transaction);
 		auto mob_sql = comp.select("max(mob_virtual_number) + 1 as mob_number")
-		               .from("mobile")
-		               .sql();
+		    .from("mobile")
+		    .sql();
 		auto mob_record = mods::pq::exec(select_transaction,mob_sql);
 		if(mob_record.size() == 0) {
 			mods::adhoc::max_mob = 0;
@@ -511,12 +511,12 @@ SUPERCMD(do_histfile) {
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		*player << "usage: \r\n" <<
-		        " {red}histfile{/red} {grn}start{/grn}\r\n" <<
-		        "  |--> create new histfile.\r\n" <<
-		        " {red}histfile{/red} {grn}stop{/grn}\r\n" <<
-		        "  |--> stop recording and write histfile.\r\n" <<
-		        "\r\n"
-		        ;
+		    " {red}histfile{/red} {grn}start{/grn}\r\n" <<
+		    "  |--> create new histfile.\r\n" <<
+		    " {red}histfile{/red} {grn}stop{/grn}\r\n" <<
+		    "  |--> stop recording and write histfile.\r\n" <<
+		    "\r\n"
+		    ;
 		return;
 	}
 	if(vec_args.size() == 0) {
@@ -537,10 +537,10 @@ ACMD(do_uuid) {
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		*player << "usage: \r\n" <<
-		        " {red}uuid{/red} {grn}camera{/grn}\r\n" <<
-		        "  |--> will print the uuid of the camera that you're holding.\r\n" <<
-		        "\r\n"
-		        ;
+		    " {red}uuid{/red} {grn}camera{/grn}\r\n" <<
+		    "  |--> will print the uuid of the camera that you're holding.\r\n" <<
+		    "\r\n"
+		    ;
 		return;
 	}
 	auto obj = mods::util::parse_object_vec(player,vec_args);
@@ -551,18 +551,21 @@ ACMD(do_uuid) {
 	player->stc(std::to_string(obj->uuid));
 }
 
+/**
+ * "pmw" seems to mean "prompt me when"
+ */
 SUPERCMD(do_pmw_obj_from_room) {
 
 	player->sendln("This function is under construction!");
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		*player << "usage: \r\n" <<
-		        " {red}pmw_obj_from_room{/red} {grn}start{/grn}\r\n" <<
-		        "  |--> the system will prompt you when obj_from_room is called.\r\n" <<
-		        " {red}pmw_obj_from_room{/red} {grn}stop{/grn}\r\n" <<
-		        "  |--> the system will {red}stop{/red} prompting you when obj_from_room is called.\r\n" <<
-		        "\r\n"
-		        ;
+		    " {red}pmw_obj_from_room{/red} {grn}start{/grn}\r\n" <<
+		    "  |--> the system will prompt you when obj_from_room is called.\r\n" <<
+		    " {red}pmw_obj_from_room{/red} {grn}stop{/grn}\r\n" <<
+		    "  |--> the system will {red}stop{/red} prompting you when obj_from_room is called.\r\n" <<
+		    "\r\n"
+		    ;
 		return;
 	}
 	if(vec_args.size() == 0) {
@@ -588,18 +591,18 @@ SUPERCMD(do_toggle_obj_from_room) {
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		*player << "usage: \r\n" <<
-		        " {red}toggle_obj_from_room{/red} {grn}on{/grn}\r\n" <<
-		        "  |--> the system will enable obj_from_room\r\n" <<
-		        " {red}toggle_obj_from_room{/red} {grn}off{/grn}\r\n" <<
-		        "  |--> the system will not perform obj_from_room\r\n" <<
-		        "\r\n"
-		        ;
+		    " {red}toggle_obj_from_room{/red} {grn}on{/grn}\r\n" <<
+		    "  |--> the system will enable obj_from_room\r\n" <<
+		    " {red}toggle_obj_from_room{/red} {grn}off{/grn}\r\n" <<
+		    "  |--> the system will not perform obj_from_room\r\n" <<
+		    "\r\n"
+		    ;
 		return;
 	}
 	if(vec_args.size() == 0) {
 		player->sendln(mods::world_conf::toggle::get_obj_from_room() ?
-		               "{grn}enabled{/grn}" :
-		               "{grn}disabled{/grn}");
+		    "{grn}enabled{/grn}" :
+		    "{grn}disabled{/grn}");
 		return;
 	}
 	if(std::string(vec_args[0]).compare("on") == 0) {

@@ -1,4 +1,5 @@
 \connect "postgres"
+
 --
 -- PostgreSQL database dump
 --
@@ -1225,6 +1226,43 @@ ALTER TABLE "public"."karma_karma_id_seq" OWNER TO "postgres";
 --
 
 ALTER SEQUENCE "public"."karma_karma_id_seq" OWNED BY "public"."karma"."karma_id";
+
+
+--
+-- Name: locker; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "public"."locker" (
+    "id" integer NOT NULL,
+    "l_room_vnum" integer NOT NULL,
+    "l_type" character varying(3) NOT NULL,
+    "l_yaml" character varying(2048) NOT NULL,
+    "l_count" integer NOT NULL
+);
+
+
+ALTER TABLE "public"."locker" OWNER TO "postgres";
+
+--
+-- Name: locker_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "public"."locker_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "public"."locker_id_seq" OWNER TO "postgres";
+
+--
+-- Name: locker_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "public"."locker_id_seq" OWNED BY "public"."locker"."id";
 
 
 --
@@ -4029,6 +4067,13 @@ ALTER TABLE ONLY "public"."karma" ALTER COLUMN "karma_id" SET DEFAULT "nextval"(
 
 
 --
+-- Name: locker id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "public"."locker" ALTER COLUMN "id" SET DEFAULT "nextval"('"public"."locker_id_seq"'::"regclass");
+
+
+--
 -- Name: loot_ammo id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -4527,7 +4572,7 @@ INSERT INTO "public"."class_ghost" VALUES (13, 111, '2022-05-17 13:17:37.45463',
 -- Data for Name: class_marine; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."class_marine" VALUES (3, 113, '2022-12-09 23:11:15.118701', '2022-12-09 23:11:15.118701');
+INSERT INTO "public"."class_marine" VALUES (4, 114, '2022-12-21 19:26:48.977796', '2022-12-21 19:26:48.977796');
 
 
 --
@@ -5486,6 +5531,35 @@ INSERT INTO "public"."help_topics" VALUES (149, 'social', 'insult', '2022-01-14 
 
 
 --
+-- Data for Name: locker; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO "public"."locker" VALUES (1, 128, 'WPN', 'rifle/aug-a3.yml', 3);
+INSERT INTO "public"."locker" VALUES (2, 128, 'WPN', 'rifle/glock.yml', 3);
+INSERT INTO "public"."locker" VALUES (3, 128, 'WPN', 'rifle/magnum-revolver.yml', 3);
+INSERT INTO "public"."locker" VALUES (4, 128, 'WPN', 'rifle/mp5.yml', 3);
+INSERT INTO "public"."locker" VALUES (5, 128, 'WPN', 'rifle/mp9.yml', 3);
+INSERT INTO "public"."locker" VALUES (6, 128, 'WPN', 'rifle/psg1.yml', 3);
+INSERT INTO "public"."locker" VALUES (7, 128, 'WPN', 'rifle/sasg12.yml', 3);
+INSERT INTO "public"."locker" VALUES (8, 128, 'AMU', 'consumable/sg3-ar-ammunition.yml', 5);
+INSERT INTO "public"."locker" VALUES (9, 128, 'AMU', 'consumable/sg3-lmg-ammunition.yml', 5);
+INSERT INTO "public"."locker" VALUES (10, 128, 'AMU', 'consumable/sg3-mp-ammunition.yml', 5);
+INSERT INTO "public"."locker" VALUES (11, 128, 'AMU', 'consumable/sg3-pistol-ammunition.yml', 5);
+INSERT INTO "public"."locker" VALUES (12, 128, 'AMU', 'consumable/sg3-shotgun-ammunition.yml', 5);
+INSERT INTO "public"."locker" VALUES (13, 128, 'AMU', 'consumable/sg3-smg-ammunition.yml', 5);
+INSERT INTO "public"."locker" VALUES (14, 128, 'AMU', 'consumable/sg3-sniper-ammunition.yml', 5);
+INSERT INTO "public"."locker" VALUES (15, 128, 'ARM', 'armor/basic-ballistic-vest.yml', 3);
+INSERT INTO "public"."locker" VALUES (16, 128, 'ARM', 'armor/basic-boots.yml', 3);
+INSERT INTO "public"."locker" VALUES (17, 128, 'ARM', 'armor/raven-ultralight-backpack.yml', 3);
+INSERT INTO "public"."locker" VALUES (18, 128, 'ARM', 'armor/titan-elbow-guards.yml', 3);
+INSERT INTO "public"."locker" VALUES (19, 128, 'ARM', 'armor/titan-gauntlets.yml', 3);
+INSERT INTO "public"."locker" VALUES (20, 128, 'ARM', 'armor/titan-shin-guards.yml', 3);
+INSERT INTO "public"."locker" VALUES (21, 128, 'ARM', 'armor/titan-shoulder-pads.yml', 3);
+INSERT INTO "public"."locker" VALUES (22, 128, 'ARM', 'armor/xm-scorpio-belt.yml', 3);
+INSERT INTO "public"."locker" VALUES (23, 128, 'ARM', 'armor/xm-scorpio-tactical-gloves.yml', 3);
+
+
+--
 -- Data for Name: loot_ammo; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -5900,9 +5974,9 @@ INSERT INTO "public"."object_weapon" VALUES (5, 7, 0, 0, 0, false);
 --
 
 INSERT INTO "public"."player" VALUES (110, '$2a$06$V3cNhHZegxU40gLh/I8w1.dR7IaNHnNyzBSUCuv80W1EWiehiajD.', '0', '0', 'sniper', '1', '1', 0, 3, 0, 9, 9, 12, 15, 9, 0, 0, 241, 436, 729, 48, 561, 'M', 241, 436, 729, 52, 52, 52, '9', '1', '52', 0, 0, 'PC', 0, 3, 52, 0, '2021-09-18 01:42:45.163952', 0, '2021-09-18 01:42:45.163952', '8388736', 7);
-INSERT INTO "public"."player" VALUES (113, '$2a$06$MiAvtBjkrIcUaQUu0A0DtubpnnuY5RGcuCzbO3rhEIzb9Q6RRHhWS', '0', '0', 'port0s', '1', '1', 0, 4, 0, 4, 4, 8, 14, 4, 0, 0, 291, 226, 421, 0, 1000, 'M', 291, 226, 421, 53, 53, 53, '2', '1', '53', 0, 0, 'PC', 0, 2, 53, 0, '2022-12-09 23:11:14.922272', 0, '2022-12-09 23:11:14.922272', '8388736', 3);
-INSERT INTO "public"."player" VALUES (111, '$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC', '0', '0', 'ghost', '1', '1', 0, 4, 0, 8, 8, 17, 21, 8, 0, 0, 322, 452, 1037, 6730, 3850, 'M', 322, 452, 936, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 0, 4, 53, 0, '2022-05-17 13:17:37.271391', 0, '2022-05-17 13:17:37.271391', '8388736', 6);
 INSERT INTO "public"."player" VALUES (112, '$2a$06$tZ.d26Ss0bmylxdAIcR.2.KJMQCrARqFa0oghvTkHet73f5EeOAPi', '0', '0', 'breacher', '1', '1', 0, 7, 0, 2, 2, 8, 14, 2, 0, 0, 421, 161, 356, 0, 1000, 'M', 421, 161, 356, 53, 53, 53, '22', '1', '53', 0, 0, 'PC', 0, 2, 53, 0, '2022-11-09 08:07:37.145886', 0, '2022-11-09 08:07:37.145886', '8388736', 3);
+INSERT INTO "public"."player" VALUES (111, '$2a$06$tkZgj.i47ARkCbyx8ZixBuZqWRJjPKtgQuekkJ6ZRgoPJ.EtKtIeC', '0', '0', 'ghost', '1', '1', 0, 4, 0, 8, 8, 17, 21, 8, 0, 0, 322, 452, 1037, 6730, 3850, 'M', 322, 452, 936, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 0, 4, 53, 0, '2022-05-17 13:17:37.271391', 0, '2022-05-17 13:17:37.271391', '8388736', 6);
+INSERT INTO "public"."player" VALUES (114, '$2a$06$xSl9UF.TUe.A/6XOIKWx0epotu.uOhDHzQPz7bCy/SlT447h/s0E6', '0', '0', 'port0s', '1', '1', 0, 13, 0, 13, 13, 26, 41, 13, 0, 0, 284, 210, 420, 0, 1000, 'M', 284, 210, 420, 53, 53, 53, '2', '1', '53', 0, 0, 'PC', 0, 2, 53, 0, '2022-12-21 19:26:48.908705', 0, '2022-12-21 19:26:48.908705', '0', 3);
 INSERT INTO "public"."player" VALUES (1, 'foKntnEF3KSXA', '0', '0', 'far', '1', '1', 0, 20, 0, 41, 41, 82, 102, 41, 1479, 0, 65000, 2277, 65000, 42698, 94030, 'M', 65000, 2277, 65000, 53, 53, 53, '9', '1', '53', 0, 0, 'PC', 1479, 19, 53, 0, '2019-03-20 22:38:47.454111', 0, '2019-03-20 22:38:47.454111', '14680304', 37);
 
 
@@ -5927,6 +6001,7 @@ INSERT INTO "public"."player_base_ability" VALUES (7, 101, 44, 0, 44, 44, 88, 13
 INSERT INTO "public"."player_base_ability" VALUES (16, 110, 3, 0, 9, 9, 12, 15, 9, 9, 6, 8, 8, 15, 10, 6, 9, 9, '2021-09-18 01:42:45.197498', '2021-09-18 01:42:45.197498');
 INSERT INTO "public"."player_base_ability" VALUES (19, 113, 4, 0, 4, 4, 8, 14, 4, 4, 8, 4, 4, 8, 4, 6, 4, 7, '2022-12-09 23:11:15.093093', '2022-12-09 23:11:15.093093');
 INSERT INTO "public"."player_base_ability" VALUES (17, 111, 4, 0, 8, 8, 17, 21, 8, 8, 8, 15, 15, 21, 9, 13, 8, 12, '2022-05-17 13:17:37.452746', '2022-05-17 13:17:37.452746');
+INSERT INTO "public"."player_base_ability" VALUES (20, 114, 13, 0, 13, 13, 26, 41, 13, 13, 26, 13, 13, 26, 13, 15, 13, 7, '2022-12-21 19:26:48.977253', '2022-12-21 19:26:48.977253');
 INSERT INTO "public"."player_base_ability" VALUES (1, 1, 20, 0, 41, 41, 82, 102, 41, 41, 40, 64, 64, 103, 42, 62, 41, 57, '2021-09-04 04:17:39.714689', '2021-09-04 04:17:39.714689');
 INSERT INTO "public"."player_base_ability" VALUES (18, 112, 7, 0, 2, 2, 8, 14, 2, 2, 14, 4, 4, 8, 2, 4, 2, 6, '2022-11-09 08:07:37.190702', '2022-11-09 08:07:37.190702');
 
@@ -6206,26 +6281,6 @@ INSERT INTO "public"."room" VALUES (95, 224, 1, 0, '{blu}C.O.F.O.B [OUTER]:{/blu
 ', NULL, NULL, 1, 0, 'cofob-west-atop-stairs', NULL);
 INSERT INTO "public"."room" VALUES (96, 225, 1, 0, '{blu}C.O.F.O.B [OUTER]:{/blu} - Atop the stairs', 'The floor deviates from the other rooms in that it is made up of a reinforced steel grating. The choice for such a floor remains a mystery. The door to the west leads to the stairs that will take you to the underground portion of the base.
 ', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (114, 243, 1, 0, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (115, 244, 1, 0, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (116, 245, 1, 0, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (117, 246, 1, 0, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (118, 247, 1, 0, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (119, 248, 1, 0, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (120, 249, 1, 21, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (121, 250, 1, 21, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (122, 251, 1, 21, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (123, 252, 1, 21, '{blu}C.O.F.O.B:{/blu} - Second floor Foremast', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (130, 259, 1, 0, '{blu}C.O.F.O.B:{/blu} - Engineering hallway', 'The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (131, 260, 1, 0, '{blu}C.O.F.O.B:{/blu} - Engineering hallway', 'The doors on the eastern wall are all closed and most likely locked. You see the commons area at the end of the hallway. You notice various surveillance cameras strategically placed at the corners of the ceiling. 
@@ -6235,8 +6290,6 @@ INSERT INTO "public"."room" VALUES (132, 261, 1, 0, '{blu}C.O.F.O.B:{/blu} - Eng
 INSERT INTO "public"."room" VALUES (134, 263, 1, 0, '{blu}C.O.F.O.B:{/blu} - Server Room 1A', 'It''s noisy and loud in here. The rack mounted servers are fervently whirring under the immense workloads. The ceiling is a grate with a large fan behind it. A complex looking locking mechanism protects rack mounted servers here. 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (135, 264, 1, 0, '{blu}C.O.F.O.B:{/blu} - Server Room 1B', 'Wall to wall rack mounted servers take up the entirety of this room. There is almost nowhere to stand. A haphazard array of ethernet cables snake chaotically to and from each server. Maintaining this must be a headache. 
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (136, 265, 1, 21, '{blu}C.O.F.O.B:{/blu} - Eastern Hallway', '@FILL_ME@
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (332, 460, 1, 0, '{blu}La Mesa{/blu} Kenwood Drive North', '@FILL_ME@
 ', NULL, NULL, 1, 0, NULL, NULL);
@@ -6250,18 +6303,16 @@ INSERT INTO "public"."room" VALUES (105, 234, 1, 21, '{blu}C.O.F.O.B{/blu} - Up 
 ', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
 INSERT INTO "public"."room" VALUES (108, 237, 1, 21, '{blu}C.O.F.O.B{/blu} - Engineering - Atop the stairs', 'The computing industry has progressed to the point where every individual has their own computer in the palm of their hand. But those advances dont''t come without a cost. The engineering level of the FOB focusses on the invisible threat of state actors and the growing need for tighter security. 
 ', NULL, NULL, 1, 0, 'cofob-secondfloor-center', ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (137, 266, 1, 0, '{blu}C.O.F.O.B:{/blu} - Gear room', 'A huge weapons rack is attached to the wall here. The rack contains rifles, pistols, ammunition, explosives, and breach charges.
-', NULL, NULL, 1, 0, 'cofob-gear-room', NULL);
-INSERT INTO "public"."room" VALUES (138, 267, 1, 0, '{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (139, 268, 1, 0, '{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (140, 269, 1, 0, '{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (141, 270, 1, 0, '{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
-INSERT INTO "public"."room" VALUES (142, 271, 1, 0, '{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon', '@FILL_ME@
-', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (115, 244, 1, 0, '{blu}C.O.F.O.B{/blu} - Second Floor - SOF Meeting Room', 'At the center of the room is a massive obsidian desk with an array of chairs decorating it''s perimeter. The walls are beige and a single 70 inch 4K LED Smart TV is mounted on the northern wall. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,INSIDE,ROOFTOP,SOUND_PROOF,WOODEN_WALLS');
+INSERT INTO "public"."room" VALUES (120, 249, 1, 21, '{blu}C.O.F.O.B{/blu} - Second Floor - SOF Meeting Room', 'At the center of the room is a massive obsidian desk with an array of chairs decorating it''s perimeter. The walls are beige and a single 70 inch 4K LED Smart TV is mounted on the northern wall. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,CEMENT,INSIDE,ROOFTOP,SOUND_PROOF,WOODEN_WALLS');
+INSERT INTO "public"."room" VALUES (123, 252, 1, 21, '{blu}C.O.F.O.B{/blu} - Second Floor - SOF Meeting Room', 'At the center of the room is a massive obsidian desk with an array of chairs decorating it''s perimeter. The walls are beige and a single 70 inch 4K LED Smart TV is mounted on the northern wall. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,CEMENT,INSIDE,ROOFTOP,SOUND_PROOF,WOODEN_WALLS');
+INSERT INTO "public"."room" VALUES (118, 247, 1, 0, '{blu}C.O.F.O.B{/blu} - Second Floor - SOF Meeting Room', 'At the center of the room is a massive obsidian desk with an array of chairs decorating it''s perimeter. The walls are beige and a single 70 inch 4K LED Smart TV is mounted on the northern wall. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,INSIDE,ROOFTOP,SOUND_PROOF,WOODEN_WALLS');
+INSERT INTO "public"."room" VALUES (136, 265, 1, 21, '{blu}C.O.F.O.B{/blu} - Gear Room - Entrance', 'You stand before the entrance to the live fire shooting range.The smell of gun powder is strong.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP');
 INSERT INTO "public"."room" VALUES (143, 272, 1, 0, '{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon', '@FILL_ME@
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (144, 273, 1, 0, '{blu}C.O.F.O.B:{/blu} - Shooting Range Area Falcon', '@FILL_ME@
@@ -6300,6 +6351,8 @@ INSERT INTO "public"."room" VALUES (161, 290, 1, 0, 'Destroyed overpass - Abott 
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (162, 291, 1, 0, 'Market Apartments - East entrance', 'An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You''d be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.
 ', NULL, NULL, 1, 0, NULL, NULL);
+INSERT INTO "public"."room" VALUES (141, 270, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
 INSERT INTO "public"."room" VALUES (163, 292, 1, 0, 'Market Apartments - East entrance', 'An iron rod gate can be seen laying discarded near the entrance. In another time, that gate would have been used to keep intruders out. Far off to the west is what used to be the tenant parking lot. You''d be surprised to find any tenant using that lot seeing as how low the income requirements were for this apartment complex.
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (164, 293, 1, 0, 'Market Apartments - Building Way', 'Building 2 is a two story building with 16 units. The stairs leading to the second story are completely demolished. The top 4 units to the east are completely exposed to the elements. You could make it upstairs but it would require some sort of rope. 
@@ -8146,8 +8199,6 @@ INSERT INTO "public"."room" VALUES (98, 227, 1, 0, '{blu}C.O.F.O.B{/blu} - South
 ', NULL, NULL, 1, 0, NULL, NULL);
 INSERT INTO "public"."room" VALUES (13, 142, 1, 21, '{blu}C.O.F.O.B{/blu} - TRITON - Decontamination', 'In order for the lab to maintain a clean and sterile atmosphere, a decontamination area was installed. That is the room you find yourself in. A station not unlike the body scanners you find at an airport sprays you up and down with a cool mist of chemicals. A vacuum below your feet sucks wind and your ears pop as various hidden but audible devices clamor to eliminate any hazardous bacteria.
 ', NULL, NULL, 1, 0, NULL, ',CEMENT,INSIDE');
-INSERT INTO "public"."room" VALUES (20, 128, 1, 18, '{blu}C.O.F.O.B{/blu} - Equipment', 'Three huge lockers are attached to the wall, each with their own category of equipment. The most appalling detail is the haphazard array of bloodied medical equipment sitting on a nearby desk.
-', NULL, NULL, 0, 16, 'cofob-spawn-point-a', ',CEMENT,DAMP,INSIDE,OUTSIDE,ROOFTOP,SHALLOW_WATER');
 INSERT INTO "public"."room" VALUES (775, 909, 1, 0, '{blu}C.O.F.O.B{/blu} - Equipment Inventory', 'Three huge lockers are attached to the wall, each with their own category of equipment. The most appalling detail is the haphazard array of bloodied medical equipment sitting on a nearby desk.
 ', NULL, NULL, 1, 88, 'cofob-equipment-inventory', ',INSIDE,METAL_WALL,ROOFTOP,TILE');
 INSERT INTO "public"."room" VALUES (67, 196, 1, 21, '{blu}C.O.F.O.B{/blu} - East Hallway', 'Many complaints have been lodged against the higher ups about the lack of cleanliness of the eastern hallway. An odd dampness is prevalent throughout. The temperature outside somehow affects this part of the FOB more than others. During sand storms, the eastern hallway turns to a sandy damp mess.
@@ -8184,6 +8235,54 @@ INSERT INTO "public"."room" VALUES (452, 580, 1, 0, '{grn}Abbot Market East{/grn
 ', NULL, NULL, 1, 0, NULL, ',CARPET,GLASS_WINDOWS,INSIDE,ROOFTOP');
 INSERT INTO "public"."room" VALUES (453, 581, 1, 0, '{grn}Abbot Market East{/grn} - Allied Foods - Pharmacy', 'Prior to the installation of the FOB, the residents of Abbot City had no source of cheap and subsidized pharmaceuticals. The FOB created jobs and opportunities that would never be possible prior to it''s existence. Ironically, the FOB also brought more danger and resentment from the extremist sect of the local religion. 
 ', NULL, NULL, 1, 0, NULL, ',CARPET,GLASS_WINDOWS,INSIDE,ROOFTOP');
+INSERT INTO "public"."room" VALUES (1454, 1202, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1455, 1203, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1456, 1204, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1457, 1205, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1458, 1206, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1459, 1207, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1460, 1208, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1461, 1209, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1462, 1210, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1463, 1211, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1464, 1212, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (1465, 1213, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (142, 271, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (122, 251, 1, 21, '{blu}C.O.F.O.B{/blu} - Second Floor - SOF Meeting Room', 'At the center of the room is a massive obsidian desk with an array of chairs decorating it''s perimeter. The walls are beige and a single 70 inch 4K LED Smart TV is mounted on the northern wall. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,CEMENT,INSIDE,ROOFTOP,SOUND_PROOF,WOODEN_WALLS');
+INSERT INTO "public"."room" VALUES (116, 245, 1, 0, '{blu}C.O.F.O.B{/blu} - Second Floor - SOF Meeting Room', 'At the center of the room is a massive obsidian desk with an array of chairs decorating it''s perimeter. The walls are beige and a single 70 inch 4K LED Smart TV is mounted on the northern wall. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,INSIDE,ROOFTOP,SOUND_PROOF,WOODEN_WALLS');
+INSERT INTO "public"."room" VALUES (140, 269, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (117, 246, 1, 0, '{blu}C.O.F.O.B{/blu} - Second Floor - SOF Meeting Room', 'At the center of the room is a massive obsidian desk with an array of chairs decorating it''s perimeter. The walls are beige and a single 70 inch 4K LED Smart TV is mounted on the northern wall. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,INSIDE,ROOFTOP,SOUND_PROOF,WOODEN_WALLS');
+INSERT INTO "public"."room" VALUES (119, 248, 1, 0, '{blu}C.O.F.O.B{/blu} - Second Floor - SOF Meeting Room', 'At the center of the room is a massive obsidian desk with an array of chairs decorating it''s perimeter. The walls are beige and a single 70 inch 4K LED Smart TV is mounted on the northern wall. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,INSIDE,ROOFTOP,SOUND_PROOF,WOODEN_WALLS');
+INSERT INTO "public"."room" VALUES (20, 128, 1, 18, '{blu}C.O.F.O.B{/blu} - Rifle Room', 'A collection of standard-issue ranged weapons are hung up on the wall here. The room is dry and smells like gun powder residue. The room to the north leads into the main hallway of the COFOB.
+', NULL, NULL, 0, 16, 'cofob-spawn-point-a', ',CEMENT,DAMP,INSIDE,OUTSIDE,ROOFTOP,SHALLOW_WATER');
+INSERT INTO "public"."room" VALUES (114, 243, 1, 0, '{blu}C.O.F.O.B{/blu} - Second Floor - SOF Hallway', 'As you make your way through the hallway, you notice that the ambient noise is vastly different than the rest of the base. Special highly classified techniques have been taken to make this part of the base soundproof and resistant to all forms of surveillance.
+', NULL, NULL, 1, 0, NULL, ',CARPET,INSIDE,ROOFTOP,SOUND_PROOF,WOODEN_WALLS');
+INSERT INTO "public"."room" VALUES (121, 250, 1, 21, '{blu}C.O.F.O.B{/blu} - Second Floor - SOF Meeting Room', 'At the center of the room is a massive obsidian desk with an array of chairs decorating it''s perimeter. The walls are beige and a single 70 inch 4K LED Smart TV is mounted on the northern wall. 
+', NULL, NULL, 1, 0, NULL, ',CARPET,CEMENT,INSIDE,ROOFTOP,SOUND_PROOF,WOODEN_WALLS');
+INSERT INTO "public"."room" VALUES (137, 266, 1, 0, '{blu}C.O.F.O.B{/blu} - Gear Room - Entrance', 'You stand before the entrance to the live fire shooting range.The smell of gun powder is strong.
+', NULL, NULL, 1, 0, 'cofob-gear-room', ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP');
+INSERT INTO "public"."room" VALUES (138, 267, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
+INSERT INTO "public"."room" VALUES (139, 268, 1, 0, '{blu}C.O.F.O.B{/blu} - {red}LIVE FIRE{/red} - {blu}Shooting Range - Falcon{/blu}', 'The metal railings above your head carry paper targets to and from their destination to the north. Each stall is equipped with a miniature touch screen device to control the paper targets.
+', NULL, NULL, 1, 0, NULL, ',CEMENT,DRY,INSIDE,METAL_WALL,ROOFTOP,REINFORCED_WALLS');
 
 
 --
@@ -12568,6 +12667,197 @@ INSERT INTO "public"."room_direction_data" VALUES (4950, 579, 2, 'general descri
 INSERT INTO "public"."room_direction_data" VALUES (4951, 580, 0, 'general_description', 'keyword', 1, 0, 581);
 INSERT INTO "public"."room_direction_data" VALUES (4952, 580, 2, 'general description', 'keyword', 1, 0, 579);
 INSERT INTO "public"."room_direction_data" VALUES (4953, 581, 2, 'general description', 'keyword', 1, 0, 580);
+INSERT INTO "public"."room_direction_data" VALUES (4954, 271, 1, 'general_description', 'keyword', 1, 0, 1202);
+INSERT INTO "public"."room_direction_data" VALUES (4955, 271, 3, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (4956, 1202, 1, 'general_description', 'keyword', 1, 0, 1203);
+INSERT INTO "public"."room_direction_data" VALUES (4957, 1202, 3, 'general description', 'keyword', 1, 0, 271);
+INSERT INTO "public"."room_direction_data" VALUES (4958, 1203, 0, 'general_description', 'keyword', 1, 0, 1205);
+INSERT INTO "public"."room_direction_data" VALUES (4959, 1203, 1, 'general_description', 'keyword', 1, 0, 1204);
+INSERT INTO "public"."room_direction_data" VALUES (4960, 1203, 3, 'general description', 'keyword', 1, 0, 1202);
+INSERT INTO "public"."room_direction_data" VALUES (4961, 1204, 3, 'general description', 'keyword', 1, 0, 1203);
+INSERT INTO "public"."room_direction_data" VALUES (4962, 1205, 0, 'general_description', 'keyword', 1, 0, 1206);
+INSERT INTO "public"."room_direction_data" VALUES (4963, 1205, 2, 'general description', 'keyword', 1, 0, 1203);
+INSERT INTO "public"."room_direction_data" VALUES (4964, 1206, 0, 'general_description', 'keyword', 1, 0, 1207);
+INSERT INTO "public"."room_direction_data" VALUES (4965, 1206, 2, 'general description', 'keyword', 1, 0, 1205);
+INSERT INTO "public"."room_direction_data" VALUES (4966, 1207, 0, 'general_description', 'keyword', 1, 0, 1208);
+INSERT INTO "public"."room_direction_data" VALUES (4967, 1207, 2, 'general description', 'keyword', 1, 0, 1206);
+INSERT INTO "public"."room_direction_data" VALUES (4968, 1208, 0, 'general_description', 'keyword', 1, 0, 1209);
+INSERT INTO "public"."room_direction_data" VALUES (4969, 1208, 2, 'general description', 'keyword', 1, 0, 1207);
+INSERT INTO "public"."room_direction_data" VALUES (4970, 1209, 2, 'general description', 'keyword', 1, 0, 1208);
+INSERT INTO "public"."room_direction_data" VALUES (4971, 269, 0, 'general_description', 'keyword', 1, 0, 1210);
+INSERT INTO "public"."room_direction_data" VALUES (4972, 269, 2, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (4973, 1210, 0, 'general_description', 'keyword', 1, 0, 1211);
+INSERT INTO "public"."room_direction_data" VALUES (4974, 1210, 2, 'general description', 'keyword', 1, 0, 269);
+INSERT INTO "public"."room_direction_data" VALUES (4975, 1211, 0, 'general_description', 'keyword', 1, 0, 1212);
+INSERT INTO "public"."room_direction_data" VALUES (4976, 1211, 2, 'general description', 'keyword', 1, 0, 1210);
+INSERT INTO "public"."room_direction_data" VALUES (4977, 1212, 0, 'general_description', 'keyword', 1, 0, 1213);
+INSERT INTO "public"."room_direction_data" VALUES (4978, 1212, 2, 'general description', 'keyword', 1, 0, 1211);
+INSERT INTO "public"."room_direction_data" VALUES (4979, 1213, 2, 'general description', 'keyword', 1, 0, 1212);
+INSERT INTO "public"."room_direction_data" VALUES (4980, 265, 1, 'general_description', 'keyword', 1, 0, 266);
+INSERT INTO "public"."room_direction_data" VALUES (4981, 265, 3, 'general description', 'keyword', 1, 0, 203);
+INSERT INTO "public"."room_direction_data" VALUES (4982, 266, 0, 'general_description', 'keyword', 1, 0, 267);
+INSERT INTO "public"."room_direction_data" VALUES (4983, 266, 3, 'general description', 'keyword', 1, 0, 265);
+INSERT INTO "public"."room_direction_data" VALUES (4984, 267, 0, 'general_description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (4985, 267, 2, 'general description', 'keyword', 1, 0, 266);
+INSERT INTO "public"."room_direction_data" VALUES (4986, 268, 0, 'general_description', 'keyword', 1, 0, 269);
+INSERT INTO "public"."room_direction_data" VALUES (4987, 268, 1, 'general_description', 'keyword', 1, 0, 271);
+INSERT INTO "public"."room_direction_data" VALUES (4988, 268, 2, 'general description', 'keyword', 1, 0, 267);
+INSERT INTO "public"."room_direction_data" VALUES (4989, 268, 3, 'general_description', 'keyword', 1, 0, 270);
+INSERT INTO "public"."room_direction_data" VALUES (4990, 268, 4, 'general_description', 'keyword', 1, 0, 272);
+INSERT INTO "public"."room_direction_data" VALUES (4991, 268, 5, 'general_description', 'keyword', 1, 0, 273);
+INSERT INTO "public"."room_direction_data" VALUES (4992, 269, 0, 'general_description', 'keyword', 1, 0, 1210);
+INSERT INTO "public"."room_direction_data" VALUES (4993, 269, 2, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (4994, 265, 1, 'general_description', 'keyword', 1, 0, 266);
+INSERT INTO "public"."room_direction_data" VALUES (4995, 265, 3, 'general description', 'keyword', 1, 0, 203);
+INSERT INTO "public"."room_direction_data" VALUES (4996, 266, 0, 'general_description', 'keyword', 1, 0, 267);
+INSERT INTO "public"."room_direction_data" VALUES (4997, 266, 3, 'general description', 'keyword', 1, 0, 265);
+INSERT INTO "public"."room_direction_data" VALUES (4998, 267, 0, 'general_description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (4999, 267, 2, 'general description', 'keyword', 1, 0, 266);
+INSERT INTO "public"."room_direction_data" VALUES (5000, 268, 0, 'general_description', 'keyword', 1, 0, 269);
+INSERT INTO "public"."room_direction_data" VALUES (5001, 268, 1, 'general_description', 'keyword', 1, 0, 271);
+INSERT INTO "public"."room_direction_data" VALUES (5002, 268, 2, 'general description', 'keyword', 1, 0, 267);
+INSERT INTO "public"."room_direction_data" VALUES (5003, 268, 3, 'general_description', 'keyword', 1, 0, 270);
+INSERT INTO "public"."room_direction_data" VALUES (5004, 268, 4, 'general_description', 'keyword', 1, 0, 272);
+INSERT INTO "public"."room_direction_data" VALUES (5005, 268, 5, 'general_description', 'keyword', 1, 0, 273);
+INSERT INTO "public"."room_direction_data" VALUES (5006, 269, 0, 'general_description', 'keyword', 1, 0, 1210);
+INSERT INTO "public"."room_direction_data" VALUES (5007, 269, 2, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5008, 270, 1, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5009, 128, 0, 'general_description', 'keyword', 1, 0, 130);
+INSERT INTO "public"."room_direction_data" VALUES (5010, 128, 2, 'general_description', 'keyword', 1, 0, 910);
+INSERT INTO "public"."room_direction_data" VALUES (5011, 243, 0, 'general_description', 'keyword', 1, 0, 244);
+INSERT INTO "public"."room_direction_data" VALUES (5012, 243, 2, 'general description', 'keyword', 1, 0, 237);
+INSERT INTO "public"."room_direction_data" VALUES (5013, 244, 1, 'general_description', 'keyword', 1, 0, 245);
+INSERT INTO "public"."room_direction_data" VALUES (5014, 244, 2, 'general description', 'keyword', 1, 0, 243);
+INSERT INTO "public"."room_direction_data" VALUES (5015, 244, 3, 'general_description', 'keyword', 1, 0, 249);
+INSERT INTO "public"."room_direction_data" VALUES (5016, 249, 0, 'general_description', 'keyword', 1, 0, 250);
+INSERT INTO "public"."room_direction_data" VALUES (5017, 249, 1, 'general description', 'keyword', 1, 0, 244);
+INSERT INTO "public"."room_direction_data" VALUES (5018, 250, 0, 'general_description', 'keyword', 1, 0, 251);
+INSERT INTO "public"."room_direction_data" VALUES (5019, 250, 2, 'general description', 'keyword', 1, 0, 249);
+INSERT INTO "public"."room_direction_data" VALUES (5020, 251, 0, 'general_description', 'keyword', 1, 0, 252);
+INSERT INTO "public"."room_direction_data" VALUES (5021, 251, 2, 'general description', 'keyword', 1, 0, 250);
+INSERT INTO "public"."room_direction_data" VALUES (5022, 252, 2, 'general description', 'keyword', 1, 0, 251);
+INSERT INTO "public"."room_direction_data" VALUES (5023, 245, 0, 'general_description', 'keyword', 1, 0, 246);
+INSERT INTO "public"."room_direction_data" VALUES (5024, 245, 3, 'general description', 'keyword', 1, 0, 244);
+INSERT INTO "public"."room_direction_data" VALUES (5025, 246, 0, 'general_description', 'keyword', 1, 0, 247);
+INSERT INTO "public"."room_direction_data" VALUES (5026, 246, 2, 'general description', 'keyword', 1, 0, 245);
+INSERT INTO "public"."room_direction_data" VALUES (5027, 247, 0, 'general_description', 'keyword', 1, 0, 248);
+INSERT INTO "public"."room_direction_data" VALUES (5028, 247, 2, 'general description', 'keyword', 1, 0, 246);
+INSERT INTO "public"."room_direction_data" VALUES (5029, 248, 2, 'general description', 'keyword', 1, 0, 247);
+INSERT INTO "public"."room_direction_data" VALUES (5030, 265, 1, 'general_description', 'keyword', 1, 0, 266);
+INSERT INTO "public"."room_direction_data" VALUES (5031, 265, 3, 'general description', 'keyword', 1, 0, 203);
+INSERT INTO "public"."room_direction_data" VALUES (5032, 266, 0, 'general_description', 'keyword', 1, 0, 267);
+INSERT INTO "public"."room_direction_data" VALUES (5033, 266, 3, 'general description', 'keyword', 1, 0, 265);
+INSERT INTO "public"."room_direction_data" VALUES (5034, 267, 0, 'general_description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5035, 267, 2, 'general description', 'keyword', 1, 0, 266);
+INSERT INTO "public"."room_direction_data" VALUES (5036, 268, 0, 'general_description', 'keyword', 1, 0, 269);
+INSERT INTO "public"."room_direction_data" VALUES (5037, 268, 1, 'general_description', 'keyword', 1, 0, 271);
+INSERT INTO "public"."room_direction_data" VALUES (5038, 268, 2, 'general description', 'keyword', 1, 0, 267);
+INSERT INTO "public"."room_direction_data" VALUES (5039, 268, 3, 'general_description', 'keyword', 1, 0, 270);
+INSERT INTO "public"."room_direction_data" VALUES (5040, 268, 4, 'general_description', 'keyword', 1, 0, 272);
+INSERT INTO "public"."room_direction_data" VALUES (5041, 268, 5, 'general_description', 'keyword', 1, 0, 273);
+INSERT INTO "public"."room_direction_data" VALUES (5042, 269, 0, 'general_description', 'keyword', 1, 0, 1210);
+INSERT INTO "public"."room_direction_data" VALUES (5043, 269, 2, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5044, 270, 1, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5045, 268, 0, 'general_description', 'keyword', 1, 0, 269);
+INSERT INTO "public"."room_direction_data" VALUES (5046, 268, 1, 'general_description', 'keyword', 1, 0, 271);
+INSERT INTO "public"."room_direction_data" VALUES (5047, 268, 2, 'general description', 'keyword', 1, 0, 267);
+INSERT INTO "public"."room_direction_data" VALUES (5048, 268, 3, 'general_description', 'keyword', 1, 0, 270);
+INSERT INTO "public"."room_direction_data" VALUES (5049, 268, 4, 'general_description', 'keyword', 1, 0, 272);
+INSERT INTO "public"."room_direction_data" VALUES (5050, 268, 5, 'general_description', 'keyword', 1, 0, 273);
+INSERT INTO "public"."room_direction_data" VALUES (5051, 271, 1, 'general_description', 'keyword', 1, 0, 1202);
+INSERT INTO "public"."room_direction_data" VALUES (5052, 271, 3, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5053, 1202, 1, 'general_description', 'keyword', 1, 0, 1203);
+INSERT INTO "public"."room_direction_data" VALUES (5054, 1202, 3, 'general description', 'keyword', 1, 0, 271);
+INSERT INTO "public"."room_direction_data" VALUES (5055, 1203, 0, 'general_description', 'keyword', 1, 0, 1205);
+INSERT INTO "public"."room_direction_data" VALUES (5056, 1203, 1, 'general_description', 'keyword', 1, 0, 1204);
+INSERT INTO "public"."room_direction_data" VALUES (5057, 1203, 3, 'general description', 'keyword', 1, 0, 1202);
+INSERT INTO "public"."room_direction_data" VALUES (5058, 1204, 3, 'general description', 'keyword', 1, 0, 1203);
+INSERT INTO "public"."room_direction_data" VALUES (5059, 1205, 0, 'general_description', 'keyword', 1, 0, 1206);
+INSERT INTO "public"."room_direction_data" VALUES (5060, 1205, 2, 'general description', 'keyword', 1, 0, 1203);
+INSERT INTO "public"."room_direction_data" VALUES (5061, 1206, 0, 'general_description', 'keyword', 1, 0, 1207);
+INSERT INTO "public"."room_direction_data" VALUES (5062, 1206, 2, 'general description', 'keyword', 1, 0, 1205);
+INSERT INTO "public"."room_direction_data" VALUES (5063, 1207, 0, 'general_description', 'keyword', 1, 0, 1208);
+INSERT INTO "public"."room_direction_data" VALUES (5064, 1207, 2, 'general description', 'keyword', 1, 0, 1206);
+INSERT INTO "public"."room_direction_data" VALUES (5065, 1208, 0, 'general_description', 'keyword', 1, 0, 1209);
+INSERT INTO "public"."room_direction_data" VALUES (5066, 1208, 2, 'general description', 'keyword', 1, 0, 1207);
+INSERT INTO "public"."room_direction_data" VALUES (5067, 1209, 2, 'general description', 'keyword', 1, 0, 1208);
+INSERT INTO "public"."room_direction_data" VALUES (5068, 269, 0, 'general_description', 'keyword', 1, 0, 1210);
+INSERT INTO "public"."room_direction_data" VALUES (5069, 269, 2, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5070, 1210, 0, 'general_description', 'keyword', 1, 0, 1211);
+INSERT INTO "public"."room_direction_data" VALUES (5071, 1210, 2, 'general description', 'keyword', 1, 0, 269);
+INSERT INTO "public"."room_direction_data" VALUES (5072, 1211, 0, 'general_description', 'keyword', 1, 0, 1212);
+INSERT INTO "public"."room_direction_data" VALUES (5073, 1211, 2, 'general description', 'keyword', 1, 0, 1210);
+INSERT INTO "public"."room_direction_data" VALUES (5074, 1212, 0, 'general_description', 'keyword', 1, 0, 1213);
+INSERT INTO "public"."room_direction_data" VALUES (5075, 1212, 2, 'general description', 'keyword', 1, 0, 1211);
+INSERT INTO "public"."room_direction_data" VALUES (5076, 1213, 2, 'general description', 'keyword', 1, 0, 1212);
+INSERT INTO "public"."room_direction_data" VALUES (5077, 128, 0, 'general_description', 'keyword', 1, 0, 130);
+INSERT INTO "public"."room_direction_data" VALUES (5078, 128, 2, 'general_description', 'keyword', 1, 0, 910);
+INSERT INTO "public"."room_direction_data" VALUES (5079, 243, 0, 'general_description', 'keyword', 1, 0, 244);
+INSERT INTO "public"."room_direction_data" VALUES (5080, 243, 2, 'general description', 'keyword', 1, 0, 237);
+INSERT INTO "public"."room_direction_data" VALUES (5081, 244, 1, 'general_description', 'keyword', 1, 0, 245);
+INSERT INTO "public"."room_direction_data" VALUES (5082, 244, 2, 'general description', 'keyword', 1, 0, 243);
+INSERT INTO "public"."room_direction_data" VALUES (5083, 244, 3, 'general_description', 'keyword', 1, 0, 249);
+INSERT INTO "public"."room_direction_data" VALUES (5084, 249, 0, 'general_description', 'keyword', 1, 0, 250);
+INSERT INTO "public"."room_direction_data" VALUES (5085, 249, 1, 'general description', 'keyword', 1, 0, 244);
+INSERT INTO "public"."room_direction_data" VALUES (5086, 250, 0, 'general_description', 'keyword', 1, 0, 251);
+INSERT INTO "public"."room_direction_data" VALUES (5087, 250, 2, 'general description', 'keyword', 1, 0, 249);
+INSERT INTO "public"."room_direction_data" VALUES (5088, 251, 0, 'general_description', 'keyword', 1, 0, 252);
+INSERT INTO "public"."room_direction_data" VALUES (5089, 251, 2, 'general description', 'keyword', 1, 0, 250);
+INSERT INTO "public"."room_direction_data" VALUES (5090, 252, 2, 'general description', 'keyword', 1, 0, 251);
+INSERT INTO "public"."room_direction_data" VALUES (5091, 245, 0, 'general_description', 'keyword', 1, 0, 246);
+INSERT INTO "public"."room_direction_data" VALUES (5092, 245, 3, 'general description', 'keyword', 1, 0, 244);
+INSERT INTO "public"."room_direction_data" VALUES (5093, 246, 0, 'general_description', 'keyword', 1, 0, 247);
+INSERT INTO "public"."room_direction_data" VALUES (5094, 246, 2, 'general description', 'keyword', 1, 0, 245);
+INSERT INTO "public"."room_direction_data" VALUES (5095, 247, 0, 'general_description', 'keyword', 1, 0, 248);
+INSERT INTO "public"."room_direction_data" VALUES (5096, 247, 2, 'general description', 'keyword', 1, 0, 246);
+INSERT INTO "public"."room_direction_data" VALUES (5097, 248, 2, 'general description', 'keyword', 1, 0, 247);
+INSERT INTO "public"."room_direction_data" VALUES (5098, 265, 1, 'general_description', 'keyword', 1, 0, 266);
+INSERT INTO "public"."room_direction_data" VALUES (5099, 265, 3, 'general description', 'keyword', 1, 0, 203);
+INSERT INTO "public"."room_direction_data" VALUES (5100, 266, 0, 'general_description', 'keyword', 1, 0, 267);
+INSERT INTO "public"."room_direction_data" VALUES (5101, 266, 3, 'general description', 'keyword', 1, 0, 265);
+INSERT INTO "public"."room_direction_data" VALUES (5102, 267, 0, 'general_description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5103, 267, 2, 'general description', 'keyword', 1, 0, 266);
+INSERT INTO "public"."room_direction_data" VALUES (5104, 268, 0, 'general_description', 'keyword', 1, 0, 269);
+INSERT INTO "public"."room_direction_data" VALUES (5105, 268, 1, 'general_description', 'keyword', 1, 0, 271);
+INSERT INTO "public"."room_direction_data" VALUES (5106, 268, 2, 'general description', 'keyword', 1, 0, 267);
+INSERT INTO "public"."room_direction_data" VALUES (5107, 268, 3, 'general_description', 'keyword', 1, 0, 270);
+INSERT INTO "public"."room_direction_data" VALUES (5108, 268, 4, 'general_description', 'keyword', 1, 0, 272);
+INSERT INTO "public"."room_direction_data" VALUES (5109, 268, 5, 'general_description', 'keyword', 1, 0, 273);
+INSERT INTO "public"."room_direction_data" VALUES (5110, 269, 0, 'general_description', 'keyword', 1, 0, 1210);
+INSERT INTO "public"."room_direction_data" VALUES (5111, 269, 2, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5112, 270, 1, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5113, 268, 0, 'general_description', 'keyword', 1, 0, 269);
+INSERT INTO "public"."room_direction_data" VALUES (5114, 268, 1, 'general_description', 'keyword', 1, 0, 271);
+INSERT INTO "public"."room_direction_data" VALUES (5115, 268, 2, 'general description', 'keyword', 1, 0, 267);
+INSERT INTO "public"."room_direction_data" VALUES (5116, 268, 3, 'general_description', 'keyword', 1, 0, 270);
+INSERT INTO "public"."room_direction_data" VALUES (5117, 268, 4, 'general_description', 'keyword', 1, 0, 272);
+INSERT INTO "public"."room_direction_data" VALUES (5118, 268, 5, 'general_description', 'keyword', 1, 0, 273);
+INSERT INTO "public"."room_direction_data" VALUES (5119, 271, 1, 'general_description', 'keyword', 1, 0, 1202);
+INSERT INTO "public"."room_direction_data" VALUES (5120, 271, 3, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5121, 1202, 1, 'general_description', 'keyword', 1, 0, 1203);
+INSERT INTO "public"."room_direction_data" VALUES (5122, 1202, 3, 'general description', 'keyword', 1, 0, 271);
+INSERT INTO "public"."room_direction_data" VALUES (5123, 1203, 0, 'general_description', 'keyword', 1, 0, 1205);
+INSERT INTO "public"."room_direction_data" VALUES (5124, 1203, 1, 'general_description', 'keyword', 1, 0, 1204);
+INSERT INTO "public"."room_direction_data" VALUES (5125, 1203, 3, 'general description', 'keyword', 1, 0, 1202);
+INSERT INTO "public"."room_direction_data" VALUES (5126, 1204, 3, 'general description', 'keyword', 1, 0, 1203);
+INSERT INTO "public"."room_direction_data" VALUES (5127, 1205, 0, 'general_description', 'keyword', 1, 0, 1206);
+INSERT INTO "public"."room_direction_data" VALUES (5128, 1205, 2, 'general description', 'keyword', 1, 0, 1203);
+INSERT INTO "public"."room_direction_data" VALUES (5129, 1206, 0, 'general_description', 'keyword', 1, 0, 1207);
+INSERT INTO "public"."room_direction_data" VALUES (5130, 1206, 2, 'general description', 'keyword', 1, 0, 1205);
+INSERT INTO "public"."room_direction_data" VALUES (5131, 1207, 0, 'general_description', 'keyword', 1, 0, 1208);
+INSERT INTO "public"."room_direction_data" VALUES (5132, 1207, 2, 'general description', 'keyword', 1, 0, 1206);
+INSERT INTO "public"."room_direction_data" VALUES (5133, 1208, 0, 'general_description', 'keyword', 1, 0, 1209);
+INSERT INTO "public"."room_direction_data" VALUES (5134, 1208, 2, 'general description', 'keyword', 1, 0, 1207);
+INSERT INTO "public"."room_direction_data" VALUES (5135, 1209, 2, 'general description', 'keyword', 1, 0, 1208);
+INSERT INTO "public"."room_direction_data" VALUES (5136, 269, 0, 'general_description', 'keyword', 1, 0, 1210);
+INSERT INTO "public"."room_direction_data" VALUES (5137, 269, 2, 'general description', 'keyword', 1, 0, 268);
+INSERT INTO "public"."room_direction_data" VALUES (5138, 1210, 0, 'general_description', 'keyword', 1, 0, 1211);
+INSERT INTO "public"."room_direction_data" VALUES (5139, 1210, 2, 'general description', 'keyword', 1, 0, 269);
+INSERT INTO "public"."room_direction_data" VALUES (5140, 1211, 0, 'general_description', 'keyword', 1, 0, 1212);
+INSERT INTO "public"."room_direction_data" VALUES (5141, 1211, 2, 'general description', 'keyword', 1, 0, 1210);
+INSERT INTO "public"."room_direction_data" VALUES (5142, 1212, 0, 'general_description', 'keyword', 1, 0, 1213);
+INSERT INTO "public"."room_direction_data" VALUES (5143, 1212, 2, 'general description', 'keyword', 1, 0, 1211);
+INSERT INTO "public"."room_direction_data" VALUES (5144, 1213, 2, 'general description', 'keyword', 1, 0, 1212);
 
 
 --
@@ -12654,13 +12944,16 @@ INSERT INTO "public"."shop_objects" VALUES (5, 2, 137);
 INSERT INTO "public"."shop_objects" VALUES (6, 3, 137);
 INSERT INTO "public"."shop_objects" VALUES (7, 3, 94);
 INSERT INTO "public"."shop_objects" VALUES (8, 2, 94);
+INSERT INTO "public"."shop_objects" VALUES (9, 0, 90);
+INSERT INTO "public"."shop_objects" VALUES (10, 0, 91);
+INSERT INTO "public"."shop_objects" VALUES (11, 0, 137);
+INSERT INTO "public"."shop_objects" VALUES (12, 0, 94);
 
 
 --
 -- Data for Name: shop_rooms; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."shop_rooms" VALUES (1, 2, 128);
 
 
 --
@@ -12669,6 +12962,7 @@ INSERT INTO "public"."shop_rooms" VALUES (1, 2, 128);
 
 INSERT INTO "public"."shops" VALUES (2, 2, 'MP5 repo', 'Feeling over burdened by money?', 0, 0, 0, 'We don''t carry that sort of thing here.', 'Look, we don''t carry that...', 'No money, no product. Simple as that.', 'The precursor to buying guns is that you have to have money upfront...', 'I don''t work with those types of items.', 'You got it. Here you go!', 'Nice. Maybe I can find some poor schmuck to sell this to...', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT INTO "public"."shops" VALUES (3, 3, 'MP5 repo', 'Feeling over burdened by money?', 0, 0, 0, 'We don''t carry that sort of thing here.', 'Look, we don''t carry that...', 'No money, no product. Simple as that.', 'The precursor to buying guns is that you have to have money upfront...', 'I don''t work with those types of items.', 'You got it. Here you go!', 'Nice. Maybe I can find some poor schmuck to sell this to...', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO "public"."shops" VALUES (4, 2, 'MP5 repo', 'Feeling over burdened by money?', 0, 0, 0, 'We don''t carry that sort of thing here.', 'Look, we don''t carry that...', 'No money, no product. Simple as that.', 'The precursor to buying guns is that you have to have money upfront...', 'I don''t work with those types of items.', 'You got it. Here you go!', 'Nice. Maybe I can find some poor schmuck to sell this to...', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 
 --
@@ -12889,113 +13183,49 @@ INSERT INTO "public"."skill_usage" VALUES (438, 111, 'mark', 0);
 INSERT INTO "public"."skill_usage" VALUES (439, 1, 'dissipate', 0);
 INSERT INTO "public"."skill_usage" VALUES (440, 1, 'penshot', 0);
 INSERT INTO "public"."skill_usage" VALUES (441, 1, 'mark', 0);
-INSERT INTO "public"."skill_usage" VALUES (442, 113, 'ts', 0);
-INSERT INTO "public"."skill_usage" VALUES (443, 113, 'lb', 0);
-INSERT INTO "public"."skill_usage" VALUES (444, 113, 'suture', 0);
-INSERT INTO "public"."skill_usage" VALUES (445, 113, 'as', 0);
-INSERT INTO "public"."skill_usage" VALUES (446, 113, 'emp', 0);
-INSERT INTO "public"."skill_usage" VALUES (447, 113, 'chaff', 0);
-INSERT INTO "public"."skill_usage" VALUES (448, 113, 'sensor', 0);
-INSERT INTO "public"."skill_usage" VALUES (449, 113, 'ubs', 0);
-INSERT INTO "public"."skill_usage" VALUES (450, 113, 'ubf', 0);
-INSERT INTO "public"."skill_usage" VALUES (451, 113, 'gm', 0);
-INSERT INTO "public"."skill_usage" VALUES (452, 113, 'limb', 0);
-INSERT INTO "public"."skill_usage" VALUES (453, 113, 'claymore', 0);
-INSERT INTO "public"."skill_usage" VALUES (454, 113, 'smine', 0);
-INSERT INTO "public"."skill_usage" VALUES (455, 113, 'cmine', 0);
-INSERT INTO "public"."skill_usage" VALUES (456, 113, 'xray', 0);
-INSERT INTO "public"."skill_usage" VALUES (457, 113, 'recon', 0);
-INSERT INTO "public"."skill_usage" VALUES (458, 113, 'wpn-ar', 0);
-INSERT INTO "public"."skill_usage" VALUES (459, 113, 'wpn-sniper', 0);
-INSERT INTO "public"."skill_usage" VALUES (460, 113, 'wpn-smg', 0);
-INSERT INTO "public"."skill_usage" VALUES (461, 113, 'wpn-shotguns', 0);
-INSERT INTO "public"."skill_usage" VALUES (462, 113, 'wpn-pistols', 0);
-INSERT INTO "public"."skill_usage" VALUES (463, 113, 'wpn-mp', 0);
-INSERT INTO "public"."skill_usage" VALUES (464, 113, 'wpn-lmg', 0);
-INSERT INTO "public"."skill_usage" VALUES (465, 113, 'cqc-jab-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (466, 113, 'cqc-jab-to-body', 0);
-INSERT INTO "public"."skill_usage" VALUES (467, 113, 'cqc-cross-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (468, 113, 'cqc-cross-to-body', 0);
-INSERT INTO "public"."skill_usage" VALUES (469, 113, 'cqc-left-hook-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (470, 113, 'cqc-right-hook-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (471, 113, 'cqc-left-hook-to-body', 0);
-INSERT INTO "public"."skill_usage" VALUES (472, 113, 'cqc-right-hook-to-body', 0);
-INSERT INTO "public"."skill_usage" VALUES (473, 113, 'cqc-left-uppercut', 0);
-INSERT INTO "public"."skill_usage" VALUES (474, 113, 'cqc-right-uppercut', 0);
-INSERT INTO "public"."skill_usage" VALUES (475, 113, 'cqc-left-elbow', 0);
-INSERT INTO "public"."skill_usage" VALUES (476, 113, 'cqc-right-elbow', 0);
-INSERT INTO "public"."skill_usage" VALUES (477, 113, 'cqc-right-upward-elbow', 0);
-INSERT INTO "public"."skill_usage" VALUES (478, 113, 'cqc-left-upward-elbow', 0);
-INSERT INTO "public"."skill_usage" VALUES (479, 113, 'cqc-right-oblique', 0);
-INSERT INTO "public"."skill_usage" VALUES (480, 113, 'cqc-left-oblique', 0);
-INSERT INTO "public"."skill_usage" VALUES (481, 113, 'cqc-left-teep', 0);
-INSERT INTO "public"."skill_usage" VALUES (482, 113, 'cqc-right-teep', 0);
-INSERT INTO "public"."skill_usage" VALUES (483, 113, 'cqc-left-front-kick', 0);
-INSERT INTO "public"."skill_usage" VALUES (484, 113, 'cqc-right-front-kick', 0);
-INSERT INTO "public"."skill_usage" VALUES (485, 113, 'cqc-left-knee-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (486, 113, 'cqc-right-knee-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (487, 113, 'cqc-left-knee-to-body', 0);
-INSERT INTO "public"."skill_usage" VALUES (488, 113, 'cqc-right-knee-to-body', 0);
-INSERT INTO "public"."skill_usage" VALUES (489, 113, 'cqc-knife-disarm', 0);
-INSERT INTO "public"."skill_usage" VALUES (490, 113, 'cqc-pistol-disarm', 0);
-INSERT INTO "public"."skill_usage" VALUES (491, 113, 'cqc-right-leg-kick', 0);
-INSERT INTO "public"."skill_usage" VALUES (492, 113, 'cqc-left-leg-kick', 0);
-INSERT INTO "public"."skill_usage" VALUES (493, 113, 'cqc-right-kick-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (494, 113, 'cqc-left-kick-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (495, 113, 'cqc-right-stomp-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (496, 113, 'cqc-left-stomp-to-head', 0);
-INSERT INTO "public"."skill_usage" VALUES (497, 113, 'load_tracer_rounds', 0);
-INSERT INTO "public"."skill_usage" VALUES (498, 113, 'field_strip_weapon', 0);
-INSERT INTO "public"."skill_usage" VALUES (499, 113, 'attach_m203', 0);
-INSERT INTO "public"."skill_usage" VALUES (500, 113, 'attach_m203_x12', 0);
-INSERT INTO "public"."skill_usage" VALUES (501, 113, 'attach_flash_surpressor', 0);
-INSERT INTO "public"."skill_usage" VALUES (502, 113, 'teep_kick', 0);
-INSERT INTO "public"."skill_usage" VALUES (503, 113, 'single_leg_takedown', 0);
-INSERT INTO "public"."skill_usage" VALUES (504, 113, 'double_leg_takedown', 0);
-INSERT INTO "public"."skill_usage" VALUES (505, 113, 'uchi_mata', 0);
-INSERT INTO "public"."skill_usage" VALUES (506, 113, 'morote_seoi_nage', 0);
-INSERT INTO "public"."skill_usage" VALUES (507, 113, 'tomoe_nage', 0);
-INSERT INTO "public"."skill_usage" VALUES (508, 113, 'thermal_vision', 0);
-INSERT INTO "public"."skill_usage" VALUES (509, 113, 'night_vision', 0);
-INSERT INTO "public"."skill_usage" VALUES (510, 113, 'deploy_smoke', 0);
-INSERT INTO "public"."skill_usage" VALUES (511, 113, 'specialize_in', 0);
-INSERT INTO "public"."skill_usage" VALUES (512, 113, 'benzo_stimuli_shot', 0);
-INSERT INTO "public"."skill_usage" VALUES (513, 113, 'light_bandage', 0);
-INSERT INTO "public"."skill_usage" VALUES (514, 113, 'adrenaline_shot', 0);
-INSERT INTO "public"."skill_usage" VALUES (515, 113, 'target_limb', 0);
-INSERT INTO "public"."skill_usage" VALUES (516, 113, 'plant_claymore', 0);
-INSERT INTO "public"."skill_usage" VALUES (517, 113, 'shrapnel_claymore', 0);
-INSERT INTO "public"."skill_usage" VALUES (518, 113, 'corrosive_claymore', 0);
-INSERT INTO "public"."skill_usage" VALUES (519, 113, 'request_recon', 0);
-INSERT INTO "public"."skill_usage" VALUES (520, 113, 'request_smoke_screen', 0);
-INSERT INTO "public"."skill_usage" VALUES (521, 113, 'request_drone_strike', 0);
-INSERT INTO "public"."skill_usage" VALUES (522, 113, 'request_drone_recon', 0);
-INSERT INTO "public"."skill_usage" VALUES (523, 113, 'ltr', 0);
-INSERT INTO "public"."skill_usage" VALUES (524, 113, 'fsw', 0);
-INSERT INTO "public"."skill_usage" VALUES (525, 113, 'm2', 0);
-INSERT INTO "public"."skill_usage" VALUES (526, 113, 'm2x', 0);
-INSERT INTO "public"."skill_usage" VALUES (527, 113, 'afs', 0);
-INSERT INTO "public"."skill_usage" VALUES (528, 113, 'teep', 0);
-INSERT INTO "public"."skill_usage" VALUES (529, 113, 'slt', 0);
-INSERT INTO "public"."skill_usage" VALUES (530, 113, 'tlt', 0);
-INSERT INTO "public"."skill_usage" VALUES (531, 113, 'uch', 0);
-INSERT INTO "public"."skill_usage" VALUES (532, 113, 'msn', 0);
-INSERT INTO "public"."skill_usage" VALUES (533, 113, 'tnage', 0);
-INSERT INTO "public"."skill_usage" VALUES (534, 113, 'therm', 0);
-INSERT INTO "public"."skill_usage" VALUES (535, 113, 'nvg', 0);
-INSERT INTO "public"."skill_usage" VALUES (536, 113, 'ds', 0);
-INSERT INTO "public"."skill_usage" VALUES (537, 113, 'spec', 0);
-INSERT INTO "public"."skill_usage" VALUES (538, 113, 'bss', 0);
-INSERT INTO "public"."skill_usage" VALUES (539, 113, 'ads', 0);
-INSERT INTO "public"."skill_usage" VALUES (540, 113, 'tlimb', 0);
-INSERT INTO "public"."skill_usage" VALUES (541, 113, 'clay', 0);
-INSERT INTO "public"."skill_usage" VALUES (542, 113, 'sclay', 0);
-INSERT INTO "public"."skill_usage" VALUES (543, 113, 'corclay', 0);
-INSERT INTO "public"."skill_usage" VALUES (544, 113, 'reqrecon', 0);
-INSERT INTO "public"."skill_usage" VALUES (545, 113, 'reqs', 0);
-INSERT INTO "public"."skill_usage" VALUES (546, 113, 'reqds', 0);
-INSERT INTO "public"."skill_usage" VALUES (547, 113, 'reqdr', 0);
-INSERT INTO "public"."skill_usage" VALUES (548, 113, 'str', 0);
+INSERT INTO "public"."skill_usage" VALUES (551, 114, 'ltr', 0);
+INSERT INTO "public"."skill_usage" VALUES (552, 114, 'dedrone', 0);
+INSERT INTO "public"."skill_usage" VALUES (553, 114, 'm2', 0);
+INSERT INTO "public"."skill_usage" VALUES (554, 114, 'pin', 0);
+INSERT INTO "public"."skill_usage" VALUES (555, 114, 'wpn-ar', 0);
+INSERT INTO "public"."skill_usage" VALUES (556, 114, 'wpn-sniper', 0);
+INSERT INTO "public"."skill_usage" VALUES (557, 114, 'wpn-smg', 0);
+INSERT INTO "public"."skill_usage" VALUES (558, 114, 'wpn-shotguns', 0);
+INSERT INTO "public"."skill_usage" VALUES (559, 114, 'wpn-pistols', 0);
+INSERT INTO "public"."skill_usage" VALUES (560, 114, 'wpn-mp', 0);
+INSERT INTO "public"."skill_usage" VALUES (561, 114, 'wpn-lmg', 0);
+INSERT INTO "public"."skill_usage" VALUES (562, 114, 'cqc-jab-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (563, 114, 'cqc-jab-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (564, 114, 'cqc-cross-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (565, 114, 'cqc-cross-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (566, 114, 'cqc-left-hook-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (567, 114, 'cqc-right-hook-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (568, 114, 'cqc-left-hook-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (569, 114, 'cqc-right-hook-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (570, 114, 'cqc-left-uppercut', 0);
+INSERT INTO "public"."skill_usage" VALUES (571, 114, 'cqc-right-uppercut', 0);
+INSERT INTO "public"."skill_usage" VALUES (572, 114, 'cqc-left-elbow', 0);
+INSERT INTO "public"."skill_usage" VALUES (573, 114, 'cqc-right-elbow', 0);
+INSERT INTO "public"."skill_usage" VALUES (574, 114, 'cqc-right-upward-elbow', 0);
+INSERT INTO "public"."skill_usage" VALUES (575, 114, 'cqc-left-upward-elbow', 0);
+INSERT INTO "public"."skill_usage" VALUES (576, 114, 'cqc-right-oblique', 0);
+INSERT INTO "public"."skill_usage" VALUES (577, 114, 'cqc-left-oblique', 0);
+INSERT INTO "public"."skill_usage" VALUES (578, 114, 'cqc-left-teep', 0);
+INSERT INTO "public"."skill_usage" VALUES (579, 114, 'cqc-right-teep', 0);
+INSERT INTO "public"."skill_usage" VALUES (580, 114, 'cqc-left-front-kick', 0);
+INSERT INTO "public"."skill_usage" VALUES (581, 114, 'cqc-right-front-kick', 0);
+INSERT INTO "public"."skill_usage" VALUES (582, 114, 'cqc-left-knee-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (583, 114, 'cqc-right-knee-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (584, 114, 'cqc-left-knee-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (585, 114, 'cqc-right-knee-to-body', 0);
+INSERT INTO "public"."skill_usage" VALUES (586, 114, 'cqc-knife-disarm', 0);
+INSERT INTO "public"."skill_usage" VALUES (587, 114, 'cqc-pistol-disarm', 0);
+INSERT INTO "public"."skill_usage" VALUES (588, 114, 'cqc-right-leg-kick', 0);
+INSERT INTO "public"."skill_usage" VALUES (589, 114, 'cqc-left-leg-kick', 0);
+INSERT INTO "public"."skill_usage" VALUES (590, 114, 'cqc-right-kick-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (591, 114, 'cqc-left-kick-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (592, 114, 'cqc-right-stomp-to-head', 0);
+INSERT INTO "public"."skill_usage" VALUES (593, 114, 'cqc-left-stomp-to-head', 0);
 
 
 --
@@ -13413,7 +13643,7 @@ SELECT pg_catalog.setval('"public"."class_ghost_ghost_id_seq"', 13, true);
 -- Name: class_marine_marine_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."class_marine_marine_id_seq"', 3, true);
+SELECT pg_catalog.setval('"public"."class_marine_marine_id_seq"', 4, true);
 
 
 --
@@ -13526,6 +13756,13 @@ SELECT pg_catalog.setval('"public"."integral_object_object_id_seq"', 1, false);
 --
 
 SELECT pg_catalog.setval('"public"."karma_karma_id_seq"', 1, false);
+
+
+--
+-- Name: locker_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('"public"."locker_id_seq"', 23, true);
 
 
 --
@@ -13665,7 +13902,7 @@ SELECT pg_catalog.setval('"public"."object_weapon_id_seq"', 5, true);
 -- Name: player_base_ability_pba_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."player_base_ability_pba_id_seq"', 19, true);
+SELECT pg_catalog.setval('"public"."player_base_ability_pba_id_seq"', 20, true);
 
 
 --
@@ -13693,7 +13930,7 @@ SELECT pg_catalog.setval('"public"."player_flags_id_seq"', 1, false);
 -- Name: player_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."player_id_seq"', 113, true);
+SELECT pg_catalog.setval('"public"."player_id_seq"', 114, true);
 
 
 --
@@ -13798,7 +14035,7 @@ SELECT pg_catalog.setval('"public"."rifle_placements_id_seq"', 1, false);
 -- Name: room_direction_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."room_direction_data_id_seq"', 4953, true);
+SELECT pg_catalog.setval('"public"."room_direction_data_id_seq"', 5144, true);
 
 
 --
@@ -13812,7 +14049,7 @@ SELECT pg_catalog.setval('"public"."room_extra_descriptions_id_seq"', 1, false);
 -- Name: room_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."room_id_seq"', 1453, true);
+SELECT pg_catalog.setval('"public"."room_id_seq"', 1465, true);
 
 
 --
@@ -13840,7 +14077,7 @@ SELECT pg_catalog.setval('"public"."scripted_steps_id_seq"', 147, true);
 -- Name: shop_objects_shop_objects_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."shop_objects_shop_objects_id_seq"', 8, true);
+SELECT pg_catalog.setval('"public"."shop_objects_shop_objects_id_seq"', 12, true);
 
 
 --
@@ -13854,7 +14091,7 @@ SELECT pg_catalog.setval('"public"."shop_rooms_shop_rooms_id_seq"', 2, true);
 -- Name: shops_shop_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."shops_shop_id_seq"', 3, true);
+SELECT pg_catalog.setval('"public"."shops_shop_id_seq"', 5, true);
 
 
 --
@@ -13875,7 +14112,7 @@ SELECT pg_catalog.setval('"public"."skill_trees_id_seq"', 16, true);
 -- Name: skill_usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"public"."skill_usage_id_seq"', 548, true);
+SELECT pg_catalog.setval('"public"."skill_usage_id_seq"', 593, true);
 
 
 --
@@ -14169,6 +14406,14 @@ ALTER TABLE ONLY "public"."integral_object"
 
 ALTER TABLE ONLY "public"."karma"
     ADD CONSTRAINT "karma_pkey" PRIMARY KEY ("karma_id");
+
+
+--
+-- Name: locker locker_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "public"."locker"
+    ADD CONSTRAINT "locker_pkey" PRIMARY KEY ("id");
 
 
 --

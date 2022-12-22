@@ -655,9 +655,9 @@ namespace mods::levels {
 				std::cerr << red_str("generic_advance_hp encountered odd ARMOR triad:") << triads[ARMOR] << "\n";
 				break;
 		}
-		s[STAT_HP] = (hp * (32.5)) + (level * 15.53);
-		s[STAT_MANA] = (mana * (32.5)) + (level * 15.53);
-		s[STAT_MOVE] = (move * (32.5)) + (level * 15.53);
+		s[STAT_HP] = (hp * (10.5));
+		s[STAT_MANA] = (mana * (10.5));
+		s[STAT_MOVE] = (move * (10.5));
 		s[STAT_STRENGTH] = strength;
 		s[STAT_CONSTITUTION] = constitution;
 		s[STAT_DEXTERITY] = dexterity;
