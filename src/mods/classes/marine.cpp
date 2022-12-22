@@ -151,15 +151,22 @@ namespace mods::classes {
 		return m_frag_ub.fire(m_player,direction,distance);
 	}
 	cmd_report_t marine::deploy_explosive_drone() {
+		/**
+		 * TODO FIXME: implement this
+		 */
 		return {true,"You attach an M203."};
 	}
 	cmd_report_t marine::pin_down() {
 		if(!m_player->primary() || !m_player->primary()->has_rifle()) {
 			return {0,"Your primary weapon must be a rifle"};
 		}
+		/**
+		 * TODO FIXME
+		 */
 		return {true,"You attach an M203."};
 	}
 	cmd_report_t marine::load_tracer_rounds(const uuid_t& wpn) {
+		// TEST ME
 		auto ptr = optr_by_uuid(wpn);
 		if(!ptr) {
 			return {0,"Couldn't find that item"};
@@ -204,16 +211,16 @@ namespace mods::class_abilities::marine {
 		PLAYER_CAN("marine.deploy_explosive_drone");
 		CMDREPORT(player->marine()->deploy_explosive_drone());
 	}
-	ACMD(do_attach_m203) {
+	ACMD(do_attach_m203) { // TEST ME
 		PLAYER_CAN("marine.attach_m203");
 		DO_HELP_WITH_ZERO("marine.attach_m203");
 		CMDREPORT(player->marine()->attach_frag_underbarrel());
 	}
-	ACMD(do_detach_m203) {
+	ACMD(do_detach_m203) { // TEST ME
 		PLAYER_CAN("marine.detach_m203");
 		CMDREPORT(player->marine()->detach_frag_underbarrel());
 	}
-	ACMD(do_marine_fire) {
+	ACMD(do_marine_fire) { // TEST ME
 		PLAYER_CAN("marine.fire");
 		DO_HELP("marine.fire");
 		static constexpr const char* usage = "marine:fire <direction> <distance>\r\n";
@@ -238,11 +245,11 @@ namespace mods::class_abilities::marine {
 		player->sendln("Your class does not support this.");
 	};
 	void init() {
-		mods::interpreter::add_command("marine:load_tracer_rounds", POS_RESTING, do_load_tracer_rounds, 0,0);
-		mods::interpreter::add_command("marine:deploy_explosive_drone", POS_RESTING, do_deploy_explosive_drone, 0,0);
-		mods::interpreter::add_command("marine:attach_m203", POS_RESTING, do_attach_m203, 0,0);
-		mods::interpreter::add_command("marine:detach_m203", POS_RESTING, do_detach_m203, 0,0);
-		mods::interpreter::add_command("marine:fire", POS_RESTING, do_marine_fire, 0,0);
+		mods::interpreter::add_command("marine:load_tracer_rounds", POS_RESTING, do_load_tracer_rounds, 0,0); // TESTME FIXME
+		mods::interpreter::add_command("marine:deploy_explosive_drone", POS_RESTING, do_deploy_explosive_drone, 0,0); // TESTME FIXME
+		mods::interpreter::add_command("marine:attach_m203", POS_RESTING, do_attach_m203, 0,0); // TESTME FIXME
+		mods::interpreter::add_command("marine:detach_m203", POS_RESTING, do_detach_m203, 0,0); // TESTME FIXME
+		mods::interpreter::add_command("marine:fire", POS_RESTING, do_marine_fire, 0,0); // TESTME FIXME
 
 	}
 };

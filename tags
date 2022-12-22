@@ -134,11 +134,11 @@ ACMD	src/mods/classes/ghost.cpp	/^	ACMD(do_mark_target) {$/;"	kind:function	line
 ACMD	src/mods/classes/ghost.cpp	/^	ACMD(do_toss_cryogenic_grenade) {$/;"	kind:function	line:1319	namespace:mods::class_abilities::ghost	signature:(do_toss_cryogenic_grenade)
 ACMD	src/mods/classes/ghost.cpp	/^	ACMD(do_tracking_shot) {$/;"	kind:function	line:1200	namespace:mods::class_abilities::ghost	signature:(do_tracking_shot)
 ACMD	src/mods/classes/ghost.cpp	/^	ACMD(do_xray_shot) {$/;"	kind:function	line:1178	namespace:mods::class_abilities::ghost	signature:(do_xray_shot)
-ACMD	src/mods/classes/marine.cpp	/^	ACMD(do_attach_m203) {$/;"	kind:function	line:207	namespace:mods::class_abilities::marine	signature:(do_attach_m203)
-ACMD	src/mods/classes/marine.cpp	/^	ACMD(do_deploy_explosive_drone) {$/;"	kind:function	line:203	namespace:mods::class_abilities::marine	signature:(do_deploy_explosive_drone)
-ACMD	src/mods/classes/marine.cpp	/^	ACMD(do_detach_m203) {$/;"	kind:function	line:212	namespace:mods::class_abilities::marine	signature:(do_detach_m203)
-ACMD	src/mods/classes/marine.cpp	/^	ACMD(do_load_tracer_rounds) {$/;"	kind:function	line:186	namespace:mods::class_abilities::marine	signature:(do_load_tracer_rounds)
-ACMD	src/mods/classes/marine.cpp	/^	ACMD(do_marine_fire) {$/;"	kind:function	line:216	namespace:mods::class_abilities::marine	signature:(do_marine_fire)
+ACMD	src/mods/classes/marine.cpp	/^	ACMD(do_attach_m203) { \/\/ TEST ME$/;"	kind:function	line:214	namespace:mods::class_abilities::marine	signature:(do_attach_m203)
+ACMD	src/mods/classes/marine.cpp	/^	ACMD(do_deploy_explosive_drone) {$/;"	kind:function	line:210	namespace:mods::class_abilities::marine	signature:(do_deploy_explosive_drone)
+ACMD	src/mods/classes/marine.cpp	/^	ACMD(do_detach_m203) { \/\/ TEST ME$/;"	kind:function	line:219	namespace:mods::class_abilities::marine	signature:(do_detach_m203)
+ACMD	src/mods/classes/marine.cpp	/^	ACMD(do_load_tracer_rounds) {$/;"	kind:function	line:193	namespace:mods::class_abilities::marine	signature:(do_load_tracer_rounds)
+ACMD	src/mods/classes/marine.cpp	/^	ACMD(do_marine_fire) { \/\/ TEST ME$/;"	kind:function	line:223	namespace:mods::class_abilities::marine	signature:(do_marine_fire)
 ACMD	src/mods/classes/pyrexia.cpp	/^ACMD(do_fire_nade){$/;"	kind:function	line:217	signature:(do_fire_nade)
 ACMD	src/mods/combat-composer/snipe-target.cpp	/^	ACMD(do_print_rct) {$/;"	kind:function	line:35	namespace:mods::combat_composer	signature:(do_print_rct)
 ACMD	src/mods/combat.cpp	/^		ACMD(do_set_rules_of_engagement) {$/;"	kind:function	line:35	namespace:mods::combat::commands	signature:(do_set_rules_of_engagement)
@@ -10015,7 +10015,7 @@ init	src/mods/classes/forge.cpp	/^	void forge::init(){$/;"	kind:function	line:22
 init	src/mods/classes/forge.cpp	/^	void init(){$/;"	kind:function	line:107	namespace:mods::class_abilities::forge	signature:()
 init	src/mods/classes/ghost.cpp	/^	void ghost::init() {$/;"	kind:function	line:245	class:mods::classes::ghost	signature:()
 init	src/mods/classes/ghost.cpp	/^	void init() {$/;"	kind:function	line:1430	namespace:mods::class_abilities::ghost	signature:()
-init	src/mods/classes/marine.cpp	/^	void init() {$/;"	kind:function	line:240	namespace:mods::class_abilities::marine	signature:()
+init	src/mods/classes/marine.cpp	/^	void init() {$/;"	kind:function	line:247	namespace:mods::class_abilities::marine	signature:()
 init	src/mods/classes/marine.cpp	/^	void marine::init() {$/;"	kind:function	line:12	class:mods::classes::marine	signature:()
 init	src/mods/classes/medic.cpp	/^	void medic::init() {$/;"	kind:function	line:17	class:mods::classes::medic	signature:()
 init	src/mods/classes/super-user-fiddler.cpp	/^	void init() {$/;"	kind:function	line:46	namespace:mods::classes	signature:()
@@ -10795,7 +10795,7 @@ load_room	src/structs.h	/^	room_vnum load_room;		\/* Which room to place char in
 load_skill_by_player	src/mods/classes/base.cpp	/^	std::tuple<bool,std::string> skill_t::load_skill_by_player(std::string_view skill_name, player_ptr_t& player) {$/;"	kind:function	line:14	class:mods::classes::skill_t	signature:(std::string_view skill_name, player_ptr_t& player)
 load_skill_points	src/mods/players/db-load.cpp	/^	void load_skill_points(player_ptr_t& player) {$/;"	kind:function	line:208	namespace:mods::players::db_load	signature:(player_ptr_t& player)
 load_skill_usages	src/mods/orm/sniper.cpp	/^	void sniper::load_skill_usages() {$/;"	kind:function	line:6	class:mods::orm::sniper	signature:()
-load_tracer_rounds	src/mods/classes/marine.cpp	/^	cmd_report_t marine::load_tracer_rounds(const uuid_t& wpn) {$/;"	kind:function	line:162	class:mods::classes::marine	signature:(const uuid_t& wpn)
+load_tracer_rounds	src/mods/classes/marine.cpp	/^	cmd_report_t marine::load_tracer_rounds(const uuid_t& wpn) {$/;"	kind:function	line:168	class:mods::classes::marine	signature:(const uuid_t& wpn)
 load_trees	src/mods/behaviour_tree_impl.cpp	/^	void load_trees() {$/;"	kind:function	line:113	namespace:mods::behaviour_tree_impl	signature:()
 load_where	src/mods/orm/base.hpp	/^		static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,$/;"	kind:function	line:111	struct:mods::orm::base	access:public	signature:(TContainerObject& s, std::string_view where, std::string_view sql_operator, std::string_view value)
 load_where	src/mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s, std::string_view table_name,TCompoundStatement& compound_statement_list) {$/;"	kind:function	line:251	namespace:mods::orm::util	signature:(TContainerObject& s, std::string_view table_name,TCompoundStatement& compound_statement_list)
@@ -12385,7 +12385,7 @@ mapor	src/mods/rooms.cpp	789;"	kind:macro	line:789	file:
 maps	src/mods/util-map.hpp	/^		namespace maps {$/;"	kind:namespace	line:12	namespace:mods::util	file:
 marine	src/mods/classes/marine.cpp	/^	marine::marine() {$/;"	kind:function	line:9	class:mods::classes::marine	signature:()
 marine	src/mods/classes/marine.cpp	/^	marine::marine(player_ptr_t p) {$/;"	kind:function	line:100	class:mods::classes::marine	signature:(player_ptr_t p)
-marine	src/mods/classes/marine.cpp	/^namespace mods::class_abilities::marine {$/;"	kind:namespace	line:185	class:mods::class_abilities	file:
+marine	src/mods/classes/marine.cpp	/^namespace mods::class_abilities::marine {$/;"	kind:namespace	line:192	class:mods::class_abilities	file:
 marine	src/mods/classes/marine.hpp	/^	struct marine : base {$/;"	kind:struct	line:8	namespace:mods::classes	file:	inherits:base
 marine	src/mods/init.hpp	/^INIT(mods::class_abilities::marine);$/;"	kind:variable	line:9
 marine	src/mods/orm/marine.hpp	/^		marine() : id(0) {$/;"	kind:function	line:17	struct:mods::orm::marine	access:public	signature:()
@@ -13728,7 +13728,7 @@ phases	src/mods/combat-composer/shared.hpp	/^	namespace phases {$/;"	kind:namesp
 phases	src/mods/combat-composer/snipe-target.cpp	/^	namespace phases {$/;"	kind:namespace	line:43	namespace:mods::combat_composer	file:
 phases	src/mods/combat-composer/spray-target.cpp	/^	namespace phases {$/;"	kind:namespace	line:45	namespace:mods::combat_composer	file:
 pick_corpse_from_room_by_argument	src/mods/corpse.cpp	/^	std::tuple<bool,std::string,obj_ptr_t> pick_corpse_from_room_by_argument(player_ptr_t& player, std::string_view in_argument) {$/;"	kind:function	line:68	namespace:mods::corpse	signature:(player_ptr_t& player, std::string_view in_argument)
-pin_down	src/mods/classes/marine.cpp	/^	cmd_report_t marine::pin_down() {$/;"	kind:function	line:156	class:mods::classes::marine	signature:()
+pin_down	src/mods/classes/marine.cpp	/^	cmd_report_t marine::pin_down() {$/;"	kind:function	line:159	class:mods::classes::marine	signature:()
 pistol	src/mods/weapons/pistol-czp10.cpp	/^namespace mods::weapons::pistol {$/;"	kind:namespace	line:6	class:mods::weapons	file:
 pistol	src/mods/weapons/pistol-czp10.hpp	/^namespace mods::weapons::pistol {$/;"	kind:namespace	line:8	class:mods::weapons	file:
 pistol_limits	src/mods/forge-engine/generated-rifle.cpp	/^	static std::vector<attribute_limits_t> pistol_limits;$/;"	kind:member	line:295	namespace:mods::forge_engine	file:
