@@ -2156,7 +2156,7 @@ MAX_OBJ_NAME	src/olc.h	16;"	kind:macro	line:16	file:
 MAX_OPER	src/shop.h	131;"	kind:macro	line:131	file:
 MAX_OUTSIDE_BANK	src/shop.h	171;"	kind:macro	line:171	file:
 MAX_PER_PRAC	src/spec_procs.cpp	125;"	kind:macro	line:125	file:
-MAX_PLAYER_LEVEL	src/mods/levels.hpp	/^	static constexpr uint8_t MAX_PLAYER_LEVEL = 255;$/;"	kind:member	line:39	namespace:mods::levels	file:
+MAX_PLAYER_LEVEL	src/mods/levels.hpp	/^	static constexpr uint8_t MAX_PLAYER_LEVEL = 100;$/;"	kind:member	line:39	namespace:mods::levels	file:
 MAX_PLAYER_NAME_LENGTH	src/mods/player.cpp	/^static constexpr std::size_t MAX_PLAYER_NAME_LENGTH = 16;$/;"	kind:variable	line:55	file:
 MAX_PROD	src/shop.h	83;"	kind:macro	line:83	file:
 MAX_PROMPT_LENGTH	src/structs.h	682;"	kind:macro	line:682	file:
