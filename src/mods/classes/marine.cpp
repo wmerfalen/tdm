@@ -2,6 +2,7 @@
 #include "../orm/inventory.hpp"
 #include "../query-objects.hpp"
 #include "../interpreter.hpp"
+#include "../object-utils.hpp"
 #include "../weapon.hpp"
 
 namespace mods::classes {
@@ -46,6 +47,16 @@ namespace mods::classes {
 			//{REQUEST_DRONE_STRIKE,"reqds","Request Drone Strike",s::INTELLIGENCE,&m_request_drone_strike,M},
 			//{REQUEST_DRONE_RECON,"reqdr","Request Drone Recon",s::INTELLIGENCE,&m_request_drone_recon,M},
 		});
+	}
+	cmd_report_t marine::giveme_m16() {
+		if(!m_m16) {
+			m_m16 = create_object(ITEM_RIFLE,marine::M16A_RIFLE_OBJECT.data());
+		}
+		if(m_player->primary()) {
+			m_player->unequip_into_inventory(WEAR_PRIMARY);
+		}
+		m_player->equip(m_m16,WEAR_PRIMARY);
+		return {1,"You equip your M16A into your primary weapon slot."};
 	}
 	bool marine::is_core_ability(const ability_t& ability) const {
 		return std::find(core_abilities.cbegin(),core_abilities.cend(),ability) != core_abilities.cend();
@@ -156,12 +167,40 @@ namespace mods::classes {
 		 */
 		return {true,"You attach an M203."};
 	}
-	cmd_report_t marine::pin_down() {
-		if(!m_player->primary() || !m_player->primary()->has_rifle()) {
-			return {0,"Your primary weapon must be a rifle"};
+	cmd_report_t marine::pin_down(const acquired_target_t& input) {
+		if(!mods::object_utils::player_primary_is_assault_rifle(m_player)) {
+			return {0,"Your must be wielding an {grn}Assault Rifle{/grn}"};
 		}
 		/**
-		 * TODO FIXME
+		 * TODO: FIXME: implement this
+		 */
+		/**
+		 * Brainstorm:
+		 * ----------------
+		 *  Possible implementations:
+		 *  	- flagging a target as being "pinned down"
+		 *  		- an AFFECT
+		 *  		- a type of effect similar to bleed/blind/etc
+		 *  		- a free_to_move_on_tick variable stored on target
+		 *
+		 * "Movement penalty":
+		 * - whenever the target wants to move, we first do:
+		 * ```
+		 * if(target->attempt_to_move(direction)){
+		 *  	target->move(direction);
+		 * }else{
+		 * 		target->sendln("You are pinned down!");
+		 * }
+		 *
+		 * bool player::attempt_to_move(direction_t dir) {
+		 *		if(m_target_movement_penalty > 0){
+		 *   		m_target_movement_penalty -= dexterity * 0.5 * tier;
+		 *		}
+		 *		if(m_target_movement_penalty < 0){
+		 *			m_target_movement_penalty = 0;
+		 *		}
+		 *		return m_target_movement_penalty == 0;
+		 * }
 		 */
 		return {true,"You attach an M203."};
 	}
@@ -244,12 +283,48 @@ namespace mods::class_abilities::marine {
 		}
 		player->sendln("Your class does not support this.");
 	};
+	ACMD(do_marine_giveme_m16) { // TEST ME
+		PLAYER_CAN("marine.giveme_m16");
+		DO_HELP("marine.giveme_m16");
+		if(!player->marine()) {
+			player->sendln("Your class does not support this.");
+			return;
+		}
+		CMDREPORT(player->marine()->giveme_m16());
+	};
+	ACMD(do_marine_pin_down) { // TEST ME
+		using namespace mods::target_acquisition;
+		PLAYER_CAN("marine.pin_down");
+		DO_HELP("marine.pin_down");
+		if(!player->marine()) {
+			player->sendln("Your class does not support this.");
+			return;
+		}
+		static constexpr std::string_view usage = "marine:pin_down <target> <direction> <distance>\r\n"
+		    "Example:\r\n"
+		    "marine:pin_down Guard west 2\r\n";
+
+		auto vec_args = PARSE_ARGS();
+		if(argshave()->size_gt(2)->passed()) {
+			player->sendln(usage);
+			return;
+		}
+		auto opt_tdd = mods::util::parse_target_direction_distance(player,vec_args);
+		if(!opt_tdd.has_value()) {
+			player->sendln("Couldn't find target!");
+			return;
+		}
+		acquired_target_t t(opt_tdd);
+		CMDREPORT(player->marine()->pin_down(t));
+	};
 	void init() {
+		mods::interpreter::add_command("marine:giveme_m16", POS_RESTING, do_marine_giveme_m16, 0,0); // TESTME FIXME
 		mods::interpreter::add_command("marine:load_tracer_rounds", POS_RESTING, do_load_tracer_rounds, 0,0); // TESTME FIXME
 		mods::interpreter::add_command("marine:deploy_explosive_drone", POS_RESTING, do_deploy_explosive_drone, 0,0); // TESTME FIXME
 		mods::interpreter::add_command("marine:attach_m203", POS_RESTING, do_attach_m203, 0,0); // TESTME FIXME
 		mods::interpreter::add_command("marine:detach_m203", POS_RESTING, do_detach_m203, 0,0); // TESTME FIXME
 		mods::interpreter::add_command("marine:fire", POS_RESTING, do_marine_fire, 0,0); // TESTME FIXME
+		mods::interpreter::add_command("marine:pin_down", POS_RESTING, do_marine_pin_down, 0,0); // TESTME FIXME
 
 	}
 };

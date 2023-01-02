@@ -99,7 +99,7 @@ namespace mods::util {
 			}
 			double elapsed() const {
 				return std::chrono::duration_cast<second_>
-				       (clock_::now() - beg_).count();
+				    (clock_::now() - beg_).count();
 			}
 
 		private:
@@ -368,16 +368,16 @@ namespace mods::util {
 
 	template <typename ContainerType,typename FindType>
 	bool exists(const ContainerType * container_ptr,
-	            const FindType& find_me,
-	            typename ContainerType::const_iterator& found_at) {
+	    const FindType& find_me,
+	    typename ContainerType::const_iterator& found_at) {
 		return (
-		           found_at =
-		               std::find(
-		                   container_ptr->begin(),
-		                   container_ptr->end(),
-		                   find_me
-		               )
-		       )!= container_ptr->end();
+		        found_at =
+		            std::find(
+		                container_ptr->begin(),
+		                container_ptr->end(),
+		                find_me
+		            )
+		    )!= container_ptr->end();
 	}
 	extern std::function<void(const std::string&,std::string&)> sanitize;
 	bool dir_exists(const char*);
@@ -420,6 +420,7 @@ namespace mods::util {
 	static constexpr uint8_t CAP_ALL = 0;
 	obj_ptr_t make_from(obj_data* o);
 	bool parse_help(std::string_view argument);
+	std::optional<std::tuple<player_ptr_t,direction_t,uint16_t>> parse_target_direction_distance(player_ptr_t& attacker,std::vector<std::string>& vec_args);
 
 	bool match_any(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch);
 	bool is_lower_match(std::string_view str1,std::string_view str2);

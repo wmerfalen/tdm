@@ -9,6 +9,8 @@
 ./mods/classes/marine.cpp:	->attach_m203 // TEST ME
 ./mods/classes/marine.cpp:	->detach_m203 // TEST ME
 ./mods/classes/marine.cpp:	->marine_fire // TEST ME
+./mods/classes/marine.cpp:	->marine_giveme_m16 // TEST ME
+./mods/classes/marine.cpp:	->marine_pin_down // TEST ME
 ./mods/classes/contagion.cpp:	->invoke
 ./mods/classes/pyrexia.cpp:->fire_nade
 ./mods/classes/ghost.cpp:	->light_bandage

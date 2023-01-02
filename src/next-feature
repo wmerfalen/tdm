@@ -1,5 +1,30 @@
 see doc/building/2022-quarter-1-features.md
 
+[ ] Rbuild Sandbox
+	- Status: [ not implemented ]
+		- There is code referencing an rbuild_sandbox command but it's just a wrapper to pave mode
+		- TODO:'s
+			- [ ] HIGH PRIORITY:
+				- [ ] MUST verify that there is a way to transfer to a new zone
+				- [ ] MUST be able to create a sandbox in the middle of nowhere (and not attached in any way to existing rooms)
+				- [ ] MUST be able to specify a zone
+					- [ ] MUST verify that an ADMIN player can transfer to another zone
+					- [ ] MUST verify that a player can transfer to another zone
+			- [ ] create a `sandbox` table
+				- [ ] id, name
+			- [ ] tie rooms, objects, and mobs to the sandbox id
+				- [ ] add a `room_sandbox_id` to the `room` table
+				- [ ] add a `mob_sandbox_id` to the `mobile` table
+				- [ ] add a `obj_sandbox_id` to the `object` table
+			- the point in having the sandbox id on each table is that if the builder wants to, he can delete the sandbox from the `sandbox` table and it will cause anything with that sandbox id to be removed from the room, object, mob tables
+			- [ ] each `*_sandbox_id` should be nullable
+				- so that when the builder is satisfied with their work, they can commit the sandbox and the system will no longer need the sandbox_id fields. the system can also remove the corresponding sandbox in the sandbox table
+				- 
+	- bigger picture
+		- creating sandboxes is likely going to be the best avenue for getting to a procedurally generated arena of content like in diablo's 2 and 3.
+			- content can be generated and subsequently destroyed by deleting anything matching that sandbox id
+
+
 [ ] Lockers
 	- Status:
 			- TODO's:

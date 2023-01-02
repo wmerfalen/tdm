@@ -18,6 +18,8 @@ namespace mods::object_utils {
 	bool is_vc88(const obj_ptr_t&);
 	bool is_unique(const obj_ptr_t&);
 
+	bool player_primary_is_assault_rifle(const player_ptr_t&);
+
 	bool is_corrosive_claymore(const obj_ptr_t&);
 	bool is_shrapnel_claymore(const obj_ptr_t&);
 	bool is_assault_rifle(const obj_ptr_t&);

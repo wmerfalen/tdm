@@ -3,13 +3,16 @@
 #include "base.hpp"
 #include "../orm/marine.hpp"
 #include "../weapons/attachment-frag-underbarrel.hpp"
+#include "../target-acquisition.hpp"
 using marine_orm_t = mods::orm::marine;
 namespace mods::classes {
 	struct marine : base {
 			using frag_ub_t = mods::weapons::attachment_frag_underbarrel;
+			using acquired_target_t = mods::target_acquisition::acquired_target_t;
 			static constexpr std::string_view M203_UNDERBARREL = "m203-grenade-launcher-underbarrel.yml";
 			static constexpr std::string_view TRACER_ROUNDS = "marine-class-tracer-rounds.yml";
 			static constexpr std::string_view EXPLOSIVE_DRONE = "marine-class-explosive-drone.yml";
+			static constexpr std::string_view M16A_RIFLE_OBJECT = "marine-class-m16a.yml";
 			types kind() {
 				return types::MARINE;
 			}
@@ -91,6 +94,7 @@ namespace mods::classes {
 			void replenish();
 			void init();
 
+			cmd_report_t giveme_m16();
 			cmd_report_t attach_frag_underbarrel();
 			cmd_report_t detach_frag_underbarrel();
 			cmd_report_t fire_frag(const direction_t& direction,const uint8_t& distance);
@@ -112,7 +116,7 @@ namespace mods::classes {
 
 			cmd_report_t load_tracer_rounds(const uuid_t& wpn);
 			cmd_report_t deploy_explosive_drone();
-			cmd_report_t pin_down();
+			cmd_report_t pin_down(const acquired_target_t& target);
 
 		private:
 			skill_t* m_get_skill(const ability_t& ab);
@@ -155,6 +159,7 @@ namespace mods::classes {
 			obj_ptr_t m_m203;
 			obj_ptr_t m_tracer_rounds;
 			obj_ptr_t m_explosive_drone;
+			obj_ptr_t m_m16;
 			std::size_t m_call_count;
 			uint8_t m_pindown_count;
 			uint8_t m_explosive_drone_count;

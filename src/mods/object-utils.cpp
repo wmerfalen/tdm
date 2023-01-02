@@ -64,6 +64,12 @@ namespace mods::object_utils {
 		}
 		return item->has_rifle() && item->rifle()->attributes->type == type;
 	}
+	bool player_primary_is_assault_rifle(const player_ptr_t& player) {
+		if(!player || !player->primary() || !player->primary()->has_rifle()) {
+			return false;
+		}
+		return check_rifle_type(player->primary(),mw_rifle::ASSAULT_RIFLE);
+	}
 	bool is_shotgun_underbarrel(const obj_ptr_t& item) {
 		return item->has_attachment() && item->attachment()->attributes->type == mw_attachment::UNDER_BARREL &&
 		    item->attachment()->attributes->underbarrel_launcher_type.compare("SHOTGUN") == 0;

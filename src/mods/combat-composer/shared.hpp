@@ -19,6 +19,7 @@
 #include "../weapons/elemental.hpp"
 #include "../weapons/legacy-combat.hpp"
 #include "../interpreter.hpp"
+#include "../target-acquisition.hpp"
 #include "skill-increment.hpp"
 
 namespace mods::combat_composer {
@@ -47,47 +48,9 @@ namespace mods::combat_composer {
 	};
 	void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) ;
 	namespace phases {
-		struct calculation_t {
-			int16_t max_range;
-			int16_t critical_range;
-			std::pair<int16_t,int16_t> effective_range;
-			uint16_t stat_boosts;
-		};
-
-		struct target_t {
-			std::string target_name;
-			direction_t direction;
-			bool is_corpse;
-			bool is_object;
-			bool is_character;
-			target_t(std::string_view _target_name,
-			         direction_t _direction,
-			         bool _is_corpse,
-			         bool _is_object,
-			         bool _is_character
-			        ) : target_name(_target_name),
-				direction(_direction),
-				is_corpse(_is_corpse),
-				is_object(_is_object),
-				is_character(_is_character)
-			{}
-			target_t(std::string_view _target_name,
-			         direction_t _direction) :
-				target_name(_target_name),
-				direction(_direction),
-				is_corpse(0),
-				is_object(0),
-				is_character(1)
-			{}
-			target_t() = delete;
-			~target_t() = default;
-		};
-
-		struct acquired_target_t {
-			player_ptr_t target;
-			direction_t direction;
-			uint16_t distance;
-		};
+		using calculation_t = mods::target_acquisition::calculation_t;
+		using target_t = mods::target_acquisition::target_t;
+		using acquired_target_t = mods::target_acquisition::acquired_target_t;
 
 		struct calculated_damage_t {
 			direction_t from_direction;

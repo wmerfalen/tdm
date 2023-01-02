@@ -14,11 +14,12 @@
 #include <algorithm>
 #include <regex>
 #include "str.hpp"
+#include "scan.hpp"
 
 #ifdef __MENTOC_MODS_UTIL_DEBUG__
-#define mu_debug(A) std::cerr << "[mods::util][debug]:'" << A << "'\n";
+	#define mu_debug(A) std::cerr << "[mods::util][debug]:'" << A << "'\n";
 #else
-#define mu_debug(A) /**-*/
+	#define mu_debug(A) /**-*/
 #endif
 namespace mods::util {
 	static constexpr std::string_view DEEP_YAML_PREFIX = "#deep|";
@@ -708,8 +709,8 @@ namespace mods::util {
 			 */
 			if(paragraph[cint] == '{') {
 				while(paragraph[cint] != '}'
-				        && cint < paragraph.length()
-				     ) {
+				    && cint < paragraph.length()
+				) {
 					buffer += paragraph[cint++];
 					--position;
 				}
@@ -732,7 +733,7 @@ namespace mods::util {
 				 * up on spaces if we didn't 'continue' here.
 				 */
 				if(buffer.begin() != buffer.end() &&
-				        isspace(*(buffer.end() - 1))) {
+				    isspace(*(buffer.end() - 1))) {
 					continue;
 				} else {
 					/* the most recent character was *not* a space so we
@@ -769,41 +770,41 @@ namespace mods::util {
 
 		return buffer;
 	}
-//uint64_t aff2legacy(mods::flags::aff f){
-//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
-//		if(mods::flags::aff_flags[i].first == f){
-//			return mods::flags::aff_flags[i].second;
-//		}
-//	}
-//	return 0;
-//}
-//mods::flags::aff legacy2aff(uint64_t f){
-//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
-//		if(mods::flags::aff_flags[i].second == f){
-//			return mods::flags::aff_flags[i].first;
-//		}
-//	}
-//	return mods::flags::aff::__AFF_FIRST;
-//}
-///**
-// * @return returns the legacy PLR_ flag given the modern plr flag
-// */
-//uint64_t plr2legacy(mods::flags::plr f){
-//	for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
-//		if(mods::flags::plr_flags[i].first == f){
-//			return mods::flags::plr_flags[i].second;
-//		}
-//	}
-//	return 0;
-//}
-//mods::flags::plr legacy2plr(uint64_t f){
-//	for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
-//		if(mods::flags::plr_flags[i].second == f){
-//			return mods::flags::plr_flags[i].first;
-//		}
-//	}
-//	return mods::flags::plr::__PLR_FIRST;
-//}
+	//uint64_t aff2legacy(mods::flags::aff f){
+	//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
+	//		if(mods::flags::aff_flags[i].first == f){
+	//			return mods::flags::aff_flags[i].second;
+	//		}
+	//	}
+	//	return 0;
+	//}
+	//mods::flags::aff legacy2aff(uint64_t f){
+	//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
+	//		if(mods::flags::aff_flags[i].second == f){
+	//			return mods::flags::aff_flags[i].first;
+	//		}
+	//	}
+	//	return mods::flags::aff::__AFF_FIRST;
+	//}
+	///**
+	// * @return returns the legacy PLR_ flag given the modern plr flag
+	// */
+	//uint64_t plr2legacy(mods::flags::plr f){
+	//	for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
+	//		if(mods::flags::plr_flags[i].first == f){
+	//			return mods::flags::plr_flags[i].second;
+	//		}
+	//	}
+	//	return 0;
+	//}
+	//mods::flags::plr legacy2plr(uint64_t f){
+	//	for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
+	//		if(mods::flags::plr_flags[i].second == f){
+	//			return mods::flags::plr_flags[i].first;
+	//		}
+	//	}
+	//	return mods::flags::plr::__PLR_FIRST;
+	//}
 	bool preg_match(std::string_view regex,std::string_view haystack) {
 		using namespace std::regex_constants;
 		return std::regex_search(haystack.data(), std::regex(regex.data()), match_not_null);
@@ -949,6 +950,44 @@ namespace mods::util {
 			return std::nullopt;
 		}
 		return (direction_t)dir;
+	}
+	std::optional<std::tuple<player_ptr_t,direction_t,uint16_t>> parse_target_direction_distance(player_ptr_t& attacker,std::vector<std::string>& vec_args) {
+		if(vec_args.size() < 3) {
+			return std::nullopt;
+		}
+		std::string str_target = vec_args[0];
+		auto opt_dir = parse_direction_optional(vec_args[1]);
+		if(!opt_dir.has_value()) {
+			return std::nullopt;
+		}
+		direction_t direction = opt_dir.value();
+		auto opt_distance = mods::util::stoi_optional<uint8_t>(vec_args[2]);
+		if(!opt_distance.has_value()) {
+			return std::nullopt;
+		}
+
+		uint16_t distance = opt_distance.value();
+
+		player_ptr_t victim = nullptr;
+		mods::scan::vec_player_data scan;
+		mods::scan::los_scan_direction(attacker->cd(),distance,&scan,direction);
+		for(const auto& scanned_target : scan) {
+			if(scanned_target.distance != distance) {
+				continue;
+			}
+			victim = nullptr;
+			if(scanned_target.ch && scanned_target.uuid) {
+				victim = ptr_by_uuid(scanned_target.uuid);
+			}
+			if(!victim) {
+				continue;
+			}
+			if(mods::util::fuzzy_match(str_target,victim->name())) {
+				return std::make_tuple<>(victim,direction,distance);
+			}
+		}
+
+		return std::nullopt;
 	}
 	int parse_direction(std::string_view arg) {
 
@@ -1168,7 +1207,7 @@ namespace mods::util {
 		return parse_objdir_capable(player,arg, CAP_ALL, capabilities);
 	}
 	*/
-// --
+	// --
 	player_class_t to_player_class(std::string_view str) {
 		if(is_lower_match(str,"CONTAGION")) {
 			return player_class_t::CONTAGION;
@@ -1229,7 +1268,7 @@ namespace mods::util {
 		}
 		return player_class_t::CLASS_UNDEFINED;
 	}
-// --/
+	// --/
 	std::vector<std::string> explode(char delim,std::string& haystack) {
 		std::vector<std::string> results;
 		std::string current = "";
@@ -1358,11 +1397,11 @@ namespace mods::util {
 			 * [1] => psg1.yml
 			 */
 #define MENTOC_ITEM_PARSE_IMPL(r,data,CLASS_TYPE)\
-		if(ICMP(parts[0],BOOST_PP_STRINGIZE(CLASS_TYPE))){\
-			return {BOOST_PP_CAT(ITEM_,CLASS_TYPE),parts[1]};\
-		}
+	if(ICMP(parts[0],BOOST_PP_STRINGIZE(CLASS_TYPE))){\
+		return {BOOST_PP_CAT(ITEM_,CLASS_TYPE),parts[1]};\
+	}
 #define MENTOC_ITEM_PARSE \
-BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
 
 			MENTOC_ITEM_PARSE
 
@@ -1371,11 +1410,11 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
 		}
 
 #define MENTOC_ITEM_PARSE_IMPL(r,data,CLASS_TYPE)\
-		if(ICMP(parts[1],BOOST_PP_STRINGIZE(CLASS_TYPE))){\
-			return {BOOST_PP_CAT(ITEM_,CLASS_TYPE),parts[2]};\
-		}
+	if(ICMP(parts[1],BOOST_PP_STRINGIZE(CLASS_TYPE))){\
+		return {BOOST_PP_CAT(ITEM_,CLASS_TYPE),parts[2]};\
+	}
 #define MENTOC_ITEM_PARSE \
-BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
 
 		/**
 		 * parts:

@@ -882,6 +882,7 @@ namespace mods::combat_composer {
 			}
 		}
 		INIT_RCT();
+		using namespace mods::combat_composer::phases;
 		phases::acquired_target_t found_target;
 		found_target.target = victim;
 		found_target.direction = direction;
