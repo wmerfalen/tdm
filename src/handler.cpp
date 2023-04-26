@@ -23,6 +23,8 @@
 #include "globals.hpp"
 #include "mods/loops.hpp"
 #include "mods/players/db-load.hpp"
+#include <boost/stacktrace/stacktrace.hpp>
+#include <boost/stacktrace/detail/frame_decl.hpp>
 
 /* local vars */
 int extractions_pending = 0;
@@ -100,7 +102,7 @@ int isname(const char *str, const char *namelist) {
 
 
 void affect_modify(char_data *ch, byte loc, sbyte mod,
-                   bitvector_t bitv, bool add) {
+    bitvector_t bitv, bool add) {
 	if(add) {
 		SET_BIT(AFF_FLAGS(ch), bitv);
 	} else {
@@ -233,8 +235,8 @@ void affect_total(char_data *ch) {
 		if(GET_EQ(ch, i))
 			for(j = 0; j < MAX_OBJ_AFFECT; j++)
 				affect_modify(ch, GET_EQ(ch, i)->affected[j].location,
-				              GET_EQ(ch, i)->affected[j].modifier,
-				              GET_OBJ_AFFECT(GET_EQ(ch, i)), FALSE);
+				    GET_EQ(ch, i)->affected[j].modifier,
+				    GET_OBJ_AFFECT(GET_EQ(ch, i)), FALSE);
 	}
 
 
@@ -248,8 +250,8 @@ void affect_total(char_data *ch) {
 		if(GET_EQ(ch, i))
 			for(j = 0; j < MAX_OBJ_AFFECT; j++)
 				affect_modify(ch, GET_EQ(ch, i)->affected[j].location,
-				              GET_EQ(ch, i)->affected[j].modifier,
-				              GET_OBJ_AFFECT(GET_EQ(ch, i)), TRUE);
+				    GET_EQ(ch, i)->affected[j].modifier,
+				    GET_OBJ_AFFECT(GET_EQ(ch, i)), TRUE);
 	}
 
 
@@ -352,7 +354,7 @@ bool affected_by_spell(char_data *ch, int type) {
 
 
 void affect_join(char_data *ch, struct affected_type *af,
-                 bool add_dur, bool avg_dur, bool add_mod, bool avg_mod) {
+    bool add_dur, bool avg_dur, bool add_mod, bool avg_mod) {
 	struct affected_type *hjp, *next;
 	bool found = FALSE;
 
@@ -979,11 +981,16 @@ void obj_from_room(obj_ptr_t in_object) {
 	if(!object || IN_ROOM(object) == NOWHERE) {
 		log("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room(obj_ptr_t)",
 		    object, IN_ROOM(object));
+		std::cerr << boost::stacktrace::stacktrace();
+		//for(const auto& s : boost::stacktrace::stacktrace()) {
+		//	std::cerr << s.source_file() << ":" << s.source_line() << "->" << s.name() << "\n";
+		//}
 		return;
 	}
 	auto room = IN_ROOM(object);
 	if(room < 0 || room >= world.size()) {
 		log("SYSERR: object in funky room: %d",room);
+		std::cerr << boost::stacktrace::stacktrace();
 		return;
 	}
 
@@ -1010,6 +1017,7 @@ void obj_from_room(struct obj_data *object) {
 	if(!object || IN_ROOM(object) == NOWHERE) {
 		log("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room(obj_data*)",
 		    object, IN_ROOM(object));
+		std::cerr << boost::stacktrace::stacktrace();
 		return;
 	}
 
@@ -1270,7 +1278,8 @@ void extract_char_final(char_data *ch) {
 
 	mods::loops::foreach_all_chars([&ch](player_ptr_t _player_ptr) -> bool {
 		if(HUNTING(_player_ptr->cd()) == ch) {
-			HUNTING(_player_ptr->cd()) = nullptr;
+			HUNTING(_player_ptr->cd())
+			= nullptr;
 		}
 		return true;
 	});
@@ -1427,7 +1436,7 @@ char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {
 
 		if(str_cmp(player->name().c_str(), name)) { /* If not same, continue */
 			d("continuing due to name str != name '" <<
-			  player->name().c_str() << "' !== '" << name << "'");
+			    player->name().c_str() << "' !== '" << name << "'");
 			continue;
 		}
 
@@ -1706,7 +1715,7 @@ const char *money_desc(int amount) {
  * describes what it filled in.
  */
 int generic_find(char *arg, bitvector_t bitvector, char_data *ch,
-                 char_data **tar_ch, struct obj_data **tar_obj) {
+    char_data **tar_ch, struct obj_data **tar_obj) {
 	int i, found, number;
 	char name_val[MAX_INPUT_LENGTH];
 	char *name = name_val;

@@ -46,7 +46,7 @@ FLAGS = $(gdbflags) $(optimization) \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	-D__MENTOC_USE_LMDB=1 \
-	-I$(yamlcpp) -L$(yamllib) \
+	-I$(yamlcpp) -L$(yamllib) -L$(boosters)/stage/lib \
 	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\" \
 	-D__MENTOC_SUPER_USERS_ARE_INVINCIBLE__=1 \
 	-D__MENTOC_SHOW_SNIPE_HIT_STATS__=1 \
@@ -104,7 +104,7 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	#-D__MENTOC_USE_PQXX_RESULT__=1 
-LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2 -L/usr/local/lib -lzmq -lpthread
+LIBS = -lboost_stacktrace_backtrace -lboost_stacktrace_basic -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2 -L/usr/local/lib -lzmq -lpthread
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard act.demolitions alias boards bsd-snprintf castle \
