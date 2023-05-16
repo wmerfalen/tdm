@@ -4,15 +4,28 @@
 #include "../interpreter.hpp"
 #include "../object-utils.hpp"
 #include "../weapon.hpp"
+#include "../combat-composer/spray-target.hpp"
 
 namespace mods::classes {
 	using cmd_report_t = mods::classes::base::cmd_report_t;
 	marine::marine() {
 		this->init();
 	}
+	bool marine::is_surpressing(const uuid_t& victim_uuid) {
+		return ACT_SURPRESSING_FIRE == m_current_activity
+		    && m_surpressing.contains(victim_uuid) &&
+		    m_surpressing[victim_uuid] >= CURRENT_TICK() - 30;
+	}
+	void marine::set_surpressing(const uuid_t& victim_uuid) {
+		m_surpressing[victim_uuid] = CURRENT_TICK() + 30; // FIXME: use values system
+	}
+	void marine::remove_surpressing(const uuid_t& victim_uuid) {
+		m_surpressing.erase(victim_uuid);
+	}
 	void marine::init() {
 		using s = base::ability_data_t::skillset_t;
 		uint16_t M = 0;
+		m_acquired_target.first = false;
 		m_call_count =0;
 		m_explosive_drone_count = 0;
 		m_pindown_count = 0;
@@ -167,13 +180,50 @@ namespace mods::classes {
 		 */
 		return {true,"You attach an M203."};
 	}
-	cmd_report_t marine::pin_down(const acquired_target_t& input) {
-		if(!mods::object_utils::player_primary_is_assault_rifle(m_player)) {
-			return {0,"Your must be wielding an {grn}Assault Rifle{/grn}"};
+	cmd_report_t marine::engage() {
+
+		if(m_current_activity == ACT_SURPRESSING_FIRE) {
+			if(m_acquired_target.first == false) {
+				m_current_activity = ACT_NON_COMBATIVE;
+				return {false,"It doesn't look like you can find your target."};
+			}
+			if(m_player->position() != POS_PRONE) {
+				m_player->sendln("You get on your stomach");
+				m_player->set_position(POS_PRONE);
+			}
+			m_player->sendln("You aim...");
+			m_player->sendln("You pull the trigger...");
+
+			m_current_activity = ACT_SURPRESSING_FIRE;
+			auto weapon = m_player->primary();
+			mods::combat_composer::spray_target(m_player,m_acquired_target.second.direction,weapon);
+			m_pin_down.use_skill(m_player);
+			return {true,"You engage your target!"};
 		}
-		/**
-		 * TODO: FIXME: implement this
-		 */
+		return {false,"Engage with what? You aren't doing anything!"};
+	}
+	cmd_report_t marine::disengage() {
+		if(m_current_activity == ACT_SURPRESSING_FIRE) {
+			if(m_player->position() == POS_PRONE) {
+				m_player->sendln("You pick yourself up off the ground");
+				m_player->set_position(POS_STANDING);
+				m_acquired_target.first = false;
+			}
+			m_current_activity = ACT_NON_COMBATIVE;
+			m_surpressing.clear();
+		}
+
+		return {false,"Disengage from what? You aren't doing anything!"};
+	}
+	cmd_report_t marine::pin_down(const acquired_target_t& input,pin_down_mode_t pin_mode) {
+		auto s = roll_skill_success(PIN_DOWN);
+		if(!std::get<0>(s)) {
+			return s;
+		}
+		if(!mods::object_utils::player_primary_is_lmg(m_player)) {
+			return {0,"You must be wielding an {grn}LMG{/grn}"};
+		}
+		m_pin_down.use_skill(m_player);
 		/**
 		 * Brainstorm:
 		 * ----------------
@@ -202,7 +252,22 @@ namespace mods::classes {
 		 *		return m_target_movement_penalty == 0;
 		 * }
 		 */
-		return {true,"You attach an M203."};
+		if(m_player->position() != POS_PRONE) {
+			m_player->sendln("You get on your stomach");
+			m_player->set_position(POS_PRONE);
+		}
+		m_player->sendln("You aim...");
+		m_player->sendln("You pull the trigger...");
+
+		m_current_activity = ACT_SURPRESSING_FIRE;
+		auto weapon = m_player->primary();
+		mods::combat_composer::spray_target(m_player,input.direction,weapon);
+		m_acquired_target.first = true;
+		m_acquired_target.second = input;
+		set_surpressing(m_acquired_target.second.target->uuid());
+		return {true,
+		        std::string("HINT: {yel}Type {grn}marine:engage{/grn}{yel} to spray again!{/yel}\r\n") +
+		        std::string("HINT: {yel}Type {grn}marine:disengage{/grn}{yel} to stop spraying{/yel}")};
 	}
 	cmd_report_t marine::load_tracer_rounds(const uuid_t& wpn) {
 		// TEST ME
@@ -229,6 +294,7 @@ namespace mods::classes {
 };
 
 namespace mods::class_abilities::marine {
+	using pin_down_mode_t = ::mods::classes::marine::pin_down_mode_t;
 	ACMD(do_load_tracer_rounds) {
 		static constexpr std::string_view usage = "Usage: marine:load_tracer_rounds <weapon>";
 		PLAYER_CAN("marine.load_tracer_rounds");
@@ -292,6 +358,31 @@ namespace mods::class_abilities::marine {
 		}
 		CMDREPORT(player->marine()->giveme_m16());
 	};
+	ACMD(do_marine_pin_down_change_target) { // TEST ME
+		using namespace mods::target_acquisition;
+		PLAYER_CAN("marine.pin_down");
+		DO_HELP("marine.pin_down");
+		if(!player->marine()) {
+			player->sendln("Your class does not support this.");
+			return;
+		}
+		static constexpr std::string_view usage = "marine:pin_down:change_target <target> <direction> <distance>\r\n"
+		    "Example:\r\n"
+		    "marine:pin_down:change_target Guard west 2\r\n";
+
+		auto vec_args = PARSE_ARGS();
+		if(argshave()->size_gt(2)->passed()) {
+			player->sendln(usage);
+			return;
+		}
+		auto opt_tdd = mods::util::parse_target_direction_distance(player,vec_args);
+		if(!opt_tdd.has_value()) {
+			player->sendln("Couldn't find target!");
+			return;
+		}
+		acquired_target_t t(opt_tdd);
+		CMDREPORT(player->marine()->pin_down(t,pin_down_mode_t::PD_CHANGE_TARGET));
+	};
 	ACMD(do_marine_pin_down) { // TEST ME
 		using namespace mods::target_acquisition;
 		PLAYER_CAN("marine.pin_down");
@@ -305,7 +396,7 @@ namespace mods::class_abilities::marine {
 		    "marine:pin_down Guard west 2\r\n";
 
 		auto vec_args = PARSE_ARGS();
-		if(argshave()->size_gt(2)->passed()) {
+		if(!argshave()->size_gt(2)->passed()) {
 			player->sendln(usage);
 			return;
 		}
@@ -315,7 +406,26 @@ namespace mods::class_abilities::marine {
 			return;
 		}
 		acquired_target_t t(opt_tdd);
-		CMDREPORT(player->marine()->pin_down(t));
+		CMDREPORT(player->marine()->pin_down(t,pin_down_mode_t::PD_START_SURPRESSING));
+	};
+	ACMD(do_marine_engage) { // TEST ME
+		using namespace mods::target_acquisition;
+		PLAYER_CAN("marine.pin_down");
+		DO_HELP("marine.pin_down");
+		if(!player->marine()) {
+			player->sendln("Your class does not support this.");
+			return;
+		}
+		CMDREPORT(player->marine()->engage());
+	};
+	ACMD(do_marine_disengage) { // TEST ME
+		PLAYER_CAN("marine.disengage");
+		DO_HELP("marine.disengage");
+		if(!player->marine()) {
+			player->sendln("Your class does not support this.");
+			return;
+		}
+		CMDREPORT(player->marine()->disengage());
 	};
 	void init() {
 		mods::interpreter::add_command("marine:giveme_m16", POS_RESTING, do_marine_giveme_m16, 0,0); // TESTME FIXME
@@ -325,6 +435,9 @@ namespace mods::class_abilities::marine {
 		mods::interpreter::add_command("marine:detach_m203", POS_RESTING, do_detach_m203, 0,0); // TESTME FIXME
 		mods::interpreter::add_command("marine:fire", POS_RESTING, do_marine_fire, 0,0); // TESTME FIXME
 		mods::interpreter::add_command("marine:pin_down", POS_RESTING, do_marine_pin_down, 0,0); // TESTME FIXME
+		mods::interpreter::add_command("marine:pin_down:change_target", POS_RESTING, do_marine_pin_down_change_target, 0,0); // TESTME FIXME
+		mods::interpreter::add_command("marine:engage", POS_PRONE, do_marine_engage, 0,0); // TESTME FIXME
+		mods::interpreter::add_command("marine:disengage", POS_PRONE, do_marine_disengage, 0,0); // TESTME FIXME
 
 	}
 };

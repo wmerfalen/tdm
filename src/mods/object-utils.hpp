@@ -19,10 +19,12 @@ namespace mods::object_utils {
 	bool is_unique(const obj_ptr_t&);
 
 	bool player_primary_is_assault_rifle(const player_ptr_t&);
+	bool player_primary_is_lmg(const player_ptr_t&);
 
 	bool is_corrosive_claymore(const obj_ptr_t&);
 	bool is_shrapnel_claymore(const obj_ptr_t&);
 	bool is_assault_rifle(const obj_ptr_t&);
+	bool is_lmg(const obj_ptr_t&);
 	bool is_smg(const obj_ptr_t&);
 	bool is_sniper_rifle(const obj_ptr_t&);
 	bool is_shotgun(const obj_ptr_t&);

@@ -68,7 +68,13 @@ namespace mods::object_utils {
 		if(!player || !player->primary() || !player->primary()->has_rifle()) {
 			return false;
 		}
-		return check_rifle_type(player->primary(),mw_rifle::ASSAULT_RIFLE);
+		return is_assault_rifle(player->primary());
+	}
+	bool player_primary_is_lmg(const player_ptr_t& player) {
+		if(!player || !player->primary() || !player->primary()->has_rifle()) {
+			return false;
+		}
+		return is_lmg(player->primary());
 	}
 	bool is_shotgun_underbarrel(const obj_ptr_t& item) {
 		return item->has_attachment() && item->attachment()->attributes->type == mw_attachment::UNDER_BARREL &&
@@ -103,6 +109,9 @@ namespace mods::object_utils {
 	}
 	bool is_assault_rifle(const obj_ptr_t& weapon) {
 		return check_rifle_type(weapon,mw_rifle::ASSAULT_RIFLE);
+	}
+	bool is_lmg(const obj_ptr_t& weapon) {
+		return check_rifle_type(weapon,mw_rifle::LIGHT_MACHINE_GUN);
 	}
 	bool is_sniper_rifle(const obj_ptr_t& weapon) {
 		return check_rifle_type(weapon,mw_rifle::SNIPER);

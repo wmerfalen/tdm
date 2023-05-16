@@ -252,6 +252,7 @@ enum player_class_t {
 #define POS_SITTING    6	/* sitting		*/
 #define POS_FIGHTING   7	/* fighting		*/
 #define POS_STANDING   8	/* standing		*/
+#define POS_PRONE 		 9	/* laying on your belly */
 
 
 /* Player flags: used by char_data.char_specials.act */
@@ -354,6 +355,7 @@ enum player_class_t {
 #define AFF_SCANNED						(1 << 23)
 #define AFF_TRACKED           (1 << 24)   /* User is being tracked */
 #define AFF_TERRIFY (1 << 25)   /* User is being tracked */
+#define AFF_SUPPRESS (1 << 26)   /* User is being tracked */
 
 
 

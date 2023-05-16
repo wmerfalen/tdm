@@ -10,7 +10,10 @@
 ./mods/classes/marine.cpp:	->detach_m203 // TEST ME
 ./mods/classes/marine.cpp:	->marine_fire // TEST ME
 ./mods/classes/marine.cpp:	->marine_giveme_m16 // TEST ME
+./mods/classes/marine.cpp:	->marine_pin_down_change_target // TEST ME
 ./mods/classes/marine.cpp:	->marine_pin_down // TEST ME
+./mods/classes/marine.cpp:	->marine_engage // TEST ME
+./mods/classes/marine.cpp:	->marine_disengage // TEST ME
 ./mods/classes/contagion.cpp:	->invoke
 ./mods/classes/pyrexia.cpp:->fire_nade
 ./mods/classes/ghost.cpp:	->light_bandage
@@ -38,6 +41,7 @@
 ./mods/classes/breacher.cpp:->deconstruct_weapon
 ./mods/rifle.cpp:	->rifle_me
 ./mods/bleed.cpp:	->bleed_me
+./mods/suppress.cpp:	->suppress_me_for
 ./mods/help.cpp:	->help
 ./mods/help.cpp:	->search_help
 ./mods/loot.cpp:	->show_loot

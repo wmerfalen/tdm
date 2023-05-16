@@ -248,7 +248,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/builder-flags mods/rbuild-sandbox \
 					 mods/rbuild mods/zbuild mods/mbuild mods/sbuild \
 					 mods/obuild mods/rifle-attachments-forge-commands \
-					 mods/orm/zone-mob
+					 mods/orm/zone-mob mods/suppress
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

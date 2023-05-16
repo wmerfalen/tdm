@@ -25,3 +25,4 @@ database-errors.log
 
 lib/plralias
 valgrind.run
+lib/js-errors.log

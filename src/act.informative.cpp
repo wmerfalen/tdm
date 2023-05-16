@@ -535,15 +535,16 @@ void list_one_char(char_data *i, char_data *ch) {
 	}
 
 	const char *positions[] = {
-		" is lying here, dead.",
-		" is lying here, mortally wounded.",
-		" is lying here, incapacitated.",
-		" is lying here, stunned.",
+		" is lying here, {red}DEAD{/red}.",
+		" is lying here, {red}mortally wounded{/red}.",
+		" is lying here, {yel}incapacitated{/yel}.",
+		" is lying here, {yel}stunned{/yel}.",
 		" is sleeping here.",
 		" is resting here.",
 		" is sitting here.",
 		"!FIGHTING!",
-		" is standing here."
+		" is standing here.",
+		" is prone here.",
 	};
 	auto iptr = ptr(i);
 

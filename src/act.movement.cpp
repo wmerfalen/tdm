@@ -49,6 +49,7 @@ ACMD(do_rest);
 ACMD(do_sleep);
 ACMD(do_wake);
 ACMD(do_follow);
+ACMD(do_prone);
 
 
 /* simple function to determine if char can walk on water */
@@ -298,6 +299,10 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 }
 
 ACMD(do_move) {
+	if(player->position() == POS_PRONE) {
+		player->sendln("You should probably get to your feet first.");
+		return;
+	}
 	/*
 	 * This is basically a mapping of cmd numbers to perform_move indices.
 	 * It cannot be done in perform_move because perform_move is called
@@ -599,6 +604,10 @@ ACMD(do_gen_door) {
 
 
 ACMD(do_enter) {
+	if(player->position() == POS_PRONE) {
+		player->sendln("You should probably get to your feet first.");
+		return;
+	}
 	char buf[MAX_INPUT_LENGTH];
 	int door;
 
@@ -635,6 +644,10 @@ ACMD(do_enter) {
 
 
 ACMD(do_leave) {
+	if(player->position() == POS_PRONE) {
+		player->sendln("You should probably get to your feet first.");
+		return;
+	}
 	int door;
 
 	if(OUTSIDE(ch)) {
@@ -656,6 +669,11 @@ ACMD(do_leave) {
 
 ACMD(do_stand) {
 	switch(GET_POS(ch)) {
+		case POS_PRONE:
+			send_to_char(ch, "You get up off your stomach and stand up.");
+			act("$n stops lying prone, and clambers onto $s feet.", TRUE, ch, 0, 0, TO_ROOM);
+			GET_POS(ch) = POS_STANDING;
+			break;
 		case POS_STANDING:
 			send_to_char(ch, "You are already standing.");
 			break;
@@ -693,6 +711,11 @@ ACMD(do_stand) {
 
 ACMD(do_sit) {
 	switch(GET_POS(ch)) {
+		case POS_PRONE:
+			send_to_char(ch, "You roll over onto your back into a seated position.");
+			act("$n rolls over onto $s back, then sits up into a seated position.", FALSE, ch, 0, 0, TO_ROOM);
+			GET_POS(ch) = POS_SITTING;
+			break;
 		case POS_STANDING:
 			send_to_char(ch, "You sit down.");
 			act("$n sits down.", FALSE, ch, 0, 0, TO_ROOM);
@@ -728,6 +751,11 @@ ACMD(do_sit) {
 
 ACMD(do_rest) {
 	switch(GET_POS(ch)) {
+		case POS_PRONE:
+			send_to_char(ch, "You roll over onto your back and rest your tired bones.");
+			act("$n rolls over onto $s back and rests.", TRUE, ch, 0, 0, TO_ROOM);
+			GET_POS(ch) = POS_RESTING;
+			break;
 		case POS_STANDING:
 			send_to_char(ch, "You sit down and rest your tired bones.");
 			act("$n sits down and rests.", TRUE, ch, 0, 0, TO_ROOM);
@@ -771,6 +799,12 @@ ACMD(do_sleep) {
 			GET_POS(ch) = POS_SLEEPING;
 			mods::resting::add_player_resting(player);
 			break;
+		case POS_PRONE:
+			send_to_char(ch, "You roll over onto your back and go to sleep.");
+			act("$n rolls over onto $s back and falls asleep.", TRUE, ch, 0, 0, TO_ROOM);
+			GET_POS(ch) = POS_SLEEPING;
+			mods::resting::add_player_resting(player);
+			break;
 
 		case POS_SLEEPING:
 			send_to_char(ch, "You are already sound asleep.");
@@ -798,6 +832,10 @@ ACMD(do_wake) {
 	one_argument(argument, arg);
 
 	if(*arg) {
+		if(GET_POS(ch) == POS_PRONE) {
+			send_to_char(ch, "You aren't sleeping...");
+			return;
+		}
 		if(GET_POS(ch) == POS_SLEEPING) {
 			send_to_char(ch, "Maybe you should wake yourself up first.");
 		} else if((vict = get_char_vis(ch, arg, NULL, FIND_CHAR_ROOM)) == NULL) {
@@ -836,6 +874,12 @@ ACMD(do_wake) {
 
 
 ACMD(do_follow) {
+	// TODO: it might be helpful to crawl while you are prone...
+	//
+	if(player->position() == POS_PRONE) {
+		player->sendln("You should probably get to your feet first.");
+		return;
+	}
 	char buf[MAX_INPUT_LENGTH];
 	char_data *leader;
 

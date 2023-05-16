@@ -36,6 +36,7 @@
 #include "mods/corrosive.hpp"
 #include "mods/bleed.hpp"
 #include "mods/blind.hpp"
+#include "mods/suppress.hpp"
 #include "mods/terrify.hpp"
 #include "mods/melt.hpp"
 #include "mods/ensnare.hpp"
@@ -981,6 +982,7 @@ void heartbeat(int pulse) {
 	static int mins_since_crashsave = 0;
 	static uint16_t blind_ticks = 0;
 	static uint16_t terrify_ticks = 0;
+	static uint16_t suppress_ticks = 0;
 	mods::globals::current_tick++;
 	if(!(pulse % mods::zone::refresh_tick_resolution())) {
 		if(mods::zone::should_refresh()) {
@@ -1004,13 +1006,18 @@ void heartbeat(int pulse) {
 		mods::resting::process_players_resting();
 		++blind_ticks;
 		++terrify_ticks;
+		++suppress_ticks;
 		if(!(blind_ticks % mods::blind::tick_resolution())) {
 			mods::blind::process_players();
 			blind_ticks = 0;
 		}
-		if(!(blind_ticks % mods::terrify::tick_resolution())) {
+		if(!(terrify_ticks % mods::terrify::tick_resolution())) {
 			mods::terrify::process_players();
 			terrify_ticks = 0;
+		}
+		if(!(suppress_ticks % mods::suppress::tick_resolution())) {
+			mods::suppress::process_players();
+			suppress_ticks = 0;
 		}
 	}
 

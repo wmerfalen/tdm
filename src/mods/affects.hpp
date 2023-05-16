@@ -10,9 +10,9 @@
 
 //#define __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
-#define maffects_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
+	#define maffects_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
 #else
-#define maffects_debug(a) /**/
+	#define maffects_debug(a) /**/
 #endif
 namespace mods {
 	struct player;
@@ -36,7 +36,8 @@ namespace mods::affects {
 		BLEED,
 		SLOWED,
 		MELT,
-		__AFFECT_SIZE = 9,
+		SUPPRESSED,
+		__AFFECT_SIZE = 11,
 	};
 	constexpr static std::size_t AFFECT_DISSOLVE_COUNT = affect_t::__AFFECT_SIZE;
 	/** i.e.: AFFECT_MAP[affect_t::BLIND] will give us AFF_BLIND */
@@ -59,6 +60,7 @@ namespace mods::affects {
 		{"bleed",affect_t::BLEED},
 		{"slowed",affect_t::SLOWED},
 		{"melt",affect_t::MELT},
+		{"suppressed",affect_t::SUPPRESSED},
 	};
 	//using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 	using affect_map_t = std::map<uint32_t,amount_t>;

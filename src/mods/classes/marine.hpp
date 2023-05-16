@@ -4,6 +4,7 @@
 #include "../orm/marine.hpp"
 #include "../weapons/attachment-frag-underbarrel.hpp"
 #include "../target-acquisition.hpp"
+#include <map>
 using marine_orm_t = mods::orm::marine;
 namespace mods::classes {
 	struct marine : base {
@@ -17,6 +18,28 @@ namespace mods::classes {
 				return types::MARINE;
 			}
 			using primary_choice_t = mods::weapon::marine::primary_choice_t;
+			enum pin_down_mode_t : uint8_t {
+				PD_CHANGE_TARGET,
+				PD_ENGAGE_TARGET,
+				PD_CHANGE_DIRECTION,
+				PD_START_SURPRESSING,
+				PD_DISENGAGE,
+				PD_PAUSE,
+			};
+			enum current_activity_t : uint16_t {
+				ACT_IDLE,
+				ACT_NON_COMBATIVE,
+				ACT_MOVING,
+				ACT_RANGED_COMBAT,
+				ACT_CQC_COMBAT,
+				ACT_SURPRESSING_FIRE,
+				ACT_INSTALLING_GADGET,
+				ACT_INSTALLING_TRAP,
+				ACT_REMOVING_EXPLOSIVE,
+				ACT_DISARMING_MINE,
+				ACT_PLANTING_MINE,
+				ACT_PLANTING_C4,
+			};
 			enum ability_t : uint8_t {
 				NONE = 0,
 				LOAD_TRACER_ROUNDS,
@@ -116,13 +139,21 @@ namespace mods::classes {
 
 			cmd_report_t load_tracer_rounds(const uuid_t& wpn);
 			cmd_report_t deploy_explosive_drone();
-			cmd_report_t pin_down(const acquired_target_t& target);
+			cmd_report_t pin_down(const acquired_target_t& target,pin_down_mode_t pd_mode);
+			cmd_report_t engage();
+			cmd_report_t disengage();
+			bool is_surpressing(const uuid_t& victim_uuid);
 
 		private:
+			void set_surpressing(const uuid_t& victim_uuid);
+			void remove_surpressing(const uuid_t& victim_uuid);
+			std::map<uuid_t,uint64_t> m_surpressing;
 			skill_t* m_get_skill(const ability_t& ab);
 			player_ptr_t m_player;
 			marine_orm_t m_orm;
 			ability_list_t m_abilities;
+			current_activity_t m_current_activity;
+			std::pair<bool,acquired_target_t> m_acquired_target;
 
 
 			skill_t m_load_tracer_rounds;

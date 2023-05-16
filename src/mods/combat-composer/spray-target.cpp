@@ -19,6 +19,7 @@
 #include "../weapons/unique-weapons.hpp"
 #include "../armor/unique-armor.hpp"
 #include "../interpreter.hpp"
+#include "../suppress.hpp"
 #include "skill-increment.hpp"
 #include "shared.hpp"
 
@@ -167,7 +168,6 @@ namespace mods::combat_composer {
 		calculated_damage_t calculate_weapon_damage(player_ptr_t& attacker,const target_list_t& targets,obj_ptr_t& weapon);
 
 		void perform_cleanup(player_ptr_t& attacker,obj_ptr_t& weapon) {
-			attacker->sendln("Perform cleanup");
 			feedback_t feedback;
 			m_debug("decreasing ammo");
 			mods::combat_composer::phases::decrease_spray_shot_ammo(attacker,weapon);
@@ -266,10 +266,9 @@ namespace mods::combat_composer {
 			RCT->report(attacker);
 #endif
 			if(is_sniper_rifle(weapon)) {
-				attacker->sendln("You cannot spray with a sniper rifle!");
 				return room_damages;
 			}
-			uint8_t max_targets_hit = tier(attacker);
+			uint8_t max_targets_hit = tier(attacker) + 2;
 			uint8_t targets_hit = 0;
 			for(const auto& target : collect_spray_targets(attacker,direction,weapon)) {
 				if(targets_hit++ >= max_targets_hit) {
@@ -289,6 +288,12 @@ namespace mods::combat_composer {
 				}
 				if(attacker->marine()) {
 					if(is_assault_rifle(weapon)) {
+						d.damage += (MARINE_AR_SPRAY_BASE_DAMAGE_MULTIPLIER() * d.damage);
+						if(mods::rand::chance(MARINE_AR_SPRAY_INCENDIARY_CHANCE())) {
+							d.incendiary_damage += dice(tier(attacker) * MARINE_AR_SPRAY_INC_TIER_DICE_COUNT_MULTIPLIER(),tier(attacker) * MARINE_AR_SPRAY_INC_TIER_DICE_SIDES_MULTIPLIER());
+						}
+					}
+					if(is_lmg(weapon)) {
 						d.damage += (MARINE_AR_SPRAY_BASE_DAMAGE_MULTIPLIER() * d.damage);
 						if(mods::rand::chance(MARINE_AR_SPRAY_INCENDIARY_CHANCE())) {
 							d.incendiary_damage += dice(tier(attacker) * MARINE_AR_SPRAY_INC_TIER_DICE_COUNT_MULTIPLIER(),tier(attacker) * MARINE_AR_SPRAY_INC_TIER_DICE_SIDES_MULTIPLIER());
@@ -470,6 +475,7 @@ namespace mods::combat_composer {
 				mods::armor::dispatch_unique_armor_event(attacker->uuid(), damage_event_t::YOU_HIT_ARMOR, victim);
 				mods::weapons::dispatch_unique_ranged_weapon_event(attacker->uuid(), damage_event_t::YOU_HIT_FLESH,victim);
 				if(victim->is_npc()) {
+					// FIXME: wrongly dispatching sniped event
 					mods::mobs::damage_event::sniped(victim,feedback);
 				}
 				m_debug("remembering");
@@ -516,18 +522,15 @@ namespace mods::combat_composer {
 	bool can_spray(player_ptr_t& attacker,obj_ptr_t weapon) {
 		if(!weapon) {
 			attacker->damage_event(feedback_t(de::NO_PRIMARY_WIELDED_EVENT));
-			std::cerr << __FUNCTION__ << ":" << __LINE__ << "-> NO_PRIMARY FOR " << attacker->name() << "\n";
 			m_debug("no primary!");
 			return false;
 		}
 		if(!weapon->has_rifle()) {
 			attacker->damage_event(feedback_t(de::NO_PRIMARY_WIELDED_EVENT));
-			std::cerr << __FUNCTION__ << ":" << __LINE__ << "-> NO_PRIMARY FOR " << attacker->name() << "\n";
 			m_debug("no primary rifle(2)");
 			return false;
 		}
 		if(weapon->rifle() && weapon->rifle()->attributes->type == mw_rifle::SNIPER) {
-			attacker->sendln("You cannot spray with a sniper rifle!");
 			return false;
 		}
 		if(mods::rooms::is_peaceful(attacker->room())) {
@@ -576,6 +579,10 @@ namespace mods::combat_composer {
 			 * Phase 2: Apply damage to victim
 			 */
 			mods::combat_composer::phases::apply_damage_to_victim(attacker,victim,weapon,pair.second);
+
+			if(attacker->marine() && attacker->marine()->is_surpressing(pair.first)) {
+				mods::suppress::suppress_for(victim,30); // FIXME: use values system
+			}
 		}
 		mods::combat_composer::phases::perform_cleanup(attacker,weapon);
 	}

@@ -811,10 +811,14 @@ namespace mods::util {
 	}
 
 	bool fuzzy_match(const std::string& _needle,const std::string& _haystack) {
+		std::cerr << "_haystack: '" << _haystack << "', needle: '" << _needle << "'\n";
 		std::string needle = "", haystack = _haystack;
 
 		/* If matches EXACTLY (strcmp) */
-		if(_needle.compare(haystack) == 0) {
+		if(_needle.compare(haystack.c_str()) == 0) {
+			return true;
+		}
+		if(strcasestr(_haystack.c_str(),_needle.c_str())) {
 			return true;
 		}
 
@@ -961,7 +965,7 @@ namespace mods::util {
 			return std::nullopt;
 		}
 		direction_t direction = opt_dir.value();
-		auto opt_distance = mods::util::stoi_optional<uint8_t>(vec_args[2]);
+		auto opt_distance = mods::util::stoi_optional<uint16_t>(vec_args[2]);
 		if(!opt_distance.has_value()) {
 			return std::nullopt;
 		}
@@ -972,7 +976,7 @@ namespace mods::util {
 		mods::scan::vec_player_data scan;
 		mods::scan::los_scan_direction(attacker->cd(),distance,&scan,direction);
 		for(const auto& scanned_target : scan) {
-			if(scanned_target.distance != distance) {
+			if(scanned_target.distance + 1 != distance) {
 				continue;
 			}
 			victim = nullptr;

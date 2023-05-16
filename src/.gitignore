@@ -55,3 +55,5 @@ loot-armor.common
 rifle-by
 explosive-by
 debug.log
+zone-erase.log
+../lib/js-errors.log
