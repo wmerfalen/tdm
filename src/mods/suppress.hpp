@@ -16,10 +16,11 @@
  */
 
 namespace mods::suppress {
-	void suppress_for(player_ptr_t& victim, uint32_t ticks);
+	void suppress_for(const uuid_t& victim_uuid, const uint64_t& ticks);
 	void process_players();
-	constexpr uint8_t tick_resolution() {
+	static inline constexpr uint16_t tick_resolution() {
 		return 10;
 	}
+	bool is_suppressed(const uuid_t& victim_uuid);
 };
 #endif

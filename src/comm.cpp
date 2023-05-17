@@ -982,7 +982,6 @@ void heartbeat(int pulse) {
 	static int mins_since_crashsave = 0;
 	static uint16_t blind_ticks = 0;
 	static uint16_t terrify_ticks = 0;
-	static uint16_t suppress_ticks = 0;
 	mods::globals::current_tick++;
 	if(!(pulse % mods::zone::refresh_tick_resolution())) {
 		if(mods::zone::should_refresh()) {
@@ -1006,7 +1005,6 @@ void heartbeat(int pulse) {
 		mods::resting::process_players_resting();
 		++blind_ticks;
 		++terrify_ticks;
-		++suppress_ticks;
 		if(!(blind_ticks % mods::blind::tick_resolution())) {
 			mods::blind::process_players();
 			blind_ticks = 0;
@@ -1015,10 +1013,9 @@ void heartbeat(int pulse) {
 			mods::terrify::process_players();
 			terrify_ticks = 0;
 		}
-		if(!(suppress_ticks % mods::suppress::tick_resolution())) {
-			mods::suppress::process_players();
-			suppress_ticks = 0;
-		}
+	}
+	if(!(pulse % mods::suppress::tick_resolution())) {
+		mods::suppress::process_players();
 	}
 
 	if(!(pulse % mods::corrosive::tick_resolution())) {

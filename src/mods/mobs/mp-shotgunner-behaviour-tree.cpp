@@ -8,12 +8,13 @@
 #include "../rooms.hpp"
 #include "helpers.hpp"
 #include "../radio.hpp"
+#include "../suppress.hpp"
 
 #define  __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << "[m.m.mps.btree:" << __LINE__ << "]->" << a << "\n";
+	#define m_debug(a) std::cerr << "[m.m.mps.btree:" << __LINE__ << "]->" << a << "\n";
 #else
-#define m_debug(a)
+	#define m_debug(a)
 #endif
 
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
@@ -62,7 +63,7 @@ namespace mods::mobs::mp_shotgunner_behaviour_tree {
 			auto g = mp_shotgunner_ptr(mob.uuid());
 #ifdef __MENTOC_SHOW_TREE_NAME__
 			std::cerr << "[debug_echo_tree_name][mob_uuid:" << mob.uuid() << "]" <<
-			          green_str(CAT("[tree:'",name,"']\n"));
+			    green_str(CAT("[tree:'",name,"']\n"));
 #endif
 			return TStatus::SUCCESS;
 		});
@@ -76,6 +77,11 @@ namespace mods::mobs::mp_shotgunner_behaviour_tree {
 	}
 	TChildNode random_trivial_action() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			if(mods::suppress::is_suppressed(mob.uuid())) {
+				std::cerr << "random_trivial_action failing because i'm suppressed (" << mob.uuid()
+				    << ")\n";
+				return TStatus::FAILURE;
+			}
 			auto lsec = mp_shotgunner_ptr(mob.uuid());
 			if(!lsec->should_do(mp_shotgunner::SHOULD_DO_RANDOM_TRIVIAL)) {
 				return TStatus::SUCCESS;
@@ -162,6 +168,11 @@ namespace mods::mobs::mp_shotgunner_behaviour_tree {
 	 */
 	TChildNode find_targets() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			if(mods::suppress::is_suppressed(mob.uuid())) {
+				std::cerr << "find_targets failing because i'm suppressed (" << mob.uuid()
+				    << ")\n";
+				return TStatus::FAILURE;
+			}
 			auto mg = mp_shotgunner_ptr(mob.uuid());
 			int depth = LOWLY_SECURITY_SCAN_DEPTH();
 			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);

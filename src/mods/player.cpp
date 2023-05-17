@@ -2632,15 +2632,15 @@ namespace mods {
 		return m_weight_index;
 	}
 	void player::set_room(room_rnum r) {
-		if(is_executing_js()) {
-			std::cerr << red_str("STATUS: Setting player room to: ") << r << "\n";
-		}
+		//if(is_executing_js()) {
+		//std::cerr << red_str("STATUS: Setting player room to: ") << r << "\n";
+		//}
 		cd()->in_room = r;
 	}
 	room_rnum& player::room() {
-		if(is_executing_js()) {
-			std::cerr << red_str("STATUS: player room is: ") << cd()->in_room << "\n";
-		}
+		//if(is_executing_js()) {
+		//	std::cerr << red_str("STATUS: player room is: ") << cd()->in_room << "\n";
+		//}
 		return cd()->in_room;
 	}
 };

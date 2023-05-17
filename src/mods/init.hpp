@@ -9,6 +9,7 @@
 INIT(mods::class_abilities::marine);
 INIT(mods::dialog_tree);
 INIT(mods::drops);
+INIT(mods::suppress);
 INIT(mods::flee);
 INIT(mods::suicide);
 INIT(mods::builder::raid);
@@ -169,6 +170,7 @@ namespace mods::init {
 		mods::flee::init();
 		mods::suicide::init();
 		mods::drops::init();
+		mods::suppress::init();
 		mods::rifle_attachments::forge_commands::init();
 		//mods::dialog_tree::init();
 #ifdef __MENTOC_PLUGIN_CONTENT__

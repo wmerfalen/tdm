@@ -12,7 +12,10 @@
 #include "rand.hpp"
 #include "weapons/damage-calculator.hpp"
 #include "weapons/elemental.hpp"
+#include "examine.hpp"
 
+#define SUPPRESS_SHOW_CLEANUPS
+//#define __MENTOC_SHOW_MODS_SUPPRESS_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_SUPPRESS_DEBUG_OUTPUT__
 	#define m_debug(MSG) mentoc_prefix_debug("[mods::suppress::debug]")  << MSG << "\n";
 	#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::suppress::ERROR]"))  << MSG << "\n";
@@ -33,19 +36,18 @@ namespace mods::suppress {
 		uint64_t stop_tick;
 		bool cleanup;
 		inline bool operator==(const suppress_damage_t& lhs) {
-			if(lhs.id == id) {
-				return true;
-			}
-			return false;
+			return lhs.id == id;
 		}
 		std::string report() {
 			return CAT("suppression: id:",id,"\ntarget:",target,"\nstop_tick:",stop_tick);
 		}
 		suppress_damage_t() = delete;
-		suppress_damage_t(player_ptr_t victim,
-		    uint64_t ticks) : id(++suppress_id),
-			target(victim->uuid()),stop_tick((9 * ticks) + CURRENT_TICK()),cleanup(false) {
-			victim->affect(AFF_SUPPRESS);
+		suppress_damage_t(const uuid_t& _victim_uuid, const uint64_t& ticks) : id(++suppress_id),
+			target(_victim_uuid),stop_tick(ticks + CURRENT_TICK()),cleanup(false) {
+			auto victim = ptr_by_uuid(_victim_uuid);
+			if(victim) {
+				victim->affect(AFF_SUPPRESS);
+			}
 			m_debug("[[[[ stop at: " << stop_tick << " which is " << stop_tick - CURRENT_TICK() << " in the future");
 		}
 		suppress_damage_t(const suppress_damage_t& other) {
@@ -55,17 +57,14 @@ namespace mods::suppress {
 			stop_tick = other.stop_tick;
 			cleanup = other.cleanup;
 		}
-		~suppress_damage_t() {
-			m_debug("[~suppress_damage_t]");
-		}
+		~suppress_damage_t() = default;
 
 	};
 	using suppress_list_t = std::vector<suppress_damage_t>;
 
 	static suppress_list_t suppress_player_list;
 
-	void suppress_for(player_ptr_t& victim, uint32_t ticks) {
-		m_debug("suppress_for cast on: " << victim->name() << ", for " << ticks << " ticks");
+	void suppress_for(const uuid_t& victim, const uint64_t& ticks) {
 		suppress_player_list.emplace_back(victim,ticks);
 		return;
 #if 0
@@ -100,19 +99,26 @@ namespace mods::suppress {
 	}
 	void process_players() {
 		m_debug("[SUPPRESS][process_players]...");
+		m_debug("CURRENT_TICK: " << CURRENT_TICK());
 		if(suppress_player_list.size() == 0) {
 			return;
 		}
 		std::vector<uint64_t> player_removals;
 		for(const auto& entry : suppress_player_list) {
 			m_debug("[SUPPRESS](for loop)[1]");
-			auto victim = ptr_by_uuid(entry.target);
+			auto victim_opt = ptr_opt(entry.target);
+			auto victim = victim_opt.value_or(nullptr);
 			if(!victim || victim->position() == POS_DEAD) {
 				player_removals.emplace_back(entry.id);
 				continue;
 			}
+			m_debug("victim: " << entry.target);
 			bool cleanup = entry.cleanup;
 			if(entry.stop_tick <= CURRENT_TICK()) {
+#ifdef SUPPRESS_SHOW_CLEANUPS
+				std::cerr << "suppress[process_players]::CLEANUP " << entry.target << "\n";
+#endif
+				m_debug("CLEANUP" << entry.target << " id:" << entry.id);
 				cleanup = true;
 				victim->remove_affect(AFF_SUPPRESS);
 			}
@@ -121,10 +127,6 @@ namespace mods::suppress {
 				player_removals.emplace_back(entry.id);
 				continue;
 			}
-			m_debug("victim: " << entry.target);
-			/**TODO got lucky? undo suppressness now!
-			 * uto damage = mods::rand::roll(entry.dice_count,entry.dice_sides);
-			 */
 		}
 		m_debug("[player_removals.size() check]");
 		if(player_removals.size()) {
@@ -145,11 +147,26 @@ namespace mods::suppress {
 	ACMD(do_suppress_me_for) {
 		if(argshave()->size_gt(0)->int_at(0)->passed()) {
 			player->sendln(CAT("intat(0):",intat(0)));
-			suppress_for(player,intat(0));
+			suppress_for(player->uuid(),intat(0));
+			return;
+		}
+		player->errorln("Usage: admin:suppress_me_for <ticks>");
+	}
+	ACMD(do_suppress_target_for) {
+		if(argshave()->size_gt(1)->int_at(1)->passed()) {
+			suppress_for(mods::examine::find_player_by_name(player,argat(0)),intat(1));
+		} else {
+			player->sendln("Usage: admin:suppress_target_for <player> <ticks>");
 		}
 	}
+	bool is_suppressed(const uuid_t& victim_uuid) {
+		return std::find_if(suppress_player_list.cbegin(),suppress_player_list.cend(),[&](const auto& sd) -> bool {
+			return victim_uuid == sd.target;
+		}) != suppress_player_list.cend();
+	}
 	void init() {
-		mods::interpreter::add_command("suppress_me_for", POS_RESTING, do_suppress_me_for, 0, 0);
+		ADD_ADMIN_COMMAND("admin:suppress_me_for", do_suppress_me_for);
+		ADD_ADMIN_COMMAND("admin:suppress_target_for", do_suppress_target_for);
 
 	}
 
@@ -158,3 +175,6 @@ namespace mods::suppress {
 #undef m_error
 #undef m_debug
 };
+#ifdef SUPPRESS_SHOW_CLEANUPS
+	#undef SUPPRESS_SHOW_CLEANUPS
+#endif

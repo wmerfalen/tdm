@@ -42,6 +42,7 @@
 ./mods/rifle.cpp:	->rifle_me
 ./mods/bleed.cpp:	->bleed_me
 ./mods/suppress.cpp:	->suppress_me_for
+./mods/suppress.cpp:	->suppress_target_for
 ./mods/help.cpp:	->help
 ./mods/help.cpp:	->search_help
 ./mods/loot.cpp:	->show_loot
