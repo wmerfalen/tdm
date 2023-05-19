@@ -10,7 +10,7 @@
 #include "../radio.hpp"
 #include "../suppress.hpp"
 
-#define  __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__
+//#define  __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_MP_SHOTGUNNER_BTREE_DEBUG_OUTPUT__
 	#define m_debug(a) std::cerr << "[m.m.mps.btree:" << __LINE__ << "]->" << a << "\n";
 #else
@@ -77,11 +77,6 @@ namespace mods::mobs::mp_shotgunner_behaviour_tree {
 	}
 	TChildNode random_trivial_action() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			if(mods::suppress::is_suppressed(mob.uuid())) {
-				std::cerr << "random_trivial_action failing because i'm suppressed (" << mob.uuid()
-				    << ")\n";
-				return TStatus::FAILURE;
-			}
 			auto lsec = mp_shotgunner_ptr(mob.uuid());
 			if(!lsec->should_do(mp_shotgunner::SHOULD_DO_RANDOM_TRIVIAL)) {
 				return TStatus::SUCCESS;
@@ -403,6 +398,11 @@ namespace mods::mobs::mp_shotgunner_behaviour_tree {
 	}
 	TChildNode scan_to_find_hostile_activity() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			if(mods::suppress::is_suppressed(mob.uuid())) {
+				std::cerr << "scan_to_find_hostile_activity failing because i'm suppressed (" << mob.uuid()
+				    << ")\n";
+				return TStatus::FAILURE;
+			}
 			auto g = mp_shotgunner_ptr(mob.uuid());
 			int depth = LOWLY_SECURITY_SCAN_DEPTH();
 			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
@@ -443,11 +443,21 @@ namespace mods::mobs::mp_shotgunner_behaviour_tree {
 	TChildNode move_toward_heading() {
 		return TNode::create_selector({
 			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				if(mods::suppress::is_suppressed(mob.uuid())) {
+					std::cerr << "move_toward_heading failing because i'm suppressed (" << mob.uuid()
+					    << ")\n";
+					return TStatus::FAILURE;
+				}
 				const auto& g = mp_shotgunner_ptr(mob.uuid());
 				m_debug("mps attempting move 1");
 				return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
 			}),
 			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				if(mods::suppress::is_suppressed(mob.uuid())) {
+					std::cerr << "move_toward_heading failing because i'm suppressed (" << mob.uuid()
+					    << ")\n";
+					return TStatus::FAILURE;
+				}
 				using namespace mods::doors;
 				const auto& g = mp_shotgunner_ptr(mob.uuid());
 				m_debug("mps attempting move 2");
@@ -468,6 +478,11 @@ namespace mods::mobs::mp_shotgunner_behaviour_tree {
 				return perform_move(g->cd(), g->get_heading(),0) ? TStatus::SUCCESS : TStatus::FAILURE;
 			}),
 			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				if(mods::suppress::is_suppressed(mob.uuid())) {
+					std::cerr << "move_toward_heading failing because i'm suppressed (" << mob.uuid()
+					    << ")\n";
+					return TStatus::FAILURE;
+				}
 				using namespace mods::doors;
 				m_debug("mps last ditch attempt. breaching door");
 				const auto& g = mp_shotgunner_ptr(mob.uuid());
@@ -491,6 +506,11 @@ namespace mods::mobs::mp_shotgunner_behaviour_tree {
 	}
 	TChildNode engage_hostile() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			if(mods::suppress::is_suppressed(mob.uuid())) {
+				std::cerr << "move_toward_heading failing because i'm suppressed (" << mob.uuid()
+				    << ")\n";
+				return TStatus::FAILURE;
+			}
 			const auto& g = mp_shotgunner_ptr(mob.uuid());
 			m_debug("mps engaging with hostile");
 			g->hunt_hostile_targets();

@@ -581,7 +581,7 @@ namespace mods::combat_composer {
 			mods::combat_composer::phases::apply_damage_to_victim(attacker,victim,weapon,pair.second);
 
 			if(attacker->marine() && attacker->marine()->is_surpressing(pair.first)) {
-				mods::suppress::suppress_for(pair.first,30); // FIXME: use values system
+				mods::suppress::suppress_for(pair.first, tier(attacker) * MARINE_SUPPRESSION_TICKS_PER_TIER());
 			}
 		}
 		mods::combat_composer::phases::perform_cleanup(attacker,weapon);

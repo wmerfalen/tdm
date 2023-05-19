@@ -74,7 +74,7 @@ namespace mods::orm {
 			id = 0;
 		}
 		locker(const pqxx::row& r) {
-			std::cerr << "[locker] copy constructor\n";
+			//std::cerr << "[locker] copy constructor\n";
 			id = r["id"].as<uint64_t>();
 			l_type = r["l_type"].c_str();
 			l_room_vnum = r["l_room_vnum"].as<room_vnum>();
@@ -82,7 +82,7 @@ namespace mods::orm {
 			l_count = r["l_count"].as<uint16_t>();
 		}
 		~locker() {
-			std::cerr << "[locker::~locker] destructor\n";
+			//std::cerr << "[locker::~locker] destructor\n";
 			l_type.clear();
 			l_yaml.clear();
 		}

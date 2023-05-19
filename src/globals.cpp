@@ -1365,7 +1365,9 @@ namespace mods {
 			 * the object pointer by obj_uuid
 			 */
 			mods::weapons::dispose_unique_weapon(obj_uuid);
-			obj_from_room(obj);
+			if(IN_ROOM(obj)) {
+				obj_from_room(obj);
+			}
 			destruct_object(obj_uuid);
 			recursive_obj_list_erase(obj.get());
 			mods::rifle_attachments::erase(obj_uuid);

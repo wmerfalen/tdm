@@ -87,7 +87,9 @@ namespace mods {
 		 * @param uuid
 		 */
 		void erase(const uuid_t& uuid) {
+#ifdef SHOW_RIFLE_ATTACHMENTS_ERASE
 			std::cerr << green_str("erasing uuid from rifle attachments:") << uuid << "\n";
+#endif
 			uuid_schema_list().erase(uuid);
 			global_list().erase(uuid);
 		}

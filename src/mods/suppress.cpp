@@ -14,7 +14,7 @@
 #include "weapons/elemental.hpp"
 #include "examine.hpp"
 
-#define SUPPRESS_SHOW_CLEANUPS
+//#define SUPPRESS_SHOW_CLEANUPS
 //#define __MENTOC_SHOW_MODS_SUPPRESS_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_SUPPRESS_DEBUG_OUTPUT__
 	#define m_debug(MSG) mentoc_prefix_debug("[mods::suppress::debug]")  << MSG << "\n";
