@@ -565,12 +565,12 @@ namespace mods {
 			});
 		}
 		void pre_game_loop() {
-			std::cout << "[event] Pre game loop\n";
+			//std::cout << "[event] Pre game loop\n";
 			refresh_player_states();
-			std::cout << "[event] refreshed player states\n";
+			//std::cout << "[event] refreshed player states\n";
 			mods::chat::setup_public_channels();
 			if(bootup_test_suite.length() > 0) {
-				std::cout << "booting suite: " << bootup_test_suite << "\n";
+				//std::cout << "booting suite: " << bootup_test_suite << "\n";
 				mods::pregame::boot_suite(bootup_test_suite);
 			}
 			if(!mods::debug::pre_game::run()) {
@@ -1006,7 +1006,7 @@ namespace mods {
 							return true;
 					}
 					auto cached_room = player->room();
-					std::cerr << "STATUS: " << CAT("cached_room: ",cached_room) << "\n";
+					//std::cerr << "STATUS: " << CAT("cached_room: ",cached_room) << "\n";
 
 					int target_x = world[cached_room].x + x;
 					int target_y = world[cached_room].y + y;
@@ -1016,7 +1016,7 @@ namespace mods {
 					room_data* existing_room = nullptr;
 					int real_room_id = 0;
 					if(existing_room_vnum > -1) {
-						std::cerr << "STATUS: checking existing room\n";
+						//std::cerr << "STATUS: checking existing room\n";
 						real_room_id = real_room(existing_room_vnum);
 						if(real_room_id != NOWHERE) {
 							existing_room = &world[real_room_id];
@@ -1047,18 +1047,18 @@ namespace mods {
 							mods::builder::add_room_to_pavements(player,real_room_id);
 							glue_room_at_coordinates(existing_room->x,existing_room->y,existing_room->z,existing_room->number);
 							if(player->is_executing_js()) {
-								std::cerr << green_str("STATUS: dumping: ") <<
-								    "player->room():" << player->room() <<
-								    "| real_room_id:" << real_room_id << "\n";
+								//std::cerr << green_str("STATUS: dumping: ") <<
+								//    "player->room():" << player->room() <<
+								//    "| real_room_id:" << real_room_id << "\n";
 								mods::globals::rooms::char_from_room(player->cd());
 								mods::globals::rooms::char_to_room(real_room_id,player->cd());
-								std::cerr << "STATUS: glued existing room. setting builder room\n";
+								//std::cerr << "STATUS: glued existing room. setting builder room\n";
 								return false;
 							}
 							return true;
 						}
 						player->sendln("Creating room in that direction");
-						std::cerr << "STATUS: Creating room in that direction\n";
+						//std::cerr << "STATUS: Creating room in that direction\n";
 						int new_room_rnum = 0;
 						world.emplace_back();
 						register_room(0);
@@ -1093,10 +1093,10 @@ namespace mods {
 						mods::builder::add_room_to_pavements(player,new_room_rnum);
 						if(player->is_executing_js()) {
 							player->sendln("Short-circuit because of js [1]");
-							std::cerr << green_str("STATUS: dumping: ") <<
-							    "player->room():" << player->room() <<
-							    "| new_room_rnum:" << new_room_rnum <<
-							    "(CHANGING TO): " << new_room_rnum << "\n";
+							//std::cerr << green_str("STATUS: dumping: ") <<
+							//    "player->room():" << player->room() <<
+							//    "| new_room_rnum:" << new_room_rnum <<
+							//    "(CHANGING TO): " << new_room_rnum << "\n";
 							mods::globals::rooms::char_to_room(new_room_rnum,player->cd());
 							player->sendln("Short-circuited [1]");
 							return false;
@@ -1211,16 +1211,16 @@ namespace mods {
 				auto player = ptr(ch);
 				if(player->builder_data) {
 					if(player->is_executing_js()) {
-						std::cout << "STATUS: {0}[player doing char to room]: real:" << room
-						    << "|player->room():" << player->room()
-						    << "\n";
+						//std::cout << "STATUS: {0}[player doing char to room]: real:" << room
+						//    << "|player->room():" << player->room()
+						//    << "\n";
 						player->builder_data->room_recorder.char_to_room(room);
 						player->set_room(room);
 						mods::globals::room_list[room].push_back(player);
 						player->moving_to_room() = false;
-						std::cout << "STATUS: {1}[player doing char to room]: real:" << room
-						    << "|player->room():" << player->room()
-						    << "\n";
+						//std::cout << "STATUS: {1}[player doing char to room]: real:" << room
+						//    << "|player->room():" << player->room()
+						//    << "\n";
 						return true;
 					}
 				}
@@ -1233,7 +1233,7 @@ namespace mods {
 					return false;
 				}
 				if(!mods::movement::char_move_to(player,target_room)) {
-					std::cerr << red_str("cannot move to target room") << "\n";
+					//std::cerr << red_str("cannot move to target room") << "\n";
 					player->set_room(ch->was_in_room);
 					mods::globals::room_list[ch->was_in_room].push_back(player);
 					player->moving_to_room() = false;

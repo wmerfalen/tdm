@@ -25,6 +25,7 @@
 #include "mods/classes/ghost.hpp"
 #include "mods/contract-events.hpp"
 #include "mods/resting.hpp"
+#include "mods/suppress.hpp"
 
 /* external variables  */
 extern int tunnel_size;
@@ -142,6 +143,13 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 		}
 
 		return (0);
+	}
+	if(mods::suppress::is_suppressed(player->uuid())) {
+		if(IS_NPC(ch)) {
+			return 0;
+		}
+		player->sendln("{red}[SUPPRESSED]{/red}: You are unable to think straight!");
+		return 0;
 	}
 
 	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_ATRIUM)) {

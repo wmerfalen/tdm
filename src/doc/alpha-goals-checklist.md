@@ -3,6 +3,31 @@
 The mud is in a very close state to having an alpha testing environment. Documented here are
 a checklist of items neeeded before a successfull alpha could be deployed.
 
+# "no bullshit" goals
+The idea of "no bullshit" goals is to implement features that make life on the MUD less of a nuisance. This includes things like not allowing people to plant claymore mines in recall. Simple things that prevent most annoying people from ruining the experience for others.
+
+## COFOB is PEACEFUL
+- [ ] Make all rooms in the COFOB "PEACEFUL"
+	- Apply the following to each room:
+		- `rbuild flag:add PEACEFUL INDOORS DMZ NOTRACK`
+
+## Dis-allow annoyances in PEACEFUL rooms
+- All rooms marked with `PEACEFUL` should:
+	- [ ] ... not allow claymores to go off
+	- [ ] ... not allow claymores to be planted
+	- [ ] ... not allow grenades *OF ANY TYPE* to go off
+	- [ ] ... not allow sensor grenades to ping anyone
+	- [ ] ... not allow elemental damage of any kind to harm anyone
+	- [ ] ... not allow melee damage
+	- [ ] ... not allow sniping from other rooms into the peaceful room
+	- [ ] ... not allow sniping from within the peaceful room to the outer rooms
+
+## Admins should be able to discipline
+- Admins should have:
+	- [ ] easy to remember player muting abilities
+	- [ ] easy to remember player banning
+	- [ ] easy to remember host banning
+
 # component: regen hp when sleeping/resting
 	- status:
 		- not done

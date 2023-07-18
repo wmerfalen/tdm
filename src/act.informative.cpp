@@ -152,6 +152,9 @@ ACMD(do_drone) {
 }
 
 SUPERCMD(do_givemegold) {
+	if(!mods::super_users::player_is(player)){
+		return;
+	}
 	ch->points.gold += 50000;
 }
 
@@ -183,18 +186,26 @@ ACMD(do_preferences) {
 }
 
 SUPERCMD(do_js) {
+	if(!mods::super_users::player_is(player)){
+		return;
+	}
 	player->executing_js(true);
 	mods::js::eval_string(std::string(argument) + ";");
 	player->executing_js(false);
 }
 
 SUPERCMD(do_newjs) {
+	if(!mods::super_users::player_is(player)){
+		return;
+	}
 	mods::js::create_new_context();
 	mods::js::load_base_functions();
 	mods::js::load_c_require_functions();
 }
 SUPERCMD(do_jstest) {
-
+	if(!mods::super_users::player_is(player)){
+		return;
+	}
 
 	if(!mods::js::run_test_suite(*player,argument)) {
 		*player << "{red}Unable to load test suite{/red}\r\n";
