@@ -10,6 +10,48 @@
 
 namespace mods::help::pages {
 #define HELP_STR static constexpr const char*
+	/**
+	 * TODO: need help files for the following
+	 * - [ ] invoke
+	 * - [ ] spray
+	 * - [ ] breach
+	 */
+	HELP_STR h_help_topics = 
+		"==============================================|\r\n"
+		"| Help topics                                 |\r\n"
+		"==============================================|\r\n"
+		"{grn}Combat{/grn}:                            |\r\n"
+		"{grn}==============================================|{/grn}\r\n"
+		" set_rules_of_engagement, snipe, kill, reload,     |\r\n"
+		" engage, spray                                     |\r\n"
+		"                                                   |\r\n"
+		"{grn}Demolitions{/grn}:                            |\r\n"
+		"{grn}==============================================|{/grn}\r\n"
+		" toss_cryogenic_grenade, install, cancel, throw,   |\r\n"
+		" use_flash_underbarrel, uninstall, grenade         |\r\n"
+		"                                                   |\r\n"
+		"{grn}Intelligence gathering:{/grn}                 |\r\n"
+		"{grn}==============================================|{/grn}\r\n"
+		" drone, scan, look, camera                         |\r\n"
+		"                                                   |\r\n"
+	  "{grn}Contracts{/grn}:                              |\r\n"
+		"{grn}==============================================|{/grn}\r\n"
+	  " contract                                          |\r\n"
+		"                                                   |\r\n"
+	  "{grn}Leveling up{/grn}:                            |\r\n"
+		"{grn}==============================================|{/grn}\r\n"
+	  " practice, skills, score                           |\r\n"
+		"                                                   |\r\n"
+	  "{grn}Moving around{/grn}:                          |\r\n"
+		"{grn}==============================================|{/grn}\r\n"
+	  " n, s, e, w, u, d, sleep, wake, stand, sit         |\r\n"
+		"                                                   |\r\n"
+		"{grn}Using class abilities{/grn}:                  |\r\n"
+		"{grn}==============================================|{/grn}\r\n"
+		" invoke                                            |\r\n"
+		"\r\n";
+
+
 	HELP_STR h_combat=
 	    " Rules of engagement\r\n"
 	    "{hr}"
@@ -970,7 +1012,7 @@ namespace mods::help {
 	};
 
 	void send_topics_help_menu(player_ptr_t& player) {
-		player->sendln("[TOPICS HELP MENU STUB]");
+		player->sendln(h_help_topics);
 	}
 
 
@@ -1226,6 +1268,10 @@ namespace mods::help {
 				case player_class_t::CLASS_GHOST:
 					mods::help::send_ghost_help_menu(player);
 					break;
+				/**
+				 * TODO: Marine class
+				 * TODO: breacher class
+				 */
 				case player_class_t::CLASS_MARKSMAN:
 					mods::help::send_marksman_help_menu(player);
 					break;
