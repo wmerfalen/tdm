@@ -49,6 +49,81 @@
 #include "mods/admin-tools/stay.hpp"
 //#include "mods/orm/admin/muted.hpp"
 
+static constexpr std::size_t BUF_LENGTH = MAX_INPUT_LENGTH;
+static constexpr std::size_t MAX_USERNAME_LENGTH = 24;
+static_assert(MAX_USERNAME_LENGTH < BUF_LENGTH,"MAX_USERNAME_LENGTH must be less than BUF_LENGTH");
+std::string extract_username(std::string_view arg){
+	if(arg.length() >= MAX_USERNAME_LENGTH){
+		return arg.substr(0,MAX_INPUT_LENGTH - 1).data();
+	}
+	return arg.data();
+}
+std::array<char,BUF_LENGTH> buf;
+std::vector<std::string> banned_phrases = {
+	"arse",
+	"ass",
+	"asshole",
+	"bitch",
+	"cock",
+	"cunt",
+	"dick",
+	"fuck",
+	"fucker",
+	"hoe",
+	"kike",
+	"nazi",
+	"nigga",
+	"nigger",
+	"pedo",
+	"pussy",
+	"prick",
+	"shit",
+	"twat",
+	"whore",
+};
+std::set<std::string> taken_usernames;
+void populate_taken(){
+	try {
+		auto sel_txn = txn();
+		sql_compositor comp("player",&sel_txn);
+		auto sel_sql = comp
+				.select("player_name")
+				.from("player")
+				.sql();
+		auto records = mods::pq::exec(sel_txn,sel_sql);
+		mods::pq::commit(sel_txn);
+		for(auto&& row : records){
+			taken_usernames.emplace(row["player_name"].c_str());
+		}
+	} catch(std::exception& e) {
+		log(CAT("SYSERR:Failed fetching player!:", e.what()).c_str());
+	}
+}
+
+std::tuple<bool,std::string> is_valid_name(std::string_view buf){
+	for(const auto& ch : buf){
+		if(!isalpha(ch)){
+			return {false,"Your name contained invalid characters."};
+		}
+	}
+	for(const auto& phrase : banned_phrases){
+		if(strstr(buf.data(),phrase.c_str())){
+			return {false,"Your name contained a phrase that we don't allow."};
+		}
+	}
+	return {true,""};
+}
+
+std::string sanitize_name(std::string_view name){
+	std::string filt;
+	for(const auto& ch: name){
+		if(!isalpha(ch)){
+			continue;
+		}
+		filt += ch;
+	}
+	return filt;
+}
 namespace mods::interpreter {
 	extern command_info& get_command(std::string_view,player_ptr_t&);
 };
@@ -1447,24 +1522,6 @@ int64_t perform_dupe_check(player_ptr_t p) {
 	return kicked;
 }
 
-int Valid_Name(const char *newname) {
-	/*
-	 * Make sure someone isn't trying to create this same name.  We want to
-	 * do a 'str_cmp' so people can't do 'Bob' and 'BoB'.  The creating login
-	 * will not have a character name yet and other people sitting at the
-	 * prompt won't have characters yet.
-	 */
-	for(auto& p : mods::globals::player_list) {
-		if(mods::util::is_lower_match(p->name().c_str(), newname)) {
-			if((p->state() == CON_PLAYING || p->state() == CON_IDLE) && p->authenticated()) {
-				return 0;
-			}
-		}
-	}
-
-	return (1);
-}
-
 /* deal with newcomers and other non-playing sockets */
 void nanny(player_ptr_t p, char * in_arg) {
 	int load_result;	/* Overloaded variable */
@@ -1480,22 +1537,27 @@ void nanny(player_ptr_t p, char * in_arg) {
 			if(arg.length() == 0) {
 				p->set_state(CON_CLOSE);
 			} else {
-				std::array<char,MAX_INPUT_LENGTH + 1> buf;
-				std::fill(buf.begin(),buf.end(),0);
-				if(!Valid_Name(arg.c_str()) ||
-				        fill_word(strncpy(&buf[0], arg.c_str(),MAX_INPUT_LENGTH)) ||
-				        reserved_word(&buf[0])) {	/* strcpy: OK (mutual MAX_INPUT_LENGTH) */
-					write_to_output(d, "Invalid name, please try another.\r\nName: ");
+				std::string username = extract_username(arg);
+				auto valid = is_valid_name(username);
+				if(std::get<0>(valid) == false){
+					write_to_output(d, "Invalid name.\r\nWe have some simple rules for names:\r\n");
+					write_to_output(d, "1) We only allow letters in the English alphabet\r\n");
+					write_to_output(d, "2) Digits and any other characters are not allowed\r\n");
+					write_to_output(d, "-- The reasoning for this is because you are entering a PvP world where other players will have to be able to address you by name\r\n");
+					write_to_output(d, "The reason for your name being rejected: ");
+					write_to_output(d, std::get<1>(valid).c_str());
+					write_to_output(d, "\r\n");
+					write_to_output(d, "With that being said, try another name: ");
 					return;
 				}
-				if(mods::ban_system::username::is_banned(arg)) {
+				if(mods::ban_system::username::is_banned(username)) {
 					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (siteban)", p->name().c_str(), p->host().c_str());
 					write_to_output(d, "Sorry, new characters are not allowed from your site!\r\n");
 					p->set_state(CON_CLOSE);
 					return;
 				}
 
-				p->set_name(arg);
+				p->set_name(sanitize_name(username));
 				p->set_db_id(0);
 				if(player_exists(p) == false) {
 					write_to_output(d, "Did I get that right, %s (Y/N)? ", p->name().c_str());

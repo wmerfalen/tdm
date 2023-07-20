@@ -16,6 +16,7 @@ extern player_class_t parse_class(char arg);
 extern std::string motd;
 extern size_t write_to_output(mods::descriptor_data& t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
 extern const char* MENU;
+extern void populate_taken();
 
 namespace mods::chargen {
 	static std::vector<std::string> classes;
@@ -256,6 +257,7 @@ namespace mods::chargen {
 		}
 		mudlog(NRM, LVL_IMMORT, TRUE, CAT(player->name()," [",player->host(),"] player creation rollback ",
 		                                  green_str("success")).c_str());
+		populate_taken();
 	}
 	std::tuple<bool,std::string> make_char(player_ptr_t player,player_class_t class_type) {
 		REMOVE_BIT(MOB_FLAGS(player->cd()), MOB_ISNPC);
@@ -308,6 +310,7 @@ namespace mods::chargen {
 		}
 		mods::levels::gain_exp(player,1000);
 
+		populate_taken();
 		return {1,"success"};
 	}
 	void show_finalized_chargen_screen(player_ptr_t p) {

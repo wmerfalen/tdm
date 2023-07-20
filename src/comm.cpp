@@ -55,6 +55,7 @@ namespace mods::mobs::room_watching {
 	extern void destroy_player(uuid_t);
 	extern void heartbeat();
 };
+extern void populate_taken();
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 	#include <mcheck.h>
@@ -386,6 +387,7 @@ void init_game(ush_int port) {
 
 	log("Entering game loop.");
 
+	populate_taken();
 	game_loop(mother_desc);
 
 	Crash_save_all();
