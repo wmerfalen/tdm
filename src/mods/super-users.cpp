@@ -10,6 +10,7 @@
 #include "jx.hpp"
 
 extern void exit_with(int);
+extern int destroy_player(player_ptr_t&& player);
 
 namespace mods::super_users {
 	SUPERCMD(do_vnumtele) {
@@ -237,10 +238,24 @@ SUPERCMD(do_shutdown_mud) {
 	ADMIN_REJECT();
 	exit_with(0);
 }
+SUPERCMD(do_admin_kick) {
+	ADMIN_REJECT();
+	DO_HELP("admin:kick");
+	auto vec_args = PARSE_ARGS();
+	for(const auto& name : vec_args) {
+		for(auto& pair : mods::globals::socket_map){
+			if(mods::util::is_lower_match(pair.second->name(),name)){
+				destroy_player(std::move(pair.second));
+			}
+		}
+	}
+
+}
 namespace mods::super_users {
 	void init() {
 		mods::interpreter::add_command("sdm", POS_RESTING, do_shutdown_mud, LVL_BUILDER,0);
 		mods::interpreter::add_command("vnumtele", POS_RESTING, do_vnumtele, LVL_BUILDER,0);
 		mods::interpreter::add_command("rnumlist", POS_RESTING, do_rnumlist, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:kick", POS_RESTING, do_admin_kick, LVL_BUILDER,0);
 	}
 };

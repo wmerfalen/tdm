@@ -51,6 +51,9 @@
 #include "mods/mobs/orthos-spawn-sentinel-btree.hpp"
 #include "mods/mobs/goat.hpp"
 #include "mods/loot.hpp"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 namespace mods::mobs::room_watching {
 	extern void destroy_player(uuid_t);
 	extern void heartbeat();
@@ -166,6 +169,49 @@ const char *text_overflow = "**OVERFLOW**\r\n";
 int epoll_fd = -1;
 epoll_event epoll_ev;
 
+static std::vector<char> splash_page;
+void send_splash_page_to(player_ptr_t& player){
+	static FILE* fp_splash = nullptr;
+	static struct stat splash_file;
+	static bool initialized = false;
+	if(!initialized){
+		memset(&splash_file,0,sizeof(struct stat));
+		initialized = true;
+	}
+	static constexpr std::string_view SPLASH_SCREEN = "../lib/splash";
+	if(fp_splash){
+		fclose(fp_splash);
+		fp_splash = nullptr;
+	}
+	struct stat sb;
+	int ret = stat(SPLASH_SCREEN.data(),&sb);
+	if(ret == -1){
+		if(fp_splash){
+			fclose(fp_splash);
+		}
+		log("SYSERR: couldnt STAT splash screen");
+		return;
+	}
+	if(splash_file.st_mtim.tv_sec < sb.st_mtim.tv_sec){
+		/**
+		 * FIle is new. Read it
+		 */
+		fp_splash = fopen(SPLASH_SCREEN.data(),"r");
+		if(fp_splash){
+			splash_page.resize(sb.st_size + 1);
+			fread(&splash_page[0], sizeof(char), sb.st_size, fp_splash);
+			write_to_output(player->desc(),&splash_page[0]);
+		}
+		if(fp_splash){
+			fclose(fp_splash);
+			fp_splash = nullptr;
+		}
+		bcopy(&sb,&splash_file,sizeof(struct stat));
+	}else{
+		write_to_output(player->desc(),&splash_page[0]);
+	}
+	write_to_output(player->desc(),mods::values::LOGIN_SCREEN_USERNAME().c_str());
+}
 void on_shutdown() {
 	if(mods::globals::db) {
 		mods::globals::db->abort_txn();
@@ -1658,9 +1704,7 @@ int new_descriptor(socket_t s) {
 	}
 	player->desc().desc_num = last_desc;
 
-
-	GREETINGS = "Username:";
-	write_to_output(player->desc(), "%s",GREETINGS.c_str());
+	send_splash_page_to(player);
 	mods::globals::register_player(player);
 	mods::globals::socket_map.insert(
 	    std::pair<int,player_ptr_t>(

@@ -49,6 +49,10 @@
 #include "mods/admin-tools/stay.hpp"
 //#include "mods/orm/admin/muted.hpp"
 
+namespace mods::players::db_load {
+	extern int save_player_password(player_ptr_t& player,std::string_view password);
+};
+extern bool login(std::string_view user_name,std::string_view password);
 static constexpr std::size_t BUF_LENGTH = MAX_INPUT_LENGTH;
 static constexpr std::size_t MAX_USERNAME_LENGTH = 24;
 static_assert(MAX_USERNAME_LENGTH < BUF_LENGTH,"MAX_USERNAME_LENGTH must be less than BUF_LENGTH");
@@ -217,6 +221,7 @@ namespace mods::js {
 	extern void eval_string(std::string_view str);
 };
 SUPERCMD(do_builder) {
+	ADMIN_REJECT();
 
 	if(IS_NPC(ch)) {
 		/** nice try */
@@ -1675,7 +1680,8 @@ void nanny(player_ptr_t p, char * in_arg) {
 			break;
 
 		case CON_NEWPASSWD:
-		case CON_CHPWD_GETNEW:
+		case CON_CHPWD_GETNEW: {
+			echo_off(d);
 			if(arg.length() > MAX_PWD_LENGTH || arg.length() < 3 ||
 			        arg.compare(p->name()) == 0) {
 				write_to_output(d, "\r\nIllegal password.\r\nPassword: ");
@@ -1683,6 +1689,14 @@ void nanny(player_ptr_t p, char * in_arg) {
 			}
 
 			p->set_password(arg);
+			int ret = mods::players::db_load::save_player_password(p,arg);
+			if(ret != 0){
+				write_to_output(d,"\r\nERROR! Password not updated! error code: %d \r\n",ret);
+				write_to_output(d,"*** PRESS ANY KEY TO CONTINUE***\r\n");
+				p->set_state(CON_NEWPASSWD);
+				echo_on(d);
+				return;
+			}
 
 			write_to_output(d, "\r\nPlease retype password: ");
 
@@ -1692,6 +1706,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 				p->set_state(CON_CHPWD_VRFY);
 			}
 
+													 }
 			break;
 
 		case CON_CNFPASSWD:
@@ -1861,6 +1876,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 						write_to_output(d, "\r\nEnter your old password: ");
 						echo_off(d);
 						p->set_state(CON_CHPWD_GETOLD);
+						return;
 						break;
 
 					case '5':
@@ -1877,20 +1893,21 @@ void nanny(player_ptr_t p, char * in_arg) {
 				break;
 			}
 
-		case CON_CHPWD_GETOLD:
-
-			if(p->get_password().compare(arg) != 0) {
-				echo_on(d);
-				write_to_output(d, "\r\nIncorrect password.\r\n%s", MENU);
-				p->set_state(CON_MENU);
-			} else {
-				write_to_output(d, "\r\nEnter a new password: ");
-				p->set_state(CON_CHPWD_GETNEW);
+		case CON_CHPWD_GETOLD:{
+				if(!login(p->name(),arg)) {
+					echo_on(d);
+					write_to_output(d, "\r\nIncorrect password.\r\n%s", MENU);
+					p->set_state(CON_MENU);
+				} else {
+					write_to_output(d, "\r\nEnter a new password: ");
+					p->set_state(CON_CHPWD_GETNEW);
+				}
 			}
 
 			return;
 
 		case CON_DELCNF1:
+				write_to_output(d, "\r\ncon delcnf1 %d\r\n",__LINE__);
 			echo_on(d);
 
 			if(p->get_password().compare(arg) != 0) {
