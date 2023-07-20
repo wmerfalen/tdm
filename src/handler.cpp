@@ -981,7 +981,9 @@ void obj_from_room(obj_ptr_t in_object) {
 	if(!object || IN_ROOM(object) == NOWHERE) {
 		log("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room(obj_ptr_t)",
 		    object, IN_ROOM(object));
+#ifdef __MENTOC_OBJ_FROM_ROOM_BACKTRACE__
 		std::cerr << boost::stacktrace::stacktrace();
+#endif
 		//for(const auto& s : boost::stacktrace::stacktrace()) {
 		//	std::cerr << s.source_file() << ":" << s.source_line() << "->" << s.name() << "\n";
 		//}
@@ -990,7 +992,9 @@ void obj_from_room(obj_ptr_t in_object) {
 	auto room = IN_ROOM(object);
 	if(room < 0 || room >= world.size()) {
 		log("SYSERR: object in funky room: %d",room);
+#ifdef __MENTOC_OBJ_FROM_ROOM_BACKTRACE__
 		std::cerr << boost::stacktrace::stacktrace();
+#endif
 		return;
 	}
 
@@ -1017,7 +1021,9 @@ void obj_from_room(struct obj_data *object) {
 	if(!object || IN_ROOM(object) == NOWHERE) {
 		log("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room(obj_data*)",
 		    object, IN_ROOM(object));
+#ifdef __MENTOC_OBJ_FROM_ROOM_BACKTRACE__
 		std::cerr << boost::stacktrace::stacktrace();
+#endif
 		return;
 	}
 

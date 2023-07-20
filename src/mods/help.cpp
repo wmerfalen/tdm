@@ -1280,7 +1280,6 @@ namespace mods::help {
 		player->sendln(search_help_msg.data());
 
 		if(argshave()->size_gt(0)->passed()) {
-			player->sendln("doing part 2");
 			if(send_help(argat(0), player)) {
 				player->pager_start();
 				player->sendln("No specific help screen found for that. Searching every command...");

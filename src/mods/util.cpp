@@ -811,7 +811,6 @@ namespace mods::util {
 	}
 
 	bool fuzzy_match(const std::string& _needle,const std::string& _haystack) {
-		std::cerr << "_haystack: '" << _haystack << "', needle: '" << _needle << "'\n";
 		std::string needle = "", haystack = _haystack;
 
 		/* If matches EXACTLY (strcmp) */

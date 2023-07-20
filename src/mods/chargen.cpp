@@ -264,6 +264,7 @@ namespace mods::chargen {
 		player->set_db_id(0);
 		GET_CLASS(player->cd()) = class_type;
 		player->level() = 1;
+		player->get_prefs() |= PRF_OVERHEAD_MAP | PRF_AUTOEXIT;
 		if(mods::players::db_load::save_new_char(player) == 0) {
 			if(mods::players::db_load::load_char_pkid(player) < 0) {
 				log("SYSERR: couldn't load character's pkid: '%s'",player->name().c_str());
