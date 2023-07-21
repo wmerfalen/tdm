@@ -11,6 +11,8 @@ LMDBNAME = bnull
 LIB_DIR="$(DATA_DIR)"
 POST_BUILD_SCRIPT="$(CURDIR)/scripts/post-build.sh"
 SQL_MIGRATIONS_DIR="$(CURDIR)/sql/migrations"
+LD_PATHS="-L$(CURDIR)/boost_1_72_0/stage/lib"
+
 
 lmdbdir = $(CURDIR)/liblmdb
 lmdb = liblmdb/liblmdb.so
@@ -23,6 +25,7 @@ yamlcpp_object = yaml-cpp
 boostdir = $(CURDIR)/boost
 thirdparty = $(duktape) $(lmdb)
 gdbflags = -ggdb -g
+LOGGING_FLAGS=-D__MENTOC_WRITE_HISTFILE__=1
 #post_build_args = strip-all
 optimization =
 # TODO: for prod builds, uncomment this
@@ -35,7 +38,7 @@ warnings_list = -Wall -Wunused-result \
 	-Wno-pessimizing-move
 
 FLAGS = $(gdbflags) $(optimization) \
-				$(warnings_list) \
+				$(warnings_list) $(LOGGING_FLAGS) \
 	-std=c++20 -fpermissive -MMD \
 	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-DMENTOC_DATA_DIR=\"$(DATA_DIR)\" \
@@ -104,7 +107,7 @@ FLAGS = $(gdbflags) $(optimization) \
 	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	#-D__MENTOC_USE_PQXX_RESULT__=1 
-LIBS = -lboost_stacktrace_backtrace -lboost_stacktrace_basic -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2 -L/usr/local/lib -lzmq -lpthread
+LIBS = -lboost_stacktrace_backtrace -lboost_stacktrace_basic -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2 $(LD_PATHS) -L/usr/local/lib -lzmq -lpthread
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard act.demolitions alias boards bsd-snprintf castle \

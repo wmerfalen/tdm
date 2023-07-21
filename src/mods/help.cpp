@@ -16,40 +16,37 @@ namespace mods::help::pages {
 	 * - [ ] spray
 	 * - [ ] breach
 	 */
-	HELP_STR h_help_topics = 
-		"==============================================|\r\n"
-		"| Help topics                                 |\r\n"
-		"==============================================|\r\n"
-		"{grn}Combat{/grn}:                            |\r\n"
-		"{grn}==============================================|{/grn}\r\n"
-		" set_rules_of_engagement, snipe, kill, reload,     |\r\n"
-		" engage, spray                                     |\r\n"
-		"                                                   |\r\n"
-		"{grn}Demolitions{/grn}:                            |\r\n"
-		"{grn}==============================================|{/grn}\r\n"
-		" toss_cryogenic_grenade, install, cancel, throw,   |\r\n"
-		" use_flash_underbarrel, uninstall, grenade         |\r\n"
-		"                                                   |\r\n"
-		"{grn}Intelligence gathering:{/grn}                 |\r\n"
-		"{grn}==============================================|{/grn}\r\n"
-		" drone, scan, look, camera                         |\r\n"
-		"                                                   |\r\n"
-	  "{grn}Contracts{/grn}:                              |\r\n"
-		"{grn}==============================================|{/grn}\r\n"
-	  " contract                                          |\r\n"
-		"                                                   |\r\n"
-	  "{grn}Leveling up{/grn}:                            |\r\n"
-		"{grn}==============================================|{/grn}\r\n"
-	  " practice, skills, score                           |\r\n"
-		"                                                   |\r\n"
-	  "{grn}Moving around{/grn}:                          |\r\n"
-		"{grn}==============================================|{/grn}\r\n"
-	  " n, s, e, w, u, d, sleep, wake, stand, sit         |\r\n"
-		"                                                   |\r\n"
-		"{grn}Using class abilities{/grn}:                  |\r\n"
-		"{grn}==============================================|{/grn}\r\n"
-		" invoke                                            |\r\n"
-		"\r\n";
+	HELP_STR h_help_topics =
+	    "{grn}=============={/grn}\r\n"
+	    "{grn} Help topics{/grn}\r\n"
+	    "{grn}=============={/grn}\r\n"
+	    "{grn}Combat{/grn}:                            \r\n"
+	    " set_rules_of_engagement, snipe, kill, reload,\r\n"
+	    " engage, spray\r\n"
+	    "\r\n"
+	    "{grn}Demolitions{/grn}:\r\n"
+	    " toss_cryogenic_grenade, install, \r\n"
+	    " cancel, throw, use_flash_underbarrel, \r\n"
+	    " uninstall, grenade\r\n"
+	    "\r\n"
+	    "{grn}Intelligence gathering:{/grn}\r\n"
+	    " drone, scan, look, camera\r\n"
+	    "\r\n"
+	    "{grn}Contracts{/grn}:\r\n"
+	    " contract\r\n"
+	    "\r\n"
+	    "{grn}Leveling up{/grn}:\r\n"
+	    " practice, skills, score\r\n"
+	    "\r\n"
+	    "{grn}Moving around{/grn}:\r\n"
+	    " neswud, sleep, wake, stand, sit, open\r\n"
+	    "\r\n"
+	    "{grn}Using class abilities{/grn}:\r\n"
+	    " invoke\r\n"
+	    "\r\n"
+	    "{grn}Shops{/grn}:\r\n"
+	    " list, buy \r\n"
+	    "\r\n";
 
 
 	HELP_STR h_combat=
@@ -1012,7 +1009,7 @@ namespace mods::help {
 	};
 
 	void send_topics_help_menu(player_ptr_t& player) {
-		player->sendln(h_help_topics);
+		player->sendln(mods::help::pages::h_help_topics);
 	}
 
 

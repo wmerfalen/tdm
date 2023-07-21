@@ -6,11 +6,6 @@ a checklist of items neeeded before a successfull alpha could be deployed.
 # "no bullshit" goals
 The idea of "no bullshit" goals is to implement features that make life on the MUD less of a nuisance. This includes things like not allowing people to plant claymore mines in recall. Simple things that prevent most annoying people from ruining the experience for others.
 
-## COFOB is PEACEFUL
-- [ ] Make all rooms in the COFOB "PEACEFUL"
-	- Apply the following to each room:
-		- `rbuild flag:add PEACEFUL INDOORS DMZ NOTRACK`
-
 ## Dis-allow annoyances in PEACEFUL rooms
 - All rooms marked with `PEACEFUL` should:
 	- [ ] ... not allow claymores to go off

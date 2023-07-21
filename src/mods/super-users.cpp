@@ -66,7 +66,7 @@ namespace mods::super_users {
 				}
 			} else {
 				*player << "{gld}[" << std::to_string(room_ctr) << "]{/gld} :->{red} [" <<
-				        room.name.c_str() << "]{/red}";
+				    room.name.c_str() << "]{/red}";
 			}
 		}
 		if(player->is_executing_js()) {
@@ -243,9 +243,24 @@ SUPERCMD(do_admin_kick) {
 	DO_HELP("admin:kick");
 	auto vec_args = PARSE_ARGS();
 	for(const auto& name : vec_args) {
-		for(auto& pair : mods::globals::socket_map){
-			if(mods::util::is_lower_match(pair.second->name(),name)){
+		for(auto& pair : mods::globals::socket_map) {
+			if(mods::util::is_lower_match(pair.second->name(),name)) {
 				destroy_player(std::move(pair.second));
+			}
+		}
+	}
+
+}
+SUPERCMD(do_admin_goto) {
+	ADMIN_REJECT();
+	DO_HELP("admin:goto");
+	auto vec_args = PARSE_ARGS();
+	for(const auto& name : vec_args) {
+		for(auto& pair : mods::globals::socket_map) {
+			if(mods::util::is_lower_match(pair.second->name(),name)) {
+				char_from_room(player->cd());
+				char_to_room(player->cd(),pair.second->room());
+				return;
 			}
 		}
 	}
@@ -257,5 +272,6 @@ namespace mods::super_users {
 		mods::interpreter::add_command("vnumtele", POS_RESTING, do_vnumtele, LVL_BUILDER,0);
 		mods::interpreter::add_command("rnumlist", POS_RESTING, do_rnumlist, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:kick", POS_RESTING, do_admin_kick, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:goto", POS_RESTING, do_admin_goto, LVL_BUILDER,0);
 	}
 };

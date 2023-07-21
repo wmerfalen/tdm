@@ -180,7 +180,7 @@ ACMD(do_recall) {
 
 
 ACMD(do_preferences) {
-	if(player->is_npc()){
+	if(player->is_npc()) {
 		return;
 	}
 	player->sendln("Not implemented");
@@ -1929,6 +1929,7 @@ void perform_immort_where(char_data *ch, char *arg) {
 
 
 ACMD(do_where) {
+	/*
 	char arg[MAX_INPUT_LENGTH];
 
 	one_argument(argument, arg);
@@ -1937,7 +1938,7 @@ ACMD(do_where) {
 		perform_immort_where(ch, arg);
 	} else {
 		perform_mortal_where(ch, arg);
-	}
+	}*/
 }
 
 
