@@ -14,6 +14,7 @@ extern int destroy_player(player_ptr_t&& player);
 
 namespace mods::super_users {
 	SUPERCMD(do_vnumtele) {
+		ADMIN_REJECT();
 		if(argshave()->int_at(0)->passed() == false) {
 			player->sendln("Usage: vnumtele <room-vnum>");
 			return;
@@ -29,6 +30,47 @@ namespace mods::super_users {
 		command_interpreter(player,"l");
 	}
 
+	SUPERCMD(do_admin_where) {
+		ADMIN_REJECT();
+		if(argshave()->size_gt(0)->passed() == false) {
+			player->sendln("Usage: admin:where <user>");
+			return;
+		}
+		auto it = mods::globals::player_name_map.find(argat(0));
+		if(it != mods::globals::player_name_map.end()) {
+			auto ptr = mods::globals::player_name_map[argat(0)];
+			if(ptr->room() < world.size()) {
+				auto& room = world[ptr->room()];
+				player->sendln(CAT("vnum:",room.number,":",room.name.c_str()));
+				player->sendln(room.overhead(lense_type_t::NORMAL_SIGHT).data());
+				return;
+			} else {
+				player->sendln("Unknown room(0)");
+				return;
+			}
+		}
+		player->sendln("Couldn't find player in player_name_map");
+	}
+	SUPERCMD(do_admin_tele) {
+		ADMIN_REJECT();
+		if(argshave()->size_gt(0)->passed() == false) {
+			player->sendln("Usage: admin:tele <user>");
+			return;
+		}
+		auto it = mods::globals::player_name_map.find(argat(0));
+		if(it != mods::globals::player_name_map.end()) {
+			auto ptr = mods::globals::player_name_map[argat(0)];
+			if(ptr->room() < world.size()) {
+				char_from_room(player->cd());
+				char_to_room(player->cd(),ptr->room());
+				return;
+			} else {
+				player->sendln("Unknown room(0)");
+				return;
+			}
+		}
+		player->sendln("Couldn't find player in player_name_map");
+	}
 	/**
 	 * The only argument to this should be the page that you
 	 * are interested in.
@@ -273,5 +315,7 @@ namespace mods::super_users {
 		mods::interpreter::add_command("rnumlist", POS_RESTING, do_rnumlist, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:kick", POS_RESTING, do_admin_kick, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:goto", POS_RESTING, do_admin_goto, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:where", POS_RESTING, do_admin_where, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:tele", POS_RESTING, do_admin_tele, LVL_BUILDER,0);
 	}
 };

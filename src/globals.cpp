@@ -841,21 +841,12 @@ namespace mods {
 		}
 
 		bool command_interpreter(player_ptr_t player,std::string_view in_argument) {
-			const bool locked_down = player->is_locked_down();
-#ifdef __MENTOC_WRITE_HISTFILE__
 			if(player->authenticated()) {
 				player->write_histfile(in_argument);
 			}
-#endif
 			std::string argument = in_argument.data();
 			auto vec_args = PARSE_ARGS();
 			if(player->paging()) {
-				if(locked_down) {
-					player->pager_clear();
-					player->pager_end();
-					mods::interpreter::douchebags::locked_down_player_always(player);
-					return false;
-				}
 				if(vec_args.size() == 0) {
 					player->pager_next_page();
 					return false;
@@ -872,10 +863,6 @@ namespace mods {
 				return false;
 			}
 			if(vec_args.size()) {
-				if(locked_down) {
-					mods::interpreter::douchebags::locked_down_player_always(player);
-					return false;
-				}
 				if(mods::chat::handle_chat(player,argument)) {
 					return false;
 				}
@@ -951,10 +938,6 @@ namespace mods {
 					return false;
 				}
 			}
-			if(locked_down) {
-				mods::interpreter::douchebags::locked_down_player_always(player);
-				return false;
-			}
 			if(mods::drone::started(player->uuid())) {
 				d("drone started. interpretting");
 				return mods::drone::interpret(player->uuid(),in_argument.data());
@@ -1006,7 +989,6 @@ namespace mods {
 							return true;
 					}
 					auto cached_room = player->room();
-					//std::cerr << "STATUS: " << CAT("cached_room: ",cached_room) << "\n";
 
 					int target_x = world[cached_room].x + x;
 					int target_y = world[cached_room].y + y;
@@ -1016,7 +998,6 @@ namespace mods {
 					room_data* existing_room = nullptr;
 					int real_room_id = 0;
 					if(existing_room_vnum > -1) {
-						//std::cerr << "STATUS: checking existing room\n";
 						real_room_id = real_room(existing_room_vnum);
 						if(real_room_id != NOWHERE) {
 							existing_room = &world[real_room_id];
@@ -1047,18 +1028,12 @@ namespace mods {
 							mods::builder::add_room_to_pavements(player,real_room_id);
 							glue_room_at_coordinates(existing_room->x,existing_room->y,existing_room->z,existing_room->number);
 							if(player->is_executing_js()) {
-								//std::cerr << green_str("STATUS: dumping: ") <<
-								//    "player->room():" << player->room() <<
-								//    "| real_room_id:" << real_room_id << "\n";
 								mods::globals::rooms::char_from_room(player->cd());
 								mods::globals::rooms::char_to_room(real_room_id,player->cd());
-								//std::cerr << "STATUS: glued existing room. setting builder room\n";
 								return false;
 							}
 							return true;
 						}
-						player->sendln("Creating room in that direction");
-						//std::cerr << "STATUS: Creating room in that direction\n";
 						int new_room_rnum = 0;
 						world.emplace_back();
 						register_room(0);
@@ -1092,25 +1067,16 @@ namespace mods {
 						mods::builder::add_room_to_pavements(player,cached_room);
 						mods::builder::add_room_to_pavements(player,new_room_rnum);
 						if(player->is_executing_js()) {
-							player->sendln("Short-circuit because of js [1]");
-							//std::cerr << green_str("STATUS: dumping: ") <<
-							//    "player->room():" << player->room() <<
-							//    "| new_room_rnum:" << new_room_rnum <<
-							//    "(CHANGING TO): " << new_room_rnum << "\n";
 							mods::globals::rooms::char_to_room(new_room_rnum,player->cd());
-							player->sendln("Short-circuited [1]");
 							return false;
 						}
 					}
 					if(player->is_executing_js()) {
-						player->sendln("Short-circuit because of js [2]");
 						if(player->room() >= world.size()) {
 							log("SYSERR: room is %d which is out of bounds of world",player->room());
 							return true;
 						}
-						player->sendln("Checking [2]");
 						if(world[player->room()].dir_option[door]) {
-							player->sendln("Passed [2]");
 							auto new_room_rnum = world[player->room()].dir_option[door]->to_room;
 							player->set_room(new_room_rnum);
 							player->moving_to_room() = false;

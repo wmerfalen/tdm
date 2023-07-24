@@ -26,5 +26,6 @@ ACMD(do_set_who_line);
 ACMD(do_add_super_user);
 ACMD(do_remove_super_user);
 ACMD(do_get_super_user_list);
+SUPERCMD(do_admin_where);
 
 #endif

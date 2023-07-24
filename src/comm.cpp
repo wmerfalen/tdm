@@ -170,44 +170,44 @@ int epoll_fd = -1;
 epoll_event epoll_ev;
 
 static std::vector<char> splash_page;
-void send_splash_page_to(player_ptr_t& player){
+void send_splash_page_to(player_ptr_t& player) {
 	static FILE* fp_splash = nullptr;
 	static struct stat splash_file;
 	static bool initialized = false;
-	if(!initialized){
+	if(!initialized) {
 		memset(&splash_file,0,sizeof(struct stat));
 		initialized = true;
 	}
 	static constexpr std::string_view SPLASH_SCREEN = "../lib/splash";
-	if(fp_splash){
+	if(fp_splash) {
 		fclose(fp_splash);
 		fp_splash = nullptr;
 	}
 	struct stat sb;
 	int ret = stat(SPLASH_SCREEN.data(),&sb);
-	if(ret == -1){
-		if(fp_splash){
+	if(ret == -1) {
+		if(fp_splash) {
 			fclose(fp_splash);
 		}
 		log("SYSERR: couldnt STAT splash screen");
 		return;
 	}
-	if(splash_file.st_mtim.tv_sec < sb.st_mtim.tv_sec){
+	if(splash_file.st_mtim.tv_sec < sb.st_mtim.tv_sec) {
 		/**
 		 * FIle is new. Read it
 		 */
 		fp_splash = fopen(SPLASH_SCREEN.data(),"r");
-		if(fp_splash){
+		if(fp_splash) {
 			splash_page.resize(sb.st_size + 1);
 			fread(&splash_page[0], sizeof(char), sb.st_size, fp_splash);
 			write_to_output(player->desc(),&splash_page[0]);
 		}
-		if(fp_splash){
+		if(fp_splash) {
 			fclose(fp_splash);
 			fp_splash = nullptr;
 		}
 		bcopy(&sb,&splash_file,sizeof(struct stat));
-	}else{
+	} else {
 		write_to_output(player->desc(),&splash_page[0]);
 	}
 	write_to_output(player->desc(),mods::values::LOGIN_SCREEN_USERNAME().c_str());
@@ -790,6 +790,11 @@ void game_loop(socket_t mother_desc) {
 			}
 
 			auto player = it->second;
+			if(player->is_locked_down()) {
+				player->sendln("{red}@@@ You've been locked down @@@{/red}");
+				player->sendln("{red}@@@ This is because an admin decided to discipline you @@@{/red}");
+				continue;
+			}
 			mods::globals::current_player = player;
 
 			if(mods::auto_login::auto_login_enabled() && player->state() != CON_PLAYING) {
@@ -855,6 +860,7 @@ void game_loop(socket_t mother_desc) {
 				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system
 					get_from_q(player->desc(), comm, &aliased);
 				}
+
 				command_interpreter(player, comm); // Send it to interpreter
 			}
 			++i;

@@ -2,9 +2,9 @@
 #include "help.hpp"
 #include "super-users.hpp"
 #ifdef __MENTOC_SHOW_MODS_INTERPRETER_DEBUG_OUTPUT__
-#define mi_debug(a) mentoc_prefix_debug("mods::interpreter") << a << "\n";
+	#define mi_debug(a) mentoc_prefix_debug("mods::interpreter") << a << "\n";
 #else
-#define mi_debug(a) /**/
+	#define mi_debug(a) /**/
 #endif
 
 namespace mods::super_users {
@@ -67,10 +67,5 @@ namespace mods::interpreter {
 		mods::interpreter::custom_cmd_info_list.emplace_back(std::move(c));
 	}
 
-	namespace douchebags {
-		void locked_down_player_always(player_ptr_t& douche) {
-			douche->sendln("You are unable to do much of anything...");
-		}
-	};//end namespace douchebags
 };
 #undef mi_debug
