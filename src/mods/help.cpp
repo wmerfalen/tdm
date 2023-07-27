@@ -10,6 +10,7 @@
 #include "pc-ability.hpp"
 #include <sys/types.h>
 #include <dirent.h>
+#include "markdown-transformer.hpp"
 
 namespace mods::help::pages {
 	std::array<std::string,4> dirs = {
@@ -1601,19 +1602,19 @@ namespace mods::help {
 					std::string error;
 					if(p_class.compare("breacher") == 0) {
 						mods::filesystem::file_get_contents(path, guts,error);
-						mods::help::pages::breacher_pages[page_name] = markdown_transformer(guts);
+						mods::help::pages::breacher_pages[page_name] = mods::markdown_transformer::transform(guts);
 					}
 					if(p_class.compare("marine") == 0) {
 						mods::filesystem::file_get_contents(path, guts,error);
-						mods::help::pages::marine_pages[page_name] = markdown_transformer(guts);
+						mods::help::pages::marine_pages[page_name] = mods::markdown_transformer::transform(guts);
 					}
 					if(p_class.compare("contagion") == 0) {
 						mods::filesystem::file_get_contents(path, guts,error);
-						mods::help::pages::contagion_pages[page_name] = markdown_transformer(guts);
+						mods::help::pages::contagion_pages[page_name] = mods::markdown_transformer::transform(guts);
 					}
 					if(p_class.compare("ghost") == 0) {
 						mods::filesystem::file_get_contents(path, guts,error);
-						mods::help::pages::ghost_pages[page_name] = markdown_transformer(guts);
+						mods::help::pages::ghost_pages[page_name] = mods::markdown_transformer::transform(guts);
 					}
 				}
 			}

@@ -178,7 +178,7 @@ echo r > .run
 
 function up_migration(){
 			$GDB --args ./bin/circle \
-				--auto-login=far --auto-password=foo \
+				--auto-login=marinegunz --auto-password=foo \
 				--lmdb-dir=$MENTOC_DATA_DIR --lmdb-name=$MENTOC_LMDB_DBNAME \
 				--postgres-dbname=$MENTOC_POSTGRES_DBNAME \
 				--postgres-user=postgres --postgres-host=$MENTOC_POSTGRES_HOST \
