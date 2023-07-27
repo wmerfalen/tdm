@@ -8,8 +8,8 @@
 #alias start
 {
 	#session t 127.0.0.1 4000;
-	#delay 0.5 marine;
-	#delay 0.8 vdxynPExfsc6LqAR;
+	#delay 0.5 mortis;
+	#delay 0.8 wkZZWc14S61rC7HC5wFMiZYnCeZUm7NA;
 	#delay 1.0 #cr;
 	#delay 1.2 1;
 	#delay 1.4 #cr;

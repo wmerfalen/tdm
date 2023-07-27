@@ -12,6 +12,37 @@ namespace mods::util {
 	extern bool parse_help(std::string_view argument);
 };
 namespace mods::help {
+	enum PC_CLASS : uint16_t {
+		PC_UNKNOWN,
+		PC_MARINE,
+		PC_CONTAGION,
+		PC_GHOST,
+		PC_BREACHER,
+	};
+	struct page {
+		std::forward_list<std::string> keywords;
+		std::string contents;
+	};
+
+	struct pc_ability {
+		pc_ability() = delete;
+		pc_ability(PC_CLASS _class,
+		    std::string_view _title,
+		    std::string_view _ability,
+		    std::string_view _usage,
+		    std::string_view _desc,
+		    std::forward_list<std::string>&& _ex,
+		    std::forward_list<std::string>&& _key);
+		PC_CLASS player_class;
+		std::string title;
+		std::string ability;
+		std::string usage;
+		std::string description;
+		std::forward_list<std::string> examples;
+		std::forward_list<std::string> keywords;
+		std::string created_page;
+		[[nodiscard]] page make();
+	};
 	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level_t);
 
 	bool matches_many(const std::string& items,std::string_view from);
@@ -31,6 +62,8 @@ namespace mods::help {
 	void send_syndrome_help_menu(player_ptr_t&);
 	void send_machinist_help_menu(player_ptr_t&);
 	void send_generic_help(player_ptr_t&);
+	void register_class_ability(pc_ability& ability);
+
 };
 #endif
 

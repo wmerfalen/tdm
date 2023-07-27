@@ -660,6 +660,11 @@ void perform_auto_login(player_ptr_t& player) {
 
 	player->start_histfile();
 	player->desc().has_prompt = 1;
+	/**
+	 * TODO: grouped scripts. Scripts that run for a group of users.
+	 * TODO: scripts that run for _every_ mortal
+	 * TODO: scripts that run for _new_ users
+	 */
 #ifndef __MENTOC_DONT_RUN_PROFILE_SCRIPTS__
 	mods::js::run_profile_scripts(player->name());
 #endif
