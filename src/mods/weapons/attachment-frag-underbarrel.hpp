@@ -11,6 +11,7 @@ namespace mods::weapons {
 			~attachment_frag_underbarrel();
 
 			void init();
+			void set_ammo(uint16_t& amount);
 			std::tuple<bool,std::string> attach_to(obj_ptr_t weapon, const uint8_t& player_tier);
 			std::tuple<bool,std::string> detach();
 			void consume_ammo();

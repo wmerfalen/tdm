@@ -67,10 +67,15 @@ namespace mods::weapons {
 		m_obj->obj_flags.ammo = m_obj->attachment()->attributes->ammunition_amount;
 		m_sniper_rifle = weapon;
 		m_attached = true;
-		m_obj->obj_flags.ammo += player_tier * 2;
-		return {true,CAT("You attach a frag underbarrel to ",weapon->name)};
+		m_obj->obj_flags.ammo += (1 + player_tier) * 2;
+		return {true,CAT("You attach a frag underbarrel to ",weapon->short_description.str())};
 	}
 
+	void attachment_frag_underbarrel::set_ammo(uint16_t& amount){
+		if(m_obj){
+			m_obj->obj_flags.ammo = amount;
+		}
+	}
 	void attachment_frag_underbarrel::consume_ammo() {
 		if(m_attached) {
 			m_debug("obj_flags.ammo->" << m_obj->obj_flags.ammo);

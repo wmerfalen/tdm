@@ -5,6 +5,7 @@
 #include "../object-utils.hpp"
 #include "../weapon.hpp"
 #include "../combat-composer/spray-target.hpp"
+#include "../pc-ability.hpp"
 
 namespace mods::classes {
 	using cmd_report_t = mods::classes::base::cmd_report_t;
@@ -162,9 +163,12 @@ namespace mods::classes {
 		}
 		auto s = roll_skill_success(ATTACH_M203);
 		if(std::get<0>(s)) {
+			uint16_t frag_ammo = 2 * (tier(m_player) + 1);
 			m_ub_frag.use_skill(m_player);
 			m_frag_ub.set_yaml(M203_UNDERBARREL);
-			return m_frag_ub.attach_to(m_player->primary(),tier(m_player));
+			auto f = m_frag_ub.attach_to(m_player->primary(),tier(m_player));
+			m_frag_ub.set_ammo(frag_ammo);
+			return f;
 		}
 		return s;
 	}

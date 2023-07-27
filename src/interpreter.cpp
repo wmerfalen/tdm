@@ -106,7 +106,7 @@ void populate_taken(){
 
 std::tuple<bool,std::string> is_valid_name(std::string_view buf){
 	for(const auto& ch : buf){
-		if(!isalpha(ch)){
+		if(!isalpha(ch) && !isdigit(ch) && ch != '_'){
 			return {false,"Your name contained invalid characters."};
 		}
 	}
@@ -1542,13 +1542,11 @@ void nanny(player_ptr_t p, char * in_arg) {
 			if(arg.length() == 0) {
 				p->set_state(CON_CLOSE);
 			} else {
-				std::string username = extract_username(arg);
+				std::string username = sanitize_name(extract_username(arg));
 				auto valid = is_valid_name(username);
 				if(std::get<0>(valid) == false){
 					write_to_output(d, "Invalid name.\r\nWe have some simple rules for names:\r\n");
-					write_to_output(d, "1) We only allow letters in the English alphabet\r\n");
-					write_to_output(d, "2) Digits and any other characters are not allowed\r\n");
-					write_to_output(d, "-- The reasoning for this is because you are entering a PvP world where other players will have to be able to address you by name\r\n");
+					write_to_output(d, "- We only allow letters in the English alphabet, underscores, and numbers.\r\n");
 					write_to_output(d, "The reason for your name being rejected: ");
 					write_to_output(d, std::get<1>(valid).c_str());
 					write_to_output(d, "\r\n");
@@ -1562,7 +1560,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 					return;
 				}
 
-				p->set_name(sanitize_name(username));
+				p->set_name(username);
 				p->set_db_id(0);
 				if(player_exists(p) == false) {
 					write_to_output(d, "Did I get that right, %s (Y/N)? ", p->name().c_str());

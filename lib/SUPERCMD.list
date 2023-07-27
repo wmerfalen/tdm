@@ -76,6 +76,8 @@
 {yel}mods/boosters/adrenaline-shot{/yel}:->{grn}adshot_test{/grn}
 {yel}mods/memory{/yel}:->{grn}footprints{/grn}
 {yel}mods/super-users{/yel}:->{grn}vnumtele{/grn}
+{yel}mods/super-users{/yel}:->{grn}admin_where{/grn}
+{yel}mods/super-users{/yel}:->{grn}admin_tele{/grn}
 {yel}mods/super-users{/yel}:->{grn}rnumlist{/grn}
 {yel}mods/super-users{/yel}:->{grn}add_super_user{/grn}
 {yel}mods/super-users{/yel}:->{grn}get_super_user_list{/grn}
@@ -86,6 +88,7 @@
 {yel}mods/super-users{/yel}:->{grn}clear_who_line{/grn}
 {yel}mods/super-users{/yel}:->{grn}shutdown_mud{/grn}
 {yel}mods/super-users{/yel}:->{grn}admin_kick{/grn}
+{yel}mods/super-users{/yel}:->{grn}admin_goto{/grn}
 {yel}mods/loot{/yel}:->{grn}mixup_contents{/grn}
 {yel}mods/loot{/yel}:->{grn}reward{/grn}
 {yel}mods/loot{/yel}:->{grn}add_rifle_index{/grn}
