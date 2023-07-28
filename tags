@@ -672,7 +672,7 @@ CONSTITUTION	src/mods/classes/base.hpp	/^					CONSTITUTION,$/;"	kind:member	line
 CONSTSET	src/mods/values.hpp	/^		static inline void CONSTSET(value_key_t m,T value){$/;"	kind:function	line:874	namespace:mods::values	signature:(value_key_t m,T value)
 CONTAGION	src/mods/classes/types.hpp	/^		CONTAGION,$/;"	kind:enumerator	line:13	enum:mods::classes::types	file:
 CONTAGION	src/structs.h	/^	CONTAGION = 4,$/;"	kind:enumerator	line:204	enum:player_class_t	file:
-CONTAGION_CHECK	src/mods/classes/contagion.cpp	409;"	kind:macro	line:409	file:
+CONTAGION_CHECK	src/mods/classes/contagion.cpp	408;"	kind:macro	line:408	file:
 CONTAGION_CHECK	src/mods/classes/contagion.cpp	8;"	kind:macro	line:8	file:
 CONTAGION_NONE	src/mods/weapon.hpp	/^			CONTAGION_NONE = 0,$/;"	kind:enumerator	line:528	enum:mods::weapon::contagion::primary_choice_t	file:
 CONTAGION_PRIMARY_FAMAS	src/mods/weapon.hpp	/^			CONTAGION_PRIMARY_FAMAS = 2,$/;"	kind:enumerator	line:530	enum:mods::weapon::contagion::primary_choice_t	file:
