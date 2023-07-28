@@ -25,47 +25,48 @@
 #include "mods/util.hpp"
 #include "mods/rand.hpp"
 #include "mods/rooms.hpp"
+#include "mods/hostname.hpp"
 
 
 /* external globals */
 extern struct time_data time_info;
 
-bool boot_type_hell(){
+bool boot_type_hell() {
 	return mods::globals::boot_type == mods::globals::boot_type_t::BOOT_HELL;
 }
 
 void log(mods::string n) {
-			 std::cerr << "[log]: " << n.c_str() << "\n";
+	std::cerr << "[log]: " << n.c_str() << "\n";
 }
 
 void log(const char* format,...) {
-       va_list args;
+	va_list args;
 
-       va_start(args, format);
-       basic_mud_vlog(format, args);
-       va_end(args);
+	va_start(args, format);
+	basic_mud_vlog(format, args);
+	va_end(args);
 }
 
 
 /**
  * STATE macro overload - temporary while we refactor
  */
-int& STATE(std::shared_ptr<mods::descriptor_data> d){	
+int& STATE(std::shared_ptr<mods::descriptor_data> d) {
 	return (d)->connected;
 }
-int& STATE(mods::descriptor_data &d){	
+int& STATE(mods::descriptor_data& d) {
 	//d("STATE non-iterator. connected: " << d.connected);
 #ifdef __MENTOC_PRINT_STATE_DEPRECATION__
 	std::cerr << "STATE() deprecated: " << __FILE__ << ":" << __LINE__ << "\n";
 #endif
 	return d.connected;
 }
-int& STATE(std::deque<mods::descriptor_data>::iterator d){ 
+int& STATE(std::deque<mods::descriptor_data>::iterator d) {
 	//d("STATE [iterator]. connected: " << d->connected);
 #ifdef __MENTOC_PRINT_STATE_DEPRECATION__
 	std::cerr << "STATE() deprecated: " << __FILE__ << ":" << __LINE__ << "\n";
 #endif
-	return (d)->connected; 
+	return (d)->connected;
 }
 
 
@@ -77,46 +78,46 @@ void prune_crlf(char *txt);
 #if 0
 namespace mods::rand {
 	static bool initialized = false;
-static std::random_device rd;
-static std::mt19937 serious_generator(rd());
+	static std::random_device rd;
+	static std::mt19937 serious_generator(rd());
 
-static std::default_random_engine lax_generator;
-static constexpr uint8_t dice_sides_index[] = {
-	4,
-	6,
-	8,
-	10,
-	50,
-	80,
-	0
-};
-static std::map<int,std::uniform_int_distribution<int>> popular_distributions;
-static void init() {
-	for(unsigned i=0; dice_sides_index[i]; i++){
-		popular_distributions[dice_sides_index[i]] = std::uniform_int_distribution<int>(1,dice_sides_index[i]);
+	static std::default_random_engine lax_generator;
+	static constexpr uint8_t dice_sides_index[] = {
+		4,
+		6,
+		8,
+		10,
+		50,
+		80,
+		0
+	};
+	static std::map<int,std::uniform_int_distribution<int>> popular_distributions;
+	static void init() {
+		for(unsigned i=0; dice_sides_index[i]; i++) {
+			popular_distributions[dice_sides_index[i]] = std::uniform_int_distribution<int>(1,dice_sides_index[i]);
+		}
+		initialized = 1;
 	}
-	initialized = 1;
-}
 
-static int roll(int number, int size) {
-	if(number < 0){
-		log("SYSERR: roll() should not receive a negative number for count dice");
-		return -1;
+	static int roll(int number, int size) {
+		if(number < 0) {
+			log("SYSERR: roll() should not receive a negative number for count dice");
+			return -1;
+		}
+		if(!mods::rand::initialized) {
+			mods::rand::init();
+		}
+		auto search = popular_distributions.find(size);
+		if(search == popular_distributions.end()) {
+			popular_distributions[size] = std::uniform_int_distribution<int>(1,size);
+		}
+		auto& dist = popular_distributions[size];
+		int result = 0;
+		while(number-- > 0) {
+			result += dist(mods::rand::lax_generator);
+		}
+		return result;
 	}
-	if(!mods::rand::initialized){
-		mods::rand::init();
-	}
-	auto search = popular_distributions.find(size);
-	if(search == popular_distributions.end()){
-		popular_distributions[size] = std::uniform_int_distribution<int>(1,size);
-	}
-	auto& dist = popular_distributions[size];
-	int result = 0;
-	while(number-- > 0){
-		result += dist(mods::rand::lax_generator);
-	}
-	return result;
-}
 };
 #endif
 /* creates a random number in interval [from;to] */
@@ -250,7 +251,7 @@ void basic_mud_vlog(const char *format, va_list args) {
 	char *time_s = asctime(localtime(&ct));
 
 	if(logfile == NULL) {
-		fprintf(stderr, "%-15.15s :: ", time_s + 4);
+		fprintf(stderr, "%s %-15.15s :: ", mods::host_name::get(),time_s + 4);
 		vfprintf(stderr, format, args);
 		fputc('\n', stderr);
 		fflush(stderr);
@@ -263,7 +264,7 @@ void basic_mud_vlog(const char *format, va_list args) {
 
 	time_s[strlen(time_s) - 1] = '\0';
 
-	fprintf(logfile, "%-15.15s :: ", time_s + 4);
+	fprintf(logfile, "%s %-15.15s :: ", mods::host_name::get(),time_s + 4);
 	vfprintf(logfile, format, args);
 	fputc('\n', logfile);
 	fflush(logfile);
@@ -322,8 +323,10 @@ void mudlog(int type, int level, int file, const char *str, ...) {
 	va_end(args);
 	strcat(buf, " ]\r\n");	/* strcat: OK */
 
-	for(auto & i : descriptor_list) {
-		if(!i.character){ continue; }
+	for(auto& i : descriptor_list) {
+		if(!i.character) {
+			continue;
+		}
 		if(STATE(i) != CON_PLAYING || IS_NPC(i.character)) { /* switch */
 			continue;
 		}
@@ -696,24 +699,24 @@ int get_filename(char *filename, size_t fbufsize, int mode, const char *orig_nam
 
 
 int num_pc_in_room(room_data *room) {
-	if(room == nullptr){
+	if(room == nullptr) {
 		log("SYSERR: num_pc_in_room room is null!");
 		return 0;
 	}
 	unsigned i = 0;
 
 	auto real_room_number = real_room(room->number);
-	if(real_room_number == NOWHERE){
+	if(real_room_number == NOWHERE) {
 		log(
-			"SYSERR: num_pc_in_room cannot find real room number: %d",
-			room->number
+		    "SYSERR: num_pc_in_room cannot find real room number: %d",
+		    room->number
 		);
 		return 0;
 	}
 
-	for(auto & player_ptr : mods::globals::get_room_list(real_room_number)){
+	for(auto& player_ptr : mods::globals::get_room_list(real_room_number)) {
 		auto ch = player_ptr->cd();
-		if(!IS_NPC(ch)){
+		if(!IS_NPC(ch)) {
 			++i;
 		}
 	}
@@ -772,16 +775,18 @@ int room_is_dark(room_rnum room) {
 }
 
 
-room_rnum& GET_WAS_IN(player_ptr_t& player){
+room_rnum& GET_WAS_IN(player_ptr_t& player) {
 	return player->cd()->was_in_room;
 }
-room_rnum& GET_WAS_IN(char_data* ch){
+room_rnum& GET_WAS_IN(char_data* ch) {
 	return ch->was_in_room;
 }
-std::string TOSTR(std::string a){
+std::string TOSTR(std::string a) {
 	return a;
 }
-std::string TOSTR(int a){
+std::string TOSTR(int a) {
 	return std::to_string(a);
 }
-std::string TOSTR(nullptr_t a){ return ""; }
+std::string TOSTR(nullptr_t a) {
+	return "";
+}

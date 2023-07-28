@@ -5,9 +5,9 @@
 #include "help.hpp"
 
 #ifdef __MENTOC_MODS_RATE_LIMITING_DEBUG__
-#define mo_debug(A) std::cerr << "[mods::rate_limiting][debug]:" << A <<"\n";
+	#define mo_debug(A) std::cerr << "[mods::rate_limiting][debug]:" << A <<"\n";
 #else
-#define mo_debug(A)
+	#define mo_debug(A)
 #endif
 
 namespace mods::rate_limiting {
@@ -81,9 +81,9 @@ namespace mods::rate_limiting {
 		player->rate_limit_hit(action);
 	}
 
-	static const char* set_rate_limit_help = "usage: set_rate_limit <action> <times> <seconds>";
-	static const char* get_rate_limit_types_help = "usage: get_rate_limit_types";
-	static const char* list_rate_limits_help = "usage: list_rate_limits [search]";
+	//static const char* set_rate_limit_help = "usage: set_rate_limit <action> <times> <seconds>";
+	//static const char* get_rate_limit_types_help = "usage: get_rate_limit_types";
+	//static const char* list_rate_limits_help = "usage: list_rate_limits [search]";
 	/**
 	 * admin utility code
 	 */
@@ -113,7 +113,7 @@ namespace mods::rate_limiting {
 	SUPERCMD(do_set_rate_limit) {
 		ADMIN_REJECT();
 		DO_HELP("set_rate_limit");
-		static const char* usage = set_rate_limit_help;
+		static const char* usage = "usage: set_rate_limit <action> <times> <seconds>";
 		/** code here */
 		auto vec_args = PARSE_ARGS();
 		if(vec_args.size() != 3) {
@@ -167,9 +167,9 @@ namespace mods::rate_limiting {
 		mods::interpreter::add_command("get_rate_limit_types", POS_RESTING, do_get_rate_limit_types, LVL_BUILDER,0);
 		mods::interpreter::add_command("list_rate_limits", POS_RESTING, do_list_rate_limits, LVL_BUILDER,0);
 		mods::interpreter::add_command("list_rate_limit", POS_RESTING, do_list_rate_limits, LVL_BUILDER,0);
-		mods::help::register_help_command_with_permission("set_rate_limit",set_rate_limit_help,LVL_BUILDER);
-		mods::help::register_help_command_with_permission("get_rate_limit_types",get_rate_limit_types_help,LVL_BUILDER);
-		mods::help::register_help_command_with_permission("list_rate_limits",list_rate_limits_help,LVL_BUILDER);
+		//mods::help::register_help_command_with_permission("set_rate_limit",set_rate_limit_help,LVL_BUILDER);
+		//mods::help::register_help_command_with_permission("get_rate_limit_types",get_rate_limit_types_help,LVL_BUILDER);
+		//mods::help::register_help_command_with_permission("list_rate_limits",list_rate_limits_help,LVL_BUILDER);
 		mods::rate_limiting::limits[PLAYER_SAVE] = std::make_pair<>(10,60);
 	}
 };

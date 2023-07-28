@@ -10,6 +10,13 @@ namespace mods::classes {
 	obj_ptr_t create_pathogen_ammunition_attachment() {
 		return create_object(ITEM_ATTACHMENT,contagion::PATHOGEN_AMMUNITION_YAML.data());
 	}
+	void contagion::replenish() {
+#ifdef CONTAGIONS_CAN_REPLENISH
+		auto tier = tier(m_player);
+		if((m_call_count % GHOST_REPLENISH_PULSE()) == 0) { // FIXME: change to CONTAGION
+		}
+#endif
+	}
 
 	/**
 	 * Global handler for all events that are CONTAGION related.

@@ -1,21 +1,21 @@
-# Attach grenade launcher to your primary weapon
+# Become less visible to enemies
 
 # Ability
-Ability allows user to attach a grenade launcher to the underbarrel attachment of the currently wielded weapon.
+Dissipate changes the visibility of the user. 
 
 # Usage
-`marine:attach_m203`
+`ghost:dissipate`
 
-# Step one: Attaching to an Assault Rifle
-`marine:attach_m203`
+# Duration
+This ability's effectiveness rely on both familiarity and the player's level. But more specifically, it's the player's tier.
 
-# Step two: Using it
-`marine:fire west 2`
+# Replenished charges
+This ability relies on a mechanic in the game known as replenishes. Every so often, the game will replenish your supply of different abilities. This comes in the form of charges. Depending on the class and ability, an ability can 1 or more of a specific charge. As the user levels up, more charges are awarded for every replenish.
 
-# Step three: Removing it 
-If you run out of grenades, the underbarrel attachment will automatically detach itself. But you can also manually detach it.
-`marine:detach_m203`
 
 # See also:
-`marine:detach_203`
-`marine:fire`
+`practice`
+`skills`
+`scan`
+`tiers`
+`replenish`

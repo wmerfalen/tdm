@@ -1,21 +1,23 @@
-# Attach grenade launcher to your primary weapon
+# Spawn a claymore mine into your inventory
 
 # Ability
-Ability allows user to attach a grenade launcher to the underbarrel attachment of the currently wielded weapon.
+A claymore mine will be spawned to your inventory. Claymore mines can be set on exits and will be detonated when an enemy leaves or enters a room corressponding with the exit the mine was planted on.
 
 # Usage
-`marine:attach_m203`
+`ghost:build_claymore`
 
-# Step one: Attaching to an Assault Rifle
-`marine:attach_m203`
+# Required knowledge
+You will need to know how to use the following commands:
+`install <object> <direction>`
 
-# Step two: Using it
-`marine:fire west 2`
-
-# Step three: Removing it 
-If you run out of grenades, the underbarrel attachment will automatically detach itself. But you can also manually detach it.
-`marine:detach_m203`
+# Example
+`ghost:build_claymore`
+`install claymore north`
 
 # See also:
-`marine:detach_203`
-`marine:fire`
+`mines`
+`claymores`
+`demolitions`
+`explosives`
+`install`
+`cancel`

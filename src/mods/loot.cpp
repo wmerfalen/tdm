@@ -403,11 +403,14 @@ namespace mods::loot {
 	 */
 	SUPERCMD(do_mixup_contents) {
 		ADMIN_REJECT();
-		DO_HELP_WITH_ZERO("admin:payload:mixup");
 		static constexpr const char* usage = "usage: admin:payload:mixup <object>\r\n"
 		    "Example: \r\n"
 		    "admin:payload:mixup crate\r\n";
 		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() == 0) {
+			player->sendln(usage);
+			return;
+		}
 		auto obj = mods::find::obj(vec_args[0],player);
 		if(!obj) {
 			player->sendln("Couldn't find an object in your room that matched that string.");
@@ -426,7 +429,6 @@ namespace mods::loot {
 	 */
 	SUPERCMD(do_reward) {
 		ADMIN_REJECT();
-		DO_HELP_WITH_ZERO("reward");
 		static constexpr const char* usage = "usage: reward <type> <level>...<level N>\r\n"
 		    "valid types:\r\n"
 		    "\t- rifle\r\n"
@@ -475,7 +477,6 @@ namespace mods::loot {
 	 */
 	ADMINCMD(do_reward_with) {
 		ADMIN_REJECT();
-		DO_HELP_WITH_ZERO("admin:reward:with");
 		static constexpr const char* usage = "usage: admin:reward:with <type> <level>...<level N>\r\n"
 		    "SHOTGUN\r\n"
 		    "ASSAULT_RIFLE\r\n"
@@ -511,7 +512,6 @@ namespace mods::loot {
 	 */
 	SUPERCMD(do_add_rifle_index) {
 		ADMIN_REJECT();
-		DO_HELP_WITH_ZERO("add_rifle_index");
 		static constexpr const char* usage = "usage: add_rifle_index <type> <yaml-file>\r\n"
 		    "valid types:\r\n"
 		    "\t- ar\r\n"
@@ -580,7 +580,6 @@ namespace mods::loot {
 		r.save();
 	}
 	ACMD(do_show_loot) {
-		DO_HELP_WITH_ZERO("show_loot");
 		static const char* usage = "usage: show_loot <index>\r\n";
 		if(argshave()->int_at(0)->passed() == false) {
 			player->sendln(usage);
@@ -599,7 +598,6 @@ namespace mods::loot {
 		}
 	}
 	ACMD(do_take_loot) {
-		DO_HELP_WITH_ZERO("take_loot");
 		static const char* usage = "usage: take_loot <index>\r\n";
 		if(argshave()->int_at(0)->passed() == false) {
 			player->sendln(usage);
@@ -618,17 +616,8 @@ namespace mods::loot {
 		}
 	}
 	ACMD(do_list_loot) {
-		DO_HELP_WITH_ZERO("list_loot");
-		/*
-		static constexpr const char* usage = "usage: reward <type> <level>...<level N>\r\n"
-		                                     "valid types:\r\n"
-		                                     "\t- rifle\r\n"
-		                                     "\t- armor\r\n"
-		                                     "example: reward rifle 1 10 30\r\n"
-		                                     "\t this example will spin the forge engine for 3 rifles at levels 1, 10, and 30.\r\n";
-																				 */
-		auto vec_args = PARSE_ARGS();
 		std::vector<std::string> screen;
+		player->pager_start();
 		player->sendln("[+] Listing...");
 		int ctr = 1;
 		for(const auto& loot : get_loot(player)) {
@@ -636,22 +625,18 @@ namespace mods::loot {
 			++ctr;
 		}
 		player->sendln("[+] End of list.");
-#if 0
-		if(vec_args.size() < 2) {
-			player->sendln(usage);
-			return;
-		}
-#endif
+		player->pager_end();
+		player->page(0);
 	}
 	/** game init */
 	void init() {
 		mods::interpreter::add_command("list_loot", POS_RESTING, do_list_loot, 0, 0);
 		mods::interpreter::add_command("show_loot", POS_RESTING, do_show_loot, 0, 0);
 		mods::interpreter::add_command("take_loot", POS_RESTING, do_take_loot, 0, 0);
-		mods::interpreter::add_command("reward", POS_RESTING, do_reward, LVL_BUILDER, 0);
+		ADD_ADMIN_COMMAND("admin:reward", do_reward);
 		ADD_ADMIN_COMMAND("admin:reward:with", do_reward_with);
-		mods::interpreter::add_command("add_rifle_index", POS_RESTING, do_add_rifle_index, LVL_BUILDER, 0);
-		mods::interpreter::add_command("add_armor_index", POS_RESTING, do_add_armor_index, LVL_BUILDER, 0);
+		ADD_ADMIN_COMMAND("admin:add_rifle_index", do_add_rifle_index);
+		ADD_ADMIN_COMMAND("admin:add_armor_index", do_add_armor_index);
 		ADD_ADMIN_COMMAND("admin:payload:mixup",do_mixup_contents);
 	}
 };

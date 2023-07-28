@@ -10,9 +10,9 @@
 #include "classes/includes.hpp"
 
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
-#define mo_debug(A) std::cerr << "[mods::replenish][debug]:" << A <<"\n";
+	#define mo_debug(A) std::cerr << "[mods::replenish][debug]:" << A <<"\n";
 #else
-#define mo_debug(A)
+	#define mo_debug(A)
 #endif
 
 extern std::string sanitize_key(std::string key);
@@ -45,8 +45,10 @@ namespace mods::replenish {
 		ghost_ptrs[ghost] = ptr_by_uuid(ghost)->ghost();
 	}
 	void register_contagion(uuid_t contagion) {
+#ifdef CONTAGIONS_CAN_REPLENISH
 		contagion_list.emplace_back(contagion);
 		contagion_ptrs[contagion] = ptr_by_uuid(contagion)->contagion();
+#endif
 	}
 	void destroy_player(uuid_t player_uuid) {
 		if(std::find(marine_list.begin(),marine_list.end(),player_uuid) != marine_list.end()) {
@@ -61,6 +63,12 @@ namespace mods::replenish {
 			ghost_list.erase(std::find(ghost_list.begin(),ghost_list.end(),player_uuid));
 			ghost_ptrs.erase(player_uuid);
 		}
+#ifdef CONTAGIONS_CAN_REPLENISH
+		if(std::find(contagion_list.begin(),contagion_list.end(),player_uuid) != contagion_list.end()) {
+			contagion_list.erase(std::find(contagion_list.begin(),contagion_list.end(),player_uuid));
+			contagion_ptrs.erase(player_uuid);
+		}
+#endif
 	}
 
 	/** Depending on PULSE_REPLENISH_CHARACTERS value */
@@ -68,6 +76,14 @@ namespace mods::replenish {
 		/** will be called every 5 IRL seconds */
 		static uint16_t call_count = 0;
 		++call_count;
+#ifdef CONTAGIONS_CAN_REPLENISH
+		for(auto& pair : contagion_ptrs) {
+			if(pair.second->get_player_ptr()->state() != CON_PLAYING) {
+				continue;
+			}
+			pair.second->replenish();
+		}
+#endif
 		for(auto& pair : marine_ptrs) {
 			if(pair.second->get_player_ptr()->state() != CON_PLAYING) {
 				continue;

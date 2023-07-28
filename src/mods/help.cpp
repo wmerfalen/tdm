@@ -19,6 +19,7 @@
 #define m_debug(A) std::cerr << "[DEBUG][mods::help]: " << A << "\n"
 
 namespace mods::help {
+	void send_help(const std::vector<std::string>& vec_args,player_ptr_t& player);
 	bool is_exact_handled_help_match(std::string_view in_topic,player_ptr_t& player);
 	bool is_class_help_match(const std::string& in_topic,player_ptr_t& player);
 	void send_class_header(player_ptr_t& player,std::string_view class_name);
@@ -46,14 +47,7 @@ namespace mods::help {
 		"ghost",
 		"marine",
 	};
-	std::vector<std::string> global_help_directories = {
-		"combat",
-		"intelligence",
-		"demolitions",
-	};
-	static std::vector<std::string> combat_pages;
-	static std::vector<std::string> intel_pages;
-	static std::vector<std::string> demo_pages;
+	static std::vector<std::string> generic_pages;
 	static std::vector<std::string> marine_pages;
 	static std::vector<std::string> contagion_pages;
 	static std::vector<std::string> breacher_pages;
@@ -83,7 +77,7 @@ namespace mods::help {
 	void send_help_topics(player_ptr_t& player) {
 
 	}
-	void send_builder_help(player_ptr_t& player,std::string argument) {
+	void send_builder_help(player_ptr_t& player) {
 		std::vector<std::string> builder_help;
 		builder_page(builder_help);
 		player->pager_start();
@@ -231,7 +225,6 @@ namespace mods::help {
 			screen.emplace_back(line);
 		}
 	}
-	static std::map<std::string,std::pair<player_level_t,std::string>> registered_help_commands;
 	void fetch_builder_help(std::vector<std::string>& screen) {
 		builder_page(screen);
 		std::string guts,error;
@@ -252,7 +245,6 @@ namespace mods::help {
 			}
 		}
 	}
-	static std::map<std::string,std::string> registered_admin_help_commands;
 
 	bool matches_many(const std::string& items,std::string_view from) {
 		std::vector<std::string> tokens;
@@ -313,10 +305,15 @@ namespace mods::help {
 	std::string get_help_file(std::string_view category,std::string_view topic) {
 		std::string path = std::string(MENTOC_CURRENT_WORKING_DIR);
 		path += "help/";
-		path += sanitize_path(category.data());
-		path += "/";
-		path += sanitize_topic(topic.data());
-		path += ".md";
+		if(category.compare("generic") == 0) {
+			path += sanitize_topic(topic.data());
+			path += ".md";
+		} else {
+			path += sanitize_path(category.data());
+			path += "/";
+			path += sanitize_topic(topic.data());
+			path += ".md";
+		}
 		m_debug("[debug] get_help_file() file: '" << path << "'");
 		std::string guts,error;
 		int ret = mods::filesystem::file_get_contents(path,guts,error);
@@ -370,6 +367,9 @@ namespace mods::help {
 		return false;
 	}
 	bool is_exact_handled_help_match(std::string_view topic,player_ptr_t& player) {
+		if(handled_help(topic,generic_pages,player,"generic")) {
+			return true;
+		}
 		if(handled_help(topic,marine_pages,player,"marine")) {
 			return true;
 		}
@@ -385,45 +385,17 @@ namespace mods::help {
 		return false;
 	}
 
-	bool send_help(std::string_view topic, std::shared_ptr<mods::player>& player) {
-		auto it = registered_help_commands.find(topic.data());
-		if(registered_help_commands.end() != it && ((int)player->level()) >= ((int)it->second.first)) {
-			player->sendln(CAT("{blu}",it->second.second,"{/blu}"));
-			return false;
-		}
-
-
-		auto rows =  find_page_for(topic);
-		for(const auto& row : rows) {
-			player->sendln(row["hp_content"].c_str());
-		}
-		if(rows.size()) {
+	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help) {
+		//bool show = false;
+		//auto vec_args = PARSE_ARGS();
+		//if(vec_args.size() == 0 && zero_is_help) {
+		//	show = true;
+		//}
+		m_debug("should_continue: from:'" << from << "', argument: '" << argument << "'");
+		if(is_exact_handled_help_match(argument,player)) {
 			return false;
 		}
 		return true;
-	};
-
-	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level_t level) {
-		registered_help_commands[command] = {level,contents};
-	}
-
-
-	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help) {
-		bool show = false;
-		auto vec_args = PARSE_ARGS();
-		if(vec_args.size() == 0 && zero_is_help) {
-			show = true;
-		}
-		if(vec_args.size() && is_exact_handled_help_match(vec_args[0],player)) {
-			return true;
-		}
-		if(vec_args.size() && is_class_help_match(vec_args[0],player)) {
-			return true;
-		}
-		if(!show && !mods::util::parse_help(argument)) {
-			return true;
-		}
-		return send_help(from,player);
 	}
 
 
@@ -452,8 +424,6 @@ namespace mods::help {
 		player->sendln(header);
 	}
 
-
-
 	void send_contagion_help_menu(player_ptr_t& player) {
 		player->pager_start();
 		send_class_header(player,"CONTAGION");
@@ -474,118 +444,26 @@ namespace mods::help {
 		player->pager_end();
 		player->page(0);
 	}
-	void send_marksman_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"MARKSMAN");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"MARKSMAN");
-
-	}
-	void send_bandit_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"BANDIT");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"BANDIT");
-
-	}
-	void send_butcher_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"BUTCHER");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"BUTCHER");
-
-	}
-	void send_striker_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"STRIKER");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"STRIKER");
-
-	}
-	void send_obstructor_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"OBSTRUCTOR");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"OBSTRUCTOR");
-
-	}
-	void send_malady_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"MALADY");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"MALADY");
-
-	}
-	void send_pyrexia_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"PYREXIA");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"PYREXIA");
-
-	}
-	void send_dealer_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"DEALER");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"DEALER");
-
-	}
-	void send_forge_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"FORGE");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"FORGE");
-
-	}
-	void send_syndrome_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"SYNDROME");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"SYNDROME");
-
-	}
-	void send_machinist_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = { };
-		send_class_header(player,"MACHINIST");
-		for(auto topic : topics) {
-			player->sendln(send_topic(topic));
-		}
-		send_class_footer(player,"MACHINIST");
-
-	}
-
-
 	ACMD(do_help) {
 		if(IS_NPC(ch)) {
 			return;
 		}
+		auto vec_args = PARSE_ARGS();
+		send_help(vec_args,player);
+	}
+	bool send_help(std::string_view topic,player_ptr_t& player) {
+		if(is_exact_handled_help_match(topic,player)) {
+			return false;
+		}
+		return true;
+
+	}
+	void send_help(const std::vector<std::string>& vec_args,player_ptr_t& player) {
 		std::vector<std::string> screen;
 		static constexpr std::string_view search_help_msg = "\r\n{grn}help:search{/grn} can be use to search every command in the mud. Try it out!\r\n";
 
-		auto vec_args = PARSE_ARGS();
 		if(vec_args.size()) {
 			if(is_exact_handled_help_match(vec_args[0],player)) {
-				m_debug("is_exact_handled_help_match() yes");
 				return;
 			}
 			if(is_class_help_match(vec_args[0],player)) {
@@ -594,7 +472,7 @@ namespace mods::help {
 			if(vec_args[0].compare("builder") == 0 && (
 			        player->implementor_mode() || player->builder_mode()
 			    )) {
-				send_builder_help(player,argument);
+				send_builder_help(player);
 				return ;
 			}
 		}
@@ -603,16 +481,6 @@ namespace mods::help {
 			return;
 		}
 
-		if(argshave()->size_gt(0)->passed()) {
-			if(send_help(argat(0), player)) {
-				player->pager_start();
-				player->sendln("No specific help screen found for that. Searching every command...");
-				mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
-				player->pager_end();
-				player->page(0);
-				return;
-			}
-		}
 		if(vec_args.size() == 0 || vec_args[0].compare("index") == 0) {
 			player->sendln(search_help_msg.data());
 		}
@@ -756,38 +624,27 @@ namespace mods::help {
 	}
 	void read_global_flat_help_files() {
 		std::string help_dir = MENTOC_CURRENT_WORKING_DIR;
-		help_dir += "help/global";
-		for(const auto& help_category : global_help_directories) {
-			std::string glob = help_dir + help_category.data();
-			DIR * fp = opendir(glob.c_str());
-			if(fp == nullptr) {
+		help_dir += "help/";
+		DIR * fp = opendir(help_dir.c_str());
+		if(fp == nullptr) {
+			return;
+		}
+		while(dirent * entry = readdir(fp)) {
+			if(entry->d_type == DT_UNKNOWN || entry->d_type == DT_DIR || entry->d_type == DT_LNK) {
 				continue;
 			}
-			while(dirent * entry = readdir(fp)) {
-				if(entry->d_type == DT_UNKNOWN || entry->d_type == DT_DIR || entry->d_type == DT_LNK) {
-					continue;
-				}
-				if(!mods::filesystem::has_extension(entry->d_name,"md")) {
-					continue;
-				}
-				if(entry->d_type == DT_REG) {
-					std::string path = glob + "/";
-					path += entry->d_name;
-					std::string page_name = help_category.data() + std::string(":") + remove_md_extension(entry->d_name);
-					m_debug("[DEBUG] page name: '" << page_name << "'");
-					if(help_category.compare("combat") == 0) {
-						combat_pages.emplace_back(page_name);
-					} else if(help_category.compare("intelligence") == 0) {
-						intel_pages.emplace_back(page_name);
-					} else if(help_category.compare("demolitions") == 0) {
-						demo_pages.emplace_back(page_name);
-					} else {
-						m_debug("[WARNING] unknown help_category: '" << help_category << "' when trying to place page_name: '" << page_name << "'");
-					}
-				}
+			if(!mods::filesystem::has_extension(entry->d_name,"md")) {
+				continue;
 			}
-			closedir(fp);
+			if(entry->d_type == DT_REG) {
+				std::string path = help_dir;
+				path += entry->d_name;
+				std::string page_name = remove_md_extension(entry->d_name);
+				m_debug("[DEBUG] page name: '" << page_name << "'");
+				generic_pages.emplace_back(page_name);
+			}
 		}
+		closedir(fp);
 	}
 	void clear_flat_help_files() {
 		breacher_pages.clear();
@@ -796,9 +653,7 @@ namespace mods::help {
 		ghost_pages.clear();
 	}
 	void clear_global_flat_help_files() {
-		combat_pages.clear();
-		intel_pages.clear();
-		demo_pages.clear();
+		generic_pages.clear();
 	}
 
 	SUPERCMD(do_help_refresh) {
@@ -811,7 +666,7 @@ namespace mods::help {
 	}
 	SUPERCMD(do_builder_help) {
 		ADMIN_REJECT();
-		send_builder_help(player,argument);
+		send_builder_help(player);
 		ADMIN_DONE();
 	}
 	SUPERCMD(do_help_dump) {
