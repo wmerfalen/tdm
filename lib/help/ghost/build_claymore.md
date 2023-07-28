@@ -16,8 +16,6 @@ You will need to know how to use the following commands:
 
 # See also:
 `mines`
-`claymores`
 `demolitions`
-`explosives`
 `install`
 `cancel`

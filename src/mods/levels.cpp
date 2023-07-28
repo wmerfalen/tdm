@@ -824,20 +824,17 @@ namespace mods::levels {
 	 */
 	SUPERCMD(do_award_exp_by_name) {
 		ADMIN_REJECT();
-		DO_HELP_WITH_ZERO("award_exp_by_name");
-		/** code here */
 		auto vec_args = PARSE_ARGS();
-		static const char* usage = "usage: award_exp_by_name <player> <exp>\r\n";
+		static const char* usage = "usage: admin:award_exp_by_name <player> <exp>\r\n";
 		if(vec_args.size() < 2) {
-			player->errorln(usage);
-			SEND_HELP("award_exp_by_name");
+			player->sendln(usage);
 			return;
 		}
 
 		auto found = mods::players::util::find_player_by_name(vec_args[0]);
 		if(!found.has_value()) {
 			player->sendln("Couldn't find a player by that name.");
-			player->errorln(usage);
+			player->sendln(usage);
 			return;
 		}
 		auto found_player = ptr_by_uuid(found.value());
@@ -845,7 +842,7 @@ namespace mods::levels {
 		auto opt = mods::util::stoi_optional<int>(vec_args[1]);
 		if(!opt.has_value()) {
 			player->errorln("Invalid integer encountered. Please specify a valid amount of experience points.");
-			player->errorln(usage);
+			player->sendln(usage);
 			return;
 		}
 		int used_to = found_player->exp();
@@ -863,7 +860,6 @@ namespace mods::levels {
 	}
 	SUPERCMD(do_csv_export_levels) {
 		ADMIN_REJECT();
-		DO_HELP_WITH_ZERO("csv_export_levels");
 		auto status = csv_export_report();
 		if(status == -1) {
 			player->errorln("Unable to write to levels.csv");
@@ -882,9 +878,9 @@ namespace mods::levels {
 
 
 	void init() {
-		mods::interpreter::add_command("award_exp_by_name", POS_RESTING, do_award_exp_by_name, LVL_BUILDER,0);
-		mods::interpreter::add_command("csv_export_levels", POS_RESTING, do_csv_export_levels, LVL_BUILDER,0);
-		mods::interpreter::add_command("exp", POS_RESTING, do_exp, 0,0);
+		ADD_ADMIN_COMMAND("admin:award_exp_by_name",  do_award_exp_by_name);
+		ADD_ADMIN_COMMAND("admin:csv_export_levels",  do_csv_export_levels);
+		ADD_USER_COMMAND("exp", do_exp);
 	}
 };
 #undef m_debug

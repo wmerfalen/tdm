@@ -59,7 +59,6 @@ using vpd = mods::scan::vec_player_data;
  * throw <object> <direction> <count>
  */
 ACMD(do_throw) {
-	DO_HELP("throw");
 	auto vec_args = PARSE_ARGS();
 	const char* usage = "Usage: throw <direction> <count>";
 
@@ -69,7 +68,7 @@ ACMD(do_throw) {
 	}
 
 	if(vec_args.size() < 2) {
-		player->errorln(CAT("Not enough arguments.\r\n",usage));
+		player->sendln(CAT(usage));
 		return;
 	}
 	int cnt = mods::util::stoi(vec_args[1].c_str()).value_or(-1);
@@ -85,7 +84,7 @@ ACMD(do_throw) {
 
 	auto held_object = player->equipment(WEAR_HOLD);
 	if(!held_object) {
-		player->sendln("You're not holding anything!");
+		player->errorln("You're not holding anything!");
 		return;
 	}
 	mods::projectile::throw_object(player, dir, cnt, held_object, "lob");

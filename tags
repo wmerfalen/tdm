@@ -67,17 +67,17 @@ ACMD	src/act.movement.cpp	/^ACMD(do_sit) {$/;"	kind:function	line:720	signature:
 ACMD	src/act.movement.cpp	/^ACMD(do_sleep) {$/;"	kind:function	line:800	signature:(do_sleep)
 ACMD	src/act.movement.cpp	/^ACMD(do_stand) {$/;"	kind:function	line:678	signature:(do_stand)
 ACMD	src/act.movement.cpp	/^ACMD(do_wake) {$/;"	kind:function	line:835	signature:(do_wake)
-ACMD	src/act.offensive.cpp	/^ACMD(do_assist) {$/;"	kind:function	line:290	signature:(do_assist)
-ACMD	src/act.offensive.cpp	/^ACMD(do_command_sequence) {$/;"	kind:function	line:199	signature:(do_command_sequence)
-ACMD	src/act.offensive.cpp	/^ACMD(do_engagement_mode) {$/;"	kind:function	line:188	signature:(do_engagement_mode)
-ACMD	src/act.offensive.cpp	/^ACMD(do_go_loud) {$/;"	kind:function	line:184	signature:(do_go_loud)
-ACMD	src/act.offensive.cpp	/^ACMD(do_regroup) {$/;"	kind:function	line:192	signature:(do_regroup)
-ACMD	src/act.offensive.cpp	/^ACMD(do_scan) { \/* !mods *\/$/;"	kind:function	line:214	signature:(do_scan)
-ACMD	src/act.offensive.cpp	/^ACMD(do_silencers_off) {$/;"	kind:function	line:179	signature:(do_silencers_off)
-ACMD	src/act.offensive.cpp	/^ACMD(do_silencers_on) {$/;"	kind:function	line:175	signature:(do_silencers_on)
-ACMD	src/act.offensive.cpp	/^ACMD(do_snipe) {$/;"	kind:function	line:139	signature:(do_snipe)
-ACMD	src/act.offensive.cpp	/^ACMD(do_snipe_object) {$/;"	kind:function	line:124	signature:(do_snipe_object)
-ACMD	src/act.offensive.cpp	/^ACMD(do_spray) {$/;"	kind:function	line:159	signature:(do_spray)
+ACMD	src/act.offensive.cpp	/^ACMD(do_assist) {$/;"	kind:function	line:289	signature:(do_assist)
+ACMD	src/act.offensive.cpp	/^ACMD(do_command_sequence) {$/;"	kind:function	line:198	signature:(do_command_sequence)
+ACMD	src/act.offensive.cpp	/^ACMD(do_engagement_mode) {$/;"	kind:function	line:187	signature:(do_engagement_mode)
+ACMD	src/act.offensive.cpp	/^ACMD(do_go_loud) {$/;"	kind:function	line:183	signature:(do_go_loud)
+ACMD	src/act.offensive.cpp	/^ACMD(do_regroup) {$/;"	kind:function	line:191	signature:(do_regroup)
+ACMD	src/act.offensive.cpp	/^ACMD(do_scan) { \/* !mods *\/$/;"	kind:function	line:213	signature:(do_scan)
+ACMD	src/act.offensive.cpp	/^ACMD(do_silencers_off) {$/;"	kind:function	line:178	signature:(do_silencers_off)
+ACMD	src/act.offensive.cpp	/^ACMD(do_silencers_on) {$/;"	kind:function	line:174	signature:(do_silencers_on)
+ACMD	src/act.offensive.cpp	/^ACMD(do_snipe) {$/;"	kind:function	line:138	signature:(do_snipe)
+ACMD	src/act.offensive.cpp	/^ACMD(do_snipe_object) {$/;"	kind:function	line:123	signature:(do_snipe_object)
+ACMD	src/act.offensive.cpp	/^ACMD(do_spray) {$/;"	kind:function	line:158	signature:(do_spray)
 ACMD	src/act.offensive.cpp	/^ACMD(do_throw) {$/;"	kind:function	line:61	signature:(do_throw)
 ACMD	src/act.other.cpp	/^ACMD(do_display) {$/;"	kind:function	line:778	signature:(do_display)
 ACMD	src/act.other.cpp	/^ACMD(do_gen_tog) {$/;"	kind:function	line:903	signature:(do_gen_tog)
@@ -155,7 +155,7 @@ ACMD	src/mods/date-time.cpp	/^	ACMD(do_moon_phase) {$/;"	kind:function	line:233	
 ACMD	src/mods/flee.cpp	/^	ACMD(do_flee) {$/;"	kind:function	line:36	namespace:mods::flee	signature:(do_flee)
 ACMD	src/mods/help.cpp	/^	ACMD(do_help) {$/;"	kind:function	line:447	namespace:mods::help	signature:(do_help)
 ACMD	src/mods/help.cpp	/^	ACMD(do_search_help) {$/;"	kind:function	line:489	namespace:mods::help	signature:(do_search_help)
-ACMD	src/mods/levels.cpp	/^	ACMD(do_exp) {$/;"	kind:function	line:875	namespace:mods::levels	signature:(do_exp)
+ACMD	src/mods/levels.cpp	/^	ACMD(do_exp) {$/;"	kind:function	line:871	namespace:mods::levels	signature:(do_exp)
 ACMD	src/mods/loot.cpp	/^	ACMD(do_list_loot) {$/;"	kind:function	line:618	namespace:mods::loot	signature:(do_list_loot)
 ACMD	src/mods/loot.cpp	/^	ACMD(do_show_loot) {$/;"	kind:function	line:582	namespace:mods::loot	signature:(do_show_loot)
 ACMD	src/mods/loot.cpp	/^	ACMD(do_take_loot) {$/;"	kind:function	line:600	namespace:mods::loot	signature:(do_take_loot)
@@ -452,7 +452,7 @@ AXE	src/mods/weapon.hpp	/^		AXE,$/;"	kind:enumerator	line:74	enum:mods::weapon::
 BACKGROUND_FILE	src/db.h	84;"	kind:macro	line:84	file:
 BACKPACK_WEAPON	src/mods/mobs/defiler.hpp	/^			static constexpr std::string_view BACKPACK_WEAPON = "rifle\/defiler-scarh.yml";$/;"	kind:member	line:51	namespace:mods::mobs	file:
 BACKPACK_WEAPON	src/mods/mobs/goat.hpp	/^			static constexpr std::string_view BACKPACK_WEAPON = "rifle\/goat-scarh.yml";$/;"	kind:member	line:17	struct:mods::mobs::goat	file:	access:public
-BACKTICK	src/mods/markdown-transformer.cpp	/^			BACKTICK = '`',$/;"	kind:enumerator	line:34	enum:mods::markdown_transformer::rdp::ch_type	file:
+BACKTICK	src/mods/markdown-transformer.cpp	/^			BACKTICK = '`',$/;"	kind:enumerator	line:35	enum:mods::markdown_transformer::rdp::ch_type	file:
 BALLISTIC	src/mods/object.hpp	/^				BALLISTIC,$/;"	kind:enumerator	line:62	enum:mods::object::object_type_enum_t	file:
 BALLISTICS_EXPERT	src/mods/drops.cpp	/^	static constexpr mob_vnum BALLISTICS_EXPERT = 603;$/;"	kind:member	line:47	namespace:mods::drops	file:
 BANDIT	src/structs.h	/^	BANDIT = 11,$/;"	kind:enumerator	line:211	enum:player_class_t	file:
@@ -678,7 +678,7 @@ CONTAGION_NONE	src/mods/weapon.hpp	/^			CONTAGION_NONE = 0,$/;"	kind:enumerator	
 CONTAGION_PRIMARY_FAMAS	src/mods/weapon.hpp	/^			CONTAGION_PRIMARY_FAMAS = 2,$/;"	kind:enumerator	line:530	enum:mods::weapon::contagion::primary_choice_t	file:
 CONTAGION_PRIMARY_M3	src/mods/weapon.hpp	/^			CONTAGION_PRIMARY_M3 = 1,$/;"	kind:enumerator	line:529	enum:mods::weapon::contagion::primary_choice_t	file:
 CONTAINER	src/mods/object.hpp	/^				CONTAINER,$/;"	kind:enumerator	line:23	enum:mods::object::object_type_enum_t	file:
-CONTENT	src/mods/markdown-transformer.cpp	/^			CONTENT = '\\x02',$/;"	kind:enumerator	line:33	enum:mods::markdown_transformer::rdp::ch_type	file:
+CONTENT	src/mods/markdown-transformer.cpp	/^			CONTENT = '\\x02',$/;"	kind:enumerator	line:34	enum:mods::markdown_transformer::rdp::ch_type	file:
 CONTRACT_REWARD	src/mods/players/db-load.hpp	/^		CONTRACT_REWARD,$/;"	kind:enumerator	line:18	enum:mods::players::db_load::save_from_t	file:
 CONT_CLOSEABLE	src/room-data.hpp	127;"	kind:macro	line:127	file:
 CONT_CLOSEABLE	src/structs.h	564;"	kind:macro	line:564	file:
@@ -797,6 +797,7 @@ DAMAGE_CLAMP_SIZE	src/mods/forge-engine/generated-rifle.hpp	/^	static constexpr 
 DAMAGE_DIVISOR	src/mods/values-list.cpp	/^DAMAGE_DIVISOR,3.0$/;"	kind:variable	line:362
 DAMAGE_EVENT_NOTHING	src/mods/damage-event.hpp	/^	DAMAGE_EVENT_NOTHING = 0,$/;"	kind:enumerator	line:12	enum:uint16_t	file:
 DAMP	src/room-data.hpp	/^			DAMP,$/;"	kind:member	line:193	struct:room_data	typeref:enum:room_data::	file:	access:public
+DASH	src/mods/markdown-transformer.cpp	/^			DASH = '-',$/;"	kind:enumerator	line:27	enum:mods::markdown_transformer::rdp::ch_type	file:
 DATA_BLOCK_DATASIZE	src/mail.h	75;"	kind:macro	line:75	file:
 DBGET	src/globals.hpp	65;"	kind:macro	line:65	file:
 DBSET	src/globals.hpp	64;"	kind:macro	line:64	file:
@@ -1436,7 +1437,7 @@ HANDLED	src/mods/mbuild.cpp	/^	HANDLED,$/;"	kind:enumerator	line:371	enum:parse_
 HANDLED	src/mods/obuild.cpp	/^	HANDLED,$/;"	kind:enumerator	line:212	enum:parse_response_t	file:
 HANDLED	src/mods/rbuild-sandbox.cpp	/^	HANDLED,$/;"	kind:enumerator	line:340	enum:parse_response_t	file:
 HARDENED	src/mods/yaml.hpp	/^		HARDENED,$/;"	kind:enumerator	line:72	enum:mods::yaml::durability_profile_type_t	file:
-HASHTAG	src/mods/markdown-transformer.cpp	/^			HASHTAG = '#',	\/\/ "#"$/;"	kind:enumerator	line:29	enum:mods::markdown_transformer::rdp::ch_type	file:
+HASHTAG	src/mods/markdown-transformer.cpp	/^			HASHTAG = '#',	\/\/ "#"$/;"	kind:enumerator	line:30	enum:mods::markdown_transformer::rdp::ch_type	file:
 HAS_CLIP	src/mods/weapon-types.hpp	/^		HAS_CLIP,$/;"	kind:enumerator	line:40	enum:mods::weapon::capabilities::cap_t	file:
 HAS_RLIMIT	src/sysdep.h	407;"	kind:macro	line:407	file:
 HAS_SANDBOX	src/mods/rbuild.hpp	/^	constexpr static uint64_t HAS_SANDBOX = (1 << 0);$/;"	kind:member	line:64	namespace:mods::builder	file:
@@ -1929,7 +1930,7 @@ LIGHT_BANDAGE	src/mods/classes/ghost.hpp	/^				LIGHT_BANDAGE,$/;"	kind:enumerato
 LIGHT_MACHINE_GUN	src/mods/object.hpp	/^				LIGHT_MACHINE_GUN,$/;"	kind:enumerator	line:38	enum:mods::object::object_type_enum_t	file:
 LIGHT_MACHINE_GUNS	src/mods/classes/base.hpp	/^				LIGHT_MACHINE_GUNS,$/;"	kind:enumerator	line:106	enum:ability_t	file:
 LIGHT_OK	src/utils.h	443;"	kind:macro	line:443	file:
-LINE_FEED	src/mods/markdown-transformer.cpp	/^			LINE_FEED = '\\r', \/\/ "\\r"$/;"	kind:enumerator	line:28	enum:mods::markdown_transformer::rdp::ch_type	file:
+LINE_FEED	src/mods/markdown-transformer.cpp	/^			LINE_FEED = '\\r', \/\/ "\\r"$/;"	kind:enumerator	line:29	enum:mods::markdown_transformer::rdp::ch_type	file:
 LIQ_ALE	src/room-data.hpp	137;"	kind:macro	line:137	file:
 LIQ_ALE	src/structs.h	574;"	kind:macro	line:574	file:
 LIQ_BEER	src/room-data.hpp	135;"	kind:macro	line:135	file:
@@ -2662,7 +2663,7 @@ NEED_STRNICMP_PROTO	src/conf.h	317;"	kind:macro	line:317	file:
 NEED_UNLOCKED	src/act.movement.cpp	387;"	kind:macro	line:387	file:
 NEUTRON_SHIELD	src/mods/classes/contagion.hpp	/^				NEUTRON_SHIELD,$/;"	kind:enumerator	line:42	enum:mods::classes::contagion::ability_t	file:
 NEWEST_AT_TOP	src/boards.cpp	60;"	kind:macro	line:60	file:
-NEWLINE	src/mods/markdown-transformer.cpp	/^			NEWLINE = '\\n',	\/\/ "\\n"$/;"	kind:enumerator	line:27	enum:mods::markdown_transformer::rdp::ch_type	file:
+NEWLINE	src/mods/markdown-transformer.cpp	/^			NEWLINE = '\\n',	\/\/ "\\n"$/;"	kind:enumerator	line:28	enum:mods::markdown_transformer::rdp::ch_type	file:
 NEWS_FILE	src/db.h	76;"	kind:macro	line:76	file:
 NEW_MOON	src/mods/date-time.hpp	/^		NEW_MOON = 0,$/;"	kind:enumerator	line:10	enum:mods::date_time::moon_phase	file:
 NEW_MSG_INDEX	src/boards.h	43;"	kind:macro	line:43	file:
@@ -2743,7 +2744,7 @@ NRM	src/utils.h	121;"	kind:macro	line:121	file:
 NULL	src/utils.h	525;"	kind:macro	line:525	file:
 NULLABLE_U32	src/mods/orm/util.hpp	6;"	kind:macro	line:6	file:
 NUMBER	src/act.wizard.cpp	2393;"	kind:macro	line:2393	file:
-NUMBER	src/mods/markdown-transformer.cpp	/^			NUMBER = '\\x01',$/;"	kind:enumerator	line:32	enum:mods::markdown_transformer::rdp::ch_type	file:
+NUMBER	src/mods/markdown-transformer.cpp	/^			NUMBER = '\\x01',$/;"	kind:enumerator	line:33	enum:mods::markdown_transformer::rdp::ch_type	file:
 NUM_CLASSES	src/structs.h	228;"	kind:macro	line:228	file:
 NUM_OF_BOARDS	src/boards.h	11;"	kind:macro	line:11	file:
 NUM_OF_DIRS	src/room-data.hpp	152;"	kind:macro	line:152	file:
@@ -3750,7 +3751,7 @@ SONIC_WAVE	src/mods/aoe.hpp	/^		SONIC_WAVE,	\/** The same type of explosion caus
 SOUND_PROOF	src/room-data.hpp	/^			SOUND_PROOF,$/;"	kind:member	line:219	struct:room_data	typeref:enum:room_data::	file:	access:public
 SOUTH	src/room-data.hpp	71;"	kind:macro	line:71	file:
 SOUTH	src/structs.h	118;"	kind:macro	line:118	file:
-SPACE	src/mods/markdown-transformer.cpp	/^			SPACE = ' ', \/\/ " "$/;"	kind:enumerator	line:31	enum:mods::markdown_transformer::rdp::ch_type	file:
+SPACE	src/mods/markdown-transformer.cpp	/^			SPACE = ' ', \/\/ " "$/;"	kind:enumerator	line:32	enum:mods::markdown_transformer::rdp::ch_type	file:
 SPEAR	src/mods/weapon.hpp	/^		SPEAR,$/;"	kind:enumerator	line:85	enum:mods::weapon::melee_t	file:
 SPECIAL	src/boards.cpp	/^SPECIAL(gen_board) {$/;"	kind:function	line:158	signature:(gen_board)
 SPECIAL	src/castle.cpp	/^SPECIAL(CastleGuard) {$/;"	kind:function	line:799	signature:(CastleGuard)
@@ -3857,7 +3858,7 @@ STAB	src/mods/weapon-types.hpp	/^		STAB,$/;"	kind:enumerator	line:53	enum:mods::
 STAMP_PRICE	src/mail.h	23;"	kind:macro	line:23	file:
 STANDING	src/mods/positions.hpp	/^	STANDING = mods::pos::STANDING,$/;"	kind:enumerator	line:27	enum:int8_t	file:
 STANDING	src/mods/positions.hpp	/^	constexpr static uint8_t STANDING   = 8;	\/* standing		*\/$/;"	kind:member	line:14	namespace:mods::pos	file:
-STAR	src/mods/markdown-transformer.cpp	/^			STAR = '*',		\/\/ "*"$/;"	kind:enumerator	line:30	enum:mods::markdown_transformer::rdp::ch_type	file:
+STAR	src/mods/markdown-transformer.cpp	/^			STAR = '*',		\/\/ "*"$/;"	kind:enumerator	line:31	enum:mods::markdown_transformer::rdp::ch_type	file:
 STARTING_VISIBILITY	src/structs.h	/^		static constexpr visibility_t STARTING_VISIBILITY = 255;$/;"	kind:member	line:812	struct:obj_data	file:	access:public
 STARTING_VISIBILITY	src/structs.h	/^	static constexpr visibility_t STARTING_VISIBILITY = 255;$/;"	kind:member	line:1547	struct:char_data	file:	access:public
 START_MESSG	src/config.cpp	/^const char *START_MESSG =$/;"	kind:variable	line:288
@@ -3992,7 +3993,7 @@ SUPERCMD	src/act.informative.cpp	/^SUPERCMD(do_givemegold) {$/;"	kind:function	l
 SUPERCMD	src/act.informative.cpp	/^SUPERCMD(do_js) {$/;"	kind:function	line:189	signature:(do_js)
 SUPERCMD	src/act.informative.cpp	/^SUPERCMD(do_jstest) {$/;"	kind:function	line:202	signature:(do_jstest)
 SUPERCMD	src/act.informative.cpp	/^SUPERCMD(do_newjs) {$/;"	kind:function	line:196	signature:(do_newjs)
-SUPERCMD	src/act.offensive.cpp	/^SUPERCMD(do_affect_me) {$/;"	kind:function	line:95	signature:(do_affect_me)
+SUPERCMD	src/act.offensive.cpp	/^SUPERCMD(do_affect_me) {$/;"	kind:function	line:94	signature:(do_affect_me)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_advance) {$/;"	kind:function	line:1274	signature:(do_advance)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_at) {$/;"	kind:function	line:227	signature:(do_at)
 SUPERCMD	src/act.wizard.cpp	/^SUPERCMD(do_date) {$/;"	kind:function	line:1672	signature:(do_date)
@@ -4095,7 +4096,7 @@ SUPERCMD	src/mods/integral-objects.cpp	/^SUPERCMD(do_uninstall_weapon_locker) {$
 SUPERCMD	src/mods/integral-objects.cpp	/^SUPERCMD(do_weapon_locker_help) {$/;"	kind:function	line:445	signature:(do_weapon_locker_help)
 SUPERCMD	src/mods/json/export.cpp	/^	SUPERCMD(do_json_export) {$/;"	kind:function	line:245	namespace:mods::json	signature:(do_json_export)
 SUPERCMD	src/mods/levels.cpp	/^	SUPERCMD(do_award_exp_by_name) {$/;"	kind:function	line:825	namespace:mods::levels	signature:(do_award_exp_by_name)
-SUPERCMD	src/mods/levels.cpp	/^	SUPERCMD(do_csv_export_levels) {$/;"	kind:function	line:864	namespace:mods::levels	signature:(do_csv_export_levels)
+SUPERCMD	src/mods/levels.cpp	/^	SUPERCMD(do_csv_export_levels) {$/;"	kind:function	line:861	namespace:mods::levels	signature:(do_csv_export_levels)
 SUPERCMD	src/mods/loot.cpp	/^	SUPERCMD(do_add_armor_index) {$/;"	kind:function	line:542	namespace:mods::loot	signature:(do_add_armor_index)
 SUPERCMD	src/mods/loot.cpp	/^	SUPERCMD(do_add_rifle_index) {$/;"	kind:function	line:513	namespace:mods::loot	signature:(do_add_rifle_index)
 SUPERCMD	src/mods/loot.cpp	/^	SUPERCMD(do_mixup_contents) {$/;"	kind:function	line:404	namespace:mods::loot	signature:(do_mixup_contents)
@@ -5259,13 +5260,13 @@ ability_value	src/mods/classes/base.hpp	/^				uint8_t ability_value;$/;"	kind:me
 abort_txn	src/mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::abort_txn() {$/;"	kind:function	line:252	class:mods::lmdb::_db_handle	signature:()
 about	src/mods/builder/mob-scaler.hpp	/^		std::string about;$/;"	kind:member	line:28	struct:mods::builder::mob_equipment_randomizer	file:	access:public
 abs_val	src/bsd-snprintf.cpp	155;"	kind:macro	line:155	file:
-accept	src/mods/markdown-transformer.cpp	/^		bool accept(ch_type type) {$/;"	kind:function	line:158	namespace:mods::markdown_transformer::rdp	signature:(ch_type type)
+accept	src/mods/markdown-transformer.cpp	/^		bool accept(ch_type type) {$/;"	kind:function	line:159	namespace:mods::markdown_transformer::rdp	signature:(ch_type type)
 accept_closing_bracket	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> accept_closing_bracket(const std::string& line, counter_t in_counter) {$/;"	kind:function	line:186	namespace:mods	signature:(const std::string& line, counter_t in_counter)
 accept_comma	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> accept_comma(const std::string& line, counter_t in_counter) {$/;"	kind:function	line:174	namespace:mods	signature:(const std::string& line, counter_t in_counter)
 accept_eol	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> accept_eol(const std::string& line, counter_t in_counter) {$/;"	kind:function	line:94	namespace:mods	signature:(const std::string& line, counter_t in_counter)
 accept_open_bracket	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> accept_open_bracket(const std::string& line, counter_t in_counter) {$/;"	kind:function	line:100	namespace:mods	signature:(const std::string& line, counter_t in_counter)
 accept_pkid	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,std::string,counter_t> accept_pkid(const std::string& line, counter_t in_counter) {$/;"	kind:function	line:63	namespace:mods	signature:(const std::string& line, counter_t in_counter)
-accept_repeated	src/mods/markdown-transformer.cpp	/^		bool accept_repeated(ch_type sym,ctr_t len) {$/;"	kind:function	line:147	namespace:mods::markdown_transformer::rdp	signature:(ch_type sym,ctr_t len)
+accept_repeated	src/mods/markdown-transformer.cpp	/^		bool accept_repeated(ch_type sym,ctr_t len) {$/;"	kind:function	line:148	namespace:mods::markdown_transformer::rdp	signature:(ch_type sym,ctr_t len)
 accept_yaml_file	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> accept_yaml_file(const std::string& line, counter_t in_counter) {$/;"	kind:function	line:23	namespace:mods	signature:(const std::string& line, counter_t in_counter)
 access	src/mods/lmdb/shm.hpp	/^        static inline int access(size_t memory_size,char** out_ptr){$/;"	kind:function	line:41	class:gdns::shm	access:public	signature:(size_t memory_size,char** out_ptr)
 access	src/mods/lmdb/shm.hpp	/^int shm::access(const char* memory_id,int project_id,size_t memory_size,char** out_ptr){$/;"	kind:function	line:94	class:gdns::shm	signature:(const char* memory_id,int project_id,size_t memory_size,char** out_ptr)
@@ -5886,7 +5887,7 @@ board_msginfo	src/boards.h	/^struct board_msginfo {$/;"	kind:struct	line:19	file
 body	src/mods/builder/mob-scaler.hpp	/^		std::string body;$/;"	kind:member	line:21	struct:mods::builder::mob_equipment_randomizer	file:	access:public
 body_content	src/mods/mini-games/line-up.hpp	/^		std::string body_content;$/;"	kind:member	line:37	namespace:mods::mini_games	file:	access:private
 body_content	src/mods/mini-games/wires.hpp	/^		std::string body_content;$/;"	kind:member	line:78	struct:mods::mini_games::wires	file:	access:private
-bold	src/mods/markdown-transformer.cpp	/^		bool bold() {$/;"	kind:function	line:210	namespace:mods::markdown_transformer::rdp	signature:()
+bold	src/mods/markdown-transformer.cpp	/^		bool bold() {$/;"	kind:function	line:220	namespace:mods::markdown_transformer::rdp	signature:()
 bonus	src/structs.h	/^	byte bonus;       \/* how many practices player gains per lev *\/$/;"	kind:member	line:1711	struct:wis_app_type	file:	access:public
 bookmarks	src/mods/builder-data.hpp	/^		std::map<std::string,room_rnum> bookmarks;$/;"	kind:member	line:94	struct:builder_data_t	file:	access:public
 bookmarks	src/mods/builder/bookmarks.cpp	/^namespace mods::builder::bookmarks {$/;"	kind:namespace	line:8	class:mods::builder	file:
@@ -6419,7 +6420,7 @@ clear	src/mods/builder/meqbuild.cpp	/^		void clear() {$/;"	kind:function	line:11
 clear	src/mods/builder/raid.cpp	/^		void clear() {$/;"	kind:function	line:270	struct:mods::builder::raid::raid_interface	access:public	signature:()
 clear	src/mods/builder/seqbuild.cpp	/^		void clear() {$/;"	kind:function	line:636	struct:mods::builder::seqbuild::seqbuild_interface	access:public	signature:()
 clear	src/mods/builder/static-loot.cpp	/^		void clear() {$/;"	kind:function	line:119	struct:mods::builder::staticlootbuild::staticlootbuild_interface	access:public	signature:()
-clear	src/mods/markdown-transformer.cpp	/^		void clear() {$/;"	kind:function	line:323	namespace:mods::markdown_transformer::rdp	signature:()
+clear	src/mods/markdown-transformer.cpp	/^		void clear() {$/;"	kind:function	line:354	namespace:mods::markdown_transformer::rdp	signature:()
 clear	src/mods/sql.hpp	/^			compositor<T>& clear() {$/;"	kind:function	line:482	struct:mods::sql::compositor	access:public	signature:()
 clear	src/mods/string.cpp	/^	void string::clear() {$/;"	kind:function	line:79	class:mods::string	signature:()
 clear	src/mods/util.hpp	/^			void clear() {$/;"	kind:function	line:509	struct:mods::util::args::check_parsed_args	access:public	signature:()
@@ -6671,7 +6672,7 @@ consume_object	src/mods/player.cpp	/^	void player::consume_object(obj_ptr_t& ite
 consume_scripted_response	src/mods/player.hpp	/^			std::string consume_scripted_response() {$/;"	kind:function	line:876	namespace:mods	access:public	signature:()
 consume_shotgun_charge	src/mods/armor/gauntlets-xtv89.cpp	/^	user_feedback xtv89::consume_shotgun_charge() {$/;"	kind:function	line:139	class:mods::armor::xtv89	signature:()
 consume_shotgun_underbarrel_ammo	src/mods/classes/ghost.cpp	/^	void ghost::consume_shotgun_underbarrel_ammo() {$/;"	kind:function	line:946	class:mods::classes::ghost	signature:()
-consume_until_newline	src/mods/markdown-transformer.cpp	/^		std::string consume_until_newline() {$/;"	kind:function	line:184	namespace:mods::markdown_transformer::rdp	signature:()
+consume_until_newline	src/mods/markdown-transformer.cpp	/^		std::string consume_until_newline() {$/;"	kind:function	line:185	namespace:mods::markdown_transformer::rdp	signature:()
 consumed_object_wears_off	src/mods/player.cpp	/^	void player::consumed_object_wears_off(const mods::yaml::consumable_description_t& c) {$/;"	kind:function	line:2545	class:mods::player	signature:(const mods::yaml::consumable_description_t& c)
 contact_hq_for_camera_spots	src/mods/mobs/mini-gunner-behaviour-tree.hpp	/^	auto contact_hq_for_camera_spots() {$/;"	kind:function	line:308	namespace:mods::mobs::mini_gunner_behaviour_tree	signature:()
 contagion	src/mods/classes/contagion.cpp	/^	contagion::contagion() {$/;"	kind:function	line:48	class:mods::classes::contagion	signature:()
@@ -6700,8 +6701,8 @@ container_yaml	src/mods/generic-locker.hpp	/^			std::string container_yaml;$/;"	
 containers	src/room-data.hpp	/^		std::forward_list<mods::generic_locker_t> containers;$/;"	kind:variable	line:320
 contains	src/structs.h	/^		obj_data *contains;     \/* Contains objects                 *\/$/;"	kind:member	line:903	struct:obj_data	file:	access:public
 content	src/mods/json/export.cpp	/^		list_t* content;$/;"	kind:member	line:24	struct:mods::json::json_reader	file:	access:public
-content	src/mods/markdown-transformer.cpp	/^		void content() {$/;"	kind:function	line:100	namespace:mods::markdown_transformer::rdp	signature:()
-content_chars	src/mods/markdown-transformer.cpp	/^		static constexpr std::string_view content_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890,.:!@$%^&()-_=+[{]}\\\\|;\\"',<.>\/?";$/;"	kind:member	line:36	namespace:mods::markdown_transformer::rdp	file:
+content	src/mods/markdown-transformer.cpp	/^		void content() {$/;"	kind:function	line:101	namespace:mods::markdown_transformer::rdp	signature:()
+content_chars	src/mods/markdown-transformer.cpp	/^		static constexpr std::string_view content_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890,.:!@$%^&()-_=+[{]}\\\\|;\\"',<.>\/?";$/;"	kind:member	line:37	namespace:mods::markdown_transformer::rdp	file:
 contents	src/mods/loot.hpp	/^		std::vector<obj_ptr_t> contents;$/;"	kind:member	line:41	namespace:mods::loot	file:
 contents	src/mods/pc-ability.hpp	/^		std::string contents;$/;"	kind:member	line:18	struct:mods::page	file:	access:public
 contents	src/room-data.hpp	/^		obj_data *contents;   \/* List of items in room              *\/$/;"	kind:variable	line:291
@@ -8005,7 +8006,7 @@ ensnared_amount	src/mods/player.hpp	/^			auto& ensnared_amount() {$/;"	kind:func
 entry	src/db.h	/^	char *entry;$/;"	kind:member	line:287	struct:help_index_element	file:	access:public
 env	src/mods/lmdb/db.hpp	/^			MDB_env* env;$/;"	kind:member	line:76	struct:gdns::lmdb::gdns_env	file:	access:public
 env	src/mods/lmdb/db.hpp	/^			std::unique_ptr<gdns_env> env;$/;"	kind:member	line:102	struct:gdns::lmdb::db	file:	access:public
-eof	src/mods/markdown-transformer.cpp	/^		static bool eof;$/;"	kind:member	line:41	namespace:mods::markdown_transformer::rdp	file:
+eof	src/mods/markdown-transformer.cpp	/^		static bool eof;$/;"	kind:member	line:42	namespace:mods::markdown_transformer::rdp	file:
 epoch_string	src/mods/date-time.cpp	/^	std::string epoch_string() {$/;"	kind:function	line:11	namespace:mods::date_time::irl	signature:()
 epoll_ev	src/comm.cpp	/^epoll_event epoll_ev;$/;"	kind:variable	line:170
 epoll_fd	src/comm.cpp	/^int epoll_fd = -1;$/;"	kind:variable	line:169
@@ -8039,7 +8040,7 @@ error	src/mods/db.hpp	/^namespace mods::lmdb::error { $/;"	kind:namespace	line:1
 error	src/mods/mobs/mini-gunner.hpp	/^			bool error;$/;"	kind:member	line:106	struct:mods::mobs::mini_gunner	file:	access:private
 error	src/mods/mobs/smart-mob.hpp	/^			bool error;$/;"	kind:member	line:172	struct:mods::mobs::smart_mob	file:	access:protected
 error	src/mods/player.hpp	/^			void error(std::string_view msg) {$/;"	kind:function	line:827	namespace:mods	access:public	signature:(std::string_view msg)
-error_expected	src/mods/markdown-transformer.cpp	/^		void error_expected(ch_type t) {$/;"	kind:function	line:124	namespace:mods::markdown_transformer::rdp	signature:(ch_type t)
+error_expected	src/mods/markdown-transformer.cpp	/^		void error_expected(ch_type t) {$/;"	kind:function	line:125	namespace:mods::markdown_transformer::rdp	signature:(ch_type t)
 error_log	src/mods/sql.cpp	/^	void error_log(std::string_view msg) {$/;"	kind:function	line:6	namespace:mods::sql	signature:(std::string_view msg)
 errorln	src/mods/player.hpp	/^			void errorln(std::string_view msg) {$/;"	kind:function	line:830	namespace:mods	access:public	signature:(std::string_view msg)
 errors	src/mods/util.cpp	/^	std::string check_parsed_args::errors() {$/;"	kind:function	line:1778	class:mods::util::args::check_parsed_args	signature:()
@@ -8094,7 +8095,7 @@ exit_with	src/comm.cpp	/^void exit_with(int code) {$/;"	kind:function	line:335	s
 exp	src/mods/player.hpp	/^			auto& exp() {$/;"	kind:function	line:382	namespace:mods	access:public	signature:()
 exp	src/structs.h	/^	upoints_t exp;            \/* The experience of the player            *\/$/;"	kind:member	line:1220	struct:char_point_data	file:	access:public
 expand_safe_escape_codes	src/mods/util.cpp	/^	std::string expand_safe_escape_codes(std::string_view str,std::size_t screen_width) {$/;"	kind:function	line:179	namespace:mods::util	signature:(std::string_view str,std::size_t screen_width)
-expect	src/mods/markdown-transformer.cpp	/^		bool expect(ch_type type) {$/;"	kind:function	line:177	namespace:mods::markdown_transformer::rdp	signature:(ch_type type)
+expect	src/mods/markdown-transformer.cpp	/^		bool expect(ch_type type) {$/;"	kind:function	line:178	namespace:mods::markdown_transformer::rdp	signature:(ch_type type)
 expect_digit	src/act.social.cpp	/^bool expect_digit(FILE* fl) {$/;"	kind:function	line:309	signature:(FILE* fl)
 expect_integer	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> expect_integer(const std::string& line, counter_t in_counter) {$/;"	kind:function	line:115	namespace:mods	signature:(const std::string& line, counter_t in_counter)
 expect_item_declaration	src/mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t,parsed_type_t> expect_item_declaration(const std::string& line, counter_t in_counter) {$/;"	kind:function	line:228	namespace:mods	signature:(const std::string& line, counter_t in_counter)
@@ -8314,7 +8315,7 @@ extract_until	src/mods/util.cpp	/^	std::string extract_until(std::string_view ta
 extract_yaml_info_from_path	src/mods/util.cpp	/^	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path) {$/;"	kind:function	line:1382	namespace:mods::util	signature:(std::string_view path)
 extract_yaml_reward	src/mods/util.cpp	/^	std::tuple<bool,int,std::string> extract_yaml_reward(std::string reward) {$/;"	kind:function	line:401	namespace:mods::util	signature:(std::string reward)
 extractions_pending	src/handler.cpp	/^int extractions_pending = 0;$/;"	kind:variable	line:30
-f	src/mods/markdown-transformer.cpp	/^		static std::string f;$/;"	kind:member	line:37	namespace:mods::markdown_transformer::rdp	file:
+f	src/mods/markdown-transformer.cpp	/^		static std::string f;$/;"	kind:member	line:38	namespace:mods::markdown_transformer::rdp	file:
 f_import_rooms	src/globals.cpp	/^		bool f_import_rooms;$/;"	kind:member	line:106	namespace:mods::globals	file:
 face_direction	src/mods/mobs/mini-gunner.hpp	/^		static inline std::string face_direction(std::string value) {$/;"	kind:function	line:114	namespace:mods::mobs::mg::orm	signature:(std::string value)
 factory	src/mods/orm/factory.hpp	/^namespace mods::orm::factory {$/;"	kind:namespace	line:11	class:mods::orm	file:
@@ -9447,14 +9448,14 @@ hcontrol_pay_house	src/house.cpp	/^void hcontrol_pay_house(char_data *ch, char *
 head	src/db.h	/^	struct reset_q_element *head;$/;"	kind:member	line:273	struct:reset_q_type	typeref:struct:reset_q_type::reset_q_element	file:	access:public
 head	src/mods/builder/mob-scaler.hpp	/^		std::string head;$/;"	kind:member	line:22	struct:mods::builder::mob_equipment_randomizer	file:	access:public
 head	src/mods/lmdb/conf.cpp	/^static struct translation *head = NULL;$/;"	kind:member	line:9	namespace:gdns	typeref:struct:gdns::translation	file:
-header_1	src/mods/markdown-transformer.cpp	/^		bool header_1() {$/;"	kind:function	line:250	namespace:mods::markdown_transformer::rdp	signature:()
-header_2	src/mods/markdown-transformer.cpp	/^		bool header_2() {$/;"	kind:function	line:262	namespace:mods::markdown_transformer::rdp	signature:()
-header_3	src/mods/markdown-transformer.cpp	/^		bool header_3() {$/;"	kind:function	line:274	namespace:mods::markdown_transformer::rdp	signature:()
+header_1	src/mods/markdown-transformer.cpp	/^		bool header_1() {$/;"	kind:function	line:260	namespace:mods::markdown_transformer::rdp	signature:()
+header_2	src/mods/markdown-transformer.cpp	/^		bool header_2() {$/;"	kind:function	line:272	namespace:mods::markdown_transformer::rdp	signature:()
+header_3	src/mods/markdown-transformer.cpp	/^		bool header_3() {$/;"	kind:function	line:284	namespace:mods::markdown_transformer::rdp	signature:()
 header_block_type	src/mail.h	/^typedef struct header_block_type_d header_block_type;$/;"	kind:typedef	line:92	typeref:struct:header_block_type_d	file:
 header_block_type_d	src/mail.h	/^struct header_block_type_d {$/;"	kind:struct	line:80	file:
 header_data	src/mail.h	/^	struct header_data_type header_data;	\/* other header data		*\/$/;"	kind:member	line:82	struct:header_block_type_d	typeref:struct:header_block_type_d::header_data_type	file:	access:public
 header_data_type	src/mail.h	/^struct header_data_type {$/;"	kind:struct	line:63	file:
-header_line	src/mods/markdown-transformer.cpp	/^		void header_line() {$/;"	kind:function	line:234	namespace:mods::markdown_transformer::rdp	signature:()
+header_line	src/mods/markdown-transformer.cpp	/^		void header_line() {$/;"	kind:function	line:244	namespace:mods::markdown_transformer::rdp	signature:()
 header_size	src/mods/message-server.cpp	/^	constexpr std::size_t header_size = sizeof(channel_t) + sizeof(channel_message_t::control) + sizeof(channel_message_t::message_id) + sizeof(std::size_t);$/;"	kind:member	line:38	namespace:mods::message_server	file:
 heading	src/boards.h	/^	char	*heading;     \/* pointer to message's heading *\/$/;"	kind:member	line:21	struct:board_msginfo	file:	access:public
 heading	src/mods/mobs/mini-gunner.hpp	/^			int heading;$/;"	kind:member	line:102	struct:mods::mobs::mini_gunner	file:	access:private
@@ -9584,7 +9585,7 @@ hunting	src/mods/mobs/smart-mob.hpp	/^			uuidvec_t hunting;$/;"	kind:member	line
 hunting	src/mods/player.hpp	/^			char_data* hunting() {$/;"	kind:function	line:260	namespace:mods	access:public	signature:()
 hunting	src/structs.h	/^	char_data *hunting;	\/* Char hunted by this char		*\/$/;"	kind:member	line:1261	struct:char_special_data	file:	access:public
 hupsig	src/comm.cpp	/^RETSIGTYPE hupsig(int sig) {$/;"	kind:function	line:2372	signature:(int sig)
-i	src/mods/markdown-transformer.cpp	/^		static ctr_t i;$/;"	kind:member	line:39	namespace:mods::markdown_transformer::rdp	file:
+i	src/mods/markdown-transformer.cpp	/^		static ctr_t i;$/;"	kind:member	line:40	namespace:mods::markdown_transformer::rdp	file:
 i_max_count	src/mods/rifle-stats.cpp	/^	static constexpr std::size_t i_max_count = __i_END;$/;"	kind:member	line:101	namespace:mods::rifle_stats	file:
 i_storage	src/mods/util.hpp	/^		std::vector<int> i_storage;$/;"	kind:member	line:473	struct:mods::util::args::parsed_args	file:	access:public
 id	src/db.h	/^	long id;$/;"	kind:member	line:281	struct:player_index_element	file:	access:public
@@ -9847,7 +9848,7 @@ init	src/mods/integral-objects.cpp	/^	void init() {$/;"	kind:function	line:521	n
 init	src/mods/js.cpp	/^		void init() {$/;"	kind:function	line:42	namespace:mods::js	signature:()
 init	src/mods/json/export.cpp	/^	void init() {$/;"	kind:function	line:313	namespace:mods::json	signature:()
 init	src/mods/karma.cpp	/^	void init(){$/;"	kind:function	line:7	namespace:mods	signature:()
-init	src/mods/levels.cpp	/^	void init() {$/;"	kind:function	line:884	namespace:mods::levels	signature:()
+init	src/mods/levels.cpp	/^	void init() {$/;"	kind:function	line:880	namespace:mods::levels	signature:()
 init	src/mods/lmdb/conf.cpp	/^void conf<StringType>::init(void){$/;"	kind:function	line:247	class:gdns::conf	signature:(void)
 init	src/mods/lmdb/db.hpp	/^				bool init(gsl::not_null<const char*> file,gsl::not_null<const char*> db_name){$/;"	kind:function	line:216	struct:gdns::lmdb::client	access:public	signature:(gsl::not_null<const char*> file,gsl::not_null<const char*> db_name)
 init	src/mods/lmdb/db.hpp	/^			bool init(const char* file, const char* dbi_name,int flags, int perms){$/;"	kind:function	line:242	struct:gdns::lmdb::server	access:public	signature:(const char* file, const char* dbi_name,int flags, int perms)
@@ -10019,7 +10020,7 @@ injure_roll	src/mods/weapons/damage-event-broadcaster.hpp	/^	void injure_roll(pl
 injured	src/mods/damage-event.hpp	/^	std::vector<uuid_t> injured;$/;"	kind:member	line:123	struct:feedback_t	file:	access:public
 injured	src/mods/mobs/damage-event.cpp	/^	void injured(player_ptr_t& mob,const feedback_t& feedback) {$/;"	kind:function	line:62	namespace:mods::mobs::damage_event	signature:(player_ptr_t& mob,const feedback_t& feedback)
 injured	src/mods/weapons/damage-calculator.hpp	/^		bool injured;$/;"	kind:member	line:89	struct:mods::weapons::damage_calculator::explosive_damage_t	file:	access:public
-inline_code	src/mods/markdown-transformer.cpp	/^		bool inline_code() {$/;"	kind:function	line:192	namespace:mods::markdown_transformer::rdp	signature:()
+inline_code	src/mods/markdown-transformer.cpp	/^		bool inline_code() {$/;"	kind:function	line:193	namespace:mods::markdown_transformer::rdp	signature:()
 inner_join	src/mods/sql.hpp	/^			compositor<T>& inner_join(std::string_view table) {$/;"	kind:function	line:282	struct:mods::sql::compositor	access:public	signature:(std::string_view table)
 innocent	src/mods/mobs/extended-types.hpp	/^		static const std::string innocent = std::string("Innocent mobs that wouldn't harm a fly (even when provoked). These mobs fulfill the ") +$/;"	kind:member	line:83	namespace:mods::mobs::desc	file:
 innocent	src/mods/mobs/innocent.cpp	/^	innocent::innocent(uuid_t mob_uuid, std::string variation) {$/;"	kind:function	line:123	class:mods::mobs::innocent	signature:(uuid_t mob_uuid, std::string variation)
@@ -10157,7 +10158,7 @@ is_class_help_match	src/mods/help.cpp	/^	bool is_class_help_match(const std::str
 is_claymore	src/mods/object-utils.hpp	/^	static inline bool is_claymore(T& obj) {$/;"	kind:function	line:185	namespace:mods::object_utils	signature:(T& obj)
 is_common	src/mods/rarity.cpp	/^	bool is_common(const float& rarity)  {$/;"	kind:function	line:4	namespace:mods::rarity	signature:(const float& rarity)
 is_consumable	src/mods/object-utils.cpp	/^	bool is_consumable(const obj_ptr_t& item) {$/;"	kind:function	line:89	namespace:mods::object_utils	signature:(const obj_ptr_t& item)
-is_content	src/mods/markdown-transformer.cpp	/^		bool is_content() {$/;"	kind:function	line:75	namespace:mods::markdown_transformer::rdp	signature:()
+is_content	src/mods/markdown-transformer.cpp	/^		bool is_content() {$/;"	kind:function	line:76	namespace:mods::markdown_transformer::rdp	signature:()
 is_core_ability	src/mods/classes/marine.cpp	/^	bool marine::is_core_ability(const ability_t& ability) const {$/;"	kind:function	line:76	class:mods::classes::marine	signature:(const ability_t& ability) const
 is_corpse	src/mods/object-utils.cpp	/^	bool is_corpse(const obj_ptr_t& item) {$/;"	kind:function	line:83	namespace:mods::object_utils	signature:(const obj_ptr_t& item)
 is_corpse	src/mods/target-acquisition.hpp	/^		bool is_corpse;$/;"	kind:member	line:22	struct:mods::target_acquisition::target_t	file:	access:public
@@ -10419,7 +10420,7 @@ light_machine_guns	src/mods/forge-engine/generated-rifle.cpp	/^	static std::vect
 limit	src/mods/sql.hpp	/^			compositor<T>& limit(const std::size_t count) {$/;"	kind:function	line:478	struct:mods::sql::compositor	access:public	signature:(const std::size_t count)
 limits	src/mods/rate-limiting.cpp	/^	static std::map<action_t,std::pair<int,int>> limits;$/;"	kind:member	line:27	namespace:mods::rate_limiting	file:
 line	src/db.h	/^	int line;		\/* line number this command appears on  *\/$/;"	kind:member	line:173	struct:reset_com	file:	access:public
-line	src/mods/markdown-transformer.cpp	/^		void line() {$/;"	kind:function	line:285	namespace:mods::markdown_transformer::rdp	signature:()
+line	src/mods/markdown-transformer.cpp	/^		void line() {$/;"	kind:function	line:295	namespace:mods::markdown_transformer::rdp	signature:()
 line_up	src/mods/mini-games/line-up.cpp	/^	line_up::line_up() {$/;"	kind:function	line:19	class:mods::mini_games::line_up	signature:()
 line_up	src/mods/mini-games/line-up.hpp	/^	struct line_up {$/;"	kind:struct	line:8	namespace:mods::mini_games	file:
 linked_list_remove	src/mods/util.hpp	/^	inline void linked_list_remove(T item, T head) {$/;"	kind:function	line:353	namespace:mods::util	signature:(T item, T head)
@@ -10431,6 +10432,7 @@ list_container	src/mods/acl_list.cpp	/^	namespace list_container{$/;"	kind:names
 list_detailed_shop	src/shop.cpp	/^void list_detailed_shop(char_data *ch, int shop_nr) {$/;"	kind:function	line:1373	signature:(char_data *ch, int shop_nr)
 list_devices	src/mods/mini-games.cpp	/^	void list_devices(player_ptr_t& player) {$/;"	kind:function	line:34	namespace:mods::mini_games	signature:(player_ptr_t& player)
 list_extract_option	src/mods/builder.hpp	/^static inline std::string list_extract_option(std::string_view parent_command, std::string_view entity_name) {$/;"	kind:function	line:119	file:	signature:(std::string_view parent_command, std::string_view entity_name)
+list_item	src/mods/markdown-transformer.cpp	/^		bool list_item() {$/;"	kind:function	line:211	namespace:mods::markdown_transformer::rdp	signature:()
 list_line	src/mods/builder_util.hpp	/^	void list_line(TPlayer& player, const std::string& key, ObjectType& value) {$/;"	kind:function	line:276	namespace:mods::builder_util	signature:(TPlayer& player, const std::string& key, ObjectType& value)
 list_locker_by_type	src/mods/orm/locker.cpp	/^	std::vector<std::string> locker::list_locker_by_type(std::string_view type,const room_vnum& room) {$/;"	kind:function	line:77	class:mods::orm::locker	signature:(std::string_view type,const room_vnum& room)
 list_obj_contents_to_char	src/mods/examine.cpp	/^	void list_obj_contents_to_char(obj_ptr_t& object,player_ptr_t& player,int mode,int show) {$/;"	kind:function	line:14	namespace:mods::examine	signature:(obj_ptr_t& object,player_ptr_t& player,int mode,int show)
@@ -11154,7 +11156,7 @@ m_debug	src/mods/help.cpp	16;"	kind:macro	line:16	file:
 m_debug	src/mods/help.cpp	19;"	kind:macro	line:19	file:
 m_debug	src/mods/levels.cpp	12;"	kind:macro	line:12	file:
 m_debug	src/mods/levels.cpp	14;"	kind:macro	line:14	file:
-m_debug	src/mods/levels.cpp	890;"	kind:macro	line:890	file:
+m_debug	src/mods/levels.cpp	886;"	kind:macro	line:886	file:
 m_debug	src/mods/loot-container.cpp	5;"	kind:macro	line:5	file:
 m_debug	src/mods/loot-container.cpp	7;"	kind:macro	line:7	file:
 m_debug	src/mods/loot.cpp	12;"	kind:macro	line:12	file:
@@ -12798,7 +12800,7 @@ mud_time_passed	src/utils.cpp	/^struct time_info_data *mud_time_passed(time_t t2
 mud_time_to_secs	src/utils.cpp	/^time_t mud_time_to_secs(struct time_info_data *now) {$/;"	kind:function	line:443	signature:(struct time_info_data *now)
 mudlog	src/utils.cpp	/^void mudlog(int type, int level, int file, const char *str, ...) {$/;"	kind:function	line:302	signature:(int type, int level, int file, const char *str, ...)
 multi	src/mods/util.cpp	/^	std::vector<std::string> parsed_args::multi(std::vector<std::size_t> indexes) {$/;"	kind:function	line:1672	class:mods::util::args::parsed_args	signature:(std::vector<std::size_t> indexes)
-multi_line_code	src/mods/markdown-transformer.cpp	/^		bool multi_line_code() {$/;"	kind:function	line:107	namespace:mods::markdown_transformer::rdp	signature:()
+multi_line_code	src/mods/markdown-transformer.cpp	/^		bool multi_line_code() {$/;"	kind:function	line:108	namespace:mods::markdown_transformer::rdp	signature:()
 muzzle	src/mods/rifle-attachments.hpp	/^			obj_ptr_t muzzle;$/;"	kind:member	line:48	namespace:mods	file:
 muzzle_velocity	src/mods/forge-engine/generated-rifle.hpp	/^			auto muzzle_velocity() {$/;"	kind:function	line:561	struct:mods::forge_engine::generated_rifle_t	file:	access:private	signature:()
 muzzle_velocity	src/mods/ranged-combat-totals.hpp	/^		int muzzle_velocity;$/;"	kind:member	line:73	struct:mods::ranged_combat_totals	file:	access:public
@@ -12927,7 +12929,7 @@ next_row	src/mods/mini-games/wires.cpp	/^	void wires::next_row() {$/;"	kind:func
 next_zone	src/act.builder.cpp	/^	static inline int next_zone() {$/;"	kind:function	line:40	namespace:mods::adhoc	signature:()
 next_zone_number	src/act.builder.cpp	/^int next_zone_number() {$/;"	kind:function	line:119	signature:()
 next_zone_vnum	src/mods/zbuild.cpp	/^int next_zone_vnum() {$/;"	kind:function	line:185	signature:()
-nextsym	src/mods/markdown-transformer.cpp	/^		void nextsym() {$/;"	kind:function	line:141	namespace:mods::markdown_transformer::rdp	signature:()
+nextsym	src/mods/markdown-transformer.cpp	/^		void nextsym() {$/;"	kind:function	line:142	namespace:mods::markdown_transformer::rdp	signature:()
 nget	src/mods/lmdb.cpp	/^	int _db_handle::nget(void* key,std::size_t k_size,std::string& in_value) {$/;"	kind:function	line:414	class:mods::lmdb::_db_handle	signature:(void* key,std::size_t k_size,std::string& in_value)
 nget	src/mods/lmdb.cpp	/^	int _db_handle::nget(void* key,std::size_t k_size,void* in_value) {$/;"	kind:function	line:365	class:mods::lmdb::_db_handle	signature:(void* key,std::size_t k_size,void* in_value)
 nickname	src/mods/orm/room.hpp	/^		std::string nickname;$/;"	kind:member	line:51	struct:mods::orm::room	file:	access:public
@@ -13365,7 +13367,7 @@ owner	src/house.h	/^	long owner;			\/* idnum of house's owner	*\/$/;"	kind:membe
 owner	src/mods/rifle-attachments.hpp	/^			uuid_t owner() const {$/;"	kind:function	line:77	namespace:mods	signature:() const
 owner_drone	src/mods/drone.cpp	/^		std::pair<player_ptr_t,player_ptr_t> owner_drone(uuid_t owner_uuid) {$/;"	kind:function	line:85	namespace:mods::drone	signature:(uuid_t owner_uuid)
 owner_uuid	src/mods/camera.hpp	/^			uuid_t owner_uuid() const { return m_player; }$/;"	kind:function	line:14	class:mods::camera	access:public	signature:() const
-p	src/mods/markdown-transformer.cpp	/^		static std::string p;$/;"	kind:member	line:38	namespace:mods::markdown_transformer::rdp	file:
+p	src/mods/markdown-transformer.cpp	/^		static std::string p;$/;"	kind:member	line:39	namespace:mods::markdown_transformer::rdp	file:
 p	src/mods/util.hpp	/^			parsed_args* p;$/;"	kind:member	line:503	struct:mods::util::args::check_parsed_args	file:	access:public
 p5boots	src/mods/drops.cpp	/^	static constexpr std::string_view p5boots = "armor\/p5-boots.yml";$/;"	kind:member	line:158	namespace:mods::drops	file:
 p5pants	src/mods/drops.cpp	/^	static constexpr std::string_view p5pants = "armor\/p5-pants.yml";$/;"	kind:member	line:159	namespace:mods::drops	file:
@@ -13387,7 +13389,7 @@ paging	src/mods/player.hpp	/^			bool paging() const {$/;"	kind:function	line:545
 parse	src/mods/builder.cpp	/^	parse_response_t parse(str_t argument,player_ptr_t& player) {$/;"	kind:function	line:247	struct:command_t	access:public	signature:(str_t argument,player_ptr_t& player)
 parse	src/mods/lmdb/conf.cpp	/^int conf<StringType>::parse(void){$/;"	kind:function	line:84	class:gdns::conf	signature:(void)
 parse	src/mods/lmdb/conf.hpp	/^int parse(void){$/;"	kind:function	line:100	struct:gdns::conf	access:public	signature:(void)
-parse	src/mods/markdown-transformer.cpp	/^		std::string parse() {$/;"	kind:function	line:315	namespace:mods::markdown_transformer::rdp	signature:()
+parse	src/mods/markdown-transformer.cpp	/^		std::string parse() {$/;"	kind:function	line:346	namespace:mods::markdown_transformer::rdp	signature:()
 parse	src/mods/mbuild.cpp	/^	parse_response_t parse(str_t argument,player_ptr_t& player) {$/;"	kind:function	line:422	struct:command_t	access:public	signature:(str_t argument,player_ptr_t& player)
 parse	src/mods/obuild.cpp	/^	parse_response_t parse(str_t argument,player_ptr_t& player) {$/;"	kind:function	line:263	struct:command_t	access:public	signature:(str_t argument,player_ptr_t& player)
 parse	src/mods/rbuild-sandbox.cpp	/^	parse_response_t parse(str_t argument,player_ptr_t& player) {$/;"	kind:function	line:391	struct:command_t	access:public	signature:(str_t argument,player_ptr_t& player)
@@ -15033,8 +15035,8 @@ s_task_type	src/mods/orm/contract-steps.hpp	/^		task_type_t s_task_type;$/;"	kin
 s_task_type	src/mods/orm/contract-steps.hpp	/^		task_type_t s_task_type;$/;"	kind:member	line:23	struct:mods::orm::contract_steps_record_t	file:	access:public
 sacrifice	src/mods/loot.hpp	/^		obj_ptr_t sacrifice;$/;"	kind:member	line:43	namespace:mods::loot	file:
 sacrifice_count	src/mods/loot.hpp	/^		uint16_t sacrifice_count;$/;"	kind:member	line:42	namespace:mods::loot	file:
-safe	src/mods/markdown-transformer.cpp	/^		bool safe() {$/;"	kind:function	line:83	namespace:mods::markdown_transformer::rdp	signature:()
-safe	src/mods/markdown-transformer.cpp	/^		bool safe(ctr_t offset) {$/;"	kind:function	line:86	namespace:mods::markdown_transformer::rdp	signature:(ctr_t offset)
+safe	src/mods/markdown-transformer.cpp	/^		bool safe() {$/;"	kind:function	line:84	namespace:mods::markdown_transformer::rdp	signature:()
+safe	src/mods/markdown-transformer.cpp	/^		bool safe(ctr_t offset) {$/;"	kind:function	line:87	namespace:mods::markdown_transformer::rdp	signature:(ctr_t offset)
 same_obj	src/shop.cpp	/^int same_obj(struct obj_data *obj1, struct obj_data *obj2) {$/;"	kind:function	line:349	signature:(struct obj_data *obj1, struct obj_data *obj2)
 sandbox_data_t	src/mods/rbuild-sandbox.cpp	/^	sandbox_data_t::sandbox_data_t($/;"	kind:function	line:109	class:mods::builder::sandbox_data_t	signature:( player_ptr_t player, std::string_view name, int starting_room_number, int zone_virtual_number)
 sandbox_data_t	src/mods/rbuild-sandbox.cpp	/^	sandbox_data_t::sandbox_data_t() : m_name("") {}$/;"	kind:function	line:116	class:mods::builder::sandbox_data_t	signature:()
@@ -16257,7 +16259,7 @@ syndrome	src/mods/orm/syndrome.hpp	/^	struct syndrome : public mods::orm::orm_ba
 syndrome_advance_level	src/mods/classes/syndrome.cpp	/^	void syndrome_advance_level(player_ptr_t& player){$/;"	kind:function	line:12	namespace:mods::classes	signature:(player_ptr_t& player)
 syndrome_id	src/mods/orm/syndrome.hpp	/^		uint64_t syndrome_id;$/;"	kind:member	line:33	struct:mods::orm::syndrome	file:	access:public
 syndrome_player_id	src/mods/orm/syndrome.hpp	/^		uint64_t syndrome_player_id;$/;"	kind:member	line:34	struct:mods::orm::syndrome	file:	access:public
-syntax_okay	src/mods/markdown-transformer.cpp	/^		static bool syntax_okay;$/;"	kind:member	line:40	namespace:mods::markdown_transformer::rdp	file:
+syntax_okay	src/mods/markdown-transformer.cpp	/^		static bool syntax_okay;$/;"	kind:member	line:41	namespace:mods::markdown_transformer::rdp	file:
 table	src/mods/builder.cpp	/^	str_t table;$/;"	kind:member	line:203	struct:command_t	file:	access:public
 table	src/mods/lmdb.hpp	/^			table_type_t table() const {$/;"	kind:function	line:94	struct:mods::lmdb::transaction_t	access:public	signature:() const
 table	src/mods/lmdb.hpp	/^		table_type_t table;$/;"	kind:member	line:39	struct:mods::lmdb::_selector	file:	access:public
@@ -16501,7 +16503,7 @@ to_string	src/mods/forge-engine/util.cpp	/^	std::string to_string(player_class_t
 to_string	src/mods/forge-engine/util.cpp	/^	std::string to_string(rifle_attributes_t t) {$/;"	kind:function	line:280	namespace:mods::forge_engine	signature:(rifle_attributes_t t)
 to_string	src/mods/forge-engine/util.cpp	/^	std::string to_string(rifle_types_t t) {$/;"	kind:function	line:262	namespace:mods::forge_engine	signature:(rifle_types_t t)
 to_string	src/mods/forge-engine/util.cpp	/^	std::string to_string(stat_types_t t) {$/;"	kind:function	line:217	namespace:mods::forge_engine	signature:(stat_types_t t)
-to_string	src/mods/markdown-transformer.cpp	/^		std::string to_string(ch_type t) {$/;"	kind:function	line:44	namespace:mods::markdown_transformer::rdp	signature:(ch_type t)
+to_string	src/mods/markdown-transformer.cpp	/^		std::string to_string(ch_type t) {$/;"	kind:function	line:45	namespace:mods::markdown_transformer::rdp	signature:(ch_type t)
 to_string	src/mods/melee/combat-order.hpp	/^	static inline std::string to_string(technique_t technique) {$/;"	kind:function	line:57	namespace:mods::melee::main	signature:(technique_t technique)
 to_string	src/mods/message-server.hpp	/^	static inline std::string to_string(const channel_t& c) {$/;"	kind:function	line:34	namespace:mods::message_server	signature:(const channel_t& c)
 to_string	src/mods/mobs/extended-types.cpp	/^	std::string to_string(extended_types_t t) {$/;"	kind:function	line:155	namespace:mods::mobs::extended_types	signature:(extended_types_t t)
@@ -16577,7 +16579,7 @@ transaction_id	src/mods/object-utils.hpp	/^		uint32_t transaction_id;$/;"	kind:m
 transaction_t	src/mods/lmdb.cpp	/^	transaction_t::transaction_t(std::string ce_table,transact_type_t type) : m_type(type) {$/;"	kind:function	line:31	class:mods::lmdb::transaction_t	signature:(std::string ce_table,transact_type_t type)
 transaction_t	src/mods/lmdb.cpp	/^	transaction_t::transaction_t(table_type_t e_table,transact_type_t type) : m_table(e_table), m_type(type) {$/;"	kind:function	line:40	class:mods::lmdb::transaction_t	signature:(table_type_t e_table,transact_type_t type)
 transaction_t	src/mods/lmdb.hpp	/^	struct transaction_t {$/;"	kind:struct	line:64	namespace:mods::lmdb	file:
-transform	src/mods/markdown-transformer.cpp	/^	std::string transform(std::string_view p) {$/;"	kind:function	line:332	namespace:mods::markdown_transformer	signature:(std::string_view p)
+transform	src/mods/markdown-transformer.cpp	/^	std::string transform(std::string_view p) {$/;"	kind:function	line:363	namespace:mods::markdown_transformer	signature:(std::string_view p)
 translations	src/mods/lmdb/conf.hpp	/^	conf_map& translations() { return m_translations; }$/;"	kind:function	line:18	struct:gdns::conf	access:public	signature:()
 transmit	src/mods/chat.cpp	/^	void channel::transmit(std::string_view user,std::string_view message) {$/;"	kind:function	line:79	class:mods::chat::channel	signature:(std::string_view user,std::string_view message)
 transmit	src/mods/chat.cpp	/^	void transmit(std::string verb,std::string_view player_name,std::string_view message) {$/;"	kind:function	line:113	namespace:mods::chat	signature:(std::string verb,std::string_view player_name,std::string_view message)
@@ -17124,7 +17126,7 @@ where	src/mods/sql.hpp	/^			compositor<T>& where(str_object lhs,$/;"	kind:functi
 where_crypt	src/mods/sql.hpp	/^			compositor<T>& where_crypt(str_object lhs,$/;"	kind:function	line:328	struct:mods::sql::compositor	access:public	signature:(str_object lhs, str_object rhs)
 where_failed	src/mods/util.hpp	/^			std::vector<std::string> where_failed;$/;"	kind:member	line:508	struct:mods::util::args::check_parsed_args	file:	access:public
 where_in	src/mods/sql.hpp	/^			compositor<T>& where_in(str_object lhs,$/;"	kind:function	line:342	struct:mods::sql::compositor	access:public	signature:(str_object lhs, TIterable id_list)
-white_space	src/mods/markdown-transformer.cpp	/^		bool white_space() {$/;"	kind:function	line:222	namespace:mods::markdown_transformer::rdp	signature:()
+white_space	src/mods/markdown-transformer.cpp	/^		bool white_space() {$/;"	kind:function	line:232	namespace:mods::markdown_transformer::rdp	signature:()
 white_str	src/mods/colors.hpp	/^	static inline std::string white_str(TStr str) {$/;"	kind:function	line:27	namespace:mods::colors	signature:(TStr str)
 who_line	src/mods/super-users.cpp	/^	std::string who_line(player_ptr_t& player) {$/;"	kind:function	line:127	namespace:mods::super_users	signature:(player_ptr_t& player)
 width	src/mods/builder/rectangle-layouts.hpp	/^		uint8_t width;$/;"	kind:member	line:7	struct:mods::builder::rectangle_layouts::dimensions_t	file:	access:public

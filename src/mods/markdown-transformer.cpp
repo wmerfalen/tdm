@@ -24,6 +24,7 @@ namespace mods::markdown_transformer {
 	namespace rdp {
 		enum ch_type {
 			IDENT = '\t',	// "\t"
+			DASH = '-',
 			NEWLINE = '\n',	// "\n"
 			LINE_FEED = '\r', // "\r"
 			HASHTAG = '#',	// "#"
@@ -199,7 +200,7 @@ namespace mods::markdown_transformer {
 				if(safe() && p[i] == '`') {
 					nextsym();
 				}
-				if(safe()) {
+				if(safe() && p[i] == NEWLINE) {
 					f += p[i];
 				}
 				f += "{/grn}";
@@ -207,14 +208,23 @@ namespace mods::markdown_transformer {
 			}
 			return false;
 		}
+		bool list_item() {
+			if(accept(DASH)) {
+				f += "{grn}-{/grn}{wht}";
+				f += consume_until_newline();
+				f += "{/wht}";
+				return true;
+			}
+			return false;
+		}
 		bool bold() {
 			if(accept(STAR)) {
-				f += "{blu}";
+				f += "{gld}";
 				while(!accept(STAR)) {
 					f += p[i];
 					nextsym();
 				}
-				f += "{/blu}";
+				f += "{/gld}";
 				return true;
 			}
 			return false;
@@ -233,12 +243,12 @@ namespace mods::markdown_transformer {
 
 		void header_line() {
 			white_space();
-			if(inline_code()) {
+			if(accept(CONTENT)) {
+				content();
 				f += "{yel}";
 				return header_line();
 			}
-			if(accept(CONTENT)) {
-				content();
+			if(inline_code()) {
 				f += "{yel}";
 				return header_line();
 			}
@@ -284,15 +294,22 @@ namespace mods::markdown_transformer {
 
 		void line() {
 			if(header_1()) {
+				f += "\r\n";
 				return line();
 			}
 			if(header_2()) {
+				f += "\r\n";
 				return line();
 			}
 			if(header_3()) {
+				f += "\r\n";
 				return line();
 			}
 			if(multi_line_code()) {
+				return line();
+			}
+			if(list_item()) {
+				f += "\r\n";
 				return line();
 			}
 			if(inline_code()) {
@@ -301,15 +318,29 @@ namespace mods::markdown_transformer {
 			if(bold()) {
 				return line();
 			}
-			while(accept(CONTENT)) {
+			if(is_content()) {
+				f += "{wht}";
 				f += p[i];
+			}
+			while(accept(CONTENT)) {
+				if(p[i] == BACKTICK || p[i] == STAR) {
+					break;
+				}
+				f += p[i];
+			}
+			if(inline_code()) {
+				return line();
+			}
+			if(bold()) {
+				return line();
 			}
 			if(safe() && p[i] != '\n') {
 				return line();
 			}
 			f += "{wht}";
 			f += consume_until_newline();
-			f += "{/wht}\r\n";
+			f += "{/wht}";
+
 			nextsym();
 		}
 		std::string parse() {
