@@ -39,6 +39,7 @@ namespace mods::markdown_transformer {
 		static ctr_t i;
 		static bool syntax_okay;
 		static bool eof;
+		bool safe();
 		std::string consume_until_newline();
 		std::string to_string(ch_type t) {
 			if(t == ch_type::NUMBER) {
@@ -78,6 +79,9 @@ namespace mods::markdown_transformer {
 				}
 			}
 			return false;
+		}
+		bool safe() {
+			return p.length() > i;
 		}
 		bool safe(ctr_t offset) {
 			return p.length() > offset;
@@ -179,7 +183,7 @@ namespace mods::markdown_transformer {
 		}
 		std::string consume_until_newline() {
 			std::string s;
-			while(safe(i) && p[i] != '\n') {
+			while(safe() && p[i] != '\n') {
 				s += p[i];
 				++i;
 			}
@@ -188,14 +192,14 @@ namespace mods::markdown_transformer {
 		bool inline_code() {
 			if(accept(BACKTICK)) {
 				f += "{grn}";
-				while(safe(i) && p[i] != '`' && !eof) {
+				while(safe() && p[i] != '`' && !eof) {
 					f += p[i];
 					nextsym();
 				}
-				if(safe(i) && p[i] == '`') {
+				if(safe() && p[i] == '`') {
 					nextsym();
 				}
-				if(safe(i)) {
+				if(safe()) {
 					f += p[i];
 				}
 				f += "{/grn}";
@@ -300,7 +304,7 @@ namespace mods::markdown_transformer {
 			while(accept(CONTENT)) {
 				f += p[i];
 			}
-			if(safe(i) && p[i] != '\n') {
+			if(safe() && p[i] != '\n') {
 				return line();
 			}
 			f += "{wht}";

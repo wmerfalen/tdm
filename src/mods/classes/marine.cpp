@@ -9,6 +9,7 @@
 
 namespace mods::classes {
 	using cmd_report_t = mods::classes::base::cmd_report_t;
+	static constexpr std::string_view DEPLOY_EXPLOSIVE_DRONE_USAGE = "marine:deploy_explosive_drone <direction> <distance>";
 	marine::marine() {
 		this->init();
 	}
@@ -179,9 +180,15 @@ namespace mods::classes {
 		return m_frag_ub.fire(m_player,direction,distance);
 	}
 	cmd_report_t marine::deploy_explosive_drone() {
-		/**
-		 * TODO FIXME: implement this
-		 */
+		auto s = roll_skill_success(DEPLOY_EXPLOSIVE_DRONE);
+		if(std::get<0>(s)) {
+			uint16_t frag_ammo = 2 * (tier(m_player) + 1);
+			m_ub_frag.use_skill(m_player);
+			m_frag_ub.set_yaml(M203_UNDERBARREL);
+			auto f = m_frag_ub.attach_to(m_player->primary(),tier(m_player));
+			m_frag_ub.set_ammo(frag_ammo);
+			return f;
+		}
 		return {true,"You attach an M203."};
 	}
 	cmd_report_t marine::engage() {
@@ -414,8 +421,8 @@ namespace mods::class_abilities::marine {
 	};
 	ACMD(do_marine_engage) { // TEST ME
 		using namespace mods::target_acquisition;
-		PLAYER_CAN("marine.pin_down");
-		DO_HELP("marine.pin_down");
+		PLAYER_CAN("marine.engage");
+		DO_HELP("marine.engage");
 		if(!player->marine()) {
 			player->sendln("Your class does not support this.");
 			return;
