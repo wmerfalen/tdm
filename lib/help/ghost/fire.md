@@ -1,21 +1,27 @@
-# Attach grenade launcher to your primary weapon
+# Launch a frag from your underbarrel attachment
 
 # Ability
-Ability allows user to attach a grenade launcher to the underbarrel attachment of the currently wielded weapon.
+This ability allows the user to utilize their currently active underbarrel attachment. This requires either a weapon that already has an underbarrel attachment, or more commonly, a weapon that you attached an underbarrel to using one of the abilities listed below.
+
+# Attaching an underbarrel
+The ghost class has the following underbarrel abilites:
+`ghost:attach_frag`
+`ghost:attach_shotgun`
+
+# Caveat
+The shotgun underbarrel attachment is for same-room engagements. The underbarrel shotgun attachment typically does not work on ranged targets (or targets not in the same room).
 
 # Usage
-`marine:attach_m203`
+`ghost:fire <direction> <distance>`
 
-# Step one: Attaching to an Assault Rifle
-`marine:attach_m203`
+# Step one: Attaching an underbarrel
+`ghost:attach_frag`
 
 # Step two: Using it
-`marine:fire west 2`
-
-# Step three: Removing it 
-If you run out of grenades, the underbarrel attachment will automatically detach itself. But you can also manually detach it.
-`marine:detach_m203`
+`ghost:fire west 2`
 
 # See also:
-`marine:detach_203`
-`marine:fire`
+`ghost:attach_frag`
+`ghost:attach_shotgun`
+`ghost:detach_frag`
+`ghost:detach_shotgun`

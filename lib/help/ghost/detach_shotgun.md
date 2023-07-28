@@ -1,21 +1,13 @@
-# Attach grenade launcher to your primary weapon
+# Detach a shotgun underbarrel attachment from your primary weapon
 
 # Ability
-Ability allows user to attach a grenade launcher to the underbarrel attachment of the currently wielded weapon.
+This command simply detaches the shotgun underbarrel attachment from your primary weapon.
 
 # Usage
-`marine:attach_m203`
-
-# Step one: Attaching to an Assault Rifle
-`marine:attach_m203`
-
-# Step two: Using it
-`marine:fire west 2`
-
-# Step three: Removing it 
-If you run out of grenades, the underbarrel attachment will automatically detach itself. But you can also manually detach it.
-`marine:detach_m203`
+`ghost:detach_shotgun`
 
 # See also:
-`marine:detach_203`
-`marine:fire`
+`ghost:attach_frag`
+`ghost:detach_frag`
+`ghost:attach_shotgun`
+`ghost:fire`
