@@ -255,16 +255,20 @@ SUPERCMD(do_add_super_user) {
 SUPERCMD(do_get_super_user_list) {
 	DO_HELP("get_super_user_list");
 	ADMIN_REJECT();
-	auto vec_args = PARSE_ARGS();
-	if(vec_args.size()) {
-		std::vector<std::string> screen;
-		for(auto& user : mods::super_users::super_users) {
-			screen.emplace_back(user);
-		}
-		mods::search_screen(player, screen, vec_args, 64);
-		return;
+	player->pager_start();
+	player->sendln("{grn} The following admins can be changed. {/grn}");
+	for(const auto& user : mods::super_users::super_users) {
+		player->sendln(CAT(user));
 	}
-	player->sendln(mods::super_users::get_list().c_str());
+	player->sendln("-- end of changeable admins --");
+	player->sendln("{grn} The following users will always be admins.{/grn}");
+	for(const auto& user : mods::super_users::always_super_users()) {
+		player->sendln(user);
+	}
+	player->sendln("-- end of hardcoded admins --");
+	player->pager_end();
+	player->page(0);
+	ADMIN_DONE();
 }
 SUPERCMD(do_remove_super_user) {
 	DO_HELP("remove_super_user");
@@ -277,6 +281,9 @@ SUPERCMD(do_remove_super_user) {
 		mods::super_users::super_users_initialized = false;
 		mods::super_users::save();
 		ADMIN_DONE();
+		return;
+	} else {
+		player->sendln("Usage: admin:remove <user>...[user-N]");
 		return;
 	}
 	ADMIN_FAIL();
@@ -302,6 +309,10 @@ SUPERCMD(do_set_who_line) {
 		mods::super_users::set_who_line(vec_args[0],vec_args[1]);
 		ADMIN_DONE();
 		return;
+	} else {
+		player->sendln("Usage: set_who_line <user> <label>");
+		player->sendln("Example: set_who_line xisop xisop-the-lamest");
+		return;
 	}
 	ADMIN_FAIL();
 }
@@ -309,6 +320,11 @@ SUPERCMD(do_clear_who_line) {
 	ADMIN_REJECT();
 	DO_HELP("clear_who_line");
 	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() == 0) {
+		player->sendln("Usage: clear_who_line <user>...[user-N]");
+		player->sendln("Example: clear_who_line xisop grifter mortis");
+		return;
+	}
 	for(auto name : vec_args) {
 		mods::super_users::clear_who_line(name);
 		ADMIN_DONE();
@@ -317,12 +333,21 @@ SUPERCMD(do_clear_who_line) {
 }
 SUPERCMD(do_shutdown_mud) {
 	ADMIN_REJECT();
-	exit_with(0);
+	if(player->name().compare("mortis") == 0) {
+		exit_with(0);
+		return;
+	}
+	player->errorln("Unfortunately, only mortis can do this");
 }
 SUPERCMD(do_admin_kick) {
 	ADMIN_REJECT();
 	DO_HELP("admin:kick");
 	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() == 0) {
+		player->sendln("Usage: admin:kick <user>...[user-N]");
+		player->sendln("Example: admin:kick lamer");
+		return;
+	}
 	for(const auto& name : vec_args) {
 		for(auto& pair : mods::globals::socket_map) {
 			if(mods::util::is_lower_match(pair.second->name(),name)) {
@@ -358,5 +383,6 @@ namespace mods::super_users {
 		mods::interpreter::add_command("admin:tele", POS_RESTING, do_admin_tele, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:add", POS_RESTING, do_add_super_user, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:remove", POS_RESTING, do_remove_super_user, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:list", POS_RESTING, do_get_super_user_list, LVL_BUILDER,0);
 	}
 };

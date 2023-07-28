@@ -5,6 +5,7 @@
 #include "../calc-visibility.hpp"
 #include "../orm/inventory.hpp"
 
+#define CONTAGION_CHECK() if(!player->contagion()){ player->errorln("Wrong class"); return; }
 namespace mods::classes {
 	obj_ptr_t create_pathogen_ammunition_attachment() {
 		return create_object(ITEM_ATTACHMENT,contagion::PATHOGEN_AMMUNITION_YAML.data());
@@ -305,76 +306,104 @@ namespace mods::class_abilities::contagion {
 				}
 		}
 	}
-	ACMD(do_invoke) {
-		if(!player->contagion()) {
-			player->sendln("Invoke what? You're not a CONTAGION.");
+	ACMD(do_contagion_corpse_explosion) {
+		CONTAGION_CHECK();
+		auto vec_args = PARSE_ARGS();
+		if(!argshave()->size_gt(0)->passed()) {
+			player->sendln("Usage: contagion:corpse_explosion <corpse>");
+			player->sendln("Example: contagion:corpse_explosion enforcer");
 			return;
 		}
+		do_corpse_explosion(player,vec_args[0],corpse_explosion_type_t::NORMAL_CORPSE_EXPLOSION);
+	}
+	ACMD(do_contagion_hellfire_corpse_explosion) {
+		CONTAGION_CHECK();
+		auto vec_args = PARSE_ARGS();
+		if(!argshave()->size_gt(0)->passed()) {
+			player->sendln("Usage: contagion:hellfire_corpse_explosion <corpse>");
+			player->sendln("Example: contagion:hellfire_corpse_explosion enforcer");
+			return;
+		}
+		do_corpse_explosion(player,vec_args[0],corpse_explosion_type_t::HELLFIRE_CORPSE_EXPLOSION);
+	}
+	ACMD(do_contagion_shrapnel_corpse_explosion) {
+		CONTAGION_CHECK();
+		auto vec_args = PARSE_ARGS();
+		if(!argshave()->size_gt(0)->passed()) {
+			player->sendln("Usage: contagion:shrapnel_corpse_explosion <corpse>");
+			player->sendln("Example: contagion:shrapnel_corpse_explosion enforcer");
+			return;
+		}
+		do_corpse_explosion(player,vec_args[0],corpse_explosion_type_t::SHRAPNEL_CORPSE_EXPLOSION);
+		return;
+	}
+	ACMD(do_contagion_drag_corpse) {
+		CONTAGION_CHECK();
+		auto vec_args = PARSE_ARGS();
+		if(!argshave()->size_gt(1)->passed()) {
+			player->sendln("Usage: contagion:drag_corpse <corpse> <direction>");
+			player->sendln("Example: contagion:drag_corpse enforcer north");
+			return;
+		}
+		auto status = mods::corpse::pick_corpse_from_room_by_argument(player, vec_args[0]);
+		if(std::get<0>(status) == 0) {
+			player->sendln(std::get<1>(status));
+			return;
+		}
+		auto opt_dir = mods::util::parse_direction_optional(vec_args[1]);
+		if(!opt_dir.has_value()) {
+			player->sendln("Use a valid direction");
+			return;
+		}
+		player->sendln(std::get<1>(player->contagion()->drag_corpse(std::get<2>(status),opt_dir.value())));
+	}
+	ACMD(do_contagion_minor_shielding) {
+		CONTAGION_CHECK();
+		auto cast_status = player->contagion()->cast_minor_shielding();
+		player->sendln(std::get<1>(cast_status));
+		return;
+	}
+	ACMD(do_invoke) {
+		CONTAGION_CHECK();
 		/** This is the main entry point of all spells
 		 * that the necro can cast. 'invoke' is a command
 		 * that *only* a necro can call to use their spells
 		 * and abilities.
 		 */
-		if(argshave()->first_is("corpse_explosion")->size_gt(1)->passed()) {
-			do_corpse_explosion(player,argument,corpse_explosion_type_t::NORMAL_CORPSE_EXPLOSION);
-			return;
-		}
-		if(argshave()->first_is("hellfire_corpse_explosion")->size_gt(1)->passed()) {
-			do_corpse_explosion(player,argument,corpse_explosion_type_t::HELLFIRE_CORPSE_EXPLOSION);
-			return;
-		}
-		if(argshave()->first_is("shrapnel_corpse_explosion")->size_gt(1)->passed()) {
-			do_corpse_explosion(player,argument,corpse_explosion_type_t::SHRAPNEL_CORPSE_EXPLOSION);
-			return;
-		}
-		if(argshave()->first_is("drag_corpse")->size_gt(2)->passed()) {
-			auto status = mods::corpse::pick_corpse_from_room_by_argument(player, argument);
-			if(std::get<0>(status) == 0) {
-				player->sendln(std::get<1>(status));
-				return;
-			}
-			auto opt_dir = mods::util::parse_direction_optional(argat(2));
-			if(!opt_dir.has_value()) {
-				player->sendln("Use a valid direction");
-				return;
-			}
-			player->sendln(CAT("Direction: ",dirstr(opt_dir.value())));
-			player->sendln(std::get<1>(player->contagion()->drag_corpse(std::get<2>(status),opt_dir.value())));
-			return;
-		}
-		if(argshave()->first_is("minor_shielding")->size_gt(0)->passed()) {
-			auto cast_status = player->contagion()->cast_minor_shielding();
-			player->sendln(std::get<1>(cast_status));
-			return;
-		}
-		if(argshave()->first_is("pathogen_ammunition")->passed()) {
-			player->sendln("Pathogen ammunition!");
-			return;
-		}
-		if(argshave()->first_is("grim_aura")->passed()) {
-			player->sendln("grim aura!");
-			return;
-		}
-		if(argshave()->first_is("melt")->size_gt(1)->passed()) {
-			player->sendln("melt!");
-			return;
-		}
-		if(argshave()->first_is("suffocate")->passed()) {
-			player->sendln("suffocate!");
-			return;
-		}
-		if(argshave()->first_is("shredded_cantrip")->size_gt(1)->passed()) {
-			player->sendln("shredded_cantrip!");
-			return;
-		}
-		if(argshave()->first_is("muscle_memory")->passed()) {
-			player->sendln("muscle_memory!");
-			return;
-		}
-		player->sendln("Invoke");
+		//if(argshave()->first_is("pathogen_ammunition")->passed()) {
+		//	player->sendln("Pathogen ammunition!");
+		//	return;
+		//}
+		//if(argshave()->first_is("grim_aura")->passed()) {
+		//	player->sendln("grim aura!");
+		//	return;
+		//}
+		//if(argshave()->first_is("melt")->size_gt(1)->passed()) {
+		//	player->sendln("melt!");
+		//	return;
+		//}
+		//if(argshave()->first_is("suffocate")->passed()) {
+		//	player->sendln("suffocate!");
+		//	return;
+		//}
+		//if(argshave()->first_is("shredded_cantrip")->size_gt(1)->passed()) {
+		//	player->sendln("shredded_cantrip!");
+		//	return;
+		//}
+		//if(argshave()->first_is("muscle_memory")->passed()) {
+		//	player->sendln("muscle_memory!");
+		//	return;
+		//}
+		//player->sendln("Invoke");
 	}
 
 	void init() {
-		mods::interpreter::add_command("invoke", POS_RESTING, do_invoke, 0,0);
+		//mods::interpreter::add_command("invoke", POS_RESTING, do_invoke, 0,0);
+		mods::interpreter::add_command("contagion:corpse_explosion", POS_RESTING, do_contagion_corpse_explosion, 0,0);
+		mods::interpreter::add_command("contagion:hellfire_corpse_explosion", POS_RESTING, do_contagion_hellfire_corpse_explosion, 0,0);
+		mods::interpreter::add_command("contagion:shrapnel_corpse_explosion", POS_RESTING, do_contagion_shrapnel_corpse_explosion, 0,0);
+		mods::interpreter::add_command("contagion:drag_corpse", POS_RESTING, do_contagion_drag_corpse, 0,0);
+		mods::interpreter::add_command("contagion:minor_shielding", POS_RESTING, do_contagion_minor_shielding, 0,0);
 	}
 };
+#undef CONTAGION_CHECK

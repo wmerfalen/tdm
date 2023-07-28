@@ -24,11 +24,11 @@ extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_d
 
 #define __MENTOC_SHOW_MODS_CORPSE_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_CORPSE_DEBUG_OUTPUT__
-#define m_debug(MSG) mentoc_prefix_debug("[mods::corpse::debug]")  << MSG << "\n";
-#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::corpse::ERROR]"))  << MSG << "\n";
+	#define m_debug(MSG) mentoc_prefix_debug("[mods::corpse::debug]")  << MSG << "\n";
+	#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::corpse::ERROR]"))  << MSG << "\n";
 #else
-#define m_debug(MSG) ;;
-#define m_error(MSG) ;;
+	#define m_debug(MSG) ;;
+	#define m_error(MSG) ;;
 #endif
 
 extern void object_list_new_owner(struct obj_data *list, char_data *ch);
@@ -66,7 +66,15 @@ namespace mods::corpse {
 		uuid_t attacker;
 	};
 	std::tuple<bool,std::string,obj_ptr_t> pick_corpse_from_room_by_argument(player_ptr_t& player, std::string_view in_argument) {
-		const char* argument = in_argument.substr(1).data();
+		if(in_argument.length() == 0) {
+			return {0,"Specify a corpse",nullptr};
+		}
+		std::string corpse;
+		if(in_argument.length() > 32) {
+			corpse = in_argument.substr(0,31);
+		} else {
+			corpse = in_argument.data();
+		}
 		auto list = world[player->room()].contents;
 		for(auto i = list; i; i = i->next_content) {
 			if(!i) {
@@ -79,7 +87,7 @@ namespace mods::corpse {
 					continue;
 				} else {
 					/** TODO: test for this syntax: 3.corpse */
-					if(mods::util::fuzzy_match(argat(1),i->name.str()) && mods::object_utils::is_corpse(item)) {
+					if(mods::util::fuzzy_match(corpse,i->name.str()) && mods::object_utils::is_corpse(item)) {
 						return {1,"",item};
 					}
 				}
@@ -259,6 +267,7 @@ namespace mods::corpse {
 	 *  - blindness over N seconds
 	 */
 	ACMD(do_corpse_me) {
+		ADMIN_REJECT();
 		player->sendln("Creating corpse");
 		auto obj = make_corpse(player);
 		mods::globals::register_object(obj);

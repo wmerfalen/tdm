@@ -14,6 +14,11 @@
 ./mods/classes/marine.cpp:	->marine_pin_down // TEST ME
 ./mods/classes/marine.cpp:	->marine_engage // TEST ME
 ./mods/classes/marine.cpp:	->marine_disengage // TEST ME
+./mods/classes/contagion.cpp:	->contagion_corpse_explosion
+./mods/classes/contagion.cpp:	->contagion_hellfire_corpse_explosion
+./mods/classes/contagion.cpp:	->contagion_shrapnel_corpse_explosion
+./mods/classes/contagion.cpp:	->contagion_drag_corpse
+./mods/classes/contagion.cpp:	->contagion_minor_shielding
 ./mods/classes/contagion.cpp:	->invoke
 ./mods/classes/pyrexia.cpp:->fire_nade
 ./mods/classes/ghost.cpp:	->light_bandage
