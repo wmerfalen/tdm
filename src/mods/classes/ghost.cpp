@@ -258,24 +258,24 @@ namespace mods::classes {
 			{DISSIPATE,"dissipate","Dissipate",SK::INTELLIGENCE,&m_dissipate,GHOST_DISSIPATE_MANA_COST()},
 			{XRAY_SHOT,"xray","X-Ray Shot",SK::SNIPING,&m_xray_shot,GHOST_XRAY_SHOT_MANA_COST()},
 			{PENETRATING_SHOT,"penshot","Penetrating Shot",SK::SNIPING,&m_penetrating_shot,GHOST_PENSHOT_MANA_COST()},
-			{FEIGN_DEATH,"feign","Feign Death",SK::STRATEGY,&m_feign_death,GHOST_FEIGN_DEATH_MANA_COST()},
+			//FIXME: {FEIGN_DEATH,"feign","Feign Death",SK::STRATEGY,&m_feign_death,GHOST_FEIGN_DEATH_MANA_COST()},
 			{INTIMIDATION,"intimidation","Intimidation",SK::INTELLIGENCE,&m_intimidation,GHOST_INTIMIDATION_MANA_COST()},
 			{CRYOGENIC_GRENADE,"cryo","Cryogenic Grenade",SK::DEMOLITIONS,&m_cryogenic_grenade,GHOST_CRYONADE_MANA_COST()},
 			{FLASH_UNDERBARREL,"flash","Flash Underbarrel",SK::WEAPON_HANDLING,&m_flash_underbarrel,GHOST_FLASHUB_MANA_COST()},
 			{TRACKING_SHOT,"ts","Tracking Shot",SK::SNIPING,&m_tracking_shot,GHOST_TRACKINGSHOT_MANA_COST()},
 			{LIGHT_BANDAGE,shorthand::LIGHT_BANDAGE.data(),"Light Bandage",SK::MEDICAL,&m_light_bandage,GHOST_LIGHTBANDAGE_MANA_COST()},
-			{SUTURE,"suture","Suture",SK::MEDICAL,&m_suture,GHOST_SUTURE_MANA_COST()},
+			//FIXME: {SUTURE,"suture","Suture",SK::MEDICAL,&m_suture,GHOST_SUTURE_MANA_COST()},
 			{ADRENALINE_SHOT,"as","Adrenaline Shot",SK::MEDICAL,&m_adrenaline_shot,GHOST_ADRENALSHOT_MANA_COST()},
 			{SENSOR_NADE,"sensor","Sensor Grenade",SK::INTELLIGENCE,&m_sensor_nade,GHOST_SENSORNADE_MANA_COST()},
 			{UB_SHOTGUN,"ubs","Underbarrel Shotgun",SK::DEMOLITIONS,&m_ub_shotgun,GHOST_SHOTUB_MANA_COST()},
 			{UB_FRAG,"ubf","Underbarrel Nade Launcher",SK::DEMOLITIONS,&m_ub_frag,GHOST_UBFRAG_MANA_COST()},
-			{GUIDED_MISSILE,"gm","Guided Missile",SK::DEMOLITIONS,&m_guided_missile,GHOST_GUIDEDMIS_MANA_COST()},
-			{TARGET_LIMB,"limb","Target Limb",SK::SNIPING,&m_target_limb,GHOST_TARGETLIMB_MANA_COST()},
+			//FIXME {GUIDED_MISSILE,"gm","Guided Missile",SK::DEMOLITIONS,&m_guided_missile,GHOST_GUIDEDMIS_MANA_COST()},
+			//TODO: {TARGET_LIMB,"limb","Target Limb",SK::SNIPING,&m_target_limb,GHOST_TARGETLIMB_MANA_COST()},
 			{MARK_TARGET,"mark","Mark Target",SK::SNIPING,&m_mark_target,GHOST_MARKTARGET_MANA_COST()},
 			{PLANT_CLAYMORE,"claymore","Plant Claymore",SK::DEMOLITIONS,&m_plant_claymore,GHOST_CLAYMORE_MANA_COST()},
 			{SHRAPNEL_CLAYMORE,"smine","Shrapnel Claymore",SK::DEMOLITIONS,&m_plant_shrapnel_claymore,GHOST_SHRAPCLAY_MANA_COST()},
 			{CORROSIVE_CLAYMORE,"cmine","Corrosive Claymore",SK::DEMOLITIONS,&m_plant_corrosive_claymore,GHOST_CORCLAY_MANA_COST()},
-			{REQUEST_RECON,"recon","Request Recon",SK::INTELLIGENCE,&m_request_recon,GHOST_REQRECON_MANA_COST()},
+			//TODO:{REQUEST_RECON,"recon","Request Recon",SK::INTELLIGENCE,&m_request_recon,GHOST_REQRECON_MANA_COST()},
 		});
 		/**
 		 * REQUIRED
@@ -1428,28 +1428,26 @@ namespace mods::class_abilities::ghost {
 		/** On success, the function doesn't send a string to send back to the user */
 	}
 	void init() {
-		mods::interpreter::add_command("ghost:adrenaline_shot", POS_RESTING, do_inject_adrenaline_shot, 0,0);
-		mods::interpreter::add_command("ghost:dissipate", POS_RESTING, do_dissipate, 0,0);
-		mods::interpreter::add_command("ghost:mark", POS_RESTING, do_mark_target, 0,0);
-		mods::interpreter::add_command("ghost:mark_target", POS_RESTING, do_mark_target, 0,0);
-		mods::interpreter::add_command("ghost:tracking_shot", POS_RESTING, do_tracking_shot, 0,0);
-		mods::interpreter::add_command("ghost:engage", POS_RESTING, do_engage, 0,0);
-		mods::interpreter::add_command("ghost:disengage", POS_RESTING, do_disengage, 0,0);
-		mods::interpreter::add_command("ghost:xray_shot", POS_RESTING, do_xray_shot, 0,0);
-		mods::interpreter::add_command("ghost:build_claymore", POS_RESTING, do_build_claymore, 0,0);
-		mods::interpreter::add_command("ghost:light_bandage", POS_RESTING, do_light_bandage, 0,0);
-		mods::interpreter::add_command("ghost:attach_shotgun", POS_RESTING, do_attach_shotgun_underbarrel, 0,0);
-		mods::interpreter::add_command("ghost:detach_shotgun", POS_RESTING, do_detach_shotgun_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:aerial_drone_scan", POS_RESTING, do_aerial_drone_scan, 0,0);
 		mods::interpreter::add_command("ghost:attach_frag", POS_RESTING, do_attach_frag_underbarrel, 0,0);
-		mods::interpreter::add_command("ghost:detach_frag", POS_RESTING, do_detach_frag_underbarrel, 0,0);
-		mods::interpreter::add_command("ghost:fire", POS_RESTING, do_fire, 0,0);
+		mods::interpreter::add_command("ghost:attach_shotgun", POS_RESTING, do_attach_shotgun_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:adrenaline_shot", POS_RESTING, do_inject_adrenaline_shot, 0,0);
 		mods::interpreter::add_command("ghost:build_claymore", POS_RESTING, do_build_claymore, 0,0);
 		mods::interpreter::add_command("ghost:build_corrosive_claymore", POS_RESTING, do_build_corrosive_claymore, 0,0);
-		mods::interpreter::add_command("build_shrapnel_claymore", POS_RESTING, do_build_shrapnel_claymore, 0,0);
-		mods::interpreter::add_command("ghost:toss_cryogenic_grenade", POS_RESTING, do_toss_cryogenic_grenade, 0,0);
+		mods::interpreter::add_command("ghost:build_shrapnel_claymore", POS_RESTING, do_build_shrapnel_claymore, 0,0);
+		mods::interpreter::add_command("ghost:detach_frag", POS_RESTING, do_detach_frag_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:detach_shotgun", POS_RESTING, do_detach_shotgun_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:disengage", POS_RESTING, do_disengage, 0,0);
+		mods::interpreter::add_command("ghost:dissipate", POS_RESTING, do_dissipate, 0,0);
+		mods::interpreter::add_command("ghost:engage", POS_RESTING, do_engage, 0,0);
+		mods::interpreter::add_command("ghost:fire", POS_RESTING, do_fire, 0,0);
 		mods::interpreter::add_command("ghost:fire_penetrating_shot", POS_RESTING, do_fire_penetrating_shot, 0,0);
-		mods::interpreter::add_command("ghost:aerial_drone_scan", POS_RESTING, do_aerial_drone_scan, 0,0);
-		mods::interpreter::add_command("ghost:intimidate", POS_RESTING, do_intimidate, 0,0);
 		mods::interpreter::add_command("ghost:flash_underbarrel", POS_RESTING, do_flash_underbarrel, 0,0);
+		mods::interpreter::add_command("ghost:intimidate", POS_RESTING, do_intimidate, 0,0);
+		mods::interpreter::add_command("ghost:light_bandage", POS_RESTING, do_light_bandage, 0,0);
+		mods::interpreter::add_command("ghost:mark", POS_RESTING, do_mark_target, 0,0);
+		mods::interpreter::add_command("ghost:toss_cryogenic_grenade", POS_RESTING, do_toss_cryogenic_grenade, 0,0);
+		mods::interpreter::add_command("ghost:tracking_shot", POS_RESTING, do_tracking_shot, 0,0);
+		mods::interpreter::add_command("ghost:xray_shot", POS_RESTING, do_xray_shot, 0,0);
 	}
 };

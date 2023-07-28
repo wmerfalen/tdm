@@ -80,7 +80,7 @@ namespace mods::classes {
 			{HELLFIRE_CORPSE_EXPLOSION,"hce","Hellfire Corpse Explosion",skillset_t::DEMOLITIONS,&m_hellfire_corpse_explosion,0},
 			//{ATTRACT,"at","Attract",skillset_t::STRATEGY,&m_attract,0},
 			//{CONFUSE,"cf","Confuse",skillset_t::STRATEGY,&m_confuse,0},
-			{HELLFIRE_INCANTATION,"hell","Hellfire Incantation",skillset_t::DEMOLITIONS,&m_hellfire_incantation,0},
+			//{HELLFIRE_INCANTATION,"hell","Hellfire Incantation",skillset_t::DEMOLITIONS,&m_hellfire_incantation,0},
 			//{DETONATE_LIMB,"det","Detonate Limb",skillset_t::DEMOLITIONS,&m_detonate_limb,0},
 			{DRAG_CORPSE,"drag","Drag Corpse",skillset_t::STRENGTH,&m_drag_corpse,0},
 		});

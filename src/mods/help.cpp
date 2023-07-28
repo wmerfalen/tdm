@@ -342,9 +342,11 @@ namespace mods::help {
 	}
 	void send_marine_help_menu(player_ptr_t& player) {
 		player->pager_start();
+		send_class_header(player,"MARINE");
 		for(const auto& topic : marine_pages) {
 			player->sendln(send_topic(topic));
 		}
+		send_class_footer(player,"MARINE");
 		player->pager_end();
 		player->page(0);
 	}
@@ -453,44 +455,9 @@ namespace mods::help {
 
 
 	void send_contagion_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = {
-			"Pathogen Ammunition",
-			"Grim Aura",
-			"Melt",
-			"Suffocate",
-			"Shredded Cantrip",
-			"Muscle Memory",
-			"Hellfire Circle",
-			"Particle Deceleration",
-			"Ghastly Double",
-			"Minor Shielding",
-			"Cursed Ballistics",
-			"Neutron Shield",
-			"Bladed Array",
-			"Roots of Mayhem",
-			"Morbid Doubt",
-			"Intimidate",
-			"Force Out",
-			"Leech",
-			"Parasitic Corpse Tap",
-			"Extract Organs",
-			"Recruit",
-			"Demonic Incantation",
-			"Shadow Sight",
-			"Morbid Insight",
-			"Life Tap",
-			"Corpse Explosion",
-			"Shrapnel Corpse Explosion",
-			"Corrosive Corpse Explosion",
-			"Hellfire Corpse Explosion",
-			"Attract",
-			"Confuse",
-			"Hellfire Incantation",
-			"Detonate Limb",
-		};
 		player->pager_start();
 		send_class_header(player,"CONTAGION");
-		for(auto topic : topics) {
+		for(const auto& topic : contagion_pages) {
 			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"CONTAGION");
@@ -498,38 +465,9 @@ namespace mods::help {
 		player->page(0);
 	}
 	void send_ghost_help_menu(player_ptr_t& player) {
-		static std::vector<std::string> topics = {
-			"ghost:intimidate",
-			"ghost:adrenaline_shot",
-			"ghost:dissipate",
-			"ghost:mark",
-			"ghost:mark_target",
-			"ghost:tracking_shot",
-			"ghost:engage",
-			"ghost:disengage",
-			"ghost:xray_shot",
-			"ghost:build_claymore",
-			"ghost:light_bandage",
-			"ghost:attach_shotgun",
-			"ghost:detach_shotgun",
-			"ghost:attach_frag",
-			"ghost:detach_frag",
-			"ghost:fire",
-			"ghost:build_claymore",
-			"ghost:build_corrosive_claymore",
-			"build_shrapnel_claymore",
-			"plant_claymore",
-			"penetrating_shot",
-			"intimidate",
-			"ghost:toss_cryogenic_grenade",
-			"use_flash_underbarrel",
-			"attach_frag",
-			"attach_shotgun",
-			"ghost:aerial_drone_scan",
-		};
 		player->pager_start();
 		send_class_header(player,"GHOST");
-		for(auto topic : topics) {
+		for(const auto& topic : ghost_pages) {
 			player->sendln(send_topic(topic));
 		}
 		send_class_footer(player,"GHOST");
