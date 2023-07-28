@@ -3324,7 +3324,7 @@ CGET_DEF(std::string,MSG_YOU_INJURED_SOMEONE,"{red}*** YOU INJURED YOUR TARGET *
 CGET_DEF(std::string,DEFAULT_PUBLIC_CHANNELS,"chat,gossip,gratz,newbie");
 CGET_DEF(std::string,EXTENDED_PREFERENCES,IMPLODE({"nochat","nogossip","nonewbie","nogratz"},"|"));
 CGET_DEF(std::string,EXTENDED_PREFERENCES_DEFAULTS,IMPLODE({"0","0","0","0"},"|"));
-CGET_DEF(std::string,SUPER_USERS_LIST,IMPLODE({"mortis","xisop"},"|"));
+CGET_DEF(std::string,SUPER_USERS_LIST,IMPLODE({"mortis","xisop","grifter"},"|"));
 CGET_DEF(std::string,PRIMARY_CHOICE_SCREEN_PSG1_DESCRIPTION,"A bolt-action semi-automatic sniper rifle.\r\n");
 CGET_DEF(std::string,PRIMARY_CHOICE_SCREEN_L96AW_DESCRIPTION,"A reliable semi-automatic sniper rifle that works well in very cold conditions.\r\n");
 CGET_DEF(std::string,PRIMARY_CHOICE_SCREEN_M16A4_DESCRIPTION,"Standard issue marine corps automatic rifle.\r\n");

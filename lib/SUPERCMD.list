@@ -89,6 +89,7 @@
 {yel}mods/super-users{/yel}:->{grn}shutdown_mud{/grn}
 {yel}mods/super-users{/yel}:->{grn}admin_kick{/grn}
 {yel}mods/super-users{/yel}:->{grn}admin_goto{/grn}
+{yel}mods/help{/yel}:->{grn}help_refresh{/grn}
 {yel}mods/loot{/yel}:->{grn}mixup_contents{/grn}
 {yel}mods/loot{/yel}:->{grn}reward{/grn}
 {yel}mods/loot{/yel}:->{grn}add_rifle_index{/grn}

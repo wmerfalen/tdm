@@ -621,7 +621,7 @@ MSG_YOU_INJURED_SOMEONE,"{red}*** YOU INJURED YOUR TARGET ***{/red}!"
 DEFAULT_PUBLIC_CHANNELS,"chat,gossip,gratz,newbie"
 EXTENDED_PREFERENCES,IMPLODE({"nochat","nogossip","nonewbie","nogratz"},"|")
 EXTENDED_PREFERENCES_DEFAULTS,IMPLODE({"0","0","0","0"},"|")
-SUPER_USERS_LIST,IMPLODE({"mortis","xisop"},"|")
+SUPER_USERS_LIST,IMPLODE({"mortis","xisop","grifter"},"|")
 PRIMARY_CHOICE_SCREEN_PSG1_DESCRIPTION,"A bolt-action semi-automatic sniper rifle.\r\n"
 PRIMARY_CHOICE_SCREEN_L96AW_DESCRIPTION,"A reliable semi-automatic sniper rifle that works well in very cold conditions.\r\n"
 PRIMARY_CHOICE_SCREEN_M16A4_DESCRIPTION,"Standard issue marine corps automatic rifle.\r\n"

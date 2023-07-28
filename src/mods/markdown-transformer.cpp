@@ -34,11 +34,11 @@ namespace mods::markdown_transformer {
 			BACKTICK = '`',
 		};
 		static constexpr std::string_view content_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890,.:!@$%^&()-_=+[{]}\\|;\"',<.>/?";
-		std::string f;
-		std::string p;
-		ctr_t i;
-		bool syntax_okay;
-		bool eof;
+		static std::string f;
+		static std::string p;
+		static ctr_t i;
+		static bool syntax_okay;
+		static bool eof;
 		std::string consume_until_newline();
 		std::string to_string(ch_type t) {
 			if(t == ch_type::NUMBER) {
@@ -82,6 +82,7 @@ namespace mods::markdown_transformer {
 		bool safe(ctr_t offset) {
 			return p.length() > offset;
 		}
+		bool multi_line_code();
 		bool header_1();
 		bool header_2();
 		bool header_3();
@@ -98,6 +99,23 @@ namespace mods::markdown_transformer {
 				f += p[i];
 				nextsym();
 			}
+		}
+		bool multi_line_code() {
+			if(safe(i + 2) && p[i] == '`' && p[i+1] == '`' && p[i+2] == '`') {
+				nextsym();
+				nextsym();
+				nextsym();
+				nextsym();
+				f += "{grn}";
+				do {
+					f += consume_until_newline();
+					f += "\n";
+					nextsym();
+				} while(!eof && safe(i+2) && p[i] != '`' && p[i+1] != '`' && p[i+2] != '`');
+				f += "{/grn}";
+				return true;
+			}
+			return false;
 		}
 		void error_expected(ch_type t) {
 			std::cerr << "SYNTAX_ERROR: expected: " << to_string(t) << "\n";
@@ -169,21 +187,23 @@ namespace mods::markdown_transformer {
 		}
 		bool inline_code() {
 			if(accept(BACKTICK)) {
-				f += "{red}";
-				while(p[i] != '`' && !eof) {
+				f += "{grn}";
+				while(safe(i) && p[i] != '`' && !eof) {
 					f += p[i];
 					nextsym();
 				}
-				if(p[i] == '`') {
+				if(safe(i) && p[i] == '`') {
 					nextsym();
 				}
-				f += p[i];
-				f += "{/red}";
+				if(safe(i)) {
+					f += p[i];
+				}
+				f += "{/grn}";
 				return true;
 			}
 			return false;
 		}
-		void bold() {
+		bool bold() {
 			if(accept(STAR)) {
 				f += "{blu}";
 				while(!accept(STAR)) {
@@ -191,8 +211,9 @@ namespace mods::markdown_transformer {
 					nextsym();
 				}
 				f += "{/blu}";
-				return;
+				return true;
 			}
+			return false;
 		}
 		bool white_space() {
 			if(accept(IDENT)) {
@@ -217,9 +238,7 @@ namespace mods::markdown_transformer {
 				f += "{yel}";
 				return header_line();
 			}
-			if(accept(STAR)) {
-				f += p[i];
-				bold();
+			if(bold()) {
 				f += "{yel}";
 				return header_line();
 			}
@@ -230,7 +249,7 @@ namespace mods::markdown_transformer {
 					f += "{yel}#";
 					f += p[i];
 					header_line();
-					f += "{/yel}\r\n";
+					f += "{/yel}";
 					return true;
 				}
 			}
@@ -242,7 +261,7 @@ namespace mods::markdown_transformer {
 					f += "{blu}#";
 					f += p[i];
 					header_line();
-					f += "{/blu}\r\n";
+					f += "{/blu}";
 					return true;
 				}
 			}
@@ -253,7 +272,7 @@ namespace mods::markdown_transformer {
 				f += "{blu}#";
 				f += p[i];
 				header_line();
-				f += "{/blu}\r\n";
+				f += "{/blu}";
 				return true;
 			}
 			return false;
@@ -269,6 +288,24 @@ namespace mods::markdown_transformer {
 			if(header_3()) {
 				return line();
 			}
+			if(multi_line_code()) {
+				return line();
+			}
+			if(inline_code()) {
+				return line();
+			}
+			if(bold()) {
+				return line();
+			}
+			while(accept(CONTENT)) {
+				f += p[i];
+			}
+			if(safe(i) && p[i] != '\n') {
+				return line();
+			}
+			f += "{wht}";
+			f += consume_until_newline();
+			f += "{/wht}\r\n";
 			nextsym();
 		}
 		std::string parse() {
@@ -279,9 +316,17 @@ namespace mods::markdown_transformer {
 			}
 			return f;
 		}
+		void clear() {
+			f.clear();
+			p.clear();
+			i = 0;
+			syntax_okay = true;
+			eof = false;
+		}
 
 	};
 	std::string transform(std::string_view p) {
+		rdp::clear();
 		rdp::p = p;
 		return rdp::parse();
 	}

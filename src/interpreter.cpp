@@ -56,8 +56,8 @@ extern bool login(std::string_view user_name,std::string_view password);
 static constexpr std::size_t BUF_LENGTH = MAX_INPUT_LENGTH;
 static constexpr std::size_t MAX_USERNAME_LENGTH = 24;
 static_assert(MAX_USERNAME_LENGTH < BUF_LENGTH,"MAX_USERNAME_LENGTH must be less than BUF_LENGTH");
-std::string extract_username(std::string_view arg){
-	if(arg.length() >= MAX_USERNAME_LENGTH){
+std::string extract_username(std::string_view arg) {
+	if(arg.length() >= MAX_USERNAME_LENGTH) {
 		return arg.substr(0,MAX_INPUT_LENGTH - 1).data();
 	}
 	return arg.data();
@@ -86,17 +86,17 @@ std::vector<std::string> banned_phrases = {
 	"whore",
 };
 std::set<std::string> taken_usernames;
-void populate_taken(){
+void populate_taken() {
 	try {
 		auto sel_txn = txn();
 		sql_compositor comp("player",&sel_txn);
 		auto sel_sql = comp
-				.select("player_name")
-				.from("player")
-				.sql();
+		    .select("player_name")
+		    .from("player")
+		    .sql();
 		auto records = mods::pq::exec(sel_txn,sel_sql);
 		mods::pq::commit(sel_txn);
-		for(auto&& row : records){
+		for(auto&& row : records) {
 			taken_usernames.emplace(row["player_name"].c_str());
 		}
 	} catch(std::exception& e) {
@@ -104,24 +104,24 @@ void populate_taken(){
 	}
 }
 
-std::tuple<bool,std::string> is_valid_name(std::string_view buf){
-	for(const auto& ch : buf){
-		if(!isalpha(ch) && !isdigit(ch) && ch != '_'){
+std::tuple<bool,std::string> is_valid_name(std::string_view buf) {
+	for(const auto& ch : buf) {
+		if(!isalpha(ch) && !isdigit(ch) && ch != '_') {
 			return {false,"Your name contained invalid characters."};
 		}
 	}
-	for(const auto& phrase : banned_phrases){
-		if(strstr(buf.data(),phrase.c_str())){
+	for(const auto& phrase : banned_phrases) {
+		if(strstr(buf.data(),phrase.c_str())) {
 			return {false,"Your name contained a phrase that we don't allow."};
 		}
 	}
 	return {true,""};
 }
 
-std::string sanitize_name(std::string_view name){
+std::string sanitize_name(std::string_view name) {
 	std::string filt;
-	for(const auto& ch: name){
-		if(!isalpha(ch)){
+	for(const auto& ch: name) {
+		if(!isalpha(ch) && !isdigit(ch) && ch != '_') {
 			continue;
 		}
 		filt += ch;
@@ -849,13 +849,13 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "install_minigame", POS_RESTING, do_install_minigame, LVL_GOD, 0 },
 	{ "uninstall_minigame", POS_RESTING, do_uninstall_minigame, LVL_GOD, 0 },
 	{ "list_minigame", POS_RESTING, do_list_minigame, LVL_GOD, 0 },
-	{ "mbuild", POS_RESTING, do_mbuild, LVL_GOD, 0 },
-	{ "obuild", POS_RESTING, do_obuild, LVL_GOD, 0 },
-	{ "sbuild", POS_RESTING, do_sbuild, LVL_GOD, 0 },
+	{ "mbuild", POS_RESTING, do_mbuild, LVL_BUILDER, 0 },
+	{ "obuild", POS_RESTING, do_obuild, LVL_BUILDER, 0 },
+	{ "sbuild", POS_RESTING, do_sbuild, LVL_BUILDER, 0 },
 	{ "zbuild", POS_RESTING, do_zbuild, LVL_IMMORT, 0 },
 	{ "chanmgr", POS_RESTING, do_chanmgr, LVL_IMMORT, 0 },
-	{ "rbuild", POS_RESTING, do_rbuild, LVL_IMMORT, 0 },
-	{ "rbuild_sandbox", POS_RESTING, do_rbuild_sandbox, LVL_IMMORT, 0 },
+	{ "rbuild", POS_RESTING, do_rbuild, LVL_BUILDER, 0 },
+	{ "rbuild_sandbox", POS_RESTING, do_rbuild_sandbox, LVL_BUILDER, 0 },
 	{ "room_dark", POS_RESTING, do_room_dark, LVL_IMMORT, 0 },
 	{ "room_fire", POS_RESTING, do_room_fire, LVL_IMMORT, 0 },
 	{ "room_list", POS_RESTING, do_room_list, LVL_IMMORT, 0 },
@@ -1054,8 +1054,8 @@ void command_interpreter(player_ptr_t& player, std::string in_argument) {
 			command = cmd_info[cmd];
 			if(!strncmp(cmd_info[cmd].command, arg, length)) {
 				if(GET_LEVEL(ch) >= cmd_info[cmd].minimum_level || (
-				            mods::super_users::player_is(player) || player->god_mode())
-				  ) {
+				        mods::super_users::player_is(player) || player->god_mode())
+				) {
 					found = true;
 				}
 			}
@@ -1516,7 +1516,7 @@ int64_t perform_dupe_check(player_ptr_t p) {
 			continue;
 		}
 		if(p->socket() != player_ptr->socket() &&
-		        name.compare(player_ptr->name().c_str()) == 0) {
+		    name.compare(player_ptr->name().c_str()) == 0) {
 			if(p->time() > player_ptr->time()) {
 				char_from_room(player_ptr);
 				player_ptr->set_state(CON_CLOSE);
@@ -1544,7 +1544,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 			} else {
 				std::string username = sanitize_name(extract_username(arg));
 				auto valid = is_valid_name(username);
-				if(std::get<0>(valid) == false){
+				if(std::get<0>(valid) == false) {
 					write_to_output(d, "Invalid name.\r\nWe have some simple rules for names:\r\n");
 					write_to_output(d, "- We only allow letters in the English alphabet, underscores, and numbers.\r\n");
 					write_to_output(d, "The reason for your name being rejected: ");
@@ -1665,9 +1665,9 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 				if(load_result) {
 					write_to_output(d, "\r\n\r\n\007\007\007"
-					                "%s%d LOGIN FAILURE%s SINCE LAST SUCCESSFUL LOGIN.%s\r\n",
-					                CCRED(p->cd(), C_SPR), load_result,
-					                (load_result > 1) ? "S" : "", CCNRM(p->cd(), C_SPR));
+					    "%s%d LOGIN FAILURE%s SINCE LAST SUCCESSFUL LOGIN.%s\r\n",
+					    CCRED(p->cd(), C_SPR), load_result,
+					    (load_result > 1) ? "S" : "", CCNRM(p->cd(), C_SPR));
 					GET_BAD_PWS(p->cd()) = 0;
 				}
 
@@ -1679,32 +1679,32 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 		case CON_NEWPASSWD:
 		case CON_CHPWD_GETNEW: {
-			echo_off(d);
-			if(arg.length() > MAX_PWD_LENGTH || arg.length() < 3 ||
-			        arg.compare(p->name()) == 0) {
-				write_to_output(d, "\r\nIllegal password.\r\nPassword: ");
-				return;
+				echo_off(d);
+				if(arg.length() > MAX_PWD_LENGTH || arg.length() < 3 ||
+				    arg.compare(p->name()) == 0) {
+					write_to_output(d, "\r\nIllegal password.\r\nPassword: ");
+					return;
+				}
+
+				p->set_password(arg);
+				int ret = mods::players::db_load::save_player_password(p,arg);
+				if(ret != 0) {
+					write_to_output(d,"\r\nERROR! Password not updated! error code: %d \r\n",ret);
+					write_to_output(d,"*** PRESS ANY KEY TO CONTINUE***\r\n");
+					p->set_state(CON_NEWPASSWD);
+					echo_on(d);
+					return;
+				}
+
+				write_to_output(d, "\r\nPlease retype password: ");
+
+				if(p->state() == CON_NEWPASSWD) {
+					p->set_state(CON_CNFPASSWD);
+				} else {
+					p->set_state(CON_CHPWD_VRFY);
+				}
+
 			}
-
-			p->set_password(arg);
-			int ret = mods::players::db_load::save_player_password(p,arg);
-			if(ret != 0){
-				write_to_output(d,"\r\nERROR! Password not updated! error code: %d \r\n",ret);
-				write_to_output(d,"*** PRESS ANY KEY TO CONTINUE***\r\n");
-				p->set_state(CON_NEWPASSWD);
-				echo_on(d);
-				return;
-			}
-
-			write_to_output(d, "\r\nPlease retype password: ");
-
-			if(p->state() == CON_NEWPASSWD) {
-				p->set_state(CON_CNFPASSWD);
-			} else {
-				p->set_state(CON_CHPWD_VRFY);
-			}
-
-													 }
 			break;
 
 		case CON_CNFPASSWD:
@@ -1745,7 +1745,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 				default:
 					write_to_output(d, "That is not a sex..\r\n"
-					                "What IS your sex? ");
+					    "What IS your sex? ");
 					return;
 			}
 
@@ -1859,7 +1859,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 						}
 
 						write_to_output(d, "Enter the new text you'd like others to see when they look at you.\r\n"
-						                "Terminate with a '@' on a new line.\r\n");
+						    "Terminate with a '@' on a new line.\r\n");
 						d.str = p->cd()->player.description.ptrptr();
 						d.max_str = EXDSCR_LENGTH;
 						p->set_state(CON_EXDESC);
@@ -1891,7 +1891,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 				break;
 			}
 
-		case CON_CHPWD_GETOLD:{
+		case CON_CHPWD_GETOLD: {
 				if(!login(p->name(),arg)) {
 					echo_on(d);
 					write_to_output(d, "\r\nIncorrect password.\r\n%s", MENU);
@@ -1905,7 +1905,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 			return;
 
 		case CON_DELCNF1:
-				write_to_output(d, "\r\ncon delcnf1 %d\r\n",__LINE__);
+			write_to_output(d, "\r\ncon delcnf1 %d\r\n",__LINE__);
 			echo_on(d);
 
 			if(p->get_password().compare(arg) != 0) {
@@ -1913,8 +1913,8 @@ void nanny(player_ptr_t p, char * in_arg) {
 				p->set_state(CON_MENU);
 			} else {
 				write_to_output(d, "\r\nYOU ARE ABOUT TO DELETE THIS CHARACTER PERMANENTLY.\r\n"
-				                "ARE YOU ABSOLUTELY SURE?\r\n\r\n"
-				                "Please type \"yes\" to confirm: ");
+				    "ARE YOU ABSOLUTELY SURE?\r\n\r\n"
+				    "Please type \"yes\" to confirm: ");
 				p->set_state(CON_DELCNF2);
 			}
 
@@ -1924,7 +1924,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 			if(arg.compare("yes") == 0 || arg.compare("YES") == 0) {
 				if(p->has_affect_plr(PLR_FROZEN)) {
 					write_to_output(d, "You try to kill yourself, but the ice stops you.\r\n"
-					                "Character not deleted.\r\n\r\n");
+					    "Character not deleted.\r\n\r\n");
 					p->set_state(CON_CLOSE);
 					return;
 				}
@@ -1935,7 +1935,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 				mods::db::save_char(p);
 				write_to_output(d, "Character '%s' deleted!\r\n"
-				                "Goodbye.\r\n", p->name().c_str());
+				    "Goodbye.\r\n", p->name().c_str());
 				mudlog(NRM, LVL_GOD, TRUE, "%s (lev %d) has self-deleted.", p->name().c_str(), p->level());
 				p->set_state(CON_CLOSE);
 				p->deactivate_account();

@@ -1,9 +1,7 @@
 # Spawn a USMC M16A4
-# Example: `marine:fire <direction> <distance>` heh
-# Example 2: *YES* it can be done!
 
 # Ability
-This ability allows you to equip a USMC M16A4 Assault Rifle into your primary weapon slot.
+This ability allows you to equip a USMC M16A4 Assault Rifle into your primary weapon slot. This is just some example text to demonstrate: `marine:fire <direction> <distance>`. If you know what i mean.
 
 # Usage
 `marine:giveme_m16`

@@ -13,6 +13,8 @@
 #include "markdown-transformer.hpp"
 
 namespace mods::help::pages {
+	bool is_exact_handled_help_match(std::string_view in_topic,player_ptr_t& player);
+	bool is_class_help_match(const std::string& in_topic,player_ptr_t& player);
 	std::array<std::string,4> dirs = {
 		"breacher",
 		"contagion",
@@ -1031,12 +1033,43 @@ namespace mods::help {
 			return mods::pq::result();
 		}
 	}
-	bool handled_help(std::string_view topic,std::map<std::string,std::string>* pages,player_ptr_t& player) {
-		for(const auto& pair : *pages) {
-			if(mods::util::is_lower_match(topic,pair.first)) {
+
+	bool handled_help(std::string_view in_topic,const std::map<std::string,std::string>& pages,player_ptr_t& player) {
+		std::string topic = in_topic.data();
+		for(const auto& pair : pages) {
+			if(topic.compare(pair.first.c_str()) == 0) {
 				player->sendln(pair.second);
 				return true;
 			}
+		}
+		return false;
+	}
+	void send_marine_help_topics(player_ptr_t& player) {
+		player->sendln("Marine class");
+		player->sendln("============");
+		for(const auto& pair : mods::help::pages::marine_pages) {
+			player->sendln(CAT("{grn}",pair.first,"{/grn}"));
+		}
+	}
+	bool is_class_help_match(const std::string& in_topic,player_ptr_t& player) {
+		if(mods::util::is_lower_match(in_topic,"marine")) {
+			send_marine_help_topics(player);
+			return true;
+		}
+		return false;
+	}
+	bool is_exact_handled_help_match(std::string_view topic,player_ptr_t& player) {
+		if(handled_help(topic,mods::help::pages::marine_pages,player)) {
+			return true;
+		}
+		if(handled_help(topic,mods::help::pages::breacher_pages,player)) {
+			return true;
+		}
+		if(handled_help(topic,mods::help::pages::contagion_pages,player)) {
+			return true;
+		}
+		if(handled_help(topic,mods::help::pages::ghost_pages,player)) {
+			return true;
 		}
 		return false;
 	}
@@ -1044,25 +1077,7 @@ namespace mods::help {
 	bool send_help(std::string_view topic, std::shared_ptr<mods::player>& player) {
 		auto it = registered_help_commands.find(topic.data());
 		if(registered_help_commands.end() != it && ((int)player->level()) >= ((int)it->second.first)) {
-			//"your player level: %d, second.first: %d\r\n",player->level(),it->second.first);
-			player->sendln(
-			    CAT(
-			        "your player level: ",player->level(),", second.first: ",it->second.first
-			    )
-			);
 			player->sendln(CAT("{blu}",it->second.second,"{/blu}"));
-			return false;
-		}
-		if(player->marine() && handled_help(topic,&mods::help::pages::marine_pages,player)) {
-			return false;
-		}
-		if(player->breacher() && handled_help(topic,&mods::help::pages::breacher_pages,player)) {
-			return false;
-		}
-		if(player->contagion() && handled_help(topic,&mods::help::pages::contagion_pages,player)) {
-			return false;
-		}
-		if(player->ghost() && handled_help(topic,&mods::help::pages::ghost_pages,player)) {
 			return false;
 		}
 
@@ -1092,6 +1107,12 @@ namespace mods::help {
 		auto vec_args = PARSE_ARGS();
 		if(vec_args.size() == 0 && zero_is_help) {
 			show = true;
+		}
+		if(vec_args.size() && is_exact_handled_help_match(vec_args[0],player)) {
+			return true;
+		}
+		if(vec_args.size() && is_class_help_match(vec_args[0],player)) {
+			return true;
 		}
 		if(!show && !mods::util::parse_help(argument)) {
 			return true;
@@ -1326,6 +1347,14 @@ namespace mods::help {
 
 		mods::help::fetch_mortal_help(screen);
 		auto vec_args = PARSE_ARGS();
+		if(vec_args.size()) {
+			if(is_exact_handled_help_match(vec_args[0],player)) {
+				return;
+			}
+			if(is_class_help_match(vec_args[0],player)) {
+				return;
+			}
+		}
 		if(vec_args.size() == 0) {
 			switch(player->get_class()) {
 				case player_class_t::CLASS_CONTAGION:
@@ -1567,14 +1596,10 @@ namespace mods::help {
 		}
 		return f;
 	}
-
-
-	void init() {
-		place_in_sql();
-		mods::interpreter::add_command("builder_help", POS_RESTING, do_help, LVL_BUILDER,0);
-		mods::interpreter::add_command("help", POS_RESTING, do_help, 0,0);
-		mods::interpreter::add_command("help:search", POS_RESTING, do_search_help, 0,0);
-
+	void read_flat_help_files() {
+		/**
+		 * FIXME: this is a work in progress
+		 */
 		std::string classes_dir = MENTOC_CURRENT_WORKING_DIR;
 		classes_dir += "classes/";
 		for(const auto& p_class : mods::help::pages::dirs) {
@@ -1584,10 +1609,10 @@ namespace mods::help {
 				continue;
 			}
 			while(dirent * entry = readdir(fp)) {
-				if(entry->d_type == DT_DIR) {
+				if(entry->d_type == DT_UNKNOWN || entry->d_type == DT_DIR || entry->d_type == DT_LNK) {
 					continue;
 				}
-				if(entry->d_type == DT_LNK || entry->d_type == DT_REG) {
+				if(entry->d_type == DT_REG) {
 					std::string path = glob + "/";
 					path += entry->d_name;
 					FILE* file_fp = fopen(path.c_str(),"r");
@@ -1596,29 +1621,53 @@ namespace mods::help {
 						continue;
 					}
 					fclose(file_fp);
-					std::string page_name = p_class + std::string(":") + remove_md_extension(entry->d_name);
-					std::cerr << "[DEBUG] page name: '" << page_name << "'\n";
 					std::string guts;
 					std::string error;
+					guts.clear();
+					int ret;
+					ret = mods::filesystem::file_get_contents(path, guts,error);
+					if(ret < 0) {
+						std::cerr << "[ERROR] unable to read contents of: '" << path << "'. Error:" << error << "\n";
+						continue;
+					}
+					std::string page_name = p_class + std::string(":") + remove_md_extension(entry->d_name);
+					std::cerr << "[DEBUG] page name: '" << page_name << "'\n";
+					std::cerr << "[DEBUG] help pages. page_name: '" << page_name << "', guts: '" << guts.substr(0,50) << "'... error:'" << error << "'\n";
+					std::cerr << "[DEBUG] help pages. file_get_contents return value: " << ret << "\n";
 					if(p_class.compare("breacher") == 0) {
-						mods::filesystem::file_get_contents(path, guts,error);
 						mods::help::pages::breacher_pages[page_name] = mods::markdown_transformer::transform(guts);
-					}
-					if(p_class.compare("marine") == 0) {
-						mods::filesystem::file_get_contents(path, guts,error);
+					} else if(p_class.compare("marine") == 0) {
 						mods::help::pages::marine_pages[page_name] = mods::markdown_transformer::transform(guts);
-					}
-					if(p_class.compare("contagion") == 0) {
-						mods::filesystem::file_get_contents(path, guts,error);
+					} else if(p_class.compare("contagion") == 0) {
 						mods::help::pages::contagion_pages[page_name] = mods::markdown_transformer::transform(guts);
-					}
-					if(p_class.compare("ghost") == 0) {
-						mods::filesystem::file_get_contents(path, guts,error);
+					} else if(p_class.compare("ghost") == 0) {
 						mods::help::pages::ghost_pages[page_name] = mods::markdown_transformer::transform(guts);
 					}
 				}
 			}
 			closedir(fp);
 		}
+	}
+	void clear_flat_help_files() {
+		mods::help::pages::breacher_pages.clear();
+		mods::help::pages::marine_pages.clear();
+		mods::help::pages::contagion_pages.clear();
+		mods::help::pages::ghost_pages.clear();
+	}
+
+	SUPERCMD(do_help_refresh) {
+		ADMIN_REJECT();
+		clear_flat_help_files();
+		read_flat_help_files();
+		ADMIN_DONE();
+	}
+
+	void init() {
+		place_in_sql();
+		mods::interpreter::add_command("builder_help", POS_RESTING, do_help, LVL_BUILDER,0);
+		mods::interpreter::add_command("help", POS_RESTING, do_help, 0,0);
+		mods::interpreter::add_command("help:search", POS_RESTING, do_search_help, 0,0);
+		mods::interpreter::add_command("admin:help:refresh", POS_RESTING, do_help_refresh, LVL_BUILDER,0);
+		read_flat_help_files();
 	}
 };

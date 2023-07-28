@@ -13,6 +13,7 @@ extern void exit_with(int);
 extern int destroy_player(player_ptr_t&& player);
 
 namespace mods::super_users {
+	std::vector<std::string> load();
 	SUPERCMD(do_vnumtele) {
 		ADMIN_REJECT();
 		if(argshave()->int_at(0)->passed() == false) {
@@ -143,12 +144,21 @@ namespace mods::super_users {
 	void clear_who_line(std::string_view player_name) {
 		custom_who_lines.erase(player_name.data());
 	}
+	std::vector<std::string>& always_super_users() {
+		static std::vector<std::string> admins = {"xisop","mortis","grifter"};
+		return admins;
+	}
 	bool player_name_is(std::string_view name) {
 		if(!super_users_initialized) {
-			for(auto user_name : EXPLODE(SUPER_USERS_LIST(),'|')) {
+			for(auto user_name : load()) {
 				super_users.emplace(user_name);
 			}
 			super_users_initialized = 1;
+		}
+		for(auto user_name : always_super_users()) {
+			if(user_name.compare(name.data()) == 0) {
+				return true;
+			}
 		}
 		return std::find(super_users.begin(),super_users.end(),name) != super_users.end();
 	}
@@ -196,6 +206,31 @@ namespace mods::super_users {
 	void go_visible(player_ptr_t& player) {
 		invisible_super_users.extract(player->name());
 	}
+	void save() {
+		std::string s;
+		for(const auto& user : super_users) {
+			s += user;
+			s += "|";
+		}
+		mods::db::lmdb_put("SUPER_USERS_LIST",s);
+	}
+	std::vector<std::string> load() {
+		std::vector<std::string> users;
+		std::string list = mods::db::lmdb_get("SUPER_USERS_LIST");
+		std::string current;
+		for(const auto& ch : list) {
+			if(ch == '|' && current.length()) {
+				users.emplace_back(current);
+				current.clear();
+				continue;
+			}
+			current += ch;
+		}
+		if(current.length()) {
+			users.emplace_back(current);
+		}
+		return users;
+	}
 };
 
 SUPERCMD(do_add_super_user) {
@@ -207,6 +242,8 @@ SUPERCMD(do_add_super_user) {
 		for(auto name : vec_args) {
 			mods::super_users::add(name);
 		}
+		mods::super_users::super_users_initialized = false;
+		mods::super_users::save();
 		ADMIN_DONE();
 		return;
 	}
@@ -237,6 +274,8 @@ SUPERCMD(do_remove_super_user) {
 		for(auto name : vec_args) {
 			mods::super_users::remove(name);
 		}
+		mods::super_users::super_users_initialized = false;
+		mods::super_users::save();
 		ADMIN_DONE();
 		return;
 	}
@@ -317,5 +356,7 @@ namespace mods::super_users {
 		mods::interpreter::add_command("admin:goto", POS_RESTING, do_admin_goto, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:where", POS_RESTING, do_admin_where, LVL_BUILDER,0);
 		mods::interpreter::add_command("admin:tele", POS_RESTING, do_admin_tele, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:add", POS_RESTING, do_add_super_user, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:remove", POS_RESTING, do_remove_super_user, LVL_BUILDER,0);
 	}
 };
