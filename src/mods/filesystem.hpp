@@ -12,11 +12,11 @@
 #undef m_error
 #define __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_STATS_RIFLE_DEBUG_OUTPUT__
-#define m_debug(MSG) mentoc_prefix_debug("[mods::dmon-monitoring::debug]")  << MSG << "\n";
-#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::dmon-monitoring::ERROR]"))  << MSG << "\n";
+	#define m_debug(MSG) mentoc_prefix_debug("[mods::dmon-monitoring::debug]")  << MSG << "\n";
+	#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::dmon-monitoring::ERROR]"))  << MSG << "\n";
 #else
-#define m_debug(MSG) ;;
-#define m_error(MSG) ;;
+	#define m_debug(MSG) ;;
+	#define m_error(MSG) ;;
 #endif
 
 namespace mods::filesystem {
@@ -108,8 +108,8 @@ namespace mods::filesystem {
 
 		std::string base_dir = current_working_directory() + "/../log";
 		for(const std::string& dir : {
-		            "logins",cleaned.c_str()
-		        }) {
+		        "logins",cleaned.c_str()
+		    }) {
 			base_dir += CAT("/",dir);
 			if(is_directory(base_dir) == false) {
 				mkdir(base_dir.data(),0755);
@@ -124,8 +124,8 @@ namespace mods::filesystem {
 
 		std::string base_dir = current_working_directory() + "/../log";
 		for(const std::string& dir : {
-		            "logins",cleaned.c_str()
-		        }) {
+		        "logins",cleaned.c_str()
+		    }) {
 			base_dir += CAT("/",dir);
 			if(is_directory(base_dir) == false) {
 				mkdir(base_dir.data(),0755);
@@ -140,8 +140,8 @@ namespace mods::filesystem {
 
 		std::string base_dir = current_working_directory() + "/../log";
 		for(const std::string& dir : {
-		            "forge-engine",cleaned.c_str()
-		        }) {
+		        "forge-engine",cleaned.c_str()
+		    }) {
 			base_dir += CAT("/",dir);
 			if(is_directory(base_dir) == false) {
 				mkdir(base_dir.data(),0755);
@@ -156,8 +156,8 @@ namespace mods::filesystem {
 
 		std::string base_dir = current_working_directory() + "/../log";
 		for(const std::string& dir : {
-		            "mob-debug",cleaned.c_str()
-		        }) {
+		        "mob-debug",cleaned.c_str()
+		    }) {
 			base_dir += CAT("/",dir);
 			if(is_directory(base_dir) == false) {
 				mkdir(base_dir.data(),0755);
@@ -167,6 +167,16 @@ namespace mods::filesystem {
 		file_append(base_dir,CAT(mob_name.data(),",",msg.data(),",",mods::util::time_string()));
 	}
 
+	static inline bool has_extension(std::string_view path,std::string_view ext) {
+		if(ext.length() == 0) {
+			return false;
+		}
+		if(path.length() < ext.length()) {
+			return false;
+		}
+		std::string extension = std::string(".") + ext.data();
+		return path.substr(path.length() - extension.length()).compare(extension.c_str()) == 0;
+	}
 };//end namespace
 
 #undef m_debug

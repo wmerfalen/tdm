@@ -12,6 +12,12 @@
 #include <dirent.h>
 #include "markdown-transformer.hpp"
 
+#ifdef m_debug
+	#undef m_debug
+#endif
+
+#define m_debug(A) std::cerr << "[DEBUG][mods::help]: " << A << "\n"
+
 namespace mods::help {
 	bool is_exact_handled_help_match(std::string_view in_topic,player_ptr_t& player);
 	bool is_class_help_match(const std::string& in_topic,player_ptr_t& player);
@@ -20,6 +26,9 @@ namespace mods::help {
 	std::string send_topic(std::string_view topic);
 	void builder_page(std::vector<std::string>& screen);
 	void fetch_builder_help(std::vector<std::string>& screen);
+	void send_player_class_help(player_ptr_t& player);
+	void send_help_topics(player_ptr_t& player);
+	void send_marine_help_menu(player_ptr_t& player);
 	void send_breacher_help_menu(player_ptr_t& player) {
 		static std::vector<std::string> topics = {
 			"Special Ability - To use your explosive shot, simply move toward a closed door or surface twice. The first time you "
@@ -31,16 +40,49 @@ namespace mods::help {
 		}
 		send_class_footer(player,"BREACHER");
 	}
-	std::array<std::string,4> dirs = {
+	std::vector<std::string> dirs = {
 		"breacher",
 		"contagion",
 		"ghost",
 		"marine",
 	};
-	std::map<std::string,std::string> marine_pages;
-	std::map<std::string,std::string> contagion_pages;
-	std::map<std::string,std::string> breacher_pages;
-	std::map<std::string,std::string> ghost_pages;
+	std::vector<std::string> global_help_directories = {
+		"combat",
+		"intelligence",
+		"demolitions",
+	};
+	static std::vector<std::string> combat_pages;
+	static std::vector<std::string> intel_pages;
+	static std::vector<std::string> demo_pages;
+	static std::vector<std::string> marine_pages;
+	static std::vector<std::string> contagion_pages;
+	static std::vector<std::string> breacher_pages;
+	static std::vector<std::string> ghost_pages;
+	void send_player_class_help(player_ptr_t& player) {
+		player->pager_start();
+		switch(player->get_class()) {
+			case player_class_t::CLASS_MARINE:
+				send_marine_help_menu(player);
+				break;
+			case player_class_t::CLASS_GHOST:
+				send_ghost_help_menu(player);
+				break;
+			case player_class_t::CLASS_CONTAGION:
+				send_contagion_help_menu(player);
+				break;
+			case player_class_t::CLASS_BREACHER:
+				send_breacher_help_menu(player);
+				break;
+			default:
+				break;
+		}
+		send_help_topics(player);
+		player->pager_end();
+		player->page(0);
+	}
+	void send_help_topics(player_ptr_t& player) {
+
+	}
 	void send_builder_help(player_ptr_t& player,std::string argument) {
 		std::vector<std::string> builder_help;
 		builder_page(builder_help);
@@ -233,45 +275,82 @@ namespace mods::help {
 			    .where("hp_section","LIKE",CAT("%",topic.data(),"%"))
 			    .sql();
 #ifdef __DEBUG_HELP_PAGES_SQL__
-			std::cerr << room_sql.data() << "\n";
+			m_debug(room_sql.data() << "\n";
 #endif
-			return mods::pq::exec(up_txn,room_sql.data());
+			    return mods::pq::exec(up_txn,room_sql.data());
 		} catch(std::exception& e) {
 			return mods::pq::result();
 		}
 	}
+	std::string sanitize_path(std::string_view p) {
+		std::string f;
+		for(const auto& ch : p) {
+			if(isalpha(ch) || isdigit(ch) || ch == '/' || ch == '_') {
+				f += ch;
+			}
+			if(f.length() > 24) {
+				return f;
+			}
+		}
+		return f;
+	}
+	std::string sanitize_topic(std::string_view p) {
+		std::string f;
+		for(const auto& ch : p) {
+			if(ch == ':') {
+				f.clear();
+				continue;
+			}
+			if(isalpha(ch) || isdigit(ch) || ch == '_') {
+				f += ch;
+			}
+			if(f.length() > 24) {
+				return f;
+			}
+		}
+		return f;
+	}
+	std::string get_help_file(std::string_view category,std::string_view topic) {
+		std::string path = std::string(MENTOC_CURRENT_WORKING_DIR);
+		path += "help/";
+		path += sanitize_path(category.data());
+		path += "/";
+		path += sanitize_topic(topic.data());
+		path += ".md";
+		m_debug("[debug] get_help_file() file: '" << path << "'");
+		std::string guts,error;
+		int ret = mods::filesystem::file_get_contents(path,guts,error);
+		if(ret <= 0) {
+			if(ret < 0) {
+				m_debug("[ERROR] get_help_file(): '" << error << "'");
+			}
+			return "";
+		}
+		return mods::markdown_transformer::transform(guts);
+	}
 
-	bool handled_help(std::string_view in_topic,const std::map<std::string,std::string>& pages,player_ptr_t& player) {
+	bool handled_help(std::string_view in_topic,const std::vector<std::string>& pages,player_ptr_t& player,std::string_view category) {
 		std::string topic = in_topic.data();
-		for(const auto& pair : pages) {
-			if(topic.compare(pair.first.c_str()) == 0) {
-				player->sendln(pair.second);
+		for(const auto& page_name : pages) {
+			m_debug("debug: page_name: '" << page_name << "'");
+			if(topic.compare(page_name.c_str()) == 0) {
+				player->sendln(get_help_file(category,topic));
 				return true;
 			}
 		}
 		return false;
 	}
-	void send_marine_help_topics(player_ptr_t& player) {
-		player->sendln("Marine class");
-		player->sendln("============");
-		for(const auto& pair : marine_pages) {
-			player->sendln(CAT("{grn}",pair.first,"{/grn}"));
+	void send_marine_help_menu(player_ptr_t& player) {
+		player->pager_start();
+		for(const auto& topic : marine_pages) {
+			player->sendln(send_topic(topic));
 		}
+		player->pager_end();
+		player->page(0);
 	}
 	bool is_class_help_match(const std::string& in_topic,player_ptr_t& player) {
 		if(mods::util::is_lower_match(in_topic,"marine")) {
-			send_marine_help_topics(player);
-			player->sendln("marine:giveme_m16\r\n"
-			    "marine:load_tracer_rounds\r\n"
-			    "marine:deploy_explosive_drone\r\n"
-			    "marine:attach_m203\r\n"
-			    "marine:detach_m203\r\n"
-			    "marine:fire\r\n"
-			    "marine:pin_down\r\n"
-			    "marine:pin_down:change_target\r\n"
-			    "marine:engage\r\n"
-			    "marine:disengage\r\n"
-			);
+			send_marine_help_menu(player);
 			return true;
 		}
 		if(mods::util::is_lower_match(in_topic,"contagion")) {
@@ -289,16 +368,16 @@ namespace mods::help {
 		return false;
 	}
 	bool is_exact_handled_help_match(std::string_view topic,player_ptr_t& player) {
-		if(handled_help(topic,marine_pages,player)) {
+		if(handled_help(topic,marine_pages,player,"marine")) {
 			return true;
 		}
-		if(handled_help(topic,breacher_pages,player)) {
+		if(handled_help(topic,breacher_pages,player,"breacher")) {
 			return true;
 		}
-		if(handled_help(topic,contagion_pages,player)) {
+		if(handled_help(topic,contagion_pages,player,"contagion")) {
 			return true;
 		}
-		if(handled_help(topic,ghost_pages,player)) {
+		if(handled_help(topic,ghost_pages,player,"ghost")) {
 			return true;
 		}
 		return false;
@@ -568,6 +647,7 @@ namespace mods::help {
 		auto vec_args = PARSE_ARGS();
 		if(vec_args.size()) {
 			if(is_exact_handled_help_match(vec_args[0],player)) {
+				m_debug("is_exact_handled_help_match() yes");
 				return;
 			}
 			if(is_class_help_match(vec_args[0],player)) {
@@ -580,7 +660,10 @@ namespace mods::help {
 				return ;
 			}
 		}
-
+		if(vec_args.size() == 0) {
+			send_player_class_help(player);
+			return;
+		}
 
 		if(argshave()->size_gt(0)->passed()) {
 			if(send_help(argat(0), player)) {
@@ -694,13 +777,50 @@ namespace mods::help {
 		return f;
 	}
 	void read_flat_help_files() {
-		/**
-		 * FIXME: this is a work in progress
-		 */
-		std::string classes_dir = MENTOC_CURRENT_WORKING_DIR;
-		classes_dir += "classes/";
+		std::string help_dir = MENTOC_CURRENT_WORKING_DIR;
+		help_dir += "help/";
 		for(const auto& p_class : dirs) {
-			std::string glob = classes_dir + p_class;
+			std::string glob = help_dir + p_class;
+			m_debug("glob: '" << glob << "'");
+			DIR * fp = opendir(glob.c_str());
+			if(fp == nullptr) {
+				m_debug("[ERROR]: cannot open glob'd directory: '" << glob << "'");
+				continue;
+			}
+			while(dirent * entry = readdir(fp)) {
+				if(entry->d_type == DT_UNKNOWN || entry->d_type == DT_DIR || entry->d_type == DT_LNK) {
+					m_debug("[DEBUG] skipping '" << entry->d_name << "'");
+					continue;
+				}
+				if(!mods::filesystem::has_extension(entry->d_name,"md")) {
+					continue;
+				}
+				if(entry->d_type == DT_REG) {
+					std::string path = glob + "/";
+					path += entry->d_name;
+					std::string page_name = p_class + std::string(":") + remove_md_extension(entry->d_name);
+					m_debug("[DEBUG] page name: '" << page_name << "'");
+					if(p_class.compare("breacher") == 0) {
+						breacher_pages.emplace_back(page_name);
+					} else if(p_class.compare("marine") == 0) {
+						marine_pages.emplace_back(page_name);
+					} else if(p_class.compare("contagion") == 0) {
+						contagion_pages.emplace_back(page_name);
+					} else if(p_class.compare("ghost") == 0) {
+						ghost_pages.emplace_back(page_name);
+					} else {
+						m_debug("WARNING: didn't match a page index for: '" << p_class << "'");
+					}
+				}
+			}
+			closedir(fp);
+		}
+	}
+	void read_global_flat_help_files() {
+		std::string help_dir = MENTOC_CURRENT_WORKING_DIR;
+		help_dir += "help/global";
+		for(const auto& help_category : global_help_directories) {
+			std::string glob = help_dir + help_category.data();
 			DIR * fp = opendir(glob.c_str());
 			if(fp == nullptr) {
 				continue;
@@ -709,40 +829,22 @@ namespace mods::help {
 				if(entry->d_type == DT_UNKNOWN || entry->d_type == DT_DIR || entry->d_type == DT_LNK) {
 					continue;
 				}
+				if(!mods::filesystem::has_extension(entry->d_name,"md")) {
+					continue;
+				}
 				if(entry->d_type == DT_REG) {
 					std::string path = glob + "/";
 					path += entry->d_name;
-					FILE* file_fp = fopen(path.c_str(),"r");
-					if(!file_fp) {
-						std::cerr << "[ERROR]: couldn't open help file: '" << path << "'\n";
-						continue;
-					}
-					fclose(file_fp);
-					std::string guts;
-					std::string error;
-					guts.clear();
-					int ret;
-					ret = mods::filesystem::file_get_contents(path, guts,error);
-					if(ret < 0) {
-						std::cerr << "[ERROR] unable to read contents of: '" << path << "'. Error:" << error << "\n";
-						continue;
-					}
-					std::string page_name = p_class + std::string(":") + remove_md_extension(entry->d_name);
-					if(ret == 0) {
-						std::cerr << "[DEBUG] file_get_contents returned zero. not processing: " << page_name << "\n";
-						continue;
-					}
-					std::cerr << "[DEBUG] page name: '" << page_name << "'\n";
-					std::cerr << "[DEBUG] help pages. page_name: '" << page_name << "', guts: '" << guts.substr(0,50) << "'... error:'" << error << "'\n";
-					std::cerr << "[DEBUG] help pages. file_get_contents return value: " << ret << "\n";
-					if(p_class.compare("breacher") == 0) {
-						breacher_pages[page_name] = mods::markdown_transformer::transform(guts);
-					} else if(p_class.compare("marine") == 0) {
-						marine_pages[page_name] = mods::markdown_transformer::transform(guts);
-					} else if(p_class.compare("contagion") == 0) {
-						contagion_pages[page_name] = mods::markdown_transformer::transform(guts);
-					} else if(p_class.compare("ghost") == 0) {
-						ghost_pages[page_name] = mods::markdown_transformer::transform(guts);
+					std::string page_name = help_category.data() + std::string(":") + remove_md_extension(entry->d_name);
+					m_debug("[DEBUG] page name: '" << page_name << "'");
+					if(help_category.compare("combat") == 0) {
+						combat_pages.emplace_back(page_name);
+					} else if(help_category.compare("intelligence") == 0) {
+						intel_pages.emplace_back(page_name);
+					} else if(help_category.compare("demolitions") == 0) {
+						demo_pages.emplace_back(page_name);
+					} else {
+						m_debug("[WARNING] unknown help_category: '" << help_category << "' when trying to place page_name: '" << page_name << "'");
 					}
 				}
 			}
@@ -755,16 +857,35 @@ namespace mods::help {
 		contagion_pages.clear();
 		ghost_pages.clear();
 	}
+	void clear_global_flat_help_files() {
+		combat_pages.clear();
+		intel_pages.clear();
+		demo_pages.clear();
+	}
 
 	SUPERCMD(do_help_refresh) {
 		ADMIN_REJECT();
 		clear_flat_help_files();
 		read_flat_help_files();
+		clear_global_flat_help_files();
+		read_global_flat_help_files();
 		ADMIN_DONE();
 	}
 	SUPERCMD(do_builder_help) {
 		ADMIN_REJECT();
 		send_builder_help(player,argument);
+		ADMIN_DONE();
+	}
+	SUPERCMD(do_help_dump) {
+		ADMIN_REJECT();
+		for(const auto& section : {
+		        marine_pages,
+		        contagion_pages,
+		    }) {
+			for(const auto& pg : section) {
+				player->sendln(pg);
+			}
+		}
 		ADMIN_DONE();
 	}
 
@@ -774,6 +895,8 @@ namespace mods::help {
 		mods::interpreter::add_command("help", POS_RESTING, do_help, 0,0);
 		mods::interpreter::add_command("help:search", POS_RESTING, do_search_help, 0,0);
 		mods::interpreter::add_command("admin:help:refresh", POS_RESTING, do_help_refresh, LVL_BUILDER,0);
+		mods::interpreter::add_command("admin:help:dump", POS_RESTING, do_help_dump, LVL_BUILDER,0);
 		read_flat_help_files();
+		read_global_flat_help_files();
 	}
 };
